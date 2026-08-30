@@ -6,7 +6,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._AU14.Insurgency.Editor;
+namespace Content.Client.CMU14.Insurgency.Editor;
 
 /// <summary>
 ///     Searchable "select an entity" picker: a search box over every spawnable entity prototype and

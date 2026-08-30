@@ -24,6 +24,7 @@
     - state: idle
       map: [ "rmc_flick_animation" ]
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

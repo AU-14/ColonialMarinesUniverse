@@ -2,7 +2,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Xenomorphs.Larva;
+namespace Content.Shared.CMU14.Xenomorphs.Larva;
 
 public sealed partial class BloodyLarvaSystem : EntitySystem
 {

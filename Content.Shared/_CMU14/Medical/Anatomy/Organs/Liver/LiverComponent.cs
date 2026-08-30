@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(SharedLiverSystem))]

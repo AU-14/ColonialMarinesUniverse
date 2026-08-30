@@ -1,11 +1,11 @@
-using Content.Shared._AU14.Callsigns;
-using Content.Shared._AU14.Radio;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Callsigns;
+using Content.Shared.CMU14.Radio;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Marines;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._AU14.Callsigns;
+namespace Content.Client.CMU14.Callsigns;
 
 public sealed partial class AU14CallsignConsoleBui : BoundUserInterface
 {

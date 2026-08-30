@@ -1,9 +1,9 @@
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Systems.Gameplay;
-using Content.Shared._CMU14.Input;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -13,9 +13,9 @@ using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Input.Binding;
 using MainViewport = Content.Client.UserInterface.Controls.MainViewport;
-using ClientBodyZoneTargetingSystem = Content.Client._CMU14.Medical.Anatomy.BodyParts.BodyZoneTargetingSystem;
+using ClientBodyZoneTargetingSystem = Content.Client.CMU14.Medical.Anatomy.BodyParts.BodyZoneTargetingSystem;
 
-namespace Content.Client._CMU14.Medical.Presentation.HUD;
+namespace Content.Client.CMU14.Medical.Presentation.HUD;
 
 public sealed partial class BodyZoneTargetWidgetController :
     UIController,

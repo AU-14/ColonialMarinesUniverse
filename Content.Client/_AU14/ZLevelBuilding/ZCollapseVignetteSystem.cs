@@ -2,11 +2,11 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System;
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Robust.Client.Graphics;
 using Robust.Shared.Timing;
 
-namespace Content.Client._AU14.ZLevelBuilding;
+namespace Content.Client.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Receives <see cref="ZCollapseVignetteEvent"/> from the server and drives

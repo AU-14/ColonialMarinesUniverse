@@ -1,7 +1,7 @@
 using Content.Shared.Examine;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CMU14.CharacterDescription;
+namespace Content.Shared.CMU14.CharacterDescription;
 
 public sealed class CharacterDescriptionExamineSystem : EntitySystem
 {

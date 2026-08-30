@@ -3,7 +3,7 @@ using Content.Shared.Movement.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
-namespace Content.Shared._CMU14.TileMovement;
+namespace Content.Shared.CMU14.TileMovement;
 
 /// <summary>
 /// When attached to an entity with an <see cref="InputMoverComponent"/>, all mob movement on that entity will

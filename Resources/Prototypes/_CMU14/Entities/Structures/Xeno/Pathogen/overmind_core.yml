@@ -28,10 +28,11 @@
     requiredTriggeredSpeed: 0
     intersectRatio: 0.1
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     state: pathogen_core
     drawdepth: FloorObjects
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

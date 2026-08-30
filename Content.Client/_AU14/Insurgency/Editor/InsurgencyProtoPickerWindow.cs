@@ -6,7 +6,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client._AU14.Insurgency.Editor;
+namespace Content.Client.CMU14.Insurgency.Editor;
 
 /// <summary>
 ///     Searchable list picker for plain (id, label) options: jobs, ships, faction icons, and the

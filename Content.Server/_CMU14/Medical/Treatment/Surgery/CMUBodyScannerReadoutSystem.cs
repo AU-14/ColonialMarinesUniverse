@@ -1,24 +1,23 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Body;
-using Content.Shared._CMU14.Threats.Mobs.Abomination;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
 {
@@ -26,6 +25,7 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedRMCBloodstreamSystem _bloodstream = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     public List<CMUBodyScannerScanLine> BuildScanLines(EntityUid patient)
@@ -50,7 +50,8 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
 
         if (TryComp<DamageableComponent>(patient, out var damageable))
         {
-            var total = damageable.TotalDamage;
+            var total = _damageable.GetTotalDamage((patient, damageable));
+            var damagePerGroup = _damageable.GetDamagePerGroup((patient, damageable));
             var severity = total <= FixedPoint2.Zero
                 ? CMUBodyScannerScanSeverity.Stable
                 : total >= FixedPoint2.New(100)
@@ -63,15 +64,15 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
                 Loc.GetString("cmu-body-scanner-title-damage"),
                 Loc.GetString(
                     "cmu-body-scanner-detail-damage",
-                    ("total", damageable.TotalDamage),
-                    ("brute", damageable.DamagePerGroup.GetValueOrDefault("Brute")),
-                    ("burn", damageable.DamagePerGroup.GetValueOrDefault("Burn")))));
+                    ("total", total),
+                    ("brute", damagePerGroup.GetValueOrDefault("Brute")),
+                    ("burn", damagePerGroup.GetValueOrDefault("Burn")))));
         }
 
-        if (_bloodstream.TryGetBloodSolution(patient, out var blood))
+        if (_bloodstream.TryGetBloodReadout(patient, out var blood, out var normalBlood))
         {
-            var ratio = blood.MaxVolume > FixedPoint2.Zero
-                ? blood.Volume.Float() / blood.MaxVolume.Float()
+            var ratio = normalBlood > FixedPoint2.Zero
+                ? blood.Float() / normalBlood.Float()
                 : 0f;
             var severity = ratio < 0.4f
                 ? CMUBodyScannerScanSeverity.Critical
@@ -83,10 +84,10 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
                 CMUBodyScannerScanKind.Blood,
                 severity,
                 Loc.GetString("cmu-body-scanner-title-blood"),
-                Loc.GetString("cmu-body-scanner-detail-blood", ("blood", blood.Volume), ("max", blood.MaxVolume)),
+                Loc.GetString("cmu-body-scanner-detail-blood", ("blood", blood), ("max", normalBlood)),
                 hasRange: true,
-                current: blood.Volume.Float(),
-                maximum: blood.MaxVolume.Float()));
+                current: blood.Float(),
+                maximum: normalBlood.Float()));
         }
 
         if (_medicalIndex.TryGetOrgan<HeartComponent>(patient, out var heartId) &&
@@ -107,18 +108,6 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
         }
 
         AddAnatomyLines(patient, lines);
-
-        if (TryComp<AbominationInfectionComponent>(patient, out var infection)
-            && (infection.AnchoredPart is null
-                || _timing.CurTime - infection.InfectedAt >= infection.AmputationWindow))
-        {
-            lines.Add(ScanLine(
-                CMUBodyScannerScanCategory.Vitals,
-                CMUBodyScannerScanKind.FleshInfection,
-                CMUBodyScannerScanSeverity.Critical,
-                Loc.GetString("cmu-body-scanner-title-flesh-infection"),
-                Loc.GetString("cmu-body-scanner-detail-flesh-infection-systemic")));
-        }
 
         if (lines.Count == 0)
         {
@@ -194,8 +183,6 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
 
     private void AddPartLines(EntityUid patient, List<CMUBodyScannerScanLine> lines)
     {
-        TryComp<AbominationInfectionComponent>(patient, out var infection);
-
         foreach (var (part, partComp) in _medicalIndex.GetBodyParts(patient))
         {
             var details = new List<string>();
@@ -248,13 +235,6 @@ public sealed partial class CMUBodyScannerReadoutSystem : EntitySystem
             {
                 details.Add(Loc.GetString("cmu-body-scanner-part-tourniquet"));
                 severity = MaxSeverity(severity, CMUBodyScannerScanSeverity.Warning);
-            }
-
-            if (infection?.AnchoredPart == part
-                && _timing.CurTime - infection.InfectedAt < infection.AmputationWindow)
-            {
-                details.Add(Loc.GetString("cmu-body-scanner-part-flesh-infection"));
-                severity = CMUBodyScannerScanSeverity.Critical;
             }
 
             if (details.Count == 0 && !hasRange)

@@ -8,13 +8,14 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Shared._CMU14.Chemistry.Effects.Negative;
+namespace Content.Shared.CMU14.Chemistry.Effects.Negative;
 
 public sealed partial class Hemolytic : RMCChemicalEffect
 {
@@ -28,34 +29,30 @@ public sealed partial class Hemolytic : RMCChemicalEffect
                $"Critical overdoses cause [color=red]{PotencyPerSecond * 5}[/color] oxygen damage.";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var entman = args.EntityManager;
         var targ = args.TargetEntity;
 
-        if (entman.TryGetComponent<BloodstreamComponent>(targ, out var blood))
+        if (system.TryGetBloodstream(targ, out var blood))
         {
-            var bloodsys = entman.System<SharedBloodstreamSystem>();
-            bloodsys.TryModifyBloodLevel((targ, blood), -(5.0 * potency));
+            system.Bloodstream.TryModifyBloodLevel((targ, blood), -(5.0 * potency));
         }
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var entman = args.EntityManager;
         var targ = args.TargetEntity;
 
-        if (entman.TryGetComponent<BloodstreamComponent>(targ, out var blood))
+        if (system.TryGetBloodstream(targ, out var blood))
         {
-            var bloodsys = entman.System<SharedBloodstreamSystem>();
-            bloodsys.TryModifyBloodLevel((targ, blood), -(4.0 * potency));
+            system.Bloodstream.TryModifyBloodLevel((targ, blood), -(4.0 * potency));
             //TODO M.drowsiness
 
-            var random = IoCManager.Resolve<IRobustRandom>();
+            var random = system.Random;
             if (!random.Prob(0.1f))
                 return;
 
-            var emoteSystem = args.EntityManager.System<SharedRMCEmoteSystem>();
+            var emoteSystem = system.RMCEmote;
             if (random.Prob(0.5f))
             {
                 emoteSystem.TryEmoteWithChat(
@@ -79,7 +76,7 @@ public sealed partial class Hemolytic : RMCChemicalEffect
             
         }
     }
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[AsphyxiationType] = potency * 5f;

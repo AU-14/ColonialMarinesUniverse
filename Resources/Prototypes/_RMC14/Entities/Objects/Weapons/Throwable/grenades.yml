@@ -9,7 +9,12 @@
     explosionType: RMC
   - type: ExplosionResistance
     damageCoefficient: 0
-  - type: OnUseTimerTrigger
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
     delay: 4
     beepSound:
       path: "/Audio/_RMC14/Explosion/armbomb.ogg"
@@ -17,7 +22,7 @@
         volume: -5
     initialBeepDelay: 0
     beepInterval: 10
-    doPopup: false
+    popup: null
   - type: IgnorePredictionHide
   - type: Clothing
     slots:
@@ -31,7 +36,6 @@
   abstract: true
   id: RMCM40DPTags
   components:
-  - type: CMUGrenadeDetonationMode
   - type: Tag
     tags:
     - Grenade
@@ -46,9 +50,10 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/flashbang.rsi
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound:
       path: "/Audio/Effects/flash_bang.ogg"
+    positional: true
   - type: DeleteOnTrigger
   - type: SpawnOnTrigger
     proto: GrenadeFlashEffect
@@ -100,16 +105,15 @@
   name: 30mm HSDP smoke grenade
   description: The 30mm HSDP is a small, but powerful smoke grenade. Based off the same platform as the 30mm HEDP. It is set to detonate in 2.5 seconds.
   components:
-  - type: CMUGrenadeDetonationMode
-    impactSpawn: CMUImpactRMCSmoke
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 2.5
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40smoke.rsi
   - type: SpawnOnTrigger
     proto: RMCSmoke
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound: /Audio/Effects/smoke.ogg
+    positional: true
   - type: DeleteOnTrigger
   - type: TimerTriggerVisuals
     primingSound:
@@ -330,11 +334,11 @@
   name: M07 Training Grenade
   description: A harmless reusable version of the 30mm HEDP, used for training. Capable of being loaded into a grenade launcher, or thrown by hand.
   components:
-  - type: CMUGrenadeDetonationMode
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m07training.rsi
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound: /Audio/Effects/snap.ogg
+    positional: true
   - type: Tag
     tags:
     - Grenade
@@ -353,7 +357,7 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hidp.rsi
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     beepSound: null
   - type: CMVocalizeTrigger
   - type: TileFireOnTrigger
@@ -369,11 +373,9 @@
   name: 30mm WPDP white phosphorus grenade
   description: The 30mm WPDP is a small, but powerful phosphorus grenade. It is set to detonate in 2 seconds.
   components:
-  - type: CMUGrenadeDetonationMode
-    impactSpawn: CMUImpactRMCSmokePhosphorusWeak
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40wpdp.rsi
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 2
     beepSound: null
   - type: CMVocalizeTrigger
@@ -383,8 +385,9 @@
       path: /Audio/Effects/Smoke-grenade.ogg
   - type: SpawnOnTrigger
     proto: RMCSmokePhosphorusWeak
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound: /Audio/Effects/smoke.ogg
+    positional: true
 
 - type: entity
   parent: RMCGrenadeWhitePhosphorus
@@ -392,8 +395,6 @@
   name: 30mm CCDP chemical compound grenade
   description: The 30mm CCDP is a small, but powerful chemical compound grenade, similar in effect to WPDP. Word on the block says that the CCDP doesn't actually release White Phosphorus, but some other chemical developed in We-Ya labs.
   components:
-  - type: CMUGrenadeDetonationMode
-    impactSpawn: CMUImpactRMCSmokePhosphorus
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/ied.rsi
   - type: SpawnOnTrigger
@@ -409,14 +410,18 @@
     sprite: _RMC14/Objects/Weapons/Grenades/molotov.rsi
     layers:
     - state: icon
-  - type: CMUOnLightTimerTrigger
+  - type: TriggerOnIgniterUse
+    keyOut: ignite
+  - type: TimerTrigger
+    keysIn:
+    - ignite
+    keyOut: trigger
     examinable: false
     initialBeepDelay: 0
     beepSound: null
+  - type: RandomTimerTrigger
     min: 1
     max: 4
-    instantfusechance: false
-    instfusechance: 10
   - type: CMVocalizeTrigger
   - type: TileFireOnTrigger
     spawn: RMCTileFire

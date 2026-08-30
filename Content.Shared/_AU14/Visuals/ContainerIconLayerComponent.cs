@@ -1,7 +1,7 @@
 using System.Numerics;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.Visuals;
+namespace Content.Shared.CMU14.Visuals;
 
 /// <summary>
 ///     Draws the icon of the most recently inserted item of one container as an extra sprite layer on

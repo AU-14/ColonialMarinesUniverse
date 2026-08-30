@@ -3,7 +3,7 @@
   id: radioGovforAlpha
   name: chat-radio-govforalpha
   keycode: "a"
-  frequency: 2502
+  frequency: 250.2
   color: "#F0433E"
   longRange: true
   tower: true
@@ -14,7 +14,7 @@
   id: radioGovforBravo
   name: chat-radio-govforbravo
   keycode: "b"
-  frequency: 1606
+  frequency: 160.6
   color: "#c7b646"
   longRange: true
   tower: true
@@ -25,7 +25,7 @@
   id: radioGovforCharlie
   name: chat-radio-govforcharlie
   keycode: "c"
-  frequency: 1607
+  frequency: 160.7
   color: "#9D3EF0"
   longRange: true
   tower: true
@@ -36,7 +36,7 @@
   id: radioGovforCommand
   name: chat-radio-govforcommand
   keycode: "v"
-  frequency: 2592
+  frequency: 259.2
   color: "#5b96d4"
   longRange: true
   tower: true
@@ -47,7 +47,7 @@
   id: radioGovforIntel
   name: chat-radio-govforintel
   keycode: "y"
-  frequency: 1605
+  frequency: 160.5
   color: "#e4860c"
   longRange: true
   tower: true
@@ -58,7 +58,7 @@
   id: radioGovforJTAC
   name: chat-radio-govforjtac
   keycode: "j"
-  frequency: 2598
+  frequency: 259.8
   color: "#ad3b98"
   longRange: true
   tower: true
@@ -69,7 +69,7 @@
   id: radioGovforMILP
   name: chat-radio-govformp
   keycode: "p"
-  frequency: 2595
+  frequency: 259.5
   color: "#E92211"
   longRange: true
   tower: true
@@ -81,7 +81,7 @@
   id: radioOpforAlpha
   name: chat-radio-opforalpha
   keycode: "s"
-  frequency: 1601
+  frequency: 160.1
   color: "#bb91d8"
   longRange: true
   tower: true
@@ -92,7 +92,7 @@
   id: radioOpforBravo
   name: chat-radio-opforbravo
   keycode: "t"
-  frequency: 1603
+  frequency: 160.3
   color: "#c6c1a8"
   longRange: true
   tower: true
@@ -103,7 +103,7 @@
   id: radioOpforCharlie
   name: chat-radio-opforcharlie
   keycode: "u"
-  frequency: 1604
+  frequency: 160.4
   color: "#bb44bd"
   longRange: true
   tower: true
@@ -114,7 +114,7 @@
   id: radioOpforCommand
   name: chat-radio-opforcommand
   keycode: "k"
-  frequency: 1479
+  frequency: 147.9
   color: "#5b96d4"
   longRange: true
   tower: true
@@ -125,7 +125,7 @@
   id: radioOpforIntel
   name: chat-radio-opforintel
   keycode: "i"
-  frequency: 1602
+  frequency: 160.2
   color: "#e4860c"
   longRange: true
   tower: true
@@ -136,7 +136,7 @@
   id: radioOpforJTAC
   name: chat-radio-opforjtac
   keycode: "d"
-  frequency: 1474
+  frequency: 147.4
   color: "#ad3b98"
   longRange: true
   tower: true
@@ -147,7 +147,7 @@
   id: radioOpforMILP
   name: chat-radio-opformp
   keycode: "l"
-  frequency: 1477
+  frequency: 147.7
   color: "#DD0055"
   longRange: true
   tower: true
@@ -158,8 +158,8 @@
 - type: radioChannel
   id: radioProvost
   name: chat-radio-provost
-  keycode: "1"
-  frequency: 1863
+  keycode: "0"
+  frequency: 186.3
   color: "#5b96d4"
   longRange: true
   tower: true
@@ -171,7 +171,7 @@
   id: Colony
   name: chat-radio-colony
   keycode: "o"
-  frequency: 1469
+  frequency: 146.9
   color: "#cf40a6"
   longRange: true
   tower: true
@@ -180,7 +180,7 @@
   id: colonyAlert
   name: chat-radio-alert
   keycode: "2"
-  frequency: 1431
+  frequency: 143.1
   color: "#318779"
   longRange: true
 
@@ -188,7 +188,7 @@
   id: radioWEYU
   name: chat-radio-WEYU
   keycode: "w"
-  frequency: 1231
+  frequency: 123.1
   color: "#fe9b24"
   longRange: true
   tower: true
@@ -197,7 +197,7 @@
   id: radioCMB
   name: chat-radio-CMB
   keycode: "3"
-  frequency: 1220
+  frequency: 122.0
   color: "#1b748c"
   longRange: true
   tower: true
@@ -206,7 +206,7 @@
   id: radioCLF
   name: chat-radio-CLF
   keycode: "q"
-  frequency: 1886
+  frequency: 188.6
   color: "#059705"
   longRange: true
   tower: true
@@ -219,7 +219,7 @@
   id: radioCLFCommand
   name: chat-radio-CLFCommand
   keycode: "n"
-  frequency: 1887
+  frequency: 188.7
   color: "#0b7a3d"
   longRange: true
   tower: true
@@ -230,7 +230,7 @@
   id: radioMobFamily
   name: chat-radio-mob
   keycode: "f"
-  frequency: 1467
+  frequency: 146.7
   color: "#318779"
   longRange: true
   # tower: true
@@ -239,7 +239,7 @@
   id: radioAI
   name: chat-radio-ai
   keycode: "$"
-  frequency: 7676
+  frequency: 767.6
   color: "#d39d22"
   longRange: true
 
@@ -248,7 +248,7 @@
   id: ColonyHandheld
   name: chat-radio-colony-softwave
   keycode: 'ñ' # unused - handhelds broadcast without key
-  frequency: 1461
+  frequency: 146.1
   color: "#a6cf40"
   longRange: true
 
@@ -257,7 +257,7 @@
   id: Hivemind
   name: chat-radio-hivemind
   keycode: "h"
-  frequency: 426
+  frequency: 42.6
   color: "#8b36a6"
   longRange: true
 
@@ -265,7 +265,7 @@
   id: MyceliumLink
   name: chat-radio-mycelium-link
   keycode: "m"
-  frequency: 427
+  frequency: 42.5
   color: "#c2c38d"
   longRange: true
 
@@ -273,7 +273,7 @@
   id: ICSCSOF
   name: chat-radio-icsc
   keycode: "4"
-  frequency: 1558
+  frequency: 155.8
   color: "#0b93b9"
   longRange: true
   tower: true
@@ -282,7 +282,7 @@
   id: UASOF
   name: chat-radio-uasof
   keycode: "5"
-  frequency: 1553
+  frequency: 155.3
   color: "#2e4f68"
   longRange: true
   tower: true
@@ -291,7 +291,7 @@
   id: TWESOF
   name: chat-radio-twe
   keycode: "6"
-  frequency: 1557
+  frequency: 155.7
   color: "#701ba7"
   longRange: true
   tower: true
@@ -300,7 +300,7 @@
   id: UPPSOF
   name: chat-radio-uppsof
   keycode: "7"
-  frequency: 1533
+  frequency: 153.3
   color: "#e4860c"
   longRange: true
   tower: true
@@ -309,7 +309,7 @@
   id: CCASOF
   name: chat-radio-cca
   keycode: "8"
-  frequency: 1537
+  frequency: 153.7
   color: "#ffae00"
   longRange: true
   tower: true
@@ -318,7 +318,7 @@
   id: radioVAI
   name: chat-radio-vai
   keycode: "z"
-  frequency: 1559
+  frequency: 155.9
   color: "#e3580e"
   longRange: true
   tower: true
@@ -326,8 +326,8 @@
 - type: radioChannel
   id: PART
   name: chat-radio-part
-  keycode: "8"
-  frequency: 5571
+  keycode: "1"
+  frequency: 557.1
   color: "#92969A"
   longRange: true
   tower: true
@@ -352,49 +352,7 @@
   id: UNISOF
   name: chat-radio-unisc
   keycode: 'u'
-  frequency: 1765
+  frequency: 176.5
   color: "#3d82b8"
   longRange: true
   tower: true
-
-# ├──[ Abominations ]────────────────────────────────────────────────┤
-- type: radioChannel
-  id: Abomination # Spider/Grunt/Skitter/Mimic
-  name: chat-radio-abomination
-  keycode: "g"
-  frequency: 428
-  color: "#6b8f3a"
-  longRange: true
-
-- type: radioChannel
-  id: AbominationMimic # (Disguised) Mimic-only
-  name: chat-radio-abomination-mimic
-  keycode: "e"
-  frequency: 427
-  color: "#a63636"
-  longRange: true
-
-# ├──[ Yautja ]──────────────────────────────────────────────────────┤
-- type: radioChannel
-  id: CMUYautja
-  name: chat-radio-cmu-yautja
-  keycode: "9"
-  frequency: 1541
-  color: "#b85440"
-  longRange: true
-
-# - type: radioChannel
-#   id: CMUYautjaOverseer
-#   name: chat-radio-cmu-yautja-overseer
-#   keycode: "Ŷ"
-#   frequency: 1542
-#   color: "#d4a85b"
-#   longRange: true
-
-- type: radioChannel
-  id: CMUYautjaBadBlood
-  name: chat-radio-cmu-yautja-badblood
-  keycode: "0"
-  frequency: 1543
-  color: "#c44343"
-  longRange: true

@@ -2,20 +2,22 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Linq;
-using Content.Server._AU14.Construction.CustomConstruction;
-using Content.Server.AU14.Round;
-using Content.Shared._AU14.Administration;
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Server.CMU14.Construction.CustomConstruction;
+using Content.Server.CMU14.Round;
+using Content.Shared.CMU14.Administration;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Database;
+using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Server._AU14.ZLevelBuilding;
+namespace Content.Server.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// The "Z-Sync Lists" admin tool: controls WHICH wall prototypes get mirrored across z-levels as map
@@ -38,6 +40,12 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
     [Dependency] private  AuRoundSystem _auRound = default!;
 
     private static readonly ResPath SaveFile = new("/au14_zborder_sync.txt");
+
+    /// <summary>
+    /// Global code switch for z-border synchronization. Keep the configured lists loaded and editable while
+    /// preventing every map from reflecting border entities across z-levels.
+    /// </summary>
+    public bool GloballyEnabled = false;
 
     /// <summary>The scope key for entries that apply on every map.</summary>
     public const string GlobalScope = "";
@@ -80,6 +88,9 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
     /// the selected planet's MapId and its planet prototype id are both accepted so either keying works.</summary>
     public bool ShouldReflect(string protoId)
     {
+        if (!GloballyEnabled)
+            return false;
+
         // The RMC wall hierarchy puts ordinary, destructible walls beneath its historical "invincible" wall
         // roots. Inheritance alone therefore cannot distinguish a real map boundary from a wall a player just
         // built. Never mirror a damageable wall: doing so will duplicate player construction onto the levels above
@@ -155,7 +166,7 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
 
         // Every map prototype is offered, planets or not, in rotation or not - the scope picker should
         // cover anything the server can ever load.
-        foreach (var map in _prototype.EnumeratePrototypes<Content.Server.Maps.GameMapPrototype>()
+        foreach (var map in _prototype.EnumeratePrototypes<GameMapPrototype>()
                      .OrderBy(p => p.MapName, StringComparer.OrdinalIgnoreCase))
         {
             var name = string.IsNullOrWhiteSpace(map.MapName) ? map.ID : map.MapName;
@@ -178,7 +189,7 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
         foreach (var scope in scopes)
         {
             if (scope != GlobalScope &&
-                !_prototype.HasIndex<Content.Server.Maps.GameMapPrototype>(scope) &&
+                !_prototype.HasIndex<GameMapPrototype>(scope) &&
                 !_prototype.HasIndex<EntityPrototype>(scope))
                 continue;
 

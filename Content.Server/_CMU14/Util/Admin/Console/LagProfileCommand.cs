@@ -7,7 +7,7 @@ using Robust.Shared.Console;
 using Robust.Shared.Profiling;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Administration.Console;
+namespace Content.Server.CMU14.Administration.Console;
 
 [AdminCommand(AdminFlags.Debug)]
 public sealed partial class LagProfileCommand : IConsoleCommand

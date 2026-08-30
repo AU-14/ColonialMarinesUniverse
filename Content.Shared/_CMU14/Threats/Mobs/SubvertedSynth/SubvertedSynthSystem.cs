@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Synth;
 
-namespace Content.Shared._CMU14.Threats.Mobs.SubvertedSynth;
+namespace Content.Shared.CMU14.Threats.Mobs.SubvertedSynth;
 
 public sealed class SubvertedSynthSystem : EntitySystem
 {

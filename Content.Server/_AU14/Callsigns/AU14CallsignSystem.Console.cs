@@ -1,14 +1,14 @@
-﻿using System.Linq;
-using Content.Shared._AU14.Callsigns;
-using Content.Shared._AU14.Radio;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using System.Linq;
+using Content.Shared.CMU14.Callsigns;
+using Content.Shared.CMU14.Radio;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared.Popups;
 using Robust.Shared.Utility;
 
-namespace Content.Server._AU14.Callsigns;
+namespace Content.Server.CMU14.Callsigns;
 
 public sealed partial class AU14CallsignSystem
 {

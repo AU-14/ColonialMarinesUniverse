@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeCloud;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeCloud;
 
 /// <summary>
 /// Marker for xenos (e.g. spore poppers) that release a spore cloud on death.

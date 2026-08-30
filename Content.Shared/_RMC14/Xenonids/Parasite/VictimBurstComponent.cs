@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
@@ -16,7 +16,7 @@ public sealed partial class VictimBurstComponent : Component
     ///     the standard chest-burst RSI.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public ResPath BackRsiPath = new("/Textures/_CMU14/Effects/back_burst.rsi");
+    public ResPath BackRsiPath = new("/Textures/Effects/back_burst.rsi");
 
     [DataField, AutoNetworkedField]
     public string BurstState = "bursted_stand";

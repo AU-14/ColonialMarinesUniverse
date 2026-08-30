@@ -1,7 +1,7 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Explosion;
+namespace Content.Shared.CMU14.Explosion;
 
 /// <summary>
 ///     Placed on the ground with a short do-after when used in hand. Once placed it is anchored and can no

@@ -1,25 +1,26 @@
-using Content.Server._CMU14.Threats.Rules;
-using Content.Server._CMU14.CharacterDescription;
+using Content.Server.CMU14.Threats.Rules;
+using Content.Server.CMU14.CharacterDescription;
+using Content.Server.Humanoid;
 using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
 using Content.Shared._RMC14.Chemistry.Reagent;
-using Content.Shared._CMU14.CharacterDescription;
-using Content.Shared._CMU14.FactionRoster;
+using Content.Shared.CMU14.CharacterDescription;
+using Content.Shared.CMU14.FactionRoster;
 using Content.Shared.Humanoid;
-using Content.Shared.Humanoid.Markings;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
 using Robust.Server.GameObjects;
 
-namespace Content.Server._CMU14.FactionRoster;
+namespace Content.Server.CMU14.FactionRoster;
 
-public sealed partial class FactionRosterConsoleSystem : EntitySystem
+public sealed class FactionRosterConsoleSystem : EntitySystem
 {
-    [Dependency] private  UserInterfaceSystem _ui = default!;
-    [Dependency] private  JobSystem _jobs = default!;
-    [Dependency] private  MindSystem _minds = default!;
-    [Dependency] private  Robust.Shared.Prototypes.IPrototypeManager _prototypeManager = default!;
-    [Dependency] private  RMCReagentSystem _reagentSystem = default!;
+    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly JobSystem _jobs = default!;
+    [Dependency] private readonly MindSystem _minds = default!;
+    [Dependency] private readonly Robust.Shared.Prototypes.IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly RMCReagentSystem _reagentSystem = default!;
+    [Dependency] private readonly HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
 
     private const string ColonyFactionId = "AUColonist";
     private const string ClfFactionId = "CLF";
@@ -101,12 +102,12 @@ public sealed partial class FactionRosterConsoleSystem : EntitySystem
             }
         }
 
-        if (TryComp(uid, out HumanoidAppearanceComponent? humanoid))
+        if (_humanoidAppearance.TryGetColors(uid, out var skinColor, out var eyeColor))
         {
-            entry.SkinToneName = NamedColorHelper.NearestColorName(humanoid.SkinColor);
-            entry.EyeColorName = NamedColorHelper.NearestColorName(humanoid.EyeColor);
+            entry.SkinToneName = NamedColorHelper.NearestColorName(skinColor);
+            entry.EyeColorName = NamedColorHelper.NearestColorName(eyeColor);
 
-            if (humanoid.MarkingSet.TryGetCategory(MarkingCategories.Hair, out var hairMarkings) &&
+            if (_humanoidAppearance.TryGetMarkings(uid, HumanoidVisualLayers.Hair, out _, out _, out var hairMarkings) &&
                 hairMarkings.Count > 0 && hairMarkings[0].MarkingColors.Count > 0)
             {
                 entry.HairColorName = NamedColorHelper.NearestColorName(hairMarkings[0].MarkingColors[0]);

@@ -1,6 +1,7 @@
 - type: entity
   abstract: true
   id: ActionZombieSummonerBase
+  parent: BaseAction
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -16,12 +17,14 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: reserve_parasite
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: reserve_parasite
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOpenActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOpenActionEvent
 
 - type: entity
   parent: ActionZombieSummonerBase
@@ -31,16 +34,19 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: mark_hold
-    iconOn:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: mark_hold
     priority: 6
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_hold
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_hold
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
       type: Halt
 
 - type: entity
@@ -51,16 +57,19 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: mark_attack
-    iconOn:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: mark_attack
     priority: 7
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_attack
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_attack
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
       type: Attack
 
 - type: entity
@@ -71,16 +80,19 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: mark_rally
-    iconOn:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: mark_rally
     priority: 8
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_rally
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_rally
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
       type: Follow
 
 - type: entity
@@ -91,14 +103,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: mark_danger
-    iconOn:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: mark_danger
     priority: 9
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_danger
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_danger
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.ZombieSummoner.ZombieSummonerOrderActionEvent
       type: CheeseEm

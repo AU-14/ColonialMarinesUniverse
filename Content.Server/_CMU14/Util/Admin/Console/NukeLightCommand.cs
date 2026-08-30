@@ -9,7 +9,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Spawners;
 
-namespace Content.Server._CMU14.Util.Admin.Console;
+namespace Content.Server.CMU14.Util.Admin.Console;
 
 [AdminCommand(AdminFlags.Fun)]
 public sealed partial class NukeLightCommand : LocalizedEntityCommands

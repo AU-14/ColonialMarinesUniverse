@@ -3,14 +3,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System;
 using Content.Server.Administration;
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
-namespace Content.Server._AU14.ZLevelBuilding;
+namespace Content.Server.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): lists every map with its AU14 "Multi Z-Level" status (whether players may build

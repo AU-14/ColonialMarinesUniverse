@@ -1,6 +1,6 @@
 // ReSharper disable CheckNamespace
 
-using Content.Shared._CMU14.Item.Stain;
+using Content.Shared.CMU14.Item.Stain;
 
 namespace Content.Shared.Chemistry.Reagent;
 

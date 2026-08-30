@@ -1,7 +1,7 @@
 using Content.Client._RMC14.UserInterface;
 using Content.Client.Administration.UI.CustomControls;
 using Content.Client.UserInterface.Controls;
-using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Research;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Content.Client._AU14.Chemistry.Research;
+namespace Content.Client.CMU14.Chemistry.Research;
 
 [UsedImplicitly]
 public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)

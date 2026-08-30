@@ -5,7 +5,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Abomination;
+namespace Content.Shared.CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 ///     Behaviour for the flesh kudzu tile. Heals abominations standing on it

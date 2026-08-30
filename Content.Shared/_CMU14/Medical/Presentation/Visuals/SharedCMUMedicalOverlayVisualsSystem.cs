@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Diagnostics.Examine;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Diagnostics.Examine;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared.Body.Part;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 
-namespace Content.Shared._CMU14.Medical.Presentation.Visuals;
+namespace Content.Shared.CMU14.Medical.Presentation.Visuals;
 
 public sealed partial class SharedCMUMedicalOverlayVisualsSystem : EntitySystem
 {
@@ -123,17 +124,24 @@ public sealed partial class SharedCMUMedicalOverlayVisualsSystem : EntitySystem
                 }
             }
 
-            if (part.ToHumanoidLayers() is not { } layer)
+            var layer = part.PartType switch
+            {
+                BodyPartType.Torso => HumanoidVisualLayers.Chest,
+                BodyPartType.Head => HumanoidVisualLayers.Head,
+                BodyPartType.Tail => HumanoidVisualLayers.Tail,
+                _ => CMUMedicalVisualLayers.ForBodyPart(part.PartType, part.Symmetry),
+            };
+            if (layer is null)
                 continue;
 
             var splinted = HasComp<CMUSplintedComponent>(partUid) || HasComp<CMUCastComponent>(partUid);
             if (bandaged || splinted)
-                AddTreatmentVisual(_builders, layer, bandaged, splinted, partUid.GetHashCode());
+                AddTreatmentVisual(_builders, layer.Value, bandaged, splinted, partUid.GetHashCode());
 
             var bruteDamageLevel = PickDamageLevel(partBrute.Float());
             var burnDamageLevel = PickDamageLevel(partBurn.Float());
             if (bruteDamageLevel > 0 || burnDamageLevel > 0)
-                AddDamageVisual(_builders, ToDamageLayer(layer), bruteDamageLevel, burnDamageLevel, partUid.GetHashCode());
+                AddDamageVisual(_builders, ToDamageLayer(layer.Value), bruteDamageLevel, burnDamageLevel, partUid.GetHashCode());
         }
 
         _examineProjection.Replace(body, _examineParts, totalBrute, totalBurn);

@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Medical.Core;
+namespace Content.Shared.CMU14.Medical.Core;
 
 /// <summary>
 ///     Identifies one replaceable scheduled work item on an entity.

@@ -31,6 +31,7 @@
     node: completed
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: PointLight
     enabled: true

@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Dropship.TacticalLand;
+namespace Content.Shared.CMU14.Dropship.TacticalLand;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedDropshipTacticalLandSystem))]

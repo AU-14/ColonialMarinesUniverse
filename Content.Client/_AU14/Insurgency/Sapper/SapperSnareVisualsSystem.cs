@@ -1,11 +1,11 @@
 using Content.Client.Eye;
-using Content.Shared._AU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Insurgency.Sapper;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.GameObjects;
 
-namespace Content.Client._AU14.Insurgency.Sapper;
+namespace Content.Client.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     Handles the two visual halves of a snare, both client-side:

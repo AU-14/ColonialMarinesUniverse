@@ -11,7 +11,7 @@
     announcement: "Fiorina 161, a Weyland-Yutani maximum security prison, has gone silent. A response force has been dispatched to investigate."
     platoonsGovfor:
     - USCM
-    - WYPMC
+    - WEYU
     - VAIPO
     - RMC
     - CMBCIU
@@ -20,7 +20,7 @@
     - LACN
     - UPP
     - ProdigySF
-    defaultgovfor: WYPMC
+    defaultgovfor: WEYU
     defaultopfor: ProdigySF
     govforinship: true
     opforinship: true
@@ -82,7 +82,7 @@
 - type: gameMap
   id: aufiorina
   mapName: Fiorina Prison
-  mapPath: /Maps/_AU14/fiorina.yml
+  mapPath: /Maps/CMU14/fiorina.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

@@ -1,6 +1,6 @@
 <controls:CMUSurgeryWindow
     xmlns="https://spacestation14.io"
-    xmlns:controls="clr-namespace:Content.Client._CMU14.Medical.Treatment.Surgery"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Medical.Treatment.Surgery"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     Title="{Loc 'cmu-medical-surgery-window-title'}"
     MinSize="560 420"

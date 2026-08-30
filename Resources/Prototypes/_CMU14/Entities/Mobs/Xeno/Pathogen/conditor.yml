@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-conditor
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/conditor.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/conditor.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -97,8 +97,10 @@
   - type: MeleeWeapon
     attackRate: 1.2
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: RMCSize
     size: Big
   - type: CMArmor
@@ -112,10 +114,10 @@
     stunMax: 4
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: conditor
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:

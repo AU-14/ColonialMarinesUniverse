@@ -8,7 +8,7 @@
     factions:
     - CMU14PathogenWalker
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     layers:
     - state: sporecaster
     - state: sporecaster_underlay
@@ -47,10 +47,10 @@
   - type: TacticalMapTracked
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: fogger
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: GhostRole
     name: cmu-job-name-pathogen-popper
@@ -70,7 +70,7 @@
   suffix: Construction
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     layers:
     - state: sporecaster
     - state: sporecaster_underlay
@@ -93,4 +93,4 @@
   - type: HiveConstructionLimited
     id: CMU14PathogenSporecaster
   - type: WarpPoint
-    location: sporecaster
+    location: cmu-warp-location-sporecaster

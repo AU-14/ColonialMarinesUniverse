@@ -10,7 +10,7 @@
         tableId: AU14CrateCivilianClothingRandomSelection
         rolls: 15
 
-# in Resources/Prototypes/_AU14/Entities/crates.yml
+# in Resources/Prototypes/CMU14/Entities/crates.yml
 
 - type: entityTable
   id: AU14CrateCivilianClothingRandomSelection

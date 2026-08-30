@@ -4,12 +4,12 @@
 using System;
 using System.Globalization;
 using System.Numerics;
-using Content.Client._AU14.UI;
-using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Client.CMU14.UI;
+using Content.Shared.CMU14.Construction.CustomConstruction;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client._AU14.Construction.CustomConstruction;
+namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// The one shared cost/placement form for the Mass Entity Editor's TILES mode: pick the top-bar page

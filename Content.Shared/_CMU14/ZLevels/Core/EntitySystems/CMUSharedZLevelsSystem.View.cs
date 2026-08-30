@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Actions;
 using Content.Shared.Maps;
@@ -8,7 +8,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
-namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem
 {

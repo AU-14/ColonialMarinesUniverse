@@ -1,6 +1,6 @@
-using Content.Shared.Actions;
 using Content.Shared._RMC14.Actions;
 using Content.Shared.Interaction;
+using Content.Shared.Physics;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -10,7 +10,7 @@ namespace Content.Shared.Actions.Components;
 /// An action that targets an entity or map.
 /// Requires <see cref="ActionComponent"/>.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem), typeof(Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock.CMUXenoWarlockSystem))]
+[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem), typeof(Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock.CMUXenoWarlockSystem))]
 [EntityCategory("Actions")]
 [AutoGenerateComponentState]
 public sealed partial class TargetActionComponent : Component
@@ -39,6 +39,16 @@ public sealed partial class TargetActionComponent : Component
     [DataField, AutoNetworkedField]
     public bool CheckCanAccess = true;
 
+    /// <summary>
+    ///     The collision group to use to check for accessibility if <see cref="CheckCanAccess" /> is true.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public CollisionGroup AccessMask = SharedInteractionSystem.InRangeUnobstructedMask;
+
+    /// <summary>
+    ///     The allowed range for a target to be. If zero or negative, the range check is skipped,
+    ///     unless <see cref="CheckCanAccess"/> is true.
+    /// </summary>
     [DataField, AutoNetworkedField]
     public float Range = SharedInteractionSystem.InteractionRange;
 

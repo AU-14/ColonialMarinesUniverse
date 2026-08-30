@@ -1,4 +1,4 @@
-using Content.Server._CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Administration;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
@@ -12,7 +12,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.ZLevels.Mapping;
+namespace Content.Server.CMU14.ZLevels.Mapping;
 
 [AdminCommand(AdminFlags.Server | AdminFlags.Mapping)]
 public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands

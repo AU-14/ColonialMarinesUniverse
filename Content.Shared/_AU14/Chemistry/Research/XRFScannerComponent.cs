@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Shared._AU14.Chemistry.Research;
+namespace Content.Shared.CMU14.Chemistry.Research;
 
 [RegisterComponent, AutoGenerateComponentState, NetworkedComponent]
 public sealed partial class XRFScannerComponent : Component
@@ -27,7 +27,7 @@ public sealed partial class XRFScannerComponent : Component
     public SoundPathSpecifier PrintSound = new("/Audio/_RMC14/Machines/fax.ogg");
 
     [DataField]
-    public SoundPathSpecifier SuccessSound = new("/Audio/_CMU14/Machines/twobeep.ogg");
+    public SoundPathSpecifier SuccessSound = new("/Audio/CMU14/Machines/twobeep.ogg");
 
     [DataField]
     public SoundPathSpecifier FailSound = new("/Audio/_RMC14/Machines/buzz_two.ogg");

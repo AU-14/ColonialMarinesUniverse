@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
-namespace Content.Shared._CMU14.Round.Roles;
+namespace Content.Shared.CMU14.Round.Roles;
 
 public enum RoundJobSide : byte
 {

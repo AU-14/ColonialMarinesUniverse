@@ -1,5 +1,5 @@
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Hands.EntitySystems;
@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Shared._AU14.Chemistry.Research;
+namespace Content.Shared.CMU14.Chemistry.Research;
 
 public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
 {

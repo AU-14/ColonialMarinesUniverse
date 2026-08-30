@@ -1,10 +1,10 @@
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 
 
 [ByRefEvent]

@@ -1,11 +1,11 @@
 using System.Numerics;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Yautja;
+namespace Content.Client.CMU14.Yautja;
 
 public sealed class YautjaMarkWindow : DefaultWindow
 {

@@ -58,8 +58,9 @@
       Brute:
         collection: GlassSmack
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: XenoToggleChargingDamage
     stageLoss: 2
     damage:
@@ -430,7 +431,6 @@
   - type: Icon
     sprite: _RMC14/Structures/Windows/colony_rwindow.rsi
     state: col_rwindow0
-    color: "#aba9a9"
   - type: IconSmooth
     key: windows
     additionalKeys:

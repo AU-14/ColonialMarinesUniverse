@@ -1,6 +1,6 @@
 using Content.Shared.FixedPoint;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain;
 
 public enum PainTier : byte
 {

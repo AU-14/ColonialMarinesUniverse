@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Threats.Mobs.Wendigo;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo;
 using Content.Shared.Chat.Prototypes;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Threats.Mobs.Wendigo;
+namespace Content.Client.CMU14.Threats.Mobs.Wendigo;
 
 public sealed partial class WendigoVoiceBui : BoundUserInterface
 {

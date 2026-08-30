@@ -45,13 +45,13 @@
     speechStyleClass: commanderSpeech
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
-      state: adj
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_adj
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_CMU14/Interface/cmuopforblips.rsi
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: adj
     # UPP:
     # - type: JobPrefix

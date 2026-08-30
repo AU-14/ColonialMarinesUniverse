@@ -4,15 +4,15 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using Content.Shared._AU14.Administration;
-using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Shared.CMU14.Administration;
+using Content.Shared.CMU14.Construction.CustomConstruction;
 using Content.Shared.Database;
 using Content.Shared.Lathe.Prototypes;
 using Content.Shared.Popups;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Construction.CustomConstruction;
+namespace Content.Server.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Lathe sibling of the construction-items editor (see <see cref="CustomConstructionMenuSystem"/>): lets a

@@ -1,7 +1,7 @@
-using Content.Shared.AU14.AllianceConsole;
+using Content.Shared.CMU14.AllianceConsole;
 using Robust.Client.UserInterface;
 
-namespace Content.Client.AU14.AllianceConsole;
+namespace Content.Client.CMU14.AllianceConsole;
 
 public sealed class AllianceConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {

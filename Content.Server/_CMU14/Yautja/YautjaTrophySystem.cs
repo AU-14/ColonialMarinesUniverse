@@ -1,7 +1,7 @@
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Body.Part;
@@ -25,7 +25,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaTrophySystem : EntitySystem
 {
@@ -981,7 +981,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private bool IsHumanTrophyTarget(EntityUid target)
     {
-        return HasComp<HumanoidAppearanceComponent>(target) &&
+        return HasComp<HumanoidProfileComponent>(target) &&
                !HasComp<XenoComponent>(target) &&
                !HasComp<YautjaComponent>(target);
     }

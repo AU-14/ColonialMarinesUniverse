@@ -1,5 +1,5 @@
-using Content.Server.StatusEffectNew;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.StatusEffectNew;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -8,7 +8,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Medical.Core;
+namespace Content.Server.CMU14.Medical.Core;
 
 /// <summary>
 ///     Applies nitrous anesthesia when a CMU medical body connects working internals.

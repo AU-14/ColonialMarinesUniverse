@@ -58,7 +58,7 @@
   startingGear: AU14GearUNISCSquadleader
   greeting: au14-unisc-greeting
   joinNotifyCrew: false
-  supervisors: au-14-job-name-unisc-commander
+  supervisors: au14-job-supervisors-govfor
   accessGroups:
   - AU14GovforSquad
   - AU14GovforCommand
@@ -108,4 +108,3 @@
 
 - type: playTimeTracker
   id: AU14JobUNISCSquadleader
-

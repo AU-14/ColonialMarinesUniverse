@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 
 /// <summary>
 /// Tracks the Overmind's visual state: incorporeal (eye/ghost) vs manifested (physical form),

@@ -1,6 +1,6 @@
 <ambassador:AmbassadorThirdPartyWindow
     xmlns="https://spacestation14.io"
-    xmlns:ambassador="clr-namespace:Content.Client.AU14.Ambassador"
+    xmlns:ambassador="clr-namespace:Content.Client.CMU14.Ambassador"
     Title="Call Third Party Support" MinSize="400 300">
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8">
         <Label Name="BudgetLabel" Access="Public" Text="Budget: $0" StyleClasses="LabelHeading" Margin="4 4" />

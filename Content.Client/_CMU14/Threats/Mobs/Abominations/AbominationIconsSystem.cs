@@ -1,9 +1,9 @@
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
-using AbominationMimicComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
+using AbominationMimicComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
 
-namespace Content.Client._CMU14.Threats.Mobs.Abominations;
+namespace Content.Client.CMU14.Threats.Mobs.Abominations;
 
 /// <summary>
 ///     Client-side overlay that paints the AbominationFaction icon on every

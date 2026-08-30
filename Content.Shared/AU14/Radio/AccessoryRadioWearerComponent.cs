@@ -1,7 +1,7 @@
 
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 /// <summary>
 ///     Placed on an entity that has been granted radio access by an <see cref="AccessoryHeadsetComponent"/>.

@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Content.Shared._CMU14.ZLevels.Core.Components;
+namespace Content.Shared.CMU14.ZLevels.Core.Components;
 
 [RegisterComponent]
 public sealed partial class CMUZLevelPredictedProjectileVisualOffsetComponent : Component

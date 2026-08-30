@@ -30,13 +30,13 @@
     prefix: au14-job-prefix-govforsquadautomaticrifleman
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
-      state: afn
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_afn
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_CMU14/Interface/cmuopforblips.rsi
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: afn
     UPP:
     - type: Skills

@@ -1,10 +1,10 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.Audio;
 using Robust.Shared.Audio;
 
-namespace Content.Server.AU14.Comms;
+namespace Content.Server.CMU14.Comms;
 
 public sealed partial class ColonyCommsConsoleSystem : EntitySystem
 {
@@ -59,7 +59,7 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
                 if (!HasComp<AmbientSoundComponent>(sirenUid))
                 {
                     var ambient = AddComp<AmbientSoundComponent>(sirenUid);
-                    _ambientSound.SetSound(sirenUid, new SoundPathSpecifier("/Audio/_CMU14/Machines/ColonySiren.ogg"), ambient);
+                    _ambientSound.SetSound(sirenUid, new SoundPathSpecifier("/Audio/CMU14/Machines/ColonySiren.ogg"), ambient);
                     _ambientSound.SetRange(sirenUid, 48f, ambient);
                     _ambientSound.SetVolume(sirenUid, -1f, ambient);
                     _ambientSound.SetAmbience(sirenUid, true, ambient);

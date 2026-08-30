@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
+namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
 ///     Persistent internal-bleeding source left when an incision is closed

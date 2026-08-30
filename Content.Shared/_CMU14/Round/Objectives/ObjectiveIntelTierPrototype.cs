@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Round.Objectives;
+namespace Content.Shared.CMU14.Round.Objectives;
 
 [Prototype]
 public sealed partial class ObjectiveIntelTierPrototype : IPrototype

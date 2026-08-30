@@ -1,10 +1,10 @@
 using Content.Server.Ghost.Roles;
-using Content.Shared._CMU14.Round.Objectives.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Mind.Components;
 using Robust.Shared.Map;
 
-namespace Content.Server._CMU14.Round.Objectives;
+namespace Content.Server.CMU14.Round.Objectives;
 
 public sealed class ObjectiveWatchedEntityStartupEvent(EntityUid uid) : EntityEventArgs
 {

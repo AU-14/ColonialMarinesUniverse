@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Roles;
+namespace Content.Shared.CMU14.Roles;
 
 /// <summary>
 /// Shared constants for the character "Synthetic" option and its whitelist gate.

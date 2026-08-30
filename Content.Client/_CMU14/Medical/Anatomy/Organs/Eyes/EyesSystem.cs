@@ -1,5 +1,5 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
 
-namespace Content.Client._CMU14.Medical.Anatomy.Organs.Eyes;
+namespace Content.Client.CMU14.Medical.Anatomy.Organs.Eyes;
 
 public sealed class EyesSystem : SharedEyesSystem;

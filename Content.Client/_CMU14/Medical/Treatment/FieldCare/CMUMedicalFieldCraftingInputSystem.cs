@@ -1,10 +1,10 @@
-using Content.Shared._CMU14.Input;
-using Content.Shared._CMU14.Medical.Treatment.FieldCare;
+using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Medical.Treatment.FieldCare;
 using JetBrains.Annotations;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 
-namespace Content.Client._CMU14.Medical.Treatment.FieldCare;
+namespace Content.Client.CMU14.Medical.Treatment.FieldCare;
 
 [UsedImplicitly]
 public sealed class CMUMedicalFieldCraftingInputSystem : EntitySystem

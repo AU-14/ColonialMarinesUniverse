@@ -1,18 +1,21 @@
 using System.Linq;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.Popups;
-using Content.Shared._CMU14.Round.Objectives;
-using Content.Shared._CMU14.Round.Objectives.Type;
-using Content.Shared._CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.Round.Objectives;
+using Content.Shared.CMU14.Round.Objectives.Type;
+using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.NPC.Components;
 using Content.Shared.Popups;
 
-namespace Content.Server._CMU14.Round.Objectives.Type;
+namespace Content.Server.CMU14.Round.Objectives.Type;
 
 public sealed partial class ObjCaptureSystem : ObjectiveSystem
 {
     [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
 
     private readonly Dictionary<EntityUid, float> _timeSinceLastIncrement = new();
@@ -147,7 +150,8 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
             if (TryComp(uid, out DamageableComponent? damageable))
             {
                 float currentSlash = 0f;
-                if (damageable.Damage.DamageDict.TryGetValue("Slash", out var slash))
+                var damage = _damageable.GetAllDamage((uid, damageable));
+                if (damage.DamageDict.TryGetValue("Slash", out var slash))
                     currentSlash = slash.Float();
                 _lastSlashDamage.TryGetValue(uid, out float lastSlash);
                 float delta = currentSlash - lastSlash;

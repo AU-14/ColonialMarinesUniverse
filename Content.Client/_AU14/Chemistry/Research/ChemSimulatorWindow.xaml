@@ -1,6 +1,6 @@
 <controls:ChemSimulatorWindow
     xmlns="https://spacestation14.io"
-    xmlns:controls="clr-namespace:Content.Client._AU14.Chemistry.Research"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Chemistry.Research"
     xmlns:ui="clr-namespace:Content.Client._RMC14.UserInterface"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:uiControls="clr-namespace:Content.Client.UserInterface.Controls"

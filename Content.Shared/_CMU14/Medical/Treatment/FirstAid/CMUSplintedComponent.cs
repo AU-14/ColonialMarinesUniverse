@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.FirstAid;
+namespace Content.Shared.CMU14.Medical.Treatment.FirstAid;
 
 /// <summary>
 ///     The actual fracture data is untouched, so removing the splint restores the

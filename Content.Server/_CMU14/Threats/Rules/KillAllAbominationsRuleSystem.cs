@@ -1,17 +1,17 @@
-using Content.Server._CMU14.RoundStatistics;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.RoundStatistics;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
 using AbominationMimicTransformedComponent
-    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
-using KillAllAbominationsRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllAbominationsRuleComponent;
+    = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
+using KillAllAbominationsRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllAbominationsRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 /// <summary>
 ///     Counts every abomination in the world — natural-form castes via

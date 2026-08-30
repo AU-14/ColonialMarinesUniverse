@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Content.Server.Explosion.EntitySystems;
-using Content.Shared._AU14.Insurgency.Sapper;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.Examine;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Explosion.EntitySystems;
@@ -12,6 +11,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Trigger.Systems;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -19,7 +19,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 
-namespace Content.Server._AU14.Insurgency.Sapper;
+namespace Content.Server.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     The two-part tripwire. Planting the charge hands the sapper the wire's "other end"; they carry it to

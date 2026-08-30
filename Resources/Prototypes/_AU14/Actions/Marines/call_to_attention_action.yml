@@ -6,8 +6,10 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/GOVFOR/call_to_attention.rsi
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/GOVFOR/call_to_attention.rsi
       state: attention
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:AU14CallToAttentionActionEvent

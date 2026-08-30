@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Bones;
+namespace Content.Shared.CMU14.Medical.Anatomy.Bones;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(SharedFractureSystem), typeof(SharedBoneSystem))]

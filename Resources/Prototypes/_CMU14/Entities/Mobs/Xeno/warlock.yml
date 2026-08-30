@@ -13,7 +13,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Warlock/warlock.rsi
+    sprite: CMU14/Mobs/Xenonids/Warlock/warlock.rsi
   - type: MobState
     allowedStates:
     - Alive
@@ -61,12 +61,16 @@
     clawType: Sharp
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 18
+      types:
+        Blunt: 6
+        Slash: 6
+        Piercing: 6
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: Tackle
     max: 3
   - type: MovementSpeedModifier

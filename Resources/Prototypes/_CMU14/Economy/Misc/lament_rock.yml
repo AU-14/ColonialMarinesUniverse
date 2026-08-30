@@ -6,9 +6,9 @@
   suffix: Mining, Barren
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Walls/fragile_rock.rsi
+    sprite: CMU14/Structures/Walls/fragile_rock.rsi
   - type: Icon
-    sprite: _CMU14/Structures/Walls/fragile_rock.rsi
+    sprite: CMU14/Structures/Walls/fragile_rock.rsi
     state: strata_ice
   - type: IconSmooth
     key: walls
@@ -25,8 +25,9 @@
     tags:
     - Pickaxe
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: ReceiverXenoClaws
     maxHealth: 168
     hitsToDestroy: 3
@@ -47,9 +48,9 @@
   suffix: Mining, Steel
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Walls/steelore.rsi
+    sprite: CMU14/Structures/Walls/steelore.rsi
   - type: Icon
-    sprite: _CMU14/Structures/Walls/steelore.rsi
+    sprite: CMU14/Structures/Walls/steelore.rsi
     state: strata_ice
   - type: IconSmooth
     key: walls

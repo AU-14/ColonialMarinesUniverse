@@ -1,13 +1,15 @@
-using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Database;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -16,13 +18,13 @@ using Content.Shared.Popups;
 using Content.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaHealingGunSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private SharedBoneSystem _bone = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
@@ -59,11 +61,12 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 
     private bool TryHeal(Entity<YautjaHealingGunComponent> gun, EntityUid target, EntityUid user, bool resetDelay)
     {
-        if (!TryComp(target, out DamageableComponent? damageable))
+        if (!TryComp(target, out DamageableComponent? damageable) ||
+            !TryComp(target, out InjurableComponent? injurable))
             return false;
 
         if (gun.Comp.DamageContainers is not null &&
-            damageable.DamageContainerID is { } container &&
+            injurable.DamageContainer is { } container &&
             !gun.Comp.DamageContainers.Contains(container))
         {
             return false;
@@ -139,10 +142,11 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
         if (gun.Comp.RepairsFractures && HasFractures(target.Owner))
             return true;
 
+        var damage = _damageable.GetAllDamage((target.Owner, (DamageableComponent?) target.Comp));
         foreach (var (type, amount) in gun.Comp.Damage.DamageDict)
         {
             if (amount < 0 &&
-                target.Comp.Damage.DamageDict.TryGetValue(type, out var current) &&
+                damage.DamageDict.TryGetValue(type, out var current) &&
                 current > 0)
             {
                 return true;

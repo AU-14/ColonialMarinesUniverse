@@ -7,7 +7,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server._CMU14.Medical.Treatment.FieldCare;
+namespace Content.Server.CMU14.Medical.Treatment.FieldCare;
 
 public sealed partial class CMUFieldTreatmentItemDiscoverySystem : EntitySystem
 {

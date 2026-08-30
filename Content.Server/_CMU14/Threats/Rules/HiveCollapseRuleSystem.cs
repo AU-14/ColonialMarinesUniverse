@@ -1,14 +1,14 @@
-using Content.Server._CMU14.RoundStatistics;
+using Content.Server.CMU14.RoundStatistics;
 using Content.Server._RMC14.Xenonids.Hive;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.Timing;
-using HiveCollapseRuleComponent = Content.Shared._CMU14.Threats.Rules.HiveCollapseRuleComponent;
+using HiveCollapseRuleComponent = Content.Shared.CMU14.Threats.Rules.HiveCollapseRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 public sealed partial class HiveCollapseRuleSystem : GameRuleSystem<HiveCollapseRuleComponent>
 {

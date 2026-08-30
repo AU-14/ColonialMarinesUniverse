@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using Content.Server.Popups;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared.Body.Part;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 {

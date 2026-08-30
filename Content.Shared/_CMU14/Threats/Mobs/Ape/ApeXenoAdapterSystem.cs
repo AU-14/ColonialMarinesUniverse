@@ -2,7 +2,7 @@ using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared._RMC14.Xenonids.Fling;
 using Content.Shared._RMC14.Xenonids.Headbite;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Ape;
+namespace Content.Shared.CMU14.Threats.Mobs.Ape;
 
 public sealed class ApeXenoAdapterSystem : EntitySystem
 {

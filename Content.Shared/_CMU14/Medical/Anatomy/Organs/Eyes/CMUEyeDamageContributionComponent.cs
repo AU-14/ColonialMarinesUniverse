@@ -1,6 +1,6 @@
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
 
 /// <summary>
 ///     Tracks the eye-damage value the CMU eye-stage system has contributed

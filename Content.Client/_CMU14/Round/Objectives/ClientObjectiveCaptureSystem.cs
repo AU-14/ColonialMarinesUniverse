@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Round.Objectives.Type;
+using Content.Shared.CMU14.Round.Objectives.Type;
 using Robust.Shared.GameStates;
 
-namespace Content.Client._CMU14.Round.Objectives;
+namespace Content.Client.CMU14.Round.Objectives;
 
 public sealed partial class ClientObjectiveCaptureSystem : EntitySystem
 {

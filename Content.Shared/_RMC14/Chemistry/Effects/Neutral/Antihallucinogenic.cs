@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Body;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -28,25 +29,25 @@ public sealed partial class Antihallucinogenic : RMCChemicalEffect
                $"Critical overdoses cause [color=red]{PotencyPerSecond}[/color] brute, [color=red]{PotencyPerSecond}[/color] burn, and [color=red]{PotencyPerSecond * 3}[/color] toxin damage";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var bloodstream = args.EntityManager.System<SharedRMCBloodstreamSystem>();
+        var bloodstream = system.RMCBloodstream;
         bloodstream.RemoveBloodstreamChemical(args.TargetEntity, MindbreakerToxin, 2.5f);
         bloodstream.RemoveBloodstreamChemical(args.TargetEntity, SpaceDrugs, 2.5f);
 
-        var status = args.EntityManager.System<SharedStatusEffectsSystem>();
-        status.TryAddTime(args.TargetEntity, SeeingRainbows, TimeSpan.FromSeconds(PotencyPerSecond * -10)); // SeeingRainbows is M.druggy in CM13
+        var status = system.StatusEffects;
+        status.TryAddTime(args.TargetEntity, SeeingRainbows, TimeSpan.FromSeconds(args.PotencyPerSecond * -10)); // SeeingRainbows is M.druggy in CM13
         // TODO RMC14 Hallucination
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = potency;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency;

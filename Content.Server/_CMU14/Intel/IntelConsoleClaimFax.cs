@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Content.Server._CMU14.Intel;
+namespace Content.Server.CMU14.Intel;
 
 public readonly record struct ClfRosterEntry(string Name, string Job);
 

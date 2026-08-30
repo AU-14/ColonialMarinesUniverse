@@ -1,6 +1,6 @@
 using System.Numerics;
-using Content.Shared._CMU14.Blackfoot;
-using Content.Shared.Ghost;
+using Content.Shared.CMU14.Blackfoot;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
@@ -10,7 +10,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Maths;
 
-namespace Content.Server._CMU14.Blackfoot;
+namespace Content.Server.CMU14.Blackfoot;
 
 public sealed partial class BlackfootTowSystem : EntitySystem
 {

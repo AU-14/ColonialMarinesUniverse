@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Vocal;
+using Content.Shared.CMU14.Vocal;
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 
-namespace Content.Client._CMU14.Vocal;
+namespace Content.Client.CMU14.Vocal;
 
 /// <summary>
 ///     Notifies the server immediately when the local player's "pin scream to hotbar" preference changes,

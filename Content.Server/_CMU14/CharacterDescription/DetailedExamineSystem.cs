@@ -1,12 +1,12 @@
 using Content.Server.EUI;
-using Content.Server._CMU14.CharacterDescription.UI;
-using Content.Shared._CMU14.CharacterDescription;
+using Content.Server.CMU14.CharacterDescription.UI;
+using Content.Shared.CMU14.CharacterDescription;
 using Content.Shared.Examine;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.CharacterDescription;
+namespace Content.Server.CMU14.CharacterDescription;
 
 public sealed partial class DetailedExamineSystem : EntitySystem
 {

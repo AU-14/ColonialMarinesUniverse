@@ -1,8 +1,8 @@
-using Content.Server.AU14.Comms;
+using Content.Server.CMU14.Comms;
 using Content.Shared._RMC14.Evacuation;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Chat;
+namespace Content.Server.CMU14.Chat;
 
 /// <summary>
 /// Broadcasts a colony alert when Govfor starts or cancels an evacuation from their command tablet,

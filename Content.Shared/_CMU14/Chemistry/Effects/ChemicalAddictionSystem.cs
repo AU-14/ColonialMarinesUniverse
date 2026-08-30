@@ -3,7 +3,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Chemistry.Effects;
+namespace Content.Shared.CMU14.Chemistry.Effects;
 
 [ByRefEvent]
 public record struct CureChemicalAddictionEvent;

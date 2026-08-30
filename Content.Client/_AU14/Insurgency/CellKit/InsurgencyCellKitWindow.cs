@@ -6,7 +6,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._AU14.Insurgency.CellKit;
+namespace Content.Client.CMU14.Insurgency.CellKit;
 
 /// <summary>
 ///     Lists the cell kit's remaining deployables, each with its sprite, name, and a Deploy button.

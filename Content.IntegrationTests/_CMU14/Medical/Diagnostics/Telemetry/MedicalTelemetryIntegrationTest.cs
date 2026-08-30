@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared.Body.Systems;
@@ -7,7 +7,7 @@ using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Medical.Diagnostics.Telemetry;
+namespace Content.IntegrationTests.CMU14.Medical.Diagnostics.Telemetry;
 
 [TestFixture]
 public sealed class MedicalTelemetryIntegrationTest

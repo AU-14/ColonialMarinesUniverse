@@ -1,6 +1,6 @@
 using System.Collections.Frozen;
 
-namespace Content.Shared._CMU14.Medical.Core;
+namespace Content.Shared.CMU14.Medical.Core;
 
 /// <summary>
 ///     Immutable structural view of a CMU medical body at a specific revision.

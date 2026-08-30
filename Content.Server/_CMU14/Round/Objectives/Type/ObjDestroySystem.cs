@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Round.Objectives.Components;
-using Content.Server._CMU14.Round.Objectives.Components;
-using Content.Shared._CMU14.Round.Objectives.Type;
+using Content.Shared.CMU14.Round.Objectives.Components;
+using Content.Server.CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.Round.Objectives.Type;
 using Robust.Shared.Map;
 
-namespace Content.Server._CMU14.Round.Objectives.Type;
+namespace Content.Server.CMU14.Round.Objectives.Type;
 
 public sealed partial class ObjDestroySystem : ObjectiveSystem
 {

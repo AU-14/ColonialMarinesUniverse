@@ -3,14 +3,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Content.Server.Database;
-using Content.Shared._AU14.Insurgency;
+using Content.Shared.CMU14.Insurgency;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown;
 using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
-namespace Content.Server._AU14.Insurgency.Database;
+namespace Content.Server.CMU14.Insurgency.Database;
 
 /// <summary>
 ///     Persistence for host-authored Default factions. Converts a <see cref="FactionDefinition"/>

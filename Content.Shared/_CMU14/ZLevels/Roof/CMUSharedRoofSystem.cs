@@ -1,12 +1,12 @@
-using Content.Shared._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
-namespace Content.Shared._CMU14.ZLevels.Roof;
+namespace Content.Shared.CMU14.ZLevels.Roof;
 
 /// <summary>
 /// Systems that automatically covers tiles with roofs (or removes roofs)

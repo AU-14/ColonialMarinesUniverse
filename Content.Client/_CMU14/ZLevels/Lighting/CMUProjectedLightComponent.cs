@@ -2,7 +2,7 @@ using System;
 using System.Numerics;
 using Robust.Shared.Map;
 
-namespace Content.Client._CMU14.ZLevels.Lighting;
+namespace Content.Client.CMU14.ZLevels.Lighting;
 
 /// <summary>
 /// Marker component for client-only projected light entities.

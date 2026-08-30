@@ -1,4 +1,3 @@
-cmu-ui-options-chat-follow-button = As ghost, show follow buttons next to chat messages
 cmu-ui-options-examine-log-in-chat = Show detailed examine breakdown of characters in chat
 cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat like in SS13
 

@@ -1,7 +1,7 @@
 <controls:HospitalEmergencyComputerWindow
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Content.Client.AU14.Hospital"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Hospital"
     Title="Emergency Computer" MinSize="540 420">
     <BoxContainer Orientation="Vertical" SeparationOverride="6">
         <Label Text="Hospital Emergency Shuttle" StyleClasses="LabelHeading" />

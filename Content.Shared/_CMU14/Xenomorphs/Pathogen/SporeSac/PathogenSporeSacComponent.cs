@@ -2,7 +2,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Content.Shared.FixedPoint;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeSac;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeSac;
 
 /// <summary>
 /// Structure that bursts and releases a spore cloud when a valid host walks

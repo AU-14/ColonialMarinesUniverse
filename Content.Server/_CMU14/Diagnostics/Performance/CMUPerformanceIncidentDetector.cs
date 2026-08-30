@@ -1,4 +1,4 @@
-namespace Content.Server._CMU14.Diagnostics.Performance;
+namespace Content.Server.CMU14.Diagnostics.Performance;
 
 [Flags]
 internal enum CMUPerformanceIncidentReason

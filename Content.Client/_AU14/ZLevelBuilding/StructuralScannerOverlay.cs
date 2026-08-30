@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._AU14.ZLevelBuilding;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
@@ -12,7 +12,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Client._AU14.ZLevelBuilding;
+namespace Content.Client.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): holder-only structural heat-map for the structural scanner. Drawn entirely

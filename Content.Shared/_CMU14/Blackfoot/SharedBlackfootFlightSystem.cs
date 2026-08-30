@@ -1,6 +1,7 @@
+using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 
-namespace Content.Shared._CMU14.Blackfoot;
+namespace Content.Shared.CMU14.Blackfoot;
 
 public sealed partial class SharedBlackfootFlightSystem : EntitySystem
 {

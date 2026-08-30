@@ -1,64 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Robust.Shared.Containers;
 
 namespace Content.Shared.Body.Systems;
 
-public partial class SharedBodySystem
+public sealed partial class SharedBodySystem
 {
-    private void AddOrgan(
-        Entity<OrganComponent> organEnt,
-        EntityUid bodyUid,
-        EntityUid parentPartUid)
-    {
-        organEnt.Comp.Body = bodyUid;
-        var addedEv = new OrganAddedEvent(parentPartUid);
-        RaiseLocalEvent(organEnt, ref addedEv);
-
-        if (organEnt.Comp.Body is not null)
-        {
-            var addedInBodyEv = new OrganAddedToBodyEvent(bodyUid, parentPartUid);
-            RaiseLocalEvent(organEnt, ref addedInBodyEv);
-        }
-
-        Dirty(organEnt, organEnt.Comp);
-    }
-
-    private void RemoveOrgan(Entity<OrganComponent> organEnt, EntityUid parentPartUid)
-    {
-        var removedEv = new OrganRemovedEvent(parentPartUid);
-        RaiseLocalEvent(organEnt, ref removedEv);
-
-        if (organEnt.Comp.Body is { Valid: true } bodyUid)
-        {
-            var removedInBodyEv = new OrganRemovedFromBodyEvent(bodyUid, parentPartUid);
-            RaiseLocalEvent(organEnt, ref removedInBodyEv);
-        }
-
-        organEnt.Comp.Body = null;
-        Dirty(organEnt, organEnt.Comp);
-    }
-
-    /// <summary>
-    /// Creates the specified organ slot on the parent entity.
-    /// </summary>
-    private OrganSlot? CreateOrganSlot(Entity<BodyPartComponent?> parentEnt, string slotId)
-    {
-        if (!Resolve(parentEnt, ref parentEnt.Comp, logMissing: false))
-            return null;
-
-        Containers.EnsureContainer<ContainerSlot>(parentEnt, GetOrganContainerId(slotId));
-        var slot = new OrganSlot(slotId);
-        parentEnt.Comp.Organs.Add(slotId, slot);
-        return slot;
-    }
-
-    /// <summary>
-    /// Attempts to create the specified organ slot on the specified parent if it exists.
-    /// </summary>
     public bool TryCreateOrganSlot(
         EntityUid? parent,
         string slotId,
@@ -66,35 +13,30 @@ public partial class SharedBodySystem
         BodyPartComponent? part = null)
     {
         slot = null;
+        if (parent is null || !Resolve(parent.Value, ref part, false))
+            return false;
 
-        if (parent is null || !Resolve(parent.Value, ref part, logMissing: false))
+        var created = new OrganSlot(slotId);
+        if (!part.Organs.TryAdd(slotId, created))
+            return false;
+
+        Dirty(parent.Value, part);
+        slot = created;
+        return true;
+    }
+
+    public bool CanInsertOrgan(EntityUid partId, string slotId, BodyPartComponent? part = null)
+    {
+        if (!Resolve(partId, ref part, false) || !part.Organs.ContainsKey(slotId) ||
+            !TryComp<ParentOrganComponent>(partId, out var parent))
         {
             return false;
         }
 
-        Containers.EnsureContainer<ContainerSlot>(parent.Value, GetOrganContainerId(slotId));
-        slot = new OrganSlot(slotId);
-        return part.Organs.TryAdd(slotId, slot.Value);
+        return !TryGetRelatedOccupant(parent, slotId, bodyPart: false, out _);
     }
 
-    /// <summary>
-    /// Returns whether the slotId exists on the partId.
-    /// </summary>
-    public bool CanInsertOrgan(
-        EntityUid partId,
-        string slotId,
-        BodyPartComponent? part = null)
-    {
-        return Resolve(partId, ref part) && part.Organs.ContainsKey(slotId);
-    }
-
-    /// <summary>
-    /// Returns whether the specified organ slot exists on the partId.
-    /// </summary>
-    public bool CanInsertOrgan(
-        EntityUid partId,
-        OrganSlot slot,
-        BodyPartComponent? part = null)
+    public bool CanInsertOrgan(EntityUid partId, OrganSlot slot, BodyPartComponent? part = null)
     {
         return CanInsertOrgan(partId, slot.Id, part);
     }
@@ -106,107 +48,103 @@ public partial class SharedBodySystem
         BodyPartComponent? part = null,
         OrganComponent? organ = null)
     {
-        if (!Resolve(organId, ref organ, logMissing: false)
-            || !Resolve(partId, ref part, logMissing: false)
-            || !CanInsertOrgan(partId, slotId, part))
+        if (!Resolve(partId, ref part, false) ||
+            !Resolve(organId, ref organ, false) ||
+            !CanInsertOrgan(partId, slotId, part) ||
+            GetCanonicalSlotId(organ.Category) != slotId ||
+            GetParentPartOrNull(organId) is not null ||
+            !TryComp<ParentOrganComponent>(partId, out var parent) ||
+            !TryComp<ChildOrganComponent>(organId, out var child))
         {
             return false;
         }
 
-        var containerId = GetOrganContainerId(slotId);
+        if (part.Body is { } body)
+        {
+            if (!MoveSubtreeToBody(organId, body))
+                return false;
+        }
+        else if (organ.Body is not null)
+        {
+            return false;
+        }
 
-        return Containers.TryGetContainer(partId, containerId, out var container)
-            && Containers.Insert(organId, container);
+        _relations.Relate((partId, parent), (organId, child));
+        return true;
     }
 
-    /// <summary>
-    /// Removes the organ if it is inside of a body part.
-    /// </summary>
     public bool RemoveOrgan(EntityUid organId, OrganComponent? organ = null)
     {
-        if (!Containers.TryGetContainingContainer((organId, null, null), out var container))
+        if (!Resolve(organId, ref organ, false) ||
+            !TryComp<ChildOrganComponent>(organId, out var child) ||
+            child.Parent is not { } parent ||
+            !HasComp<BodyPartComponent>(parent))
+        {
             return false;
+        }
 
-        var parent = container.Owner;
+        BaseContainer? bodyContainer = null;
+        if (organ.Body is { } body)
+        {
+            if (!_containers.TryGetContainer(body, BodyComponent.ContainerID, out bodyContainer) ||
+                !_containers.CanRemove(organId, bodyContainer))
+            {
+                return false;
+            }
+        }
 
-        return HasComp<BodyPartComponent>(parent)
-            && Containers.Remove(organId, container);
+        _relations.Orphan((organId, child));
+        return bodyContainer is null || _containers.Remove(organId, bodyContainer);
     }
 
-    /// <summary>
-    /// Tries to add this organ to any matching slot on this body part.
-    /// </summary>
     public bool AddOrganToFirstValidSlot(
         EntityUid partId,
         EntityUid organId,
         BodyPartComponent? part = null,
         OrganComponent? organ = null)
     {
-        if (!Resolve(partId, ref part, logMissing: false)
-            || !Resolve(organId, ref organ, logMissing: false))
-        {
+        if (!Resolve(partId, ref part, false) || !Resolve(organId, ref organ, false))
             return false;
-        }
+
+        var preferred = GetCanonicalSlotId(organ.Category);
+        if (preferred is not null && part.Organs.ContainsKey(preferred))
+            return InsertOrgan(partId, organId, preferred, part, organ);
 
         foreach (var slotId in part.Organs.Keys)
         {
-            InsertOrgan(partId, organId, slotId, part, organ);
-            return true;
+            if (InsertOrgan(partId, organId, slotId, part, organ))
+                return true;
         }
 
         return false;
     }
 
-    /// <summary>
-    /// Returns a list of Entity<<see cref="T"/>, <see cref="OrganComponent"/>>
-    /// for each organ of the body
-    /// </summary>
-    /// <typeparam name="T">The component that we want to return</typeparam>
-    /// <param name="entity">The body to check the organs of</param>
-    public List<Entity<T, OrganComponent>> GetBodyOrganEntityComps<T>(
-        Entity<BodyComponent?> entity)
+    public List<Entity<T, OrganComponent>> GetBodyOrganEntityComps<T>(Entity<BodyComponent?> entity)
         where T : IComponent
     {
-        if (!Resolve(entity, ref entity.Comp))
-            return new List<Entity<T, OrganComponent>>();
+        if (!Resolve(entity, ref entity.Comp, false))
+            return new();
 
-        var query = GetEntityQuery<T>();
-        var list = new List<Entity<T, OrganComponent>>(3);
+        var result = new List<Entity<T, OrganComponent>>();
         foreach (var organ in GetBodyOrgans(entity.Owner, entity.Comp))
         {
-            if (query.TryGetComponent(organ.Id, out var comp))
-                list.Add((organ.Id, comp, organ.Component));
+            if (TryComp<T>(organ.Id, out var component))
+                result.Add((organ.Id, component, organ.Component));
         }
 
-        return list;
+        return result;
     }
 
-    /// <summary>
-    ///     Tries to get a list of ValueTuples of <see cref="T"/> and OrganComponent on each organs
-    ///     in the given body.
-    /// </summary>
-    /// <param name="uid">The body entity id to check on.</param>
-    /// <param name="comps">The list of components.</param>
-    /// <param name="body">The body to check for organs on.</param>
-    /// <typeparam name="T">The component to check for.</typeparam>
-    /// <returns>Whether any were found.</returns>
     public bool TryGetBodyOrganEntityComps<T>(
         Entity<BodyComponent?> entity,
-        [NotNullWhen(true)] out List<Entity<T, OrganComponent>>? comps)
+        [NotNullWhen(true)] out List<Entity<T, OrganComponent>>? components)
         where T : IComponent
     {
-        if (!Resolve(entity.Owner, ref entity.Comp))
-        {
-            comps = null;
-            return false;
-        }
-
-        comps = GetBodyOrganEntityComps<T>(entity);
-
-        if (comps.Count != 0)
+        components = GetBodyOrganEntityComps<T>(entity);
+        if (components.Count != 0)
             return true;
 
-        comps = null;
+        components = null;
         return false;
     }
 }

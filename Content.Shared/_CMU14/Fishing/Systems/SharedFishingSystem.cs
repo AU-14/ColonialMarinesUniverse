@@ -4,8 +4,8 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Content.Shared._CMU14.Fishing.Components;
-using Content.Shared._CMU14.Fishing.Events;
+using Content.Shared.CMU14.Fishing.Components;
+using Content.Shared.CMU14.Fishing.Events;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
@@ -20,7 +20,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Fishing.Systems;
+namespace Content.Shared.CMU14.Fishing.Systems;
 
 /// <summary>
 /// This handles... da fish

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 /// <summary>
 ///     Server-only scanner anatomy projection shared by all viewers that request

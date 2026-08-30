@@ -6,7 +6,7 @@ using Content.Shared.DoAfter;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeSac;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeSac;
 
 /// <summary>
 /// Handles the Popper's ability to place a Spore Sac structure at a target

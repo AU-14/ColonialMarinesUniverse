@@ -6,7 +6,7 @@
   setPreference: true
   playTimeTracker: AUJobThirdPartyLeader
   hidden: false
-  supervisors: nobody
+  supervisors: cm-job-supervisors-nobody
   icon: "AU14JobIconThirdPartyLeader"
   jobPreviewEntity: RMCPlayerXenoQueenPreview
   accessGroups:
@@ -24,7 +24,7 @@
   setPreference: true
   playTimeTracker: AUThirdPartyMember
   hidden: false
-  supervisors: nobody
+  supervisors: cm-job-supervisors-nobody
   icon: "AU14JobIconThirdPartyMember"
   jobPreviewEntity: RMCPlayerXenoQueenPreview
   accessGroups:

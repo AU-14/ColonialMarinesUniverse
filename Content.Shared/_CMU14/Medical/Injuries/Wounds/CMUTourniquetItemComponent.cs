@@ -2,7 +2,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
+namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUTourniquetItemComponent : Component

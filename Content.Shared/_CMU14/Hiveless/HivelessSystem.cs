@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Evolution;
 
-namespace Content.Shared._CMU14.Hiveless;
+namespace Content.Shared.CMU14.Hiveless;
 
 public sealed class HivelessSystem : EntitySystem
 {

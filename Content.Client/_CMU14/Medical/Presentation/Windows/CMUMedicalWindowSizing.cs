@@ -3,7 +3,7 @@ using System.Numerics;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client._CMU14.Medical.Presentation.Windows;
+namespace Content.Client.CMU14.Medical.Presentation.Windows;
 
 internal static class CMUMedicalWindowSizing
 {

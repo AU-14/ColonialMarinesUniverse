@@ -1,15 +1,15 @@
 using System.Linq;
-using Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
+using Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities;
 using Content.Shared.Popups;
 using Robust.Shared.Timing;
 using AbominationConstructionChooseActionEvent
-    = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionChooseActionEvent;
+    = Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionChooseActionEvent;
 using AbominationConstructionComponent
-    = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionComponent;
+    = Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionComponent;
 using AbominationConstructionSecreteActionEvent
-    = Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionSecreteActionEvent;
+    = Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionSecreteActionEvent;
 
-namespace Content.Server._CMU14.Threats.Mobs.Abomination;
+namespace Content.Server.CMU14.Threats.Mobs.Abomination;
 
 public sealed partial class AbominationConstructionSystem : EntitySystem
 {

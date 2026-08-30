@@ -1,7 +1,7 @@
-using Content.Server._AU14.Chemistry.Reagents;
+using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Server.GameTicking;
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Research;
 using Content.Shared.Dataset;
 using Content.Shared.Popups;
 using Robust.Shared.Containers;
@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using System.Security.Cryptography;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
@@ -23,7 +23,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Paper;
 using Content.Shared.GameTicking;
 
-namespace Content.Server._AU14.Chemistry.Research;
+namespace Content.Server.CMU14.Chemistry.Research;
 
 public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorSystem
 {

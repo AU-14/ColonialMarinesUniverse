@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.Insurgency.Selection;
+namespace Content.Shared.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     Marks the CLF cell leader while the round's faction has not been chosen yet. The client shows a

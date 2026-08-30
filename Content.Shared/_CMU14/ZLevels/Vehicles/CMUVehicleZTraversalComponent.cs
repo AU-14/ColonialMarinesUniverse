@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.ZLevels.Vehicles;
+namespace Content.Shared.CMU14.ZLevels.Vehicles;
 
 /// <summary>
 /// Enables grid vehicles to use derived footprint support for CMU multi-Z traversal.

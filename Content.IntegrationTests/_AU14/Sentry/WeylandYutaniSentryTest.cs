@@ -5,7 +5,7 @@ using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.Sentry;
+namespace Content.IntegrationTests.CMU14.Sentry;
 
 [TestFixture]
 public sealed class WeylandYutaniSentryTest

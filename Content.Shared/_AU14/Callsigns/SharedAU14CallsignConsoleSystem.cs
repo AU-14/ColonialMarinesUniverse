@@ -1,11 +1,12 @@
 using Content.Shared.Administration.Managers;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Marines;
 
-namespace Content.Shared._AU14.Callsigns;
+namespace Content.Shared.CMU14.Callsigns;
 
 // faction access control for the comms net directory
 // this lives in shared rather than on the server system because ActivatableUISystem is

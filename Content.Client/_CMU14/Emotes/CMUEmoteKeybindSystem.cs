@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Input;
+using Content.Shared.CMU14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
@@ -8,7 +8,7 @@ using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Emotes;
+namespace Content.Client.CMU14.Emotes;
 
 // Lets a player fire a chosen emote directly from a keybind, instead of going through the
 // emotes wheel. Which emote (if any) each of the 8 slots triggers is picked in the keybinds tab

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
-using Content.Shared._AU14.SavedBuilds;
+using Content.Shared.CMU14.SavedBuilds;
 
-namespace Content.Client._AU14.SavedBuilds;
+namespace Content.Client.CMU14.SavedBuilds;
 
 /// <summary>
 /// Client side of build partners. Opens the <see cref="BuildPartnerWindow"/> from the construction menu's

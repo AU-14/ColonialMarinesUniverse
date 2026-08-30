@@ -1,6 +1,6 @@
 using Content.Shared.Inventory.Events;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 
 public sealed partial class CMUPathogenWalkerMarkerSystem : EntitySystem
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Content.Shared.Destructible;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.DragDrop;
 using Content.Shared.Movement.Events;
@@ -9,7 +9,7 @@ using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 public sealed partial class CMUBodyScannerSystem : EntitySystem
 {

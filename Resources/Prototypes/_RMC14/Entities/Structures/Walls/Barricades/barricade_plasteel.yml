@@ -111,8 +111,9 @@
     - "enum.RMCDamageOverlayVisuals.DamageOverlay"
     - "enum.RMCDamageOverlayVisuals.AdditionalDamageOverlay"
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMBurnBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: RMCConstructionUpgradeTarget
     upgrades: null
     downgrade: RMCBiohazardUpgradePlasteel
@@ -141,8 +142,9 @@
     - "enum.RMCDamageOverlayVisuals.DamageOverlay"
     - "enum.RMCDamageOverlayVisuals.AdditionalDamageOverlay"
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMBruteBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: RMCConstructionUpgradeTarget
     upgrades: null
     downgrade: RMCBruteUpgradePlasteel

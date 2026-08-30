@@ -24,7 +24,7 @@
     prefix: cmu-govfor-prefix-adjutant-dress
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
+      sprite: /Textures/CMU14/Interface/cmugovforblips.rsi
       state: adj
     background:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -103,7 +103,7 @@
     prefix: cmu-govfor-prefix-brigadier-general
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
+      sprite: /Textures/CMU14/Interface/cmugovforblips.rsi
       state: platco
     background:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -174,7 +174,7 @@
     prefix: cmu-govfor-prefix-vip-escort
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
+      sprite: /Textures/CMU14/Interface/cmugovforblips.rsi
       state: mp
     background:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi

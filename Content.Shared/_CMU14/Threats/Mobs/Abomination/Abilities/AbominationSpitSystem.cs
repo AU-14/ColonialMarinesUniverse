@@ -5,7 +5,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Spawners;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
+namespace Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities;
 
 public sealed partial class AbominationSpitSystem : EntitySystem
 {

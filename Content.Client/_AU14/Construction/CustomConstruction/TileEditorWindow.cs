@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
-using Content.Client._AU14.UI;
-using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Client.CMU14.UI;
+using Content.Shared.CMU14.Construction.CustomConstruction;
 using Content.Shared.Maps;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -16,7 +16,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._AU14.Construction.CustomConstruction;
+namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// The "Tiles Editor" (Admin Tools): pick a tile from a searchable list, choose which MAIN CATEGORY (the

@@ -1,6 +1,6 @@
 <controls:AdminChemicalContractConsoleWindow
     xmlns="https://spacestation14.io"
-    xmlns:controls="clr-namespace:Content.Client._AU14.Chemistry.Research"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Chemistry.Research"
     Title="{Loc admin-chemical-contract-window-title}"
     MinSize="680 600">
     <PanelContainer Margin="8">

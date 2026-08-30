@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/26/2026 17:51:19
-  entityCount: 24697
+  entityCount: 24711
 maps:
 - 1
 grids:
@@ -213348,4 +213348,102 @@ entities:
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: xenotunnel
+- proto: AU14SpawnPointCivilianHeadOfService
+  entities:
+  - uid: 24698
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianShopkeep
+  entities:
+  - uid: 24699
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointColonyWorkingJoe
+  entities:
+  - uid: 24700
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianColonyAdminAssistant
+  entities:
+  - uid: 24701
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianAmbassadorTWE
+  entities:
+  - uid: 24702
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianNSPAInspector
+  entities:
+  - uid: 24703
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianHeadPhysician
+  entities:
+  - uid: 24704
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianCorporateLiaison
+  entities:
+  - uid: 24705
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianCorporateAssistant
+  entities:
+  - uid: 24706
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianScientist
+  entities:
+  - uid: 24707
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointWYGuard
+  entities:
+  - uid: 24708
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointOrbitalArbiter
+  entities:
+  - uid: 24709
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointOrbitalLawyer
+  entities:
+  - uid: 24710
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+- proto: AU14SpawnPointCivilianPrisoner
+  entities:
+  - uid: 24711
+    components:
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
 ...

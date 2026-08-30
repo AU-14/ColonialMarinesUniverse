@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Server.Chat.Systems;
-using Content.Shared._CMU14.ZLevels;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using static Content.Server.Chat.Systems.ChatSystem;
 
-namespace Content.Server._CMU14.ZLevels.Chat;
+namespace Content.Server.CMU14.ZLevels.Chat;
 
 public sealed partial class CMUZLevelsSpeakingSystem : EntitySystem
 {

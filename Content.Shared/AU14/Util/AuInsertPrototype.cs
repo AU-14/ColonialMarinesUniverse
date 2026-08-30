@@ -2,7 +2,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 
-namespace Content.Shared.AU14.util;
+namespace Content.Shared.CMU14.util;
 [Prototype]
 public sealed partial class AuInsertPrototype : IPrototype
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Vision;
+namespace Content.Shared.CMU14.Medical.Injuries.Vision;
 
 [RegisterComponent]
 public sealed partial class CMUTemporaryBlurryVisionComponent : Component

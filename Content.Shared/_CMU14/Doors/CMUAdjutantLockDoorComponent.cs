@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Doors;
+namespace Content.Shared.CMU14.Doors;
 
 /// <summary>
 /// Marks a pod-door shutter that is meant to be operated by GOVFOR command staff, but shouldn't be able

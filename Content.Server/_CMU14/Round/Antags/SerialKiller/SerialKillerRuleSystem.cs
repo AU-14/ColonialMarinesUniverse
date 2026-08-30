@@ -1,9 +1,9 @@
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Systems;
 using Content.Server.GameTicking.Rules;
 using Robust.Shared.GameObjects;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
 
-namespace Content.Server._CMU14.Round.Antags.SerialKiller;
+namespace Content.Server.CMU14.Round.Antags.SerialKiller;
 
 public sealed partial class SerialKillerRuleSystem : GameRuleSystem<SerialKillerRuleComponent>
 {

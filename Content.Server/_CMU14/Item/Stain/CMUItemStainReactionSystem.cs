@@ -1,14 +1,15 @@
 using System;
-using Content.Shared._CMU14.Item.Stain;
+using Content.Shared.CMU14.Item.Stain;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 
-namespace Content.Server._CMU14.Item.Stain;
+namespace Content.Server.CMU14.Item.Stain;
 
 /// <summary>
 /// Converts reagent touch reactions into stains on items and exposed equipment.
@@ -21,12 +22,13 @@ public sealed partial class CMUItemStainReactionSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<ReactiveComponent, ReactionEntityEvent>(OnReaction);
+        SubscribeLocalEvent<ReactiveComponent, BeforeReactionEntityEffectsEvent>(OnReaction);
     }
 
-    private void OnReaction(Entity<ReactiveComponent> ent, ref ReactionEntityEvent args)
+    private void OnReaction(Entity<ReactiveComponent> ent, ref BeforeReactionEntityEffectsEvent args)
     {
-        if (args.Method != ReactionMethod.Touch || !TrySelectReagent(args, out var reagent))
+        var reaction = args.Reaction;
+        if (reaction.Method != ReactionMethod.Touch || !TrySelectReagent(reaction, out var reagent))
             return;
 
         if (reagent.CleansItemStains)

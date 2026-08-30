@@ -1,9 +1,9 @@
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
-using Content.Server._CMU14.Threats;
+using Content.Server.CMU14.Threats;
 using Content.Shared._RMC14.Xenonids.Hive;
 
-namespace Content.Server._CMU14.Xenonids.Hive;
+namespace Content.Server.CMU14.Xenonids.Hive;
 
 public sealed partial class CMUBurrowedLarvaSystem : EntitySystem
 {

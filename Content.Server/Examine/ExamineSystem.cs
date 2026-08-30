@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Server._AU14.Examine;
+using Content.Server.CMU14.Examine;
 using Content.Server.Chat.Managers;
 using Content.Server.Verbs;
 using Content.Shared.CCVar;
@@ -18,8 +18,8 @@ namespace Content.Server.Examine
     public sealed partial class ExamineSystem : ExamineSystemShared
     {
         [Dependency] private VerbSystem _verbSystem = default!;
-        [Dependency] private  IChatManager _chatManager = default!;
-        [Dependency] private  INetConfigurationManager _netConfigManager = default!;
+        [Dependency] private IChatManager _chatManager = default!;
+        [Dependency] private INetConfigurationManager _netConfigManager = default!;
 
         private readonly FormattedMessage _entityNotFoundMessage = new();
         private readonly FormattedMessage _entityOutOfRangeMessage = new();

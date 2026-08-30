@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-blight
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/blight.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/blight.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -38,7 +38,7 @@
     delay: 0
     moveDelayTime: 1.5
     knockdownTime: 5
-    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
+    leapSound: /Audio/CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
     knockdownRequiresInvisibility: true
     unrootOnMelee: true
   - type: XenoTurnInvisible
@@ -92,8 +92,10 @@
   - type: MeleeWeapon
     attackRate: 1.5
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: CMArmor
     explosionArmor: 10
     xenoArmor: 10
@@ -107,10 +109,10 @@
     stunMax: 4
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: blight
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:

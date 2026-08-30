@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
 using Content.Server.Popups;
 using Content.Server.Roles.Jobs;
-using Content.Shared._AU14.Insurgency.Orders;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Insurgency.Orders;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
@@ -11,7 +11,7 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Insurgency.Orders;
+namespace Content.Server.CMU14.Insurgency.Orders;
 
 /// <summary>
 ///     The cell leader writes their intent on a sheet once and passes the word. From then on

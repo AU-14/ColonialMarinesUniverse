@@ -1,11 +1,11 @@
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaMaskAccessorySystem : EntitySystem
 {

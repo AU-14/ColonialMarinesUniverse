@@ -1,7 +1,7 @@
 using Robust.Client.Graphics;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Dropship.TacticalLand;
+namespace Content.Client.CMU14.Dropship.TacticalLand;
 
 public sealed partial class HolographicWarningSignSystem : EntitySystem
 {

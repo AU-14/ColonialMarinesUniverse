@@ -1,27 +1,27 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Core;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs;
 
 public abstract partial class SharedOrganHealthSystem : EntitySystem
 {

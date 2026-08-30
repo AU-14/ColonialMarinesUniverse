@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared._CMU14.ZLevels.Ghost;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Ghost;
 using Content.Shared.Actions;
 
-namespace Content.Server._CMU14.ZLevels.Ghost;
+namespace Content.Server.CMU14.ZLevels.Ghost;
 
 public sealed partial class CMUZLevelGhostMoverSystem : EntitySystem
 {

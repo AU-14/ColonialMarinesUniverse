@@ -57,7 +57,7 @@
   startingGear: AU14GearUNISCPltOpsOff
   greeting: au14-unisc-greeting
   joinNotifyCrew: false
-  supervisors: High Command
+  supervisors: au14-job-supervisors-govforplatco
   accessGroups:
   - AU14GovforSquad
   - AU14GovforCommand

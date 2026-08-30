@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Client.Viewport;
-using Content.Shared._CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels;
 using Robust.Client.Graphics;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
@@ -8,7 +8,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.ZLevels.Core;
+namespace Content.Client.CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelBlurOverlay : Overlay
 {

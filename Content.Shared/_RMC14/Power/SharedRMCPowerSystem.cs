@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Sprite;
@@ -8,6 +8,8 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Access.Components;
 using Content.Shared.Audio;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -19,6 +21,7 @@ using Content.Shared.Power;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
 using Content.Shared.Stacks;
 using Content.Shared.Toggleable;
 using Content.Shared.Tools.Systems;
@@ -281,7 +284,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
 
         if (TryComp(ent, out DamageableComponent? damageable))
-            _damageable.SetAllDamage(ent, damageable, FixedPoint2.Zero);
+            _damageable.SetAllDamage((ent.Owner, damageable), FixedPoint2.Zero);
     }
 
     private void OnApcInteractHand(Entity<RMCApcComponent> ent, ref InteractHandEvent args)
@@ -667,7 +670,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         if (amount <= 0)
             return;
 
-        _stack.Use(used, amount, stack);
+        _stack.TryUse((used, stack), amount);
         ent.Comp.Sheets += amount;
         Dirty(ent);
 

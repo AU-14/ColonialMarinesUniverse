@@ -15,12 +15,15 @@
 
   <ItemGroup>
     <PackageReference Include="NUnit" />
+    <PackageReference Include="Moq" />
     <PackageReference Include="SixLabors.ImageSharp" />
   </ItemGroup>
 
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
+
   <Import Project="..\RobustToolbox\Imports\Client.props" />
   <Import Project="..\RobustToolbox\Imports\Server.props" />
   <Import Project="..\RobustToolbox\Imports\Shared.props" />
   <Import Project="..\RobustToolbox\Imports\Testing.props" />
+
 </Project>

@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 
 [Serializable, NetSerializable]
 public enum TargetBodyZone : byte

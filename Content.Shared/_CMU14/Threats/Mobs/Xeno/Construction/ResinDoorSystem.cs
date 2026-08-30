@@ -5,9 +5,9 @@
 using Content.Shared._RMC14.Xenonids.Construction.ResinWhisper;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Doors;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Construction;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno.Construction;
 
 public sealed partial class ResinDoorSystem : EntitySystem
 {

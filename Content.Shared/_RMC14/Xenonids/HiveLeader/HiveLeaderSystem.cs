@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Radio;

@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.Flare;
+namespace Content.Shared.CMU14.Flare;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class FlareStomperComponent : Component;

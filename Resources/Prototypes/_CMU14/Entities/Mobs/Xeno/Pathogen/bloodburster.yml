@@ -7,11 +7,11 @@
   description: A tiny sharp-clawed terror that just tore its way out of a living host.
   components:
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/bloodburster.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/bloodburster.rsi
     layers:
     - state: alive
       map: [ "enum.XenoVisualLayers.Base" ]
-    - sprite: _CMU14/Mobs/Xenonids/Pathogen/bloodburster_bloody.rsi
+    - sprite: CMU14/Mobs/Xenonids/Pathogen/bloodburster_bloody.rsi
       state: alive_bloody
       map: [ "bloody" ]
       visible: false
@@ -48,7 +48,7 @@
   - type: XenoLeap
     delay: 0
     knockdownTime: 2
-    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
+    leapSound: /Audio/CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.2
@@ -95,8 +95,10 @@
   - type: MeleeWeapon
     attackRate: 2.5 # attack_delay = -4 in CM13
     damage:
-      groups:
-        Brute: 10 # XENO_DAMAGE_TIER_1/2 range
+      types:
+        Blunt: 3.33 # XENO_DAMAGE_TIER_1/2 range
+        Slash: 3.33
+        Piercing: 3.34
   - type: CMArmor
     explosionArmor: 5 # XENO_EXPLOSIVE_ARMOR_TIER_1
   - type: Tackle
@@ -113,10 +115,10 @@
     - RMCGibEffectXenoSmall
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: bloodburster
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:
@@ -151,6 +153,6 @@
   description: All slimy and yucky.
   components:
     - type: Sprite
-      sprite: _CMU14/Mobs/Xenonids/Pathogen/bloodburster.rsi
+      sprite: CMU14/Mobs/Xenonids/Pathogen/bloodburster.rsi
       noRot: true
       state: embryo

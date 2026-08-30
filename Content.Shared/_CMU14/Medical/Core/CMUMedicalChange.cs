@@ -1,7 +1,7 @@
 using System;
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._CMU14.Medical.Core;
+namespace Content.Shared.CMU14.Medical.Core;
 
 [Flags]
 public enum CMUMedicalChangeFlags : ushort

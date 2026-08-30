@@ -13,7 +13,7 @@
   announceAsSurvivors: true
   partyspawn: WYPMCWhiteoutSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600

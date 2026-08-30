@@ -2,7 +2,7 @@ using System.Numerics;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client._AU14.Insurgency.Editor;
+namespace Content.Client.CMU14.Insurgency.Editor;
 
 /// <summary>
 ///     A plain, scrollable explanation of every field in the INSFOR faction editor, so a host can build a

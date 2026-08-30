@@ -1,7 +1,7 @@
-﻿<ambassador:AmbassadorConsoleWindow
+<ambassador:AmbassadorConsoleWindow
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ambassador="clr-namespace:Content.Client.AU14.Ambassador"
+    xmlns:ambassador="clr-namespace:Content.Client.CMU14.Ambassador"
     Title="Ambassador Console" MinSize="500 450">
     <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True">

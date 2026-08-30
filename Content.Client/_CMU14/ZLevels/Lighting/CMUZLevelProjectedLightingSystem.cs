@@ -1,10 +1,10 @@
 using System.Numerics;
 using Content.Client.Examine;
-using Content.Client._CMU14.ZLevels.Core;
+using Content.Client.CMU14.ZLevels.Core;
 using Content.Client.Viewport;
-using Content.Shared._CMU14.ZLevels;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Examine;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -21,7 +21,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 using SysStopwatch = System.Diagnostics.Stopwatch;
 
-namespace Content.Client._CMU14.ZLevels.Lighting;
+namespace Content.Client.CMU14.ZLevels.Lighting;
 
 /// <summary>
 /// Projects client-only point lights from adjacent Z-level maps onto the local receiving map.

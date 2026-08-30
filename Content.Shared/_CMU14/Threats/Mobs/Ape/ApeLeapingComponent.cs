@@ -6,7 +6,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Ape;
+namespace Content.Shared.CMU14.Threats.Mobs.Ape;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause,
  Access(typeof(ApeLeapSystem))]

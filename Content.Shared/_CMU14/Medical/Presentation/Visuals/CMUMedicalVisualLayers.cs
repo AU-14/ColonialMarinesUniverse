@@ -1,7 +1,7 @@
 using Content.Shared.Body.Part;
 using Content.Shared.Humanoid;
 
-namespace Content.Shared._CMU14.Medical.Presentation.Visuals;
+namespace Content.Shared.CMU14.Medical.Presentation.Visuals;
 
 public static class CMUMedicalVisualLayers
 {

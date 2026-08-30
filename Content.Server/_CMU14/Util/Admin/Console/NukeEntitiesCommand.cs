@@ -10,7 +10,7 @@ using Robust.Shared.Console;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Util.Admin.Console;
+namespace Content.Server.CMU14.Util.Admin.Console;
 
 /// <summary>
 /// Shared plumbing for the nuke:* cleanup commands in this file: [all] bool (default false,

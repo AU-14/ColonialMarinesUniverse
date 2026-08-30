@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Threats.Mobs.CLF;
+namespace Content.Shared.CMU14.Threats.Mobs.CLF;
 
 /// <summary>
 /// </summary>

@@ -2,7 +2,7 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Collections.Generic;
-using Content.Shared._AU14.SavedBuilds;
+using Content.Shared.CMU14.SavedBuilds;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Input;
@@ -10,7 +10,7 @@ using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
 
-namespace Content.Client._AU14.SavedBuilds;
+namespace Content.Client.CMU14.SavedBuilds;
 
 /// <summary>
 /// Client driver for the saved-build selection flow. Tracks the current range, committed range boxes

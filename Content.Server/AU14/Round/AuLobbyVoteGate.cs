@@ -1,6 +1,6 @@
 using Content.Server.GameTicking;
 
-namespace Content.Server.AU14.Round;
+namespace Content.Server.CMU14.Round;
 
 public static class AuLobbyVoteGate
 {

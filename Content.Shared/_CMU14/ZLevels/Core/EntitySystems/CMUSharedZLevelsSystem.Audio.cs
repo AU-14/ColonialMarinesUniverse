@@ -1,6 +1,6 @@
 using Robust.Shared.Audio;
 
-namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem
 {

@@ -1,6 +1,6 @@
 using Content.Server.Administration;
-using Content.Shared._AU14.Chemistry.Research;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Server._AU14.Chemistry.Research;
+namespace Content.Server.CMU14.Chemistry.Research;
 
 [AdminCommand(Shared.Administration.AdminFlags.Debug)]
 internal sealed partial class PickReagentCommand : LocalizedEntityCommands

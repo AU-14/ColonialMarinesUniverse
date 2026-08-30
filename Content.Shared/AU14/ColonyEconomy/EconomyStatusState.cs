@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.ColonyEconomy;
+namespace Content.Shared.CMU14.ColonyEconomy;
 
 /// <summary>
 ///     Shared economy status sent to admin, corporate, and ambassador consoles

@@ -49,8 +49,9 @@
       types:
         Slash: 10
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -108,8 +109,9 @@
     bodyType: Static
     canCollide: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

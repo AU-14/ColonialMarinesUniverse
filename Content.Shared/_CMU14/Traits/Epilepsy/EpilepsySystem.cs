@@ -6,7 +6,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Traits.Epilepsy;
+namespace Content.Shared.CMU14.Traits.Epilepsy;
 
 public sealed partial class EpilepsySystem : EntitySystem
 {

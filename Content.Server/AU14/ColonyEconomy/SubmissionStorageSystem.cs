@@ -1,12 +1,12 @@
-using Content.Server.AU14.Ambassador;
+using Content.Server.CMU14.Ambassador;
 using Content.Server.Containers;
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.Containers;
 using Content.Shared.Stacks;
 using Content.Shared.Tag;
 using Robust.Shared.Containers;
 
-namespace Content.Server.AU14.ColonyEconomy;
+namespace Content.Server.CMU14.ColonyEconomy;
 
 public sealed partial class SubmissionStorageSystem : EntitySystem
 {

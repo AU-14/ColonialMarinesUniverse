@@ -1,8 +1,10 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Metabolism.Events;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -11,9 +13,9 @@ using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Core;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
 
 public abstract partial class SharedLiverSystem : EntitySystem
 {
@@ -21,7 +23,7 @@ public abstract partial class SharedLiverSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId HepaticFailure = "StatusEffectCMUHepaticFailure";
@@ -119,16 +121,13 @@ public abstract partial class SharedLiverSystem : EntitySystem
         return worst < 0f ? 1.0f : worst;
     }
 
-    public void ApplyBloodstreamDirectDamage(EntityUid body, string group)
+    public void ApplyBloodstreamDirectDamage(EntityUid body, CMUMetabolismClass toxicity)
     {
-        if (group != "Poison" && group != "Alcohol")
-            return;
-
         foreach (var (organId, _) in MedicalIndex.GetOrgans(body))
         {
             if (!HasComp<LiverComponent>(organId))
                 continue;
-            ApplyBloodstreamDirectHit(body, organId, group);
+            ApplyBloodstreamDirectHit(body, organId, toxicity.ToString());
         }
     }
 

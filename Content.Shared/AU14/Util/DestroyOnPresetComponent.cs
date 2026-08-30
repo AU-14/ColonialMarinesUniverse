@@ -1,4 +1,4 @@
-namespace Content.Shared.AU14.util;
+namespace Content.Shared.CMU14.util;
 
 [RegisterComponent]
 public sealed partial class DestroyOnPresetComponent : Component

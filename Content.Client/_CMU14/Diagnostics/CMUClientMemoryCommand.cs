@@ -5,7 +5,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Diagnostics;
+namespace Content.Client.CMU14.Diagnostics;
 
 public sealed partial class CMUClientMemoryCommand : IConsoleCommand
 {

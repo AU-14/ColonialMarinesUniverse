@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: BaseStructureDynamic
   id: AU14BlackBoxRecorder
   name: colony blackbox recorder
@@ -11,6 +11,7 @@
     bodyType: Dynamic
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -33,5 +34,5 @@
             min: 1
             max: 1
   - type: Sprite
-    sprite:  _AU14/Structures/blackbox.rsi
+    sprite:  CMU14/Structures/blackbox.rsi
     state: blackbox

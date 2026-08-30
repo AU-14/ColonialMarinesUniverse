@@ -1,9 +1,9 @@
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.ZLevels.Core.Components;
+namespace Content.Shared.CMU14.ZLevels.Core.Components;
 
 /// <summary>
 /// Allows entity to see through Z-levels

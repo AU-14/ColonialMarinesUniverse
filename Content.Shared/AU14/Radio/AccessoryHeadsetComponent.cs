@@ -2,7 +2,7 @@ using Content.Shared.Radio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 /// <summary>
 ///     When this uniform accessory is attached to a worn uniform, it grants the wearer

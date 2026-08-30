@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Injuries.Trauma;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Injuries.Trauma;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
@@ -13,7 +13,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Medical.Injuries.Trauma;
+namespace Content.IntegrationTests.CMU14.Medical.Injuries.Trauma;
 
 [TestFixture]
 public sealed class TraumaContactIntegrationTest

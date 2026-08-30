@@ -1,14 +1,17 @@
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Diagnostics.Examine;
-using Content.Shared._CMU14.Medical.Injuries.Trauma;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
-using Content.Server._CMU14.Medical.Diagnostics.Examine;
-using Content.Server._CMU14.Medical.Injuries.Wounds;
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Diagnostics.Examine;
+using Content.Shared.CMU14.Medical.Injuries.Trauma;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
+using Content.Server.CMU14.Medical.Diagnostics.Examine;
+using Content.Server.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -19,7 +22,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Examine;
 using Content.Shared.Verbs;
 using Content.Server.Verbs;
-using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared.Projectiles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -27,7 +30,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using System.Collections.Generic;
 
-namespace Content.IntegrationTests._CMU14.Medical.Injuries.Wounds;
+namespace Content.IntegrationTests.CMU14.Medical.Injuries.Wounds;
 
 [TestFixture]
 public sealed class MechanismWoundsFoundationTest
@@ -1355,3 +1358,5 @@ public sealed class MechanismWoundsFoundationTest
         }
     }
 }
+
+#pragma warning restore RA0002

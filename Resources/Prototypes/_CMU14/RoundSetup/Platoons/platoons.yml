@@ -5,15 +5,15 @@
   Allegiance: UA
   reqlist: USCMCargoCatalog
   vendorSet: USCM
-  platoonPatch: /Textures/_AU14/Clothing/Patches/uscm_patch.rsi/icon.png
+  platoonPatch: /Textures/CMU14/Clothing/Patches/uscm_patch.rsi/icon.png
   #platoonflag:  uaflag
   languages:
     - English
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+    - /Maps/CMU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: CMUIntelTechTree_GOVFOR # CMUIntelTechTree_UA (TODO)
@@ -28,7 +28,7 @@
     - Brazilian
   reqlist: LACNCargoCatalog
   vendorSet: LACN
-  platoonPatch: /Textures/_AU14/Clothing/Patches/brazilunit_patch.rsi/icon.png
+  platoonPatch: /Textures/CMU14/Clothing/Patches/brazilunit_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
       CMU14RankLACNFrigateCaptain:
@@ -322,8 +322,8 @@
     - USSBushRedux
   #platoonflag: uaflag
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -338,7 +338,7 @@
     - Spanish
   reqlist: UPPCargoCatalog
   vendorSet: UPP
-  platoonPatch: /Textures/_AU14/Clothing/Patches/naval_patch.rsi/icon.png
+  platoonPatch: /Textures/CMU14/Clothing/Patches/naval_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
       UPP_Major:
@@ -638,17 +638,17 @@
   #   DCC: AU14JobGOVFORDCCUPP
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
-  id: WYPMC
+  id: WEYU
   name: WY PMC
-  lorePrimer: AU14PrimerPlatoonWYPMC
-  reqlist: WYPMCCargoCatalog
-  vendorSet: WYPMC
-  platoonPatch: /Textures/_AU14/Clothing/Patches/wy_white_patch.rsi/icon.png
+  lorePrimer: AU14PrimerPlatoonWEYU
+  reqlist: WEYUCargoCatalog
+  vendorSet: WEYU
+  platoonPatch: /Textures/CMU14/Clothing/Patches/wy_white_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
       AU14RankWeYuSiteDirector:
@@ -943,13 +943,13 @@
   #   DCC: AU14JobGOVFORDCCWYPMC
     # Synth
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   possibleships:
       - USSBushRedux
   compatibleFighters:
-  - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-  - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+  - /Maps/CMU14/ShuttlesDropships/f84owl.yml
+  - /Maps/CMU14/ShuttlesDropships/ud_6.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -961,7 +961,7 @@
     - English
   reqlist: CMBCIUCargoCatalog
   vendorSet: CMBCIU
-  platoonPatch: /Textures/_AU14/Clothing/Patches/ua_patch.rsi/icon.png
+  platoonPatch: /Textures/CMU14/Clothing/Patches/ua_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
       AU14RankCMBMarshal:
@@ -1153,10 +1153,10 @@
   possibleships:
       - USSBushRedux
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-    - /Maps/_AU14/ShuttlesDropships/cmbsquadcar.yml
+    - /Maps/CMU14/ShuttlesDropships/cmbsquadcar.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -1168,15 +1168,15 @@
     - English
   reqlist: HAZOPSCargoCatalog
   vendorSet: HAZOPS
-  platoonPatch: /Textures/_AU14/Clothing/Patches/hazops_patch.rsi/icon.png
+  platoonPatch: /Textures/CMU14/Clothing/Patches/hazops_patch.rsi/icon.png
   possibleships:
       - USSBushRedux
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/osprey.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/osprey.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-  - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-  - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+  - /Maps/CMU14/ShuttlesDropships/f84owl.yml
+  - /Maps/CMU14/ShuttlesDropships/ud_6.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -1187,7 +1187,7 @@
   languages:
     - English
   vendorSet: ProdigySF
-  platoonPatch: /Textures/_AU14/Clothing/Patches/merc_red_patch.rsi/icon.png
+  platoonPatch: /Textures/CMU14/Clothing/Patches/merc_red_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
       AU14RankPrDOperationsDirector:
@@ -1440,11 +1440,11 @@
 
   #platoonflag:  uaflag
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+    - /Maps/CMU14/ShuttlesDropships/f84owl.yml
+    - /Maps/CMU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: CMUIntelTechTree_GOVFOR
@@ -1459,7 +1459,7 @@
     - English
     - TacticalSignLanguage
   vendorSet: VAIPO
-  platoonPatch: /Textures/_AU14/Clothing/Patches/merc_patch.rsi/icon.png
+  platoonPatch: /Textures/CMU14/Clothing/Patches/merc_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
       VAI_VASCGroupCommander:
@@ -1612,11 +1612,11 @@
         requirements: []
 
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+    - /Maps/CMU14/ShuttlesDropships/f84owl.yml
+    - /Maps/CMU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: CMUIntelTechTree_GOVFOR
@@ -1631,7 +1631,7 @@
     - English
   reqlist: RMCCargoCatalog
   vendorSet: RMC
-  platoonPatch: /Textures/_AU14/Clothing/Patches/rmc_patch.rsi/icon.png
+  platoonPatch: /Textures/CMU14/Clothing/Patches/rmc_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
       RMC_Major:
@@ -1923,11 +1923,11 @@
   #   DCC: AU14JobGOVFORDCCRMC
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthRMC
   CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters: #TODO: RMC Fighters
-    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+    - /Maps/CMU14/ShuttlesDropships/f84owl.yml
+    - /Maps/CMU14/ShuttlesDropships/ud_6.yml
   possibleships: #TODO: RMC Ship
       - USSBushRedux
   techTree: CMUIntelTechTree_GOVFOR
@@ -1947,7 +1947,7 @@
   PlatoonInfo: "The Union of Progressive Peoples Naval Infantry (UPP), under the 5th Fleet of the 5th Division, is known as the 'North Stars.' Drawn from Chinese (former CANC), Russian, German, and Spanish conscripts, the unit is considered one of the most culturally diverse formations in the UPP, even among the 5th Fleet. The 'North Stars' are regarded as underfunded, even by UPP standards, yet despite this, they continue to demonstrate an undying loyalty to the party."
 
 - type: lorePrimer
-  id: AU14PrimerPlatoonWYPMC
+  id: AU14PrimerPlatoonWEYU
   PlatoonInfo: "The Weyland-Yutani Private Military Company (WEYU PMC), known as the 'Whiteshields', is the organized security force of Weyland-Yutani. While usually reserved for operations directly related to Weyland-Yutani facilities, whether for security or containment, colonial governments have often found hiring them to be more efficient and effective than relying on the local military."
 
 - type: lorePrimer

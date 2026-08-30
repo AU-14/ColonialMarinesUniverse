@@ -1,11 +1,11 @@
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using System.Numerics;
 using Robust.Client.UserInterface;
 
 
-namespace Content.Client._CMU14.Xenomorphs.Pathogen.Walker;
+namespace Content.Client.CMU14.Xenomorphs.Pathogen.Walker;
 
 public sealed class CMUPathogenWalkerSystem : EntitySystem
 {

@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.Round.Objectives.Components;
 using Robust.Shared.Map;
 
-namespace Content.Server._CMU14.Round.Objectives;
+namespace Content.Server.CMU14.Round.Objectives;
 
 public abstract partial class ObjectiveSystem
 {

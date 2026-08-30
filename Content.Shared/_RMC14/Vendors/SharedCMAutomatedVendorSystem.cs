@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._CMU14.Round.Objectives;
+using Content.Shared.CMU14.Round.Objectives;
 using Content.Shared._RMC14.Animations;
 using Content.Shared._RMC14.Holiday;
 using Content.Shared._RMC14.Inventory;
@@ -45,7 +45,7 @@ using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Storage;
 using Content.Shared._RMC14.Cryostorage;
-using Content.Shared._AU14.Vendors;
+using Content.Shared.CMU14.Vendors;
 
 namespace Content.Shared._RMC14.Vendors;
 
@@ -353,7 +353,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         if (TryComp(ent, out AccessReaderComponent? accessReader))
         {
             var access = ent.Comp.Hacked ? new List<ProtoId<AccessLevelPrototype>>() : ent.Comp.Access;
-            _accessReader.SetAccesses((ent, accessReader), access);
+            _accessReader.TrySetAccesses((ent, accessReader), access);
         }
     }
 

@@ -9,7 +9,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 
-using CMUAutodocContainedPatientComponent = Content.Shared._CMU14.Medical.Treatment.Surgery.CMUAutodocContainedPatientComponent;
+using CMUAutodocContainedPatientComponent = Content.Shared.CMU14.Medical.Treatment.Surgery.CMUAutodocContainedPatientComponent;
 
 namespace Content.Shared._RMC14.Medical.Surgery;
 

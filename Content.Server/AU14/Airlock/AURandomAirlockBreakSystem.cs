@@ -4,7 +4,7 @@ using Content.Shared._RMC14.Rules;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server.AU14.Airlock;
+namespace Content.Server.CMU14.Airlock;
 
 public sealed partial class AURandomAirlockBreakSystem : EntitySystem
 {

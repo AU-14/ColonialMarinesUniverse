@@ -12,7 +12,7 @@
     platoonsGovfor:
     - LACN
     - USCM
-    - WYPMC
+    - WEYU
     - CMBCIU
     - RMC
     - HAZOPS
@@ -88,7 +88,7 @@
 - type: gameMap
   id: AU747
   mapName: LV-747 Solaris Gulch
-  mapPath: /Maps/_AU14/Solaris.yml
+  mapPath: /Maps/CMU14/Solaris.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

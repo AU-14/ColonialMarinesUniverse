@@ -1,7 +1,7 @@
 using System.Linq;
 using Robust.Shared.Profiling;
 
-namespace Content.Server._CMU14.Diagnostics.Performance;
+namespace Content.Server.CMU14.Diagnostics.Performance;
 
 internal readonly record struct CMUPerformanceProfileFrame(
     long IndexOffset,

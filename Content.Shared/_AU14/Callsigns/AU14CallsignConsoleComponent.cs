@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.Callsigns;
+namespace Content.Shared.CMU14.Callsigns;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AU14CallsignConsoleComponent : Component

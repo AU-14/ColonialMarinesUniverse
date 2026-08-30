@@ -1,5 +1,5 @@
-using Content.Server._CMU14.RoundStatistics;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.RoundStatistics;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
@@ -11,10 +11,10 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
-using KillAllXenoRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllXenoRuleComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
+using KillAllXenoRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllXenoRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRuleComponent>
 {

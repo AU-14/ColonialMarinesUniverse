@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.AU14.WithdrawConsole;
+namespace Content.Shared.CMU14.WithdrawConsole;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class WithdrawConsoleComponent : Component

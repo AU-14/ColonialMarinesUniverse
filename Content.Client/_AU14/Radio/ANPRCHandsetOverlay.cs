@@ -1,10 +1,10 @@
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.Radio;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 
-namespace Content.Client._AU14.Radio;
+namespace Content.Client.CMU14.Radio;
 
 // draws the cord between a manpack and its handset while the handset is off the pack,
 // same idea as the RMC rotary phone cable overlay

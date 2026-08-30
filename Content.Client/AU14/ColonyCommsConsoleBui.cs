@@ -1,8 +1,8 @@
-using Content.Client.AU14.ColonyEconomy;
-using Content.Shared.AU14;
+using Content.Client.CMU14.ColonyEconomy;
+using Content.Shared.CMU14;
 using Robust.Client.UserInterface;
 
-namespace Content.Client.AU14;
+namespace Content.Client.CMU14;
 
 public sealed class ColonyCommsConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {

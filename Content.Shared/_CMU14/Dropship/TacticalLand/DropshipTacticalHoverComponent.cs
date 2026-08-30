@@ -5,7 +5,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Dropship.TacticalLand;
+namespace Content.Shared.CMU14.Dropship.TacticalLand;
 
 [RegisterComponent]
 public sealed partial class DropshipTacticalHoverComponent : Component

@@ -1,9 +1,9 @@
 using Content.Client.Eui;
-using Content.Shared._CMU14.RoundStatistics;
+using Content.Shared.CMU14.RoundStatistics;
 using Content.Shared.Eui;
 using JetBrains.Annotations;
 
-namespace Content.Client._CMU14.RoundStatistics;
+namespace Content.Client.CMU14.RoundStatistics;
 
 [UsedImplicitly]
 public sealed class CMURoundStatisticsEui : BaseEui

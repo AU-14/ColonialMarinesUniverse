@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Item.Stain;
+namespace Content.Shared.CMU14.Item.Stain;
 
 /// <summary>
 /// Stores the single visual stain currently applied to an item.

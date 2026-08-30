@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCWeaponRevolverBase
   id: AU14WeaponRevolverM2019
   name: "M2019 'blaster' autorevolver"
@@ -10,7 +10,7 @@
     - RMCRevolver
     - AU14WeaponRevolverM2019
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Civilian/blaster.rsi
+    sprite: CMU14/Weapons/Guns/Civilian/blaster.rsi
   - type: RevolverAmmoProvider
     whitelist:
       tags:

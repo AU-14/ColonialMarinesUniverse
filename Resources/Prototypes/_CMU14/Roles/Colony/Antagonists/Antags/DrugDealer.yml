@@ -5,7 +5,7 @@
   - type: GameRule
   - type: DrugDealerRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
+    selectionTime: JobsAssigned
     definitions:
     - prefRoles: [ DrugDealerRole ]
       max: 1

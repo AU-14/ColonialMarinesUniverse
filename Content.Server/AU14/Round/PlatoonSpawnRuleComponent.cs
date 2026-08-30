@@ -1,8 +1,8 @@
 using System.Threading;
 using Content.Server.GameTicking.Rules.Components;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 
-namespace Content.Server.AU14.Round;
+namespace Content.Server.CMU14.Round;
 
 /// <summary>
 /// Gamerule that ends the round after a period of inactivity.

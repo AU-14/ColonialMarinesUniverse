@@ -1,10 +1,10 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.Body.Events;
 using Content.Shared.Eye.Blinding.Systems;
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
 
 public abstract partial class SharedEyesSystem : EntitySystem
 {

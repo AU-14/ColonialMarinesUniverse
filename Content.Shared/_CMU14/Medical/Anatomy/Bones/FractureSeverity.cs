@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Medical.Anatomy.Bones;
+namespace Content.Shared.CMU14.Medical.Anatomy.Bones;
 
 /// <summary>
 ///     Stage value is monotonically increasing:

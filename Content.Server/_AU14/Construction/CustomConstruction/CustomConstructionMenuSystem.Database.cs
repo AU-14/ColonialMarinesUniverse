@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Content.Server.Database;
 using Robust.Shared.Upload;
 
-namespace Content.Server._AU14.Construction.CustomConstruction;
+namespace Content.Server.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Database mirror for every generated construction file, so admin-added entries survive Docker

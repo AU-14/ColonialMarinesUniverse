@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs;
 
 /// <summary>
 ///     Marker for detached organs. Freezes <see cref="OrganHealthComponent"/>

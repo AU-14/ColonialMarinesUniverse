@@ -1,4 +1,4 @@
-﻿using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
@@ -19,13 +19,13 @@ public sealed partial class PhysicalCompositionComponent : Component
     /// <summary>
     /// The materials that "make up" this entity
     /// </summary>
-    [DataField("materialComposition")]
+    [DataField]
     public Dictionary<ProtoId<MaterialPrototype>, int> MaterialComposition = new();
 
     /// <summary>
     /// The chemicals that "make up" this entity
     /// </summary>
-    [DataField("chemicalComposition")]
+    [DataField]
     public Dictionary<ProtoId<ReagentPrototype>, FixedPoint2> ChemicalComposition = new();
     // TODO use ReagentQuantity[]
 }

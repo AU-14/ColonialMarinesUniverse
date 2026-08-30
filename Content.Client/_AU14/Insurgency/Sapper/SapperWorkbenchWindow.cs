@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Shared._AU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Insurgency.Sapper;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._AU14.Insurgency.Sapper;
+namespace Content.Client.CMU14.Insurgency.Sapper;
 
 public sealed class SapperWorkbenchWindow : DefaultWindow
 {

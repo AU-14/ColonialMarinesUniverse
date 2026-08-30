@@ -1,6 +1,7 @@
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -20,7 +21,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaTrapSystem : EntitySystem
 {

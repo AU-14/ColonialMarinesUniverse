@@ -1,8 +1,8 @@
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14.ColonyEvacuation;
+using Content.Shared.CMU14.ColonyEvacuation;
 
-namespace Content.Server.AU14.ColonyEvacuation;
+namespace Content.Server.CMU14.ColonyEvacuation;
 
 public sealed partial class ColonyEvacuationSystem : EntitySystem
 {

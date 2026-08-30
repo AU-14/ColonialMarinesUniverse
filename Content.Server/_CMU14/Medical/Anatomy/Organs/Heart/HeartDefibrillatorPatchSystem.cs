@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -10,7 +10,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Random;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Organs.Heart;
+namespace Content.Server.CMU14.Medical.Anatomy.Organs.Heart;
 
 public sealed partial class HeartDefibrillatorPatchSystem : EntitySystem
 {

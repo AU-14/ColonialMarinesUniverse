@@ -2,7 +2,7 @@
 // Copyright (c) 2026 wray-git
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Marks a dropship GRID whose structure was hit by a cave-in below it. A compromised dropship refuses

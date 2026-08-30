@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Dropship;
 
-namespace Content.Shared._CMU14.Dropship.TacticalLand;
+namespace Content.Shared.CMU14.Dropship.TacticalLand;
 
 public abstract class SharedDropshipTacticalLandSystem : EntitySystem
 {

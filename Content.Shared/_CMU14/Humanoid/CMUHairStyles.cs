@@ -1,7 +1,7 @@
 using Content.Shared.Humanoid.Markings;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Humanoid
+namespace Content.Shared.CMU14.Humanoid
 {
     /// <summary>
     /// Curated hairstyle lists used by the "Tie Hair Back" verb.

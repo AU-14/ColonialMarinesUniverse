@@ -1,11 +1,11 @@
-using Content.Shared._AU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.GameTicking;
 using Robust.Shared.Network;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Shared._AU14.Chemistry.Research;
+namespace Content.Shared.CMU14.Chemistry.Research;
 
 public abstract partial class SharedResearchDataTerminalSystem : EntitySystem
 {

@@ -7,7 +7,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.SavedBuilds;
+namespace Content.Shared.CMU14.SavedBuilds;
 
 /// <summary>
 /// Which selection/placement ruleset a saved-build action runs under. The server re-validates the caller's

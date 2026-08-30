@@ -3,7 +3,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._CMU14.Yautja;
+namespace Content.Client.CMU14.Yautja;
 
 internal static class YautjaBracerUiStyle
 {

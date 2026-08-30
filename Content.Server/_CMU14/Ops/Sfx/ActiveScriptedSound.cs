@@ -1,6 +1,6 @@
 using Robust.Shared.Audio;
 
-namespace Content.Server._CMU14.Ops.Sfx;
+namespace Content.Server.CMU14.Ops.Sfx;
 
 public sealed class ActiveScriptedSound
 {

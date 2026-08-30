@@ -1,11 +1,11 @@
 //pretty please license this under the MIT license :) - MACMAN2003
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Chemistry.Reagents;
+namespace Content.Shared.CMU14.Chemistry.Reagents;
 
 [Serializable, NetSerializable]
 public struct GeneratedReagentData

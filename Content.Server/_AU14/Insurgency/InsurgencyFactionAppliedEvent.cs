@@ -1,6 +1,6 @@
-using Content.Shared._AU14.Insurgency;
+using Content.Shared.CMU14.Insurgency;
 
-namespace Content.Server._AU14.Insurgency;
+namespace Content.Server.CMU14.Insurgency;
 
 /// <summary>
 ///     Broadcast once when a faction definition is applied for the round. Other systems

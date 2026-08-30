@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.AllianceConsole;
+namespace Content.Shared.CMU14.AllianceConsole;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AllianceConsoleComponent : Component

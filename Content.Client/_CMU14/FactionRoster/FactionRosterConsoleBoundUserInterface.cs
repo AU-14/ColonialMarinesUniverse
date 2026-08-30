@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.FactionRoster;
+using Content.Shared.CMU14.FactionRoster;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._CMU14.FactionRoster;
+namespace Content.Client.CMU14.FactionRoster;
 
 public sealed class FactionRosterConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {

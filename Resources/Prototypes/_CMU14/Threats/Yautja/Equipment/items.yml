@@ -1,3 +1,27 @@
+- type: radioChannel
+  id: CMUYautja
+  name: chat-radio-cmu-yautja
+  keycode: "ŷ"
+  frequency: 154.1
+  color: "#b85440"
+  longRange: true
+
+- type: radioChannel
+  id: CMUYautjaOverseer
+  name: chat-radio-cmu-yautja-overseer
+  keycode: "Ŷ"
+  frequency: 154.2
+  color: "#d4a85b"
+  longRange: true
+
+- type: radioChannel
+  id: CMUYautjaBadBlood
+  name: chat-radio-cmu-yautja-badblood
+  keycode: "ƀ"
+  frequency: 154.3
+  color: "#c44343"
+  longRange: true
+
 - type: entity
   parent: EncryptionKey
   id: CMUYautjaEncryptionKey
@@ -14,22 +38,22 @@
     - state: crypt_rusted
     - state: synd_label
 
-# - type: entity
-#   parent: EncryptionKey
-#   id: CMUYautjaOverseerEncryptionKey
-#   name: Yautja overseer encryption key
-#   description: An alien cipher chip tuned to hunter and overseer channels.
-#   suffix: Yautja
-#   components:
-#   - type: EncryptionKey
-#     channels:
-#     - CMUYautja
-#     - CMUYautjaOverseer
-#     defaultChannel: CMUYautjaOverseer
-#   - type: Sprite
-#     layers:
-#     - state: crypt_gold
-#     - state: cap_label
+- type: entity
+  parent: EncryptionKey
+  id: CMUYautjaOverseerEncryptionKey
+  name: Yautja overseer encryption key
+  description: An alien cipher chip tuned to hunter and overseer channels.
+  suffix: Yautja
+  components:
+  - type: EncryptionKey
+    channels:
+    - CMUYautja
+    - CMUYautjaOverseer
+    defaultChannel: CMUYautjaOverseer
+  - type: Sprite
+    layers:
+    - state: crypt_gold
+    - state: cap_label
 
 - type: entity
   parent: EncryptionKey
@@ -68,16 +92,16 @@
     blockMelee: false
     blockThrow: false
 
-# - type: entity
-#   parent: CMUYautjaCommunicator
-#   id: CMUYautjaOverseerCommunicator
-#   name: overseer communicator
-#   suffix: Yautja, Overseer
-#   components:
-#   - type: ContainerFill
-#     containers:
-#       key_slots:
-#       - CMUYautjaOverseerEncryptionKey
+- type: entity
+  parent: CMUYautjaCommunicator
+  id: CMUYautjaOverseerCommunicator
+  name: overseer communicator
+  suffix: Yautja, Overseer
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUYautjaOverseerEncryptionKey
 
 - type: entity
   parent: CMUYautjaCommunicator
@@ -104,10 +128,10 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: beltbag
   - type: Clothing
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     slots:
     - belt
     clothingVisuals:
@@ -115,7 +139,7 @@
       - state: equipped-BELT-hunting_pouch
   - type: Item
     size: Large
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -131,11 +155,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: teleporter
   - type: Item
     size: Tiny
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
   - type: YautjaRelayBeacon
   - type: YautjaTechItem
 
@@ -147,11 +171,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: dissolving_vial
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
   - type: YautjaCleaner
   - type: YautjaTechItem
     blockPickup: false
@@ -164,13 +188,13 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     layers:
     - state: scalp_1
     - state: scalp_1_blood
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: scalp
   - type: YautjaScalp
   - type: YautjaTrophy
@@ -183,11 +207,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: bar
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: bar
     storedRotation: 0
   - type: YautjaTechItem
@@ -200,15 +224,15 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: wrench
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: wrench
     storedRotation: 0
     storedSprite:
-      sprite: _CMU14/Yautja/yautja_items.rsi
+      sprite: CMU14/Yautja/yautja_items.rsi
       state: wrench
   - type: YautjaTechItem
 
@@ -220,7 +244,7 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     layers:
     - state: wirescutter
       map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -230,7 +254,7 @@
         wirescutter: ""
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: wirescutter
     storedRotation: 0
   - type: YautjaTechItem
@@ -243,7 +267,7 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     layers:
     - state: screwdriver
       map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -253,7 +277,7 @@
         screwdriver: ""
   - type: Item
     size: Tiny
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: screwdriver
     storedRotation: 0
   - type: MeleeWeapon
@@ -274,11 +298,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: multitool
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: multitool
     storedRotation: 0
   - type: YautjaTechItem
@@ -291,7 +315,7 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     layers:
     - state: welder
       map: ["enum.ToggleableVisuals.Enabled"]
@@ -301,7 +325,7 @@
       shader: unshaded
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     heldPrefix: welder
   - type: ToggleableVisuals
     spriteLayer: on
@@ -336,16 +360,16 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: beltbag
   - type: Clothing
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     clothingVisuals:
       belt:
       - state: equipped-BELT-utilitybelt_pred
   - type: Item
     size: Large
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
   - type: Storage
     maxItemSize: Large
     grid:
@@ -378,11 +402,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: metal_chain
   - type: Item
     size: Normal
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
   - type: YautjaTechItem
     blockPickup: false
     blockUse: false
@@ -395,11 +419,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: houndpad
   - type: Item
     size: Small
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
   - type: YautjaHoundPad
   - type: YautjaTechItem
 
@@ -411,42 +435,12 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
     state: emitter-xeno
   - type: Item
     size: Tiny
-    sprite: _CMU14/Yautja/yautja_items.rsi
+    sprite: CMU14/Yautja/yautja_items.rsi
   - type: YautjaHivebreaker
   - type: YautjaTechItem
     blockPickup: false
     blockUse: false
-
-- type: entity
-  parent: CMFoodBase
-  id: CMUYautjaFieldRation
-  name: preserved hunting ration
-  description: Strips of dried meat packed in waxy alien leaves. It smells aggressively of spice.
-  components:
-  - type: Sprite
-    sprite: Objects/Consumable/Food/meat.rsi
-    state: plain
-  - type: Item
-    size: Tiny
-  - type: Food
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 25
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 25
-
-- type: entity
-  parent: CMCanteenBase
-  id: CMUYautjaHuntingCanteen
-  name: hunting canteen
-  description: A lacquered alien gourd sealed with resin. The water inside tastes faintly of copper.
-  components:
-  - type: Sprite
-    state: canteen
-    color: "#b85440"

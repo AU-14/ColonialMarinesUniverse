@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Threats.Mobs.WorkingJoe;
+namespace Content.Shared.CMU14.Threats.Mobs.WorkingJoe;
 
 [Serializable, NetSerializable]
 public sealed class WorkingJoeVoiceLine

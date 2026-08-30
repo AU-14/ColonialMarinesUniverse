@@ -10,7 +10,7 @@
     camouflage: Desert
     announcement: "The Octanis Research Complex and attached colony of Hope's Retreat on charted exoplanet JE-1758 have gone silent, investigate the cause of this communications blackout."
     platoonsGovfor:
-    - WYPMC
+    - WEYU
     - USCM
     - RMC
     - CMBCIU
@@ -20,7 +20,7 @@
     - HAZOPS
     - ProdigySF
     - VAIPO
-    defaultgovfor: WYPMC
+    defaultgovfor: WEYU
     defaultopfor: ProdigySF
     govforinship: false
     opforinship: true
@@ -82,13 +82,13 @@
   id: hopesretreat
   mapName: JE-1758 Ascanius
   allegiance: IndependentSystems # ICSC
-  mapPath: /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ0.yml
+  mapPath: /Maps/CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ0.yml
   mapsBelow:
-  - /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ-1.yml
+  - /Maps/CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ-1.yml
   mapsAbove:
-  - /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ1.yml
-  - /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ2.yml
-  - /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ3.yml
+  - /Maps/CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ1.yml
+  - /Maps/CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ2.yml
+  - /Maps/CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ3.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

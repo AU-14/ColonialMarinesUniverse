@@ -1,7 +1,7 @@
 using Content.Shared.Physics;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.ZLevels.Core;
+namespace Content.Server.CMU14.ZLevels.Core;
 
 [RegisterComponent]
 [Access(typeof(CMUDeployableZLevelLadderSystem))]

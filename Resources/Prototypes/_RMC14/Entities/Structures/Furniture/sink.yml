@@ -31,6 +31,7 @@
   - type: DumpableSolution
     solution: drainBuffer
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Xenonids.Watch;
+namespace Content.Shared.CMU14.Xenonids.Watch;
 
 public static class CMUXenoWatchCommand
 {

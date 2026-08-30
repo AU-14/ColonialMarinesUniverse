@@ -12,7 +12,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Yautja;
+namespace Content.Shared.CMU14.Yautja;
 
 public sealed partial class YautjaMarkSystem : EntitySystem
 {
@@ -230,7 +230,7 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         if (_mob.IsDead(target))
             return false;
 
-        var humanoid = HasComp<HumanoidAppearanceComponent>(target);
+        var humanoid = HasComp<HumanoidProfileComponent>(target);
         var xeno = HasComp<XenoComponent>(target);
         if (!CanMarkSpecies(kind, target, humanoid, xeno))
             return false;

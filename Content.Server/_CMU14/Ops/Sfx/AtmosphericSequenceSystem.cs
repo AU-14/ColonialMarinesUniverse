@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Ops.Sfx;
+using Content.Shared.CMU14.Ops.Sfx;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Ops.Sfx;
+namespace Content.Server.CMU14.Ops.Sfx;
 
 /// <summary>Starts a scripted seq anchored to an entity (e.g. speaker)</summary>
 public sealed partial class AtmosphericSequenceSystem : EntitySystem

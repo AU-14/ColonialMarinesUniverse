@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Text;
-using Content.Shared._AU14.CCVar;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.CCVar;
+using Content.Shared.CMU14.Radio;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared.Paper;
@@ -10,7 +10,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 // rolls a fresh signal operating plan every round: faction net frequencies are
 // randomized so last round's numbers are worthless and captured frequency cards
@@ -22,11 +22,12 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private PaperSystem _paper = default!;
 
-    private const int FrequencyMin = 1000;
-    private const int FrequencyMax = 2999;
+    private const int FrequencyMinKilohertz = 100_000;
+    private const int FrequencyMaxKilohertz = 299_900;
+    private const int FrequencyStepKilohertz = 100;
 
-    private Dictionary<string, int>? _plan;
-    private Dictionary<int, ProtoId<RadioChannelPrototype>>? _channelsByFrequency;
+    private Dictionary<string, RadioFrequency>? _plan;
+    private Dictionary<RadioFrequency, ProtoId<RadioChannelPrototype>>? _channelsByFrequency;
 
     private bool _commsEnabled;
 
@@ -66,7 +67,7 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         foreach (var id in _plan.Keys.ToArray())
         {
             if (!_prototype.TryIndex<RadioChannelPrototype>(id, out var proto) ||
-                proto.Frequency <= 0 ||
+                proto.Frequency == RadioFrequency.Off ||
                 string.IsNullOrEmpty(proto.Faction))
             {
                 _plan.Remove(id);
@@ -76,27 +77,29 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
 
         // new channels get a frequency without disturbing the assignments everyone
         // already has written down
-        var taken = new HashSet<int>(_plan.Values);
+        var taken = new HashSet<RadioFrequency>(_plan.Values);
 
         foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
         {
-            if (proto.Frequency > 0)
+            if (proto.Frequency != RadioFrequency.Off)
                 taken.Add(proto.Frequency);
         }
 
         var added = _prototype.EnumeratePrototypes<RadioChannelPrototype>()
-            .Where(proto => proto.Frequency > 0 &&
+            .Where(proto => proto.Frequency != RadioFrequency.Off &&
                             !string.IsNullOrEmpty(proto.Faction) &&
                             !_plan.ContainsKey(proto.ID))
             .OrderBy(proto => proto.ID, StringComparer.Ordinal);
 
         foreach (var proto in added)
         {
-            int frequency;
+            RadioFrequency frequency;
 
             do
             {
-                frequency = _random.Next(FrequencyMin, FrequencyMax + 1);
+                var steps = (FrequencyMaxKilohertz - FrequencyMinKilohertz) / FrequencyStepKilohertz;
+                var kilohertz = FrequencyMinKilohertz + _random.Next(steps + 1) * FrequencyStepKilohertz;
+                frequency = RadioFrequency.FromKilohertz(kilohertz);
             }
             while (!taken.Add(frequency));
 
@@ -127,9 +130,9 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         ReprintCards();
     }
 
-    public int GetFrequency(RadioChannelPrototype channel)
+    public RadioFrequency GetFrequency(RadioChannelPrototype channel)
     {
-        if (!_commsEnabled || channel.Frequency <= 0 || string.IsNullOrEmpty(channel.Faction))
+        if (!_commsEnabled || channel.Frequency == RadioFrequency.Off || string.IsNullOrEmpty(channel.Faction))
             return channel.Frequency;
 
         return GetPlan().TryGetValue(channel.ID, out var frequency)
@@ -140,7 +143,7 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
     // a frequency the operator already holds: an unfactioned net, or one belonging to
     // their own faction. the sweep uses this so nobody is made to grind out a number
     // that is already printed on their own freq card
-    public bool IsKnownTo(int frequency, string? operatorFaction)
+    public bool IsKnownTo(RadioFrequency frequency, string? operatorFaction)
     {
         if (!TryGetChannelByFrequency(frequency, out var channel) ||
             !_prototype.TryIndex(channel, out var proto))
@@ -153,11 +156,11 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
                string.Equals(proto.Faction, operatorFaction, StringComparison.OrdinalIgnoreCase);
     }
 
-    public bool TryGetChannelByFrequency(int frequency, out ProtoId<RadioChannelPrototype> channel)
+    public bool TryGetChannelByFrequency(RadioFrequency frequency, out ProtoId<RadioChannelPrototype> channel)
     {
         if (_channelsByFrequency == null)
         {
-            _channelsByFrequency = new Dictionary<int, ProtoId<RadioChannelPrototype>>();
+            _channelsByFrequency = new Dictionary<RadioFrequency, ProtoId<RadioChannelPrototype>>();
 
             foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
             {
@@ -171,34 +174,36 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         return _channelsByFrequency.TryGetValue(frequency, out channel);
     }
 
-    private Dictionary<string, int> GetPlan()
+    private Dictionary<string, RadioFrequency> GetPlan()
     {
         if (_plan != null)
             return _plan;
 
-        _plan = new Dictionary<string, int>();
+        _plan = new Dictionary<string, RadioFrequency>();
 
         // static channels keep their book frequencies, keep the plan clear of them
-        var taken = new HashSet<int>();
+        var taken = new HashSet<RadioFrequency>();
 
         foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
         {
-            if (proto.Frequency > 0)
+            if (proto.Frequency != RadioFrequency.Off)
                 taken.Add(proto.Frequency);
         }
 
         // deterministic enumeration order so the roll count is stable
         var randomized = _prototype.EnumeratePrototypes<RadioChannelPrototype>()
-            .Where(proto => proto.Frequency > 0 && !string.IsNullOrEmpty(proto.Faction))
+            .Where(proto => proto.Frequency != RadioFrequency.Off && !string.IsNullOrEmpty(proto.Faction))
             .OrderBy(proto => proto.ID, StringComparer.Ordinal);
 
         foreach (var proto in randomized)
         {
-            int frequency;
+            RadioFrequency frequency;
 
             do
             {
-                frequency = _random.Next(FrequencyMin, FrequencyMax + 1);
+                var steps = (FrequencyMaxKilohertz - FrequencyMinKilohertz) / FrequencyStepKilohertz;
+                var kilohertz = FrequencyMinKilohertz + _random.Next(steps + 1) * FrequencyStepKilohertz;
+                frequency = RadioFrequency.FromKilohertz(kilohertz);
             }
             while (!taken.Add(frequency));
 
@@ -225,7 +230,7 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         sb.AppendLine();
 
         var channels = _prototype.EnumeratePrototypes<RadioChannelPrototype>()
-            .Where(proto => proto.Frequency > 0 &&
+            .Where(proto => proto.Frequency != RadioFrequency.Off &&
                             string.Equals(proto.Faction, faction, StringComparison.OrdinalIgnoreCase))
             .OrderBy(proto => proto.LocalizedName, StringComparer.OrdinalIgnoreCase);
 
@@ -235,7 +240,7 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         }
 
         sb.AppendLine();
-        sb.AppendLine("Enter a frequency in the radio panel's FREQ tab (with or without the dot, 2592 and 2.592 are the same) to assign the matching net to a preset slot.");
+        sb.AppendLine("Enter a frequency in the radio panel's FREQ tab (2592 and 259.2 both mean 259.200 MHz) to assign the matching net to a preset slot.");
         sb.AppendLine();
         sb.Append("[italic]COMSEC NOTICE: This card is a controlled document. Destroy before capture. Frequencies are assigned per operation and expire with it.[/italic]");
 

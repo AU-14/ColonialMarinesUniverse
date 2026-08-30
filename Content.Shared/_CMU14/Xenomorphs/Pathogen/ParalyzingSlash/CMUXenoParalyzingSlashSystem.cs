@@ -8,7 +8,7 @@ using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Network;
 using Content.Shared.Stunnable;
 
-namespace Content.Shared._CMU14.Xenonids.ParalyzingSlash;
+namespace Content.Shared.CMU14.Xenonids.ParalyzingSlash;
 
 public sealed partial class CMUXenoParalyzingSlashSystem : EntitySystem
 {

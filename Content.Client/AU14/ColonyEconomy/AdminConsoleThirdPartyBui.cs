@@ -1,7 +1,7 @@
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Client.UserInterface;
 
-namespace Content.Client.AU14.ColonyEconomy;
+namespace Content.Client.CMU14.ColonyEconomy;
 
 public sealed class AdminConsoleThirdPartyBui : BoundUserInterface
 {

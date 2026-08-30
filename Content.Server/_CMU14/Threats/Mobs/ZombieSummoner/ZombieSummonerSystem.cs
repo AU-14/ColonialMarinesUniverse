@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Server.Actions;
 using Content.Server.Chat;
 using Content.Server.Chat.Systems;
+using Content.Server.Humanoid;
 using Content.Server.Humanoid.Systems;
 using Content.Server.Mobs;
 using Content.Server.NPC;
@@ -10,13 +11,16 @@ using Content.Server.NPC.Systems;
 using Content.Server.Prayer;
 using Content.Server.Zombies;
 using Content.Shared._RMC14.NightVision;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.Actions.Components;
-using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
-using Content.Shared.Body.Components;
+using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Dataset;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -40,7 +44,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Threats.Mobs.ZombieSummoner;
+namespace Content.Server.CMU14.Threats.Mobs.ZombieSummoner;
 
 public sealed partial class ZombieSummonerSystem : EntitySystem
 {
@@ -101,7 +105,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
     [Dependency] private EmoteOnDamageSystem _emoteOnDamage = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private HTNSystem _htn = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
@@ -267,17 +271,18 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void OnMapInit(Entity<ZombieSummonerComponent> ent, ref MapInitEvent args)
     {
-        if (!TryComp(ent, out HumanoidAppearanceComponent? humanoid))
+        if (!_humanoidAppearance.TryGetColors(ent.Owner, out _, out var eyeColor))
             return;
 
         if (ent.Comp.SkinColors.Count > 0)
-            _humanoid.SetSkinColor(ent.Owner, _random.Pick(ent.Comp.SkinColors), false, false, humanoid);
+            _humanoidAppearance.TrySetSkinColor(ent.Owner, _random.Pick(ent.Comp.SkinColors));
 
-        EnsureRealisticEyeColor(ent.Owner, humanoid, ent.Comp.EyeColors);
+        EnsureRealisticEyeColor(ent.Owner, eyeColor, ent.Comp.EyeColors);
         if (ent.Comp.StartsWithFaceMark)
-            _humanoid.AddMarking(ent.Owner, ent.Comp.ZombieFaceMarking, ent.Comp.ZombieFaceMarkingColor, false, true, humanoid);
-
-        Dirty(ent.Owner, humanoid);
+            _humanoidAppearance.TryAddMarking(ent.Owner,
+                ent.Comp.ZombieFaceMarking,
+                ent.Comp.ZombieFaceMarkingColor,
+                true);
     }
 
     private void OnRefreshZombieLabel(Entity<ZombieSummonerZombieLabelComponent> ent, ref RefreshNameModifiersEvent args)
@@ -618,21 +623,20 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
         _faction.AddFaction((uid, CompOrNull<NpcFactionMemberComponent>(uid)), ZombieFaction);
 
-        if (TryComp(uid, out HumanoidAppearanceComponent? humanoid))
-            EnsureRealisticEyeColor(uid, humanoid, summoner.EyeColors);
+        if (_humanoidAppearance.TryGetColors(uid, out _, out var eyeColor))
+            EnsureRealisticEyeColor(uid, eyeColor, summoner.EyeColors);
     }
 
     private void EnsureRealisticEyeColor(
         EntityUid uid,
-        HumanoidAppearanceComponent humanoid,
+        Color currentEyeColor,
         IReadOnlyList<Color> eyeColors)
     {
         var palette = eyeColors.Count > 0 ? eyeColors : RealisticEyeColors;
-        if (IsRealisticEyeColor(humanoid.EyeColor, palette))
+        if (IsRealisticEyeColor(currentEyeColor, palette))
             return;
 
-        humanoid.EyeColor = palette[_random.Next(palette.Count)];
-        Dirty(uid, humanoid);
+        _humanoidAppearance.TrySetEyeColor(uid, palette[_random.Next(palette.Count)]);
     }
 
     private bool IsRealisticEyeColor(Color color, IReadOnlyList<Color> eyeColors)
@@ -669,11 +673,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
     private void ApplyDelayedFaceMark(EntityUid uid, ZombieSummonerDelayedFaceMarkComponent delayedMark)
     {
-        if (!TryComp(uid, out HumanoidAppearanceComponent? humanoid))
-            return;
-
-        _humanoid.AddMarking(uid, delayedMark.FaceMarking, delayedMark.FaceMarkingColor, false, true, humanoid);
-        Dirty(uid, humanoid);
+        _humanoidAppearance.TryAddMarking(uid, delayedMark.FaceMarking, delayedMark.FaceMarkingColor, true);
     }
 
     private void OnSpawnMessage(Entity<ZombieSummonerComponent> ent, ref ZombieSummonerSpawnMessage args)
@@ -716,11 +716,11 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             var skinColor = Color.Transparent;
             var eyeColor = Color.Transparent;
             var hasHumanoidAppearance = false;
-            if (TryComp(zombie, out HumanoidAppearanceComponent? humanoid))
+            if (_humanoidAppearance.TryGetColors(zombie, out var currentSkinColor, out var currentEyeColor))
             {
                 hasHumanoidAppearance = true;
-                skinColor = humanoid.SkinColor;
-                eyeColor = humanoid.EyeColor;
+                skinColor = currentSkinColor;
+                eyeColor = currentEyeColor;
             }
 
             _zombie.ZombifyEntity(zombie);
@@ -772,7 +772,6 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
             return;
 
         zombieComp.EmoteSoundsId = null;
-        zombieComp.EmoteSounds = null;
         Dirty(zombie, zombieComp);
     }
 
@@ -814,14 +813,14 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         Color skinColor,
         Color eyeColor)
     {
-        if (!TryComp(zombie, out HumanoidAppearanceComponent? humanoid))
+        if (!_humanoidAppearance.TrySetColors(zombie, skinColor, eyeColor))
             return;
 
-        _humanoid.SetSkinColor(zombie, skinColor, false, false, humanoid);
-        humanoid.EyeColor = eyeColor;
-        EnsureRealisticEyeColor(zombie, humanoid, comp.EyeColors);
-        _humanoid.AddMarking(zombie, comp.ZombieFaceMarking, comp.ZombieFaceMarkingColor, false, true, humanoid);
-        Dirty(zombie, humanoid);
+        EnsureRealisticEyeColor(zombie, eyeColor, comp.EyeColors);
+        _humanoidAppearance.TryAddMarking(zombie,
+            comp.ZombieFaceMarking,
+            comp.ZombieFaceMarkingColor,
+            true);
     }
 
     private void GiveZombieHands(EntityUid zombie)

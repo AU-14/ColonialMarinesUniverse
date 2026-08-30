@@ -1,8 +1,8 @@
 using System;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
@@ -19,7 +19,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
+namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 public abstract partial class SharedCMUTourniquetSystem : EntitySystem
 {

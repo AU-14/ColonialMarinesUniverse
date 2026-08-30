@@ -24,11 +24,13 @@ using Content.Shared.Atmos.Rotting;
 using Content.Shared.Buckle; // CMU14
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -60,8 +62,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Xenomorphs.Larva;
-using Content.Shared._CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Xenomorphs.Larva;
+using Content.Shared.CMU14.Chemistry.Effects;
 
 namespace Content.Shared._RMC14.Xenonids.Parasite;
 
@@ -677,8 +679,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             return false;
 
         if (_net.IsServer &&
-            TryComp(victim, out HumanoidAppearanceComponent? appearance) &&
-            infectable.Sound.TryGetValue(appearance.Sex, out var sound))
+            TryComp(victim, out HumanoidProfileComponent? profile) &&
+            infectable.Sound.TryGetValue(profile.Sex, out var sound))
         {
             _audio.PlayPvs(sound, victim);
         }
@@ -1005,8 +1007,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
             if (_net.IsServer &&
                 TryComp(victim, out InfectableComponent? infectable) &&
-                TryComp(victim, out HumanoidAppearanceComponent? appearance) &&
-                infectable.PreburstSound.TryGetValue(appearance.Sex, out var sound) &&
+                TryComp(victim, out HumanoidProfileComponent? profile) &&
+                infectable.PreburstSound.TryGetValue(profile.Sex, out var sound) &&
                 !_mobState.IsIncapacitated(victim))
             {
                 var filter = Filter.Pvs(victim);

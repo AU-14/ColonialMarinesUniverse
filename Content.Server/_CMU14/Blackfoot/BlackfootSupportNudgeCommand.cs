@@ -1,14 +1,14 @@
 using System.Globalization;
 using System.Numerics;
 using Content.Server.Administration;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.Enums;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 
-namespace Content.Server._CMU14.Blackfoot;
+namespace Content.Server.CMU14.Blackfoot;
 
 [AdminCommand(AdminFlags.Mapping)]
 public sealed partial class BlackfootSupportNudgeCommand : IConsoleCommand

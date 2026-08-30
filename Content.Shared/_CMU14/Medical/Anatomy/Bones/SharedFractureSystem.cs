@@ -1,10 +1,10 @@
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Anatomy.Bones.Events;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Anatomy.Bones.Events;
 using Content.Shared.Body.Part;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Bones;
+namespace Content.Shared.CMU14.Medical.Anatomy.Bones;
 
 public abstract partial class SharedFractureSystem : EntitySystem
 {

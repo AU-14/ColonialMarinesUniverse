@@ -22,7 +22,7 @@
   - type: Battery
     maxCharge: 500
     startingCharge: 500
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: RMCProjectileTaser
     fireCost: 100
   - type: MagazineVisuals
@@ -57,8 +57,13 @@
         Blunt: 5
     soundHit:
       path: /Audio/Weapons/Guns/Hits/energy_metal2.ogg
-  - type: Stunbaton
-    energyPerUse: 50
+  - type: ItemToggleExaminableStatus
+  - type: ItemToggleRequiresCharge
+    requiredCharge: 50
+  - type: MeleeBatteryHitsLeft
+  - type: StaminaDamageOnHitRequiresToggle
+  - type: StaminaDamageOnHitRequiresCharge
+    requiredCharge: 50
   - type: RMCStaminaDamageOnHit
     damage: 15
   - type: MeleeRequiresSkill

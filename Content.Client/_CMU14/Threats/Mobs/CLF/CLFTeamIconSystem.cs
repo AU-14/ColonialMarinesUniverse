@@ -1,9 +1,9 @@
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
-using CLFMemberComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFMemberComponent;
+using CLFMemberComponent = Content.Shared.CMU14.Threats.Mobs.CLF.CLFMemberComponent;
 
-namespace Content.Client._CMU14.Threats.Mobs.CLF;
+namespace Content.Client.CMU14.Threats.Mobs.CLF;
 
 public sealed partial class CLFTeamIconSystem : EntitySystem
 {

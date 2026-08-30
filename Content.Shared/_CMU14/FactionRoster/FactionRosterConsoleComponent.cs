@@ -1,7 +1,7 @@
 using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.FactionRoster;
+namespace Content.Shared.CMU14.FactionRoster;
 
 [RegisterComponent]
 public sealed partial class FactionRosterConsoleComponent : Component

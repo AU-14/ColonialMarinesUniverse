@@ -1,7 +1,7 @@
 using Content.Shared.Eui;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.CharacterDescription;
+namespace Content.Shared.CMU14.CharacterDescription;
 
 [Serializable, NetSerializable]
 public sealed class DetailedExamineEuiState : EuiStateBase

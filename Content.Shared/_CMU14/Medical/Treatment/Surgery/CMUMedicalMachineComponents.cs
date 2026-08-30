@@ -7,7 +7,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 [RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUAutodocPodComponent : Component

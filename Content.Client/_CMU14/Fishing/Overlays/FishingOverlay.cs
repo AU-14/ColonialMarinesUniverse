@@ -6,14 +6,14 @@
 
 using System.Numerics;
 using Content.Client.UserInterface.Systems;
-using Content.Shared._CMU14.Fishing.Components;
+using Content.Shared.CMU14.Fishing.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Client.Player;
 using Robust.Shared.Utility;
 
-namespace Content.Client._CMU14.Fishing.Overlays;
+namespace Content.Client.CMU14.Fishing.Overlays;
 
 public sealed class FishingOverlay : Overlay
 {

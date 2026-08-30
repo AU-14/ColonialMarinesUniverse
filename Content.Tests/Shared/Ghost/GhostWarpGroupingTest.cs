@@ -1,4 +1,4 @@
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Systems;
 using NUnit.Framework;
 
 namespace Content.Tests.Shared.Ghost;

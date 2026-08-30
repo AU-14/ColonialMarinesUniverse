@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Language;
+using Content.Shared.CMU14.Language;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._CMU14.Language;
+namespace Content.Client.CMU14.Language;
 
 public sealed class FactionLanguageBoundUserInterface : BoundUserInterface
 {

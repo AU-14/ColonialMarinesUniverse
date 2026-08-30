@@ -1,6 +1,6 @@
 <examine:CMUInspectInjuriesWindow
     xmlns="https://spacestation14.io"
-    xmlns:examine="clr-namespace:Content.Client._CMU14.Medical.Diagnostics.Examine"
+    xmlns:examine="clr-namespace:Content.Client.CMU14.Medical.Diagnostics.Examine"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     MinSize="320 240"
     SetSize="400 340">

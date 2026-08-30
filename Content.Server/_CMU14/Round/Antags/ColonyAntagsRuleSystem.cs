@@ -6,7 +6,7 @@ using Robust.Shared.IoC;
 using System.Collections.Generic;
 using Content.Server.GameTicking.Rules;
 
-namespace Content.Server._CMU14.Round.Antags;
+namespace Content.Server.CMU14.Round.Antags;
 
 public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntagsRuleComponent>
 {

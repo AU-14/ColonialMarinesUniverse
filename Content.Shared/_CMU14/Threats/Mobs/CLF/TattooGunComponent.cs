@@ -5,7 +5,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Threats.Mobs.CLF;
+namespace Content.Shared.CMU14.Threats.Mobs.CLF;
 
 /// <summary>
 ///     When held and used on a humanoid, opens a prompt asking if they want to join the CLF.

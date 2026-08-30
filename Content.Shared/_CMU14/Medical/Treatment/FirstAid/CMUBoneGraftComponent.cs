@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.FirstAid;
+namespace Content.Shared.CMU14.Medical.Treatment.FirstAid;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUBoneGraftComponent : Component, ICMSurgeryToolComponent

@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._CMU14.Ops.Sfx;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared._CMU14.ZLevels.Ordnance;
+using Content.Shared.CMU14.Ops.Sfx;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.OrbitalCannon;
 using Content.Shared.CCVar;
@@ -14,7 +14,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Ops.Sfx;
+namespace Content.Server.CMU14.Ops.Sfx;
 
 public sealed partial class EvacuationSequenceSystem : EntitySystem
 {

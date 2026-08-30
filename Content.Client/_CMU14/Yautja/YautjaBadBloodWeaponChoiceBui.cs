@@ -1,11 +1,11 @@
 using Content.Client._RMC14.Xenonids.UI;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Yautja;
+namespace Content.Client.CMU14.Yautja;
 
 [UsedImplicitly]
 public sealed partial class YautjaBadBloodWeaponChoiceBui : BoundUserInterface

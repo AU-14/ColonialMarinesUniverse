@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
 
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedEyesSystem))]

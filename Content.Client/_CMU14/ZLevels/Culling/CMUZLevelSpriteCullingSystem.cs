@@ -1,8 +1,8 @@
 using System.Numerics;
-using Content.Client._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Client.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Maps;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -13,7 +13,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.ZLevels.Culling;
+namespace Content.Client.CMU14.ZLevels.Culling;
 
 /// <summary>
 /// Performs content-side dynamic sprite culling for lower Z-level render passes.

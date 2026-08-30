@@ -1,24 +1,25 @@
 using Content.Shared.Inventory;
+using Content.Shared.Radio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.Manager.Attributes;
 
-namespace Content.Shared._AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TunableHeadsetComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public int TunedFrequency = 0;
+    public RadioFrequency TunedFrequency = RadioFrequency.Off;
 
     [DataField]
     public SlotFlags RequiredSlots = SlotFlags.EARS;
 
     [DataField]
-    public int DefaultFrequency = 0;
+    public RadioFrequency DefaultFrequency = RadioFrequency.Off;
 
     [DataField]
-    public int MinFrequency = 30000;
+    public RadioFrequency MinFrequency = RadioFrequency.FromKilohertz(30_000);
 
     [DataField]
-    public int MaxFrequency = 87999;
+    public RadioFrequency MaxFrequency = RadioFrequency.FromKilohertz(87_999);
 }

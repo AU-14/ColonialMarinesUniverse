@@ -1,9 +1,9 @@
 using Content.Client.Eui;
-using Content.Shared._CMU14.BalanceRating;
+using Content.Shared.CMU14.BalanceRating;
 using Content.Shared.Eui;
 using JetBrains.Annotations;
 
-namespace Content.Client._CMU14.BalanceRating;
+namespace Content.Client.CMU14.BalanceRating;
 
 [UsedImplicitly]
 public sealed class CMUBalanceRatingEui : BaseEui

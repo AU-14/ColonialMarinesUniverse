@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 using System;
 
 
-namespace Content.Shared._CMU14.Chemistry.Effects.Negative;
+namespace Content.Shared.CMU14.Chemistry.Effects.Negative;
 
 public sealed partial class Hepatotoxic : RMCChemicalEffect
 {

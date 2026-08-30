@@ -2,7 +2,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Trauma;
+namespace Content.Shared.CMU14.Medical.Injuries.Trauma;
 
 public enum CMUTraumaMechanism : byte
 {

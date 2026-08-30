@@ -2,7 +2,7 @@ using System.Numerics;
 using System.Text;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.Radio;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
@@ -10,7 +10,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 public sealed partial class ANPRCGarbleSystem : EntitySystem
 {

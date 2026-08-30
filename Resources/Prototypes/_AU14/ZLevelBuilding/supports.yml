@@ -25,7 +25,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_blue
     scale: 0.5, 0.5
   - type: Fixtures
@@ -45,8 +45,9 @@
     isVerticalSupport: true
     cantileverSpan: 2
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine
@@ -75,7 +76,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_brown
     scale: 0.5, 0.5
   - type: Fixtures
@@ -93,8 +94,9 @@
     isVerticalSupport: true
     cantileverSpan: 3
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine
@@ -126,7 +128,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_green
     scale: 0.5, 0.5
   - type: Fixtures
@@ -144,8 +146,9 @@
     isVerticalSupport: true
     cantileverSpan: 5
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine
@@ -177,7 +180,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_aqua
     scale: 0.5, 0.5
   - type: Fixtures
@@ -195,8 +198,9 @@
     isVerticalSupport: true
     cantileverSpan: 8
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine

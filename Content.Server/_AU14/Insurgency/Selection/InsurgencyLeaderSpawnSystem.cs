@@ -1,12 +1,12 @@
 using Content.Server.Administration.Managers;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.EUI;
-using Content.Server._AU14.Insurgency.Database;
-using Content.Shared._AU14.Insurgency.Selection;
+using Content.Server.CMU14.Insurgency.Database;
+using Content.Shared.CMU14.Insurgency.Selection;
 using Content.Shared.GameTicking;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency.Selection;
+namespace Content.Server.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     Opens the faction selection popup for the CLF cell leader when they spawn, so the leader picks

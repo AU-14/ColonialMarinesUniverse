@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
-using Content.Shared._CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.Round.Objectives.Components;
 
-namespace Content.Shared._CMU14.Round.Objectives.Type;
+namespace Content.Shared.CMU14.Round.Objectives.Type;
 
 /// <summary>The Analyzer Machine: scans for fetch objective/items and converts inserted submissions</summary>
 [RegisterComponent]

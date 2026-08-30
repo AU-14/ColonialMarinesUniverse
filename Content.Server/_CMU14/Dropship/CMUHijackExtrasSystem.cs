@@ -1,10 +1,9 @@
 using Content.Server.Ghost;
 using Content.Server.Mind;
 using Content.Server.Popups;
-using Content.Server.Station.Components;
 using Content.Server.Stunnable;
 using Content.Server._RMC14.Xenonids.JoinXeno;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
@@ -14,7 +13,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.Coordinates;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
@@ -25,6 +24,8 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Components;
+using Content.Shared.Station.Components;
 using Content.Shared.StatusEffect;
 using Robust.Server.Audio;
 using Robust.Shared.Audio;
@@ -36,7 +37,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Dropship;
+namespace Content.Server.CMU14.Dropship;
 
 /// <summary>
 ///     Hijack song, crash camera shake and ship-wide stun, and the burrowed larva surge for
@@ -155,7 +156,7 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
                 !TryComp<MindComponent>(mindContainer.Mind, out var mind))
                 continue;
 
-            foreach (var roleId in mind.MindRoles)
+            foreach (var roleId in mind.MindRoleContainer.ContainedEntities)
             {
                 if (!TryComp<MindRoleComponent>(roleId, out var mindRole) ||
                     mindRole.JobPrototype == null ||
@@ -258,10 +259,7 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
 
         foreach (var child in toKnock)
         {
-            if (!TryComp<StatusEffectsComponent>(child, out var status))
-                continue;
-
-            _stuns.TryParalyze(child, HijackStunTime, true, status);
+            _stuns.TryParalyze(child, HijackStunTime, true);
         }
     }
 

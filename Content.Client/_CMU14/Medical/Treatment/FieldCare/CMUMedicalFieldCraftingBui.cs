@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
-using Content.Shared._CMU14.Medical.Treatment.FieldCare;
+using Content.Shared.CMU14.Medical.Treatment.FieldCare;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -11,7 +11,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Medical.Treatment.FieldCare;
+namespace Content.Client.CMU14.Medical.Treatment.FieldCare;
 
 [UsedImplicitly]
 public sealed partial class CMUMedicalFieldCraftingBui : BoundUserInterface
@@ -95,7 +95,7 @@ public sealed partial class CMUMedicalFieldCraftingBui : BoundUserInterface
         };
         icon.SetPrototype(option.Product.Id);
 
-        var button = new RadialMenuTextureButton
+        var button = new RadialMenuButton
         {
             EnableAllKeybinds = false,
             StyleClasses = { "RadialMenuButton" },

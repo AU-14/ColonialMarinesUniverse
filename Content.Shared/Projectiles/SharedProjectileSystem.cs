@@ -1,6 +1,7 @@
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Projectiles.Penetration;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Weapons.Ranged;
@@ -8,20 +9,22 @@ using Content.Shared._RMC14.Xenonids.Damage;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Camera;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
-using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -44,21 +47,21 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 {
     public const string ProjectileFixture = "projectile";
     private static readonly FixedPoint2 BloodImpactPiercingThreshold = FixedPoint2.New(45);
-    private static readonly ProtoId<ReagentPrototype> BloodReagent = "Blood";
+    private static readonly ProtoId<ReagentPrototype> HumanBlood = "Blood";
     private static readonly string[] BloodImpactEffects =
     {
         "CMUBloodImpactEffect",
         "CMUBloodImpactEffect1",
         "CMUBloodImpactEffect2",
     };
-    private static readonly ProtoId<ReagentPrototype> YautjaBloodReagent = "CMUYautjaBlood";
+    private static readonly ProtoId<ReagentPrototype> YautjaBlood = "CMUYautjaBlood";
     private static readonly string[] YautjaBloodImpactEffects =
     {
         "CMUYautjaBloodImpactEffect",
         "CMUYautjaBloodImpactEffect1",
         "CMUYautjaBloodImpactEffect2",
     };
-    private static readonly ProtoId<ReagentPrototype> SynthBloodReagent = "RMCSynthBlood";
+    private static readonly ProtoId<ReagentPrototype> SynthBlood = "RMCSynthBlood";
     private static readonly string[] SynthBloodImpactEffects =
     {
         "CMUSynthBloodImpactEffect",
@@ -68,7 +71,6 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedDestructibleSystem _destructible = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -77,12 +79,15 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedGunSystem _guns = default!;
     [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = null!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     public override void Initialize()
     {
@@ -97,6 +102,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         SubscribeLocalEvent<EmbeddableProjectileComponent, ComponentShutdown>(OnEmbeddableCompShutdown);
 
         SubscribeLocalEvent<EmbeddedContainerComponent, EntityTerminatingEvent>(OnEmbeddableTermination);
+        SubscribeLocalEvent<ComplexProjectileDamageComponent, BeforeProjectileHitEvent>(OnBeforeComplexProjectileHit);
     }
 
     private void OnStartCollide(EntityUid uid, ProjectileComponent component, ref StartCollideEvent args)
@@ -138,13 +144,20 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             return;
         }
 
-        var ev = new ProjectileHitEvent(component.Damage * _damageableSystem.UniversalProjectileDamageModifier, target, component.Shooter);
+        var beforeHit = new BeforeProjectileHitEvent(component.Damage, target, component.Shooter);
+        RaiseLocalEvent(uid, ref beforeHit);
+
+        var ev = new ProjectileHitEvent(
+            beforeHit.Damage * _damageableSystem.UniversalProjectileDamageModifier,
+            target,
+            component.Shooter);
         RaiseLocalEvent(uid, ref ev);
         if (ev.Handled)
             return;
 
         var coordinates = Transform(projectile).Coordinates;
         var otherName = ToPrettyString(target);
+        var damageRequired = GetRemainingDestructionDamage(target);
         var modifiedDamage = _net.IsServer
             ? _damageableSystem.TryChangeDamage(target,
                 ev.Damage,
@@ -201,65 +214,29 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (predictedXenoShooter is { } removedXenoShooter)
             damageEffectFilter = damageEffectFilter.RemovePlayer(removedXenoShooter);
 
-        if (modifiedDamage is not null && (Exists(component.Shooter) || Exists(component.Weapon)))
+        if (modifiedDamage is not null)
         {
             if (modifiedDamage.AnyPositive() && !deleted)
             {
                 _color.RaiseEffect(GetDamageEffectColor(target), new List<EntityUid> { target }, damageEffectFilter);
             }
 
-            var shooterOrWeapon = Exists(component.Shooter) ? component.Shooter!.Value : component.Weapon!.Value;
+            var shotByString = Exists(component.Shooter)
+                ? $"{ToPrettyString(component.Shooter!.Value):source}"
+                : Exists(component.Weapon)
+                    ? $"{ToPrettyString(component.Weapon!.Value):source}"
+                    : "a now deleted entity (grenade?)";
 
             _adminLogger.Add(LogType.BulletHit,
                 HasComp<ActorComponent>(target) ? LogImpact.Medium : LogImpact.Low,
-                $"Projectile {ToPrettyString(uid):projectile} shot by {ToPrettyString(shooterOrWeapon):source} hit {otherName:target} and dealt {modifiedDamage.GetTotal():damage} damage");
+                $"Projectile {ToPrettyString(uid):projectile} shot by {shotByString} hit {otherName:target} and dealt {modifiedDamage.GetTotal():damage} damage");
         }
 
-        // TODO RMC14 move destructible to shared
-        // If penetration is to be considered, we need to do some checks to see if the projectile should stop.
-        // if (modifiedDamage is not null && component.PenetrationThreshold != 0)
-        // {
-        //     // If a damage type is required, stop the bullet if the hit entity doesn't have that type.
-        //     if (component.PenetrationDamageTypeRequirement != null)
-        //     {
-        //         var stopPenetration = false;
-        //         foreach (var requiredDamageType in component.PenetrationDamageTypeRequirement)
-        //         {
-        //             if (!modifiedDamage.DamageDict.Keys.Contains(requiredDamageType))
-        //             {
-        //                 stopPenetration = true;
-        //                 break;
-        //             }
-        //         }
-        //         if (stopPenetration)
-        //             component.ProjectileSpent = true;
-        //     }
-        //
-        //     var damageRequired = _destructible.DestroyedAt(target);
-        //     // If the object won't be destroyed, it "tanks" the penetration hit.
-        //     if (modifiedDamage.GetTotal() < damageRequired)
-        //     {
-        //         component.ProjectileSpent = true;
-        //     }
-        //
-        //     if (!component.ProjectileSpent)
-        //     {
-        //         component.PenetrationAmount += damageRequired;
-        //         // The projectile has dealt enough damage to be spent.
-        //         if (component.PenetrationAmount >= component.PenetrationThreshold)
-        //         {
-        //             component.ProjectileSpent = true;
-        //         }
-        //     }
-        // }
-        // else
-        // {
-        //     component.ProjectileSpent = true;
-        // }
+        component.ProjectileSpent = !TryPenetrate((uid, component), modifiedDamage, damageRequired);
 
-        if (!deleted && filter.Count > 0)
+        if (!deleted)
         {
-            _guns.PlayImpactSound(target, modifiedDamage, component.SoundHit, component.ForceSound, filter, projectile);
+            _guns.PlayImpactSound(target, modifiedDamage, component.SoundHit, component.ForceSound);
 
             // if (!ourBody.LinearVelocity.IsLengthZero())
             // {
@@ -269,26 +246,29 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             // }
         }
 
-        component.ProjectileSpent = true;
         Dirty(uid, component);
 
         // RMC14
         var additionalHits = new AfterProjectileHitEvent(projectile, target);
         RaiseLocalEvent(uid, ref additionalHits);
 
-        if (!predicted && component.DeleteOnCollide && (_net.IsServer || IsClientSide(uid)))
-            QueueDel(uid);
-
-        else if (_net.IsServer && component.DeleteOnCollide)
+        if (component.ProjectileSpent && component.DeleteOnCollide)
         {
-            var predictedComp = EnsureComp<PredictedProjectileHitComponent>(uid);
-            predictedComp.Origin = _transform.GetMoverCoordinates(coordinates);
+            if (!predicted && (_net.IsServer || IsClientSide(uid)))
+            {
+                QueueDel(uid);
+            }
+            else if (_net.IsServer)
+            {
+                var predictedComp = EnsureComp<PredictedProjectileHitComponent>(uid);
+                predictedComp.Origin = _transform.GetMoverCoordinates(coordinates);
 
-            var targetCoords = _transform.GetMoverCoordinates(target);
-            if (predictedComp.Origin.TryDistance(EntityManager, _transform, targetCoords, out var distance))
-                predictedComp.Distance = distance;
+                var targetCoords = _transform.GetMoverCoordinates(target);
+                if (predictedComp.Origin.TryDistance(EntityManager, _transform, targetCoords, out var distance))
+                    predictedComp.Distance = distance;
 
-            Dirty(uid, predictedComp);
+                Dirty(uid, predictedComp);
+            }
         }
 
         var impactEffect = GetImpactEffect(component.ImpactEffect, target, modifiedDamage);
@@ -302,6 +282,42 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         }
     }
 
+    private FixedPoint2 GetRemainingDestructionDamage(EntityUid target)
+    {
+        if (!_rmcDamageable.TryGetDestroyedAt(target, out var destroyedAt))
+            return FixedPoint2.MaxValue;
+
+        var damageRequired = destroyedAt.Value;
+        if (TryComp<DamageableComponent>(target, out var damageable))
+            damageRequired -= _damageableSystem.GetTotalDamage((target, damageable));
+
+        return FixedPoint2.Max(damageRequired, FixedPoint2.Zero);
+    }
+
+    private static bool TryPenetrate(
+        Entity<ProjectileComponent> projectile,
+        DamageSpecifier? damage,
+        FixedPoint2 damageRequired)
+    {
+        if (damage is null || projectile.Comp.PenetrationThreshold == FixedPoint2.Zero)
+            return false;
+
+        if (projectile.Comp.PenetrationDamageTypeRequirement is { } requiredTypes)
+        {
+            foreach (var requiredType in requiredTypes)
+            {
+                if (!damage.DamageDict.ContainsKey(requiredType))
+                    return false;
+            }
+        }
+
+        if (damage.GetTotal() < damageRequired)
+            return false;
+
+        projectile.Comp.PenetrationAmount += damageRequired;
+        return projectile.Comp.PenetrationAmount < projectile.Comp.PenetrationThreshold;
+    }
+
     private string? GetImpactEffect(string? fallback, EntityUid target, DamageSpecifier? damage)
     {
         if (damage == null ||
@@ -312,13 +328,13 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             return fallback;
         }
 
-        if (bloodstream.BloodReagent == BloodReagent)
+        if (_bloodstream.HasReferenceReagent((target, bloodstream), HumanBlood))
             return _random.Pick(BloodImpactEffects);
 
-        if (bloodstream.BloodReagent == YautjaBloodReagent)
+        if (_bloodstream.HasReferenceReagent((target, bloodstream), YautjaBlood))
             return _random.Pick(YautjaBloodImpactEffects);
 
-        if (bloodstream.BloodReagent == SynthBloodReagent)
+        if (_bloodstream.HasReferenceReagent((target, bloodstream), SynthBlood))
             return _random.Pick(SynthBloodImpactEffects);
 
         return fallback;
@@ -327,9 +343,11 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     private Color GetDamageEffectColor(EntityUid target)
     {
         if (TryComp(target, out BloodstreamComponent? bloodstream)
-            && bloodstream.BloodReagent != BloodReagent
-            && _reagent.TryIndex(bloodstream.BloodReagent, out var reagent))
-            return reagent.SubstanceColor;
+            && _bloodstream.TryGetPrimaryReferenceReagent((target, bloodstream), out var blood))
+        {
+            if (blood != HumanBlood && _reagent.TryIndex(blood, out var reagent))
+                return reagent.SubstanceColor;
+        }
 
         return Color.Red;
     }
@@ -377,7 +395,8 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     //ported from civ14
     private void PreventCollision(EntityUid uid, ProjectileComponent component, ref PreventCollideEvent args)
     {
-        if (component.IgnoreShooter && (args.OtherEntity == component.Shooter || args.OtherEntity == component.Weapon))
+        if (_timing.CurTime < component.WhenToStopIgnoringShooter
+            && (args.OtherEntity == component.Shooter || args.OtherEntity == component.Weapon))
         {
             args.Cancelled = true;
         }
@@ -475,13 +494,11 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         EmbedAttach(embeddable, args.Target, args.Shooter, embeddable.Comp);
 
         // Raise a specific event for projectiles.
-        if (TryComp(embeddable, out ProjectileComponent? projectile) &&
-            projectile.Shooter is { } shooter &&
-            projectile.Weapon is { } weapon)
-        {
-            var ev = new ProjectileEmbedEvent(shooter, weapon, args.Target);
-            RaiseLocalEvent(embeddable, ref ev);
-        }
+        if (!TryComp<ProjectileComponent>(embeddable, out var projectile))
+            return;
+
+        var ev = new ProjectileEmbedEvent(projectile.Shooter, projectile.Weapon, args.Target);
+        RaiseLocalEvent(embeddable, ref ev);
     }
 
     private void EmbedAttach(EntityUid uid, EntityUid target, EntityUid? user, EmbeddableProjectileComponent component)
@@ -519,20 +536,22 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return;
 
-        if (component.EmbeddedIntoUid is not null)
+        if (component.EmbeddedIntoUid == null)
+            return; // the entity is not embedded, so do nothing
+
+        var embeddedInto = component.EmbeddedIntoUid;
+
+        if (TryComp<EmbeddedContainerComponent>(component.EmbeddedIntoUid.Value, out var embeddedContainer))
         {
-            if (TryComp<EmbeddedContainerComponent>(component.EmbeddedIntoUid.Value, out var embeddedContainer))
-            {
-                embeddedContainer.EmbeddedObjects.Remove(uid);
-                Dirty(component.EmbeddedIntoUid.Value, embeddedContainer);
-                if (embeddedContainer.EmbeddedObjects.Count == 0)
-                    RemCompDeferred<EmbeddedContainerComponent>(component.EmbeddedIntoUid.Value);
-            }
+            embeddedContainer.EmbeddedObjects.Remove(uid);
+            Dirty(component.EmbeddedIntoUid.Value, embeddedContainer);
+            if (embeddedContainer.EmbeddedObjects.Count == 0)
+                RemCompDeferred<EmbeddedContainerComponent>(component.EmbeddedIntoUid.Value);
         }
 
-        if (component.DeleteOnRemove && _net.IsServer)
+        if (component.DeleteOnRemove)
         {
-            QueueDel(uid);
+            PredictedQueueDel(uid);
             return;
         }
 
@@ -555,6 +574,9 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             Dirty(uid, projectile);
         }
 
+        var ev = new EmbedDetachEvent(user, embeddedInto.Value);
+        RaiseLocalEvent(uid, ref ev);
+
         if (user != null)
         {
             // Land it just coz uhhh yeah
@@ -570,6 +592,24 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         DetachAllEmbedded(container);
     }
 
+    private void OnBeforeComplexProjectileHit(Entity<ComplexProjectileDamageComponent> ent, ref BeforeProjectileHitEvent args)
+    {
+        foreach (var option in ent.Comp.DamageOptions)
+        {
+            if (!_whitelist.CheckBoth(args.Target, option.Blacklist, option.Whitelist))
+                continue;
+            args.Damage = option.Damage;
+            return;
+        }
+    }
+
+    [SubscribeLocalEvent]
+    private void OnBeingShot(Entity<ProjectileComponent> entity, ref ProjectileShotEvent args)
+    {
+        entity.Comp.WhenToStopIgnoringShooter = _timing.CurTime + entity.Comp.DelayToAcknowledgeShooter;
+        Dirty(entity);
+    }
+
     public void DetachAllEmbedded(Entity<EmbeddedContainerComponent> container)
     {
         foreach (var embedded in container.Comp.EmbeddedObjects)
@@ -580,7 +620,6 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             EmbedDetach(embedded, embeddedComp);
         }
     }
-
 
     public void SetShooter(EntityUid id, ProjectileComponent component, EntityUid? shooterId = null)
     {
@@ -621,7 +660,19 @@ public record struct ProjectileReflectAttemptEvent(EntityUid ProjUid, Projectile
 }
 
 /// <summary>
+/// Raised when a projectile is shot
+/// </summary>
+[ByRefEvent]
+public record struct ProjectileShotEvent;
+
+/// <summary>
 /// Raised when a projectile hits an entity
 /// </summary>
 [ByRefEvent]
 public record struct ProjectileHitEvent(DamageSpecifier Damage, EntityUid Target, EntityUid? Shooter = null, bool Handled = false);
+
+/// <summary>
+/// Raised before a projectile hits an entity
+/// </summary>
+[ByRefEvent]
+public record struct BeforeProjectileHitEvent(DamageSpecifier Damage, EntityUid Target, EntityUid? Shooter = null);

@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.MycotoxinInject;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.MycotoxinInject;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(CMUXenoMycotoxinInjectSystem))]

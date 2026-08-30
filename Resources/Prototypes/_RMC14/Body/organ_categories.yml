@@ -1,0 +1,8 @@
+- type: organCategory
+  id: Legs
+
+- type: organCategory
+  id: Feet
+
+- type: organCategory
+  id: Hands

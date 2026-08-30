@@ -70,6 +70,6 @@ hud-chatbox-display-color-whole-message = Color whole message text
 hud-chatbox-display-color-whole-message-help = Uses channel colors on every word instead of only side accents and highlighted words.
 hud-chatbox-display-legacy = Use old chat
 hud-chatbox-display-legacy-help = Shows the old scrollback panel and hides structured tabs and split chat.
-hud-chatbox-highlights-placeholder = McHands
+hud-chatbox-highlights-placeholder = @McHands
                                      "Judge"
                                      Medical

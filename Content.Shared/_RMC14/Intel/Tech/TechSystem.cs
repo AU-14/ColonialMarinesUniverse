@@ -1,6 +1,6 @@
 using System.Numerics;
-using Content.Shared._CMU14.Round.Objectives;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Round.Objectives;
+using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Dropship.Fabricator;
@@ -10,7 +10,7 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Scaling;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Access.Systems;
-using Content.Shared.AU14.Util;
+using Content.Shared.CMU14.Util;
 using Content.Shared.GameTicking;
 using Content.Shared.UserInterface;
 using Robust.Shared.Map;

@@ -9,7 +9,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Utility;
 using System.Numerics;
 
-namespace Content.Shared._CMU14.Fishing.Components;
+namespace Content.Shared.CMU14.Fishing.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class FishingRodComponent : Component

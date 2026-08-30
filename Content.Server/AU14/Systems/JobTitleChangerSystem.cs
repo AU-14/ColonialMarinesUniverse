@@ -4,14 +4,14 @@ using Content.Server.Roles.Jobs;
 using Content.Shared.Inventory;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.UniformAccessories;
-using Content.Shared.AU14.Util;
+using Content.Shared.CMU14.Util;
 using Robust.Shared.Containers;
-using Content.Server._AU14.Marines.Roles.Ranks;
-using Content.Shared._AU14.Marines.Roles.Ranks;
+using Content.Server.CMU14.Marines.Roles.Ranks;
+using Content.Shared.CMU14.Marines.Roles.Ranks;
 using Content.Server._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Clothing;
 
-namespace Content.Server.AU14.Systems;
+namespace Content.Server.CMU14.Systems;
 
 public sealed partial class JobTitleChangerSystem : EntitySystem
 {
@@ -60,16 +60,16 @@ public sealed partial class JobTitleChangerSystem : EntitySystem
     private void OnEquipped(EntityUid uid, JobTitleChangerComponent comp, GotEquippedEvent args)
     {
         // Only apply if equipped to a humanoid
-        if (!TryComp(args.Equipee, out InventoryComponent? _))
+        if (!TryComp(args.EquipTarget, out InventoryComponent? _))
             return;
 
         // Set the temporary job title
         if (!string.IsNullOrWhiteSpace(comp.JobTitle))
         {
-            if (TryComp(args.Equipee, out IdCardComponent? idCard))
+            if (TryComp(args.EquipTarget, out IdCardComponent? idCard))
             {
                 idCard._jobTitle = comp.JobTitle;
-                Dirty(args.Equipee, idCard);
+                Dirty(args.EquipTarget, idCard);
             }
         }
     }
@@ -77,14 +77,14 @@ public sealed partial class JobTitleChangerSystem : EntitySystem
     private void OnUnequipped(EntityUid uid, JobTitleChangerComponent comp, GotUnequippedEvent args)
     {
         // Only apply if unequipped from a humanoid
-        if (!TryComp(args.Equipee, out InventoryComponent? _))
+        if (!TryComp(args.EquipTarget, out InventoryComponent? _))
             return;
 
         // Revert to original job title
-        if (TryComp(args.Equipee, out IdCardComponent? idCard))
+        if (TryComp(args.EquipTarget, out IdCardComponent? idCard))
         {
             // Try to get the mind's job name
-            if (_minds.TryGetMind(args.Equipee, out var mindId, out _) &&
+            if (_minds.TryGetMind(args.EquipTarget, out var mindId, out _) &&
                 _jobs.MindTryGetJobName(mindId, out var jobName))
             {
                 idCard._jobTitle = jobName;
@@ -93,7 +93,7 @@ public sealed partial class JobTitleChangerSystem : EntitySystem
             {
                 idCard._jobTitle = null;
             }
-            Dirty(args.Equipee, idCard);
+            Dirty(args.EquipTarget, idCard);
         }
     }
 

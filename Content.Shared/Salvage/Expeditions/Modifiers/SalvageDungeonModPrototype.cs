@@ -1,6 +1,5 @@
 using Content.Shared.Procedural;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared.Salvage.Expeditions.Modifiers;
 
@@ -16,7 +15,7 @@ public sealed partial class SalvageDungeonModPrototype : IPrototype, IBiomeSpeci
     public float Cost { get; private set; } = 0f;
 
     /// <inheridoc/>
-    [DataField("biomes")]
+    [DataField]
     public List<ProtoId<SalvageBiomeModPrototype>>? Biomes { get; private set; } = null;
 
     /// <summary>

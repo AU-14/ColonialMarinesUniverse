@@ -1,12 +1,12 @@
 using System.Linq;
-using Content.Server._CMU14.RoundStatistics;
-using Content.Shared._CMU14.Round.Objectives.Components;
-using Content.Shared._CMU14.Round.Objectives.Type;
+using Content.Server.CMU14.RoundStatistics;
+using Content.Shared.CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Vendors;
 using Robust.Shared.Map;
 
-namespace Content.Server._CMU14.Round.Objectives;
+namespace Content.Server.CMU14.Round.Objectives;
 
 public sealed partial class ObjectiveControlSystem
 {

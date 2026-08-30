@@ -3,7 +3,7 @@ using Content.Shared._RMC14.Medical.Scanner;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Medical.Diagnostics;
+namespace Content.IntegrationTests.CMU14.Medical.Diagnostics;
 
 [TestFixture]
 public sealed class CMUHealthScannerProjectionTest

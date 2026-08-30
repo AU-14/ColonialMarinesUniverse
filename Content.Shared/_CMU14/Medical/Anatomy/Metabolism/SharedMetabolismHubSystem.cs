@@ -1,16 +1,16 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Metabolism.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Metabolism.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Metabolism;
+namespace Content.Shared.CMU14.Medical.Anatomy.Metabolism;
 
 /// <summary>
 ///     Owns the single
-///     <c>&lt;CMUHumanMedicalComponent, MetabolismGroupRateModifyEvent&gt;</c>
+///     <c>&lt;CMUHumanMedicalComponent, MetabolismRateModifyEvent&gt;</c>
 ///     subscription on the body and dispatches to the per-organ subsystems.
 ///     Centralising the body-level handler avoids duplicate-event subscription conflicts.
 /// </summary>
@@ -30,19 +30,22 @@ public abstract partial class SharedMetabolismHubSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CMUHumanMedicalComponent, MetabolismGroupRateModifyEvent>(OnRate);
+        SubscribeLocalEvent<CMUHumanMedicalComponent, MetabolismRateModifyEvent>(OnRate);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.OrganEnabled, v => _organEnabled = v, true);
     }
 
-    private void OnRate(Entity<CMUHumanMedicalComponent> ent, ref MetabolismGroupRateModifyEvent args)
+    private void OnRate(Entity<CMUHumanMedicalComponent> ent, ref MetabolismRateModifyEvent args)
     {
         if (!_medicalEnabled || !_organEnabled)
             return;
 
         args.Multiplier *= GetClearanceMultiplier(ent);
-        Liver.ApplyBloodstreamDirectDamage(ent, args.Group);
+        foreach (var toxicity in args.ToxicityClasses)
+        {
+            Liver.ApplyBloodstreamDirectDamage(ent, toxicity);
+        }
     }
 
     private float GetClearanceMultiplier(EntityUid body)

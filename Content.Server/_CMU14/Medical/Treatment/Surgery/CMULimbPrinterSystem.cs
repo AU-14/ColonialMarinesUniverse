@@ -1,5 +1,5 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -16,7 +16,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 public sealed partial class CMULimbPrinterSystem : EntitySystem
 {
@@ -256,7 +256,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
                 if (!TryGetRoboticMetalStack(uid, comp, out var material, out var stack, out reason))
                     return false;
 
-                if (!_stack.Use(material, GetRoboticMetalCost(comp), stack))
+                if (!_stack.TryUse((material, stack), GetRoboticMetalCost(comp)))
                 {
                     reason = Loc.GetString("cmu-limb-printer-missing-metal");
                     return false;
@@ -619,7 +619,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         }
 
         if (!TryComp<StackComponent>(materialUid, out var foundStack) ||
-            !foundStack.StackTypeId.Equals(comp.RoboticMetalStack.ToString(), StringComparison.Ordinal))
+            foundStack.StackTypeId != comp.RoboticMetalStack)
         {
             reason = Loc.GetString("cmu-limb-printer-wrong-metal");
             return false;

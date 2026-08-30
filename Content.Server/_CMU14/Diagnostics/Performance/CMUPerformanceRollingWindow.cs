@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Content.Server._CMU14.Diagnostics.Performance;
+namespace Content.Server.CMU14.Diagnostics.Performance;
 
 internal readonly record struct CMUPerformanceCounterPoint(
     double Tick,

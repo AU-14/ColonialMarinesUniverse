@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Medical.Injuries.Trauma;
+using Content.Shared.CMU14.Medical.Injuries.Trauma;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
+namespace Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
 
 [ByRefEvent]
 public readonly record struct BodyPartWoundAppliedEvent(

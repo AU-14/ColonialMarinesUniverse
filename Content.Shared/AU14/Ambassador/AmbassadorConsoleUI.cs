@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.Ambassador;
+namespace Content.Shared.CMU14.Ambassador;
 
 [Serializable, NetSerializable]
 public enum AmbassadorConsoleUi
@@ -26,7 +26,7 @@ public sealed class AmbassadorConsoleBuiState : BoundUserInterfaceState
     public bool SignalBoostActive { get; }
     public bool SignalJamActive { get; }
     public List<string> RadarList { get; }
-    public Content.Shared.AU14.ColonyEconomy.EconomyStatusState EconomyStatus { get; }
+    public Content.Shared.CMU14.ColonyEconomy.EconomyStatusState EconomyStatus { get; }
     public string FactionName { get; }
 
     // Prices
@@ -46,7 +46,7 @@ public sealed class AmbassadorConsoleBuiState : BoundUserInterfaceState
         bool signalBoostActive,
         bool signalJamActive,
         List<string> radarList,
-        Content.Shared.AU14.ColonyEconomy.EconomyStatusState economyStatus,
+        Content.Shared.CMU14.ColonyEconomy.EconomyStatusState economyStatus,
         string factionName,
         float embargoCostPerMinute,
         float tradePactCostPerMinute,

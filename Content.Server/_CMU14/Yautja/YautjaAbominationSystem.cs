@@ -1,7 +1,7 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Chat.Managers;
 using Content.Server._RMC14.Xenonids.Leap;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Actions;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -25,7 +26,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaAbominationSystem : EntitySystem
 {
@@ -153,7 +154,7 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
         rush.SpeedMultiplier = ent.Comp.RushSpeedMultiplier;
         rush.ExpiresAt = _timing.CurTime + ent.Comp.RushDuration;
         Dirty(ent.Owner, rush);
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _audio.PlayPvs(ent.Comp.RushSound, ent);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-abomination-rush-start"), ent, ent);
     }
@@ -186,7 +187,7 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
             buff.SpeedMultiplier = 1f + ent.Comp.RoarSpeedPerKill * ent.Comp.Kills;
             buff.ExpiresAt = _timing.CurTime + ent.Comp.RoarBuffBaseDuration + ent.Comp.RoarBuffDurationPerKill * ent.Comp.Kills;
             Dirty(xeno.Owner, buff);
-            _movement.RefreshMovementSpeedModifiers(xeno);
+            _movement.RefreshMovementSpeedModifiers((xeno.Owner, null));
         }
     }
 
@@ -300,7 +301,7 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
             if (rush.ExpiresAt > time)
                 continue;
 
-            RemCompDeferred<YautjaAbominationRushComponent>(uid);
+            RemComp<YautjaAbominationRushComponent>(uid);
             _movement.RefreshMovementSpeedModifiers(uid);
         }
 
@@ -310,7 +311,7 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
             if (buff.ExpiresAt > time)
                 continue;
 
-            RemCompDeferred<YautjaAbominationRoarBuffComponent>(uid);
+            RemComp<YautjaAbominationRoarBuffComponent>(uid);
             _movement.RefreshMovementSpeedModifiers(uid);
         }
     }

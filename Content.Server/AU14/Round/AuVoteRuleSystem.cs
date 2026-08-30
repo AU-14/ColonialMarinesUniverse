@@ -9,7 +9,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Server.AU14.Round;
+namespace Content.Server.CMU14.Round;
 
 public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponent>
 {

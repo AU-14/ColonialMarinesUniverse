@@ -1,13 +1,13 @@
 using System.Linq;
 using Content.Server.Administration;
 using Content.Server.GameTicking;
-using Content.Server._CMU14.Threats;
-using Content.Shared._CMU14.Threats;
+using Content.Server.CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Util.Admin.Console;
+namespace Content.Server.CMU14.Util.Admin.Console;
 
 [AdminCommand(AdminFlags.Round)]
 public sealed partial class SpawnThreatCommand : LocalizedEntityCommands

@@ -2,7 +2,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Content.Shared._RMC14.Language.Prototypes;
 
-namespace Content.Shared.AU14.Origin;
+namespace Content.Shared.CMU14.Origin;
 
 /// <summary>
 /// Represents a character origin that can add components, accents, items, and traits to a character at spawn.

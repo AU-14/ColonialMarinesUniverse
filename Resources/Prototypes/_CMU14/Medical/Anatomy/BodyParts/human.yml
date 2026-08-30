@@ -1,5 +1,5 @@
 - type: entity
-  parent: TorsoHuman
+  parent: OrganHumanTorso
   id: CMUPartHumanTorso
   components:
   - type: BodyPartHealth
@@ -19,9 +19,12 @@
       Shattered: 5
   - type: Sprite
     drawdepth: Items
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
 
 - type: entity
-  parent: HeadHuman
+  parent: OrganHumanHead
   id: CMUPartHumanHead
   components:
   - type: BodyPartHealth
@@ -41,9 +44,12 @@
       Shattered: 5
   - type: Sprite
     drawdepth: Items
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
 
 - type: entity
-  parent: LeftArmHuman
+  parent: OrganHumanArmLeft
   id: CMUPartHumanLeftArm
   components:
   - type: BodyPartHealth
@@ -63,7 +69,7 @@
     drawdepth: Items
 
 - type: entity
-  parent: RightArmHuman
+  parent: OrganHumanArmRight
   id: CMUPartHumanRightArm
   components:
   - type: BodyPartHealth
@@ -83,7 +89,7 @@
     drawdepth: Items
 
 - type: entity
-  parent: LeftHandHuman
+  parent: OrganHumanHandLeft
   id: CMUPartHumanLeftHand
   components:
   - type: BodyPartHealth
@@ -103,7 +109,7 @@
     drawdepth: Items
 
 - type: entity
-  parent: RightHandHuman
+  parent: OrganHumanHandRight
   id: CMUPartHumanRightHand
   components:
   - type: BodyPartHealth
@@ -123,7 +129,7 @@
     drawdepth: Items
 
 - type: entity
-  parent: LeftLegHuman
+  parent: OrganHumanLegLeft
   id: CMUPartHumanLeftLeg
   components:
   - type: BodyPartHealth
@@ -143,7 +149,7 @@
     drawdepth: Items
 
 - type: entity
-  parent: RightLegHuman
+  parent: OrganHumanLegRight
   id: CMUPartHumanRightLeg
   components:
   - type: BodyPartHealth
@@ -163,7 +169,7 @@
     drawdepth: Items
 
 - type: entity
-  parent: LeftFootHuman
+  parent: OrganHumanFootLeft
   id: CMUPartHumanLeftFoot
   components:
   - type: BodyPartHealth
@@ -183,7 +189,7 @@
     drawdepth: Items
 
 - type: entity
-  parent: RightFootHuman
+  parent: OrganHumanFootRight
   id: CMUPartHumanRightFoot
   components:
   - type: BodyPartHealth

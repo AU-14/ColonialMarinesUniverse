@@ -16,9 +16,9 @@
     baseFireRate: 10
     burstScatterMult: 5
   - type: Sprite
-    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Pistols/glock.rsi
   - type: Clothing
-    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Pistols/glock.rsi
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.2
   - type: ItemSlots
@@ -97,9 +97,9 @@
   description: Austrian legend, designed in XX century, Glock quickly became a major player on the pistol market. This version was produced on a license for Prodigy CORP for security and police forces, features an underbarrel rail for a taser and fully automatic mode.
   components:
   - type: Sprite
-    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock77.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Pistols/glock77.rsi
   - type: Clothing
-    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock77.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Pistols/glock77.rsi
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -436,7 +436,7 @@
   description: Prodigy CORP underbarrel taser for Glock 70-series.
   components:
   - type: Sprite
-    sprite: _CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
+    sprite: CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
     state: underbarreltaser
   - type: Tag
     tags:
@@ -451,7 +451,7 @@
   - type: Battery
     maxCharge: 800
     startingCharge: 800
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: RMCProjectileTaser
     fireCost: 100
   - type: GunPointBlank
@@ -484,10 +484,10 @@
     actionName: Switch to the underbarrel taser.
     actionDesc: Switch to using the underbarrel taser.
     icon:
-      sprite: _CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
+      sprite: CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
       state: underbarreltaser
     iconActive:
-      sprite: _CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
+      sprite: CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
       state: underbarreltaser-on
   - type: AttachableVisuals
   - type: WieldedCrosshair

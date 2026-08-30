@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Chemistry.Stimmaster;
+namespace Content.Shared.CMU14.Chemistry.Stimmaster;
 
 [Serializable, NetSerializable]
 public sealed class CMUStimmasterCreateMsg(EntProtoId prototype, int amount) : BoundUserInterfaceMessage

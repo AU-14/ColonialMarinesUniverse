@@ -1,7 +1,7 @@
 <withdrawConsole:WithdrawConsoleWindow
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:withdrawConsole="clr-namespace:Content.Client.AU14.WithdrawConsole"
+    xmlns:withdrawConsole="clr-namespace:Content.Client.CMU14.WithdrawConsole"
     Title="Withdraw Console" MinSize="360 280">
     <BoxContainer Orientation="Vertical" Margin="8 8 8 8" SeparationOverride="6">
 

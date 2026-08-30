@@ -2,7 +2,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(SharedBodyZoneTargetingSystem))]

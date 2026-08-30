@@ -6,7 +6,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Fishing.Components;
+namespace Content.Shared.CMU14.Fishing.Components;
 
 /// <summary>
 /// Dynamic component, that is assigned to active fishing spots that are currently waiting for da fish.

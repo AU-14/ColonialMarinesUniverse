@@ -1,15 +1,15 @@
-using Content.Server._CMU14.Round.Antags.Cannibal;
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Round.Antags.Cannibal;
+using Content.Server.CMU14.Systems;
 using Content.Server.Popups;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
-using Content.Shared._CMU14.Round.Antags.ColonyBounty;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition;
 using Content.Shared.Paper;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 
-namespace Content.Server._CMU14.Round.Antags.Cannibal;
+namespace Content.Server.CMU14.Round.Antags.Cannibal;
 
 /// <summary>
 /// Tracks a cannibal's meals: every piece of human meat eaten escalates the CMB response
@@ -24,15 +24,15 @@ public sealed partial class CannibalMealSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<FoodComponent, AfterFullyEatenEvent>(OnFoodEaten);
+        SubscribeLocalEvent<MetaDataComponent, FullyEatenEvent>(OnFoodEaten);
     }
 
-    private void OnFoodEaten(EntityUid uid, FoodComponent food, ref AfterFullyEatenEvent args)
+    private void OnFoodEaten(Entity<MetaDataComponent> food, ref FullyEatenEvent args)
     {
         if (!TryComp(args.User, out CannibalComponent? cannibal))
             return;
 
-        if (MetaData(uid).EntityPrototype?.ID != HumanMeatPrototype)
+        if (MetaData(food).EntityPrototype?.ID != HumanMeatPrototype)
             return;
 
         cannibal.MealsEaten++;

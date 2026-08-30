@@ -6,7 +6,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
+namespace Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities;
 
 /// <summary>
 ///     Spawns a fan of acid spit projectiles in a cone toward the target.

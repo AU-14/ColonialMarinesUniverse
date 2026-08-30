@@ -21,7 +21,7 @@
   - type: Paper
     contentSize: 1000
   - type: PaperVisuals
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/NoteSlip.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/NoteSlip.png"
     backgroundModulate: "#eaedde"
     maxWritableArea: 300, 300
     contentMargin: 20, 40, 60, 30
@@ -42,10 +42,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundModulate: "#eaedde"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    fontAccentColor: "#ffffff"
+    defaultTextColor: "#ffffff"
 
 # DEDICATED PAPER SLIPS /*//////////////////////////////////////////////////
 
@@ -84,7 +84,7 @@
       [bold]Attending Physician:[/bold]
       [signature][/color]
   - type: PaperVisuals
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/MedicalSlip.png" #"/Textures/Interface/CMUPaper/MedicalSlip.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/MedicalSlip.png" #"/Textures/Interface/CMUPaper/MedicalSlip.png"
     backgroundModulate: "#dbbce3"
     maxWritableArea: 300, 300
     contentMargin: 20, 25, 10, 10
@@ -168,7 +168,7 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/photo_bkg.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/photo_bkg.png"
     maxWritableArea: 650, 680
     contentMargin: -20, 25, -25, 40
     backgroundPatchMargin: 0, 0, 0, 0
@@ -191,7 +191,7 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/parking_ticket_bkg.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/parking_ticket_bkg.png"
     maxWritableArea: 600, 400
     contentMargin: 10, 90, 10, 10
     backgroundPatchMargin: 0, 0, 0, 0
@@ -269,10 +269,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/ICSCHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/ICSCHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/ICSCFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/ICSCFooter.png"
     footerMargin: 0, 40, 0, 0
 
 # USCM
@@ -295,10 +295,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/USCMHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/USCMHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/USCMFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/USCMFooter.png"
     footerMargin: 0, 40, 0, 0
 
 # UA
@@ -321,10 +321,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/UAHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/UAHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/UAFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/UAFooter.png"
     footerMargin: 0, 40, 0, 0
 
 # UPP
@@ -347,10 +347,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/UPPHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/UPPHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/UPPFooter.png"
     footerMargin: 0, 40, 0, 0
 
 - type: entity
@@ -372,10 +372,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFLAGHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/UPPFLAGHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/UPPFooter.png"
     footerMargin: 0, 40, 0, 0
 
 # HYPERDYNE
@@ -399,10 +399,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/HYPERDYNEHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/HYPERDYNEFooter.png"
     footerMargin: 0, 40, 0, 0
 
 - type: entity
@@ -425,10 +425,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEHeader_alt.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/HYPERDYNEHeader_alt.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEFooter_alt.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/HYPERDYNEFooter_alt.png"
     footerMargin: 0, 40, 0, 0
 
 # WEYLAND
@@ -452,10 +452,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDBlackHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDBlackHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDBlackFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDBlackFooter.png"
     footerMargin: 0, 40, 0, 0
 
 - type: entity
@@ -466,10 +466,10 @@
   description: A sheet of paper bearing the Weyland-Yutani letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDFooter.png"
     footerMargin: 0, 40, 0, 0
 
 - type: entity
@@ -480,10 +480,10 @@
   description: A sheet of paper bearing the inverted Weyland-Yutani letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDInvertedHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDInvertedHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDInvertedFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDInvertedFooter.png"
     footerMargin: 0, 40, 0, 0
 
 - type: entity
@@ -494,10 +494,10 @@
   description: A sheet of paper bearing the Weyland-Yutani Research letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDResearchHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDResearchHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDResearchFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDResearchFooter.png"
     footerMargin: 0, 40, 0, 0
 
 - type: entity
@@ -508,10 +508,10 @@
   description: A sheet of paper bearing the repurposed Weyland "Wings" for the Weyland-Yutani Private Military Contractors letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDPMCHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDPMCHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDPMCFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/WEYLANDPMCFooter.png"
     footerMargin: 0, 40, 0, 0
 
 #TWE
@@ -534,10 +534,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/TWEHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/TWEHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/TWEFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/TWEFooter.png"
     footerMargin: 0, 40, 0, 0
 
 
@@ -550,10 +550,10 @@
   description: A sheet of paper bearing the black Tyrell Corporation letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/TYRELLCORPHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/TYRELLCORPFooter.png"
     footerMargin: 0, 40, 0, 0
 
 - type: entity
@@ -564,10 +564,10 @@
   description: A sheet of paper bearing the Tyrell Corporation letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPHeader_alt.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/TYRELLCORPHeader_alt.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPFooter_alt.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/TYRELLCORPFooter_alt.png"
     footerMargin: 0, 40, 0, 0
 
 #SEEGSON
@@ -590,10 +590,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/SEEGSONHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/SEEGSONHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/SEEGSONFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/SEEGSONFooter.png"
     footerMargin: 0, 40, 0, 0
 
 #AEGIS
@@ -604,10 +604,10 @@
   description: A sheet of paper bearing the AEGIS Armaments letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/AEGISHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/AEGISHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/AEGISFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/AEGISFooter.png"
     footerMargin: 0, 40, 0, 0
 
 #LASELLE BIONATIONAL
@@ -630,8 +630,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/LASALLE_BIONATIONALHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/LASALLE_BIONATIONALHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 #YAMAHA
@@ -642,8 +642,8 @@
   description: A sheet of paper bearing the Yamaha Corporation letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/YAMAHAHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/YAMAHAHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 #KELLAND
@@ -666,8 +666,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/KELLANDHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/KELLANDHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 #CMB
@@ -678,10 +678,10 @@
   description: A sheet of paper bearing the Colonial Marshal Bureau letterhead.
   components:
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/CMBHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/CMBHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/CMBFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/CMBFooter.png"
     footerMargin: 0, 40, 0, 0
 
 #VAI // Logo is me opening the CM13 page of their seeing mentions of USCM then just making it similar to it + PMCs as troy suggested MAKE A NEW ONE THATS GOOD
@@ -704,10 +704,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/VANGUARDARROWHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/VANGUARDARROWHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/VANGUARDARROWFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/VANGUARDARROWFooter.png"
     footerMargin: 0, 40, 0, 0
 
 #CCAF // Logo is from a ingame patch. It's ass
@@ -730,10 +730,10 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/CCAFHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/CCAFHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    footerImagePath: "/Textures/_CMU14/Interface/Paper/CCAFFooter.png"
+    footerImagePath: "/Textures/CMU14/Interface/Paper/CCAFFooter.png"
     footerMargin: 0, 40, 0, 0
 
 #CLF / Insurgent factions.
@@ -756,8 +756,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/CLFHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/CLFHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 # UN / IHRO
@@ -781,8 +781,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/UNHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/UNHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 - type: entity
@@ -804,8 +804,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/IHROHeader2.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/IHROHeader2.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 - type: entity
@@ -827,8 +827,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/IHROHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/IHROHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 # USARMY
@@ -851,8 +851,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/UnitedStatesArmy.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/UnitedStatesArmy.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 #FBI
@@ -875,8 +875,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/FederalHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/FederalHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 #ORBITALS
@@ -900,8 +900,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbArbiterHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/OrbArbiterHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 - type: entity
@@ -925,8 +925,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbArbiterHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/OrbArbiterHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     backgroundModulate: "#1a1a1a"
 
@@ -949,8 +949,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbCounselHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/OrbCounselHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 #PROVOST
@@ -974,8 +974,8 @@
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
   - type: PaperVisuals
-    headerImagePath: "/Textures/_CMU14/Interface/Paper/PROVOSTHeader.png"
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    headerImagePath: "/Textures/CMU14/Interface/Paper/PROVOSTHeader.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 
 # PAPER SLIPS /*//////////////////////////////////////////////////

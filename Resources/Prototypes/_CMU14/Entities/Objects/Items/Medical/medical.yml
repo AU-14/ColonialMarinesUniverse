@@ -2,9 +2,8 @@
   parent: CMPill
   id: AU14PillEthylredoxrazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: CMEthylredoxrazine
@@ -20,9 +19,8 @@
   parent: CMPill
   id: AU14PillDermaline
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: CMDermaline
@@ -38,9 +36,8 @@
   parent: CMPill
   id: AU14PillMeralyne
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: CMMeralyne
@@ -56,9 +53,8 @@
   parent: CMPill
   id: AU14PillImidazoline
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: CMImidazoline
@@ -74,9 +70,8 @@
   parent: CMPill
   id: AU14PillCryoxadone
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: CMCryoxadone
@@ -92,9 +87,8 @@
   parent: CMPill
   id: AU14PillLeporazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: CMLeporazine
@@ -110,9 +104,8 @@
   parent: CMPill
   id: AU14PillAlbuterol
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: AU14Albuterol
@@ -128,9 +121,8 @@
   parent: CMPill
   id: AU14PillCMUParacetamol
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUParacetamol
@@ -146,9 +138,8 @@
   parent: CMPill
   id: AU14PillCMUTramadol
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUTramadol
@@ -164,9 +155,8 @@
   parent: CMPill
   id: AU14PillCMUOxycodone
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUOxycodone
@@ -184,9 +174,8 @@
   parent: CMPill
   id: AU14PillCMUHepatocytin
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUHepatocytin
@@ -202,9 +191,8 @@
   parent: CMPill
   id: AU14PillCMUPulmovine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUPulmovine
@@ -220,9 +208,8 @@
   parent: CMPill
   id: AU14PillCMUNephronate
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUNephronate
@@ -238,9 +225,8 @@
   parent: CMPill
   id: AU14PillCMUCardiocaine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUCardiocaine
@@ -256,9 +242,8 @@
   parent: CMPill
   id: CMU14PillAlkysine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUAlkysine
@@ -274,9 +259,8 @@
   parent: CMPill
   id: AU14PillCMUOsteoCalc
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: CMUOsteoCalc
@@ -693,7 +677,7 @@
   color: "#1f83a7"
   overdose: 20
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.04
       effects:
       - !type:EqualHealthChange
@@ -702,19 +686,23 @@
       - !type:ClearRespiratoryStrain
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 20
         damage:
-          groups:
-            Toxin: 0.5
+          types:
+            Poison: 0.25
+            Radiation: 0.25
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         damage:
-          groups:
-            Brute: 1
-            Toxin: 2
+          types:
+            Blunt: 0.33
+            Slash: 0.33
+            Piercing: 0.34
+            Poison: 1
+            Radiation: 1
 
 - type: reagent
   parent: [ CMReagentMedicine, DexalinPlus ]
@@ -724,7 +712,7 @@
   color: "#a3adbf"
   overdose: 200
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.02
       effects:
       - !type:RemoveDamage
@@ -732,62 +720,66 @@
       - !type:CureDrugAllergyReaction
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 15
         damage:
-          groups:
-            Toxin: 0.75
+          types:
+            Poison: 0.37
+            Radiation: 0.38
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 25
         damage:
-          groups:
-            Brute: 1.5
-            Toxin: 3
-      - !type:ChemVomit
+          types:
+            Blunt: 0.5
+            Slash: 0.5
+            Piercing: 0.5
+            Poison: 1.5
+            Radiation: 1.5
+      - !type:Vomit
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           reagent: CMUParacetamol
           min: 1
       - !type:AdjustReagent
         reagent: CMUParacetamol
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           reagent: CMUTramadol
           min: 1
       - !type:AdjustReagent
         reagent: CMUTramadol
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           reagent: CMUOxycodone
           min: 1
       - !type:AdjustReagent
         reagent: CMUOxycodone
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           reagent: CMUFentanyl
           min: 1
       - !type:AdjustReagent
         reagent: CMUFentanyl
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           reagent: CMUSleen
           min: 1
       - !type:AdjustReagent
         reagent: CMUSleen
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           reagent: CMUSoporific
           min: 1
       - !type:AdjustReagent
@@ -802,7 +794,7 @@
   description: An autoinjector loaded with naloxone, used to instantly counteract toxin damage. Primarily used to treat overdoses. Doesn't require any training to use.
   components:
   - type: Sprite
-    sprite: _AU14/Items/naloxone_auto_injector.rsi
+    sprite: CMU14/Items/naloxone_auto_injector.rsi
     layers:
     - state: autoinjector
     - state: autoinjector1
@@ -836,7 +828,7 @@
   description: An autoinjector loaded with epinephrine, sometimes referred to as an 'EpiPen'. It is used to treat severe allergic reactions, though it can also be used to help restart someone's heart. Doesn't require any training to use.
   components:
   - type: Sprite
-    sprite: _AU14/Items/naloxone_auto_injector.rsi
+    sprite: CMU14/Items/naloxone_auto_injector.rsi
     layers:
     - state: autoinjector
     - state: autoinjector1
@@ -1140,10 +1132,10 @@
   description: A vacuum sealed packet of chemically treated gauze designed to stop arterial bleeding fast. The powder burns like hell, but it works. Single-use. Rip it open, jam it in, hope for the best.
   components:
   - type: Sprite
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: CMU14/Items/quickclot.rsi
     state: quickclot
   - type: Item
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: CMU14/Items/quickclot.rsi
     inhandVisuals:
       left:
       - state: qc_left
@@ -1170,13 +1162,13 @@
   description: A vacuum sealed packet of chemically treated gauze designed to stop arterial bleeding fast. The powder burns like hell, but it works. Single-use. This one is trash, its already been used!
   components:
   - type: Sprite
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: CMU14/Items/quickclot.rsi
     state: qc_ripped
   - type: Tag
     tags:
     - Trash
   - type: Item
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: CMU14/Items/quickclot.rsi
     inhandVisuals:
       left:
       - state: qc_left
@@ -1193,10 +1185,10 @@
     tags:
     - Brutepack
   - type: Sprite
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: CMU14/Items/quickclot.rsi
     state: hemgauze
   - type: Item
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: CMU14/Items/quickclot.rsi
     inhandVisuals:
       left:
       - state: hemgauze_left

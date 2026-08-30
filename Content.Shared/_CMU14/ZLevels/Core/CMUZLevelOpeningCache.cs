@@ -6,7 +6,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.ZLevels.Core;
+namespace Content.Shared.CMU14.ZLevels.Core;
 
 public sealed class CMUZLevelOpeningCache
 {

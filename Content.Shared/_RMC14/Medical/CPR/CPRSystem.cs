@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.ShakeStun;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -102,11 +104,12 @@ public sealed partial class CPRSystem : EntitySystem
 
         _unrevivable.AddRevivableTime(target, CPRCooldownSeconds);
 
-        if (!TryComp(target, out DamageableComponent? damageable) ||
-            !damageable.Damage.DamageDict.TryGetValue(HealType, out damage))
-        {
+        if (!TryComp(target, out DamageableComponent? damageable))
             return;
-        }
+
+        var currentDamage = _damageable.GetAllDamage((target, damageable));
+        if (!currentDamage.DamageDict.TryGetValue(HealType, out damage))
+            return;
 
         var heal = -FixedPoint2.Min(damage, HealAmount);
         var healSpecifier = new DamageSpecifier();

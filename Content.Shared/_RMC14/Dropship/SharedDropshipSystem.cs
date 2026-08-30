@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared._CMU14.Xenomorphs.Pathogen;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Areas;
@@ -22,8 +22,8 @@ using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
-using Content.Shared.AU14;
-using Content.Shared.AU14.Round;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Round;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -293,7 +293,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             return;
         }
 
-        var ev = new ActivatableUIOpenAttemptEvent(user);
+        var ev = new ActivatableUIOpenAttemptEvent(user, false);
 
         OnUIOpenAttempt(ent, ref ev);
     }
@@ -599,7 +599,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
     private void OnTerminalOpen(Entity<DropshipTerminalComponent> terminal, ref AfterActivatableUIOpenEvent args)
     {
-        if (!_ui.IsUiOpen(terminal.Owner, DropshipTerminalUiKey.Key, args.Actor))
+        if (!_ui.IsUiOpen(terminal.Owner, DropshipTerminalUiKey.Key, args.User))
             return;
 
         var closestLZ = FindClosestLZ(terminal);

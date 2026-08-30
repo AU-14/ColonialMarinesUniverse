@@ -1,19 +1,19 @@
 using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.Components;
-using Content.Shared._AU14.Callsigns;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.Callsigns;
+using Content.Shared.CMU14.Radio;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Marines;
-using Content.Shared.AU14.Radio;
+using Content.Shared.CMU14.Radio;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 public sealed partial class ANPRCRadioSystem
 {
@@ -190,7 +190,7 @@ public sealed partial class ANPRCRadioSystem
     // every radio prefix in the game reads the whole frequency plan back off the panel
     private void LogHeadsetTraffic(Entity<WearingANPRCComponent> ent, ref EntitySpokeEvent args)
     {
-        if (args.Channel == null || args.Channel.Frequency <= 0)
+        if (args.Channel == null || args.Channel.Frequency == RadioFrequency.Off)
             return;
 
         if (!TryComp(ent.Comp.Radio, out ANPRCRadioComponent? logRadio) || !logRadio.Enabled)

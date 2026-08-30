@@ -1,6 +1,6 @@
 using Content.Shared.Movement.Systems;
 
-namespace Content.Shared._CMU14.Traits.SlowRunner;
+namespace Content.Shared.CMU14.Traits.SlowRunner;
 
 public sealed class SlowRunnerSystem : EntitySystem
 {

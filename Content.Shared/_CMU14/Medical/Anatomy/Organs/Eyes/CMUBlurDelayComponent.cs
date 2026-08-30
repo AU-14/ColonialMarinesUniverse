@@ -1,6 +1,6 @@
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
 
 /// <summary>
 ///     Pushes the EyeDamage → blur curve out so blur only kicks in once

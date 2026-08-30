@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Injuries.Pain;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.Medical.Wounds;
@@ -19,7 +19,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Diagnostics;
+namespace Content.Shared.CMU14.Medical.Diagnostics;
 
 public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
 {

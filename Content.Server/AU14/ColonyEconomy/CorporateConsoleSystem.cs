@@ -1,22 +1,24 @@
-using Content.Server._CMU14.Ops.ThirdParty;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.Round;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Server.Stack;
-using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.ColonyEconomy;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Stacks;
 using Content.Shared.Interaction;
 using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
-using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
+using ThirdPartySystem = Content.Server.CMU14.Ops.ThirdParty.ThirdPartySystem;
 
-namespace Content.Server.AU14.ColonyEconomy;
+namespace Content.Server.CMU14.ColonyEconomy;
 
 public sealed partial class CorporateConsoleSystem : EntitySystem
 {
+    private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
+
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
@@ -169,7 +171,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         var netAmount = (int) msg.Amount - taxAmount;
 
         if (netAmount > 0)
-            _stack.SpawnMultiple("RMCSpaceCash", netAmount, uid);
+            _stack.SpawnMultipleNextToOrDrop(CashPrototype, netAmount, uid);
         if (taxAmount > 0)
             _colonyBudget.AddToBudget(taxAmount);
 
@@ -242,4 +244,3 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
             UpdateUiState(uid, comp);
     }
 }
-

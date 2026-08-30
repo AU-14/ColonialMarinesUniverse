@@ -1,7 +1,7 @@
-using Content.Shared.AU14.WithdrawConsole;
+using Content.Shared.CMU14.WithdrawConsole;
 using Robust.Client.UserInterface;
 
-namespace Content.Client.AU14.WithdrawConsole;
+namespace Content.Client.CMU14.WithdrawConsole;
 
 public sealed class WithdrawConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {

@@ -1,7 +1,7 @@
 using Robust.Shared;
 using Robust.Shared.Configuration;
 
-namespace Content.Shared._AU14.CCVar;
+namespace Content.Shared.CMU14.CCVar;
 
 [CVarDefs]
 public sealed partial class AU14CCVars : CVars

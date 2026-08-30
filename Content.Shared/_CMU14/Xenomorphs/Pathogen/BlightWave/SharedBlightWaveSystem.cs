@@ -9,7 +9,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.BlightWave;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.BlightWave;
 
 public abstract partial class SharedBlightWaveSystem : EntitySystem
 {

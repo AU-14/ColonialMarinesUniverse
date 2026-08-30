@@ -4,7 +4,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Timing;
 
-namespace Content.Client._AU14.Chemistry.Research;
+namespace Content.Client.CMU14.Chemistry.Research;
 
 [GenerateTypedNameReferences]
 public sealed partial class ResearchDataTerminalWindow : DefaultWindow

@@ -1,9 +1,9 @@
-using Content.Shared._AU14.Visuals;
+using Content.Shared.CMU14.Visuals;
 using Robust.Client.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
 
-namespace Content.Client._AU14.Visuals;
+namespace Content.Client.CMU14.Visuals;
 
 /// <summary>
 ///     Client side of <see cref="AU14ContainerIconLayerComponent"/>: keeps one sprite layer in sync with

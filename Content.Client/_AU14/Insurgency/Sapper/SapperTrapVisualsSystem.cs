@@ -1,9 +1,9 @@
-using Content.Shared._AU14.Insurgency.Sapper;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 
-namespace Content.Client._AU14.Insurgency.Sapper;
+namespace Content.Client.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     Decides, per local viewer, whether a planted sapper trap is drawn. Reveal is now entirely a

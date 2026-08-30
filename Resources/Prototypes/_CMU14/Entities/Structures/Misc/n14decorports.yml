@@ -1,16 +1,17 @@
-﻿- type: entity
+- type: entity
   id: Rails
   name: railway
   placement:
     mode: SnapgridCenter
   components:
   - type: Sprite
-    sprite: _AU14/N14content/rails64.rsi
+    sprite: CMU14/N14content/rails64.rsi
     state: rails
     netsync: false
     drawdepth: FloorObjects
   - type: Damageable
     damageModifierSet: Wood
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -101,12 +102,13 @@
     mode: SnapgridCenter
   components:
   - type: Sprite
-    sprite: _AU14/N14content/cave_decor.rsi
+    sprite: CMU14/N14content/cave_decor.rsi
     netsync: false
     noRot: true
     drawdepth: FloorObjects
   - type: Damageable
     damageModifierSet: Wood
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -434,7 +436,7 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: _AU14/N14content/world.rsi
+    sprite: CMU14/N14content/world.rsi
 
 - type: entity
   parent: DecorFloorWorldBase
@@ -444,7 +446,7 @@
   suffix: 8 states
   components:
   - type: Sprite
-    sprite: _AU14/N14content/world.rsi
+    sprite: CMU14/N14content/world.rsi
     state: scattered_papers
     # add destruction drop for materials
 

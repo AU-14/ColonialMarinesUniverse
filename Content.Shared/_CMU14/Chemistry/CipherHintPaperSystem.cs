@@ -1,4 +1,4 @@
-using Content.Shared._AU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.GameTicking;
@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Shared._CMU14.Chemistry;
+namespace Content.Shared.CMU14.Chemistry;
 
 public sealed partial class CipherHintPaperSystem : EntitySystem
 {

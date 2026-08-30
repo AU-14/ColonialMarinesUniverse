@@ -1,6 +1,6 @@
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared._RMC14.CCVar;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.CCVar;
 using Content.Shared.Mobs.Components;
@@ -11,7 +11,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
 
-namespace Content.Client._CMU14.Medical.Diagnostics.Telemetry;
+namespace Content.Client.CMU14.Medical.Diagnostics.Telemetry;
 
 public sealed partial class CMUMedicalPerfCommand : IConsoleCommand
 {

@@ -1,12 +1,12 @@
 using System.Numerics;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Threats.Mobs.Xeno.Xenonids.Warlock;
+namespace Content.Client.CMU14.Threats.Mobs.Xeno.Xenonids.Warlock;
 
 public sealed partial class CMUXenoPsychicCrushBlurOverlay : Overlay
 {

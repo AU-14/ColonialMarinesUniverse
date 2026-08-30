@@ -2,7 +2,7 @@ using System.Numerics;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client._CMU14.Language;
+namespace Content.Client.CMU14.Language;
 
 public sealed class FactionLanguagePickerWindow : DefaultWindow
 {

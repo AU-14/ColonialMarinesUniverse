@@ -15,7 +15,7 @@
     prefix: au14-job-prefix-civiliancolonist
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmucolonyblips.rsi
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
       state: colonist
 
   name: au14-job-name-civiliancolonist
@@ -49,11 +49,31 @@
     job_id: AU14JobCivilianColonist
   - type: Sprite
     state: syn_spawn
+  - type: ScenarioSpawnMarker
+    kind: ClfCivilianSpawn
+    tags:
+    - force:clf:civilian-spawn:AU14JobCivilianColonist
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: ScenarioClfCivilianColonistSpawnMarker
+  name: Spawn Point Civilian Colonist
+  suffix: Scenario Anchor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianColonist
+  - type: Sprite
+    state: syn_spawn
+  - type: ScenarioSpawnMarker
+    kind: ClfCivilianSpawn
+    tags:
+    - force:clf:civilian-spawn:AU14JobCivilianColonist
 
 - type: playTimeTracker
   id: AU14JobCivilianColonist
   isHumanoid: true
 
+# ├──[ colony ]──────────────────────────────────────────────────────┤
 - type: roleLoadout
   id: JobAU14JobCivilianColonist
   points: 7

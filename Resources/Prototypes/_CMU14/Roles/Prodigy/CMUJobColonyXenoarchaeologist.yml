@@ -13,7 +13,7 @@
     prefix: cmu-colony-prefix-xenoarchaeologist
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmucolonyblips.rsi
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
       state: colonist
   name: cmu-colony-name-xenoarchaeologist
   description: cmu-colony-description-xenoarchaeologist

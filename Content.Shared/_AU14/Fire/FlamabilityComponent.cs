@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.Fire;
+namespace Content.Shared.CMU14.Fire;
 
 /// <summary>
 /// Marks an entity as participating in the AU14 fire spread system.

@@ -11,6 +11,8 @@ using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
@@ -29,6 +31,7 @@ namespace Content.Shared._RMC14.Medical.Scanner;
 public sealed partial class HealthScannerSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
     [Dependency] private INetManager _net = default!;
@@ -137,8 +140,8 @@ public sealed partial class HealthScannerSystem : EntitySystem
     /// <returns></returns>
     private bool CanUseHealthScannerPopup(Entity<HealthScannerComponent> scanner, EntityUid user, ref EntityUid target)
     {
-        SharedEntityStorageComponent? entityStorage = null;
-        if (HasComp<HealthScannableContainerComponent>(target) && _entityStorage.ResolveStorage(target, ref entityStorage))
+        if (HasComp<HealthScannableContainerComponent>(target) &&
+            TryComp<EntityStorageComponent>(target, out var entityStorage))
         {
             foreach (var entity in entityStorage.Contents.ContainedEntities)
             {
@@ -245,11 +248,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
     {
         FixedPoint2 blood = 0;
         FixedPoint2 maxBlood = 0;
-        if (_rmcBloodstream.TryGetBloodSolution(target, out var bloodstream))
-        {
-            blood = bloodstream.Volume;
-            maxBlood = bloodstream.MaxVolume;
-        }
+        _rmcBloodstream.TryGetBloodReadout(target, out blood, out maxBlood);
 
         _rmcBloodstream.TryGetChemicalSolution(target, out _, out var chemicals);
         _rmcTemperature.TryGetCurrentTemperature(target, out var temperature);
@@ -268,12 +267,13 @@ public sealed partial class HealthScannerSystem : EntitySystem
     {
         if (TryComp<DamageableComponent>(target, out var damageable))
         {
-            state.Damage.Brute = damageable.DamagePerGroup.GetValueOrDefault("Brute");
-            state.Damage.Burn = damageable.DamagePerGroup.GetValueOrDefault("Burn");
-            state.Damage.Toxin = damageable.DamagePerGroup.GetValueOrDefault("Toxin");
-            state.Damage.Airloss = damageable.DamagePerGroup.GetValueOrDefault("Airloss");
-            state.Damage.Genetic = damageable.DamagePerGroup.GetValueOrDefault("Genetic");
-            state.Damage.Total = damageable.TotalDamage;
+            var damagePerGroup = _damageable.GetDamagePerGroup((target, damageable));
+            state.Damage.Brute = damagePerGroup.GetValueOrDefault("Brute");
+            state.Damage.Burn = damagePerGroup.GetValueOrDefault("Burn");
+            state.Damage.Toxin = damagePerGroup.GetValueOrDefault("Toxin");
+            state.Damage.Airloss = damagePerGroup.GetValueOrDefault("Airloss");
+            state.Damage.Genetic = damagePerGroup.GetValueOrDefault("Genetic");
+            state.Damage.Total = _damageable.GetTotalDamage((target, damageable));
         }
 
         if (TryComp<WoundedComponent>(target, out var wounded))

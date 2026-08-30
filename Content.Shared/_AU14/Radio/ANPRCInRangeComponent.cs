@@ -1,4 +1,4 @@
-namespace Content.Shared._AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 // transient marker stamped on a radio for the duration of one send/receive,
 // carrying how good its link to the nearest covering anchor is

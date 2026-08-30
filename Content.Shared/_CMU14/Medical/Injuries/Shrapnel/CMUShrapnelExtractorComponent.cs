@@ -5,7 +5,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Shrapnel;
+namespace Content.Shared.CMU14.Medical.Injuries.Shrapnel;
 
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedCMUShrapnelSystem))]

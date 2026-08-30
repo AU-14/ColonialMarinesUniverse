@@ -15,7 +15,7 @@ public sealed partial class DungeonJob
     /// <summary>
     /// <see cref="WormCorridorDunGen"/>
     /// </summary>
-    private async Task PostGen(WormCorridorDunGen gen, Dungeon dungeon, HashSet<Vector2i> reservedTiles, Random random)
+    private async Task PostGen(WormCorridorDunGen gen, Dungeon dungeon, HashSet<Vector2i> reservedTiles, IRobustRandom random)
     {
         var networks = new List<(Vector2i Start, HashSet<Vector2i> Network)>();
 
@@ -39,7 +39,7 @@ public sealed partial class DungeonJob
         // There's a lot of ways to handle this, e.g. pathfinding towards each room
         // For simplicity we'll go through each entrance randomly and generate worms from it
         // then as a final step we will connect all of their networks.
-        Shuffle(random, networks);
+        random.Shuffle(networks);
 
         for (var i = 0; i < gen.Count; i++)
         {
@@ -55,7 +55,7 @@ public sealed partial class DungeonJob
             for (var x = remainingLength; x >= 0; x--)
             {
                 position += angle.ToVec();
-                angle += NextAngle(random, -gen.MaxAngleChange, gen.MaxAngleChange);
+                angle += random.NextAngle(-gen.MaxAngleChange, gen.MaxAngleChange);
                 var roundedPos = position.Floored();
 
                 // Check if the tile doesn't overlap something it shouldn't
@@ -77,7 +77,7 @@ public sealed partial class DungeonJob
             // Find a random part on the existing worm to start.
             var value = worm[random.Next(worm.Count)];
             networks[startIndex].Network.UnionWith(worm);
-            startAngles[value] = NextAngle(random);
+            startAngles[value] = random.NextAngle();
         }
 
         // Now to ensure they all connect we'll pathfind each network to one another
@@ -100,7 +100,7 @@ public sealed partial class DungeonJob
                 frontier.Clear();
                 costSoFar.Clear();
 
-                var targetNode = Pick(random, main.Network);
+                var targetNode = random.Pick(main.Network);
 
                 var other = networks[i];
                 var startNode = other.Network.First();

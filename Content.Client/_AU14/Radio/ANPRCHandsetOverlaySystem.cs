@@ -1,6 +1,6 @@
 using Robust.Client.Graphics;
 
-namespace Content.Client._AU14.Radio;
+namespace Content.Client.CMU14.Radio;
 
 public sealed partial class ANPRCHandsetOverlaySystem : EntitySystem
 {

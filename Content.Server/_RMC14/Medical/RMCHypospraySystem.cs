@@ -1,5 +1,7 @@
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Prototypes;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
@@ -9,6 +11,8 @@ namespace Content.Server._RMC14.Medical;
 
 public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
 {
+    [Dependency] private InjectorSystem _injector = default!;
+
     protected override void OnInteractUsing(Entity<RMCHyposprayComponent> ent, ref InteractUsingEvent args)
     {
         base.OnInteractUsing(ent, ref args);
@@ -23,7 +27,7 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
         if (!TryComp<ItemSlotsComponent>(ent, out var slots))
             return;
         // Dont transfer when vial is used
-        if (_slots.CanInsert(ent, args.Used, args.User, slots.Slots[ent.Comp.SlotId], true))
+        if (_slots.CanInsert(ent, slots.Slots[ent.Comp.SlotId], args.Used, args.User, true))
             return;
 
         if (container.ContainedEntities.Count == 0)
@@ -86,10 +90,20 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
         if (!_solution.TryGetSolution(injector, syringe.SolutionName, out var syringeSolutionComp, out var syringeSolution))
             return;
 
+        if (!ProtoMan.Resolve(syringe.ActiveModeProtoId, out var activeMode))
+            return;
+
+        var injecting = activeMode.Behavior switch
+        {
+            InjectorBehavior.Inject => true,
+            InjectorBehavior.Draw or InjectorBehavior.Dynamic => false,
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+
         Entity<SolutionComponent>? vialSolutionComp;
         Solution? vialSolution;
 
-        if (syringe.ToggleState == InjectorToggleMode.Inject)
+        if (injecting)
         {
             if (!_solution.TryGetInjectableSolution(vial, out vialSolutionComp, out vialSolution))
                 return;
@@ -100,20 +114,22 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
                 return;
         }
 
-        var transferAmount = syringe.ToggleState == InjectorToggleMode.Inject ?
-            FixedPoint2.Min(syringe.TransferAmount, vialSolution.AvailableVolume) :
-            FixedPoint2.Min(syringe.TransferAmount, syringeSolution.AvailableVolume);
+        var requestedAmount = syringe.CurrentTransferAmount ??
+            (injecting ? syringeSolution.Volume : FixedPoint2.New(5));
+        var transferAmount = injecting
+            ? FixedPoint2.Min(requestedAmount, vialSolution.AvailableVolume)
+            : FixedPoint2.Min(requestedAmount, syringeSolution.AvailableVolume);
 
         if (transferAmount <= 0)
         {
-            if (syringe.ToggleState == InjectorToggleMode.Inject)
+            if (injecting)
                 _popup.PopupEntity(Loc.GetString("rmc-hypospray-full", ("vial", vial)), ent, user);
             else
                 _popup.PopupEntity(Loc.GetString("rmc-hypospray-full", ("vial", injector)), ent, user);
             return;
         }
 
-        if (syringe.ToggleState == InjectorToggleMode.Draw)
+        if (!injecting)
         {
             var removed = _solution.Draw(vial, vialSolutionComp.Value, transferAmount);
             if (!_solution.TryAddSolution(syringeSolutionComp.Value, removed))
@@ -123,10 +139,7 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
                                 ("target", Identity.Entity(vial, EntityManager))), injector, user);
 
             if (syringeSolution.Volume == syringeSolution.MaxVolume)
-            {
-                syringe.ToggleState = InjectorToggleMode.Inject;
-                Dirty(injector, syringe);
-            }
+                TrySetMode((injector, syringe), user, InjectorBehavior.Inject);
         }
         else
         {
@@ -137,15 +150,33 @@ public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
                                 ("target", Identity.Entity(vial, EntityManager))), injector, user);
 
             if (syringeSolution.Volume == 0)
-            {
-                syringe.ToggleState = InjectorToggleMode.Draw;
-                Dirty(injector, syringe);
-            }
+                TrySetMode((injector, syringe), user, InjectorBehavior.Draw);
         }
 
         Dirty(syringeSolutionComp.Value);
         Dirty(vialSolutionComp.Value);
 
         UpdateAppearance(ent);
+    }
+
+    private void TrySetMode(Entity<InjectorComponent> injector, EntityUid user, InjectorBehavior behavior)
+    {
+        if (!ProtoMan.Resolve(injector.Comp.ActiveModeProtoId, out var activeMode) ||
+            activeMode.Behavior == InjectorBehavior.Dynamic)
+        {
+            return;
+        }
+
+        foreach (var mode in injector.Comp.AllowedModes)
+        {
+            if (!ProtoMan.Resolve(mode, out InjectorModePrototype? modePrototype) ||
+                !modePrototype.Behavior.HasFlag(behavior))
+            {
+                continue;
+            }
+
+            _injector.ToggleMode(injector, user, modePrototype, false);
+            return;
+        }
     }
 }

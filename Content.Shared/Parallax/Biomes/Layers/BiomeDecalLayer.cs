@@ -1,8 +1,8 @@
 using Content.Shared.Decals;
 using Content.Shared.Maps;
 using Robust.Shared.Noise;
-using Robust.Shared.Serialization;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Parallax.Biomes.Layers;
 
@@ -10,7 +10,7 @@ namespace Content.Shared.Parallax.Biomes.Layers;
 public sealed partial class BiomeDecalLayer : IBiomeWorldLayer
 {
     /// <inheritdoc/>
-    [DataField("allowedTiles")]
+    [DataField]
     public List<ProtoId<ContentTileDefinition>> AllowedTiles { get; private set; } = new();
 
     /// <summary>
@@ -29,6 +29,6 @@ public sealed partial class BiomeDecalLayer : IBiomeWorldLayer
     /// <inheritdoc/>
     [DataField("invert")] public bool Invert { get; private set; } = false;
 
-    [DataField("decals", required: true)]
+    [DataField(required: true)]
     public List<ProtoId<DecalPrototype>> Decals = new();
 }

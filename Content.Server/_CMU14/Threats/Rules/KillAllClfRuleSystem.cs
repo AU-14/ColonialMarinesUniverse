@@ -1,5 +1,5 @@
-using Content.Server._CMU14.RoundStatistics;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.RoundStatistics;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Areas;
@@ -12,9 +12,9 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
-using KillAllClfRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllClfRuleComponent;
+using KillAllClfRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllClfRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 /// <summary>
 ///     Kill-all rule that targets all CLF faction members, excludes SSD and evacuated.
@@ -42,8 +42,8 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
         SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
     }
 
-    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
-    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
+    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.EquipTarget, ev.Slot, ev.Equipment);
+    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.EquipTarget, ev.Slot, ev.Equipment);
     public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)

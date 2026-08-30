@@ -1,7 +1,7 @@
 using Content.Shared.Destructible.Thresholds;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Weapons.Melee;
+namespace Content.Shared.CMU14.Weapons.Melee;
 
 /// <summary>
 /// Gibs hit bodies on melee impact and sprays extra gore around them. Debug weapon support.

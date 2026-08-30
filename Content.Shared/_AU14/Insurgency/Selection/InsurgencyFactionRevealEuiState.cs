@@ -1,7 +1,7 @@
 using Content.Shared.Eui;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.Selection;
+namespace Content.Shared.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     State for the faction reveal popup shown to every cell member once a faction is applied. Plain

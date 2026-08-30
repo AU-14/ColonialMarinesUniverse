@@ -1,15 +1,15 @@
-using Content.Shared._CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.EntityEffects;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Effects;
+namespace Content.Shared.CMU14.Medical.Treatment.Effects;
 
 /// <summary>
 ///     Stacking painkillers takes the strongest, not a sum.
 /// </summary>
 [UsedImplicitly]
-public sealed partial class CMUApplyPainSuppressionEffect : EntityEffect
+public sealed partial class CMUApplyPainSuppressionEffect : EntityEffectBase<CMUApplyPainSuppressionEffect>
 {
     [DataField]
     public float AccumulationSuppression = 0.5f;
@@ -29,38 +29,47 @@ public sealed partial class CMUApplyPainSuppressionEffect : EntityEffect
     [DataField]
     public float DurationPerUnit = 60f;
 
-    public override void Effect(EntityEffectBaseArgs args)
-    {
-        if (args is not EntityEffectReagentArgs reagent)
-            return;
-        var duration = TimeSpan.FromSeconds(DurationPerUnit * (float)reagent.Quantity);
-        var pain = args.EntityManager.System<SharedPainShockSystem>();
-        if (Additive)
-        {
-            pain.AddAdditivePainSuppressionProfile(
-                reagent.TargetEntity,
-                AccumulationSuppression,
-                TierSuppression,
-                DecayBonus,
-                duration);
-        }
-        else
-        {
-            pain.AddPainSuppressionProfile(
-                reagent.TargetEntity,
-                AccumulationSuppression,
-                TierSuppression,
-                DecayBonus,
-                duration,
-                ReductionDecreaseRate);
-        }
-    }
-
-    protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => Loc.GetString("cmu-medical-pain-suppression-guidebook",
             ("percent", (int)(AccumulationSuppression * 100f)),
             ("tiers", TierSuppression),
             ("decay", DecayBonus),
             ("decrease", ReductionDecreaseRate),
             ("seconds", DurationPerUnit));
+}
+
+public sealed partial class CMUApplyPainSuppressionEntityEffectSystem
+    : EntityEffectSystem<MetaDataComponent, CMUApplyPainSuppressionEffect>
+{
+    [Dependency] private readonly SharedPainShockSystem _pain = default!;
+
+    protected override void Effect(
+        Entity<MetaDataComponent> entity,
+        ref EntityEffectEvent<CMUApplyPainSuppressionEffect> args)
+    {
+        if (args.ReagentContext is not { } context)
+            return;
+
+        var effect = args.Effect;
+        var duration = TimeSpan.FromSeconds(effect.DurationPerUnit * (float) context.Quantity.Quantity);
+        if (effect.Additive)
+        {
+            _pain.AddAdditivePainSuppressionProfile(
+                entity,
+                effect.AccumulationSuppression,
+                effect.TierSuppression,
+                effect.DecayBonus,
+                duration);
+        }
+        else
+        {
+            _pain.AddPainSuppressionProfile(
+                entity,
+                effect.AccumulationSuppression,
+                effect.TierSuppression,
+                effect.DecayBonus,
+                duration,
+                effect.ReductionDecreaseRate);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-namespace Content.Server._CMU14.Round.Objectives.Components;
+namespace Content.Server.CMU14.Round.Objectives.Components;
 
 [RegisterComponent]
 public sealed partial class ObjSpawnedByComponent : Robust.Shared.GameObjects.Component

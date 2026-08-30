@@ -19,6 +19,7 @@
   - type: InteractionOutline
   - type: Appearance
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

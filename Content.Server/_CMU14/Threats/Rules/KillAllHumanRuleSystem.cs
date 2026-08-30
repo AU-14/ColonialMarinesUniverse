@@ -1,5 +1,5 @@
-using Content.Server._CMU14.RoundStatistics;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.RoundStatistics;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Areas;
@@ -12,12 +12,12 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using KillAllHumanRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllHumanRuleComponent;
+using KillAllHumanRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllHumanRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 /// <summary>
-///     Kill-all rule that targets all humanoid mobs (any entity with HumanoidAppearanceComponent),
+///     Kill-all rule that targets all humanoid mobs (any entity with HumanoidProfileComponent),
 ///     excluding xenos. Evacuated entities are excluded from the count entirely.
 /// </summary>
 public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHumanRuleComponent>
@@ -42,8 +42,8 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
         SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
     }
 
-    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
-    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
+    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.EquipTarget, ev.Slot, ev.Equipment);
+    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.EquipTarget, ev.Slot, ev.Equipment);
     public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
@@ -58,7 +58,7 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
             return;
         if (ev.NewMobState != MobState.Dead)
             return;
-        if (!HasComp<HumanoidAppearanceComponent>(ev.Target))
+        if (!HasComp<HumanoidProfileComponent>(ev.Target))
             return;
 
         CheckVictoryCondition();
@@ -70,7 +70,7 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
             return;
         if (!_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>())
             return;
-        if (!HasComp<HumanoidAppearanceComponent>(wearer))
+        if (!HasComp<HumanoidProfileComponent>(wearer))
             return;
 
         CheckVictoryCondition();
@@ -96,8 +96,8 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
         bool countArrests = ruleComp.Arrest;
         bool crashedDropship = _threatRuleHelper.HasCrashedDropship();
 
-        EntityQueryEnumerator<MobStateComponent, HumanoidAppearanceComponent> query = _entMan
-            .EntityQueryEnumerator<MobStateComponent, HumanoidAppearanceComponent>();
+        EntityQueryEnumerator<MobStateComponent, HumanoidProfileComponent> query = _entMan
+            .EntityQueryEnumerator<MobStateComponent, HumanoidProfileComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState, out _))
         {
             if (_threatRuleHelper.IsExcludedFromVictory(uid, mobState))

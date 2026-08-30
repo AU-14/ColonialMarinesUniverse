@@ -3,7 +3,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
-namespace Content.Server.AU14.Power;
+namespace Content.Server.CMU14.Power;
 
 public sealed partial class AUFusionCellExpirySystem : EntitySystem
 {

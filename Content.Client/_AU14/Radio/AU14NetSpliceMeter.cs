@@ -4,7 +4,7 @@ using Robust.Client.UserInterface;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
-namespace Content.Client._AU14.Radio;
+namespace Content.Client.CMU14.Radio;
 
 /// <summary>
 ///     Segmented detection meter on the splice panel. Segments light green through amber to red, and the lit

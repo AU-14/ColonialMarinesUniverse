@@ -8,9 +8,9 @@
     factions:
     - CMU14PathogenWalker
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures48x48.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures48x48.rsi
     layers:
-    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    - sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
       state: hive_weed0
     - state: hive_cluster_idle
   - type: Destructible
@@ -44,10 +44,10 @@
   - type: TacticalMapTracked
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: patho_cluster
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
 
 - type: entity
@@ -59,7 +59,7 @@
   components:
   - type: Sprite
     color: '#FFFFFFAA'
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures48x48.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures48x48.rsi
     layers:
     - state: hive_cluster_idle
     - sprite: _RMC14/Interface/xeno_hud.rsi
@@ -82,4 +82,4 @@
   - type: HiveConstructionLimited
     id: CMU14PathogenCluster
   - type: WarpPoint
-    location: mycelium cluster
+    location: cmu-warp-location-mycelium-cluster

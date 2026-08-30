@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.Body.Part;
 
-namespace Content.Client._CMU14.Medical.Treatment.Surgery;
+namespace Content.Client.CMU14.Medical.Treatment.Surgery;
 
 internal readonly record struct CMUSurgeryPartKey(NetEntity Part, BodyPartType Type, BodyPartSymmetry Symmetry)
 {

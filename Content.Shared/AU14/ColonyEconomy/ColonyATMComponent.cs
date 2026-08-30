@@ -1,7 +1,7 @@
-// Content.Shared/AU14/ColonyEconomy/SubmissionStorageComponent.cs
+// Content.Shared/CMU14/ColonyEconomy/SubmissionStorageComponent.cs
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.AU14.ColonyEconomy;
+namespace Content.Shared.CMU14.ColonyEconomy;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ColonyAtmComponent : Component

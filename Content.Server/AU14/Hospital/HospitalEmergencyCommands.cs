@@ -5,7 +5,7 @@ using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 
-namespace Content.Server.AU14.Hospital;
+namespace Content.Server.CMU14.Hospital;
 
 [AdminCommand(AdminFlags.Admin)]
 public sealed class HospitalIncidentTimerCommand : IConsoleCommand

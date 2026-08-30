@@ -1,9 +1,9 @@
 using Content.Server._RMC14.Language.Systems;
-using Content.Shared.AU14.Origin;
+using Content.Shared.CMU14.Origin;
 using Content.Shared.GameTicking;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Origin;
+namespace Content.Server.CMU14.Origin;
 
 public sealed partial class OriginLanguageSystem : EntitySystem
 {

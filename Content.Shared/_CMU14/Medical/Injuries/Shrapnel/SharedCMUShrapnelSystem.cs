@@ -1,15 +1,16 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Injuries.Pain;
-using Content.Shared._CMU14.Medical.Injuries.Trauma;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Trauma;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
@@ -27,7 +28,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Shrapnel;
+namespace Content.Shared.CMU14.Medical.Injuries.Shrapnel;
 
 public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 {

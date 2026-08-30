@@ -1,9 +1,9 @@
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Weapons.Ranged.Systems;
 
-namespace Content.Server._CMU14.Blackfoot;
+namespace Content.Server.CMU14.Blackfoot;
 
 public sealed partial class BlackfootWeaponSoundSystem : EntitySystem
 {

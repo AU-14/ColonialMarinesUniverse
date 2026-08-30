@@ -1,5 +1,5 @@
 using Content.Server.Administration;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration;
 using Content.Shared.Maps;
 using Robust.Server.GameObjects;
@@ -7,7 +7,7 @@ using Robust.Shared.Console;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
-namespace Content.Server._CMU14.ZLevels.Mapping;
+namespace Content.Server.CMU14.ZLevels.Mapping;
 
 [AdminCommand(AdminFlags.Server | AdminFlags.Mapping)]
 public sealed partial class CMUVariantizeZNetworkCommand : LocalizedEntityCommands

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Content.Shared.Players.PlayTimeTracking;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.PlayTimeTracking;
+namespace Content.Shared.CMU14.PlayTimeTracking;
 
 public static class CMUThreatPlayTimeCompatibility
 {

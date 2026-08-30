@@ -17,7 +17,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Ravager/ravager.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Ravager/ravager.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base", "enum.XenoShardVisualLayers.Base" ]
       state: alive
@@ -72,17 +72,16 @@
     clawType: VerySharp
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaCatecholamine
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaCatecholamine
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -92,12 +91,16 @@
   - type: MeleeWeapon
     attackRate: 1.05
     damage:
-      groups:
-        Brute: 45
+      types:
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 54
+      types:
+        Blunt: 18
+        Slash: 18
+        Piercing: 18
   - type: Tackle
     max: 5
     chance: 0.35
@@ -175,14 +178,20 @@
     destroyObjects: true
   - type: XenoEmpower
     damageIncreasePer:
-      groups:
-        Brute: 2
+      types:
+        Blunt: 0.66
+        Slash: 0.67
+        Piercing: 0.67
     damageTailIncreasePer:
-      groups:
-        Brute: 2.4
+      types:
+        Blunt: 0.8
+        Slash: 0.8
+        Piercing: 0.8
     leapDamage:
-      groups:
-        Brute: 45
+      types:
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
   - type: VehicleDamageMultiplier
     multiplier: 4
   - type: XenoScissorCut
@@ -203,7 +212,7 @@
   suffix: Berserker
   components:
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Ravager/berserker_ravager.rsi
+    sprite: CMU14/Mobs/Xenos/Ravager/berserker_ravager.rsi
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -242,16 +251,26 @@
   - type: XenoRage
   - type: XenoEviscerate
     damageAtRageLevels:
-    - groups:
-        Brute: 5
-    - groups:
-        Brute: 10
-    - groups:
-        Brute: 25
-    - groups:
-        Brute: 45
-    - groups:
-        Brute: 70
+    - types:
+        Blunt: 1.66
+        Slash: 1.67
+        Piercing: 1.67
+    - types:
+        Blunt: 3.33
+        Slash: 3.33
+        Piercing: 3.34
+    - types:
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
+    - types:
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
+    - types:
+        Blunt: 23.33
+        Slash: 23.33
+        Piercing: 23.34
     rangeAtRageLevels: [1.5, 1.5, 1.5, 2.5, 2.5]
     windupReductionAtRageLevels: [0, 0.2, 0.4, 0.6, 1]
   - type: XenoFling # TODO RMC14 target head
@@ -264,8 +283,10 @@
     dazeTime: 4
     throwSpeed: 12
     damage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoRavagerBerserker
@@ -276,7 +297,7 @@
   suffix: Hedgehog
   components:
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Ravager/hedgehog_ravager.rsi
+    sprite: CMU14/Mobs/Xenos/Ravager/hedgehog_ravager.rsi
     # layers:
     # - state: hedgehog_1
     #   map: [ "enum.XenoShardVisualLayers.Base" ]
@@ -331,24 +352,30 @@
   - type: MeleeWeapon
     attackRate: 0.9
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 48
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
   - type: XenoClaws
     clawType: VerySharp
   - type: XenoSpikeShield
     spikeDamage:
-      groups:
-        Brute: 15
+      types:
+        Blunt: 5
+        Slash: 5
+        Piercing: 5
   - type: XenoSpikeShed
     shardDamage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoRavagerHedgehog
-
-

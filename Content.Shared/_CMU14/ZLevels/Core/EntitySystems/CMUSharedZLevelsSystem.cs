@@ -1,8 +1,9 @@
 using System.Numerics;
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using JetBrains.Annotations;
@@ -15,7 +16,7 @@ using Robust.Shared.Profiling;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem : EntitySystem
 {

@@ -15,7 +15,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Diagnostics;
+namespace Content.Client.CMU14.Diagnostics;
 
 public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
 {

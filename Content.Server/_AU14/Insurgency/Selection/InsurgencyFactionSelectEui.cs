@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Administration.Managers;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.EUI;
-using Content.Server._AU14.Insurgency.Database;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._AU14.Insurgency.Selection;
+using Content.Server.CMU14.Insurgency.Database;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Insurgency.Selection;
 using Content.Shared.Eui;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency.Selection;
+namespace Content.Server.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     Server side of the CLF-leader faction selection popup. Loads the round's Default factions,
@@ -159,7 +159,7 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
 
     // Gathers what a faction's cell kit puts in play, for the sprite preview: the free-placed entities,
     // each vendor's base model, then the items its vendors stock. Deduplicated, order preserved, capped.
-    private static List<string> CellKitEntities(Content.Shared._AU14.Insurgency.FactionDefinition def)
+    private static List<string> CellKitEntities(Content.Shared.CMU14.Insurgency.FactionDefinition def)
     {
         var seen = new HashSet<string>();
         var result = new List<string>();

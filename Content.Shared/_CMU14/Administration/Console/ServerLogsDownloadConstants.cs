@@ -1,6 +1,6 @@
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CMU14.Administration.Console;
+namespace Content.Shared.CMU14.Administration.Console;
 
 public static class ServerLogsDownloadConstants
 {

@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Attachable.Events;
 using Content.Shared._RMC14.Attachable.Systems;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
@@ -18,7 +19,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._AU14.Weapons.GunSwitch;
+namespace Content.Shared.CMU14.Weapons.GunSwitch;
 
 /// <summary>
 ///     Runs the "Switch" auto-sear chip: rate-of-fire and accuracy changes while the chip's toggle
@@ -152,7 +153,7 @@ public sealed partial class GunSwitchSystem : EntitySystem
 
             // AttemptShoot respects the gun's own fire-rate cooldown, so calling it every tick just
             // sustains fire at the (multiplied) rate - the involuntary mag dump.
-            _gun.AttemptShoot(dump.User, uid, gunComp, dump.Target);
+            _gun.AttemptShoot(dump.User, (uid, gunComp), dump.Target);
         }
     }
 

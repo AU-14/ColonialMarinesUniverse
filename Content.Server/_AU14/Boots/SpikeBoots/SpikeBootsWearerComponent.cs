@@ -1,7 +1,7 @@
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 
-namespace Content.Server._AU14.Boots.SpikeBoots;
+namespace Content.Server.CMU14.Boots.SpikeBoots;
 
 [RegisterComponent]
 public sealed partial class SpikeBootsWearerComponent : Component

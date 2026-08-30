@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Robust.Shared.Map;
@@ -8,7 +9,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
 
-namespace Content.Shared._CMU14.Falling;
+namespace Content.Shared.CMU14.Falling;
 
 public abstract partial class SharedCMUFallingSystem : EntitySystem
 {

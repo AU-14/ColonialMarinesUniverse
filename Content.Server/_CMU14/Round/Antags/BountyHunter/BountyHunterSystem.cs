@@ -1,15 +1,15 @@
 using Content.Server.Antag;
 using Content.Server.Station.Systems;
-using Content.Server.StationRecords.Systems;
+using Content.Shared.StationRecords.Systems;
 using Content.Shared.CriminalRecords;
 using Content.Shared.Security;
 using Content.Shared.StationRecords;
-using Content.Shared._CMU14.Round.Antags.BountyHunter;
+using Content.Shared.CMU14.Round.Antags.BountyHunter;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Round.Antags.BountyHunter;
+namespace Content.Server.CMU14.Round.Antags.BountyHunter;
 
 /// <summary>
 /// Briefs the bounty hunter with every wanted record on the colony's books,

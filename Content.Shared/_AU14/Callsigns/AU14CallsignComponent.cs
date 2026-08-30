@@ -1,6 +1,6 @@
 using Robust.Shared.Timing;
 
-namespace Content.Shared._AU14.Callsigns;
+namespace Content.Shared.CMU14.Callsigns;
 
 // a faction member's assigned radio callsign ("ALPHA 6", "HAVOC ROMEO"), assigned
 // automatically at spawn from job and squad.

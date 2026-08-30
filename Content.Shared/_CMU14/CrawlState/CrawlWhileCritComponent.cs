@@ -3,7 +3,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.CrawlState;
+namespace Content.Shared.CMU14.CrawlState;
 
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedCrawlWhileCritSystem))]

@@ -1,8 +1,12 @@
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._RMC14.Armor;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Inventory;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
@@ -253,3 +257,5 @@ public sealed class CMArmorSystemTest
         }
     }
 }
+
+#pragma warning restore RA0002

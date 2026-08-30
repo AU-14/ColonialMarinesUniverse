@@ -1,13 +1,13 @@
-using Content.Shared._CMU14.Chemistry.Effects;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Bones.Events;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Injuries.Pain.Events;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
+using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones.Events;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Injuries.Pain.Events;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.FixedPoint;
@@ -20,7 +20,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain;
 
 public abstract partial class SharedPainShockSystem : EntitySystem
 {
@@ -29,7 +29,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected SharedPainSourceProfileSystem PainSources = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
 
     private const float PainScanInterval = 0.5f;
     private const float ShockStatusRefreshSeconds = 2.5f;
@@ -198,7 +198,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
 
     private void OnPainSuppressionRemoved(Entity<PainSuppressionComponent> ent, ref StatusEffectRemovedEvent args)
     {
-        if (Net.IsClient)
+        if (Net.IsClient || TerminatingOrDeleted(args.Target))
             return;
         if (!TryComp<PainShockComponent>(args.Target, out var pain))
             return;

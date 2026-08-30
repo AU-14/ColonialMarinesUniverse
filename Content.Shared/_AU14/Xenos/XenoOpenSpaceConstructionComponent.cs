@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
-namespace Content.Shared._AU14.Xenos;
+namespace Content.Shared.CMU14.Xenos;
 
 /// <summary>
 /// Marks a xeno structure as one that is built into a HOLE rather than onto a floor.

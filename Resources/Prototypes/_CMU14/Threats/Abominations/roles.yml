@@ -61,3 +61,24 @@
   speechVerbStrings:
   - chat-speech-verb-robotic-1
   - chat-speech-verb-robotic-2
+
+# General abomination radio channel, the hive-equivalent for the threat.
+# Spider / Grunt / Skitter / Mimic all share this band.
+- type: radioChannel
+  id: Abomination
+  name: chat-radio-abomination
+  keycode: "g"
+  frequency: 42.8
+  color: "#6b8f3a"
+  longRange: true
+
+# Mimic-only radio channel, modelled on Hivemind.
+# Private side-channel mimics also have so disguised mimics can coordinate
+# without breaking cover on local chat.
+- type: radioChannel
+  id: AbominationMimic
+  name: chat-radio-abomination-mimic
+  keycode: "e"
+  frequency: 42.7
+  color: "#a63636"
+  longRange: true

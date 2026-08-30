@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Weapons.Ranged;
+namespace Content.Shared.CMU14.Weapons.Ranged;
 
 /// <summary>
 /// Marks a spent casing ejected from a gun, so the server can strip its physics

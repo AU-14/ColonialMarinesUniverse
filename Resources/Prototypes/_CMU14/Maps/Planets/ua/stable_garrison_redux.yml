@@ -11,7 +11,7 @@
     announcement: "Stable Garrison, a joint UA base and its surrounding settlement, has gone dark. A response force has been dispatched to re-establish contact."
     platoonsGovfor:
     - LACN
-    - WYPMC
+    - WEYU
     - USCM
     - CMBCIU
     - RMC
@@ -80,15 +80,15 @@
   id: StableGarrisonRedux
   mapName: Stable Garrison
   allegiance: UA
-  mapPath: /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ0.yml
+  mapPath: /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ0.yml
   mapsBelow:
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ-1.yml
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ-2.yml
+  - /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ-1.yml
+  - /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ-2.yml
   mapsAbove:
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ1.yml
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ2.yml
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ3.yml
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ4.yml
+  - /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ1.yml
+  - /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ2.yml
+  - /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ3.yml
+  - /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ4.yml
   minPlayers: 0
   maxPlayers: 250
   maxRandomOffset: 0

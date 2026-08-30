@@ -1,6 +1,6 @@
 - type: entity
   save: false
-  parent: CMMobHuman
+  parent: [ AppearanceYautja, CMMobHuman ]
   id: CMUMobYautja
   name: Yautja Hunter
   suffix: Yautja, Event
@@ -26,13 +26,8 @@
     - CMUYautjaHunterGearSilver
     - CMUYautjaHunterGearCrimson
     - CMUYautjaHunterGearBone
-  - type: HumanoidAppearance
-    species: Yautja
-    hideLayersOnEquip:
-    - UndergarmentTop
-    - Hair
   - type: Icon
-    sprite: _CMU14/Yautja/body.rsi
+    sprite: CMU14/Yautja/body.rsi
     state: full
   - type: FixedIdentity
     name: species-name-yautja
@@ -51,14 +46,6 @@
     - CMUYautjaDistract
     - CMUYautjaDeathCry
     - CMUYautjaDeathLaugh
-  - type: Vocal
-    sounds:
-      Male: CMUMaleYautja
-      Female: CMUFemaleYautja
-      Unsexed: CMUMaleYautja
-  - type: Body
-    prototype: CMUYautjaBody
-    requiredLegs: 2
   - type: MeleeWeapon
     soundHit:
       collection: Punch
@@ -70,12 +57,15 @@
         Blunt: 12
         Structural: 3
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: CMUYautja
+  - type: Injurable
+    damageContainer: Biological
     healthBarThreshold: 5
   - type: Bloodstream
-    bloodReagent: CMUYautjaBlood
-    bloodMaxVolume: 650
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: CMUYautjaBlood
+        Quantity: 650
     maxBleedAmount: 35
     bleedReductionAmount: 0
     bloodRefreshAmount: 0.2
@@ -177,10 +167,7 @@
     - CMUYautjaBadBloodLeaderGear16
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearanceYautja
   id: CMUMobYautjaDummy
   name: Yautja Dummy
   categories: [ HideSpawnMenu ]
-  components:
-  - type: HumanoidAppearance
-    species: Yautja

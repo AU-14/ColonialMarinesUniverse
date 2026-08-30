@@ -38,13 +38,14 @@
   - type: RMCMesonsNonviewable
     xenoVisible: true
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     layers:
-    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    - sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
       state: hive_weed0
     - state: pathogen_core
     drawdepth: FloorObjects
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -74,10 +75,10 @@
   - type: TacticalMapTracked
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: patho_core
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
 
 - type: entity
@@ -89,7 +90,7 @@
   components:
   - type: Sprite
     color: '#FFFFFFAA'
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     layers:
     - state: pathogen_core
     - sprite: _RMC14/Interface/xeno_hud.rsi
@@ -111,4 +112,4 @@
   - type: HiveConstructionLimited
     id: CMU14PathogenBlightCore
   - type: WarpPoint
-    location: blight core
+    location: cmu-warp-location-blight-core

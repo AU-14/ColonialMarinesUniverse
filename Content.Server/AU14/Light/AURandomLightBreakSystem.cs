@@ -4,7 +4,7 @@ using Content.Shared._RMC14.Rules;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server.AU14.Light;
+namespace Content.Server.CMU14.Light;
 
 public sealed partial class AURandomLightBreakSystem : EntitySystem
 {

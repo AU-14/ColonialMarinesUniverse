@@ -6,9 +6,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: evolve
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoOpenEvolutionsActionEvent
 
@@ -20,8 +22,10 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: xeno_deevolve
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoOpenDevolveActionEvent

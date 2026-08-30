@@ -6,7 +6,7 @@ using Content.Shared.Construction.Conditions;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): a construction condition that blocks placement of the overhaul's vertical-building

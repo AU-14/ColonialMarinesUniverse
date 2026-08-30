@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.Selection;
+namespace Content.Shared.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     Sent by the leader's client when they press the in-viewport "Choose faction" button after

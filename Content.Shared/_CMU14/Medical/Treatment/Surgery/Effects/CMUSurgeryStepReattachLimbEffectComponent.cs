@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Effects;
 
 /// <summary>
 ///     <see cref="StartingHpFraction"/> and <see cref="StartingFracture"/>

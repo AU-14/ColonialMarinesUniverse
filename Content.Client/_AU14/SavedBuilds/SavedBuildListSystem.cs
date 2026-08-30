@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Content.Shared._AU14.SavedBuilds;
+using Content.Shared.CMU14.SavedBuilds;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.Markdown;
@@ -15,7 +15,7 @@ using Robust.Shared.Utility;
 using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
-namespace Content.Client._AU14.SavedBuilds;
+namespace Content.Client.CMU14.SavedBuilds;
 
 /// <summary>
 /// LOCAL storage of saved builds. Builds are private files in this client's own user-data folder

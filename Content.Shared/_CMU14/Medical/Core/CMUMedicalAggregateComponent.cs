@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Medical.Core;
+namespace Content.Shared.CMU14.Medical.Core;
 
 /// <summary>
 ///     Server-owned revision and cached aggregate for a CMU medical body.

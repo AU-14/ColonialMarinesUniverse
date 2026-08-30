@@ -1,11 +1,11 @@
 using System;
 using Content.Server.Administration;
-using Content.Server._AU14.Insurgency.Database;
-using Content.Shared._AU14.Insurgency;
+using Content.Server.CMU14.Insurgency.Database;
+using Content.Shared.CMU14.Insurgency;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server._AU14.Insurgency.Commands;
+namespace Content.Server.CMU14.Insurgency.Commands;
 
 /// <summary>
 ///     Debug round-trip for the faction DB layer: saves a throwaway faction, reads it back, then

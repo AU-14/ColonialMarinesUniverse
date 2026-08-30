@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.GasMask;
+using Content.Shared.CMU14.GasMask;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -11,13 +11,13 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Systems;
 using Robust.Shared.Prototypes;
 using Content.Shared.Containers.ItemSlots;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
 public abstract partial class SharedMycotoxinSystem : EntitySystem
 {
@@ -80,7 +80,7 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         if (!TryComp<ItemSlotsComponent>(item, out var slots))
             return false;
 
-        if (!_itemSlots.TryGetSlot(item, "filter", out var slot, slots))
+        if (!_itemSlots.TryGetSlot((item, slots), "filter", out var slot))
             return false;
 
         if (slot.ContainerSlot?.ContainedEntity is not { } fEnt)

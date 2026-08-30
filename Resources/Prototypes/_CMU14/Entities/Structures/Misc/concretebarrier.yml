@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: CMBarricadeBase
   id: AU14JerseyBarricade
   name: concrete barricade
@@ -12,7 +12,7 @@
         path:
           "/Audio/Effects/gen_hit.ogg"
   - type: Sprite
-    sprite: _AU14/Structures/concretebarrier.rsi
+    sprite: CMU14/Structures/concretebarrier.rsi
     layers:
     - state: concrete
     - map: [ "acided" ]
@@ -32,8 +32,9 @@
           False:
             visible: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -50,7 +51,7 @@
     damageDivisor: 25
     trackAllDamage: true
     damageOverlay:
-      sprite: _AU14/Structures/concretebarrier.rsi
+      sprite: CMU14/Structures/concretebarrier.rsi
   - type: Barbed
     thornsDamage:
       types:

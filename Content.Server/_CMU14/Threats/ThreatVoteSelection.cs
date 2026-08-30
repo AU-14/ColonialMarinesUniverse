@@ -1,12 +1,12 @@
 using System.Linq;
-using Content.Shared._CMU14.Threats;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.util;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Threats;
+namespace Content.Server.CMU14.Threats;
 
 public readonly record struct ThreatVoteBodyCount(int Leaders, int Members)
 {

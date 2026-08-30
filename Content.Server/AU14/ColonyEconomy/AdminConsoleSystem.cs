@@ -1,17 +1,17 @@
 using System.Linq;
-using Content.Server.AU14.Ambassador;
-using Content.Server.AU14.Round;
-using Content.Server._CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.Ambassador;
+using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
-using Content.Shared.AU14.Ambassador;
-using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Ambassador;
+using Content.Shared.CMU14.ColonyEconomy;
+using Content.Shared.CMU14.Threats;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
-using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
+using ThirdPartySystem = Content.Server.CMU14.Ops.ThirdParty.ThirdPartySystem;
 
-namespace Content.Server.AU14.ColonyEconomy;
+namespace Content.Server.CMU14.ColonyEconomy;
 
 public sealed partial class AdminConsoleSystem : EntitySystem
 {

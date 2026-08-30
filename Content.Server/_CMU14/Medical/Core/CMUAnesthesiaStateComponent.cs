@@ -1,4 +1,4 @@
-namespace Content.Server._CMU14.Medical.Core;
+namespace Content.Server.CMU14.Medical.Core;
 
 [RegisterComponent]
 public sealed partial class CMUAnesthesiaStateComponent : Component

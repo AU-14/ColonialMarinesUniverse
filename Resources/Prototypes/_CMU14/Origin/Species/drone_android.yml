@@ -3,120 +3,73 @@
   name: cmu-species-name-drone-android
   roundStart: false
   prototype: CMUDroneAndroid
-  sprites: CMUMobDroneAndroidSprites
-  markingLimits: MobHumanMarkingLimits
-  dollPrototype: CMUDroneAndroidDummy
+  dollPrototype: AppearanceDroneAndroid
   skinColoration: Hues
+  defaultSoundsBySex:
+  - AU14WorkingJoeSounds
+  - AU14WorkingJoeSounds
+  - AU14WorkingJoeSounds
+  voices:
+  - AU14WorkingJoeSounds
 
-- type: speciesBaseSprites
-  id: CMUMobDroneAndroidSprites
-  sprites:
-    Head: CMUMobDroneAndroidHead
-    Chest: CMUMobDroneAndroidTorso
-    Eyes: MobHumanoidEyes
-    LArm: CMUMobDroneAndroidLArm
-    RArm: CMUMobDroneAndroidRArm
-    LHand: CMUMobDroneAndroidLHand
-    RHand: CMUMobDroneAndroidRHand
-    LLeg: CMUMobDroneAndroidLLeg
-    RLeg: CMUMobDroneAndroidRLeg
-    LFoot: CMUMobDroneAndroidLFoot
-    RFoot: CMUMobDroneAndroidRFoot
+- type: markingsGroup
+  parent: Human
+  id: DroneAndroid
 
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidHead
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: head_m
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceDroneAndroid
+  categories: [ HideSpawnMenu ]
+  name: drone android appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: CMUPartDroneAndroidTorso
+      Head: CMUPartDroneAndroidHead
+      ArmLeft: CMUPartRoboticLeftArm
+      ArmRight: CMUPartRoboticRightArm
+      HandLeft: CMUPartRoboticLeftHand
+      HandRight: CMUPartRoboticRightHand
+      LegLeft: CMUPartRoboticLeftLeg
+      LegRight: CMUPartRoboticRightLeg
+      FootLeft: CMUPartRoboticLeftFoot
+      FootRight: CMUPartRoboticRightFoot
+      Brain: CMUOrganHumanBrain
+      Eyes: CMUOrganHumanEyes
+      Lungs: CMUOrganHumanLungs
+      Heart: CMUOrganHumanHeart
+      Stomach: CMUOrganHumanStomach
+      Liver: CMUOrganHumanLiver
+      Kidneys: CMUOrganHumanKidneys
+  - type: HumanoidProfile
+    species: DroneAndroid
+    voice: AU14WorkingJoeSounds
 
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidHeadMale
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: head_m
+- type: entity
+  id: CMUPartDroneAndroidVisual
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/DroneAndroid/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: CMU14/Mobs/DroneAndroid/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: DroneAndroid
 
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidHeadFemale
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: head_f
+- type: entity
+  parent: [ CMUPartDroneAndroidVisual, CMUPartHumanTorso ]
+  id: CMUPartDroneAndroidTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
 
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidTorso
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: torso_m
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidTorsoMale
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: torso_m
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidTorsoFemale
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: torso_f
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidLLeg
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: l_leg
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidLHand
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: l_hand
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidLArm
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: l_arm
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidLFoot
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: l_foot
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidRLeg
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: r_leg
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidRHand
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: r_hand
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidRArm
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: r_arm
-
-- type: humanoidBaseSprite
-  id: CMUMobDroneAndroidRFoot
-  matchSkin: false
-  baseSprite:
-    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
-    state: r_foot
+- type: entity
+  parent: [ CMUPartDroneAndroidVisual, CMUPartHumanHead ]
+  id: CMUPartDroneAndroidHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.HeadTop

@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Client._AU14.Construction.CustomConstruction;
-using Content.Client._AU14.UI;
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Client.CMU14.Construction.CustomConstruction;
+using Content.Client.CMU14.UI;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._AU14.ZLevelBuilding;
+namespace Content.Client.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// The "Z-Sync Lists" tool: controls which wall prototypes get mirrored across z-levels as map borders.

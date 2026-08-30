@@ -2,7 +2,7 @@ using System.Linq;
 using System.Text;
 using Robust.Shared.Maths;
 
-namespace Content.Shared._CMU14.CharacterDescription;
+namespace Content.Shared.CMU14.CharacterDescription;
 
 public static class NamedColorHelper
 {

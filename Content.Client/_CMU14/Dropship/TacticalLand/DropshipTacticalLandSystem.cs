@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Client.Movement.Systems;
-using Content.Shared._CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Components;
 using Robust.Client.GameObjects;
@@ -8,7 +8,7 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Dropship.TacticalLand;
+namespace Content.Client.CMU14.Dropship.TacticalLand;
 
 public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalLandSystem
 {

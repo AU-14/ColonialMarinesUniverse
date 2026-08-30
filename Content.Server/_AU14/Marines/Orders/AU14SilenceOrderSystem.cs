@@ -1,6 +1,6 @@
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
-using Content.Shared._AU14.Marines.Orders;
+using Content.Shared.CMU14.Marines.Orders;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.Chat;
@@ -9,7 +9,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Marines.Orders;
+namespace Content.Server.CMU14.Marines.Orders;
 
 public sealed partial class AU14SilenceOrderSystem : EntitySystem
 {

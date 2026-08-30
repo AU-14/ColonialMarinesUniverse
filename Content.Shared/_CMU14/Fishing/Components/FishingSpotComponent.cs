@@ -5,7 +5,7 @@
 
 using Content.Shared.EntityTable.EntitySelectors;
 
-namespace Content.Shared._CMU14.Fishing.Components;
+namespace Content.Shared.CMU14.Fishing.Components;
 
 [RegisterComponent]
 public sealed partial class FishingSpotComponent : Component

@@ -1,15 +1,15 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Ears;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Ears;
 
 public abstract partial class SharedEarsSystem : EntitySystem
 {
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId Tinnitus = "StatusEffectCMUTinnitus";
     private static readonly EntProtoId Deafened = "StatusEffectCMUDeafened";

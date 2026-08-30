@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Content.Shared.Body.Part;
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
 
 public sealed partial class SharedCMUSurgicalTraitSystem : EntitySystem
 {

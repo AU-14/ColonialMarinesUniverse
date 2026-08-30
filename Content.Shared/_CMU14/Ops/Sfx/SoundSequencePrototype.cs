@@ -2,7 +2,7 @@ using Content.Shared.Chat;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Ops.Sfx;
+namespace Content.Shared.CMU14.Ops.Sfx;
 
 [Prototype]
 public sealed partial class ScriptedSoundSequencePrototype : IPrototype

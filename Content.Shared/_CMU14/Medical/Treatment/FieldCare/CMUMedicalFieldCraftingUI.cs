@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Treatment.FieldCare;
+namespace Content.Shared.CMU14.Medical.Treatment.FieldCare;
 
 [Serializable, NetSerializable]
 public enum CMUMedicalFieldCraftingUI : byte

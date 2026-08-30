@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.util;
+namespace Content.Shared.CMU14.util;
 [Prototype]
 public sealed partial class LorePrimerPrototype : IPrototype
 {

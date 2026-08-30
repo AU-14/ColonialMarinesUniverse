@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.Allegiance;
+namespace Content.Shared.CMU14.Allegiance;
 
 /// <summary>
 /// Represents an allegiance a player can select for their character.

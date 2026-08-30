@@ -3,11 +3,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
 using Content.Server.Chat.Managers;
-using Content.Shared._AU14.ZLevelBuilding;
-using Content.Shared._AU14.SavedBuilds;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.SavedBuilds;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
@@ -23,7 +25,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.ZLevelBuilding;
+namespace Content.Server.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level), Phase 1: the structural support graph.

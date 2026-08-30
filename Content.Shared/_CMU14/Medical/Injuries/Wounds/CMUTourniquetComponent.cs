@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
+namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
 ///     While present, the wound layer skips the part's internal-bleed tick

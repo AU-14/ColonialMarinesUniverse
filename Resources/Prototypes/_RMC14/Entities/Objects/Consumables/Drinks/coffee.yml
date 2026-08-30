@@ -4,14 +4,13 @@
   name: coffee
   description: Careful, the beverage you're about to enjoy is extremely hot.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 50
         reagents:
         - ReagentId: RMCCoffee
           Quantity: 30
-  - type: Drink
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/coffee.rsi
     state: base
@@ -57,9 +56,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/tea.rsi
     state: base
     layers: []
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 50
         reagents:
         - ReagentId: RMCTea
@@ -76,9 +74,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/tea.rsi
     state: tea_spp
     layers: []
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: RMCTea
@@ -90,9 +87,8 @@
   name: insulated container
   suffix: Water
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Water
@@ -108,9 +104,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/hot_cocoa.rsi
     state: base
     layers: []
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 50
         reagents:
         - ReagentId: RMCHotCocoa

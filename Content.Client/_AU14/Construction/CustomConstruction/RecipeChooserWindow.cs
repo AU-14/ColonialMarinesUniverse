@@ -3,14 +3,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System;
 using System.Numerics;
-using Content.Client._AU14.UI;
-using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Client.CMU14.UI;
+using Content.Shared.CMU14.Construction.CustomConstruction;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
 
-namespace Content.Client._AU14.Construction.CustomConstruction;
+namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Shown when an admin opens the Construction Items Editor for an entity that ALREADY has recipe entries:

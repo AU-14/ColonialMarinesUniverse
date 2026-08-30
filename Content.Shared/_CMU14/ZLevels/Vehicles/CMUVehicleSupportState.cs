@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.ZLevels.Vehicles;
+namespace Content.Shared.CMU14.ZLevels.Vehicles;
 
 public readonly record struct CMUVehicleSupportState(
     int SupportedSamples,

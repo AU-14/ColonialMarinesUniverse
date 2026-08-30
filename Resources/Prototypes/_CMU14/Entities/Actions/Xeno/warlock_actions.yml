@@ -1,18 +1,21 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicCrush
-  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl. A loc entry
+  # Name and description are in Resources/Locale/en-US/CMU14/xeno/warlock.ftl. A loc entry
   # overrides the prototype's name/description, so keeping text here as well would be dead.
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
-      state: psy_crush
-    iconOn:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
-      state: psy_crush_activate
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/Xeno/warlock.rsi
+      state: psy_crush
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Actions/Xeno/warlock.rsi
+      state: psy_crush_activate
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   # SharedActionsSystem gate is intentionally looser than the ability's true range so a click
   # anywhere on a tile the range overlay highlights (6-tile closest-point-of-tile check) reaches
   # the handler. The handler snaps to the tile centre and enforces the real 6-tile initiation
@@ -33,14 +36,16 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicBlast
-  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl.
+  # Name and description are in Resources/Locale/en-US/CMU14/xeno/warlock.ftl.
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
-      state: psy_blast
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/Xeno/warlock.rsi
+      state: psy_blast
+      map: ["enum.ActionVisuals.Icon"]
   # See CMUActionXenoPsychicCrush above for why the gate range exceeds the true 6-tile range.
   - type: TargetAction
     range: 8
@@ -53,17 +58,20 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicShield
-  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl.
+  # Name and description are in Resources/Locale/en-US/CMU14/xeno/warlock.ftl.
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
-      state: psy_shield
-    iconOn:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
-      state: psy_shield_reflect
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/Xeno/warlock.rsi
+      state: psy_shield
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Actions/Xeno/warlock.rsi
+      state: psy_shield_reflect
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: TargetAction
     range: 7
     checkCanAccess: false

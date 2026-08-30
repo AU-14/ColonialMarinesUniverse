@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.EUI;
-using Content.Server._AU14.Insurgency.Database;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._AU14.Insurgency.Editor;
+using Content.Server.CMU14.Insurgency.Database;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Insurgency.Editor;
 using Content.Shared.Eui;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency.Editor;
+namespace Content.Server.CMU14.Insurgency.Editor;
 
 /// <summary>
 ///     Server side of the Default-faction editor. Loads stored factions from the DB, pushes them to

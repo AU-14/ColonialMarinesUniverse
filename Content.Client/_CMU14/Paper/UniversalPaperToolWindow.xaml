@@ -1,5 +1,5 @@
 <cmu:UniversalPaperToolWindow xmlns="https://spacestation14.io"
-    xmlns:cmu="clr-namespace:Content.Client._CMU14.Paper"
+    xmlns:cmu="clr-namespace:Content.Client.CMU14.Paper"
     SetSize="420 520"
     MinSize="360 360">
 

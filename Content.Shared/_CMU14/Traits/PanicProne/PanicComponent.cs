@@ -4,7 +4,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Traits.PanicProne;
+namespace Content.Shared.CMU14.Traits.PanicProne;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class PanicComponent : Component

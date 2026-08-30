@@ -119,8 +119,8 @@ public sealed partial class SharedGhillieSuitSystem : EntitySystem
         if (!_inventory.InSlotWithFlags((ent, null, null), SlotFlags.OUTERCLOTHING))
             return;
 
-        var comp = EnsureComp<EntityTurnInvisibleComponent>(args.Equipee);
-        Dirty(args.Equipee, comp);
+        var comp = EnsureComp<EntityTurnInvisibleComponent>(args.EquipTarget);
+        Dirty(args.EquipTarget, comp);
     }
 
     private void OnUnequipped(Entity<GhillieSuitComponent> ent, ref GotUnequippedEvent args)
@@ -131,8 +131,8 @@ public sealed partial class SharedGhillieSuitSystem : EntitySystem
         if (_inventory.InSlotWithFlags((ent, null, null), SlotFlags.OUTERCLOTHING))
             return;
 
-        RemCompDeferred<EntityTurnInvisibleComponent>(args.Equipee);
-        ToggleInvisibility(ent, args.Equipee, false);
+        RemCompDeferred<EntityTurnInvisibleComponent>(args.EquipTarget);
+        ToggleInvisibility(ent, args.EquipTarget, false);
     }
 
     public void ToggleInvisibility(Entity<GhillieSuitComponent> ent, EntityUid user, bool enabling)

@@ -1,8 +1,8 @@
 using Content.Server._RMC14.Damage;
 using Content.Server.Body.Systems;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Core;
 
-namespace Content.Server._CMU14.Medical.Core;
+namespace Content.Server.CMU14.Medical.Core;
 
 /// <summary>
 ///     Owns the server update phase for sparse medical deadline dispatch.

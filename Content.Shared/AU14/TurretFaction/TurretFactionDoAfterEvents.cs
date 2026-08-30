@@ -1,7 +1,7 @@
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.TurretFaction;
+namespace Content.Shared.CMU14.TurretFaction;
 
 [Serializable, NetSerializable]
 public sealed partial class TurretAssignFactionDoAfterEvent : SimpleDoAfterEvent;

@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Doors.Components;
 using Content.Shared.Weapons.Melee;

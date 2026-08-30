@@ -4,13 +4,13 @@ using System.Linq;
 using Content.Server.Construction;
 using Content.Server.Construction.Completions;
 using Content.Server.Stack;
-using Content.Shared._AU14.Construction;
+using Content.Shared.CMU14.Construction;
 using Content.Shared.Construction;
 using Content.Shared.Prototypes;
 using Content.Shared.Stacks;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Construction;
+namespace Content.Server.CMU14.Construction;
 
 /// <summary>
 /// Enforces "deconstruction output = materials actually invested" for skill-discounted builds. When a

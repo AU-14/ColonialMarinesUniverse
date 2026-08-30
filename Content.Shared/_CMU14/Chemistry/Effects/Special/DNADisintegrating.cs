@@ -4,7 +4,7 @@
 using Content.Shared._RMC14.Chemistry.Effects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Chemistry.Effects.Special;
+namespace Content.Shared.CMU14.Chemistry.Effects.Special;
 
 public sealed partial class DNADisintegrating : RMCChemicalEffect
 {

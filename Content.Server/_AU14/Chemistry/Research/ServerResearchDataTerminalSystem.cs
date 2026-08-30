@@ -1,19 +1,19 @@
-using Content.Server._AU14.Chemistry.Reagents;
-using Content.Server.AU14.ColonyEconomy;
+using Content.Server.CMU14.Chemistry.Reagents;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._AU14.Chemistry.Research;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CCVar;
+using Content.Shared.Chat;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.GameTicking;
 using Content.Shared.Paper;
 using Discord.Rest;
-using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Content.Server._AU14.Chemistry.Research;
+namespace Content.Server.CMU14.Chemistry.Research;
 
 public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDataTerminalSystem
 {

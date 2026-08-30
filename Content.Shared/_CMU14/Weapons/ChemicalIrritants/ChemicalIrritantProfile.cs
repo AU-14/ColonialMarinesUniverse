@@ -1,7 +1,7 @@
 using Content.Shared.Damage;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.ChemicalIrritants;
+namespace Content.Shared.CMU14.ChemicalIrritants;
 
 /// <summary>
 /// Shared effect parameters for chemical irritants.

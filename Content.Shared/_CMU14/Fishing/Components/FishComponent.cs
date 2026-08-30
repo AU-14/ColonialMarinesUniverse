@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-namespace Content.Shared._CMU14.Fishing.Components;
+namespace Content.Shared.CMU14.Fishing.Components;
 
 /// <summary>
 /// The fish itself!

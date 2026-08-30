@@ -1,6 +1,6 @@
 using Content.Shared.Body.Part;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 [RegisterComponent]
 public sealed partial class CMUSurgeryWindowOpenComponent : Component

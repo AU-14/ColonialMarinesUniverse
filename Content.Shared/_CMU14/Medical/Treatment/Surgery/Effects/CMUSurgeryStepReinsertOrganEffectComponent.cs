@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Effects;
 
 /// <summary>
 ///     On step success the system pulls the organ from the surgeon's active

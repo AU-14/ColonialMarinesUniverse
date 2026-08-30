@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
-namespace Content.Shared.AU14.util;
+namespace Content.Shared.CMU14.util;
 
 [Prototype]
 public sealed partial class PlatoonVendorSetPrototype : IPrototype, IInheritingPrototype

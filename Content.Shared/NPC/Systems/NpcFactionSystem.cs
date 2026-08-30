@@ -12,7 +12,6 @@ namespace Content.Shared.NPC.Systems;
 public sealed partial class NpcFactionSystem : EntitySystem
 {
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
 
     /// <summary>
@@ -104,7 +103,7 @@ public sealed partial class NpcFactionSystem : EntitySystem
     /// </summary>
     public void AddFaction(Entity<NpcFactionMemberComponent?> ent, [ForbidLiteral] string faction, bool dirty = true)
     {
-        if (!_proto.HasIndex<NpcFactionPrototype>(faction))
+        if (!ProtoMan.HasIndex<NpcFactionPrototype>(faction))
         {
             Log.Error($"Unable to find faction {faction}");
             return;
@@ -127,7 +126,7 @@ public sealed partial class NpcFactionSystem : EntitySystem
 
         foreach (var faction in factions)
         {
-            if (!_proto.HasIndex(faction))
+            if (!ProtoMan.HasIndex(faction))
             {
                 Log.Error($"Unable to find faction {faction}");
                 continue;
@@ -145,7 +144,7 @@ public sealed partial class NpcFactionSystem : EntitySystem
     /// </summary>
     public void RemoveFaction(Entity<NpcFactionMemberComponent?> ent, [ForbidLiteral] string faction, bool dirty = true)
     {
-        if (!_proto.HasIndex<NpcFactionPrototype>(faction))
+        if (!ProtoMan.HasIndex<NpcFactionPrototype>(faction))
         {
             Log.Error($"Unable to find faction {faction}");
             return;
@@ -308,7 +307,7 @@ public sealed partial class NpcFactionSystem : EntitySystem
     private void RefreshFactions() // CMU14 Method: faction hostile uses inheritance (e.g. RMCXeno -> CMU14PathogenWalker)
     {
         var children = new Dictionary<string, List<string>>();
-        foreach (var faction in _proto.EnumeratePrototypes<NpcFactionPrototype>())
+        foreach (var faction in ProtoMan.EnumeratePrototypes<NpcFactionPrototype>())
         {
             if (faction.Parents == null)
                 continue;
@@ -328,23 +327,27 @@ public sealed partial class NpcFactionSystem : EntitySystem
             if (descendants.TryGetValue(id, out var found))
                 return found;
 
-            // Reserve before recursing so malformed parent cycles terminate instead of hanging.
-            found = new HashSet<ProtoId<NpcFactionPrototype>> { id };
-            descendants[id] = found;
-
-            if (children.TryGetValue(id, out var kids))
+            // Cache only complete per-root traversals so malformed cycles cannot expose partial closures.
+            found = new HashSet<ProtoId<NpcFactionPrototype>>();
+            var remaining = new Stack<string>();
+            remaining.Push(id);
+            while (remaining.TryPop(out var current))
             {
+                if (!found.Add(current) || !children.TryGetValue(current, out var kids))
+                    continue;
+
                 foreach (var kid in kids)
-                    found.UnionWith(DescendantsOf(kid));
+                    remaining.Push(kid);
             }
 
+            descendants[id] = found;
             return found;
         }
 
-        foreach (var faction in _proto.EnumeratePrototypes<NpcFactionPrototype>())
+        foreach (var faction in ProtoMan.EnumeratePrototypes<NpcFactionPrototype>())
             DescendantsOf(faction.ID);
 
-        _factions = _proto.EnumeratePrototypes<NpcFactionPrototype>().ToFrozenDictionary(
+        _factions = ProtoMan.EnumeratePrototypes<NpcFactionPrototype>().ToFrozenDictionary(
             faction => faction.ID,
             faction =>
             {

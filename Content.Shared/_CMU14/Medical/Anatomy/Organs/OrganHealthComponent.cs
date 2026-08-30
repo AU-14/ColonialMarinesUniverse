@@ -4,7 +4,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(SharedOrganHealthSystem))]

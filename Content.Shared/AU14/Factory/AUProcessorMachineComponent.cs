@@ -2,7 +2,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Content.Shared.Tag;
 
-namespace Content.Shared.AU14.Factory;
+namespace Content.Shared.CMU14.Factory;
 
 [RegisterComponent]
 public sealed partial class AUProcessorMachineComponent : Component

@@ -1,7 +1,7 @@
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Humanoid;
+namespace Content.Shared.CMU14.Humanoid;
 
 [Serializable, NetSerializable]
 public sealed partial class CMUTieHairDoAfterEvent : DoAfterEvent

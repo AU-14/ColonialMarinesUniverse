@@ -1,10 +1,10 @@
-using Content.Shared._AU14.Insurgency.Selection;
+using Content.Shared.CMU14.Insurgency.Selection;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Player;
 
-namespace Content.Client._AU14.Insurgency.Selection;
+namespace Content.Client.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     Shows a small "Choose faction" button in the top-left of the game view for the CLF cell leader

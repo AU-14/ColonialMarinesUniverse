@@ -1,8 +1,7 @@
 - type: marking
   id: CMUZombieSummonerBloodyCross
   bodyPart: Head
-  markingCategory: Head
-  speciesRestriction: [Human]
+  groupWhitelist: [Human]
   sprites:
-  - sprite: _CMU14/Mobs/ZombieSummoner/bloody_cross.rsi
+  - sprite: CMU14/Mobs/ZombieSummoner/bloody_cross.rsi
     state: bloody_cross

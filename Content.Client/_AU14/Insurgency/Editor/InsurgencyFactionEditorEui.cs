@@ -1,8 +1,8 @@
 using Content.Client.Eui;
-using Content.Shared._AU14.Insurgency.Editor;
+using Content.Shared.CMU14.Insurgency.Editor;
 using Content.Shared.Eui;
 
-namespace Content.Client._AU14.Insurgency.Editor;
+namespace Content.Client.CMU14.Insurgency.Editor;
 
 /// <summary>
 ///     Client side of the Default-faction editor. Shares its type name with the server EUI so the

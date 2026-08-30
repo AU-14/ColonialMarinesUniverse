@@ -10,7 +10,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
-using Content.Shared.Flash.Components;
+using Content.Shared.Flash;
 using Content.Shared.Inventory;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
@@ -22,6 +22,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Explosion;
 
@@ -39,11 +40,11 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private RMCDazedSystem _dazed = default!;
     [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
     [Dependency] private SharedDeafnessSystem _deafness = default!;
     [Dependency] private INetManager _net = default!;
 
     private static readonly ProtoId<DamageTypePrototype> StructuralDamage = "Structural";
-    private static readonly ProtoId<StatusEffectPrototype> FlashedKey = "Flashed";
     private static readonly ProtoId<StatusEffectPrototype> BlindKey = "Blinded";
 
     private readonly HashSet<Entity<RMCWallExplosionDeletableComponent>> _walls = new();
@@ -127,7 +128,10 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             var bombArmorMult = (100 - ev.ExplosionArmor) * 0.01;
             var severity = factor * 5;
 
-            _statusEffects.TryAddStatusEffect<FlashedComponent>(ent, FlashedKey, ent.Comp.BlindTime * bombArmorMult, true);
+            _newStatusEffects.TryUpdateStatusEffectDuration(
+                ent,
+                SharedFlashSystem.FlashedKey,
+                ent.Comp.BlindTime * bombArmorMult);
             _deafness.TryDeafen(ent, TimeSpan.FromSeconds(severity * 0.5), true);
 
             var knockBackDistance = (float) Math.Clamp(severity / 5 / dir.Length(), 0.5, Math.Max(severity / 10, 0.5));
@@ -155,7 +159,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         {
             var stunTime = TimeSpan.FromSeconds(factor / 2.5);
             _stun.TryStun(ent, stunTime, true);
-            _stun.TryKnockdown(ent, stunTime, true);
+            _stun.TryKnockdown((ent.Owner, null), stunTime, true);
 
             if (size < RMCSizes.Big)
             {
@@ -172,7 +176,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             factor /= 5;
             var stunTime = TimeSpan.FromSeconds(factor / 5);
             _stun.TryStun(ent, stunTime, true);
-            _stun.TryKnockdown(ent, stunTime, true);
+            _stun.TryKnockdown((ent.Owner, null), stunTime, true);
             if (size < RMCSizes.Big)
             {
                 _slow.TrySlowdown(ent, TimeSpan.FromSeconds(factor));

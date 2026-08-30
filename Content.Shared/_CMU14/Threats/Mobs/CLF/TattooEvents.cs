@@ -1,7 +1,7 @@
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Threats.Mobs.CLF;
+namespace Content.Shared.CMU14.Threats.Mobs.CLF;
 
 /// <summary>
 ///     Raised on the target entity when they confirm the CLF tattoo dialog.

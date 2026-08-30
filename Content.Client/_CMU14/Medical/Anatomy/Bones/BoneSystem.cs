@@ -1,6 +1,6 @@
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
 
-namespace Content.Client._CMU14.Medical.Anatomy.Bones;
+namespace Content.Client.CMU14.Medical.Anatomy.Bones;
 
 public sealed class BoneSystem : SharedBoneSystem
 {

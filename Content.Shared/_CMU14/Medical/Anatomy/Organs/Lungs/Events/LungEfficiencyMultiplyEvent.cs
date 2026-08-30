@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs.Events;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs.Events;
 
 /// <summary>
 ///     Raised by-ref on a respirator-bearing entity once per inhale cycle so the

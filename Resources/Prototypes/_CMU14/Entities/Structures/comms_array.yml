@@ -41,8 +41,9 @@
           True: { state: static1_broken }
           False: { state: static1 }
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Inorganic
   - type: MaxDamage
     max: 500
   - type: Destructible
@@ -313,8 +314,9 @@
   - type: WallMount
     arc: 360
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

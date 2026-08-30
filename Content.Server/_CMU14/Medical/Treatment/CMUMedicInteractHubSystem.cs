@@ -1,13 +1,13 @@
-using Content.Server._CMU14.Medical.Diagnostics;
-using Content.Server._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.CMU14.Medical.Diagnostics;
+using Content.Server.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared.Interaction;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server._CMU14.Medical.Treatment;
+namespace Content.Server.CMU14.Medical.Treatment;
 
 public sealed partial class CMUMedicInteractHubSystem : EntitySystem
 {

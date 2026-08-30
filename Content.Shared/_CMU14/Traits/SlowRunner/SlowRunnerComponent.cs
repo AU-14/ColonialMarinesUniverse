@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Traits.SlowRunner;
+namespace Content.Shared.CMU14.Traits.SlowRunner;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SlowRunnerComponent : Component

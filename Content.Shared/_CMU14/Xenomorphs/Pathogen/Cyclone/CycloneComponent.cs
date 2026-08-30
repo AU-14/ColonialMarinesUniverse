@@ -2,7 +2,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Cyclone;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Cyclone;
 
 /// <summary>
 /// Harbinger Cyclone ability.

@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Server.PowerCell;
+using Content.Server.Power.EntitySystems;
 using Content.Shared._RMC14.Maths;
 using Content.Shared._RMC14.PDT;
 using Content.Shared._RMC14.Storage;
@@ -27,6 +27,7 @@ public sealed partial class PDTSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private BatterySystem _battery = default!;
     [Dependency] private PowerCellSystem _cell = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -104,7 +105,7 @@ public sealed partial class PDTSystem : EntitySystem
         if (!TryGetSignal(ent, out var bracelet, out var locatorCoords, out var braceletCoords, args.User))
             return;
 
-        if (!_cell.TryUseCharge(ent, ent.Comp.PingCharge, user: args.User))
+        if (!_cell.TryUseCharge(ent.Owner, ent.Comp.PingCharge, user: args.User))
         {
             UpdateLocatorVisuals(ent);
             return;
@@ -296,17 +297,19 @@ public sealed partial class PDTSystem : EntitySystem
 
     private PDTLocatorScreenVisuals GetLocatorScreen(Entity<PDTLocatorComponent> locator)
     {
-        if (!_cell.TryGetBatteryFromSlot(locator, out _, out var battery) ||
-            battery.MaxCharge <= 0 ||
-            battery.CurrentCharge <= 0)
+        if (!_cell.TryGetBatteryFromSlot(locator.Owner, out var battery))
+            return PDTLocatorScreenVisuals.Off;
+
+        var charge = _battery.GetCharge(battery.Value.AsNullable());
+        if (battery.Value.Comp.MaxCharge <= 0 || charge <= 0)
         {
             return PDTLocatorScreenVisuals.Off;
         }
 
-        if (battery.CurrentCharge < locator.Comp.PingCharge)
+        if (charge < locator.Comp.PingCharge)
             return PDTLocatorScreenVisuals.Red;
 
-        if (battery.CurrentCharge < battery.MaxCharge * LowBatteryFraction)
+        if (charge < battery.Value.Comp.MaxCharge * LowBatteryFraction)
             return PDTLocatorScreenVisuals.Yellow;
 
         return PDTLocatorScreenVisuals.Normal;

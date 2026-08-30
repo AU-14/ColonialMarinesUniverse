@@ -4,12 +4,14 @@ using Content.Server.GameTicking.Rules;
 using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.Roles;
-using Content.Shared._CMU14.SynthRepairer;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
-using Content.Shared._CMU14.Threats.Mobs.SubvertedSynth;
+using Content.Shared.CMU14.SynthRepairer;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Threats.Mobs.SubvertedSynth;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mind;
@@ -20,12 +22,13 @@ using Content.Shared.NPC.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Threats.Mobs.SubvertedSynth;
+namespace Content.Server.CMU14.Threats.Mobs.SubvertedSynth;
 
 public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedSynthRuleComponent>
 {
     [Dependency] private IAdminLogManager _adminLogManager = default!;
     [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
@@ -115,38 +118,39 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
             || !TryComp(target, out DamageableComponent? damageable))
             return;
 
-        FixedPoint2 damageAfterZap = SubvertedSynthRuleSystem.GetProjectedDamageAfterHeal(damageable, heal);
+        var damage = _damageable.GetAllDamage((target, damageable));
+        FixedPoint2 damageAfterZap = SubvertedSynthRuleSystem.GetProjectedDamageAfterHeal(damage, heal);
 
         if (damageAfterZap < deadThreshold.Value)
             return;
 
         FixedPoint2 extraHeal = damageAfterZap - deadThreshold.Value + FixedPoint2.New(1);
-        SubvertedSynthRuleSystem.AddHealingToExistingDamage(damageable, heal, extraHeal);
+        SubvertedSynthRuleSystem.AddHealingToExistingDamage(damage, heal, extraHeal);
     }
 
-    private static FixedPoint2 GetProjectedDamageAfterHeal(DamageableComponent damageable, DamageSpecifier heal)
+    private static FixedPoint2 GetProjectedDamageAfterHeal(DamageSpecifier damage, DamageSpecifier heal)
     {
         FixedPoint2 total = FixedPoint2.Zero;
-        foreach ((string type, FixedPoint2 current) in damageable.Damage.DamageDict)
+        foreach (var (type, current) in damage.DamageDict)
         {
             FixedPoint2 next = current + heal.DamageDict.GetValueOrDefault(type);
             if (next > FixedPoint2.Zero)
                 total += next;
         }
 
-        foreach ((string type, FixedPoint2 change) in heal.DamageDict)
+        foreach (var (type, change) in heal.DamageDict)
         {
-            if (change > FixedPoint2.Zero && !damageable.Damage.DamageDict.ContainsKey(type))
+            if (change > FixedPoint2.Zero && !damage.DamageDict.ContainsKey(type))
                 total += change;
         }
 
         return total;
     }
 
-    private static void AddHealingToExistingDamage(DamageableComponent damageable, DamageSpecifier heal,
+    private static void AddHealingToExistingDamage(DamageSpecifier damage, DamageSpecifier heal,
         FixedPoint2 amount)
     {
-        foreach ((string type, FixedPoint2 current) in damageable.Damage.DamageDict)
+        foreach (var (type, current) in damage.DamageDict)
         {
             if (amount <= FixedPoint2.Zero)
                 return;

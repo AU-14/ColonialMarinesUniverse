@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.ZLevels.Core.Components;
+namespace Content.Shared.CMU14.ZLevels.Core.Components;
 
 /// <summary>
 /// Tracker that tracks all maps added to the zLevel network. Usually, entity in Nullspace,

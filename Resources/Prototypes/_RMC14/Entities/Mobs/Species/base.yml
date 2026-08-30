@@ -1,6 +1,6 @@
 ﻿- type: entity
   save: false
-  parent: BaseMobSpecies
+  parent: [BaseSpeciesMob, BaseSlicingRefinable]
   id: RMCBaseMobSpeciesOrganic
   abstract: true
   name: Urist C.M. McHands
@@ -10,6 +10,13 @@
     butcheringType: Knife
     waitForRot: true
     spawned:
+    - id: FoodMeatHuman
+      amount: 6
+  - type: ToolRefinable
+    qualityNeeded: Slicing
+    refineTime: 8
+    popupType: LargeCaution
+    refineResult:
     - id: FoodMeatHuman
       amount: 6
   - type: Fingerprint
@@ -37,13 +44,15 @@
         restitution: 0.0
         layer:
         - BulletImpassable
-  - type: SolutionContainerManager
+  - type: SolutionManager
   - type: InjectableSolution
-    solution: chemicals
+    solution: bloodstream
   - type: RMCStamina
   - type: Bloodstream
-    bloodReagent: Blood
-    bloodMaxVolume: 560
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 560
     maxBleedAmount: 50
     bleedReductionAmount: 0
     bloodRefreshAmount: 0.15
@@ -55,6 +64,11 @@
         Bloodloss: -1
     damageBleedModifiers: CMBloodlossHuman
   - type: Woundable
+  # Preserve the pre-Nubody fork slowdown inherited by every RMC humanoid.
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      60: 0.85
+      80: 0.75
   - type: StatusEffects
     allowed:
     - Stun
@@ -67,7 +81,6 @@
     - Drunk
     - SlurredSpeech
     - RatvarianLanguage
-    - PressureImmunity
     - Muted
     - Pacified
     - StaminaModifier
@@ -92,41 +105,28 @@
   - type: Marine
   - type: RMCSuitLight
   - type: HolocardState
-  - type: Hunger
+  - type: Satiation
     # baseDecayRate of 0.1/sec with all threshold modifiers at 1 means decay is a flat 6/min.
     # Okay(380) -> Peckish(110) is a gap of 270, i.e. exactly 45 minutes of not eating: warning popup + slowdown starts.
     # Peckish(110) -> Starving(50) is a gap of 60, i.e. exactly 10 more minutes: severe popup + screen desaturates.
-    baseDecayRate: 0.1
-    thresholds:
-      Overfed: 480
-      Okay: 380
-      Peckish: 110
-      Starving: 50
-      Dead: 0
-    hungerThresholdDecayModifiers:
-      Overfed: 1
-      Okay: 1
-      Peckish: 1
-      Starving: 1
-      Dead: 0
-    peckishSlowdownModifier: 0.9
-    starvingSlowdownModifier: 0.8 # 20% slowdown while desaturated
-  - type: Thirst
+    satiations:
+      Hunger:
+        prototype: RMCHumanHunger
+      Thirst:
+        prototype: RMCHumanThirst
+  - type: SatiationSpeedModifier
+    satiations:
+      Hunger:
+        thresholds:
+          Peckish: 0.9
+          Starving: 0.72 # Historical 0.9 peckish and 0.8 starving modifiers stacked.
+      Thirst:
+        thresholds:
+          Thirsty: 0.9
+          Parched: 0.72 # Historical 0.9 thirsty and 0.8 parched modifiers stacked.
     # baseDecayRate of 0.1/sec, decay multiplier is 1x at Okay and 0.8x at Thirsty.
     # Okay(278) -> Thirsty(98) is a gap of 180 at 1x (6/min), i.e. exactly 30 minutes: warning popup + slowdown starts.
     # Thirsty(98) -> Parched(50) is a gap of 48 at 0.8x (4.8/min), i.e. exactly 10 more minutes: severe popup + screen desaturates.
-    baseDecayRate: 0.1
-    thresholds:
-      OverHydrated: 378
-      Okay: 278
-      Thirsty: 98
-      Parched: 50
-      Dead: 0
-    thirstySlowdownModifier: 0.9
-    parchedSlowdownModifier: 0.8
-  - type: Body
-    prototype: CMUHumanBody
-    requiredLegs: 2
   - type: Internals
   - type: BodyZoneTargeting
   - type: CMUHumanMedical
@@ -134,14 +134,11 @@
   - type: PainShock
   - type: CMUPainFeedback
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Biological
     healthBarThreshold: 5
   - type: Vocal
-    sounds:
-      Male: MaleHuman
-      Female: FemaleHuman
-      Unsexed: MaleHuman
   - type: Flammable
     fireSpread: false
     canResistFire: true
@@ -215,9 +212,6 @@
     max: 719 # TODO RMC14 this should be per part and smaller
   - type: AtmosExposed
   - type: Temperature
-    heatDamageThreshold: 325
-    coldDamageThreshold: 260
-    currentTemperature: 310.15
     specificHeat: 42
   - type: TemperatureSpeed
     thresholds:
@@ -317,7 +311,7 @@
             state: human_acid_enhanced
             visible: true
   - type: Spottable
-  - type: ActiveInputMover
+  - type: RMCActiveInputMover
   - type: DropItemsOnRest
   - type: UserBlockShootingInsideContainers
   - type: TacticalMapTracked
@@ -410,6 +404,10 @@
     whitelist:
       components:
       - Xeno
+  - type: HiddenAppearance
+    whitelist:
+      components:
+      - Xeno
   - type: RMCHealthIcons
   - type: RMCMesonsNonviewable
     xenoVisible: true
@@ -423,10 +421,11 @@
     removeDuration: 3.75
     sound:
       path: /Audio/_RMC14/Weapons/genhit1.ogg
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: Human
-    hideLayersOnEquip:
-    - UndergarmentTop
-    - Hair
   - type: LanguageLearning
     preset: AU14LanguageLearningPresetHuman
+  # Components retained from the pre-Nubody fork species contract.
+  - type: ExaminableCharacter
+  - type: MobGibbedByExplosionType
+  - type: RMCCanBeFultoned

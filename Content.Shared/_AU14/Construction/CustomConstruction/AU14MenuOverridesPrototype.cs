@@ -4,13 +4,13 @@
 using System.Collections.Generic;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Construction.CustomConstruction;
+namespace Content.Shared.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// AU14 construction-menu overrides, persisted as a generated prototype so the client can hide recipes the
 /// admin removed from the menu - including VANILLA recipes that the right-click recipe editor never sees
 /// (it only tracks recipes IT generated). The server writes a single instance of this into
-/// <c>Resources/Prototypes/_AU14/CustomConstruction/Generated/Overrides/</c>; on the next restart the client
+/// <c>Resources/Prototypes/CMU14/CustomConstruction/Generated/Overrides/</c>; on the next restart the client
 /// loads it and the construction-menu presenter skips any recipe whose construction id is listed here.
 /// </summary>
 [Prototype("au14MenuOverrides")]

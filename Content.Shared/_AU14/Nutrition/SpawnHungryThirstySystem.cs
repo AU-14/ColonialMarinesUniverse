@@ -1,12 +1,11 @@
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 
-namespace Content.Shared._AU14.Nutrition;
+namespace Content.Shared.CMU14.Nutrition;
 
 public sealed partial class SpawnHungryThirstySystem : EntitySystem
 {
-    [Dependency] private ThirstSystem _thirst = default!;
-    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
 
     public override void Initialize()
     {
@@ -17,10 +16,10 @@ public sealed partial class SpawnHungryThirstySystem : EntitySystem
 
     private void OnStartup(Entity<SpawnHungryThirstyComponent> ent, ref ComponentStartup args)
     {
-        if (TryComp(ent, out ThirstComponent? thirst))
-            _thirst.SetThirstToThreshold(ent, thirst, ent.Comp.StartingThirstThreshold);
+        if (!TryComp(ent, out SatiationComponent? satiation))
+            return;
 
-        if (TryComp(ent, out HungerComponent? hunger))
-            _hunger.SetHungerToThreshold(ent, hunger, ent.Comp.StartingHungerThreshold);
+        _satiation.SetValue((ent, satiation), SatiationSystem.Thirst, ent.Comp.StartingThirstThreshold);
+        _satiation.SetValue((ent, satiation), SatiationSystem.Hunger, ent.Comp.StartingHungerThreshold);
     }
 }

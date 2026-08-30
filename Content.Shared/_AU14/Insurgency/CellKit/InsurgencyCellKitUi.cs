@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.CellKit;
+namespace Content.Shared.CMU14.Insurgency.CellKit;
 
 [Serializable, NetSerializable]
 public enum InsurgencyCellKitUiKey : byte

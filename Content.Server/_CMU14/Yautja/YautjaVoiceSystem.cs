@@ -1,12 +1,12 @@
 using Content.Server.Administration.Logs;
 using Content.Server._RMC14.Emote;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Actions;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Database;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaVoiceSystem : EntitySystem
 {

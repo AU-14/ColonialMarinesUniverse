@@ -1,7 +1,7 @@
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Threats;
+namespace Content.Shared.CMU14.Threats;
 
 [Prototype]
 public sealed partial class ThreatPrototype : IPrototype

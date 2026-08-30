@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.AllianceConsole;
+namespace Content.Shared.CMU14.AllianceConsole;
 
 [Serializable, NetSerializable]
 public enum AllianceConsoleUiKey

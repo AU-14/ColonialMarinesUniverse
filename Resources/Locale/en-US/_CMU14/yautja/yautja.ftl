@@ -361,6 +361,7 @@ cmu-yautja-emote-msg-death-laugh = gives a final, chilling laugh.
 cmu-xeno-predalien-larva-name = Predalien Larva
 cmu-xeno-abomination-name = Abomination
 cmu-xeno-abomination-description = A forbidden hybrid born from a Yautja host. Grow stronger through kills and draw every hunter's wrath.
+name-identifier-format-abomination = Abomination-{$number}
 cmu-yautja-abomination-gestating = A dishonorable embryo twists inside you.
 cmu-yautja-abomination-awaken = You are an Abomination. The hive may tolerate you, but the hunters will come.
 cmu-yautja-abomination-announcement = An abomination has been detected. Exterminate it immediately.

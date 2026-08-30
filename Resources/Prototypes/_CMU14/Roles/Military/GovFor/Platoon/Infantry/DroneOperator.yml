@@ -27,7 +27,7 @@
     prefix: cmu-job-prefix-govfordroneoperator
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: rifleman
 
   requirements:

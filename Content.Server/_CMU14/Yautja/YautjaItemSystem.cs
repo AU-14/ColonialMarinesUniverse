@@ -1,5 +1,5 @@
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared.Database;
@@ -18,7 +18,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaItemSystem : EntitySystem
 {

@@ -1,6 +1,6 @@
 using Content.Shared.Actions;
 
-namespace Content.Shared._CMU14.Xenonids.ParalyzingSlash;
+namespace Content.Shared.CMU14.Xenonids.ParalyzingSlash;
 
 public sealed partial class CMUXenoParalyzingSlashActionEvent : InstantActionEvent
 {

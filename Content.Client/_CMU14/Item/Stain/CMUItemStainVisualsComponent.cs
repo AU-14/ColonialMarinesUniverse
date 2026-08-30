@@ -1,4 +1,4 @@
-namespace Content.Client._CMU14.Item.Stain;
+namespace Content.Client.CMU14.Item.Stain;
 
 /// <summary>
 /// Tracks client-only helper layers owned by the item stain visualizer.

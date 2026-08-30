@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Network;
 
-namespace Content.Shared._CMU14.Medical.Diagnostics.Examine;
+namespace Content.Shared.CMU14.Medical.Diagnostics.Examine;
 
 /// <summary>
 ///     Owns the replicated wound examine read model and exposes read-only

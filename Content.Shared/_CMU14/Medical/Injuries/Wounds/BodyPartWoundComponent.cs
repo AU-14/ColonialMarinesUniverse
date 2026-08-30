@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
+namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
 ///     Server-owned per-body-part wound ledger. Clients receive only the

@@ -2,10 +2,10 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Robust.Client.GameObjects;
 
-namespace Content.Client._AU14.ZLevelBuilding;
+namespace Content.Client.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Renders structures that fell through a collapsed z-level floor as battered rubble: the sprite is

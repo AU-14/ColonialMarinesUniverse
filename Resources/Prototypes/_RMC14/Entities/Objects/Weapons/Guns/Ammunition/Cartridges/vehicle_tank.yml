@@ -4,7 +4,7 @@
   name: cartridge (LTB cannon, HESH)
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: CMU14/Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_hesh
       map: ["enum.AmmoVisualLayers.Base"]
@@ -260,7 +260,7 @@
   - type: TriggerOnSpawn
   - type: SpawnOnTrigger
     proto: RMCSmokeFireSentry
-    mapCoords: true
+    useMapCoords: true
   - type: TileFireOnTrigger
     range: 1
     spawn: RMCTileFireHCNapalm
@@ -354,7 +354,7 @@
   - type: TriggerOnSpawn
   - type: SpawnOnTrigger
     proto: RMCSmokeFireSentry
-    mapCoords: true
+    useMapCoords: true
   - type: TileFireOnTrigger
     range: 0
     spawn: RMCTileFireHCNapalm

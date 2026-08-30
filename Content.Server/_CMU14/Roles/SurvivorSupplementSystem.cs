@@ -1,13 +1,13 @@
 using System.Linq;
-using Content.Server.AU14.Round;
-using Content.Shared._CMU14.Roles;
+using Content.Server.CMU14.Round;
+using Content.Shared.CMU14.Roles;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Inventory;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Roles;
+namespace Content.Server.CMU14.Roles;
 
 public sealed partial class SurvivorSupplementSystem : EntitySystem
 {

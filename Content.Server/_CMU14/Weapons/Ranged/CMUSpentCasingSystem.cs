@@ -1,12 +1,12 @@
-using Content.Shared._CMU14.Weapons.Ranged;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.Weapons.Ranged;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Weapons.Ranged;
+namespace Content.Server.CMU14.Weapons.Ranged;
 
 /// <summary>
 /// Periodic sweeper for ejected spent casings: strips their physics a few seconds

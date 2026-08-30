@@ -37,19 +37,19 @@
         maxScatterModifier: 3
         shotsToMaxScatter: 6
   - type: Sprite
-    sprite: _CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+    sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
     layers:
     - state: base
-      sprite: _CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+      sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
     - state: bolt-open
-      sprite: _CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+      sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
     - state: mag-0
-      sprite: _CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+      sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
       map: [ "enum.GunVisualLayers.Mag" ]
     - state: cover-closed
-      sprite: _CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+      sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
   - type: Clothing
-    sprite: _CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+    sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -102,7 +102,7 @@
     proto: CMCCartridgeGPMGTWE
     capacity: 250
   - type: Sprite
-    sprite: _CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+    sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
     layers:
     - state: mag-0
       map: ["enum.GunVisualLayers.Base"]

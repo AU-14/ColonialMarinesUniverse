@@ -4,7 +4,8 @@
   components:
   - type: Sprite
     sprite: _RMC14/Mobs/Effects/on_fire_xeno.rsi
-    state: simple_onfire
     drawdepth: Effects
-    shader: unshaded
-    color: "#FFA500"
+    layers:
+    - state: simple_onfire
+      shader: unshaded
+      color: "#FFA500"

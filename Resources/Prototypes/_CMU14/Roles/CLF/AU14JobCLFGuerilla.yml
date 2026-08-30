@@ -7,7 +7,6 @@
   roundComponents:
   - type: NpcFactionMember
     factions:
-    - AUColonist # cover identity
     - CLF
   - type: CLFMember
   - type: Skills
@@ -26,7 +25,7 @@
     mindRole: MindRoleCLFGuerrilla
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmucolonyblips.rsi
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
       state: colonist
   - type: ShowMarineIcons
     factions:

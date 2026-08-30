@@ -1,11 +1,11 @@
 using Content.Server.Antag;
 using Content.Server.EUI;
-using Content.Server._AU14.Insurgency.Selection;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._AU14.Insurgency.Selection;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
-using Content.Shared._CMU14.Round.Objectives.Type;
-using Content.Shared._AU14.Vendors;
+using Content.Server.CMU14.Insurgency.Selection;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Insurgency.Selection;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Round.Objectives.Type;
+using Content.Shared.CMU14.Vendors;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Access.Components;
 using Content.Shared.Containers.ItemSlots;
@@ -20,7 +20,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency;
+namespace Content.Server.CMU14.Insurgency;
 
 /// <summary>
 ///     Applies a chosen <see cref="FactionDefinition"/> for the round: injects vendor sections,

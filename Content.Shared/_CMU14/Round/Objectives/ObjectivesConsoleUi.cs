@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Round.Objectives;
+namespace Content.Shared.CMU14.Round.Objectives;
 
 [Serializable, NetSerializable]
 public enum ObjectiveStatusDisplay

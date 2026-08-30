@@ -2,7 +2,7 @@
 /// reason: Because I, (MACMAN2003), the initial coder of this specific file disagree with the AGPL's copyleft approach to
 /// free software and would prefer this code be shared freely without restrictions.
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno;
 
 [RegisterComponent]
 public sealed partial class HasKnowledgeOfXenoLanguageComponent : Component

@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Numerics;
 using Content.Client.Administration.Managers;
 using Content.Client.Construction;
-using Content.Client._CMU14.ZLevels.Core;
-using Content.Shared._AU14.SavedBuilds;
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Client.Popups;
+using Content.Client.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.SavedBuilds;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.Administration;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Popups;
@@ -22,7 +23,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._AU14.SavedBuilds;
+namespace Content.Client.CMU14.SavedBuilds;
 
 /// <summary>
 /// Drives saved-build placement. Hold Alt to snap to the grid; the vanilla rotate key rotates; left-click
@@ -30,19 +31,19 @@ namespace Content.Client._AU14.SavedBuilds;
 /// places vanilla construction ghosts for each entity, which they then build normally (consuming
 /// materials) — i.e. building the whole saved structure the vanilla way.
 /// </summary>
-public sealed partial class SavedBuildPlacementSystem : EntitySystem
+public sealed class SavedBuildPlacementSystem : EntitySystem
 {
-    [Dependency] private  IOverlayManager _overlays = default!;
-    [Dependency] private  IEyeManager _eye = default!;
-    [Dependency] private  IInputManager _input = default!;
-    [Dependency] private  SharedMapSystem _mapManager = default!;
-    [Dependency] private  IPrototypeManager _proto = default!;
-    [Dependency] private  IClientAdminManager _admin = default!;
-    [Dependency] private  IResourceCache _cache = default!;
-    [Dependency] private  SharedTransformSystem _transform = default!;
-    [Dependency] private  SharedPopupSystem _popup = default!;
-    [Dependency] private  IComponentFactory _componentFactory = default!;
-    [Dependency] private  CMUClientZLevelsSystem _zLevels = default!;
+    [Dependency] private readonly IOverlayManager _overlays = default!;
+    [Dependency] private readonly IEyeManager _eye = default!;
+    [Dependency] private readonly IInputManager _input = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IClientAdminManager _admin = default!;
+    [Dependency] private readonly IResourceCache _cache = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly IComponentFactory _componentFactory = default!;
+    [Dependency] private readonly CMUClientZLevelsSystem _zLevels = default!;
 
     public bool Active { get; private set; }
     public bool IsAdmin { get; private set; }

@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Xenomorphs.Larva;
+using Content.Shared.CMU14.Xenomorphs.Larva;
 using Robust.Client.GameObjects;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Xenomorphs.Larva;
+namespace Content.Client.CMU14.Xenomorphs.Larva;
 
 public sealed class BloodyLarvaVisualsSystem : EntitySystem
 {

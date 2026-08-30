@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Round.Antags.BountyHunter;
+namespace Content.Shared.CMU14.Round.Antags.BountyHunter;
 
 /// <summary>
 /// A bounty hunter antag. Shortly after spawn they are briefed with every wanted

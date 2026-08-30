@@ -2,9 +2,9 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using AbominationFleshNestComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationFleshNestComponent;
+using AbominationFleshNestComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationFleshNestComponent;
 
-namespace Content.Server._CMU14.Threats.Mobs.Abomination;
+namespace Content.Server.CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 ///     Global flesh-nest spawning. Every tick picks one random nest and spawns

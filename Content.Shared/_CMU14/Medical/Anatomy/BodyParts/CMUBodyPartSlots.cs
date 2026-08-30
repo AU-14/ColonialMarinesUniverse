@@ -1,7 +1,7 @@
 using System;
 using Content.Shared.Body.Part;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 
 public static class CMUBodyPartSlots
 {

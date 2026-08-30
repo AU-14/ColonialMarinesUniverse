@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Paper;
+using Content.Shared.CMU14.Paper;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Paper;
@@ -9,7 +9,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 
-namespace Content.Server._CMU14.Paper;
+namespace Content.Server.CMU14.Paper;
 
 public sealed partial class UniversalPaperToolSystem : EntitySystem
 {

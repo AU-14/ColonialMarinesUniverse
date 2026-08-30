@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 08:50:22
-  entityCount: 24647
+  entityCount: 24654
 maps:
 - 1
 grids:
@@ -175373,4 +175373,53 @@ entities:
       containers:
         rmc_xeno_tunnel_mob_container: !type:Container
           ents: []
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 24648
+    components:
+    - type: Transform
+      pos: -2.5,-8.5
+      parent: 1
+- proto: AU14SpawnPointCivilianShopkeep
+  entities:
+  - uid: 24649
+    components:
+    - type: Transform
+      pos: -2.5,-8.5
+      parent: 1
+- proto: AU14SpawnPointColonyWorkingJoe
+  entities:
+  - uid: 24650
+    components:
+    - type: Transform
+      pos: -2.5,-8.5
+      parent: 1
+- proto: AU14SpawnPointCivilianCorporateAssistant
+  entities:
+  - uid: 24651
+    components:
+    - type: Transform
+      pos: -2.5,-8.5
+      parent: 1
+- proto: AU14SpawnPointWYGuard
+  entities:
+  - uid: 24652
+    components:
+    - type: Transform
+      pos: -2.5,-8.5
+      parent: 1
+- proto: AU14SpawnPointOrbitalArbiter
+  entities:
+  - uid: 24653
+    components:
+    - type: Transform
+      pos: -2.5,-8.5
+      parent: 1
+- proto: AU14SpawnPointOrbitalLawyer
+  entities:
+  - uid: 24654
+    components:
+    - type: Transform
+      pos: -2.5,-8.5
+      parent: 1
 ...

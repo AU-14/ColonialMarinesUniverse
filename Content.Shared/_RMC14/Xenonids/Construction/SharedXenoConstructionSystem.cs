@@ -19,7 +19,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Designer;
 using Content.Shared._RMC14.Xenonids.Designer.Events;
-using Content.Shared._AU14.Xenos;
+using Content.Shared.CMU14.Xenos;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Events;
@@ -30,6 +30,8 @@ using Content.Shared.Climbing.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
@@ -1230,7 +1232,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return;
         }
 
-        if (xenoStructureDamage.TotalDamage <= 0)
+        if (_damageable.GetTotalDamage((xenoStructure, xenoStructureDamage)) <= 0)
         {
             var undamagedStructureMessage = Loc.GetString("rmc-xeno-construction-repair-structure-no-damage-failure", ("struct", xenoStructure.Owner));
             _popup.PopupClient(undamagedStructureMessage, xenoStructure.Owner.ToCoordinates(), user);
@@ -1271,7 +1273,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             !TryComp(xenoStructure, out TransformComponent? xenoStructureTransform) ||
             !TryComp(user, out XenoPlasmaComponent? plasma) ||
             !TryComp(xenoStructure, out DamageableComponent? xenoStructureDamage) ||
-            xenoStructureDamage.TotalDamage <= 0)
+            _damageable.GetTotalDamage((xenoStructure, xenoStructureDamage)) <= 0)
         {
             return;
         }
@@ -1303,7 +1305,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return;
         }
 
-        _damageable.SetAllDamage(xenoStructure.Owner, xenoStructureDamage, 0);
+        _damageable.SetAllDamage((xenoStructure.Owner, xenoStructureDamage), FixedPoint2.Zero);
         var ev = new XenoStructureRepairedEvent();
         RaiseLocalEvent(xenoStructure, ev);
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
 
 /// <summary>
 ///     CMU-prefixed to avoid clashing with vanilla SS14's <c>StomachComponent</c>.

@@ -3,7 +3,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._CMU14.Medical.Treatment.Surgery;
+namespace Content.Client.CMU14.Medical.Treatment.Surgery;
 
 internal static class CMUMedicalMachineStyle
 {

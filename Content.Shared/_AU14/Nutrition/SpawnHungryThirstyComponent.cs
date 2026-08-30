@@ -1,6 +1,6 @@
-using Content.Shared.Nutrition.Components;
+using Content.Shared.Nutrition.Prototypes;
 
-namespace Content.Shared._AU14.Nutrition;
+namespace Content.Shared.CMU14.Nutrition;
 
 /// <summary>
 /// Marker component. Attach to a job (directly via <c>roundComponents</c>/<c>roundSideComponents</c>/
@@ -10,16 +10,15 @@ namespace Content.Shared._AU14.Nutrition;
 /// needing breakfast after waking up.
 /// </summary>
 /// <remarks>
-/// The actual thirst/hunger values used are read from the entity's own <see cref="ThirstComponent"/>/
-/// <see cref="HungerComponent"/> thresholds at spawn time, so this always matches whatever pacing
-/// those components are currently tuned to - no numbers to keep in sync by hand.
+/// The actual thirst/hunger values are resolved from the entity's satiation prototypes at spawn time,
+/// so this always matches whatever pacing those prototypes are currently tuned to.
 /// </remarks>
 [RegisterComponent]
 public sealed partial class SpawnHungryThirstyComponent : Component
 {
     [DataField]
-    public ThirstThreshold StartingThirstThreshold = ThirstThreshold.Thirsty;
+    public SatiationValue StartingThirstThreshold = "Thirsty";
 
     [DataField]
-    public HungerThreshold StartingHungerThreshold = HungerThreshold.Peckish;
+    public SatiationValue StartingHungerThreshold = "Peckish";
 }

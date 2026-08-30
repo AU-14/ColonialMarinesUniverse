@@ -10,7 +10,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Yautja;
+namespace Content.Shared.CMU14.Yautja;
 
 public sealed partial class YautjaPowerSystem : EntitySystem
 {
@@ -63,10 +63,10 @@ public sealed partial class YautjaPowerSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        ent.Comp.User = args.Equipee;
+        ent.Comp.User = args.EquipTarget;
         ent.Comp.NextRegen = _timing.CurTime + ent.Comp.RegenEvery;
         UpdateAlert(ent);
-        _audio.PlayPredicted(ent.Comp.EquipSound, ent.Owner, args.Equipee);
+        _audio.PlayPredicted(ent.Comp.EquipSound, ent.Owner, args.EquipTarget);
     }
 
     private void OnUnequipped(Entity<YautjaBracerComponent> ent, ref GotUnequippedEvent args)
@@ -80,7 +80,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
         ClearAlert(ent);
         ent.Comp.User = null;
 
-        var ev = new YautjaBracerUnequippedEvent(args.Equipee, args.SlotFlags);
+        var ev = new YautjaBracerUnequippedEvent(args.EquipTarget, args.SlotFlags);
         RaiseLocalEvent(ent, ref ev);
     }
 

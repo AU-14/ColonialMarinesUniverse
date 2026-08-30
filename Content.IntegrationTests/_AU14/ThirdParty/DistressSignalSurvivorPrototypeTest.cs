@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server._CMU14.Threats;
-using Content.Shared._CMU14.Threats;
+using Content.Server.CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.ThirdParty;
+namespace Content.IntegrationTests.CMU14.ThirdParty;
 
 [TestFixture]
 public sealed class DistressSignalSurvivorPrototypeTest
@@ -51,6 +51,7 @@ public sealed class DistressSignalSurvivorPrototypeTest
         "ProdigySurvLarge",
         "ProdigySurvMedium",
         "ProdigySurvSmall",
+        "ProdigyLawyer",
         "WYHT",
         "WYPMCParty",
         "WYPMCPartyAlt",

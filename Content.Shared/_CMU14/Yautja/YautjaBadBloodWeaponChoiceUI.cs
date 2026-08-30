@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Yautja;
+namespace Content.Shared.CMU14.Yautja;
 
 [Serializable, NetSerializable]
 public enum YautjaBadBloodWeaponChoiceUI : byte

@@ -1,7 +1,7 @@
 using Content.Shared.Radio;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Callsigns;
+namespace Content.Shared.CMU14.Callsigns;
 
 [Serializable, NetSerializable]
 public enum AU14CallsignConsoleUI

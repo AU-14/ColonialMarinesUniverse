@@ -1,7 +1,7 @@
 using System.Numerics;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.ZLevels.Core;
+namespace Content.Client.CMU14.ZLevels.Core;
 
 internal static class CMUZLevelStairPreviewVisibility
 {

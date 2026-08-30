@@ -3,15 +3,15 @@ using Content.Server._RMC14.Language.Systems;
 using Content.Server._RMC14.Marines.Roles.Ranks;
 using Content.Server._RMC14.TacticalMap;
 using Content.Server.Chat.Managers;
-using Content.Shared._AU14.CCVar;
-using Content.Server._AU14.Callsigns;
-using Content.Shared._AU14.Callsigns;
+using Content.Shared.CMU14.CCVar;
+using Content.Server.CMU14.Callsigns;
+using Content.Shared.CMU14.Callsigns;
 using Content.Server.Chat.Systems;
-using Content.Server.PowerCell;
+using Content.Server.Power.EntitySystems;
 using Content.Server.Radio;
 using Content.Server.Radio.Components;
 using Content.Server.Radio.EntitySystems;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.Radio;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Language.Systems;
@@ -26,6 +26,7 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Paper;
 using Content.Shared.Item;
 using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
 using Content.Shared.Popups;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
@@ -39,7 +40,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 public sealed partial class ANPRCRadioSystem : EntitySystem
 {
@@ -62,6 +63,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private ANPRCSweepSystem _sweep = default!;
     [Dependency] private AU14CommsToggleSystem _comms = default!;
     [Dependency] private PaperSystem _paper = default!;
+    [Dependency] private BatterySystem _battery = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private TacticalMapSystem _tacticalMap = default!;
@@ -292,7 +294,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         ent.Comp.IsEquipped = true;
         Dirty(ent);
 
-        var wearer = EnsureComp<WearingANPRCComponent>(args.Equipee);
+        var wearer = EnsureComp<WearingANPRCComponent>(args.EquipTarget);
         wearer.Radio = ent.Owner;
         wearer.PendingANPRCTransmit = false;
 
@@ -309,12 +311,12 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             Dirty(ent.Owner, relay);
         }
 
-        if (!HasComp<ANPRCRadioUserComponent>(args.Equipee))
+        if (!HasComp<ANPRCRadioUserComponent>(args.EquipTarget))
         {
             _popup.PopupEntity(
                 Loc.GetString("anprc-not-rto-warning"),
-                args.Equipee,
-                args.Equipee,
+                args.EquipTarget,
+                args.EquipTarget,
                 PopupType.MediumCaution);
         }
     }
@@ -327,7 +329,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         ent.Comp.IsEquipped = false;
         Dirty(ent);
 
-        RemComp<WearingANPRCComponent>(args.Equipee);
+        RemComp<WearingANPRCComponent>(args.EquipTarget);
 
         SetBatteryDrawEnabled(ent.Owner, false);
         RevokeReceiveChannels(ent);
@@ -412,7 +414,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         slot = null;
 
         return TryComp(uid, out ItemSlotsComponent? slots) &&
-               _itemSlots.TryGetSlot(uid, slotId, out slot, slots);
+               _itemSlots.TryGetSlot((uid, slots), slotId, out slot);
     }
 
     private void UpdateRelayAnchor(Entity<ANPRCRadioComponent> ent)
@@ -574,11 +576,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
     private void SetBatteryDrawEnabled(EntityUid uid, bool enabled)
     {
-        if (!TryComp(uid, out PowerCellDrawComponent? draw) || draw.Enabled == enabled)
-            return;
-
-        draw.Enabled = enabled;
-        Dirty(uid, draw);
+        _powerCell.SetDrawEnabled(uid, enabled);
     }
 
     private void OnBatteryEmpty(Entity<ANPRCRadioComponent> ent, ref PowerCellSlotEmptyEvent args)

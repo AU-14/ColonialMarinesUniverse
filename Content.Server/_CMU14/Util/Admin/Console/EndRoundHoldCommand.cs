@@ -5,7 +5,7 @@ using Content.Shared.Administration;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 
-namespace Content.Server._CMU14.Util.Admin.Console;
+namespace Content.Server.CMU14.Util.Admin.Console;
 
 [AdminCommand(AdminFlags.Round)]
 public sealed partial class EndRoundHoldCommand : LocalizedEntityCommands

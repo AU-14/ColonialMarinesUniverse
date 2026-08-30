@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Round.Antags.Arsonist;
+namespace Content.Shared.CMU14.Round.Antags.Arsonist;
 
 /// <summary>
 /// Colony arsonist. Counts structure fires while they are alive; the CMB is alerted at

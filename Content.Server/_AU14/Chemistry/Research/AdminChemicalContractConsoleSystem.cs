@@ -1,8 +1,8 @@
-using Content.Server._AU14.Chemistry.Reagents;
+using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Server.Administration.Managers;
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._AU14.Chemistry.Research;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
@@ -13,7 +13,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using System.Linq;
 
-namespace Content.Server._AU14.Chemistry.Research;
+namespace Content.Server.CMU14.Chemistry.Research;
 
 /// <summary>
 /// Provides an admin test workflow for creating a generated reagent contract from an exact property

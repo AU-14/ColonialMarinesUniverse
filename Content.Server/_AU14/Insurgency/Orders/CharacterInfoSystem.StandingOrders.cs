@@ -1,5 +1,5 @@
-using Content.Server._AU14.Insurgency.Orders;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Server.CMU14.Insurgency.Orders;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 
 namespace Content.Server.CharacterInfo;
 

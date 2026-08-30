@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Doors;
+using Content.Shared.CMU14.Doors;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Xenonids;

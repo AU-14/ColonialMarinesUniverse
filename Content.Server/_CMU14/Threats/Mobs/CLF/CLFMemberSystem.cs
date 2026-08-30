@@ -13,9 +13,9 @@ using Content.Shared.Verbs;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
-using CLFMemberComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFMemberComponent;
+using CLFMemberComponent = Content.Shared.CMU14.Threats.Mobs.CLF.CLFMemberComponent;
 
-namespace Content.Server._CMU14.Threats.Mobs.CLF;
+namespace Content.Server.CMU14.Threats.Mobs.CLF;
 
 public sealed partial class CLFMemberSystem : EntitySystem
 {

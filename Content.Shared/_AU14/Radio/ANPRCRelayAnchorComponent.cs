@@ -1,8 +1,8 @@
-﻿using Content.Shared.Radio;
+using Content.Shared.Radio;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 [RegisterComponent]
 public sealed partial class ANPRCRelayAnchorComponent : Component

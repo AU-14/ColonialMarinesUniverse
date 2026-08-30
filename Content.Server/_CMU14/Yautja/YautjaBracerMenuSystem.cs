@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared.Actions;
 using Content.Shared.Item;
@@ -8,7 +8,7 @@ using Content.Shared.UserInterface;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaBracerMenuSystem : EntitySystem
 {

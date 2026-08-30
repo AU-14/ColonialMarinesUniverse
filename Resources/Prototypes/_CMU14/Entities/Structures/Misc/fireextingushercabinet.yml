@@ -1,4 +1,4 @@
-﻿# TODO: this could probably use some kind of base structure prototype
+# TODO: this could probably use some kind of base structure prototype
 # every wallmount cabinet copypastes placement and like 8 components
 - type: entity
   parent: BaseItemCabinet
@@ -15,7 +15,7 @@
     - type: Clickable
     - type: InteractionOutline
     - type: Sprite
-      sprite: _AU14/fireextingushercabinet.rsi
+      sprite: CMU14/fireextingushercabinet.rsi
       snapCardinals: true
       layers:
       - state: frame
@@ -32,8 +32,9 @@
             components:
             - SpraySafety
     - type: Damageable
-      damageContainer: StructuralInorganic
       damageModifierSet: Metallic
+    - type: Injurable
+      damageContainer: StructuralInorganic
     - type: Destructible
       thresholds:
         - trigger:

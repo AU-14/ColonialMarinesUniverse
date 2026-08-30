@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
 
 public enum CMUSurgicalTrait : byte
 {

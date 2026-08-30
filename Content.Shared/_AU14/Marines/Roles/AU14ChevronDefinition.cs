@@ -1,7 +1,7 @@
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Marines.Roles.Chevrons;
+namespace Content.Shared.CMU14.Marines.Roles.Chevrons;
 
 [DataDefinition]
 public sealed partial class ChevronDefinition

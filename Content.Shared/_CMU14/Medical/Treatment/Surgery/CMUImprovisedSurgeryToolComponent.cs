@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 [RegisterComponent]
 public sealed partial class CMUImprovisedSurgeryToolComponent : Component

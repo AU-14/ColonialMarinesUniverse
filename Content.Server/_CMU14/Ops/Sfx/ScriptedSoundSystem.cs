@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Ops.Sfx;
+using Content.Shared.CMU14.Ops.Sfx;
 using System.Linq;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CameraShake;
-using Content.Server._CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server._RMC14.Announce;
 using Content.Shared._RMC14.Announce;
 using Content.Shared.GameTicking;
@@ -16,7 +16,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Ops.Sfx;
+namespace Content.Server.CMU14.Ops.Sfx;
 
 public sealed partial class ScriptedSoundSystem : EntitySystem
 {

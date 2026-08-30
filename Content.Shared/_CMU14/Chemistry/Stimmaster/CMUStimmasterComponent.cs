@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Chemistry.Stimmaster;
+namespace Content.Shared.CMU14.Chemistry.Stimmaster;
 
 /// <summary>
 /// Adds autoinjector fabrication to an RMC ChemMaster-compatible machine.

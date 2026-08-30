@@ -9,7 +9,7 @@ namespace Content.Shared.Parallax.Biomes.Layers;
 public sealed partial class BiomeEntityLayer : IBiomeWorldLayer
 {
     /// <inheritdoc/>
-    [DataField("allowedTiles")]
+    [DataField]
     public List<ProtoId<ContentTileDefinition>> AllowedTiles { get; private set; } = new();
 
     [DataField("noise")] public FastNoiseLite Noise { get; private set; } = new(0);
@@ -21,6 +21,6 @@ public sealed partial class BiomeEntityLayer : IBiomeWorldLayer
     /// <inheritdoc/>
     [DataField("invert")] public bool Invert { get; private set; } = false;
 
-    [DataField("entities", required: true)]
+    [DataField(required: true)]
     public List<EntProtoId> Entities = new();
 }

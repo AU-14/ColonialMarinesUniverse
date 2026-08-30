@@ -1,13 +1,13 @@
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones.Events;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
-using Content.Shared._CMU14.Medical.Injuries.Pain;
-using Content.Shared._CMU14.Medical.Injuries.Trauma;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones.Events;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Trauma;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.StatusEffectNew;
@@ -20,10 +20,10 @@ using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Chemistry.Effects;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Bones;
+namespace Content.Shared.CMU14.Medical.Anatomy.Bones;
 
 public abstract partial class SharedBoneSystem : EntitySystem
 {
@@ -31,7 +31,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected IPrototypeManager Proto = default!;
     [Dependency] protected SharedFractureSystem Fracture = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
 

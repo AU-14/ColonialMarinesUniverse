@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-matriarch
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/matriarch.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/matriarch.rsi
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -103,12 +103,16 @@
   - type: MeleeWeapon
     attackRate: 2.0
     damage:
-      groups:
-        Brute: 55
+      types:
+        Blunt: 18.33
+        Slash: 18.33
+        Piercing: 18.34
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 54
+      types:
+        Blunt: 18
+        Slash: 18
+        Piercing: 18
   - type: CMArmor
     explosionArmor: 50
     xenoArmor: 25
@@ -134,10 +138,10 @@
       - RMCFireImmunityBypass  # Only fires with this component can bypass immunity
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: matriarch
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:

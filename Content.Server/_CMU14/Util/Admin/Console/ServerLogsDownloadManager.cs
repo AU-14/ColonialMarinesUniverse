@@ -3,11 +3,11 @@ using System.Buffers.Binary;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Content.Shared._CMU14.Administration.Console;
+using Content.Shared.CMU14.Administration.Console;
 using Robust.Shared.Network.Transfer;
 using Robust.Shared.Player;
 
-namespace Content.Server._CMU14.Administration.Console;
+namespace Content.Server.CMU14.Administration.Console;
 
 public sealed partial class ServerLogsDownloadManager : IPostInjectInit
 {

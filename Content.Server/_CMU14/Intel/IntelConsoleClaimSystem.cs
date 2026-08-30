@@ -1,12 +1,12 @@
-using Content.Server._CMU14.Threats.Rules;
-using Content.Server.AU14.Comms;
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Threats.Rules;
+using Content.Server.CMU14.Comms;
+using Content.Server.CMU14.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
 using Content.Server._RMC14.Announce;
 using Content.Server._RMC14.Marines;
-using Content.Shared._CMU14.Intel;
+using Content.Shared.CMU14.Intel;
 using Content.Shared._RMC14.Intel;
 using Content.Shared.CCVar;
 using Content.Shared._RMC14.Marines;
@@ -20,7 +20,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Intel;
+namespace Content.Server.CMU14.Intel;
 
 public sealed partial class IntelConsoleClaimSystem : EntitySystem
 {

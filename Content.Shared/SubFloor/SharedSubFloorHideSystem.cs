@@ -2,6 +2,7 @@ using Content.Shared.Audio;
 using Content.Shared.Construction.Components;
 using Content.Shared.Explosion;
 using Content.Shared.Eye;
+using Content.Shared.Interaction.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
@@ -25,13 +26,11 @@ namespace Content.Shared.SubFloor
         [Dependency] private SharedVisibilitySystem _visibility = default!;
         [Dependency] protected SharedPopupSystem _popup = default!;
 
-        private EntityQuery<SubFloorHideComponent> _hideQuery;
+        [Dependency] private EntityQuery<SubFloorHideComponent> _hideQuery = default!;
 
         public override void Initialize()
         {
             base.Initialize();
-
-            _hideQuery = GetEntityQuery<SubFloorHideComponent>();
 
             SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
             SubscribeLocalEvent<SubFloorHideComponent, ComponentStartup>(OnSubFloorStarted);
@@ -53,7 +52,7 @@ namespace Content.Shared.SubFloor
             if (TryComp<MapGridComponent>(xform.GridUid, out var grid)
                 && HasFloorCover(xform.GridUid.Value, grid, Map.TileIndicesFor(xform.GridUid.Value, grid, xform.Coordinates)))
             {
-                _popup.PopupClient(Loc.GetString("subfloor-anchor-failure", ("entity", uid)), args.User);
+                _popup.PopupEntity(Loc.GetString("subfloor-anchor-failure", ("entity", uid)), args.User, args.User);
                 args.Cancel();
             }
         }
@@ -64,7 +63,7 @@ namespace Content.Shared.SubFloor
             // despite being partially under the floor.
             if (component.IsUnderCover)
             {
-                _popup.PopupClient(Loc.GetString("subfloor-unanchor-failure", ("entity", uid)), args.User);
+                _popup.PopupEntity(Loc.GetString("subfloor-unanchor-failure", ("entity", uid)), args.User, args.User);
                 args.Cancel();
             }
         }
@@ -83,6 +82,10 @@ namespace Content.Shared.SubFloor
 
         private void OnInteractionAttempt(EntityUid uid, SubFloorHideComponent component, ref GettingInteractedWithAttemptEvent args)
         {
+            // Allow admins (e.g., mappers/aghosts) to twiddle with stuff under subfloors
+            if (HasComp<BypassInteractionChecksComponent>(args.Uid))
+                return;
+
             // No interactions with entities hidden under floor tiles.
             if (component.BlockInteractions && component.IsUnderCover)
                 args.Cancelled = true;

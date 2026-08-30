@@ -1,10 +1,10 @@
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Roof;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Roof;
 using Content.Shared.Light.Components;
 
-namespace Content.Server._CMU14.ZLevels.Roof;
+namespace Content.Server.CMU14.ZLevels.Roof;
 
 /// <inheritdoc/>
 public sealed partial class CMURoofSystem : CMUSharedRoofSystem

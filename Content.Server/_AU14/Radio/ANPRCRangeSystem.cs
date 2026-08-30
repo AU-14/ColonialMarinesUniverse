@@ -2,9 +2,9 @@ using Content.Server._RMC14.Telephone;
 using Content.Server.Power.Components;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._AU14.Radio;
-using Content.Shared.Ghost;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.Radio;
+using Content.Shared.Ghost.Components;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Radio;
 using Content.Shared.Radio;
@@ -14,7 +14,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 public sealed partial class ANPRCRangeSystem : EntitySystem
 {

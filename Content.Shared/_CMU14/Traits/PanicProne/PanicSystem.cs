@@ -10,7 +10,7 @@ using Content.Shared.Stunnable;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Traits.PanicProne;
+namespace Content.Shared.CMU14.Traits.PanicProne;
 
 public abstract partial class PanicSystem : EntitySystem
 {

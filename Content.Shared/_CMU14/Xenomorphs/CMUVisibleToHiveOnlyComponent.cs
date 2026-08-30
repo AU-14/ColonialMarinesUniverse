@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Xenomorphs;
+namespace Content.Shared.CMU14.Xenomorphs;
 
 /// <summary>
 /// Marker component added to the Overmind while in incorporeal "eye" form.

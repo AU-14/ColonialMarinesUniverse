@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Insurgency;
+namespace Content.Shared.CMU14.Insurgency;
 
 /// <summary>
 ///     "A Package": the after-spawn loadout delivery. Because the faction is chosen after everyone

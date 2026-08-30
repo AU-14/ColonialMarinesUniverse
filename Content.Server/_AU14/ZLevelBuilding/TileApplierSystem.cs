@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
-using Content.Shared._AU14.ZLevelBuilding;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Maps;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.ZLevelBuilding;
+namespace Content.Server.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): turns a constructed <see cref="TileApplierComponent"/> entity into an actual grid

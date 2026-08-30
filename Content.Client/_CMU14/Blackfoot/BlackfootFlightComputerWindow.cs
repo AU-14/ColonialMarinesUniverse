@@ -1,13 +1,13 @@
 using System;
 using System.Numerics;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Blackfoot;
+namespace Content.Client.CMU14.Blackfoot;
 
 public sealed class BlackfootFlightComputerWindow : DefaultWindow
 {

@@ -1,5 +1,5 @@
 # CMU14 Pathogen - Mycelium Weeds
-# RSI: Resources/Textures/_CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+# RSI: Resources/Textures/CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
 
 # ── Base mycelium weed tile ───────────────────────────────────────────────────
 
@@ -13,7 +13,7 @@
     factions:
     - CMU14PathogenWalker
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
     drawdepth: FloorTiles
     layers:
     - state: weed0
@@ -72,7 +72,7 @@
   description: A pulsating knot of mycelium threads. It slowly spreads spores across the floor.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
     drawdepth: FloorTiles
     layers:
     - state: weed0
@@ -96,13 +96,17 @@
   - type: QueenEyeVision
   - type: Damageable
     damage:
-      groups:
-        Brute: 6
+      types:
+        Blunt: 2
+        Slash: 2
+        Piercing: 2
   - type: XenoWeeds
     spawns: CMU14XenoMyceliumWeeds
     healOnStopSpreading:
-      groups:
-        Brute: -6
+      types:
+        Blunt: -2
+        Slash: -2
+        Piercing: -2
   - type: Tag
     tags:
     - XenoWeedNode
@@ -139,7 +143,7 @@
   name: dense mycelium weeds
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
     drawdepth: FloorTiles
     layers:
     - state: hive_weed0
@@ -221,7 +225,7 @@
   description: A large, pulsating knot of dense mycelium. It floods the surrounding area with spores.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
     drawdepth: FloorTiles
     layers:
     - state: hive_weed0
@@ -244,8 +248,10 @@
   - type: XenoWeeds
     spawns: CMU14XenoMyceliumHiveWeeds
     healOnStopSpreading:
-      groups:
-        Brute: -6
+      types:
+        Blunt: -2
+        Slash: -2
+        Piercing: -2
   - type: XenoConstructionPlasmaCost
     plasma: 75
   - type: Tag
@@ -303,7 +309,7 @@
         hard: false
   - type: Clickable
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
     drawdepth: Objects
   - type: IconSmooth
     key: cm_xeno_weeds_walls
@@ -314,6 +320,7 @@
   - type: HiveMember
   - type: XenoFriendly
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

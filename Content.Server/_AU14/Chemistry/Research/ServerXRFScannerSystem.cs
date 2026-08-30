@@ -1,7 +1,7 @@
-using Content.Server._AU14.Chemistry.Reagents;
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._AU14.Chemistry.Research;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Server.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Chemistry.Reagent;
@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Server._AU14.Chemistry.Research;
+namespace Content.Server.CMU14.Chemistry.Research;
 
 public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
 {

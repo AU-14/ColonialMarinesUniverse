@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server.PowerCell;
+using Content.Shared.PowerCell;
 using Content.Server.Radio;
-using Content.Shared._AU14.CCVar;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.CCVar;
+using Content.Shared.CMU14.Radio;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.Radio;
 using Robust.Shared.Configuration;
@@ -11,7 +11,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 // the search receiver. an operator can walk the band hunting for somebody else's net,
 // but the set can only do one job at a time: while it sweeps it will not transmit and
@@ -31,7 +31,7 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
     // traffic seen on each frequency: where the last emission came from, when it
     // landed, and how many have stacked up since the run began. a net that keeps
     // talking builds a heavier signature than one passing the odd message
-    private readonly Dictionary<int, BandEmission> _band = new();
+    private readonly Dictionary<RadioFrequency, BandEmission> _band = new();
 
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
 
@@ -60,9 +60,9 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
         RecordEmission(args.RadioSource, _freqPlan.GetFrequency(args.Channel));
     }
 
-    public void RecordEmission(EntityUid source, int frequency)
+    public void RecordEmission(EntityUid source, RadioFrequency frequency)
     {
-        if (!_commsEnabled || frequency <= 0 || Deleted(source))
+        if (!_commsEnabled || frequency == RadioFrequency.Off || Deleted(source))
             return;
 
         var xform = Transform(source);
@@ -143,7 +143,7 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
         DecayContacts(radio, seconds);
 
         var start = radio.SweepPosition;
-        var advance = Math.Max(1, (int) MathF.Round(radio.SweepStepPerSecond * seconds));
+        var advance = Math.Max(1, (int) MathF.Round(radio.SweepKilohertzPerSecond * seconds));
 
         var xform = Transform(ent.Owner);
         var position = _transform.GetWorldPosition(xform);
@@ -152,11 +152,9 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
         var cutoff = now - radio.SweepActivityWindow;
         var rangeSquared = radio.SweepInterceptRange * radio.SweepInterceptRange;
 
-        for (var i = 0; i < advance; i++)
+        foreach (var (frequency, emission) in _band)
         {
-            var frequency = Wrap(start + i);
-
-            if (!_band.TryGetValue(frequency, out var emission) ||
+            if (!WasSwept(start, advance, frequency) ||
                 emission.Time < cutoff ||
                 emission.Map != map ||
                 (emission.Position - position).LengthSquared() > rangeSquared)
@@ -167,7 +165,7 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
             RegisterHit(ent, frequency, emission.Count);
         }
 
-        radio.SweepPosition = Wrap(start + advance);
+        radio.SweepPosition = Wrap(start.Kilohertz + advance);
         Dirty(ent);
 
         // contacts and their confidence live only in the BUI state, so Dirty alone
@@ -197,7 +195,7 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
         }
     }
 
-    private void RegisterHit(Entity<ANPRCRadioComponent> ent, int frequency, int traffic)
+    private void RegisterHit(Entity<ANPRCRadioComponent> ent, RadioFrequency frequency, int traffic)
     {
         var radio = ent.Comp;
 
@@ -301,34 +299,53 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
 
     // zero out the digits the operator has not earned. the masked value is what goes
     // over the wire, so the exact number is never in the BUI state early
-    public static int MaskFrequency(int frequency, int tier)
+    public static RadioFrequency MaskFrequency(RadioFrequency frequency, int tier)
     {
-        return tier switch
+        if (tier >= DigitCount)
+            return frequency;
+
+        var kilohertz = frequency.Kilohertz;
+        var maskedKilohertz = tier switch
         {
             <= 0 => 0,
-            1 => frequency / 1000 * 1000,
-            2 => frequency / 100 * 100,
-            3 => frequency / 10 * 10,
-            _ => frequency,
+            1 => kilohertz / 100_000 * 100_000,
+            2 => kilohertz / 10_000 * 10_000,
+            3 => kilohertz / 1_000 * 1_000,
+            _ => kilohertz,
         };
+
+        return RadioFrequency.FromKilohertz(maskedKilohertz);
     }
 
-    // the masked value rendered with X in place of the unknown digits, so a partial
-    // fix reads as 2.4XX rather than a misleadingly precise 2.400
-    public static string FormatMasked(int frequency, int tier)
+    // the masked value rendered with X in place of every unearned digit. The first
+    // three tiers reveal the MHz digits; the final tier reveals the exact kHz carrier.
+    public static string FormatMasked(RadioFrequency frequency, int tier)
     {
         var text = TunableFrequencySystem.FormatFreq(MaskFrequency(frequency, tier));
-        var unknown = Math.Max(0, DigitCount - tier);
+        if (tier >= DigitCount)
+            return text;
 
-        return unknown > 0
-            ? text[..^unknown] + new string('X', unknown)
-            : text;
+        var earnedDigits = Math.Max(0, tier);
+        var digitsSeen = 0;
+        var masked = text.ToCharArray();
+
+        for (var i = 0; i < masked.Length; i++)
+        {
+            if (!char.IsAsciiDigit(masked[i]))
+                continue;
+
+            digitsSeen++;
+            if (digitsSeen > earnedDigits)
+                masked[i] = 'X';
+        }
+
+        return new string(masked);
     }
 
     // digits in a band frequency, and so the length of a full ladder
     public const int DigitCount = 4;
 
-    public string GetChannelName(int frequency)
+    public string GetChannelName(RadioFrequency frequency)
     {
         return _freqPlan.TryGetChannelByFrequency(frequency, out var channel) &&
                _prototype.TryIndex(channel, out var proto)
@@ -336,15 +353,37 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
             : Loc.GetString("anprc-sweep-unknown-net");
     }
 
-    private static int Wrap(int frequency)
+    private static bool WasSwept(RadioFrequency start, int advanceKilohertz, RadioFrequency candidate)
     {
-        var span = ANPRCRadioComponent.SweepBandMax - ANPRCRadioComponent.SweepBandMin + 1;
-        var offset = (frequency - ANPRCRadioComponent.SweepBandMin) % span;
+        var minimum = ANPRCRadioComponent.SweepBandMin.Kilohertz;
+        var maximum = ANPRCRadioComponent.SweepBandMax.Kilohertz;
+
+        if (candidate.Kilohertz < minimum || candidate.Kilohertz > maximum)
+            return false;
+
+        var span = maximum - minimum + 1;
+
+        if (advanceKilohertz >= span)
+            return true;
+
+        var startOffset = (start.Kilohertz - minimum) % span;
+        var candidateOffset = (candidate.Kilohertz - minimum) % span;
+        var distance = (candidateOffset - startOffset + span) % span;
+
+        return distance < advanceKilohertz;
+    }
+
+    private static RadioFrequency Wrap(int kilohertz)
+    {
+        var minimum = ANPRCRadioComponent.SweepBandMin.Kilohertz;
+        var maximum = ANPRCRadioComponent.SweepBandMax.Kilohertz;
+        var span = maximum - minimum + 1;
+        var offset = (kilohertz - minimum) % span;
 
         if (offset < 0)
             offset += span;
 
-        return ANPRCRadioComponent.SweepBandMin + offset;
+        return RadioFrequency.FromKilohertz(minimum + offset);
     }
 
     private readonly record struct BandEmission(Vector2 Position, MapId Map, TimeSpan Time, int Count);

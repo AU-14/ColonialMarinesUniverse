@@ -33,7 +33,7 @@
   description: A cheap way to injure someone. Designed by your local insurgent’s.
   components:
   - type: Sprite
-    sprite: _CMU14/Items/pipebomb.rsi
+    sprite: CMU14/Items/pipebomb.rsi
     layers:
     - state: base
       map: ["enum.TriggerVisualLayers.Base"]
@@ -44,14 +44,18 @@
     intensitySlope: 8
     totalIntensity: 100
     deleteAfterExplosion: false
-  - type: CMUOnLightTimerTrigger
+  - type: TriggerOnIgniterUse
+    keyOut: ignite
+  - type: TimerTrigger
+    keysIn:
+    - ignite
+    keyOut: trigger
     examinable: false
     initialBeepDelay: 0
     beepSound: /Audio/Effects/lightburn.ogg
+  - type: RandomTimerTrigger
     min: 1
     max: 4
-    instantfusechance: false
-    instfusechance: 10
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 20
@@ -71,7 +75,7 @@
   suffix: Fuse
   components:
   - type: Sprite
-    sprite: _CMU14/Items/pipebomb.rsi
+    sprite: CMU14/Items/pipebomb.rsi
     state: base
   - type: CraftIntoPipeBomb
     Spawn: CMUPipeBomb
@@ -87,7 +91,7 @@
   suffix: Casing
   components:
   - type: Sprite
-    sprite: _CMU14/Items/pipebomb.rsi
+    sprite: CMU14/Items/pipebomb.rsi
     state: base
   - type: CraftIntoPipeBomb
     Spawn: CMUPipeBombFuse

@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Paper;
+namespace Content.Shared.CMU14.Paper;
 
 [Serializable, NetSerializable]
 public enum UniversalPaperToolUiKey : byte

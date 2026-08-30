@@ -1,7 +1,7 @@
 using Content.Shared.Actions;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Blackfoot;
+namespace Content.Shared.CMU14.Blackfoot;
 
 [ByRefEvent]
 public readonly record struct BlackfootStateChangedEvent(

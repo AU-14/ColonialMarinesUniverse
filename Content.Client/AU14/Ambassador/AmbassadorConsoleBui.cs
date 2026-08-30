@@ -1,7 +1,7 @@
-using Content.Shared.AU14.Ambassador;
+using Content.Shared.CMU14.Ambassador;
 using Robust.Client.UserInterface;
 
-namespace Content.Client.AU14.Ambassador;
+namespace Content.Client.CMU14.Ambassador;
 
 public sealed class AmbassadorConsoleBui : BoundUserInterface
 {

@@ -7,7 +7,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
 
-namespace Content.Client._AU14.Construction.CustomConstruction;
+namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Search/ancestry index over every selectable entity prototype, shared by the multi-select pickers

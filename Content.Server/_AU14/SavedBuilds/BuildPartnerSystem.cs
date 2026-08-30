@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Collections.Generic;
 using System.Linq;
-using Content.Shared._AU14.SavedBuilds;
+using Content.Shared.CMU14.SavedBuilds;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
@@ -12,7 +12,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
-namespace Content.Server._AU14.SavedBuilds;
+namespace Content.Server.CMU14.SavedBuilds;
 
 /// <summary>
 /// Tracks round-scoped, one-directional "build partner" grants. If owner O adds player P as a

@@ -1,15 +1,15 @@
 using System.Linq;
 using Content.Server.GameTicking;
-using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
-using Content.Shared._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.Station.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Systems;
 
-namespace Content.Server._CMU14.ZLevels.Core;
+namespace Content.Server.CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
 {

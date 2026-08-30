@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Round.Objectives;
+namespace Content.Shared.CMU14.Round.Objectives;
 
 public sealed class CaptureHoistFlagStartedEvent : EntityEventArgs
 {

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
-using Content.Shared._CMU14.RoundStatistics;
+using Content.Shared.CMU14.RoundStatistics;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -11,7 +11,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 
-namespace Content.Client._CMU14.RoundStatistics;
+namespace Content.Client.CMU14.RoundStatistics;
 
 public sealed class CMURoundStatisticsWindow : DefaultWindow
 {
@@ -72,7 +72,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             Text = "Operational Outcomes",
             FontColorOverride = Text,
-            StyleClasses = { StyleBase.StyleClassLabelHeading },
+            StyleClasses = { StyleClass.LabelHeading },
             ClipText = true,
             HorizontalExpand = true,
         });
@@ -190,7 +190,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             Text = mode.Title,
             FontColorOverride = Text,
-            StyleClasses = { StyleBase.StyleClassLabelHeading },
+            StyleClasses = { StyleClass.LabelHeading },
             ClipText = true,
             HorizontalExpand = true,
         });
@@ -784,7 +784,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             Text = text,
             FontColorOverride = Text,
-            StyleClasses = { StyleBase.StyleClassLabelSubText },
+            StyleClasses = { StyleClass.LabelSubText },
             ClipText = true,
             HorizontalExpand = true,
         };

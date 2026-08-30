@@ -1,9 +1,9 @@
 using Content.Server.Light.EntitySystems;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.BlightWave;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.BlightWave;
 using Content.Shared.Coordinates;
 using Robust.Server.GameObjects;
 
-namespace Content.Server._CMU14.Xenomorphs.Pathogen.BlightWave;
+namespace Content.Server.CMU14.Xenomorphs.Pathogen.BlightWave;
 
 public sealed partial class BlightWaveSystem : SharedBlightWaveSystem
 {

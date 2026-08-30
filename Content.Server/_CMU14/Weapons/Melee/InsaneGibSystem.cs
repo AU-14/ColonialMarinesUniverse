@@ -1,12 +1,12 @@
-using Content.Shared._CMU14.Weapons.Melee;
-using Content.Shared.Body.Components;
+using Content.Shared.CMU14.Weapons.Melee;
+using Content.Shared.Body;
 using Content.Shared.Body.Systems;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
 
-namespace Content.Server._CMU14.Weapons.Melee;
+namespace Content.Server.CMU14.Weapons.Melee;
 
 public sealed class InsaneGibSystem : EntitySystem
 {
@@ -35,7 +35,7 @@ public sealed class InsaneGibSystem : EntitySystem
             var coords = _transform.GetMoverCoordinates(target);
             foreach (var (proto, count) in ent.Comp.ExtraGibs)
             {
-                var n = _random.Next(count.Min, count.Max + 1);
+                var n = _random.Next((int) count.Min, (int) count.Max + 1);
                 for (var i = 0; i < n; i++)
                 {
                     var gib = Spawn(proto, coords.Offset(_random.NextVector2(ent.Comp.SpawnOffset)));

@@ -1,11 +1,11 @@
 using System.Numerics;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.Radio;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Client._AU14.Radio;
+namespace Content.Client.CMU14.Radio;
 
 public sealed partial class AU14NetSpliceBandDisplay : Control
 {

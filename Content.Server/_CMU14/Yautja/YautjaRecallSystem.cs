@@ -1,11 +1,11 @@
 using Content.Shared._RMC14.Actions;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Popups;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.Audio.Systems;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaRecallSystem : EntitySystem
 {
@@ -77,9 +77,9 @@ public sealed partial class YautjaRecallSystem : EntitySystem
 
     private void OnRecallableEquipped(Entity<YautjaRecallableComponent> ent, ref GotEquippedEvent args)
     {
-        if (ent.Comp.YautjaOwner == null && CanUseYautjaRecall(args.Equipee))
+        if (ent.Comp.YautjaOwner == null && CanUseYautjaRecall(args.EquipTarget))
         {
-            ent.Comp.YautjaOwner = args.Equipee;
+            ent.Comp.YautjaOwner = args.EquipTarget;
             Dirty(ent);
         }
     }

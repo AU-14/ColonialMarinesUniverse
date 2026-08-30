@@ -1,9 +1,9 @@
 using Content.Server.EUI;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._AU14.Insurgency.Selection;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Insurgency.Selection;
 using Content.Shared.Eui;
 
-namespace Content.Server._AU14.Insurgency.Selection;
+namespace Content.Server.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     Server side of the faction reveal popup. One is opened per cell member when a faction is

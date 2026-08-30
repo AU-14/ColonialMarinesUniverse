@@ -49,6 +49,7 @@
   - type: Item
     size: Large
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

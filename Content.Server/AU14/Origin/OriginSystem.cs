@@ -1,9 +1,9 @@
-using Content.Shared.AU14.Origin;
+using Content.Shared.CMU14.Origin;
 using Content.Shared.Preferences;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 
-namespace Content.Server.AU14.Origin;
+namespace Content.Server.CMU14.Origin;
 
 /// <summary>
 /// Applies origin effects (components, accents, starting items, traits) to a spawned character entity.

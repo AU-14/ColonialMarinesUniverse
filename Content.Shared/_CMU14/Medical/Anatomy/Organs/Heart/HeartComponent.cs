@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(SharedHeartSystem))]

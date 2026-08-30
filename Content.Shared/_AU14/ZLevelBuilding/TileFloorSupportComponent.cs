@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): an invisible marker dropped on a laid floor tile (by <c>TileApplierSystem</c>)

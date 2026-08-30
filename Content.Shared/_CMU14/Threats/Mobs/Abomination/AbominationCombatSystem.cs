@@ -2,7 +2,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Projectiles;
 using Robust.Shared.Physics.Events;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Abomination;
+namespace Content.Shared.CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 ///     Friendly-fire rules for the abomination team. Spit passes through

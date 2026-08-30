@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.Server.DoAfter;
 using Content.Server.Humanoid;
-using Content.Shared._CMU14.Humanoid;
+using Content.Shared.CMU14.Humanoid;
 using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
@@ -9,7 +9,7 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Humanoid;
+namespace Content.Server.CMU14.Humanoid;
 
 /// <summary>
 /// Lets a humanoid with a long hairstyle tie their hair back into one of a curated set of
@@ -17,10 +17,9 @@ namespace Content.Server._CMU14.Humanoid;
 /// </summary>
 public sealed partial class CMUTieHairSystem : EntitySystem
 {
-    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private MarkingManager _markingManager = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private DoAfterSystem _doAfter = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
 
     private static readonly TimeSpan TieHairDelay = TimeSpan.FromSeconds(1.5);
 
@@ -31,17 +30,14 @@ public sealed partial class CMUTieHairSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<HumanoidAppearanceComponent, CMUTieHairDoAfterEvent>(OnTieHairDoAfter);
-        SubscribeLocalEvent<HumanoidAppearanceComponent, CMUUntieHairDoAfterEvent>(OnUntieHairDoAfter);
+        SubscribeLocalEvent<HumanoidProfileComponent, GetVerbsEvent<Verb>>(OnGetVerbs);
+        SubscribeLocalEvent<HumanoidProfileComponent, CMUTieHairDoAfterEvent>(OnTieHairDoAfter);
+        SubscribeLocalEvent<HumanoidProfileComponent, CMUUntieHairDoAfterEvent>(OnUntieHairDoAfter);
     }
 
-    /// <summary>
-    /// Adds the "Tie Hair Back"/"Untie Hair" verbs for this humanoid, if applicable. Called from
-    /// <see cref="HumanoidAppearanceSystem"/>'s own GetVerbsEvent&lt;Verb&gt; handler, since only one
-    /// system may subscribe to that event for HumanoidAppearanceComponent.
-    /// </summary>
-    public void AddVerbs(EntityUid uid, HumanoidAppearanceComponent component, GetVerbsEvent<Verb> args)
+    private void OnGetVerbs(Entity<HumanoidProfileComponent> ent, ref GetVerbsEvent<Verb> args)
     {
+        var uid = ent.Owner;
         if (args.User != args.Target || !args.CanInteract)
             return;
 
@@ -56,8 +52,16 @@ public sealed partial class CMUTieHairSystem : EntitySystem
             return;
         }
 
-        if (!component.MarkingSet.TryGetCategory(MarkingCategories.Hair, out var hairMarkings) || hairMarkings.Count == 0)
+        if (!_humanoidAppearance.TryGetMarkings(
+                uid,
+                HumanoidVisualLayers.Hair,
+                out _,
+                out _,
+                out var hairMarkings) ||
+            hairMarkings.Count == 0)
+        {
             return;
+        }
 
         var currentHair = hairMarkings[0];
 
@@ -66,7 +70,7 @@ public sealed partial class CMUTieHairSystem : EntitySystem
 
         foreach (var styleId in CMUHairStyles.TiedBackHairStyles)
         {
-            if (!_markingManager.Markings.TryGetValue(styleId, out var prototype))
+            if (!ProtoMan.TryIndex<MarkingPrototype>(styleId, out var prototype))
                 continue;
 
             var tiedStyleId = prototype.ID;
@@ -104,13 +108,22 @@ public sealed partial class CMUTieHairSystem : EntitySystem
         });
     }
 
-    private void OnTieHairDoAfter(EntityUid uid, HumanoidAppearanceComponent component, CMUTieHairDoAfterEvent args)
+    private void OnTieHairDoAfter(EntityUid uid, HumanoidProfileComponent component, CMUTieHairDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled)
             return;
 
-        if (!component.MarkingSet.TryGetCategory(MarkingCategories.Hair, out var hairMarkings) || hairMarkings.Count == 0)
+        if (!_humanoidAppearance.TryGetMarkings(
+                uid,
+                HumanoidVisualLayers.Hair,
+                out var organ,
+                out _,
+                out var hairMarkings) ||
+            hairMarkings.Count == 0 ||
+            !ProtoMan.TryIndex<MarkingPrototype>(args.TiedStyleId, out var tiedPrototype))
+        {
             return;
+        }
 
         var currentHair = hairMarkings[0];
 
@@ -118,21 +131,46 @@ public sealed partial class CMUTieHairSystem : EntitySystem
         tied.OriginalHairId = currentHair.MarkingId;
         tied.OriginalHairColors = new List<Color>(currentHair.MarkingColors);
 
-        _humanoid.SetMarkingId(uid, MarkingCategories.Hair, 0, args.TiedStyleId, component);
+        var replacement = tiedPrototype.AsMarking() with { Forced = currentHair.Forced };
+        for (var i = 0; i < replacement.MarkingColors.Count && i < currentHair.MarkingColors.Count; i++)
+        {
+            replacement = replacement.WithColorAt(i, currentHair.MarkingColors[i]);
+        }
+
+        var updated = hairMarkings.ToList();
+        updated[0] = replacement;
+        _humanoidAppearance.SetMarkings(uid, organ, HumanoidVisualLayers.Hair, updated);
         _popup.PopupEntity(Loc.GetString("cmu-tie-hair-back-tied-self"), uid, uid);
         args.Handled = true;
     }
 
-    private void OnUntieHairDoAfter(EntityUid uid, HumanoidAppearanceComponent component, CMUUntieHairDoAfterEvent args)
+    private void OnUntieHairDoAfter(EntityUid uid, HumanoidProfileComponent component, CMUUntieHairDoAfterEvent args)
     {
         if (args.Handled || args.Cancelled)
             return;
 
-        if (!TryComp<CMUTiedHairComponent>(uid, out var tied))
+        if (!TryComp<CMUTiedHairComponent>(uid, out var tied) ||
+            !_humanoidAppearance.TryGetMarkings(
+                uid,
+                HumanoidVisualLayers.Hair,
+                out var organ,
+                out _,
+                out var hairMarkings) ||
+            hairMarkings.Count == 0 ||
+            !ProtoMan.TryIndex<MarkingPrototype>(tied.OriginalHairId, out var originalPrototype))
+        {
             return;
+        }
 
-        _humanoid.SetMarkingId(uid, MarkingCategories.Hair, 0, tied.OriginalHairId, component);
-        _humanoid.SetMarkingColor(uid, MarkingCategories.Hair, 0, tied.OriginalHairColors, component);
+        var replacement = originalPrototype.AsMarking() with { Forced = hairMarkings[0].Forced };
+        for (var i = 0; i < replacement.MarkingColors.Count && i < tied.OriginalHairColors.Count; i++)
+        {
+            replacement = replacement.WithColorAt(i, tied.OriginalHairColors[i]);
+        }
+
+        var updated = hairMarkings.ToList();
+        updated[0] = replacement;
+        _humanoidAppearance.SetMarkings(uid, organ, HumanoidVisualLayers.Hair, updated);
         RemComp<CMUTiedHairComponent>(uid);
         _popup.PopupEntity(Loc.GetString("cmu-tie-hair-back-untied-self"), uid, uid);
         args.Handled = true;

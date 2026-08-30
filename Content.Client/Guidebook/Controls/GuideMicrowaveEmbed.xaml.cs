@@ -144,7 +144,6 @@ public sealed partial class GuideMicrowaveEmbed : PanelContainer, IDocumentTag, 
             liquidColorLabel.SetMessage(liquidColorMsg);
             liquidColorLabel.HorizontalAlignment = Control.HAlignment.Center;
             liquidColorLabel.LinkedPrototype = reagent;
-            liquidColorLabel.HorizontalAlignment = HAlignment.Center;
 
             IngredientsGrid.AddChild(liquidColorLabel);
 

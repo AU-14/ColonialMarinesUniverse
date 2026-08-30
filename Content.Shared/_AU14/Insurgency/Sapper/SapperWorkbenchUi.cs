@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.Sapper;
+namespace Content.Shared.CMU14.Insurgency.Sapper;
 
 [Serializable, NetSerializable]
 public enum SapperWorkbenchUiKey : byte

@@ -1,11 +1,11 @@
 using Content.Server.Chat.Systems;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Slow;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
 
-namespace Content.Server._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+namespace Content.Server.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
 public sealed partial class ServerMycotoxinSystem : SharedMycotoxinSystem
 {

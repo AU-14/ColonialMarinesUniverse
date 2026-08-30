@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Client._AU14.UI;
-using Content.Shared._AU14.Administration;
+using Content.Client.CMU14.UI;
+using Content.Shared.CMU14.Administration;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client._AU14.Administration;
+namespace Content.Client.CMU14.Administration;
 
 /// <summary>
 /// The Host-only "Tool Permissions" manager: grant editor tools (Construction Item Editor, Tile Editor,

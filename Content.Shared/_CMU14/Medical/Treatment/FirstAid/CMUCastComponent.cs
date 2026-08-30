@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.FirstAid;
+namespace Content.Shared.CMU14.Medical.Treatment.FirstAid;
 
 /// <summary>
 ///     Applied-time fields use <see cref="AutoPausedField"/> so the heal countdown

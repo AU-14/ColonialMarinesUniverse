@@ -7,8 +7,8 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared.EntityTable;
-using Content.Shared._CMU14.Fishing.Components;
-using Content.Shared._CMU14.Fishing.Systems;
+using Content.Shared.CMU14.Fishing.Components;
+using Content.Shared.CMU14.Fishing.Systems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Movement.Pulling.Components;
@@ -20,7 +20,7 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Server._CMU14.Fishing;
+namespace Content.Server.CMU14.Fishing;
 
 public sealed partial class FishingSystem : SharedFishingSystem
 {
@@ -155,7 +155,8 @@ public sealed partial class FishingSystem : SharedFishingSystem
         visuals.Sprite = component.RopeSprite;
         visuals.OffsetA = component.RopeLureOffset;
         visuals.OffsetB = component.RopeUserOffset;
-        visuals.Target = GetNetEntity(uid);
+        visuals.Target = uid;
+        Dirty(fishFloat, visuals);
     }
 
     protected override void ThrowFishReward(EntProtoId fishId, EntityUid fishSpot, EntityUid target)

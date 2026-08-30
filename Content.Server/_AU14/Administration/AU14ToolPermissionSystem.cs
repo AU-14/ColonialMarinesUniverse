@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Linq;
 using Content.Server.Administration.Managers;
-using Content.Shared._AU14.Administration;
+using Content.Shared.CMU14.Administration;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -11,7 +11,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
-namespace Content.Server._AU14.Administration;
+namespace Content.Server.CMU14.Administration;
 
 /// <summary>
 /// Per-tool editor permissions by ckey (see <see cref="AU14ToolPermissions"/>). Replaces the old

@@ -4,7 +4,7 @@
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server._AU14.SavedBuilds;
+namespace Content.Server.CMU14.SavedBuilds;
 
 /// <summary>
 /// Test/dev command for the saved-builds save pipeline: serializes the player-built entities in a box

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using System.Numerics;
-using Content.Shared._AU14.Smelting;
+using Content.Shared.CMU14.Smelting;
 using Content.Shared.Stacks;
 using Robust.Client.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Client._AU14.Smelting;
+namespace Content.Client.CMU14.Smelting;
 
 /// <summary>
 /// Draws the pot's contents as small "pips" sitting in the crucible - one per unit of material - and hisses

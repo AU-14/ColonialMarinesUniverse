@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._CMU14.Roles.Ranks;
+using Content.Shared.CMU14.Roles.Ranks;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -11,7 +11,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Client.Lobby.UI;
 
-namespace Content.Client._CMU14.Roles.Ranks;
+namespace Content.Client.CMU14.Roles.Ranks;
 
 public sealed partial class PlatoonRankPreferenceWindow : DefaultWindow
 {

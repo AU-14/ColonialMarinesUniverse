@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.Sapper;
+namespace Content.Shared.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     The Sapper's Workbench structure. Recipes use CM/RMC material prototype ids and display counts,

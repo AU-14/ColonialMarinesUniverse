@@ -1,8 +1,8 @@
-using Content.Server.Forensics;
-using Content.Shared._CMU14.Item.Stain;
+using Content.Shared.CMU14.Item.Stain;
 using Content.Shared.Forensics;
+using Content.Shared.Forensics.Components;
 
-namespace Content.Server._CMU14.Item.Stain;
+namespace Content.Server.CMU14.Item.Stain;
 
 /// <summary>
 /// Clears visual stains when an existing forensic-cleaning do-after completes.

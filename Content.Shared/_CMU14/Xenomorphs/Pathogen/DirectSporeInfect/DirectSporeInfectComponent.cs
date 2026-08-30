@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.DirectSporeInfect;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.DirectSporeInfect;
 
 /// <summary>
 /// Gives the Popper a melee "infect" ability that directly infects

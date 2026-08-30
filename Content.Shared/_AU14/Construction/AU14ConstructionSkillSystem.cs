@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.Marines.Skills;
 
-namespace Content.Shared._AU14.Construction;
+namespace Content.Shared.CMU14.Construction;
 
 /// <summary>AU14 construction-skill policy layered over RMC's generic pricing and timing extension events.</summary>
 public sealed partial class AU14ConstructionSkillSystem : EntitySystem

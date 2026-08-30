@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Numerics;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared._RMC14.Explosion.Components;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Xenonids.Evolution;
@@ -15,7 +15,7 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Xenonids;
+namespace Content.IntegrationTests.CMU14.Xenonids;
 
 [TestFixture]
 public sealed class CMUXenoPortTest

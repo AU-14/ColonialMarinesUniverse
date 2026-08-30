@@ -1,7 +1,8 @@
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Power;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -13,7 +14,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaApcSiphonSystem : EntitySystem
 {
@@ -27,7 +28,7 @@ public sealed partial class YautjaApcSiphonSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly SoundSpecifier SiphonSound =
-        new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/apc_power_drain.wav");
+        new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/apc_power_drain.wav");
 
     private static readonly TimeSpan SiphonDuration = TimeSpan.FromSeconds(9.3);
     private static readonly TimeSpan SiphonCooldown = TimeSpan.FromMinutes(20);

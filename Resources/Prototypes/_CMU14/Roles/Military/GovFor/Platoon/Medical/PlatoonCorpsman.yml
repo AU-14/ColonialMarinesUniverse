@@ -30,13 +30,13 @@
     prefix: au14-job-prefix-govforplatooncorpsman
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
-      state: corpsman
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_corpsman
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_CMU14/Interface/cmuopforblips.rsi
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: corpsman
     RMC:
     - type: Skills
@@ -117,7 +117,7 @@
   id: AU14GearGOVFORPlatoonCorpsman
   equipment:
     id: AU14JobIDCardGOVFORPlatoonCorpsman
-    ears: CMU14HeadsetGovforJTAC
+    ears: AU14HeadsetGovforMarine
 
 - type: startingGear
   id: AU14GearGOVFORCorpsmanDummy
@@ -127,7 +127,7 @@
     shoes: CMBootsBlack
     head: AU14JungleM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
-    ears: CMU14HeadsetGovforJTAC
+    ears: AU14HeadsetGovforMarine
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -178,7 +178,7 @@
   id: AU14GearopforPlatoonCorpsman
   equipment:
     id: AU14JobIDCardOPFORPlatoonCorpsman
-    ears: CMU14HeadsetOpforJTAC
+    ears: AU14HeadsetOpforMarine
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -198,7 +198,7 @@
     shoes: CMBootsBlack
     head: AU14JungleM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
-    ears: CMU14HeadsetOpforJTAC
+    ears: AU14HeadsetOpforMarine
 
 - type: job
   parent: AU14JobPlatoonCorpsmanBase

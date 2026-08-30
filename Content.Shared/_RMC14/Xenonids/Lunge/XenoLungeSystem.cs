@@ -259,10 +259,20 @@ public sealed partial class XenoLungeSystem : EntitySystem
         if (args.PulledUid != ent.Owner)
             return;
 
+        var clearParalysis = false;
         foreach (var effect in ent.Comp.Effects)
         {
+            if (effect.Id is "Stun" or "KnockedDown")
+            {
+                clearParalysis = true;
+                continue;
+            }
+
             _statusEffects.TryRemoveStatusEffect(ent, effect);
         }
+
+        if (clearParalysis)
+            _stun.TryClearStunAndKnockdown(ent);
 
         RemCompDeferred<XenoLungeStunnedComponent>(ent.Owner);
     }

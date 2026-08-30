@@ -1,23 +1,22 @@
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
-using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Medical.Injuries.Wounds;
+namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
 public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
 {
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -52,24 +51,13 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             return;
 
         if (TryComp<BloodstreamComponent>(body, out var bloodstream))
-            _bloodstream.TryModifyBloodLevel((body, bloodstream), FixedPoint2.New(-(rate * tickSeconds)));
+            _bloodstream.TryBleedOut((body, bloodstream), FixedPoint2.New(rate * tickSeconds));
     }
 
     private void DrainBlood(EntityUid body, float amount)
     {
-        if (!TryComp<BloodstreamComponent>(body, out var bloodstream))
-            return;
-
-        if (!_solutions.ResolveSolution(body, bloodstream.BloodSolutionName, ref bloodstream.BloodSolution, out var bloodSolution))
-            return;
-
-        var drain = FixedPoint2.Min((FixedPoint2) amount, bloodSolution.Volume);
-        if (drain <= FixedPoint2.Zero)
-            return;
-
-        var removed = bloodSolution.RemoveReagent(bloodstream.BloodReagent, drain, ignoreReagentData: true);
-        if (removed > FixedPoint2.Zero)
-            _solutions.UpdateChemicals(bloodstream.BloodSolution.Value);
+        if (TryComp<BloodstreamComponent>(body, out var bloodstream))
+            _bloodstream.TryRegulateBloodLevel((body, bloodstream), (FixedPoint2) amount, referenceFactor: 0f);
     }
 
     protected override void ApplyWoundHealingDamage(EntityUid body, EntityUid part, WoundType type, FixedPoint2 amount)
@@ -128,7 +116,8 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             return;
         if (!Proto.TryIndex(group, out var groupProto))
             return;
-        if (!damageable.Damage.TryGetDamageInGroup(groupProto, out var amount) || amount <= FixedPoint2.Zero)
+        var damage = Damageable.GetAllDamage((body, damageable));
+        if (!damage.TryGetDamageInGroup(groupProto, out var amount) || amount <= FixedPoint2.Zero)
             return;
 
         ApplyWoundHealingDamage(body, part, group, amount);

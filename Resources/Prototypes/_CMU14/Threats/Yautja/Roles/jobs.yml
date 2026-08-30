@@ -411,7 +411,7 @@
   suffix: Spawner, Player, Event
   components:
   - type: Sprite
-    sprite: _CMU14/Yautja/mask.rsi
+    sprite: CMU14/Yautja/mask.rsi
     state: icon
   - type: RandomHumanoidSpawner
     settings: CMUYautjaHunter
@@ -431,8 +431,9 @@
     baseWalkSpeed: 4.4
     baseSprintSpeed: 8.4
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: CMUYautja
+  - type: Injurable
+    damageContainer: Biological
     healthBarThreshold: 5
   - type: MeleeWeapon
     soundHit:
@@ -458,12 +459,6 @@
     - CMUYautjaPain
     - CMUYautjaDeathCry
     - CMUYautjaDeathLaugh
-  - type: Vocal
-    sounds:
-      Male: CMUMaleYautja
-      Female: CMUFemaleYautja
-      Unsexed: CMUMaleYautja
-
 - type: playTimeTracker
   id: CMUYautjaHunter
 
@@ -471,5 +466,5 @@
   parent: CMJobIconBase
   id: CMUYautjaJobIcon
   icon:
-    sprite: _CMU14/Yautja/mask.rsi
+    sprite: CMU14/Yautja/mask.rsi
     state: icon

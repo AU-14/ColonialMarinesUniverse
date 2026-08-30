@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
 /// <summary>
 /// Marker for wearable items (masks, helmets) that fully or partially

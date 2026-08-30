@@ -8,7 +8,8 @@
   color: "#bed700"
   reward: 2
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.1
       effects:
       - !type:Corrosive
@@ -21,7 +22,8 @@
   desc: reagent-desc-xeno-royal-blood
   color: "#cac703"
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.1
       effects:
       - !type:Corrosive
@@ -47,7 +49,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Hallucinogenic
@@ -66,7 +69,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Hyperdensificating
@@ -83,7 +87,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Neuropathic
@@ -102,7 +107,8 @@
   overdose: 80
   criticalOverdose: 100
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Hemositic
@@ -120,7 +126,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Neurotoxic
@@ -141,7 +148,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Fueling
@@ -164,7 +172,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Biocidic
@@ -181,7 +190,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Biocidic

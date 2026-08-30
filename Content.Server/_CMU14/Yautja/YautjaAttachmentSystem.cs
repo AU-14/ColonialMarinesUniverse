@@ -1,5 +1,5 @@
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Inventory;
@@ -16,7 +16,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaAttachmentSystem : EntitySystem
 {
@@ -415,7 +415,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         if ((args.SlotFlags & bracer.Slots) == 0)
             return;
 
-        _ui.TryOpenUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key, args.Equipee);
+        _ui.TryOpenUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key, args.EquipTarget);
         UpdateBadBloodChoiceUi(ent);
     }
 

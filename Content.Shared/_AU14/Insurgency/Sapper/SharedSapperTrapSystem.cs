@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Map;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
@@ -15,7 +15,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._AU14.Insurgency.Sapper;
+namespace Content.Shared.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     Shared behavior for CLF Sapper traps: planting, disarming, and gating who can set one off. The

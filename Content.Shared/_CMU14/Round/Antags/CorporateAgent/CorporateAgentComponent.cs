@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Round.Antags.CorporateAgent;
+namespace Content.Shared.CMU14.Round.Antags.CorporateAgent;
 
 /// <summary>
 /// A corporate infiltration antag (Laselle spy, Weyland-Yutani agent). Their goal is to hold

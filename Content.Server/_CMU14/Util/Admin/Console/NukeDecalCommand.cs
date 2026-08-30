@@ -5,9 +5,10 @@ using Content.Server.Decals;
 using Content.Shared.Administration;
 using Content.Shared.Decals;
 using Robust.Shared.Console;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Util.Admin.Console;
+namespace Content.Server.CMU14.Util.Admin.Console;
 
 [AdminCommand(AdminFlags.Fun)]
 public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
@@ -35,10 +36,10 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
         var idArray = idArgs.ToArray();
         var idFilter = idArray.Length > 0 ? new HashSet<string>(idArray) : null;
         int totalRemoved = 0, totalSkipped = 0, gridCount = 0;
-        var query = EntityManager.EntityQueryEnumerator<DecalGridComponent>();
-        while (query.MoveNext(out var gridUid, out var decalGrid))
+        var query = EntityManager.EntityQueryEnumerator<MapGridComponent>();
+        while (query.MoveNext(out var gridUid, out _))
         {
-            var (removed, skipped) = _decalSys.RemoveDecals(gridUid, idFilter, !all, decalGrid);
+            var (removed, skipped) = _decalSys.RemoveDecals(gridUid, idFilter, !all);
             totalRemoved += removed;
             totalSkipped += skipped;
             gridCount++;

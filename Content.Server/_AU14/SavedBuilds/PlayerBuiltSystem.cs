@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
-using Content.Shared._AU14.SavedBuilds;
+using Content.Shared.CMU14.SavedBuilds;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Construction;
 using Content.Shared.Database;
@@ -12,7 +12,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.SavedBuilds;
+namespace Content.Server.CMU14.SavedBuilds;
 
 /// <summary>
 /// Stamps <see cref="PlayerBuiltComponent"/> on entities players construct and surfaces the

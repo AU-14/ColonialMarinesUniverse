@@ -1,12 +1,12 @@
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.Item;
 using Content.Shared.Tag;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
-using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
+using TribalComponent = Content.Shared.CMU14.Threats.Mobs.Tribal.TribalComponent;
 
-namespace Content.Server.AU14;
+namespace Content.Server.CMU14;
 
 public sealed partial class TribalItemRestrictSystem : EntitySystem
 {
@@ -79,11 +79,11 @@ public sealed partial class TribalItemRestrictSystem : EntitySystem
 			return;
 
 		// If the equipee has TribalComponent, allow equip
-		if (HasComp<TribalComponent>(args.Equipee))
+		if (HasComp<TribalComponent>(args.User))
 			return;
 
 		// Block non-tribals from equipping tribe-tagged items
 		args.Cancel();
-		_popupSystem.PopupClient("You cannot equip this.", item, args.Equipee);
+		_popupSystem.PopupClient("You cannot equip this.", item, args.User);
 	}
 }

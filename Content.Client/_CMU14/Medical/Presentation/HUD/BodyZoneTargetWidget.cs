@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -11,7 +11,7 @@ using Robust.Shared.IoC;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
-namespace Content.Client._CMU14.Medical.Presentation.HUD;
+namespace Content.Client.CMU14.Medical.Presentation.HUD;
 
 public sealed class BodyZoneTargetWidget : Control
 {
@@ -24,7 +24,7 @@ public sealed class BodyZoneTargetWidget : Control
     private const string BaseState = "zone_sel";
 
     private static readonly ResPath RsiPath =
-        new("/Textures/_CMU14/Medical/Presentation/HUD/targetdoll.rsi");
+        new("/Textures/CMU14/Medical/Presentation/HUD/targetdoll.rsi");
 
     private static readonly ZoneButton[] ZoneButtons =
     {

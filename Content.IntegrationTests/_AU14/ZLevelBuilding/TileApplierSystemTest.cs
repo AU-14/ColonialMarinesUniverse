@@ -1,11 +1,11 @@
-using Content.Server._AU14.ZLevelBuilding;
-using Content.Server._CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevelBuilding;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
-using Content.Shared._AU14.ZLevelBuilding;
-using Content.Shared._AU14.SavedBuilds;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.SavedBuilds;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Shuttles.Components;
 using Robust.Shared.GameObjects;
@@ -16,7 +16,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 
-namespace Content.IntegrationTests._AU14.ZLevelBuilding;
+namespace Content.IntegrationTests.CMU14.ZLevelBuilding;
 
 [TestFixture]
 public sealed class TileApplierSystemTest

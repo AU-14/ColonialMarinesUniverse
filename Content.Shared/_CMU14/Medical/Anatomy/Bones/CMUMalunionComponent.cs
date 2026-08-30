@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Bones;
+namespace Content.Shared.CMU14.Medical.Anatomy.Bones;
 
 /// <summary>
 ///     Marks a fracture that healed badly after being left unstabilized.

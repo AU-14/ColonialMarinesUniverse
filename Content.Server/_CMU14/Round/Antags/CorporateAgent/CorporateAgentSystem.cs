@@ -1,14 +1,14 @@
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Systems;
 using Content.Server.Popups;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
-using Content.Shared._CMU14.Round.Antags.CorporateAgent;
-using Content.Shared._CMU14.Round.Objectives.Type;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.CorporateAgent;
+using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Paper;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 
-namespace Content.Server._CMU14.Round.Antags.CorporateAgent;
+namespace Content.Server.CMU14.Round.Antags.CorporateAgent;
 
 public sealed partial class CorporateAgentSystem : EntitySystem
 {

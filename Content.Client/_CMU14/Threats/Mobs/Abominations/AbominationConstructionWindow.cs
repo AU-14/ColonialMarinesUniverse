@@ -3,7 +3,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Threats.Mobs.Abominations;
+namespace Content.Client.CMU14.Threats.Mobs.Abominations;
 
 public sealed class AbominationConstructionWindow : DefaultWindow
 {

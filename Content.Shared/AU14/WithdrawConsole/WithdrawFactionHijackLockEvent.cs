@@ -1,4 +1,4 @@
-namespace Content.Shared.AU14.WithdrawConsole;
+namespace Content.Shared.CMU14.WithdrawConsole;
 
 [ByRefEvent]
 public readonly record struct WithdrawFactionHijackLockEvent(string Faction);

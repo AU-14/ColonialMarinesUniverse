@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._AU14.Smelting;
+namespace Content.Shared.CMU14.Smelting;
 
 /// <summary>
 /// A crucible that renders ore into sheets over a lit fire.

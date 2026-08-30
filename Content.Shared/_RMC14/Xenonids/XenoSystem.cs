@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
@@ -35,6 +35,7 @@ using Content.Shared.Buckle.Components;
 using Content.Shared.Chat;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DragDrop;
@@ -180,7 +181,7 @@ public sealed partial class XenoSystem : EntitySystem
         }
 
         if (!MathHelper.CloseTo(_xenoSpeedMultiplier, 1))
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         if (xeno.Comp.MuteOnSpawn)
             _status.TryAddStatusEffect(xeno, SpawnMuteStatus, _xenoSpawnMuteDuration, true, SpawnMuteStatus);
@@ -358,8 +359,7 @@ public sealed partial class XenoSystem : EntitySystem
     {
         foreach (var hit in args.HitEntities)
         {
-            SharedEntityStorageComponent? storage = null;
-            if (!_entityStorage.ResolveStorage(hit, ref storage))
+            if (!TryComp<EntityStorageComponent>(hit, out var storage))
                 continue;
 
             if (_weldable.IsWelded(hit))
@@ -451,7 +451,7 @@ public sealed partial class XenoSystem : EntitySystem
         var xenos = EntityQueryEnumerator<XenoComponent, MovementSpeedModifierComponent>();
         while (xenos.MoveNext(out var uid, out _, out var comp))
         {
-            _movementSpeed.RefreshMovementSpeedModifiers(uid, comp);
+            _movementSpeed.RefreshMovementSpeedModifiers((uid, comp));
         }
     }
 
@@ -502,11 +502,12 @@ public sealed partial class XenoSystem : EntitySystem
         if (_rmcFlammable.IsOnFire(xeno.Owner))
             return;
 
-        if (!_damageableQuery.Resolve(xeno, ref xeno.Comp, false) ||
-            xeno.Comp.Damage.GetTotal() <= FixedPoint2.Zero)
-        {
+        if (!_damageableQuery.Resolve(xeno, ref xeno.Comp, false))
             return;
-        }
+
+        var currentDamage = _damageable.GetAllDamage(xeno);
+        if (currentDamage.GetTotal() <= FixedPoint2.Zero)
+            return;
 
         if (_mobStateQuery.TryGetComponent(xeno, out var mobState) &&
             _mobState.IsDead(xeno, mobState))

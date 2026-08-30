@@ -1,22 +1,23 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server.AU14.ColonyEconomy;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Stack;
-using Content.Shared._AU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Insurgency.Sapper;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Access.Components;
 using Content.Shared.Administration.Logs;
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Insurgency.Sapper;
+namespace Content.Server.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     Runs the financial siphon rig. Clamping it onto a colony finance device (ATM, budget console, or
@@ -296,7 +297,7 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
 
     private bool TryCommitSiphon(
         string sourceKind,
-        string cashPrototype,
+        EntProtoId cashPrototype,
         EntityUid source,
         EntityUid recipient,
         List<SiphonDebit> debits,
@@ -306,7 +307,9 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
         List<EntityUid> payout;
         try
         {
-            payout = amount > 0 ? _stack.SpawnMultiple(cashPrototype, amount, source) : new List<EntityUid>();
+            payout = amount > 0
+                ? _stack.SpawnMultipleNextToOrDrop(cashPrototype, amount, source)
+                : new List<EntityUid>();
         }
         catch (Exception e)
         {

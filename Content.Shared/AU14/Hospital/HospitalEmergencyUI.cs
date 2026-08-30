@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.Hospital;
+namespace Content.Shared.CMU14.Hospital;
 
 [Serializable, NetSerializable]
 public enum HospitalEmergencyComputerUi

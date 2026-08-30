@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-aberration
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/aberration.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/aberration.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -39,13 +39,15 @@
     range: 4
     moveDelayTime: 0
     knockdownTime: 0
-    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
+    leapSound: /Audio/CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
     hitEffect: RMCEffectExtraSlash
     targetJitterTime: 1
     targetCameraShakeStrength: 1
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoHeadbutt
     damage:
       types:
@@ -105,8 +107,10 @@
   - type: MeleeWeapon
     attackRate: 2.5
     damage:
-      groups:
-        Brute: 55
+      types:
+        Blunt: 18.33
+        Slash: 18.33
+        Piercing: 18.34
   - type: CMArmor
     explosionArmor: 50
     xenoArmor: 15
@@ -123,10 +127,10 @@
     size: Big
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: aberration
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:

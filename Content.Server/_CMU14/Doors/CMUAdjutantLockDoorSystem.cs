@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Doors;
+using Content.Shared.CMU14.Doors;
 using Content.Shared._RMC14.Roles;
 using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
@@ -10,7 +10,7 @@ using Content.Shared.Roles;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Doors;
+namespace Content.Server.CMU14.Doors;
 
 public sealed partial class CMUAdjutantLockDoorSystem : EntitySystem
 {

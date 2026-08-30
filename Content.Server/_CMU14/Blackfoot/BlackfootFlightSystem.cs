@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.Blackfoot;
-using Content.Shared._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.Blackfoot;
+using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions;
 using Content.Shared.Audio;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
+using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -22,7 +24,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Blackfoot;
+namespace Content.Server.CMU14.Blackfoot;
 
 public sealed partial class BlackfootFlightSystem : EntitySystem
 {
@@ -1145,7 +1147,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
                 continue;
             }
 
-            if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) ||
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) ||
                 itemSlot.Item is not { } thrusters)
             {
                 return false;

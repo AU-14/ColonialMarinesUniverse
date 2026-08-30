@@ -1,15 +1,15 @@
-using Content.Server._CMU14.RoundStatistics;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.RoundStatistics;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using ApeComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeComponent;
-using KillAllApeRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllApeRuleComponent;
+using ApeComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeComponent;
+using KillAllApeRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllApeRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 public sealed partial class KillAllApeRuleSystem : GameRuleSystem<KillAllApeRuleComponent>
 {

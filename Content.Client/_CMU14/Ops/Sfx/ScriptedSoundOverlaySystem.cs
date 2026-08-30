@@ -1,5 +1,5 @@
-using Content.Shared._CMU14.Ops.Sfx;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Ops.Sfx;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
@@ -10,7 +10,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Ops.Sfx;
+namespace Content.Client.CMU14.Ops.Sfx;
 
 public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
 {

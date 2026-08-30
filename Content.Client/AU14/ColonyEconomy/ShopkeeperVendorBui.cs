@@ -1,8 +1,8 @@
 using Content.Shared.Access.Systems;
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
-namespace Content.Client.AU14.ColonyEconomy;
+namespace Content.Client.CMU14.ColonyEconomy;
 public sealed partial class AU14ShopkeeperVendorBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [Dependency] private IPlayerManager _player = default!;

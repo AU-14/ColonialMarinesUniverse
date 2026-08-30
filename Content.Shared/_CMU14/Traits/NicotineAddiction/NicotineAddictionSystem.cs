@@ -4,9 +4,9 @@ using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Chemistry.Effects;
 
-namespace Content.Shared._CMU14.Traits.NicotineAddiction;
+namespace Content.Shared.CMU14.Traits.NicotineAddiction;
 
 public sealed partial class NicotineAddictionSystem : EntitySystem
 {

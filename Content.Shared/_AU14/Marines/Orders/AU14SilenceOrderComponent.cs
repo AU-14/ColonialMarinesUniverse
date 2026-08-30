@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.Marines.Orders;
+namespace Content.Shared.CMU14.Marines.Orders;
 
 /// <summary>
 /// Added to entities under the Silence Order effect. Forces whisper-only speech for the duration.

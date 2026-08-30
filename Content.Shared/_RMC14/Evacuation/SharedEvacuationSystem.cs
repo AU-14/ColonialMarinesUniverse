@@ -8,7 +8,7 @@ using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.HyperSleep;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Xenonids.Announce;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Audio;
 using Content.Shared.CCVar;
 using Content.Shared.Coordinates;

@@ -1,7 +1,7 @@
 # CMU14 Pathogen - Neomorph Structures
 # RSI paths:
-#   Resources/Textures/_CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
-#   Resources/Textures/_CMU14/Effects/pathogen_effects.rsi
+#   Resources/Textures/CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+#   Resources/Textures/CMU14/Effects/pathogen_effects.rsi
 
 # ── Walls ────────────────────────────────────────────────────────────────────
 
@@ -12,17 +12,18 @@
   description: A dense wall of pale, fibrous mycelium secreted by a Neomorph. It pulses faintly with bioluminescent light.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     drawdepth: Walls
   - type: Icon
-    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     state: mycelium
   - type: IconSmooth
     key: walls
     base: mycelium
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -64,10 +65,10 @@
   description: A heavily reinforced mycelium wall. The fibrous strands have fused into a dense, almost chitinous mass.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     drawdepth: Walls
   - type: Icon
-    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     state: thickmycelium
   - type: IconSmooth
     key: walls
@@ -111,10 +112,10 @@
   description: A translucent sheet of mycelium, thin enough to see through but tough enough to slow a marine advance.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     drawdepth: Walls
   - type: Icon
-    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     state: membrane
   - type: IconSmooth
     key: walls
@@ -131,8 +132,9 @@
         - GlassLayer
         density: 1000
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -176,10 +178,10 @@
   description: A reinforced mycelium membrane. It remains just translucent enough to make out shapes on the other side.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     drawdepth: Walls
   - type: Icon
-    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     state: thickmembrane
   - type: IconSmooth
     key: walls
@@ -229,7 +231,7 @@
     - CMU14PathogenWalker
   - type: InteractionOutline
   - type: Sprite
-    sprite: _CMU14/Effects/pathogen_effects.rsi
+    sprite: CMU14/Effects/pathogen_effects.rsi
     layers:
     - state: mycelium
       map: ["enum.DoorVisualLayers.Base"]
@@ -272,8 +274,9 @@
   - type: RMCMesonsNonviewable
   - type: Occluder
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -330,7 +333,7 @@
   description: A dense, reinforced curtain of mycelium. The fibres have hardened into something almost solid.
   components:
   - type: Sprite
-    sprite: _CMU14/Effects/pathogen_effects.rsi
+    sprite: CMU14/Effects/pathogen_effects.rsi
     layers:
     - state: "thick mycelium"
       map: ["enum.DoorVisualLayers.Base"]
@@ -395,7 +398,7 @@
     bodyType: Static
   - type: Appearance
   - type: Sprite
-    sprite: _CMU14/Effects/pathogen_effects.rsi
+    sprite: CMU14/Effects/pathogen_effects.rsi
     state: nest_overlay
     drawdepth: OverMobs
   - type: Fixtures
@@ -412,6 +415,7 @@
         hard: false
   - type: Clickable
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
@@ -439,7 +443,7 @@
     anchored: false
   - type: Sprite
     drawdepth: Effects
-    sprite: _CMU14/Effects/pathogen_effects.rsi
+    sprite: CMU14/Effects/pathogen_effects.rsi
     layers:
     - state: secrete_base
     - map: ["enum.XenoConstructionVisualLayers.Animation"]
@@ -459,7 +463,7 @@
     anchored: false
   - type: Sprite
     drawdepth: Effects
-    sprite: _CMU14/Effects/pathogen_effects.rsi
+    sprite: CMU14/Effects/pathogen_effects.rsi
     layers:
     - state: secrete_base
     - map: ["enum.XenoConstructionVisualLayers.Animation"]
@@ -479,7 +483,7 @@
     anchored: false
   - type: Sprite
     drawdepth: Effects
-    sprite: _CMU14/Effects/pathogen_effects.rsi
+    sprite: CMU14/Effects/pathogen_effects.rsi
     layers:
     - state: secrete_base
     - map: ["enum.XenoConstructionVisualLayers.Animation"]
@@ -499,7 +503,7 @@
     anchored: false
   - type: Sprite
     drawdepth: Effects
-    sprite: _CMU14/Effects/pathogen_effects.rsi
+    sprite: CMU14/Effects/pathogen_effects.rsi
     layers:
     - state: secrete_base
     - map: ["enum.XenoConstructionVisualLayers.Animation"]

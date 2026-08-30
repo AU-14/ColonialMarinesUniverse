@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CMU14.Roles.Ranks;
+namespace Content.Shared.CMU14.Roles.Ranks;
 
 /// <summary>
 /// Rank preference options for a single job, broken down per platoon. Client-only data holder,
@@ -32,7 +32,7 @@ public sealed class PlatoonRankOptions
 
     /// <summary>
     /// Optional path to the platoon patch texture shown in the tab header.
-    /// Example: /Textures/_AU14/Clothing/Patches/uscm_patch.rsi/icon.png
+    /// Example: /Textures/CMU14/Clothing/Patches/uscm_patch.rsi/icon.png
     /// </summary>
     public ResPath? PatchPath;
 

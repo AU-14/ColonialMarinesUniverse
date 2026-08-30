@@ -67,7 +67,7 @@
   greeting: au14-uppgrom-greeting
   icon: "AU14JobIconUPPGROMSquadLeader"
   joinNotifyCrew: false
-  supervisors: au-14-job-name-uppgrom-commander
+  supervisors: au-14-job-name-rmcrrt-commander
   accessGroups:
   - AU14GovforCommand
   hidden: false

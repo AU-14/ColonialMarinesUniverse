@@ -1,7 +1,7 @@
 using System;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.util;
+namespace Content.Shared.CMU14.util;
 
 /// <summary>
 /// Per-job scaling info.

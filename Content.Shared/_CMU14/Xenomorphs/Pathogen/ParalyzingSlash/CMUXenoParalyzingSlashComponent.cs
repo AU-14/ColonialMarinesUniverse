@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Xenonids.ParalyzingSlash;
+namespace Content.Shared.CMU14.Xenonids.ParalyzingSlash;
 
 /// <summary>
 /// Marks a xeno as having the Pathogen Paralyzing Slash armed and ready.

@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Systems;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
@@ -11,10 +11,10 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Chemistry.Effects;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
 
 public abstract partial class SharedBrainSystem : EntitySystem
 {
@@ -22,7 +22,7 @@ public abstract partial class SharedBrainSystem : EntitySystem
     [Dependency] protected BlurryVisionSystem BlurryVision = default!;
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IRobustRandom Rng = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
 

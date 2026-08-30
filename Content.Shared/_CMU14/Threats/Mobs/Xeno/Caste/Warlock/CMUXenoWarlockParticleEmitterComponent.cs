@@ -2,7 +2,7 @@ using System.Numerics;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 
 [Serializable, NetSerializable]
 public enum CMUXenoWarlockParticleEffect : byte

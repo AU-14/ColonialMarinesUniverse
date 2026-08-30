@@ -1,17 +1,17 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Treatment.FieldCare;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Treatment.FieldCare;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
+using TribalComponent = Content.Shared.CMU14.Threats.Mobs.Tribal.TribalComponent;
 
-namespace Content.Server._CMU14.Medical.Treatment.FieldCare;
+namespace Content.Server.CMU14.Medical.Treatment.FieldCare;
 
 public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
 {
@@ -179,10 +179,10 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
         if (productId == default)
             return false;
 
-        if (!_stacks.Use(ingredientUid, cost, ingredientStack))
+        if (!_stacks.TryUse((ingredientUid, ingredientStack), cost))
             return false;
 
-        if (!_stacks.Use(baseUid, 1, baseStack))
+        if (!_stacks.TryUse((baseUid, baseStack), 1))
             return false;
 
         var spawned = Spawn(productId, Transform(user).Coordinates);

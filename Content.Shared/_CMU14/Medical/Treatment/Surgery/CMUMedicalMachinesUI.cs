@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Content.Shared.Body.Part;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 [Serializable, NetSerializable]
 public enum CMUAutodocUIKey : byte

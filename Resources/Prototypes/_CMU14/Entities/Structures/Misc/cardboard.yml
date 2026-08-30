@@ -11,6 +11,7 @@
     bodyType: Static
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -28,7 +29,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/cardboard.rsi
+    sprite: CMU14/Structures/cardboard.rsi
     state: johnnycardboard
   - type: Flamability
     chance: 1.0

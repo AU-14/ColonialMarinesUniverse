@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
 
 /// <summary>
 ///     CMU-prefixed to avoid clashing with vanilla SS14's <c>BrainComponent</c>

@@ -25,8 +25,7 @@ public sealed partial class PolymorphCommand : ToolshedCommand
     {
         _system ??= GetSys<PolymorphSystem>();
 
-        if (!_proto.TryIndex(protoId, out var prototype))
-            return null;
+        var prototype = _proto.Index(protoId);
 
         return _system.PolymorphEntity(input, prototype.Configuration);
     }

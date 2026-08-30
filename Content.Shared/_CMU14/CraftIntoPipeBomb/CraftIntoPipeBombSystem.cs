@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.CraftIntoPipeBomb;
+using Content.Shared.CMU14.CraftIntoPipeBomb;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Smokeables;
 using Content.Shared._RMC14.Stack;
@@ -15,7 +15,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
 using System.Security.Principal;
 
-namespace Content.Shared._CMU14.CraftIntoPipeBomb;
+namespace Content.Shared.CMU14.CraftIntoPipeBomb;
 
 public sealed partial class CraftIntoPipeBombSystem : EntitySystem
 {
@@ -112,7 +112,7 @@ public sealed partial class CraftIntoPipeBombSystem : EntitySystem
             }
             if (countStack >= 5 && _repair.UseFuel(used.Value, args.User, 5))
             {
-                _stack.Use(ent, 5, stack);
+                _stack.TryUse((ent, stack), 5);
             }
             else
             {
@@ -131,7 +131,7 @@ public sealed partial class CraftIntoPipeBombSystem : EntitySystem
             if (HasComp<RMCCableCoilComponent>(used))
                 if (countStack >= 5)
                 {
-                    _stack.Use(used.Value, 5, stacks);
+                    _stack.TryUse((used.Value, stacks), 5);
                 }
                 else
                 {

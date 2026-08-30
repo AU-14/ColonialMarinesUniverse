@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Round.Antags.ColonyBounty;
+namespace Content.Shared.CMU14.Round.Antags.ColonyBounty;
 
 /// <summary>
 /// Marks a colony antag as carrying a CMB bounty. Creates their wanted record on spawn

@@ -1,6 +1,6 @@
 using Content.Server.Administration;
 using Content.Server.Radio.EntitySystems;
-using Content.Shared._AU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Insurgency.Sapper;
 using Content.Shared._RMC14.Areas;
 using Content.Shared.Radio;
 using Robust.Shared.Audio.Systems;
@@ -8,7 +8,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Insurgency.Sapper;
+namespace Content.Server.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     The audio (early-warning) trap's payload. The wire lifecycle is entirely the tripwire system's;

@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.ZLevels.Core.Components;
+namespace Content.Shared.CMU14.ZLevels.Core.Components;
 
 /// <summary>
 /// Allows entities not to fall if they are above this entity at a higher level.

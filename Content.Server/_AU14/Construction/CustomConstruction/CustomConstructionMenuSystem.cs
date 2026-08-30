@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using Content.Server.Administration.Managers;
 using Content.Server.Players.JobWhitelist;
-using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Shared.CMU14.Construction.CustomConstruction;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
@@ -23,7 +23,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Construction.CustomConstruction;
+namespace Content.Server.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Lets a permitted admin add/remove/re-recipe an arbitrary world entity to/from the construction
@@ -32,7 +32,7 @@ namespace Content.Server._AU14.Construction.CustomConstruction;
 ///
 /// <para>
 /// Persistence is "restart-applied": each added item is written as a self-contained construction
-/// prototype YAML file under <c>Resources/Prototypes/_AU14/CustomConstruction/Generated/</c>. The
+/// prototype YAML file under <c>Resources/Prototypes/CMU14/CustomConstruction/Generated/</c>. The
 /// entry lives in the codebase as a normal prototype file, so it is loaded on the next restart,
 /// committed to git, and shipped to clients via the content pack. Add = write file, Remove = delete
 /// file, Change Recipe = rewrite file. A machine-readable header records spawnlist/category/steps so
@@ -68,7 +68,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     // AU14ToolPermissionSystem) because jobwhitelistadd was reachable by lower admin ranks. Trusted
     // non-admins are now granted per tool through the Tool Permissions window or the toolperm command.
 
-    private const string GeneratedSubDir = "Prototypes/_AU14/CustomConstruction/Generated";
+    private const string GeneratedSubDir = "Prototypes/CMU14/CustomConstruction/Generated";
     private const string DefaultSpawnlist = "AU14";
     private const string DefaultCategory = "Custom";
 
@@ -152,7 +152,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     /// </summary>
     public bool CanEditConstructionMenu(ICommonSession session)
     {
-        return CanUseTool(session, Content.Shared._AU14.Administration.AU14ToolPermissions.Construction);
+        return CanUseTool(session, Content.Shared.CMU14.Administration.AU14ToolPermissions.Construction);
     }
 
     /// <summary>Per-tool gate: a Host-flagged admin, or a ckey granted this specific tool through the

@@ -1,14 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.Body;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
-using Robust.Shared.Containers;
 using Robust.Shared.Network;
 
-namespace Content.Shared._CMU14.Medical.Core;
+namespace Content.Shared.CMU14.Medical.Core;
 
 /// <summary>
 ///     Maintains a structural medical index and exposes cached snapshots to callers.
@@ -17,7 +16,6 @@ public sealed partial class CMUMedicalBodyIndexSystem : EntitySystem
 {
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private CMUMedicalChangeSystem _changes = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
@@ -29,6 +27,8 @@ public sealed partial class CMUMedicalBodyIndexSystem : EntitySystem
         SubscribeLocalEvent<CMUMedicalBodyIndexComponent, BodyPartRemovedEvent>(OnBodyPartRemoved);
         SubscribeLocalEvent<OrganHealthComponent, OrganAddedToBodyEvent>(OnOrganAdded);
         SubscribeLocalEvent<OrganHealthComponent, OrganRemovedFromBodyEvent>(OnOrganRemoved);
+        SubscribeLocalEvent<ChildOrganComponent, OrganRelatedEvent>(OnOrganRelationshipChanged);
+        SubscribeLocalEvent<ChildOrganComponent, OrganOrphanedEvent>(OnOrganRelationshipChanged);
     }
 
     /// <summary>
@@ -357,6 +357,28 @@ public sealed partial class CMUMedicalBodyIndexSystem : EntitySystem
         Invalidate(args.OldBody, aggregate, ReindexPartOrgans(index, args.OldPart));
     }
 
+    private void OnOrganRelationshipChanged(Entity<ChildOrganComponent> ent, ref OrganRelatedEvent args)
+    {
+        RebuildForRelationshipChange(ent.Owner);
+    }
+
+    private void OnOrganRelationshipChanged(Entity<ChildOrganComponent> ent, ref OrganOrphanedEvent args)
+    {
+        RebuildForRelationshipChange(ent.Owner);
+    }
+
+    private void RebuildForRelationshipChange(EntityUid organ)
+    {
+        if (!TryComp<OrganComponent>(organ, out var component) ||
+            component.Body is not { } body ||
+            !TryGetMedicalState(body, out var index, out var aggregate))
+        {
+            return;
+        }
+
+        Invalidate(body, aggregate, RebuildIndex(body, index));
+    }
+
     private CMUMedicalSnapshot BuildSnapshot(
         CMUMedicalBodyIndexComponent index,
         CMUMedicalAggregateComponent aggregate)
@@ -438,19 +460,9 @@ public sealed partial class CMUMedicalBodyIndexSystem : EntitySystem
         var slots = new List<CMUMedicalBodyPartSlotEntry>(component.Children.Count);
         foreach (var (slotId, slot) in component.Children)
         {
-            EntityUid? occupant = null;
-            var containerId = SharedBodySystem.GetPartSlotContainerId(slotId);
-            if (_containers.TryGetContainer(part, containerId, out var container))
-            {
-                foreach (var contained in container.ContainedEntities)
-                {
-                    if (!HasComp<BodyPartComponent>(contained))
-                        continue;
-
-                    occupant = contained;
-                    break;
-                }
-            }
+            EntityUid? occupant = TryGetRelatedOccupant(part, slotId, bodyPart: true, out var child)
+                ? child
+                : null;
 
             slots.Add(new CMUMedicalBodyPartSlotEntry(slotId, slot.Type, occupant));
         }
@@ -509,24 +521,36 @@ public sealed partial class CMUMedicalBodyIndexSystem : EntitySystem
         var slots = new List<CMUMedicalOrganSlotEntry>(component.Organs.Count);
         foreach (var slotId in component.Organs.Keys)
         {
-            EntityUid? occupant = null;
-            var containerId = SharedBodySystem.GetOrganContainerId(slotId);
-            if (_containers.TryGetContainer(part, containerId, out var container))
-            {
-                foreach (var contained in container.ContainedEntities)
-                {
-                    if (!HasComp<OrganComponent>(contained))
-                        continue;
-
-                    occupant = contained;
-                    break;
-                }
-            }
+            EntityUid? occupant = TryGetRelatedOccupant(part, slotId, bodyPart: false, out var organ)
+                ? organ
+                : null;
 
             slots.Add(new CMUMedicalOrganSlotEntry(slotId, occupant));
         }
 
         return slots;
+    }
+
+    private bool TryGetRelatedOccupant(EntityUid parent, string slotId, bool bodyPart, out EntityUid occupant)
+    {
+        if (TryComp<ParentOrganComponent>(parent, out var relation))
+        {
+            foreach (var child in relation.Children)
+            {
+                if (HasComp<BodyPartComponent>(child) != bodyPart ||
+                    !TryComp<OrganComponent>(child, out var organ) ||
+                    SharedBodySystem.GetCanonicalSlotId(organ.Category) != slotId)
+                {
+                    continue;
+                }
+
+                occupant = child;
+                return true;
+            }
+        }
+
+        occupant = default;
+        return false;
     }
 
     private static bool PartOrganMapsEqual(

@@ -5,7 +5,7 @@ using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 
-namespace Content.Shared._CMU14.Intel;
+namespace Content.Shared.CMU14.Intel;
 
 public sealed partial class ClaimableIntelConsoleSystem : EntitySystem
 {

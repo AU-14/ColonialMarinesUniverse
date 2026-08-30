@@ -1,10 +1,11 @@
 using System.Numerics;
 using Content.Server._RMC14.Atmos;
-using Content.Shared._AU14.Fire;
+using Content.Shared.CMU14.Fire;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
@@ -21,7 +22,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Fire;
+namespace Content.Server.CMU14.Fire;
 
 /// <summary>
 /// Drives the <see cref="FlamabilityComponent"/> fire spread and damage logic.

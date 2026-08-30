@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.ChemicalIrritants;
+namespace Content.Shared.CMU14.ChemicalIrritants;
 
 /// <summary>
 /// Component for clouds and dispensers that apply chemical irritants.

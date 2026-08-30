@@ -2,8 +2,7 @@ using System;
 using System.Numerics;
 using Content.Client.Stylesheets;
 using Content.Client.Resources;
-using Content.Shared._CMU14.Ghost;
-using Content.Shared._CMU14.Xenonids.Watch;
+using Content.Shared.CMU14.Xenonids.Watch;
 using Content.Shared.Chat;
 using Robust.Client.Console;
 using Robust.Client.Graphics;
@@ -73,12 +72,6 @@ public sealed partial class ChatMessageRow : PanelContainer
             });
         }
 
-        if (message.GhostFollowEntity.Valid)
-        {
-            var followButton = CreateFollowButton(message, metrics, textColor);
-            row.AddChild(followButton);
-        }
-
         if (message.XenoWatchEntity.Valid)
         {
             var watchButton = CreateXenoWatchButton(message, metrics, textColor);
@@ -105,31 +98,6 @@ public sealed partial class ChatMessageRow : PanelContainer
             FontOverride = sideFont
         };
         row.AddChild(_repeatBadge);
-    }
-
-    private Button CreateFollowButton(ChatMessage message, RowMetrics metrics, Color textColor)
-    {
-        var followButtonSize = new Vector2(metrics.FollowButtonSize, metrics.FollowButtonSize);
-        var followButtonColor = textColor.WithAlpha(1f);
-        var followButton = new Button
-        {
-            Text = Loc.GetString("cmu-chat-manager-follow-button"),
-            ToolTip = Loc.GetString("cmu-chat-manager-follow-button-tooltip"),
-            MinSize = followButtonSize,
-            MaxSize = followButtonSize,
-            Margin = new Thickness(2, 5, 2, 0),
-            ModulateSelfOverride = followButtonColor,
-            VerticalAlignment = VAlignment.Top,
-            StyleClasses = { StyleNano.StyleClassChatGhostFollowButton }
-        };
-
-        followButton.Label.HorizontalExpand = true;
-        followButton.Label.HorizontalAlignment = HAlignment.Center;
-        followButton.Label.VerticalAlignment = VAlignment.Center;
-        followButton.Label.Align = Label.AlignMode.Center;
-        followButton.Label.FontColorOverride = followButtonColor;
-        followButton.OnPressed += _ => _consoleHost.ExecuteCommand($"{CMUGhostFollowCommand.CommandName} {message.GhostFollowEntity}");
-        return followButton;
     }
 
     private Button CreateXenoWatchButton(ChatMessage message, RowMetrics metrics, Color textColor)

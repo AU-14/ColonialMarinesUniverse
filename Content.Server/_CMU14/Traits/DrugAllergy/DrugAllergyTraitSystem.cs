@@ -1,10 +1,10 @@
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Marines.Dogtags;
-using Content.Shared._CMU14.Traits.DrugAllergy;
+using Content.Shared.CMU14.Traits.DrugAllergy;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.Random;
 
-namespace Content.Server._CMU14.Traits.DrugAllergy;
+namespace Content.Server.CMU14.Traits.DrugAllergy;
 
 public sealed partial class DrugAllergyTraitSystem : EntitySystem
 {

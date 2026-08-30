@@ -1,11 +1,11 @@
-using Content.Shared._CMU14.Round.Objectives.Components;
-using Content.Shared._CMU14.Round.Objectives.Type;
+using Content.Shared.CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared.DragDrop;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Pulling.Events;
 using Robust.Shared.Map;
 
-namespace Content.Server._CMU14.Round.Objectives.Type;
+namespace Content.Server.CMU14.Round.Objectives.Type;
 
 public sealed partial class ObjFetchSystem : ObjectiveSystem
 {

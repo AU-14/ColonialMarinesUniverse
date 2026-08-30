@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Content.Shared._AU14.Insurgency;
+using Content.Shared.CMU14.Insurgency;
 using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency;
+namespace Content.Server.CMU14.Insurgency;
 
 /// <summary>
 ///     Server-side gate for untrusted faction definitions. Everything a client sends passes through

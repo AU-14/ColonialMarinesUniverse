@@ -1,15 +1,15 @@
-using Content.Server.Radio.Components;
 using Content.Shared._RMC14.UniformAccessories;
-using Content.Shared.AU14.Radio;
+using Content.Shared.CMU14.Radio;
 using Content.Shared.Clothing;
 using Content.Shared.Inventory;
 using Content.Shared.Radio;
+using Content.Shared.Radio.Components;
 using Robust.Shared.Containers;
-using Content.Server._AU14.Marines.Roles.Ranks;
-using Content.Shared._AU14.Marines.Roles.Ranks;
+using Content.Server.CMU14.Marines.Roles.Ranks;
+using Content.Shared.CMU14.Marines.Roles.Ranks;
 using Content.Server._RMC14.Marines.Roles.Ranks;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 /// <summary>
 ///     Grants intrinsic radio to the wearer when an <see cref="AccessoryHeadsetComponent"/>
@@ -238,4 +238,3 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
         Dirty(ent);
     }
 }
-

@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Threats.Mobs.Abomination;
+using Content.Shared.CMU14.Threats.Mobs.Abomination;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._CMU14.Threats.Mobs.Abominations;
+namespace Content.Client.CMU14.Threats.Mobs.Abominations;
 
 [UsedImplicitly]
 public sealed class AbominationMimicBui : BoundUserInterface

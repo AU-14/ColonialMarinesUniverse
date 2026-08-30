@@ -1,13 +1,13 @@
 using System.Collections.Frozen;
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Server._CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Server.CMU14.Medical.Treatment.FirstAid;
 using Content.Server._RMC14.Medical.Wounds;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Markers;
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
@@ -21,8 +21,10 @@ using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -33,7 +35,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 {
@@ -44,6 +46,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -149,6 +152,8 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             MovementThreshold = 0.5f,
             NeedHand = true,
             CancelDuplicate = true,
+            RangeCheck = false,
+            ExtraCheck = () => _interaction.InRangeAndAccessible(surgeon, patient),
         };
         if (!DoAfter.TryStartDoAfter(doAfter))
         {

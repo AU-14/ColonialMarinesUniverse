@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Client._AU14.UI;
+using Content.Client.CMU14.UI;
 using Content.Shared.Maps;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -16,7 +16,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
 
-namespace Content.Client._AU14.Construction.CustomConstruction;
+namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Multi-select entity picker for the "Mass Entity Editor": rows toggle-select, a searchable parent DROPDOWN

@@ -1,7 +1,7 @@
 using Content.Shared.Body.Part;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class TachycardiaComponent : Component { }

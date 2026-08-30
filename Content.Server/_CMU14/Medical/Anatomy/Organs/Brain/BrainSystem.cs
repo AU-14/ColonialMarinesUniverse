@@ -1,30 +1,29 @@
-using Content.Server.Speech.Components;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Injuries.Vision;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Injuries.Vision;
 using Content.Shared._RMC14.Medical.HUD;
 using Content.Shared._RMC14.Medical.HUD.Components;
-using Content.Shared.Drunk;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Speech.Components;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Organs.Brain;
+namespace Content.Server.CMU14.Medical.Anatomy.Organs.Brain;
 
 public sealed partial class BrainSystem : SharedBrainSystem
 {
     [Dependency] private CMUTemporaryBlurryVisionSystem _blur = default!;
-    [Dependency] private SharedDrunkSystem _drunk = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedStunSystem _stun = default!;
 
     private static readonly EntProtoId ForcedSleeping = "StatusEffectForcedSleeping";
+    private static readonly EntProtoId Woozy = "StatusEffectWoozy";
 
     public override void Update(float frameTime)
     {
@@ -87,7 +86,10 @@ public sealed partial class BrainSystem : SharedBrainSystem
                 _stun.TryKnockdown(body, brain.DisorientationKnockdownDuration, refresh: false);
                 break;
             default:
-                _drunk.TryApplyDrunkenness(body, brain.DisorientationDrunkPower, applySlur: false);
+                Status.TryAddStatusEffectDuration(
+                    body,
+                    Woozy,
+                    TimeSpan.FromSeconds(brain.DisorientationDrunkPower));
                 break;
         }
     }

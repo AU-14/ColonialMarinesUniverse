@@ -1,10 +1,10 @@
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Bones.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Bones;
+namespace Content.Server.CMU14.Medical.Anatomy.Bones;
 
 public sealed partial class BoneSystem : SharedBoneSystem
 {

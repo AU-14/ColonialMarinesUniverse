@@ -2,7 +2,7 @@ using Content.Server.EUI;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server._CMU14.BalanceRating;
+namespace Content.Server.CMU14.BalanceRating;
 
 [AnyCommand]
 public sealed partial class CMUBalanceRatingCommand : LocalizedCommands

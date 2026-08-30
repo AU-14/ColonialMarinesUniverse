@@ -1,15 +1,17 @@
 using System;
-using Content.Server._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
@@ -22,7 +24,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Medical.Injuries.Wounds;
+namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
 public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 {
@@ -37,6 +39,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedBodyZoneTargetingSystem _zoneTargeting = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -456,9 +459,10 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!_prototypes.TryIndex<DamageGroupPrototype>(treater.Group, out var group))
             return false;
 
+        var damage = _damageable.GetAllDamage((patient, damageable));
         foreach (var type in group.DamageTypes)
         {
-            if (damageable.Damage.DamageDict.TryGetValue(type, out var amount) && amount > FixedPoint2.Zero)
+            if (damage.DamageDict.TryGetValue(type, out var amount) && amount > FixedPoint2.Zero)
                 return true;
         }
 
@@ -900,7 +904,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 
         if (TryComp<StackComponent>(treaterUid, out var stack))
         {
-            if (!_stacks.Use(treaterUid, 1, stack))
+            if (!_stacks.TryUse((treaterUid, stack), 1))
                 return false;
 
             return stack.Unlimited || stack.Count > 0;

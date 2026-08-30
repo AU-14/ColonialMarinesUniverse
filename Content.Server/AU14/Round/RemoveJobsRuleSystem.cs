@@ -6,7 +6,7 @@ using Content.Server.Station.Components;
 using Content.Shared.GameTicking.Components;
 using JetBrains.Annotations;
 
-namespace Content.Server.AU14.Round;
+namespace Content.Server.CMU14.Round;
 
 [UsedImplicitly]
 public sealed partial class RemoveJobsRuleSystem : GameRuleSystem<RemoveJobsRuleComponent>

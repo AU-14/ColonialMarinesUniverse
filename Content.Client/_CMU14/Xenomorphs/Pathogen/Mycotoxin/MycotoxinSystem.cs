@@ -1,6 +1,6 @@
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
-namespace Content.Client._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+namespace Content.Client.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
 public sealed class ClientMycotoxinSystem : SharedMycotoxinSystem
 {

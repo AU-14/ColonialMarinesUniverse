@@ -14,7 +14,7 @@
     prefix: cmu-colony-prefix-ministry-doctor
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmucolonyblips.rsi
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
       state: colonist
   name: cmu-colony-name-ministry-doctor
   description: cmu-colony-description-ministry-doctor

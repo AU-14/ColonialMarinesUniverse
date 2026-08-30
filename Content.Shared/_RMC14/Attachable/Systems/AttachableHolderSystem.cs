@@ -676,22 +676,35 @@ public sealed partial class AttachableHolderSystem : EntitySystem
         Dirty(holder);
     }
 
-    public bool TryGetInhandSupercedingGun(EntityUid user, out EntityUid attachable, [NotNullWhen(true)] out GunComponent? gunComp)
+    public bool TryGetSupercedingGun(Entity<AttachableHolderComponent?> holder, out Entity<GunComponent> gun)
     {
-        attachable = default;
+        gun = default;
 
-        if (_hands.GetActiveItem(user) is not { } active ||
-            !TryComp(active, out AttachableHolderComponent? holderComp) ||
-            holderComp.SupercedingAttachable == null)
+        if (!Resolve(holder, ref holder.Comp, false) ||
+            holder.Comp.SupercedingAttachable is not { } attachable ||
+            !TryComp(attachable, out GunComponent? gunComp))
         {
-            gunComp = null;
             return false;
         }
 
-        if(!TryComp(holderComp.SupercedingAttachable, out gunComp))
-            return false;
+        gun = (attachable, gunComp);
+        return true;
+    }
 
-        attachable = holderComp.SupercedingAttachable.Value;
+    public bool TryGetInhandSupercedingGun(EntityUid user, out EntityUid attachable, [NotNullWhen(true)] out GunComponent? gunComp)
+    {
+        attachable = default;
+        gunComp = null;
+
+        if (_hands.GetActiveItem(user) is not { } active ||
+            !TryComp(active, out AttachableHolderComponent? holderComp) ||
+            !TryGetSupercedingGun((active, holderComp), out var gun))
+        {
+            return false;
+        }
+
+        attachable = gun.Owner;
+        gunComp = gun.Comp;
         return true;
     }
 

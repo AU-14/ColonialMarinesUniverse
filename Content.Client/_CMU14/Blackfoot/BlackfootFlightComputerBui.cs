@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._CMU14.Blackfoot;
+namespace Content.Client.CMU14.Blackfoot;
 
 [UsedImplicitly]
 public sealed class BlackfootFlightComputerBui : BoundUserInterface

@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.DroneOperator;
+namespace Content.Shared.CMU14.DroneOperator;
 
 [Serializable, NetSerializable]
 public sealed class CMUDroneAndroidShakeEvent(NetEntity drone, float duration) : EntityEventArgs

@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Organs.Eyes;
+namespace Content.Server.CMU14.Medical.Anatomy.Organs.Eyes;
 
 public sealed partial class EyesSystem : SharedEyesSystem
 {

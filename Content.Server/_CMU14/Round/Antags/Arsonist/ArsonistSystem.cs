@@ -1,14 +1,14 @@
-using Content.Server.AU14.Systems;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
-using Content.Shared._CMU14.Round.Antags.ColonyBounty;
-using Content.Shared._CMU14.Round.Antags.Arsonist;
+using Content.Server.CMU14.Systems;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.Arsonist;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Paper;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 
-namespace Content.Server._CMU14.Round.Antags.Arsonist;
+namespace Content.Server.CMU14.Round.Antags.Arsonist;
 
 /// <summary>
 /// Counts structure fires while an arsonist is active. Fires are counted regardless of

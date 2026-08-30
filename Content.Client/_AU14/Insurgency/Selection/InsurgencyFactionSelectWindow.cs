@@ -1,14 +1,14 @@
 using System;
 using System.Numerics;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._AU14.Insurgency.Selection;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Insurgency.Selection;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Client._AU14.Insurgency.Selection;
+namespace Content.Client.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     The CLF-leader faction selection popup. A single scrolling list of the round's Default factions:

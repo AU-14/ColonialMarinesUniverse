@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Markers;
 
 /// <summary>
 ///     Bone-setting workflow markers. They keep multi-step fracture repair

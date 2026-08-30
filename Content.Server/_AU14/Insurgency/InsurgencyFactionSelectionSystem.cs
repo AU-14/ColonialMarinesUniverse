@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Content.Server.AU14.Round;
-using Content.Server._AU14.Insurgency.Database;
+using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Insurgency.Database;
 
-namespace Content.Server._AU14.Insurgency;
+namespace Content.Server.CMU14.Insurgency;
 
 /// <summary>
 ///     GOVFOR to Default-faction matching and the server-authoritative selection path. A Default
@@ -48,7 +48,7 @@ public sealed partial class InsurgencyFactionSelectionSystem : EntitySystem
         return true;
     }
 
-    private static bool OpposesGovfor(Content.Shared._AU14.Insurgency.FactionDefinition def, string? govforPlatoon)
+    private static bool OpposesGovfor(Content.Shared.CMU14.Insurgency.FactionDefinition def, string? govforPlatoon)
     {
         // No GOVFOR platoon picked yet: nothing is confirmed to match, so offer nothing rather than
         // everything. A faction must explicitly list the platoon it opposes.
@@ -57,7 +57,7 @@ public sealed partial class InsurgencyFactionSelectionSystem : EntitySystem
 
         // The built-in CLF (now seeded as an ordinary DB row) opposes every GOVFOR, exactly as the
         // code-built copy always did, regardless of its OpposedGovforFactions list.
-        if (def.Metadata.BuiltinOverrideOf == Content.Shared._AU14.Insurgency.InsurgencyBuiltinFactions.VanillaClfId)
+        if (def.Metadata.BuiltinOverrideOf == Content.Shared.CMU14.Insurgency.InsurgencyBuiltinFactions.VanillaClfId)
             return true;
 
         return def.Metadata.OpposedGovforFactions

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
-using Content.Client._AU14.UI;
+using Content.Client.CMU14.UI;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client._AU14.Insurgency;
+namespace Content.Client.CMU14.Insurgency;
 
 /// <summary>
 ///     Applies the improved-construction-menu look (<see cref="GmodStyle"/>: dark slate panels,

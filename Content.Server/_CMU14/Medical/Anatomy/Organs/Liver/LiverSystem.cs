@@ -1,12 +1,12 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Organs.Liver;
+namespace Content.Server.CMU14.Medical.Anatomy.Organs.Liver;
 
 public sealed partial class LiverSystem : SharedLiverSystem
 {

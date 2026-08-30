@@ -5,14 +5,14 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using ClosedXML.Excel;
-using Content.Shared._AU14.Insurgency;
+using Content.Shared.CMU14.Insurgency;
 using Content.Shared._RMC14.Vendors;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency.Editor;
+namespace Content.Server.CMU14.Insurgency.Editor;
 
 /// <summary>
 ///     Builds and reads the faction authoring spreadsheet (.xlsx) with ClosedXML. The whole point is a

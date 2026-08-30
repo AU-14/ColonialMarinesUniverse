@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Conditions;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Conditions;
 
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedCMUSurgerySystem))]

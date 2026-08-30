@@ -1,8 +1,8 @@
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels;
-using Content.Shared._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Movement.Components;
@@ -16,7 +16,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.ZLevels.Core;
+namespace Content.Server.CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelsSystem
 {

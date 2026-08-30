@@ -9,7 +9,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Blackfoot;
+namespace Content.Shared.CMU14.Blackfoot;
 
 [Serializable, NetSerializable]
 public enum BlackfootFlightState : byte
@@ -173,31 +173,31 @@ public sealed partial class BlackfootVisualsComponent : Component
 public sealed partial class BlackfootSoundComponent : Component
 {
     [DataField]
-    public SoundSpecifier? EngineIdleLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/engineidle.ogg");
+    public SoundSpecifier? EngineIdleLoopSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/engineidle.ogg");
 
     [DataField]
-    public SoundSpecifier? ExteriorFlightLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/exteriorflight.ogg");
+    public SoundSpecifier? ExteriorFlightLoopSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/exteriorflight.ogg");
 
     [DataField]
-    public SoundSpecifier? InteriorFlightLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/interior.ogg");
+    public SoundSpecifier? InteriorFlightLoopSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/interior.ogg");
 
     [DataField]
-    public SoundSpecifier? EngineStartupSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/enginestartup.ogg");
+    public SoundSpecifier? EngineStartupSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/enginestartup.ogg");
 
     [DataField]
-    public SoundSpecifier? EngineShutdownSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/engineshutdown.ogg");
+    public SoundSpecifier? EngineShutdownSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/engineshutdown.ogg");
 
     [DataField]
-    public SoundSpecifier? TakeoffSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/takeoff.ogg");
+    public SoundSpecifier? TakeoffSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/takeoff.ogg");
 
     [DataField]
-    public SoundSpecifier? LandingSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/landing.ogg");
+    public SoundSpecifier? LandingSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/landing.ogg");
 
     [DataField]
-    public SoundSpecifier? FlightTransitionSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/flight_transition.ogg");
+    public SoundSpecifier? FlightTransitionSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/flight_transition.ogg");
 
     [DataField]
-    public SoundSpecifier? MechanicalSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/mechanical.ogg");
+    public SoundSpecifier? MechanicalSound = new SoundPathSpecifier("/Audio/CMU14/Blackfoot/mechanical.ogg");
 
     public EntityUid? InteriorEngineLoopStream;
 

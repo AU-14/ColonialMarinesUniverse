@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Round.Antags.CorporateAgent;
+namespace Content.Shared.CMU14.Round.Antags.CorporateAgent;
 
 /// <summary>
 /// Marks a data link beacon. Used in hand by a corporate agent to transmit the

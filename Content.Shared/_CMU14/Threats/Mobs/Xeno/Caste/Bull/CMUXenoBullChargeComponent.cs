@@ -3,7 +3,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Bull;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Bull;
 
 public enum CMUXenoBullChargeMode : byte
 {

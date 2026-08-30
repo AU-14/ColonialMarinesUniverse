@@ -2,7 +2,7 @@ using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Robust.Shared.Player;
 
-namespace Content.Server._AU14.Insurgency;
+namespace Content.Server.CMU14.Insurgency;
 
 /// <summary>
 ///     Single point of change for who may author Default factions and select Custom factions.
@@ -36,8 +36,8 @@ public static class InsurgencyAuthorization
             return true;
 
         var perms = IoCManager.Resolve<IEntityManager>()
-            .System<_AU14.Administration.AU14ToolPermissionSystem>();
-        return perms.HasGrant(player, Content.Shared._AU14.Administration.AU14ToolPermissions.Insfor);
+            .System<CMU14.Administration.AU14ToolPermissionSystem>();
+        return perms.HasGrant(player, Content.Shared.CMU14.Administration.AU14ToolPermissions.Insfor);
     }
 
     public static bool IsCustomAuthorized(IAdminManager admin, ICommonSession player)

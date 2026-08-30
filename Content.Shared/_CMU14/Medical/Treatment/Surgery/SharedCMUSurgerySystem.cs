@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Conditions;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
-using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Conditions;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Effects;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
@@ -18,9 +18,9 @@ using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Core;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 /// <summary>
 ///     Side effects that need server-only state mutation (organ extract,

@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Vendors;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Insurgency;
+namespace Content.Shared.CMU14.Insurgency;
 
 /// <summary>
 ///     Built-in factions that ship with the game rather than being authored in the editor or the DB.

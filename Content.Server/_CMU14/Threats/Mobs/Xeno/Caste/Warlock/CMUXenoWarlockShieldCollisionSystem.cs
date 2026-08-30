@@ -1,10 +1,11 @@
-using Content.Server.Explosion.EntitySystems;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Systems;
 
-namespace Content.Server._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+namespace Content.Server.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 
 /// <summary>
-/// Cancels any <see cref="BeforeTriggerEvent"/> raised on a projectile that is currently frozen by
+/// Cancels any <see cref="AttemptTriggerEvent"/> raised on a projectile that is currently frozen by
 /// a psychic shield. The freeze itself happens in the shared warlock system via
 /// <see cref="Robust.Shared.Physics.Events.PreventCollideEvent"/> and the projectile's own
 /// reflect-attempt path; both add <see cref="CMUXenoFrozenProjectileComponent"/> to the projectile.
@@ -14,17 +15,16 @@ namespace Content.Server._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 /// this handler stops cancelling, and any subsequent collision triggers normally - so a reflected
 /// SLAW still detonates on the marine it comes back to.
 ///
-/// This system is server-only because <see cref="BeforeTriggerEvent"/> lives in
-/// <c>Content.Server.Explosion.EntitySystems</c>.
+/// This remains server-only because the collision authority that freezes the projectile is server-side.
 /// </summary>
 public sealed class CMUXenoWarlockShieldCollisionSystem : EntitySystem
 {
     public override void Initialize()
     {
-        SubscribeLocalEvent<CMUXenoFrozenProjectileComponent, BeforeTriggerEvent>(OnFrozenProjectileBeforeTrigger);
+        SubscribeLocalEvent<CMUXenoFrozenProjectileComponent, AttemptTriggerEvent>(OnFrozenProjectileAttemptTrigger);
     }
 
-    private void OnFrozenProjectileBeforeTrigger(Entity<CMUXenoFrozenProjectileComponent> frozen, ref BeforeTriggerEvent args)
+    private void OnFrozenProjectileAttemptTrigger(Entity<CMUXenoFrozenProjectileComponent> frozen, ref AttemptTriggerEvent args)
     {
         // Thrown grenades opt into keeping their fuse alive by setting AllowTriggerWhileFrozen.
         // For those, the trigger runs normally - if the shield does not reflect in time, the

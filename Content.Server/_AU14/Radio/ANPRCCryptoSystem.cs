@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Server.Administration.Logs;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.Radio;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -9,7 +9,7 @@ using Content.Shared.Popups;
 using Content.Shared.Radio;
 using Robust.Shared.Containers;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 public sealed partial class ANPRCCryptoSystem : EntitySystem
 {

@@ -1,9 +1,10 @@
 using System.Numerics;
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
@@ -26,7 +27,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaSmartDiscSystem : EntitySystem
 {
@@ -496,7 +497,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private bool IsHumanDiscTarget(EntityUid target)
     {
-        return HasComp<HumanoidAppearanceComponent>(target) && !HasComp<YautjaComponent>(target);
+        return HasComp<HumanoidProfileComponent>(target) && !HasComp<YautjaComponent>(target);
     }
 
     private bool TryFindHitTarget(Entity<YautjaSmartDiscComponent> ent, out EntityUid target)

@@ -1,4 +1,4 @@
-namespace Content.Server._AU14.Insurgency;
+namespace Content.Server.CMU14.Insurgency;
 
 /// <summary>
 ///     Marks a vendor entity as belonging to the active INSFOR faction. When a faction is

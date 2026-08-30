@@ -3,126 +3,105 @@
   name: species-name-workingjoe
   roundStart: false
   prototype: AU14MobWorkingJoeColony
-  sprites: MobWorkingJoeSprites
-  markingLimits: MobHumanMarkingLimits
-  dollPrototype: MobHumanDummy
+  dollPrototype: AppearanceWorkingJoe
   skinColoration: Hues
+  defaultSoundsBySex:
+  - AU14WorkingJoeSounds
+  - AU14WorkingJoeSounds
+  - AU14WorkingJoeSounds
+  voices:
+  - AU14WorkingJoeSounds
 
-- type: speciesBaseSprites
-  id: MobWorkingJoeSprites
-  sprites:
-    Head: MobWorkingJoeHead
-    Hair: MobHumanoidAnyMarking
-    FacialHair: MobHumanoidAnyMarking
-    HeadTop: MobHumanoidAnyMarking
-    HeadSide: MobHumanoidAnyMarking
-    UndergarmentTop: MobHumanoidAnyMarking
-    UndergarmentBottom: MobHumanoidAnyMarking
-    Chest: MobWorkingJoeTorso
-    Eyes: MobHumanoidEyes
-    LArm: MobWorkingJoeLArm
-    RArm: MobWorkingJoeRArm
-    LHand: MobWorkingJoeLHand
-    RHand: MobWorkingJoeRHand
-    LLeg: MobWorkingJoeLLeg
-    RLeg: MobWorkingJoeRLeg
-    LFoot: MobWorkingJoeLFoot
-    RFoot: MobWorkingJoeRFoot
+- type: markingsGroup
+  parent: Human
+  id: WorkingJoe
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeHead
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: head_m
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceWorkingJoe
+  categories: [ HideSpawnMenu ]
+  name: working joe appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: CMUPartWorkingJoeTorso
+      Head: CMUPartWorkingJoeHead
+      ArmLeft: CMUPartWorkingJoeLeftArm
+      ArmRight: CMUPartWorkingJoeRightArm
+      HandLeft: CMUPartWorkingJoeLeftHand
+      HandRight: CMUPartWorkingJoeRightHand
+      LegLeft: CMUPartWorkingJoeLeftLeg
+      LegRight: CMUPartWorkingJoeRightLeg
+      FootLeft: CMUPartWorkingJoeLeftFoot
+      FootRight: CMUPartWorkingJoeRightFoot
+      Brain: CMUOrganHumanBrain
+      Eyes: CMUOrganHumanEyes
+      Lungs: CMUOrganHumanLungs
+      Heart: CMUOrganHumanHeart
+      Stomach: CMUOrganHumanStomach
+      Liver: CMUOrganHumanLiver
+      Kidneys: CMUOrganHumanKidneys
+  - type: HumanoidProfile
+    species: WorkingJoe
+    voice: AU14WorkingJoeSounds
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeHeadMale
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: head_m
+- type: entity
+  id: CMUPartWorkingJoeVisual
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/WorkingJoe/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: CMU14/Mobs/WorkingJoe/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: WorkingJoe
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeHeadFemale
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: head_f
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanTorso ]
+  id: CMUPartWorkingJoeTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeTorso
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: torso_m
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanHead ]
+  id: CMUPartWorkingJoeHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.HeadTop
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeTorsoMale
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: torso_m
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanLeftArm ]
+  id: CMUPartWorkingJoeLeftArm
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeTorsoFemale
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: torso_f
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanRightArm ]
+  id: CMUPartWorkingJoeRightArm
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeLLeg
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: l_leg
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanLeftHand ]
+  id: CMUPartWorkingJoeLeftHand
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeLHand
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: l_hand
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanRightHand ]
+  id: CMUPartWorkingJoeRightHand
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeLArm
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: l_arm
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanLeftLeg ]
+  id: CMUPartWorkingJoeLeftLeg
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeLFoot
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: l_foot
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanRightLeg ]
+  id: CMUPartWorkingJoeRightLeg
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeRLeg
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: r_leg
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanLeftFoot ]
+  id: CMUPartWorkingJoeLeftFoot
 
-- type: humanoidBaseSprite
-  id: MobWorkingJoeRHand
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: r_hand
-
-- type: humanoidBaseSprite
-  id: MobWorkingJoeRArm
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: r_arm
-
-- type: humanoidBaseSprite
-  id: MobWorkingJoeRFoot
-  matchSkin: false
-  baseSprite:
-    sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-    state: r_foot
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanRightFoot ]
+  id: CMUPartWorkingJoeRightFoot

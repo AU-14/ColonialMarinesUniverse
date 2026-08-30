@@ -2,7 +2,7 @@ using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server._CMU14.Diagnostics.Performance;
+namespace Content.Server.CMU14.Diagnostics.Performance;
 
 [AdminCommand(AdminFlags.Debug)]
 public sealed partial class CMUServerPerformanceCommand : IConsoleCommand

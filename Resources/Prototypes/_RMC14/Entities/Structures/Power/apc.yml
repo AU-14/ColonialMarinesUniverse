@@ -25,22 +25,22 @@
       visible: false
     - state: display-charging
       shader: unshaded
-      map: [ "enum.ApcVisualLayers.ChargeState" ]
+      map: [ "enum.RMCApcSpriteLayers.ChargeState" ]
     - state: apcox-0
       shader: unshaded
-      map: [ "enum.ApcVisualLayers.InterfaceLock" ]
+      map: [ "enum.RMCApcSpriteLayers.InterfaceLock" ]
     - state: apcox-1
       shader: unshaded
-      map: [ "enum.ApcVisualLayers.PanelLock" ]
+      map: [ "enum.RMCApcSpriteLayers.PanelLock" ]
     - state: apco0-2
       shader: unshaded
-      map: [ "enum.ApcVisualLayers.Equipment" ]
+      map: [ "enum.RMCApcSpriteLayers.Equipment" ]
     - state: apco1-2
       shader: unshaded
-      map: [ "enum.ApcVisualLayers.Lighting" ]
+      map: [ "enum.RMCApcSpriteLayers.Lighting" ]
     - state: apco2-2
       shader: unshaded
-      map: [ "enum.ApcVisualLayers.Environment" ]
+      map: [ "enum.RMCApcSpriteLayers.Environment" ]
   - type: Appearance
   - type: WallMount
     arc: 360
@@ -58,6 +58,7 @@
       components:
       - Xeno
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -82,54 +83,54 @@
         enum.WiresVisualLayers.MaintenancePanel: # TODO RMC14
           Working: { visible: false }
           WiresExposed: { visible: false }
-        enum.ApcVisualLayers.ChargeState: # TODO RMC14
+        enum.RMCApcSpriteLayers.ChargeState: # TODO RMC14
           Working: { visible: true }
           WiresExposed: { visible: false }
           CoverOpenBattery: { visible: false }
           CoverOpenNoBattery: { visible: false }
-        enum.ApcVisualLayers.InterfaceLock:
+        enum.RMCApcSpriteLayers.InterfaceLock:
           Working: { visible: true }
           WiresExposed: { visible: false }
           CoverOpenBattery: { visible: false }
           CoverOpenNoBattery: { visible: false }
-        enum.ApcVisualLayers.PanelLock:
+        enum.RMCApcSpriteLayers.PanelLock:
           Working: { visible: true }
           WiresExposed: { visible: false }
           CoverOpenBattery: { visible: false }
           CoverOpenNoBattery: { visible: false }
-        enum.ApcVisualLayers.Equipment:
+        enum.RMCApcSpriteLayers.Equipment:
           Working: { visible: true }
           WiresExposed: { visible: false }
           CoverOpenBattery: { visible: false }
           CoverOpenNoBattery: { visible: false }
-        enum.ApcVisualLayers.Lighting:
+        enum.RMCApcSpriteLayers.Lighting:
           Working: { visible: true }
           WiresExposed: { visible: false }
           CoverOpenBattery: { visible: false }
           CoverOpenNoBattery: { visible: false }
-        enum.ApcVisualLayers.Environment:
+        enum.RMCApcSpriteLayers.Environment:
           Working: { visible: true }
           WiresExposed: { visible: false }
           CoverOpenBattery: { visible: false }
           CoverOpenNoBattery: { visible: false }
       enum.RMCApcVisualsLayers.Lock:
-        enum.ApcVisualLayers.InterfaceLock:
+        enum.RMCApcSpriteLayers.InterfaceLock:
           true: { state: apcox-1 }
           false: { state: apcox-0 }
-#        enum.ApcVisualLayers.PanelLock: # TODO RMC14
+#        enum.RMCApcSpriteLayers.PanelLock: # TODO RMC14
 #          Working: { visible: false }
 #          Broken: { visible: false }
-#        enum.ApcVisualLayers.Equipment: # TODO RMC14
+#        enum.RMCApcSpriteLayers.Equipment: # TODO RMC14
 #          Working: { visible: false }
 #          Broken: { visible: false }
-#        enum.ApcVisualLayers.Lighting: # TODO RMC14
+#        enum.RMCApcSpriteLayers.Lighting: # TODO RMC14
 #          Working: { visible: false }
 #          Broken: { visible: false }
-#        enum.ApcVisualLayers.Environment: # TODO RMC14
+#        enum.RMCApcSpriteLayers.Environment: # TODO RMC14
 #          Working: { visible: false }
 #          Broken: { visible: false }
       enum.RMCApcVisualsLayers.Power:
-        enum.ApcVisualLayers.ChargeState:
+        enum.RMCApcSpriteLayers.ChargeState:
           NotCharging: { state: display-lack }
           Charging: { state: display-charging }
           FullCharge: { state: display-full }

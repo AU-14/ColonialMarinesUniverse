@@ -1,10 +1,10 @@
-using Content.Shared._CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.Popups;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server._CMU14.Medical.Injuries.Pain;
+namespace Content.Server.CMU14.Medical.Injuries.Pain;
 
 public sealed partial class PainShockSystem : SharedPainShockSystem
 {

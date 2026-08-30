@@ -1,8 +1,8 @@
-using Content.Server.Medical;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
+using Content.Shared.Medical;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Organs.Stomach;
+namespace Content.Server.CMU14.Medical.Anatomy.Organs.Stomach;
 
 public sealed partial class StomachSystem : SharedStomachSystem
 {

@@ -6,6 +6,8 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
@@ -99,7 +101,8 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         if (!TryComp(repairable, out DamageableComponent? damageable))
             return;
 
-        if (!hasReplace && damageable.TotalDamage <= FixedPoint2.Zero)
+        var totalDamage = _damageable.GetTotalDamage((repairable, damageable));
+        if (!hasReplace && totalDamage <= FixedPoint2.Zero)
         {
             _popup.PopupClient(Loc.GetString("rmc-repairable-not-damaged", ("target", repairable)),
                 user,
@@ -108,7 +111,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
             return;
         }
 
-        if (repairable.Comp.RepairableDamageLimit > 0 && damageable.TotalDamage > repairable.Comp.RepairableDamageLimit)
+        if (repairable.Comp.RepairableDamageLimit > 0 && totalDamage > repairable.Comp.RepairableDamageLimit)
         {
             _popup.PopupClient(Loc.GetString("rmc-repairable-too-damaged", ("target", repairable)),
                 user,
@@ -132,7 +135,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         var delay = hasReplace
             ? (float) repairable.Comp.Delay.TotalSeconds
-            : GetWeldRepairDelaySeconds(repairable, user, damageable.TotalDamage);
+            : GetWeldRepairDelaySeconds(repairable, user, _damageable.GetTotalDamage((repairable, damageable)));
         var ev = new RMCRepairableDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(delay), ev, repairable, repairable, used: args.Used)
         {
@@ -263,30 +266,32 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         _popup.PopupPredicted(repairSelfMsg, repairOthersMsg, user, user);
         _audio.PlayPredicted(repairable.Comp.Sound, repairable, user);
 
-        if (TryComp(repairable, out DamageableComponent? damageable) &&
-            damageable.TotalDamage > FixedPoint2.Zero &&
-            heal.GetTotal() != FixedPoint2.Zero)
+        if (!TryComp(repairable, out DamageableComponent? damageable))
+            return;
+
+        var totalDamage = _damageable.GetTotalDamage((repairable, damageable));
+        if (totalDamage <= FixedPoint2.Zero || heal.GetTotal() == FixedPoint2.Zero)
+            return;
+
+        if (args.Used is not { } used)
+            return;
+
+        var delay = TimeSpan.FromSeconds(GetWeldRepairDelaySeconds(repairable, args.User, totalDamage));
+        var ev = new RMCRepairableDoAfterEvent();
+        var doAfter = new DoAfterArgs(EntityManager, args.User, delay, ev, repairable, used: used)
         {
-            if (args.Used is not { } used)
-                return;
+            NeedHand = true,
+            BreakOnMove = true,
+            BlockDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent
+        };
 
-            var delay = TimeSpan.FromSeconds(GetWeldRepairDelaySeconds(repairable, args.User, damageable.TotalDamage));
-            var ev = new RMCRepairableDoAfterEvent();
-            var doAfter = new DoAfterArgs(EntityManager, args.User, delay, ev, repairable, used: used)
-            {
-                NeedHand = true,
-                BreakOnMove = true,
-                BlockDuplicate = true,
-                DuplicateCondition = DuplicateConditions.SameEvent
-            };
-
-            _doAfter.TryStartDoAfter(doAfter);
-        }
+        _doAfter.TryStartDoAfter(doAfter);
     }
 
     public bool UseFuel(EntityUid tool, EntityUid user, FixedPoint2 fuelUsed, bool attempt = false)
     {
-        if (!TryComp<SolutionContainerManagerComponent>(tool, out var welderCon))
+        if (!TryComp<SolutionManagerComponent>(tool, out var welderCon))
             return false;
 
         if (!TryComp<ItemToggleComponent>(tool, out var toggle) || !toggle.Activated)
@@ -334,7 +339,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         args.Handled = true;
         if (!TryComp(repairable, out DamageableComponent? damageable) ||
-            damageable.TotalDamage <= FixedPoint2.Zero)
+            _damageable.GetTotalDamage((repairable, damageable)) <= FixedPoint2.Zero)
         {
             _popup.PopupClient(Loc.GetString("rmc-repairable-not-damaged", ("target", repairable)), user, user, PopupType.SmallCaution);
             return;

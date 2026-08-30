@@ -1,23 +1,24 @@
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
 using Content.Server.Mind;
-using Content.Server.Radio.Components;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Administration;
+using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.NPC.Systems;
+using Content.Shared.Radio.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
-using HasKnowledgeOfXenoLanguageComponent = Content.Shared._CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
+using HasKnowledgeOfXenoLanguageComponent = Content.Shared.CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
 
-namespace Content.Server._CMU14.Threats.Mobs.Cultist;
+namespace Content.Server.CMU14.Threats.Mobs.Cultist;
 
 public sealed partial class CultistSystem : EntitySystem
 {
@@ -59,7 +60,7 @@ public sealed partial class CultistSystem : EntitySystem
             {
                 Text = "Make Cultist",
                 Category = VerbCategory.Antag,
-                Icon = new SpriteSpecifier.Rsi(new("/Textures/_CMU14/Interface/job_icons.rsi"),
+                Icon = new SpriteSpecifier.Rsi(new("/Textures/CMU14/Interface/job_icons.rsi"),
                     "threat_member"),
                 Act = () => { MakeCultist(args.Target); },
                 Impact = LogImpact.High,
@@ -76,9 +77,9 @@ public sealed partial class CultistSystem : EntitySystem
         RemCompDeferred<InfectableComponent>(Target);
         EnsureComp<IntrinsicRadioReceiverComponent>(Target);
         EnsureComp(Target, out IntrinsicRadioTransmitterComponent radio);
-        radio.Channels.Add("Hivemind");
+        radio.Channels.Add(SharedChatSystem.HivemindChannel);
         EnsureComp(Target, out ActiveRadioComponent actrad);
-        actrad.Channels.Add("Hivemind");
+        actrad.Channels.Add(SharedChatSystem.HivemindChannel);
         var s = "Xeno";
         _npcFaction.AddFaction(Target, s);
 

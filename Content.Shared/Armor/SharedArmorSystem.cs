@@ -1,4 +1,6 @@
+﻿using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
 using Content.Shared.Silicons.Borgs;
@@ -32,6 +34,9 @@ public abstract partial class SharedArmorSystem : EntitySystem
     /// <param name="args">The event, contains the running count of armor percentage as a coefficient</param>
     private void OnCoefficientQuery(Entity<ArmorComponent> ent, ref InventoryRelayedEvent<CoefficientQueryEvent> args)
     {
+        if (TryComp<MaskComponent>(ent, out var mask) && mask.IsToggled)
+            return;
+
         foreach (var armorCoefficient in ent.Comp.Modifiers.Coefficients)
         {
             args.Args.DamageModifiers.Coefficients[armorCoefficient.Key] = args.Args.DamageModifiers.Coefficients.TryGetValue(armorCoefficient.Key, out var coefficient) ? coefficient * armorCoefficient.Value : armorCoefficient.Value;
@@ -40,12 +45,18 @@ public abstract partial class SharedArmorSystem : EntitySystem
 
     private void OnDamageModify(EntityUid uid, ArmorComponent component, InventoryRelayedEvent<DamageModifyEvent> args)
     {
+        if (TryComp<MaskComponent>(uid, out var mask) && mask.IsToggled)
+            return;
+
         args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
     }
 
     private void OnBorgDamageModify(EntityUid uid, ArmorComponent component,
         ref BorgModuleRelayedEvent<DamageModifyEvent> args)
     {
+        if (TryComp<MaskComponent>(uid, out var mask) && mask.IsToggled)
+            return;
+
         args.Args.Damage = DamageSpecifier.ApplyModifierSet(args.Args.Damage, component.Modifiers);
     }
 
@@ -73,6 +84,7 @@ public abstract partial class SharedArmorSystem : EntitySystem
         {
             msg.PushNewline();
 
+            // TODO: probably make these prototype fields or have a test that they all exist
             var armorType = Loc.GetString("armor-damage-type-" + coefficientArmor.Key.Id.ToLower());
             msg.AddMarkupOrThrow(Loc.GetString("armor-coefficient-value",
                 ("type", armorType),
@@ -80,7 +92,7 @@ public abstract partial class SharedArmorSystem : EntitySystem
             ));
         }
 
-        foreach (var flatArmor in armorModifiers.FlatReduction)
+        foreach (var flatArmor in armorModifiers.FlatReductions)
         {
             msg.PushNewline();
 

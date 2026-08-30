@@ -14,11 +14,11 @@
   name: sailor chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: CMU14RankLACNSailor
@@ -30,11 +30,11 @@
   name: first class sailor chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: CMU14RankLACNSailorFirstClass
@@ -46,11 +46,11 @@
   name: third class corporal chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: CMU14RankLACNThirdClassCorporal
@@ -62,11 +62,11 @@
   name: second class corporal chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_nco
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
     rank: CMU14RankLACNSecondClassCorporal
@@ -78,11 +78,11 @@
   name: first class corporal chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_nco
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
     rank: CMU14RankLACNFirstClassCorporal
@@ -94,11 +94,11 @@
   name: third class sergeant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_nco
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
     rank: CMU14RankLACNThirdClassSergeant
@@ -110,11 +110,11 @@
   name: second class sergeant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_snco
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
     rank: CMU14RankLACNSecondClassSergeant
@@ -126,11 +126,11 @@
   name: first class sergeant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_snco
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
     rank: CMU14RankLACNFirstClassSergeant
@@ -142,11 +142,11 @@
   name: master sergeant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_snco
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
     rank: CMU14RankLACNMasterSergeant
@@ -160,11 +160,11 @@
   name: ensign chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: CMU14RankLACNEnsign
@@ -176,11 +176,11 @@
   name: ship of the line lieutenant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: CMU14RankLACNShipLineLieutenant
@@ -192,11 +192,11 @@
   name: corvette captain chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: CMU14RankLACNCorvetteCaptain
@@ -208,11 +208,11 @@
   name: frigate captain chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: CMU14RankLACNFrigateCaptain
@@ -224,11 +224,11 @@
   name: captain chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: CMU14RankLACNCaptain
@@ -240,11 +240,11 @@
   name: counter admiral chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: CMU14RankLACNCounterAdmiral
@@ -256,11 +256,11 @@
   name: vice admiral chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_seniorofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: CMU14RankLACNViceAdmiral
@@ -272,11 +272,11 @@
   name: admiral chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: CMU14RankLACNAdmiral
@@ -288,11 +288,11 @@
   name: admiral general chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: CMU14RankLACNAdmiralGeneral
@@ -304,11 +304,11 @@
   name: captain general of the navy chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: CMU14RankLACNCaptainGeneral

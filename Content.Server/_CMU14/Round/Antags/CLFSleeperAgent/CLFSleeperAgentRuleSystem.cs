@@ -1,13 +1,13 @@
-using Content.Server.AU14.Round;
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Systems;
 using Content.Server.GameTicking.Rules;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Content.Shared.Paper;
-using CLFSleeperAgentComponent = Content.Shared._CMU14.Round.Antags.CLFSleeperAgent.CLFSleeperAgentComponent;
-using CLFSleeperAgentRuleComponent = Content.Shared._CMU14.Round.Antags.CLFSleeperAgent.CLFSleeperAgentRuleComponent;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
+using CLFSleeperAgentComponent = Content.Shared.CMU14.Round.Antags.CLFSleeperAgent.CLFSleeperAgentComponent;
+using CLFSleeperAgentRuleComponent = Content.Shared.CMU14.Round.Antags.CLFSleeperAgent.CLFSleeperAgentRuleComponent;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
 
-namespace Content.Server._CMU14.Round.Antags.CLFSleeperAgent;
+namespace Content.Server.CMU14.Round.Antags.CLFSleeperAgent;
 
 public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleeperAgentRuleComponent>
 {

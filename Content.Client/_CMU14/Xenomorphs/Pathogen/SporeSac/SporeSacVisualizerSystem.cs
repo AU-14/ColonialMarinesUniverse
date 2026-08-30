@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Xenomorphs.Pathogen.SporeSac;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.SporeSac;
 using Robust.Client.GameObjects;
 
-namespace Content.Client._CMU14.Xenomorphs.Pathogen.SporeSac;
+namespace Content.Client.CMU14.Xenomorphs.Pathogen.SporeSac;
 
 public sealed class SporeSacVisualizerSystem : VisualizerSystem<CMUPathogenSporeSacComponent>
 {

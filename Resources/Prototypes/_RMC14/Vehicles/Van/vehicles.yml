@@ -90,8 +90,9 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoMultiplier: 5
     otherMultiplier: 1
@@ -188,8 +189,9 @@
   description: A rugged transport van painted in CLF colors.
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/CLF_van.rsi
     layers:
@@ -309,8 +311,9 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoMultiplier: 5
     otherMultiplier: 1
@@ -652,7 +655,7 @@
   description: A van used by the Colonial Marshal Bureau to transport both prisoners and officers alike.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/marshalpaddywagon.rsi
+    sprite: CMU14/Structures/Vehicles/marshalpaddywagon.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -663,7 +666,7 @@
     - map: [ rmc-wheels ]
       state: wheels_1
   - type: VehicleEnter
-    # interiorPath: /Maps/_CMU14/Vehicleinteriors/paddywagon.yml
+    # interiorPath: /Maps/Vehicleinteriors/paddywagon.yml
     interiorPath: /Maps/_RMC14/Vehicles/box_van_interior.yml # TODO: fix the broken interior PR-895
     enterDoAfter: 1.0
     exitDoAfter: 1.0

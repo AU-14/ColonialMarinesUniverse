@@ -26,8 +26,8 @@
     prefix: au14-job-prefix-govforengineeringtech
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
-      state: ct
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_ct
 
   requirements:
   - !type:TraitsRequirement

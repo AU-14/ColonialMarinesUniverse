@@ -6,7 +6,7 @@ using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.ManageHive;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno.ManageHive;
 
 [Serializable, NetSerializable]
 public sealed record HiveSetAllyStatusIndividualEvent(NetEntity Ent, bool State);

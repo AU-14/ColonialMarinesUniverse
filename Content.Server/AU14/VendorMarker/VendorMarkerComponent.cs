@@ -1,8 +1,8 @@
-using Content.Shared.AU14;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.util;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server.AU14.VendorMarker
+namespace Content.Server.CMU14.VendorMarker
 {
     /// <summary>
     /// Component to mark vendor marker entities for platoon spawning or other logic.

@@ -1,11 +1,11 @@
 using System.Globalization;
 using System.Linq;
 using Content.Server.Administration;
-using Content.Shared._CMU14.BalanceRating;
+using Content.Shared.CMU14.BalanceRating;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server._CMU14.BalanceRating;
+namespace Content.Server.CMU14.BalanceRating;
 
 [AdminCommand(AdminFlags.Round)]
 public sealed partial class StartCMUBalanceRatingCommand : LocalizedEntityCommands

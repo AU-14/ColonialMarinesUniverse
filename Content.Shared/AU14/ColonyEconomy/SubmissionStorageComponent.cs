@@ -1,9 +1,9 @@
-// Content.Shared/AU14/ColonyEconomy/SubmissionStorageComponent.cs
+// Content.Shared/CMU14/ColonyEconomy/SubmissionStorageComponent.cs
 using Content.Shared.Tag;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.ColonyEconomy;
+namespace Content.Shared.CMU14.ColonyEconomy;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class SubmissionStorageComponent : Component

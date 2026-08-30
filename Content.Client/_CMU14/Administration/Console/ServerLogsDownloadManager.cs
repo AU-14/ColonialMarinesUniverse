@@ -3,13 +3,13 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Content.Shared._CMU14.Administration.Console;
+using Content.Shared.CMU14.Administration.Console;
 using Robust.Client.Console;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Network.Transfer;
 using Robust.Shared.Utility;
 
-namespace Content.Client._CMU14.Administration.Console;
+namespace Content.Client.CMU14.Administration.Console;
 
 public sealed partial class ServerLogsDownloadManager : IPostInjectInit
 {

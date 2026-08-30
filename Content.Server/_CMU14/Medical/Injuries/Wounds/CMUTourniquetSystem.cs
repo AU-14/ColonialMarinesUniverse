@@ -1,6 +1,6 @@
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 
-namespace Content.Server._CMU14.Medical.Injuries.Wounds;
+namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
 public sealed class CMUTourniquetSystem : SharedCMUTourniquetSystem
 {

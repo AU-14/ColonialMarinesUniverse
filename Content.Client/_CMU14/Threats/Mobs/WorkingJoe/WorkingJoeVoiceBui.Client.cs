@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Threats.Mobs.WorkingJoe;
+using Content.Shared.CMU14.Threats.Mobs.WorkingJoe;
 using Content.Shared.Chat.Prototypes;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Threats.Mobs.WorkingJoe;
+namespace Content.Client.CMU14.Threats.Mobs.WorkingJoe;
 
 public sealed partial class WorkingJoeVoiceBui : BoundUserInterface
 {

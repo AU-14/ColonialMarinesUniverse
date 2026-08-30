@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Xenonids.Screech;
 using Content.Shared.Alert;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Jittering;
@@ -12,7 +13,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Traits.DrugAllergy;
+namespace Content.Shared.CMU14.Traits.DrugAllergy;
 
 public sealed partial class AllergicReactionSystem : EntitySystem
 {

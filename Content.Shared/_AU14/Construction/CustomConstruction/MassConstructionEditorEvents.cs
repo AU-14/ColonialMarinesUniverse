@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Construction.CustomConstruction;
+namespace Content.Shared.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Client → server: the admin picked a batch of entities in the "Mass Entity Editor" selector and wants the

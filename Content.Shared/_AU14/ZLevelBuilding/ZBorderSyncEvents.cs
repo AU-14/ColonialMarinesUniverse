@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>Client → server: open the "Z-Sync Lists" tool (admin-gated, re-validated server-side).</summary>
 [Serializable, NetSerializable]

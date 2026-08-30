@@ -1,9 +1,9 @@
 using Content.Shared._RMC14.Chat;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
 
-namespace Content.Server._CMU14.Threats.Mobs.Cultist;
+namespace Content.Server.CMU14.Threats.Mobs.Cultist;
 
 public sealed class CultistChatSystem : EntitySystem
 {

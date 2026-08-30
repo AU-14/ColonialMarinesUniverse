@@ -30,8 +30,8 @@
     prefix: au14-job-prefix-vehiclecrewman
   - type: TacticalMapIcon
     icon: # TODO: copy paste this for OPFOR but use their version of course
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
-      state: vc
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_vc
   requirements:
   - !type:TraitsRequirement
     inverted: true

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Content.Shared.Eui;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.Selection;
+namespace Content.Shared.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     State for the CLF-leader faction selection popup. Carries the round's Default factions (List A)

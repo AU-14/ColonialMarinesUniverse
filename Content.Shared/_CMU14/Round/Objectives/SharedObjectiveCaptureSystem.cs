@@ -1,10 +1,10 @@
 using System.Linq;
-using Content.Shared._CMU14.Round.Objectives.Type;
+using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.NPC.Components;
 
-namespace Content.Shared._CMU14.Round.Objectives;
+namespace Content.Shared.CMU14.Round.Objectives;
 
 public sealed partial class SharedObjectiveCaptureSystem : EntitySystem
 {

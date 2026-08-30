@@ -8,6 +8,7 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
@@ -15,7 +16,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Bull;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Bull;
 
 public sealed partial class CMUXenoBullChargeSystem : EntitySystem
 {

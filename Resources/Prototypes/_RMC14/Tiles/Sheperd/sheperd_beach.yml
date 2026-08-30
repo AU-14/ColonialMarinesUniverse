@@ -132,7 +132,7 @@
     intersectRatio: 0.1
   - type: TileEntityEffect
     effects:
-    - !type:ExtinguishReaction
+    - !type:Extinguish
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepWater

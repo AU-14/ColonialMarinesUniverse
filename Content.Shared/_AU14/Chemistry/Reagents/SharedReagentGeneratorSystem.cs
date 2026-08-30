@@ -1,11 +1,11 @@
 //Pretty please license this under the MIT license :) - MACMAN2003
-using Content.Shared._AU14.Chemistry.Research;
-using Content.Shared._CMU14.Chemistry.Effects.Negative;
-using Content.Shared._CMU14.Chemistry.Effects.Neutral;
-using Content.Shared._CMU14.Chemistry.Effects.Positive;
-using Content.Shared._CMU14.Chemistry.Effects.Reaction;
-using Content.Shared._CMU14.Chemistry.Effects.Special;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Effects.Negative;
+using Content.Shared.CMU14.Chemistry.Effects.Neutral;
+using Content.Shared.CMU14.Chemistry.Effects.Positive;
+using Content.Shared.CMU14.Chemistry.Effects.Reaction;
+using Content.Shared.CMU14.Chemistry.Effects.Special;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Reaction;
@@ -29,7 +29,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Content.Shared._AU14.Chemistry.Reagents;
+namespace Content.Shared.CMU14.Chemistry.Reagents;
 
 public abstract partial class SharedReagentGeneratorSystem : EntitySystem
 {
@@ -138,7 +138,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         medicine.Add("metabolismRate", metabRate.ToString());
         medicine.Add("effects", effects);
         MappingDataNode metabolisms = [];
-        metabolisms.Add("Medicine", medicine);
+        metabolisms.Add("Bloodstream", medicine);
         reagent.Add("metabolisms", metabolisms);
         //string yamlstr = reagent.ToString();
         string yamlstr =
@@ -162,7 +162,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             $"  reward: {args.ScanPointYield}\n" +
             (worksOnTheDead ? "  worksOnTheDead: true\n" : string.Empty) +
             $"  metabolisms:\n" +
-            $"    Medicine:\n" +
+            $"    Bloodstream:\n" +
             $"      metabolismRate: {metabRate.ToString()}\n" +
             $"      effects:\n{effectyml}";
         //_sawmill.Info(yamlstr);
@@ -248,7 +248,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         List<FixedPoint2> metabs = [];
         if (proto.Metabolisms is not null)
         {
-            foreach (var metab in proto.Metabolisms.Values)
+            foreach (var metab in proto.Metabolisms.Metabolisms.Values)
             {
                 metabs.Add(metab.MetabolismRate);
                 foreach (var effect in metab.Effects)

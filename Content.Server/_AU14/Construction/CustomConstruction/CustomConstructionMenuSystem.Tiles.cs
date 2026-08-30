@@ -4,8 +4,8 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using Content.Shared._AU14.Administration;
-using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Shared.CMU14.Administration;
+using Content.Shared.CMU14.Construction.CustomConstruction;
 using Content.Shared.Database;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
@@ -13,7 +13,7 @@ using Content.Shared.Stacks;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Construction.CustomConstruction;
+namespace Content.Server.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Tiles sibling of the construction-items editor (see <see cref="CustomConstructionMenuSystem"/>): lets a
@@ -117,7 +117,7 @@ public sealed partial class CustomConstructionMenuSystem
 
     /// <summary>
     /// Builds the generated tile-applier entity + graph + recipe. Mirrors the hand-authored Tiles spawnlist
-    /// (see Resources/Prototypes/_AU14/ZLevelBuilding/tiles.yml): an applier entity carries a TileApplier that
+    /// (see Resources/Prototypes/CMU14/ZLevelBuilding/tiles.yml): an applier entity carries a TileApplier that
     /// lays the tile on map-init then deletes itself, and a Construction component so the build path accepts it.
     /// </summary>
     private string BuildTileYaml(string key, string tileId, string material, int amount, string spawnlist, string category, bool zLevelPage)

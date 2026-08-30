@@ -1,0 +1,77 @@
+- type: roundGroup
+  id: GovforUppPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: UPP
+  groupId: GovforPlatoon:UPP
+
+- type: roundGroup
+  id: GovforUscmPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: USCM
+  groupId: GovforPlatoon:USCM
+
+- type: roundGroup
+  id: GovforRmcPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: RMC
+  groupId: GovforPlatoon:RMC
+
+- type: roundGroup
+  id: GovforLacnPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: LACN
+  groupId: GovforPlatoon:LACN
+
+- type: roundGroup
+  id: GovforCmbciuPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: CMBCIU
+  groupId: GovforPlatoon:CMBCIU
+
+- type: roundGroup
+  id: GovforWeyuPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: WEYU
+  groupId: GovforPlatoon:WEYU
+
+- type: roundGroup
+  id: GovforHazopsPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: HAZOPS
+  groupId: GovforPlatoon:HAZOPS
+
+- type: roundGroup
+  id: GovforVaipoPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: VAIPO
+  groupId: GovforPlatoon:VAIPO
+
+- type: roundGroup
+  id: GovforProdigySfPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: ProdigySF
+  groupId: GovforPlatoon:ProdigySF
+
+- type: roundGroup
+  id: OpforUppPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: UPP
+  groupId: OpforPlatoon:UPP
+
+- type: roundGroup
+  id: OpforWeyuPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: WEYU
+  groupId: OpforPlatoon:WEYU
+
+- type: roundGroup
+  id: OpforVaipoPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: VAIPO
+  groupId: OpforPlatoon:VAIPO
+
+- type: roundGroup
+  id: OpforProdigySfPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: ProdigySF
+  groupId: OpforPlatoon:ProdigySF

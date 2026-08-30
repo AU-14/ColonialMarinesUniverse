@@ -1,7 +1,7 @@
 using System;
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.Blackfoot;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.Blackfoot;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle.Viewport;
 using Content.Shared.Interaction;
@@ -12,7 +12,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 
-namespace Content.Server._CMU14.Blackfoot;
+namespace Content.Server.CMU14.Blackfoot;
 
 public sealed partial class BlackfootRearDoorSystem : EntitySystem
 {

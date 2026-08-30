@@ -41144,23 +41144,6 @@ entities:
     - type: Transform
       pos: 5.5,-30.5
       parent: 1
-- proto: TowelColorBlack
-  entities:
-  - uid: 6143
-    components:
-    - type: Transform
-      pos: -17.730303,-12.577909
-      parent: 1
-  - uid: 6144
-    components:
-    - type: Transform
-      pos: -17.49072,-12.629993
-      parent: 1
-  - uid: 6145
-    components:
-    - type: Transform
-      pos: -17.230303,-12.609159
-      parent: 1
 - proto: VehicleLift
   entities:
   - uid: 845

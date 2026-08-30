@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Threats;
+namespace Content.Shared.CMU14.Threats;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ParachuteMarkerComponent : Component

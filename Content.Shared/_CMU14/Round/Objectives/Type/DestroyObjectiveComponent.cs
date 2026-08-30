@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Round.Objectives.Type;
+namespace Content.Shared.CMU14.Round.Objectives.Type;
 
 [RegisterComponent]
 public sealed partial class DestroyObjectiveComponent : Robust.Shared.GameObjects.Component

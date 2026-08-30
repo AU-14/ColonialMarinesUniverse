@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 03/29/2026 11:27:10
-  entityCount: 33608
+  entityCount: 33617
 maps:
 - 1
 grids:
@@ -263597,5 +263597,68 @@ entities:
     components:
     - type: Transform
       pos: -159.62491,7.567453
+      parent: 1
+- proto: AU14SpawnPointCivilianHeadOfService
+  entities:
+  - uid: 33610
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
+      parent: 1
+- proto: AU14SpawnPointCivilianShopkeep
+  entities:
+  - uid: 33611
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
+      parent: 1
+- proto: AU14SpawnPointColonyWorkingJoe
+  entities:
+  - uid: 33612
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
+      parent: 1
+- proto: AU14SpawnPointCivilianColonyAdminAssistant
+  entities:
+  - uid: 33613
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
+      parent: 1
+- proto: AU14SpawnPointCivilianCorporateAssistant
+  entities:
+  - uid: 33614
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
+      parent: 1
+- proto: AU14SpawnPointWYGuard
+  entities:
+  - uid: 33615
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
+      parent: 1
+- proto: AU14SpawnPointCivilianHeadPhysician
+  entities:
+  - uid: 33616
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
+      parent: 1
+- proto: AU14SpawnPointOrbitalArbiter
+  entities:
+  - uid: 33617
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
+      parent: 1
+- proto: AU14SpawnPointOrbitalLawyer
+  entities:
+  - uid: 33618
+    components:
+    - type: Transform
+      pos: -7.5,-33.5
       parent: 1
 ...

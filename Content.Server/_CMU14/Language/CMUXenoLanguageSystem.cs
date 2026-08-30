@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Server._RMC14.Language.Systems;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Language;
 using Content.Shared._RMC14.Language.Components;
 using Content.Shared._RMC14.Language.Prototypes;
@@ -9,7 +9,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Language;
+namespace Content.Server.CMU14.Language;
 
 public sealed partial class CMUXenoLanguageSystem : EntitySystem
 {

@@ -1,4 +1,4 @@
-namespace Content.Server._CMU14.Ops.ThirdParty;
+namespace Content.Server.CMU14.Ops.ThirdParty;
 
 [RegisterComponent]
 public sealed partial class ThirdPartyDropshipReturnDestinationComponent : Component

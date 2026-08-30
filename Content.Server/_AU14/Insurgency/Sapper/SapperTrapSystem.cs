@@ -1,9 +1,9 @@
-using Content.Server.Explosion.EntitySystems;
-using Content.Shared._AU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Insurgency.Sapper;
+using Content.Shared.Trigger;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Insurgency.Sapper;
+namespace Content.Server.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     Server-side timing for sapper traps:

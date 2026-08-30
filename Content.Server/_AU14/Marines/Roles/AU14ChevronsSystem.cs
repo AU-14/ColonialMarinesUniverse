@@ -5,20 +5,20 @@ using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared._AU14.Marines.Roles.Chevrons;
+using Content.Shared.CMU14.Marines.Roles.Chevrons;
 using Content.Server.Ghost.Roles.Components;
 using Robust.Shared.Utility;
 using Robust.Server.Player;
 using Robust.Shared.Player;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Preferences;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Shared.NPC.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 
-namespace Content.Server._AU14.Marines.Roles.Chevrons;
+namespace Content.Server.CMU14.Marines.Roles.Chevrons;
 
 public sealed partial class ChevronSystem : EntitySystem
 {
@@ -97,7 +97,7 @@ public sealed partial class ChevronSystem : EntitySystem
         if (!HasComp<UniformAccessoryHolderComponent>(args.Equipment))
             return;
 
-        var mob = args.Equipee;
+        var mob = args.EquipTarget;
 
         if (HasComp<ChevronSpawnedComponent>(mob))
             return;

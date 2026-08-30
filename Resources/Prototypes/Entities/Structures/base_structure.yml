@@ -8,6 +8,7 @@
   - type: Transform
     anchored: true
   - type: Clickable
+  - type: GravityAffected
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -66,6 +67,3 @@
   components:
     - type: TileFrictionModifier
       modifier: 0.4
-
-- type: Tag
-  id: Structure

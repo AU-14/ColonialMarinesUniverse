@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Roles;
+namespace Content.Shared.CMU14.Roles;
 
 /// <summary>
 ///     Bonus items handed to Distress Signal roundstart survivors when their party spawns.

@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._RMC14.Emote;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -10,11 +10,11 @@ using Content.Shared.Popups;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Organs.Lungs;
+namespace Content.Server.CMU14.Medical.Anatomy.Organs.Lungs;
 
 public sealed partial class LungsSystem : SharedLungsSystem
 {
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _proto = default!;
@@ -44,7 +44,7 @@ public sealed partial class LungsSystem : SharedLungsSystem
     protected override void ApplyBloodCough(EntityUid body, EntityUid lung, FixedPoint2 bloodLoss)
     {
         if (bloodLoss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(body, out var bloodstream))
-            _bloodstream.TryModifyBloodLevel((body, bloodstream), -bloodLoss);
+            _bloodstream.TryBleedOut((body, bloodstream), bloodLoss);
 
         _emote.TryEmoteWithChat(body, Cough, forceEmote: true, cooldown: TimeSpan.Zero);
         _popup.PopupEntity(

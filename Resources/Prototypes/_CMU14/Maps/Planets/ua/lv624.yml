@@ -13,7 +13,7 @@
     - LACN
     - USCM
     - CMBCIU
-    - WYPMC
+    - WEYU
     - RMC
     - HAZOPS
     platoonsOpfor:
@@ -91,7 +91,7 @@
 - type: gameMap
   id: LV624
   mapName: LV-624
-  mapPath: /Maps/_AU14/LV624.yml
+  mapPath: /Maps/CMU14/LV624.yml
   minPlayers: 0
   maxPlayers: 65
   maxRandomOffset: 0

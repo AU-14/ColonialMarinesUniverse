@@ -15,7 +15,7 @@
     freeSlots:
       CMU14XenoConditor: 2
     announceSound:
-      path: /Audio/_CMU14/Xeno/Pathogen/pathogen_distant_roar.ogg
+      path: /Audio/CMU14/Xeno/Pathogen/pathogen_distant_roar.ogg
       params:
         volume: -6
     marineAnnounceSound:

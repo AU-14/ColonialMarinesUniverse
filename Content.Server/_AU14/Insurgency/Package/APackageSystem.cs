@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
@@ -13,7 +13,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency.Package;
+namespace Content.Server.CMU14.Insurgency.Package;
 
 /// <summary>
 ///     Grants and dispenses "A Package". On a faction being applied, every member whose job has a

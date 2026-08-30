@@ -1,11 +1,12 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Organs.Kidneys;
+namespace Content.Server.CMU14.Medical.Anatomy.Organs.Kidneys;
 
 public sealed partial class KidneysSystem : SharedKidneysSystem
 {

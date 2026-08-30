@@ -1,17 +1,17 @@
-using Content.Server._CMU14.RoundStatistics;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.RoundStatistics;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14.ColonyEvacuation;
+using Content.Shared.CMU14.ColonyEvacuation;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
-using KillAllColonistRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllColonistRuleComponent;
+using KillAllColonistRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllColonistRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 /// <summary>
 ///     Kill-all rule that targets all Colonists, excludes SSD.

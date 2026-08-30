@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Chat;
+namespace Content.Shared.CMU14.Chat;
 
 public static class CMURunechatStyles
 {

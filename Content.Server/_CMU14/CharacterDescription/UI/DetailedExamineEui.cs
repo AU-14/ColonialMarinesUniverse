@@ -1,14 +1,14 @@
-using Content.Server._CMU14.CharacterDescription;
+using Content.Server.CMU14.CharacterDescription;
 using Content.Server.EUI;
+using Content.Server.Humanoid;
 using Content.Shared._RMC14.Chemistry.Reagent;
-using Content.Shared._CMU14.CharacterDescription;
+using Content.Shared.CMU14.CharacterDescription;
 using Content.Shared.Eui;
 using Content.Shared.Humanoid;
-using Content.Shared.Humanoid.Markings;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.CharacterDescription.UI;
+namespace Content.Server.CMU14.CharacterDescription.UI;
 
 [UsedImplicitly]
 public sealed partial class DetailedExamineEui : BaseEui
@@ -17,6 +17,7 @@ public sealed partial class DetailedExamineEui : BaseEui
     [Dependency] private  IPrototypeManager _prototypeManager = default!;
 
     private readonly RMCReagentSystem _reagentSystem;
+    private readonly HumanoidOrganAppearanceSystem _humanoidAppearance;
     private readonly NetEntity _target;
 
     public DetailedExamineEui(NetEntity target)
@@ -24,6 +25,7 @@ public sealed partial class DetailedExamineEui : BaseEui
         _target = target;
         IoCManager.InjectDependencies(this);
         _reagentSystem = _entManager.System<RMCReagentSystem>();
+        _humanoidAppearance = _entManager.System<HumanoidOrganAppearanceSystem>();
     }
 
     public override void Opened()
@@ -64,12 +66,12 @@ public sealed partial class DetailedExamineEui : BaseEui
             }
         }
 
-        if (_entManager.TryGetComponent(uid, out HumanoidAppearanceComponent? humanoid))
+        if (_humanoidAppearance.TryGetColors(uid, out var skinColor, out var eyeColor))
         {
-            state.SkinToneName = NamedColorHelper.NearestColorName(humanoid.SkinColor);
-            state.EyeColorName = NamedColorHelper.NearestColorName(humanoid.EyeColor);
+            state.SkinToneName = NamedColorHelper.NearestColorName(skinColor);
+            state.EyeColorName = NamedColorHelper.NearestColorName(eyeColor);
 
-            if (humanoid.MarkingSet.TryGetCategory(MarkingCategories.Hair, out var hairMarkings) &&
+            if (_humanoidAppearance.TryGetMarkings(uid, HumanoidVisualLayers.Hair, out _, out _, out var hairMarkings) &&
                 hairMarkings.Count > 0 && hairMarkings[0].MarkingColors.Count > 0)
             {
                 state.HairColorName = NamedColorHelper.NearestColorName(hairMarkings[0].MarkingColors[0]);

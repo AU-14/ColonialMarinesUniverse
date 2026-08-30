@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.AU14;
+namespace Content.Shared.CMU14;
 
 [RegisterComponent]
 public sealed partial class ColonyCommsConsoleComponent : Component

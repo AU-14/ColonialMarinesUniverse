@@ -8,7 +8,7 @@ using Content.Client.Message;
 using Content.Client.Playtime;
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Client.Voting;
-using Content.Shared.AU14.Allegiance;
+using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
 using Robust.Client;
@@ -18,6 +18,7 @@ using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Client.Lobby
@@ -42,6 +43,7 @@ namespace Content.Client.Lobby
         /// Whether the player wants to ignore allegiance for spawning the current character.
         /// </summary>
         public bool IgnoreAllegiance { get; set; }
+        [Dependency] private IPrototypeManager _protoMan = default!;
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
@@ -89,6 +91,8 @@ namespace Content.Client.Lobby
             Lobby.CharacterPreview.PrevCharacterButton.OnPressed += OnPrevCharPressed;
             Lobby.CharacterPreview.NextCharacterButton.OnPressed += OnNextCharPressed;
             Lobby.CharacterPreview.IgnoreAllegianceToggle.OnToggled += OnIgnoreAllegianceToggled;
+            Lobby.CharacterPreview.IgnoreAllegianceToggle.Pressed = false;
+            SetIgnoreAllegiance(false);
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
 
@@ -257,10 +261,10 @@ namespace Content.Client.Lobby
             else
             {
                 Lobby!.StartTime.Text = string.Empty;
+                Lobby!.ReadyButton.Pressed = _gameTicker.AreWeReady;
                 Lobby!.ReadyButton.Text = Loc.GetString(Lobby!.ReadyButton.Pressed ? "lobby-state-player-status-ready": "lobby-state-player-status-not-ready");
                 Lobby!.ReadyButton.ToggleMode = true;
                 Lobby!.ReadyButton.Disabled = false;
-                Lobby!.ReadyButton.Pressed = _gameTicker.AreWeReady;
                 Lobby!.ObserveButton.Disabled = true;
 
                 // RMC14
@@ -327,15 +331,22 @@ namespace Content.Client.Lobby
 
         private void UpdateLobbyBackground()
         {
-            if (_gameTicker.LobbyBackground != null)
+            if (_protoMan.TryIndex(_gameTicker.LobbyBackground, out var proto))
             {
-                Lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(_gameTicker.LobbyBackground );
+                Lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(proto.Background);
+
+                var markup = Loc.GetString("lobby-state-background-text",
+                    ("backgroundTitle", Loc.GetString(proto.Title)),
+                    ("backgroundArtist", Loc.GetString(proto.Artist)));
+
+                Lobby!.LobbyBackground.SetMarkup(markup);
             }
             else
             {
                 Lobby!.Background.Texture = null;
-            }
 
+                Lobby!.LobbyBackground.SetMarkup(Loc.GetString("lobby-state-background-no-background-text"));
+            }
         }
 
         private void SetReady(bool newReady)
@@ -404,11 +415,16 @@ namespace Content.Client.Lobby
 
         private void OnIgnoreAllegianceToggled(BaseButton.ButtonToggledEventArgs args)
         {
-            IgnoreAllegiance = args.Pressed;
+            SetIgnoreAllegiance(args.Pressed);
+        }
+
+        private void SetIgnoreAllegiance(bool ignoreAllegiance)
+        {
+            IgnoreAllegiance = ignoreAllegiance;
             var netManager = IoCManager.Resolve<Robust.Shared.Network.IClientNetManager>();
             var msg = new MsgIgnoreAllegiance
             {
-                IgnoreAllegiance = args.Pressed
+                IgnoreAllegiance = ignoreAllegiance
             };
             netManager.ClientSendMessage(msg);
         }

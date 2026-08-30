@@ -1,9 +1,9 @@
 using System;
 using System.Numerics;
-using Content.Client._CMU14.Medical.Presentation.Windows;
+using Content.Client.CMU14.Medical.Presentation.Windows;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Ghost.Controls;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -15,7 +15,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Localization;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Medical.Treatment.Surgery;
+namespace Content.Client.CMU14.Medical.Treatment.Surgery;
 
 [UsedImplicitly]
 public sealed partial class CMUAutodocBui : BoundUserInterface

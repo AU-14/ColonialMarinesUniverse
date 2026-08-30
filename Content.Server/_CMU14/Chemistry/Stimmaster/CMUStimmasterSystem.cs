@@ -1,5 +1,5 @@
 using Content.Server.Materials;
-using Content.Shared._CMU14.Chemistry.Stimmaster;
+using Content.Shared.CMU14.Chemistry.Stimmaster;
 using Content.Shared._RMC14.Chemistry.ChemMaster;
 using Content.Shared._RMC14.Chemistry.SmartFridge;
 using Content.Shared._RMC14.IconLabel;
@@ -16,7 +16,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Chemistry.Stimmaster;
+namespace Content.Server.CMU14.Chemistry.Stimmaster;
 
 /// <summary>
 /// Fabricates empty autoinjector shells and fills selected shells from an RMC ChemMaster buffer.

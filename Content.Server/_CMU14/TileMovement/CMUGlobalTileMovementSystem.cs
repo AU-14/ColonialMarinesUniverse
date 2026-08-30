@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.TileMovement;
+using Content.Shared.CMU14.TileMovement;
 using Content.Shared.CCVar;
 using Content.Shared.Movement.Components;
 using Robust.Shared.Configuration;
 
-namespace Content.Server._CMU14.TileMovement;
+namespace Content.Server.CMU14.TileMovement;
 
 /// <summary>
 /// Lets an admin force tile-based movement onto every player mob at once via the "cmuforcetilemovement"

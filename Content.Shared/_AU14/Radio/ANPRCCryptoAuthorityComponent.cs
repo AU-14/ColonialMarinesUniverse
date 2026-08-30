@@ -1,4 +1,4 @@
-namespace Content.Shared._AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 // command authority over COMSEC: only holders may order a recrypto that
 // supersedes every older fill card of their faction

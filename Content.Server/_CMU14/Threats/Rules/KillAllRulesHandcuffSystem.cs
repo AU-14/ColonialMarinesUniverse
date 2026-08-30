@@ -4,11 +4,11 @@ using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.NPC.Components;
-using KillAllClfRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllClfRuleComponent;
-using KillAllGovforRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllGovforRuleComponent;
-using KillAllHumanRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllHumanRuleComponent;
+using KillAllClfRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllClfRuleComponent;
+using KillAllGovforRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllGovforRuleComponent;
+using KillAllHumanRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllHumanRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 /// <summary>
 ///     Shared system for handling handcuff events for KillAllClf, KillAllGovfor, and KillAllHuman rules.
@@ -27,7 +27,7 @@ public sealed partial class KillAllRulesHandcuffSystem : EntitySystem
 
     private void OnTargetHandcuffed(EntityUid uid, CuffableComponent component, ref TargetHandcuffedEvent args)
     {
-        if (_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>() && HasComp<HumanoidAppearanceComponent>(uid))
+        if (_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>() && HasComp<HumanoidProfileComponent>(uid))
             EntityManager.System<KillAllHumanRuleSystem>().OnHandcuffEvent(uid);
 
         if (!TryComp(uid, out NpcFactionMemberComponent? faction))

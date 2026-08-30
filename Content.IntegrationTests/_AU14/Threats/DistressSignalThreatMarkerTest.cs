@@ -1,26 +1,27 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Content.Server._CMU14.Threats;
+using Content.Server.CMU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Scenario;
+using Content.Shared.CMU14.util;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using KillAllColonistRuleComponent = Content.Shared._CMU14.Threats.Rules.KillAllColonistRuleComponent;
+using KillAllColonistRuleComponent = Content.Shared.CMU14.Threats.Rules.KillAllColonistRuleComponent;
 
-namespace Content.IntegrationTests._AU14.Threats;
+namespace Content.IntegrationTests.CMU14.Threats;
 
 [TestFixture]
 public sealed class DistressSignalThreatMarkerTest
 {
     private static readonly ProtoId<ThreatPrototype> XenoThreat = "XenoThreat";
-    private static readonly ProtoId<ThreatPrototype> TribalThreat = "TribalsThreatCF";
+    private static readonly ProtoId<ThreatPrototype> TribalThreat = "TribalsThreat";
     private const string DistressSignalPreset = "DistressSignal";
     private const int MarkerValidationPlayerCount = 100;
 
@@ -130,8 +131,6 @@ public sealed class DistressSignalThreatMarkerTest
                     continue;
 
                 var gameMap = prototypes.Index<GameMapPrototype>(planet.MapId);
-                var mapProtoCounts = CountMapPrototypes(resources, gameMap.MapPath);
-
                 foreach (var threatId in planet.AllowedThreats)
                 {
                     var threat = prototypes.Index<ThreatPrototype>(threatId);
@@ -152,10 +151,15 @@ public sealed class DistressSignalThreatMarkerTest
                         if (requiredCount <= 0)
                             continue;
 
-                        var markerPrototype = GetThreatMarkerPrototype(partySpawn, markerType);
-                        mapProtoCounts.TryGetValue(markerPrototype, out var count);
+                        var count = CountCompatibleMapMarkers(
+                            resources,
+                            prototypes,
+                            factory,
+                            gameMap,
+                            partySpawn,
+                            markerType);
                         Assert.That(count, Is.GreaterThan(0),
-                            $"{planetId} ({gameMap.ID}) allows {threat.ID} for {presetId}, but {gameMap.MapPath} has no {markerPrototype} entries.");
+                            $"{planetId} ({gameMap.ID}) allows {threat.ID} for {presetId}, but its authored maps have no compatible {markerType} marker entries.");
                     }
                 }
             }
@@ -194,17 +198,20 @@ public sealed class DistressSignalThreatMarkerTest
                     continue;
 
                 var gameMap = prototypes.Index<GameMapPrototype>(planet.MapId);
-                var mapProtoCounts = CountMapPrototypes(resources, gameMap.MapPath);
-
                 foreach (var (markerType, requiredCount) in requiredMarkers)
                 {
                     if (requiredCount <= 0)
                         continue;
 
-                    var markerPrototype = GetThreatMarkerPrototype(partySpawn, markerType);
-                    mapProtoCounts.TryGetValue(markerPrototype, out var count);
+                    var count = CountCompatibleMapMarkers(
+                        resources,
+                        prototypes,
+                        factory,
+                        gameMap,
+                        partySpawn,
+                        markerType);
                     Assert.That(count, Is.GreaterThan(0),
-                        $"{planetProto.ID} ({gameMap.ID}) allows {XenoThreat}, but {gameMap.MapPath} has no {markerPrototype} entries.");
+                        $"{planetProto.ID} ({gameMap.ID}) allows {XenoThreat}, but its authored maps have no compatible {markerType} marker entries.");
                 }
             }
         });
@@ -233,26 +240,55 @@ public sealed class DistressSignalThreatMarkerTest
         return counts;
     }
 
-    private static string GetThreatMarkerPrototype(PartySpawnPrototype partySpawn, ThreatMarkerType markerType)
+    private static int CountCompatibleMapMarkers(
+        IResourceManager resources,
+        IPrototypeManager prototypes,
+        IComponentFactory factory,
+        GameMapPrototype gameMap,
+        PartySpawnPrototype partySpawn,
+        ThreatMarkerType markerType)
     {
         var markerId = partySpawn.Markers.TryGetValue(markerType, out var id) ? id : string.Empty;
-        return markerId switch
+        var requiredTags = new[]
         {
-            "" => markerType switch
-            {
-                ThreatMarkerType.Leader => "threatleaderspawnmarker",
-                ThreatMarkerType.Member => "threatmemberspawnmarker",
-                ThreatMarkerType.Entity => "threatentityspawnmarker",
-                _ => throw new ArgumentOutOfRangeException(nameof(markerType), markerType, null),
-            },
-            "xenocf" => markerType switch
-            {
-                ThreatMarkerType.Leader => "xenocfthreatleaderspawnmarker",
-                ThreatMarkerType.Member => "xenocfthreatmemberspawnmarker",
-                ThreatMarkerType.Entity => "xenocfthreatentityspawnmarker",
-                _ => throw new ArgumentOutOfRangeException(nameof(markerType), markerType, null),
-            },
-            _ => throw new InvalidOperationException($"Unknown threat marker id '{markerId}' for {markerType}."),
+            ScenarioMarkerTags.ForceHostile,
+            ScenarioMarkerTags.Bucket(markerType.ToString()),
+            ScenarioMarkerTags.MarkerId(markerId),
         };
+        var count = 0;
+
+        foreach (var mapPath in EnumerateMapPaths(gameMap))
+        {
+            foreach (var (prototypeId, occurrences) in CountMapPrototypes(resources, mapPath))
+            {
+                if (!prototypes.TryIndex<EntityPrototype>(prototypeId, out var prototype) ||
+                    !prototype.TryComp<ScenarioSpawnMarkerComponent>(out var marker, factory) ||
+                    marker.Kind != SpawnMarkerKind.ThreatMarker ||
+                    requiredTags.Any(required =>
+                        !marker.Tags.Contains(required, StringComparer.OrdinalIgnoreCase)))
+                {
+                    continue;
+                }
+
+                count += occurrences * Math.Max(1, marker.Count);
+            }
+        }
+
+        return count;
+    }
+
+    private static IEnumerable<ResPath> EnumerateMapPaths(GameMapPrototype gameMap)
+    {
+        yield return gameMap.MapPath;
+
+        foreach (var path in gameMap.MapsBelow)
+        {
+            yield return path;
+        }
+
+        foreach (var path in gameMap.MapsAbove)
+        {
+            yield return path;
+        }
     }
 }

@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Dropship;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.AU14.Round;
+namespace Content.Shared.CMU14.Round;
 
 
 [RegisterComponent,NetworkedComponent]

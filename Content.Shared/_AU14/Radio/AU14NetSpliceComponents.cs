@@ -5,7 +5,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 /// <summary>
 ///     A fixed mast or array whose feeder junction the CLF can splice a tap into, putting the cell nets on

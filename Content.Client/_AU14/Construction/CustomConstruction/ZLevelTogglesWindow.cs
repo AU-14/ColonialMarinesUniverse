@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
 
-namespace Content.Client._AU14.Construction.CustomConstruction;
+namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// The "Z-Level Toggles" admin tool (construction menu > Tools): one row per game-map prototype with a Yes/No

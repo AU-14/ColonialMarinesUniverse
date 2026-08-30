@@ -2,13 +2,15 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using Content.Client.Administration.Managers;
-using Content.Shared._AU14.Administration;
+using Content.Client.Popups;
+using Content.Shared.CMU14.Administration;
 using Content.Shared.Administration;
 using Content.Shared.Popups;
+using Robust.Client.GameStates;
 using Robust.Client.Player;
 using Robust.Shared.Player;
 
-namespace Content.Client._AU14.Administration;
+namespace Content.Client.CMU14.Administration;
 
 /// <summary>
 /// Client side of the per-tool editor permissions (see <see cref="AU14ToolPermissions"/>). Caches the
@@ -16,12 +18,14 @@ namespace Content.Client._AU14.Administration;
 /// changes them live) so tool buttons can pre-check without a round trip, and drives the Host-only
 /// Tool Permissions manager window. The server re-validates everything.
 /// </summary>
-public sealed partial class ToolPermissionClientSystem : EntitySystem
+public sealed class ToolPermissionClientSystem : EntitySystem
 {
-    [Dependency] private  IClientAdminManager _admin = default!;
-    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IClientAdminManager _admin = default!;
+    [Dependency] private readonly IClientGameStateManager _gameStates = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
 
     private readonly HashSet<string> _myTools = new();
+    private bool _requestPending;
     private ToolPermissionsWindow? _window;
 
     public override void Initialize()
@@ -30,6 +34,7 @@ public sealed partial class ToolPermissionClientSystem : EntitySystem
         SubscribeNetworkEvent<MyToolPermissionsEvent>(OnMine);
         SubscribeNetworkEvent<OpenToolPermissionsEvent>(OnOpen);
         SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
+        _gameStates.GameStateApplied += OnGameStateApplied;
 
         // Re-fetch grants whenever admin status flips (admin/deadmin/readmin), so a deadmined host or a
         // freshly granted player has working tool buttons without rejoining.
@@ -40,6 +45,7 @@ public sealed partial class ToolPermissionClientSystem : EntitySystem
     {
         base.Shutdown();
         _admin.AdminStatusUpdated -= RequestMyGrants;
+        _gameStates.GameStateApplied -= OnGameStateApplied;
     }
 
     private void OnPlayerAttached(LocalPlayerAttachedEvent ev)
@@ -49,6 +55,15 @@ public sealed partial class ToolPermissionClientSystem : EntitySystem
 
     private void RequestMyGrants()
     {
+        _requestPending = true;
+    }
+
+    private void OnGameStateApplied(GameStateAppliedArgs args)
+    {
+        if (!_requestPending)
+            return;
+
+        _requestPending = false;
         RaiseNetworkEvent(new RequestMyToolPermissionsEvent());
     }
 

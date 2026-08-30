@@ -1,11 +1,11 @@
-using Content.Server._AU14.Insurgency;
-using Content.Server._CMU14.Language;
+using Content.Server.CMU14.Insurgency;
+using Content.Server.CMU14.Language;
 using Content.Server.Administration.Logs;
 using Content.Server.Antag;
 using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.Roles;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Database;
@@ -21,12 +21,12 @@ using Content.Shared.Storage;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using CLFMemberComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFMemberComponent;
-using TattooDoAfterEvent = Content.Shared._CMU14.Threats.Mobs.CLF.TattooDoAfterEvent;
-using TattooGunComponent = Content.Shared._CMU14.Threats.Mobs.CLF.TattooGunComponent;
-using TattooPendingComponent = Content.Shared._CMU14.Threats.Mobs.CLF.TattooPendingComponent;
+using CLFMemberComponent = Content.Shared.CMU14.Threats.Mobs.CLF.CLFMemberComponent;
+using TattooDoAfterEvent = Content.Shared.CMU14.Threats.Mobs.CLF.TattooDoAfterEvent;
+using TattooGunComponent = Content.Shared.CMU14.Threats.Mobs.CLF.TattooGunComponent;
+using TattooPendingComponent = Content.Shared.CMU14.Threats.Mobs.CLF.TattooPendingComponent;
 
-namespace Content.Server._CMU14.Threats.Mobs.CLF;
+namespace Content.Server.CMU14.Threats.Mobs.CLF;
 
 public sealed partial class CLFTattooSystem : EntitySystem
 {
@@ -106,7 +106,7 @@ public sealed partial class CLFTattooSystem : EntitySystem
         }
 
         // Must be a humanoid
-        if (!HasComp<HumanoidAppearanceComponent>(target))
+        if (!HasComp<HumanoidProfileComponent>(target))
             return;
 
         // Must be alive

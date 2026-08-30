@@ -1,8 +1,8 @@
-using Content.Shared._AU14.CCVar;
+using Content.Shared.CMU14.CCVar;
 using Content.Shared.Radio;
 using Robust.Shared.Configuration;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 /// <summary>
 ///     One place to ask whether the comms overhaul applies. There is the master switch and

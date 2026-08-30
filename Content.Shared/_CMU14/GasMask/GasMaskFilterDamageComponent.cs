@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Content.Shared._CMU14.GasMask;
+namespace Content.Shared.CMU14.GasMask;
 
 [RegisterComponent]
 public sealed partial class GasMaskFilterDamageComponent : Component

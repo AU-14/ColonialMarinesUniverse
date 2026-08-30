@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -6,13 +6,13 @@ using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.DoAfter;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Inventory;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.DirectSporeInfect;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.DirectSporeInfect;
 
 public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
 {

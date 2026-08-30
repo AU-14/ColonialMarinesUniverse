@@ -1,6 +1,6 @@
 using Robust.Shared.GameObjects;
 
-namespace Content.Server._CMU14.Threats;
+namespace Content.Server.CMU14.Threats;
 
 /// <summary>
 ///     Raised after the round's selected threat changes mid-round (post-roundstart threat vote),

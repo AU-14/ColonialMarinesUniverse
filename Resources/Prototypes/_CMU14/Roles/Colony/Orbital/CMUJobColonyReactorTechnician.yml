@@ -14,7 +14,7 @@
     prefix: cmu-colony-prefix-reactor-technician
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmucolonyblips.rsi
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
       state: colonist
   name: cmu-colony-name-reactor-technician
   description: cmu-colony-description-reactor-technician

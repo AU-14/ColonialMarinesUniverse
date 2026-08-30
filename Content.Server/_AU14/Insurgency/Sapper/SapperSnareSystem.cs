@@ -1,16 +1,16 @@
-using Content.Shared._AU14.Insurgency.Sapper;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared._RMC14.Slow;
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
-using Content.Shared.Kitchen.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Tools.Systems;
+using Content.Shared.Trigger;
 
-namespace Content.Server._AU14.Insurgency.Sapper;
+namespace Content.Server.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     Runs the snare trap's non-lethal payload. When a snare goes off it binds the tripper: they are
@@ -29,11 +29,14 @@ namespace Content.Server._AU14.Insurgency.Sapper;
 /// </summary>
 public sealed partial class SapperSnareSystem : EntitySystem
 {
+    private const string SlicingQuality = "Slicing";
+
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedCuffableSystem _cuffable = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
 
     public override void Initialize()
     {
@@ -56,7 +59,7 @@ public sealed partial class SapperSnareSystem : EntitySystem
         args.Cancelled = true;
     }
 
-    private void OnSnareTriggered(EntityUid uid, SapperSnareComponent comp, TriggerEvent args)
+    private void OnSnareTriggered(EntityUid uid, SapperSnareComponent comp, ref TriggerEvent args)
     {
         // The step gate already spared friendlies, but re-check in case something else set it off.
         if (args.User is not { } tripper || HasComp<CLFMemberComponent>(tripper))
@@ -101,7 +104,7 @@ public sealed partial class SapperSnareSystem : EntitySystem
     {
         // Free their movement immediately (in case they were cut loose early, before the root expired).
         RemComp<RMCRootedComponent>(ent);
-        _speed.RefreshMovementSpeedModifiers(ent);
+        _speed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
         // Take the cuffs off by deleting them - the snare's cuffs are conjured by the trap, so they vanish
         // with it instead of leaving a free pair on the floor. Removal from the container cleans up the
@@ -116,7 +119,7 @@ public sealed partial class SapperSnareSystem : EntitySystem
             return;
 
         // Only a friend with a knife can cut someone loose, and not the victim themselves.
-        if (args.User == ent.Owner || !HasComp<SharpComponent>(args.Used))
+        if (args.User == ent.Owner || !_tool.HasQuality(args.Used, SlicingQuality))
             return;
 
         args.Handled = true;

@@ -49,10 +49,9 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IInputManager _input = default!;
 
-    [UISystemDependency] private ActionsSystem? _actionsSystem = default;
-    [UISystemDependency] private InteractionOutlineSystem? _interactionOutline = default;
-    [UISystemDependency] private TargetOutlineSystem? _targetOutline = default;
-    [UISystemDependency] private SpriteSystem _spriteSystem = default!;
+    [UISystemDependency] private readonly ActionsSystem? _actionsSystem = default;
+    [UISystemDependency] private readonly InteractionOutlineSystem? _interactionOutline = default;
+    [UISystemDependency] private readonly TargetOutlineSystem? _targetOutline = default;
 
     private ActionButtonContainer? _container;
     private readonly List<EntityUid?> _actions = new();
@@ -379,7 +378,7 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
                 continue;
             }
 
-            var button = new ActionButton(EntityManager, _spriteSystem, this) {Locked = true};
+            var button = new ActionButton(EntityManager, this) {Locked = true};
             button.ActionPressed += OnWindowActionPressed;
             button.ActionUnpressed += OnWindowActionUnPressed;
             button.ActionFocusExited += OnWindowActionFocusExisted;
@@ -636,14 +635,15 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         // and a small item/provider sprite, then the dragged icon should be the big texture, not the provider.
         if (_menuDragHelper.Dragged?.Action is {} action)
         {
-            if (EntityManager.TryGetComponent(action.Comp.EntityIcon, out SpriteComponent? sprite)
-                && sprite.Icon?.GetFrame(RsiDirection.South, 0) is {} frame)
+            if (EntityManager.TryGetComponent(action.Comp.EntityIcon, out SpriteComponent? itemSprite)
+                && itemSprite.Icon?.GetFrame(RsiDirection.South, 0) is {} itemFrame)
             {
-                _dragShadow.Texture = frame;
+                _dragShadow.Texture = itemFrame;
             }
-            else if (action.Comp.Icon is {} icon)
+            else if (EntityManager.TryGetComponent(action.Owner, out SpriteComponent? actionSprite)
+                && actionSprite.Icon?.GetFrame(RsiDirection.South, 0) is {} actionFrame)
             {
-                _dragShadow.Texture = _spriteSystem.Frame0(icon);
+                _dragShadow.Texture = actionFrame;
             }
             else
             {
@@ -666,6 +666,18 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
     {
         _dragShadow.Texture = null;
         _dragShadow.Visible = false;
+        UpdateActionBarBackgrounds();
+    }
+
+    private void UpdateActionBarBackgrounds()
+    {
+        if (_container == null)
+            return;
+
+        foreach (var button in _container.GetButtons())
+        {
+            button.UpdateBackground();
+        }
     }
 
     private void UnloadGui()
@@ -773,8 +785,12 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
 
     public override void FrameUpdate(FrameEventArgs args)
     {
+        var wasDragging = IsDragging;
         _menuDragHelper.Update(args.DeltaSeconds);
         RefreshVehicleHotbarOverride();
+
+        if (wasDragging != IsDragging)
+            UpdateActionBarBackgrounds();
         if (_window is {UpdateNeeded: true})
             SearchAndDisplay();
     }
@@ -856,10 +872,11 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
             {
                 handOverlay.EntityOverride = provider;
             }
-            else if (action.Toggled && action.IconOn != null)
-                handOverlay.IconOverride = _spriteSystem.Frame0(action.IconOn);
-            else if (action.Icon != null)
-                handOverlay.IconOverride = _spriteSystem.Frame0(action.Icon);
+            else if (EntityManager.TryGetComponent(uid, out SpriteComponent? actionSprite)
+                && actionSprite.Icon?.GetFrame(RsiDirection.South, 0) is {} frame)
+            {
+                handOverlay.IconOverride = frame;
+            }
         }
 
         if (_container != null)

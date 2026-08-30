@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Round.Antags.Vigilante;
+namespace Content.Shared.CMU14.Round.Antags.Vigilante;
 
 /// <summary>
 /// A vigilante antag. Shortly after spawn they are briefed with the names of the

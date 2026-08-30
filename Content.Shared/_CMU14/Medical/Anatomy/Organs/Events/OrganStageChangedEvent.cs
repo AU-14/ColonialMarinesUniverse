@@ -1,6 +1,6 @@
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 
 [ByRefEvent]
 public readonly record struct OrganStageChangedEvent(

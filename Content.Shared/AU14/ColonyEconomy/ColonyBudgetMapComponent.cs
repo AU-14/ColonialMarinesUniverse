@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.AU14.ColonyEconomy;
+namespace Content.Shared.CMU14.ColonyEconomy;
 
 /// <summary>
 ///     Place this component on a map entity (e.g. the planet map) to set the starting colony budget.

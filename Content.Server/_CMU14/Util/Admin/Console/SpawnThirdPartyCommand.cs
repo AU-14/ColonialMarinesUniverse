@@ -1,12 +1,12 @@
 using System.Linq;
 using Content.Server.Administration;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
-using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
+using ThirdPartySystem = Content.Server.CMU14.Ops.ThirdParty.ThirdPartySystem;
 
-namespace Content.Server._CMU14.Util.Admin.Console;
+namespace Content.Server.CMU14.Util.Admin.Console;
 
 [AdminCommand(AdminFlags.Admin)]
 public sealed partial class SpawnThirdPartyCommand : LocalizedEntityCommands

@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Construction.CustomConstruction;
+namespace Content.Shared.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Server -> client: open the TILE editor (the "Tiles" sibling of the Construction Items Editor). Lets a

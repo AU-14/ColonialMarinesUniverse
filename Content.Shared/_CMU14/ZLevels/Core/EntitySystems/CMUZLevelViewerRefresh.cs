@@ -1,6 +1,6 @@
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 
-namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 
 public static class CMUZLevelViewerRefresh
 {

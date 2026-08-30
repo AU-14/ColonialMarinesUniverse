@@ -2,7 +2,7 @@ using Content.Shared.Actions;
 using Content.Shared.Inventory;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Yautja;
+namespace Content.Shared.CMU14.Yautja;
 
 public sealed partial class YautjaToggleVisorActionEvent : InstantActionEvent;
 

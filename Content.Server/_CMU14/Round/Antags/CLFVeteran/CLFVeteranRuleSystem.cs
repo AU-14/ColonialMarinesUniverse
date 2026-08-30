@@ -1,14 +1,14 @@
 // CMU14 file: wanted record/capture watch/bounty payout moved to ColonyBountySystem; the faxes remain
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Systems;
 using Content.Server.Fax;
 using Content.Server.GameTicking.Rules;
 using Content.Shared.Fax.Components;
 using Content.Shared.Paper;
-using CLFFaxReceiverComponent = Content.Shared._CMU14.Threats.Mobs.CLF.CLFFaxReceiverComponent;
+using CLFFaxReceiverComponent = Content.Shared.CMU14.Threats.Mobs.CLF.CLFFaxReceiverComponent;
 using Robust.Shared.Maths;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
 
-namespace Content.Server._CMU14.Round.Antags.CLFVeteran;
+namespace Content.Server.CMU14.Round.Antags.CLFVeteran;
 
 public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRuleComponent>
 {

@@ -2,7 +2,7 @@ using System;
 using Robust.Shared.GameStates;
 using Robust.Shared.Maths;
 
-namespace Content.Shared._CMU14.Dropship.TacticalLand;
+namespace Content.Shared.CMU14.Dropship.TacticalLand;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class EphemeralDropshipDestinationComponent : Component

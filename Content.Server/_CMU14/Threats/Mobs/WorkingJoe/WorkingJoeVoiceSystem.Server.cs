@@ -1,6 +1,7 @@
 using Content.Server.Chat.Systems;
-using Content.Shared._CMU14.Threats.Mobs.WorkingJoe;
+using Content.Shared.CMU14.Threats.Mobs.WorkingJoe;
 using Content.Shared.Actions;
+using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Mobs;
 using Robust.Server.GameObjects;
@@ -9,10 +10,10 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using WorkingJoeVoiceActionEvent = Content.Shared._CMU14.Threats.Mobs.WorkingJoe.WorkingJoeVoiceActionEvent;
-using WorkingJoeVoiceComponent = Content.Shared._CMU14.Threats.Mobs.WorkingJoe.WorkingJoeVoiceComponent;
+using WorkingJoeVoiceActionEvent = Content.Shared.CMU14.Threats.Mobs.WorkingJoe.WorkingJoeVoiceActionEvent;
+using WorkingJoeVoiceComponent = Content.Shared.CMU14.Threats.Mobs.WorkingJoe.WorkingJoeVoiceComponent;
 
-namespace Content.Server._CMU14.Threats.Mobs.WorkingJoe;
+namespace Content.Server.CMU14.Threats.Mobs.WorkingJoe;
 
 public sealed partial class WorkingJoeVoiceSystem : EntitySystem
 {

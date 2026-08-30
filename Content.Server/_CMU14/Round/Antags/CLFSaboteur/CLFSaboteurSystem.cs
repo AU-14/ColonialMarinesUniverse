@@ -1,14 +1,14 @@
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Systems;
 using Content.Server.Communications;
 using Content.Server.Power.Components;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
-using Content.Shared._CMU14.Round.Antags.ColonyBounty;
-using Content.Shared._CMU14.Round.Antags.CLFSaboteur;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.CLFSaboteur;
 using Content.Shared.Paper;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 
-namespace Content.Server._CMU14.Round.Antags.CLFSaboteur;
+namespace Content.Server.CMU14.Round.Antags.CLFSaboteur;
 
 /// <summary>
 /// Counts colony infrastructure destroyed while a CLF saboteur is active. Destruction is

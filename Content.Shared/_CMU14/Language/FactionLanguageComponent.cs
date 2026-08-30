@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Language;
+namespace Content.Shared.CMU14.Language;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class FactionLanguageLeaderComponent : Component

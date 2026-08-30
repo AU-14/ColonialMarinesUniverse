@@ -1,4 +1,4 @@
-namespace Content.Server._CMU14.Humanoid;
+namespace Content.Server.CMU14.Humanoid;
 
 /// <summary>
 /// Marks a humanoid as currently having their hair tied back, storing the original hairstyle

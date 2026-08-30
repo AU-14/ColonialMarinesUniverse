@@ -4,7 +4,7 @@
 using System;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Server → client: a floor/cave collapse is happening near the player. Drives the client-side vignette:

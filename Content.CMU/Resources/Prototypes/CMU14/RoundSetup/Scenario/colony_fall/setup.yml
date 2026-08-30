@@ -1,0 +1,33 @@
+- type: votingChoices
+  id: ColonyFallVotingChoices
+  preset: ColonyFall
+  planetChoices:
+    - planets:
+        - AUPlanetShepherdsPride
+        - CMUPlanetStableGarrisonRedux
+        - CMUPlanetLament
+      backupThreatVote:
+        candidates:
+          - ColonyFallWendigoRoundGroup
+
+    - planets:
+        - AUPlanetLV327
+      backupThreatVote:
+        candidates:
+          - ColonyFallWendigoRoundGroup
+
+    - planets:
+        - AUPlanetSorokyne
+      backupThreatVote:
+        candidates:
+          - ColonyFallWendigoRoundGroup
+
+    - planets:
+        - CMUPlanetHopesRetreat
+      backupThreatVote:
+        candidates:
+          - ColonyFallAbominationRoundGroup
+
+    - planets:
+        - AuPlanetChances
+      backupQuiet: true

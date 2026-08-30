@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Diagnostics.Examine;
+namespace Content.Shared.CMU14.Medical.Diagnostics.Examine;
 
 [Serializable, NetSerializable]
 public sealed partial class CMUDetailedPhysicalExamineDoAfterEvent : SimpleDoAfterEvent;

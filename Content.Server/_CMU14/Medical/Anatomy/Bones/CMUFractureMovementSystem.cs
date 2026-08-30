@@ -1,16 +1,16 @@
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared.Body.Components;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -24,7 +24,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Medical.Anatomy.Bones;
+namespace Content.Server.CMU14.Medical.Anatomy.Bones;
 
 /// <summary>
 ///     Turns movement with an unstabilized fracture into the internal bleeding

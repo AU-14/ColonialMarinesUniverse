@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.AU14;
+namespace Content.Shared.CMU14;
 
 /// <summary>
 /// Marker component added to food service workers for antag selection whitelisting.

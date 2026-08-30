@@ -1,6 +1,6 @@
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions;
@@ -12,7 +12,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.ZJump;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno.ZJump;
 
 public sealed partial class CMUXenoZJumpSystem : EntitySystem
 {

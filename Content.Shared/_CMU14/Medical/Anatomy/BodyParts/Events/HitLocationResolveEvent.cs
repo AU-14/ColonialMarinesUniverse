@@ -2,7 +2,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
+namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 
 /// <summary>
 ///     Raised on the target before damage application so the routing pipeline can decide

@@ -1,9 +1,9 @@
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
-namespace Content.Shared._CMU14.ZLevels.Core.Components;
+namespace Content.Shared.CMU14.ZLevels.Core.Components;
 
 /// <summary>
 /// Allows an entity to move up and down the z-levels by gravity or jumping

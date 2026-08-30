@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Medical.Wounds;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
+namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
 ///     One coherent wound-ledger row. All treatment metadata travels with the

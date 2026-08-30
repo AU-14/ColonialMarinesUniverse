@@ -1,12 +1,29 @@
 - type: entity
   save: false
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceSlimePerson
+  - RMCBaseMobSpeciesOrganic
   id: CMMobSlimePerson
   name: Urist C.M McSlime
   suffix: RMC14
   components:
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: SlimePerson
+  - type: InitialBody
+    organs:
+      Torso: RMCOrganSlimePersonTorso
+      Head: OrganSlimePersonHead
+      ArmLeft: OrganSlimePersonArmLeft
+      ArmRight: OrganSlimePersonArmRight
+      HandRight: OrganSlimePersonHandRight
+      HandLeft: OrganSlimePersonHandLeft
+      LegLeft: OrganSlimePersonLegLeft
+      LegRight: OrganSlimePersonLegRight
+      FootLeft: OrganSlimePersonFootLeft
+      FootRight: OrganSlimePersonFootRight
+      Brain: OrganSlimePersonCore
+      Eyes: OrganSlimePersonEyes
+      Lungs: OrganSlimePersonLungs
   - type: Icon
     sprite: Mobs/Species/Slime/parts.rsi
     state: full
@@ -17,10 +34,6 @@
   - type: TypingIndicator
     proto: slime
   - type: Vocal
-    sounds:
-      Male: RMCMaleSlime
-      Female: RMCFemaleSlime
-      Unsexed: RMCMaleSlime
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:
@@ -30,3 +43,11 @@
         sprite: Mobs/Effects/burn_damage.rsi
   - type: FixedIdentity
     name: cm-chatsan-replacement-slime
+
+- type: entity
+  parent: OrganSlimePersonTorso
+  id: RMCOrganSlimePersonTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop

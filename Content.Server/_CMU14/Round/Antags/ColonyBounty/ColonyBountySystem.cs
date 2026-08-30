@@ -1,8 +1,8 @@
-using Content.Server.AU14.ColonyEconomy;
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.ColonyEconomy;
+using Content.Server.CMU14.Systems;
 using Content.Server.CriminalRecords.Systems;
 using Content.Server.Station.Systems;
-using Content.Server.StationRecords.Systems;
+using Content.Shared.StationRecords.Systems;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.CriminalRecords;
 using Content.Shared.Forensics.Components;
@@ -10,9 +10,9 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Security;
 using Content.Shared.StationRecords;
-using Content.Shared._CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.ColonyBounty;
 using Robust.Shared.GameObjects;
-namespace Content.Server._CMU14.Round.Antags.ColonyBounty;
+namespace Content.Server.CMU14.Round.Antags.ColonyBounty;
 
 /// <summary>
 /// Shared bookkeeping for bounty-carrying colony antags: wanted record on spawn,

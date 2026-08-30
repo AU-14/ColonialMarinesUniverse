@@ -1,6 +1,6 @@
 <cc:YautjaBadBloodWeaponChoiceWindow
     xmlns="https://spacestation14.io"
-    xmlns:cc="clr-namespace:Content.Client._CMU14.Yautja"
+    xmlns:cc="clr-namespace:Content.Client.CMU14.Yautja"
     Title="Choose Your Weapon"
     MinSize="300 200">
     <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="8 8 8 8">

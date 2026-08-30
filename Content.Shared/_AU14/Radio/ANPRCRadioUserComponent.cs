@@ -1,6 +1,6 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ANPRCRadioUserComponent : Component;

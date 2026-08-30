@@ -11,7 +11,7 @@
     announcement: "A crime wave has engulfed Chances Claim, a Weyland-Yutani administered mining colony on LV-522. A response force has been dispatched to restore order."
     platoonsGovfor:
     - USCM
-    - WYPMC
+    - WEYU
     - VAIPO
     - RMC
     - CMBCIU
@@ -81,11 +81,11 @@
   id: auchances
   mapName: Chances Claim
   allegiance: WeylandYutani
-  mapPath: /Maps/_CMU14/chances.yml
+  mapPath: /Maps/CMU14/chances.yml
   mapsBelow:
-  - /Maps/_CMU14/chances_below.yml
+  - /Maps/CMU14/chances_below.yml
   mapsAbove:
-  - /Maps/_CMU14/chances_above.yml
+  - /Maps/CMU14/chances_above.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
 /// <summary>
 /// Component for spore clouds (or other sources) that inject Mycotoxin into

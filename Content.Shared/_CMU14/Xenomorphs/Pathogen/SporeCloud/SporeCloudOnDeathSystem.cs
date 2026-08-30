@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Mobs;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeCloud;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeCloud;
 
 public sealed partial class CMUSporeCloudOnDeathSystem : EntitySystem
 {

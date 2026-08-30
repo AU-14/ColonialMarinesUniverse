@@ -1,4 +1,4 @@
-namespace Content.Server.AU14.Light;
+namespace Content.Server.CMU14.Light;
 
 [RegisterComponent]
 public sealed partial class AURandomLightBreakComponent : Component

@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Content.Shared.Interaction;
 
-namespace Content.Shared._CMU14.ZLevels.Core.Components;
+namespace Content.Shared.CMU14.ZLevels.Core.Components;
 
 /// <summary>
 /// Moves a user by a relative Z-level offset when activated.

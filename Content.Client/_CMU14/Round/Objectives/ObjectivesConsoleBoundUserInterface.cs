@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Round.Objectives;
+using Content.Shared.CMU14.Round.Objectives;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._CMU14.Round.Objectives;
+namespace Content.Client.CMU14.Round.Objectives;
 
 public sealed class ObjectivesConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {

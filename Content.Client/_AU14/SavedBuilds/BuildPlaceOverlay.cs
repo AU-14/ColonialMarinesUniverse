@@ -13,7 +13,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._AU14.SavedBuilds;
+namespace Content.Client.CMU14.SavedBuilds;
 
 /// <summary>
 /// Placement preview for a saved build: a translucent ghost of each entity's sprite plus the footprint

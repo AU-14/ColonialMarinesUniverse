@@ -1,9 +1,9 @@
 using System.Text;
-using Content.Shared._CMU14.Traits.DrugAllergy;
+using Content.Shared.CMU14.Traits.DrugAllergy;
 using Content.Shared._RMC14.Chemistry.Reagent;
-using Content.Shared._CMU14.CharacterDescription;
+using Content.Shared.CMU14.CharacterDescription;
 
-namespace Content.Server._CMU14.CharacterDescription;
+namespace Content.Server.CMU14.CharacterDescription;
 
 public static class MedicalRecordBuilder
 {

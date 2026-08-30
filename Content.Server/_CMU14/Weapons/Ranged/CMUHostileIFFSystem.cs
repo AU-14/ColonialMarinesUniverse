@@ -2,7 +2,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Inventory;
 using Content.Shared.Zombies;
 
-namespace Content.Server._CMU14.Weapons.Ranged;
+namespace Content.Server.CMU14.Weapons.Ranged;
 
 // Entities that turn hostile (zombies, pathogen walkers, thralls, mimics) keep their old IFF
 // Clearing UserIFFComponent alone is not enough, an equipped dogtag's ItemIFF relays through

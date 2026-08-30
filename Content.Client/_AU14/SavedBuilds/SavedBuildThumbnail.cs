@@ -3,14 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._AU14.SavedBuilds;
+using Content.Shared.CMU14.SavedBuilds;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
-namespace Content.Client._AU14.SavedBuilds;
+namespace Content.Client.CMU14.SavedBuilds;
 
 /// <summary>
 /// A tiny composite preview of a saved build: draws each stored entity's icon at its relative position, scaled

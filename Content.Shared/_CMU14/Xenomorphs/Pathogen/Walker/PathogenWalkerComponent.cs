@@ -2,7 +2,7 @@ using Robust.Shared.GameStates;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUPathogenWalkerComponent : Component

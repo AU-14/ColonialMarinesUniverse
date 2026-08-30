@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Threats.Mobs.Abomination;
+using Content.Shared.CMU14.Threats.Mobs.Abomination;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Xenonids;
@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs.Components;
@@ -19,7 +20,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Boots.SpikeBoots;
+namespace Content.Server.CMU14.Boots.SpikeBoots;
 
 public sealed partial class SpikeBootsSystem : EntitySystem
 {
@@ -87,8 +88,8 @@ public sealed partial class SpikeBootsSystem : EntitySystem
         if (args.Slot != "shoes")
             return;
 
-        EnsureComp<SpikeBootsWearerComponent>(args.Equipee);
-        _movementSpeed.RefreshMovementSpeedModifiers(args.Equipee);
+        EnsureComp<SpikeBootsWearerComponent>(args.EquipTarget);
+        _movementSpeed.RefreshMovementSpeedModifiers(args.EquipTarget);
     }
 
     private void OnUnequipped(Entity<SpikeBootsComponent> boots, ref GotUnequippedEvent args)
@@ -96,8 +97,8 @@ public sealed partial class SpikeBootsSystem : EntitySystem
         if (args.Slot != "shoes")
             return;
 
-        RemComp<SpikeBootsWearerComponent>(args.Equipee);
-        _movementSpeed.RefreshMovementSpeedModifiers(args.Equipee);
+        RemComp<SpikeBootsWearerComponent>(args.EquipTarget);
+        _movementSpeed.RefreshMovementSpeedModifiers(args.EquipTarget);
     }
 
     public override void Update(float frameTime)

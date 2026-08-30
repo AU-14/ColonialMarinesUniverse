@@ -1,7 +1,7 @@
 using System;
 using Content.Shared._RMC14.Medical.Wounds;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Wounds;
+namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 public static class WoundSizeProfile
 {

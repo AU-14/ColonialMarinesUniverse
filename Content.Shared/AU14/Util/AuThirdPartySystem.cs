@@ -1,13 +1,12 @@
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Robust.Shared.Prototypes;
 using Robust.Shared.IoC;
 using Robust.Shared.Player;
 using System.Linq;
-using Robust.Client.Player;
 using Robust.Shared.Log;
 using Robust.Shared.Random;
 
-namespace Content.Shared.AU14.Util;
+namespace Content.Shared.CMU14.Util;
 
 /// <summary>
 /// This handles...
@@ -15,7 +14,7 @@ namespace Content.Shared.AU14.Util;
 public abstract partial class AuThirdPartySystem : EntitySystem
 {
     [Dependency] protected IPrototypeManager PrototypeManager = default!;
-    [Dependency] protected IPlayerManager PlayerManager = default!;
+    [Dependency] protected ISharedPlayerManager PlayerManager = default!;
     [Dependency] protected IRobustRandom _random = default!;
 
     /// <inheritdoc/>
@@ -73,4 +72,3 @@ public abstract partial class AuThirdPartySystem : EntitySystem
         Logger.GetSawmill("content").Debug($"[AuThirdPartySystem] Spawning third party: {party.ID}");
     }
 }
-

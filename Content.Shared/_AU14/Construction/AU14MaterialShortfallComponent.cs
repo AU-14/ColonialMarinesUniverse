@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
-namespace Content.Shared._AU14.Construction;
+namespace Content.Shared.CMU14.Construction;
 
 /// <summary>
 /// Anti-dupe bookkeeping for the construction-skill material discount: records how many units of a basic

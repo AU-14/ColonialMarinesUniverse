@@ -1,7 +1,7 @@
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Ape;
+namespace Content.Shared.CMU14.Threats.Mobs.Ape;
 
 [Serializable, NetSerializable]
 public sealed class ApeLeapPredictedHitEvent(NetEntity target, GameTick lastRealTick, int substep = 0) : EntityEventArgs

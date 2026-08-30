@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Neurotoxin;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Maps;

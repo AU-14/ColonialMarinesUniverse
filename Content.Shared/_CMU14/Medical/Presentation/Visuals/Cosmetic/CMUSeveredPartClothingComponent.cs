@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Presentation.Visuals.Cosmetic;
+namespace Content.Shared.CMU14.Medical.Presentation.Visuals.Cosmetic;
 
 /// <summary>
 ///     Records the outer-clothing prototype the wearer had equipped at

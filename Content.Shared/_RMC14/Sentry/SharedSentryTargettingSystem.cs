@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
-using Content.Shared.AU14.AllianceConsole;
+using Content.Shared.CMU14.AllianceConsole;
 using Content.Shared.Inventory;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes; // CMU14

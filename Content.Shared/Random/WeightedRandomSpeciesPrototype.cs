@@ -12,6 +12,6 @@ public sealed partial class WeightedRandomSpeciesPrototype : IWeightedRandomProt
     [IdDataField]
     public string ID { get; private set; } = default!;
 
-    [DataField("weights")]
+    [DataField(required: true)]
     public Dictionary<ProtoId<SpeciesPrototype>, float> Weights { get; private set; } = new();
 }

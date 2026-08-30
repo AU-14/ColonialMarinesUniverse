@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Medical.Diagnostics.Examine;
+using Content.Shared.CMU14.Medical.Diagnostics.Examine;
 using JetBrains.Annotations;
 
-namespace Content.Client._CMU14.Medical.Diagnostics.Examine;
+namespace Content.Client.CMU14.Medical.Diagnostics.Examine;
 
 [UsedImplicitly]
 public sealed partial class CMUInspectInjuriesSystem : EntitySystem

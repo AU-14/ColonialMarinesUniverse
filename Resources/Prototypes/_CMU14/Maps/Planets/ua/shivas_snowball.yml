@@ -11,7 +11,7 @@
     announcement: "The UA mining and research colony on 'Shiva's Snowball' has gone silent. A response force has been dispatched to investigate."
     platoonsGovfor:
     - USCM
-    - WYPMC
+    - WEYU
     - VAIPO
     - RMC
     - CMBCIU
@@ -78,11 +78,11 @@
 - type: gameMap
   id: auShivas
   mapName: Shivas Snowball
-  mapPath: /Maps/_AU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ0.yml
+  mapPath: /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ0.yml
   mapsBelow:
-  - /Maps/_AU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ-1.yml
+  - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ-1.yml
   mapsAbove:
-  - /Maps/_AU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ1.yml
+  - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ1.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

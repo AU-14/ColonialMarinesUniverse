@@ -1,8 +1,8 @@
-using Content.Server._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Treatment.FieldCare;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Treatment.FieldCare;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
@@ -13,7 +13,7 @@ using Content.Shared.Stacks;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 
-namespace Content.Server._CMU14.Medical.Treatment.FieldCare;
+namespace Content.Server.CMU14.Medical.Treatment.FieldCare;
 
 public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
 {
@@ -140,7 +140,7 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
         if (!_wounds.StopSurfaceBleedingOnPart(part, wounds))
             return false;
 
-        if (_net.IsServer && !_stacks.Use(item.Owner, 1))
+        if (_net.IsServer && !_stacks.TryUse((item.Owner, null), 1))
             return false;
 
         _popup.PopupEntity(Loc.GetString("cmu-field-treatment-bleed-control-finish"), patient, user);

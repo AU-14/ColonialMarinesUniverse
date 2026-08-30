@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using Robust.Shared.Maths;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): setup marker for a buildable staircase.

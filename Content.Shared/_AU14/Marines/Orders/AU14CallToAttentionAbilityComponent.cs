@@ -3,7 +3,7 @@ using Content.Shared.Examine;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Marines.Orders;
+namespace Content.Shared.CMU14.Marines.Orders;
 
 /// <summary>
 /// Grants the Call to Attention order ability.

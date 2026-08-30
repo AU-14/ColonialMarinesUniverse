@@ -1,10 +1,10 @@
 using Content.Shared._RMC14.Inventory;
 using Content.Shared.Examine;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Containers;
 
-namespace Content.Shared._CMU14.GasMask;
+namespace Content.Shared.CMU14.GasMask;
 
 public sealed partial class SharedGasMaskSystem : EntitySystem
 {
@@ -71,7 +71,7 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
     private void OnMaskExamined(Entity<MycotoxinProtectionComponent> ent, ref ExaminedEvent args)
     {
         if (!TryComp<ItemSlotsComponent>(ent.Owner, out var slots) ||
-            !_itemSlots.TryGetSlot(ent.Owner, "filter", out var slot, slots) ||
+            !_itemSlots.TryGetSlot((ent.Owner, slots), "filter", out var slot) ||
             slot.ContainerSlot?.ContainedEntity is not { } filterEnt ||
             !TryComp(filterEnt, out GasMaskFilterComponent? filter))
         {

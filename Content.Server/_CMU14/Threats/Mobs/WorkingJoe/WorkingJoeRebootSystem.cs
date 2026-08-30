@@ -1,5 +1,7 @@
 using Content.Server.Medical;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Medical;
@@ -8,14 +10,15 @@ using Content.Shared.Traits.Assorted;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
-using WorkingJoeRebootDoAfterEvent = Content.Shared._CMU14.Threats.Mobs.WorkingJoe.WorkingJoeRebootDoAfterEvent;
-using WorkingJoeVoiceComponent = Content.Shared._CMU14.Threats.Mobs.WorkingJoe.WorkingJoeVoiceComponent;
+using WorkingJoeRebootDoAfterEvent = Content.Shared.CMU14.Threats.Mobs.WorkingJoe.WorkingJoeRebootDoAfterEvent;
+using WorkingJoeVoiceComponent = Content.Shared.CMU14.Threats.Mobs.WorkingJoe.WorkingJoeVoiceComponent;
 
-namespace Content.Server._CMU14.Threats.Mobs.WorkingJoe;
+namespace Content.Server.CMU14.Threats.Mobs.WorkingJoe;
 
 public sealed partial class WorkingJoeRebootSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private DefibrillatorSystem _defib = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
@@ -54,7 +57,7 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
         if (!TryComp(ent.Owner, out DamageableComponent? damageable))
             return;
 
-        if (damageable.TotalDamage > 0)
+        if (_damageable.GetTotalDamage((ent.Owner, damageable)) > 0)
             return;
 
         EntityUid user = args.User;
@@ -99,7 +102,7 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
         var revived = false;
         if (TryComp(key, out DefibrillatorComponent? defibComp))
         {
-            _defib.Zap(key, ent.Owner, args.User, defibComp);
+            _defib.Zap((key, defibComp), ent.Owner, args.User);
             revived = !_mobState.IsDead(ent.Owner);
         }
 

@@ -1,14 +1,16 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Injuries.Wounds.Events;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.DoAfter;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -155,7 +157,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
                 return;
             }
 
-            var ev = new Content.Shared._CMU14.Medical.Injuries.Wounds.Events.CMUWoundTreaterInterceptEvent(
+            var ev = new Content.Shared.CMU14.Medical.Injuries.Wounds.Events.CMUWoundTreaterInterceptEvent(
                 args.User, ent.Owner, args.Target.Value);
             RaiseLocalEvent(ref ev);
             if (ev.Handled)
@@ -232,7 +234,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         if (treater.Comp.Consumable)
         {
             if (TryComp(treater, out StackComponent? stack))
-                _stacks.Use(treater, 2, stack);
+                _stacks.TryUse((treater, stack), 2);
             else if (_net.IsServer)
                 QueueDel(treater);
         }
@@ -368,7 +370,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         {
             if (treater.Comp.Consumable &&
                 TryComp(treater, out StackComponent? stack) &&
-                _stacks.GetCount(treater, stack) < 2)
+                _stacks.GetCount((treater.Owner, stack)) < 2)
             {
                 _popup.PopupClient(Loc.GetString("cm-wounds-failed-not-enough", ("treater", treater.Owner)), target, user, PopupType.SmallCaution);
                 return false;
@@ -494,7 +496,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         DamageSpecifier damage,
         FixedPoint2? limit = null)
     {
-        if (wounded.Comp1.DamagePerGroup.GetValueOrDefault(group) <= FixedPoint2.Zero)
+        if (_damageable.GetDamagePerGroup((wounded.Owner, wounded.Comp1)).GetValueOrDefault(group) <= FixedPoint2.Zero)
         {
             RemoveWounds((wounded, wounded), type);
         }

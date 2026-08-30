@@ -1,7 +1,7 @@
 using Robust.Shared;
 using Robust.Shared.Configuration;
 
-namespace Content.Shared._CMU14.BalanceRating;
+namespace Content.Shared.CMU14.BalanceRating;
 
 [CVarDefs]
 public sealed partial class CMUBalanceRatingCVars : CVars

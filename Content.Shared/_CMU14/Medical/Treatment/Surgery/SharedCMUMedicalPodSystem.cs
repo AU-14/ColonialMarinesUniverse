@@ -1,7 +1,8 @@
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.DragDrop;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 public sealed class SharedCMUMedicalPodSystem : EntitySystem
 {

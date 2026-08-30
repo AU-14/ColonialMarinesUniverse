@@ -5,10 +5,16 @@
   description: A spray bottle filled with a cleaning solution. It is used to clean various surfaces and objects.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Tools/cleaner_spray.rsi
-    state: cleaner
+    sprite: CMU14/Objects/Tools/cleaner_spray.rsi
+    layers:
+    - state: cleaner
   - type: Item
-    sprite: _AU14/Objects/Tools/cleaner_spray.rsi
+    sprite: CMU14/Objects/Tools/cleaner_spray.rsi
+  - type: SolutionContainerVisuals
+    maxFillLevels: 0
+    fillBaseName: null
+    inHandsMaxFillLevels: 0
+    inHandsFillBaseName: null
 
 - type: entity
   parent: AU14SprayCleaner
@@ -17,11 +23,11 @@
   description: A large spray bottle filled with a cleaning solution. It is used to clean various surfaces and objects.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Tools/cleaner_spray.rsi
-    state: cleaner_large
-  - type: SolutionContainerManager
-    solutions:
-      spray:
+    sprite: CMU14/Objects/Tools/cleaner_spray.rsi
+    layers:
+    - state: cleaner_large
+  - type: Solution
+    solution:
         maxVol: 300
         reagents:
         - ReagentId: SpaceCleaner
@@ -34,17 +40,17 @@
   description: An experimental spray bottle filled with an cleaning solution. It's capable of self-regenerating the cleaning solution by harvesting ambient compounds from the surrounding atmosphere. It is used to clean various surfaces and objects.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Tools/cleaner_spray.rsi
-    state: cleaner_special
-  - type: SolutionContainerManager
-    solutions:
-      spray:
-        maxVol: 300
-        reagents:
-        - ReagentId: SpaceCleaner
-          Quantity: 300
+    sprite: CMU14/Objects/Tools/cleaner_spray.rsi
+    layers:
+    - state: cleaner_special
+  - type: Solution
+    id: spray
+    solution:
+      maxVol: 300
+      reagents:
+      - ReagentId: SpaceCleaner
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: spray
     generated:
       reagents:
       - ReagentId: SpaceCleaner

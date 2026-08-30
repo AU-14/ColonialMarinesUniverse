@@ -2,7 +2,7 @@ using Content.Shared.Alert;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Traits.NicotineAddiction;
+namespace Content.Shared.CMU14.Traits.NicotineAddiction;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class NicotineAddictionComponent : Component

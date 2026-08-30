@@ -1,8 +1,6 @@
-﻿using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Dictionary;
 
 namespace Content.Shared.Kitchen
 {
@@ -26,10 +24,10 @@ namespace Content.Shared.Kitchen
         private Dictionary<ProtoId<ReagentPrototype>, FixedPoint2> _ingsReagents = new();
 
         [DataField("solids")]
-        private Dictionary<EntProtoId, FixedPoint2> _ingsSolids = new ();
+        private Dictionary<EntProtoId, FixedPoint2> _ingsSolids = new();
 
-        [DataField("result", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-        public string Result { get; private set; } = string.Empty;
+        [DataField(required: true)]
+        public EntProtoId Result;
 
         [DataField("time")]
         public uint CookTime { get; private set; } = 5;

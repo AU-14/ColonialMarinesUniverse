@@ -83,3 +83,18 @@ ghost-roles-window-rules-footer = The button will enable after {$time} seconds (
 
 ghost-return-to-body-title = Return to Body
 ghost-return-to-body-text = You are being revived! Return to your body?
+
+
+ghost-gui-toggle-lighting-manager-popup-half-bright = Half-Bright.
+
+ghost-target-window-warp-to-title = [bold]Quick Warp[/bold]
+
+ghost-target-window-warp-to-random-followed = Random Followed
+
+ghost-target-window-warp-to-random = Random
+
+ghost-target-window-warp-to-most-followed-tooltip = Warp to the most followed player
+
+ghost-target-window-warp-to-random-followed-tooltip = Warp to a random followed player
+
+ghost-target-window-warp-to-random-tooltip = Warp to a random player

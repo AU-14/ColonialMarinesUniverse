@@ -1,45 +1,45 @@
 using System.Collections.Generic;
-using Content.Server._CMU14.Medical.Presentation.Visibility;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Presentation.Visuals.Cosmetic;
-using Content.Shared._CMU14.Medical.Presentation.Visuals;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared.Body.Components;
+using System.Numerics;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Presentation.Visuals.Cosmetic;
+using Content.Shared.CMU14.Medical.Presentation.Visuals;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Standing;
+using Content.Shared.Throwing;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Serialization;
+using Robust.Shared.Random;
 
-namespace Content.Server._CMU14.Medical.Presentation.Visuals.Cosmetic;
+namespace Content.Server.CMU14.Medical.Presentation.Visuals.Cosmetic;
 
 public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 {
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedHideableHumanoidLayersSystem _hideableLayers = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private CMUMedicalVisibilitySystem _medicalVisibility = default!;
-    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
-    [Dependency] private SharedCMURoboticLimbSystem _roboticLimbs = default!;
+    [Dependency] private OrganRelationSystem _organRelations = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     /// <summary>
-    ///     Bodies queued for next-tick hand-removal / glove-drop / shoe-drop / force-down.
-    ///     Doing it inline races with FlingPartFromBody's reparent of the
-    ///     severed limb — RemoveHand's TryDrop + ShutdownContainer mutations
-    ///     occurring mid-arm-reparent suppressed the dropped-arm spawn when
-    ///     the marine held an item.
+    ///     Bodies queued for next-tick glove-drop / shoe-drop / force-down.
+    ///     HandOrganSystem owns hand registration; delaying the clothing check
+    ///     lets the complete severed subtree leave the old flat body first.
     /// </summary>
     private readonly Queue<DeferredHandSever> _deferredHandSever = new();
     private readonly Queue<DeferredLegSever> _deferredLegSever = new();
+    private readonly Queue<EntityUid> _deferredHeadSever = new();
 
-    private readonly record struct DeferredHandSever(EntityUid Body, string ArmSlot, string HandId);
+    private readonly record struct DeferredHandSever(EntityUid Body, string HandId);
     private readonly record struct DeferredLegSever(EntityUid Body);
 
     public override void Initialize()
@@ -56,16 +56,13 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 
         while (_deferredHandSever.TryDequeue(out var d))
         {
-            if (Deleted(d.Body) || !HasComp<HandsComponent>(d.Body))
+            if (Deleted(d.Body) || !TryComp<HandsComponent>(d.Body, out var hands))
                 continue;
 
-            if (HasAttachedHandForArmSlot(d.Body, d.ArmSlot))
+            if (_hands.TryGetHand((d.Body, hands), d.HandId, out _))
                 continue;
 
-            if (_inventory.TryGetSlotEntity(d.Body, "gloves", out _))
-                _inventory.TryUnequip(d.Body, "gloves", force: true);
-
-            _hands.RemoveHand(d.Body, d.HandId);
+            UnequipAndFling(d.Body, "gloves");
         }
 
         while (_deferredLegSever.TryDequeue(out var d))
@@ -76,24 +73,32 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             if (TryComp<BodyComponent>(d.Body, out var body) && body.LegEntities.Count >= 2)
                 continue;
 
-            if (_inventory.TryGetSlotEntity(d.Body, "shoes", out _))
-                _inventory.TryUnequip(d.Body, "shoes", force: true);
+            UnequipAndFling(d.Body, "shoes");
 
             _standing.Down(d.Body);
+        }
+
+        while (_deferredHeadSever.TryDequeue(out var body))
+        {
+            if (Deleted(body))
+                continue;
+
+            UnequipAndFling(body, "ears");
+            UnequipAndFling(body, "eyes");
+            UnequipAndFling(body, "mask");
+            UnequipAndFling(body, "head");
         }
     }
 
     private void OnPartRemoved(Entity<CMUHumanMedicalComponent> ent, ref BodyPartRemovedEvent args)
     {
-        _medicalVisibility.RefreshSubtree(args.Part.Owner);
-        _roboticLimbs.BodyPartRemoved(ent.Owner);
-
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;
 
-        if (CMUMedicalVisualLayers.ForBodyPart(partType, symmetry) is { } layer && HasComp<HumanoidAppearanceComponent>(ent.Owner))
+        if (CMUMedicalVisualLayers.ForBodyPart(partType, symmetry) is { } layer &&
+            HasComp<HideableHumanoidLayersComponent>(ent.Owner))
         {
-            _humanoid.SetLayerVisibility(ent.Owner, layer, visible: false);
+            _hideableLayers.SetPermanentLayerOcclusion(ent.Owner, layer, hidden: true);
             // DamageVisualsSystem.UpdateDisabledLayers reads a `bool disabled`
             // appearance datum keyed by the layer enum; without setting it,
             // the Brute/Burn overlay floats over the now-missing limb.
@@ -107,67 +112,37 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 
         // Deferred — see _deferredHandSever doc above for the race.
         if (partType == BodyPartType.Arm
-            && HandIdForArmSlot(args.Slot) is { } handId
+            && HandIdForArm(args.Part.Owner) is { } handId
             && HasComp<HandsComponent>(ent.Owner))
         {
-            _deferredHandSever.Enqueue(new DeferredHandSever(ent.Owner, args.Slot, handId));
+            _deferredHandSever.Enqueue(new DeferredHandSever(ent.Owner, handId));
+        }
+        else if (partType == BodyPartType.Hand)
+        {
+            // A glove is one inventory item shared by both hand visuals, so a
+            // severed hand must eject it even when its parent arm remains.
+            UnequipAndFling(ent.Owner, "gloves");
         }
 
         if (partType == BodyPartType.Leg)
             _deferredLegSever.Enqueue(new DeferredLegSever(ent.Owner));
+        else if (partType == BodyPartType.Foot)
+            UnequipAndFling(ent.Owner, "shoes");
+
+        if (partType == BodyPartType.Head)
+            _deferredHeadSever.Enqueue(ent.Owner);
     }
 
     private void OnPartAdded(Entity<CMUHumanMedicalComponent> ent, ref BodyPartAddedEvent args)
     {
-        _medicalVisibility.RefreshSubtree(args.Part.Owner);
-        _roboticLimbs.BodyPartAdded(ent.Owner, args.Part);
-
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;
 
-        if (CMUMedicalVisualLayers.ForBodyPart(partType, symmetry) is { } layer && HasComp<HumanoidAppearanceComponent>(ent.Owner))
+        if (CMUMedicalVisualLayers.ForBodyPart(partType, symmetry) is { } layer &&
+            HasComp<HideableHumanoidLayersComponent>(ent.Owner))
         {
-            _humanoid.SetLayerVisibility(ent.Owner, layer, visible: true);
+            _hideableLayers.SetPermanentLayerOcclusion(ent.Owner, layer, hidden: false);
             _appearance.SetData(ent.Owner, layer, false);
-        }
-
-        if (partType == BodyPartType.Arm
-            && HasComp<HandsComponent>(ent.Owner))
-        {
-            RestoreArmHand(ent.Owner, args.Part.Owner, args.Slot);
-        }
-    }
-
-    private void RestoreArmHand(EntityUid body, EntityUid arm, string armSlot)
-    {
-        if (!HasComp<BodyPartComponent>(arm))
-            return;
-
-        if (SymmetryForArmSlot(armSlot) is not { } slotSymmetry)
-            return;
-
-        foreach (var slot in _medicalIndex.GetBodyPartSlots(arm))
-        {
-            if (slot.Type != BodyPartType.Hand || slot.Part is null)
-                continue;
-
-            var location = slotSymmetry switch
-            {
-                BodyPartSymmetry.Left => HandLocation.Left,
-                BodyPartSymmetry.Right => HandLocation.Right,
-                _ => HandLocation.Middle,
-            };
-
-            var handId = HandIdForArmSlot(armSlot) ?? SharedBodySystem.PartSlotContainerIdPrefix + slot.SlotId;
-            if (!_hands.TrySetHandLocation((body, null), handId, location))
-                _hands.AddHand((body, null), handId, location);
-
-            if (CMUMedicalVisualLayers.ForBodyPart(BodyPartType.Hand, slotSymmetry) is { } handLayer
-                && HasComp<HumanoidAppearanceComponent>(body))
-            {
-                _humanoid.SetLayerVisibility(body, handLayer, visible: true);
-                _appearance.SetData(body, handLayer, false);
-            }
         }
     }
 
@@ -200,55 +175,32 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         Dirty(droppedPart, marker);
     }
 
-    /// <summary>
-    ///     Vanilla HandsSystem.HandleBodyPartAdded registers the hand using
-    ///     the *prefixed* container id (SharedBodySystem.PartSlotContainerIdPrefix
-    ///     + slotId), not the bare slot id — we must match that for RemoveHand
-    ///     to find the entry.
-    /// </summary>
-    private bool HasAttachedHandForArmSlot(EntityUid body, string armSlot)
+    private string? HandIdForArm(EntityUid arm)
     {
-        if (SymmetryForArmSlot(armSlot) is null || !_medicalIndex.TryGetRootPart(body, out var root))
-            return false;
-
-        var bareArmSlot = BarePartSlot(armSlot);
-        if (!_medicalIndex.TryGetBodyPartInSlot(root.Owner, bareArmSlot, out var arm))
-            return false;
-
-        foreach (var slot in _medicalIndex.GetBodyPartSlots(arm))
+        foreach (var child in _organRelations.AllChildren(arm))
         {
-            if (slot.Type != BodyPartType.Hand)
-                continue;
-            if (slot.Part is not null)
-                return true;
+            if (TryComp<HandOrganComponent>(child, out var hand))
+                return hand.HandID;
         }
 
-        return false;
+        return null;
     }
 
-    private static string? HandIdForArmSlot(string armSlot) => SymmetryForArmSlot(armSlot) switch
+    private void UnequipAndFling(EntityUid wearer, string slot)
     {
-        BodyPartSymmetry.Left => SharedBodySystem.PartSlotContainerIdPrefix + "left_hand",
-        BodyPartSymmetry.Right => SharedBodySystem.PartSlotContainerIdPrefix + "right_hand",
-        _ => null,
-    };
-
-    private static BodyPartSymmetry? SymmetryForArmSlot(string armSlot)
-    {
-        return BarePartSlot(armSlot) switch
+        if (!_inventory.TryUnequip(wearer, slot, out var removedItem, silent: true, force: true) ||
+            removedItem is not { } item ||
+            TerminatingOrDeleted(item))
         {
-            "left_arm" => BodyPartSymmetry.Left,
-            "right_arm" => BodyPartSymmetry.Right,
-            _ => null,
-        };
-    }
+            return;
+        }
 
-    private static string BarePartSlot(string slot)
-    {
-        const string prefix = SharedBodySystem.PartSlotContainerIdPrefix;
-        return slot.StartsWith(prefix, StringComparison.Ordinal)
-            ? slot[prefix.Length..]
-            : slot;
+        // TryUnequip drops the item beside the wearer. Give every ejected item
+        // its own short random trajectory, matching the severed-part fling.
+        _transform.AttachToGridOrMap(item);
+        var angle = _random.NextFloat(0f, MathF.Tau);
+        var distance = _random.NextFloat(1.0f, 2.0f);
+        var direction = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * distance;
+        _throwing.TryThrow(item, direction, baseThrowSpeed: 4f, doSpin: true, compensateFriction: true);
     }
-
 }

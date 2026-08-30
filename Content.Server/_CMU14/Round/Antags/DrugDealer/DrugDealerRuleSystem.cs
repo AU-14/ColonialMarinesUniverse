@@ -1,9 +1,9 @@
 using Content.Server.GameTicking.Rules;
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Systems;
 using Robust.Shared.GameObjects;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
 
-namespace Content.Server._CMU14.Round.Antags.DrugDealer;
+namespace Content.Server.CMU14.Round.Antags.DrugDealer;
 
 public sealed partial class DrugDealerRuleSystem : GameRuleSystem<DrugDealerRuleComponent>
 {

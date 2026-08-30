@@ -108,8 +108,8 @@
   parent: CMJobIconBase
   id: AU14JobIconGovK9Handler
   icon:
-    sprite: _CMU14/Interface/cmugovforjobicons.rsi
-    state: k9handler
+    sprite: CMU14/Interface/au14govforjobicons.rsi
+    state: govfor_k9handler
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -130,7 +130,7 @@
   parent: CMJobIconBase
   id: AU14JobIconOPFORK9Handler
   icon:
-    sprite: _CMU14/Interface/cmuopforjobicons.rsi
+    sprite: CMU14/Interface/au14opforjobicons.rsi
     state: k9handler
 
 - type: entity

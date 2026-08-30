@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 [Access(typeof(SharedKidneysSystem))]

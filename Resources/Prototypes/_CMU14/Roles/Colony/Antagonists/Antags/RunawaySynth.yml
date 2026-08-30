@@ -5,7 +5,7 @@
   - type: GameRule
   - type: RunawaySynthRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
+    selectionTime: JobsAssigned
     definitions:
     - prefRoles: [ RunawaySynthRole ]
       max: 1

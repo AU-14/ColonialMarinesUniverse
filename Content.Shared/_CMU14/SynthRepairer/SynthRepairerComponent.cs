@@ -1,6 +1,6 @@
 
 
-namespace Content.Shared._CMU14.SynthRepairer;
+namespace Content.Shared.CMU14.SynthRepairer;
 
 [RegisterComponent]
 public sealed partial class SynthRepairerComponent : Component

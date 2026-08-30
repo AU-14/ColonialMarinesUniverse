@@ -4,8 +4,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Content.Client._AU14.UI;
-using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Client.CMU14.UI;
+using Content.Client.Construction;
+using Content.Shared.CMU14.Construction.CustomConstruction;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Item;
 using Content.Shared.Stacks;
@@ -18,7 +19,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Client._AU14.Construction.CustomConstruction;
+namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// The "drastically improved" add/change-recipe editor: spawnlist + category dropdowns (each with an
@@ -218,7 +219,7 @@ public sealed partial class ConstructionEditorWindow : DefaultWindow
                 set = new SortedSet<string>(StringComparer.InvariantCulture);
                 _categoriesBySpawnlist[spawnlist] = set;
             }
-            set.Add(Loc.GetString(proto.Category));
+            set.Add(ConstructionLocalization.LocalizeOrRaw(proto.Category));
         }
     }
 

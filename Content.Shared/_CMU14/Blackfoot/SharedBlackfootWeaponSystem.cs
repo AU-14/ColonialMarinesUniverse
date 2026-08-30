@@ -5,7 +5,7 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Network;
 
-namespace Content.Shared._CMU14.Blackfoot;
+namespace Content.Shared.CMU14.Blackfoot;
 
 public sealed partial class SharedBlackfootWeaponSystem : EntitySystem
 {

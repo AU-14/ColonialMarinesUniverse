@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 using Robust.Client.UserInterface;
 using Robust.Shared.GameObjects;
 
-namespace Content.Client._CMU14.Xenomorphs.Pathogen.Overmind;
+namespace Content.Client.CMU14.Xenomorphs.Pathogen.Overmind;
 
 public sealed partial class BlightCoreAcceptBui : BoundUserInterface
 {

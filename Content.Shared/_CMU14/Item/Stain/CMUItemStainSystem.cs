@@ -3,7 +3,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Robust.Shared.Network;
 
-namespace Content.Shared._CMU14.Item.Stain;
+namespace Content.Shared.CMU14.Item.Stain;
 
 /// <summary>
 /// Owns authoritative item stain state and common exposed-equipment helpers.

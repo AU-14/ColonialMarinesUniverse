@@ -5,7 +5,7 @@ using Content.Shared.Body.Part;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 /// <summary>
 ///     Tool categories are compiled into the surgery registry and matched at

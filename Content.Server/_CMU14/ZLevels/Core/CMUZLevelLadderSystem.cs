@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.DoAfter;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
@@ -9,7 +9,7 @@ using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.Server._CMU14.ZLevels.Core;
+namespace Content.Server.CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelLadderSystem : EntitySystem
 {

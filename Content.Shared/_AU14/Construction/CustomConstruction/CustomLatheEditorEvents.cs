@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Construction.CustomConstruction;
+namespace Content.Shared.CMU14.Construction.CustomConstruction;
 
 /// <summary>Which lathe an admin-added recipe belongs to.</summary>
 [Serializable, NetSerializable]

@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.BlightWave;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.BlightWave;
 
 /// <summary>
 /// Temporarily added to a light-emitting entity to track its pre-wave radius

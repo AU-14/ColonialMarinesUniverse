@@ -1,13 +1,13 @@
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14.MedVendorLock;
+using Content.Shared.CMU14.MedVendorLock;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server.AU14.MedVendorLock;
+namespace Content.Server.CMU14.MedVendorLock;
 
 /// <summary>
 /// Locks <see cref="AU14MedVendorDistressLockComponent"/> medical vendors and chem dispensers

@@ -1,18 +1,18 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server._CMU14.Dropship.TacticalLand;
+using Content.Server.CMU14.Dropship.TacticalLand;
 using Content.Server._RMC14.GameStates;
 using Content.Server._RMC14.Marines;
-using Content.Server.AU14.Round;
-using Content.Server._CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server._RMC14.Shuttles;
 using Content.Server.Doors.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared._CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.AlertLevel;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
@@ -30,10 +30,10 @@ using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared.Administration.Logs;
-using Content.Server.AU14.WithdrawConsole;
-using Content.Shared.AU14;
-using Content.Shared.AU14.Round;
-using Content.Shared.AU14.WithdrawConsole;
+using Content.Server.CMU14.WithdrawConsole;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Round;
+using Content.Shared.CMU14.WithdrawConsole;
 using Content.Shared.CCVar;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
@@ -56,10 +56,10 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
-using ThirdPartyDropshipAutoReturnComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipAutoReturnComponent;
-using ThirdPartyDropshipDeactivatedConsoleComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipDeactivatedConsoleComponent;
-using ThirdPartyDropshipReturnDestinationComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipReturnDestinationComponent;
-using ThirdPartyDropshipReturnedComponent = Content.Server._CMU14.Ops.ThirdParty.ThirdPartyDropshipReturnedComponent;
+using ThirdPartyDropshipAutoReturnComponent = Content.Server.CMU14.Ops.ThirdParty.ThirdPartyDropshipAutoReturnComponent;
+using ThirdPartyDropshipDeactivatedConsoleComponent = Content.Server.CMU14.Ops.ThirdParty.ThirdPartyDropshipDeactivatedConsoleComponent;
+using ThirdPartyDropshipReturnDestinationComponent = Content.Server.CMU14.Ops.ThirdParty.ThirdPartyDropshipReturnDestinationComponent;
+using ThirdPartyDropshipReturnedComponent = Content.Server.CMU14.Ops.ThirdParty.ThirdPartyDropshipReturnedComponent;
 
 namespace Content.Server._RMC14.Dropship;
 
@@ -555,7 +555,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         // AU14: a dropship structurally compromised by a cave-in below it must never launch - the collapse
         // can tangle the dropship grid into the map grid, and FTL would drag the entire map along. The
         // lockout lasts the round; sparks from the console sell the "flight systems shorted" story.
-        if (HasComp<Content.Shared._AU14.ZLevelBuilding.ZCollapseCompromisedComponent>(dropshipId.Value))
+        if (HasComp<Content.Shared.CMU14.ZLevelBuilding.ZCollapseCompromisedComponent>(dropshipId.Value))
         {
             if (user != null)
                 _popup.PopupEntity(Loc.GetString("au14-dropship-collapse-compromised"), computer.Owner, user.Value, PopupType.LargeCaution);
@@ -835,7 +835,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
             while (query.MoveNext(out var uid, out var comp))
             {
-                if (HasComp<Content.Shared._CMU14.Dropship.TacticalLand.EphemeralDropshipDestinationComponent>(uid))
+                if (HasComp<Content.Shared.CMU14.Dropship.TacticalLand.EphemeralDropshipDestinationComponent>(uid))
                     continue;
 
                 if (TryComp(uid, out ThirdPartyDropshipReturnDestinationComponent? returnDestination) &&

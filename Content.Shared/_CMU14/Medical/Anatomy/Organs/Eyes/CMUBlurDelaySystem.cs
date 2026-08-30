@@ -1,7 +1,7 @@
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
 
 public sealed partial class CMUBlurDelaySystem : EntitySystem
 {

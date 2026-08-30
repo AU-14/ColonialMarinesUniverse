@@ -620,8 +620,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
                 continue;
 
             // Remove both paralyze and knockdown effects
-            _statusEffects.TryRemoveStatusEffect(uid, "Stun");
-            _statusEffects.TryRemoveStatusEffect(uid, "KnockedDown");
+            _stun.TryClearStunAndKnockdown(uid);
 
             RemCompDeferred<SynthStunCancelOnMoveComponent>(uid);
         }

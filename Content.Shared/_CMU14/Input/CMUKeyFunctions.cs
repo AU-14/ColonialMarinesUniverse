@@ -1,6 +1,6 @@
 using Robust.Shared.Input;
 
-namespace Content.Shared._CMU14.Input;
+namespace Content.Shared.CMU14.Input;
 
 [KeyFunctions]
 public sealed class CMUKeyFunctions

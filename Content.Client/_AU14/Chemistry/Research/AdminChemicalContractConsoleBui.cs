@@ -1,9 +1,9 @@
-using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Research;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._AU14.Chemistry.Research;
+namespace Content.Client.CMU14.Chemistry.Research;
 
 [UsedImplicitly]
 public sealed class AdminChemicalContractConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)

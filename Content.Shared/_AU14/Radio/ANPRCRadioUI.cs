@@ -3,7 +3,7 @@ using Content.Shared.Radio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 [Serializable, NetSerializable]
 public enum ANPRCRadioUI
@@ -98,7 +98,7 @@ public sealed class ANPRCNetLogEntry(
 // contacts carry their exact frequency, unresolved ones only the digits earned so far
 [Serializable, NetSerializable]
 public sealed class ANPRCSweepContact(
-    int frequency,
+    RadioFrequency frequency,
     float confidence,
     bool resolved,
     string channelName,
@@ -106,7 +106,7 @@ public sealed class ANPRCSweepContact(
     int tierMax,
     bool known)
 {
-    public readonly int Frequency = frequency;
+    public readonly RadioFrequency Frequency = frequency;
     public readonly float Confidence = confidence;
     public readonly bool Resolved = resolved;
 
@@ -130,10 +130,10 @@ public sealed class ANPRCSetSweepMsg(bool enabled) : BoundUserInterfaceMessage
 
 // tune a resolved sweep contact straight into a slot without retyping the number
 [Serializable, NetSerializable]
-public sealed class ANPRCTuneContactMsg(int slot, int frequency) : BoundUserInterfaceMessage
+public sealed class ANPRCTuneContactMsg(int slot, RadioFrequency frequency) : BoundUserInterfaceMessage
 {
     public readonly int Slot = slot;
-    public readonly int Frequency = frequency;
+    public readonly RadioFrequency Frequency = frequency;
 }
 
 // dumps the net log to paper so an intercept can leave the radio
@@ -242,7 +242,7 @@ public sealed class ANPRCManualFrequencyMsg(int slot, string frequencyText) : Bo
 [Serializable, NetSerializable]
 public sealed class ANPRCRadioState(
     Dictionary<int, ProtoId<RadioChannelPrototype>> presets,
-    Dictionary<int, int> frequencyOverrides,
+    Dictionary<int, RadioFrequency> frequencyOverrides,
     Dictionary<int, string> slotLabels,
     int activeSlot,
     bool enabled,
@@ -264,18 +264,18 @@ public sealed class ANPRCRadioState(
     float batteryFraction,
     bool hasBattery,
     string antennaLabel,
-    Dictionary<string, int> channelFrequencies,
+    Dictionary<string, RadioFrequency> channelFrequencies,
     bool sweepEnabled,
-    int sweepPosition,
+    RadioFrequency sweepPosition,
     List<ANPRCSweepContact> sweepContacts)
     : BoundUserInterfaceState
 {
     public readonly bool SweepEnabled = sweepEnabled;
-    public readonly int SweepPosition = sweepPosition;
+    public readonly RadioFrequency SweepPosition = sweepPosition;
     public readonly List<ANPRCSweepContact> SweepContacts = sweepContacts;
 
     public readonly Dictionary<int, ProtoId<RadioChannelPrototype>> Presets = presets;
-    public readonly Dictionary<int, int> FrequencyOverrides = frequencyOverrides;
+    public readonly Dictionary<int, RadioFrequency> FrequencyOverrides = frequencyOverrides;
     public readonly Dictionary<int, string> SlotLabels = slotLabels;
     public readonly int ActiveSlot = activeSlot;
     public readonly bool Enabled = enabled;
@@ -302,5 +302,5 @@ public sealed class ANPRCRadioState(
 
     // the round's signal plan: channel id -> live frequency. prototype frequencies
     // are only the book values, the plan is rolled per round
-    public readonly Dictionary<string, int> ChannelFrequencies = channelFrequencies;
+    public readonly Dictionary<string, RadioFrequency> ChannelFrequencies = channelFrequencies;
 }

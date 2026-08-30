@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Content.Shared._AU14.Insurgency;
+namespace Content.Shared.CMU14.Insurgency;
 
 /// <summary>
 ///     The Heavy Cell Kit. Using it opens a small UI listing the active faction's deployables with

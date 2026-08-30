@@ -1,7 +1,7 @@
-// Content.Shared.AU14.ColonyEconomy.BudgetConsoleUi.cs
+// Content.Shared.CMU14.ColonyEconomy.BudgetConsoleUi.cs
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.ColonyEconomy;
+namespace Content.Shared.CMU14.ColonyEconomy;
 
 [Serializable, NetSerializable]
 public enum BudgetConsoleUi

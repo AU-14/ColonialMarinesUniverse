@@ -2,7 +2,7 @@ using System.Linq;
 using Content.Shared.Access.Components;
 using Content.Server.Stack;
 using Content.Shared.Access.Systems;
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Stacks;
@@ -14,10 +14,12 @@ using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.AU14.ColonyEconomy;
+namespace Content.Server.CMU14.ColonyEconomy;
 
 public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
 {
+    private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
+
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
@@ -160,7 +162,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
     {
         if (comp.InsertedCash <= 0)
             return;
-        _stack.SpawnMultiple("RMCSpaceCash", (int)comp.InsertedCash, uid);
+        _stack.SpawnMultipleNextToOrDrop(CashPrototype, (int) comp.InsertedCash, uid);
         comp.InsertedCash = 0;
         UpdateShopUi(uid, comp);
     }

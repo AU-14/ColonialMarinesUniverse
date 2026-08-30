@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Shared._AU14.Chemistry.Reagents;
+namespace Content.Shared.CMU14.Chemistry.Reagents;
 
 //WARNING: SEVERE EVENTSLOP AHEAD, PROCEED WITH CAUTION
 

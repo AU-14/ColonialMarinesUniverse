@@ -1,16 +1,16 @@
 using Content.Server.Chat.Managers;
-using Content.Server.IdentityManagement;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 
-namespace Content.Server._AU14.Examine
+namespace Content.Server.CMU14.Examine
 {
     // Sends a detailed equipment breakdown to the examiner's chat log. Deliberately does not
     // touch the examine tooltip (args.PushMarkup/PushText) - this is chat-only, toggleable via

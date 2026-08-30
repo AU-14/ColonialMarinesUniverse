@@ -1,10 +1,10 @@
 using Content.Server.Administration;
-using Content.Shared._CMU14.Ops.Sfx;
+using Content.Shared.CMU14.Ops.Sfx;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Ops.Sfx.Commands;
+namespace Content.Server.CMU14.Ops.Sfx.Commands;
 
 [AdminCommand(AdminFlags.Debug)]
 public sealed partial class ScriptedSoundCommand : LocalizedCommands

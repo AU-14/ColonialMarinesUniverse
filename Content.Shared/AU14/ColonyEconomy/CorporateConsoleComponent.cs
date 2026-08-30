@@ -1,4 +1,4 @@
-namespace Content.Shared.AU14.ColonyEconomy;
+namespace Content.Shared.CMU14.ColonyEconomy;
 
 /// <summary>
 ///     Corporate console: manages transit tariffs and can call third parties.

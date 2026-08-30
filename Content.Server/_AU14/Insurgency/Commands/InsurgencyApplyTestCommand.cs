@@ -1,10 +1,10 @@
 using Content.Server.Administration;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server._AU14.Insurgency.Commands;
+namespace Content.Server.CMU14.Insurgency.Commands;
 
 /// <summary>
 ///     Debug helper for Phase 0. Builds a minimal in-memory <see cref="FactionDefinition"/> and

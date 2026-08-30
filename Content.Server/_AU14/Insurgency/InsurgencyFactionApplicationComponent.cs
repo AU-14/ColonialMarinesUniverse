@@ -1,4 +1,4 @@
-namespace Content.Server._AU14.Insurgency;
+namespace Content.Server.CMU14.Insurgency;
 
 /// <summary>
 /// Server-owned delivery state for faction effects applied to a spawned member.

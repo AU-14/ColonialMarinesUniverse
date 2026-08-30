@@ -1,10 +1,10 @@
 using Content.Server.GameTicking.Presets;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14;
-using Content.Shared._CMU14.Threats;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.util;
 
-namespace Content.Server.AU14.Round;
+namespace Content.Server.CMU14.Round;
 
 internal sealed class AuRoundSelectionState
 {

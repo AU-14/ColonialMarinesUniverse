@@ -1,8 +1,8 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Shared.Damage;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Falling;
+namespace Content.Shared.CMU14.Falling;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedCMUFallingSystem))]

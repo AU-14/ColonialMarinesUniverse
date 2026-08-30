@@ -1,9 +1,9 @@
 using System;
-using Content.Shared._AU14.Insurgency.CellKit;
+using Content.Shared.CMU14.Insurgency.CellKit;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._AU14.Insurgency.CellKit;
+namespace Content.Client.CMU14.Insurgency.CellKit;
 
 /// <summary>
 ///     Client side of the Heavy Cell Kit UI. Shows the deployables still in the kit with their sprites

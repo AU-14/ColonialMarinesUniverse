@@ -1,9 +1,9 @@
 using System;
-using Content.Shared._AU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Insurgency.Sapper;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._AU14.Insurgency.Sapper;
+namespace Content.Client.CMU14.Insurgency.Sapper;
 
 [UsedImplicitly]
 public sealed class SapperWorkbenchBui : BoundUserInterface

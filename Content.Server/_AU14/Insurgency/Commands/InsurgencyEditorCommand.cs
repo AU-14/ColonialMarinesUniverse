@@ -1,14 +1,14 @@
 using Content.Server.Administration;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.Administration.Managers;
 using Content.Server.EUI;
-using Content.Server._AU14.Insurgency.Database;
-using Content.Server._AU14.Insurgency.Editor;
+using Content.Server.CMU14.Insurgency.Database;
+using Content.Server.CMU14.Insurgency.Editor;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency.Commands;
+namespace Content.Server.CMU14.Insurgency.Commands;
 
 /// <summary>
 ///     Opens the Default-faction editor for the calling player. This console command is the

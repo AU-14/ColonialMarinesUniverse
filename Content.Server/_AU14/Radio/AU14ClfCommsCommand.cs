@@ -1,11 +1,11 @@
 using Content.Server.Administration;
 using Content.Server.Chat.Managers;
-using Content.Shared._AU14.CCVar;
+using Content.Shared.CMU14.CCVar;
 using Content.Shared.Administration;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 /// <summary>
 ///     Turns the comms overhaul off over the CLF/INSFOR nets and back on, without touching

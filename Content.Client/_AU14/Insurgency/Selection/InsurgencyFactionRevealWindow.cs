@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._AU14.Insurgency.Selection;
+using Content.Shared.CMU14.Insurgency.Selection;
 using Content.Shared.StatusIcon;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
@@ -8,7 +8,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Client._AU14.Insurgency.Selection;
+namespace Content.Client.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     The faction reveal popup. Shown to every cell member once a faction is applied: the faction

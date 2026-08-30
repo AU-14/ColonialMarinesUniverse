@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Diagnostics;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
-using Content.Shared._CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Diagnostics;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared.DoAfter;
@@ -13,7 +13,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Medical.Diagnostics;
+namespace Content.Server.CMU14.Medical.Diagnostics;
 
 public sealed partial class CMUStethoscopeSystem : EntitySystem
 {

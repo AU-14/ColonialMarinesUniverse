@@ -3,7 +3,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Maths;
 
-namespace Content.Shared._CMU14.ZLevels.Vehicles;
+namespace Content.Shared.CMU14.ZLevels.Vehicles;
 
 public static class CMUVehicleSupportFootprint
 {

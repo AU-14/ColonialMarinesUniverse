@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 /// <summary>
 ///     Entries are ordered by descending damage so the lookup picks the

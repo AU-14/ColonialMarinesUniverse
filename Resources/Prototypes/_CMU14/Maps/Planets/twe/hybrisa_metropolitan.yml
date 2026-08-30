@@ -13,7 +13,7 @@
     - USCM
     - UPP
     - RMC
-    - WYPMC
+    - WEYU
     - HAZOPS
     platoonsOpfor:
     - LACN
@@ -78,7 +78,7 @@
 - type: gameMap
   id: hybrisametro
   mapName: LV-759 Hybrisa Metropolitan
-  mapPath: /Maps/_AU14/hybrisametro.yml
+  mapPath: /Maps/CMU14/hybrisametro.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

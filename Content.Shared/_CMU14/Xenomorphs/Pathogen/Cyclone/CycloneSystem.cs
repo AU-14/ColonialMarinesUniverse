@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Rotate;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
@@ -17,7 +18,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Content.Shared.Coordinates;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Cyclone;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Cyclone;
 
 public sealed partial class CMUXenoCycloneSystem : EntitySystem
 {
@@ -173,10 +174,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
 
             _damageable.TryChangeDamage(target, new DamageSpecifier
             {
-                DamageDict = new Dictionary<string, FixedPoint2>
-                {
-                    { "Blunt", damage }
-                }
+                DamageDict = { ["Blunt"] = damage },
             }, origin: xeno);
 
             if (knockdown && (!_size.TryGetSize(target, out var size) || size < RMCSizes.Big))

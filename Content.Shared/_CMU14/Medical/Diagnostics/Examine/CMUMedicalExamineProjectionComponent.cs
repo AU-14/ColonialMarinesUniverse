@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Diagnostics.Examine;
+namespace Content.Shared.CMU14.Medical.Diagnostics.Examine;
 
 /// <summary>
 ///     Compact body-level read model for public wound examine text. The raw

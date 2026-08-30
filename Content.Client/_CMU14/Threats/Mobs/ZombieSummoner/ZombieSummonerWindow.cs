@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
+using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client._CMU14.Threats.Mobs.ZombieSummoner;
+namespace Content.Client.CMU14.Threats.Mobs.ZombieSummoner;
 
 public sealed class ZombieSummonerWindow : DefaultWindow
 {

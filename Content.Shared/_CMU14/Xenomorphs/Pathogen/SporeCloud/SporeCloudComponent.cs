@@ -1,8 +1,8 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.SporeSac;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.SporeSac;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeCloud;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeCloud;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(CMUPathogenSporeCloudSystem), typeof(CMUPathogenSporeSacSystem))]

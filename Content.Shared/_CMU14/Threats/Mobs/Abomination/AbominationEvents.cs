@@ -2,7 +2,7 @@ using Content.Shared.Actions;
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Abomination;
+namespace Content.Shared.CMU14.Threats.Mobs.Abomination;
 
 public sealed partial class AbominationAssimilateActionEvent : EntityTargetActionEvent;
 public sealed partial class AbominationPlantKudzuActionEvent : InstantActionEvent;

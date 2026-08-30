@@ -4,7 +4,7 @@ using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 [Serializable, NetSerializable]
 public sealed partial class CMUSurgeryStepDoAfterEvent : DoAfterEvent

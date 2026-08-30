@@ -1,14 +1,14 @@
 using System;
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.Blackfoot;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.Blackfoot;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Events;
 
-namespace Content.Server._CMU14.Blackfoot;
+namespace Content.Server.CMU14.Blackfoot;
 
 public sealed partial class BlackfootDoorGunSystem : EntitySystem
 {

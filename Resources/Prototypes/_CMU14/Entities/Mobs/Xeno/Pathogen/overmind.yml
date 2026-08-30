@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-overmind
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
     noRot: true
     state: overmind_eye
     layers:
@@ -123,8 +123,10 @@
   - type: MeleeWeapon
     attackRate: 1.5
     damage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: CMArmor
     explosionArmor: 25
     xenoArmor: 15
@@ -151,10 +153,10 @@
     stunMax: 4
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: archon
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:
@@ -180,7 +182,7 @@
     receiveAllChannels: false
   - type: EmitSoundOnSpawn
     sound:
-      path: /Audio/_CMU14/Xeno/Pathogen/announce_screech.ogg
+      path: /Audio/CMU14/Xeno/Pathogen/announce_screech.ogg
       params:
         volume: -8
   - type: XenoAnnounceDeath
@@ -212,7 +214,7 @@
   categories: [ HideSpawnMenu, DoNotMap ]
   components:
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
     layers:
     - state: overmind_eye
   - type: Eye

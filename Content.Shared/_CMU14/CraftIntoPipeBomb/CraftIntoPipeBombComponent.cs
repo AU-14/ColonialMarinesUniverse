@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.CraftIntoPipeBomb;
+namespace Content.Shared.CMU14.CraftIntoPipeBomb;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 

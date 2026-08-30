@@ -1,4 +1,4 @@
-namespace Content.Shared._AU14.Marines.Orders;
+namespace Content.Shared.CMU14.Marines.Orders;
 
 /// <summary>
 /// Prevents Call to Attention on the entity

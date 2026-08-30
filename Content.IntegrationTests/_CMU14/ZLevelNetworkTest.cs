@@ -1,6 +1,6 @@
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 

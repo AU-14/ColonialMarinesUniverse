@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System;
 
-namespace Content.Client._AU14.Construction;
+namespace Content.Client.CMU14.Construction;
 
 /// <summary>
 /// Building overhaul (z-level): the spawnlists that belong to the separate "Z-Level (Experimental)" top-bar

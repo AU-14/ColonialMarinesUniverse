@@ -1,12 +1,12 @@
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using JetBrains.Annotations;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 
-namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem
 {

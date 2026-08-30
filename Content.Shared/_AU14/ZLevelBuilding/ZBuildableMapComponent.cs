@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): per-map opt-out switch for vertical building.
@@ -22,7 +22,7 @@ namespace Content.Shared._AU14.ZLevelBuilding;
 ///         - type: ZBuildableMap
 ///           enabled: false
 ///
-///   With <c>enabled: false</c>, <see cref="Content.Server._AU14.ZLevelBuilding.ZLevelBuildingSystem"/> will
+///   With <c>enabled: false</c>, <see cref="Content.Server.CMU14.ZLevelBuilding.ZLevelBuildingSystem"/> will
 ///   refuse to bootstrap a level below or generate stone for that map, leaving it strictly single-z.
 ///
 /// To disable the feature globally in code (all maps), set

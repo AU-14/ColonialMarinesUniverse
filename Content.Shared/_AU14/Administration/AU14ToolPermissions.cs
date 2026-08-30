@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Administration;
+namespace Content.Shared.CMU14.Administration;
 
 /// <summary>
 /// The per-tool editor permissions replacing the old JModEditor / InsforEditor job-whitelist gating.

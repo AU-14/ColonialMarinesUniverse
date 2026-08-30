@@ -5,7 +5,7 @@ using Content.Shared.Chat;
 using Robust.Server.Player;
 using Robust.Shared.Player;
 
-namespace Content.Server._CMU14.Administration.Console;
+namespace Content.Server.CMU14.Administration.Console;
 
 public sealed partial class ServerLogsFollowerSystem : EntitySystem
 {

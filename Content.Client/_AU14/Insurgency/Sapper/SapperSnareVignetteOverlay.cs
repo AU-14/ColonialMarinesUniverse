@@ -1,12 +1,12 @@
 using System;
-using Content.Shared._AU14.Insurgency.Sapper;
+using Content.Shared.CMU14.Insurgency.Sapper;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
-namespace Content.Client._AU14.Insurgency.Sapper;
+namespace Content.Client.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     A pulsing dark-green screen-edge vignette shown while the local player is caught in a snare. Same

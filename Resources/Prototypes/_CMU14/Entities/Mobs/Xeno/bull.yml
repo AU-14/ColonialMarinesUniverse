@@ -13,7 +13,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Bull/bull.rsi
+    sprite: CMU14/Mobs/Xenonids/Bull/bull.rsi
   - type: MobState
     allowedStates:
     - Alive
@@ -67,12 +67,16 @@
     clawType: Sharp
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 24
+      types:
+        Blunt: 8
+        Slash: 8
+        Piercing: 8
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 36
+      types:
+        Blunt: 12
+        Slash: 12
+        Piercing: 12
   - type: Tackle
     max: 4
   - type: MovementSpeedModifier

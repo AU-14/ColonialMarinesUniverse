@@ -2,22 +2,22 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server._CMU14.Threats;
-using Content.Server.Radio.Components;
-using Content.Shared.AU14;
-using Content.Shared._CMU14.Threats;
+using Content.Server.CMU14.Threats;
+using Content.Shared.Radio.Components;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Chat;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
-using Content.Shared._CMU14.Threats.Mobs.Xeno;
+using Content.Shared.CMU14.Threats.Mobs.Xeno;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Vendors;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
-using HasKnowledgeOfXenoLanguageComponent = Content.Shared._CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
+using HasKnowledgeOfXenoLanguageComponent = Content.Shared.CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
 
 namespace Content.IntegrationTests._AU14;
 
@@ -95,7 +95,7 @@ public sealed class CultistThreatAssignmentTest
 
     private static bool MindHasRolePrototype(IEntityManager entMan, MindComponent mind, string prototype)
     {
-        foreach (var role in mind.MindRoles)
+        foreach (var role in mind.MindRoleContainer.ContainedEntities)
         {
             if (entMan.TryGetComponent(role, out MetaDataComponent? meta) &&
                 meta.EntityPrototype?.ID == prototype)

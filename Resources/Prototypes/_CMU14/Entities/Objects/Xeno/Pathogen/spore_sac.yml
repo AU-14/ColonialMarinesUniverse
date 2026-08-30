@@ -5,7 +5,7 @@
   description: A fleshy sac, ready to be planted.
   components:
   - type: Sprite
-    sprite: _CMU14/Objects/Xeno/Pathogen/spore_sac_item.rsi
+    sprite: CMU14/Objects/Xeno/Pathogen/spore_sac_item.rsi
     layers:
     - state: icon
   - type: Item

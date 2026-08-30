@@ -1,11 +1,11 @@
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Research;
 using Content.Shared.GameTicking;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Client._AU14.Chemistry.Research;
+namespace Content.Client.CMU14.Chemistry.Research;
 
 public sealed partial class ClientResearchDataTerminalSystem : SharedResearchDataTerminalSystem
 {

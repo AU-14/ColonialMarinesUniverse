@@ -71,7 +71,7 @@
       - DoorBumpOpener
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
+        sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
         state: working_joe
     - type: Language
       preset: AU14LanguagePresetSynth
@@ -107,7 +107,7 @@
       - DoorBumpOpener
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_CMU14/Interface/cmuopforblips.rsi
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: working_joe
     - type: Language
       preset: AU14LanguagePresetSynth

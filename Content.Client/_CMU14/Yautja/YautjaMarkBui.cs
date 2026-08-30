@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._CMU14.Yautja;
+namespace Content.Client.CMU14.Yautja;
 
 [UsedImplicitly]
 public sealed class YautjaMarkBui : BoundUserInterface

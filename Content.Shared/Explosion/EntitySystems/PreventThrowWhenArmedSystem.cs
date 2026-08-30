@@ -1,5 +1,6 @@
 using Content.Shared.Explosion.Components;
 using Content.Shared.Throwing;
+using Content.Shared.Trigger.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Localization;
 using Content.Shared.Popups;
@@ -53,5 +54,4 @@ namespace Content.Shared.Explosion.EntitySystems
 		}
 	}
 }
-
 

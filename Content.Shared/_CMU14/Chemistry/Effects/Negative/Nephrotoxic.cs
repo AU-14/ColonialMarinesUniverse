@@ -4,7 +4,7 @@
 using Content.Shared._RMC14.Chemistry.Effects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Chemistry.Effects.Negative;
+namespace Content.Shared.CMU14.Chemistry.Effects.Negative;
 
 public sealed partial class Nephrotoxic : RMCChemicalEffect
 {

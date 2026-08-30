@@ -1,12 +1,12 @@
 using Content.Client.Lobby;
 using Content.Client.Lobby.UI;
-using Content.Shared._CMU14.BalanceRating;
+using Content.Shared.CMU14.BalanceRating;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.BalanceRating;
+namespace Content.Client.CMU14.BalanceRating;
 
 public sealed partial class CMUBalanceRatingUIController : UIController,
     IOnStateEntered<LobbyState>,

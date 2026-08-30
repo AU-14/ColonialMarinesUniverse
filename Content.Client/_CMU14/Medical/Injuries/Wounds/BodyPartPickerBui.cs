@@ -1,10 +1,10 @@
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Part;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._CMU14.Medical.Injuries.Wounds;
+namespace Content.Client.CMU14.Medical.Injuries.Wounds;
 
 [UsedImplicitly]
 public sealed class BodyPartPickerBui : BoundUserInterface

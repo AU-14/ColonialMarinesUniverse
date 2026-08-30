@@ -1,6 +1,6 @@
 using System.Numerics;
-using Content.Shared._CMU14.Input;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
@@ -12,7 +12,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 
 public sealed partial class CMUZLevelShootingSystem : EntitySystem
 {
@@ -107,7 +107,14 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private bool TryGetGun(EntityUid user, out EntityUid gunUid)
     {
-        return _gun.TryGetGun(user, out gunUid, out _);
+        if (_gun.TryGetGun(user, out var gun))
+        {
+            gunUid = gun.Owner;
+            return true;
+        }
+
+        gunUid = default;
+        return false;
     }
 
     private bool IsReadyGun(EntityUid gunUid)

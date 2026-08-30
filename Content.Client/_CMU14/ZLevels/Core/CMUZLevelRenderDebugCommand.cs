@@ -1,14 +1,14 @@
 using Content.Client.Viewport;
-using Content.Client._CMU14.ZLevels.Lighting;
-using Content.Shared._CMU14.ZLevels;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Client.CMU14.ZLevels.Lighting;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Client.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.Client._CMU14.ZLevels.Core;
+namespace Content.Client.CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
 {

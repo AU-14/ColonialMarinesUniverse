@@ -2,12 +2,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Server.EUI;
-using Content.Shared._CMU14.BalanceRating;
+using Content.Shared.CMU14.BalanceRating;
 using Content.Shared.Eui;
 using Robust.Shared.Asynchronous;
 using Robust.Shared.Log;
 
-namespace Content.Server._CMU14.BalanceRating;
+namespace Content.Server.CMU14.BalanceRating;
 
 public sealed partial class CMUBalanceRatingEui : BaseEui
 {

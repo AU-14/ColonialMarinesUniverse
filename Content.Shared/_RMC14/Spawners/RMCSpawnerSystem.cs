@@ -30,7 +30,7 @@ public sealed partial class RMCSpawnerSystem : EntitySystem
         if (TerminatingOrDeleted(ent) || EntityManager.IsQueuedForDeletion(ent))
             return;
 
-        if (_entityWhitelist.IsBlacklistPass(ent.Comp.Blacklist, user))
+        if (_entityWhitelist.IsWhitelistPass(ent.Comp.Blacklist, user))
             return;
 
         if (ent.Comp.RequireEvacuation && !_evacuation.IsEvacuationInProgress())

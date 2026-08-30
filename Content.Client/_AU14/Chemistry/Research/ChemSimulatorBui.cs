@@ -1,6 +1,6 @@
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._AU14.Chemistry.Research;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using JetBrains.Annotations;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Client._AU14.Chemistry.Research;
+namespace Content.Client.CMU14.Chemistry.Research;
 
 [UsedImplicitly]
 public sealed partial class ChemSimulatorBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)

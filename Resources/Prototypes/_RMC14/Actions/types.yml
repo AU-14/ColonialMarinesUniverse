@@ -4,10 +4,13 @@
   id: ActionToggleVulpkaninWagging
   components:
   - type: Action
-    icon: { sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi, state: tail-wag-icon }
-    iconOn: { sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi, state: tail-wag-icon }
     itemIconStyle: NoItem
     useDelay: 1 # Prevents Emote Spam
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
+      state: tail-wag-icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ToggleActionEvent
 
@@ -17,10 +20,13 @@
   id: ActionToggleFelinidWagging
   components:
   - type: Action
-    icon: { sprite: _RMC14/Mobs/Felinids/felinid_tails.rsi, state: tail_wag_icon }
-    iconOn: { sprite: _RMC14/Mobs/Felinids/felinid_tails.rsi, state: tail_wag_icon }
     itemIconStyle: NoItem
     useDelay: 1 # Prevents Emote Spam
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Mobs/Felinids/felinid_tails.rsi
+      state: tail_wag_icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ToggleActionEvent
 
@@ -30,9 +36,12 @@
   id: ActionToggleAvaliWagging
   components:
   - type: Action
-    icon: { sprite: _RMC14/Mobs/Avali/avali_parts.rsi, state: tail-wag-icon }
-    iconOn: { sprite: _RMC14/Mobs/Avali/avali_parts.rsi, state: tail-wag-icon }
     itemIconStyle: NoItem
     useDelay: 1 # Prevents Emote Spam
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Mobs/Avali/avali_parts.rsi
+      state: tail-wag-icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ToggleActionEvent

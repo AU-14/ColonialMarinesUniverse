@@ -5,7 +5,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Presentation.Visuals;
+namespace Content.Shared.CMU14.Medical.Presentation.Visuals;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true)]
 public sealed partial class CMUMedicalOverlayVisualsComponent : Component

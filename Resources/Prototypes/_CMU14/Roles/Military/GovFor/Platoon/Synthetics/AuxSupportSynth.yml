@@ -35,8 +35,8 @@
     prefix: au14-job-prefix-govforauxsupportsynth
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
-      state: synth
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_synth
   - type: MeleeWeapon
     soundHit:
       path: /Audio/_RMC14/Weapons/synthpunch1.ogg
@@ -58,7 +58,7 @@
     OPFOR:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_CMU14/Interface/cmuopforblips.rsi
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: synth
     RMC:
     - type: Skills

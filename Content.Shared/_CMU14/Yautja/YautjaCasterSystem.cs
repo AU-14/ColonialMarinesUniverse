@@ -9,7 +9,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Yautja;
+namespace Content.Shared.CMU14.Yautja;
 
 public sealed partial class YautjaCasterSystem : EntitySystem
 {
@@ -116,7 +116,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (mode == null)
             return;
 
-        if (!TryComp(ent, out ProjectileBatteryAmmoProviderComponent? ammo) ||
+        if (!TryComp(ent, out BatteryAmmoProviderComponent? ammo) ||
             ammo.Prototype == mode.Projectile)
         {
             return;

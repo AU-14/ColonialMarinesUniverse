@@ -5,7 +5,7 @@ using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server._AU14.ZLevelBuilding;
+namespace Content.Server.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level), Phase 2 test/driver command: digs straight down from where you are standing.

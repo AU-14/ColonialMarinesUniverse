@@ -13,7 +13,7 @@
   announceAsSurvivors: true
   partyspawn: FreelancersSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/genericthirdpartyshuttle.yml
+  dropshippath: /Maps/CMU14/ShuttlesDropships/genericthirdpartyshuttle.yml
   weight: 20
   minplayers: 0
   maxplayers: 400

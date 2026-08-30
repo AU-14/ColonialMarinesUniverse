@@ -1,6 +1,6 @@
 using System.Linq;
-using Content.Shared._AU14.Radio;
-using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared.CMU14.Radio;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -17,7 +17,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 /// <summary>
 ///     CLF net splicing. A trained insurgent operator uses a splice kit on a mast or array, runs a do-after

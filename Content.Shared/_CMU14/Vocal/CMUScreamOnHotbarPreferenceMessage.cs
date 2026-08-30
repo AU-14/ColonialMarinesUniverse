@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Vocal;
+namespace Content.Shared.CMU14.Vocal;
 
 /// <summary>
 ///     Sent by the client the moment it changes its "pin scream to hotbar" preference, so the server can

@@ -5,7 +5,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
-namespace Content.Client._CMU14.Yautja;
+namespace Content.Client.CMU14.Yautja;
 
 public sealed class YautjaThrallMessageWindow : DefaultWindow
 {

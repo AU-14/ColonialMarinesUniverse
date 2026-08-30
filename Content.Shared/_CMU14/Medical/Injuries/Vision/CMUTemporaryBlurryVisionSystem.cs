@@ -1,11 +1,11 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Rejuvenate;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Vision;
+namespace Content.Shared.CMU14.Medical.Injuries.Vision;
 
 public sealed partial class CMUTemporaryBlurryVisionSystem : EntitySystem
 {

@@ -1,7 +1,7 @@
 using Content.Shared.Doors.Components;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Dropship.TacticalLand;
+namespace Content.Shared.CMU14.Dropship.TacticalLand;
 
 /// <summary>
 ///     UI state shown to a pilot who is currently controlling the tactical-land eye.

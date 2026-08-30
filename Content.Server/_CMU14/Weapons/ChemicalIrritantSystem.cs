@@ -1,6 +1,6 @@
-using Content.Shared._CMU14.ChemicalIrritants;
+using Content.Shared.CMU14.ChemicalIrritants;
 
-namespace Content.Server._CMU14.Weapons;
+namespace Content.Server.CMU14.Weapons;
 
 /// <summary>
 /// Server-side system for chemical irritants (tear gas, pepper spray, etc.)

@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 
 [RegisterComponent]
 public sealed partial class CMUProstheticLeftArmComponent : Component;

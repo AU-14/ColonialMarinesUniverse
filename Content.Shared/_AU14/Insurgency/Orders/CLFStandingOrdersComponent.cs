@@ -1,7 +1,7 @@
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Insurgency.Orders;
+namespace Content.Shared.CMU14.Insurgency.Orders;
 
 /// <summary>
 ///     An order sheet the cell leader can pass down to the whole cell. Passing the word does

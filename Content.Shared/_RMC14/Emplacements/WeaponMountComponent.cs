@@ -5,7 +5,6 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
 namespace Content.Shared._RMC14.Emplacements;
 
@@ -106,8 +105,8 @@ public sealed partial class WeaponMountComponent : Component
     /// <summary>
     ///     The action prototype to stop using the mount.
     /// </summary>
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string? DismountAction = "RMCActionDismount";
+    [DataField]
+    public EntProtoId? DismountAction = "RMCActionDismount";
 
     /// <summary>
     ///     The uid of the action that makes you stop using the mount.

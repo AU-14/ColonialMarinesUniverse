@@ -2,7 +2,7 @@ using Robust.Shared.Prototypes;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Content.Shared.AU14.util
+namespace Content.Shared.CMU14.util
 {
     [Prototype("GamePlanetPool"),PublicAPI]
     public sealed partial class GamePlanetPoolPrototype : IPrototype

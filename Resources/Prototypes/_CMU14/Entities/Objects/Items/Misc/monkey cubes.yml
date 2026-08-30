@@ -11,7 +11,7 @@
     - Meat
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
 
 - type: entity
@@ -27,7 +27,7 @@
     tags:
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap
 
 - type: entity
@@ -64,7 +64,7 @@
     - Meat
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
 
 - type: entity
@@ -80,7 +80,7 @@
     - Meat
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
 
 - type: entity
@@ -96,7 +96,7 @@
     - Meat
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
 
 - type: entity
@@ -112,7 +112,7 @@
     - Meat
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
 
 - type: entity
@@ -128,7 +128,7 @@
     tags:
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap
 
 - type: entity
@@ -144,7 +144,7 @@
     tags:
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap
 
 - type: entity
@@ -160,7 +160,7 @@
     tags:
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap
 
 - type: entity
@@ -176,7 +176,7 @@
     tags:
     - MonkeyCube
   - type: Sprite
-    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    sprite: CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap
 
 - type: entity

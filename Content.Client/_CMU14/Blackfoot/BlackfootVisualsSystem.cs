@@ -1,11 +1,11 @@
 using System;
 using System.Numerics;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared._RMC14.Vehicle;
 using Robust.Client.GameObjects;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Blackfoot;
+namespace Content.Client.CMU14.Blackfoot;
 
 public sealed partial class BlackfootVisualsSystem : EntitySystem
 {

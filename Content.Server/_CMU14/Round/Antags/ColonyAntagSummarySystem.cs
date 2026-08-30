@@ -1,22 +1,22 @@
 using Content.Server.Antag;
 using Content.Server.Antag.Components;
-using Content.Server._CMU14.Round.Antags.Cannibal;
-using Content.Server._CMU14.Round.Antags.StrikeOrganizer;
+using Content.Server.CMU14.Round.Antags.Cannibal;
+using Content.Server.CMU14.Round.Antags.StrikeOrganizer;
 using Content.Server.GameTicking;
 using Content.Server.Roles;
-using Content.Shared._CMU14.Round.Antags.Arsonist;
-using Content.Shared._CMU14.Round.Antags.BountyHunter;
-using Content.Shared._CMU14.Round.Antags.CLFSaboteur;
-using Content.Shared._CMU14.Round.Antags.ColonyBounty;
-using Content.Shared._CMU14.Round.Antags.CorporateAgent;
-using Content.Shared._CMU14.Round.Antags.StrikeOrganizer;
-using Content.Shared._CMU14.Round.Antags.Vigilante;
+using Content.Shared.CMU14.Round.Antags.Arsonist;
+using Content.Shared.CMU14.Round.Antags.BountyHunter;
+using Content.Shared.CMU14.Round.Antags.CLFSaboteur;
+using Content.Shared.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.CMU14.Round.Antags.CorporateAgent;
+using Content.Shared.CMU14.Round.Antags.StrikeOrganizer;
+using Content.Shared.CMU14.Round.Antags.Vigilante;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server._CMU14.Round.Antags;
+namespace Content.Server.CMU14.Round.Antags;
 
 /// <summary>
 /// Appends colony antag outcomes to the round end summary: who played which antag

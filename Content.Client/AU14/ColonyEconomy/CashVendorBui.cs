@@ -1,8 +1,8 @@
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client.AU14.ColonyEconomy;
+namespace Content.Client.CMU14.ColonyEconomy;
 
 public sealed class AU14CashVendorBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {

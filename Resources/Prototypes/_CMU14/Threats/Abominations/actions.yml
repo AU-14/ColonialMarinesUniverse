@@ -3,6 +3,7 @@
 - type: entity
   abstract: true
   id: ActionAbominationBase
+  parent: BaseAction
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -20,15 +21,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: pounce
     useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 6
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationLeapActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationLeapActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -38,15 +41,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: xeno_spit
     useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 10
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationSpitActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationSpitActionEvent
 
 # --- Grunt ---
 
@@ -58,15 +63,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: pounce
     useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 6
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationLeapActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationLeapActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -76,15 +83,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: ready_charge
     useDelay: 18
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ready_charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 8
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationChargeActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationChargeActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -94,15 +103,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: xeno_spit
     useDelay: 4
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 10
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationSpitActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationSpitActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -112,15 +123,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: spray_acid
     useDelay: 22
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: spray_acid
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationAcidSprayActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationAcidSprayActionEvent
 
 # --- Skitter ---
 
@@ -132,12 +145,14 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: plant_weeds
     useDelay: 30
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: plant_weeds
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationPlantKudzuActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationPlantKudzuActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -147,12 +162,14 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: place_resin
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: place_resin
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionChooseActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionChooseActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -162,15 +179,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: secrete_resin
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: secrete_resin
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1
     checkCanAccess: false
   - type: WorldTargetAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionSecreteActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities.AbominationConstructionSecreteActionEvent
 
 # --- Mimic ---
 
@@ -182,16 +201,18 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: headbite
     useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbite
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     checkCanAccess: true
     deselectOnMiss: false
   - type: EntityTargetAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilateActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationAssimilateActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -201,15 +222,17 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: place_resin
     # useDelay is just a debounce on the picker — the real 5-minute cooldown
     # is stamped onto this specific action entity in FinishRevert, so it's
     # per-mimic by construction.
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: place_resin
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicTransformActionEvent
 
 - type: entity
   parent: ActionAbominationBase
@@ -219,12 +242,14 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: headbite
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbite
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicRevertActionEvent
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicRevertActionEvent
 
 # --- Tactical map ---
 

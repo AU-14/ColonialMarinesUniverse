@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.Client.Clothing;
 using Content.Client.Items.Systems;
-using Content.Shared._CMU14.Item.Stain;
+using Content.Shared.CMU14.Item.Stain;
 using Content.Shared.Clothing;
 using Content.Shared.Item;
 using Robust.Client.GameObjects;
@@ -10,7 +10,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Client._CMU14.Item.Stain;
+namespace Content.Client.CMU14.Item.Stain;
 
 /// <summary>
 /// Renders clipped stains on item sprites and directional stains on equipped clothing.
@@ -18,7 +18,7 @@ namespace Content.Client._CMU14.Item.Stain;
 public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
 {
     private static readonly ProtoId<ShaderPrototype> ItemStainShader = "CMUItemStain";
-    private static readonly ResPath ItemStainsRsi = new("_CMU14/Effects/item_stains.rsi");
+    private static readonly ResPath ItemStainsRsi = new("CMU14/Effects/item_stains.rsi");
 
     private const string ItemBloodState = "itemblood";
     private const string LayerPrefix = "cmu-item-stain";

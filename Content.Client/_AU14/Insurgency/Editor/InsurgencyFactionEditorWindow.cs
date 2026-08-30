@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using Content.Client._AU14.Insurgency.CustomFactions;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._AU14.Insurgency.Editor;
+using Content.Client.CMU14.Insurgency.CustomFactions;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Insurgency.Editor;
 using Content.Shared._RMC14.Vendors;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
 using Robust.Client.UserInterface;
@@ -16,7 +16,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Client._AU14.Insurgency.Editor;
+namespace Content.Client.CMU14.Insurgency.Editor;
 
 /// <summary>
 ///     Programmatic editor window for INSFOR Default factions. Built in code rather than XAML to

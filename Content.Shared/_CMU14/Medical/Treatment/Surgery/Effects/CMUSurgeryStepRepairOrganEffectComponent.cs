@@ -1,7 +1,7 @@
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Effects;
 
 /// <summary>
 ///     Restores the organ in <see cref="OrganSlot"/> to full health and

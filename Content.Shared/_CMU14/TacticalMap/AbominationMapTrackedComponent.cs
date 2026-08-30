@@ -1,7 +1,7 @@
 using Content.Shared._RMC14.TacticalMap;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.TacticalMap;
+namespace Content.Shared.CMU14.TacticalMap;
 
 /// <summary>
 ///     Bucket override like <see cref="WeYuMapTrackedComponent" />: pair with

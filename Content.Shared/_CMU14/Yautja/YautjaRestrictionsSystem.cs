@@ -4,7 +4,7 @@ using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 
-namespace Content.Shared._CMU14.Yautja;
+namespace Content.Shared.CMU14.Yautja;
 
 /// <summary>
 /// Shared restrictions for all Yautja: human guns refuse them (use and pickup), and

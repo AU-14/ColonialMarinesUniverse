@@ -11,9 +11,11 @@ using Content.Shared._RMC14.Xenonids.Devour;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Explosion;
 using Content.Shared.Hands;
@@ -39,7 +41,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Ape;
+namespace Content.Shared.CMU14.Threats.Mobs.Ape;
 
 public abstract partial class SharedApeDestroySystem : EntitySystem
 {

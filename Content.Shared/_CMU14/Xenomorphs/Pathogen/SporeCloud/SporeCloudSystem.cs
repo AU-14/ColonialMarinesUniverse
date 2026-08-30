@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Synth;
@@ -9,9 +9,9 @@ using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeCloud;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeCloud;
 
 public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
 {

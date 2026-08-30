@@ -209,7 +209,7 @@
   id: CMUSurgeryStepMetaRemoveLimb
   surgery: CMUSurgeryRemoveLimb
   displayName: Remove Limb
-  validParts: [Arm, Leg]
+  validParts: [Arm, Hand, Leg, Foot]
   category: amputation
   minSkill: 2
   steps:

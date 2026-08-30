@@ -1,6 +1,6 @@
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared.AU14.MedVendorLock;
+namespace Content.Shared.CMU14.MedVendorLock;
 
 /// <summary>
 /// Marks a medical vendor as disabled while a distress-signal round is active but

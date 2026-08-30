@@ -106,11 +106,11 @@ jobs:
       - name: Rsync CMAudio into Resources
         if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
         run: |
-          mkdir -p Resources/Audio/_CMU14/Private/
+          mkdir -p Content.CMU/Resources/Audio/CMU14/Private/
           rsync -a --delete \
             __audio-overlay/Resources/Audio/_CMU14/Private/ \
-            Resources/Audio/_CMU14/Private/
-          du -sh Resources/Audio/_CMU14/Private/
+            Content.CMU/Resources/Audio/CMU14/Private/
+          du -sh Content.CMU/Resources/Audio/CMU14/Private/
           rm -rf __audio-overlay
 
       - uses: actions/setup-dotnet@v5.2.0

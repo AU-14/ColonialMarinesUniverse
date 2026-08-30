@@ -6,6 +6,7 @@
   - MobCombat
   - MobBloodstream
   - MobFlammable
+  - BaseSlicingRefinable
   abstract: true
   suffix: CMU
   components:
@@ -54,8 +55,20 @@
             state: human_acid_enhanced
             visible: true
   - type: Body
-    prototype: Bloodsucker
     requiredLegs: 0
+  - type: InitialBody
+    organs:
+      Torso: TorsoAnimal
+      Legs: LegsAnimal
+      Feet: FeetAnimal
+      Lungs: OrganAnimalLungs
+      Stomach: OrganBloodsuckerStomach
+      Liver: OrganBloodsuckerLiver
+      Heart: OrganBloodsuckerHeart
+      Kidneys: OrganAnimalKidneys
+    relationships:
+      Torso: [ Legs, Lungs, Stomach, Liver, Heart, Kidneys ]
+      Legs: [ Feet ]
   - type: Climbing
   - type: RMCRevivable
   - type: RMCMedicalExamine
@@ -65,14 +78,18 @@
   - type: CrashLandable
   - type: Woundable
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Biological
     healthBarThreshold: 2 # some of these mobs literally only have 10 hit points
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.7
     baseSprintSpeed: 5
   - type: Bloodstream
-    bloodMaxVolume: 150
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 150
   - type: StatusEffects
     allowed:
     - Stun
@@ -85,7 +102,6 @@
     - Drunk
     - SlurredSpeech
     - RatvarianLanguage
-    - PressureImmunity
     - Muted
     - Pacified
     - StaminaModifier
@@ -135,10 +151,10 @@
     drawdepth: Mobs
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
-      sprite: _AU14/Mobs/Animals/carp.rsi
+      sprite: CMU14/Mobs/Animals/carp.rsi
       state: alive
     - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
-      sprite: _AU14/Mobs/Animals/carp.rsi
+      sprite: CMU14/Mobs/Animals/carp.rsi
       state: mouth
       #shader: unshaded
     - map: [ "mask" ]
@@ -171,6 +187,13 @@
   - type: Butcherable
     butcheringType: Knife
     spawned:
+    - id: FoodMeatFish
+      amount: 2
+  - type: ToolRefinable
+    qualityNeeded: Slicing
+    refineTime: 8
+    popupType: LargeCaution
+    refineResult:
     - id: FoodMeatFish
       amount: 2
   - type: Puller
@@ -243,7 +266,7 @@
   - type: Sprite
     layers:
     - state: carp_spawn
-      sprite: _AU14/Mobs/Animals/carp.rsi
+      sprite: CMU14/Mobs/Animals/carp.rsi
   - type: ProportionalSpawner
     id: CMUSpawnMobCarp
     ratio: 16

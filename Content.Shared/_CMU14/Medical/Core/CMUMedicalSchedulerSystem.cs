@@ -3,7 +3,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CMU14.Medical.Core;
+namespace Content.Shared.CMU14.Medical.Core;
 
 /// <summary>
 ///     Dispatches sparse medical work at due times without feature-specific entity scans.

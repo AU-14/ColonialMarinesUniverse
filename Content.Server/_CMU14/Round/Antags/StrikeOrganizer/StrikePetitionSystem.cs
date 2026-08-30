@@ -1,14 +1,14 @@
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Systems;
 using Content.Server.Popups;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Paper;
-using Content.Shared._CMU14.Round.Antags.StrikeOrganizer;
+using Content.Shared.CMU14.Round.Antags.StrikeOrganizer;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 
-namespace Content.Server._CMU14.Round.Antags.StrikeOrganizer;
+namespace Content.Server.CMU14.Round.Antags.StrikeOrganizer;
 
 public sealed partial class StrikePetitionSystem : EntitySystem
 {

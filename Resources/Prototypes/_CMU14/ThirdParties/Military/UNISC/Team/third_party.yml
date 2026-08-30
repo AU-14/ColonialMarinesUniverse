@@ -1,4 +1,4 @@
-﻿- type: partySpawn
+- type: partySpawn
   id: UNISCTeamSpawn
   leadersToSpawn:
     AU14JobUNISCPltOpsOff: 1
@@ -17,7 +17,7 @@
   id: UNISCTeamParty
   partyspawn: UNISCTeamSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight: 20
   minplayers: 0
   maxplayers: 400

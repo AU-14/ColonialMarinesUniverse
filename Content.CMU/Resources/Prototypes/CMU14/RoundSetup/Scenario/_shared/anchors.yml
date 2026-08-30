@@ -1,0 +1,99 @@
+- type: spawnMarker
+  id: ThreatLeaderGenericSpawnMarker
+  kind: ThreatMarker
+  tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:<generic>
+
+- type: spawnMarker
+  id: ThreatMemberGenericSpawnMarker
+  kind: ThreatMarker
+  tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:<generic>
+
+- type: spawnMarker
+  id: ThreatEntityGenericSpawnMarker
+  kind: ThreatMarker
+  tags:
+    - force:hostile
+    - bucket:Entity
+    - marker-id:<generic>
+
+- type: spawnMarker
+  id: ThreatLeaderXenoCfSpawnMarker
+  kind: ThreatMarker
+  tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:xenocf
+
+- type: spawnMarker
+  id: ThreatMemberXenoCfSpawnMarker
+  kind: ThreatMarker
+  tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:xenocf
+
+- type: spawnMarker
+  id: ThreatEntityXenoCfSpawnMarker
+  kind: ThreatMarker
+  tags:
+    - force:hostile
+    - bucket:Entity
+    - marker-id:xenocf
+
+- type: spawnMarker
+  id: ThreatLeaderCultistCfSpawnMarker
+  kind: ThreatMarker
+  tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:cultistcf
+
+- type: spawnMarker
+  id: ThreatMemberCultistCfSpawnMarker
+  kind: ThreatMarker
+  tags:
+    - force:hostile
+    - bucket:Member
+    - marker-id:cultistcf
+
+- type: spawnMarker
+  id: ThirdPartyLeaderGenericSpawnMarker
+  kind: ThirdPartyMarker
+  tags:
+    - force:third-party
+    - bucket:Leader
+    - marker-id:<generic>
+
+- type: spawnMarker
+  id: ThirdPartyMemberGenericSpawnMarker
+  kind: ThirdPartyMarker
+  tags:
+    - force:third-party
+    - bucket:Member
+    - marker-id:<generic>
+
+- type: spawnMarker
+  id: ThirdPartyEntityGenericSpawnMarker
+  kind: ThirdPartyMarker
+  tags:
+    - force:third-party
+    - bucket:Entity
+    - marker-id:<generic>
+
+- type: spawnMarker
+  id: ClfSafehouseSpawnMarker
+  kind: ClfSafehouse
+  tags:
+    - force:clf:safehouse
+
+- type: spawnMarker
+  id: ClfCivilianColonistSpawnMarker
+  kind: ClfCivilianSpawn
+  tags:
+    - force:clf:civilian-spawn:AU14JobCivilianColonist

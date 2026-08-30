@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Marks a structure that fell through a collapsed z-level floor and is now rubble. The server strips its

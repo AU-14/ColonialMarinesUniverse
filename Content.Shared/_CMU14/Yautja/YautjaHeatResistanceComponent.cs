@@ -4,7 +4,7 @@ using Content.Shared._RMC14.Damage;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CMU14.Yautja.HeatResistance;
+namespace Content.Shared.CMU14.Yautja.HeatResistance;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class YautjaHeatResistanceComponent : Component

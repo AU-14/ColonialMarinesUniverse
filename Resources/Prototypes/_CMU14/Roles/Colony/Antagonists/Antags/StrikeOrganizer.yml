@@ -5,7 +5,7 @@
   - type: GameRule
   - type: StrikeOrganizerRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
+    selectionTime: JobsAssigned
     definitions:
     - prefRoles: [ StrikeOrganizerRole ]
       max: 1

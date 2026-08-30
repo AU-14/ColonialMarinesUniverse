@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Destructible;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DragDrop;
 using Content.Shared.FixedPoint;
@@ -23,7 +25,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 using RMCSurgerySystem = Content.Server._RMC14.Medical.Surgery.CMSurgerySystem;
 
@@ -525,7 +527,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         if (!TryComp<DamageableComponent>(patient, out var damageable))
             return FixedPoint2.Zero;
 
-        return damageable.DamagePerGroup.GetValueOrDefault(group.Id);
+        return _damageable.GetDamagePerGroup((patient, damageable)).GetValueOrDefault(group);
     }
 
     private void HealDamageGroup(EntityUid patient, EntityUid origin, ProtoId<DamageGroupPrototype> group, FixedPoint2 amount)

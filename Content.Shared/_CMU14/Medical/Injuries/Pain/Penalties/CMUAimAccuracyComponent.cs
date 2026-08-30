@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain.Penalties;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain.Penalties;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUAimAccuracyComponent : Component

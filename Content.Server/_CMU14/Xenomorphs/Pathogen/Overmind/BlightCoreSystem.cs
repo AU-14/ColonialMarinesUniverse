@@ -1,6 +1,6 @@
 using Content.Server._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Evolution;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Mobs;
@@ -14,9 +14,10 @@ using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Server.GameObjects;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Server._RMC14.Announce;
 
-namespace Content.Server._CMU14.Xenomorphs.Pathogen.Overmind;
+namespace Content.Server.CMU14.Xenomorphs.Pathogen.Overmind;
 
 public sealed partial class CMUBlightCoreSystem : EntitySystem
 {

@@ -3,7 +3,7 @@
   files:
     - /Audio/Voice/Human/manlaugh1.ogg
     - /Audio/Voice/Human/manlaugh2.ogg
-    - /Audio/_AU14/Voice/UpdatedVoice/Male/Dragon-V0942/Laugh/Giggle1.ogg
+    - /Audio/Voice/UpdatedVoice/Male/Dragon-V0942/Laugh/Giggle1.ogg
 
 - type: soundCollection
   id: FemaleLaugh
@@ -103,6 +103,11 @@
   id: Hew
   files:
   - /Audio/Items/Toys/hew.ogg
+
+- type: soundCollection
+  id: XenoborgScream
+  files:
+  - /Audio/Voice/Xenoborg/xenoborg_scream.ogg
 
 - type: soundCollection
   id: XenoborgLaugh

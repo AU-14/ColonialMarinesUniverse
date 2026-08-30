@@ -1,5 +1,5 @@
 using Content.Server._RMC14.Marines.Roles.Ranks;
-using Content.Shared._AU14.Marines.Roles.Ranks;
+using Content.Shared.CMU14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.UniformAccessories;
@@ -11,7 +11,7 @@ using Content.Shared.Roles;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Marines.Roles.Ranks;
+namespace Content.Server.CMU14.Marines.Roles.Ranks;
 
 public sealed partial class RankChangerSystem : EntitySystem
 {
@@ -34,12 +34,12 @@ public sealed partial class RankChangerSystem : EntitySystem
 
     private void OnEquipped(Entity<RankChangerComponent> ent, ref GotEquippedEvent args)
     {
-        ApplyRank(args.Equipee, ent.Comp);
+        ApplyRank(args.EquipTarget, ent.Comp);
     }
 
     private void OnUnequipped(Entity<RankChangerComponent> ent, ref GotUnequippedEvent args)
     {
-        RevertRank(args.Equipee, ent.Comp);
+        RevertRank(args.EquipTarget, ent.Comp);
     }
 
     private void OnShutdown(Entity<RankChangerComponent> ent, ref ComponentShutdown args)

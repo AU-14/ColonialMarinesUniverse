@@ -9,7 +9,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
 
-namespace Content.Client._AU14.SavedBuilds;
+namespace Content.Client.CMU14.SavedBuilds;
 
 /// <summary>
 /// Small control panel for the saved-build selection: a range slider (1x1 .. 11x11), append/clear of
@@ -74,7 +74,7 @@ public sealed class BuildSaveWindow : DefaultWindow
 
         // Mapper-mode option: also grab unanchored loose items (default is anchored structures only). Only shown
         // when the build-mode dropdown is on Mapper; for other modes it's irrelevant.
-        if (mode.Mode == Content.Shared._AU14.SavedBuilds.BuildSaveMode.Mapper)
+        if (mode.Mode == Content.Shared.CMU14.SavedBuilds.BuildSaveMode.Mapper)
         {
             var includeLoose = new CheckBox
             {

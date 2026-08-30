@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Conditions;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Conditions;
 
 /// <summary>
 ///     Set <see cref="RequireSeverity"/> for an exact match or

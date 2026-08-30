@@ -10,7 +10,6 @@
     commandElement: true
   - type: NpcFactionMember
     factions:
-    - AUColonist # cover identity
     - CLF
   - type: CLFMember
     statusIcon: CLFFactionLeader
@@ -41,7 +40,7 @@
     mindRole: MindRoleCLFLeader
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmucolonyblips.rsi
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
       state: colonist
   - type: ShowMarineIcons
     factions:
@@ -106,6 +105,10 @@
   - type: Sprite
     state: syn_spawn
   - type: SafehouseMarker
+  - type: ScenarioSpawnMarker
+    kind: ClfSafehouse
+    tags:
+    - force:clf:safehouse
 
 - type: playTimeTracker
   id: AU14JobCLFCellLeader

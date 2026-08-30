@@ -1,9 +1,9 @@
 using System.Numerics;
-using Content.Shared._CMU14.DroneOperator;
+using Content.Shared.CMU14.DroneOperator;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 
-namespace Content.Client._CMU14.DroneOperator;
+namespace Content.Client.CMU14.DroneOperator;
 
 public sealed partial class CMUDroneOperatorVisualSystem : EntitySystem
 {

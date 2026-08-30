@@ -1,13 +1,13 @@
 using Content.Server._RMC14.Language.Systems;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking;
 using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.Language;
 
-namespace Content.Server._CMU14.Platoon;
+namespace Content.Server.CMU14.Platoon;
 
 public sealed partial class PlatoonLanguageSystem : EntitySystem
 {

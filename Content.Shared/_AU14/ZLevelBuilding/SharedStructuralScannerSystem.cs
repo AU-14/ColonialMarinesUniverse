@@ -4,7 +4,7 @@
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): toggles the <see cref="StructuralScannerComponent"/> heat-map on use-in-hand.

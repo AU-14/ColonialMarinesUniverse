@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._AU14.Chemistry.Research;
+namespace Content.Shared.CMU14.Chemistry.Research;
 
 /// <summary>
 /// Admin-only console for issuing generated chemical contracts and materializing their reagent.

@@ -5,7 +5,7 @@ using Content.Shared.Tools;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.DroneOperator;
+namespace Content.Shared.CMU14.DroneOperator;
 
 [Serializable]
 public enum CMUDroneAssemblyPartSlot : byte

@@ -1,5 +1,5 @@
 using Content.Server.Popups;
-using Content.Shared._CMU14.Round.Objectives.Type;
+using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared.Stacks;
 using Content.Shared.Tag;
 using Content.Shared.Verbs;
@@ -7,7 +7,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Round.Objectives.Type;
+namespace Content.Server.CMU14.Round.Objectives.Type;
 
 /// <summary>
 /// Handles the Analyzer Machine:

@@ -1,16 +1,16 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Bones.Events;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
-using Content.Shared._CMU14.Medical.Injuries.Pain;
-using Content.Shared._CMU14.Medical.Injuries.Pain.Events;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones.Events;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Pain.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
@@ -18,9 +18,9 @@ using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Chemistry.Effects;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain.Penalties;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain.Penalties;
 
 public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
 {

@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Requisitions;
+namespace Content.Shared.CMU14.Requisitions;
 
 [Prototype("cmuRequisitionsRoundStartFreeCrate")]
 public sealed partial class CMURequisitionsRoundStartFreeCratePrototype : IPrototype

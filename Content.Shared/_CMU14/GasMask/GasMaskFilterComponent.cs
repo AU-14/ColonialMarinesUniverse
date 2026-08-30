@@ -2,7 +2,7 @@
 
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.GasMask;
+namespace Content.Shared.CMU14.GasMask;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class GasMaskFilterComponent : Component

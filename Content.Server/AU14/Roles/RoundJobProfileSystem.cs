@@ -1,10 +1,10 @@
-using Content.Server._CMU14.Round.Objectives;
-using Content.Shared._CMU14.Round.Roles;
+using Content.Server.CMU14.Round.Objectives;
+using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.AU14.Roles;
+namespace Content.Server.CMU14.Roles;
 
 public readonly record struct ResolvedRoundJobProfileComponents(
     string Source,

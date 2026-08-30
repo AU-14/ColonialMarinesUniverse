@@ -1,5 +1,5 @@
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.GameTicking;
@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Client._AU14.Chemistry.Reagents;
+namespace Content.Client.CMU14.Chemistry.Reagents;
 
 public sealed partial class ClientReagentGeneratorSystem : SharedReagentGeneratorSystem
 {

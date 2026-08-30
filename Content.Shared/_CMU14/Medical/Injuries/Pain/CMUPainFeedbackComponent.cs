@@ -3,7 +3,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain;
 
 [RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUPainFeedbackComponent : Component

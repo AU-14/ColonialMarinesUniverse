@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.Sapper;
+namespace Content.Shared.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     Marks a mob as a trained CLF Sapper. Only mobs with this component know how to plant sapper traps

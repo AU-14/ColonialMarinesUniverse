@@ -2,11 +2,11 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface;
 using Robust.Shared.IoC;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 
-namespace Content.Client._CMU14.Xenomorphs.Pathogen.Overmind;
+namespace Content.Client.CMU14.Xenomorphs.Pathogen.Overmind;
 
 public sealed partial class BlightCoreVoteWindow : DefaultWindow
 {

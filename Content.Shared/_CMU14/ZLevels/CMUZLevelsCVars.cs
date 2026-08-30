@@ -1,7 +1,7 @@
 using Robust.Shared;
 using Robust.Shared.Configuration;
 
-namespace Content.Shared._CMU14.ZLevels;
+namespace Content.Shared.CMU14.ZLevels;
 
 [CVarDefs]
 public sealed partial class CMUZLevelsCVars : CVars

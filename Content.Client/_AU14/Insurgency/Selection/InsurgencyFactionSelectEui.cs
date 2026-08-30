@@ -1,8 +1,8 @@
 using Content.Client.Eui;
-using Content.Shared._AU14.Insurgency.Selection;
+using Content.Shared.CMU14.Insurgency.Selection;
 using Content.Shared.Eui;
 
-namespace Content.Client._AU14.Insurgency.Selection;
+namespace Content.Client.CMU14.Insurgency.Selection;
 
 /// <summary>
 ///     Client side of the CLF-leader faction selection popup. Shares its type name with the server EUI

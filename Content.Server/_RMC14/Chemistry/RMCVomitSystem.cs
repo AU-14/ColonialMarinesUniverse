@@ -1,4 +1,4 @@
-using Content.Server.Medical;
+using Content.Shared.Medical;
 using Content.Shared._RMC14.Chemistry;
 
 namespace Content.Server._RMC14.Chemistry;

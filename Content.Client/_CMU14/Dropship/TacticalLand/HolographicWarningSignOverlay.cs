@@ -1,10 +1,10 @@
 using System.Numerics;
-using Content.Shared._CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.Dropship.TacticalLand;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Dropship.TacticalLand;
+namespace Content.Client.CMU14.Dropship.TacticalLand;
 
 public sealed class HolographicWarningSignOverlay : Overlay
 {

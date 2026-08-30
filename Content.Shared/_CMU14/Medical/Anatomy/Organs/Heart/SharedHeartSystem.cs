@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart.Events;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -13,10 +13,10 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Chemistry.Effects;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 
 public abstract partial class SharedHeartSystem : EntitySystem
 {
@@ -26,7 +26,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedRMCBloodstreamSystem Bloodstream = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId Tachycardia = "StatusEffectCMUTachycardia";
@@ -241,11 +241,13 @@ public abstract partial class SharedHeartSystem : EntitySystem
     private bool TryGetBloodFraction(EntityUid body, out float fraction)
     {
         fraction = 0f;
-        if (!Bloodstream.TryGetBloodSolution(body, out var solution))
+        if (!Bloodstream.TryGetBloodReadout(body, out var current, out var normal)
+            || normal <= FixedPoint2.Zero)
+        {
             return false;
-        if (solution.MaxVolume <= FixedPoint2.Zero)
-            return false;
-        fraction = (float)solution.Volume / (float)solution.MaxVolume;
+        }
+
+        fraction = (float)current / (float)normal;
         return true;
     }
 

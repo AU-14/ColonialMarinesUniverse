@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Abomination;
+namespace Content.Shared.CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 ///     Lives on every mimic abomination. Holds the pool of assimilated identities it can

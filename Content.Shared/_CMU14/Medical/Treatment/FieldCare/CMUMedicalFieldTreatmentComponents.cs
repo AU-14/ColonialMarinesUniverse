@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Medical.Treatment.FieldCare;
+namespace Content.Shared.CMU14.Medical.Treatment.FieldCare;
 
 [RegisterComponent]
 public sealed partial class CMUMedicalIngredientComponent : Component

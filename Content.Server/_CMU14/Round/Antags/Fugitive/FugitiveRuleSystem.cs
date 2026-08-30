@@ -1,10 +1,10 @@
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Systems;
 using Content.Server.GameTicking.Rules;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.Paper;
 using Robust.Shared.Maths;
 
-namespace Content.Server._CMU14.Round.Antags.Fugitive;
+namespace Content.Server.CMU14.Round.Antags.Fugitive;
 
 public sealed partial class FugitiveRuleSystem : GameRuleSystem<FugitiveRuleComponent>
 {

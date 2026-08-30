@@ -77,7 +77,7 @@
     - fire: CMUTileFireOBAegis
       fireRange: 55
   - type: WarpPoint
-    location: 1 orbital bombardment
+    location: cmu-warp-location-orbital-bombardment-one
 
 # Warhead Tile Fire
 - type: entity

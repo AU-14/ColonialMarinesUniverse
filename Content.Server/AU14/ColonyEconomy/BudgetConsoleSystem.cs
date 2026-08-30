@@ -1,13 +1,16 @@
 using Content.Server.Stack;
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.Stacks;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
-namespace Content.Server.AU14.ColonyEconomy;
+namespace Content.Server.CMU14.ColonyEconomy;
 
 public sealed partial class BudgetConsoleSystem : EntitySystem
 {
+    private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
+
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ColonyBudgetSystem _budget = default!;
     [Dependency] private IEntityManager _entities = default!;
@@ -45,7 +48,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
             return;
 
         _budget.AddToBudget(-msg.Amount);
-        _stack.SpawnMultiple("RMCSpaceCash", (int) msg.Amount, uid);
+        _stack.SpawnMultipleNextToOrDrop(CashPrototype, (int) msg.Amount, uid);
 
         UpdateAllUi();
     }

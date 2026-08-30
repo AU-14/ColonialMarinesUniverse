@@ -41,7 +41,7 @@
   - type: InteractionOutline
   - type: Sprite
     drawdepth: Mobs
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
+    sprite: CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
     layers:
     - map: [ base ]
       state: stowed
@@ -83,17 +83,18 @@
     collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
     collisionSoundCooldown: 1.5
     collisionSoundMinSpeed: 5
-    hornSound: /Audio/_CMU14/Blackfoot/buttonpress.ogg
+    hornSound: /Audio/CMU14/Blackfoot/buttonpress.ogg
     hornCooldown: 1
   - type: AmbientSound
     enabled: false
     range: 18
     volume: -2
     sound:
-      path: /Audio/_CMU14/Blackfoot/engineidle.ogg
+      path: /Audio/CMU14/Blackfoot/engineidle.ogg
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: DoAfter
   - type: UserInterface
     interfaces:
@@ -198,7 +199,7 @@
     maxIntegrity: 500
     bypassEntryOnZero: true
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot.yml
+    interiorPath: /Maps/CMU14/Vehicles/Blackfoot/blackfoot.yml
     enterDoAfter: 1
     exitDoAfter: 1
     maxPassengers: 9
@@ -276,7 +277,7 @@
       insertDelay: 2
       required: false
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml
+    interiorPath: /Maps/CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml
 
 - type: entity
   parent: VehicleBlackfootDoorGunBase
@@ -360,7 +361,7 @@
   abstract: true
   components:
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot.yml
+    interiorPath: /Maps/CMU14/Vehicles/Blackfoot/blackfoot.yml
 
 - type: entity
   parent: VehicleBlackfootBase

@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Paper;
+using Content.Shared.CMU14.Paper;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._CMU14.Paper;
+namespace Content.Client.CMU14.Paper;
 
 [UsedImplicitly]
 public sealed class UniversalPaperToolBui : BoundUserInterface

@@ -1,10 +1,10 @@
-using Content.Shared.AU14.Salvage;
+using Content.Shared.CMU14.Salvage;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Random;
 
-namespace Content.Server.AU14.Salvage;
+namespace Content.Server.CMU14.Salvage;
 
 public sealed partial class SalvageSpawnerSystem : EntitySystem
 {

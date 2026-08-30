@@ -1,10 +1,10 @@
-using Content.Shared.AU14.Allegiance;
-using Content.Shared.AU14.Origin;
+using Content.Shared.CMU14.Allegiance;
+using Content.Shared.CMU14.Origin;
 using Content.Shared.Preferences;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.CharacterDescription;
+namespace Content.Shared.CMU14.CharacterDescription;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CharacterDescriptionComponent : Component

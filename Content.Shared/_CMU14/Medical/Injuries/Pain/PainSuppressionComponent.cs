@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain;
 
 /// <summary>
 ///     Sits on a <c>StatusEffectCMUPainSuppression</c> entity. Multiple

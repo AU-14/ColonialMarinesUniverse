@@ -1,6 +1,6 @@
 using Content.Shared.Actions;
 
-namespace Content.Shared._CMU14.DroneOperator;
+namespace Content.Shared.CMU14.DroneOperator;
 
 public sealed partial class CMUDroneEndControlActionEvent : InstantActionEvent;
 

@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
+using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._CMU14.Threats.Mobs.ZombieSummoner;
+namespace Content.Client.CMU14.Threats.Mobs.ZombieSummoner;
 
 [UsedImplicitly]
 public sealed class ZombieSummonerBui : BoundUserInterface

@@ -1,29 +1,24 @@
-using Content.Shared._CMU14.TacticalMap;
 using Content.Shared._RMC14.TacticalMap;
-using Content.Shared.GameTicking;
-using Content.Shared.Roles;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.TacticalMap;
 
-public sealed partial class TacticalMapSystem // CMU14 Class
+public sealed partial class TacticalMapSystem
 {
-    [Dependency] private IPrototypeManager _weyuProtoMan = default!;
     private int _nextIntelBlipKey = -1;
 
     private static readonly Dictionary<string, SpriteSpecifier.Rsi> FactionSignalIcon = new()
     {
         ["govfor"] = new SpriteSpecifier.Rsi(
-            new ResPath("/Textures/_CMU14/Interface/cmugovforblips.rsi"),
+            new ResPath("/Textures/CMU14/Interface/au14govforjobicons.rsi"),
             "rifleman"),
 
         ["opfor"] = new SpriteSpecifier.Rsi(
-            new ResPath("/Textures/_CMU14/Interface/cmuopforblips.rsi"),
+            new ResPath("/Textures/CMU14/Interface/au14opforjobicons.rsi"),
             "rifleman"),
 
         ["clf"] = new SpriteSpecifier.Rsi(
-            new ResPath("/Textures/_CMU14/Interface/cmucolonyblips.rsi"),
+            new ResPath("/Textures/CMU14/Interface/au14colonyjobicons.rsi"),
             "colonist")
     };
 
@@ -104,32 +99,10 @@ public sealed partial class TacticalMapSystem // CMU14 Class
                 snapshot = map.LastUpdateClfBlips;
                 return true;
 
-            case "WEYU":
-                live = map.WeYuBlips;
-                snapshot = map.LastUpdateWeYuBlips;
-                return true;
-
             default:
                 live = null!;
                 snapshot = null!;
                 return false;
-        }
-    }
-
-    private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)
-    {
-        if (ev.JobId == null || !_weyuProtoMan.TryIndex<JobPrototype>(ev.JobId, out var job))
-            return;
-
-        if (job.RoundForce is not "WY")
-            return;
-
-        EnsureComp<WeYuMapTrackedComponent>(ev.Mob);
-
-        if (TryComp<TacticalMapUserComponent>(ev.Mob, out var user))
-        {
-            SyncUserFactionFlags((ev.Mob, user));
-            SyncTrackedFaction(ev.Mob);
         }
     }
 }

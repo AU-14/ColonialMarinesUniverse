@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
-using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
+using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Zombies;
 using Robust.Shared.Map;
 
-namespace Content.Server._CMU14.Threats.Mobs.ZombieSummoner;
+namespace Content.Server.CMU14.Threats.Mobs.ZombieSummoner;
 
 public sealed partial class ZombieSummonerOrderedTargetOperator : HTNOperator
 {

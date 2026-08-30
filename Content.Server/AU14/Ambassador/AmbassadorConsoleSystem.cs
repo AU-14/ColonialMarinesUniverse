@@ -1,29 +1,32 @@
 using System.Linq;
-using Content.Server._CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Stack;
-using Content.Shared.AU14.Ambassador;
-using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Ambassador;
+using Content.Shared.CMU14.ColonyEconomy;
+using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Stacks;
 using Content.Shared.Interaction;
+using Content.Shared.Radio;
 using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
+using ThirdPartySystem = Content.Server.CMU14.Ops.ThirdParty.ThirdPartySystem;
 
-namespace Content.Server.AU14.Ambassador;
+namespace Content.Server.CMU14.Ambassador;
 
 public sealed partial class AmbassadorConsoleSystem : EntitySystem
 {
+    private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
+
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private IEntityManager _entities = default!;
     [Dependency] private StackSystem _stack = default!;
@@ -370,7 +373,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     {
         if (msg.Amount <= 0 || msg.Amount > comp.Budget) return;
         comp.Budget -= msg.Amount;
-        _stack.SpawnMultiple("RMCSpaceCash", (int)msg.Amount, uid);
+        _stack.SpawnMultipleNextToOrDrop(CashPrototype, (int) msg.Amount, uid);
         UpdateAllFactionUi(comp);
     }
 
@@ -474,4 +477,3 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         UpdateAllFactionUi(comp);
     }
 }
-

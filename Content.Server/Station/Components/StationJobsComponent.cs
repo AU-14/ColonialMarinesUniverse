@@ -1,16 +1,16 @@
 ﻿using Content.Server._RMC14.Stations;
+using Content.Server.Station.Systems;
 using Content.Shared.Roles;
 using JetBrains.Annotations;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
-using StationJobsSystem = Content.Server.Station.Systems.StationJobsSystem;
 
 namespace Content.Server.Station.Components;
 
 /// <summary>
 /// Stores information about a station's job selection.
 /// </summary>
-[RegisterComponent, PublicAPI]
+[RegisterComponent, Access(typeof(StationJobsSystem)), PublicAPI]
 public sealed partial class StationJobsComponent : Component
 {
     /// <summary>

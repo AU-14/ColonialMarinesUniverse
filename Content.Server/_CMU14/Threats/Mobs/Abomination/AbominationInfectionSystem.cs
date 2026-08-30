@@ -2,11 +2,12 @@ using System.Linq;
 using Content.Server.Chat;
 using Content.Server.Chat.Systems;
 using Content.Server.Polymorph.Systems;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.EntityEffects;
 using Content.Shared.Popups;
 using Content.Shared.Humanoid;
@@ -18,16 +19,16 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using AbominationAssimilationProfile = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAssimilationProfile;
-using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationInfectableComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationInfectableComponent;
-using AbominationInfectionComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationInfectionComponent;
+using AbominationAssimilationProfile = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationAssimilationProfile;
+using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationInfectableComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationInfectableComponent;
+using AbominationInfectionComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationInfectionComponent;
 using AbominationMimicTransformedComponent
-    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
-using CauseAbominationInfection = Content.Shared._CMU14.Threats.Mobs.Abomination.Reagents.CauseAbominationInfection;
-using CureAbominationInfection = Content.Shared._CMU14.Threats.Mobs.Abomination.Reagents.CureAbominationInfection;
+    = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
+using CauseAbominationInfection = Content.Shared.CMU14.Threats.Mobs.Abomination.Reagents.CauseAbominationInfection;
+using CureAbominationInfection = Content.Shared.CMU14.Threats.Mobs.Abomination.Reagents.CureAbominationInfection;
 
-namespace Content.Server._CMU14.Threats.Mobs.Abomination;
+namespace Content.Server.CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 ///     Abomination melee hits roll AbominationComponent.InfectionChance against
@@ -60,8 +61,8 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
     {
         SubscribeLocalEvent<AbominationComponent, MeleeHitEvent>(OnAbominationMeleeHit);
         SubscribeLocalEvent<AbominationInfectionComponent, MobStateChangedEvent>(OnInfectedMobStateChanged);
-        SubscribeLocalEvent<ExecuteEntityEffectEvent<CauseAbominationInfection>>(OnExecuteCauseInfection);
-        SubscribeLocalEvent<ExecuteEntityEffectEvent<CureAbominationInfection>>(OnExecuteCureInfection);
+        SubscribeLocalEvent<MetaDataComponent, EntityEffectEvent<CauseAbominationInfection>>(OnExecuteCauseInfection);
+        SubscribeLocalEvent<MetaDataComponent, EntityEffectEvent<CureAbominationInfection>>(OnExecuteCureInfection);
         SubscribeLocalEvent<BodyPartSeveredEvent>(OnBodyPartSevered);
     }
 
@@ -105,20 +106,20 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
         }
     }
 
-    private void OnExecuteCauseInfection(ref ExecuteEntityEffectEvent<CauseAbominationInfection> args)
+    private void OnExecuteCauseInfection(
+        Entity<MetaDataComponent> target,
+        ref EntityEffectEvent<CauseAbominationInfection> args)
     {
-        EntityUid target = args.Args.TargetEntity;
-
         if (!IsValidInfectionTarget(target))
             return;
 
         ApplyInfection(target);
     }
 
-    private void OnExecuteCureInfection(ref ExecuteEntityEffectEvent<CureAbominationInfection> args)
+    private void OnExecuteCureInfection(
+        Entity<MetaDataComponent> target,
+        ref EntityEffectEvent<CureAbominationInfection> args)
     {
-        EntityUid target = args.Args.TargetEntity;
-
         if (!RemComp<AbominationInfectionComponent>(target))
             return;
 
@@ -176,7 +177,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
             return false;
 
         // Humanoids OR tagged-infectable animals are valid.
-        return HasComp<HumanoidAppearanceComponent>(target) || HasComp<AbominationInfectableComponent>(target);
+        return HasComp<HumanoidProfileComponent>(target) || HasComp<AbominationInfectableComponent>(target);
     }
 
     public bool TryInfect(EntityUid target)
@@ -257,7 +258,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
         _assimilate.AddProfileToAllMimics(profile);
 
         ProtoId<PolymorphPrototype> polymorphId;
-        if (HasComp<HumanoidAppearanceComponent>(ent.Owner))
+        if (HasComp<HumanoidProfileComponent>(ent.Owner))
         {
             // 50/50 — sometimes the host body collapses into a builder caste
             // (skitter) instead of yet another mimic. Keeps the threat from

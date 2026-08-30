@@ -1,7 +1,7 @@
 using Content.Server.GameTicking;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 
-namespace Content.Server.AU14;
+namespace Content.Server.CMU14;
 
 public sealed class DestroyOnPresetSystem : EntitySystem
 {

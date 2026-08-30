@@ -1,17 +1,18 @@
 using Content.Server.Chat.Systems;
-using Content.Server.Radio.Components;
-using Content.Shared._AU14.Callsigns;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.Callsigns;
+using Content.Shared.CMU14.Radio;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.Chat;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
+using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Radio;
+namespace Content.Server.CMU14.Radio;
 
 public sealed partial class ANPRCRadioSystem
 {
@@ -191,7 +192,7 @@ public sealed partial class ANPRCRadioSystem
         if (!TryComp(user.Comp.Radio, out ANPRCRadioComponent? radio))
             return;
 
-        HashSet<string>? headsetChannels = null;
+        HashSet<ProtoId<RadioChannelPrototype>>? headsetChannels = null;
 
         if (TryComp(user.Owner, out WearingHeadsetComponent? headset) &&
             TryComp(headset.Headset, out EncryptionKeyHolderComponent? keys))

@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using System.Linq;
-using Content.Shared._AU14.Smelting;
+using Content.Shared.CMU14.Smelting;
 using Content.Shared._RMC14.Campfire;
 using Content.Shared._RMC14.Emote;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Construction.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.Doors.Electronics;
 using Content.Shared.Examine;
@@ -23,7 +24,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Server._AU14.Smelting;
+namespace Content.Server.CMU14.Smelting;
 
 /// <summary>
 /// Runs the smelting pot: loading it, sitting it on a fire, converting a batch at a time while that fire is
@@ -140,11 +141,12 @@ public sealed partial class SmeltingPotSystem : EntitySystem
             return;
         }
 
-        var taken = Math.Min(space, _stack.GetCount(args.Used, stack));
+        var available = _stack.GetCount((args.Used, stack));
+        var taken = Math.Min(space, available);
         if (taken <= 0)
             return;
 
-        _stack.SetCount(args.Used, _stack.GetCount(args.Used, stack) - taken, stack);
+        _stack.SetCount((args.Used, stack), available - taken);
         pot.Comp.Material = stack.StackTypeId;
         pot.Comp.Amount += taken;
         Dirty(pot);

@@ -1,4 +1,4 @@
-namespace Content.Shared._AU14.Callsigns;
+namespace Content.Shared.CMU14.Callsigns;
 
 // added via the job's roundComponents to claim a fixed callsign suffix
 // (6 = leader, 5 = 2IC, 7 = senior NCO, ROMEO = RTO, OPS = staff)

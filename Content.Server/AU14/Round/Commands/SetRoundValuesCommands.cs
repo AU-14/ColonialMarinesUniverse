@@ -3,11 +3,11 @@ using System.Linq;
 using Content.Server.Administration;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.AU14.Round.Commands
+namespace Content.Server.CMU14.Round.Commands
 {
     [AdminCommand(AdminFlags.Admin)]
     public sealed class SetOpforCommand : IConsoleCommand

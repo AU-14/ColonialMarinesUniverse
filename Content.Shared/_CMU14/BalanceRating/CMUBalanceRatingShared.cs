@@ -1,7 +1,7 @@
 using Content.Shared.Eui;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.BalanceRating;
+namespace Content.Shared.CMU14.BalanceRating;
 
 [Serializable, NetSerializable]
 public enum CMUBalanceRatingTarget : byte

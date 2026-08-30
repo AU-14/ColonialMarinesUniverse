@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Ops.ThirdParty;
+namespace Content.Server.CMU14.Ops.ThirdParty;
 
 [RegisterComponent]
 public sealed partial class SpawnThirdPartyToolComponent : Component

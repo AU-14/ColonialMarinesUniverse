@@ -1,4 +1,4 @@
-using Content.Shared._AU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared._RMC14.Audio;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.DoAfter;
@@ -14,7 +14,6 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
-using Robust.Client.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
@@ -25,7 +24,7 @@ using System.Collections.Generic;
 using System.Linq; // CMU14
 using System.Text;
 
-namespace Content.Shared._AU14.Chemistry.Research;
+namespace Content.Shared.CMU14.Chemistry.Research;
 
 public abstract partial class XRFScannerSystem : EntitySystem
 {

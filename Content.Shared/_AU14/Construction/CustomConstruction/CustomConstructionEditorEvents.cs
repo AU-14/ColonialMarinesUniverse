@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Construction.CustomConstruction;
+namespace Content.Shared.CMU14.Construction.CustomConstruction;
 
 /// <summary>What kind of requirement a recipe step is.</summary>
 [Serializable, NetSerializable]

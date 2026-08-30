@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using Content.Server.Database;
 using Content.Server.EUI;
-using Content.Shared._CMU14.RoundStatistics;
+using Content.Shared.CMU14.RoundStatistics;
 using Content.Shared.Eui;
 using Robust.Shared.Asynchronous;
 using Robust.Shared.Log;
 
-namespace Content.Server._CMU14.RoundStatistics;
+namespace Content.Server.CMU14.RoundStatistics;
 
 public sealed partial class CMURoundStatisticsEui : BaseEui
 {

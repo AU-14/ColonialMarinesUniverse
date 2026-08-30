@@ -1,10 +1,10 @@
 using Content.Server.Popups;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Interaction;
 using Content.Shared.Timing;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CMU14.Ops.ThirdParty;
+namespace Content.Server.CMU14.Ops.ThirdParty;
 
 public sealed partial class SpawnThirdPartyToolSystem : EntitySystem
 {

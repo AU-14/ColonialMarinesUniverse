@@ -1,6 +1,6 @@
 using System.Numerics;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared.Body.Components;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.Body;
 using Content.Shared.DoAfter;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -8,7 +8,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 
-namespace Content.Server._CMU14.Medical.Treatment.Surgery;
+namespace Content.Server.CMU14.Medical.Treatment.Surgery;
 
 public sealed partial class CMUMedicalPatientBaySystem : EntitySystem
 {

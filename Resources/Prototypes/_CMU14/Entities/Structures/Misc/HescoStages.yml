@@ -8,9 +8,9 @@
     builds: AU14HescoUnfilled1
   - type: Item
     size: Huge
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: CMU14/Structures/hesco.rsi
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: CMU14/Structures/hesco.rsi
     state: item_icon
 
 - type: entity
@@ -29,8 +29,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoFillable
     nextStage: AU14HescoUnfilled2
   - type: HescoDisassemblable
@@ -44,7 +45,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_1
     - map: [ "acided" ]
@@ -74,8 +75,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoFillable
     nextStage: AU14HescoUnfilled3
   - type: HescoDisassemblable
@@ -89,7 +91,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_2
     - map: [ "acided" ]
@@ -134,8 +136,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoFillable
     nextStage: AU14HescoShortComplete
   - type: HescoDisassemblable
@@ -149,7 +152,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_3
     - map: [ "acided" ]
@@ -195,8 +198,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMHescoBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoRaisable
     nextStage: AU14HescoTallBuilding1
   - type: HescoDisassemblable
@@ -210,7 +214,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_short_complete
     - map: [ "acided" ]
@@ -265,8 +269,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMHescoBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoFillable
     nextStage: AU14HESCOBarrier
   - type: HescoDisassemblable
@@ -281,7 +286,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_tall_building1
     - map: [ "acided" ]

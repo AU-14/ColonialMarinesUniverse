@@ -1,6 +1,9 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using System.Linq;
 using System.Numerics;
-using Content.Shared._CMU14.Chemistry.Effects.Negative;
+using Content.Shared.CMU14.Chemistry.Effects.Negative;
+using Content.Shared.CMU14.Medical.Anatomy.Metabolism.Events;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Chemistry.Effects.Negative;
 using Content.Shared._RMC14.Slow;
@@ -13,9 +16,11 @@ using Content.Shared.Actions.Events;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects;
 using Content.Shared.FixedPoint;
+using Content.Shared.Metabolism;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.GameObjects;
@@ -89,6 +94,7 @@ public sealed class XenoAlchemistTest
     private static readonly ProtoId<ReagentPrototype> AlchemistBloodloss = "RMCXenoAlchBloodloss";
     private static readonly ProtoId<ReagentPrototype> AlchemistFreeze = "RMCXenoAlchFreeze";
     private static readonly ProtoId<ReagentPrototype> AlchemistPurge = "RMCXenoAlchPurge";
+    private static readonly ProtoId<MetabolismStagePrototype> Bloodstream = "Bloodstream";
 
     [Test]
     public async Task TailInjectionCannotTargetSameHiveXenos()
@@ -199,7 +205,10 @@ public sealed class XenoAlchemistTest
             {
                 var reagent = prototypes.Index<ReagentPrototype>(id);
                 Assert.That(reagent.Toxin, Is.True, id);
-                Assert.That(reagent.Metabolisms!.ContainsKey("Poison"), Is.True, id);
+                var metabolism = GetBloodstream(reagent);
+                Assert.That(metabolism.CMUToxicity,
+                    Is.EquivalentTo(new[] { CMUMetabolismClass.Poison }),
+                    id);
             }
         });
 
@@ -225,7 +234,11 @@ public sealed class XenoAlchemistTest
 
             foreach (var reagent in new[] { brute, burn, pain, fire, bloodloss, freeze, purge })
             {
-                Assert.That(GetPoison(reagent).MetabolismRate, Is.EqualTo(FixedPoint2.New(0.4f)), reagent.ID);
+                var bloodstream = GetBloodstream(reagent);
+                Assert.That(bloodstream.CMUToxicity,
+                    Is.EquivalentTo(new[] { CMUMetabolismClass.Poison }),
+                    reagent.ID);
+                Assert.That(bloodstream.MetabolismRate, Is.EqualTo(FixedPoint2.New(0.4f)), reagent.ID);
             }
 
             Assert.Multiple(() =>
@@ -341,7 +354,7 @@ public sealed class XenoAlchemistTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var alchemist = entMan.SpawnEntity("RMCTestXenoSpitterAlchemistNoctineFull", map.GridCoords);
             var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
             var action = SpawnAction(entMan);
@@ -404,7 +417,7 @@ public sealed class XenoAlchemistTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var alchemist = entMan.SpawnEntity("RMCTestXenoSpitterAlchemistPyrinineFull", map.GridCoords);
             var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
             var action = SpawnAction(entMan);
@@ -453,23 +466,23 @@ public sealed class XenoAlchemistTest
         return entMan.GetComponent<DamageableComponent>(target).Damage.GetTotal().Float();
     }
 
-    private static ReagentEffectsEntry GetPoison(ReagentPrototype reagent)
+    private static ReagentEffectsEntry GetBloodstream(ReagentPrototype reagent)
     {
         Assert.That(reagent.Metabolisms, Is.Not.Null, reagent.ID);
-        Assert.That(reagent.Metabolisms!.TryGetValue("Poison", out var poison), Is.True, reagent.ID);
-        return poison!;
+        Assert.That(reagent.Metabolisms!.Metabolisms.TryGetValue(Bloodstream, out var bloodstream), Is.True, reagent.ID);
+        return bloodstream!;
     }
 
     private static T GetEffect<T>(ReagentPrototype reagent) where T : EntityEffect
     {
-        var effect = GetPoison(reagent).Effects.OfType<T>().SingleOrDefault();
+        var effect = GetBloodstream(reagent).Effects.OfType<T>().SingleOrDefault();
         Assert.That(effect, Is.Not.Null, reagent.ID);
         return effect!;
     }
 
     private static void AssertAdjusts(ReagentPrototype reagent, string target, float amount)
     {
-        var effect = GetPoison(reagent).Effects
+        var effect = GetBloodstream(reagent).Effects
             .OfType<AdjustReagent>()
             .SingleOrDefault(e => e.Reagent == target);
 
@@ -477,3 +490,5 @@ public sealed class XenoAlchemistTest
         Assert.That(effect!.Amount, Is.EqualTo(FixedPoint2.New(amount)), $"{reagent.ID} should adjust {target}");
     }
 }
+
+#pragma warning restore RA0002

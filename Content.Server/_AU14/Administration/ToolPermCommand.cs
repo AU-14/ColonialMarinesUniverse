@@ -3,11 +3,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Linq;
 using Content.Server.Administration;
-using Content.Shared._AU14.Administration;
+using Content.Shared.CMU14.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server._AU14.Administration;
+namespace Content.Server.CMU14.Administration;
 
 /// <summary>
 /// Console fallback for the Tool Permissions window: grant/revoke per-tool editor access by ckey.

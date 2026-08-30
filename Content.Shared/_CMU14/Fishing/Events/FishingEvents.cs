@@ -7,7 +7,7 @@
 using Content.Shared.Actions;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Fishing.Events;
+namespace Content.Shared.CMU14.Fishing.Events;
 
 public sealed partial class ThrowFishingLureActionEvent : WorldTargetActionEvent;
 

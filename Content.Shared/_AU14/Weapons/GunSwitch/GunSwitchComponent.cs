@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Weapons.GunSwitch;
+namespace Content.Shared.CMU14.Weapons.GunSwitch;
 
 /// <summary>
 ///     The illegal "Switch" auto-sear chip (crafted at the Sapper's Workbench). While the chip is

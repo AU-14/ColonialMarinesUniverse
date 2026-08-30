@@ -1,6 +1,6 @@
 using Content.Shared.Body.Part;
 
-namespace Content.Shared._CMU14.Medical.Core;
+namespace Content.Shared.CMU14.Medical.Core;
 
 /// <summary>
 ///     Server-owned structural index for a CMU medical body.

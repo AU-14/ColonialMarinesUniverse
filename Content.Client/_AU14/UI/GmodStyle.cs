@@ -6,7 +6,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 
-namespace Content.Client._AU14.UI;
+namespace Content.Client.CMU14.UI;
 
 /// <summary>
 /// Shared "gmod menu" visual style: dark slate panels, a blue accent, and flat buttons with a hover swap and an

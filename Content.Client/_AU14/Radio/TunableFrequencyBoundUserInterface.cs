@@ -1,7 +1,7 @@
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.Radio;
 using Robust.Client.UserInterface;
 
-namespace Content.Client._AU14.Radio;
+namespace Content.Client.CMU14.Radio;
 
 public sealed class TunableFrequencyBoundUserInterface : BoundUserInterface
 {

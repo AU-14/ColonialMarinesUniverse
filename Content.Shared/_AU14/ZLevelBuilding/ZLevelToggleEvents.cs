@@ -2,7 +2,7 @@
 // Copyright (c) 2026 wray-git
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Client -> server: the admin pressed the construction menu's "Z-Level Toggles" tool. The server re-checks

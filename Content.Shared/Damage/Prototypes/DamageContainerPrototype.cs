@@ -1,5 +1,5 @@
+using Content.Shared.Damage.Components;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
 
 namespace Content.Shared.Damage.Prototypes
 {
@@ -21,14 +21,14 @@ namespace Content.Shared.Damage.Prototypes
         /// <summary>
         ///     List of damage groups that are supported by this container.
         /// </summary>
-        [DataField("supportedGroups")]
+        [DataField]
         public List<ProtoId<DamageGroupPrototype>> SupportedGroups = new();
 
         /// <summary>
         ///     Partial List of damage types supported by this container. Note that members of the damage groups listed
         ///     in <see cref="SupportedGroups"/> are also supported, but they are not included in this list.
         /// </summary>
-        [DataField("supportedTypes")]
+        [DataField]
         public List<ProtoId<DamageTypePrototype>> SupportedTypes = new();
     }
 }

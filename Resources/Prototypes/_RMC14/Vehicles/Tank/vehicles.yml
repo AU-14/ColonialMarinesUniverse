@@ -99,8 +99,9 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameTank
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ReceiverXenoClaws
     minimumClawStrength: Sharp
   - type: InteractionOutline
@@ -375,7 +376,7 @@
     wallSmashSlowdownDuration: 0.2
     speedAtZeroIntegrity: 0.7
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicles/arv.yml
+    interiorPath: /Maps/Vehicles/arv.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -566,7 +567,7 @@
         layer:
         - LargeMobLayer
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    sprite: CMU14/Structures/Vehicles/fv150/exterior.rsi
     layers:
     - map: [ base ]
       state: tank_base

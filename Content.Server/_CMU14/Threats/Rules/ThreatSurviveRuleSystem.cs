@@ -1,13 +1,13 @@
-using Content.Server._CMU14.RoundStatistics;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.RoundStatistics;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.RoundEnd;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.Timing;
-using ThreatSurviveRuleComponent = Content.Shared._CMU14.Threats.Rules.ThreatSurviveRuleComponent;
+using ThreatSurviveRuleComponent = Content.Shared.CMU14.Threats.Rules.ThreatSurviveRuleComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurviveRuleComponent>
 {

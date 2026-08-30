@@ -1,17 +1,17 @@
-using Content.Server.Explosion.EntitySystems;
-using Content.Shared._CMU14.Explosion;
+using Content.Shared.CMU14.Explosion;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Map;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Popups;
+using Content.Shared.Trigger.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 
-namespace Content.Server._CMU14.Explosion;
+namespace Content.Server.CMU14.Explosion;
 
 public sealed partial class CMUBangaloreSystem : EntitySystem
 {

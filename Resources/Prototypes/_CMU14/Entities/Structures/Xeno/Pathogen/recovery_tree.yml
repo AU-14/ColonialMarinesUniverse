@@ -8,7 +8,7 @@
     factions:
     - CMU14PathogenWalker
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     state: recovery
   - type: Destructible
     thresholds:
@@ -33,10 +33,10 @@
   - type: TacticalMapTracked
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: recovery_node
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
 
 - type: entity
@@ -49,7 +49,7 @@
   - type: Sprite
     color: '#FFFFFFAA'
     layers:
-    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    - sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
       state: recovery
     - sprite: _RMC14/Interface/xeno_hud.rsi
       state: xeno_structure_node_indicator
@@ -72,4 +72,4 @@
   - type: HiveConstructionRequiresHiveWeeds
   - type: HiveConstructionRequiresSpace
   - type: WarpPoint
-    location: recovery node
+    location: cmu-warp-location-recovery-node

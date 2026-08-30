@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using System.IO;
-using Content.Shared._AU14.Administration;
-using Content.Shared._AU14.Construction.CustomConstruction;
+using Content.Shared.CMU14.Administration;
+using Content.Shared.CMU14.Construction.CustomConstruction;
 using Content.Shared.Database;
 using Content.Shared.Popups;
 using Robust.Shared.Player;
 
-namespace Content.Server._AU14.Construction.CustomConstruction;
+namespace Content.Server.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// "Spawnlist Delete" tool (Admin Tools > Delete Spawnlist): removes a whole spawnlist - every generated

@@ -3,14 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._AU14.SavedBuilds;
+using Content.Shared.CMU14.SavedBuilds;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Network;
 using Robust.Shared.Maths;
 
-namespace Content.Client._AU14.SavedBuilds;
+namespace Content.Client.CMU14.SavedBuilds;
 
 /// <summary>
 /// Build-partner management window (opened from the construction menu's "Partners" button). Lists the other

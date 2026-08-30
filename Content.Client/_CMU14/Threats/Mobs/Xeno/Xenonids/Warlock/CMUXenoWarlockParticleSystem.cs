@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
@@ -7,7 +7,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.Client._CMU14.Threats.Mobs.Xeno.Xenonids.Warlock;
+namespace Content.Client.CMU14.Threats.Mobs.Xeno.Xenonids.Warlock;
 
 public sealed partial class CMUXenoWarlockParticleSystem : EntitySystem
 {
@@ -39,7 +39,7 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IGameTiming _timing = default!;
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
-    private static readonly ResPath ParticleSprite = new("/Textures/_CMU14/Effects/Xeno/warlock_particles.rsi");
+    private static readonly ResPath ParticleSprite = new("/Textures/CMU14/Effects/Xeno/warlock_particles.rsi");
     private const float PixelsPerMeter = EyeManager.PixelsPerMeter;
     private const float CullPadding = 9f;
     private readonly Texture _particleTexture;

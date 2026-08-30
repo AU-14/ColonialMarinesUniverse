@@ -1,10 +1,12 @@
 using Content.Server.Hands.Systems;
 using Content.Server.Storage.EntitySystems;
+using Content.Shared._RMC14.Storage;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.Storage;
+using Content.Shared.Trigger;
 using Robust.Server.Containers;
 
 namespace Content.Server.VoiceTrigger;
@@ -19,6 +21,7 @@ public sealed partial class StorageVoiceControlSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCStorageSystem _rmcStorage = default!;
     [Dependency] private StorageSystem _storage = default!;
 
     public override void Initialize()
@@ -29,10 +32,9 @@ public sealed partial class StorageVoiceControlSystem : EntitySystem
 
     private void VoiceTriggered(Entity<StorageVoiceControlComponent> ent, ref VoiceTriggeredEvent args)
     {
-        // Check if the component has any slot restrictions via AllowedSlots
         // If it has slot restrictions, check if the item is in a slot that is allowed
-        if (ent.Comp.AllowedSlots != null && _inventory.TryGetContainingSlot(ent.Owner, out var itemSlot) &&
-            (itemSlot.SlotFlags & ent.Comp.AllowedSlots) == 0)
+        if (ent.Comp.AllowedSlots is { } allowedSlots
+            && !_inventory.InSlotWithAnyFlags(ent.Owner, allowedSlots))
             return;
 
         // Get the storage component
@@ -48,7 +50,14 @@ public sealed partial class StorageVoiceControlSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("comp-storagevoicecontrol-self-insert", ("entity", activeItem.Value)), ent, args.Source);
                 return;
             }
-            if (_storage.CanInsert(ent, activeItem.Value, args.Source, out var failedReason))
+            var canInsert = _storage.CanInsert(ent, activeItem.Value, out var failedReason, storage);
+            if (canInsert && !_rmcStorage.CanInsert((ent.Owner, storage), activeItem.Value, args.Source, out var rmcFailedReason))
+            {
+                canInsert = false;
+                failedReason = rmcFailedReason;
+            }
+
+            if (canInsert)
             {
                 // We adminlog before insertion, otherwise the logger will attempt to pull info on an entity that no longer is present and throw an exception
                 _adminLogger.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(args.Source)} inserted {ToPrettyString(activeItem.Value)} into {ToPrettyString(ent)} via voice control");

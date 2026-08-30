@@ -1,4 +1,4 @@
-namespace Content.Server.AU14.ColonyJobs;
+namespace Content.Server.CMU14.ColonyJobs;
 
 public sealed class MiningJobSystem
 {

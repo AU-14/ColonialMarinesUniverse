@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Item.Stain;
+namespace Content.Shared.CMU14.Item.Stain;
 
 /// <summary>
 /// Raised on a cleaning target so CMU systems can make it eligible for the forensic cleaning do-after.

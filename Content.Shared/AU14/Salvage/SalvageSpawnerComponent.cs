@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.Salvage;
+namespace Content.Shared.CMU14.Salvage;
 
 [RegisterComponent]
 public sealed partial class SalvageSpawnerComponent : Component

@@ -1,10 +1,10 @@
 using Content.Shared.Coordinates;
 using Robust.Shared.Prototypes;
-using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
 using AbominationPlantKudzuActionEvent
-    = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationPlantKudzuActionEvent;
+    = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationPlantKudzuActionEvent;
 
-namespace Content.Server._CMU14.Threats.Mobs.Abomination;
+namespace Content.Server.CMU14.Threats.Mobs.Abomination;
 
 public sealed class AbominationKudzuSystem : EntitySystem
 {

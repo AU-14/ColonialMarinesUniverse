@@ -9,7 +9,8 @@
   flavor: bitter
   color: "#56213a"
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       effects:
       - !type:CauseAbominationInfection
         probability: 1.0
@@ -27,51 +28,10 @@
   name: clotted syringe
   description: A syringe filled with a viscous, dark fluid that smells like rotted flesh.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      injector:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: AbominationVenom
           Quantity: 15
   - type: Injector
-    minTransferAmount: 5
-    maxTransferAmount: 15
-    transferAmount: 5
-
-# WeYu counteragent: the cure the company keeps for its own experiments.
-# Metabolising it purges the abomination infection outright, at any stage.
-# The expensive sure-thing alternative to gambling a limb on emergency
-# amputation; only obtainable through the req-ordered WY experiment crates.
-- type: reagent
-  id: AbominationCounteragent
-  name: reagent-name-abomination-counteragent
-  group: Biological
-  desc: reagent-desc-abomination-counteragent
-  physicalDesc: reagent-physical-desc-opaque
-  flavor: bitter
-  color: "#7fb2a5"
-  metabolisms:
-    Medicine:
-      effects:
-      - !type:CureAbominationInfection
-        probability: 1.0
-
-# Pre-filled counteragent syringe, this pairs with the clotted syringe in the WY experiment crates.
-- type: entity
-  parent: BaseSyringe
-  id: AU14AbominationCounteragentSyringe
-  name: experimental counteragent syringe
-  description: A syringe of pale, opaque fluid. The label just reads 'COUNTERAGENT - TEST BATCH'.
-  components:
-  - type: SolutionContainerManager
-    solutions:
-      injector:
-        maxVol: 15
-        reagents:
-        - ReagentId: AbominationCounteragent
-          Quantity: 15
-  - type: Injector
-    minTransferAmount: 5
-    maxTransferAmount: 15
-    transferAmount: 5

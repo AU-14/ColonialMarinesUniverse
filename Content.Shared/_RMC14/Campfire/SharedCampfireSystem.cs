@@ -133,7 +133,7 @@ public abstract partial class SharedCampfireSystem : EntitySystem
             // Try to use from stack if it's a stack, otherwise delete the entity
             if (TryComp<StackComponent>(args.Used, out var stack))
             {
-                _stack.Use(args.Used, 1, stack);
+                _stack.TryUse((args.Used, stack), 1);
             }
             else
             {

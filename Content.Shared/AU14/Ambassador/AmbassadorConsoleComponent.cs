@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.Ambassador;
+namespace Content.Shared.CMU14.Ambassador;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class AmbassadorConsoleComponent : Component

@@ -1,21 +1,20 @@
-using Content.Server.Botany;
-using Content.Server.Botany.Components;
+using Content.Shared.CMU14.Chemistry.Effects.Positive;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Chemistry.Effects.Negative;
 using Content.Shared._RMC14.Chemistry.Effects.Positive;
-using Content.Shared._CMU14.Chemistry.Effects.Positive;
-using Robust.Shared.Timing;
-using Content.Shared.EntityEffects;
+using Content.Shared.Botany.Components;
+using Content.Shared.Botany.Systems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
-using System;
-using System.Diagnostics.CodeAnalysis;
+using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Chemistry.HydroTrayEffects;
+namespace Content.Server.CMU14.Chemistry.HydroTrayEffects;
 
 public sealed partial class HydroTrayEffectSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private PlantTraySystem _plantTray = default!;
 
     public override void Initialize()
     {
@@ -29,64 +28,77 @@ public sealed partial class HydroTrayEffectSystem : EntitySystem
         SubscribeLocalEvent<HydroTickEvent<Oculopeutic>>(Oculopeutic);
         SubscribeLocalEvent<HydroTickEvent<Cardiopeutic>>(Cardiopeutic);
         SubscribeLocalEvent<HydroTickEvent<Neuropeutic>>(Neuropeutic);
+        SubscribeLocalEvent<PlantHolderComponent, BeforeRandomPlantMutationEvent>(OnBeforeRandomPlantMutation);
+        SubscribeLocalEvent<PlantSpeciesChangedEvent>(OnPlantSpeciesChanged);
     }
 
     private void Antitoxic(ref HydroTickEvent<Antitoxic> args)
     {
-        if (!CanMetabolizePlant(args.Args.TargetEntity, out var plant))
+        if (!TryGetAlivePlant(args.Target, out var tray, out _))
             return;
-        plant.Toxins = MathF.Max(0f, plant.Toxins - HydroStrength(args.Potency, args.Args) * 10f);
-        if (plant.Toxins > 0)
-            plant.Toxins += -1.5f * ((float) args.Potency * 2f);
+
+        _plantTray.AdjustToxin((tray.Owner, (PlantTrayComponent?) tray.Comp),
+            -HydroStrength(args.Potency, args.Quantity) * 10f);
+        if (tray.Comp.ToxinLevel > 0)
+            _plantTray.AdjustToxin((tray.Owner, (PlantTrayComponent?) tray.Comp),
+                -1.5f * ((float) args.Potency * 2f));
     }
 
     private void Anticorrosive(ref HydroTickEvent<Anticorrosive> args)
     {
-        if (!CanMetabolizePlant(args.Args.TargetEntity, out var plant) || plant.Seed == null)
+        if (!TryGetAlivePlant(args.Target, out var tray, out var plant))
             return;
-        plant.Health = MathF.Min(plant.Seed.Endurance, plant.Health + HydroStrength(args.Potency, args.Args) * 5f);
-        if (plant.Toxins > 0)
-            plant.Health += 0.75f * ((float) args.Potency * 2f);
+
+        var healing = HydroStrength(args.Potency, args.Quantity) * 5f;
+        if (tray.Comp.ToxinLevel > 0)
+            healing += 0.75f * ((float) args.Potency * 2f);
+
+        _plantHolder.AdjustsHealth((plant.Owner, (PlantHolderComponent?) plant.Comp), healing);
     }
 
     private void Hepatopeutic(ref HydroTickEvent<Hepatopeutic> args)
-        => EnableMutations(args.Args, "Plant Cancer", "Gluttony");
+        => EnableMutations(args.Target,
+            "ChangeLifespan",
+            "ChangeEndurance",
+            "ChangeWaterConsumption",
+            "ChangeNutrientConsumption");
 
     private void Nephropeutic(ref HydroTickEvent<Nephropeutic> args)
-        => EnableMutations(args.Args, "Light Tolerance", "Weed Tolerance", "Toxin Tolerance");
+        => EnableMutations(args.Target, "ChangeToxinsTolerance", "ChangeWeedTolerance");
 
     private void Pneumopeutic(ref HydroTickEvent<Pneumopeutic> args)
-        => EnableMutations(args.Args, "Endurance", "Lifespan", "Production", "Maturity");
+        => EnableMutations(args.Target,
+            "ChangeEndurance",
+            "ChangeLifespan",
+            "ChangeProduction",
+            "ChangeMaturation");
 
     private void Oculopeutic(ref HydroTickEvent<Oculopeutic> args)
-        => EnableMutations(args.Args, "Potency", "Bioluminescence", "Flowers");
+        => EnableMutations(args.Target, "ChangePotency");
 
     private void Neuropeutic(ref HydroTickEvent<Neuropeutic> args)
-        => EnableMutations(args.Args, "Mutate Species");
+        => EnableMutations(args.Target, "ChangeSpecies");
 
     private void Cardiopeutic(ref HydroTickEvent<Cardiopeutic> args)
     {
-        if (!CanMetabolizePlant(args.Args.TargetEntity, out _))
+        if (!TryGetAlivePlant(args.Target, out _, out var plant))
             return;
-        var suppression = EnsureComp<CMUChemicalMutationSuppressionComponent>(args.Args.TargetEntity);
-        var duration = TimeSpan.FromSeconds(60f * MathF.Max(1f, HydroStrength(args.Potency, args.Args)));
+
+        var suppression = EnsureComp<CMUChemicalMutationSuppressionComponent>(plant);
+        var duration = TimeSpan.FromSeconds(60f * MathF.Max(1f, HydroStrength(args.Potency, args.Quantity)));
         suppression.ExpiresAt = Max(suppression.ExpiresAt, _timing.CurTime + duration);
     }
 
-    private void EnableMutations(EntityEffectHydroArgs args, params string[] mutationNames)
+    private void EnableMutations(EntityUid target, params string[] mutationNames)
     {
-        if (!CanMetabolizePlant(args.TargetEntity, out var plant, mustHaveMutableSeed: true) || plant.Seed == null)
+        if (!TryGetAlivePlant(target, out _, out var plant))
             return;
 
-        foreach (var mutationName in mutationNames)
-        {
-            if (plant.MutationController.Fields[mutationName] < 1)
-                plant.MutationController.Fields[mutationName] = 1;
-        }
+        EnsureComp<CMUChemicalMutationWhitelistComponent>(plant).AllowedMutations.UnionWith(mutationNames);
     }
 
-    private static float HydroStrength(FixedPoint2 potency, EntityEffectHydroArgs args)
-        => MathF.Max(0f, (float)potency * (float)args.Quantity);
+    private static float HydroStrength(FixedPoint2 potency, ReagentQuantity quantity)
+        => MathF.Max(0f, (float) potency * (float) quantity.Quantity);
 
     private static TimeSpan Max(TimeSpan a, TimeSpan b) => a > b ? a : b;
 
@@ -102,44 +114,78 @@ public sealed partial class HydroTrayEffectSystem : EntitySystem
         }
     }
 
-
-
-
     private void Carcinogenic(ref HydroTickEvent<Carcinogenic> args)
     {
-        if (!CanMetabolizePlant(args.Args.TargetEntity, out var pcomp, mustHaveMutableSeed: true))
+        if (!TryGetAlivePlant(args.Target, out var tray, out var plant))
             return;
 
-        pcomp.Toxins += 1.5f * ((float)args.Potency * 2f) * (float)args.Args.Quantity;
-        pcomp.MutationLevel += 10 * ((float)args.Potency * 2) * ((float)args.Args.Quantity + pcomp.MutationMod);
+        _plantTray.AdjustToxin((tray.Owner, (PlantTrayComponent?) tray.Comp),
+            1.5f * ((float) args.Potency * 2f) * (float) args.Quantity.Quantity);
+        plant.Comp.MutationLevel = MathHelper.Clamp(
+            plant.Comp.MutationLevel + 10f * ((float) args.Potency * 2f) *
+            ((float) args.Quantity.Quantity + plant.Comp.MutationMod),
+            0f,
+            plant.Comp.MaxMutationLevel);
+        DirtyField<PlantHolderComponent>((plant.Owner, (PlantHolderComponent?) plant.Comp),
+            nameof(plant.Comp.MutationLevel));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    private bool CanMetabolizePlant(EntityUid plantHolder, [NotNullWhen(true)] out PlantHolderComponent? plantHolderComponent,
-        bool mustHaveAlivePlant = true, bool mustHaveMutableSeed = false)
+    private void OnBeforeRandomPlantMutation(
+        Entity<PlantHolderComponent> plant,
+        ref BeforeRandomPlantMutationEvent args)
     {
-        plantHolderComponent = null;
+        if (TryComp<CMUChemicalMutationWhitelistComponent>(plant, out var whitelist) &&
+            whitelist.AllowedMutations.Count > 0 &&
+            !whitelist.AllowedMutations.Contains(args.Mutation.Name))
+        {
+            args.Cancelled = true;
+            return;
+        }
 
-        if (!TryComp(plantHolder, out plantHolderComponent))
+        if (args.Mutation.Name == "ChangeChemicals" &&
+            TryComp<CMUChemicalMutationSuppressionComponent>(plant, out var suppression) &&
+            suppression.ExpiresAt > _timing.CurTime)
+        {
+            args.Cancelled = true;
+        }
+    }
+
+    private void OnPlantSpeciesChanged(ref PlantSpeciesChangedEvent args)
+    {
+        if (TryComp<CMUChemicalMutationWhitelistComponent>(args.OldPlant, out var oldWhitelist) &&
+            oldWhitelist.AllowedMutations.Count > 0)
+        {
+            EnsureComp<CMUChemicalMutationWhitelistComponent>(args.NewPlant)
+                .AllowedMutations.UnionWith(oldWhitelist.AllowedMutations);
+        }
+
+        if (TryComp<CMUChemicalMutationSuppressionComponent>(args.OldPlant, out var oldSuppression) &&
+            oldSuppression.ExpiresAt > _timing.CurTime)
+        {
+            var newSuppression = EnsureComp<CMUChemicalMutationSuppressionComponent>(args.NewPlant);
+            newSuppression.ExpiresAt = Max(newSuppression.ExpiresAt, oldSuppression.ExpiresAt);
+        }
+    }
+
+    private bool TryGetAlivePlant(
+        EntityUid trayUid,
+        out Entity<PlantTrayComponent> tray,
+        out Entity<PlantHolderComponent> plant)
+    {
+        tray = default;
+        plant = default;
+
+        if (!TryComp<PlantTrayComponent>(trayUid, out var trayComp))
             return false;
 
-        if (mustHaveAlivePlant && (plantHolderComponent.Seed == null || plantHolderComponent.Dead))
+        tray = (trayUid, trayComp);
+        if (!_plantTray.TryGetAlivePlant((tray.Owner, (PlantTrayComponent?) tray.Comp), out var plantUid) ||
+            !TryComp<PlantHolderComponent>(plantUid, out var plantHolder))
+        {
             return false;
+        }
 
-        if (mustHaveMutableSeed && (plantHolderComponent.Seed == null || plantHolderComponent.Seed.Immutable))
-            return false;
-
+        plant = (plantUid.Value, plantHolder);
         return true;
     }
 }

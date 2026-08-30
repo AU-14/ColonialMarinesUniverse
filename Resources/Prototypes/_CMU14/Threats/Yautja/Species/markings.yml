@@ -1,8 +1,7 @@
 - type: marking
   id: CMUYautjaDreadlocksStandard
   bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [ Yautja ]
+  groupWhitelist: [ Yautja ]
   sprites:
-  - sprite: _CMU14/Yautja/hair.rsi
+  - sprite: CMU14/Yautja/hair.rsi
     state: standard

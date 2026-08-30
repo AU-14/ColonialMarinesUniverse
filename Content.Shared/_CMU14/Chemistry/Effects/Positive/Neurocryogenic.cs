@@ -1,11 +1,12 @@
 /// THIS FILE IS LICENSED UNDER THE MIT LICENSE ///
-using Content.Shared._CMU14.Chemistry.Effects;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -14,7 +15,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Chemistry.Effects.Positive;
+namespace Content.Shared.CMU14.Chemistry.Effects.Positive;
 
 public sealed partial class Neurocryogenic : RMCChemicalEffect
 {
@@ -30,29 +31,29 @@ public sealed partial class Neurocryogenic : RMCChemicalEffect
            $"Overdoses cause [color=red]{PotencyPerSecond}[/color] cold damage.\n" +
            $"Critical overdoses cause [color=red]{PotencyPerSecond * 4}[/color] direct brain damage.";
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        if (args.EntityManager.TryGetComponent<MobStateComponent>(args.TargetEntity, out var mobState) &&
+        if (system.TryGetMobState(args.TargetEntity, out var mobState) &&
             mobState.CurrentState == MobState.Dead)
         {
-            args.EntityManager.System<RMCUnrevivableSystem>()
+            system.Unrevivable
                 .AddRevivableTime(args.TargetEntity, TimeSpan.FromSeconds((float)potency * 5f));
             return;
         }
 
-        args.EntityManager.System<ChemicalPropertyStatusSystem>().ApplyNeurocryogenic(args.TargetEntity);
-        args.EntityManager.System<SharedStatusEffectsSystem>()
+        system.ChemicalPropertyStatus.ApplyNeurocryogenic(args.TargetEntity);
+        system.StatusEffects
             .TrySetStatusEffectDuration(args.TargetEntity, Unconscious, TimeSpan.FromSeconds(3));
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[ColdType] = potency;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
-        => args.EntityManager.System<CMUChemicalMedicalSystem>()
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
+        => system.ChemicalMedical
             .DamageOrgan<CMUBrainComponent>(args.TargetEntity, potency * 4f, ShockType, OrganDamageSource.Direct);
 }

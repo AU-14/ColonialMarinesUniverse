@@ -1,4 +1,4 @@
-namespace Content.Shared._AU14.Callsigns;
+namespace Content.Shared.CMU14.Callsigns;
 
 // placed on a squad team entity to set the element word its members' callsigns use
 // on the radio. squads default to color words (RED 6, YELLOW 1-2) instead of their

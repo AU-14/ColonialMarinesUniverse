@@ -1,13 +1,13 @@
 using System.Linq;
-using Content.Shared._AU14.Insurgency;
-using Content.Shared._AU14.Insurgency.CellKit;
+using Content.Shared.CMU14.Insurgency;
+using Content.Shared.CMU14.Insurgency.CellKit;
 using Content.Shared.DoAfter;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Insurgency.CellKit;
+namespace Content.Server.CMU14.Insurgency.CellKit;
 
 /// <summary>
 ///     Drives the Heavy Cell Kit UI. On first open it snapshots the active faction's manifest into the

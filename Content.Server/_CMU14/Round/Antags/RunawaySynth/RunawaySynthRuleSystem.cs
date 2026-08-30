@@ -1,14 +1,14 @@
-using Content.Server.AU14.Systems;
+using Content.Server.CMU14.Systems;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Systems;
-using Content.Server.StationRecords.Systems;
-using Content.Server._CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.StationRecords.Systems;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.Paper;
 using Content.Shared.StationRecords;
 using Robust.Shared.Maths;
 using Robust.Shared.Random;
 
-namespace Content.Server._CMU14.Round.Antags.RunawaySynth;
+namespace Content.Server.CMU14.Round.Antags.RunawaySynth;
 
 public sealed partial class RunawaySynthRuleSystem : GameRuleSystem<RunawaySynthRuleComponent>
 {

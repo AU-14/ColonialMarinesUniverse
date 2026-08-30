@@ -6,7 +6,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.Sapper;
+namespace Content.Shared.CMU14.Insurgency.Sapper;
 
 /// <summary>
 ///     A CLF Sapper trap: an item that is deployed onto a tile where it hides itself, arms after a short

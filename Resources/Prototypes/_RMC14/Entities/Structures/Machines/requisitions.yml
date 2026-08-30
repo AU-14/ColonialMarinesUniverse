@@ -183,7 +183,7 @@
   - type: RequisitionsElevator
   - type: CargoSellBlacklist
   - type: WarpPoint
-    location: the pit
+    location: cmu-warp-location-the-pit
 
 - type: entity
   parent: CMBaseStructureCorrodible

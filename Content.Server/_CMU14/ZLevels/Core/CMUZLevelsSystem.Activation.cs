@@ -1,12 +1,12 @@
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared.Ghost;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 
-namespace Content.Server._CMU14.ZLevels.Core;
+namespace Content.Server.CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelsSystem
 {

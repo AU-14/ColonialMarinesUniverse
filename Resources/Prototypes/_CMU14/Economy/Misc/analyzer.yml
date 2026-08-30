@@ -46,7 +46,7 @@
     powerLoad: 0
   - type: Appearance
   - type: Sprite
-    sprite: _AU14/Structures/analyzermachine.rsi
+    sprite: CMU14/Structures/analyzermachine.rsi
     state: analyzer_idle
   - type: FetchAnalyzer
     faction: govfor

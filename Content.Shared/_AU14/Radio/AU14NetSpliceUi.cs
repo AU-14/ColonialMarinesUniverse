@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Radio;
+namespace Content.Shared.CMU14.Radio;
 
 [Serializable, NetSerializable]
 public enum AU14NetSpliceUiKey : byte

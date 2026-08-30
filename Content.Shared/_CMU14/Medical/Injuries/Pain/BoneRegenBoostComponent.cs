@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain;
 
 /// <summary>
 ///     Sits on a <c>StatusEffectCMUBoneRegenBoost</c> entity. The bone

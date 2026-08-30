@@ -2,7 +2,7 @@ using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.Allegiance;
+namespace Content.Shared.CMU14.Allegiance;
 
 /// <summary>
 /// Sent from client to server to indicate whether the player wants to ignore allegiance for spawning.

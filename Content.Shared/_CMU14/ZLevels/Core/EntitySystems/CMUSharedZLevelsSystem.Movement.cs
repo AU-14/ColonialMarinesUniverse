@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Vehicles;
+using Content.Shared.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared.Buckle.Components; // RuMC edit
 using Content.Shared.Chasm;
@@ -11,7 +13,6 @@ using Content.Shared.Damage.Prototypes;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Movement.Events;
-using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
@@ -21,7 +22,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem
 {
@@ -53,7 +54,6 @@ public abstract partial class CMUSharedZLevelsSystem
     private const float ImpactVelocityLimit = 4.0f;
     private const string FallDebugTag = "[DEBUG-CMUZ-FALL]";
     private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
-    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
 
     private EntityQuery<FixturesComponent> _fixturesQuery;
     private EntityQuery<CMUZLevelHighGroundComponent> _highgroundQuery;
@@ -80,7 +80,6 @@ public abstract partial class CMUSharedZLevelsSystem
     private int _profileZMoveSnapSweepSamples;
     private int _profileZMoveSnapSweepHighGroundChecks;
     private bool _debugFalling;
-    [Dependency] private TagSystem _tags = default!;
     [Dependency] private PullingSystem _pulling = default!;
 
     private void InitMovement()
@@ -999,7 +998,7 @@ public abstract partial class CMUSharedZLevelsSystem
             DebugLogFalling(target.Owner, "distance-no-z-map", $"inputMap={mapUid} sampleWorld={worldPos}");
             return 0;
         }
-        if (!_gridQuery.TryComp(resolvedMap, out var mapGrid))
+        if (!TryResolveMovementGrid(resolvedMap, worldPos, out var checkingGridUid, out var mapGrid))
         {
             DebugLogFalling(target.Owner, "distance-no-grid", $"inputMap={resolvedMap} sampleWorld={worldPos}");
             return 0;
@@ -1027,7 +1026,11 @@ public abstract partial class CMUSharedZLevelsSystem
                 }
 
                 checkingMap = tempCheckingMap.Value;
-                if (!_gridQuery.TryComp(checkingMap.Owner, out var tempCheckingGrid))
+                if (!TryResolveMovementGrid(
+                        checkingMap.Owner,
+                        worldPos,
+                        out checkingGridUid,
+                        out var tempCheckingGrid))
                 {
                     DebugLogFalling(
                         target.Owner,
@@ -1039,9 +1042,17 @@ public abstract partial class CMUSharedZLevelsSystem
                 checkingGrid = tempCheckingGrid;
             }
 
-            var checkingTile = _map.WorldToTile(checkingMap, checkingGrid, worldPos);
+            var checkingTile = _map.WorldToTile(checkingGridUid, checkingGrid, worldPos);
 
-            if (TryGetHighGroundDistance(target, checkingMap, checkingGrid, checkingTile, worldPos, floor, out var highGroundDistance, ref stickyGround))
+            if (TryGetHighGroundDistance(
+                    target,
+                    checkingGridUid,
+                    checkingGrid,
+                    checkingTile,
+                    worldPos,
+                    floor,
+                    out var highGroundDistance,
+                    ref stickyGround))
             {
                 if (profiling)
                     _profileZDistanceHighGroundHits++;
@@ -1056,7 +1067,7 @@ public abstract partial class CMUSharedZLevelsSystem
             // A wall fills the full height of its own level, so its top is a walkable surface on the level above.
             // Without this check an entity crossing an upper-level opening over a wall falls down into that wall,
             // because z-physics previously recognized only floor tiles and explicit high-ground components.
-            if (floor > 0 && HasWallAt(checkingMap, checkingGrid, checkingTile))
+            if (floor > 0 && HasWallAt(checkingGridUid, checkingGrid, checkingTile))
             {
                 // The wall's top is a flat walkable surface, not an airborne contact. Mark it sticky just like
                 // flat high-ground so horizontal movement cannot leave the entity in the frictionless/sliding
@@ -1071,7 +1082,7 @@ public abstract partial class CMUSharedZLevelsSystem
             }
 
             //No ZEntities found, check floor tiles
-            var tileFound = _map.TryGetTileRef(checkingMap, checkingGrid, checkingTile, out var tileRef);
+            var tileFound = _map.TryGetTileRef(checkingGridUid, checkingGrid, checkingTile, out var tileRef);
             var tileEmpty = !tileFound || tileRef.Tile.IsEmpty;
             var tileType = tileFound ? tileRef.Tile.TypeId.ToString() : "none";
             if (tileFound &&
@@ -1100,15 +1111,31 @@ public abstract partial class CMUSharedZLevelsSystem
         return maxFloors;
     }
 
-    private bool HasWallAt(Entity<CMUZLevelMapComponent> map, MapGridComponent grid, Vector2i tile)
-        => HasWallAt(map.Owner, grid, tile);
+    private bool TryResolveMovementGrid(
+        EntityUid mapUid,
+        Vector2 worldPosition,
+        out EntityUid gridUid,
+        [NotNullWhen(true)] out MapGridComponent? grid)
+    {
+        if (_map.TryFindGridAt(mapUid, worldPosition, out gridUid, out grid))
+            return true;
+
+        if (_gridQuery.TryComp(mapUid, out grid))
+        {
+            gridUid = mapUid;
+            return true;
+        }
+
+        gridUid = default;
+        return false;
+    }
 
     private bool HasWallAt(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
     {
         var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
         while (query.MoveNext(out var anchored))
         {
-            if (_tags.HasTag(anchored.Value, WallTag))
+            if (HasComp<ZLevelWallSupportComponent>(anchored.Value))
                 return true;
         }
 
@@ -1117,7 +1144,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private bool TryGetHighGroundDistance(
         Entity<CMUZPhysicsComponent?> target,
-        Entity<CMUZLevelMapComponent> checkingMap,
+        EntityUid checkingGridUid,
         MapGridComponent checkingGrid,
         Vector2i checkingTile,
         Vector2 worldPos,
@@ -1128,7 +1155,7 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!Prof.IsEnabled)
             return TryGetHighGroundDistanceCore(
                 target,
-                checkingMap,
+                checkingGridUid,
                 checkingGrid,
                 checkingTile,
                 worldPos,
@@ -1139,7 +1166,7 @@ public abstract partial class CMUSharedZLevelsSystem
         using var profile = Prof.Group("CMU Z HighGroundDistance");
         return TryGetHighGroundDistanceCore(
             target,
-            checkingMap,
+            checkingGridUid,
             checkingGrid,
             checkingTile,
             worldPos,
@@ -1150,7 +1177,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private bool TryGetHighGroundDistanceCore(
         Entity<CMUZPhysicsComponent?> target,
-        Entity<CMUZLevelMapComponent> checkingMap,
+        EntityUid checkingGridUid,
         MapGridComponent checkingGrid,
         Vector2i checkingTile,
         Vector2 worldPos,
@@ -1164,7 +1191,7 @@ public abstract partial class CMUSharedZLevelsSystem
         var bestSticky = false;
         var bestScore = float.MaxValue;
         var bestIsCurrentTile = false;
-        var gridLocal = _map.WorldToLocal(checkingMap, checkingGrid, worldPos) / checkingGrid.TileSize;
+        var gridLocal = _map.WorldToLocal(checkingGridUid, checkingGrid, worldPos) / checkingGrid.TileSize;
         var profiling = Prof.IsEnabled;
 
         for (var x = -1; x <= 1; x++)
@@ -1176,7 +1203,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
                 var tile = checkingTile + new Vector2i(x, y);
                 var isCurrentTile = x == 0 && y == 0;
-                var query = _map.GetAnchoredEntitiesEnumerator(checkingMap, checkingGrid, tile);
+                var query = _map.GetAnchoredEntitiesEnumerator(checkingGridUid, checkingGrid, tile);
 
                 while (query.MoveNext(out var uid))
                 {

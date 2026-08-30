@@ -5,7 +5,7 @@
   - type: GameRule
   - type: SerialKillerRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
+    selectionTime: JobsAssigned
     definitions:
     - prefRoles: [ SerialKillerRole ]
       max: 1

@@ -1,10 +1,10 @@
 using Content.Client.Damage;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage.Prototypes;
 using Robust.Client.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Yautja;
+namespace Content.Client.CMU14.Yautja;
 
 public sealed partial class YautjaDamageVisualsSystem : EntitySystem
 {

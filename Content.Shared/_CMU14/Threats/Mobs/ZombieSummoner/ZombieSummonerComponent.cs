@@ -5,7 +5,7 @@ using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
+namespace Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 
 [RegisterComponent, NetworkedComponent, ComponentProtoName("ZombieSummoner")]
 public sealed partial class ZombieSummonerComponent : Component

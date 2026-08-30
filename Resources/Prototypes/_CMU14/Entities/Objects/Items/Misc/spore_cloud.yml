@@ -19,7 +19,7 @@
         layer:
         - MidImpassable
   - type: Sprite
-    sprite: _CMU14/Effects/spore_cloud.rsi
+    sprite: CMU14/Effects/spore_cloud.rsi
     state: smoke
     color: "#8fbf5f"
   - type: TimedDespawn
@@ -41,7 +41,7 @@
   categories: [ HideSpawnMenu, DoNotMap ]
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     state: fog_pillar_spores
     color: "#8fbf5f88"
   - type: Fixtures

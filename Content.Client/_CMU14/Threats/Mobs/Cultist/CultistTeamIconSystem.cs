@@ -1,9 +1,9 @@
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
 
-namespace Content.Client._CMU14.Threats.Mobs.Cultist;
+namespace Content.Client.CMU14.Threats.Mobs.Cultist;
 
 public sealed partial class CultistTeamIconSystem : EntitySystem
 {

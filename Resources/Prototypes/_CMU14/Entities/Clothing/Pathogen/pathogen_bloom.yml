@@ -6,6 +6,6 @@
   components:
   - type: CMUPathogenWalkerMarker
   - type: Sprite
-    sprite: _CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
+    sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
   - type: Clothing
-    sprite: _CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
+    sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi

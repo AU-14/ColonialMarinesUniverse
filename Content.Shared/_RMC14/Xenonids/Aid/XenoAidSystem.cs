@@ -6,12 +6,14 @@ using Content.Shared._RMC14.Xenonids.Strain;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
+using Content.Shared.Stunnable;
 using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.Xenonids.Aid;
@@ -29,6 +31,7 @@ public sealed partial class XenoAidSystem : EntitySystem
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoEnergySystem _xenoEnergy = default!;
     [Dependency] private XenoStrainSystem _xenoStrain = default!;
@@ -127,10 +130,20 @@ public sealed partial class XenoAidSystem : EntitySystem
                 if (!_xenoEnergy.TryRemoveEnergyPopup(xeno.Owner, xeno.Comp.EnergyCost))
                     return;
 
+                var clearParalysis = false;
                 foreach (var status in xeno.Comp.AilmentsRemove)
                 {
+                    if (status.Id is "Stun" or "KnockedDown")
+                    {
+                        clearParalysis = true;
+                        continue;
+                    }
+
                     _statusEffects.TryRemoveStatusEffect(target, status);
                 }
+
+                if (clearParalysis)
+                    _stun.TryClearStunAndKnockdown(target);
 
                 EntityManager.RemoveComponents(target, xeno.Comp.ComponentsRemove);
 

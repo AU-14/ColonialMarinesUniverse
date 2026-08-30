@@ -1,5 +1,6 @@
 using Content.Server.Chat.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -7,17 +8,18 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationFleshKudzuComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationFleshKudzuComponent;
+using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationFleshKudzuComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationFleshKudzuComponent;
 
-namespace Content.Server._CMU14.Threats.Mobs.Abomination;
+namespace Content.Server.CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 ///     Periodic heal-tick for abominations standing on a flesh kudzu tile, plus
 ///     occasional sob/cry/scream emotes. Damage tick for non-abominations is
-///     handled by upstream DamageContacts on the kudzu prototype. Also drives
-///     the tiny everywhere-passive heal on every abomination (see
-///     AbominationComponent.PassiveHeal).
+///     handled by upstream DamageContacts on the kudzu prototype. Abomination
+///     melee attacks on tendons are rejected here so the threat can't trash its
+///     own coverage. Also drives the tiny everywhere-passive heal on every
+///     abomination (see AbominationComponent.PassiveHeal).
 /// </summary>
 public sealed partial class AbominationFleshKudzuSystem : EntitySystem
 {

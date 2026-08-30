@@ -7,7 +7,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Ape;
+namespace Content.Shared.CMU14.Threats.Mobs.Ape;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class ApeDestroyComponent : Component

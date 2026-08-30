@@ -1,10 +1,10 @@
 using Content.Server._RMC14.Xenonids.Watch;
-using Content.Shared._CMU14.Xenonids.Watch;
+using Content.Shared.CMU14.Xenonids.Watch;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.Network;
 
-namespace Content.Server._CMU14.Xenonids.Watch;
+namespace Content.Server.CMU14.Xenonids.Watch;
 
 [AnyCommand]
 internal sealed partial class CMUXenoWatchEntityCommand : LocalizedEntityCommands

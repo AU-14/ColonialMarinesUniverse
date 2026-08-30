@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CMU14.CrawlState;
+namespace Content.Shared.CMU14.CrawlState;
 
 [Access(typeof(SharedCrawlWhileCritSystem))]
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]

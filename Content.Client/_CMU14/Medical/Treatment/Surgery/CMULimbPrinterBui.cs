@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.Body.Part;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
@@ -10,7 +10,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Medical.Treatment.Surgery;
+namespace Content.Client.CMU14.Medical.Treatment.Surgery;
 
 [UsedImplicitly]
 public sealed class CMULimbPrinterBui : BoundUserInterface

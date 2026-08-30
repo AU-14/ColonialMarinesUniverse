@@ -6,7 +6,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.Manager.Attributes;
 using Robust.Shared.ViewVariables;
 
-namespace Content.Shared._AU14.ZLevelBuilding;
+namespace Content.Shared.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// First building block of the z-level structural-stability feature. Marks a structure that participates

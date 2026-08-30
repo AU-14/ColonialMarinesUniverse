@@ -3,7 +3,7 @@ using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency;
+namespace Content.Shared.CMU14.Insurgency;
 
 /// <summary>
 ///     The single serializable shape that drives the whole INSFOR faction featureset.

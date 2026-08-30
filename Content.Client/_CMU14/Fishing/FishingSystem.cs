@@ -4,15 +4,15 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-using Content.Client._CMU14.Fishing.Overlays;
-using Content.Shared._CMU14.Fishing.Components;
-using Content.Shared._CMU14.Fishing.Systems;
+using Content.Client.CMU14.Fishing.Overlays;
+using Content.Shared.CMU14.Fishing.Components;
+using Content.Shared.CMU14.Fishing.Systems;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Fishing;
+namespace Content.Client.CMU14.Fishing;
 
 public sealed partial class FishingSystem : SharedFishingSystem
 {

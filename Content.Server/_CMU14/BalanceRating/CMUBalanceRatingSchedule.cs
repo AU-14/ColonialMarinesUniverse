@@ -1,4 +1,4 @@
-namespace Content.Server._CMU14.BalanceRating;
+namespace Content.Server.CMU14.BalanceRating;
 
 internal sealed class CMUBalanceRatingSchedule
 {

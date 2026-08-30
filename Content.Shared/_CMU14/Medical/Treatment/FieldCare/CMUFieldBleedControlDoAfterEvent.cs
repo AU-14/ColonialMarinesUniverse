@@ -1,7 +1,7 @@
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CMU14.Medical.Treatment.FieldCare;
+namespace Content.Shared.CMU14.Medical.Treatment.FieldCare;
 
 [Serializable, NetSerializable]
 public sealed partial class CMUFieldBleedControlDoAfterEvent : DoAfterEvent

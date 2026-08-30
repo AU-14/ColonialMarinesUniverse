@@ -1,24 +1,25 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Bones.Events;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Injuries.Pain;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Bones.Events;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Medical.Diagnostics.Telemetry;
+namespace Content.Server.CMU14.Medical.Diagnostics.Telemetry;
 
 public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
 {
@@ -42,14 +43,14 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<HitLocationComponent, HitLocationResolvedEvent>(OnHitResolved);
-        SubscribeLocalEvent<Content.Shared._CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent, BoneFracturedEvent>(OnFractureSpawn);
+        SubscribeLocalEvent<Content.Shared.CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent, BoneFracturedEvent>(OnFractureSpawn);
         SubscribeLocalEvent<OrganStageChangedEvent>(OnOrganStage);
         SubscribeLocalEvent<CMSurgeryTargetComponent, CMSurgeryCompleteEvent>(OnSurgeryDone);
         SubscribeLocalEvent<DamageableComponent, RMCDefibrillatorAttemptEvent>(OnDefibAttempt);
         SubscribeLocalEvent<CMUPainShockStatusComponent, ComponentStartup>(OnPainShockEntered);
         SubscribeLocalEvent<BodyPartSeveredEvent>(OnBodyPartSevered);
         SubscribeLocalEvent<InternalBleedingChangedEvent>(OnInternalBleedingChanged);
-        SubscribeLocalEvent<Content.Shared._CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent, CMUShrapnelChangedEvent>(OnShrapnelChanged);
+        SubscribeLocalEvent<Content.Shared.CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent, CMUShrapnelChangedEvent>(OnShrapnelChanged);
         SubscribeLocalEvent<RoundEndSummaryStatsEvent>(OnRoundEndStats);
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundEnd);
@@ -61,7 +62,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
         _hitCounts[args.ResolvedPart] = prior + 1;
     }
 
-    private void OnFractureSpawn(Entity<Content.Shared._CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent> ent, ref BoneFracturedEvent args)
+    private void OnFractureSpawn(Entity<Content.Shared.CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent> ent, ref BoneFracturedEvent args)
     {
         if (args.Old == args.New)
             return;
@@ -109,7 +110,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
             _internalBleedsStarted++;
     }
 
-    private void OnShrapnelChanged(Entity<Content.Shared._CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent> ent, ref CMUShrapnelChangedEvent args)
+    private void OnShrapnelChanged(Entity<Content.Shared.CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent> ent, ref CMUShrapnelChangedEvent args)
     {
         if (args.Removed)
             _shrapnelExtracted++;

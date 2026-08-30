@@ -1,7 +1,7 @@
 using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUVascularTearComponent : Component;

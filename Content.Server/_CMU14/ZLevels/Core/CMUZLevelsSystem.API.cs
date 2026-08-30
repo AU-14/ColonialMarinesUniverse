@@ -1,8 +1,8 @@
-using Content.Server._CMU14.ZLevels.PVS;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Server.CMU14.ZLevels.PVS;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using JetBrains.Annotations;
 
-namespace Content.Server._CMU14.ZLevels.Core;
+namespace Content.Server.CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelsSystem
 {

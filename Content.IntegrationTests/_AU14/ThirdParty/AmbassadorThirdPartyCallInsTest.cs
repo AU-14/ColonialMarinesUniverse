@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Content.Shared.AU14.Ambassador;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Ambassador;
+using Content.Shared.CMU14.Threats;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.ThirdParty;
+namespace Content.IntegrationTests.CMU14.ThirdParty;
 
 [TestFixture]
 public sealed class AmbassadorThirdPartyCallInsTest

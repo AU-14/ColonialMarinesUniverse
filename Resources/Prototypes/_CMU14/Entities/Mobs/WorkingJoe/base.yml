@@ -1,7 +1,9 @@
 - type: entity
   abstract: true
   save: false
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceWorkingJoe
+  - RMCBaseMobSpeciesOrganic
   id: AU14MobWorkingJoe
   name: Urist McJoe
   suffix: AU14, Base
@@ -24,6 +26,7 @@
     - map: ["enum.HumanoidVisualLayers.RFoot"]
     - map: ["enum.HumanoidVisualLayers.LHand"]
     - map: ["enum.HumanoidVisualLayers.RHand"]
+    - map: ["enum.HumanoidVisualLayers.Overlay"]
     - map: [ "gloves" ]
     - map: [ "enum.SquadArmorLayers.Gloves" ]
     - map: [ "shoes" ]
@@ -34,14 +37,19 @@
     - map: [ "belt" ]
     - map: [ "enum.SquadArmorLayers.Armor" ]
     - map: [ "enum.WebbingVisualLayers.Base" ]
+    - map: [ "enum.UniformAccessoryLayer.Base" ]
     - map: [ "enum.MedalVisualLayers.Base" ]
+    - map: [ "enum.MedalVisualLayers.Base1" ]
     - map: [ "back" ]
-    - map: [ "enum.HumanoidVisualLayers.FacialHair" ]
     - map: [ "neck" ] # RMC14 re-arrange neck slot
+    - map: [ "suitstorage" ]
+    - map: [ "enum.HumanoidVisualLayers.SnoutCover" ]
+    - map: [ "enum.HumanoidVisualLayers.FacialHair" ]
     - map: [ "enum.HumanoidVisualLayers.Hair" ]
     - map: [ "enum.HumanoidVisualLayers.HeadSide" ]
     - map: [ "enum.HumanoidVisualLayers.HeadTop" ]
     - map: [ "enum.HumanoidVisualLayers.Tail" ]
+    - map: [ "enum.HumanoidVisualLayers.TailOverlay" ]
     - map: [ "mask" ]
     - map: [ "head" ]
     - map: [ "enum.SquadArmorLayers.Helmet" ]
@@ -76,19 +84,13 @@
       sprite: _RMC14/Effects/targeted.rsi
       state: sniper_lockon_intense_direction
       visible: false
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: WorkingJoe
-    hideLayersOnEquip:
-    - UndergarmentTop
-    - HeadTop
   - type: Speech
     speechVerb: WorkingJoe
     speechSounds: null
   - type: Vocal
-    sounds:
-      Male: AU14WorkingJoeSounds
-      Female: AU14WorkingJoeSounds
-      Unsexed: AU14WorkingJoeSounds
+    emoteSounds: AU14WorkingJoeSounds
   - type: TypingIndicator
     proto: joe
   - type: Deathgasp
@@ -108,7 +110,10 @@
       types:
         Blunt: 60
   - type: Bloodstream
-    bloodReagent: RMCSynthBlood
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: RMCSynthBlood
+        Quantity: 560
   - type: Synth
     generation: "rmc-species-synth-generation-first"
     critThreshold: 299
@@ -183,12 +188,9 @@
     preset: AU14LanguageLearningPresetWorkingJoe
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearanceWorkingJoe
   id: AU14MobWorkingJoeDummy
   categories: [ HideSpawnMenu ]
-  components:
-  - type: HumanoidAppearance
-    species: WorkingJoe
 
 - type: entity
   parent: RMCSynthRemoveComponents

@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Synth;
@@ -10,12 +10,12 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.SSDIndicator;
-using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationMimicComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
-using ApeComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeComponent;
-using TribalComponent = Content.Shared._CMU14.Threats.Mobs.Tribal.TribalComponent;
+using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using AbominationMimicComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
+using ApeComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeComponent;
+using TribalComponent = Content.Shared.CMU14.Threats.Mobs.Tribal.TribalComponent;
 
-namespace Content.Server._CMU14.Threats.Rules;
+namespace Content.Server.CMU14.Threats.Rules;
 
 internal enum EvacuatedMobPolicy
 {

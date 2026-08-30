@@ -1,7 +1,7 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Wendigo;
+namespace Content.Shared.CMU14.Threats.Mobs.Wendigo;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class WendigoVoiceComponent : Component

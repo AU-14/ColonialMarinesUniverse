@@ -1,5 +1,5 @@
-using Content.Server._AU14.Chemistry.Reagents;
-using Content.Server.AU14.ColonyEconomy;
+using Content.Server.CMU14.Chemistry.Reagents;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Chat.Systems;
 using Content.Shared.Paper;
 using Robust.Shared.Prototypes;
@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Content.Server._AU14.Chemistry.Research;
+namespace Content.Server.CMU14.Chemistry.Research;
 
 public sealed partial class ServerResearchNoteSystem : EntitySystem
 {

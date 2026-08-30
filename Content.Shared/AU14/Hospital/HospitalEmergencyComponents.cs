@@ -3,7 +3,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
-namespace Content.Shared.AU14.Hospital;
+namespace Content.Shared.CMU14.Hospital;
 
 [RegisterComponent]
 public sealed partial class HospitalDropshipLandingZoneComponent : Component;
@@ -22,7 +22,7 @@ public sealed partial class HospitalPatientComponent : Component
 public sealed partial class HospitalEmergencyComputerComponent : Component
 {
     [DataField]
-    public ResPath ShuttlePath = new("/Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml");
+    public ResPath ShuttlePath = new("/Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml");
 
     [DataField]
     public EntProtoId PatientPrototype = "AU14HospitalPatient";
@@ -76,7 +76,7 @@ public sealed partial class HospitalEmergencyComputerComponent : Component
     public float ShuttleTravelTime = 15f;
 
     [DataField]
-    public SoundSpecifier NotificationSound = new SoundPathSpecifier("/Audio/_CMU14/Hospital/spo2_alarm.ogg");
+    public SoundSpecifier NotificationSound = new SoundPathSpecifier("/Audio/CMU14/Hospital/spo2_alarm.ogg");
 
     [DataField]
     public SoundSpecifier RewardSound = new SoundPathSpecifier("/Audio/Effects/Cargo/ping.ogg");

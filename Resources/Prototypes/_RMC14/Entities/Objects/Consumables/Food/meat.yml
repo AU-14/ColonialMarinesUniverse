@@ -11,16 +11,16 @@
     tags:
     - Raw
     - Meat
-  - type: Food
+  - type: Edible
     transferAmount: 3 # 3 bites
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: rawfish
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
         - ReagentId: Nutriment
           Quantity: 3
         - ReagentId: UncookedAnimalProteins
@@ -49,16 +49,16 @@
     tags:
     - Cooked
     - Meat
-  - type: Food
+  - type: Edible
     transferAmount: 3 # 3 bites
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: grilledfish
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
         - ReagentId: Nutriment
           Quantity: 3
         - ReagentId: Protein
@@ -87,16 +87,16 @@
     tags:
     - Cooked
     - Meat
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: fishandchips
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
         - ReagentId: Nutriment
           Quantity: 5
         - ReagentId: Protein
@@ -123,16 +123,16 @@
   - type: Tag
     tags:
     - Meat
-  - type: Food
+  - type: Edible
     transferAmount: 3 # 3 bites
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: fishsushiroll
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
         - ReagentId: Nutriment
           Quantity: 3
   - type: Item

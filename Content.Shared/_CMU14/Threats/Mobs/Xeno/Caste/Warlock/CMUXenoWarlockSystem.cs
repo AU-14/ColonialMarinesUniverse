@@ -14,6 +14,8 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
@@ -44,7 +46,7 @@ using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 
 public enum CMUXenoWarlockChannelKind : byte
 {
@@ -122,7 +124,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier PsychicCrushCancelSound
-        = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
+        = new SoundPathSpecifier("/Audio/CMU14/Xeno/Warlock/woosh_swoosh.ogg");
 
     public EntityUid? PsychicCrushChannelEffect;
 
@@ -162,7 +164,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier
-        PsychicCrushPulseSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
+        PsychicCrushPulseSound = new SoundPathSpecifier("/Audio/CMU14/Xeno/Warlock/woosh_swoosh.ogg");
 
     // Range at which the warlock can start channelling a new psychic crush. Matches the psychic
     // blast's initiation range (6 tiles) so both ranged abilities share the same reach at cast.
@@ -180,7 +182,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
     public EntityCoordinates PsychicCrushTarget;
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicCrushTriggerSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/EMPulse.ogg");
+    public SoundSpecifier PsychicCrushTriggerSound = new SoundPathSpecifier("/Audio/CMU14/Xeno/Warlock/EMPulse.ogg");
 
     [DataField, AutoNetworkedField]
     public EntProtoId PsychicCrushWarningId = "CMUXenoPsychicCrushWarning";
@@ -234,11 +236,11 @@ public sealed partial class CMUXenoWarlockComponent : Component
     public TimeSpan PsychicShieldOwnerStun = TimeSpan.FromSeconds(1);
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicShieldReflectSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/portal.ogg");
+    public SoundSpecifier PsychicShieldReflectSound = new SoundPathSpecifier("/Audio/CMU14/Xeno/Warlock/portal.ogg");
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier
-        PsychicShieldRoarSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/roar_warlock.ogg");
+        PsychicShieldRoarSound = new SoundPathSpecifier("/Audio/CMU14/Xeno/Warlock/roar_warlock.ogg");
 
     [DataField, AutoNetworkedField]
     public EntProtoId PsychicShieldSegmentId = "CMUXenoPsychicShieldSegment";
@@ -264,7 +266,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
     public float PsychicShieldMinimumFreezeSpeed = 15f;
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicShieldStartSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/magic.ogg");
+    public SoundSpecifier PsychicShieldStartSound = new SoundPathSpecifier("/Audio/CMU14/Xeno/Warlock/magic.ogg");
 
     [DataField, AutoNetworkedField]
     public EntProtoId PsychicShieldVisualId = "CMUXenoPsychicShield";
@@ -324,12 +326,12 @@ public sealed partial class CMUXenoFrozenProjectileComponent : Component
     public bool HadProjectileFixedDistanceComponent;
 
     [DataField, AutoNetworkedField]
-    public bool IgnoreShooter;
+    public TimeSpan? ShooterIgnoreRemaining;
 
     [DataField, AutoNetworkedField]
     public bool ProjectileSpent;
 
-    // When true, BeforeTriggerEvent is NOT cancelled while the entity is frozen. Used for
+    // When true, AttemptTriggerEvent is NOT cancelled while the entity is frozen. Used for
     // thrown grenades so their fuse timer still expires normally (if the warlock does not
     // reflect in time, the grenade detonates at the shield face). Rockets/other collision-
     // triggered projectiles keep this false so they cannot self-detonate on shield contact.
@@ -522,8 +524,8 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     [Dependency] private XenoProjectileSystem _xenoProjectile = default!;
     private static readonly FixedPoint2 PsychicCrushVehicleDamageMultiplier = FixedPoint2.New(0.5f);
     private static readonly FixedPoint2 PsychicCrushMechDamageMultiplier = FixedPoint2.New(2.3f);
-    public const string PsychicBlastFireSoundPath = "/Audio/_CMU14/Xeno/Warlock/volkite_4.ogg";
-    public const string PsychicBlastImpactSoundPath = "/Audio/_CMU14/Xeno/Warlock/EMPulse.ogg";
+    public const string PsychicBlastFireSoundPath = "/Audio/CMU14/Xeno/Warlock/volkite_4.ogg";
+    public const string PsychicBlastImpactSoundPath = "/Audio/CMU14/Xeno/Warlock/EMPulse.ogg";
     public const int PsychicCrushBaseDamage = 25;
     public const int PsychicCrushDamagePerPulse = 15;
     public const int PsychicCrushMaxAreaRadius = 3;
@@ -1038,7 +1040,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         var channeling = EnsureComp<CMUXenoWarlockChannelingComponent>(warlock);
         channeling.SpeedMultiplier = 0f;
-        _movement.RefreshMovementSpeedModifiers(warlock);
+        _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
 
         var ev = new CMUXenoPsychicCrushDoAfterEvent(GetNetCoordinates(target));
         var doAfter = new DoAfterArgs(EntityManager, warlock, warlock.Comp.PsychicCrushWindupDuration, ev, warlock,
@@ -1335,7 +1337,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         var channeling = EnsureComp<CMUXenoWarlockChannelingComponent>(warlock);
         channeling.SpeedMultiplier = warlock.Comp.PsychicCrushChannelSpeedMultiplier;
-        _movement.RefreshMovementSpeedModifiers(warlock);
+        _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
 
         var ev = new CMUXenoPsychicCrushChannelDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager,
@@ -1764,7 +1766,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         StartWarlockChannelEffect(warlock, CMUXenoWarlockChannelKind.PsychicShield);
         // Icon toggle is handled inside SetPsychicShieldActionMode below, alongside the swap.
         EnsureComp<CMUXenoPsychicShieldRootComponent>(warlock);
-        _movement.RefreshMovementSpeedModifiers(warlock);
+        _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
         if (TryComp(warlock, out PhysicsComponent? physics))
             _physics.SetLinearVelocity(warlock, Vector2.Zero, body: physics);
 
@@ -1827,7 +1829,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         SetPsychicShieldActionMode(warlock, shieldUp: false);
         SetActionCooldown<CMUXenoPsychicShieldActionEvent>(warlock, warlock.Comp.PsychicShieldCooldown);
         if (RemComp<CMUXenoPsychicShieldRootComponent>(warlock))
-            _movement.RefreshMovementSpeedModifiers(warlock);
+            _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
 
         if (stunOwner)
             _stun.TryParalyze(warlock, warlock.Comp.PsychicShieldOwnerStun, true);
@@ -1909,7 +1911,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             {
                 projectileComp.Shooter = warlock;
                 projectileComp.Weapon = warlock;
-                projectileComp.IgnoreShooter = false;
+                projectileComp.WhenToStopIgnoringShooter = _timing.CurTime;
                 projectileComp.DeleteOnCollide = frozen.DeleteOnCollide;
                 projectileComp.ProjectileSpent = false;
                 Dirty(frozenEnt, projectileComp);
@@ -2096,7 +2098,12 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         bool canCollide = physics.CanCollide;
         EntityUid? shooter = projectileComp.Shooter;
         EntityUid? weapon = projectileComp.Weapon;
-        bool ignoreShooter = projectileComp.IgnoreShooter;
+        TimeSpan? shooterIgnoreRemaining = null;
+        if (projectileComp.WhenToStopIgnoringShooter is { } ignoreUntil)
+        {
+            var remaining = ignoreUntil - _timing.CurTime;
+            shooterIgnoreRemaining = remaining > TimeSpan.Zero ? remaining : TimeSpan.Zero;
+        }
         bool deleteOnCollide = projectileComp.DeleteOnCollide;
         bool projectileSpent = projectileComp.ProjectileSpent;
 
@@ -2109,7 +2116,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         frozen.BodyType = bodyType;
         frozen.Shooter = shooter;
         frozen.Weapon = weapon;
-        frozen.IgnoreShooter = ignoreShooter;
+        frozen.ShooterIgnoreRemaining = shooterIgnoreRemaining;
         frozen.DeleteOnCollide = deleteOnCollide;
         frozen.ProjectileSpent = projectileSpent;
         frozen.HadDeleteOnCollideComponent = RemComp<DeleteOnCollideComponent>(projectile);
@@ -2162,7 +2169,9 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         projectileComp.Shooter = frozen.Shooter;
         projectileComp.Weapon = frozen.Weapon;
-        projectileComp.IgnoreShooter = frozen.IgnoreShooter;
+        projectileComp.WhenToStopIgnoringShooter = frozen.ShooterIgnoreRemaining is { } remaining
+            ? _timing.CurTime + remaining
+            : null;
         projectileComp.DeleteOnCollide = frozen.DeleteOnCollide;
         projectileComp.ProjectileSpent = false;
         Dirty(projectile, projectileComp);
@@ -2355,7 +2364,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     private void RemovePsychicCrushMovementModifier(Entity<CMUXenoWarlockComponent> warlock)
     {
         RemCompDeferred<CMUXenoWarlockChannelingComponent>(warlock);
-        _movement.RefreshMovementSpeedModifiers(warlock);
+        _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
     }
 
     private void StartWarlockChannelEffect(Entity<CMUXenoWarlockComponent> warlock, CMUXenoWarlockChannelKind kind)

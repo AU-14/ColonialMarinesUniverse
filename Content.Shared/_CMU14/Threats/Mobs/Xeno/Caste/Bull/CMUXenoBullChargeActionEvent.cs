@@ -1,6 +1,6 @@
 using Content.Shared.Actions;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Bull;
+namespace Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Bull;
 
 public sealed partial class CMUXenoBullChargeActionEvent : InstantActionEvent
 {

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
-using Content.Shared._AU14.Xenos;
+using Content.Shared.CMU14.Xenos;
 using Content.Shared.Maps;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._AU14.Xenos;
+namespace Content.Server.CMU14.Xenos;
 
 /// <summary>
 /// Lays and removes the floor tile under a resin patch, so the hive can bridge holes punched by cave-ins and

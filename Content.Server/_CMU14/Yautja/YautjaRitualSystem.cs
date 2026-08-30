@@ -1,5 +1,5 @@
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -15,7 +15,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Yautja;
+namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaRitualSystem : EntitySystem
 {
@@ -172,7 +172,7 @@ public sealed partial class YautjaRitualSystem : EntitySystem
             HasComp<YautjaComponent>(target) ||
             !TryComp<MobStateComponent>(target, out var mob) ||
             !_mob.IsAlive(target, mob) ||
-            (!HasComp<HumanoidAppearanceComponent>(target) && !HasComp<XenoComponent>(target)))
+            (!HasComp<HumanoidProfileComponent>(target) && !HasComp<XenoComponent>(target)))
         {
             return false;
         }

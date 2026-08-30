@@ -7,7 +7,7 @@ using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._CMU14.Medical.Presentation.Windows;
+namespace Content.Client.CMU14.Medical.Presentation.Windows;
 
 public sealed class CMUScaledRichTextLabel : RichTextLabel
 {

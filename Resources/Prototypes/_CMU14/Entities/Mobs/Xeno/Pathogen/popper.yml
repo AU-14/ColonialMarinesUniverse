@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-popper
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/popper.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/popper.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -66,8 +66,10 @@
   - type: MeleeWeapon
     attackRate: 1.0
     damage:
-      groups:
-        Brute: 10
+      types:
+        Blunt: 3.33
+        Slash: 3.33
+        Piercing: 3.34
   - type: CMArmor
     explosionArmor: 10
   - type: Tackle
@@ -80,10 +82,10 @@
     size: VerySmallXeno
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: popper
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:

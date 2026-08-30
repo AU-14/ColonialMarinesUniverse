@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs;
 
 public enum OrganDamageStage : byte
 {

@@ -1,7 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Audio;
 
-namespace Content.Shared._CMU14.Paper;
+namespace Content.Shared.CMU14.Paper;
 
 [RegisterComponent]
 public sealed partial class UniversalPaperToolComponent : Component

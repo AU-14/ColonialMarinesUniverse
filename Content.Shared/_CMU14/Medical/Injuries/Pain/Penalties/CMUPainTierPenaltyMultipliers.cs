@@ -1,6 +1,6 @@
-using Content.Shared._CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Pain.Penalties;
+namespace Content.Shared.CMU14.Medical.Injuries.Pain.Penalties;
 
 public static class CMUPainTierPenaltyMultipliers
 {

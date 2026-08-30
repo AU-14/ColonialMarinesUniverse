@@ -1,29 +1,27 @@
 # Cotton Bun
 
 - type: entity
-  parent: FoodBreadSliceBase
+  parent: [FoodBreadSliceBase, BaseSlicingRefinable]
   id: FoodCottonBun
   name: cotton bun
   description: A cotton hamburger bun. Soft, round and convenient to hold.
   components:
-  - type: Food
-    #requiresSpecialDigestion: true Disabled for RMC
+  - type: Edible
+    # requiresSpecialDigestion remains false for RMC; see 8c44d4fdfe.
   - type: Sprite
     sprite: Objects/Consumable/Food/cottonburger.rsi
     layers:
     - state: cottonbun
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3.33
-        - ReagentId: Fiber
-          Quantity: 3.33
-  - type: Butcherable
-    butcherDelay: 1
-    spawned:
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Fiber
+        Quantity: 5
+  - type: ToolRefinable
+    refineTime: 1
+    refineResult:
     - id: FoodCottonBunTop
       amount: 1
     - id: FoodCottonBunBottom
@@ -43,8 +41,7 @@
   components:
   - type: Item
     size: Normal #patch until there is an adequate resizing system in place
-  - type: Food
-    #requiresSpecialDigestion: true Disabled for RMC
+  - type: Edible
   - type: Sprite
     drawdepth: Mobs
     noRot: true
@@ -62,16 +59,14 @@
     nameGeneration: food-sequence-cotton-burger-gen
   - type: Appearance
   - type: FoodMetamorphableByAdding
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        canReact: false # Dont want cause reactions inside burgers after merging ingredients
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 1.665
-        - ReagentId: Fiber
-          Quantity: 1.665
+  - type: Solution
+    solution:
+      maxVol: 7.5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 2.5
+      - ReagentId: Fiber
+        Quantity: 2.5
   - type: Tag
     tags:
     - ClothMade
@@ -84,21 +79,19 @@
   name: cotton top bun
   description: The perfect finish for your fibrous burger tower.
   components:
-  - type: Food
-    #requiresSpecialDigestion: true Disabled for RMC
+  - type: Edible
   - type: Sprite
     sprite: Objects/Consumable/Food/cottonburger.rsi
     layers:
     - state: cottonbun_top
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 1.665
-        - ReagentId: Fiber
-          Quantity: 1.665
+  - type: Solution
+    solution:
+      maxVol: 7.5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 2.5
+      - ReagentId: Fiber
+        Quantity: 2.5
   - type: FoodSequenceElement
     entries:
       CottonBurger: CottonBunTopBurger

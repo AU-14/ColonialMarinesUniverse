@@ -2,12 +2,12 @@ using Content.Server.Antag;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Roles.Jobs;
-using Content.Shared._CMU14.Round.Antags.Vigilante;
+using Content.Shared.CMU14.Round.Antags.Vigilante;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CMU14.Round.Antags.Vigilante;
+namespace Content.Server.CMU14.Round.Antags.Vigilante;
 
 public sealed partial class VigilanteSystem : EntitySystem
 {

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using Robust.Client.Graphics;
 
-namespace Content.Client._AU14.ZLevelBuilding;
+namespace Content.Client.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Building overhaul (z-level): registers the holder-only structural scanner heat-map overlay. The overlay itself

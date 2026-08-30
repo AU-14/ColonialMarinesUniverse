@@ -4,11 +4,11 @@ using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Weapons.Melee.Events;
-using Content.Shared._CMU14.Medical.Injuries.Pain.Penalties;
+using Content.Shared.CMU14.Medical.Injuries.Pain.Penalties;
 using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Chemistry.Effects;
+namespace Content.Shared.CMU14.Chemistry.Effects;
 
 [ByRefEvent]
 public record struct GetChemicalStunTimeMultiplierEvent
@@ -278,7 +278,7 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
 
     private void OnMovementStatusChanged(Entity<ChemicalNerveStimulationComponent> ent, ref ComponentStartup args)
     {
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _medicalSpeed.RefreshAggregatedPenalties(ent);
     }
 
@@ -287,13 +287,13 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
         if (TerminatingOrDeleted(ent))
             return;
 
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _medicalSpeed.RefreshAggregatedPenalties(ent);
     }
 
     private void OnMuscleStatusChanged(Entity<ChemicalMuscleStimulationComponent> ent, ref ComponentStartup args)
     {
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _medicalSpeed.RefreshAggregatedPenalties(ent);
     }
 
@@ -302,7 +302,7 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
         if (TerminatingOrDeleted(ent))
             return;
 
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _medicalSpeed.RefreshAggregatedPenalties(ent);
     }
 

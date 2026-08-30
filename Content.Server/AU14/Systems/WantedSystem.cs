@@ -6,7 +6,7 @@ using Content.Shared.Paper;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.Server.AU14.Systems;
+namespace Content.Server.CMU14.Systems;
 
 public sealed partial class WantedSystem : EntitySystem
 {

@@ -8,7 +8,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared.FixedPoint;
 
-namespace Content.Shared._CMU14.Chemistry.Reagent;
+namespace Content.Shared.CMU14.Chemistry.Reagent;
 
 
 [Flags]

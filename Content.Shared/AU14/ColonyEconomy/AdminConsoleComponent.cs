@@ -1,4 +1,4 @@
-namespace Content.Shared.AU14.ColonyEconomy;
+namespace Content.Shared.CMU14.ColonyEconomy;
 
 /// <summary>
 ///     Admin console: manages colony sales tax, income tax, and can call third parties.

@@ -8,7 +8,7 @@
     factions:
     - CMU14PathogenWalker
   - type: Sprite
-    sprite: _CMU14/Structures/Xeno/Pathogen/spore_sac.rsi
+    sprite: CMU14/Structures/Xeno/Pathogen/spore_sac.rsi
     layers:
     - state: closed
       map: ["enum.SporeSacVisualLayers.Base"]

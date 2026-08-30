@@ -1,6 +1,6 @@
-﻿using Content.Shared.Actions;
+using Content.Shared.Actions;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Wendigo;
+namespace Content.Shared.CMU14.Threats.Mobs.Wendigo;
 
 public sealed partial class WendigoVoiceActionEvent : InstantActionEvent
 { }

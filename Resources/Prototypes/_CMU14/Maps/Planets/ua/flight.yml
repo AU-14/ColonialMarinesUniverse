@@ -13,7 +13,7 @@
     - LACN
     - CMBCIU
     - USCM
-    - WYPMC
+    - WEYU
     - RMC
     - HAZOPS
     platoonsOpfor:
@@ -58,7 +58,7 @@
   id: Flight
   mapName: Flight
   allegiance: Neutral
-  mapPath: /Maps/_AU14/flight.yml
+  mapPath: /Maps/CMU14/flight.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

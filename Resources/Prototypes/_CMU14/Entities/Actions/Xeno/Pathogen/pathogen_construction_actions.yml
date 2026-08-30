@@ -6,10 +6,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: plant_weeds
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: plant_weeds
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoPlantWeedsActionEvent
       prototype: CMU14XenoMyceliumWeedsSource
@@ -25,9 +27,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: TEMPLATE  # no place_resin in pathogen RSI
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoChooseStructureActionEvent
   - type: XenoChooseConstructionAction
@@ -41,9 +45,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: secrete_resin
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     deselectOnMiss: false
     range: 0
@@ -66,9 +72,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: secrete_resin
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     deselectOnMiss: false
     range: 0
@@ -91,9 +99,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: morph_resin
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoOrderConstructionActionEvent
   - type: RMCDazeableAction
@@ -106,10 +116,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: place_trap
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: place_trap
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoPlaceResinHoleActionEvent
   - type: RMCDazeableAction
@@ -122,9 +134,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
       state: gardener_plant
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoFruitChooseActionEvent
   - type: XenoFruitChooseAction
@@ -137,10 +151,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: gardener_plant
     useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: gardener_plant
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoFruitPlantActionEvent
 
@@ -152,10 +168,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: plant_gardener_weeds
     useDelay: 120
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: plant_gardener_weeds
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoPlantWeedsActionEvent
       plasmaCost: 125
@@ -179,10 +197,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: build_tunnel
     useDelay: 300
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: build_tunnel
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDigTunnelActionEvent
 
@@ -202,10 +222,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: plant_weeds
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: plant_weeds
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
     range: -1
@@ -223,9 +245,16 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon: { sprite: _CMU14/Actions/actions_pathogen.rsi, state: design_mark_1 }
-    iconOn: { sprite: _CMU14/Actions/actions_pathogen.rsi, state: design_mark_2 }
     useDelay: 0.2
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: design_mark_1
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: design_mark_2
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Designer.DesignerSelectedDesignToggleActionEvent
   - type: RMCDazeableAction
@@ -238,8 +267,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon: { sprite: _CMU14/Actions/actions_pathogen.rsi, state: greater_resin_surge }
     useDelay: 30
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: greater_resin_surge
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Designer.DesignerGreaterResinSurgeActionEvent
   - type: RMCDazeableAction

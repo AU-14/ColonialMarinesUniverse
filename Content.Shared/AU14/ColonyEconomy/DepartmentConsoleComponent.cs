@@ -2,7 +2,7 @@ using Content.Shared.Access;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.AU14.ColonyEconomy;
+namespace Content.Shared.CMU14.ColonyEconomy;
 
 [RegisterComponent]
 public sealed partial class DepartmentConsoleComponent : Component

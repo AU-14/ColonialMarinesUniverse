@@ -1,18 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
-using Content.Client._AU14.Administration;
+using Content.Client.CMU14.Administration;
 using Content.Client.Construction;
-using Content.Shared._AU14.Administration;
-using Content.Shared._AU14.Construction.CustomConstruction;
-using Content.Client._AU14.ZLevelBuilding;
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Client.Popups;
+using Content.Shared.CMU14.Administration;
+using Content.Shared.CMU14.Construction.CustomConstruction;
+using Content.Client.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.Popups;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._AU14.Construction.CustomConstruction;
+namespace Content.Client.CMU14.Construction.CustomConstruction;
 
 /// <summary>
 /// Client side of the construction-menu editor. Opens <see cref="ConstructionEditorWindow"/> when the
@@ -20,11 +21,11 @@ namespace Content.Client._AU14.Construction.CustomConstruction;
 /// to the server. Also drives the in-menu "Construction Items Editor" utility: opens the entity selector,
 /// then asks the server to open the editor for the chosen entity (with a client-side admin pre-check).
 /// </summary>
-public sealed partial class CustomConstructionEditorClientSystem : EntitySystem
+public sealed class CustomConstructionEditorClientSystem : EntitySystem
 {
-    [Dependency] private  SharedPopupSystem _popup = default!;
-    [Dependency] private  ToolPermissionClientSystem _toolPerms = default!;
-    [Dependency] private  IPrototypeManager _prototypes = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly ToolPermissionClientSystem _toolPerms = default!;
+    [Dependency] private readonly IPrototypeManager _prototypes = default!;
 
     /// <summary>
     /// Client-side pre-check mirroring the server gate: a Host-flagged admin OR a ckey granted this

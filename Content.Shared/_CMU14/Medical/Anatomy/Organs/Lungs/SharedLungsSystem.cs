@@ -1,10 +1,11 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs.Events;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs.Events;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -15,7 +16,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
+namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 
 public abstract partial class SharedLungsSystem : EntitySystem
 {
@@ -24,7 +25,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
     [Dependency] protected IRobustRandom Random = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId PulmonaryEdema = "StatusEffectCMUPulmonaryEdema";

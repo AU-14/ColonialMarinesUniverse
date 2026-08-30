@@ -1,16 +1,16 @@
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Body.Part;
 using Content.Shared.Projectiles;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.ClawSharpness;
 using Robust.Shared.Configuration;
 using Robust.Shared.Random;
-using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using Content.Shared._CMU14.Medical.Core;
+using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using Content.Shared.CMU14.Medical.Core;
 
-namespace Content.Shared._CMU14.Medical.Injuries.Trauma;
+namespace Content.Shared.CMU14.Medical.Injuries.Trauma;
 
 public sealed partial class SharedCMUTraumaSystem : EntitySystem
 {

@@ -3,14 +3,15 @@ using Content.Server.GameTicking;
 using Content.Server.Popups;
 using Content.Shared.Administration;
 using Content.Shared.GameTicking;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
+using Content.Shared.Ghost.Systems;
 using Content.Shared.Mind;
 using Robust.Server.GameObjects;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 
-namespace Content.Server._CMU14.Ghost;
+namespace Content.Server.CMU14.Ghost;
 
 [AdminCommand(AdminFlags.MentorHelp)]
 public sealed partial class MGhostCommand : LocalizedCommands

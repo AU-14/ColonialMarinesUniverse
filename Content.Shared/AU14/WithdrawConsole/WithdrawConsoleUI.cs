@@ -1,6 +1,6 @@
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.AU14.WithdrawConsole;
+namespace Content.Shared.CMU14.WithdrawConsole;
 
 [Serializable, NetSerializable]
 public enum WithdrawConsoleUiKey

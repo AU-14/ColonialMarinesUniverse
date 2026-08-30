@@ -1,11 +1,11 @@
-using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
-namespace Content.Client._CMU14.Threats.Mobs.Xeno.Xenonids.Warlock;
+namespace Content.Client.CMU14.Threats.Mobs.Xeno.Xenonids.Warlock;
 
 /// <summary>
 /// Draws a pulsing outline on any projectile currently frozen by the psychic shield so the

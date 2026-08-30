@@ -1,7 +1,7 @@
 using Content.Shared.Eui;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._AU14.Insurgency.Editor;
+namespace Content.Shared.CMU14.Insurgency.Editor;
 
 /// <summary>
 ///     State pushed to the faction editor client. Carries every stored faction as a full

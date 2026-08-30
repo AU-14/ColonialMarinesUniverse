@@ -1,23 +1,25 @@
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Content.Shared._CMU14.DroneOperator;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Conditions;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
-using Content.Shared._CMU14.Medical.Injuries.Pain;
+using System.Diagnostics.CodeAnalysis;
+using Content.Shared.CMU14.DroneOperator;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Conditions;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Effects;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Markers;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared.Bed.Sleep;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -39,7 +41,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 {
@@ -58,7 +60,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     [Dependency] protected SharedPainShockSystem Pain = default!;
     [Dependency] protected CMUSurgerySessionSystem SurgerySessions = default!;
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected SharedUserInterfaceSystem UserInterface = default!;
     [Dependency] protected SharedCMSurgerySystem RmcSurgery = default!;
 
@@ -1904,11 +1906,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
     public bool LimbMatchesMissingSlot(EntityUid patient, EntityUid heldLimb, BodyPartType targetType, BodyPartSymmetry targetSymmetry)
     {
-        if (!TryComp<BodyPartComponent>(heldLimb, out var heldBp))
+        if (!TryResolveHeldLimbRoot(heldLimb, out var limbRoot, out var heldBp))
             return false;
+
         if (heldBp.PartType != targetType || heldBp.Symmetry != targetSymmetry)
             return false;
-        if (!CanPatientAcceptLimb(patient, heldLimb))
+        if (!CanPatientAcceptLimb(patient, limbRoot))
             return false;
         if (!CMUBodyPartSlots.IsReportableMissingPart(targetType))
             return false;
@@ -1926,6 +1929,13 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     {
         if (category is null)
             return true;
+
+        // Nubody severs a whole organ subtree into a DetachedBody carrier. Keep
+        // direct legacy body parts valid, but only unwrap the exact carrier
+        // prototype so an arbitrary body entity cannot masquerade as a limb.
+        if (category == "severed_limb")
+            return TryResolveHeldLimbRoot(tool, out _, out _);
+
         if (!_toolCategories.TryGetValue(category, out var componentTypes))
             return false;
 
@@ -1935,6 +1945,29 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                 return true;
         }
         return false;
+    }
+
+    private bool TryResolveHeldLimbRoot(
+        EntityUid held,
+        out EntityUid limbRoot,
+        [NotNullWhen(true)] out BodyPartComponent? bodyPart)
+    {
+        limbRoot = held;
+        if (TryComp(held, out bodyPart))
+            return true;
+
+        if (MetaData(held).EntityPrototype?.ID != "DetachedBody" ||
+            !TryComp<BodyComponent>(held, out var carrier) ||
+            Body.GetRootPartOrNull(held, carrier) is not { } root ||
+            !CMUBodyPartSlots.IsReportableMissingPart(root.BodyPart.PartType))
+        {
+            bodyPart = null;
+            return false;
+        }
+
+        limbRoot = root.Entity;
+        bodyPart = root.BodyPart;
+        return true;
     }
 
     public bool TryGetWrongToolDamage(EntityUid tool, out string damageType, out float amount)

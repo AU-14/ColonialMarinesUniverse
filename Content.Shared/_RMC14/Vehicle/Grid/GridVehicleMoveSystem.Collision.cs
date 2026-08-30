@@ -1,10 +1,11 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Vehicles;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Doors.Components;
 using Content.Shared.Foldable;
 using Content.Shared.Item;

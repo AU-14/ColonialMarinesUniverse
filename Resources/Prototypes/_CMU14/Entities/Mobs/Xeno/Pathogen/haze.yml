@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-haze
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/haze.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/haze.rsi
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -126,8 +126,10 @@
   - type: MeleeWeapon
     attackRate: 1.5
     damage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: CMArmor
     explosionArmor: 10
   - type: Tackle
@@ -140,10 +142,10 @@
     size: Small
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: neophyte
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:

@@ -1,24 +1,24 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Access.Systems;
-using Content.Server.AU14.Round;
-using Content.Server.AU14.VendorMarker;
+using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Scenario;
+using Content.Server.CMU14.VendorMarker;
 using Content.Server.Chat.Systems;
-using Content.Server._CMU14.Roles;
-using Content.Server._CMU14.Threats;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
-using Content.Server.IdentityManagement;
 using Content.Server.Preferences.Managers;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Map;
 using Content.Shared.Access.Components;
-using Content.Shared.AU14.util;
-using Content.Shared.Ghost;
+using Content.Shared.CMU14.Scenario;
+using Content.Shared.CMU14.util;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -36,22 +36,20 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using ParachuteMarkerComponent = Content.Shared._CMU14.Threats.ParachuteMarkerComponent;
+using ParachuteMarkerComponent = Content.Shared.CMU14.Threats.ParachuteMarkerComponent;
 
-namespace Content.Server._CMU14.Ops.ThirdParty;
+namespace Content.Server.CMU14.Ops.ThirdParty;
 
 public sealed partial class ThirdPartySystem : EntitySystem
 {
-    private static readonly IReadOnlyDictionary<string, JobScaleEntry> EmptyScaling
-        = new Dictionary<string, JobScaleEntry>();
-
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private ThreatSystem _threatSystem = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -61,7 +59,6 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
-    [Dependency] private SurvivorSupplementSystem _survivorSupplement = default!;
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
@@ -203,11 +200,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
             ? overrideDropship.Value ? "shuttle" : "ground"
             : string.IsNullOrWhiteSpace(party.EntryMethod) ? "ground" : party.EntryMethod;
         _sawmill.Debug($"[ThirdPartySystem] Entry method: {entryMethod} (overrideDropship={overrideDropship})");
+        string presetId = _auRoundSystem.SelectedPreset?.ID ?? string.Empty;
+        bool coveredScenarioForce = _scenarioPlan.HasMappedThirdPartyRoundGroup(presetId, party.ID);
         if (_sawmill.Level <= LogLevel.Debug)
         {
             ThirdPartyAssignmentCounts assignmentCounts = ThirdPartySystem.CountThirdPartyAssignments(assignedJobs);
             _sawmill.Debug(
-                $"[ThirdPartySystem] Spawn context: party={party.ID}, spawnProto={spawnProto.ID}, roundStart={roundStart}, threat={_currentThreat?.ID ?? "null"}, entryMethod={entryMethod}, assignedJobs={assignedJobs?.Count ?? 0}, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={assignmentCounts.Members}.");
+                $"[ThirdPartySystem] Spawn context: party={party.ID}, spawnProto={spawnProto.ID}, roundStart={roundStart}, preset={presetId}, threat={_currentThreat?.ID ?? "null"}, entryMethod={entryMethod}, coveredScenarioForce={coveredScenarioForce}, assignedJobs={assignedJobs?.Count ?? 0}, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={assignmentCounts.Members}.");
         }
 
         List<EntityUid> markerEntities = new();
@@ -304,6 +303,17 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 AddMarkerEntity(uid);
             }
 
+            EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent> scenarioMarkerQuery = _entityManager
+                .EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent>();
+            while (scenarioMarkerQuery.MoveNext(out EntityUid uid, out _, out TransformComponent? transform))
+            {
+                if (!HasStandaloneThirdPartyMarker(uid) ||
+                    !ThirdPartySystem.IsOnGrid(transform, mainGridUid))
+                    continue;
+
+                AddMarkerEntity(uid);
+            }
+
             _sawmill.Debug($"[ThirdPartySystem] Dropship markers collected: {markerEntities.Count}");
 
             // Spawn consoles
@@ -390,6 +400,16 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 AddMarkerEntity(uid);
             }
 
+            EntityQueryEnumerator<ScenarioSpawnMarkerComponent> scenarioMarkerQuery
+                = _entityManager.EntityQueryEnumerator<ScenarioSpawnMarkerComponent>();
+            while (scenarioMarkerQuery.MoveNext(out EntityUid uid, out _))
+            {
+                if (!HasStandaloneThirdPartyMarker(uid))
+                    continue;
+
+                AddMarkerEntity(uid);
+            }
+
             _sawmill.Debug($"[ThirdPartySystem] Main map third-party markers collected: {markerEntities.Count}");
         }
 
@@ -413,18 +433,52 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 $"[ThirdPartySystem] Candidate marker maps for third party ({party.ID}): count={candidateMapIds.Count}, maps=[{string.Join(", ", candidateMapIds)}], initialMap={mapId?.ToString() ?? "null"}.");
         }
 
-        IReadOnlyDictionary<string, int> leaderBodies = ThreatVoteSelection.GetScaledBodies(
-            spawnProto.LeadersToSpawn,
-            EmptyScaling,
-            0);
-        IReadOnlyDictionary<string, int> gruntBodies = ThreatVoteSelection.GetScaledBodies(
-            spawnProto.GruntsToSpawn,
-            EmptyScaling,
-            0);
-        IReadOnlyDictionary<string, int> entityBodies = ThreatVoteSelection.GetScaledBodies(
-            spawnProto.EntitiesToSpawn,
-            EmptyScaling,
-            0);
+        ResolvedThirdPartySpawnMarkerSet? scenarioMarkers = null;
+        foreach (MapId spawnMapId in candidateMapIds)
+        {
+            if (!TryResolveScenarioPlanSpawnMarkers(
+                party,
+                spawnMapId,
+                assignedJobs,
+                out scenarioMarkers,
+                false,
+                coveredScenarioForce))
+                continue;
+
+            mapId = spawnMapId;
+            break;
+        }
+
+        if (scenarioMarkers == null &&
+            mapId is { } fallbackMapId)
+        {
+            TryResolveScenarioPlanSpawnMarkers(
+                party,
+                fallbackMapId,
+                assignedJobs,
+                out scenarioMarkers,
+                coveredScenarioForce: coveredScenarioForce);
+        }
+
+        if (scenarioMarkers == null && coveredScenarioForce)
+        {
+            _sawmill.Error(
+                $"[ThirdPartySystem] Covered Round Group for third party '{party.ID}' resolved without live Spawn Markers; aborting authoritative Scenario Plan third-party spawn instead of using legacy marker lookup.");
+            return false;
+        }
+
+        IReadOnlyDictionary<string, int> leaderBodies = ThirdPartySystem.GetSpawnBodies(
+            scenarioMarkers?.Force.SpawnPlan,
+            ThreatMarkerType.Leader,
+            spawnProto.LeadersToSpawn);
+        IReadOnlyDictionary<string, int> gruntBodies = ThirdPartySystem.GetSpawnBodies(
+            scenarioMarkers?.Force.SpawnPlan,
+            ThreatMarkerType.Member,
+            spawnProto.GruntsToSpawn);
+        IReadOnlyDictionary<string, int> entityBodies = ThirdPartySystem.GetSpawnBodies(
+            scenarioMarkers?.Force.SpawnPlan,
+            ThreatMarkerType.Entity,
+            spawnProto.EntitiesToSpawn);
         int leaderReq = leaderBodies.Values.Sum();
         int gruntReq = gruntBodies.Values.Sum();
         int entityReq = entityBodies.Values.Sum();
@@ -455,6 +509,40 @@ public sealed partial class ThirdPartySystem : EntitySystem
         List<EntityUid> ResolveMarkers(ThreatMarkerType markerType)
         {
             TimeSpan time = _timing.CurTime;
+            if (scenarioMarkers != null &&
+                scenarioMarkers.TryGetMarkers(markerType.ToString(), out IReadOnlyList<EntityUid> plannedMarkers))
+            {
+                EntityUid? gridUid = useDropship && mainGridUid != EntityUid.Invalid
+                    ? mainGridUid
+                    : null;
+                int requiredBodyCount = GetRequiredBodyCount(markerType);
+                List<EntityUid> filteredScenarioMarkers = FilterScenarioMarkers(markerType, plannedMarkers, time, mapId,
+                    gridUid, false);
+                if (roundStart && filteredScenarioMarkers.Count < requiredBodyCount)
+                {
+                    List<EntityUid> cooldownMarkers = FilterScenarioMarkers(markerType, plannedMarkers, time, mapId,
+                        gridUid, true);
+                    cooldownMarkers.RemoveAll(filteredScenarioMarkers.Contains);
+
+                    int markersNeeded = requiredBodyCount - filteredScenarioMarkers.Count;
+                    int markersReused = Math.Min(markersNeeded, cooldownMarkers.Count);
+                    if (markersReused > 0)
+                    {
+                        filteredScenarioMarkers.AddRange(cooldownMarkers.Take(markersReused));
+                        _sawmill.Warning(
+                            $"[ThirdPartySystem] Round-start third party ({party.ID}) is reusing {markersReused} {markerType} marker(s) on cooldown because only {filteredScenarioMarkers.Count - markersReused} available marker(s) remain for {requiredBodyCount} body/bodies.");
+                    }
+                }
+                _sawmill.Debug($"[ThirdPartySystem] GetMarkers({markerType}): Using {filteredScenarioMarkers.Count} Scenario Plan marker(s) on map {mapId}");
+                if (filteredScenarioMarkers.Count > 0 || !useDropship)
+                    return filteredScenarioMarkers;
+
+                if (coveredScenarioForce)
+                    return filteredScenarioMarkers;
+
+                _sawmill.Warning($"[ThirdPartySystem] Scenario Plan resolved no dropship grid markers for {markerType} on grid {mainGridUid}; falling back to legacy marker lookup.");
+            }
+
             string markerId = spawnProto.Markers.TryGetValue(markerType, out string? id) ? id : string.Empty;
             var legacyMarkers = new List<EntityUid>();
             var legacyCooldownMarkers = new List<EntityUid>();
@@ -561,7 +649,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         if (_sawmill.Level <= LogLevel.Debug)
         {
             _sawmill.Debug(
-                $"[ThirdPartySystem] Spawn plan for third party ({party.ID}): leaders[{ThirdPartySystem.FormatSpawnBodies(leaderBodies)}] requested={leaderReq} markers={leaderMarkers.Count}, grunts[{ThirdPartySystem.FormatSpawnBodies(gruntBodies)}] requested={gruntReq} markers={gruntMarkers.Count}, entities[{ThirdPartySystem.FormatSpawnBodies(entityBodies)}] requested={entityReq} markers={entityMarkers.Count}.");
+                $"[ThirdPartySystem] Spawn plan for third party ({party.ID}): force={scenarioMarkers?.Force.ForceId ?? "legacy"}, leaders[{ThirdPartySystem.FormatSpawnBodies(leaderBodies)}] requested={leaderReq} markers={leaderMarkers.Count}, grunts[{ThirdPartySystem.FormatSpawnBodies(gruntBodies)}] requested={gruntReq} markers={gruntMarkers.Count}, entities[{ThirdPartySystem.FormatSpawnBodies(entityBodies)}] requested={entityReq} markers={entityMarkers.Count}.");
         }
 
         if (leaderReq > 0 && leaderMarkers.Count == 0)
@@ -596,7 +684,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         // If parachute mode, use the parachute marker pool for all types; make local mutable copies so we can pick
         // without replacement during this spawn
-        if (parachuteMode)
+        if (parachuteMode && scenarioMarkers == null)
         {
             // Parachute markers must still have a ThreatSpawnMarkerComponent with ThirdParty==true
             leaderMarkers = FilterByType(ThreatMarkerType.Leader);
@@ -662,12 +750,6 @@ public sealed partial class ThirdPartySystem : EntitySystem
             return true;
         }
 
-        _threatSystem.AnnounceMarkerShortfall("THIRD PARTY",
-            party.ID,
-            (ThreatMarkerType.Leader, leaderReq, leaderMarkers.Count + unsafeLeaderMarkers.Count),
-            (ThreatMarkerType.Member, gruntReq, gruntMarkers.Count + unsafeGruntMarkers.Count),
-            (ThreatMarkerType.Entity, entityReq, entityMarkers.Count + unsafeEntityMarkers.Count));
-
         if (!ValidateMarkerPool("leader", leaderReq, leaderMarkers, unsafeLeaderMarkers) ||
             !ValidateMarkerPool("member", gruntReq, gruntMarkers, unsafeGruntMarkers) ||
             !ValidateMarkerPool("entity", entityReq, entityMarkers, unsafeEntityMarkers))
@@ -732,7 +814,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 return;
 
             EntityUid centerMarkerUid = lastUsedMarker.Value;
-            if (!_entityManager.HasComponent<ThreatSpawnMarkerComponent>(centerMarkerUid))
+            if (!_entityManager.HasComponent<ThreatSpawnMarkerComponent>(centerMarkerUid) &&
+                !_entityManager.HasComponent<ScenarioSpawnMarkerCooldownComponent>(centerMarkerUid))
                 return;
 
             var centerXform = _entityManager.GetComponent<TransformComponent>(centerMarkerUid);
@@ -760,16 +843,23 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     }
                 }
             }
+
+            EntityQueryEnumerator<ScenarioSpawnMarkerCooldownComponent, TransformComponent> scenarioQuery
+                = _entityManager.EntityQueryEnumerator<ScenarioSpawnMarkerCooldownComponent, TransformComponent>();
+            while (scenarioQuery.MoveNext(out EntityUid otherUid, out _, out TransformComponent? otherXform))
+            {
+                if (otherUid == centerMarkerUid ||
+                    otherXform.MapID != centerMap ||
+                    !HasStandaloneThirdPartyMarker(otherUid))
+                    continue;
+
+                if (_transform.InRange(otherXform.Coordinates, centerCoords, SpawnTogetherRadius))
+                    ApplyScenarioMarkerCooldown(otherUid);
+            }
         }
 
         // Run neighbor-marking now (only once per spawn operation, using the last used marker)
         MarkNeighborsIfNeeded();
-
-        if (roundStart && party.AnnounceAsSurvivors)
-        {
-            foreach (EntityUid survivor in spawnedLeaders.Concat(spawnedGrunts))
-                _survivorSupplement.ApplyToSurvivor(survivor);
-        }
 
         if (roundStart && assignedJobs != null)
         {
@@ -798,6 +888,23 @@ public sealed partial class ThirdPartySystem : EntitySystem
         return true;
     }
 
+    private static IReadOnlyDictionary<string, int> GetSpawnBodies(ResolvedSpawnPlan? spawnPlan,
+        ThreatMarkerType markerType,
+        IReadOnlyDictionary<string, int> legacyBodies)
+    {
+        SpawnBodyBucket? bucket = spawnPlan?.BodyBuckets.FirstOrDefault(bodyBucket =>
+            bodyBucket.Bucket.Equals(markerType.ToString(), StringComparison.OrdinalIgnoreCase));
+        if (bucket != null &&
+            (bucket.Bodies.Count > 0 || bucket.Count == 0))
+            return bucket.Bodies;
+
+        return legacyBodies
+            .ToDictionary(
+                body => body.Key,
+                body => Math.Max(0, body.Value),
+                StringComparer.OrdinalIgnoreCase);
+    }
+
     private static bool IsOnGrid(TransformComponent transform, EntityUid gridUid)
         => (transform.GridUid.HasValue && transform.GridUid.Value == gridUid) ||
             transform.ParentUid == gridUid;
@@ -810,6 +917,63 @@ public sealed partial class ThirdPartySystem : EntitySystem
                !destinationComponent.Home &&
                !HasComp<ThirdPartyDropshipReturnDestinationComponent>(destination) &&
                string.Equals(destinationComponent.FactionController, ThirdPartyFaction, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private List<EntityUid> FilterScenarioMarkers(ThreatMarkerType markerType,
+        IReadOnlyList<EntityUid> candidateMarkers,
+        TimeSpan time,
+        MapId? mapId,
+        EntityUid? gridUid,
+        bool includeCooldown)
+    {
+        var filteredMarkers = new List<EntityUid>();
+        foreach (EntityUid uid in candidateMarkers)
+        {
+            if (!_entityManager.TryGetComponent(uid, out TransformComponent? transform))
+                continue;
+
+            if (mapId != null && transform.MapID != mapId) continue;
+
+            if (gridUid != null &&
+                !ThirdPartySystem.IsOnGrid(transform, gridUid.Value))
+                continue;
+
+            if (_entityManager.TryGetComponent(uid, out ThreatSpawnMarkerComponent? marker))
+            {
+                if (marker.ThreatMarkerType != markerType ||
+                    !marker.ThirdParty ||
+                    (!includeCooldown && marker.NextAvailableAt > time))
+                    continue;
+
+                if (IsMarkerBlockedByWalls(uid))
+                    continue;
+
+                filteredMarkers.Add(uid);
+                continue;
+            }
+
+            if (HasStandaloneThirdPartyMarker(uid, markerType)
+                && (includeCooldown || IsScenarioMarkerAvailable(uid, time))
+                && !IsMarkerBlockedByWalls(uid))
+                filteredMarkers.Add(uid);
+        }
+
+        return filteredMarkers;
+    }
+
+    private bool HasStandaloneThirdPartyMarker(EntityUid uid, ThreatMarkerType? markerType = null)
+    {
+        if (!_entityManager.TryGetComponent(uid, out ScenarioSpawnMarkerComponent? marker) ||
+            marker.Kind != SpawnMarkerKind.ThirdPartyMarker ||
+            !marker.Tags.Contains(ScenarioMarkerTags.ForceThirdParty, StringComparer.OrdinalIgnoreCase))
+            return false;
+
+        if (markerType != null &&
+            !marker.Tags.Contains(ScenarioMarkerTags.Bucket(markerType.Value.ToString()),
+                StringComparer.OrdinalIgnoreCase))
+            return false;
+
+        return !_entityManager.HasComponent<ThreatSpawnMarkerComponent>(uid);
     }
 
     private bool TryLoadDropshipGrid(ResPath path, DeserializationOptions options, out EntityUid gridUid)
@@ -835,6 +999,78 @@ public sealed partial class ThirdPartySystem : EntitySystem
         return false;
     }
 
+    private bool IsScenarioMarkerAvailable(EntityUid uid, TimeSpan time)
+        => !_entityManager.TryGetComponent(uid, out ScenarioSpawnMarkerCooldownComponent? cooldown) ||
+            cooldown.NextAvailableAt <= time;
+
+    private void ApplyScenarioMarkerCooldown(EntityUid uid)
+    {
+        if (!_entityManager.TryGetComponent(uid, out ScenarioSpawnMarkerCooldownComponent? cooldown))
+            return;
+
+        cooldown.NextAvailableAt = _timing.CurTime + cooldown.Cooldown;
+        Dirty(uid, cooldown);
+    }
+
+    private bool TryResolveScenarioPlanSpawnMarkers(ThirdPartyPrototype party,
+        MapId mapId,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs,
+        out ResolvedThirdPartySpawnMarkerSet? markers,
+        bool logFailure = true,
+        bool coveredScenarioForce = false)
+    {
+        markers = null;
+
+        try
+        {
+            ScenarioPlanValidationRequest request = BuildThirdPartySpawnScenarioPlanRequest(assignedJobs);
+            if (_scenarioPlan.TryResolveThirdPartySpawnMarkers(request, party.ID, mapId, out markers,
+                out string diagnostic))
+            {
+                _sawmill.Debug($"[ThirdPartySystem] Using Scenario Plan Spawn Markers for third party '{party.ID}' on map {mapId}.");
+                return true;
+            }
+
+            if (logFailure)
+            {
+                string backupDiagnostic = coveredScenarioForce
+                    ? "covered Round Groups do not use legacy marker lookup"
+                    : "falling back to legacy marker lookup";
+                _sawmill.Warning($"[ThirdPartySystem] Could not resolve Scenario Plan Spawn Markers for third party '{party.ID}' on map {mapId}; {backupDiagnostic}. {diagnostic}");
+            }
+        }
+        catch (Exception ex)
+        {
+            if (logFailure)
+            {
+                string backupDiagnostic = coveredScenarioForce
+                    ? "covered Round Groups do not use legacy marker lookup"
+                    : "falling back to legacy marker lookup";
+                _sawmill.Error($"[ThirdPartySystem] Scenario Plan Spawn Marker resolution threw for third party '{party.ID}' on map {mapId}; {backupDiagnostic}. {ex}");
+            }
+        }
+
+        markers = null;
+        return false;
+    }
+
+    private ScenarioPlanValidationRequest BuildThirdPartySpawnScenarioPlanRequest(
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs)
+    {
+        int playerCount = Math.Max(_playerManager.PlayerCount, assignedJobs?.Count ?? 0);
+
+        return new(
+            _auRoundSystem.SelectedPreset?.ID ?? string.Empty,
+            playerCount,
+            _platoonSpawnRule.SelectedGovforPlatoon?.ID,
+            _platoonSpawnRule.SelectedOpforPlatoon?.ID,
+            _auRoundSystem.GetSelectedPlanetId(),
+            _auRoundSystem.GetSelectedPlanet()?.MapId,
+            _currentThreat?.ID,
+            _auRoundSystem.GetSelectedGovforShip(),
+            _auRoundSystem.GetSelectedOpforShip());
+    }
+
     private string GetPlayerCharacterName(ICommonSession player, EntityUid? mind, string fallback)
     {
         if (mind != null &&
@@ -851,7 +1087,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
     private void ApplyPlayerCharacterName(EntityUid mob, string characterName)
     {
-        if (!HasComp<HumanoidAppearanceComponent>(mob))
+        if (!HasComp<HumanoidProfileComponent>(mob))
             return;
 
         if (string.IsNullOrWhiteSpace(characterName))
@@ -1020,6 +1256,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 markerComp.NextAvailableAt = _timing.CurTime + markerComp.Cooldown;
                 Dirty(marker, markerComp);
             }
+            else if (!parachuteMode) ApplyScenarioMarkerCooldown(marker);
 
             // Parachute markers are intentionally NOT marked as used so they may be reused.
             lastUsedMarker = marker;

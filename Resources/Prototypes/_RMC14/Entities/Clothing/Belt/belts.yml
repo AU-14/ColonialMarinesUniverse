@@ -2495,6 +2495,7 @@
     - 0,0,11,1 # 6 slots
     whitelist:
       tags:
+      - Stunbaton
       - SecBeltEquip
       - Taser
       - Flashlight
@@ -2511,7 +2512,6 @@
       - Handcuff
       - Flash
       - FlashOnTrigger
-      - Stunbaton
       - ForensicScanner
       - MeleeWeapon
       - Gun

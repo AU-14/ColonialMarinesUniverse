@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Threats;
+namespace Content.Shared.CMU14.Threats;
 
 [RegisterComponent]
 public sealed partial class InsurgencyRuleComponent : Component

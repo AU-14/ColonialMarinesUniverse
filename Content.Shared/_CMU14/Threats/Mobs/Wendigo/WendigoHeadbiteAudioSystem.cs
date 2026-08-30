@@ -10,7 +10,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Wendigo;
+namespace Content.Shared.CMU14.Threats.Mobs.Wendigo;
 
 public sealed partial class WendigoHeadbiteAudioSystem : EntitySystem
 {

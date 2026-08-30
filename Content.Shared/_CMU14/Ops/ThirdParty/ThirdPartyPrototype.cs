@@ -2,7 +2,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CMU14.Threats;
+namespace Content.Shared.CMU14.Threats;
 
 [Prototype]
 public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototype
@@ -31,7 +31,7 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     public string? EntryMethod { get; private set; }
 
     [DataField("dropshippath", required: false)]
-    public ResPath dropshippath { get; private set; } = new("/Maps/_CMU14/Shuttles/black_ert.yml");
+    public ResPath dropshippath { get; private set; } = new("/Maps/CMU14/Shuttles/black_ert.yml");
 
     // used if enterbyshuttle is true
 

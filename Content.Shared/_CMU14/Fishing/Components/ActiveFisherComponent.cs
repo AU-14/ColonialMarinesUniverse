@@ -6,7 +6,7 @@
 
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Fishing.Components;
+namespace Content.Shared.CMU14.Fishing.Components;
 
 /// <summary>
 /// Applied to players that are pulling fish out from water

@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.HUD;
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -10,7 +10,7 @@ using Content.Shared.Body.Part;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 
-namespace Content.Server._CMU14.Medical.Diagnostics.Holocards;
+namespace Content.Server.CMU14.Medical.Diagnostics.Holocards;
 
 /// <summary>
 ///     Automatically upgrades holocards for severe injuries without replacing

@@ -3,7 +3,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
+namespace Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities;
 
 /// <summary>
 ///     Boiler-style acid spray. Launches a fan of acid projectiles in a cone

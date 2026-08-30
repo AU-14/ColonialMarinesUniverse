@@ -23,7 +23,7 @@
     mindRole: MindRoleCLFGuerrilla
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmucolonyblips.rsi
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
       state: colonist
   - type: ShowMarineIcons
     factions:

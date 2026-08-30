@@ -1,5 +1,5 @@
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Sporecaster;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Sporecaster;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Synth;
@@ -16,23 +16,23 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Interaction;
 using Content.Shared.Body.Systems;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared.Examine;
 
-namespace Content.Server._CMU14.Xenomorphs.Pathogen.Sporecaster;
+namespace Content.Server.CMU14.Xenomorphs.Pathogen.Sporecaster;
 
-public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
+public sealed class CMUPathogenSporecasterSystem : EntitySystem
 {
-    [Dependency] private  EntityLookupSystem _lookup = default!;
-    [Dependency] private  IGameTiming _timing = default!;
-    [Dependency] private  IRobustRandom _random = default!;
-    [Dependency] private  SharedXenoHiveSystem _hive = default!;
-    [Dependency] private  SharedPopupSystem _popup = default!;
-    [Dependency] private  InventorySystem _inventory = default!;
-    [Dependency] private  MobStateSystem _mobState = default!;
-    [Dependency] private  SharedBodySystem _body = default!;
-    [Dependency] private  Content.Shared._CMU14.Medical.Injuries.Wounds.SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private readonly Content.Shared.CMU14.Medical.Injuries.Wounds.SharedCMUWoundsSystem _wounds = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _nearby = new();
 

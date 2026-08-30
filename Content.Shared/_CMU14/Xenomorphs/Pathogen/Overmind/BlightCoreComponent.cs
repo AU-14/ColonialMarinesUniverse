@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 
 /// <summary>
 /// The Pathogen Confluence's equivalent of the Hive Core.

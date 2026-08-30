@@ -77,8 +77,9 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameAPC
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoMultiplier: 3.4
     otherMultiplier: 1

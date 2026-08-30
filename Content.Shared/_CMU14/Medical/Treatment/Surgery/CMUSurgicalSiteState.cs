@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
+namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 
 public enum CMUSurgicalAccess : byte
 {

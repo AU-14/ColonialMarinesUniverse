@@ -1,7 +1,7 @@
-using Content.Shared._CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.Round.Objectives.Components;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Round.Objectives.Type;
+namespace Content.Shared.CMU14.Round.Objectives.Type;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CaptureObjectiveComponent : Robust.Shared.GameObjects.Component

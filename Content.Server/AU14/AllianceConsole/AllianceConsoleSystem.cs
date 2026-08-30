@@ -2,7 +2,7 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
-using Content.Shared.AU14.AllianceConsole;
+using Content.Shared.CMU14.AllianceConsole;
 using Content.Shared.Database;
 using Content.Shared.Inventory;
 using Content.Shared.NPC.Components;
@@ -11,7 +11,7 @@ using Content.Shared.NPC.Systems;
 using Content.Shared._RMC14.Sentry;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.AU14.AllianceConsole;
+namespace Content.Server.CMU14.AllianceConsole;
 
 public sealed partial class AllianceConsoleSystem : EntitySystem
 {

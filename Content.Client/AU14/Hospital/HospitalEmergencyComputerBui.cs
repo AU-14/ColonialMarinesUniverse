@@ -1,7 +1,7 @@
-using Content.Shared.AU14.Hospital;
+using Content.Shared.CMU14.Hospital;
 using Robust.Client.UserInterface;
 
-namespace Content.Client.AU14.Hospital;
+namespace Content.Client.CMU14.Hospital;
 
 public sealed class HospitalEmergencyComputerBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {

@@ -1,8 +1,8 @@
 using Content.Client._RMC14.Overwatch;
-using Content.Shared._AU14.Callsigns;
+using Content.Shared.CMU14.Callsigns;
 using Content.Shared._RMC14.Overwatch;
 
-namespace Content.Client._AU14.Overwatch;
+namespace Content.Client.CMU14.Overwatch;
 
 // injects the comms directory tab into open overwatch consoles from outside the
 // upstream BUI, so no RMC file needs to wire the button in. only entities that

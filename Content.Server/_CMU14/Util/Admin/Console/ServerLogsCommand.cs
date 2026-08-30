@@ -3,14 +3,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Content.Server.Administration;
-using Content.Shared._CMU14.Administration.Console;
+using Content.Shared.CMU14.Administration.Console;
 using Content.Shared.Administration;
 using Robust.Server.Player;
 using Robust.Shared.Console;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
-namespace Content.Server._CMU14.Administration.Console;
+namespace Content.Server.CMU14.Administration.Console;
 
 [AdminCommand(AdminFlags.Host)]
 public sealed partial class ServerLogsCommand : LocalizedCommands

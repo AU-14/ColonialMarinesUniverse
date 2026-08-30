@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Content.Shared._AU14.Insurgency;
+using Content.Shared.CMU14.Insurgency;
 using Robust.Shared.ContentPack;
 using Robust.Shared.IoC;
 using Robust.Shared.Log;
@@ -14,7 +14,7 @@ using Robust.Shared.Utility;
 using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
-namespace Content.Client._AU14.Insurgency.CustomFactions;
+namespace Content.Client.CMU14.Insurgency.CustomFactions;
 
 /// <summary>
 ///     Reads and writes the player's own Custom INSFOR factions as YAML files under their user data.

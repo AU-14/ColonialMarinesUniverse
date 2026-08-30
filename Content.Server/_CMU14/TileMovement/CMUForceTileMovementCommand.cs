@@ -5,7 +5,7 @@ using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 
-namespace Content.Server._CMU14.TileMovement;
+namespace Content.Server.CMU14.TileMovement;
 
 [AdminCommand(AdminFlags.Server)]
 public sealed partial class CMUForceTileMovementCommand : LocalizedCommands

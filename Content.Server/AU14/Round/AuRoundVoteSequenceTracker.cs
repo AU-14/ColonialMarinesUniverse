@@ -1,7 +1,7 @@
 using Content.Server.Voting;
 using Content.Server.Voting.Managers;
 
-namespace Content.Server.AU14.Round;
+namespace Content.Server.CMU14.Round;
 
 internal sealed class AuRoundVoteSequenceTracker
 {

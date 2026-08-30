@@ -1,4 +1,4 @@
-namespace Content.Server.AU14.Airlock;
+namespace Content.Server.CMU14.Airlock;
 
 [RegisterComponent]
 public sealed partial class AURandomAirlockBreakComponent : Component

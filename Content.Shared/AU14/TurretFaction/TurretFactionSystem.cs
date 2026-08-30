@@ -7,7 +7,7 @@ using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
 using Robust.Shared.Network;
 
-namespace Content.Shared.AU14.TurretFaction;
+namespace Content.Shared.CMU14.TurretFaction;
 
 public sealed partial class TurretFactionSystem : EntitySystem
 {

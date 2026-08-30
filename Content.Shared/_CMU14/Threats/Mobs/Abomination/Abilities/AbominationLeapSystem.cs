@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
@@ -16,7 +17,7 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Abilities;
+namespace Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities;
 
 public sealed partial class AbominationLeapSystem : EntitySystem
 {

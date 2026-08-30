@@ -1,7 +1,7 @@
-// Content.Server/AU14/ColonyEconomy/ColonyBudgetSystem.cs
-using Content.Shared.AU14.ColonyEconomy;
+// Content.Server/CMU14/ColonyEconomy/ColonyBudgetSystem.cs
+using Content.Shared.CMU14.ColonyEconomy;
 
-namespace Content.Server.AU14.ColonyEconomy;
+namespace Content.Server.CMU14.ColonyEconomy;
 
 public sealed class ColonyBudgetSystem : EntitySystem
 {

@@ -2,7 +2,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeSac;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeSac;
 
 /// <summary>
 /// Lets the Popper place a Spore Sac structure at a target tile.

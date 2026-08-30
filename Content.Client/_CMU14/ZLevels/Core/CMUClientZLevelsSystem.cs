@@ -1,8 +1,8 @@
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels;
-using Content.Shared._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Camera;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -11,7 +11,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
-namespace Content.Client._CMU14.ZLevels.Core;
+namespace Content.Client.CMU14.ZLevels.Core;
 
 /// <summary>
 /// Only process Eye offset and drawdepth on clientside

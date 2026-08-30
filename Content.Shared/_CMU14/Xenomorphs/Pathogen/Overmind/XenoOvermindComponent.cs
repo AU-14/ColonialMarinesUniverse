@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
+namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 
 /// <summary>
 /// Added to a xeno that has become the Pathogen Overmind.

@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 
 
 
-namespace Content.Shared._CMU14.Chemistry.Effects.Neutral;
+namespace Content.Shared.CMU14.Chemistry.Effects.Neutral;
 
 public sealed partial class Neuropathic : RMCChemicalEffect
 {

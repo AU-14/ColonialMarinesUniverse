@@ -48,8 +48,8 @@
     prefix: au14-job-prefix-vehiclecommander
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/cmugovforblips.rsi
-      state: vcc
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: govfor_vcc
   requirements:
 #  - !type:RoleTimeRequirement
 #    role: AU14JobGOVFORVehicleCrewman

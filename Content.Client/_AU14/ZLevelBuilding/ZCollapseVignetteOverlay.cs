@@ -7,7 +7,7 @@ using Robust.Shared.Enums;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
-namespace Content.Client._AU14.ZLevelBuilding;
+namespace Content.Client.CMU14.ZLevelBuilding;
 
 /// <summary>
 /// Collapse feedback vignette (same screen-edge technique as <c>SapperSnareVignetteOverlay</c>):

@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-sprinter
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/sprinter.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/sprinter.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -40,7 +40,7 @@
   - type: XenoLeap
     delay: 0
     knockdownTime: 2
-    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
+    leapSound: /Audio/CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
@@ -87,8 +87,10 @@
   - type: MeleeWeapon
     attackRate: 2.0
     damage:
-      groups:
-        Brute: 25
+      types:
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
   - type: CMArmor
     explosionArmor: 5
   - type: Tackle
@@ -102,10 +104,10 @@
     size: SmallXeno
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: sprinter
     background:
-      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      sprite: /Textures/CMU14/Interface/neo_blips.rsi
       state: background_pathogen
   - type: Tag
     tags:
