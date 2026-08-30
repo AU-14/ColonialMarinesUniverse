@@ -100,7 +100,9 @@ namespace Content.Client.Stylesheets
 
         private void RefreshNanoSheet()
         {
-            SheetNano = new StyleNano(_resCache).Stylesheet;
+            var legacyNano = new StyleNano(_resCache).Stylesheet;
+            SheetNano = new Stylesheet(
+                SheetNanotrasen.Rules.Concat(legacyNano.Rules).ToArray());
             _userInterfaceManager.Stylesheet = SheetNano;
         }
 
