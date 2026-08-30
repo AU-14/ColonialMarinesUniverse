@@ -567,7 +567,7 @@
         layer:
         - LargeMobLayer
   - type: Sprite
-    sprite: CMU14/Structures/Vehicles/fv150/exterior.rsi
+    sprite: CMU14/Structures/vehicles/fv150/exterior.rsi
     layers:
     - map: [ base ]
       state: tank_base

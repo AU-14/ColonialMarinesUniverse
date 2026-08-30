@@ -1,3 +1,5 @@
+marking-FacialHairShaved = Shaved
+
 marking-HumanFacialHairAbe = Beard (Abraham Lincoln)
 marking-HumanFacialHairAbe-abe = Beard (Abraham Lincoln)
 

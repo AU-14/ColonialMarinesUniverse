@@ -1,3 +1,5 @@
+marking-HairBald = Bald
+
 marking-HumanHairAfro = Afro
 marking-HumanHairAfro-afro = Afro
 

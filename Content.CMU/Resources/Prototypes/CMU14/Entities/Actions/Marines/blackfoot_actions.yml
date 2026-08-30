@@ -4,12 +4,12 @@
   description: Start or stop the Blackfoot engines.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootEngineToggleActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootEngineToggleActionEvent
   - type: Action
     itemIconStyle: BigItem
   - type: Sprite
     layers:
-    - sprite: CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
       state: integrity
       map: ["enum.ActionVisuals.Icon"]
 
@@ -19,12 +19,12 @@
   description: Begin the VTOL takeoff sequence.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootTakeoffActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootTakeoffActionEvent
   - type: Action
     itemIconStyle: BigItem
   - type: Sprite
     layers:
-    - sprite: CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
       state: fuel
       map: ["enum.ActionVisuals.Icon"]
 
@@ -34,12 +34,12 @@
   description: Begin the VTOL landing sequence.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootLandActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootLandActionEvent
   - type: Action
     itemIconStyle: BigItem
   - type: Sprite
     layers:
-    - sprite: CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
       state: targeting-reticle
       map: ["enum.ActionVisuals.Icon"]
 
@@ -49,12 +49,12 @@
   description: Switch between VTOL hover and forward flight.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootFlightModeToggleActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootFlightModeToggleActionEvent
   - type: Action
     itemIconStyle: BigItem
   - type: Sprite
     layers:
-    - sprite: CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
       state: battery
       map: ["enum.ActionVisuals.Icon"]
 
@@ -64,12 +64,12 @@
   description: Open or close the Blackfoot rear door.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootRearDoorToggleActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootRearDoorToggleActionEvent
   - type: Action
     itemIconStyle: BigItem
   - type: Sprite
     layers:
-    - sprite: CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    - sprite: CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot.rsi
       state: rear-door-open
       map: ["enum.ActionVisuals.Icon"]
 
@@ -79,12 +79,12 @@
   description: Fold or deploy the Blackfoot while grounded.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootStowToggleActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootStowToggleActionEvent
   - type: Action
     itemIconStyle: BigItem
   - type: Sprite
     layers:
-    - sprite: CMU14/Structures/Vehicles/Blackfoot/blackfoot_hardpoints.rsi
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hardpoints.rsi
       state: engines
       map: ["enum.ActionVisuals.Icon"]
 
@@ -94,7 +94,7 @@
   description: Climb the Blackfoot up one Z-level.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootAscendZLevelActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootAscendZLevelActionEvent
   - type: Action
     checkCanInteract: false
     itemIconStyle: BigItem
@@ -110,7 +110,7 @@
   description: Descend the Blackfoot down one Z-level.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootDescendZLevelActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootDescendZLevelActionEvent
   - type: Action
     checkCanInteract: false
     itemIconStyle: BigItem
@@ -126,7 +126,7 @@
   description: Switch the M866 between current Z-level fire and one-level-down fire.
   components:
   - type: InstantAction
-    event: !type:Content.Shared._CMU14.Blackfoot.BlackfootDoorGunZModeToggleActionEvent
+    event: !type:Content.Shared.CMU14.Blackfoot.BlackfootDoorGunZModeToggleActionEvent
   - type: Action
     checkCanInteract: false
     itemIconStyle: BigItem

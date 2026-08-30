@@ -1,3 +1,5 @@
+marking-CMUZombieSummonerBloodyCross = Bloody Cross
+
 cmu-zombie-summoner-title = Summon Zombies
 cmu-zombie-summoner-points = Points: {$points}/{$max}
 cmu-zombie-summoner-controlled = Controlled: {$count}/{$max}

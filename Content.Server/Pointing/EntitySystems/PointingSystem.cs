@@ -23,6 +23,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Enums;
 using Robust.Shared.GameStates;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Replays;
@@ -48,6 +49,7 @@ namespace Content.Server.Pointing.EntitySystems
         [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private ExamineSystemShared _examine = default!;
         [Dependency] private EntityQuery<InventoryComponent> _inventoryQuery = default!;
+        [Dependency] private ILocalizationManager _localization = default!;
 
         private TimeSpan _pointDelay = TimeSpan.FromSeconds(0.5f);
 
@@ -344,7 +346,7 @@ namespace Content.Server.Pointing.EntitySystems
 
                 var tileDef = _tileDefinitionManager[tileRef?.Tile.TypeId ?? 0];
 
-                var name = Loc.GetString(tileDef.Name);
+                var name = _localization.TryGetString(tileDef.Name, out var localized) ? localized : tileDef.Name;
                 selfMessage = Loc.GetString("pointing-system-point-at-tile", ("tileName", name));
 
                 viewerMessage = Loc.GetString("pointing-system-other-point-at-tile", ("otherName", playerName), ("tileName", name));
