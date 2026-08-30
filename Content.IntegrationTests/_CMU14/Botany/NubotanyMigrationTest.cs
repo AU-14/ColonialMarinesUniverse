@@ -119,6 +119,20 @@ public sealed class NubotanyMigrationTest
                 Is.EquivalentTo(Contracts.Select(contract => contract.PlantId.Id)),
                 "PlantSpecialChemicals must remain species-bound to the exact ten migrated plants.");
 
+            var lingzhi = prototypes.Index<EntityPrototype>("LingzhiPlants");
+            Assert.That(lingzhi.TryComp<PlantChemicalsComponent>(out var lingzhiChemicals, factory), Is.True);
+            var lingzhiChemicalIds = lingzhiChemicals!.Chemicals.Select(pair => pair.Key.Id).ToArray();
+            var amatoxin = lingzhiChemicals.Chemicals.Single(pair => pair.Key.Id == "CMUAmatoxin").Value;
+            Assert.Multiple(() =>
+            {
+                Assert.That(lingzhiChemicalIds, Does.Not.Contain("Epinephrine"),
+                    "Lingzhi inherited Wizden's epinephrine during the botany rebase.");
+                Assert.That(lingzhiChemicalIds, Does.Contain("CMUAmatoxin"));
+                Assert.That(amatoxin.Min, Is.EqualTo((FixedPoint2) 3));
+                Assert.That(amatoxin.Max, Is.EqualTo((FixedPoint2) 10));
+                Assert.That(amatoxin.PotencyDivisor, Is.EqualTo(5));
+            });
+
             var mangoPacket = server.EntMan.SpawnEntity("RMCMangoSeeds", MapCoordinates.Nullspace);
             var solutions = server.EntMan.System<SharedSolutionContainerSystem>();
             Assert.That(solutions.TryGetSolution(mangoPacket, "food", out var solution), Is.True);
