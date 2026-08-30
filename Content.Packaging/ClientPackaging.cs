@@ -100,7 +100,7 @@ public static class ClientPackaging
             cancel);
 
         await RobustSharedPackaging.DoResourceCopy(
-            Path.Combine(contentDir, "Content.CMU", "Resources", "CMU14"),
+            Path.Combine(contentDir, "Content.CMU", "Resources"),
             inputPass,
             new HashSet<string>(),
             cancel: cancel);

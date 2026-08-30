@@ -228,7 +228,7 @@ public static class ServerPackaging
             cancel);
 
         await RobustSharedPackaging.DoResourceCopy(
-            Path.Combine(contentDir, "Content.CMU", "Resources", "CMU14"),
+            Path.Combine(contentDir, "Content.CMU", "Resources"),
             inputPassResources,
             new HashSet<string>(),
             cancel: cancel);
