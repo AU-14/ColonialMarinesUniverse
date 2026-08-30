@@ -15,6 +15,7 @@
     slots:
     - neck
   - type: Stethoscope
+  - type: RMCStethoscope
 
 - type: entity
   parent: BaseAction

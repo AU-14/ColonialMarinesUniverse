@@ -32,6 +32,7 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
+    private const string NeckSlot = "neck";
     private static readonly string[] AccessorySlots = ["jumpsuit", "outerClothing"];
 
     public override void Initialize()
@@ -82,6 +83,13 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
             HasComp<RMCStethoscopeComponent>(held.Value))
         {
             stethoscope = held.Value;
+            return true;
+        }
+
+        if (_inventorySystem.TryGetSlotEntity(user, NeckSlot, out var neck) &&
+            HasComp<RMCStethoscopeComponent>(neck.Value))
+        {
+            stethoscope = neck.Value;
             return true;
         }
 
