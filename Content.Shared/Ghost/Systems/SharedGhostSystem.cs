@@ -135,6 +135,14 @@ public sealed partial class GhostWarpsRequestEvent : EntityEventArgs
 }
 
 /// <summary>
+/// Tells the server that the ghost warp window is no longer displaying live previews.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class GhostWarpsCloseEvent : EntityEventArgs
+{
+}
+
+/// <summary>
 /// An individual place a ghost can warp to.
 /// This is used as part of <see cref="GhostWarpsResponseEvent"/>
 /// </summary>

@@ -19,13 +19,17 @@ internal static class GhostPreviewHelper
     public static bool CanUseLiveSprite(
         IEntityManager entityManager,
         IPlayerManager playerManager,
-        EntityUid target)
+        EntityUid target,
+        bool allowCrossMap = false)
     {
-        if (playerManager.LocalEntity is not { } local)
+        if (!entityManager.TryGetComponent(target, out TransformComponent? targetXform))
             return false;
 
-        if (!entityManager.TryGetComponent(local, out TransformComponent? localXform) ||
-            !entityManager.TryGetComponent(target, out TransformComponent? targetXform))
+        if (allowCrossMap)
+            return true;
+
+        if (playerManager.LocalEntity is not { } local ||
+            !entityManager.TryGetComponent(local, out TransformComponent? localXform))
         {
             return false;
         }

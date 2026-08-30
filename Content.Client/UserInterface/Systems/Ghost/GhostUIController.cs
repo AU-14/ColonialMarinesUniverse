@@ -140,6 +140,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         Gui.ReturnToBodyPressed += ReturnToBody;
         Gui.GhostRolesPressed += GhostRolesPressed;
         Gui.TargetWindow.WarpClicked += OnWarpClicked;
+        Gui.TargetWindow.OnClose += OnWarpsClosed;
         Gui.TargetWindow.OnGhostnadoClicked += OnGhostnadoClicked;
         Gui.LateJoinPressed += LateJoinPressed;
         Gui.TargetWindow.OnWarpToRandomClicked += OnWarpToRandomClicked;
@@ -156,6 +157,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         Gui.ReturnToBodyPressed -= ReturnToBody;
         Gui.GhostRolesPressed -= GhostRolesPressed;
         Gui.TargetWindow.WarpClicked -= OnWarpClicked;
+        Gui.TargetWindow.OnClose -= OnWarpsClosed;
         Gui.TargetWindow.OnGhostnadoClicked -= OnGhostnadoClicked;
         Gui.TargetWindow.OnWarpToRandomClicked -= OnWarpToRandomClicked;
         Gui.LateJoinPressed -= LateJoinPressed;
@@ -176,6 +178,12 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         window.ClearWarps();
         window.OpenCentered();
         _system?.RequestWarps();
+    }
+
+    private void OnWarpsClosed()
+    {
+        _net.SendSystemNetworkMessage(new GhostWarpsCloseEvent());
+        Gui?.TargetWindow.ClearWarps();
     }
 
     private void GhostRolesPressed()

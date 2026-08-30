@@ -339,7 +339,11 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
             if (target is { } targetUid &&
                 _entityManager.HasComponent<SpriteComponent>(targetUid) &&
-                GhostPreviewHelper.CanUseLiveSprite(_entityManager, _playerManager, targetUid))
+                GhostPreviewHelper.CanUseLiveSprite(
+                    _entityManager,
+                    _playerManager,
+                    targetUid,
+                    allowCrossMap: true))
             {
                 icon = CreateSpritePreview(targetUid, density);
             }

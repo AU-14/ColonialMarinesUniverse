@@ -38,6 +38,7 @@ using Content.Shared.Roles;
 using Content.Shared.Storage.Components;
 using Content.Shared.Tag;
 using Content.Shared.Warps;
+using Robust.Server.GameStates;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -80,6 +81,7 @@ namespace Content.Server.Ghost
         [Dependency] private NameModifierSystem _nameMod = default!;
         [Dependency] private GhostSpriteStateSystem _ghostState = default!;
         [Dependency] private SharedXenoHiveSystem _xenoHive = default!;
+        [Dependency] private PvsOverrideSystem _pvsOverride = default!;
 
         [Dependency] private EntityQuery<GhostComponent> _ghostQuery = default!;
         [Dependency] private EntityQuery<FollowerComponent> _followerQuery = default!;
@@ -87,6 +89,7 @@ namespace Content.Server.Ghost
 
         private static readonly ProtoId<TagPrototype> AllowGhostShownByEventTag = "AllowGhostShownByEvent";
         private static readonly ProtoId<DamageTypePrototype> AsphyxiationDamageType = "Asphyxiation";
+        private readonly Dictionary<ICommonSession, HashSet<EntityUid>> _warpPreviewOverrides = new();
 
         public override void Initialize()
         {
@@ -103,6 +106,7 @@ namespace Content.Server.Ghost
             SubscribeLocalEvent<GhostOnMoveComponent, MoveInputEvent>(OnRelayMoveInput);
 
             SubscribeNetworkEvent<GhostWarpsRequestEvent>(OnGhostWarpsRequest);
+            SubscribeNetworkEvent<GhostWarpsCloseEvent>(OnGhostWarpsClose);
             SubscribeNetworkEvent<GhostReturnToBodyRequest>(OnGhostReturnToBodyRequest);
             SubscribeNetworkEvent<GhostWarpToTargetRequestEvent>(OnGhostWarpToTargetRequest);
             SubscribeNetworkEvent<GhostnadoRequestEvent>(OnGhostnadoRequest);
@@ -233,6 +237,7 @@ namespace Content.Server.Ghost
 
         private void OnPlayerDetached(EntityUid uid, GhostComponent component, PlayerDetachedEvent args)
         {
+            ClearWarpPreviewOverrides(args.Player);
             DeleteEntity(uid);
         }
 
@@ -290,8 +295,46 @@ namespace Content.Server.Ghost
                 return;
             }
 
-            var response = new GhostWarpsResponseEvent(GetPlayerWarps(entity).Concat(GetLocationWarps()).ToList());
+            var playerWarps = GetPlayerWarps(entity).ToList();
+            RefreshWarpPreviewOverrides(args.SenderSession, playerWarps);
+
+            var response = new GhostWarpsResponseEvent(playerWarps.Concat(GetLocationWarps()).ToList());
             RaiseNetworkEvent(response, args.SenderSession.Channel);
+        }
+
+        private void OnGhostWarpsClose(GhostWarpsCloseEvent msg, EntitySessionEventArgs args)
+        {
+            ClearWarpPreviewOverrides(args.SenderSession);
+        }
+
+        private void RefreshWarpPreviewOverrides(ICommonSession session, IReadOnlyList<GhostWarp> warps)
+        {
+            ClearWarpPreviewOverrides(session);
+
+            var overrides = new HashSet<EntityUid>();
+            foreach (var warp in warps)
+            {
+                if (!TryGetEntity(warp.Entity, out var target) || !Exists(target.Value))
+                    continue;
+
+                _pvsOverride.AddSessionOverride(target.Value, session);
+                overrides.Add(target.Value);
+            }
+
+            if (overrides.Count > 0)
+                _warpPreviewOverrides[session] = overrides;
+        }
+
+        private void ClearWarpPreviewOverrides(ICommonSession session)
+        {
+            if (!_warpPreviewOverrides.Remove(session, out var overrides))
+                return;
+
+            foreach (var target in overrides)
+            {
+                if (Exists(target))
+                    _pvsOverride.RemoveSessionOverride(target, session);
+            }
         }
 
         public void GhostWarpRequest(ICommonSession player, NetEntity target)
@@ -380,6 +423,9 @@ namespace Content.Server.Ghost
 
         private void WarpTo(EntityUid uid, EntityUid target)
         {
+            if (uid == target) // CMU14: ghostnado can pick the requesting ghost itself, warping to self throws
+                return;
+
             _adminLog.Add(LogType.GhostWarp, $"{ToPrettyString(uid)} ghost warped to {ToPrettyString(target)}");
 
             if ((TryComp(target, out WarpPointComponent? warp) && warp.Follow) || HasComp<MobStateComponent>(target))
