@@ -446,6 +446,8 @@ public abstract partial class SharedGunSystem
                 ent.Comp.UnspawnedCount--;
                 DirtyField(ent.AsNullable(), nameof(BallisticAmmoProviderComponent.UnspawnedCount));
                 ammoEntity = Spawn(ent.Comp.Proto, args.Coordinates);
+                if (TryComp(ammoEntity.Value, out StackComponent? stack))
+                    _stack.SetCount((ammoEntity.Value, stack), 1);
             }
 
             if (ammoEntity is not { } ammoEnt)
