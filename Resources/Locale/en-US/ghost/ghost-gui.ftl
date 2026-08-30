@@ -22,6 +22,7 @@ ghost-target-window-no-results = NO MATCHING TARGETS
 ghost-target-window-location-role = Navigation point
 ghost-target-window-tracked-count = {$count} tracked
 ghost-target-window-tab-military = Military
+ghost-target-window-tab-govfor = GOVFOR
 ghost-target-window-tab-xenos = Xenos
 ghost-target-window-tab-corrupted-hive = Corrupted Hive
 ghost-target-window-tab-opfor = OPFOR

@@ -28,23 +28,23 @@ public sealed class GhostWarpGroupingTest
     }
 
     [Test]
-    public void MilitaryRolesUseRoleSpecificSubtabs()
+    public void GovforRolesUseGovforRoleSpecificSubtabs()
     {
-        AssertMilitarySection("AU14JobGOVFORDSPilot", GhostWarpGrouping.SectionPilotsCrew);
-        AssertMilitarySection("AU14JobGOVFORPlatCo", GhostWarpGrouping.SectionCommand);
-        AssertMilitarySection("AU14JobGOVFORSectionSergeant", GhostWarpGrouping.SectionSquadLeads);
-        AssertMilitarySection("AU14JobGOVFORPlatoonCorpsman", GhostWarpGrouping.SectionSpecialists);
-        AssertMilitarySection("AU14JobGOVFORSquadRifleman", GhostWarpGrouping.SectionLine);
+        AssertMilitarySection("AU14JobGOVFORDSPilot", GhostWarpGrouping.SectionPilotsCrew, GhostWarpGrouping.TabGovfor);
+        AssertMilitarySection("AU14JobGOVFORPlatCo", GhostWarpGrouping.SectionCommand, GhostWarpGrouping.TabGovfor);
+        AssertMilitarySection("AU14JobGOVFORSectionSergeant", GhostWarpGrouping.SectionSquadLeads, GhostWarpGrouping.TabGovfor);
+        AssertMilitarySection("AU14JobGOVFORPlatoonCorpsman", GhostWarpGrouping.SectionSpecialists, GhostWarpGrouping.TabGovfor);
+        AssertMilitarySection("AU14JobGOVFORSquadRifleman", GhostWarpGrouping.SectionLine, GhostWarpGrouping.TabGovfor);
     }
 
     [Test]
     public void UnmcMilitaryRolesUseRoleSpecificSubtabs()
     {
-        AssertMilitarySection("CMJobPilotDropship", GhostWarpGrouping.SectionPilotsCrew, "UNMC", "CMEngineering");
-        AssertMilitarySection("CMJobCommandingOfficer", GhostWarpGrouping.SectionCommand, "UNMC", "CMCommand");
-        AssertMilitarySection("CMJobSquadLeader", GhostWarpGrouping.SectionSquadLeads, "UNMC", "CMSquad");
-        AssertMilitarySection("CMJobHospitalCorpsman", GhostWarpGrouping.SectionSpecialists, "UNMC", "CMMedbay");
-        AssertMilitarySection("CMJobRifleman", GhostWarpGrouping.SectionLine, "UNMC", "CMSquad");
+        AssertMilitarySection("CMJobPilotDropship", GhostWarpGrouping.SectionPilotsCrew, GhostWarpGrouping.TabMilitary, "UNMC", "CMEngineering");
+        AssertMilitarySection("CMJobCommandingOfficer", GhostWarpGrouping.SectionCommand, GhostWarpGrouping.TabMilitary, "UNMC", "CMCommand");
+        AssertMilitarySection("CMJobSquadLeader", GhostWarpGrouping.SectionSquadLeads, GhostWarpGrouping.TabMilitary, "UNMC", "CMSquad");
+        AssertMilitarySection("CMJobHospitalCorpsman", GhostWarpGrouping.SectionSpecialists, GhostWarpGrouping.TabMilitary, "UNMC", "CMMedbay");
+        AssertMilitarySection("CMJobRifleman", GhostWarpGrouping.SectionLine, GhostWarpGrouping.TabMilitary, "UNMC", "CMSquad");
     }
 
     [Test]
@@ -147,6 +147,7 @@ public sealed class GhostWarpGroupingTest
     private static void AssertMilitarySection(
         string jobId,
         string expectedSection,
+        string expectedTab,
         string faction = "GOVFOR",
         string departmentId = "AU14DepartmentGovernmentForces")
     {
@@ -163,7 +164,7 @@ public sealed class GhostWarpGroupingTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(grouping.Tab, Is.EqualTo(GhostWarpGrouping.TabMilitary));
+            Assert.That(grouping.Tab, Is.EqualTo(expectedTab));
             Assert.That(grouping.Section, Is.EqualTo(expectedSection));
         });
     }

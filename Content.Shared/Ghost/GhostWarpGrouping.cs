@@ -7,6 +7,7 @@ public readonly record struct GhostWarpGroupingResult(string Tab, string Section
 public static class GhostWarpGrouping
 {
     public const string TabMilitary = "Military";
+    public const string TabGovfor = "GOVFOR";
     public const string TabXenos = "Xenos";
     public const string TabCorruptedHive = "Corrupted Hive";
     public const string TabOpfor = "OPFOR";
@@ -49,7 +50,7 @@ public static class GhostWarpGrouping
         ["RMCXeno"] = TabXenos,
         ["Xeno"] = TabXenos,
         ["UNMC"] = TabMilitary,
-        ["GOVFOR"] = TabMilitary,
+        ["GOVFOR"] = TabGovfor,
         ["RoyalMarines"] = TabTseRoyal,
         ["TSE"] = TabTseRoyal,
         ["SPP"] = TabSpp,
@@ -144,6 +145,9 @@ public static class GhostWarpGrouping
 
         if (departmentId == "CMSurvivor")
             return new GhostWarpGroupingResult(TabSurvivors, TabSurvivors);
+
+        if (departmentId == "AU14DepartmentGovernmentForces")
+            return new GhostWarpGroupingResult(TabGovfor, GetMilitarySection(jobId, realDisplayWeight));
 
         if (departmentId != null && MarineDepartments.Contains(departmentId))
             return new GhostWarpGroupingResult(TabMilitary, GetMilitarySection(jobId, realDisplayWeight));
@@ -322,7 +326,7 @@ public static class GhostWarpGrouping
 
     private static string GetFactionSection(string tab, string? jobId, int realDisplayWeight)
     {
-        return tab == TabMilitary
+        return tab is TabMilitary or TabGovfor
             ? GetMilitarySection(jobId, realDisplayWeight)
             : GetHumanSection(tab, realDisplayWeight);
     }

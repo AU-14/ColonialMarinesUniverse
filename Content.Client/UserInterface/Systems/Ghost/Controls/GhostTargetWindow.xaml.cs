@@ -716,6 +716,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             return tab switch
             {
                 GhostWarpGrouping.TabMilitary => 0,
+                GhostWarpGrouping.TabGovfor => 0,
                 GhostWarpGrouping.TabXenos => 1,
                 GhostWarpGrouping.TabCorruptedHive => 2,
                 GhostWarpGrouping.TabOpfor => 3,
@@ -880,6 +881,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             return name switch
             {
                 GhostWarpGrouping.TabMilitary => Loc.GetString("ghost-target-window-tab-military"),
+                GhostWarpGrouping.TabGovfor => Loc.GetString("ghost-target-window-tab-govfor"),
                 GhostWarpGrouping.TabXenos => Loc.GetString("ghost-target-window-tab-xenos"),
                 GhostWarpGrouping.TabCorruptedHive => Loc.GetString("ghost-target-window-tab-corrupted-hive"),
                 GhostWarpGrouping.TabOpfor => Loc.GetString("ghost-target-window-tab-opfor"),
