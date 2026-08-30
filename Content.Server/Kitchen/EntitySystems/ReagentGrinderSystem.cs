@@ -183,12 +183,13 @@ public sealed partial class ReagentGrinderSystem : SharedReagentGrinderSystem
         {
             var bottle = Spawn(BottlePrototype);
             _solution.EnsureSolution(bottle, BottleSolution, out var bottleSolution);
-            if (!_solution.TryAddReagent(
-                    bottleSolution,
-                    args.Reagent.Reagent,
-                    quantity,
-                    out var accepted) ||
-                accepted <= 0 ||
+            // A partial fill returns false, but is expected when splitting across bottles.
+            _solution.TryAddReagent(
+                bottleSolution,
+                args.Reagent.Reagent,
+                quantity,
+                out var accepted);
+            if (accepted <= 0 ||
                 !_container.Insert(bottle, fridgeContainer))
             {
                 QueueDel(bottle);
