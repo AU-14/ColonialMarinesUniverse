@@ -24,7 +24,10 @@
     actions:
       Alive:
       - ActionAbominationSpiderSpit
+  # Xeno-parity velocity (standard xeno spit flies at 30; the old default
+  # of 18 was trivially dodgeable at range).
   - type: AbominationSpit
+    speed: 30
   - type: MeleeWeapon
     damage:
       types:

@@ -71,7 +71,7 @@ public sealed class AuJobSelectionTest : ContentUnitTest
     public void ThreatJobEligibilityRequiresSelectedThreatPreference()
     {
         var threatMember = new ProtoId<JobPrototype>("AU14JobThreatMember");
-        var abomination = new ProtoId<ThreatPrototype>("abominationsThreat");
+        var abomination = new ProtoId<ThreatPrototype>("AbominationsThreatCF");
         var xeno = new ProtoId<ThreatPrototype>("XenoThreat");
 
         var profile = HumanoidCharacterProfile.DefaultWithSpecies()

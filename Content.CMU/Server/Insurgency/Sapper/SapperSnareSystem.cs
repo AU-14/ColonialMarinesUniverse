@@ -27,7 +27,7 @@ namespace Content.Server.CMU14.Insurgency.Sapper;
 ///     <see cref="SapperSnaredComponent"/> (see the client SapperSnareVisualsSystem); the eye flip cannot
 ///     be set once server-side because the client's eye-lerping resets it every frame.
 /// </summary>
-public sealed class SapperSnareSystem : EntitySystem
+public sealed partial class SapperSnareSystem : EntitySystem
 {
     private const string SlicingQuality = "Slicing";
 

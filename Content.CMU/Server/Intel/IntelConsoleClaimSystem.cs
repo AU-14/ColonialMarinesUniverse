@@ -4,6 +4,7 @@ using Content.Server.CMU14.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
+using Content.Server._RMC14.Announce;
 using Content.Server._RMC14.Marines;
 using Content.Shared.CMU14.Intel;
 using Content.Shared._RMC14.Intel;
@@ -16,6 +17,8 @@ using Content.Shared.NPC.Components;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
 using Robust.Shared.Configuration;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Intel;
 
@@ -23,18 +26,19 @@ public sealed partial class IntelConsoleClaimSystem : EntitySystem
 {
     [Dependency] private ColonyCommsConsoleSystem _colonyComms = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private GeneralAnnounceSystem _generalAnnounce = default!;
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private JobSystem _jobs = default!;
     [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private MindSystem _mindSys = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
     [Dependency] private WantedSystem _wantedSys = default!;
 
     private const string MarshalBureauFaxGroup = "marshal-bureau";
     private const string MilitaryFaxGroup = "military-command";
     private const string WarshipFaxGroup = "warship-command";
-    private const string GovforFaxTitle = "CLF Cell Compromised";
     private const string GovforFaxStampState = "paper_stamp-provost-inspector";
     private const string GovforFaxPaperPrototype = "CMUPaperPROVOST";
     private bool _huntTriggered;
@@ -83,12 +87,13 @@ public sealed partial class IntelConsoleClaimSystem : EntitySystem
         var faxContent = IntelConsoleClaimFax.BuildGovforFaxContent(roster);
         var stampedBy = new List<StampDisplayInfo>
         {
-            new() { StampedColor = Color.FromHex("#cb0000"), StampedName = "HUMINT CLASSIFIED" }
+            new() { StampedColor = Color.FromHex("#cb0000"), StampedName = Loc.GetString("cmu-intel-console-fax-stamp") }
         };
 
-        var faxDelivered = _wantedSys.SendFaxToGroup(MarshalBureauFaxGroup, GovforFaxTitle, faxContent, GovforFaxStampState, stampedBy, GovforFaxPaperPrototype);
-        faxDelivered |= _wantedSys.SendFaxToGroup(MilitaryFaxGroup, GovforFaxTitle, faxContent, GovforFaxStampState, stampedBy, GovforFaxPaperPrototype);
-        faxDelivered |= _wantedSys.SendFaxToGroup(WarshipFaxGroup, GovforFaxTitle, faxContent, GovforFaxStampState, stampedBy, GovforFaxPaperPrototype);
+        var faxTitle = Loc.GetString("cmu-intel-console-fax-title");
+        var faxDelivered = _wantedSys.SendFaxToGroup(MarshalBureauFaxGroup, faxTitle, faxContent, GovforFaxStampState, stampedBy, GovforFaxPaperPrototype);
+        faxDelivered |= _wantedSys.SendFaxToGroup(MilitaryFaxGroup, faxTitle, faxContent, GovforFaxStampState, stampedBy, GovforFaxPaperPrototype);
+        faxDelivered |= _wantedSys.SendFaxToGroup(WarshipFaxGroup, faxTitle, faxContent, GovforFaxStampState, stampedBy, GovforFaxPaperPrototype);
 
         var forceAnnouncement = _cfg.GetCVar(CCVars.CMUIntelClaimForceGovforAnnouncement);
         if (forceAnnouncement || !faxDelivered)
@@ -100,6 +105,9 @@ public sealed partial class IntelConsoleClaimSystem : EntitySystem
         }
 
         _colonyComms.BroadcastColonyAlert(ent.Owner, IntelConsoleClaimFax.BuildColonyAnnouncementText());
+
+        Timer.Spawn(_random.Next(TimeSpan.FromSeconds(25), TimeSpan.FromSeconds(40)), () =>
+            _generalAnnounce.AnnounceCLF(null, IntelConsoleClaimFax.BuildClfBroadcastText()));
     }
 
     private List<ClfRosterEntry> BuildClfRoster()

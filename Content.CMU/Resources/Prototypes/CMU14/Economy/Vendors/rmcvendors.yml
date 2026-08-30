@@ -1317,6 +1317,8 @@
         amount: 10
     - name: special issue firearms
       entries:
+      - id: CMUGPMGTWE
+        amount: 2
       - id: RMCL49Case
         amount: 3
       - id: RMCWeaponRifleL90A1
@@ -1333,6 +1335,8 @@
         amount: 1
     - name: primary ammunition
       entries:
+      - id: CMUMagazineGPMGTWE
+        amount: 30
       - id: RMCMagazineRifleL24
         amount: 200
       - id: RMCMagazineRifleL24AP

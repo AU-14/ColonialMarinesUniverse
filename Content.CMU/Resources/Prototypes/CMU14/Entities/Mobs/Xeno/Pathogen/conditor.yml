@@ -61,13 +61,9 @@
     healOffWeeds: true
     restHealMultiplier: 1.0
   - type: XenoPlasma
-    plasma: 500
-    maxPlasma: 500
+    plasma: 1000
+    maxPlasma: 1000
     plasmaRegenOnWeeds: 10
-  - type: XenoEvolution
-    actionId: CMU14ActionXenoPathogenEvolve
-    canEvolveWithoutGranter: false
-    evolvesTo: []
   - type: XenoDevolve
     devolvesTo:
     - CMU14XenoNeomorph

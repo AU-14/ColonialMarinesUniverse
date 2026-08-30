@@ -28,7 +28,7 @@ public sealed partial class ChemicalAddictionEntry
     public bool Craving;
 }
 
-public sealed class ChemicalAddictionSystem : EntitySystem
+public sealed partial class ChemicalAddictionSystem : EntitySystem
 {
     private static readonly TimeSpan CravingDelay = TimeSpan.FromMinutes(5);
     private static readonly TimeSpan MessageInterval = TimeSpan.FromSeconds(90);

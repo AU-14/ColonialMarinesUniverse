@@ -154,6 +154,9 @@ public sealed partial class CMUZLevelsSystem
 
     private void WakeZPhysicsAtTile(Entity<MapGridComponent> grid, Vector2i tile)
     {
+        if (TerminatingOrDeleted(grid.Owner))
+            return;
+
         var coordinates = _map.GridTileToWorld(grid.Owner, grid.Comp, tile);
 
         _zFallWakeBuffer.Clear();

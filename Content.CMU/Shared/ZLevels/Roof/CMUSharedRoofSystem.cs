@@ -37,6 +37,9 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
     /// </summary>
     private void OnTileChanged(Entity<CMUZLevelMapComponent> ent, ref TileChangedEvent args)
     {
+        if (TerminatingOrDeleted(ent.Owner))
+            return;
+
         if (!GridQuery.TryComp(ent, out var currentMapGrid))
             return;
         if (!RoofQuery.TryComp(ent, out var currentRoof))

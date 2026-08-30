@@ -26,6 +26,10 @@ public sealed partial class YautjaToggleBracerIdChipActionEvent : InstantActionE
 
 public sealed partial class YautjaCreateStabilisingCrystalActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaCreateFieldRationActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaCreateHuntingCanteenActionEvent : InstantActionEvent;
+
 public sealed partial class YautjaCreateHumanStabilisingCrystalActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCreateHuntingTrapActionEvent : InstantActionEvent;
@@ -49,6 +53,8 @@ public sealed partial class YautjaToggleScimitarActionEvent : InstantActionEvent
 public sealed partial class YautjaToggleShieldActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaToggleChainGauntletActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaRaiseThrallActionEvent : EntityTargetActionEvent;
 
 public sealed partial class YautjaVoiceClickActionEvent : InstantActionEvent;
 

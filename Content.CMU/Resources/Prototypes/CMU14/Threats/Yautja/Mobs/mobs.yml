@@ -77,8 +77,8 @@
         Bloodloss: -1
     damageBleedModifiers: CMBloodlossHuman
   - type: MovementSpeedModifier
-    baseWalkSpeed: 4.4
-    baseSprintSpeed: 8.4
+    baseWalkSpeed: 3.7
+    baseSprintSpeed: 7.1
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -92,6 +92,8 @@
     emoteCooldown: 8
     hiddenFromChatWindow: true
   - type: MotionDetectorTracked
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja

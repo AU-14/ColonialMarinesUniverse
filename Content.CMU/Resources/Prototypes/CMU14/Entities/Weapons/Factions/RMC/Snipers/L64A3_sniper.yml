@@ -24,6 +24,10 @@
   - type: Tag
     tags:
     - AU14L64A3SniperRifle
+  - type: GunUserWhitelist
+    whitelist:
+      components:
+      - SniperWhitelist
   - type: MeleeWeapon
     damage:
       types:

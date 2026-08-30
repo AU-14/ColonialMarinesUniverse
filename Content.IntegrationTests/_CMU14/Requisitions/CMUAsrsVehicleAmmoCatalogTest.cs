@@ -45,7 +45,7 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
         "USCMCargoCatalog",
         "RMCCargoCatalog",
         "UPPCargoCatalog",
-        "WEYUCargoCatalog",
+        "WYPMCCargoCatalog",
         "VAIPOCargoCatalog",
         "ProdigyCargoCatalog",
         "LACNCargoCatalog",

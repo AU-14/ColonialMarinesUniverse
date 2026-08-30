@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Armor.ThermalCloak;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared.Actions;
@@ -16,6 +17,7 @@ using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -179,8 +181,16 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         if (enabling && !HasComp<EntityActiveInvisibleComponent>(user))
         {
             var activeInvisibility = EnsureComp<EntityActiveInvisibleComponent>(user);
-            activeInvisibility.Opacity = bracer.Comp.CloakOpacity;
+            var cloakUser = EnsureComp<ThermalCloakUserComponent>(user);
+            cloakUser.Opacity = bracer.Comp.CloakOpacity;
+            cloakUser.MovingOpacity = MathF.Max(bracer.Comp.CloakMovingOpacity, bracer.Comp.CloakOpacity);
+            cloakUser.LerpSpeed = 0.33f;
+            var isMoving = TryComp<PhysicsComponent>(user, out var physics)
+                        && physics.LinearVelocity.LengthSquared() > 0.01f;
+            cloakUser.CurrentOpacity = isMoving ? cloakUser.MovingOpacity : cloakUser.Opacity;
+            activeInvisibility.Opacity = cloakUser.CurrentOpacity;
             Dirty(user, activeInvisibility);
+            Dirty(user, cloakUser);
 
             turnInvisible.Enabled = true;
             turnInvisible.UncloakTime = _timing.CurTime;
@@ -231,6 +241,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 RemCompDeferred<EntityIFFComponent>(user);
 
             RemCompDeferred<EntityActiveInvisibleComponent>(user);
+            RemCompDeferred<ThermalCloakUserComponent>(user);
 
             if (_net.IsServer)
                 _audio.PlayPvs(bracer.Comp.CloakOffSound, user);

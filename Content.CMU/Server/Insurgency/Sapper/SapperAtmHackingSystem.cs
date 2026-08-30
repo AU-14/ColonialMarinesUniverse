@@ -29,7 +29,7 @@ namespace Content.Server.CMU14.Insurgency.Sapper;
 ///     budget - divided across the ATMs, plus a 5% skim from every player account. Budget console and ASRS
 ///     terminal instead drain their own held funds in full, with heavier feedback for the bigger event.
 /// </summary>
-public sealed class SapperAtmHackingSystem : EntitySystem
+public sealed partial class SapperAtmHackingSystem : EntitySystem
 {
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

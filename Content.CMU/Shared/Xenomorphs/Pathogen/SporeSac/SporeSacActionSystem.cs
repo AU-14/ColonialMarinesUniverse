@@ -1,7 +1,10 @@
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Popups;
 using Content.Shared._RMC14.Actions;
 using Content.Shared.DoAfter;
+using Robust.Shared.Map;
+using Robust.Shared.Network;
 
 namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeSac;
 
@@ -12,10 +15,12 @@ namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeSac;
 /// </summary>
 public sealed partial class CMUXenoSporeSacSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {
@@ -28,10 +33,22 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
         if (args.Handled)
             return;
 
+        if (!args.Target.TryDistance(EntityManager, _transform.GetMoverCoordinates(xeno), out var dist)
+            || dist > xeno.Comp.Range)
+        {
+            _popup.PopupClient(
+                Loc.GetString("cmu-xeno-spore-sac-too-far"),
+                xeno,
+                xeno);
+
+            return;
+        }
+
         if (!_rmcActions.TryUseAction(args))
             return;
 
         xeno.Comp.PlacedSacs.RemoveAll(s => Deleted(s));
+        xeno.Comp.PendingCoords = args.Target.SnapToGrid(EntityManager);
 
         args.Handled = true;
 
@@ -73,14 +90,22 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
         if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
             return;
 
+        if (xeno.Comp.PendingCoords is not { } coords)
+            return;
+
+        xeno.Comp.PendingCoords = null;
+
         args.Handled = true;
 
-        var sac = Spawn(xeno.Comp.SacPrototype, Transform(xeno).Coordinates);
+        if (_net.IsServer)
+        {
+            var sac = Spawn(xeno.Comp.SacPrototype, coords);
 
-        if (TryComp(sac, out CMUPathogenSporeSacComponent? comp))
-            comp.Placer = xeno.Owner;
+            if (TryComp(sac, out CMUPathogenSporeSacComponent? comp))
+                comp.Placer = xeno.Owner;
 
-        xeno.Comp.PlacedSacs.Add(sac);
+            xeno.Comp.PlacedSacs.Add(sac);
+        }
 
         _popup.PopupPredicted(
             Loc.GetString("cmu-xeno-spore-sac-place-self"),

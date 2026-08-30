@@ -108,7 +108,7 @@
   - type: Appearance
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifle
-    
+
 - type: entity
   parent: CMBaseCartridgeRifle
   id: AU14CartridgeRifleM20A
@@ -121,6 +121,7 @@
     - AU14CartridgeRifleM20A
   - type: CartridgeAmmo
     proto: BulletRifleAR10
+    deleteOnSpawn: true # caseless ammo
 
 - type: entity
   parent: RMCBaseBullet

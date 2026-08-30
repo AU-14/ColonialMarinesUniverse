@@ -13,7 +13,7 @@ namespace Content.Shared.CMU14.Chemistry.Effects;
 /// <summary>
 /// Common typed-organ operations for generated medicines.
 /// </summary>
-public sealed class CMUChemicalMedicalSystem : EntitySystem
+public sealed partial class CMUChemicalMedicalSystem : EntitySystem
 {
     [Dependency] private CMUMedicalBodyIndexSystem _index = default!;
     [Dependency] private SharedOrganHealthSystem _organs = default!;

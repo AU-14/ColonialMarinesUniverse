@@ -172,7 +172,7 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: Appearance
   - type: RefillableByBulletBox
-    bulletType: CMUBoxBulletsRifleAG80 
+    bulletType: CMUBoxBulletsRifleAG80
 
 - type: entity
   parent: CMMagazineRifleM54C
@@ -235,7 +235,7 @@
   - type: Appearance
   - type: RefillableByBulletBox
     bulletType: CMUBoxBulletsRifleAG80
-    
+
 - type: entity
   parent: CMBaseCartridgeRifle
   id: AU14CartridgeRifle97x16mm
@@ -248,6 +248,7 @@
     - AU14CartridgeRifle97x16mm
   - type: CartridgeAmmo
     proto: BulletRifle97x16mm
+    deleteOnSpawn: true # caseless ammo
 
 - type: entity
   parent: AU14CartridgeRifle97x16mm

@@ -39,7 +39,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
 
     private readonly Dictionary<EntityUid, PendingDepartmentRegistration> _pendingRegistrations = new();
 
-    private sealed class PendingDepartmentRegistration
+    private sealed partial class PendingDepartmentRegistration
     {
         public readonly string JobId;
         public int Attempts;

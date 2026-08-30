@@ -4,6 +4,9 @@
   name: recovery node
   description: A warm, soothing mass that hastily recovers the strength of sisters resting around it.
   components:
+  - type: NpcFactionMember
+    factions:
+    - CMU14PathogenWalker
   - type: Sprite
     sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     state: recovery

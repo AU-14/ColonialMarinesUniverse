@@ -40,19 +40,19 @@ namespace Content.Server.CMU14.ZLevelBuilding;
 /// (visible in ViewVariables), logs transitions, and popups newly-unsupported structures. Collapse
 /// scheduling (the 8s warning, lower-z effects, despawn+debris on upper z) lands in a later phase.
 /// </summary>
-public sealed class ZLevelSupportSystem : EntitySystem
+public sealed partial class ZLevelSupportSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  ThrowingSystem _throwing = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private  IChatManager _chat = default!;
+    [Dependency] private  TagSystem _tag = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
 
     // Per-map cooldown so a cascading floor collapse (many structures at once) logs/alerts admins once, not per
     // tile. Maps the collapsing level -> the time after which the next collapse there alerts again.

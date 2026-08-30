@@ -21,15 +21,15 @@ namespace Content.Server.CMU14.Xenomorphs.Pathogen.Overmind;
 
 public sealed partial class CMUBlightCoreSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly XenoEvolutionSystem _evolution = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly XenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  INetManager _net = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  SharedXenoHiveSystem _hive = default!;
+    [Dependency] private  XenoEvolutionSystem _evolution = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  XenoAnnounceSystem _xenoAnnounce = default!;
 
     private const float JoinTimeBonusSeconds = 10f;
     private const float InitialVoteSeconds = 35f;

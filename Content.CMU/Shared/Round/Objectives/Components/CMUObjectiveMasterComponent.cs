@@ -34,7 +34,7 @@ public sealed partial class CMUObjectiveMasterComponent : Robust.Shared.GameObje
         ["govfor"] = new(),
         ["opfor"] = new(),
         ["clf"] = new(),
-        ["scientist"] = new(),
+        ["weyu"] = new(),
     };
 
     public HashSet<string> FactionsGivenFinalObjective { get; set; } = new();

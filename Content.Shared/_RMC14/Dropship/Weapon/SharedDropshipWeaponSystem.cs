@@ -1734,6 +1734,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             if (_net.IsClient)
                 continue;
 
+            if (!flight.Target.IsValid(EntityManager)) // CMU14: the target grid can be deleted before the marker spawns
+            {
+                QueueDel(uid);
+                continue;
+            }
+
             if (!flight.WarnedSound)
             {
                 flight.WarnedSound = true;

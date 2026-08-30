@@ -45,3 +45,5 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.76
     baseSprintSpeed: 4.83
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 30

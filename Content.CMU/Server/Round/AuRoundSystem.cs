@@ -1,3 +1,4 @@
+using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Preferences.Managers;
 using Content.Server.Voting.Managers;
@@ -61,6 +62,7 @@ namespace Content.Server.CMU14.Round
         [Dependency] private IServerPreferencesManager _prefsManager = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private ItemCamouflageSystem _camo = default!;
+        [Dependency] private IChatManager _chatManager = default!;
 
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;
@@ -123,6 +125,8 @@ namespace Content.Server.CMU14.Round
         {
             _state.SelectedThreat = threat;
             _sawmill.Debug($"[AuRoundSystem] Selected threat set to: {threat?.ID ?? "null"}");
+            var ev = new ThreatSelectedEvent();
+            RaiseLocalEvent(ref ev);
         }
 
         public bool UsesPostRoundstartThreatVote()
@@ -206,6 +210,13 @@ namespace Content.Server.CMU14.Round
 
             return null;
         }
+
+        private void AnnounceVoteResult(VoteFinishedEventArgs args, string voteName, string winnerName) =>
+            _chatManager.DispatchServerAnnouncement(Loc.GetString(
+                args.Winner == null ? "au14-vote-tie" : "au14-vote-win",
+                ("vote", voteName),
+                ("winner", winnerName),
+                ("picked", winnerName)));
 
         public void StartFullVoteSequence()
         {
@@ -306,6 +317,8 @@ namespace Content.Server.CMU14.Round
                     {
                         args.ResolveWinner(picked);
                         _state.SetPlanet(planet.Id, planet.Planet);
+                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-planet"),
+                            string.IsNullOrWhiteSpace(planet.Planet.VoteName) ? planet.Planet.MapId : planet.Planet.VoteName);
                     }
                 };
 
@@ -840,7 +853,7 @@ namespace Content.Server.CMU14.Round
             var platoonSpawnRuleSystem =
                 _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
 
-            void StartShipVote(List<string> possibleShips, string title, Action<string> onShipSelected)
+            void StartShipVote(List<string> possibleShips, string title, string voteName, Action<string> onShipSelected)
             {
 
                 if (possibleShips.Count == 0)
@@ -871,7 +884,13 @@ namespace Content.Server.CMU14.Round
                     if (winner == null && shipOptions.Count > 0)
                         winner = shipOptions[0].id;
                     if (winner != null)
+                    {
                         args.ResolveWinner(winner);
+                        var shipName = _prototypeManager.TryIndex<GameMapPrototype>(winner, out var shipMap)
+                            ? shipMap.MapName
+                            : winner;
+                        AnnounceVoteResult(args, voteName, shipName);
+                    }
                     onShipSelected(winner ?? string.Empty);
                 };
             }
@@ -909,6 +928,7 @@ namespace Content.Server.CMU14.Round
                     {
                         args.ResolveWinner(winnerId);
                         platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
+                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-govfor"), winnerId.Name);
 
                         // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
                         var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
@@ -928,6 +948,7 @@ namespace Content.Server.CMU14.Round
 
                                     StartShipVote(winnerId.PossibleShips,
                                         "Govfor Ship Vote",
+                                        Loc.GetString("au14-vote-name-govfor-ship"),
                                         shipId => _selectedGovforShip = shipId);
                                 });
                         }
@@ -966,6 +987,7 @@ namespace Content.Server.CMU14.Round
                     {
                         args.ResolveWinner(winnerId);
                         platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
+                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-opfor"), winnerId.Name);
 
                         // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
                         var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
@@ -985,6 +1007,7 @@ namespace Content.Server.CMU14.Round
 
                                     StartShipVote(winnerId.PossibleShips,
                                         "Opfor Ship Vote",
+                                        Loc.GetString("au14-vote-name-opfor-ship"),
                                         shipId => _selectedOpforShip = shipId);
                                 });
                         }

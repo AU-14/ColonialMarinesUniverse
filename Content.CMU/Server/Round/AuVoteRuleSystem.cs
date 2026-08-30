@@ -19,6 +19,8 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
     private bool _pausedForMinimumPlayers;
     private bool _waitingForMinimumPlayers;
+    private bool _voteStartDelayed;
+    private int _voteDelayGen;
 
     // Only keep the persistent system trigger and dependency injection
     public override void Initialize()
@@ -38,10 +40,24 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         // Delay only covers the post-boot connect window; restarts with enough players re-run at once.
+        _voteDelayGen++;
+        var gen = _voteDelayGen;
+        _voteStartDelayed = false;
         var delay = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VoteStartDelay));
         if (delay > TimeSpan.Zero
                 && _playerManager.PlayerCount < _cfg.GetCVar(CCVars.VoteStartDelayMinPlayers))
-            Timer.Spawn(delay, TryStartVoteSequence);
+        {
+            _voteStartDelayed = true;
+            Timer.Spawn(delay, () =>
+            {
+                if (gen != _voteDelayGen)
+                    return;
+
+                _voteStartDelayed = false;
+                TryStartVoteSequence();
+            });
+            PauseForMinimumPlayers();
+        }
         else
             TryStartVoteSequence();
     }
@@ -57,6 +73,9 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
     private void TryStartVoteSequence()
     {
+        if (_voteStartDelayed)
+            return;
+
         if (!AuLobbyVoteGate.ShouldStartVoteSequence(
                 GameTicker.LobbyEnabled,
                 GameTicker.RunLevel,

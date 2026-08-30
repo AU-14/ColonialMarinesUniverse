@@ -140,7 +140,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     // beneath it (so a large spawnlist can be sorted by category); only the selected spawnlist's list is built
     // and shown at a time. _categoryContainers holds every spawnlist's (initially empty/hidden) child box;
     // _categoryButtons holds the currently-expanded spawnlist's buttons, keyed by the raw category value.
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
     private readonly Dictionary<string, BoxContainer> _categoryContainers = new();
     private readonly Dictionary<string, BaseButton> _categoryButtons = new();
     // Per-spawnlist arrow glyph updaters (▶ collapsed / ▼ expanded); only spawnlists that actually have

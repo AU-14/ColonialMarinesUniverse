@@ -19,7 +19,7 @@ namespace Content.Server.CMU14.Chemistry.Research;
 /// Provides an admin test workflow for creating a generated reagent contract from an exact property
 /// profile, then manufacturing that reagent by using the printed contract on the console.
 /// </summary>
-public sealed class AdminChemicalContractConsoleSystem : EntitySystem
+public sealed partial class AdminChemicalContractConsoleSystem : EntitySystem
 {
     [Dependency] private IAdminManager _admins = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;

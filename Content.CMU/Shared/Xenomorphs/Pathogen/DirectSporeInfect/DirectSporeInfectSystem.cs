@@ -9,21 +9,24 @@ using Content.Shared.DoAfter;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Inventory;
+using Robust.Shared.Network;
 using Robust.Shared.Random;
 
 namespace Content.Shared.CMU14.Xenomorphs.Pathogen.DirectSporeInfect;
 
 public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedXenoParasiteSystem _parasite = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {
@@ -38,15 +41,10 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!_rmcActions.TryUseAction(args))
-            return;
-
         var target = args.Entity;
 
         if (target == null || TerminatingOrDeleted(target.Value))
             return;
-
-        args.Handled = true;
 
         if (!_xeno.CanAbilityAttackTarget(xeno, target.Value))
         {
@@ -93,6 +91,11 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
             return;
         }
 
+        if (!_rmcActions.TryUseAction(args))
+            return;
+
+        args.Handled = true;
+
         var ev = new CMUDirectSporeInfectDoAfterEvent();
 
         var doAfter = new DoAfterArgs(
@@ -110,12 +113,6 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
         };
 
         _doAfter.TryStartDoAfter(doAfter);
-
-        _popup.PopupPredicted(
-            Loc.GetString("cmu-xeno-direct-spore-infect-hit", ("target", target.Value)),
-            Loc.GetString("cmu-xeno-direct-spore-infect-hit", ("target", target.Value)),
-            xeno,
-            xeno);
     }
 
     private void OnDoAfter(
@@ -177,12 +174,21 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
             }
         }
 
+        args.Handled = true;
+
+        if (_net.IsServer)
+        {
+            var victimComp = EnsureComp<VictimInfectedComponent>(target);
+            _parasite.SetBurstSpawn((target, victimComp), xeno.Comp.EmbryoSpawn);
+
+            if (sourceHive is { } hiveEnt)
+                _parasite.SetHive((target, victimComp), hiveEnt);
+        }
+
         _popup.PopupPredicted(
             Loc.GetString("cmu-xeno-direct-spore-infect-hit", ("target", target)),
             Loc.GetString("cmu-xeno-direct-spore-infect-hit", ("target", target)),
             xeno,
             xeno);
-
-        args.Handled = true;
     }
 }

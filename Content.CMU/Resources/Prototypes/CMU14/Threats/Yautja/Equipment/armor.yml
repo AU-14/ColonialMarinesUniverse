@@ -590,7 +590,7 @@
     sprite: CMU14/Yautja/armor_badblood_patchwork.rsi
   - type: CMArmor
     melee: 35
-    bullet: 40
+    bullet: 20
     bio: 45
     explosionArmor: 40
 

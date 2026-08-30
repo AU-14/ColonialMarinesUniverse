@@ -40,6 +40,11 @@ public sealed partial class YautjaPowerSystem : EntitySystem
 
         args.AddAction(ref ent.Comp.OpenBracerMenuAction, ent.Comp.OpenBracerMenuActionId);
         args.AddAction(ref ent.Comp.ToggleCloakAction, ent.Comp.ToggleCloakActionId);
+        args.AddAction(ref ent.Comp.CreateFieldRationAction, ent.Comp.CreateFieldRationActionId);
+        args.AddAction(ref ent.Comp.CreateHuntingCanteenAction, ent.Comp.CreateHuntingCanteenActionId);
+
+        if (ent.Comp.EnableRaiseThrall)
+            args.AddAction(ref ent.Comp.RaiseThrallAction, ent.Comp.RaiseThrallActionId);
 
         if (ent.Comp.EnableRecall)
             args.AddAction(ref ent.Comp.RecallAction, ent.Comp.RecallActionId);

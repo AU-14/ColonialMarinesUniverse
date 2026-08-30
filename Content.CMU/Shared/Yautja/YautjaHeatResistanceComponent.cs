@@ -10,7 +10,7 @@ namespace Content.Shared.CMU14.Yautja.HeatResistance;
 public sealed partial class YautjaHeatResistanceComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public float FireDamageMultiplier = 0.65f;
+    public float FireDamageMultiplier = 0.35f;
 
 private void OnDamageModifyAfterResist(Entity<YautjaHeatResistanceComponent> ent, ref DamageModifyAfterResistEvent args)
     {

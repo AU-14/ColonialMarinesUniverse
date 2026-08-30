@@ -36,6 +36,22 @@ public static class ThreatVoteSelection
         => ThreatVoteSelection.CalculateBodyCount(spawn.LeadersToSpawn, spawn.GruntsToSpawn, spawn.Scaling,
             playerCount);
 
+    public static IReadOnlyDictionary<string, int> GetScaledBodies(
+        IReadOnlyDictionary<string, int> bodies,
+        IReadOnlyDictionary<string, JobScaleEntry> scaling,
+        int playerCount)
+    {
+        var result = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        foreach ((string bodyId, int staticCount) in bodies)
+        {
+            result[bodyId] = scaling.TryGetValue(bodyId, out JobScaleEntry entry)
+                ? JobScaling.CalculateScaledSlots(playerCount, staticCount, entry)
+                : Math.Max(0, staticCount);
+        }
+
+        return result;
+    }
+
     public static bool IsThreatAllowed(IReadOnlyCollection<string> blacklistedGamemodes,
         IReadOnlyCollection<string> whitelistedGamemodes,
         int minPlayers,

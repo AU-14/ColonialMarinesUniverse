@@ -127,7 +127,7 @@ public sealed partial class ChemicalAddictionTreatmentComponent : Component
 /// Owns short-lived state supplied by generated medicinal properties. Reapplying a property
 /// refreshes its duration and keeps the strongest potency instead of stacking modifiers.
 /// </summary>
-public sealed class ChemicalPropertyStatusSystem : EntitySystem
+public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
 {
     private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(2);
     private const string DirectSource = "__direct";

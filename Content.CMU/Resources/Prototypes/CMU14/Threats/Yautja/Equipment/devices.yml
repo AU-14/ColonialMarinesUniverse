@@ -132,6 +132,8 @@
   - type: YautjaBadBloodGearChoice
   - type: YautjaBracer
     enableRecall: false
+    enableRaiseThrall: true
+    maxRaiseThrall: 3
     cloakDuration: 20
     cloakCooldown: 20
     cloakWarningBefore: 5

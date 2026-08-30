@@ -9,10 +9,10 @@ using Content.Shared._RMC14.Language;
 
 namespace Content.Server.CMU14.Platoon;
 
-public sealed class PlatoonLanguageSystem : EntitySystem
+public sealed partial class PlatoonLanguageSystem : EntitySystem
 {
-    [Dependency] private readonly LanguageLearningSystem _learning = default!;
-    [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private  LanguageLearningSystem _learning = default!;
+    [Dependency] private  PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
 
     public override void Initialize()
     {

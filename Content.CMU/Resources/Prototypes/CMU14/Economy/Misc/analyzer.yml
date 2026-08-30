@@ -1,7 +1,7 @@
 - type: entity
   parent: CMBaseStructure
   id: AU14AnalyzerMachine
-  name: Analyzer Machine
+  name: Analyzer Machine (Govfor)
   description:  An intel analyzer
   components:
   - type: Transform
@@ -229,3 +229,13 @@
   components:
   - type: FetchAnalyzer
     faction: opfor
+
+
+- type: entity
+  parent: AU14AnalyzerMachine
+  id: AU14AnalyzerMachineWeYu
+  name: Analyzer Machine (WeYu)
+  description: An intel analyzer
+  components:
+  - type: FetchAnalyzer
+    faction: weyu

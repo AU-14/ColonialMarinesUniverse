@@ -22,7 +22,7 @@ public sealed class CMUMedicalAsrsCatalogTest
         "USCMCargoCatalog",
         "RMCCargoCatalog",
         "UPPCargoCatalog",
-        "WEYUCargoCatalog",
+        "WYPMCCargoCatalog",
         "VAIPOCargoCatalog",
         "ProdigyCargoCatalog",
         "LACNCargoCatalog",

@@ -14,11 +14,11 @@ namespace Content.Server.CMU14.Weapons.Ranged;
 /// <see cref="CCVars.SpentCasingDespawnTime"/>. One shared sweep instead of
 /// per-entity timers; contained casings (held, stored) are left alone.
 /// </summary>
-public sealed class CMUSpentCasingSystem : EntitySystem
+public sealed partial class CMUSpentCasingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  SharedContainerSystem _containers = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private static readonly TimeSpan SweepInterval = TimeSpan.FromSeconds(5);
 

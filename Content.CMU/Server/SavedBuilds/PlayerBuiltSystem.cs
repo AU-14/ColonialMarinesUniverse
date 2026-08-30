@@ -25,7 +25,7 @@ public sealed partial class PlayerBuiltSystem : EntitySystem
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
 
     /// <summary>Building overhaul: a light "thunk/ratchet" played at the spot whenever a player finishes a build
     /// step, so construction has some audible feedback. Guarded so a bad path can never crash the build.</summary>

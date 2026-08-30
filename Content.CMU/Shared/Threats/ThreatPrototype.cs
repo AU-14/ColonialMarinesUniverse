@@ -25,6 +25,14 @@ public sealed partial class ThreatPrototype : IPrototype
     [DataField("roundstartspawns")]
     public ProtoId<PartySpawnPrototype> RoundStartSpawn { get; private set; }
 
+    /// <summary>
+    ///     Whether extra member bodies are spawned beyond the partySpawn plan so every held
+    ///     threat voter gets a seat. Elite threats (small designed counts) set this false or
+    ///     popularity overrides the threat's intended scale.
+    /// </summary>
+    [DataField(required: false)]
+    public bool SpawnExtraVoteMembers { get; private set; } = true;
+
     [DataField("possibleInserts")]
     public List<AuInsertPrototype> Inserts { get; private set; } = new();
 
@@ -74,6 +82,10 @@ public sealed partial class ThreatPrototype : IPrototype
     public bool hiveevolution { get; private set; }
 
     // if xeno evo should send messages
+
+    /// <summary>Whether the hive's burrowed larva pool stays active with this threat; xeno-lineage threats only.</summary>
+    [DataField("burrowedLarvaEnabled")]
+    public bool BurrowedLarvaEnabled { get; private set; }
 
     /// <summary>
     ///     Optional job scaling prototype for human job slots.

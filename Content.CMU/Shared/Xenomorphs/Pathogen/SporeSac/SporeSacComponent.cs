@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Xenomorphs.Pathogen.SporeSac;
@@ -32,4 +33,8 @@ public sealed partial class CMUXenoSporeSacComponent : Component
     /// <summary>Track placed sacs so we can enforce MaxSacs.</summary>
     [ViewVariables]
     public List<EntityUid> PlacedSacs = new();
+
+    /// <summary>Tile chosen for the in-progress placement doafter.</summary>
+    [ViewVariables]
+    public EntityCoordinates? PendingCoords;
 }

@@ -130,6 +130,7 @@
     - AU14CartridgeRifleM75AMAS
   - type: CartridgeAmmo
     proto: BulletRifleAR10
+    deleteOnSpawn: true # caseless ammo
 
 - type: entity
   parent: RMCBaseBullet

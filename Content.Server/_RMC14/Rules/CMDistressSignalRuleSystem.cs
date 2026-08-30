@@ -872,7 +872,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         // For human hijacks, build a set of map IDs belonging to the hijacker's faction ship(s).
         // For xeno hijacks, keep legacy behavior (Almayer maps).
         var targetShipMaps = new HashSet<MapId>();
-        if (ev.IsHumanHijack && !string.IsNullOrEmpty(ev.HijackerFaction))
+        if (ev.HijackerType == DropshipHijackerType.Human && !string.IsNullOrEmpty(ev.HijackerFaction)) // CMU14
         {
             // Scan ShipFactionComponent grids matching the hijacker's faction
             var shipQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
@@ -899,7 +899,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         }
 
         // Only do xeno-specific cleanup for xeno hijacks
-        if (!ev.IsHumanHijack)
+        if (ev.HijackerType != DropshipHijackerType.Human) // CMU14
         {
             var hiveStructures = EntityQueryEnumerator<HiveConstructionLimitedComponent, TransformComponent>();
             while (hiveStructures.MoveNext(out var id, out _, out var xform))

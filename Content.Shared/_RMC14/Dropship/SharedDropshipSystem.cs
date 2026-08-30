@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Areas;
@@ -858,7 +859,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                 if (TryComp<MarineComponent>(args.Actor, out var marine) && !string.IsNullOrEmpty(marine.Faction))
                     hijackerFaction = marine.Faction.ToLowerInvariant();
 
-                var ev = new DropshipHijackStartEvent(xform.ParentUid, hijackerFaction, true);
+                var ev = new DropshipHijackStartEvent(xform.ParentUid, hijackerFaction, DropshipHijackerType.Human); // CMU14
                 RaiseLocalEvent(ref ev);
             }
         }
@@ -891,7 +892,10 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                 dropship.Crashed = true;
                 Dirty(xform.ParentUid, dropship);
 
-                var ev = new DropshipHijackStartEvent(xform.ParentUid);
+                var hijackerType = HasComp<CMUPathogenHiveMemberComponent>(args.Actor) ? DropshipHijackerType.Pathogen :
+                    HasComp<XenoComponent>(args.Actor) ? DropshipHijackerType.Xeno :
+                    DropshipHijackerType.Other; // CMU14
+                var ev = new DropshipHijackStartEvent(xform.ParentUid, HijackerType: hijackerType); // CMU14
                 RaiseLocalEvent(ref ev);
             }
         }

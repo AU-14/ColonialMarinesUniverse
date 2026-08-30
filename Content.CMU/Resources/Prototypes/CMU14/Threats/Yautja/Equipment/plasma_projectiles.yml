@@ -333,6 +333,56 @@
     radius: 4.75
     energy: 3.2
 
+- type: explosion
+  id: CMUYautjaBadBloodPlasma
+  damagePerIntensity:
+    types:
+      Blunt: 2
+      Heat: 2
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+- type: entity
+  parent: CMUYautjaCasterLethalBolt
+  id: CMUYautjaBadBloodCasterLethalBolt
+  name: unstable plasma bolt
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: CMUYautjaPlasmaHeavyImpactEffect
+    damage:
+      types:
+        Heat: 30
+        Structural: 8
+  - type: Explosive
+    explosionType: CMUYautjaBadBloodPlasma
+    maxIntensity: 18
+    intensitySlope: 6
+    totalIntensity: 70
+    maxTileBreak: 1
+  - type: CMExplosionEffect
+    explosion: CMUYautjaPlasmaHeavyImpactEffect
+    shockWave: CMUYautjaPlasmaHeavyShockWave
+    minShrapnel: 1
+    maxShrapnel: 2
+    shrapnelSpeed: 5
+  - type: RMCScorchEffect
+    count: 2
+    scatterRadius: 1
+    radius: 1
+
 - type: entity
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterEradicatorBolt

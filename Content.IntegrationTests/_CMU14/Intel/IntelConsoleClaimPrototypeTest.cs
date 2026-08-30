@@ -26,7 +26,7 @@ public sealed class IntelConsoleClaimPrototypeTest
                 Assert.That(prototype.TryComp<ClaimableIntelConsoleComponent>(out var claim, factory), Is.True);
                 Assert.That(claim!.ClaimingTeam, Is.EqualTo(Team.GovFor));
                 Assert.That(claim.RequiredPreset, Is.EqualTo("Insurgency"));
-                Assert.That(claim.ClaimTime, Is.EqualTo(TimeSpan.FromSeconds(10)));
+                Assert.That(claim.ClaimTime, Is.EqualTo(TimeSpan.FromSeconds(45)));
             });
         });
 
