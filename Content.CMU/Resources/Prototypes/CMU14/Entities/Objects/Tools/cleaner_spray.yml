@@ -44,7 +44,6 @@
     layers:
     - state: cleaner_special
   - type: Solution
-    id: spray
     solution:
       maxVol: 300
       reagents:
