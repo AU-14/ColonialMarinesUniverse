@@ -25,8 +25,8 @@
     capacity: 100
     # Pip sprite while the pot holds scrap boards, since electronics have no stack icon to borrow.
     electronicsIcon:
-      sprite: Objects/Misc/module.rsi
-      state: door_electronics
+      sprite: CMU14/Objects/Smelting/smelting_pot.rsi
+      state: pot_active
     recipes:
     # Cave-rock iron ore. SteelOre is what mineablesolarisrocksteel actually drops (display name "iron ore").
     - input: SteelOre
@@ -60,12 +60,12 @@
         active:
           True: { visible: true }
           False: { visible: false }
-  - type: AmbientSound
-    enabled: false
-    volume: -6
-    range: 4
+  # BaseItem's direct drop sound is unavailable when a generated construction child is hot-loaded.
+  - type: EmitSoundOnLand
     sound:
-      path: /Audio/Effects/Chemistry/bubbles.ogg
+      collection: MetalThud
+      params:
+        volume: 2
   - type: Damageable
   - type: Injurable
     damageContainer: Inorganic
