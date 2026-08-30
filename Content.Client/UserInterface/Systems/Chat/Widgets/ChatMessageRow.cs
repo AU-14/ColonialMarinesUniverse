@@ -24,8 +24,8 @@ public sealed partial class ChatMessageRow : PanelContainer
         typeof(BoldItalicTag),
         typeof(BoldTag),
         typeof(BulletTag),
+        typeof(ChatCommandLinkTag),
         typeof(ColorTag),
-        typeof(CommandLinkTag),
         typeof(FontTag),
         typeof(HeadingTag),
         typeof(ItalicTag),
@@ -109,7 +109,7 @@ public sealed partial class ChatMessageRow : PanelContainer
             VerticalAlignment = VAlignment.Top,
             LineHeightScale = metrics.LineHeightScale
         };
-        _messageLabel.SetMessage(formatted, AllowedMarkupTags, defaultColor: textColor);
+        _messageLabel.SetMessage(ReplaceCommandLinkTags(formatted), AllowedMarkupTags, defaultColor: textColor);
         row.AddChild(_messageLabel);
 
         _repeatBadge = new Label
@@ -175,6 +175,27 @@ public sealed partial class ChatMessageRow : PanelContainer
     {
         _repeatBadge.Visible = count > 1;
         _repeatBadge.Text = $"x{count}";
+    }
+
+    internal static FormattedMessage ReplaceCommandLinkTags(FormattedMessage message)
+    {
+        var output = new FormattedMessage(message.Count);
+        foreach (var node in message)
+        {
+            if (node.Name == "cmdlink")
+            {
+                output.PushTag(new MarkupNode(
+                    ChatCommandLinkTag.TagName,
+                    node.Value,
+                    node.Attributes,
+                    node.Closing));
+                continue;
+            }
+
+            output.PushTag(node);
+        }
+
+        return output;
     }
 
     public void RefreshLayout()
