@@ -4,6 +4,9 @@ using Content.Server.CMU14.VendorMarker;
 using Robust.Shared.Prototypes;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Maps;
+using Content.Shared.Access;
+using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Round;
@@ -19,6 +22,7 @@ namespace Content.Server.CMU14.Round;
 
 public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComponent>
 {
+    [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
@@ -255,6 +259,19 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         continue;
                     }
 
+                    if (markerComp.Class == PlatoonMarkerClass.TacticalMap)
+                    {
+                        var tacMapProtoId = shipFaction.Faction switch
+                        {
+                            "govfor" => "CMUTacticalMapTableGovfor",
+                            "opfor" => "CMUTacticalMapTableOpfor",
+                            _ => null,
+                        };
+                        if (tacMapProtoId != null && _prototypeManager.TryIndex(tacMapProtoId, out _))
+                            _entityManager.SpawnEntity(tacMapProtoId, transform.Coordinates);
+                        continue;
+                    }
+
                     // --- GROUNDSIDE OPS SEGREGATED MARKERS ---
                     if (markerComp.Class == PlatoonMarkerClass.GroundsideOpsGovfor)
                     {
@@ -375,6 +392,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         if (_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                         {
                             var spawned = _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
+                            SetRequisitionsVendorAccess(spawned, markerComp.Class, shipFaction.Faction);
                             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawned, out var spawnedPhone))
                             {
                                 if (!string.IsNullOrEmpty(shipFaction.Faction))
@@ -984,6 +1002,25 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
         vendorProtoId = default;
         return false;
+    }
+
+    private void SetRequisitionsVendorAccess(EntityUid vendor, PlatoonMarkerClass markerClass, string faction)
+    {
+        if (markerClass != PlatoonMarkerClass.ReqVend ||
+            !TryComp<AccessReaderComponent>(vendor, out var accessReader))
+        {
+            return;
+        }
+
+        ProtoId<AccessLevelPrototype>? access = faction switch
+        {
+            "govfor" => "AU14AccessGovforReq",
+            "opfor" => "AU14AccessOpforReq",
+            _ => null,
+        };
+
+        if (access is { } factionAccess)
+            _accessReader.TrySetAccesses((vendor, accessReader), new List<ProtoId<AccessLevelPrototype>> { factionAccess });
     }
 
     protected override void Ended(EntityUid uid, PlatoonSpawnRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
