@@ -338,7 +338,7 @@
         shader: unshaded
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents:
         - ReagentId: WeldingFuel
           Quantity: 150

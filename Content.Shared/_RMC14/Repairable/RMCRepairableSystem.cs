@@ -51,7 +51,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
     private static readonly ProtoId<StackPrototype> WoodStack = "RMCWood";
     private static readonly EntProtoId<SkillDefinitionComponent> ConstructionSkill = "RMCSkillConstruction";
 
-    private const string SolutionWelder = "Welder";
+    private const string SolutionWelder = "welder";
     private const string ReagentWelder = "WeldingFuel";
 
     private EntityUid? _forceRepairUser;

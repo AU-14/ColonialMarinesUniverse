@@ -82,7 +82,7 @@
         shader: unshaded
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents:
         - ReagentId: WeldingFuel
           Quantity: 100
@@ -96,7 +96,7 @@
     soundHit:
       collection: GenericHit
   - type: RefillableSolution
-    solution: Welder
+    solution: welder
   - type: Tool
     useSound:
       collection: Welder
@@ -141,7 +141,7 @@
   - type: RequiresEyeProtection
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents:
         - ReagentId: WeldingFuel
           Quantity: 100
@@ -155,7 +155,7 @@
   - type: RequiresEyeProtection
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents: []
         maxVol: 100 # TODO RMC14 40 when welders are fixed
 
@@ -168,7 +168,7 @@
   components:
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents:
         - ReagentId: WeldingFuel
           Quantity: 500
@@ -187,7 +187,7 @@
     sprite: _RMC14/Objects/Tools/welder_hand.rsi
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents:
         - ReagentId: WeldingFuel
           Quantity: 12.5
@@ -212,7 +212,7 @@
   - type: RequiresEyeProtection
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents:
         - ReagentId: WeldingFuel
           Quantity: 150
@@ -231,7 +231,7 @@
   components:
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents:
         - ReagentId: WeldingFuel
           Quantity: 100
@@ -249,13 +249,13 @@
     sprite: _RMC14/Objects/Tools/welder_industrial.rsi
   - type: SolutionContainerManager
     solutions:
-      Welder:
+      welder:
         reagents:
         - ReagentId: WeldingFuel
           Quantity: 200
         maxVol: 200
   - type: RMCSelfRechargingSolution
-    solutionId: Welder
+    solutionId: welder
     reagent: WeldingFuel
     rechargeAmount: 1
     rechargeEvery: 1
