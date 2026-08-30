@@ -1,4 +1,5 @@
 using Content.Server.Stack;
+using Content.Shared.Stacks;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Map;
@@ -28,7 +29,8 @@ public sealed partial class GunSystem
             ent.Comp.UnspawnedCount--;
             DirtyField(ent.AsNullable(), nameof(BallisticAmmoProviderComponent.UnspawnedCount));
             ammoEnt = Spawn(ent.Comp.Proto, coordinates);
-            _stack.SetCount(ammoEnt.Value, 1);
+            if (TryComp(ammoEnt.Value, out StackComponent? stack))
+                _stack.SetCount((ammoEnt.Value, stack), 1);
             EnsureShootable(ammoEnt.Value);
         }
 
