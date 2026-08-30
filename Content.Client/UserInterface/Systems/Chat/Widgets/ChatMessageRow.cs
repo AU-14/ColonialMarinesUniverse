@@ -2,6 +2,8 @@ using System;
 using System.Numerics;
 using Content.Client.Stylesheets;
 using Content.Client.Resources;
+using Content.Client.UserInterface.RichText;
+using Content.Client._RMC14.Chat;
 using Content.Shared.CMU14.Ghost;
 using Content.Shared.CMU14.Xenonids.Watch;
 using Content.Shared.Chat;
@@ -9,6 +11,7 @@ using Robust.Client.Console;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.RichText;
 using Robust.Shared.IoC;
 using Robust.Shared.Utility;
 
@@ -16,6 +19,21 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
 public sealed partial class ChatMessageRow : PanelContainer
 {
+    internal static readonly Type[] AllowedMarkupTags =
+    [
+        typeof(BoldItalicTag),
+        typeof(BoldTag),
+        typeof(BulletTag),
+        typeof(ColorTag),
+        typeof(CommandLinkTag),
+        typeof(FontTag),
+        typeof(HeadingTag),
+        typeof(ItalicTag),
+        typeof(LanguageIconTag),
+        typeof(MonoTag),
+        typeof(ScrambleTag),
+    ];
+
     [Dependency] private IClientConsoleHost _consoleHost = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
 
@@ -91,7 +109,7 @@ public sealed partial class ChatMessageRow : PanelContainer
             VerticalAlignment = VAlignment.Top,
             LineHeightScale = metrics.LineHeightScale
         };
-        _messageLabel.SetMessage(formatted, defaultColor: textColor);
+        _messageLabel.SetMessage(formatted, AllowedMarkupTags, defaultColor: textColor);
         row.AddChild(_messageLabel);
 
         _repeatBadge = new Label
