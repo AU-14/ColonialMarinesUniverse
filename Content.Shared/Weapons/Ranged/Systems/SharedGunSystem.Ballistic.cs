@@ -502,7 +502,8 @@ public abstract partial class SharedGunSystem
     /// </summary>
     public bool CanInsertBallistic(Entity<BallisticAmmoProviderComponent> entity, EntityUid inserted)
     {
-        return !_whitelistSystem.IsWhitelistFailOrNull(entity.Comp.Whitelist, inserted) &&
+        return (!TryComp(inserted, out CartridgeAmmoComponent? cartridge) || !cartridge.Spent) &&
+               !_whitelistSystem.IsWhitelistFailOrNull(entity.Comp.Whitelist, inserted) &&
                !IsFull(entity);
     }
 
