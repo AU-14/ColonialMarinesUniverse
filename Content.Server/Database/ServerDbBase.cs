@@ -67,9 +67,11 @@ namespace Content.Server.Database
         {
             await using var db = await GetDb();
 
-            await SetSelectedCharacterSlotAsync(userId, index, db.DbContext);
-
-            await db.DbContext.SaveChangesAsync();
+            // Profile edits and selection messages are handled asynchronously. Make the FK check part of the
+            // update so a selection racing a slot deletion becomes a no-op instead of throwing a DbUpdateException.
+            await db.DbContext.Preference
+                .Where(p => p.UserId == userId.UserId && p.Profiles.Any(profile => profile.Slot == index))
+                .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.SelectedCharacterSlot, index));
         }
 
         /// <summary>

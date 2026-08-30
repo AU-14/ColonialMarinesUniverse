@@ -81,16 +81,24 @@ public sealed partial class CustomConstructionMenuSystem
             if (path == null)
                 continue;
 
+            var yaml = row.Yaml;
+            if (row.Kind == DbKindTiles && TryMigrateLegacyTileYaml(yaml, out var migratedYaml))
+            {
+                yaml = migratedYaml;
+                DbUpsert(row.Kind, row.EntryKey, yaml);
+                Log.Info($"Migrated legacy custom tile entry {row.EntryKey} to the current construction schema.");
+            }
+
             // Bad-data quarantine, applied to EVERY kind: oversized rows (or, for entries, unsafe ones)
             // are skipped AND deleted so a corrupt/hostile row can never crash or stall startup again.
-            if (IsOversizedYaml(row.Yaml, out var sizeReason))
+            if (IsOversizedYaml(yaml, out var sizeReason))
             {
                 Log.Error($"Skipping oversized custom construction entry {row.Kind}/{row.EntryKey}: {sizeReason}. The DB row will be removed.");
                 DbDelete(row.Kind, row.EntryKey);
                 continue;
             }
 
-            if (row.Kind == DbKindEntries && IsUnsafeGeneratedEntryYaml(row.Yaml, out var reason))
+            if (row.Kind == DbKindEntries && IsUnsafeGeneratedEntryYaml(yaml, out var reason))
             {
                 Log.Error($"Skipping unsafe custom construction entry {row.Kind}/{row.EntryKey}: {reason}. The DB row will be removed so startup cannot crash on it again.");
                 DbDelete(row.Kind, row.EntryKey);
@@ -110,10 +118,10 @@ public sealed partial class CustomConstructionMenuSystem
 
             try
             {
-                if (!File.Exists(path))
+                if (!File.Exists(path) || !string.Equals(File.ReadAllText(path), yaml, StringComparison.Ordinal))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-                    File.WriteAllText(path, row.Yaml, Encoding.UTF8);
+                    File.WriteAllText(path, yaml, Encoding.UTF8);
                     restored++;
                 }
 
@@ -124,9 +132,9 @@ public sealed partial class CustomConstructionMenuSystem
                 // loaded server-side here; the CLIENT replay goes through one combined publish on the
                 // first Update tick (see _pendingRestorePublish) - per-row publishing reloaded all
                 // localizations once per entry, which stalled startup for minutes on big batches.
-                _prototype.LoadString(row.Yaml, overwrite: true);
+                _prototype.LoadString(yaml, overwrite: true);
                 loaded++;
-                combined.AppendLine(row.Yaml);
+                combined.AppendLine(yaml);
                 combined.AppendLine();
                 anyLathe |= row.Kind == DbKindLathe;
             }
@@ -159,6 +167,21 @@ public sealed partial class CustomConstructionMenuSystem
 
         if (restored > 0)
             Log.Info($"Restored {restored} custom construction entries from the database.");
+    }
+
+    /// <summary>
+    /// Removes the recipe icon emitted by the old tile generator. ConstructionPrototype no longer has an
+    /// icon field; the generated tile-applier entity supplies the menu icon instead.
+    /// </summary>
+    private static bool TryMigrateLegacyTileYaml(string yaml, out string migrated)
+    {
+        const string legacyLf = "  icon:\n    sprite: Objects/Tiles/tile.rsi\n    state: steel\n";
+        const string legacyCrLf = "  icon:\r\n    sprite: Objects/Tiles/tile.rsi\r\n    state: steel\r\n";
+
+        migrated = yaml
+            .Replace(legacyCrLf, string.Empty, StringComparison.Ordinal)
+            .Replace(legacyLf, string.Empty, StringComparison.Ordinal);
+        return !string.Equals(yaml, migrated, StringComparison.Ordinal);
     }
 
     /// <summary>

@@ -9,6 +9,8 @@
     grid:
     - 0,0,20,1
     whitelist:
+      components:
+        - UniversalPaperTool
       tags:
         - Book
         - Document
