@@ -3,7 +3,6 @@ using Content.Shared.Actions;
 using Content.Shared.Mapping;
 using Content.Shared.Maps;
 using Robust.Client.Placement;
-using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -16,7 +15,6 @@ public sealed partial class MappingSystem : EntitySystem
     [Dependency] private ITileDefinitionManager _tileMan = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private ILocalizationManager _localization = default!;
 
     public static readonly EntProtoId SpawnAction = "BaseMappingSpawnAction";
     public static readonly EntProtoId EraserAction = "ActionMappingEraser";
@@ -59,8 +57,7 @@ public sealed partial class MappingSystem : EntitySystem
                 if (!tileDef.MapAtmosphere && tileDef.Sprite is {} sprite)
                     _actions.SetIcon(action, new SpriteSpecifier.Texture(sprite));
                 ev.TileId = tileDef.ID;
-                var tileName = _localization.TryGetString(tileDef.Name, out var localized) ? localized : tileDef.Name;
-                _metaData.SetEntityName(action, tileName);
+                _metaData.SetEntityName(action, Loc.GetString(tileDef.Name));
             }
             else if (permission.EntityType is {} id)
             {
