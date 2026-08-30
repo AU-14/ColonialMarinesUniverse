@@ -1,5 +1,6 @@
 using System.IO;
 using Content.IntegrationTests.Fixtures;
+using Robust.Shared.Audio;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Utility;
 
@@ -8,6 +9,22 @@ namespace Content.IntegrationTests.CMU14.Resources;
 [TestFixture]
 public sealed class RuntimeSpriteResourceRegressionTest : GameTest
 {
+    [Test]
+    public async Task DeathGaspCollectionsReferencePackagedAudio()
+    {
+        await Pair.Client.WaitAssertion(() =>
+        {
+            var resources = Pair.Client.ResolveDependency<IResourceManager>();
+
+            foreach (var collectionId in new[] { "MaleDeathGasp", "FemaleDeathGasp" })
+            {
+                var collection = CProtoMan.Index<SoundCollectionPrototype>(collectionId);
+                Assert.That(collection.PickFiles, Has.All.Matches<ResPath>(resources.ContentFileExists),
+                    $"{collectionId} contains an audio path that is missing from packaged resources.");
+            }
+        });
+    }
+
     [Test]
     public async Task VehicleResourceReferencesMatchPackagedPathCasing()
     {
