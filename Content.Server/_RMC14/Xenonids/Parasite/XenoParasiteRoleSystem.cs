@@ -116,7 +116,7 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    public bool UserCheck(EntityUid user)
+    public bool UserCheck(EntityUid user, bool bypassDeathTime = false)
     {
         if (_net.IsClient)
             return false;
@@ -125,6 +125,9 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
             return false;
 
         if (HasComp<InfectionSuccessComponent>(user))
+            return true;
+
+        if (bypassDeathTime)
             return true;
 
         var timeSinceDeath = _timing.CurTime - ghost.TimeOfDeath;
@@ -147,6 +150,11 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
         //TODO RMC14 parasite bans should be checked here
         _ui.CloseUi(ent, XenoParasiteGhostUI.Key);
 
-        return UserCheck(user);
+        var attempt = new XenoParasiteClaimAttemptEvent(user);
+        RaiseLocalEvent(ent, attempt);
+        if (attempt.Cancelled)
+            return false;
+
+        return UserCheck(user, attempt.BypassDeathTime);
     }
 }

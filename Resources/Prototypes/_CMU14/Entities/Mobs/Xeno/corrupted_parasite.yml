@@ -1,0 +1,17 @@
+- type: entity
+  parent: CMXenoParasite
+  id: CMUCorruptedXenoParasite
+  categories: [ HideSpawnMenu ]
+  components:
+  # Unlike ordinary AI parasites, this role must persist while the killed Queen considers the offer.
+  - type: GhostRole
+    name: cmu-corrupted-hive-ghost-role-name
+    description: cmu-corrupted-hive-ghost-role-description
+    rules: cmu-corrupted-hive-ghost-role-rules
+    prob: 1
+    requirements:
+    - !type:RoleTimeRequirement
+      role: AUJobThreatMember
+      time: 18000 # 5 hours, matching the normal Threat Leader requirement.
+    raffle:
+      settings: parasiteTimeRequirement
