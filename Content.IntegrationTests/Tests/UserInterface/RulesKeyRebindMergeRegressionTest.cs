@@ -11,12 +11,43 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Input;
+using Robust.Shared.Input.Binding;
 
 namespace Content.IntegrationTests.Tests.UserInterface;
 
 [TestFixture]
 public sealed class RulesKeyRebindMergeRegressionTest : GameTest
 {
+    [Test]
+    public async Task AttachableGameplayBindingsRunInsidePrediction()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var binds = Client.ResolveDependency<IEntitySystemManager>()
+                .GetEntitySystem<SharedInputSystem>()
+                .BindRegistry;
+            BoundKeyFunction[] attachableFunctions =
+            [
+                CMKeyFunctions.RMCActivateAttachableBarrel,
+                CMKeyFunctions.RMCActivateAttachableRail,
+                CMKeyFunctions.RMCActivateAttachableStock,
+                CMKeyFunctions.RMCActivateAttachableUnderbarrel,
+                CMKeyFunctions.RMCFieldStripHeldItem
+            ];
+
+            Assert.Multiple(() =>
+            {
+                foreach (var function in attachableFunctions)
+                {
+                    var handlers = binds.GetHandlers(function).ToArray();
+                    Assert.That(handlers, Is.Not.Empty, $"missing gameplay handler for {function}");
+                    Assert.That(handlers, Has.All.Property(nameof(InputCmdHandler.FireOutsidePrediction)).False,
+                        $"{function} must run in predicted simulation so attachment state and do-afters can change");
+                }
+            });
+        });
+    }
+
     [Test]
     public async Task RulesWindowComposesCrtPanelTabsTutorialAndCvarLifecycle()
     {

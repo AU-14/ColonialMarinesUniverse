@@ -95,35 +95,40 @@ public sealed partial class AttachableHolderSystem : EntitySystem
                         if (session?.AttachedEntity is { } userUid)
                             ToggleAttachable(userUid, "rmc-aslot-barrel");
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Bind(CMKeyFunctions.RMCActivateAttachableRail,
                 InputCmdHandler.FromDelegate(session =>
                     {
                         if (session?.AttachedEntity is { } userUid)
                             ToggleAttachable(userUid, "rmc-aslot-rail");
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Bind(CMKeyFunctions.RMCActivateAttachableStock,
                 InputCmdHandler.FromDelegate(session =>
                     {
                         if (session?.AttachedEntity is { } userUid)
                             ToggleAttachable(userUid, "rmc-aslot-stock");
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Bind(CMKeyFunctions.RMCActivateAttachableUnderbarrel,
                 InputCmdHandler.FromDelegate(session =>
                     {
                         if (session?.AttachedEntity is { } userUid)
                             ToggleAttachable(userUid, "rmc-aslot-underbarrel");
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Bind(CMKeyFunctions.RMCFieldStripHeldItem,
                 InputCmdHandler.FromDelegate(session =>
                     {
                         if (session?.AttachedEntity is { } userUid)
                             FieldStripHeldItem(userUid);
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Register<AttachableHolderSystem>();
     }
 
