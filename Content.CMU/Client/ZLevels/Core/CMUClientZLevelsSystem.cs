@@ -279,7 +279,9 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         if (sprite.Offset != targetOffset)
             _sprite.SetOffset((uid, sprite), targetOffset);
 
-        var targetDrawDepth = zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault;
+        var targetDrawDepth = zPhys.LocalPosition > 0
+            ? Math.Max(zPhys.DrawDepthDefault, (int) Shared.DrawDepth.DrawDepth.OverMobs)
+            : zPhys.DrawDepthDefault;
         if (sprite.DrawDepth != targetDrawDepth)
             _sprite.SetDrawDepth((uid, sprite), targetDrawDepth);
     }

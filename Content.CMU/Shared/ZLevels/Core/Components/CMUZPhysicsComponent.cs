@@ -42,7 +42,7 @@ public sealed partial class CMUZPhysicsComponent : Component
     public bool NoRotDefault;
 
     /// <summary>
-    /// The original DrawDepth of the object is automatically saved here. Increases by 1 when the creature has <see cref="LocalPosition"/> > 0
+    /// The original DrawDepth of the object is automatically saved here. Airborne sprites are raised to at least OverMobs.
     /// </summary>
     [DataField]
     public int DrawDepthDefault;
