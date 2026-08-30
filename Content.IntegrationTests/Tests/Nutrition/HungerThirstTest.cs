@@ -1,7 +1,9 @@
 using Content.IntegrationTests.Tests.Interaction;
+using Content.Shared.CCVar;
 using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
+using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -100,8 +102,11 @@ public sealed class HungerThirstTest : InteractionTest
     }
 
     [Test]
-    public async Task RMCDrinkUsesEdibleAndConsumesOneSipPerInteraction()
+    public async Task RMCDrinkAutoConsumesUntilEmpty()
     {
+        var originalPreference = Client.CfgMan.GetCVar(CCVars.CMUAutoIngestEnabled);
+        await SetAutoIngestPreference(true);
+
         var drink = await PlaceInHands("RMCDrinkAlcoholGrenadine");
         var serverDrink = ToServer(drink);
         var edible = SEntMan.GetComponent<EdibleComponent>(serverDrink);
@@ -116,13 +121,36 @@ public sealed class HungerThirstTest : InteractionTest
         }
 
         Assert.That(ingestion.CanConsume(SPlayer, SPlayer, serverDrink, out var solution, out _), Is.True);
-        var initialVolume = solution.Value.Comp.Solution.Volume;
 
-        await UseInHand();
-        await RunSeconds(3);
+        try
+        {
+            await UseInHand();
+            await RunSeconds(30);
 
-        Assert.That(solution.Value.Comp.Solution.Volume, Is.EqualTo(initialVolume - edible.TransferAmount!.Value),
-            "Drinks should consume one deliberate sip and must not repeat until empty.");
+            Assert.That(solution.Value.Comp.Solution.Volume, Is.EqualTo(FixedPoint2.Zero),
+                "Drinks should continue consuming after the first sip until empty.");
+        }
+        finally
+        {
+            await SetAutoIngestPreference(originalPreference);
+        }
+    }
+
+    [Test]
+    public async Task AutoIngestCanBeDisabledForFoodAndDrink()
+    {
+        var originalPreference = Client.CfgMan.GetCVar(CCVars.CMUAutoIngestEnabled);
+        await SetAutoIngestPreference(false);
+
+        try
+        {
+            await AssertConsumesOnePortion("RMCDrinkAlcoholGrenadine");
+            await AssertConsumesOnePortion(_food);
+        }
+        finally
+        {
+            await SetAutoIngestPreference(originalPreference);
+        }
     }
 
     [Test]
@@ -141,5 +169,37 @@ public sealed class HungerThirstTest : InteractionTest
             Assert.That(nutrition, Is.Zero);
             Assert.That(ingestion.TotalHydration((serverDrink, null), SPlayer), Is.EqualTo(hydration));
         }
+    }
+
+    private async Task AssertConsumesOnePortion(EntProtoId prototype)
+    {
+        var item = await PlaceInHands(prototype);
+        var serverItem = ToServer(item);
+        var edible = SEntMan.GetComponent<EdibleComponent>(serverItem);
+        var ingestion = SEntMan.System<IngestionSystem>();
+
+        Assert.That(ingestion.CanConsume(SPlayer, SPlayer, serverItem, out var solution, out _), Is.True);
+        Assert.That(edible.TransferAmount, Is.Not.Null);
+        var initialVolume = solution.Value.Comp.Solution.Volume;
+
+        await UseInHand();
+        await RunSeconds(3);
+
+        Assert.That(solution.Value.Comp.Solution.Volume, Is.EqualTo(initialVolume - edible.TransferAmount!.Value),
+            $"{prototype} should consume exactly one portion when automatic ingestion is disabled.");
+
+        await Pair.DeleteEntityTreeLeafFirst(serverItem);
+    }
+
+    private async Task SetAutoIngestPreference(bool enabled)
+    {
+        await Client.WaitPost(() => Client.CfgMan.SetCVar(CCVars.CMUAutoIngestEnabled, enabled));
+        await Pair.ReallyBeIdle(5);
+        await Server.WaitAssertion(() =>
+        {
+            var netConfig = Server.ResolveDependency<INetConfigurationManager>();
+            Assert.That(netConfig.GetClientCVar(Server.PlayerMan.Sessions[0].Channel, CCVars.CMUAutoIngestEnabled),
+                Is.EqualTo(enabled));
+        });
     }
 }

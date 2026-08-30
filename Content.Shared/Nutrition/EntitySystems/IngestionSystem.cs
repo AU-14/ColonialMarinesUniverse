@@ -506,8 +506,8 @@ public sealed partial class IngestionSystem : EntitySystem
             // Leave some of the consumer's DNA on the consumed item...
             _forensics.TransferDna(entity, args.Target, false);
 
-            // Drinks historically required one deliberate interaction per sip.
-            args.Repeat = !args.ForceFed && entity.Comp.Edible != Drink;
+            // CMU14: Let players choose whether eating and drinking continue automatically.
+            args.Repeat = !args.ForceFed && ShouldAutoIngest(entity);
             return;
         }
 

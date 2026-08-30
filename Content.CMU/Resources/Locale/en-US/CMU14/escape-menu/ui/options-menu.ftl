@@ -1,6 +1,10 @@
 cmu-ui-options-examine-log-in-chat = Show detailed examine breakdown of characters in chat
 cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat like in SS13
 
+cmu-ui-options-accessibility = Accessibility
+cmu-ui-options-auto-ingest = Automatically continue eating and drinking
+cmu-ui-options-auto-ingest-tooltip = After the first bite or sip, continue consuming the held item until it is empty or the action is interrupted.
+
 cmu-ui-options-general-construction = Construction
 cmu-ui-options-construction-mode = Construction Mode
 cmu-ui-options-construction-mode-improved = Improved

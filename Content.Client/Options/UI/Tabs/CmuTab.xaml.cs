@@ -34,6 +34,7 @@ public sealed partial class CmuTab : Control
         Control.AddOptionPercentSlider(CCVars.ChatRunechatBubbleScale, RunechatSpeechBubbleScaleSlider, 0.5f, 2f);
         Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUAutoIngestEnabled, AutoIngestCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.TargetedHealingEnabled, TargetedHealingCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.AutoReapplyKitsEnabled, AutoReapplyKitsCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.UiLessSurgeryEnabled, UiLessSurgeryCheckBox);

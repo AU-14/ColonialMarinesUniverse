@@ -18,6 +18,11 @@
                 <CheckBox Name="ExamineLogInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-log-in-chat'}" />
                 <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" />
 
+                <Label Text="{Loc 'cmu-ui-options-accessibility'}" StyleClasses="LabelKeyText" />
+                <CheckBox Name="AutoIngestCheckBox"
+                          Text="{Loc 'cmu-ui-options-auto-ingest'}"
+                          ToolTip="{Loc 'cmu-ui-options-auto-ingest-tooltip'}" />
+
                 <Label Text="{Loc 'cmu-ui-options-medical'}" StyleClasses="LabelKeyText" />
                 <CheckBox Name="TargetedHealingCheckBox"
                           Text="{Loc 'cmu-ui-options-targeted-healing'}"
