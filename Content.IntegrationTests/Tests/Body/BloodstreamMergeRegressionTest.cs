@@ -126,6 +126,24 @@ public sealed class BloodstreamMergeRegressionTest : GameTest
     }
 
     [Test]
+    public async Task OverfilledBloodstreamReportsAtMostFullBloodLevel()
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            var target = SSpawnAtPosition("BloodstreamMergeTarget", map.GridCoords);
+            var bloodstream = SEntity<BloodstreamComponent>(target);
+            var bloodSolution = GetBloodSolution(target);
+
+            bloodSolution.AddReagent(new ReagentId(Blood, null), FixedPoint2.New(100));
+
+            Assert.That(_bloodstream.GetBloodLevel(bloodstream.AsNullable()), Is.EqualTo(1f),
+                "Blood level consumers such as the health analyzer must never display 200%.");
+        });
+    }
+
+    [Test]
     public async Task StasisAndDeathFreezeBloodstreamUntilMetabolismResumes()
     {
         var map = await Pair.CreateTestMap();

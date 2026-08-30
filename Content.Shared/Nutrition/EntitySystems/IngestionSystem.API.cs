@@ -144,7 +144,7 @@ public sealed partial class IngestionSystem
             return false;
 
         // If we don't have the tools to eat we can't eat.
-        return CanAccessSolution(ingested, user, out solution, out time);
+        return CanAccessSolution(ingested, user, target, out solution, out time);
     }
 
     #endregion
@@ -307,10 +307,12 @@ public sealed partial class IngestionSystem
     /// </summary>
     /// <param name="ingested">Entity being ingested</param>
     /// <param name="user">The entity trying to make the ingestion happening, not necessarily the one eating</param>
+    /// <param name="target">The entity that would consume the item</param>
     /// <param name="solution">Solution we're returning</param>
     /// <param name="time">The time it takes us to eat this entity</param>
     public bool CanAccessSolution(EntityUid ingested,
         EntityUid user,
+        EntityUid target,
         [NotNullWhen(true)] out Entity<SolutionComponent>? solution,
         out TimeSpan? time)
     {
@@ -318,7 +320,7 @@ public sealed partial class IngestionSystem
         time = null;
 
         // TODO: Relay this event to solutions using solution relay
-        var ev = new EdibleEvent(user);
+        var ev = new EdibleEvent(user, target);
         RaiseLocalEvent(ingested, ref ev);
 
         solution = ev.Solution;

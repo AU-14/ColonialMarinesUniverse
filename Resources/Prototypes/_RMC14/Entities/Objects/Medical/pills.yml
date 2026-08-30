@@ -23,6 +23,7 @@
     skills:
       RMCSkillMedical: 1
   - type: Pill
+    directBloodstream: true
   - type: Edible
     edible: Pill
     delay: 0

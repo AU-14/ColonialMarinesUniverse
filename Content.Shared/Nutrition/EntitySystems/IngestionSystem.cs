@@ -62,6 +62,7 @@ public sealed partial class IngestionSystem : EntitySystem
 
     // Body Component Dependencies
     [Dependency] private BodySystem _body = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private ReactiveSystem _reaction = default!;
     [Dependency] private StomachSystem _stomach = default!;
 
@@ -317,19 +318,40 @@ public sealed partial class IngestionSystem : EntitySystem
             return;
 
         var forceFed = args.User != entity.Owner;
+        var directBloodstream = TryComp<PillComponent>(food, out var pill) && pill.DirectBloodstream;
 
         var highestAvailable = FixedPoint2.Zero;
         Entity<StomachComponent>? stomachToUse = null;
+        BloodstreamComponent? bloodstream = null;
+        Solution? bloodSolution = null;
+
+        if (directBloodstream &&
+            (!TryComp(entity, out bloodstream) ||
+             !_solutionContainer.ResolveSolution(entity.Owner,
+                 bloodstream.BloodSolutionName,
+                 ref bloodstream.BloodSolution,
+                 out bloodSolution)))
+        {
+            return;
+        }
+
         foreach (var ent in stomachs)
         {
+            if (!IsDigestibleBy(food, ent))
+                continue;
+
+            if (directBloodstream)
+            {
+                stomachToUse = ent;
+                highestAvailable = bloodSolution!.AvailableVolume;
+                break;
+            }
+
             var owner = ent.Owner;
             if (!_solutionContainer.ResolveSolution(owner, StomachSystem.DefaultSolutionName, ref ent.Comp.Solution, out var stomachSol))
                 continue;
 
             if (stomachSol.AvailableVolume <= highestAvailable)
-                continue;
-
-            if (!IsDigestibleBy(food, ent))
                 continue;
 
             stomachToUse = ent;
@@ -379,7 +401,16 @@ public sealed partial class IngestionSystem : EntitySystem
         var afterEv = new IngestedEvent(args.User, entity, split, forceFed, beforeEv.Transfer >= beforeEv.Max);
         RaiseLocalEvent(food, ref afterEv);
 
-        _stomach.TryTransferSolution((stomachToUse.Value, stomachToUse.Value.Comp), split);
+        var transferred = directBloodstream
+            ? _bloodstream.TryAddToBloodstream((entity, bloodstream), split)
+            : _stomach.TryTransferSolution((stomachToUse.Value, stomachToUse.Value.Comp), split);
+
+        // Capacity was checked before splitting, but restore the dose if another system changed it during ingestion.
+        if (!transferred)
+        {
+            _solutionContainer.TryAddSolution(solution.Value, split);
+            return;
+        }
 
         if (!afterEv.Destroy)
         {

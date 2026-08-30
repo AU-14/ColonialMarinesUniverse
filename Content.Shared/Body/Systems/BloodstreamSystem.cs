@@ -360,7 +360,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
     /// For multi reagent bloodstreams, if you have 100 of Reagent Y need 100, and 50 of Reagent X and need 100,
     /// this will return 0.5f
     /// </summary>
-    /// <returns>Returns the current blood level as a value from 0 to <see cref="BloodstreamComponent.MaxVolumeModifier"/></returns>
+    /// <returns>Returns the current blood level as a normalized value from 0 to 1.</returns>
     public float GetBloodLevel(Entity<BloodstreamComponent?> entity)
     {
         if (!Resolve(entity, ref entity.Comp)
@@ -370,7 +370,8 @@ public sealed partial class BloodstreamSystem : EntitySystem
             return 0.0f;
         }
 
-        var totalBloodLevel = FixedPoint2.New(entity.Comp.MaxVolumeModifier); // Can't go above max volume factor...
+        // The solution has extra capacity for injected chemicals, but medical blood level is a normalized percentage.
+        var totalBloodLevel = FixedPoint2.New(1);
 
         foreach (var (reagentId, quantity) in entity.Comp.BloodReferenceSolution.Contents)
         {
