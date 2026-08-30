@@ -108,10 +108,12 @@ public abstract partial class SharedRankSystem : EntitySystem
             return genderPrefix;
         }
 
-        if (hasPaygrade && rank.Paygrade != null)
-            return $"({Loc.GetString(rank.Paygrade)}) {Loc.GetString(rank.Name)}";
+        var rankName = Loc.TryGetString($"rank-{rank.ID}", out var localizedName) ? localizedName : rank.Name;
 
-        return Loc.TryGetString($"rank-{rank.ID}", out var localizedName) ? localizedName : rank.Name;
+        if (hasPaygrade && rank.Paygrade != null)
+            return $"({rank.Paygrade}) {rankName}";
+
+        return rankName;
     }
 
     /// <summary>
