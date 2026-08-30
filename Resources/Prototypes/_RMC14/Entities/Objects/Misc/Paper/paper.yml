@@ -33,6 +33,7 @@
     - Trash
     - Paper
   - type: Appearance
+  - type: PaperVisualizer
   - type: PaperVisuals
   - type: Flammable
     fireSpread: true
