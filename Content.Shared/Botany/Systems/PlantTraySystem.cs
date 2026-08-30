@@ -8,6 +8,7 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.EntityEffects;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
+using Content.Shared.Interaction;
 using Content.Shared.Random.Helpers;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -66,6 +67,22 @@ public sealed partial class PlantTraySystem : EntitySystem
     private void OnSolutionTransferred(Entity<PlantTrayComponent> ent, ref SolutionTransferredEvent args)
     {
         _audio.PlayPredicted(ent.Comp.WateringSound, ent, args.User);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnAfterInteractUsing(Entity<PlantComponent> ent, ref AfterInteractUsingEvent args)
+    {
+        if (args.Handled || !_plant.TryGetTray(ent.AsNullable(), out var tray))
+            return;
+
+        var redirected = new AfterInteractEvent(
+            args.User,
+            args.Used,
+            tray.Owner,
+            args.ClickLocation,
+            args.CanReach);
+        RaiseLocalEvent(args.Used, redirected);
+        args.Handled = redirected.Handled;
     }
 
     // Workaround for https://github.com/space-wizards/space-station-14/pull/35314

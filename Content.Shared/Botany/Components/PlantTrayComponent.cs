@@ -80,7 +80,7 @@ public sealed partial class PlantTrayComponent : Component
     /// Multiplier for resource consumption (water, nutrients) in the tray.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float TrayConsumptionMultiplier = 2f;
+    public float TrayConsumptionMultiplier = 1.2f;
 
     /// <summary>
     /// Currently planted plant entity (parented to this tray).
