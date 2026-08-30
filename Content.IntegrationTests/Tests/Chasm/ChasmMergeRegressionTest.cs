@@ -1,5 +1,6 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Chasm;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -19,6 +20,20 @@ public sealed class ChasmMergeRegressionTest : GameTest
           - type: Chasm
           - type: ChasmMergeProbe
         """;
+
+    [Test]
+    public async Task ChasmPrototypeBlocksWeedSpread()
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            var chasm = SEntMan.SpawnEntity("FloorChasmEntity", map.GridCoords);
+
+            Assert.That(SEntMan.HasComponent<BlockWeedsComponent>(chasm), Is.True,
+                "chasm hazards must prevent weeds from spreading onto their tile");
+        });
+    }
 
     [Test]
     public async Task QueenDeathPrecedesCompletionAndSourcelessFallSkipsCompletionEvents()

@@ -8,6 +8,7 @@
     - Wall
   components:
   - type: Chasm
+  - type: BlockWeeds
   - type: StepTrigger
     requiredTriggeredSpeed: 0
     intersectRatio: 0.4

@@ -21,9 +21,7 @@ public sealed partial class ItemSlotsSystem
                 if (slot.InsertOnInteract || !CanInsert(ent, slot, usingEntity, user))
                     continue;
 
-                var verbSubject = slot.Name != string.Empty
-                    ? Loc.GetString(slot.Name)
-                    : Name(usingEntity);
+                var verbSubject = GetSlotDisplayName(slot.Name, usingEntity);
 
                 AlternativeVerb verb = new()
                 {
@@ -69,9 +67,7 @@ public sealed partial class ItemSlotsSystem
             if (!_actionBlockerSystem.CanPickup(user, slot.Item!.Value))
                 continue;
 
-            var verbSubject = slot.Name != string.Empty
-                ? Loc.GetString(slot.Name)
-                : Comp<MetaDataComponent>(slot.Item.Value).EntityName;
+            var verbSubject = GetSlotDisplayName(slot.Name, slot.Item.Value);
 
             AlternativeVerb verb = new()
             {
@@ -109,9 +105,7 @@ public sealed partial class ItemSlotsSystem
             if (!_actionBlockerSystem.CanPickup(user, slot.Item!.Value))
                 continue;
 
-            var verbSubject = slot.Name != string.Empty
-                ? Loc.GetString(slot.Name)
-                : Name(slot.Item!.Value);
+            var verbSubject = GetSlotDisplayName(slot.Name, slot.Item!.Value);
 
             InteractionVerb takeVerb = new()
             {
@@ -137,9 +131,7 @@ public sealed partial class ItemSlotsSystem
             if (!slot.InsertOnInteract || !CanInsert(ent, slot, usingEntity, user))
                 continue;
 
-            var verbSubject = slot.Name != string.Empty
-                ? Loc.GetString(slot.Name)
-                : Name(usingEntity);
+            var verbSubject = GetSlotDisplayName(slot.Name, usingEntity);
 
             InteractionVerb insertVerb = new()
             {
@@ -170,5 +162,15 @@ public sealed partial class ItemSlotsSystem
             insertVerb.Priority = slot.Priority;
             args.Verbs.Add(insertVerb);
         }
+    }
+
+    private string GetSlotDisplayName(string slotName, EntityUid fallback)
+    {
+        if (slotName == string.Empty)
+            return Name(fallback);
+
+        return Loc.TryGetString(slotName, out var localizedName)
+            ? localizedName
+            : slotName;
     }
 }

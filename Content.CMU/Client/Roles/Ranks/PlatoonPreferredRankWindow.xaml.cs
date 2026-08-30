@@ -13,10 +13,10 @@ using Content.Client.Lobby.UI;
 
 namespace Content.Client.CMU14.Roles.Ranks;
 
-public sealed class PlatoonRankPreferenceWindow : DefaultWindow
+public sealed partial class PlatoonRankPreferenceWindow : DefaultWindow
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  IResourceCache _resourceCache = default!;
 
     private readonly TabContainer _tabs;
     private readonly Dictionary<string, string?> _selections = new();
@@ -187,7 +187,9 @@ public sealed class PlatoonRankPreferenceWindow : DefaultWindow
             }
             toggles.Add((rank.RankId, button));
 
-            vbox.AddChild(BuildRow(rank.ChevronEntity, rank.RankName, rank.Paygrade, rank.Unlocked, rank.RequirementsText, button));
+            var rankName = LocalizeOrLiteral(rank.RankName);
+            var paygrade = rank.Paygrade is { } value ? LocalizeOrLiteral(value) : null;
+            vbox.AddChild(BuildRow(rank.ChevronEntity, rankName, paygrade, rank.Unlocked, rank.RequirementsText, button));
         }
 
         var validPreference = toggles
@@ -259,6 +261,13 @@ public sealed class PlatoonRankPreferenceWindow : DefaultWindow
             MinWidth = 70,
             VerticalAlignment = VAlignment.Center
         };
+    }
+
+    private static string LocalizeOrLiteral(string value)
+    {
+        return Loc.TryGetString(value, out var localized)
+            ? localized
+            : value;
     }
 
     private Texture? GetChevronIcon(EntProtoId? entProtoId)

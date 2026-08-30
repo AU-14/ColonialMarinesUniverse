@@ -617,9 +617,11 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
                 if (!_actionBlockerSystem.CanPickup(args.User, slot.Item!.Value))
                     continue;
 
-                var verbSubject = slot.Name != string.Empty
-                    ? Loc.GetString(slot.Name)
-                    : Comp<MetaDataComponent>(slot.Item.Value).EntityName;
+                var verbSubject = slot.Name;
+                if (slot.Name == string.Empty)
+                    verbSubject = Comp<MetaDataComponent>(slot.Item.Value).EntityName;
+                else if (Loc.TryGetString(slot.Name, out var localizedName))
+                    verbSubject = localizedName;
 
                 AlternativeVerb verb = new()
                 {
