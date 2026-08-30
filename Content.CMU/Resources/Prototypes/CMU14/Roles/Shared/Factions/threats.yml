@@ -21,6 +21,7 @@
   parent: THREAT
   id: RMCXeno
   name: Prime Hive
+  hidden: true
 
 - type: npcFaction
   parent: RMCXeno

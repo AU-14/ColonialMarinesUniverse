@@ -10,6 +10,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Medical;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Medical.Defibrillator;
 
@@ -17,6 +18,7 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
@@ -117,7 +119,10 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
     {
         StopChargingAudio(defib);
 
-        defib.Comp.ChargeSoundEntity = _audio.PlayPredicted(defib.Comp.ChargeSound, defib.Owner, user)?.Entity;
+        if (_net.IsClient)
+            return;
+
+        defib.Comp.ChargeSoundEntity = _audio.PlayPvs(defib.Comp.ChargeSound, defib.Owner)?.Entity;
         if (defib.Comp.ChargeSoundEntity is not { } sound)
             return;
 

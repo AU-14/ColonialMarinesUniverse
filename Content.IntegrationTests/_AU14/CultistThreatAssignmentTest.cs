@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.CMU14.Threats;
+using Content.Shared.Access.Systems;
 using Content.Shared.Radio.Components;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.Threats;
@@ -26,7 +27,7 @@ public sealed class CultistThreatAssignmentTest
 {
     private static readonly ProtoId<JobPrototype> ThreatMemberJob = "AU14JobThreatMember";
     private static readonly ProtoId<JobPrototype> CultistJob = "AU14JobCultist";
-    private static readonly ProtoId<ThreatPrototype> CultistThreatOnMarker = "cultistThreatOnMarker";
+    private static readonly ProtoId<ThreatPrototype> CultistThreat = "CultistThreatCF";
 
     [Test]
     public async Task AssignedCultistThreatMemberKeepsCultistJobAndMindRole()
@@ -45,9 +46,9 @@ public sealed class CultistThreatAssignmentTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            entMan.SpawnEntity("cultistcfthreatmemberspawnmarker", map.GridCoords);
+            entMan.SpawnEntity("threatmemberspawnmarker", map.GridCoords);
 
-            var threat = server.ProtoMan.Index(CultistThreatOnMarker);
+            var threat = server.ProtoMan.Index(CultistThreat);
             var assignedJobs = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>
             {
                 [player.UserId] = (ThreatMemberJob, EntityUid.Invalid),
@@ -87,6 +88,9 @@ public sealed class CultistThreatAssignmentTest
                 Assert.That(jobSystem.MindTryGetJobId(mindId.Value, out var job) ? job : null, Is.EqualTo(CultistJob));
                 Assert.That(MindHasRolePrototype(entMan, mind, "MindRoleCultist"), Is.True);
                 Assert.That(roleSystem.MindHasRole<JobRoleComponent>(mindId.Value), Is.True);
+                Assert.That(entMan.System<IdExaminableSystem>().GetInfo(cultist),
+                    Does.Not.Contain("Prime Hive"),
+                    "cultist hive affiliation must not be exposed by ID examination");
             });
         });
 
