@@ -41,7 +41,8 @@ namespace Content.Server.GameTicking
 
         public void UpdateInfoText()
         {
-            var filter = Filter.Empty().AddPlayers(_playerManager.NetworkedSessions);
+            var filter = Filter.Empty().AddPlayers(
+                _playerManager.NetworkedSessions.Where(session => session.Channel.IsConnected));
             RaiseNetworkEvent(GetInfoMsg(), filter);
             RaiseNetworkEvent(GetRoundStatusMsg(), filter);
         }

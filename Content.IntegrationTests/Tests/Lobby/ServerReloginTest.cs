@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.GameTicking;
 using Content.Shared.CCVar;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
@@ -35,6 +36,23 @@ public sealed class ServerReloginTest : GameTest
 
             //No new players are allowed, but since our client was already playing, they should be able to get in
             serverConfig.SetCVar(CCVars.SoftMaxPlayers, 0);
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var session = serverPlayerMgr.Sessions.Single();
+            var connectedProperty = session.Channel.GetType().GetProperty(nameof(INetChannel.IsConnected));
+            Assert.That(connectedProperty, Is.Not.Null);
+
+            connectedProperty.SetValue(session.Channel, false);
+            try
+            {
+                server.System<GameTicker>().UpdateInfoText();
+            }
+            finally
+            {
+                connectedProperty.SetValue(session.Channel, true);
+            }
         });
 
         await client.WaitAssertion(() =>
