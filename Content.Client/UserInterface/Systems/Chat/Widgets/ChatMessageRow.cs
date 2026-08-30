@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using Content.Client.Stylesheets;
 using Content.Client.Resources;
+using Content.Shared.CMU14.Ghost;
 using Content.Shared.CMU14.Xenonids.Watch;
 using Content.Shared.Chat;
 using Robust.Client.Console;
@@ -72,6 +73,12 @@ public sealed partial class ChatMessageRow : PanelContainer
             });
         }
 
+        if (message.GhostFollowEntity.Valid)
+        {
+            var followButton = CreateFollowButton(message, metrics, textColor);
+            row.AddChild(followButton);
+        }
+
         if (message.XenoWatchEntity.Valid)
         {
             var watchButton = CreateXenoWatchButton(message, metrics, textColor);
@@ -98,6 +105,17 @@ public sealed partial class ChatMessageRow : PanelContainer
             FontOverride = sideFont
         };
         row.AddChild(_repeatBadge);
+    }
+
+    private Button CreateFollowButton(ChatMessage message, RowMetrics metrics, Color textColor)
+    {
+        var followButton = CreateChatActionButton(
+            Loc.GetString("cmu-chat-manager-follow-button"),
+            Loc.GetString("cmu-chat-manager-follow-button-tooltip"),
+            metrics,
+            textColor);
+        followButton.OnPressed += _ => _consoleHost.ExecuteCommand($"{CMUGhostFollowCommand.CommandName} {message.GhostFollowEntity}");
+        return followButton;
     }
 
     private Button CreateXenoWatchButton(ChatMessage message, RowMetrics metrics, Color textColor)

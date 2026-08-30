@@ -309,7 +309,8 @@ public sealed partial class TunableFrequencySystem : EntitySystem
                 ? chat
                 : new ChatMessage(chat)
                 {
-                    WrappedMessage = wrapped
+                    WrappedMessage = wrapped,
+                    GhostFollowEntity = GetNetEntity(sender)
                 };
 
             _netManager.ServerSendMessage(new MsgChatMessage { Message = ghostChat }, session.Channel);

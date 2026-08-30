@@ -443,11 +443,13 @@ internal sealed partial class ChatManager : IChatManager
 
         speechStyleClass ??= _entityManager.GetComponentOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass;
         var repeatCheckSender = !_entityManager.HasComponent<ChatRepeatIgnoreSenderComponent>(source);
-        wrappedMessage = PrependFollowButtonIfAppropriate(wrappedMessage, source, client);
-
         // CMU14
+        var ghostFollowEntity = NetEntity.Invalid;
         var xenoWatchEntity = NetEntity.Invalid;
-        var customWrappedMessage = wrappedMessage;
+        var customWrappedMessage = PrependFollowButtonIfAppropriate(wrappedMessage, source, client);
+        if (customWrappedMessage != wrappedMessage)
+            ghostFollowEntity = netSource;
+
         if (TryCreateXenoWatchButton(customWrappedMessage, source, client, out var wrappedWithWatchButton, out var watchEntity))
         {
             customWrappedMessage = wrappedWithWatchButton;
@@ -470,6 +472,7 @@ internal sealed partial class ChatManager : IChatManager
             repeatCheckSender: repeatCheckSender,
             display: display,
             languageIcon: languageIcon,
+            ghostFollowEntity: ghostFollowEntity,
             xenoWatchEntity: xenoWatchEntity
         );
         _netManager.ServerSendMessage(new MsgChatMessage() { Message = msg }, client);
@@ -514,8 +517,12 @@ internal sealed partial class ChatManager : IChatManager
         var repeatCheckSender = !_entityManager.HasComponent<ChatRepeatIgnoreSenderComponent>(source);
         foreach (var client in clients)
         {
+            var ghostFollowEntity = NetEntity.Invalid;
             var xenoWatchEntity = NetEntity.Invalid;
             var customWrappedMessage = PrependFollowButtonIfAppropriate(wrappedMessage, source, client);
+            if (customWrappedMessage != wrappedMessage)
+                ghostFollowEntity = netSource;
+
             if (TryCreateXenoWatchButton(customWrappedMessage, source, client, out var wrappedWithWatchButton, out var watchEntity))
             {
                 customWrappedMessage = wrappedWithWatchButton;
@@ -535,6 +542,7 @@ internal sealed partial class ChatManager : IChatManager
                 hidePopup,
                 speechStyleClass: speechStyleClass,
                 repeatCheckSender: repeatCheckSender,
+                ghostFollowEntity: ghostFollowEntity,
                 xenoWatchEntity: xenoWatchEntity);
             _netManager.ServerSendMessage(new MsgChatMessage { Message = msg }, client);
         }

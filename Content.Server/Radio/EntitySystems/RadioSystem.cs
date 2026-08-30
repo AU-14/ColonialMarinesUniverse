@@ -343,6 +343,9 @@ public sealed partial class RadioSystem : SharedRadioSystem
             Message = new ChatMessage(chatMsg.Message)
             {
                 WrappedMessage = wrappedMessage,
+                GhostFollowEntity = ghostWrappedMessage != chatMsg.Message.WrappedMessage
+                    ? GetNetEntity(messageSource)
+                    : NetEntity.Invalid,
                 XenoWatchEntity = wrappedMessage != ghostWrappedMessage
                     ? GetNetEntity(messageSource)
                     : NetEntity.Invalid,
