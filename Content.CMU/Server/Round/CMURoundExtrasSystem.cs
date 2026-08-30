@@ -7,6 +7,7 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Rules;
+using Content.Shared._RMC14.WeedKiller;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Maps;
@@ -32,6 +33,11 @@ public sealed class CMURoundExtrasSystem : EntitySystem
 
     private static readonly TimeSpan GreetingDelay = TimeSpan.FromSeconds(5);
     private static readonly TimeSpan MapAnnounceDelay = TimeSpan.FromSeconds(20);
+    private static readonly HashSet<string> XenoCleanupPresets = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "ColonyFall",
+        "Insurgency",
+    };
 
     // Mirrors the CMDistressSignalRuleComponent.AresGreetingAudio default
     private static readonly SoundSpecifier GreetingAudio =
@@ -68,12 +74,24 @@ public sealed class CMURoundExtrasSystem : EntitySystem
         while (inserts.MoveNext(out var uid, out var insert))
             _mapInsert.ProcessMapInsert((uid, insert));
 
+        RemoveMappedXenoStructures();
+
         string? planetName = null;
         if (_auRound.GetSelectedPlanetId() is { } planetId &&
             _prototypes.TryIndex<EntityPrototype>(planetId, out var planet))
             planetName = planet.Name;
 
         _distressSignal.SetCmuRoundInfo(planetName);
+    }
+
+    private void RemoveMappedXenoStructures()
+    {
+        if (_auRound.SelectedPreset?.ID is not { } preset || !XenoCleanupPresets.Contains(preset))
+            return;
+
+        var structures = EntityQueryEnumerator<DeletedByWeedKillerComponent>();
+        while (structures.MoveNext(out var uid, out _))
+            QueueDel(uid);
     }
 
     public override void Update(float frameTime)
