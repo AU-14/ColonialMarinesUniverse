@@ -233,6 +233,17 @@
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardWYGuard
+  name: WY corporate security ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobWYGuard
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
   id: CMU14IDCardColonyProdigyLiaison
   name: prodigy liaison ID card
   components:

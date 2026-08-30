@@ -79,7 +79,7 @@
 - type: startingGear
   id: AU14GearWYGuard
   equipment:
-    id: AU14IDCardColonyCorporateLiaison
+    id: AU14IDCardWYGuard
     outerClothing: CMUArmorM4PMCCorporate
     jumpsuit: AU14WYSecurityUniformRig
     shoes: RMCBootsPMCFilled
