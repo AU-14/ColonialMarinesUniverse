@@ -89,10 +89,17 @@ public sealed partial class ActionContainerSystem : EntitySystem
         DebugTools.AssertOwner(uid, comp);
         comp ??= EnsureComp<ActionsContainerComponent>(uid);
 
+        // Replicated action and container states can arrive separately. Keep server-owned references intact until
+        // containment catches up, since the client cannot authoritatively replace them.
+        var canSpawnAction = !_netMan.IsClient || IsClientSide(uid);
+
         if (Exists(actionId))
         {
             if (_actions.GetAction(actionId) is not {} ent)
             {
+                if (!canSpawnAction)
+                    return false;
+
                 actionId = null;
             }
             else
@@ -113,6 +120,9 @@ public sealed partial class ActionContainerSystem : EntitySystem
                     return true;
                 }
 
+                if (!canSpawnAction)
+                    return false;
+
                 Log.Error($"Action {ToPrettyString(ent)} is not contained in the expected container {ToPrettyString(uid)}");
                 actionId = null;
             }
@@ -123,7 +133,7 @@ public sealed partial class ActionContainerSystem : EntitySystem
             return false;
 
         // Client cannot predict entity spawning.
-        if (_netMan.IsClient && !IsClientSide(uid))
+        if (!canSpawnAction)
             return false;
 
         actionId = Spawn(actionPrototypeId);
