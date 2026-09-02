@@ -35,7 +35,7 @@ public sealed partial class CCVars
     ///     If enabled, the server automatically triggers an AFK check popup when a player's inactivity exceeds afk.time (or admin.afk_time for admins)
     /// </summary>
     public static readonly CVarDef<bool> AfkAutomaticChecks =
-        CVarDef.Create("afk.automatic_checks", true, CVar.SERVERONLY);
+        CVarDef.Create("afk.automatic_checks", false, CVar.SERVERONLY);
 
     /// <summary>
     ///     How long a client can go without any input before being considered AFK.

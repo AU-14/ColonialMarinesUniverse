@@ -175,6 +175,24 @@ public sealed class AfkSystemTest : GameTest
         });
     }
 
+    [Test]
+    public async Task AutomaticAfkChecksAreDisabledByDefault()
+    {
+        await MakeAfk();
+
+        await Server.WaitAssertion(() =>
+        {
+            var session = GetSession();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(_cfg.GetCVar(CCVars.AfkAutomaticChecks), Is.False);
+                Assert.That(_afkManager.IsAfk(session), Is.True);
+                Assert.That(_afkConfirm.HasConfirmation(session), Is.False);
+            });
+        });
+    }
+
     private async Task MakeAfk()
     {
         await Server.WaitAssertion(() =>
