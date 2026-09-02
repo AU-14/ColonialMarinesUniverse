@@ -163,6 +163,7 @@ namespace Content.Shared.Movement.Systems
                 return;
 
             mover.TargetRelativeRotation += angle;
+            UpdateMoverStatus((uid, mover, null));
             Dirty(uid, mover);
         }
 
@@ -177,6 +178,10 @@ namespace Content.Shared.Movement.Systems
             {
                 mover.RelativeRotation = angle;
                 mover.LerpTarget = TimeSpan.Zero;
+            }
+            else
+            {
+                UpdateMoverStatus((uid, mover, null));
             }
 
             Dirty(uid, mover);
@@ -206,6 +211,7 @@ namespace Content.Shared.Movement.Systems
 
             mover.LerpTarget = TimeSpan.Zero;
             mover.TargetRelativeRotation = Angle.Zero;
+            UpdateMoverStatus((uid, mover, null));
             Dirty(uid, mover);
         }
 

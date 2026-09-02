@@ -176,6 +176,17 @@ public sealed partial class MoverController : SharedMoverController
         foreach (var ent in _moversToUpdate)
         {
             HandleMobMovement(ent, frameTime);
+
+            // Camera rotation temporarily wakes immobile movers so the authoritative rotation can finish
+            // instead of prediction repeatedly restoring an intermediate angle.
+            if (!ent.Comp.CanMove &&
+                !RelayQuery.HasComp(ent) &&
+                !RelayTargetQuery.HasComp(ent) &&
+                Angle.ShortestDistance(ent.Comp.RelativeRotation, ent.Comp.TargetRelativeRotation)
+                    .EqualsApprox(Angle.Zero, 0.001))
+            {
+                RemCompDeferred<ActiveInputMoverComponent>(ent);
+            }
         }
 
         HandleShuttleMovement(frameTime);
