@@ -17,6 +17,50 @@ public sealed class CMUStorageTests : GameTest
     private static readonly EntProtoId MedicalPouch = "RMCPouchMedical";
     private static readonly EntProtoId InfantryIfakTramadolPacket = "AU14PacketPillsTramadol";
     private static readonly EntProtoId EpinephrineAutoInjector = "CMEpinephrineAutoInjector";
+    private static readonly EntProtoId StandardBackpack = "CMBackpack";
+    private static readonly EntProtoId[] MediumOuterClothing =
+    [
+        "RMCVestTan",
+        "RMCCoatBomber",
+        "RMCHazardVest",
+    ];
+
+    [Test]
+    public async Task MediumOuterClothingFitsInStandardBackpack()
+    {
+        var server = Pair.Server;
+        var testMap = await Pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var storageSystem = server.System<SharedStorageSystem>();
+            var backpack = entMan.SpawnEntity(StandardBackpack, testMap.GridCoords);
+
+            try
+            {
+                foreach (var outerClothingPrototype in MediumOuterClothing)
+                {
+                    var outerClothing = entMan.SpawnEntity(outerClothingPrototype, testMap.GridCoords);
+
+                    try
+                    {
+                        Assert.That(storageSystem.CanInsert(backpack, outerClothing, out var reason),
+                            Is.True,
+                            $"{outerClothingPrototype}: {reason}");
+                    }
+                    finally
+                    {
+                        entMan.DeleteEntity(outerClothing);
+                    }
+                }
+            }
+            finally
+            {
+                entMan.DeleteEntity(backpack);
+            }
+        });
+    }
 
     [Test]
     public async Task HemostaticGauzePacketFitsProdigyIfak()
