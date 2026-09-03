@@ -65,7 +65,7 @@ internal sealed class RequisitionsItemFlyout : LayeredTextureRect
         LayoutContainer.SetPosition(this, position);
 
         _trailClock += args.DeltaSeconds;
-        if (_trailClock >= 0.045f && Parent is { } parent)
+        if (_trailClock >= 0.09f && Parent is { } parent)
         {
             _trailClock = 0;
             var textures = Textures.ToList();

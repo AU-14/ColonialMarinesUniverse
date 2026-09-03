@@ -59,8 +59,14 @@ public sealed class RequisitionsCrtOverlay : Control
         if (_manifest is not { IsInsideTree: true })
             return;
 
-        var origin = _manifest.GlobalPosition - GlobalPosition;
-        var manifest = new UIBox2(origin.X, origin.Y, origin.X + _manifest.Width, origin.Y + _manifest.Height);
+        // DrawingHandleScreen works in physical pixels. GlobalPosition is UI-scaled and shifts the
+        // manifest mask at non-1x UI scales, which makes the green pass spill into the catalog.
+        var origin = _manifest.GlobalPixelPosition - GlobalPixelPosition;
+        var manifest = new UIBox2(
+            origin.X,
+            origin.Y,
+            origin.X + _manifest.PixelWidth,
+            origin.Y + _manifest.PixelHeight);
         for (var x = manifest.Left + 72; x < manifest.Right; x += 96)
             handle.DrawRect(new UIBox2(x, manifest.Top, x + 1, manifest.Bottom), _accent.WithAlpha(0.025f));
         for (var y = manifest.Top + 64; y < manifest.Bottom; y += 64)

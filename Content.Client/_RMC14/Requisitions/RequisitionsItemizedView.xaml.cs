@@ -314,8 +314,10 @@ public sealed partial class RequisitionsItemizedView : Control
         AnimationLayer.AddChild(_ghostIcon);
         _ghostRoute = new RequisitionsGhostRoute
         {
-            Start = start,
-            End = end,
+            Start = source.GlobalPixelPosition - AnimationLayer.GlobalPixelPosition +
+                    new Vector2(source.PixelWidth / 2f, source.PixelHeight / 2f),
+            End = anchor.GlobalPixelPosition - AnimationLayer.GlobalPixelPosition +
+                  new Vector2(anchor.PixelWidth / 2f, anchor.PixelHeight / 2f),
             Color = GetTrailColor(GetTrailKind(item.Categories)),
             HorizontalExpand = true,
             VerticalExpand = true,

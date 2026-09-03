@@ -128,7 +128,7 @@ internal sealed class RequisitionsAfterimage : LayeredTextureRect
         Textures = textures;
         SetSize = size;
         Stretch = TextureRect.StretchMode.KeepAspectCentered;
-        Modulate = color.WithAlpha(0.32f);
+        Modulate = color.WithAlpha(0.18f);
         MouseFilter = MouseFilterMode.Ignore;
         LayoutContainer.SetPosition(this, position);
     }
@@ -137,8 +137,8 @@ internal sealed class RequisitionsAfterimage : LayeredTextureRect
     {
         base.FrameUpdate(args);
         _life += args.DeltaSeconds;
-        Modulate = Modulate.WithAlpha(Math.Max(0, 0.32f * (1f - _life / 0.24f)));
-        if (_life < 0.24f)
+        Modulate = Modulate.WithAlpha(Math.Max(0, 0.18f * (1f - _life / 0.14f)));
+        if (_life < 0.14f)
             return;
         UserInterfaceManager.DeferAction(Orphan);
     }
@@ -163,13 +163,13 @@ internal sealed class RequisitionsTrailParticle : Control
     {
         base.FrameUpdate(args);
         _life += args.DeltaSeconds;
-        if (_life >= 0.32f)
+        if (_life >= 0.2f)
             UserInterfaceManager.DeferAction(Orphan);
     }
 
     protected override void Draw(DrawingHandleScreen handle)
     {
-        var fade = Math.Max(0f, 1f - _life / 0.32f);
+        var fade = Math.Max(0f, 1f - _life / 0.2f);
         var color = _color.WithAlpha(fade * 0.55f);
         switch (_kind)
         {
