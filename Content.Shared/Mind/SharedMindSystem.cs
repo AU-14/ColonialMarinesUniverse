@@ -165,8 +165,12 @@ public abstract partial class SharedMindSystem : EntitySystem
 
     private void OnVisitingTerminating(EntityUid uid, VisitingMindComponent component, ref EntityTerminatingEvent args)
     {
-        if (component.MindId != null)
-            UnVisit(component.MindId.Value);
+        if (component.MindId is { } mindId &&
+            TryComp(mindId, out MindComponent? mind) &&
+            !Terminating(mindId))
+        {
+            UnVisit(mindId, mind);
+        }
     }
 
     /// <summary>

@@ -160,6 +160,17 @@ public sealed partial class FollowerSystem : EntitySystem
     // before they get deleted so that we don't get recursively deleted too.
     private void OnFollowedTerminating(EntityUid uid, FollowedComponent component, ref EntityTerminatingEvent args)
     {
+        var mapUid = Transform(uid).MapUid;
+        if (mapUid == null || Terminating(mapUid.Value))
+        {
+            // The follower is already part of the terminating hierarchy. Keep it parented so recursive deletion can
+            // clean it up without trying to attach it to a map that is being deleted.
+            foreach (var follower in component.Following.ToArray())
+                StopFollowingEntity(follower, uid, component, deparent: false);
+
+            return;
+        }
+
         StopAllFollowers(uid, component);
     }
 
