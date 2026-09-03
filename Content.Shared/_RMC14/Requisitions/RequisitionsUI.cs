@@ -16,20 +16,26 @@ public sealed class RequisitionsBuiState : BoundUserInterfaceState
     public bool Busy;
     public int Balance;
     public bool Full;
+    public int AvailableSlots;
     public List<RequisitionsStockInfo> Stock;
+    public List<RequisitionsItemStockInfo> ItemStock;
 
     public RequisitionsBuiState(
         RequisitionsElevatorMode? platformLowered,
         bool busy,
         int balance,
         bool full,
-        List<RequisitionsStockInfo> stock)
+        int availableSlots,
+        List<RequisitionsStockInfo> stock,
+        List<RequisitionsItemStockInfo> itemStock)
     {
         PlatformLowered = platformLowered;
         Busy = busy;
         Balance = balance;
         Full = full;
+        AvailableSlots = availableSlots;
         Stock = stock;
+        ItemStock = itemStock;
     }
 }
 

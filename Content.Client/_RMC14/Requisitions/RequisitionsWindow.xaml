@@ -1,11 +1,12 @@
 ﻿<controls:RequisitionsWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Requisitions"
-    Title="Automated Storage and Retrieval System"
-    SetSize="896 560"
-    MinSize="896 560">
+    Title="{Loc 'cmu-asrs-window-title'}"
+    SetSize="1120 680"
+    MinSize="980 600">
+    <controls:RequisitionsItemizedView Name="ItemizedView" Access="Public" />
     <controls:RequisitionsMainView Name="MainView" Access="Public" Visible="False" />
-    <controls:RequisitionsOrderCategoriesView Name="OrderCategoriesView" Access="Public" />
+    <controls:RequisitionsOrderCategoriesView Name="OrderCategoriesView" Access="Public" Visible="False" />
     <controls:RequisitionsCategoryView Name="CategoryView" Access="Public" Visible="False" />
     <controls:RequisitionsOrderSearchView Name="OrderSearchView" Access="Public" Visible="False" />
 </controls:RequisitionsWindow>

@@ -96,11 +96,13 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         SubscribeLocalEvent<RequisitionsComputerComponent, MapInitEvent>(OnComputerMapInit);
         SubscribeLocalEvent<RequisitionsComputerComponent, ComponentStartup>(OnComputerStartup);
+        SubscribeLocalEvent<RequisitionsComputerComponent, ComponentShutdown>(OnComputerShutdown);
         SubscribeLocalEvent<RequisitionsComputerComponent, BeforeActivatableUIOpenEvent>(OnComputerBeforeActivatableUIOpen);
 
         Subs.BuiEvents<RequisitionsComputerComponent>(RequisitionsUIKey.Key, subs =>
         {
             subs.Event<RequisitionsBuyMsg>(OnBuy);
+            subs.Event<RequisitionsCheckoutMsg>(OnItemizedCheckout);
             subs.Event<RequisitionsPlatformMsg>(OnPlatform);
         });
 
@@ -529,7 +531,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 }
                 else
                 {
-                    PrintInvoice(crate, coordinates, PaperRequisitionInvoice);
+                    PrintInvoice(crate, coordinates, PaperRequisitionInvoice, order.PackedWeight);
                 }
 
                 yOffset--;
@@ -767,6 +769,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void ResetStock(Entity<RequisitionsComputerComponent> computer)
     {
+        RebuildItemizedCatalog(computer);
         computer.Comp.Stock.Clear();
         EnsureStockEntries(computer, _timing.CurTime);
     }
@@ -787,6 +790,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             {
                 var entry = category.Entries[orderIndex];
                 if (!IsLimitedStock(entry))
+                    continue;
+
+                if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
                     continue;
 
                 var key = (categoryIndex, orderIndex);
@@ -827,6 +833,12 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         int order,
         RequisitionsEntry entry)
     {
+        if (TryTakeItemizedBundle(computer, (category, order)))
+            return true;
+
+        if (HasItemizedSource(computer.Owner, (category, order)))
+            return false;
+
         if (!IsLimitedStock(entry))
             return true;
 
@@ -875,7 +887,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     {
         EnsureStockEntries(computer, time);
 
-        var updateUi = false;
+        var updateUi = ProcessItemizedStock(computer, time);
         var waitingForStock = false;
         for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
         {
@@ -884,6 +896,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             {
                 var entry = category.Entries[orderIndex];
                 if (!IsLimitedStock(entry))
+                    continue;
+
+                if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
                     continue;
 
                 var key = (categoryIndex, orderIndex);
@@ -948,6 +963,17 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 var entry = category.Entries[orderIndex];
                 if (!IsLimitedStock(entry))
                     continue;
+
+                if (TryGetItemizedBundleStock(computer.Owner, (categoryIndex, orderIndex), time, out var itemizedStock))
+                {
+                    stockInfo.Add(new RequisitionsStockInfo(
+                        categoryIndex,
+                        orderIndex,
+                        itemizedStock.Current,
+                        itemizedStock.Max,
+                        itemizedStock.SecondsUntilNextReplenish));
+                    continue;
+                }
 
                 var key = (categoryIndex, orderIndex);
                 if (!computer.Comp.Stock.TryGetValue(key, out var stock))

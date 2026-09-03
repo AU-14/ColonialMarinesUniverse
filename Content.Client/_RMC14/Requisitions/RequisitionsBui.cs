@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using Content.Client.Stylesheets;
+using Content.Client._CMU14.Interface;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using JetBrains.Annotations;
@@ -25,16 +26,22 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     private RequisitionsWindow? _window;
 
     private readonly Dictionary<(int Category, int Order), RequisitionsStockInfo> _stock = new();
+    private readonly Dictionary<EntProtoId, RequisitionsItemStockInfo> _itemStock = new();
+    private readonly Dictionary<EntProtoId, int> _cart = new();
     private RequisitionsBuiState? _lastState;
     private bool? _raisePlatform;
     private bool _previewOpen;
     private int? _selectedCategory;
     private int? _selectedOrder;
+    private string? _selectedItemCategory;
+    private int _checkoutRequestId;
+    private int? _pendingCheckout;
 
     protected override void Open()
     {
         base.Open();
         _window = this.CreateWindow<RequisitionsWindow>();
+        _cart.Clear();
 
         _window.MainView.OrderItemsButton.OnPressed += _ => ShowView(_window, _window.OrderCategoriesView);
         _window.MainView.PlatformButton.OnPressed += _ => TrySendPlatformMessage();
@@ -42,10 +49,18 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         _window.MainView.ViewOrdersButton.OnPressed += _ => { };
 
         _window.OrderCategoriesView.PlatformButton.OnPressed += _ => TrySendPlatformMessage();
+        _window.OrderCategoriesView.ItemsModeButton.OnPressed += _ => ShowView(_window, _window.ItemizedView);
         _window.OrderCategoriesView.SearchBar.OnTextChanged += _ => RebuildBrowser();
         _window.OrderCategoriesView.PreviewOrderButton.OnPressed += _ => TryOrderSelected();
 
-        ShowView(_window, _window.OrderCategoriesView);
+        _window.ItemizedView.ItemsTabButton.OnPressed += _ => ShowView(_window, _window.ItemizedView);
+        _window.ItemizedView.BundlesTabButton.OnPressed += _ => ShowView(_window, _window.OrderCategoriesView);
+        _window.ItemizedView.PlatformButton.OnPressed += _ => TrySendPlatformMessage();
+        _window.ItemizedView.SearchBar.OnTextChanged += _ => RebuildItemizedBrowser();
+        _window.ItemizedView.CheckoutButton.OnPressed += _ => TryCheckout();
+        _window.ItemizedView.ApplyTheme();
+
+        ShowView(_window, _window.ItemizedView);
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -63,11 +78,15 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         {
             _stock[(stock.Category, stock.Order)] = stock;
         }
+        _itemStock.Clear();
+        foreach (var stock in uiState.ItemStock)
+            _itemStock[stock.Prototype] = stock;
 
         UpdatePlatform(uiState);
         UpdateBudget(uiState);
         ApplyDisplayMode();
         RebuildBrowser();
+        RebuildItemizedBrowser();
 
         if (!_window.IsOpen)
             _window.OpenCentered();
@@ -120,6 +139,13 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         _window.OrderCategoriesView.PlatformLabel.SetMessage(platformLabel);
         _window.OrderCategoriesView.PlatformButton.Text = platformButtonLabel;
         _window.OrderCategoriesView.PlatformButton.Disabled = platformButtonDisabled;
+
+        _window.ItemizedView.PlatformLabel.Text = Loc.GetString(
+            "cmu-asrs-platform-status",
+            ("state", GetPlatformState(uiState)),
+            ("slots", uiState.AvailableSlots));
+        _window.ItemizedView.PlatformButton.Text = platformButtonLabel;
+        _window.ItemizedView.PlatformButton.Disabled = platformButtonDisabled;
     }
 
     private void UpdateBudget(RequisitionsBuiState uiState)
@@ -131,6 +157,293 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         _window.OrderCategoriesView.BudgetLabel.Text = text;
         _window.CategoryView.BudgetLabel.SetMessage(budget);
         _window.OrderSearchView.BudgetLabel.SetMessage(budget);
+        _window.ItemizedView.BudgetLabel.Text = Loc.GetString("cmu-asrs-budget", ("balance", uiState.Balance));
+    }
+
+    private static string GetPlatformState(RequisitionsBuiState state)
+    {
+        return Loc.GetString(state.PlatformLowered switch
+        {
+            null => "cmu-asrs-platform-none",
+            Lowered when state.Busy => "cmu-asrs-platform-busy",
+            Raised when state.Busy => "cmu-asrs-platform-busy",
+            Lowered => "cmu-asrs-platform-lowered",
+            Raised => "cmu-asrs-platform-raised",
+            Lowering => "cmu-asrs-platform-lowering",
+            Raising => "cmu-asrs-platform-raising",
+            _ => "cmu-asrs-platform-busy",
+        });
+    }
+
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+        if (message is not RequisitionsCheckoutResultMsg result ||
+            _window == null ||
+            _pendingCheckout != result.RequestId)
+        {
+            return;
+        }
+
+        _pendingCheckout = null;
+        if (result.Result == RequisitionsCheckoutResult.Success)
+            _cart.Clear();
+
+        _window.ItemizedView.FeedbackLabel.FontColorOverride = result.Result == RequisitionsCheckoutResult.Success
+            ? CrtTerminalPalette.Accent
+            : CrtTerminalPalette.Alert;
+
+        _window.ItemizedView.FeedbackLabel.Text = Loc.GetString(result.Result switch
+        {
+            RequisitionsCheckoutResult.Success => "cmu-asrs-checkout-success",
+            RequisitionsCheckoutResult.InvalidOrder => "cmu-asrs-checkout-invalid",
+            RequisitionsCheckoutResult.InsufficientFunds => "cmu-asrs-checkout-funds",
+            RequisitionsCheckoutResult.InsufficientStock => "cmu-asrs-checkout-stock",
+            RequisitionsCheckoutResult.NoPlatform => "cmu-asrs-checkout-platform",
+            RequisitionsCheckoutResult.PlatformFull => "cmu-asrs-checkout-full",
+            _ => "cmu-asrs-checkout-invalid",
+        });
+        RebuildItemizedBrowser();
+    }
+
+    private void RebuildItemizedBrowser()
+    {
+        if (_window == null ||
+            !_entities.TryGetComponent(Owner, out RequisitionsComputerComponent? computer))
+        {
+            return;
+        }
+
+        var view = _window.ItemizedView;
+        var allCategories = computer.ItemCatalog
+            .SelectMany(item => item.Categories)
+            .Distinct()
+            .Order()
+            .ToList();
+        if (_selectedItemCategory != null && !allCategories.Contains(_selectedItemCategory))
+            _selectedItemCategory = null;
+
+        view.CategoriesContainer.RemoveAllChildren();
+        AddItemCategoryButton(Loc.GetString("cmu-asrs-category-all"), null);
+        foreach (var category in allCategories)
+            AddItemCategoryButton(category, category);
+
+        view.ItemsContainer.RemoveAllChildren();
+        var filter = view.SearchBar.Text?.Trim();
+        var visible = 0;
+        for (var catalogIndex = 0; catalogIndex < computer.ItemCatalog.Count; catalogIndex++)
+        {
+            var item = computer.ItemCatalog[catalogIndex];
+            if (_selectedItemCategory != null && !item.Categories.Contains(_selectedItemCategory))
+                continue;
+
+            if (!string.IsNullOrWhiteSpace(filter) &&
+                !item.Name.Contains(filter, StringComparison.OrdinalIgnoreCase) &&
+                !item.Description.Contains(filter, StringComparison.OrdinalIgnoreCase) &&
+                !item.Categories.Any(category => category.Contains(filter, StringComparison.OrdinalIgnoreCase)))
+            {
+                continue;
+            }
+
+            if (!_prototypes.TryIndex<EntityPrototype>(item.Prototype, out var prototype))
+                continue;
+
+            var row = new RequisitionsItemRow(item, prototype, EntMan.System<SpriteSystem>(), GetItemStockText(item.Prototype));
+            row.AddButton.Disabled = !CanAddItem(item);
+            row.AddButton.OnPressed += _ => AddToCart(item.Prototype);
+            view.ItemsContainer.AddChild(row);
+            visible++;
+        }
+
+        if (visible == 0)
+            view.ItemsContainer.AddChild(new Label { Text = Loc.GetString("cmu-asrs-no-results") });
+        view.ResultCountLabel.Text = Loc.GetString("cmu-asrs-results", ("count", visible));
+        RebuildCart(computer);
+    }
+
+    private void AddItemCategoryButton(string label, string? category)
+    {
+        var selected = _selectedItemCategory == category;
+        var button = new Button
+        {
+            Text = $"{(selected ? "> " : string.Empty)}{label}",
+            HorizontalExpand = true,
+        };
+        button.Label.Align = Label.AlignMode.Left;
+        CmuButtonStyles.Apply(button, selected ? CmuButtonStyles.Variant.Affirm : CmuButtonStyles.Variant.Neutral);
+        button.OnPressed += _ =>
+        {
+            _selectedItemCategory = category;
+            RebuildItemizedBrowser();
+        };
+        _window!.ItemizedView.CategoriesContainer.AddChild(button);
+    }
+
+    private bool CanAddItem(RequisitionsItemEntry item)
+    {
+        _cart.TryGetValue(item.Prototype, out var amount);
+        if (amount >= 99)
+            return false;
+
+        return !_itemStock.TryGetValue(item.Prototype, out var stock) || amount < stock.Current;
+    }
+
+    private void AddToCart(EntProtoId prototype)
+    {
+        if (!_entities.TryGetComponent(Owner, out RequisitionsComputerComponent? computer) ||
+            computer.ItemCatalog.FirstOrDefault(item => item.Prototype == prototype) is not { } item ||
+            !CanAddItem(item))
+        {
+            return;
+        }
+
+        _cart.TryGetValue(prototype, out var amount);
+        _cart[prototype] = amount + 1;
+        _window!.ItemizedView.FeedbackLabel.Text = string.Empty;
+        RebuildItemizedBrowser();
+    }
+
+    private void RemoveFromCart(EntProtoId prototype)
+    {
+        if (!_cart.TryGetValue(prototype, out var amount))
+            return;
+
+        if (amount <= 1)
+            _cart.Remove(prototype);
+        else
+            _cart[prototype] = amount - 1;
+        RebuildItemizedBrowser();
+    }
+
+    private void RebuildCart(RequisitionsComputerComponent computer)
+    {
+        var view = _window!.ItemizedView;
+        view.CartContainer.RemoveAllChildren();
+        var cost = 0;
+        var weight = 0;
+        foreach (var (prototype, amount) in _cart.OrderBy(pair => pair.Key.Id).ToArray())
+        {
+            if (computer.ItemCatalog.FirstOrDefault(item => item.Prototype == prototype) is not { } item)
+            {
+                _cart.Remove(prototype);
+                continue;
+            }
+
+            cost += item.Cost * amount;
+            weight += item.Weight * amount;
+
+            var row = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                SeparationOverride = 4,
+            };
+            row.AddChild(new Label
+            {
+                Text = $"{amount}x {item.Name}",
+                HorizontalExpand = true,
+                ClipText = true,
+                ToolTip = item.Name,
+            });
+            var remove = new Button { Text = "−", MinWidth = 34, ToolTip = Loc.GetString("cmu-asrs-cart-remove") };
+            CmuButtonStyles.Apply(remove, CmuButtonStyles.Variant.Caution);
+            var captured = prototype;
+            remove.OnPressed += _ => RemoveFromCart(captured);
+            row.AddChild(remove);
+            view.CartContainer.AddChild(row);
+        }
+
+        var slots = EstimateShipmentSlots(computer);
+        view.CartEmptyLabel.Visible = _cart.Count == 0;
+        view.CartCostLabel.Text = Loc.GetString("cmu-asrs-cart-cost", ("cost", cost));
+        view.CartWeightLabel.Text = Loc.GetString("cmu-asrs-cart-weight", ("weight", weight));
+        view.CartCratesLabel.Text = Loc.GetString("cmu-asrs-cart-crates", ("crates", slots));
+        view.CheckoutButton.Disabled = _cart.Count == 0 ||
+                                       _pendingCheckout != null ||
+                                       _lastState == null ||
+                                       cost > _lastState.Balance ||
+                                       slots > _lastState.AvailableSlots ||
+                                       !CartStockAvailable(computer);
+    }
+
+    private bool CartStockAvailable(RequisitionsComputerComponent computer)
+    {
+        foreach (var (prototype, amount) in _cart)
+        {
+            if (computer.ItemCatalog.FirstOrDefault(item => item.Prototype == prototype) is not { } item)
+                return false;
+
+            if (_itemStock.TryGetValue(item.Prototype, out var stock) && amount > stock.Current)
+                return false;
+        }
+
+        return true;
+    }
+
+    private int EstimateShipmentSlots(RequisitionsComputerComponent computer)
+    {
+        var bins = new List<int>();
+        var loose = 0;
+        var weights = new List<int>();
+        foreach (var (prototype, amount) in _cart)
+        {
+            if (computer.ItemCatalog.FirstOrDefault(item => item.Prototype == prototype) is not { } item)
+                continue;
+
+            for (var i = 0; i < amount; i++)
+            {
+                if (item.Packable && item.Weight <= computer.ItemShipmentWeightLimit)
+                    weights.Add(item.Weight);
+                else
+                    loose++;
+            }
+        }
+
+        foreach (var itemWeight in weights.OrderByDescending(weight => weight))
+        {
+            var bin = bins.FindIndex(weight => weight + itemWeight <= computer.ItemShipmentWeightLimit);
+            if (bin < 0)
+                bins.Add(itemWeight);
+            else
+                bins[bin] += itemWeight;
+        }
+
+        return loose + bins.Count;
+    }
+
+    private string GetItemStockText(EntProtoId prototype)
+    {
+        if (!_itemStock.TryGetValue(prototype, out var stock))
+            return Loc.GetString("cmu-asrs-stock-unlimited");
+
+        if (stock.Current < stock.Max)
+        {
+            return Loc.GetString(
+                "cmu-asrs-stock-count-refill",
+                ("current", stock.Current),
+                ("max", stock.Max),
+                ("time", FormatTime(stock.SecondsUntilNextReplenish)));
+        }
+
+        return Loc.GetString("cmu-asrs-stock-count", ("current", stock.Current), ("max", stock.Max));
+    }
+
+    private void TryCheckout()
+    {
+        if (_pendingCheckout != null ||
+            _cart.Count == 0 ||
+            !_entities.TryGetComponent(Owner, out RequisitionsComputerComponent? computer) ||
+            !CartStockAvailable(computer))
+        {
+            return;
+        }
+
+        var lines = _cart.Select(pair => new RequisitionsCheckoutLine(pair.Key, pair.Value)).ToList();
+        var requestId = ++_checkoutRequestId;
+        _pendingCheckout = requestId;
+        _window!.ItemizedView.FeedbackLabel.FontColorOverride = CrtTerminalPalette.Caution;
+        _window.ItemizedView.FeedbackLabel.Text = Loc.GetString("cmu-asrs-checkout-pending");
+        _window.ItemizedView.CheckoutButton.Disabled = true;
+        SendMessage(new RequisitionsCheckoutMsg(requestId, lines));
     }
 
     private void RebuildBrowser()
@@ -491,6 +804,8 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         var crt = IsCrtMode();
         var view = _window.OrderCategoriesView;
 
+        _window.ItemizedView.ApplyTheme();
+
         SetClass(view.RootPanel, StyleNano.StyleClassCrtPanel, crt);
         SetClass(view.CategoryPanel, StyleNano.StyleClassCrtInsetPanel, crt);
         SetClass(view.OrdersPanel, StyleNano.StyleClassCrtInsetPanel, crt);
@@ -510,6 +825,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         SetClass(view.PreviewStockLabel, StyleNano.StyleClassCrtDimText, crt);
 
         SetButtonCrtMode(view.PlatformButton, crt);
+        SetButtonCrtMode(view.ItemsModeButton, crt);
         SetButtonCrtMode(view.PreviewOrderButton, crt);
     }
 

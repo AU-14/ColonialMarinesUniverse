@@ -64,4 +64,10 @@ public sealed partial class RequisitionsEntry
     /// <summary>Name of the ordering department.</summary>
     [NonSerialized]
     public string? DeptName;
+
+    /// <summary>
+    /// The actual packed weight of an itemized ASRS shipment. Legacy catalog entries leave this at zero.
+    /// </summary>
+    [NonSerialized]
+    public int PackedWeight;
 }
