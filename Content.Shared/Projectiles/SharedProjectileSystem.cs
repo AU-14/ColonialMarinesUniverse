@@ -676,3 +676,14 @@ public record struct ProjectileHitEvent(DamageSpecifier Damage, EntityUid Target
 /// </summary>
 [ByRefEvent]
 public record struct BeforeProjectileHitEvent(DamageSpecifier Damage, EntityUid Target, EntityUid? Shooter = null);
+
+/// <summary>
+/// Raised authoritatively on the entity struck by a projectile after
+/// projectile-side hit modifiers have run, but before ordinary target damage
+/// is applied.
+/// </summary>
+[ByRefEvent]
+public readonly record struct ProjectileHitTargetEvent(
+    DamageSpecifier Damage,
+    EntityUid Projectile,
+    EntityUid? Shooter = null);

@@ -104,6 +104,19 @@ public sealed partial class ANPRCRadioSystem
         Dirty(ent);
     }
 
+    private void OnHandsetTerminating(Entity<ANPRCHandsetComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (ent.Comp.Radio is not { } radioUid ||
+            !TryComp(radioUid, out ANPRCRadioComponent? radio) ||
+            radio.Handset != ent.Owner)
+        {
+            return;
+        }
+
+        radio.Handset = null;
+        Dirty(radioUid, radio);
+    }
+
     private void SeedDefaultSlots(Entity<ANPRCRadioComponent> ent)
     {
         // only ever seeds a virgin set, so a mapper-placed or already-tuned station

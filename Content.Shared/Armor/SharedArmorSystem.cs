@@ -65,6 +65,9 @@ public abstract partial class SharedArmorSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess || !component.ShowArmorOnExamine)
             return;
 
+        if (component.Modifiers is null) // CMU14: armor with no modifiers block crashed the examine verb
+            return;
+
         var examineMarkup = GetArmorExamine(component.Modifiers);
 
         var ev = new ArmorExamineEvent(examineMarkup);

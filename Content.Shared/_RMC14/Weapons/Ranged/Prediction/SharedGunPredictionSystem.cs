@@ -38,6 +38,8 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
             return null;
 
         var shootCoordinates = GetCoordinates(coordinates);
+        if (!shootCoordinates.IsValid(EntityManager)) // CMU14: stale client coordinates after their parent entity was deleted
+            return null;
         var shootMapCoordinates = _transform.ToMapCoordinates(shootCoordinates);
         if (!IsSameMap(gun.Owner, shootMapCoordinates))
             return null;

@@ -40,9 +40,9 @@ public sealed partial class LabelSystem : EntitySystem
 
     private void OnLabelCompMapInit(Entity<LabelComponent> ent, ref MapInitEvent args)
     {
-        if (ent.Comp.LocalizedLabel is { } locId)
+        if (!string.IsNullOrEmpty(ent.Comp.CurrentLabel))
         {
-            ent.Comp.CurrentLabel = Loc.GetString(locId);
+            ent.Comp.CurrentLabel = Loc.GetString(ent.Comp.CurrentLabel);
             Dirty(ent);
         }
 

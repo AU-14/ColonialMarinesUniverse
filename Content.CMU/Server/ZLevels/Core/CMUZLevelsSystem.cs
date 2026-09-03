@@ -16,9 +16,9 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private MapSystem _map = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private StationSystem _station = default!;
     [Dependency] private TransformSystem _transform = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     public CMUZLevelOpeningCache OpeningCache => _zOpeningCache;
 
@@ -138,4 +138,5 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
             _station.AddGridToStation(resolvedStation, grid);
         }
     }
+
 }

@@ -110,8 +110,10 @@ public sealed partial class NightVisionOverlay : Overlay
         _shader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
 
         var colorVal = _config.GetCVar(RMCCVars.RMCNightVisionColor);
-        var color = ((NightVisionColor) colorVal).ToColor();
+        var color = nightVision.Tint ?? ((NightVisionColor) colorVal).ToColor();
         _shader.SetParameter("nv_color", new Vector3(color.R, color.G, color.B));
+        _shader.SetParameter("noise_strength", nightVision.NoiseStrength);
+        _shader.SetParameter("vignette_strength", nightVision.VignetteStrength);
 
         var worldHandle = args.WorldHandle;
         worldHandle.UseShader(_shader);

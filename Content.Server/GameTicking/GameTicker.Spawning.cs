@@ -9,7 +9,6 @@ using Content.Server.Administration.Systems;
 using Content.Server.CMU14.Allegiance;
 using Content.Server.CMU14.Origin;
 using Content.Server.CMU14.Round;
-using Content.Server.CMU14.Scenario;
 using Content.Server.GameTicking.Events;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Components;
@@ -46,7 +45,6 @@ namespace Content.Server.GameTicking
         [Dependency] private AdminSystem _admin = default!;
         [Dependency] private MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
         [Dependency] private AuJobSelectionSystem _auJobSelectionSystem = default!;
-        [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
         [Dependency] private ThreatSystem _threatSystem = default!;
         [Dependency] private ThreatVoteSystem _threatVoteSystem = default!;
         [Dependency] private ThirdPartySystem _thirdParty = default!;
@@ -118,23 +116,6 @@ namespace Content.Server.GameTicking
 
             return null;
         }
-
-        private ScenarioPlanValidationRequest BuildScenarioPlanRuntimeRequest(string? presetId, int playerCount) => new(
-            presetId ?? string.Empty,
-            playerCount,
-            _platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
-            _platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
-            _auRoundSystem.GetSelectedPlanetId(),
-            _auRoundSystem.GetSelectedPlanet()?.MapId,
-            _auRoundSystem.SelectedThreat?.ID,
-            _auRoundSystem.GetSelectedGovforShip(),
-            _auRoundSystem.GetSelectedOpforShip());
-
-        private static bool ShouldGenerateScenarioPlanShadow(string? presetId)
-            => presetId != null
-                && (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase)
-                    || presetId.Equals("Insurgency", StringComparison.OrdinalIgnoreCase)
-                    || presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase));
 
         /// <summary>
         ///     Resolves the correct character profile for a player based on allegiance.
@@ -317,26 +298,6 @@ namespace Content.Server.GameTicking
             {
                 _sawmill.Debug("[RoundStart] Assigning immediate threat jobs.");
                 _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(assignmentProfiles);
-            }
-
-            if (GameTicker.ShouldGenerateScenarioPlanShadow(presetId))
-            {
-                try
-                {
-                    _scenarioPlan.GenerateShadowPlan(
-                        BuildScenarioPlanRuntimeRequest(presetId, assignmentProfiles.Count),
-                        usesPostRoundstartThreatVote
-                            ? "RoundStartDeferredThreatVotePrepared"
-                            : "RoundStartThreatAssignmentPrepared");
-                }
-                catch (Exception scenarioEx)
-                {
-                    Log.Error($"GenerateShadowPlan threw - round will continue without a shadow Scenario Plan. {scenarioEx}");
-                    _chatManager.DispatchServerAnnouncement(
-                        Loc.GetString("au14-scenario-plan-threw-announcement",
-                            ("preset", presetId ?? "<unknown>")),
-                        Color.Red);
-                }
             }
 
             List<EntityUid> spawnableStations = GetSpawnableStations();

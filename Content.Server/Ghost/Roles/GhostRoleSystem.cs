@@ -639,13 +639,9 @@ public sealed partial class GhostRoleSystem : EntitySystem
     /// <returns>True if takeover was successful, otherwise false.</returns>
     public bool Takeover(ICommonSession player, uint identifier)
     {
-        if (!CanRequestGhostRole(player))
-            return false;
-
+        // UI entry points validate ghost/lobby state and role eligibility before reaching this raw API.
+        // Keeping the gate here prevents sequential programmatic takeovers and leaves spawned roles unusable.
         if (!_ghostRoles.TryGetValue(identifier, out var role))
-            return false;
-
-        if (!CanRequestGhostRole(player, role))
             return false;
 
         var playerNotInGame = _gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status)

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.CMU14.Ambassador;
+using Content.Server.CMU14.Chat;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.Chat.Systems;
@@ -123,9 +124,15 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (Math.Abs(oldTax - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            _chat.DispatchGlobalAnnouncement(
+            //_chat.DispatchGlobalAnnouncement(
+            //    $"Colony sales tax has been set to {clamped:F0}%.",
+            //    "Administration",
+            //    playSound: true,
+            //    announcementSound: sound); // CMU14: xenos must not receive colony announcements
+            _chat.DispatchFilteredAnnouncement(
+                ColonyAnnouncements.Recipients(EntityManager), // CMU14
                 $"Colony sales tax has been set to {clamped:F0}%.",
-                "Administration",
+                sender: "Administration",
                 playSound: true,
                 announcementSound: sound);
         }
@@ -146,9 +153,15 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (Math.Abs(oldTax - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            _chat.DispatchGlobalAnnouncement(
+            //_chat.DispatchGlobalAnnouncement(
+            //    $"Colony income tax has been set to {clamped:F0}%. This affects salary payouts and corporate withdrawals.",
+            //    "Administration",
+            //    playSound: true,
+            //    announcementSound: sound); // CMU14: xenos must not receive colony announcements
+            _chat.DispatchFilteredAnnouncement(
+                ColonyAnnouncements.Recipients(EntityManager), // CMU14
                 $"Colony income tax has been set to {clamped:F0}%. This affects salary payouts and corporate withdrawals.",
-                "Administration",
+                sender: "Administration",
                 playSound: true,
                 announcementSound: sound);
         }
@@ -213,4 +226,3 @@ public sealed partial class AdminConsoleSystem : EntitySystem
             UpdateUiState(uid, comp);
     }
 }
-

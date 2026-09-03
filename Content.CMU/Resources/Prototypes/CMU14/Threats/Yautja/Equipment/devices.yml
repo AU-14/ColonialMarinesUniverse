@@ -9,6 +9,7 @@
     state: icon
   - type: Clothing
     sprite: CMU14/Yautja/bracer.rsi
+  - type: YautjaTechItem
   - type: YautjaBracer
     charge: 3000
     maxCharge: 3000
@@ -1105,6 +1106,7 @@
   - type: Item
     size: Small
     sprite: CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTechItem
   - type: Storage
     maxItemSize: Small
     grid:

@@ -1,6 +1,5 @@
 ﻿using Content.Shared._RMC14.Dropship.Weapon;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Camera;
 
@@ -8,9 +7,6 @@ namespace Content.Shared._RMC14.Camera;
 [Access(typeof(SharedRMCCameraSystem), typeof(SharedDropshipWeaponSystem))]
 public sealed partial class RMCCameraComponent : Component
 {
-    [DataField(required: true), AutoNetworkedField]
-    public EntProtoId? Id;
-
     [DataField, AutoNetworkedField]
     public bool Rename = true;
 

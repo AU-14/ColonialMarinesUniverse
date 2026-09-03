@@ -82,7 +82,7 @@
   suffix: Center, Nanotrasen
   components:
   - type: Label
-    localizedLabel: teleporter-name-center
+    currentLabel: teleporter-name-center
 
 - type: entity
   parent: StationTeleporterNanotrasen
@@ -90,7 +90,7 @@
   suffix: Salvage, Nanotrasen
   components:
   - type: Label
-    localizedLabel: teleporter-name-salvage
+    currentLabel: teleporter-name-salvage
 
 - type: entity
   parent: StationTeleporterNanotrasen
@@ -98,7 +98,7 @@
   suffix: Medical, Nanotrasen
   components:
   - type: Label
-    localizedLabel: teleporter-name-medical
+    currentLabel: teleporter-name-medical
 
 - type: entity
   parent: StationTeleporterNanotrasen
@@ -106,7 +106,7 @@
   suffix: Engineering, Nanotrasen
   components:
   - type: Label
-    localizedLabel: teleporter-name-engineering
+    currentLabel: teleporter-name-engineering
 
 - type: entity
   parent: StationTeleporterNanotrasen
@@ -114,7 +114,7 @@
   suffix: Security, Nanotrasen
   components:
   - type: Label
-    localizedLabel: teleporter-name-security
+    currentLabel: teleporter-name-security
 
 - type: entity
   parent: StationTeleporterNanotrasen
@@ -122,7 +122,7 @@
   suffix: Science, Nanotrasen
   components:
   - type: Label
-    localizedLabel: teleporter-name-science
+    currentLabel: teleporter-name-science
 
 - type: entity
   parent: StationTeleporterNanotrasen
@@ -130,4 +130,4 @@
   suffix: Cargo, Nanotrasen
   components:
   - type: Label
-    localizedLabel: teleporter-name-cargo
+    currentLabel: teleporter-name-cargo

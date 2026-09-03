@@ -143,6 +143,15 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
             ApplyTargeting((sentry, targeting));
 
         Dirty(sentry, targeting);
+
+        // Automatic dropship assignment must notify the alliance system just like
+        // manual multitool assignment does, so previously selected standings apply now.
+        if (_net.IsServer)
+        {
+            var ev = new SentryFactionAssignedEvent(sentry);
+            RaiseLocalEvent(sentry, ref ev);
+        }
+
         return true;
     }
 

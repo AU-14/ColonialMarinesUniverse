@@ -247,9 +247,9 @@ public sealed class ItemToggleMergeRegressionTest : GameTest
             await Server.WaitPost(() =>
             {
                 Server.PlayerMan.SetAttachedEntity(session, originalAttached);
-                SEntMan.DeleteEntity(item);
-                SEntMan.DeleteEntity(user);
             });
+            // GameTest owns server entity cleanup. Deleting the attached mob and its children in one replicated tick
+            // can mutate the client's live transform-child collection while the parent deletion is being processed.
         }
     }
 

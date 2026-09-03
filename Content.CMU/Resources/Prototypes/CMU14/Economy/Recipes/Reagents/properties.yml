@@ -1130,7 +1130,7 @@
   rarity: admin
   value: 666
   category: reactant, unadjustable
-  effectName: Intensity
+  effectName: CMUIntensity
 
 - type: reagentProperty
   parent: Special

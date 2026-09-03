@@ -67,7 +67,6 @@
   id: AU14JobFORECONCommander
   name: FORECON Commander (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadFORECON

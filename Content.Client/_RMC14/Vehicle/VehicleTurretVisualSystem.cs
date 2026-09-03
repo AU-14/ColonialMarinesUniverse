@@ -153,7 +153,10 @@ public sealed partial class VehicleTurretVisualSystem : EntitySystem
 
         vehicleRot = _transform.GetWorldRotation(vehicle);
         var eyeRot = _eye.CurrentEye.Rotation;
-        var baseFacingAngle = _turretSystem.GetVehicleFacingAngle(vehicle, vehicleRot);
+        // Directional offsets must use the same continuous chassis angle as the
+        // vehicle sprite. CurrentDirection is only a legacy four-way movement value
+        // and makes roof mounts jump or drift between cardinal directions.
+        var baseFacingAngle = vehicleRot;
         var anchorFacingAngle = GetRenderFacing(anchorTurret, anchorTurret, vehicleRot, baseFacingAngle, eyeRot);
         var anchorPixelOffset = _turretSystem.GetPixelOffset(anchorTurret, anchorFacingAngle) / PixelsPerMeter;
         var anchorLocalOffset = GetVehicleLocalOffset(anchorTurret, anchorPixelOffset, vehicleRot, eyeRot);

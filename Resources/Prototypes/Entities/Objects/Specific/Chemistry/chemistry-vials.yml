@@ -134,7 +134,7 @@
   suffix: vestine
   components:
   - type: Label
-    localizedLabel: reagent-name-vestine
+    currentLabel: reagent-name-vestine
   - type: Solution
     solution:
       reagents:
@@ -150,7 +150,7 @@
   suffix: radium
   components:
   - type: Label
-    localizedLabel: reagent-name-radium
+    currentLabel: reagent-name-radium
   - type: Solution
     solution:
       reagents:
@@ -165,7 +165,7 @@
   suffix: chlorine
   components:
   - type: Label
-    localizedLabel: reagent-name-chlorine
+    currentLabel: reagent-name-chlorine
   - type: Solution
     solution:
       reagents:
@@ -180,7 +180,7 @@
   suffix: plasma
   components:
   - type: Label
-    localizedLabel: reagent-name-plasma
+    currentLabel: reagent-name-plasma
   - type: Solution
     solution:
       reagents:
@@ -195,7 +195,7 @@
   suffix: xenoborg oil
   components:
   - type: Label
-    localizedLabel: reagent-name-xenoborg-oil
+    currentLabel: reagent-name-xenoborg-oil
   - type: ThrowingAngle
     angle: 90
     angularVelocity: true

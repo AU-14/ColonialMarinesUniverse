@@ -220,6 +220,27 @@ public sealed partial class NavMapSystem : SharedNavMapSystem
 
     #region: Grid functions
 
+    /// <summary>
+    /// Ensures that a grid has current nav-map geometry even when it was loaded outside station setup.
+    /// </summary>
+    public void EnsureNavMap(Entity<MapGridComponent> grid)
+    {
+        var component = EnsureComp<NavMapComponent>(grid);
+        RefreshGrid(grid, component, grid.Comp);
+    }
+
+    /// <summary>
+    /// Generates nav-map geometry for a grid that was loaded outside station setup.
+    /// Existing nav maps are maintained by the normal tile and airtight event handlers.
+    /// </summary>
+    public void EnsureNavMapIfMissing(Entity<MapGridComponent> grid)
+    {
+        if (HasComp<NavMapComponent>(grid))
+            return;
+
+        EnsureNavMap(grid);
+    }
+
     private void RefreshGrid(EntityUid uid, NavMapComponent component, MapGridComponent mapGrid)
     {
         // Clear stale data

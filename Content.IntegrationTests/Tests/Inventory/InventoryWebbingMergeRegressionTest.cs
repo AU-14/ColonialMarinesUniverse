@@ -165,14 +165,8 @@ public sealed class InventoryWebbingMergeRegressionTest : GameTest
         }
         finally
         {
-            await Server.WaitPost(() =>
-            {
-                foreach (var entity in new[] { stored, webbing, clothing, user })
-                {
-                    if (entity.Valid && SEntMan.EntityExists(entity))
-                        SEntMan.DeleteEntity(entity);
-                }
-            });
+            // GameTest owns entity cleanup. Deleting a container and its child in the same server tick can make the
+            // client process both deletions while it is still detaching the live child collection.
         }
     }
 

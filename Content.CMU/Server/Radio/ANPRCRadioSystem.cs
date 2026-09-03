@@ -110,6 +110,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             before: [typeof(HeadsetSystem)]);
 
         SubscribeLocalEvent<ANPRCRadioComponent, MapInitEvent>(OnRadioMapInit);
+        SubscribeLocalEvent<ANPRCHandsetComponent, EntityTerminatingEvent>(OnHandsetTerminating);
         SubscribeLocalEvent<ANPRCHandsetComponent, GotEquippedHandEvent>(OnHandsetEquippedHand);
         SubscribeLocalEvent<ANPRCHandsetComponent, GotUnequippedHandEvent>(OnHandsetUnequippedHand);
         SubscribeLocalEvent<ANPRCHandsetComponent, UseInHandEvent>(OnHandsetUseInHand);

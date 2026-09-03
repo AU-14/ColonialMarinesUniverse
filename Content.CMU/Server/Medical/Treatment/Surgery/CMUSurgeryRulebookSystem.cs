@@ -409,7 +409,10 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
             "suture" or "head_organ" => HasDamagedOrganForSurgery(part, surgeryId),
             "remove_organ" => HasOrganForSurgery(part, surgeryId),
             "transplant" => IsOrganReplacementNeededForSurgery(part, surgeryId),
-            "amputation" => partType is BodyPartType.Arm or BodyPartType.Leg,
+            "amputation" => partType is BodyPartType.Arm
+                or BodyPartType.Hand
+                or BodyPartType.Leg
+                or BodyPartType.Foot,
             _ => true,
         };
     }

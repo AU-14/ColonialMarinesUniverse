@@ -234,7 +234,7 @@ public sealed class BlackfootPrototypeTest
 
     private static (List<Vector2> PassengerSeats, Vector2? Pilot, Vector2? M866) ReadDoorGunSeatLayout(IResourceManager resources)
     {
-        using var file = resources.ContentFileRead(new ResPath("/Maps/Vehicles/Blackfoot/blackfoot_doorgun.yml"));
+        using var file = resources.ContentFileRead(new ResPath("/Maps/CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml"));
         using var reader = new StreamReader(file);
         var yamlStream = new YamlStream();
         yamlStream.Load(reader);

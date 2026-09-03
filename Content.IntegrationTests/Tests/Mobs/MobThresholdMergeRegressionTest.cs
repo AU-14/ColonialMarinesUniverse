@@ -196,10 +196,6 @@ public sealed class MobThresholdMergeRegressionTest : GameTest
             await Server.WaitPost(() =>
             {
                 Server.PlayerMan.SetAttachedEntity(session, originalAttached);
-                if (human.Valid && SEntMan.EntityExists(human))
-                    SEntMan.DeleteEntity(human);
-                if (xeno.Valid && SEntMan.EntityExists(xeno))
-                    SEntMan.DeleteEntity(xeno);
             });
         }
     }

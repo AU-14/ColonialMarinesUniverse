@@ -58,7 +58,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         var isDown = false;
         foreach (var hit in args.HitEntities)
         {
-            if (!_xeno.CanAbilityAttackTarget(xeno.Owner, hit))
+            if (!_xeno.CanGainRewardsFromTarget(xeno.Owner, hit)) // CMU14: no rewards from vehicles
                 continue;
 
             if (xeno.Comp.IgnoreLateInfected && TryComp<VictimInfectedComponent>(hit, out var infect) && infect.CurrentStage >= infect.FinalSymptomsStart)
@@ -85,7 +85,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         if (!xeno.Comp.GainOnProjectiles)
             return;
 
-        if (_xeno.CanAbilityAttackTarget(xeno, args.Hit))
+        if (_xeno.CanGainRewardsFromTarget(xeno, args.Hit)) // CMU14: no rewards from vehicles
         {
             AddEnergy(xeno, xeno.Comp.GainAttack);
             UpdateAlert(xeno);

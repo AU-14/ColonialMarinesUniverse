@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: [StorageTank, StructureWheeled]
   id: RMCTankReagentEmpty
   name: reagent tank
@@ -78,7 +78,7 @@
         - ReagentId: Water
           Quantity: 1000
   - type: Label
-    localizedLabel: reagent-name-water
+    currentLabel: reagent-name-water
 
 - type: entity
   parent: RMCTankReagentWater
@@ -130,7 +130,7 @@
       types:
         Heat: 100
   - type: Label
-    localizedLabel: reagent-name-welding-fuel
+    currentLabel: reagent-name-welding-fuel
   - type: Tag
     tags:
     - RMCTankFuel
@@ -154,7 +154,7 @@
         - ReagentId: CMMeralyne
           Quantity: 1000
   - type: Label
-    localizedLabel: reagent-name-cmmeralyne
+    currentLabel: reagent-name-cmmeralyne
 
 - type: entity
   parent: RMCTankReagentEmpty
@@ -168,7 +168,7 @@
         - ReagentId: CMDermaline
           Quantity: 1000
   - type: Label
-    localizedLabel: reagent-name-cmdermaline
+    currentLabel: reagent-name-cmdermaline
 
 - type: entity
   parent: RMCTankReagentEmpty
@@ -182,7 +182,7 @@
         - ReagentId: RMCPhoron
           Quantity: 1000
   - type: Label
-    localizedLabel: reagent-name-rmcphoron
+    currentLabel: reagent-name-rmcphoron
 
 - type: entity
   parent: RMCTankReagentEmpty
@@ -196,4 +196,4 @@
         - ReagentId: RMCSulphuricAcid
           Quantity: 1000
   - type: Label
-    localizedLabel: reagent-name-rmc-sulphuric-acid
+    currentLabel: reagent-name-rmc-sulphuric-acid

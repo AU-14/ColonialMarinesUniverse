@@ -96,6 +96,9 @@ namespace Content.IntegrationTests.Tests
         private static readonly ResPath[] ShuttleMapFiles = GameDataScrounger
             .FilesInDirectoryInVfs("/Maps/Shuttles", "*.yml")
             .Concat(GameDataScrounger.FilesInDirectoryInVfs("/Maps/_RMC14/Shuttles", "*.yml"))
+            // This gunship is intentionally a self-contained map because it is loaded
+            // independently of an existing map. DynamicGunshipMapTest covers it.
+            .Where(path => path.Filename != "dynamic_gunship.yml")
             .ToArray();
 
         private static readonly ProtoId<EntityCategoryPrototype> DoNotMapCategory = "DoNotMap";

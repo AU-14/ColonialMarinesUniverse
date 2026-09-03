@@ -5,6 +5,13 @@ namespace Content.Shared.CCVar;
 public sealed partial class CCVars
 {
     /// <summary>
+    /// Enables the experimental free-flight gunship, integrity, and pilot-control systems.
+    /// The content remains loadable while rollout is disabled.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUEnableGunshipOverhaul =
+        CVarDef.Create("cmu.game.enable_gunship_overhaul", false, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
     ///     Part of the CLF intel console claim feature, when Govfor seizes it the game sends a fax
     ///     of the remaining CLF to the Marshal/Military faxes and can send a faction wide announcement
     ///     to the marines as fallback. Default: false, the announcement only goes automatically when zero

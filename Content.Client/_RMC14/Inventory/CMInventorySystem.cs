@@ -16,13 +16,24 @@ public sealed partial class CMInventorySystem : SharedCMInventorySystem
 
     private void OnItemSlotsAppearanceChange(Entity<CMItemSlotsComponent> ent, ref AppearanceChangeEvent args)
     {
-        ContentsUpdated(ent);
+        UpdateSlotSprite(ent);
     }
 
     protected override void ContentsUpdated(Entity<CMItemSlotsComponent> ent)
     {
         base.ContentsUpdated(ent);
 
+        UpdateSlotSprite(ent);
+    }
+
+    /// <summary>
+    /// Applies the current item-slot contents to the local sprite without writing back to the
+    /// networked appearance component. Appearance-change events are raised while applying server
+    /// state, so routing them through <see cref="ContentsUpdated"/> would dirty the entity again
+    /// during prediction rollback.
+    /// </summary>
+    private void UpdateSlotSprite(Entity<CMItemSlotsComponent> ent)
+    {
         if (!TryComp(ent, out SpriteComponent? sprite) ||
             !_sprite.LayerMapTryGet((ent.Owner, sprite), CMItemSlotsLayers.Fill, out var layer, false))
         {

@@ -647,7 +647,7 @@ public sealed partial class YautjaMaskZoomComponent : Component
 public sealed partial class YautjaThrallComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public EntityUid Master;
+    public EntityUid? Master;
 
     [DataField, AutoNetworkedField]
     public bool Raised;
@@ -1363,12 +1363,6 @@ public sealed partial class YautjaTrophyComponent : Component
 {
     [DataField, AutoNetworkedField]
     public YautjaTrophyKind Kind;
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? Source;
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? Hunter;
 
     [DataField, AutoNetworkedField]
     public string SourceName = string.Empty;

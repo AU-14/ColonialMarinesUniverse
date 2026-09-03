@@ -145,7 +145,7 @@ public sealed class CMUNubodyMedicalGraphTest : GameTest
             "CMUDroneAndroid",
             "DroneAndroid",
             DroneAndroidExternalOrgans,
-            "Mobs/DroneAndroid/parts.rsi",
+            "CMU14/Mobs/DroneAndroid/parts.rsi",
             allExternalPartsHaveBones: false,
             syntheticAppearance: true,
             roboticLimbs: true);
@@ -423,7 +423,7 @@ public sealed class CMUNubodyMedicalGraphTest : GameTest
         Assert.Multiple(() =>
         {
             Assert.That(visual.Layer, Is.EqualTo(layer));
-            Assert.That(visual.Data.RsiPath, Is.EqualTo("Mobs/DroneAndroid/parts.rsi"));
+            Assert.That(visual.Data.RsiPath, Is.EqualTo("CMU14/Mobs/DroneAndroid/parts.rsi"));
             Assert.That(visual.Data.State, Is.EqualTo(state));
         });
     }

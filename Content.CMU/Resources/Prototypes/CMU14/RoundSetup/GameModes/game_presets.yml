@@ -4,9 +4,13 @@
   - colonyfall
   name: Colony Fall
   showInVote: true
-  maxPlayers: 35
+  maxPlayers: 45
   description: Live in an offworld colony as it falls into chaos.
   burrowedLarvaEnabled: false
+  thirdPartyAutoSpawn: true
+  thirdPartyInterval: 2250
+  thirdPartyRatio: 0.25
+  maxThirdParties: 2
   supportedPlanets:
   - SharedPlanetPool
 # - AUPlanetLV624 # Green Hell # missing threat spawns, scenario fails
@@ -19,7 +23,7 @@
   alias:
   - distresssignal
   name: Distress Signal
-# showInVote: true # Ins-Only
+  showInVote: true
   description: Investigate a mysterious distress signal as government forces.
   requiresGovforVote: true
   supportedPlanets:
@@ -75,17 +79,21 @@
   name: Force on Force
   showInVote: true
   description: Two units face each other in combat.
-  minPlayers: 500
+  minPlayers: 80
   requiresOpforVote: true
   requiresGovforVote: true
+  thirdPartyAutoSpawn: true
+  thirdPartyInterval: 1800
+  thirdPartyRatio: 0.10
+  maxThirdParties: 4
   supportedPlanets:
-  - SharedPlanetPool
-  - AUPlanetGixensCaverns
-  - AUPlanetFlight
-  - AUPlanetLV759 # Hybrisa Metro
-  - AUPlanetCorsatStation
-  - AUPlanetSorokyne
-  - AUPlanetTrijent
+  - SharedPlanetPool # Only Maintained maps can process feedback (Shep doesn't have base)
+# - AUPlanetGixensCaverns
+# - AUPlanetFlight
+# - AUPlanetLV759 # Hybrisa Metro
+# - AUPlanetCorsatStation
+# - AUPlanetSorokyne
+# - AUPlanetTrijent
   rules:
   - AuVoteRule
   - PlatoonSpawn

@@ -103,7 +103,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     public static bool CollisionDebugEnabled { get; set; }
     public static bool MovementDebugEnabled { get; set; }
 
-    private readonly HashSet<EntityUid> _intersecting = new();
+    private readonly HashSet<Entity<PhysicsComponent>> _intersectingPhysics = new();
     private readonly HashSet<EntityUid> _pushBlockedIntersecting = new();
     private readonly HashSet<EntityUid> _pushTileIntersecting = new();
     private readonly List<EntityUid>[] _hitsBuffers = { new(), new(), new() };
@@ -112,7 +112,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private readonly DamageSpecifier _mobCollisionDamage = new() { DamageDict = { [CollisionDamageType] = MobCollisionDamage } };
     private readonly Dictionary<EntityUid, TimeSpan> _nextImmobilePopupAt = new();
     private readonly HashSet<EntityUid> _immobileAnnounced = new();
+    private readonly Dictionary<EntityUid, PoweredDemolitionContact> _poweredDemolitionContacts = new();
+    private readonly VehicleCollisionCooldownTracker _wallSmashCooldowns = new();
     private static readonly TimeSpan ImmobilePopupCooldown = TimeSpan.FromSeconds(4);
+    // Longer than the AEV's damage-pulse cooldown so a slow server frame cannot
+    // make uninterrupted forward pressure restart the demolition warmup.
+    private static readonly TimeSpan PoweredDemolitionContactGrace = TimeSpan.FromSeconds(0.75);
     private readonly Dictionary<EntityUid, bool> _hardState = new();
     private readonly Dictionary<EntityUid, bool> _lastMobPushAxis = new();
     private readonly Dictionary<EntityUid, float> _movementAccumulator = new();
@@ -122,6 +127,14 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private readonly HashSet<EntityUid> _vehiclePushIgnored = new();
     private readonly HashSet<EntityUid> _bypassInitialBlockers = new();
     private readonly HashSet<EntityUid> _bypassSampleBlockers = new();
+
+    private readonly record struct PoweredDemolitionContact(
+        EntityUid Target,
+        TimeSpan StartedAt,
+        TimeSpan LastContactAt,
+        TimeSpan NextSoundAt,
+        bool WorkingAnnounced,
+        bool IndestructibleAnnounced);
 
     private enum VehicleCollisionClass : byte
     {
@@ -198,6 +211,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         _activeXenoPushers.Remove(ent.Owner);
         _nextImmobilePopupAt.Remove(ent.Owner);
         _immobileAnnounced.Remove(ent.Owner);
+        _poweredDemolitionContacts.Remove(ent.Owner);
+        _wallSmashCooldowns.RemoveVehicle(ent.Owner);
     }
 
     private void OnMoverMove(Entity<GridVehicleMoverComponent> ent, ref MoveEvent args)
@@ -230,6 +245,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
             ent.Comp.SyncedGrid = null;
             ent.Comp.CurrentSpeed = 0f;
+            ent.Comp.AngularVelocityDegrees = 0f;
             ent.Comp.PushDirection = Vector2i.Zero;
             ent.Comp.IsCommittedToMove = false;
             ent.Comp.IsPushMove = false;
@@ -245,7 +261,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         var coords = transform.WithEntityId(xform.Coordinates, grid);
         var tile = map.TileIndicesFor(grid, gridComp, coords);
-        var preserveFallingMotion = ShouldPreserveVehicleZFallMotion(uid);
+        var preserveFallingMotion = ShouldPreserveVehicleZFallMotion(uid, xform);
 
         ent.Comp.SyncedGrid = grid;
         ent.Comp.CurrentTile = tile;
@@ -256,6 +272,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         ent.Comp.TargetPosition = ent.Comp.Position;
         if (!preserveFallingMotion)
             ent.Comp.CurrentSpeed = 0f;
+        if (!preserveFallingMotion)
+            ent.Comp.AngularVelocityDegrees = 0f;
 
         ent.Comp.PushDirection = Vector2i.Zero;
         if (!preserveFallingMotion)
@@ -276,10 +294,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return true;
     }
 
-    private bool ShouldPreserveVehicleZFallMotion(EntityUid uid)
+    private bool ShouldPreserveVehicleZFallMotion(EntityUid uid, TransformComponent? xform = null)
     {
+        xform ??= Transform(uid);
         return HasComp<CMUVehicleZTraversalComponent>(uid) &&
-               HasComp<CMUZFallingComponent>(uid);
+               HasComp<CMUZFallingComponent>(uid) &&
+               xform.MapUid == xform.ParentUid;
     }
 
     private void OnMoverCanRun(Entity<GridVehicleMoverComponent> ent, ref VehicleCanRunEvent args)
@@ -370,13 +390,15 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             if (xform.GridUid is not { } grid || !gridQ.TryComp(grid, out var gridComp))
                 continue;
 
+            SyncMoverFacingToTransform(uid, mover, grid);
+
             if (_net.IsClient && !ShouldPredictVehicleMovement(vehicle))
             {
                 SmoothReplicatedVehicle(uid, grid, mover, frameTime);
                 continue;
             }
 
-            var inputDir = GetMoverInput(uid, mover, vehicle, out var pushing);
+            var inputDir = GetMoverInput(uid, mover, vehicle, grid, out var pushing);
             var accumulator = _movementAccumulator.GetValueOrDefault(uid) + frameTime;
             var maxAccum = MovementFixedStep * MaxFixedStepsPerFrame;
             if (accumulator > maxAccum)
@@ -390,8 +412,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 if (currentXform.GridUid is not { } currentGrid || !gridQ.TryComp(currentGrid, out var currentGridComp))
                     break;
 
+                // Z movement only applies to entities parented directly to a map.
+                // A replicated marker can briefly outlive reparenting onto a
+                // shuttle grid and must not suppress driver input there.
                 if (TryComp(uid, out CMUVehicleZTraversalComponent? zTraversal) &&
-                    HasComp<CMUZFallingComponent>(uid))
+                    HasComp<CMUZFallingComponent>(uid) &&
+                    currentXform.MapUid == currentXform.ParentUid)
                 {
                     UpdateFallingMovement(uid, mover, currentGrid, currentGridComp, zTraversal, MovementFixedStep);
                 }
@@ -417,6 +443,23 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return false;
 
         return vehicle.Operator != null && vehicle.Operator == _player.LocalEntity;
+    }
+
+    private void SyncMoverFacingToTransform(EntityUid uid, GridVehicleMoverComponent mover, EntityUid grid)
+    {
+        // Shuttle rotation can update a vehicle's transform without changing grids,
+        // so OnMoverMove has no parent-change event from which to resynchronize the
+        // mover. Keep its logical forward direction aligned with the visible chassis.
+        if (mover.CurrentDirection == Vector2i.Zero)
+            return;
+
+        var relativeRotation = transform.GetWorldRotation(uid) - transform.GetWorldRotation(grid);
+        var transformDirection = relativeRotation.GetCardinalDir().ToIntVec();
+        if (transformDirection == mover.CurrentDirection)
+            return;
+
+        mover.CurrentDirection = transformDirection;
+        Dirty(uid, mover);
     }
 
     private void SmoothReplicatedVehicle(EntityUid uid, EntityUid grid, GridVehicleMoverComponent mover, float frameTime)

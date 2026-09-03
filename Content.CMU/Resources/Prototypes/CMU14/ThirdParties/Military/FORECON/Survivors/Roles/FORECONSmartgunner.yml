@@ -78,7 +78,6 @@
   id: AU14JobFORECONSmartGunOperator
   name: FORECON Smart Gun Operator (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadFORECON

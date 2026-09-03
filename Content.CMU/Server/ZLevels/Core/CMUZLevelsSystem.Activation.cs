@@ -94,8 +94,12 @@ public sealed partial class CMUZLevelsSystem
             return false;
 
         var xform = Transform(ent);
+        // Child grids provide their own supporting surface. The Z movement loop
+        // cannot process their children and already stops them explicitly, so do
+        // not give those entities a transient falling marker during activation.
         if (xform.MapUid is not { } map ||
             !HasComp<CMUZLevelMapComponent>(map) ||
+            xform.ParentUid != map ||
             xform.Anchored)
         {
             return false;

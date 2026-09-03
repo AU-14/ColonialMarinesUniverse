@@ -39,11 +39,41 @@
   - type: DropshipPilotEye
 
 - type: entity
+  id: CMUGunshipPilotEye
+  name: gunship exterior view
+  description: A projected exterior camera centered on a tactically hovering gunship.
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: Sprite
+    visible: false
+  - type: Visibility
+    layer: 2
+  - type: Eye
+    drawFov: false
+  - type: ContentEye
+  - type: GunshipPilotEye
+
+- type: entity
   id: CMUHolographicWarningSign
   name: holographic warning sign
   description: A bright yellow hologram warning of incoming danger.
   components:
   - type: HolographicWarningSign
+
+- type: entity
+  parent: MarkerBase
+  id: CMUDropshipCrashM15Explosion
+  name: dropship crash explosion
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: ProjectileGrenade
+    fillPrototype: CMProjectileShrapnel
+    capacity: 65
+    directHit: false
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+  - type: ClusterLimitHits
 
 - type: entity
   id: CMUDropshipTacticalHoverShadow

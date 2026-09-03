@@ -797,6 +797,12 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
             tracker.UpdateAt = time + tracker.UpdateEvery;
             var targetSquadName = "";
 
+            if (tracker.Target is { } deletedTarget && TerminatingOrDeleted(deletedTarget)) // CMU14: target can die while tracked; prune before any use so map lookups and PVS sync don't error
+            {
+                tracker.Target = null;
+                Dirty(uid, tracker);
+            }
+
             // Swap target to the new SquadLeader after it is swapped.
             if (tracker.Target != null && tracker.Mode == SquadLeaderMode && !HasComp<SquadLeaderComponent>(tracker.Target))
             {
@@ -871,13 +877,6 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
             // If the tracker is tracking an entity, point towards the target.
             if (tracker.Target != null)
             {
-                if (TerminatingOrDeleted(tracker.Target.Value)) // CMU14: target can die while tracked
-                {
-                    tracker.Target = null;
-                    Dirty(uid, tracker);
-                    continue;
-                }
-
                 if (_squadMemberQuery.TryComp(tracker.Target, out var targetSquad) && targetSquad.Squad != null)
                     targetSquadName = Name(targetSquad.Squad.Value);
 

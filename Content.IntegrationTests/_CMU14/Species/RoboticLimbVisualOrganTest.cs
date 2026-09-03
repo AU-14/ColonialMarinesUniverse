@@ -15,8 +15,8 @@ namespace Content.IntegrationTests.CMU14.Species;
 [TestOf(typeof(SharedVisualBodySystem))]
 public sealed class RoboticLimbVisualOrganTest : GameTest
 {
-    private const string PartsPrototypeRsi = "Mobs/DroneAndroid/parts.rsi";
-    private static readonly ResPath PartsRsi = new("/Textures/Mobs/DroneAndroid/parts.rsi");
+    private const string PartsPrototypeRsi = "CMU14/Mobs/DroneAndroid/parts.rsi";
+    private static readonly ResPath PartsRsi = new("/Textures/CMU14/Mobs/DroneAndroid/parts.rsi");
 
     [SidedDependency(Side.Server)] private SharedBodySystem _body = default!;
     [SidedDependency(Side.Client)] private SpriteSystem _sprites = default!;

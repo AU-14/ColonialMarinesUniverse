@@ -10487,5 +10487,92 @@
   id: 671
   time: '2026-08-29T18:07:27.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1883
+- author: maertayn
+  changes:
+  - message: Spent casings being recycled as live ammunition
+    type: Fix
+  - message: Yautja equipment (id-locked) not severing arms
+    type: Fix
+  - message: APC vehicle med vendor access
+    type: Fix
+  - message: Invisibility shader and lurker cloak (again)
+    type: Fix
+  - message: Turrets require LOS to fire, and stationary turrets snap to targets
+    type: Tweak
+  - message: Weedkiller is roughly ~20% larger
+    type: Tweak
+  - message: Cassettes not playing audio because the server package had empty placeholder
+      files (to conserve space)
+    type: Fix
+  - message: Server hostname (on the Hub) changes every round based on day and game
+      preset
+    type: Add
+  - message: FoF into rotation at 80 pop, time fo' fraggin' (heavy WIP)
+    type: Add
+  - message: Hide colony announcements from xeno/threats
+    type: Fix
+  - message: Third party dropships would announce a Govfor hijack if threats took
+      it
+    type: Fix
+  - message: Dropped magnetic weapon/flamer not returning to broiler
+    type: Fix
+  - message: Tattoo gun hard-locked by an orphaned offer
+    type: Fix
+  - message: No xeno rewards (e.g. lurker acid/reaper berserker) from blackfoot/vehicles
+    type: Fix
+  id: 672
+  time: '2026-08-30T16:03:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1887
+- author: Berkin101
+  changes:
+  - message: Razorwires now make noises when walked on and have an appropriate hit
+      sound.
+    type: Tweak
+  id: 673
+  time: '2026-08-31T14:16:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1882
+- author: Berkin101
+  changes:
+  - message: Mine Detectors
+    type: Add
+  - message: Mine Signs
+    type: Add
+  id: 674
+  time: '2026-08-31T14:16:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1872
+- author: TheMaiji
+  changes:
+  - message: Camera consoles now use logical camera subnets and can display authorized
+      cameras on a shared multi-deck map.
+    type: Add
+  - message: Authorized users can manage CMU and RMC camera subnets, memberships,
+      and camera names from supported consoles.
+    type: Add
+  - message: Camera power, wire, movement, removal, and MAP-wire visibility changes
+      now update console lists and map markers.
+    type: Tweak
+  - message: Camera selection, names, remote-grid maps, and live feeds stay synchronized
+      after subnet and deck changes.
+    type: Fix
+  id: 675
+  time: '2026-08-31T19:30:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1825
+- author: CatoChristopherMrow
+  changes:
+  - message: Entirely reworked gunships
+    type: Add
+  - message: AEVs now act like bulldozers
+    type: Tweak
+  - message: Fixed deployable dropship sentries not updating to the alliance console
+      settings if deployed after the settings were changed
+    type: Fix
+  - message: Leadership skill now automatically grants the marine orders button.
+    type: Fix
+  - message: disabled the blackfoot in favor of the new gunship system (for now at
+      least. It might come to some specific platoons again.)
+    type: Tweak
+  id: 676
+  time: '2026-08-31T20:43:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1816
 Name: CMU
 Order: -1

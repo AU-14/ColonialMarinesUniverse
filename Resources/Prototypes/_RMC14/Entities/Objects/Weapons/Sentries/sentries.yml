@@ -53,7 +53,7 @@
       preset: TargetDistance
   - !type:TargetAccessibleCon
     curve: !type:BoolCurve
-  - !type:TargetInLOSOrCurrentCon
+  - !type:TargetBulletLOSCon # CMU14
     curve: !type:BoolCurve
   - !type:CanFaceCon
     curve: !type:BoolCurve

@@ -105,10 +105,6 @@
   - type: Sprite
     state: syn_spawn
   - type: SafehouseMarker
-  - type: ScenarioSpawnMarker
-    kind: ClfSafehouse
-    tags:
-    - force:clf:safehouse
 
 - type: playTimeTracker
   id: AU14JobCLFCellLeader

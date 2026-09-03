@@ -515,8 +515,8 @@
       entries:
       - id: CMArmorHelmetM30
       - id: RMCM5CameraGear
-    - name: Flight Visor
-      choices: { CMUPlatoonAirCrewFlightVisor: 2 }
+    - name: Pilot HUD
+      choices: { CMUPlatoonAirCrewPilotHUD: 1 }
       entries:
       - id: RMCVisorPilotBlack
       - id: RMCVisorPilotDarkblue

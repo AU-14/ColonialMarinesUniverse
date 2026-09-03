@@ -80,7 +80,7 @@
     contents:
     - id: AU14WeaponPistolM48A4
     - id: AU14MagazinePistolM48A4
-      amount: 2
+      amount: 1
     - id: RMCMagazineSmartGun
       amount: 3
 

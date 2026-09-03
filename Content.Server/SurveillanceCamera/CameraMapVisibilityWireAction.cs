@@ -1,3 +1,4 @@
+using Content.Server.Camera;
 using Content.Server.Wires;
 using Content.Shared.SurveillanceCamera.Components;
 using Content.Shared.Wires;
@@ -6,7 +7,7 @@ namespace Content.Server.SurveillanceCamera;
 
 public sealed partial class CameraMapVisibilityWireAction : ComponentWireAction<SurveillanceCameraComponent>
 {
-    private SurveillanceCameraMapSystem _cameraMapSystem => EntityManager.System<SurveillanceCameraMapSystem>();
+    private CameraNetworkSystem CameraNetworks => EntityManager.System<CameraNetworkSystem>();
 
     public override string Name { get; set; } = "wire-name-camera-map";
     public override Color Color { get; set; } = Color.Teal;
@@ -14,25 +15,24 @@ public sealed partial class CameraMapVisibilityWireAction : ComponentWireAction<
 
     public override StatusLightState? GetLightState(Wire wire, SurveillanceCameraComponent component)
     {
-        return _cameraMapSystem.IsCameraVisible(wire.Owner)
+        return CameraNetworks.IsMapVisible(wire.Owner)
             ? StatusLightState.On
             : StatusLightState.Off;
     }
 
     public override bool Cut(EntityUid user, Wire wire, SurveillanceCameraComponent component)
     {
-        _cameraMapSystem.SetCameraVisibility(wire.Owner, false);
+        CameraNetworks.SetMapVisibility(wire.Owner, false);
         return true;
     }
 
     public override bool Mend(EntityUid user, Wire wire, SurveillanceCameraComponent component)
     {
-        _cameraMapSystem.SetCameraVisibility(wire.Owner, true);
+        CameraNetworks.SetMapVisibility(wire.Owner, true);
         return true;
     }
 
     public override void Pulse(EntityUid user, Wire wire, SurveillanceCameraComponent component)
     {
-
     }
 }

@@ -403,8 +403,8 @@ public sealed class CMUXenoWarlockTest
     [Test]
     public void PsychicBlastUsesTgmcSoundStagesAsAuthoritativeWorldAudio()
     {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastFireSoundPath(), Is.EqualTo("/Audio/Xeno/Warlock/volkite_4.ogg"));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastImpactSoundPath(), Is.EqualTo("/Audio/Xeno/Warlock/EMPulse.ogg"));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastFireSoundPath(), Is.EqualTo("/Audio/CMU14/Xeno/Warlock/volkite_4.ogg"));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastImpactSoundPath(), Is.EqualTo("/Audio/CMU14/Xeno/Warlock/EMPulse.ogg"));
         Assert.That(CMUXenoWarlockSystem.ShouldPsychicBlastPlayFireSoundFromWarlockSystem(), Is.True);
         Assert.That(CMUXenoWarlockSystem.ShouldPsychicBlastUsePvsAudio(), Is.True);
     }

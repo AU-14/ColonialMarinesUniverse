@@ -19,6 +19,7 @@
       - Knife
       - RMCMacheteScabbard
       - RMCScabbardKatana
+  - type: YautjaTechItem
   - type: RMCArmorSpeedTier
     speedTier: very light
   - type: CMArmor
@@ -463,6 +464,12 @@
   description: A human-sized suit of alien thrall armor.
   suffix: Thrall, Ebony
   components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
   - type: Sprite
     sprite: CMU14/Yautja/armor_thrall_ebony.rsi
   - type: Clothing
@@ -752,6 +759,7 @@
     explosionArmor: 10
   - type: Corrodible
     isCorrodible: false
+  - type: YautjaTechItem
 
 - type: entity
   parent: CMUYautjaBodyMesh
@@ -766,6 +774,12 @@
   description: A light alien mesh undersuit sized for a human thrall.
   suffix: Yautja, Thrall
   components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
   - type: CMArmor
     melee: 20
     bullet: 10
@@ -793,6 +807,7 @@
       collection: RMCEquipArmor
       params:
         volume: -4
+  - type: YautjaTechItem
   - type: CMArmor
     melee: 20
     bullet: 10
@@ -1028,6 +1043,12 @@
   description: Human-sized alien greaves for a Yautja thrall.
   suffix: Thrall, Ebony
   components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
   - type: Sprite
     sprite: CMU14/Yautja/greaves_thrall_ebony.rsi
   - type: Clothing

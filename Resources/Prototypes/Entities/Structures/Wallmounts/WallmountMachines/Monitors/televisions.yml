@@ -15,13 +15,11 @@
       state: television_wall
     - map: ["computerLayerScreen"]
       state: television_wallscreen
-  - type: DeviceNetwork
-    deviceNetId: Wireless
-    receiveFrequencyId: SurveillanceCamera
-    transmitFrequencyId: SurveillanceCamera
   - type: WirelessNetworkConnection
     range: 200
-  - type: DeviceNetworkRequiresPower
+  - type: CameraNetworkReceiver
+    networks: [SurveillanceCameraEngineering, SurveillanceCameraSecurity, SurveillanceCameraScience, SurveillanceCameraSupply, SurveillanceCameraCommand, SurveillanceCameraService, SurveillanceCameraMedical, SurveillanceCameraGeneral]
+    supportedSources: Standard
   - type: Speech
   - type: SurveillanceCameraSpeaker
   - type: SurveillanceCameraMonitor

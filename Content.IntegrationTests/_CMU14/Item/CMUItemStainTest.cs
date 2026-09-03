@@ -435,7 +435,7 @@ public sealed class CMUItemStainTest
                 layer.Item1 == "cmu-item-stain-equipped-head").Item2;
             Assert.Multiple(() =>
             {
-                Assert.That(wornLayer.RsiPath, Is.EqualTo("Effects/item_stains.rsi"));
+                Assert.That(wornLayer.RsiPath, Is.EqualTo("CMU14/Effects/item_stains.rsi"));
                 Assert.That(wornLayer.State, Is.EqualTo("m10helmet_blood"));
                 Assert.That(wornLayer.Color, Is.EqualTo(Color.FromHex("#800000")));
             });

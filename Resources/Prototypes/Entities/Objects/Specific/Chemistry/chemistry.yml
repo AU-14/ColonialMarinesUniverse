@@ -183,7 +183,7 @@
   id: CryoxadoneBeakerSmall
   components:
   - type: Label
-    localizedLabel: reagent-name-cryoxadone
+    currentLabel: reagent-name-cryoxadone
   - type: Solution
     solution:
       reagents:
@@ -196,7 +196,7 @@
   suffix: arithrazine
   components:
   - type: Label
-    localizedLabel: reagent-name-arithrazine
+    currentLabel: reagent-name-arithrazine
   - type: Solution
     solution:
       reagents:
@@ -209,7 +209,7 @@
   suffix: sigynate
   components:
   - type: Label
-    localizedLabel: reagent-name-sigynate
+    currentLabel: reagent-name-sigynate
   - type: Solution
     solution:
       reagents:
@@ -222,7 +222,7 @@
   suffix: phalanximine
   components:
   - type: Label
-    localizedLabel: reagent-name-phalanximine
+    currentLabel: reagent-name-phalanximine
   - type: Solution
     solution:
       reagents:
@@ -235,7 +235,7 @@
   suffix: diphenhydramine
   components:
   - type: Label
-    localizedLabel: reagent-name-diphenhydramine
+    currentLabel: reagent-name-diphenhydramine
   - type: Solution
     solution:
       reagents:
@@ -248,7 +248,7 @@
   suffix: bruizine
   components:
   - type: Label
-    localizedLabel: reagent-name-bruizine
+    currentLabel: reagent-name-bruizine
   - type: Solution
     solution:
       reagents:
@@ -261,7 +261,7 @@
   suffix: lacerinol
   components:
   - type: Label
-    localizedLabel: reagent-name-lacerinol
+    currentLabel: reagent-name-lacerinol
   - type: Solution
     solution:
       reagents:

@@ -200,7 +200,6 @@
   - type: RemoveComponents
     components:
     - type: PowerLoaderGrabbable
-
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankTreadsTWE
@@ -222,7 +221,6 @@
   - type: RemoveComponents
     components:
     - type: PowerLoaderGrabbable
-
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankReinforcedTreads

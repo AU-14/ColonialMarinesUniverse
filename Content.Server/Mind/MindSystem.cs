@@ -45,6 +45,16 @@ public sealed partial class MindSystem : SharedMindSystem
         if (mind.OwnedEntity != null && !TerminatingOrDeleted(mind.OwnedEntity.Value))
             TransferTo(uid, null, mind: mind, createGhost: false);
 
+        var containers = EntityQueryEnumerator<MindContainerComponent>();
+        while (containers.MoveNext(out var containerUid, out var container))
+        {
+            if (container.LastMind != uid)
+                continue;
+
+            container.LastMind = null;
+            Dirty(containerUid, container);
+        }
+
         mind.OwnedEntity = null;
     }
 

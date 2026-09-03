@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.CMU14.Threats;
-using Content.Server.CMU14.Scenario;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.Preferences;
 using Content.Shared.CMU14.util;
@@ -18,7 +17,6 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private IRobustRandom _random = default!;
 
 
@@ -92,37 +90,15 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
         int numThreatMembers = 0;
         if (useThreat && threat != null)
         {
-            var coveredScenarioForce = _scenarioPlan.HasMappedHostileRoundGroup(
-                selectedPresetId ?? string.Empty,
-                threat.ID);
-            if (TryResolveThreatBodyCountFromScenarioPlan(
-                    selectedPresetId ?? string.Empty,
-                    threat,
-                    playerCount,
-                    out var bodyCount,
-                    out var diagnostic))
+            if (TryCalculateLegacyThreatBodyCount(threat, playerCount, out var bodyCount))
             {
                 numThreatLeaders = bodyCount.Leaders;
                 numThreatMembers = bodyCount.Members;
-                Logger.GetSawmill("au14.jobs").Debug(
-                    $"[DEBUG] Scenario Plan resolved threat bodies: leaders={numThreatLeaders}, members={numThreatMembers}");
-            }
-            else if (!coveredScenarioForce &&
-                     TryCalculateLegacyThreatBodyCount(threat, playerCount, out bodyCount))
-            {
-                numThreatLeaders = bodyCount.Leaders;
-                numThreatMembers = bodyCount.Members;
-                Logger.GetSawmill("au14.jobs").Warning(
-                    $"[AuJobSelectionSystem] Could not resolve selected threat from Scenario Plan; falling back to legacy body-count calculation. {diagnostic}");
             }
             else
             {
-                var message =
-                    $"[AuJobSelectionSystem] Could not resolve selected threat body count for {threat.ID}; no threat jobs will be assigned. {diagnostic}";
-                if (coveredScenarioForce)
-                    Logger.GetSawmill("au14.jobs").Error(message);
-                else
-                    Logger.GetSawmill("au14.jobs").Warning(message);
+                Logger.GetSawmill("au14.jobs").Warning(
+                    $"[AuJobSelectionSystem] Could not resolve selected threat body count for {threat.ID}; no threat jobs will be assigned.");
             }
 
             Logger.GetSawmill("au14.jobs").Debug( $"[DEBUG] Threat leaders to assign: {numThreatLeaders}, members: {numThreatMembers}");
@@ -208,36 +184,6 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
         }
         // The rest will be assigned normally
         Logger.GetSawmill("au14.jobs").Debug( $"[DEBUG] ForcedJobAssignments: {string.Join(", ", ForcedJobAssignments.Select(kv => $"{kv.Key}:{kv.Value}"))}");
-    }
-
-    private bool TryResolveThreatBodyCountFromScenarioPlan(
-        string selectedPresetId,
-        ThreatPrototype threat,
-        int playerCount,
-        out ThreatVoteBodyCount bodyCount,
-        out string diagnostic)
-    {
-        var platoonSpawnRuleSystem = EntityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-        var request = new ScenarioPlanValidationRequest(
-            selectedPresetId,
-            playerCount,
-            platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
-            platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
-            _auRoundSystem.GetSelectedPlanetId(),
-            _auRoundSystem.GetSelectedPlanet()?.MapId,
-            threat.ID,
-            _auRoundSystem.GetSelectedGovforShip(),
-            _auRoundSystem.GetSelectedOpforShip());
-
-        if (!_scenarioPlan.TryResolveSelectedThreatForce(request, out var force, out diagnostic) ||
-            force == null)
-        {
-            bodyCount = default;
-            return false;
-        }
-
-        bodyCount = new ThreatVoteBodyCount(force.LeaderBodies, force.MemberBodies);
-        return true;
     }
 
     private bool TryCalculateLegacyThreatBodyCount(

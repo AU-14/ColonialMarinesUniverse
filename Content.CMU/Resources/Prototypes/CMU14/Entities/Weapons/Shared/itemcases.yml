@@ -95,6 +95,7 @@
       tags:
       - RMCSentry
       - RMCMagazineSentry
+      - RMCMagazineSentryShotgun
   - type: StorageFill
     contents:
     - id: RMCSentryShotgun
@@ -122,6 +123,7 @@
       tags:
       - RMCSentry
       - RMCMagazineSentry
+      - RMCMagazineSentryFire
   - type: StorageFill
     contents:
     - id: RMCSentryFire
@@ -149,6 +151,7 @@
       tags:
       - RMCSentry
       - RMCMagazineSentry
+      - RMCMagazineSentryFire
   - type: StorageFill
     contents:
     - id: RMCSentryMiniFire

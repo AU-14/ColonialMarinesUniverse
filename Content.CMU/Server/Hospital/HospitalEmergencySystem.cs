@@ -4,6 +4,7 @@ using Content.Server.Shuttles.Events;
 using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server._RMC14.Dropship;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
@@ -12,7 +13,6 @@ using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.CMU14.Hospital;
-using Content.Shared.CMU14.Scenario;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Body;
@@ -687,13 +687,13 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
     private void GetShuttlePatientSpawnCoordinates(EntityUid shuttle, List<EntityCoordinates> coordinates)
     {
         coordinates.Clear();
-        var query = EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent>();
+        var query = EntityQueryEnumerator<ThreatSpawnMarkerComponent, TransformComponent>();
         while (query.MoveNext(out _, out var marker, out var xform))
         {
             if (xform.GridUid != shuttle && xform.ParentUid != shuttle)
                 continue;
 
-            if (!marker.Tags.Contains("force:third-party"))
+            if (!marker.ThirdParty)
                 continue;
 
             coordinates.Add(xform.Coordinates);

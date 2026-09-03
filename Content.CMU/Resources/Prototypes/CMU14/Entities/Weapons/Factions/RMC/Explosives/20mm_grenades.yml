@@ -42,6 +42,10 @@
     sprite: CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_he
+      map: [ "enum.TriggerVisualLayers.Base", "enum.ConstructionVisuals.Layer" ]
+  - type: TimerTriggerVisuals
+    unprimedSprite: grenade_20mm_he
+    primingSprite: grenade_20mm_he_active
   - type: GenericVisualizer
     visuals:
       enum.Trigger.TriggerVisuals.VisualState:
@@ -76,6 +80,10 @@
     sprite: CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_squash
+      map: [ "enum.TriggerVisualLayers.Base", "enum.ConstructionVisuals.Layer" ]
+  - type: TimerTriggerVisuals
+    unprimedSprite: grenade_20mm_squash
+    primingSprite: grenade_20mm_squash_active
   - type: GenericVisualizer
     visuals:
       enum.Trigger.TriggerVisuals.VisualState:
@@ -110,6 +118,10 @@
     sprite: CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_gas
+      map: [ "enum.TriggerVisualLayers.Base", "enum.ConstructionVisuals.Layer" ]
+  - type: TimerTriggerVisuals
+    unprimedSprite: grenade_20mm_gas
+    primingSprite: grenade_20mm_gas_active
   - type: GenericVisualizer
     visuals:
       enum.Trigger.TriggerVisuals.VisualState:

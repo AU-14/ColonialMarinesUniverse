@@ -18,7 +18,6 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
     private static readonly string[] MigratedRules =
     [
         "RunawaySynth",
-        "SubvertedSynth",
         "Fugitive",
         "DrugDealer",
         "CorporateSpy",
@@ -43,7 +42,6 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
     private static readonly Dictionary<string, string> Roles = new()
     {
         ["RunawaySynth"] = "RunawaySynthRole",
-        ["SubvertedSynth"] = "CLFSubvertedSynthRole",
         ["Fugitive"] = "FugitiveRole",
         ["DrugDealer"] = "DrugDealerRole",
         ["CorporateSpy"] = "CorporateSpyRole",
@@ -56,22 +54,20 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
 
     private static readonly Dictionary<string, string[]> Components = new()
     {
-        ["RunawaySynth"] = ["RunawaySynth", "Skills", "Synth"],
-        ["SubvertedSynth"] = [],
-        ["Fugitive"] = ["Fugitive"],
-        ["DrugDealer"] = ["DrugDealer"],
-        ["CorporateSpy"] = ["CorporateSpy"],
-        ["CLFVeteran"] = ["CLFVeteran", "Skills"],
+        ["RunawaySynth"] = ["RunawaySynth", "Skills", "Synth", "ColonyBounty"],
+        ["Fugitive"] = ["Fugitive", "ColonyBounty"],
+        ["DrugDealer"] = ["DrugDealer", "ColonyBounty"],
+        ["CorporateSpy"] = ["CorporateAgent", "ColonyBounty"],
+        ["CLFVeteran"] = ["CLFVeteran", "Skills", "ColonyBounty"],
         ["StrikeOrganizer"] = ["StrikeOrganizer"],
         ["Cannibal"] = ["Cannibal"],
-        ["SerialKiller"] = ["SerialKiller"],
+        ["SerialKiller"] = ["SerialKiller", "ColonyBounty"],
         ["CLFSleeperAgent"] = ["CLFSleeperAgent"],
     };
 
     private static readonly Dictionary<string, string?> MindRoles = new()
     {
-        ["RunawaySynth"] = null,
-        ["SubvertedSynth"] = null,
+        ["RunawaySynth"] = "MindRoleRunawaySynth",
         ["Fugitive"] = "MindRoleFugitive",
         ["DrugDealer"] = "MindRoleDrugDealer",
         ["CorporateSpy"] = "MindRoleCorporateSpy",
@@ -85,13 +81,12 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
     private static readonly Dictionary<string, string?> StartingGear = new()
     {
         ["RunawaySynth"] = null,
-        ["SubvertedSynth"] = null,
         ["Fugitive"] = "AU14GearFugitive",
         ["DrugDealer"] = "AU14GearDrugDealer",
         ["CorporateSpy"] = "AU14GearCorporateSpy",
         ["CLFVeteran"] = "AU14GearCLFVeteran",
         ["StrikeOrganizer"] = "AU14GearStrikeOrganizer",
-        ["Cannibal"] = null,
+        ["Cannibal"] = "AU14GearCannibal",
         ["SerialKiller"] = null,
         ["CLFSleeperAgent"] = null,
     };
@@ -130,7 +125,7 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
 ";
 
     [Test]
-    public async Task TenRulesUseSameIdSpecifiersWithFullFieldParity()
+    public async Task NineRulesUseSameIdSpecifiersWithFullFieldParity()
     {
         await Server.WaitAssertion(() =>
         {

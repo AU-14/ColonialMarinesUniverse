@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.CMU14.Round;
-using Content.Server.CMU14.Scenario;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Voting;
@@ -29,7 +28,6 @@ public sealed partial class ThreatVoteSystem : EntitySystem
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private ThreatSystem _threat = default!;
     [Dependency] private GameTicker _ticker = default!;
@@ -98,26 +96,8 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         Sawmill.Debug($"[ThreatVoteSystem] Preparing threat vote: preset={presetId}, planet={planet.MapId}, profiles={
             profiles.Count}, playerCount={playerCount}, selectedThreat={_auRound.SelectedThreat?.ID ?? "null"}.");
 
-        if (!TryBuildCandidatesFromScenarioPlan(planet, presetId, playerCount, out List<ThreatVoteCandidate> candidates,
-            out ThreatVoteBodyCount heldBodyCount, out string diagnostic))
-        {
-            if (HasCoveredScenarioThreatCandidate(planet, presetId))
-            {
-                _jobSelection.ForcedJobAssignments.Clear();
-                Sawmill.Error(
-                    $"[ThreatVoteSystem] Could not resolve deferred threat vote from Scenario Plan for covered Round Groups; vote will not start instead of falling back to legacy body-count calculation. {
-                        diagnostic}");
-
-                return false;
-            }
-
-            Sawmill.Warning(
-                $"[ThreatVoteSystem] Could not resolve deferred threat vote from Scenario Plan; falling back to legacy body-count calculation. {
-                    diagnostic}");
-
-            candidates = BuildLegacyCandidates(planet, presetId, playerCount);
-            heldBodyCount = ThreatVoteSystem.GetMaxRequiredBodyCount(candidates);
-        }
+        List<ThreatVoteCandidate> candidates = BuildLegacyCandidates(planet, presetId, playerCount);
+        ThreatVoteBodyCount heldBodyCount = ThreatVoteSystem.GetMaxRequiredBodyCount(candidates);
 
         if (candidates.Count == 0)
         {
@@ -262,65 +242,6 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         return true;
     }
 
-    private bool TryBuildCandidatesFromScenarioPlan(RMCPlanetMapPrototypeComponent planet,
-        string presetId,
-        int playerCount,
-        out List<ThreatVoteCandidate> candidates,
-        out ThreatVoteBodyCount heldBodyCount,
-        out string diagnostic)
-    {
-        candidates = [];
-        heldBodyCount = default(ThreatVoteBodyCount);
-
-        var request = new ScenarioPlanValidationRequest(presetId,
-            playerCount,
-            GetSelectedGovforPlatoonId(),
-            GetSelectedOpforPlatoonId(),
-            _auRound.GetSelectedPlanetId(),
-            planet.MapId,
-            null,
-            _auRound.GetSelectedGovforShip(),
-            _auRound.GetSelectedOpforShip());
-
-        if (!_scenarioPlan.TryResolveDeferredThreatVote(request, out ResolvedDeferredThreatChoice? deferredChoice,
-                out diagnostic)
-            || deferredChoice == null)
-            return false;
-
-        foreach (ResolvedThreatForcePlan resolved in deferredChoice.Candidates)
-        {
-            if (!_prototype.TryIndex(resolved.ThreatId, out ThreatPrototype? threat))
-            {
-                diagnostic = $"Resolved deferred threat candidate '{resolved.ThreatId}' could not be indexed.";
-                candidates.Clear();
-
-                return false;
-            }
-
-            candidates.Add(new(threat,
-                new(resolved.LeaderBodies, resolved.MemberBodies)));
-        }
-
-        heldBodyCount = new(deferredChoice.ReservationPolicy.ReservedLeaderBodies,
-            deferredChoice.ReservationPolicy.ReservedMemberBodies);
-        if (candidates.Count == 0 || heldBodyCount.Total <= 0)
-        {
-            diagnostic = $"Resolved deferred threat choice '{deferredChoice.ChoiceId
-            }' did not produce reservable bodies.";
-            candidates.Clear();
-            heldBodyCount = default(ThreatVoteBodyCount);
-
-            return false;
-        }
-
-        diagnostic = string.Empty;
-
-        return true;
-    }
-
-    private bool HasCoveredScenarioThreatCandidate(RMCPlanetMapPrototypeComponent planet, string presetId)
-        => planet.AllowedThreats.Any(threatId => _scenarioPlan.HasMappedHostileRoundGroup(presetId, threatId.Id));
-
     private List<ThreatVoteCandidate> BuildLegacyCandidates(RMCPlanetMapPrototypeComponent planet,
         string presetId,
         int playerCount)
@@ -375,24 +296,6 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             prepared.MapId}, heldPlayers={prepared.HeldPlayers.Count}, assignedJobs={assignedJobs.Count}.");
         _auRound.SetSelectedThreat(selected);
         _auRound.PreselectThirdPartiesForSelectedThreat();
-        try
-        {
-            _scenarioPlan.GenerateShadowPlan(new(prepared.PresetId,
-                    Math.Max(_player.PlayerCount, prepared.HeldPlayers.Count),
-                    GetSelectedGovforPlatoonId(),
-                    GetSelectedOpforPlatoonId(),
-                    _auRound.GetSelectedPlanetId(),
-                    _auRound.GetSelectedPlanet()?.MapId,
-                    selected.ID,
-                    _auRound.GetSelectedGovforShip(),
-                    _auRound.GetSelectedOpforShip()),
-                "PostRoundstartThreatVoteFinished");
-        }
-        catch (Exception scenarioEx)
-        {
-            Sawmill.Error($"[ThreatVoteSystem] GenerateShadowPlan threw after threat vote: {scenarioEx}");
-        }
-
         MoveHeldPlayersToObservers(prepared.HeldPlayers, selected);
 
         try
@@ -473,10 +376,6 @@ public sealed partial class ThreatVoteSystem : EntitySystem
     //         .Order(StringComparer.OrdinalIgnoreCase);
     //     return $"au14-threat:{prepared.PresetId}:{string.Join(",", candidateIds)}";
     // }
-
-    private string? GetSelectedGovforPlatoonId() => _platoonSpawnRule.SelectedGovforPlatoon?.ID;
-
-    private string? GetSelectedOpforPlatoonId() => _platoonSpawnRule.SelectedOpforPlatoon?.ID;
 
     private string GetLocalizedThreatDisplayName(string threatId)
     {

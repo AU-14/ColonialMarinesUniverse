@@ -25,6 +25,7 @@
     govforinship: true
     opforinship: true
     daycycleenabled: false
+    inRotation: false
     # All threat entries are disabled until this map has generic threat markers.
     # threats:
     # - XenoThreat
@@ -36,6 +37,17 @@
     # - apethreatcf
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
+
+- type: gameMap
+  id: GixensCaverns
+  mapName: Gixens Caverns
+  allegiance: UA
+  mapPath: /Maps/CMU14/gixenscaverns.yml
+  minPlayers: 0
+  maxPlayers: 200
+  maxRandomOffset: 0
+  randomRotation: false
+  stations: {}
 
 - type: lorePrimer
   id: AU14PrimerPlanetGixensCaverns

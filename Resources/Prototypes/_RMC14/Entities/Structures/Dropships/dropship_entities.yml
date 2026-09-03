@@ -51,6 +51,28 @@
     - RMCDropshipUtilityPoint
 
 - type: entity
+  parent: RMCUtilityAttachmentPoint
+  id: CMUGunshipHardpointAttachmentPoint
+  name: hardpoint attachment point
+  description: A restricted attachment point for crew-served gunship hardpoint systems.
+  components:
+  - type: GunshipHardpointAttachmentPoint
+  - type: Tag
+    tags:
+    - CMUGunshipHardpointAttachmentPoint
+
+- type: entity
+  parent: RMCUtilityAttachmentPoint
+  id: CMUGunshipUtilityAttachmentPoint
+  name: gunship utility attachment point
+  description: A restricted attachment point for gunship utility systems.
+  components:
+  - type: GunshipUtilityAttachmentPoint
+  - type: Tag
+    tags:
+    - CMUGunshipUtilityAttachmentPoint
+
+- type: entity
   parent: CMBaseStructureCorrodible
   id: RMCEngineAttachmentPoint
   name: engine system attach point

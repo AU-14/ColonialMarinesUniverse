@@ -109,6 +109,12 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
+    RMCRankSecondLT:
+      entity: AU14ChevronSecondLT
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDSPilot
+        time: 90000 #25 hours
     RMCRankChiefWarrantOfficer3:
       entity: AU14ChevronUSCMChiefWarrantOfficer3
       requirements:

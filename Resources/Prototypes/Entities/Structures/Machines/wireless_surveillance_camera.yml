@@ -88,10 +88,9 @@
   suffix: Constructed, Anchored
   id: SurveillanceWirelessCameraAnchoredConstructed
   components:
-    - type: DeviceNetwork
-      deviceNetId: Wireless
-      receiveFrequencyId: SurveillanceCamera
-      transmitFrequencyId: SurveillanceCamera
+    - type: CameraNetworkMember
+      networks: []
+      sourceKinds: Standard
     - type: SurveillanceCamera
       setupAvailableNetworks:
         - SurveillanceCameraEntertainment
@@ -101,10 +100,9 @@
   suffix: Constructed, Movable
   id: SurveillanceWirelessCameraMovableConstructed
   components:
-    - type: DeviceNetwork
-      deviceNetId: Wireless
-      receiveFrequencyId: SurveillanceCameraEntertainment
-      transmitFrequencyId: SurveillanceCamera
+    - type: CameraNetworkMember
+      networks: []
+      sourceKinds: Standard
     - type: SurveillanceCamera
       setupAvailableNetworks:
         - SurveillanceCameraEntertainment
@@ -114,10 +112,9 @@
   suffix: Entertainment, Anchored
   id: SurveillanceWirelessCameraAnchoredEntertainment
   components:
-    - type: DeviceNetwork
-      deviceNetId: Wireless
-      receiveFrequencyId: SurveillanceCameraEntertainment
-      transmitFrequencyId: SurveillanceCamera
+    - type: CameraNetworkMember
+      networks: [SurveillanceCameraEntertainment]
+      sourceKinds: Standard
     - type: SurveillanceCamera
       networkSet: true
 
@@ -126,9 +123,8 @@
   suffix: Entertainment, Movable
   id: SurveillanceWirelessCameraMovableEntertainment
   components:
-    - type: DeviceNetwork
-      deviceNetId: Wireless
-      receiveFrequencyId: SurveillanceCameraEntertainment
-      transmitFrequencyId: SurveillanceCamera
+    - type: CameraNetworkMember
+      networks: [SurveillanceCameraEntertainment]
+      sourceKinds: Standard
     - type: SurveillanceCamera
       networkSet: true

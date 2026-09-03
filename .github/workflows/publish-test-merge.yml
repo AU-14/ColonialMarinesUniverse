@@ -199,7 +199,7 @@ jobs:
           git submodule update --init --recursive --depth=1
 
       - name: Checkout ColonialMarinesAudio
-        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
+        if: ${{ env.AUDIO_REPO_TOKEN != '' }}
         uses: actions/checkout@v6.0.2
         with:
           repository: AU-14/ColonialMarinesAudio
@@ -207,7 +207,7 @@ jobs:
           path: __audio-overlay
 
       - name: Rsync CMAudio into Resources
-        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
+        if: ${{ env.AUDIO_REPO_TOKEN != '' }}
         run: |
           mkdir -p Content.CMU/Resources/Audio/CMU14/Private/
           rsync -a --delete \

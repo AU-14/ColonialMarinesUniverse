@@ -19,6 +19,7 @@
   - type: InteractionOutline
   - type: Corrodible
     isCorrodible: false
+  - type: StationRecordKeyStorage
 
 - type: entity
   abstract: true

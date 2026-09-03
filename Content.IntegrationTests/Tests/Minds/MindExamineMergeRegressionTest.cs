@@ -1,3 +1,5 @@
+#pragma warning disable RA0002 // The regression needs a mind identity with no live player session.
+
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Mind;
 using Content.Shared._RMC14.Medical.Examine;
@@ -7,6 +9,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.Tests.Minds;
@@ -28,8 +31,6 @@ public sealed class MindExamineMergeRegressionTest : GameTest
         var map = await Pair.CreateTestMap();
         var session = ServerSession!;
         var originalAttached = session.AttachedEntity;
-        var dummy = await Server.AddDummySession($"MindExamineDisconnected{Guid.NewGuid():N}");
-        var dummyRemoved = false;
         EntityUid hostMind = default;
         EntityUid? originalOwned = null;
         EntityUid examiner = default;
@@ -37,7 +38,6 @@ public sealed class MindExamineMergeRegressionTest : GameTest
         EntityUid rmc = default;
         EntityUid disconnectedRmc = default;
         EntityUid mindlessRmc = default;
-        EntityUid disconnectedMind = default;
 
         try
         {
@@ -78,10 +78,10 @@ public sealed class MindExamineMergeRegressionTest : GameTest
                         "RMCMedicalExamine suppresses only the duplicate generic connected-dead line");
                 });
 
-                disconnectedMind = mindSystem.CreateMind(dummy.UserId, "Disconnected mind");
+                var disconnectedMind = mindSystem.CreateMind(null, "Disconnected mind");
+                SEntMan.GetComponent<MindComponent>(disconnectedMind).UserId = new NetUserId(Guid.NewGuid());
                 mindSystem.TransferTo(disconnectedMind, disconnectedRmc);
-                Assert.That(State(disconnectedRmc), Is.EqualTo(MindState.None),
-                    "the dummy begins as a genuinely connected mind before disconnection");
+                Assert.That(State(disconnectedRmc), Is.EqualTo(MindState.SSD));
 
                 Assert.That(State(mindlessRmc), Is.EqualTo(MindState.Catatonic));
                 var catatonic = Examine(mindlessRmc, examiner);
@@ -89,9 +89,6 @@ public sealed class MindExamineMergeRegressionTest : GameTest
                     Does.Contain(Loc.GetString("comp-mind-examined-catatonic", ("ent", mindlessRmc))),
                     "RMCMedicalExamine must not suppress the upstream catatonic status");
             });
-
-            await Server.RemoveDummySession(dummy);
-            dummyRemoved = true;
 
             await Server.WaitAssertion(() =>
             {
@@ -127,9 +124,6 @@ public sealed class MindExamineMergeRegressionTest : GameTest
         }
         finally
         {
-            if (!dummyRemoved)
-                await Server.RemoveDummySession(dummy);
-
             await Server.WaitPost(() =>
             {
                 var mindSystem = Server.System<MindSystem>();
@@ -143,19 +137,10 @@ public sealed class MindExamineMergeRegressionTest : GameTest
 
                 Server.PlayerMan.SetAttachedEntity(session, originalAttached);
 
-                if (disconnectedMind.IsValid())
-                {
-                    mindSystem.WipeMind(disconnectedMind);
-                    SEntMan.DeleteEntity(disconnectedMind);
-                }
-
-                Delete(mindlessRmc);
-                Delete(disconnectedRmc);
-                Delete(rmc);
-                Delete(ordinary);
-                Delete(examiner);
             });
         }
+
+        await Pair.RunUntilSynced();
     }
 
     private MindState State(EntityUid uid)
@@ -168,11 +153,5 @@ public sealed class MindExamineMergeRegressionTest : GameTest
         var examined = new ExaminedEvent(new FormattedMessage(), target, examiner, true, false);
         SEntMan.EventBus.RaiseLocalEvent(target, examined);
         return examined.GetTotalMessage().ToMarkup();
-    }
-
-    private void Delete(EntityUid uid)
-    {
-        if (uid.IsValid())
-            SEntMan.DeleteEntity(uid);
     }
 }

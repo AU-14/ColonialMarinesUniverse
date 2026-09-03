@@ -112,7 +112,6 @@
   id: AU14JobFORECONSynth
   name: FORECON Synthetic (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadFORECON

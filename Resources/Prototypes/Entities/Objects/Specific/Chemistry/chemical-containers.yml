@@ -26,7 +26,7 @@
   suffix: punct & tranex
   components:
   - type: Label
-    localizedLabel: reagent-name-puncturase-tranexamic
+    currentLabel: reagent-name-puncturase-tranexamic
   - type: Solution
     solution:
       reagents:
@@ -41,7 +41,7 @@
   suffix: pyra & derma
   components:
   - type: Label
-    localizedLabel: reagent-name-pyrazine-dermaline
+    currentLabel: reagent-name-pyrazine-dermaline
   - type: Solution
     solution:
       reagents:
@@ -56,7 +56,7 @@
   suffix: dex+ & saline
   components:
   - type: Label
-    localizedLabel: reagent-name-dexalin-plus-saline
+    currentLabel: reagent-name-dexalin-plus-saline
   - type: Solution
     solution:
       reagents:
@@ -71,7 +71,7 @@
   suffix: tricordrazine
   components:
   - type: Label
-    localizedLabel: reagent-name-tricordrazine
+    currentLabel: reagent-name-tricordrazine
   - type: Solution
     solution:
       reagents:
@@ -84,7 +84,7 @@
   suffix: blood
   components:
   - type: Label
-    localizedLabel: reagent-name-blood
+    currentLabel: reagent-name-blood
   - type: Solution
     solution:
       reagents:
@@ -97,7 +97,7 @@
   suffix: water
   components:
   - type: Label
-    localizedLabel: reagent-name-water
+    currentLabel: reagent-name-water
   - type: Solution
     solution:
       reagents:
@@ -111,7 +111,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-carbon
+    currentLabel: reagent-name-carbon
   - type: Solution
     solution:
       reagents:
@@ -125,7 +125,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-iodine
+    currentLabel: reagent-name-iodine
   - type: Solution
     solution:
       reagents:
@@ -139,7 +139,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-fluorine
+    currentLabel: reagent-name-fluorine
   - type: Solution
     solution:
       reagents:
@@ -153,7 +153,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-chlorine
+    currentLabel: reagent-name-chlorine
   - type: Solution
     solution:
       reagents:
@@ -167,7 +167,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-aluminium
+    currentLabel: reagent-name-aluminium
   - type: Solution
     solution:
       reagents:
@@ -181,7 +181,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-phosphorus
+    currentLabel: reagent-name-phosphorus
   - type: Solution
     solution:
       reagents:
@@ -195,7 +195,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-sulfur
+    currentLabel: reagent-name-sulfur
   - type: Solution
     solution:
       reagents:
@@ -209,7 +209,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-silicon
+    currentLabel: reagent-name-silicon
   - type: Solution
     solution:
       reagents:
@@ -223,7 +223,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-hydrogen
+    currentLabel: reagent-name-hydrogen
   - type: Solution
     solution:
       reagents:
@@ -237,7 +237,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-lithium
+    currentLabel: reagent-name-lithium
   - type: Solution
     solution:
       reagents:
@@ -251,7 +251,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-sodium
+    currentLabel: reagent-name-sodium
   - type: Solution
     solution:
       reagents:
@@ -265,7 +265,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-potassium
+    currentLabel: reagent-name-potassium
   - type: Solution
     solution:
       reagents:
@@ -279,7 +279,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-radium
+    currentLabel: reagent-name-radium
   - type: Solution
     solution:
       reagents:
@@ -293,7 +293,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-iron
+    currentLabel: reagent-name-iron
   - type: Solution
     solution:
       reagents:
@@ -307,7 +307,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-copper
+    currentLabel: reagent-name-copper
   - type: Solution
     solution:
       reagents:
@@ -321,7 +321,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-gold
+    currentLabel: reagent-name-gold
   - type: Solution
     solution:
       reagents:
@@ -335,7 +335,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-mercury
+    currentLabel: reagent-name-mercury
   - type: Solution
     solution:
       reagents:
@@ -349,7 +349,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-silver
+    currentLabel: reagent-name-silver
   - type: Solution
     solution:
       reagents:
@@ -363,7 +363,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-ethanol
+    currentLabel: reagent-name-ethanol
   - type: Solution
     solution:
       reagents:
@@ -377,7 +377,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-sugar
+    currentLabel: reagent-name-sugar
   - type: Solution
     solution:
       reagents:
@@ -391,7 +391,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-nitrogen
+    currentLabel: reagent-name-nitrogen
   - type: Solution
     solution:
       reagents:
@@ -405,7 +405,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-oxygen
+    currentLabel: reagent-name-oxygen
   - type: Solution
     solution:
       reagents:
@@ -419,7 +419,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-plant-b-gone
+    currentLabel: reagent-name-plant-b-gone
   - type: Solution
     solution:
       reagents:
@@ -433,7 +433,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-welding-fuel
+    currentLabel: reagent-name-welding-fuel
   - type: Solution
     solution:
       reagents:
@@ -447,7 +447,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-bicaridine
+    currentLabel: reagent-name-bicaridine
   - type: Solution
     solution:
       reagents:
@@ -461,7 +461,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-puncturase
+    currentLabel: reagent-name-puncturase
   - type: Solution
     solution:
       reagents:
@@ -475,7 +475,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-dermaline
+    currentLabel: reagent-name-dermaline
   - type: Solution
     solution:
       reagents:
@@ -489,7 +489,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-dylovene
+    currentLabel: reagent-name-dylovene
   - type: Solution
     solution:
       reagents:
@@ -503,7 +503,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-tranexamic-acid
+    currentLabel: reagent-name-tranexamic-acid
   - type: Solution
     solution:
       reagents:
@@ -517,7 +517,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-hyronalin
+    currentLabel: reagent-name-hyronalin
   - type: Solution
     solution:
       reagents:
@@ -531,7 +531,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-saline
+    currentLabel: reagent-name-saline
   - type: Solution
     solution:
       reagents:
@@ -545,7 +545,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Label
-    localizedLabel: reagent-name-dexalin-plus
+    currentLabel: reagent-name-dexalin-plus
   - type: Solution
     solution:
       reagents:

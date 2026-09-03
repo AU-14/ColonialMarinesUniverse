@@ -131,6 +131,21 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     }
 
     /// <summary>
+    /// Changes the payload count of an initialized grenade before it is
+    /// triggered. Used by effects that need grenade-identical fragmentation
+    /// with a deliberately variable projectile count.
+    /// </summary>
+    public void SetPayloadCount(Entity<ProjectileGrenadeComponent?> grenade, int count)
+    {
+        if (!Resolve(grenade, ref grenade.Comp, false))
+            return;
+
+        grenade.Comp.Capacity = Math.Max(0, count);
+        grenade.Comp.UnspawnedCount = Math.Max(0,
+            grenade.Comp.Capacity - grenade.Comp.Container.ContainedEntities.Count);
+    }
+
+    /// <summary>
     /// Spawns one instance of the fill prototype or contained entity at the coordinate indicated
     /// </summary>
     private bool TrySpawnContents(MapCoordinates spawnCoordinates, ProjectileGrenadeComponent component, out EntityUid contentUid)

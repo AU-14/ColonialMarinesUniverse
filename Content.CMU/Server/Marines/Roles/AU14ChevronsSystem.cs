@@ -9,7 +9,9 @@ using Content.Shared.CMU14.Marines.Roles.Chevrons;
 using Content.Server.Ghost.Roles.Components;
 using Robust.Shared.Utility;
 using Robust.Server.Player;
+using Robust.Shared.Enums;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 using Content.Shared.CMU14.util;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Preferences;
@@ -22,6 +24,8 @@ namespace Content.Server.CMU14.Marines.Roles.Chevrons;
 
 public sealed partial class ChevronSystem : EntitySystem
 {
+    private static readonly TimeSpan PlaytimeRetryDelay = TimeSpan.FromSeconds(10);
+
     [Dependency] private PlayTimeTrackingManager _tracking = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -52,8 +56,24 @@ public sealed partial class ChevronSystem : EntitySystem
 
         if (!_tracking.TryGetTrackerTimes(ev.Player, out var playTimes))
         {
-            Log.Error($"Playtimes weren't ready yet for {ev.Player} on roundstart!");
-            playTimes ??= new Dictionary<string, TimeSpan>();
+            var mob = ev.Mob;
+            var jobId = ev.JobId;
+            var profile = ev.Profile;
+            var player = ev.Player;
+            Timer.Spawn(PlaytimeRetryDelay, () =>
+            {
+                if (Deleted(mob) || player.Status != SessionStatus.Connected)
+                    return;
+
+                if (!_tracking.TryGetTrackerTimes(player, out var retryTimes))
+                {
+                    Log.Error($"Playtimes weren't ready for {player} after retry!");
+                    return;
+                }
+
+                TrySpawnChevronForMob(mob, jobId, profile, retryTimes);
+            });
+            return;
         }
 
         TrySpawnChevronForMob(ev.Mob, ev.JobId, ev.Profile, playTimes);

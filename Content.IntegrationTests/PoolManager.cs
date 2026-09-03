@@ -1,9 +1,18 @@
 #nullable enable
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Content.IntegrationTests.Pair;
+using Content.IntegrationTests.Tests.Destructible;
+using Content.IntegrationTests.Tests.DeviceNetwork;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.CCVar;
+using Robust.Server;
+using Robust.Shared;
+using Robust.Shared.ContentPack;
+using Robust.Shared.GameObjects;
+using Robust.Shared.IoC;
+using Robust.Shared.Log;
 using Robust.UnitTesting;
 
 namespace Content.IntegrationTests;
@@ -78,6 +87,51 @@ public static partial class PoolManager
         ITestContextLike? testContext = null)
     {
         return await Instance.GetPair(settings, testContext);
+    }
+
+    /// <summary>
+    /// Creates a standalone server for tests that do not need a client or pooled state.
+    /// </summary>
+    public static async Task<(RobustIntegrationTest.ServerIntegrationInstance, PoolTestLogHandler)> GenerateServer(
+        PoolSettings settings,
+        TextWriter testOut)
+    {
+        var options = new RobustIntegrationTest.ServerIntegrationOptions
+        {
+            LoadTestAssembly = false,
+            ContentStart = true,
+            ContentAssemblies = Instance.ServerAssemblies,
+            Options = new ServerOptions
+            {
+                LoadConfigAndUserData = false,
+                LoadContentResources = !settings.NoLoadContent,
+                MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources"], zipMounts: []),
+            },
+        };
+
+        foreach (var (cvar, value) in Instance.DefaultCvars)
+            options.CVarOverrides[cvar] = value;
+
+        options.CVarOverrides[CCVars.GameDummyTicker.Name] = settings.DummyTicker.ToString();
+        options.CVarOverrides[CCVars.GameLobbyEnabled.Name] = settings.InLobby.ToString();
+        options.CVarOverrides[CCVars.GameMap.Name] = settings.Map;
+        options.CVarOverrides[CCVars.AdminLogsEnabled.Name] = settings.AdminLogsEnabled.ToString();
+
+        var logHandler = new PoolTestLogHandler("SERVER");
+        logHandler.ActivateContext(testOut);
+        options.OverrideLogHandler = () => logHandler;
+        options.BeforeStart += () =>
+        {
+            var systems = IoCManager.Resolve<IEntitySystemManager>();
+            systems.LoadExtraSystemType<DeviceNetworkTestSystem>();
+            systems.LoadExtraSystemType<TestDestructibleListenerSystem>();
+        };
+
+        var server = new RobustIntegrationTest.ServerIntegrationInstance(options);
+        await server.WaitIdleAsync();
+        server.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
+        server.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
+        return (server, logHandler);
     }
 
     public static void Startup(params Assembly[] extra)

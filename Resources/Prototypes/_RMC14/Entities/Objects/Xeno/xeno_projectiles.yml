@@ -55,6 +55,7 @@
     damage:
       types:
         Heat: 20 # TODO RMC14 damage fall-off and higher at close range
+  - type: XenoAcidProjectile
   - type: CMArmorPiercing
     amount: 10
   - type: XenoProjectile
@@ -133,6 +134,7 @@
     damage:
       types:
         Heat: 16
+  - type: XenoAcidProjectile
   - type: XenoToxicSpitProjectile
   - type: RMCProjectileSkipXenos
   - type: XenoProjectile
@@ -199,6 +201,7 @@
     damage:
       types:
         Heat: 10
+  - type: XenoAcidProjectile
   - type: XenoProjectile
     deleteOnFriendlyXeno: false
   - type: ProjectileMaxRange
@@ -277,6 +280,7 @@
     lifetime: 10
   - type: XenoProjectile
     deleteOnFriendlyXeno: false
+  - type: XenoAcidProjectile
   - type: SpawnOnTerminate
     spawn: RMCSmokeAcid
     popup: rmc-glob-land

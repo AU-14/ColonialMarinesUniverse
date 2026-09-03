@@ -1,5 +1,10 @@
 - type: entity
-  parent: RMCSurveillanceCameraAlmayer
+  parent: SurveillanceCameraAssembly
+  id: CMUSurveillanceCameraAssembly
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: SurveillanceCameraBase
   id: CMUSurveillanceCameraColonyGOVFOR
   name: colony-grade camera
   suffix: Colony, Govfor
@@ -8,11 +13,24 @@
     snap:
     - Wallmount
   components:
+  - type: Transform
+    anchored: true
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: SurveillanceCamera
+    networkSet: false
+    setupAvailableNetworks:
+    - CMUSurveillanceCameraColonyCMB
+    - CMUSurveillanceCameraColonyGOVFOR
+    - CMUSurveillanceCameraColonyWEYU
   - type: RMCCamera
-    id: CMUSurveillanceCameraColonyGOVFOR
+  - type: CameraMapMarker
+  - type: CameraNetworkMember
+    networks: [CMUSurveillanceCameraColonyGOVFOR]
+    sourceKinds: Rmc
 
 - type: entity
-  parent: RMCSurveillanceCameraAlmayer
+  parent: SurveillanceCameraBase
   id: CMUSurveillanceCameraColonyWEYU
   name: colony-grade camera
   suffix: Colony, We-Yu
@@ -21,11 +39,24 @@
     snap:
     - Wallmount
   components:
+  - type: Transform
+    anchored: true
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: SurveillanceCamera
+    networkSet: false
+    setupAvailableNetworks:
+    - CMUSurveillanceCameraColonyCMB
+    - CMUSurveillanceCameraColonyGOVFOR
+    - CMUSurveillanceCameraColonyWEYU
   - type: RMCCamera
-    id: CMUSurveillanceCameraColonyWEYU
+  - type: CameraMapMarker
+  - type: CameraNetworkMember
+    networks: [CMUSurveillanceCameraColonyWEYU]
+    sourceKinds: Rmc
 
 - type: entity
-  parent: RMCSurveillanceCameraAlmayer
+  parent: SurveillanceCameraBase
   id: CMUSurveillanceCameraColonyCMB
   name: colony-grade camera
   suffix: Colony, CMB
@@ -34,8 +65,21 @@
     snap:
     - Wallmount
   components:
+  - type: Transform
+    anchored: true
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: SurveillanceCamera
+    networkSet: false
+    setupAvailableNetworks:
+    - CMUSurveillanceCameraColonyCMB
+    - CMUSurveillanceCameraColonyGOVFOR
+    - CMUSurveillanceCameraColonyWEYU
   - type: RMCCamera
-    id: CMUSurveillanceCameraColonyCMB
+  - type: CameraMapMarker
+  - type: CameraNetworkMember
+    networks: [CMUSurveillanceCameraColonyCMB]
+    sourceKinds: Rmc
 
 - type: entity
   parent: RMCMonitorCameraAlmayer
@@ -44,9 +88,12 @@
   description: Used to access the various cameras on the colony.
   suffix: Colony, Govfor
   components:
+  - type: Transform
+    anchored: true
   - type: RMCCameraComputer
-    protoIds:
-    - CMUSurveillanceCameraColonyGOVFOR
+  - type: CameraNetworkReceiver
+    networks: [CMUSurveillanceCameraColonyGOVFOR]
+    supportedSources: Rmc
 
 - type: entity
   parent: RMCMonitorCameraAlmayer
@@ -55,9 +102,12 @@
   description: Used to access the various cameras on the colony.
   suffix: Colony, We-Yu
   components:
+  - type: Transform
+    anchored: true
   - type: RMCCameraComputer
-    protoIds:
-    - CMUSurveillanceCameraColonyWEYU
+  - type: CameraNetworkReceiver
+    networks: [CMUSurveillanceCameraColonyWEYU]
+    supportedSources: Rmc
 
 - type: entity
   parent: RMCMonitorCameraAlmayer
@@ -66,10 +116,12 @@
   description: Used to access the various cameras in the facility and the colony.
   suffix: Colony, We-Yu, Spy
   components:
+  - type: Transform
+    anchored: true
   - type: RMCCameraComputer
-    protoIds:
-    - CMUSurveillanceCameraColonyCMB
-    - CMUSurveillanceCameraColonyWEYU
+  - type: CameraNetworkReceiver
+    networks: [CMUSurveillanceCameraColonyCMB, CMUSurveillanceCameraColonyWEYU]
+    supportedSources: Rmc
 
 - type: entity
   parent: RMCMonitorCameraAlmayer
@@ -78,10 +130,12 @@
   description: Used to access the various cameras in the base and the colony.
   suffix: Colony, Govfor, Spy
   components:
+  - type: Transform
+    anchored: true
   - type: RMCCameraComputer
-    protoIds:
-    - CMUSurveillanceCameraColonyCMB
-    - CMUSurveillanceCameraColonyGOVFOR
+  - type: CameraNetworkReceiver
+    networks: [CMUSurveillanceCameraColonyCMB, CMUSurveillanceCameraColonyGOVFOR]
+    supportedSources: Rmc
 
 - type: entity
   parent: RMCMonitorCameraAlmayer
@@ -90,6 +144,9 @@
   description: Used to access the various cameras on the colony.
   suffix: Colony, CMB
   components:
+  - type: Transform
+    anchored: true
   - type: RMCCameraComputer
-    protoIds:
-    - CMUSurveillanceCameraColonyCMB
+  - type: CameraNetworkReceiver
+    networks: [CMUSurveillanceCameraColonyCMB]
+    supportedSources: Rmc

@@ -18,7 +18,9 @@
   kind: source
   path: "/Textures/_RMC14/Shaders/night_vision.swsl"
   params:
-    nv_color: 0.1, 0.75, 0.1 
+    nv_color: 0.1, 0.75, 0.1
+    noise_strength: 0.04
+    vignette_strength: 3.168
    # Green tint
 
 - type: shader
@@ -27,6 +29,8 @@
   path: "/Textures/_RMC14/Shaders/night_vision.swsl"
   params:
     nv_color: 0.5, 0.5, 0.5
+    noise_strength: 0.04
+    vignette_strength: 3.168
 
 - type: shader
   id: RMCScreechBlind

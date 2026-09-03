@@ -1,4 +1,4 @@
-using Content.Shared.DeviceNetwork;
+using Content.Shared.Camera;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -51,7 +51,6 @@ public sealed partial class SurveillanceCameraComponent : Component
     [DataField, AutoNetworkedField]
     public bool NetworkSet;
 
-    // This has to be device network frequency prototypes.
     [DataField("setupAvailableNetworks")]
-    public List<ProtoId<DeviceFrequencyPrototype>> AvailableNetworks { get; private set; } = new();
+    public List<ProtoId<CameraNetworkPrototype>> AvailableNetworks { get; private set; } = new();
 }

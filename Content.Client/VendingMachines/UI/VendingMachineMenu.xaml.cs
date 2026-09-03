@@ -159,7 +159,7 @@ public sealed partial class VendingMachineMenu : FancyWindow
         var itemName = prototype.Name;
 
         if (prototype.TryComp<LabelComponent>(out var label, _componentFactory) &&
-            label.LocalizedLabel is { } locId)
+            label.CurrentLabel is { Length: > 0 } locId)
         {
             itemName = _loc.GetString("comp-label-format",
                 ("baseName", itemName),

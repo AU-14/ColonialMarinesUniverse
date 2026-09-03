@@ -71,7 +71,6 @@
   id: AU14JobFORECONMarksman
   name: FORECON Marksman (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadFORECON

@@ -148,6 +148,16 @@ public abstract partial class SharedGunSystem
         EntityUid ammo,
         EntityUid loader)
     {
+        // CMU14: spent casings cannot be reloaded into guns.
+        if (TryComp(ammo, out CartridgeAmmoComponent? spentCartridge) && spentCartridge.Spent)
+        {
+            PopupSystem.PopupEntity(
+                Loc.GetString("cmu-gun-ballistic-spent", ("ammoEntity", ammo)),
+                entity.Owner,
+                loader);
+            return false;
+        }
+
         if (!CanInsertBallistic(entity, ammo))
             return false;
 

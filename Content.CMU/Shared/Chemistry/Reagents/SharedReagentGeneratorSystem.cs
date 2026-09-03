@@ -108,7 +108,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         foreach (var effect in args.Effects)
         {
             string effectstr =
-                $"      - !type:{properties[effect.Key].ID}\n" +
+                $"      - !type:{properties[effect.Key].EffectName}\n" +
                 $"        potency: {effect.Value}\n";
             effectyml += effectstr;
             MappingDataNode e = [];
