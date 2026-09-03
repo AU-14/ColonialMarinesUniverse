@@ -221,6 +221,11 @@
         Piercing: 70
     soundHit:
       path: /Audio/Effects/gen_hit.ogg
+  - type: DamageImpactProfile
+    projectile:
+      contact: Fragment
+      penetration: Forced
+      energy: Severe
   - type: ClusterLimitHits
     limit: 0
     ignoreFirstHit: true

@@ -124,7 +124,11 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         ProjectileCollide((uid, component, args.OurBody), args.OtherEntity);
     }
 
-    public void ProjectileCollide(Entity<ProjectileComponent, PhysicsComponent> projectile, EntityUid target, bool predicted = false)
+    public void ProjectileCollide(
+        Entity<ProjectileComponent, PhysicsComponent> projectile,
+        EntityUid target,
+        bool predicted = false,
+        DamageImpactContext context = DamageImpactContext.None)
     {
         var (uid, component, ourBody) = projectile;
         if (projectile.Comp1.ProjectileSpent)
@@ -155,6 +159,11 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (ev.Handled)
             return;
 
+        var impact = DamageImpact.ForProjectile(ev.Damage);
+        if (TryComp<DamageImpactProfileComponent>(uid, out var impactProfile))
+            impact = impactProfile.GetProjectileImpact(impact);
+        impact = impact with { Context = impact.Context | context };
+
         var coordinates = Transform(projectile).Coordinates;
         var otherName = ToPrettyString(target);
         var damageRequired = GetRemainingDestructionDamage(target);
@@ -164,14 +173,14 @@ public abstract partial class SharedProjectileSystem : EntitySystem
                 component.IgnoreResistances,
                 origin: component.Shooter,
                 tool: uid,
-                impact: DamageImpact.Projectile)
+                impact: impact)
             : new DamageSpecifier(ev.Damage);
         var deleted = Deleted(target);
 
         // RMC14 this is already done on the server in TryChangeDamage.
         if (_net.IsClient)
         {
-            var modifyEvent = new DamageModifyEvent(ev.Damage, component.Shooter, uid, impact: DamageImpact.Projectile);
+            var modifyEvent = new DamageModifyEvent(ev.Damage, component.Shooter, uid, impact: impact);
             RaiseLocalEvent(target, modifyEvent);
             modifiedDamage = modifyEvent.Damage;
         }

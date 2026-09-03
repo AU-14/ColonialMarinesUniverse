@@ -144,6 +144,11 @@
       types:
         Piercing: 125
         Structural: 1275
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Forced
+      energy: Severe
   - type: CMArmorPiercing
     amount: 75
   - type: RMCPenetratingProjectile

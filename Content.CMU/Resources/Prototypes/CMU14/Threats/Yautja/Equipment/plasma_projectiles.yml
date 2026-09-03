@@ -172,6 +172,11 @@
     damage:
       types:
         Heat: 0
+  - type: DamageImpactProfile
+    projectile:
+      contact: Burn
+      penetration: None
+      energy: Low
   - type: PointLight
     enabled: true
     color: "#50d9ff"

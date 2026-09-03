@@ -8,6 +8,8 @@ using Content.Shared.Database;
 using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Maps;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.Map;
@@ -468,9 +470,12 @@ public sealed partial class ExplosionSystem
                     continue;
 
                 // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
+                var stateBeforeDamage = TryComp<MobStateComponent>(entity, out var mobState)
+                    ? (MobState?) mobState.CurrentState
+                    : null;
                 _damageableSystem.ChangeDamage((entity, damageable), damage);
 
-                var received = new ExplosionReceivedEvent(id, epicenter, damage);
+                var received = new ExplosionReceivedEvent(id, epicenter, damage, stateBeforeDamage);
                 RaiseLocalEvent(entity, ref received);
 
                 if (_actorQuery.HasComp(entity))

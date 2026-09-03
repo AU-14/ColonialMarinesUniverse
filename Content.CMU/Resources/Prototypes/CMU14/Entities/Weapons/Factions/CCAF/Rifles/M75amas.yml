@@ -141,6 +141,11 @@
     damage:
       types:
         Piercing: 40
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: CMArmorPiercing
     amount: 5
   - type: RMCProjectileDamageFalloff

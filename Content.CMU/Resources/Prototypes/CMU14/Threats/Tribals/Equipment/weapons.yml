@@ -80,6 +80,11 @@
     damage:
       types:
         Piercing: 130
+  - type: DamageImpactProfile
+    projectile:
+      contact: Stab
+      penetration: High
+      energy: High
 
 - type: entity
   name: tribal bow

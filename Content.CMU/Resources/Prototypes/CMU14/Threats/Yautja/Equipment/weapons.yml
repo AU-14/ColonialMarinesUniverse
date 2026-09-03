@@ -778,6 +778,11 @@
       types:
         Piercing: 24
         Slash: 6
+  - type: DamageImpactProfile
+    projectile:
+      contact: Stab
+      penetration: Medium
+      energy: Low
 
 - type: entity
   parent: BaseItem

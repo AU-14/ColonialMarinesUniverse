@@ -161,6 +161,11 @@
     damage:
       types:
         Piercing: 80
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: High
+      energy: High
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 32

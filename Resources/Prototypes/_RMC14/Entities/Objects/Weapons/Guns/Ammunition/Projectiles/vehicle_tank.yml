@@ -16,6 +16,11 @@
         Piercing: 4
         Structural: 60
     maxFixedRange: 0
+  - type: DamageImpactProfile
+    projectile:
+      contact: Fragment
+      penetration: Forced
+      energy: Severe
   - type: VehicleDamageMultiplier
     multiplier: 8
   - type: TriggerOnFixedDistanceStop

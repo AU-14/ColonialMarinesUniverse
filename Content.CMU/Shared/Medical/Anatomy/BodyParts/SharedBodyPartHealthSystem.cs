@@ -10,6 +10,9 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -42,7 +45,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<HitLocationComponent, DamageChangedEvent>(OnDamageChanged);
+        // Read the state that existed before this hit so a catastrophic hit against a living target remains possible.
+        SubscribeLocalEvent<HitLocationComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]);
         SubscribeLocalEvent<BodyPartHealthComponent, ComponentStartup>(OnPartStartup);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
@@ -109,7 +113,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         CMUTraumaMechanism? mechanism = null,
         EntityUid? origin = null,
         DamageImpact impact = default,
-        TargetBodyZone? targetZone = null)
+        TargetBodyZone? targetZone = null,
+        MobState? stateAtImpact = null)
     {
         if (!_medicalEnabled || !_bodyPartEnabled)
             return false;
@@ -124,7 +129,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (scale != 1f)
             localizable *= scale;
 
-        return TryApplyPartDamageToPart(body, partUid, localizable, origin, tool, mechanism, impact, targetZone);
+        return TryApplyPartDamageToPart(body, partUid, localizable, origin, tool, mechanism, impact, targetZone, stateAtImpact);
     }
 
     private bool TryApplyPartDamageToPart(
@@ -135,7 +140,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         EntityUid? tool,
         CMUTraumaMechanism? mechanism,
         DamageImpact impact,
-        TargetBodyZone? targetZone)
+        TargetBodyZone? targetZone,
+        MobState? stateAtImpact)
     {
         if (!TryComp<BodyPartHealthComponent>(partUid, out var health))
             return false;
@@ -146,7 +152,11 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             return false;
 
         var deduction = FixedPoint2.New(total * _bodyPartDamagePropagation);
-        var severanceDeduction = GetDamageInGroup(modified, BruteGroup) * (FixedPoint2)_bodyPartDamagePropagation;
+        var partType = TryComp<BodyPartComponent>(partUid, out var partComp) ? partComp.PartType : BodyPartType.Other;
+        var canAccumulateSeverance = CanAutomaticallySever(body, partType, impact, stateAtImpact);
+        var severanceDeduction = canAccumulateSeverance
+            ? DamageImpactSeverance.Calculate(modified, impact) * (FixedPoint2)_bodyPartDamagePropagation
+            : FixedPoint2.Zero;
 
         health.Current -= deduction;
         if (severanceDeduction > FixedPoint2.Zero)
@@ -154,12 +164,13 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         Dirty(partUid, health);
 
         var organs = CollectOrgans(partUid);
-        var partType = TryComp<BodyPartComponent>(partUid, out var partComp) ? partComp.PartType : BodyPartType.Other;
         var trauma = Trauma.CreateContactResult(partType, modified, organs.Count > 0, origin, tool, impact, mechanism, targetZone);
         var damaged = new BodyPartDamagedEvent(body, partUid, partType, modified, health.Current, organs, tool, impact, trauma, targetZone);
         RaiseLocalEvent(partUid, ref damaged, broadcast: true);
 
-        if (health.SeveranceDamage >= health.Max + health.SeveranceThreshold && !IsSeveranceLocked(partType))
+        if (health.SeveranceDamage >= health.Max + health.SeveranceThreshold &&
+            !IsSeveranceLocked(partType) &&
+            CanAutomaticallySever(body, partType, impact, stateAtImpact))
         {
             var severed = new BodyPartSeveredEvent(body, partUid, partType);
             RaiseLocalEvent(partUid, ref severed, broadcast: true);
@@ -174,21 +185,6 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         AddPositiveGroupDamage(result, damage, BruteGroup);
         AddPositiveGroupDamage(result, damage, BurnGroup);
         return result;
-    }
-
-    private FixedPoint2 GetDamageInGroup(DamageSpecifier damage, ProtoId<DamageGroupPrototype> groupId)
-    {
-        if (!_prototypes.TryIndex(groupId, out var group))
-            return FixedPoint2.Zero;
-
-        var total = FixedPoint2.Zero;
-        foreach (var type in group.DamageTypes)
-        {
-            if (damage.DamageDict.TryGetValue(type, out var amount) && amount > FixedPoint2.Zero)
-                total += amount;
-        }
-
-        return total;
     }
 
     private void AddPositiveGroupDamage(DamageSpecifier dest, DamageSpecifier src, ProtoId<DamageGroupPrototype> groupId)
@@ -397,6 +393,40 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         BodyPartType.Torso => _severanceTorsoDisabled,
         _ => false,
     };
+
+    private bool CanAutomaticallySever(EntityUid body, BodyPartType type, DamageImpact impact, MobState? stateAtImpact = null)
+    {
+        if (type != BodyPartType.Head)
+            return true;
+
+        var state = stateAtImpact ?? (TryComp<MobStateComponent>(body, out var mobState)
+            ? mobState.CurrentState
+            : (MobState?) null);
+        return CanAutomaticallySeverHead(
+            impact,
+            state,
+            HasComp<RMCRevivableComponent>(body),
+            Unrevivable.IsUnrevivable(body));
+    }
+
+    /// <summary>
+    /// Determines whether ordinary damage may contribute to or trigger head severance.
+    /// Direct severance events used by surgery and explicit mechanics bypass this policy.
+    /// </summary>
+    public static bool CanAutomaticallySeverHead(
+        DamageImpact impact,
+        MobState? state,
+        bool revivable,
+        bool unrevivable)
+    {
+        if (impact.Delivery == DamageImpactDelivery.Projectile)
+            return false;
+
+        if (state == MobState.Critical)
+            return false;
+
+        return state != MobState.Dead || !revivable || unrevivable;
+    }
 
     private DamageSpecifier ApplyResistance(DamageSpecifier d, Dictionary<ProtoId<DamageGroupPrototype>, float> resistance)
     {

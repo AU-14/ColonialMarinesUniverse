@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Deafness;
+using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
@@ -12,11 +13,14 @@ using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
 using Content.Shared.Flash;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
 using Content.Shared.Sticky.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
+using Content.Shared.Traits.Assorted;
 using Content.Shared.Whitelist;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -215,6 +219,14 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
 
         if (total < ent.Comp.Threshold)
             return;
+
+        if (TryComp<MobStateComponent>(ent, out var mobState) &&
+            (args.StateBeforeDamage ?? mobState.CurrentState) is MobState.Critical or MobState.Dead &&
+            HasComp<RMCRevivableComponent>(ent) &&
+            !HasComp<UnrevivableComponent>(ent))
+        {
+            return;
+        }
 
         if (_net.IsClient)
             return;

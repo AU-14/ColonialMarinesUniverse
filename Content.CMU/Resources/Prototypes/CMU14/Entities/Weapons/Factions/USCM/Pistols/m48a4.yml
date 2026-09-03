@@ -284,6 +284,11 @@
     damage:
       types:
         Piercing: 45
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: High
+      energy: High
   - type: CMArmorPiercing
     amount: 5
   - type: RMCProjectileAccuracy

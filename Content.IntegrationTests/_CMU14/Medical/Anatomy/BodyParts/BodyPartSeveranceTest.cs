@@ -8,6 +8,8 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -16,6 +18,76 @@ namespace Content.IntegrationTests.CMU14.Medical.Anatomy.BodyParts;
 [TestFixture]
 public sealed class BodyPartSeveranceTest
 {
+    [Test]
+    public async Task AutomaticHeadSeveranceProtectsProjectilesCriticalAndRevivableDeadTargets()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var medical = entities.System<CMUMedicalBodyIndexSystem>();
+            var mobState = entities.System<MobStateSystem>();
+            var partHealth = entities.System<SharedBodyPartHealthSystem>();
+            var projectileTarget = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var criticalTarget = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var deadTarget = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var headKey = new CMUMedicalBodyPartKey(BodyPartType.Head, BodyPartSymmetry.None);
+                Assert.That(medical.TryGetBodyPart(projectileTarget, headKey, out var projectileHead), Is.True);
+                Assert.That(medical.TryGetBodyPart(criticalTarget, headKey, out var criticalHead), Is.True);
+                Assert.That(medical.TryGetBodyPart(deadTarget, headKey, out var deadHead), Is.True);
+
+                var projectileDamage = Damage("Piercing", 1000);
+                Assert.That(partHealth.TryApplyPartDamage(
+                    projectileTarget,
+                    projectileHead,
+                    projectileDamage,
+                    impact: DamageImpact.ForProjectile(projectileDamage)), Is.True);
+
+                mobState.ChangeMobState(criticalTarget, MobState.Critical);
+                Assert.That(partHealth.TryApplyPartDamage(
+                    criticalTarget,
+                    criticalHead,
+                    Damage("Slash", 1000),
+                    impact: DamageImpact.MeleeSlash), Is.True);
+
+                mobState.ChangeMobState(deadTarget, MobState.Dead);
+                Assert.That(partHealth.TryApplyPartDamage(
+                    deadTarget,
+                    deadHead,
+                    Damage("Blunt", 1000),
+                    impact: DamageImpact.Explosion), Is.True);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entities.GetComponent<BodyPartHealthComponent>(projectileHead).Current,
+                        Is.LessThan(FixedPoint2.Zero), "projectile head damage must still be applied");
+                    Assert.That(entities.GetComponent<BodyPartHealthComponent>(projectileHead).SeveranceDamage,
+                        Is.EqualTo(FixedPoint2.Zero));
+                    Assert.That(entities.GetComponent<BodyPartHealthComponent>(criticalHead).SeveranceDamage,
+                        Is.EqualTo(FixedPoint2.Zero));
+                    Assert.That(entities.GetComponent<BodyPartHealthComponent>(deadHead).SeveranceDamage,
+                        Is.EqualTo(FixedPoint2.Zero));
+                    Assert.That(medical.TryGetBodyPart(projectileTarget, headKey, out _), Is.True);
+                    Assert.That(medical.TryGetBodyPart(criticalTarget, headKey, out _), Is.True);
+                    Assert.That(medical.TryGetBodyPart(deadTarget, headKey, out _), Is.True);
+                });
+            }
+            finally
+            {
+                entities.DeleteEntity(projectileTarget);
+                entities.DeleteEntity(criticalTarget);
+                entities.DeleteEntity(deadTarget);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task LiveVitalRemovalDamagesButRecursiveBodyDeletionDoesNot()
     {
@@ -63,7 +135,7 @@ public sealed class BodyPartSeveranceTest
     }
 
     [Test]
-    public async Task HeadSeversOnlyAfterOneHundredSeventyBruteOverkill()
+    public async Task HeadSeversOnlyAfterWeightedMeleeImpactCrossesThreshold()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -84,22 +156,31 @@ public sealed class BodyPartSeveranceTest
 
                 var health = entMan.GetComponent<BodyPartHealthComponent>(head);
                 Assert.That(health.SeveranceThreshold, Is.EqualTo(FixedPoint2.New(170)));
+                var choppingImpact = DamageImpact.MeleeSlash with { Energy = DamageImpactEnergy.High };
 
-                // The head's 0.85 brute resistance turns 270 slash into 229.5
-                // structural damage: 169.5 past its 60 HP, just short of severance.
-                Assert.That(partHealth.TryApplyPartDamage(human, head, Damage("Slash", 270)), Is.True);
+                // Resistance and the high-energy slash profile leave the first chop below the
+                // combined 230-point health and severance threshold.
+                Assert.That(partHealth.TryApplyPartDamage(
+                    human,
+                    head,
+                    Damage("Slash", 180),
+                    impact: choppingImpact), Is.True);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(health.Current, Is.EqualTo(FixedPoint2.New(-169.5f)));
+                    Assert.That(health.SeveranceDamage, Is.LessThan(health.Max + health.SeveranceThreshold));
                     Assert.That(medical.TryGetBodyPart(human, key, out var attached), Is.True);
                     Assert.That(attached, Is.EqualTo(head));
                 });
 
-                Assert.That(partHealth.TryApplyPartDamage(human, head, Damage("Slash", 1)), Is.True);
+                Assert.That(partHealth.TryApplyPartDamage(
+                    human,
+                    head,
+                    Damage("Slash", 33),
+                    impact: choppingImpact), Is.True);
                 detachedBody = FindDetachedCarrier(entMan, head);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(health.Current, Is.LessThanOrEqualTo(FixedPoint2.New(-170)));
+                    Assert.That(health.SeveranceDamage, Is.GreaterThanOrEqualTo(health.Max + health.SeveranceThreshold));
                     Assert.That(medical.TryGetBodyPart(human, key, out _), Is.False);
                     Assert.That(entMan.System<SharedBodySystem>().GetRootPartOrNull(detachedBody.Value)?.Entity,
                         Is.EqualTo(head));

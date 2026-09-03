@@ -9,6 +9,8 @@ using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared.Traits.Assorted;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
@@ -59,6 +61,16 @@ public sealed partial class RMCGibSystem : EntitySystem
 
         if (args.NewMobState != MobState.Dead)
             return;
+
+        // Ordinary overkill must not consume the revival window. A target that goes directly
+        // from alive to dead can still suffer the existing catastrophic gib outcome.
+        if (_thresholds.IsDamageThresholdUpdateInProgress(ent) &&
+            args.OldMobState == MobState.Critical &&
+            HasComp<RMCRevivableComponent>(ent) &&
+            !HasComp<UnrevivableComponent>(ent))
+        {
+            return;
+        }
 
         var gibProbability = ent.Comp.GibChance;
 

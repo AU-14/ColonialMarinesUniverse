@@ -19,6 +19,14 @@ public sealed partial class MobThresholdSystem : EntitySystem
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private DamageableSystem _damageable = default!;
 
+    private readonly HashSet<EntityUid> _damageThresholdUpdates = new();
+
+    /// <summary>
+    /// Returns whether the target's mob state is currently being recalculated in response to damage.
+    /// </summary>
+    public bool IsDamageThresholdUpdateInProgress(EntityUid target)
+        => _damageThresholdUpdates.Contains(target);
+
     public override void Initialize()
     {
         SubscribeLocalEvent<MobThresholdsComponent, ComponentGetState>(OnGetState);
@@ -446,10 +454,20 @@ public sealed partial class MobThresholdSystem : EntitySystem
     {
         if (!TryComp<MobStateComponent>(target, out var mobState))
             return;
-        CheckThresholds(target, mobState, thresholds, args.Damageable, args.Origin);
-        var ev = new MobThresholdChecked(target, mobState, thresholds, args.Damageable);
-        RaiseLocalEvent(target, ref ev, true);
-        UpdateAlerts(target, mobState.CurrentState, thresholds, args.Damageable);
+
+        var ownsDamageMarker = _damageThresholdUpdates.Add(target);
+        try
+        {
+            CheckThresholds(target, mobState, thresholds, args.Damageable, args.Origin);
+            var ev = new MobThresholdChecked(target, mobState, thresholds, args.Damageable);
+            RaiseLocalEvent(target, ref ev, true);
+            UpdateAlerts(target, mobState.CurrentState, thresholds, args.Damageable);
+        }
+        finally
+        {
+            if (ownsDamageMarker)
+                _damageThresholdUpdates.Remove(target);
+        }
     }
 
     private void MobThresholdStartup(EntityUid target, MobThresholdsComponent thresholds, ComponentStartup args)

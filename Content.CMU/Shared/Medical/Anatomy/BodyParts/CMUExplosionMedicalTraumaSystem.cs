@@ -59,7 +59,8 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
                 args.Damage,
                 scale,
                 mechanism: CMUTraumaMechanism.Explosive,
-                impact: DamageImpact.Explosion);
+                impact: DamageImpact.Explosion,
+                stateAtImpact: args.StateBeforeDamage);
         }
 
         _shrapnel.TryApplyExplosionShrapnel(ent.Owner, args.Explosion, exposure, weightedParts);

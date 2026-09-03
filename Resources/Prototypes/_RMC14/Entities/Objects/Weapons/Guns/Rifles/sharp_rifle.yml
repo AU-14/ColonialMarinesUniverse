@@ -180,6 +180,11 @@
         Piercing: 35
     soundHit:
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: DamageImpactProfile
+    projectile:
+      contact: Fragment
+      penetration: High
+      energy: High
   - type: RMCProjectileAccuracy
     accuracy: 105
     thresholds:

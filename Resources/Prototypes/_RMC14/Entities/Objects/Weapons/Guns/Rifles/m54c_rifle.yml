@@ -637,6 +637,11 @@
     damage:
       types:
         Piercing: 40
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 24
@@ -717,6 +722,11 @@
   id: BulletRifle10x24mmTracer
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:
