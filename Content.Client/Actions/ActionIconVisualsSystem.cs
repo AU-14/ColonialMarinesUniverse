@@ -20,6 +20,32 @@ public sealed partial class ActionIconVisualsSystem : VisualizerSystem<ActionCom
                 SpriteSystem.LayerSetSprite((uid, args.Sprite), ActionVisuals.Icon, icon);
         }
 
+        if (AppearanceSystem.TryGetData<SpriteSpecifier>(
+                uid,
+                ActionState.DynamicIconToggled,
+                out var toggledIcon,
+                args.Component))
+        {
+            SpriteSystem.LayerMapReserve((uid, args.Sprite), ActionVisuals.IconToggled);
+
+            if (toggledIcon is SpriteSpecifier.EntityPrototype)
+                SpriteSystem.LayerSetTexture(
+                    (uid, args.Sprite),
+                    ActionVisuals.IconToggled,
+                    SpriteSystem.Frame0(toggledIcon));
+            else
+                SpriteSystem.LayerSetSprite((uid, args.Sprite), ActionVisuals.IconToggled, toggledIcon);
+        }
+
+        if (!AppearanceSystem.TryGetData<bool>(uid, ActionState.Toggled, out var toggled, args.Component))
+            toggled = comp.Toggled;
+
+        var hasToggledIcon = SpriteSystem.LayerExists((uid, args.Sprite), ActionVisuals.IconToggled);
+        SpriteSystem.LayerSetVisible((uid, args.Sprite), ActionVisuals.Icon, !toggled || !hasToggledIcon);
+
+        if (hasToggledIcon)
+            SpriteSystem.LayerSetVisible((uid, args.Sprite), ActionVisuals.IconToggled, toggled);
+
         if (AppearanceSystem.TryGetData<Color>(uid, ActionState.Color, out var color, args.Component))
         {
             SpriteSystem.LayerSetColor((uid, args.Sprite), ActionVisuals.Icon, color);

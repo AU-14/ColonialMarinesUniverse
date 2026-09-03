@@ -12,13 +12,6 @@
   - type: Appearance
   - type: GenericVisualizer
     visuals:
-      enum.ActionState.Toggled:
-        enum.ActionVisuals.Icon:
-          True: { visible: false }
-          False: { visible: true }
-        enum.ActionVisuals.IconToggled:
-          True: { visible: true }
-          False: { visible: false }
       enum.LimitedChargesState.HasCharges:
         enum.ActionVisuals.Icon:
           True: { color: White }
