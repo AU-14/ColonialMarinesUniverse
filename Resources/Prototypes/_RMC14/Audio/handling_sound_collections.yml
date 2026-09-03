@@ -1,0 +1,9 @@
+- type: soundCollection
+  id: RMCPaperPickup
+  files:
+  - /Audio/_RMC14/Handling/paper_pickup.ogg
+
+- type: soundCollection
+  id: RMCPaperDrop
+  files:
+  - /Audio/_RMC14/Handling/paper_drop.ogg

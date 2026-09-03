@@ -77,17 +77,17 @@
       - Xeno
   - type: EmitSoundOnPickup
     sound:
-      path: /Audio/_RMC14/Handling/paper_pickup.ogg
+      collection: RMCPaperPickup
       params:
         volume: -4
   - type: EmitSoundOnDrop
     sound:
-      path: /Audio/_RMC14/Handling/paper_drop.ogg
+      collection: RMCPaperDrop
       params:
         volume: -5
   - type: EmitSoundOnLand
     sound:
-      path: /Audio/_RMC14/Handling/paper_drop.ogg
+      collection: RMCPaperDrop
       params:
         volume: -5
   - type: Clothing
