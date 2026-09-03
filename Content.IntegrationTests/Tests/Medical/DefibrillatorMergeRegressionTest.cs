@@ -171,7 +171,7 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
             var draw = SEntMan.GetComponent<PowerCellDrawComponent>(defib);
 
             Assert.That(powerCell.TryGetBatteryFromSlot(defib, out var batteryEntity), Is.True);
-            battery.SetCharge(batteryEntity!.Value, draw.UseCharge);
+            battery.SetCharge(batteryEntity!.Value.AsNullable(), draw.UseCharge);
             skills.SetSkill(SPlayer, "RMCSkillMedical", 0);
             component.DoAfterDuration = TimeSpan.FromSeconds(1);
             component.SkillMultiplierDuration = TimeSpan.FromSeconds(3);
@@ -193,7 +193,7 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
                 Assert.That(active[0].Args.RootEntity, Is.True);
                 Assert.That(component.ChargeSoundEntity, Is.Not.Null,
                     "a successful start must track the charging stream");
-                Assert.That(battery.GetCharge(batteryEntity.Value), Is.EqualTo(draw.UseCharge),
+                Assert.That(battery.GetCharge(batteryEntity.Value.AsNullable()), Is.EqualTo(draw.UseCharge),
                     "starting the do-after must not consume the last charge");
             });
 
@@ -205,7 +205,7 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
                     "the rejected duplicate follows SharedDoAfter's cancel-existing contract");
                 Assert.That(component.ChargeSoundEntity, Is.Null,
                     "cancelling the tracked do-after must stop and clear its charging stream");
-                Assert.That(battery.GetCharge(batteryEntity.Value), Is.EqualTo(draw.UseCharge));
+                Assert.That(battery.GetCharge(batteryEntity.Value.AsNullable()), Is.EqualTo(draw.UseCharge));
             });
 
             SEntMan.EnsureComponent<RMCDefibrillatorBlockedComponent>(target);
@@ -260,35 +260,35 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
             var selfProbe = SEntMan.GetComponent<DefibrillatorMergeProbeComponent>(SPlayer);
             var targetProbe = SEntMan.GetComponent<DefibrillatorMergeProbeComponent>(target);
 
-            SetLastCharge(defib, component, batteryEntity!.Value, draw, battery);
+            SetLastCharge(defib, component, batteryEntity!.Value.AsNullable(), draw, battery);
             selfProbe.CancelSelf = true;
             defibrillator.Zap((defib, component), target, SPlayer);
-            Assert.That(battery.GetCharge(batteryEntity.Value), Is.EqualTo(draw.UseCharge),
+            Assert.That(battery.GetCharge(batteryEntity.Value.AsNullable()), Is.EqualTo(draw.UseCharge),
                 "self cancellation must happen before charge consumption");
 
             selfProbe.CancelSelf = false;
             selfProbe.RedirectSelf = blocked;
             defibrillator.Zap((defib, component), target, SPlayer);
-            Assert.That(battery.GetCharge(batteryEntity.Value), Is.EqualTo(draw.UseCharge),
+            Assert.That(battery.GetCharge(batteryEntity.Value.AsNullable()), Is.EqualTo(draw.UseCharge),
                 "a self-event redirect must be revalidated before charge consumption");
 
             selfProbe.RedirectSelf = null;
             targetProbe.CancelTarget = true;
             defibrillator.Zap((defib, component), target, SPlayer);
-            Assert.That(battery.GetCharge(batteryEntity.Value), Is.EqualTo(draw.UseCharge),
+            Assert.That(battery.GetCharge(batteryEntity.Value.AsNullable()), Is.EqualTo(draw.UseCharge),
                 "target cancellation must happen before charge consumption");
 
             targetProbe.CancelTarget = false;
             targetProbe.RedirectTarget = blocked;
             defibrillator.Zap((defib, component), target, SPlayer);
-            Assert.That(battery.GetCharge(batteryEntity.Value), Is.EqualTo(draw.UseCharge),
+            Assert.That(battery.GetCharge(batteryEntity.Value.AsNullable()), Is.EqualTo(draw.UseCharge),
                 "a target-event redirect must be revalidated before charge consumption");
 
             targetProbe.RedirectTarget = null;
             defibrillator.Zap((defib, component), target, SPlayer);
             Assert.Multiple(() =>
             {
-                Assert.That(battery.GetCharge(batteryEntity.Value), Is.EqualTo(0f),
+                Assert.That(battery.GetCharge(batteryEntity.Value.AsNullable()), Is.EqualTo(0f),
                     "a valid use must accept and consume the final available charge");
                 Assert.That(targetProbe.AttemptEvents, Is.Zero,
                     "living targets must not enter the RMC dead-target damage-modification path");
@@ -306,7 +306,7 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
         {
             var targetProbe = SEntMan.GetComponent<DefibrillatorMergeProbeComponent>(target);
             var defibProbe = SEntMan.GetComponent<DefibrillatorMergeProbeComponent>(defib);
-            SetLastCharge(defib, component, batteryEntity!.Value, draw, battery);
+            SetLastCharge(defib, component, batteryEntity!.Value.AsNullable(), draw, battery);
             targetProbe.CancelAttempt = true;
             defibrillator.Zap((defib, component), target, SPlayer);
             Assert.Multiple(() =>
@@ -325,7 +325,7 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
         {
             var targetProbe = SEntMan.GetComponent<DefibrillatorMergeProbeComponent>(target);
             var defibProbe = SEntMan.GetComponent<DefibrillatorMergeProbeComponent>(defib);
-            SetLastCharge(defib, component, batteryEntity.Value, draw, battery);
+            SetLastCharge(defib, component, batteryEntity!.Value.AsNullable(), draw, battery);
             targetProbe.CancelAttempt = false;
             defibrillator.Zap((defib, component), target, SPlayer);
             Assert.Multiple(() =>
@@ -366,7 +366,7 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
             component.RMCZapDamage = null;
             damageable.SetDamage((target, targetDamageable),
                 new DamageSpecifier(ProtoMan.Index(Blunt), FixedPoint2.New(20)));
-            SetLastCharge(defib, component, batteryEntity!.Value, draw, battery);
+            SetLastCharge(defib, component, batteryEntity!.Value.AsNullable(), draw, battery);
 
             defibrillator.Zap((defib, component), target, SPlayer);
             Assert.Multiple(() =>
@@ -374,7 +374,7 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
                 Assert.That(damageable.GetTotalDamage(target), Is.EqualTo(FixedPoint2.New(10)));
                 Assert.That(targetProbe.AttemptEvents, Is.Zero);
                 Assert.That(targetProbe.DefibrillatedEvents, Is.EqualTo(1));
-                Assert.That(battery.GetCharge(batteryEntity.Value), Is.EqualTo(0f));
+                Assert.That(battery.GetCharge(batteryEntity.Value.AsNullable()), Is.EqualTo(0f));
             });
         });
     }
@@ -389,7 +389,7 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
     private void SetLastCharge(
         EntityUid defib,
         DefibrillatorComponent component,
-        Entity<BatteryComponent> batteryEntity,
+        Entity<BatteryComponent?> batteryEntity,
         PowerCellDrawComponent draw,
         BatterySystem battery)
     {
