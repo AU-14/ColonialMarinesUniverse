@@ -48,7 +48,7 @@ public readonly partial record struct RadioFrequency : IComparable<RadioFrequenc
     public static RadioFrequency ParseMegahertz(string text)
     {
         if (!TryParseMegahertz(text, out var frequency))
-            throw new FormatException($"'{text}' is not a non-negative MHz value with at most three decimal places.");
+            throw new ArgumentException($"'{text}' is not a non-negative MHz value with at most three decimal places.", nameof(text));
 
         return frequency;
     }

@@ -312,7 +312,7 @@ public sealed class RadioFrequencyTest : GameTest
     private static void AssertRejects(string text)
     {
         Assert.That(RadioFrequency.TryParseMegahertz(text, out _), Is.False, text);
-        Assert.That(() => RadioFrequency.ParseMegahertz(text), Throws.TypeOf<FormatException>(), text);
+        Assert.That(() => RadioFrequency.ParseMegahertz(text), Throws.TypeOf<ArgumentException>(), text);
     }
 
     private static void AssertReverseLookup(ANPRCFrequencyPlanSystem plan, int kilohertz, string expectedId)
