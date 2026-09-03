@@ -14,6 +14,7 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
+    range: 2
   - type: EntityTargetAction
     event: !type:XenoCorrosiveAcidEvent
       acidId: XenoAcidNormal
