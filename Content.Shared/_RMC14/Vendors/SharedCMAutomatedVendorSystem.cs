@@ -790,7 +790,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         }
         else
         {
-            var spawn = SpawnNextToOrDrop(toVend, vendor);
+            var spawn = SpawnAtPosition(toVend, vendor.ToCoordinates());
             AfterVend(spawn, player, vendor, offset, replaceSlot: replaceSlot);
         }
     }
