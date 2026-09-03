@@ -12,6 +12,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Animations;
 using Robust.Shared.Timing;
+using Content.Shared._RMC14.Requisitions;
 
 namespace Content.Client._RMC14.Requisitions;
 
@@ -23,19 +24,26 @@ public sealed partial class RequisitionsItemizedView : Control
 
     private float _checkoutSequence;
     private float _bootSequence;
+    private float _idleTime;
+    private float _receiptReveal;
     private string _receipt = string.Empty;
     private RequisitionsLayoutRefs _layout = default!;
+    private RequisitionsGhostRoute? _ghostRoute;
+    private LayeredTextureRect? _ghostIcon;
+    private readonly PanelContainer _bootPanel = new();
+    private readonly Label _bootLabel = new();
+    private readonly PanelContainer _idlePanel = new();
+    private readonly Label _idleLabel = new();
 
     public event Action? ItemsRequested;
     public event Action? BundlesRequested;
     public event Action? PlatformRequested;
     public event Action? SearchChanged;
     public event Action? CheckoutRequested;
-    public event Action? LayoutChanged;
-
-    public RequisitionsTerminalStyle TerminalStyle { get; private set; }
-    public RequisitionsTerminalTheme TerminalTheme => RequisitionsTerminalTheme.Get(TerminalStyle);
+    public RequisitionsTerminalTheme CatalogTheme => RequisitionsTerminalTheme.Neutral;
+    public RequisitionsTerminalTheme ManifestTheme => RequisitionsTerminalTheme.Manifest;
     public Control? PackingAnchor { get; set; }
+    public List<Control> PackingAnchors { get; } = new();
 
     public PanelContainer RootPanel => _layout.RootPanel;
     public PanelContainer StatusPanel => _layout.StatusPanel;
@@ -46,6 +54,7 @@ public sealed partial class RequisitionsItemizedView : Control
     public PanelContainer PackingHintPanel => _layout.PackingHintPanel;
     public PanelContainer CheckoutStagePanel => _layout.CheckoutStagePanel;
     public PanelContainer ReceiptPanel => _layout.ReceiptPanel;
+    public PanelContainer ItemPreviewPanel => _layout.ItemPreviewPanel;
     public Label BudgetLabel => _layout.BudgetLabel;
     public Label ProjectedBudgetLabel => _layout.ProjectedBudgetLabel;
     public Label PlatformLabel => _layout.PlatformLabel;
@@ -61,16 +70,20 @@ public sealed partial class RequisitionsItemizedView : Control
     public Label CheckoutPhaseLabel => _layout.CheckoutPhaseLabel;
     public Label ReceiptLabel => _layout.ReceiptLabel;
     public Label StyleSubtitleLabel => _layout.StyleSubtitleLabel;
+    public Label PreviewNameLabel => _layout.PreviewNameLabel;
+    public Label PreviewMetaLabel => _layout.PreviewMetaLabel;
     public Button ItemsTabButton => _layout.ItemsTabButton;
     public Button BundlesTabButton => _layout.BundlesTabButton;
     public Button PlatformButton => _layout.PlatformButton;
-    public Button StyleButton => _layout.StyleButton;
     public Button CheckoutButton => _layout.CheckoutButton;
     public Button ReceiptDismissButton => _layout.ReceiptDismissButton;
     public LineEdit SearchBar => _layout.SearchBar;
     public BoxContainer CategoriesContainer => _layout.CategoriesContainer;
     public BoxContainer ItemsContainer => _layout.ItemsContainer;
     public BoxContainer CartContainer => _layout.CartContainer;
+    public BoxContainer PlatformSlotsContainer => _layout.PlatformSlotsContainer;
+    public RequisitionsTurntablePreview PreviewIcon => _layout.PreviewIcon;
+    public RequisitionsScanLine PreviewScanLine => _layout.PreviewScanLine;
     public ProgressBar CheckoutProgress => _layout.CheckoutProgress;
 
     private static readonly Animation ManifestPulse = new()
@@ -92,24 +105,37 @@ public sealed partial class RequisitionsItemizedView : Control
         },
     };
 
+    private static readonly Animation CatalogPulse = new()
+    {
+        Length = TimeSpan.FromSeconds(0.22),
+        AnimationTracks =
+        {
+            new AnimationTrackControlProperty
+            {
+                Property = nameof(Modulate),
+                InterpolationMode = AnimationInterpolationMode.Linear,
+                KeyFrames =
+                {
+                    new AnimationTrackProperty.KeyFrame(Color.White, 0f),
+                    new AnimationTrackProperty.KeyFrame(RequisitionsTerminalTheme.Neutral.Accent, 0.09f),
+                    new AnimationTrackProperty.KeyFrame(Color.White, 0.13f),
+                },
+            },
+        },
+    };
+
     public RequisitionsItemizedView()
     {
         RobustXamlLoader.Load(this);
         LoadLayout();
+        InitializeDiagnosticOverlays();
     }
 
     private void LoadLayout()
     {
         var search = _layout?.SearchBar.Text ?? string.Empty;
         LayoutHost.RemoveAllChildren();
-        Control layout = TerminalStyle switch
-        {
-            RequisitionsTerminalStyle.WeylandAmber => new RequisitionsManifestLayout(),
-            RequisitionsTerminalStyle.ColonialCyan => new RequisitionsOperatorLayout(),
-            RequisitionsTerminalStyle.UppRedline => new RequisitionsTacticalLayout(),
-            RequisitionsTerminalStyle.FieldMono => new RequisitionsFieldLayout(),
-            _ => new RequisitionsLoadBayLayout(),
-        };
+        Control layout = new RequisitionsLoadBayLayout();
         layout.HorizontalExpand = true;
         layout.VerticalExpand = true;
         LayoutHost.AddChild(layout);
@@ -117,12 +143,11 @@ public sealed partial class RequisitionsItemizedView : Control
         SearchBar.Text = search;
         PackingAnchor = null;
 
-        ItemsTabButton.OnPressed += _ => ItemsRequested?.Invoke();
-        BundlesTabButton.OnPressed += _ => BundlesRequested?.Invoke();
-        PlatformButton.OnPressed += _ => PlatformRequested?.Invoke();
-        SearchBar.OnTextChanged += _ => SearchChanged?.Invoke();
+        ItemsTabButton.OnPressed += _ => { NotifyActivity(); ItemsRequested?.Invoke(); };
+        BundlesTabButton.OnPressed += _ => { NotifyActivity(); BundlesRequested?.Invoke(); };
+        PlatformButton.OnPressed += _ => { NotifyActivity(); PlatformRequested?.Invoke(); };
+        SearchBar.OnTextChanged += _ => { NotifyActivity(); SearchChanged?.Invoke(); };
         CheckoutButton.OnPressed += _ => CheckoutRequested?.Invoke();
-        StyleButton.OnPressed += _ => CycleStyle();
         ReceiptDismissButton.OnPressed += _ => ReceiptPanel.Visible = false;
         ApplyTheme();
         _bootSequence = 0.001f;
@@ -131,7 +156,8 @@ public sealed partial class RequisitionsItemizedView : Control
     public void ApplyTheme()
     {
         CrtLobbyTheme.Apply(this, useCrtTypography: true);
-        var theme = TerminalTheme;
+        var theme = CatalogTheme;
+        var manifest = ManifestTheme;
         foreach (var label in this.GetControlOfType<Label>(true))
             label.FontColorOverride = theme.Text;
         foreach (var scrollBar in this.GetControlOfType<ScrollBar>(true))
@@ -139,48 +165,44 @@ public sealed partial class RequisitionsItemizedView : Control
         SearchBar.RemoveStyleClass(StyleNano.StyleClassCrtLineEdit);
         SearchBar.RemoveStyleClass(StyleNano.StyleClassCrtNativeLineEdit);
         SearchBar.StyleBoxOverride = theme.Panel(theme.Background, corners: true);
-        RootPanel.PanelOverride = theme.Panel(theme.Background, grid: TerminalStyle == RequisitionsTerminalStyle.WeylandAmber);
+        RootPanel.PanelOverride = theme.Panel(theme.Background, corners: true);
         StatusPanel.PanelOverride = theme.Panel(theme.SurfaceSelected);
         FilterPanel.PanelOverride = theme.Panel(theme.Surface);
-        CatalogPanel.PanelOverride = theme.Panel(theme.Surface, grid: TerminalStyle == RequisitionsTerminalStyle.ColonialCyan);
-        CartPanel.PanelOverride = theme.Panel(theme.Surface, corners: true);
-        CartSummaryPanel.PanelOverride = theme.Panel(theme.SurfaceRaised);
+        CatalogPanel.PanelOverride = theme.Panel(theme.Surface);
+        CartPanel.PanelOverride = manifest.Panel(manifest.Surface, grid: true, corners: true);
+        CartSummaryPanel.PanelOverride = manifest.Panel(manifest.SurfaceRaised);
         PackingHintPanel.PanelOverride = theme.Panel(theme.SurfaceRaised);
-        CheckoutStagePanel.PanelOverride = theme.Panel(theme.SurfaceSelected, corners: true);
-        ReceiptPanel.PanelOverride = theme.Panel(theme.SurfaceSelected, corners: true);
+        CheckoutStagePanel.PanelOverride = manifest.Panel(manifest.SurfaceSelected, corners: true);
+        ReceiptPanel.PanelOverride = manifest.Panel(manifest.SurfaceSelected, corners: true);
+        ItemPreviewPanel.PanelOverride = theme.Panel(theme.SurfaceRaised, grid: true, corners: true);
+        foreach (var label in CartPanel.GetControlOfType<Label>(true))
+            label.FontColorOverride = manifest.Text;
 
         BudgetLabel.FontColorOverride = theme.TextBright;
         ProjectedBudgetLabel.FontColorOverride = theme.Caution;
         PlatformLabel.FontColorOverride = theme.Text;
         ResultCountLabel.FontColorOverride = theme.TextDim;
         PackingHintLabel.FontColorOverride = theme.Accent;
-        CartStateLabel.FontColorOverride = theme.Accent;
-        FeedbackLabel.FontColorOverride = theme.Caution;
-        CheckoutPhaseLabel.FontColorOverride = theme.TextBright;
-        StyleSubtitleLabel.Text = theme.Name;
+        CartStateLabel.FontColorOverride = manifest.Accent;
+        FeedbackLabel.FontColorOverride = manifest.Caution;
+        CheckoutPhaseLabel.FontColorOverride = manifest.TextBright;
         StyleSubtitleLabel.FontColorOverride = theme.TextDim;
-        StyleButton.Text = $"LAYOUT {(int) TerminalStyle + 1}/5  //  {theme.Subtitle}";
-        CrtOverlay.SetProfile(TerminalStyle, theme.Accent);
+        PreviewNameLabel.FontColorOverride = theme.TextBright;
+        PreviewMetaLabel.FontColorOverride = theme.TextDim;
+        PreviewScanLine.Color = theme.Accent.WithAlpha(0.48f);
+        CrtOverlay.SetManifestTarget(CartPanel, manifest.Accent);
 
         theme.ApplyButton(ItemsTabButton, primary: true);
         theme.ApplyButton(BundlesTabButton);
         theme.ApplyButton(PlatformButton);
-        theme.ApplyButton(StyleButton, primary: true);
-        theme.ApplyButton(CheckoutButton, primary: true);
-        theme.ApplyButton(ReceiptDismissButton);
+        manifest.ApplyButton(CheckoutButton, primary: true);
+        manifest.ApplyButton(ReceiptDismissButton);
 
-        CheckoutProgress.BackgroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = theme.Background };
-        CheckoutProgress.ForegroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = theme.Accent };
+        CheckoutProgress.BackgroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = manifest.Background };
+        CheckoutProgress.ForegroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = manifest.Accent };
     }
 
-    public void CycleStyle()
-    {
-        TerminalStyle = RequisitionsTerminalTheme.Next(TerminalStyle);
-        LoadLayout();
-        LayoutChanged?.Invoke();
-    }
-
-    public void PlayItemAddedAnimation(LayeredTextureRect source)
+    public void PlayItemAddedAnimation(LayeredTextureRect source, IReadOnlyList<string> categories)
     {
         if (!source.IsInsideTree || !AnimationLayer.IsInsideTree)
             return;
@@ -190,7 +212,8 @@ public sealed partial class RequisitionsItemizedView : Control
         var target = PackingAnchor is { IsInsideTree: true } ? PackingAnchor : CartPanel;
         var targetCenter = target.GlobalPosition - AnimationLayer.GlobalPosition + target.Size / 2f;
         var end = targetCenter - iconSize / 2f;
-        var flyout = new RequisitionsItemFlyout(source.Textures.ToList(), start, end, iconSize);
+        var kind = GetTrailKind(categories);
+        var flyout = new RequisitionsItemFlyout(source.Textures.ToList(), start, end, iconSize, kind, GetTrailColor(kind));
         flyout.Landed += PlayManifestPulse;
         AnimationLayer.AddChild(flyout);
     }
@@ -215,11 +238,13 @@ public sealed partial class RequisitionsItemizedView : Control
         CheckoutPhaseLabel.Text = Loc.GetString("cmu-asrs-phase-verifying");
         CheckoutProgress.Value = 0.12f;
         _checkoutSequence = -1f;
+        NotifyActivity();
     }
 
     public void CompleteCheckout(string receipt)
     {
         _receipt = receipt;
+        _receiptReveal = 0;
         _checkoutSequence = 0.001f;
         CheckoutStagePanel.Visible = true;
     }
@@ -241,6 +266,102 @@ public sealed partial class RequisitionsItemizedView : Control
         }
     }
 
+    public void PlayDispatchConveyor(int count)
+    {
+        var cards = CartContainer.GetControlOfType<RequisitionsCrateCard>(true).Take(Math.Max(1, count)).ToList();
+        for (var i = 0; i < cards.Count; i++)
+        {
+            var start = cards[i].GlobalPosition - AnimationLayer.GlobalPosition;
+            var end = new Vector2(AnimationLayer.Width + 220, start.Y);
+            AnimationLayer.AddChild(new RequisitionsConveyorCrate(start, end, i + 1, 0.38f + i * 0.12f));
+        }
+    }
+
+    public void ShowPackingPreview(
+        RequisitionsItemEntry item,
+        LayeredTextureRect source,
+        int destination,
+        int projectedWeight,
+        int weightLimit)
+    {
+        if (!source.IsInsideTree)
+            return;
+
+        NotifyActivity();
+        ItemPreviewPanel.Visible = true;
+        PreviewIcon.Textures = source.Textures.ToList();
+        PreviewNameLabel.Text = item.Name;
+        PreviewMetaLabel.Text = destination < 0
+            ? Loc.GetString("cmu-asrs-preview-loose", ("weight", item.Weight))
+            : Loc.GetString("cmu-asrs-preview-crate", ("crate", destination + 1), ("weight", projectedWeight), ("limit", weightLimit));
+
+        HideGhostRoute();
+        if (destination < 0)
+            return;
+
+        var start = source.GlobalPosition - AnimationLayer.GlobalPosition + source.Size / 2f;
+        var anchor = destination < PackingAnchors.Count ? PackingAnchors[destination] : CartPanel;
+        var end = anchor.GlobalPosition - AnimationLayer.GlobalPosition + anchor.Size / 2f;
+        _ghostIcon = new LayeredTextureRect
+        {
+            Textures = source.Textures.ToList(),
+            SetSize = new Vector2(36, 36),
+            Stretch = TextureRect.StretchMode.KeepAspectCentered,
+            Modulate = GetTrailColor(GetTrailKind(item.Categories)).WithAlpha(0.42f),
+            MouseFilter = MouseFilterMode.Ignore,
+        };
+        LayoutContainer.SetPosition(_ghostIcon, end - new Vector2(18));
+        AnimationLayer.AddChild(_ghostIcon);
+        _ghostRoute = new RequisitionsGhostRoute
+        {
+            Start = start,
+            End = end,
+            Color = GetTrailColor(GetTrailKind(item.Categories)),
+            HorizontalExpand = true,
+            VerticalExpand = true,
+        };
+        AnimationLayer.AddChild(_ghostRoute);
+    }
+
+    public void HidePackingPreview()
+    {
+        ItemPreviewPanel.Visible = false;
+        HideGhostRoute();
+    }
+
+    public void SetBudget(int balance, int projected)
+    {
+        if (BudgetLabel is RequisitionsRollingLabel budget)
+            budget.SetTarget(balance, Loc.GetString("cmu-asrs-budget-prefix"));
+        if (ProjectedBudgetLabel is RequisitionsRollingLabel after)
+            after.SetTarget(projected, Loc.GetString("cmu-asrs-after-prefix"));
+    }
+
+    public void SetPlatformSlots(int available, int used)
+    {
+        PlatformSlotsContainer.RemoveAllChildren();
+        var shown = Math.Min(Math.Max(available, used), 8);
+        for (var i = 0; i < shown; i++)
+        {
+            var filled = i < used;
+            var overflow = i >= available;
+            PlatformSlotsContainer.AddChild(new Label
+            {
+                Text = filled ? "▣" : "□",
+                ToolTip = overflow ? Loc.GetString("cmu-asrs-slot-overflow") : Loc.GetString(filled ? "cmu-asrs-slot-filled" : "cmu-asrs-slot-free"),
+                FontColorOverride = overflow ? ManifestTheme.Alert : filled ? ManifestTheme.Accent : ManifestTheme.TextDim,
+            });
+        }
+        if (Math.Max(available, used) > shown)
+            PlatformSlotsContainer.AddChild(new Label { Text = $"+{Math.Max(available, used) - shown}", FontColorOverride = ManifestTheme.TextDim });
+    }
+
+    public void NotifyActivity()
+    {
+        _idleTime = 0;
+        _idlePanel.Visible = false;
+    }
+
     public void RejectCheckout()
     {
         _checkoutSequence = 0;
@@ -254,11 +375,32 @@ public sealed partial class RequisitionsItemizedView : Control
         if (_bootSequence > 0)
         {
             _bootSequence += args.DeltaSeconds;
-            var progress = Math.Min(1f, _bootSequence / 0.28f);
-            RootPanel.Modulate = Color.InterpolateBetween(TerminalTheme.Accent.WithAlpha(0.34f), Color.White, progress);
+            var progress = Math.Min(1f, _bootSequence / 1.45f);
+            RootPanel.Modulate = Color.InterpolateBetween(CatalogTheme.Accent.WithAlpha(0.34f), Color.White, Math.Min(1f, progress * 2f));
+            _bootLabel.Text = Loc.GetString(progress switch
+            {
+                < 0.24f => "cmu-asrs-boot-bus",
+                < 0.48f => "cmu-asrs-boot-cranes",
+                < 0.72f => "cmu-asrs-boot-scale",
+                < 0.92f => "cmu-asrs-boot-manifest",
+                _ => "cmu-asrs-boot-ready",
+            });
             if (progress >= 1f)
+            {
                 _bootSequence = 0;
+                _bootPanel.Visible = false;
+            }
         }
+
+        _idleTime += args.DeltaSeconds;
+        if (_idleTime > 38f && _checkoutSequence <= 0)
+        {
+            _idlePanel.Visible = true;
+            _idleLabel.Text = Loc.GetString("cmu-asrs-idle", ("position", (int) (_idleTime * 7) % 100));
+        }
+
+        var scanY = 5f + (_idleTime * 31f) % 84f;
+        LayoutContainer.SetPosition(PreviewScanLine, new Vector2(0, scanY));
 
         if (_checkoutSequence <= 0)
             return;
@@ -278,8 +420,12 @@ public sealed partial class RequisitionsItemizedView : Control
 
         _checkoutSequence = 0;
         CheckoutStagePanel.Visible = false;
-        ReceiptLabel.Text = _receipt;
         ReceiptPanel.Visible = true;
+        _receiptReveal += args.DeltaSeconds * 34f;
+        var count = Math.Min(_receipt.Length, (int) _receiptReveal);
+        ReceiptLabel.Text = _receipt[..count] + (count < _receipt.Length ? "█" : string.Empty);
+        if (count < _receipt.Length)
+            _checkoutSequence = 1.46f;
     }
 
     private void PlayManifestPulse()
@@ -300,6 +446,64 @@ public sealed partial class RequisitionsItemizedView : Control
 
         if (CatalogPanel.HasRunningAnimation(CatalogPulseKey))
             CatalogPanel.StopAnimation(CatalogPulseKey);
-        CatalogPanel.PlayAnimation(ManifestPulse, CatalogPulseKey);
+        CatalogPanel.PlayAnimation(CatalogPulse, CatalogPulseKey);
+    }
+
+    private void HideGhostRoute()
+    {
+        _ghostRoute?.Orphan();
+        _ghostRoute = null;
+        _ghostIcon?.Orphan();
+        _ghostIcon = null;
+    }
+
+    private void InitializeDiagnosticOverlays()
+    {
+        _bootPanel.SetSize = new Vector2(430, 150);
+        _bootPanel.PanelOverride = CatalogTheme.Panel(CatalogTheme.SurfaceSelected, grid: true, corners: true);
+        _bootPanel.MouseFilter = MouseFilterMode.Ignore;
+        _bootLabel.Margin = new Thickness(18);
+        _bootLabel.FontColorOverride = CatalogTheme.TextBright;
+        _bootPanel.AddChild(_bootLabel);
+        AnimationLayer.AddChild(_bootPanel);
+
+        _idlePanel.SetSize = new Vector2(430, 150);
+        _idlePanel.PanelOverride = CatalogTheme.Panel(CatalogTheme.Background, grid: true, corners: true);
+        _idlePanel.MouseFilter = MouseFilterMode.Ignore;
+        _idlePanel.Visible = false;
+        _idleLabel.Margin = new Thickness(18);
+        _idleLabel.FontColorOverride = CatalogTheme.TextDim;
+        _idlePanel.AddChild(_idleLabel);
+        AnimationLayer.AddChild(_idlePanel);
+    }
+
+    private static RequisitionsTrailKind GetTrailKind(IReadOnlyList<string> categories)
+    {
+        if (categories.Any(category => category.Contains("medical", StringComparison.OrdinalIgnoreCase)))
+            return RequisitionsTrailKind.MedicalPulse;
+        if (categories.Any(category => category.Contains("ammo", StringComparison.OrdinalIgnoreCase) || category.Contains("weapon", StringComparison.OrdinalIgnoreCase)))
+            return RequisitionsTrailKind.AmmoTracer;
+        if (categories.Any(category => category.Contains("engineering", StringComparison.OrdinalIgnoreCase) || category.Contains("material", StringComparison.OrdinalIgnoreCase) || category.Contains("machine", StringComparison.OrdinalIgnoreCase)))
+            return RequisitionsTrailKind.EngineeringSparks;
+        return RequisitionsTrailKind.Phosphor;
+    }
+
+    private Color GetTrailColor(RequisitionsTrailKind kind)
+    {
+        return kind switch
+        {
+            RequisitionsTrailKind.MedicalPulse => Color.FromHex("#62D9FF"),
+            RequisitionsTrailKind.AmmoTracer => Color.FromHex("#FF774D"),
+            RequisitionsTrailKind.EngineeringSparks => Color.FromHex("#FFC24F"),
+            _ => ManifestTheme.Accent,
+        };
+    }
+
+    protected override void Resized()
+    {
+        base.Resized();
+        var center = new Vector2(Math.Max(0, Width / 2f - 215), Math.Max(0, Height / 2f - 75));
+        LayoutContainer.SetPosition(_bootPanel, center);
+        LayoutContainer.SetPosition(_idlePanel, center);
     }
 }

@@ -7,7 +7,7 @@ namespace Content.Client._RMC14.Requisitions;
 public sealed class RequisitionsWeightBar : ProgressBar
 {
     private float _target;
-    private RequisitionsTerminalTheme _theme = RequisitionsTerminalTheme.Get(RequisitionsTerminalStyle.UsmcPhosphor);
+    private RequisitionsTerminalTheme _theme = RequisitionsTerminalTheme.Manifest;
 
     public RequisitionsWeightBar()
     {

@@ -47,6 +47,11 @@ public sealed class RequisitionsCrateCard : PanelContainer
         header.AddChild(new Label { Text = state, FontColorOverride = theme.Accent });
         root.AddChild(header);
 
+        var sealedCrate = weight >= weightLimit;
+        root.AddChild(new RequisitionsSealStrip(sealedCrate));
+        if (sealedCrate)
+            root.AddChild(new RequisitionsSealStamp($"ASRS-{title.Sum(character => character) % 10000:0000}"));
+
         var barRow = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,

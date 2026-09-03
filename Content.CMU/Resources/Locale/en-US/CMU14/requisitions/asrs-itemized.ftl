@@ -62,3 +62,39 @@ cmu-asrs-receipt-summary = CHARGED: ${ $cost }
     CARGO: { $weight } WT
     SHIPMENTS: { $crates }
 cmu-asrs-receipt-dismiss = RETURN TO CATALOG
+cmu-asrs-preview-crate = ROUTE: CRATE { $crate } // { $weight }/{ $limit } WT
+cmu-asrs-preview-loose = ROUTE: UNCRATED LOAD // { $weight } WT
+cmu-asrs-slot-filled = Shipment occupies this platform slot
+cmu-asrs-slot-free = Platform slot available
+cmu-asrs-slot-overflow = Shipment exceeds available platform space
+cmu-asrs-boot-bus = ASRS/88 LOAD CONTROL
+    [01] POLLING STORAGE BUS...
+    [02] WAITING FOR BAY TELEMETRY
+cmu-asrs-boot-cranes = ASRS/88 LOAD CONTROL
+    [OK] STORAGE BUS
+    [03] HOMING CRANE SERVOS...
+cmu-asrs-boot-scale = ASRS/88 LOAD CONTROL
+    [OK] CRANE DATUM
+    [04] ZEROING CARGO SCALES...
+cmu-asrs-boot-manifest = ASRS/88 LOAD CONTROL
+    [OK] WEIGHT CELLS
+    [05] MOUNTING MANIFEST VOLUME...
+cmu-asrs-boot-ready = ASRS/88 LOAD CONTROL
+    ALL SYSTEMS NOMINAL // LOAD BAY READY
+cmu-asrs-idle = ASRS LOAD BAY // STANDBY
+    ═══════════════════════════════════
+    CRANE POSITION { $position } // AWAITING MANIFEST
+    STORAGE BUS QUIET // PLATFORM MONITOR ACTIVE
+cmu-asrs-load-bay = LOAD BAY //
+cmu-asrs-load-control = INDUSTRIAL LOAD CONTROL
+cmu-asrs-catalog-index = CATALOG INDEX
+cmu-asrs-holographic-inspection = HOLOGRAPHIC INSPECTION
+cmu-asrs-feed-rack = FEED RACK
+cmu-asrs-physical-manifest = PHYSICAL LOADING MANIFEST
+cmu-asrs-platform-slots = PLATFORM SLOTS
+cmu-asrs-line-printer = LINE PRINTER // DISPATCH RECEIPT
+cmu-asrs-seal-dispatch = SEAL & DISPATCH
+cmu-asrs-budget-prefix = BUDGET:
+cmu-asrs-after-prefix = AFTER:
+cmu-asrs-conveyor-crate = ▥  CRATE { $number }  //  SEALED
+cmu-asrs-seal-stamp = { $code } // SEALED

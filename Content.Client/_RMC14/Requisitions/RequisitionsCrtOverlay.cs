@@ -7,7 +7,7 @@ using Robust.Shared.Timing;
 namespace Content.Client._RMC14.Requisitions;
 
 /// <summary>
-/// Lightweight, root-level ASRS CRT pass. It deliberately avoids the old render-texture shader.
+/// Lightweight CRT pass. Neutral scanlines cover the terminal; green phosphor is clipped to the manifest.
 /// </summary>
 public sealed class RequisitionsCrtOverlay : Control
 {
@@ -15,7 +15,7 @@ public sealed class RequisitionsCrtOverlay : Control
     private float _glitch;
     private float _activity;
     private Color _accent = Color.Green;
-    private RequisitionsTerminalStyle _style;
+    private Control? _manifest;
 
     public RequisitionsCrtOverlay()
     {
@@ -23,21 +23,14 @@ public sealed class RequisitionsCrtOverlay : Control
         CanKeyboardFocus = false;
     }
 
-    public void SetProfile(RequisitionsTerminalStyle style, Color accent)
+    public void SetManifestTarget(Control manifest, Color accent)
     {
-        _style = style;
+        _manifest = manifest;
         _accent = accent;
     }
 
-    public void TriggerActivity()
-    {
-        _activity = 0.28f;
-    }
-
-    public void TriggerGlitch()
-    {
-        _glitch = 0.24f;
-    }
+    public void TriggerActivity() => _activity = 0.28f;
+    public void TriggerGlitch() => _glitch = 0.24f;
 
     protected override void FrameUpdate(FrameEventArgs args)
     {
@@ -52,101 +45,35 @@ public sealed class RequisitionsCrtOverlay : Control
         if (!StyleNano.CrtUiEnabled || Width <= 0 || Height <= 0)
             return;
 
-        var rect = PixelSizeBox;
-        DrawScanlines(handle, rect);
-        switch (_style)
-        {
-            case RequisitionsTerminalStyle.WeylandAmber:
-                DrawManifestGrid(handle, rect);
-                break;
-            case RequisitionsTerminalStyle.ColonialCyan:
-                DrawTelemetry(handle, rect);
-                break;
-            case RequisitionsTerminalStyle.UppRedline:
-                DrawTargeting(handle, rect);
-                break;
-            case RequisitionsTerminalStyle.FieldMono:
-                DrawFieldSync(handle, rect);
-                break;
-            default:
-                DrawLoadingGate(handle, rect);
-                break;
-        }
+        var screen = PixelSizeBox;
+        for (var y = 3f; y < screen.Bottom; y += 6f)
+            handle.DrawRect(new UIBox2(screen.Left, y, screen.Right, y + 1), Color.Black.WithAlpha(0.065f));
 
         const float edge = 9;
         var shade = Color.Black.WithAlpha(0.22f);
-        handle.DrawRect(new UIBox2(rect.Left, rect.Top, rect.Right, edge), shade);
-        handle.DrawRect(new UIBox2(rect.Left, rect.Bottom - edge, rect.Right, rect.Bottom), shade);
-        handle.DrawRect(new UIBox2(rect.Left, rect.Top, edge, rect.Bottom), shade);
-        handle.DrawRect(new UIBox2(rect.Right - edge, rect.Top, rect.Right, rect.Bottom), shade);
+        handle.DrawRect(new UIBox2(screen.Left, screen.Top, screen.Right, edge), shade);
+        handle.DrawRect(new UIBox2(screen.Left, screen.Bottom - edge, screen.Right, screen.Bottom), shade);
+        handle.DrawRect(new UIBox2(screen.Left, screen.Top, edge, screen.Bottom), shade);
+        handle.DrawRect(new UIBox2(screen.Right - edge, screen.Top, screen.Right, screen.Bottom), shade);
 
-        if (_glitch <= 0)
-        {
-            if (_activity > 0)
-                handle.DrawRect(rect, _accent.WithAlpha(_activity * 0.08f));
+        if (_manifest is not { IsInsideTree: true })
             return;
-        }
 
-        var band = (_glitch * 997f) % Math.Max(1f, rect.Bottom - 12);
-        handle.DrawRect(new UIBox2(rect.Left, band, rect.Right, band + 6), _accent.WithAlpha(0.22f));
-    }
+        var origin = _manifest.GlobalPosition - GlobalPosition;
+        var manifest = new UIBox2(origin.X, origin.Y, origin.X + _manifest.Width, origin.Y + _manifest.Height);
+        for (var x = manifest.Left + 72; x < manifest.Right; x += 96)
+            handle.DrawRect(new UIBox2(x, manifest.Top, x + 1, manifest.Bottom), _accent.WithAlpha(0.025f));
+        for (var y = manifest.Top + 64; y < manifest.Bottom; y += 64)
+            handle.DrawRect(new UIBox2(manifest.Left, y, manifest.Right, y + 1), _accent.WithAlpha(0.025f));
 
-    private void DrawScanlines(DrawingHandleScreen handle, UIBox2 rect)
-    {
-        var spacing = _style == RequisitionsTerminalStyle.FieldMono ? 8f : 6f;
-        for (var y = 3f; y < rect.Bottom; y += spacing)
-            handle.DrawRect(new UIBox2(rect.Left, y, rect.Right, y + 1), Color.Black.WithAlpha(0.065f));
-    }
-
-    private void DrawLoadingGate(DrawingHandleScreen handle, UIBox2 rect)
-    {
-        var x = (_sweep * 1.7f) % Math.Max(1f, rect.Right);
-        handle.DrawRect(new UIBox2(x, rect.Top, Math.Min(rect.Right, x + 2), rect.Bottom), _accent.WithAlpha(0.045f));
-        for (var tooth = 14f; tooth < rect.Right; tooth += 28f)
-            handle.DrawRect(new UIBox2(tooth, rect.Bottom - 8, tooth + 10, rect.Bottom - 5), _accent.WithAlpha(0.16f));
-    }
-
-    private void DrawManifestGrid(DrawingHandleScreen handle, UIBox2 rect)
-    {
-        for (var x = 72f; x < rect.Right; x += 96f)
-            handle.DrawRect(new UIBox2(x, rect.Top, x + 1, rect.Bottom), _accent.WithAlpha(0.025f));
-        for (var y = 64f; y < rect.Bottom; y += 64f)
-            handle.DrawRect(new UIBox2(rect.Left, y, rect.Right, y + 1), _accent.WithAlpha(0.025f));
-        for (var y = 18f; y < rect.Bottom; y += 24f)
+        var sweep = manifest.Top + _sweep % Math.Max(1, manifest.Height);
+        handle.DrawRect(new UIBox2(manifest.Left, sweep, manifest.Right, Math.Min(manifest.Bottom, sweep + 16)), _accent.WithAlpha(0.025f));
+        if (_activity > 0)
+            handle.DrawRect(manifest, _accent.WithAlpha(_activity * 0.08f));
+        if (_glitch > 0)
         {
-            handle.DrawRect(new UIBox2(rect.Left + 4, y, rect.Left + 7, y + 3), _accent.WithAlpha(0.18f));
-            handle.DrawRect(new UIBox2(rect.Right - 7, y, rect.Right - 4, y + 3), _accent.WithAlpha(0.18f));
+            var band = manifest.Top + (_glitch * 997f) % Math.Max(1f, manifest.Height - 12);
+            handle.DrawRect(new UIBox2(manifest.Left, band, manifest.Right, band + 6), _accent.WithAlpha(0.22f));
         }
-        handle.DrawRect(new UIBox2(rect.Left, _sweep, rect.Right, Math.Min(rect.Bottom, _sweep + 18)), _accent.WithAlpha(0.025f));
-    }
-
-    private void DrawTelemetry(DrawingHandleScreen handle, UIBox2 rect)
-    {
-        var offset = (_sweep * 2f) % 36f;
-        for (var x = -offset; x < rect.Right; x += 36f)
-        {
-            handle.DrawRect(new UIBox2(x, rect.Top + 5, x + 18, rect.Top + 7), _accent.WithAlpha(0.18f));
-            handle.DrawRect(new UIBox2(rect.Right - x - 18, rect.Bottom - 7, rect.Right - x, rect.Bottom - 5), _accent.WithAlpha(0.12f));
-        }
-        handle.DrawRect(new UIBox2(rect.Left, _sweep, rect.Right, Math.Min(rect.Bottom, _sweep + 1)), _accent.WithAlpha(0.09f));
-    }
-
-    private void DrawTargeting(DrawingHandleScreen handle, UIBox2 rect)
-    {
-        var centerX = rect.Width * 0.5f;
-        var centerY = rect.Height * 0.5f;
-        var pulse = 14f + MathF.Sin(_sweep * 0.04f) * 4f;
-        handle.DrawRect(new UIBox2(centerX - pulse, centerY, centerX - 4, centerY + 1), _accent.WithAlpha(0.1f));
-        handle.DrawRect(new UIBox2(centerX + 4, centerY, centerX + pulse, centerY + 1), _accent.WithAlpha(0.1f));
-        handle.DrawRect(new UIBox2(centerX, centerY - pulse, centerX + 1, centerY - 4), _accent.WithAlpha(0.1f));
-        handle.DrawRect(new UIBox2(centerX, centerY + 4, centerX + 1, centerY + pulse), _accent.WithAlpha(0.1f));
-        handle.DrawRect(new UIBox2(rect.Left, _sweep, rect.Right, Math.Min(rect.Bottom, _sweep + 2)), _accent.WithAlpha(0.075f));
-    }
-
-    private void DrawFieldSync(DrawingHandleScreen handle, UIBox2 rect)
-    {
-        var y = (_sweep * 1.35f) % Math.Max(1f, rect.Bottom);
-        handle.DrawRect(new UIBox2(rect.Left, y, rect.Right, Math.Min(rect.Bottom, y + 2)), Color.White.WithAlpha(0.045f));
-        handle.DrawRect(new UIBox2(rect.Left, Math.Min(rect.Bottom, y + 4), rect.Right, Math.Min(rect.Bottom, y + 5)), Color.Black.WithAlpha(0.12f));
     }
 }

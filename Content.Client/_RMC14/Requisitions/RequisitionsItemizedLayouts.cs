@@ -9,26 +9,6 @@ public sealed partial class RequisitionsLoadBayLayout : Control
     public RequisitionsLoadBayLayout() => RobustXamlLoader.Load(this);
 }
 
-public sealed partial class RequisitionsManifestLayout : Control
-{
-    public RequisitionsManifestLayout() => RobustXamlLoader.Load(this);
-}
-
-public sealed partial class RequisitionsOperatorLayout : Control
-{
-    public RequisitionsOperatorLayout() => RobustXamlLoader.Load(this);
-}
-
-public sealed partial class RequisitionsTacticalLayout : Control
-{
-    public RequisitionsTacticalLayout() => RobustXamlLoader.Load(this);
-}
-
-public sealed partial class RequisitionsFieldLayout : Control
-{
-    public RequisitionsFieldLayout() => RobustXamlLoader.Load(this);
-}
-
 public sealed class RequisitionsLayoutRefs
 {
     public readonly Control Layout;
@@ -41,6 +21,7 @@ public sealed class RequisitionsLayoutRefs
     public readonly PanelContainer PackingHintPanel;
     public readonly PanelContainer CheckoutStagePanel;
     public readonly PanelContainer ReceiptPanel;
+    public readonly PanelContainer ItemPreviewPanel;
     public readonly Label BudgetLabel;
     public readonly Label ProjectedBudgetLabel;
     public readonly Label PlatformLabel;
@@ -56,17 +37,21 @@ public sealed class RequisitionsLayoutRefs
     public readonly Label CheckoutPhaseLabel;
     public readonly Label ReceiptLabel;
     public readonly Label StyleSubtitleLabel;
+    public readonly Label PreviewNameLabel;
+    public readonly Label PreviewMetaLabel;
     public readonly Button ItemsTabButton;
     public readonly Button BundlesTabButton;
     public readonly Button PlatformButton;
-    public readonly Button StyleButton;
     public readonly Button CheckoutButton;
     public readonly Button ReceiptDismissButton;
     public readonly LineEdit SearchBar;
     public readonly BoxContainer CategoriesContainer;
     public readonly BoxContainer ItemsContainer;
     public readonly BoxContainer CartContainer;
+    public readonly BoxContainer PlatformSlotsContainer;
     public readonly ProgressBar CheckoutProgress;
+    public readonly RequisitionsTurntablePreview PreviewIcon;
+    public readonly RequisitionsScanLine PreviewScanLine;
 
     public RequisitionsLayoutRefs(Control layout)
     {
@@ -80,6 +65,7 @@ public sealed class RequisitionsLayoutRefs
         PackingHintPanel = Find<PanelContainer>("PackingHintPanel");
         CheckoutStagePanel = Find<PanelContainer>("CheckoutStagePanel");
         ReceiptPanel = Find<PanelContainer>("ReceiptPanel");
+        ItemPreviewPanel = Find<PanelContainer>("ItemPreviewPanel");
         BudgetLabel = Find<Label>("BudgetLabel");
         ProjectedBudgetLabel = Find<Label>("ProjectedBudgetLabel");
         PlatformLabel = Find<Label>("PlatformLabel");
@@ -95,17 +81,21 @@ public sealed class RequisitionsLayoutRefs
         CheckoutPhaseLabel = Find<Label>("CheckoutPhaseLabel");
         ReceiptLabel = Find<Label>("ReceiptLabel");
         StyleSubtitleLabel = Find<Label>("StyleSubtitleLabel");
+        PreviewNameLabel = Find<Label>("PreviewNameLabel");
+        PreviewMetaLabel = Find<Label>("PreviewMetaLabel");
         ItemsTabButton = Find<Button>("ItemsTabButton");
         BundlesTabButton = Find<Button>("BundlesTabButton");
         PlatformButton = Find<Button>("PlatformButton");
-        StyleButton = Find<Button>("StyleButton");
         CheckoutButton = Find<Button>("CheckoutButton");
         ReceiptDismissButton = Find<Button>("ReceiptDismissButton");
         SearchBar = Find<LineEdit>("SearchBar");
         CategoriesContainer = Find<BoxContainer>("CategoriesContainer");
         ItemsContainer = Find<BoxContainer>("ItemsContainer");
         CartContainer = Find<BoxContainer>("CartContainer");
+        PlatformSlotsContainer = Find<BoxContainer>("PlatformSlotsContainer");
         CheckoutProgress = Find<ProgressBar>("CheckoutProgress");
+        PreviewIcon = Find<RequisitionsTurntablePreview>("PreviewIcon");
+        PreviewScanLine = Find<RequisitionsScanLine>("PreviewScanLine");
     }
 
     private T Find<T>(string name) where T : Control

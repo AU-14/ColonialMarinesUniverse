@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -19,7 +20,11 @@ internal sealed class RequisitionsItemFlyout : LayeredTextureRect
 
     private readonly Vector2 _end;
     private readonly Vector2 _start;
+    private readonly RequisitionsTrailKind _trailKind;
+    private readonly Color _trailColor;
+    private readonly Vector2 _size;
     private float _elapsed;
+    private float _trailClock;
     private bool _finished;
 
     public event Action? Landed;
@@ -28,10 +33,15 @@ internal sealed class RequisitionsItemFlyout : LayeredTextureRect
         List<Texture> textures,
         Vector2 start,
         Vector2 end,
-        Vector2 size)
+        Vector2 size,
+        RequisitionsTrailKind trailKind = RequisitionsTrailKind.Phosphor,
+        Color? trailColor = null)
     {
         _start = start;
         _end = end;
+        _size = size;
+        _trailKind = trailKind;
+        _trailColor = trailColor ?? RequisitionsTerminalTheme.Manifest.Accent;
 
         Textures = textures;
         SetSize = size;
@@ -53,6 +63,25 @@ internal sealed class RequisitionsItemFlyout : LayeredTextureRect
         var position = Vector2.Lerp(_start, _end, eased);
         position.Y -= MathF.Sin(progress * MathF.PI) * ArcHeight;
         LayoutContainer.SetPosition(this, position);
+
+        _trailClock += args.DeltaSeconds;
+        if (_trailClock >= 0.045f && Parent is { } parent)
+        {
+            _trailClock = 0;
+            var textures = Textures.ToList();
+            var afterimage = new RequisitionsAfterimage(textures, position, _size, _trailColor);
+            var particle = new RequisitionsTrailParticle(position + _size / 2f, _trailKind, _trailColor);
+            UserInterfaceManager.DeferAction(() =>
+            {
+                if (!parent.Disposed)
+                {
+                    parent.AddChild(afterimage);
+                    afterimage.SetPositionInParent(Math.Max(0, GetPositionInParent()));
+                    if (_trailKind != RequisitionsTrailKind.Phosphor)
+                        parent.AddChild(particle);
+                }
+            });
+        }
 
         if (progress >= FadeStart)
         {
