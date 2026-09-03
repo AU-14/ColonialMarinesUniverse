@@ -6,6 +6,8 @@
   components:
   - type: Vehicle
     movementKind: Grid
+    transferDamage: false
+  - type: VehicleOperatorDamage
   - type: Clickable
   - type: Tag
     tags:
