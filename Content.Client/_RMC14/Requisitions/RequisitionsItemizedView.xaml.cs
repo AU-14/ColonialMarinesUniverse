@@ -43,7 +43,7 @@ public sealed partial class RequisitionsItemizedView : Control
     public RequisitionsTerminalTheme CatalogTheme => RequisitionsTerminalTheme.Neutral;
     public RequisitionsTerminalTheme ManifestTheme => RequisitionsTerminalTheme.Manifest;
     public Control? PackingAnchor { get; set; }
-    public List<Control> PackingAnchors { get; } = new();
+    public Dictionary<int, Control> PackingAnchors { get; } = new();
 
     public PanelContainer RootPanel => _layout.RootPanel;
     public PanelContainer StatusPanel => _layout.StatusPanel;
@@ -300,7 +300,7 @@ public sealed partial class RequisitionsItemizedView : Control
             return;
 
         var start = source.GlobalPosition - AnimationLayer.GlobalPosition + source.Size / 2f;
-        var anchor = destination < PackingAnchors.Count ? PackingAnchors[destination] : CartPanel;
+        var anchor = PackingAnchors.GetValueOrDefault(destination, CartPanel);
         var end = anchor.GlobalPosition - AnimationLayer.GlobalPosition + anchor.Size / 2f;
         _ghostIcon = new LayeredTextureRect
         {

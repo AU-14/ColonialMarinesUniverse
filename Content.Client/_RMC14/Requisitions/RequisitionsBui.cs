@@ -31,8 +31,11 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     private readonly Dictionary<(int Category, int Order), RequisitionsStockInfo> _stock = new();
     private readonly Dictionary<EntProtoId, RequisitionsItemStockInfo> _itemStock = new();
     private readonly Dictionary<EntProtoId, int> _cart = new();
+    private readonly Dictionary<int, (string Signature, RequisitionsCrateCard Card)> _crateCards = new();
     private readonly HashSet<EntProtoId> _favorites = new();
+    private readonly Dictionary<EntProtoId, RequisitionsItemRow> _itemRows = new();
     private readonly List<EntProtoId> _recent = new();
+    private readonly List<RequisitionsCrateCard> _looseCards = new();
     private RequisitionsBuiState? _lastState;
     private bool? _raisePlatform;
     private bool _previewOpen;
@@ -54,6 +57,9 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         base.Open();
         _window = this.CreateWindow<RequisitionsWindow>();
         _cart.Clear();
+        _crateCards.Clear();
+        _itemRows.Clear();
+        _looseCards.Clear();
 
         _window.MainView.OrderItemsButton.OnPressed += _ => ShowView(_window, _window.OrderCategoriesView);
         _window.MainView.PlatformButton.OnPressed += _ => TrySendPlatformMessage();
@@ -265,6 +271,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             AddItemCategoryButton(category, category);
 
         view.ItemsContainer.RemoveAllChildren();
+        _itemRows.Clear();
         var filter = view.SearchBar.Text?.Trim();
         var visible = 0;
         for (var catalogIndex = 0; catalogIndex < computer.ItemCatalog.Count; catalogIndex++)
@@ -304,6 +311,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             row.OnMouseEntered += _ => PreviewPacking(item, row.ItemIcon, computer);
             row.OnMouseExited += _ => view.HidePackingPreview();
             view.ItemsContainer.AddChild(row);
+            _itemRows[item.Prototype] = row;
             visible++;
         }
 
@@ -366,7 +374,8 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         _window.ItemizedView.PlayItemAddedAnimation(sourceIcon, item.Categories);
         _window.ItemizedView.NotifyActivity();
         PlayUiSound("/Audio/UserInterface/click.ogg", -8f);
-        RebuildItemizedBrowser();
+        RefreshItemRow(item);
+        RebuildCart(computer);
     }
 
     private void RemoveFromCart(EntProtoId prototype, LayeredTextureRect sourceIcon)
@@ -381,13 +390,17 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             _cart.Remove(prototype);
         else
             _cart[prototype] = amount - 1;
-        RebuildItemizedBrowser();
+        if (_entities.TryGetComponent(Owner, out RequisitionsComputerComponent? computer) &&
+            computer.ItemCatalog.FirstOrDefault(item => item.Prototype == prototype) is { } item)
+        {
+            RefreshItemRow(item);
+            RebuildCart(computer);
+        }
     }
 
     private void RebuildCart(RequisitionsComputerComponent computer)
     {
         var view = _window!.ItemizedView;
-        view.CartContainer.RemoveAllChildren();
         view.PackingAnchors.Clear();
         var cost = 0;
         var requests = new List<(RequisitionsItemEntry Item, int Amount)>();
@@ -407,7 +420,14 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         var catalog = computer.ItemCatalog.ToDictionary(item => item.Prototype);
         var sprites = EntMan.System<SpriteSystem>();
         view.PackingAnchor = null;
-        for (var i = 0; i < plan.Crates.Count; i++)
+        foreach (var index in _crateCards.Keys.Where(index => index >= plan.Crates.Count).ToArray())
+        {
+            _crateCards[index].Card.Orphan();
+            _crateCards.Remove(index);
+        }
+
+        var displayIndex = 0;
+        for (var i = plan.Crates.Count - 1; i >= 0; i--)
         {
             var crate = plan.Crates[i];
             var lines = crate.Items
@@ -416,22 +436,37 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             var state = crate.Weight >= computer.ItemShipmentWeightLimit
                 ? Loc.GetString("cmu-asrs-crate-sealed")
                 : Loc.GetString("cmu-asrs-crate-packing");
-            var card = new RequisitionsCrateCard(
-                Loc.GetString("cmu-asrs-crate-title", ("number", i + 1)),
-                state,
-                crate.Weight,
-                computer.ItemShipmentWeightLimit,
-                lines,
-                sprites,
-                _prototypes,
-                view.ManifestTheme,
-                AddToCart,
-                RemoveFromCart);
-            view.CartContainer.AddChild(card);
-            view.PackingAnchors.Add(card.LandingAnchor);
-            view.PackingAnchor = card.LandingAnchor;
+            var signature = $"{crate.Weight}:{string.Join(',', crate.Items.OrderBy(prototype => prototype.Id))}";
+            if (!_crateCards.TryGetValue(i, out var cached) || cached.Signature != signature)
+            {
+                cached.Card?.Orphan();
+                var card = new RequisitionsCrateCard(
+                    Loc.GetString("cmu-asrs-crate-title", ("number", i + 1)),
+                    state,
+                    crate.Weight,
+                    computer.ItemShipmentWeightLimit,
+                    lines,
+                    sprites,
+                    _prototypes,
+                    view.ManifestTheme,
+                    AddToCart,
+                    RemoveFromCart);
+                view.CartContainer.AddChild(card);
+                cached = (signature, card);
+                _crateCards[i] = cached;
+            }
+
+            cached.Card.SetPositionInParent(displayIndex++);
+            view.PackingAnchors[i] = cached.Card.LandingAnchor;
         }
 
+        view.PackingAnchor = plan.Crates.Count > 0
+            ? view.PackingAnchors[plan.Crates.Count - 1]
+            : null;
+
+        foreach (var card in _looseCards)
+            card.Orphan();
+        _looseCards.Clear();
         for (var i = 0; i < plan.Loose.Count; i++)
         {
             var loose = plan.Loose[i];
@@ -449,7 +484,8 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
                 AddToCart,
                 RemoveFromCart);
             view.CartContainer.AddChild(card);
-            view.PackingAnchor = card.LandingAnchor;
+            card.SetPositionInParent(displayIndex++);
+            _looseCards.Add(card);
         }
 
         var weight = plan.TotalWeight;
@@ -480,6 +516,15 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
                                        cost > _lastState.Balance ||
                                        slots > _lastState.AvailableSlots ||
                                        !CartStockAvailable(computer);
+    }
+
+    private void RefreshItemRow(RequisitionsItemEntry item)
+    {
+        if (!_itemRows.TryGetValue(item.Prototype, out var row))
+            return;
+
+        _cart.TryGetValue(item.Prototype, out var amount);
+        row.SetCartAmount(amount, CanAddItem(item));
     }
 
     private void PreviewPacking(

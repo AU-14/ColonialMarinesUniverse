@@ -86,4 +86,10 @@ public sealed class RequisitionsItemRow : PanelContainer
         theme.ApplyButton(AddButton, primary: true);
         row.AddChild(AddButton);
     }
+
+    public void SetCartAmount(int amount, bool canAdd)
+    {
+        AddButton.Text = amount > 0 ? $"+  [{amount}]" : "+";
+        AddButton.Disabled = !canAdd;
+    }
 }
