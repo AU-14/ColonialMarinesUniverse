@@ -2146,6 +2146,84 @@ public sealed class ConditionDrivenSurgeryTest
         await pair.CleanReturnAsync();
     }
 
+    [TestCase("CMMobHuman", false)]
+    [TestCase("CMUDroneAndroid", true)]
+    public async Task AutodocRegeneratesPristineNativeLimbWithoutConsumingSeveredLimb(
+        string patientPrototype,
+        bool expectRobotic)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var autodoc = entMan.System<CMUAutodocSystem>();
+            var patient = entMan.SpawnEntity(patientPrototype, MapCoordinates.Nullspace);
+            var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            EntityUid detachedBody = default;
+
+            try
+            {
+                entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(patient);
+                var severedHand = GetBodyPart(entMan, patient, BodyPartType.Hand, BodyPartSymmetry.Right);
+                detachedBody = DetachBodyPart(entMan, severedHand);
+
+                var entries = BuildAutodocPartEntries(autodoc, patient, surgeon);
+                var missingHand = entries.Find(entry =>
+                    entry.Type == BodyPartType.Hand
+                    && entry.Symmetry == BodyPartSymmetry.Right);
+                var regeneration = missingHand?.EligibleSurgeries.Find(entry =>
+                    entry.SurgeryId == "CMUAutodocRegenerateLimb");
+
+                Assert.That(missingHand, Is.Not.Null);
+                Assert.That(regeneration, Is.Not.Null);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(regeneration!.DisplayName, Is.EqualTo("Regenerate Limb"));
+                    Assert.That(GetAutodocProcedureDuration(regeneration), Is.EqualTo(90f));
+                });
+
+                var queued = new CMUAutodocQueuedStep(
+                    patient,
+                    BodyPartType.Hand,
+                    BodyPartSymmetry.Right,
+                    "CMUAutodocRegenerateLimb",
+                    regeneration.DisplayName,
+                    regeneration.Category,
+                    0,
+                    "cmu-autodoc-automated-step-label",
+                    missingHand!.DisplayName,
+                    90f);
+
+                Assert.That(ApplyAutodocProcedure(autodoc, patient, surgeon, queued), Is.True);
+
+                var replacement = GetBodyPart(entMan, patient, BodyPartType.Hand, BodyPartSymmetry.Right);
+                var health = entMan.GetComponent<BodyPartHealthComponent>(replacement);
+                var hasFracture = entMan.TryGetComponent<FractureComponent>(replacement, out var fracture);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(replacement, Is.Not.EqualTo(severedHand));
+                    Assert.That(health.Current, Is.EqualTo(health.Max));
+                    Assert.That(hasFracture && fracture!.Severity != FractureSeverity.None, Is.False);
+                    Assert.That(entMan.HasComponent<CMURoboticLimbComponent>(replacement), Is.EqualTo(expectRobotic));
+                    Assert.That(entMan.EntityExists(detachedBody), Is.True);
+                    Assert.That(entMan.EntityExists(severedHand), Is.True);
+                });
+            }
+            finally
+            {
+                if (entMan.EntityExists(detachedBody))
+                    entMan.DeleteEntity(detachedBody);
+                entMan.DeleteEntity(patient);
+                entMan.DeleteEntity(surgeon);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [TestCase(BodyPartType.Hand, BodyPartType.Arm)]
     [TestCase(BodyPartType.Foot, BodyPartType.Leg)]
     public async Task ExtremityCanBeRemovedAndAppearsAsReattachableMissingSite(
@@ -3058,6 +3136,30 @@ public sealed class ConditionDrivenSurgeryTest
 
         Assert.That(method, Is.Not.Null);
         return (List<CMUSurgeryPartEntry>) method!.Invoke(autodoc, [patient, viewer])!;
+    }
+
+    private static bool ApplyAutodocProcedure(
+        CMUAutodocSystem autodoc,
+        EntityUid patient,
+        EntityUid operatorUid,
+        CMUAutodocQueuedStep queued)
+    {
+        var method = typeof(CMUAutodocSystem).GetMethod(
+            "TryApplyAutomatedProcedure",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (bool) method!.Invoke(autodoc, [patient, operatorUid, queued])!;
+    }
+
+    private static float GetAutodocProcedureDuration(CMUSurgeryEntry surgery)
+    {
+        var method = typeof(CMUAutodocSystem).GetMethod(
+            "GetProcedureDurationSeconds",
+            BindingFlags.Static | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (float) method!.Invoke(null, [surgery])!;
     }
 }
 

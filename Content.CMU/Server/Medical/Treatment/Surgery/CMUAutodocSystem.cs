@@ -33,6 +33,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private CMUSurgerySystem _cmuSurgery = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flow = default!;
@@ -50,9 +51,12 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
+    private const string AutodocLimbRegenerationId = "CMUAutodocRegenerateLimb";
+    private const string AutodocLimbRegenerationCategory = "limb_regeneration";
     private const string AutodocWoundRepairId = "CMUAutodocRepairWounds";
     private const string AutodocWoundRepairCategory = "wound_repair";
     private const float DefaultProcedureSeconds = 45f;
+    private const float LimbRegenerationSeconds = 90f;
     private static readonly CMUMedicalWorkKey ProcedureStepWork = new("autodoc-procedure-step");
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -61,6 +65,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         new Dictionary<string, SoundSpecifier>
         {
             [AutodocWoundRepairCategory] = new SoundCollectionSpecifier("RMCSurgeryScalpel"),
+            [AutodocLimbRegenerationCategory] = new SoundCollectionSpecifier("RMCSurgeryOrgan"),
             ["bleed"] = new SoundCollectionSpecifier("RMCSurgeryHemostat"),
             ["fracture"] = new SoundCollectionSpecifier("RMCSurgerySplint"),
             ["head_organ"] = new SoundCollectionSpecifier("RMCSurgeryOrgan"),
@@ -375,6 +380,9 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
     private bool TryApplyAutomatedProcedure(EntityUid patient, EntityUid operatorUid, CMUAutodocQueuedStep queued)
     {
+        if (queued.SurgeryId == AutodocLimbRegenerationId)
+            return _cmuSurgery.TryRegenerateLimb(patient, queued.Type, queued.Symmetry);
+
         var targetPart = ResolveQueuedPart(patient, queued);
         if (!targetPart.IsValid())
             return false;
@@ -576,6 +584,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         foreach (var part in source)
         {
             var surgeries = new List<CMUSurgeryEntry>();
+            var canRegenerateLimb = false;
             var partUid = GetEntity(part.Part);
             if (partUid.IsValid())
                 listedParts.Add(partUid);
@@ -585,11 +594,20 @@ public sealed partial class CMUAutodocSystem : EntitySystem
 
             foreach (var surgery in part.EligibleSurgeries)
             {
+                if (surgery.Category == "reattach")
+                {
+                    canRegenerateLimb = true;
+                    continue;
+                }
+
                 if (!IsAutodocAllowedCategory(surgery.Category))
                     continue;
 
                 surgeries.Add(surgery);
             }
+
+            if (canRegenerateLimb)
+                surgeries.Add(BuildAutodocLimbRegenerationEntry());
 
             result.Add(new CMUSurgeryPartEntry(
                 part.Part,
@@ -652,6 +670,19 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             AutodocWoundRepairCategory);
     }
 
+    private CMUSurgeryEntry BuildAutodocLimbRegenerationEntry()
+    {
+        return new CMUSurgeryEntry(
+            AutodocLimbRegenerationId,
+            Loc.GetString("cmu-autodoc-regenerate-limb-surgery"),
+            "cmu-autodoc-automated-step-label",
+            AutodocLimbRegenerationCategory,
+            0,
+            1,
+            null,
+            AutodocLimbRegenerationCategory);
+    }
+
     private bool NeedsAutodocWoundRepair(EntityUid part, BodyPartType type, BodyPartSymmetry symmetry)
     {
         if (!part.IsValid() ||
@@ -691,6 +722,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
             or "bleed"
             or "suture"
             or "head_organ"
+            or AutodocLimbRegenerationCategory
             or AutodocWoundRepairCategory;
     }
 
@@ -698,6 +730,9 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     {
         if (surgery.SurgeryId == AutodocWoundRepairId)
             return 30f;
+
+        if (surgery.SurgeryId == AutodocLimbRegenerationId)
+            return LimbRegenerationSeconds;
 
         if (surgery.SurgeryId.Contains("Shattered", StringComparison.OrdinalIgnoreCase))
             return 60f;

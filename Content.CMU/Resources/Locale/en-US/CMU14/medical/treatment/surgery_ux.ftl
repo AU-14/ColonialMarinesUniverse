@@ -418,3 +418,4 @@ cmu-limb-printer-right-robotic-foot = Right robotic foot
 cmu-limb-printer-slot-beaker = matrix beaker
 cmu-limb-printer-slot-syringe = blood syringe
 cmu-limb-printer-slot-metal = Metal Sheets
+cmu-autodoc-regenerate-limb-surgery = Regenerate Limb

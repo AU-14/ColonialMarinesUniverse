@@ -15,6 +15,7 @@ using Content.Shared.Popups;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -136,10 +137,92 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-success"), body, user, PopupType.Medium);
     }
 
+    public bool TryRegenerateLimb(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry)
+    {
+        if (!HasComp<CMUHumanMedicalComponent>(body)
+            || !TryFindPartSlot(body, type, symmetry, out var rootPart, out var slotId)
+            || !TryComp<InitialBodyComponent>(body, out var initialBody)
+            || !TryGetInitialBodyCategory(type, symmetry, out var category))
+        {
+            return false;
+        }
+
+        EntProtoId<OrganComponent>? prototype = null;
+        foreach (var (initialCategory, initialPrototype) in initialBody.Organs)
+        {
+            if (initialCategory != category)
+                continue;
+
+            prototype = initialPrototype;
+            break;
+        }
+
+        if (prototype is null)
+            return false;
+
+        var limb = Spawn(prototype.Value, new EntityCoordinates(body, default));
+        if (!TryComp<BodyPartComponent>(limb, out var limbPart)
+            || limbPart.PartType != type
+            || limbPart.Symmetry != symmetry
+            || !CanPatientAcceptLimb(body, limb)
+            || !Body.AttachPart(rootPart, slotId, limb))
+        {
+            QueueDel(limb);
+            return false;
+        }
+
+        if (TryComp<BodyPartHealthComponent>(limb, out var health))
+            _partHealth.SetCurrent((limb, health), health.Max);
+        if (TryComp<BoneComponent>(limb, out var bone))
+            Bone.RestoreIntegrity((limb, bone), bone.IntegrityMax);
+        if (TryComp<FractureComponent>(limb, out var fracture))
+            Fracture.SetSeverity((limb, fracture), FractureSeverity.None);
+
+        TryClearMissingLimbStatus(body, type, symmetry);
+        return true;
+    }
+
     private bool CanPatientAcceptLimb(EntityUid body, EntityUid limb)
     {
         return !HasComp<CMUDroneAndroidComponent>(body) ||
                HasComp<CMURoboticLimbComponent>(limb);
+    }
+
+    private static bool TryGetInitialBodyCategory(
+        BodyPartType type,
+        BodyPartSymmetry symmetry,
+        out ProtoId<OrganCategoryPrototype> category)
+    {
+        switch (type, symmetry)
+        {
+            case (BodyPartType.Arm, BodyPartSymmetry.Left):
+                category = "ArmLeft";
+                return true;
+            case (BodyPartType.Arm, BodyPartSymmetry.Right):
+                category = "ArmRight";
+                return true;
+            case (BodyPartType.Hand, BodyPartSymmetry.Left):
+                category = "HandLeft";
+                return true;
+            case (BodyPartType.Hand, BodyPartSymmetry.Right):
+                category = "HandRight";
+                return true;
+            case (BodyPartType.Leg, BodyPartSymmetry.Left):
+                category = "LegLeft";
+                return true;
+            case (BodyPartType.Leg, BodyPartSymmetry.Right):
+                category = "LegRight";
+                return true;
+            case (BodyPartType.Foot, BodyPartSymmetry.Left):
+                category = "FootLeft";
+                return true;
+            case (BodyPartType.Foot, BodyPartSymmetry.Right):
+                category = "FootRight";
+                return true;
+            default:
+                category = default;
+                return false;
+        }
     }
 
     private void ClearSynthLimbOrganicMedicalState(EntityUid limb)
