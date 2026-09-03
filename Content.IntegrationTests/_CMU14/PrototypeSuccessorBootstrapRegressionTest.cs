@@ -240,11 +240,15 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
         {
             Assert.That(welderTool!.Qualities.Select(quality => quality.Id),
                 Is.EquivalentTo(new[] { "Welding" }));
-            Assert.That(multipleTool!.Entries, Has.Length.EqualTo(2));
+            Assert.That(multipleTool!.Entries, Has.Length.EqualTo(4));
             Assert.That(multipleTool.Entries[0].Behavior.Select(quality => quality.Id),
                 Is.EquivalentTo(new[] { "Prying" }));
             Assert.That(multipleTool.Entries[1].Behavior.Select(quality => quality.Id),
                 Is.EquivalentTo(new[] { "Anchoring" }));
+            Assert.That(multipleTool.Entries[2].Behavior.Select(quality => quality.Id),
+                Is.EquivalentTo(new[] { "Screwing" }));
+            Assert.That(multipleTool.Entries[3].Behavior.Select(quality => quality.Id),
+                Is.EquivalentTo(new[] { "VehicleServicing" }));
             Assert.That(plantTray!.DrawWarnings, Is.True);
         });
     }

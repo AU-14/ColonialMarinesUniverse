@@ -104,6 +104,17 @@
           sprite: CMU14/Objects/Tools/maintenance_jack.rsi
           state: wrench
         useSound: /Audio/Items/ratchet.ogg
+      - behavior: [ Screwing ]
+        sprite:
+          sprite: CMU14/Objects/Tools/maintenance_jack.rsi
+          state: wrench
+        useSound:
+          collection: Screwdriver
+      - behavior: [ VehicleServicing ]
+        sprite:
+          sprite: CMU14/Objects/Tools/maintenance_jack.rsi
+          state: icon
+        useSound: /Audio/Items/jaws_pry.ogg
   - type: DamageImpactProfile
     melee:
       contact: Crush
