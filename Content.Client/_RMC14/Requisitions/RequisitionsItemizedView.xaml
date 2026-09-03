@@ -59,4 +59,5 @@
             </BoxContainer>
         </BoxContainer>
     </PanelContainer>
+    <LayoutContainer Name="AnimationLayer" Access="Public" HorizontalExpand="True" VerticalExpand="True" MouseFilter="Ignore" />
 </controls:RequisitionsItemizedView>

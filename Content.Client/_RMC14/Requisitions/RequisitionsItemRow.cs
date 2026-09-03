@@ -12,6 +12,7 @@ namespace Content.Client._RMC14.Requisitions;
 public sealed class RequisitionsItemRow : PanelContainer
 {
     public readonly Button AddButton;
+    public readonly LayeredTextureRect ItemIcon;
 
     public RequisitionsItemRow(
         RequisitionsItemEntry item,
@@ -30,9 +31,9 @@ public sealed class RequisitionsItemRow : PanelContainer
         };
         AddChild(row);
 
-        var icon = new LayeredTextureRect { MinSize = new Vector2(42, 42) };
-        icon.Textures = sprites.GetPrototypeTextures(prototype).Select(layer => layer.Default).ToList();
-        row.AddChild(icon);
+        ItemIcon = new LayeredTextureRect { MinSize = new Vector2(42, 42) };
+        ItemIcon.Textures = sprites.GetPrototypeTextures(prototype).Select(layer => layer.Default).ToList();
+        row.AddChild(ItemIcon);
 
         var details = new BoxContainer
         {

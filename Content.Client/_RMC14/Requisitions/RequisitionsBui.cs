@@ -250,7 +250,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
 
             var row = new RequisitionsItemRow(item, prototype, EntMan.System<SpriteSystem>(), GetItemStockText(item.Prototype));
             row.AddButton.Disabled = !CanAddItem(item);
-            row.AddButton.OnPressed += _ => AddToCart(item.Prototype);
+            row.AddButton.OnPressed += _ => AddToCart(item.Prototype, row.ItemIcon);
             view.ItemsContainer.AddChild(row);
             visible++;
         }
@@ -288,7 +288,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         return !_itemStock.TryGetValue(item.Prototype, out var stock) || amount < stock.Current;
     }
 
-    private void AddToCart(EntProtoId prototype)
+    private void AddToCart(EntProtoId prototype, LayeredTextureRect sourceIcon)
     {
         if (!_entities.TryGetComponent(Owner, out RequisitionsComputerComponent? computer) ||
             computer.ItemCatalog.FirstOrDefault(item => item.Prototype == prototype) is not { } item ||
@@ -300,6 +300,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         _cart.TryGetValue(prototype, out var amount);
         _cart[prototype] = amount + 1;
         _window!.ItemizedView.FeedbackLabel.Text = string.Empty;
+        _window.ItemizedView.PlayItemAddedAnimation(sourceIcon);
         RebuildItemizedBrowser();
     }
 
