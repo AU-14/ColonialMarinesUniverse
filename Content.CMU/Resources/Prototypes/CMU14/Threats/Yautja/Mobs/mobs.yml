@@ -13,6 +13,16 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
+  - type: ActionGrant
+    actions:
+    - CMUActionYautjaVoiceClick
+    - CMUActionYautjaVoiceRoar
+    - CMUActionYautjaVoiceLaugh
+    - CMUActionYautjaVoiceGrowl
+    - CMUActionYautjaVoicePain
+    - CMUActionYautjaVoiceDistract
+    - CMUActionYautjaVoiceDeathCry
+    - CMUActionYautjaVoiceDeathLaugh
   - type: YautjaHeatResistance
   - type: IgnoreXenoWeedsSlowdown
   - type: Skills
@@ -77,8 +87,8 @@
         Bloodloss: -1
     damageBleedModifiers: CMBloodlossHuman
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3.7
-    baseSprintSpeed: 7.1
+    baseWalkSpeed: 4.4
+    baseSprintSpeed: 8.4
   - type: MobThresholds
     thresholds:
       0: Alive

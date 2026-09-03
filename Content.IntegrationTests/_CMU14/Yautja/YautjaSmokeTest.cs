@@ -5,6 +5,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Components;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Robust.Shared.GameObjects;
@@ -15,6 +16,18 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaSmokeTest
 {
+    private static readonly string[] VoiceActionIds =
+    {
+        "CMUActionYautjaVoiceClick",
+        "CMUActionYautjaVoiceRoar",
+        "CMUActionYautjaVoiceLaugh",
+        "CMUActionYautjaVoiceGrowl",
+        "CMUActionYautjaVoicePain",
+        "CMUActionYautjaVoiceDistract",
+        "CMUActionYautjaVoiceDeathCry",
+        "CMUActionYautjaVoiceDeathLaugh",
+    };
+
     private static readonly string[] ClanArmorLoadoutIds =
     {
         "CMUYautjaClanArmor",
@@ -47,6 +60,13 @@ public sealed class YautjaSmokeTest
                 AssertEquipped(entMan, inventory, hunter, "shoes", "CMUYautjaClanGreaves");
                 AssertEquipped(entMan, inventory, hunter, "pocket1", "CMUYautjaSmartDisc");
                 AssertEquipped(entMan, inventory, hunter, "pocket2", "CMUYautjaMedicomp");
+
+                var movement = entMan.GetComponent<MovementSpeedModifierComponent>(hunter);
+                Assert.That(movement.BaseWalkSpeed, Is.EqualTo(4.4f));
+                Assert.That(movement.BaseSprintSpeed, Is.EqualTo(8.4f));
+
+                foreach (var action in VoiceActionIds)
+                    Assert.That(HasAction(entMan, hunter, action), Is.True, action);
             }
             finally
             {
@@ -226,5 +246,19 @@ public sealed class YautjaSmokeTest
             Performer = hunter,
             Action = (action, actionComp),
         };
+    }
+
+    private static bool HasAction(IEntityManager entMan, EntityUid user, string prototype)
+    {
+        if (!entMan.TryGetComponent<ActionsComponent>(user, out var actions))
+            return false;
+
+        foreach (var action in actions.Actions)
+        {
+            if (entMan.GetComponent<MetaDataComponent>(action).EntityPrototype?.ID == prototype)
+                return true;
+        }
+
+        return false;
     }
 }
