@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.ARES.Logs;
+using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Containers;
@@ -29,7 +30,7 @@ public sealed partial class RequisitionsSystem
     private void RebuildItemizedCatalog(Entity<RequisitionsComputerComponent> computer)
     {
         var runtime = new ItemizedCatalogRuntime();
-        var prices = new Dictionary<EntProtoId, List<int>>();
+        var priceSources = new List<RequisitionsPriceSource>();
         var categories = new Dictionary<EntProtoId, HashSet<string>>();
 
         for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
@@ -41,22 +42,10 @@ public sealed partial class RequisitionsSystem
                 if (!TryGetDeterministicManifest(entry, out var manifest) || manifest.Count == 0)
                     continue;
 
-                var weights = new Dictionary<EntProtoId, int>();
-                long totalWeight = 0;
-                var totalObjects = manifest.Values.Sum();
-                foreach (var (prototype, amount) in manifest)
-                {
-                    var weight = GetItemWeight(prototype, out _);
-                    weights[prototype] = weight;
-                    totalWeight += weight * amount;
-                }
-
-                if (totalWeight <= 0)
-                    continue;
-
                 var key = (categoryIndex, orderIndex);
                 var source = new ItemizedSource(entry, manifest, _timing.CurTime);
                 runtime.Sources[key] = source;
+                priceSources.Add(new RequisitionsPriceSource(entry.Cost, manifest));
 
                 foreach (var prototype in manifest.Keys)
                 {
@@ -68,20 +57,6 @@ public sealed partial class RequisitionsSystem
 
                     sources.Add(key);
 
-                    if (!prices.TryGetValue(prototype, out var candidates))
-                    {
-                        candidates = new List<int>();
-                        prices[prototype] = candidates;
-                    }
-
-                    // A pure weight split makes light specialist gear almost free when it shares a
-                    // crate with heavy filler. Blend equal-object and cargo-weight shares so mixed
-                    // crates retain sensible value without discarding the logistics cost of bulk.
-                    var objectShare = 1d / totalObjects;
-                    var weightShare = (double) weights[prototype] / totalWeight;
-                    candidates.Add(Math.Max(1,
-                        (int) Math.Ceiling(entry.Cost * (objectShare + weightShare) / 2d)));
-
                     if (!categories.TryGetValue(prototype, out var itemCategories))
                     {
                         itemCategories = new HashSet<string>();
@@ -92,6 +67,8 @@ public sealed partial class RequisitionsSystem
                 }
             }
         }
+
+        var prices = RequisitionsPriceCalculator.Calculate(priceSources);
 
         var overrides = new Dictionary<EntProtoId, RequisitionsItemOverride>();
         foreach (var itemOverride in computer.Comp.ItemOverrides)
@@ -105,9 +82,7 @@ public sealed partial class RequisitionsSystem
             if (!_prototypeManager.TryIndex<EntityPrototype>(prototypeId, out var prototype))
                 continue;
 
-            var candidates = prices[prototypeId];
-            candidates.Sort();
-            var price = candidates[candidates.Count / 2];
+            var price = prices[prototypeId];
             var weight = GetItemWeight(prototypeId, out var packable);
             if (overrides.TryGetValue(prototypeId, out var itemOverride))
             {
@@ -179,6 +154,13 @@ public sealed partial class RequisitionsSystem
                 if (!TryAddDeterministicSelector(selector, manifest, new HashSet<string>(), 0))
                     return false;
             }
+        }
+
+        if (cratePrototype.TryComp<SpawnOnTerminateComponent>(
+                CompName.Get<SpawnOnTerminateComponent>(componentFactory), out var spawnOnTerminate))
+        {
+            hasFill = true;
+            AddManifestItem(manifest, spawnOnTerminate.Spawn, 1);
         }
 
         foreach (var prototype in entry.Entities)
