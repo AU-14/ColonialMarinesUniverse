@@ -606,7 +606,7 @@ namespace Content.Client.Vehicle
             var baseFacingAngle = GetVehicleFacingAngle(vehicle, vehicleRot);
             var anchorFacingAngle = GetRenderFacing(anchorTurret, anchorTurret, vehicleRot, baseFacingAngle, eyeRot);
             var anchorPixelOffset = GetPixelOffset(anchorTurret, anchorFacingAngle) / PixelsPerMeter;
-            var anchorLocalOffset = GetVehicleLocalOffset(anchorTurret, anchorPixelOffset, vehicleRot, eyeRot);
+            var anchorLocalOffset = GetVehicleLocalOffset(anchorTurret, anchorPixelOffset, vehicleRot, anchorFacingAngle);
             var anchorCoords = baseCoords.Offset(anchorLocalOffset);
 
             basePos = baseMap.Position;
@@ -641,7 +641,7 @@ namespace Content.Client.Vehicle
             }
             else
             {
-                turretLocalOffset = (-vehicleRot).RotateVec(worldOffset);
+                turretLocalOffset = GetVehicleLocalOffset(turret, worldOffset, vehicleRot, turretFacingAngle);
                 relativeAnchorOffset = (-localRot).RotateVec(turretLocalOffset);
             }
             MapCoordinates turretMap;
@@ -785,10 +785,10 @@ namespace Content.Client.Vehicle
             VehicleTurretComponent turret,
             Vector2 offset,
             Angle vehicleRot,
-            Angle eyeRot)
+            Angle facing)
         {
             if (turret.UseDirectionalOffsets)
-                offset = (-eyeRot).RotateVec(offset);
+                return VehicleTurretDirectionHelpers.GetLocalOffsetForRenderDirection(offset, facing);
 
             return (-vehicleRot).RotateVec(offset);
         }

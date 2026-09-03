@@ -13,7 +13,7 @@
     maxSpeed: 8
     acceleration: 5
     deceleration: 12
-    maxRotationSpeedDegrees: 45
+    maxRotationSpeedDegrees: 90
     rotationAccelerationDegrees: 90
     rotationDecelerationDegrees: 120
     turnDelay: 0.25
@@ -237,7 +237,7 @@
     maxSpeed: 8
     acceleration: 5
     deceleration: 12
-    maxRotationSpeedDegrees: 45
+    maxRotationSpeedDegrees: 90
     rotationAccelerationDegrees: 90
     rotationDecelerationDegrees: 120
     turnDelay: 0.25

@@ -16,7 +16,7 @@
     maxSpeed: 5
     acceleration: 4
     deceleration: 10
-    maxRotationSpeedDegrees: 36
+    maxRotationSpeedDegrees: 72
     rotationAccelerationDegrees: 72
     rotationDecelerationDegrees: 96
     turnDelay: 0.4
