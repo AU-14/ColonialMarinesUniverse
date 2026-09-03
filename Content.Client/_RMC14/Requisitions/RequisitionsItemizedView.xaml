@@ -1,63 +1,7 @@
 <controls:RequisitionsItemizedView
     xmlns="https://spacestation14.io"
-    xmlns:controls="clr-namespace:Content.Client._RMC14.Requisitions"
-    xmlns:cmu="clr-namespace:Content.Client._CMU14.Interface">
-    <PanelContainer Name="RootPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True">
-        <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8">
-            <PanelContainer Name="StatusPanel" Access="Public" HorizontalExpand="True" MinHeight="40">
-                <BoxContainer Orientation="Horizontal" Margin="10 6" SeparationOverride="8">
-                    <Label Name="BudgetLabel" Access="Public" HorizontalExpand="True" />
-                    <Label Name="PlatformLabel" Access="Public" />
-                    <Button Name="PlatformButton" Access="Public" MinWidth="96" />
-                </BoxContainer>
-            </PanelContainer>
-            <BoxContainer Orientation="Horizontal" SeparationOverride="4">
-                <Button Name="ItemsTabButton" Access="Public" Text="{Loc 'cmu-asrs-tab-items'}" MinWidth="130" />
-                <Button Name="BundlesTabButton" Access="Public" Text="{Loc 'cmu-asrs-tab-bundles'}" MinWidth="130" />
-                <Control HorizontalExpand="True" />
-                <Label Text="{Loc 'cmu-asrs-mode-itemized'}" />
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
-                <PanelContainer Name="FilterPanel" Access="Public" SetWidth="190" VerticalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="4">
-                        <Label Text="{Loc 'cmu-asrs-categories'}" />
-                        <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
-                            <BoxContainer Name="CategoriesContainer" Access="Public" Orientation="Vertical" SeparationOverride="2" />
-                        </ScrollContainer>
-                    </BoxContainer>
-                </PanelContainer>
-                <PanelContainer Name="CatalogPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
-                        <LineEdit Name="SearchBar" Access="Public" PlaceHolder="{Loc 'cmu-asrs-search-items'}" HorizontalExpand="True" />
-                        <BoxContainer Orientation="Horizontal">
-                            <Label Name="CatalogHeading" Access="Public" Text="{Loc 'cmu-asrs-catalog-heading'}" HorizontalExpand="True" />
-                            <Label Name="ResultCountLabel" Access="Public" />
-                        </BoxContainer>
-                        <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
-                            <BoxContainer Name="ItemsContainer" Access="Public" Orientation="Vertical" SeparationOverride="4" />
-                        </ScrollContainer>
-                    </BoxContainer>
-                </PanelContainer>
-                <PanelContainer Name="CartPanel" Access="Public" SetWidth="300" VerticalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
-                        <Label Text="{Loc 'cmu-asrs-cart-heading'}" />
-                        <Label Name="CartEmptyLabel" Access="Public" Text="{Loc 'cmu-asrs-cart-empty'}" />
-                        <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
-                            <BoxContainer Name="CartContainer" Access="Public" Orientation="Vertical" SeparationOverride="4" />
-                        </ScrollContainer>
-                        <PanelContainer Name="CartSummaryPanel" Access="Public">
-                            <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="3">
-                                <Label Name="CartCostLabel" Access="Public" />
-                                <Label Name="CartWeightLabel" Access="Public" />
-                                <Label Name="CartCratesLabel" Access="Public" />
-                            </BoxContainer>
-                        </PanelContainer>
-                        <Label Name="FeedbackLabel" Access="Public" />
-                        <Button Name="CheckoutButton" Access="Public" Text="{Loc 'cmu-asrs-checkout'}" MinHeight="46" />
-                    </BoxContainer>
-                </PanelContainer>
-            </BoxContainer>
-        </BoxContainer>
-    </PanelContainer>
+    xmlns:controls="clr-namespace:Content.Client._RMC14.Requisitions">
+    <BoxContainer Name="LayoutHost" Access="Public" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" />
     <LayoutContainer Name="AnimationLayer" Access="Public" HorizontalExpand="True" VerticalExpand="True" MouseFilter="Ignore" />
+    <controls:RequisitionsCrtOverlay Name="CrtOverlay" Access="Public" HorizontalExpand="True" VerticalExpand="True" MouseFilter="Ignore" />
 </controls:RequisitionsItemizedView>

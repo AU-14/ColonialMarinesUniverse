@@ -1,0 +1,32 @@
+<controls:RequisitionsOperatorLayout xmlns="https://spacestation14.io" xmlns:controls="clr-namespace:Content.Client._RMC14.Requisitions" xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls">
+  <PanelContainer Name="RootPanel" HorizontalExpand="True" VerticalExpand="True">
+    <BoxContainer Orientation="Horizontal" Margin="10" SeparationOverride="8">
+      <PanelContainer Name="StatusPanel" SetWidth="230"><BoxContainer Orientation="Vertical" Margin="12" SeparationOverride="8">
+        <Label Text="ASRS // OPERATOR"/><Label Name="StyleSubtitleLabel"/><Button Name="StyleButton"/>
+        <cc:HSeparator/><Label Name="BudgetLabel"/><Label Name="ProjectedBudgetLabel"/><Label Name="PlatformLabel"/><Button Name="PlatformButton"/>
+        <cc:HSeparator/><Button Name="ItemsTabButton" Text="01  ITEM FEED"/><Button Name="BundlesTabButton" Text="02  LEGACY BAY"/>
+        <Control VerticalExpand="True"/><Label Text="TERMINAL READY"/>
+      </BoxContainer></PanelContainer>
+      <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="8">
+        <PanelContainer Name="FilterPanel"><BoxContainer Orientation="Horizontal" Margin="8" SeparationOverride="6">
+          <Label Text="CHANNEL"/><ScrollContainer HScrollEnabled="True" VScrollEnabled="False" HorizontalExpand="True"><BoxContainer Name="CategoriesContainer" Orientation="Horizontal" SeparationOverride="3"/></ScrollContainer>
+        </BoxContainer></PanelContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
+          <PanelContainer Name="CatalogPanel" HorizontalExpand="True"><BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
+            <BoxContainer Orientation="Horizontal"><LineEdit Name="SearchBar" PlaceHolder="QUERY ASRS INVENTORY" HorizontalExpand="True"/><Label Name="ResultCountLabel"/></BoxContainer>
+            <PanelContainer Name="PackingHintPanel"><Label Name="PackingHintLabel" Margin="8 4"/></PanelContainer>
+            <Label Text="LIVE INVENTORY FEED"/><ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VerticalExpand="True"><BoxContainer Name="ItemsContainer" Orientation="Vertical" SeparationOverride="4"/></ScrollContainer>
+          </BoxContainer></PanelContainer>
+          <PanelContainer Name="CartPanel" SetWidth="390"><BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
+            <BoxContainer Orientation="Horizontal"><Label Text="ACTIVE LOAD" HorizontalExpand="True"/><Label Name="CartStateLabel"/></BoxContainer><Label Name="CartEmptyLabel" Text="AWAITING OPERATOR INPUT"/>
+            <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VerticalExpand="True"><BoxContainer Name="CartContainer" Orientation="Vertical" SeparationOverride="5"/></ScrollContainer>
+            <PanelContainer Name="CartSummaryPanel"><BoxContainer Orientation="Vertical" Margin="8"><Label Name="CartCostLabel"/><Label Name="CartWeightLabel"/><Label Name="CartCratesLabel"/><Label Name="CartCapacityLabel"/></BoxContainer></PanelContainer>
+            <PanelContainer Name="CheckoutStagePanel" Visible="False"><BoxContainer Orientation="Vertical" Margin="8"><Label Name="CheckoutPhaseLabel" Align="Center"/><ProgressBar Name="CheckoutProgress" MinValue="0" MaxValue="1"/></BoxContainer></PanelContainer>
+            <PanelContainer Name="ReceiptPanel" Visible="False"><BoxContainer Orientation="Vertical" Margin="8"><Label Text="OPERATOR RECEIPT"/><Label Name="ReceiptLabel"/><Button Name="ReceiptDismissButton" Text="ACKNOWLEDGE"/></BoxContainer></PanelContainer>
+            <Label Name="FeedbackLabel"/><Button Name="CheckoutButton" Text="EXECUTE LOAD PLAN" MinHeight="46"/>
+          </BoxContainer></PanelContainer>
+        </BoxContainer>
+      </BoxContainer>
+    </BoxContainer>
+  </PanelContainer>
+</controls:RequisitionsOperatorLayout>

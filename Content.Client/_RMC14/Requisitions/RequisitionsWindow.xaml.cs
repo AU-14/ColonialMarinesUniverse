@@ -12,5 +12,6 @@ public sealed partial class RequisitionsWindow : DefaultWindow
     {
         RobustXamlLoader.Load(this);
         CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
+        ItemizedView.ApplyTheme();
     }
 }

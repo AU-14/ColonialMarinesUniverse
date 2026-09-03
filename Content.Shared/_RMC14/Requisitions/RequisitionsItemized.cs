@@ -25,6 +25,12 @@ public sealed partial class RequisitionsItemEntry
     [DataField]
     public int Weight;
 
+    /// <summary>
+    /// Number of units contained by one purchased entity, such as sheets in a material stack.
+    /// </summary>
+    [DataField]
+    public int Units = 1;
+
     [DataField]
     public bool Packable = true;
 }

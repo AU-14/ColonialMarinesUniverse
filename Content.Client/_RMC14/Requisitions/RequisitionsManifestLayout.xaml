@@ -1,0 +1,31 @@
+<controls:RequisitionsManifestLayout xmlns="https://spacestation14.io" xmlns:controls="clr-namespace:Content.Client._RMC14.Requisitions">
+  <PanelContainer Name="RootPanel" HorizontalExpand="True" VerticalExpand="True">
+    <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8">
+      <PanelContainer Name="StatusPanel"><BoxContainer Orientation="Horizontal" Margin="10 6" SeparationOverride="8">
+        <Label Text="MANIFEST COMPOSER" HorizontalExpand="True"/><Label Name="BudgetLabel"/><Label Name="ProjectedBudgetLabel"/><Label Name="PlatformLabel"/><Button Name="PlatformButton"/>
+      </BoxContainer></PanelContainer>
+      <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+        <Button Name="ItemsTabButton" Text="LOAD PLAN" MinWidth="120"/><Button Name="BundlesTabButton" Text="LEGACY FORMS" MinWidth="140"/><Control HorizontalExpand="True"/><Label Name="StyleSubtitleLabel"/><Button Name="StyleButton" MinWidth="190"/>
+      </BoxContainer>
+      <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
+        <PanelContainer Name="CartPanel" HorizontalExpand="True"><BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
+          <BoxContainer Orientation="Horizontal"><Label Text="SHIPPING DOCKETS" HorizontalExpand="True"/><Label Name="CartStateLabel"/></BoxContainer>
+          <PanelContainer Name="PackingHintPanel"><Label Name="PackingHintLabel" Margin="8 4"/></PanelContainer>
+          <Label Name="CartEmptyLabel" Text="NO DOCKETS — SELECT STOCK FROM THE DRAWER"/>
+          <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VerticalExpand="True"><BoxContainer Name="CartContainer" Orientation="Vertical" SeparationOverride="7"/></ScrollContainer>
+          <PanelContainer Name="CheckoutStagePanel" Visible="False"><BoxContainer Orientation="Vertical" Margin="8"><Label Name="CheckoutPhaseLabel" Align="Center"/><ProgressBar Name="CheckoutProgress" MinValue="0" MaxValue="1"/></BoxContainer></PanelContainer>
+          <PanelContainer Name="ReceiptPanel" Visible="False"><BoxContainer Orientation="Vertical" Margin="8"><Label Text="VERIFIED SHIPPING COPY"/><Label Name="ReceiptLabel"/><Button Name="ReceiptDismissButton" Text="CLOSE DOCKET"/></BoxContainer></PanelContainer>
+          <PanelContainer Name="CartSummaryPanel"><BoxContainer Orientation="Horizontal" Margin="8" SeparationOverride="12"><Label Name="CartCostLabel"/><Label Name="CartWeightLabel"/><Label Name="CartCratesLabel"/><Label Name="CartCapacityLabel" HorizontalExpand="True"/><Button Name="CheckoutButton" Text="AUTHORIZE MANIFEST" MinWidth="210"/></BoxContainer></PanelContainer>
+          <Label Name="FeedbackLabel"/>
+        </BoxContainer></PanelContainer>
+        <BoxContainer Orientation="Vertical" SetWidth="520" SeparationOverride="8">
+          <PanelContainer Name="FilterPanel"><BoxContainer Orientation="Vertical" Margin="8"><Label Text="INDEX TABS"/><ScrollContainer HScrollEnabled="True" VScrollEnabled="False"><BoxContainer Name="CategoriesContainer" Orientation="Horizontal" SeparationOverride="3"/></ScrollContainer></BoxContainer></PanelContainer>
+          <PanelContainer Name="CatalogPanel" VerticalExpand="True"><BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="5">
+            <LineEdit Name="SearchBar" PlaceHolder="SEARCH STOCK DRAWER..."/><BoxContainer Orientation="Horizontal"><Label Text="STOCK DRAWER" HorizontalExpand="True"/><Label Name="ResultCountLabel"/></BoxContainer>
+            <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VerticalExpand="True"><BoxContainer Name="ItemsContainer" Orientation="Vertical" SeparationOverride="3"/></ScrollContainer>
+          </BoxContainer></PanelContainer>
+        </BoxContainer>
+      </BoxContainer>
+    </BoxContainer>
+  </PanelContainer>
+</controls:RequisitionsManifestLayout>

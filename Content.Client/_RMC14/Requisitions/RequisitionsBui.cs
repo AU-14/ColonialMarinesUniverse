@@ -6,10 +6,13 @@ using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
+using Robust.Client.Audio;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Audio;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Content.Shared._RMC14.Requisitions.Components.RequisitionsElevatorMode;
@@ -28,6 +31,8 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     private readonly Dictionary<(int Category, int Order), RequisitionsStockInfo> _stock = new();
     private readonly Dictionary<EntProtoId, RequisitionsItemStockInfo> _itemStock = new();
     private readonly Dictionary<EntProtoId, int> _cart = new();
+    private readonly HashSet<EntProtoId> _favorites = new();
+    private readonly List<EntProtoId> _recent = new();
     private RequisitionsBuiState? _lastState;
     private bool? _raisePlatform;
     private bool _previewOpen;
@@ -36,6 +41,13 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     private string? _selectedItemCategory;
     private int _checkoutRequestId;
     private int? _pendingCheckout;
+    private int _pendingCost;
+    private int _pendingWeight;
+    private int _pendingSlots;
+    private List<EntProtoId> _pendingItems = new();
+
+    private const string FavoritesCategory = "#favorites";
+    private const string RecentCategory = "#recent";
 
     protected override void Open()
     {
@@ -53,12 +65,20 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         _window.OrderCategoriesView.SearchBar.OnTextChanged += _ => RebuildBrowser();
         _window.OrderCategoriesView.PreviewOrderButton.OnPressed += _ => TryOrderSelected();
 
-        _window.ItemizedView.ItemsTabButton.OnPressed += _ => ShowView(_window, _window.ItemizedView);
-        _window.ItemizedView.BundlesTabButton.OnPressed += _ => ShowView(_window, _window.OrderCategoriesView);
-        _window.ItemizedView.PlatformButton.OnPressed += _ => TrySendPlatformMessage();
-        _window.ItemizedView.SearchBar.OnTextChanged += _ => RebuildItemizedBrowser();
-        _window.ItemizedView.CheckoutButton.OnPressed += _ => TryCheckout();
-        _window.ItemizedView.ApplyTheme();
+        _window.ItemizedView.ItemsRequested += () => ShowView(_window, _window.ItemizedView);
+        _window.ItemizedView.BundlesRequested += () => ShowView(_window, _window.OrderCategoriesView);
+        _window.ItemizedView.PlatformRequested += TrySendPlatformMessage;
+        _window.ItemizedView.SearchChanged += RebuildItemizedBrowser;
+        _window.ItemizedView.CheckoutRequested += TryCheckout;
+        _window.ItemizedView.LayoutChanged += () =>
+        {
+            if (_lastState != null)
+            {
+                UpdatePlatform(_lastState);
+                UpdateBudget(_lastState);
+            }
+            RebuildItemizedBrowser();
+        };
 
         ShowView(_window, _window.ItemizedView);
     }
@@ -187,11 +207,33 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
 
         _pendingCheckout = null;
         if (result.Result == RequisitionsCheckoutResult.Success)
+        {
+            _window.ItemizedView.PlayPurchasedItemsPacking();
+            foreach (var prototype in _pendingItems)
+            {
+                _recent.Remove(prototype);
+                _recent.Insert(0, prototype);
+            }
+            if (_recent.Count > 12)
+                _recent.RemoveRange(12, _recent.Count - 12);
+
             _cart.Clear();
+            _window.ItemizedView.CompleteCheckout(Loc.GetString(
+                "cmu-asrs-receipt-summary",
+                ("cost", _pendingCost),
+                ("weight", _pendingWeight),
+                ("crates", _pendingSlots)));
+            PlayUiSound("/Audio/Machines/printer.ogg", -5f);
+        }
+        else
+        {
+            _window.ItemizedView.RejectCheckout();
+            PlayUiSound("/Audio/Machines/warning_buzzer.ogg", -8f);
+        }
 
         _window.ItemizedView.FeedbackLabel.FontColorOverride = result.Result == RequisitionsCheckoutResult.Success
-            ? CrtTerminalPalette.Accent
-            : CrtTerminalPalette.Alert;
+            ? _window.ItemizedView.TerminalTheme.Accent
+            : _window.ItemizedView.TerminalTheme.Alert;
 
         _window.ItemizedView.FeedbackLabel.Text = Loc.GetString(result.Result switch
         {
@@ -220,11 +262,14 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             .Distinct()
             .Order()
             .ToList();
-        if (_selectedItemCategory != null && !allCategories.Contains(_selectedItemCategory))
+        if (_selectedItemCategory is not null and not FavoritesCategory and not RecentCategory &&
+            !allCategories.Contains(_selectedItemCategory))
             _selectedItemCategory = null;
 
         view.CategoriesContainer.RemoveAllChildren();
         AddItemCategoryButton(Loc.GetString("cmu-asrs-category-all"), null);
+        AddItemCategoryButton(Loc.GetString("cmu-asrs-category-favorites"), FavoritesCategory);
+        AddItemCategoryButton(Loc.GetString("cmu-asrs-category-recent"), RecentCategory);
         foreach (var category in allCategories)
             AddItemCategoryButton(category, category);
 
@@ -234,7 +279,12 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         for (var catalogIndex = 0; catalogIndex < computer.ItemCatalog.Count; catalogIndex++)
         {
             var item = computer.ItemCatalog[catalogIndex];
-            if (_selectedItemCategory != null && !item.Categories.Contains(_selectedItemCategory))
+            if (_selectedItemCategory == FavoritesCategory && !_favorites.Contains(item.Prototype))
+                continue;
+            if (_selectedItemCategory == RecentCategory && !_recent.Contains(item.Prototype))
+                continue;
+            if (_selectedItemCategory is not null and not FavoritesCategory and not RecentCategory &&
+                !item.Categories.Contains(_selectedItemCategory))
                 continue;
 
             if (!string.IsNullOrWhiteSpace(filter) &&
@@ -248,9 +298,18 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             if (!_prototypes.TryIndex<EntityPrototype>(item.Prototype, out var prototype))
                 continue;
 
-            var row = new RequisitionsItemRow(item, prototype, EntMan.System<SpriteSystem>(), GetItemStockText(item.Prototype));
+            _cart.TryGetValue(item.Prototype, out var cartAmount);
+            var row = new RequisitionsItemRow(
+                item,
+                prototype,
+                EntMan.System<SpriteSystem>(),
+                GetItemStockText(item.Prototype),
+                cartAmount,
+                _favorites.Contains(item.Prototype),
+                view.TerminalTheme);
             row.AddButton.Disabled = !CanAddItem(item);
             row.AddButton.OnPressed += _ => AddToCart(item.Prototype, row.ItemIcon);
+            row.FavoriteButton.OnPressed += _ => ToggleFavorite(item.Prototype);
             view.ItemsContainer.AddChild(row);
             visible++;
         }
@@ -270,13 +329,23 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             HorizontalExpand = true,
         };
         button.Label.Align = Label.AlignMode.Left;
-        CmuButtonStyles.Apply(button, selected ? CmuButtonStyles.Variant.Affirm : CmuButtonStyles.Variant.Neutral);
+        button.Label.ClipText = true;
+        button.ToolTip = label;
+        _window!.ItemizedView.TerminalTheme.ApplyButton(button, primary: selected);
+        button.Label.Align = Label.AlignMode.Left;
         button.OnPressed += _ =>
         {
             _selectedItemCategory = category;
             RebuildItemizedBrowser();
         };
-        _window!.ItemizedView.CategoriesContainer.AddChild(button);
+        _window.ItemizedView.CategoriesContainer.AddChild(button);
+    }
+
+    private void ToggleFavorite(EntProtoId prototype)
+    {
+        if (!_favorites.Add(prototype))
+            _favorites.Remove(prototype);
+        RebuildItemizedBrowser();
     }
 
     private bool CanAddItem(RequisitionsItemEntry item)
@@ -301,14 +370,17 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         _cart[prototype] = amount + 1;
         _window!.ItemizedView.FeedbackLabel.Text = string.Empty;
         _window.ItemizedView.PlayItemAddedAnimation(sourceIcon);
+        PlayUiSound("/Audio/UserInterface/click.ogg", -8f);
         RebuildItemizedBrowser();
     }
 
-    private void RemoveFromCart(EntProtoId prototype)
+    private void RemoveFromCart(EntProtoId prototype, LayeredTextureRect sourceIcon)
     {
         if (!_cart.TryGetValue(prototype, out var amount))
             return;
 
+        _window?.ItemizedView.PlayItemRemovedAnimation(sourceIcon);
+        PlayUiSound("/Audio/UserInterface/click.ogg", -10f);
         if (amount <= 1)
             _cart.Remove(prototype);
         else
@@ -321,7 +393,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         var view = _window!.ItemizedView;
         view.CartContainer.RemoveAllChildren();
         var cost = 0;
-        var weight = 0;
+        var requests = new List<(RequisitionsItemEntry Item, int Amount)>();
         foreach (var (prototype, amount) in _cart.OrderBy(pair => pair.Key.Id).ToArray())
         {
             if (computer.ItemCatalog.FirstOrDefault(item => item.Prototype == prototype) is not { } item)
@@ -331,33 +403,78 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
             }
 
             cost += item.Cost * amount;
-            weight += item.Weight * amount;
-
-            var row = new BoxContainer
-            {
-                Orientation = BoxContainer.LayoutOrientation.Horizontal,
-                SeparationOverride = 4,
-            };
-            row.AddChild(new Label
-            {
-                Text = $"{amount}x {item.Name}",
-                HorizontalExpand = true,
-                ClipText = true,
-                ToolTip = item.Name,
-            });
-            var remove = new Button { Text = "−", MinWidth = 34, ToolTip = Loc.GetString("cmu-asrs-cart-remove") };
-            CmuButtonStyles.Apply(remove, CmuButtonStyles.Variant.Caution);
-            var captured = prototype;
-            remove.OnPressed += _ => RemoveFromCart(captured);
-            row.AddChild(remove);
-            view.CartContainer.AddChild(row);
+            requests.Add((item, amount));
         }
 
-        var slots = EstimateShipmentSlots(computer);
+        var plan = RequisitionsPackingPlan.Build(requests, computer.ItemShipmentWeightLimit);
+        var catalog = computer.ItemCatalog.ToDictionary(item => item.Prototype);
+        var sprites = EntMan.System<SpriteSystem>();
+        view.PackingAnchor = null;
+        for (var i = 0; i < plan.Crates.Count; i++)
+        {
+            var crate = plan.Crates[i];
+            var lines = crate.Items
+                .GroupBy(prototype => prototype)
+                .Select(group => (catalog[group.Key], group.Count()));
+            var state = crate.Weight >= computer.ItemShipmentWeightLimit
+                ? Loc.GetString("cmu-asrs-crate-sealed")
+                : Loc.GetString("cmu-asrs-crate-packing");
+            var card = new RequisitionsCrateCard(
+                Loc.GetString("cmu-asrs-crate-title", ("number", i + 1)),
+                state,
+                crate.Weight,
+                computer.ItemShipmentWeightLimit,
+                lines,
+                sprites,
+                _prototypes,
+                view.TerminalTheme,
+                AddToCart,
+                RemoveFromCart);
+            view.CartContainer.AddChild(card);
+            view.PackingAnchor = card.LandingAnchor;
+        }
+
+        for (var i = 0; i < plan.Loose.Count; i++)
+        {
+            var loose = plan.Loose[i];
+            if (!catalog.TryGetValue(loose.Prototype, out var item))
+                continue;
+            var card = new RequisitionsCrateCard(
+                Loc.GetString("cmu-asrs-loose-title", ("number", i + 1)),
+                Loc.GetString("cmu-asrs-loose-state"),
+                loose.Weight,
+                Math.Max(1, loose.Weight),
+                new[] { (item, 1) },
+                sprites,
+                _prototypes,
+                view.TerminalTheme,
+                AddToCart,
+                RemoveFromCart);
+            view.CartContainer.AddChild(card);
+            view.PackingAnchor = card.LandingAnchor;
+        }
+
+        var weight = plan.TotalWeight;
+        var slots = plan.ShipmentCount;
         view.CartEmptyLabel.Visible = _cart.Count == 0;
+        view.CartStateLabel.Text = _cart.Count == 0
+            ? Loc.GetString("cmu-asrs-cart-state-idle")
+            : Loc.GetString("cmu-asrs-cart-state-packing");
         view.CartCostLabel.Text = Loc.GetString("cmu-asrs-cart-cost", ("cost", cost));
         view.CartWeightLabel.Text = Loc.GetString("cmu-asrs-cart-weight", ("weight", weight));
         view.CartCratesLabel.Text = Loc.GetString("cmu-asrs-cart-crates", ("crates", slots));
+        var remaining = plan.Crates.Count == 0
+            ? computer.ItemShipmentWeightLimit
+            : computer.ItemShipmentWeightLimit - plan.Crates[^1].Weight;
+        view.CartCapacityLabel.Text = Loc.GetString("cmu-asrs-cart-capacity", ("remaining", remaining));
+
+        var balance = _lastState?.Balance ?? 0;
+        view.ProjectedBudgetLabel.Text = Loc.GetString("cmu-asrs-projected-budget", ("balance", balance - cost));
+        view.ProjectedBudgetLabel.FontColorOverride = cost > balance ? view.TerminalTheme.Alert : view.TerminalTheme.Caution;
+        view.PackingHintLabel.Text = BuildPackingHint(plan, cost, computer);
+        view.PackingHintLabel.FontColorOverride = slots > (_lastState?.AvailableSlots ?? 0) || cost > balance
+            ? view.TerminalTheme.Alert
+            : view.TerminalTheme.Accent;
         view.CheckoutButton.Disabled = _cart.Count == 0 ||
                                        _pendingCheckout != null ||
                                        _lastState == null ||
@@ -380,35 +497,19 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         return true;
     }
 
-    private int EstimateShipmentSlots(RequisitionsComputerComponent computer)
+    private string BuildPackingHint(RequisitionsPackedOrder plan, int cost, RequisitionsComputerComponent computer)
     {
-        var bins = new List<int>();
-        var loose = 0;
-        var weights = new List<int>();
-        foreach (var (prototype, amount) in _cart)
-        {
-            if (computer.ItemCatalog.FirstOrDefault(item => item.Prototype == prototype) is not { } item)
-                continue;
+        if (_cart.Count == 0)
+            return Loc.GetString("cmu-asrs-hint-empty");
+        if (_lastState != null && cost > _lastState.Balance)
+            return Loc.GetString("cmu-asrs-hint-funds", ("amount", cost - _lastState.Balance));
+        if (_lastState != null && plan.ShipmentCount > _lastState.AvailableSlots)
+            return Loc.GetString("cmu-asrs-hint-slots", ("amount", plan.ShipmentCount - _lastState.AvailableSlots));
+        if (plan.Loose.Count > 0)
+            return Loc.GetString("cmu-asrs-hint-loose", ("amount", plan.Loose.Count));
 
-            for (var i = 0; i < amount; i++)
-            {
-                if (item.Packable && item.Weight <= computer.ItemShipmentWeightLimit)
-                    weights.Add(item.Weight);
-                else
-                    loose++;
-            }
-        }
-
-        foreach (var itemWeight in weights.OrderByDescending(weight => weight))
-        {
-            var bin = bins.FindIndex(weight => weight + itemWeight <= computer.ItemShipmentWeightLimit);
-            if (bin < 0)
-                bins.Add(itemWeight);
-            else
-                bins[bin] += itemWeight;
-        }
-
-        return loose + bins.Count;
+        var remaining = computer.ItemShipmentWeightLimit - plan.Crates[^1].Weight;
+        return Loc.GetString("cmu-asrs-hint-fit", ("crate", plan.Crates.Count), ("remaining", remaining));
     }
 
     private string GetItemStockText(EntProtoId prototype)
@@ -439,12 +540,31 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         }
 
         var lines = _cart.Select(pair => new RequisitionsCheckoutLine(pair.Key, pair.Value)).ToList();
+        var requests = computer.ItemCatalog
+            .Where(item => _cart.ContainsKey(item.Prototype))
+            .Select(item => (Item: item, Amount: _cart[item.Prototype]))
+            .ToList();
+        var plan = RequisitionsPackingPlan.Build(requests, computer.ItemShipmentWeightLimit);
+        _pendingCost = requests.Sum(request => request.Item.Cost * request.Amount);
+        _pendingWeight = plan.TotalWeight;
+        _pendingSlots = plan.ShipmentCount;
+        _pendingItems = lines.Select(line => line.Prototype).ToList();
         var requestId = ++_checkoutRequestId;
         _pendingCheckout = requestId;
-        _window!.ItemizedView.FeedbackLabel.FontColorOverride = CrtTerminalPalette.Caution;
+        _window!.ItemizedView.FeedbackLabel.FontColorOverride = _window.ItemizedView.TerminalTheme.Caution;
         _window.ItemizedView.FeedbackLabel.Text = Loc.GetString("cmu-asrs-checkout-pending");
         _window.ItemizedView.CheckoutButton.Disabled = true;
+        _window.ItemizedView.BeginCheckout();
         SendMessage(new RequisitionsCheckoutMsg(requestId, lines));
+    }
+
+    private void PlayUiSound(string path, float volume)
+    {
+        _entities.System<AudioSystem>().PlayGlobal(
+            new SoundPathSpecifier(path),
+            Filter.Local(),
+            false,
+            AudioParams.Default.WithVolume(volume));
     }
 
     private void RebuildBrowser()

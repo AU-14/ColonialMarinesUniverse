@@ -9,6 +9,7 @@ using Content.Shared.EntityTable.EntitySelectors;
 using Content.Shared.EntityTable.ValueSelector;
 using Content.Shared.Item;
 using Content.Shared.Storage.Components;
+using Content.Shared.Stacks;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -42,6 +43,7 @@ public sealed partial class RequisitionsSystem
 
                 var weights = new Dictionary<EntProtoId, int>();
                 long totalWeight = 0;
+                var totalObjects = manifest.Values.Sum();
                 foreach (var (prototype, amount) in manifest)
                 {
                     var weight = GetItemWeight(prototype, out _);
@@ -72,8 +74,13 @@ public sealed partial class RequisitionsSystem
                         prices[prototype] = candidates;
                     }
 
+                    // A pure weight split makes light specialist gear almost free when it shares a
+                    // crate with heavy filler. Blend equal-object and cargo-weight shares so mixed
+                    // crates retain sensible value without discarding the logistics cost of bulk.
+                    var objectShare = 1d / totalObjects;
+                    var weightShare = (double) weights[prototype] / totalWeight;
                     candidates.Add(Math.Max(1,
-                        (int) Math.Ceiling((double) entry.Cost * weights[prototype] / totalWeight)));
+                        (int) Math.Ceiling(entry.Cost * (objectShare + weightShare) / 2d)));
 
                     if (!categories.TryGetValue(prototype, out var itemCategories))
                     {
@@ -119,6 +126,7 @@ public sealed partial class RequisitionsSystem
                 Categories = categories[prototypeId].Order().ToList(),
                 Cost = Math.Max(1, price),
                 Weight = Math.Max(1, weight),
+                Units = GetItemUnits(prototype),
                 Packable = packable,
             });
         }
@@ -253,6 +261,14 @@ public sealed partial class RequisitionsSystem
 
         packable = true;
         return Math.Max(1, size.Weight);
+    }
+
+    private int GetItemUnits(EntityPrototype prototype)
+    {
+        return prototype.TryComp<StackComponent>(
+            CompName.Get<StackComponent>(EntityManager.ComponentFactory), out var stack)
+            ? Math.Max(1, stack.Count)
+            : 1;
     }
 
     private bool HasItemizedSource(EntityUid computer, (int Category, int Order) key)
@@ -480,34 +496,19 @@ public sealed partial class RequisitionsSystem
         RequisitionsComputerComponent computer,
         IEnumerable<(RequisitionsItemEntry Item, int Amount)> requests)
     {
-        var shipments = new List<RequisitionsEntry>();
-        var packable = new List<RequisitionsItemEntry>();
-        foreach (var (item, amount) in requests)
+        var plan = RequisitionsPackingPlan.Build(requests, computer.ItemShipmentWeightLimit);
+        var shipments = plan.Crates.Select(crate => new RequisitionsEntry
         {
-            for (var i = 0; i < amount; i++)
-            {
-                if (item.Packable && item.Weight <= computer.ItemShipmentWeightLimit)
-                    packable.Add(item);
-                else
-                    shipments.Add(new RequisitionsEntry { Crate = item.Prototype, PackedWeight = item.Weight });
-            }
-        }
+            Crate = computer.ItemShipmentCrate,
+            Entities = new List<EntProtoId>(crate.Items),
+            PackedWeight = crate.Weight,
+        }).ToList();
 
-        foreach (var item in packable.OrderByDescending(item => item.Weight))
+        shipments.AddRange(plan.Loose.Select(item => new RequisitionsEntry
         {
-            var shipment = shipments.FirstOrDefault(order =>
-                order.Crate == computer.ItemShipmentCrate &&
-                order.PackedWeight + item.Weight <= computer.ItemShipmentWeightLimit);
-            if (shipment == null)
-            {
-                shipment = new RequisitionsEntry { Crate = computer.ItemShipmentCrate };
-                shipments.Add(shipment);
-            }
-
-            shipment.Entities.Add(item.Prototype);
-            shipment.PackedWeight += item.Weight;
-        }
-
+            Crate = item.Prototype,
+            PackedWeight = item.Weight,
+        }));
         return shipments;
     }
 
