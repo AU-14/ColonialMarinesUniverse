@@ -1039,6 +1039,15 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             _ => TimeSpan.Zero,
         };
 
+        // Always process the platform contents before completing a lower. If an update crosses
+        // both thresholds at once, finalizing first leaves the old shipment on the platform.
+        if (elevator.Mode == Lowering &&
+            time > elevator.ToggledAt + delay &&
+            Sell(ent))
+        {
+            return true;
+        }
+
         if (time > elevator.ToggledAt + moveDelay)
         {
             elevator.Audio = null;
@@ -1057,13 +1066,6 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             SpawnOrders(ent);
 
             return true;
-        }
-
-        if (elevator.Mode == Lowering &&
-            time > elevator.ToggledAt + delay)
-        {
-            if (Sell(ent))
-                return true;
         }
 
         return false;
