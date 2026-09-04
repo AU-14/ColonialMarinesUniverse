@@ -62,13 +62,13 @@ public sealed partial class CMUCargoVehicleComponent : Component
     public EntProtoId WreckPrototype = "CMUCargoCarrierWreck";
 
     [DataField]
-    public List<EntProtoId> DebrisPrototypes =
-    [
+    public List<EntProtoId> DebrisPrototypes = new()
+    {
         "CMUCargoCarrierDebris",
         "CMUCargoCarrierDebrisSide",
         "CMUCargoCarrierDebrisHood",
         "CMUCargoCarrierDebrisBumper",
-    ];
+    };
 
     [DataField]
     public EntProtoId OilSpawnerPrototype = "RMCDecalSpawnerOilSplatters";
