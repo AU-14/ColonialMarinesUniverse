@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.ARES.Logs;
+using Content.Shared._RMC14.Crate;
 using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
@@ -122,6 +123,23 @@ public sealed partial class RequisitionsSystem
         {
             hasFill = true;
             foreach (var spawn in storageFill.Contents)
+            {
+                if (spawn.PrototypeId == null ||
+                    spawn.SpawnProbability != 1f ||
+                    !string.IsNullOrEmpty(spawn.GroupId) ||
+                    spawn.MaxAmount > spawn.Amount)
+                {
+                    return false;
+                }
+
+                AddManifestItem(manifest, spawn.PrototypeId.Value, Math.Max(0, spawn.Amount));
+            }
+        }
+
+        if (cratePrototype.TryComp<CrateOpenableComponent>(CompName.Get<CrateOpenableComponent>(componentFactory), out var crateOpenable))
+        {
+            hasFill = true;
+            foreach (var spawn in crateOpenable.Spawn)
             {
                 if (spawn.PrototypeId == null ||
                     spawn.SpawnProbability != 1f ||

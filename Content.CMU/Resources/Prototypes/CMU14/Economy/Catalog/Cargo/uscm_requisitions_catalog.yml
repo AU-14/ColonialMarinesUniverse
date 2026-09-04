@@ -167,6 +167,10 @@
         crate: RMCCrateSuppliesBoxes
       - cost: 150
         crate: RMCCrateSupplyJanitor
+      - cost: 3000
+        crate: CMUCrateCargoCarrier
+        maxStock: 2
+        stockReplenishDelay: 0
     - name: Vehicle Ammo
       entries:
       - cost: 1900

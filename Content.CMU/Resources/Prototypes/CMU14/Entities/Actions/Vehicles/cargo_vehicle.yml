@@ -1,0 +1,38 @@
+- type: entity
+  parent: BaseAction
+  id: CMUActionCargoVehicleReturn
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.CargoVehicle.CMUCargoVehicleReturnActionEvent
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: BigItem
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+
+- type: entity
+  parent: BaseAction
+  id: CMUActionCargoVehicleToggleBay
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.CargoVehicle.CMUCargoVehicleToggleBayActionEvent
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: BigItem
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/cargo_carrier.rsi
+    state: cargo_open
+
+- type: entity
+  parent: BaseAction
+  id: CMUActionCargoVehicleSelfDestruct
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.CargoVehicle.CMUCargoVehicleSelfDestructActionEvent
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: BigItem
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Grenades/rcm20mm/he.rsi
+    state: icon
