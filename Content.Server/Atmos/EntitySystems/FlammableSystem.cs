@@ -548,7 +548,12 @@ namespace Content.Server.Atmos.EntitySystems
                     _inventory.RelayEvent((uid, inv), ref ev);
 
                 ApplyFireDamage(uid, flammable, ev.Multiplier);
-                AdjustFireStacks(uid, flammable.FirestackFade * (flammable.Resisting ? 15f : 1f), flammable, flammable.OnFire);
+
+                var fireStackAdjustment = flammable.FirestackFade;
+                if (flammable.Resisting && TryComp<OnFireComponent>(uid, out var rmcFire))
+                    fireStackAdjustment = rmcFire.ResistStacks;
+
+                AdjustFireStacks(uid, fireStackAdjustment, flammable, flammable.OnFire);
             }
         }
 

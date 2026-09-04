@@ -17,4 +17,10 @@ public sealed partial class OnFireComponent : Component
     /// </summary>
     [DataField]
     public int Duration;
+
+    /// <summary>
+    /// Fire stacks removed by one stop-drop-roll resist tick.
+    /// </summary>
+    [DataField]
+    public int ResistStacks = -10;
 }

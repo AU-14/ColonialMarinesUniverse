@@ -276,6 +276,44 @@ public sealed class FlammableLifecycleTest : GameTest
         });
     }
 
+    [Test]
+    public async Task StopDropRollUsesRmcResistStacksInsteadOfPositiveFade()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid human = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            SetOxygenAtmosphere(map.MapUid);
+            human = SpawnBurnable(map.MapId, 0);
+
+            var flammable = SEntMan.GetComponent<FlammableComponent>(human);
+            flammable.FirestackFade = 1;
+            IgniteRmc(human, 10, 10, 10);
+
+            var alert = new ResistFireAlertEvent();
+            SEntMan.EventBus.RaiseLocalEvent(human, alert);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(alert.Handled, Is.True);
+                Assert.That(flammable.Resisting, Is.True);
+            });
+        });
+
+        await Pair.RunTicksSync(1);
+
+        await Server.WaitAssertion(() =>
+        {
+            var flammable = SEntMan.GetComponent<FlammableComponent>(human);
+            Assert.Multiple(() =>
+            {
+                Assert.That(flammable.FireStacks, Is.Zero);
+                Assert.That(flammable.OnFire, Is.False);
+            });
+        });
+    }
+
     private EntityUid SpawnBurnable(MapId mapId, float x, string prototype = "CMMobHuman")
     {
         var uid = SEntMan.SpawnEntity(prototype, new MapCoordinates(new Vector2(x, 0), mapId));
