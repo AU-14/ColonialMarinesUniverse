@@ -77,6 +77,47 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
     }
 
     [Test]
+    public async Task UnmappedStaticIconUsesFirstSpriteLayer()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid serverAction = default;
+        NetEntity netAction = default;
+
+        try
+        {
+            await Server.WaitPost(() =>
+            {
+                serverAction = SEntMan.SpawnEntity("ActionSleep", map.GridCoords);
+                netAction = SEntMan.GetNetEntity(serverAction);
+            });
+            await Pair.RunUntilSynced();
+
+            await Client.WaitAssertion(() =>
+            {
+                var action = CEntMan.GetEntity(netAction);
+                var sprite = CEntMan.GetComponent<SpriteComponent>(action);
+                var sprites = Client.System<SpriteSystem>();
+
+                Assert.That(sprites.LayerMapTryGet(
+                    (action, sprite),
+                    ActionVisuals.Icon,
+                    out var iconLayer,
+                    false), Is.True);
+                Assert.That(iconLayer, Is.Zero);
+                Assert.That(sprite[iconLayer].Visible, Is.True);
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() =>
+            {
+                if (SEntMan.EntityExists(serverAction))
+                    SEntMan.DeleteEntity(serverAction);
+            });
+        }
+    }
+
+    [Test]
     public async Task StaticAndDynamicIconsReplicateAndCustomBackgroundTracksActionState()
     {
         var map = await Pair.CreateTestMap();

@@ -12,6 +12,16 @@ public sealed partial class ActionIconVisualsSystem : VisualizerSystem<ActionCom
         if (args.Sprite == null)
             return;
 
+        var sprite = (uid, args.Sprite);
+        // CMU14: Action prototypes often replace inherited sprite layers without repeating the icon map.
+        if (!SpriteSystem.LayerMapTryGet(sprite, ActionVisuals.Icon, out _, false))
+        {
+            if (SpriteSystem.LayerExists(sprite, 0))
+                SpriteSystem.LayerMapSet(sprite, ActionVisuals.Icon, 0);
+            else
+                SpriteSystem.LayerMapReserve(sprite, ActionVisuals.Icon);
+        }
+
         if (AppearanceSystem.TryGetData<SpriteSpecifier>(uid, ActionState.DynamicIcon, out var icon, args.Component))
         {
             if (icon is SpriteSpecifier.EntityPrototype)
