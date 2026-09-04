@@ -236,9 +236,13 @@ public sealed partial class CrewManifestSystem : EntitySystem
         foreach (var recordObject in iter)
         {
             var record = recordObject.Item2;
-            var entry = new CrewManifestEntry(record.Name, record.JobTitle, record.JobIcon, record.JobPrototype, record.Squad, record.SquadColor);
-
             ProtoMan.TryIndex(record.JobPrototype, out JobPrototype? job);
+
+            // CMU14
+            if (CMUShouldHideFromCrewManifest(job))
+                continue;
+
+            var entry = new CrewManifestEntry(record.Name, record.JobTitle, record.JobIcon, record.JobPrototype, record.Squad, record.SquadColor);
             entriesSort.Add((job, entry));
         }
 
