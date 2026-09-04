@@ -371,15 +371,16 @@ public sealed partial class BloodstreamSystem : EntitySystem
         }
 
         // The solution has extra capacity for injected chemicals, but medical blood level is a normalized percentage.
-        var totalBloodLevel = FixedPoint2.New(1);
+        var totalBloodLevel = 1f;
 
         foreach (var (reagentId, quantity) in entity.Comp.BloodReferenceSolution.Contents)
         {
             // Ideally we use a different calculation for blood pressure, this just defines how much *usable* blood you have!
-            totalBloodLevel = FixedPoint2.Min(totalBloodLevel, bloodSolution.GetTotalPrototypeQuantity(reagentId.Prototype) / quantity);
+            var reagentLevel = (float)bloodSolution.GetTotalPrototypeQuantity(reagentId.Prototype) / (float)quantity;
+            totalBloodLevel = MathF.Min(totalBloodLevel, reagentLevel);
         }
 
-        return (float)totalBloodLevel;
+        return totalBloodLevel;
     }
 
     /// <summary>

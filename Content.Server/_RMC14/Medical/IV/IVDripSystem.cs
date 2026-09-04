@@ -11,6 +11,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -110,13 +111,13 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             if (ivComp.Injecting)
             {
                 if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume)
-                {
-                    // Don't transfer non-blood reagants
-                    Solution excludedSolution = packSol.SplitSolutionWithout(packSol.MaxVolume, packComponent.TransferableReagents);
-                    _solutionContainer.TryTransferSolution(streamSolEnt.Value, packSol, ivComp.TransferAmount);
-                    _solutionContainer.TryAddSolution(packSolEnt.Value, excludedSolution);
-                    Dirty(packSolEnt.Value);
-                }
+                    TransferBloodToRecipient(
+                        streamSolEnt.Value,
+                        packSolEnt.Value,
+                        packSol,
+                        bloodstream,
+                        packComponent.TransferableReagents,
+                        ivComp.TransferAmount);
             }
             else
             {
@@ -152,13 +153,13 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
             if (packComp.Injecting)
             {
                 if (streamSolEnt.Value.Comp.Solution.Volume < streamSolEnt.Value.Comp.Solution.MaxVolume)
-                {
-                    // Don't transfer non-blood reagants
-                    Solution excludedSolution = packSol.SplitSolutionWithout(packSol.MaxVolume, packComp.TransferableReagents);
-                    _solutionContainer.TryTransferSolution(streamSolEnt.Value, packSol, packComp.TransferAmount);
-                    _solutionContainer.TryAddSolution(packSolEnt.Value, excludedSolution);
-                    Dirty(packSolEnt.Value);
-                }
+                    TransferBloodToRecipient(
+                        streamSolEnt.Value,
+                        packSolEnt.Value,
+                        packSol,
+                        bloodstream,
+                        packComp.TransferableReagents,
+                        packComp.TransferAmount);
             }
             else
             {
@@ -227,6 +228,43 @@ public sealed partial class IVDripSystem : SharedIVDripSystem
 
         _solutionContainer.TryTransferSolution(destination, sourceSolution, amount);
         _solutionContainer.TryAddSolution(source, excludedSolution);
+        Dirty(source);
+    }
+
+    private void TransferBloodToRecipient(
+        Entity<SolutionComponent> destination,
+        Entity<SolutionComponent> source,
+        Solution sourceSolution,
+        BloodstreamComponent bloodstream,
+        string[] transferableReagents,
+        FixedPoint2 amount)
+    {
+        amount = FixedPoint2.Min(amount, destination.Comp.Solution.AvailableVolume);
+        if (amount <= FixedPoint2.Zero)
+            return;
+
+        var transferablePrototypes = transferableReagents
+            .Select(reagent => (ProtoId<ReagentPrototype>) reagent)
+            .ToArray();
+        var transferred = sourceSolution.SplitSolutionWithOnly(amount, transferablePrototypes);
+        if (transferred.Volume <= FixedPoint2.Zero)
+            return;
+
+        // Blood packs do not model compatibility yet. Convert matching donor blood IDs (including DNA data)
+        // to the recipient's reference IDs so they restore blood volume instead of metabolizing as foreign blood.
+        foreach (var (referenceReagent, _) in bloodstream.BloodReferenceSolution)
+        {
+            var quantity = transferred.GetTotalPrototypeQuantity(referenceReagent.Prototype);
+            if (quantity <= FixedPoint2.Zero)
+                continue;
+
+            transferred.RemoveReagent(referenceReagent, quantity, ignoreReagentData: true);
+            transferred.AddReagent(referenceReagent, quantity);
+        }
+
+        if (!_solutionContainer.TryAddSolution(destination, transferred))
+            _solutionContainer.TryAddSolution(source, transferred);
+
         Dirty(source);
     }
 

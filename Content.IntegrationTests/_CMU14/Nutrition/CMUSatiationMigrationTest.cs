@@ -3,6 +3,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._RMC14.Chemistry.Effects.Positive;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.EntityEffects;
@@ -205,6 +207,7 @@ public sealed class CMUSatiationMigrationTest
             var entities = server.EntMan;
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var satiationSystem = entities.System<SatiationSystem>();
+            var bloodstreamSystem = entities.System<BloodstreamSystem>();
             var effects = entities.System<SharedEntityEffectsSystem>();
             var human = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             try
@@ -228,10 +231,19 @@ public sealed class CMUSatiationMigrationTest
 
                 satiationSystem.SetValue(entity, Hunger, 200f);
                 var atGate = satiationSystem.GetValueOrNull(entity, Hunger)!.Value;
+                var bloodstream = entities.GetComponent<BloodstreamComponent>(human);
+                Assert.That(bloodstreamSystem.TryModifyBloodLevel((human, bloodstream), -10), Is.True);
+                var bloodBeforeIron = bloodstreamSystem.GetBloodLevel((human, bloodstream));
                 ApplyHemogenic(effects, human, reagent, hemogenic);
-                Assert.That(satiationSystem.GetValueOrNull(entity, Hunger),
-                    Is.LessThan(atGate),
-                    "Hemogenic did not run at the inclusive 200 Hunger boundary.");
+                Assert.Multiple(() =>
+                {
+                    Assert.That(satiationSystem.GetValueOrNull(entity, Hunger),
+                        Is.LessThan(atGate),
+                        "Hemogenic did not run at the inclusive 200 Hunger boundary.");
+                    Assert.That(bloodstreamSystem.GetBloodLevel((human, bloodstream)),
+                        Is.GreaterThan(bloodBeforeIron),
+                        "RMCIron did not replenish the depleted bloodstream.");
+                });
             }
             finally
             {
