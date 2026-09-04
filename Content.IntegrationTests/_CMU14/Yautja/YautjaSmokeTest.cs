@@ -158,6 +158,21 @@ public sealed class YautjaSmokeTest
                 Assert.That(prototypes, Does.Contain("CMUYautjaAlienHealthAnalyzer"));
                 Assert.That(prototypes.Count(id => id == "CMUYautjaHerbalCase"), Is.EqualTo(2));
 
+                foreach (var herbalCase in storage.Container.ContainedEntities
+                             .Where(contained => entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID == "CMUYautjaHerbalCase"))
+                {
+                    var herbalStorage = entMan.GetComponent<StorageComponent>(herbalCase);
+                    var bruisePackTotal = herbalStorage.Container.ContainedEntities
+                        .Where(contained => entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID == "CMUYautjaAdvancedBruisePack")
+                        .Sum(pack => entMan.GetComponent<StackComponent>(pack).Count);
+                    var ointmentTotal = herbalStorage.Container.ContainedEntities
+                        .Where(contained => entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID == "CMUYautjaAdvancedOintment")
+                        .Sum(ointment => entMan.GetComponent<StackComponent>(ointment).Count);
+
+                    Assert.That(bruisePackTotal, Is.EqualTo(4));
+                    Assert.That(ointmentTotal, Is.EqualTo(4));
+                }
+
                 var healingGelTotal = storage.Container.ContainedEntities
                     .Where(contained => entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID == "CMUYautjaHealingGel")
                     .Sum(gel => entMan.GetComponent<StackComponent>(gel).Count);

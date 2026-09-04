@@ -1082,6 +1082,9 @@
     maxItemSize: Small
     grid:
     - 0,0,7,1
+    whitelist:
+      components:
+      - YautjaMedicalItem
   - type: StorageFill
     contents:
     - id: CMUYautjaAdvancedBruisePack
