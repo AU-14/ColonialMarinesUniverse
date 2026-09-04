@@ -10,6 +10,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -20,6 +21,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 
 public abstract partial class SharedHeartSystem : EntitySystem
 {
+    [Dependency] private INetManager _net = default!;
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected IPrototypeManager Proto = default!;
@@ -63,6 +65,9 @@ public abstract partial class SharedHeartSystem : EntitySystem
     private void OnHeartRemovedFromBody(Entity<HeartComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
         if (!_medicalEnabled || !_organEnabled)
+        if (_net.IsClient)
+            return;
+
             return;
         if (TerminatingOrDeleted(ent.Owner) || TerminatingOrDeleted(args.OldBody))
             return;
@@ -78,6 +83,9 @@ public abstract partial class SharedHeartSystem : EntitySystem
     private void OnHeartAddedToBody(Entity<HeartComponent> ent, ref OrganAddedToBodyEvent args)
     {
         if (ent.Comp.Stopped)
+        if (_net.IsClient)
+            return;
+
             return;
 
         RemCompDeferred<MissingHeartComponent>(args.Body);
@@ -327,6 +335,9 @@ public abstract partial class SharedHeartSystem : EntitySystem
             case OrganDamageStage.Damaged:
                 ent.Comp.MinBpmBeforeStop = 30;
                 Dirty(ent);
+        if (_net.IsClient)
+            return;
+
                 Status.TryRemoveStatusEffect(body, Tachycardia);
                 Status.TrySetStatusEffectDuration(body, Arrhythmia, duration: null);
                 break;

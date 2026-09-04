@@ -12,6 +12,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -20,6 +21,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 
 public abstract partial class SharedLungsSystem : EntitySystem
 {
+    [Dependency] private INetManager _net = default!;
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
@@ -58,6 +60,9 @@ public abstract partial class SharedLungsSystem : EntitySystem
 
     private void OnLungsRemovedFromBody(Entity<LungsComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         if (!_medicalEnabled || !_organEnabled)
             return;
         if (TerminatingOrDeleted(ent.Owner) || TerminatingOrDeleted(args.OldBody))
@@ -71,6 +76,9 @@ public abstract partial class SharedLungsSystem : EntitySystem
 
     private void OnLungsAddedToBody(Entity<LungsComponent> ent, ref OrganAddedToBodyEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         RemCompDeferred<MissingLungsComponent>(args.Body);
 
         if (ent.Comp.Efficiency >= 0.5f)
@@ -79,6 +87,9 @@ public abstract partial class SharedLungsSystem : EntitySystem
 
     private void OnStageChanged(Entity<LungsComponent> ent, ref OrganStageChangedEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         ent.Comp.Efficiency = GetEfficiency(args.New);
         Dirty(ent);
 

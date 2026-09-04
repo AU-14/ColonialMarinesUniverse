@@ -1071,7 +1071,8 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
     private void SyncHands(Entity<PowerLoaderComponent> loader)
     {
-        if (_net.IsClient)
+        // Recursive deletion removes held cargo and raises hand events before the loader is gone.
+        if (_net.IsClient || TerminatingOrDeleted(loader.Owner))
             return;
 
         var virtualContainer = _container.EnsureContainer<Container>(loader, loader.Comp.VirtualContainerId);

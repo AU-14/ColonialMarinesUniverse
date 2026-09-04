@@ -8,6 +8,7 @@ using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -19,6 +20,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
 public abstract partial class SharedBrainSystem : EntitySystem
 {
     [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] protected BlurryVisionSystem BlurryVision = default!;
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IRobustRandom Rng = default!;
@@ -52,6 +54,9 @@ public abstract partial class SharedBrainSystem : EntitySystem
     {
         if (!_medicalEnabled || !_organEnabled)
             return;
+        if (_net.IsClient)
+            return;
+
         if (TerminatingOrDeleted(args.OldBody))
             return;
 
@@ -68,6 +73,9 @@ public abstract partial class SharedBrainSystem : EntitySystem
     {
         var body = args.Body;
         UpdateVisionImpairment(body, ent.Comp, args.New);
+        if (_net.IsClient)
+            return;
+
         switch (args.New)
         {
             case OrganDamageStage.Healthy:

@@ -9,6 +9,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -16,6 +17,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
 
 public abstract partial class SharedKidneysSystem : EntitySystem
 {
+    [Dependency] private INetManager _net = default!;
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
@@ -49,6 +51,9 @@ public abstract partial class SharedKidneysSystem : EntitySystem
 
     private void OnKidneysRemovedFromBody(Entity<KidneysComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         if (!_medicalEnabled || !_organEnabled)
             return;
 
@@ -62,6 +67,9 @@ public abstract partial class SharedKidneysSystem : EntitySystem
 
     private void OnKidneysAddedToBody(Entity<KidneysComponent> ent, ref OrganAddedToBodyEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         RemCompDeferred<MissingKidneysComponent>(args.Body);
         if (TryComp<OrganHealthComponent>(ent, out var health) &&
             health.Stage.IsAtLeast(OrganDamageStage.Damaged))
@@ -76,6 +84,9 @@ public abstract partial class SharedKidneysSystem : EntitySystem
 
     private void OnStageChanged(Entity<KidneysComponent> ent, ref OrganStageChangedEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         ent.Comp.WasteFiltration = GetFiltration(args.New);
         Dirty(ent);
 

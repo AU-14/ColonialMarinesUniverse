@@ -11,6 +11,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared.CMU14.Medical.Core;
@@ -19,6 +20,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
 
 public abstract partial class SharedLiverSystem : EntitySystem
 {
+    [Dependency] private INetManager _net = default!;
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
@@ -54,6 +56,9 @@ public abstract partial class SharedLiverSystem : EntitySystem
 
     private void OnLiverRemovedFromBody(Entity<LiverComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         if (!_medicalEnabled || !_organEnabled)
             return;
 
@@ -67,6 +72,9 @@ public abstract partial class SharedLiverSystem : EntitySystem
 
     private void OnLiverAddedToBody(Entity<LiverComponent> ent, ref OrganAddedToBodyEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         RemCompDeferred<MissingLiverComponent>(args.Body);
         if (TryComp<OrganHealthComponent>(ent, out var health) &&
             health.Stage.IsAtLeast(OrganDamageStage.Damaged))
@@ -81,6 +89,9 @@ public abstract partial class SharedLiverSystem : EntitySystem
 
     private void OnStageChanged(Entity<LiverComponent> ent, ref OrganStageChangedEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         ent.Comp.ToxinClearMultiplier = GetClearance(args.New);
         Dirty(ent);
 

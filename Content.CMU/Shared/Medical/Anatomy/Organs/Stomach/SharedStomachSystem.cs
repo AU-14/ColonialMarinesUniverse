@@ -8,6 +8,7 @@ using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -16,6 +17,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
 public abstract partial class SharedStomachSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected StatusEffectsSystem Status = default!;
@@ -48,6 +50,9 @@ public abstract partial class SharedStomachSystem : EntitySystem
     {
         var body = args.Body;
         if (args.New.IsAtLeast(OrganDamageStage.Damaged))
+        if (_net.IsClient)
+            return;
+
             Status.TrySetStatusEffectDuration(body, Nausea, duration: null);
         else
             Status.TryRemoveStatusEffect(body, Nausea);
@@ -57,6 +62,9 @@ public abstract partial class SharedStomachSystem : EntitySystem
     {
         if (!_medicalEnabled || !_organEnabled)
             return;
+        if (_net.IsClient)
+            return;
+
 
         if (TerminatingOrDeleted(ent.Owner) || TerminatingOrDeleted(args.OldBody))
             return;
@@ -68,6 +76,9 @@ public abstract partial class SharedStomachSystem : EntitySystem
     private void OnStomachAddedToBody(Entity<CMUStomachComponent> ent, ref OrganAddedToBodyEvent args)
     {
         RemComp<MissingStomachComponent>(args.Body);
+
+        if (_net.IsClient)
+            return;
 
         if (TryComp<OrganHealthComponent>(ent, out var health) &&
             health.Stage.IsAtLeast(OrganDamageStage.Damaged))
