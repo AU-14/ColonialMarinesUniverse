@@ -149,6 +149,61 @@ public sealed class AuJobSelectionTest : ContentUnitTest
         }));
     }
 
+    [TestCase(0, 0)]
+    [TestCase(1, 1)]
+    [TestCase(10, 3)]
+    [TestCase(15, 4)]
+    [TestCase(20, 5)]
+    [TestCase(100, 25)]
+    public void ThreatPlayerBudgetUsesReadyPopulation(int readyPlayerCount, int expectedBudget)
+    {
+        Assert.That(
+            ThreatVoteSelection.CalculateThreatPlayerBudget(readyPlayerCount, 0.25f),
+            Is.EqualTo(expectedBudget));
+    }
+
+    [Test]
+    public void ThreatBodyCountIsLimitedToPlayerBudget()
+    {
+        ThreatVoteBodyCount bodyCount = ThreatVoteSelection.LimitBodyCount(
+            new ThreatVoteBodyCount(2, 8),
+            maxTotal: 4);
+
+        Assert.That(bodyCount, Is.EqualTo(new ThreatVoteBodyCount(2, 2)));
+    }
+
+    [Test]
+    public void ThreatVoteReservationDoesNotCombineCandidateMaximums()
+    {
+        ThreatVoteBodyCount bodyCount = ThreatVoteSelection.GetRequiredVoteBodyCount(
+        [
+            new ThreatVoteBodyCount(1, 3),
+            new ThreatVoteBodyCount(2, 2),
+        ]);
+
+        Assert.That(bodyCount, Is.EqualTo(new ThreatVoteBodyCount(2, 2)));
+    }
+
+    [Test]
+    public void ThreatSpawnBodiesAreLimitedUsingSameLeaderFirstBudget()
+    {
+        var leaders = new Dictionary<string, int>
+        {
+            ["Leader"] = 2,
+        };
+        var members = new Dictionary<string, int>
+        {
+            ["Mimic"] = 4,
+            ["Spider"] = 2,
+            ["Skitter"] = 2,
+        };
+
+        ThreatVoteSelection.LimitBodies(leaders, members, maxTotal: 4);
+
+        Assert.That(leaders.Values.Sum(), Is.EqualTo(2));
+        Assert.That(members.Values.Sum(), Is.EqualTo(2));
+    }
+
     [Test]
     public void ThreatVoteRoundJoinBlockTracksHeldPlayersUntilCleared()
     {

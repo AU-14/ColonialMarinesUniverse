@@ -96,7 +96,9 @@ public sealed partial class ThreatSystem : EntitySystem
                         pending.MapId,
                         pending.AssignedJobs,
                         pending.VoteHeldPlayers,
-                        pending.RequireObserverForVotePlayers))
+                        pending.RequireObserverForVotePlayers,
+                        pending.PlayerCount,
+                        pending.PlayerBudget))
                     StartThreatWinConditions(pending.Threat);
             }
             catch (Exception ex)
@@ -216,6 +218,8 @@ public sealed partial class ThreatSystem : EntitySystem
 
         bool isColonyFall = string.Equals(_auRound.SelectedPreset?.ID, "ColonyFall",
             StringComparison.OrdinalIgnoreCase);
+        int playerCount = assignedJobs.Count;
+        int playerBudget = ThreatVoteSelection.CalculateThreatPlayerBudget(playerCount, threat.ThreatRatio);
 
         if (isColonyFall)
         {
@@ -225,11 +229,17 @@ public sealed partial class ThreatSystem : EntitySystem
             SchedulePendingThreatSpawn(threat,
                 mapId,
                 assignedJobs,
-                TimeSpan.FromSeconds(delaySeconds));
+                TimeSpan.FromSeconds(delaySeconds),
+                playerCount: playerCount,
+                playerBudget: playerBudget);
         }
         else
         {
-            if (ExecuteSpawn(threat, mapId, assignedJobs))
+            if (ExecuteSpawn(threat,
+                    mapId,
+                    assignedJobs,
+                    scalingPlayerCount: playerCount,
+                    playerBudget: playerBudget))
                 StartThreatWinConditions(threat);
         }
     }
@@ -237,7 +247,8 @@ public sealed partial class ThreatSystem : EntitySystem
     public void SpawnThreatFromVote(ThreatPrototype threat,
         MapId mapId,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
-        IReadOnlyList<NetUserId> heldPlayers)
+        IReadOnlyList<NetUserId> heldPlayers,
+        int playerCount)
     {
         if (threat == null)
         {
@@ -258,6 +269,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
         bool isColonyFall = string.Equals(_auRound.SelectedPreset?.ID, "ColonyFall",
             StringComparison.OrdinalIgnoreCase);
+        int playerBudget = ThreatVoteSelection.CalculateThreatPlayerBudget(playerCount, threat.ThreatRatio);
 
         if (isColonyFall)
         {
@@ -269,11 +281,18 @@ public sealed partial class ThreatSystem : EntitySystem
                 assignedJobs,
                 TimeSpan.FromSeconds(delaySeconds),
                 heldPlayers,
-                true);
+                true,
+                playerCount,
+                playerBudget);
         }
         else
         {
-            if (ExecuteSpawn(threat, mapId, assignedJobs, heldPlayers))
+            if (ExecuteSpawn(threat,
+                    mapId,
+                    assignedJobs,
+                    heldPlayers,
+                    scalingPlayerCount: playerCount,
+                    playerBudget: playerBudget))
                 StartThreatWinConditions(threat);
         }
     }
@@ -308,7 +327,9 @@ public sealed partial class ThreatSystem : EntitySystem
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
         TimeSpan delay,
         IReadOnlyList<NetUserId>? voteHeldPlayers = null,
-        bool requireObserverForVotePlayers = false)
+        bool requireObserverForVotePlayers = false,
+        int? playerCount = null,
+        int? playerBudget = null)
     {
         var pending = new PendingThreatForceSpawn
         {
@@ -317,7 +338,9 @@ public sealed partial class ThreatSystem : EntitySystem
             AssignedJobs = assignedJobs,
             FireAt = _timing.CurTime + delay,
             VoteHeldPlayers = voteHeldPlayers?.ToList(),
-            RequireObserverForVotePlayers = requireObserverForVotePlayers
+            RequireObserverForVotePlayers = requireObserverForVotePlayers,
+            PlayerCount = playerCount,
+            PlayerBudget = playerBudget
         };
 
         EnqueuePendingThreatSpawn(pending);
@@ -340,7 +363,9 @@ public sealed partial class ThreatSystem : EntitySystem
         MapId mapId,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
         IReadOnlyList<NetUserId>? voteHeldPlayers = null,
-        bool requireObserverForVotePlayers = false)
+        bool requireObserverForVotePlayers = false,
+        int? scalingPlayerCount = null,
+        int? playerBudget = null)
     {
         string threatId = threat.ID;
         ProtoId<PartySpawnPrototype> partySpawn = threat.RoundStartSpawn;
@@ -468,14 +493,14 @@ public sealed partial class ThreatSystem : EntitySystem
         // Spawn leaders
         if (newPartySpawn != null)
         {
-            int playerCount = _playerManager.PlayerCount;
+            int playerCount = scalingPlayerCount ?? _playerManager.PlayerCount;
 
-            IReadOnlyDictionary<string, int> leaderBodies = ThreatSystem.GetSpawnBodies(
+            Dictionary<string, int> leaderBodies = ThreatSystem.GetSpawnBodies(
                 ThreatMarkerType.Leader,
                 newPartySpawn.LeadersToSpawn,
                 newPartySpawn.Scaling,
                 playerCount);
-            IReadOnlyDictionary<string, int> memberBodies = ThreatSystem.GetSpawnBodies(
+            Dictionary<string, int> memberBodies = ThreatSystem.GetSpawnBodies(
                 ThreatMarkerType.Member,
                 newPartySpawn.GruntsToSpawn,
                 newPartySpawn.Scaling,
@@ -485,6 +510,9 @@ public sealed partial class ThreatSystem : EntitySystem
                 newPartySpawn.EntitiesToSpawn,
                 EmptyScaling,
                 playerCount);
+            if (playerBudget is { } maxPlayerBodies)
+                ThreatVoteSelection.LimitBodies(leaderBodies, memberBodies, maxPlayerBodies);
+
             int leaderReq = leaderBodies.Values.Sum();
             int memberReq = memberBodies.Values.Sum();
             int entityReq = entityBodies.Values.Sum();
@@ -653,7 +681,13 @@ public sealed partial class ThreatSystem : EntitySystem
             {
                 List<NetUserId> eligibleHeldPlayers = GetEligibleVoteHeldPlayers(voteHeldPlayers,
                     requireObserverForVotePlayers);
-                int missingVoteBodies = eligibleHeldPlayers.Count - spawnedLeaders.Count - spawnedMembers.Count;
+                int availableVoteSeats = playerBudget is { } votePlayerBudget
+                    ? Math.Max(0, votePlayerBudget - spawnedLeaders.Count - spawnedMembers.Count)
+                    : int.MaxValue;
+                int missingVoteBodies = threat?.SpawnExtraVoteMembers == true
+                    ? Math.Min(eligibleHeldPlayers.Count - spawnedLeaders.Count - spawnedMembers.Count,
+                        availableVoteSeats)
+                    : 0;
                 int extraMembers = SpawnExtraVoteMemberBodies(missingVoteBodies);
                 if (extraMembers > 0)
                 {
@@ -773,7 +807,7 @@ public sealed partial class ThreatSystem : EntitySystem
         return true;
     }
 
-    private static IReadOnlyDictionary<string, int> GetSpawnBodies(
+    private static Dictionary<string, int> GetSpawnBodies(
         ThreatMarkerType markerType,
         IReadOnlyDictionary<string, int> legacyBodies,
         IReadOnlyDictionary<string, JobScaleEntry> legacyScaling,
@@ -984,6 +1018,8 @@ public sealed partial class ThreatSystem : EntitySystem
         public required Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> AssignedJobs;
         public required TimeSpan FireAt;
         public required MapId MapId;
+        public int? PlayerBudget;
+        public int? PlayerCount;
         public bool RequireObserverForVotePlayers;
         public required ThreatPrototype Threat;
         public IReadOnlyList<NetUserId>? VoteHeldPlayers;

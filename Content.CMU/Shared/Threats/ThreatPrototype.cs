@@ -39,6 +39,9 @@ public sealed partial class ThreatPrototype : IPrototype
     //   [DataField("govforratio")]
     //  public float GovForRatio { get; private set; } = 0.6f;
 
+    /// <summary>
+    ///     Maximum share of readied players assigned to player-controlled threat bodies.
+    /// </summary>
     [DataField("threatratio")]
     public float ThreatRatio { get; private set; } = 0.25f;
 

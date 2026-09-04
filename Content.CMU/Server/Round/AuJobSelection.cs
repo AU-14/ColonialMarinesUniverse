@@ -72,13 +72,10 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
         var threat = _auRoundSystem.SelectedThreat;
         Logger.GetSawmill("au14.jobs").Debug( $"[DEBUG] Preset: {presetId}, Threat: {threat?.ID ?? "null"}");
 
-        var threatRatio = threat?.ThreatRatio ?? 0f;
-
         // Third parties spawn through ThirdPartySystem's dedicated ghost-role path.
         // Do not force players into the utility ThirdParty jobs at roundstart: those
         // jobs are not station jobs and the normal spawn pipeline creates naked
         // placeholder humans when it tries to spawn them directly.
-        Logger.GetSawmill("au14.jobs").Debug( $"[DEBUG] threatRatio: {threatRatio}");
 
         // Modes that do NOT use threat jobs (e.g., insurgency, forceonforce)
         var noThreatModes = new[] { "insurgency", "forceonforce" };
@@ -195,7 +192,7 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
         if (!_prototypeManager.TryIndex(threat.RoundStartSpawn, out PartySpawnPrototype? partySpawn))
             return false;
 
-        bodyCount = ThreatVoteSelection.CalculateBodyCount(partySpawn, playerCount);
+        bodyCount = ThreatVoteSelection.CalculateBodyCount(partySpawn, playerCount, threat.ThreatRatio);
         return true;
     }
 

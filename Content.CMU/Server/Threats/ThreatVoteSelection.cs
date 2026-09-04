@@ -36,6 +36,72 @@ public static class ThreatVoteSelection
         => ThreatVoteSelection.CalculateBodyCount(spawn.LeadersToSpawn, spawn.GruntsToSpawn, spawn.Scaling,
             playerCount);
 
+    internal static ThreatVoteBodyCount CalculateBodyCount(PartySpawnPrototype spawn,
+        int playerCount,
+        float threatRatio)
+    {
+        ThreatVoteBodyCount bodyCount = ThreatVoteSelection.CalculateBodyCount(spawn, playerCount);
+        int playerBudget = ThreatVoteSelection.CalculateThreatPlayerBudget(playerCount, threatRatio);
+        return ThreatVoteSelection.LimitBodyCount(bodyCount, playerBudget);
+    }
+
+    internal static int CalculateThreatPlayerBudget(int readyPlayerCount, float threatRatio)
+    {
+        if (readyPlayerCount <= 0 ||
+            threatRatio <= 0 ||
+            float.IsNaN(threatRatio) ||
+            float.IsInfinity(threatRatio))
+        {
+            return 0;
+        }
+
+        int budget = (int) Math.Round(readyPlayerCount * threatRatio, MidpointRounding.AwayFromZero);
+        return Math.Clamp(budget, 1, readyPlayerCount);
+    }
+
+    internal static ThreatVoteBodyCount LimitBodyCount(ThreatVoteBodyCount bodyCount, int maxTotal)
+    {
+        var remaining = Math.Max(0, maxTotal);
+        int leaders = Math.Min(Math.Max(0, bodyCount.Leaders), remaining);
+        remaining -= leaders;
+        int members = Math.Min(Math.Max(0, bodyCount.Members), remaining);
+        return new(leaders, members);
+    }
+
+    internal static ThreatVoteBodyCount GetRequiredVoteBodyCount(IEnumerable<ThreatVoteBodyCount> candidates)
+    {
+        var maxTotal = 0;
+        var maxLeaders = 0;
+        foreach (ThreatVoteBodyCount candidate in candidates)
+        {
+            maxTotal = Math.Max(maxTotal, candidate.Total);
+            maxLeaders = Math.Max(maxLeaders, candidate.Leaders);
+        }
+
+        maxLeaders = Math.Min(maxLeaders, maxTotal);
+        return new(maxLeaders, maxTotal - maxLeaders);
+    }
+
+    internal static void LimitBodies(IDictionary<string, int> leaders,
+        IDictionary<string, int> members,
+        int maxTotal)
+    {
+        var remaining = Math.Max(0, maxTotal);
+        Limit(leaders, ref remaining);
+        Limit(members, ref remaining);
+        return;
+
+        static void Limit(IDictionary<string, int> bodies, ref int remaining)
+        {
+            foreach (string bodyId in bodies.Keys.ToList())
+            {
+                int count = Math.Min(Math.Max(0, bodies[bodyId]), remaining);
+                bodies[bodyId] = count;
+                remaining -= count;
+            }
+        }
+    }
+
     public static IReadOnlyDictionary<string, int> GetScaledBodies(
         IReadOnlyDictionary<string, int> bodies,
         IReadOnlyDictionary<string, JobScaleEntry> scaling,

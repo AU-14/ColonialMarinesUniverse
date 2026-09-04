@@ -92,9 +92,10 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             return false;
         }
 
-        int playerCount = Math.Max(_player.PlayerCount, profiles.Count);
+        int playerCount = profiles.Count;
         Sawmill.Debug($"[ThreatVoteSystem] Preparing threat vote: preset={presetId}, planet={planet.MapId}, profiles={
-            profiles.Count}, playerCount={playerCount}, selectedThreat={_auRound.SelectedThreat?.ID ?? "null"}.");
+            profiles.Count}, readyPlayerCount={playerCount}, connectedPlayers={_player.PlayerCount}, selectedThreat={
+                _auRound.SelectedThreat?.ID ?? "null"}.");
 
         List<ThreatVoteCandidate> candidates = BuildLegacyCandidates(planet, presetId, playerCount);
         ThreatVoteBodyCount heldBodyCount = ThreatVoteSystem.GetMaxRequiredBodyCount(candidates);
@@ -140,7 +141,8 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             PresetId = presetId,
             MapId = mapId,
             Candidates = candidates,
-            HeldPlayers = heldPlayers
+            HeldPlayers = heldPlayers,
+            PlayerCount = playerCount
         };
 
         Sawmill.Debug($"[ThreatVoteSystem] Prepared {candidates.Count} candidate(s), held {heldPlayers.Count
@@ -151,15 +153,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
 
     private static ThreatVoteBodyCount GetMaxRequiredBodyCount(IReadOnlyList<ThreatVoteCandidate> candidates)
     {
-        var leaders = 0;
-        var members = 0;
-        foreach (ThreatVoteCandidate candidate in candidates)
-        {
-            leaders = Math.Max(leaders, candidate.BodyCount.Leaders);
-            members = Math.Max(members, candidate.BodyCount.Members);
-        }
-
-        return new(leaders, members);
+        return ThreatVoteSelection.GetRequiredVoteBodyCount(candidates.Select(candidate => candidate.BodyCount));
     }
 
     public bool StartPreparedThreatVote(Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs)
@@ -257,7 +251,9 @@ public sealed partial class ThreatVoteSystem : EntitySystem
                 || !_prototype.TryIndex(threatProto.RoundStartSpawn, out PartySpawnPrototype? spawn))
                 continue;
 
-            ThreatVoteBodyCount bodyCount = ThreatVoteSelection.CalculateBodyCount(spawn, playerCount);
+            ThreatVoteBodyCount bodyCount = ThreatVoteSelection.CalculateBodyCount(spawn,
+                playerCount,
+                threatProto.ThreatRatio);
 
             if (bodyCount.Total <= 0)
                 continue;
@@ -301,7 +297,11 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         try
         {
             Sawmill.Debug($"[ThreatVoteSystem] Spawning voted threat '{selected.ID}'.");
-            _threat.SpawnThreatFromVote(selected, prepared.MapId, assignedJobs, prepared.HeldPlayers);
+            _threat.SpawnThreatFromVote(selected,
+                prepared.MapId,
+                assignedJobs,
+                prepared.HeldPlayers,
+                prepared.PlayerCount);
         }
         catch (Exception threatEx)
         {
@@ -399,6 +399,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         public required List<ThreatVoteCandidate> Candidates;
         public required List<NetUserId> HeldPlayers;
         public required MapId MapId;
+        public required int PlayerCount;
         public required string PresetId;
     }
 }

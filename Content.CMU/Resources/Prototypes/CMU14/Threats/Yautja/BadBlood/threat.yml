@@ -17,6 +17,7 @@
   blacklistedgamemodes:
   - ColonyFall
   jobScaling: DefaultDistressScale
+  spawnExtraVoteMembers: false
   winconditions:
   - KillAllGovforRule
   - KillAllYautjaRule

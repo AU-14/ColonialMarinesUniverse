@@ -58,7 +58,8 @@ public sealed class CultistThreatAssignmentTest
                 threat,
                 map.MapId,
                 assignedJobs,
-                [player.UserId]);
+                [player.UserId],
+                playerCount: 16);
         });
 
         await pair.RunTicksSync(5);

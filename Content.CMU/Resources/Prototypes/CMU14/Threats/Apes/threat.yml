@@ -50,6 +50,8 @@
 - type: partySpawn
   id: apeParty
   leadersToSpawn:
-    CMUMobApe: 12
+    CMUMobApe: 1
+  gruntsToSpawn:
+    CMUMobApe: 11
   scalewithpop: false
   spawnTogether: true
