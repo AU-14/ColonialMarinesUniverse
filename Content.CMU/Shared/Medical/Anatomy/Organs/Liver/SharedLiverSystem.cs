@@ -54,7 +54,10 @@ public abstract partial class SharedLiverSystem : EntitySystem
 
     private void OnLiverRemovedFromBody(Entity<LiverComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (!_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
+        if (!_medicalEnabled || !_organEnabled)
+            return;
+
+        if (TerminatingOrDeleted(ent.Owner) || TerminatingOrDeleted(args.OldBody))
             return;
 
         var missing = EnsureComp<MissingLiverComponent>(args.OldBody);

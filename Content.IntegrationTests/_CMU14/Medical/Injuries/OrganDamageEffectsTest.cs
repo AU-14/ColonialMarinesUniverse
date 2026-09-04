@@ -274,6 +274,56 @@ public sealed class OrganDamageEffectsTest
     }
 
     [Test]
+    public async Task DeletingOrgansDuringTeardownDoesNotApplyMissingOrganEffects()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var index = entMan.System<CMUMedicalBodyIndexSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var heart = GetOrgan<HeartComponent>(index, human);
+                var kidneys = GetOrgan<KidneysComponent>(index, human);
+                var liver = GetOrgan<LiverComponent>(index, human);
+                var lungs = GetOrgan<LungsComponent>(index, human);
+                var stomach = GetOrgan<CMUStomachComponent>(index, human);
+
+                entMan.DeleteEntity(heart);
+                entMan.DeleteEntity(kidneys);
+                entMan.DeleteEntity(liver);
+                entMan.DeleteEntity(lungs);
+                entMan.DeleteEntity(stomach);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.HasComponent<MissingHeartComponent>(human), Is.False);
+                    Assert.That(entMan.HasComponent<MissingKidneysComponent>(human), Is.False);
+                    Assert.That(entMan.HasComponent<MissingLiverComponent>(human), Is.False);
+                    Assert.That(entMan.HasComponent<MissingLungsComponent>(human), Is.False);
+                    Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUCardiacArrest"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMURenalFailure"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUHepaticFailure"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUPulmonaryEdema"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.False);
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task MissingLiverAndKidneysDisableClearanceAndGenerateToxins()
     {
         await using var pair = await PoolManager.GetServerClient();

@@ -60,7 +60,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
     {
         if (!_medicalEnabled || !_organEnabled)
             return;
-        if (TerminatingOrDeleted(args.OldBody))
+        if (TerminatingOrDeleted(ent.Owner) || TerminatingOrDeleted(args.OldBody))
             return;
 
         var missing = EnsureComp<MissingLungsComponent>(args.OldBody);
