@@ -1,13 +1,14 @@
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.Weapons.Ranged;
 
 /// <summary>
 /// Wrapper around a magazine (handled via ItemSlot). Passes all AmmoProvider logic onto it.
 /// </summary>
-[RegisterComponent, Virtual]
+[RegisterComponent, Virtual, AutoGenerateComponentState]
 [Access(typeof(SharedGunSystem))]
 public partial class MagazineAmmoProviderComponent : AmmoProviderComponent
 {
