@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Database;
 using Content.Shared.Follower.Components;
+using Content.Shared.GameTicking;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Hands;
 using Content.Shared.Movement.Events;
@@ -37,6 +38,7 @@ public sealed partial class FollowerSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
+    private readonly List<(EntityUid Follower, EntityUid Followed)> _roundRestartFollowers = new();
 
     private static readonly ProtoId<TagPrototype> ForceableFollowTag = "ForceableFollow";
     private static readonly ProtoId<TagPrototype> PreventGhostnadoWarpTag = "NotGhostnadoWarpable";
@@ -58,6 +60,27 @@ public sealed partial class FollowerSystem : EntitySystem
         SubscribeLocalEvent<BeforeSerializationEvent>(OnBeforeSave);
         SubscribeLocalEvent<FollowedComponent, PolymorphedEvent>(OnFollowedPolymorphed);
         SubscribeLocalEvent<FollowedComponent, StationAiRemoteEntityReplacementEvent>(OnFollowedStationAiRemoteEntityReplaced);
+
+        if (_netMan.IsClient)
+            SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent _)
+    {
+        _roundRestartFollowers.Clear();
+
+        var query = EntityQueryEnumerator<FollowerComponent>();
+        while (query.MoveNext(out var follower, out var component))
+        {
+            _roundRestartFollowers.Add((follower, component.Following));
+        }
+
+        foreach (var (follower, followed) in _roundRestartFollowers)
+        {
+            StopFollowingEntity(follower, followed);
+        }
+
+        _roundRestartFollowers.Clear();
     }
 
     private void OnFollowedAttempt(Entity<FollowedComponent> ent, ref ComponentGetStateAttemptEvent args)

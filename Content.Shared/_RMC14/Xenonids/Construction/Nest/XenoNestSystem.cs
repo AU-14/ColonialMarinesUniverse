@@ -773,6 +773,9 @@ public sealed partial class XenoNestSystem : EntitySystem
             return;
         }
 
+        if (xform.MapUid is not { } map || Terminating(map))
+            return;
+
         if (TryComp(nested, out XenoNestedComponent? nestedComp))
         {
             nest ??= nestedComp.Nest;
