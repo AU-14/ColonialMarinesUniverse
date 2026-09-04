@@ -1,4 +1,6 @@
 using Content.Server.Chat.Systems;
+using Content.Server.Spreader;
+using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
@@ -31,6 +33,31 @@ public sealed partial class AbominationFleshKudzuSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedXenoWeedsSystem _weeds = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<AbominationFleshKudzuComponent, SpreadNeighborsEvent>(OnSpreadNeighbors,
+            before: [typeof(KudzuSystem)]);
+    }
+
+    private void OnSpreadNeighbors(Entity<AbominationFleshKudzuComponent> ent, ref SpreadNeighborsEvent args)
+    {
+        for (var i = args.NeighborFreeTiles.Count - 1; i >= 0; i--)
+        {
+            var neighbor = args.NeighborFreeTiles[i];
+            if (_weeds.CanSpreadWeedsPopup(
+                    (neighbor.Tile.GridUid, neighbor.Grid),
+                    neighbor.Tile.GridIndices,
+                    null,
+                    null))
+            {
+                continue;
+            }
+
+            args.NeighborFreeTiles.RemoveAt(i);
+        }
+    }
 
     public override void Update(float frameTime)
     {

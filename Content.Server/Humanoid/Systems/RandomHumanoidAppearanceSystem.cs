@@ -39,6 +39,9 @@ public sealed partial class RandomHumanoidAppearanceSystem : EntitySystem
         if (TryComp<RandomHumanoidAppearanceWhitelistedComponent>(ent, out var whitelist))
             profile = ApplyWhitelist(profile, whitelist);
 
+        if (profile.Sex == Sex.Female)
+            profile = WithoutMarkings(profile, HumanoidVisualLayers.FacialHair);
+
         var appearance = HumanoidCharacterAppearance.EnsureValid(profile.Appearance, profile.Species, profile.Sex);
         profile = profile.WithCharacterAppearance(appearance);
 
@@ -78,15 +81,6 @@ public sealed partial class RandomHumanoidAppearanceSystem : EntitySystem
         }
 
         var hairColor = GetMarkingColor(profile, HumanoidVisualLayers.Hair, Color.Black);
-        if (profile.Sex == Sex.Female)
-        {
-            return WithMarking(
-                profile,
-                HumanoidVisualLayers.FacialHair,
-                HairStyles.DefaultFacialHairStyle,
-                Color.Black);
-        }
-
         if (whitelist.BeardChance > 0f && _random.NextFloat() < whitelist.BeardChance)
         {
             if (whitelist.AllowedBeardStyles is { Count: > 0 })
@@ -165,6 +159,19 @@ public sealed partial class RandomHumanoidAppearanceSystem : EntitySystem
         }
 
         return fallback;
+    }
+
+    private static HumanoidCharacterProfile WithoutMarkings(
+        HumanoidCharacterProfile profile,
+        HumanoidVisualLayers layer)
+    {
+        var markings = CloneMarkings(profile.Appearance.Markings);
+        foreach (var organMarkings in markings.Values)
+        {
+            organMarkings.Remove(layer);
+        }
+
+        return profile.WithCharacterAppearance(profile.Appearance.WithMarkings(markings));
     }
 
     private static Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>

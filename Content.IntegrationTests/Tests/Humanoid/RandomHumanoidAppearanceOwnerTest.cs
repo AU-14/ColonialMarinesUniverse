@@ -50,6 +50,31 @@ public sealed class RandomHumanoidAppearanceOwnerTest : GameTest
   - type: RandomHumanoidAppearance
     hair: VoxHairAfro
     randomizeName: false
+
+- type: species
+  id: RandomHumanoidAppearanceFemaleTestSpecies
+  name: species-name-human
+  roundStart: false
+  prototype: RandomHumanoidAppearanceFemaleTestTarget
+  dollPrototype: RandomHumanoidAppearanceFemaleTestTarget
+  skinColoration: HumanToned
+  sexes: [ Female ]
+  defaultSoundsBySex:
+  - RMCMaleHuman
+  - RMCFemaleHuman
+  - RMCMaleHuman
+  voices:
+  - RMCMaleHuman
+  - RMCFemaleHuman
+
+- type: entity
+  parent: CMMobHuman
+  id: RandomHumanoidAppearanceFemaleTestTarget
+  components:
+  - type: HumanoidProfile
+    species: RandomHumanoidAppearanceFemaleTestSpecies
+  - type: RandomHumanoidAppearance
+    randomizeName: false
 """;
 
     [Test]
@@ -126,6 +151,32 @@ public sealed class RandomHumanoidAppearanceOwnerTest : GameTest
                 Assert.That(hair.Select(marking => marking.MarkingId.Id),
                     Does.Not.Contain("VoxHairAfro"),
                     "EnsureValid must remove a fixed marking that is not valid for the preserved species");
+            }
+            finally
+            {
+                SEntMan.DeleteEntity(target);
+            }
+        });
+    }
+
+    [Test]
+    public async Task FemaleRandomAppearanceHasNoFacialHairWithoutWhitelist()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var target = SEntMan.Spawn("RandomHumanoidAppearanceFemaleTestTarget");
+
+            try
+            {
+                var profile = SEntMan.GetComponent<HumanoidProfileComponent>(target);
+                Assert.That(profile.Sex, Is.EqualTo(Sex.Female));
+                var hasFacialHair = _organAppearance.TryGetMarkings(
+                    target,
+                    HumanoidVisualLayers.FacialHair,
+                    out _,
+                    out _,
+                    out var facialHair);
+                Assert.That(hasFacialHair && facialHair.Count > 0, Is.False);
             }
             finally
             {
