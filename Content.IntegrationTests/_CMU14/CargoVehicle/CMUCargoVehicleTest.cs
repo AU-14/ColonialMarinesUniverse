@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server._RMC14.Scorch;
+using Content.Shared.Access.Systems;
 using Content.Shared.Actions;
 using Content.Shared.CMU14.CargoVehicle;
 using Content.Shared.CMU14.util;
@@ -170,6 +171,27 @@ public sealed class CMUCargoVehicleTest
             {
                 Assert.That(prototypes.TryIndex<EntityPrototype>(action, out _), Is.True, action);
             }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AccessItemTraversalTerminatesForSelfOperatedCarrier()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var carrier = entities.SpawnEntity(CarrierId, MapCoordinates.Nullspace);
+            var vehicle = entities.GetComponent<VehicleComponent>(carrier);
+
+            Assert.That(vehicle.Operator, Is.EqualTo(carrier));
+
+            var accessItems = entities.System<AccessReaderSystem>().FindPotentialAccessItems(carrier);
+            Assert.That(accessItems, Does.Contain(carrier));
         });
 
         await pair.CleanReturnAsync();
