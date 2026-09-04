@@ -254,6 +254,11 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
     public void ForceDecloak(EntityUid user)
     {
+        // Damage and mob-state events also fire while restoring replicated state. The server's
+        // cloak state is authoritative here; changing components would invalidate prediction reset.
+        if (_timing.ApplyingState)
+            return;
+
         if (!HasComp<EntityActiveInvisibleComponent>(user) ||
             !_power.TryGetWornBracer(user, out var bracer))
         {
