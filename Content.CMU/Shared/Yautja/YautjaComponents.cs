@@ -357,6 +357,30 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public FixedPoint2 StabilisingCrystalCost = 400;
 
     [DataField]
+    public EntProtoId FieldRationPrototype = "CMUYautjaFieldRation";
+
+    [DataField]
+    public FixedPoint2 FieldRationCost = 100;
+
+    [DataField]
+    public TimeSpan FieldRationCooldown = TimeSpan.FromSeconds(30);
+
+    [DataField]
+    public TimeSpan NextFieldRation;
+
+    [DataField]
+    public EntProtoId HuntingCanteenPrototype = "CMUYautjaHuntingCanteen";
+
+    [DataField]
+    public FixedPoint2 HuntingCanteenCost = 100;
+
+    [DataField]
+    public TimeSpan HuntingCanteenCooldown = TimeSpan.FromSeconds(30);
+
+    [DataField]
+    public TimeSpan NextHuntingCanteen;
+
+    [DataField]
     public FixedPoint2 HumanStabilisingCrystalCost = 400;
 
      [DataField]

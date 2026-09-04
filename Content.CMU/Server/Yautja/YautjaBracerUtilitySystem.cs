@@ -77,6 +77,8 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, YautjaTranslatorActionEvent>(OnTranslator);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaToggleBracerIdChipActionEvent>(OnToggleIdChip);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateStabilisingCrystalActionEvent>(OnCreateStabilisingCrystal);
+        SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateFieldRationActionEvent>(OnCreateFieldRation);
+        SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHuntingCanteenActionEvent>(OnCreateHuntingCanteen);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHumanStabilisingCrystalActionEvent>(OnCreateHumanStabilisingCrystal);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHuntingTrapActionEvent>(OnCreateHuntingTrap);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaOverloadBracerDoAfterEvent>(OnOverloadBracerDoAfter);
@@ -216,6 +218,26 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
         args.Handled = true;
         TryCreateHumanStabilisingCrystal(ent, args.Performer);
+    }
+
+    private void OnCreateFieldRation(Entity<YautjaBracerComponent> ent, ref YautjaCreateFieldRationActionEvent args)
+    {
+        if (args.Handled || !_rmcActions.TryUseAction(args))
+            return;
+
+        args.Handled = true;
+        TryCreateItem(ent, args.Performer, ent.Comp.FieldRationPrototype, ent.Comp.FieldRationCost,
+            ent.Comp.FieldRationCooldown, ref ent.Comp.NextFieldRation, "cmu-yautja-bracer-item-created");
+    }
+
+    private void OnCreateHuntingCanteen(Entity<YautjaBracerComponent> ent, ref YautjaCreateHuntingCanteenActionEvent args)
+    {
+        if (args.Handled || !_rmcActions.TryUseAction(args))
+            return;
+
+        args.Handled = true;
+        TryCreateItem(ent, args.Performer, ent.Comp.HuntingCanteenPrototype, ent.Comp.HuntingCanteenCost,
+            ent.Comp.HuntingCanteenCooldown, ref ent.Comp.NextHuntingCanteen, "cmu-yautja-bracer-item-created");
     }
 
     private void OnCreateHuntingTrap(Entity<YautjaBracerComponent> ent, ref YautjaCreateHuntingTrapActionEvent args)

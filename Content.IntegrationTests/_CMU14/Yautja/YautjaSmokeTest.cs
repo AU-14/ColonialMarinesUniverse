@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.Humanoid.Systems;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -71,12 +72,105 @@ public sealed class YautjaSmokeTest
                 Assert.That(server.ProtoMan.Index(YautjaRadioChannel).KeyCode, Is.EqualTo('9'));
 
                 foreach (var action in VoiceActionIds)
-                    Assert.That(HasAction(entMan, hunter, action), Is.True, action);
+                    Assert.That(HasAction(entMan, hunter, action), Is.False, action);
+
+                Assert.That(CountActions(entMan, hunter, "ActionCombatModeToggle"), Is.EqualTo(1));
             }
             finally
             {
                 if (!entMan.Deleted(hunter))
                     entMan.DeleteEntity(hunter);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RandomYautjaSpawnHasOneCombatModeAndNoVoiceActions()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var randomHumanoid = entMan.System<RandomHumanoidSystem>();
+            var hunter = randomHumanoid.SpawnRandomHumanoid("CMUYautjaHunter", EntityCoordinates.Invalid, string.Empty);
+
+            try
+            {
+                foreach (var action in VoiceActionIds)
+                    Assert.That(HasAction(entMan, hunter, action), Is.False, action);
+
+                Assert.That(CountActions(entMan, hunter, "ActionCombatModeToggle"), Is.EqualTo(1));
+            }
+            finally
+            {
+                if (!entMan.Deleted(hunter))
+                    entMan.DeleteEntity(hunter);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task BracerFabricatesRationAndCanteen()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var hands = entMan.System<SharedHandsSystem>();
+            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
+            var rationAction = entMan.SpawnEntity("CMUActionYautjaCreateFieldRation", MapCoordinates.Nullspace);
+            var canteenAction = entMan.SpawnEntity("CMUActionYautjaCreateHuntingCanteen", MapCoordinates.Nullspace);
+
+            try
+            {
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
+
+                var rationActionComp = entMan.GetComponent<ActionComponent>(rationAction);
+                var rationEvent = new YautjaCreateFieldRationActionEvent
+                {
+                    Performer = hunter,
+                    Action = (rationAction, rationActionComp),
+                };
+                entMan.EventBus.RaiseLocalEvent(bracer, rationEvent);
+
+                var ration = hands.GetActiveItem(hunter);
+                Assert.That(ration, Is.Not.Null);
+                Assert.That(entMan.GetComponent<MetaDataComponent>(ration!.Value).EntityPrototype?.ID,
+                    Is.EqualTo("CMUYautjaFieldRation"));
+                entMan.DeleteEntity(ration.Value);
+
+                var canteenActionComp = entMan.GetComponent<ActionComponent>(canteenAction);
+                var canteenEvent = new YautjaCreateHuntingCanteenActionEvent
+                {
+                    Performer = hunter,
+                    Action = (canteenAction, canteenActionComp),
+                };
+                entMan.EventBus.RaiseLocalEvent(bracer, canteenEvent);
+
+                var canteen = hands.GetActiveItem(hunter);
+                Assert.That(canteen, Is.Not.Null);
+                Assert.That(entMan.GetComponent<MetaDataComponent>(canteen!.Value).EntityPrototype?.ID,
+                    Is.EqualTo("CMUYautjaHuntingCanteen"));
+            }
+            finally
+            {
+                entMan.DeleteEntity(hunter);
+                entMan.DeleteEntity(rationAction);
+                entMan.DeleteEntity(canteenAction);
+
+                if (!entMan.Deleted(bracer))
+                    entMan.DeleteEntity(bracer);
             }
         });
 
@@ -280,5 +374,14 @@ public sealed class YautjaSmokeTest
         }
 
         return false;
+    }
+
+    private static int CountActions(IEntityManager entMan, EntityUid user, string prototype)
+    {
+        if (!entMan.TryGetComponent<ActionsComponent>(user, out var actions))
+            return 0;
+
+        return actions.Actions.Count(action =>
+            entMan.GetComponent<MetaDataComponent>(action).EntityPrototype?.ID == prototype);
     }
 }

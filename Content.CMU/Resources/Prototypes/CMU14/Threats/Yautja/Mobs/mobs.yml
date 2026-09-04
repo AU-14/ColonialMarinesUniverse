@@ -13,16 +13,6 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
-  - type: ActionGrant
-    actions:
-    - CMUActionYautjaVoiceClick
-    - CMUActionYautjaVoiceRoar
-    - CMUActionYautjaVoiceLaugh
-    - CMUActionYautjaVoiceGrowl
-    - CMUActionYautjaVoicePain
-    - CMUActionYautjaVoiceDistract
-    - CMUActionYautjaVoiceDeathCry
-    - CMUActionYautjaVoiceDeathLaugh
   - type: YautjaHeatResistance
   - type: IgnoreXenoWeedsSlowdown
   - type: Skills
