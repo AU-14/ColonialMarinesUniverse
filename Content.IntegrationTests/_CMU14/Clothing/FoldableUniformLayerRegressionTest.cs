@@ -8,15 +8,17 @@ namespace Content.IntegrationTests.CMU14.Clothing;
 [TestFixture]
 public sealed class FoldableUniformLayerRegressionTest : GameTest
 {
-    [Test]
-    public async Task JacketFoldRevealsUndergarmentTop()
+    [TestCase("JumpsuitMarine")]
+    [TestCase("AU14CamoUSCMFatigues")]
+    [TestCase("AU14HAZOPUrbanFatigues")]
+    public async Task JacketFoldRevealsUndergarmentTop(string uniformPrototype)
     {
         var map = await Pair.CreateTestMap();
 
         await Server.WaitAssertion(() =>
         {
             var wearer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var uniform = SEntMan.SpawnEntity("AU14HAZOPUrbanFatigues", map.GridCoords);
+            var uniform = SEntMan.SpawnEntity(uniformPrototype, map.GridCoords);
             var inventory = Server.System<InventorySystem>();
             var clothing = SEntMan.GetComponent<RMCClothingFoldableComponent>(uniform);
             var fold = Server.System<RMCClothingSystem>();
