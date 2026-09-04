@@ -75,9 +75,28 @@ public sealed partial class FollowerSystem : EntitySystem
             _roundRestartFollowers.Add((follower, component.Following));
         }
 
+        if (_roundRestartFollowers.Count != 0)
+            Log.Info($"[CMU-ROUND-RESET-FOLLOWER] Detaching {_roundRestartFollowers.Count} active follower relationships before the client state reset.");
+
         foreach (var (follower, followed) in _roundRestartFollowers)
         {
-            StopFollowingEntity(follower, followed);
+            var parent = TryComp(follower, out TransformComponent? xform)
+                ? xform.ParentUid.ToString()
+                : "<no transform>";
+
+            Log.Debug($"[CMU-ROUND-RESET-FOLLOWER] Detaching follower {ToPrettyString(follower)} from " +
+                      $"{ToPrettyString(followed)}. Current parent: {parent}.");
+
+            try
+            {
+                StopFollowingEntity(follower, followed);
+            }
+            catch (Exception exception)
+            {
+                Log.Error($"[CMU-ROUND-RESET-FOLLOWER] Failed to detach follower {ToPrettyString(follower)} from " +
+                          $"{ToPrettyString(followed)}. Current parent: {parent}. Exception and full trace:\n{exception}");
+                throw;
+            }
         }
 
         _roundRestartFollowers.Clear();
