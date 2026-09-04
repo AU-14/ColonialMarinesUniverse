@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Clothing;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -34,6 +35,19 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
         SetLayerVisibility(ent!, args.Wearer, hideLayers: false);
     }
 
+    public void RefreshLayerVisibility(Entity<HideLayerClothingComponent?, ClothingComponent?> clothing)
+    {
+        if (!Resolve(clothing.Owner, ref clothing.Comp1, ref clothing.Comp2) ||
+            clothing.Comp2.InSlot == null ||
+            clothing.Comp2.InSlotFlag is not { } inSlot ||
+            inSlot == SlotFlags.NONE)
+        {
+            return;
+        }
+
+        SetLayerVisibility(clothing, Transform(clothing).ParentUid, hideLayers: true);
+    }
+
     private void SetLayerVisibility(
         Entity<HideLayerClothingComponent?, ClothingComponent?> clothing,
         Entity<HideableHumanoidLayersComponent?> user,
@@ -65,7 +79,10 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
         {
             // Only update this layer if we are currently equipped to the relevant slot.
             if (validSlots.HasFlag(inSlot))
-                _hideableHumanoidLayers.SetLayerOcclusion(user, layer, hideLayers, inSlot);
+            {
+                var hideLayer = hideLayers && !IsRevealedByFold(clothing.Owner, layer);
+                _hideableHumanoidLayers.SetLayerOcclusion(user, layer, hideLayer, inSlot);
+            }
         }
 
         // Fallback for obsolete field: assume we want to hide **all** layers, as long as we are equipped to any
@@ -79,6 +96,23 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
                 _hideableHumanoidLayers.SetLayerOcclusion(user, layer, hideLayers, inSlot);
             }
         }
+    }
+
+    private bool IsRevealedByFold(EntityUid clothing, HumanoidVisualLayers layer)
+    {
+        if (!TryComp<RMCClothingFoldableComponent>(clothing, out var foldable) ||
+            foldable.ActivatedPrefix is not { } prefix)
+        {
+            return false;
+        }
+
+        foreach (var type in foldable.Types)
+        {
+            if (type.Prefix == prefix && type.RevealLayers?.Contains(layer) == true)
+                return true;
+        }
+
+        return false;
     }
 
     private bool IsEnabled(Entity<HideLayerClothingComponent, ClothingComponent> clothing)

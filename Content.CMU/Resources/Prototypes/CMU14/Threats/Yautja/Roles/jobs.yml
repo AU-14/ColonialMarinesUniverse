@@ -428,8 +428,8 @@
       RMCSkillMedical: 3
       RMCSkillSurgery: 2
   - type: MovementSpeedModifier
-    baseWalkSpeed: 4.4
-    baseSprintSpeed: 8.4
+    baseWalkSpeed: 3.7
+    baseSprintSpeed: 7.1
   - type: Damageable
     damageModifierSet: CMUYautja
   - type: Injurable

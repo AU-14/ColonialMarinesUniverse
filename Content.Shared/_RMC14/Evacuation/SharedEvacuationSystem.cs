@@ -299,7 +299,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             return;
         using (args.PushGroup(nameof(EvacuationPumpComponent)))
         {
-            var progress = GetEvacuationProgress();
+            var progress = GetEvacuationProgress(ent.Owner);
             if (progress < 25)
                 args.PushMarkup("It looks like it barely has any fuel yet.");
             else if (progress < 50)
@@ -389,7 +389,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         ent.Comp.Mode = EvacuationComputerMode.Travelling;
         Dirty(ent);
 
-        var crashChance = IsEvacuationComplete() ? 0 : ent.Comp.EarlyCrashChance;
+        var crashChance = IsEvacuationComplete(gridId) ? 0 : ent.Comp.EarlyCrashChance;
         LaunchEvacuationFTL(gridId, crashChance, ent.Comp.LaunchSound);
     }
 
@@ -408,7 +408,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         ent.Comp.Enabled = false;
         Dirty(ent);
 
-        var crashChance = IsEvacuationComplete() ? 0 : ent.Comp.EarlyCrashChance;
+        var crashChance = IsEvacuationComplete(gridId) ? 0 : ent.Comp.EarlyCrashChance;
         LaunchEvacuationFTL(gridId, crashChance, null);
     }
 
@@ -590,20 +590,24 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         return false;
     }
 
-    public int GetEvacuationProgress()
+    public int GetEvacuationProgress(EntityUid reference)
     {
-        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
-        while (query.MoveNext(out var progress))
+        if (Transform(reference).MapUid is not { } mapUid)
+            return 0;
+
+        var query = EntityQueryEnumerator<EvacuationProgressComponent, TransformComponent>();
+        while (query.MoveNext(out _, out var progress, out var transform))
         {
-            return (int)progress.Progress;
+            if (_zLevels.IsSameZNetwork(transform.MapUid, mapUid))
+                return (int)progress.Progress;
         }
 
         return 0;
     }
 
-    public bool IsEvacuationComplete()
+    public bool IsEvacuationComplete(EntityUid reference)
     {
-        return GetEvacuationProgress() >= 100;
+        return GetEvacuationProgress(reference) >= 100;
     }
 
     private void ProcessEvacuation()

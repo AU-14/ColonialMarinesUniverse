@@ -26,10 +26,10 @@ public sealed partial class YautjaComponent : Component
     public LocId RankName = "cmu-yautja-rank-hunter";
 
     [DataField]
-    public float BaseWalkSpeed = 4.4f;
+    public float BaseWalkSpeed = 3.7f;
 
     [DataField]
-    public float BaseSprintSpeed = 8.4f;
+    public float BaseSprintSpeed = 7.1f;
 
     [DataField]
     public float UnarmedAttackRate = 1.15f;

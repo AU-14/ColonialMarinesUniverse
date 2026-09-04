@@ -21,6 +21,7 @@ public sealed partial class RMCClothingSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private SharedUniformAccessorySystem _uniformAccessories = default!;
+    [Dependency] private HideLayerClothingSystem _hideLayerClothing = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
@@ -182,5 +183,6 @@ public sealed partial class RMCClothingSystem : EntitySystem
 
         _clothing.SetEquippedPrefix(ent.Owner, ent.Comp.ActivatedPrefix);
         _uniformAccessories.SetAccessoriesHidden(ent.Owner, hideAccessories);
+        _hideLayerClothing.RefreshLayerVisibility(ent.Owner);
     }
 }

@@ -6,16 +6,20 @@ using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
+using Content.Shared.Radio;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaSmokeTest
 {
+    private static readonly ProtoId<RadioChannelPrototype> YautjaRadioChannel = "CMUYautja";
+
     private static readonly string[] VoiceActionIds =
     {
         "CMUActionYautjaVoiceClick",
@@ -62,8 +66,9 @@ public sealed class YautjaSmokeTest
                 AssertEquipped(entMan, inventory, hunter, "pocket2", "CMUYautjaMedicomp");
 
                 var movement = entMan.GetComponent<MovementSpeedModifierComponent>(hunter);
-                Assert.That(movement.BaseWalkSpeed, Is.EqualTo(4.4f));
-                Assert.That(movement.BaseSprintSpeed, Is.EqualTo(8.4f));
+                Assert.That(movement.BaseWalkSpeed, Is.EqualTo(3.7f));
+                Assert.That(movement.BaseSprintSpeed, Is.EqualTo(7.1f));
+                Assert.That(server.ProtoMan.Index(YautjaRadioChannel).KeyCode, Is.EqualTo('9'));
 
                 foreach (var action in VoiceActionIds)
                     Assert.That(HasAction(entMan, hunter, action), Is.True, action);

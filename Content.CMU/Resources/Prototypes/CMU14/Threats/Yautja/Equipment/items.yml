@@ -1,7 +1,7 @@
 - type: radioChannel
   id: CMUYautja
   name: chat-radio-cmu-yautja
-  keycode: "ŷ"
+  keycode: "9"
   frequency: 154.1
   color: "#b85440"
   longRange: true
