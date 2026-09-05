@@ -23,6 +23,28 @@ namespace Content.IntegrationTests.Tests.Atmos;
 [TestOf(typeof(RMCFlammableSystem))]
 public sealed class FlammableLifecycleTest : GameTest
 {
+    [TestCase("CMMobHuman")]
+    [TestCase("CMXenoDrone")]
+    public async Task RmcFireKeepsBurningWithoutSimulatedAtmosphere(string prototype)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var target = SEntMan.SpawnEntity(prototype, map.GridCoords);
+            IgniteRmc(target, 10, 10, 10);
+
+            Server.System<ServerFlammableSystem>().Update(0f);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.GetComponent<FlammableComponent>(target).OnFire, Is.True,
+                    "RMC fire must not go out on the first update when the map has no simulated atmosphere");
+                Assert.That(TotalDamage(target), Is.GreaterThan(0),
+                    "RMC incendiary fire must deal damage without simulated oxygen");
+            });
+        });
+    }
+
     [Test]
     public async Task IdleUpdatesReuseSnapshotStorage()
     {
@@ -229,7 +251,7 @@ public sealed class FlammableLifecycleTest : GameTest
 
             IgniteRmc(immune, 10, 10, 10);
             IgniteRmc(bypass, 10, 10, 10);
-            IgniteRmc(oxygenless, 10, 10, 10);
+            IgniteOrdinary(oxygenless, 10);
         });
 
         await Pair.RunTicksSync(1);

@@ -543,13 +543,15 @@ namespace Content.Server.Atmos.EntitySystems
                     continue;
                 }
 
-                var air = _atmosphereSystem.GetContainingMixture(uid);
-
-                // If we're in an oxygenless environment, put the fire out.
-                if (air == null || air.GetMoles(Gas.Oxygen) < 1f)
+                // RMC14: incendiary fuel burns independently of simulated map atmosphere.
+                if (!TryComp<OnFireComponent>(uid, out var onFire) || onFire.Intensity <= 0 || onFire.Duration <= 0)
                 {
-                    TryExtinguish((uid, flammable));
-                    continue;
+                    var air = _atmosphereSystem.GetContainingMixture(uid);
+                    if (air == null || air.GetMoles(Gas.Oxygen) < 1f)
+                    {
+                        TryExtinguish((uid, flammable));
+                        continue;
+                    }
                 }
 
                 var source = EnsureComp<IgnitionSourceComponent>(uid);
