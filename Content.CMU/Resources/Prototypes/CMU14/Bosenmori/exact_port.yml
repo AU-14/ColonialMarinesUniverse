@@ -1247,6 +1247,7 @@
     noRot: true
   - type: IconSmooth
     enabled: false
+    mode: NoSprite
 
 - type: entity
   id: CMUBosenmoriExact14cbf0caf8f3ae0e
@@ -4858,6 +4859,7 @@
     noRot: true
   - type: IconSmooth
     enabled: false
+    mode: NoSprite
 
 - type: tile
   id: CMUBosenmoriExact4f1141cdf862bd1e
@@ -11096,6 +11098,7 @@
     color: "#424a50ff"
   - type: IconSmooth
     enabled: false
+    mode: NoSprite
 
 - type: entity
   id: CMUBosenmoriExactb4285e1314f6f109
@@ -12736,6 +12739,7 @@
     color: "#ffb84dff"
   - type: IconSmooth
     enabled: false
+    mode: NoSprite
 
 - type: entity
   id: CMUBosenmoriExactcf48a42bb4955364
