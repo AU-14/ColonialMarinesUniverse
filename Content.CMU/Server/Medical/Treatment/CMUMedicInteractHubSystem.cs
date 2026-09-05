@@ -1,9 +1,7 @@
-using Content.Server.CMU14.Medical.Diagnostics;
 using Content.Server.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared.Interaction;
 using Robust.Shared.GameObjects;
 
@@ -12,13 +10,11 @@ namespace Content.Server.CMU14.Medical.Treatment;
 public sealed partial class CMUMedicInteractHubSystem : EntitySystem
 {
     [Dependency] private CMUBandageInterceptionSystem _bandage = default!;
-    [Dependency] private CMUStethoscopeSystem _stethoscope = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<CMUWoundTreaterInterceptEvent>(OnWoundTreaterIntercept);
-        SubscribeLocalEvent<CMUHumanMedicalComponent, AfterInteractEvent>(OnMedicAfterInteract);
     }
 
     private void OnWoundTreaterIntercept(ref CMUWoundTreaterInterceptEvent args)
@@ -37,11 +33,4 @@ public sealed partial class CMUMedicInteractHubSystem : EntitySystem
             args.Handled = true;
     }
 
-    private void OnMedicAfterInteract(Entity<CMUHumanMedicalComponent> medic, ref AfterInteractEvent args)
-    {
-        if (args.Handled)
-            return;
-        if (HasComp<RMCStethoscopeComponent>(args.Used))
-            _stethoscope.HandleAfterInteract(medic, ref args);
-    }
 }
