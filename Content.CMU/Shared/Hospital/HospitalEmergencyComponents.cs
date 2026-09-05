@@ -1,24 +1,62 @@
 using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.Body;
 
 namespace Content.Shared.CMU14.Hospital;
 
 [RegisterComponent]
 public sealed partial class HospitalDropshipLandingZoneComponent : Component;
 
-[RegisterComponent]
+[RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class HospitalPatientComponent : Component
 {
     public EntityUid SourceComputer;
     public bool IsVip;
     public bool DeathPenaltyApplied;
     public bool ArrivedWithFatalOutcome;
-    public TimeSpan NextPainLineAt;
+    [AutoPausedField] public TimeSpan NextPainLineAt;
+    /// <summary>Original sites and organ capabilities; compatible replacements need not be the original entity or prototype.</summary>
+    public readonly Dictionary<CMUMedicalBodyPartKey, List<HospitalAdmissionOrgan>> AdmissionAnatomy = new();
+    /// <summary>Original part hierarchy, used to count one missing subtree rather than each absent descendant.</summary>
+    public readonly Dictionary<CMUMedicalBodyPartKey, CMUMedicalBodyPartKey> AdmissionParents = new();
 }
 
-[RegisterComponent]
+[Flags]
+public enum HospitalOrganCapabilities : ushort
+{
+    None = 0,
+    Health = 1 << 0,
+    Heart = 1 << 1,
+    Lungs = 1 << 2,
+    Liver = 1 << 3,
+    Kidneys = 1 << 4,
+    Stomach = 1 << 5,
+    Brain = 1 << 6,
+    Eyes = 1 << 7,
+    Ears = 1 << 8,
+}
+
+public readonly record struct HospitalAdmissionOrgan(
+    string Slot,
+    ProtoId<OrganCategoryPrototype>? Category,
+    HospitalOrganCapabilities Capabilities);
+
+public readonly record struct HospitalDischargeAssessment(
+    int MissedInjuries,
+    bool MissingAnatomy,
+    bool FatalOutcome,
+    bool IncompatibleOrgan = false,
+    bool TreatmentPending = false)
+{
+    public bool EligibleForReward => !MissingAnatomy && !FatalOutcome && !IncompatibleOrgan;
+    public bool Cleared => EligibleForReward && MissedInjuries == 0 && !TreatmentPending;
+}
+
+[RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class HospitalEmergencyComputerComponent : Component
 {
     [DataField]
@@ -178,10 +216,12 @@ public sealed partial class HospitalEmergencyComputerComponent : Component
 
     public HospitalEmergencyStatus Status = HospitalEmergencyStatus.Idle;
     public HospitalShuttlePurpose ShuttlePurpose = HospitalShuttlePurpose.None;
-    public TimeSpan NextIncidentAt;
-    public TimeSpan PhaseEndsAt;
-    public TimeSpan NextUiRefreshAt;
-    public TimeSpan NextLandingZoneRefreshAt;
+    [AutoPausedField] public TimeSpan NextIncidentAt;
+    [AutoPausedField] public TimeSpan PhaseEndsAt;
+    [AutoPausedField] public TimeSpan NextUiRefreshAt;
+    [AutoPausedField] public TimeSpan NextLandingZoneRefreshAt;
+    [AutoPausedField] public TimeSpan NextTransportRetryAt;
+    public string TransportFailure = string.Empty;
     public int Casualties;
     public int Severity;
     public int Reward;
@@ -194,6 +234,9 @@ public sealed partial class HospitalEmergencyComputerComponent : Component
     public EntityUid? LandingZone;
     public EntityUid? ActiveShuttle;
     public EntityUid? ReturnDestination;
+    public EntityUid? ExpectedDestination;
+    /// <summary>Maps and unparented entities created by this transport's load, never the hospital map.</summary>
+    public readonly HashSet<EntityUid> TransportRoots = new();
     public EntityUid? VipPatient;
     public readonly List<EntityUid> Patients = new();
 }
@@ -210,6 +253,8 @@ public enum HospitalEmergencyStatus : byte
     PickupInbound,
     PickupBoarding,
     RewardReady,
+    WaitingForDeparture,
+    WaitingForArrival,
 }
 
 public enum HospitalShuttlePurpose : byte

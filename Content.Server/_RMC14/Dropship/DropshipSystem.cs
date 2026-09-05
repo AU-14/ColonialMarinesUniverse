@@ -433,6 +433,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
     private void DisableReturnedThirdPartyDropship(EntityUid dropship, ThirdPartyDropshipReturnDestinationComponent returnDestination)
     {
         if (returnDestination.Shuttle != dropship) return;
+        // Hospital leases retain ownership until occupants and belongings are safely
+        // unloaded. Their recovery path must survive generic third-party retirement.
+        if (HasComp<Content.Server.CMU14.Hospital.HospitalTransportShuttleComponent>(dropship)) return;
         if (_dropshipReusable) { RefreshUI(); return; }
 
         EnsureComp<ThirdPartyDropshipReturnedComponent>(dropship);

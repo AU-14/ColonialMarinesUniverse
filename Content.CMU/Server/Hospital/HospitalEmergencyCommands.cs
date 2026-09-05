@@ -18,7 +18,7 @@ public sealed class HospitalIncidentTimerCommand : IConsoleCommand
     {
         if (args.Length != 1 ||
             !double.TryParse(args[0], NumberStyles.Float, CultureInfo.InvariantCulture, out var seconds) ||
-            seconds < 0)
+            !double.IsFinite(seconds) || seconds < 0 || seconds > TimeSpan.FromDays(365).TotalSeconds)
         {
             shell.WriteError(Help);
             return;
