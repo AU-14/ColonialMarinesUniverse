@@ -39807,6 +39807,8 @@ entities:
   entities:
   - uid: 2205
     components:
+    - type: SupplyDropPad
+      squad: SquadGovfor
     - type: Transform
       pos: 30.5,9.5
       parent: 1
@@ -39814,6 +39816,8 @@ entities:
   entities:
   - uid: 943
     components:
+    - type: SupplyDropPad
+      squad: SquadGovforBravo
     - type: Transform
       pos: 31.5,9.5
       parent: 1
@@ -39821,6 +39825,8 @@ entities:
   entities:
   - uid: 3316
     components:
+    - type: SupplyDropPad
+      squad: SquadGovforCharlie
     - type: Transform
       pos: 32.5,9.5
       parent: 1
@@ -39828,6 +39834,8 @@ entities:
   entities:
   - uid: 3311
     components:
+    - type: SupplyDropPad
+      squad: SquadGovforIntel
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 32.5,10.5

@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Numerics;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Animations;
 using Content.Shared._RMC14.Areas;
@@ -68,6 +70,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
@@ -527,11 +530,18 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 !string.Equals(cannonComp.Faction, faction, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            if (transform.Coordinates.TryDistance(EntityManager,
+            if (!transform.Coordinates.TryDistance(EntityManager,
                     _transform,
                     cannonTransform.Coordinates,
-                    out var distance) &&
-                distance < last)
+                    out var distance))
+            {
+                if (!_zLevels.IsSameZNetwork(transform.MapID, cannonTransform.MapID))
+                    continue;
+
+                distance = Vector2.Distance(_transform.GetWorldPosition(to), _transform.GetWorldPosition(cannonId));
+            }
+
+            if (distance < last)
             {
                 last = distance;
                 cannon = (cannonId, cannonComp);
