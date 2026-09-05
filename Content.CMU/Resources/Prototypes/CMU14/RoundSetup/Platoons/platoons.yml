@@ -11,7 +11,7 @@
     - English
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
     - /Maps/CMU14/ShuttlesDropships/ud_6.yml
   possibleships:
@@ -323,7 +323,7 @@
   #platoonflag: uaflag
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -639,7 +639,7 @@
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -944,7 +944,7 @@
     # Synth
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   possibleships:
       - USSBushRedux
   compatibleFighters:
@@ -1154,7 +1154,7 @@
       - USSBushRedux
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
     - /Maps/CMU14/ShuttlesDropships/cmbsquadcar.yml
   techTree: CMUIntelTechTree_GOVFOR
@@ -1173,7 +1173,7 @@
       - USSBushRedux
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/osprey.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
   - /Maps/CMU14/ShuttlesDropships/f84owl.yml
   - /Maps/CMU14/ShuttlesDropships/ud_6.yml
@@ -1441,7 +1441,7 @@
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
     - /Maps/CMU14/ShuttlesDropships/f84owl.yml
     - /Maps/CMU14/ShuttlesDropships/ud_6.yml
@@ -1613,7 +1613,7 @@
 
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
     - /Maps/CMU14/ShuttlesDropships/f84owl.yml
     - /Maps/CMU14/ShuttlesDropships/ud_6.yml
@@ -1924,7 +1924,7 @@
   #   SupportSynth: AU14JobGOVFORAuxSupportSynthRMC
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/CMU14/Shuttles/lexingtonsmall.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters: #TODO: RMC Fighters
     - /Maps/CMU14/ShuttlesDropships/f84owl.yml
     - /Maps/CMU14/ShuttlesDropships/ud_6.yml
