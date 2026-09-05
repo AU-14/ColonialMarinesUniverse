@@ -361,5 +361,5 @@
     proto: RMCSmokeFireSentry
     useMapCoords: true
   - type: TileFireOnTrigger
-    range: 0
+    range: 1
     spawn: RMCTileFireBlue
