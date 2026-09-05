@@ -647,7 +647,7 @@
   name: WY PMC
   lorePrimer: AU14PrimerPlatoonWEYU
   reqlist: WYPMCCargoCatalog
-  vendorSet: WEYU
+  vendorSet: WYPMC
   platoonPatch: /Textures/CMU14/Clothing/Patches/wy_white_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:

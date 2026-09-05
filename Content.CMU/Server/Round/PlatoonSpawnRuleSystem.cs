@@ -127,24 +127,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     // --- OVERWATCH CONSOLE MARKER LOGIC ---
                     if (markerComp.Class == PlatoonMarkerClass.OverwatchConsole)
                     {
-                        string? overwatchConsoleProtoId = null;
-                        if (markerComp.Govfor)
-                            overwatchConsoleProtoId = "RMCOverwatchConsoleGovforRotating";
-                        else if (markerComp.Opfor)
-                            overwatchConsoleProtoId = "RMCOverwatchConsoleOpforRotating";
-                        else if (markerComp.Ship)
-                        {
-                            // Try to determine ship faction by parent entity
-                            var parentUid = transform.ParentUid;
-                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
-                            {
-                                overwatchConsoleProtoId = parentShipFaction.Faction == "govfor"
-                                    ? "RMCOverwatchConsoleGovforRotating"
-                                    : parentShipFaction.Faction == "opfor"
-                                        ? "RMCOverwatchConsoleOpforRotating"
-                                        : null;
-                            }
-                        }
+                        var overwatchConsoleProtoId = FactionPrototype(shipFaction.Faction,
+                            "RMCOverwatchConsoleGovforRotating", "RMCOverwatchConsoleOpforRotating");
                         if (overwatchConsoleProtoId != null && _prototypeManager.TryIndex(overwatchConsoleProtoId, out _))
                         {
                             _entityManager.SpawnEntity(overwatchConsoleProtoId, transform.Coordinates);
@@ -155,23 +139,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     // --- INTEL COMPUTER MARKER LOGIC ---
                     if (markerComp.Class == PlatoonMarkerClass.IntelComputer)
                     {
-                        string? intelConsoleProtoId = null;
-                        if (markerComp.Govfor)
-                            intelConsoleProtoId = "RMCComputerIntelGovfor";
-                        else if (markerComp.Opfor)
-                            intelConsoleProtoId = "RMCComputerIntelOpfor";
-                        else if (markerComp.Ship)
-                        {
-                            var parentUid = transform.ParentUid;
-                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
-                            {
-                                intelConsoleProtoId = parentShipFaction.Faction == "govfor"
-                                    ? "RMCComputerIntelGovfor"
-                                    : parentShipFaction.Faction == "opfor"
-                                        ? "RMCComputerIntelOpfor"
-                                        : null;
-                            }
-                        }
+                        var intelConsoleProtoId = FactionPrototype(shipFaction.Faction,
+                            "RMCComputerIntelGovfor", "RMCComputerIntelOpfor");
                         if (intelConsoleProtoId != null && _prototypeManager.TryIndex(intelConsoleProtoId, out _))
                         {
                             _entityManager.SpawnEntity(intelConsoleProtoId, transform.Coordinates);
@@ -182,23 +151,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     // --- TECH TREE CONSOLE MARKER LOGIC ---
                     if (markerComp.Class == PlatoonMarkerClass.TechTree)
                     {
-                        string? techTreeProtoId = null;
-                        if (markerComp.Govfor)
-                            techTreeProtoId = "RMCTechTreeConsoleGovfor";
-                        else if (markerComp.Opfor)
-                            techTreeProtoId = "RMCTechTreeConsoleOpfor";
-                        else if (markerComp.Ship)
-                        {
-                            var parentUid = transform.ParentUid;
-                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
-                            {
-                                techTreeProtoId = parentShipFaction.Faction == "govfor"
-                                    ? "RMCTechTreeConsoleGovfor"
-                                    : parentShipFaction.Faction == "opfor"
-                                        ? "RMCTechTreeConsoleOpfor"
-                                        : null;
-                            }
-                        }
+                        var techTreeProtoId = FactionPrototype(shipFaction.Faction,
+                            "RMCTechTreeConsoleGovfor", "RMCTechTreeConsoleOpfor");
                         if (techTreeProtoId != null && _prototypeManager.TryIndex(techTreeProtoId, out _))
                         {
                             _entityManager.SpawnEntity(techTreeProtoId, transform.Coordinates);
@@ -209,23 +163,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     // --- GROUNDSIDE OPERATIONS CONSOLE MARKER LOGIC ---
                     if (markerComp.Class == PlatoonMarkerClass.GroundsideOps)
                     {
-                        string? groundsideProtoId = null;
-                        if (markerComp.Govfor)
-                            groundsideProtoId = "RMCGroundsideOperationsConsole";
-                        else if (markerComp.Opfor)
-                            groundsideProtoId = "RMCGroundsideOperationsConsoleOpfor";
-                        else if (markerComp.Ship)
-                        {
-                            var parentUid = transform.ParentUid;
-                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
-                            {
-                                groundsideProtoId = parentShipFaction.Faction == "govfor"
-                                    ? "RMCGroundsideOperationsConsole"
-                                    : parentShipFaction.Faction == "opfor"
-                                        ? "RMCGroundsideOperationsConsoleOpfor"
-                                        : null;
-                            }
-                        }
+                        var groundsideProtoId = FactionPrototype(shipFaction.Faction,
+                            "RMCGroundsideOperationsConsole", "RMCGroundsideOperationsConsoleOpfor");
                         if (groundsideProtoId != null && _prototypeManager.TryIndex(groundsideProtoId, out _))
                         {
                             _entityManager.SpawnEntity(groundsideProtoId, transform.Coordinates);
@@ -235,23 +174,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
                     if (markerComp.Class == PlatoonMarkerClass.RosterConsole)
                     {
-                        string? rosterConsoleProtoId = null;
-                        if (markerComp.Govfor)
-                            rosterConsoleProtoId = "CMUGovforRosterConsole";
-                        else if (markerComp.Opfor)
-                            rosterConsoleProtoId = "CMUOpforRosterConsole";
-                        else if (markerComp.Ship)
-                        {
-                            var parentUid = transform.ParentUid;
-                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
-                            {
-                                rosterConsoleProtoId = parentShipFaction.Faction == "govfor"
-                                    ? "CMUGovforRosterConsole"
-                                    : parentShipFaction.Faction == "opfor"
-                                        ? "CMUOpforRosterConsole"
-                                        : null;
-                            }
-                        }
+                        var rosterConsoleProtoId = FactionPrototype(shipFaction.Faction,
+                            "CMUGovforRosterConsole", "CMUOpforRosterConsole");
                         if (rosterConsoleProtoId != null && _prototypeManager.TryIndex(rosterConsoleProtoId, out _))
                         {
                             _entityManager.SpawnEntity(rosterConsoleProtoId, transform.Coordinates);
