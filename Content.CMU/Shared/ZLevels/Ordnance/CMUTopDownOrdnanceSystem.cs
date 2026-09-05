@@ -41,15 +41,16 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
             return false;
         }
 
-        if (!_zLevels.TryGetZNetwork(resolvedMapUid, out var network) ||
-            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+        if (!_zLevels.TryGetZNetwork(resolvedMapUid, out var network))
         {
             return TryResolveSingleSurface(selected, kind, result);
         }
 
         result.UsesZLevels = true;
-        for (var depth = maxDepth; depth >= minDepth; depth--)
+        var maps = _zLevels.GetOrderedNetworkMaps(network.Value);
+        for (var i = maps.Count - 1; i >= 0; i--)
         {
+            var depth = maps[i].Depth;
             if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var map, out var mapComp))
                 continue;
 
@@ -113,14 +114,17 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         if (!_map.TryGetMap(current.MapId, out var mapUid) ||
             mapUid is not { } resolvedMapUid ||
             !_zLevels.TryGetZNetwork(resolvedMapUid, out var network) ||
-            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out _) ||
             !TryGetDepth(network.Value, resolvedMapUid, out var currentDepth))
         {
             return false;
         }
 
-        for (var depth = currentDepth - 1; depth >= minDepth; depth--)
+        var maps = _zLevels.GetOrderedNetworkMaps(network.Value);
+        for (var i = maps.Count - 1; i >= 0; i--)
         {
+            var depth = maps[i].Depth;
+            if (depth >= currentDepth)
+                continue;
             if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out _, out var mapComp))
                 continue;
 
@@ -154,14 +158,15 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         if (!_zLevels.TryGetZNetwork(resolvedMapUid, out var network))
             return true;
 
-        if (!_zLevels.TryGetDepthBounds(network.Value, out _, out var maxDepth) ||
-            !TryGetDepth(network.Value, resolvedMapUid, out var currentDepth))
+        if (!TryGetDepth(network.Value, resolvedMapUid, out var currentDepth))
         {
             return false;
         }
 
-        for (var depth = currentDepth + 1; depth <= maxDepth; depth++)
+        foreach (var (depth, _) in _zLevels.GetOrderedNetworkMaps(network.Value))
         {
+            if (depth <= currentDepth)
+                continue;
             if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out _, out var mapComp))
                 continue;
 

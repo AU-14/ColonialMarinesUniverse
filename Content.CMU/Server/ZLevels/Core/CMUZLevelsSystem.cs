@@ -29,6 +29,8 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         InitAudio();
         InitTransitionBudget();
         InitializeActivation();
+        InitializeTopology();
+        InitializeSupportActivation();
 
         SubscribeLocalEvent<PostGameMapLoad>(OnGameMapLoad, after: [typeof(StationSystem)]);
     }
@@ -36,6 +38,9 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        UpdateAudio();
+        UpdateSupportActivation();
 
         if (!_zLevelsEnabled)
             return;
@@ -74,41 +79,46 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         var depth = -1;
         foreach (var mapBelow in ev.GameMap.MapsBelow)
         {
+            var mapDepth = depth--;
             if (!_mapLoader.TryLoadMap(mapBelow, out var mapEnt, out var grids))
             {
-                Log.Error($"Failed to load map for Station zNetwork at depth {depth}!");
+                Log.Error($"Failed to load map for Station zNetwork at depth {mapDepth}!");
                 continue;
             }
 
-            Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {depth}");
+            Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {mapDepth}");
             EntityManager.AddComponents(mapEnt.Value, ev.GameMap.ZLevelsComponentOverrides);
             AddZLevelGridsToStations(grids, stationsById, stations);
-            _map.InitializeMap(mapEnt.Value.Comp.MapId);
-            _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{depth}]");
-            dict.Add(mapEnt.Value, depth);
-            depth--;
+            _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{mapDepth}]");
+            dict.Add(mapEnt.Value, mapDepth);
         }
 
         //Loading maps above next
         depth = 1;
         foreach (var mapAbove in ev.GameMap.MapsAbove)
         {
+            var mapDepth = depth++;
             if (!_mapLoader.TryLoadMap(mapAbove, out var mapEnt, out var grids))
             {
-                Log.Error($"Failed to load map for Station zNetwork at depth {depth}!");
+                Log.Error($"Failed to load map for Station zNetwork at depth {mapDepth}!");
                 continue;
             }
 
-            Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {depth}");
+            Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {mapDepth}");
             EntityManager.AddComponents(mapEnt.Value, ev.GameMap.ZLevelsComponentOverrides);
             AddZLevelGridsToStations(grids, stationsById, stations);
-            _map.InitializeMap(mapEnt.Value.Comp.MapId);
-            _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{depth}]");
-            dict.Add(mapEnt.Value, depth);
-            depth++;
+            _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{mapDepth}]");
+            dict.Add(mapEnt.Value, mapDepth);
         }
 
-        TryAddMapsIntoZNetwork(stationNetwork, dict);
+        if (!TryAddMapsIntoZNetwork(stationNetwork, dict))
+            return;
+
+        foreach (var (map, mapDepth) in dict)
+        {
+            if (mapDepth != 0)
+                _map.InitializeMap(Comp<MapComponent>(map).MapId);
+        }
     }
 
     private void AddZLevelGridsToStations(

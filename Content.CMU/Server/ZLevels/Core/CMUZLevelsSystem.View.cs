@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Shared.CMU14.ZLevels;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -44,6 +45,7 @@ public sealed partial class CMUZLevelsSystem
     private readonly Dictionary<EntityUid, Dictionary<ICommonSession, int>> _extraViewerProbeSubscribers = new();
     private readonly HashSet<EntityUid> _movedViewerProbeEyes = new();
     private readonly HashSet<EntityUid> _viewSubscriptionViewers = new();
+    private readonly Dictionary<(EntityUid View, ICommonSession Session), EntityUid?> _viewProbeSubscriptions = new();
     private readonly CMUZLevelOpeningCache _zOpeningCache = new();
     private readonly List<int> _wantedProbeDepths = new();
     private readonly List<int> _probeDepthsToRemove = new();
@@ -110,6 +112,7 @@ public sealed partial class CMUZLevelsSystem
 
         _movedViewerProbeEyes.Clear();
         _nextZLevelViewerUpdate = _gameTiming.CurTime + _zLevelViewerUpdateRate;
+        ReconcileViewSubscriptions();
 
         using var profile = Prof.Group("CMU Z PVS Probes");
         var profiling = Prof.IsEnabled;
@@ -247,6 +250,12 @@ public sealed partial class CMUZLevelsSystem
         _extraViewerProbeSubscribers.Remove(ent);
         _movedViewerProbeEyes.Remove(ent);
         _viewSubscriptionViewers.Remove(ent);
+        foreach (var (key, origin) in _viewProbeSubscriptions.ToArray())
+        {
+            if (origin == ent.Owner)
+                _viewProbeSubscriptions[key] = null;
+        }
+        _nextZLevelViewerUpdate = TimeSpan.Zero;
     }
 
     private void OnViewerMetaFlagRemoveAttempt(Entity<CMUZLevelViewerComponent> ent, ref MetaFlagRemoveAttemptEvent args)
@@ -271,13 +280,22 @@ public sealed partial class CMUZLevelsSystem
         if (!_zLevelsEnabled)
             return;
 
+        if (!HasComp<CMUZLevelViewerComponent>(ev.Entity))
+            _viewSubscriptionViewers.Add(ev.Entity);
         var viewer = EnsureComp<CMUZLevelViewerComponent>(ev.Entity);
         UpdateViewer((ev.Entity, viewer));
     }
 
     private void OnPlayerDetached(PlayerDetachedEvent ev)
     {
-        RemComp<CMUZLevelViewerComponent>(ev.Entity);
+        if (TryComp<CMUZLevelViewerComponent>(ev.Entity, out var viewer) &&
+            (!_extraViewerProbeSubscribers.TryGetValue(ev.Entity, out var subscribers) ||
+             !subscribers.ContainsKey(ev.Player)))
+        {
+            foreach (var eye in viewer.Eyes)
+                _viewSubscriber.RemoveViewSubscriber(eye, ev.Player);
+        }
+        _nextZLevelViewerUpdate = TimeSpan.Zero;
     }
 
     private void OnViewerMapUidChanged(Entity<CMUZLevelViewerComponent> ent, ref MapUidChangedEvent args)
@@ -401,7 +419,9 @@ public sealed partial class CMUZLevelsSystem
         foreach (var (depth, eye) in probes)
         {
             if (!_wantedProbeDepths.Contains(depth) ||
-                TerminatingOrDeleted(eye))
+                TerminatingOrDeleted(eye) ||
+                !TryMapOffset(map.Value, depth, out var targetMap) ||
+                Transform(eye).MapUid != targetMap.Value.Owner)
             {
                 _probeDepthsToRemove.Add(depth);
             }
@@ -540,7 +560,8 @@ public sealed partial class CMUZLevelsSystem
 
         subscribers.Remove(session);
 
-        if (TryComp<CMUZLevelViewerComponent>(viewer, out var viewerComp))
+        if (TryComp<CMUZLevelViewerComponent>(viewer, out var viewerComp) &&
+            (!TryComp<ActorComponent>(viewer, out var actor) || actor.PlayerSession != session))
         {
             foreach (var eye in viewerComp.Eyes)
             {
@@ -553,35 +574,59 @@ public sealed partial class CMUZLevelsSystem
 
         _extraViewerProbeSubscribers.Remove(viewer);
 
-        if (!_viewSubscriptionViewers.Remove(viewer) ||
-            HasComp<ActorComponent>(viewer))
-        {
-            return;
-        }
-
-        RemCompDeferred<CMUZLevelViewerComponent>(viewer);
+        _nextZLevelViewerUpdate = TimeSpan.Zero;
     }
 
     private void OnViewSubscriberAdded(ViewSubscriberAddedEvent ev)
     {
-        if (IsZLevelProbe(ev.View) ||
-            !TryResolveZLevelViewOrigin(ev.View, out var viewer))
-        {
+        if (IsZLevelProbe(ev.View))
             return;
-        }
 
-        AddExtraViewerProbeSubscriber(viewer, ev.Subscriber);
+        var key = (ev.View, ev.Subscriber);
+        if (_viewProbeSubscriptions.ContainsKey(key))
+            return;
+
+        EntityUid? origin = _zLevelsEnabled && TryResolveZLevelViewOrigin(ev.View, out var viewer) ? viewer : null;
+        _viewProbeSubscriptions.Add(key, origin);
+        if (origin is { } resolved)
+            AddExtraViewerProbeSubscriber(resolved, ev.Subscriber);
     }
 
     private void OnViewSubscriberRemoved(ViewSubscriberRemovedEvent ev)
     {
-        if (IsZLevelProbe(ev.View) ||
-            !TryResolveZLevelViewOrigin(ev.View, out var viewer))
+        if (_viewProbeSubscriptions.Remove((ev.View, ev.Subscriber), out var origin) && origin is { } viewer)
+            RemoveExtraViewerProbeSubscriber(viewer, ev.Subscriber);
+    }
+
+    private void ReconcileViewSubscriptions()
+    {
+        // Remember the origin actually subscribed, even after the camera changes
+        // container/map. Engine component shutdown does not emit unsubscribe events.
+        foreach (var (key, previous) in _viewProbeSubscriptions.ToArray())
         {
-            return;
+            var live = !TerminatingOrDeleted(key.View) && key.Session.ViewSubscriptions.Contains(key.View);
+            EntityUid? current = live && TryResolveZLevelViewOrigin(key.View, out var viewer) ? viewer : null;
+            if (current != previous)
+            {
+                if (previous is { } oldOrigin)
+                    RemoveExtraViewerProbeSubscriber(oldOrigin, key.Session);
+                _viewProbeSubscriptions[key] = current;
+                if (current is { } newOrigin)
+                    AddExtraViewerProbeSubscriber(newOrigin, key.Session);
+            }
+            if (!live)
+                _viewProbeSubscriptions.Remove(key);
         }
 
-        RemoveExtraViewerProbeSubscriber(viewer, ev.Subscriber);
+        // Reconcile all ownership reasons before removing components, so migrating
+        // subscriptions within one refresh cannot leave a deferred removal behind.
+        foreach (var viewer in _viewSubscriptionViewers.ToArray())
+        {
+            if (HasViewerProbeSubscribers(viewer))
+                continue;
+            _viewSubscriptionViewers.Remove(viewer);
+            RemComp<CMUZLevelViewerComponent>(viewer);
+        }
     }
 
     private bool TryResolveZLevelViewOrigin(EntityUid view, out EntityUid viewer)
@@ -1033,7 +1078,9 @@ public sealed partial class CMUZLevelsSystem
                 return true;
         }
 
-        return false;
+        // Unchecked apertures may still be visible. Keep their probe subscription when the
+        // point-sample budget is exhausted; false is reserved for the existing fully checked policy.
+        return checkCount < _probeOpeningCandidates.Count;
     }
 
     private bool HasZOpeningNear(EntityUid map, Vector2 globalPos)

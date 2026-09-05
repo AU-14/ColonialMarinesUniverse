@@ -27,13 +27,10 @@ public sealed partial class CMURoofSystem : CMUSharedRoofSystem
     {
         _roofMap.Clear();
 
-        if (!ZLevel.TryGetDepthBounds(network, out var minDepth, out var maxDepth))
-            return;
-
-        for (var depth = maxDepth; depth >= minDepth; depth--)
+        var maps = ZLevel.GetOrderedNetworkMaps(network);
+        for (var i = maps.Count - 1; i >= 0; i--)
         {
-            if (!ZLevel.TryGetMapAtDepth(network, depth, out var map))
-                continue;
+            var map = maps[i].Map;
 
             if (!GridQuery.TryComp(map, out var mapGrid))
                 continue;

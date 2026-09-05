@@ -46,7 +46,7 @@ public abstract partial class CMUSharedZLevelsSystem
     /// How far past a tile edge high ground is allowed to support an entity.
     /// Ramp highground only uses this past its top edge; flat highground uses it on every edge.
     /// </summary>
-    private const float HighGroundEdgeSupport = 0.35f;
+    protected const float HighGroundEdgeSupport = 0.35f;
 
     /// <summary>
     /// The minimum speed required to trigger LandEvent events.
@@ -244,7 +244,8 @@ public abstract partial class CMUSharedZLevelsSystem
                 if (profiling)
                     _profileZMovementStoppedParent++;
 
-                DebugLogFalling(uid, "stop-parent", $"parent={xform.ParentUid} map={xform.MapUid}");
+                if (_debugFalling)
+                    DebugLogFalling(uid, "stop-parent", $"parent={xform.ParentUid} map={xform.MapUid}");
                 StopZMovement(uid, zPhys);
                 continue;
             }
@@ -254,7 +255,8 @@ public abstract partial class CMUSharedZLevelsSystem
                 if (profiling)
                     _profileZMovementStoppedNoMap++;
 
-                DebugLogFalling(uid, "stop-no-z-map", $"map={xform.MapUid}");
+                if (_debugFalling)
+                    DebugLogFalling(uid, "stop-no-z-map", $"map={xform.MapUid}");
                 StopZMovement(uid, zPhys);
                 continue;
             }
@@ -278,10 +280,11 @@ public abstract partial class CMUSharedZLevelsSystem
                 : GetGroundSnapDistance(distanceToGround, stickyGround);
             hasGroundContact |= fallingGroundContact;
             var isVehicle = HasComp<CMUVehicleZTraversalComponent>(uid);
-            DebugLogFalling(
-                uid,
-                "tick",
-                $"frame={frameTime:F4} oldLocal={oldHeight:F3} local={zPhys.LocalPosition:F3} oldVel={oldVelocity:F3} vel={zPhys.Velocity:F3} distance={distanceToGround:F3} sticky={stickyGround} hasGround={hasGroundContact} fallingGround={fallingGroundContact} snap={groundSnapDistance:F3} body={physics.BodyStatus}");
+            if (_debugFalling)
+                DebugLogFalling(
+                    uid,
+                    "tick",
+                    $"frame={frameTime:F4} oldLocal={oldHeight:F3} local={zPhys.LocalPosition:F3} oldVel={oldVelocity:F3} vel={zPhys.Velocity:F3} distance={distanceToGround:F3} sticky={stickyGround} hasGround={hasGroundContact} fallingGround={fallingGroundContact} snap={groundSnapDistance:F3} body={physics.BodyStatus}");
 
             if (hasGroundContact &&
                 physics.BodyStatus != BodyStatus.OnGround)
@@ -294,10 +297,11 @@ public abstract partial class CMUSharedZLevelsSystem
                 if (profiling)
                     _profileZMovementGroundContacts++;
 
-                DebugLogFalling(
-                    uid,
-                    "ground-contact",
-                    $"preSnapLocal={zPhys.LocalPosition:F3} snap={groundSnapDistance:F3} distance={distanceToGround:F3} sticky={stickyGround} vel={zPhys.Velocity:F3}");
+                if (_debugFalling)
+                    DebugLogFalling(
+                        uid,
+                        "ground-contact",
+                        $"preSnapLocal={zPhys.LocalPosition:F3} snap={groundSnapDistance:F3} distance={distanceToGround:F3} sticky={stickyGround} vel={zPhys.Velocity:F3}");
                 zPhys.LocalPosition -= groundSnapDistance;
                 if (stickyGround)
                 {
@@ -312,7 +316,8 @@ public abstract partial class CMUSharedZLevelsSystem
                     if (profiling)
                         _profileZMovementLandEvents++;
 
-                    DebugLogFalling(uid, "land-event", $"impact={MathF.Abs(zPhys.Velocity):F3}");
+                    if (_debugFalling)
+                        DebugLogFalling(uid, "land-event", $"impact={MathF.Abs(zPhys.Velocity):F3}");
                     RaiseLocalEvent(uid, new CMUZLevelHitEvent(MathF.Abs(zPhys.Velocity)));
                     var land = new LandEvent(null, true);
                     RaiseLocalEvent(uid, ref land);
@@ -320,10 +325,11 @@ public abstract partial class CMUSharedZLevelsSystem
 
                 var velocityBeforeBounce = zPhys.Velocity;
                 zPhys.Velocity = -zPhys.Velocity * zPhys.Bounciness;
-                DebugLogFalling(
-                    uid,
-                    "ground-bounce",
-                    $"velocityBefore={velocityBeforeBounce:F3} bounciness={zPhys.Bounciness:F3} velocityAfter={zPhys.Velocity:F3} local={zPhys.LocalPosition:F3}");
+                if (_debugFalling)
+                    DebugLogFalling(
+                        uid,
+                        "ground-bounce",
+                        $"velocityBefore={velocityBeforeBounce:F3} bounciness={zPhys.Bounciness:F3} velocityAfter={zPhys.Velocity:F3} local={zPhys.LocalPosition:F3}");
 
                 if (MathF.Abs(zPhys.Velocity) <= MinActiveZVelocity)
                 {
@@ -341,10 +347,11 @@ public abstract partial class CMUSharedZLevelsSystem
                                 zPhys.Velocity,
                                 isVehicle))
                         {
-                            DebugLogFalling(
-                                uid,
-                                "sleep",
-                                $"settledDistance={settledDistanceToGround:F3} sticky={stickyGround} local={zPhys.LocalPosition:F3}");
+                            if (_debugFalling)
+                                DebugLogFalling(
+                                    uid,
+                                    "sleep",
+                                    $"settledDistance={settledDistanceToGround:F3} sticky={stickyGround} local={zPhys.LocalPosition:F3}");
                             RemComp<CMUZFallingComponent>(uid);
                         }
 
@@ -357,16 +364,18 @@ public abstract partial class CMUSharedZLevelsSystem
             {
                 var velocityBeforeSettle = zPhys.Velocity;
                 zPhys.Velocity = 0f;
-                DebugLogFalling(
-                    uid,
-                    "ground-settle",
-                    $"velocityBefore={velocityBeforeSettle:F3} local={zPhys.LocalPosition:F3} sticky={stickyGround}");
+                if (_debugFalling)
+                    DebugLogFalling(
+                        uid,
+                        "ground-settle",
+                        $"velocityBefore={velocityBeforeSettle:F3} local={zPhys.LocalPosition:F3} sticky={stickyGround}");
 
                 if (zPhys.LocalPosition >= 0f &&
                     zPhys.LocalPosition < 1f &&
                     ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity, isVehicle))
                 {
-                    DebugLogFalling(uid, "sleep", $"settledDistance=0.000 sticky={stickyGround} local={zPhys.LocalPosition:F3}");
+                    if (_debugFalling)
+                        DebugLogFalling(uid, "sleep", $"settledDistance=0.000 sticky={stickyGround} local={zPhys.LocalPosition:F3}");
                     RemComp<CMUZFallingComponent>(uid);
                     DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
                     continue;
@@ -376,7 +385,8 @@ public abstract partial class CMUSharedZLevelsSystem
             if (profiling)
                 _profileZMovementBoundaryChecks++;
 
-            DebugLogFalling(uid, "boundary-check", $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3} sticky={stickyGround}");
+            if (_debugFalling)
+                DebugLogFalling(uid, "boundary-check", $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3} sticky={stickyGround}");
             TryProcessZLevelBoundary(uid, zPhys, stickyGround);
 
             if (Math.Abs(zPhys.Velocity) > ZVelocityLimit)
@@ -673,33 +683,38 @@ public abstract partial class CMUSharedZLevelsSystem
         if (zPhys.LocalPosition < 0f &&
             !ShouldProcessDownBoundary(zPhys.LocalPosition))
         {
-            DebugLogFalling(
-                uid,
-                "boundary-down-epsilon",
-                $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3} sticky={stickyGround}");
+            if (_debugFalling)
+                DebugLogFalling(
+                    uid,
+                    "boundary-down-epsilon",
+                    $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3} sticky={stickyGround}");
             return;
         }
 
         if (zPhys.LocalPosition < 0) //We wanna fall down on ZLevel below
         {
             var canTransitionDown = CanProcessZLevelTransition(uid, -1);
-            DebugLogFalling(
-                uid,
-                "boundary-down-enter",
-                $"canTransition={canTransitionDown} local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3} sticky={stickyGround}");
+            if (_debugFalling)
+                DebugLogFalling(
+                    uid,
+                    "boundary-down-enter",
+                    $"canTransition={canTransitionDown} local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3} sticky={stickyGround}");
 
             if (canTransitionDown)
             {
                 var movedDown = TryMoveDownOrChasm(uid);
-                DebugLogFalling(uid, "boundary-down-result", $"moved={movedDown} localBeforeNormalize={zPhys.LocalPosition:F3}");
+                if (_debugFalling)
+                    DebugLogFalling(uid, "boundary-down-result", $"moved={movedDown} localBeforeNormalize={zPhys.LocalPosition:F3}");
                 if (movedDown)
                 {
                     zPhys.LocalPosition += 1;
-                    DebugLogFalling(uid, "boundary-down-normalized", $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3}");
+                    if (_debugFalling)
+                        DebugLogFalling(uid, "boundary-down-normalized", $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3}");
 
                     if (!stickyGround)
                     {
-                        DebugLogFalling(uid, "fall-event", "raised=true");
+                        if (_debugFalling)
+                            DebugLogFalling(uid, "fall-event", "raised=true");
                         var fallEv = new CMUZLevelFallEvent();
                         RaiseLocalEvent(uid, fallEv);
                     }
@@ -709,7 +724,8 @@ public abstract partial class CMUSharedZLevelsSystem
             }
             else
             {
-                DebugLogFalling(uid, "boundary-down-denied", $"localBeforeClamp={zPhys.LocalPosition:F3}");
+                if (_debugFalling)
+                    DebugLogFalling(uid, "boundary-down-denied", $"localBeforeClamp={zPhys.LocalPosition:F3}");
                 zPhys.LocalPosition = 0;
             }
 
@@ -752,10 +768,11 @@ public abstract partial class CMUSharedZLevelsSystem
                 distanceToGround,
                 stickyGround,
                 zPhys.Velocity);
-        DebugLogFalling(
-            uid,
-            "post-down-distance",
-            $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3} distance={distanceToGround:F3} sticky={stickyGround} shouldClamp={shouldClamp}");
+        if (_debugFalling)
+            DebugLogFalling(
+                uid,
+                "post-down-distance",
+                $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3} distance={distanceToGround:F3} sticky={stickyGround} shouldClamp={shouldClamp}");
         if (!shouldClamp)
         {
             return false;
@@ -782,10 +799,11 @@ public abstract partial class CMUSharedZLevelsSystem
         else
             zPhys.Velocity = -zPhys.Velocity * zPhys.Bounciness;
 
-        DebugLogFalling(
-            uid,
-            "post-down-clamp",
-            $"localBefore={localBefore:F3} localAfter={zPhys.LocalPosition:F3} velocityBefore={velocityBefore:F3} velocityAfter={zPhys.Velocity:F3} distance={distanceToGround:F3} sticky={stickyGround}");
+        if (_debugFalling)
+            DebugLogFalling(
+                uid,
+                "post-down-clamp",
+                $"localBefore={localBefore:F3} localAfter={zPhys.LocalPosition:F3} velocityBefore={velocityBefore:F3} velocityAfter={zPhys.Velocity:F3} distance={distanceToGround:F3} sticky={stickyGround}");
 
         if (MathF.Abs(zPhys.Velocity) <= MinActiveZVelocity)
         {
@@ -797,7 +815,8 @@ public abstract partial class CMUSharedZLevelsSystem
                     zPhys.Velocity,
                     HasComp<CMUVehicleZTraversalComponent>(uid)))
             {
-                DebugLogFalling(uid, "post-down-sleep", $"local={zPhys.LocalPosition:F3} sticky={stickyGround}");
+                if (_debugFalling)
+                    DebugLogFalling(uid, "post-down-sleep", $"local={zPhys.LocalPosition:F3} sticky={stickyGround}");
                 RemComp<CMUZFallingComponent>(uid);
             }
         }
@@ -943,10 +962,11 @@ public abstract partial class CMUSharedZLevelsSystem
                 vehicleTraversal.EdgeTipUnsupportedFraction,
                 falling))
         {
-            DebugLogFalling(
-                target.Owner,
-                "vehicle-support-reject",
-                $"falling={falling} supported={supported}/{_vehicleSupportSamples.Count} edgeTip={vehicleTraversal.EdgeTipUnsupportedFraction:F3} sticky={stickyGround}");
+            if (_debugFalling)
+                DebugLogFalling(
+                    target.Owner,
+                    "vehicle-support-reject",
+                    $"falling={falling} supported={supported}/{_vehicleSupportSamples.Count} edgeTip={vehicleTraversal.EdgeTipUnsupportedFraction:F3} sticky={stickyGround}");
             stickyGround = false;
             distance = maxFloors;
             return true;
@@ -957,10 +977,11 @@ public abstract partial class CMUSharedZLevelsSystem
             supported,
             highestSupportedSurfaceDistance,
             stickyGround);
-        DebugLogFalling(
-            target.Owner,
-            "vehicle-support",
-            $"falling={falling} supported={supported}/{_vehicleSupportSamples.Count} sticky={stickyGround} distance={distance:F3} highest={highestSupportedSurfaceDistance:F3}");
+        if (_debugFalling)
+            DebugLogFalling(
+                target.Owner,
+                "vehicle-support",
+                $"falling={falling} supported={supported}/{_vehicleSupportSamples.Count} sticky={stickyGround} distance={distance:F3} highest={highestSupportedSurfaceDistance:F3}");
         return true;
     }
 
@@ -995,12 +1016,14 @@ public abstract partial class CMUSharedZLevelsSystem
         if (mapUid is not { } resolvedMap ||
             !_zMapQuery.TryComp(resolvedMap, out var zMapComp))
         {
-            DebugLogFalling(target.Owner, "distance-no-z-map", $"inputMap={mapUid} sampleWorld={worldPos}");
+            if (_debugFalling)
+                DebugLogFalling(target.Owner, "distance-no-z-map", $"inputMap={mapUid} sampleWorld={worldPos}");
             return 0;
         }
         if (!TryResolveMovementGrid(resolvedMap, worldPos, out var checkingGridUid, out var mapGrid))
         {
-            DebugLogFalling(target.Owner, "distance-no-grid", $"inputMap={resolvedMap} sampleWorld={worldPos}");
+            if (_debugFalling)
+                DebugLogFalling(target.Owner, "distance-no-grid", $"inputMap={resolvedMap} sampleWorld={worldPos}");
             return 0;
         }
 
@@ -1018,10 +1041,11 @@ public abstract partial class CMUSharedZLevelsSystem
             {
                 if (!TryMapDown((checkingMap.Owner, checkingMap.Comp), out var tempCheckingMap))
                 {
-                    DebugLogFalling(
-                        target.Owner,
-                        "distance-map-down-missing",
-                        $"floor={floor} checkingMap={checkingMap.Owner} sampleWorld={worldPos}");
+                    if (_debugFalling)
+                        DebugLogFalling(
+                            target.Owner,
+                            "distance-map-down-missing",
+                            $"floor={floor} checkingMap={checkingMap.Owner} sampleWorld={worldPos}");
                     break;
                 }
 
@@ -1032,10 +1056,11 @@ public abstract partial class CMUSharedZLevelsSystem
                         out checkingGridUid,
                         out var tempCheckingGrid))
                 {
-                    DebugLogFalling(
-                        target.Owner,
-                        "distance-map-down-no-grid",
-                        $"floor={floor} checkingMap={checkingMap.Owner} sampleWorld={worldPos}");
+                    if (_debugFalling)
+                        DebugLogFalling(
+                            target.Owner,
+                            "distance-map-down-no-grid",
+                            $"floor={floor} checkingMap={checkingMap.Owner} sampleWorld={worldPos}");
                     continue;
                 }
 
@@ -1057,10 +1082,11 @@ public abstract partial class CMUSharedZLevelsSystem
                 if (profiling)
                     _profileZDistanceHighGroundHits++;
 
-                DebugLogFalling(
-                    target.Owner,
-                    "distance-highground-hit",
-                    $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} distance={highGroundDistance:F3} sticky={stickyGround}");
+                if (_debugFalling)
+                    DebugLogFalling(
+                        target.Owner,
+                        "distance-highground-hit",
+                        $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} distance={highGroundDistance:F3} sticky={stickyGround}");
                 return highGroundDistance;
             }
 
@@ -1074,40 +1100,44 @@ public abstract partial class CMUSharedZLevelsSystem
                 // state while it is standing over an opening.
                 stickyGround = target.Comp.Velocity <= 0.01f && target.Comp.Velocity > -4f;
                 var wallTopDistance = target.Comp.LocalPosition + floor - 1;
-                DebugLogFalling(
-                    target.Owner,
-                    "distance-wall-top-hit",
-                    $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} distance={wallTopDistance:F3}");
+                if (_debugFalling)
+                    DebugLogFalling(
+                        target.Owner,
+                        "distance-wall-top-hit",
+                        $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} distance={wallTopDistance:F3}");
                 return wallTopDistance;
             }
 
             //No ZEntities found, check floor tiles
             var tileFound = _map.TryGetTileRef(checkingGridUid, checkingGrid, checkingTile, out var tileRef);
             var tileEmpty = !tileFound || tileRef.Tile.IsEmpty;
-            var tileType = tileFound ? tileRef.Tile.TypeId.ToString() : "none";
+            var tileType = _debugFalling && tileFound ? tileRef.Tile.TypeId.ToString() : "none";
             if (tileFound &&
                 !tileEmpty)
             {
                 if (profiling)
                     _profileZDistanceTileHits++;
 
-                DebugLogFalling(
-                    target.Owner,
-                    "distance-tile-hit",
-                    $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileType={tileType} distance={target.Comp.LocalPosition + floor:F3}");
+                if (_debugFalling)
+                    DebugLogFalling(
+                        target.Owner,
+                        "distance-tile-hit",
+                        $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileType={tileType} distance={target.Comp.LocalPosition + floor:F3}");
                 return target.Comp.LocalPosition + floor;
             }
 
-            DebugLogFalling(
-                target.Owner,
-                "distance-tile-miss",
-                $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileFound={tileFound} tileEmpty={tileEmpty} tileType={tileType} local={target.Comp.LocalPosition:F3}");
+            if (_debugFalling)
+                DebugLogFalling(
+                    target.Owner,
+                    "distance-tile-miss",
+                    $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileFound={tileFound} tileEmpty={tileEmpty} tileType={tileType} local={target.Comp.LocalPosition:F3}");
         }
 
         if (profiling)
             _profileZDistanceMisses++;
 
-        DebugLogFalling(target.Owner, "distance-miss", $"sampleWorld={worldPos} maxFloors={maxFloors}");
+        if (_debugFalling)
+            DebugLogFalling(target.Owner, "distance-miss", $"sampleWorld={worldPos} maxFloors={maxFloors}");
         return maxFloors;
     }
 
@@ -1873,14 +1903,16 @@ public abstract partial class CMUSharedZLevelsSystem
     {
         if (TryMoveDown(ent))
         {
-            DebugLogFalling(ent, "move-down-success", "result=z-map");
+            if (_debugFalling)
+                DebugLogFalling(ent, "move-down-success", "result=z-map");
             return true;
         }
 
         //welp, that default Chasm behavior. Not really good, but ok for now.
         if (HasComp<ChasmFallingComponent>(ent))
         {
-            DebugLogFalling(ent, "move-down-chasm-existing", "result=false");
+            if (_debugFalling)
+                DebugLogFalling(ent, "move-down-chasm-existing", "result=false");
             return false; //Already falling
         }
 
@@ -1889,7 +1921,8 @@ public abstract partial class CMUSharedZLevelsSystem
         var falling = AddComp<ChasmFallingComponent>(ent);
         falling.NextDeletionTime = _timing.CurTime + falling.DeletionTime;
         _blocker.UpdateCanMove(ent);
-        DebugLogFalling(ent, "move-down-chasm-start", $"deleteAt={falling.NextDeletionTime}");
+        if (_debugFalling)
+            DebugLogFalling(ent, "move-down-chasm-start", $"deleteAt={falling.NextDeletionTime}");
 
         return false;
     }

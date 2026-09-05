@@ -146,8 +146,9 @@ public sealed class WeatherSuccessorMergeRegressionTest : GameTest
     public async Task WeatherEligibilityUnionsTileAreaRoofBlockerAndTileAboveRules()
     {
         var ordinary = await Pair.CreateTestMap(initialized: true, "FloorBasalt");
-        var lower = await Pair.CreateTestMap(initialized: true, "FloorBasalt");
-        var upper = await Pair.CreateTestMap(initialized: true, "FloorBasalt");
+        EntityUid lower = default;
+        EntityUid upper = default;
+        EntityUid networkUid = default;
 
         await Server.WaitAssertion(() =>
         {
@@ -190,25 +191,48 @@ public sealed class WeatherSuccessorMergeRegressionTest : GameTest
             areas.ReplaceArea(areaGrid, indices, "WeatherMergeBlockedArea");
             Assert.That(weather.CanWeatherAffect((ordinary.Grid.Owner, ordinary.Grid.Comp, roof), tile), Is.False);
 
-            var lowerZ = SEntMan.EnsureComponent<CMUZLevelMapComponent>(lower.Grid.Owner);
-            var upperZ = SEntMan.EnsureComponent<CMUZLevelMapComponent>(upper.Grid.Owner);
-            lowerZ.MapAbove = upper.Grid.Owner;
-            upperZ.MapBelow = lower.Grid.Owner;
+            // Z-level terrain lives on map grids registered in a real network.
+            lower = map.CreateMap(out _, runMapInit: true);
+            upper = map.CreateMap(out _, runMapInit: true);
+            var lowerGrid = SEntMan.EnsureComponent<MapGridComponent>(lower);
+            var upperGrid = SEntMan.EnsureComponent<MapGridComponent>(upper);
+            var basalt = new Tile(tiles["FloorBasalt"].TileId);
+            map.SetTile(lower, lowerGrid, indices, basalt);
+            map.SetTile(upper, upperGrid, indices, basalt);
+            var zLevels = Server.System<CMUZLevelsSystem>();
+            var network = zLevels.CreateZNetwork();
+            networkUid = network;
+            Assert.That(zLevels.TryAddMapsIntoZNetwork(network, new Dictionary<EntityUid, int>
+            {
+                [lower] = 0,
+                [upper] = 1,
+            }), Is.True);
+
+            var lowerTile = map.GetTileRef(lower, lowerGrid, indices);
             Assert.That(weather.CanWeatherAffect(
-                (lower.Grid.Owner, lower.Grid.Comp, (RoofComponent?) null), lower.Tile), Is.False,
+                (lower, lowerGrid, (RoofComponent?) null), lowerTile), Is.False,
                 "a nonempty tile at the same indices on the level above must block weather");
 
-            map.SetTile(upper.Grid, upper.Tile.GridIndices, Tile.Empty);
+            map.SetTile(upper, upperGrid, indices, Tile.Empty);
             Assert.That(weather.CanWeatherAffect(
-                (lower.Grid.Owner, lower.Grid.Comp, (RoofComponent?) null), lower.Tile), Is.True,
+                (lower, lowerGrid, (RoofComponent?) null), lowerTile), Is.True,
                 "an empty tile above must not be treated as a roof");
+
+            map.SetTile(upper, upperGrid, indices, basalt);
+            Assert.That(weather.CanWeatherAffect(
+                (lower, lowerGrid, (RoofComponent?) null), lowerTile), Is.False,
+                "replacing the tile above must block weather again without rebuilding the network");
         });
 
         await Server.WaitPost(() =>
         {
-            SEntMan.RemoveComponent<CMUZLevelMapComponent>(lower.Grid.Owner);
-            SEntMan.RemoveComponent<CMUZLevelMapComponent>(upper.Grid.Owner);
+            var zLevels = Server.System<CMUZLevelsSystem>();
+            zLevels.TryRemoveMapFromZNetwork(lower);
+            zLevels.TryRemoveMapFromZNetwork(upper);
+            SEntMan.DeleteEntity(networkUid);
         });
+        await Pair.DeleteEntityTreeLeafFirst(lower);
+        await Pair.DeleteEntityTreeLeafFirst(upper);
         await Pair.RunUntilSynced();
     }
 }

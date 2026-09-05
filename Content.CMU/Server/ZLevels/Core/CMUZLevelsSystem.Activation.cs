@@ -14,6 +14,24 @@ public sealed partial class CMUZLevelsSystem
 
     private readonly HashSet<EntityUid> _zFallWakeBuffer = new();
 
+    private void ActivateAttachedMaps(Dictionary<EntityUid, int> maps)
+    {
+        // MapInit handles freshly loaded entities. This pass also covers attaching
+        // existing, already initialized maps through mapping/construction tools.
+        foreach (var map in maps.Keys)
+        {
+            // Only direct map children can use Z physics. Avoid scanning every body
+            // in the world each time construction attaches a new, often empty level.
+            var children = Transform(map).ChildEnumerator;
+            while (children.MoveNext(out var uid))
+            {
+                if (TryComp<CMUZPhysicsComponent>(uid, out var physics) &&
+                    Comp<MetaDataComponent>(uid).EntityLifeStage >= EntityLifeStage.MapInitialized)
+                    CheckActivation((uid, physics));
+            }
+        }
+    }
+
     private void InitializeActivation()
     {
         SubscribeLocalEvent<CMUZPhysicsComponent, MapInitEvent>(OnMapInit);

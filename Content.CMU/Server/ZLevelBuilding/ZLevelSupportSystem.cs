@@ -2,6 +2,7 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Chat.Managers;
 using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.SavedBuilds;
@@ -92,8 +93,9 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
 
     // Structural entities that have lost support: maps entity uid -> time at which it will collapse.
     // Cleared if the entity regains support before the deadline (counterplay via building more pillars/anchors).
-    private readonly Dictionary<EntityUid, TimeSpan> _pendingUnsupported = new();
+    private readonly Dictionary<EntityUid, PendingCollapse> _pendingUnsupported = new();
     private readonly PriorityQueue<EntityUid, TimeSpan> _unsupportedDeadlines = new();
+    private readonly record struct PendingCollapse(TimeSpan Deadline, EntityUid Grid, Vector2i Tile);
 
     /// <summary>Seconds a structure remains standing after losing its last support before collapsing.</summary>
     private const float CollapseWarningSeconds = 5f;
@@ -115,6 +117,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         SubscribeLocalEvent<ZLevelWallSupportComponent, ComponentShutdown>(OnWallSupportShutdown);
         SubscribeLocalEvent<ZLevelWallSupportComponent, AnchorStateChangedEvent>(OnWallSupportAnchorChanged);
         SubscribeLocalEvent<PlayerBuiltComponent, ComponentStartup>(OnPlayerBuiltStartup);
+        SubscribeLocalEvent<CMUZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
 
         // All of these are keyed by round-scoped uids; drop them with the round so stale entries never accumulate.
         SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ =>
@@ -129,6 +132,17 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             _supportGridsByMap.Clear();
             _indexedGridMap.Clear();
         });
+    }
+
+    private void OnNetworkUpdated(ref CMUZLevelNetworkUpdatedEvent args)
+    {
+        // Removal notifications contain the surviving network only. Invalidate enrolled grids as well as
+        // current members so detached levels stop using their former depth and projected support.
+        foreach (var grid in _supportsByGrid.Keys)
+        {
+            EnsureGridMapIndexed(grid);
+            _dirtyGrids.Add(grid);
+        }
     }
 
     /// <summary>Records the last player to damage a support on a level, so a resulting collapse names the real culprit.</summary>
@@ -199,13 +213,22 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         => MarkGridDirty(ent);
 
     private void OnWallSupportShutdown(Entity<ZLevelWallSupportComponent> ent, ref ComponentShutdown args)
-        => MarkGridDirty(ent);
+    {
+        MarkGridDirty(ent);
+        if (Transform(ent).Anchored)
+        {
+            var ev = new ZLevelSupportChangedEvent(ent.Owner);
+            RaiseLocalEvent(ref ev);
+        }
+    }
 
     private void OnWallSupportAnchorChanged(Entity<ZLevelWallSupportComponent> ent, ref AnchorStateChangedEvent args)
     {
         MarkGridDirty(ent);
         if (!args.Anchored)
         {
+            var ev = new ZLevelSupportChangedEvent(ent.Owner);
+            RaiseLocalEvent(ref ev);
             var caveEvent = new ZCaveSupportRemovedEvent(ent.Owner);
             RaiseLocalEvent(ref caveEvent);
         }
@@ -230,7 +253,11 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     /// <summary>Moves a support's index entry to its current grid and dirties both sides of a grid change.</summary>
     private void ReindexSupport(EntityUid uid)
     {
-        var newGrid = !Deleted(uid) && TryComp(uid, out TransformComponent? xform) ? xform.GridUid : null;
+        var newGrid = !Deleted(uid) && TryComp(uid, out TransformComponent? xform) && xform.Anchored
+            ? xform.GridUid
+            : null;
+        if (newGrid == null)
+            _pendingUnsupported.Remove(uid);
         _supportGrid.TryGetValue(uid, out var oldGrid);
         var hadOldGrid = _supportGrid.ContainsKey(uid);
 
@@ -242,6 +269,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
 
         if (hadOldGrid)
         {
+            _pendingUnsupported.Remove(uid);
             RemoveIndexedSupport(uid, out _);
             _dirtyGrids.Add(oldGrid);
         }
@@ -350,7 +378,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             {
                 _unsupportedDeadlines.Dequeue();
 
-                if (!_pendingUnsupported.TryGetValue(uid, out var currentDeadline) || currentDeadline != collapseAt)
+                if (!_pendingUnsupported.TryGetValue(uid, out var pending) || pending.Deadline != collapseAt)
                     continue;
 
                 _pendingUnsupported.Remove(uid);
@@ -361,6 +389,17 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
                 // it was shored up before the deadline (it would then have been removed from the dict).
                 if (!TryComp<StructuralSupportComponent>(uid, out var sup) || sup.Supported)
                     continue;
+
+                // A warning belongs to the structural cell that lost support, never to a loose/moved object.
+                var xform = Transform(uid);
+                if (!xform.Anchored || xform.GridUid != pending.Grid ||
+                    !_gridQuery.TryComp(pending.Grid, out var grid) ||
+                    _map.TileIndicesFor(pending.Grid, grid, xform.Coordinates) != pending.Tile)
+                {
+                    ReindexSupport(uid);
+                    MarkGridDirty(uid);
+                    continue;
+                }
 
                 CollapseUnsupportedStructure(uid);
             }
@@ -385,7 +424,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             {
                 if (!TryComp<StructuralSupportComponent>(uid, out var comp) ||
                     !TryComp(uid, out TransformComponent? xform) ||
-                    xform.GridUid != grid.Owner)
+                    !xform.Anchored || xform.GridUid != grid.Owner)
                 {
                     _staleIndexedSupports.Add(uid);
                     continue;
@@ -504,7 +543,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
                 if (!_pendingUnsupported.ContainsKey(ent.Owner))
                 {
                     var collapseAt = now + TimeSpan.FromSeconds(CollapseWarningSeconds);
-                    _pendingUnsupported[ent.Owner] = collapseAt;
+                    _pendingUnsupported[ent.Owner] = new PendingCollapse(collapseAt, grid.Owner, tile);
                     _unsupportedDeadlines.Enqueue(ent.Owner, collapseAt);
 
                     // Popup only on the supported -> unsupported transition, to avoid spamming every recompute.
@@ -887,8 +926,16 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         var best = -1;
         foreach (var anchored in _map.GetAnchoredEntities(belowGridUid, belowGrid, tile))
         {
-            if (TryComp<StructuralSupportComponent>(anchored, out var sup) && (sup.IsVerticalSupport || sup.IsAnchor))
-                best = Math.Max(best, sup.CantileverSpan);
+            if (TryComp<StructuralSupportComponent>(anchored, out var sup))
+            {
+                // A constructed wall/beam in its warning window no longer has a structural load path.
+                // Its still-present physical body must not reset the warning independently on every storey.
+                if (!sup.Supported)
+                    continue;
+
+                if (sup.IsVerticalSupport || sup.IsAnchor)
+                    best = Math.Max(best, sup.CantileverSpan);
+            }
 
             if (HasComp<ZLevelWallSupportComponent>(anchored))
                 best = Math.Max(best, ZLevelWallSupportComponent.CantileverSpan);
@@ -908,6 +955,10 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
 /// </summary>
 [ByRefEvent]
 public readonly record struct ZCaveSupportRemovedEvent(EntityUid Support);
+
+/// <summary>A wall's anchored virtual support changed; consumers snapshot its location before teardown completes.</summary>
+[ByRefEvent]
+public readonly record struct ZLevelSupportChangedEvent(EntityUid Support);
 
 /// <summary>Relays player damage to a structural-only cave support for cave-in attribution.</summary>
 [ByRefEvent]
