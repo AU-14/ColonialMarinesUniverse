@@ -124,7 +124,7 @@
     maxFixedRange: 32
     damage:
       types:
-        Piercing: 60
+        Piercing: 75
     soundHit:
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
   - type: DamageImpactProfile
@@ -268,7 +268,7 @@
     useMapCoords: true
   - type: TileFireOnTrigger
     range: 1
-    spawn: RMCTileFireHCNapalm
+    spawn: RMCTileFireBlue
     sound: null
 
 - type: entity
@@ -297,7 +297,7 @@
     delay: 0
   - type: DeleteOnTrigger
   - type: SpawnOnTerminate
-    spawn: RMCTileFireHCNapalm
+    spawn: RMCTileFireBlue
   - type: IgnoreArc
   - type: IgnorePredictionHide
   - type: Fixtures
@@ -362,4 +362,4 @@
     useMapCoords: true
   - type: TileFireOnTrigger
     range: 0
-    spawn: RMCTileFireHCNapalm
+    spawn: RMCTileFireBlue
