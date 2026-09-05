@@ -43,7 +43,7 @@ public sealed class PainShockReworkTest
     private static readonly ProtoId<MetabolismStagePrototype> Bloodstream = "Bloodstream";
 
     [Test]
-    public async Task ShatteredFractureAloneIsSeverePressureNotShock()
+    public async Task ShatteredFractureWithControlledBleedingIsSeverePressureNotShock()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -60,6 +60,10 @@ public sealed class PainShockReworkTest
                 var part = GetFirstPart(entMan, human);
                 var frac = entMan.EnsureComponent<FractureComponent>(part);
                 fracture.SetSeverity((part, frac), FractureSeverity.Shattered);
+                Assert.That(entMan.HasComponent<InternalBleedingComponent>(part), Is.True);
+                Assert.That(pain.ComputePainSourceProfile(human).Target.Float(), Is.EqualTo(75.5f).Within(0.001f));
+                entMan.System<SharedCMUWoundsSystem>().SuppressInternalBleed(part);
+                Assert.That(entMan.HasComponent<InternalBleedingComponent>(part), Is.False);
 
                 var profile = pain.ComputePainSourceProfile(human);
                 var rawTier = PainTierThresholds.Get(PainTier.None, profile.Target, 0f, pain.ShockThreshold);

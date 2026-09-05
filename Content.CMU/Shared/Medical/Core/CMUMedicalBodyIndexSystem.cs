@@ -622,6 +622,6 @@ public sealed partial class CMUMedicalBodyIndexSystem : EntitySystem
 
         aggregate.Revision = unchecked(aggregate.Revision + 1);
         aggregate.Snapshot = null;
-        _changes.MarkChanged(body, CMUMedicalChangeFlags.Anatomy);
+        _changes.MarkChanged(body, CMUMedicalChangeFlags.Anatomy | CMUMedicalChangeFlags.Topology);
     }
 }

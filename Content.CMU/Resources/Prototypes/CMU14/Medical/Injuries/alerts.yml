@@ -1,11 +1,7 @@
-- type: alertCategory
-  id: CMUMedical
-
 # ---- Cardiac ---------------------------------------------------------
 
 - type: alert
   id: CMUTachycardia
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed3
@@ -14,7 +10,6 @@
 
 - type: alert
   id: CMUArrhythmia
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed5
@@ -23,7 +18,6 @@
 
 - type: alert
   id: CMUCardiacArrest
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed10
@@ -34,7 +28,6 @@
 
 - type: alert
   id: CMUPulmonaryEdema
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/breathing.rsi
     state: not_enough_oxy
@@ -45,7 +38,6 @@
 
 - type: alert
   id: CMUHepaticFailure
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed8
@@ -54,7 +46,6 @@
 
 - type: alert
   id: CMURenalFailure
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed7
@@ -65,7 +56,6 @@
 
 - type: alert
   id: CMUConcussed
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: hot1
@@ -74,7 +64,6 @@
 
 - type: alert
   id: CMUTraumaticBrainInjury
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: hot3
@@ -83,7 +72,6 @@
 
 - type: alert
   id: CMUWhiplash
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: hot2
@@ -94,7 +82,6 @@
 
 - type: alert
   id: CMUNausea
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/hunger.rsi
     state: peckish
@@ -103,7 +90,6 @@
 
 - type: alert
   id: CMUTinnitus
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: cold1
@@ -112,7 +98,6 @@
 
 - type: alert
   id: CMUDeafened
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: cold3
@@ -123,7 +108,6 @@
 
 - type: alert
   id: CMUMissingArm
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed10
@@ -132,7 +116,6 @@
 
 - type: alert
   id: CMUMissingHand
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed9
@@ -141,7 +124,6 @@
 
 - type: alert
   id: CMUMissingLeg
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed10
@@ -150,7 +132,6 @@
 
 - type: alert
   id: CMUMissingFoot
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed9
@@ -161,7 +142,6 @@
 
 - type: alert
   id: CMURecoveringFromSurgery
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: cold2
@@ -170,7 +150,6 @@
 
 - type: alert
   id: CMUTransplantRejection
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed4
@@ -179,7 +158,6 @@
 
 - type: alert
   id: CMUNerveDamage
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: cold2
@@ -188,7 +166,6 @@
 
 - type: alert
   id: CMUPainShock
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed10
@@ -197,7 +174,6 @@
 
 - type: alert
   id: CMUPainSuppression
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: cold1
@@ -206,7 +182,6 @@
 
 - type: alert
   id: CMUSplinted
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed1
@@ -215,7 +190,6 @@
 
 - type: alert
   id: CMUCast
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed2
@@ -224,7 +198,6 @@
 
 - type: alert
   id: CMUBoneRegenBoost
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/temperature.rsi
     state: cold1
@@ -233,7 +206,6 @@
 
 - type: alert
   id: CMUPainMild
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed1
@@ -242,7 +214,6 @@
 
 - type: alert
   id: CMUPainModerate
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed3
@@ -251,7 +222,6 @@
 
 - type: alert
   id: CMUPainSevere
-  category: CMUMedical
   icons:
   - sprite: /Textures/Interface/Alerts/bleed.rsi
     state: bleed7

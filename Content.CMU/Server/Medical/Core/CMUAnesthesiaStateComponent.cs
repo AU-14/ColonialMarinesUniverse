@@ -3,11 +3,14 @@ namespace Content.Server.CMU14.Medical.Core;
 [RegisterComponent]
 public sealed partial class CMUAnesthesiaStateComponent : Component
 {
-    public bool DrowsinessApplied;
+    public EntityUid GasTank;
 
-    public uint InductionId;
+    public EntityUid? Drowsiness;
 
-    public bool SleepApplied;
+    public EntityUid? ForcedSleep;
 
-    public bool WasSleeping;
+    public bool Induced;
+
+    /// <summary>Only wake sleep first introduced by this anesthesia session.</summary>
+    public bool OwnsSleep;
 }

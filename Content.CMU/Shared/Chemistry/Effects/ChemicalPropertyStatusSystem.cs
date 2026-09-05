@@ -5,10 +5,20 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.CMU14.Medical.Injuries.Pain.Penalties;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
+using Robust.Shared.Network;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.Rejuvenate;
 
 namespace Content.Shared.CMU14.Chemistry.Effects;
+
+[ByRefEvent]
+public readonly record struct ChemicalAntiparasiticChangedEvent;
+
+[ByRefEvent]
+public readonly record struct ChemicalCardiacPacingChangedEvent(TimeSpan ExpiresAt);
 
 [ByRefEvent]
 public record struct GetChemicalStunTimeMultiplierEvent
@@ -20,7 +30,7 @@ public record struct GetChemicalStunTimeMultiplierEvent
     }
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true), AutoGenerateComponentPause]
 public sealed partial class ChemicalNerveStimulationComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -30,7 +40,7 @@ public sealed partial class ChemicalNerveStimulationComponent : Component
     public TimeSpan ExpiresAt;
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true), AutoGenerateComponentPause]
 public sealed partial class ChemicalMuscleStimulationComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -141,9 +151,13 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
     private readonly Dictionary<EntityUid, Dictionary<string, TimedStrength>> _painSensitivitySources = new();
     private readonly Dictionary<EntityUid, Dictionary<string, TimedStrength>> _addictionTreatmentSources = new();
 
+    [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
     [Dependency] private SharedCMUMedicalSpeedSystem _medicalSpeed = default!;
+    [Dependency] private SharedPainShockSystem _pain = default!;
 
     public override void Initialize()
     {
@@ -160,89 +174,196 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
         SubscribeLocalEvent<ChemicalMuscleStimulationComponent, ComponentStartup>(OnMuscleStatusChanged);
         SubscribeLocalEvent<ChemicalMuscleStimulationComponent, ComponentShutdown>(OnMuscleStatusChanged);
         SubscribeLocalEvent<MetaDataComponent, EntityUnpausedEvent>(OnEntityUnpaused);
+        RegisterStrengthStatus<ChemicalNerveStimulationComponent>(_nerveSources,
+            comp => (comp.Strength, comp.ExpiresAt),
+            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires), RefreshMovement);
+        RegisterStrengthStatus<ChemicalMuscleStimulationComponent>(_muscleSources,
+            comp => (comp.Strength, comp.ExpiresAt),
+            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires), RefreshMovement);
+        RegisterStrengthStatus<ChemicalCardiacPacingComponent>(_pacingSources,
+            comp => (comp.Strength, comp.ExpiresAt),
+            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires));
+        RegisterStrengthStatus<ChemicalHyperdensityComponent>(_hyperdensitySources,
+            comp => (comp.Protection, comp.ExpiresAt),
+            (comp, strength, expires) => (comp.Protection, comp.ExpiresAt) = (strength, expires));
+        RegisterStrengthStatus<ChemicalNeuroshieldComponent>(_neuroshieldSources,
+            comp => (comp.Protection, comp.ExpiresAt),
+            (comp, strength, expires) => (comp.Protection, comp.ExpiresAt) = (strength, expires));
+        RegisterStrengthStatus<ChemicalAntiparasiticComponent>(_antiparasiticSources,
+            comp => (comp.Strength, comp.ExpiresAt),
+            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires), RefreshAntiparasitic);
+        RegisterStrengthStatus<ChemicalPainSensitivityComponent>(_painSensitivitySources,
+            comp => (comp.Multiplier, comp.ExpiresAt),
+            (comp, strength, expires) => (comp.Multiplier, comp.ExpiresAt) = (strength, expires),
+            beforeExpiry: SettlePain);
+        RegisterStrengthStatus<ChemicalAddictionTreatmentComponent>(_addictionTreatmentSources,
+            comp => (comp.Strength, comp.ExpiresAt),
+            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires));
+        RegisterExpiry<ChemicalNeurocryogenicComponent>(comp => comp.ExpiresAt);
+        RegisterExpiry<ChemicalFluxingComponent>(comp => comp.ExpiresAt);
+        SubscribeLocalEvent<ChemicalNerveStimulationComponent, AfterAutoHandleStateEvent>(OnNerveState);
+        SubscribeLocalEvent<ChemicalMuscleStimulationComponent, AfterAutoHandleStateEvent>(OnMuscleState);
+        SubscribeLocalEvent<ChemicalPainSensitivityComponent, ComponentShutdown>(OnSensitivityShutdown);
+
     }
 
     public void ApplyNerveStimulation(EntityUid target, float strength, string source = DirectSource)
     {
+        if (_net.IsClient)
+            return;
+
         var comp = EnsureComp<ChemicalNerveStimulationComponent>(target);
-        RecordSource(_nerveSources, target, source, strength, out comp.Strength, out comp.ExpiresAt);
+        var previousStrength = comp.Strength;
+        RecordSource(_nerveSources, target, comp, source, strength, out comp.Strength, out comp.ExpiresAt);
         Dirty(target, comp);
-        _movement.RefreshMovementSpeedModifiers(target);
-        _medicalSpeed.RefreshAggregatedPenalties(target);
+        if (previousStrength != comp.Strength)
+            RefreshMovement(target);
     }
 
     public void ApplyMuscleStimulation(EntityUid target, float strength, string source = DirectSource)
     {
+        if (_net.IsClient)
+            return;
+
         var comp = EnsureComp<ChemicalMuscleStimulationComponent>(target);
-        RecordSource(_muscleSources, target, source, strength, out comp.Strength, out comp.ExpiresAt);
+        var previousStrength = comp.Strength;
+        RecordSource(_muscleSources, target, comp, source, strength, out comp.Strength, out comp.ExpiresAt);
         Dirty(target, comp);
-        _movement.RefreshMovementSpeedModifiers(target);
-        _medicalSpeed.RefreshAggregatedPenalties(target);
+        if (previousStrength != comp.Strength)
+            RefreshMovement(target);
     }
 
     public void ApplyCardiacPacing(EntityUid target, float strength, string source = DirectSource)
     {
+        if (_net.IsClient)
+            return;
+
         var comp = EnsureComp<ChemicalCardiacPacingComponent>(target);
-        RecordSource(_pacingSources, target, source, strength, out comp.Strength, out comp.ExpiresAt);
+        RecordSource(_pacingSources, target, comp, source, strength, out comp.Strength, out comp.ExpiresAt);
         Dirty(target, comp);
+        var changed = new ChemicalCardiacPacingChangedEvent(comp.ExpiresAt);
+        RaiseLocalEvent(target, ref changed);
     }
 
     public void ApplyHyperdensity(EntityUid target, float protection = 0.75f, string source = DirectSource)
     {
+        if (_net.IsClient)
+            return;
+
         var comp = EnsureComp<ChemicalHyperdensityComponent>(target);
-        RecordSource(_hyperdensitySources, target, source, protection, out comp.Protection, out comp.ExpiresAt);
+        RecordSource(_hyperdensitySources, target, comp, source, protection, out comp.Protection, out comp.ExpiresAt);
         Dirty(target, comp);
     }
 
     public void ApplyNeuroshield(EntityUid target, float protection = 0.8f, string source = DirectSource)
     {
+        if (_net.IsClient)
+            return;
+
         var comp = EnsureComp<ChemicalNeuroshieldComponent>(target);
-        RecordSource(_neuroshieldSources, target, source, protection, out comp.Protection, out comp.ExpiresAt);
+        RecordSource(_neuroshieldSources, target, comp, source, protection, out comp.Protection, out comp.ExpiresAt);
         Dirty(target, comp);
     }
 
     public void ApplyNeurocryogenic(EntityUid target)
     {
+        if (_net.IsClient)
+            return;
+
         var comp = EnsureComp<ChemicalNeurocryogenicComponent>(target);
-        comp.ExpiresAt = MathHelper.Max(comp.ExpiresAt, _timing.CurTime + DefaultDuration);
+        comp.ExpiresAt = MathHelper.Max(comp.ExpiresAt, StatusTime(target) + DefaultDuration);
         Dirty(target, comp);
+        ScheduleExpiry<ChemicalNeurocryogenicComponent>(target, comp.ExpiresAt);
     }
 
-    public ChemicalAntiparasiticComponent ApplyAntiparasitic(EntityUid target,
+    public ChemicalAntiparasiticComponent? ApplyAntiparasitic(EntityUid target,
         float strength,
         float progress,
         string source = DirectSource)
     {
+        if (_net.IsClient)
+            return null;
+
         var comp = EnsureComp<ChemicalAntiparasiticComponent>(target);
-        RecordSource(_antiparasiticSources, target, source, strength, out comp.Strength, out comp.ExpiresAt);
+        var previousStrength = comp.Strength;
+        RecordSource(_antiparasiticSources, target, comp, source, strength, out comp.Strength, out comp.ExpiresAt);
         comp.TreatmentProgress += MathF.Max(0f, progress);
         Dirty(target, comp);
+        if (previousStrength != comp.Strength)
+            RefreshAntiparasitic(target);
         return comp;
     }
 
-    public ChemicalFluxingComponent ApplyFluxing(EntityUid target, float progress)
+    public ChemicalFluxingComponent? ApplyFluxing(EntityUid target, float progress)
     {
+        if (_net.IsClient)
+            return null;
+
         var comp = EnsureComp<ChemicalFluxingComponent>(target);
         comp.Progress += MathF.Max(0f, progress);
-        comp.ExpiresAt = MathHelper.Max(comp.ExpiresAt, _timing.CurTime + DefaultDuration);
+        comp.ExpiresAt = MathHelper.Max(comp.ExpiresAt, StatusTime(target) + DefaultDuration);
         Dirty(target, comp);
+        ScheduleExpiry<ChemicalFluxingComponent>(target, comp.ExpiresAt);
         return comp;
     }
 
     public void ApplyPainSensitivity(EntityUid target, float multiplier, string source = DirectSource)
     {
+        if (_net.IsClient)
+            return;
+
+        SettlePain(target);
         var comp = EnsureComp<ChemicalPainSensitivityComponent>(target);
-        RecordSource(_painSensitivitySources, target, source, multiplier, out comp.Multiplier, out comp.ExpiresAt);
+        RecordSource(_painSensitivitySources, target, comp, source, multiplier, out comp.Multiplier, out comp.ExpiresAt);
         Dirty(target, comp);
     }
 
-    public ChemicalAddictionTreatmentComponent ApplyAddictionTreatment(EntityUid target,
+    /// <summary>
+    /// Reads the sensitivity over a historical active-time interval. Sources are
+    /// retained until pain consumes their preceding interval before mutation/expiry.
+    /// </summary>
+    public float GetPainSensitivity(EntityUid target, TimeSpan at, out TimeSpan nextChange)
+    {
+        nextChange = TimeSpan.MaxValue;
+        var multiplier = 1f;
+        if (_painSensitivitySources.TryGetValue(target, out var sources))
+        {
+            foreach (var entry in sources.Values)
+            {
+                if (entry.ExpiresAt <= at)
+                    continue;
+                multiplier = MathF.Max(multiplier, entry.Strength);
+                nextChange = MathHelper.Min(nextChange, entry.ExpiresAt);
+            }
+            return multiplier;
+        }
+
+        if (TryComp<ChemicalPainSensitivityComponent>(target, out var component) && component.ExpiresAt > at)
+        {
+            nextChange = component.ExpiresAt;
+            return MathF.Max(1, component.Multiplier);
+        }
+        return multiplier;
+    }
+
+    private void SettlePain(EntityUid target) => _pain.SettlePainBeforeModifierChange(target);
+
+    private void OnSensitivityShutdown(Entity<ChemicalPainSensitivityComponent> ent, ref ComponentShutdown args)
+    {
+        if (_net.IsServer && !TerminatingOrDeleted(ent.Owner))
+            SettlePain(ent.Owner);
+    }
+
+    public ChemicalAddictionTreatmentComponent? ApplyAddictionTreatment(EntityUid target,
         float strength,
         float progress,
         string source = DirectSource)
     {
+        if (_net.IsClient)
+            return null;
+
         var comp = EnsureComp<ChemicalAddictionTreatmentComponent>(target);
-        RecordSource(_addictionTreatmentSources, target, source, strength, out comp.Strength, out comp.ExpiresAt);
+        RecordSource(_addictionTreatmentSources, target, comp, source, strength, out comp.Strength, out comp.ExpiresAt);
         comp.Progress += MathF.Max(0f, progress);
         Dirty(target, comp);
         return comp;
@@ -250,6 +371,8 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
 
     private void OnNerveMovement(Entity<ChemicalNerveStimulationComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
+        if (ent.Comp.LifeStage > ComponentLifeStage.Running)
+            return;
         var bonus = MathF.Min(0.30f, ent.Comp.Strength * 0.10f);
         args.ModifySpeed(1f + bonus, 1f + bonus);
     }
@@ -262,6 +385,8 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
     private void OnMuscleMovement(Entity<ChemicalMuscleStimulationComponent> ent,
         ref RefreshMovementSpeedModifiersEvent args)
     {
+        if (ent.Comp.LifeStage > ComponentLifeStage.Running)
+            return;
         var bonus = MathF.Min(0.30f, ent.Comp.Strength * 0.05f);
         args.ModifySpeed(1f + bonus, 1f + bonus);
     }
@@ -318,54 +443,40 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
         ShiftSources(_addictionTreatmentSources, ent, args.PausedTime);
     }
 
-    public override void Update(float frameTime)
+    private void RefreshMovement(EntityUid target)
     {
-        base.Update(frameTime);
-        var now = _timing.CurTime;
-        RefreshStrengthStatuses<ChemicalNerveStimulationComponent>(_nerveSources,
-            now,
-            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires),
-            uid =>
-            {
-                _movement.RefreshMovementSpeedModifiers(uid);
-                _medicalSpeed.RefreshAggregatedPenalties(uid);
-            });
-        RefreshStrengthStatuses<ChemicalMuscleStimulationComponent>(_muscleSources,
-            now,
-            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires),
-            uid =>
-            {
-                _movement.RefreshMovementSpeedModifiers(uid);
-                _medicalSpeed.RefreshAggregatedPenalties(uid);
-            });
-        RefreshStrengthStatuses<ChemicalCardiacPacingComponent>(_pacingSources,
-            now,
-            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires));
-        RefreshStrengthStatuses<ChemicalHyperdensityComponent>(_hyperdensitySources,
-            now,
-            (comp, strength, expires) => (comp.Protection, comp.ExpiresAt) = (strength, expires));
-        RefreshStrengthStatuses<ChemicalNeuroshieldComponent>(_neuroshieldSources,
-            now,
-            (comp, strength, expires) => (comp.Protection, comp.ExpiresAt) = (strength, expires));
-        Expire<ChemicalNeurocryogenicComponent>(now, c => c.ExpiresAt);
-        RefreshStrengthStatuses<ChemicalAntiparasiticComponent>(_antiparasiticSources,
-            now,
-            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires));
-        Expire<ChemicalFluxingComponent>(now, c => c.ExpiresAt);
-        RefreshStrengthStatuses<ChemicalPainSensitivityComponent>(_painSensitivitySources,
-            now,
-            (comp, strength, expires) => (comp.Multiplier, comp.ExpiresAt) = (strength, expires));
-        RefreshStrengthStatuses<ChemicalAddictionTreatmentComponent>(_addictionTreatmentSources,
-            now,
-            (comp, strength, expires) => (comp.Strength, comp.ExpiresAt) = (strength, expires));
+        _movement.RefreshMovementSpeedModifiers(target);
+        _medicalSpeed.RefreshAggregatedPenalties(target);
     }
 
-    private void RecordSource(Dictionary<EntityUid, Dictionary<string, TimedStrength>> statuses,
+    private void RefreshAntiparasitic(EntityUid target)
+    {
+        var changed = new ChemicalAntiparasiticChangedEvent();
+        RaiseLocalEvent(target, ref changed);
+    }
+
+    private void OnNerveState(Entity<ChemicalNerveStimulationComponent> ent, ref AfterAutoHandleStateEvent args)
+        => RefreshMovement(ent.Owner);
+
+    private void OnMuscleState(Entity<ChemicalMuscleStimulationComponent> ent, ref AfterAutoHandleStateEvent args)
+        => RefreshMovement(ent.Owner);
+
+    private static CMUMedicalWorkKey StatusKey<T>() where T : Component => new(typeof(T).Name);
+
+    // AutoPaused fields use the start of the current pause as their clock until
+    // unpause shifts them. Sources applied mid-pause must use that same clock.
+    private TimeSpan StatusTime(EntityUid target) => _timing.CurTime - _metadata.GetPauseTime(target);
+
+    private void ScheduleExpiry<T>(EntityUid target, TimeSpan dueAt) where T : Component
+        => _scheduler.Schedule(target, StatusKey<T>(), dueAt + _metadata.GetPauseTime(target));
+
+    private void RecordSource<T>(Dictionary<EntityUid, Dictionary<string, TimedStrength>> statuses,
         EntityUid target,
+        T component,
         string source,
         float strength,
         out float strongest,
-        out TimeSpan expiresAt)
+        out TimeSpan expiresAt) where T : Component
     {
         if (!statuses.TryGetValue(target, out var sources))
         {
@@ -373,72 +484,107 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
             statuses.Add(target, sources);
         }
 
-        sources[source] = new TimedStrength(strength, _timing.CurTime + DefaultDuration);
+        var now = StatusTime(target);
+        RemoveExpiredSources(sources, now);
+        sources[source] = new TimedStrength(strength, now + DefaultDuration);
         AggregateSources(sources, out strongest, out expiresAt);
+        ScheduleSources<T>(target, sources);
     }
 
-    private void RefreshStrengthStatuses<T>(Dictionary<EntityUid, Dictionary<string, TimedStrength>> statuses,
-        TimeSpan now,
+    // These component/event pairs are owned here. In particular, Antiparasitic's
+    // ComponentShutdown is owned by the parasite system; removal only retires our sources.
+    private void RegisterStrengthStatus<T>(Dictionary<EntityUid, Dictionary<string, TimedStrength>> statuses,
+        Func<T, (float Strength, TimeSpan ExpiresAt)> read,
         Action<T, float, TimeSpan> update,
-        Action<EntityUid>? afterChange = null)
-        where T : Component
+        Action<EntityUid>? afterStrengthChange = null,
+        Action<EntityUid>? beforeExpiry = null) where T : Component
     {
-        var query = EntityQueryEnumerator<T>();
-        while (query.MoveNext(out var uid, out var comp))
+        SubscribeLocalEvent<T, RejuvenateEvent>(OnRejuvenate<T>);
+        SubscribeLocalEvent<T, ComponentInit>((Entity<T> ent, ref ComponentInit args) =>
         {
-            if (!statuses.TryGetValue(uid, out var sources))
-            {
-                RemCompDeferred<T>(uid);
-                continue;
-            }
+            if (_net.IsClient)
+                return;
 
-            List<string>? expired = null;
-            foreach (var (source, entry) in sources)
-            {
-                if (entry.ExpiresAt > now)
-                    continue;
+            // Aggregate fields cannot reconstruct separate source lifetimes after
+            // load. Retire unsupported source-less state as the old scan did; a
+            // real application below replaces this provisional deadline.
+            ScheduleExpiry<T>(ent.Owner, StatusTime(ent.Owner));
+        });
+        SubscribeLocalEvent<T, CMUMedicalWorkDueEvent>((Entity<T> ent, ref CMUMedicalWorkDueEvent args) =>
+        {
+            if (args.Key != StatusKey<T>() || _net.IsClient)
+                return;
 
-                expired ??= new List<string>();
-                expired.Add(source);
-            }
-
-            if (expired != null)
+            beforeExpiry?.Invoke(ent.Owner);
+            if (statuses.TryGetValue(ent.Owner, out var sources))
+                RemoveExpiredSources(sources, _timing.CurTime);
+            if (sources == null || sources.Count == 0)
             {
-                foreach (var source in expired)
-                {
-                    sources.Remove(source);
-                }
-            }
-
-            if (sources.Count == 0)
-            {
-                statuses.Remove(uid);
-                RemCompDeferred<T>(uid);
-                continue;
+                statuses.Remove(ent.Owner);
+                RemComp<T>(ent.Owner);
+                return;
             }
 
             AggregateSources(sources, out var strongest, out var expiresAt);
-            update(comp, strongest, expiresAt);
-            Dirty(uid, comp);
-            afterChange?.Invoke(uid);
-        }
+            var previous = read(ent.Comp);
+            if (previous != (strongest, expiresAt))
+            {
+                update(ent.Comp, strongest, expiresAt);
+                Dirty(ent);
+                if (previous.Strength != strongest)
+                    afterStrengthChange?.Invoke(ent.Owner);
+            }
 
-        List<EntityUid>? orphaned = null;
-        foreach (var uid in statuses.Keys)
+            ScheduleSources<T>(ent.Owner, sources);
+        });
+        SubscribeLocalEvent<T, ComponentRemove>((Entity<T> ent, ref ComponentRemove args) =>
         {
-            if (Exists(uid) && HasComp<T>(uid))
-                continue;
+            statuses.Remove(ent.Owner);
+            _scheduler.Cancel(ent.Owner, StatusKey<T>());
+            if (!TerminatingOrDeleted(ent.Owner))
+                afterStrengthChange?.Invoke(ent.Owner);
+        });
+    }
 
-            orphaned ??= new List<EntityUid>();
-            orphaned.Add(uid);
-        }
-
-        if (orphaned == null)
-            return;
-
-        foreach (var uid in orphaned)
+    private void RegisterExpiry<T>(Func<T, TimeSpan> expiresAt) where T : Component
+    {
+        SubscribeLocalEvent<T, RejuvenateEvent>(OnRejuvenate<T>);
+        SubscribeLocalEvent<T, ComponentInit>((Entity<T> ent, ref ComponentInit args) =>
         {
-            statuses.Remove(uid);
+            if (!_net.IsClient)
+                ScheduleExpiry<T>(ent.Owner, expiresAt(ent.Comp));
+        });
+        SubscribeLocalEvent<T, CMUMedicalWorkDueEvent>((Entity<T> ent, ref CMUMedicalWorkDueEvent args) =>
+        {
+            if (args.Key == StatusKey<T>() && !_net.IsClient && expiresAt(ent.Comp) <= _timing.CurTime)
+                RemComp<T>(ent.Owner);
+        });
+        SubscribeLocalEvent<T, ComponentRemove>((Entity<T> ent, ref ComponentRemove args) =>
+            _scheduler.Cancel(ent.Owner, StatusKey<T>()));
+    }
+
+    private void OnRejuvenate<T>(Entity<T> ent, ref RejuvenateEvent args) where T : Component
+    {
+        // Removal also retires source history, queued expiry and cached effects.
+        if (!_net.IsClient)
+            RemComp<T>(ent.Owner);
+    }
+
+    private void ScheduleSources<T>(EntityUid target, Dictionary<string, TimedStrength> sources) where T : Component
+    {
+        var next = TimeSpan.MaxValue;
+        foreach (var entry in sources.Values)
+            next = MathHelper.Min(next, entry.ExpiresAt);
+        ScheduleExpiry<T>(target, next);
+    }
+
+    private static void RemoveExpiredSources(Dictionary<string, TimedStrength> sources, TimeSpan now)
+    {
+        // Dictionary removal during enumeration is supported by the target runtime.
+        foreach (var (source, entry) in sources)
+        {
+            if (entry.ExpiresAt <= now)
+                sources.Remove(source);
         }
     }
 
@@ -466,16 +612,6 @@ public sealed partial class ChemicalPropertyStatusSystem : EntitySystem
         {
             var entry = sources[source];
             sources[source] = entry with { ExpiresAt = entry.ExpiresAt + pausedTime };
-        }
-    }
-
-    private void Expire<T>(TimeSpan now, Func<T, TimeSpan> expiresAt) where T : Component
-    {
-        var query = EntityQueryEnumerator<T>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (expiresAt(comp) <= now)
-                RemCompDeferred<T>(uid);
         }
     }
 

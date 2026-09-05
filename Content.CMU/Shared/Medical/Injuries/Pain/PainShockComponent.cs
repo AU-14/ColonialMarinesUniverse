@@ -1,5 +1,6 @@
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.CMU14.Medical.Injuries.Pain;
 
@@ -53,7 +54,15 @@ public sealed partial class PainShockComponent : Component
     [DataField]
     public FixedPoint2 CachedRiseRate;
 
-    public bool AccumulationRateDirty;
+    public bool AccumulationRateDirty = true;
+
+    /// <summary>The active-time boundary already integrated into Pain.</summary>
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan LastPainUpdate;
+
+    /// <summary>Sub-cent progress retained across differently sized simulation intervals.</summary>
+    [DataField]
+    public double IntegrationRemainder;
 
     [DataField, AutoPausedField]
     public TimeSpan LastEventRecompute;

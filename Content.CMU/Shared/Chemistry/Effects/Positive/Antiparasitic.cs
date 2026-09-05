@@ -34,8 +34,10 @@ public sealed partial class Antiparasitic : RMCChemicalEffect
             args.ActualPotency,
             (float)potency,
             args.Reagent!.ID);
+        if (treatment == null)
+            return;
+
         var parasites = system.Parasite;
-        parasites.RefreshIncubationMultipliers(args.TargetEntity);
         ApplyDamage(damageable, HeatType, potency * 0.5f, args);
         if (treatment.TreatmentProgress >= CureThreshold)
             parasites.TryChemicallyExpelInfection(args.TargetEntity);

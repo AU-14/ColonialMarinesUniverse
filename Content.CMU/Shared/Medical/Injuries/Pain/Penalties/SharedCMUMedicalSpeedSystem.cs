@@ -27,6 +27,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected SharedFractureSystem Fracture = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
+    [Dependency] private SharedLungsSystem _lungs = default!;
     [Dependency] protected MovementSpeedModifierSystem Movement = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedPainShockSystem Pain = default!;
@@ -34,6 +35,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
 
     private bool _medicalEnabled;
     private bool _statusEffectsEnabled;
+    private bool _configurationRefreshPending;
 
     public override void Initialize()
     {
@@ -47,9 +49,37 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         SubscribeLocalEvent<CMUCastChangedEvent>(OnCastChanged);
         SubscribeLocalEvent<PainShockComponent, ComponentStartup>(OnPainStartup);
         SubscribeLocalEvent<PainTierChangedEvent>(OnPainTierChanged);
+        SubscribeLocalEvent<CMUMedicalChangedEvent>(OnMedicalChanged);
 
-        Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
-        Cfg.OnValueChanged(CMUMedicalCCVars.StatusEffectsEnabled, v => _statusEffectsEnabled = v, true);
+        Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => SetLayerEnabled(ref _medicalEnabled, v), true);
+        Cfg.OnValueChanged(CMUMedicalCCVars.StatusEffectsEnabled, v => SetLayerEnabled(ref _statusEffectsEnabled, v), true);
+    }
+
+    private void SetLayerEnabled(ref bool field, bool enabled)
+    {
+        if (field == enabled)
+            return;
+        field = enabled;
+        if (!Net.IsClient)
+            _configurationRefreshPending = true;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        if (!_configurationRefreshPending)
+            return;
+        _configurationRefreshPending = false;
+
+        // Other penalty consumers have their own CVar callbacks. Refresh after
+        // those callbacks finish so held-gun caches use the new configuration too.
+        // Paused patients also need current projections when the layer is toggled.
+        var query = EntityManager.AllEntityQueryEnumerator<CMUHumanMedicalComponent>();
+        while (query.MoveNext(out var body, out _))
+        {
+            if (!TerminatingOrDeleted(body))
+                RefreshAggregatedPenalties(body);
+        }
     }
 
     public bool IsLayerEnabled()
@@ -58,6 +88,16 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
     }
 
     // ---- Lifecycle refresh fan-in ---------------------------------------
+
+    private void OnMedicalChanged(ref CMUMedicalChangedEvent args)
+    {
+        // Anatomy construction, transplantation and organ-stage effects finish
+        // before this coalesced notification. Do not retain a startup "no lungs"
+        // penalty or wait for an unrelated pain/drug change to refresh the cache.
+        if ((args.Changes & (CMUMedicalChangeFlags.Topology | CMUMedicalChangeFlags.OrganStage)) != 0 &&
+            !TerminatingOrDeleted(args.Body))
+            RefreshAggregatedPenalties(args.Body);
+    }
 
     private void OnBoneFractured(ref BoneFracturedEvent args)
     {
@@ -140,6 +180,8 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
 
     public float ComputeMovementMultiplier(EntityUid body)
     {
+        if (!IsLayerEnabled())
+            return 1f;
         var mult = 1f;
 
         foreach (var (partUid, partComp) in MedicalIndex.GetBodyParts(body))
@@ -159,18 +201,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         if (TryComp<PainShockComponent>(body, out var pain))
             mult *= CMUPainTierPenaltyMultipliers.GetMovementMultiplier(Pain.GetEffectiveTier(body, pain));
 
-        var hasLungs = false;
-        var impairedLungs = false;
-        foreach (var organ in MedicalIndex.GetOrgans(body))
-        {
-            if (!TryComp<LungsComponent>(organ.Owner, out var lungs))
-                continue;
-
-            hasLungs = true;
-            impairedLungs |= lungs.Efficiency < 0.5f;
-        }
-
-        if (!hasLungs || impairedLungs)
+        if (!_lungs.TryGetRespiratoryCapacity(body, out var capacity) || capacity.Efficiency < 0.5f)
             mult *= 0.85f;
 
         if (HasComp<RecoveringFromSurgeryComponent>(body))
@@ -181,6 +212,9 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
 
     public float ComputeAimSwayMultiplier(EntityUid body)
     {
+        var nerveMultiplier = GetNerveStimulationMultiplier(body);
+        if (!IsLayerEnabled())
+            return nerveMultiplier;
         var mult = 1f;
 
         foreach (var (partUid, partComp) in MedicalIndex.GetBodyParts(body))
@@ -212,14 +246,14 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
             };
         }
 
-        if (TryComp<ChemicalNerveStimulationComponent>(body, out var nerve))
-            mult *= MathF.Max(0.7f, 1f - nerve.Strength * 0.1f);
-
-        return MathF.Min(mult, 2.5f);
+        return MathF.Min(mult * nerveMultiplier, 2.5f);
     }
 
     public float ComputeActionSpeedMultiplier(EntityUid body)
     {
+        var nerveMultiplier = GetNerveStimulationMultiplier(body);
+        if (!IsLayerEnabled())
+            return nerveMultiplier;
         var mult = 1f;
 
         foreach (var organ in MedicalIndex.GetOrgans(body))
@@ -231,9 +265,14 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         if (TryComp<PainShockComponent>(body, out var pain))
             mult *= CMUPainTierPenaltyMultipliers.GetActionSpeedMultiplier(Pain.GetEffectiveTier(body, pain));
 
-        if (TryComp<ChemicalNerveStimulationComponent>(body, out var nerve))
-            mult *= MathF.Max(0.7f, 1f - nerve.Strength * 0.1f);
+        return MathF.Min(mult * nerveMultiplier, 3.0f);
+    }
 
-        return MathF.Min(mult, 3.0f);
+    private float GetNerveStimulationMultiplier(EntityUid body)
+    {
+        return TryComp<ChemicalNerveStimulationComponent>(body, out var nerve) &&
+               nerve.LifeStage <= ComponentLifeStage.Running
+            ? MathF.Max(0.7f, 1f - nerve.Strength * 0.1f)
+            : 1f;
     }
 }
