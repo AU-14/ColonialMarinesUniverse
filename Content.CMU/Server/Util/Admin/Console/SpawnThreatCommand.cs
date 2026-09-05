@@ -65,9 +65,7 @@ public sealed partial class SpawnThreatCommand : LocalizedEntityCommands
             return;
         }
 
-        shell.WriteLine(nowin
-            ? $"Spawned threat '{threat.ID}' without win conditions; use endround when the event is done. Bodies that could not find markers spawned at your position; unclaimed bodies are ghost roles."
-            : $"Spawned threat '{threat.ID}'. Bodies that could not find markers spawned at your position; unclaimed bodies are ghost roles.");
+        shell.WriteLine($"Queued threat '{threat.ID}' for player interest (winConditions={!nowin}).");
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)

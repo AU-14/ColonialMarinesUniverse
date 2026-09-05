@@ -1,4 +1,5 @@
 using Content.Shared.Eui;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -46,10 +47,12 @@ namespace Content.Shared.Ghost.Roles
     public sealed class GhostRolesEuiState : EuiStateBase
     {
         public GhostRoleInfo[] GhostRoles { get; }
+        public ForceInterestInfo[] Forces { get; }
 
-        public GhostRolesEuiState(GhostRoleInfo[] ghostRoles)
+        public GhostRolesEuiState(GhostRoleInfo[] ghostRoles, ForceInterestInfo[]? forces = null)
         {
             GhostRoles = ghostRoles;
+            Forces = forces ?? [];
         }
     }
 

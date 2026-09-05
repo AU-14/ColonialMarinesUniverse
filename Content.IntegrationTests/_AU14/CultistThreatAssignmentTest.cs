@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.CMU14.Threats;
+using Content.Server.GameTicking;
 using Content.Shared.Access.Systems;
 using Content.Shared.Radio.Components;
 using Content.Shared.CMU14;
@@ -27,7 +28,19 @@ public sealed class CultistThreatAssignmentTest
 {
     private static readonly ProtoId<JobPrototype> ThreatMemberJob = "AU14JobThreatMember";
     private static readonly ProtoId<JobPrototype> CultistJob = "AU14JobCultist";
-    private static readonly ProtoId<ThreatPrototype> CultistThreat = "CultistThreatCF";
+    private static readonly ProtoId<ThreatPrototype> CultistThreat = "TestCultistAssignmentThreat";
+
+    [TestPrototypes]
+    private const string Prototypes = """
+        - type: threat
+          id: TestCultistAssignmentThreat
+          roundstartspawns: TestCultistAssignmentSpawn
+        - type: partySpawn
+          id: TestCultistAssignmentSpawn
+          leadersToSpawn: {}
+          gruntsToSpawn:
+            cultistJob: 1
+        """;
 
     [Test]
     public async Task AssignedCultistThreatMemberKeepsCultistJobAndMindRole()
@@ -46,6 +59,7 @@ public sealed class CultistThreatAssignmentTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            entMan.System<GameTicker>().JoinAsObserver(player);
             entMan.SpawnEntity("threatmemberspawnmarker", map.GridCoords);
 
             var threat = server.ProtoMan.Index(CultistThreat);
@@ -62,7 +76,7 @@ public sealed class CultistThreatAssignmentTest
                 playerCount: 16);
         });
 
-        await pair.RunTicksSync(5);
+        await pair.RunSeconds(2);
 
         await server.WaitAssertion(() =>
         {

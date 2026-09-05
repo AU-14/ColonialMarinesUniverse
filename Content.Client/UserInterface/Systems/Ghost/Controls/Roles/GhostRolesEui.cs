@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Client.Eui;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Shared.Eui;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Ghost.Roles;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -18,6 +19,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         public GhostRolesEui()
         {
             _window = new GhostRolesWindow();
+            _window.OnForceInterestChanged += (id, interested) => SendMessage(new SetForceInterestMessage(id, interested));
 
             _window.OnRoleRequestButtonClicked += info =>
             {
@@ -91,6 +93,9 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             var requirementsManager = IoCManager.Resolve<JobRequirementsManager>();
             try
             {
+                foreach (var force in ghostState.Forces)
+                    _window.AddForceEntry(force);
+
                 // Grouping roles
                 var groupedRoles = ghostState.GhostRoles.GroupBy(
                     role => (
