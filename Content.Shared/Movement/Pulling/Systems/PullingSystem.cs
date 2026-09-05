@@ -556,7 +556,7 @@ public sealed partial class PullingSystem : EntitySystem
             return false;
         }
 
-        var pullJointId = $"pull-joint-{GetNetEntity(pullableUid)}";
+        var pullJointId = GetPullJointId(pullerUid, pullableUid);
 
         if (!_timing.ApplyingState)
         {
@@ -605,6 +605,13 @@ public sealed partial class PullingSystem : EntitySystem
                Resolve(pullableUid, ref pullableComp, false) &&
                pullerComp.Pulling == pullableUid &&
                pullableComp.Puller == pullerUid;
+    }
+
+    // CMU14: Replicated joints keep their endpoints when applying state. A handoff must
+    // use a different ID so it cannot update the previous puller's joint in place.
+    private string GetPullJointId(EntityUid pullerUid, EntityUid pullableUid)
+    {
+        return $"pull-joint-{GetNetEntity(pullableUid)}-{GetNetEntity(pullerUid)}";
     }
 
     private void RemovePullJoint(EntityUid pullableUid, EntityUid? pullerUid, string pullJointId)
@@ -686,8 +693,8 @@ public sealed partial class PullingSystem : EntitySystem
 
         _interaction.DoContactInteraction(pullableUid, pullerUid);
 
-        // Use net entity so it's consistent across client and server.
-        var pullJointId = $"pull-joint-{GetNetEntity(pullableUid)}";
+        // Use net entities so it's consistent across client and server.
+        var pullJointId = GetPullJointId(pullerUid, pullableUid);
         pullableComp.PullJointId = pullJointId;
 
         EnsureComp<ActivePullerComponent>(pullerUid);
@@ -700,7 +707,7 @@ public sealed partial class PullingSystem : EntitySystem
         // joint state handling will manage its own state
         if (!_timing.ApplyingState)
         {
-            // Pull joint IDs are deterministic per pulled entity. If stale joint state
+            // Pull joint IDs are deterministic per pair. If stale joint state
             // survived a previous pull, clear it before creating the replacement.
             RemovePullJoint(pullableUid, pullerUid, pullJointId);
 
