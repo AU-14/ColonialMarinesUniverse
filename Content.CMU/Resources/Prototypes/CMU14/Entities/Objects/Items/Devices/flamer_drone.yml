@@ -26,6 +26,12 @@
     - state: body
       color: "#9d9d9d"
       map: ["enum.CMUCombatDroneVisuals.Turret"]
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUCombatDroneVisuals.Turret:
+        enum.CMUCombatDroneVisuals.Turret:
+          True: {state: body, color: "#ffffff"}
+          False: {state: body, color: "#9d9d9d"}
   - type: CMUCombatDroneHull
     weapon: Flamer
     dronePrototype: CMUFlamerDrone

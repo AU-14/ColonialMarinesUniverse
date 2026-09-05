@@ -103,18 +103,23 @@ public sealed class CMUFlamerDroneTest
         var entities = server.EntMan;
         EntityUid user = default, hull = default, assembly = default, tank = default, tablet = default, drone = default;
         NetEntity netDrone = default;
+        NetEntity netHull = default;
 
         await server.WaitAssertion(() =>
         {
             user = entities.SpawnEntity("CMMobHuman", map.GridCoords);
             entities.AddComponent<CMUDroneOperatorComponent>(user);
             hull = entities.SpawnEntity("CMUFlamerDroneHull", map.GridCoords.Offset(new Vector2(0.8f, 0)));
+            netHull = entities.GetNetEntity(hull);
+            server.PlayerMan.SetAttachedEntity(pair.Player!, user);
             entities.GetComponent<CMUCombatDroneHullComponent>(hull).AssemblyDelay = TimeSpan.FromSeconds(0.1);
             assembly = entities.SpawnEntity("CMUCombatDroneTurretAssembly", map.GridCoords);
             Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(user, assembly, checkActionBlocker: false), Is.True);
             Interact(entities, user, assembly, hull);
         });
         await server.WaitRunTicks(20);
+        await pair.RunUntilSynced();
+        await pair.Client.WaitAssertion(() => AssertHullVisual(pair.Client.EntMan, netHull, Color.FromHex("#9d9d9d")));
         await server.WaitAssertion(() =>
         {
             Assert.That(entities.System<SharedContainerSystem>().GetContainer(hull, "cmu-combat-drone-turret").ContainedEntities, Is.Empty,
@@ -125,6 +130,8 @@ public sealed class CMUFlamerDroneTest
             Interact(entities, user, assembly, hull);
         });
         await server.WaitRunTicks(20);
+        await pair.RunUntilSynced();
+        await pair.Client.WaitAssertion(() => AssertHullVisual(pair.Client.EntMan, netHull, Color.White));
         await server.WaitAssertion(() =>
         {
             var wrongAmmo = entities.SpawnEntity("CMUCombatDroneAmmoBox", map.GridCoords);
@@ -151,6 +158,7 @@ public sealed class CMUFlamerDroneTest
             tablet = entities.SpawnEntity("CMUDroneControlTablet", map.GridCoords);
             Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(user, tablet, checkActionBlocker: false), Is.True);
             Interact(entities, user, tablet, drone);
+            server.PlayerMan.SetAttachedEntity(pair.Player!, null);
             var minds = entities.System<SharedMindSystem>();
             var mind = minds.CreateMind(null).Owner;
             minds.TransferTo(mind, user);
@@ -290,6 +298,15 @@ public sealed class CMUFlamerDroneTest
                 effects.Add(uid);
         }
         return effects;
+    }
+
+    private static void AssertHullVisual(IEntityManager entities, NetEntity netHull, Color color)
+    {
+        var hull = entities.GetEntity(netHull);
+        var sprite = entities.GetComponent<SpriteComponent>(hull);
+        Assert.That(entities.System<SpriteSystem>().LayerGetRsiState((hull, sprite), 0).ToString(), Is.EqualTo("body"),
+            "Both flamer assembly stages must use a state in flamer_ugv.rsi, not inherited gun UGV states.");
+        Assert.That(sprite[0].Color, Is.EqualTo(color), "Installing the incinerator must restore the hull's full color.");
     }
 
     private static int AmmoCount(IEntityManager entities, EntityUid drone)
