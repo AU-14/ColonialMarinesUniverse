@@ -8,8 +8,6 @@ namespace Content.Shared._RMC14.Requisitions;
 /// </summary>
 public static class RequisitionsPriceCalculator
 {
-    private const int RefinementPasses = 8;
-
     public static Dictionary<EntProtoId, int> Calculate(IEnumerable<RequisitionsPriceSource> sources)
     {
         var validSources = sources
@@ -18,62 +16,54 @@ public static class RequisitionsPriceCalculator
         var candidates = new Dictionary<EntProtoId, List<double>>();
         var anchors = new Dictionary<EntProtoId, List<double>>();
 
-        // Equal-object shares are the neutral prior. Unlike physical weight, they correctly account
-        // for repeated stacks, magazines, or tools without pretending that mass determines value.
+        // Only homogeneous bundles establish known unit prices. Estimates from mixed bundles must
+        // not feed back into other bundles and repeatedly drive their remaining contents toward zero.
         foreach (var source in validSources)
         {
-            var objectCount = source.Manifest.Values.Where(amount => amount > 0).Sum();
-            var equalShare = (double) source.Cost / objectCount;
+            var items = source.Manifest.Where(item => item.Value > 0).ToArray();
+            if (items.Length != 1)
+                continue;
+
+            var item = items[0];
+            AddCandidate(anchors, item.Key, (double) source.Cost / item.Value);
+        }
+
+        var fixedPrices = anchors.ToDictionary(pair => pair.Key, pair => Median(pair.Value));
+        foreach (var source in validSources)
+        {
+            var remainingCost = (double) source.Cost;
+            var objectCount = 0;
+            var unpricedCount = 0;
             foreach (var (prototype, amount) in source.Manifest)
             {
                 if (amount <= 0)
                     continue;
-                AddCandidate(candidates, prototype, equalShare);
+
+                objectCount += amount;
+                if (fixedPrices.TryGetValue(prototype, out var price))
+                    remainingCost -= price * amount;
+                else
+                    unpricedCount += amount;
             }
 
-            if (source.Manifest.Count != 1)
+            if (unpricedCount == 0)
                 continue;
 
-            var item = source.Manifest.Single();
-            if (item.Value > 0)
-                AddCandidate(anchors, item.Key, (double) source.Cost / item.Value);
-        }
-
-        var prices = candidates.ToDictionary(pair => pair.Key, pair => Median(pair.Value));
-        var fixedPrices = anchors.ToDictionary(pair => pair.Key, pair => Median(pair.Value));
-        foreach (var (prototype, price) in fixedPrices)
-            prices[prototype] = price;
-
-        // Pure legacy bundles act as price anchors. Repeated passes propagate those known values
-        // through mixed bundles, assigning the remaining value to their otherwise-unknown contents.
-        for (var pass = 0; pass < RefinementPasses; pass++)
-        {
-            candidates.Clear();
-            foreach (var source in validSources)
+            // A discounted bundle can cost less than its separately sold accessories. That does
+            // not make the other items worthless: fall back to the bundle's equal-object share.
+            var unitPrice = remainingCost > 0
+                ? remainingCost / unpricedCount
+                : (double) source.Cost / objectCount;
+            foreach (var (prototype, amount) in source.Manifest)
             {
-                var sourceWeight = source.Manifest.Sum(item =>
-                    item.Value > 0 && prices.TryGetValue(item.Key, out var price)
-                        ? price * item.Value
-                        : 0);
-                if (sourceWeight <= 0)
-                    continue;
-
-                foreach (var (prototype, amount) in source.Manifest)
-                {
-                    if (amount <= 0 || !prices.TryGetValue(prototype, out var prior))
-                        continue;
-
-                    var allocatedUnitPrice = source.Cost * prior / sourceWeight;
-                    AddCandidate(candidates, prototype, allocatedUnitPrice);
-                }
-            }
-
-            foreach (var (prototype, itemCandidates) in candidates)
-            {
-                if (!fixedPrices.ContainsKey(prototype))
-                    prices[prototype] = Median(itemCandidates);
+                if (amount > 0 && !fixedPrices.ContainsKey(prototype))
+                    AddCandidate(candidates, prototype, unitPrice);
             }
         }
+
+        var prices = new Dictionary<EntProtoId, double>(fixedPrices);
+        foreach (var (prototype, itemCandidates) in candidates)
+            prices[prototype] = Median(itemCandidates);
 
         return prices.ToDictionary(
             pair => pair.Key,
