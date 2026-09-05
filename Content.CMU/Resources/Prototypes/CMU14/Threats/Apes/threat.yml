@@ -9,6 +9,7 @@
 # Colony Fall
 - type: threat
   id: ApeThreatCF
+  voteCooldownGroup: Ape
   lorePrimer: AU14PrimerThreatApe
   roundstartspawns: apePartycf
   thirdpartyinterval: 9100
@@ -35,6 +36,7 @@
 # Distress Signal
 - type: threat
   id: ApeThreatDS
+  voteCooldownGroup: Ape
   lorePrimer: AU14PrimerThreatApe
   roundstartspawns: apeParty
   whitelistedgamemodes:

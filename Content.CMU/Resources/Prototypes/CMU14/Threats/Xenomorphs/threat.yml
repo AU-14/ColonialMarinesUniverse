@@ -1,6 +1,7 @@
 
 - type: threat
   id: XenoThreat
+  allowConsecutiveVotes: true
   burrowedLarvaEnabled: true
   lorePrimer: AU14PrimerThreatXeno
   roundstartspawns: XenoThreatSpawns
@@ -28,6 +29,7 @@
 
 - type: threat
   id: XenoThreatCF
+  allowConsecutiveVotes: true
   burrowedLarvaEnabled: true
   lorePrimer: AU14PrimerThreatXeno
   roundstartspawns: XenoThreatSpawnsCF

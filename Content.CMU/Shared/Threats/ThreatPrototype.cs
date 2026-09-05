@@ -6,6 +6,18 @@ namespace Content.Shared.CMU14.Threats;
 [Prototype]
 public sealed partial class ThreatPrototype : IPrototype
 {
+    /// <summary>
+    ///     Shared vote cooldown identity for variants across game modes. Defaults to this prototype's ID.
+    /// </summary>
+    [DataField]
+    public string? VoteCooldownGroup;
+
+    /// <summary>
+    ///     Whether this threat can be voted for in consecutive rounds.
+    /// </summary>
+    [DataField]
+    public bool AllowConsecutiveVotes;
+
     [DataField("blacklistedPlatoons", required: false)]
     public List<string> BlacklistedPlatoons { get; private set; } = new();
 
