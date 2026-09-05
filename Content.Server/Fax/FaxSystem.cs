@@ -388,15 +388,21 @@ public sealed partial class FaxSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Set fax destination address not checking if he knows it exists
+    ///     Select a known fax. A client may still have a destination from before the latest refresh.
     /// </summary>
     public void SetDestination(EntityUid uid, string destAddress, FaxMachineComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return;
 
+        if (!component.KnownFaxes.TryGetValue(destAddress, out var destinationName))
+        {
+            UpdateUserInterface(uid, component);
+            return;
+        }
+
         component.DestinationFaxAddress = destAddress;
-        component.DestinationFaxName = component.KnownFaxes[destAddress];
+        component.DestinationFaxName = destinationName;
 
         UpdateUserInterface(uid, component);
     }
@@ -411,6 +417,7 @@ public sealed partial class FaxSystem : EntitySystem
             return;
 
         component.DestinationFaxAddress = null;
+        component.DestinationFaxName = null;
         component.KnownFaxes.Clear();
 
         var payload = new NetworkPayload()

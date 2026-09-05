@@ -21,7 +21,7 @@
     - SemiAuto
     - FullAuto
     soundGunshot:
-      path: /Audio/Weapons/l42a/ltrifle.ogg
+      path: /Audio/CMU14/Weapons/l42a/ltrifle.ogg
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto

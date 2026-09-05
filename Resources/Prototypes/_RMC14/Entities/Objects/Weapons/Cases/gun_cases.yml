@@ -418,9 +418,9 @@
   description: A gun case containing the M41AE2 heavy pulse rifle. You can get additional ammunition at requisitions.
   components:
   - type: Storage
-    maxItemSize: Ginormous
+    maxItemSize: Colossal
     grid:
-    - 0,0,7,1
+    - 0,0,8,5
     whitelist:
       tags:
       - RMCWeaponRifleM54CE2

@@ -20,6 +20,22 @@ public sealed class PaperPrototypeUploadTest : GameTest
         """;
 
     [Test]
+    public async Task PottedPlantChildCanBeUploadedWithCollectionBackedSounds()
+    {
+        const string id = "CMUUploadedPottedPlantTest";
+        const string yaml = $"""
+            - type: entity
+              id: {id}
+              parent: CMPottedPlant10
+            """;
+        var loader = Pair.Client.ResolveDependency<IGamePrototypeLoadManager>();
+        await Pair.Client.WaitPost(() => loader.SendGamePrototype(yaml));
+        await Pair.RunTicksSync(10);
+        await Pair.Server.WaitAssertion(() => Assert.That(Pair.Server.ProtoMan.HasIndex<EntityPrototype>(id), Is.True));
+        await Pair.Client.WaitAssertion(() => Assert.That(Pair.Client.ProtoMan.HasIndex<EntityPrototype>(id), Is.True));
+    }
+
+    [Test]
     public async Task PaperChildCanBeUploadedWithCollectionBackedHandlingSounds()
     {
         var pair = Pair;

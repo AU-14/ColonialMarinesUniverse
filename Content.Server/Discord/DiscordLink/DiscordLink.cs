@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Threading;
 using Content.Shared.CCVar;
 using NetCord;
 using NetCord.Gateway;
@@ -54,6 +56,7 @@ public sealed partial class DiscordLink : IPostInjectInit
     private GatewayClient? _client;
     private ISawmill _sawmill = default!;
     private ISawmill _sawmillLog = default!;
+    private readonly ConcurrentDictionary<ulong, SemaphoreSlim> _channelSendLocks = new();
 
     private ulong _guildId;
     private string _botToken = string.Empty;
@@ -235,18 +238,29 @@ public sealed partial class DiscordLink : IPostInjectInit
             return;
         }
 
-        var channel = await _client.Rest.GetChannelAsync(channelId) as TextChannel;
-        if (channel == null)
+        var sendLock = _channelSendLocks.GetOrAdd(channelId, _ => new SemaphoreSlim(1, 1));
+        await sendLock.WaitAsync();
+        try
         {
-            _sawmill.Error("Tried to send a message to Discord but the channel {Channel} was not found.", channel);
-            return;
-        }
+            var channel = await _client.Rest.GetChannelAsync(channelId) as TextChannel;
+            if (channel == null)
+            {
+                _sawmill.Error("Tried to send a message to Discord but channel {Channel} was not found.", channelId);
+                return;
+            }
 
-        await channel.SendMessageAsync(new MessageProperties()
+            await channel.SendMessageAsync(new MessageProperties()
+            {
+                AllowedMentions = AllowedMentionsProperties.None,
+                Content = message,
+            });
+        }
+        finally
         {
-            AllowedMentions = AllowedMentionsProperties.None,
-            Content = message,
-        });
+            // Pace bursts per channel; the REST client still handles Discord's changing rate limits.
+            await Task.Delay(TimeSpan.FromSeconds(1.25));
+            sendLock.Release();
+        }
     }
 
     #endregion

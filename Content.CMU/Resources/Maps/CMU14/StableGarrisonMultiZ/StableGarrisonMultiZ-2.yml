@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 08/16/2026 00:09:34
-  entityCount: 9271
+  entityCount: 9270
 maps:
 - 1
 grids:
@@ -27368,15 +27368,6 @@ entities:
     components:
     - type: Transform
       pos: 259.42496,-123.15004
-      parent: 1
-- proto: GhostWarpPoint
-  entities:
-  - uid: 1757
-    components:
-    - type: MetaData
-      name: Albacetrie We-Yu Bunker
-    - type: Transform
-      pos: 265.5,-106.5
       parent: 1
 - proto: HydroponicsToolClippers
   entities:

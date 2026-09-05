@@ -346,7 +346,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
     private void RemoveRaffleAndUpdateEui(EntityUid entityUid, GhostRoleRaffleComponent raffle)
     {
         _ghostRoleRaffles.Remove(raffle.Identifier);
-        RemComp(entityUid, raffle);
+        if (!raffle.Deleted)
+            RemComp(entityUid, raffle);
         UpdateAllEui();
     }
 

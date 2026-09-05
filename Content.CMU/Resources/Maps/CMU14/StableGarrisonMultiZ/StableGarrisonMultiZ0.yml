@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 08/15/2026 23:28:41
-  entityCount: 61733
+  entityCount: 61723
 maps:
 - 1
 grids:
@@ -97715,6 +97715,13 @@ entities:
     - type: Transform
       pos: 240.5,-45.5
       parent: 1
+- proto: AU14SpawnPointCivilianCorporateAssistant
+  entities:
+  - uid: 84953
+    components:
+    - type: Transform
+      pos: 112.5,-125.5
+      parent: 1
 - proto: AU14SpawnPointCivilianCorporateLiaison
   entities:
   - uid: 550
@@ -152239,39 +152246,6 @@ entities:
     - type: Transform
       pos: 179.5,-71.5
       parent: 1
-- proto: GhostWarpPoint
-  entities:
-  - uid: 12964
-    components:
-    - type: MetaData
-      name: Mining Camp
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 1.5,-128.5
-      parent: 1
-    - type: WarpPoint
-      location: Mining Camp
-  - uid: 12965
-    components:
-    - type: MetaData
-      name: LZ2 - Corporate Car Park
-    - type: Transform
-      pos: 284.5,-149.5
-      parent: 1
-  - uid: 12966
-    components:
-    - type: Transform
-      pos: 237.5,-49.5
-      parent: 1
-    - type: WarpPoint
-      location: Administration Office
-  - uid: 12967
-    components:
-    - type: Transform
-      pos: 0.5,0.5
-      parent: 1
-    - type: WarpPoint
-      location: Creator's Rotunda
 - proto: killcelleaderobjective
   entities:
   - uid: 12968
@@ -429184,25 +429158,6 @@ entities:
     components:
     - type: Transform
       pos: 205.5,-100.5
-      parent: 1
-- proto: TowelColorDarkBlue
-  entities:
-  - uid: 84574
-    components:
-    - type: Transform
-      pos: 171.33789,-94.59151
-      parent: 1
-  - uid: 84575
-    components:
-    - type: Transform
-      pos: 177.6431,-94.852104
-      parent: 1
-- proto: TowelColorDarkGreen
-  entities:
-  - uid: 84576
-    components:
-    - type: Transform
-      pos: 186.70757,-94.24752
       parent: 1
 - proto: TowelColorWhite
   entities:

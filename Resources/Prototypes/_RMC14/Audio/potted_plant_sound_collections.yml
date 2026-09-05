@@ -1,0 +1,19 @@
+- type: soundCollection
+  id: RMCPottedPlantRustle
+  files:
+  - /Audio/_RMC14/Entrenching/rustle1.ogg
+
+- type: soundCollection
+  id: RMCPottedPlantBreak
+  files:
+  - /Audio/_RMC14/Entrenching/thud.ogg
+
+- type: soundCollection
+  id: CMUPottedPlantRustle
+  files:
+  - /Audio/Effects/plant_rustle.ogg
+
+- type: soundCollection
+  id: CMUPottedPlantBreak
+  files:
+  - /Audio/Effects/break_stone.ogg

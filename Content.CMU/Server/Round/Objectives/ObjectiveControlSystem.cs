@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
+using Content.Server.CMU14.Round.Objectives.Type;
 using Content.Server.Maps;
 using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared.CMU14.Round.Objectives.Type;
@@ -27,6 +28,7 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private PlatoonSpawnRuleSystem _platoonSystem = default!;
     [Dependency] private ObjectiveInterestSystem _interest = default!;
+    [Dependency] private ObjFetchSystem _fetch = default!;
 
     private readonly List<(EntityUid Uid, CMUObjectiveComponent Comp)> _allObjectives = new();
     private EntityUid _objectiveMasterUid = EntityUid.Invalid;
@@ -260,10 +262,11 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
     public void LateSpawnFetchObjectiveForItem(EntityUid itemUid, string objectiveProto)
     {
         var itemProto = Comp<MetaDataComponent>(itemUid).EntityPrototype?.ID ?? string.Empty;
+        var planetMaps = _zLevels.GetAllNetworkMapIds(_planetMapId);
 
         foreach (var (uid, comp) in _allObjectives)
         {
-            if (!Exists(uid) || comp.Active || Transform(uid).MapID != _planetMapId)
+            if (!Exists(uid) || comp.Active || !planetMaps.Contains(Transform(uid).MapID))
                 continue;
 
             if (!TryComp(uid, out FetchObjectiveComponent? fetch)
@@ -340,8 +343,8 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 
             foreach (var (uid, obj) in neutralCandidates)
             {
-                ActivateObjective(uid, obj);
-                _logs.Debug($"[OBJ-CTRL] Activated neutral objective '{obj.ObjectiveDescription}'");
+                if (ActivateObjective(uid, obj))
+                    _logs.Debug($"[OBJ-CTRL] Activated neutral objective '{obj.ObjectiveDescription}'");
             }
         }
         catch (Exception ex) { _logs.Error($"[OBJ-CTRL] Failed to activate neutral objectives: {ex.Message}!"); }
@@ -365,7 +368,7 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
             if (proto.TryComp<FetchObjectiveComponent>(out var fetchComp, compFactory))
             {
                 if (fetchComp.Catalog)
-                    TrySpawnCatalogObjective(proto, presetId, bestPlanetGrid, planetMaps, () => IsFetchCatalogFeasible(fetchComp, planetMaps));
+                    TrySpawnCatalogObjective(proto, presetId, bestPlanetGrid, planetMaps, () => _fetch.HasAvailableCatalogSources(primaryMapId, fetchComp));
             }
         }
     }
@@ -403,17 +406,6 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         _logs.Debug($"[OBJ-CATALOG] Spawned catalog objective '{proto.ID}' ('{objComp.Id}') for preset '{presetId}'.");
     }
 
-    private bool IsFetchCatalogFeasible(FetchObjectiveComponent fetchComp, HashSet<MapId> planetMaps)
-    {
-        if (fetchComp.UseAnyEntity && !string.IsNullOrEmpty(fetchComp.TargetPrototype) &&
-            TryGetCatalogTarget(fetchComp.TargetPrototype, planetMaps, out _))
-        {
-            return true;
-        }
-
-        return CatalogMarkerExists(fetchComp.SpawnMarkerId, planetMaps);
-    }
-
     private bool IsKillCatalogFeasible(KillObjectiveComponent killComp, HashSet<MapId> planetMaps)
     {
         if (!killComp.SpawnMob)
@@ -443,7 +435,7 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUObjectiveMarkerComponent, TransformComponent>();
         while (query.MoveNext(out var markerUid, out var markerComp, out var xform))
         {
-            if (HasComp<CMUObjectiveComponent>(markerUid))
+            if (markerComp.Used || HasComp<CMUObjectiveComponent>(markerUid))
                 continue;
 
             if (!planetMaps.Contains(xform.MapID))

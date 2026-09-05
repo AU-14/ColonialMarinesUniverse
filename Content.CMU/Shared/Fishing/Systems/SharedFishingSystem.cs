@@ -6,6 +6,7 @@
 
 using Content.Shared.CMU14.Fishing.Components;
 using Content.Shared.CMU14.Fishing.Events;
+using Content.Shared.CMU14.EntityReferences;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
@@ -30,6 +31,7 @@ public abstract partial class SharedFishingSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected ThrowingSystem Throwing = default!;
     [Dependency] protected SharedTransformSystem Xform = default!;
+    [Dependency] protected EntityReferenceSystem References = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -58,6 +60,7 @@ public abstract partial class SharedFishingSystem : EntitySystem
         XformQuery = GetEntityQuery<TransformComponent>();
 
         SubscribeLocalEvent<FishingRodComponent, MapInitEvent>(OnFishingRodInit);
+        SubscribeLocalEvent<ActiveFishingSpotComponent, ReferencedEntityTerminatingEvent>(OnLureTerminating);
         SubscribeLocalEvent<FishingRodComponent, GetItemActionsEvent>(OnGetActions);
         SubscribeLocalEvent<FishingRodComponent, GotEquippedHandEvent>(OnRodEquippedHand);
         SubscribeLocalEvent<FishingRodComponent, GotUnequippedHandEvent>(OnRodUnequippedHand);
@@ -169,6 +172,18 @@ public abstract partial class SharedFishingSystem : EntitySystem
                 StopFishing(fishingRod, fisher);
             }
         }
+    }
+
+    private void OnLureTerminating(Entity<ActiveFishingSpotComponent> ent, ref ReferencedEntityTerminatingEvent args)
+    {
+        if (ent.Comp.AttachedFishingLure != args.Entity)
+            return;
+
+        ent.Comp.AttachedFishingLure = null;
+        ent.Comp.FishingStartTime = null;
+        ent.Comp.IsActive = false;
+        Dirty(ent);
+        RemCompDeferred<ActiveFishingSpotComponent>(ent);
     }
 
     /// <summary>

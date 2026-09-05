@@ -12,6 +12,7 @@ public sealed partial class ObjectiveControlSystem
         string? presetId = null, MapId? mapId = null)
     {
         var objectives = new List<(EntityUid Uid, CMUObjectiveComponent Comp)>();
+        var planetMaps = mapId is { } map ? _zLevels.GetAllNetworkMapIds(map) : null;
         int count = 0;
         foreach (var (uid, comp) in _allObjectives)
         {
@@ -25,7 +26,10 @@ public sealed partial class ObjectiveControlSystem
 
             _logs.Debug($"[OBJ-SEL] GetInactiveObjectives: Found entity {uid} ({comp.ObjectiveDescription}), Active={comp.Active}");
 
-            if (mapId != null && Transform(uid).MapID != mapId)
+            if (planetMaps != null && !planetMaps.Contains(Transform(uid).MapID))
+                continue;
+
+            if (TryComp<FetchObjectiveComponent>(uid, out var fetch) && !_fetch.HasAvailableSources(uid, fetch))
                 continue;
 
             bool modeMatch = true;
@@ -173,13 +177,17 @@ public sealed partial class ObjectiveControlSystem
 
         foreach (var (objUid, obj) in objectives)
         {
-            ActivateObjective(objUid, obj, faction);
-            _logs.Debug($"[OBJ-SEL] Activated {faction} {levelName}: {obj.ObjectiveDescription}");
+            if (ActivateObjective(objUid, obj, faction))
+                _logs.Debug($"[OBJ-SEL] Activated {faction} {levelName}: {obj.ObjectiveDescription}");
         }
     }
 
-    private void ActivateObjective(EntityUid uid, CMUObjectiveComponent comp, string? faction = null, bool lateActivation = false)
+    private bool ActivateObjective(EntityUid uid, CMUObjectiveComponent comp, string? faction = null, bool lateActivation = false)
     {
+        // Earlier activations may have claimed sources since the candidate list was built.
+        if (!lateActivation && TryComp<FetchObjectiveComponent>(uid, out var fetch) && !_fetch.HasAvailableSources(uid, fetch))
+            return false;
+
         if (!comp.FactionNeutral && !string.IsNullOrEmpty(faction))
             comp.Faction = faction;
 
@@ -197,6 +205,8 @@ public sealed partial class ObjectiveControlSystem
         {
             _objConsole.RefreshConsolesForFaction(comp.Faction);
         }
+
+        return true;
     }
 
     private void TryLateActivateObjective(EntityUid uid)
@@ -207,7 +217,8 @@ public sealed partial class ObjectiveControlSystem
         if (!TryComp(uid, out CMUObjectiveComponent? comp) || comp.Active)
             return;
 
-        if (_planetMapId == MapId.Nullspace || Transform(uid).MapID != _planetMapId)
+        var planetMaps = _zLevels.GetAllNetworkMapIds(_planetMapId);
+        if (_planetMapId == MapId.Nullspace || !planetMaps.Contains(Transform(uid).MapID))
         {
             _logs.Debug($"[OBJ-LATE] Not activating '{comp.ObjectiveDescription}': entity's map" +
                         $" ({Transform(uid).MapID}) isn't the voted planet ({_planetMapId})!");
@@ -244,7 +255,7 @@ public sealed partial class ObjectiveControlSystem
             if (!stillInProgress)
                 continue;
 
-            if (Exists(otherUid) && Transform(otherUid).MapID == _planetMapId)
+            if (Exists(otherUid) && planetMaps.Contains(Transform(otherUid).MapID))
             {
                 _logs.Info($"[OBJ-LATE] Skipping late activation of '{comp.ObjectiveDescription}':" +
                            $" an in-progress copy ('{comp.Id}') already exists on this map.");

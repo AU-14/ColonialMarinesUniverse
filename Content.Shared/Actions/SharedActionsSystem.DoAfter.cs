@@ -80,6 +80,6 @@ public abstract partial class SharedActionsSystem
             return;
 
         // Cancel this doafter if we can't validate the action
-        _doAfter.Cancel(args.DoAfter.Id, force: true);
+        _doAfter.Cancel(args.DoAfter, force: true);
     }
 }

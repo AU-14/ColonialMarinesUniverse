@@ -161,6 +161,8 @@ public sealed partial class JukeboxSystem : SharedJukeboxSystem
             }
 
             ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(10f))?.Entity;
+            if (ent.Comp.AudioStream is { } stream)
+                References.Watch(ent.Owner, stream);
             Dirty(ent);
         }
         return true;

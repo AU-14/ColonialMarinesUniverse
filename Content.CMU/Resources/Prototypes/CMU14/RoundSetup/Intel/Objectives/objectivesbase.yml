@@ -9,8 +9,13 @@
   - type: CMUObjectiveMaster
     gamePreset: DistressSignal
 
-# as you can see we only have DS/FoF - other presets use first mapped comp as fallback
-# even spawns the distress signal marker if the map doesn't have one at all
+- type: entity
+  parent: ObjectiveMasterBaseDistress
+  id: ObjectiveMasterBaseColonyFall
+  components:
+  - type: CMUObjectiveMaster
+    gamePreset: ColonyFall
+
 - type: entity
   name: Objective Master
   parent: MarkerBase

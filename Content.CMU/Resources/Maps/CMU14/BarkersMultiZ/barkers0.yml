@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/26/2026 07:13:20
-  entityCount: 91937
+  entityCount: 91938
 maps:
 - 1
 grids:
@@ -145957,6 +145957,13 @@ entities:
     components:
     - type: Transform
       pos: -69.5,-27.5
+      parent: 1
+- proto: AU14SpawnPointCivilianColonyAdminAssistant
+  entities:
+  - uid: 91938
+    components:
+    - type: Transform
+      pos: 12.5,0.5
       parent: 1
 - proto: AU14SpawnPointCivilianColonyAdministrator
   entities:
