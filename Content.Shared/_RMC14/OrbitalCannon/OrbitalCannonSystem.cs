@@ -839,13 +839,14 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 Dirty(uid, firing);
 
                 var map = _transform.GetMapId(uid);
-                var sameMap = Filter.BroadcastMap(map);
-                _rmcCameraShake.ShakeCamera(sameMap, 10, 1);
-                _audio.PlayPvs(cannon.FireSound, uid);
+                var shipFilter = Filter.Broadcast()
+                    .RemoveWhereAttachedEntity(e => !_zLevels.IsSameZNetwork(Transform(e).MapID, map));
+                _rmcCameraShake.ShakeCamera(shipFilter, 10, 1);
+                _audio.PlayGlobal(cannon.FireSound, shipFilter, true);
                 _animation.TryFlick(uid, cannon.FiringAnimation, cannon.ChamberedState, cannon.BaseLayerKey);
 
                 var msg = "[color=red]The deckplate kicks hard beneath your feet as the warship's orbital batteries thunder to life, slamming fiery judgment down onto the colony.[/color]";
-                _rmcChat.ChatMessageToMany(msg, msg, sameMap, ChatChannel.Radio);
+                _rmcChat.ChatMessageToMany(msg, msg, shipFilter, ChatChannel.Radio);
 
                 _marineAnnounce.AnnounceSquad("WARNING! Ballistic trans-atmospheric launch detected! Get outside of Danger Close!", firing.Squad);
             }
