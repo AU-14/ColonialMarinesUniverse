@@ -357,4 +357,4 @@
     # mapCoords: true # CMU14
   - type: TileFireOnTrigger
     range: 0
-    spawn: RMCTileFireHCNapalm
+    spawn: RMCNapalmX
