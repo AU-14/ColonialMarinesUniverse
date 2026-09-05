@@ -4,8 +4,8 @@ namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 
 /// <summary>
 ///     Raised by the client HUD widget when the local shooter clicks a zone on the
-///     CM13 aim picker. The server clock is authoritative for <c>LastSelectedAt</c>
-///     so the freshness window cannot be gamed by manipulating client time.
+///     CM13 aim picker. The authenticated player's selection remains until they
+///     choose another zone; the server validates the zone before storing it.
 /// </summary>
 [Serializable, NetSerializable]
 public sealed class BodyZoneTargetSelectedMessage : EntityEventArgs

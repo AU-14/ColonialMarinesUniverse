@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Medical.Treatment.FirstAid;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedCMUSplintItemSystem))]
 public sealed partial class CMUCastItemComponent : Component
 {
@@ -20,7 +20,7 @@ public sealed partial class CMUCastItemComponent : Component
     [DataField]
     public bool ConsumedOnApply = true;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public int Uses = 1;
 
     [DataField]

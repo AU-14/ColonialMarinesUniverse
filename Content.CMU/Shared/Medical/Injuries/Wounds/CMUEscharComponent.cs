@@ -4,8 +4,9 @@ using Robust.Shared.GameStates;
 namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
-///     While present the part's passive heal tick is blocked and the bandage
-///     picker excludes the part — debridement surgery is the only path back.
+///     Burn eschar remains a distinct painful condition until debridement or
+///     complete rejuvenation. Field dressings and tissue recovery can proceed
+///     while it is present; healing damage does not itself remove the eschar.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class CMUEscharComponent : Component

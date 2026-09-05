@@ -52,7 +52,6 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedStackSystem _stack = default!;
     [Dependency] private SharedToolSystem _tool = default!;
@@ -69,14 +68,10 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
 
         SubscribeLocalEvent<CMURoboticLimbComponent, BodyPartDamagedEvent>(OnRoboticPartDamaged);
         SubscribeLocalEvent<SynthComponent, DamageChangedEvent>(OnSynthDamageChanged, after: [typeof(SharedBodyPartHealthSystem)]);
-        SubscribeLocalEvent<CMURoboticLimbComponent, ComponentShutdown>(OnRoboticLimbShutdown);
-        SubscribeLocalEvent<CMUHumanMedicalComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged, before: [typeof(SharedHitLocationSystem)]);
         SubscribeLocalEvent<CMUHumanMedicalComponent, CMURoboticLimbRepairDoAfterEvent>(OnRepairDoAfter);
-        SubscribeLocalEvent<CMUHumanMedicalComponent, ComponentShutdown>(OnHumanShutdown);
-        SubscribeLocalEvent<CMUHumanMedicalComponent, HitLocationResolvedEvent>(OnHitLocationResolved);
         SubscribeLocalEvent<CMUHumanMedicalComponent, InteractUsingEvent>(OnInteractUsing);
-        SubscribeLocalEvent<CMUHumanMedicalComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<CMUHumanMedicalComponent, DamageModifyAfterResistEvent>(OnDamageModifyAfterResist);
+        SubscribeLocalEvent<CMUHumanMedicalComponent, DamageDealtEvent>(OnHealingDamageDealt, before: [typeof(DamageableSystem)]);
 
         CacheRepairableDamageTypes();
 
@@ -96,37 +91,10 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         Dirty(ent);
     }
 
-    private void OnRoboticLimbShutdown(Entity<CMURoboticLimbComponent> ent, ref ComponentShutdown args)
-    {
-        RemovePendingRoboticHitPart(ent.Owner);
-    }
-
-    private void OnHumanShutdown(Entity<CMUHumanMedicalComponent> ent, ref ComponentShutdown args)
-    {
-        _pendingRoboticHits.Remove(ent.Owner);
-    }
-
-    private void OnHitLocationResolved(Entity<CMUHumanMedicalComponent> ent, ref HitLocationResolvedEvent args)
-    {
-        if (HasComp<SynthComponent>(ent.Owner) ||
-            args.ResolvedPartEntity is not { } part ||
-            !HasComp<CMURoboticLimbComponent>(part))
-        {
-            _pendingRoboticHits.Remove(ent.Owner);
-            return;
-        }
-
-        _pendingRoboticHits[ent.Owner] = part;
-    }
-
-    private void OnBeforeDamageChanged(Entity<CMUHumanMedicalComponent> ent, ref BeforeDamageChangedEvent args)
-    {
-        _pendingRoboticHits.Remove(ent.Owner);
-    }
-
     private void OnDamageModifyAfterResist(Entity<CMUHumanMedicalComponent> ent, ref DamageModifyAfterResistEvent args)
     {
-        if (!_pendingRoboticHits.Remove(ent.Owner, out var part) ||
+        if (HasComp<SynthComponent>(ent.Owner) ||
+            args.TargetPartEntity is not { } part ||
             !HasComp<CMURoboticLimbComponent>(part))
         {
             return;
@@ -135,9 +103,40 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         args.Damage = FilterToRepairableDamage(args.Damage);
     }
 
-    private void OnDamageChanged(Entity<CMUHumanMedicalComponent> ent, ref DamageChangedEvent args)
+    private void OnHealingDamageDealt(Entity<CMUHumanMedicalComponent> ent, ref DamageDealtEvent args)
     {
-        _pendingRoboticHits.Remove(ent.Owner);
+        if (!_medicalEnabled || !_bodyPartEnabled || HasComp<SynthComponent>(ent.Owner))
+            return;
+
+        DamageSpecifier? adjusted = null;
+        DamageSpecifier? aggregate = null;
+        foreach (var (type, amount) in args.Damage.DamageDict)
+        {
+            if (amount >= FixedPoint2.Zero || !_repairableDamageTypes.Contains(type))
+                continue;
+
+            var protectedDamage = FixedPoint2.Zero;
+            foreach (var (part, _) in _medicalIndex.GetBodyParts(ent.Owner))
+            {
+                if (HasComp<CMURoboticLimbComponent>(part))
+                    protectedDamage += _partHealth.GetAttributedDamage(part, type);
+            }
+
+            if (protectedDamage <= FixedPoint2.Zero)
+                continue;
+
+            aggregate ??= _damageable.GetAllDamage(ent.Owner);
+            var available = FixedPoint2.Max(FixedPoint2.Zero,
+                aggregate.DamageDict.GetValueOrDefault(type) - protectedDamage);
+            if (-amount <= available)
+                continue;
+
+            adjusted ??= args.Damage.Clone();
+            adjusted.DamageDict[type] = -available;
+        }
+
+        if (adjusted is not null)
+            args.Damage = adjusted;
     }
 
     private void OnInteractUsing(Entity<CMUHumanMedicalComponent> ent, ref InteractUsingEvent args)
@@ -287,7 +286,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         part = default;
         robotic = default!;
 
-        var aimed = _zoneTargeting.TryGetFreshSelection(user);
+        var aimed = _zoneTargeting.TryGetExplicitSelection(user);
         if (aimed is { } zone &&
             TryPartForZone(patient, zone, repairKind, out part, out robotic))
         {
@@ -396,21 +395,8 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
                 _partHealth.SetCurrent((part, health), health.Current + partHealed);
         }
 
-        if (TryComp<DamageableComponent>(body, out var damageable))
-        {
-            var group = repairKind == CMURoboticLimbRepairKind.Brute ? BruteGroup : BurnGroup;
-            var spec = _rmcDamageable.DistributeHealing((body, damageable), group, repaired);
-            if (!spec.Empty)
-            {
-                _damageable.TryChangeDamage(body,
-                    spec,
-                    ignoreResistances: true,
-                    interruptsDoAfters: false,
-                    damageable: damageable,
-                    origin: part,
-                    tool: used);
-            }
-        }
+        var group = repairKind == CMURoboticLimbRepairKind.Brute ? BruteGroup : BurnGroup;
+        _partHealth.HealPartDamage(body, part, group, repaired, healPart: false);
 
         return repaired;
     }
@@ -491,22 +477,6 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
 
         foreach (var type in group.DamageTypes)
             _repairableDamageTypes.Add(type);
-    }
-
-    private void RemovePendingRoboticHitPart(EntityUid part)
-    {
-        EntityUid? bodyToRemove = null;
-        foreach (var (body, pendingPart) in _pendingRoboticHits)
-        {
-            if (pendingPart != part)
-                continue;
-
-            bodyToRemove = body;
-            break;
-        }
-
-        if (bodyToRemove is { } pendingBody)
-            _pendingRoboticHits.Remove(pendingBody);
     }
 
     private FixedPoint2 GroupSum(DamageSpecifier delta, ProtoId<DamageGroupPrototype> group)

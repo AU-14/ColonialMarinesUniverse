@@ -121,7 +121,8 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
         Entity<CMUMedicalMixingBaseComponent> item,
         EntityUid part)
     {
-        if (!TryComp<BodyPartWoundComponent>(part, out var wounds) ||
+        if (!TryComp<BodyPartComponent>(part, out var bodyPart) || bodyPart.Body != patient ||
+            !TryComp<BodyPartWoundComponent>(part, out var wounds) ||
             wounds.ExternalBleeding == ExternalBleedTier.None)
         {
             _popup.PopupEntity(Loc.GetString("cmu-field-treatment-no-bleeding"), patient, user, PopupType.SmallCaution);
@@ -157,7 +158,7 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
         part = default;
         blockedByArterial = false;
 
-        if (_zoneTargeting.TryGetFreshSelection(user) is { } zone &&
+        if (_zoneTargeting.TryGetExplicitSelection(user) is { } zone &&
             PartForZone(patient, zone) is { } aimed)
         {
             if (CanUseOnPart(aimed, stopsArterial, out blockedByArterial))

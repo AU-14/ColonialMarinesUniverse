@@ -241,6 +241,7 @@ public sealed partial class DamageableSystem
             damageDone.DamageDict[type] = newValue - oldValue;
         }
 
+        args.AppliedDamage = damageDone;
         if (!damageDone.Empty)
             OnEntityDamageChanged(
                 (ent, damageable),
@@ -248,7 +249,9 @@ public sealed partial class DamageableSystem
                 args.InterruptsDoAfters,
                 args.Origin,
                 args.Tool,
-                args.Impact);
+                args.Impact,
+                args.TargetPartEntity,
+                args.TargetZone);
     }
 }
 
@@ -264,7 +267,8 @@ public record struct BeforeDamageChangedEvent(
     SlotFlags TargetSlots = SlotFlags.WITHOUT_POCKET,
     BodyPartType? TargetPart = null,
     TargetBodyZone? TargetZone = null,
-    bool Cancelled = false);
+    bool Cancelled = false,
+    EntityUid? TargetPartEntity = null);
 
 /// <summary>
 ///     Raised on an entity when damage is about to be dealt,
@@ -338,12 +342,18 @@ public sealed class DamageModifyEvent : EntityEventArgs, IInventoryRelayEvent
 /// <param name="Tool">The item or entity that delivered the damage</param>
 /// <param name="Impact">Structured information about how the damage was delivered</param>
 [ByRefEvent]
-public readonly record struct DamageDealtEvent(
+public record struct DamageDealtEvent(
     DamageSpecifier Damage,
     EntityUid? Origin,
     bool InterruptsDoAfters,
     EntityUid? Tool = null,
-    DamageImpact Impact = default);
+    DamageImpact Impact = default,
+    EntityUid? TargetPartEntity = null,
+    TargetBodyZone? TargetZone = null)
+{
+    // The result belongs to this invocation, even when notification handlers deal nested damage.
+    public DamageSpecifier? AppliedDamage;
+}
 
 [Obsolete("Will be replaced with damage-model specific events; general 'took damage' can be served by DamageDealtEvent")]
 public sealed class DamageChangedEvent : EntityEventArgs
@@ -383,6 +393,9 @@ public sealed class DamageChangedEvent : EntityEventArgs
 
     public readonly EntityUid? Tool;
     public readonly DamageImpact Impact;
+    public readonly EntityUid? TargetPartEntity;
+    public readonly TargetBodyZone? TargetZone;
+    public readonly bool BodyDamageOnly;
 
     public DamageChangedEvent(
         DamageableComponent damageable,
@@ -390,7 +403,10 @@ public sealed class DamageChangedEvent : EntityEventArgs
         bool interruptsDoAfters,
         EntityUid? origin,
         EntityUid? tool = null,
-        DamageImpact impact = default
+        DamageImpact impact = default,
+        EntityUid? targetPartEntity = null,
+        TargetBodyZone? targetZone = null,
+        bool bodyDamageOnly = false
     )
     {
         Damageable = damageable;
@@ -398,6 +414,9 @@ public sealed class DamageChangedEvent : EntityEventArgs
         Origin = origin;
         Tool = tool;
         Impact = impact;
+        TargetPartEntity = targetPartEntity;
+        TargetZone = targetZone;
+        BodyDamageOnly = bodyDamageOnly;
 
         if (DamageDelta is null)
             return;

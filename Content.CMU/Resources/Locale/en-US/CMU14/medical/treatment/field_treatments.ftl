@@ -11,3 +11,8 @@ cmu-splint-item-uses-remaining = It has {$uses ->
     [one] one splint
    *[other] {$uses} splints
 } remaining.
+
+cmu-cast-item-uses-remaining = It has {$uses ->
+    [one] one cast
+   *[other] {$uses} casts
+} remaining.

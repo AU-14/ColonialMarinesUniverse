@@ -9,7 +9,7 @@ namespace Content.Shared.CMU14.Medical.Treatment.FirstAid;
 ///     The suppression cap (<see cref="MaxSuppressed"/>) prevents splints from
 ///     hiding compound or shattered fractures — those need the cast or surgery.
 /// </summary>
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedCMUSplintItemSystem))]
 public sealed partial class CMUSplintItemComponent : Component
 {
@@ -31,6 +31,6 @@ public sealed partial class CMUSplintItemComponent : Component
     [DataField]
     public bool ConsumedOnApply = true;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public int Uses = 1;
 }

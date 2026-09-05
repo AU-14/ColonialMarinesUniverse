@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Server.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Presentation.Visuals.Cosmetic;
@@ -29,6 +30,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private BodyPartSeveranceSystem _severance = default!;
 
     /// <summary>
     ///     Bodies queued for next-tick glove-drop / shoe-drop / force-down.
@@ -137,6 +139,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     {
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;
+        _severance.ClearMissingPartStatus(ent.Owner, partType, symmetry);
 
         if (CMUMedicalVisualLayers.ForBodyPart(partType, symmetry) is { } layer &&
             HasComp<HideableHumanoidLayersComponent>(ent.Owner))

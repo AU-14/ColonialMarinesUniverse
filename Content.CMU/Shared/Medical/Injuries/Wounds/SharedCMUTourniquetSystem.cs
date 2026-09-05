@@ -92,6 +92,9 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             applyEv, ent.Owner, target: target, used: ent.Owner)
         {
             BlockDuplicate = true,
+            NeedHand = true,
+            BreakOnHandChange = true,
+            BreakOnDropItem = true,
         };
         var applyStarted = DoAfter.TryStartDoAfter(applyDo);
         if (applyStarted)
@@ -184,11 +187,12 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Idempotent — re-applying refreshes the necrosis countdown to "now".
+    ///     Applies reversible blood-flow occlusion. Reapplication cannot reset the ischemia clock.
     /// </summary>
     public bool ApplyTourniquetToPart(Entity<CMUTourniquetItemComponent> ent, EntityUid part)
     {
-        if (!HasComp<BodyPartComponent>(part))
+        if (!TryComp<BodyPartComponent>(part, out var bodyPart) || bodyPart.Body is null ||
+            !IsTourniquetable(bodyPart.PartType) || HasComp<CMUTourniquetComponent>(part))
             return false;
         if (HasComp<CMURoboticLimbComponent>(part))
             return false;
@@ -205,8 +209,6 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         tq.NecrosisAt = now + necrosisOffset;
         tq.RefundOnRemove = ent.Comp.RefundOnRemove;
         Dirty(part, tq);
-
-        Wounds.StopSurfaceBleedingOnPart(part);
 
         if (ent.Comp.ApplySound is not null)
             Audio.PlayPredicted(ent.Comp.ApplySound, part, null);
@@ -335,7 +337,8 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
     private bool ResolvePart(EntityUid patient, NetEntity? netPart, out EntityUid part)
     {
         part = default;
-        if (netPart is { } ne && TryGetEntity(ne, out var stored) && HasComp<BodyPartComponent>(stored.Value))
+        if (netPart is { } ne && TryGetEntity(ne, out var stored) &&
+            TryComp<BodyPartComponent>(stored.Value, out var bodyPart) && bodyPart.Body == patient)
         {
             part = stored.Value;
             return true;

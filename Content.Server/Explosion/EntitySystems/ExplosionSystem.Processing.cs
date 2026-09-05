@@ -473,9 +473,14 @@ public sealed partial class ExplosionSystem
                 var stateBeforeDamage = TryComp<MobStateComponent>(entity, out var mobState)
                     ? (MobState?) mobState.CurrentState
                     : null;
-                _damageableSystem.ChangeDamage((entity, damageable), damage);
+                var preparing = new ExplosionDamagePreparingEvent(epicenter, damage);
+                RaiseLocalEvent(entity, ref preparing);
+                // The tile spec already includes both universal explosion and all-damage
+                // modifiers. Applying the all-damage modifier again would scale the blast twice.
+                var applied = _damageableSystem.TryChangeDamage(entity, preparing.Damage,
+                    damageable: damageable, origin: cause, impact: DamageImpact.Explosion, ignoreGlobalModifiers: true);
 
-                var received = new ExplosionReceivedEvent(id, epicenter, damage, stateBeforeDamage);
+                var received = new ExplosionReceivedEvent(id, epicenter, applied ?? new DamageSpecifier(), stateBeforeDamage);
                 RaiseLocalEvent(entity, ref received);
 
                 if (_actorQuery.HasComp(entity))

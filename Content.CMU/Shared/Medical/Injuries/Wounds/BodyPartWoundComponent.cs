@@ -19,6 +19,9 @@ public sealed partial class BodyPartWoundComponent : Component
     [DataField]
     internal List<CMUWoundEntry> Entries = new();
 
+    // Server-local mutation identity for continuations across public healing callbacks.
+    internal ulong Revision;
+
     [DataField]
     public ExternalBleedTier ExternalBleeding;
 

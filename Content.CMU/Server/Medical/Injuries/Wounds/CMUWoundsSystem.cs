@@ -17,7 +17,6 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
 {
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
-    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -60,7 +59,8 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             _bloodstream.TryRegulateBloodLevel((body, bloodstream), (FixedPoint2) amount, referenceFactor: 0f);
     }
 
-    protected override void ApplyWoundHealingDamage(EntityUid body, EntityUid part, WoundType type, FixedPoint2 amount)
+    protected override void ApplyWoundHealingDamage(EntityUid body, EntityUid part, WoundType type, FixedPoint2 amount,
+        FixedPoint2 remainingWoundDamage)
     {
         if (amount <= FixedPoint2.Zero)
             return;
@@ -68,59 +68,12 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         switch (type)
         {
             case WoundType.Brute:
-                ApplyWoundHealingDamage(body, part, BruteGroup, amount);
+                PartHealth.HealPartWoundDamage(body, part, BruteGroup, amount, remainingWoundDamage);
                 break;
             case WoundType.Burn:
-                ApplyWoundHealingDamage(body, part, BurnGroup, amount);
+                PartHealth.HealPartWoundDamage(body, part, BurnGroup, amount, remainingWoundDamage);
                 break;
         }
-    }
-
-    private void ApplyWoundHealingDamage(
-        EntityUid body,
-        EntityUid part,
-        ProtoId<DamageGroupPrototype> group,
-        FixedPoint2 amount)
-    {
-        if (!TryComp<DamageableComponent>(body, out var damageable))
-            return;
-
-        var spec = _rmcDamageable.DistributeHealing((body, damageable), group, amount);
-        Damageable.TryChangeDamage(body,
-            spec,
-            ignoreResistances: true,
-            interruptsDoAfters: false,
-            damageable: damageable,
-            origin: part);
-    }
-
-    protected override void OnPartWoundsCleared(EntityUid body, EntityUid part)
-    {
-        if (TryComp<BodyPartHealthComponent>(part, out var health))
-            PartHealth.SetCurrent((part, health), health.Max);
-
-        if (!HasRemainingWounds(body, WoundType.Brute))
-            HealRemainingDamageGroup(body, part, BruteGroup);
-        if (!HasRemainingWounds(body, WoundType.Burn))
-            HealRemainingDamageGroup(body, part, BurnGroup);
-    }
-
-    private bool HasRemainingWounds(EntityUid body, WoundType type)
-    {
-        return _woundLedger.BodyHasWoundOfType(body, type);
-    }
-
-    private void HealRemainingDamageGroup(EntityUid body, EntityUid part, ProtoId<DamageGroupPrototype> group)
-    {
-        if (!TryComp<DamageableComponent>(body, out var damageable))
-            return;
-        if (!Proto.TryIndex(group, out var groupProto))
-            return;
-        var damage = Damageable.GetAllDamage((body, damageable));
-        if (!damage.TryGetDamageInGroup(groupProto, out var amount) || amount <= FixedPoint2.Zero)
-            return;
-
-        ApplyWoundHealingDamage(body, part, group, amount);
     }
 
     public bool TryApplyTreaterDamage(
@@ -139,6 +92,14 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         damage = LimitHealingToWoundCap(damage, origin, partHealthCap, useLargestWoundCap);
         if (damage == FixedPoint2.Zero)
             return false;
+
+        if (damage < FixedPoint2.Zero && origin is { } selectedPart)
+        {
+            var healed = PartHealth.HealPartDamage(body, selectedPart, group, -damage);
+            if (healed > FixedPoint2.Zero)
+                ClampTreaterPartHealth(origin, partHealthCap, useLargestWoundCap);
+            return healed > FixedPoint2.Zero;
+        }
 
         if (!TryComp<DamageableComponent>(body, out var damageable))
             return false;

@@ -37,7 +37,6 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DetachableOrganSystem _detachableOrgan = default!;
@@ -45,10 +44,8 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private SharedHideableHumanoidLayersSystem _hideableLayers = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
+    [Dependency] private OrganRelationSystem _organRelation = default!;
     private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
-    private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
-    private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
     private const float StumpBleedDamage = 30f;
     private static readonly SoundSpecifier SeveranceSound =
         new SoundPathSpecifier("/Audio/CMU14/Medical/crackandbleed.ogg");
@@ -56,11 +53,30 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<BodyPartHealthComponent, BodyPartSeveredEvent>(OnPartSevered);
+        SubscribeLocalEvent<BodyPartHealthComponent, BodyPartSeverAttemptEvent>(OnPartSeverAttempt);
     }
 
-    private void OnPartSevered(Entity<BodyPartHealthComponent> ent, ref BodyPartSeveredEvent args)
+    public void ClearMissingPartStatus(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry)
     {
+        if (TerminatingOrDeleted(body) ||
+            StatusForPart(type, symmetry) is not { } status ||
+            !_status.TryGetStatusEffect(body, status, out var effect) ||
+            TerminatingOrDeleted(effect.Value))
+            return;
+
+        // Attachment commits the end of this exact missing-site source. Queued
+        // removal would let a same-tick sever renew an entity still due for deletion.
+        // This server system preserves the normal status/container removal callbacks.
+        Del(effect.Value);
+    }
+
+    private void OnPartSeverAttempt(Entity<BodyPartHealthComponent> ent, ref BodyPartSeverAttemptEvent args)
+    {
+        if (args.Cancelled || args.Succeeded || args.Part != ent.Owner ||
+            !TryComp<BodyPartComponent>(args.Part, out var partComp) ||
+            partComp.Body != args.Body || partComp.PartType != args.Type)
+            return;
+
         if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled) || !_cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled))
         {
             return;
@@ -76,21 +92,39 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
             return;
         }
 
-        var symmetry = TryComp<BodyPartComponent>(args.Part, out var partComp)
-            ? partComp.Symmetry
-            : BodyPartSymmetry.None;
+        var detachedParts = new List<(EntityUid Part, BodyPartType Type, BodyPartSymmetry Symmetry)>();
+        detachedParts.Add((args.Part, args.Type, partComp.Symmetry));
+        foreach (var child in _organRelation.AllChildren(args.Part))
+        {
+            if (TryComp<BodyPartComponent>(child.Owner, out var childPart) && childPart.Body == args.Body)
+                detachedParts.Add((child.Owner, childPart.PartType, childPart.Symmetry));
+        }
 
         if (_detachableOrgan.Detach(args.Part) is not { } detachedBody)
         {
             return;
         }
 
-        RemoveSeveredPartWoundDamage(args.Body, args.Part);
-        FlingPartFromBody(args.Body, detachedBody);
-        HideHumanoidLimbLayer(args.Body, args.Type, symmetry);
-        ApplyStumpBleed(args.Body);
-        ApplyMissingLimbStatus(args.Body, args.Part, args.Type);
-        _audio.PlayPvs(SeveranceSound, args.Body);
+        args.Succeeded = true;
+        args.DetachedBody = detachedBody;
+        foreach (var detached in detachedParts)
+        {
+            HideHumanoidLimbLayer(args.Body, detached.Type, detached.Symmetry);
+            ApplyMissingLimbStatus(args.Body, detached.Part, detached.Type);
+        }
+
+        if (!args.Surgical)
+        {
+            FlingPartFromBody(args.Body, detachedBody);
+            ApplyStumpBleed(args.Body);
+            _audio.PlayPvs(SeveranceSound, args.Body);
+        }
+
+        foreach (var detached in detachedParts)
+        {
+            var committed = new BodyPartSeveredEvent(args.Body, detached.Part, detached.Type);
+            RaiseLocalEvent(detached.Part, ref committed, broadcast: true);
+        }
     }
 
     private void FlingPartFromBody(EntityUid body, EntityUid detachedBody)
@@ -126,52 +160,6 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
         BodyPartType.Torso => _cfg.GetCVar(CMUMedicalCCVars.SeveranceTorsoDisabled),
         _ => false,
     };
-
-    private void RemoveSeveredPartWoundDamage(EntityUid body, EntityUid part)
-    {
-        if (!TryComp<BodyPartWoundComponent>(part, out var wounds))
-            return;
-
-        var brute = FixedPoint2.Zero;
-        var burn = FixedPoint2.Zero;
-        foreach (var entry in _woundLedger.GetEntries(wounds))
-        {
-            var wound = entry.Wound;
-            var remaining = wound.Damage - wound.Healed;
-            if (remaining <= FixedPoint2.Zero)
-                continue;
-
-            switch (wound.Type)
-            {
-                case WoundType.Brute:
-                    brute += remaining;
-                    break;
-                case WoundType.Burn:
-                    burn += remaining;
-                    break;
-            }
-        }
-
-        HealDamageGroup(body, part, BruteGroup, brute);
-        HealDamageGroup(body, part, BurnGroup, burn);
-    }
-
-    private void HealDamageGroup(EntityUid body, EntityUid origin, ProtoId<DamageGroupPrototype> group, FixedPoint2 amount)
-    {
-        if (amount <= FixedPoint2.Zero)
-            return;
-
-        if (!TryComp<DamageableComponent>(body, out var damageable))
-            return;
-
-        var spec = _rmcDamageable.DistributeHealing((body, damageable), group, amount);
-        if (spec.Empty)
-            return;
-
-        var adjusted = _damageable.GetAllDamage((body, damageable)) + spec;
-        adjusted.ClampMin(FixedPoint2.Zero);
-        _damageable.SetDamage((body, damageable), adjusted);
-    }
 
     private void ApplyStumpBleed(EntityUid body)
     {

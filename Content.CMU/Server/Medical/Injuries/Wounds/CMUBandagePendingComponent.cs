@@ -1,29 +1,15 @@
-using Content.Shared.FixedPoint;
+using System.Collections.Generic;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 
 namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
-///     Transient routing handle for the bandage picker BUI. Carries the
-///     patient + treater context because the
-///     <see cref="BodyPartPickerSelectMessage"/> only carries the picked part.
-///     Server-only.
+/// Active server operation handles. Each DoAfter owns its complete context;
+/// cancellation of one handle cannot overwrite or retire another operation.
 /// </summary>
 [RegisterComponent]
+[Access(typeof(CMUBandageInterceptionSystem))]
 public sealed partial class CMUBandagePendingComponent : Component
 {
-    [DataField]
-    public EntityUid Patient;
-
-    [DataField]
-    public EntityUid Treater;
-
-    [DataField]
-    public EntityUid? PartHealthCapPart;
-
-    [DataField]
-    public FixedPoint2? PartHealthCap;
-
-    [DataField]
-    public bool AutoReapplyKit;
+    public readonly HashSet<CMUBandageDoAfterEvent> Operations = new();
 }

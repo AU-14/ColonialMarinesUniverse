@@ -10,6 +10,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 
@@ -18,7 +19,7 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedCMUShrapnelSystem _shrapnel = default!;
 
     private const float ExposureFalloffTiles = 9f;
@@ -29,6 +30,7 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<CMUHumanMedicalComponent, ExplosionDamagePreparingEvent>(OnExplosionPreparing);
         SubscribeLocalEvent<CMUHumanMedicalComponent, ExplosionReceivedEvent>(
             OnExplosionReceived,
             before: [typeof(SharedRMCExplosionSystem)]);
@@ -36,28 +38,34 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
 
     private void OnExplosionReceived(Entity<CMUHumanMedicalComponent> ent, ref ExplosionReceivedEvent args)
     {
-        if (args.Damage.GetTotal() <= FixedPoint2.Zero)
+        if (!IsEnabled() || args.Damage.GetTotal() <= FixedPoint2.Zero)
             return;
 
         var exposure = ComputeExposure(ent.Owner, args.Epicenter, args.Damage.GetTotal().Float());
-        ApplyNormalDamageCorrection(ent.Owner, args.Damage, exposure);
 
         var weightedParts = BuildWeightedParts(ent.Owner, args.Epicenter);
         if (weightedParts.Count == 0)
             return;
 
-        var propagation = 0.35f + exposure * 0.55f;
-        foreach (var weighted in weightedParts)
+        // Assign all aggregate shares before damage callbacks can detach an entire subtree.
+        var shares = new List<DamageSpecifier>(weightedParts.Count);
+        var remaining = args.Damage.Clone();
+        for (var i = 0; i < weightedParts.Count; i++)
         {
-            var scale = propagation * weighted.Weight;
-            if (scale <= 0f)
-                continue;
+            var share = i == weightedParts.Count - 1 ? remaining : args.Damage * weightedParts[i].Weight;
+            foreach (var (type, amount) in share.DamageDict)
+                share.DamageDict[type] = FixedPoint2.Min(amount, remaining.DamageDict.GetValueOrDefault(type));
+            shares.Add(share);
+            remaining -= share;
+            _partHealth.TrackBodyDamage(ent.Owner, weightedParts[i].Part, share);
+        }
 
+        for (var i = 0; i < weightedParts.Count; i++)
+        {
             _partHealth.TryApplyPartDamage(
                 ent.Owner,
-                weighted.Part,
-                args.Damage,
-                scale,
+                weightedParts[i].Part,
+                shares[i],
                 mechanism: CMUTraumaMechanism.Explosive,
                 impact: DamageImpact.Explosion,
                 stateAtImpact: args.StateBeforeDamage);
@@ -66,18 +74,20 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
         _shrapnel.TryApplyExplosionShrapnel(ent.Owner, args.Explosion, exposure, weightedParts);
     }
 
-    private void ApplyNormalDamageCorrection(EntityUid body, DamageSpecifier damage, float exposure)
+    private bool IsEnabled() => _cfg.GetCVar(CMUMedicalCCVars.Enabled) &&
+                                _cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled);
+
+    private void OnExplosionPreparing(Entity<CMUHumanMedicalComponent> ent, ref ExplosionDamagePreparingEvent args)
     {
+        if (!IsEnabled())
+            return;
+
+        var exposure = ComputeExposure(ent.Owner, args.Epicenter, args.Damage.GetTotal().Float());
         var multiplier = Math.Clamp(
             MinimumNormalDamageMultiplier + exposure * (MaximumNormalDamageMultiplier - MinimumNormalDamageMultiplier),
             MinimumNormalDamageMultiplier,
             MaximumNormalDamageMultiplier);
-        var correction = multiplier - 1f;
-
-        if (MathF.Abs(correction) < 0.01f)
-            return;
-
-        _damageable.TryChangeDamage(body, damage * correction, ignoreResistances: true);
+        args.Damage *= multiplier;
     }
 
     private float ComputeExposure(EntityUid body, MapCoordinates epicenter, float totalDamage)
@@ -103,6 +113,9 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
 
         foreach (var (partUid, part) in _medicalIndex.GetBodyParts(body))
         {
+            if (!HasComp<BodyPartHealthComponent>(partUid))
+                continue;
+
             var weight = GetBaseWeight(part.PartType) *
                          GetOrientationMultiplier(part.PartType, part.Symmetry, hasDirection, facingDot, lateralSide);
             if (weight <= 0f)

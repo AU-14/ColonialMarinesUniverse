@@ -456,7 +456,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         if (!_medicalIndex.TryGetBodyPart(body, new CMUMedicalBodyPartKey(type, symmetry), out var part))
             return false;
 
-        var ev = new BodyPartSeveredEvent(body, part, type);
+        var ev = new BodyPartSeverAttemptEvent(body, part, type);
         RaiseLocalEvent(part, ref ev, broadcast: true);
         return true;
     }

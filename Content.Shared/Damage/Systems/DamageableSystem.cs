@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.Chemistry;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Explosion.EntitySystems;
@@ -53,7 +54,10 @@ public sealed partial class DamageableSystem : EntitySystem
         bool interruptsDoAfters = true,
         EntityUid? origin = null,
         EntityUid? tool = null,
-        DamageImpact impact = default
+        DamageImpact impact = default,
+        EntityUid? targetPartEntity = null,
+        TargetBodyZone? targetZone = null,
+        bool bodyDamageOnly = false
     )
     {
         ent.Comp.Damage.GetDamagePerGroup(ProtoMan, ent.Comp.DamagePerGroup);
@@ -86,7 +90,8 @@ public sealed partial class DamageableSystem : EntitySystem
 
         // TODO DAMAGE
         // byref struct event.
-        RaiseLocalEvent(ent, new DamageChangedEvent(ent.Comp, damageDelta, interruptsDoAfters, origin, tool, impact));
+        RaiseLocalEvent(ent, new DamageChangedEvent(ent.Comp, damageDelta, interruptsDoAfters, origin, tool, impact,
+            targetPartEntity, targetZone, bodyDamageOnly));
     }
 
     /// <summary>

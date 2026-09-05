@@ -10,6 +10,32 @@ namespace Content.Shared.Damage.Systems;
 
 public sealed partial class DamageableSystem
 {
+    /// <summary>
+    ///     Updates an already accounted regional contribution. It bypasses incoming injury modifiers and
+    ///     localization, but publishes the actual change to thresholds and other aggregate observers.
+    /// </summary>
+    public DamageSpecifier ApplyBodyDamageProjection(Entity<DamageableComponent?> ent, DamageSpecifier delta)
+    {
+        var applied = new DamageSpecifier();
+        if (!_damageableQuery.Resolve(ent, ref ent.Comp, false))
+            return applied;
+
+        foreach (var (type, amount) in delta.DamageDict)
+        {
+            var previous = ent.Comp.Damage.DamageDict.GetValueOrDefault(type);
+            var next = FixedPoint2.Max(FixedPoint2.Zero, previous + amount);
+            if (previous == next)
+                continue;
+
+            ent.Comp.Damage.DamageDict[type] = next;
+            applied.DamageDict[type] = next - previous;
+        }
+
+        if (!applied.Empty)
+            OnEntityDamageChanged((ent.Owner, ent.Comp), applied, interruptsDoAfters: false, bodyDamageOnly: true);
+        return applied;
+    }
+
     /// <returns>If the damage container can take the given damage type</returns>
     private bool SupportsType(ProtoId<DamageContainerPrototype>? container, ProtoId<DamageTypePrototype> type)
     {
@@ -271,7 +297,7 @@ public sealed partial class DamageableSystem
                 return damageDone;
         }
 
-        var afterResist = new DamageModifyAfterResistEvent(damage, origin, tool, impact);
+        var afterResist = new DamageModifyAfterResistEvent(damage, origin, tool, impact, before.TargetPartEntity);
         RaiseLocalEvent(ent, afterResist);
         damage = afterResist.Damage;
         impact = afterResist.Impact;
@@ -284,12 +310,10 @@ public sealed partial class DamageableSystem
 
         // The compatibility overload historically returned the clamped, supported delta rather than the
         // post-modifier attempted damage returned by ChangeDamage and the bool/out overload.
-        var previousDamage = ent.Comp.Damage.Clone();
-        var evt = new DamageDealtEvent(damage, origin, interruptsDoAfters, tool, impact);
+        var evt = new DamageDealtEvent(damage, origin, interruptsDoAfters, tool, impact, before.TargetPartEntity, before.TargetZone);
         RaiseLocalEvent(ent, ref evt);
 
-        actualDamage = ent.Comp.Damage - previousDamage;
-        actualDamage.TrimZeros();
+        actualDamage = evt.AppliedDamage ?? new DamageSpecifier();
 
         return damage;
     }
