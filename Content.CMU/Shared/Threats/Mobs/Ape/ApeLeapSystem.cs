@@ -16,6 +16,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
+using Content.Shared.CMU14.EntityReferences;
 using Content.Shared.Effects;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.FixedPoint;
@@ -52,6 +53,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
     [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
     [Dependency] private DamageableSystem _damagable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityReferenceSystem _references = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
@@ -81,6 +83,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
         SubscribeLocalEvent<ApeLeapComponent, ApeLeapActionEvent>(OnApeLeapAction);
         SubscribeLocalEvent<ApeLeapComponent, ApeLeapDoAfterEvent>(OnApeLeapDoAfter);
         SubscribeLocalEvent<ApeLeapComponent, MeleeHitEvent>(OnApeLeapMelee);
+        SubscribeLocalEvent<ApeLeapComponent, ReferencedEntityTerminatingEvent>(OnLastHitTerminating);
         SubscribeLocalEvent<ApeLeapComponent, RMCMeleeUserGetRangeEvent>(OnApeLeapingMeleeGetRange);
 
         SubscribeLocalEvent<ApeLeapingComponent, StartCollideEvent>(OnApeLeapingDoHit);
@@ -235,6 +238,16 @@ public sealed partial class ApeLeapSystem : EntitySystem
         }
     }
 
+    private void OnLastHitTerminating(Entity<ApeLeapComponent> ape, ref ReferencedEntityTerminatingEvent args)
+    {
+        if (ape.Comp.LastHit != args.Entity)
+            return;
+
+        ape.Comp.LastHit = null;
+        ape.Comp.LastHitAt = null;
+        Dirty(ape);
+    }
+
     private void OnApeLeapMelee(Entity<ApeLeapComponent> ape, ref MeleeHitEvent args)
     {
         if (!ape.Comp.UnrootOnMelee)
@@ -360,6 +373,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
         if (TryComp(xeno, out ApeLeapComponent? leap))
         {
             leap.LastHit = target;
+            _references.Watch(xeno.Owner, target);
             leap.LastHitAt = _timing.CurTime;
             Dirty(xeno, leap);
         }

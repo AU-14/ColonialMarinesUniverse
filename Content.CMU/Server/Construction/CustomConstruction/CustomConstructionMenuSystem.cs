@@ -130,12 +130,11 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         SubscribeNetworkEvent<RemoveCustomLatheRecipeEvent>(OnRemoveLatheRecipe);
 
         // These packs are referenced by static lathe prototypes. Keep empty fallbacks available even
-        // when Generated/ is intentionally not part of the repo and the DB has no custom recipes.
+        // when Generated/ is intentionally not part of the repo.
         EnsureLathePackFallbacks();
 
-        // The database is the durable store (the Docker filesystem is wiped on redeploy): put back
-        // any stored entry whose generated file is gone, and hot-load its prototypes for this boot.
-        RestoreFromDatabase();
+        // Keep the recipes already on disk. Database backups are not restored
+        // automatically: old generated YAML must not override the current prototypes at startup.
 
         // Safety net: drop any previously-generated entries that reference things that no longer exist
         // (e.g. a recipe saved with an invalid material before validation existed). Prevents broken

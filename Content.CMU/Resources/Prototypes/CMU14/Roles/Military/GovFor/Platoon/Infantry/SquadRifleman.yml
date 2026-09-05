@@ -250,7 +250,7 @@
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanWYPMC
   roundForce: WYPMC
-  name: PMC Contractor
+  name: au14-job-name-wypmc-contractor
   spawnMenuRoleName: Rifleman (WYPMC)
   ranks:
     AU14RankWeYuSeniorOperator:

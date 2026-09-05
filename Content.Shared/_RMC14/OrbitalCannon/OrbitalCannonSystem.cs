@@ -643,12 +643,16 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             return false;
 
         if (cannon.Comp.Status != OrbitalCannonStatus.Chambered)
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-orbital-cannon-not-chambered"), user, PopupType.LargeCaution);
             return false;
+        }
 
         var time = _timing.CurTime;
         if (cannon.Comp.LastFireAt != null &&
             time < cannon.Comp.LastFireAt + cannon.Comp.FireCooldown)
         {
+            _popup.PopupCursor(Loc.GetString("rmc-orbital-cannon-cooldown"), user, PopupType.LargeCaution);
             return false;
         }
 

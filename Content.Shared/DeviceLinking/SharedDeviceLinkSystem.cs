@@ -87,9 +87,11 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
         {
             if (_deviceLinkSinkQuery.TryGetComponent(sinkUid, out var sink))
                 RemoveSinkFromSourceInternal(source, sinkUid, source, sink);
-            else
-                Log.Error($"Device source {ToPrettyString(source)} links to invalid entity: {ToPrettyString(sinkUid)}");
         }
+
+        // During map cleanup the other endpoint may already have lost its component.
+        source.Comp.LinkedPorts.Clear();
+        source.Comp.Outputs.Clear();
     }
 
     /// <summary>
@@ -101,9 +103,9 @@ public abstract partial class SharedDeviceLinkSystem : EntitySystem
         {
             if (TryComp(sourceUid, out DeviceLinkSourceComponent? source))
                 RemoveSinkFromSourceInternal(sourceUid, sink, source, sink);
-            else
-                Log.Error($"Device sink {ToPrettyString(sink)} source list contains invalid entity: {ToPrettyString(sourceUid)}");
         }
+
+        sink.Comp.LinkedSources.Clear();
     }
 
     #region Ports

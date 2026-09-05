@@ -109,12 +109,41 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
         comp.HasSpawned = false;
     }
 
-    private int RegisterNearbyFetchEntities(EntityUid objectiveUid, FetchObjectiveComponent comp, float radius = 48f)
+    /// <summary>Checks the same unclaimed sources that activation will consume.</summary>
+    public bool HasAvailableSources(EntityUid objectiveUid, FetchObjectiveComponent comp)
     {
-        if (!TryComp(objectiveUid, out TransformComponent? xform))
-            return 0;
+        if (comp.HasSpawned || comp.LateActivation)
+            return true;
 
-        var registered = 0;
+        if (comp.Catalog)
+            return HasAvailableCatalogSources(Transform(objectiveUid).MapID, comp);
+
+        return FindNearbyFetchEntities(objectiveUid, comp).Count >= comp.FetchCount;
+    }
+
+    public bool HasAvailableCatalogSources(MapId map, FetchObjectiveComponent comp)
+    {
+        if (string.IsNullOrEmpty(comp.TargetPrototype) || comp.SpawnCount < comp.FetchCount)
+            return false;
+
+        return FindPreplacedFetchEntities(map, comp.TargetPrototype).Count
+            + ResolveMarkers(map, comp.SpawnMarkerId).Count >= comp.FetchCount;
+    }
+
+    private int RegisterNearbyFetchEntities(EntityUid objectiveUid, FetchObjectiveComponent comp)
+    {
+        var entities = FindNearbyFetchEntities(objectiveUid, comp);
+        foreach (var ent in entities)
+            EnsureComp<FetchItemComponent>(ent).ObjectiveUid = objectiveUid;
+        return entities.Count;
+    }
+
+    private List<EntityUid> FindNearbyFetchEntities(EntityUid objectiveUid, FetchObjectiveComponent comp, float radius = 48f)
+    {
+        var found = new List<EntityUid>();
+        if (!TryComp(objectiveUid, out TransformComponent? xform))
+            return found;
+
         foreach (var ent in _lookup.GetEntitiesInRange(xform.Coordinates, radius))
         {
             if (ent == objectiveUid || HasComp<FetchItemComponent>(ent))
@@ -123,10 +152,9 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             if (!TryComp(ent, out MetaDataComponent? meta) || meta.EntityPrototype?.ID != comp.TargetPrototype)
                 continue;
 
-            EnsureComp<FetchItemComponent>(ent).ObjectiveUid = objectiveUid;
-            registered++;
+            found.Add(ent);
         }
-        return registered;
+        return found;
     }
 
     private int ClaimRandomFetchSources(EntityUid objectiveUid, FetchObjectiveComponent comp, MapId objMap)

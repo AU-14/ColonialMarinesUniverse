@@ -131,6 +131,12 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!ShouldProcessMoveGroundSnap(_net.IsClient, _timing.ApplyingState))
             return;
 
+        // Container insertion also raises MoveEvent. Only snap entities directly on
+        // a map; reparenting a contained item here breaks the insertion in progress.
+        var xform = Transform(ent);
+        if (xform.MapUid is not { } map || xform.ParentUid != map || xform.Anchored)
+            return;
+
         var oldVelocity = ent.Comp.Velocity;
         var oldHeight = ent.Comp.LocalPosition;
         Entity<CMUZPhysicsComponent?> nullableEnt = (ent.Owner, ent.Comp);
@@ -222,7 +228,8 @@ public abstract partial class CMUSharedZLevelsSystem
 
         var processed = 0;
         _zMovementUpdateQueue.Clear();
-        var query = EntityQueryEnumerator<CMUZPhysicsComponent, CMUZFallingComponent, TransformComponent, PhysicsComponent>();
+        // Enumerators scan the first component's population; only active falling bodies need an update.
+        var query = EntityQueryEnumerator<CMUZFallingComponent, CMUZPhysicsComponent, TransformComponent, PhysicsComponent>();
         while (query.MoveNext(out var uid, out _, out _, out _, out _))
         {
             _zMovementUpdateQueue.Add(uid);

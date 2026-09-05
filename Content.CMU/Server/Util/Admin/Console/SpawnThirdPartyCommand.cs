@@ -62,7 +62,7 @@ public sealed partial class SpawnThirdPartyCommand : LocalizedEntityCommands
         else
             thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false);
 
-        shell.WriteLine($"Spawned third party '{party.ID}' (dropship={dropship})");
+        shell.WriteLine($"Queued third party '{party.ID}' for player interest (dropship={dropship})");
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)

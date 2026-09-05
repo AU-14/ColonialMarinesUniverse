@@ -2,6 +2,7 @@
   id: WendigoThreatCF
   lorePrimer: AU14PrimerThreatWendigo
   roundstartspawns: wendigoParty
+  spawnExtraVoteMembers: false
   thirdpartyinterval: 9100
   whitelistedgamemodes:
   - ColonyFall
@@ -26,4 +27,3 @@
   KnowledgeLevelsGovforThreat:
     "Threat Unknown": 1
     "Threat is biological in nature.": 2
-

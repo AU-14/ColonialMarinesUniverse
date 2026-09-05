@@ -390,6 +390,16 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
     #endregion
 
     #region Cancellation
+    /// <summary>Cancels the operation itself, including instant operations that are never stored by ID.</summary>
+    public void Cancel(DoAfter doAfter, bool force = false)
+    {
+        if (!TryComp(doAfter.Args.User, out DoAfterComponent? component))
+            return;
+
+        InternalCancel(doAfter, component, force);
+        Dirty(doAfter.Args.User, component);
+    }
+
     /// <summary>
     ///     Cancels an active DoAfter.
     /// </summary>

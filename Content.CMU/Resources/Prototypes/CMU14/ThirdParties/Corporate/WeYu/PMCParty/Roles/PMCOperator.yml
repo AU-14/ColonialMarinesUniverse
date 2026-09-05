@@ -1,7 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobWYPMCPartyContractorBase
-  name: PMC Contractor
+  name: au14-job-name-wypmc-contractor
   description: au14-pmcparty-description
   playTimeTracker: AU14JobWYPMCPartyContractor
   basePlaytimeTracker: true
@@ -31,7 +31,7 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
-  name: PMC Contractor
+  name: au14-job-name-wypmc-contractor
   description: au14-pmcparty-description
   ranks:
     AU14RankWeYuRecruit: []
@@ -70,7 +70,7 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
-  name: PMC Contractor
+  name: au14-job-name-wypmc-contractor
   description: au14-pmcparty-description
   ranks:
     AU14RankWeYuRecruit: []
@@ -110,7 +110,7 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
-  name: PMC Contractor
+  name: au14-job-name-wypmc-contractor
   description: au14-pmcparty-description
   ranks:
     AU14RankWeYuRecruit: []
@@ -151,7 +151,7 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
-  name: PMC Sniper
+  name: au14-job-name-wypmc-sniper
   description: au14-pmcparty-description
   ranks:
     AU14RankWeYuOperator: []
@@ -178,7 +178,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Contractor
+    name: au14-job-name-wypmc-contractor
     description: au14-pmcparty-description
     reregister: false
     job: AU14JobWYPMCPartyContractor
@@ -198,7 +198,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Contractor
+    name: au14-job-name-wypmc-contractor
     description: au14-pmcparty-description
     reregister: false
     job: AU14JobWYPMCPartyContractorM39B2
@@ -218,7 +218,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Contractor
+    name: au14-job-name-wypmc-contractor
     description: au14-pmcparty-description
     reregister: false
     job: AU14JobWYPMCPartyContractorNSG23
@@ -238,7 +238,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Sniper
+    name: au14-job-name-wypmc-sniper
     description: au14-pmcparty-description
     reregister: false
     job: AU14JobWYPMCPartyContractorM42A

@@ -18,14 +18,14 @@
 - type: soundCollection
   id: AU14MortarExplosion
   files:
-  - /Audio/Explosion/MortarFireNew1.ogg
-  - /Audio/Explosion/MortarFireNew2.ogg
-  - /Audio/Explosion/MortarFireNew3.ogg
-  - /Audio/Explosion/MortarFireNew4.ogg
-  - /Audio/Explosion/MortarFireNew5.ogg
-  - /Audio/Explosion/MortarFireNew6.ogg
-  - /Audio/Explosion/MortarFireNew7.ogg
-  - /Audio/Explosion/MortarFireNew8.ogg
+  - /Audio/CMU14/Explosion/MortarFireNew1.ogg
+  - /Audio/CMU14/Explosion/MortarFireNew2.ogg
+  - /Audio/CMU14/Explosion/MortarFireNew3.ogg
+  - /Audio/CMU14/Explosion/MortarFireNew4.ogg
+  - /Audio/CMU14/Explosion/MortarFireNew5.ogg
+  - /Audio/CMU14/Explosion/MortarFireNew6.ogg
+  - /Audio/CMU14/Explosion/MortarFireNew7.ogg
+  - /Audio/CMU14/Explosion/MortarFireNew8.ogg
 
 - type: soundCollection
   id: RMCOBAegis

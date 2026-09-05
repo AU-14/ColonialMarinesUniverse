@@ -52,6 +52,7 @@
        tags:
        - RMCWeaponPistolL54
        - RMCMagazinePistolL54
+       - RMCAttachmentRailFlashlight
     - type: StorageFill
       contents:
       - id: RMCAttachmentRailFlashlight

@@ -171,7 +171,7 @@ public sealed partial class ChatSystem
         if (needsSpeech && !_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
             return;
 
-        var message = TransformSpeech(source, FormattedMessage.RemoveMarkupOrThrow(markedMessage));
+        var message = TransformSpeech(source, FormattedMessage.RemoveMarkupPermissive(markedMessage));
         if (message.Length == 0)
             return;
 

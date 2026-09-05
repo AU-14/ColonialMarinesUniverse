@@ -236,16 +236,21 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         if (args.BreakOnMove && !(!args.BreakOnWeightlessMove && _gravity.IsWeightless(args.User)))
         {
             var movementEntity = doAfter.MovementEntity;
-            var movementXform = Transform(movementEntity);
+            if (!TryComp(movementEntity, out TransformComponent? movementXform) || TerminatingOrDeleted(movementEntity))
+                return true;
 
             // Whether the effective movement entity has moved too much from its original position.
             if (!_transform.InRange(movementXform.Coordinates, doAfter.UserPosition, args.MovementThreshold))
                 return true;
 
             // Whether the distance between the effective movement entity and the target(if any) has changed too much.
-            if (args.Target is { } target && Transform(target).Coordinates.TryDistance(EntityManager, movementXform.Coordinates, out var distance))
+            if (args.Target is { } target)
             {
-                if (Math.Abs(distance - doAfter.TargetDistance) > args.MovementThreshold)
+                if (!TryComp(target, out TransformComponent? targetXform))
+                    return true;
+
+                if (targetXform.Coordinates.TryDistance(EntityManager, movementXform.Coordinates, out var distance)
+                    && Math.Abs(distance - doAfter.TargetDistance) > args.MovementThreshold)
                     return true;
             }
         }

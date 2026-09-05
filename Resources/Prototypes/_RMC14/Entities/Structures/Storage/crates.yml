@@ -77,8 +77,8 @@
           Invoice: { state: invoice }
   - type: PaperLabel
     labelSlot:
-      insertVerbText: Attach Invoice
-      ejectVerbText: Remove Invoice
+      insertVerbText: rmc-requisition-invoice-attach
+      ejectVerbText: rmc-requisition-invoice-remove
       whitelist:
         components:
         - RequisitionsInvoice

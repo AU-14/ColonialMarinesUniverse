@@ -176,9 +176,10 @@ public sealed partial class ObjectiveControlSystem
     private void TryActivateFinalObjective(string factionKey)
     {
         var finalObjectives = new List<(EntityUid Uid, CMUObjectiveComponent Comp)>();
+        var planetMaps = _zLevels.GetAllNetworkMapIds(_planetMapId);
         foreach (var (uid, comp) in _allObjectives)
         {
-            if (_planetMapId == MapId.Nullspace || Transform(uid).MapID != _planetMapId)
+            if (_planetMapId == MapId.Nullspace || !Exists(uid) || !planetMaps.Contains(Transform(uid).MapID))
                 continue;
 
             if (comp is { Active: false, ObjectiveLevel: 3 }
@@ -193,7 +194,8 @@ public sealed partial class ObjectiveControlSystem
             if (TryComp(uid, out KillObjectiveComponent? _) && !IsKillObjectiveCompletable(uid))
                 continue;
 
-            ActivateObjective(uid, comp, factionKey);
+            if (!ActivateObjective(uid, comp, factionKey))
+                continue;
 
             if (GetOrReselectObjMaster() is not { } master)
                 return;

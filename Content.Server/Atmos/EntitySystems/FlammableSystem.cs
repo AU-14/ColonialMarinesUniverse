@@ -66,6 +66,9 @@ namespace Content.Server.Atmos.EntitySystems
 
         private readonly Dictionary<Entity<FlammableComponent>, float> _fireEvents = new();
 
+        // CMU14: retain snapshot capacity between updates without retaining component references.
+        private readonly List<(EntityUid Uid, FlammableComponent Flammable)> _flammableUpdateQueue = new();
+
         // RMC14
         private EntityQuery<SteppingOnFireComponent> _steppingOnFireQuery;
 
@@ -484,17 +487,28 @@ namespace Content.Server.Atmos.EntitySystems
             }
             _fireEvents.Clear();
 
+            try
+            {
+                UpdateFlammables();
+            }
+            finally
+            {
+                _flammableUpdateQueue.Clear();
+            }
+        }
+
+        private void UpdateFlammables()
+        {
             var curTime = _timing.CurTime;
 
             // TODO: This needs cleanup to take off the crust from TemperatureComponent and shit.
             // CMU14: fire protection and damage handlers can add FlammableComponents mid-iteration
             // and invalidate the query enumerator, so iterate over a snapshot instead
-            var flammables = new List<(EntityUid Uid, FlammableComponent Flammable)>();
             var query = EntityQueryEnumerator<FlammableComponent, TransformComponent>();
             while (query.MoveNext(out var uid, out var flammable, out _))
-                flammables.Add((uid, flammable));
+                _flammableUpdateQueue.Add((uid, flammable));
 
-            foreach (var (uid, flammable) in flammables)
+            foreach (var (uid, flammable) in _flammableUpdateQueue)
             {
                 if (flammable.Deleted)
                     continue;

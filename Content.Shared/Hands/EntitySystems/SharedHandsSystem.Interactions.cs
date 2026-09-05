@@ -92,7 +92,8 @@ public abstract partial class SharedHandsSystem : EntitySystem
         if (session?.AttachedEntity is not { } player)
             return;
 
-        SwapHands(player, true, false);
+        if (TryComp<HandsComponent>(player, out var hands))
+            SwapHands((player, hands), true, false);
     }
 
     private void SwapHandsReversePressed(ICommonSession? session)
@@ -100,7 +101,8 @@ public abstract partial class SharedHandsSystem : EntitySystem
         if (session?.AttachedEntity is not { } player)
             return;
 
-        SwapHands(player, true, true);
+        if (TryComp<HandsComponent>(player, out var hands))
+            SwapHands((player, hands), true, true);
     }
 
     private bool DropPressed(ICommonSession? session, EntityCoordinates coords, EntityUid netEntity)

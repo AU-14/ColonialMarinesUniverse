@@ -25,13 +25,20 @@
 - type: partySpawn
   id: apePartycf
   leadersToSpawn:
-    CMUMobApe: 2
+    CMUMobApeLeader: 1
+  gruntsToSpawn:
+    CMUMobApe: 1
   scalewithpop: true
   spawnTogether: true
   scaling:
     CMUMobApe:
       scale: 0.33
       whenToBeginScaling: 25
+
+- type: entity
+  parent: CMUMobApe
+  id: CMUMobApeLeader
+  suffix: Threat leader
 
 # Distress Signal
 - type: threat

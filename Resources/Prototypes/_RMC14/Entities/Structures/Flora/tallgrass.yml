@@ -10,6 +10,7 @@
     sprite: _RMC14/Structures/Flora/tallgrass.rsi
     state: tallgrass
     drawdepth: Walls
+  - type: TallGrassOcclusion
   - type: Physics
     canCollide: false
   - type: Fixtures
@@ -40,6 +41,8 @@
   components:
   - type: Sprite
     state: tallgrass_sides
+  - type: TallGrassOcclusion
+    state: tallgrass_overlay_corner
 
 - type: entity
   abstract: true
@@ -49,6 +52,9 @@
   components:
   - type: Sprite
     state: tallgrass_corner
+  - type: TallGrassOcclusion
+    state: tallgrass_overlay_corner
+    diagonal: true
 
 # Desert
 - type: entity

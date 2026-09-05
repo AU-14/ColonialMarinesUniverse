@@ -109,7 +109,8 @@ namespace Content.Server.EUI
             var msg = new MsgEuiCtl();
             msg.Id = eui.Id;
             msg.Type = MsgEuiCtl.CtlType.Close;
-            _net.ServerSendMessage(msg, eui.Player.Channel);
+            if (eui.Player.Status != SessionStatus.Disconnected)
+                _net.ServerSendMessage(msg, eui.Player.Channel);
         }
 
         private void RxMsgMessage(MsgEuiMessage message)

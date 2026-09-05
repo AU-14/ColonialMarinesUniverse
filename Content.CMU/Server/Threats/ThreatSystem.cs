@@ -43,6 +43,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private ForceInterestSystem _forceInterest = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
@@ -90,22 +91,7 @@ public sealed partial class ThreatSystem : EntitySystem
             PendingThreatForceSpawn pending = _pendingSpawns[0];
             _pendingSpawns.RemoveAt(0);
 
-            try
-            {
-                if (ExecuteSpawn(pending.Threat,
-                        pending.MapId,
-                        pending.AssignedJobs,
-                        pending.VoteHeldPlayers,
-                        pending.RequireObserverForVotePlayers,
-                        pending.PlayerCount,
-                        pending.PlayerBudget))
-                    StartThreatWinConditions(pending.Threat);
-            }
-            catch (Exception ex)
-            {
-                _sawmill.Error($"[ThreatSystem] Delayed threat spawn threw: {ex}");
-                ReleaseVoteHeldPlayers(pending.VoteHeldPlayers, pending.Threat.ID, "delayed threat spawn threw", true);
-            }
+            _forceInterest.SetReady(pending.InterestId);
         }
     }
 
@@ -193,8 +179,8 @@ public sealed partial class ThreatSystem : EntitySystem
     }
 
     /// <summary>
-    ///     In Colony Fall: schedules threat entity spawning and win condition activation after a random
-    ///     delay via the game update loop. In all other presets: spawns and starts win conditions immediately.
+    ///     Queues the threat for player interest, with an additional random arrival delay in Colony Fall.
+    ///     Win conditions begin when the force actually deploys.
     /// </summary>
     public void SpawnThreatAtRoundStart(ThreatPrototype threat,
         MapId mapId,
@@ -235,12 +221,7 @@ public sealed partial class ThreatSystem : EntitySystem
         }
         else
         {
-            if (ExecuteSpawn(threat,
-                    mapId,
-                    assignedJobs,
-                    scalingPlayerCount: playerCount,
-                    playerBudget: playerBudget))
-                StartThreatWinConditions(threat);
+            QueueThreat(threat, mapId, assignedJobs, playerCount: playerCount, playerBudget: playerBudget);
         }
     }
 
@@ -281,19 +262,12 @@ public sealed partial class ThreatSystem : EntitySystem
                 assignedJobs,
                 TimeSpan.FromSeconds(delaySeconds),
                 heldPlayers,
-                true,
                 playerCount,
                 playerBudget);
         }
         else
         {
-            if (ExecuteSpawn(threat,
-                    mapId,
-                    assignedJobs,
-                    heldPlayers,
-                    scalingPlayerCount: playerCount,
-                    playerBudget: playerBudget))
-                StartThreatWinConditions(threat);
+            QueueThreat(threat, mapId, assignedJobs, heldPlayers, playerCount: playerCount, playerBudget: playerBudget);
         }
     }
 
@@ -306,20 +280,8 @@ public sealed partial class ThreatSystem : EntitySystem
             return false;
         }
 
-        var assignedJobs = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
-        if (!ExecuteSpawn(threat, transform.MapID, assignedJobs))
-            return false;
-
-        if (startWinConditions)
-        {
-            StartThreatWinConditions(threat);
-            _auRound.SetSelectedThreat(threat);
-            _auRound.PreselectThirdPartiesForSelectedThreat();
-        }
-
-        _sawmill.Info($"[ThreatSystem] Admin-forced threat '{threat.ID}' spawned on map {transform.MapID} " +
-            $"(winConditions={startWinConditions}).");
-        return true;
+        return QueueThreat(threat, transform.MapID, new(), startWinConditions: startWinConditions,
+            forced: true) != null;
     }
 
     internal void SchedulePendingThreatSpawn(ThreatPrototype threat,
@@ -327,23 +289,78 @@ public sealed partial class ThreatSystem : EntitySystem
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
         TimeSpan delay,
         IReadOnlyList<NetUserId>? voteHeldPlayers = null,
-        bool requireObserverForVotePlayers = false,
         int? playerCount = null,
         int? playerBudget = null)
     {
-        var pending = new PendingThreatForceSpawn
+        var id = QueueThreat(threat, mapId, assignedJobs, voteHeldPlayers, false, playerCount, playerBudget);
+        if (id == null)
+            return;
+
+        EnqueuePendingThreatSpawn(new PendingThreatForceSpawn
         {
             Threat = threat,
-            MapId = mapId,
-            AssignedJobs = assignedJobs,
             FireAt = _timing.CurTime + delay,
-            VoteHeldPlayers = voteHeldPlayers?.ToList(),
-            RequireObserverForVotePlayers = requireObserverForVotePlayers,
-            PlayerCount = playerCount,
-            PlayerBudget = playerBudget
-        };
+            InterestId = id.Value,
+        });
+    }
 
-        EnqueuePendingThreatSpawn(pending);
+    private uint? QueueThreat(ThreatPrototype threat, MapId mapId,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
+        IReadOnlyList<NetUserId>? voteHeldPlayers = null, bool ready = true,
+        int? playerCount = null, int? playerBudget = null, bool startWinConditions = true, bool forced = false)
+    {
+        if (!_prototypeManager.TryIndex(threat.RoundStartSpawn, out var spawn))
+        {
+            RemoveThreatJobAssignments(assignedJobs);
+            ReleaseVoteHeldPlayers(voteHeldPlayers, threat.ID, "missing spawn prototype", true);
+            return null;
+        }
+
+        var population = playerCount ?? _playerManager.PlayerCount;
+        var leaders = GetSpawnBodies(ThreatMarkerType.Leader, spawn.LeadersToSpawn, spawn.Scaling, population);
+        var members = GetSpawnBodies(ThreatMarkerType.Member, spawn.GruntsToSpawn, spawn.Scaling, population);
+        if (playerBudget is { } budget)
+            ThreatVoteSelection.LimitBodies(leaders, members, budget);
+        var bodies = _forceInterest.GetPlayableBodies(leaders.Concat(members).GroupBy(pair => pair.Key)
+            .ToDictionary(group => group.Key, group => group.Sum(pair => pair.Value)), true);
+        foreach (var (body, count) in _forceInterest.GetPlayableBodies(spawn.EntitiesToSpawn))
+            bodies[body] = bodies.GetValueOrDefault(body) + count;
+
+        var fallbackJobs = leaders.Where(pair => pair.Value > 0).ToDictionary(pair => pair.Key, _ => ThreatLeaderJobId);
+        foreach (var (body, count) in members)
+        {
+            if (count > 0)
+                fallbackJobs[body] = ThreatMemberJobId;
+        }
+
+        var assignments = assignedJobs.Where(pair => IsThreatJob(pair.Value.Item1)).ToDictionary();
+        var volunteers = voteHeldPlayers?.ToList() ?? assignments.Keys.ToList();
+        var name = Loc.GetString(ThreatVoteSelection.GetThreatDisplayNameLocId(threat.ID), ("threat", threat.ID));
+        var id = _forceInterest.QueueForce(name, bodies, interested =>
+        {
+            // A vote is consent, but only while that player remains interested and available.
+            var currentAssignments = assignments.Where(pair => interested.Contains(pair.Key)).ToDictionary();
+            var currentVoters = voteHeldPlayers?.Where(interested.Contains).ToList();
+            if (!ExecuteSpawn(threat, mapId, currentAssignments, currentVoters,
+                    scalingPlayerCount: population, playerBudget: playerBudget))
+                return false;
+
+            if (startWinConditions)
+            {
+                StartThreatWinConditions(threat);
+                if (forced)
+                {
+                    _auRound.SetSelectedThreat(threat);
+                    _auRound.PreselectThirdPartiesForSelectedThreat();
+                }
+            }
+
+            return true;
+        }, ready, volunteers, fallbackJobs);
+
+        // Shelved forces must not indefinitely prevent volunteers from joining another role.
+        ReleaseVoteHeldPlayers(voteHeldPlayers, threat.ID, "force queued for interest", false);
+        return id;
     }
 
     private void EnqueuePendingThreatSpawn(PendingThreatForceSpawn pending)
@@ -581,6 +598,7 @@ public sealed partial class ThreatSystem : EntitySystem
                     {
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedList?.Add(ent);
+                        _forceInterest.TrackRole(ent);
                         spawned++;
                         _sawmill.Debug($"[DEBUG] Spawned {label} entity {ent} at marker {marker}");
                     }
@@ -962,6 +980,7 @@ public sealed partial class ThreatSystem : EntitySystem
         ghostRole.MindRoles = new List<EntProtoId> { ThreatMindRoleId };
 
         EnsureComp<GhostTakeoverAvailableComponent>(entity);
+        _forceInterest.TrackRole(entity);
     }
 
     private void AddThreatFaction(EntityUid entity)
@@ -1015,13 +1034,8 @@ public sealed partial class ThreatSystem : EntitySystem
 
     private sealed class PendingThreatForceSpawn
     {
-        public required Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> AssignedJobs;
         public required TimeSpan FireAt;
-        public required MapId MapId;
-        public int? PlayerBudget;
-        public int? PlayerCount;
-        public bool RequireObserverForVotePlayers;
         public required ThreatPrototype Threat;
-        public IReadOnlyList<NetUserId>? VoteHeldPlayers;
+        public required uint InterestId;
     }
 }

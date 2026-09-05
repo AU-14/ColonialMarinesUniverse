@@ -144,7 +144,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             }
 
             ContentPanel.Visible = anyVisible;
-            NoRolesMessage.Text = _availableRoleCount == 0
+            NoRolesMessage.Text = _entries.Count == 0
                 ? Loc.GetString("ghost-roles-window-no-roles-available-label")
                 : Loc.GetString("ghost-roles-window-no-results-label");
             NoRolesMessage.Visible = !anyVisible;

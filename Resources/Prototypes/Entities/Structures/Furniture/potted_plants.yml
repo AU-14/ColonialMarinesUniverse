@@ -28,8 +28,10 @@
   - type: Speech
     speechVerb: Plant # for pais (In the secret stash)
   - type: SecretStash
-    tryInsertItemSound: /Audio/Effects/plant_rustle.ogg
-    tryRemoveItemSound: /Audio/Effects/plant_rustle.ogg
+    tryInsertItemSound:
+      collection: CMUPottedPlantRustle
+    tryRemoveItemSound:
+      collection: CMUPottedPlantRustle
     secretStashName: secret-stash-plant
   - type: ContainerContainer
     containers:
@@ -49,10 +51,10 @@
       behaviors:
       - !type:PlaySoundBehavior
         sound:
-          path: /Audio/Effects/plant_rustle.ogg
+          collection: CMUPottedPlantRustle
       - !type:PlaySoundBehavior
         sound:
-          path: /Audio/Effects/break_stone.ogg
+          collection: CMUPottedPlantBreak
           params:
             volume: -6
   - type: InteractedBlacklist

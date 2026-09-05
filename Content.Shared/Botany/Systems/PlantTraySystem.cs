@@ -13,6 +13,7 @@ using Content.Shared.Random.Helpers;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
+using Content.Shared.CMU14.EntityReferences;
 
 namespace Content.Shared.Botany.Systems;
 
@@ -22,6 +23,7 @@ namespace Content.Shared.Botany.Systems;
 /// </summary>
 public sealed partial class PlantTraySystem : EntitySystem
 {
+    [Dependency] private EntityReferenceSystem _references = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private PlantHolderSystem _plantHolder = default!;
     [Dependency] private PlantSystem _plant = default!;
@@ -226,6 +228,19 @@ public sealed partial class PlantTraySystem : EntitySystem
     }
 
     /// <summary>
+    /// Clears the networked reference before the plant is removed.
+    /// </summary>
+    [SubscribeLocalEvent]
+    private void OnPlantTerminating(Entity<PlantTrayComponent> ent, ref ReferencedEntityTerminatingEvent args)
+    {
+        if (ent.Comp.PlantEntity != args.Entity)
+            return;
+
+        ent.Comp.PlantEntity = null;
+        DirtyField(ent.AsNullable(), nameof(ent.Comp.PlantEntity));
+    }
+
+    /// <summary>
     /// Planting a plant in a tray.
     /// </summary>
     [PublicAPI]
@@ -240,6 +255,7 @@ public sealed partial class PlantTraySystem : EntitySystem
         _transform.SetCoordinates(plantUid, Transform(trayUid).Coordinates);
         _transform.SetParent(plantUid, trayUid);
         trayComp.PlantEntity = plantUid;
+        _references.Watch(trayUid, plantUid);
         DirtyField(trayEnt, nameof(trayComp.PlantEntity));
     }
 

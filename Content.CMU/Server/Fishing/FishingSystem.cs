@@ -81,6 +81,7 @@ public sealed partial class FishingSystem : SharedFishingSystem
         var time = spotComp.FishDefaultTimer + _random.NextFloat(-spotComp.FishTimerVariety, spotComp.FishTimerVariety);
         activeFishSpot.FishingStartTime = Timing.CurTime + TimeSpan.FromSeconds(time);
         activeFishSpot.AttachedFishingLure = ent;
+        References.Watch(attachedEnt, ent.Owner);
 
         // Declares war on prediction
         Dirty(attachedEnt, activeFishSpot);

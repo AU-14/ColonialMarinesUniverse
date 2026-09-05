@@ -61,7 +61,7 @@
     - NeomorphsThreat
     # - AbominationsThreatDS # no xenocf markers
     - ApeThreatDS
-    - BadBloodClanThreat
+    # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers
     - CultistThreatCF

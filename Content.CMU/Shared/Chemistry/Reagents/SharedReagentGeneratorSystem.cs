@@ -96,7 +96,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         reagent.Add("isCM", "true");
         reagent.Add("generated", "true");
         reagent.Add("physicalDesc", "reagent-physical-desc-unidentifiable");
-        reagent.Add("flavor", "flavor-base-horrible");
+        reagent.Add("flavor", "horrible");
         reagent.Add("genTier", args.GenTier.ToString());
         var worksOnTheDead = args.Effects.ContainsKey("Defibrillating") ||
                              args.Effects.ContainsKey("Neurocryogenic");
@@ -157,7 +157,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             $"  unknown: true\n" +
             $"  group: Generated\n" +
             $"  flags: Scannable\n" +
-            $"  flavor: flavor-base-horrible\n" +
+            $"  flavor: horrible\n" +
             $"  genTier: {args.GenTier}\n" +
             $"  reward: {args.ScanPointYield}\n" +
             (worksOnTheDead ? "  worksOnTheDead: true\n" : string.Empty) +

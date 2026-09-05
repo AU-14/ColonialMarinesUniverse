@@ -32,7 +32,7 @@ public sealed class RequisitionsPriceCalculatorTest
         Assert.Multiple(() =>
         {
             Assert.That(prices["PowerCell"], Is.EqualTo(100));
-            Assert.That(prices["Toolkit"], Is.EqualTo(150).Within(1));
+            Assert.That(prices["Toolkit"], Is.EqualTo(150));
         });
     }
 
@@ -61,6 +61,61 @@ public sealed class RequisitionsPriceCalculatorTest
         });
 
         Assert.That(prices["Rocket"], Is.EqualTo(225));
+    }
+
+    [TestCase(1200, 400)]
+    [TestCase(2800, 933)]
+    public void AmmoAnchorsThatExhaustLauncherBundleUseEqualShareFallback(int bundleCost, int expectedLauncherCost)
+    {
+        var prices = RequisitionsPriceCalculator.Calculate(new[]
+        {
+            Source(1500, ("AU14BoxHEDPUPP", 1)),
+            Source(1300, ("AU14BoxHIDPUPP", 1)),
+            Source(bundleCost, ("AU14WeaponLauncherOG60", 1), ("AU14BoxHEDPUPP", 1), ("AU14BoxHIDPUPP", 1)),
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(prices["AU14WeaponLauncherOG60"], Is.EqualTo(expectedLauncherCost));
+            Assert.That(prices["AU14BoxHEDPUPP"], Is.EqualTo(1500));
+            Assert.That(prices["AU14BoxHIDPUPP"], Is.EqualTo(1300));
+        });
+    }
+
+    [Test]
+    public void ExpensiveUnanchoredBundleDoesNotErodeAnotherItemsPrice()
+    {
+        var sources = new[]
+        {
+            Source(10000, ("Ammo", 1), ("Armor", 1)),
+            Source(1000, ("Ammo", 1), ("Launcher", 1)),
+        };
+        var prices = RequisitionsPriceCalculator.Calculate(sources);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(prices["Ammo"], Is.EqualTo(2750));
+            Assert.That(prices["Armor"], Is.EqualTo(5000));
+            Assert.That(prices["Launcher"], Is.EqualTo(500));
+            Assert.That(RequisitionsPriceCalculator.Calculate(sources.Reverse()), Is.EquivalentTo(prices));
+        });
+    }
+
+    [Test]
+    public void MixedBundleSharesRemainingValueByUnanchoredQuantity()
+    {
+        var prices = RequisitionsPriceCalculator.Calculate(new[]
+        {
+            Source(400, ("PowerCell", 4)),
+            Source(1100, ("PowerCell", 2), ("Toolkit", 2), ("Helmet", 1)),
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(prices["PowerCell"], Is.EqualTo(100));
+            Assert.That(prices["Toolkit"], Is.EqualTo(300));
+            Assert.That(prices["Helmet"], Is.EqualTo(300));
+        });
     }
 
     private static RequisitionsPriceSource Source(int cost, params (string Prototype, int Amount)[] items)

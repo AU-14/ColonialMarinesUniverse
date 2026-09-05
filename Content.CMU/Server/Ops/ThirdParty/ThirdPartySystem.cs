@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.Access.Systems;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.VendorMarker;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
@@ -14,7 +15,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Map;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.util;
-using Content.Shared.Ghost.Components;
+using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mind;
@@ -40,6 +41,7 @@ namespace Content.Server.CMU14.Ops.ThirdParty;
 
 public sealed partial class ThirdPartySystem : EntitySystem
 {
+    [Dependency] private ForceInterestSystem _forceInterest = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -72,6 +74,27 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private float _spawnTimer;
     private List<ThirdPartyPrototype>? _thirdPartyList;
 
+    private readonly Dictionary<int, uint> _scheduledForces = new();
+    private readonly Dictionary<string, uint> _automaticForces = new();
+    private readonly Dictionary<uint, ThirdPartyPrototype> _queuedParties = new();
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    private void OnRoundRestart(RoundRestartCleanupEvent ev)
+    {
+        _spawningActive = false;
+        _thirdPartyList = null;
+        _currentThreat = null;
+        _signalIntervalMultiplier = 1f;
+        _scheduledForces.Clear();
+        _queuedParties.Clear();
+        _automaticForces.Clear();
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -95,14 +118,6 @@ public sealed partial class ThirdPartySystem : EntitySystem
         if (_spawnTimer < interval.TotalSeconds)
             return;
 
-        int ghostCount = _playerManager.Sessions.Count(s => s.AttachedEntity == null
-            || _entityManager.HasComponent<GhostComponent>(s.AttachedEntity));
-        if (ghostCount < party.GhostsNeeded)
-        {
-            _spawnTimer = 0f;
-            return;
-        }
-
         _spawnTimer = 0f;
         int roll = _random.Next(1, 101);
         int chance = Math.Clamp(party.weight * 10, 5, 100); // Example: weight 1 = 10%, weight 10 = 100%
@@ -113,21 +128,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
             return;
         }
 
-        if (!_prototypeManager.TryIndex(party.PartySpawn, out PartySpawnPrototype? spawnProto))
-        {
-            _sawmill.Error($"[ThirdPartySystem] No spawn proto for ({party.ID}) (PartySpawn={party.PartySpawn})");
-            _nextThirdPartyIndex++;
-            return;
-        }
-
-        try
-        {
-            if (SpawnThirdParty(party, spawnProto, false))
-                _sawmill.Debug($"[ThirdPartySystem] Spawned ({party.ID}) (roll {roll} <= {chance})");
-            else
-                _sawmill.Warning($"[ThirdPartySystem] Spawn of ({party.ID}) failed; skipping.");
-        }
-        catch (Exception ex) { _sawmill.Error($"[ThirdPartySystem] Exception spawning ({party.ID}): {ex}"); }
+        if (_scheduledForces.TryGetValue(_nextThirdPartyIndex, out var force))
+            _forceInterest.SetReady(force);
 
         _nextThirdPartyIndex++;
     }
@@ -163,10 +165,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     /// </summary>
     public List<ThirdPartyPrototype> GetQueuedThirdParties()
     {
-        if (_thirdPartyList == null || _nextThirdPartyIndex >= _thirdPartyList.Count)
-            return new();
-
-        return _thirdPartyList.GetRange(_nextThirdPartyIndex, _thirdPartyList.Count - _nextThirdPartyIndex);
+        return _queuedParties.Where(pair => _forceInterest.IsPending(pair.Key)).Select(pair => pair.Value).ToList();
     }
 
     /// <summary>
@@ -181,6 +180,30 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
     public bool SpawnThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, bool? overrideDropship = null)
+    {
+        QueueThirdParty(party, spawnProto, roundStart, overrideDropship, true, assignedJobs);
+        return true;
+    }
+
+    private uint QueueThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+        bool? overrideDropship, bool ready,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null)
+    {
+        var bodies = spawnProto.LeadersToSpawn.Concat(spawnProto.GruntsToSpawn).Concat(spawnProto.EntitiesToSpawn)
+            .GroupBy(pair => pair.Key).ToDictionary(group => group.Key, group => group.Sum(pair => Math.Max(0, pair.Value)));
+        var assignments = roundStart && assignedJobs != null
+            ? assignedJobs.Where(pair => pair.Value.Item1 == ThirdPartyLeaderJobId || pair.Value.Item1 == ThirdPartyMemberJobId).ToDictionary()
+            : new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
+        var id = _forceInterest.QueueForce(party.DisplayName ?? party.ID,
+            _forceInterest.GetPlayableBodies(bodies),
+            interested => SpawnThirdPartyNow(party, spawnProto, roundStart,
+                assignments.Where(pair => interested.Contains(pair.Key)).ToDictionary(), overrideDropship), ready, assignments.Keys);
+        _queuedParties.Add(id, party);
+        return id;
+    }
+
+    private bool SpawnThirdPartyNow(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship)
     {
         const float SpawnTogetherRadius = 8f;
         _sawmill.Debug($"[ThirdPartySystem] Spawning third party: ({party.ID})");
@@ -899,29 +922,21 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         _spawningActive = true;
 
-        // Spawn all roundstart third parties immediately (called after jobs assigned)
-        foreach (ThirdPartyPrototype party in _thirdPartyList)
+        _scheduledForces.Clear();
+        for (var i = 0; i < _thirdPartyList.Count; i++)
         {
-            if (!party.RoundStart)
-                break;
+            var party = _thirdPartyList[i];
+            if (!_prototypeManager.TryIndex(party.PartySpawn, out var spawn))
+                continue;
 
-            _sawmill.Debug($"[ThirdPartySystem] Attempting roundstart third-party ({party.ID}) with PartySpawn={party.PartySpawn}.");
-            if (_prototypeManager.TryIndex(party.PartySpawn, out PartySpawnPrototype? spawnProto))
+            // A threat vote can extend a schedule which already includes round-start survivors.
+            if (!_automaticForces.TryGetValue(party.ID, out var id))
             {
-                if (SpawnThirdParty(party, spawnProto, true, assignedJobs))
-                    _sawmill.Debug($"[ThirdPartySystem] Spawned roundstart third party ({party.ID})");
-                else
-                {
-                    _sawmill.Warning(
-                        $"[ThirdPartySystem] Roundstart spawn attempt for third party ({party.ID}) failed.");
-                }
-            }
-            else
-            {
-                _sawmill.Error($"[ThirdPartySystem] No spawn proto for roundstart third party ({party.ID}) PartySpawn={party.PartySpawn}");
+                id = QueueThirdParty(party, spawn, party.RoundStart, null, party.RoundStart, assignedJobs);
+                _automaticForces.Add(party.ID, id);
             }
 
-            _nextThirdPartyIndex++;
+            _scheduledForces[i] = id;
         }
     }
 
@@ -1001,6 +1016,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
 
             spawnedList.Add(ent);
+            _forceInterest.TrackRole(ent);
 
             // Put marker on a cooldown
             if (!parachuteMode

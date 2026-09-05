@@ -1215,8 +1215,11 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             yield break;
 
         var landingZoneQuery = EntityQueryEnumerator<DropshipDestinationComponent, MetaDataComponent, TransformComponent>();
-        while (landingZoneQuery.MoveNext(out var uid, out _, out var metaData, out var xform))
+        while (landingZoneQuery.MoveNext(out var uid, out var destination, out var metaData, out var xform))
         {
+            if (!destination.CanBePrimary)
+                continue;
+
             if (!HasComp<RMCPlanetComponent>(xform.ParentUid) &&
                 !HasComp<RMCPlanetComponent>(xform.MapUid))
             {

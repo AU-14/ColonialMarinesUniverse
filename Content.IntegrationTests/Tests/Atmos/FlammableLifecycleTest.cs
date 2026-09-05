@@ -23,6 +23,70 @@ namespace Content.IntegrationTests.Tests.Atmos;
 public sealed class FlammableLifecycleTest : GameTest
 {
     [Test]
+    public async Task IdleUpdatesReuseSnapshotStorage()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            for (var i = 0; i < 512; i++)
+            {
+                var uid = SEntMan.SpawnEntity(null, map.GridCoords);
+                SEntMan.EnsureComponent<FlammableComponent>(uid).NextUpdate = TimeSpan.MaxValue;
+            }
+
+            var system = Server.System<ServerFlammableSystem>();
+            // Warm the snapshot capacity and update path before measuring steady-state allocations.
+            system.Update(0f);
+            system.Update(0f);
+
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            for (var i = 0; i < 10; i++)
+                system.Update(0f);
+            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.LessThan(4096),
+                "idle updates should not allocate a fresh snapshot of every flammable entity each tick");
+        });
+    }
+
+    [Test]
+    public async Task ProtectionHandlerCanAddFlammablesDuringUpdate()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            _ = Server.System<FlammableLifecycleProbeSystem>();
+            SetOxygenAtmosphere(map.MapUid);
+            var first = SpawnBurnable(map.MapId, 0);
+            var second = SpawnBurnable(map.MapId, 1);
+            var added = SEntMan.SpawnEntity(null, map.GridCoords);
+            SEntMan.EnsureComponent<FireProtectionProbeComponent>(first).OnProtection = () =>
+            {
+                var flammable = SEntMan.EnsureComponent<FlammableComponent>(added);
+                flammable.NextUpdate = SGameTiming.CurTime;
+                flammable.FireStacks = -2f;
+            };
+            IgniteOrdinary(first, 4);
+            IgniteOrdinary(second, 4);
+
+            var system = Server.System<ServerFlammableSystem>();
+            system.Update(0f);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(TotalDamage(first), Is.GreaterThan(0));
+                Assert.That(TotalDamage(second), Is.GreaterThan(0));
+                Assert.That(SEntMan.GetComponent<FlammableComponent>(added).FireStacks, Is.EqualTo(-2f),
+                    "components added by fire handlers should join the next update's snapshot");
+            });
+
+            system.Update(0f);
+            Assert.That(SEntMan.GetComponent<FlammableComponent>(added).FireStacks, Is.EqualTo(-1f),
+                "the next update should process the newly added flammable component");
+        });
+    }
+
+    [Test]
     public async Task OrdinaryFireScalesWithStacksAndProtection()
     {
         var map = await Pair.CreateTestMap();
@@ -373,6 +437,7 @@ public sealed class FlammableLifecycleTest : GameTest
 public sealed partial class FireProtectionProbeComponent : Component
 {
     public float Reduction;
+    public Action OnProtection;
 }
 
 [RegisterComponent]
@@ -396,6 +461,7 @@ public sealed class FlammableLifecycleProbeSystem : EntitySystem
         Entity<FireProtectionProbeComponent> ent,
         ref GetFireProtectionEvent args)
     {
+        ent.Comp.OnProtection?.Invoke();
         args.Reduce(ent.Comp.Reduction);
     }
 

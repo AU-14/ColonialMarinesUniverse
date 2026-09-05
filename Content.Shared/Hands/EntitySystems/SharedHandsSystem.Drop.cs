@@ -251,7 +251,7 @@ public abstract partial class SharedHandsSystem
             return;
         }
 
-        if (targetDropLocation != null)
+        if (targetDropLocation is { } dropLocation && dropLocation.IsValid(EntityManager))
         {
             var (itemPos, itemRot) = TransformSystem.GetWorldPositionRotation(entity.Value);
             // otherwise, also move dropped item and rotate it properly according to grid/map

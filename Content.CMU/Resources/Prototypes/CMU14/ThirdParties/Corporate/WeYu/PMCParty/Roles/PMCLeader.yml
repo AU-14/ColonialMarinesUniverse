@@ -30,7 +30,7 @@
       state: synth
   - type: MarineOrders
 
-  name: PMC Leader
+  name: au14-job-name-wypmc-leader
   description: au14-pmcparty-description
   playTimeTracker: AU14JobWYPMCPartyLeader
   ranks:
@@ -58,7 +58,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Leader
+    name: au14-job-name-wypmc-leader
     description: au14-pmcparty-description
     reregister: false
     job: AU14JobWYPMCPartyLeader

@@ -80,7 +80,7 @@ public sealed partial class PrayerSystem : EntitySystem
     /// <param name="source">The IPlayerSession that sent the message</param>
     /// <param name="messageString">The main message sent to the player via the chatbox</param>
     /// <param name="popupMessage">The popup to notify the player, also prepended to the messageString</param>
-    public void SendSubtleMessage(ICommonSession target, ICommonSession? source, string messageString, string popupMessage)
+    public void SendSubtleMessage(ICommonSession? target, ICommonSession? source, string messageString, string popupMessage)
     {
         SendSubtleMessage(target, source?.Name ?? "unknown source", messageString, popupMessage);
     }
@@ -92,9 +92,9 @@ public sealed partial class PrayerSystem : EntitySystem
     /// <param name="sourceName">The name to show as the subtle message source in admin logs</param>
     /// <param name="messageString">The main message sent to the player via the chatbox</param>
     /// <param name="popupMessage">The popup to notify the player, also prepended to the messageString</param>
-    public void SendSubtleMessage(ICommonSession target, string sourceName, string messageString, string popupMessage)
+    public void SendSubtleMessage(ICommonSession? target, string sourceName, string messageString, string popupMessage)
     {
-        if (target.AttachedEntity == null)
+        if (target?.AttachedEntity is not { } attached || TerminatingOrDeleted(attached))
             return;
 
         var message = popupMessage == "" ? "" : popupMessage + (messageString == "" ? "" : $" \"{messageString}\"");
