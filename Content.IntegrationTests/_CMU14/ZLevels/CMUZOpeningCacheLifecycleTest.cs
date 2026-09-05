@@ -12,6 +12,40 @@ namespace Content.IntegrationTests.CMU14.ZLevels;
 [TestFixture]
 public sealed class CMUZOpeningCacheLifecycleTest : GameTest
 {
+    [TestCase(float.NaN)]
+    [TestCase(float.PositiveInfinity)]
+    [TestCase(float.NegativeInfinity)]
+    public async Task OpeningEdgesRejectNonFiniteSourcePositions(float coordinate)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var tiles = Server.ResolveDependency<ITileDefinitionManager>();
+            var mapUid = maps.CreateMap(out var mapId, runMapInit: true);
+            var grid = maps.CreateGridEntity(mapId);
+            try
+            {
+                Fill(maps, grid, new Tile(tiles["Plating"].TileId));
+                maps.SetTile(grid, Vector2i.Zero, new Tile(tiles["Lattice"].TileId));
+                foreach (var position in new[] { new Vector2(coordinate, 0.5f), new Vector2(0.5f, coordinate) })
+                {
+                    foreach (var inside in new[] { false, true })
+                    {
+                        Assert.That(CMUZLevelOpeningCache.IsOpeningEdgeTile(grid, Vector2i.Zero, position,
+                            inside, maps, tiles), Is.False);
+                    }
+                }
+
+                Assert.That(CMUZLevelOpeningCache.IsOpeningEdgeTile(grid, Vector2i.Zero, new Vector2(1.5f, 0.5f),
+                    false, maps, tiles), Is.True);
+            }
+            finally
+            {
+                SEntMan.DeleteEntity(mapUid);
+            }
+        });
+    }
+
     [Test]
     public async Task ClientOwnerInvalidatesMultipleTileChangesWithinOneTick()
     {

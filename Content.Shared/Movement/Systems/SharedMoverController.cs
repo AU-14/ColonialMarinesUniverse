@@ -740,6 +740,20 @@ public abstract partial class SharedMoverController : VirtualController
     {
         var movementSpeed = GetEntityMoveSpeed(physicsUid, inputMover.Sprinting);
 
+        // Invalid coordinates must not reach the slide timeout, snapping, or velocity calculation.
+        // Leave the transform in place so its owner can correct it without an arbitrary teleport.
+        if (!float.IsFinite(targetTransform.LocalPosition.X) ||
+            !float.IsFinite(targetTransform.LocalPosition.Y) ||
+            (tileMovement.SlideActive &&
+             !float.IsFinite((tileMovement.Destination - tileMovement.Origin.Position).LengthSquared())))
+        {
+            EndSlide(physicsUid, tileMovement);
+            tileMovement.FailureSlideActive = false;
+            tileMovement.LastTickLocalCoordinates = null;
+            Dirty(uid, tileMovement);
+            return true;
+        }
+
         // A stopped mover cannot finish or start a slide. In particular, a zero-distance
         // centering slide at zero speed produces NaN when calculating its duration.
         if ((!float.IsFinite(movementSpeed) || movementSpeed <= 0f) &&
@@ -995,6 +1009,13 @@ public abstract partial class SharedMoverController : VirtualController
             }
 
             movementVelocity = parentRotation.RotateVec(movementVelocity);
+
+            if (!float.IsFinite(movementVelocity.X) || !float.IsFinite(movementVelocity.Y))
+            {
+                EndSlide(physicsUid, tileMovement);
+                tileMovement.FailureSlideActive = false;
+                return;
+            }
 
             // Apply final velocity to physics body.
             PhysicsSystem.SetLinearVelocity(physicsUid, movementVelocity, body: physicsComponent);

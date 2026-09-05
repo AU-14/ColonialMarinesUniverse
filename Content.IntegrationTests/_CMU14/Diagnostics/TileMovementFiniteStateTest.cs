@@ -3,6 +3,7 @@ using Content.Server.Physics.Controllers;
 using Content.Shared.CMU14.TileMovement;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 
@@ -11,6 +12,67 @@ namespace Content.IntegrationTests.CMU14.Diagnostics;
 [TestFixture]
 public sealed class TileMovementFiniteStateTest : GameTest
 {
+    [TestCase(float.NaN, false)]
+    [TestCase(float.NaN, true)]
+    [TestCase(float.PositiveInfinity, false)]
+    [TestCase(float.PositiveInfinity, true)]
+    [TestCase(float.NegativeInfinity, false)]
+    [TestCase(float.NegativeInfinity, true)]
+    [TestCase(float.MaxValue, false)]
+    [TestCase(float.MaxValue, true)]
+    public async Task InvalidSlideCoordinatesStopAndCanResume(float coordinate, bool corruptOrigin)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var uid = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0.5f)));
+            try
+            {
+                var mover = Server.System<MoverController>();
+                var input = SComp<InputMoverComponent>(uid);
+                var physics = SComp<PhysicsComponent>(uid);
+                var transform = SComp<TransformComponent>(uid);
+                var tile = SEntMan.EnsureComponent<CMUTileMovementComponent>(uid);
+                var position = transform.LocalPosition;
+                input.HeldMoveButtons = MoveButtons.Right;
+                Tick();
+                Assert.That(tile.SlideActive, Is.True);
+
+                if (corruptOrigin)
+                    tile.Origin = new EntityCoordinates(transform.ParentUid, new Vector2(coordinate, position.Y));
+                else
+                    tile.Destination = new Vector2(position.X, coordinate);
+
+                tile.FailureSlideActive = true;
+                Tick();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(tile.SlideActive, Is.False);
+                    Assert.That(tile.FailureSlideActive, Is.False);
+                    Assert.That(tile.LastTickLocalCoordinates, Is.Null);
+                    Assert.That(physics.LinearVelocity, Is.EqualTo(Vector2.Zero));
+                    Assert.That(transform.LocalPosition, Is.EqualTo(position));
+                });
+
+                Tick();
+                Assert.That(tile.SlideActive, Is.True);
+                Assert.That(physics.LinearVelocity.X, Is.GreaterThan(0));
+                Assert.That(float.IsFinite(physics.LinearVelocity.X) && float.IsFinite(physics.LinearVelocity.Y), Is.True);
+
+                void Tick()
+                {
+                    Assert.DoesNotThrow(() => mover.HandleTileMovement(uid, uid, tile, physics, transform,
+                        input, null, null, 1f / 30f));
+                }
+            }
+            finally
+            {
+                SEntMan.DeleteEntity(uid);
+            }
+        });
+        await Pair.DeleteEntityTreeLeafFirst(map.Grid);
+    }
+
     [TestCase(0f, false)]
     [TestCase(0f, true)]
     [TestCase(-1f, false)]
