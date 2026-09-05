@@ -17,6 +17,9 @@ public sealed class CMUZLevelOpeningCache
 
     public CMUZLevelOpeningCache(int chunkSize = DefaultChunkSize)
     {
+        if (chunkSize <= 0)
+            throw new ArgumentOutOfRangeException(nameof(chunkSize));
+
         _chunkSize = chunkSize;
     }
 
@@ -80,19 +83,10 @@ public sealed class CMUZLevelOpeningCache
         {
             for (var y = startChunk.Y; y <= endChunk.Y; y++)
             {
-                if (ForEachOpeningTileInBounds(
-                        grid,
-                        new Vector2i(x, y),
-                        startX,
-                        endX,
-                        startY,
-                        endY,
-                        map,
-                        tile,
-                        _ => true))
-                {
+                var openings = GetOpeningTilesInBounds(
+                    grid, new Vector2i(x, y), startX, endX, startY, endY, map, tile);
+                if (openings.MoveNext(out _))
                     return true;
-                }
             }
         }
 
@@ -127,6 +121,7 @@ public sealed class CMUZLevelOpeningCache
         {
             GetTileSearchBounds(grid, bottomLeft, topRight, map, out var startX, out var endX, out var startY, out var endY);
             var gridWorldMatrix = transform.GetWorldMatrix(grid.Owner);
+            var tileSize = grid.Comp.TileSize;
 
             var startChunk = SharedMapSystem.GetChunkIndices(new Vector2i(startX, startY), _chunkSize);
             var endChunk = SharedMapSystem.GetChunkIndices(new Vector2i(endX, endY), _chunkSize);
@@ -146,7 +141,9 @@ public sealed class CMUZLevelOpeningCache
                     {
                         var chunkStart = chunk * _chunkSize;
                         var chunkEnd = chunkStart + new Vector2i(_chunkSize, _chunkSize);
-                        var localBounds = new Box2(chunkStart.X, chunkStart.Y, chunkEnd.X, chunkEnd.Y);
+                        var localBounds = new Box2(
+                            chunkStart.X * tileSize, chunkStart.Y * tileSize,
+                            chunkEnd.X * tileSize, chunkEnd.Y * tileSize);
                         var worldBounds = gridWorldMatrix.TransformBox(localBounds);
 
                         AddOpeningBounds(openingBounds, worldBounds, ref combinedBounds, ref foundOpening);
@@ -166,30 +163,23 @@ public sealed class CMUZLevelOpeningCache
                     var tileStartY = Math.Max(startY, tileStart.Y);
                     var tileEndY = Math.Min(endY, tileEnd.Y - 1);
 
-                    if (ForEachOpeningTileInBounds(
-                            grid,
-                            chunk,
-                            tileStartX,
-                            tileEndX,
-                            tileStartY,
-                            tileEndY,
-                            map,
-                            tileDefinition,
-                            openingTile =>
-                            {
-                                var localTileBounds = new Box2(
-                                    openingTile.X,
-                                    openingTile.Y,
-                                    openingTile.X + 1,
-                                    openingTile.Y + 1);
-                                var worldTileBounds = gridWorldMatrix.TransformBox(localTileBounds);
-                                AddOpeningBounds(openingBounds, worldTileBounds, ref combinedBounds, ref foundOpening);
-
-                                return openingBounds.Count >= maxOpeningBounds;
-                            }))
+                    var openings = GetOpeningTilesInBounds(
+                        grid, chunk, tileStartX, tileEndX, tileStartY, tileEndY, map, tileDefinition);
+                    while (openings.MoveNext(out var openingTile))
                     {
-                        combinedOpeningBounds = combinedBounds;
-                        return true;
+                        var localTileBounds = tileSize == 1
+                            ? new Box2(openingTile.X, openingTile.Y, openingTile.X + 1, openingTile.Y + 1)
+                            : new Box2(
+                                openingTile.X * tileSize, openingTile.Y * tileSize,
+                                (openingTile.X + 1) * tileSize, (openingTile.Y + 1) * tileSize);
+                        var worldTileBounds = gridWorldMatrix.TransformBox(localTileBounds);
+                        AddOpeningBounds(openingBounds, worldTileBounds, ref combinedBounds, ref foundOpening);
+
+                        if (openingBounds.Count >= maxOpeningBounds)
+                        {
+                            combinedOpeningBounds = combinedBounds;
+                            return true;
+                        }
                     }
                 }
             }
@@ -209,6 +199,41 @@ public sealed class CMUZLevelOpeningCache
         SharedTransformSystem transform,
         ITileDefinitionManager tileDefinition,
         bool edgeOnly = true)
+    {
+        FindOpeningsNear(mapId, sourcePosition, searchRadius, openings, null, gridScratch,
+            map, transform, tileDefinition, edgeOnly);
+    }
+
+    /// <summary>
+    /// Appends real tile apertures with stable grid/tile identity. World positions are refreshed
+    /// on every query so moving a grid does not change its portals' ownership.
+    /// </summary>
+    public void FindOpeningPortalsNear(
+        MapId mapId,
+        Vector2 sourcePosition,
+        float searchRadius,
+        List<CMUZOpeningPortal> portals,
+        List<Entity<MapGridComponent>> gridScratch,
+        SharedMapSystem map,
+        SharedTransformSystem transform,
+        ITileDefinitionManager tileDefinition,
+        bool edgeOnly = true)
+    {
+        FindOpeningsNear(mapId, sourcePosition, searchRadius, null, portals, gridScratch,
+            map, transform, tileDefinition, edgeOnly);
+    }
+
+    private void FindOpeningsNear(
+        MapId mapId,
+        Vector2 sourcePosition,
+        float searchRadius,
+        List<(Vector2 Center, float Distance)>? centers,
+        List<CMUZOpeningPortal>? portals,
+        List<Entity<MapGridComponent>> gridScratch,
+        SharedMapSystem map,
+        SharedTransformSystem transform,
+        ITileDefinitionManager tileDefinition,
+        bool edgeOnly)
     {
         var searchBounds = Box2.CenteredAround(sourcePosition, new Vector2(searchRadius * 2f, searchRadius * 2f));
         gridScratch.Clear();
@@ -231,7 +256,8 @@ public sealed class CMUZLevelOpeningCache
             if (!Matrix3x2.Invert(gridWorldMatrix, out var gridInvWorldMatrix))
                 continue;
 
-            var localSourcePosition = Vector2.Transform(sourcePosition, gridInvWorldMatrix);
+            var tileSize = grid.Comp.TileSize;
+            var localSourcePosition = Vector2.Transform(sourcePosition, gridInvWorldMatrix) / tileSize;
             var sourceInsideOpening = IsExistingOpeningTile(
                 grid,
                 new Vector2i((int) MathF.Floor(localSourcePosition.X), (int) MathF.Floor(localSourcePosition.Y)),
@@ -253,33 +279,27 @@ public sealed class CMUZLevelOpeningCache
                     var tileStartY = Math.Max(startY, chunkStart.Y);
                     var tileEndY = Math.Min(endY, chunkEnd.Y - 1);
 
-                    ForEachOpeningTileInBounds(
-                        grid,
-                        chunk,
-                        tileStartX,
-                        tileEndX,
-                        tileStartY,
-                        tileEndY,
-                        map,
-                        tileDefinition,
-                        openingTile =>
+                    var openings = GetOpeningTilesInBounds(
+                        grid, chunk, tileStartX, tileEndX, tileStartY, tileEndY, map, tileDefinition);
+                    while (openings.MoveNext(out var openingTile))
+                    {
+                        if (edgeOnly &&
+                            !IsOpeningEdgeTile(grid, openingTile, localSourcePosition, sourceInsideOpening, map, tileDefinition))
                         {
-                            if (edgeOnly &&
-                                !IsOpeningEdgeTile(grid, openingTile, localSourcePosition, sourceInsideOpening, map, tileDefinition))
-                            {
-                                return false;
-                            }
+                            continue;
+                        }
 
-                            var center = Vector2.Transform(
-                                new Vector2(openingTile.X + 0.5f, openingTile.Y + 0.5f),
-                                gridWorldMatrix);
-                            var distanceSquared = Vector2.DistanceSquared(sourcePosition, center);
-                            if (distanceSquared > searchRadiusSquared)
-                                return false;
+                        var center = Vector2.Transform(
+                            new Vector2(openingTile.X + 0.5f, openingTile.Y + 0.5f) * tileSize,
+                            gridWorldMatrix);
+                        var distanceSquared = Vector2.DistanceSquared(sourcePosition, center);
+                        if (distanceSquared > searchRadiusSquared)
+                            continue;
 
-                            openings.Add((center, MathF.Sqrt(distanceSquared)));
-                            return false;
-                        });
+                        var distance = MathF.Sqrt(distanceSquared);
+                        centers?.Add((center, distance));
+                        portals?.Add(new CMUZOpeningPortal(grid.Owner, openingTile, center, distance));
+                    }
                 }
             }
         }
@@ -321,7 +341,8 @@ public sealed class CMUZLevelOpeningCache
             if (!Matrix3x2.Invert(gridWorldMatrix, out var gridInvWorldMatrix))
                 continue;
 
-            var localSourcePosition = Vector2.Transform(sourcePosition, gridInvWorldMatrix);
+            var tileSize = grid.Comp.TileSize;
+            var localSourcePosition = Vector2.Transform(sourcePosition, gridInvWorldMatrix) / tileSize;
             var sourceInsideOpening = IsExistingOpeningTile(
                 grid,
                 new Vector2i((int) MathF.Floor(localSourcePosition.X), (int) MathF.Floor(localSourcePosition.Y)),
@@ -351,6 +372,7 @@ public sealed class CMUZLevelOpeningCache
                         localSourcePosition,
                         sourceInsideOpening,
                         gridWorldMatrix,
+                        tileSize,
                         searchRadiusSquared,
                         edgeOnly,
                         map,
@@ -480,7 +502,7 @@ public sealed class CMUZLevelOpeningCache
         return cached;
     }
 
-    private bool ForEachOpeningTileInBounds(
+    private OpeningTileEnumerator GetOpeningTilesInBounds(
         Entity<MapGridComponent> grid,
         Vector2i chunk,
         int startX,
@@ -488,57 +510,11 @@ public sealed class CMUZLevelOpeningCache
         int startY,
         int endY,
         SharedMapSystem map,
-        ITileDefinitionManager tileDefinition,
-        Func<Vector2i, bool> visitor)
+        ITileDefinitionManager tileDefinition)
     {
         var cached = GetChunkOpenings(grid, chunk, map, tileDefinition);
-        if (!cached.HasOpening)
-            return false;
-
-        if (_chunkSize == DefaultChunkSize)
-        {
-            var chunkStart = chunk * DefaultChunkSize;
-            var tileStartX = Math.Max(startX, chunkStart.X);
-            var tileEndX = Math.Min(endX, chunkStart.X + DefaultChunkSize - 1);
-            var tileStartY = Math.Max(startY, chunkStart.Y);
-            var tileEndY = Math.Min(endY, chunkStart.Y + DefaultChunkSize - 1);
-
-            for (var tileY = tileStartY; tileY <= tileEndY; tileY++)
-            {
-                for (var tileX = tileStartX; tileX <= tileEndX; tileX++)
-                {
-                    var bit = OpeningMaskBit(chunkStart, tileX, tileY);
-                    if ((cached.OpeningMask & bit) == 0)
-                        continue;
-
-                    if (visitor(new Vector2i(tileX, tileY)))
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        var fallbackChunkStart = chunk * _chunkSize;
-        var fallbackTileStartX = Math.Max(startX, fallbackChunkStart.X);
-        var fallbackTileEndX = Math.Min(endX, fallbackChunkStart.X + _chunkSize - 1);
-        var fallbackTileStartY = Math.Max(startY, fallbackChunkStart.Y);
-        var fallbackTileEndY = Math.Min(endY, fallbackChunkStart.Y + _chunkSize - 1);
-
-        for (var tileX = fallbackTileStartX; tileX <= fallbackTileEndX; tileX++)
-        {
-            for (var tileY = fallbackTileStartY; tileY <= fallbackTileEndY; tileY++)
-            {
-                var openingTile = new Vector2i(tileX, tileY);
-                if (!IsOpeningTile(grid, openingTile, map, tileDefinition))
-                    continue;
-
-                if (visitor(openingTile))
-                    return true;
-            }
-        }
-
-        return false;
+        return new OpeningTileEnumerator(grid, chunk * _chunkSize, _chunkSize,
+            startX, endX, startY, endY, cached, map, tileDefinition);
     }
 
     private void TryFindNearestOpeningCenterInChunk(
@@ -552,6 +528,7 @@ public sealed class CMUZLevelOpeningCache
         Vector2 localSourcePosition,
         bool sourceInsideOpening,
         Matrix3x2 gridWorldMatrix,
+        ushort tileSize,
         float searchRadiusSquared,
         bool edgeOnly,
         SharedMapSystem map,
@@ -587,6 +564,7 @@ public sealed class CMUZLevelOpeningCache
                         localSourcePosition,
                         sourceInsideOpening,
                         gridWorldMatrix,
+                        tileSize,
                         searchRadiusSquared,
                         edgeOnly,
                         map,
@@ -621,6 +599,7 @@ public sealed class CMUZLevelOpeningCache
                     localSourcePosition,
                     sourceInsideOpening,
                     gridWorldMatrix,
+                    tileSize,
                     searchRadiusSquared,
                     edgeOnly,
                     map,
@@ -639,6 +618,7 @@ public sealed class CMUZLevelOpeningCache
         Vector2 localSourcePosition,
         bool sourceInsideOpening,
         Matrix3x2 gridWorldMatrix,
+        ushort tileSize,
         float searchRadiusSquared,
         bool edgeOnly,
         SharedMapSystem map,
@@ -654,7 +634,7 @@ public sealed class CMUZLevelOpeningCache
         }
 
         var center = Vector2.Transform(
-            new Vector2(openingTile.X + 0.5f, openingTile.Y + 0.5f),
+            new Vector2(openingTile.X + 0.5f, openingTile.Y + 0.5f) * tileSize,
             gridWorldMatrix);
         var distanceSquared = Vector2.DistanceSquared(sourcePosition, center);
         if (distanceSquared > searchRadiusSquared ||
@@ -719,11 +699,16 @@ public sealed class CMUZLevelOpeningCache
     {
         var tileBottomLeft = map.TileIndicesFor(grid.Owner, grid.Comp, bottomLeft);
         var tileTopRight = map.TileIndicesFor(grid.Owner, grid.Comp, topRight);
+        var tileTopLeft = map.TileIndicesFor(grid.Owner, grid.Comp,
+            new MapCoordinates(new Vector2(bottomLeft.X, topRight.Y), bottomLeft.MapId));
+        var tileBottomRight = map.TileIndicesFor(grid.Owner, grid.Comp,
+            new MapCoordinates(new Vector2(topRight.X, bottomLeft.Y), bottomLeft.MapId));
 
-        startX = Math.Min(tileBottomLeft.X, tileTopRight.X) - 1;
-        endX = Math.Max(tileBottomLeft.X, tileTopRight.X) + 1;
-        startY = Math.Min(tileBottomLeft.Y, tileTopRight.Y) - 1;
-        endY = Math.Max(tileBottomLeft.Y, tileTopRight.Y) + 1;
+        // Opposite corners alone lose the side triangles when the grid rotates.
+        startX = Math.Min(Math.Min(tileBottomLeft.X, tileTopRight.X), Math.Min(tileTopLeft.X, tileBottomRight.X)) - 1;
+        endX = Math.Max(Math.Max(tileBottomLeft.X, tileTopRight.X), Math.Max(tileTopLeft.X, tileBottomRight.X)) + 1;
+        startY = Math.Min(Math.Min(tileBottomLeft.Y, tileTopRight.Y), Math.Min(tileTopLeft.Y, tileBottomRight.Y)) - 1;
+        endY = Math.Max(Math.Max(tileBottomLeft.Y, tileTopRight.Y), Math.Max(tileTopLeft.Y, tileBottomRight.Y)) + 1;
     }
 
     private static void AddOpeningBounds(
@@ -746,4 +731,90 @@ public sealed class CMUZLevelOpeningCache
     }
 
     private readonly record struct CachedChunk(bool HasOpening, ulong OpeningMask);
+
+    /// <summary>Value cursor avoids captured query/grid closures and cached visitor delegates.</summary>
+    private struct OpeningTileEnumerator
+    {
+        private readonly Entity<MapGridComponent> _grid;
+        private readonly SharedMapSystem _map;
+        private readonly ITileDefinitionManager _tiles;
+        private readonly Vector2i _chunkStart;
+        private readonly bool _useMask;
+        private readonly int _endX;
+        private readonly int _startY;
+        private readonly int _endY;
+        private ulong _remainingMask;
+        private int _x;
+        private int _y;
+        private bool _done;
+
+        public OpeningTileEnumerator(Entity<MapGridComponent> grid, Vector2i chunkStart, int chunkSize,
+            int startX, int endX, int startY, int endY, CachedChunk cached,
+            SharedMapSystem map, ITileDefinitionManager tiles)
+        {
+            _grid = grid;
+            _map = map;
+            _tiles = tiles;
+            _chunkStart = chunkStart;
+            _useMask = chunkSize == DefaultChunkSize;
+            _endX = Math.Min(endX, chunkStart.X + chunkSize - 1);
+            _startY = Math.Max(startY, chunkStart.Y);
+            _endY = Math.Min(endY, chunkStart.Y + chunkSize - 1);
+            _x = Math.Max(startX, chunkStart.X);
+            _y = _startY;
+            _done = !cached.HasOpening || _x > _endX || _startY > _endY;
+            _remainingMask = 0;
+
+            if (_useMask && !_done)
+            {
+                // Clip once. Width is at most eight, so no shift can wrap at 64 bits.
+                var rowMask = ((1UL << (_endX - _x + 1)) - 1) << (_x - chunkStart.X);
+                var boundsMask = 0UL;
+                for (var row = _startY - chunkStart.Y; row <= _endY - chunkStart.Y; row++)
+                    boundsMask |= rowMask << (row * DefaultChunkSize);
+                _remainingMask = cached.OpeningMask & boundsMask;
+            }
+        }
+
+        public bool MoveNext(out Vector2i tile)
+        {
+            if (!_useMask)
+                return MoveNextFallback(out tile);
+
+            if (_remainingMask == 0)
+            {
+                tile = default;
+                return false;
+            }
+
+            // Ascending bit indices retain the historical row-major order.
+            var bit = BitOperations.TrailingZeroCount(_remainingMask);
+            _remainingMask &= _remainingMask - 1;
+            tile = new Vector2i(_chunkStart.X + bit % DefaultChunkSize, _chunkStart.Y + bit / DefaultChunkSize);
+            return true;
+        }
+
+        private bool MoveNextFallback(out Vector2i tile)
+        {
+            while (!_done)
+            {
+                tile = new Vector2i(_x, _y);
+                // Non-default chunks retain their historical column-major order.
+                if (_y == _endY)
+                {
+                    _y = _startY;
+                    _done = _x == _endX;
+                    _x++;
+                }
+                else
+                    _y++;
+
+                if (IsOpeningTile(_grid, tile, _map, _tiles))
+                    return true;
+            }
+
+            tile = default;
+            return false;
+        }
+    }
 }
