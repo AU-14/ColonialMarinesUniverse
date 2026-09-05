@@ -116,6 +116,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeCombatDrones();
         base.Initialize();
 
         _actorQuery = GetEntityQuery<ActorComponent>();
@@ -179,6 +180,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+        UpdateCombatDrones();
 
         FlushPendingOperatorEndControls();
         FlushPendingSessionEndControls();
@@ -460,6 +462,9 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
         if (TryComp<CMUDroneModuleComponent>(args.Used, out var module))
         {
+            if (!ent.Comp.SupportsModules)
+                return;
+
             args.Handled = TryStartModuleInstall(ent, (args.Used, module), args.User);
             return;
         }
@@ -537,7 +542,10 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     private void OnDroneMobStateChanged(Entity<CMUDroneAndroidComponent> ent, ref MobStateChangedEvent args)
     {
         if (args.NewMobState == MobState.Alive)
+        {
+            RefreshDroneDormantEffect(ent);
             return;
+        }
 
         SetDroneDormantEffect(ent, false);
         StopDroneFollowing(ent, null, false);
@@ -1229,6 +1237,13 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         var drone = Spawn(frame.Comp.DronePrototype, xform.Coordinates);
         _transform.SetLocalRotation(drone, xform.LocalRotation);
 
+        RegisterAssembledDrone(drone, user, operatorComp);
+        QueueDel(key);
+        QueueDel(frame.Owner);
+    }
+
+    private void RegisterAssembledDrone(EntityUid drone, EntityUid user, CMUDroneOperatorComponent operatorComp)
+    {
         var droneComp = EnsureComp<CMUDroneAndroidComponent>(drone);
         droneComp.Operator = user;
         SuppressSsdIndicator(drone);
@@ -1243,9 +1258,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             Loc.GetString("cmu-drone-assembly-finish", ("drone", drone)),
             drone,
             user);
-
-        QueueDel(key);
-        QueueDel(frame.Owner);
     }
 
     private Container EnsureFramePartsContainer(Entity<CMUDroneFrameComponent> frame)

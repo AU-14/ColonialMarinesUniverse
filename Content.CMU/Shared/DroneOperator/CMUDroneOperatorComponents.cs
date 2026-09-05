@@ -79,6 +79,9 @@ public sealed partial class CMUDroneControlTabletComponent : Component
 public sealed partial class CMUDroneAndroidComponent : Component
 {
     [DataField]
+    public bool SupportsModules = true;
+
+    [DataField]
     public string ModuleContainerId = "cmu-drone-module";
 
     [DataField]

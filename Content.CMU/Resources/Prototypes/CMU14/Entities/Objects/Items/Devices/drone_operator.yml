@@ -1,8 +1,46 @@
 - type: entity
+  parent: CMBackpackMarine
+  id: CMUDroneOperatorChoicePackFilled
+  name: drone operator deployment pack
+  description: Contains a drone selection kit. Use the kit to choose humanoid or tracked drone equipment after deployment.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/tech/jungle-desert-classic.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,29,2
+  - type: StorageFill
+    contents:
+    - id: CMUDronePlatformKit
+
+- type: entity
+  parent: BaseItem
+  id: CMUDronePlatformKit
+  name: drone selection kit
+  description: Use this kit to choose one humanoid or tracked combat drone assembly package.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+    state: closed
+  - type: Item
+    size: Small
+  - type: CMUDronePlatformKit
+  - type: ActivatableUI
+    key: enum.CMUDronePlatformKitUi.Key
+    inHandsOnly: false
+    verbText: cmu-drone-platform-title
+  - type: UserInterface
+    interfaces:
+      enum.CMUDronePlatformKitUi.Key:
+        type: CMUDronePlatformKitBui
+
+- type: entity
   parent: BaseItem
   id: CMUDroneControlTablet
   name: drone control tablet
-  description: A ruggedized command tablet used to link and remotely pilot one drone android within a short tactical leash.
+  description: A ruggedized command tablet used to link and remotely pilot one drone android or tracked combat drone within a short tactical leash.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Devices/command_tablet.rsi

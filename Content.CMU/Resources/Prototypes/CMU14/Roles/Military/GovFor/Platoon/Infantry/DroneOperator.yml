@@ -70,7 +70,7 @@
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
     ears: AU14HeadsetGovforMarine
-    back: CMUDroneOperatorPackFilled
+    back: CMUDroneOperatorChoicePackFilled
 
 - type: entity
   parent: CMIDCardBase
@@ -119,6 +119,7 @@
   id: CMUDroneOperatorBackpack
   name: rmc-loadout-group-backpack
   minLimit: 1
+  maxLimit: 1
   hidden: true
   loadouts:
   - CMUDroneOperatorPackLoadout
@@ -126,4 +127,9 @@
 - type: loadout
   id: CMUDroneOperatorPackLoadout
   equipment:
-    back: CMUDroneOperatorPackFilled
+    back: CMUDroneOperatorChoicePackFilled
+
+- type: loadout
+  id: CMUCombatDroneOperatorPackLoadout
+  equipment:
+    back: CMUDroneOperatorChoicePackFilled
