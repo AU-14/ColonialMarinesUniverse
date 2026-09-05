@@ -1,11 +1,14 @@
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Inventory;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Eye.Blinding.Systems;
 
 public sealed partial class BlurryVisionSystem : EntitySystem
 {
+    [Dependency] private IGameTiming _timing = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -27,6 +30,10 @@ public sealed partial class BlurryVisionSystem : EntitySystem
     /// <param name="ent">The entity with the component to update.</param>
     public void UpdateBlurMagnitude(Entity<BlindableComponent?> ent)
     {
+        // CMU14: blur is replicated; state callbacks must not change components during prediction reset.
+        if (_timing.ApplyingState)
+            return;
+
         if (!Resolve(ent.Owner, ref ent.Comp, false))
             return;
 
