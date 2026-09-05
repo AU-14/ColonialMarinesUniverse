@@ -744,8 +744,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             user,
             user);
 
-        if (TryComp<CMUDroneControlSessionComponent>(drone.Owner, out var session))
-            RefreshDroneSkills((drone.Owner, session));
+        RefreshDroneSkills(drone);
     }
 
     private void UninstallDroneModule(
@@ -758,9 +757,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             Loc.GetString("cmu-drone-module-remove-finish", ("module", module.Owner), ("drone", drone.Owner)),
             user,
             user);
-
-        if (TryComp<CMUDroneControlSessionComponent>(drone.Owner, out var session))
-            RefreshDroneSkills((drone.Owner, session));
     }
 
     private void EjectDroneModule(Entity<CMUDroneAndroidComponent> drone, EntityUid module, EntityUid user)
@@ -772,6 +768,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         if (drone.Comp.InstalledModule == module)
             drone.Comp.InstalledModule = null;
 
+        RefreshDroneSkills(drone);
         _hands.PickupOrDrop(user, module, dropNear: true);
     }
 
@@ -1629,7 +1626,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         session.Operator = user;
         session.Tablet = tablet.Owner;
         session.MindId = resolvedMind;
-        RefreshDroneSkills((linkedDrone, session));
+        RefreshDroneSkills((linkedDrone, droneComp));
         AddEndControlAction((linkedDrone, session));
 
         operatorComp.ControlledDrone = linkedDrone;
@@ -2129,7 +2126,11 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     private void EndControl(Entity<CMUDroneControlSessionComponent> drone, string reason)
     {
         RemoveEndControlAction(drone);
-        RestoreDroneSkills(drone);
+        if (!TerminatingOrDeleted(drone.Owner) &&
+            TryComp<CMUDroneAndroidComponent>(drone.Owner, out var skillsDrone))
+        {
+            RefreshDroneSkills((drone.Owner, skillsDrone), includeOperator: false);
+        }
 
         var operatorUid = drone.Comp.Operator;
         var mindId = drone.Comp.MindId;
@@ -2284,20 +2285,24 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         return true;
     }
 
-    private void RefreshDroneSkills(Entity<CMUDroneControlSessionComponent> drone)
+    private void RefreshDroneSkills(Entity<CMUDroneAndroidComponent> drone, bool includeOperator = true)
     {
-        SnapshotDroneSkills(drone);
+        // Keep the unmodified frame skills across module swaps and control sessions.
+        drone.Comp.BaseSkills ??= TryComp<SkillsComponent>(drone.Owner, out var baseSkills)
+            ? new Dictionary<EntProtoId<SkillDefinitionComponent>, int>(baseSkills.Skills)
+            : new Dictionary<EntProtoId<SkillDefinitionComponent>, int>();
 
-        var skills = new Dictionary<EntProtoId<SkillDefinitionComponent>, int>();
+        var skills = new Dictionary<EntProtoId<SkillDefinitionComponent>, int>(drone.Comp.BaseSkills);
 
-        if (!TerminatingOrDeleted(drone.Comp.Operator) &&
-            TryComp<SkillsComponent>(drone.Comp.Operator, out var operatorSkills))
+        if (includeOperator &&
+            TryComp<CMUDroneControlSessionComponent>(drone.Owner, out var session) &&
+            !TerminatingOrDeleted(session.Operator) &&
+            TryComp<SkillsComponent>(session.Operator, out var operatorSkills))
         {
             MergeSkills(skills, operatorSkills.Skills);
         }
 
-        if (TryComp<CMUDroneAndroidComponent>(drone.Owner, out var droneComp) &&
-            TryGetInstalledDroneModule((drone.Owner, droneComp), out var module))
+        if (TryGetInstalledDroneModule(drone, out var module))
         {
             MergeSkills(skills, module.Comp.Skills);
         }
@@ -2305,20 +2310,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         _skills.RemoveAllSkills(drone.Owner);
         if (skills.Count > 0)
             _skills.SetSkills(drone.Owner, skills);
-    }
-
-    private void SnapshotDroneSkills(Entity<CMUDroneControlSessionComponent> drone)
-    {
-        if (drone.Comp.SkillsSnapshotTaken)
-            return;
-
-        drone.Comp.SkillsSnapshotTaken = true;
-
-        if (TryComp<SkillsComponent>(drone.Owner, out var previousSkills))
-        {
-            drone.Comp.HadSkills = true;
-            drone.Comp.PreviousSkills = new Dictionary<EntProtoId<SkillDefinitionComponent>, int>(previousSkills.Skills);
-        }
     }
 
     private static void MergeSkills(
@@ -2330,22 +2321,6 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             if (!target.TryGetValue(skill, out var current) || level > current)
                 target[skill] = level;
         }
-    }
-
-    private void RestoreDroneSkills(Entity<CMUDroneControlSessionComponent> drone)
-    {
-        if (TerminatingOrDeleted(drone.Owner))
-            return;
-
-        if (!drone.Comp.HadSkills)
-        {
-            RemCompDeferred<SkillsComponent>(drone.Owner);
-            return;
-        }
-
-        _skills.RemoveAllSkills(drone.Owner);
-        if (drone.Comp.PreviousSkills is { } previous)
-            _skills.SetSkills(drone.Owner, new Dictionary<EntProtoId<SkillDefinitionComponent>, int>(previous));
     }
 
     private bool TryGetActiveSession(EntityUid tablet, out Entity<CMUDroneControlSessionComponent> session)
