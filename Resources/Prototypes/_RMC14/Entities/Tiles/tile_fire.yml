@@ -155,13 +155,6 @@
     intensity: 40
     duration: 45
     maxStacks: 40
-    tileDamage:
-      types:
-      Heat: 1
-    armorMultiplier: 0.9
-    armorWhitelist:
-      components:
-      - Xeno
     burnColor: "#00b8ff"
   - type: TileFire
     id: RMCTileFireBlue
