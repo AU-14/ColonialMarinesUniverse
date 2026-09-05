@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -20,8 +21,14 @@ public sealed partial class DamageableSystem
 
     public DamageModifierSet? GetDamageModifierSet(Entity<DamageableComponent?> entity)
     {
-        if (!_damageableQuery.Resolve(entity, ref entity.Comp, false)
-            || entity.Comp.DamageModifierSetId is not { } proto
+        if (!_damageableQuery.Resolve(entity, ref entity.Comp, false))
+            return null;
+
+        // CMU14: synth resistance belongs to the frame, even if its damageable component was replaced after startup.
+        var modifierSetId = TryComp<SynthComponent>(entity, out var synth)
+            ? synth.NewDamageModifier
+            : entity.Comp.DamageModifierSetId;
+        if (modifierSetId is not { } proto
             || !ProtoMan.Resolve(proto, out var modifierSet)
            )
             return null;

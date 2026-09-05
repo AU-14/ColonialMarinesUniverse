@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared.CMU14.DroneOperator;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -203,6 +204,10 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
     private void OnOrganDamaged(Entity<OrganHealthComponent> ent, ref OrganDamagedEvent args)
     {
         if (!_medicalEnabled || !_organEnabled)
+            return;
+
+        // Drone control cores retain a medical brain slot but cannot suffer biological brain damage.
+        if (HasComp<CMUDroneAndroidComponent>(args.Body) && HasComp<CMUBrainComponent>(ent))
             return;
 
         var total = args.Damage.GetTotal();
