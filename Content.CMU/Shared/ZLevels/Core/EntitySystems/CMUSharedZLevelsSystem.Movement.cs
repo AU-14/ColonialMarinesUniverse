@@ -228,7 +228,8 @@ public abstract partial class CMUSharedZLevelsSystem
 
         var processed = 0;
         _zMovementUpdateQueue.Clear();
-        var query = EntityQueryEnumerator<CMUZPhysicsComponent, CMUZFallingComponent, TransformComponent, PhysicsComponent>();
+        // Enumerators scan the first component's population; only active falling bodies need an update.
+        var query = EntityQueryEnumerator<CMUZFallingComponent, CMUZPhysicsComponent, TransformComponent, PhysicsComponent>();
         while (query.MoveNext(out var uid, out _, out _, out _, out _))
         {
             _zMovementUpdateQueue.Add(uid);
