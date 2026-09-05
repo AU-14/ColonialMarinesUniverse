@@ -251,7 +251,7 @@ public sealed class StructuralScannerOverlay : Overlay
         return false;
     }
 
-    /// <summary>Client-side roof support: an empty/ungenerated tile, or any anchored entity (rock/wall/pillar).</summary>
+    /// <summary>Client-side roof support: an empty/ungenerated tile, or an anchored wall/vertical support.</summary>
     private bool IsSolid(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
     {
         if (_solidTiles.TryGetValue(tile, out var cached))
@@ -261,7 +261,16 @@ public sealed class StructuralScannerOverlay : Overlay
         if (!solid)
         {
             var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
-            solid = anchored.MoveNext(out _);
+            while (anchored.MoveNext(out var uid))
+            {
+                if (_entMan.HasComponent<ZLevelWallSupportComponent>(uid) ||
+                    _entMan.TryGetComponent<StructuralSupportComponent>(uid, out var support) &&
+                    (support.IsVerticalSupport || support.IsAnchor))
+                {
+                    solid = true;
+                    break;
+                }
+            }
         }
 
         _solidTiles[tile] = solid;

@@ -29,8 +29,8 @@ public sealed partial class TileApplierSystem : EntitySystem
 
     private EntityQuery<MapGridComponent> _gridQuery;
     private EntityQuery<CMUZLevelMapComponent> _zMapQuery;
-    private readonly Queue<(EntityUid Grid, Vector2i Tile)> _pendingTileRemovals = new();
-    private readonly HashSet<(EntityUid Grid, Vector2i Tile)> _queuedTileRemovals = new();
+    private readonly Queue<(EntityUid Grid, Vector2i Tile, EntityUid Owner)> _pendingTileRemovals = new();
+    private readonly Dictionary<(EntityUid Grid, Vector2i Tile), EntityUid> _queuedTileRemovals = new();
 
     public override void Initialize()
     {
@@ -39,6 +39,18 @@ public sealed partial class TileApplierSystem : EntitySystem
         _zMapQuery = GetEntityQuery<CMUZLevelMapComponent>();
         SubscribeLocalEvent<TileApplierComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<TileFloorSupportComponent, EntityTerminatingEvent>(OnSupportTerminating);
+        SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
+        SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ =>
+        {
+            _pendingTileRemovals.Clear();
+            _queuedTileRemovals.Clear();
+        });
+    }
+
+    private void OnTileChanged(ref TileChangedEvent args)
+    {
+        foreach (var change in args.Changes)
+            _queuedTileRemovals.Remove((args.Entity, change.GridIndices));
     }
 
     private void OnMapInit(Entity<TileApplierComponent> ent, ref MapInitEvent args)
@@ -50,6 +62,8 @@ public sealed partial class TileApplierSystem : EntitySystem
             _tileDef.TryGetDefinition(ent.Comp.Tile, out var def))
         {
             var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+            // Rebuilding also replaces the claim when the new tile has the same value (and no tile event fires).
+            _queuedTileRemovals.Remove((gridUid, tile));
             _map.SetTile(gridUid, grid, tile, new Tile(def.TileId));
 
             // On an upper z-level the floor needs structural support or it caves in: drop an invisible support
@@ -67,12 +81,12 @@ public sealed partial class TileApplierSystem : EntitySystem
     private void OnSupportTerminating(Entity<TileFloorSupportComponent> ent, ref EntityTerminatingEvent args)
     {
         var xform = Transform(ent);
-        if (xform.GridUid is not { } gridUid || TerminatingOrDeleted(gridUid) || !_gridQuery.TryComp(gridUid, out var grid))
+        if (!xform.Anchored || xform.GridUid is not { } gridUid || TerminatingOrDeleted(gridUid) || !_gridQuery.TryComp(gridUid, out var grid))
             return;
 
         var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
-        if (_queuedTileRemovals.Add((gridUid, tile)))
-            _pendingTileRemovals.Enqueue((gridUid, tile));
+        _queuedTileRemovals[(gridUid, tile)] = ent.Owner;
+        _pendingTileRemovals.Enqueue((gridUid, tile, ent.Owner));
     }
 
     public override void Update(float frameTime)
@@ -85,9 +99,16 @@ public sealed partial class TileApplierSystem : EntitySystem
         for (var i = 0; i < count; i++)
         {
             var pending = _pendingTileRemovals.Dequeue();
-            _queuedTileRemovals.Remove(pending);
+            var cell = (pending.Grid, pending.Tile);
+            if (!_queuedTileRemovals.TryGetValue(cell, out var owner) || owner != pending.Owner)
+                continue;
+
+            _queuedTileRemovals.Remove(cell);
 
             if (TerminatingOrDeleted(pending.Grid) || !_gridQuery.TryComp(pending.Grid, out var grid))
+                continue;
+
+            if (TileHasFloorSupport(pending.Grid, grid, pending.Tile))
                 continue;
 
             _map.SetTile(pending.Grid, grid, pending.Tile, Tile.Empty);
@@ -104,7 +125,7 @@ public sealed partial class TileApplierSystem : EntitySystem
     {
         foreach (var anchored in _map.GetAnchoredEntities(gridUid, grid, tile))
         {
-            if (HasComp<TileFloorSupportComponent>(anchored))
+            if (!TerminatingOrDeleted(anchored) && HasComp<TileFloorSupportComponent>(anchored))
                 return true;
         }
 
