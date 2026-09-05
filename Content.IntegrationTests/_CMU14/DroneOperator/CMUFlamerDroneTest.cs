@@ -15,15 +15,89 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Maths;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.CMU14.DroneOperator;
 
 [TestFixture]
 public sealed class CMUFlamerDroneTest
 {
+    [Test]
+    public async Task ClawEffectsFollowRenderedNozzlesThroughMovementAndCameraTurns()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var map = await pair.CreateTestMap();
+        NetEntity netDrone = default;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var drone = entities.SpawnEntity("CMUFlamerDrone", map.GridCoords);
+            var tank = entities.SpawnEntity("CMUFlamerDroneFuelTank", map.GridCoords);
+            Assert.That(entities.System<ItemSlotsSystem>().TryInsert((drone, null), SharedGunSystem.MagazineSlot, tank, null), Is.True);
+            netDrone = entities.GetNetEntity(drone);
+            pair.Server.PlayerMan.SetAttachedEntity(pair.Player!, drone);
+        });
+        await pair.RunUntilSynced();
+        await pair.Client.WaitAssertion(() =>
+        {
+            var entities = pair.Client.EntMan;
+            var drone = entities.GetEntity(netDrone);
+            var flamer = entities.GetComponent<CMUFlamerDroneComponent>(drone);
+            var transform = entities.System<SharedTransformSystem>();
+            var visuals = entities.System<CMUFlamerDroneVisualizerSystem>();
+            var timing = pair.Client.ResolveDependency<IGameTiming>();
+            var eye = pair.Client.ResolveDependency<IEyeManager>().CurrentEye;
+            var originalCamera = eye.Rotation;
+            try
+            {
+                foreach (var firing in new[] { false, true })
+                foreach (var camera in new[] { 0, 45, 90, 270 })
+                foreach (var facing in new[] { 0, 44, 45, 46, 90, 134, 135, 136, 180, 224, 225, 226, 270, 314, 315, 316 })
+                {
+                    eye.Rotation = Angle.FromDegrees(camera);
+                    var rotation = Angle.FromDegrees(facing);
+                    transform.SetLocalPositionNoLerp(drone, new Vector2(facing / 100f, camera / 100f));
+                    transform.SetWorldRotationNoLerp(drone, rotation);
+                    flamer.FlameUntil = firing ? timing.CurTime + TimeSpan.FromSeconds(1) : TimeSpan.Zero;
+                    visuals.FrameUpdate(0);
+
+                    var direction = SpriteComponent.Layer.GetDirection(RsiDirectionType.Dir4,
+                        (rotation + eye.Rotation).Reduced().FlipPositive());
+                    var nozzles = new[] { flamer.FirstClawOffsets[(int) direction], flamer.SecondClawOffsets[(int) direction] };
+                    var effects = GetClawEffects(entities, drone);
+                    Assert.That(effects, Has.Count.EqualTo(2));
+                    var remaining = nozzles.ToList();
+                    foreach (var effect in effects)
+                    {
+                        var sprite = entities.GetComponent<SpriteComponent>(effect);
+                        Assert.That(sprite.NoRotation, Is.True);
+                        var light = entities.GetComponent<PointLightComponent>(effect);
+                        var origin = transform.GetWorldPosition(effect) - transform.GetWorldPosition(drone);
+                        var particlePosition = eye.Rotation.RotateVec(origin) + sprite.Offset;
+                        var nozzle = remaining.FindIndex(offset => Vector2.Distance(offset, particlePosition) < 0.0001f);
+                        Assert.That(nozzle, Is.GreaterThanOrEqualTo(0),
+                            $"Flame at {particlePosition} missed its nozzle: hull {facing}, camera {camera}, firing {firing}.");
+                        remaining.RemoveAt(nozzle);
+                        var lightPosition = origin + transform.GetWorldRotation(effect).RotateVec(light.Offset);
+                        Assert.That(Vector2.Distance(eye.Rotation.RotateVec(lightPosition), particlePosition), Is.LessThan(0.0001f),
+                            "The flame and its glow must stay on the same nozzle.");
+                        Assert.That(sprite.Scale, Is.EqualTo(new Vector2(firing ? 0.5f : 0.3f)));
+                    }
+                }
+            }
+            finally
+            {
+                eye.Rotation = originalCamera;
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task LoadedFlamerKeepsPilotFlamesWhileIdleAndExtinguishesWhenDisabled()
     {
@@ -186,9 +260,10 @@ public sealed class CMUFlamerDroneTest
             var clientDrone = clientEntities.GetEntity(netDrone);
             clientEntities.System<CMUFlamerDroneVisualizerSystem>().FrameUpdate(0);
             var sprites = clientEntities.System<SpriteSystem>();
+            var transform = clientEntities.System<SharedTransformSystem>();
             var effects = GetClawEffects(clientEntities, clientDrone);
             Assert.That(effects, Has.Count.EqualTo(2), "A real shot must create a welding effect and glow at each claw tip.");
-            var first = effects.Single(uid => clientEntities.GetComponent<SpriteComponent>(uid).Offset.X < 0);
+            var first = effects.Single(uid => EffectOffset(uid).X < 0);
             var second = effects.Single(uid => uid != first);
             foreach (var effect in effects)
             {
@@ -199,20 +274,16 @@ public sealed class CMUFlamerDroneTest
                 Assert.That(light.CastShadows, Is.False, "Brief tip glows must not consume the shadow-light budget.");
                 Assert.That(light.Radius, Is.GreaterThan(0));
                 Assert.That(light.Energy, Is.GreaterThan(0));
+                Assert.That(light.Offset, Is.EqualTo(Vector2.Zero), "The glow must use the same nozzle origin as the particles.");
+                Assert.That(clientEntities.GetComponent<SpriteComponent>(effect).Offset, Is.EqualTo(Vector2.Zero));
             }
-            Assert.That(clientEntities.GetComponent<SpriteComponent>(first).Offset, Is.EqualTo(new Vector2(-1, -9) / 32));
-            Assert.That(clientEntities.GetComponent<PointLightComponent>(first).Offset, Is.EqualTo(new Vector2(-1, -9) / 32));
-            clientEntities.System<SharedTransformSystem>().SetWorldRotation(clientDrone, Direction.East.ToAngle());
+            Assert.That(Vector2.Distance(EffectOffset(first), new Vector2(-1, -9) / 32), Is.LessThan(0.0001f));
+            transform.SetWorldRotation(clientDrone, Direction.East.ToAngle());
             clientEntities.System<CMUFlamerDroneVisualizerSystem>().FrameUpdate(0);
-            Assert.That(clientEntities.GetComponent<SpriteComponent>(first).Offset, Is.EqualTo(new Vector2(4, 12) / 32), "The first effect must follow the upper claw in Side A.");
-            Assert.That(clientEntities.GetComponent<SpriteComponent>(second).Offset, Is.EqualTo(new Vector2(4, 5) / 32), "The second effect must follow the lower claw in Side A.");
-            foreach (var effect in effects)
-            {
-                var worldLightOffset = clientEntities.System<SharedTransformSystem>().GetWorldRotation(effect)
-                    .RotateVec(clientEntities.GetComponent<PointLightComponent>(effect).Offset);
-                Assert.That(Vector2.Distance(worldLightOffset, clientEntities.GetComponent<SpriteComponent>(effect).Offset), Is.LessThan(0.0001f),
-                    "The glow must stay centered on its particles when the UGV turns.");
-            }
+            Assert.That(Vector2.Distance(EffectOffset(first), new Vector2(4, 12) / 32), Is.LessThan(0.0001f), "The first effect must follow the upper claw in Side A.");
+            Assert.That(Vector2.Distance(EffectOffset(second), new Vector2(4, 5) / 32), Is.LessThan(0.0001f), "The second effect must follow the lower claw in Side A.");
+
+            Vector2 EffectOffset(EntityUid effect) => transform.GetWorldPosition(effect) - transform.GetWorldPosition(clientDrone);
         });
         await server.WaitRunTicks(100);
         await server.WaitAssertion(() =>

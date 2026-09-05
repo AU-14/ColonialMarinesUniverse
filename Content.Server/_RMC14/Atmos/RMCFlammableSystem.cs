@@ -63,7 +63,9 @@ public sealed partial class RMCFlammableSystem : SharedRMCFlammableSystem
         if (!Resolve(flammable, ref flammable.Comp, false))
             return;
 
-        if (TryComp<OnFireComponent>(flammable, out var onFire))
+        // Changing stack count must preserve the burning fuel's intensity and duration.
+        if (TryComp<OnFireComponent>(flammable, out var onFire) &&
+            (onFire.Intensity <= 0 || onFire.Duration <= 0))
         {
             onFire.Intensity = 30;
             onFire.Duration = 20;

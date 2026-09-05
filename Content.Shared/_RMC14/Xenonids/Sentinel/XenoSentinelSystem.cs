@@ -81,8 +81,9 @@ public sealed partial class XenoSentinelSystem : EntitySystem
         SubscribeLocalEvent<XenoDrainStingComponent, XenoDrainStingActionEvent>(OnDrainStingAction);
 
         SubscribeLocalEvent<XenoIntoxicatedComponent, ComponentStartup>(OnIntoxicatedStartup);
+        SubscribeLocalEvent<XenoIntoxicatedComponent, ComponentGetState>(OnIntoxicatedGetState);
+        SubscribeLocalEvent<XenoIntoxicatedComponent, ComponentHandleState>(OnIntoxicatedHandleState);
         SubscribeLocalEvent<XenoIntoxicatedComponent, ComponentRemove>(OnIntoxicatedRemove);
-        SubscribeLocalEvent<XenoIntoxicatedComponent, AfterAutoHandleStateEvent>(OnIntoxicatedAfterState);
         SubscribeLocalEvent<XenoIntoxicatedComponent, MobStateChangedEvent>(OnIntoxicatedMobStateChanged);
         SubscribeLocalEvent<XenoIntoxicatedComponent, RejuvenateEvent>(OnIntoxicatedRejuvenate);
         SubscribeLocalEvent<XenoIntoxicatedComponent, RefreshMovementSpeedModifiersEvent>(OnIntoxicatedRefreshSpeed);
@@ -290,11 +291,6 @@ public sealed partial class XenoSentinelSystem : EntitySystem
 
         if (!TerminatingOrDeleted(ent))
             _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
-    }
-
-    private void OnIntoxicatedAfterState(Entity<XenoIntoxicatedComponent> ent, ref AfterAutoHandleStateEvent args)
-    {
-        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private void OnIntoxicatedMobStateChanged(Entity<XenoIntoxicatedComponent> ent, ref MobStateChangedEvent args)

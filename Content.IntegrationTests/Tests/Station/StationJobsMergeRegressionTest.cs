@@ -45,6 +45,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
       components:
       - type: StationJobs
         availableJobs:
+          AU14JobCivilianColonist: [-1, -1]
           AU14JobGOVFORSquadRifleman: [-1, -1]
           AU14JobOPFORSquadRifleman: [-1, -1]
 
@@ -91,6 +92,9 @@ public sealed class StationJobsMergeRegressionTest : GameTest
             _ => new HumanoidCharacterProfile()
                 .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
                 .WithPreferenceUnavailable(PreferenceUnavailableMode.StayInLobby));
+        stayInLobby[dummies[0].UserId] = stayInLobby[dummies[0].UserId].WithJobPriority(ThirdPartyLeader, JobPriority.Low);
+        stayInLobby[dummies[1].UserId] = stayInLobby[dummies[1].UserId].WithJobPriority(ThreatMember, JobPriority.Low);
+        stayInLobby[dummies[2].UserId] = stayInLobby[dummies[2].UserId].WithJobPriority(Govfor, JobPriority.Low);
 
         try
         {
@@ -132,6 +136,8 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                     session => session.UserId,
                     _ => HumanoidCharacterProfile.Random()
                         .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
+                        .WithJobPriority(Govfor, JobPriority.Low)
+                        .WithJobPriority(Opfor, JobPriority.Low)
                         .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
 
                 var firstPass = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
@@ -164,6 +170,52 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                 forced.ForcedJobAssignments.Clear();
                 SetCurrentPreset(ticker, originalCurrentPreset);
             });
+        }
+    }
+
+    [TestCase("ColonyFall")]
+    [TestCase("DistressSignal")]
+    [TestCase("ForceOnForce")]
+    public async Task NeverBlocksGamemodeOverflow(string presetId)
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var preset = SProtoMan.Index<GamePresetPrototype>(presetId);
+        var originalPreset = ticker.CurrentPreset;
+        var station = EntityUid.Invalid;
+        await Server.WaitPost(() =>
+            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map));
+        var dummies = await Server.AddDummySessions(1);
+        var player = dummies[0].UserId;
+        var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+        {
+            [player] = new HumanoidCharacterProfile()
+                .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow),
+        };
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, preset);
+                var blocked = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
+                jobs.AssignOverflowJobs(ref blocked, profiles.Keys, profiles, [station]);
+                Assert.That(blocked[player], Is.EqualTo(((ProtoId<JobPrototype>?) null, EntityUid.Invalid)),
+                    "Gamemode overflow must not override Never for colonist or either faction's rifleman.");
+
+                profiles[player] = profiles[player].WithJobPriority(Opfor, JobPriority.Low);
+                var accepted = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
+                jobs.AssignOverflowJobs(ref accepted, profiles.Keys, profiles, [station]);
+                Assert.That(accepted[player], Is.EqualTo(((ProtoId<JobPrototype>?) Opfor, station)),
+                    "An accepted overflow role must remain available when the mode's usual role is Never.");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SetCurrentPreset(ticker, originalPreset));
         }
     }
 

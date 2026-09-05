@@ -4,6 +4,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
+using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.DroneOperator;
@@ -18,6 +19,12 @@ public sealed class CMUCombatDroneTurretSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private TimeSpan _nextAim;
+
+    public override void Initialize()
+    {
+        UpdatesAfter.Add(typeof(TransformSystem));
+        UpdatesAfter.Add(typeof(EyeSystem));
+    }
 
     public override void Update(float frameTime)
     {
@@ -46,6 +53,9 @@ public sealed class CMUCombatDroneTurretSystem : EntitySystem
             if (drone.TurretVisual is not { } turret || TerminatingOrDeleted(turret))
                 continue;
 
+            // Only the sprite offset positions the mount; the independently aiming entity
+            // must retain the hull's origin even if its replicated position has drifted.
+            _transform.SetLocalPositionNoLerp(turret, Vector2.Zero);
             var hullDirection = DirectionIndex(_transform.GetWorldRotation(uid) + _eye.CurrentEye.Rotation);
             _sprite.SetOffset(turret, drone.TurretMountOffsets[hullDirection]);
         }
@@ -97,11 +107,7 @@ public sealed class CMUCombatDroneTurretSystem : EntitySystem
         _transform.SetWorldPosition((ent, transform), position);
     }
 
-    private static int DirectionIndex(Angle angle) => angle.GetCardinalDir() switch
-    {
-        Direction.North => 1,
-        Direction.East => 2,
-        Direction.West => 3,
-        _ => 0,
-    };
+    // Use the renderer's four-way direction bias, including at diagonal boundaries.
+    private static int DirectionIndex(Angle angle) =>
+        (int) SpriteComponent.Layer.GetDirection(RsiDirectionType.Dir4, angle.Reduced().FlipPositive());
 }

@@ -369,14 +369,20 @@ public sealed partial class MobThresholdSystem : EntitySystem
         MobThresholdsComponent? thresholds = null,
         EntityUid? origin = null)
     {
-        if (!Resolve(target, ref mobState, ref thresholds) || mobState.CurrentState == newState)
+        if (!Resolve(target, ref mobState, ref thresholds))
             return;
 
-        if (mobState.CurrentState != MobState.Dead || thresholds.AllowRevives)
+        // RMC14: defibrillation can set the mob state directly. Refresh the cached threshold
+        // even when it already matches the mob state, or a later update can restore death.
+        if ((mobState.CurrentState != MobState.Dead || thresholds.AllowRevives) &&
+            thresholds.CurrentThresholdState != newState)
         {
             thresholds.CurrentThresholdState = newState;
             Dirty(target, thresholds);
         }
+
+        if (mobState.CurrentState == newState)
+            return;
 
         _mobStateSystem.UpdateMobState(target, mobState, origin);
     }
@@ -486,7 +492,8 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
     private void OnUpdateMobState(EntityUid target, MobThresholdsComponent component, ref UpdateMobStateEvent args)
     {
-        if (!component.AllowRevives && component.CurrentThresholdState == MobState.Dead)
+        // RMC14: only an explicit revival may leave death, including deaths imposed by organs.
+        if (!component.AllowRevives && args.Component.CurrentState == MobState.Dead)
         {
             args.State = MobState.Dead;
         }

@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Water;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
+using Content.Shared.Alert;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Damage.Systems;
@@ -22,6 +23,28 @@ namespace Content.IntegrationTests.Tests.Atmos;
 [TestOf(typeof(RMCFlammableSystem))]
 public sealed class FlammableLifecycleTest : GameTest
 {
+    [TestCase("CMMobHuman")]
+    [TestCase("CMXenoDrone")]
+    public async Task RmcFireKeepsBurningWithoutSimulatedAtmosphere(string prototype)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var target = SEntMan.SpawnEntity(prototype, map.GridCoords);
+            IgniteRmc(target, 10, 10, 10);
+
+            Server.System<ServerFlammableSystem>().Update(0f);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.GetComponent<FlammableComponent>(target).OnFire, Is.True,
+                    "RMC fire must not go out on the first update when the map has no simulated atmosphere");
+                Assert.That(TotalDamage(target), Is.GreaterThan(0),
+                    "RMC incendiary fire must deal damage without simulated oxygen");
+            });
+        });
+    }
+
     [Test]
     public async Task IdleUpdatesReuseSnapshotStorage()
     {
@@ -228,7 +251,7 @@ public sealed class FlammableLifecycleTest : GameTest
 
             IgniteRmc(immune, 10, 10, 10);
             IgniteRmc(bypass, 10, 10, 10);
-            IgniteRmc(oxygenless, 10, 10, 10);
+            IgniteOrdinary(oxygenless, 10);
         });
 
         await Pair.RunTicksSync(1);
@@ -337,6 +360,44 @@ public sealed class FlammableLifecycleTest : GameTest
             {
                 SEntMan.ComponentRemoved -= OnComponentRemoved;
             }
+        });
+    }
+
+    [Test]
+    public async Task AcidBurnKeepsStopDropRollAlertUntilResisted()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid human = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            PrepareBurnable(human);
+            SEntMan.EnsureComponent<UserAcidedComponent>(human);
+
+            var alerts = Server.System<AlertsSystem>();
+            Assert.That(alerts.IsShowingAlert(human, "Fire"), Is.True,
+                "acid burns must show the stop-drop-roll alert");
+            Assert.That(SEntMan.GetComponent<FlammableComponent>(human).OnFire, Is.False,
+                "this regression covers acid burns without ordinary fire");
+
+            Server.System<ServerFlammableSystem>().Update(0f);
+
+            Assert.That(alerts.IsShowingAlert(human, "Fire"), Is.True,
+                "the fire update must keep the alert available while acid is still burning");
+            Assert.That(alerts.ActivateAlert(human, SProtoMan.Index(SEntMan.GetComponent<FlammableComponent>(human).FireAlert)), Is.True);
+        });
+
+        await Pair.RunTicksSync(1);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.HasComponent<UserAcidedComponent>(human), Is.False,
+                    "stop-drop-roll must remove the acid burn");
+                Assert.That(Server.System<AlertsSystem>().IsShowingAlert(human, "Fire"), Is.False);
+            });
         });
     }
 
