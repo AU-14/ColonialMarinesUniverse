@@ -21,6 +21,13 @@ public sealed partial class CrawlerComponent : Component
     public float KnockdownDamageThreshold = 5f;
 
     /// <summary>
+    /// Whether damage delays recovery and interrupts the standing-up action.
+    /// RMC mobs recover from knockdown without damage restarting their recovery.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool DamageInterruptsStanding = true;
+
+    /// <summary>
     /// Time it takes us to stand up
     /// </summary>
     [DataField, AutoNetworkedField]
