@@ -930,14 +930,12 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
         if (!entity.Comp.StoredItems.ContainsKey(args.Entity))
         {
-            if (!CMInventoryExtensions.TryGetFirst(entity, args.Entity, out var location))
+            // CMU14: Commit the same placement policy that CanInsert accepted, including rotation.
+            if (!TryAssignInsertedStorageLocation(entity, args.Entity))
             {
-                ContainerSystem.Remove(args.Entity, args.Container, force: true);
+                QueueInvalidStorageInsertion(entity, args.Entity);
                 return;
             }
-
-            entity.Comp.StoredItems[args.Entity] = location;
-            AddOccupiedEntity(entity, args.Entity, location);
         }
 
         UpdateAppearance((entity, entity.Comp, null));
