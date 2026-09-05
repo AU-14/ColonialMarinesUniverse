@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
 
 namespace Content.Client.CMU14.ZLevels.Lighting;
 
@@ -17,6 +18,11 @@ public sealed partial class CMUProjectedLightComponent : Component
     /// Used as the cache key for the source-to-projected mapping.
     /// </summary>
     public EntityUid SourceLight;
+
+    /// <summary>The grid and tile owning the real floor aperture. World position is mutable data.</summary>
+    public EntityUid PortalGrid;
+
+    public Vector2i PortalTile;
 
     /// <summary>
     /// The world-space center of the opening tile on the receiving map
