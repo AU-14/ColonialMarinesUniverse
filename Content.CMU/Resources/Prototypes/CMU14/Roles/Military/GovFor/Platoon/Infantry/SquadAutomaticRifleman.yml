@@ -212,7 +212,7 @@
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
   roundForce: WYPMC
-  name: PMC Smartgun Operator
+  name: au14-job-name-wypmc-smartgun-operator
   spawnMenuRoleName: Automatic Rifleman (WYPMC)
   ranks:
     AU14RankWeYuSeniorOperator:

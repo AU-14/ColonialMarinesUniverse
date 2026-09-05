@@ -238,7 +238,7 @@
   - type: PaperLabelType
     paperType: Invoice
   - type: PaperVisuals
-    backgroundImagePath: "/Textures/Interface/Paper/paper_bkg.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundModulate: "#9ef5ff"
     contentImageModulate: "#9ef5ff"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0

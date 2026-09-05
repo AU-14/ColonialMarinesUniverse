@@ -355,7 +355,7 @@
   categories: [ HideSpawnMenu ]
   components:
     - type: Label
-      currentLabel: reagent-name-platinum
+      currentLabel: reagent-name-rmc-platinum
     - type: Solution
       id: beaker
       solution:

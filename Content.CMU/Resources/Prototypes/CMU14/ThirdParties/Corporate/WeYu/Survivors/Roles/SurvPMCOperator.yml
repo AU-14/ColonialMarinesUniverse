@@ -57,7 +57,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: PMC Contractor
+    name: au14-job-name-wypmc-contractor
     description: au14-wysurv-description
     reregister: false
     job: AU14JobWYSurvPMC

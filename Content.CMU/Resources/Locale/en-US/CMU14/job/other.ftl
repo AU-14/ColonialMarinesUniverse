@@ -264,6 +264,10 @@ au14-pmcparty-greeting = You are a part of Weyland-Yutani PMC party!
 
     Weyland-Yutani - building better worlds.
 au14-job-name-wypmc = Private Military Contractor
+au14-job-name-wypmc-contractor = PMC Contractor
+au14-job-name-wypmc-leader = PMC Leader
+au14-job-name-wypmc-smartgun-operator = PMC Smartgun Operator
+au14-job-name-wypmc-sniper = PMC Sniper
 au14-job-name-wypmc-engineer = PMC Combat Engineer
 
 au14-ipie-lawyer-description = You are Intelectual Property Infringement Enforcement Lawyer of Weyland-Yutani Corporation. Defend Corporation's rights!
