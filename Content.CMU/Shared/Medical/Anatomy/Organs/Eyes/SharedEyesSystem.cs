@@ -3,6 +3,7 @@ using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.Body.Events;
 using Content.Shared.Eye.Blinding.Systems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
 
@@ -10,6 +11,7 @@ public abstract partial class SharedEyesSystem : EntitySystem
 {
     [Dependency] protected BlindableSystem Blindable = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
+    [Dependency] private BlurryVisionSystem _blur = default!;
 
     public override void Initialize()
     {
@@ -20,6 +22,41 @@ public abstract partial class SharedEyesSystem : EntitySystem
         SubscribeLocalEvent<CMUOrganBlindnessComponent, ComponentStartup>(OnOrganBlindnessStartup);
         SubscribeLocalEvent<CMUOrganBlindnessComponent, ComponentShutdown>(OnOrganBlindnessShutdown);
         SubscribeLocalEvent<CMUOrganBlindnessComponent, CanSeeAttemptEvent>(OnOrganBlindnessCanSee);
+        SubscribeLocalEvent<CMUOrganVisionImpairmentComponent, GetBlurEvent>(OnGetBlur,
+            after: [typeof(CMUBlurDelaySystem)]);
+        SubscribeLocalEvent<CMUOrganVisionImpairmentComponent, AfterAutoHandleStateEvent>(OnVisionState);
+        SubscribeLocalEvent<CMUOrganVisionImpairmentComponent, ComponentRemove>(OnVisionRemoved);
+    }
+
+    private void OnGetBlur(Entity<CMUOrganVisionImpairmentComponent> ent, ref GetBlurEvent args)
+    {
+        if (ent.Comp.LifeStage <= ComponentLifeStage.Running)
+            args.Blur = MathF.Max(args.Blur, ent.Comp.Magnitude);
+    }
+
+    private void OnVisionState(Entity<CMUOrganVisionImpairmentComponent> ent, ref AfterAutoHandleStateEvent args)
+        => _blur.UpdateBlurMagnitude(ent.Owner);
+
+    private void OnVisionRemoved(Entity<CMUOrganVisionImpairmentComponent> ent, ref ComponentRemove args)
+    {
+        if (!TerminatingOrDeleted(ent.Owner))
+            _blur.UpdateBlurMagnitude(ent.Owner);
+    }
+
+    protected void SetOrganBlur(EntityUid body, float magnitude)
+    {
+        if (magnitude <= 0)
+        {
+            RemComp<CMUOrganVisionImpairmentComponent>(body);
+            return;
+        }
+
+        var impairment = EnsureComp<CMUOrganVisionImpairmentComponent>(body);
+        if (impairment.Magnitude == magnitude)
+            return;
+        impairment.Magnitude = magnitude;
+        Dirty(body, impairment);
+        _blur.UpdateBlurMagnitude(body);
     }
 
     private void OnStageChanged(Entity<EyesComponent> ent, ref OrganStageChangedEvent args)

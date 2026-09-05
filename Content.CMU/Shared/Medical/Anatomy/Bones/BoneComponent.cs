@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Medical.Anatomy.Bones;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedBoneSystem))]
 public sealed partial class BoneComponent : Component
 {
@@ -36,7 +36,4 @@ public sealed partial class BoneComponent : Component
 
     [DataField]
     public bool BlocksFullHeal = true;
-
-    [AutoPausedField]
-    public TimeSpan NextIntegrityTick;
 }

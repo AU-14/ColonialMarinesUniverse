@@ -41,8 +41,6 @@ using Robust.Shared.GameObjects;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
-using Content.Shared.Eye.Blinding.Components;
-using Content.Shared.Eye.Blinding.Systems;
 
 namespace Content.Server.CMU14.Xenomorphs.Pathogen.Walker;
 
@@ -62,7 +60,6 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private readonly LanguageSystem _language = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly BlindableSystem _blindable = default!;
     [Dependency] private readonly HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
@@ -111,12 +108,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         }
 
         RemComp<CMUOrganBlindnessComponent>(target);
-        if (TryComp<CMUEyeDamageContributionComponent>(target, out var eyeTracker))
-        {
-            if (TryComp<BlindableComponent>(target, out var blindable))
-                _blindable.AdjustEyeDamage((target, blindable), -eyeTracker.Applied);
-            eyeTracker.Applied = 0;
-        }
+        RemComp<CMUOrganVisionImpairmentComponent>(target);
 
         _faction.AddFaction(target, WalkerFaction);
         _language.SetExclusiveLanguage(target, "Pathogen");

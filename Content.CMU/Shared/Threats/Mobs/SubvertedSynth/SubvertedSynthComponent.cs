@@ -1,3 +1,5 @@
+using Content.Shared.CMU14.Threats.Mobs.CLF;
+using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
@@ -16,6 +18,16 @@ public sealed partial class SubvertedSynthComponent : Component
 
     [DataField]
     public ProtoId<NpcFactionPrototype> Faction = "CLF";
+
+    // Runtime provenance of this key's overlay. Snapshots contain only the
+    // component's serialized data, and applied handles identify exactly which
+    // live instances reset may retire. These are not network payloads.
+    public Dictionary<Type, (Component Applied, Component? Previous)> ComponentOverlays = new();
+
+    // Non-null only when this key introduced the faction/member, rather than
+    // encountering an independently existing membership or faction icon.
+    public NpcFactionMemberComponent? AddedFactionTo;
+    public CLFMemberComponent? AddedClfMember;
 
     public override bool SessionSpecific => true;
 }

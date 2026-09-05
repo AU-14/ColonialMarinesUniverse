@@ -107,6 +107,14 @@
     exclusiveAntag: true
     roleType: TeamAntagonist
 
+# The subversion key uses the existing cultist policy, with a distinct ownership
+# marker so an ordinary reset preserves roles acquired independently of the key.
+- type: entity
+  parent: MindRoleCultist
+  id: MindRoleXenoHackedSynth
+  components:
+  - type: SubvertedSynthRole
+
 - type: antag
   id: CultistRole
   name: roles-antag-cultist-name

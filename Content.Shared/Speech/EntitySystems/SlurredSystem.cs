@@ -1,4 +1,5 @@
 using System.Text;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Speech.Components;
 using Content.Shared.StatusEffectNew;
@@ -16,13 +17,34 @@ public sealed partial class SlurredSystem : RelayAccentSystem<SlurredAccentCompo
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+        // Keep the brain-owned source at the same ordering position as a direct
+        // SlurredAccent, including systems that explicitly run before SlurredSystem.
+        SubscribeLocalEvent<CMUBrainSpeechImpairmentComponent, AccentGetEvent>(OnBrainAccent,
+            before: AccentBefore, after: AccentAfter);
+    }
+
+    private void OnBrainAccent(Entity<CMUBrainSpeechImpairmentComponent> ent, ref AccentGetEvent args)
+    {
+        if (HasComp<SlurredAccentComponent>(ent.Owner))
+            return;
+
+        args.Message = Accentuate(args.Message, ent.Owner, 1f);
+    }
+
     public override string Accentuate(string message, Entity<SlurredAccentComponent>? ent = null)
     {
         if (ent == null)
             return message;
 
-        var scale = GetProbabilityScale(ent.Value);
-        var random = SharedRandomExtensions.PredictedRandom(_timing, GetNetEntity(ent.Value));
+        return Accentuate(message, ent.Value.Owner, GetProbabilityScale(ent.Value));
+    }
+
+    private string Accentuate(string message, EntityUid source, float scale)
+    {
+        var random = SharedRandomExtensions.PredictedRandom(_timing, GetNetEntity(source));
         var sb = new StringBuilder();
 
         // This is pretty much ported from TG.

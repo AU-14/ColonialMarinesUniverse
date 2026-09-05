@@ -11,6 +11,7 @@ using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
 using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -31,6 +32,11 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
     [Dependency] protected IPrototypeManager Proto = default!;
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
+    [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
+    [Dependency] private CMStasisBagSystem _stasis = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+
+    private static readonly CMUMedicalWorkKey PreservationExpiry = new("organ-preservation-expiry");
 
     private const float RegenScanInterval = 1f;
     private const float CompoundOrganPassThrough = 0.30f;
@@ -55,6 +61,11 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         SubscribeLocalEvent<BodyPartHealthComponent, BodyPartDamagedEvent>(OnPartDamaged, after: new[] { typeof(SharedBoneSystem) });
         SubscribeLocalEvent<OrganHealthComponent, OrganDamagedEvent>(OnOrganDamaged);
         SubscribeLocalEvent<OrganHealthComponent, ComponentStartup>(OnOrganStartup);
+        SubscribeLocalEvent<OrganHealthComponent, ComponentShutdown>(OnOrganShutdown);
+        SubscribeLocalEvent<OrganHealthComponent, ComponentInit>(OnOrganInit);
+        SubscribeLocalEvent<OrganStasisComponent, CMUMedicalWorkDueEvent>(OnPreservationExpired);
+        SubscribeLocalEvent<OrganStasisComponent, ComponentRemove>(OnPreservationRemoved);
+        SubscribeLocalEvent<OrganStasisComponent, ComponentInit>(OnPreservationInit);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.OrganEnabled, v => _organEnabled = v, true);
@@ -65,7 +76,24 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
     private void OnOrganStartup(Entity<OrganHealthComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.NextRegenTick = Timing.CurTime + TimeSpan.FromSeconds(10);
+        PublishHealthLifecycle(ent.Owner);
     }
+
+    private void OnOrganShutdown(Entity<OrganHealthComponent> ent, ref ComponentShutdown args)
+        => PublishHealthLifecycle(ent.Owner);
+
+    private void PublishHealthLifecycle(EntityUid organ)
+    {
+        if (!TryComp<OrganComponent>(organ, out var component))
+            return;
+        var ev = new OrganHealthLifecycleChangedEvent(organ, component.Body);
+        RaiseLocalEvent(ref ev);
+    }
+
+    // Initialize the health projection before any organ component's Startup reads
+    // it. Subscription ordering cannot order two different component lifecycles.
+    private void OnOrganInit(Entity<OrganHealthComponent> ent, ref ComponentInit args)
+        => ent.Comp.Stage = ComputeStage(ent.Comp);
 
     private void OnPartDamaged(Entity<BodyPartHealthComponent> ent, ref BodyPartDamagedEvent args)
     {
@@ -246,8 +274,30 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
     public void SetStasisExpire(EntityUid organ, TimeSpan expireAt)
     {
         var stasis = EnsureComp<OrganStasisComponent>(organ);
-        stasis.ExpireAt = expireAt;
+        stasis.ExpireAt = expireAt - _metadata.GetPauseTime(organ);
         Dirty(organ, stasis);
+        _scheduler.Schedule(organ, PreservationExpiry, expireAt);
+    }
+
+    private void OnPreservationRemoved(Entity<OrganStasisComponent> ent, ref ComponentRemove args)
+        => _scheduler.Cancel(ent.Owner, PreservationExpiry);
+
+    private void OnPreservationInit(Entity<OrganStasisComponent> ent, ref ComponentInit args)
+        => _scheduler.Schedule(ent.Owner, PreservationExpiry, ent.Comp.ExpireAt + _metadata.GetPauseTime(ent.Owner));
+
+    private void OnPreservationExpired(Entity<OrganStasisComponent> ent, ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != PreservationExpiry || ent.Comp.ExpireAt > Timing.CurTime ||
+            !TryComp<OrganHealthComponent>(ent, out var health))
+            return;
+
+        // A stale preservation deadline must never damage a transplanted patient.
+        if (TryComp<OrganComponent>(ent, out var organ) && organ.Body != null)
+            return;
+
+        health.Current = FixedPoint2.Zero;
+        health.Stage = ComputeStage(health);
+        Dirty(ent.Owner, health);
     }
 
     public void HealOrgan(Entity<OrganHealthComponent?> ent, EntityUid body, FixedPoint2 amount)
@@ -419,7 +469,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         _regenScanAccumulator += frameTime;
         if (_regenScanAccumulator < RegenScanInterval)
             return;
-        _regenScanAccumulator = 0f;
+        _regenScanAccumulator %= RegenScanInterval;
 
         var now = Timing.CurTime;
         var globalMult = _organPassiveHealMultiplier;
@@ -430,6 +480,12 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         {
             if (organ.Body is not { } body || Unrevivable.IsUnrevivable(body))
                 continue;
+
+            if (!_stasis.CanBodyMetabolize(body))
+            {
+                oh.NextRegenTick = now + TimeSpan.FromSeconds(10);
+                continue;
+            }
 
             if (oh.Stage.IsAtLeast(OrganDamageStage.Damaged))
                 continue;
@@ -448,8 +504,8 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
                 continue;
             oh.NextRegenTick = now + TimeSpan.FromSeconds(10);
 
-            oh.Current = FixedPoint2.Min(ceiling, oh.Current + oh.NativeRegenPerTick * globalMult);
-            Dirty(uid, oh);
+            var amount = FixedPoint2.Min(ceiling - oh.Current, oh.NativeRegenPerTick * globalMult);
+            HealOrgan((uid, oh), body, amount);
         }
     }
 }

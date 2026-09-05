@@ -6,15 +6,21 @@ namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
 /// <summary>
 ///     CMU-prefixed to avoid clashing with vanilla SS14's <c>StomachComponent</c>.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedStomachSystem))]
 public sealed partial class CMUStomachComponent : Component
 {
     [DataField, AutoNetworkedField]
     public float DigestionMultiplier = 1.0f;
 
-    [DataField, AutoPausedField]
+    [DataField]
     public TimeSpan NextVomitCheck;
+
+    public uint PhysiologyRevision;
+    [DataField] public TimeSpan LastPhysiologyUpdate;
+    [DataField] public TimeSpan ActiveCheckElapsed;
+    [DataField] public OrganDamageStage PhysiologyStage;
+    [DataField] public bool PhysiologyActive;
 
     [DataField]
     public TimeSpan VomitCheckInterval = TimeSpan.FromSeconds(10);

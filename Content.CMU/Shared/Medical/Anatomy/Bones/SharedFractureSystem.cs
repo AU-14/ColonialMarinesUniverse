@@ -12,7 +12,7 @@ public abstract partial class SharedFractureSystem : EntitySystem
 
     /// <summary>
     ///     Pass <see cref="FractureSeverity.None"/> to clear the fracture entirely.
-    ///     Without <paramref name="forceUpgrade"/> a request that doesn't strictly
+    ///     With <paramref name="forceUpgrade"/> a request that doesn't strictly
     ///     raise the tier is ignored — that keeps the bone-spawn path's
     ///     "compute then assign" cycle from accidentally downgrading a Compound
     ///     to a Simple on a small subsequent hit. Surgical downgrades opt in by
@@ -25,16 +25,19 @@ public abstract partial class SharedFractureSystem : EntitySystem
 
         if (newSev == FractureSeverity.None)
         {
-            RaiseSeverityChanged(ent.Owner, current, FractureSeverity.None);
+            ent.Comp.Severity = FractureSeverity.None;
+            ent.Comp.IsBleeding = false;
             RemComp<FractureComponent>(ent);
+            RaiseSeverityChanged(ent.Owner, current, FractureSeverity.None);
             return;
         }
 
-        if (forceUpgrade && newSev <= current)
+        if (newSev == current || forceUpgrade && newSev < current)
             return;
 
         ent.Comp.Severity = newSev;
-        ent.Comp.AppearedAt = Timing.CurTime;
+        if (current == FractureSeverity.None)
+            ent.Comp.AppearedAt = Timing.CurTime;
         ent.Comp.IsBleeding = FractureProfile.Get(newSev).BloodlossPerSecond > 0;
         Dirty(ent);
         RaiseSeverityChanged(ent.Owner, current, newSev);

@@ -13,12 +13,6 @@ public sealed partial class BoneSystem : SharedBoneSystem
     private static readonly SoundSpecifier BoneBreakSound =
         new SoundCollectionSpecifier("CMUBoneBreakSounds");
 
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-        UpdateServer(frameTime);
-    }
-
     public override void Initialize()
     {
         base.Initialize();

@@ -10,6 +10,13 @@ public sealed partial class InitialBodySystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private OrganRelationSystem _organRelation = default!;
 
+    /// <summary>
+    /// Whether the body's initial anatomy calls for this organ category, even if
+    /// the live organ has since been removed or replaced.
+    /// </summary>
+    public bool HasInitialOrgan(EntityUid body, ProtoId<OrganCategoryPrototype> category)
+        => TryComp<InitialBodyComponent>(body, out var initial) && initial.Organs.ContainsKey(category);
+
     public override void Initialize()
     {
         base.Initialize();

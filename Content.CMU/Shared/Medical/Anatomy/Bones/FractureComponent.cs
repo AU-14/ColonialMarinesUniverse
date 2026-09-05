@@ -8,7 +8,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.Bones;
 public sealed partial class FractureComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public FractureSeverity Severity = FractureSeverity.Hairline;
+    public FractureSeverity Severity = FractureSeverity.None;
 
     /// <summary>
     ///     <see cref="AutoPausedField"/> so the value stays meaningful across round pauses.

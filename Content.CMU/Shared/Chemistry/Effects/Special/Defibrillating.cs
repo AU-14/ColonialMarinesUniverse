@@ -48,7 +48,7 @@ public sealed partial class Defibrillating : RMCChemicalEffect
         if (system.TryGetMobState(args.TargetEntity, out var mobState) &&
             mobState.CurrentState == MobState.Dead)
         {
-            TickDead(system, damageable, potency, args, mobState);
+            TickDead(system, potency, args);
             return;
         }
 
@@ -64,20 +64,18 @@ public sealed partial class Defibrillating : RMCChemicalEffect
         system.Heart.TryRestartHeart((heart, heartComp));
     }
 
-    private static void TickDead(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args,
-        MobStateComponent mobState)
+    private static void TickDead(RMCChemicalEffectSystem system, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var target = args.TargetEntity;
         if (system.HasUnrevivable(target) ||
-            !system.TryGetMobThresholds(target, out var thresholds) ||
-            !system.TryGetDamageable(target, out var damageComponent))
+            !system.TryGetMobThresholds(target, out _) ||
+            !system.TryGetDamageable(target, out _))
         {
             return;
         }
 
-        // A corpse can remain in the heart system's "beating" transition state until its next
-        // periodic pulse update. Chemical pacing must not silently fail during that window.
-        if (!system.CanChemicallyDefibrillate(target))
+        var attempt = system.Defibrillator.PrepareRevival(target, allowBeatingHeart: true);
+        if (attempt.Cancelled)
             return;
 
         var rmcDamage = system.RMCDamageable;
@@ -87,18 +85,11 @@ public sealed partial class Defibrillating : RMCChemicalEffect
         heal = rmcDamage.DistributeHealingCached(target, ToxinGroup, perGroup, heal);
         heal = rmcDamage.DistributeHealingCached(target, GeneticGroup, perGroup, heal);
         heal = rmcDamage.DistributeHealingCached(target, AirlossGroup, FixedPoint2.Max(perGroup, 200), heal);
-        system.Defibrillator.TryApplyElectrogenetic(target, ref heal);
-        damageable.TryChangeDamage(target, heal, true, interruptsDoAfters: false);
-
-        var thresholdSystem = system.MobThreshold;
-        if (!thresholdSystem.TryGetThresholdForState(target, MobState.Dead, out var deadThreshold) ||
-            damageable.GetTotalDamage((target, damageComponent)) >= deadThreshold)
+        if (!system.Defibrillator.TryRevive(target, attempt, heal, target, interruptsDoAfters: false))
         {
             return;
         }
-
-        system.MobState.ChangeMobState(target, MobState.Critical, mobState, target);
-        thresholdSystem.VerifyThresholds(target, thresholds, mobState, damageComponent);
+        system.ChemicalPropertyStatus.ApplyCardiacPacing(target, args.ActualPotency, args.Reagent.ID);
     }
 
     protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)

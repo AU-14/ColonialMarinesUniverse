@@ -72,3 +72,11 @@ public sealed partial class CMUBrainVisionImpairmentComponent : Component
     [DataField, AutoNetworkedField]
     public float Magnitude;
 }
+
+/// <summary>
+/// Speech impairment owned by attached damaged brains. It is not a slur status:
+/// an indefinite brain symptom must not increase independent timed slur strength.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+[Access(typeof(SharedBrainSystem))]
+public sealed partial class CMUBrainSpeechImpairmentComponent : Component;
