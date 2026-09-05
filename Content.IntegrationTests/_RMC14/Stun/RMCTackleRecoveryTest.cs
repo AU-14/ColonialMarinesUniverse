@@ -1,13 +1,17 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Gravity;
 using Content.Server.Light.EntitySystems;
 using Content.Server.Stunnable;
 using Content.Shared._RMC14.Tackle;
 using Content.Shared._RMC14.Weapons.Melee;
+using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
+using Content.Shared.Gravity;
 using Content.Shared.Light.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Standing;
@@ -109,16 +113,19 @@ public sealed class RMCTackleRecoveryTest : GameTest
         }
     }
 
-    [Test]
-    public async Task DisarmAttackReachesTackle()
+    [TestCase("CMMobHuman")]
+    [TestCase("CMMobSmallHostMonkey")]
+    public async Task DisarmAttackReachesTackle(string targetPrototype)
     {
         var map = await Pair.CreateTestMap();
         EntityUid xeno = default;
         EntityUid target = default;
         await Server.WaitAssertion(() =>
         {
+            Server.System<GravitySystem>().EnableGravity(map.MapUid,
+                SEntMan.EnsureComponent<GravityComponent>(map.MapUid));
             xeno = SSpawnAtPosition("CMXenoRunner", map.GridCoords);
-            target = SSpawnAtPosition("CMMobHuman", map.GridCoords);
+            target = SSpawnAtPosition(targetPrototype, map.GridCoords);
             Server.System<SharedCombatModeSystem>().SetInCombatMode(xeno, true);
         });
         var tackled = false;
@@ -135,7 +142,34 @@ public sealed class RMCTackleRecoveryTest : GameTest
             });
             await Pair.RunSeconds(1);
         }
-        Assert.That(tackled, Is.True, "six normal disarm attacks must tackle the human");
+        Assert.That(tackled, Is.True, "six normal disarm attacks must tackle the target");
+    }
+
+    [TestCase("CMMobHuman")]
+    [TestCase("CMMobSmallHostMonkey")]
+    public async Task RunnerLeapKnocksDownTarget(string targetPrototype)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid target = default;
+        await Server.WaitAssertion(() =>
+        {
+            Server.System<GravitySystem>().EnableGravity(map.MapUid,
+                SEntMan.EnsureComponent<GravityComponent>(map.MapUid));
+            var xeno = SSpawnAtPosition("CMXenoRunner", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+            target = SSpawnAtPosition(targetPrototype, map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+            var leap = new XenoLeapDoAfterEvent(SEntMan.GetNetCoordinates(map.GridCoords.Offset(new Vector2(2.5f, 0.5f))));
+            leap.DoAfter = new DoAfter(0,
+                new DoAfterArgs(SEntMan, xeno, TimeSpan.Zero, leap, xeno), TimeSpan.Zero);
+            SEntMan.EventBus.RaiseLocalEvent(xeno, leap);
+            Assert.That(SEntMan.HasComponent<XenoLeapingComponent>(xeno), Is.True);
+        });
+        await Pair.RunSeconds(0.3f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.HasComponent<LeapIncapacitatedComponent>(target), Is.True);
+            Assert.That(SEntMan.HasComponent<StunnedComponent>(target), Is.True);
+            Assert.That(Server.System<StandingStateSystem>().IsDown(target), Is.True);
+        });
     }
 
     [TestCase("CMXenoRunner")]
