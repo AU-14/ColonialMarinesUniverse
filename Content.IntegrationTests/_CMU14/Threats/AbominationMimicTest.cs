@@ -5,6 +5,7 @@ using Content.Server._RMC14.Speech.Components;
 using Content.Server.Humanoid;
 using Content.Server.Mind;
 using Content.Server.Polymorph.Components;
+using Content.Server.Polymorph.Systems;
 using Content.Shared.CMU14.Threats.Mobs.Abomination;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body;
@@ -64,14 +65,16 @@ public sealed class AbominationMimicTest : GameTest
         });
     }
 
-    [Test]
-    public async Task HumanoidDisguiseUsesFixedChassisAndRevertsWithMind()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task HumanoidDisguiseUsesFixedChassisAndRevertsWithMind(bool converted)
     {
         var map = await Pair.CreateTestMap();
         EntityUid mimic = default;
         EntityUid donor = default;
         EntityUid disguised = default;
         EntityUid mind = default;
+        EntityUid? victim = null;
         AbominationAssimilationProfile? profile = null;
 
         await Server.WaitAssertion(() =>
@@ -81,7 +84,15 @@ public sealed class AbominationMimicTest : GameTest
             var mindSystem = Server.System<MindSystem>();
             var mobState = Server.System<MobStateSystem>();
 
-            mimic = SEntMan.SpawnEntity("AU14AbominationMimic", map.GridCoords);
+            if (converted)
+            {
+                victim = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                mimic = Server.System<PolymorphSystem>().PolymorphEntity(victim.Value,
+                    AbominationAssimilateSystem.HumanoidTurnPolymorph)
+                    ?? throw new AssertionException("Victim failed to become a mimic.");
+            }
+            else
+                mimic = SEntMan.SpawnEntity("AU14AbominationMimic", map.GridCoords);
             donor = SEntMan.SpawnEntity("RMCMobVulpkanin", map.GridCoords);
             SEntMan.EnsureComponent<LoadoutComponent>(donor);
 
@@ -138,11 +149,14 @@ public sealed class AbominationMimicTest : GameTest
             SEntMan.DeleteEntity(donor);
             SEntMan.DeleteEntity(mimic);
             SEntMan.DeleteEntity(mind);
+            if (victim is { } original && SEntMan.EntityExists(original))
+                SEntMan.DeleteEntity(original);
         });
     }
 
-    [Test]
-    public async Task AnimalProfileUsesSourcePrototypeDirectly()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task AnimalProfileUsesSourcePrototypeDirectly(bool converted)
     {
         var map = await Pair.CreateTestMap();
 
@@ -151,7 +165,17 @@ public sealed class AbominationMimicTest : GameTest
             var assimilate = Server.System<AbominationAssimilateSystem>();
             var infection = Server.System<AbominationInfectionSystem>();
             var mimicSystem = Server.System<AbominationMimicSystem>();
-            var mimic = SEntMan.SpawnEntity("AU14AbominationMimic", map.GridCoords);
+            EntityUid? victim = null;
+            EntityUid mimic;
+            if (converted)
+            {
+                victim = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                mimic = Server.System<PolymorphSystem>().PolymorphEntity(victim.Value,
+                    AbominationAssimilateSystem.HumanoidTurnPolymorph)
+                    ?? throw new AssertionException("Victim failed to become a mimic.");
+            }
+            else
+                mimic = SEntMan.SpawnEntity("AU14AbominationMimic", map.GridCoords);
             var mouse = SEntMan.SpawnEntity("MobMouse", map.GridCoords);
 
             try
@@ -191,6 +215,8 @@ public sealed class AbominationMimicTest : GameTest
                     SEntMan.DeleteEntity(mouse);
                 if (SEntMan.EntityExists(mimic))
                     SEntMan.DeleteEntity(mimic);
+                if (victim is { } original && SEntMan.EntityExists(original))
+                    SEntMan.DeleteEntity(original);
             }
         });
     }

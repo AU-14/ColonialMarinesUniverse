@@ -222,8 +222,9 @@ public sealed partial class AbominationMimicSystem : EntitySystem
                 TransferName = false,
                 TransferDamage = true,
 
-                // Mimics from assimilation already have PolymorphedEntityComponent;
-                // allow stacking the disguise polymorph on top.
+                // Converted mimics' existing polymorph disallows further morphs.
+                // Bypass that restriction when applying their disguise.
+                IgnoreAllowRepeatedMorphs = true,
                 AllowRepeatedMorphs = true,
                 RevertOnCrit = false,
                 RevertOnDeath = false

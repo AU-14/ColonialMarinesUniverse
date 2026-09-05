@@ -9,10 +9,9 @@
     inventory: Drop
     transferName: false
     transferDamage: true
-    # Critical: mimics that were spawned via AbominationAssimilationToMimic
-    # already carry PolymorphedEntityComponent (pointing back to the victim).
-    # Without this flag the second polymorph (mimic -> disguise) is rejected
-    # outright and the picker silently does nothing.
+    # Converted mimics already have a polymorph that disallows further morphs.
+    # The disguise must bypass that existing form's restriction.
+    ignoreAllowRepeatedMorphs: true
     allowRepeatedMorphs: true
     # We handle crit/death/expiry ourselves so we can run the shake-and-scream
     # revert sequence; the polymorph layer must not auto-revert.
