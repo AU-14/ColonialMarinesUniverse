@@ -4,6 +4,7 @@ rmc-supply-drop-underground = The landing zone is underground. The supply drop c
 rmc-supply-drop-blocked = The landing zone appears to be obstructed or out of bounds. Package would be lost on drop.
 rmc-supply-drop-crate-open = The crate is not secure on the drop pad. Please close it!
 rmc-supply-drop-insufficient-funds = Insufficient funds for supply drop. Cost: ${$cost}.
+rmc-supply-drop-cooldown = Supply drop is recharging. Wait for the cooldown to finish before launching again.
 
 rmc-supply-drop-crate-load = {$crate} loads into a launch tube. Stand clear!
 rmc-supply-drop-squad-announcement = {$crate} supply drop incoming. Heads up!

@@ -540,7 +540,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
             return;
 
         if (!TryComp(ent, out SupplyDropComputerComponent? computer))
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-supply-drop-not-operational"), args.Actor, PopupType.MediumCaution);
             return;
+        }
 
         _supplyDrop.TryLaunchSupplyDropPopup((ent, computer), args.Actor);
 
@@ -593,11 +596,20 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
     private void OnOverwatchOrbitalLaunchBui(Entity<OverwatchConsoleComponent> ent, ref OverwatchConsoleOrbitalLaunchBuiMsg args)
     {
-        if (!ent.Comp.CanOrbitalBombardment)
+        if (_net.IsClient)
             return;
 
-        if (!_orbitalCannon.TryGetClosestCannon(ent, out var cannon, string.IsNullOrEmpty(ent.Comp.Group) ? null : ent.Comp.Group))
+        if (!ent.Comp.CanOrbitalBombardment)
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-overwatch-orbital-unavailable"), args.Actor, PopupType.LargeCaution);
             return;
+        }
+
+        if (!_orbitalCannon.TryGetClosestCannon(ent, out var cannon, string.IsNullOrEmpty(ent.Comp.Group) ? null : ent.Comp.Group))
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-overwatch-orbital-no-cannon"), args.Actor, PopupType.LargeCaution);
+            return;
+        }
 
         EntityUid squad = default;
         if (TryGetAccessibleSquad(ent.Comp, ent.Comp.Squad, out var accessibleSquad))

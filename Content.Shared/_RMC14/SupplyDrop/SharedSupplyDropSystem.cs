@@ -230,7 +230,10 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
     {
         var time = _timing.CurTime;
         if (time < computer.Comp.NextLaunchAt)
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-supply-drop-cooldown"), user, PopupType.MediumCaution);
             return false;
+        }
 
         if (computer.Comp.Squad is not { } squad ||
             !_rmcPlanet.TryPlanetToCoordinates(computer.Comp.Coordinates, out var mapCoordinates) ||
