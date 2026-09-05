@@ -1,247 +1,94 @@
-using System.Numerics;
 using Content.Client.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels;
-using Content.Shared.CMU14.ZLevels.Core.Components;
-using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared.Maps;
+using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
-using Robust.Client.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
-using Robust.Shared.Maths;
 
 namespace Content.Client.CMU14.ZLevels.Culling;
 
 /// <summary>
-/// Performs content-side dynamic sprite culling for lower Z-level render passes.
+/// Applies a viewport's conservative mask only while that viewport renders. Semantic visibility
+/// remains owned by appearance systems between renders and is never cached across frames.
 /// </summary>
 public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _config = default!;
-    [Dependency] private IEyeManager _eyeManager = default!;
-    [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private ITileDefinitionManager _tile = default!;
-    [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SpriteSystem _sprite = default!;
-    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
-    private CMUClientZLevelsSystem _zLevels = default!;
+    private readonly HashSet<Entity<SpriteComponent, TransformComponent>> _candidates = new();
+    private readonly List<Entity<SpriteComponent>> _hidden = new();
+    private bool _rendering;
 
-    private readonly List<Box2> _openingBounds = new();
-    private List<Entity<MapGridComponent>> _openingGrids = new();
-    private readonly HashSet<EntityUid> _hiddenSprites = new();
-    private readonly HashSet<EntityUid> _stillHidden = new();
-    private readonly HashSet<Entity<SpriteComponent>> _spriteCandidates = new();
-    private readonly Dictionary<EntityUid, bool> _hiddenSpriteOriginalVisibility = new();
-    private readonly List<EntityUid> _restoreScratch = new();
+    public int LastCandidates { get; private set; }
+    public int LastHidden { get; private set; }
 
-    private EntityQuery<MapComponent> _mapQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-
-    /// <inheritdoc />
-    public override void Initialize()
+    /// <summary>
+    /// Called after camera-specific sprite presentation and its tree updates. Both visibility and
+    /// tree membership are restored even when the renderer throws or deletes a candidate.
+    /// </summary>
+    public void RenderViewport(IClydeViewport viewport, CMUZVisibilityMask? mask)
     {
-        base.Initialize();
+        if (_rendering)
+            throw new InvalidOperationException("World viewport renders must not be nested.");
 
-        _zLevels = EntityManager.System<CMUClientZLevelsSystem>();
-        _mapQuery = GetEntityQuery<MapComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-    }
-
-    /// <inheritdoc />
-    public override void FrameUpdate(float frameTime)
-    {
-        base.FrameUpdate(frameTime);
-
-        if (!_config.GetCVar(CMUZLevelsCVars.Enabled) ||
+        LastCandidates = 0;
+        LastHidden = 0;
+        if (mask is null ||
+            viewport.Eye is not { } eye ||
+            mask.MapId != eye.Position.MapId ||
+            !_config.GetCVar(CMUZLevelsCVars.Enabled) ||
             !_config.GetCVar(CMUZLevelsCVars.RenderEnabled) ||
-            !_config.GetCVar(CMUZLevelsCVars.CullOccludedDynamicSprites))
+            mask.DynamicOnly && !_config.GetCVar(CMUZLevelsCVars.CullOccludedDynamicSprites))
         {
-            RestoreAllHiddenSprites();
+            viewport.Render();
             return;
         }
 
-        if (_player.LocalEntity is not { } playerUid ||
-            !TryComp<CMUZLevelViewerComponent>(playerUid, out _) ||
-            !_xformQuery.TryComp(playerUid, out var playerXform) ||
-            playerXform.MapUid is not { } playerMapUid ||
-            !_mapQuery.TryComp(playerMapUid, out var playerMapComp))
+        var diagnostics = _config.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled);
+        _rendering = true;
+        try
         {
-            RestoreAllHiddenSprites();
-            return;
-        }
-
-        var maxOpeningRects = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
-        var maxDepth = Math.Clamp(
-            _config.GetCVar(CMUZLevelsCVars.MaxRenderDepth),
-            0,
-            CMUSharedZLevelsSystem.MaxZLevelsBelowRendering);
-
-        var viewBounds = _eyeManager.GetWorldViewbounds().CalcBoundingBox();
-        var openingLimit = maxOpeningRects == 0 ? int.MaxValue : maxOpeningRects + 1;
-        if (!TryFindOpeningBounds(playerMapComp.MapId, viewBounds, openingLimit) ||
-            _openingBounds.Count == 0 ||
-            maxOpeningRects > 0 && _openingBounds.Count > maxOpeningRects)
-        {
-            RestoreAllHiddenSprites();
-            return;
-        }
-
-        _stillHidden.Clear();
-
-        for (var depthOffset = -1; depthOffset >= -maxDepth; depthOffset--)
-        {
-            if (!_zLevels.TryMapOffset(playerMapUid, depthOffset, out _, out var lowerMapComp) ||
-                lowerMapComp.MapId == MapId.Nullspace)
+            _spriteTree.QueryAabb(_candidates, mask.MapId, mask.WorldBounds, approx: true);
+            if (diagnostics)
+                LastCandidates = _candidates.Count;
+            foreach (var candidate in _candidates)
             {
-                continue;
+                var (uid, sprite, xform) = candidate;
+                if (!sprite.Visible || xform.MapID != mask.MapId || mask.DynamicOnly && xform.Anchored)
+                    continue;
+
+                var (position, rotation) = _transform.GetWorldPositionRotation(xform);
+                var bounds = _sprite.CalculateBounds((uid, sprite), position, rotation, eye.Rotation).CalcBoundingBox();
+                if (mask.ClassifyBounds(bounds) != CMUZVisibility.Hidden)
+                    continue;
+
+                _hidden.Add((uid, sprite));
+                _sprite.SetVisible((uid, sprite), false);
             }
 
-            CullDynamicSpritesOnMap(lowerMapComp.MapId, viewBounds);
+            if (diagnostics)
+                LastHidden = _hidden.Count;
+            if (_hidden.Count != 0)
+                _spriteTree.UpdateTreePositions();
+            viewport.Render();
         }
-
-        RestoreNoLongerHiddenSprites();
-    }
-
-    private void CullDynamicSpritesOnMap(MapId mapId, Box2 viewBounds)
-    {
-        _spriteCandidates.Clear();
-        _lookup.GetEntitiesIntersecting(mapId, viewBounds, _spriteCandidates, LookupFlags.All);
-
-        foreach (var candidate in _spriteCandidates)
+        finally
         {
-            var uid = candidate.Owner;
-            var sprite = candidate.Comp;
-            if (!_xformQuery.TryComp(uid, out var xform) ||
-                xform.MapID != mapId ||
-                xform.Anchored)
+            foreach (var entity in _hidden)
             {
-                continue;
+                if (!entity.Comp.Deleted)
+                    _sprite.SetVisible((entity.Owner, entity.Comp), true);
             }
 
-            var hiddenByUs = _hiddenSprites.Contains(uid);
-            if (!sprite.Visible && !hiddenByUs)
-                continue;
-
-            var worldBounds = GetApproximateSpriteBounds(uid, sprite, xform);
-            if (IntersectsAnyOpening(worldBounds))
-            {
-                RestoreHiddenSprite(uid, sprite);
-                continue;
-            }
-
-            HideSprite(uid, sprite);
+            if (_hidden.Count != 0)
+                _spriteTree.UpdateTreePositions();
+            _hidden.Clear();
+            _candidates.Clear();
+            _rendering = false;
         }
-    }
-
-    private Box2 GetApproximateSpriteBounds(EntityUid uid, SpriteComponent sprite, TransformComponent xform)
-    {
-        var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
-        var localBounds = _sprite.GetLocalBounds((uid, sprite));
-        var radius = localBounds.Size.Length() * 0.5f + sprite.Offset.Length() + 0.25f;
-        return new Box2(
-            worldPos.X - radius,
-            worldPos.Y - radius,
-            worldPos.X + radius,
-            worldPos.Y + radius);
-    }
-
-    private bool TryFindOpeningBounds(
-        MapId mapId,
-        Box2 worldAabb,
-        int maxOpeningBounds)
-    {
-        _openingBounds.Clear();
-
-        return _zLevels.OpeningCache.TryFindOpeningBounds(
-            mapId,
-            worldAabb,
-            _openingBounds,
-            out _,
-            maxOpeningBounds,
-            true,
-            _openingGrids,
-            _map,
-            _transform,
-            _tile);
-    }
-
-    private bool IntersectsAnyOpening(Box2 worldBounds)
-    {
-        foreach (var opening in _openingBounds)
-        {
-            if (worldBounds.Intersects(opening))
-                return true;
-        }
-
-        return false;
-    }
-
-    private void HideSprite(EntityUid uid, SpriteComponent sprite)
-    {
-        _stillHidden.Add(uid);
-
-        if (_hiddenSprites.Add(uid))
-            _hiddenSpriteOriginalVisibility[uid] = sprite.Visible;
-
-        if (sprite.Visible)
-            _sprite.SetVisible((uid, sprite), false);
-    }
-
-    private void RestoreHiddenSprite(EntityUid uid, SpriteComponent sprite)
-    {
-        if (!_hiddenSprites.Remove(uid))
-            return;
-
-        var restoreVisible = _hiddenSpriteOriginalVisibility.Remove(uid, out var wasVisible) && wasVisible;
-        if (restoreVisible && !sprite.Visible)
-            _sprite.SetVisible((uid, sprite), true);
-    }
-
-    private void RestoreNoLongerHiddenSprites()
-    {
-        _restoreScratch.Clear();
-
-        foreach (var uid in _hiddenSprites)
-        {
-            if (!_stillHidden.Contains(uid))
-                _restoreScratch.Add(uid);
-        }
-
-        foreach (var uid in _restoreScratch)
-        {
-            if (TryComp<SpriteComponent>(uid, out var sprite))
-                RestoreHiddenSprite(uid, sprite);
-            else
-            {
-                _hiddenSprites.Remove(uid);
-                _hiddenSpriteOriginalVisibility.Remove(uid);
-            }
-        }
-    }
-
-    private void RestoreAllHiddenSprites()
-    {
-        foreach (var uid in _hiddenSprites)
-        {
-            var restoreVisible = _hiddenSpriteOriginalVisibility.TryGetValue(uid, out var wasVisible) && wasVisible;
-            if (restoreVisible && TryComp<SpriteComponent>(uid, out var sprite) && !sprite.Visible)
-                _sprite.SetVisible((uid, sprite), true);
-        }
-
-        _hiddenSprites.Clear();
-        _stillHidden.Clear();
-        _hiddenSpriteOriginalVisibility.Clear();
-    }
-
-    /// <inheritdoc />
-    public override void Shutdown()
-    {
-        base.Shutdown();
-        RestoreAllHiddenSprites();
     }
 }

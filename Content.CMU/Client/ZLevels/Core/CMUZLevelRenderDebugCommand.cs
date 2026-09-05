@@ -21,16 +21,34 @@ public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
 
     public string Command => "cmu_zrender_debug";
     public string Description => "Reports the last CMU multi-Z render decision for the last ScalingViewport frame.";
-    public string Help => "Usage: cmu_zrender_debug [counts]";
+    public string Help => "Usage: cmu_zrender_debug [on|off|counts]";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         var stats = ScalingViewport.LastZRenderDebugStats;
         var counts = args.Length > 0 && args[0].Equals("counts", StringComparison.OrdinalIgnoreCase);
 
-        if (args.Length > 0 && !counts)
+        if (args.Length == 1 &&
+            (args[0].Equals("on", StringComparison.OrdinalIgnoreCase) ||
+             args[0].Equals("off", StringComparison.OrdinalIgnoreCase)))
+        {
+            var enabled = args[0].Equals("on", StringComparison.OrdinalIgnoreCase);
+            _config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, enabled);
+            shell.WriteLine(enabled
+                ? "CMU Z diagnostics enabled. Let a frame render, then run cmu_zrender_debug."
+                : "CMU Z diagnostics disabled.");
+            return;
+        }
+
+        if (args.Length > 1 || args.Length > 0 && !counts)
         {
             shell.WriteError(Help);
+            return;
+        }
+
+        if (!_config.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled))
+        {
+            shell.WriteLine("CMU Z diagnostics are disabled. Run cmu_zrender_debug on to collect samples.");
             return;
         }
 
@@ -85,6 +103,10 @@ public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
             $"  other passes: base={stats.BasePassRendered}, upper={stats.UpperPassesRendered}, " +
             $"stairPreviewComposite={stats.StairPreviewCompositesRendered}");
         shell.WriteLine(
+            $"  stair mask: tiles={stats.StairPreviewTilesExamined}, visible={stats.StairPreviewTilesVisible}, " +
+            $"losChecks={stats.StairPreviewLosChecks}; reused by sprite inclusion and stencil");
+        shell.WriteLine($"  viewport culling across masked passes: candidates={stats.SpriteCullCandidates}, hidden={stats.SpritesCulled}");
+        shell.WriteLine(
             $"  timings ms: total={stats.TotalRenderMs:F2}, opening={stats.OpeningQueryTotalMs:F2}, " +
             $"currentOpen={stats.CurrentOpeningQueryMs:F2}, los={stats.OpeningLosMs:F2}, " +
             $"lowerDiscover={stats.LowerDepthDiscoveryMs:F2}, lowerOpen={stats.LowerDepthOpeningQueryMs:F2}");
@@ -133,13 +155,13 @@ public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
             $"openingsRejected={stats.OpeningsRejectedByCurrentView}, " +
             $"openingsRejectedByCap={stats.OpeningsRejectedBySourceCap}");
         shell.WriteLine(
-            $"  projected portal path: lightBounds={stats.PortalLightQueryBounds}, " +
+            $"  projected portal path: boundBuilds={stats.PortalLightQueryBuilds}, lightBounds={stats.PortalLightQueryBounds}, " +
             $"candidateBounds={stats.PortalOpeningCandidateBounds}, " +
             $"lightQueries={stats.PortalLightQueries}, portalLightsAccepted={stats.PortalLightsAccepted}, " +
             $"openingSearchesSkipped={stats.OpeningSearchesSkippedByPortal}, " +
             $"portalOpeningCandidates={stats.PortalOpeningCandidates}");
         shell.WriteLine(
-            $"  projected work: raycasts={stats.Raycasts}, candidates={stats.Candidates}, " +
+            $"  projected work: transmissionChecks={stats.TransmissionChecks}, raycasts={stats.Raycasts}, candidates={stats.Candidates}, " +
             $"applied={stats.ProjectedLightsApplied}, active={stats.ActiveProjectedLights}, " +
             $"heldByGrace={stats.ProjectedLightsHeldByVisibilityGrace}, " +
             $"cleanup={stats.CleanupCount}, grace={stats.VisibilityGraceSeconds:F2}s");

@@ -84,6 +84,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private void InitMovement()
     {
+        InitializeZPhysicsPresentation();
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
         _highgroundQuery = GetEntityQuery<CMUZLevelHighGroundComponent>();
         _vehicleTraversalQuery = GetEntityQuery<CMUVehicleZTraversalComponent>();
@@ -847,6 +848,11 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private void DirtyZPhysics(EntityUid uid, CMUZPhysicsComponent zPhys, float oldVelocity, float oldHeight)
     {
+        // Presentation membership must see crossings through zero even when the network's dirty
+        // threshold suppresses a tiny final move or prediction has not dirtied an authoritative field.
+        if ((oldHeight == 0f) != (zPhys.LocalPosition == 0f))
+            RaiseZPhysicsPresentationChanged((uid, zPhys));
+
         if (Math.Abs(oldVelocity - zPhys.Velocity) > 0.01f)
             DirtyField(uid, zPhys, nameof(CMUZPhysicsComponent.Velocity));
 
@@ -1729,6 +1735,7 @@ public abstract partial class CMUSharedZLevelsSystem
             return;
 
         ent.Comp.LocalPosition = localPosition;
+        RaiseZPhysicsPresentationChanged((ent.Owner, ent.Comp));
         DirtyField(ent, ent.Comp, nameof(CMUZPhysicsComponent.LocalPosition));
         WakeZPhysics(ent);
     }

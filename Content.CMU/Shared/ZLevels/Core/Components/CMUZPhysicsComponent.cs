@@ -8,7 +8,7 @@ namespace Content.Shared.CMU14.ZLevels.Core.Components;
 /// <summary>
 /// Allows an entity to move up and down the z-levels by gravity or jumping
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true),
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true, fieldDeltas: true),
  Access(typeof(CMUSharedZLevelsSystem))]
 public sealed partial class CMUZPhysicsComponent : Component
 {
