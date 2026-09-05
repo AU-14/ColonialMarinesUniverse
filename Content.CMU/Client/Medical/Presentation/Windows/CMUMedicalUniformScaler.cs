@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using Content.Client.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -39,18 +40,30 @@ internal sealed class CMUMedicalUniformScaler
     private const float KeyFontSize = 12f;
     private const float SmallFontSize = 8f;
 
-    private readonly Dictionary<Control, Baseline> _baselines = new();
-    private int _applyCount;
+    // ConditionalWeakTable is unavailable in the content sandbox. Keep controls weakly referenced instead.
+    private readonly Dictionary<int, List<Baseline>> _baselines = new();
 
     public void Apply(Control root, float scale, IResourceCache resourceCache)
     {
-        if ((_applyCount++ & 0x1f) == 0)
-            PruneDisposedBaselines();
-
-        ApplyRecursive(root, Math.Clamp(scale, MinimumScale, 1f), resourceCache);
+        PruneBaselines();
+        var fonts = new Dictionary<(string Variation, int Size, bool Display), Font>();
+        ApplyRecursive(root, Math.Clamp(scale, MinimumScale, 1f), resourceCache, fonts);
     }
 
-    private void ApplyRecursive(Control control, float scale, IResourceCache resourceCache)
+    public void Apply(IReadOnlyList<Control> roots, float scale, IResourceCache resourceCache)
+    {
+        if (roots.Count == 0)
+            return;
+
+        PruneBaselines();
+        var fonts = new Dictionary<(string Variation, int Size, bool Display), Font>();
+        scale = Math.Clamp(scale, MinimumScale, 1f);
+        foreach (var root in roots)
+            ApplyRecursive(root, scale, resourceCache, fonts);
+    }
+
+    private void ApplyRecursive(Control control, float scale, IResourceCache resourceCache,
+        Dictionary<(string Variation, int Size, bool Display), Font> fonts)
     {
         var baseline = GetBaseline(control);
 
@@ -64,61 +77,77 @@ internal sealed class CMUMedicalUniformScaler
 
         if (control is Label label)
         {
-            label.FontOverride = GetFont(label, scale, resourceCache);
-            label.TextMemory = label.TextMemory;
+            var font = GetFont(label, scale, resourceCache, fonts);
+            if (!ReferenceEquals(label.FontOverride, font))
+                label.FontOverride = font;
         }
 
         if (control is CMUScaledRichTextLabel rich)
             rich.UniformScale = scale;
 
         foreach (var child in control.Children)
-            ApplyRecursive(child, scale, resourceCache);
+            ApplyRecursive(child, scale, resourceCache, fonts);
     }
 
     private Baseline GetBaseline(Control control)
     {
-        if (_baselines.TryGetValue(control, out var baseline))
-            return baseline;
+        var hash = RuntimeHelpers.GetHashCode(control);
+        if (!_baselines.TryGetValue(hash, out var bucket))
+        {
+            bucket = new List<Baseline>();
+            _baselines.Add(hash, bucket);
+        }
 
-        baseline = new Baseline(
+        // Identity hashes may collide, so compare the live controls within each bucket.
+        foreach (var entry in bucket)
+        {
+            if (entry.Control.TryGetTarget(out var target) && ReferenceEquals(target, control))
+                return entry;
+        }
+
+        var baseline = new Baseline(
+            control,
             control.Margin,
             control.MinSize,
             control.SetSize,
             control.MaxSize,
             control is BoxContainer box ? box.SeparationOverride : null);
-        _baselines.Add(control, baseline);
+        bucket.Add(baseline);
         return baseline;
     }
 
-    private void PruneDisposedBaselines()
+    private void PruneBaselines()
     {
-        List<Control>? disposed = null;
-
-        foreach (var entry in _baselines)
+        List<int>? empty = null;
+        foreach (var (hash, bucket) in _baselines)
         {
-            if (!entry.Key.Disposed)
-                continue;
-
-            disposed ??= new List<Control>();
-            disposed.Add(entry.Key);
+            bucket.RemoveAll(static entry => !entry.Control.TryGetTarget(out var control) || control.Disposed);
+            if (bucket.Count == 0)
+            {
+                empty ??= new List<int>();
+                empty.Add(hash);
+            }
         }
 
-        if (disposed == null)
+        if (empty == null)
             return;
 
-        foreach (var control in disposed)
-        {
-            _baselines.Remove(control);
-        }
+        foreach (var hash in empty)
+            _baselines.Remove(hash);
     }
 
-    private static Font GetFont(Label label, float scale, IResourceCache resourceCache)
+    private static Font GetFont(Label label, float scale, IResourceCache resourceCache,
+        Dictionary<(string Variation, int Size, bool Display), Font> fonts)
     {
         var (variation, size, display) = GetFontStyle(label);
-        return resourceCache.NotoStack(
-            variation,
-            Math.Max(6, (int) Math.Round(size * scale)),
-            display);
+        var key = (Variation: variation, Size: Math.Max(6, (int) Math.Round(size * scale)), Display: display);
+        if (fonts.TryGetValue(key, out var font))
+            return font;
+
+        // Resolve again on the next application, preserving resource replacement behavior.
+        font = resourceCache.NotoStack(key.Variation, key.Size, key.Display);
+        fonts.Add(key, font);
+        return font;
     }
 
     private static (string Variation, float Size, bool Display) GetFontStyle(Label label)
@@ -179,8 +208,9 @@ internal sealed class CMUMedicalUniformScaler
             : null;
     }
 
-    private readonly struct Baseline
+    private sealed class Baseline
     {
+        public readonly WeakReference<Control> Control;
         public readonly Thickness Margin;
         public readonly Vector2 MinSize;
         public readonly Vector2 SetSize;
@@ -188,12 +218,14 @@ internal sealed class CMUMedicalUniformScaler
         public readonly int? SeparationOverride;
 
         public Baseline(
+            Control control,
             Thickness margin,
             Vector2 minSize,
             Vector2 setSize,
             Vector2 maxSize,
             int? separationOverride)
         {
+            Control = new WeakReference<Control>(control);
             Margin = margin;
             MinSize = minSize;
             SetSize = setSize;

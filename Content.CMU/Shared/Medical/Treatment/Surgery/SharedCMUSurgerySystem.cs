@@ -37,12 +37,26 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     [Dependency] protected SharedHeartSystem Heart = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedOrganHealthSystem OrganHealth = default!;
+    [Dependency] protected SharedCMSurgerySystem RmcSurgery = default!;
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
     [Dependency] protected SharedCMUShrapnelSystem Shrapnel = default!;
     [Dependency] protected SharedCMUWoundsSystem Wounds = default!;
 
     private bool _medicalEnabled;
     private bool _surgeryEnabled;
+
+    private static readonly Type[] AtomicEffectTypes =
+    [
+        typeof(CMUSurgeryStepRemoveOrganEffectComponent),
+        typeof(CMUSurgeryStepReinsertOrganEffectComponent),
+        typeof(CMUSurgeryStepSetBoneEffectComponent),
+        typeof(CMUSurgeryStepRepairOrganEffectComponent),
+        typeof(CMUSurgeryStepCauterizeBleedEffectComponent),
+        typeof(CMUSurgeryStepReattachLimbEffectComponent),
+        typeof(CMUSurgeryStepRemoveLimbEffectComponent),
+        typeof(CMUSurgeryStepDebrideEscharEffectComponent),
+        typeof(CMUSurgeryStepResolveTraitEffectComponent),
+    ];
 
     public override void Initialize()
     {
@@ -74,6 +88,48 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     public bool IsSurgeryEnabled()
     {
         return _medicalEnabled && _surgeryEnabled;
+    }
+
+    /// <summary>
+    /// Executes one committed step. Anatomical effects must succeed before markers or callers advance.
+    /// The used entity and logical site are supplied by the validated attempt, never rediscovered from hands.
+    /// </summary>
+    public CMUSurgeryStepOutcome TryExecuteStep(EntityUid step, ref CMSurgeryStepEvent args, bool automated = false)
+    {
+        if (!IsSurgeryEnabled())
+            return CMUSurgeryStepOutcome.Disabled;
+        if (TerminatingOrDeleted(args.Body) || TerminatingOrDeleted(args.Part) ||
+            !TryComp<BodyPartComponent>(args.Part, out var part) || part.Body != args.Body)
+            return CMUSurgeryStepOutcome.InvalidSite;
+        if (!TryComp<CMSurgeryStepComponent>(step, out var stepComp))
+            return CMUSurgeryStepOutcome.Failed;
+        if (!automated && !RmcSurgery.HasStepTools((step, stepComp), args.Tools))
+            return CMUSurgeryStepOutcome.InvalidTool;
+        if (args.IsCurrent != null && !args.IsCurrent())
+        {
+            args.Failed = true;
+            return CMUSurgeryStepOutcome.Failed;
+        }
+
+        // Independent effect subscribers cannot roll one another back. Definitions must
+        // split multiple anatomical mutations into separate steps until a composite has
+        // its own atomic implementation. Reject before invoking any subscriber.
+        var effects = 0;
+        foreach (var effectType in AtomicEffectTypes)
+        {
+            if (HasComp(step, effectType) && ++effects > 1)
+                return CMUSurgeryStepOutcome.Failed;
+        }
+
+        args.DeferMarkers = true;
+        args.Failed = false;
+        args.ToolCheckPassed = true;
+        RaiseLocalEvent(step, ref args);
+        if (args.Failed)
+            return CMUSurgeryStepOutcome.Failed;
+
+        RmcSurgery.CommitStepMarkers((step, stepComp), ref args);
+        return args.Failed ? CMUSurgeryStepOutcome.Failed : CMUSurgeryStepOutcome.Succeeded;
     }
 
     private void OnFracturedValid(Entity<CMUFracturedSurgeryConditionComponent> ent, ref CMSurgeryValidEvent args)
@@ -154,10 +210,11 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     {
         if (!IsSurgeryEnabled())
             return;
-        if (!TryGetOrganInSlot(args.Part, ent.Comp.OrganSlot, out var organ))
+        if (!TryGetOrganInSlot(args.Part, ent.Comp.OrganSlot, out var organ) || !Body.RemoveOrgan(organ))
+        {
+            args.Failed = true;
             return;
-
-        Body.RemoveOrgan(organ);
+        }
 
         ApplyOrganRemovalSideEffects(args.User, args.Body, organ, ent.Comp.OrganSlot);
 
@@ -169,16 +226,13 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         if (!IsSurgeryEnabled())
             return;
 
-        // Pulled from the surgeon's hand via the virtual hook to keep the
-        // shared path prediction-safe.
-        var organ = TryPickDonorOrganFromHand(args.User, ent.Comp.OrganSlot);
-        if (organ is null)
+        if (!TryInsertDonorOrgan(args.User, args.Part, args.Used, ent.Comp.OrganSlot, out var organ))
+        {
+            args.Failed = true;
             return;
+        }
 
-        if (!Body.InsertOrgan(args.Part, organ.Value, ent.Comp.OrganSlot))
-            return;
-
-        ApplyOrganReinsertionSideEffects(args.User, args.Body, organ.Value, ent.Comp.OrganSlot);
+        ApplyOrganReinsertionSideEffects(args.User, args.Body, organ, ent.Comp.OrganSlot);
         Wounds.RecomputeInternalBleed(args.Part);
     }
 
@@ -187,10 +241,11 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         if (!IsSurgeryEnabled())
             return;
 
-        if (!TryComp<FractureComponent>(args.Part, out var frac))
+        if (!TryComp<FractureComponent>(args.Part, out var frac) || !MatchesBoneEffectSeverity(ent.Comp, frac.Severity))
+        {
+            args.Failed = true;
             return;
-        if (!MatchesBoneEffectSeverity(ent.Comp, frac.Severity))
-            return;
+        }
 
         Bone.RestoreIntegrity((args.Part, null), ent.Comp.IntegrityRestore);
         Fracture.SetSeverity((args.Part, frac), ent.Comp.DowngradeTo, forceUpgrade: false);
@@ -229,10 +284,11 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     {
         if (!IsSurgeryEnabled())
             return;
-        if (!TryGetOrganInSlot(args.Part, ent.Comp.OrganSlot, out var organ))
+        if (!TryGetOrganInSlot(args.Part, ent.Comp.OrganSlot, out var organ) || !TryComp<OrganHealthComponent>(organ, out var oh))
+        {
+            args.Failed = true;
             return;
-        if (!TryComp<OrganHealthComponent>(organ, out var oh))
-            return;
+        }
 
         HeartComponent? heart = null;
         var canRestartHeart = oh.Stage != OrganDamageStage.Dead &&
@@ -256,14 +312,15 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     {
         if (!IsSurgeryEnabled())
             return;
-        ApplyLimbReattach(args.User, args.Body, args.Part, ent.Comp.StartingHpFraction, ent.Comp.StartingFracture);
+        args.Failed |= !ApplyLimbReattach(args.User, args.Body, args.Part, args.Used,
+            args.TargetType, args.TargetSymmetry, ent.Comp.StartingHpFraction, ent.Comp.StartingFracture);
     }
 
     private void OnRemoveLimbStep(Entity<CMUSurgeryStepRemoveLimbEffectComponent> ent, ref CMSurgeryStepEvent args)
     {
         if (!IsSurgeryEnabled())
             return;
-        ApplyLimbRemoval(args.User, args.Body, args.Part);
+        args.Failed |= !ApplyLimbRemoval(args.User, args.Body, args.Part);
     }
 
     private void OnDebrideEscharStep(Entity<CMUSurgeryStepDebrideEscharEffectComponent> ent, ref CMSurgeryStepEvent args)
@@ -279,7 +336,10 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         if (!IsSurgeryEnabled())
             return;
         if (!SurgicalTraits.RemoveTrait(args.Part, ent.Comp.Trait))
+        {
+            args.Failed = true;
             return;
+        }
 
         if (ent.Comp.Trait == CMUSurgicalTrait.VascularTear)
             Wounds.SuppressInternalBleed(args.Part);
@@ -295,17 +355,21 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     {
     }
 
-    protected virtual void ApplyLimbReattach(EntityUid user, EntityUid body, EntityUid part, float startingHpFraction, FractureSeverity startingFracture)
+    protected virtual bool ApplyLimbReattach(EntityUid user, EntityUid body, EntityUid part, EntityUid? used,
+        BodyPartType? type, BodyPartSymmetry? symmetry, float? startingHpFraction, FractureSeverity startingFracture)
     {
+        return false;
     }
 
-    protected virtual void ApplyLimbRemoval(EntityUid user, EntityUid body, EntityUid part)
+    protected virtual bool ApplyLimbRemoval(EntityUid user, EntityUid body, EntityUid part)
     {
+        return false;
     }
 
-    protected virtual EntityUid? TryPickDonorOrganFromHand(EntityUid surgeon, string organSlot)
+    protected virtual bool TryInsertDonorOrgan(EntityUid surgeon, EntityUid part, EntityUid? used, string organSlot, out EntityUid organ)
     {
-        return null;
+        organ = default;
+        return false;
     }
 
     public bool TryGetOrganInSlot(EntityUid part, string slotId, out EntityUid organ)

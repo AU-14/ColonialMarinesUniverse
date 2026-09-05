@@ -13,6 +13,19 @@ namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 public sealed partial class CMUAutodocPodComponent : Component
 {
     public const string BodyContainerId = "cmu-autodoc-bodyContainer";
+    public const int MaximumQueueEntries = 32;
+
+    [ViewVariables]
+    public EntityUid? Patient;
+
+    [ViewVariables]
+    public ulong OccupantGeneration;
+
+    [ViewVariables]
+    public ulong StateRevision;
+
+    [ViewVariables]
+    public ulong NextQueueEntryId;
 
     [DataField]
     public float StepDelay = 45f;
@@ -56,6 +69,12 @@ public sealed partial class CMUBodyScannerPodComponent : Component
 
     [ViewVariables]
     public ContainerSlot BodyContainer = default!;
+
+    [ViewVariables]
+    public EntityUid? Patient;
+
+    [ViewVariables]
+    public ulong OccupantGeneration;
 }
 
 [RegisterComponent]
@@ -99,31 +118,39 @@ public sealed partial class CMUBodyScannerConsoleComponent : Component
 
 }
 
-[RegisterComponent]
+[RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUBodyScannerPuzzleProgressComponent : Component
 {
+    [ViewVariables]
+    public CMUBodyScannerOrigin? Origin;
+
+    [ViewVariables]
+    public float LockoutDurationSeconds;
+
+    [ViewVariables]
+    public ulong AttemptId;
     [ViewVariables]
     public EntityUid Patient;
 
     [ViewVariables]
     public readonly List<CMUBodyScannerPuzzleAssignment> Assignments = new();
 
-    [ViewVariables]
+    [ViewVariables, AutoPausedField]
     public TimeSpan StartedAt;
 
-    [ViewVariables]
+    [ViewVariables, AutoPausedField]
     public TimeSpan EndsAt;
 
-    [ViewVariables]
+    [ViewVariables, AutoPausedField]
     public TimeSpan PulseStartedAt;
 
-    [ViewVariables]
+    [ViewVariables, AutoPausedField]
     public TimeSpan LastPenaltyAt;
 
     [ViewVariables]
     public float LastPenaltySeconds;
 
-    [ViewVariables]
+    [ViewVariables, AutoPausedField]
     public TimeSpan LastFeedbackAt;
 
     [ViewVariables]
@@ -143,15 +170,25 @@ public sealed partial class CMUBodyScannerSurgerySpeedComponent : Component
     public float DelayMultiplier = 0.5f;
 }
 
-[RegisterComponent, AutoGenerateComponentPause]
+[RegisterComponent]
 public sealed partial class CMUBodyScannerCalibrationLockoutComponent : Component
 {
-    [ViewVariables]
-    public EntityUid Patient;
+    public const int MaximumPatients = 32;
 
-    [ViewVariables, AutoPausedField]
-    public TimeSpan ExpiresAt;
+    [ViewVariables]
+    public readonly Dictionary<EntityUid, TimeSpan> Expiries = new();
+
+    public TimeSpan NextExpiry;
 }
+
+[RegisterComponent]
+public sealed partial class CMUBodyScannerOperatorComponent : Component
+{
+    [ViewVariables]
+    public ulong Revision;
+}
+
+public readonly record struct CMUBodyScannerOrigin(EntityUid Console, EntityUid Pod, ulong OccupantGeneration);
 
 [RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMULimbPrinterComponent : Component
@@ -237,11 +274,17 @@ public sealed record CMUAutodocQueuedStep(
     int StepIndex,
     string StepLabel,
     string PartDisplayName,
-    float DurationSeconds);
+    float DurationSeconds,
+    ulong Id = 0,
+    EntityUid? TargetOrgan = null,
+    EntityUid? TargetAnchor = null,
+    string? TargetSlot = null);
 
 [RegisterComponent]
 public sealed partial class CMUAutodocContainedPatientComponent : Component
 {
+    [ViewVariables]
+    public EntityUid Pod;
 }
 
 [Serializable, NetSerializable]

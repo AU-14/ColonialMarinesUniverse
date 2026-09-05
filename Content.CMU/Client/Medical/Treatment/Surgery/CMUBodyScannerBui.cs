@@ -46,6 +46,10 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
     protected override void Open()
     {
         base.Open();
+        // Initial state and attachment can queue the same BUI more than once.
+        if (_window != null)
+            return;
+
         _window = this.CreateWindow<CMUBodyScannerWindow>();
         _window.Title = Loc.GetString("cmu-body-scanner-window-title");
         _window.ResetButton.OnPressed += ResetPressed;
@@ -79,19 +83,21 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
 
     private void Refresh(CMUBodyScannerBuiState state)
     {
+        _latestState = state;
         if (_window is null)
             return;
 
+        EnsureRowContext(state);
         var boostText = state.BoostExpiresAt is { } expires
             ? Loc.GetString("cmu-body-scanner-boost-active", ("time", FormatRemaining(expires)))
             : Loc.GetString("cmu-body-scanner-boost-inactive");
 
         _window.SetPatient(ResolvePatient(state.Patient), state.PatientName, state.Status, boostText, _entities, _players);
-        _window.StatusLabel.Text = state.Status;
-        _window.BoostLabel.Text = boostText;
-        _window.ScanSummaryLabel.Text = state.CanScan
+        SetText(_window.StatusLabel, state.Status);
+        SetText(_window.BoostLabel, boostText);
+        SetText(_window.ScanSummaryLabel, state.CanScan
             ? Loc.GetString("cmu-body-scanner-diagnostic-summary", ("count", state.ScanLines.Count))
-            : Loc.GetString("cmu-body-scanner-surgery1-required");
+            : Loc.GetString("cmu-body-scanner-surgery1-required"));
 
         var matched = state.Assignments.Count;
         var required = CountRealTargets(state);
@@ -100,7 +106,7 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
         var started = state.CalibrationStartedAt is not null;
         var calibrated = state.BoostExpiresAt is not null;
         var remaining = FormatCalibrationRemaining(state);
-        _window.PuzzleSummaryLabel.Text = state.CanScan
+        SetText(_window.PuzzleSummaryLabel, state.CanScan
             ? calibrated && state.BoostExpiresAt is { } boostExpires
                 ? Loc.GetString("cmu-body-scanner-calibrated-summary", ("time", FormatRemaining(boostExpires)))
                 : locked && state.CalibrationLockoutExpiresAt is { } lockoutExpires
@@ -110,20 +116,22 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
                 : !started
                     ? Loc.GetString("cmu-body-scanner-match-summary-idle", ("matched", matched), ("required", required))
                     : Loc.GetString("cmu-body-scanner-match-summary", ("matched", matched), ("required", required), ("time", remaining))
-            : Loc.GetString("cmu-body-scanner-surgery1-required");
+            : Loc.GetString("cmu-body-scanner-surgery1-required"));
         _window.PuzzleSummaryLabel.FontColorOverride = calibrated || state.PuzzleComplete
             ? CMUMedicalMachineStyle.Cyan
             : locked || expired ? CMUMedicalMachineStyle.Red : matched >= required && required > 0 ? CMUMedicalMachineStyle.Warning : CMUMedicalMachineStyle.Muted;
 
-        _window.CalibrationButtonLabel.Text = started
+        SetText(_window.CalibrationButtonLabel, started
             ? Loc.GetString("cmu-body-scanner-reset-button")
-            : Loc.GetString("cmu-body-scanner-start-button");
-        _window.ResetButton.Disabled = !state.CanScan || required == 0 || locked || started || calibrated;
-        _window.EjectButton.Disabled = !state.CanScan || state.Patient is null;
+            : Loc.GetString("cmu-body-scanner-start-button"));
+        _window.ResetButton.Disabled = !state.CanStartCalibration || required == 0 || locked || started || calibrated;
+        _window.EjectButton.Disabled = !state.CanScan || state.CommandContext is null;
+        if (state.CalibrationActiveElsewhere)
+            SetText(_window.PuzzleSummaryLabel, Loc.GetString("cmu-body-scanner-calibration-elsewhere"));
         _window.SweepStatusOverlay.Visible = calibrated;
-        _window.SweepStatusOverlay.Text = calibrated && state.BoostExpiresAt is { } badgeExpires
+        SetText(_window.SweepStatusOverlay, calibrated && state.BoostExpiresAt is { } badgeExpires
             ? Loc.GetString("cmu-body-scanner-calibrated-badge", ("time", FormatRemaining(badgeExpires)))
-            : string.Empty;
+            : string.Empty);
         EnsureSelectedLayer(state);
         _window.SweepControl.SetState(state, _selectedLayer);
         PlayFeedbackSound(state);
@@ -140,35 +148,35 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
 
         if (!state.CanScan)
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-surgery1-required");
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-surgery1-required"));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Muted;
             return;
         }
 
         if (CountRealTargets(state) == 0)
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-no-surgical-targets-detail");
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-no-surgical-targets-detail"));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Muted;
             return;
         }
 
         if (locked && state.CalibrationLockoutExpiresAt is { } lockoutExpires)
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-lockout-status", ("time", FormatRemaining(lockoutExpires)));
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-lockout-status", ("time", FormatRemaining(lockoutExpires))));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Red;
             return;
         }
 
         if (state.BoostExpiresAt is not null)
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-complete-status");
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-complete-status"));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Cyan;
             return;
         }
 
         if (state.CalibrationStartedAt is null)
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-start-status");
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-start-status"));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Muted;
             return;
         }
@@ -178,15 +186,15 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
             switch (feedback)
             {
                 case CMUBodyScannerFeedbackKind.Correct:
-                    _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-feedback-correct");
+                    SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-feedback-correct"));
                     _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Cyan;
                     break;
                 case CMUBodyScannerFeedbackKind.WrongLayer:
-                    _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-feedback-wrong-layer", ("seconds", state.LastPenaltySeconds));
+                    SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-feedback-wrong-layer", ("seconds", state.LastPenaltySeconds)));
                     _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Purple;
                     break;
                 default:
-                    _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-feedback-wrong-timing", ("seconds", state.LastPenaltySeconds));
+                    SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-feedback-wrong-timing", ("seconds", state.LastPenaltySeconds)));
                     _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Red;
                     break;
             }
@@ -195,33 +203,33 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
 
         if (PenaltyActive(state))
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-penalty-status", ("seconds", state.LastPenaltySeconds));
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-penalty-status", ("seconds", state.LastPenaltySeconds)));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Red;
             return;
         }
 
         if (expired)
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-expired-status");
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-expired-status"));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Red;
             return;
         }
 
         if (state.PuzzleComplete)
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-complete-status");
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-complete-status"));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Cyan;
             return;
         }
 
         if (_selectedLayer is { } layer)
         {
-            _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-armed-status", ("layer", GetLayerText(state, layer)));
+            SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-armed-status", ("layer", GetLayerText(state, layer))));
             _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Warning;
             return;
         }
 
-        _window.SweepDetailLabel.Text = Loc.GetString("cmu-body-scanner-ready-status");
+        SetText(_window.SweepDetailLabel, Loc.GetString("cmu-body-scanner-ready-status"));
         _window.SweepDetailLabel.FontColorOverride = CMUMedicalMachineStyle.Muted;
     }
 
@@ -295,676 +303,484 @@ public sealed partial class CMUBodyScannerBui : BoundUserInterface
     private void ResetPressed(BaseButton.ButtonEventArgs args)
     {
         _selectedLayer = null;
-        SendMessage(new CMUBodyScannerResetPuzzleMessage());
+        if (_latestState?.CommandContext is { } context)
+            SendMessage(new CMUBodyScannerResetPuzzleMessage(context));
     }
 
     private void EjectPressed(BaseButton.ButtonEventArgs args)
     {
-        SendMessage(new CMUBodyScannerEjectPatientMessage());
+        if (_latestState?.CommandContext is { } context)
+            SendMessage(new CMUBodyScannerEjectPatientMessage(context));
+    }
+
+    private readonly Dictionary<(CMUBodyScannerScanCategory Category, int Index), ScanCard> _scanRows = new();
+    private readonly Dictionary<CMUBodyScannerScanCategory, Label> _scanHeaders = new();
+    private readonly Dictionary<string, PuzzleRow> _layerRows = new();
+    private readonly Dictionary<(string Layer, string Signal, byte Role), PuzzleRow> _signalRows = new();
+    private readonly HashSet<(CMUBodyScannerScanCategory Category, int Index)> _seenScan = new();
+    private readonly HashSet<string> _seenLayers = new();
+    private readonly HashSet<(string Layer, string Signal, byte Role)> _seenSignals = new();
+    private readonly List<Control> _addedControls = new();
+    private readonly List<string> _concerns = new(3);
+    private ScanCard? _banner;
+    private ScanCard? _timer;
+    private Control? _scanEmpty;
+    private Control? _termsEmpty;
+    private Control? _targetsEmpty;
+    private (NetEntity? Pod, NetEntity? Patient, ulong Generation, ulong Attempt, bool Authorized)? _rowContext;
+
+    private void EnsureRowContext(CMUBodyScannerBuiState state)
+    {
+        var context = (state.Pod, state.Patient, state.CommandContext?.OccupantGeneration ?? 0,
+            state.CalibrationAttempt, state.CanScan);
+        if (_rowContext == context)
+            return;
+        _rowContext = context;
+        _selectedLayer = null;
+        foreach (var row in _layerRows.Values) row.Release();
+        foreach (var row in _signalRows.Values) row.Release();
+        _layerRows.Clear();
+        _signalRows.Clear();
+        foreach (var row in _scanRows.Values) row.Orphan();
+        _scanRows.Clear();
     }
 
     private void RefreshScan(CMUBodyScannerBuiState state)
     {
-        if (_window is null)
+        if (_window == null)
             return;
-
-        _window.ScanList.DisposeAllChildren();
-        if (!state.CanScan)
+        _addedControls.Clear();
+        _seenScan.Clear();
+        var empty = !state.CanScan || state.ScanLines.Count == 0;
+        SetEmpty(_window.ScanList, ref _scanEmpty, empty, Loc.GetString(state.CanScan
+            ? "cmu-body-scanner-no-scan-lines" : "cmu-body-scanner-surgery1-required"));
+        if (empty)
         {
-            _window.ScanList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-surgery1-required")));
-            return;
-        }
-
-        if (state.ScanLines.Count == 0)
-        {
-            _window.ScanList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-no-scan-lines")));
-            return;
-        }
-
-        _window.ScanList.AddChild(BuildScanBanner(state));
-        AddScanSection(state, CMUBodyScannerScanCategory.Vitals, Loc.GetString("cmu-body-scanner-section-vitals"));
-        AddScanSection(state, CMUBodyScannerScanCategory.Body, Loc.GetString("cmu-body-scanner-section-body"));
-        AddScanSection(state, CMUBodyScannerScanCategory.Organs, Loc.GetString("cmu-body-scanner-section-organs"));
-    }
-
-    private void AddScanSection(CMUBodyScannerBuiState state, CMUBodyScannerScanCategory category, string title)
-    {
-        if (_window is null)
-            return;
-
-        var addedHeader = false;
-        foreach (var line in state.ScanLines)
-        {
-            if (line.Category != category)
-                continue;
-
-            if (!addedHeader)
-            {
-                _window.ScanList.AddChild(BuildSectionHeader(title, CategoryAccent(category)));
-                addedHeader = true;
-            }
-
-            _window.ScanList.AddChild(BuildDiagnosticRow(line));
-        }
-    }
-
-    private Control BuildScanBanner(CMUBodyScannerBuiState state)
-    {
-        var severity = CMUBodyScannerScanSeverity.Stable;
-        var concerns = new List<string>();
-
-        foreach (var line in state.ScanLines)
-        {
-            var lineSeverity = GetLineSeverity(line);
-            if (lineSeverity > severity)
-                severity = lineSeverity;
-
-            if (lineSeverity == CMUBodyScannerScanSeverity.Stable)
-                continue;
-
-            concerns.Add(line.Title);
-        }
-
-        var accent = SeverityAccent(severity);
-        var titleText = severity switch
-        {
-            CMUBodyScannerScanSeverity.Critical => Loc.GetString("cmu-body-scanner-triage-critical"),
-            CMUBodyScannerScanSeverity.Warning => Loc.GetString("cmu-body-scanner-triage-serious"),
-            _ => Loc.GetString("cmu-body-scanner-triage-stable"),
-        };
-
-        var detail = concerns.Count == 0
-            ? Loc.GetString("cmu-body-scanner-triage-clear")
-            : string.Join(", ", concerns.GetRange(0, Math.Min(3, concerns.Count)));
-
-        var row = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            HorizontalExpand = true,
-        };
-
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(7, 42),
-            PanelOverride = CMUMedicalMachineStyle.Flat(accent, accent),
-        });
-
-        var text = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        row.AddChild(text);
-
-        text.AddChild(new Label
-        {
-            Text = titleText,
-            StyleClasses = { "LabelHeading" },
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-            ClipText = true,
-        });
-        text.AddChild(new Label
-        {
-            Text = detail,
-            FontColorOverride = CMUMedicalMachineStyle.Muted,
-            ClipText = true,
-        });
-
-        return CMUMedicalMachineStyle.Wrap(row, CMUMedicalMachineStyle.DeepCardBg, accent, new Thickness(9, 7), new Thickness(2));
-    }
-
-    private Control BuildSectionHeader(string title, Color accent)
-    {
-        return new Label
-        {
-            Text = title,
-            StyleClasses = { "LabelHeading" },
-            FontColorOverride = accent,
-            Margin = new Thickness(2, 7, 2, 1),
-            ClipText = true,
-            HorizontalExpand = true,
-        };
-    }
-
-    private Control BuildDiagnosticRow(CMUBodyScannerScanLine line)
-    {
-        return line.Category switch
-        {
-            CMUBodyScannerScanCategory.Body => BuildBodyPartCard(line),
-            CMUBodyScannerScanCategory.Organs => BuildDiagnosticCard(line.Title, line.Detail, GetScanLineAccent(line)),
-            _ => CMUMedicalMachineStyle.Metric(line.Title, line.Detail, GetScanLineAccent(line)),
-        };
-    }
-
-    private Control BuildBodyPartCard(CMUBodyScannerScanLine line)
-    {
-        var severity = line.Severity;
-        var accent = SeverityAccent(severity);
-
-        var stack = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 5,
-            HorizontalExpand = true,
-        };
-
-        var row = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            HorizontalExpand = true,
-        };
-        stack.AddChild(row);
-
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(5, 32),
-            PanelOverride = CMUMedicalMachineStyle.Flat(accent, accent),
-        });
-
-        row.AddChild(new Label
-        {
-            Text = line.Title,
-            MinWidth = 90,
-            HorizontalExpand = true,
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-            ClipText = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        });
-
-        if (line.HasRange)
-        {
-            row.AddChild(new Label
-            {
-                Text = SeverityText(severity),
-                MinWidth = 66,
-                FontColorOverride = accent,
-                ClipText = true,
-                VerticalAlignment = Control.VAlignment.Center,
-            });
-
-            var hpRow = new BoxContainer
-            {
-                Orientation = BoxContainer.LayoutOrientation.Horizontal,
-                SeparationOverride = 8,
-                Margin = new Thickness(13, 0, 0, 0),
-                HorizontalExpand = true,
-            };
-            stack.AddChild(hpRow);
-
-            hpRow.AddChild(new Label
-            {
-                Text = Loc.GetString(
-                    "cmu-body-scanner-part-health",
-                    ("current", line.Current),
-                    ("max", line.Maximum)),
-                MinWidth = 150,
-                HorizontalExpand = true,
-                ClipText = true,
-                VerticalAlignment = Control.VAlignment.Center,
-            });
-            hpRow.AddChild(BuildHpBar(line.Current, line.Maximum, accent));
+            _banner?.Orphan();
+            foreach (var header in _scanHeaders.Values) header.Orphan();
         }
         else
         {
-            row.AddChild(new Label
+            if (_banner == null)
             {
-                Text = line.Detail,
-                HorizontalExpand = true,
-                ClipText = true,
-                VerticalAlignment = Control.VAlignment.Center,
-            });
+                _banner = new ScanCard(heading: true);
+                _addedControls.Add(_banner);
+            }
+            AttachAt(_window.ScanList, _banner, 0);
+            var severity = CMUBodyScannerScanSeverity.Stable;
+            _concerns.Clear();
+            foreach (var line in state.ScanLines)
+            {
+                if (line.Severity > severity) severity = line.Severity;
+                if (line.Severity != CMUBodyScannerScanSeverity.Stable && _concerns.Count < 3)
+                    _concerns.Add(line.Title);
+            }
+            _banner.SetPlain(Loc.GetString(severity switch
+            {
+                CMUBodyScannerScanSeverity.Critical => "cmu-body-scanner-triage-critical",
+                CMUBodyScannerScanSeverity.Warning => "cmu-body-scanner-triage-serious",
+                _ => "cmu-body-scanner-triage-stable",
+            }), _concerns.Count == 0 ? Loc.GetString("cmu-body-scanner-triage-clear") : string.Join(", ", _concerns),
+                SeverityAccent(severity));
+
+            var order = 1;
+            AddScanSection(state, CMUBodyScannerScanCategory.Vitals, "cmu-body-scanner-section-vitals", ref order);
+            AddScanSection(state, CMUBodyScannerScanCategory.Body, "cmu-body-scanner-section-body", ref order);
+            AddScanSection(state, CMUBodyScannerScanCategory.Organs, "cmu-body-scanner-section-organs", ref order);
         }
-
-        var chips = new BoxContainer
+        foreach (var (key, row) in _scanRows)
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 3,
-            Margin = new Thickness(13, 2, 0, 0),
-            HorizontalExpand = true,
-        };
-
-        foreach (var piece in line.Details)
-            chips.AddChild(BuildScanChip(piece, accent));
-
-        if (chips.ChildCount > 0)
-            stack.AddChild(chips);
-
-        return CMUMedicalMachineStyle.Wrap(stack, CMUMedicalMachineStyle.DeepCardBg, CMUMedicalMachineStyle.MutedBorder, new Thickness(7, 5));
+            if (_seenScan.Contains(key)) continue;
+            row.Orphan();
+            _scanRows.Remove(key);
+        }
+        _window.ScaleAddedControls(_addedControls);
     }
 
-    private Control BuildDiagnosticCard(string title, string detail, Color accent)
+    private void AddScanSection(CMUBodyScannerBuiState state, CMUBodyScannerScanCategory category,
+        string heading, ref int order)
     {
-        var stack = new BoxContainer
+        if (_window == null) return;
+        var index = 0;
+        foreach (var line in state.ScanLines)
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 5,
-            HorizontalExpand = true,
-        };
-
-        var row = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            HorizontalExpand = true,
-        };
-        stack.AddChild(row);
-
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(5, 30),
-            PanelOverride = CMUMedicalMachineStyle.Flat(accent, accent),
-        });
-        row.AddChild(new Label
-        {
-            Text = title,
-            MinWidth = 112,
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-            ClipText = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        });
-        row.AddChild(new Label
-        {
-            Text = detail,
-            HorizontalExpand = true,
-            ClipText = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        });
-
-        return CMUMedicalMachineStyle.Wrap(stack, CMUMedicalMachineStyle.DeepCardBg, CMUMedicalMachineStyle.MutedBorder, new Thickness(7, 5));
-    }
-
-    private static Control BuildHpBar(float current, float max, Color accent)
-    {
-        const int trackWidth = 72;
-        const int barHeight = 10;
-        var pct = max <= 0f ? 0f : Math.Clamp(current / max, 0f, 1f);
-        var track = new PanelContainer
-        {
-            MinSize = new Vector2(trackWidth, barHeight),
-            VerticalAlignment = Control.VAlignment.Center,
-            PanelOverride = CMUMedicalMachineStyle.Flat(Color.FromHex("#223039"), Color.FromHex("#314B55")),
-        };
-
-        var fillWidth = (int)Math.Round(trackWidth * pct);
-        if (fillWidth <= 0)
-            return track;
-
-        var fill = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal };
-        fill.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(fillWidth, barHeight),
-            PanelOverride = CMUMedicalMachineStyle.Flat(accent, accent),
-        });
-        track.AddChild(fill);
-        return track;
-    }
-
-    private static Control BuildScanChip(string text, Color accent)
-    {
-        var panel = new PanelContainer
-        {
-            HorizontalExpand = true,
-            PanelOverride = CMUMedicalMachineStyle.Flat(Color.FromHex("#1B242A"), accent),
-        };
-        panel.AddChild(new Label
-        {
-            Text = text,
-            ClipText = true,
-            HorizontalExpand = true,
-            Margin = new Thickness(6, 2),
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-        });
-        return panel;
+            if (line.Category != category) continue;
+            if (index == 0)
+            {
+                if (!_scanHeaders.TryGetValue(category, out var header))
+                {
+                    header = new Label { Text = Loc.GetString(heading), StyleClasses = { "LabelHeading" },
+                        FontColorOverride = CategoryAccent(category), Margin = new Thickness(2, 7, 2, 1),
+                        ClipText = true, HorizontalExpand = true };
+                    _scanHeaders.Add(category, header);
+                    _addedControls.Add(header);
+                }
+                AttachAt(_window.ScanList, header, order++);
+            }
+            // These are read-only projection slots, not anatomical identities or command targets.
+            var key = (category, index++);
+            _seenScan.Add(key);
+            if (!_scanRows.TryGetValue(key, out var row))
+            {
+                row = new ScanCard();
+                _scanRows.Add(key, row);
+                _addedControls.Add(row);
+            }
+            row.SetLine(line, _addedControls);
+            AttachAt(_window.ScanList, row, order++);
+        }
+        if (index == 0 && _scanHeaders.TryGetValue(category, out var absent))
+            absent.Orphan();
     }
 
     private void RefreshPuzzle(CMUBodyScannerBuiState state)
     {
-        if (_window is null)
-            return;
-
-        _window.TermList.DisposeAllChildren();
-        _window.TargetList.DisposeAllChildren();
-
-        if (!state.CanScan)
+        if (_window == null) return;
+        _addedControls.Clear();
+        _seenLayers.Clear();
+        _seenSignals.Clear();
+        var noTargets = !state.CanScan || CountRealTargets(state) == 0;
+        SetEmpty(_window.TermList, ref _termsEmpty, noTargets, Loc.GetString(state.CanScan
+            ? "cmu-body-scanner-no-surgical-targets" : "cmu-body-scanner-surgery1-required"));
+        string? targetEmptyText = noTargets ? Loc.GetString(state.CanScan
+            ? "cmu-body-scanner-no-surgical-targets-detail" : "cmu-body-scanner-surgery1-required") : null;
+        var locked = CalibrationLocked(state);
+        var expired = !locked && CalibrationExpired(state);
+        var started = state.CalibrationStartedAt != null;
+        var calibrated = state.BoostExpiresAt != null;
+        var index = 0;
+        if (!noTargets)
         {
-            _window.TermList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-surgery1-required")));
-            _window.TargetList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-surgery1-required")));
-            return;
-        }
-
-        if (CountRealTargets(state) == 0)
-        {
-            _window.TermList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-no-surgical-targets")));
-            _window.TargetList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-no-surgical-targets-detail")));
-            return;
-        }
-
-        var lockedOut = CalibrationLocked(state);
-        var expired = !lockedOut && CalibrationExpired(state);
-        var started = state.CalibrationStartedAt is not null;
-        var calibrated = state.BoostExpiresAt is not null;
-        foreach (var layer in state.Terms)
-        {
-            var selected = _selectedLayer == layer.Id;
-            var total = CountSignalsForLayer(state, layer.Id);
-            var layerLocked = CountLockedSignalsForLayer(state, layer.Id);
-            var button = BuildLayerButton(
-                layer.Text,
-                total == 0
-                    ? Loc.GetString("cmu-body-scanner-layer-empty")
-                    : selected
-                        ? Loc.GetString("cmu-body-scanner-layer-selected", ("locked", layerLocked), ("total", total))
-                        : Loc.GetString("cmu-body-scanner-layer-ready", ("locked", layerLocked), ("total", total)),
-                layerLocked >= total && total > 0 ? CMUMedicalMachineStyle.Cyan : selected ? CMUMedicalMachineStyle.Warning : CMUMedicalMachineStyle.Blue,
-                selected,
-                !started || expired || lockedOut || calibrated);
-            var captured = layer.Id;
-            button.OnPressed += _ =>
+            foreach (var layer in state.Terms)
             {
-                if (!started || lockedOut || calibrated)
-                    return;
-
-                _selectedLayer = captured;
-                RefreshPuzzle(state);
-            };
-            _window.TermList.AddChild(button);
-        }
-
-        if (calibrated)
-        {
-            _window.TargetList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-complete-status")));
-            return;
-        }
-
-        if (!started && !lockedOut)
-        {
-            _window.TargetList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-start-status")));
-            return;
-        }
-
-        _window.TargetList.AddChild(BuildActiveSliceTimer(state, expired, lockedOut));
-        if (lockedOut)
-            return;
-
-        if (_selectedLayer is not { } selectedLayer)
-        {
-            _window.TargetList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-body-scanner-ready-status")));
-            return;
-        }
-
-        var addedSignal = false;
-        foreach (var signal in state.Targets)
-        {
-            if (signal.LayerId != selectedLayer || signal.IsDecoy)
-                continue;
-
-            addedSignal = true;
-            var assigned = TryGetAssignmentForSignal(state, signal.Id, out _);
-            var button = BuildSignalButton(
-                signal.Text,
-                assigned
-                    ? Loc.GetString("cmu-body-scanner-signal-locked")
-                    : Loc.GetString("cmu-body-scanner-signal-ready", ("detail", signal.Detail)),
-                assigned ? CMUMedicalMachineStyle.Cyan : CMUMedicalMachineStyle.Purple,
-                assigned,
-                assigned || expired);
-            var signalCaptured = signal.Id;
-            button.OnPressed += _ =>
-            {
-                if (assigned || expired)
-                    return;
-
-                SendMessage(new CMUBodyScannerConfirmPuzzleMessage(selectedLayer, signalCaptured, GetPulsePhase(state)));
-            };
-            _window.TargetList.AddChild(button);
-        }
-
-        var addedDecoy = 0;
-        foreach (var signal in state.Targets)
-        {
-            if (signal.LayerId != selectedLayer || !signal.IsDecoy || addedDecoy >= 2)
-                continue;
-
-            addedSignal = true;
-            addedDecoy++;
-            var button = BuildSignalButton(
-                signal.Text,
-                Loc.GetString("cmu-body-scanner-decoy-ready", ("detail", signal.Detail)),
-                CMUMedicalMachineStyle.Purple,
-                false,
-                expired);
-            var signalCaptured = signal.Id;
-            button.OnPressed += _ =>
-            {
-                if (expired)
-                    return;
-
-                SendMessage(new CMUBodyScannerConfirmPuzzleMessage(selectedLayer, signalCaptured, GetPulsePhase(state)));
-            };
-            _window.TargetList.AddChild(button);
-        }
-
-        var interferenceAdded = 0;
-        foreach (var signal in state.Targets)
-        {
-            if (signal.IsDecoy ||
-                signal.LayerId == selectedLayer ||
-                TryGetAssignmentForSignal(state, signal.Id, out _) ||
-                interferenceAdded >= 2)
-            {
-                continue;
+                _seenLayers.Add(layer.Id);
+                if (!_layerRows.TryGetValue(layer.Id, out var row))
+                {
+                    var id = layer.Id;
+                    row = new PuzzleRow(layer: true, () => LayerPressed(id));
+                    _layerRows.Add(id, row);
+                    _addedControls.Add(row);
+                }
+                var total = CountSignalsForLayer(state, layer.Id);
+                var assigned = CountLockedSignalsForLayer(state, layer.Id);
+                var selected = _selectedLayer == layer.Id;
+                row.Update(layer.Text, total == 0 ? Loc.GetString("cmu-body-scanner-layer-empty")
+                    : Loc.GetString(selected ? "cmu-body-scanner-layer-selected" : "cmu-body-scanner-layer-ready",
+                        ("locked", assigned), ("total", total)),
+                    assigned >= total && total > 0 ? CMUMedicalMachineStyle.Cyan : selected
+                        ? CMUMedicalMachineStyle.Warning : CMUMedicalMachineStyle.Blue,
+                    selected, !started || expired || locked || calibrated);
+                AttachAt(_window.TermList, row, index++);
             }
-
-            addedSignal = true;
-            interferenceAdded++;
-            var button = BuildSignalButton(
-                Loc.GetString("cmu-body-scanner-interference-title"),
-                Loc.GetString("cmu-body-scanner-interference-detail", ("layer", GetLayerText(state, selectedLayer))),
-                CMUMedicalMachineStyle.Purple,
-                false,
-                expired);
-            var signalCaptured = signal.Id;
-            button.OnPressed += _ =>
-            {
-                if (expired)
-                    return;
-
-                SendMessage(new CMUBodyScannerConfirmPuzzleMessage(selectedLayer, signalCaptured, GetPulsePhase(state)));
-            };
-            _window.TargetList.AddChild(button);
         }
 
-        if (!addedSignal)
-            _window.TargetList.AddChild(CMUMedicalMachineStyle.Empty(
-                Loc.GetString("cmu-body-scanner-no-layer-signals", ("layer", GetLayerText(state, selectedLayer)))));
+        if (noTargets || calibrated || !started && !locked)
+        {
+            _timer?.Orphan();
+            if (!noTargets)
+                targetEmptyText = Loc.GetString(calibrated
+                    ? "cmu-body-scanner-complete-status" : "cmu-body-scanner-start-status");
+        }
+        else
+        {
+            if (_timer == null)
+            {
+                _timer = new ScanCard();
+                _addedControls.Add(_timer);
+            }
+            AttachAt(_window.TargetList, _timer, 0);
+            _timer.SetPlain(Loc.GetString(locked ? "cmu-body-scanner-timer-locked"
+                : expired ? "cmu-body-scanner-timer-expired" : "cmu-body-scanner-timer-active"),
+                Loc.GetString(locked ? "cmu-body-scanner-lockout-detail"
+                    : state.PuzzleComplete ? "cmu-body-scanner-complete-status" : "cmu-body-scanner-timer-detail"),
+                locked || expired ? CMUMedicalMachineStyle.Red : CMUMedicalMachineStyle.Warning,
+                locked && state.CalibrationLockoutExpiresAt is { } expires ? FormatRemaining(expires)
+                    : expired ? "0:00" : FormatCalibrationRemaining(state));
+            index = 1;
+            if (!locked && _selectedLayer is { } layer)
+            {
+                foreach (var signal in state.Targets)
+                    if (signal.LayerId == layer && !signal.IsDecoy)
+                        AddSignal(state, signal, layer, 0, expired, ref index);
+                var decoys = 0;
+                foreach (var signal in state.Targets)
+                    if (signal.LayerId == layer && signal.IsDecoy && decoys++ < 2)
+                        AddSignal(state, signal, layer, 1, expired, ref index);
+                var interference = 0;
+                foreach (var signal in state.Targets)
+                    if (signal.LayerId != layer && !signal.IsDecoy &&
+                        !TryGetAssignmentForSignal(state, signal.Id, out _) && interference++ < 2)
+                        AddSignal(state, signal, layer, 2, expired, ref index);
+                if (index == 1)
+                    targetEmptyText = Loc.GetString("cmu-body-scanner-no-layer-signals", ("layer", GetLayerText(state, layer)));
+            }
+            else if (!locked)
+                targetEmptyText = Loc.GetString("cmu-body-scanner-ready-status");
+        }
+        SetEmpty(_window.TargetList, ref _targetsEmpty, targetEmptyText != null, targetEmptyText ?? string.Empty);
+        RemoveAbsent(_layerRows, _seenLayers);
+        RemoveAbsent(_signalRows, _seenSignals);
+        _window.ScaleAddedControls(_addedControls);
     }
 
-    private Button BuildLayerButton(string title, string subtitle, Color accent, bool active, bool disabled = false)
+    private void AddSignal(CMUBodyScannerBuiState state, CMUBodyScannerSliceSignal signal,
+        string layer, byte role, bool expired, ref int index)
     {
-        var button = new Button
+        if (_window == null) return;
+        var key = (layer, signal.Id, role);
+        _seenSignals.Add(key);
+        if (!_signalRows.TryGetValue(key, out var row))
         {
-            HorizontalExpand = true,
-            MinHeight = 42,
-            ModulateSelfOverride = active ? Color.White : Color.FromHex("#CDD6DE"),
-            Disabled = disabled,
-        };
-
-        var panel = CMUMedicalMachineStyle.Panel(
-            active ? Color.FromHex("#1B2228") : CMUMedicalMachineStyle.DeepCardBg,
-            accent,
-            active ? new Thickness(2) : new Thickness(1));
-
-        var row = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 7,
-            Margin = new Thickness(7, 4),
-            HorizontalExpand = true,
-        };
-        panel.AddChild(row);
-
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(10, 10),
-            VerticalAlignment = Control.VAlignment.Center,
-            PanelOverride = CMUMedicalMachineStyle.Flat(accent, accent),
-        });
-
-        var text = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        row.AddChild(text);
-
-        text.AddChild(new Label
-        {
-            Text = title,
-            ClipText = true,
-            HorizontalExpand = true,
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-        });
-        text.AddChild(new Label
-        {
-            Text = subtitle,
-            ClipText = true,
-            HorizontalExpand = true,
-            StyleClasses = { "LabelSubText" },
-            FontColorOverride = CMUMedicalMachineStyle.Muted,
-        });
-
-        button.AddChild(panel);
-        return button;
+            row = new PuzzleRow(layer: false, () => SignalPressed(key));
+            _signalRows.Add(key, row);
+            _addedControls.Add(row);
+        }
+        var assigned = TryGetAssignmentForSignal(state, signal.Id, out _);
+        row.Update(role == 2 ? Loc.GetString("cmu-body-scanner-interference-title") : signal.Text,
+            role == 2 ? Loc.GetString("cmu-body-scanner-interference-detail", ("layer", GetLayerText(state, layer)))
+                : role == 1 ? Loc.GetString("cmu-body-scanner-decoy-ready", ("detail", signal.Detail))
+                : assigned ? Loc.GetString("cmu-body-scanner-signal-locked")
+                : Loc.GetString("cmu-body-scanner-signal-ready", ("detail", signal.Detail)),
+            assigned ? CMUMedicalMachineStyle.Cyan : CMUMedicalMachineStyle.Purple,
+            assigned, expired || assigned);
+        AttachAt(_window.TargetList, row, index++);
     }
 
-    private Button BuildSignalButton(string title, string subtitle, Color accent, bool active, bool disabled = false)
+    private void LayerPressed(string id)
     {
-        var button = new Button
-        {
-            HorizontalExpand = true,
-            MinHeight = 58,
-            ModulateSelfOverride = active ? Color.White : Color.FromHex("#CDD6DE"),
-            Disabled = disabled,
-        };
-
-        var panel = CMUMedicalMachineStyle.Panel(
-            active ? Color.FromHex("#15262A") : Color.FromHex("#0E171D"),
-            accent,
-            active ? new Thickness(2) : new Thickness(1));
-
-        var row = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            Margin = new Thickness(8, 6),
-            HorizontalExpand = true,
-        };
-        panel.AddChild(row);
-
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(5, 42),
-            PanelOverride = CMUMedicalMachineStyle.Flat(accent, accent),
-        });
-
-        var text = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        row.AddChild(text);
-
-        text.AddChild(new Label
-        {
-            Text = title,
-            ClipText = true,
-            HorizontalExpand = true,
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-        });
-        text.AddChild(new Label
-        {
-            Text = subtitle,
-            ClipText = true,
-            HorizontalExpand = true,
-            StyleClasses = { "LabelSubText" },
-            FontColorOverride = active ? accent : CMUMedicalMachineStyle.Muted,
-        });
-
-        button.AddChild(panel);
-        return button;
+        if (_latestState is not { CanScan: true, CalibrationStartedAt: not null, BoostExpiresAt: null } state ||
+            CalibrationLocked(state) || CalibrationExpired(state) || !_layerRows.ContainsKey(id) || !HasLayer(state, id))
+            return;
+        _selectedLayer = id;
+        _window?.SweepControl.SetState(state, id);
+        RefreshCalibrationPrompt(state, false, false);
+        RefreshPuzzle(state);
     }
 
-    private Control BuildActiveSliceTimer(CMUBodyScannerBuiState state, bool expired, bool locked)
+    private void SignalPressed((string Layer, string Signal, byte Role) key)
     {
-        var accent = locked || expired ? CMUMedicalMachineStyle.Red : state.PuzzleComplete ? CMUMedicalMachineStyle.Cyan : CMUMedicalMachineStyle.Warning;
-        var heading = locked
-            ? Loc.GetString("cmu-body-scanner-timer-locked")
-            : expired
-                ? Loc.GetString("cmu-body-scanner-timer-expired")
-                : Loc.GetString("cmu-body-scanner-timer-active");
-        var value = locked && state.CalibrationLockoutExpiresAt is { } lockoutExpires
-            ? FormatRemaining(lockoutExpires)
-            : expired
-                ? "0:00"
-                : FormatCalibrationRemaining(state);
-        var detail = locked
-            ? Loc.GetString("cmu-body-scanner-lockout-detail")
-            : state.PuzzleComplete
-                ? Loc.GetString("cmu-body-scanner-complete-status")
-                : Loc.GetString("cmu-body-scanner-timer-detail");
+        if (_latestState is not { CanScan: true, CommandContext: { } context,
+                CalibrationStartedAt: not null, BoostExpiresAt: null } state ||
+            _selectedLayer != key.Layer || !_signalRows.ContainsKey(key) ||
+            CalibrationLocked(state) || CalibrationExpired(state) || TryGetAssignmentForSignal(state, key.Signal, out _) ||
+            !state.Targets.Exists(signal => signal.Id == key.Signal))
+            return;
+        SendMessage(new CMUBodyScannerConfirmPuzzleMessage(key.Layer, key.Signal, GetPulsePhase(state),
+            context, state.Assignments.Count));
+    }
 
-        var row = new BoxContainer
+    private void AttachAt(BoxContainer parent, Control control, int index)
+    {
+        if (control.Parent == null)
         {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 9,
-            HorizontalExpand = true,
-        };
+            parent.AddChild(control);
+            if (!_addedControls.Contains(control)) _addedControls.Add(control);
+        }
+        if (control.GetPositionInParent() != index) control.SetPositionInParent(index);
+    }
 
-        row.AddChild(new PanelContainer
+    private void SetEmpty(BoxContainer parent, ref Control? empty, bool visible, string text)
+    {
+        if (!visible)
         {
-            MinSize = new Vector2(6, 48),
-            PanelOverride = CMUMedicalMachineStyle.Flat(accent, accent),
-        });
+            empty?.Orphan();
+            empty = null;
+            return;
+        }
+        if (empty != null)
+        {
+            foreach (var child in empty.Children)
+                if (child is Label label) SetText(label, text);
+            return;
+        }
+        empty = CMUMedicalMachineStyle.Empty(text);
+        parent.AddChild(empty);
+        _addedControls.Add(empty);
+    }
 
-        var text = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        row.AddChild(text);
+    private static void SetText(Label label, string text)
+    {
+        if (!label.TextMemory.Span.SequenceEqual(text.AsSpan())) label.Text = text;
+    }
 
-        text.AddChild(new Label
+    private static void RemoveAbsent<TKey>(Dictionary<TKey, PuzzleRow> rows, HashSet<TKey> seen) where TKey : notnull
+    {
+        foreach (var (key, row) in rows)
         {
-            Text = heading,
-            StyleClasses = { "LabelSubText" },
-            FontColorOverride = accent,
-            ClipText = true,
-            HorizontalExpand = true,
-        });
-        text.AddChild(new Label
-        {
-            Text = value,
-            StyleClasses = { "LabelKeyText" },
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-            ClipText = true,
-            HorizontalExpand = true,
-        });
-        text.AddChild(new Label
-        {
-            Text = detail,
-            StyleClasses = { "LabelSubText" },
-            FontColorOverride = CMUMedicalMachineStyle.Muted,
-            ClipText = true,
-            HorizontalExpand = true,
-        });
+            if (seen.Contains(key)) continue;
+            row.Release();
+            rows.Remove(key);
+        }
+    }
 
-        return CMUMedicalMachineStyle.Wrap(row, Color.FromHex("#121D23"), accent, new Thickness(8, 6), new Thickness(2));
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            foreach (var row in _layerRows.Values) row.Release();
+            foreach (var row in _signalRows.Values) row.Release();
+            _layerRows.Clear();
+            _signalRows.Clear();
+            _scanRows.Clear();
+            _scanHeaders.Clear();
+            _addedControls.Clear();
+            _latestState = null;
+        }
+        base.Dispose(disposing);
+    }
+
+    private sealed class PuzzleRow : Button
+    {
+        private readonly Label _title;
+        private readonly Label _detail;
+        private readonly PanelContainer _panel;
+        private readonly StyleBoxFlat _style;
+        private Action? _pressed;
+
+        public PuzzleRow(bool layer, Action pressed)
+        {
+            _pressed = pressed;
+            HorizontalExpand = true;
+            MinHeight = layer ? 42 : 58;
+            _style = CMUMedicalMachineStyle.Flat(CMUMedicalMachineStyle.DeepCardBg, CMUMedicalMachineStyle.Blue);
+            _panel = new PanelContainer { PanelOverride = _style, HorizontalExpand = true };
+            AddChild(_panel);
+            var text = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical,
+                Margin = layer ? new Thickness(7, 4) : new Thickness(8, 6), HorizontalExpand = true };
+            _panel.AddChild(text);
+            _title = new Label { ClipText = true, HorizontalExpand = true, FontColorOverride = CMUMedicalMachineStyle.Text };
+            _detail = new Label { ClipText = true, HorizontalExpand = true, StyleClasses = { "LabelSubText" } };
+            text.AddChild(_title);
+            text.AddChild(_detail);
+            OnPressed += _ => _pressed?.Invoke();
+        }
+
+        public void Update(string title, string detail, Color accent, bool active, bool disabled)
+        {
+            SetText(_title, title);
+            SetText(_detail, detail);
+            _detail.FontColorOverride = active ? accent : CMUMedicalMachineStyle.Muted;
+            Disabled = disabled;
+            ModulateSelfOverride = active ? Color.White : Color.FromHex("#CDD6DE");
+            _style.BackgroundColor = active ? Color.FromHex("#15262A") : CMUMedicalMachineStyle.DeepCardBg;
+            _style.BorderColor = accent;
+            var border = active ? new Thickness(2) : new Thickness(1);
+            if (_style.BorderThickness != border) { _style.BorderThickness = border; _panel.InvalidateMeasure(); }
+        }
+
+        public void Release() { _pressed = null; Orphan(); }
+    }
+
+    private sealed class ScanCard : PanelContainer
+    {
+        private readonly Label _title;
+        private readonly Label _value;
+        private readonly Label _detail;
+        private readonly ScannerHealthBar _bar;
+        private readonly BoxContainer _chips;
+        private readonly StyleBoxFlat _style;
+        private readonly List<(PanelContainer Panel, Label Label, StyleBoxFlat Style)> _chipRows = new();
+
+        public ScanCard(bool heading = false)
+        {
+            HorizontalExpand = true;
+            _style = CMUMedicalMachineStyle.Flat(CMUMedicalMachineStyle.DeepCardBg, CMUMedicalMachineStyle.MutedBorder);
+            PanelOverride = _style;
+            var stack = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical,
+                SeparationOverride = 5, Margin = new Thickness(7, 5), HorizontalExpand = true };
+            AddChild(stack);
+            var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                SeparationOverride = 8, HorizontalExpand = true };
+            stack.AddChild(row);
+            _title = new Label { HorizontalExpand = true, ClipText = true, FontColorOverride = CMUMedicalMachineStyle.Text };
+            if (heading) _title.StyleClasses.Add("LabelHeading");
+            _value = new Label { ClipText = true, StyleClasses = { "LabelKeyText" } };
+            row.AddChild(_title);
+            row.AddChild(_value);
+            var detailRow = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                SeparationOverride = 8, HorizontalExpand = true };
+            stack.AddChild(detailRow);
+            _detail = new Label { ClipText = true, HorizontalExpand = true, FontColorOverride = CMUMedicalMachineStyle.Muted };
+            _bar = new ScannerHealthBar();
+            detailRow.AddChild(_detail);
+            detailRow.AddChild(_bar);
+            _chips = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical,
+                SeparationOverride = 3, HorizontalExpand = true };
+            stack.AddChild(_chips);
+        }
+
+        public void SetPlain(string title, string detail, Color accent, string value = "")
+        {
+            SetText(_title, title);
+            SetText(_detail, detail);
+            SetText(_value, value);
+            _value.Visible = value.Length > 0;
+            _value.FontColorOverride = accent;
+            _style.BorderColor = accent;
+            _bar.Visible = false;
+            _chips.Visible = false;
+        }
+
+        public void SetLine(CMUBodyScannerScanLine line, List<Control> added)
+        {
+            var body = line.Category == CMUBodyScannerScanCategory.Body;
+            var range = body && line.HasRange;
+            var accent = body ? SeverityAccent(line.Severity) : GetScanLineAccent(line);
+            SetText(_title, line.Title);
+            SetText(_detail, range ? Loc.GetString("cmu-body-scanner-part-health", ("current", line.Current),
+                ("max", line.Maximum)) : line.Detail);
+            SetText(_value, range ? SeverityText(line.Severity) : "");
+            _value.Visible = range;
+            _value.FontColorOverride = accent;
+            _style.BorderColor = accent;
+            _bar.Visible = range;
+            _bar.Fraction = line.Maximum > 0 ? Math.Clamp(line.Current / line.Maximum, 0f, 1f) : 0;
+            _bar.Accent = accent;
+            var count = body ? line.Details.Count : 0;
+            while (_chipRows.Count > count)
+            {
+                _chipRows[^1].Panel.Orphan();
+                _chipRows.RemoveAt(_chipRows.Count - 1);
+            }
+            for (var i = 0; i < count; i++)
+            {
+                if (i == _chipRows.Count)
+                {
+                    var style = CMUMedicalMachineStyle.Flat(Color.FromHex("#1B242A"), accent);
+                    var panel = new PanelContainer { HorizontalExpand = true, PanelOverride = style };
+                    var label = new Label { ClipText = true, HorizontalExpand = true, Margin = new Thickness(6, 2),
+                        FontColorOverride = CMUMedicalMachineStyle.Text };
+                    panel.AddChild(label);
+                    _chips.AddChild(panel);
+                    _chipRows.Add((panel, label, style));
+                    // The whole new card is already queued for scaling; do not capture a scaled chip twice.
+                    if (!added.Contains(this)) added.Add(panel);
+                }
+                SetText(_chipRows[i].Label, line.Details[i]);
+                _chipRows[i].Style.BorderColor = accent;
+            }
+            _chips.Visible = count > 0;
+        }
+    }
+
+    private sealed class ScannerHealthBar : Control
+    {
+        public float Fraction;
+        public Color Accent;
+
+        public ScannerHealthBar()
+        {
+            MinSize = new Vector2(72, 10);
+            VerticalAlignment = VAlignment.Center;
+        }
+
+        protected override void Draw(DrawingHandleScreen handle)
+        {
+            base.Draw(handle);
+            handle.DrawRect(PixelSizeBox, Color.FromHex("#223039"));
+            if (Fraction > 0)
+                handle.DrawRect(UIBox2.FromDimensions(Vector2.Zero, new Vector2(PixelSize.X * Fraction, PixelSize.Y)), Accent);
+        }
     }
 
     private static bool TryGetAssignmentForSignal(CMUBodyScannerBuiState state, string signalId, out string layerId)
@@ -1838,9 +1654,9 @@ public sealed partial class CMUBodyScannerWindow : FancyWindow
         IEntityManager entities,
         IPlayerManager players)
     {
-        PatientLabel.Text = patientName;
-        StatusLabel.Text = status;
-        BoostLabel.Text = boost;
+        SetText(PatientLabel, patientName);
+        SetText(StatusLabel, status);
+        SetText(BoostLabel, boost);
 
         var showPreview = patient is { } uid &&
                           uid.Valid &&
@@ -1876,6 +1692,16 @@ public sealed partial class CMUBodyScannerWindow : FancyWindow
         CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale();
         CMUMedicalWindowSizing.RememberSize(RememberedSizeKey, this);
+    }
+
+    private static void SetText(Label label, string text)
+    {
+        if (!label.TextMemory.Span.SequenceEqual(text.AsSpan())) label.Text = text;
+    }
+
+    public void ScaleAddedControls(IReadOnlyList<Control> controls)
+    {
+        _uniformScaler.Apply(controls, _layoutScale, _resourceCache);
     }
 
     private void ApplyUniformScale(bool force = false)

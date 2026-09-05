@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -32,7 +33,8 @@ public readonly record struct CMUBodyScannerCalibrationView(
     CMUBodyScannerFeedbackKind LastFeedbackKind,
     List<CMUBodyScannerPuzzleChoice> Layers,
     List<CMUBodyScannerSliceSignal> Targets,
-    List<CMUBodyScannerPuzzleAssignment> Assignments);
+    List<CMUBodyScannerPuzzleAssignment> Assignments,
+    ulong AttemptId);
 
 public readonly record struct CMUBodyScannerPuzzleSignal(string Id, string LayerId, string Text, string Detail, int Priority);
 
@@ -47,6 +49,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private const int MaxPuzzleSignals = 8;
+    private ulong _nextAttemptId;
     private const string SliceVitals = "vitals";
     private const string SliceSkeleton = "skeleton";
     private const string SliceOrgans = "organs";
@@ -54,6 +57,8 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
     private const string DecoySignalPrefix = "noise:";
     private static readonly CMUMedicalWorkKey BoostExpiryWork = new("body-scanner-boost-expiry");
     private static readonly CMUMedicalWorkKey LockoutExpiryWork = new("body-scanner-lockout-expiry");
+    private static readonly CMUMedicalWorkKey AttemptExpiryWork = new("body-scanner-attempt-expiry");
+    private readonly List<EntityUid> _expiredPatients = new();
 
     private static readonly List<CMUBodyScannerPuzzleChoice> ScannerSlices =
     [
@@ -69,6 +74,8 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
 
         SubscribeLocalEvent<CMUBodyScannerSurgerySpeedComponent, CMUMedicalWorkDueEvent>(OnBoostExpiryDue);
         SubscribeLocalEvent<CMUBodyScannerCalibrationLockoutComponent, CMUMedicalWorkDueEvent>(OnLockoutExpiryDue);
+        SubscribeLocalEvent<CMUBodyScannerCalibrationLockoutComponent, EntityUnpausedEvent>(OnLockoutsUnpaused);
+        SubscribeLocalEvent<CMUBodyScannerPuzzleProgressComponent, CMUMedicalWorkDueEvent>(OnAttemptExpiryDue);
     }
 
     private void OnBoostExpiryDue(
@@ -84,7 +91,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
             return;
         }
 
-        RemCompDeferred<CMUBodyScannerSurgerySpeedComponent>(ent);
+        RemComp<CMUBodyScannerSurgerySpeedComponent>(ent);
     }
 
     private void OnLockoutExpiryDue(
@@ -94,13 +101,44 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         if (args.Key != LockoutExpiryWork)
             return;
 
-        if (ent.Comp.ExpiresAt > _timing.CurTime)
-        {
-            _scheduler.Schedule(ent.Owner, LockoutExpiryWork, ent.Comp.ExpiresAt);
-            return;
-        }
+        ent.Comp.NextExpiry = TimeSpan.Zero;
+        PruneLockouts(ent.Owner, ent.Comp);
+    }
 
-        RemCompDeferred<CMUBodyScannerCalibrationLockoutComponent>(ent);
+    private void OnLockoutsUnpaused(Entity<CMUBodyScannerCalibrationLockoutComponent> ent, ref EntityUnpausedEvent args)
+    {
+        foreach (var patient in ent.Comp.Expiries.Keys.ToArray())
+            ent.Comp.Expiries[patient] += args.PausedTime;
+        ent.Comp.NextExpiry += args.PausedTime;
+    }
+
+    private void OnAttemptExpiryDue(Entity<CMUBodyScannerPuzzleProgressComponent> ent, ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != AttemptExpiryWork)
+            return;
+        if (!ExpireAttempt(ent.Owner))
+            _scheduler.Schedule(ent.Owner, AttemptExpiryWork, ent.Comp.EndsAt);
+    }
+
+    public ulong GetRevision(EntityUid user) => CompOrNull<CMUBodyScannerOperatorComponent>(user)?.Revision ?? 0;
+
+    public ulong GetAttempt(EntityUid user) => CompOrNull<CMUBodyScannerPuzzleProgressComponent>(user)?.AttemptId ?? 0;
+
+    private void AdvanceRevision(EntityUid user) => EnsureComp<CMUBodyScannerOperatorComponent>(user).Revision++;
+
+    public bool HasOtherAttempt(EntityUid user, EntityUid patient, CMUBodyScannerOrigin origin)
+    {
+        return TryComp<CMUBodyScannerPuzzleProgressComponent>(user, out var progress)
+            && (progress.Patient != patient || progress.Origin != origin);
+    }
+
+    public bool CanStart(EntityUid user, EntityUid patient)
+    {
+        ExpireAttempt(user);
+        if (HasComp<CMUBodyScannerPuzzleProgressComponent>(user) || GetCalibrationLockoutExpiry(user, patient) != null)
+            return false;
+        return !TryComp<CMUBodyScannerCalibrationLockoutComponent>(user, out var lockouts)
+            || lockouts.Expiries.Count < CMUBodyScannerCalibrationLockoutComponent.MaximumPatients;
     }
 
     public float GetSurgeryDelayMultiplier(EntityUid surgeon, EntityUid patient)
@@ -120,8 +158,14 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         CMUBodyScannerConsoleComponent scanner,
         string layerId,
         string signalId,
-        float clientPhase)
+        float clientPhase,
+        ulong? expectedAttempt = null,
+        int? expectedAssignments = null,
+        CMUBodyScannerOrigin? origin = null)
     {
+        if (Paused(user) || TerminatingOrDeleted(patient) || !float.IsFinite(clientPhase))
+            return false;
+        ExpireAttempt(user);
         if (GetCalibrationLockoutExpiry(user, patient) is not null)
             return true;
 
@@ -131,14 +175,21 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
 
         if (!TryComp<CMUBodyScannerPuzzleProgressComponent>(user, out var progress) ||
             progress.Patient != patient ||
-            progress.StartedAt == TimeSpan.Zero)
+            progress.Origin != origin)
         {
             return true;
         }
 
+        if (expectedAttempt is { } attempt && progress.AttemptId != attempt
+            || expectedAssignments is { } count && progress.Assignments.Count != count
+            || progress.Assignments.Exists(assignment => assignment.SignalId == signalId))
+        {
+            return false;
+        }
+
         if (_timing.CurTime >= progress.EndsAt)
         {
-            ApplyCalibrationLockout(user, patient, scanner);
+            ApplyCalibrationLockout(user, progress, progress.EndsAt);
             return true;
         }
 
@@ -147,9 +198,9 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
             if (!IsDecoySignal(signalId))
                 return false;
 
-            ApplyPuzzlePenalty(progress, scanner, CMUBodyScannerFeedbackKind.WrongLayer);
+            ApplyPuzzlePenalty(user, progress, scanner, CMUBodyScannerFeedbackKind.WrongLayer);
             if (_timing.CurTime >= progress.EndsAt)
-                ApplyCalibrationLockout(user, patient, scanner);
+                ApplyCalibrationLockout(user, progress, _timing.CurTime);
 
             return true;
         }
@@ -161,23 +212,25 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         var targetPhase = GetPulseTargetPhase(scanner, progress.Assignments.Count);
         var windowSize = GetPulseWindowSize(scanner, completedLayers, layerCount);
         var graceSize = GetPulseGraceSize(scanner, completedLayers, layerCount);
-        var phaseOk = PhaseInWindow(clientPhase, targetPhase, windowSize + graceSize) ||
-                      PhaseInWindow(GetServerPulsePhase(progress, scanner, completedLayers, layerCount), targetPhase, windowSize + graceSize);
+        // The configured grace window is the bounded latency allowance. Client animation
+        // phase is diagnostic input only; it cannot prove a successful timed action.
+        var phaseOk = PhaseInWindow(GetServerPulsePhase(progress, scanner, completedLayers, layerCount),
+            targetPhase, windowSize + graceSize);
 
         if (!correctLayer)
         {
-            ApplyPuzzlePenalty(progress, scanner, CMUBodyScannerFeedbackKind.WrongLayer);
+            ApplyPuzzlePenalty(user, progress, scanner, CMUBodyScannerFeedbackKind.WrongLayer);
             if (_timing.CurTime >= progress.EndsAt)
-                ApplyCalibrationLockout(user, patient, scanner);
+                ApplyCalibrationLockout(user, progress, _timing.CurTime);
 
             return true;
         }
 
         if (!phaseOk)
         {
-            ApplyPuzzlePenalty(progress, scanner, CMUBodyScannerFeedbackKind.WrongTiming);
+            ApplyPuzzlePenalty(user, progress, scanner, CMUBodyScannerFeedbackKind.WrongTiming);
             if (_timing.CurTime >= progress.EndsAt)
-                ApplyCalibrationLockout(user, patient, scanner);
+                ApplyCalibrationLockout(user, progress, _timing.CurTime);
 
             return true;
         }
@@ -186,6 +239,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         progress.Assignments.Add(new CMUBodyScannerPuzzleAssignment(layerId, signal.Id));
         progress.LastFeedbackAt = _timing.CurTime;
         progress.LastFeedbackKind = CMUBodyScannerFeedbackKind.Correct;
+        AdvanceRevision(user);
 
         assignments = GetPuzzleAssignments(progress, signals);
         if (PuzzleSolved(signals, assignments))
@@ -194,33 +248,27 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         return true;
     }
 
-    public bool ResetPuzzle(EntityUid user, EntityUid patient, CMUBodyScannerConsoleComponent scanner)
+    public bool ResetPuzzle(EntityUid user, EntityUid patient, CMUBodyScannerConsoleComponent scanner,
+        CMUBodyScannerOrigin? origin = null)
     {
+        if (Paused(user) || TerminatingOrDeleted(patient))
+            return false;
+        ExpireAttempt(user);
         if (GetCalibrationLockoutExpiry(user, patient) is not null)
-            return true;
+            return false;
 
         var signals = GetPuzzleProjection(patient).Signals;
         if (signals.Count == 0)
             return true;
 
-        if (TryComp<CMUBodyScannerPuzzleProgressComponent>(user, out var progress))
-        {
-            if (progress.Patient != patient)
-            {
-                RemComp<CMUBodyScannerPuzzleProgressComponent>(user);
-            }
-            else if (_timing.CurTime >= progress.EndsAt)
-            {
-                ApplyCalibrationLockout(user, progress.Patient, scanner);
-                return true;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        EnsurePuzzleProgress(user, patient, scanner);
+        // Starting another scan must never reset an unfinished patient's countdown.
+        if (!CanStart(user, patient))
+            return false;
+        var progress = EnsurePuzzleProgress(user, patient, scanner);
+        progress.Origin = origin;
+        progress.LockoutDurationSeconds = MathF.Max(0, scanner.CalibrationLockoutSeconds);
+        _scheduler.Schedule(user, AttemptExpiryWork, progress.EndsAt);
+        AdvanceRevision(user);
         return true;
     }
 
@@ -228,8 +276,11 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         EntityUid? viewer,
         EntityUid? patient,
         bool canScan,
-        CMUBodyScannerConsoleComponent scanner)
+        CMUBodyScannerConsoleComponent scanner,
+        CMUBodyScannerOrigin? origin = null)
     {
+        if (viewer is { } activeViewer)
+            ExpireAttempt(activeViewer);
         var boostExpires = GetBoostExpiry(viewer, patient);
         var lockoutExpires = GetCalibrationLockoutExpiry(viewer, patient);
         var projection = canScan && patient is { } puzzlePatient
@@ -245,14 +296,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
             lockoutExpires is null &&
             TryComp<CMUBodyScannerPuzzleProgressComponent>(progressViewer, out progress))
         {
-            if (progress.Patient == progressPatient &&
-                progress.StartedAt != TimeSpan.Zero &&
-                _timing.CurTime >= progress.EndsAt)
-            {
-                lockoutExpires = ApplyCalibrationLockout(progressViewer, progressPatient, scanner);
-                progress = null;
-            }
-            else if (progress.Patient != progressPatient || progress.StartedAt == TimeSpan.Zero)
+            if (progress.Patient != progressPatient || progress.Origin != origin)
             {
                 progress = null;
             }
@@ -282,7 +326,8 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
             progress?.LastFeedbackKind ?? CMUBodyScannerFeedbackKind.None,
             layers,
             targets,
-            assignments);
+            assignments,
+            progress?.AttemptId ?? 0);
     }
 
     private CMUBodyScannerPuzzleProgressComponent EnsurePuzzleProgress(
@@ -302,6 +347,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
     private void ResetPuzzleProgress(CMUBodyScannerPuzzleProgressComponent progress, CMUBodyScannerConsoleComponent scanner)
     {
         progress.Assignments.Clear();
+        progress.AttemptId = ++_nextAttemptId;
         progress.StartedAt = _timing.CurTime;
         progress.EndsAt = _timing.CurTime + TimeSpan.FromSeconds(scanner.CalibrationDurationSeconds);
         progress.PulseStartedAt = _timing.CurTime;
@@ -318,7 +364,9 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         boost.DelayMultiplier = 0.5f;
         boost.ExpiresAt = _timing.CurTime + TimeSpan.FromSeconds(scanner.BoostDurationSeconds);
         _scheduler.Schedule(user, BoostExpiryWork, boost.ExpiresAt);
+        _scheduler.Cancel(user, AttemptExpiryWork);
         RemComp<CMUBodyScannerPuzzleProgressComponent>(user);
+        AdvanceRevision(user);
     }
 
     private TimeSpan? GetBoostExpiry(EntityUid? viewer, EntityUid? patient)
@@ -343,23 +391,68 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         if (!TryComp<CMUBodyScannerCalibrationLockoutComponent>(user, out var lockout))
             return null;
 
-        if (lockout.Patient != body || _timing.CurTime >= lockout.ExpiresAt)
-            return null;
-
-        return lockout.ExpiresAt;
+        PruneLockouts(user, lockout);
+        return lockout.Expiries.TryGetValue(body, out var expiry) ? expiry : null;
     }
 
-    private TimeSpan ApplyCalibrationLockout(EntityUid user, EntityUid patient, CMUBodyScannerConsoleComponent scanner)
+    private TimeSpan ApplyCalibrationLockout(EntityUid user, CMUBodyScannerPuzzleProgressComponent progress, TimeSpan expiredAt)
     {
         var lockout = EnsureComp<CMUBodyScannerCalibrationLockoutComponent>(user);
-        lockout.Patient = patient;
-        lockout.ExpiresAt = _timing.CurTime + TimeSpan.FromSeconds(scanner.CalibrationLockoutSeconds);
-        _scheduler.Schedule(user, LockoutExpiryWork, lockout.ExpiresAt);
+        var expires = expiredAt + TimeSpan.FromSeconds(progress.LockoutDurationSeconds);
+        // One slot was reserved when this attempt began. No live patient's penalty is evicted.
+        lockout.Expiries[progress.Patient] = expires;
+        _scheduler.Cancel(user, AttemptExpiryWork);
+        RemComp<CMUBodyScannerPuzzleProgressComponent>(user);
+        AdvanceRevision(user);
+        PruneLockouts(user, lockout);
+        return expires;
+    }
 
-        if (HasComp<CMUBodyScannerPuzzleProgressComponent>(user))
+    private bool ExpireAttempt(EntityUid user)
+    {
+        if (Paused(user) || !TryComp<CMUBodyScannerPuzzleProgressComponent>(user, out var progress))
+            return false;
+        if (TerminatingOrDeleted(progress.Patient))
+        {
+            _scheduler.Cancel(user, AttemptExpiryWork);
             RemComp<CMUBodyScannerPuzzleProgressComponent>(user);
+            AdvanceRevision(user);
+            return true;
+        }
+        if (_timing.CurTime < progress.EndsAt)
+            return false;
+        ApplyCalibrationLockout(user, progress, progress.EndsAt);
+        return true;
+    }
 
-        return lockout.ExpiresAt;
+    private void PruneLockouts(EntityUid user, CMUBodyScannerCalibrationLockoutComponent lockouts)
+    {
+        if (Paused(user))
+            return;
+        _expiredPatients.Clear();
+        TimeSpan? earliest = null;
+        foreach (var (patient, expiry) in lockouts.Expiries)
+        {
+            if (TerminatingOrDeleted(patient) || expiry <= _timing.CurTime)
+                _expiredPatients.Add(patient);
+            else if (earliest == null || expiry < earliest)
+                earliest = expiry;
+        }
+        foreach (var patient in _expiredPatients)
+            lockouts.Expiries.Remove(patient);
+        if (earliest is { } next)
+        {
+            if (lockouts.NextExpiry != next)
+            {
+                lockouts.NextExpiry = next;
+                _scheduler.Schedule(user, LockoutExpiryWork, next);
+            }
+        }
+        else
+        {
+            _scheduler.Cancel(user, LockoutExpiryWork);
+            RemComp<CMUBodyScannerCalibrationLockoutComponent>(user);
+        }
     }
 
     private (List<CMUBodyScannerPuzzleSignal> Signals, List<CMUBodyScannerSliceSignal> Targets)
@@ -674,6 +767,7 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
     }
 
     private void ApplyPuzzlePenalty(
+        EntityUid user,
         CMUBodyScannerPuzzleProgressComponent progress,
         CMUBodyScannerConsoleComponent scanner,
         CMUBodyScannerFeedbackKind feedback)
@@ -687,6 +781,8 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
         progress.LastPenaltySeconds = penalty;
         progress.LastFeedbackAt = _timing.CurTime;
         progress.LastFeedbackKind = feedback;
+        AdvanceRevision(user);
+        _scheduler.Schedule(user, AttemptExpiryWork, progress.EndsAt);
     }
 
     private float GetServerPulsePhase(

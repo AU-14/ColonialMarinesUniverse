@@ -1048,17 +1048,20 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     ///     or raises <c>CMSurgeryCompleteEvent</c>. Shared no-ops so
     ///     prediction rollback can't double-apply state mutations.
     /// </summary>
-    protected virtual void RunStepEffect(
+    protected virtual CMUSurgeryStepOutcome RunStepEffect(
         EntityUid patient,
         CMUSurgeryArmedStepComponent armed,
         EntityUid surgeon,
         EntityUid? tool,
         EntityUid? targetPart,
-        EntProtoId<CMSurgeryStepComponent>? committedStep = null)
+        EntProtoId<CMSurgeryStepComponent>? committedStep = null,
+        EntityUid? donor = null)
     {
+        return CMUSurgeryStepOutcome.Failed;
     }
 
-    public bool TryCompleteAutomatedStep(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon)
+    public bool TryCompleteAutomatedStep(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon,
+        EntityUid? donor = null)
     {
         if (!Net.IsServer)
             return false;
@@ -1083,8 +1086,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return false;
         }
 
-        RunStepEffect(patient, armed, surgeon, null, targetPart);
-        return true;
+        return RunStepEffect(patient, armed, surgeon, null, targetPart, donor: donor) == CMUSurgeryStepOutcome.Succeeded;
     }
 
     private void OnStepDoAfterAttempt(Entity<CMUSurgeryArmedStepComponent> ent, ref DoAfterAttemptEvent<CMUSurgeryStepDoAfterEvent> args)
@@ -1093,6 +1095,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         var ev = args.Event;
 
         if (!ArmedMatchesDoAfter(armed, ev)
+            || !IsAttemptDonorStillValid(ev)
             || (Net.IsServer && !SurgerySessions.IsAttemptCurrent(patient, ev.Attempt, ev.User, ev.Used, ev.Target, ev.StepId))
             || (Net.IsServer && !IsAttemptTargetStillValid(patient, armed, ev.Target))
             || !CanOperateOnPatient(patient, ev.User)
@@ -1152,7 +1155,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return;
         }
 
-        if (!IsAttemptTargetStillValid(patient, armed, args.Target))
+        if (!IsAttemptTargetStillValid(patient, armed, args.Target) || !IsAttemptDonorStillValid(args))
         {
             if (SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
                 AbandonInvalidTarget(patient, armed);
@@ -1172,6 +1175,14 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         Dirty(patient, armed);
         ScheduleArmedExpiry(patient, armed);
         OnSurgerySessionStateChanged(patient);
+    }
+
+    private bool IsAttemptDonorStillValid(CMUSurgeryStepDoAfterEvent attempt)
+    {
+        return attempt.DonorRoot is not { } donorRoot
+            || attempt.Used is { } used
+            && TryResolveHeldLimbRoot(used, out var currentRoot, out _)
+            && GetNetEntity(currentRoot) == donorRoot;
     }
 
     private void OnAttemptActorLost(
@@ -1614,9 +1625,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
     private bool TryResolveSurgicalTraitCleanupStep(EntityUid targetPart, string leafSurgeryId, out CMUResolvedStep resolved)
     {
+        var site = GetSiteState(targetPart);
         foreach (var trait in SurgicalTraits.EnumerateOrderedTraits(targetPart))
         {
             if (!CanResolveTraitForAccess(trait, leafSurgeryId))
+                continue;
+            if (site.Access < (IsDeepAccessTrait(trait) ? CMUSurgicalAccess.Deep : CMUSurgicalAccess.Shallow))
                 continue;
 
             var surgeryId = TraitCleanupSurgeryId(trait);
@@ -1947,7 +1961,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         return false;
     }
 
-    private bool TryResolveHeldLimbRoot(
+    protected bool TryResolveHeldLimbRoot(
         EntityUid held,
         out EntityUid limbRoot,
         [NotNullWhen(true)] out BodyPartComponent? bodyPart)

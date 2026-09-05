@@ -4,9 +4,11 @@ using Content.Shared.Destructible;
 using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.DragDrop;
+using Content.Shared.Interaction;
 using Content.Shared.Movement.Events;
 using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Medical.Treatment.Surgery;
@@ -18,12 +20,14 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
     [Dependency] private CMUMedicalPatientBaySystem _patientBay = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
     private readonly HashSet<EntityUid> _openConsoles = new();
     private readonly List<EntityUid> _staleConsoles = new();
     private float _uiAccumulator;
+    private ulong _nextOccupantGeneration;
 
     public override void Initialize()
     {
@@ -39,6 +43,8 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
         });
 
         SubscribeLocalEvent<CMUBodyScannerPodComponent, ComponentInit>(OnPodInit);
+        SubscribeLocalEvent<CMUBodyScannerPodComponent, EntInsertedIntoContainerMessage>(OnPatientInserted);
+        SubscribeLocalEvent<CMUBodyScannerPodComponent, EntRemovedFromContainerMessage>(OnPatientRemoved);
         SubscribeLocalEvent<CMUBodyScannerPodComponent, DestructionEventArgs>(OnPodDestroyed);
         SubscribeLocalEvent<CMUBodyScannerPodComponent, DragDropTargetEvent>(OnPodDragDrop);
         SubscribeLocalEvent<CMUBodyScannerPodComponent, GetVerbsEvent<AlternativeVerb>>(OnPodAlternativeVerbs);
@@ -97,49 +103,63 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
 
     private void OnConfirmPuzzle(Entity<CMUBodyScannerConsoleComponent> ent, ref CMUBodyScannerConfirmPuzzleMessage msg)
     {
-        if (!CanUsePuzzle(ent.Owner, ent.Comp, msg.Actor, out var patient))
+        if (!ValidateCommand(ent, msg.Actor, msg.Context, out var patient, out var origin))
             return;
 
-        if (_calibration.TryConfirmPuzzle(msg.Actor, patient, ent.Comp, msg.LayerId, msg.SignalId, msg.ClientPhase))
+        if (msg.Context.Attempt == 0)
+            return;
+
+        if (_calibration.TryConfirmPuzzle(msg.Actor, patient, ent.Comp, msg.LayerId, msg.SignalId, msg.ClientPhase,
+                msg.Context.Attempt, msg.ExpectedAssignments, origin))
             RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnResetPuzzle(Entity<CMUBodyScannerConsoleComponent> ent, ref CMUBodyScannerResetPuzzleMessage msg)
     {
-        if (!CanUsePuzzle(ent.Owner, ent.Comp, msg.Actor, out var patient))
+        if (!ValidateCommand(ent, msg.Actor, msg.Context, out var patient, out var origin))
             return;
 
-        if (_calibration.ResetPuzzle(msg.Actor, patient, ent.Comp))
+        if (_calibration.ResetPuzzle(msg.Actor, patient, ent.Comp, origin))
             RefreshUi(ent.Owner, ent.Comp);
     }
 
     private void OnEjectPatient(Entity<CMUBodyScannerConsoleComponent> ent, ref CMUBodyScannerEjectPatientMessage msg)
     {
-        if (!_skills.HasSkill(msg.Actor, SurgerySkill, 1))
+        if (!ValidateCommand(ent, msg.Actor, msg.Context, out _, out var origin))
             return;
 
-        if (!TryFindLinkedScanner(ent.Owner, ent.Comp, out var pod, out var podComp)
-            || !_patientBay.TryGetPatient(podComp.BodyContainer, out _))
-        {
+        if (!TryComp<CMUBodyScannerPodComponent>(origin.Pod, out var podComp))
             return;
-        }
 
-        EjectPatient(pod, podComp);
+        EjectPatient(origin.Pod, podComp);
         RefreshUi(ent.Owner, ent.Comp);
     }
 
-    private bool CanUsePuzzle(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid user, out EntityUid patient)
+    private bool ValidateCommand(Entity<CMUBodyScannerConsoleComponent> console, EntityUid user,
+        CMUBodyScannerCommandContext context, out EntityUid patient, out CMUBodyScannerOrigin origin)
     {
         patient = default;
-        if (!_skills.HasSkill(user, SurgerySkill, 1))
+        origin = default;
+        if (TerminatingOrDeleted(user) || Paused(user) || !_skills.HasSkill(user, SurgerySkill, 1)
+            || !_interaction.InRangeAndAccessible(user, console.Owner))
             return false;
 
-        if (!TryFindLinkedScanner(console, comp, out _, out var scanner)
-            || !_patientBay.TryGetPatient(scanner.BodyContainer, out patient))
+        if (!TryFindLinkedScanner(console.Owner, console.Comp, out var pod, out var scanner)
+            || !_patientBay.TryGetPatient(scanner.BodyContainer, out patient)
+            || TerminatingOrDeleted(patient))
         {
             return false;
         }
-
+        origin = new CMUBodyScannerOrigin(console.Owner, pod, scanner.OccupantGeneration);
+        if (context.Console != GetNetEntity(console.Owner) || context.Pod != GetNetEntity(pod)
+            || context.Patient != GetNetEntity(patient) || scanner.Patient != patient
+            || context.OccupantGeneration != scanner.OccupantGeneration
+            || context.OperatorRevision != _calibration.GetRevision(user)
+            || context.Attempt != _calibration.GetAttempt(user))
+        {
+            RefreshUi(console.Owner, console.Comp, user);
+            return false;
+        }
         return true;
     }
 
@@ -158,7 +178,7 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
 
     private void SendState(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid viewer)
     {
-        var state = BuildState(console, comp, viewer);
+        var state = BuildStateForViewer(console, comp, viewer);
         _ui.ServerSendUiMessage(
             console,
             CMUBodyScannerUIKey.Key,
@@ -166,12 +186,13 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
             viewer);
     }
 
-    private CMUBodyScannerBuiState BuildState(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid? viewer)
+    public CMUBodyScannerBuiState BuildStateForViewer(EntityUid console, CMUBodyScannerConsoleComponent comp, EntityUid? viewer)
     {
         var podLinked = TryFindLinkedScanner(console, comp, out var pod, out var scanner);
         EntityUid? patient = podLinked ? scanner.BodyContainer.ContainedEntity : null;
         var canScan = viewer is { } user && patient is { } body && _skills.HasSkill(user, SurgerySkill, 1);
-        var calibration = _calibration.BuildView(viewer, patient, canScan, comp);
+        var origin = new CMUBodyScannerOrigin(console, pod, podLinked ? scanner.OccupantGeneration : 0);
+        var calibration = _calibration.BuildView(viewer, patient, canScan, comp, origin);
 
         var status = !podLinked
             ? Loc.GetString("cmu-body-scanner-status-no-pod")
@@ -205,7 +226,18 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
             canScan && patient is { } scanPatient ? _readout.BuildScanLines(scanPatient) : [],
             calibration.Layers,
             calibration.Targets,
-            calibration.Assignments);
+            calibration.Assignments)
+        {
+            CalibrationAttempt = calibration.AttemptId,
+            CommandContext = canScan && viewer is { } actor && patient is { } bodyPatient
+                ? new CMUBodyScannerCommandContext(GetNetEntity(console), GetNetEntity(pod), GetNetEntity(bodyPatient),
+                    scanner.OccupantGeneration, _calibration.GetRevision(actor), _calibration.GetAttempt(actor))
+                : null,
+            CanStartCalibration = canScan && viewer is { } startActor && patient is { } startPatient
+                && _calibration.CanStart(startActor, startPatient),
+            CalibrationActiveElsewhere = canScan && viewer is { } otherActor && patient is { } otherPatient
+                && _calibration.HasOtherAttempt(otherActor, otherPatient, origin),
+        };
     }
 
     private bool TryFindLinkedScanner(
@@ -220,7 +252,31 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
     private void OnPodInit(Entity<CMUBodyScannerPodComponent> ent, ref ComponentInit args)
     {
         ent.Comp.BodyContainer = _patientBay.EnsureBodyContainer(ent.Owner, CMUBodyScannerPodComponent.BodyContainerId);
+        SynchronizeOccupant(ent);
         _patientBay.UpdatePodAppearance(ent.Owner, ent.Comp.BodyContainer);
+    }
+
+    private void OnPatientInserted(Entity<CMUBodyScannerPodComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        if (args.Container == ent.Comp.BodyContainer)
+            SynchronizeOccupant(ent);
+    }
+
+    private void OnPatientRemoved(Entity<CMUBodyScannerPodComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        if (args.Container == ent.Comp.BodyContainer)
+            SynchronizeOccupant(ent);
+    }
+
+    private void SynchronizeOccupant(Entity<CMUBodyScannerPodComponent> ent)
+    {
+        var patient = ent.Comp.BodyContainer.ContainedEntity;
+        if (ent.Comp.Patient == patient)
+            return;
+        ent.Comp.Patient = patient;
+        ent.Comp.OccupantGeneration = ++_nextOccupantGeneration;
+        _patientBay.UpdatePodAppearance(ent.Owner, ent.Comp.BodyContainer);
+        RefreshLinkedConsoles(ent.Owner);
     }
 
     private void OnPodDestroyed(Entity<CMUBodyScannerPodComponent> ent, ref DestructionEventArgs args)
@@ -244,18 +300,8 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
 
         var user = args.User;
 
-        if (_patientBay.TryGetPatient(ent.Comp.BodyContainer, out _))
-        {
-            args.Verbs.Add(new AlternativeVerb
-            {
-                Act = () => EjectPatient(ent.Owner, ent.Comp),
-                Category = VerbCategory.Eject,
-                Text = Loc.GetString("medical-scanner-verb-noun-occupant"),
-                Priority = 1,
-            });
-            return;
-        }
-
+        // Occupant ejection requires the console's visit-bound command context.
+        // Generic verbs are reconstructed at execution and cannot bind that visit.
         if (!_patientBay.CanInsertPatient(ent.Comp.BodyContainer, user))
             return;
 
@@ -303,7 +349,8 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
         if (!_patientBay.TryGetPatient(comp.BodyContainer, out var patient))
             return null;
 
-        _patientBay.TryEjectPatient(pod, comp.BodyContainer, patient);
+        if (!_patientBay.TryEjectPatient(pod, comp.BodyContainer, patient))
+            return null;
         RefreshLinkedConsoles(pod);
         return patient;
     }

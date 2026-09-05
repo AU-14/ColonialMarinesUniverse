@@ -50,6 +50,7 @@ public enum CMUMedicalPodVisuals : byte
 [Serializable, NetSerializable]
 public sealed class CMUAutodocBuiState : BoundUserInterfaceState
 {
+    public CMUAutodocCommandContext? CommandContext;
     public NetEntity? Pod;
     public NetEntity? Patient;
     public string PatientName;
@@ -107,7 +108,16 @@ public sealed record CMUAutodocQueueEntry(
     string Category,
     int StepIndex,
     string StepLabel,
-    float DurationSeconds);
+    float DurationSeconds,
+    ulong Id = 0);
+
+/// <summary>Commands apply only to the exact occupant and machine state the viewer received.</summary>
+[Serializable, NetSerializable]
+public readonly record struct CMUAutodocCommandContext(
+    NetEntity Pod,
+    NetEntity Patient,
+    ulong OccupantGeneration,
+    ulong StateRevision);
 
 [Serializable, NetSerializable]
 public sealed class CMUAutodocQueueStepMessage : BoundUserInterfaceMessage
@@ -117,51 +127,64 @@ public sealed class CMUAutodocQueueStepMessage : BoundUserInterfaceMessage
     public BodyPartSymmetry TargetSymmetry;
     public string SurgeryId;
     public int StepIndex;
+    public CMUAutodocCommandContext Context;
 
-    public CMUAutodocQueueStepMessage(NetEntity part, BodyPartType type, BodyPartSymmetry symmetry, string surgeryId, int stepIndex)
+    public CMUAutodocQueueStepMessage(NetEntity part, BodyPartType type, BodyPartSymmetry symmetry, string surgeryId,
+        int stepIndex, CMUAutodocCommandContext context)
     {
         Part = part;
         TargetPartType = type;
         TargetSymmetry = symmetry;
         SurgeryId = surgeryId;
         StepIndex = stepIndex;
+        Context = context;
     }
 }
 
 [Serializable, NetSerializable]
 public sealed class CMUAutodocRemoveQueueStepMessage : BoundUserInterfaceMessage
 {
-    public int Index;
+    public ulong EntryId;
+    public CMUAutodocCommandContext Context;
 
-    public CMUAutodocRemoveQueueStepMessage(int index)
+    public CMUAutodocRemoveQueueStepMessage(ulong entryId, CMUAutodocCommandContext context)
     {
-        Index = index;
+        EntryId = entryId;
+        Context = context;
     }
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUAutodocClearQueueMessage : BoundUserInterfaceMessage
+public sealed class CMUAutodocClearQueueMessage(CMUAutodocCommandContext context) : BoundUserInterfaceMessage
 {
+    public CMUAutodocCommandContext Context = context;
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUAutodocStartMessage : BoundUserInterfaceMessage
+public sealed class CMUAutodocStartMessage(CMUAutodocCommandContext context) : BoundUserInterfaceMessage
 {
+    public CMUAutodocCommandContext Context = context;
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUAutodocStopMessage : BoundUserInterfaceMessage
+public sealed class CMUAutodocStopMessage(CMUAutodocCommandContext context) : BoundUserInterfaceMessage
 {
+    public CMUAutodocCommandContext Context = context;
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUAutodocEjectPatientMessage : BoundUserInterfaceMessage
+public sealed class CMUAutodocEjectPatientMessage(CMUAutodocCommandContext context) : BoundUserInterfaceMessage
 {
+    public CMUAutodocCommandContext Context = context;
 }
 
 [Serializable, NetSerializable]
 public sealed class CMUBodyScannerBuiState : BoundUserInterfaceState
 {
+    public CMUBodyScannerCommandContext? CommandContext;
+    public bool CanStartCalibration;
+    public bool CalibrationActiveElsewhere;
+    public ulong CalibrationAttempt;
     public NetEntity? Pod;
     public NetEntity? Patient;
     public string PatientName;
@@ -311,28 +334,40 @@ public sealed record CMUBodyScannerScanLine(
 public sealed record CMUBodyScannerPuzzleAssignment(string LayerId, string SignalId);
 
 [Serializable, NetSerializable]
+public readonly record struct CMUBodyScannerCommandContext(
+    NetEntity Console, NetEntity Pod, NetEntity Patient, ulong OccupantGeneration,
+    ulong OperatorRevision, ulong Attempt);
+
+[Serializable, NetSerializable]
 public sealed class CMUBodyScannerConfirmPuzzleMessage : BoundUserInterfaceMessage
 {
     public string LayerId;
     public string SignalId;
     public float ClientPhase;
+    public CMUBodyScannerCommandContext Context;
+    public int ExpectedAssignments;
 
-    public CMUBodyScannerConfirmPuzzleMessage(string layerId, string signalId, float clientPhase)
+    public CMUBodyScannerConfirmPuzzleMessage(string layerId, string signalId, float clientPhase,
+        CMUBodyScannerCommandContext context, int expectedAssignments)
     {
         LayerId = layerId;
         SignalId = signalId;
         ClientPhase = clientPhase;
+        Context = context;
+        ExpectedAssignments = expectedAssignments;
     }
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUBodyScannerResetPuzzleMessage : BoundUserInterfaceMessage
+public sealed class CMUBodyScannerResetPuzzleMessage(CMUBodyScannerCommandContext context) : BoundUserInterfaceMessage
 {
+    public CMUBodyScannerCommandContext Context = context;
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUBodyScannerEjectPatientMessage : BoundUserInterfaceMessage
+public sealed class CMUBodyScannerEjectPatientMessage(CMUBodyScannerCommandContext context) : BoundUserInterfaceMessage
 {
+    public CMUBodyScannerCommandContext Context = context;
 }
 
 [Serializable, NetSerializable]

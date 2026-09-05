@@ -9,6 +9,7 @@ using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared.Body.Part;
+using Content.Shared.Interaction;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
@@ -19,6 +20,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private PopupSystem _popup = default!;
@@ -50,6 +52,12 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             if (marker.Patient != patient)
                 continue;
 
+            if (!CanAccessPatient(medic, patient))
+            {
+                _ui.CloseUi(medic, CMUSurgeryUIKey.Key, medic);
+                continue;
+            }
+
             var parts = BuildPartEntries(patient, medic);
             var armed = CompOrNull<CMUSurgeryArmedStepComponent>(patient);
             var state = BuildBuiStateForViewer(patient, medic, marker, parts, armed);
@@ -63,6 +71,9 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             return false;
 
         if (!IsCmuOrganicSurgeryPatient(patient))
+            return false;
+
+        if (!CanAccessPatient(surgeon, patient))
             return false;
 
         if (tool is { } usedTool && IsUiLessSurgeryEnabled(surgeon))
@@ -817,7 +828,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
     {
         var marker = ent.Comp;
         var medic = ent.Owner;
-        if (!marker.Patient.IsValid())
+        if (args.Actor != medic || !CanAccessPatient(medic, marker.Patient))
             return;
 
         if (!IsUiCommandCurrent(
@@ -936,7 +947,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
     private void OnClearArmedMessage(Entity<CMUSurgeryWindowOpenComponent> ent, ref CMUSurgeryClearArmedMessage args)
     {
         var marker = ent.Comp;
-        if (!marker.Patient.IsValid())
+        if (args.Actor != ent.Owner || !CanAccessPatient(ent.Owner, marker.Patient))
             return;
 
         if (!IsUiCommandCurrent(
@@ -973,6 +984,12 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             return;
 
         RemComp<CMUSurgeryWindowOpenComponent>(ent.Owner);
+    }
+
+    private bool CanAccessPatient(EntityUid surgeon, EntityUid patient)
+    {
+        return Exists(patient) && !TerminatingOrDeleted(patient)
+            && _interaction.InRangeAndAccessible(surgeon, patient);
     }
 
     private readonly record struct ToolIntentCandidate(CMUSurgeryPartEntry Part, CMUSurgeryEntry Entry, int Score);
