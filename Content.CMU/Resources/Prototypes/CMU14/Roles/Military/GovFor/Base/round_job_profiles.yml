@@ -4,6 +4,7 @@
   id: AU14RoundJobProfileMilitaryBase
   components:
   - type: MarineOrders
+  - type: RMCAwardRecommendation
   sideComponents:
     Govfor:
     - type: Marine
