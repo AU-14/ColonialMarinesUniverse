@@ -1056,12 +1056,25 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             var messageLarva = Loc.GetString(burstLocId, ("victim", Identity.Entity(victim, EntityManager)));
             _popup.PopupClient(messageLarva, spawnedLarva, spawnedLarva, PopupType.MediumCaution);
         }
+        else
+        {
+            // A failed start must not disable movement and automatic burst retries.
+            comp.IsBursting = false;
+            Dirty(victim, comp);
+        }
     }
 
     private void OnBurst(Entity<VictimInfectedComponent> ent, ref LarvaBurstDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled)
+        if (args.Handled)
             return;
+
+        if (args.Cancelled)
+        {
+            ent.Comp.IsBursting = false;
+            Dirty(ent);
+            return;
+        }
 
         if (_net.IsClient)
             return;
