@@ -24,6 +24,7 @@ using Content.Shared.Chat;
 using Content.Shared.CombatMode;
 using Content.Shared.Coordinates;
 using Content.Shared.Dataset;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Components;
@@ -47,6 +48,7 @@ using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Content.Shared.SSDIndicator;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Content.Shared.Tools;
 using Content.Shared.Tools.Components;
@@ -164,6 +166,9 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         SubscribeLocalEvent<CMURemotePilotingComponent, HeadsetRadioReceiveRelayEvent>(OnPilotingHeadsetReceive);
         SubscribeLocalEvent<CMURemotePilotingComponent, UpdateCanMoveEvent>(OnPilotingUpdateCanMove);
         SubscribeLocalEvent<CMURemotePilotingComponent, MoveEvent>(OnPilotingMove);
+        SubscribeLocalEvent<CMURemotePilotingComponent, DamageChangedEvent>(OnPilotingDamageChanged);
+        SubscribeLocalEvent<CMURemotePilotingComponent, StunnedEvent>(OnPilotingStunned);
+        SubscribeLocalEvent<CMURemotePilotingComponent, KnockedDownEvent>(OnPilotingKnockedDown);
         SubscribeLocalEvent<CMURemotePilotingComponent, MobStateChangedEvent>(OnPilotingMobStateChanged);
         SubscribeLocalEvent<CMURemotePilotingComponent, UseAttemptEvent>(OnPilotingAttempt);
         SubscribeLocalEvent<CMURemotePilotingComponent, PickupAttemptEvent>(OnPilotingAttempt);
@@ -892,6 +897,22 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             return;
 
         EndControlForOperator(ent.Owner, Loc.GetString("cmu-drone-control-ended-operator-disabled"));
+    }
+
+    private void OnPilotingDamageChanged(Entity<CMURemotePilotingComponent> ent, ref DamageChangedEvent args)
+    {
+        if (ent.Comp.BlocksInput && args.DamageIncreased)
+            QueueEndControlForOperator(ent, Loc.GetString("cmu-drone-control-ended-operator-hurt"));
+    }
+
+    private void OnPilotingStunned(Entity<CMURemotePilotingComponent> ent, ref StunnedEvent args)
+    {
+        QueueEndControlForOperator(ent, Loc.GetString("cmu-drone-control-ended-operator-disabled"));
+    }
+
+    private void OnPilotingKnockedDown(Entity<CMURemotePilotingComponent> ent, ref KnockedDownEvent args)
+    {
+        QueueEndControlForOperator(ent, Loc.GetString("cmu-drone-control-ended-operator-disabled"));
     }
 
     private void OnPilotingAttempt(EntityUid uid, CMURemotePilotingComponent component, CancellableEntityEventArgs args)
@@ -1632,6 +1653,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         pilot.MindId = resolvedMind;
         pilot.BlocksInput = true;
         pilot.BodyMoveGraceUntil = _timing.CurTime + BodyMoveGrace;
+        pilot.BodyStartCoordinates = Transform(user).Coordinates;
         RemoveOperatorSsdIndicator((user, pilot));
 
         var session = EnsureComp<CMUDroneControlSessionComponent>(linkedDrone);
@@ -2013,7 +2035,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             return false;
         }
 
-        if (!args.OldPosition.TryDistance(EntityManager, args.NewPosition, out var distance))
+        // Measure total displacement, so repeated small pushes cannot bypass the safeguard.
+        if (!ent.Comp.BodyStartCoordinates.TryDistance(EntityManager, args.NewPosition, out var distance))
             return false;
 
         return distance <= BodyMoveGraceDistance;

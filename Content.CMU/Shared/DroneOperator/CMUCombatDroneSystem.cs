@@ -41,6 +41,25 @@ public sealed partial class CMUCombatDroneSystem : EntitySystem
         SubscribeLocalEvent<CMUCombatDroneComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CMUCombatDroneComponent, RMCIgniteAttemptEvent>(OnIgniteAttempt);
         SubscribeLocalEvent<CMUCombatDroneComponent, RMCGetFireImmunityEvent>(OnGetFireImmunity);
+        SubscribeAllEvent<CMUCombatDroneAimEvent>(OnAim);
+    }
+
+    private void OnAim(CMUCombatDroneAimEvent args, EntitySessionEventArgs session)
+    {
+        if (_timing.ApplyingState || !double.IsFinite(args.Angle.Theta) ||
+            session.SenderSession.AttachedEntity is not { } uid ||
+            !TryComp<CMUCombatDroneComponent>(uid, out var drone) || drone.Wrecked ||
+            !_mobState.IsAlive(uid) || (_net.IsServer && !HasComp<CMUDroneControlSessionComponent>(uid)) ||
+            drone.TurretVisual is not { } turret || TerminatingOrDeleted(turret))
+            return;
+
+        _transform.SetWorldRotation(turret, ClampAim(_transform.GetWorldRotation(uid), args.Angle, drone.FireArcDegrees));
+    }
+
+    public static Angle ClampAim(Angle heading, Angle aim, float arcDegrees)
+    {
+        var halfArc = Math.Clamp(arcDegrees, 0, 360) / 2;
+        return heading + Angle.FromDegrees(Math.Clamp(Angle.ShortestDistance(heading, aim).Degrees, -halfArc, halfArc));
     }
 
     private void OnChangeDirectionAttempt(Entity<CMUCombatDroneComponent> ent, ref ChangeDirectionAttemptEvent args)

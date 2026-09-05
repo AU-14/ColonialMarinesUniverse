@@ -1,7 +1,7 @@
 - type: entity
   parent: CMBackpackMarine
   id: CMUCombatDroneOperatorPackFilled
-  name: tracked drone operator field pack
+  name: gun UGV operator field pack
   description: A tracked combat drone kit containing a hull, pulse turret, standard and AP ammunition boxes, controller, and repair supplies.
   suffix: Filled
   components:
@@ -24,23 +24,21 @@
 - type: entity
   parent: BaseItem
   id: CMUCombatDroneHull
-  name: combat drone hull
+  name: gun UGV hull
   description: A folded tracked chassis. Place it on the ground, install its pulse turret, then load a standard or AP ammunition box to bring it online.
   components:
   - type: Sprite
-    sprite: CMU14/Mobs/CombatDrone/combat_drone.rsi
+    sprite: CMU14/Mobs/CombatDrone/ugv.rsi
     layers:
-    - state: hull
-    - state: turret
-      visible: false
+    - state: healthy-hull
       map: ["enum.CMUCombatDroneVisuals.Turret"]
   - type: Appearance
   - type: GenericVisualizer
     visuals:
       enum.CMUCombatDroneVisuals.Turret:
         enum.CMUCombatDroneVisuals.Turret:
-          True: {visible: true}
-          False: {visible: false}
+          True: {state: healthy}
+          False: {state: healthy-hull}
   - type: Item
     size: Normal
   - type: CMUCombatDroneHull
@@ -52,8 +50,8 @@
   description: A compact M41A-pattern pulse turret with a fixed IFF interlock and a 180-degree forward firing arc. Install it on a combat drone hull.
   components:
   - type: Sprite
-    sprite: CMU14/Mobs/CombatDrone/combat_drone.rsi
-    state: turret
+    sprite: CMU14/Mobs/CombatDrone/ugv.rsi
+    state: healthy-turret
   - type: Item
     size: Normal
   - type: CMUCombatDroneTurretAssembly

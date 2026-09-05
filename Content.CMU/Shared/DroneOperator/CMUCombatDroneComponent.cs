@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Tools;
@@ -13,6 +14,21 @@ public enum CMUCombatDroneVisuals : byte
 {
     Turret,
     Wrecked,
+    DamageState,
+}
+
+[Serializable, NetSerializable]
+public enum CMUCombatDroneDamageState : byte
+{
+    Healthy,
+    Damaged,
+    Destroyed,
+}
+
+public enum CMUCombatDroneWeapon : byte
+{
+    Pulse,
+    Flamer,
 }
 
 /// <summary>A remotely driven tracked chassis with a gun restricted to its forward hemisphere.</summary>
@@ -23,10 +39,24 @@ public sealed partial class CMUCombatDroneComponent : Component
     public float FireArcDegrees = 180;
 
     [DataField]
-    public EntProtoId TurretVisualPrototype = "CMUCombatDroneTurretVisual";
+    public EntProtoId? TurretVisualPrototype;
 
     [DataField, AutoNetworkedField]
     public EntityUid? TurretVisual;
+
+    /// <summary>Turret mount positions in sprite space, ordered south, north, east, west.</summary>
+    [DataField]
+    public List<Vector2> TurretMountOffsets = new()
+    {
+        new(0, 17f / 32), new(0, -14f / 32), new(-11f / 32, -6f / 32), new(10f / 32, -6f / 32),
+    };
+
+    /// <summary>Barrel tips relative to the turret pivot in each RSI direction.</summary>
+    [DataField]
+    public List<Vector2> TurretMuzzleOffsets = new()
+    {
+        new(0, -12f / 32), new(0, 18f / 32), new(24f / 32, 16f / 32), new(-24f / 32, 16f / 32),
+    };
 
     [DataField, AutoNetworkedField]
     public bool Wrecked;
@@ -36,6 +66,9 @@ public sealed partial class CMUCombatDroneComponent : Component
 
     [DataField]
     public FixedPoint2 WreckRecoveryThreshold = 200;
+
+    [DataField]
+    public FixedPoint2 DamagedVisualThreshold = 100;
 
     [DataField]
     public string? PreWreckName;
@@ -78,6 +111,9 @@ public sealed partial class CMUCombatDroneComponent : Component
 public sealed partial class CMUCombatDroneHullComponent : Component
 {
     [DataField]
+    public CMUCombatDroneWeapon Weapon;
+
+    [DataField]
     public EntProtoId DronePrototype = "CMUCombatDrone";
 
     [DataField]
@@ -88,7 +124,11 @@ public sealed partial class CMUCombatDroneHullComponent : Component
 }
 
 [RegisterComponent, NetworkedComponent]
-public sealed partial class CMUCombatDroneTurretAssemblyComponent : Component;
+public sealed partial class CMUCombatDroneTurretAssemblyComponent : Component
+{
+    [DataField]
+    public CMUCombatDroneWeapon Weapon;
+}
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUCombatDroneAmmoBoxComponent : Component;

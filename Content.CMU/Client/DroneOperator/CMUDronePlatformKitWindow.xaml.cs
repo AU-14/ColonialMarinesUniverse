@@ -15,5 +15,6 @@ public sealed partial class CMUDronePlatformKitWindow : DefaultWindow
         RobustXamlLoader.Load(this);
         HumanoidButton.OnPressed += _ => OnSelected?.Invoke(CMUDronePlatform.Humanoid);
         TrackedButton.OnPressed += _ => OnSelected?.Invoke(CMUDronePlatform.Tracked);
+        FlamerButton.OnPressed += _ => OnSelected?.Invoke(CMUDronePlatform.Flamer);
     }
 }

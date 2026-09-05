@@ -1,5 +1,8 @@
 using Content.Server._RMC14.Humanoid.Markings;
 using Content.Shared._RMC14.Repairable;
+using Content.Shared._RMC14.Weapons.Ranged.Flamer;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.CMU14.DroneOperator;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -9,6 +12,7 @@ using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared.Mobs;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Shared.SSDIndicator;
@@ -23,6 +27,7 @@ public sealed partial class CMUDroneOperatorSystem
 {
     [Dependency] private SharedAppearanceSystem _combatAppearance = default!;
     [Dependency] private DamageableSystem _combatDamage = default!;
+    [Dependency] private SharedSolutionContainerSystem _combatSolutions = default!;
     [Dependency] private SharedStackSystem _combatStacks = default!;
 
     private void InitializeCombatDrones()
@@ -38,6 +43,11 @@ public sealed partial class CMUDroneOperatorSystem
         SubscribeLocalEvent<CMUCombatDroneComponent, CMUCombatDroneWeldDoAfterEvent>(OnCombatWeld);
         SubscribeLocalEvent<CMUCombatDroneComponent, CMUCombatDroneWireDoAfterEvent>(OnCombatWire);
         SubscribeLocalEvent<CMUCombatDroneComponent, DamageChangedEvent>(OnCombatDamageChanged);
+        SubscribeLocalEvent<CMUFlamerDroneComponent, GunShotEvent>(OnFlamerDroneShot);
+        SubscribeLocalEvent<CMUFlamerDroneComponent, EntInsertedIntoContainerMessage>(OnFlamerTankInserted);
+        SubscribeLocalEvent<CMUFlamerDroneComponent, EntRemovedFromContainerMessage>(OnFlamerTankRemoved);
+        SubscribeLocalEvent<CMUFlamerDroneComponent, MobStateChangedEvent>(OnFlamerMobStateChanged);
+        SubscribeLocalEvent<RMCFlamerTankComponent, SolutionChangedEvent>(OnFlamerFuelChanged);
     }
 
     private void OnCombatHullInit(Entity<CMUCombatDroneHullComponent> ent, ref ComponentInit args)
@@ -53,9 +63,21 @@ public sealed partial class CMUDroneOperatorSystem
 
     private void OnCombatHullExamine(Entity<CMUCombatDroneHullComponent> ent, ref ExaminedEvent args)
     {
-        args.PushMarkup(Loc.GetString(GetCombatHullTurret(ent) == null
-            ? "cmu-combat-drone-assembly-needs-turret"
-            : "cmu-combat-drone-assembly-needs-ammo"));
+        args.PushMarkup(Loc.GetString(CombatAssemblyMessage(ent, GetCombatHullTurret(ent) == null
+            ? "assembly-needs-turret"
+            : "assembly-needs-ammo")));
+    }
+
+    private static string CombatAssemblyMessage(Entity<CMUCombatDroneHullComponent> hull, string message)
+    {
+        return (hull.Comp.Weapon == CMUCombatDroneWeapon.Flamer ? "cmu-flamer-drone-" : "cmu-combat-drone-") + message;
+    }
+
+    private bool IsCombatHullAmmo(Entity<CMUCombatDroneHullComponent> hull, EntityUid used)
+    {
+        return hull.Comp.Weapon == CMUCombatDroneWeapon.Flamer
+            ? HasComp<RMCFlamerTankComponent>(used)
+            : HasComp<CMUCombatDroneAmmoBoxComponent>(used);
     }
 
     private bool CanAssembleCombatHull(Entity<CMUCombatDroneHullComponent> hull, EntityUid user, EntityUid used)
@@ -83,27 +105,33 @@ public sealed partial class CMUDroneOperatorSystem
         if (args.Handled)
             return;
 
-        var turret = HasComp<CMUCombatDroneTurretAssemblyComponent>(args.Used);
-        var ammo = HasComp<CMUCombatDroneAmmoBoxComponent>(args.Used);
-        if (!turret && !ammo)
+        var turret = TryComp<CMUCombatDroneTurretAssemblyComponent>(args.Used, out var assembly);
+        var ammo = IsCombatHullAmmo(ent, args.Used);
+        if (!turret && !ammo && !HasComp<CMUCombatDroneAmmoBoxComponent>(args.Used) && !HasComp<RMCFlamerTankComponent>(args.Used))
             return;
 
         args.Handled = true;
         if (!CanAssembleCombatHull(ent, args.User, args.Used))
             return;
 
+        if (turret && assembly!.Weapon != ent.Comp.Weapon || !turret && !ammo)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-combat-drone-incompatible-part"), ent, args.User);
+            return;
+        }
+
         var installed = GetCombatHullTurret(ent) != null;
         if (turret && installed || ammo && !installed)
         {
-            _popup.PopupEntity(Loc.GetString(installed
-                ? "cmu-combat-drone-assembly-needs-ammo"
-                : "cmu-combat-drone-assembly-needs-turret"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString(CombatAssemblyMessage(ent, installed
+                ? "assembly-needs-ammo"
+                : "assembly-needs-turret")), ent, args.User);
             return;
         }
 
         if (ammo && !HasCombatAmmo(args.Used))
         {
-            _popup.PopupEntity(Loc.GetString("cmu-combat-drone-assembly-empty-ammo"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString(CombatAssemblyMessage(ent, "assembly-empty-ammo")), ent, args.User);
             return;
         }
 
@@ -119,11 +147,14 @@ public sealed partial class CMUDroneOperatorSystem
             DuplicateCondition = DuplicateConditions.SameTarget,
         };
         if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupEntity(Loc.GetString(turret ? "cmu-combat-drone-install-turret-start" : "cmu-combat-drone-activate-start"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString(CombatAssemblyMessage(ent, turret ? "install-turret-start" : "activate-start")), ent, args.User);
     }
 
     private bool HasCombatAmmo(EntityUid magazine)
     {
+        if (TryComp<RMCFlamerTankComponent>(magazine, out var tank))
+            return _combatSolutions.TryGetSolution(magazine, tank.SolutionId, out _, out var solution) && solution.Volume > 0;
+
         var ammo = new GetAmmoCountEvent();
         RaiseLocalEvent(magazine, ref ammo);
         return ammo.Count > 0;
@@ -134,7 +165,8 @@ public sealed partial class CMUDroneOperatorSystem
         if (args.Handled || args.Cancelled)
             return;
         args.Handled = true;
-        if (args.Used is not { } used || !HasComp<CMUCombatDroneTurretAssemblyComponent>(used) ||
+        if (args.Used is not { } used || !TryComp<CMUCombatDroneTurretAssemblyComponent>(used, out var assembly) ||
+            assembly.Weapon != ent.Comp.Weapon ||
             !CanAssembleCombatHull(ent, args.User, used) || GetCombatHullTurret(ent) != null)
             return;
 
@@ -142,7 +174,7 @@ public sealed partial class CMUDroneOperatorSystem
         if (_containers.Insert(used, slot))
         {
             _combatAppearance.SetData(ent, CMUCombatDroneVisuals.Turret, true);
-            _popup.PopupEntity(Loc.GetString("cmu-combat-drone-assembly-needs-ammo"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString(CombatAssemblyMessage(ent, "assembly-needs-ammo")), ent, args.User);
         }
     }
 
@@ -151,7 +183,7 @@ public sealed partial class CMUDroneOperatorSystem
         if (args.Handled || args.Cancelled)
             return;
         args.Handled = true;
-        if (args.Used is not { } ammo || !HasComp<CMUCombatDroneAmmoBoxComponent>(ammo) ||
+        if (args.Used is not { } ammo || !IsCombatHullAmmo(ent, ammo) ||
             !CanAssembleCombatHull(ent, args.User, ammo) || GetCombatHullTurret(ent) == null || !HasCombatAmmo(ammo) ||
             !TryComp<CMUDroneOperatorComponent>(args.User, out var op))
             return;
@@ -173,9 +205,12 @@ public sealed partial class CMUDroneOperatorSystem
 
     private void OnCombatDroneMapInit(Entity<CMUCombatDroneComponent> ent, ref MapInitEvent args)
     {
-        var visual = SpawnAttachedTo(ent.Comp.TurretVisualPrototype, new(ent, System.Numerics.Vector2.Zero));
-        ent.Comp.TurretVisual = visual;
-        Dirty(ent);
+        if (ent.Comp.TurretVisualPrototype is { } prototype)
+        {
+            ent.Comp.TurretVisual = SpawnAttachedTo(prototype, new(ent, System.Numerics.Vector2.Zero));
+            Dirty(ent);
+        }
+        UpdateCombatDroneAppearance(ent, _combatDamage.GetTotalDamage((ent, null)));
     }
 
     private DamageSpecifier GetCombatRepair(Entity<CMUCombatDroneComponent> ent, bool wiring)
@@ -268,6 +303,8 @@ public sealed partial class CMUDroneOperatorSystem
         else if (ent.Comp.Wrecked && total < ent.Comp.WreckRecoveryThreshold)
             SetCombatDroneWrecked(ent, false);
 
+        UpdateCombatDroneAppearance(ent, total);
+
         if (total < ent.Comp.SparkDamageThreshold)
         {
             RemComp<CMUCombatDroneSparkingComponent>(ent);
@@ -281,16 +318,74 @@ public sealed partial class CMUDroneOperatorSystem
         }
     }
 
+    private void UpdateCombatDroneAppearance(Entity<CMUCombatDroneComponent> ent, FixedPoint2 total)
+    {
+        var state = ent.Comp.Wrecked ? CMUCombatDroneDamageState.Destroyed
+            : total >= ent.Comp.DamagedVisualThreshold ? CMUCombatDroneDamageState.Damaged
+            : CMUCombatDroneDamageState.Healthy;
+        _combatAppearance.SetData(ent, CMUCombatDroneVisuals.DamageState, state);
+        if (ent.Comp.TurretVisual is { } turret && !TerminatingOrDeleted(turret))
+            _combatAppearance.SetData(turret, CMUCombatDroneVisuals.DamageState, state);
+    }
+
+    private void OnFlamerDroneShot(Entity<CMUFlamerDroneComponent> ent, ref GunShotEvent args)
+    {
+        ent.Comp.FlameUntil = _timing.CurTime + ent.Comp.FlameDuration;
+        Dirty(ent);
+    }
+
+    private void OnFlamerTankInserted(Entity<CMUFlamerDroneComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        UpdateFlamerPilot(ent);
+    }
+
+    private void OnFlamerTankRemoved(Entity<CMUFlamerDroneComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        UpdateFlamerPilot(ent);
+    }
+
+    private void OnFlamerMobStateChanged(Entity<CMUFlamerDroneComponent> ent, ref MobStateChangedEvent args)
+    {
+        UpdateFlamerPilot(ent);
+    }
+
+    private void OnFlamerFuelChanged(Entity<RMCFlamerTankComponent> ent, ref SolutionChangedEvent args)
+    {
+        if (_containers.TryGetContainingContainer((ent, null), out var container) &&
+            TryComp<CMUFlamerDroneComponent>(container.Owner, out var flamer))
+            UpdateFlamerPilot((container.Owner, flamer));
+    }
+
+    private void UpdateFlamerPilot(Entity<CMUFlamerDroneComponent> ent)
+    {
+        var lit = _mobState.IsAlive(ent) &&
+            (!TryComp<CMUCombatDroneComponent>(ent, out var drone) || !drone.Wrecked) &&
+            _containers.TryGetContainer(ent, SharedGunSystem.MagazineSlot, out var slot) &&
+            slot.ContainedEntities.Count > 0 && HasCombatAmmo(slot.ContainedEntities[0]);
+        if (lit == ent.Comp.PilotLit)
+            return;
+
+        ent.Comp.PilotLit = lit;
+        Dirty(ent);
+    }
+
     private void SetCombatDroneWrecked(Entity<CMUCombatDroneComponent> ent, bool wrecked)
     {
         ent.Comp.Wrecked = wrecked;
         Dirty(ent);
+        if (TryComp<CMUFlamerDroneComponent>(ent, out var pilot))
+            UpdateFlamerPilot((ent, pilot));
         _combatAppearance.SetData(ent, CMUCombatDroneVisuals.Wrecked, wrecked);
         if (ent.Comp.TurretVisual is { } turret && !TerminatingOrDeleted(turret))
             _combatAppearance.SetData(turret, CMUCombatDroneVisuals.Wrecked, wrecked);
 
         if (wrecked)
         {
+            if (TryComp<CMUFlamerDroneComponent>(ent, out var flamer))
+            {
+                flamer.FlameUntil = TimeSpan.Zero;
+                Dirty(ent, flamer);
+            }
             ent.Comp.PreWreckName = Name(ent);
             _metaData.SetEntityName(ent, Loc.GetString("cmu-combat-drone-wreck-name", ("name", ent.Comp.PreWreckName)));
             StopEntityMotion(ent);
