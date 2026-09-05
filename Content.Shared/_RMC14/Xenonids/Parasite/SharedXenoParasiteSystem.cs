@@ -114,6 +114,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         SubscribeLocalEvent<ChemicalAntiparasiticComponent, GetInfectedIncubationMultiplierEvent>(OnAntiparasiticMultiplier);
         SubscribeLocalEvent<ChemicalAntiparasiticComponent, ComponentStartup>(OnAntiparasiticChanged);
         SubscribeLocalEvent<ChemicalAntiparasiticComponent, ComponentShutdown>(OnAntiparasiticChanged);
+        SubscribeLocalEvent<VictimInfectedComponent, ChemicalAntiparasiticChangedEvent>(OnAntiparasiticStrengthChanged);
         SubscribeLocalEvent<InfectableComponent, ActivateInWorldEvent>(OnInfectableActivate);
         SubscribeLocalEvent<InfectableComponent, CanDropTargetEvent>(OnInfectableCanDropTarget);
 
@@ -144,6 +145,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         SubscribeLocalEvent<ParasiteResistanceComponent, ExaminedEvent>(OnParasiteResistanceExamined);
 
         SubscribeLocalEvent<VictimInfectedComponent, MapInitEvent>(OnVictimInfectedMapInit);
+        SubscribeLocalEvent<VictimInfectedComponent, ComponentStartup>(OnVictimInfectedStartup);
         SubscribeLocalEvent<VictimInfectedComponent, ComponentRemove>(OnVictimInfectedRemoved);
         SubscribeLocalEvent<VictimInfectedComponent, ExaminedEvent>(OnVictimInfectedExamined);
         SubscribeLocalEvent<VictimInfectedComponent, RejuvenateEvent>(OnVictimInfectedRejuvenate);
@@ -163,6 +165,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     private void OnAntiparasiticMultiplier(Entity<ChemicalAntiparasiticComponent> ent,
         ref GetInfectedIncubationMultiplierEvent args)
     {
+        if (ent.Comp.LifeStage > ComponentLifeStage.Running)
+            return;
         args.Multiply(MathF.Max(0f, 1f - ent.Comp.Strength * 0.5f));
     }
 
@@ -171,6 +175,9 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
     private void OnAntiparasiticChanged(Entity<ChemicalAntiparasiticComponent> ent, ref ComponentShutdown args)
         => RefreshIncubationMultipliers(ent.Owner);
+
+    private void OnAntiparasiticStrengthChanged(Entity<VictimInfectedComponent> ent, ref ChemicalAntiparasiticChangedEvent args)
+        => RefreshIncubationMultipliers((ent.Owner, ent.Comp));
 
     public bool TryCureEarlyInfection(Entity<VictimInfectedComponent?> ent)
     {
@@ -516,6 +523,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         victim.Comp.BurstAt = _timing.CurTime + victim.Comp.BurstDelay;
     }
 
+    private void OnVictimInfectedStartup(Entity<VictimInfectedComponent> victim, ref ComponentStartup args)
+    {
+        var changed = new VictimInfectionChangedEvent(victim.Owner);
+        RaiseLocalEvent(ref changed);
+    }
+
     private void OnVictimInfectedRemoved(Entity<VictimInfectedComponent> victim, ref ComponentRemove args)
     {
         if (_status.HasStatusEffect(victim, "Unconscious", null))
@@ -523,6 +536,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             _status.TryRemoveStatusEffect(victim, "Unconscious");
         }
         _standing.Stand(victim);
+        var changed = new VictimInfectionChangedEvent(victim.Owner);
+        RaiseLocalEvent(ref changed);
     }
 
     private void OnVictimInfectedCancel<T>(Entity<VictimInfectedComponent> victim, ref T args) where T : CancellableEntityEventArgs
@@ -738,7 +753,11 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             multiplier *= multi;
         }
 
-        ent.Comp.IncubationMultiplier = multiplier;
+        if (ent.Comp.IncubationMultiplier != multiplier)
+        {
+            ent.Comp.IncubationMultiplier = multiplier;
+            Dirty(ent);
+        }
     }
 
     public override void Update(float frameTime)

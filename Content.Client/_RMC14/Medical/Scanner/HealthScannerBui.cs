@@ -190,38 +190,35 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         _window.ChemicalsContainer.DisposeAllChildren();
 
         var anyChemicals = false;
-        var anyUnknown = false;
-        if (uiState.Chemicals != null)
+        foreach (var reagent in uiState.KnownChemicals)
         {
-            foreach (var reagent in uiState.Chemicals.Contents)
-            {
-                if (!_reagent.TryIndex(reagent.Reagent, out var prototype))
-                    continue;
+            if (!_reagent.TryIndex(reagent.Prototype, out var prototype))
+                continue;
 
-                if (prototype.Unknown)
-                {
-                    // TODO RMC14 these shouldn't be setting sent to the client
-                    anyUnknown = true;
-                    continue;
-                }
+            var text = FormattedMessage.EscapeText($"{reagent.Quantity.Float():F1} {prototype.LocalizedName}");
+            if (reagent.Overdose)
+                text = $"[bold][color=red]{text} OD[/color][/bold]";
 
-                var text = $"{reagent.Quantity.Float():F1} {prototype.LocalizedName}";
-                if (prototype.Overdose != null && reagent.Quantity > prototype.Overdose)
-                    text = $"[bold][color=red]{FormattedMessage.EscapeText(text)} OD[/color][/bold]";
+            var label = new CMUScaledRichTextLabel();
+            label.SetMarkupPermissive(text);
+            _window.ChemicalsContainer.AddChild(label);
+            anyChemicals = true;
+        }
 
-                var label = new CMUScaledRichTextLabel();
-                label.SetMarkupPermissive(text);
-                _window.ChemicalsContainer.AddChild(label);
-                anyChemicals = true;
-            }
+        if (uiState.OmittedKnownChemicals > 0)
+        {
+            var label = new CMUScaledRichTextLabel();
+            label.SetMarkupPermissive(Loc.GetString("rmc-health-analyzer-additional-reagents", ("count", uiState.OmittedKnownChemicals)));
+            _window.ChemicalsContainer.AddChild(label);
+            anyChemicals = true;
         }
 
         _window.UnknownReagentsLabel.SetMarkupPermissive(Loc.GetString("rmc-health-analyzer-unknown-reagents"));
-        _window.UnknownChemicalsPanel.Visible = anyUnknown;
+        _window.UnknownChemicalsPanel.Visible = uiState.UnknownChemicals;
         _window.ChemicalContentsLabel.Visible = anyChemicals;
         _window.ChemicalContentsSeparator.Visible = anyChemicals;
         _window.ChemicalsContainer.Visible = anyChemicals;
-        _window.ChemicalContentsCard.Visible = anyChemicals || anyUnknown;
+        _window.ChemicalContentsCard.Visible = anyChemicals || uiState.UnknownChemicals;
 
         _window.BloodTypeLabel.Text = "Blood:";
         var bloodMsg = new FormattedMessage();

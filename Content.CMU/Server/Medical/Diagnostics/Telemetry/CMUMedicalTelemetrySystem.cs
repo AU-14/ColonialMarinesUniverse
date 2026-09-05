@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Anatomy.Bones.Events;
-using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
@@ -13,23 +10,18 @@ using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared.Body.Part;
-using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Medical.Diagnostics.Telemetry;
 
 public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
 {
-    [Dependency] private IGameTiming _timing = default!;
-
-    private readonly Dictionary<BodyPartType, int> _hitCounts = new();
-    private readonly Dictionary<FractureSeverity, int> _fractureCounts = new();
-    private readonly Dictionary<EntityUid, int> _surgeriesPerMarine = new();
-    private readonly Dictionary<EntityUid, int> _organStageTransitions = new();
-    private readonly Dictionary<EntityUid, int> _painShockEntries = new();
+    private int _bonesBroken;
+    private int _surgeries;
+    private int _organCrises;
+    private int _painShockEntries;
     private int _defibAttempts;
     private int _severedLimbs;
     private int _internalBleedsStarted;
@@ -42,8 +34,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<HitLocationComponent, HitLocationResolvedEvent>(OnHitResolved);
-        SubscribeLocalEvent<Content.Shared.CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent, BoneFracturedEvent>(OnFractureSpawn);
+        SubscribeLocalEvent<FractureSeverityChangedEvent>(OnFractureChanged);
         SubscribeLocalEvent<OrganStageChangedEvent>(OnOrganStage);
         SubscribeLocalEvent<CMSurgeryTargetComponent, CMSurgeryCompleteEvent>(OnSurgeryDone);
         SubscribeLocalEvent<DamageableComponent, RMCDefibrillatorAttemptEvent>(OnDefibAttempt);
@@ -56,30 +47,22 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundEnd);
     }
 
-    private void OnHitResolved(Entity<HitLocationComponent> ent, ref HitLocationResolvedEvent args)
+    private void OnFractureChanged(ref FractureSeverityChangedEvent args)
     {
-        _hitCounts.TryGetValue(args.ResolvedPart, out var prior);
-        _hitCounts[args.ResolvedPart] = prior + 1;
-    }
-
-    private void OnFractureSpawn(Entity<Content.Shared.CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent> ent, ref BoneFracturedEvent args)
-    {
-        if (args.Old == args.New)
-            return;
-        _fractureCounts.TryGetValue(args.New, out var prior);
-        _fractureCounts[args.New] = prior + 1;
+        // Escalation and recovery belong to the same fracture episode.
+        if (args.Old == FractureSeverity.None && args.New != FractureSeverity.None)
+            _bonesBroken++;
     }
 
     private void OnOrganStage(ref OrganStageChangedEvent args)
     {
-        _organStageTransitions.TryGetValue(args.Body, out var prior);
-        _organStageTransitions[args.Body] = prior + 1;
+        if (args.Old < OrganDamageStage.Failing && args.New >= OrganDamageStage.Failing)
+            _organCrises++;
     }
 
     private void OnSurgeryDone(Entity<CMSurgeryTargetComponent> ent, ref CMSurgeryCompleteEvent args)
     {
-        _surgeriesPerMarine.TryGetValue(args.Patient, out var prior);
-        _surgeriesPerMarine[args.Patient] = prior + 1;
+        _surgeries++;
 
         if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(args.Surgery.Id))
             _limbsReattached++;
@@ -92,8 +75,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
 
     private void OnPainShockEntered(Entity<CMUPainShockStatusComponent> ent, ref ComponentStartup args)
     {
-        _painShockEntries.TryGetValue(ent.Owner, out var prior);
-        _painShockEntries[ent.Owner] = prior + 1;
+        _painShockEntries++;
     }
 
     private void OnBodyPartSevered(ref BodyPartSeveredEvent args)
@@ -120,30 +102,25 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
 
     private void OnRoundEndStats(RoundEndSummaryStatsEvent ev)
     {
-        var fractureTotal = SumValues(_fractureCounts);
-        var surgeryTotal = SumValues(_surgeriesPerMarine);
-        var organTotal = SumValues(_organStageTransitions);
-        var painShockTotal = SumValues(_painShockEntries);
-
         ev.AddInjuryStat(
             "round-end-summary-window-stat-bones-broken",
             "round-end-summary-window-stat-bones-broken-detail",
-            fractureTotal,
+            _bonesBroken,
             RoundEndSummaryStatColor.Red);
         ev.AddInjuryStat(
             "round-end-summary-window-stat-surgeries",
             "round-end-summary-window-stat-surgeries-detail",
-            surgeryTotal,
+            _surgeries,
             RoundEndSummaryStatColor.Cyan);
         ev.AddInjuryStat(
             "round-end-summary-window-stat-pain-shock",
             "round-end-summary-window-stat-pain-shock-detail",
-            painShockTotal,
+            _painShockEntries,
             RoundEndSummaryStatColor.Gold);
         ev.AddInjuryStat(
             "round-end-summary-window-stat-organ-crises",
             "round-end-summary-window-stat-organ-crises-detail",
-            organTotal,
+            _organCrises,
             RoundEndSummaryStatColor.Purple);
         ev.AddInjuryStat(
             "round-end-summary-window-stat-defibs",
@@ -185,11 +162,10 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
 
     private void OnRoundEnd(RoundRestartCleanupEvent ev)
     {
-        _hitCounts.Clear();
-        _fractureCounts.Clear();
-        _surgeriesPerMarine.Clear();
-        _organStageTransitions.Clear();
-        _painShockEntries.Clear();
+        _bonesBroken = 0;
+        _surgeries = 0;
+        _organCrises = 0;
+        _painShockEntries = 0;
         _defibAttempts = 0;
         _severedLimbs = 0;
         _internalBleedsStarted = 0;
@@ -199,13 +175,4 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
         _limbsReattached = 0;
     }
 
-    private static int SumValues<T>(Dictionary<T, int> counts)
-        where T : notnull
-    {
-        var total = 0;
-        foreach (var (_, count) in counts)
-            total += count;
-
-        return total;
-    }
 }
