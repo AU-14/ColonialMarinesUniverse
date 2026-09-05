@@ -999,7 +999,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     {
         var time = _timing.CurTime;
         var elevator = ent.Comp;
-        if (time > elevator.ToggledAt + elevator.ToggleDelay)
+        // A late update must finish moving and process the cargo before clearing the timer.
+        // Otherwise the lift gets stuck in a transitional mode with paid orders or returns stranded.
+        if (elevator.Mode is Lowered or Raised &&
+            time > elevator.ToggledAt + elevator.ToggleDelay)
         {
             elevator.ToggledAt = null;
             elevator.Busy = false;
