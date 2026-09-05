@@ -526,13 +526,16 @@ namespace Content.Server.Atmos.EntitySystems
                 if (flammable.FireStacks < 0)
                     flammable.FireStacks = MathF.Min(0, flammable.FireStacks + 1);
 
-                if (!flammable.OnFire)
-                {
+                // RMC14: acid burns also use the fire alert to stop, drop, and roll.
+                var showAlert = new ShowFireAlertEvent(flammable.OnFire);
+                RaiseLocalEvent(uid, ref showAlert);
+                if (showAlert.Show)
+                    _alertsSystem.ShowAlert(uid, flammable.FireAlert);
+                else
                     _alertsSystem.ClearAlert(uid, flammable.FireAlert);
-                    continue;
-                }
 
-                _alertsSystem.ShowAlert(uid, flammable.FireAlert);
+                if (!flammable.OnFire)
+                    continue;
 
                 if (flammable.FireStacks <= 0)
                 {

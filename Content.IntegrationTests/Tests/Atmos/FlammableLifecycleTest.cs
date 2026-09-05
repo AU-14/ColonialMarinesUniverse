@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Water;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
+using Content.Shared.Alert;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Damage.Systems;
@@ -337,6 +338,44 @@ public sealed class FlammableLifecycleTest : GameTest
             {
                 SEntMan.ComponentRemoved -= OnComponentRemoved;
             }
+        });
+    }
+
+    [Test]
+    public async Task AcidBurnKeepsStopDropRollAlertUntilResisted()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid human = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            PrepareBurnable(human);
+            SEntMan.EnsureComponent<UserAcidedComponent>(human);
+
+            var alerts = Server.System<AlertsSystem>();
+            Assert.That(alerts.IsShowingAlert(human, "Fire"), Is.True,
+                "acid burns must show the stop-drop-roll alert");
+            Assert.That(SEntMan.GetComponent<FlammableComponent>(human).OnFire, Is.False,
+                "this regression covers acid burns without ordinary fire");
+
+            Server.System<ServerFlammableSystem>().Update(0f);
+
+            Assert.That(alerts.IsShowingAlert(human, "Fire"), Is.True,
+                "the fire update must keep the alert available while acid is still burning");
+            Assert.That(alerts.ActivateAlert(human, SProtoMan.Index(SEntMan.GetComponent<FlammableComponent>(human).FireAlert)), Is.True);
+        });
+
+        await Pair.RunTicksSync(1);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.HasComponent<UserAcidedComponent>(human), Is.False,
+                    "stop-drop-roll must remove the acid burn");
+                Assert.That(Server.System<AlertsSystem>().IsShowingAlert(human, "Fire"), Is.False);
+            });
         });
     }
 
