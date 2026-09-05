@@ -48,6 +48,8 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
     protected override void Open()
     {
         base.Open();
+        if (_window != null)
+            return;
         _window = this.CreateWindow<CMUSurgeryWindow>();
         _window.Title = Loc.GetString("cmu-medical-surgery-window-title");
         if (State is CMUSurgeryBuiState s)
@@ -346,7 +348,13 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
     {
         foreach (var part in state.Parts)
         {
-            if (!part.IsInFlightHere && part.Part != inFlight.Part)
+            // The marked row identifies the operation's site. Missing slots use
+            // the patient entity while their committed work lives on a socket
+            // anchor; attached rows identify the physical operation part.
+            if (!part.IsInFlightHere
+                || (state.SessionPartType is { } type && part.Type != type)
+                || (state.SessionPartSymmetry is { } symmetry && part.Symmetry != symmetry)
+                || (part.Part != state.Patient && part.Part != inFlight.Part))
                 continue;
 
             entry = part;

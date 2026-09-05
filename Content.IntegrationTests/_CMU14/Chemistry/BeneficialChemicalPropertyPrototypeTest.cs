@@ -43,6 +43,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.EntityConditions.Conditions;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
+using Content.Shared.Item.ItemToggle;
 using Content.Shared.Medical;
 using Content.Shared.Metabolism;
 using Content.Shared.Mobs;
@@ -622,7 +623,8 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         {
             var entities = pair.Server.EntMan;
             var human = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var defibrillator = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var defibrillator = entities.SpawnEntity("CMDefibrillator", MapCoordinates.Nullspace);
+            var user = entities.SpawnEntity("MobHuman", MapCoordinates.Nullspace);
             try
             {
                 var damageable = entities.System<DamageableSystem>();
@@ -632,9 +634,6 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                     ? organ
                     : throw new AssertionException("Test human has no heart.");
                 var heartComponent = entities.GetComponent<HeartComponent>(heart);
-
-                SetField(heartComponent, nameof(HeartComponent.Stopped), true);
-                SetField(heartComponent, nameof(HeartComponent.BeatsPerMinute), 0);
 
                 var damage = new DamageSpecifier
                 {
@@ -646,17 +645,20 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                     },
                 };
                 damageable.TryChangeDamage(human, damage, true, interruptsDoAfters: false);
+                entities.System<MobStateSystem>().ChangeMobState(human, MobState.Dead);
+                var damageBefore = damageable.GetTotalDamage(human);
 
                 Assert.That(bloodstream.TryGetChemicalSolution(human, out var solution, out _), Is.True);
-                solution.Comp.Solution.AddReagent(TestReagent, 2);
-
-                entities.EnsureComponent<DefibrillatorComponent>(defibrillator);
-                var attempt = new RMCDefibrillatorDamageModifyEvent(human, new DamageSpecifier());
-                entities.EventBus.RaiseLocalEvent(defibrillator, ref attempt);
+                Assert.That(entities.System<SharedSolutionContainerSystem>().TryAddReagent(solution, TestReagent, 2), Is.True);
+                Assert.That(entities.System<ItemToggleSystem>().TryActivate(defibrillator, user: user), Is.True);
+                var defibs = entities.System<SharedDefibrillatorSystem>();
+                Assert.That(defibs.CanZap(defibrillator, human, user), Is.True);
+                defibs.Zap(defibrillator, human, user);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(attempt.Heal.GetTotal(), Is.LessThan(FixedPoint2.Zero));
+                    Assert.That(damageable.GetTotalDamage(human), Is.LessThan(damageBefore));
+                    Assert.That(entities.GetComponent<MobStateComponent>(human).CurrentState, Is.Not.EqualTo(MobState.Dead));
                     Assert.That(solution.Comp.Solution.GetTotalPrototypeQuantity(TestReagent),
                         Is.EqualTo((FixedPoint2)1));
                     Assert.That(heartComponent.Stopped, Is.False);
@@ -666,6 +668,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
             {
                 entities.DeleteEntity(human);
                 entities.DeleteEntity(defibrillator);
+                entities.DeleteEntity(user);
             }
         });
 

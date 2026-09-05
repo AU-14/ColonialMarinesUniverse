@@ -1360,7 +1360,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (ent.Comp.Abbreviation == null)
             return;
 
-        args.AddModifier(ent.Comp.Abbreviation);
+        args.AddModifier("rmc-laser-designator-signal-flare-name", extraArgs: ("id", ent.Comp.Abbreviation));
     }
 
     private void UpdateTarget(Entity<DropshipTerminalWeaponsComponent> ent, EntityUid target)

@@ -1203,7 +1203,8 @@ public sealed class ConditionDrivenSurgeryTest
 
                 traits.EnsureTrait(arm, CMUSurgicalTrait.VascularTear);
 
-                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True);
+                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.False,
+                    "Rearming an injected prerequisite does not commit the stale step.");
 
                 var rearmed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
                 Assert.Multiple(() =>
@@ -1525,7 +1526,8 @@ public sealed class ConditionDrivenSurgeryTest
 
                 traits.EnsureTrait(arm, CMUSurgicalTrait.ContaminatedWound);
 
-                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True);
+                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.False,
+                    "Rearming cleanup does not commit the original final bone-setting step.");
                 armed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
                 Assert.Multiple(() =>
                 {
@@ -1601,7 +1603,8 @@ public sealed class ConditionDrivenSurgeryTest
                 traits.EnsureTrait(arm, CMUSurgicalTrait.VascularTear);
                 wounds.SeedInternalBleed(arm, "test:vascular-tear", 0.5f);
 
-                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True);
+                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.False,
+                    "Rearming an injected prerequisite does not commit the stale step.");
 
                 armed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
                 Assert.Multiple(() =>
@@ -2184,6 +2187,8 @@ public sealed class ConditionDrivenSurgeryTest
                     Assert.That(GetAutodocProcedureDuration(regeneration), Is.EqualTo(90f));
                 });
 
+                Assert.That(entMan.System<CMUSurgerySystem>().TryGetMissingPartSite(patient,
+                    BodyPartType.Hand, BodyPartSymmetry.Right, out var anchor, out var slot), Is.True);
                 var queued = new CMUAutodocQueuedStep(
                     patient,
                     BodyPartType.Hand,
@@ -2194,7 +2199,9 @@ public sealed class ConditionDrivenSurgeryTest
                     0,
                     "cmu-autodoc-automated-step-label",
                     missingHand!.DisplayName,
-                    90f);
+                    90f,
+                    TargetAnchor: anchor,
+                    TargetSlot: slot);
 
                 Assert.That(ApplyAutodocProcedure(autodoc, patient, surgeon, queued), Is.True);
 
@@ -2931,7 +2938,11 @@ public sealed class ConditionDrivenSurgeryTest
                 BodyPartSymmetry.None,
                 surgeryId);
             armed = CompleteExpectedStep(entMan, flow, human, surgeon, armed, "organ_clamp", surgeryId)!;
-            CompleteExpectedStep(entMan, flow, human, surgeon, armed, null, surgeryId);
+            Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.False,
+                "Automation must identify its donor explicitly even when a compatible organ is held.");
+            Assert.That(hands.IsHolding(surgeon, donorOrgan), Is.True);
+            Assert.That(TryGetPartOrgan<TOrgan>(entMan, torso, out _), Is.False);
+            CompleteExpectedStep(entMan, flow, human, surgeon, armed, null, surgeryId, donorOrgan);
 
             AssertAwaitingClosure(entMan, human, torso, surgeryId);
             Assert.That(TryGetPartOrgan<TOrgan>(entMan, torso, out _), Is.True, surgeryId);
@@ -2973,10 +2984,11 @@ public sealed class ConditionDrivenSurgeryTest
         EntityUid surgeon,
         CMUSurgeryArmedStepComponent armed,
         string expectedTool,
-        string context)
+        string context,
+        EntityUid? donor = null)
     {
         Assert.That(armed.RequiredToolCategory, Is.EqualTo(expectedTool), context);
-        Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True, context);
+        Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon, donor), Is.True, context);
 
         return entMan.TryGetComponent<CMUSurgeryArmedStepComponent>(human, out var next)
             ? next
@@ -3149,7 +3161,7 @@ public sealed class ConditionDrivenSurgeryTest
             BindingFlags.Instance | BindingFlags.NonPublic);
 
         Assert.That(method, Is.Not.Null);
-        return (bool) method!.Invoke(autodoc, [patient, operatorUid, queued])!;
+        return (bool) method!.Invoke(autodoc, [patient, operatorUid, queued, (Func<bool>) (() => true)])!;
     }
 
     private static float GetAutodocProcedureDuration(CMUSurgeryEntry surgery)

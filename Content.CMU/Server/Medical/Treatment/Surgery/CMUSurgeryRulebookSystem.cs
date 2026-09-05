@@ -238,6 +238,32 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         return minSkill <= 0 || _skills.HasSkill(surgeon, SurgerySkill, minSkill);
     }
 
+    /// <summary>
+    /// Checks a concrete attached site against the same anatomy and condition rules used by manual selection.
+    /// Continuation steps must not repeat this check after their own effects change the original condition.
+    /// </summary>
+    public bool IsProcedureEligible(EntityUid patient, EntityUid part, EntityUid surgeon, string surgeryId,
+        bool ignoreSkillRequirements = false)
+    {
+        return !TerminatingOrDeleted(patient) && !TerminatingOrDeleted(part) &&
+            TryComp<BodyPartComponent>(part, out var anatomy) && anatomy.Body == patient &&
+            _medicalIndex.TryGetBodyPart(patient, new(anatomy.PartType, anatomy.Symmetry), out var current) &&
+            current == part && _flowSurgery.CanOperateOnPatient(patient, surgeon) &&
+            _flowSurgery.TryGetDefinition(surgeryId, out var surgery) &&
+            surgery.ValidParts.Contains(anatomy.PartType) &&
+            (patient != surgeon || _flowSurgery.CanSelfOperateSurgery(surgeryId, anatomy.PartType)) &&
+            (ignoreSkillRequirements || HasRequiredSurgerySkill(surgeon, surgery.MinSkill)) &&
+            IsNeededSurgeryForPart(patient, part, surgeryId, surgery.Category, anatomy.PartType) &&
+            IsSurgeryEligible(patient, part, surgery, anatomy.PartType, surgeon);
+    }
+
+    /// <summary>Captures the organ selected by a slot-based repair so delayed work cannot heal a transplant.</summary>
+    public EntityUid? GetProcedureOrgan(EntityUid part, string surgeryId)
+    {
+        return TryGetOrganConditionForSurgery(surgeryId, out var slot, out _) &&
+            TryGetOrganInSlot(part, slot, out var organ) ? organ : null;
+    }
+
     private static CMUSurgeryEntry BuildEntry(
         CMUSurgeryDefinition surgery,
         CMUResolvedStep resolved)

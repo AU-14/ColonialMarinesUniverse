@@ -238,6 +238,8 @@ cmu-autodoc-automated-step-note = Autodoc repairs this target on a machine timer
 cmu-autodoc-repair-wounds-surgery = Repair Wounds / Burns
 cmu-autodoc-procedure-time-note = { $time } automated procedure.
 cmu-autodoc-minutes = { $minutes } min
+cmu-autodoc-seconds = { $seconds } s
+cmu-autodoc-minutes-seconds = { $minutes } min { $seconds } s
 
 # ---- Body scanner ----------------------------------------------------
 
@@ -419,3 +421,5 @@ cmu-limb-printer-slot-beaker = matrix beaker
 cmu-limb-printer-slot-syringe = blood syringe
 cmu-limb-printer-slot-metal = Metal Sheets
 cmu-autodoc-regenerate-limb-surgery = Regenerate Limb
+
+cmu-body-scanner-calibration-elsewhere = Your active calibration belongs to another scanner visit. Its countdown continues.

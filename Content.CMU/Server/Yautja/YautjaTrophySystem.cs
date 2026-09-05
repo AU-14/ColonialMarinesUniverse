@@ -650,7 +650,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         if (!_medicalIndex.TryGetBodyPart(target, new CMUMedicalBodyPartKey(type, symmetry), out var part))
             return;
 
-        var ev = new BodyPartSeveredEvent(target, part, type);
+        var ev = new BodyPartSeverAttemptEvent(target, part, type);
         RaiseLocalEvent(part, ref ev, broadcast: true);
     }
 

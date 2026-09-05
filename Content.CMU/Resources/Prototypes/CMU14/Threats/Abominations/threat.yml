@@ -4,6 +4,7 @@
 # (KillAllAbominationsRule, counts disguised mimics).
 - type: threat
   id: AbominationsThreatCF
+  voteCooldownGroup: Abominations
   lorePrimer: AU14PrimerThreatAbomination
   roundstartspawns: abominationsParty
   thirdpartyinterval: 9100
@@ -54,6 +55,7 @@
 # counted via KillAllAbominationsRule).
 - type: threat
   id: AbominationsThreatDS
+  voteCooldownGroup: Abominations
   lorePrimer: AU14PrimerThreatAbomination
   roundstartspawns: abominationsPartyDistress
   whitelistedgamemodes:

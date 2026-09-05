@@ -126,6 +126,15 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
     private void OnWoundTreaterUseInHand(Entity<WoundTreaterComponent> ent, ref UseInHandEvent args)
     {
+        if (args.Handled)
+            return;
+
+        if (!CanUseWoundTreater(args.User, args.User, ent))
+        {
+            args.Handled = true;
+            return;
+        }
+
         if (HasComp<CMUHumanMedicalComponent>(args.User))
         {
             var ev = new CMUWoundTreaterInterceptEvent(args.User, ent.Owner, args.User);
@@ -143,15 +152,14 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
     private void OnWoundTreaterAfterInteract(Entity<WoundTreaterComponent> ent, ref AfterInteractEvent args)
     {
-        if (!args.CanReach || args.Target == null)
+        if (args.Handled || !args.CanReach || args.Target == null)
             return;
 
         if (HasComp<CMUHumanMedicalComponent>(args.Target.Value)
             && (HasComp<CMUHumanMedicalComponent>(args.User)
                 || HasComp<YautjaMedicalItemComponent>(ent.Owner)))
         {
-            var hasSkills = _skills.HasAllSkills(args.User, ent.Comp.Skills);
-            if (!CanUseWoundTreater(args.User, args.Target.Value, ent, hasSkills))
+            if (!CanUseWoundTreater(args.User, args.Target.Value, ent))
             {
                 args.Handled = true;
                 return;
@@ -302,7 +310,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
         var targetName = Identity.Name(target, EntityManager, user);
         var hasSkills = _skills.HasAllSkills(user, treater.Comp.Skills);
-        if (!CanUseWoundTreater(user, target, treater, hasSkills, doPopups))
+        if (!CanUseWoundTreater(user, target, treater, doPopups))
             return false;
 
         if (!TryComp(target, out wounded) ||
@@ -393,14 +401,16 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         return false;
     }
 
-    private bool CanUseWoundTreater(
+    /// <summary>
+    /// Shared skill policy for every wound-treater entry and completion path.
+    /// </summary>
+    public bool CanUseWoundTreater(
         EntityUid user,
         EntityUid popupTarget,
         Entity<WoundTreaterComponent> treater,
-        bool hasSkills,
         bool doPopups = true)
     {
-        if (treater.Comp.CanUseUnskilled || hasSkills)
+        if (treater.Comp.CanUseUnskilled || _skills.HasAllSkills(user, treater.Comp.Skills))
             return true;
 
         if (doPopups)

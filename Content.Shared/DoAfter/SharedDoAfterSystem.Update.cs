@@ -224,6 +224,11 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         if (args.Used is { } used && !Exists(used))
             return true;
 
+        // A target can be deleted independently of the user and event recipient.
+        // Retire the operation before movement or range checks resolve its transform.
+        if (args.Target is { } targetEntity && !Exists(targetEntity))
+            return true;
+
         if (args.EventTarget is { Valid: true } eventTarget && !Exists(eventTarget))
             return true;
 

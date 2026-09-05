@@ -13,8 +13,9 @@ public sealed partial class LungsComponent : Component
 
     /// <summary>
     ///     Per-stage asphyxiation damage (in Damage units) inflicted on the body
-    ///     once per second while this lung sits at the given stage. Zero entries
-    ///     mean "no self-damage at this stage".
+    ///     once per second while this lung supplies the body's best respiratory
+    ///     capacity at the given stage. Multiple lungs never stack functional
+    ///     asphyxiation. Zero entries mean "no self-damage at this stage".
     /// </summary>
     [DataField]
     public Dictionary<OrganDamageStage, FixedPoint2> AsphyxPerSecond = new()
@@ -49,10 +50,10 @@ public sealed partial class LungsComponent : Component
     public TimeSpan NextBloodCoughCheck;
 }
 
-[RegisterComponent]
+[RegisterComponent, AutoGenerateComponentPause]
 [Access(typeof(SharedLungsSystem))]
 public sealed partial class MissingLungsComponent : Component
 {
-    [DataField]
+    [DataField, AutoPausedField]
     public TimeSpan NextAsphyxTick;
 }

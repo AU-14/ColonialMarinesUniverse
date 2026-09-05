@@ -21,16 +21,10 @@ public sealed partial class CMUWeatherSystem : EntitySystem
 
         var resolvedNetwork = (network.Owner, network.Comp);
 
-        if (!_zLevels.TryGetDepthBounds(resolvedNetwork, out var minDepth, out var maxDepth))
-            return false;
-
         var success = false;
 
-        for (var depth = minDepth; depth <= maxDepth; depth++)
+        foreach (var (_, map) in _zLevels.GetOrderedNetworkMaps(resolvedNetwork))
         {
-            if (!_zLevels.TryGetMapAtDepth(resolvedNetwork, depth, out var map))
-                continue;
-
             if (!TryComp<MapComponent>(map, out var mapComp))
                 continue;
 

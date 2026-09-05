@@ -48,6 +48,8 @@
   - type: InjectableSolution
     solution: bloodstream
   - type: RMCStamina
+  - type: Crawler
+    damageInterruptsStanding: false
   - type: Bloodstream
     bloodReferenceSolution:
       reagents:

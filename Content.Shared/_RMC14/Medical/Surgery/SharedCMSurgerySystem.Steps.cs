@@ -38,8 +38,13 @@ public abstract partial class SharedCMSurgerySystem
 
     private void OnToolStep(Entity<CMSurgeryStepComponent> ent, ref CMSurgeryStepEvent args)
     {
+        if (args.DeferMarkers || args.Failed)
+            return;
+        if (!CanCommitStepMarkers(ref args))
+            return;
+
         var automated = HasComp<CMUAutodocContainedPatientComponent>(args.Body);
-        if (ent.Comp.Tool != null && !automated)
+        if (ent.Comp.Tool != null && !automated && !args.ToolCheckPassed)
         {
             foreach (var reg in ent.Comp.Tool.Values)
             {
@@ -59,6 +64,8 @@ public abstract partial class SharedCMSurgerySystem
         {
             foreach (var reg in ent.Comp.Add.Values)
             {
+                if (!CanCommitStepMarkers(ref args))
+                    return;
                 var compType = reg.Component.GetType();
                 if (HasComp(args.Part, compType))
                     continue;
@@ -71,6 +78,8 @@ public abstract partial class SharedCMSurgerySystem
         {
             foreach (var reg in ent.Comp.Remove.Values)
             {
+                if (!CanCommitStepMarkers(ref args))
+                    return;
                 RemComp(args.Part, reg.Component.GetType());
             }
         }
@@ -79,9 +88,46 @@ public abstract partial class SharedCMSurgerySystem
         {
             foreach (var reg in ent.Comp.BodyRemove.Values)
             {
+                if (!CanCommitStepMarkers(ref args))
+                    return;
                 RemComp(args.Body, reg.Component.GetType());
             }
         }
+
+        CanCommitStepMarkers(ref args);
+    }
+
+    private bool CanCommitStepMarkers(ref CMSurgeryStepEvent args)
+    {
+        if (!TerminatingOrDeleted(args.Body) && !TerminatingOrDeleted(args.Part) &&
+            (args.IsCurrent == null || args.IsCurrent()))
+            return true;
+
+        args.Failed = true;
+        return false;
+    }
+
+    /// <summary>
+    /// Commits framework markers after CMU has successfully applied the anatomical effect.
+    /// </summary>
+    public void CommitStepMarkers(Entity<CMSurgeryStepComponent> step, ref CMSurgeryStepEvent args)
+    {
+        args.DeferMarkers = false;
+        OnToolStep(step, ref args);
+    }
+
+    public bool HasStepTools(Entity<CMSurgeryStepComponent> step, List<EntityUid> tools)
+    {
+        if (step.Comp.Tool == null)
+            return true;
+
+        foreach (var reg in step.Comp.Tool.Values)
+        {
+            if (!AnyHaveComp(tools, reg.Component, out _))
+                return false;
+        }
+
+        return true;
     }
 
     private void OnToolCheck(Entity<CMSurgeryStepComponent> ent, ref CMSurgeryStepCompleteCheckEvent args)

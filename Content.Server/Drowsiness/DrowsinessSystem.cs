@@ -31,6 +31,9 @@ public sealed partial class DrowsinessSystem : SharedDrowsinessSystem
         var query = EntityQueryEnumerator<DrowsinessStatusEffectComponent, StatusEffectComponent>();
         while (query.MoveNext(out var uid, out var drowsiness, out var statusEffect))
         {
+            if (!drowsiness.CausesSleep)
+                continue;
+
             if (_timing.CurTime < drowsiness.NextIncidentTime)
                 continue;
 

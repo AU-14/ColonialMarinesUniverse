@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.CMU14.Medical.Injuries.Pain;
 
@@ -47,6 +48,6 @@ public sealed partial class PainSuppressionEntry
     [DataField]
     public bool Additive;
 
-    [DataField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan ExpiresAt;
 }

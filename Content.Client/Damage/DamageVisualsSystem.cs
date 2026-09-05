@@ -85,13 +85,28 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
     {
         if (Deleted(uid) ||
             !TryComp(uid, out DamageVisualsComponent? damageVisuals) ||
-            !damageVisuals.Valid || damageVisuals.Disabled ||
+            !damageVisuals.Valid || damageVisuals.Disabled || damageVisuals.MedicalOverride ||
             !TryComp(uid, out AppearanceComponent? appearance))
         {
             return;
         }
 
         HandleDamage(uid, appearance, damageVisuals);
+    }
+
+    public void SetMedicalOverride(EntityUid uid, bool enabled)
+    {
+        if (!TryComp<DamageVisualsComponent>(uid, out var visuals) || visuals.MedicalOverride == enabled)
+            return;
+
+        visuals.MedicalOverride = enabled;
+        if (enabled)
+            return;
+
+        // Regional takeover hid these layers without changing their cached damage
+        // thresholds. Force their visibility/state to reconcile when ownership ends.
+        visuals.MedicalRefreshPending = true;
+        RefreshDamageVisuals(uid);
     }
 
     private void InitializeEntity(EntityUid entity, DamageVisualsComponent comp, ComponentInit args)
@@ -415,7 +430,7 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
             out var disabledStatus,
             args.Component) && disabledStatus;
 
-        if (damageVisComp.Disabled)
+        if (damageVisComp.Disabled || damageVisComp.MedicalOverride)
             return;
 
         if (AppearanceSystem.TryGetData<string>(uid,  DamageVisualizerKeys.Displacement,  out var displacement, args.Component) &&
@@ -445,10 +460,11 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
         if (damageVisComp.Overlay && damageVisComp.TargetLayers == null)
             CheckOverlayOrdering((uid, spriteComponent), damageVisComp);
 
-        if (AppearanceSystem.TryGetData<bool>(uid, DamageVisualizerKeys.ForceUpdate, out var update, component)
-            && update)
+        if (damageVisComp.MedicalRefreshPending ||
+            AppearanceSystem.TryGetData<bool>(uid, DamageVisualizerKeys.ForceUpdate, out var update, component) && update)
         {
             ForceUpdateLayers((uid, damageComponent, spriteComponent, damageVisComp));
+            damageVisComp.MedicalRefreshPending = false;
             return;
         }
 
@@ -647,7 +663,7 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
             threshold = damageVisComp.Thresholds[thresholdIndex];
         }
 
-        if (threshold == lastThreshold)
+        if (threshold == lastThreshold && !damageVisComp.MedicalRefreshPending)
             return false;
 
         return true;

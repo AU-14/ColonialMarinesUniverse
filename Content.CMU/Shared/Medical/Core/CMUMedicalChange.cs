@@ -15,6 +15,8 @@ public enum CMUMedicalChangeFlags : ushort
     Treatment = 1 << 5,
     Surgery = 1 << 6,
     Visuals = 1 << 7,
+    Topology = 1 << 8,
+    OrganStage = 1 << 9,
 }
 
 /// <summary>

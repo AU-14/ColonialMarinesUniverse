@@ -133,6 +133,10 @@ public sealed partial class DamageVisualsComponent : Component
 
     public readonly List<Enum> TargetLayerMapKeys = new();
     public bool Disabled = false;
+    // CMU regional overlays own a separate suppression source; appearance can
+    // independently disable aggregate visuals without being overwritten on release.
+    public bool MedicalOverride;
+    public bool MedicalRefreshPending;
     public bool Valid = true;
     public FixedPoint2 LastDamageThreshold = FixedPoint2.Zero;
     public readonly Dictionary<Enum, bool> DisabledLayers = new();

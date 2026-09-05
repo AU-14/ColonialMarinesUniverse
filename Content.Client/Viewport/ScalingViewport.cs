@@ -191,7 +191,9 @@ namespace Content.Client.Viewport
                 {
                     NoteZRenderBypassed("viewport RenderZLevels=false");
                     ClearZLevelCompositeState();
-                    _viewport!.Render();
+                    ResetLowerRenderGrace();
+                    _viewport!.ClearColor = Color.Black;
+                    RenderZSpritePass(_viewport);
                 }
             }
 

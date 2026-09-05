@@ -82,135 +82,14 @@ public sealed partial class GasTileHeatBlurOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        if (args.MapId == MapId.Nullspace)
-            return false;
-
-        var res = _resources.GetForViewport(args.Viewport, static _ => new CachedResources());
-
-        var target = args.Viewport.RenderTarget;
-
-        // Probably the resolution of the game window changed, remake the textures.
-        if (res.HeatTarget?.Texture.Size != target.Size)
-        {
-            res.HeatTarget?.Dispose();
-            res.HeatTarget = _clyde.CreateRenderTarget(
-                target.Size,
-                new RenderTargetFormatParameters(RenderTargetColorFormat.Rgba8Srgb),
-                name: nameof(GasTileHeatBlurOverlaySystem));
-        }
-
-        if (res.HeatBlurTarget?.Texture.Size != target.Size)
-        {
-            res.HeatBlurTarget?.Dispose();
-            res.HeatBlurTarget = _clyde.CreateRenderTarget(
-                target.Size,
-                new RenderTargetFormatParameters(RenderTargetColorFormat.Rgba8Srgb),
-                name: $"{nameof(GasTileHeatBlurOverlaySystem)}-blur");
-        }
-
-        var overlayQuery = _entManager.GetEntityQuery<GasTileOverlayComponent>();
-
-        args.WorldHandle.UseShader(_proto.Index(UnshadedShader).Instance());
-
-        var mapId = args.MapId;
-        var worldAABB = args.WorldAABB;
-        var worldBounds = args.WorldBounds;
-        var worldHandle = args.WorldHandle;
-        var worldToViewportLocal = args.Viewport.GetWorldToLocalMatrix();
-
-        // If there is no distortion after checking all visible tiles, we can bail early
-        var anyDistortion = false;
-
-        // We're rendering in the context of the heat target texture, which will encode data as to where and how strong
-        // the heat distortion will be
-        args.WorldHandle.RenderInRenderTarget(res.HeatTarget,
-            () =>
-            {
-                _intersectingGrids.Clear();
-                _maps.FindGridsIntersecting(mapId, worldAABB, ref _intersectingGrids);
-                foreach (var grid in _intersectingGrids)
-                {
-                    if (!overlayQuery.TryGetComponent(grid.Owner, out var comp))
-                        continue;
-
-                    var gridEntToWorld = _xformSys.GetWorldMatrix(grid.Owner);
-                    var gridEntToViewportLocal = gridEntToWorld * worldToViewportLocal;
-
-                    if (!Matrix3x2.Invert(gridEntToViewportLocal, out var viewportLocalToGridEnt))
-                        continue;
-
-                    var uvToUi = Matrix3Helpers.CreateScale(res.HeatTarget.Size.X, -res.HeatTarget.Size.Y);
-                    var uvToGridEnt = uvToUi * viewportLocalToGridEnt;
-
-                    // Because we want the actual distortion to be calculated based on the grid coordinates*, we need
-                    // to pass a matrix transformation to go from the viewport coordinates to grid coordinates.
-                    //   * (why? because otherwise the effect would shimmer like crazy as you moved around, think
-                    //      moving a piece of warped glass above a picture instead of placing the warped glass on the
-                    //      paper and moving them together)
-                    _shader.SetParameter("grid_ent_from_viewport_local", uvToGridEnt);
-
-                    // Draw commands (like DrawRect) will be using grid coordinates from here
-                    worldHandle.SetTransform(gridEntToViewportLocal);
-
-                    // We only care about tiles that fit in these bounds
-                    var worldToGridLocal = _xformSys.GetInvWorldMatrix(grid.Owner);
-                    var floatBounds = worldToGridLocal.TransformBox(worldBounds).Enlarged(grid.Comp.TileSize);
-
-                    var localBounds = new Box2i(
-                        (int)MathF.Floor(floatBounds.Left),
-                        (int)MathF.Floor(floatBounds.Bottom),
-                        (int)MathF.Ceiling(floatBounds.Right),
-                        (int)MathF.Ceiling(floatBounds.Top));
-
-                    // for each tile and its gas --->
-                    foreach (var chunk in comp.Chunks.Values)
-                    {
-                        var enumerator = new GasChunkEnumerator(chunk);
-
-                        while (enumerator.MoveNext(out var tileGas))
-                        {
-                            // Check and make sure the tile is within the viewport/screen
-                            var tilePosition = chunk.Origin + (enumerator.X, enumerator.Y);
-                            if (!localBounds.Contains(tilePosition))
-                                continue;
-
-                            // Get the distortion strength from the temperature and bail if it's not hot enough
-                            var strength = GetHeatDistortionStrength(tileGas.ByteGasTemperature);
-                            if (strength <= 0f)
-                                continue;
-
-                            anyDistortion = true;
-
-                            // Encode the strength in the red channel
-                            // alpha set to 1 as tile is active
-                            worldHandle.DrawTextureRect(
-                                _heatGradientTexture,
-                                Box2.CenteredAround(tilePosition + grid.Comp.TileSizeHalfVector,
-                                    grid.Comp.TileSizeVector * ShaderSpilling),
-                                new Color(strength, 0f, 0f));
-                        }
-                    }
-                }
-            },
-            // This clears the buffer to all zero first...
-            new Color(0, 0, 0, 0));
-
-        // no distortion, no need to render
-        if (!anyDistortion)
-        {
-            args.WorldHandle.UseShader(null);
-            args.WorldHandle.SetTransform(Matrix3x2.Identity);
-            return false;
-        }
-
-        return true;
+        return CMUBeforeDrawHeat(args.Viewport, args.MapId, args.WorldAABB, args.WorldBounds, args.WorldHandle);
     }
 
     protected override void Draw(in OverlayDrawArgs args)
     {
         var res = _resources.GetForViewport(args.Viewport, static _ => new CachedResources());
 
-        if (ScreenTexture is null || res.HeatTarget is null || res.HeatBlurTarget is null)
+        if (ScreenTexture is null || res.HeatTarget is null)
             return;
 
         _shader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
@@ -253,12 +132,10 @@ public sealed partial class GasTileHeatBlurOverlay : Overlay
     internal sealed class CachedResources : IDisposable
     {
         public IRenderTexture? HeatTarget;
-        public IRenderTexture? HeatBlurTarget;
 
         public void Dispose()
         {
             HeatTarget?.Dispose();
-            HeatBlurTarget?.Dispose();
         }
     }
 }

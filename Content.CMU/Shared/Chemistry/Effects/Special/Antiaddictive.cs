@@ -34,6 +34,9 @@ public sealed partial class Antiaddictive : RMCChemicalEffect
                 args.ActualPotency,
                 (float)potency,
                 args.Reagent!.ID);
+        if (treatment == null)
+            return;
+
         if (treatment.Progress < CureThreshold)
             return;
 

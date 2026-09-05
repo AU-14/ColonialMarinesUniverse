@@ -6,10 +6,14 @@ using Content.Shared.CMU14.Medical.Anatomy.Bones.Events;
 using Content.Shared.CMU14.Medical.Treatment.FirstAid;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.CMU14.Medical.Injuries.Pain.Events;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared._RMC14.Synth;
+using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Part;
+using Content.Shared.Body;
+using Content.Shared.Body.Events;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -30,6 +34,9 @@ public abstract partial class SharedPainShockSystem : EntitySystem
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected SharedPainSourceProfileSystem PainSources = default!;
     [Dependency] protected StatusEffectsSystem Status = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private CMStasisBagSystem _stasis = default!;
+    [Dependency] private ChemicalPropertyStatusSystem _chemicalStatuses = default!;
 
     private const float PainScanInterval = 0.5f;
     private const float ShockStatusRefreshSeconds = 2.5f;
@@ -62,6 +69,8 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         SubscribeLocalEvent<CMUCastComponent, ComponentStartup>(OnCastStartup);
         SubscribeLocalEvent<CMUCastComponent, ComponentRemove>(OnCastRemove);
         SubscribeLocalEvent<BodyPartDamagedEvent>(OnBodyPartDamaged);
+        SubscribeLocalEvent<BodyPartWoundAppliedEvent>(OnWoundApplied);
+        SubscribeLocalEvent<CMUShrapnelChangedEvent>(OnShrapnelChanged);
         SubscribeLocalEvent<BodyPartPainThresholdCrossedEvent>(OnBodyPartPainThresholdCrossed);
         SubscribeLocalEvent<OrganStageChangedEvent>(OnOrganStageChanged);
         SubscribeLocalEvent<BodyPartHealedEvent>(OnBodyPartHealed);
@@ -72,10 +81,23 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         SubscribeLocalEvent<CMUEscharComponent, ComponentRemove>(OnEscharRemove);
         SubscribeLocalEvent<InternalBleedingChangedEvent>(OnInternalBleedChanged);
         SubscribeLocalEvent<PainSuppressionComponent, StatusEffectRemovedEvent>(OnPainSuppressionRemoved);
+        SubscribeLocalEvent<PainSuppressionComponent, EntityUnpausedEvent>(OnSuppressionUnpaused);
+        SubscribeLocalEvent<PainShockComponent, ComponentInit>(OnPainStartup);
+        SubscribeLocalEvent<PainShockComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<PainShockComponent, CMUMedicalChangedEvent>(OnMedicalChanged);
+        SubscribeLocalEvent<PainShockComponent, BodyPartAddedEvent>(OnBodyPartAdded,
+            after: new[] { typeof(CMUMedicalBodyIndexSystem) });
+        SubscribeLocalEvent<PainShockComponent, BodyPartRemovedEvent>(OnBodyPartRemoved,
+            after: new[] { typeof(CMUMedicalBodyIndexSystem) });
+        SubscribeLocalEvent<OrganComponent, OrganAddedToBodyEvent>(OnOrganAdded,
+            after: new[] { typeof(CMUMedicalBodyIndexSystem) });
+        SubscribeLocalEvent<OrganComponent, OrganRemovedFromBodyEvent>(OnOrganRemoved,
+            after: new[] { typeof(CMUMedicalBodyIndexSystem) });
+        SubscribeLocalEvent<PainShockComponent, CMUMedicalStasisChangedEvent>(OnStasisChanged);
 
-        Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
-        Cfg.OnValueChanged(CMUMedicalCCVars.StatusEffectsEnabled, v => _statusEffectsEnabled = v, true);
-        Cfg.OnValueChanged(CMUMedicalCCVars.PainEnabled, v => _painEnabled = v, true);
+        Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => SetLayerEnabled(ref _medicalEnabled, v), true);
+        Cfg.OnValueChanged(CMUMedicalCCVars.StatusEffectsEnabled, v => SetLayerEnabled(ref _statusEffectsEnabled, v), true);
+        Cfg.OnValueChanged(CMUMedicalCCVars.PainEnabled, v => SetLayerEnabled(ref _painEnabled, v), true);
         Cfg.OnValueChanged(CMUMedicalCCVars.PainShockThreshold, v => _painShockThreshold = (FixedPoint2)v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.PainDecayPerSecond, v => _painDecayPerSecond = (FixedPoint2)v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.PainTierHysteresis, v => _painTierHysteresis = v, true);
@@ -86,9 +108,26 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         return _medicalEnabled && _statusEffectsEnabled && _painEnabled;
     }
 
+    private void SetLayerEnabled(ref bool field, bool enabled)
+    {
+        if (field == enabled)
+            return;
+        field = enabled;
+        if (Net.IsClient)
+            return;
+
+        var query = EntityQueryEnumerator<PainShockComponent>();
+        while (query.MoveNext(out var body, out var pain))
+        {
+            pain.LastPainUpdate = PainTime(body);
+            pain.AccumulationRateDirty = true;
+            pain.NextUpdate = TimeSpan.Zero;
+        }
+    }
+
     public void OnRecomputeTrigger(EntityUid body)
     {
-        if (!IsLayerEnabled())
+        if (Net.IsClient || !IsLayerEnabled())
             return;
         if (!TryComp<PainShockComponent>(body, out var pain))
             return;
@@ -97,13 +136,92 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         if (TryClearSynthPain(body, pain))
             return;
 
-        if (TryComp<MobStateComponent>(body, out var mob) && mob.CurrentState == MobState.Dead)
-            return;
-
-        pain.AccumulationRateDirty = true;
+        var now = PainTime(body);
+        // Events arrive after mutation. The cached snapshot is the only record of
+        // the preceding interval, so consume it before reading the new anatomy.
+        // Same-time mutations still refresh the final snapshot for the next event.
+        if (CanAdvancePain(body))
+            IntegratePain(body, pain, pain.LastPainUpdate, now, null);
+        pain.LastPainUpdate = now;
+        RefreshPainSources(body, pain);
         pain.NextUpdate = TimeSpan.Zero;
         pain.LastEventRecompute = Timing.CurTime;
     }
+
+    private TimeSpan PainTime(EntityUid body) => Timing.CurTime - _metadata.GetPauseTime(body);
+
+    private void OnPainStartup(Entity<PainShockComponent> ent, ref ComponentInit args)
+    {
+        ent.Comp.LastPainUpdate = PainTime(ent.Owner);
+        ent.Comp.AccumulationRateDirty = true;
+    }
+
+    private void OnMobStateChanged(Entity<PainShockComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (Net.IsClient || (args.OldMobState != MobState.Dead && args.NewMobState != MobState.Dead))
+            return;
+
+        // A corpse neither accumulates pain nor resumes an old anatomy cache on revival.
+        ent.Comp.LastPainUpdate = PainTime(ent.Owner);
+        ent.Comp.AccumulationRateDirty = true;
+        ent.Comp.NextUpdate = TimeSpan.Zero;
+    }
+
+    private void OnMedicalChanged(Entity<PainShockComponent> ent, ref CMUMedicalChangedEvent args)
+    {
+        const CMUMedicalChangeFlags sources = CMUMedicalChangeFlags.Anatomy | CMUMedicalChangeFlags.Wounds |
+            CMUMedicalChangeFlags.Fractures | CMUMedicalChangeFlags.Organs | CMUMedicalChangeFlags.Treatment;
+        if ((args.Changes & sources) != 0)
+            OnRecomputeTrigger(ent.Owner);
+    }
+
+    private void OnSuppressionUnpaused(Entity<PainSuppressionComponent> ent, ref EntityUnpausedEvent args)
+    {
+        foreach (var profile in ent.Comp.ActiveProfiles)
+            profile.ExpiresAt += args.PausedTime;
+    }
+
+    private void OnStasisChanged(Entity<PainShockComponent> ent, ref CMUMedicalStasisChangedEvent args)
+    {
+        if (Net.IsClient)
+            return;
+        var pain = ent.Comp;
+        var now = PainTime(ent.Owner);
+        if (!args.Active)
+        {
+            // Shutdown still exposes the marker through TryComp. Its ownership
+            // boundary, not a metabolism query, resumes the clock.
+            pain.LastPainUpdate = now;
+            RefreshPainSources(ent.Owner, pain);
+            pain.NextUpdate = TimeSpan.Zero;
+            return;
+        }
+
+        // The marker already exists during Init. Consume the preceding active
+        // interval directly rather than querying its newly cancelled metabolism.
+        if (IsLayerEnabled() && !HasComp<SynthComponent>(ent) &&
+            (!TryComp<MobStateComponent>(ent, out var mob) || mob.CurrentState != MobState.Dead))
+            IntegratePain(ent.Owner, pain, pain.LastPainUpdate, now, null);
+        pain.LastPainUpdate = now;
+    }
+
+    private void OnBodyPartAdded(Entity<PainShockComponent> ent, ref BodyPartAddedEvent args)
+        => OnRecomputeTrigger(ent.Owner);
+
+    private void OnBodyPartRemoved(Entity<PainShockComponent> ent, ref BodyPartRemovedEvent args)
+        => OnRecomputeTrigger(ent.Owner);
+
+    private void OnOrganAdded(Entity<OrganComponent> ent, ref OrganAddedToBodyEvent args)
+        => OnRecomputeTrigger(args.Body);
+
+    private void OnOrganRemoved(Entity<OrganComponent> ent, ref OrganRemovedFromBodyEvent args)
+        => OnRecomputeTrigger(args.OldBody);
+
+    private void OnWoundApplied(ref BodyPartWoundAppliedEvent args)
+        => OnRecomputeTrigger(args.Body);
+
+    private void OnShrapnelChanged(ref CMUShrapnelChangedEvent args)
+        => OnRecomputeTrigger(args.Body);
 
     private void OnBoneFractured(ref BoneFracturedEvent args)
         => OnRecomputeTrigger(args.Body);
@@ -205,6 +323,12 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         if (TryClearSynthPain(args.Target, pain))
             return;
 
+        // The effect has left its container, so normal lookup cannot recover its
+        // pre-expiry profile. Settle that history before discarding it.
+        if (IsLayerEnabled() && CanAdvancePain(args.Target))
+            AdvancePain(args.Target, pain, PainTime(args.Target), ent.Comp);
+        else
+            pain.LastPainUpdate = PainTime(args.Target);
         ent.Comp.ActiveProfiles.Clear();
         ent.Comp.AccumulationSuppression = 0f;
         ent.Comp.TierSuppression = 0;
@@ -212,7 +336,8 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         Dirty(ent);
 
         pain.NextUpdate = TimeSpan.Zero;
-        UpdateTier(args.Target, pain, false);
+        if (IsLayerEnabled())
+            UpdateTier(args.Target, pain, false);
     }
 
     private bool TryClearSynthPain(EntityUid body, PainShockComponent pain)
@@ -224,6 +349,21 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             ClearPainState(body, pain);
 
         return true;
+    }
+
+    /// <summary>Clears accumulated pain and pending feedback after all injury sources have been rejuvenated.</summary>
+    public void ResetPain(EntityUid body)
+    {
+        if (Net.IsClient || !TryComp<PainShockComponent>(body, out var pain))
+            return;
+
+        var oldTier = pain.Tier;
+        ClearPainState(body, pain);
+        if (oldTier != PainTier.None)
+        {
+            var ev = new PainTierChangedEvent(body, oldTier, PainTier.None);
+            RaiseLocalEvent(body, ref ev, broadcast: true);
+        }
     }
 
     private void ClearPainState(EntityUid body, PainShockComponent pain)
@@ -242,6 +382,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             || pain.NextPainRelief != TimeSpan.Zero;
 
         pain.Pain = FixedPoint2.Zero;
+        pain.IntegrationRemainder = 0;
         pain.PainTarget = FixedPoint2.Zero;
         pain.CachedRiseRate = FixedPoint2.Zero;
         pain.AccumulationRateDirty = false;
@@ -249,6 +390,9 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         pain.Tier = PainTier.None;
         pain.InShock = false;
         pain.NextUpdate = TimeSpan.Zero;
+        pain.NextUnconsciousRefresh = TimeSpan.Zero;
+        pain.LastEventRecompute = TimeSpan.Zero;
+        pain.LastPainUpdate = PainTime(body);
         pain.NextShockPulse = TimeSpan.Zero;
         pain.NextTierAlertRefresh = TimeSpan.Zero;
         pain.NextPainReflection = TimeSpan.Zero;
@@ -269,7 +413,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         _painScanAccumulator += frameTime;
         if (_painScanAccumulator < PainScanInterval)
             return;
-        _painScanAccumulator = 0f;
+        _painScanAccumulator %= PainScanInterval;
 
         var now = Timing.CurTime;
         var query = EntityQueryEnumerator<PainShockComponent, CMUHumanMedicalComponent, MobStateComponent>();
@@ -278,14 +422,18 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             if (TryClearSynthPain(uid, pain))
                 continue;
 
-            if (mob.CurrentState == MobState.Dead || pain.NextUpdate > now)
+            if (mob.CurrentState == MobState.Dead || !_stasis.CanBodyMetabolize(uid))
+            {
+                pain.LastPainUpdate = now;
+                continue;
+            }
+
+            if (pain.NextUpdate > now)
                 continue;
             pain.NextUpdate = now + TimeSpan.FromSeconds(1);
 
-            if (pain.AccumulationRateDirty)
-                RefreshPainSources(uid, pain);
-
-            if (pain.RawTier == PainTier.None
+            if (!pain.AccumulationRateDirty
+                && pain.RawTier == PainTier.None
                 && pain.Tier == PainTier.None
                 && pain.PainTarget <= 0
                 && pain.CachedRiseRate <= 0
@@ -293,6 +441,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
                 && pain.Pain <= 0)
             {
                 pain.NextUpdate = now + TimeSpan.FromSeconds(IdlePainSleepSeconds);
+                pain.LastPainUpdate = now;
                 continue;
             }
 
@@ -302,14 +451,23 @@ public abstract partial class SharedPainShockSystem : EntitySystem
 
     public void TickOne(Entity<PainShockComponent?> ent, bool refreshCache = true)
     {
+        if (Net.IsClient)
+            return;
         if (!Resolve(ent.Owner, ref ent.Comp, logMissing: false))
             return;
         if (!HasComp<CMUHumanMedicalComponent>(ent.Owner))
             return;
         if (TryClearSynthPain(ent.Owner, ent.Comp))
             return;
-        if (refreshCache)
-            RefreshPainSources(ent.Owner, ent.Comp);
+        if (!CanAdvancePain(ent.Owner))
+        {
+            ent.Comp.LastPainUpdate = PainTime(ent.Owner);
+            return;
+        }
+        if (refreshCache && !ent.Comp.AccumulationRateDirty)
+        {
+            OnRecomputeTrigger(ent.Owner);
+        }
         TickOne(ent.Owner, ent.Comp);
     }
 
@@ -329,30 +487,80 @@ public abstract partial class SharedPainShockSystem : EntitySystem
     private void TickOne(EntityUid uid, PainShockComponent pain)
     {
         var oldPain = pain.Pain;
-        var newPain = pain.Pain;
-        var target = FixedPoint2.Min(pain.PainTarget, pain.PainMax);
-
-        if (newPain < target)
-        {
-            var rise = pain.CachedRiseRate * (FixedPoint2)GetAccumulationMultiplier(uid);
-            newPain = FixedPoint2.Min(target, newPain + rise);
-        }
-        else if (newPain > target)
-        {
-            var decay = _painDecayPerSecond + (FixedPoint2)GetDecayBonus(uid);
-            var decayed = newPain - decay;
-            newPain = decayed < target ? target : decayed;
-        }
-
-        if (newPain < FixedPoint2.Zero)
-            newPain = FixedPoint2.Zero;
-        if (newPain > pain.PainMax)
-            newPain = pain.PainMax;
-        pain.Pain = newPain;
-
-        UpdateTier(uid, pain, newPain != oldPain);
+        AdvancePain(uid, pain, PainTime(uid));
+        UpdateTier(uid, pain, pain.Pain != oldPain);
         TryShowPainRelief(uid, pain);
         TryApplyRecurringShockPulse(uid, pain);
+    }
+
+    /// <summary>
+    /// Settles the old continuous modifier before its owner changes it. An explicit
+    /// boundary uses the same absolute, pause-adjusted timeline as expiry deadlines.
+    /// This never rewinds or publishes feedback for an intermediate historic state.
+    /// </summary>
+    public void SettlePainBeforeModifierChange(EntityUid body, TimeSpan? until = null)
+    {
+        if (Net.IsClient || !IsLayerEnabled() || !HasComp<CMUHumanMedicalComponent>(body) ||
+            !TryComp<PainShockComponent>(body, out var pain) || TryClearSynthPain(body, pain))
+            return;
+
+        var now = PainTime(body);
+        if (!CanAdvancePain(body))
+        {
+            pain.LastPainUpdate = now;
+            return;
+        }
+
+        AdvancePain(body, pain, until is { } boundary ? MathHelper.Min(boundary, now) : now);
+    }
+
+    private bool CanAdvancePain(EntityUid body)
+        => (!TryComp<MobStateComponent>(body, out var mob) || mob.CurrentState != MobState.Dead) &&
+            _stasis.CanBodyMetabolize(body);
+
+    private void AdvancePain(EntityUid uid, PainShockComponent pain, TimeSpan until,
+        PainSuppressionComponent? removedSuppression = null)
+    {
+        if (until < pain.LastPainUpdate)
+            return;
+
+        if (pain.AccumulationRateDirty)
+        {
+            RefreshPainSources(uid, pain);
+        }
+
+        IntegratePain(uid, pain, pain.LastPainUpdate, until, removedSuppression);
+        pain.LastPainUpdate = until;
+    }
+
+    private void IntegratePain(EntityUid uid, PainShockComponent pain, TimeSpan from, TimeSpan until,
+        PainSuppressionComponent? suppression)
+    {
+        if (until <= from)
+            return;
+
+        if (suppression == null &&
+            Status.TryGetStatusEffect(uid, PainSuppressionStatus, out var effect) && effect != null)
+        {
+            TryComp(effect.Value, out suppression);
+        }
+        var integrated = (pain.Pain.Value + pain.IntegrationRemainder) / 100;
+        var profiles = suppression?.ActiveProfiles ?? (IReadOnlyList<PainSuppressionEntry>)Array.Empty<PainSuppressionEntry>();
+        while (from < until)
+        {
+            var sensitivity = _chemicalStatuses.GetPainSensitivity(uid, from, out var nextChange);
+            var next = MathHelper.Min(until, nextChange);
+            integrated = CMUPainIntegrator.Integrate(integrated,
+                pain.PainMax.Value / 100.0,
+                pain.PainTarget.Value / 100.0,
+                pain.CachedRiseRate.Value / 100.0,
+                _painDecayPerSecond.Value / 100.0,
+                sensitivity, profiles, from, next);
+            from = next;
+        }
+        var cents = integrated * 100;
+        pain.Pain = FixedPoint2.FromCents((int)cents);
+        pain.IntegrationRemainder = cents - pain.Pain.Value;
     }
 
     public void RefreshTier(EntityUid body)
@@ -527,6 +735,11 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         if (TryClearSynthPain(body, pain))
             return;
 
+        if ((TryComp<MobStateComponent>(body, out var mob) && mob.CurrentState == MobState.Dead) ||
+            !_stasis.CanBodyMetabolize(body))
+            return;
+
+        SettlePainBeforeModifierChange(body);
         pain.Pain = FixedPoint2.Min(
             pain.PainMax,
             pain.Pain + amount * (FixedPoint2)GetAccumulationMultiplier(body));
@@ -546,6 +759,10 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         if (Net.IsClient || duration <= TimeSpan.Zero)
             return;
 
+        // Settle the preceding interval with the previous medication profile.
+        // Refreshing a drug must not apply its new strength retroactively.
+        SettlePainBeforeModifierChange(body);
+
         if (!Status.TryUpdateStatusEffectDuration(body, PainSuppressionStatus, out var effect, duration)
             || effect is not { } effectUid)
         {
@@ -558,15 +775,40 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         var oldTier = sup.TierSuppression;
         var oldDecay = sup.DecayBonus;
 
-        sup.ActiveProfiles.Add(new PainSuppressionEntry
+        accumulationSuppression = Math.Clamp(accumulationSuppression, 0f, 1f);
+        tierSuppression = Math.Max(0, tierSuppression);
+        decayBonus = Math.Max(0f, decayBonus);
+        reductionDecreaseRate = Math.Max(0f, reductionDecreaseRate);
+        var expiresAt = PainTime(effectUid) + duration;
+        PainSuppressionEntry? refreshed = null;
+        if (!additive)
         {
-            AccumulationSuppression = Math.Clamp(accumulationSuppression, 0f, 1f),
-            TierSuppression = Math.Max(0, tierSuppression),
-            DecayBonus = Math.Max(0f, decayBonus),
-            ReductionDecreaseRate = Math.Max(0f, reductionDecreaseRate),
-            Additive = additive,
-            ExpiresAt = Timing.CurTime + duration,
-        });
+            foreach (var profile in sup.ActiveProfiles)
+            {
+                if (!profile.Additive && profile.AccumulationSuppression == accumulationSuppression &&
+                    profile.TierSuppression == tierSuppression && profile.DecayBonus == decayBonus &&
+                    profile.ReductionDecreaseRate == reductionDecreaseRate)
+                {
+                    refreshed = profile;
+                    break;
+                }
+            }
+        }
+
+        if (refreshed != null)
+            refreshed.ExpiresAt = MathHelper.Max(refreshed.ExpiresAt, expiresAt);
+        else
+        {
+            sup.ActiveProfiles.Add(new PainSuppressionEntry
+            {
+                AccumulationSuppression = accumulationSuppression,
+                TierSuppression = tierSuppression,
+                DecayBonus = decayBonus,
+                ReductionDecreaseRate = reductionDecreaseRate,
+                Additive = additive,
+                ExpiresAt = expiresAt,
+            });
+        }
 
         ResolveSuppressionProfile(body, (effectUid, sup));
         RefreshTier(body);
@@ -633,10 +875,11 @@ public abstract partial class SharedPainShockSystem : EntitySystem
 
     private void ResolveSuppressionProfile(EntityUid body, Entity<PainSuppressionComponent> ent, bool dirty = true)
     {
+        SettlePainBeforeModifierChange(body);
         var result = CMUPainSuppressionResolver.ResolveAndPrune(
             ent.Comp,
             GetPainSuppressionPainFraction(body),
-            Timing.CurTime);
+            PainTime(ent.Owner));
 
         ent.Comp.AccumulationSuppression = result.AccumulationSuppression;
         ent.Comp.TierSuppression = result.TierSuppression;

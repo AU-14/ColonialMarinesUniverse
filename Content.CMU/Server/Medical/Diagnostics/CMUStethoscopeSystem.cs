@@ -1,41 +1,37 @@
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Diagnostics;
-using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
+using Content.Shared.Body;
+using Content.Shared.Body.Part;
 using Content.Shared.DoAfter;
-using Content.Shared.Interaction;
-using Content.Shared.Popups;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server.CMU14.Medical.Diagnostics;
 
 public sealed partial class CMUStethoscopeSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private SharedLungsSystem _lungs = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCStethoscopeSystem _stethoscope = default!;
     [Dependency] private SkillsSystem _skills = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
-
-    public enum StethoscopeAudioCue : byte { Strong, Weak, Fast, Flatline }
+    private ulong _nextAttempt;
 
     public override void Initialize()
     {
         base.Initialize();
-        // <CMUHumanMedicalComponent, AfterInteractEvent> slot is owned by
-        // CMUMedicInteractHubSystem — HandleAfterInteract is the dispatch
-        // target. We still own the DoAfter completion event.
-        SubscribeLocalEvent<CMUHumanMedicalComponent, CMUStethoscopeDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<RMCStethoscopeExamineRequest>(OnExamineRequest);
+        SubscribeLocalEvent<CMUStethoscopeExaminationComponent, CMUStethoscopeDoAfterEvent>(OnDoAfter);
     }
 
     public bool IsLayerEnabled()
@@ -44,96 +40,152 @@ public sealed partial class CMUStethoscopeSystem : EntitySystem
             && _cfg.GetCVar(CMUMedicalCCVars.DiagnosticsEnabled);
     }
 
-    public void HandleAfterInteract(Entity<CMUHumanMedicalComponent> medic, ref AfterInteractEvent args)
+    private void OnExamineRequest(ref RMCStethoscopeExamineRequest args)
     {
-        if (args.Handled || !args.CanReach || args.Target is not { } target)
-            return;
-        var used = args.Used;
-        if (!HasComp<RMCStethoscopeComponent>(used))
-            return;
-        if (!IsLayerEnabled())
-            return;
-        if (!HasComp<CMUHumanMedicalComponent>(target))
-            return;
-        if (_skills.GetSkill(args.User, MedicalSkill) < 1)
+        if (args.Handled || !IsLayerEnabled() ||
+            !TryComp<CMUHumanMedicalComponent>(args.Patient, out var medical))
             return;
 
-        var skillMult = _skills.GetSkillDelayMultiplier(args.User, MedicalSkill);
-        var ev = new CMUStethoscopeDoAfterEvent();
-        var doAfter = new DoAfterArgs(EntityManager, args.User, TimeSpan.FromSeconds(2) * skillMult,
-            ev, args.User, target: target, used: used)
+        // Rejection is also a handled CMU examination, never a fallback scan.
+        args.Handled = true;
+        if (_skills.GetSkill(args.User, MedicalSkill) < 1)
+        {
+            if (_stethoscope.CanExamine(args.User, args.Patient, args.Tool, args.FromVerb))
+            {
+                var denied = new FormattedMessage();
+                denied.AddText(Loc.GetString("rmc-stethoscope-unskilled"));
+                _stethoscope.ShowResult(args.User, args.Patient, denied, args.FromVerb);
+            }
+            return;
+        }
+
+        if (TryComp<CMUStethoscopeExaminationComponent>(args.User, out var previous))
+        {
+            // Direct replacement of the generic DoAfter component discards its
+            // callbacks. Reclaim only that orphan before allowing a new scan.
+            if (previous.DoAfter == null || IsSame(args.User, previous.DoAfter))
+                return;
+            ClearExamination(args.User, previous);
+        }
+
+        if (!TryComp<BodyComponent>(args.Patient, out var body) ||
+            !TryComp<TransformComponent>(args.Patient, out var patientTransform) ||
+            !TryComp<TransformComponent>(args.User, out var medicTransform) ||
+            !TryComp<SkillsComponent>(args.User, out var skills) ||
+            !TryComp<DoAfterComponent>(args.User, out var doAfterComponent) ||
+            _skills.GetSkill((args.User, skills), MedicalSkill) < 1)
+            return;
+
+        var context = AddComp<CMUStethoscopeExaminationComponent>(args.User);
+        context.Attempt = ++_nextAttempt;
+        context.Patient = args.Patient;
+        context.Tool = args.Tool;
+        context.Medical = medical;
+        context.Body = body;
+        context.PatientTransform = patientTransform;
+        context.MedicTransform = medicTransform;
+        context.Skills = skills;
+        context.DoAfter = doAfterComponent;
+        context.Skill = _skills.GetSkill((args.User, skills), MedicalSkill);
+        context.FromVerb = args.FromVerb;
+        var medic = args.User;
+        var delay = TimeSpan.FromSeconds(2) * _skills.GetSkillDelayMultiplier((medic, skills), MedicalSkill);
+        var doAfter = new DoAfterArgs(EntityManager, medic, delay,
+            new CMUStethoscopeDoAfterEvent(context.Attempt), medic, target: context.Patient, used: context.Tool)
         {
             BreakOnMove = true,
+            NeedHand = !context.FromVerb,
             BlockDuplicate = true,
+            AttemptFrequency = AttemptFrequency.EveryTick,
+            ExtraCheck = () => IsCurrent(medic, context),
         };
-        _doAfter.TryStartDoAfter(doAfter);
-        args.Handled = true;
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            ClearExamination(medic, context);
     }
 
-    private void OnDoAfter(Entity<CMUHumanMedicalComponent> medic, ref CMUStethoscopeDoAfterEvent args)
+    private void OnDoAfter(Entity<CMUStethoscopeExaminationComponent> medic, ref CMUStethoscopeDoAfterEvent args)
     {
-        if (args.Cancelled || args.Target is not { } patient)
+        if (args.Handled || args.Attempt != medic.Comp.Attempt)
             return;
+        args.Handled = true;
+        var context = medic.Comp;
+        if (args.Cancelled || args.User != medic.Owner || args.Target != context.Patient ||
+            args.Used != context.Tool.Owner || !IsCurrent(medic, context))
+        {
+            ClearExamination(medic, context);
+            return;
+        }
 
-        var (cue, popup) = ReadStethoscope(args.User, patient);
-        _popup.PopupClient(popup, patient, args.User);
+        // Pain is integrated at the observation time. Its public physiology
+        // callbacks can invalidate this operation, so check the snapshot again.
+        _pain.SettlePainBeforeModifierChange(context.Patient);
+        if (IsCurrent(medic, context))
+        {
+            var result = new FormattedMessage();
+            result.AddText(ReadStethoscope(medic, context.Patient));
+            _stethoscope.ShowResult(medic, context.Patient, result, context.FromVerb);
+        }
+        ClearExamination(medic, context);
     }
 
-    public (StethoscopeAudioCue Cue, string Popup) ReadStethoscope(EntityUid user, EntityUid patient)
+    private void ClearExamination(EntityUid medic, CMUStethoscopeExaminationComponent context)
+    {
+        if (TryComp<CMUStethoscopeExaminationComponent>(medic, out var current) && ReferenceEquals(current, context))
+            RemComp<CMUStethoscopeExaminationComponent>(medic);
+    }
+
+    private bool IsCurrent(EntityUid medic, CMUStethoscopeExaminationComponent context)
+    {
+        return IsIdentityCurrent(medic, context) &&
+               _stethoscope.CanExamine(medic, context.Patient, context.Tool, context.FromVerb) &&
+               IsIdentityCurrent(medic, context);
+    }
+
+    private bool IsIdentityCurrent(EntityUid medic, CMUStethoscopeExaminationComponent context)
+    {
+        return IsLayerEnabled() && IsLive(medic) && IsLive(context.Patient) &&
+               IsSame(medic, context) && IsSame(medic, context.MedicTransform) &&
+               context.DoAfter != null && IsSame(medic, context.DoAfter) &&
+               IsSame(medic, context.Skills) && _skills.GetSkill((medic, context.Skills), MedicalSkill) == context.Skill &&
+               context.Skill >= 1 && IsSame(context.Patient, context.Medical) &&
+               IsSame(context.Patient, context.Body) && IsSame(context.Patient, context.PatientTransform);
+    }
+
+    private bool IsLive(EntityUid uid) => !TerminatingOrDeleted(uid) && !EntityManager.IsQueuedForDeletion(uid);
+
+    private bool IsSame<T>(EntityUid uid, T expected) where T : Component
+        => expected.LifeStage < ComponentLifeStage.Stopping && TryComp<T>(uid, out var current) && ReferenceEquals(current, expected);
+
+    /// <summary>Formats the authoritative organ and pain projections without aggregate-damage inference.</summary>
+    public string ReadStethoscope(EntityUid user, EntityUid patient)
     {
         var skill = _skills.GetSkill(user, MedicalSkill);
-
         var heart = TryGetHeart(patient);
-        var lungs = TryGetLungs(patient);
-
-        var cue = StethoscopeAudioCue.Strong;
-        string pulseStr;
+        var hasLungs = _lungs.TryGetRespiratoryCapacity(patient, out var lungs) && IsAttachedOrgan(patient, lungs.Organ);
+        string pulse;
         if (heart is null)
-        {
-            cue = StethoscopeAudioCue.Flatline;
-            pulseStr = Loc.GetString("cmu-medical-stethoscope-no-heart");
-        }
+            pulse = Loc.GetString("cmu-medical-stethoscope-no-heart");
         else if (heart.Stopped)
-        {
-            cue = StethoscopeAudioCue.Flatline;
-            pulseStr = Loc.GetString("cmu-medical-stethoscope-no-pulse");
-        }
-        else if (heart.BeatsPerMinute < 50)
-        {
-            cue = StethoscopeAudioCue.Weak;
-            pulseStr = skill >= 2
-                ? Loc.GetString("cmu-medical-stethoscope-pulse", ("bpm", heart.BeatsPerMinute))
-                : Loc.GetString("cmu-medical-stethoscope-pulse-qualitative", ("description", "slow"));
-        }
-        else if (heart.BeatsPerMinute > 130)
-        {
-            cue = StethoscopeAudioCue.Fast;
-            pulseStr = skill >= 2
-                ? Loc.GetString("cmu-medical-stethoscope-pulse", ("bpm", heart.BeatsPerMinute))
-                : Loc.GetString("cmu-medical-stethoscope-pulse-qualitative", ("description", "racing"));
-        }
-        else
-        {
-            cue = StethoscopeAudioCue.Strong;
-            pulseStr = skill >= 2
-                ? Loc.GetString("cmu-medical-stethoscope-pulse", ("bpm", heart.BeatsPerMinute))
-                : Loc.GetString("cmu-medical-stethoscope-pulse-qualitative", ("description", "steady"));
-        }
-
-        string lungStr;
-        if (lungs is null)
-            lungStr = Loc.GetString("cmu-medical-stethoscope-no-lungs");
+            pulse = Loc.GetString("cmu-medical-stethoscope-no-pulse");
         else if (skill >= 2)
-            lungStr = Loc.GetString("cmu-medical-stethoscope-lungs-precise",
-                ("stage", $"{lungs.Efficiency:F2}"));
+            pulse = Loc.GetString("cmu-medical-stethoscope-pulse", ("bpm", heart.BeatsPerMinute));
         else
-            lungStr = Loc.GetString("cmu-medical-stethoscope-lungs-qualitative",
-                ("description", QualitativeLungs(lungs)));
+            pulse = Loc.GetString("cmu-medical-stethoscope-pulse-qualitative",
+                ("description", heart.BeatsPerMinute < 50 ? "slow" : heart.BeatsPerMinute > 130 ? "racing" : "steady"));
 
-        var painStr = string.Empty;
+        string breathing;
+        if (!hasLungs)
+            breathing = Loc.GetString("cmu-medical-stethoscope-no-lungs");
+        else if (skill >= 2)
+            breathing = Loc.GetString("cmu-medical-stethoscope-lungs-precise", ("stage", $"{lungs.Efficiency:F2}"));
+        else
+            breathing = Loc.GetString("cmu-medical-stethoscope-lungs-qualitative",
+                ("description", QualitativeLungs(lungs.Efficiency)));
+
+        var painText = string.Empty;
         if (skill >= 2 && TryComp<PainShockComponent>(patient, out var pain))
         {
-            painStr = _pain.GetEffectiveTier(patient, pain) switch
+            painText = _pain.GetEffectiveTier(patient, pain) switch
             {
                 PainTier.Mild => Loc.GetString("cmu-medical-stethoscope-pain-mild"),
                 PainTier.Moderate => Loc.GetString("cmu-medical-stethoscope-pain-moderate"),
@@ -142,39 +194,28 @@ public sealed partial class CMUStethoscopeSystem : EntitySystem
                 _ => string.Empty,
             };
         }
-
-        var combined = string.IsNullOrEmpty(painStr)
-            ? $"{pulseStr}\n{lungStr}"
-            : $"{pulseStr}\n{lungStr}\n{painStr}";
-        return (cue, combined);
+        return string.IsNullOrEmpty(painText) ? $"{pulse}\n{breathing}" : $"{pulse}\n{breathing}\n{painText}";
     }
-
-    public StethoscopeAudioCue ReadCueOnly(EntityUid user, EntityUid patient)
-        => ReadStethoscope(user, patient).Cue;
 
     private HeartComponent? TryGetHeart(EntityUid body)
     {
-        return _medicalIndex.TryGetOrgan<HeartComponent>(body, out var organ) &&
-               TryComp<HeartComponent>(organ, out var heart)
-            ? heart
-            : null;
-    }
-
-    private LungsComponent? TryGetLungs(EntityUid body)
-    {
-        // Pair-survival: take the best (highest efficiency) lung.
-        LungsComponent? best = null;
         foreach (var organ in _medicalIndex.GetOrgans(body))
         {
-            if (!TryComp<LungsComponent>(organ.Owner, out var lungs))
-                continue;
-            if (best is null || lungs.Efficiency > best.Efficiency)
-                best = lungs;
+            if (IsAttachedOrgan(body, organ) && TryComp<HeartComponent>(organ, out var heart) &&
+                heart.LifeStage < ComponentLifeStage.Stopping)
+                return heart;
         }
-        return best;
+        return null;
     }
 
-    private static string QualitativeLungs(LungsComponent l) => l.Efficiency switch
+    private bool IsAttachedOrgan(EntityUid body, EntityUid organ)
+    {
+        return IsLive(organ) && TryComp<OrganComponent>(organ, out var anatomy) && anatomy.Body == body &&
+               _medicalIndex.TryGetOrganPart(organ, out var part) && IsLive(part) &&
+               TryComp<BodyPartComponent>(part, out var partAnatomy) && partAnatomy.Body == body;
+    }
+
+    private static string QualitativeLungs(float efficiency) => efficiency switch
     {
         >= 0.85f => "clear",
         >= 0.5f => "wet",

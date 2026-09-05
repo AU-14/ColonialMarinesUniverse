@@ -73,7 +73,7 @@ public sealed partial class XenoMeleeSeverSystem : EntitySystem
             chosen = legs;
 
         var (severedPartUid, severedPart) = _random.Pick(chosen);
-        var ev = new BodyPartSeveredEvent(body, severedPartUid, severedPart.PartType);
+        var ev = new BodyPartSeverAttemptEvent(body, severedPartUid, severedPart.PartType);
         RaiseLocalEvent(severedPartUid, ref ev, broadcast: true); // CMU14: broadcast so non-directed observers see it
     }
 }

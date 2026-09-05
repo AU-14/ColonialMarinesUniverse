@@ -18,6 +18,7 @@
   id: MindRoleCLFSubvertedSynth
   name: CLF Subverted Synth Role
   components:
+  - type: SubvertedSynthRole
   - type: MindRole
     antagPrototype: CLFSubvertedSynthRole
     exclusiveAntag: true

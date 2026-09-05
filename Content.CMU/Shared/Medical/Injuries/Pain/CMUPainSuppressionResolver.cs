@@ -17,7 +17,14 @@ public static class CMUPainSuppressionResolver
         float painFraction,
         TimeSpan now)
     {
-        var removed = suppression.ActiveProfiles.RemoveAll(entry => entry.ExpiresAt <= now) > 0;
+        var removed = false;
+        for (var i = suppression.ActiveProfiles.Count - 1; i >= 0; i--)
+        {
+            if (suppression.ActiveProfiles[i].ExpiresAt > now)
+                continue;
+            suppression.ActiveProfiles.RemoveAt(i);
+            removed = true;
+        }
 
         var bestAccumulation = 0f;
         var bestTier = 0;
@@ -79,17 +86,17 @@ public static class CMUPainSuppressionResolver
         return Math.Clamp(1f - painFraction * entry.ReductionDecreaseRate, 0f, 1f);
     }
 
-    private static bool IsProfileStronger(
-        float accumulation,
+    internal static bool IsProfileStronger(
+        double accumulation,
         int tier,
-        float decay,
-        float bestAccumulation,
+        double decay,
+        double bestAccumulation,
         int bestTier,
-        float bestDecay)
+        double bestDecay)
     {
         if (tier != bestTier)
             return tier > bestTier;
-        if (MathF.Abs(accumulation - bestAccumulation) > EffectEpsilon)
+        if (Math.Abs(accumulation - bestAccumulation) > EffectEpsilon)
             return accumulation > bestAccumulation;
 
         return decay > bestDecay;

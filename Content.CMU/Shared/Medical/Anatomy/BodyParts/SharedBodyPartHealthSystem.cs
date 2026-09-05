@@ -4,9 +4,12 @@ using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Trauma;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -29,6 +32,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
     [Dependency] protected SharedCMUTraumaSystem Trauma = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private const float HealScanInterval = 1f;
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -47,6 +52,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         base.Initialize();
         // Read the state that existed before this hit so a catastrophic hit against a living target remains possible.
         SubscribeLocalEvent<HitLocationComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]);
+        SubscribeLocalEvent<HitLocationComponent, BodyPartAddedEvent>(OnBodyPartAdded);
+        SubscribeLocalEvent<HitLocationComponent, BodyPartRemovedEvent>(OnBodyPartRemoved);
         SubscribeLocalEvent<BodyPartHealthComponent, ComponentStartup>(OnPartStartup);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
@@ -63,6 +70,26 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
 
     private void OnDamageChanged(Entity<HitLocationComponent> ent, ref DamageChangedEvent args)
     {
+        if (args.BodyDamageOnly)
+            return;
+        if (args.DamageDelta is null || args.DamageDelta.Empty)
+        {
+            // Explicit aggregate overwrites can lower individual types without an applied delta.
+            // Clamp attribution now so later regional repair cannot spend obsolete debt on a new injury.
+            var available = _damageable.GetAllDamage(ent.Owner);
+            foreach (var (part, _) in MedicalIndex.GetBodyParts(ent.Owner))
+            {
+                if (!TryComp<BodyPartHealthComponent>(part, out var health))
+                    continue;
+                foreach (var (type, amount) in health.BodyDamage.DamageDict)
+                {
+                    var balance = available.DamageDict.GetValueOrDefault(type);
+                    var retained = FixedPoint2.Min(balance, amount);
+                    health.BodyDamage.DamageDict[type] = retained;
+                    available.DamageDict[type] = balance - retained;
+                }
+            }
+        }
         if (!ShouldProcessDamageChanged(_medicalEnabled, _bodyPartEnabled, Timing.ApplyingState, args.DamageDelta))
             return;
 
@@ -70,11 +97,9 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         var positive = DamageSpecifier.GetPositive(delta);
         var localizable = ExtractLocalizableDamage(positive);
         if (!localizable.Empty)
-            ApplyPartDamage(ent, localizable, args.Origin, args.Tool, args.Impact);
+            ApplyPartDamage(ent, localizable, args);
 
-        var healing = GetHealingInGroup(delta, BruteGroup) + GetHealingInGroup(delta, BurnGroup);
-        if (healing > FixedPoint2.Zero)
-            HealDamagedParts(ent.Owner, healing * (FixedPoint2)_bodyPartDamagePropagation, args.Origin);
+        ApplyAttributedHealing(ent.Owner, delta);
     }
 
     private static bool ShouldProcessDamageChanged(
@@ -89,19 +114,160 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             damageDelta is not null;
     }
 
-    private void ApplyPartDamage(Entity<HitLocationComponent> ent, DamageSpecifier damage, EntityUid? origin, EntityUid? tool, DamageImpact impact)
+    private void ApplyPartDamage(Entity<HitLocationComponent> ent, DamageSpecifier damage, DamageChangedEvent args)
     {
         // No mob-state gate: dead bodies still take new wounds, fractures, organ
         // damage, and severance from external hits (overkill, desecration). The
         // rotting-pipeline perf concern that justified an earlier dead-skip
         // doesn't apply here since this codebase has no rotting damage source.
-        if (!HitLocation.TryConsumePendingHit(ent.Owner, out var resolved))
+        if (args.TargetPartEntity is not { } partUid)
             return;
 
-        if (resolved.ResolvedPartEntity is not { } partUid)
+        TrackBodyDamage(ent.Owner, partUid, damage);
+        TryApplyPartDamage(ent.Owner, partUid, damage, tool: args.Tool, origin: args.Origin, impact: args.Impact, targetZone: args.TargetZone);
+    }
+
+    /// <summary>Records the exact applied aggregate share before regional injury can trigger severance.</summary>
+    public void TrackBodyDamage(EntityUid body, EntityUid part, DamageSpecifier damage)
+    {
+        if (TryComp<BodyPartComponent>(part, out var anatomy) && anatomy.Body == body &&
+            TryComp<BodyPartHealthComponent>(part, out var health))
+        {
+            health.BodyDamage += ExtractLocalizableDamage(damage);
+        }
+    }
+
+    public FixedPoint2 GetAttributedDamage(EntityUid part, ProtoId<DamageTypePrototype> type)
+        => TryComp<BodyPartHealthComponent>(part, out var health)
+            ? health.BodyDamage.DamageDict.GetValueOrDefault(type)
+            : FixedPoint2.Zero;
+
+    /// <summary>Returns this site's outstanding contribution to aggregate brute/burn damage.</summary>
+    public FixedPoint2 GetOutstandingBodyDamage(EntityUid part)
+        => TryComp<BodyPartHealthComponent>(part, out var health) ? health.BodyDamage.GetTotal() : FixedPoint2.Zero;
+
+    /// <summary>Heals only the selected part's outstanding contribution of the requested group.</summary>
+    public FixedPoint2 HealPartDamage(EntityUid body, EntityUid part, ProtoId<DamageGroupPrototype> group, FixedPoint2 amount, bool healPart = true)
+    {
+        if (amount <= FixedPoint2.Zero || !TryComp<BodyPartComponent>(part, out var anatomy) || anatomy.Body != body ||
+            !TryComp<BodyPartHealthComponent>(part, out var health) || !_prototypes.TryIndex(group, out var prototype) ||
+            !TryComp<DamageableComponent>(body, out var bodyDamage))
+            return FixedPoint2.Zero;
+
+        var remaining = amount;
+        var delta = new DamageSpecifier();
+        var aggregate = _damageable.GetAllDamage((body, bodyDamage));
+        foreach (var type in prototype.DamageTypes)
+        {
+            var tracked = health.BodyDamage.DamageDict.GetValueOrDefault(type);
+            var healed = FixedPoint2.Min(remaining, FixedPoint2.Min(tracked, aggregate.DamageDict.GetValueOrDefault(type)));
+            if (healed <= FixedPoint2.Zero)
+                continue;
+
+            health.BodyDamage.DamageDict[type] = tracked - healed;
+            delta.DamageDict[type] = -healed;
+            remaining -= healed;
+        }
+
+        var total = amount - remaining;
+        if (total <= FixedPoint2.Zero)
+            return total;
+
+        if (healPart)
+            SetCurrent((part, health), health.Current + total * (FixedPoint2)_bodyPartDamagePropagation);
+        _damageable.ApplyBodyDamageProjection(body, delta);
+        return total;
+    }
+
+    /// <summary>
+    /// Advances this site's pooled wound recovery. Wound burden is resistance-adjusted while
+    /// aggregate attribution is not, so recovery spends the same fraction of the remaining group debt.
+    /// Structural recovery remains possible after aggregate healing or for anatomy-only injuries.
+    /// </summary>
+    public FixedPoint2 HealPartWoundDamage(EntityUid body, EntityUid part, ProtoId<DamageGroupPrototype> group,
+        FixedPoint2 amount, FixedPoint2 remainingWoundDamage)
+    {
+        if (amount <= FixedPoint2.Zero || remainingWoundDamage <= FixedPoint2.Zero ||
+            !TryComp<BodyPartComponent>(part, out var anatomy) || anatomy.Body != body ||
+            !TryComp<BodyPartHealthComponent>(part, out var health) || !_prototypes.TryIndex(group, out var prototype))
+            return FixedPoint2.Zero;
+
+        amount = FixedPoint2.Min(amount, remainingWoundDamage);
+        var outstanding = FixedPoint2.Zero;
+        foreach (var type in prototype.DamageTypes)
+            outstanding += health.BodyDamage.DamageDict.GetValueOrDefault(type);
+
+        // Consume the final fixed-point residual on the last step, without touching other sites or groups.
+        var aggregateHealing = amount == remainingWoundDamage
+            ? outstanding
+            : FixedPoint2.Min(outstanding, FixedPoint2.New(outstanding.Float() * amount.Float() / remainingWoundDamage.Float()));
+        var wounds = CompOrNull<BodyPartWoundComponent>(part);
+        var woundRevision = wounds == null ? 0 : _woundLedger.GetRevision(wounds);
+        var bodyDamage = CompOrNull<DamageableComponent>(body);
+        var healed = HealPartDamage(body, part, group, aggregateHealing, healPart: false);
+        // Aggregate observers may remove, transplant or replace this tissue. The
+        // accepted aggregate change cannot authorize healing a different instance
+        // or a new injury created after recovery reset the same tissue.
+        if (TerminatingOrDeleted(body) || TerminatingOrDeleted(part) ||
+            EntityManager.IsQueuedForDeletion(body) || EntityManager.IsQueuedForDeletion(part) ||
+            !TryComp<BodyPartComponent>(part, out var currentAnatomy) || !ReferenceEquals(currentAnatomy, anatomy) ||
+            currentAnatomy.Body != body || !TryComp<BodyPartHealthComponent>(part, out var currentHealth) ||
+            !ReferenceEquals(currentHealth, health) ||
+            !ReferenceEquals(CompOrNull<DamageableComponent>(body), bodyDamage) ||
+            !ReferenceEquals(CompOrNull<BodyPartWoundComponent>(part), wounds) ||
+            wounds != null && _woundLedger.GetRevision(wounds) != woundRevision)
+            return healed;
+        var structuralHealing = amount * (FixedPoint2)_bodyPartDamagePropagation;
+        HealOneDamagedPart(body, part, anatomy, health, ref structuralHealing);
+        return healed;
+    }
+
+    private void OnBodyPartRemoved(Entity<HitLocationComponent> body, ref BodyPartRemovedEvent args)
+    {
+        if (TerminatingOrDeleted(body) || !TryComp<BodyPartHealthComponent>(args.Part.Owner, out var health))
             return;
 
-        TryApplyPartDamage(ent.Owner, partUid, damage, tool: tool, origin: origin, impact: impact, targetZone: resolved.ResolvedZone);
+        // Retain the injury on the detached material so transplantation transfers the same debt.
+        _damageable.ApplyBodyDamageProjection(body.Owner, -health.BodyDamage);
+    }
+
+    private void OnBodyPartAdded(Entity<HitLocationComponent> body, ref BodyPartAddedEvent args)
+    {
+        if (!TerminatingOrDeleted(body) && TryComp<BodyPartHealthComponent>(args.Part.Owner, out var health))
+            _damageable.ApplyBodyDamageProjection(body.Owner, health.BodyDamage);
+    }
+
+    private void ApplyAttributedHealing(EntityUid body, DamageSpecifier delta)
+    {
+        _prototypes.TryIndex(BruteGroup, out var brute);
+        _prototypes.TryIndex(BurnGroup, out var burn);
+        foreach (var (type, amount) in delta.DamageDict)
+        {
+            if (amount >= FixedPoint2.Zero ||
+                brute?.DamageTypes.Contains(type) != true && burn?.DamageTypes.Contains(type) != true)
+                continue;
+
+            var remaining = -amount;
+            foreach (var (part, anatomy) in MedicalIndex.GetBodyParts(body))
+            {
+                if (remaining <= FixedPoint2.Zero)
+                    break;
+                if (HasComp<CMURoboticLimbComponent>(part) && !HasComp<SynthComponent>(body))
+                    continue;
+                if (!TryComp<BodyPartHealthComponent>(part, out var health))
+                    continue;
+
+                var tracked = health.BodyDamage.DamageDict.GetValueOrDefault(type);
+                var healed = FixedPoint2.Min(tracked, remaining);
+                if (healed <= FixedPoint2.Zero)
+                    continue;
+
+                health.BodyDamage.DamageDict[type] = tracked - healed;
+                remaining -= healed;
+                var regionalHealing = healed * (FixedPoint2)_bodyPartDamagePropagation;
+                HealOneDamagedPart(body, part, anatomy, health, ref regionalHealing);
+            }
+        }
     }
 
     public bool TryApplyPartDamage(
@@ -143,7 +309,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         TargetBodyZone? targetZone,
         MobState? stateAtImpact)
     {
-        if (!TryComp<BodyPartHealthComponent>(partUid, out var health))
+        if (!TryComp<BodyPartHealthComponent>(partUid, out var health) ||
+            !TryComp<BodyPartComponent>(partUid, out var partComp) || partComp.Body != body)
             return false;
 
         var modified = ApplyResistance(damage, health.Resistance);
@@ -152,7 +319,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             return false;
 
         var deduction = FixedPoint2.New(total * _bodyPartDamagePropagation);
-        var partType = TryComp<BodyPartComponent>(partUid, out var partComp) ? partComp.PartType : BodyPartType.Other;
+        var partType = partComp.PartType;
         var canAccumulateSeverance = CanAutomaticallySever(body, partType, impact, stateAtImpact);
         var severanceDeduction = canAccumulateSeverance
             ? DamageImpactSeverance.Calculate(modified, impact) * (FixedPoint2)_bodyPartDamagePropagation
@@ -172,7 +339,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             !IsSeveranceLocked(partType) &&
             CanAutomaticallySever(body, partType, impact, stateAtImpact))
         {
-            var severed = new BodyPartSeveredEvent(body, partUid, partType);
+            var severed = new BodyPartSeverAttemptEvent(body, partUid, partType);
             RaiseLocalEvent(partUid, ref severed, broadcast: true);
         }
 
@@ -196,70 +363,6 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         {
             if (src.DamageDict.TryGetValue(type, out var amount) && amount > FixedPoint2.Zero)
                 dest.DamageDict[type] = amount;
-        }
-    }
-
-    private FixedPoint2 GetHealingInGroup(DamageSpecifier delta, ProtoId<DamageGroupPrototype> groupId)
-    {
-        if (!_prototypes.TryIndex(groupId, out var group))
-            return FixedPoint2.Zero;
-
-        var total = FixedPoint2.Zero;
-        foreach (var type in group.DamageTypes)
-        {
-            if (!delta.DamageDict.TryGetValue(type, out var amount) || amount >= FixedPoint2.Zero)
-                continue;
-
-            total -= amount;
-        }
-
-        return total;
-    }
-
-    private void HealDamagedParts(EntityUid body, FixedPoint2 amount, EntityUid? preferredPart = null)
-    {
-        if (amount <= FixedPoint2.Zero)
-            return;
-
-        var remaining = amount;
-        if (preferredPart is { } preferred &&
-            TryComp<BodyPartComponent>(preferred, out var preferredPartComp) &&
-            preferredPartComp.Body == body &&
-            !HasComp<CMURoboticLimbComponent>(preferred) &&
-            TryComp<BodyPartHealthComponent>(preferred, out var preferredHealth))
-        {
-            HealOneDamagedPart(body, preferred, preferredPartComp, preferredHealth, ref remaining);
-            if (remaining <= FixedPoint2.Zero)
-                return;
-        }
-
-        var damaged = new List<(EntityUid Uid, BodyPartComponent Part, BodyPartHealthComponent Health)>();
-        foreach (var (partUid, part) in MedicalIndex.GetBodyParts(body))
-        {
-            if (partUid == preferredPart)
-                continue;
-
-            if (HasComp<CMURoboticLimbComponent>(partUid))
-                continue;
-
-            if (!TryComp<BodyPartHealthComponent>(partUid, out var health))
-                continue;
-
-            if (health.Current >= health.Max)
-                continue;
-
-            damaged.Add((partUid, part, health));
-        }
-
-        damaged.Sort(static (a, b) =>
-            (b.Health.Max - b.Health.Current).CompareTo(a.Health.Max - a.Health.Current));
-
-        foreach (var (partUid, part, health) in damaged)
-        {
-            if (remaining <= FixedPoint2.Zero)
-                break;
-
-            HealOneDamagedPart(body, partUid, part, health, ref remaining);
         }
     }
 
@@ -303,33 +406,28 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         var query = EntityQueryEnumerator<BodyPartHealthComponent, BodyPartComponent>();
         while (query.MoveNext(out var uid, out var health, out var part))
         {
-            if (part.Body is not { } body || Unrevivable.IsUnrevivable(body))
+            // Most parts do not opt into native recovery. Skip them before body queries.
+            if (health.PassiveHealMultiplier <= 0 || health.Current >= health.Max || health.NextHealTick > now)
+                continue;
+
+            if (part.Body is not { } body || TerminatingOrDeleted(body) || TerminatingOrDeleted(uid) ||
+                EntityManager.IsQueuedForDeletion(body) || EntityManager.IsQueuedForDeletion(uid) ||
+                HasComp<CMInStasisComponent>(body) || MetaData(body).EntityPaused || Unrevivable.IsUnrevivable(body))
                 continue;
 
             if (HasComp<CMURoboticLimbComponent>(uid))
                 continue;
 
-            if (health.PassiveHealMultiplier <= 0 || health.Current >= health.Max)
-                continue;
-
-            if (health.NextHealTick > now)
-                continue;
-
             health.NextHealTick = now + health.HealInterval;
 
-            // Hand-rolled HasComp by name to avoid a forward reference to the wounds layer.
+            // Native structural recovery waits until the wound ledger has closed.
             if (health.BlockedByOpenWound && HasOpenWound(uid))
                 continue;
 
-            var prev = health.Current;
-            var next = FixedPoint2.Min(health.Max, prev + (FixedPoint2)health.PassiveHealMultiplier);
-            if (next == prev)
-                continue;
-
-            health.Current = next;
-            Dirty(uid, health);
-
-            RaiseHealedThresholdEvent(part.Body, uid, part.PartType, health, prev, next);
+            // Spend only the accepted HP quantum on severance recovery, just as
+            // ordinary structural healing does. Aggregate attribution is separate.
+            var healing = (FixedPoint2)health.PassiveHealMultiplier;
+            HealOneDamagedPart(body, uid, part, health, ref healing);
         }
     }
 

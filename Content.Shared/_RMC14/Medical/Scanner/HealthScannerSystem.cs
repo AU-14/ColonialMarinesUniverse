@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Defibrillator;
@@ -11,6 +12,8 @@ using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Damage;
+using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
@@ -25,6 +28,7 @@ using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Medical.Scanner;
 
@@ -37,6 +41,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
+    [Dependency] private RMCReagentSystem _reagents = default!;
     [Dependency] private RMCHandsSystem _rmcHands = default!;
     [Dependency] private SharedRMCTemperatureSystem _rmcTemperature = default!;
     [Dependency] private RMCUnrevivableSystem _rmcUnrevivable = default!;
@@ -254,8 +259,13 @@ public sealed partial class HealthScannerSystem : EntitySystem
         _rmcTemperature.TryGetCurrentTemperature(target, out var temperature);
 
         var bleeding = _rmcBloodstream.IsBleeding(target);
-        var state = new HealthScannerBuiState(GetNetEntity(target), blood, maxBlood, temperature, chemicals, bleeding);
-        FillBaseMedicalReadout(target, state);
+        var readouts = BuildChemicalReadouts(chemicals, out var unknown, out var omitted);
+        var state = new HealthScannerBuiState(GetNetEntity(target), blood, maxBlood, temperature, readouts, bleeding)
+        {
+            UnknownChemicals = unknown,
+            OmittedKnownChemicals = omitted,
+        };
+        FillBaseMedicalReadout(target, state, chemicals);
 
         var buildEv = new HealthScannerBuildStateEvent(scanner, target, viewer, state);
         RaiseLocalEvent(scanner, ref buildEv);
@@ -263,7 +273,51 @@ public sealed partial class HealthScannerSystem : EntitySystem
         return state;
     }
 
-    private void FillBaseMedicalReadout(EntityUid target, HealthScannerBuiState state)
+    private List<HealthScannerChemicalReadout> BuildChemicalReadouts(Solution? chemicals, out bool unknown, out int omitted)
+    {
+        unknown = false;
+        omitted = 0;
+        if (chemicals == null || chemicals.Contents.Count == 0)
+            return [];
+
+        // Different DNA/instance-data variants are one visible chemical. Only the
+        // prototype and total quantity belong in a scanner projection.
+        var totals = new Dictionary<ProtoId<ReagentPrototype>, FixedPoint2>();
+        foreach (var chemical in chemicals.Contents)
+        {
+            if (!_reagents.TryIndex(chemical.Reagent, out var prototype) || prototype.Unknown)
+            {
+                unknown = true;
+                continue;
+            }
+
+            var id = chemical.Reagent.Prototype;
+            totals[id] = totals.GetValueOrDefault(id) + chemical.Quantity;
+        }
+
+        var readouts = new List<HealthScannerChemicalReadout>(totals.Count);
+        foreach (var (id, quantity) in totals)
+        {
+            var prototype = _reagents.Index(id);
+            readouts.Add(new HealthScannerChemicalReadout(id, quantity,
+                prototype.Overdose is { } overdose && quantity > overdose));
+        }
+
+        // Keep overdose warnings first if an unusual mixture exceeds the display bound.
+        readouts.Sort(static (left, right) =>
+        {
+            var order = right.Overdose.CompareTo(left.Overdose);
+            if (order == 0)
+                order = right.Quantity.CompareTo(left.Quantity);
+            return order != 0 ? order : string.CompareOrdinal(left.Prototype.Id, right.Prototype.Id);
+        });
+        omitted = Math.Max(0, readouts.Count - HealthScannerBuiState.MaximumChemicalReadouts);
+        if (omitted > 0)
+            readouts.RemoveRange(HealthScannerBuiState.MaximumChemicalReadouts, omitted);
+        return readouts;
+    }
+
+    private void FillBaseMedicalReadout(EntityUid target, HealthScannerBuiState state, Solution? chemicals)
     {
         if (TryComp<DamageableComponent>(target, out var damageable))
         {
@@ -307,16 +361,15 @@ public sealed partial class HealthScannerSystem : EntitySystem
              _rmcUnrevivable.IsUnrevivable(target) ||
              HasComp<RMCDefibrillatorBlockedComponent>(target));
 
-        FillAdviceReadout(state);
+        FillAdviceReadout(state, chemicals);
     }
 
-    private void FillAdviceReadout(HealthScannerBuiState state)
+    private void FillAdviceReadout(HealthScannerBuiState state, Solution? chemicals)
     {
         var advice = state.Advice;
         var damage = state.Damage;
         var isDead = state.MobState == MobState.Dead;
         var isCritical = state.MobState == MobState.Critical;
-        var chemicals = state.Chemicals;
 
         if (isDead)
         {

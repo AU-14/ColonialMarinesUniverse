@@ -32,6 +32,7 @@
       On: tube1
       Broken: tube-broken
       Burned: tube-burned
+  - type: Appearance
   - type: Destructible
     thresholds: []
   - type: Construction

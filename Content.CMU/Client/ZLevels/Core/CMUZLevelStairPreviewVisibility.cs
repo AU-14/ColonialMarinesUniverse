@@ -24,10 +24,23 @@ internal static class CMUZLevelStairPreviewVisibility
         Box2 bounds,
         Vector2 renderOffset)
     {
-        return IsInFrontOfStair(viewerPosition, stairPosition, bounds.BottomLeft - renderOffset) &&
-               IsInFrontOfStair(viewerPosition, stairPosition, bounds.TopLeft - renderOffset) &&
-               IsInFrontOfStair(viewerPosition, stairPosition, bounds.TopRight - renderOffset) &&
-               IsInFrontOfStair(viewerPosition, stairPosition, bounds.BottomRight - renderOffset);
+        return ProjectedCornersStayInFrontOfStair(viewerPosition, stairPosition,
+            bounds.BottomLeft, bounds.TopLeft, bounds.TopRight, bounds.BottomRight, renderOffset);
+    }
+
+    public static bool ProjectedCornersStayInFrontOfStair(
+        Vector2 viewerPosition,
+        Vector2 stairPosition,
+        Vector2 bottomLeft,
+        Vector2 topLeft,
+        Vector2 topRight,
+        Vector2 bottomRight,
+        Vector2 renderOffset)
+    {
+        return IsInFrontOfStair(viewerPosition, stairPosition, bottomLeft - renderOffset) &&
+               IsInFrontOfStair(viewerPosition, stairPosition, topLeft - renderOffset) &&
+               IsInFrontOfStair(viewerPosition, stairPosition, topRight - renderOffset) &&
+               IsInFrontOfStair(viewerPosition, stairPosition, bottomRight - renderOffset);
     }
 
     private static bool ViewerInsideStairFootprint(Vector2 viewerPosition, Vector2 stairPosition)

@@ -304,7 +304,7 @@ public abstract partial class SharedStunSystem
 
         var doAfterArgs = new DoAfterArgs(EntityManager, entity, ev.DoAfterTime, new TryStandDoAfterEvent(), entity, entity)
         {
-            BreakOnDamage = true,
+            BreakOnDamage = crawler.DamageInterruptsStanding,
             DamageThreshold = 5,
             CancelDuplicate = true,
             RequireCanInteract = false,
@@ -499,7 +499,7 @@ public abstract partial class SharedStunSystem
     private void OnDamaged(Entity<CrawlerComponent> entity, ref DamageChangedEvent args)
     {
         // We only want to extend our knockdown timer if it would've prevented us from standing up
-        if (!args.InterruptsDoAfters || !args.DamageIncreased || args.DamageDelta == null || GameTiming.ApplyingState)
+        if (!entity.Comp.DamageInterruptsStanding || !args.InterruptsDoAfters || !args.DamageIncreased || args.DamageDelta == null || GameTiming.ApplyingState)
             return;
 
         if (args.DamageDelta.GetTotal() >= entity.Comp.KnockdownDamageThreshold)

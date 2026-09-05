@@ -28,6 +28,9 @@ public sealed partial class CMUWoundLedgerSystem : EntitySystem
         return wounds.Entries;
     }
 
+    /// <summary>Identifies row mutations across public effect callbacks, including clear and rebuild.</summary>
+    public ulong GetRevision(BodyPartWoundComponent wounds) => wounds.Revision;
+
     /// <summary>
     ///     Appends one authoritative row and returns its index; clients are rejected with -1.
     /// </summary>
@@ -37,6 +40,7 @@ public sealed partial class CMUWoundLedgerSystem : EntitySystem
             return -1;
 
         wounds.Entries.Add(entry);
+        wounds.Revision++;
         return wounds.Entries.Count - 1;
     }
 
@@ -48,7 +52,11 @@ public sealed partial class CMUWoundLedgerSystem : EntitySystem
         if (_net.IsClient || index < 0 || index >= wounds.Entries.Count)
             return false;
 
+        if (wounds.Entries[index] == entry)
+            return true;
+
         wounds.Entries[index] = entry;
+        wounds.Revision++;
         return true;
     }
 
@@ -61,6 +69,7 @@ public sealed partial class CMUWoundLedgerSystem : EntitySystem
             return false;
 
         wounds.Entries.RemoveAt(index);
+        wounds.Revision++;
         return true;
     }
 
@@ -73,6 +82,7 @@ public sealed partial class CMUWoundLedgerSystem : EntitySystem
             return false;
 
         wounds.Entries.Clear();
+        wounds.Revision++;
         return true;
     }
 

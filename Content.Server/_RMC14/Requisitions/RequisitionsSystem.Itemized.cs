@@ -118,6 +118,20 @@ public sealed partial class RequisitionsSystem
             return false;
 
         var componentFactory = EntityManager.ComponentFactory;
+        // Keep deployment crates intact when their contents cannot be carried as items.
+        // Spawning the machine directly can leave it anchored on the delivery pad.
+        if (cratePrototype.TryComp<SpawnOnTerminateComponent>(
+                CompName.Get<SpawnOnTerminateComponent>(componentFactory), out var deployment) &&
+            _prototypeManager.TryIndex<EntityPrototype>(deployment.Spawn, out var deployedPrototype) &&
+            !deployedPrototype.TryComp<ItemComponent>(CompName.Get<ItemComponent>(componentFactory), out _))
+        {
+            AddManifestItem(manifest, entry.Crate, 1);
+            foreach (var prototype in entry.Entities)
+                AddManifestItem(manifest, prototype, 1);
+
+            return true;
+        }
+
         var hasFill = false;
         if (cratePrototype.TryComp<StorageFillComponent>(CompName.Get<StorageFillComponent>(componentFactory), out var storageFill))
         {

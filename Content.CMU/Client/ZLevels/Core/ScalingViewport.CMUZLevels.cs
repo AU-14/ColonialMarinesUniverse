@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Content.Client.Examine;
 using Content.Shared.CMU14.ZLevels;
 using Content.Client.CMU14.ZLevels.Core;
+using Content.Client.CMU14.ZLevels.Culling;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
@@ -33,7 +34,6 @@ public sealed partial class ScalingViewport
     private static readonly ProtoId<ShaderPrototype> StencilMaskShader = "StencilMask";
     private static readonly ProtoId<ShaderPrototype> StencilEqualDrawShader = "StencilEqualDraw";
     private static readonly Color StairPreviewTint = new(0.05f, 0.05f, 0.05f, 0.48f);
-    private const int MaxOpeningLosChecks = 32;
 
     private CMUClientZLevelsSystem? _zLevels;
     private SharedMapSystem? _mapSystem;
@@ -41,7 +41,7 @@ public sealed partial class ScalingViewport
     private EntityLookupSystem? _lookup;
     private ExamineSystem? _examine;
     private SharedContainerSystem? _containers;
-    private SpriteSystem? _sprite;
+    private CMUZLevelSpriteCullingSystem? _spriteCulling;
     private ShaderInstance? _stencilClearShaderInstance;
     private ShaderInstance? _stencilMaskShaderInstance;
     private ShaderInstance? _stencilEqualDrawShaderInstance;
@@ -51,13 +51,11 @@ public sealed partial class ScalingViewport
     private List<Entity<MapGridComponent>> _zLevelGrids = new();
     private List<Entity<MapGridComponent>> _stairPreviewGrids = new();
     private readonly List<StairPreviewOrigin> _stairPreviewOrigins = new(CMUZLevelViewerComponent.MaxStairPreviewPositions);
-    private readonly HashSet<Entity<SpriteComponent>> _stairPreviewSpriteCandidates = new();
-    private readonly Dictionary<EntityUid, bool> _stairPreviewHiddenSpriteVisibility = new();
+    private readonly CMUZViewportRenderPlan _zRenderPlan = new();
+    private readonly List<Box2> _stairPreviewTileBounds = new();
+    private readonly Vector2[] _stairPreviewStencilCorners = new Vector2[4];
     private readonly List<Box2> _zOpeningBounds = new();
-    private readonly List<Box2> _zLowerChainBounds = new();
     private readonly List<Box2> _zLowerOpeningBounds = new();
-    private readonly List<Box2> _zLowerSearchBounds = new();
-    private readonly List<int> _checkedOpeningIndices = new(MaxOpeningLosChecks);
     private readonly ZEye _zEye = new();
     private readonly ZEye _stairPreviewEye = new();
     private IClydeViewport? _stairPreviewViewport;
@@ -71,10 +69,12 @@ public sealed partial class ScalingViewport
     private EntityUid? _lastZLevelViewEntity;
     private TimeSpan _zLowerRenderGraceUntil = TimeSpan.Zero;
     private int _zLowerRenderGraceLowestDepth;
+    private IEye? _zLowerRenderGraceEye;
+    private EntityUid? _zLowerRenderGraceViewer;
+    private EntityUid? _zLowerRenderGraceMap;
+    private bool _zRenderDiagnostics;
 
     internal static ZLevelRenderDebugStats LastZRenderDebugStats { get; } = new();
-
-    private SpriteSystem Sprite => _sprite ??= _entityManager.System<SpriteSystem>();
 
     /// <summary>
     /// We are looking for at least one empty tile on the screen.
@@ -146,11 +146,16 @@ public sealed partial class ScalingViewport
         return _zLevelGrids.Count == 0 || foundOpening;
     }
 
-    private void RenderZLevelPasses(IClydeViewport viewport)
+    internal void RenderZLevelPasses(IClydeViewport viewport)
     {
+        using var renderState = new CMUZViewportRenderState(viewport);
+        viewport.ClearColor = Color.Black;
         ClearZLevelCompositeState();
-        LastZRenderDebugStats.Reset();
-        var totalStart = Stopwatch.GetTimestamp();
+        _zRenderPlan.Reset();
+        _zRenderDiagnostics = _cfg.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled);
+        if (_zRenderDiagnostics)
+            LastZRenderDebugStats.Reset();
+        var totalStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
 
         var zLevelsEnabled = _cfg.GetCVar(CMUZLevelsCVars.Enabled);
         var renderEnabled = _cfg.GetCVar(CMUZLevelsCVars.RenderEnabled);
@@ -160,18 +165,23 @@ public sealed partial class ScalingViewport
                 zLevelsEnabled,
                 renderEnabled))
         {
-            LastZRenderDebugStats.SkipReason = _eye is null
-                ? "no viewport eye"
-                : !zLevelsEnabled
-                    ? "cmu.zlevels.enabled=false"
-                    : !renderEnabled
-                        ? "cmu.zlevels.render_enabled=false"
-                        : "z render disabled";
-            var renderStart = Stopwatch.GetTimestamp();
-            viewport.Render();
-            LastZRenderDebugStats.BasePassRendered = true;
-            LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
-            LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+            ResetLowerRenderGrace();
+            if (_zRenderDiagnostics)
+                LastZRenderDebugStats.SkipReason = _eye is null
+                    ? "no viewport eye"
+                    : !zLevelsEnabled
+                        ? "cmu.zlevels.enabled=false"
+                        : !renderEnabled
+                            ? "cmu.zlevels.render_enabled=false"
+                            : "z render disabled";
+            var renderStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
+            RenderZSpritePass(viewport);
+            if (_zRenderDiagnostics)
+            {
+                LastZRenderDebugStats.BasePassRendered = true;
+                LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
+                LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+            }
             return;
         }
 
@@ -190,16 +200,31 @@ public sealed partial class ScalingViewport
         _examine ??= _entityManager.System<ExamineSystem>();
         _containers ??= _entityManager.System<SharedContainerSystem>();
 
-        if (!TryGetZLevelViewEntity(fallbackEye, out _, out var zLevelViewer, out var viewXform) ||
+        if (!TryGetZLevelViewEntity(fallbackEye, out var viewEntity, out var zLevelViewer, out var viewXform) ||
             viewXform.MapUid is null)
         {
-            LastZRenderDebugStats.SkipReason = "no Z-level viewer for current eye";
-            var renderStart = Stopwatch.GetTimestamp();
-            viewport.Render();
-            LastZRenderDebugStats.BasePassRendered = true;
-            LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
-            LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+            ResetLowerRenderGrace();
+            if (_zRenderDiagnostics)
+                LastZRenderDebugStats.SkipReason = "no Z-level viewer for current eye";
+            var renderStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
+            RenderZSpritePass(viewport);
+            if (_zRenderDiagnostics)
+            {
+                LastZRenderDebugStats.BasePassRendered = true;
+                LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
+                LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+            }
             return;
+        }
+
+        if (!ReferenceEquals(_zLowerRenderGraceEye, fallbackEye) ||
+            _zLowerRenderGraceViewer != viewEntity ||
+            _zLowerRenderGraceMap != viewXform.MapUid)
+        {
+            ResetLowerRenderGrace();
+            _zLowerRenderGraceEye = fallbackEye;
+            _zLowerRenderGraceViewer = viewEntity;
+            _zLowerRenderGraceMap = viewXform.MapUid;
         }
 
         var lookUp = zLevelViewer.LookUp || zLevelViewer.StairPreviewUp ? 1 : 0;
@@ -212,124 +237,150 @@ public sealed partial class ScalingViewport
         var weatherSourceMapId = GetWeatherSourceMapId(viewXform.MapUid.Value, viewXform.MapID);
         if (!TryGetViewportWorldAabb(viewport, out var viewportWorldAabb))
         {
-            LastZRenderDebugStats.SkipReason = "no viewport world bounds";
-            var renderStart = Stopwatch.GetTimestamp();
-            viewport.Render();
-            LastZRenderDebugStats.BasePassRendered = true;
-            LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
-            LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+            if (_zRenderDiagnostics)
+                LastZRenderDebugStats.SkipReason = "no viewport world bounds";
+            var renderStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
+            RenderZSpritePass(viewport);
+            if (_zRenderDiagnostics)
+            {
+                LastZRenderDebugStats.BasePassRendered = true;
+                LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
+                LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+            }
             return;
         }
 
-        LastZRenderDebugStats.UsedZRender = true;
-        LastZRenderDebugStats.SkipReason = "rendered";
-        LastZRenderDebugStats.BaseMapId = viewXform.MapID;
-        LastZRenderDebugStats.MaxDepth = maxDepth;
-        LastZRenderDebugStats.LookUpDepth = lookUp;
-        LastZRenderDebugStats.ViewerLookUp = zLevelViewer.LookUp;
-        LastZRenderDebugStats.StairPreviewUp = zLevelViewer.StairPreviewUp;
-        LastZRenderDebugStats.BaseMapUid = viewXform.MapUid;
-        LastZRenderDebugStats.ViewportWorldAabb = viewportWorldAabb;
-        LastZRenderDebugStats.ViewportWorldArea = GetArea(viewportWorldAabb);
+        if (_zRenderDiagnostics)
+        {
+            LastZRenderDebugStats.UsedZRender = true;
+            LastZRenderDebugStats.SkipReason = "rendered";
+            LastZRenderDebugStats.BaseMapId = viewXform.MapID;
+            LastZRenderDebugStats.MaxDepth = maxDepth;
+            LastZRenderDebugStats.LookUpDepth = lookUp;
+            LastZRenderDebugStats.ViewerLookUp = zLevelViewer.LookUp;
+            LastZRenderDebugStats.StairPreviewUp = zLevelViewer.StairPreviewUp;
+            LastZRenderDebugStats.BaseMapUid = viewXform.MapUid;
+            LastZRenderDebugStats.ViewportWorldAabb = viewportWorldAabb;
+            LastZRenderDebugStats.ViewportWorldArea = GetArea(viewportWorldAabb);
+        }
         var zRenderRotation = -fallbackEye.Rotation;
-        LastZRenderDebugStats.ZRenderOffsetPerDepth =
-            zRenderRotation.ToWorldVec() * CMUClientZLevelsSystem.ZLevelOffset;
+        var zRenderOffsetPerDepth = zRenderRotation.ToWorldVec() * CMUClientZLevelsSystem.ZLevelOffset;
+        if (_zRenderDiagnostics)
+            LastZRenderDebugStats.ZRenderOffsetPerDepth = zRenderOffsetPerDepth;
 
         _zOpeningBounds.Clear();
         using (var openingProfile = _prof.Group("CMU Z Opening Query"))
         {
-            var openingStart = Stopwatch.GetTimestamp();
-            var currentOpeningStart = Stopwatch.GetTimestamp();
+            var openingStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
+            var currentOpeningStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
             var hasOpenings = TryFindEmptyTilesInAabb(
                 viewXform.MapUid.Value,
                 viewportWorldAabb,
                 _zOpeningBounds,
                 out _,
-                maxOpeningRects == 0 ? int.MaxValue : maxOpeningRects + 1,
+                maxOpeningRects == 0 || maxOpeningRects == int.MaxValue ? int.MaxValue : maxOpeningRects + 1,
                 true);
-            LastZRenderDebugStats.CurrentOpeningQueryMs = GetElapsedMilliseconds(currentOpeningStart);
+            if (_zRenderDiagnostics)
+                LastZRenderDebugStats.CurrentOpeningQueryMs = GetElapsedMilliseconds(currentOpeningStart);
 
-            LastZRenderDebugStats.OpeningQueryRan = true;
-            LastZRenderDebugStats.OpeningQueryFoundOpening = hasOpenings;
-            LastZRenderDebugStats.OpeningsBeforeLos = _zOpeningBounds.Count;
-            LastZRenderDebugStats.OpeningBoundsTruncated = maxOpeningRects > 0 && _zOpeningBounds.Count > maxOpeningRects;
-            LastZRenderDebugStats.OpeningQueryConservativeNoBounds = hasOpenings && _zOpeningBounds.Count == 0;
-            LastZRenderDebugStats.OpeningAreaBeforeLos = GetAreaSum(_zOpeningBounds);
-
-            if (hasOpenings)
+            if (_zRenderDiagnostics)
             {
-                var beforeLos = _zOpeningBounds.Count;
-                var losStart = Stopwatch.GetTimestamp();
-                hasOpenings = FilterVisibleOpeningBounds(
-                    viewXform.MapID,
-                    _transform.GetWorldPosition(viewXform),
-                    _zOpeningBounds,
-                    maxOpeningRects,
-                    out var losChecks,
-                    out var conservativeLos,
-                    out var losMode);
+                LastZRenderDebugStats.OpeningQueryRan = true;
+                LastZRenderDebugStats.OpeningQueryFoundOpening = hasOpenings;
+                LastZRenderDebugStats.OpeningsBeforeLos = _zOpeningBounds.Count;
+                LastZRenderDebugStats.OpeningBoundsTruncated = maxOpeningRects > 0 && _zOpeningBounds.Count > maxOpeningRects;
+                LastZRenderDebugStats.OpeningQueryConservativeNoBounds = hasOpenings && _zOpeningBounds.Count == 0;
+                LastZRenderDebugStats.OpeningAreaBeforeLos = GetAreaSum(_zOpeningBounds);
+            }
 
-                LastZRenderDebugStats.OpeningLosChecks = losChecks;
-                LastZRenderDebugStats.OpeningLosMs = GetElapsedMilliseconds(losStart);
+            var completeOpenings = (maxOpeningRects == 0 || _zOpeningBounds.Count <= maxOpeningRects) &&
+                !(hasOpenings && _zOpeningBounds.Count == 0);
+            _zRenderPlan.BaseOpenings.SetOpenings(
+                viewXform.MapID, viewportWorldAabb, _zOpeningBounds, completeOpenings);
+            hasOpenings = _zRenderPlan.BaseOpenings.Visibility != CMUZVisibility.Hidden;
+
+            // A finite set of failed point rays cannot prove an entire aperture hidden. Geometry
+            // admission therefore needs no LOS sampling; the current map's FOV still masks the result.
+            if (_zRenderDiagnostics)
+            {
                 LastZRenderDebugStats.OpeningsAfterLos = _zOpeningBounds.Count;
-                LastZRenderDebugStats.OpeningsRemovedByLos = Math.Max(0, beforeLos - _zOpeningBounds.Count);
-                LastZRenderDebugStats.OpeningLosConservativeFallback = conservativeLos;
-                LastZRenderDebugStats.OpeningLosMode = losMode;
+                LastZRenderDebugStats.OpeningLosConservativeFallback = hasOpenings;
+                LastZRenderDebugStats.OpeningLosMode = hasOpenings ? "geometry; LOS unknown" : "closed geometry";
                 LastZRenderDebugStats.OpeningAreaAfterLos = GetAreaSum(_zOpeningBounds);
             }
 
-            LastZRenderDebugStats.VisibleCurrentOpenings = hasOpenings;
+            if (_zRenderDiagnostics)
+                LastZRenderDebugStats.VisibleCurrentOpenings = hasOpenings;
             var hasLowerMap = _zLevels.TryMapOffset(viewXform.MapUid.Value, -1, out _);
-            LastZRenderDebugStats.HasLowerMap = hasLowerMap;
+            if (_zRenderDiagnostics)
+                LastZRenderDebugStats.HasLowerMap = hasLowerMap;
 
-            var lowerDiscoveryStart = Stopwatch.GetTimestamp();
+            var lowerDiscoveryStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
             if (hasOpenings &&
                 maxDepth > 0 &&
                 hasLowerMap)
             {
-                _zLowerChainBounds.Clear();
-                _zLowerChainBounds.AddRange(_zOpeningBounds);
+                _zRenderPlan.LowerChain.SetProjected(_zRenderPlan.BaseOpenings, viewXform.MapID, Vector2.Zero);
 
-                var lowerStepOffset = -LastZRenderDebugStats.ZRenderOffsetPerDepth;
+                var chainDepth = 0;
+                var filterMargin = GetLowerFilterMargin(viewport);
                 for (var i = -1; i >= -maxDepth; i--)
                 {
-                    LastZRenderDebugStats.LowerDepthsChecked++;
+                    if (_zRenderDiagnostics)
+                        LastZRenderDebugStats.LowerDepthsChecked++;
                     if (!_zLevels.TryMapOffset(viewXform.MapUid.Value, i, out var mapUidBelow, out var lowerMapComp))
                         continue;
 
-                    lowestDepth = i;
-                    LastZRenderDebugStats.LowerDepthsWithMaps++;
+                    var pass = _zRenderPlan.LowerPass(i);
+                    pass.SetProjected(_zRenderPlan.LowerChain, lowerMapComp.MapId,
+                        zRenderOffsetPerDepth * (i - chainDepth),
+                        filterMargin * (chainDepth == 0 && zLevelViewer.LookUp ? 2f : 1f));
+                    chainDepth = i;
+                    if (pass.Visibility == CMUZVisibility.Hidden)
+                    {
+                        if (_zRenderDiagnostics)
+                            LastZRenderDebugStats.LowerDepthBreakDepth = i;
+                        break;
+                    }
 
-                    var lowerOpeningStart = Stopwatch.GetTimestamp();
-                    var hasDeeperOpening = TryFindChainedLowerOpeningBounds(
-                        mapUidBelow.Value,
-                        lowerMapComp.MapId,
-                        viewportWorldAabb,
-                        lowerStepOffset,
-                        maxOpeningRects,
-                        out var losChecks);
-                    LastZRenderDebugStats.LowerDepthOpeningQueryMs += GetElapsedMilliseconds(lowerOpeningStart);
-                    LastZRenderDebugStats.LowerDepthOpeningLosChecks += losChecks;
+                    lowestDepth = i;
+                    if (_zRenderDiagnostics)
+                        LastZRenderDebugStats.LowerDepthsWithMaps++;
+
+                    // The last rendered floor does not need an aperture query for a nonexistent pass.
+                    if (i == -maxDepth)
+                        break;
+
+                    var lowerOpeningStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
+                    var hasDeeperOpening = FindLowerChainOpenings(mapUidBelow.Value, pass, maxOpeningRects);
+                    if (_zRenderDiagnostics)
+                        LastZRenderDebugStats.LowerDepthOpeningQueryMs += GetElapsedMilliseconds(lowerOpeningStart);
 
                     if (!hasDeeperOpening)
                     {
-                        LastZRenderDebugStats.LowerDepthBreakDepth = i;
+                        if (_zRenderDiagnostics)
+                            LastZRenderDebugStats.LowerDepthBreakDepth = i;
                         break;
                     }
                 }
             }
-            LastZRenderDebugStats.LowerDepthDiscoveryMs = GetElapsedMilliseconds(lowerDiscoveryStart);
+            if (_zRenderDiagnostics)
+                LastZRenderDebugStats.LowerDepthDiscoveryMs = GetElapsedMilliseconds(lowerDiscoveryStart);
 
             ApplyLowerRenderGrace(maxDepth, hasLowerMap, ref lowestDepth);
 
-            LastZRenderDebugStats.LowerSuppressedByOpeningGate = maxDepth > 0 &&
-                hasLowerMap &&
-                lowestDepth == 0 &&
-                !hasOpenings;
-            LastZRenderDebugStats.OpeningQueryTotalMs = GetElapsedMilliseconds(openingStart);
+            if (_zRenderDiagnostics)
+            {
+                LastZRenderDebugStats.LowerSuppressedByOpeningGate = maxDepth > 0 &&
+                    hasLowerMap &&
+                    lowestDepth == 0 &&
+                    !hasOpenings;
+                LastZRenderDebugStats.OpeningQueryTotalMs = GetElapsedMilliseconds(openingStart);
+            }
         }
 
-        LastZRenderDebugStats.LowestDepth = lowestDepth;
+        if (_zRenderDiagnostics)
+            LastZRenderDebugStats.LowestDepth = lowestDepth;
 
         //From the lowest depth to the highest, render each level
         using (var passProfile = _prof.Group("CMU Z Render Passes"))
@@ -405,10 +456,11 @@ public sealed partial class ScalingViewport
 
                     if (separateStairPreview)
                     {
-                        var stairPreviewStart = Stopwatch.GetTimestamp();
-                        RenderStairPreviewComposite(viewport, _zEye);
-                        LastZRenderDebugStats.StairPreviewCompositesRendered++;
-                        LastZRenderDebugStats.StairPreviewRenderMs += GetElapsedMilliseconds(stairPreviewStart);
+                        var stairPreviewStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
+                        if (RenderStairPreviewComposite(viewport, _zEye) && _zRenderDiagnostics)
+                            LastZRenderDebugStats.StairPreviewCompositesRendered++;
+                        if (_zRenderDiagnostics)
+                            LastZRenderDebugStats.StairPreviewRenderMs += GetElapsedMilliseconds(stairPreviewStart);
                         continue;
                     }
 
@@ -416,25 +468,29 @@ public sealed partial class ScalingViewport
                 }
 
                 viewport.ClearColor = depth == lowestDepth ? Color.Black : null;
-                var renderStart = Stopwatch.GetTimestamp();
-                viewport.Render();
-                var renderMs = GetElapsedMilliseconds(renderStart);
-
-                if (depth < 0)
+                var renderStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
+                RenderZSpritePass(viewport, depth < 0
+                    ? _zRenderPlan.FindLowerPass(depth, viewport.Eye!.Position.MapId)
+                    : null);
+                if (_zRenderDiagnostics)
                 {
-                    LastZRenderDebugStats.LowerPassesRendered++;
-                    LastZRenderDebugStats.LowerRenderMs += renderMs;
-                    LastZRenderDebugStats.LowerRenderedDepths.Add(depth);
-                }
-                else if (depth > 0)
-                {
-                    LastZRenderDebugStats.UpperPassesRendered++;
-                    LastZRenderDebugStats.UpperRenderMs += renderMs;
-                }
-                else
-                {
-                    LastZRenderDebugStats.BasePassRendered = true;
-                    LastZRenderDebugStats.BaseRenderMs += renderMs;
+                    var renderMs = GetElapsedMilliseconds(renderStart);
+                    if (depth < 0)
+                    {
+                        LastZRenderDebugStats.LowerPassesRendered++;
+                        LastZRenderDebugStats.LowerRenderMs += renderMs;
+                        LastZRenderDebugStats.LowerRenderedDepths.Add(depth);
+                    }
+                    else if (depth > 0)
+                    {
+                        LastZRenderDebugStats.UpperPassesRendered++;
+                        LastZRenderDebugStats.UpperRenderMs += renderMs;
+                    }
+                    else
+                    {
+                        LastZRenderDebugStats.BasePassRendered = true;
+                        LastZRenderDebugStats.BaseRenderMs += renderMs;
+                    }
                 }
             }
         }
@@ -444,10 +500,29 @@ public sealed partial class ScalingViewport
         if (lookUp == 0 && zLevelViewer.FaintUp)
             RenderFaintUpperComposite(viewport, fallbackEye, viewXform, lowestDepth, weatherSourceMapId);
 
-        // Restore the Eye
-        Eye = fallbackEye;
-        viewport.Eye = Eye;
-        LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+        if (_zRenderDiagnostics)
+            LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+    }
+
+    private void RenderZSpritePass(IClydeViewport viewport, CMUZVisibilityMask? mask = null)
+    {
+        _zLevels ??= _entityManager.System<CMUClientZLevelsSystem>();
+        _zLevels.RenderViewport(viewport, mask);
+        if (mask is null || !_zRenderDiagnostics)
+            return;
+
+        _spriteCulling ??= _entityManager.System<CMUZLevelSpriteCullingSystem>();
+        LastZRenderDebugStats.SpriteCullCandidates += _spriteCulling.LastCandidates;
+        LastZRenderDebugStats.SpritesCulled += _spriteCulling.LastHidden;
+    }
+
+    private void ResetLowerRenderGrace()
+    {
+        _zLowerRenderGraceUntil = TimeSpan.Zero;
+        _zLowerRenderGraceLowestDepth = 0;
+        _zLowerRenderGraceEye = null;
+        _zLowerRenderGraceViewer = null;
+        _zLowerRenderGraceMap = null;
     }
 
     internal static bool ShouldUseZLevelRenderPasses(bool zLevelsEnabled, bool renderEnabled)
@@ -459,7 +534,8 @@ public sealed partial class ScalingViewport
     private void ApplyLowerRenderGrace(int maxDepth, bool hasLowerMap, ref int lowestDepth)
     {
         var graceSeconds = Math.Max(0f, _cfg.GetCVar(CMUZLevelsCVars.LowerRenderVisibilityGrace));
-        LastZRenderDebugStats.LowerRenderGraceSeconds = graceSeconds;
+        if (_zRenderDiagnostics)
+            LastZRenderDebugStats.LowerRenderGraceSeconds = graceSeconds;
 
         if (lowestDepth < 0)
         {
@@ -468,8 +544,11 @@ public sealed partial class ScalingViewport
                 ? _timing.CurTime + TimeSpan.FromSeconds(graceSeconds)
                 : TimeSpan.Zero;
 
-            LastZRenderDebugStats.LowerRenderGraceLowestDepth = _zLowerRenderGraceLowestDepth;
-            LastZRenderDebugStats.LowerRenderGraceRemainingMs = graceSeconds * 1000d;
+            if (_zRenderDiagnostics)
+            {
+                LastZRenderDebugStats.LowerRenderGraceLowestDepth = _zLowerRenderGraceLowestDepth;
+                LastZRenderDebugStats.LowerRenderGraceRemainingMs = graceSeconds * 1000d;
+            }
             return;
         }
 
@@ -480,11 +559,14 @@ public sealed partial class ScalingViewport
             _timing.CurTime <= _zLowerRenderGraceUntil)
         {
             lowestDepth = Math.Clamp(_zLowerRenderGraceLowestDepth, -maxDepth, -1);
-            LastZRenderDebugStats.LowerRenderGraceActive = true;
-            LastZRenderDebugStats.LowerRenderGraceLowestDepth = lowestDepth;
-            LastZRenderDebugStats.LowerRenderGraceRemainingMs = Math.Max(
-                0d,
-                (_zLowerRenderGraceUntil - _timing.CurTime).TotalMilliseconds);
+            if (_zRenderDiagnostics)
+            {
+                LastZRenderDebugStats.LowerRenderGraceActive = true;
+                LastZRenderDebugStats.LowerRenderGraceLowestDepth = lowestDepth;
+                LastZRenderDebugStats.LowerRenderGraceRemainingMs = Math.Max(
+                    0d,
+                    (_zLowerRenderGraceUntil - _timing.CurTime).TotalMilliseconds);
+            }
             return;
         }
 
@@ -492,247 +574,42 @@ public sealed partial class ScalingViewport
         _zLowerRenderGraceUntil = TimeSpan.Zero;
     }
 
-    private bool TryFindChainedLowerOpeningBounds(
-        EntityUid mapUid,
-        MapId mapId,
-        Box2 viewportWorldAabb,
-        Vector2 lowerStepOffset,
-        int maxOpeningRects,
-        out int losChecks)
+    private bool FindLowerChainOpenings(EntityUid mapUid, CMUZVisibilityMask pass, int maxOpeningRects)
     {
-        losChecks = 0;
-        _zLowerSearchBounds.Clear();
-
-        if (_zLowerChainBounds.Count == 0)
-        {
-            _zLowerSearchBounds.Add(viewportWorldAabb.Translated(lowerStepOffset));
-        }
-        else
-        {
-            foreach (var openingBound in _zLowerChainBounds)
-            {
-                AddMergedOpeningSearchBounds(
-                    _zLowerSearchBounds,
-                    openingBound.Translated(lowerStepOffset));
-            }
-        }
-
+        _zRenderPlan.LowerChain.SetProjected(pass, pass.MapId, Vector2.Zero);
         _zLowerOpeningBounds.Clear();
-        var foundOpening = false;
-        var openingLimit = maxOpeningRects == 0
-            ? int.MaxValue
-            : maxOpeningRects + 1;
 
-        foreach (var searchBounds in _zLowerSearchBounds)
-        {
-            var beforeCount = _zLowerOpeningBounds.Count;
-            var foundInBounds = TryFindEmptyTilesInAabb(
-                mapUid,
-                searchBounds,
-                _zLowerOpeningBounds,
-                out _,
-                openingLimit,
-                true);
+        // Query once for the floor. The AABB is broad phase only; intersections below retain each
+        // aperture separately, so an L-shaped shaft never becomes its filled rectangular union.
+        var searchBounds = pass.Bounds[0];
+        for (var i = 1; i < pass.Bounds.Count; i++)
+            searchBounds = searchBounds.Union(pass.Bounds[i]);
 
-            if (!foundInBounds)
-                continue;
-
-            foundOpening = true;
-
-            if (_zLevelGrids.Count == 0 && _zLowerOpeningBounds.Count == beforeCount)
-                _zLowerOpeningBounds.Add(searchBounds);
-
-            if (_zLowerOpeningBounds.Count >= openingLimit)
-                break;
-        }
-
-        if (!foundOpening)
-            return false;
-
-        var hasVisibleOpening = FilterVisibleChainedLowerOpeningBounds(
-            mapId,
-            maxOpeningRects,
-            out losChecks);
-
-        _zLowerChainBounds.Clear();
-        _zLowerChainBounds.AddRange(_zLowerOpeningBounds);
-
-        return hasVisibleOpening;
+        var found = TryFindEmptyTilesInAabb(
+            mapUid,
+            searchBounds,
+            _zLowerOpeningBounds,
+            out _,
+            maxOpeningRects == 0 || maxOpeningRects == int.MaxValue ? int.MaxValue : maxOpeningRects + 1,
+            true);
+        var complete = !(found && _zLowerOpeningBounds.Count == 0) &&
+            (maxOpeningRects == 0 || _zLowerOpeningBounds.Count <= maxOpeningRects);
+        _zRenderPlan.LowerChain.IntersectOpenings(_zLowerOpeningBounds, complete, maxOpeningRects);
+        return _zRenderPlan.LowerChain.Visibility != CMUZVisibility.Hidden;
     }
 
-    private bool FilterVisibleChainedLowerOpeningBounds(
-        MapId mapId,
-        int maxOpeningRects,
-        out int losChecks)
+    private float GetLowerFilterMargin(IClydeViewport viewport)
     {
-        losChecks = 0;
+        // zblur samples at most two screen pixels away. Keep their source pixels around every
+        // aperture, plus one for texture filtering; repeated lower passes accumulate this support.
+        var pixels = 1f;
+        if (_cfg.GetCVar(CMUZLevelsCVars.BlurEnabled))
+            pixels += Math.Clamp(_cfg.GetCVar(CMUZLevelsCVars.BlurStrength), 0f, 2f);
 
-        if (_examine is null)
-            return true;
-
-        if (_zLowerOpeningBounds.Count == 0)
-            return true;
-
-        if (maxOpeningRects > 0 && _zLowerOpeningBounds.Count > maxOpeningRects)
-            return true;
-
-        if (_zLowerOpeningBounds.Count > MaxOpeningLosChecks)
-        {
-            if (HasSampledVisibleChainedLowerOpeningBounds(mapId, ref losChecks))
-                return true;
-
-            _zLowerOpeningBounds.Clear();
-            return false;
-        }
-
-        for (var i = _zLowerOpeningBounds.Count - 1; i >= 0; i--)
-        {
-            if (CanAnyLowerSearchBoundSeeOpening(mapId, _zLowerOpeningBounds[i], ref losChecks))
-                continue;
-
-            _zLowerOpeningBounds.RemoveAt(i);
-        }
-
-        return _zLowerOpeningBounds.Count > 0;
-    }
-
-    private bool HasSampledVisibleChainedLowerOpeningBounds(MapId mapId, ref int losChecks)
-    {
-        _checkedOpeningIndices.Clear();
-
-        var checks = Math.Min(MaxOpeningLosChecks, _zLowerOpeningBounds.Count);
-        for (var i = 0; i < checks; i++)
-        {
-            var targetIndex = checks == 1
-                ? _zLowerOpeningBounds.Count / 2
-                : (int) MathF.Round(i * (_zLowerOpeningBounds.Count - 1) / (float) (checks - 1));
-            var index = FindUncheckedOpeningAround(targetIndex, _zLowerOpeningBounds.Count, _checkedOpeningIndices);
-            if (index < 0)
-                break;
-
-            _checkedOpeningIndices.Add(index);
-            if (CanAnyLowerSearchBoundSeeOpening(mapId, _zLowerOpeningBounds[index], ref losChecks))
-                return true;
-        }
-
-        return false;
-    }
-
-    private bool CanAnyLowerSearchBoundSeeOpening(
-        MapId mapId,
-        Box2 openingBounds,
-        ref int losChecks)
-    {
-        foreach (var searchBounds in _zLowerSearchBounds)
-        {
-            if (!BoundsOverlapOrTouch(searchBounds, openingBounds))
-                continue;
-
-            if (CanSeeOpeningBounds(new MapCoordinates(searchBounds.Center, mapId), mapId, openingBounds, ref losChecks))
-                return true;
-        }
-
-        return false;
-    }
-
-    private static void AddMergedOpeningSearchBounds(List<Box2> searchBounds, Box2 bounds)
-    {
-        for (var i = 0; i < searchBounds.Count; i++)
-        {
-            if (!BoundsOverlapOrTouch(searchBounds[i], bounds))
-                continue;
-
-            searchBounds[i] = searchBounds[i].Union(bounds);
-            MergeOpeningSearchBounds(searchBounds, i);
-            return;
-        }
-
-        searchBounds.Add(bounds);
-    }
-
-    private static void MergeOpeningSearchBounds(List<Box2> searchBounds, int index)
-    {
-        for (var i = searchBounds.Count - 1; i >= 0; i--)
-        {
-            if (i == index ||
-                !BoundsOverlapOrTouch(searchBounds[index], searchBounds[i]))
-            {
-                continue;
-            }
-
-            searchBounds[index] = searchBounds[index].Union(searchBounds[i]);
-            searchBounds.RemoveAt(i);
-            if (i < index)
-                index--;
-        }
-    }
-
-    private static bool BoundsOverlapOrTouch(Box2 a, Box2 b)
-    {
-        return a.BottomLeft.X <= b.TopRight.X &&
-               a.TopRight.X >= b.BottomLeft.X &&
-               a.BottomLeft.Y <= b.TopRight.Y &&
-               a.TopRight.Y >= b.BottomLeft.Y;
-    }
-
-    private bool FilterVisibleOpeningBounds(
-        MapId mapId,
-        Vector2 viewerPosition,
-        List<Box2> openingBounds,
-        int maxOpeningRects,
-        out int losChecks,
-        out bool conservativeFallback,
-        out string losMode)
-    {
-        losChecks = 0;
-        conservativeFallback = false;
-        losMode = "exhaustive";
-
-        if (_examine is null)
-        {
-            conservativeFallback = true;
-            losMode = "no examine system";
-            return true;
-        }
-
-        // If there were no grids in the queried area, the opening cache conservatively reports open space without
-        // concrete bounds. Keep the old behavior for that case.
-        if (openingBounds.Count == 0)
-        {
-            conservativeFallback = true;
-            losMode = "no bounds";
-            return true;
-        }
-
-        // A truncated opening list is incomplete, so keep the old conservative behavior rather than hiding a valid
-        // lower view. Large complete lists are handled with bounded sampling below.
-        if (maxOpeningRects > 0 && openingBounds.Count > maxOpeningRects)
-        {
-            conservativeFallback = true;
-            losMode = "truncated";
-            return true;
-        }
-
-        if (openingBounds.Count > MaxOpeningLosChecks)
-        {
-            losMode = "sampled";
-            if (HasSampledVisibleOpeningBounds(mapId, viewerPosition, openingBounds, ref losChecks))
-                return true;
-
-            openingBounds.Clear();
-            return false;
-        }
-
-        var origin = new MapCoordinates(viewerPosition, mapId);
-        for (var i = openingBounds.Count - 1; i >= 0; i--)
-        {
-            if (CanSeeOpeningBounds(origin, mapId, openingBounds[i], ref losChecks))
-                continue;
-
-            openingBounds.RemoveAt(i);
-        }
-
-        return openingBounds.Count > 0;
+        var origin = viewport.LocalToWorld(Vector2.Zero).Position;
+        var xStep = viewport.LocalToWorld(Vector2.UnitX).Position - origin;
+        var yStep = viewport.LocalToWorld(Vector2.UnitY).Position - origin;
+        return (xStep.Length() + yStep.Length()) * pixels;
     }
 
     private static double GetElapsedMilliseconds(long start)
@@ -754,140 +631,6 @@ public sealed partial class ScalingViewport
         }
 
         return area;
-    }
-
-    private bool HasSampledVisibleOpeningBounds(
-        MapId mapId,
-        Vector2 viewerPosition,
-        List<Box2> openingBounds,
-        ref int losChecks)
-    {
-        var origin = new MapCoordinates(viewerPosition, mapId);
-        _checkedOpeningIndices.Clear();
-
-        var nearestChecks = Math.Min(MaxOpeningLosChecks / 2, openingBounds.Count);
-        for (var i = 0; i < nearestChecks; i++)
-        {
-            var index = FindNearestUncheckedOpening(openingBounds, viewerPosition, _checkedOpeningIndices);
-            if (index < 0)
-                break;
-
-            _checkedOpeningIndices.Add(index);
-            if (CanSeeOpeningBounds(origin, mapId, openingBounds[index], ref losChecks))
-                return true;
-        }
-
-        var spreadChecks = Math.Min(
-            MaxOpeningLosChecks - _checkedOpeningIndices.Count,
-            openingBounds.Count - _checkedOpeningIndices.Count);
-        for (var i = 0; i < spreadChecks && _checkedOpeningIndices.Count < MaxOpeningLosChecks; i++)
-        {
-            var targetIndex = spreadChecks == 1
-                ? openingBounds.Count / 2
-                : (int) MathF.Round(i * (openingBounds.Count - 1) / (float) (spreadChecks - 1));
-            var index = FindUncheckedOpeningAround(targetIndex, openingBounds.Count, _checkedOpeningIndices);
-            if (index < 0)
-                break;
-
-            _checkedOpeningIndices.Add(index);
-            if (CanSeeOpeningBounds(origin, mapId, openingBounds[index], ref losChecks))
-                return true;
-        }
-
-        return false;
-    }
-
-    private bool CanSeeOpeningBounds(
-        MapCoordinates origin,
-        MapId mapId,
-        Box2 openingBounds,
-        ref int losChecks)
-    {
-        var center = openingBounds.Center;
-        if (CanSeeOpeningPoint(origin, mapId, center, ref losChecks))
-            return true;
-
-        var closest = openingBounds.ClosestPoint(origin.Position);
-        if (CanSeeOpeningPoint(origin, mapId, InsetOpeningPoint(closest, center), ref losChecks))
-            return true;
-
-        return CanSeeOpeningPoint(origin, mapId, InsetOpeningPoint(openingBounds.BottomLeft, center), ref losChecks) ||
-               CanSeeOpeningPoint(origin, mapId, InsetOpeningPoint(openingBounds.TopLeft, center), ref losChecks) ||
-               CanSeeOpeningPoint(origin, mapId, InsetOpeningPoint(openingBounds.TopRight, center), ref losChecks) ||
-               CanSeeOpeningPoint(origin, mapId, InsetOpeningPoint(openingBounds.BottomRight, center), ref losChecks);
-    }
-
-    private bool CanSeeOpeningPoint(
-        MapCoordinates origin,
-        MapId mapId,
-        Vector2 targetPosition,
-        ref int losChecks)
-    {
-        losChecks++;
-        return _examine!.InRangeUnOccluded(origin, new MapCoordinates(targetPosition, mapId), 0f, null);
-    }
-
-    private static Vector2 InsetOpeningPoint(Vector2 point, Vector2 center)
-    {
-        return point + (center - point) * 0.15f;
-    }
-
-    private static int FindNearestUncheckedOpening(
-        List<Box2> openingBounds,
-        Vector2 viewerPosition,
-        List<int> checkedIndices)
-    {
-        var bestIndex = -1;
-        var bestDistance = float.PositiveInfinity;
-        for (var i = 0; i < openingBounds.Count; i++)
-        {
-            if (HasCheckedOpeningIndex(checkedIndices, i))
-                continue;
-
-            var distance = Vector2.DistanceSquared(viewerPosition, openingBounds[i].Center);
-            if (distance >= bestDistance)
-                continue;
-
-            bestIndex = i;
-            bestDistance = distance;
-        }
-
-        return bestIndex;
-    }
-
-    private static int FindUncheckedOpeningAround(
-        int targetIndex,
-        int openingCount,
-        List<int> checkedIndices)
-    {
-        if (!HasCheckedOpeningIndex(checkedIndices, targetIndex))
-            return targetIndex;
-
-        for (var offset = 1; offset < openingCount; offset++)
-        {
-            var lower = targetIndex - offset;
-            if (lower >= 0 && !HasCheckedOpeningIndex(checkedIndices, lower))
-                return lower;
-
-            var upper = targetIndex + offset;
-            if (upper < openingCount && !HasCheckedOpeningIndex(checkedIndices, upper))
-                return upper;
-        }
-
-        return -1;
-    }
-
-    private static bool HasCheckedOpeningIndex(
-        List<int> checkedIndices,
-        int index)
-    {
-        for (var i = 0; i < checkedIndices.Count; i++)
-        {
-            if (checkedIndices[i] == index)
-                return true;
-        }
-
-        return false;
     }
 
     private bool TryGetZLevelViewEntity(
@@ -1027,11 +770,11 @@ public sealed partial class ScalingViewport
         return groundMapComp.MapId;
     }
 
-    private void RenderStairPreviewComposite(IClydeViewport sourceViewport, ZEye sourceEye)
+    private bool RenderStairPreviewComposite(IClydeViewport sourceViewport, ZEye sourceEye)
     {
         EnsureStairPreviewViewport(sourceViewport);
         if (_stairPreviewViewport is null)
-            return;
+            return false;
 
         CopyZEye(_stairPreviewEye, sourceEye);
         _stairPreviewEye.DrawFov = false;
@@ -1039,84 +782,13 @@ public sealed partial class ScalingViewport
 
         _stairPreviewViewport.Eye = _stairPreviewEye;
         _stairPreviewViewport.ClearColor = Color.Transparent;
-        CullStairPreviewSprites(_stairPreviewEye.Position.MapId);
-        try
-        {
-            _stairPreviewViewport.Render();
-        }
-        finally
-        {
-            RestoreStairPreviewSprites();
-        }
+        if (!BuildStairPreviewMask())
+            return false;
+
+        RenderZSpritePass(_stairPreviewViewport, _zRenderPlan.StairPreview);
 
         _drawStairPreviewComposite = true;
-    }
-
-    private void CullStairPreviewSprites(MapId mapId)
-    {
-        if (_stairPreviewViewport is null ||
-            _lookup is null ||
-            _transform is null ||
-            _xformQuery is not { } xformQuery ||
-            !TryGetViewportWorldAabb(_stairPreviewViewport, out var worldAabb))
-        {
-            return;
-        }
-
-        _stairPreviewSpriteCandidates.Clear();
-        _lookup.GetEntitiesIntersecting(mapId, worldAabb, _stairPreviewSpriteCandidates, LookupFlags.All);
-
-        foreach (var candidate in _stairPreviewSpriteCandidates)
-        {
-            var uid = candidate.Owner;
-            var sprite = candidate.Comp;
-            if (!sprite.Visible ||
-                !xformQuery.TryComp(uid, out var xform) ||
-                xform.MapID != mapId)
-            {
-                continue;
-            }
-
-            var worldBounds = GetStairPreviewSpriteBounds(uid, sprite, xform, xformQuery);
-            var target = new MapCoordinates(worldBounds.Center, mapId);
-            if (CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
-            {
-                continue;
-            }
-
-            if (!_stairPreviewHiddenSpriteVisibility.TryAdd(uid, sprite.Visible))
-                continue;
-
-            Sprite.SetVisible((uid, sprite), false);
-        }
-    }
-
-    private void RestoreStairPreviewSprites()
-    {
-        foreach (var (uid, wasVisible) in _stairPreviewHiddenSpriteVisibility)
-        {
-            if (!wasVisible ||
-                !_entityManager.TryGetComponent<SpriteComponent>(uid, out var sprite) ||
-                sprite.Visible)
-            {
-                continue;
-            }
-
-            Sprite.SetVisible((uid, sprite), true);
-        }
-
-        _stairPreviewHiddenSpriteVisibility.Clear();
-        _stairPreviewSpriteCandidates.Clear();
-    }
-
-    private Box2 GetStairPreviewSpriteBounds(
-        EntityUid uid,
-        SpriteComponent sprite,
-        TransformComponent xform,
-        EntityQuery<TransformComponent> xformQuery)
-    {
-        var worldPos = _transform!.GetWorldPosition(xform, xformQuery);
-        return Sprite.GetLocalBounds((uid, sprite)).Translated(worldPos);
+        return true;
     }
 
     private void EnsureStairPreviewViewport(IClydeViewport sourceViewport)
@@ -1227,7 +899,7 @@ public sealed partial class ScalingViewport
 
         _stairPreviewViewport.Eye = _zEye;
         _stairPreviewViewport.ClearColor = Color.Transparent;
-        _stairPreviewViewport.Render();
+        RenderZSpritePass(_stairPreviewViewport);
 
         _faintUpperAlpha = Math.Clamp(_cfg.GetCVar(CMUZLevelsCVars.FaintUpperAlpha), 0.05f, 0.80f);
         _drawFaintUpperComposite = true;
@@ -1272,42 +944,65 @@ public sealed partial class ScalingViewport
         return _stencilEqualDrawShaderInstance ??= _prototypeManager.Index(StencilEqualDrawShader).Instance();
     }
 
-    private void DrawStairPreviewFovMask(DrawingHandleScreen screen, UIBox2 drawBox)
+    private bool BuildStairPreviewMask()
     {
+        _zRenderPlan.StairTiles.Clear();
+        _stairPreviewTileBounds.Clear();
         if (_stairPreviewViewport is null ||
             _mapSystem is null ||
             _transform is null ||
             _lookup is null ||
             _examine is null ||
+            _stairPreviewOrigins.Count == 0 ||
             !TryGetViewportWorldAabb(_stairPreviewViewport, out var worldAabb))
         {
-            return;
+            return false;
         }
 
         var mapId = _stairPreviewEye.Position.MapId;
-        if (_stairPreviewOrigins.Count == 0)
-            return;
-
         _stairPreviewGrids.Clear();
         _mapSystem.FindGridsIntersecting(mapId, worldAabb, ref _stairPreviewGrids, approx: true, includeMap: true);
-
         foreach (var grid in _stairPreviewGrids)
         {
             var gridMatrix = _transform.GetWorldMatrix(grid.Owner);
             foreach (var tile in _mapSystem.GetTilesIntersecting(grid.Owner, grid.Comp, worldAabb, ignoreEmpty: true))
             {
+                if (_zRenderDiagnostics)
+                    LastZRenderDebugStats.StairPreviewTilesExamined++;
                 var localBounds = _lookup.GetLocalBounds(tile, grid.Comp.TileSize).Enlarged(0.01f);
-                var worldBounds = gridMatrix.TransformBox(localBounds);
-                var target = new MapCoordinates(worldBounds.Center, mapId);
-
-                if (!CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
+                var visibleTile = new CMUZViewportRenderPlan.StairTile(
+                    Vector2.Transform(localBounds.BottomLeft, gridMatrix),
+                    Vector2.Transform(localBounds.TopLeft, gridMatrix),
+                    Vector2.Transform(localBounds.TopRight, gridMatrix),
+                    Vector2.Transform(localBounds.BottomRight, gridMatrix));
+                var bounds = visibleTile.Bounds;
+                if (!CanAnyStairPreviewOriginSeeTile(visibleTile, mapId, _stairPreviewEye.VisualZOffset))
                     continue;
 
-                screen.DrawRect(GetCompositeScreenBox(localBounds, gridMatrix, drawBox), Color.White);
+                _zRenderPlan.StairTiles.Add(visibleTile);
+                _stairPreviewTileBounds.Add(bounds);
             }
         }
 
         _stairPreviewGrids.Clear();
+        _zRenderPlan.StairPreview.SetOpenings(mapId, worldAabb, _stairPreviewTileBounds, complete: true, dynamicOnly: false);
+        _zRenderPlan.StairPreview.ConfirmVisible();
+        if (_zRenderDiagnostics)
+            LastZRenderDebugStats.StairPreviewTilesVisible = _zRenderPlan.StairTiles.Count;
+        return _zRenderPlan.StairPreview.Visibility != CMUZVisibility.Hidden;
+    }
+
+    private void DrawStairPreviewFovMask(DrawingHandleScreen screen, UIBox2 drawBox)
+    {
+        var corners = _stairPreviewStencilCorners;
+        foreach (var tile in _zRenderPlan.StairTiles)
+        {
+            corners[0] = CompositeWorldToScreen(tile.BottomLeft, drawBox);
+            corners[1] = CompositeWorldToScreen(tile.TopLeft, drawBox);
+            corners[2] = CompositeWorldToScreen(tile.TopRight, drawBox);
+            corners[3] = CompositeWorldToScreen(tile.BottomRight, drawBox);
+            screen.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, corners, Color.White);
+        }
     }
 
     private void SetStairPreviewOrigins(CMUZLevelViewerComponent viewer, Vector2 viewerPosition)
@@ -1330,22 +1025,19 @@ public sealed partial class ScalingViewport
                 _ => default,
             };
 
-            if (position == default)
-                continue;
-
             _stairPreviewOrigins.Add(new StairPreviewOrigin(position, viewerPosition));
         }
     }
 
-    private bool CanAnyStairPreviewOriginSeeBounds(
-        MapCoordinates target,
-        Box2 bounds,
+    private bool CanAnyStairPreviewOriginSeeTile(
+        CMUZViewportRenderPlan.StairTile tile,
         MapId mapId,
         Vector2 renderOffset)
     {
         if (_examine is null)
             return false;
 
+        var target = new MapCoordinates(tile.Bounds.Center, mapId);
         foreach (var origin in _stairPreviewOrigins)
         {
             if (!CMUZLevelStairPreviewVisibility.IsInFrontOfStair(
@@ -1356,16 +1048,21 @@ public sealed partial class ScalingViewport
                 continue;
             }
 
-            if (!CMUZLevelStairPreviewVisibility.ProjectedBoundsStayInFrontOfStair(
+            if (!CMUZLevelStairPreviewVisibility.ProjectedCornersStayInFrontOfStair(
                     origin.ViewerPosition,
                     origin.Position,
-                    bounds,
+                    tile.BottomLeft,
+                    tile.TopLeft,
+                    tile.TopRight,
+                    tile.BottomRight,
                     renderOffset))
             {
                 continue;
             }
 
             var originCoordinates = new MapCoordinates(origin.Position, mapId);
+            if (_zRenderDiagnostics)
+                LastZRenderDebugStats.StairPreviewLosChecks++;
             if (_examine.InRangeUnOccluded(originCoordinates, target, 0f, null))
                 return true;
         }
@@ -1394,21 +1091,6 @@ public sealed partial class ScalingViewport
         return true;
     }
 
-    private UIBox2 GetCompositeScreenBox(Box2 localBounds, Matrix3x2 gridMatrix, UIBox2 drawBox)
-    {
-        var c0 = CompositeWorldToScreen(Vector2.Transform(localBounds.BottomLeft, gridMatrix), drawBox);
-        var c1 = CompositeWorldToScreen(Vector2.Transform(localBounds.TopLeft, gridMatrix), drawBox);
-        var c2 = CompositeWorldToScreen(Vector2.Transform(localBounds.TopRight, gridMatrix), drawBox);
-        var c3 = CompositeWorldToScreen(Vector2.Transform(localBounds.BottomRight, gridMatrix), drawBox);
-
-        var minX = MathF.Min(MathF.Min(c0.X, c1.X), MathF.Min(c2.X, c3.X));
-        var minY = MathF.Min(MathF.Min(c0.Y, c1.Y), MathF.Min(c2.Y, c3.Y));
-        var maxX = MathF.Max(MathF.Max(c0.X, c1.X), MathF.Max(c2.X, c3.X));
-        var maxY = MathF.Max(MathF.Max(c0.Y, c1.Y), MathF.Max(c2.Y, c3.Y));
-
-        return new UIBox2(minX, minY, maxX, maxY);
-    }
-
     private Vector2 CompositeWorldToScreen(Vector2 worldPosition, UIBox2 drawBox)
     {
         if (_stairPreviewViewport is null)
@@ -1424,18 +1106,23 @@ public sealed partial class ScalingViewport
         _drawFaintUpperComposite = false; // AU14: faint upper ghost is re-decided every frame
     }
 
-    internal static void NoteZRenderBypassed(string reason)
+    internal void NoteZRenderBypassed(string reason)
     {
-        LastZRenderDebugStats.Reset();
-        LastZRenderDebugStats.SkipReason = reason;
-        LastZRenderDebugStats.BasePassRendered = true;
+        _zRenderDiagnostics = _cfg.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled);
+        if (_zRenderDiagnostics)
+        {
+            LastZRenderDebugStats.Reset();
+            LastZRenderDebugStats.SkipReason = reason;
+            LastZRenderDebugStats.BasePassRendered = true;
+        }
     }
 
     private void DisposeZLevelViewports()
     {
         _stairPreviewViewport?.Dispose();
         _stairPreviewViewport = null;
-        RestoreStairPreviewSprites();
+        _zRenderPlan.Reset();
+        _stairPreviewTileBounds.Clear();
         ClearZLevelCompositeState();
     }
 
@@ -1482,6 +1169,11 @@ public sealed partial class ScalingViewport
         public int LowerPassesRendered;
         public int UpperPassesRendered;
         public int StairPreviewCompositesRendered;
+        public int StairPreviewTilesExamined;
+        public int StairPreviewTilesVisible;
+        public int StairPreviewLosChecks;
+        public int SpriteCullCandidates;
+        public int SpritesCulled;
         public double TotalRenderMs;
         public double OpeningQueryTotalMs;
         public double CurrentOpeningQueryMs;
@@ -1536,6 +1228,11 @@ public sealed partial class ScalingViewport
             LowerPassesRendered = 0;
             UpperPassesRendered = 0;
             StairPreviewCompositesRendered = 0;
+            StairPreviewTilesExamined = 0;
+            StairPreviewTilesVisible = 0;
+            StairPreviewLosChecks = 0;
+            SpriteCullCandidates = 0;
+            SpritesCulled = 0;
             TotalRenderMs = 0d;
             OpeningQueryTotalMs = 0d;
             CurrentOpeningQueryMs = 0d;

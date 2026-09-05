@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedKidneysSystem))]
 public sealed partial class KidneysComponent : Component
 {
@@ -24,8 +24,15 @@ public sealed partial class KidneysComponent : Component
         { OrganDamageStage.Dead, FixedPoint2.New(0.75) },
     };
 
-    [DataField, AutoPausedField]
+    // Global time is settled explicitly at every active/frozen boundary.
+    [DataField]
     public TimeSpan NextSelfDamageTick;
+
+    public uint PhysiologyRevision;
+    [DataField] public TimeSpan LastPhysiologyUpdate;
+    [DataField] public OrganDamageStage PhysiologyStage;
+    [DataField] public bool PhysiologyActive;
+    [DataField] public double ToxinRemainder;
 }
 
 [RegisterComponent]
@@ -34,4 +41,9 @@ public sealed partial class MissingKidneysComponent : Component
 {
     [DataField]
     public TimeSpan NextSelfDamageTick;
+
+    public uint PhysiologyRevision;
+    [DataField] public TimeSpan LastPhysiologyUpdate;
+    [DataField] public bool PhysiologyActive;
+    [DataField] public double ToxinRemainder;
 }

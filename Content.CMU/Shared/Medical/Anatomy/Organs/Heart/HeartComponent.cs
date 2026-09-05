@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(SharedHeartSystem))]
 public sealed partial class HeartComponent : Component
 {
@@ -18,7 +18,9 @@ public sealed partial class HeartComponent : Component
     public int MaxBpm = 200;
 
     /// <summary>
-    ///     Below this floor the grace period starts; if the heart is still below
+    ///     Below this intrinsic pulse floor the grace period starts; compensatory
+    ///     display pulse from unrelated injuries cannot restore circulation. Failing
+    ///     tissue uses at least 60 BPM without overwriting this configured floor. If still below
     ///     for the full <see cref="StopGracePeriod"/> it transitions to
     ///     <see cref="Stopped"/>.
     /// </summary>
@@ -32,22 +34,27 @@ public sealed partial class HeartComponent : Component
     ///     When did BPM first dip below <see cref="MinBpmBeforeStop"/>? Null while
     ///     above the floor.
     /// </summary>
-    [DataField, AutoNetworkedField, AutoPausedField]
+    [DataField]
     public TimeSpan? BelowThresholdSince;
 
     /// <summary>
     ///     When did circulation fully stop? Used for collapse timing.
     /// </summary>
-    [DataField, AutoNetworkedField, AutoPausedField]
+    [DataField]
     public TimeSpan? NoPulseSince;
 
-    [DataField, AutoPausedField]
+    // The owner settles both heart-entity and patient pause boundaries. Generated
+    // offsets on the heart alone cannot handle a paused patient with unpaused organs.
+    [DataField]
+    public TimeSpan LastPhysiologyUpdate;
+
+    [DataField]
     public TimeSpan NextPulseUpdate;
 
     [DataField]
     public TimeSpan PulseUpdateInterval = TimeSpan.FromSeconds(5);
 
-    [DataField, AutoPausedField]
+    [DataField]
     public TimeSpan NextCardiacArrestTick;
 
     [DataField]
@@ -76,8 +83,24 @@ public sealed partial class HeartComponent : Component
         { OrganDamageStage.Dead, FixedPoint2.Zero },
     };
 
-    [DataField, AutoPausedField]
+    [DataField]
     public TimeSpan NextOrganDamageTick;
+
+    [DataField]
+    public OrganDamageStage PhysiologyStage;
+
+    [DataField]
+    public bool CriticalBloodVolume;
+
+    // Source expiry follows the body's pause clock, not stasis or heart-entity pause.
+    [DataField]
+    public TimeSpan PacingUntil;
+
+    [DataField]
+    public double AsphyxRemainder;
+
+    [DataField]
+    public double ToxinRemainder;
 }
 
 [RegisterComponent]
@@ -92,4 +115,7 @@ public sealed partial class MissingHeartComponent : Component
 
     [DataField]
     public TimeSpan NextCardiacArrestTick;
+
+    [DataField]
+    public double AsphyxRemainder;
 }

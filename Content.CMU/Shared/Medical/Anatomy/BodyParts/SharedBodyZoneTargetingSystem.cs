@@ -29,15 +29,11 @@ public abstract partial class SharedBodyZoneTargetingSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } shooter)
             return;
 
-        if (!TryComp<BodyZoneTargetingComponent>(shooter, out var aim))
-            return;
-
-        aim.Selected = msg.Zone;
-        aim.LastSelectedAt = Timing.CurTime;
-        Dirty(shooter, aim);
+        SelectZone(shooter, msg.Zone);
     }
 
-    public TargetBodyZone? TryGetFreshSelection(Entity<BodyZoneTargetingComponent?> shooter)
+    /// <summary>Returns an explicitly chosen zone, retained until another selection is made.</summary>
+    public TargetBodyZone? TryGetExplicitSelection(Entity<BodyZoneTargetingComponent?> shooter)
     {
         if (!_medicalEnabled || !_hitLocationEnabled)
             return null;
@@ -62,7 +58,7 @@ public abstract partial class SharedBodyZoneTargetingSystem : EntitySystem
 
     public void SelectZone(Entity<BodyZoneTargetingComponent?> shooter, TargetBodyZone zone)
     {
-        if (!Resolve(shooter.Owner, ref shooter.Comp, logMissing: false))
+        if (!Enum.IsDefined(zone) || !Resolve(shooter.Owner, ref shooter.Comp, logMissing: false))
             return;
 
         shooter.Comp.Selected = zone;

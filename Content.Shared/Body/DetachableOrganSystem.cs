@@ -24,7 +24,6 @@ public sealed partial class DetachableOrganSystem : EntitySystem
         if (!_detachableOrgan.Resolve(organ, ref organ.Comp) || !_organ.TryComp(organ, out var organComp) || organComp.Body is not { } oldBody)
             return null;
 
-        _organRelation.Orphan(organ.Owner);
         var body = PredictedSpawnNextToOrDrop(organ.Comp.DetachedBody, oldBody);
         _metaData.SetEntityName(body, Name(organ));
 
@@ -35,17 +34,38 @@ public sealed partial class DetachableOrganSystem : EntitySystem
             return null;
         }
 
-        if (!_container.Insert(organ.Owner, container, force: true))
+        var parts = new List<EntityUid> { organ.Owner };
+        foreach (var child in _organRelation.AllChildren(organ.Owner))
+            parts.Add(child.Owner);
+
+        foreach (var part in parts)
         {
-            Log.Error($"{ToPrettyString(organ)} could not be transferred to new body {ToPrettyString(body)}.");
+            if (_container.CanInsert(part, container))
+                continue;
+
+            Del(body);
+            return null;
         }
 
-        foreach (var child in _organRelation.AllChildren(organ.Owner))
+        if (!_container.TryGetContainer(oldBody, BodyComponent.ContainerID, out var previousContainer))
         {
-            if (!_container.Insert(child.Owner, container, force: true))
+            Del(body);
+            return null;
+        }
+
+        var previousParent = TryComp<ChildOrganComponent>(organ.Owner, out var relation) ? relation.Parent : null;
+        _organRelation.Orphan(organ.Owner);
+        foreach (var part in parts)
+        {
+            if (!_container.Insert(part, container, force: true))
             {
-                Log.Error($"{ToPrettyString(child)} could not be transferred to new body {ToPrettyString(body)}.");
-                _organRelation.Orphan(child.AsNullable());
+                // Never report a complete detachment after a partial transfer.
+                foreach (var restore in parts)
+                    _container.Insert(restore, previousContainer, force: true);
+                if (previousParent is { } parent)
+                    _organRelation.Relate(parent, organ.Owner);
+                Del(body);
+                return null;
             }
         }
 

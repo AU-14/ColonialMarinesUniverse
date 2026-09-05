@@ -15,6 +15,7 @@ rmc-laser-designator-target-name = {$id} laser
 rmc-laser-designator-target-abbreviation-squad = {$letter}-{$id}
 rmc-laser-designator-target-abbreviation = {$id}
 rmc-laser-designator-examine-id = Tracking ID for CAS: {$id}.
+rmc-laser-designator-signal-flare-name = {$baseName} [{$id}]
 rmc-laser-designator-signal-flare-examine = [color=red]It cannot be picked back up while its burning.[/color]
 rmc-laser-designator-signal-flare-examine-id = This target has the designator: [color=#ad3b98][bold]{$id}[/bold][/color]
 rmc-laser-designator-switch-mode = Switch to {$mode} mode

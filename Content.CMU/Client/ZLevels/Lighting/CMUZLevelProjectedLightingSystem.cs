@@ -1,11 +1,9 @@
 using System.Numerics;
-using Content.Client.Examine;
 using Content.Client.CMU14.ZLevels.Core;
-using Content.Client.Viewport;
 using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared.Examine;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Robust.Client.ComponentTrees;
@@ -34,32 +32,27 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private const float StripLinearityRatio = 2.5f;
     private const float StripSampleSpacing = 1.5f;
     private const int MaxStripSamples = 8;
-    private const float MaxProjectedCenterOffset = 0.5f;
-    private const int PartialSelectionSortMultiplier = 4;
     private const float ViewBoundsLightPadding = 2f;
-    private const int MaxOpeningLosChecks = 32;
 
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private LightTreeSystem _lightTree = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private LightTreeSystem _lightTree = default!;
-    [Dependency] private ExamineSystem _examine = default!;
 
     private CMUClientZLevelsSystem _zLevels = default!;
 
     internal static ProjectedLightingDebugStats LastProjectedLightingDebugStats { get; } = new();
 
     /// <summary>
-    /// Cache of source light entity and opening center to projected client-only light entity.
+    /// Cache of source light and stable grid/tile aperture identity to a reusable projected entity.
     /// </summary>
     private readonly Dictionary<ProjectedLightKey, EntityUid> _projectedLights = new();
-    private readonly Dictionary<MergedProjectedLightKey, EntityUid> _mergedProjectedLights = new();
 
     private readonly HashSet<EntityUid> _activeThisFrame = new();
     private readonly List<ProjectedLightCandidate> _candidates = new();
@@ -69,10 +62,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private readonly List<bool> _visitedSourceCandidates = new();
     private List<Entity<MapGridComponent>> _openingGrids = new();
     private readonly List<ProjectedLightKey> _toRemove = new();
-    private readonly List<MergedProjectedLightKey> _mergedToRemove = new();
-    private readonly List<(Vector2 Center, float Distance)> _tempOpenings = new();
+    private readonly List<CMUZOpeningPortal> _tempOpenings = new();
     private readonly List<Box2> _currentViewOpeningBounds = new();
-    private readonly List<int> _checkedOpeningIndices = new(MaxOpeningLosChecks);
     private readonly HashSet<Entity<SharedPointLightComponent, TransformComponent>> _lightTreeResults = new();
     private readonly HashSet<EntityUid> _sourceLightSeen = new();
     private readonly List<Box2> _portalLightQueryBounds = new();
@@ -80,6 +71,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private readonly List<Box2> _cachedCurrentViewOpeningBounds = new();
     private readonly HashSet<MapId> _queriedSourceLightMaps = new();
     private readonly Dictionary<MapId, List<SourceLight>> _sourceLightBuckets = new();
+    private readonly List<MapId> _unusedSourceMaps = new();
     private readonly Dictionary<OpeningCandidateBucketKey, List<int>> _openingCandidateBuckets = new();
     private readonly List<List<int>> _openingCandidateBucketPool = new();
     private readonly ProjectedLightAlongAxisComparer _alongAxisComparer = new();
@@ -89,6 +81,10 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private MapId _currentViewOpeningGraceMapId = MapId.Nullspace;
     private bool _currentViewOpeningBoundsComplete;
     private bool _cachedCurrentViewOpeningBoundsComplete;
+    private bool _currentViewOpeningConservativeFallback;
+    private bool _portalLightQueryBoundsReady;
+    private bool _diagnosticsEnabled;
+    private int _sourceCandidateStart;
 
     private EntityQuery<CMUProjectedLightComponent> _projectedQuery;
     private EntityQuery<PointLightComponent> _pointLightQuery;
@@ -107,6 +103,14 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         _mapQuery = GetEntityQuery<MapComponent>();
         _xformQuery = GetEntityQuery<TransformComponent>();
         _zMapQuery = GetEntityQuery<CMUZLevelMapComponent>();
+        Subs.CVar(_config, CMUZLevelsCVars.ClientDiagnosticsEnabled, OnDiagnosticsChanged, true);
+    }
+
+    private void OnDiagnosticsChanged(bool enabled)
+    {
+        _diagnosticsEnabled = enabled;
+        if (_diagnosticsEnabled)
+            LastProjectedLightingDebugStats.Reset();
     }
 
     /// <inheritdoc />
@@ -115,17 +119,23 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         base.FrameUpdate(frameTime);
 
         var stats = LastProjectedLightingDebugStats;
-        stats.Reset();
-        var totalStart = SysStopwatch.GetTimestamp();
+        if (_diagnosticsEnabled)
+            stats.Reset();
+        var totalStart = _diagnosticsEnabled ? SysStopwatch.GetTimestamp() : 0;
 
         if (!_config.GetCVar(CMUZLevelsCVars.Enabled) ||
             !_config.GetCVar(CMUZLevelsCVars.RenderEnabled) ||
             !_config.GetCVar(CMUZLevelsCVars.ProjectedLightingEnabled))
         {
-            stats.SkipReason = "projected lighting disabled";
-            stats.CleanupCount += CleanupAllProjectedLights();
-            stats.ActiveProjectedLights = GetActiveProjectedLightCount();
-            stats.TotalMs = GetElapsedMilliseconds(totalStart);
+            if (_diagnosticsEnabled)
+                stats.SkipReason = "projected lighting disabled";
+            var removed = CleanupAllProjectedLights();
+            if (_diagnosticsEnabled)
+            {
+                stats.CleanupCount += removed;
+                stats.ActiveProjectedLights = GetActiveProjectedLightCount();
+                stats.TotalMs = GetElapsedMilliseconds(totalStart);
+            }
             return;
         }
 
@@ -136,20 +146,31 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             !_mapQuery.TryComp(playerMapUid, out var playerMapComp) ||
             !_zMapQuery.TryComp(playerMapUid, out var playerZMap))
         {
-            stats.SkipReason = "no local Z-level viewer";
-            stats.CleanupCount += CleanupAllProjectedLights();
-            stats.ActiveProjectedLights = GetActiveProjectedLightCount();
-            stats.TotalMs = GetElapsedMilliseconds(totalStart);
+            if (_diagnosticsEnabled)
+                stats.SkipReason = "no local Z-level viewer";
+            var removed = CleanupAllProjectedLights();
+            if (_diagnosticsEnabled)
+            {
+                stats.CleanupCount += removed;
+                stats.ActiveProjectedLights = GetActiveProjectedLightCount();
+                stats.TotalMs = GetElapsedMilliseconds(totalStart);
+            }
             return;
         }
 
         var maxPerLevel = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxProjectedLightsPerLevel));
-        if (maxPerLevel == 0)
+        var maxGlobal = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxProjectedLightsGlobal));
+        if (maxPerLevel == 0 || maxGlobal == 0)
         {
-            stats.SkipReason = "max projected lights is zero";
-            stats.CleanupCount += CleanupAllProjectedLights();
-            stats.ActiveProjectedLights = GetActiveProjectedLightCount();
-            stats.TotalMs = GetElapsedMilliseconds(totalStart);
+            if (_diagnosticsEnabled)
+                stats.SkipReason = "max projected lights is zero";
+            var removed = CleanupAllProjectedLights();
+            if (_diagnosticsEnabled)
+            {
+                stats.CleanupCount += removed;
+                stats.ActiveProjectedLights = GetActiveProjectedLightCount();
+                stats.TotalMs = GetElapsedMilliseconds(totalStart);
+            }
             return;
         }
 
@@ -169,15 +190,18 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             CMUSharedZLevelsSystem.MaxZLevelsBelowRendering);
 
         var currentFrame = _timing.CurFrame;
-        stats.VisibilityGraceSeconds = visibilityGraceSeconds;
+        if (_diagnosticsEnabled)
+            stats.VisibilityGraceSeconds = visibilityGraceSeconds;
         _activeThisFrame.Clear();
+        _candidates.Clear();
 
         var viewBounds = _eyeManager.GetWorldViewbounds();
         var viewAabb = viewBounds.CalcBoundingBox();
-        var playerWorldPosition = _transform.GetWorldPosition(playerXform);
-        var useRenderVisibilityGate = TryUpdateRenderedLowerDepths(playerMapUid, playerMapComp.MapId);
+        var playerWorldPosition = _eyeManager.CurrentEye.Position.Position;
+        // Lighting must not depend on whichever viewport last wrote diagnostic statistics.
+        const bool useRenderVisibilityGate = false;
         var maxOpeningRects = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
-        var openingStart = SysStopwatch.GetTimestamp();
+        var openingStart = _diagnosticsEnabled ? SysStopwatch.GetTimestamp() : 0;
         var hasCurrentViewOpening = TryUpdateCurrentViewOpenings(
             playerMapComp.MapId,
             viewAabb,
@@ -185,29 +209,39 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             maxOpeningRects,
             visibilityGraceSeconds);
         var hasUpperSourceOpening = HasUpperSourceOpening(playerMapUid, viewAabb);
-        stats.CurrentOpeningMs = GetElapsedMilliseconds(openingStart);
-        stats.VisibleCurrentOpenings = hasCurrentViewOpening;
-        stats.UpperSourceOpenings = hasUpperSourceOpening;
-        stats.CurrentOpeningBounds = _currentViewOpeningBounds.Count;
-        stats.CurrentOpeningBoundsComplete = _currentViewOpeningBoundsComplete;
-        BuildPortalOpeningCandidateBounds();
+        if (_diagnosticsEnabled)
+        {
+            stats.CurrentOpeningMs = GetElapsedMilliseconds(openingStart);
+            stats.VisibleCurrentOpenings = hasCurrentViewOpening;
+            stats.UpperSourceOpenings = hasUpperSourceOpening;
+            stats.CurrentOpeningBounds = _currentViewOpeningBounds.Count;
+            stats.CurrentOpeningBoundsComplete = _currentViewOpeningBoundsComplete;
+        }
 
         if (!viewer.LookUp &&
             !viewer.StairPreviewUp &&
             !hasCurrentViewOpening &&
             !hasUpperSourceOpening)
         {
-            stats.SkipReason = "no visible current openings";
-            stats.CleanupCount += CleanupStaleProjectedLights(visibilityGraceSeconds);
-            stats.ActiveProjectedLights = GetActiveProjectedLightCount();
-            stats.TotalMs = GetElapsedMilliseconds(totalStart);
+            if (_diagnosticsEnabled)
+                stats.SkipReason = "no visible current openings";
+            _sourceLightBuckets.Clear();
+            ReconcileProjectedLights(_candidates, maxPerLevel, maxGlobal, currentFrame, visibilityGraceSeconds);
+            if (_diagnosticsEnabled)
+            {
+                stats.ActiveProjectedLights = GetActiveProjectedLightCount();
+                stats.TotalMs = GetElapsedMilliseconds(totalStart);
+            }
             return;
         }
 
-        stats.Ran = true;
-        stats.SkipReason = "processed";
+        if (_diagnosticsEnabled)
+        {
+            stats.Ran = true;
+            stats.SkipReason = "processed";
+        }
         Entity<CMUZLevelMapComponent?> playerZLevelMap = (playerMapUid, playerZMap);
-        var sourceStart = SysStopwatch.GetTimestamp();
+        var sourceStart = _diagnosticsEnabled ? SysStopwatch.GetTimestamp() : 0;
         BuildSourceLightBuckets(
             viewBounds,
             minEnergy,
@@ -218,10 +252,11 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             projectLowerReceivers,
             projectLowerSources,
             useRenderVisibilityGate,
-            stats.RenderedLowerDepths);
-        stats.SourceQueryMs = GetElapsedMilliseconds(sourceStart);
+            Array.Empty<int>());
+        if (_diagnosticsEnabled)
+            stats.SourceQueryMs = GetElapsedMilliseconds(sourceStart);
 
-        var candidateStart = SysStopwatch.GetTimestamp();
+        var candidateStart = _diagnosticsEnabled ? SysStopwatch.GetTimestamp() : 0;
         for (var depthOffset = -maxDepth; depthOffset <= 1; depthOffset++)
         {
             if (depthOffset == 0)
@@ -230,9 +265,10 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             if (depthOffset < 0 && !projectLowerSources)
                 continue;
 
-            if (!ShouldProcessLowerProjectionDepth(depthOffset, useRenderVisibilityGate, stats.RenderedLowerDepths))
+            if (!ShouldProcessLowerProjectionDepth(depthOffset, useRenderVisibilityGate, Array.Empty<int>()))
             {
-                stats.LowerSourcePassesSkippedByRenderVisibility++;
+                if (_diagnosticsEnabled)
+                    stats.LowerSourcePassesSkippedByRenderVisibility++;
                 continue;
             }
 
@@ -242,7 +278,6 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 continue;
             }
 
-            _candidates.Clear();
             if (!_sourceLightBuckets.TryGetValue(adjacentMapComp.MapId, out var sourceLights) ||
                 sourceLights.Count == 0)
             {
@@ -265,16 +300,17 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 minEnergy,
                 maxOpeningsPerSource);
 
-            ApplyLevelCap(maxPerLevel, currentFrame);
+
         }
 
         if (projectLowerReceivers)
         {
             for (var receivingDepth = -1; receivingDepth >= -maxDepth; receivingDepth--)
             {
-                if (!ShouldProcessLowerProjectionDepth(receivingDepth, useRenderVisibilityGate, stats.RenderedLowerDepths))
+                if (!ShouldProcessLowerProjectionDepth(receivingDepth, useRenderVisibilityGate, Array.Empty<int>()))
                 {
-                    stats.LowerReceiverPassesSkippedByRenderVisibility++;
+                    if (_diagnosticsEnabled)
+                        stats.LowerReceiverPassesSkippedByRenderVisibility++;
                     continue;
                 }
 
@@ -288,9 +324,10 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 }
 
                 var sourceDepth = receivingDepth + 1;
-                if (!ShouldProcessLowerProjectionDepth(sourceDepth, useRenderVisibilityGate, stats.RenderedLowerDepths))
+                if (!ShouldProcessLowerProjectionDepth(sourceDepth, useRenderVisibilityGate, Array.Empty<int>()))
                 {
-                    stats.LowerReceiverPassesSkippedByRenderVisibility++;
+                    if (_diagnosticsEnabled)
+                        stats.LowerReceiverPassesSkippedByRenderVisibility++;
                     continue;
                 }
 
@@ -316,7 +353,6 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                     continue;
                 }
 
-                _candidates.Clear();
                 if (!_sourceLightBuckets.TryGetValue(sourceMapComp.MapId, out var sourceLights) ||
                     sourceLights.Count == 0)
                 {
@@ -339,17 +375,20 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                     minEnergy,
                     maxOpeningsPerSource);
 
-                ApplyLevelCap(maxPerLevel, currentFrame);
+
             }
         }
 
-        stats.CandidateMs = GetElapsedMilliseconds(candidateStart);
-        stats.CleanupCount += CleanupStaleProjectedLights(visibilityGraceSeconds);
-        stats.ActiveProjectedLights = GetActiveProjectedLightCount();
-        stats.TotalMs = GetElapsedMilliseconds(totalStart);
+        ReconcileProjectedLights(_candidates, maxPerLevel, maxGlobal, currentFrame, visibilityGraceSeconds);
+        if (_diagnosticsEnabled)
+        {
+            stats.CandidateMs = GetElapsedMilliseconds(candidateStart);
+            stats.ActiveProjectedLights = GetActiveProjectedLightCount();
+            stats.TotalMs = GetElapsedMilliseconds(totalStart);
+        }
     }
 
-    private bool TryUpdateCurrentViewOpenings(
+    internal bool TryUpdateCurrentViewOpenings(
         MapId mapId,
         Box2 worldAabb,
         Vector2 viewerPosition,
@@ -362,8 +401,9 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         _portalLightQueryBounds.Clear();
         _combinedCurrentViewOpeningBounds = default;
         _currentViewOpeningBoundsComplete = false;
+        _currentViewOpeningConservativeFallback = false;
 
-        var openingLimit = maxOpeningRects == 0
+        var openingLimit = maxOpeningRects is 0 or int.MaxValue
             ? int.MaxValue
             : maxOpeningRects + 1;
 
@@ -379,12 +419,17 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             _transform,
             _tile);
 
-        stats.CurrentOpeningQueryFoundOpening = found;
+        if (_diagnosticsEnabled)
+            stats.CurrentOpeningQueryFoundOpening = found;
 
         if (_openingGrids.Count == 0)
         {
-            stats.CurrentOpeningLosConservativeFallback = true;
-            stats.CurrentOpeningLosMode = "no grids";
+            _currentViewOpeningConservativeFallback = true;
+            if (_diagnosticsEnabled)
+            {
+                stats.CurrentOpeningLosConservativeFallback = true;
+                stats.CurrentOpeningLosMode = "no grids";
+            }
             return true;
         }
 
@@ -393,22 +438,29 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 
         if (_currentViewOpeningBounds.Count == 0)
         {
-            stats.CurrentOpeningLosConservativeFallback = true;
-            stats.CurrentOpeningLosMode = "no bounds";
+            _currentViewOpeningConservativeFallback = true;
+            if (_diagnosticsEnabled)
+            {
+                stats.CurrentOpeningLosConservativeFallback = true;
+                stats.CurrentOpeningLosMode = "no bounds";
+            }
             return true;
         }
 
         if (maxOpeningRects > 0 && _currentViewOpeningBounds.Count > maxOpeningRects)
         {
-            stats.CurrentOpeningBoundsTruncated = true;
-            stats.CurrentOpeningLosConservativeFallback = true;
-            stats.CurrentOpeningLosMode = "truncated";
+            _currentViewOpeningConservativeFallback = true;
+            if (_diagnosticsEnabled)
+            {
+                stats.CurrentOpeningBoundsTruncated = true;
+                stats.CurrentOpeningLosConservativeFallback = true;
+                stats.CurrentOpeningLosMode = "truncated";
+            }
             return true;
         }
 
         var visible = FilterVisibleCurrentViewOpenings(mapId, viewerPosition);
-        _currentViewOpeningBoundsComplete = visible &&
-            stats.CurrentOpeningLosMode == "exhaustive";
+        _currentViewOpeningBoundsComplete = true;
 
         if (visible)
         {
@@ -424,102 +476,12 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 
     private bool FilterVisibleCurrentViewOpenings(MapId mapId, Vector2 viewerPosition)
     {
-        var stats = LastProjectedLightingDebugStats;
-        stats.CurrentOpeningLosMode = "exhaustive";
-
-        if (_currentViewOpeningBounds.Count > MaxOpeningLosChecks)
-        {
-            stats.CurrentOpeningLosMode = "sampled";
-            if (HasSampledVisibleCurrentViewOpening(mapId, viewerPosition))
-                return true;
-
-            _currentViewOpeningBounds.Clear();
-            _combinedCurrentViewOpeningBounds = default;
-            return false;
-        }
-
-        var origin = new MapCoordinates(viewerPosition, mapId);
-        for (var i = _currentViewOpeningBounds.Count - 1; i >= 0; i--)
-        {
-            if (CanSeeCurrentViewOpening(origin, mapId, _currentViewOpeningBounds[i]))
-                continue;
-
-            _currentViewOpeningBounds.RemoveAt(i);
-        }
-
-        RecalculateCurrentViewOpeningBounds();
+        // Point samples cannot prove an aperture hidden, even when every sampled ray is blocked.
+        // Keep complete real geometry for the source broad phase; receiving shadows provide occlusion.
+        if (_diagnosticsEnabled)
+            LastProjectedLightingDebugStats.CurrentOpeningLosMode = "conservative geometry";
         return _currentViewOpeningBounds.Count > 0;
     }
-
-    private bool HasSampledVisibleCurrentViewOpening(MapId mapId, Vector2 viewerPosition)
-    {
-        var origin = new MapCoordinates(viewerPosition, mapId);
-        _checkedOpeningIndices.Clear();
-
-        var nearestChecks = Math.Min(MaxOpeningLosChecks / 2, _currentViewOpeningBounds.Count);
-        for (var i = 0; i < nearestChecks; i++)
-        {
-            var index = FindNearestUncheckedOpening(_currentViewOpeningBounds, viewerPosition, _checkedOpeningIndices);
-            if (index < 0)
-                break;
-
-            _checkedOpeningIndices.Add(index);
-            if (CanSeeCurrentViewOpening(origin, mapId, _currentViewOpeningBounds[index]))
-                return true;
-        }
-
-        var spreadChecks = Math.Min(
-            MaxOpeningLosChecks - _checkedOpeningIndices.Count,
-            _currentViewOpeningBounds.Count - _checkedOpeningIndices.Count);
-        for (var i = 0; i < spreadChecks && _checkedOpeningIndices.Count < MaxOpeningLosChecks; i++)
-        {
-            var targetIndex = spreadChecks == 1
-                ? _currentViewOpeningBounds.Count / 2
-                : (int)MathF.Round(i * (_currentViewOpeningBounds.Count - 1) / (float)(spreadChecks - 1));
-            var index = FindUncheckedOpeningAround(targetIndex, _currentViewOpeningBounds.Count, _checkedOpeningIndices);
-            if (index < 0)
-                break;
-
-            _checkedOpeningIndices.Add(index);
-            if (CanSeeCurrentViewOpening(origin, mapId, _currentViewOpeningBounds[index]))
-                return true;
-        }
-
-        return false;
-    }
-
-    private bool CanSeeCurrentViewOpening(MapCoordinates origin, MapId mapId, Box2 openingBounds)
-    {
-        var center = openingBounds.Center;
-        if (CanSeeCurrentViewOpeningPoint(origin, mapId, center))
-            return true;
-
-        var closest = openingBounds.ClosestPoint(origin.Position);
-        if (CanSeeCurrentViewOpeningPoint(origin, mapId, InsetOpeningPoint(closest, center)))
-            return true;
-
-        return CanSeeCurrentViewOpeningPoint(origin, mapId, InsetOpeningPoint(openingBounds.BottomLeft, center)) ||
-               CanSeeCurrentViewOpeningPoint(origin, mapId, InsetOpeningPoint(openingBounds.TopLeft, center)) ||
-               CanSeeCurrentViewOpeningPoint(origin, mapId, InsetOpeningPoint(openingBounds.TopRight, center)) ||
-               CanSeeCurrentViewOpeningPoint(origin, mapId, InsetOpeningPoint(openingBounds.BottomRight, center));
-    }
-
-    private bool CanSeeCurrentViewOpeningPoint(MapCoordinates origin, MapId mapId, Vector2 targetPosition)
-    {
-        LastProjectedLightingDebugStats.CurrentOpeningLosChecks++;
-        var target = new MapCoordinates(targetPosition, mapId);
-        var distSquared = (origin.Position - target.Position).LengthSquared();
-        if (distSquared > ExamineSystemShared.MaxRaycastRange * ExamineSystemShared.MaxRaycastRange)
-            return false;
-
-        return _examine.InRangeUnOccluded(origin, target, 0f, null);
-    }
-
-    private static Vector2 InsetOpeningPoint(Vector2 point, Vector2 center)
-    {
-        return point + (center - point) * 0.15f;
-    }
-
     private void RememberCurrentViewOpeningBounds(MapId mapId, float visibilityGraceSeconds)
     {
         _cachedCurrentViewOpeningBounds.Clear();
@@ -548,11 +510,14 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         _currentViewOpeningBoundsComplete = _cachedCurrentViewOpeningBoundsComplete;
 
         var stats = LastProjectedLightingDebugStats;
-        stats.CurrentOpeningBoundsFromGrace = true;
-        stats.CurrentOpeningLosMode = "visibility grace";
-        stats.CurrentOpeningGraceRemainingMs = Math.Max(
-            0d,
-            (_currentViewOpeningGraceUntil - _timing.CurTime).TotalMilliseconds);
+        if (_diagnosticsEnabled)
+        {
+            stats.CurrentOpeningBoundsFromGrace = true;
+            stats.CurrentOpeningLosMode = "visibility grace";
+            stats.CurrentOpeningGraceRemainingMs = Math.Max(
+                0d,
+                (_currentViewOpeningGraceUntil - _timing.CurTime).TotalMilliseconds);
+        }
         return true;
     }
 
@@ -577,77 +542,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             _tile);
     }
 
-    private void RecalculateCurrentViewOpeningBounds()
-    {
-        _combinedCurrentViewOpeningBounds = default;
-        var hasBounds = false;
-
-        foreach (var bounds in _currentViewOpeningBounds)
-        {
-            _combinedCurrentViewOpeningBounds = hasBounds
-                ? _combinedCurrentViewOpeningBounds.Union(bounds)
-                : bounds;
-            hasBounds = true;
-        }
-    }
-
-    private static int FindNearestUncheckedOpening(
-        List<Box2> openingBounds,
-        Vector2 viewerPosition,
-        List<int> checkedIndices)
-    {
-        var bestIndex = -1;
-        var bestDistance = float.PositiveInfinity;
-        for (var i = 0; i < openingBounds.Count; i++)
-        {
-            if (HasCheckedOpeningIndex(checkedIndices, i))
-                continue;
-
-            var distance = Vector2.DistanceSquared(viewerPosition, openingBounds[i].Center);
-            if (distance >= bestDistance)
-                continue;
-
-            bestIndex = i;
-            bestDistance = distance;
-        }
-
-        return bestIndex;
-    }
-
-    private static int FindUncheckedOpeningAround(
-        int targetIndex,
-        int openingCount,
-        List<int> checkedIndices)
-    {
-        if (!HasCheckedOpeningIndex(checkedIndices, targetIndex))
-            return targetIndex;
-
-        for (var offset = 1; offset < openingCount; offset++)
-        {
-            var lower = targetIndex - offset;
-            if (lower >= 0 && !HasCheckedOpeningIndex(checkedIndices, lower))
-                return lower;
-
-            var upper = targetIndex + offset;
-            if (upper < openingCount && !HasCheckedOpeningIndex(checkedIndices, upper))
-                return upper;
-        }
-
-        return -1;
-    }
-
-    private static bool HasCheckedOpeningIndex(List<int> checkedIndices, int index)
-    {
-        for (var i = 0; i < checkedIndices.Count; i++)
-        {
-            if (checkedIndices[i] == index)
-                return true;
-        }
-
-        return false;
-    }
-
-    private void BuildSourceLightBuckets(
+    internal void BuildSourceLightBuckets(
         Box2Rotated viewBounds,
         float minEnergy,
         Entity<CMUZLevelMapComponent?> playerZLevelMap,
@@ -661,6 +556,9 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     {
         ClearSourceLightBuckets();
         _queriedSourceLightMaps.Clear();
+        BuildPortalOpeningCandidateBounds();
+        // Source maps share this update's aperture geometry. Rebuild lazily on the first query.
+        _portalLightQueryBoundsReady = false;
 
         if (includePlayerMap &&
             ShouldProcessLowerProjectionDepth(-1, useRenderVisibilityGate, renderedLowerDepths))
@@ -672,7 +570,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         }
         else if (includePlayerMap)
         {
-            LastProjectedLightingDebugStats.SourceMapsSkippedByRenderVisibility++;
+            if (_diagnosticsEnabled)
+                LastProjectedLightingDebugStats.SourceMapsSkippedByRenderVisibility++;
         }
 
         for (var depthOffset = -maxDepth; depthOffset <= 1; depthOffset++)
@@ -680,12 +579,14 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             if (depthOffset == 0)
                 continue;
 
-            if (depthOffset < 0 && !includeLowerSources)
+            // Lower receivers need their immediately higher source even when upward projection is disabled.
+            if (depthOffset < 0 && !includeLowerSources && !(includePlayerMap && depthOffset > -maxDepth))
                 continue;
 
             if (!ShouldProcessLowerProjectionDepth(depthOffset, useRenderVisibilityGate, renderedLowerDepths))
             {
-                LastProjectedLightingDebugStats.SourceMapsSkippedByRenderVisibility++;
+                if (_diagnosticsEnabled)
+                    LastProjectedLightingDebugStats.SourceMapsSkippedByRenderVisibility++;
                 continue;
             }
 
@@ -700,6 +601,15 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         }
 
         CapSourceLightBuckets(maxSourceLightsPerMap);
+        _unusedSourceMaps.Clear();
+        foreach (var mapId in _sourceLightBuckets.Keys)
+        {
+            if (!_queriedSourceLightMaps.Contains(mapId))
+                _unusedSourceMaps.Add(mapId);
+        }
+
+        foreach (var mapId in _unusedSourceMaps)
+            _sourceLightBuckets.Remove(mapId);
     }
 
     private static bool ShouldProcessLowerProjectionDepth(
@@ -722,26 +632,6 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         return false;
     }
 
-    private bool TryUpdateRenderedLowerDepths(EntityUid playerMapUid, MapId playerMapId)
-    {
-        var stats = LastProjectedLightingDebugStats;
-        stats.RenderedLowerDepths.Clear();
-        stats.RenderVisibilityGateValid = false;
-
-        var zRenderStats = ScalingViewport.LastZRenderDebugStats;
-        if (!zRenderStats.UsedZRender ||
-            zRenderStats.BaseMapUid is not { } baseMapUid ||
-            baseMapUid != playerMapUid ||
-            zRenderStats.BaseMapId != playerMapId)
-        {
-            return false;
-        }
-
-        stats.RenderVisibilityGateValid = true;
-        stats.RenderedLowerDepths.AddRange(zRenderStats.LowerRenderedDepths);
-        return true;
-    }
-
     private void QuerySourceLightBucket(
         MapId mapId,
         Box2Rotated viewBounds,
@@ -754,11 +644,15 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         }
 
         var stats = LastProjectedLightingDebugStats;
-        stats.SourceMapsChecked++;
-        stats.SourceQueries++;
+        if (_diagnosticsEnabled)
+        {
+            stats.SourceMapsChecked++;
+            stats.SourceQueries++;
+        }
         _lightTreeResults.Clear();
         _lightTree.QueryAabb(_lightTreeResults, mapId, viewBounds);
-        stats.LightsScanned += _lightTreeResults.Count;
+        if (_diagnosticsEnabled)
+            stats.LightsScanned += _lightTreeResults.Count;
 
         foreach (var lightEnt in _lightTreeResults)
         {
@@ -784,19 +678,28 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         }
 
         var stats = LastProjectedLightingDebugStats;
-        stats.SourceMapsChecked++;
-        BuildPortalLightQueryBounds();
+        if (_diagnosticsEnabled)
+            stats.SourceMapsChecked++;
+        if (!_portalLightQueryBoundsReady)
+        {
+            BuildPortalLightQueryBounds();
+            _portalLightQueryBoundsReady = true;
+        }
         if (_portalLightQueryBounds.Count == 0)
             return;
 
         _sourceLightSeen.Clear();
         foreach (var bounds in _portalLightQueryBounds)
         {
-            stats.SourceQueries++;
-            stats.PortalLightQueries++;
+            if (_diagnosticsEnabled)
+            {
+                stats.SourceQueries++;
+                stats.PortalLightQueries++;
+            }
             _lightTreeResults.Clear();
             _lightTree.QueryAabb(_lightTreeResults, mapId, bounds);
-            stats.LightsScanned += _lightTreeResults.Count;
+            if (_diagnosticsEnabled)
+                stats.LightsScanned += _lightTreeResults.Count;
 
             foreach (var lightEnt in _lightTreeResults)
             {
@@ -808,12 +711,13 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 }
 
                 AddSourceLight(sourceLight, mapId);
-                stats.PortalLightsAccepted++;
+                if (_diagnosticsEnabled)
+                    stats.PortalLightsAccepted++;
             }
         }
     }
 
-    private bool TryBuildSourceLight(
+    internal bool TryBuildSourceLight(
         Entity<SharedPointLightComponent, TransformComponent> lightEnt,
         MapId mapId,
         float minEnergy,
@@ -828,6 +732,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             lightXform.MapID == MapId.Nullspace ||
             lightXform.MapID != mapId ||
             !light.Enabled ||
+            light.ContainerOccluded ||
             light.Radius <= 0f ||
             light.Energy <= 0f ||
             light.Energy < minEnergy)
@@ -837,22 +742,27 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 
         sourceLight = new SourceLight(
             lightUid,
-            _transform.GetWorldPosition(lightXform),
+            _transform.GetWorldPosition(lightXform) + _transform.GetWorldRotation(lightXform).RotateVec(light.Offset),
             light.Radius,
             light.Energy,
             light.Color,
-            light.Softness);
+            light.Softness,
+            light.Falloff,
+            light.CurveFactor);
         return true;
     }
 
     private void AddSourceLight(SourceLight sourceLight, MapId mapId)
     {
         GetSourceLightBucket(mapId).Add(sourceLight);
-        LastProjectedLightingDebugStats.LightsAccepted++;
+        if (_diagnosticsEnabled)
+            LastProjectedLightingDebugStats.LightsAccepted++;
     }
 
     private void BuildPortalLightQueryBounds()
     {
+        if (_diagnosticsEnabled)
+            LastProjectedLightingDebugStats.PortalLightQueryBuilds++;
         _portalLightQueryBounds.Clear();
         var sourceBounds = _portalOpeningCandidateBounds.Count > 0
             ? _portalOpeningCandidateBounds
@@ -864,7 +774,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 openingBounds.Enlarged(ViewBoundsLightPadding));
         }
 
-        LastProjectedLightingDebugStats.PortalLightQueryBounds += _portalLightQueryBounds.Count;
+        if (_diagnosticsEnabled)
+            LastProjectedLightingDebugStats.PortalLightQueryBounds += _portalLightQueryBounds.Count;
     }
 
     private void BuildPortalOpeningCandidateBounds()
@@ -872,7 +783,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         _portalOpeningCandidateBounds.Clear();
         if (!CanUseCurrentViewOpeningBoundsFilter())
         {
-            LastProjectedLightingDebugStats.PortalOpeningCandidateBounds = 0;
+            if (_diagnosticsEnabled)
+                LastProjectedLightingDebugStats.PortalOpeningCandidateBounds = 0;
             return;
         }
 
@@ -881,7 +793,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             AddMergedPortalLightQueryBounds(_portalOpeningCandidateBounds, openingBounds);
         }
 
-        LastProjectedLightingDebugStats.PortalOpeningCandidateBounds = _portalOpeningCandidateBounds.Count;
+        if (_diagnosticsEnabled)
+            LastProjectedLightingDebugStats.PortalOpeningCandidateBounds = _portalOpeningCandidateBounds.Count;
     }
 
     private static void AddMergedPortalLightQueryBounds(List<Box2> queryBounds, Box2 bounds)
@@ -937,13 +850,15 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             bucket.Sort(CompareSourceLightEnergyDescending);
             var rejected = bucket.Count - maxSourceLightsPerMap;
             bucket.RemoveRange(maxSourceLightsPerMap, rejected);
-            LastProjectedLightingDebugStats.LightsRejectedBySourceCap += rejected;
+            if (_diagnosticsEnabled)
+                LastProjectedLightingDebugStats.LightsRejectedBySourceCap += rejected;
         }
     }
 
     private static int CompareSourceLightEnergyDescending(SourceLight left, SourceLight right)
     {
-        return right.Energy.CompareTo(left.Energy);
+        var energy = right.Energy.CompareTo(left.Energy);
+        return energy != 0 ? energy : left.Entity.CompareTo(right.Entity);
     }
 
     private List<SourceLight> GetSourceLightBucket(MapId mapId)
@@ -964,110 +879,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         }
     }
 
-    private void ApplyLevelCap(int maxPerLevel, uint currentFrame)
-    {
-        if (_candidates.Count == 0)
-            return;
-
-        if (_candidates.Count <= maxPerLevel)
-        {
-            _candidates.Sort(CompareProjectedEnergyDescending);
-            foreach (var candidate in _candidates)
-            {
-                UpdateProjectedLight(candidate, currentFrame);
-            }
-
-            return;
-        }
-
-        var directCount = Math.Max(0, maxPerLevel - 1);
-        if (directCount > 0 && ShouldPartiallySelectCandidates(_candidates.Count, directCount))
-        {
-            SelectTopCandidates(directCount);
-        }
-        else if (directCount > 0)
-        {
-            // Full sort is cheaper when the direct keep count is close to the
-            // total candidate count; partial selection is O(n*k).
-            _candidates.Sort(CompareProjectedEnergyDescending);
-        }
-
-        for (var i = 0; i < directCount; i++)
-        {
-            UpdateProjectedLight(_candidates[i], currentFrame);
-        }
-
-        UpdateProjectedLight(MergeOverflowCandidates(directCount), currentFrame);
-    }
-
-    private static bool ShouldPartiallySelectCandidates(int candidateCount, int directCount)
-    {
-        return directCount > 0 &&
-               candidateCount > directCount * PartialSelectionSortMultiplier;
-    }
-
-    private void SelectTopCandidates(int directCount)
-    {
-        for (var i = 0; i < directCount; i++)
-        {
-            var bestIndex = i;
-            for (var j = i + 1; j < _candidates.Count; j++)
-            {
-                if (_candidates[j].ProjectedEnergy > _candidates[bestIndex].ProjectedEnergy)
-                    bestIndex = j;
-            }
-
-            if (bestIndex == i)
-                continue;
-
-            (_candidates[i], _candidates[bestIndex]) = (_candidates[bestIndex], _candidates[i]);
-        }
-    }
-
-    private static int CompareProjectedEnergyDescending(ProjectedLightCandidate left, ProjectedLightCandidate right)
-    {
-        return right.ProjectedEnergy.CompareTo(left.ProjectedEnergy);
-    }
-
-    private ProjectedLightCandidate MergeOverflowCandidates(int startIndex)
-    {
-        var first = _candidates[startIndex];
-        var weightedOpening = Vector2.Zero;
-        var weightedProjection = Vector2.Zero;
-        var weightedColor = Vector4.Zero;
-        var weightedSoftness = 0f;
-        var totalWeight = 0f;
-        var maxEnergy = 0f;
-        var maxRadius = 0f;
-
-        for (var i = startIndex; i < _candidates.Count; i++)
-        {
-            var candidate = _candidates[i];
-            var weight = Math.Max(candidate.ProjectedEnergy, 0.001f);
-            weightedOpening += candidate.OpeningCenter * weight;
-            weightedProjection += candidate.ProjectedCenter * weight;
-            weightedColor += candidate.Color.RGBA * weight;
-            weightedSoftness += candidate.Softness * weight;
-            totalWeight += weight;
-            maxEnergy = Math.Max(maxEnergy, candidate.ProjectedEnergy);
-            maxRadius = Math.Max(maxRadius, candidate.ProjectedRadius);
-        }
-
-        return new ProjectedLightCandidate(
-            EntityUid.Invalid,
-            first.SourceMapId,
-            first.ReceivingMapId,
-            first.DepthOffset,
-            weightedOpening / totalWeight,
-            weightedProjection / totalWeight,
-            maxRadius,
-            maxEnergy,
-            new Color(weightedColor / totalWeight),
-            weightedSoftness / totalWeight,
-            true);
-    }
-
-    private void CollectCandidates(
+    internal void CollectCandidates(
         List<SourceLight> sourceLights,
         Entity<CMUZLevelMapComponent> adjacentMap,
         MapId adjacentMapId,
@@ -1093,46 +905,34 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         var openingMapIsCurrentView =
             openingMap == currentViewOpeningMapUid &&
             openingMapComp.MapId == currentViewOpeningMapId;
-        var useCurrentViewOpenings =
-            openingMapIsCurrentView &&
-            CanUseCurrentViewOpeningBoundsFilter();
-
         foreach (var sourceLight in sourceLights)
         {
             if (openingMapIsCurrentView &&
                 !SourceLightCanReachCurrentViewOpening(sourceLight))
             {
-                LastProjectedLightingDebugStats.LightsRejectedByOpeningBounds++;
+                if (_diagnosticsEnabled)
+                    LastProjectedLightingDebugStats.LightsRejectedByOpeningBounds++;
                 continue;
             }
 
             _tempOpenings.Clear();
-            if (useCurrentViewOpenings)
-            {
-                LastProjectedLightingDebugStats.OpeningSearchesSkippedByPortal++;
-                if (CanUseCurrentViewOpeningBoundsForPortal())
-                    AddCurrentViewOpeningsNearSource(sourceLight, _tempOpenings);
-                else
-                    AddCurrentViewPortalRegionsNearSource(sourceLight, _tempOpenings);
-
-                LastProjectedLightingDebugStats.PortalOpeningCandidates += _tempOpenings.Count;
-            }
-            else
-            {
+            // Bounds (including merged broad-phase bounds) are never transmission geometry.
+            if (_diagnosticsEnabled)
                 LastProjectedLightingDebugStats.OpeningSearches++;
-                FindOpeningsNearPosition(
-                    openingMapComp.MapId,
-                    sourceLight.WorldPosition,
-                    sourceLight.Radius,
-                    _tempOpenings);
+            FindOpeningsNearPosition(
+                openingMapComp.MapId,
+                sourceLight.WorldPosition,
+                sourceLight.Radius,
+                _tempOpenings);
+            if (_diagnosticsEnabled)
                 LastProjectedLightingDebugStats.OpeningsFound += _tempOpenings.Count;
 
-                if (openingMapIsCurrentView)
-                {
-                    var beforeFilter = _tempOpenings.Count;
-                    FilterTempOpeningsToCurrentView();
+            if (openingMapIsCurrentView)
+            {
+                var beforeFilter = _tempOpenings.Count;
+                FilterTempOpeningsToCurrentView();
+                if (_diagnosticsEnabled)
                     LastProjectedLightingDebugStats.OpeningsRejectedByCurrentView += beforeFilter - _tempOpenings.Count;
-                }
             }
 
             CapTempOpeningsPerSource(maxOpeningsPerSource);
@@ -1141,27 +941,10 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 continue;
 
             _sourceCandidates.Clear();
-            foreach (var (openingCenter, sourceToOpeningDistance) in _tempOpenings)
+            foreach (var portal in _tempOpenings)
             {
-                // 1. Light Source Occlusion (Top-Down Blockage)
-                var rayDirection = openingCenter - sourceLight.WorldPosition;
-                var rayLength = rayDirection.Length();
-                if (rayLength > 0.01f)
-                {
-                    LastProjectedLightingDebugStats.Raycasts++;
-                    var ray = new CollisionRay(sourceLight.WorldPosition, rayDirection.Normalized(), (int)CollisionGroup.Opaque);
-                    var blocked = false;
-                    foreach (var _ in _physics.IntersectRay(adjacentMapId, ray, rayLength, ignoredEnt: sourceLight.Entity, returnOnFirstHit: true))
-                    {
-                        blocked = true;
-                        break;
-                    }
-
-                    if (blocked)
-                    {
-                        continue;
-                    }
-                }
+                var openingCenter = portal.Center;
+                var sourceToOpeningDistance = portal.Distance;
 
                 // Smooth attenuation keeps the projected leak from becoming brighter than the source.
                 var depth = Math.Abs(depthOffset);
@@ -1185,24 +968,32 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 if (projectedRadius <= 0f)
                     continue;
 
-                var projectedCenter = openingCenter;
-                if (rayLength > 0.01f)
-                    projectedCenter += rayDirection / rayLength * Math.Min(projectedRadius, MaxProjectedCenterOffset);
+                // Reject contributions with no usable energy or radius before querying world geometry.
+                if (!CanTransmitThroughMaps(playerMapUid, adjacentMap.Owner, depthOffset, openingCenter))
+                    continue;
+
+                if (IsSourceRayBlocked(sourceLight, adjacentMapId, openingCenter))
+                    continue;
 
                 var candidate = new ProjectedLightCandidate(
                     sourceLight.Entity,
                     adjacentMapId,
                     playerMapId,
                     depthOffset,
+                    portal.Grid,
+                    portal.Tile,
                     openingCenter,
-                    projectedCenter,
+                    openingCenter,
                     projectedRadius,
                     projectedEnergy,
                     sourceLight.Color,
-                    sourceLight.Softness);
+                    sourceLight.Softness,
+                    sourceLight.Falloff,
+                    sourceLight.CurveFactor);
 
                 _sourceCandidates.Add(candidate);
-                LastProjectedLightingDebugStats.Candidates++;
+                if (_diagnosticsEnabled)
+                    LastProjectedLightingDebugStats.Candidates++;
             }
 
             if (_sourceCandidates.Count > 0)
@@ -1218,6 +1009,22 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         // Holes are floor apertures on the higher level. When the source light is above
         // the receiver, use the source map; when it is below, use the receiver map.
         return depthOffset > 0 ? sourceMap.Owner : receivingMap;
+    }
+
+    private bool IsSourceRayBlocked(SourceLight source, MapId mapId, Vector2 openingCenter)
+    {
+        var direction = openingCenter - source.WorldPosition;
+        var length = direction.Length();
+        if (length <= 0.01f)
+            return false;
+
+        if (_diagnosticsEnabled)
+            LastProjectedLightingDebugStats.Raycasts++;
+        var ray = new CollisionRay(source.WorldPosition, direction / length, (int) CollisionGroup.Opaque);
+        foreach (var _ in _physics.IntersectRay(mapId, ray, length, ignoredEnt: source.Entity, returnOnFirstHit: true))
+            return true;
+
+        return false;
     }
 
     private void RebuildOpeningCandidateBuckets()
@@ -1252,7 +1059,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         foreach (var bucket in _openingCandidateBuckets.Values)
         {
             bucket.Clear();
-            _openingCandidateBucketPool.Add(bucket);
+            if (_openingCandidateBucketPool.Count < 64 && bucket.Capacity <= 256)
+                _openingCandidateBucketPool.Add(bucket);
         }
 
         _openingCandidateBuckets.Clear();
@@ -1260,6 +1068,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 
     private void AddSourceCandidates()
     {
+        _sourceCandidateStart = _candidates.Count;
         RebuildOpeningCandidateBuckets();
 
         _visitedSourceCandidates.Clear();
@@ -1452,9 +1261,11 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 
     private bool OverlapsAcceptedCandidate(ProjectedLightCandidate candidate)
     {
-        foreach (var accepted in _candidates)
+        for (var i = _sourceCandidateStart; i < _candidates.Count; i++)
         {
+            var accepted = _candidates[i];
             if (accepted.SourceLight != candidate.SourceLight ||
+                accepted.ReceivingMapId != candidate.ReceivingMapId ||
                 accepted.DepthOffset != candidate.DepthOffset)
             {
                 continue;
@@ -1471,7 +1282,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private bool SourceLightCanReachCurrentViewOpening(SourceLight sourceLight)
     {
         if (_currentViewOpeningBounds.Count == 0)
-            return LastProjectedLightingDebugStats.CurrentOpeningLosConservativeFallback;
+            return _currentViewOpeningConservativeFallback;
 
         if (!CanUseCurrentViewOpeningBoundsFilter())
             return true;
@@ -1495,52 +1306,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private bool CanUseCurrentViewOpeningBoundsFilter()
     {
         return _currentViewOpeningBounds.Count > 0 &&
-               !LastProjectedLightingDebugStats.CurrentOpeningBoundsTruncated &&
-               !LastProjectedLightingDebugStats.CurrentOpeningLosConservativeFallback;
-    }
-
-    private bool CanUseCurrentViewOpeningBoundsForPortal()
-    {
-        return CanUseCurrentViewOpeningBoundsFilter() &&
-               LastProjectedLightingDebugStats.CurrentOpeningBoundsComplete;
-    }
-
-    private void AddCurrentViewPortalRegionsNearSource(
-        SourceLight sourceLight,
-        List<(Vector2 Center, float Distance)> openings)
-    {
-        var radiusSquared = sourceLight.Radius * sourceLight.Radius;
-        foreach (var openingBounds in _portalOpeningCandidateBounds)
-        {
-            if (!openingBounds.Enlarged(sourceLight.Radius).Contains(sourceLight.WorldPosition))
-                continue;
-
-            var openingCenter = openingBounds.ClosestPoint(sourceLight.WorldPosition);
-            var distanceSquared = Vector2.DistanceSquared(sourceLight.WorldPosition, openingCenter);
-            if (distanceSquared > radiusSquared)
-                continue;
-
-            openings.Add((openingCenter, MathF.Sqrt(distanceSquared)));
-        }
-    }
-
-    private void AddCurrentViewOpeningsNearSource(
-        SourceLight sourceLight,
-        List<(Vector2 Center, float Distance)> openings)
-    {
-        var radiusSquared = sourceLight.Radius * sourceLight.Radius;
-        foreach (var openingBounds in _currentViewOpeningBounds)
-        {
-            if (!openingBounds.Enlarged(sourceLight.Radius).Contains(sourceLight.WorldPosition))
-                continue;
-
-            var openingCenter = openingBounds.Center;
-            var distanceSquared = Vector2.DistanceSquared(sourceLight.WorldPosition, openingCenter);
-            if (distanceSquared > radiusSquared)
-                continue;
-
-            openings.Add((openingCenter, MathF.Sqrt(distanceSquared)));
-        }
+               _currentViewOpeningBoundsComplete;
     }
 
     private void FilterTempOpeningsToCurrentView()
@@ -1570,12 +1336,13 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         _tempOpenings.Sort(CompareOpeningDistance);
         var rejected = _tempOpenings.Count - maxOpeningsPerSource;
         _tempOpenings.RemoveRange(maxOpeningsPerSource, rejected);
-        LastProjectedLightingDebugStats.OpeningsRejectedBySourceCap += rejected;
+        if (_diagnosticsEnabled)
+            LastProjectedLightingDebugStats.OpeningsRejectedBySourceCap += rejected;
     }
 
     private static int CompareOpeningDistance(
-        (Vector2 Center, float Distance) left,
-        (Vector2 Center, float Distance) right)
+        CMUZOpeningPortal left,
+        CMUZOpeningPortal right)
     {
         return left.Distance.CompareTo(right.Distance);
     }
@@ -1598,9 +1365,9 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         MapId openingMapId,
         Vector2 sourcePosition,
         float searchRadius,
-        List<(Vector2 Center, float Distance)> openings)
+        List<CMUZOpeningPortal> openings)
     {
-        _zLevels.OpeningCache.FindOpeningCentersNear(
+        _zLevels.OpeningCache.FindOpeningPortalsNear(
             openingMapId,
             sourcePosition,
             searchRadius,
@@ -1608,214 +1375,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             _openingGrids,
             _map,
             _transform,
-            _tile);
-    }
-
-    private void UpdateProjectedLight(ProjectedLightCandidate candidate, uint currentFrame)
-    {
-        LastProjectedLightingDebugStats.ProjectedLightsApplied++;
-        var projectedUid = GetOrCreateProjectedLight(candidate);
-
-        if (_pointLightQuery.TryComp(projectedUid, out var light))
-        {
-            _lights.SetRadius(projectedUid, candidate.ProjectedRadius, light);
-            _lights.SetEnergy(projectedUid, candidate.ProjectedEnergy, light);
-            _lights.SetColor(projectedUid, candidate.Color, light);
-            _lights.SetSoftness(projectedUid, candidate.Softness, light);
-            _lights.SetCastShadows(projectedUid, false, light);
-            _lights.SetEnabled(projectedUid, true, light);
-        }
-        else
-        {
-            _lights.SetRadius(projectedUid, candidate.ProjectedRadius);
-            _lights.SetEnergy(projectedUid, candidate.ProjectedEnergy);
-            _lights.SetColor(projectedUid, candidate.Color);
-            _lights.SetSoftness(projectedUid, candidate.Softness);
-            _lights.SetCastShadows(projectedUid, false);
-            _lights.SetEnabled(projectedUid, true);
-        }
-
-        if (_projectedQuery.TryComp(projectedUid, out var projected))
-        {
-            if (projected.LastAppliedMapId != candidate.ReceivingMapId ||
-                projected.LastAppliedCenter != candidate.ProjectedCenter)
-            {
-                _transform.SetMapCoordinates(projectedUid, new MapCoordinates(candidate.ProjectedCenter, candidate.ReceivingMapId));
-                projected.LastAppliedMapId = candidate.ReceivingMapId;
-                projected.LastAppliedCenter = candidate.ProjectedCenter;
-            }
-
-            projected.OpeningCenter = candidate.OpeningCenter;
-            projected.LastActiveFrame = currentFrame;
-            projected.LastActiveTime = _timing.CurTime;
-            projected.LastProjectedEnergy = candidate.ProjectedEnergy;
-            projected.SourceMapId = candidate.SourceMapId;
-            projected.DepthOffset = candidate.DepthOffset;
-        }
-        else
-        {
-            _transform.SetMapCoordinates(projectedUid, new MapCoordinates(candidate.ProjectedCenter, candidate.ReceivingMapId));
-        }
-
-        _activeThisFrame.Add(projectedUid);
-    }
-
-    private EntityUid GetOrCreateProjectedLight(ProjectedLightCandidate candidate)
-    {
-        EntityUid projectedUid;
-        var key = new ProjectedLightKey(candidate.SourceLight, candidate.ReceivingMapId, candidate.OpeningCenter);
-        var mergedKey = new MergedProjectedLightKey(candidate.ReceivingMapId, candidate.DepthOffset);
-        var hasProjectedLight = candidate.IsMerged
-            ? _mergedProjectedLights.TryGetValue(mergedKey, out projectedUid)
-            : _projectedLights.TryGetValue(key, out projectedUid);
-
-        if (!hasProjectedLight || !Exists(projectedUid))
-        {
-            projectedUid = Spawn(null, new MapCoordinates(candidate.ProjectedCenter, candidate.ReceivingMapId));
-            var projectedComp = AddComp<CMUProjectedLightComponent>(projectedUid);
-            projectedComp.SourceLight = candidate.SourceLight;
-            projectedComp.SourceMapId = candidate.SourceMapId;
-            projectedComp.DepthOffset = candidate.DepthOffset;
-            projectedComp.OpeningCenter = candidate.OpeningCenter;
-            projectedComp.LastAppliedMapId = candidate.ReceivingMapId;
-            projectedComp.LastAppliedCenter = candidate.ProjectedCenter;
-
-            AddComp<PointLightComponent>(projectedUid);
-
-            if (candidate.IsMerged)
-                _mergedProjectedLights[mergedKey] = projectedUid;
-            else
-                _projectedLights[key] = projectedUid;
-        }
-
-        return projectedUid;
-    }
-
-    private int CleanupStaleProjectedLights(float visibilityGraceSeconds)
-    {
-        var removed = 0;
-        _toRemove.Clear();
-        foreach (var (key, projectedUid) in _projectedLights)
-        {
-            if (_activeThisFrame.Contains(projectedUid))
-                continue;
-
-            if (TryKeepStaleProjectedLight(projectedUid, visibilityGraceSeconds))
-                continue;
-
-            _toRemove.Add(key);
-            if (Exists(projectedUid))
-            {
-                Del(projectedUid);
-                removed++;
-            }
-        }
-
-        foreach (var key in _toRemove)
-        {
-            _projectedLights.Remove(key);
-        }
-
-        _mergedToRemove.Clear();
-        foreach (var (key, projectedUid) in _mergedProjectedLights)
-        {
-            if (_activeThisFrame.Contains(projectedUid))
-                continue;
-
-            if (TryKeepStaleProjectedLight(projectedUid, visibilityGraceSeconds))
-                continue;
-
-            _mergedToRemove.Add(key);
-            if (Exists(projectedUid))
-            {
-                Del(projectedUid);
-                removed++;
-            }
-        }
-
-        foreach (var key in _mergedToRemove)
-        {
-            _mergedProjectedLights.Remove(key);
-        }
-
-        return removed;
-    }
-
-    private bool TryKeepStaleProjectedLight(EntityUid projectedUid, float visibilityGraceSeconds)
-    {
-        if (visibilityGraceSeconds <= 0f ||
-            !_projectedQuery.TryComp(projectedUid, out var projected))
-        {
-            return false;
-        }
-
-        var elapsedSeconds = Math.Max(0f, (float)(_timing.CurTime - projected.LastActiveTime).TotalSeconds);
-        if (elapsedSeconds >= visibilityGraceSeconds)
-            return false;
-
-        var fade = 1f - elapsedSeconds / visibilityGraceSeconds;
-        var energy = projected.LastProjectedEnergy * fade;
-        if (energy <= 0.001f)
-            return false;
-
-        if (_pointLightQuery.TryComp(projectedUid, out var light))
-        {
-            _lights.SetEnergy(projectedUid, energy, light);
-            _lights.SetEnabled(projectedUid, true, light);
-        }
-        else
-        {
-            _lights.SetEnergy(projectedUid, energy);
-            _lights.SetEnabled(projectedUid, true);
-        }
-
-        LastProjectedLightingDebugStats.ProjectedLightsHeldByVisibilityGrace++;
-        return true;
-    }
-
-    private int CleanupAllProjectedLights()
-    {
-        var removed = 0;
-        foreach (var (_, projectedUid) in _projectedLights)
-        {
-            if (Exists(projectedUid))
-            {
-                Del(projectedUid);
-                removed++;
-            }
-        }
-
-        foreach (var (_, projectedUid) in _mergedProjectedLights)
-        {
-            if (Exists(projectedUid))
-            {
-                Del(projectedUid);
-                removed++;
-            }
-        }
-
-        _projectedLights.Clear();
-        _mergedProjectedLights.Clear();
-        _activeThisFrame.Clear();
-        _currentViewOpeningBounds.Clear();
-        _cachedCurrentViewOpeningBounds.Clear();
-        _lightTreeResults.Clear();
-        _queriedSourceLightMaps.Clear();
-        _currentViewOpeningBoundsComplete = false;
-        _cachedCurrentViewOpeningBoundsComplete = false;
-        _combinedCurrentViewOpeningBounds = default;
-        _cachedCombinedCurrentViewOpeningBounds = default;
-        _currentViewOpeningGraceMapId = MapId.Nullspace;
-        _currentViewOpeningGraceUntil = TimeSpan.Zero;
-        ClearSourceLightBuckets();
-        ClearOpeningCandidateBuckets();
-
-        return removed;
-    }
-
-    private int GetActiveProjectedLightCount()
-    {
-        return _projectedLights.Count + _mergedProjectedLights.Count;
+            _tile,
+            edgeOnly: false);
     }
 
     private static double GetElapsedMilliseconds(long start)
@@ -1830,39 +1391,35 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         CleanupAllProjectedLights();
     }
 
-    private readonly record struct ProjectedLightKey(
-        EntityUid SourceLight,
-        MapId ReceivingMapId,
-        Vector2 OpeningCenter);
-
-    private readonly record struct MergedProjectedLightKey(
-        MapId ReceivingMapId,
-        int DepthOffset);
-
     private readonly record struct OpeningCandidateBucketKey(
         int X,
         int Y);
 
-    private readonly record struct SourceLight(
+    internal readonly record struct SourceLight(
         EntityUid Entity,
         Vector2 WorldPosition,
         float Radius,
         float Energy,
         Color Color,
-        float Softness);
+        float Softness,
+        float Falloff,
+        float CurveFactor);
 
-    private readonly record struct ProjectedLightCandidate(
+    internal readonly record struct ProjectedLightCandidate(
         EntityUid SourceLight,
         MapId SourceMapId,
         MapId ReceivingMapId,
         int DepthOffset,
+        EntityUid PortalGrid,
+        Vector2i PortalTile,
         Vector2 OpeningCenter,
         Vector2 ProjectedCenter,
         float ProjectedRadius,
         float ProjectedEnergy,
         Color Color,
         float Softness,
-        bool IsMerged = false);
+        float Falloff,
+        float CurveFactor);
 
     private sealed class ProjectedLightAlongAxisComparer : IComparer<ProjectedLightCandidate>
     {
@@ -1896,6 +1453,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         public int SourceQueries;
         public int SourceMapsSkippedByRenderVisibility;
         public int PortalLightQueryBounds;
+        public int PortalLightQueryBuilds;
         public int PortalLightQueries;
         public int PortalLightsAccepted;
         public int PortalOpeningCandidateBounds;
@@ -1910,10 +1468,14 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         public int OpeningsRejectedByCurrentView;
         public int OpeningsRejectedBySourceCap;
         public int Raycasts;
+        public int TransmissionChecks;
         public int Candidates;
         public int LowerSourcePassesSkippedByRenderVisibility;
         public int LowerReceiverPassesSkippedByRenderVisibility;
         public int ProjectedLightsApplied;
+        public int ProjectedLightsCreated;
+        public int ProjectedLightsReused;
+        public int ProjectedLightsReassigned;
         public int ProjectedLightsHeldByVisibilityGrace;
         public int ActiveProjectedLights;
         public int CleanupCount;
@@ -1945,6 +1507,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             SourceQueries = 0;
             SourceMapsSkippedByRenderVisibility = 0;
             PortalLightQueryBounds = 0;
+            PortalLightQueryBuilds = 0;
             PortalLightQueries = 0;
             PortalLightsAccepted = 0;
             PortalOpeningCandidateBounds = 0;
@@ -1959,10 +1522,14 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             OpeningsRejectedByCurrentView = 0;
             OpeningsRejectedBySourceCap = 0;
             Raycasts = 0;
+            TransmissionChecks = 0;
             Candidates = 0;
             LowerSourcePassesSkippedByRenderVisibility = 0;
             LowerReceiverPassesSkippedByRenderVisibility = 0;
             ProjectedLightsApplied = 0;
+            ProjectedLightsCreated = 0;
+            ProjectedLightsReused = 0;
+            ProjectedLightsReassigned = 0;
             ProjectedLightsHeldByVisibilityGrace = 0;
             ActiveProjectedLights = 0;
             CleanupCount = 0;

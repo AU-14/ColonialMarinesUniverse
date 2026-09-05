@@ -4,36 +4,57 @@ using Content.Server.Shuttles.Events;
 using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server._RMC14.Dropship;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
+using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared.Body.Part;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Ears;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.CMU14.Hospital;
+using Content.Shared.CMU14.Round;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Body;
+using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.SSDIndicator;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Shuttles.Components;
+using Content.Shared.Verbs;
 using Content.Shared.Traits.Assorted;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -55,7 +76,9 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
     [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedFractureSystem _fracture = default!;
+    [Dependency] private SharedBoneSystem _bone = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
@@ -64,6 +87,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Blunt = "Blunt";
     private static readonly ProtoId<DamageTypePrototype> Slash = "Slash";
@@ -260,6 +284,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<HospitalEmergencyComputerComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<HospitalEmergencyComputerComponent, ComponentShutdown>(OnComputerShutdown);
         SubscribeLocalEvent<HospitalEmergencyComputerComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<HospitalEmergencyComputerComponent, HospitalEmergencyApproveLandingMsg>(OnApproveLanding);
         SubscribeLocalEvent<HospitalEmergencyComputerComponent, HospitalEmergencySkipContractMsg>(OnSkipContract);
@@ -269,6 +294,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         SubscribeLocalEvent<RottingComponent, ComponentInit>(OnPatientRottingInit);
         SubscribeLocalEvent<UnrevivableComponent, ComponentInit>(OnPatientUnrevivableInit);
         SubscribeLocalEvent<FTLCompletedEvent>(OnDropshipFtlCompleted);
+        SubscribeLocalEvent<DropshipNavigationComputerComponent, GetVerbsEvent<AlternativeVerb>>(OnTransportRecoveryVerb);
     }
 
     private void OnMapInit(Entity<HospitalEmergencyComputerComponent> ent, ref MapInitEvent args)
@@ -284,12 +310,132 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         UpdateUi(ent);
     }
 
+    private void OnComputerShutdown(Entity<HospitalEmergencyComputerComponent> ent, ref ComponentShutdown args)
+    {
+        // Destroying a console is not authorization to destroy a shuttle or its passengers.
+        foreach (var patient in ent.Comp.Patients)
+        {
+            if (!Deleted(patient) && TryComp<HospitalPatientComponent>(patient, out var owned) && owned.SourceComputer == ent.Owner)
+                RemComp<HospitalPatientComponent>(patient);
+        }
+
+        if (ent.Comp.ActiveShuttle is { } shuttle && TryGetTransportLease(shuttle, out var lease) &&
+            lease.Comp.Computer == ent.Owner && ReferenceEquals(lease.Comp.Controller, ent.Comp))
+        {
+            lease.Comp.Computer = null;
+            lease.Comp.Controller = null;
+            lease.Comp.Retiring = true;
+            lease.Comp.NextAction = _timing.CurTime;
+            ClearComputerTransport(ent.Comp);
+            return;
+        }
+
+        CleanupShuttle(ent);
+    }
+
+    private void ReconcileTransport(Entity<HospitalEmergencyComputerComponent> ent)
+    {
+        var comp = ent.Comp;
+        if (comp.ActiveShuttle is not { } shuttle)
+            return;
+
+        if (!TryGetTransportLease(shuttle, out var lease) || lease.Comp.Computer != ent.Owner ||
+            !ReferenceEquals(lease.Comp.Controller, comp))
+        {
+            ClearComputerTransport(comp);
+            comp.Status = HospitalEmergencyStatus.Treating;
+            comp.TransportFailure = "Hospital transport ownership was lost. Other transports and their occupants remain untouched.";
+            return;
+        }
+
+        if (Deleted(shuttle))
+        {
+            CleanupShuttle(ent);
+            comp.Status = HospitalEmergencyStatus.Treating;
+            comp.TransportFailure = "Hospital shuttle was lost. Surviving patients remain assigned to this hospital.";
+            FinishEmptyIncident(ent);
+            return;
+        }
+
+        if (comp.Status is not (HospitalEmergencyStatus.ShuttleDeparting or HospitalEmergencyStatus.Arriving or HospitalEmergencyStatus.PickupInbound or HospitalEmergencyStatus.WaitingForArrival) ||
+            HasComp<FTLComponent>(shuttle) || _timing.CurTime < comp.PhaseEndsAt ||
+            _timing.CurTime < comp.NextTransportRetryAt)
+            return;
+
+        if (comp.Status is HospitalEmergencyStatus.Arriving or HospitalEmergencyStatus.PickupInbound or HospitalEmergencyStatus.WaitingForArrival)
+        {
+            ReconcileUnfinishedHospitalFlight(lease);
+            comp.ExpectedDestination = null;
+            comp.NextTransportRetryAt = _timing.CurTime + UiRefreshInterval;
+            EnsureLandingZone(ent, _timing.CurTime, true);
+            if (comp.LandingZone is { } landingZone &&
+                TryStartHospitalFlight(lease, landingZone, null, comp.ShuttleStartupTime, comp.ShuttlePurpose))
+            {
+                comp.ExpectedDestination = landingZone;
+                comp.Status = comp.ShuttlePurpose == HospitalShuttlePurpose.PickupInbound
+                    ? HospitalEmergencyStatus.PickupInbound
+                    : HospitalEmergencyStatus.Arriving;
+                comp.PhaseEndsAt = _timing.CurTime + TimeSpan.FromSeconds(comp.ShuttleStartupTime + comp.ShuttleTravelTime + 30);
+                comp.TransportFailure = string.Empty;
+            }
+            else
+            {
+                comp.Status = HospitalEmergencyStatus.WaitingForArrival;
+                comp.PhaseEndsAt = _timing.CurTime;
+                comp.TransportFailure = "Hospital shuttle arrival failed. Restore its navigation and hospital landing zone; arrival will be retried.";
+            }
+            return;
+        }
+
+        // Cancellation or external rerouting cannot be accepted as a successful return.
+        comp.ExpectedDestination = null;
+        ReconcileUnfinishedHospitalFlight(lease);
+        comp.Status = HospitalEmergencyStatus.WaitingForDeparture;
+        comp.TransportFailure = "Hospital shuttle did not reach its return destination. Retrying departure.";
+    }
+
+    private void FinishEmptyIncident(Entity<HospitalEmergencyComputerComponent> ent)
+    {
+        for (var i = ent.Comp.Patients.Count - 1; i >= 0; i--)
+        {
+            var patient = ent.Comp.Patients[i];
+            if (Deleted(patient) || !TryComp<HospitalPatientComponent>(patient, out var patientComp) ||
+                patientComp.SourceComputer != ent.Owner)
+                ent.Comp.Patients.RemoveAt(i);
+        }
+
+        if (ent.Comp.Patients.Count != 0)
+            return;
+
+        ent.Comp.LastPayout = 0;
+        ent.Comp.VipPatient = null;
+        ent.Comp.Status = HospitalEmergencyStatus.RewardReady;
+        ent.Comp.NextIncidentAt = _timing.CurTime + ent.Comp.IncidentInterval;
+    }
+
+    private void RemoveReturnedPatients(Entity<HospitalEmergencyComputerComponent> ent)
+    {
+        for (var i = ent.Comp.Patients.Count - 1; i >= 0; i--)
+        {
+            var patient = ent.Comp.Patients[i];
+            if (!Deleted(patient) && !IsPatientOnActiveShuttle(ent, patient))
+                continue;
+
+            if (!Deleted(patient) && TryComp<HospitalPatientComponent>(patient, out var patientComp) &&
+                patientComp.SourceComputer == ent.Owner)
+                QueueDel(patient);
+            ent.Comp.Patients.RemoveAt(i);
+        }
+    }
+
     public int SetNextIncidentDelay(TimeSpan delay)
     {
         if (delay < TimeSpan.Zero)
             delay = TimeSpan.Zero;
 
         var now = _timing.CurTime;
+        if (delay > TimeSpan.MaxValue - now)
+            delay = TimeSpan.MaxValue - now;
         var updated = 0;
         var query = EntityQueryEnumerator<HospitalEmergencyComputerComponent>();
         while (query.MoveNext(out var uid, out var comp))
@@ -317,6 +463,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             var ent = (uid, comp);
 
             EnsureLandingZone(ent, now);
+            ReconcileTransport(ent);
 
             switch (comp.Status)
             {
@@ -333,6 +480,15 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
                 case HospitalEmergencyStatus.PickupBoarding:
                     if (now >= comp.PhaseEndsAt)
                         FinishPickup(ent);
+                    break;
+
+                case HospitalEmergencyStatus.WaitingForDeparture:
+                    if (now >= comp.NextTransportRetryAt)
+                        TryReturnShuttle(ent);
+                    break;
+
+                case HospitalEmergencyStatus.Treating:
+                    FinishEmptyIncident(ent);
                     break;
 
                 case HospitalEmergencyStatus.RewardReady:
@@ -353,6 +509,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             _nextPatientCheck = now + PatientCheckInterval;
             UpdatePatients(now);
         }
+        UpdateTransportLeases(now);
     }
 
     private void OnApproveLanding(Entity<HospitalEmergencyComputerComponent> ent, ref HospitalEmergencyApproveLandingMsg args)
@@ -448,40 +605,45 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
     private void OnDropshipFtlCompleted(ref FTLCompletedEvent args)
     {
-        var query = EntityQueryEnumerator<HospitalEmergencyComputerComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        if (!TryGetTransportLease(args.Entity, out var lease) || !IsExpectedHospitalArrival(lease, args))
+            return;
+        var flight = lease.Comp.Flight!;
+        // Consume before callbacks or billing so duplicate completions are inert.
+        lease.Comp.Flight = null;
+        lease.Comp.Failure = string.Empty;
+        if (!TryGetTransportController(lease, out var computer))
         {
-            if (comp.ActiveShuttle != args.Entity)
-                continue;
-
-            var computer = (uid, comp);
-            switch (comp.ShuttlePurpose)
-            {
-                case HospitalShuttlePurpose.InboundPatients:
-                    comp.Status = HospitalEmergencyStatus.ManualUnloading;
-                    comp.PhaseEndsAt = _timing.CurTime + comp.ManualUnloadWindow;
-                    comp.ShuttlePurpose = HospitalShuttlePurpose.ReturningAfterManualUnload;
-                    break;
-
-                case HospitalShuttlePurpose.ReturningAfterManualUnload:
-                    CleanupShuttle(computer);
-                    comp.Status = HospitalEmergencyStatus.Treating;
-                    break;
-
-                case HospitalShuttlePurpose.PickupInbound:
-                    comp.Status = HospitalEmergencyStatus.PickupBoarding;
-                    comp.PhaseEndsAt = _timing.CurTime + comp.PickupBoardingDelay;
-                    comp.ShuttlePurpose = HospitalShuttlePurpose.PickupReturning;
-                    break;
-
-                case HospitalShuttlePurpose.PickupReturning:
-                    CleanupShuttle(computer);
-                    break;
-            }
-
-            UpdateUi(computer);
+            lease.Comp.Retiring = true;
+            lease.Comp.NextAction = _timing.CurTime;
             return;
         }
+        var comp = computer.Comp;
+        if (comp.ExpectedDestination != flight.Destination || comp.ShuttlePurpose != flight.Purpose)
+            return;
+        comp.ExpectedDestination = null;
+        comp.TransportFailure = string.Empty;
+        switch (flight.Purpose)
+        {
+            case HospitalShuttlePurpose.InboundPatients:
+                comp.Status = HospitalEmergencyStatus.ManualUnloading;
+                comp.PhaseEndsAt = _timing.CurTime + comp.ManualUnloadWindow;
+                break;
+            case HospitalShuttlePurpose.ReturningAfterManualUnload:
+                RemoveReturnedPatients(computer);
+                CleanupShuttle(computer);
+                comp.Status = HospitalEmergencyStatus.Treating;
+                FinishEmptyIncident(computer);
+                break;
+            case HospitalShuttlePurpose.PickupInbound:
+                comp.Status = HospitalEmergencyStatus.PickupBoarding;
+                comp.PhaseEndsAt = _timing.CurTime + comp.PickupBoardingDelay;
+                break;
+            case HospitalShuttlePurpose.PickupReturning:
+                SettlePickup(computer);
+                CleanupShuttle(computer);
+                break;
+        }
+        UpdateUi(computer);
     }
 
     private void CreateIncident(Entity<HospitalEmergencyComputerComponent> ent)
@@ -497,6 +659,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         comp.LastMissedInjuries = 0;
         comp.LastVipPenalty = 0;
         comp.LastPermanentDeathPenalty = 0;
+        comp.TransportFailure = string.Empty;
         comp.VipPatient = null;
         comp.Patients.Clear();
         comp.Status = HospitalEmergencyStatus.AwaitingApproval;
@@ -534,39 +697,48 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         EntityUid actor,
         HospitalShuttlePurpose purpose)
     {
-        if (ent.Comp.ActiveShuttle != null && !Deleted(ent.Comp.ActiveShuttle))
+        if (ent.Comp.ActiveShuttle is { } existing && !TransportUnavailable(existing))
             return false;
-
-        if (!TryLoadShuttle(ent, out var shuttle, out var nav, out var returnDestination))
+        if (!TryLoadShuttle(ent, out var shuttle, out _, out var returnDestination) ||
+            !TryGetTransportLease(shuttle, out var lease))
         {
             _popup.PopupEntity("The hospital shuttle could not be prepared.", ent, actor);
             return false;
         }
-
-        ent.Comp.ActiveShuttle = shuttle;
-        ent.Comp.ReturnDestination = returnDestination;
-        ent.Comp.ShuttlePurpose = purpose;
-
-        if (purpose == HospitalShuttlePurpose.InboundPatients)
-            LoadPatientsOntoShuttle(ent, shuttle);
-
-        if (!_dropship.FlyTo(nav, destination, actor, startupTime: ent.Comp.ShuttleStartupTime, hyperspaceTime: ent.Comp.ShuttleTravelTime))
+        var comp = ent.Comp;
+        comp.ActiveShuttle = shuttle;
+        comp.ReturnDestination = returnDestination;
+        comp.ShuttlePurpose = purpose;
+        comp.ExpectedDestination = null;
+        comp.Status = HospitalEmergencyStatus.WaitingForArrival;
+        comp.PhaseEndsAt = _timing.CurTime;
+        comp.NextTransportRetryAt = _timing.CurTime + UiRefreshInterval;
+        try
         {
-            if (purpose == HospitalShuttlePurpose.InboundPatients)
+            if (purpose == HospitalShuttlePurpose.InboundPatients && !LoadPatientsOntoShuttle(ent, shuttle))
             {
-                foreach (var patient in ent.Comp.Patients)
-                {
-                    if (!Deleted(patient))
-                        QueueDel(patient);
-                }
-
-                ent.Comp.Patients.Clear();
+                RequestHospitalTransportRecovery(shuttle);
+                return false;
             }
-
-            CleanupShuttle(ent);
+        }
+        catch (Exception exception)
+        {
+            Log.Warning($"Hospital patient preparation failed; preserving its tracked transport and patients: {exception}");
+            RequestHospitalTransportRecovery(shuttle);
             return false;
         }
-
+        if (!TryStartHospitalFlight(lease, destination, actor, comp.ShuttleStartupTime, purpose))
+        {
+            comp.TransportFailure = lease.Comp.Failure;
+            UpdateUi(ent);
+            return false;
+        }
+        if (!TryGetTransportController(lease, out var controller) || controller.Owner != ent.Owner ||
+            !ReferenceEquals(controller.Comp, comp))
+            return false;
+        comp.ExpectedDestination = destination;
+        comp.PhaseEndsAt = _timing.CurTime + TimeSpan.FromSeconds(comp.ShuttleStartupTime + comp.ShuttleTravelTime + 30);
+        comp.TransportFailure = string.Empty;
         return true;
     }
 
@@ -579,11 +751,27 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         shuttle = default;
         navigationComputer = default;
         returnDestination = default;
-
-        if (!_mapLoader.TryLoadGeneric(
-                ent.Comp.ShuttlePath,
-                out var result,
-                new MapLoadOptions
+        if (Transform(ent).MapUid is not { } hospitalMap ||
+            !TryComp<MapComponent>(hospitalMap, out var hospitalMapComponent) || ent.Comp.LandingZone is not { } hospitalDestination)
+            return false;
+        var leaseUid = Spawn(null, MapCoordinates.Nullspace);
+        var lease = AddComp<HospitalTransportLeaseComponent>(leaseUid);
+        lease.Computer = ent.Owner;
+        lease.Controller = ent.Comp;
+        lease.HospitalMap = hospitalMap;
+        lease.HospitalMapComponent = hospitalMapComponent;
+        lease.HospitalDestination = hospitalDestination;
+        lease.StartupTime = ent.Comp.ShuttleStartupTime;
+        lease.TravelTime = ent.Comp.ShuttleTravelTime;
+        // MapInit can move an existing foreign object onto the new map. Current
+        // map membership is insufficient provenance for deleting it later.
+        var preexisting = new HashSet<EntityUid>();
+        var existing = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
+        while (existing.MoveNext(out var existingUid, out _))
+            preexisting.Add(existingUid);
+        try
+        {
+            if (!_mapLoader.TryLoadGeneric(ent.Comp.ShuttlePath, out var result, new MapLoadOptions
                 {
                     DeserializationOptions = DeserializationOptions.Default with
                     {
@@ -591,35 +779,72 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
                         LogOrphanedGrids = false,
                     },
                 }))
+            {
+                QueueDel(leaseUid);
+                return false;
+            }
+            lease.Roots.UnionWith(result.RootNodes);
+            lease.AuthoredEntities.UnionWith(result.Entities);
+            foreach (var map in result.Maps)
+            {
+                lease.Roots.Add(map.Owner);
+                if (TryComp<MapComponent>(map.Owner, out var mapComponent))
+                    lease.Maps.Add(map.Owner, mapComponent);
+            }
+            // Include newly spawned MapInit equipment, but never claim existing
+            // visitors/property that an initialization callback moved onto it.
+            var authored = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
+            while (authored.MoveNext(out var entity, out var transform))
+                if (!preexisting.Contains(entity) && transform.MapUid is { } authoredMap && lease.Maps.ContainsKey(authoredMap))
+                    lease.AuthoredEntities.Add(entity);
+            foreach (var grid in result.Grids)
+            {
+                shuttle = grid;
+                break;
+            }
+            lease.Shuttle = shuttle;
+            if (!IsCurrentHospitalComputer(ent) || shuttle == default || !TryFindNavigationComputer(shuttle, out navigationComputer))
+            {
+                lease.Retiring = true;
+                lease.Computer = null;
+                lease.Controller = null;
+                TryReclaimTransport((leaseUid, lease));
+                return false;
+            }
+            EnsureComp<HospitalTransportShuttleComponent>(shuttle).Lease = leaseUid;
+            ent.Comp.ActiveShuttle = shuttle;
+            ent.Comp.TransportRoots.UnionWith(lease.Roots);
+
+            // Spawn the anchored marker through its map position so its initial grid
+            // agrees with the engine's anchoring contract. NoFTL leaves it behind.
+            var returnCoords = _transform.ToMapCoordinates(Transform(shuttle).Coordinates);
+            returnDestination = Spawn(ent.Comp.ReturnDestinationPrototype, returnCoords);
+            lease.ReturnDestination = returnDestination;
+            if (!IsCurrentHospitalComputer(ent))
+            {
+                RequestHospitalTransportRecovery(shuttle);
+                return false;
+            }
+            ent.Comp.ReturnDestination = returnDestination;
+            EnsureComp<ThirdPartyDropshipReturnDestinationComponent>(returnDestination).Shuttle = shuttle;
+            if (TryComp<WhitelistedShuttleComponent>(navigationComputer.Owner, out var whitelist))
+                whitelist.AutoReturn = false;
+            _dropship.SetDestinationShip(returnDestination, shuttle);
+            _dropship.SetDestinationHome(returnDestination, true);
+            EnsureComp<DropshipComponent>(shuttle);
+            _dropship.SetDropshipDestination(shuttle, returnDestination);
+            return true;
+        }
+        catch (Exception exception)
         {
+            Log.Warning($"Hospital shuttle preparation failed: {exception}");
+            lease.Retiring = true;
+            lease.Computer = null;
+            lease.Controller = null;
+            ClearComputerTransport(ent.Comp);
+            TryReclaimTransport((leaseUid, lease));
             return false;
         }
-
-        foreach (var grid in result.Grids)
-        {
-            shuttle = grid;
-            break;
-        }
-
-        if (shuttle == default || !TryFindNavigationComputer(shuttle, out navigationComputer))
-        {
-            QueueDel(shuttle);
-            return false;
-        }
-
-        var returnCoords = Transform(shuttle).Coordinates;
-        returnDestination = Spawn(ent.Comp.ReturnDestinationPrototype, returnCoords);
-
-        var returnComp = EnsureComp<ThirdPartyDropshipReturnDestinationComponent>(returnDestination);
-        returnComp.Shuttle = shuttle;
-        Dirty(returnDestination, returnComp);
-
-        _dropship.SetDestinationShip(returnDestination, shuttle);
-        _dropship.SetDestinationHome(returnDestination, true);
-        EnsureComp<DropshipComponent>(shuttle);
-        _dropship.SetDropshipDestination(shuttle, returnDestination);
-
-        return true;
     }
 
     private bool TryFindNavigationComputer(EntityUid shuttle, out Entity<DropshipNavigationComputerComponent> navigationComputer)
@@ -640,13 +865,13 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
     private void BeginManualUnloadDeparture(Entity<HospitalEmergencyComputerComponent> ent)
     {
-        ent.Comp.Status = HospitalEmergencyStatus.ShuttleDeparting;
-        ent.Comp.PhaseEndsAt = _timing.CurTime + TimeSpan.FromSeconds(ent.Comp.ShuttleDepartureStartupTime);
-        ReturnShuttle(ent, HospitalEmergencyStatus.Treating);
+        ent.Comp.ShuttlePurpose = HospitalShuttlePurpose.ReturningAfterManualUnload;
+        ent.Comp.Status = HospitalEmergencyStatus.WaitingForDeparture;
+        TryReturnShuttle(ent);
         UpdateUi(ent);
     }
 
-    private void LoadPatientsOntoShuttle(Entity<HospitalEmergencyComputerComponent> ent, EntityUid shuttle)
+    private bool LoadPatientsOntoShuttle(Entity<HospitalEmergencyComputerComponent> ent, EntityUid shuttle)
     {
         ent.Comp.Patients.Clear();
         ent.Comp.VipPatient = null;
@@ -657,19 +882,29 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
         for (var i = 0; i < ent.Comp.Casualties; i++)
         {
+            if (!IsCurrentHospitalComputer(ent) || TransportUnavailable(shuttle))
+                return false;
             var coordinates = _spawnCoordinates.Count > 0
                 ? _spawnCoordinates[i % _spawnCoordinates.Count].Offset(_random.NextVector2(0.05f, 0.25f))
                 : new EntityCoordinates(shuttle, _random.NextVector2(0.5f, 2.5f));
 
             var patient = Spawn(ent.Comp.PatientPrototype, coordinates);
-            PrepareHospitalPatient(patient);
-
+            if (!IsCurrentHospitalComputer(ent) || TransportUnavailable(patient))
+                return false;
             var patientComp = EnsureComp<HospitalPatientComponent>(patient);
             patientComp.SourceComputer = ent;
+            // Track immediately: outfit/injury callbacks can throw or delete the
+            // console, and must not leave an unowned partially prepared patient.
+            ent.Comp.Patients.Add(patient);
+            PrepareHospitalPatient(patient);
+            if (!IsCurrentHospitalComputer(ent) || TransportUnavailable(patient) ||
+                !TryComp<HospitalPatientComponent>(patient, out var prepared) || !ReferenceEquals(prepared, patientComp))
+                return false;
             patientComp.IsVip = i == vipIndex;
             patientComp.DeathPenaltyApplied = false;
             patientComp.ArrivedWithFatalOutcome = false;
             patientComp.NextPainLineAt = _timing.CurTime + RandomPainLineDelay(initial: true);
+            CaptureAdmissionAnatomy((patient, patientComp));
 
             if (patientComp.IsVip)
             {
@@ -678,10 +913,15 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             }
 
             OutfitPatient(ent, patient);
+            if (!IsCurrentHospitalComputer(ent) || TransportUnavailable(patient))
+                return false;
             ApplyPatientInjuries(patient, ent.Comp.Severity);
+            if (!IsCurrentHospitalComputer(ent) || TransportUnavailable(patient) ||
+                !TryComp<HospitalPatientComponent>(patient, out var injured) || !ReferenceEquals(injured, patientComp))
+                return false;
             patientComp.ArrivedWithFatalOutcome = HasFatalOutcome(patient);
-            ent.Comp.Patients.Add(patient);
         }
+        return true;
     }
 
     private void GetShuttlePatientSpawnCoordinates(EntityUid shuttle, List<EntityCoordinates> coordinates)
@@ -709,38 +949,39 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         RemComp<SleepingComponent>(patient);
     }
 
-    private void ReturnShuttle(Entity<HospitalEmergencyComputerComponent> ent, HospitalEmergencyStatus statusIfUnable)
+    private void TryReturnShuttle(Entity<HospitalEmergencyComputerComponent> ent)
     {
-        if (ent.Comp.ActiveShuttle == null ||
-            Deleted(ent.Comp.ActiveShuttle) ||
-            ent.Comp.ReturnDestination == null ||
-            Deleted(ent.Comp.ReturnDestination))
+        var comp = ent.Comp;
+        comp.NextTransportRetryAt = _timing.CurTime + UiRefreshInterval;
+        if (comp.ActiveShuttle is not { } shuttle || TransportUnavailable(shuttle))
         {
-            CleanupShuttle(ent);
-            ent.Comp.Status = statusIfUnable;
-            ent.Comp.PhaseEndsAt = TimeSpan.Zero;
+            ReconcileTransport(ent);
             return;
         }
-
-        if (!TryFindNavigationComputer(ent.Comp.ActiveShuttle.Value, out var nav))
+        if (HasComp<FTLComponent>(shuttle))
         {
-            CleanupShuttle(ent);
-            ent.Comp.Status = statusIfUnable;
-            ent.Comp.PhaseEndsAt = TimeSpan.Zero;
+            comp.TransportFailure = "Hospital shuttle waiting for flight cooldown.";
             return;
         }
-
-        if (!_dropship.FlyTo(
-            nav,
-            ent.Comp.ReturnDestination.Value,
-            ent,
-            startupTime: ent.Comp.ShuttleDepartureStartupTime,
-            hyperspaceTime: ent.Comp.ShuttleTravelTime))
+        if (!TryGetTransportLease(shuttle, out var lease) || lease.Comp.Computer != ent.Owner ||
+            !ReferenceEquals(lease.Comp.Controller, comp) || comp.ReturnDestination is not { } destination ||
+            destination != lease.Comp.ReturnDestination || TransportUnavailable(destination) ||
+            !TryComp<ThirdPartyDropshipReturnDestinationComponent>(destination, out var marker) || marker.Shuttle != shuttle ||
+            Transform(destination).MapUid is not { } returnMap || !lease.Comp.Maps.TryGetValue(returnMap, out var originalMap) ||
+            !TryComp<MapComponent>(returnMap, out var map) || !ReferenceEquals(originalMap, map))
         {
-            CleanupShuttle(ent);
-            ent.Comp.Status = statusIfUnable;
-            ent.Comp.PhaseEndsAt = TimeSpan.Zero;
+            comp.TransportFailure = "Hospital shuttle cannot depart. Restore its exact return marker and owned return map, or recover the transport.";
+            return;
         }
+        if (!TryStartHospitalFlight(lease, destination, null, comp.ShuttleDepartureStartupTime, comp.ShuttlePurpose))
+        {
+            comp.TransportFailure = lease.Comp.Failure;
+            return;
+        }
+        comp.ExpectedDestination = destination;
+        comp.TransportFailure = string.Empty;
+        comp.Status = HospitalEmergencyStatus.ShuttleDeparting;
+        comp.PhaseEndsAt = _timing.CurTime + TimeSpan.FromSeconds(comp.ShuttleDepartureStartupTime + comp.ShuttleTravelTime + 30);
     }
 
     private void OutfitPatient(Entity<HospitalEmergencyComputerComponent> computer, EntityUid patient)
@@ -849,7 +1090,6 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         for (var i = 0; i < fractureCount; i++)
         {
             var part = _random.PickAndTake(_patientBuffer);
-            var fracture = EnsureComp<FractureComponent>(part);
             var fractureSeverity = severity switch
             {
                 1 => FractureSeverity.Compound,
@@ -857,7 +1097,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
                 _ => _random.Prob(0.85f) ? FractureSeverity.Shattered : FractureSeverity.Compound,
             };
 
-            _fracture.SetSeverity((part, fracture), fractureSeverity);
+            _bone.SeedFracture(part, fractureSeverity);
             _surgicalTraits.RemoveTrait(part, CMUSurgicalTrait.ContaminatedWound);
         }
     }
@@ -1034,7 +1274,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         if (tier < PainTier.Moderate)
             return;
 
-        if (!HasAnyMissedInjury(patient))
+        if (AssessDischarge(patient).Cleared)
             return;
 
         _chat.TrySendInGameICMessage(
@@ -1066,12 +1306,21 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
     private void FinishPickup(Entity<HospitalEmergencyComputerComponent> ent)
     {
+        ent.Comp.ShuttlePurpose = HospitalShuttlePurpose.PickupReturning;
+        ent.Comp.Status = HospitalEmergencyStatus.WaitingForDeparture;
+        TryReturnShuttle(ent);
+        UpdateUi(ent);
+    }
+
+    private void SettlePickup(Entity<HospitalEmergencyComputerComponent> ent)
+    {
         var missed = 0;
         var vipPenalty = 0;
         var boardedPatients = 0;
         foreach (var patient in ent.Comp.Patients)
         {
-            if (Deleted(patient))
+            if (Deleted(patient) || !TryComp<HospitalPatientComponent>(patient, out var patientComp) ||
+                patientComp.SourceComputer != ent.Owner)
                 continue;
 
             if (!IsPatientOnActiveShuttle(ent, patient))
@@ -1080,26 +1329,22 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
                 continue;
             }
 
-            if (!TryComp<HospitalPatientComponent>(patient, out var patientComp))
-            {
-                QueueDel(patient);
-                continue;
-            }
-
             var fatalOutcome = HasFatalOutcome(patient);
             var permanentOutcome = TryApplyPermanentDeathPenalty((patient, patientComp), ent, updateUi: false);
             var fatalOutcomeExempt = IsArrivalFatalOutcomeExempt(patientComp, fatalOutcome);
+            var assessment = AssessDischarge(patient);
             var patientMissed = fatalOutcomeExempt
                 ? 0
-                : CountMissedInjuries(patient);
+                : assessment.MissedInjuries;
             var isVip = ent.Comp.VipPatient == patient || patientComp.IsVip;
 
-            if (isVip && !fatalOutcomeExempt && (patientMissed > 0 || permanentOutcome))
+            if (isVip && !fatalOutcomeExempt && (patientMissed > 0 || assessment.TreatmentPending || permanentOutcome))
                 vipPenalty += ent.Comp.VipMissedInjuryPenalty;
 
             if (!fatalOutcomeExempt)
             {
-                boardedPatients++;
+                if (assessment.EligibleForReward)
+                    boardedPatients++;
                 missed += patientMissed;
             }
 
@@ -1127,7 +1372,6 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
         ent.Comp.Status = HospitalEmergencyStatus.RewardReady;
         ent.Comp.NextIncidentAt = _timing.CurTime + ent.Comp.IncidentInterval;
-        ReturnShuttle(ent, HospitalEmergencyStatus.RewardReady);
         UpdateUi(ent);
     }
 
@@ -1219,68 +1463,292 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         return fatalOutcome && patient.ArrivedWithFatalOutcome;
     }
 
-    private int CountMissedInjuries(EntityUid patient, bool stopAtFirst = false)
+    /// <summary>Records the original occupied sites and minimum organ capabilities before injury generation.</summary>
+    public void CaptureAdmissionAnatomy(Entity<HospitalPatientComponent> patient)
     {
-        var missed = 0;
+        // An existing admission must never be overwritten after anatomy has been removed.
+        if (patient.Comp.AdmissionAnatomy.Count != 0)
+            return;
 
-        if (TryComp<DamageableComponent>(patient, out var damageable))
+        foreach (var part in _medicalIndex.GetBodyParts(patient.Owner))
         {
-            foreach (var damage in _damage.GetAllDamage((patient, damageable)).DamageDict.Values)
+            var organs = new List<HospitalAdmissionOrgan>();
+            foreach (var slot in _medicalIndex.GetOrganSlots(part.Owner))
             {
-                if (damage > 0)
-                {
+                if (slot.Organ is { } organ && TryComp<OrganComponent>(organ, out var component))
+                    organs.Add(new(slot.SlotId, component.Category, GetOrganCapabilities(organ)));
+            }
+            patient.Comp.AdmissionAnatomy.Add(new(part.Comp.PartType, part.Comp.Symmetry), organs);
+            if (_body.GetParentPartOrNull(part.Owner) is { } parent && TryComp<BodyPartComponent>(parent, out var parentPart))
+            {
+                patient.Comp.AdmissionParents.Add(new(part.Comp.PartType, part.Comp.Symmetry),
+                    new(parentPart.PartType, parentPart.Symmetry));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Evaluates treatment debt and recovery eligibility, including missing or incompatible admission anatomy.
+    /// </summary>
+    public HospitalDischargeAssessment AssessDischarge(EntityUid patient)
+    {
+        if (Deleted(patient))
+            return new(0, true, true);
+
+        var missed = 0;
+        var missingAnatomy = false;
+        var incompatibleOrgan = false;
+        var organConditions = new HashSet<EntityUid>();
+        if (TryComp<HospitalPatientComponent>(patient, out var hospitalPatient))
+        {
+            var missingParts = new HashSet<CMUMedicalBodyPartKey>();
+            foreach (var key in hospitalPatient.AdmissionAnatomy.Keys)
+            {
+                if (!_medicalIndex.TryGetBodyPart(patient, key, out _))
+                    missingParts.Add(key);
+            }
+            missingAnatomy = missingParts.Count > 0;
+            foreach (var key in missingParts)
+            {
+                // Organs and descendants disappear with their containing part.
+                // Legacy admissions without parents conservatively keep per-site debt.
+                if (!hospitalPatient.AdmissionParents.TryGetValue(key, out var parent) || !missingParts.Contains(parent))
                     missed++;
-                    if (stopAtFirst)
-                        return missed;
+            }
+            foreach (var (key, organSlots) in hospitalPatient.AdmissionAnatomy)
+            {
+                if (!_medicalIndex.TryGetBodyPart(patient, key, out var part))
+                    continue;
+
+                foreach (var required in organSlots)
+                {
+                    if (!_medicalIndex.TryGetOrganInSlot(part, required.Slot, out var organ))
+                    {
+                        missingAnatomy = true;
+                        missed++;
+                    }
+                    else if (!TryComp<OrganComponent>(organ, out var component) ||
+                             component.Body != patient || component.Category != required.Category ||
+                             !HasRequiredOrganCapabilities(organ, required.Capabilities))
+                    {
+                        // A same-category donor without the original physiology is
+                        // occupied anatomy, but it cannot satisfy the recovery contract.
+                        incompatibleOrgan = true;
+                        organConditions.Add(organ);
+                    }
                 }
             }
         }
 
-        foreach (var part in _body.GetBodyChildren(patient))
+        missed += CountBillableConditions(patient, organConditions, out var treatmentPending);
+        return new(missed, missingAnatomy, HasFatalOutcome(patient), incompatibleOrgan, treatmentPending);
+    }
+
+    private HospitalOrganCapabilities GetOrganCapabilities(EntityUid organ)
+    {
+        var capabilities = HospitalOrganCapabilities.None;
+        if (HasComp<OrganHealthComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Health;
+        if (HasComp<HeartComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Heart;
+        if (HasComp<LungsComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Lungs;
+        if (HasComp<LiverComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Liver;
+        if (HasComp<KidneysComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Kidneys;
+        if (HasComp<CMUStomachComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Stomach;
+        if (HasComp<CMUBrainComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Brain;
+        if (HasComp<EyesComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Eyes;
+        if (HasComp<EarsComponent>(organ))
+            capabilities |= HospitalOrganCapabilities.Ears;
+        return capabilities;
+    }
+
+    private bool HasRequiredOrganCapabilities(EntityUid organ, HospitalOrganCapabilities required)
+        => ((required & HospitalOrganCapabilities.Health) == 0 || HasComp<OrganHealthComponent>(organ)) &&
+           ((required & HospitalOrganCapabilities.Heart) == 0 || HasComp<HeartComponent>(organ)) &&
+           ((required & HospitalOrganCapabilities.Lungs) == 0 || HasComp<LungsComponent>(organ)) &&
+           ((required & HospitalOrganCapabilities.Liver) == 0 || HasComp<LiverComponent>(organ)) &&
+           ((required & HospitalOrganCapabilities.Kidneys) == 0 || HasComp<KidneysComponent>(organ)) &&
+           ((required & HospitalOrganCapabilities.Stomach) == 0 || HasComp<CMUStomachComponent>(organ)) &&
+           ((required & HospitalOrganCapabilities.Brain) == 0 || HasComp<CMUBrainComponent>(organ)) &&
+           ((required & HospitalOrganCapabilities.Eyes) == 0 || HasComp<EyesComponent>(organ)) &&
+           ((required & HospitalOrganCapabilities.Ears) == 0 || HasComp<EarsComponent>(organ));
+
+    /// <summary>
+    /// Counts unresolved conditions, not their redundant damage/marker projections.
+    /// Clinical treatment state remains independent from this economy projection.
+    /// </summary>
+    private int CountBillableConditions(EntityUid patient, HashSet<EntityUid> organConditions, out bool treatmentPending)
+    {
+        var missed = 0;
+        var remainingDamage = TryComp<DamageableComponent>(patient, out var damageable)
+            ? _damage.GetAllDamage((patient, damageable)) : new DamageSpecifier();
+        treatmentPending = remainingDamage.AnyPositive();
+        var brute = _prototypes.Index<DamageGroupPrototype>("Brute");
+        var burn = _prototypes.Index<DamageGroupPrototype>("Burn");
+        TryComp<CMUSurgeryInProgressComponent>(patient, out var surgery);
+        var surgerySiteSeen = false;
+        var surgeryTargetMissing = surgery != null && TryComp<HospitalPatientComponent>(patient, out var admission) &&
+                                   admission.AdmissionAnatomy.ContainsKey(new(surgery.TargetPartType, surgery.TargetSymmetry)) &&
+                                   !_medicalIndex.TryGetBodyPart(patient, new(surgery.TargetPartType, surgery.TargetSymmetry), out _);
+
+        foreach (var organ in _medicalIndex.GetOrgans(patient))
         {
-            if (TryComp<FractureComponent>(part.Id, out var fracture) &&
-                fracture.Severity != FractureSeverity.None)
-            {
-                missed++;
-                if (stopAtFirst)
-                    return missed;
-            }
-
-            if (HasComp<InternalBleedingComponent>(part.Id))
-            {
-                missed++;
-                if (stopAtFirst)
-                    return missed;
-            }
-
-            if (HasComp<CMUEscharComponent>(part.Id))
-            {
-                missed++;
-                if (stopAtFirst)
-                    return missed;
-            }
-
-            if (TryComp<BodyPartWoundComponent>(part.Id, out var bodyPartWounds))
-            {
-                var wounds = _woundLedger.CountUntreatedWounds(bodyPartWounds);
-                missed += wounds;
-                if (stopAtFirst && wounds > 0)
-                    return missed;
-            }
+            if (IsUnresolvedOrgan(organ.Owner))
+                organConditions.Add(organ.Owner);
         }
 
-        foreach (var organ in _body.GetBodyOrgans(patient))
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(patient))
         {
-            if (TryComp<OrganHealthComponent>(organ.Id, out var organHealth) &&
-                organHealth.Current < organHealth.Max)
+            var siteConditions = 0;
+            var bruteTrauma = false;
+            var burnTrauma = HasComp<CMUEscharComponent>(part);
+            var structuralDeficit = false;
+            var foreignBody = TryComp<CMUShrapnelComponent>(part, out var shrapnel) && shrapnel.Fragments > 0 ||
+                              HasComp<CMUEmbeddedForeignBodyComponent>(part);
+            var contaminated = HasComp<CMUContaminatedWoundComponent>(part);
+            var openTreatment = HasComp<CMIncisionOpenComponent>(part) || HasComp<CMRibcageOpenComponent>(part);
+            if (surgery?.Part == part)
             {
-                missed++;
-                if (stopAtFirst)
-                    return missed;
+                openTreatment = true;
+                surgerySiteSeen = true;
             }
+
+            if (TryComp<BodyPartHealthComponent>(part, out var health))
+            {
+                structuralDeficit = health.Current < health.Max;
+                bruteTrauma = HasPositiveGroupDamage(health.BodyDamage, brute);
+                burnTrauma |= HasPositiveGroupDamage(health.BodyDamage, burn);
+                // Only exact typed attribution shares units with aggregate damage.
+                // Wound magnitude and HP are resistance/propagation projections.
+                foreach (var (type, amount) in health.BodyDamage.DamageDict)
+                {
+                    if (amount > FixedPoint2.Zero)
+                        remainingDamage.DamageDict[type] = FixedPoint2.Max(FixedPoint2.Zero,
+                            remainingDamage.DamageDict.GetValueOrDefault(type) - amount);
+                }
+            }
+
+            var externalBleeding = false;
+            if (TryComp<BodyPartWoundComponent>(part, out var wounds))
+            {
+                externalBleeding = wounds.ExternalBleeding != ExternalBleedTier.None;
+                bruteTrauma |= externalBleeding;
+                foreach (var entry in _woundLedger.GetEntries(wounds))
+                {
+                    if (!entry.Wound.Treated || entry.Wound.Damage > FixedPoint2.Zero)
+                    {
+                        bruteTrauma |= entry.Wound.Type == WoundType.Brute;
+                        burnTrauma |= entry.Wound.Type == WoundType.Burn;
+                    }
+                    foreignBody |= (entry.Cleanup & (WoundCleanupFlags.RetainedFragment | WoundCleanupFlags.CrushDebris)) != 0;
+                    burnTrauma |= (entry.Cleanup & WoundCleanupFlags.CharredTissue) != 0;
+                    // New wounds start with DirtyDressing: it is ordinary treatment
+                    // work, not an independent contamination complication.
+                    openTreatment |= (entry.Cleanup & (WoundCleanupFlags.PoorClosure | WoundCleanupFlags.DirtyDressing)) != 0;
+                }
+            }
+
+            if (bruteTrauma)
+                siteConditions++;
+            if (burnTrauma)
+                siteConditions++;
+            if (structuralDeficit && !bruteTrauma && !burnTrauma)
+                siteConditions++; // A scalar HP deficit cannot invent a second typed trauma.
+
+            var boneCondition = TryComp<FractureComponent>(part, out var fracture) && fracture.Severity != FractureSeverity.None ||
+                                TryComp<BoneComponent>(part, out var bone) && bone.Integrity < bone.IntegrityMax ||
+                                HasComp<CMUBoneSplinteredComponent>(part);
+            if (boneCondition)
+                siteConditions++;
+            if (foreignBody)
+                siteConditions++;
+            if (contaminated)
+                siteConditions++;
+            if (HasComp<CMUCompartmentPressureComponent>(part))
+                siteConditions++;
+            if (HasComp<CMUOrganAdhesionComponent>(part))
+                siteConditions++;
+
+            var organConditionOnSite = false;
+            foreach (var organ in _medicalIndex.GetPartOrgans(part))
+                organConditionOnSite |= organConditions.Contains(organ.Owner);
+
+            var vascularCondition = HasComp<CMUVascularTearComponent>(part) || HasComp<CMUOrganHemorrhageComponent>(part) ||
+                                    HasComp<CMUSurgicalInternalBleedingComponent>(part);
+            if (TryComp<InternalBleedingComponent>(part, out var bleeding))
+            {
+                // Derived source tags are produced by the wounds owner. Unknown or
+                // explicitly seeded vascular trauma is independent, never guessed away.
+                var source = bleeding.Source;
+                var represented = source.StartsWith("fracture:", StringComparison.Ordinal) && boneCondition ||
+                                  source.StartsWith("organ:", StringComparison.Ordinal) && organConditionOnSite ||
+                                  source == "blunt" && bruteTrauma;
+                vascularCondition |= !represented;
+            }
+            if (vascularCondition)
+                siteConditions++;
+
+            treatmentPending |= siteConditions > 0 || openTreatment || organConditionOnSite;
+            // An incision/lock describes the work already being billed on this site.
+            // A clean but unclosed site is still one unresolved treatment condition.
+            if (openTreatment && siteConditions == 0 && !organConditionOnSite &&
+                !(surgery?.Part == part && surgeryTargetMissing))
+                siteConditions++;
+            missed += siteConditions;
         }
 
+        if (surgery != null && !surgerySiteSeen)
+        {
+            treatmentPending = true;
+            // Missing-limb workflows use an anchor; the admission deficit already
+            // contributes a condition. A stale lock still blocks clinical clearance.
+        }
+
+        missed += organConditions.Count;
+        if (TryComp<BloodstreamComponent>(patient, out var blood) &&
+            (_bloodstream.GetBloodLevel((patient, blood)) < blood.BloodlossThreshold || blood.BleedAmount > 0))
+        {
+            treatmentPending = true;
+            // Restoring volume is independent treatment. CMU wounds drain volume
+            // directly; they do not add the separate legacy BleedAmount field.
+            // Preserve one circulatory condition for either unresolved state.
+            missed++;
+        }
+
+        // Unlocalized Brute/Burn still count by treatment group. Other systemic
+        // damage types are independent outstanding debts: no causal organ ledger
+        // exists from which to safely subtract their historical pressure.
+        if (HasPositiveGroupDamage(remainingDamage, brute))
+            missed++;
+        if (HasPositiveGroupDamage(remainingDamage, burn))
+            missed++;
+        foreach (var (type, amount) in remainingDamage.DamageDict)
+        {
+            if (amount > FixedPoint2.Zero && !brute.DamageTypes.Contains(type) && !burn.DamageTypes.Contains(type))
+                missed++;
+        }
         return missed;
+    }
+
+    private bool IsUnresolvedOrgan(EntityUid organ)
+        => TryComp<OrganHealthComponent>(organ, out var health) &&
+           (health.Current < health.Max || health.Stage != OrganDamageStage.Healthy) ||
+           TryComp<HeartComponent>(organ, out var heart) && heart.Stopped;
+
+    private static bool HasPositiveGroupDamage(DamageSpecifier damage, DamageGroupPrototype group)
+    {
+        foreach (var type in group.DamageTypes)
+        {
+            if (damage.DamageDict.GetValueOrDefault(type) > FixedPoint2.Zero)
+                return true;
+        }
+        return false;
     }
 
     private (int Active, int FullyHealed) CountPatientStates(HospitalEmergencyComputerComponent comp)
@@ -1297,21 +1765,15 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
                 continue;
 
             active++;
-            if (countHealed && !HasAnyMissedInjury(patient))
+            if (countHealed && AssessDischarge(patient).Cleared)
                 healed++;
         }
 
         return (active, healed);
     }
 
-    private bool HasAnyMissedInjury(EntityUid patient)
-    {
-        return CountMissedInjuries(patient, true) > 0;
-    }
-
     private EntityUid? FindLandingZone(Entity<HospitalEmergencyComputerComponent> ent)
     {
-        EntityUid? fallback = null;
         EntityUid? nearest = null;
         var nearestDistance = float.MaxValue;
         var computerCoords = _transform.GetMapCoordinates(ent);
@@ -1320,7 +1782,6 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         var query = EntityQueryEnumerator<HospitalDropshipLandingZoneComponent, DropshipDestinationComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out _, out _, out var xform))
         {
-            fallback ??= uid;
             var zoneCoords = _transform.GetMapCoordinates(uid, xform);
             if (zoneCoords.MapId != computerMap)
                 continue;
@@ -1333,16 +1794,15 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             nearest = uid;
         }
 
-        return nearest ?? fallback;
+        return nearest;
     }
 
     private bool EnsureLandingZone(Entity<HospitalEmergencyComputerComponent> ent, TimeSpan now, bool force = false)
     {
-        if (ent.Comp.LandingZone is { } landingZone && !Deleted(landingZone))
-            return true;
-
         if (!force && now < ent.Comp.NextLandingZoneRefreshAt)
-            return false;
+            return ent.Comp.LandingZone is { } landingZone && !Deleted(landingZone) &&
+                HasComp<DropshipDestinationComponent>(landingZone) &&
+                Transform(landingZone).MapUid == Transform(ent).MapUid;
 
         var foundLandingZone = FindLandingZone(ent);
         var changed = ent.Comp.LandingZone != foundLandingZone;
@@ -1356,19 +1816,26 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
     private void CleanupShuttle(Entity<HospitalEmergencyComputerComponent> ent)
     {
-        if (ent.Comp.ActiveShuttle != null && !Deleted(ent.Comp.ActiveShuttle))
-            QueueDel(ent.Comp.ActiveShuttle);
-
-        if (ent.Comp.ReturnDestination != null && !Deleted(ent.Comp.ReturnDestination))
-            QueueDel(ent.Comp.ReturnDestination);
-
-        ent.Comp.ActiveShuttle = null;
-        ent.Comp.ReturnDestination = null;
-        ent.Comp.ShuttlePurpose = HospitalShuttlePurpose.None;
+        if (ent.Comp.ActiveShuttle is { } shuttle && TryGetTransportLease(shuttle, out var lease) &&
+            lease.Comp.Computer == ent.Owner && ReferenceEquals(lease.Comp.Controller, ent.Comp))
+        {
+            lease.Comp.Retiring = true;
+            lease.Comp.Computer = null;
+            lease.Comp.Controller = null;
+            lease.Comp.NextAction = _timing.CurTime;
+            if (!TryReclaimTransport(lease))
+                lease.Comp.Failure = "Hospital transport retained for its remaining occupants and belongings.";
+        }
+        // Unknown ownership is never permission to delete an arbitrary grid/map.
+        ClearComputerTransport(ent.Comp);
     }
 
     private void UpdateUi(Entity<HospitalEmergencyComputerComponent> ent)
     {
+        // Opening the UI rebuilds state. Unobserved consoles do not need a full
+        // anatomy/clinical assessment and BUI publication every two seconds.
+        if (TransportUnavailable(ent.Owner) || !_ui.IsUiOpen(ent.Owner, HospitalEmergencyComputerUi.Key))
+            return;
         var comp = ent.Comp;
         var remaining = GetSecondsRemaining(comp);
         var (activePatients, fullyHealedPatients) = CountPatientStates(comp);
@@ -1407,12 +1874,15 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         }
 
         return target > now
-            ? (int) Math.Ceiling((target - now).TotalSeconds)
+            ? (int) Math.Min(int.MaxValue, Math.Ceiling((target - now).TotalSeconds))
             : 0;
     }
 
     private static string GetStatusText(HospitalEmergencyComputerComponent comp, int secondsRemaining)
     {
+        if (!string.IsNullOrEmpty(comp.TransportFailure))
+            return comp.TransportFailure;
+
         return comp.Status switch
         {
             HospitalEmergencyStatus.Idle => comp.NextIncidentAt == TimeSpan.Zero
@@ -1422,10 +1892,12 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             HospitalEmergencyStatus.Arriving => "Hospital shuttle approved and inbound.",
             HospitalEmergencyStatus.ManualUnloading => "Hospital shuttle landed. Manually unload casualties.",
             HospitalEmergencyStatus.ShuttleDeparting => "Hospital shuttle departure sequence active.",
+            HospitalEmergencyStatus.WaitingForDeparture => "Hospital shuttle waiting for departure clearance.",
+            HospitalEmergencyStatus.WaitingForArrival => "Hospital shuttle awaiting arrival clearance; prepared patients remain aboard.",
             HospitalEmergencyStatus.Treating => "Casualties are in hospital care.",
             HospitalEmergencyStatus.PickupInbound => "Recovery shuttle inbound for patient release.",
             HospitalEmergencyStatus.PickupBoarding => "Recovered patients are boarding the pickup shuttle.",
-            HospitalEmergencyStatus.RewardReady => "Audit complete. Payment has been dispensed.",
+            HospitalEmergencyStatus.RewardReady => "Incident complete. Any earned payment has been dispensed.",
             _ => "Standing by",
         };
     }

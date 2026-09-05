@@ -1,6 +1,7 @@
 #pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
 
 using System.Collections.Generic;
+using Content.IntegrationTests.CMU14.Medical.Anatomy.BodyParts;
 using System.Numerics;
 using System.Reflection;
 using Content.Shared.CMU14.Medical.Core;
@@ -603,7 +604,7 @@ public sealed class RMCHumanPrototypeRegressionTest
     [TestCase("AU14HemostaticGauze", WoundType.Brute, WoundCleanupFlags.RetainedFragment)]
     [TestCase("CMBurnKit10", WoundType.Burn, WoundCleanupFlags.PoorClosure)]
     [TestCase("CMOintment10", WoundType.Burn, WoundCleanupFlags.PoorClosure)]
-    public async Task CmuBaseWoundTreatersClearCleanupBurdenAndAllowPassiveHealing(
+    public async Task CmuBaseWoundTreatersClearCleanupAndRecoverOnlyTheDressedWoundBurden(
         string treaterId,
         WoundType woundType,
         WoundCleanupFlags cleanup)
@@ -624,7 +625,8 @@ public sealed class RMCHumanPrototypeRegressionTest
             part = GetFirstBodyPart(entMan, patient);
 
             skills.SetSkill(patient, "RMCSkillMedical", 2);
-            AddBodyPartWound(entMan, part, woundType, FixedPoint2.New(1), cleanup, WoundSize.CutSmall);
+            AddBodyPartWound(entMan, part, woundType, FixedPoint2.New(1), cleanup, WoundSize.CutSmall,
+                woundType == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Slash);
             var health = entMan.GetComponent<BodyPartHealthComponent>(part);
             partHealth.SetCurrent((part, health), health.Max - FixedPoint2.New(4));
 
@@ -645,7 +647,8 @@ public sealed class RMCHumanPrototypeRegressionTest
             Assert.Multiple(() =>
             {
                 Assert.That(entMan.HasComponent<BodyPartWoundComponent>(part), Is.False);
-                Assert.That(health.Current, Is.EqualTo(health.Max));
+                Assert.That(health.Current, Is.EqualTo(health.Max - FixedPoint2.New(3)),
+                    "One dressed wound unit cannot heal three unrelated structural damage units.");
             });
         });
 
@@ -747,8 +750,8 @@ public sealed class RMCHumanPrototypeRegressionTest
 
             skills.SetSkill(unskilled, "RMCSkillMedical", 0);
             unskilledPart = GetFirstBodyPart(entMan, unskilled);
-            AddBodyPartWound(entMan, unskilledPart, WoundType.Brute);
-            AddBodyPartWound(entMan, unskilledPart, WoundType.Brute);
+            AddBodyPartWound(entMan, unskilledPart, WoundType.Brute, mechanism: WoundMechanism.Slash);
+            AddBodyPartWound(entMan, unskilledPart, WoundType.Brute, mechanism: WoundMechanism.Slash);
 
             var unskilledInteract = new AfterInteractEvent(unskilled, unskilledTreater, unskilled, default, true);
             entMan.EventBus.RaiseLocalEvent(unskilledTreater, unskilledInteract);
@@ -757,8 +760,8 @@ public sealed class RMCHumanPrototypeRegressionTest
 
             skills.SetSkill(corpsman, "RMCSkillMedical", 2);
             corpsmanPart = GetFirstBodyPart(entMan, corpsman);
-            AddBodyPartWound(entMan, corpsmanPart, WoundType.Brute);
-            AddBodyPartWound(entMan, corpsmanPart, WoundType.Brute);
+            AddBodyPartWound(entMan, corpsmanPart, WoundType.Brute, mechanism: WoundMechanism.Slash);
+            AddBodyPartWound(entMan, corpsmanPart, WoundType.Brute, mechanism: WoundMechanism.Slash);
 
             var corpsmanInteract = new AfterInteractEvent(corpsman, corpsmanTreater, corpsman, default, true);
             entMan.EventBus.RaiseLocalEvent(corpsmanTreater, corpsmanInteract);
@@ -830,7 +833,6 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            var damageable = entMan.System<DamageableSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var hands = entMan.System<SharedHandsSystem>();
             var skills = entMan.System<SkillsSystem>();
@@ -842,18 +844,13 @@ public sealed class RMCHumanPrototypeRegressionTest
             Assert.That(hands.TryPickupAnyHand(patient, treater, checkActionBlocker: false), Is.True);
 
             torso = GetBodyPart(entMan, patient, BodyPartType.Torso, BodyPartSymmetry.None);
+            SeedAttributedMedicalDamage(entMan, patient, torso, damageType, FixedPoint2.New(50));
             AddBodyPartWound(entMan, torso, woundType);
 
             var wounds = entMan.GetComponent<BodyPartWoundComponent>(torso);
             var health = entMan.GetComponent<BodyPartHealthComponent>(torso);
             cap = health.Max * SharedCMUWoundsSystem.ComputeFieldTreatmentCap(wounds);
             partHealth.SetCurrent((torso, health), cap - FixedPoint2.New(2));
-
-            var damage = entMan.GetComponent<DamageableComponent>(patient);
-            damageable.SetDamage((patient, damage), new DamageSpecifier
-            {
-                DamageDict = { [damageType] = FixedPoint2.New(50) },
-            });
 
             var interact = new AfterInteractEvent(patient, treater, patient, default, true);
             entMan.EventBus.RaiseLocalEvent(treater, interact);
@@ -911,7 +908,6 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            var damageable = entMan.System<DamageableSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var hands = entMan.System<SharedHandsSystem>();
             var skills = entMan.System<SkillsSystem>();
@@ -925,6 +921,8 @@ public sealed class RMCHumanPrototypeRegressionTest
             torso = GetBodyPart(entMan, patient, BodyPartType.Torso, BodyPartSymmetry.None);
             rightArm = GetBodyPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Right);
 
+            SeedAttributedMedicalDamage(entMan, patient, torso, damageType, FixedPoint2.New(25));
+            SeedAttributedMedicalDamage(entMan, patient, rightArm, damageType, FixedPoint2.New(25));
             AddBodyPartWound(entMan, torso, woundType);
             AddBodyPartWound(entMan, rightArm, woundType);
 
@@ -937,12 +935,6 @@ public sealed class RMCHumanPrototypeRegressionTest
             armCap = armHealth.Max * SharedCMUWoundsSystem.ComputeFieldTreatmentCap(armWounds);
             partHealth.SetCurrent((torso, torsoHealth), torsoCap);
             partHealth.SetCurrent((rightArm, armHealth), armCap - FixedPoint2.New(2));
-
-            var damage = entMan.GetComponent<DamageableComponent>(patient);
-            damageable.SetDamage((patient, damage), new DamageSpecifier
-            {
-                DamageDict = { [damageType] = FixedPoint2.New(50) },
-            });
 
             var interact = new AfterInteractEvent(patient, treater, patient, default, true);
             entMan.EventBus.RaiseLocalEvent(treater, interact);
@@ -999,7 +991,6 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            var damageable = entMan.System<DamageableSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var hands = entMan.System<SharedHandsSystem>();
             var skills = entMan.System<SkillsSystem>();
@@ -1011,16 +1002,11 @@ public sealed class RMCHumanPrototypeRegressionTest
             Assert.That(hands.TryPickupAnyHand(patient, treater, checkActionBlocker: false), Is.True);
 
             torso = GetBodyPart(entMan, patient, BodyPartType.Torso, BodyPartSymmetry.None);
+            SeedAttributedMedicalDamage(entMan, patient, torso, damageType, FixedPoint2.New(50));
             AddBodyPartWound(entMan, torso, woundType, size: WoundSize.CutSmall);
 
             var health = entMan.GetComponent<BodyPartHealthComponent>(torso);
             partHealth.SetCurrent((torso, health), FixedPoint2.New(50));
-
-            var damage = entMan.GetComponent<DamageableComponent>(patient);
-            damageable.SetDamage((patient, damage), new DamageSpecifier
-            {
-                DamageDict = { [damageType] = FixedPoint2.New(50) },
-            });
 
             var interact = new AfterInteractEvent(patient, treater, patient, default, true);
             entMan.EventBus.RaiseLocalEvent(treater, interact);
@@ -1068,7 +1054,6 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            var damageable = entMan.System<DamageableSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var hands = entMan.System<SharedHandsSystem>();
             var skills = entMan.System<SkillsSystem>();
@@ -1080,18 +1065,13 @@ public sealed class RMCHumanPrototypeRegressionTest
             Assert.That(hands.TryPickupAnyHand(patient, treater, checkActionBlocker: false), Is.True);
 
             torso = GetBodyPart(entMan, patient, BodyPartType.Torso, BodyPartSymmetry.None);
+            SeedAttributedMedicalDamage(entMan, patient, torso, damageType, FixedPoint2.New(50));
             AddBodyPartWound(entMan, torso, woundType, size: WoundSize.CutSmall);
 
             var health = entMan.GetComponent<BodyPartHealthComponent>(torso);
             var initialHealth = health.Max - FixedPoint2.New(15);
             expectedCap = initialHealth + (health.Max - initialHealth) / 2;
             partHealth.SetCurrent((torso, health), initialHealth);
-
-            var damage = entMan.GetComponent<DamageableComponent>(patient);
-            damageable.SetDamage((patient, damage), new DamageSpecifier
-            {
-                DamageDict = { [damageType] = FixedPoint2.New(50) },
-            });
 
             var interact = new AfterInteractEvent(patient, treater, patient, default, true);
             entMan.EventBus.RaiseLocalEvent(treater, interact);
@@ -1138,7 +1118,6 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            var damageable = entMan.System<DamageableSystem>();
             var partHealth = entMan.System<SharedBodyPartHealthSystem>();
             var hands = entMan.System<SharedHandsSystem>();
             var skills = entMan.System<SkillsSystem>();
@@ -1150,17 +1129,12 @@ public sealed class RMCHumanPrototypeRegressionTest
             Assert.That(hands.TryPickupAnyHand(patient, treater, checkActionBlocker: false), Is.True);
 
             torso = GetBodyPart(entMan, patient, BodyPartType.Torso, BodyPartSymmetry.None);
+            SeedAttributedMedicalDamage(entMan, patient, torso, damageType, FixedPoint2.New(50));
             AddBodyPartWound(entMan, torso, woundType, size: WoundSize.CutSmall);
             AddBodyPartWound(entMan, torso, woundType, size: WoundSize.CutMassive);
 
             var health = entMan.GetComponent<BodyPartHealthComponent>(torso);
             partHealth.SetCurrent((torso, health), FixedPoint2.New(60));
-
-            var damage = entMan.GetComponent<DamageableComponent>(patient);
-            damageable.SetDamage((patient, damage), new DamageSpecifier
-            {
-                DamageDict = { [damageType] = FixedPoint2.New(50) },
-            });
 
             var interact = new AfterInteractEvent(patient, treater, patient, default, true);
             entMan.EventBus.RaiseLocalEvent(treater, interact);
@@ -1255,7 +1229,7 @@ public sealed class RMCHumanPrototypeRegressionTest
     }
 
     [Test]
-    public async Task CmuSeveredLimbRemovesItsRemainingBruteAndBurnWoundDamage()
+    public async Task CmuSeveringSyntheticWoundsDoesNotEraseUnattributedBodyDamage()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -1283,14 +1257,14 @@ public sealed class RMCHumanPrototypeRegressionTest
                     },
                 });
 
-                var severed = new BodyPartSeveredEvent(patient, rightArm, BodyPartType.Arm);
+                var severed = new BodyPartSeverAttemptEvent(patient, rightArm, BodyPartType.Arm);
                 entMan.EventBus.RaiseLocalEvent(rightArm, ref severed);
 
                 var after = entMan.GetComponent<DamageableComponent>(patient);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(DamageInGroup(prototypes, after.Damage, "Brute"), Is.EqualTo(FixedPoint2.Zero));
-                    Assert.That(DamageInGroup(prototypes, after.Damage, "Burn"), Is.EqualTo(FixedPoint2.Zero));
+                    Assert.That(DamageInGroup(prototypes, after.Damage, "Brute"), Is.EqualTo(FixedPoint2.New(35)));
+                    Assert.That(DamageInGroup(prototypes, after.Damage, "Burn"), Is.EqualTo(FixedPoint2.New(15)));
                 });
             }
             finally
@@ -1303,7 +1277,7 @@ public sealed class RMCHumanPrototypeRegressionTest
     }
 
     [Test]
-    public async Task CmuBodyPartHealingPrefersTreatmentOriginPart()
+    public async Task CmuBodyPartHealingUsesExplicitAttributedSite()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -1320,6 +1294,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                 var torso = GetBodyPart(entMan, patient, BodyPartType.Torso, BodyPartSymmetry.None);
                 var leftArm = GetBodyPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Left);
 
+                entMan.System<SharedHitLocationSystem>().SetForcedHit(patient, BodyPartType.Torso);
                 damageable.TryChangeDamage(patient, new DamageSpecifier
                 {
                     DamageDict = { ["Blunt"] = FixedPoint2.New(50) },
@@ -1333,16 +1308,12 @@ public sealed class RMCHumanPrototypeRegressionTest
                 var torsoBefore = torsoHealth.Current;
                 var armBefore = armHealth.Current;
 
-                var damage = entMan.GetComponent<DamageableComponent>(patient);
-                damageable.TryChangeDamage(patient, new DamageSpecifier
-                {
-                    DamageDict = { ["Blunt"] = FixedPoint2.New(-10) },
-                }, true, false, damage, origin: leftArm);
+                partHealth.HealPartDamage(patient, torso, "Brute", FixedPoint2.New(10));
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(armHealth.Current, Is.GreaterThan(armBefore));
-                    Assert.That(torsoHealth.Current, Is.EqualTo(torsoBefore));
+                    Assert.That(armHealth.Current, Is.EqualTo(armBefore));
+                    Assert.That(torsoHealth.Current, Is.GreaterThan(torsoBefore));
                 });
             }
             finally
@@ -2355,6 +2326,9 @@ public sealed class RMCHumanPrototypeRegressionTest
 
             skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
             standing.Down(patient, playSound: false, dropHeldItems: false, force: true);
+            // The real tool-use entry point supplies a held tool. Completion now
+            // rejects a scalpel that is merely passed to this public flow method.
+            Assert.That(entMan.System<SharedHandsSystem>().TryPickupAnyHand(surgeon, scalpel), Is.True);
 
             var root = body.GetRootPartOrNull(patient);
             Assert.That(root, Is.Not.Null);
@@ -2401,6 +2375,7 @@ public sealed class RMCHumanPrototypeRegressionTest
 
             Assert.Multiple(() =>
             {
+                Assert.That(entMan.System<SharedHandsSystem>().IsHolding(surgeon, scalpel), Is.True);
                 Assert.That(entMan.HasComponent<CMIncisionOpenComponent>(socketAnchor), Is.True);
                 Assert.That(entMan.HasComponent<CMIncisionOpenComponent>(patient), Is.False);
                 Assert.That(armed.LeafSurgeryId, Is.EqualTo("CMUSurgeryReattachLimb"));
@@ -2572,12 +2547,16 @@ public sealed class RMCHumanPrototypeRegressionTest
                     },
                 };
 
-                damageable.TryChangeDamage(closeHuman, damage, ignoreResistances: true);
-                var closeExplosion = new ExplosionReceivedEvent("RMC", new MapCoordinates(new Vector2(1, 0), map.MapId), damage);
+                var closePreparing = new ExplosionDamagePreparingEvent(new MapCoordinates(new Vector2(1, 0), map.MapId), damage);
+                entMan.EventBus.RaiseLocalEvent(closeHuman, ref closePreparing);
+                var closeApplied = damageable.TryChangeDamage(closeHuman, closePreparing.Damage, ignoreResistances: true, impact: DamageImpact.Explosion);
+                var closeExplosion = new ExplosionReceivedEvent("RMC", closePreparing.Epicenter, closeApplied!);
                 entMan.EventBus.RaiseLocalEvent(closeHuman, ref closeExplosion);
 
-                damageable.TryChangeDamage(farHuman, damage, ignoreResistances: true);
-                var farExplosion = new ExplosionReceivedEvent("RMC", new MapCoordinates(new Vector2(7, 0), map.MapId), damage);
+                var farPreparing = new ExplosionDamagePreparingEvent(new MapCoordinates(new Vector2(7, 0), map.MapId), damage);
+                entMan.EventBus.RaiseLocalEvent(farHuman, ref farPreparing);
+                var farApplied = damageable.TryChangeDamage(farHuman, farPreparing.Damage, ignoreResistances: true, impact: DamageImpact.Explosion);
+                var farExplosion = new ExplosionReceivedEvent("RMC", farPreparing.Epicenter, farApplied!);
                 entMan.EventBus.RaiseLocalEvent(farHuman, ref farExplosion);
 
                 var closeTotal = entMan.GetComponent<DamageableComponent>(closeHuman).TotalDamage;
@@ -2734,13 +2713,29 @@ public sealed class RMCHumanPrototypeRegressionTest
         return detachedBody!.Value;
     }
 
+    private static void SeedAttributedMedicalDamage(IEntityManager entities, EntityUid patient,
+        EntityUid part, string type, FixedPoint2 amount)
+    {
+        entities.System<RegionalDamageProbeSystem>();
+        var probe = entities.EnsureComponent<RegionalDamageProbeComponent>(patient);
+        probe.Target = part;
+        var applied = entities.System<DamageableSystem>().TryChangeDamage(patient,
+            new DamageSpecifier { DamageDict = { [type] = amount } }, ignoreResistances: true);
+        Assert.That(applied!.GetTotal(), Is.EqualTo(amount));
+        // Retain the real regional debt while replacing the generated wound rows
+        // with the deliberate wound-cap fixture used by these treatment tests.
+        entities.System<SharedCMUWoundsSystem>().ClearAllWounds(part);
+        entities.RemoveComponent<RegionalDamageProbeComponent>(patient);
+    }
+
     private static void AddBodyPartWound(
         IEntityManager entMan,
         EntityUid part,
         WoundType type,
         FixedPoint2? damage = null,
         WoundCleanupFlags cleanup = WoundCleanupFlags.None,
-        WoundSize size = WoundSize.CutDeep)
+        WoundSize size = WoundSize.CutDeep,
+        WoundMechanism? mechanism = null)
     {
         var ledger = entMan.System<CMUWoundLedgerSystem>();
         var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
@@ -2748,7 +2743,7 @@ public sealed class RMCHumanPrototypeRegressionTest
             new Wound(damage ?? FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false),
             size,
             0,
-            type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic,
+            mechanism ?? (type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic),
             WoundMechanismFlags.None,
             WoundTreatmentQuality.Untreated,
             cleanup)), Is.GreaterThanOrEqualTo(0));

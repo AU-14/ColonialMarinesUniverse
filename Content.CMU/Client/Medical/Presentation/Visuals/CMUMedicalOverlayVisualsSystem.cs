@@ -8,6 +8,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.Humanoid;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameStates;
+using Robust.Shared.Configuration;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
@@ -16,6 +17,10 @@ namespace Content.Client.CMU14.Medical.Presentation.Visuals;
 public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
 {
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private DamageVisualsSystem _damageVisuals = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+
+    private bool _medicalEnabled;
 
     private const int TreatmentOverlayKindCount = 2;
     private const int VariantCount = 4;
@@ -95,6 +100,7 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CMUHumanMedicalComponent, ComponentStartup>(OnMedicalBodyStartup);
+        SubscribeLocalEvent<CMUHumanMedicalComponent, ComponentShutdown>(OnMedicalBodyRemoved);
         SubscribeLocalEvent<VisualBodyComponent, ComponentStartup>(OnHumanoidChanged);
         SubscribeLocalEvent<VisualBodyComponent, BodyPartAddedEvent>(OnHumanoidChanged);
         SubscribeLocalEvent<VisualBodyComponent, BodyPartRemovedEvent>(OnHumanoidChanged);
@@ -102,7 +108,19 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
         SubscribeLocalEvent<CMUMedicalOverlayVisualsComponent, ComponentStartup>(OnMedicalVisualsChanged);
         SubscribeLocalEvent<CMUMedicalOverlayVisualsComponent, ComponentRemove>(OnMedicalVisualsChanged);
         SubscribeLocalEvent<CMUMedicalOverlayVisualsComponent, AfterAutoHandleStateEvent>(OnMedicalVisualsState);
+        _cfg.OnValueChanged(CMUMedicalCCVars.Enabled, OnMedicalEnabledChanged, true);
     }
+
+    private void OnMedicalEnabledChanged(bool enabled)
+    {
+        _medicalEnabled = enabled;
+        var query = EntityQueryEnumerator<VisualBodyComponent>();
+        while (query.MoveNext(out var body, out _))
+            QueueBody(body);
+    }
+
+    private void OnMedicalBodyRemoved(Entity<CMUHumanMedicalComponent> ent, ref ComponentShutdown args)
+        => QueueBody(ent.Owner);
 
     public override void Update(float frameTime)
     {
@@ -139,16 +157,24 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
 
     private void UpdateBody(EntityUid body)
     {
+        var ownsVisuals = _medicalEnabled && TryComp<CMUHumanMedicalComponent>(body, out var medical) &&
+                         medical.LifeStage <= ComponentLifeStage.Running &&
+                         HasComp<VisualBodyComponent>(body) && HasComp<CMUMedicalOverlayVisualsComponent>(body);
+        _damageVisuals.SetMedicalOverride(body, ownsVisuals);
         if (!TryComp<SpriteComponent>(body, out var sprite))
             return;
 
-        if (!HasComp<VisualBodyComponent>(body))
-            return;
-
         Entity<SpriteComponent> bodySprite = (body, sprite);
-        DisableAggregateDamageVisuals(bodySprite);
         _desiredOverlays.Clear();
         _desiredOverlayKeys.Clear();
+
+        if (!ownsVisuals)
+        {
+            RemoveStaleOverlayLayers(bodySprite);
+            return;
+        }
+
+        DisableAggregateDamageVisuals(bodySprite);
 
         if (TryComp<CMUMedicalOverlayVisualsComponent>(body, out var medicalVisuals))
         {
@@ -209,8 +235,6 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
     {
         if (!TryComp<DamageVisualsComponent>(body.Owner, out var damageVisuals))
             return;
-
-        damageVisuals.Disabled = true;
 
         if (damageVisuals.DamageOverlayGroups is null)
             return;

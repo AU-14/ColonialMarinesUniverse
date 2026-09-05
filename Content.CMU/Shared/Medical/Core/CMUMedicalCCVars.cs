@@ -82,16 +82,6 @@ public sealed partial class CMUMedicalCCVars : CVars
     public static readonly CVarDef<bool> SeveranceTorsoDisabled =
         CVarDef.Create("cmu.medical.severance.torso_disabled", true, CVar.REPLICATED | CVar.SERVER);
 
-    /// <summary>
-    ///     Seconds the shooter's last aim-mode click stays authoritative for. After
-    ///     this window the routing layer falls back to weighted-random.
-    /// </summary>
-    public static readonly CVarDef<float> AimModeFreshnessSeconds =
-        CVarDef.Create("cmu.medical.aim_mode.freshness_seconds", 3f, CVar.REPLICATED | CVar.SERVER);
-
-    public static readonly CVarDef<float> BoneBruteAbsorb =
-        CVarDef.Create("cmu.medical.bone.brute_absorb", 0.6f, CVar.REPLICATED | CVar.SERVER);
-
     public static readonly CVarDef<float> BoneHealRate =
         CVarDef.Create("cmu.medical.bone.heal_rate", 1.0f, CVar.REPLICATED | CVar.SERVER);
 

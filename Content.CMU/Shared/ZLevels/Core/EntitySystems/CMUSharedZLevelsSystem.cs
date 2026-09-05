@@ -67,22 +67,17 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     {
         zLevel = null;
 
-        if (_zMapQuery.TryComp(mapUid, out var zLevelMapComp) &&
+        if (!TerminatingOrDeleted(mapUid) &&
+            _mapQuery.HasComp(mapUid) &&
+            _zMapQuery.TryComp(mapUid, out var zLevelMapComp) &&
             zLevelMapComp.NetworkUid.IsValid() &&
             !TerminatingOrDeleted(zLevelMapComp.NetworkUid) &&
-            TryComp<CMUZLevelsNetworkComponent>(zLevelMapComp.NetworkUid, out var cachedNetwork))
+            TryComp<CMUZLevelsNetworkComponent>(zLevelMapComp.NetworkUid, out var cachedNetwork) &&
+            cachedNetwork.LifeStage <= ComponentLifeStage.Running &&
+            cachedNetwork.ZLevels.TryGetValue(zLevelMapComp.Depth, out var member) &&
+            member == mapUid)
         {
             zLevel = (zLevelMapComp.NetworkUid, cachedNetwork);
-            return true;
-        }
-
-        var query = EntityQueryEnumerator<CMUZLevelsNetworkComponent>();
-        while (query.MoveNext(out var uid, out var zLevelComp))
-        {
-            if (!zLevelComp.ZLevelByEntity.ContainsKey(mapUid))
-                continue;
-
-            zLevel = (uid, zLevelComp);
             return true;
         }
 
@@ -91,7 +86,7 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
 
     [PublicAPI]
     public bool IsMapInNetwork(Entity<CMUZLevelsNetworkComponent> network, EntityUid mapUid)
-        => network.Comp.ZLevelByEntity.ContainsKey(mapUid);
+        => TryGetZNetwork(mapUid, out var memberNetwork) && memberNetwork.Value.Owner == network.Owner;
 
     [PublicAPI]
     public bool IsSameZNetwork(MapId mapId, MapId primaryMapId)
@@ -112,17 +107,33 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     {
         var maps = new List<EntityUid> { mapUid };
 
-        if (TryGetZNetwork(mapUid, out var network)
-            && TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+        if (TryGetZNetwork(mapUid, out var network))
         {
-            for (var depth = minDepth; depth <= maxDepth; depth++)
+            foreach (var (_, map) in GetOrderedNetworkMaps(network.Value))
             {
-                if (TryGetMapAtDepth(network.Value, depth, out var map)
-                    && map != mapUid)
+                if (map != mapUid)
                     maps.Add(map);
             }
         }
 
+        return maps;
+    }
+
+    /// <summary>
+    /// Returns a depth-ordered snapshot of live membership. Work is proportional to the
+    /// number of maps, including for sparse networks and depths at either integer limit.
+    /// A snapshot permits callers to raise events that change topology while iterating.
+    /// </summary>
+    public List<(int Depth, EntityUid Map)> GetOrderedNetworkMaps(Entity<CMUZLevelsNetworkComponent> network)
+    {
+        var maps = new List<(int Depth, EntityUid Map)>(network.Comp.ZLevels.Count);
+        foreach (var (depth, _) in network.Comp.ZLevels)
+        {
+            if (TryGetMapAtDepth(network, depth, out var map))
+                maps.Add((depth, map));
+        }
+
+        maps.Sort((a, b) => a.Depth.CompareTo(b.Depth));
         return maps;
     }
 
@@ -143,51 +154,18 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         [NotNullWhen(true)] out Entity<CMUZLevelMapComponent>? outputMapUid)
     {
         outputMapUid = null;
-        if (!Resolve(inputMapUid, ref inputMapUid.Comp, false))
+        if (!Resolve(inputMapUid, ref inputMapUid.Comp, false) ||
+            !TryGetZNetwork(inputMapUid.Owner, out var network))
             return false;
 
-        if (offset == 1 &&
-            inputMapUid.Comp.MapAbove is { } mapAbove &&
-            _zMapQuery.TryComp(mapAbove, out var mapAboveComp))
-        {
-            outputMapUid = (mapAbove, mapAboveComp);
-            return true;
-        }
+        var targetDepth = (long) inputMapUid.Comp.Depth + offset;
+        if (targetDepth < int.MinValue || targetDepth > int.MaxValue ||
+            !TryGetMapAtDepth(network.Value, (int) targetDepth, out var target) ||
+            !_zMapQuery.TryComp(target, out var targetComp))
+            return false;
 
-        if (offset == -1 &&
-            inputMapUid.Comp.MapBelow is { } mapBelow &&
-            _zMapQuery.TryComp(mapBelow, out var mapBelowComp))
-        {
-            outputMapUid = (mapBelow, mapBelowComp);
-            return true;
-        }
-
-        if (inputMapUid.Comp.NetworkUid.IsValid() &&
-            TryComp<CMUZLevelsNetworkComponent>(inputMapUid.Comp.NetworkUid, out var cachedNetwork) &&
-            cachedNetwork.ZLevels.TryGetValue(inputMapUid.Comp.Depth + offset, out var cachedTargetMapUid) &&
-            _zMapQuery.TryComp(cachedTargetMapUid, out var cachedTargetZLevelComp))
-        {
-            outputMapUid = (cachedTargetMapUid.Value, cachedTargetZLevelComp);
-            return true;
-        }
-
-        var query = EntityQueryEnumerator<CMUZLevelsNetworkComponent>();
-        while (query.MoveNext(out var network))
-        {
-            if (!network.ZLevelByEntity.TryGetValue(inputMapUid, out var inputDepth))
-                continue;
-
-            if (!network.ZLevels.TryGetValue(inputDepth + offset, out var targetMapUid))
-                continue;
-
-            if (!_zMapQuery.TryComp(targetMapUid, out var targetZLevelComp))
-                continue;
-
-            outputMapUid = (targetMapUid.Value, targetZLevelComp);
-            return true;
-        }
-
-        return false;
+        outputMapUid = (target, targetComp);
+        return true;
     }
 
     [PublicAPI]
@@ -259,11 +237,10 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         var result = new List<EntityUid>();
         var currentMap = inputMapUid;
 
-        while (currentMap.Comp.MapAbove is { } above &&
-               _zMapQuery.TryComp(above, out var aboveComp))
+        while (TryMapUp((currentMap.Owner, currentMap.Comp), out var above))
         {
-            result.Add(above);
-            currentMap = (above, aboveComp);
+            result.Add(above.Value.Owner);
+            currentMap = above.Value;
         }
 
         return result;
@@ -278,11 +255,10 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         var result = new List<EntityUid>();
         var currentMap = inputMapUid;
 
-        while (currentMap.Comp.MapBelow is { } below &&
-               _zMapQuery.TryComp(below, out var belowComp))
+        while (TryMapDown((currentMap.Owner, currentMap.Comp), out var below))
         {
-            result.Add(below);
-            currentMap = (below, belowComp);
+            result.Add(below.Value.Owner);
+            currentMap = below.Value;
         }
 
         return result;
@@ -293,17 +269,19 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     {
         minDepth = int.MaxValue;
         maxDepth = int.MinValue;
+        var found = false;
 
         foreach (var entry in network.Comp.ZLevels)
         {
-            if (!entry.Value.HasValue)
+            if (!TryGetMapAtDepth(network, entry.Key, out _))
                 continue;
 
+            found = true;
             minDepth = Math.Min(minDepth, entry.Key);
             maxDepth = Math.Max(maxDepth, entry.Key);
         }
 
-        return minDepth != int.MaxValue;
+        return found;
     }
 
     [PublicAPI]
@@ -311,8 +289,12 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     {
         map = default;
 
-        if (!network.Comp.ZLevels.TryGetValue(depth, out var mapUid) ||
-            mapUid is not { } resolved)
+        if (TerminatingOrDeleted(network.Owner) ||
+            network.Comp.LifeStage > ComponentLifeStage.Running ||
+            !network.Comp.ZLevels.TryGetValue(depth, out var mapUid) ||
+            mapUid is not { } resolved ||
+            !TryGetZNetwork(resolved, out var memberNetwork) ||
+            memberNetwork.Value.Owner != network.Owner)
         {
             return false;
         }

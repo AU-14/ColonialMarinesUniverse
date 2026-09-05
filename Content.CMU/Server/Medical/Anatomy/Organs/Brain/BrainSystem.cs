@@ -1,13 +1,11 @@
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
 using Content.Shared.CMU14.Medical.Injuries.Vision;
-using Content.Shared._RMC14.Medical.HUD;
-using Content.Shared._RMC14.Medical.HUD.Components;
+using Content.Shared._RMC14.Medical.HUD.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
-using Content.Shared.Speech.Components;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Robust.Shared.GameObjects;
@@ -18,6 +16,7 @@ namespace Content.Server.CMU14.Medical.Anatomy.Organs.Brain;
 public sealed partial class BrainSystem : SharedBrainSystem
 {
     [Dependency] private CMUTemporaryBlurryVisionSystem _blur = default!;
+    [Dependency] private HolocardSystem _holocard = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -39,12 +38,7 @@ public sealed partial class BrainSystem : SharedBrainSystem
     {
         Status.TrySetStatusEffectDuration(body, ForcedSleeping, duration: null);
 
-        if (TryComp<HolocardStateComponent>(body, out var holocard)
-            && holocard.HolocardStatus != HolocardStatus.Permadead)
-        {
-            holocard.HolocardStatus = HolocardStatus.Permadead;
-            Dirty(body, holocard);
-        }
+        _holocard.SetBrainRemovalAssessment(body, true);
 
         if (TryComp<MobStateComponent>(body, out var mobState)
             && mobState.CurrentState != MobState.Dead)
@@ -52,12 +46,6 @@ public sealed partial class BrainSystem : SharedBrainSystem
             _mobState.ChangeMobState(body, MobState.Dead, mobState);
         }
     }
-
-    protected override void ApplySlurredSpeech(EntityUid body)
-        => EnsureComp<SlurredAccentComponent>(body);
-
-    protected override void ClearSlurredSpeech(EntityUid body)
-        => RemComp<SlurredAccentComponent>(body);
 
     protected override void ApplyDisorientation(
         EntityUid body,

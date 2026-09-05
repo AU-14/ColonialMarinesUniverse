@@ -192,13 +192,6 @@ public sealed partial class RMCChemicalEffectSystem
         RaiseLocalEvent(target, ref ev);
     }
 
-    internal bool CanChemicallyDefibrillate(EntityUid target)
-    {
-        var ev = new RMCDefibrillatorAttemptEvent(target, allowBeatingHeart: true);
-        RaiseLocalEvent(target, ev);
-        return !ev.Cancelled;
-    }
-
     internal void RaiseVomit(EntityUid target)
     {
         var ev = new RMCVomitEvent(target);

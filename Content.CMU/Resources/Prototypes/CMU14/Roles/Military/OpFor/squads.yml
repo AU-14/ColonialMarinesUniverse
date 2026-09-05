@@ -9,6 +9,7 @@
     roundStart: true
     color: "#bb91d8"
     radio: radioOpforAlpha
+    supplyDropPadSquad: SquadAlpha
     group: OPFOR
     minimapBackground:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -26,6 +27,7 @@
     color: "#c6c1a8"
     group: OPFOR
     radio: radioOpforBravo
+    supplyDropPadSquad: SquadBravo
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_tango
@@ -41,6 +43,7 @@
     roundStart: true
     color: "#7A967E"
     radio: radioOpforCharlie
+    supplyDropPadSquad: SquadCharlie
     group: OPFOR
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -58,6 +61,7 @@
     color: "#1E90FF"
     group: OPFOR
     radio: radioOpforIntel
+    supplyDropPadSquad: SquadDelta
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_intel

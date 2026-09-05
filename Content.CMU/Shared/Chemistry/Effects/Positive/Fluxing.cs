@@ -26,6 +26,9 @@ public sealed partial class Fluxing : RMCChemicalEffect
     {
         var status = system.ChemicalPropertyStatus;
         var fluxing = status.ApplyFluxing(args.TargetEntity, (float)potency);
+        if (fluxing == null)
+            return;
+
         var count = (int)MathF.Floor(fluxing.Progress);
         if (count <= 0)
             return;

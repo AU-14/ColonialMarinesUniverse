@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -15,6 +16,13 @@ namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 [Access(typeof(SharedBodyPartHealthSystem))]
 public sealed partial class BodyPartHealthComponent : Component
 {
+    /// <summary>
+    ///     Outstanding typed contribution to the attached body's aggregate damage. Wounds and structural HP
+    ///     describe this injury; they are not additional aggregate debts. This server-owned ledger is not sent to clients.
+    /// </summary>
+    [DataField]
+    public DamageSpecifier BodyDamage = new();
+
     [DataField, AutoNetworkedField]
     public FixedPoint2 Max = 100;
 

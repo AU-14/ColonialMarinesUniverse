@@ -12,3 +12,7 @@ public readonly record struct ExplosionReceivedEvent(
     MapCoordinates Epicenter,
     DamageSpecifier Damage,
     MobState? StateBeforeDamage = null);
+
+/// <summary>Allows content to scale the single incoming explosion transaction before aggregate damage commits.</summary>
+[ByRefEvent]
+public record struct ExplosionDamagePreparingEvent(MapCoordinates Epicenter, DamageSpecifier Damage);

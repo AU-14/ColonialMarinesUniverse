@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -51,6 +52,6 @@ public sealed partial class Neuroshielding : RMCChemicalEffect
         damage.DamageDict[PoisonType] = potency * 4f;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
         system.ChemicalMedical
-            .DamageOrgan<CMUBrainComponent>(args.TargetEntity, potency * 4f, ShockType);
+            .DamageOrgan<CMUBrainComponent>(args.TargetEntity, potency * 4f, ShockType, OrganDamageSource.Direct);
     }
 }

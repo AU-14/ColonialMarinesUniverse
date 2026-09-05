@@ -124,13 +124,15 @@ public sealed partial class StatusEffectsSystem : EntitySystem
     private bool TryApplyStatusEffect(Entity<StatusEffectComponent> statusEffectEnt)
     {
         if (statusEffectEnt.Comp.Applied ||
-            statusEffectEnt.Comp.AppliedTo == null ||
+            statusEffectEnt.Comp.AppliedTo is not { } target || !IsCurrentStatusEffect(statusEffectEnt, target) ||
             _timing.CurTime < statusEffectEnt.Comp.StartEffectTime)
             return false;
 
         var ev = new StatusEffectAppliedEvent(statusEffectEnt.Comp.AppliedTo.Value);
         RaiseLocalEvent(statusEffectEnt, ref ev);
 
+        if (!IsCurrentStatusEffect(statusEffectEnt, target))
+            return false;
         statusEffectEnt.Comp.Applied = true;
 
         return true;
@@ -138,6 +140,9 @@ public sealed partial class StatusEffectsSystem : EntitySystem
 
     public bool CanAddStatusEffect(EntityUid uid, EntProtoId effectProto, bool force = false)
     {
+        if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
+            return false;
+
         if (!ProtoMan.Resolve(effectProto, out var effectProtoData))
             return false;
 
@@ -153,15 +158,54 @@ public sealed partial class StatusEffectsSystem : EntitySystem
         var ev = new BeforeStatusEffectAddedEvent(effectProto);
         RaiseLocalEvent(uid, ref ev);
 
-        if (ev.Cancelled)
-            return false;
-
-        return true;
+        // Permission handlers may delete their patient. Force bypasses gameplay
+        // vetoes, but neither path may create a container on retiring anatomy.
+        return !ev.Cancelled && !TerminatingOrDeleted(uid) && !EntityManager.IsQueuedForDeletion(uid);
     }
 
     /// <summary>
-    /// Attempts to add a status effect to the specified entity. Returns True if the effect is added, does not check if one
-    /// already exists as it's intended to be called after a check for an existing effect has already failed.
+    /// A renewed status must not reuse an entity already committed to deletion.
+    /// Retire that one source and re-read after its public removal callbacks.
+    /// </summary>
+    private bool TryPrepareStatusEffectRenewal(EntityUid target, EntProtoId prototype,
+        out Entity<StatusEffectComponent>? effect)
+    {
+        effect = null;
+        if (TerminatingOrDeleted(target) || EntityManager.IsQueuedForDeletion(target))
+            return false;
+        if (!TryGetStatusEffect(target, prototype, out var current))
+            return true;
+
+        if (EntityManager.IsQueuedForDeletion(current.Value) && !TerminatingOrDeleted(current.Value))
+        {
+            // On clients this detaches a networked entity for prediction, rather
+            // than attempting to delete the server's entity directly.
+            PredictedDel(current.Value);
+            if (TerminatingOrDeleted(target) || EntityManager.IsQueuedForDeletion(target))
+                return false;
+            if (!TryGetStatusEffect(target, prototype, out current))
+                return true;
+        }
+
+        // A removal callback may have installed a newer source. Reuse it only if
+        // it remains current; do not loop through arbitrarily many replacements.
+        if (!_effectQuery.TryComp(current, out var component) || !IsCurrentStatusEffect((current.Value, component), target))
+            return false;
+        effect = (current.Value, component);
+        return true;
+    }
+
+    private bool IsCurrentStatusEffect(Entity<StatusEffectComponent> effect, EntityUid target)
+        => !TerminatingOrDeleted(target) && !EntityManager.IsQueuedForDeletion(target) &&
+           !TerminatingOrDeleted(effect.Owner) && !EntityManager.IsQueuedForDeletion(effect.Owner) &&
+           effect.Comp.LifeStage <= ComponentLifeStage.Running && effect.Comp.AppliedTo == target &&
+           _effectQuery.TryComp(effect.Owner, out var current) && ReferenceEquals(current, effect.Comp) &&
+           _containerQuery.TryComp(target, out var container) &&
+           container.ActiveStatusEffects?.Contains(effect.Owner) == true;
+
+    /// <summary>
+    /// Adds a source after the caller found none. A source created by a public
+    /// permission callback supersedes this creation instead of receiving a duplicate.
     /// </summary>
     /// <param name="target">The target entity to which the effect should be added.</param>
     /// <param name="effectProto">ProtoId of the status effect entity. Make sure it has StatusEffectComponent on it.</param>
@@ -186,6 +230,11 @@ public sealed partial class StatusEffectsSystem : EntitySystem
             return false;
 
         EnsureComp<StatusEffectContainerComponent>(target);
+        // A permission/container-init callback may have created a newer same-ID
+        // source. Preserve that result and reject this superseded creation.
+        if (TerminatingOrDeleted(target) || EntityManager.IsQueuedForDeletion(target) ||
+            TryGetStatusEffect(target, effectProto, out _))
+            return false;
 
         // And only if all checks passed we spawn the effect
         if (!PredictedTrySpawnInContainer(effectProto,
@@ -197,15 +246,24 @@ public sealed partial class StatusEffectsSystem : EntitySystem
         if (!_effectQuery.TryComp(effect, out var effectComp))
             return false;
 
-        statusEffect = effect;
+        Entity<StatusEffectComponent> current = (effect.Value, effectComp);
+        if (!IsCurrentStatusEffect(current, target))
+            return false;
 
         var endTime = delay == null ? _timing.CurTime + duration : _timing.CurTime + delay + duration;
         SetStatusEffectEndTime((effect.Value, effectComp), endTime);
+        if (!IsCurrentStatusEffect(current, target))
+            return false;
         var startTime = delay == null ? _timing.CurTime : _timing.CurTime + delay.Value;
         SetStatusEffectStartTime(effect.Value, startTime);
+        if (!IsCurrentStatusEffect(current, target))
+            return false;
 
-        TryApplyStatusEffect((statusEffect.Value, effectComp));
+        TryApplyStatusEffect(current);
+        if (!IsCurrentStatusEffect(current, target))
+            return false;
 
+        statusEffect = effect;
         return true;
     }
 
@@ -282,7 +340,8 @@ public sealed partial class StatusEffectsSystem : EntitySystem
         var ev = new StatusEffectEndTimeUpdatedEvent(appliedTo, endTime);
         RaiseLocalEvent(ent, ref ev);
 
-        DirtyField(ent, ent.Comp, nameof(StatusEffectComponent.EndEffectTime));
+        if (IsCurrentStatusEffect((ent.Owner, ent.Comp), appliedTo))
+            DirtyField(ent, ent.Comp, nameof(StatusEffectComponent.EndEffectTime));
     }
 
     private void SetStatusEffectStartTime(Entity<StatusEffectComponent?> ent, TimeSpan startTime)
@@ -301,7 +360,8 @@ public sealed partial class StatusEffectsSystem : EntitySystem
         var ev = new StatusEffectStartTimeUpdatedEvent(appliedTo, startTime);
         RaiseLocalEvent(ent, ref ev);
 
-        DirtyField(ent, ent.Comp, nameof(StatusEffectComponent.StartEffectTime));
+        if (IsCurrentStatusEffect((ent.Owner, ent.Comp), appliedTo))
+            DirtyField(ent, ent.Comp, nameof(StatusEffectComponent.StartEffectTime));
     }
 }
 

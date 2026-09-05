@@ -147,7 +147,7 @@ public sealed class CMUMedicalChangeTest
                 Assert.That(probe.Events[0].Revision, Is.EqualTo(revisionAfterStructure));
                 Assert.That(
                     probe.Events[0].Changes,
-                    Is.EqualTo(CMUMedicalChangeFlags.Anatomy | CMUMedicalChangeFlags.Pain));
+                    Is.EqualTo(CMUMedicalChangeFlags.Anatomy | CMUMedicalChangeFlags.Topology | CMUMedicalChangeFlags.Pain));
             });
 
             if (detachedBody is { } carrier && entMan.EntityExists(carrier))

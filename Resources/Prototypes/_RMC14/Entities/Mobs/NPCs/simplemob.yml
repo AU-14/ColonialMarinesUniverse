@@ -9,6 +9,9 @@
   abstract: true
   suffix: CM
   components:
+  - type: Tag
+    tags:
+    - DoorBumpOpener # RMC mobs allow stun; do not inherit BaseSimpleMob's StunImmune tag.
   - type: NameIdentifier
     group: GenericNumber
   - type: ShortExamine

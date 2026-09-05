@@ -19,7 +19,7 @@ namespace Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 ///     Subscribes to <see cref="BeforeDamageChangedEvent"/> (fires for every
 ///     incoming damage application, including explosions which use
 ///     <c>ignoreResistances: true</c> and skip <see cref="DamageModifyEvent"/>)
-///     and stashes the resolution so <see cref="SharedBodyPartHealthSystem"/> can
+///     and carries the exact resolution on the damage invocation so <see cref="SharedBodyPartHealthSystem"/> can
 ///     deduct from the right part on the post-application
 ///     <see cref="DamageChangedEvent"/>.
 /// </summary>
@@ -36,7 +36,6 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
-    private readonly Dictionary<EntityUid, HitLocationResolveEvent> _pendingHits = new();
     private readonly Dictionary<EntityUid, int> _bodyZoneSuppressedOrigins = new();
 
     private bool _medicalEnabled;
@@ -45,9 +44,6 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
     private float _chestWeight;
     private float _armWeight;
     private float _legWeight;
-
-    public bool TryConsumePendingHit(EntityUid target, out HitLocationResolveEvent hit)
-        => _pendingHits.Remove(target, out hit);
 
     public BodyZoneTargetingSuppression SuppressBodyZoneTargeting(EntityUid origin)
     {
@@ -66,16 +62,6 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
             return;
         target.Comp.NextHitOverride = part;
         Dirty(target.Owner, target.Comp);
-    }
-
-    /// <summary>
-    ///     Defensive sweep for entities that no longer exist or whose stash was
-    ///     never consumed (the matching <c>DamageChangedEvent</c> was suppressed).
-    /// </summary>
-    public void SweepStaleHits(EntityUid uid)
-    {
-        if (!Exists(uid))
-            _pendingHits.Remove(uid);
     }
 
     public override void Initialize()
@@ -99,6 +85,10 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         if (!HasComp<CMUHumanMedicalComponent>(ent))
             return;
 
+        // Area impacts are distributed once by the explosion transaction.
+        if (args.Impact.Delivery == DamageImpactDelivery.Explosion)
+            return;
+
         if (args.Damage.GetTotal() <= 0)
             return;
 
@@ -116,7 +106,7 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
 
         if (resolve.Handled)
         {
-            _pendingHits[ent.Owner] = resolve;
+            args.TargetPartEntity = resolve.ResolvedPartEntity;
             var resolved = new HitLocationResolvedEvent(
                 ent, args.Origin, resolve.ResolvedPart, resolve.ResolvedPartEntity, resolve.ResolvedZone);
             RaiseLocalEvent(ent, ref resolved);
@@ -144,7 +134,7 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         if (suppressBodyZone)
             return (null, null, null);
 
-        if (attacker is { } a && ZoneTargeting.TryGetFreshSelection(a) is { } zone)
+        if (attacker is { } a && ZoneTargeting.TryGetExplicitSelection(a) is { } zone)
         {
             var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(zone);
             return (partType, symmetry, zone);
@@ -198,10 +188,8 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         PartWeights weights)
     {
         var roll = Random.NextFloat() * weights.Total;
-        var partType = weights.Pick(roll);
-
-        AssignResolvedPart(ent.Owner, ref args, partType);
-        args.ResolvedPartEntity ??= FindFirstPartOfType(ent.Owner, BodyPartType.Torso);
+        var (partType, symmetry) = weights.Pick(roll);
+        AssignResolvedPart(ent.Owner, ref args, partType, symmetry);
     }
 
     private bool RollAimAccuracy(EntityUid target, EntityUid? attacker, BodyPartType forced)
@@ -236,25 +224,6 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         return Random.NextFloat() <= accuracy;
     }
 
-    private EntityUid? FindFirstPartOfType(EntityUid bodyId, BodyPartType type, BodyPartSymmetry? symmetry = null)
-    {
-        if (symmetry is { } exact &&
-            MedicalIndex.TryGetBodyPart(bodyId, new CMUMedicalBodyPartKey(type, exact), out var exactPart))
-        {
-            return exactPart;
-        }
-
-        foreach (var (uid, partComp) in MedicalIndex.GetBodyParts(bodyId))
-        {
-            if (partComp.PartType != type)
-                continue;
-            if (symmetry is { } s && partComp.Symmetry != s)
-                continue;
-            return uid;
-        }
-        return null;
-    }
-
     private void AssignResolvedPart(
         EntityUid bodyId,
         ref HitLocationResolveEvent args,
@@ -270,9 +239,12 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
             args.ResolvedPart = part.PartType;
         }
 
-        args.ResolvedZone = zone ?? ToTargetBodyZone(args.ResolvedPart, TryComp<BodyPartComponent>(args.ResolvedPartEntity, out var resolvedPart)
-            ? resolvedPart.Symmetry
-            : null);
+        TryComp<BodyPartComponent>(args.ResolvedPartEntity, out var resolvedPart);
+        var exactSite = resolvedPart is not null && resolvedPart.PartType == type &&
+                        (symmetry is null || resolvedPart.Symmetry == symmetry);
+        args.ResolvedZone = exactSite && zone is not null
+            ? zone
+            : ToTargetBodyZone(args.ResolvedPart, resolvedPart?.Symmetry);
         args.Handled = true;
     }
 
@@ -313,16 +285,7 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
                 part ??= FindFirstDamageablePartOfType(bodyId, fallbackType);
         }
 
-        part ??= FindFirstPartOfType(bodyId, type, symmetry);
-        if (symmetry != null)
-            part ??= FindFirstPartOfType(bodyId, type);
-
-        if (fallbackType != type)
-        {
-            part ??= FindFirstPartOfType(bodyId, fallbackType, symmetry);
-            if (symmetry != null)
-                part ??= FindFirstPartOfType(bodyId, fallbackType);
-        }
+        part ??= FindFirstDamageablePartOfType(bodyId, BodyPartType.Torso);
 
         return part;
     }
@@ -423,14 +386,14 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
     {
         public float Total => Head + Chest + Arm * 2f + Leg * 2f;
 
-        public BodyPartType Pick(float roll)
+        public (BodyPartType Type, BodyPartSymmetry? Symmetry) Pick(float roll)
         {
-            if ((roll -= Head) < 0) return BodyPartType.Head;
-            if ((roll -= Chest) < 0) return BodyPartType.Torso;
-            if ((roll -= Arm) < 0) return BodyPartType.Arm;
-            if ((roll -= Arm) < 0) return BodyPartType.Arm;
-            if ((roll -= Leg) < 0) return BodyPartType.Leg;
-            return BodyPartType.Leg;
+            if ((roll -= Head) < 0) return (BodyPartType.Head, null);
+            if ((roll -= Chest) < 0) return (BodyPartType.Torso, null);
+            if ((roll -= Arm) < 0) return (BodyPartType.Arm, BodyPartSymmetry.Left);
+            if ((roll -= Arm) < 0) return (BodyPartType.Arm, BodyPartSymmetry.Right);
+            if ((roll -= Leg) < 0) return (BodyPartType.Leg, BodyPartSymmetry.Left);
+            return (BodyPartType.Leg, BodyPartSymmetry.Right);
         }
     }
 }

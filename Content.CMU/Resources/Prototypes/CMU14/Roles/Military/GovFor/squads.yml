@@ -8,6 +8,7 @@
   - type: SquadTeam
     color: "#F0433E"
     radio: radioGovforAlpha
+    supplyDropPadSquad: SquadAlpha
     group: GOVFOR
     roundStart: true
     minimapBackground:
@@ -26,6 +27,7 @@
     color: "#c7b646"
     group: GOVFOR
     radio: radioGovforBravo
+    supplyDropPadSquad: SquadBravo
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_bravo
@@ -42,6 +44,7 @@
     group: GOVFOR
     color: "#9D3EF0"
     radio: radioGovforCharlie
+    supplyDropPadSquad: SquadCharlie
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_charlie
@@ -58,6 +61,7 @@
     roundStart: true
     color: "#228B22"
     radio: radioGovforIntel
+    supplyDropPadSquad: SquadDelta
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_intel

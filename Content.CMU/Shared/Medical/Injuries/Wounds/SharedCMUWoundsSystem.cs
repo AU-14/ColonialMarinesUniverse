@@ -11,10 +11,14 @@ using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.CMU14.Medical.Injuries.Trauma;
 using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
 using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
+using Content.Shared.Body;
+using Content.Shared.Body.Events;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -79,6 +83,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     private const float WoundScanInterval = 0.5f;
 
     private float _woundScanAccumulator;
+    private bool _processingWoundHealing;
+    private readonly List<(EntityUid PartUid, BodyPartWoundComponent Wounds, BodyPartComponent Part, EntityUid Body)>
+        _woundHealingCandidates = new();
 
     private bool _medicalEnabled;
     private bool _woundsEnabled;
@@ -96,11 +103,15 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
                 OnBodyPartDamaged,
                 after: new[] { typeof(SharedBoneSystem), typeof(SharedOrganHealthSystem) });
 
-            SubscribeLocalEvent<FractureComponent, BoneFracturedEvent>(OnBoneFractured);
+            SubscribeLocalEvent<FractureSeverityChangedEvent>(OnFractureSeverityChanged);
             SubscribeLocalEvent<CMUSplintedComponent, ComponentStartup>(OnSplintStartup);
             SubscribeLocalEvent<CMUSplintedComponent, ComponentRemove>(OnSplintRemove);
             SubscribeLocalEvent<CMUSplintChangedEvent>(OnSplintChanged);
             SubscribeLocalEvent<OrganHealthComponent, OrganStageChangedEvent>(OnOrganStageChanged);
+            SubscribeLocalEvent<ChildOrganComponent, OrganAddedToBodyEvent>(OnOrganAdded,
+                after: new[] { typeof(CMUMedicalBodyIndexSystem) });
+            SubscribeLocalEvent<ChildOrganComponent, OrganRemovedFromBodyEvent>(OnOrganRemoved,
+                after: new[] { typeof(CMUMedicalBodyIndexSystem) });
         }
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
@@ -137,26 +148,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
         var partWound = EnsureComp<BodyPartWoundComponent>(ent);
 
-        var type = brute >= burn ? WoundType.Brute : WoundType.Burn;
-        var bleedDuration = ComputeBleedDuration(args.Delta);
-        var stopBleedAt = Timing.CurTime + bleedDuration;
-
-        var mechanism = ClassifyMechanism(args, brute, burn);
-        var sizeDamage = type == WoundType.Burn ? burn.Float() : brute.Float();
-        var size = WoundSizeProfile.FromDamage(type, mechanism, sizeDamage);
-        var bleedScale = WoundSizeProfile.BleedMultiplier(size, sizeDamage);
-        var bloodloss = type == WoundType.Brute ? ComputeBleedAmount(brute) * bleedScale : 0f;
-        var secondary = ClassifySecondaryMechanisms(args, mechanism, brute, burn);
-        var cleanup = DefaultCleanupFor(mechanism, secondary, size, sizeDamage);
-
-        AddOrMergeWound(partWound, new Wound(
-            bruteOrBurn,
-            FixedPoint2.Zero,
-            bloodloss,
-            stopBleedAt,
-            type,
-            false), size, mechanism, secondary, cleanup);
-        UpgradeExternalBleeding(partWound, ComputeExternalBleedTier(mechanism, secondary, size, sizeDamage));
+        var stopBleedAt = Timing.CurTime + ComputeBleedDuration(args.Delta);
+        if (brute > FixedPoint2.Zero)
+            AddDamageWound(partWound, args, WoundType.Brute, brute, stopBleedAt);
+        if (burn > FixedPoint2.Zero)
+            AddDamageWound(partWound, args, WoundType.Burn, burn, stopBleedAt);
 
         var woundApplied = new BodyPartWoundAppliedEvent(
             args.Body,
@@ -177,8 +173,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (args.Trauma.VascularContact && args.Trauma.InternalBleedRate > 0f)
             SeedInternalBleed(ent.Owner, $"vascular:{args.Trauma.Mechanism}", args.Trauma.InternalBleedRate);
 
-        if (type == WoundType.Burn
-            && burn >= _escharBurnThreshold
+        if (burn >= _escharBurnThreshold
             && !HasComp<CMUEscharComponent>(ent.Owner))
         {
             var eschar = AddComp<CMUEscharComponent>(ent.Owner);
@@ -187,11 +182,28 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         }
     }
 
-    private void OnBoneFractured(Entity<FractureComponent> ent, ref BoneFracturedEvent args)
+    private void AddDamageWound(BodyPartWoundComponent wounds, in BodyPartDamagedEvent args,
+        WoundType type, FixedPoint2 damage, TimeSpan stopBleedAt)
+    {
+        var brute = type == WoundType.Brute ? damage : FixedPoint2.Zero;
+        var burn = type == WoundType.Burn ? damage : FixedPoint2.Zero;
+        var mechanism = ClassifyMechanism(args, brute, burn);
+        var size = WoundSizeProfile.FromDamage(type, mechanism, damage.Float());
+        var bloodloss = type == WoundType.Brute
+            ? ComputeBleedAmount(brute) * WoundSizeProfile.BleedMultiplier(size, damage.Float())
+            : 0f;
+        var secondary = ClassifySecondaryMechanisms(args, mechanism, brute, burn);
+        var cleanup = DefaultCleanupFor(mechanism, secondary, size, damage.Float());
+        AddOrMergeWound(wounds, new Wound(damage, FixedPoint2.Zero, bloodloss, stopBleedAt, type, false),
+            size, mechanism, secondary, cleanup);
+        UpgradeExternalBleeding(wounds, ComputeExternalBleedTier(mechanism, secondary, size, damage.Float()));
+    }
+
+    private void OnFractureSeverityChanged(ref FractureSeverityChangedEvent args)
     {
         if (!IsEnabled())
             return;
-        RecomputeInternalBleed(ent.Owner);
+        RecomputeInternalBleed(args.Part);
     }
 
     private void OnSplintStartup(Entity<CMUSplintedComponent> ent, ref ComponentStartup args)
@@ -219,6 +231,20 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return;
         if (TryGetContainingPart(ent.Owner) is { } partUid)
             RecomputeInternalBleed(partUid);
+    }
+
+    private void OnOrganAdded(Entity<ChildOrganComponent> ent, ref OrganAddedToBodyEvent args)
+    {
+        if (IsEnabled() && !TerminatingOrDeleted(args.Part))
+            RecomputeInternalBleed(args.Part);
+    }
+
+    private void OnOrganRemoved(Entity<ChildOrganComponent> ent, ref OrganRemovedFromBodyEvent args)
+    {
+        // The committed index excludes the extracted organ. Reconcile its old
+        // site now so a derived bleed cannot survive a transplant or extraction.
+        if (IsEnabled() && !TerminatingOrDeleted(args.OldPart))
+            RecomputeInternalBleed(args.OldPart);
     }
 
     /// <summary>
@@ -414,6 +440,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     private void ClearInternalBleed(EntityUid part, bool suppressCurrentSource)
     {
         RemComp<CMUSurgicalInternalBleedingComponent>(part);
+        if (!suppressCurrentSource)
+            RemComp<CMUInternalBleedingSuppressedComponent>(part);
 
         if (suppressCurrentSource && !IsSynthOwned(part))
         {
@@ -779,10 +807,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Stops the bleed window without marking the wounds Treated.
-    ///     Tourniquets use this path: the limb stops bleeding now, but
-    ///     bandage flow still owns the <c>Treated</c> transition and
-    ///     wound-healing unlock.
+    ///     Permanently controls surface bleeding without marking wound rows treated.
+    ///     The external tier is an independent source even when every wound row has been dressed.
     /// </summary>
     public bool StopSurfaceBleedingOnPart(EntityUid part, BodyPartWoundComponent? comp = null)
     {
@@ -790,7 +816,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return false;
 
         var now = Timing.CurTime;
-        var changed = false;
+        var changed = comp.ExternalBleeding != ExternalBleedTier.None;
         for (var i = 0; i < comp.Entries.Count; i++)
         {
             var entry = comp.Entries[i];
@@ -925,8 +951,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
             wounds.NextExternalBleedTick = now + TimeSpan.FromSeconds(1);
 
+            if (IsBloodFlowOccluded(partUid))
+                continue;
+
             var bodyOwner = TryGetBodyOwner(partUid);
-            if (bodyOwner is null)
+            if (bodyOwner is null || IsWoundPhysiologySuspended(bodyOwner.Value))
                 continue;
 
             if (TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
@@ -938,61 +967,113 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private void TickWoundHealing(TimeSpan now)
     {
-        var query = EntityQueryEnumerator<BodyPartWoundComponent, BodyPartComponent>();
-        while (query.MoveNext(out var partUid, out var pw, out var part))
+        if (_processingWoundHealing)
+            return;
+        _processingWoundHealing = true;
+        try
         {
-            if (pw.NextHealTick > now)
+            // Damage callbacks can create a replacement wound component and invalidate
+            // the engine query. Collect due owners before publishing any healing.
+            var query = EntityQueryEnumerator<BodyPartWoundComponent, BodyPartComponent>();
+            while (query.MoveNext(out var uid, out var wounds, out var part))
+            {
+                if (wounds.NextHealTick <= now && part.Body is { } body)
+                    _woundHealingCandidates.Add((uid, wounds, part, body));
+            }
+            foreach (var (partUid, wounds, part, body) in _woundHealingCandidates)
+                HealWoundsOnPart(body, partUid, part, wounds, now);
+        }
+        finally
+        {
+            // Retain capacity, but no tissue references, between scans. A nested
+            // update cannot consume the same work or overwrite this snapshot.
+            _woundHealingCandidates.Clear();
+            _processingWoundHealing = false;
+        }
+    }
+
+    private void HealWoundsOnPart(EntityUid body, EntityUid partUid, BodyPartComponent part,
+        BodyPartWoundComponent pw, TimeSpan now)
+    {
+        if (!IsEnabled() || pw.NextHealTick > now || !IsCurrentWoundOwner(body, partUid, part, pw) ||
+            MetaData(partUid).EntityPaused)
+            return;
+        pw.NextHealTick = now + TimeSpan.FromSeconds(1);
+        if (IsWoundPhysiologySuspended(body) || Unrevivable.IsUnrevivable(body))
+            return;
+
+        var dirty = false;
+        var untreatedBlocked = HasUntreatedBurden(pw);
+        var partHealth = CompOrNull<BodyPartHealthComponent>(partUid);
+        var bodyDamage = CompOrNull<DamageableComponent>(body);
+        var bruteRemaining = FixedPoint2.Zero;
+        var burnRemaining = FixedPoint2.Zero;
+        foreach (var entry in pw.Entries)
+        {
+            var remaining = FixedPoint2.Max(FixedPoint2.Zero, entry.Wound.Damage - entry.Wound.Healed);
+            if (entry.Wound.Type == WoundType.Brute)
+                bruteRemaining += remaining;
+            else if (entry.Wound.Type == WoundType.Burn)
+                burnRemaining += remaining;
+        }
+        for (var i = pw.Entries.Count - 1; i >= 0; i--)
+        {
+            var entry = pw.Entries[i];
+            var w = entry.Wound;
+            if (!w.Treated || untreatedBlocked)
                 continue;
 
-            pw.NextHealTick = now + TimeSpan.FromSeconds(1);
-
-            if (part.Body is not { } body || Unrevivable.IsUnrevivable(body))
+            // Scale by the 1s tick cadence, not frameTime.
+            var remaining = w.Damage - w.Healed;
+            if (remaining <= FixedPoint2.Zero)
+            {
+                RemoveWoundAt(pw, i);
+                dirty = true;
                 continue;
-
-            var dirty = false;
-            var untreatedBlocked = HasUntreatedBurden(pw);
-            for (var i = pw.Entries.Count - 1; i >= 0; i--)
-            {
-                var entry = pw.Entries[i];
-                var w = entry.Wound;
-                if (!w.Treated || untreatedBlocked)
-                    continue;
-
-                // Scale by the 1s tick cadence, not frameTime.
-                var remaining = w.Damage - w.Healed;
-                if (remaining <= FixedPoint2.Zero)
-                {
-                    RemoveWoundAt(pw, i);
-                    dirty = true;
-                    continue;
-                }
-
-                var healing = FixedPoint2.Min((FixedPoint2)HealPerSecond, remaining);
-                ApplyWoundHealingDamage(body, partUid, w.Type, healing);
-
-                w = w with { Healed = w.Healed + healing };
-                if (w.Healed >= w.Damage)
-                {
-                    RemoveWoundAt(pw, i);
-                    dirty = true;
-                }
-                else
-                {
-                    WoundLedger.TryUpdateEntry(pw, i, entry with { Wound = w });
-                    dirty = true;
-                }
             }
 
-            if (pw.Entries.Count == 0)
+            var healing = FixedPoint2.Min((FixedPoint2)HealPerSecond, remaining);
+            var groupRemaining = w.Type == WoundType.Brute ? bruteRemaining : burnRemaining;
+            if (w.Type == WoundType.Brute)
+                bruteRemaining -= healing;
+            else if (w.Type == WoundType.Burn)
+                burnRemaining -= healing;
+
+            w = w with { Healed = w.Healed + healing };
+            if (w.Healed >= w.Damage)
             {
-                OnPartWoundsCleared(body, partUid);
-                RemComp<BodyPartWoundComponent>(partUid);
-                RaiseWoundsChanged(partUid, true);
+                RemoveWoundAt(pw, i);
+                dirty = true;
             }
-            else if (dirty)
+            else
             {
-                RaiseWoundsChanged(partUid, false);
+                WoundLedger.TryUpdateEntry(pw, i, entry with { Wound = w });
+                dirty = true;
             }
+
+            // Commit this row before aggregate observers can heal, replace or
+            // delete tissue. A callback must never leave an old row write pending.
+            var revision = pw.Revision;
+            ApplyWoundHealingDamage(body, partUid, w.Type, healing, groupRemaining);
+            if (!IsEnabled() || !IsCurrentWoundOwner(body, partUid, part, pw) || pw.Revision != revision ||
+                !ReferenceEquals(partHealth, CompOrNull<BodyPartHealthComponent>(partUid)) ||
+                !ReferenceEquals(bodyDamage, CompOrNull<DamageableComponent>(body)) ||
+                IsWoundPhysiologySuspended(body) || MetaData(partUid).EntityPaused)
+                break;
+        }
+
+        if (!IsCurrentWoundOwner(body, partUid, part, pw))
+            return;
+
+        if (pw.Entries.Count == 0 && pw.ExternalBleeding == ExternalBleedTier.None)
+        {
+            OnPartWoundsCleared(body, partUid);
+            RemComp<BodyPartWoundComponent>(partUid);
+            RaiseWoundsChanged(partUid, true);
+        }
+        else if (dirty)
+        {
+            RaiseWoundsChanged(partUid, false);
         }
     }
 
@@ -1009,11 +1090,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             // Tourniquet stops bloodflow distal to it, so the bleed tick
             // no-ops while it's on. The necrosis countdown lives in
             // SharedCMUTourniquetSystem.Update.
-            if (HasComp<CMUTourniquetComponent>(partUid))
+            if (IsBloodFlowOccluded(partUid))
                 continue;
 
             var bodyOwner = TryGetBodyOwner(partUid);
-            if (bodyOwner is null)
+            if (bodyOwner is null || IsWoundPhysiologySuspended(bodyOwner.Value))
                 continue;
 
             if (TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
@@ -1022,6 +1103,41 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             ApplyInternalBleed(bodyOwner.Value, partUid, ib.BloodlossPerSecond * tickSeconds);
         }
     }
+
+    /// <summary>
+    /// A tourniquet suppresses blood flow in its own part and attached distal descendants.
+    /// Injury sources remain intact, so removing it resumes any bleeding not separately treated.
+    /// </summary>
+    public bool IsBloodFlowOccluded(EntityUid part)
+    {
+        if (!TryComp<BodyPartComponent>(part, out var original) || original.Body is not { } body)
+            return false;
+
+        var current = part;
+        while (TryComp<BodyPartComponent>(current, out var site) && site.Body == body)
+        {
+            if (HasComp<CMUTourniquetComponent>(current))
+                return true;
+            if (!TryComp<ChildOrganComponent>(current, out var child) || child.Parent is not { } parent)
+                break;
+            current = parent;
+        }
+        return false;
+    }
+
+    // Parts are separate entities: their update query does not inherit the body's
+    // pause state. Explicit treatment remains available while physiology is frozen.
+    private bool IsWoundPhysiologySuspended(EntityUid body)
+        => HasComp<CMInStasisComponent>(body) ||
+           TryComp<MetaDataComponent>(body, out var metadata) && metadata.EntityPaused;
+
+    private bool IsCurrentWoundOwner(EntityUid body, EntityUid partUid, BodyPartComponent part,
+        BodyPartWoundComponent wounds)
+        => !TerminatingOrDeleted(body) && !TerminatingOrDeleted(partUid) &&
+           !EntityManager.IsQueuedForDeletion(body) && !EntityManager.IsQueuedForDeletion(partUid) &&
+           TryComp<BodyPartComponent>(partUid, out var currentPart) && ReferenceEquals(currentPart, part) &&
+           currentPart.Body == body && TryComp<BodyPartWoundComponent>(partUid, out var currentWounds) &&
+           ReferenceEquals(currentWounds, wounds);
 
     /// <summary>
     ///     Server-only side-effect hook; shared no-ops so prediction
@@ -1043,7 +1159,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     ///     Server-only side-effect hook for treated wounds closing over time.
     ///     Shared no-ops so prediction rollback can't double-heal body damage.
     /// </summary>
-    protected virtual void ApplyWoundHealingDamage(EntityUid body, EntityUid part, WoundType type, FixedPoint2 amount)
+    protected virtual void ApplyWoundHealingDamage(EntityUid body, EntityUid part, WoundType type, FixedPoint2 amount,
+        FixedPoint2 remainingWoundDamage)
     {
     }
 
@@ -1174,14 +1291,23 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private static int FindMergeTarget(BodyPartWoundComponent comp, WoundType type, WoundMechanism mechanism)
     {
-        var index = FindWorstMatchingMechanism(comp, mechanism, exact: true);
+        var index = FindWorstMatchingMechanism(comp, type, mechanism, exact: true);
         if (index >= 0)
             return index;
 
-        if (comp.Entries.Count < MaxWoundsPerPart)
+        // Reserve a row for an absent other damage type. Once both types exist, use the full capacity.
+        if (comp.Entries.Count < MaxWoundsPerPart - 1)
             return -1;
+        if (comp.Entries.Count < MaxWoundsPerPart)
+        {
+            foreach (var entry in comp.Entries)
+            {
+                if (entry.Wound.Type != type)
+                    return -1;
+            }
+        }
 
-        index = FindWorstMatchingMechanism(comp, mechanism, exact: false);
+        index = FindWorstMatchingMechanism(comp, type, mechanism, exact: false);
         if (index >= 0)
             return index;
 
@@ -1275,7 +1401,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         return index;
     }
 
-    private static int FindWorstMatchingMechanism(BodyPartWoundComponent comp, WoundMechanism mechanism, bool exact)
+    private static int FindWorstMatchingMechanism(BodyPartWoundComponent comp, WoundType type, WoundMechanism mechanism, bool exact)
     {
         var index = -1;
         var worst = FixedPoint2.Zero;
@@ -1283,7 +1409,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         {
             var entry = comp.Entries[i];
             var wound = entry.Wound;
-            if (wound.Treated)
+            if (wound.Treated || wound.Type != type)
                 continue;
 
             var existing = entry.Mechanism;
@@ -1327,6 +1453,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         for (var i = 0; i < comp.Entries.Count; i++)
         {
             var wound = comp.Entries[i].Wound;
+            if (wound.Type != type)
+                continue;
             if (index >= 0 && wound.Damage <= worst)
                 continue;
 
@@ -1562,5 +1690,56 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             return false;
 
         return HasUntreatedBurden(comp);
+    }
+
+    /// <summary>
+    /// Finds the next wound this type/mechanism-specific treater would affect.
+    /// Selection uses the same eligibility as treatment itself.
+    /// </summary>
+    public bool TryGetTreatableWound(EntityUid part, WoundType? type,
+        WoundMechanismFlags mechanismMask, out CMUWoundEntry entry)
+    {
+        entry = default;
+        if (!TryComp<BodyPartWoundComponent>(part, out var comp))
+            return false;
+
+        var index = -1;
+        for (var i = 0; i < comp.Entries.Count; i++)
+        {
+            var wound = comp.Entries[i].Wound;
+            if (wound.Treated || type is { } expected && wound.Type != expected ||
+                !MatchesMechanism(comp, i, mechanismMask))
+                continue;
+            if (index < 0 || wound.Damage > comp.Entries[index].Wound.Damage)
+                index = i;
+        }
+        if (index < 0)
+            return false;
+        entry = comp.Entries[index];
+        return true;
+    }
+
+    /// <summary>
+    /// Preserves the most severe eligible wound's treatment-time burden, including
+    /// for tools that heal structural damage without closing the wound itself.
+    /// </summary>
+    public TimeSpan GetWoundTreatmentDelay(EntityUid part, WoundType? type,
+        WoundMechanismFlags mechanismMask)
+    {
+        if (!TryComp<BodyPartWoundComponent>(part, out var comp))
+            return TimeSpan.Zero;
+
+        var delay = TimeSpan.Zero;
+        for (var i = 0; i < comp.Entries.Count; i++)
+        {
+            var entry = comp.Entries[i];
+            if (entry.Wound.Treated || type is { } expected && entry.Wound.Type != expected ||
+                !MatchesMechanism(comp, i, mechanismMask))
+                continue;
+            var candidate = WoundSizeProfile.BandageDelay(entry.Size, entry.Wound.Damage.Float());
+            if (candidate > delay)
+                delay = candidate;
+        }
+        return delay;
     }
 }

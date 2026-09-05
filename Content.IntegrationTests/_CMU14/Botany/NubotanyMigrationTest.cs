@@ -18,6 +18,9 @@ namespace Content.IntegrationTests.CMU14.Botany;
 [TestFixture]
 public sealed class NubotanyMigrationTest
 {
+    private static readonly EntProtoId LingzhiPlant = "LingzhiPlants";
+    private static readonly ProtoId<WeightedRandomFillSolutionPrototype> RandomBotanyReagent = "RandomPickBotanyReagent";
+
     private static readonly PlantContract[] Contracts =
     {
         new("CarrotPlants", "CarrotSeeds", "FoodCarrot", ["CMUConiine", "CMUPhenol"]),
@@ -119,7 +122,7 @@ public sealed class NubotanyMigrationTest
                 Is.EquivalentTo(Contracts.Select(contract => contract.PlantId.Id)),
                 "PlantSpecialChemicals must remain species-bound to the exact ten migrated plants.");
 
-            var lingzhi = prototypes.Index<EntityPrototype>("LingzhiPlants");
+            var lingzhi = prototypes.Index<EntityPrototype>(LingzhiPlant);
             Assert.That(lingzhi.TryComp<PlantChemicalsComponent>(out var lingzhiChemicals, factory), Is.True);
             var lingzhiChemicalIds = lingzhiChemicals!.Chemicals.Select(pair => pair.Key.Id).ToArray();
             var amatoxin = lingzhiChemicals.Chemicals.Single(pair => pair.Key.Id == "CMUAmatoxin").Value;
@@ -154,7 +157,7 @@ public sealed class NubotanyMigrationTest
         {
             var entities = server.EntMan;
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var randomChemicals = prototypes.Index<WeightedRandomFillSolutionPrototype>("RandomPickBotanyReagent");
+            var randomChemicals = prototypes.Index(RandomBotanyReagent);
             var system = entities.System<PlantChemicalsSystem>();
 
             var carrot = entities.SpawnEntity("CarrotPlants", MapCoordinates.Nullspace);
@@ -327,7 +330,7 @@ public sealed class NubotanyMigrationTest
         var original = chemicals.Chemicals.Keys.ToHashSet();
         entities.System<PlantChemicalsSystem>().MutateRandomChemical(
             plant,
-            prototypes.Index<WeightedRandomFillSolutionPrototype>("RandomPickBotanyReagent"),
+            prototypes.Index(RandomBotanyReagent),
             SeededRandom(seed));
         var added = chemicals.Chemicals.Single(pair => !original.Contains(pair.Key));
         return new MutationResult(added.Key.Id, added.Value.Min, added.Value.Max,

@@ -1190,7 +1190,8 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
             }
         }
 
-        if (!InRange(user, target.Value, component.Range, session))
+        // RMC14: match the client range, including the entity currently being pulled.
+        if (!InRange(user, target.Value, _rmcMelee.RMCGetUserDisarmRange(user, target, component), session))
         {
             return false;
         }

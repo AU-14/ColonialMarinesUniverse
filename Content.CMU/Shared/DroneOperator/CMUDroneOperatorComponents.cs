@@ -115,6 +115,8 @@ public sealed partial class CMUDroneAndroidComponent : Component
 
     public EntityUid? InstalledModule;
 
+    public Dictionary<EntProtoId<SkillDefinitionComponent>, int>? BaseSkills;
+
     public bool RuinedCoreSpawned;
 
     public bool FollowingOperator;
@@ -227,7 +229,4 @@ public sealed partial class CMUDroneControlSessionComponent : Component
     public EntityUid MindId;
     public EntityUid? EndControlAction;
     public TimeSpan NextLeashWarning;
-    public bool SkillsSnapshotTaken;
-    public bool HadSkills;
-    public Dictionary<EntProtoId<SkillDefinitionComponent>, int>? PreviousSkills;
 }

@@ -22,6 +22,11 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared.Body.Events;
+using Content.Shared.Body;
+using Content.Shared.Body.Systems;
+using Robust.Shared.Network;
 
 namespace Content.Shared.CMU14.Medical.Anatomy.Bones;
 
@@ -34,12 +39,16 @@ public abstract partial class SharedBoneSystem : EntitySystem
     [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
+    [Dependency] private CMStasisBagSystem _stasis = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
 
     private const string BoneRegenBoostStatus = "StatusEffectCMUBoneRegenBoost";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
 
-    private const float IntegrityScanInterval = 1f;
-    private float _integrityScanAccumulator;
+    private static readonly TimeSpan RecoveryInterval = TimeSpan.FromSeconds(10);
+    private static readonly CMUMedicalWorkKey RecoveryWork = new("bone-integrity-recovery");
 
     private bool _medicalEnabled;
     private bool _boneEnabled;
@@ -52,6 +61,15 @@ public abstract partial class SharedBoneSystem : EntitySystem
         SubscribeLocalEvent<BoneComponent, BodyPartDamagedEvent>(OnBodyPartDamaged);
         SubscribeLocalEvent<BoneComponent, ComponentStartup>(OnBoneStartup);
         SubscribeLocalEvent<BoneComponent, BoneFractureAttemptEvent>(OnBoneFractureAttempt);
+        SubscribeLocalEvent<BoneComponent, CMUMedicalWorkDueEvent>(OnRecoveryDue);
+        SubscribeLocalEvent<BoneComponent, ComponentShutdown>(OnBoneShutdown);
+        SubscribeLocalEvent<BoneComponent, OrganGotInsertedEvent>(OnPartInserted,
+            after: new[] { typeof(SharedBodySystem) });
+        SubscribeLocalEvent<BoneComponent, OrganGotRemovedEvent>(OnPartRemoved,
+            after: new[] { typeof(SharedBodySystem) });
+        SubscribeLocalEvent<CMUHumanMedicalComponent, CMUMedicalStasisChangedEvent>(OnStasisChanged);
+        SubscribeLocalEvent<CMUHumanMedicalComponent, EntityPausedEvent>(OnPatientPaused);
+        SubscribeLocalEvent<CMUHumanMedicalComponent, EntityUnpausedEvent>(OnPatientUnpaused);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.BoneEnabled, v => _boneEnabled = v, true);
@@ -61,10 +79,9 @@ public abstract partial class SharedBoneSystem : EntitySystem
 
     private void OnBoneStartup(Entity<BoneComponent> ent, ref ComponentStartup args)
     {
-        ent.Comp.NextIntegrityTick = Timing.CurTime + TimeSpan.FromSeconds(10);
-
         if (PartBelongsToSynth(ent.Owner))
             ClearSynthFracture(ent.Owner);
+        RefreshRecovery(ent);
     }
 
     private void OnBoneFractureAttempt(Entity<BoneComponent> ent, ref BoneFractureAttemptEvent args)
@@ -130,6 +147,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
         }
 
         Dirty(ent);
+        RefreshRecovery(ent);
 
         var newSeverity = SeverityFromIntegrity(ent.Comp);
         if (newSeverity == FractureSeverity.None)
@@ -240,53 +258,145 @@ public abstract partial class SharedBoneSystem : EntitySystem
         return delta.TryGetDamageInGroup(groupProto, out var total) ? total : FixedPoint2.Zero;
     }
 
-    protected void UpdateServer(float frameTime)
+    private void RefreshRecovery(Entity<BoneComponent> bone)
     {
-        if (!_medicalEnabled || !_boneEnabled)
+        if (_net.IsClient || TerminatingOrDeleted(bone.Owner))
             return;
 
-        _integrityScanAccumulator += frameTime;
-        if (_integrityScanAccumulator < IntegrityScanInterval)
-            return;
-        _integrityScanAccumulator = 0f;
-
-        var now = Timing.CurTime;
-        var query = EntityQueryEnumerator<FractureComponent, BoneComponent, BodyPartComponent>();
-        while (query.MoveNext(out var partUid, out var fracture, out var bone, out var part))
+        if (bone.Comp.Integrity >= bone.Comp.IntegrityMax || PartBelongsToSynth(bone.Owner))
         {
-            if (HasComp<CMUMalunionComponent>(partUid))
-                continue;
+            _scheduler.Cancel(bone.Owner, RecoveryWork);
+            RemComp<BoneRecoveryComponent>(bone.Owner);
+            return;
+        }
 
-            if (bone.NextIntegrityTick > now)
-                continue;
-            bone.NextIntegrityTick = now + TimeSpan.FromSeconds(10);
+        if (!TryComp<BoneRecoveryComponent>(bone.Owner, out var recovery))
+        {
+            recovery = AddComp<BoneRecoveryComponent>(bone.Owner);
+            recovery.DueAt = RecoveryTime(bone.Owner) + RecoveryInterval;
+            ScheduleRecovery((bone.Owner, recovery));
+        }
+        RefreshSuspension((bone.Owner, recovery));
+    }
 
-            if (part.Body is not { } body || Unrevivable.IsUnrevivable(body))
-                continue;
+    private void RefreshSuspension(Entity<BoneRecoveryComponent> ent,
+        bool? stasis = null, bool? patientPaused = null)
+    {
+        var suspended = !TryComp<BodyPartComponent>(ent, out var part) ||
+                        part.Body is not { } body ||
+                        (patientPaused ?? Paused(body)) ||
+                        (stasis ?? HasComp<CMInStasisComponent>(body));
+        if (suspended == ent.Comp.Suspended)
+            return;
 
-            var (boosted, multiplier) = GetBoneRegenBoost(body);
-            if (!CanHeal(fracture.Severity, boosted))
-                continue;
+        ent.Comp.Suspended = suspended;
+        if (suspended)
+        {
+            var now = RecoveryTime(ent.Owner);
+            ent.Comp.Remaining = ent.Comp.DueAt > now
+                ? ent.Comp.DueAt - now : TimeSpan.Zero;
+            _scheduler.Cancel(ent.Owner, RecoveryWork);
+        }
+        else
+        {
+            ent.Comp.DueAt = RecoveryTime(ent.Owner) + ent.Comp.Remaining;
+            ScheduleRecovery(ent);
+        }
+    }
 
-            var rate = _boneHealRate * (FixedPoint2) multiplier;
-            bone.Integrity = FixedPoint2.Min(bone.IntegrityMax, bone.Integrity + rate);
-            Dirty(partUid, bone);
+    private TimeSpan RecoveryTime(EntityUid part) => Timing.CurTime - _metadata.GetPauseTime(part);
 
-            if (bone.FractureThresholds.TryGetValue(fracture.Severity, out var spawnFloor)
-                && bone.Integrity > spawnFloor)
-            {
-                Fracture.SetSeverity((partUid, fracture), FractureSeverity.None);
-            }
+    private void ScheduleRecovery(Entity<BoneRecoveryComponent> ent)
+        => _scheduler.Schedule(ent.Owner, RecoveryWork, ent.Comp.DueAt + _metadata.GetPauseTime(ent.Owner));
+
+    private void OnRecoveryDue(Entity<BoneComponent> ent, ref CMUMedicalWorkDueEvent args)
+    {
+        if (args.Key != RecoveryWork || !TryComp<BoneRecoveryComponent>(ent, out var recovery))
+            return;
+        RefreshSuspension((ent.Owner, recovery));
+        if (recovery.Suspended)
+            return;
+
+        // Preserve the existing ten-second treatment quantum. A late dispatch
+        // does not invent historical medication exposure or apply catch-up doses.
+        recovery.DueAt = Timing.CurTime + RecoveryInterval;
+        ScheduleRecovery((ent.Owner, recovery));
+        if (!_medicalEnabled || !_boneEnabled ||
+            !TryComp<BodyPartComponent>(ent, out var part) || part.Body is not { } body ||
+            Unrevivable.IsUnrevivable(body) || !_stasis.CanBodyMetabolize(body) ||
+            HasComp<CMUMalunionComponent>(ent) || PartBelongsToSynth(ent.Owner))
+            return;
+
+        // Metabolism eligibility is an event boundary. A listener can remove the
+        // part or complete its treatment before returning permission to metabolize.
+        if (TerminatingOrDeleted(ent.Owner) || part.Body != body ||
+            !TryComp<BoneComponent>(ent.Owner, out var currentBone) || currentBone != ent.Comp ||
+            !TryComp<BoneRecoveryComponent>(ent.Owner, out var currentRecovery) ||
+            currentRecovery != recovery || recovery.Suspended)
+            return;
+
+        var severity = TryComp<FractureComponent>(ent, out var fracture)
+            ? fracture.Severity : FractureSeverity.None;
+        var (boosted, multiplier) = GetBoneRegenBoost(body);
+        if (!CanHeal(severity, boosted))
+            return;
+
+        var rate = FixedPoint2.Max(FixedPoint2.Zero, _boneHealRate * (FixedPoint2) multiplier);
+        var next = FixedPoint2.Min(ent.Comp.IntegrityMax, ent.Comp.Integrity + rate);
+        if (next != ent.Comp.Integrity)
+        {
+            ent.Comp.Integrity = next;
+            Dirty(ent);
+            var healedSeverity = SeverityFromIntegrity(ent.Comp);
+            if (fracture != null && healedSeverity < severity)
+                Fracture.SetSeverity((ent.Owner, fracture), healedSeverity, forceUpgrade: false);
+        }
+        // Severity callbacks may heal, damage or detach this part synchronously.
+        if (!TerminatingOrDeleted(ent.Owner) &&
+            TryComp<BoneComponent>(ent.Owner, out currentBone) && currentBone == ent.Comp)
+            RefreshRecovery(ent);
+    }
+
+    private void OnBoneShutdown(Entity<BoneComponent> ent, ref ComponentShutdown args)
+    {
+        _scheduler.Cancel(ent.Owner, RecoveryWork);
+        if (_net.IsServer && !TerminatingOrDeleted(ent.Owner))
+            RemComp<BoneRecoveryComponent>(ent.Owner);
+    }
+
+    private void OnPartInserted(Entity<BoneComponent> ent, ref OrganGotInsertedEvent args)
+        => RefreshRecovery(ent);
+
+    private void OnPartRemoved(Entity<BoneComponent> ent, ref OrganGotRemovedEvent args)
+        => RefreshRecovery(ent);
+
+    private void OnStasisChanged(Entity<CMUHumanMedicalComponent> ent, ref CMUMedicalStasisChangedEvent args)
+        => RefreshPatientSuspension(ent.Owner, stasis: args.Active);
+
+    private void OnPatientPaused(Entity<CMUHumanMedicalComponent> ent, ref EntityPausedEvent args)
+        => RefreshPatientSuspension(ent.Owner, patientPaused: true);
+
+    private void OnPatientUnpaused(Entity<CMUHumanMedicalComponent> ent, ref EntityUnpausedEvent args)
+        => RefreshPatientSuspension(ent.Owner, patientPaused: false);
+
+    private void RefreshPatientSuspension(EntityUid body, bool? stasis = null, bool? patientPaused = null)
+    {
+        if (_net.IsClient || TerminatingOrDeleted(body))
+            return;
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (TryComp<BoneRecoveryComponent>(part, out var recovery))
+                RefreshSuspension((part, recovery), stasis, patientPaused);
         }
     }
 
     /// <summary>
-    ///     Only Hairline fractures self-heal by default. Osteocalc's bone
+    ///     Intact weakened bones and Hairline fractures recover naturally. Osteocalc's bone
     ///     regen boost can also stabilize Simple and Compound fractures over
     ///     time.
     /// </summary>
     protected virtual bool CanHeal(FractureSeverity severity, bool hasBoneRegenBoost)
-        => severity == FractureSeverity.Hairline
+        => severity is FractureSeverity.None or FractureSeverity.Hairline
            || hasBoneRegenBoost && severity is FractureSeverity.Simple or FractureSeverity.Compound;
 
     private (bool Boosted, float Multiplier) GetBoneRegenBoost(EntityUid body)
@@ -304,8 +414,41 @@ public abstract partial class SharedBoneSystem : EntitySystem
     {
         if (!Resolve(part.Owner, ref part.Comp, logMissing: false))
             return;
-        part.Comp.Integrity = FixedPoint2.Min(part.Comp.IntegrityMax, newIntegrity);
+        part.Comp.Integrity = FixedPoint2.Clamp(newIntegrity, FixedPoint2.Zero, part.Comp.IntegrityMax);
         Dirty(part.Owner, part.Comp);
+        RefreshRecovery((part.Owner, part.Comp));
+    }
+
+    /// <summary>
+    ///     Seeds a fracture injury with matching structural damage. Existing worse
+    ///     injuries are preserved. Scenario generators must use this instead of
+    ///     adding a fracture marker to a fully intact bone.
+    /// </summary>
+    public bool SeedFracture(EntityUid part, FractureSeverity severity)
+    {
+        if (severity == FractureSeverity.None ||
+            !TryComp<BoneComponent>(part, out var bone) ||
+            !bone.FractureThresholds.TryGetValue(severity, out var threshold))
+            return false;
+
+        var attempt = new BoneFractureAttemptEvent(part, severity);
+        RaiseLocalEvent(part, ref attempt);
+        if (attempt.Cancelled)
+            return false;
+
+        bone.Integrity = FixedPoint2.Min(bone.Integrity, threshold);
+        Dirty(part, bone);
+        RefreshRecovery((part, bone));
+        var fracture = EnsureComp<FractureComponent>(part);
+        var previous = fracture.Severity;
+        Fracture.SetSeverity((part, fracture), SeverityFromIntegrity(bone));
+        if (fracture.Severity > previous &&
+            TryComp<BodyPartComponent>(part, out var anatomy) && anatomy.Body is { } body)
+        {
+            var fractured = new BoneFracturedEvent(body, part, previous, fracture.Severity);
+            RaiseLocalEvent(part, ref fractured, broadcast: true);
+        }
+        return true;
     }
 
     public int ChemicallyMendFractures(EntityUid body, FixedPoint2 amount)
@@ -355,8 +498,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
                 fracture.Severity is FractureSeverity.None or FractureSeverity.Shattered)
                 continue;
             var next = (FractureSeverity)((byte)fracture.Severity + 1);
-            Fracture.SetSeverity((part, fracture), next);
-            return true;
+            return SeedFracture(part, next);
         }
 
         return false;
@@ -364,6 +506,9 @@ public abstract partial class SharedBoneSystem : EntitySystem
 
     public bool DamageWeakestBone(EntityUid body, FixedPoint2 amount, bool fracture)
     {
+        if (amount <= FixedPoint2.Zero)
+            return false;
+
         EntityUid? selected = null;
         BoneComponent? selectedBone = null;
         foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
@@ -381,6 +526,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
 
         selectedBone.Integrity = FixedPoint2.Max(FixedPoint2.Zero, selectedBone.Integrity - amount);
         Dirty(selectedPart, selectedBone);
+        RefreshRecovery((selectedPart, selectedBone));
         if (fracture)
         {
             var severity = SeverityFromIntegrity(selectedBone);

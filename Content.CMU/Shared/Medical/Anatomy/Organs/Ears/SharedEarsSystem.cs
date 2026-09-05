@@ -2,12 +2,14 @@ using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Medical.Anatomy.Organs.Ears;
 
 public abstract partial class SharedEarsSystem : EntitySystem
 {
+    [Dependency] private INetManager _net = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected StatusEffectsSystem Status = default!;
 
@@ -22,6 +24,9 @@ public abstract partial class SharedEarsSystem : EntitySystem
 
     private void OnStageChanged(Entity<EarsComponent> ent, ref OrganStageChangedEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         var body = args.Body;
         var bestStage = ComputeBestEarStage(body);
         ApplyHearingStatus(body, bestStage);

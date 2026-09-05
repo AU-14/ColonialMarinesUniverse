@@ -84,7 +84,8 @@ public sealed record CMUSurgeryEntry(
     int NextStepIndex,
     int TotalSteps,
     string? GatingSurgeryId,
-    string Category);
+    string Category,
+    float? AutodocDurationSeconds = null);
 
 [Serializable, NetSerializable]
 public sealed record CMUArmedStepInfo(

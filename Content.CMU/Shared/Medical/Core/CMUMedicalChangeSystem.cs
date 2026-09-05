@@ -145,7 +145,7 @@ public sealed partial class CMUMedicalChangeSystem : EntitySystem
         => MarkChanged(args.Body, CMUMedicalChangeFlags.Organs);
 
     private void OnOrganChanged(ref OrganStageChangedEvent args)
-        => MarkChanged(args.Body, CMUMedicalChangeFlags.Organs);
+        => MarkChanged(args.Body, CMUMedicalChangeFlags.Organs | CMUMedicalChangeFlags.OrganStage);
 
     private void OnPainChanged(ref PainTierChangedEvent args)
         => MarkChanged(args.Body, CMUMedicalChangeFlags.Pain);

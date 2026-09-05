@@ -34,6 +34,11 @@ public sealed partial class CMUSurgicalTraitGenerationSystem : EntitySystem
 
     private void OnFractureSeverityChanged(Entity<FractureComponent> ent, ref FractureSeverityChangedEvent args)
     {
+        // Complications originate from new trauma. Recovery across the same tiers
+        // must not recreate a complication that treatment already removed.
+        if (args.New <= args.Old)
+            return;
+
         if (args.New == FractureSeverity.Compound)
         {
             if (ShouldSeedCompoundContamination(_random.NextFloat()))
@@ -61,6 +66,9 @@ public sealed partial class CMUSurgicalTraitGenerationSystem : EntitySystem
 
     private void OnOrganStageChanged(ref OrganStageChangedEvent args)
     {
+        if (args.New <= args.Old)
+            return;
+
         if (!TryGetContainingPart(args.Body, args.Organ, out var part, out var slotId))
             return;
         if (slotId == EyesOrganSlot)

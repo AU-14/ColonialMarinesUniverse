@@ -37,6 +37,8 @@ public sealed partial class ThreatVoteSystem : EntitySystem
     private readonly HashSet<NetUserId> _roundJoinBlockedPlayers = new();
 
     private PreparedThreatVote? _prepared;
+    private string? _currentRoundVotedThreat;
+    private string? _previousRoundVotedThreat;
     private ISawmill? _sawmill;
     private ISawmill Sawmill => _sawmill ??= Logger.GetSawmill("au14.threat");
 
@@ -46,12 +48,33 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRunLevelChanged);
     }
 
-    private void OnRunLevelChanged(GameRunLevelChangedEvent ev)
+    internal void OnRunLevelChanged(GameRunLevelChangedEvent ev)
     {
+        // Advance once when a played round ends, including direct restarts. Lobby transitions
+        // must not erase the cooldown before the next round's candidates are prepared.
+        if (ev.Old == GameRunLevel.InRound && ev.New != GameRunLevel.InRound)
+        {
+            _previousRoundVotedThreat = _currentRoundVotedThreat;
+            _currentRoundVotedThreat = null;
+        }
+
         if (ev.New == GameRunLevel.InRound) return;
 
         _prepared = null;
         ClearRoundJoinBlocks();
+    }
+
+    internal bool CanVoteForThreat(ThreatPrototype threat)
+    {
+        return threat.AllowConsecutiveVotes ||
+            !string.Equals(threat.VoteCooldownGroup ?? threat.ID,
+                _previousRoundVotedThreat,
+                StringComparison.OrdinalIgnoreCase);
+    }
+
+    internal void RecordVotedThreat(ThreatPrototype threat)
+    {
+        _currentRoundVotedThreat = threat.VoteCooldownGroup ?? threat.ID;
     }
 
     public bool IsRoundJoinBlocked(NetUserId playerId) => _roundJoinBlockedPlayers.Contains(playerId);
@@ -247,6 +270,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         foreach (ProtoId<ThreatPrototype> threatId in planet.AllowedThreats)
         {
             if (!_prototype.TryIndex(threatId, out ThreatPrototype? threatProto)
+                || !CanVoteForThreat(threatProto)
                 || !ThreatVoteSelection.IsThreatAllowed(threatProto, presetId, govforId, opforId, playerCount)
                 || !_prototype.TryIndex(threatProto.RoundStartSpawn, out PartySpawnPrototype? spawn))
                 continue;
@@ -291,6 +315,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         }, map={
             prepared.MapId}, heldPlayers={prepared.HeldPlayers.Count}, assignedJobs={assignedJobs.Count}.");
         _auRound.SetSelectedThreat(selected);
+        RecordVotedThreat(selected);
         _auRound.PreselectThirdPartiesForSelectedThreat();
         MoveHeldPlayersToObservers(prepared.HeldPlayers, selected);
 

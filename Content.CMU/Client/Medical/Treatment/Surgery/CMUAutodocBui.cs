@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Collections.Generic;
 using Content.Client.CMU14.Medical.Presentation.Windows;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Ghost.Controls;
@@ -36,6 +37,10 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
     protected override void Open()
     {
         base.Open();
+        // Initial state and attachment can queue the same BUI more than once.
+        if (_window != null)
+            return;
+
         _window = this.CreateWindow<CMUAutodocWindow>();
         _window.Title = Loc.GetString("cmu-autodoc-window-title");
         _window.StartButton.OnPressed += StartPressed;
@@ -71,6 +76,7 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
 
     private void Refresh(CMUAutodocBuiState state)
     {
+        _latestState = state;
         if (_window is null)
             return;
 
@@ -86,11 +92,11 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         }
 
         _window.SetPatient(ResolvePatient(state.Patient), state.PatientName, state.Status, currentStep, _entities, _players);
-        _window.StatusLabel.Text = state.Status;
-        _window.CurrentStepLabel.Text = currentStep;
-        _window.QueueSummaryLabel.Text = state.Queue.Count == 0
+        SetText(_window.StatusLabel, state.Status);
+        SetText(_window.CurrentStepLabel, currentStep);
+        SetText(_window.QueueSummaryLabel, state.Queue.Count == 0
             ? Loc.GetString("cmu-autodoc-queue-empty")
-            : Loc.GetString("cmu-autodoc-queue-summary", ("count", state.Queue.Count));
+            : Loc.GetString("cmu-autodoc-queue-summary", ("count", state.Queue.Count)));
 
         _window.StartButton.Disabled = !state.CanQueue || state.Running || state.Queue.Count == 0;
         _window.StopButton.Disabled = !state.CanQueue || !state.Running;
@@ -110,274 +116,391 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         return uid.Valid ? uid : null;
     }
 
-    private void StartPressed(BaseButton.ButtonEventArgs args) => SendMessage(new CMUAutodocStartMessage());
+    private void StartPressed(BaseButton.ButtonEventArgs args)
+    {
+        if (_latestState?.CommandContext is { } context)
+            SendMessage(new CMUAutodocStartMessage(context));
+    }
 
-    private void StopPressed(BaseButton.ButtonEventArgs args) => SendMessage(new CMUAutodocStopMessage());
+    private void StopPressed(BaseButton.ButtonEventArgs args)
+    {
+        if (_latestState?.CommandContext is { } context)
+            SendMessage(new CMUAutodocStopMessage(context));
+    }
 
-    private void ClearPressed(BaseButton.ButtonEventArgs args) => SendMessage(new CMUAutodocClearQueueMessage());
+    private void ClearPressed(BaseButton.ButtonEventArgs args)
+    {
+        if (_latestState?.CommandContext is { } context)
+            SendMessage(new CMUAutodocClearQueueMessage(context));
+    }
 
-    private void EjectPressed(BaseButton.ButtonEventArgs args) => SendMessage(new CMUAutodocEjectPatientMessage());
+    private void EjectPressed(BaseButton.ButtonEventArgs args)
+    {
+        if (_latestState?.CommandContext is { } context)
+            SendMessage(new CMUAutodocEjectPatientMessage(context));
+    }
+
+    private readonly Dictionary<ulong, QueueRow> _queueRows = new();
+    private readonly Dictionary<CMUSurgeryPartKey, PartRow> _partRows = new();
+    private readonly Dictionary<string, ProcedureRow> _procedureRows = new();
+    private readonly HashSet<ulong> _seenQueue = new();
+    private readonly HashSet<CMUSurgeryPartKey> _seenParts = new();
+    private readonly HashSet<string> _seenProcedures = new();
+    private readonly List<Control> _addedControls = new();
+    private CMUSurgeryPartKey? _procedurePart;
+    private (NetEntity? Pod, NetEntity? Patient, ulong Generation)? _rowContext;
+    private Control? _queueEmpty;
+    private Control? _partsEmpty;
+    private Control? _proceduresEmpty;
 
     private void RefreshQueue(CMUAutodocBuiState state)
     {
-        if (_window is null)
+        if (_window == null)
             return;
 
-        _window.QueueList.DisposeAllChildren();
-        if (state.Queue.Count == 0)
+        var context = (state.Pod, state.Patient, state.CommandContext?.OccupantGeneration ?? 0);
+        if (_rowContext != context)
         {
-            _window.QueueList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-autodoc-queue-empty")));
-            return;
+            ClearRows(_queueRows);
+            ClearRows(_partRows);
+            ClearRows(_procedureRows);
+            _selectedPart = null;
+            _procedurePart = null;
+            _rowContext = context;
         }
 
+        _seenQueue.Clear();
+        _addedControls.Clear();
+        SetEmpty(_window.QueueList, ref _queueEmpty, state.Queue.Count == 0,
+            Loc.GetString("cmu-autodoc-queue-empty"));
         foreach (var entry in state.Queue)
-            _window.QueueList.AddChild(BuildQueueRow(state, entry));
+        {
+            _seenQueue.Add(entry.Id);
+            if (!_queueRows.TryGetValue(entry.Id, out var row))
+            {
+                row = new QueueRow(entry.Id, QueueRemovePressed);
+                _queueRows.Add(entry.Id, row);
+                _window.QueueList.AddChild(row);
+                _addedControls.Add(row);
+            }
+            row.Update(entry, state);
+            if (row.GetPositionInParent() != entry.Index)
+                row.SetPositionInParent(entry.Index);
+        }
+        RemoveAbsent(_queueRows, _seenQueue);
+        _window.ScaleAddedControls(_addedControls);
     }
 
-    private Control BuildQueueRow(CMUAutodocBuiState state, CMUAutodocQueueEntry entry)
+    private void QueueRemovePressed(ulong id)
     {
-        var active = entry.Index == 0 && state.Running;
-        var accent = active ? CMUMedicalMachineStyle.Warning : CMUMedicalMachineStyle.Blue;
-        var panel = CMUMedicalMachineStyle.Panel(
-            active ? Color.FromHex("#272117") : CMUMedicalMachineStyle.DeepCardBg,
-            accent,
-            active ? new Thickness(2) : new Thickness(1));
-
-        var row = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            Margin = new Thickness(7, 5),
-            HorizontalExpand = true,
-        };
-        panel.AddChild(row);
-
-        row.AddChild(new Label
-        {
-            Text = (entry.Index + 1).ToString(),
-            MinWidth = 26,
-            Align = Label.AlignMode.Center,
-            VerticalAlignment = Control.VAlignment.Center,
-            FontColorOverride = accent,
-            StyleClasses = { "LabelKeyText" },
-        });
-
-        var text = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        row.AddChild(text);
-
-        text.AddChild(new Label
-        {
-            Text = $"{entry.SurgeryDisplayName} - {entry.PartDisplayName}",
-            ClipText = true,
-            HorizontalExpand = true,
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-        });
-        text.AddChild(new Label
-        {
-            Text = Loc.GetString(
-                "cmu-autodoc-procedure-time-note",
-                ("time", FormatDuration(entry.DurationSeconds))),
-            ClipText = true,
-            HorizontalExpand = true,
-            StyleClasses = { "LabelSubText" },
-            FontColorOverride = active ? CMUMedicalMachineStyle.Warning : CMUMedicalMachineStyle.Muted,
-        });
-
-        var remove = new Button
-        {
-            Text = Loc.GetString("cmu-autodoc-remove-button"),
-            Disabled = !state.CanQueue,
-            MinWidth = 72,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        var index = entry.Index;
-        remove.OnPressed += _ => SendMessage(new CMUAutodocRemoveQueueStepMessage(index));
-        row.AddChild(remove);
-
-        return panel;
+        if (_latestState is not { CanQueue: true, CommandContext: { } context } state ||
+            !_queueRows.ContainsKey(id) || !state.Queue.Exists(entry => entry.Id == id))
+            return;
+        SendMessage(new CMUAutodocRemoveQueueStepMessage(id, context));
     }
 
     private void RefreshSurgeryList(CMUAutodocBuiState state)
     {
-        if (_window is null)
+        if (_window == null)
             return;
 
-        _window.PartList.DisposeAllChildren();
-        _window.SurgeryList.DisposeAllChildren();
-
-        if (!state.CanQueue)
-        {
-            _window.SelectedPartLabel.Text = Loc.GetString("cmu-autodoc-parts-heading");
-            _window.SelectedPartStatusLabel.Text = Loc.GetString("cmu-autodoc-surgery2-required");
-            _window.PartList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-autodoc-surgery2-required")));
-            _window.SurgeryList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-autodoc-surgery2-required")));
-            return;
-        }
-
+        _addedControls.Clear();
+        _seenParts.Clear();
         EnsureSelectedPart(state);
-        foreach (var part in state.Parts)
+        var noParts = !state.CanQueue || state.Parts.Count == 0;
+        SetEmpty(_window.PartList, ref _partsEmpty, noParts, Loc.GetString(
+            state.CanQueue ? "cmu-autodoc-no-surgeries" : "cmu-autodoc-surgery2-required"));
+        if (state.CanQueue)
         {
-            var selected = _selectedPart is { } key && key.Matches(part);
-            var button = BuildPartButton(part, selected);
-            var captured = part;
-            button.OnPressed += _ =>
+            var index = 0;
+            foreach (var part in state.Parts)
             {
-                _selectedPart = new CMUSurgeryPartKey(captured);
-                RefreshSurgeryList(state);
-            };
-            _window.PartList.AddChild(button);
+                var key = new CMUSurgeryPartKey(part);
+                _seenParts.Add(key);
+                if (!_partRows.TryGetValue(key, out var row))
+                {
+                    row = new PartRow(key, PartPressed);
+                    _partRows.Add(key, row);
+                    _window.PartList.AddChild(row);
+                    _addedControls.Add(row);
+                }
+                row.Update(part, _selectedPart == key);
+                if (row.GetPositionInParent() != index)
+                    row.SetPositionInParent(index);
+                index++;
+            }
         }
+        RemoveAbsent(_partRows, _seenParts);
 
-        if (!TryGetSelectedPart(state, out var selectedPart))
+        if (_procedurePart != _selectedPart || !state.CanQueue)
         {
-            _window.SelectedPartLabel.Text = Loc.GetString("cmu-medical-surgery-no-part-selected");
-            _window.SelectedPartStatusLabel.Text = Loc.GetString("cmu-autodoc-no-surgeries");
-            _window.SurgeryList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-autodoc-no-surgeries")));
-            return;
+            ClearRows(_procedureRows);
+            _procedurePart = _selectedPart;
         }
-
-        _window.SelectedPartLabel.Text = selectedPart.DisplayName;
-        _window.SelectedPartStatusLabel.Text = selectedPart.EligibleSurgeries.Count == 0
-            ? Loc.GetString("cmu-autodoc-no-surgeries")
-            : Loc.GetString("cmu-autodoc-available-procedures", ("count", selectedPart.EligibleSurgeries.Count));
-
-        if (selectedPart.EligibleSurgeries.Count == 0)
+        _seenProcedures.Clear();
+        if (state.CanQueue && TryGetSelectedPart(state, out var selectedPart))
         {
-            _window.SurgeryList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-autodoc-no-surgeries")));
-            return;
+            SetText(_window.SelectedPartLabel, selectedPart.DisplayName);
+            SetText(_window.SelectedPartStatusLabel, selectedPart.EligibleSurgeries.Count == 0
+                ? Loc.GetString("cmu-autodoc-no-surgeries")
+                : Loc.GetString("cmu-autodoc-available-procedures", ("count", selectedPart.EligibleSurgeries.Count)));
+            SetEmpty(_window.SurgeryList, ref _proceduresEmpty, selectedPart.EligibleSurgeries.Count == 0,
+                Loc.GetString("cmu-autodoc-no-surgeries"));
+            var index = 0;
+            foreach (var surgery in selectedPart.EligibleSurgeries)
+            {
+                _seenProcedures.Add(surgery.SurgeryId);
+                if (!_procedureRows.TryGetValue(surgery.SurgeryId, out var row))
+                {
+                    row = new ProcedureRow(new CMUSurgeryPartKey(selectedPart), surgery.SurgeryId, ProcedurePressed);
+                    _procedureRows.Add(surgery.SurgeryId, row);
+                    _window.SurgeryList.AddChild(row);
+                    _addedControls.Add(row);
+                }
+                row.Update(surgery, selectedPart, state);
+                if (row.GetPositionInParent() != index)
+                    row.SetPositionInParent(index);
+                index++;
+            }
         }
-
-        foreach (var surgery in selectedPart.EligibleSurgeries)
-            _window.SurgeryList.AddChild(BuildSurgeryRow(selectedPart, surgery));
+        else
+        {
+            SetText(_window.SelectedPartLabel, Loc.GetString("cmu-medical-surgery-no-part-selected"));
+            var empty = Loc.GetString(state.CanQueue ? "cmu-autodoc-no-surgeries" : "cmu-autodoc-surgery2-required");
+            SetText(_window.SelectedPartStatusLabel, empty);
+            SetEmpty(_window.SurgeryList, ref _proceduresEmpty, true, empty);
+        }
+        RemoveAbsent(_procedureRows, _seenProcedures);
+        _window.ScaleAddedControls(_addedControls);
     }
 
-    private Button BuildPartButton(CMUSurgeryPartEntry part, bool selected)
+    private void PartPressed(CMUSurgeryPartKey key)
     {
-        var accent = selected
-            ? CMUMedicalMachineStyle.Warning
-            : part.EligibleSurgeries.Count > 0 ? CMUMedicalMachineStyle.Cyan : CMUMedicalMachineStyle.Dim;
+        if (_latestState is not { CanQueue: true } state || !CMUSurgeryPartKey.Contains(state.Parts, key))
+            return;
+        _selectedPart = key;
+        RefreshSurgeryList(state);
+    }
 
-        var button = new Button
-        {
-            HorizontalExpand = true,
-            MinHeight = 52,
-            ModulateSelfOverride = selected ? Color.White : Color.FromHex("#CDD6DE"),
-        };
+    private void ProcedurePressed(CMUSurgeryPartKey key, string id)
+    {
+        if (_latestState is not { CanQueue: true, CommandContext: { } context } state ||
+            _selectedPart != key || !_procedureRows.ContainsKey(id) ||
+            !CMUSurgeryPartKey.TryFind(state.Parts, key, out var part) ||
+            state.Queue.Count >= CMUAutodocPodComponent.MaximumQueueEntries ||
+            state.Queue.Exists(entry => entry.Type == key.Type && entry.Symmetry == key.Symmetry && entry.SurgeryId == id))
+            return;
 
-        var panel = CMUMedicalMachineStyle.Panel(
-            selected ? Color.FromHex("#211F2A") : CMUMedicalMachineStyle.DeepCardBg,
-            accent,
-            selected ? new Thickness(2) : new Thickness(1));
+        var surgery = part.EligibleSurgeries.Find(entry => entry.SurgeryId == id);
+        if (surgery != null)
+            SendMessage(new CMUAutodocQueueStepMessage(key.Part, key.Type, key.Symmetry,
+                id, surgery.NextStepIndex, context));
+    }
 
-        var row = new BoxContainer
+    private void SetEmpty(BoxContainer parent, ref Control? empty, bool visible, string text)
+    {
+        if (!visible)
         {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 7,
-            Margin = new Thickness(7, 5),
-            HorizontalExpand = true,
-        };
-        panel.AddChild(row);
+            empty?.Orphan();
+            empty = null;
+            return;
+        }
+        if (empty != null)
+        {
+            foreach (var child in empty.Children)
+                if (child is Label label) SetText(label, text);
+            return;
+        }
+        empty = CMUMedicalMachineStyle.Empty(text);
+        parent.AddChild(empty);
+        _addedControls.Add(empty);
+    }
 
-        row.AddChild(new PanelContainer
-        {
-            MinSize = new Vector2(5, 34),
-            PanelOverride = CMUMedicalMachineStyle.Flat(accent, accent),
-        });
+    private static void SetText(Label label, string text)
+    {
+        if (!label.TextMemory.Span.SequenceEqual(text.AsSpan()))
+            label.Text = text;
+    }
 
-        var text = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        row.AddChild(text);
+    private static void ClearRows<TKey, TRow>(Dictionary<TKey, TRow> rows)
+        where TKey : notnull where TRow : AutodocRow
+    {
+        foreach (var row in rows.Values)
+            row.Release();
+        rows.Clear();
+    }
 
-        text.AddChild(new Label
+    private static void RemoveAbsent<TKey, TRow>(Dictionary<TKey, TRow> rows, HashSet<TKey> seen)
+        where TKey : notnull where TRow : AutodocRow
+    {
+        // Dictionary removal does not invalidate its enumerator on the supported runtime.
+        foreach (var (key, row) in rows)
         {
-            Text = part.DisplayName,
-            ClipText = true,
-            HorizontalExpand = true,
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-        });
-        text.AddChild(new Label
+            if (seen.Contains(key))
+                continue;
+            row.Release();
+            rows.Remove(key);
+        }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            Text = part.EligibleSurgeries.Count == 0
+            ClearRows(_queueRows);
+            ClearRows(_partRows);
+            ClearRows(_procedureRows);
+            _latestState = null;
+            _addedControls.Clear();
+        }
+        base.Dispose(disposing);
+    }
+
+    private abstract class AutodocRow : PanelContainer
+    {
+        protected readonly BoxContainer Row;
+        protected readonly Label TitleLabel;
+        protected readonly Label DetailLabel;
+        protected readonly StyleBoxFlat Style;
+        protected bool Released;
+
+        protected AutodocRow(Color accent)
+        {
+            HorizontalExpand = true;
+            Style = CMUMedicalMachineStyle.Flat(CMUMedicalMachineStyle.DeepCardBg, accent);
+            PanelOverride = Style;
+            Row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                SeparationOverride = 8, Margin = new Thickness(7, 5), HorizontalExpand = true };
+            AddChild(Row);
+            var text = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical,
+                HorizontalExpand = true, VerticalAlignment = VAlignment.Center };
+            Row.AddChild(text);
+            TitleLabel = new Label { ClipText = true, HorizontalExpand = true,
+                FontColorOverride = CMUMedicalMachineStyle.Text };
+            DetailLabel = new Label { ClipText = true, HorizontalExpand = true,
+                FontColorOverride = CMUMedicalMachineStyle.Muted, StyleClasses = { "LabelSubText" } };
+            text.AddChild(TitleLabel);
+            text.AddChild(DetailLabel);
+        }
+
+        public virtual void Release()
+        {
+            Released = true;
+            Orphan();
+        }
+
+        protected void Accent(Color color, bool active)
+        {
+            Style.BorderColor = color;
+            Style.BackgroundColor = active ? Color.FromHex("#272117") : CMUMedicalMachineStyle.DeepCardBg;
+            var border = active ? new Thickness(2) : new Thickness(1);
+            if (Style.BorderThickness != border)
+            {
+                Style.BorderThickness = border;
+                InvalidateMeasure();
+            }
+        }
+    }
+
+    private sealed class QueueRow : AutodocRow
+    {
+        private readonly ulong _id;
+        private Action<ulong>? _remove;
+        private readonly Label _number;
+        private readonly Button _button;
+
+        public QueueRow(ulong id, Action<ulong> remove) : base(CMUMedicalMachineStyle.Blue)
+        {
+            _id = id;
+            _remove = remove;
+            _number = new Label { MinWidth = 26, Align = Label.AlignMode.Center,
+                VerticalAlignment = VAlignment.Center, StyleClasses = { "LabelKeyText" } };
+            Row.AddChild(_number);
+            _number.SetPositionInParent(0);
+            _button = new Button { Text = Loc.GetString("cmu-autodoc-remove-button"), MinWidth = 72,
+                VerticalAlignment = VAlignment.Center };
+            _button.OnPressed += _ => { if (!Released) _remove?.Invoke(_id); };
+            Row.AddChild(_button);
+        }
+
+        public void Update(CMUAutodocQueueEntry entry, CMUAutodocBuiState state)
+        {
+            var active = entry.Index == 0 && state.Running;
+            var accent = active ? CMUMedicalMachineStyle.Warning : CMUMedicalMachineStyle.Blue;
+            Accent(accent, active);
+            _number.FontColorOverride = accent;
+            SetText(_number, (entry.Index + 1).ToString());
+            SetText(TitleLabel, $"{entry.SurgeryDisplayName} - {entry.PartDisplayName}");
+            SetText(DetailLabel, Loc.GetString("cmu-autodoc-procedure-time-note", ("time", FormatDuration(entry.DurationSeconds))));
+            DetailLabel.FontColorOverride = active ? CMUMedicalMachineStyle.Warning : CMUMedicalMachineStyle.Muted;
+            _button.Disabled = !state.CanQueue || state.CommandContext == null;
+        }
+
+        public override void Release() { _remove = null; base.Release(); }
+    }
+
+    private sealed class PartRow : AutodocRow
+    {
+        private readonly CMUSurgeryPartKey _key;
+        private Action<CMUSurgeryPartKey>? _select;
+        private readonly Button _button;
+
+        public PartRow(CMUSurgeryPartKey key, Action<CMUSurgeryPartKey> select) : base(CMUMedicalMachineStyle.Cyan)
+        {
+            _key = key;
+            _select = select;
+            MinHeight = 52;
+            // The button covers the row; keeping its text children retains focus and layout.
+            RemoveChild(Row);
+            _button = new Button { HorizontalExpand = true };
+            _button.AddChild(Row);
+            AddChild(_button);
+            _button.OnPressed += _ => { if (!Released) _select?.Invoke(_key); };
+        }
+
+        public void Update(CMUSurgeryPartEntry part, bool selected)
+        {
+            Accent(selected ? CMUMedicalMachineStyle.Warning : part.EligibleSurgeries.Count > 0
+                ? CMUMedicalMachineStyle.Cyan : CMUMedicalMachineStyle.Dim, selected);
+            _button.ModulateSelfOverride = selected ? Color.White : Color.FromHex("#CDD6DE");
+            SetText(TitleLabel, part.DisplayName);
+            SetText(DetailLabel, part.EligibleSurgeries.Count == 0
                 ? Loc.GetString("cmu-medical-surgery-part-condition-no-eligible")
-                : Loc.GetString("cmu-autodoc-part-procedures", ("count", part.EligibleSurgeries.Count)),
-            ClipText = true,
-            HorizontalExpand = true,
-            StyleClasses = { "LabelSubText" },
-            FontColorOverride = CMUMedicalMachineStyle.Muted,
-        });
+                : Loc.GetString("cmu-autodoc-part-procedures", ("count", part.EligibleSurgeries.Count)));
+        }
 
-        button.AddChild(panel);
-        return button;
+        public override void Release() { _select = null; base.Release(); }
     }
 
-    private Control BuildSurgeryRow(CMUSurgeryPartEntry part, CMUSurgeryEntry surgery)
+    private sealed class ProcedureRow : AutodocRow
     {
-        var panel = CMUMedicalMachineStyle.Panel(CMUMedicalMachineStyle.DeepCardBg, CMUMedicalMachineStyle.Purple);
-        var row = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            Margin = new Thickness(7, 5),
-            HorizontalExpand = true,
-        };
-        panel.AddChild(row);
+        private readonly CMUSurgeryPartKey _part;
+        private readonly string _id;
+        private Action<CMUSurgeryPartKey, string>? _queue;
+        private readonly Button _button;
 
-        row.AddChild(new PanelContainer
+        public ProcedureRow(CMUSurgeryPartKey part, string id, Action<CMUSurgeryPartKey, string> queue)
+            : base(CMUMedicalMachineStyle.Purple)
         {
-            MinSize = new Vector2(5, 42),
-            PanelOverride = CMUMedicalMachineStyle.Flat(CMUMedicalMachineStyle.Purple, CMUMedicalMachineStyle.Purple),
-        });
+            _part = part;
+            _id = id;
+            _queue = queue;
+            _button = new Button { Text = Loc.GetString("cmu-autodoc-queue-button"), MinWidth = 86,
+                VerticalAlignment = VAlignment.Center };
+            _button.OnPressed += _ => { if (!Released) _queue?.Invoke(_part, _id); };
+            Row.AddChild(_button);
+        }
 
-        var text = new BoxContainer
+        public void Update(CMUSurgeryEntry surgery, CMUSurgeryPartEntry part, CMUAutodocBuiState state)
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        row.AddChild(text);
+            SetText(TitleLabel, surgery.DisplayName);
+            SetText(DetailLabel, Loc.GetString("cmu-autodoc-procedure-time-note",
+                ("time", surgery.AutodocDurationSeconds is { } duration ? FormatDuration(duration) : "-")));
+            _button.Disabled = state.CommandContext == null || state.Queue.Count >= CMUAutodocPodComponent.MaximumQueueEntries ||
+                state.Queue.Exists(entry => entry.Type == part.Type && entry.Symmetry == part.Symmetry && entry.SurgeryId == surgery.SurgeryId);
+        }
 
-        text.AddChild(new Label
-        {
-            Text = surgery.DisplayName,
-            ClipText = true,
-            HorizontalExpand = true,
-            FontColorOverride = CMUMedicalMachineStyle.Text,
-        });
-        text.AddChild(new Label
-        {
-            Text = Loc.GetString(
-                "cmu-autodoc-procedure-time-note",
-                ("time", FormatDuration(GetAutodocDurationSeconds(surgery)))),
-            ClipText = true,
-            HorizontalExpand = true,
-            StyleClasses = { "LabelSubText" },
-            FontColorOverride = CMUMedicalMachineStyle.Muted,
-        });
-
-        var button = new Button
-        {
-            Text = Loc.GetString("cmu-autodoc-queue-button"),
-            MinWidth = 86,
-            VerticalAlignment = Control.VAlignment.Center,
-        };
-        button.OnPressed += _ => SendMessage(new CMUAutodocQueueStepMessage(
-            part.Part,
-            part.Type,
-            part.Symmetry,
-            surgery.SurgeryId,
-            surgery.NextStepIndex));
-        row.AddChild(button);
-
-        return panel;
+        public override void Release() { _queue = null; base.Release(); }
     }
 
     private void EnsureSelectedPart(CMUAutodocBuiState state)
@@ -412,34 +535,12 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         return false;
     }
 
-    private static float GetAutodocDurationSeconds(CMUSurgeryEntry surgery)
-    {
-        if (surgery.SurgeryId == "CMUAutodocRepairWounds")
-            return 120f;
-
-        if (surgery.SurgeryId.Contains("Shattered", StringComparison.OrdinalIgnoreCase))
-            return 240f;
-
-        if (surgery.SurgeryId.Contains("Compound", StringComparison.OrdinalIgnoreCase))
-            return 180f;
-
-        if (surgery.SurgeryId.Contains("Simple", StringComparison.OrdinalIgnoreCase))
-            return 120f;
-
-        return surgery.Category switch
-        {
-            "fracture" => 180f,
-            "bleed" => 180f,
-            "suture" => 240f,
-            "head_organ" => 240f,
-            _ => 180f,
-        };
-    }
-
     private static string FormatDuration(float seconds)
     {
-        var minutes = Math.Max(1, (int)Math.Ceiling(seconds / 60f));
-        return Loc.GetString("cmu-autodoc-minutes", ("minutes", minutes));
+        var total = Math.Max(0, (int) Math.Ceiling(seconds));
+        return total < 60
+            ? Loc.GetString("cmu-autodoc-seconds", ("seconds", total))
+            : Loc.GetString("cmu-autodoc-minutes-seconds", ("minutes", total / 60), ("seconds", total % 60));
     }
 
     private static string FormatRemaining(TimeSpan expiresAt)
@@ -754,9 +855,9 @@ public sealed partial class CMUAutodocWindow : FancyWindow
         IEntityManager entities,
         IPlayerManager players)
     {
-        PatientLabel.Text = patientName;
-        StatusLabel.Text = status;
-        CurrentStepLabel.Text = currentStep;
+        SetText(PatientLabel, patientName);
+        SetText(StatusLabel, status);
+        SetText(CurrentStepLabel, currentStep);
 
         var showPreview = patient is { } uid &&
                           uid.Valid &&
@@ -780,6 +881,16 @@ public sealed partial class CMUAutodocWindow : FancyWindow
         CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale();
         CMUMedicalWindowSizing.RememberSize(RememberedSizeKey, this);
+    }
+
+    private static void SetText(Label label, string text)
+    {
+        if (!label.TextMemory.Span.SequenceEqual(text.AsSpan())) label.Text = text;
+    }
+
+    public void ScaleAddedControls(IReadOnlyList<Control> controls)
+    {
+        _uniformScaler.Apply(controls, _layoutScale, _resourceCache);
     }
 
     private void ApplyUniformScale(bool force = false)

@@ -17,7 +17,6 @@ using Content.Shared.StationRecords;
 using Content.Shared.StationRecords.Components;
 using Content.Shared.StationRecords.Systems;
 using Content.Shared.Tag;
-using Robust.Shared.Collections;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -352,20 +351,26 @@ public sealed partial class AccessReaderSystem : EntitySystem
     /// <param name="uid">The entity that is being searched.</param>
     public HashSet<EntityUid> FindPotentialAccessItems(EntityUid uid)
     {
-        FindAccessItemsInventory(uid, out var items);
+        var items = new HashSet<EntityUid>();
+        FindPotentialAccessItems(uid, items);
+        return items;
+    }
+
+    private void FindPotentialAccessItems(EntityUid uid, HashSet<EntityUid> items)
+    {
+        if (!items.Add(uid))
+            return;
+
+        FindAccessItemsInventory(uid, out var directItems);
 
         var ev = new GetAdditionalAccessEvent
         {
-            Entities = items
+            Entities = directItems
         };
         RaiseLocalEvent(uid, ref ev);
 
-        foreach (var item in new ValueList<EntityUid>(items))
-        {
-            items.UnionWith(FindPotentialAccessItems(item));
-        }
-        items.Add(uid);
-        return items;
+        foreach (var item in directItems)
+            FindPotentialAccessItems(item, items);
     }
 
     /// <summary>

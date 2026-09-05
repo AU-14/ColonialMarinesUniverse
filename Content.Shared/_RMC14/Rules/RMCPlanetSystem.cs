@@ -150,6 +150,10 @@ public sealed partial class RMCPlanetSystem : EntitySystem
 
     public bool TryGetOffset(MapCoordinates coordinates, out Vector2i offset)
     {
+        // All connected planet levels use the surface's targeting coordinate offset.
+        if (TryGetPlanetSurfaceCoordinates(coordinates, out var surfaceCoordinates))
+            coordinates = surfaceCoordinates;
+
         var entCoords = _transform.ToCoordinates(coordinates);
         if (_transform.GetGrid(entCoords) is { } gridId &&
             TryComp(gridId, out RMCPlanetComponent? gridPlanet))

@@ -49,6 +49,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         SubscribeLocalEvent<CMUSplintItemComponent, CMUSplintApplyDoAfterEvent>(OnSplintDoAfter);
         SubscribeLocalEvent<CMUSplintedComponent, BodyPartDamagedEvent>(OnSplintedPartDamaged);
         SubscribeLocalEvent<CMUCastItemComponent, AfterInteractEvent>(OnCastInteract);
+        SubscribeLocalEvent<CMUCastItemComponent, ExaminedEvent>(OnCastExamined);
         SubscribeLocalEvent<CMUCastItemComponent, CMUCastApplyDoAfterEvent>(OnCastDoAfter);
         SubscribeLocalEvent<CMUCastComponent, BoneFracturedEvent>(OnCastPartFractured);
         SubscribeLocalEvent<CMUCastComponent, CMUMedicalWorkDueEvent>(OnCastWorkDue);
@@ -69,9 +70,34 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             ("uses", Math.Max(0, ent.Comp.Uses))));
     }
 
+    private void OnCastExamined(Entity<CMUCastItemComponent> ent, ref ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange || !ent.Comp.ConsumedOnApply)
+            return;
+
+        args.PushMarkup(Loc.GetString(
+            "cmu-cast-item-uses-remaining",
+            ("uses", Math.Max(0, ent.Comp.Uses))));
+    }
+
     public bool IsLayerEnabled()
     {
         return _medicalEnabled && _boneEnabled;
+    }
+
+    /// <summary>Removes support and postoperative sources and cancels all work owned by this treatment system.</summary>
+    public void ResetTreatment(EntityUid part)
+    {
+        if (Net.IsClient)
+            return;
+
+        MedicalScheduler.Cancel(part, CastHealWork);
+        MedicalScheduler.Cancel(part, CastRemovePromptWork);
+        MedicalScheduler.Cancel(part, PostOpMalunionWork);
+        RemComp<CMUPostOpBoneSetComponent>(part);
+        RemComp<CMUMalunionComponent>(part);
+        RemComp<CMUCastComponent>(part);
+        RemComp<CMUSplintedComponent>(part);
     }
 
     private void OnSplintedPartDamaged(Entity<CMUSplintedComponent> ent, ref BodyPartDamagedEvent args)
@@ -92,10 +118,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             return;
         if (!HasComp<CMUHumanMedicalComponent>(target))
             return;
-        // Resolve the part NOW while the medic's aim selection is still fresh —
-        // the DoAfter is ApplyDelay long, and aim freshness
-        // (`cmu.medical.aim_mode.freshness_seconds`) is short, so resolving at
-        // DoAfter completion would usually miss the aim window.
+        // Bind the operation to this exact part. Changing aim during the delay
+        // must not redirect an already started treatment.
         if (!TryFindFracturedPart(target, out var part, args.User))
             return;
 
@@ -106,6 +130,9 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             BreakOnMove = true,
             BreakOnDamage = true,
             BlockDuplicate = true,
+            NeedHand = true,
+            BreakOnHandChange = true,
+            BreakOnDropItem = true,
         };
         DoAfter.TryStartDoAfter(doAfter);
         args.Handled = true;
@@ -118,18 +145,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         if (!IsLayerEnabled())
             return;
 
-        // Use the part resolved at DoAfter start (aim was fresh). Re-resolve
-        // only if the pre-selection is gone.
-        EntityUid part;
-        if (args.PreSelectedPart is { } netPart && TryGetEntity(netPart, out var stored)
-            && HasComp<FractureComponent>(stored.Value))
-        {
-            part = stored.Value;
-        }
-        else if (!TryFindFracturedPart(target, out part, args.User))
-        {
+        if (!ResolvePart(target, args.PreSelectedPart, out var part) || !HasComp<FractureComponent>(part))
             return;
-        }
         ApplySplintToPart(ent, part);
     }
 
@@ -140,7 +157,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
     /// </summary>
     public bool ApplySplintToPart(Entity<CMUSplintItemComponent> ent, EntityUid part)
     {
-        if (!HasComp<BodyPartComponent>(part))
+        if (!HasComp<BodyPartComponent>(part) || ent.Comp.ConsumedOnApply && ent.Comp.Uses <= 0)
             return false;
 
         var splinted = EnsureComp<CMUSplintedComponent>(part);
@@ -176,6 +193,9 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             BreakOnMove = true,
             BreakOnDamage = true,
             BlockDuplicate = true,
+            NeedHand = true,
+            BreakOnHandChange = true,
+            BreakOnDropItem = true,
         };
         DoAfter.TryStartDoAfter(doAfter);
         args.Handled = true;
@@ -188,21 +208,16 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         if (!IsLayerEnabled())
             return;
 
-        EntityUid part;
-        if (args.PreSelectedPart is { } netPart && TryGetEntity(netPart, out var stored)
-            && IsCastTarget(stored.Value))
-        {
-            part = stored.Value;
-        }
-        else if (!TryFindCastTargetPart(target, out part, args.User))
-        {
+        if (!ResolvePart(target, args.PreSelectedPart, out var part) || !IsCastTarget(part))
             return;
-        }
         ApplyCastToPart(ent, part);
     }
 
     public bool ApplyCastToPart(Entity<CMUCastItemComponent> ent, EntityUid part)
     {
+        if (!HasComp<BodyPartComponent>(part) || ent.Comp.ConsumedOnApply && ent.Comp.Uses <= 0)
+            return false;
+
         var hasFracture = TryComp<FractureComponent>(part, out var frac);
         var hasPostOp = HasComp<CMUPostOpBoneSetComponent>(part);
         if (!hasFracture && !hasPostOp)
@@ -246,6 +261,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             return;
 
         ent.Comp.Uses--;
+        Dirty(ent);
         if (ent.Comp.Uses <= 0)
             QueueDel(ent.Owner);
     }
@@ -256,6 +272,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             return;
 
         ent.Comp.Uses--;
+        Dirty(ent);
         if (ent.Comp.Uses <= 0)
             QueueDel(ent.Owner);
     }
@@ -435,7 +452,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
     private bool ResolvePart(EntityUid body, NetEntity? selected, out EntityUid part)
     {
         part = default;
-        if (selected is { } netPart && TryGetEntity(netPart, out var stored) && HasComp<BodyPartComponent>(stored.Value))
+        if (selected is { } netPart && TryGetEntity(netPart, out var stored) &&
+            TryComp<BodyPartComponent>(stored.Value, out var bodyPart) && bodyPart.Body == body)
         {
             part = stored.Value;
             return true;

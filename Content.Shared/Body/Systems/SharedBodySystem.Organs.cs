@@ -94,7 +94,14 @@ public sealed partial class SharedBodySystem
         }
 
         _relations.Orphan((organId, child));
-        return bodyContainer is null || _containers.Remove(organId, bodyContainer);
+        if (bodyContainer is null || _containers.Remove(organId, bodyContainer))
+            return true;
+
+        // Container listeners can refuse removal after preflight. Restore the
+        // anatomical relation so a failed extraction does not leave a missing slot.
+        if (TryComp<ParentOrganComponent>(parent, out var parentOrgan))
+            _relations.Relate((parent, parentOrgan), (organId, child));
+        return false;
     }
 
     public bool AddOrganToFirstValidSlot(

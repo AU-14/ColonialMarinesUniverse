@@ -114,7 +114,8 @@ public sealed partial class CMUMedicalPatientBaySystem : EntitySystem
         if (!ContainsPatient(bodyContainer, patient))
             return false;
 
-        _containers.Remove(patient, bodyContainer);
+        if (!_containers.Remove(patient, bodyContainer))
+            return false;
         MoveEjectedPatientToPod(pod, patient);
         UpdatePodAppearance(pod, bodyContainer);
         return true;

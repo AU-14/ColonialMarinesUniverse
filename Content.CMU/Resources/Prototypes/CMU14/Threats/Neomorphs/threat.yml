@@ -1,6 +1,7 @@
 
 - type: threat
   id: NeomorphsThreat
+  voteCooldownGroup: Neomorphs
   lorePrimer: AU14PrimerThreatNeomorphs
   roundstartspawns: NeomorphsThreatSpawns
   blacklistedgamemodes:
@@ -26,6 +27,7 @@
 
 - type: threat
   id: NeomorphsThreatCF
+  voteCooldownGroup: Neomorphs
   lorePrimer: AU14PrimerThreatNeomorphs
   roundstartspawns: NeomorphsThreatSpawnsCF
   thirdpartyinterval: 9100

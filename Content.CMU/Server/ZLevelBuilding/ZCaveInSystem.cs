@@ -192,10 +192,6 @@ public sealed partial class ZCaveInSystem : EntitySystem
             !_gridQuery.TryComp(gridUid, out var grid))
             return;
 
-        // Don't accumulate dirty tiles while the level is mid-collapse; that region is already being handled.
-        if (stone.CollapseQueue.Count > 0)
-            return;
-
         var settings = GetSettings(mapUid);
         var span = Math.Max(1, settings.MaxRoofSpan);
         var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
@@ -267,10 +263,10 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // real collapse, and so a tile shored up in time is cleared). Both sets are small.
         var candidates = new HashSet<Vector2i>(stoneMap.Comp.DirtyTiles);
         candidates.UnionWith(stoneMap.Comp.PendingCollapse.Keys);
-        stoneMap.Comp.DirtyTiles.Clear();
-
         foreach (var tile in candidates)
         {
+            // Remove only consumed input. Starting one collapse must not discard changes in another cavern.
+            stoneMap.Comp.DirtyTiles.Remove(tile);
             if (EvaluateTile(stoneMap, (stoneMap.Comp.StoneGrid, grid), tile, span, chunkSize, now))
                 return; // a collapse just started; stop evaluating this level this pass
         }
@@ -386,9 +382,8 @@ public sealed partial class ZCaveInSystem : EntitySystem
         stoneMap.Comp.CollapseNextStep = _timing.CurTime;
         stoneMap.Comp.CollapseNextRumble = TimeSpan.Zero;
 
-        // Save the region so we can trigger surface effects when this collapse finishes.
+        // Surface effects use committed burials; supports/stairs may still rescue queued cells.
         stoneMap.Comp.LastCollapseRegion.Clear();
-        stoneMap.Comp.LastCollapseRegion.AddRange(region);
         BuildCollapseFeedbackDistances(stoneMap.Comp, region);
     }
 
@@ -461,7 +456,9 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // Keep a stable platform around any staircase: if a walk-through stair is on this tile or an adjacent
         // one, do not bury it and do not pull the floor out above it. Otherwise the tile a stair drops you onto
         // would vanish and you would instantly fall (and risk clipping through to the level below).
-        if (HasStairWithin(grid, tile, 1))
+        if (HasStairWithin(grid, tile, 1) ||
+            IsSolid(grid, tile, stoneMap.Comp, Math.Max(2, settings.ChunkSize)) ||
+            HasBuiltSupportWithin(grid, tile, Math.Max(1, settings.MaxRoofSpan)))
             return;
 
         var coords = _map.GridTileToLocal(grid.Owner, grid.Comp, tile);
@@ -480,6 +477,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
         // Bury the tile in rock (the roof falling in).
         Spawn(settings.StoneRockEntity, coords);
+        stoneMap.Comp.LastCollapseRegion.Add(tile);
 
         // The ground/default level directly above loses its floor tile in the SAME spot, so the surface caves
         // into the pit exactly where the underground gave way.
@@ -534,12 +532,10 @@ public sealed partial class ZCaveInSystem : EntitySystem
                 return;
         }
 
-        _map.SetTile(surfaceGridUid, surfaceGridComp, surfaceTile, Tile.Empty);
-
-        // The floor that just gave way drops whatever was built on it into the cavern: every anchored (wrenched/
-        // constructed) structure on the now-floorless surface tile is unanchored and moved down to the same spot
-        // on this stone level, where there is no floor under it.
+        // Tile removal synchronously unanchors contents on child grids. Transfer the anchored snapshot before
+        // touching the floor so both child grids and map grids follow the same collapse path.
         DropBuiltEntitiesToLevelBelow(stoneMap.Owner, surfaceGridUid, surfaceGridComp, surfaceTile, worldPos);
+        _map.SetTile(surfaceGridUid, surfaceGridComp, surfaceTile, Tile.Empty);
     }
 
     /// <summary>
@@ -568,6 +564,14 @@ public sealed partial class ZCaveInSystem : EntitySystem
                 continue;
 
             _transform.Unanchor(uid, xform);
+            // A floor marker owns its old floor; it must never travel to and later delete a cave floor.
+            if (HasComp<TileFloorSupportComponent>(uid))
+            {
+                QueueDel(uid);
+                continue;
+            }
+
+            RemComp<StructuralSupportComponent>(uid);
             _transform.SetMapCoordinates(uid, belowCoords);
 
             // Fallen structures are rubble: strip fixture hardness so a wall that lands inside (or later gets
@@ -734,7 +738,9 @@ public sealed partial class ZCaveInSystem : EntitySystem
     /// <summary>True if an anchored entity genuinely holds up a cave roof: a built support/pillar or a wall.</summary>
     private bool IsLoadBearing(EntityUid uid)
     {
-        return HasComp<StructuralSupportComponent>(uid) || HasComp<ZLevelWallSupportComponent>(uid);
+        return HasComp<ZLevelWallSupportComponent>(uid) ||
+               TryComp<StructuralSupportComponent>(uid, out var support) &&
+               (support.IsVerticalSupport || support.IsAnchor);
     }
 
     /// <summary>True if a built vertical support / anchor stands within <paramref name="span"/> tiles (Manhattan)
@@ -849,8 +855,11 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
         // Sample up to 80 tiles from the collapsed region to limit CPU cost on large collapses.
         var region = stoneMap.Comp.LastCollapseRegion;
+        if (region.Count == 0)
+            return;
+
         var sampleCount = Math.Min(region.Count, 80);
-        var step = region.Count <= sampleCount ? 1 : region.Count / sampleCount;
+        var step = (region.Count + sampleCount - 1) / sampleCount;
 
         var brute = new DamageSpecifier();
         brute.DamageDict.Add("Blunt", FixedPoint2.New(15));

@@ -79,8 +79,8 @@ public sealed partial class ZGeneratedStoneComponent : Component
     public TimeSpan CollapseNextRumble;
 
     /// <summary>
-    /// The flood-filled cavern region from the most recent cave-in. Populated at collapse start, used at
-    /// collapse end to trigger surface effects on the level above. Cleared after surface effects fire.
+    /// The cells actually buried by the active cave-in. Queued cells rescued by supports/stairs or already
+    /// occupied by rock are excluded. Used at collapse end for surface effects, then cleared.
     /// </summary>
     [ViewVariables]
     public readonly List<Vector2i> LastCollapseRegion = new();

@@ -550,6 +550,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
         // TODO: Solution regulation API that doesn't result in very minor FixedPoint2 errors (Currently gingerbreadman only regenerates 0.99u instead of 1.00u)
         referenceFactor = Math.Clamp(referenceFactor, 0f, ent.Comp.MaxVolumeModifier);
         var ratio = (float)amount / (float)ent.Comp.BloodReferenceSolution.Volume;
+        var changed = false;
 
         foreach (var (referenceReagent, referenceQuantity) in ent.Comp.BloodReferenceSolution)
         {
@@ -560,15 +561,21 @@ public sealed partial class BloodstreamSystem : EntitySystem
             {
                 error = FixedPoint2.Min(error, adjustedAmount);
                 bloodSolution.AddReagent(referenceReagent, error);
+                changed |= error > FixedPoint2.Zero;
             }
             else if (error < 0)
             {
                 // invert the error since we're removing reagents...
                 error = FixedPoint2.Min( -error, adjustedAmount);
                 bloodSolution.RemoveReagent(referenceReagent, error);
+                changed |= error > FixedPoint2.Zero;
             }
         }
 
+        // Publish once after all reference reagents reach their new amounts. Physiology
+        // subscribers must see the exact blood-volume transition, including transfusion.
+        if (changed)
+            _solutionContainer.UpdateChemicals(ent.Comp.BloodSolution.Value);
         return true;
     }
 

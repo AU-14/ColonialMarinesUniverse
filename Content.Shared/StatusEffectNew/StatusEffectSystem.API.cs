@@ -25,19 +25,24 @@ public sealed partial class StatusEffectsSystem
         bool force = false
     )
     {
+        statusEffect = null;
         if (duration == TimeSpan.Zero)
-        {
-            statusEffect = null;
             return false;
-        }
 
         // We check to make sure time is greater than zero here because sometimes you want to use TryAddStatusEffect to remove duration instead...
-        if (!TryGetStatusEffect(target, effectProto, out statusEffect))
+        if (!TryPrepareStatusEffectRenewal(target, effectProto, out var effect))
+            return false;
+        if (effect is not { } current)
             return TryAddStatusEffect(target, effectProto, out statusEffect, duration, delay, force);
 
-        AddStatusEffectTime(statusEffect.Value, duration);
-        UpdateStatusEffectDelay(statusEffect.Value, delay);
+        AddStatusEffectTime((current.Owner, current.Comp), duration);
+        if (!IsCurrentStatusEffect(current, target))
+            return false;
+        UpdateStatusEffectDelay((current.Owner, current.Comp), delay);
+        if (!IsCurrentStatusEffect(current, target))
+            return false;
 
+        statusEffect = current.Owner;
         return true;
     }
 
@@ -72,22 +77,24 @@ public sealed partial class StatusEffectsSystem
         bool force = false
     )
     {
+        statusEffect = null;
         if (duration <= TimeSpan.Zero)
-        {
-            statusEffect = null;
             return false;
-        }
 
-        if (!TryGetStatusEffect(target, effectProto, out statusEffect))
+        if (!TryPrepareStatusEffectRenewal(target, effectProto, out var effect))
+            return false;
+        if (effect is not { } current)
             return TryAddStatusEffect(target, effectProto, out statusEffect, duration, delay, force);
 
-        if (!_effectQuery.TryComp(statusEffect, out var statusEffectComponent))
+        var endTime = delay == null || current.Comp.Applied ? _timing.CurTime + duration : _timing.CurTime + delay + duration;
+        SetStatusEffectEndTime((current.Owner, current.Comp), endTime);
+        if (!IsCurrentStatusEffect(current, target))
+            return false;
+        UpdateStatusEffectDelay((current.Owner, current.Comp), delay);
+        if (!IsCurrentStatusEffect(current, target))
             return false;
 
-        var endTime = delay == null || statusEffectComponent.Applied ? _timing.CurTime + duration : _timing.CurTime + delay + duration;
-        SetStatusEffectEndTime(statusEffect.Value, endTime);
-        UpdateStatusEffectDelay(statusEffect.Value, delay);
-
+        statusEffect = current.Owner;
         return true;
     }
 
@@ -121,22 +128,24 @@ public sealed partial class StatusEffectsSystem
         bool force = false
     )
     {
+        statusEffect = null;
         if (duration <= TimeSpan.Zero)
-        {
-            statusEffect = null;
             return false;
-        }
 
-        if (!TryGetStatusEffect(target, effectProto, out statusEffect))
+        if (!TryPrepareStatusEffectRenewal(target, effectProto, out var effect))
+            return false;
+        if (effect is not { } current)
             return TryAddStatusEffect(target, effectProto, out statusEffect, duration, delay, force);
 
-        if (!_effectQuery.TryComp(statusEffect, out var statusEffectComponent))
+        var endTime = delay == null || current.Comp.Applied ? duration : delay + duration;
+        UpdateStatusEffectTime((current.Owner, current.Comp), endTime);
+        if (!IsCurrentStatusEffect(current, target))
+            return false;
+        UpdateStatusEffectDelay((current.Owner, current.Comp), delay);
+        if (!IsCurrentStatusEffect(current, target))
             return false;
 
-        var endTime = delay == null || statusEffectComponent.Applied ? duration : delay + duration;
-        UpdateStatusEffectTime(statusEffect.Value, endTime);
-        UpdateStatusEffectDelay(statusEffect.Value, delay);
-
+        statusEffect = current.Owner;
         return true;
     }
 
@@ -298,19 +307,13 @@ public sealed partial class StatusEffectsSystem
     /// <returns> True if duration was edited successfully, false otherwise.</returns>
     public bool TryAddTime(EntityUid uid, EntProtoId effectProto, TimeSpan time)
     {
-        if (!_containerQuery.TryComp(uid, out var container))
+        if (!TryGetStatusEffect(uid, effectProto, out var effect) || !_effectQuery.TryComp(effect, out var component) ||
+            !IsCurrentStatusEffect((effect.Value, component), uid))
             return false;
 
-        foreach (var effect in container.ActiveStatusEffects?.ContainedEntities ?? [])
-        {
-            var meta = MetaData(effect);
-            if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
-            {
-                AddStatusEffectTime(effect, time);
-                return true;
-            }
-        }
-        return false;
+        Entity<StatusEffectComponent> current = (effect.Value, component);
+        AddStatusEffectTime((current.Owner, current.Comp), time);
+        return IsCurrentStatusEffect(current, uid);
     }
 
     /// <summary>
@@ -337,19 +340,13 @@ public sealed partial class StatusEffectsSystem
     /// <returns> True if duration was set successfully, false otherwise.</returns>
     public bool TrySetTime(EntityUid uid, EntProtoId effectProto, TimeSpan time)
     {
-        if (!_containerQuery.TryComp(uid, out var container))
+        if (!TryGetStatusEffect(uid, effectProto, out var effect) || !_effectQuery.TryComp(effect, out var component) ||
+            !IsCurrentStatusEffect((effect.Value, component), uid))
             return false;
 
-        foreach (var effect in container.ActiveStatusEffects?.ContainedEntities ?? [])
-        {
-            var meta = MetaData(effect);
-            if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
-            {
-                SetStatusEffectEndTime(effect, time);
-                return true;
-            }
-        }
-        return false;
+        Entity<StatusEffectComponent> current = (effect.Value, component);
+        SetStatusEffectEndTime((current.Owner, current.Comp), time);
+        return IsCurrentStatusEffect(current, uid);
     }
 
     /// <summary>
