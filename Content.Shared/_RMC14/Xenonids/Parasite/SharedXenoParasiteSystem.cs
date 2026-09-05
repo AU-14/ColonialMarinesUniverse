@@ -53,6 +53,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
@@ -118,6 +119,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         SubscribeLocalEvent<InfectableComponent, ActivateInWorldEvent>(OnInfectableActivate);
         SubscribeLocalEvent<InfectableComponent, CanDropTargetEvent>(OnInfectableCanDropTarget);
 
+        SubscribeLocalEvent<XenoParasiteComponent, ComponentGetState>(OnParasiteGetState);
+        SubscribeLocalEvent<XenoParasiteComponent, ComponentHandleState>(OnParasiteHandleState);
         SubscribeLocalEvent<XenoParasiteComponent, XenoLeapHitEvent>(OnParasiteLeapHit);
         SubscribeLocalEvent<XenoParasiteComponent, AfterInteractEvent>(OnParasiteAfterInteract);
         SubscribeLocalEvent<XenoParasiteComponent, BeforeInteractHandEvent>(OnParasiteInteractHand);

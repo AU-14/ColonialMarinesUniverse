@@ -7,21 +7,21 @@ namespace Content.Shared.Botany.Items.Components;
 /// <summary>
 /// Component that stores produce data for a plant.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(BotanySystem))]
 public sealed partial class ProduceComponent : Component
 {
     /// <summary>
     /// Name of a base plant prototype to spawn when extracting seeds.
     /// </summary>
-    [DataField("plantId"), AutoNetworkedField]
+    [DataField("plantId")]
     public EntProtoId? PlantProtoId;
 
     /// <summary>
     /// Hidden entity with cloned plant components.
     /// Used to create a <see cref="SeedComponent"/> when this produce has its seeds extracted.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? PlantData;
 
     /// <summary>
