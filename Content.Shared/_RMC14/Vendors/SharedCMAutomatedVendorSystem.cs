@@ -365,6 +365,11 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private void EjectAllVendorContents(Entity<CMAutomatedVendorComponent> vendor)
     {
+        // CMU14: Deployable shutdown also destroys vendors while their map or grid is being deleted.
+        var coords = Transform(vendor).Coordinates;
+        if (TerminatingOrDeleted(coords.EntityId))
+            return;
+
         // Get all available items with their quantity
         var inventory = GetAvailableInventoryWithAmounts(vendor.Comp);
 
@@ -374,7 +379,6 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
             for (int i = 0; i < amount; i++)
             {
                 // Create item near the vendor
-                var coords = Transform(vendor).Coordinates;
                 var spawnedItem = Spawn(itemId, coords);
 
                 // Throw in a random direction with a random force
