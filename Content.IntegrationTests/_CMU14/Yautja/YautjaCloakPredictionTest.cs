@@ -56,24 +56,25 @@ public sealed class YautjaCloakPredictionTest
             var hunter = entMan.GetEntity(hunterNet);
             var timing = client.ResolveDependency<IClientGameTiming>();
             var gameStates = client.ResolveDependency<IClientGameStateManager>();
+            var damage = entMan.System<DamageableSystem>();
             var damageable = entMan.GetComponent<DamageableComponent>(hunter);
             Assert.Multiple(() =>
             {
                 Assert.That(timing.InPrediction, Is.True);
-                Assert.That(damageable.TotalDamage, Is.EqualTo(FixedPoint2.New(10)));
+                Assert.That(damage.GetPositiveDamage((hunter, damageable)).GetTotal(), Is.EqualTo(FixedPoint2.New(10)));
                 Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(hunter), Is.True);
                 Assert.That(entMan.HasComponent<RMCNightVisionVisibleComponent>(hunter), Is.False);
             });
 
             // Restoring the server's damage after predicted healing raises a positive DamageChangedEvent
             // while ResetPredictedEntities is enumerating this entity's networked components.
-            entMan.System<DamageableSystem>().SetDamage(hunter, BluntDamage(5));
+            damage.SetDamage(hunter, BluntDamage(5));
             Assert.That(damageable.LastModifiedTick, Is.GreaterThan(timing.LastRealTick));
             Assert.DoesNotThrow(() => gameStates.ResetPredictedEntities());
 
             Assert.Multiple(() =>
             {
-                Assert.That(damageable.TotalDamage, Is.EqualTo(FixedPoint2.New(10)),
+                Assert.That(damage.GetPositiveDamage((hunter, damageable)).GetTotal(), Is.EqualTo(FixedPoint2.New(10)),
                     "The real prediction reset must restore the authoritative damage, not skip the entity.");
                 Assert.That(entMan.HasComponent<RMCNightVisionVisibleComponent>(hunter), Is.False,
                     "Damage state restoration must not add components during rollback.");
@@ -147,8 +148,10 @@ public sealed class YautjaCloakPredictionTest
             }
             else
             {
-                entMan.System<DamageableSystem>().TryChangeDamage(hunter, BluntDamage(1), ignoreResistances: true);
-                Assert.That(entMan.GetComponent<DamageableComponent>(hunter).TotalDamage, Is.GreaterThan(FixedPoint2.Zero));
+                var damage = entMan.System<DamageableSystem>();
+                var damageable = entMan.GetComponent<DamageableComponent>(hunter);
+                damage.TryChangeDamage(hunter, BluntDamage(1), ignoreResistances: true);
+                Assert.That(damage.GetPositiveDamage((hunter, damageable)).GetTotal(), Is.GreaterThan(FixedPoint2.Zero));
             }
 
             Assert.That(entMan.GetComponent<EntityTurnInvisibleComponent>(hunter).Enabled, Is.False);
