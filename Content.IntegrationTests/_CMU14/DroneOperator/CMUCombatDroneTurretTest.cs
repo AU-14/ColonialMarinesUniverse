@@ -10,7 +10,9 @@ using Content.Shared.Mind;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests.CMU14.DroneOperator;
@@ -64,8 +66,13 @@ public sealed class CMUCombatDroneTurretTest
             var turret = clientEntities.GetComponent<CMUCombatDroneComponent>(clientDrone).TurretVisual!.Value;
             var transform = clientEntities.System<SharedTransformSystem>();
             var visuals = clientEntities.System<CMUCombatDroneTurretSystem>();
+            // A displaced attachment must recover even while the hull is stationary.
+            transform.SetLocalPositionNoLerp(turret, new Vector2(13f / 32, 0));
             visuals.FrameUpdate(0);
             Assert.That(clientEntities.GetComponent<SpriteComponent>(turret).Offset, Is.EqualTo(new Vector2(-11, -6) / 32));
+            Assert.That(clientEntities.GetComponent<TransformComponent>(turret).ParentUid, Is.EqualTo(clientDrone));
+            Assert.That(clientEntities.GetComponent<TransformComponent>(turret).LocalPosition, Is.EqualTo(Vector2.Zero));
+            Assert.That(transform.GetWorldPosition(turret), Is.EqualTo(transform.GetWorldPosition(clientDrone)));
 
             // Exercise the real client gun effect path, including its animation and light.
             var muzzle = typeof(SharedGunSystem).GetMethod("MuzzleFlash", BindingFlags.Instance | BindingFlags.NonPublic,
@@ -84,6 +91,44 @@ public sealed class CMUCombatDroneTurretTest
             visuals.FrameUpdate(0);
             relative = transform.GetWorldPosition(flash) - transform.GetWorldPosition(clientDrone);
             Assert.That(Vector2.Distance(relative, new Vector2(-11, 12) / 32), Is.LessThan(0.001f), "An active flash must follow the turret independently of the hull.");
+
+            var eye = pair.Client.ResolveDependency<IEyeManager>().CurrentEye;
+            var originalCamera = eye.Rotation;
+            try
+            {
+                foreach (var camera in new[] { 0, 45, 90, 180, 270 })
+                {
+                    eye.Rotation = Angle.FromDegrees(camera);
+                    // Include both sides of every diagonal, where ordinary cardinal rounding
+                    // disagrees with the renderer's bias even after movement has stopped.
+                    foreach (var facing in new[] { -46, -45, 0, 44, 45, 46, 90, 134, 135, 136, 180, 224, 225, 226, 270, 314, 315, 316, 360 })
+                    {
+                        var hullRotation = Angle.FromDegrees(facing);
+                        var turretRotation = Angle.FromDegrees(-facing);
+                        transform.SetWorldRotationNoLerp(clientDrone, hullRotation);
+                        transform.SetWorldRotationNoLerp(turret, turretRotation);
+                        visuals.FrameUpdate(0);
+
+                        var hullDirection = SpriteComponent.Layer.GetDirection(RsiDirectionType.Dir4,
+                            (hullRotation + eye.Rotation).Reduced().FlipPositive());
+                        var turretDirection = SpriteComponent.Layer.GetDirection(RsiDirectionType.Dir4,
+                            (turretRotation + eye.Rotation).Reduced().FlipPositive());
+                        var droneComponent = clientEntities.GetComponent<CMUCombatDroneComponent>(clientDrone);
+                        var mount = droneComponent.TurretMountOffsets[(int) hullDirection];
+                        Assert.That(clientEntities.GetComponent<SpriteComponent>(turret).Offset, Is.EqualTo(mount),
+                            $"The mount must match the rendered hull at {facing} degrees with camera rotation {camera}.");
+
+                        var barrelTip = mount + droneComponent.TurretMuzzleOffsets[(int) turretDirection];
+                        relative = transform.GetWorldPosition(flash) - transform.GetWorldPosition(clientDrone);
+                        Assert.That(Vector2.Distance(eye.Rotation.RotateVec(relative), barrelTip), Is.LessThan(0.001f),
+                            "The active muzzle flash must stay on the rendered barrel through hull, turret, and camera turns.");
+                    }
+                }
+            }
+            finally
+            {
+                eye.Rotation = originalCamera;
+            }
         });
         await pair.CleanReturnAsync();
     }

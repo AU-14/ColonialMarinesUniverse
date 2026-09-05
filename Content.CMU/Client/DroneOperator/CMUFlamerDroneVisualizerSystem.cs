@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared.CMU14.DroneOperator;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.DroneOperator;
@@ -18,6 +19,8 @@ public sealed class CMUFlamerDroneVisualizerSystem : EntitySystem
 
     public override void Initialize()
     {
+        UpdatesAfter.Add(typeof(TransformSystem));
+        UpdatesAfter.Add(typeof(EyeSystem));
         SubscribeLocalEvent<CMUFlamerDroneComponent, ComponentShutdown>(OnShutdown);
     }
 
@@ -47,13 +50,7 @@ public sealed class CMUFlamerDroneVisualizerSystem : EntitySystem
 
             // Match the body's on-screen RSI direction, including rotated grids/cameras.
             var angle = _transform.GetWorldRotation(transform) + _eye.CurrentEye.Rotation;
-            var index = angle.GetCardinalDir() switch
-            {
-                Direction.North => 1,
-                Direction.East => 2,
-                Direction.West => 3,
-                _ => 0,
-            };
+            var index = (int) SpriteComponent.Layer.GetDirection(RsiDirectionType.Dir4, angle.Reduced().FlipPositive());
             var firing = flamer.FlameUntil > _timing.CurTime;
             UpdateEffect(effects.First, flamer.FirstClawOffsets[index], angle, firing);
             UpdateEffect(effects.Second, flamer.SecondClawOffsets[index], angle, firing);
@@ -62,12 +59,13 @@ public sealed class CMUFlamerDroneVisualizerSystem : EntitySystem
 
     private void UpdateEffect(EntityUid effect, Vector2 screenOffset, Angle screenAngle, bool firing)
     {
-        _sprite.SetOffset(effect, screenOffset);
+        // These client-only children share one nozzle position for both particles and light.
+        // Undo the hull and camera rotation to keep the attachment on the rendered claw tip.
+        var transform = Transform(effect);
+        transform.ActivelyLerping = false;
+        _transform.SetLocalPositionNoLerp(effect, (-screenAngle).RotateVec(screenOffset), transform);
         _sprite.SetScale(effect, new Vector2(firing ? 0.5f : 0.3f));
         _lights.SetEnergy(effect, firing ? 2f : 0.8f);
-        // Light offsets rotate with the entity; noRot sprites use screen-space offsets.
-        // Adjust the light rather than writing to the drone's replicated transforms.
-        _lights.SetOffset(effect, (-screenAngle).RotateVec(screenOffset));
     }
 
     private void ClearEffects(EntityUid drone)
