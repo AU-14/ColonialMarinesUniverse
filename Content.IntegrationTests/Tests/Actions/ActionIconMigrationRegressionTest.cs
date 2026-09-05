@@ -76,8 +76,11 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task UnmappedStaticIconUsesFirstSpriteLayer()
+    [TestCase("ActionSleep", "/Textures/Clothing/Head/Hats/pyjamasyndicatered.rsi", "icon")]
+    [TestCase("CMUActionCargoVehicleReturn", "/Textures/_RMC14/Objects/Devices/command_tablet.rsi", "cotablet")]
+    [TestCase("CMUActionCargoVehicleToggleBay", "/Textures/CMU14/Structures/vehicles/cargo_carrier.rsi", "cargo_open")]
+    [TestCase("CMUActionCargoVehicleSelfDestruct", "/Textures/_RMC14/Objects/Weapons/Grenades/rcm20mm/he.rsi", "icon")]
+    public async Task StaticIconsUseVisibleFirstSpriteLayer(string prototype, string rsi, string state)
     {
         var map = await Pair.CreateTestMap();
         EntityUid serverAction = default;
@@ -87,7 +90,7 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
         {
             await Server.WaitPost(() =>
             {
-                serverAction = SEntMan.SpawnEntity("ActionSleep", map.GridCoords);
+                serverAction = SEntMan.SpawnEntity(prototype, map.GridCoords);
                 netAction = SEntMan.GetNetEntity(serverAction);
             });
             await Pair.RunUntilSynced();
@@ -104,7 +107,7 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
                     out var iconLayer,
                     false), Is.True);
                 Assert.That(iconLayer, Is.Zero);
-                Assert.That(sprite[iconLayer].Visible, Is.True);
+                AssertRsiLayer(sprites, action, ActionVisuals.Icon, rsi, state, visible: true);
             });
         }
         finally
