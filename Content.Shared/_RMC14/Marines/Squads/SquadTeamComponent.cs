@@ -50,6 +50,12 @@ public sealed partial class SquadTeamComponent : Component
     [DataField]
     public bool CanSupplyDrop = true;
 
+    /// <summary>
+    /// Squad marker used by this team's supply pad on its ship.
+    /// </summary>
+    [DataField]
+    public EntProtoId<SquadTeamComponent>? SupplyDropPadSquad;
+
     [DataField]
     public List<SquadArmorLayers> BlacklistedSquadArmor = new();
 

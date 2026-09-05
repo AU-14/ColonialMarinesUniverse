@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -68,6 +69,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private EntityQuery<ActorComponent> _actor;
     private EntityQuery<MobStateComponent> _mobStateQuery;
@@ -148,9 +150,13 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     {
         var hasOrbital = ev.Cannon.Comp.Status == OrbitalCannonStatus.Chambered;
         var cannonFaction = ev.Cannon.Comp.Faction;
+        var cannonMap = Transform(ev.Cannon).MapID;
         var consoles = EntityQueryEnumerator<OverwatchConsoleComponent>();
         while (consoles.MoveNext(out var uid, out var console))
         {
+            if (!_zLevels.IsSameZNetwork(Transform(uid).MapID, cannonMap))
+                continue;
+
             if (!string.IsNullOrEmpty(cannonFaction) &&
                 !string.Equals(console.Group, cannonFaction, StringComparison.OrdinalIgnoreCase))
                 continue;
@@ -163,9 +169,13 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     private void OnOrbitalCannonLaunch(ref OrbitalCannonLaunchEvent ev)
     {
         var cannonFaction = ev.CannonFaction;
+        var cannonMap = Transform(ev.Cannon).MapID;
         var consoles = EntityQueryEnumerator<OverwatchConsoleComponent>();
         while (consoles.MoveNext(out var uid, out var console))
         {
+            if (!_zLevels.IsSameZNetwork(Transform(uid).MapID, cannonMap))
+                continue;
+
             if (!string.IsNullOrEmpty(cannonFaction) &&
                 !string.Equals(console.Group, cannonFaction, StringComparison.OrdinalIgnoreCase))
                 continue;

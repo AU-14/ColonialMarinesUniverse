@@ -733,7 +733,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         _adminLog.Add(LogType.RMCOrbitalBombardment, $"{logMessage}");
         _core.CreateARESLog(cannon, LogCat, (string)$"{Name(user)} fired the orbital cannon at {adjustedCoords.X}, {adjustedCoords.Y}");
 
-        var ev = new OrbitalCannonLaunchEvent(cannon.Comp.FireCooldown + firing.ImpactDelay, cannon.Comp.Faction);
+        var ev = new OrbitalCannonLaunchEvent(cannon.Owner, cannon.Comp.FireCooldown + firing.ImpactDelay, cannon.Comp.Faction);
         RaiseLocalEvent(ref ev);
         return true;
     }
