@@ -68,6 +68,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CMURoboticLimbComponent, BodyPartDamagedEvent>(OnRoboticPartDamaged);
+        SubscribeLocalEvent<SynthComponent, DamageChangedEvent>(OnSynthDamageChanged, after: [typeof(SharedBodyPartHealthSystem)]);
         SubscribeLocalEvent<CMURoboticLimbComponent, ComponentShutdown>(OnRoboticLimbShutdown);
         SubscribeLocalEvent<CMUHumanMedicalComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged, before: [typeof(SharedHitLocationSystem)]);
         SubscribeLocalEvent<CMUHumanMedicalComponent, CMURoboticLimbRepairDoAfterEvent>(OnRepairDoAfter);
