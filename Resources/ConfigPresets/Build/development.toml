@@ -8,6 +8,8 @@ map = "USSBushRedux"
 lobbyenabled = false
 role_timers = false
 role_whitelist = false
+admin_job_tracking = true
+role_loadout_timers = false
 
 [rmc]
 distress_xenos_minimum = 0  # stop blocking distress testing
@@ -22,14 +24,13 @@ enabled = false
 role_time = 0.5
 quick_lottery = true
 
-[gateway]
-generator_enabled = false
-
 [movement]
 mob_pushing = true
 
 [net]
 tickrate = 30
+max_rapid_connections = 413
+max_ip_connections = 413
 
 [physics]
 # Makes mapping annoying
@@ -50,11 +51,25 @@ emergency = false
 arrivals = false
 preload_grids = false
 
+[afk]
+time = 0
+
 [admin]
+afk_time = 0
 see_own_notes = true
+new_player_threshold = 120
 
 [ic]
 # random_characters = true
 random_species_weights = ""
 ssd_sleep_time = 3600
 id_job_length = 50
+
+[database]
+# Change to postgres if needed
+engine = "sqlite"
+pg_host = "localhost"
+pg_port = 5432
+pg_database = "ss14"
+pg_username = "postgres"
+pg_password = "postgres"

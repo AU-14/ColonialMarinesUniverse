@@ -29,7 +29,7 @@
                 <Label Name="VoteTypeTimeoutLabel" Visible="False" StyleClasses="CrtHeading" />
             </BoxContainer>
         </PanelContainer>
-        
+
         <Button Name="CreateButton" Text="{Loc 'ui-vote-create-button'}" HorizontalExpand="True" />
 
         <Label StyleClasses="CrtDimText" Text="{Loc 'ui-vote-fluff'}" />

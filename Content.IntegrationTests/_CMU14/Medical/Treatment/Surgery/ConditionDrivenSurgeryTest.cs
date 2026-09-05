@@ -1,32 +1,35 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Content.Server._CMU14.Medical.Injuries.Wounds;
-using Content.Server._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
-using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
-using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Markers;
+using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Medical.Wounds;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
@@ -38,7 +41,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Medical.Treatment.Surgery;
+namespace Content.IntegrationTests.CMU14.Medical.Treatment.Surgery;
 
 [TestFixture]
 public sealed class ConditionDrivenSurgeryTest
@@ -681,17 +684,17 @@ public sealed class ConditionDrivenSurgeryTest
             var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
             var hands = entMan.System<SharedHandsSystem>();
             var targeting = entMan.System<SharedBodyZoneTargetingSystem>();
-            var xform = entMan.System<SharedTransformSystem>();
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var scalpel = entMan.SpawnEntity("CMScalpel", MapCoordinates.Nullspace);
             var leftArm = GetBodyPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Left);
+            EntityUid? detachedBody = null;
 
             try
             {
                 entMan.EnsureComponent<BypassSkillChecksComponent>(surgeon);
                 entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(patient);
-                xform.DetachEntity(leftArm, entMan.GetComponent<TransformComponent>(leftArm));
+                detachedBody = DetachBodyPart(entMan, leftArm);
                 targeting.SelectZone((surgeon, null), TargetBodyZone.LeftArm);
                 Assert.That(hands.TryPickupAnyHand(surgeon, scalpel, checkActionBlocker: false), Is.True);
 
@@ -708,7 +711,8 @@ public sealed class ConditionDrivenSurgeryTest
             }
             finally
             {
-                entMan.DeleteEntity(leftArm);
+                if (detachedBody is { } carrier && entMan.EntityExists(carrier))
+                    entMan.DeleteEntity(carrier);
                 entMan.DeleteEntity(patient);
                 entMan.DeleteEntity(surgeon);
                 entMan.DeleteEntity(scalpel);
@@ -736,11 +740,11 @@ public sealed class ConditionDrivenSurgeryTest
         EntityUid cautery = default;
         EntityUid anchor = default;
         EntityUid extremity = default;
+        EntityUid detachedBody = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var containers = entMan.System<SharedContainerSystem>();
             var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
             var hands = entMan.System<SharedHandsSystem>();
             var sessions = entMan.System<CMUSurgerySessionSystem>();
@@ -758,10 +762,7 @@ public sealed class ConditionDrivenSurgeryTest
 
             entMan.EnsureComponent<BypassSkillChecksComponent>(surgeon);
             entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(patient);
-            Assert.That(
-                containers.TryGetContainingContainer((extremity, null, null), out var extremityContainer),
-                Is.True);
-            Assert.That(containers.Remove(extremity, extremityContainer), Is.True);
+            detachedBody = DetachBodyPart(entMan, extremity);
             targeting.SelectZone((surgeon, null), selectedZone);
             Assert.That(hands.TryPickupAnyHand(surgeon, scalpel, checkActionBlocker: false), Is.True);
 
@@ -854,9 +855,9 @@ public sealed class ConditionDrivenSurgeryTest
 
             Assert.That(hands.IsHolding(surgeon, hemostat, out var hemostatHand), Is.True);
             hands.DoDrop(surgeon, hemostatHand, doDropInteraction: false, log: false);
-            Assert.That(hands.TryPickupAnyHand(surgeon, extremity, checkActionBlocker: false), Is.True);
+            Assert.That(hands.TryPickupAnyHand(surgeon, detachedBody, checkActionBlocker: false), Is.True);
             Assert.That(
-                flow.TryHandleArmedToolUse(patient, armed, surgeon, extremity, patient, out var handled, out var started),
+                flow.TryHandleArmedToolUse(patient, armed, surgeon, detachedBody, patient, out var handled, out var started),
                 Is.True);
             Assert.Multiple(() =>
             {
@@ -883,6 +884,7 @@ public sealed class ConditionDrivenSurgeryTest
                         out var attachedExtremity),
                     Is.True);
                 Assert.That(attachedExtremity, Is.EqualTo(extremity));
+                Assert.That(entMan.EntityExists(detachedBody), Is.False);
                 Assert.That(entMan.HasComponent<CMUSurgeryArmedStepComponent>(patient), Is.False);
                 Assert.That(sessions.TryGetSession(patient, out var awaitingSession), Is.True);
                 Assert.That(awaitingSession.Phase, Is.EqualTo(CMUSurgerySessionPhase.AwaitingDecision));
@@ -924,7 +926,8 @@ public sealed class ConditionDrivenSurgeryTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            entMan.DeleteEntity(extremity);
+            if (entMan.EntityExists(detachedBody))
+                entMan.DeleteEntity(detachedBody);
             entMan.DeleteEntity(patient);
             entMan.DeleteEntity(surgeon);
             entMan.DeleteEntity(scalpel);
@@ -1200,7 +1203,8 @@ public sealed class ConditionDrivenSurgeryTest
 
                 traits.EnsureTrait(arm, CMUSurgicalTrait.VascularTear);
 
-                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True);
+                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.False,
+                    "Rearming an injected prerequisite does not commit the stale step.");
 
                 var rearmed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
                 Assert.Multiple(() =>
@@ -1522,7 +1526,8 @@ public sealed class ConditionDrivenSurgeryTest
 
                 traits.EnsureTrait(arm, CMUSurgicalTrait.ContaminatedWound);
 
-                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True);
+                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.False,
+                    "Rearming cleanup does not commit the original final bone-setting step.");
                 armed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
                 Assert.Multiple(() =>
                 {
@@ -1598,7 +1603,8 @@ public sealed class ConditionDrivenSurgeryTest
                 traits.EnsureTrait(arm, CMUSurgicalTrait.VascularTear);
                 wounds.SeedInternalBleed(arm, "test:vascular-tear", 0.5f);
 
-                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True);
+                Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.False,
+                    "Rearming an injected prerequisite does not commit the stale step.");
 
                 armed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(human);
                 Assert.Multiple(() =>
@@ -1986,7 +1992,7 @@ public sealed class ConditionDrivenSurgeryTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var heartComp = entMan.GetComponent<HeartComponent>(heart);
             var damage = entMan.GetComponent<DamageableComponent>(human);
 
@@ -2023,14 +2029,22 @@ public sealed class ConditionDrivenSurgeryTest
 
             var heartComp = entMan.GetComponent<HeartComponent>(heart);
             var health = entMan.GetComponent<OrganHealthComponent>(heart);
-            var status = entMan.System<SharedStatusEffectsSystem>();
 
             Assert.Multiple(() =>
             {
                 Assert.That(health.Stage, Is.EqualTo(OrganDamageStage.Healthy));
                 Assert.That(heartComp.Stopped, Is.False);
-                Assert.That(status.HasStatusEffect(human, "StatusEffectCMUCardiacArrest"), Is.False);
             });
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(
+                server.EntMan.System<StatusEffectsSystem>()
+                    .HasStatusEffect(human, "StatusEffectCMUCardiacArrest"),
+                Is.False);
         });
 
         await pair.RunSeconds(3);
@@ -2135,8 +2149,11 @@ public sealed class ConditionDrivenSurgeryTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task SeveredHandAppearsAsReattachableMissingSite()
+    [TestCase("CMMobHuman", false)]
+    [TestCase("CMUDroneAndroid", true)]
+    public async Task AutodocRegeneratesPristineNativeLimbWithoutConsumingSeveredLimb(
+        string patientPrototype,
+        bool expectRobotic)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -2144,55 +2161,149 @@ public sealed class ConditionDrivenSurgeryTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var containers = entMan.System<SharedContainerSystem>();
-            var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
-            var flow = entMan.System<SharedCMUSurgeryFlowSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var autodoc = entMan.System<CMUAutodocSystem>();
+            var patient = entMan.SpawnEntity(patientPrototype, MapCoordinates.Nullspace);
             var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            EntityUid severedHand = default;
+            EntityUid detachedBody = default;
 
             try
             {
-                entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(human);
-                var arm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
-                severedHand = GetBodyPart(entMan, human, BodyPartType.Hand, BodyPartSymmetry.Right);
-                Assert.That(
-                    containers.TryGetContainingContainer((severedHand, null, null), out var handContainer),
-                    Is.True);
-                Assert.That(containers.Remove(severedHand, handContainer), Is.True);
+                entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(patient);
+                var severedHand = GetBodyPart(entMan, patient, BodyPartType.Hand, BodyPartSymmetry.Right);
+                detachedBody = DetachBodyPart(entMan, severedHand);
 
-                var entries = dispatch.BuildPartEntries(human, surgeon, ignoreSkillRequirements: true);
+                var entries = BuildAutodocPartEntries(autodoc, patient, surgeon);
                 var missingHand = entries.Find(entry =>
                     entry.Type == BodyPartType.Hand
                     && entry.Symmetry == BodyPartSymmetry.Right);
+                var regeneration = missingHand?.EligibleSurgeries.Find(entry =>
+                    entry.SurgeryId == "CMUAutodocRegenerateLimb");
 
                 Assert.That(missingHand, Is.Not.Null);
+                Assert.That(regeneration, Is.Not.Null);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(
-                        missingHand!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
-                        Does.Contain("CMUSurgeryReattachLimb"));
-                    Assert.That(
-                        flow.TryGetReattachAnchorPart(
-                            human,
-                            BodyPartType.Hand,
-                            BodyPartSymmetry.Right,
-                            out var anchor),
-                        Is.True);
-                    Assert.That(anchor, Is.EqualTo(arm));
-                    Assert.That(
-                        flow.LimbMatchesMissingSlot(
-                            human,
-                            severedHand,
-                            BodyPartType.Hand,
-                            BodyPartSymmetry.Right),
-                        Is.True);
+                    Assert.That(regeneration!.DisplayName, Is.EqualTo("Regenerate Limb"));
+                    Assert.That(GetAutodocProcedureDuration(regeneration), Is.EqualTo(90f));
+                });
+
+                Assert.That(entMan.System<CMUSurgerySystem>().TryGetMissingPartSite(patient,
+                    BodyPartType.Hand, BodyPartSymmetry.Right, out var anchor, out var slot), Is.True);
+                var queued = new CMUAutodocQueuedStep(
+                    patient,
+                    BodyPartType.Hand,
+                    BodyPartSymmetry.Right,
+                    "CMUAutodocRegenerateLimb",
+                    regeneration.DisplayName,
+                    regeneration.Category,
+                    0,
+                    "cmu-autodoc-automated-step-label",
+                    missingHand!.DisplayName,
+                    90f,
+                    TargetAnchor: anchor,
+                    TargetSlot: slot);
+
+                Assert.That(ApplyAutodocProcedure(autodoc, patient, surgeon, queued), Is.True);
+
+                var replacement = GetBodyPart(entMan, patient, BodyPartType.Hand, BodyPartSymmetry.Right);
+                var health = entMan.GetComponent<BodyPartHealthComponent>(replacement);
+                var hasFracture = entMan.TryGetComponent<FractureComponent>(replacement, out var fracture);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(replacement, Is.Not.EqualTo(severedHand));
+                    Assert.That(health.Current, Is.EqualTo(health.Max));
+                    Assert.That(hasFracture && fracture!.Severity != FractureSeverity.None, Is.False);
+                    Assert.That(entMan.HasComponent<CMURoboticLimbComponent>(replacement), Is.EqualTo(expectRobotic));
+                    Assert.That(entMan.EntityExists(detachedBody), Is.True);
+                    Assert.That(entMan.EntityExists(severedHand), Is.True);
                 });
             }
             finally
             {
-                if (severedHand.Valid && entMan.EntityExists(severedHand))
-                    entMan.DeleteEntity(severedHand);
+                if (entMan.EntityExists(detachedBody))
+                    entMan.DeleteEntity(detachedBody);
+                entMan.DeleteEntity(patient);
+                entMan.DeleteEntity(surgeon);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase(BodyPartType.Hand, BodyPartType.Arm)]
+    [TestCase(BodyPartType.Foot, BodyPartType.Leg)]
+    public async Task ExtremityCanBeRemovedAndAppearsAsReattachableMissingSite(
+        BodyPartType extremityType,
+        BodyPartType anchorType)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var detachable = entMan.System<DetachableOrganSystem>();
+            var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
+            var flow = entMan.System<SharedCMUSurgeryFlowSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            EntityUid severedExtremity = default;
+            EntityUid detachedBody = default;
+
+            try
+            {
+                entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(human);
+                var anchorPart = GetBodyPart(entMan, human, anchorType, BodyPartSymmetry.Right);
+                severedExtremity = GetBodyPart(entMan, human, extremityType, BodyPartSymmetry.Right);
+
+                var attachedEntries = dispatch.BuildPartEntries(human, surgeon, ignoreSkillRequirements: true);
+                var attachedExtremity = attachedEntries.Find(entry =>
+                    entry.Type == extremityType
+                    && entry.Symmetry == BodyPartSymmetry.Right);
+                Assert.That(attachedExtremity, Is.Not.Null);
+                Assert.That(
+                    attachedExtremity!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
+                    Does.Contain("CMUSurgeryRemoveLimb"));
+
+                detachedBody = detachable.Detach(severedExtremity) ?? EntityUid.Invalid;
+                Assert.That(detachedBody.Valid, Is.True);
+
+                var entries = dispatch.BuildPartEntries(human, surgeon, ignoreSkillRequirements: true);
+                var missingExtremity = entries.Find(entry =>
+                    entry.Type == extremityType
+                    && entry.Symmetry == BodyPartSymmetry.Right);
+
+                Assert.That(missingExtremity, Is.Not.Null);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(
+                        missingExtremity!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
+                        Does.Contain("CMUSurgeryReattachLimb"));
+                    Assert.That(
+                        flow.TryGetReattachAnchorPart(
+                            human,
+                            extremityType,
+                            BodyPartSymmetry.Right,
+                            out var anchor),
+                        Is.True);
+                    Assert.That(anchor, Is.EqualTo(anchorPart));
+                    Assert.That(
+                        flow.LimbMatchesMissingSlot(
+                            human,
+                            detachedBody,
+                            extremityType,
+                            BodyPartSymmetry.Right),
+                        Is.True);
+                    Assert.That(flow.ToolMatchesCategory(detachedBody, "severed_limb"), Is.True);
+                    Assert.That(entMan.System<SharedBodySystem>().GetRootPartOrNull(detachedBody)?.Entity,
+                        Is.EqualTo(severedExtremity));
+                });
+            }
+            finally
+            {
+                if (detachedBody.Valid && entMan.EntityExists(detachedBody))
+                    entMan.DeleteEntity(detachedBody);
                 entMan.DeleteEntity(human);
                 entMan.DeleteEntity(surgeon);
             }
@@ -2250,10 +2361,12 @@ public sealed class ConditionDrivenSurgeryTest
         {
             var entMan = server.EntMan;
             var body = entMan.System<SharedBodySystem>();
-            var containers = entMan.System<SharedContainerSystem>();
+            var detachable = entMan.System<DetachableOrganSystem>();
             var medicalIndex = entMan.System<CMUMedicalBodyIndexSystem>();
             var android = entMan.SpawnEntity("CMUDroneAndroid", MapCoordinates.Nullspace);
             EntityUid severedHand = default;
+            EntityUid handCarrier = default;
+            EntityUid armCarrier = default;
 
             try
             {
@@ -2261,15 +2374,18 @@ public sealed class ConditionDrivenSurgeryTest
                 var arm = GetBodyPart(entMan, android, BodyPartType.Arm, BodyPartSymmetry.Left);
                 severedHand = GetBodyPart(entMan, android, BodyPartType.Hand, BodyPartSymmetry.Left);
 
-                Assert.That(
-                    containers.TryGetContainingContainer((severedHand, null, null), out var handContainer),
-                    Is.True);
-                Assert.That(containers.Remove(severedHand, handContainer), Is.True);
-                Assert.That(
-                    containers.TryGetContainingContainer((arm, null, null), out var armContainer),
-                    Is.True);
-                Assert.That(containers.Remove(arm, armContainer), Is.True);
+                handCarrier = detachable.Detach(severedHand) ?? EntityUid.Invalid;
+                armCarrier = detachable.Detach(arm) ?? EntityUid.Invalid;
+                Assert.Multiple(() =>
+                {
+                    Assert.That(handCarrier.Valid, Is.True);
+                    Assert.That(armCarrier.Valid, Is.True);
+                    Assert.That(body.GetRootPartOrNull(handCarrier)?.Entity, Is.EqualTo(severedHand));
+                    Assert.That(body.GetRootPartOrNull(armCarrier)?.Entity, Is.EqualTo(arm));
+                });
                 Assert.That(body.AttachPart(torso, "left_arm", arm), Is.True);
+                entMan.DeleteEntity(armCarrier);
+                armCarrier = default;
 
                 Assert.That(
                     medicalIndex.TryGetBodyPart(
@@ -2280,8 +2396,10 @@ public sealed class ConditionDrivenSurgeryTest
             }
             finally
             {
-                if (severedHand.Valid && entMan.EntityExists(severedHand))
-                    entMan.DeleteEntity(severedHand);
+                if (handCarrier.Valid && entMan.EntityExists(handCarrier))
+                    entMan.DeleteEntity(handCarrier);
+                if (armCarrier.Valid && entMan.EntityExists(armCarrier))
+                    entMan.DeleteEntity(armCarrier);
                 entMan.DeleteEntity(android);
             }
         });
@@ -2820,7 +2938,11 @@ public sealed class ConditionDrivenSurgeryTest
                 BodyPartSymmetry.None,
                 surgeryId);
             armed = CompleteExpectedStep(entMan, flow, human, surgeon, armed, "organ_clamp", surgeryId)!;
-            CompleteExpectedStep(entMan, flow, human, surgeon, armed, null, surgeryId);
+            Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.False,
+                "Automation must identify its donor explicitly even when a compatible organ is held.");
+            Assert.That(hands.IsHolding(surgeon, donorOrgan), Is.True);
+            Assert.That(TryGetPartOrgan<TOrgan>(entMan, torso, out _), Is.False);
+            CompleteExpectedStep(entMan, flow, human, surgeon, armed, null, surgeryId, donorOrgan);
 
             AssertAwaitingClosure(entMan, human, torso, surgeryId);
             Assert.That(TryGetPartOrgan<TOrgan>(entMan, torso, out _), Is.True, surgeryId);
@@ -2862,10 +2984,11 @@ public sealed class ConditionDrivenSurgeryTest
         EntityUid surgeon,
         CMUSurgeryArmedStepComponent armed,
         string expectedTool,
-        string context)
+        string context,
+        EntityUid? donor = null)
     {
         Assert.That(armed.RequiredToolCategory, Is.EqualTo(expectedTool), context);
-        Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon), Is.True, context);
+        Assert.That(flow.TryCompleteAutomatedStep(human, armed, surgeon, donor), Is.True, context);
 
         return entMan.TryGetComponent<CMUSurgeryArmedStepComponent>(human, out var next)
             ? next
@@ -2992,6 +3115,14 @@ public sealed class ConditionDrivenSurgeryTest
         return EntityUid.Invalid;
     }
 
+    private static EntityUid DetachBodyPart(IEntityManager entMan, EntityUid part)
+    {
+        var detachedBody = entMan.System<DetachableOrganSystem>().Detach(part);
+        Assert.That(detachedBody, Is.Not.Null, $"Expected {part} to detach into a DetachedBody carrier.");
+        Assert.That(entMan.System<SharedBodySystem>().GetRootPartOrNull(detachedBody!.Value), Is.Not.Null);
+        return detachedBody!.Value;
+    }
+
     private static void AddBodyPartWound(IEntityManager entMan, EntityUid part, WoundType type)
     {
         var ledger = entMan.System<CMUWoundLedgerSystem>();
@@ -3018,4 +3149,30 @@ public sealed class ConditionDrivenSurgeryTest
         Assert.That(method, Is.Not.Null);
         return (List<CMUSurgeryPartEntry>) method!.Invoke(autodoc, [patient, viewer])!;
     }
+
+    private static bool ApplyAutodocProcedure(
+        CMUAutodocSystem autodoc,
+        EntityUid patient,
+        EntityUid operatorUid,
+        CMUAutodocQueuedStep queued)
+    {
+        var method = typeof(CMUAutodocSystem).GetMethod(
+            "TryApplyAutomatedProcedure",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (bool) method!.Invoke(autodoc, [patient, operatorUid, queued, (Func<bool>) (() => true)])!;
+    }
+
+    private static float GetAutodocProcedureDuration(CMUSurgeryEntry surgery)
+    {
+        var method = typeof(CMUAutodocSystem).GetMethod(
+            "GetProcedureDurationSeconds",
+            BindingFlags.Static | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (float) method!.Invoke(null, [surgery])!;
+    }
 }
+
+#pragma warning restore RA0002

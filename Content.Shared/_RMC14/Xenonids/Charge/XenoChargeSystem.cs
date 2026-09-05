@@ -17,6 +17,8 @@ using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
@@ -217,7 +219,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         if (_net.IsClient &&
             damageable != null &&
             damage.Comp.DestroyDamage > FixedPoint2.Zero &&
-            damageable.TotalDamage >= damage.Comp.DestroyDamage)
+            _damageable.GetTotalDamage((damage, damageable)) >= damage.Comp.DestroyDamage)
         {
             _transform.DetachEntity(damage, Transform(damage));
         }
@@ -347,7 +349,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             Hidden = true,
         };
 
-        _stun.TrySlowdown(xeno, xeno.Comp.ChargeDelay, false, 0f, 0f);
+        _slow.TryRoot(xeno, TimeSpan.FromSeconds(0.6f), refresh: false, applyChemical: true);
         _audio.PlayPredicted(xeno.Comp.ChargeWindupSound, xeno, xeno);
         _doAfter.TryStartDoAfter(doAfter);
     }
@@ -439,7 +441,8 @@ public sealed partial class XenoChargeSystem : EntitySystem
             if (TryComp<DamageableComponent>(targetId, out var damageable))
             {
                 if (damage != null && crush.PassOnDestroy &&
-                    crush.DestroyDamage > FixedPoint2.Zero && damageable.TotalDamage >= crush.DestroyDamage)
+                    crush.DestroyDamage > FixedPoint2.Zero &&
+                    _damageable.GetTotalDamage((targetId, damageable)) >= crush.DestroyDamage)
                 {
                     if (_net.IsClient)
                         _transform.DetachEntity(targetId, Transform(targetId));
@@ -656,7 +659,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
     private void OnActiveToggleChargingMapInit(Entity<ActiveXenoToggleChargingComponent> ent, ref MapInitEvent args)
     {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToggleChargingActionEvent>(ent))
         {
@@ -666,7 +669,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
     private void OnActiveToggleChargingRemove(Entity<ActiveXenoToggleChargingComponent> ent, ref ComponentRemove args)
     {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToggleChargingActionEvent>(ent))
         {
@@ -786,7 +789,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         }
 
         Dirty(ent);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private void OnActiveToggleChargingCollide(Entity<ActiveXenoToggleChargingComponent> ent, ref StartCollideEvent args)
@@ -819,7 +822,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             xeno.Comp.Direction = DirectionFlag.None;
 
         Dirty(xeno);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void ResetStage(Entity<ActiveXenoToggleChargingComponent> xeno)
@@ -829,7 +832,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
         xeno.Comp.Stage = 0;
 
         Dirty(xeno);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void IncrementStages(Entity<ActiveXenoToggleChargingComponent> ent, int increment)
@@ -840,7 +843,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             ent.Comp.Stage = Math.Min(charging.MaxStage, ent.Comp.Stage);
 
         Dirty(ent);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private DirectionFlag GetHeldButton(EntityUid mover, MoveButtons button)

@@ -1,20 +1,38 @@
 using System.Linq;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.Humanoid.Systems;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Components;
+using Content.Shared.Radio;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaSmokeTest
 {
+    private static readonly ProtoId<RadioChannelPrototype> YautjaRadioChannel = "CMUYautja";
+
+    private static readonly string[] VoiceActionIds =
+    {
+        "CMUActionYautjaVoiceClick",
+        "CMUActionYautjaVoiceRoar",
+        "CMUActionYautjaVoiceLaugh",
+        "CMUActionYautjaVoiceGrowl",
+        "CMUActionYautjaVoicePain",
+        "CMUActionYautjaVoiceDistract",
+        "CMUActionYautjaVoiceDeathCry",
+        "CMUActionYautjaVoiceDeathLaugh",
+    };
+
     private static readonly string[] ClanArmorLoadoutIds =
     {
         "CMUYautjaClanArmor",
@@ -47,11 +65,112 @@ public sealed class YautjaSmokeTest
                 AssertEquipped(entMan, inventory, hunter, "shoes", "CMUYautjaClanGreaves");
                 AssertEquipped(entMan, inventory, hunter, "pocket1", "CMUYautjaSmartDisc");
                 AssertEquipped(entMan, inventory, hunter, "pocket2", "CMUYautjaMedicomp");
+
+                var movement = entMan.GetComponent<MovementSpeedModifierComponent>(hunter);
+                Assert.That(movement.BaseWalkSpeed, Is.EqualTo(3.7f));
+                Assert.That(movement.BaseSprintSpeed, Is.EqualTo(7.1f));
+                Assert.That(server.ProtoMan.Index(YautjaRadioChannel).KeyCode, Is.EqualTo('9'));
+
+                foreach (var action in VoiceActionIds)
+                    Assert.That(HasAction(entMan, hunter, action), Is.False, action);
+
+                Assert.That(CountActions(entMan, hunter, "ActionCombatModeToggle"), Is.EqualTo(1));
             }
             finally
             {
                 if (!entMan.Deleted(hunter))
                     entMan.DeleteEntity(hunter);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RandomYautjaSpawnHasOneCombatModeAndNoVoiceActions()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var randomHumanoid = entMan.System<RandomHumanoidSystem>();
+            var hunter = randomHumanoid.SpawnRandomHumanoid("CMUYautjaHunter", EntityCoordinates.Invalid, string.Empty);
+
+            try
+            {
+                foreach (var action in VoiceActionIds)
+                    Assert.That(HasAction(entMan, hunter, action), Is.False, action);
+
+                Assert.That(CountActions(entMan, hunter, "ActionCombatModeToggle"), Is.EqualTo(1));
+            }
+            finally
+            {
+                if (!entMan.Deleted(hunter))
+                    entMan.DeleteEntity(hunter);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task BracerFabricatesRationAndCanteen()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var hands = entMan.System<SharedHandsSystem>();
+            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
+            var rationAction = entMan.SpawnEntity("CMUActionYautjaCreateFieldRation", MapCoordinates.Nullspace);
+            var canteenAction = entMan.SpawnEntity("CMUActionYautjaCreateHuntingCanteen", MapCoordinates.Nullspace);
+
+            try
+            {
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
+
+                var rationActionComp = entMan.GetComponent<ActionComponent>(rationAction);
+                var rationEvent = new YautjaCreateFieldRationActionEvent
+                {
+                    Performer = hunter,
+                    Action = (rationAction, rationActionComp),
+                };
+                entMan.EventBus.RaiseLocalEvent(bracer, rationEvent);
+
+                var ration = hands.GetActiveItem(hunter);
+                Assert.That(ration, Is.Not.Null);
+                Assert.That(entMan.GetComponent<MetaDataComponent>(ration!.Value).EntityPrototype?.ID,
+                    Is.EqualTo("CMUYautjaFieldRation"));
+                entMan.DeleteEntity(ration.Value);
+
+                var canteenActionComp = entMan.GetComponent<ActionComponent>(canteenAction);
+                var canteenEvent = new YautjaCreateHuntingCanteenActionEvent
+                {
+                    Performer = hunter,
+                    Action = (canteenAction, canteenActionComp),
+                };
+                entMan.EventBus.RaiseLocalEvent(bracer, canteenEvent);
+
+                var canteen = hands.GetActiveItem(hunter);
+                Assert.That(canteen, Is.Not.Null);
+                Assert.That(entMan.GetComponent<MetaDataComponent>(canteen!.Value).EntityPrototype?.ID,
+                    Is.EqualTo("CMUYautjaHuntingCanteen"));
+            }
+            finally
+            {
+                entMan.DeleteEntity(hunter);
+                entMan.DeleteEntity(rationAction);
+                entMan.DeleteEntity(canteenAction);
+
+                if (!entMan.Deleted(bracer))
+                    entMan.DeleteEntity(bracer);
             }
         });
 
@@ -132,6 +251,21 @@ public sealed class YautjaSmokeTest
                 Assert.That(prototypes.Count(id => id == "CMUYautjaStabilisingCrystal"), Is.EqualTo(2));
                 Assert.That(prototypes, Does.Contain("CMUYautjaAlienHealthAnalyzer"));
                 Assert.That(prototypes.Count(id => id == "CMUYautjaHerbalCase"), Is.EqualTo(2));
+
+                foreach (var herbalCase in storage.Container.ContainedEntities
+                             .Where(contained => entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID == "CMUYautjaHerbalCase"))
+                {
+                    var herbalStorage = entMan.GetComponent<StorageComponent>(herbalCase);
+                    var bruisePackTotal = herbalStorage.Container.ContainedEntities
+                        .Where(contained => entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID == "CMUYautjaAdvancedBruisePack")
+                        .Sum(pack => entMan.GetComponent<StackComponent>(pack).Count);
+                    var ointmentTotal = herbalStorage.Container.ContainedEntities
+                        .Where(contained => entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID == "CMUYautjaAdvancedOintment")
+                        .Sum(ointment => entMan.GetComponent<StackComponent>(ointment).Count);
+
+                    Assert.That(bruisePackTotal, Is.EqualTo(4));
+                    Assert.That(ointmentTotal, Is.EqualTo(4));
+                }
 
                 var healingGelTotal = storage.Container.ContainedEntities
                     .Where(contained => entMan.GetComponent<MetaDataComponent>(contained).EntityPrototype?.ID == "CMUYautjaHealingGel")
@@ -226,5 +360,28 @@ public sealed class YautjaSmokeTest
             Performer = hunter,
             Action = (action, actionComp),
         };
+    }
+
+    private static bool HasAction(IEntityManager entMan, EntityUid user, string prototype)
+    {
+        if (!entMan.TryGetComponent<ActionsComponent>(user, out var actions))
+            return false;
+
+        foreach (var action in actions.Actions)
+        {
+            if (entMan.GetComponent<MetaDataComponent>(action).EntityPrototype?.ID == prototype)
+                return true;
+        }
+
+        return false;
+    }
+
+    private static int CountActions(IEntityManager entMan, EntityUid user, string prototype)
+    {
+        if (!entMan.TryGetComponent<ActionsComponent>(user, out var actions))
+            return 0;
+
+        return actions.Actions.Count(action =>
+            entMan.GetComponent<MetaDataComponent>(action).EntityPrototype?.ID == prototype);
     }
 }

@@ -8,25 +8,22 @@
     flavors:
     - oily
     - bread
-  - type: Food
+  - type: Edible
   - type: Tag
     tags:
     - Pizza
 
 - type: entity
   abstract: true
-  parent: RMCFoodPizzaBase
+  parent: [RMCFoodPizzaBase, BaseSlicingRefinableFood]
   id: RMCFoodPizzaFullBase
   components:
   - type: Sprite
     state: pizza
   - type: Item
     heldPrefix: pizza
-  - type: SliceableFood
-    count: 6
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 40
         reagents:
         - ReagentId: Nutriment
@@ -44,9 +41,8 @@
   - type: Item
     heldPrefix: slice
     size: Tiny
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 6
         reagents:
         - ReagentId: Nutriment
@@ -71,8 +67,10 @@
     - cheesy
     - oily
     - bread
-  - type: SliceableFood
-    slice: RMCFoodPizzaMargheritaSlice
+  - type: ToolRefinable
+    refineResult:
+    - id: RMCFoodPizzaMargheritaSlice
+      amount: 6
 
 - type: entity
   parent: RMCFoodPizzaSliceBase
@@ -103,8 +101,10 @@
     - cheesy
     - oily
     - bread
-  - type: SliceableFood
-    slice: RMCFoodPizzaMeatSlice
+  - type: ToolRefinable
+    refineResult:
+    - id: RMCFoodPizzaMeatSlice
+      amount: 6
 
 - type: entity
   parent: RMCFoodPizzaSliceBase
@@ -135,8 +135,10 @@
     - mushroom
     - oily
     - bread
-  - type: SliceableFood
-    slice: RMCFoodPizzaMushroomSlice
+  - type: ToolRefinable
+    refineResult:
+    - id: RMCFoodPizzaMushroomSlice
+      amount: 6
 
 - type: entity
   parent: RMCFoodPizzaSliceBase
@@ -168,11 +170,12 @@
     - cheesy
     - oily
     - bread
-  - type: SliceableFood
-    slice: RMCFoodPizzaVegetableSlice
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: ToolRefinable
+    refineResult:
+    - id: RMCFoodPizzaVegetableSlice
+      amount: 6
+  - type: Solution
+    solution:
         maxVol: 40
         reagents:
         - ReagentId: Nutriment
@@ -195,9 +198,8 @@
     - cheesy
     - oily
     - bread
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 6
         reagents:
         - ReagentId: Nutriment
@@ -222,8 +224,10 @@
     - cheesy
     - oily
     - bread
-  - type: SliceableFood
-    slice: RMCFoodPizzaHawaiianSlice
+  - type: ToolRefinable
+    refineResult:
+    - id: RMCFoodPizzaHawaiianSlice
+      amount: 6
 
 - type: entity
   parent: RMCFoodPizzaSliceBase
@@ -240,9 +244,8 @@
     - cheesy
     - oily
     - bread
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 6
         reagents:
         - ReagentId: Nutriment
@@ -269,8 +272,10 @@
     - cheesy
     - oily
     - bread
-  - type: SliceableFood
-    slice: RMCFoodPizzaSupremeSlice
+  - type: ToolRefinable
+    refineResult:
+    - id: RMCFoodPizzaSupremeSlice
+      amount: 6
 
 - type: entity
   parent: RMCFoodPizzaSliceBase
@@ -287,9 +292,8 @@
     - cheesy
     - oily
     - bread
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 6
         reagents:
         - ReagentId: Nutriment
@@ -315,8 +319,10 @@
     - onion
     - cheesy
     - bread
-  - type: SliceableFood
-    slice: RMCFoodPizzaCalabresaSlice
+  - type: ToolRefinable
+    refineResult:
+    - id: RMCFoodPizzaCalabresaSlice
+      amount: 6
 
 - type: entity
   parent: RMCFoodPizzaSliceBase
@@ -332,9 +338,8 @@
     - onion
     - cheesy
     - bread
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 6
         reagents:
         - ReagentId: Nutriment

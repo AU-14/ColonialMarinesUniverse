@@ -1,5 +1,7 @@
 using System.Linq;
-using Content.Shared._CMU14.ZLevels.Ordnance;
+using System.Numerics;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Animations;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
@@ -19,8 +21,10 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Database;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
@@ -66,6 +70,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
@@ -525,11 +530,18 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 !string.Equals(cannonComp.Faction, faction, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            if (transform.Coordinates.TryDistance(EntityManager,
+            if (!transform.Coordinates.TryDistance(EntityManager,
                     _transform,
                     cannonTransform.Coordinates,
-                    out var distance) &&
-                distance < last)
+                    out var distance))
+            {
+                if (!_zLevels.IsSameZNetwork(transform.MapID, cannonTransform.MapID))
+                    continue;
+
+                distance = Vector2.Distance(_transform.GetWorldPosition(to), _transform.GetWorldPosition(cannonId));
+            }
+
+            if (distance < last)
             {
                 last = distance;
                 cannon = (cannonId, cannonComp);
@@ -631,12 +643,16 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             return false;
 
         if (cannon.Comp.Status != OrbitalCannonStatus.Chambered)
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-orbital-cannon-not-chambered"), user, PopupType.LargeCaution);
             return false;
+        }
 
         var time = _timing.CurTime;
         if (cannon.Comp.LastFireAt != null &&
             time < cannon.Comp.LastFireAt + cannon.Comp.FireCooldown)
         {
+            _popup.PopupCursor(Loc.GetString("rmc-orbital-cannon-cooldown"), user, PopupType.LargeCaution);
             return false;
         }
 
@@ -681,7 +697,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             return false;
         }
 
-        _popup.PopupCursor("Orbital bombardment request accepted. Orbital cannons are now calibrating.", PopupType.Large);
+        _popup.PopupCursor("Orbital bombardment request accepted. Orbital cannons are now calibrating.", user, PopupType.Large);
 
         var warhead = warheadContainer.ContainedEntities[0];
         var misfuel = 0;
@@ -721,7 +737,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         _adminLog.Add(LogType.RMCOrbitalBombardment, $"{logMessage}");
         _core.CreateARESLog(cannon, LogCat, (string)$"{Name(user)} fired the orbital cannon at {adjustedCoords.X}, {adjustedCoords.Y}");
 
-        var ev = new OrbitalCannonLaunchEvent(cannon.Comp.FireCooldown + firing.ImpactDelay, cannon.Comp.Faction);
+        var ev = new OrbitalCannonLaunchEvent(cannon.Owner, cannon.Comp.FireCooldown + firing.ImpactDelay, cannon.Comp.Faction);
         RaiseLocalEvent(ref ev);
         return true;
     }
@@ -827,13 +843,14 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 Dirty(uid, firing);
 
                 var map = _transform.GetMapId(uid);
-                var sameMap = Filter.BroadcastMap(map);
-                _rmcCameraShake.ShakeCamera(sameMap, 10, 1);
-                _audio.PlayPvs(cannon.FireSound, uid);
+                var shipFilter = Filter.Broadcast()
+                    .RemoveWhereAttachedEntity(e => !_zLevels.IsSameZNetwork(Transform(e).MapID, map));
+                _rmcCameraShake.ShakeCamera(shipFilter, 10, 1);
+                _audio.PlayGlobal(cannon.FireSound, shipFilter, true);
                 _animation.TryFlick(uid, cannon.FiringAnimation, cannon.ChamberedState, cannon.BaseLayerKey);
 
                 var msg = "[color=red]The deckplate kicks hard beneath your feet as the warship's orbital batteries thunder to life, slamming fiery judgment down onto the colony.[/color]";
-                _rmcChat.ChatMessageToMany(msg, msg, sameMap, ChatChannel.Radio);
+                _rmcChat.ChatMessageToMany(msg, msg, shipFilter, ChatChannel.Radio);
 
                 _marineAnnounce.AnnounceSquad("WARNING! Ballistic trans-atmospheric launch detected! Get outside of Danger Close!", firing.Squad);
             }

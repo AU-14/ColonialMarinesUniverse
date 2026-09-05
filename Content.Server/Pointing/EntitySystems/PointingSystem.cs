@@ -6,7 +6,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Eye;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
 using Content.Shared.Interaction;
@@ -23,6 +23,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Enums;
 using Robust.Shared.GameStates;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Replays;
@@ -47,6 +48,8 @@ namespace Content.Server.Pointing.EntitySystems
         [Dependency] private SharedMapSystem _map = default!;
         [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private ExamineSystemShared _examine = default!;
+        [Dependency] private EntityQuery<InventoryComponent> _inventoryQuery = default!;
+        [Dependency] private ILocalizationManager _localization = default!;
 
         private TimeSpan _pointDelay = TimeSpan.FromSeconds(0.5f);
 
@@ -110,10 +113,10 @@ namespace Content.Server.Pointing.EntitySystems
                 // Someone pointing at YOU is slightly more important
                 var popupType = viewerEntity == pointed ? PopupType.Medium : PopupType.Small;
 
-                RaiseNetworkEvent(new PopupEntityEvent(message, popupType, netSource), viewerEntity);
+                RaiseNetworkEvent(new PopupEntityEvent(message, popupType, _gameTiming.CurTick, netSource), viewerEntity); // TODO: Make this use the popup system API
             }
 
-            _replay.RecordServerMessage(new PopupEntityEvent(viewerMessage, PopupType.Small, netSource));
+            _replay.RecordServerMessage(new PopupEntityEvent(viewerMessage, PopupType.Small, _gameTiming.CurTick, netSource));
         }
 
         public bool InRange(EntityUid pointer, EntityCoordinates coordinates)
@@ -233,10 +236,9 @@ namespace Content.Server.Pointing.EntitySystems
 
                 EntityUid? containingInventory = null;
                 // Search up through the target's containing containers until we find an inventory
-                var inventoryQuery = GetEntityQuery<InventoryComponent>();
                 foreach (var container in _container.GetContainingContainers(pointed))
                 {
-                    if (inventoryQuery.HasComp(container.Owner))
+                    if (_inventoryQuery.HasComp(container.Owner))
                     {
                         // We want the innermost inventory, since that's the "owner" of the item
                         containingInventory = container.Owner;
@@ -344,7 +346,7 @@ namespace Content.Server.Pointing.EntitySystems
 
                 var tileDef = _tileDefinitionManager[tileRef?.Tile.TypeId ?? 0];
 
-                var name = Loc.GetString(tileDef.Name);
+                var name = _localization.TryGetString(tileDef.Name, out var localized) ? localized : tileDef.Name;
                 selfMessage = Loc.GetString("pointing-system-point-at-tile", ("tileName", name));
 
                 viewerMessage = Loc.GetString("pointing-system-other-point-at-tile", ("otherName", playerName), ("tileName", name));

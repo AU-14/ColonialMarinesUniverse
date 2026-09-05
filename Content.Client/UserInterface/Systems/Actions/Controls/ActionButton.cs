@@ -2,37 +2,37 @@ using System.Numerics;
 using Content.Client.Actions;
 using Content.Client.Actions.UI;
 using Content.Client.Cooldown;
-using Content.Client.Stylesheets;
-using Content.Shared.Actions;
-using Content.Shared.Actions.Components;
 using Content.Shared._RMC14.Xenonids.Construction;
-using Content.Shared.Charges.Components;
-using Content.Shared.Charges.Systems;
+using Content.Shared.Actions.Components;
+using Content.Shared.Examine;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
 using Robust.Shared.IoC;
-using Robust.Shared.Localization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
-using static Robust.Client.UserInterface.Controls.TextureRect;
 using Direction = Robust.Shared.Maths.Direction;
 
 namespace Content.Client.UserInterface.Systems.Actions.Controls;
 
 public sealed class ActionButton : Control, IEntityControl
 {
+    public const string StyleClassActionHighlightRect = "ActionHighlightRect";
+
     private IEntityManager _entities;
+    private IPlayerManager _player;
+    private ActionsSystem? _actionsSys;
     private SpriteSystem? _spriteSys;
     private ActionUIController? _controller;
-    private SharedChargesSystem _sharedChargesSys;
-    private ILocalizationManager _localization;
     private bool _beingHovered;
     private bool _depressed;
     private bool _toggled;
+    private Texture? _slotBackground;
+    private Texture? _toggledBackground;
 
     public BoundKeyFunction? KeyBind
     {
@@ -50,15 +50,13 @@ public sealed class ActionButton : Control, IEntityControl
 
     public readonly TextureRect Button;
     public readonly PanelContainer HighlightRect;
-    private readonly TextureRect _bigActionIcon;
-    private readonly TextureRect _smallActionIcon;
+    private readonly SpriteView _bigActionIcon;
+    private readonly SpriteView _smallActionIcon;
     public readonly Label Label;
     public readonly CooldownGraphic Cooldown;
     private readonly SpriteView _smallItemSpriteView;
     private readonly SpriteView _bigItemSpriteView;
     private readonly Label _counterLabel;
-
-    private Texture? _buttonBackgroundTexture;
 
     public Entity<ActionComponent>? Action { get; private set; }
     public bool Locked { get; set; }
@@ -67,14 +65,12 @@ public sealed class ActionButton : Control, IEntityControl
     public event Action<GUIBoundKeyEventArgs, ActionButton>? ActionUnpressed;
     public event Action<ActionButton>? ActionFocusExited;
 
-    public ActionButton(IEntityManager entities, SpriteSystem? spriteSys = null, ActionUIController? controller = null)
+    public ActionButton(IEntityManager entities, ActionUIController? controller = null)
     {
         // TODO why is this constructor so slooooow. The rest of the code is fine
 
         _entities = entities;
-        _spriteSys = spriteSys;
-        _sharedChargesSys = _entities.System<SharedChargesSystem>();
-        _localization = IoCManager.Resolve<ILocalizationManager>();
+        _player = IoCManager.Resolve<IPlayerManager>();
         _controller = controller;
 
         MouseFilter = MouseFilterMode.Pass;
@@ -85,23 +81,27 @@ public sealed class ActionButton : Control, IEntityControl
         };
         HighlightRect = new PanelContainer
         {
-            StyleClasses = {StyleNano.StyleClassHandSlotHighlight},
+            StyleClasses = { StyleClassActionHighlightRect },
             MinSize = new Vector2(32, 32),
             Visible = false
         };
-        _bigActionIcon = new TextureRect
+        _bigActionIcon = new SpriteView
         {
+            Name = "Big Action Icon",
             HorizontalExpand = true,
             VerticalExpand = true,
-            Stretch = StretchMode.Scale,
-            Visible = false
+            Scale = new Vector2(2, 2),
+            SetSize = new Vector2(64, 64),
+            Visible = false,
+            OverrideDirection = Direction.South,
         };
-        _smallActionIcon = new TextureRect
+        _smallActionIcon = new SpriteView
         {
+            Name = "Small Action Icon",
             HorizontalAlignment = HAlignment.Right,
             VerticalAlignment = VAlignment.Bottom,
-            Stretch = StretchMode.Scale,
-            Visible = false
+            Visible = false,
+            OverrideDirection = Direction.South,
         };
         Label = new Label
         {
@@ -180,9 +180,10 @@ public sealed class ActionButton : Control, IEntityControl
     protected override void OnThemeUpdated()
     {
         base.OnThemeUpdated();
-        _buttonBackgroundTexture = Theme.ResolveTexture("SlotBackground");
         Label.FontColorOverride = Theme.ResolveColorOrSpecified("whiteText");
         _counterLabel.FontColorOverride = Theme.ResolveColorOrSpecified("whiteText");
+        _slotBackground = Theme.ResolveTexture("SlotBackground");
+        UpdateBackground();
     }
 
     private void OnPressed(GUIBoundKeyEventArgs args)
@@ -212,35 +213,18 @@ public sealed class ActionButton : Control, IEntityControl
         if (!_entities.TryGetComponent(Action, out MetaDataComponent? metadata))
             return null;
 
-        var name = FormattedMessage.FromMarkupPermissive(LocalizeOrRaw(metadata.EntityName));
-        var decr = FormattedMessage.FromMarkupPermissive(LocalizeOrRaw(metadata.EntityDescription));
-        FormattedMessage? chargesText = null;
+        var name = FormattedMessage.FromMarkupPermissive(metadata.EntityName);
+        var desc = FormattedMessage.FromMarkupPermissive(metadata.EntityDescription);
 
-        // TODO: Don't touch this use an event make callers able to add their own shit for actions or I kill you.
-        if (_entities.TryGetComponent(Action, out LimitedChargesComponent? actionCharges))
-        {
-            var charges = _sharedChargesSys.GetCurrentCharges((Action.Value, actionCharges, null));
-            chargesText = new FormattedMessage();
-            chargesText.AddText($"Charges: {charges}/{actionCharges.MaxCharges}");
+        if (_player.LocalEntity is null)
+            return null;
 
-            if (_entities.TryGetComponent(Action, out AutoRechargeComponent? autoRecharge))
-            {
-                var chargeTimeRemaining = _sharedChargesSys.GetNextRechargeTime((Action.Value, actionCharges, autoRecharge));
-                chargesText.AddText($"{Environment.NewLine}Time Til Recharge: {chargeTimeRemaining}");
-            }
-        }
+        var ev = new ExaminedEvent(desc, Action.Value, _player.LocalEntity.Value, true, !desc.IsEmpty);
+        _entities.EventBus.RaiseLocalEvent(Action.Value.Owner, ev);
 
-        return new ActionAlertTooltip(name, decr, charges: chargesText);
-    }
+        var newDesc = ev.GetTotalMessage();
 
-    private string LocalizeOrRaw(string message)
-    {
-        if (string.IsNullOrEmpty(message))
-            return string.Empty;
-
-        return _localization.TryGetString(message, out var localized)
-            ? localized
-            : message;
+        return new ActionAlertTooltip(name, newDesc);
     }
 
     protected override void ControlFocusExited()
@@ -284,61 +268,48 @@ public sealed class ActionButton : Control, IEntityControl
         }
     }
 
-    private void SetActionIcon(Texture? texture)
+    private void UpdateActionIcon()
     {
-        if (Action?.Comp is not {} action || texture == null)
+        if (Action?.Comp is not {} action || !_entities.HasComponent<SpriteComponent>(Action.Value.Owner))
         {
-            _bigActionIcon.Texture = null;
             _bigActionIcon.Visible = false;
-            _smallActionIcon.Texture = null;
+            _bigActionIcon.SetEntity(null);
             _smallActionIcon.Visible = false;
+            _smallActionIcon.SetEntity(null);
         }
         else if (action.EntityIcon != null && action.ItemIconStyle == ItemActionIconStyle.BigItem)
         {
-            _smallActionIcon.Texture = texture;
-            _smallActionIcon.Modulate = action.IconColor;
             _smallActionIcon.Visible = true;
-            _bigActionIcon.Texture = null;
+            _smallActionIcon.SetEntity(Action.Value.Owner);
             _bigActionIcon.Visible = false;
+            _bigActionIcon.SetEntity(null);
         }
         else
         {
-            _bigActionIcon.Texture = texture;
-            _bigActionIcon.Modulate = action.IconColor;
             _bigActionIcon.Visible = true;
-            _smallActionIcon.Texture = null;
+            _bigActionIcon.SetEntity(Action.Value.Owner);
             _smallActionIcon.Visible = false;
+            _smallActionIcon.SetEntity(null);
         }
     }
 
     public void UpdateIcons()
     {
         UpdateItemIcon();
+        UpdateActionIcon();
+        UpdateToggledBackground();
         UpdateBackground();
+    }
 
-        if (Action is not {} action)
-        {
-            SetActionIcon(null);
+    private void UpdateToggledBackground()
+    {
+        _toggledBackground = null;
+
+        if (Action?.Comp.BackgroundOn is not { } background)
             return;
-        }
 
-        _controller ??= UserInterfaceManager.GetUIController<ActionUIController>();
         _spriteSys ??= _entities.System<SpriteSystem>();
-        var icon = action.Comp.Icon;
-        if (_controller.SelectingTargetFor == action || action.Comp.Toggled)
-        {
-            if (action.Comp.IconOn is {} iconOn)
-                icon = iconOn;
-
-            if (action.Comp.BackgroundOn is {} background)
-                _buttonBackgroundTexture = _spriteSys.Frame0(background);
-        }
-        else
-        {
-            _buttonBackgroundTexture = Theme.ResolveTexture("SlotBackground");
-        }
-
-        SetActionIcon(icon != null ? _spriteSys.Frame0(icon) : null);
+        _toggledBackground = _spriteSys.Frame0(background);
     }
 
     public void UpdateBackground()
@@ -347,7 +318,11 @@ public sealed class ActionButton : Control, IEntityControl
         if (Action != null ||
             _controller.IsDragging && GetPositionInParent() == Parent?.ChildCount - 1)
         {
-            Button.Texture = _buttonBackgroundTexture;
+            Button.Texture = Action is { } action &&
+                             _toggledBackground != null &&
+                             (action.Comp.Toggled || _controller.SelectingTargetFor == action.Owner)
+                ? _toggledBackground
+                : _slotBackground;
         }
         else
         {
@@ -387,8 +362,6 @@ public sealed class ActionButton : Control, IEntityControl
     {
         base.FrameUpdate(args);
 
-        UpdateBackground();
-
         Cooldown.Visible = Action?.Comp.Cooldown != null;
         if (Action?.Comp is not {} action)
             return;
@@ -399,7 +372,10 @@ public sealed class ActionButton : Control, IEntityControl
             Cooldown.FromTime(cooldown.Start, cooldown.End);
 
         if (_toggled != action.Toggled)
+        {
             _toggled = action.Toggled;
+            UpdateBackground();
+        }
     }
 
     private void UpdateCounterLabel()
@@ -463,6 +439,7 @@ public sealed class ActionButton : Control, IEntityControl
         if (_beingHovered && (_controller.IsDragging || action.Enabled))
         {
             SetOnlyStylePseudoClass(ContainerButton.StylePseudoClassHover);
+            return;
         }
 
         // it's only depress-able if it's usable, so if we're depressed
@@ -478,7 +455,8 @@ public sealed class ActionButton : Control, IEntityControl
         if (action.Toggled || _controller.SelectingTargetFor == Action?.Owner)
         {
             // when there's a toggle sprite, we're showing that sprite instead of highlighting this slot
-            SetOnlyStylePseudoClass(action.IconOn != null
+            _actionsSys ??= _entities.System<ActionsSystem>();
+            SetOnlyStylePseudoClass(_actionsSys.HasToggleIcon(Action?.Owner)
                 ? ContainerButton.StylePseudoClassNormal
                 : ContainerButton.StylePseudoClassPressed);
             return;

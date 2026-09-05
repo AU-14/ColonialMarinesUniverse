@@ -6,7 +6,7 @@ using Content.Shared._RMC14.Language.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Language;
+namespace Content.IntegrationTests.CMU14.Language;
 
 [TestFixture]
 public sealed class CMUXenoLanguageSystemTest

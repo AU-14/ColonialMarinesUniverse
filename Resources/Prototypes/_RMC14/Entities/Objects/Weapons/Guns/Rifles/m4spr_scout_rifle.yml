@@ -241,6 +241,11 @@
   id: BulletRifleM4SPRA19
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:
@@ -266,6 +271,11 @@
   id: BulletRifleM4SPRA19Impact
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:
@@ -300,6 +310,11 @@
   id: BulletRifleM4SPRA19Incendiary
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:

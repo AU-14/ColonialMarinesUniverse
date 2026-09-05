@@ -5,6 +5,7 @@ using Content.Shared.Camera;
 using Content.Shared.CCVar;
 using Content.Shared.Power;
 using Content.Shared.SurveillanceCamera;
+using Content.Shared.SurveillanceCamera.Components;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;

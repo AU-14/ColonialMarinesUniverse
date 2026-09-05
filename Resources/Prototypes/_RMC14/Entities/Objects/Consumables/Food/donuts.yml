@@ -88,7 +88,7 @@
   name: donut
   description: A donut. Rare on the frontier, so take care of it.
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 1 # 3 bites
   - type: Tag
     tags:
@@ -96,9 +96,9 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/donuts.rsi
     state: donut1
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 5
         reagents:
         - ReagentId: Nutriment
@@ -122,13 +122,13 @@
   name: frosted donut
   description: A pink frosted donut. Even more rare on the frontier.
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 2 # 3 bites
   - type: Sprite
     state: donut2
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 5
         reagents:
         - ReagentId: Nutriment

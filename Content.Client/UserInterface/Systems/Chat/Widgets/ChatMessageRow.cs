@@ -2,13 +2,16 @@ using System;
 using System.Numerics;
 using Content.Client.Stylesheets;
 using Content.Client.Resources;
-using Content.Shared._CMU14.Ghost;
-using Content.Shared._CMU14.Xenonids.Watch;
+using Content.Client.UserInterface.RichText;
+using Content.Client._RMC14.Chat;
+using Content.Shared.CMU14.Ghost;
+using Content.Shared.CMU14.Xenonids.Watch;
 using Content.Shared.Chat;
 using Robust.Client.Console;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.RichText;
 using Robust.Shared.IoC;
 using Robust.Shared.Utility;
 
@@ -16,6 +19,21 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
 public sealed partial class ChatMessageRow : PanelContainer
 {
+    internal static readonly Type[] AllowedMarkupTags =
+    [
+        typeof(BoldItalicTag),
+        typeof(BoldTag),
+        typeof(BulletTag),
+        typeof(ChatCommandLinkTag),
+        typeof(ColorTag),
+        typeof(FontTag),
+        typeof(HeadingTag),
+        typeof(ItalicTag),
+        typeof(LanguageIconTag),
+        typeof(MonoTag),
+        typeof(ScrambleTag),
+    ];
+
     [Dependency] private IClientConsoleHost _consoleHost = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
 
@@ -91,7 +109,7 @@ public sealed partial class ChatMessageRow : PanelContainer
             VerticalAlignment = VAlignment.Top,
             LineHeightScale = metrics.LineHeightScale
         };
-        _messageLabel.SetMessage(formatted, defaultColor: textColor);
+        _messageLabel.SetMessage(ReplaceCommandLinkTags(formatted), AllowedMarkupTags, defaultColor: textColor);
         row.AddChild(_messageLabel);
 
         _repeatBadge = new Label
@@ -109,25 +127,11 @@ public sealed partial class ChatMessageRow : PanelContainer
 
     private Button CreateFollowButton(ChatMessage message, RowMetrics metrics, Color textColor)
     {
-        var followButtonSize = new Vector2(metrics.FollowButtonSize, metrics.FollowButtonSize);
-        var followButtonColor = textColor.WithAlpha(1f);
-        var followButton = new Button
-        {
-            Text = Loc.GetString("cmu-chat-manager-follow-button"),
-            ToolTip = Loc.GetString("cmu-chat-manager-follow-button-tooltip"),
-            MinSize = followButtonSize,
-            MaxSize = followButtonSize,
-            Margin = new Thickness(2, 5, 2, 0),
-            ModulateSelfOverride = followButtonColor,
-            VerticalAlignment = VAlignment.Top,
-            StyleClasses = { StyleNano.StyleClassChatGhostFollowButton }
-        };
-
-        followButton.Label.HorizontalExpand = true;
-        followButton.Label.HorizontalAlignment = HAlignment.Center;
-        followButton.Label.VerticalAlignment = VAlignment.Center;
-        followButton.Label.Align = Label.AlignMode.Center;
-        followButton.Label.FontColorOverride = followButtonColor;
+        var followButton = CreateChatActionButton(
+            Loc.GetString("cmu-chat-manager-follow-button"),
+            Loc.GetString("cmu-chat-manager-follow-button-tooltip"),
+            metrics,
+            textColor);
         followButton.OnPressed += _ => _consoleHost.ExecuteCommand($"{CMUGhostFollowCommand.CommandName} {message.GhostFollowEntity}");
         return followButton;
     }
@@ -171,6 +175,27 @@ public sealed partial class ChatMessageRow : PanelContainer
     {
         _repeatBadge.Visible = count > 1;
         _repeatBadge.Text = $"x{count}";
+    }
+
+    internal static FormattedMessage ReplaceCommandLinkTags(FormattedMessage message)
+    {
+        var output = new FormattedMessage(message.Count);
+        foreach (var node in message)
+        {
+            if (node.Name == "cmdlink")
+            {
+                output.PushTag(new MarkupNode(
+                    ChatCommandLinkTag.TagName,
+                    node.Value,
+                    node.Attributes,
+                    node.Closing));
+                continue;
+            }
+
+            output.PushTag(node);
+        }
+
+        return output;
     }
 
     public void RefreshLayout()

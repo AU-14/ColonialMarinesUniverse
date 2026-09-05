@@ -1,0 +1,29 @@
+- type: entity
+  parent: CMPaperWritten
+  id: ANPRCFreqCard
+  name: AN/PRC-117G frequency assignment card
+  description: A laminated card of signal operating instructions, sized to tape to a forearm. The lamination has seen better days.
+  components:
+  - type: Item
+    size: Small
+  - type: ANPRCFreqCard
+    faction: govfor
+  # fallback text only, the server rewrites this from the round's frequency plan
+  - type: Paper
+    content: anprc-frequency-card-fallback
+
+- type: entity
+  parent: ANPRCFreqCard
+  id: ANPRCFreqCardOPFOR
+  suffix: OPFOR
+  components:
+  - type: ANPRCFreqCard
+    faction: opfor
+
+- type: entity
+  parent: ANPRCFreqCard
+  id: ANPRCFreqCardCLF
+  suffix: CLF
+  components:
+  - type: ANPRCFreqCard
+    faction: clf

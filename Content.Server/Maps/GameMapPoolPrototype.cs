@@ -1,3 +1,4 @@
+using Content.Shared.Maps;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 
@@ -16,6 +17,6 @@ public sealed partial class GameMapPoolPrototype : IPrototype
     /// <summary>
     ///     Which maps are in this pool.
     /// </summary>
-    [DataField("maps", required: true)]
-    public HashSet<string> Maps = new(0);
+    [DataField(required: true)]
+    public HashSet<ProtoId<GameMapPrototype>> Maps = new(0);
 }

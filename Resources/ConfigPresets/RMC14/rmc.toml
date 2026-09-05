@@ -39,9 +39,6 @@ round_end_pvs_overrides = false
 round_restart_time = 180
 lobbyduration = 180
 
-[gateway]
-generator_enabled = false
-
 [ghost]
 kill_crit = false
 role_time = 0

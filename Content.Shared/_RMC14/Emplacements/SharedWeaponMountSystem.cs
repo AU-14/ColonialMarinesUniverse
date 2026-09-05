@@ -16,6 +16,7 @@ using Content.Shared.CombatMode;
 using Content.Shared.Construction.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -145,14 +146,18 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
             TryComp(args.Used, out BallisticAmmoProviderComponent? ballistic))
         {
             if (!TryComp(args.User, out HandsComponent? hands) ||
-                !_slots.CanInsert(ent.Comp.MountedEntity.Value, args.Used, args.User, itemSlot, true) ||
+                !_slots.CanInsert(ent.Comp.MountedEntity.Value, itemSlot, args.Used, args.User, true) ||
                 !_hands.TryDrop(args.User, args.Used))
                 return;
 
             if (itemSlot.Item != null)
                 _hands.TryPickupAnyHand(args.User, itemSlot.Item.Value, handsComp: hands);
 
-            _slots.TryInsert(ent.Comp.MountedEntity.Value, MagazineKey, args.Used, args.User, null, true);
+            _slots.TryInsert(ent.Comp.MountedEntity.Value,
+                MagazineKey,
+                args.Used,
+                args.User,
+                excludeUserAudio: true);
 
             var ammoSpriteKey = WeaponMountComponentVisualLayers.MountedAmmo;
             if (TryComp(ent, out FoldableComponent? foldableComp) && foldableComp.IsFolded)
@@ -606,15 +611,17 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
                 if (slot.EjectOnInteract || slot.DisableEject)
                     continue;
 
-                if (!_slots.CanEject(uid, args.User, slot))
+                if (!_slots.CanEject(uid, slot, args.User))
                     continue;
 
                 if (!_actionBlockerSystem.CanPickup(args.User, slot.Item!.Value))
                     continue;
 
-                var verbSubject = slot.Name != string.Empty
-                    ? Loc.GetString(slot.Name)
-                    : Comp<MetaDataComponent>(slot.Item.Value).EntityName;
+                var verbSubject = slot.Name;
+                if (slot.Name == string.Empty)
+                    verbSubject = Comp<MetaDataComponent>(slot.Item.Value).EntityName;
+                else if (Loc.TryGetString(slot.Name, out var localizedName))
+                    verbSubject = localizedName;
 
                 AlternativeVerb verb = new()
                 {

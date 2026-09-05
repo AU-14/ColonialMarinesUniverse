@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Server.Atmos.Piping.Components;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
+using Content.Shared.Atmos.Piping.Components;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 
@@ -27,7 +27,7 @@ public sealed partial class GasMinerSystem : SharedGasMinerSystem
         var oldState = miner.MinerState;
         float toSpawn;
 
-        if (!GetValidEnvironment(ent, out var environment) || !Transform(ent).Anchored)
+        if (!GetValidEnvironment(ent, out var environment))
         {
             miner.MinerState = GasMinerState.Disabled;
         }

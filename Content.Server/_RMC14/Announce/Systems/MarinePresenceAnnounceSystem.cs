@@ -9,13 +9,9 @@ using Content.Shared.Radio;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.Bed.Cryostorage;
 using Content.Shared.StationRecords;
-using Content.Server.StationRecords.Systems;
-using Content.Server.StationRecords;
-using Content.Server._AU14.Marines.Roles.Chevrons;
-using Robust.Server.Player;
-using Content.Server.Players;
-using Content.Server.Preferences.Managers;
-using Content.Shared.Preferences;
+using Content.Shared.StationRecords.Components;
+using Content.Shared.StationRecords.Systems;
+using Content.Server.CMU14.Marines.Roles.Chevrons;
 
 namespace Content.Server._RMC14.Announce
 {
@@ -27,8 +23,6 @@ namespace Content.Server._RMC14.Announce
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private StationRecordsSystem _stationRecords = default!;
         [Dependency] private ChevronSystem _chevron = default!;
-        [Dependency] private IServerPreferencesManager _preferences = default!;
-        [Dependency] private IPlayerManager _playerManager = default!;
 
         public static readonly ProtoId<RadioChannelPrototype> CommonChannel = "MarineCommon";
 
@@ -38,12 +32,8 @@ namespace Content.Server._RMC14.Announce
                 return;
 
             var aresUid = ares.Value.Owner;
-            HumanoidCharacterProfile? profile = null;
-            if (_playerManager.TryGetSessionByEntity(mob, out var session))
-                profile = _preferences.GetPreferences(session.UserId).SelectedCharacter as HumanoidCharacterProfile;
-
-            var fullRankName = _chevron.GetAnnouncementFullName(mob, jobId, profile);
-            var rankName = _chevron.GetAnnouncementShortName(mob, jobId, profile);
+            var fullRankName = _chevron.GetAnnouncementFullName(mob, jobId);
+            var rankName = _chevron.GetAnnouncementShortName(mob, jobId);
 
             if (lateJoin && !silent)
             {

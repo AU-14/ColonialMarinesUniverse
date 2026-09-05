@@ -15,7 +15,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Survivor;
 using Content.Shared.Chat;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Radio;
 using Robust.Server.Audio;
 using Robust.Shared.Audio;

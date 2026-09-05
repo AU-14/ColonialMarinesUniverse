@@ -1,6 +1,6 @@
 using System.Linq;
-using Content.Shared._CMU14.Threats.Mobs.Xeno;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.ManageHive;
+using Content.Shared.CMU14.Threats.Mobs.Xeno;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.ManageHive;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Commendations;
@@ -19,6 +19,7 @@ using Content.Shared.Database;
 using Content.Shared.Dataset;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;

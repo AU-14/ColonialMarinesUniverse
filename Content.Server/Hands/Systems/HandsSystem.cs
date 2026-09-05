@@ -2,8 +2,6 @@ using System.Numerics;
 using Content.Server.Stack;
 using Content.Server.Stunnable;
 using Content.Shared.ActionBlocker;
-using Content.Shared.Body.Part;
-using Content.Shared.Body.Systems;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Explosion;
@@ -34,8 +32,7 @@ namespace Content.Server.Hands.Systems
         [Dependency] private SharedTransformSystem _transformSystem = default!;
         [Dependency] private PullingSystem _pullingSystem = default!;
         [Dependency] private ThrowingSystem _throwingSystem = default!;
-
-        private EntityQuery<PhysicsComponent> _physicsQuery;
+        [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 
         /// <summary>
         /// Items dropped when the holder falls down will be launched in
@@ -50,9 +47,6 @@ namespace Content.Server.Hands.Systems
 
             SubscribeLocalEvent<HandsComponent, DisarmedEvent>(OnDisarmed, before: new[] {typeof(StunSystem), typeof(SharedStaminaSystem)});
 
-            SubscribeLocalEvent<HandsComponent, BodyPartAddedEvent>(HandleBodyPartAdded);
-            SubscribeLocalEvent<HandsComponent, BodyPartRemovedEvent>(HandleBodyPartRemoved);
-
             SubscribeLocalEvent<HandsComponent, ComponentGetState>(GetComponentState);
 
             SubscribeLocalEvent<HandsComponent, BeforeExplodeEvent>(OnExploded);
@@ -62,8 +56,6 @@ namespace Content.Server.Hands.Systems
             CommandBinds.Builder
                 .Bind(ContentKeyFunctions.ThrowItemInHand, new PointerInputCmdHandler(HandleThrowItem))
                 .Register<HandsSystem>();
-
-            _physicsQuery = GetEntityQuery<PhysicsComponent>();
         }
 
         public override void Shutdown()
@@ -75,7 +67,28 @@ namespace Content.Server.Hands.Systems
 
         private void GetComponentState(EntityUid uid, HandsComponent hands, ref ComponentGetState args)
         {
-            args.State = new HandsComponentState(hands);
+            // If we only switch hands don't send a full state.
+            if (args.FromTick > hands.CreationTick && hands.LastUnclassifiedDirty >= args.FromTick)
+            {
+                var aspects = EntityManager.GetModifiedAspects(hands, args.FromTick);
+
+                if (aspects == ActiveHandIdIndex)
+                {
+                    args.State = new HandsComponentActiveHandDeltaState(hands.ActiveHandId);
+                    return;
+                }
+            }
+
+            // Get full state.
+            args.State = new HandsComponentState(
+                hands.ActiveHandId,
+                hands.Hands,
+                hands.SortedHands,
+                hands.ShowInHands,
+                hands.HandDisplacement,
+                hands.LeftHandDisplacement,
+                hands.RightHandDisplacement,
+                hands.CanBeStripped);
         }
 
 
@@ -108,101 +121,6 @@ namespace Content.Server.Hands.Systems
             args.Handled = true; // no shove/stun.
         }
 
-        private void HandleBodyPartAdded(Entity<HandsComponent> ent, ref BodyPartAddedEvent args)
-        {
-            if (args.Part.Comp.PartType != BodyPartType.Hand)
-                return;
-
-            var location = HandLocationForSlot(args.Slot) ?? args.Part.Comp.Symmetry switch
-            {
-                BodyPartSymmetry.None => HandLocation.Middle,
-                BodyPartSymmetry.Left => HandLocation.Left,
-                BodyPartSymmetry.Right => HandLocation.Right,
-                _ => throw new ArgumentOutOfRangeException(nameof(args.Part.Comp.Symmetry))
-            };
-
-            if (!TrySetHandLocation(ent.AsNullable(), args.Slot, location))
-                AddHand(ent.AsNullable(), args.Slot, location);
-
-            NormalizeBodyHandOrder(ent);
-        }
-
-        private static HandLocation? HandLocationForSlot(string slot)
-        {
-            var bareSlot = BarePartSlot(slot);
-            return bareSlot switch
-            {
-                "left_hand" => HandLocation.Left,
-                "right_hand" => HandLocation.Right,
-                _ => null,
-            };
-        }
-
-        private static string BarePartSlot(string slot)
-        {
-            const string prefix = SharedBodySystem.PartSlotContainerIdPrefix;
-            return slot.StartsWith(prefix, StringComparison.Ordinal)
-                ? slot.Substring(prefix.Length)
-                : slot;
-        }
-
-        private void NormalizeBodyHandOrder(Entity<HandsComponent> ent)
-        {
-            var sortedHands = ent.Comp.SortedHands;
-            if (sortedHands.Count < 2)
-                return;
-
-            var ordered = new List<string>(sortedHands.Count);
-            AddCanonicalHand(sortedHands, ordered, "right_hand");
-            AddCanonicalHand(sortedHands, ordered, "left_hand");
-
-            foreach (var hand in sortedHands)
-            {
-                if (!ordered.Contains(hand))
-                    ordered.Add(hand);
-            }
-
-            if (ordered.Count == sortedHands.Count)
-            {
-                var changed = false;
-                for (var i = 0; i < sortedHands.Count; i++)
-                {
-                    if (sortedHands[i] == ordered[i])
-                        continue;
-
-                    changed = true;
-                    break;
-                }
-
-                if (!changed)
-                    return;
-            }
-
-            sortedHands.Clear();
-            sortedHands.AddRange(ordered);
-            Dirty(ent);
-        }
-
-        private static void AddCanonicalHand(IReadOnlyList<string> sortedHands, List<string> ordered, string canonicalSlot)
-        {
-            foreach (var hand in sortedHands)
-            {
-                if (BarePartSlot(hand) != canonicalSlot || ordered.Contains(hand))
-                    continue;
-
-                ordered.Add(hand);
-                return;
-            }
-        }
-
-        private void HandleBodyPartRemoved(EntityUid uid, HandsComponent component, ref BodyPartRemovedEvent args)
-        {
-            if (args.Part.Comp.PartType != BodyPartType.Hand)
-                return;
-
-            RemoveHand(uid, args.Slot);
-        }
-
         #region interactions
 
         private bool HandleThrowItem(ICommonSession? playerSession, EntityCoordinates coordinates, EntityUid entity)
@@ -230,7 +148,7 @@ namespace Content.Server.Hands.Systems
 
             if (TryComp(throwEnt, out StackComponent? stack) && stack.Count > 1 && stack.ThrowIndividually)
             {
-                var splitStack = _stackSystem.Split(throwEnt.Value, 1, Comp<TransformComponent>(player).Coordinates, stack);
+                var splitStack = _stackSystem.Split((throwEnt.Value, stack), 1, Comp<TransformComponent>(player).Coordinates);
 
                 if (splitStack is not {Valid: true})
                     return false;
@@ -270,9 +188,6 @@ namespace Content.Server.Hands.Systems
             // If the holder doesn't have a physics component, they ain't moving
             var holderVelocity = _physicsQuery.TryComp(entity, out var physics) ? physics.LinearVelocity : Vector2.Zero;
             var spreadMaxAngle = Angle.FromDegrees(DropHeldItemsSpread);
-
-            var fellEvent = new FellDownEvent(entity);
-            RaiseLocalEvent(entity, fellEvent);
 
             foreach (var hand in entity.Comp.Hands.Keys)
             {

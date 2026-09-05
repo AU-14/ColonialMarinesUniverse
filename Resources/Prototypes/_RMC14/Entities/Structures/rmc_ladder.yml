@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: RMCLadder
   name: ladder
   description: A sturdy metal ladder.
@@ -212,7 +212,7 @@
   description: A manhole entrance that passes between Z-levels.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/ladders.rsi
+    sprite: CMU14/Structures/ladders.rsi
     drawdepth: WallTops
     state: wymanhole_open3
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Client.UserInterface.Systems.Chat;
+using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Moq;
 using NUnit.Framework;
@@ -50,6 +51,11 @@ public sealed class ChatUserSettingsTest
     {
         var controller = new ChatUIController();
         var config = new Mock<IConfigurationManager>();
+        var savedHighlights = string.Empty;
+        config.Setup(c => c.GetCVar(CCVars.ChatHighlights))
+            .Returns(() => savedHighlights);
+        config.Setup(c => c.SetCVar(CCVars.ChatHighlights, It.IsAny<string>(), It.IsAny<bool>()))
+            .Callback<CVarDef<string>, string, bool>((_, value, _) => savedHighlights = value);
         SetPrivateField(controller, "_config", config.Object);
 
         controller.UpdateHighlights("@Alice", true);

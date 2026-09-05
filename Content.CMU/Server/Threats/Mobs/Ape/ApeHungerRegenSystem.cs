@@ -1,0 +1,90 @@
+using Content.Server.Nutrition.EntitySystems;
+using Content.Shared._RMC14.Damage;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Nutrition.Components;
+using Content.Shared.Nutrition.EntitySystems;
+using Robust.Shared.Timing;
+using ApeDestroyComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeDestroyComponent;
+
+namespace Content.Server.CMU14.Threats.Mobs.Ape;
+
+/// <summary>
+///     Grants passive health regeneration to apes when they are sufficiently fed.
+///     Heals 10% of max health per minute while hunger is >= 50%.
+///     Runs server-side only.
+/// </summary>
+public sealed partial class ApeHungerRegenSystem : EntitySystem
+{
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private ServerSatiationSystem _satiation = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
+
+    // Heal rate: 10% of max health per minute -> 0.1 per 60s
+    private const float HealFractionPerSecond = 0.1f / 60f;
+
+    // Minimum hunger fraction required to trigger regen (50% -> use hunger thresholds mapping)
+    private const float MinimumHungerFraction = 0.5f;
+
+    private TimeSpan _nextUpdate = TimeSpan.Zero;
+
+    public override void Update(float frameTime)
+    {
+        if (_timing.CurTime < _nextUpdate)
+            return;
+
+        _nextUpdate = _timing.CurTime + UpdateInterval;
+
+        var query = EntityQueryEnumerator<ApeDestroyComponent, SatiationComponent>();
+        while (query.MoveNext(out EntityUid uid, out _, out SatiationComponent? satiation))
+        {
+            // Only run on alive mobs
+            if (_mob.IsDead(uid))
+                continue;
+
+            // Preserve the old hunger-only 50% gate using the current hunger satiation's maximum.
+            var entity = new Entity<SatiationComponent>(uid, satiation);
+            if (_satiation.GetValueOrNull(entity, SatiationSystem.Hunger) is not { } currentHunger ||
+                _satiation.GetMaximumValue(entity, SatiationSystem.Hunger) is not { } maxHunger ||
+                maxHunger <= 0)
+            {
+                continue;
+            }
+
+            var hungerFraction = currentHunger / maxHunger;
+
+            if (hungerFraction < MinimumHungerFraction)
+                continue;
+
+            // Determine max HP using the mob dead threshold from MobThresholdSystem.
+            if (!_mobThreshold.TryGetDeadThreshold(uid, out FixedPoint2? deadThreshold)
+                || deadThreshold == FixedPoint2.Zero)
+                continue;
+
+            FixedPoint2 maxHp = deadThreshold.Value;
+
+            if (maxHp <= FixedPoint2.Zero)
+                continue;
+
+            // Heal amount per second as FixedPoint2
+            var healAmount = FixedPoint2.New(maxHp.Float() * HealFractionPerSecond);
+
+            if (healAmount <= FixedPoint2.Zero)
+                continue;
+
+            if (!TryComp(uid, out DamageableComponent? damageable))
+                continue;
+
+            // Distribute healing across damage types (expects negative amount for healing)
+            DamageSpecifier healSpec = _rmcDamageable.DistributeTypes((uid, damageable), -healAmount);
+            _damageable.TryChangeDamage(uid, healSpec, true, false);
+        }
+    }
+}

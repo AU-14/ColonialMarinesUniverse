@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Construction;
@@ -21,6 +22,7 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.Eye.Blinding.Systems;
@@ -60,12 +62,12 @@ public sealed partial class XenoLeapSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -269,11 +271,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
             if (!_xeno.CanAbilityAttackTarget(xeno, entity))
                 return;
 
-            if (TryComp<SlowedDownComponent>(xeno, out var root) && root.SprintSpeedModifier == 0f)
-            {
-                RemComp<SlowedDownComponent>(xeno);
-                _movementSpeed.RefreshMovementSpeedModifiers(xeno);
-            }
+            RemComp<RMCRootedComponent>(xeno);
 
             xeno.Comp.LastHit = null;
             xeno.Comp.LastHitAt = null;
@@ -341,7 +339,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        ApplyLeapProtection(args.Equipee, ent);
+        ApplyLeapProtection(args.EquipTarget, ent);
     }
 
     private void OnGotUnequipped(Entity<RMCGrantLeapProtectionComponent> ent, ref GotUnequippedEvent args)
@@ -352,10 +350,10 @@ public sealed partial class XenoLeapSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        if (!RemoveLeapProtection(args.Equipee, ent))
+        if (!RemoveLeapProtection(args.EquipTarget, ent))
             return;
 
-        RemCompDeferred<RMCLeapProtectionComponent>(args.Equipee);
+        RemCompDeferred<RMCLeapProtectionComponent>(args.EquipTarget);
     }
 
     private void OnEquippedHand(Entity<RMCGrantLeapProtectionComponent> ent, ref GotEquippedHandEvent args)
@@ -579,7 +577,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
             victim.RecoverAt = _timing.CurTime + xeno.Comp.ParalyzeTime;
             Dirty(target, victim);
 
-            _stun.TrySlowdown(xeno, xeno.Comp.MoveDelayTime, true, 0f, 0f);
+            _slow.TryRoot(xeno, xeno.Comp.MoveDelayTime, applyChemical: true);
 
             if (_net.IsServer)
                 _stun.TryParalyze(target, _xeno.TryApplyXenoDebuffMultiplier(target, xeno.Comp.ParalyzeTime), true);

@@ -54,9 +54,9 @@ ui-options-misc-label = Misc
 ui-options-interface-label = Interface
 
 
-ui-options-auto-fill-highlights = Auto-fill the highlights with the character's information
-ui-options-highlights-color = Highlighs color:
-ui-options-highlights-color-example = This is an highlighted text!
+ui-options-auto-fill-highlights = Automatically set the highlights list based on your character's name and job
+ui-options-highlights-color = Highlights color:
+ui-options-highlights-color-example = This is highlighted text.
 ui-options-show-held-item = Show held item next to cursor
 ui-options-show-combat-mode-indicators = Show combat mode indicators with cursor
 ui-options-opaque-storage-window = Opaque storage window
@@ -203,7 +203,7 @@ ui-options-function-open-character-menu = Open character menu
 ui-options-function-open-context-menu = Open context menu
 ui-options-function-open-crafting-menu = Open crafting menu
 ui-options-function-open-inventory-menu = Open inventory
-ui-options-function-open-a-help = Open admin and mentor help
+ui-options-function-open-a-help = Open admin help
 ui-options-function-open-abilities-menu = Open action menu
 ui-options-function-open-emotes-menu = Open emotes menu
 ui-options-function-toggle-round-end-summary-window = Toggle round end summary window
@@ -372,7 +372,7 @@ ui-options-crt-ui-color-orange = Orange
 ui-options-crt-ui-color-red = Red
 ui-options-crt-ui-color-purple = Purple
 ui-options-crt-ui-color-example = Preview text
-ui-options-reduced-motion = Reduce motion of visual effects
+ui-options-reduced-motion = Reduce general visual effects
 ui-options-screen-shake-intensity = Screen shake intensity
 ui-options-explosion-screen-shake-enabled = Screen shake from nearby explosions
 ui-options-explosion-screen-shake-ignore-far = Ignore explosions more than 25 tiles away
@@ -424,3 +424,92 @@ ui-options-admin-enable-overlay-starting-job = Show starting job
 ui-options-admin-overlay-merge-distance = Stack merge distance
 ui-options-admin-overlay-ghost-fade-distance = Ghost overlay fade range from mouse
 ui-options-admin-overlay-ghost-hide-distance = Ghost overlay hide range from mouse
+
+
+ui-options-mute-unfocused = Mute audio when unfocused
+
+ui-options-audio-device = Output device:
+
+ui-options-audio-device-default = System default
+
+ui-options-audio-hrtf = Enable HRTF Audio Processing (Requires Restart)
+
+ui-options-chat-follow-button = As ghost, show a follow button next to chat messages
+
+ui-options-max-fps = Maximum FPS:
+
+ui-options-max-fps-display-rate = Display Rate
+
+ui-options-max-fps-tooltip = Maximum framerate the client should run at. Set to 0 for no limit. This has no effect if VSync is enabled.
+
+ui-options-filter-label = Scaling filter:
+
+ui-options-filter-nearest = Nearest (no smoothing)
+
+ui-options-filter-bilinear = Bilinear (smoothed)
+
+ui-options-sharpness = Sharpness:
+
+## Controls menu
+
+ui-options-hold-to-attack-melee = Hold to attack (melee)
+
+ui-options-hold-to-attack-ranged = Hold to attack (ranged)
+
+ui-options-function-toggle-knockdown = Toggle Crawling
+
+ui-options-function-inspect-entity-tooltip = Open a ViewVariables window for the entity your mouse is currently hovering over.
+
+ui-options-function-inspect-server-component = Inspect Server Component
+
+ui-options-function-inspect-server-component-tooltip = Open a ViewVariables window with the server component set by the "quickinspect" command for the entity your mouse is currently hovering over.
+
+ui-options-function-inspect-client-component = Inspect Client Component
+
+ui-options-function-inspect-client-component-tooltip = Open a ViewVariables window with the client component set by the "quickinspect" command for the entity your mouse is currently hovering over.
+
+ui-options-accessibility-header-reduced-motion = Reduced Motion
+
+ui-options-accessibility-header-visuals = Visuals
+
+ui-options-accessibility-header-content = Content
+
+ui-options-reduced-motion-tooltip = Toggle on to show alternative sprites with reduced motion for some items.
+
+# accessibility option tooltips taken from CVar summary blocks.
+
+ui-options-disable-ai-static = AI camera static
+
+ui-options-disable-ai-static-tooltip = Replaces the AI static camera effect with a plain gradient.
+
+ui-options-disable-blurry-vision = Blurry vision
+
+ui-options-disable-blurry-vision-tooltip = Replaces the movement in the blurry shader with a static effect.
+
+ui-options-disable-drunk-overlay = Drunk overlay
+
+ui-options-disable-drunk-overlay-tooltip = Replaces the movement in the drunk shader with a static offset.
+
+ui-options-disable-flash-effect = Flash
+
+ui-options-disable-flash-effect-tooltip = Replaces the 'flash' effect with a reduced movement equivalent.
+
+ui-options-disable-heat-distortion = Heat distortion
+
+ui-options-disable-heat-distortion-tooltip = Decreases motion on the heat distortion shader.
+
+ui-options-disable-nv-noise = Night vision overlay
+
+ui-options-disable-nv-noise-tooltip = Disables the noise effect on the night vision overlay.
+
+ui-options-disable-rainbow-overlay = Rainbow overlay
+
+ui-options-disable-rainbow-overlay-tooltip = Replaces the movement in the rainbow overlay shader with a static offset.
+
+ui-options-disable-singulo-warp = Singularity
+
+ui-options-disable-singulo-warp-tooltip = Disables the screen warping effect on the singularity.
+
+ui-options-admin-strip-overlay-title = Strip Overlay
+
+ui-options-admin-strip-overlay-setting = Show strip overlay by default

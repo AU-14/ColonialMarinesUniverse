@@ -107,8 +107,8 @@ public sealed partial class WeaponMountComponent : Component
     /// <summary>
     ///     The action prototype to stop using the mount.
     /// </summary>
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
-    public string? DismountAction = "RMCActionDismount";
+    [DataField]
+    public EntProtoId? DismountAction = "RMCActionDismount";
 
     /// <summary>
     ///     The uid of the action that makes you stop using the mount.

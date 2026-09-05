@@ -55,7 +55,7 @@ public sealed partial class AttachableHolderStripMenu : FancyWindow
                 Text = Loc.GetString("rmc-attachable-holder-strip-ui-empty-slot"),
                 HorizontalExpand = true,
                 HorizontalAlignment = HAlignment.Right,
-                StyleClasses = { StyleBase.ButtonOpenRight }
+                StyleClasses = { StyleClass.ButtonOpenRight }
             };
 
             var hBox = new BoxContainer

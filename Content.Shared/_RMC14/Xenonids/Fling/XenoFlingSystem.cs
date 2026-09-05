@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Xenonids.Rage;
 using Content.Shared.CombatMode;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;

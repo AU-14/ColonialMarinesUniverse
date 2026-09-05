@@ -221,6 +221,11 @@
         maxDistance: 24
         variation: 0.05
   - type: VultureProjectile
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Forced
+      energy: Severe
   - type: Fixtures
     fixtures:
       projectile:

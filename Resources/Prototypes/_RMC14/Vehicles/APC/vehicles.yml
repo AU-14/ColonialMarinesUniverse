@@ -6,6 +6,8 @@
   components:
   - type: Vehicle
     movementKind: Grid
+    transferDamage: false
+  - type: VehicleOperatorDamage
   - type: Clickable
   - type: RMCIgnoreGhostInteractionLimits
   - type: Tag
@@ -16,7 +18,7 @@
     maxSpeed: 5
     acceleration: 4
     deceleration: 10
-    maxRotationSpeedDegrees: 36
+    maxRotationSpeedDegrees: 72
     rotationAccelerationDegrees: 72
     rotationDecelerationDegrees: 96
     turnDelay: 0.4
@@ -80,8 +82,9 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameAPC
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoMultiplier: 3.4
     otherMultiplier: 1

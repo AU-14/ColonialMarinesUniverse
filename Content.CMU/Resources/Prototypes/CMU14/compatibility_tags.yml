@@ -1,0 +1,32 @@
+# Compatibility tags retained for active CMU and RMC prototype consumers.
+# Keep this list alphabetical and remove an entry when its final consumer migrates.
+
+- type: Tag
+  id: Briefcase
+
+- type: Tag
+  id: DrinkCup
+
+- type: Tag
+  id: DrinkGlass
+
+- type: Tag
+  id: GasTank
+
+- type: Tag
+  id: Ingredient
+
+- type: Tag
+  id: Machete
+
+- type: Tag
+  id: RodMetal1
+
+- type: Tag
+  id: Shovel
+
+- type: Tag
+  id: Wall
+
+- type: Tag
+  id: Wringer

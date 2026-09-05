@@ -3,7 +3,7 @@ using Content.Server.NodeContainer.NodeGroups;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.NodeContainer;
-using Robust.Shared.Map;
+using Content.Shared.NodeContainer.NodeGroups;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Utility;
 
@@ -157,7 +157,8 @@ namespace Content.Server.NodeContainer.Nodes
             CurrentPipeDirection = OriginalPipeDirection.RotatePipeDirection(xform.LocalRotation);
         }
 
-        public override IEnumerable<Node> GetReachableNodes(TransformComponent xform,
+        public override IEnumerable<Node> GetReachableNodes(
+            Entity<TransformComponent> xform,
             EntityQuery<NodeContainerComponent> nodeQuery,
             EntityQuery<TransformComponent> xformQuery,
             Entity<MapGridComponent>? grid,
@@ -181,10 +182,11 @@ namespace Content.Server.NodeContainer.Nodes
                 }
             }
 
-            if (!xform.Anchored || grid == null)
+            if (!xform.Comp.Anchored || grid is not { } gridEnt)
                 yield break;
 
-            var pos = NodeHelpers.TileIndicesFor(entMan, grid.Value, xform.Coordinates);
+            var mapSystem = entMan.System<SharedMapSystem>();
+            var pos = mapSystem.TileIndicesFor(gridEnt, xform.Comp.Coordinates);
 
             for (var i = 0; i < PipeDirectionHelpers.PipeDirections; i++)
             {
@@ -193,7 +195,7 @@ namespace Content.Server.NodeContainer.Nodes
                 if (!CurrentPipeDirection.HasDirection(pipeDir))
                     continue;
 
-                foreach (var pipe in LinkableNodesInDirection(pos, pipeDir, grid.Value, nodeQuery, entMan))
+                foreach (var pipe in LinkableNodesInDirection(pos, pipeDir, gridEnt, nodeQuery, mapSystem))
                 {
                     yield return pipe;
                 }
@@ -208,9 +210,9 @@ namespace Content.Server.NodeContainer.Nodes
             PipeDirection pipeDir,
             Entity<MapGridComponent> grid,
             EntityQuery<NodeContainerComponent> nodeQuery,
-            IEntityManager entMan)
+            SharedMapSystem mapSystem)
         {
-            foreach (var pipe in PipesInDirection(pos, pipeDir, grid, nodeQuery, entMan))
+            foreach (var pipe in PipesInDirection(pos, pipeDir, grid, nodeQuery, mapSystem))
             {
                 if (pipe.NodeGroupID == NodeGroupID
                     && pipe.CurrentPipeLayer == CurrentPipeLayer
@@ -229,12 +231,11 @@ namespace Content.Server.NodeContainer.Nodes
             PipeDirection pipeDir,
             Entity<MapGridComponent> grid,
             EntityQuery<NodeContainerComponent> nodeQuery,
-            IEntityManager entMan)
+            SharedMapSystem mapSystem)
         {
             var offsetPos = pos.Offset(pipeDir.ToDirection());
 
-            var map = entMan.System<SharedMapSystem>();
-            foreach (var entity in map.GetAnchoredEntities(grid, offsetPos))
+            foreach (var entity in mapSystem.GetAnchoredEntities(grid, offsetPos))
             {
                 if (!nodeQuery.TryGetComponent(entity, out var container))
                     continue;

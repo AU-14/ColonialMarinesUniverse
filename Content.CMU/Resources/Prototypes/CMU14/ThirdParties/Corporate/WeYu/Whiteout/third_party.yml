@@ -1,0 +1,21 @@
+- type: partySpawn
+  id: WYPMCWhiteoutSpawn
+  leadersToSpawn:
+    CMUJobPMCWhiteout: 1
+  gruntsToSpawn:
+    CMUJobPMCWhiteoutGunner: 1
+    CMUJobPMCSynthetic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: WYPMCWhiteout
+  announceAsSurvivors: true
+  partyspawn: WYPMCWhiteoutSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  weight: 1
+  minplayers: 500
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false

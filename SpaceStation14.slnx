@@ -13,6 +13,9 @@
   <Folder Name="/Build/">
     <File Path="Tools/generate_hashes.ps1" />
   </Folder>
+  <Folder Name="/MSBuild/">
+    <File Path="MSBuild/Content.props" />
+  </Folder>
   <Folder Name="/Project Files/">
     <File Path=".editorconfig" />
     <File Path=".gitattributes" />
@@ -25,9 +28,7 @@
     <BuildType Solution="Tools|*" Project="Debug" />
   </Project>
   <Project Path="Content.Benchmarks/Content.Benchmarks.csproj" />
-  <Project Path="Content.Client/Content.Client.csproj">
-    <BuildDependency Project="RobustToolbox/Lidgren.Network/Lidgren.Network.csproj" />
-  </Project>
+  <Project Path="Content.Client/Content.Client.csproj" />
   <Project Path="Content.IntegrationTests/Content.IntegrationTests.csproj" />
   <Project Path="Content.MapRenderer/Content.MapRenderer.csproj" />
   <Project Path="Content.Packaging/Content.Packaging.csproj" />
@@ -41,10 +42,7 @@
     <BuildType Solution="Tools|*" Project="Debug" />
   </Project>
   <Project Path="Content.Server.Database/Content.Server.Database.csproj" />
-  <Project Path="Content.Server/Content.Server.csproj">
-    <BuildDependency Project="Content.Shared/Content.Shared.csproj" />
-    <BuildDependency Project="RobustToolbox/Lidgren.Network/Lidgren.Network.csproj" />
-  </Project>
+  <Project Path="Content.Server/Content.Server.csproj" />
   <Project Path="Content.Shared.Database/Content.Shared.Database.csproj" />
   <Project Path="Content.Shared/Content.Shared.csproj" />
   <Project Path="Content.Tests/Content.Tests.csproj" />
@@ -75,7 +73,6 @@
     <File Path="RobustToolbox/Imports/WebView.props" />
   </Folder>
   <Folder Name="/RobustToolbox/MSBuild/">
-    <File Path="RobustToolbox/MSBuild/MacOSAppBundle.targets" />
     <File Path="RobustToolbox/MSBuild/Robust.Analyzers.targets" />
     <File Path="RobustToolbox/MSBuild/Robust.CompNetworkGenerator.targets" />
     <File Path="RobustToolbox/MSBuild/Robust.Configurations.props" />
@@ -88,7 +85,6 @@
     <File Path="RobustToolbox/MSBuild/Robust.Properties.targets" />
     <File Path="RobustToolbox/MSBuild/Robust.Trimming.targets" />
     <File Path="RobustToolbox/MSBuild/XamlIL.targets" />
-    <File Path="RobustToolbox/MSBuild/WebView.targets" />
   </Folder>
   <Folder Name="/RobustToolbox/NetSerializer/">
     <Project Path="RobustToolbox/NetSerializer/NetSerializer/NetSerializer.csproj">
@@ -166,6 +162,7 @@
     <Project Path="RobustToolbox/Robust.Server.IntegrationTests/Robust.Server.IntegrationTests.csproj" />
     <Project Path="RobustToolbox/Robust.Server.Testing/Robust.Server.Testing.csproj" />
     <Project Path="RobustToolbox/Robust.Server/Robust.Server.csproj" />
+    <Project Path="RobustToolbox/Robust.Shared.EntitySystemSubscriptionsGenerator/Robust.Shared.EntitySystemSubscriptionsGenerator.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.IntegrationTests/Robust.Shared.IntegrationTests.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.Maths.Testing/Robust.Shared.Maths.Testing.csproj" />
     <Project Path="RobustToolbox/Robust.Shared.Maths.Tests/Robust.Shared.Maths.Tests.csproj" />

@@ -3,10 +3,10 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Server.Administration.Logs;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
-using Content.Shared._CMU14.Requisitions;
+using Content.Shared.CMU14.Requisitions;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Storage.EntitySystems;
@@ -25,11 +25,12 @@ using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared._AU14.CCVar;
-using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.CCVar;
+using Content.Shared.CMU14.ColonyEconomy;
+using Content.Shared.CMU14.util;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Chasm;
+using Content.Shared.Chat;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.Mobs.Components;
@@ -95,11 +96,13 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         SubscribeLocalEvent<RequisitionsComputerComponent, MapInitEvent>(OnComputerMapInit);
         SubscribeLocalEvent<RequisitionsComputerComponent, ComponentStartup>(OnComputerStartup);
+        SubscribeLocalEvent<RequisitionsComputerComponent, ComponentShutdown>(OnComputerShutdown);
         SubscribeLocalEvent<RequisitionsComputerComponent, BeforeActivatableUIOpenEvent>(OnComputerBeforeActivatableUIOpen);
 
         Subs.BuiEvents<RequisitionsComputerComponent>(RequisitionsUIKey.Key, subs =>
         {
             subs.Event<RequisitionsBuyMsg>(OnBuy);
+            subs.Event<RequisitionsCheckoutMsg>(OnItemizedCheckout);
             subs.Event<RequisitionsPlatformMsg>(OnPlatform);
         });
 
@@ -528,7 +531,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 }
                 else
                 {
-                    PrintInvoice(crate, coordinates, PaperRequisitionInvoice);
+                    PrintInvoice(crate, coordinates, PaperRequisitionInvoice, order.PackedWeight);
                 }
 
                 yOffset--;
@@ -754,7 +757,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                     if (_chasmFallingQuery.HasComp(toPit))
                         continue;
 
-                    _chasm.StartFalling(uid, chasm, toPit);
+                    _chasm.StartFalling((uid, chasm), toPit, playEmote: false);
                     _audio.PlayEntity(chasm.FallingSound, toPit, uid);
                 }
             }
@@ -766,6 +769,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void ResetStock(Entity<RequisitionsComputerComponent> computer)
     {
+        RebuildItemizedCatalog(computer);
         computer.Comp.Stock.Clear();
         EnsureStockEntries(computer, _timing.CurTime);
     }
@@ -786,6 +790,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             {
                 var entry = category.Entries[orderIndex];
                 if (!IsLimitedStock(entry))
+                    continue;
+
+                if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
                     continue;
 
                 var key = (categoryIndex, orderIndex);
@@ -826,6 +833,12 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         int order,
         RequisitionsEntry entry)
     {
+        if (TryTakeItemizedBundle(computer, (category, order)))
+            return true;
+
+        if (HasItemizedSource(computer.Owner, (category, order)))
+            return false;
+
         if (!IsLimitedStock(entry))
             return true;
 
@@ -874,7 +887,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     {
         EnsureStockEntries(computer, time);
 
-        var updateUi = false;
+        var updateUi = ProcessItemizedStock(computer, time);
         var waitingForStock = false;
         for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
         {
@@ -883,6 +896,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             {
                 var entry = category.Entries[orderIndex];
                 if (!IsLimitedStock(entry))
+                    continue;
+
+                if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
                     continue;
 
                 var key = (categoryIndex, orderIndex);
@@ -948,6 +964,17 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 if (!IsLimitedStock(entry))
                     continue;
 
+                if (TryGetItemizedBundleStock(computer.Owner, (categoryIndex, orderIndex), time, out var itemizedStock))
+                {
+                    stockInfo.Add(new RequisitionsStockInfo(
+                        categoryIndex,
+                        orderIndex,
+                        itemizedStock.Current,
+                        itemizedStock.Max,
+                        itemizedStock.SecondsUntilNextReplenish));
+                    continue;
+                }
+
                 var key = (categoryIndex, orderIndex);
                 if (!computer.Comp.Stock.TryGetValue(key, out var stock))
                     continue;
@@ -1012,6 +1039,15 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             _ => TimeSpan.Zero,
         };
 
+        // Always process the platform contents before completing a lower. If an update crosses
+        // both thresholds at once, finalizing first leaves the old shipment on the platform.
+        if (elevator.Mode == Lowering &&
+            time > elevator.ToggledAt + delay &&
+            Sell(ent))
+        {
+            return true;
+        }
+
         if (time > elevator.ToggledAt + moveDelay)
         {
             elevator.Audio = null;
@@ -1030,13 +1066,6 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             SpawnOrders(ent);
 
             return true;
-        }
-
-        if (elevator.Mode == Lowering &&
-            time > elevator.ToggledAt + delay)
-        {
-            if (Sell(ent))
-                return true;
         }
 
         return false;
@@ -1143,7 +1172,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         if (!string.IsNullOrEmpty(order.DeptAccessLevel))
         {
             var accessReader = EnsureComp<AccessReaderComponent>(crate);
-            accessSys.SetAccesses((crate, accessReader),
+            accessSys.TrySetAccesses((crate, accessReader),
                 new List<HashSet<ProtoId<AccessLevelPrototype>>>
                 {
                     new() { order.DeptAccessLevel }

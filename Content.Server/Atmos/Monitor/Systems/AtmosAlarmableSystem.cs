@@ -108,9 +108,9 @@ public sealed partial class AtmosAlarmableSystem : EntitySystem
                     break;
                 }
 
-                if (args.Data.TryGetValue(AlertTypes, out HashSet<AtmosMonitorThresholdType>? types) && component.MonitorAlertTypes != null)
+                if (args.Data.TryGetValue(AlertTypes, out AtmosMonitorThresholdTypeFlags types) && component.MonitorAlertTypes != AtmosMonitorThresholdTypeFlags.None)
                 {
-                    isValid = types.Any(type => component.MonitorAlertTypes.Contains(type));
+                    isValid = (types & component.MonitorAlertTypes) != 0;
                 }
 
                 if (!component.NetworkAlarmStates.ContainsKey(args.SenderAddress))
@@ -304,7 +304,9 @@ public sealed partial class AtmosAlarmableSystem : EntitySystem
     {
         if (alarm == AtmosAlarmType.Danger)
         {
-            _audioSystem.PlayPvs(alarmable.AlarmSound, uid, AudioParams.Default.WithVolume(alarmable.AlarmVolume));
+            var audioParams = alarmable.AlarmSound?.Params ?? AudioParams.Default;
+            audioParams = audioParams.AddVolume(alarmable.AlarmVolume);
+            _audioSystem.PlayPvs(alarmable.AlarmSound, uid, audioParams);
         }
     }
 

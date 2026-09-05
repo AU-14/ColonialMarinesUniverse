@@ -21,6 +21,14 @@
   - type: Sprite
     sprite: _RMC14/Objects/Medical/stethoscope.rsi
     state: icon
+  - type: Clothing
+    sprite: _RMC14/Objects/Medical/stethoscope.rsi
+    quickEquip: true
+    slots:
+    - neck
+    clothingVisuals:
+      neck:
+      - state: utility
   - type: UniformAccessory
     playerSprite:
       sprite: _RMC14/Objects/Medical/stethoscope.rsi

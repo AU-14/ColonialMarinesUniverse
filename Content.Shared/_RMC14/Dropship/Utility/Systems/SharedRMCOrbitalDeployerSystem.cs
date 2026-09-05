@@ -1,5 +1,5 @@
-using Content.Shared._CMU14.Dropship.AttachmentPoint;
-using Content.Shared._CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.SupplyDrop;

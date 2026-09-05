@@ -15,9 +15,13 @@
                 <ui:OptionSlider Name="RunechatSpeechBubbleScaleSlider" Title="{Loc 'ui-options-runechat-speech-scale'}" />
 
                 <Label Text="{Loc 'ui-options-cmu-chat'}" StyleClasses="LabelKeyText" />
-                <CheckBox Name="ChatGhostFollowButton" Text="{Loc 'cmu-ui-options-chat-follow-button'}" />
                 <CheckBox Name="ExamineLogInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-log-in-chat'}" />
                 <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" />
+
+                <Label Text="{Loc 'cmu-ui-options-accessibility'}" StyleClasses="LabelKeyText" />
+                <CheckBox Name="AutoIngestCheckBox"
+                          Text="{Loc 'cmu-ui-options-auto-ingest'}"
+                          ToolTip="{Loc 'cmu-ui-options-auto-ingest-tooltip'}" />
 
                 <Label Text="{Loc 'cmu-ui-options-medical'}" StyleClasses="LabelKeyText" />
                 <CheckBox Name="TargetedHealingCheckBox"

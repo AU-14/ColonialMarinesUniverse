@@ -43,12 +43,7 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
         Container container = ReactantsContainer;
         SetReagents(prototype.Reactants, ref container, protoMan);
         Container productContainer = ProductsContainer;
-        var products = new Dictionary<string, FixedPoint2>();
-        foreach (var (product, amount) in prototype.Products)
-        {
-            products.Add(product, amount);
-        }
-
+        var products = new Dictionary<ProtoId<ReagentPrototype>, FixedPoint2>(prototype.Products);
         foreach (var (reagent, reactantProto) in prototype.Reactants)
         {
             if (reactantProto.Catalyst)
@@ -113,11 +108,11 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
         ReactantsContainer.Visible = true;
         ReactantsContainer.AddChild(label);
 
-        if (prototype.Reagent != null)
+        if (prototype.Reagent is {} reagent)
         {
-            var quantity = new Dictionary<string, FixedPoint2>
+            var quantity = new Dictionary<ProtoId<ReagentPrototype>, FixedPoint2>
             {
-                { prototype.Reagent, FixedPoint2.New(0.21f) }
+                { reagent, FixedPoint2.New(0.21f) }
             };
             Container productContainer = ProductsContainer;
             SetReagents(quantity, ref productContainer, protoMan, false);
@@ -127,7 +122,7 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
 
     private void SetReagents(List<ReagentQuantity> reagents, ref Container container, IPrototypeManager protoMan, bool addLinks = true)
     {
-        var amounts = new Dictionary<string, FixedPoint2>();
+        var amounts = new Dictionary<ProtoId<ReagentPrototype>, FixedPoint2>();
         foreach (var (reagent, quantity) in reagents)
         {
             amounts.Add(reagent.Prototype, quantity);
@@ -136,12 +131,12 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
     }
 
     private void SetReagents(
-        Dictionary<string, ReactantPrototype> reactants,
+        Dictionary<ProtoId<ReagentPrototype>, ReactantInfo> reactants,
         ref Container container,
         IPrototypeManager protoMan,
         bool addLinks = true)
     {
-        var amounts = new Dictionary<string, FixedPoint2>();
+        var amounts = new Dictionary<ProtoId<ReagentPrototype>, FixedPoint2>();
         foreach (var (reagent, reactantPrototype) in reactants)
         {
             amounts.Add(reagent, reactantPrototype.Amount);
@@ -149,22 +144,7 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
         SetReagents(amounts, ref container, protoMan, addLinks);
     }
 
-    [PublicAPI]
-    private void SetReagents(
-        Dictionary<ProtoId<ReagentPrototype>, ReactantPrototype> reactants,
-        ref Container container,
-        IPrototypeManager protoMan,
-        bool addLinks = true)
-    {
-        var amounts = new Dictionary<string, FixedPoint2>();
-        foreach (var (reagent, reactantPrototype) in reactants)
-        {
-            amounts.Add(reagent, reactantPrototype.Amount);
-        }
-        SetReagents(amounts, ref container, protoMan, addLinks);
-    }
-
-    private void SetReagents(Dictionary<string, FixedPoint2> reagents, ref Container container, IPrototypeManager protoMan, bool addLinks = true)
+    private void SetReagents(Dictionary<ProtoId<ReagentPrototype>, FixedPoint2> reagents, ref Container container, IPrototypeManager protoMan, bool addLinks = true)
     {
         foreach (var (product, amount) in reagents.OrderByDescending(p => p.Value))
         {

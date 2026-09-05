@@ -1,15 +1,15 @@
 using Content.Server.Access.Systems;
-using Content.Server.AU14.ColonyEconomy;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Station.Systems;
 using Content.Shared.Access.Components;
-using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.ColonyEconomy;
+namespace Content.IntegrationTests.CMU14.ColonyEconomy;
 
 [TestFixture]
 public sealed class DepartmentConsoleSalaryTest

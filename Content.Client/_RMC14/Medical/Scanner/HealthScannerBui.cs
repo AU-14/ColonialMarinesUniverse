@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Numerics;
-using Content.Client._CMU14.Medical.Presentation.Windows;
+using Content.Client.CMU14.Medical.Presentation.Windows;
 using Content.Client._RMC14.Medical.HUD;
 using Content.Client.Message;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.HUD;
@@ -190,38 +190,35 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         _window.ChemicalsContainer.DisposeAllChildren();
 
         var anyChemicals = false;
-        var anyUnknown = false;
-        if (uiState.Chemicals != null)
+        foreach (var reagent in uiState.KnownChemicals)
         {
-            foreach (var reagent in uiState.Chemicals.Contents)
-            {
-                if (!_reagent.TryIndex(reagent.Reagent, out var prototype))
-                    continue;
+            if (!_reagent.TryIndex(reagent.Prototype, out var prototype))
+                continue;
 
-                if (prototype.Unknown)
-                {
-                    // TODO RMC14 these shouldn't be setting sent to the client
-                    anyUnknown = true;
-                    continue;
-                }
+            var text = FormattedMessage.EscapeText($"{reagent.Quantity.Float():F1} {prototype.LocalizedName}");
+            if (reagent.Overdose)
+                text = $"[bold][color=red]{text} OD[/color][/bold]";
 
-                var text = $"{reagent.Quantity.Float():F1} {prototype.LocalizedName}";
-                if (prototype.Overdose != null && reagent.Quantity > prototype.Overdose)
-                    text = $"[bold][color=red]{FormattedMessage.EscapeText(text)} OD[/color][/bold]";
+            var label = new CMUScaledRichTextLabel();
+            label.SetMarkupPermissive(text);
+            _window.ChemicalsContainer.AddChild(label);
+            anyChemicals = true;
+        }
 
-                var label = new CMUScaledRichTextLabel();
-                label.SetMarkupPermissive(text);
-                _window.ChemicalsContainer.AddChild(label);
-                anyChemicals = true;
-            }
+        if (uiState.OmittedKnownChemicals > 0)
+        {
+            var label = new CMUScaledRichTextLabel();
+            label.SetMarkupPermissive(Loc.GetString("rmc-health-analyzer-additional-reagents", ("count", uiState.OmittedKnownChemicals)));
+            _window.ChemicalsContainer.AddChild(label);
+            anyChemicals = true;
         }
 
         _window.UnknownReagentsLabel.SetMarkupPermissive(Loc.GetString("rmc-health-analyzer-unknown-reagents"));
-        _window.UnknownChemicalsPanel.Visible = anyUnknown;
+        _window.UnknownChemicalsPanel.Visible = uiState.UnknownChemicals;
         _window.ChemicalContentsLabel.Visible = anyChemicals;
         _window.ChemicalContentsSeparator.Visible = anyChemicals;
         _window.ChemicalsContainer.Visible = anyChemicals;
-        _window.ChemicalContentsCard.Visible = anyChemicals || anyUnknown;
+        _window.ChemicalContentsCard.Visible = anyChemicals || uiState.UnknownChemicals;
 
         _window.BloodTypeLabel.Text = "Blood:";
         var bloodMsg = new FormattedMessage();
@@ -403,9 +400,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
                 continue;
 
             attached.Add((type, sym));
-            if (!BodyPartHasScannerDamage(uiState, part.Value))
-                continue;
-
             _window!.CMUBodyChartContainer.AddChild(BuildBodyRow(uiState, part.Value));
         }
         foreach (var (type, sym) in CmuPartLayout)
@@ -651,62 +645,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         return track;
     }
 
-    private static bool BodyPartHasScannerDamage(HealthScannerBuiState uiState, CMUBodyPartReadout part)
-    {
-        if (part.Current < part.Max)
-            return true;
-        if (part.WoundDescriptor != null || part.ShrapnelFragments > 0 || part.Eschar)
-            return true;
-        if (PartHasFractureReadout(uiState, part.Type, part.Symmetry))
-            return true;
-        if (PartHasInternalBleedReadout(uiState, part.Type, part.Symmetry))
-            return true;
-
-        return false;
-    }
-
-    private static bool PartHasFractureReadout(
-        HealthScannerBuiState uiState,
-        BodyPartType type,
-        BodyPartSymmetry symmetry)
-    {
-        if (uiState.CMUFractures is not { Count: > 0 } fractures)
-            return false;
-
-        foreach (var fracture in fractures)
-        {
-            if (fracture.Part == type && fracture.Symmetry == symmetry)
-                return true;
-        }
-
-        return false;
-    }
-
-    private static bool PartHasInternalBleedReadout(
-        HealthScannerBuiState uiState,
-        BodyPartType type,
-        BodyPartSymmetry symmetry)
-    {
-        if (uiState.CMUInternalBleeds is not { Count: > 0 } bleeds)
-            return false;
-
-        foreach (var bleed in bleeds)
-        {
-            if (bleed.ExactLocationKnown)
-            {
-                if (bleed.Part == type && bleed.Symmetry == symmetry)
-                    return true;
-
-                continue;
-            }
-
-            if (type == BodyPartType.Torso)
-                return true;
-        }
-
-        return false;
-    }
-
     private static float? LineGraftRecoverableFraction(CMUBodyPartReadout part)
     {
         var max = Math.Max(1f, part.Max.Float());
@@ -892,9 +830,9 @@ public sealed partial class HealthScannerBui : BoundUserInterface
     {
         // null = sub-Med-2 examiner (FillOrgans is gated at skill ≥ 2 in
         // the server-side populator). Empty list = Med-2+ examiner but
-        // patient has no organs (corpse / synth). Distinguish the two
-        // so the medic knows whether they need to study harder or
-        // whether the patient genuinely has nothing in there.
+        // the patient has no attached organs. Distinguish the two so the
+        // medic knows whether they need to study harder or whether the
+        // patient genuinely has nothing in there.
         if (uiState.CMUOrgans is null)
         {
             _window!.CMUOrgansContainer.AddChild(BuildSkillHint(
@@ -906,7 +844,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         {
             _window!.CMUOrgansContainer.AddChild(BuildSkillHint(
                 "cmu-medical-scanner-synthetic-physiology"));
-            return;
         }
 
         if (uiState.CMUOrgans is not { Count: > 0 } organs)
@@ -914,9 +851,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
         foreach (var organ in organs)
         {
-            if (!OrganHasScannerDamage(organ))
-                continue;
-
             var sev = organ.Removed ? PartSeverity.Severed : SeverityFromOrganStage(organ.Stage);
             var card = new PanelContainer
             {
@@ -985,16 +919,6 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         (BodyPartType.Foot,  BodyPartSymmetry.Right),
     };
 
-    private static bool OrganHasScannerDamage(CMUOrganReadout organ)
-    {
-        if (organ.Removed)
-            return true;
-        if (organ.Stage != Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Healthy)
-            return true;
-
-        return organ.Current < organ.Max;
-    }
-
     private static CMUBodyPartReadout? TryFindPart(
         HealthScannerBuiState uiState, BodyPartType type, BodyPartSymmetry symmetry)
     {
@@ -1022,24 +946,24 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         return PartSeverity.Healthy;
     }
 
-    private static PartSeverity SeverityFromFracture(Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity severity)
+    private static PartSeverity SeverityFromFracture(Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity severity)
         => severity switch
         {
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Hairline => PartSeverity.Bruised,
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Simple => PartSeverity.Damaged,
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Compound => PartSeverity.Critical,
-            Content.Shared._CMU14.Medical.Anatomy.Bones.FractureSeverity.Shattered => PartSeverity.Critical,
+            Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity.Hairline => PartSeverity.Bruised,
+            Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity.Simple => PartSeverity.Damaged,
+            Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity.Compound => PartSeverity.Critical,
+            Content.Shared.CMU14.Medical.Anatomy.Bones.FractureSeverity.Shattered => PartSeverity.Critical,
             _ => PartSeverity.Bruised,
         };
 
-    private static PartSeverity SeverityFromOrganStage(Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage stage)
+    private static PartSeverity SeverityFromOrganStage(Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage stage)
         => stage switch
         {
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Healthy => PartSeverity.Healthy,
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Bruised => PartSeverity.Bruised,
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Damaged => PartSeverity.Damaged,
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Failing => PartSeverity.Critical,
-            Content.Shared._CMU14.Medical.Anatomy.Organs.OrganDamageStage.Dead => PartSeverity.Severed,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Healthy => PartSeverity.Healthy,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Bruised => PartSeverity.Bruised,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Damaged => PartSeverity.Damaged,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Failing => PartSeverity.Critical,
+            Content.Shared.CMU14.Medical.Anatomy.Organs.OrganDamageStage.Dead => PartSeverity.Severed,
             _ => PartSeverity.Healthy,
         };
 

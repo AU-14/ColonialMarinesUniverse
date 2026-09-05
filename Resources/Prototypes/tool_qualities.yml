@@ -76,6 +76,14 @@
   icon: { sprite: Objects/Specific/Janitorial/wirebrush.rsi, state: icon }
 
 - type: tool
+  id: Shearing
+  name: tool-quality-shearing-name
+  toolName: tool-quality-shearing-tool-name
+  spawn: Wirecutter
+  icon: { sprite: Objects/Tools/wirecutters.rsi, state: cutters-map }
+
+
+- type: tool
   id: VehicleServicing
   name: tool-quality-vehicle-servicing-name
   toolName: tool-quality-vehicle-servicing-tool-name

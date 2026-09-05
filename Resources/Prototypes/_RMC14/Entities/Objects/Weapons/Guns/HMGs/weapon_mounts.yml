@@ -31,6 +31,7 @@
     skill: RMCSkillConstruction
     delay: 8
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

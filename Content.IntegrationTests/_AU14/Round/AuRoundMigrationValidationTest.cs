@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.Round;
+namespace Content.IntegrationTests.CMU14.Round;
 
 [TestFixture]
 public sealed class AuRoundMigrationValidationTest
@@ -119,6 +119,45 @@ public sealed class AuRoundMigrationValidationTest
                 .ToList();
 
             Assert.That(missing, Is.Empty, $"{ruleId} is missing migrated components: {string.Join(", ", missing)}");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PlanetPlatoonReferencesResolve()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var componentFactory = server.ResolveDependency<IComponentFactory>();
+            var errors = new List<string>();
+
+            foreach (var planetProto in prototypes.EnumeratePrototypes<EntityPrototype>())
+            {
+                if (!planetProto.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory))
+                    continue;
+
+                foreach (var platoonId in planet.PlatoonsGovfor.Concat(planet.PlatoonsOpfor))
+                {
+                    if (!prototypes.HasIndex<PlatoonPrototype>(platoonId))
+                        errors.Add($"{planetProto.ID} references missing platoon {platoonId}");
+                }
+
+                foreach (var platoonId in new[] { planet.DefaultGovforPlatoon, planet.DefaultOpforPlatoon })
+                {
+                    if (!string.IsNullOrWhiteSpace(platoonId) &&
+                        !prototypes.HasIndex<PlatoonPrototype>(platoonId))
+                    {
+                        errors.Add($"{planetProto.ID} references missing default platoon {platoonId}");
+                    }
+                }
+            }
+
+            Assert.That(errors, Is.Empty, string.Join("\n", errors));
         });
 
         await pair.CleanReturnAsync();

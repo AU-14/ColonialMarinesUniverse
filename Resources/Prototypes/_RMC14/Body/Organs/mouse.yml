@@ -1,0 +1,18 @@
+- type: entity
+  parent: OrganAnimalStomach
+  id: OrganMouseStomach
+  suffix: Mouse
+  components:
+  - type: SolutionManager
+    solutions:
+    - SolutionMouseStomach
+
+- type: entity
+  parent: SolutionStomach
+  id: SolutionMouseStomach
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Solution
+    id: stomach
+    solution:
+      maxVol: 30

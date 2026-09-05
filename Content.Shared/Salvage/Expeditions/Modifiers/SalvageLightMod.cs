@@ -14,7 +14,7 @@ public sealed partial class SalvageLightMod : IPrototype, IBiomeSpecificMod
     public float Cost { get; private set; } = 0f;
 
     /// <inheritdoc/>
-    [DataField("biomes")]
+    [DataField]
     public List<ProtoId<SalvageBiomeModPrototype>>? Biomes { get; private set; } = null;
 
     [DataField("color", required: true)] public Color? Color;

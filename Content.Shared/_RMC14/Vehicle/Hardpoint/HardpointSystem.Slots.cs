@@ -54,7 +54,7 @@ public sealed partial class HardpointSystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(owner, slot.Id, out var itemSlot, itemSlots))
+            if (!_itemSlots.TryGetSlot((owner, itemSlots), slot.Id, out var itemSlot))
                 continue;
 
             var path = parentPath?.Append(slot.Id) ?? new VehicleSlotPath(slot.Id);
@@ -107,7 +107,7 @@ public sealed partial class HardpointSystem
             if (!IsValidHardpoint(item, hardpoints, slot))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(owner, slot.Id, out var itemSlot, itemSlots) || itemSlot.HasItem)
+            if (!_itemSlots.TryGetSlot((owner, itemSlots), slot.Id, out var itemSlot) || itemSlot.HasItem)
                 continue;
 
             var path = parentPath?.Append(slot.Id) ?? new VehicleSlotPath(slot.Id);
@@ -117,7 +117,7 @@ public sealed partial class HardpointSystem
 
         foreach (var slot in hardpoints.Slots)
         {
-            if (!_itemSlots.TryGetSlot(owner, slot.Id, out var itemSlot, itemSlots) ||
+            if (!_itemSlots.TryGetSlot((owner, itemSlots), slot.Id, out var itemSlot) ||
                 itemSlot.Item is not { } installed)
             {
                 continue;

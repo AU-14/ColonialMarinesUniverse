@@ -34,8 +34,10 @@
     roundsPerShot: 40
     fireMissionDelay: 1
     damage:
-      groups:
-        Brute: 105
+      types:
+        Blunt: 35
+        Slash: 35
+        Piercing: 35
     armorPiercing: 10
     weapon: RMCDropshipAttachmentGau21Cannon
     soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
@@ -87,8 +89,10 @@
     ammoType: 30mm_crate_hv
     bulletSpread: 4
     damage:
-      groups:
-        Brute: 80
+      types:
+        Blunt: 26.66
+        Slash: 26.67
+        Piercing: 26.67
     armorPiercing: 40
     travelTime: 6
   - type: DropshipFabricatorPrintable

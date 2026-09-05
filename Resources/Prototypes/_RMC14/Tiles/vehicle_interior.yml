@@ -2,7 +2,7 @@
   abstract: true
   parent: CMTileBaseUnpryable
   id: RMCFloorVehicleInteriorBase
-  name: vehicle interior floor
+  name: tiles-rmc-legacy-vehicle-interior-floor
 
 - type: tile
   parent: RMCFloorVehicleInteriorBase

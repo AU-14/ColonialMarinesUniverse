@@ -4,7 +4,7 @@ using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Content.Shared.Atmos.Components;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Standing;
@@ -12,7 +12,7 @@ using Content.Shared.Stunnable;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
 
 namespace Content.Shared._RMC14.Xenonids.Construction.AcidPillar;
 

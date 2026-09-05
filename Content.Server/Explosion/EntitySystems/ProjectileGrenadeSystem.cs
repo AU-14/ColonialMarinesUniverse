@@ -3,6 +3,7 @@ using Content.Server.Explosion.Components;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared.Projectiles;
+using Content.Shared.Trigger;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
@@ -10,16 +11,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Random;
 
 namespace Content.Server.Explosion.EntitySystems;
-
-/// <summary>
-/// Raised directed at a projectile grenade before its payload is spawned.
-/// </summary>
-[ByRefEvent]
-public record struct GetProjectileGrenadePayloadEvent(int Count)
-{
-    public int Count = Count;
-    public float DamageMultiplier = 1f;
-}
 
 public sealed partial class ProjectileGrenadeSystem : EntitySystem
 {
@@ -61,6 +52,9 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     /// </summary>
     private void OnFragTrigger(Entity<ProjectileGrenadeComponent> entity, ref TriggerEvent args)
     {
+        if (args.Key != entity.Comp.TriggerKey)
+            return;
+
         FragmentIntoProjectiles(entity.Owner, entity.Comp);
         args.Handled = true;
     }
@@ -75,10 +69,6 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
         var shootCount = 0;
         var totalCount = component.Container.ContainedEntities.Count + component.UnspawnedCount;
 
-        var payload = new GetProjectileGrenadePayloadEvent(totalCount);
-        RaiseLocalEvent(uid, ref payload);
-        totalCount = Math.Clamp(payload.Count, 0, totalCount);
-
         // RMC14 it was sometimes dividing by 0.
         if(totalCount <= 0)
             return;
@@ -87,14 +77,8 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
         var segmentAngle = 360 / totalCount;
 
         _spawned.Clear();
-        while (shootCount < totalCount && TrySpawnContents(grenadeCoord, component, out var contentUid))
+        while (TrySpawnContents(grenadeCoord, component, out var contentUid))
         {
-            if (TryComp(contentUid, out ProjectileComponent? projectile))
-            {
-                projectile.Damage *= Math.Max(0, payload.DamageMultiplier);
-                Dirty(contentUid, projectile);
-            }
-
             Angle angle;
             if (component.RandomAngle)
                 angle = _random.NextAngle();
@@ -115,9 +99,8 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
                     hitEntities = ev.HitEntities;
                     angle = ev.Angle;
                 }
+                shootCount++;
             }
-
-            shootCount++;
 
             // RMC14
             EntityUid? gunUid = null;

@@ -1,4 +1,4 @@
-using Content.Shared._AU14.Flare;
+using Content.Shared.CMU14.Flare;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Explosion.EntitySystems;

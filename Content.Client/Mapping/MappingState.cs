@@ -37,7 +37,10 @@ namespace Content.Client.Mapping;
 
 public sealed partial class MappingState : GameplayStateBase
 {
+    #if !FULL_RELEASE
     [Dependency] private IClientAdminManager _admin = default!;
+    #endif
+
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IEntityNetworkManager _entityNetwork = default!;
     [Dependency] private IInputManager _input = default!;
@@ -52,6 +55,7 @@ public sealed partial class MappingState : GameplayStateBase
     private EntityMenuUIController _entityMenuController = default!;
 
     private DecalPlacementSystem _decal = default!;
+    private MapSystem _maps = default!;
     private SpriteSystem _sprite = default!;
     private TransformSystem _transform = default!;
     private VerbSystem _verbs = default!;
@@ -203,6 +207,7 @@ public sealed partial class MappingState : GameplayStateBase
         _entityMenuController = UserInterfaceManager.GetUIController<EntityMenuUIController>();
 
         _decal = _entityManager.System<DecalPlacementSystem>();
+        _maps = _entityManager.System<MapSystem>();
         _sprite = _entityManager.System<SpriteSystem>();
         _transform = _entityManager.System<TransformSystem>();
         _verbs = _entityManager.System<VerbSystem>();
@@ -745,12 +750,13 @@ public sealed partial class MappingState : GameplayStateBase
     {
 #if FULL_RELEASE
         return false;
-#endif
+#else
         if (!_admin.IsAdmin(true) || !_admin.HasFlag(AdminFlags.Host))
             return false;
 
         SaveMap();
         return true;
+#endif
     }
 
     private bool HandleEnablePick(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
@@ -789,10 +795,9 @@ public sealed partial class MappingState : GameplayStateBase
         if (!uid.IsValid())
         {
             var mapPos = _transform.ToMapCoordinates(coords);
-            var mapSystem = _entityManager.System<SharedMapSystem>();
 
-            if (mapSystem.TryFindGridAt(mapPos, out var gridUid, out var grid) &&
-                mapSystem.TryGetTileRef(gridUid, grid, coords, out var tileRef) &&
+            if (_maps.TryFindGridAt(mapPos, out var gridUid, out var grid) &&
+                _entityManager.System<SharedMapSystem>().TryGetTileRef(gridUid, grid, coords, out var tileRef) &&
                 _allPrototypesDict.TryGetValue(_entityManager.System<TurfSystem>().GetContentTileDefinition(tileRef), out button))
             {
                 OnSelected(button);
@@ -861,7 +866,7 @@ public sealed partial class MappingState : GameplayStateBase
         }
         else
         {
-            button.ChildrenPrototypes.DisposeAllChildren();
+            button.ChildrenPrototypes.RemoveAllChildren();
             button.CollapseButton.Label.Text = "▶";
         }
     }

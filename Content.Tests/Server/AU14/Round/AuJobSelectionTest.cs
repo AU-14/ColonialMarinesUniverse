@@ -3,22 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Content.Server._CMU14.Threats;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Threats;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
+using Content.Shared.Body;
 using Content.Shared._RMC14.Rules;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using NUnit.Framework;
+using Robust.Shared.IoC;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
 
-namespace Content.Tests.Server.AU14.Round;
+namespace Content.Tests.Server.CMU14.Round;
 
 [TestFixture]
-public sealed class AuJobSelectionTest
+[NonParallelizable]
+public sealed class AuJobSelectionTest : ContentUnitTest
 {
+    protected override Type[] ExtraComponents => [typeof(InitialBodyComponent)];
+
+    private const string ProfilePrototypes = """
+        - type: entity
+          id: TestHuman
+
+        - type: skinColoration
+          id: HumanToned
+          strategy: !type:HumanTonedSkinColoration {}
+
+        - type: species
+          id: Human
+          name: test-species-human
+          roundStart: true
+          prototype: TestHuman
+          dollPrototype: TestHuman
+          skinColoration: HumanToned
+        """;
+
+    [OneTimeSetUp]
+    public void InitializeProfilePrototypes()
+    {
+        IoCManager.Resolve<ISerializationManager>().Initialize();
+
+        var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
+        prototypeManager.Initialize();
+        prototypeManager.LoadString(ProfilePrototypes);
+        prototypeManager.ResolveResults();
+    }
+
     [Test]
     public void ThreatJobEligibilityAllowsEmptyThreatPreferenceList()
     {
@@ -113,6 +147,61 @@ public sealed class AuJobSelectionTest
             new(leader, ThreatVoteSelection.ThreatLeaderJobId),
             new(member, ThreatVoteSelection.ThreatMemberJobId),
         }));
+    }
+
+    [TestCase(0, 0)]
+    [TestCase(1, 1)]
+    [TestCase(10, 3)]
+    [TestCase(15, 4)]
+    [TestCase(20, 5)]
+    [TestCase(100, 25)]
+    public void ThreatPlayerBudgetUsesReadyPopulation(int readyPlayerCount, int expectedBudget)
+    {
+        Assert.That(
+            ThreatVoteSelection.CalculateThreatPlayerBudget(readyPlayerCount, 0.25f),
+            Is.EqualTo(expectedBudget));
+    }
+
+    [Test]
+    public void ThreatBodyCountIsLimitedToPlayerBudget()
+    {
+        ThreatVoteBodyCount bodyCount = ThreatVoteSelection.LimitBodyCount(
+            new ThreatVoteBodyCount(2, 8),
+            maxTotal: 4);
+
+        Assert.That(bodyCount, Is.EqualTo(new ThreatVoteBodyCount(2, 2)));
+    }
+
+    [Test]
+    public void ThreatVoteReservationDoesNotCombineCandidateMaximums()
+    {
+        ThreatVoteBodyCount bodyCount = ThreatVoteSelection.GetRequiredVoteBodyCount(
+        [
+            new ThreatVoteBodyCount(1, 3),
+            new ThreatVoteBodyCount(2, 2),
+        ]);
+
+        Assert.That(bodyCount, Is.EqualTo(new ThreatVoteBodyCount(2, 2)));
+    }
+
+    [Test]
+    public void ThreatSpawnBodiesAreLimitedUsingSameLeaderFirstBudget()
+    {
+        var leaders = new Dictionary<string, int>
+        {
+            ["Leader"] = 2,
+        };
+        var members = new Dictionary<string, int>
+        {
+            ["Mimic"] = 4,
+            ["Spider"] = 2,
+            ["Skitter"] = 2,
+        };
+
+        ThreatVoteSelection.LimitBodies(leaders, members, maxTotal: 4);
+
+        Assert.That(leaders.Values.Sum(), Is.EqualTo(2));
+        Assert.That(members.Values.Sum(), Is.EqualTo(2));
     }
 
     [Test]

@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Server._RMC14.Sentry;
-using Content.Shared.AU14.AllianceConsole;
+using Content.Shared.CMU14.AllianceConsole;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared.Physics;
 using Robust.Shared.Physics;

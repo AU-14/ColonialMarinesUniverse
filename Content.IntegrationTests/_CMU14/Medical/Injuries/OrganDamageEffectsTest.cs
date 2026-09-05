@@ -1,26 +1,30 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using System.Collections.Generic;
 using System.Reflection;
-using Content.Server._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Injuries.Vision;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Liver;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Stomach;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
+using Content.Shared.CMU14.Medical.Injuries.Vision;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
@@ -30,7 +34,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.IntegrationTests._CMU14.Medical.Injuries;
+namespace Content.IntegrationTests.CMU14.Medical.Injuries;
 
 [TestFixture]
 public sealed class OrganDamageEffectsTest
@@ -181,8 +185,8 @@ public sealed class OrganDamageEffectsTest
             var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
             Assert.Multiple(() =>
             {
-                Assert.That(damage["Asphyxiation"], Is.GreaterThan(FixedPoint2.Zero));
-                Assert.That(damage["Poison"], Is.GreaterThan(FixedPoint2.Zero));
+                Assert.That(damage.GetValueOrDefault("Asphyxiation"), Is.GreaterThan(FixedPoint2.Zero));
+                Assert.That(damage.GetValueOrDefault("Poison"), Is.GreaterThan(FixedPoint2.Zero));
             });
             entMan.DeleteEntity(human);
         });
@@ -238,7 +242,6 @@ public sealed class OrganDamageEffectsTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var timing = server.ResolveDependency<IGameTiming>();
         EntityUid human = default;
 
         await server.WaitPost(() =>
@@ -249,24 +252,140 @@ public sealed class OrganDamageEffectsTest
             var liver = GetOrgan<LiverComponent>(index, human);
             var kidneys = GetOrgan<KidneysComponent>(index, human);
 
-            var liverComp = entMan.GetComponent<LiverComponent>(liver);
-            var kidneysComp = entMan.GetComponent<KidneysComponent>(kidneys);
-            SetField(liverComp, nameof(LiverComponent.NextSelfDamageTick), timing.CurTime);
-            SetField(kidneysComp, nameof(KidneysComponent.NextSelfDamageTick), timing.CurTime);
             DamageOrgan(entMan, human, liver, 16);
             DamageOrgan(entMan, human, kidneys, 16);
+            Assert.That(entMan.GetComponent<OrganHealthComponent>(liver).Stage, Is.EqualTo(OrganDamageStage.Bruised));
+            Assert.That(entMan.GetComponent<OrganHealthComponent>(kidneys).Stage, Is.EqualTo(OrganDamageStage.Bruised));
         });
 
-        await pair.RunTicksSync(pair.SecondsToTicks(1.5f));
+        // A stage boundary schedules now+1s; the independent 1Hz scan may visit
+        // just before that deadline. Allow both the deadline and its scan phase.
+        await pair.RunTicksSync(pair.SecondsToTicks(2.5f));
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var poison = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict["Poison"];
+            var poison = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Poison");
             Assert.That(poison, Is.GreaterThan(FixedPoint2.Zero));
             entMan.DeleteEntity(human);
         });
 
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DeletingOrgansFromLivingPatientReconcilesLungAbsence()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var index = entMan.System<CMUMedicalBodyIndexSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var heart = GetOrgan<HeartComponent>(index, human);
+                var kidneys = GetOrgan<KidneysComponent>(index, human);
+                var liver = GetOrgan<LiverComponent>(index, human);
+                var lungs = GetOrgan<LungsComponent>(index, human);
+                var stomach = GetOrgan<CMUStomachComponent>(index, human);
+
+                entMan.DeleteEntity(heart);
+                entMan.DeleteEntity(kidneys);
+                entMan.DeleteEntity(liver);
+                entMan.DeleteEntity(lungs);
+                entMan.DeleteEntity(stomach);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.HasComponent<MissingHeartComponent>(human), Is.False);
+                    Assert.That(entMan.HasComponent<MissingKidneysComponent>(human), Is.False);
+                    Assert.That(entMan.HasComponent<MissingLiverComponent>(human), Is.False);
+                    Assert.That(entMan.HasComponent<MissingLungsComponent>(human), Is.True);
+                    Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUCardiacArrest"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMURenalFailure"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUHepaticFailure"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUPulmonaryEdema"), Is.True);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.False);
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DeletingThePatientDoesNotCreateMissingLungsOrEdemaDuringTeardown()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var map = await pair.CreateTestMap();
+        var player = pair.Player!;
+        var originalPlayer = player.AttachedEntity;
+        EntityUid patient = default;
+        NetEntity patientNet = default;
+        try
+        {
+            await pair.Server.WaitPost(() =>
+            {
+                patient = pair.Server.EntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                pair.Server.PlayerMan.SetAttachedEntity(player, patient);
+                patientNet = pair.Server.EntMan.GetNetEntity(patient);
+            });
+            await pair.RunUntilSynced();
+            await pair.Client.WaitAssertion(() =>
+            {
+                Assert.That(pair.Client.EntMan.TryGetEntity(patientNet, out _), Is.True);
+                pair.Client.EntMan.System<CMULungTeardownProbeSystem>().StartCounting();
+            });
+            await pair.Server.WaitAssertion(() =>
+            {
+                var entities = pair.Server.EntMan;
+                var probe = entities.System<CMULungTeardownProbeSystem>();
+                probe.StartCounting();
+                pair.Server.PlayerMan.SetAttachedEntity(player, originalPlayer);
+                // Deleting one organ from a living patient is a clinical mutation.
+                // Deleting the patient must never create new physiological state.
+                entities.DeleteEntity(patient);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entities.EntityExists(patient), Is.False);
+                    Assert.That(probe.MissingLungsCreated, Is.Zero);
+                    Assert.That(probe.EdemaCreated, Is.Zero);
+                });
+            });
+            await pair.RunUntilSynced();
+            await pair.Client.WaitAssertion(() =>
+            {
+                var entities = pair.Client.EntMan;
+                var probe = entities.System<CMULungTeardownProbeSystem>();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entities.TryGetEntity(patientNet, out _), Is.False);
+                    Assert.That(probe.MissingLungsCreated, Is.Zero);
+                    Assert.That(probe.EdemaCreated, Is.Zero);
+                });
+            });
+        }
+        finally
+        {
+            await pair.Server.WaitPost(() =>
+            {
+                pair.Server.EntMan.System<CMULungTeardownProbeSystem>().Counting = false;
+                pair.Server.PlayerMan.SetAttachedEntity(player, originalPlayer);
+                if (pair.Server.EntMan.EntityExists(patient))
+                    pair.Server.EntMan.DeleteEntity(patient);
+            });
+            await pair.Client.WaitPost(() => pair.Client.EntMan.System<CMULungTeardownProbeSystem>().Counting = false);
+        }
         await pair.CleanReturnAsync();
     }
 
@@ -299,12 +418,13 @@ public sealed class OrganDamageEffectsTest
             });
         });
 
-        await pair.RunTicksSync(pair.SecondsToTicks(1.5f));
+        // The one-second service scan can precede a newly armed one-second deadline.
+        await pair.RunTicksSync(pair.SecondsToTicks(2.5f));
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var poison = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict["Poison"];
+            var poison = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Poison");
             Assert.That(poison, Is.GreaterThan(FixedPoint2.Zero));
             entMan.DeleteEntity(liver);
             entMan.DeleteEntity(kidneys);
@@ -361,39 +481,46 @@ public sealed class OrganDamageEffectsTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
+        EntityUid stomach = default;
+        EntityUid torso = default;
 
-        await server.WaitAssertion(() =>
+        await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
             var index = entMan.System<CMUMedicalBodyIndexSystem>();
             var body = entMan.System<SharedBodySystem>();
-            var status = entMan.System<SharedStatusEffectsSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var stomach = GetOrgan<CMUStomachComponent>(index, human);
-            var torso = GetPart(index, human, BodyPartType.Torso, BodyPartSymmetry.None);
+            var status = entMan.System<StatusEffectsSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            stomach = GetOrgan<CMUStomachComponent>(index, human);
+            torso = GetPart(index, human, BodyPartType.Torso, BodyPartSymmetry.None);
 
-            try
+            Assert.That(body.RemoveOrgan(stomach), Is.True);
+            Assert.Multiple(() =>
             {
-                Assert.That(body.RemoveOrgan(stomach), Is.True);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.True);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.True);
-                });
+                Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.True);
+                Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.True);
+            });
+        });
 
-                Assert.That(body.InsertOrgan(torso, stomach, "stomach"), Is.True);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.False);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.False);
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(human);
-                if (entMan.EntityExists(stomach))
-                    entMan.DeleteEntity(stomach);
-            }
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.That(entMan.System<SharedBodySystem>().InsertOrgan(torso, stomach, "stomach"), Is.True);
+            Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.False);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.That(
+                entMan.System<StatusEffectsSystem>().HasStatusEffect(human, "StatusEffectCMUNausea"),
+                Is.False);
+            entMan.DeleteEntity(human);
+            if (entMan.EntityExists(stomach))
+                entMan.DeleteEntity(stomach);
         });
 
         await pair.CleanReturnAsync();
@@ -423,8 +550,8 @@ public sealed class OrganDamageEffectsTest
             liver = GetOrgan<LiverComponent>(index, human);
             kidneys = GetOrgan<KidneysComponent>(index, human);
             var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
-            asphyxBefore = damage["Asphyxiation"];
-            poisonBefore = damage["Poison"];
+            asphyxBefore = damage.GetValueOrDefault("Asphyxiation");
+            poisonBefore = damage.GetValueOrDefault("Poison");
 
             entMan.EnsureComponent<CMInStasisComponent>(human);
             Assert.That(body.RemoveOrgan(heart), Is.True);
@@ -439,27 +566,29 @@ public sealed class OrganDamageEffectsTest
         {
             var entMan = server.EntMan;
             var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             Assert.Multiple(() =>
             {
-                Assert.That(damage["Asphyxiation"], Is.EqualTo(asphyxBefore));
-                Assert.That(damage["Poison"], Is.EqualTo(poisonBefore));
+                Assert.That(damage.GetValueOrDefault("Asphyxiation"), Is.EqualTo(asphyxBefore));
+                Assert.That(damage.GetValueOrDefault("Poison"), Is.EqualTo(poisonBefore));
                 Assert.That(status.HasStatusEffect(human, "StatusEffectCMUUnconscious"), Is.False);
             });
             entMan.RemoveComponent<CMInStasisComponent>(human);
         });
 
-        await pair.RunTicksSync(pair.SecondsToTicks(1.5f));
+        // Resume schedules a fresh 1s deadline independently of the 1Hz scan phase.
+        // Observe committed active-time pressure after both have had time to run.
+        await pair.RunTicksSync(pair.SecondsToTicks(2.5f));
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             Assert.Multiple(() =>
             {
-                Assert.That(damage["Asphyxiation"], Is.GreaterThan(asphyxBefore));
-                Assert.That(damage["Poison"], Is.GreaterThan(poisonBefore));
+                Assert.That(damage.GetValueOrDefault("Asphyxiation"), Is.GreaterThan(asphyxBefore));
+                Assert.That(damage.GetValueOrDefault("Poison"), Is.GreaterThan(poisonBefore));
                 Assert.That(status.HasStatusEffect(human, "StatusEffectCMUUnconscious"), Is.False);
             });
             entMan.DeleteEntity(human);
@@ -473,7 +602,7 @@ public sealed class OrganDamageEffectsTest
     }
 
     [Test]
-    public async Task DefibrillationDamagesAndRestartsARecoverableHeart()
+    public async Task DefibrillationEligibilityDoesNotMutateARecoverableHeart()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -498,8 +627,8 @@ public sealed class OrganDamageEffectsTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(attempt.Cancelled, Is.False);
-                    Assert.That(heartComp.Stopped, Is.False);
-                    Assert.That(health.Current, Is.InRange(before - 5, before - 3));
+                    Assert.That(heartComp.Stopped, Is.True, "An eligibility event must not restart tissue.");
+                    Assert.That(health.Current, Is.EqualTo(before), "A later veto must not leave attempt trauma.");
                 });
             }
             finally
@@ -614,5 +743,40 @@ public sealed class OrganDamageEffectsTest
         var field = instance.GetType().GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         Assert.That(field, Is.Not.Null, name);
         field!.SetValue(instance, value);
+    }
+}
+
+#pragma warning restore RA0002
+
+public sealed partial class CMULungTeardownProbeSystem : EntitySystem
+{
+    public bool Counting;
+    public int MissingLungsCreated;
+    public int EdemaCreated;
+
+    public void StartCounting()
+    {
+        MissingLungsCreated = 0;
+        EdemaCreated = 0;
+        Counting = true;
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<MissingLungsComponent, ComponentInit>(OnMissingLungs);
+        SubscribeLocalEvent<PulmonaryEdemaComponent, ComponentInit>(OnEdema);
+    }
+
+    private void OnMissingLungs(Entity<MissingLungsComponent> ent, ref ComponentInit args)
+    {
+        if (Counting)
+            MissingLungsCreated++;
+    }
+
+    private void OnEdema(Entity<PulmonaryEdemaComponent> ent, ref ComponentInit args)
+    {
+        if (Counting)
+            EdemaCreated++;
     }
 }

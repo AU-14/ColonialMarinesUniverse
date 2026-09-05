@@ -5,10 +5,12 @@
   description: Scope in or out with your optics.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/scope_actions.rsi
-      state: sniperscope
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/scope_actions.rsi
+      state: sniperscope
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ToggleActionEvent
 
@@ -19,10 +21,12 @@
   description: Change the level of magnification of your optics.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/scope_actions.rsi
-      state: sniperscope
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/scope_actions.rsi
+      state: sniperscope
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ScopeCycleZoomLevelEvent
   - type: Tag
@@ -36,13 +40,16 @@
   description: Allows you to see even in complete darkness.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/m42_scoutsight.rsi
-      state: icon
-    iconOn:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/m42_scoutsight.rsi
-      state: icon_on
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/m42_scoutsight.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/m42_scoutsight.rsi
+      state: icon_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:ToggleActionEvent
 
@@ -53,13 +60,16 @@
   description: Enables synthetic meson-assisted terrain imaging.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/experimental_meson_hud.rsi
-      state: icon
-    iconOn:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/experimental_meson_hud.rsi
-      state: icon-on
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/experimental_meson_hud.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/experimental_meson_hud.rsi
+      state: icon-on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:ToggleActionEvent
 
@@ -70,13 +80,16 @@
   description: Allows you to see even in complete darkness.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/ml66a_sight.rsi
-      state: icon
-    iconOn:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/ml66a_sight.rsi
-      state: icon_on
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/ml66a_sight.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/ml66a_sight.rsi
+      state: icon_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:ToggleActionEvent
 
@@ -87,9 +100,11 @@
   description: Toggles the ID lock on the gun, allowing anyone to use it.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/id_lock_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/id_lock_actions.rsi
       state: id_lock_locked
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ToggleActionEvent
 
@@ -100,9 +115,11 @@
   description: Toggles the IFF on the gun.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/iff_toggle_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/iff_toggle_actions.rsi
       state: iff_toggle_on
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ToggleActionEvent
 
@@ -113,9 +130,11 @@
   description: Toggle an attachable. If you're seeing this, someone forgot to set the description properly.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/scope_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/scope_actions.rsi
       state: sniperscope
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:AttachableToggleActionEvent
 
@@ -127,10 +146,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Objects/Devices/whistle.rsi
-      state: whistle
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Devices/whistle.rsi
+      state: whistle
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:SoundActionEvent
 
@@ -142,10 +163,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Objects/phone.rsi
-      state: rpb_phone
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/phone.rsi
+      state: rpb_phone
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:RMCTelephoneActionEvent
 
@@ -170,13 +193,16 @@
   description: Toggle the integrated synthetic medical HUD.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/medicalhud.rsi
-      state: icon
-    iconOn:
-      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/medicalhud.rsi
-      state: icon-on
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/medicalhud.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Objects/Clothing/Eyes/Glasses/medicalhud.rsi
+      state: icon-on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:RMCToggleSynthHudActionEvent
 
@@ -210,10 +236,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Objects/Clothing/helmet_visors.rsi
-      state: sight_up
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Clothing/helmet_visors.rsi
+      state: sight_up
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CycleVisorActionEvent
 
@@ -225,9 +253,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
       state: spotter_target
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:SpotTargetActionEvent
 
@@ -239,10 +269,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: sniper_toggle_laser_on
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: sniper_toggle_laser_on
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:GunToggleLaserActionEvent
 
@@ -254,9 +286,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
       state: sniper_aim
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:AimedShotActionEvent
 
@@ -268,13 +302,16 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: zoom_scope
-    iconOn:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: unzoom_scope
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_scope
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: unzoom_scope
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:AttachableToggleActionEvent
 
@@ -286,10 +323,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: zoom_scope
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_scope
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ScopeCycleZoomLevelEvent
   - type: Tag
@@ -304,10 +343,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: zoom_in
     useDelay: 0.1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_in
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureScopeForwardActionEvent
 
@@ -319,10 +360,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: zoom_out
     useDelay: 0.1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_out
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureScopeBackwardActionEvent
 
@@ -334,10 +377,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: scope_angle_left
     useDelay: 0.1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: scope_angle_left
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureScopeLeftActionEvent
 
@@ -349,10 +394,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: scope_angle_right
     useDelay: 0.1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: scope_angle_right
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureScopeRightActionEvent
 
@@ -364,10 +411,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: windage_left
     useDelay: 0.1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: windage_left
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureWindageLeftActionEvent
 
@@ -379,10 +428,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: windage_right
     useDelay: 0.1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: windage_right
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureWindageRightActionEvent
 
@@ -394,10 +445,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: elevation_up
     useDelay: 0.1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: elevation_up
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureElevationUpActionEvent
 
@@ -409,10 +462,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: elevation_down
     useDelay: 0.1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: elevation_down
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureElevationDownActionEvent
 
@@ -424,10 +479,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: prepare_position
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: prepare_position
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:VultureBreathActionEvent
 
@@ -449,9 +506,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_emplacement_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_emplacement_actions.rsi
       state: cancel_view
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:DismountActionEvent
 
@@ -463,8 +522,10 @@
   description: Raise or lower the integrated MOPP mask to toggle full fire protection.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/marine_firewalk_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_firewalk_actions.rsi
       state: firewalk
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ToggleClothingEvent { }

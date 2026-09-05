@@ -1,7 +1,8 @@
-﻿using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -29,25 +30,25 @@ public sealed partial class Oxygenating : RMCChemicalEffect
                $"Critical overdoses cause [color=red]{PotencyPerSecond}[/color] brute and [color=red]{PotencyPerSecond * 2}[/color] toxin damage";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var rmcDamageable = args.EntityManager.System<SharedRMCDamageableSystem>();
-        var amount = ActualPotency >= 3 ? 99999 : potency;
+        var rmcDamageable = system.RMCDamageable;
+        var amount = args.ActualPotency >= 3 ? 99999 : potency;
         var healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, AirlossGroup, amount);
         damageable.TryChangeDamage(args.TargetEntity, healing, true, interruptsDoAfters: false);
 
-        var bloodstream = args.EntityManager.System<SharedRMCBloodstreamSystem>();
+        var bloodstream = system.RMCBloodstream;
         bloodstream.RemoveBloodstreamChemical(args.TargetEntity, Lexorin, potency);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = potency * 0.5f;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency;

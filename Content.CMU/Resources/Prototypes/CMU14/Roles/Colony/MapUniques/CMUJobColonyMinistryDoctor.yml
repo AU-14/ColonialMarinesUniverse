@@ -1,0 +1,46 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobColonyMinistryDoctor # Hope's Retreat: Chief Physician
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: ColonyMinistryDoctor
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: cmu-colony-prefix-ministry-doctor
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
+      state: colonist
+  name: cmu-colony-name-ministry-doctor
+  description: cmu-colony-description-ministry-doctor
+  setPreference: true
+  playTimeTracker: CMUJobColonyMinistryDoctor
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearColonyMinistryDoctor
+  icon: CMJobIconFieldDoctor
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-colony-supervisors-colonist
+  spawnMenuRoleName: Colony Ministry of Health Doctor (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearColonyMinistryDoctor
+  equipment:
+    head: RMCHeadCapSPPCivilianPlantWorker
+    jumpsuit: CMScrubsGreen
+    shoes: ClothingShoesColorWhite
+    back: CMSatchelMarine
+    id: AU14IDCardColonyColonist
+
+- type: playTimeTracker
+  id: CMUJobColonyMinistryDoctor
+  isHumanoid: true

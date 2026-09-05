@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Intel;
+using Content.Shared.CMU14.Intel;
 using Content.Shared._RMC14.Intel;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Intel;
+namespace Content.IntegrationTests.CMU14.Intel;
 
 [TestFixture]
 public sealed class IntelConsoleClaimPrototypeTest

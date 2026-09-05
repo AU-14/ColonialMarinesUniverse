@@ -467,6 +467,11 @@
   id: BulletRifleM5SPRHVP
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:

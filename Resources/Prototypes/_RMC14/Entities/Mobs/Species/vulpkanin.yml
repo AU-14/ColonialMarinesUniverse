@@ -1,18 +1,36 @@
 - type: entity
   save: false
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceVulpkanin
+  - RMCBaseMobSpeciesOrganic
   id: RMCMobVulpkanin
   name: Urist C.M McVulp
   suffix: RMC14
   components:
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: Vulpkanin
-    hideLayersOnEquip:
-    - UndergarmentTop
-    - Snout
-    - HeadTop
-    - HeadSide
-    - Hair
+  - type: InitialBody
+    organs:
+      Torso: RMCOrganVulpkaninTorso
+      Head: RMCOrganVulpkaninHead
+      ArmLeft: OrganVulpkaninArmLeft
+      ArmRight: OrganVulpkaninArmRight
+      HandRight: OrganVulpkaninHandRight
+      HandLeft: OrganVulpkaninHandLeft
+      LegLeft: OrganVulpkaninLegLeft
+      LegRight: OrganVulpkaninLegRight
+      FootLeft: OrganVulpkaninFootLeft
+      FootRight: OrganVulpkaninFootRight
+      Brain: OrganVulpkaninBrain
+      Eyes: OrganVulpkaninEyes
+      Tongue: OrganVulpkaninTongue
+      Appendix: OrganVulpkaninAppendix
+      Ears: OrganVulpkaninEars
+      Lungs: OrganVulpkaninLungs
+      Heart: OrganVulpkaninHeart
+      Stomach: OrganVulpkaninStomach
+      Liver: OrganVulpkaninLiver
+      Kidneys: OrganVulpkaninKidneys
   - type: Icon
     sprite: _RMC14/Mobs/Vulpkanin/parts.rsi
     state: full
@@ -21,10 +39,6 @@
     speechVerb: Vulpkanin
     allowedEmotes: [ 'Bark', 'Snarl', 'Whine', 'Growl', 'Yip' ]
   - type: Vocal
-    sounds:
-      Male: RMCMaleVulpkanin
-      Female: RMCFemaleVulpkanin
-      Unsexed: RMCMaleVulpkanin
   - type: Wagging
     action: ActionToggleVulpkaninWagging
   - type: MeleeWeapon
@@ -33,72 +47,38 @@
     animation: WeaponArcClaw
   - type: Inventory
     speciesId: vulpkanin
-  - type: Sprite # Drawlayers. Top to bottom in order I believe.
-    netsync: false
-    noRot: true
-    drawdepth: Mobs
-    layers:
-      - map: [ "enum.HumanoidVisualLayers.Chest" ]
-      - map: [ "enum.HumanoidVisualLayers.Head" ]
-      - map: [ "enum.HumanoidVisualLayers.Snout" ]
-      - map: [ "enum.HumanoidVisualLayers.Eyes" ]
-      - map: [ "enum.HumanoidVisualLayers.RArm" ]
-      - map: [ "enum.HumanoidVisualLayers.LArm" ]
-      - map: [ "enum.HumanoidVisualLayers.RLeg" ]
-      - map: [ "enum.HumanoidVisualLayers.LLeg" ]
-      - map: [ "enum.HumanoidVisualLayers.UndergarmentBottom" ]
-      - map: [ "enum.HumanoidVisualLayers.UndergarmentTop" ]
-      - shader: StencilClear
-        sprite: Mobs/Species/Human/parts.rsi
-        state: l_leg
-      - shader: StencilMask
-        map: [ "enum.HumanoidVisualLayers.StencilMask" ]
-        sprite: _RMC14/Mobs/Vulpkanin/masking_helpers.rsi
-        state: female_full
-        visible: false
-      - map: [ "jumpsuit" ]
-      - map: [ "enum.HumanoidVisualLayers.LHand" ]
-      - map: [ "enum.HumanoidVisualLayers.RHand" ]
-      - map: [ "enum.HumanoidVisualLayers.LFoot" ]
-      - map: [ "enum.HumanoidVisualLayers.RFoot" ]
-      - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
-        color: "#ffffff"
-        sprite: Objects/Misc/handcuffs.rsi
-        state: body-overlay-2
-        visible: false
-      - map: [ "gloves" ]
-      - map: [ "shoes" ]
-      - map: [ "id" ] # RMC14 re-arrange id slot
-      - map: [ "ears" ]
-      - map: [ "outerClothing" ]
-      - map: [ "eyes" ]
-      - map: [ "belt" ]
-      - map: [ "back" ]
-      - map: [ "enum.HumanoidVisualLayers.FacialHair" ]
-      - map: [ "neck" ] # RMC14 re-arrange back slot
-      - map: [ "enum.HumanoidVisualLayers.Hair" ]
-      - map: [ "enum.HumanoidVisualLayers.HeadSide" ]
-      - map: [ "enum.HumanoidVisualLayers.HeadTop" ]
-      - map: [ "enum.HumanoidVisualLayers.Tail" ]
-      - map: [ "mask" ]
-      - map: [ "head" ]
-      - map: [ "pocket1" ]
-      - map: [ "pocket2" ]
-      - map: [ "acided" ]
-      - map: [ "hooked" ]
-        sprite: "_RMC14/Effects/xeno_spray_acid.rsi"
-        state: hooked
-        visible: false
+  - type: CreamPied
+    sprite:
+      sprite: Effects/creampie.rsi
+      state: creampie_vulpkanin
   - type: FixedIdentity
     name: cm-chatsan-replacement-vulpkanin
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearanceVulpkanin
   name: Vulpkanin Dummy
   id: MobVulpkaninDummy
   categories: [ HideSpawnMenu ]
   description: A dummy vulpkanin meant to be used in character setup.
   components:
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: Vulpkanin
 
+- type: entity
+  parent: OrganVulpkaninTorso
+  id: RMCOrganVulpkaninTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
+
+- type: entity
+  parent: OrganVulpkaninHead
+  id: RMCOrganVulpkaninHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Snout
+    - enum.HumanoidVisualLayers.HeadTop
+    - enum.HumanoidVisualLayers.HeadSide
+    - enum.HumanoidVisualLayers.Hair

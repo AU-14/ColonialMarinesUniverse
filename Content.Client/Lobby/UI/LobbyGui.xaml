@@ -65,10 +65,13 @@
                                     Margin="0 75" StyleClasses="CrtPanel">
                         <RichTextLabel Name="LobbyMessageLabel" Access="Public" Margin="5" />
                     </PanelContainer>
-                    <BoxContainer Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                    <BoxContainer Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                         <info:DevInfoBanner Name="DevInfoBanner" VerticalExpand="false" Margin="3 3 3 3" />
-                        <PanelContainer StyleClasses="CrtPanel">
-                            <RichTextLabel Name="LobbySong" Access="Public" HorizontalAlignment="Center" />
+                        <PanelContainer StyleClasses="CrtPanel" Margin="3 3 3 3">
+                            <BoxContainer Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3 3 3 3">
+                                <RichTextLabel Name="LobbySong" Access="Public" HorizontalAlignment="Left" />
+                                <RichTextLabel Name="LobbyBackground" Access="Public" HorizontalAlignment="Left" />
+                            </BoxContainer>
                         </PanelContainer>
                     </BoxContainer>
                 </Control>

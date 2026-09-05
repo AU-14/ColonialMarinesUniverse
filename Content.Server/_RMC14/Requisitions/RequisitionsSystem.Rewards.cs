@@ -16,7 +16,7 @@ namespace Content.Server._RMC14.Requisitions
         [Dependency] private ItemSlotsSystem _slots = default!;
         [Dependency] private MetaDataSystem _metaSystem = default!;
 
-        private void PrintInvoice(EntityUid requisitionOrder, EntityCoordinates coordinates, string paperwork)
+        private void PrintInvoice(EntityUid requisitionOrder, EntityCoordinates coordinates, string paperwork, int packedWeight = 0)
         {
             // Create a sheet of paper to write the order details on
             // Order information sprinkled with flavor text
@@ -30,7 +30,7 @@ namespace Content.Server._RMC14.Requisitions
             var lotNum = _random.Next(10, 99);
 
             var orderName = MetaData(requisitionOrder).EntityName;
-            uint weight = 10;
+            uint weight = packedWeight > 0 ? (uint) packedWeight : 10;
             var contentList = new FormattedMessage();
 
             // if its a crate
@@ -64,7 +64,8 @@ namespace Content.Server._RMC14.Requisitions
                         if (entity.Name == orderName)
                             continue;
 
-                        weight += 10;
+                        if (packedWeight <= 0)
+                            weight += 10;
                         contentList.AddMarkupOrThrow($"{Loc.GetString("requisition-paper-print-content",
                             ("count", entity.Count),
                             ("item", entity.Name.ToUpper()))}");

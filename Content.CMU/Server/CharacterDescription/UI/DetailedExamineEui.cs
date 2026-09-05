@@ -1,0 +1,83 @@
+using Content.Server.CMU14.CharacterDescription;
+using Content.Server.EUI;
+using Content.Server.Humanoid;
+using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared.CMU14.CharacterDescription;
+using Content.Shared.Eui;
+using Content.Shared.Humanoid;
+using JetBrains.Annotations;
+using Robust.Shared.Prototypes;
+
+namespace Content.Server.CMU14.CharacterDescription.UI;
+
+[UsedImplicitly]
+public sealed partial class DetailedExamineEui : BaseEui
+{
+    [Dependency] private  IEntityManager _entManager = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
+
+    private readonly RMCReagentSystem _reagentSystem;
+    private readonly HumanoidOrganAppearanceSystem _humanoidAppearance;
+    private readonly NetEntity _target;
+
+    public DetailedExamineEui(NetEntity target)
+    {
+        _target = target;
+        IoCManager.InjectDependencies(this);
+        _reagentSystem = _entManager.System<RMCReagentSystem>();
+        _humanoidAppearance = _entManager.System<HumanoidOrganAppearanceSystem>();
+    }
+
+    public override void Opened()
+    {
+        base.Opened();
+        StateDirty();
+    }
+
+    public override EuiStateBase GetNewState()
+    {
+        var state = new DetailedExamineEuiState { Target = _target };
+
+        var uid = _entManager.GetEntity(_target);
+        if (!_entManager.EntityExists(uid))
+            return state;
+
+        state.Name = _entManager.GetComponent<MetaDataComponent>(uid).EntityName;
+
+        if (_entManager.TryGetComponent(uid, out CharacterDescriptionComponent? desc))
+        {
+            state.FullDescription = desc.FullDescription;
+            state.Height = desc.Height;
+            state.Weight = desc.Weight;
+            state.Age = desc.Age;
+            state.Build = Loc.GetString($"build-type-{desc.Build.ToString().ToLowerInvariant()}");
+
+            if (!desc.HideMetaInformation)
+            {
+                state.MedicalRecord = MedicalRecordBuilder.Build(_entManager, _reagentSystem, uid, desc);
+                state.CriminalRecord = desc.CriminalRecord;
+                state.GeneralRecord = desc.GeneralRecord;
+
+                if (desc.Origin is { } origin && _prototypeManager.TryIndex(origin, out var originProto))
+                    state.Origin = Loc.GetString(originProto.Name);
+
+                if (desc.Allegiance is { } allegiance && _prototypeManager.TryIndex(allegiance, out var allegianceProto))
+                    state.Allegiance = Loc.GetString(allegianceProto.Name);
+            }
+        }
+
+        if (_humanoidAppearance.TryGetColors(uid, out var skinColor, out var eyeColor))
+        {
+            state.SkinToneName = NamedColorHelper.NearestColorName(skinColor);
+            state.EyeColorName = NamedColorHelper.NearestColorName(eyeColor);
+
+            if (_humanoidAppearance.TryGetMarkings(uid, HumanoidVisualLayers.Hair, out _, out _, out var hairMarkings) &&
+                hairMarkings.Count > 0 && hairMarkings[0].MarkingColors.Count > 0)
+            {
+                state.HairColorName = NamedColorHelper.NearestColorName(hairMarkings[0].MarkingColors[0]);
+            }
+        }
+
+        return state;
+    }
+}

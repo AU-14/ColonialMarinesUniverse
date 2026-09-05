@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Random;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared.Atmos;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Melee.Events;
@@ -17,6 +19,7 @@ namespace Content.Shared._RMC14.Barricade;
 
 public abstract partial class SharedDirectionalAttackBlockSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -78,7 +81,8 @@ public abstract partial class SharedDirectionalAttackBlockSystem : EntitySystem
 
         if (TryComp(target, out DamageableComponent? damageable))
         {
-            var blockChance = Math.Max(blocker.MinimumBlockChance, (blocker.MaxHealth - (float) damageable.TotalDamage) / blocker.MaxHealth);
+            var blockChance = Math.Max(blocker.MinimumBlockChance,
+                (blocker.MaxHealth - (float) _damageable.GetTotalDamage((target, damageable))) / blocker.MaxHealth);
             var blockRoll = new Xoroshiro64S(seed).NextFloat(0, 1);
 
             if (blockChance < blockRoll)

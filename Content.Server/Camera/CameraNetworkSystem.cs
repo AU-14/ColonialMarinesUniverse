@@ -5,6 +5,7 @@ using Content.Shared.Camera;
 using Content.Shared._RMC14.Camera;
 using Content.Shared.GameTicking;
 using Content.Shared.Power;
+using Content.Shared.SurveillanceCamera.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;

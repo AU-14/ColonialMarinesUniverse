@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._CMU14.Round.Objectives;
+using Content.Shared.CMU14.Round.Objectives;
 using Content.Shared._RMC14.Animations;
 using Content.Shared._RMC14.Holiday;
 using Content.Shared._RMC14.Inventory;
@@ -45,7 +45,7 @@ using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Storage;
 using Content.Shared._RMC14.Cryostorage;
-using Content.Shared._AU14.Vendors;
+using Content.Shared.CMU14.Vendors;
 
 namespace Content.Shared._RMC14.Vendors;
 
@@ -353,7 +353,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         if (TryComp(ent, out AccessReaderComponent? accessReader))
         {
             var access = ent.Comp.Hacked ? new List<ProtoId<AccessLevelPrototype>>() : ent.Comp.Access;
-            _accessReader.SetAccesses((ent, accessReader), access);
+            _accessReader.TrySetAccesses((ent, accessReader), access);
         }
     }
 
@@ -365,6 +365,11 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private void EjectAllVendorContents(Entity<CMAutomatedVendorComponent> vendor)
     {
+        // CMU14: Deployable shutdown also destroys vendors while their map or grid is being deleted.
+        var coords = Transform(vendor).Coordinates;
+        if (TerminatingOrDeleted(coords.EntityId))
+            return;
+
         // Get all available items with their quantity
         var inventory = GetAvailableInventoryWithAmounts(vendor.Comp);
 
@@ -374,7 +379,6 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
             for (int i = 0; i < amount; i++)
             {
                 // Create item near the vendor
-                var coords = Transform(vendor).Coordinates;
                 var spawnedItem = Spawn(itemId, coords);
 
                 // Throw in a random direction with a random force
@@ -790,7 +794,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         }
         else
         {
-            var spawn = SpawnNextToOrDrop(toVend, vendor);
+            var spawn = SpawnAtPosition(toVend, vendor.ToCoordinates());
             AfterVend(spawn, player, vendor, offset, replaceSlot: replaceSlot);
         }
     }

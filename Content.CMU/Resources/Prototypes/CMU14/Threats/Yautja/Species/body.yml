@@ -1,0 +1,76 @@
+- type: entity
+  parent: OrganBaseOrganic
+  id: OrganYautja
+  abstract: true
+  suffix: yautja
+
+- type: entity
+  id: OrganYautjaVisual
+  abstract: true
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: CMU14/Yautja/body.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Yautja
+
+- type: entity
+  parent: [ OrganYautja, OrganYautjaVisual ]
+  id: OrganYautjaExternal
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/body.rsi
+
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganYautjaExternal ]
+  id: OrganYautjaTorso
+
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganYautjaExternal ]
+  id: OrganYautjaHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
+
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganYautjaExternal ]
+  id: OrganYautjaArmLeft
+
+- type: entity
+  parent: [ OrganBaseArmRight, OrganYautjaExternal ]
+  id: OrganYautjaArmRight
+
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganYautjaExternal ]
+  id: OrganYautjaHandLeft
+
+- type: entity
+  parent: [ OrganBaseHandRight, OrganYautjaExternal ]
+  id: OrganYautjaHandRight
+
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganYautjaExternal ]
+  id: OrganYautjaLegLeft
+  components:
+  - type: MovementBodyPart
+    walkSpeed: 3.7
+    sprintSpeed: 7.1
+
+- type: entity
+  parent: [ OrganBaseLegRight, OrganYautjaExternal ]
+  id: OrganYautjaLegRight
+  components:
+  - type: MovementBodyPart
+    walkSpeed: 3.7
+    sprintSpeed: 7.1
+
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganYautjaExternal ]
+  id: OrganYautjaFootLeft
+
+- type: entity
+  parent: [ OrganBaseFootRight, OrganYautjaExternal ]
+  id: OrganYautjaFootRight

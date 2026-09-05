@@ -3,26 +3,27 @@ using System.Numerics;
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
-using Content.Server.Ghost.Components;
 using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
-using Content.Server.Warps;
-using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared._RMC14.Ghost;
-using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Actions;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
-using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Content.Shared.FixedPoint;
 using Content.Shared.Follower;
-using Content.Shared.Ghost;
+using Content.Shared.Follower.Components;
+using Content.Shared.Ghost.Components;
+using Content.Shared.Ghost.Systems;
+using Content.Shared.GhostTypes;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -37,8 +38,8 @@ using Content.Shared.Roles;
 using Content.Shared.Storage.Components;
 using Content.Shared.Tag;
 using Content.Shared.Warps;
+using Robust.Server.GameStates;
 using Robust.Server.GameObjects;
-using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
@@ -46,17 +47,19 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Timing;
 
 namespace Content.Server.Ghost
 {
+    /// <summary>
+    /// A system for handling interactions with ghosts ("observers").
+    /// These are noncorporeal player entities (generally after dying in-round) that can roam and warp around.
+    /// </summary>
     public sealed partial class GhostSystem : SharedGhostSystem
     {
         [Dependency] private SharedActionsSystem _actions = default!;
         [Dependency] private IAdminLogManager _adminLog = default!;
         [Dependency] private SharedEyeSystem _eye = default!;
         [Dependency] private FollowerSystem _followerSystem = default!;
-        [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private JobSystem _jobs = default!;
         [Dependency] private EntityLookupSystem _lookup = default!;
         [Dependency] private MindSystem _minds = default!;
@@ -67,7 +70,6 @@ namespace Content.Server.Ghost
         [Dependency] private VisibilitySystem _visibilitySystem = default!;
         [Dependency] private MetaDataSystem _metaData = default!;
         [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IConfigurationManager _configurationManager = default!;
         [Dependency] private IChatManager _chatManager = default!;
         [Dependency] private SharedMindSystem _mind = default!;
@@ -77,26 +79,25 @@ namespace Content.Server.Ghost
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private TagSystem _tag = default!;
         [Dependency] private NameModifierSystem _nameMod = default!;
+        [Dependency] private GhostSpriteStateSystem _ghostState = default!;
         [Dependency] private SharedXenoHiveSystem _xenoHive = default!;
+        [Dependency] private PvsOverrideSystem _pvsOverride = default!;
 
-        private EntityQuery<GhostComponent> _ghostQuery;
-        private EntityQuery<PhysicsComponent> _physicsQuery;
+        [Dependency] private EntityQuery<GhostComponent> _ghostQuery = default!;
+        [Dependency] private EntityQuery<FollowerComponent> _followerQuery = default!;
+        [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 
         private static readonly ProtoId<TagPrototype> AllowGhostShownByEventTag = "AllowGhostShownByEvent";
         private static readonly ProtoId<DamageTypePrototype> AsphyxiationDamageType = "Asphyxiation";
+        private readonly Dictionary<ICommonSession, HashSet<EntityUid>> _warpPreviewOverrides = new();
 
         public override void Initialize()
         {
             base.Initialize();
 
-            _ghostQuery = GetEntityQuery<GhostComponent>();
-            _physicsQuery = GetEntityQuery<PhysicsComponent>();
-
             SubscribeLocalEvent<GhostComponent, ComponentStartup>(OnGhostStartup);
             SubscribeLocalEvent<GhostComponent, MapInitEvent>(OnMapInit);
             SubscribeLocalEvent<GhostComponent, ComponentShutdown>(OnGhostShutdown);
-
-            SubscribeLocalEvent<GhostComponent, ExaminedEvent>(OnGhostExamine);
 
             SubscribeLocalEvent<GhostComponent, MindRemovedMessage>(OnMindRemovedMessage);
             SubscribeLocalEvent<GhostComponent, MindUnvisitedMessage>(OnMindUnvisitedMessage);
@@ -105,11 +106,13 @@ namespace Content.Server.Ghost
             SubscribeLocalEvent<GhostOnMoveComponent, MoveInputEvent>(OnRelayMoveInput);
 
             SubscribeNetworkEvent<GhostWarpsRequestEvent>(OnGhostWarpsRequest);
+            SubscribeNetworkEvent<GhostWarpsCloseEvent>(OnGhostWarpsClose);
             SubscribeNetworkEvent<GhostReturnToBodyRequest>(OnGhostReturnToBodyRequest);
             SubscribeNetworkEvent<GhostWarpToTargetRequestEvent>(OnGhostWarpToTargetRequest);
             SubscribeNetworkEvent<GhostnadoRequestEvent>(OnGhostnadoRequest);
+            SubscribeNetworkEvent<WarpToRandomFollowedRequestEvent>(OnWarpToRandomFollowedRequest);
+            SubscribeNetworkEvent<WarpToRandomRequestEvent>(OnWarpToRandomRequest);
 
-            SubscribeLocalEvent<GhostComponent, BooActionEvent>(OnActionPerform);
             SubscribeLocalEvent<GhostComponent, ToggleGhostHearingActionEvent>(OnGhostHearingAction);
             SubscribeLocalEvent<GhostComponent, InsertIntoEntityStorageAttemptEvent>(OnEntityStorageInsertAttempt);
 
@@ -151,33 +154,6 @@ namespace Content.Server.Ghost
             Dirty(uid, component);
         }
 
-        private void OnActionPerform(EntityUid uid, GhostComponent component, BooActionEvent args)
-        {
-            if (args.Handled)
-                return;
-
-            var entities = _lookup.GetEntitiesInRange(args.Performer, component.BooRadius).ToList();
-            // Shuffle the possible targets so we don't favor any particular entities
-            _random.Shuffle(entities);
-
-            var booCounter = 0;
-            foreach (var ent in entities)
-            {
-                var handled = DoGhostBooEvent(ent);
-
-                if (handled)
-                    booCounter++;
-
-                if (booCounter >= component.BooMaxTargets)
-                    break;
-            }
-
-            if (booCounter == 0)
-                _popup.PopupEntity(Loc.GetString("ghost-component-boo-action-failed"), uid, uid);
-
-            args.Handled = true;
-        }
-
         private void OnRelayMoveInput(EntityUid uid, GhostOnMoveComponent component, ref MoveInputEvent args)
         {
             // If they haven't actually moved then ignore it.
@@ -213,8 +189,10 @@ namespace Content.Server.Ghost
             }
 
             _eye.RefreshVisibilityMask(uid);
-            var time = _gameTiming.CurTime;
+            var time = _gameTiming.RealTime;
             component.TimeOfDeath = time;
+
+            Dirty(uid, component);
         }
 
         private void OnGhostShutdown(EntityUid uid, GhostComponent component, ComponentShutdown args)
@@ -245,20 +223,6 @@ namespace Content.Server.Ghost
             _actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
         }
 
-        private void OnGhostExamine(EntityUid uid, GhostComponent component, ExaminedEvent args)
-        {
-            // RMC14
-            if (HasComp<ImaginaryFriendComponent>(uid))
-                return;
-
-            var timeSinceDeath = _gameTiming.RealTime.Subtract(component.TimeOfDeath);
-            var deathTimeInfo = timeSinceDeath.Minutes > 0
-                ? Loc.GetString("comp-ghost-examine-time-minutes", ("minutes", timeSinceDeath.Minutes))
-                : Loc.GetString("comp-ghost-examine-time-seconds", ("seconds", timeSinceDeath.Seconds));
-
-            args.PushMarkup(deathTimeInfo);
-        }
-
         #region Ghost Deletion
 
         private void OnMindRemovedMessage(EntityUid uid, GhostComponent component, MindRemovedMessage args)
@@ -273,6 +237,7 @@ namespace Content.Server.Ghost
 
         private void OnPlayerDetached(EntityUid uid, GhostComponent component, PlayerDetachedEvent args)
         {
+            ClearWarpPreviewOverrides(args.Player);
             DeleteEntity(uid);
         }
 
@@ -309,43 +274,99 @@ namespace Content.Server.Ghost
 
         #region Warp
 
+        public bool CanGhostWarp(ICommonSession session, out EntityUid entity)
+        {
+            if (session.AttachedEntity is not { Valid: true } sessionEntity
+                || !_ghostQuery.HasComp(sessionEntity))
+            {
+                entity = default;
+                return false;
+            }
+
+            entity = sessionEntity;
+            return true;
+        }
+
         private void OnGhostWarpsRequest(GhostWarpsRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not { Valid: true } entity
-                || !_ghostQuery.HasComp(entity))
+            if (!CanGhostWarp(args.SenderSession, out var entity))
             {
                 Log.Warning($"User {args.SenderSession.Name} sent a {nameof(GhostWarpsRequestEvent)} without being a ghost.");
                 return;
             }
 
-            var response = new GhostWarpsResponseEvent(GetPlayerWarps(entity).Concat(GetLocationWarps()).ToList());
+            var playerWarps = GetPlayerWarps(entity).ToList();
+            RefreshWarpPreviewOverrides(args.SenderSession, playerWarps);
+
+            var response = new GhostWarpsResponseEvent(playerWarps.Concat(GetLocationWarps()).ToList());
             RaiseNetworkEvent(response, args.SenderSession.Channel);
+        }
+
+        private void OnGhostWarpsClose(GhostWarpsCloseEvent msg, EntitySessionEventArgs args)
+        {
+            ClearWarpPreviewOverrides(args.SenderSession);
+        }
+
+        private void RefreshWarpPreviewOverrides(ICommonSession session, IReadOnlyList<GhostWarp> warps)
+        {
+            ClearWarpPreviewOverrides(session);
+
+            var overrides = new HashSet<EntityUid>();
+            foreach (var warp in warps)
+            {
+                if (!TryGetEntity(warp.Entity, out var target) || !Exists(target.Value))
+                    continue;
+
+                _pvsOverride.AddSessionOverride(target.Value, session);
+                overrides.Add(target.Value);
+            }
+
+            if (overrides.Count > 0)
+                _warpPreviewOverrides[session] = overrides;
+        }
+
+        private void ClearWarpPreviewOverrides(ICommonSession session)
+        {
+            if (!_warpPreviewOverrides.Remove(session, out var overrides))
+                return;
+
+            foreach (var target in overrides)
+            {
+                if (Exists(target))
+                    _pvsOverride.RemoveSessionOverride(target, session);
+            }
+        }
+
+        public void GhostWarpRequest(ICommonSession player, NetEntity target)
+        {
+            if (!CanGhostWarp(player, out var attached))
+            {
+                Log.Warning($"User {player.Name} tried to warp to {target} without being a ghost.");
+                return;
+            }
+
+            var realTarget = GetEntity(target);
+
+            if (!Exists(realTarget))
+            {
+                Log.Warning($"User {player.Name} tried to warp to an invalid entity id: {target}");
+                return;
+            }
+
+            WarpTo(attached, realTarget);
         }
 
         private void OnGhostWarpToTargetRequest(GhostWarpToTargetRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not { Valid: true } attached
-                || !_ghostQuery.HasComp(attached))
-            {
-                Log.Warning($"User {args.SenderSession.Name} tried to warp to {msg.Target} without being a ghost.");
-                return;
-            }
-
-            var target = GetEntity(msg.Target);
-
-            if (!Exists(target))
-            {
-                Log.Warning($"User {args.SenderSession.Name} tried to warp to an invalid entity id: {msg.Target}");
-                return;
-            }
-
-            WarpTo(attached, target);
+            GhostWarpRequest(args.SenderSession, msg.Target);
         }
 
+        /// <summary>
+        /// Request to warp to the player with the most ghost followers.
+        /// </summary>
         private void OnGhostnadoRequest(GhostnadoRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not { } uid
-                || !_ghostQuery.HasComp(uid))
+            if (!CanGhostWarp(args.SenderSession, out var uid))
             {
                 Log.Warning($"User {args.SenderSession.Name} tried to ghostnado without being a ghost.");
                 return;
@@ -354,8 +375,51 @@ namespace Content.Server.Ghost
             if (_followerSystem.GetMostGhostFollowed() is not { } target)
                 return;
 
-            WarpTo(uid, target);
+            // If there is a ghostnado happening you almost definitely wanna join it, so we automatically follow instead of just warping.
+            _followerSystem.StartFollowingEntity(uid, target);
         }
+
+        /// <summary>
+        /// Request to warp to a random player with at least one ghost follower.
+        /// </summary>
+        private void OnWarpToRandomFollowedRequest(WarpToRandomFollowedRequestEvent msg, EntitySessionEventArgs args)
+        {
+            if (!CanGhostWarp(args.SenderSession, out var uid))
+            {
+                Log.Warning($"User {args.SenderSession.Name} tried to warp to a random player with at least one ghost follower without being a ghost.");
+                return;
+            }
+
+            var following = _followerQuery.CompOrNull(uid)?.Following;
+            if (_followerSystem.GetRandomGhostFollowed(except:following) is not {} target)
+                return;
+
+            _followerSystem.StartFollowingEntity(uid, target);
+        }
+
+        /// <summary>
+        /// Request to warp to a random player.
+        /// </summary>
+        private void OnWarpToRandomRequest(WarpToRandomRequestEvent msg, EntitySessionEventArgs args)
+        {
+            if (!CanGhostWarp(args.SenderSession, out var uid))
+            {
+                Log.Warning($"User {args.SenderSession.Name} tried to warp to a random player without being a ghost.");
+                return;
+            }
+
+            var following = _followerQuery.CompOrNull(uid)?.Following;
+            // select player warps cuz no one wants to warp to places.
+            if (GetPlayerWarps(following).ToArray() is not {} warps)
+                return;
+            if (warps.Length == 0)
+                return;
+            var warp = _random.Pick(warps);
+
+            var realTarget = GetEntity(warp.Entity);
+            _followerSystem.StartFollowingEntity(uid, realTarget);
+        }
+
 
         private void WarpTo(EntityUid uid, EntityUid target)
         {
@@ -395,14 +459,14 @@ namespace Content.Server.Ghost
             {
                 yield return new GhostWarp(
                     GetNetEntity(uid),
-                    warp.Location ?? Name(uid),
+                    warp.Location == null ? Name(uid) : Loc.GetString(warp.Location),
                     true,
                     tab: grouping.Tab,
                     section: grouping.Section);
             }
         }
 
-        private IEnumerable<GhostWarp> GetPlayerWarps(EntityUid except)
+        private IEnumerable<GhostWarp> GetPlayerWarps(EntityUid? except = null)
         {
             foreach (var player in _player.Sessions)
             {
@@ -418,7 +482,7 @@ namespace Content.Server.Ghost
                 TryComp<XenoComponent>(attached, out var xeno);
 
                 _jobs.MindTryGetJob(mind?.Mind, out var job);
-                if (xeno != null && _prototypeManager.TryIndex(xeno.Role, out JobPrototype? xenoJob))
+                if (xeno != null && ProtoMan.TryIndex(xeno.Role, out JobPrototype? xenoJob))
                     job = xenoJob;
 
                 var department = GetDepartment(job);
@@ -470,7 +534,7 @@ namespace Content.Server.Ghost
                 return null;
 
             var jobId = new ProtoId<JobPrototype>(job.ID);
-            return _prototypeManager.EnumeratePrototypes<DepartmentPrototype>()
+            return ProtoMan.EnumeratePrototypes<DepartmentPrototype>()
                 .Where(department => department.Roles.Contains(jobId))
                 .OrderBy(department => department, DepartmentUIComparer.Instance)
                 .FirstOrDefault();
@@ -517,10 +581,16 @@ namespace Content.Server.Ghost
             }
         }
 
-        public bool DoGhostBooEvent(EntityUid target)
+        /// <summary>
+        /// Raises a GhostBooEvent on a particular entity.
+        /// </summary>
+        /// <param name="target">The target of the action.</param>
+        /// <param name="allowedIntensity">The permitted intensity of the response.</param>
+        /// <returns>Whether or not the target had a response.</returns>
+        public bool DoGhostBooEvent(EntityUid target, GhostBooIntensity allowedIntensity = GhostBooIntensity.Normal)
         {
-            var ghostBoo = new GhostBooEvent();
-            RaiseLocalEvent(target, ghostBoo, true);
+            var ghostBoo = new GhostBooEvent(allowedIntensity);
+            RaiseLocalEvent(target, ref ghostBoo, true);
 
             return ghostBoo.Handled;
         }
@@ -574,6 +644,11 @@ namespace Content.Server.Ghost
             var ghost = SpawnAtPosition(GameTicker.ObserverPrototypeName, spawnPosition.Value);
             var ghostComponent = Comp<GhostComponent>(ghost);
 
+            if (TryComp<GhostSpriteStateComponent>(ghost, out var state))  // If more TryComps are added this should be turned into an event
+            {
+                _ghostState.SetGhostSprite((ghost, state), mind);
+            }
+
             // Try setting the ghost entity name to either the character name or the player name.
             // If all else fails, it'll default to the default entity prototype name, "observer".
             // However, that should rarely happen.
@@ -614,6 +689,15 @@ namespace Content.Server.Ghost
                     _adminLog.Add(LogType.Mind, $"{ToPrettyString(playerEntity.Value):player} was forced to ghost via command");
                 else
                     _adminLog.Add(LogType.Mind, $"{ToPrettyString(playerEntity.Value):player} is attempting to ghost via command");
+            }
+
+            if (playerEntity != null && !forced)
+            {
+                var entityCancelEv = new GhostAttemptEvent(mindId);
+                RaiseLocalEvent(playerEntity.Value, ref entityCancelEv);
+
+                if (entityCancelEv.Cancelled)
+                    return false;
             }
 
             var handleEv = new GhostAttemptHandleEvent(mind, canReturnGlobal);
@@ -676,12 +760,13 @@ namespace Content.Server.Ghost
                         && TryComp<MobThresholdsComponent>(playerEntity, out var thresholds))
                     {
                         var playerDeadThreshold = _mobThresholdSystem.GetThresholdForState(playerEntity.Value, MobState.Dead, thresholds);
-                        dealtDamage = playerDeadThreshold - damageable.TotalDamage;
+                        dealtDamage = playerDeadThreshold -
+                                      _damageable.GetTotalDamage((playerEntity.Value, damageable));
                     }
 
-                    DamageSpecifier damage = new(_prototypeManager.Index(AsphyxiationDamageType), dealtDamage);
+                    DamageSpecifier damage = new(ProtoMan.Index(AsphyxiationDamageType), dealtDamage);
 
-                    _damageable.TryChangeDamage(playerEntity, damage, true);
+                    _damageable.ChangeDamage(playerEntity.Value, damage, true);
                 }
             }
 
@@ -695,5 +780,15 @@ namespace Content.Server.Ghost
 
             return true;
         }
+    }
+
+    /// <summary>
+    /// Server extension point for systems that fully handle a ghost attempt before the default transfer logic.
+    /// </summary>
+    public sealed class GhostAttemptHandleEvent(MindComponent mind, bool canReturnGlobal) : HandledEntityEventArgs
+    {
+        public MindComponent Mind { get; } = mind;
+        public bool CanReturnGlobal { get; } = canReturnGlobal;
+        public bool Result { get; set; }
     }
 }

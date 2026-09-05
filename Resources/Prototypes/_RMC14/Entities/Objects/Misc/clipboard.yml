@@ -39,18 +39,20 @@
           tags:
             - Write
         insertOnInteract: true
-  - type: StorageFill
-    contents:
-    - id: CMPaper
-      prob: 0.5
-    - id: CMPaper
-      prob: 0.4
-    - id: CMPaper
-      prob: 0.3
-    - id: CMPaper
-      prob: 0.2
-    - id: CMPaper
-      prob: 0.2
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: CMPaper
+          prob: 0.5
+        - id: CMPaper
+          prob: 0.4
+        - id: CMPaper
+          prob: 0.3
+        - id: CMPaper
+          prob: 0.2
+        - id: CMPaper
+          prob: 0.2
   - type: InteractedBlacklist
     blacklist:
       components:
@@ -80,7 +82,8 @@
     slots: [belt]
     quickEquip: false
     sprite: _RMC14/Objects/Misc/weya_clipboard.rsi
-  - type: StorageFill
-    contents:
-    - id: CMPaper
-      amount: 4
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: CMPaper
+        amount: 4

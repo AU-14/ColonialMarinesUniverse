@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
-using Content.Client._CMU14.ZLevels.Core;
+using Content.Client.CMU14.ZLevels.Core;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.Managers;
 using Content.Client.Chat;
@@ -18,8 +18,9 @@ using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
 using Content.Client.UserInterface.Systems.Gameplay;
-using Content.Shared._CMU14.Chat;
+using Content.Shared.CMU14.Chat;
 using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.Input;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
@@ -234,7 +235,7 @@ public sealed partial class ChatUIController : UIController
         _input.SetInputCommand(ContentKeyFunctions.FocusAdminChat,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Admin)));
 
-        _input.SetInputCommand(ContentKeyFunctions.FocusAdminChat,
+        _input.SetInputCommand(CMKeyFunctions.RMCFocusMentorChat,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Mentor)));
 
         _input.SetInputCommand(ContentKeyFunctions.FocusRadio,
@@ -313,7 +314,7 @@ public sealed partial class ChatUIController : UIController
                  && style is StyleBoxFlat propStyleBoxFlat)
             color = propStyleBoxFlat.BackgroundColor;
         else
-            color = StyleNano.ChatBackgroundColor;
+            color = Color.FromHex("#25252ADD");
 
         panel.PanelOverride = new StyleBoxFlat
         {
@@ -835,7 +836,7 @@ public sealed partial class ChatUIController : UIController
         radioChannel = null;
         return _player.LocalEntity is EntityUid { Valid: true } uid
            && _chatSys != null
-           && _chatSys.TryProccessRadioMessage(uid, text, out _, out radioChannel, quiet: true);
+           && _chatSys.TryProcessRadioMessage(uid, text, out _, out radioChannel, quiet: true);
     }
 
     public void UpdateSelectedChannel(ChatBox box)
@@ -1058,7 +1059,8 @@ public sealed partial class ChatUIController : UIController
                 if (_ghost is not { IsGhost: true })
                     break;
 
-                AddSpeechBubble(msg, SpeechBubble.SpeechType.Say);
+                if (_ghost.GhostVisibility)
+                    AddSpeechBubble(msg, SpeechBubble.SpeechType.Say);
                 break;
 
             case ChatChannel.Emotes:

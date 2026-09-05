@@ -1,7 +1,7 @@
 using Content.Shared.Actions.Components;
 using Robust.Shared.GameObjects;
 
-namespace Content.IntegrationTests._CMU14.Xenonids;
+namespace Content.IntegrationTests.CMU14.Xenonids;
 
 [TestFixture]
 public sealed class CMUXenoZJumpIntegrationTest

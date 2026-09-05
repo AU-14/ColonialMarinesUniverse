@@ -120,7 +120,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
             return;
 
         if (!TryComp(gunUid, out ItemSlotsComponent? gunSlots) ||
-            !_itemSlots.TryGetSlot(gunUid, "gun_magazine", out var magSlot, gunSlots))
+            !_itemSlots.TryGetSlot((gunUid, gunSlots), "gun_magazine", out var magSlot))
         {
             return;
         }
@@ -131,7 +131,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
                 return;
         }
 
-        if (!_itemSlots.CanInsert(gunUid, args.Used, args.User, magSlot))
+        if (!_itemSlots.CanInsert(gunUid, magSlot, args.Used, args.User))
             return;
 
         if (!_hands.TryDrop(args.User, args.Used))
@@ -210,7 +210,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
             return;
 
         if (!TryComp(gunUid, out ItemSlotsComponent? gunSlots) ||
-            !_itemSlots.TryGetSlot(gunUid, "gun_magazine", out var magSlot, gunSlots) ||
+            !_itemSlots.TryGetSlot((gunUid, gunSlots), "gun_magazine", out var magSlot) ||
             !magSlot.HasItem)
         {
             return;
@@ -256,7 +256,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
         vehicle = vehicleUid.Value;
 
         if (!TryComp(vehicle, out ItemSlotsComponent? itemSlots) ||
-            !_itemSlots.TryGetSlot(vehicle, ent.Comp.GunSlotId, out var slot, itemSlots) ||
+            !_itemSlots.TryGetSlot((vehicle, itemSlots), ent.Comp.GunSlotId, out var slot) ||
             !slot.HasItem ||
             slot.Item == null)
         {
@@ -294,7 +294,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
         var vehicle = vehicleUid.Value;
 
         if (!TryComp(vehicle, out ItemSlotsComponent? itemSlots) ||
-            !_itemSlots.TryGetSlot(vehicle, ent.Comp.GunSlotId, out var slot, itemSlots) ||
+            !_itemSlots.TryGetSlot((vehicle, itemSlots), ent.Comp.GunSlotId, out var slot) ||
             !slot.HasItem ||
             slot.Item == null)
         {

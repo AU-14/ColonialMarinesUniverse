@@ -41,10 +41,11 @@
       charger_slot:
         ejectOnInteract: true
         whitelist:
-          components:
+          tags:
           - Stunbaton
+          components:
           - PowerCell
-          - ProjectileBatteryAmmoProvider
+          - BatteryAmmoProvider
           - Defibrillator
           - Visor
           - PortableDialysis
@@ -58,8 +59,8 @@
             - Taser
       recharger-baton:
         whitelist:
-          components:
-            - Stunbaton
+          tags:
+          - Stunbaton
   - type: Machine
     board: CMUCircuitboardRecharger
 

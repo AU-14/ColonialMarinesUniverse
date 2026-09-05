@@ -14,7 +14,6 @@ using Content.Shared.DoAfter;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Standing;
-using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -42,7 +41,6 @@ public sealed partial class XenoAbductSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private StandingStateSystem _standing = default!;
-    [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
@@ -93,7 +91,7 @@ public sealed partial class XenoAbductSystem : EntitySystem
 
         if (_doafter.TryStartDoAfter(doAfter))
         {
-            _stun.TrySlowdown(xeno, xeno.Comp.DoafterTime, false, 0f, 0f);
+            _slow.TryRoot(xeno, xeno.Comp.DoafterTime, refresh: false, applyChemical: true);
 
             if (_net.IsClient)
                 return;
@@ -116,7 +114,7 @@ public sealed partial class XenoAbductSystem : EntitySystem
             CleanUpTiles(xeno);
 
             DoCooldown(xeno);
-            _status.TryRemoveStatusEffect(xeno, "SlowedDown");
+            RemComp<RMCRootedComponent>(xeno);
             return;
         }
 

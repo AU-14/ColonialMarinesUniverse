@@ -1,6 +1,6 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
-using Content.Shared._CMU14.Xenomorphs.Pathogen; // CMU14
+using Content.Shared.CMU14.Xenomorphs.Pathogen; // CMU14
 using Content.Shared._RMC14.TacticalMap; // CMU14
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;

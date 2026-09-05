@@ -1,0 +1,56 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobColonyXenoarchaeologist
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: ColonyXenoarchaeologist
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillResearch: 2
+      RMCSkillFireman: 1
+  - type: JobPrefix
+    prefix: cmu-colony-prefix-xenoarchaeologist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
+      state: colonist
+  name: cmu-colony-name-xenoarchaeologist
+  description: cmu-colony-description-xenoarchaeologist
+  setPreference: true
+  playTimeTracker: CMUJobColonyXenoarchaeologist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearColonyXenoarchaeologist
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-colony-supervisors-colonist
+  spawnMenuRoleName: Colony Xenoarchaeologist (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearColonyXenoarchaeologist
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianScientist
+    outerClothing: RMCLabcoat
+    gloves: CMHandsLatex
+    shoes: RMCShoesLaceup
+    back: CMSatchel
+    id: AU14IDCardColonyColonist
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointColonyXenoarchaeologist
+  name: Spawn Point Colony Xenoarchaeologist
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobColonyXenoarchaeologist
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobColonyXenoarchaeologist
+  isHumanoid: true

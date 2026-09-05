@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: RMCDropshipAttachmentBase
   id: RMCDropshipAttachmentWeapon
@@ -55,7 +55,7 @@
   description: A pilot-controlled forward signal-flare launcher with a limited gimbal. It can only be installed on a direct-fire attach point.
   components:
   - type: Sprite
-    sprite: _CMU14/Objects/Dropship/m4332_flare_launcher.rsi
+    sprite: CMU14/Objects/Dropship/m4332_flare_launcher.rsi
     enableOverrideDir: true
     overrideDir: North
     layers:
@@ -72,13 +72,13 @@
     abbreviation: FLR
     directFireOnly: true
     weaponAttachedSprite:
-      sprite: _CMU14/Objects/Dropship/m4332_flare_launcher.rsi
+      sprite: CMU14/Objects/Dropship/m4332_flare_launcher.rsi
       state: signal_flare_launcher_unloadedalt
     ammoEmptyAttachedSprite:
-      sprite: _CMU14/Objects/Dropship/m4332_flare_launcher.rsi
+      sprite: CMU14/Objects/Dropship/m4332_flare_launcher.rsi
       state: signal_flare_launcher_unloaded
     ammoAttachedSprite:
-      sprite: _CMU14/Objects/Dropship/m4332_flare_launcher.rsi
+      sprite: CMU14/Objects/Dropship/m4332_flare_launcher.rsi
       state: signal_flare_launcher_loaded
   - type: GunshipDirectFireWeapon
     projectile: RMCFlareCASBullet

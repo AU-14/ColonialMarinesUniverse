@@ -8,6 +8,7 @@
   <Import Project="../MSBuild/Content.props" />
 
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
+
   <Import Project="..\RobustToolbox\Imports\Shared.props" />
   <Import Project="..\RobustToolbox\Imports\Packaging.props" />
 </Project>

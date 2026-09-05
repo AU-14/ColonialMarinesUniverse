@@ -1,9 +1,9 @@
 using System.Numerics;
-using Content.Client._CMU14.ZLevels.Core;
+using Content.Client.CMU14.ZLevels.Core;
 using NUnit.Framework;
 using Robust.Shared.Maths;
 
-namespace Content.Tests.Client._CMU14.ZLevels;
+namespace Content.Tests.Client.CMU14.ZLevels;
 
 [TestFixture]
 public sealed class StairPreviewVisibilityTest

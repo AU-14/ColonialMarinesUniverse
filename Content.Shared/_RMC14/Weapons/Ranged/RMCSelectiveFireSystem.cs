@@ -34,9 +34,9 @@ public sealed partial class RMCSelectiveFireSystem : EntitySystem
             .Bind(CMKeyFunctions.RMCCycleFireMode,
                 InputCmdHandler.FromDelegate(session =>
                     {
-                        if (session?.AttachedEntity is { } userUid && _gunSystem.TryGetGun(userUid, out var gunUid, out var gunComponent))
+                        if (session?.AttachedEntity is { } userUid && _gunSystem.TryGetGun(userUid, out var gun))
                         {
-                            _gunSystem.CycleFire(gunUid, gunComponent, userUid);
+                            _gunSystem.CycleFire(gun.Owner, gun.Comp, userUid);
                         }
                     },
                     handle: false))
@@ -49,12 +49,12 @@ public sealed partial class RMCSelectiveFireSystem : EntitySystem
 
         if (args.SenderSession.AttachedEntity == null ||
             !TryComp(gunUid, out GunComponent? gunComponent) ||
-            !_gunSystem.TryGetGun(args.SenderSession.AttachedEntity.Value, out _, out var userGun))
+            !_gunSystem.TryGetGun(args.SenderSession.AttachedEntity.Value, out var userGun))
         {
             return;
         }
 
-        if (userGun != gunComponent)
+        if (userGun.Comp != gunComponent)
             return;
 
         gunComponent.CurrentAngle = gunComponent.MinAngleModified;

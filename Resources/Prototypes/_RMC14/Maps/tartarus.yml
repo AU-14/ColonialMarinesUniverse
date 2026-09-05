@@ -1,13 +1,13 @@
 - type: gameMap
   id: tartarusprison
   mapName: Tartarus Prison (Jailbreak
-  mapPath: /Maps/_AU14/TartarusPrison.yml
+  mapPath: /Maps/TartarusPrison.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    tartarusprisoncompmap:
+    Sheperds:
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup

@@ -11,6 +11,7 @@ namespace Content.Server._RMC14.Humanoid.Markings;
 
 public sealed partial class RMCIntentsEyeColorSystem : EntitySystem
 {
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedCombatModeSystem _combatMode = default!;
 
@@ -69,10 +70,6 @@ public sealed partial class RMCIntentsEyeColorSystem : EntitySystem
 
     public void SetEyeColor(EntityUid uid, Color color)
     {
-        if (!TryComp<HumanoidAppearanceComponent>(uid, out var humanoid))
-            return;
-
-        humanoid.EyeColor = color;
-        Dirty(uid, humanoid);
+        _humanoidAppearance.TrySetEyeColor(uid, color);
     }
 }

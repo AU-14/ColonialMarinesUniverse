@@ -1,0 +1,107 @@
+- type: species
+  id: WorkingJoe
+  name: species-name-workingjoe
+  roundStart: false
+  prototype: AU14MobWorkingJoeColony
+  dollPrototype: AppearanceWorkingJoe
+  skinColoration: Hues
+  defaultSoundsBySex:
+  - AU14WorkingJoeSounds
+  - AU14WorkingJoeSounds
+  - AU14WorkingJoeSounds
+  voices:
+  - AU14WorkingJoeSounds
+
+- type: markingsGroup
+  parent: Human
+  id: WorkingJoe
+
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceWorkingJoe
+  categories: [ HideSpawnMenu ]
+  name: working joe appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: CMUPartWorkingJoeTorso
+      Head: CMUPartWorkingJoeHead
+      ArmLeft: CMUPartWorkingJoeLeftArm
+      ArmRight: CMUPartWorkingJoeRightArm
+      HandLeft: CMUPartWorkingJoeLeftHand
+      HandRight: CMUPartWorkingJoeRightHand
+      LegLeft: CMUPartWorkingJoeLeftLeg
+      LegRight: CMUPartWorkingJoeRightLeg
+      FootLeft: CMUPartWorkingJoeLeftFoot
+      FootRight: CMUPartWorkingJoeRightFoot
+      Brain: CMUOrganHumanBrain
+      Eyes: CMUOrganHumanEyes
+      Lungs: CMUOrganHumanLungs
+      Heart: CMUOrganHumanHeart
+      Stomach: CMUOrganHumanStomach
+      Liver: CMUOrganHumanLiver
+      Kidneys: CMUOrganHumanKidneys
+  - type: HumanoidProfile
+    species: WorkingJoe
+    voice: AU14WorkingJoeSounds
+
+- type: entity
+  id: CMUPartWorkingJoeVisual
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/WorkingJoe/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: CMU14/Mobs/WorkingJoe/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: WorkingJoe
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanTorso ]
+  id: CMUPartWorkingJoeTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanHead ]
+  id: CMUPartWorkingJoeHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.HeadTop
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanLeftArm ]
+  id: CMUPartWorkingJoeLeftArm
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanRightArm ]
+  id: CMUPartWorkingJoeRightArm
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanLeftHand ]
+  id: CMUPartWorkingJoeLeftHand
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanRightHand ]
+  id: CMUPartWorkingJoeRightHand
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanLeftLeg ]
+  id: CMUPartWorkingJoeLeftLeg
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanRightLeg ]
+  id: CMUPartWorkingJoeRightLeg
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanLeftFoot ]
+  id: CMUPartWorkingJoeLeftFoot
+
+- type: entity
+  parent: [ CMUPartWorkingJoeVisual, CMUPartHumanRightFoot ]
+  id: CMUPartWorkingJoeRightFoot

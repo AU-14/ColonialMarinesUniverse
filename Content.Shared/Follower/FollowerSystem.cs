@@ -3,7 +3,8 @@ using System.Numerics;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Database;
 using Content.Shared.Follower.Components;
-using Content.Shared.Ghost;
+using Content.Shared.GameTicking;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Hands;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Events;
@@ -20,6 +21,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Follower;
@@ -33,10 +35,13 @@ public sealed partial class FollowerSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physicsSystem = default!;
     [Dependency] private INetManager _netMan = default!;
     [Dependency] private ISharedAdminManager _adminManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
+    private readonly List<(EntityUid Follower, EntityUid Followed)> _roundRestartFollowers = new();
 
     private static readonly ProtoId<TagPrototype> ForceableFollowTag = "ForceableFollow";
+    private static readonly ProtoId<TagPrototype> PreventGhostnadoWarpTag = "NotGhostnadoWarpable";
 
     public override void Initialize()
     {
@@ -48,7 +53,6 @@ public sealed partial class FollowerSystem : EntitySystem
         SubscribeLocalEvent<FollowerComponent, MoveInputEvent>(OnFollowerMove);
         SubscribeLocalEvent<FollowerComponent, PullStartedMessage>(OnPullStarted);
         SubscribeLocalEvent<FollowerComponent, EntityTerminatingEvent>(OnFollowerTerminating);
-        SubscribeLocalEvent<FollowerComponent, AfterAutoHandleStateEvent>(OnAfterHandleState);
 
         SubscribeLocalEvent<FollowedComponent, ComponentGetStateAttemptEvent>(OnFollowedAttempt);
         SubscribeLocalEvent<FollowerComponent, GotEquippedHandEvent>(OnGotEquippedHand);
@@ -56,6 +60,46 @@ public sealed partial class FollowerSystem : EntitySystem
         SubscribeLocalEvent<BeforeSerializationEvent>(OnBeforeSave);
         SubscribeLocalEvent<FollowedComponent, PolymorphedEvent>(OnFollowedPolymorphed);
         SubscribeLocalEvent<FollowedComponent, StationAiRemoteEntityReplacementEvent>(OnFollowedStationAiRemoteEntityReplaced);
+
+        if (_netMan.IsClient)
+            SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent _)
+    {
+        _roundRestartFollowers.Clear();
+
+        var query = EntityQueryEnumerator<FollowerComponent>();
+        while (query.MoveNext(out var follower, out var component))
+        {
+            _roundRestartFollowers.Add((follower, component.Following));
+        }
+
+        if (_roundRestartFollowers.Count != 0)
+            Log.Info($"[CMU-ROUND-RESET-FOLLOWER] Detaching {_roundRestartFollowers.Count} active follower relationships before the client state reset.");
+
+        foreach (var (follower, followed) in _roundRestartFollowers)
+        {
+            var parent = TryComp(follower, out TransformComponent? xform)
+                ? xform.ParentUid.ToString()
+                : "<no transform>";
+
+            Log.Debug($"[CMU-ROUND-RESET-FOLLOWER] Detaching follower {ToPrettyString(follower)} from " +
+                      $"{ToPrettyString(followed)}. Current parent: {parent}.");
+
+            try
+            {
+                StopFollowingEntity(follower, followed);
+            }
+            catch (Exception exception)
+            {
+                Log.Error($"[CMU-ROUND-RESET-FOLLOWER] Failed to detach follower {ToPrettyString(follower)} from " +
+                          $"{ToPrettyString(followed)}. Current parent: {parent}. Exception and full trace:\n{exception}");
+                throw;
+            }
+        }
+
+        _roundRestartFollowers.Clear();
     }
 
     private void OnFollowedAttempt(Entity<FollowedComponent> ent, ref ComponentGetStateAttemptEvent args)
@@ -154,25 +198,27 @@ public sealed partial class FollowerSystem : EntitySystem
         StopFollowingEntity(uid, component.Following, deparent: false);
     }
 
-    private void OnAfterHandleState(Entity<FollowerComponent> entity, ref AfterAutoHandleStateEvent args)
-    {
-        StartFollowingEntity(entity, entity.Comp.Following);
-    }
-
     // Since we parent our observer to the followed entity, we need to detach
     // before they get deleted so that we don't get recursively deleted too.
     private void OnFollowedTerminating(EntityUid uid, FollowedComponent component, ref EntityTerminatingEvent args)
     {
+        var mapUid = Transform(uid).MapUid;
+        if (mapUid == null || Terminating(mapUid.Value))
+        {
+            // The follower is already part of the terminating hierarchy. Keep it parented so recursive deletion can
+            // clean it up without trying to attach it to a map that is being deleted.
+            foreach (var follower in component.Following.ToArray())
+                StopFollowingEntity(follower, uid, component, deparent: false);
+
+            return;
+        }
+
         StopAllFollowers(uid, component);
     }
 
     private void OnFollowedPolymorphed(Entity<FollowedComponent> entity, ref PolymorphedEvent args)
     {
-        foreach (var follower in entity.Comp.Following)
-        {
-            // Stop following the target's old entity and start following the new one
-            StartFollowingEntity(follower, args.NewEntity);
-        }
+        TransferFollowers(entity.AsNullable(), args.NewEntity);
     }
 
     // TODO: Slartibarfast mentioned that ideally this should be generalized and made part of SetRelay in SharedMoverController.Relay.cs.
@@ -182,8 +228,7 @@ public sealed partial class FollowerSystem : EntitySystem
         if (args.NewRemoteEntity == null)
             return;
 
-        foreach (var follower in entity.Comp.Following)
-            StartFollowingEntity(follower, args.NewRemoteEntity.Value);
+        TransferFollowers(entity.AsNullable(), args.NewRemoteEntity.Value);
     }
 
     /// <summary>
@@ -329,13 +374,68 @@ public sealed partial class FollowerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Gets the entity with the most non-admin ghosts following it.
+    ///     Moves every follower of <paramref name="from"/> over to <paramref name="to"/>.
+    ///     Use this when an entity is being replaced (polymorph, remote swap, ghost role spawn) and
+    ///     its watchers should ride along to the successor instead of being detached.
     /// </summary>
-    public EntityUid? GetMostGhostFollowed()
+    public void TransferFollowers(Entity<FollowedComponent?> from, EntityUid to)
     {
-        EntityUid? picked = null;
+        if (from.Owner == to || !Resolve(from, ref from.Comp, false))
+            return;
+
+        // Snapshot since HashSet is mutated down the line
+        foreach (var follower in from.Comp.Following.ToArray())
+            StartFollowingEntity(follower, to);
+    }
+
+    /// <summary>
+    /// Gets the player with the most non-admin ghosts following it.
+    /// If there are multiple players with the same top amount of followers, picks one at random.
+    /// </summary>
+    public EntityUid? GetMostGhostFollowed(EntityUid? except = null)
+    {
+        var pool = new List<EntityUid>();
         var most = 0;
 
+        var followedEnts = GetAllFollowed(except);
+        foreach (var (followed, followers) in followedEnts)
+        {
+            if (followers == most)
+            {
+                pool.Add(followed);
+            }
+            else if (followers > most)
+            {
+                pool.Clear();
+                pool.Add(followed);
+                most = followers;
+            }
+        }
+
+        return pool.Any() ? _random.Pick(pool) : null;
+    }
+
+    /// <summary>
+    /// Gets a random player that is being followed by at least one non-admin ghost.
+    /// </summary>
+    public EntityUid? GetRandomGhostFollowed(EntityUid? except = null)
+    {
+        var followedEnts = GetAllFollowed(except)
+            .Where(item => item.Value > 0 && item.Key != except)
+            .ToArray();
+        if (followedEnts.Length == 0)
+            return null;
+
+        var picked = _random.Pick(followedEnts);
+        return picked.Key;
+    }
+
+    /// <summary>
+    /// Gets all players that are being followed by non-admin ghosts with a follower count for each.
+    /// <remarks>Admin ghosts are excluded from the list of entities so that players can't spy on them.</remarks>
+    /// </summary>
+    private Dictionary<EntityUid, int> GetAllFollowed(EntityUid? except = null)
+    {
         // Keep a tally of how many ghosts are following each entity
         var followedEnts = new Dictionary<EntityUid, int>();
 
@@ -343,23 +443,26 @@ public sealed partial class FollowerSystem : EntitySystem
         var query = EntityQueryEnumerator<FollowerComponent, GhostComponent, ActorComponent>();
         while (query.MoveNext(out _, out var follower, out _, out var actor))
         {
-            // Exclude admins
+            var followed = follower.Following;
+
+            if (follower.Following == except)
+                continue;
+
+            // Don't count admin followers so that players cannot notice if admins are in stealth mode and following someone.
             if (_adminManager.IsAdmin(actor.PlayerSession))
                 continue;
 
-            var followed = follower.Following;
+            // If the followed entity cannot be ghostnado'd to, we don't count it.
+            // Used for making admins not warpable to, but IsAdmin isn't used for cases where the admin wants to be followed, for example during events.
+            if (_tagSystem.HasTag(followed, PreventGhostnadoWarpTag))
+                continue;
+
             // Add new entry or increment existing
             followedEnts.TryGetValue(followed, out var currentValue);
             followedEnts[followed] = currentValue + 1;
-
-            if (followedEnts[followed] > most)
-            {
-                picked = followed;
-                most = followedEnts[followed];
-            }
         }
 
-        return picked;
+        return followedEnts;
     }
 
     private bool CanFollow(EntityUid uid, out TransformComponent xform)

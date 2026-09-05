@@ -1,0 +1,157 @@
+- type: entity
+  parent: RMCBaseWeaponLMG
+  id: CMUGPMGTWE
+  name: L66A2 general purpose machine gun
+  description: A heavy, mobile machinegun used by the Royal Commandos. It fires 10x30mm rounds.
+  suffix: TWE
+  components:
+  - type: Tag
+    tags:
+    - CMUWeaponGPMGTWE
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilWielded: 0
+    recoilUnwielded: 0
+    scatterWielded: 1
+    scatterUnwielded: 1
+    baseFireRate: 6
+    burstScatterMult: 3
+    modifiers:
+      Burst:
+        fireDelay: 0.35
+        maxScatterModifier: 10
+        shotsToMaxScatter: 6
+      FullAuto:
+        fireDelay: 0.01
+        maxScatterModifier: 3
+        shotsToMaxScatter: 6
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+    layers:
+    - state: base
+      sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+    - state: bolt-open
+      sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+    - state: mag-0
+      sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: cover-closed
+      sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+  - type: Clothing
+    sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineGPMGTWE
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazineGPMGTWE
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentBipod
+        whitelist:
+          tags:
+          - RMCAttachmentBipod
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: 0.25, 0
+      rmc-aslot-harness: 0.35, 0.065
+      rmc-aslot-underbarrel: 0.418, -0.283
+  - type: Wieldable
+  - type: GunRequiresWield
+  - type: Corrodible
+    isCorrodible: true
+
+- type: entity
+  parent: RMCMagazineLMGBase
+  id: CMUMagazineGPMGTWE
+  name: "L66A2 Ammo Box (10x30mm)"
+  components:
+  - type: Tag
+    tags:
+    - RMCMagazineLMG
+    - CMUMagazineGPMGTWE
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - CMUCartridgeGPMGTWE
+    proto: CMCCartridgeGPMGTWE
+    capacity: 250
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+
+- type: entity
+  parent: RMCCartridgeRifleAR10
+  id: CMCCartridgeGPMGTWE
+  name: cartridge (10x30mm)
+  description: A 10x30mm cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgeGPMGTWE
+  - type: CartridgeAmmo
+    proto: CMUBulletGPMGTWE
+
+- type: entity
+  parent: RMCBaseBullet
+  id: CMUBulletGPMGTWE
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 40
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 22
+      falloff: 9999
+      ignoreModifiers: true
+  - type: CMArmorPiercing
+    amount: 30
+  - type: RMCProjectileAccuracy
+    accuracy: 95
+    thresholds:
+    - range: 14
+      falloff: 10
+
+- type: Tag
+  id: CMUWeaponGPMGTWE
+
+- type: Tag
+  id: CMUMagazineGPMGTWE
+
+- type: Tag
+  id: CMUCartridgeGPMGTWE

@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Tools;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DeviceLinking;
 using Content.Shared.Hands.EntitySystems;
@@ -31,6 +33,7 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
 {
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private ItemToggleSystem _toggle = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
@@ -603,7 +606,7 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
 
         if (TryComp<DamageableComponent>(sentry, out var damageable))
         {
-            var damage = damageable.TotalDamage.Float();
+            var damage = _damageable.GetTotalDamage((sentry, damageable)).Float();
             health = Math.Max(0, maxHealth - damage);
         }
 

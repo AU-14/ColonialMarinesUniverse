@@ -130,19 +130,19 @@ internal static class CrtLobbyTheme
             label.HasStyleClass(StyleNano.StyleClassCrtHeadingBig))
             return;
 
-        if (label.HasStyleClass(StyleNano.StyleClassLabelHeadingBigger))
+        if (label.HasStyleClass(StyleClass.LabelHeadingBigger))
         {
             AddClass(label, StyleNano.StyleClassCrtHeadingBig);
             return;
         }
 
-        if (label.HasStyleClass(StyleBase.StyleClassLabelHeading))
+        if (label.HasStyleClass(StyleClass.LabelHeading))
         {
             AddClass(label, StyleNano.StyleClassCrtHeading);
             return;
         }
 
-        if (label.HasStyleClass(StyleBase.StyleClassLabelSubText))
+        if (label.HasStyleClass(StyleClass.LabelSubText))
         {
             AddClass(label, StyleNano.StyleClassCrtDimText);
             return;

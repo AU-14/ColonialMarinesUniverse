@@ -22,7 +22,7 @@ using Content.Shared._RMC14.Xenonids.Sentinel;
 using Content.Shared._RMC14.Xenonids.Stomp;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared._RMC14.Xenonids.Despoiler;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared.Actions.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;

@@ -1,31 +1,32 @@
+using Content.Client.Actions;
 using Content.Client.Mapping;
 using Content.Client.Markers;
-using JetBrains.Annotations;
+using Content.Client.SubFloor;
 using Robust.Client.Graphics;
 using Robust.Client.State;
 using Robust.Shared.Console;
 
 namespace Content.Client.Commands;
 
-[UsedImplicitly]
-internal sealed partial class MappingClientSideSetupCommand : LocalizedCommands
+internal sealed partial class MappingClientSideSetupCommand : LocalizedEntityCommands
 {
-    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
     [Dependency] private ILightManager _lightManager = default!;
+    [Dependency] private ActionsSystem _actionSystem = default!;
+    [Dependency] private MarkerSystem _markerSystem = default!;
+    [Dependency] private SubFloorHideSystem _subfloorSystem = default!;
+    [Dependency] private IStateManager _stateManager = default!;
 
     public override string Command => "mappingclientsidesetup";
 
-    public override string Help => LocalizationManager.GetString($"cmd-{Command}-help", ("command", Command));
-
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (!_lightManager.LockConsoleAccess)
-        {
-            _entitySystemManager.GetEntitySystem<MarkerSystem>().MarkersVisible = true;
-            _lightManager.Enabled = false;
-            shell.ExecuteCommand("showsubfloor");
-            IoCManager.Resolve<IStateManager>().RequestStateChange<MappingState>();
-        }
+        if (_lightManager.LockConsoleAccess)
+            return;
+
+        _markerSystem.MarkersVisible = true;
+        _lightManager.Enabled = false;
+        _subfloorSystem.ShowAll = true;
+        _actionSystem.LoadActionAssignments("/mapping_actions.yml", false);
+        _stateManager.RequestStateChange<MappingState>();
     }
 }
-

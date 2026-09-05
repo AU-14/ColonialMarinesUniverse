@@ -112,7 +112,7 @@ public sealed partial class NetworkConfiguratorSystem : SharedNetworkConfigurato
         {
             _configurator = configurator;
             _keyBindingName = keyBindingName;
-            _label = new RichTextLabel { StyleClasses = { StyleNano.StyleClassItemStatus } };
+            _label = new RichTextLabel { StyleClasses = { StyleClass.ItemStatus } };
             AddChild(_label);
         }
 

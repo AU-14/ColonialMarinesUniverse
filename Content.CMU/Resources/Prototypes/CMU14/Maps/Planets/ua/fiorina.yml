@@ -1,0 +1,95 @@
+- type: entity
+  id: AuPlanetFiorina
+  name: Fiorina Prison
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Fiorina Prison"
+    mapId: aufiorina
+    lorePrimer: AU14PrimerPlanetFiorina
+    allegiance: UA
+    camouflage: Urban
+    announcement: "Fiorina 161, a Weyland-Yutani maximum security prison, has gone silent. A response force has been dispatched to investigate."
+    platoonsGovfor:
+    - USCM
+    - WEYU
+    - VAIPO
+    - RMC
+    - CMBCIU
+    - HAZOPS
+    platoonsOpfor:
+    - LACN
+    - UPP
+    - ProdigySF
+    defaultgovfor: WEYU
+    defaultopfor: ProdigySF
+    govforinship: true
+    opforinship: true
+    daycycleenabled: false
+    thirdparties:
+    - WYExecutivesSurv
+    - FreeCompanyRaidersSurv
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - ProfessorVonBandolier
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    # threats:
+    # - XenoThreat # map has no threat spawn markers
+    # - NeomorphsThreat # map has no threat spawn markers
+    # - AbominationsThreatDS # no xenocf markers
+    # - ApeThreatDS # map has no threat spawn markers
+    # - BadBloodClanThreat
+    # - XenoThreatCF # no xenocf markers
+    # - NeomorphsThreatCF # no xenocf markers
+    # - CultistThreatCF # map has no threat spawn markers
+    # - WendigoThreatCF # map has no threat spawn markers
+    # - AbominationsThreatCF # no xenocf markers
+    # - TribalsThreatCF # map has no threat spawn markers
+    # - ApeThreatCF # map has no threat spawn markers
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: lorePrimer
+  id: AU14PrimerPlanetFiorina
+  planetText: "Date 2181 - Fiorina Prison. Privately owned and operated by the Weyland-Yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the system."
+
+- type: gameMap
+  id: aufiorina
+  mapName: Fiorina Prison
+  mapPath: /Maps/CMU14/fiorina.yml
+  minPlayers: 0
+  maxPlayers: 200
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    fiorina:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Fiorina Prison'

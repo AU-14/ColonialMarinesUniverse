@@ -1,0 +1,84 @@
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Injuries.Vision;
+using Content.Shared._RMC14.Medical.HUD.Systems;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
+using Content.Shared.Standing;
+using Content.Shared.Stunnable;
+using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
+
+namespace Content.Server.CMU14.Medical.Anatomy.Organs.Brain;
+
+public sealed partial class BrainSystem : SharedBrainSystem
+{
+    [Dependency] private CMUTemporaryBlurryVisionSystem _blur = default!;
+    [Dependency] private HolocardSystem _holocard = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+
+    private static readonly EntProtoId ForcedSleeping = "StatusEffectForcedSleeping";
+    private static readonly EntProtoId Woozy = "StatusEffectWoozy";
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        UpdateServer(frameTime);
+    }
+
+    /// <summary>
+    ///     Server-only because mob-state mutation cannot run on a predicted
+    ///     client tick.
+    /// </summary>
+    protected override void ApplyPermadeath(EntityUid body)
+    {
+        Status.TrySetStatusEffectDuration(body, ForcedSleeping, duration: null);
+
+        _holocard.SetBrainRemovalAssessment(body, true);
+
+        if (TryComp<MobStateComponent>(body, out var mobState)
+            && mobState.CurrentState != MobState.Dead)
+        {
+            _mobState.ChangeMobState(body, MobState.Dead, mobState);
+        }
+    }
+
+    protected override void ApplyDisorientation(
+        EntityUid body,
+        CMUBrainComponent brain,
+        OrganDamageStage stage)
+    {
+        _blur.AddTemporaryBlurModifier(
+            body,
+            brain.DisorientationBlurDuration,
+            brain.DisorientationBlurStrength);
+        _popup.PopupEntity(
+            Loc.GetString("cmu-medical-brain-disorientation"),
+            body,
+            body,
+            PopupType.MediumCaution);
+
+        switch (Rng.Next(3))
+        {
+            case 0:
+            {
+                var dropItems = new DropHandItemsEvent();
+                RaiseLocalEvent(body, ref dropItems);
+                break;
+            }
+            case 1:
+                _stun.TryKnockdown(body, brain.DisorientationKnockdownDuration, refresh: false);
+                break;
+            default:
+                Status.TryAddStatusEffectDuration(
+                    body,
+                    Woozy,
+                    TimeSpan.FromSeconds(brain.DisorientationDrunkPower));
+                break;
+        }
+    }
+}

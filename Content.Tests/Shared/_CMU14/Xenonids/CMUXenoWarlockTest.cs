@@ -3,14 +3,14 @@ using System.Linq;
 using System.Numerics;
 using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 using Content.Shared.Actions;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared.FixedPoint;
 using Content.Shared.Physics;
 using NUnit.Framework;
 using Robust.Shared.GameStates;
 using Robust.Shared.Maths;
 
-namespace Content.Tests.Shared._CMU14.Xenonids;
+namespace Content.Tests.Shared.CMU14.Xenonids;
 
 [TestFixture]
 public sealed class CMUXenoWarlockTest
@@ -403,8 +403,8 @@ public sealed class CMUXenoWarlockTest
     [Test]
     public void PsychicBlastUsesTgmcSoundStagesAsAuthoritativeWorldAudio()
     {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastFireSoundPath(), Is.EqualTo("/Audio/_CMU14/Xeno/Warlock/volkite_4.ogg"));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastImpactSoundPath(), Is.EqualTo("/Audio/_CMU14/Xeno/Warlock/EMPulse.ogg"));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastFireSoundPath(), Is.EqualTo("/Audio/CMU14/Xeno/Warlock/volkite_4.ogg"));
+        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastImpactSoundPath(), Is.EqualTo("/Audio/CMU14/Xeno/Warlock/EMPulse.ogg"));
         Assert.That(CMUXenoWarlockSystem.ShouldPsychicBlastPlayFireSoundFromWarlockSystem(), Is.True);
         Assert.That(CMUXenoWarlockSystem.ShouldPsychicBlastUsePvsAudio(), Is.True);
     }

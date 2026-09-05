@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Camera;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
 using Content.Shared.SurveillanceCamera;
+using Content.Shared.SurveillanceCamera.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;

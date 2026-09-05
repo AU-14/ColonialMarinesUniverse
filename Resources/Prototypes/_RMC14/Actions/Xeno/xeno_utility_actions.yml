@@ -6,9 +6,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: transfer_plasma
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
@@ -30,9 +32,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: transfer_plasma
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -47,9 +51,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: transfer_plasma
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
   - type: EntityTargetAction
@@ -64,10 +70,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: gardener_resin_surge
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gardener_resin_surge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     checkCanAccess: false
@@ -89,9 +97,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: retrieve
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
   - type: EntityTargetAction
@@ -120,10 +130,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: warden_heal
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: warden_heal
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -146,10 +158,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: warden_rejuvenate
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: warden_rejuvenate
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 8
   - type: EntityTargetAction
@@ -191,11 +205,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    backgroundOn: null
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: xeno_lead
     useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_lead
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:HiveLeaderActionEvent
 
@@ -217,11 +232,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    backgroundOn: null
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: heal_xeno
     useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: heal_xeno
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
     range: -1
@@ -256,10 +272,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: apply_salve
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: apply_salve
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
@@ -275,9 +293,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -295,10 +315,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_tail_fountain
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_tail_fountain
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
@@ -320,10 +342,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: warden_heal
     useDelay: 7
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: warden_heal
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
     range: 8
@@ -346,10 +370,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: screech
     useDelay: 45
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoFightOrFlightActionEvent
   - type: XenoActionEnergy
@@ -373,10 +399,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: queen_eye
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: queen_eye
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:QueenEyeActionEvent
 
@@ -388,10 +416,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_shard_shield
     useDelay: 11.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_shard_shield
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ActionXenoSpikeShieldEvent
   - type: ActionBlockIfResting
@@ -405,10 +435,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: soak
     useDelay: 60
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: soak
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoBulwarkOfTheHiveActionEvent
 
@@ -420,10 +452,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: screech
     useDelay: 45
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDoomActionEvent
   - type: XenoActionPlasma
@@ -437,10 +471,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: xeno_spit
     useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.8
     checkCanAccess: false
@@ -460,10 +496,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
-      state: reaper_flesh_harvest
     useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: reaper_flesh_harvest
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -482,10 +520,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
-      state: reaper_flesh_bloom
     useDelay: 25
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: reaper_flesh_bloom
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     checkCanAccess: false

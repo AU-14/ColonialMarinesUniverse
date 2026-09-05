@@ -5,7 +5,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._RMC14.Whistle;
 
 /// <summary>
-/// Spawn attached entity for entities in range with <see cref="HumanoidAppearanceComponent"/>.
+/// Spawn attached entity for entities in range with <see cref="HumanoidProfileComponent"/>.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class RMCWhistleComponent : Component

@@ -111,7 +111,7 @@ public sealed class GridVehicleMotionSimulatorTest
         float requiredSpeed,
         float expected)
     {
-        var remaining = Content.Shared._CMU14.Destruction.ImpactEnergySolver.GetRemainingSpeed(
+        var remaining = Content.Shared.CMU14.Destruction.ImpactEnergySolver.GetRemainingSpeed(
             availableSpeed,
             requiredSpeed);
 

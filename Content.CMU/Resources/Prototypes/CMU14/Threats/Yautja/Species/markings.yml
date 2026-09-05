@@ -1,0 +1,7 @@
+- type: marking
+  id: CMUYautjaDreadlocksStandard
+  bodyPart: Hair
+  groupWhitelist: [ Yautja ]
+  sprites:
+  - sprite: CMU14/Yautja/hair.rsi
+    state: standard

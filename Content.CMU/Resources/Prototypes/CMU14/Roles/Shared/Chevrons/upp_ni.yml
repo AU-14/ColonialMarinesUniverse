@@ -1,0 +1,418 @@
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronUPPNIBase
+  abstract: true
+  suffix: Naval Infantry Chevron
+  description: Union of Progressive Peoples Naval Infantry chevron. Wearing this makes you feel proud, knowing you get extra rations compared to the proles.
+
+# enlisted
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIPrivate
+  name: private chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s1
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_Private
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIGefreiter
+  name: gefreiter chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s1
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_Gefreiter
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNISeniorGefreiter
+  name: senior gefreiter chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s2
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_SeniorGefreiter
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNICorporal
+  name: corporal chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s3
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_Corporal
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIPlutonowy
+  name: plutonowy chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s4
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_Plutonowy
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNISergeant
+  name: sergeant chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s5
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_Sergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNISeniorSergeant
+  name: senior sergeant chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s6
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_SeniorSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIFirstSergeant
+  name: first sergeant chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s6
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_FirstSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNISergeantSergeant
+  name: sergeant major chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s6
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
+  - type: RankChanger
+    rank: UPP_SergeantMajor
+    override: true
+
+# warrant officers
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIWarrantOfficer
+  name: warrant officer chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_p7
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_p
+  - type: RankChanger
+    rank: UPP_WarrantOfficer
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNISeniorWarrantOfficer
+  name: senior warrant officer chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_p8
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_p
+  - type: RankChanger
+    rank: UPP_SeniorWarrantOfficer
+    override: true
+
+# SEA
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNICommisar
+  name: commisar chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_pvstofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_pvstofficer
+  - type: RankChanger
+    rank: UPP_Commissar
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNISeniorCommisar
+  name: senior commisar chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_pvstofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_pvstofficer
+  - type: RankChanger
+    rank: UPP_SeniorCommissar
+    override: true
+
+# officers
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIJuniorLieutenant
+  name: junior lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_o9
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_o
+  - type: RankChanger
+    rank: UPP_JuniorLieutenant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNILieutenant
+  name: lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_o10
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_o
+  - type: RankChanger
+    rank: UPP_Lieutenant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNISeniorLieutenant
+  name: senior lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_o11
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_o
+  - type: RankChanger
+    rank: UPP_SeniorLieutenant
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNICaptain
+  name: captain chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_o12
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_o
+  - type: RankChanger
+    rank: UPP_Captain
+    override: true
+
+# field officers
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIMajor
+  name: major chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_go13
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_go
+  - type: RankChanger
+    rank: UPP_Major
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIJuniorColonel
+  name: junior colonel chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_go14
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_go
+  - type: RankChanger
+    rank: UPP_JuniorColonel
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIColonel
+  name: colonel chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_go15
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_go
+  - type: RankChanger
+    rank: UPP_Colonel
+    override: true
+
+# generals
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIBrigadierGeneral
+  name: brigadier general chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_g16
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_g
+  - type: RankChanger
+    rank: UPP_BrigadierGeneral
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIDivisionalGeneral
+  name: divisional general chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_g17
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_g
+  - type: RankChanger
+    rank: UPP_DivisionalGeneral
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIGeneralOfTheBranch
+  name: general of the branch chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_g18
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_g
+  - type: RankChanger
+    rank: UPP_GeneralOfTheBranch
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIMarshal
+  name: marshal chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_g19
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_g
+  - type: RankChanger
+    rank: UPP_Marshal
+    override: true
+
+- type: entity
+  parent: AU14ChevronUPPNIBase
+  id: AU14ChevronUPPNIChairmanMilitaryCouncil
+  name: chairman of the military council chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_WorldGeneral
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_WorldGeneral
+  - type: RankChanger
+    rank: UPP_ChairmanMilitaryCouncil
+    override: true

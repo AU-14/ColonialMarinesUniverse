@@ -3,6 +3,8 @@ using System.Linq;
 using Content.Shared._RMC14.Xenonids.CriticalGrace;
 using Content.Shared.Alert;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Events;
@@ -15,6 +17,15 @@ public sealed partial class MobThresholdSystem : EntitySystem
 {
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+
+    private readonly HashSet<EntityUid> _damageThresholdUpdates = new();
+
+    /// <summary>
+    /// Returns whether the target's mob state is currently being recalculated in response to damage.
+    /// </summary>
+    public bool IsDamageThresholdUpdateInProgress(EntityUid target)
+        => _damageThresholdUpdates.Contains(target);
 
     public override void Initialize()
     {
@@ -51,7 +62,10 @@ public sealed partial class MobThresholdSystem : EntitySystem
         component.Thresholds = new SortedDictionary<FixedPoint2, MobState>(state.UnsortedThresholds);
         component.TriggersAlerts = state.TriggersAlerts;
         component.CurrentThresholdState = state.CurrentThresholdState;
+        component.StateAlertDict = new Dictionary<MobState, ProtoId<AlertPrototype>>(state.StateAlertDict);
+        component.ShowOverlays = state.ShowOverlays;
         component.AllowRevives = state.AllowRevives;
+        component.DisplayDamageInAlert = state.DisplayDamageInAlert;
     }
 
     #region Public API
@@ -271,7 +285,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
         if (!TryGetThresholdForState(target2, MobState.Dead, out var ent2DeadThreshold, threshold2))
             ent2DeadThreshold = 0;
 
-        damage = (oldDamage.Damage / ent1DeadThreshold.Value) * ent2DeadThreshold.Value;
+        damage = (_damageable.GetAllDamage((target1, oldDamage)) / ent1DeadThreshold.Value) * ent2DeadThreshold.Value;
         return true;
     }
 
@@ -340,7 +354,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
     {
         foreach (var (threshold, mobState) in thresholdsComponent.Thresholds.Reverse())
         {
-            if (damageableComponent.TotalDamage < threshold)
+            if (_damageable.GetTotalDamage((target, damageableComponent)) < threshold)
                 continue;
 
             TriggerThreshold(target, mobState, mobStateComponent, thresholdsComponent, origin);
@@ -355,11 +369,8 @@ public sealed partial class MobThresholdSystem : EntitySystem
         MobThresholdsComponent? thresholds = null,
         EntityUid? origin = null)
     {
-        if (!Resolve(target, ref mobState, ref thresholds) ||
-            mobState.CurrentState == newState)
-        {
+        if (!Resolve(target, ref mobState, ref thresholds) || mobState.CurrentState == newState)
             return;
-        }
 
         if (mobState.CurrentState != MobState.Dead || thresholds.AllowRevives)
         {
@@ -382,8 +393,9 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
         var hasIncap = TryGetIncapThreshold(target, out var healthMax, threshold);
         var state = currentMobState;
+        var totalDamage = _damageable.GetTotalDamage((target, damageable));
 
-        if (hasIncap && HasComp<InCriticalGraceComponent>(target) && damageable.TotalDamage > healthMax)
+        if (hasIncap && HasComp<InCriticalGraceComponent>(target) && totalDamage >= healthMax)
             state = MobState.Critical;
 
         if (!threshold.StateAlertDict.TryGetValue(state, out var currentAlert))
@@ -402,7 +414,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
         if (threshold.DisplayDamageInAlert && hasIncap && healthMax != null)
         {
-            int healthCurrent = (int)healthMax - (int)damageable.TotalDamage;
+            int healthCurrent = (int)healthMax - (int)totalDamage;
             healthMessage = healthCurrent + " / " + healthMax;
         }
 
@@ -420,7 +432,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
             }
 
             if (TryGetNextState(target, currentMobState, out var nextState, threshold) &&
-                TryGetPercentageForState(target, nextState.Value, damageable.TotalDamage, out var percentage))
+                TryGetPercentageForState(target, nextState.Value, totalDamage, out var percentage))
             {
                 percentage = FixedPoint2.Clamp(percentage.Value, 0, 1);
 
@@ -442,10 +454,20 @@ public sealed partial class MobThresholdSystem : EntitySystem
     {
         if (!TryComp<MobStateComponent>(target, out var mobState))
             return;
-        CheckThresholds(target, mobState, thresholds, args.Damageable, args.Origin);
-        var ev = new MobThresholdChecked(target, mobState, thresholds, args.Damageable);
-        RaiseLocalEvent(target, ref ev, true);
-        UpdateAlerts(target, mobState.CurrentState, thresholds, args.Damageable);
+
+        var ownsDamageMarker = _damageThresholdUpdates.Add(target);
+        try
+        {
+            CheckThresholds(target, mobState, thresholds, args.Damageable, args.Origin);
+            var ev = new MobThresholdChecked(target, mobState, thresholds, args.Damageable);
+            RaiseLocalEvent(target, ref ev, true);
+            UpdateAlerts(target, mobState.CurrentState, thresholds, args.Damageable);
+        }
+        finally
+        {
+            if (ownsDamageMarker)
+                _damageThresholdUpdates.Remove(target);
+        }
     }
 
     private void MobThresholdStartup(EntityUid target, MobThresholdsComponent thresholds, ComponentStartup args)

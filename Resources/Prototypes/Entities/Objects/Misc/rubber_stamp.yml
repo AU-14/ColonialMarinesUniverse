@@ -19,6 +19,19 @@
     state: stamp-mime
   - type: Item
     size: Tiny
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+        sprite: Objects/Misc/stamps.rsi
+      - state: handle-inhand-left
+        sprite: Objects/Misc/stamps.rsi
+        color: "#f8f8f8"
+      right:
+      - state: stamp-inhand-right
+        sprite: Objects/Misc/stamps.rsi
+      - state: handle-inhand-right
+        sprite: Objects/Misc/stamps.rsi
+        color: "#f8f8f8"
   - type: StealTarget
     stealGroup: Stamp
   - type: Tag
@@ -52,6 +65,16 @@
     stampState: "paper_stamp-cap"
   - type: Sprite
     state: stamp-cap
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#3681bb"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#3681bb"
 
 - type: entity
   name: CentComm rubber stamp
@@ -65,6 +88,16 @@
     stampState: "paper_stamp-centcom"
   - type: Sprite
     state: stamp-centcom
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#006600"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#006600"
 
 - type: entity
   name: chaplain's rubber stamp
@@ -78,6 +111,16 @@
     stampState: "paper_stamp-chaplain"
   - type: Sprite
     state: stamp-chaplain
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#7f7f7f"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#7f7f7f"
 
 - type: entity
   name: lawyer's rubber stamp
@@ -91,6 +134,16 @@
     stampState: "paper_stamp-lawyer"
   - type: Sprite
     state: stamp-lawyer
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#162742"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#162742"
 
 - type: entity
   name: clown's rubber stamp
@@ -104,9 +157,16 @@
     stampState: "paper_stamp-clown"
   - type: Sprite
     state: stamp-clown
-  - type: Tag
-    tags:
-      - ClownRubberStamp
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#ff33cc"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#ff33cc"
 
 - type: entity
   name: chief engineer's rubber stamp
@@ -120,6 +180,16 @@
     stampState: "paper_stamp-ce"
   - type: Sprite
     state: stamp-ce
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#e09e00"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#e09e00"
 
 - type: entity
   name: chief medical officer's rubber stamp
@@ -133,6 +203,16 @@
     stampState: "paper_stamp-cmo"
   - type: Sprite
     state: stamp-cmo
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#3366ff"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#3366ff"
 
 - type: entity
   name: head of personnel's rubber stamp
@@ -146,6 +226,16 @@
     stampState: "paper_stamp-hop"
   - type: Sprite
     state: stamp-hop
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#004f71"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#004f71"
 
 - type: entity
   name: head of security's rubber stamp
@@ -159,6 +249,16 @@
     stampState: "paper_stamp-hos"
   - type: Sprite
     state: stamp-hos
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#cc0000"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#cc0000"
 
 - type: entity
   name: mime's rubber stamp
@@ -173,6 +273,16 @@
     sound: null
   - type: Sprite
     state: stamp-mime
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#777777"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#777777"
 
 - type: entity
   name: quartermaster's rubber stamp
@@ -186,6 +296,16 @@
     stampState: "paper_stamp-qm"
   - type: Sprite
     state: stamp-qm
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#906633"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#906633"
 
 - type: entity
   name: research director's rubber stamp
@@ -199,6 +319,16 @@
     stampState: "paper_stamp-rd"
   - type: Sprite
     state: stamp-rd
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#7e59bb"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#7e59bb"
 
 - type: entity
   name: trader's rubber stamp
@@ -211,6 +341,16 @@
     stampState: "paper_stamp-trader"
   - type: Sprite
     state: stamp-trader
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#000000"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#000000"
 
 - type: entity
   name: syndicate rubber stamp
@@ -226,6 +366,16 @@
     state: stamp-syndicate
   - type: StaticPrice
     price: 1000
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#850000"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#850000"
 
 - type: entity
   name: warden's rubber stamp
@@ -239,6 +389,16 @@
     stampState: "paper_stamp-warden"
   - type: Sprite
     state: stamp-warden
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#7b1d1f"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#7b1d1f"
 
 - type: entity
   name: APPROVED rubber stamp
@@ -251,6 +411,16 @@
     stampState: "paper_stamp-ok"
   - type: Sprite
     state: stamp-ok
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#00be00"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#00be00"
 
 - type: entity
   name: DENIED rubber stamp
@@ -263,6 +433,16 @@
     stampState: "paper_stamp-deny"
   - type: Sprite
     state: stamp-deny
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#7d0b00"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#7d0b00"
 
 - type: entity
   name: detective's rubber stamp
@@ -276,6 +456,16 @@
     stampState: "paper_stamp-detective"
   - type: Sprite
     state: stamp-detective
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#754731"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#754731"
 
 - type: entity
   name: greytide's rubber stamp
@@ -289,6 +479,16 @@
     stampState: "paper_stamp-greytide"
   - type: Sprite
     state: stamp-greytide
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#323232"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#323232"
 
 - type: entity
   name: psychologist's rubber stamp
@@ -303,6 +503,16 @@
     stampState: "paper_stamp-psychologist"
   - type: Sprite
     state: stamp-psychologist
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#5B97BC"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#5B97BC"
 
 - type: entity
   name: wizard's rubber stamp
@@ -317,3 +527,13 @@
     stampState: "paper_stamp-wizard"
   - type: Sprite
     state: stamp-wizard
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: stamp-inhand-left
+      - state: handle-inhand-left
+        color: "#881bc1"
+      right:
+      - state: stamp-inhand-right
+      - state: handle-inhand-right
+        color: "#881bc1"

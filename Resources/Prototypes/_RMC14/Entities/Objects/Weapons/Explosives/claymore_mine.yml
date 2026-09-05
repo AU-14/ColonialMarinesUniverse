@@ -45,6 +45,7 @@
           True: {state: active}
           False: {state: icon}
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

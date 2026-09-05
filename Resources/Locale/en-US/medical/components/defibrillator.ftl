@@ -3,3 +3,6 @@ defibrillator-no-mind = No intelligence pattern can be detected in patient's bra
 defibrillator-rotten = Body decomposition detected: resuscitation failed.
 defibrillator-unrevivable = This patient is unable to be revived due to a unique body composition.
 defibrillator-xeno = Why would you want to bring this thing back!?
+
+
+defibrillator-not-living = Warning: Defibrillation target was an inanimate object. Consider retargeting.

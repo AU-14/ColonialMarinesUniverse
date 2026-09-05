@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -13,6 +14,7 @@ using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.Maps;
 using Content.Shared.ParaDrop;
@@ -52,6 +54,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private RMCPullingSystem _rmcpulling = default!;
 
     private int _supplyDropCount;
@@ -154,12 +157,18 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
         TryLaunchSupplyDropPopup(ent, args.Actor);
     }
 
-    private bool TryGetPad(EntProtoId<SquadTeamComponent> squad, out Entity<SupplyDropPadComponent> pad)
+    private bool TryGetPad(EntityUid computer, EntProtoId<SquadTeamComponent> squad, out Entity<SupplyDropPadComponent> pad)
     {
-        var pads = EntityQueryEnumerator<SupplyDropPadComponent>();
-        while (pads.MoveNext(out var uid, out var comp))
+        var padSquad = squad;
+        if (squad.TryGet(out var team, _prototypes, _compFactory))
+            padSquad = team.SupplyDropPadSquad ?? squad;
+
+        var computerMap = Transform(computer).MapID;
+        var pads = EntityQueryEnumerator<SupplyDropPadComponent, TransformComponent>();
+        while (pads.MoveNext(out var uid, out var comp, out var xform))
         {
-            if (comp.Squad == squad)
+            if (_zLevels.IsSameZNetwork(xform.MapID, computerMap) &&
+                (comp.Squad == squad || comp.Squad == padSquad))
             {
                 pad = (uid, comp);
                 return true;
@@ -203,7 +212,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
     {
         crate = default;
         if (computer.Comp.Squad is not { } squad ||
-            !TryGetPad(squad, out var pad))
+            !TryGetPad(computer, squad, out var pad))
         {
             return false;
         }
@@ -221,7 +230,10 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
     {
         var time = _timing.CurTime;
         if (time < computer.Comp.NextLaunchAt)
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-supply-drop-cooldown"), user, PopupType.MediumCaution);
             return false;
+        }
 
         if (computer.Comp.Squad is not { } squad ||
             !_rmcPlanet.TryPlanetToCoordinates(computer.Comp.Coordinates, out var mapCoordinates) ||
@@ -237,8 +249,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
             return false;
         }
 
-        SharedEntityStorageComponent? storage = null;
-        if (_entityStorage.ResolveStorage(crate, ref storage) &&
+        if (TryComp<EntityStorageComponent>(crate, out var storage) &&
             storage.Open)
         {
             _popup.PopupCursor(Loc.GetString("rmc-supply-drop-crate-open"), user, PopupType.MediumCaution);

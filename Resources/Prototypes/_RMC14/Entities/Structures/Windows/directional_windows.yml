@@ -1,6 +1,7 @@
 ﻿- type: entity
-  id: CMWindowDirectional
-  parent: WindowDirectional
+  id: CMWindowDirectionalBase
+  parent: BaseWindowStructureDirectional
+  abstract: true
   name: window
   description: A glass window. It looks thin and flimsy. A few knocks with anything should shatter it.
   components:
@@ -30,6 +31,15 @@
     flags: Breaching
   - type: RMCBruteStructureDamageMultiplier
     multiplier: 10
+  - type: Damageable
+    damageModifierSet: GlassMod
+  - type: Injurable
+    damageContainer: StructuralInorganic
+
+- type: entity
+  id: CMWindowDirectional
+  parent: CMWindowDirectionalBase
+  components:
   - type: Destructible
     thresholds:
     - trigger:
@@ -69,7 +79,7 @@
 
 - type: entity
   id: CMWindowReinforcedDirectional
-  parent: CMWindowDirectional
+  parent: CMWindowDirectionalBase
   name: reinforced window
   description: A glass window reinforced with bracing rods. It looks rather strong. Might take a few good hits to shatter it.
   components:
@@ -112,7 +122,7 @@
 
 - type: entity
   id: CMWindowStrongReinforcedDirectional
-  parent: CMWindowDirectional
+  parent: CMWindowDirectionalBase
   name: strong reinforced window
   description: A glass window reinforced with bracing rods. It looks very strong. You can't break it with your fists.
   components:
@@ -141,6 +151,9 @@
             max: 1
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: Construction
+    graph: RMCWindowDirectional
+    node: windowDirectional
 
 - type: entity
   id: CMWindowTintedDirectional

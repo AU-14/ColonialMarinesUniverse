@@ -3,6 +3,8 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Effects;
 using Content.Shared.IdentityManagement;
@@ -48,9 +50,6 @@ public sealed partial class RMCObstacleSlammingSystem : EntitySystem
     {
         var user = args.Thrown;
         var obstacle = args.Target;
-
-        if (args.Handled)
-            return;
 
         if (user != ent.Owner)
             return;
@@ -123,8 +122,6 @@ public sealed partial class RMCObstacleSlammingSystem : EntitySystem
             var otherMessage = Loc.GetString("rmc-obstacle-slam-others", ("ent", user), ("object", Identity.Name(obstacle, EntityManager, otherEnt)));
             _popup.PopupEntity(otherMessage, user, otherEnt, PopupType.MediumCaution);
         }
-
-        args.Handled = true;
     }
 
     public void MakeImmune(EntityUid uid, float immuneDuration = 2)

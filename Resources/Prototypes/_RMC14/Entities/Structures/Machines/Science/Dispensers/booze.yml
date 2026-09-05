@@ -8,27 +8,29 @@
     sprite: _RMC14/Structures/Machines/Science/small_dispensers.rsi
     state: booze_dispenser
     snapCardinals: true
-  - type: StorageFill
-    contents:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
     # Water
-    - id: DrinkIceJug
-    - id: DrinkSodaWaterBottleFull
-    - id: DrinkSugarJug
-    - id: DrinkTonicWaterBottleFull
-    - id: DrinkBeerGrowler
+        - id: DrinkIceJug
+        - id: DrinkSodaWaterBottleFull
+        - id: DrinkSugarJug
+        - id: DrinkTonicWaterBottleFull
+        - id: DrinkBeerGrowler
     # Kahlua
-    - id: DrinkWhiskeyBottleFull
+        - id: DrinkWhiskeyBottleFull
     # Sake
-    - id: DrinkWineBottleFull
-    - id: DrinkVodkaBottleFull
-    - id: DrinkGinBottleFull
-    - id: DrinkRumBottleFull
-    - id: DrinkVermouthBottleFull
-    - id: DrinkCognacBottleFull
-    - id: DrinkAleBottleFullGrowler
-    - id: DrinkMeadJug
+        - id: DrinkWineBottleFull
+        - id: DrinkVodkaBottleFull
+        - id: DrinkGinBottleFull
+        - id: DrinkRumBottleFull
+        - id: DrinkVermouthBottleFull
+        - id: DrinkCognacBottleFull
+        - id: DrinkAleBottleFullGrowler
+        - id: DrinkMeadJug
     # Thirteen loko
-    - id: DrinkTequilaBottleFull
+        - id: DrinkTequilaBottleFull
   - type: Machine
     board: CMCircuitboardDispenserBooze
   - type: InteractedBlacklist
@@ -43,5 +45,5 @@
   id: CMDispenserBoozeEmpty
   suffix: Empty
   components:
-  - type: StorageFill
-    contents: []
+  - type: EntityTableContainerFill
+    containers: {}

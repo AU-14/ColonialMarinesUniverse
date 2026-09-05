@@ -6,6 +6,8 @@ using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
@@ -358,7 +360,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
 
         var damage = 0f;
         if (TryComp(ent, out DamageableComponent? damageable))
-            damage = damageable.TotalDamage.Float();
+            damage = _damageable.GetTotalDamage((ent, damageable)).Float();
 
         damage = ClampDamage(damage, ent.Comp.MaxDamage);
 

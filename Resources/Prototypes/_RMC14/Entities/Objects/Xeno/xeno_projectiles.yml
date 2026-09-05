@@ -355,14 +355,17 @@
     affectsDead: false
     affectsInfectedNested: false
     toxinDamage:
-      groups:
-        Toxin: 2
+      types:
+        Poison: 1
+        Radiation: 1
     oxygenDamage:
       types:
         Asphyxiation: 150
     coughDamage:
-      groups:
-        Brute: 5
+      types:
+        Blunt: 1.66
+        Slash: 1.67
+        Piercing: 1.67
   - type: RMCProjectileAccuracy
     accuracy: 95
   - type: Ammo
@@ -575,7 +578,7 @@
   - type: Sprite
     sprite: _RMC14/Effects/beam.rsi
     state: oppressor_tail_hook
-    drawDepth: Effects # Draws above mobs
+    drawdepth: Effects # Draws above mobs
   - type: ProjectileMaxRange
     max: 3.5
   - type: PreventCollideWithDead

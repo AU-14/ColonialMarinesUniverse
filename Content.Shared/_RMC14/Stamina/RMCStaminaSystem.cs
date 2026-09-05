@@ -1,13 +1,15 @@
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Stun;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Database;
+using Content.Shared.Damage.Components;
 using Content.Shared.Effects;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Projectiles;
+using Content.Shared.Power.EntitySystems;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
@@ -33,13 +35,14 @@ public sealed partial class RMCStaminaSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private TemporarySpeedModifiersSystem _temporarySpeed = default!;
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private ItemToggleSystem _itemToggle = default!;
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
@@ -142,7 +145,7 @@ public sealed partial class RMCStaminaSystem : EntitySystem
         Dirty(ent);
 
         if (newLevel != oldLevel)
-            _speed.RefreshMovementSpeedModifiers(ent);
+            _speed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private void OnStaminaMovementSpeedModify(Entity<RMCStaminaComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
@@ -194,6 +197,12 @@ public sealed partial class RMCStaminaSystem : EntitySystem
             toHit.Add((hit, stam));
         }
 
+        if (toHit.Count == 0)
+            return;
+
+        if (TryComp<StaminaDamageOnHitRequiresChargeComponent>(ent.Owner, out var requiresCharge))
+            _battery.TryUseCharge(ent.Owner, requiresCharge.RequiredCharge);
+
         var damage = ent.Comp.Damage;
 
         foreach (var (hit, comp) in toHit)
@@ -236,6 +245,8 @@ public sealed partial class RMCStaminaSystem : EntitySystem
 
     private void SetStaminaAlert(Entity<RMCStaminaComponent> ent)
     {
-        _alerts.ShowAlert(ent, ent.Comp.StaminaAlert, (short)((ent.Comp.TierThresholds.Length - 1) - ent.Comp.Level));
+        _alerts.ShowAlert((ent.Owner, null),
+            ent.Comp.StaminaAlert,
+            (short)((ent.Comp.TierThresholds.Length - 1) - ent.Comp.Level));
     }
 }

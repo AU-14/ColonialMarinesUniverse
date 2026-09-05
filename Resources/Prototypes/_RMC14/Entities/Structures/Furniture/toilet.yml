@@ -1,4 +1,13 @@
 - type: entity
+  parent: SolutionDrain
+  id: CMToiletDrainBufferSolution
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Solution
+    solution:
+      maxVol: 100
+
+- type: entity
   parent: CMSeatBase
   id: CMToiletEmpty
   name: toilet
@@ -25,7 +34,7 @@
   - type: Strap
     whitelist:
       components:
-      - HumanoidAppearance
+      - HumanoidProfile
   - type: Toilet
   - type: ContainerContainer
     containers:
@@ -38,13 +47,16 @@
     autoDrain: false
   - type: StaticPrice
     price: 25
-  - type: RatKingRummageable
-  - type: SolutionContainerManager
+  - type: Rummageable
+    table: !type:NestedSelector
+      tableId: RatKingLoot
+  - type: Solution
+    id: tank
+    solution:
+      maxVol: 500
+  - type: SolutionManager
     solutions:
-      drainBuffer:
-        maxVol: 100
-      tank:
-        maxVol: 500
+    - CMToiletDrainBufferSolution
   - type: DrainableSolution
     solution: tank
   - type: ReagentTank

@@ -26,8 +26,9 @@
   - type: InteractionOutline
   - type: Clickable
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: RMCNightVisionVisible
     priority: -1
     transparency: 0.2
@@ -65,8 +66,9 @@
   - type: InteractionOutline
   - type: Clickable
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: RMCNightVisionVisible
     priority: -1
     transparency: 0.1

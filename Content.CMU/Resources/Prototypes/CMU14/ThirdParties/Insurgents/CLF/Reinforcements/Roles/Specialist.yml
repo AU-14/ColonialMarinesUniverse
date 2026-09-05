@@ -1,0 +1,104 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobCLFSpecialist
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFSpecialist
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUColonist
+    - CLF
+  - type: CLFMember
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 3
+      RMCSkillFireman: 1
+      RMCSkillSpecialistWeapons: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-clf-prefix-specialist
+  - type: StartingMindRole
+    mindRole: MindRoleCLFGuerrilla
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
+  name: cmu-clf-name-specialist
+  description: cmu-clf-description
+  playTimeTracker: CMUJobCLFSpecialist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearCLFSpecialist
+  spawnMenuRoleName: CLF Specialist (Reinforcements)
+  icon: RMCJobIconCLFSpecialist
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCLF
+  id: CMUIntelThirdPartyCLFSpecialistReinforcements
+  name: CLF Specialist Reinforcements
+  components:
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-clf-name-specialist
+    description: cmu-clf-description-reinforcement
+    job: CMUJobCLFSpecialist
+    raffle:
+      settings: short
+    rules: cmu-clf-rules
+
+- type: startingGear
+  id: CMUGearCLFSpecialist
+  equipment:
+    head: RMCHeadMilitiaBucket
+    mask: RMCCombatUtilityKnifeA
+    ears: RMCHeadsetDistressCLF
+    eyes: RMCGlassesM4SPRBattleSight
+    jumpsuit: RMCJumpsuitCLFWebbingMAR50
+    outerClothing: RMCCoatMilitia
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    id: CMUIDCardCLFSpecialist
+    belt: RMCM77BeltFilled
+    back: RMCSatchelLightpack
+    suitstorage: RMCWeaponMar50LMG
+    pocket1: RMCPouchExplosiveFilledC4SPP
+    pocket2: RMCPouchFirstAidERTFill
+  inhand:
+  - RMCEarmuffs
+  storage:
+    back:
+    - RMCFlashlight
+    - CMFirstAidKitFilled
+    - CMCrowbar
+    - RMCMRECLF
+    - RMCRangefinder
+    - RMCGrenadeIED
+    - RMCGrenadeIED
+    - RMCWeaponLauncherDisposableFolded
+    - RMCMagazineMar50LMG
+    - RMCMagazineMar50LMG
+    outerClothing:
+    - RMCMagazineMar50LMG
+    - RMCMagazineMar50LMG
+    pocket1:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+
+- type: playTimeTracker
+  id: CMUJobCLFSpecialist

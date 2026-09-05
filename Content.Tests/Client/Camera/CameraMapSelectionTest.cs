@@ -5,8 +5,10 @@ using Content.Client._RMC14.Camera;
 using Content.Shared._RMC14.Camera;
 using Content.Shared.Camera;
 using Content.Shared.SurveillanceCamera;
+using Content.Shared.CCVar;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
 using NUnit.Framework;
@@ -23,6 +25,15 @@ public sealed class CameraMapSelectionTest : RobustUnitTest
     [OneTimeSetUp]
     public void Setup()
     {
+        var config = IoCManager.Resolve<IConfigurationManager>();
+        if (!config.IsCVarRegistered(CCVars.ViewportSharpnessStrength.Name))
+        {
+            config.RegisterCVar(
+                CCVars.ViewportSharpnessStrength.Name,
+                CCVars.ViewportSharpnessStrength.DefaultValue,
+                CCVars.ViewportSharpnessStrength.Flags);
+        }
+
         IoCManager.Resolve<IUserInterfaceManager>().InitializeTesting();
         var proxyType = typeof(IUserInterfaceManager).Assembly.GetType(
             "Robust.Client.UserInterface.XAML.Proxy.IXamlProxyManager")!;

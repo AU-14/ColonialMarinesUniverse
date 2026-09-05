@@ -20,8 +20,9 @@
         layer:
         - MachineLayer
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Inorganic
   - type: InteractionOutline
   - type: Destructible
     thresholds:

@@ -1,0 +1,49 @@
+- type: entity
+  parent: RMCProjectileRocket84mm
+  id: RMCProjectileLTBCannon
+  name: LTB HESH cannon shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DeleteOnFixedDistanceStop
+  - type: TriggerOnCollide
+    fixtureID: projectile
+    ignoreOtherNonHard: false
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Blunt: 10
+        Piercing: 4
+        Structural: 60
+    maxFixedRange: 0
+  - type: DamageImpactProfile
+    projectile:
+      contact: Fragment
+      penetration: Forced
+      energy: Severe
+  - type: VehicleDamageMultiplier
+    multiplier: 8
+  - type: TriggerOnFixedDistanceStop
+    delay: 0
+  - type: DeleteOnTrigger
+  - type: SpawnOnTerminate
+    spawn: VehicleLTBCannonImpact
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCShrapnelJagged
+    rebounds: true
+    capacity: 8
+    spreadAngle: 25
+  - type: RMCProjectileAccuracy
+    accuracy: 100
+    thresholds:
+    - range: 32
+      falloff: 10
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    scale: "1.2, 1.2"
+    layers:
+    - state: ltb
+      shader: unshaded

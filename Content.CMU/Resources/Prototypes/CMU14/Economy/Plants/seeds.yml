@@ -1,0 +1,164 @@
+- type: entity
+  parent: SeedBase
+  name: packet of messa's tears seeds
+  id: MTearSeeds
+  components:
+  - type: Seed
+    plantId: MTearPlants
+  - type: Sprite
+    sprite: CMU14/Objects/Kitchen/Plants/mtear.rsi
+
+- type: entity
+  parent: SeedBase
+  name: packet of death berry seeds
+  id: DeathberrySeeds
+  components:
+  - type: Seed
+    plantId: DeathberryPlants
+  - type: Sprite
+    sprite: CMU14/Objects/Kitchen/Plants/deathberry.rsi
+
+- type: entity
+  parent: SeedBase
+  name: packet of poison berry seeds
+  id: PoisonberrySeeds
+  components:
+  - type: Seed
+    plantId: PoisonberryPlants
+  - type: Sprite
+    sprite: CMU14/Objects/Kitchen/Plants/poisonberry.rsi
+
+- type: entity
+  parent: SeedBase
+  name: packet of poison apple seeds
+  id: PoisonAppleSeeds
+  components:
+  - type: Seed
+    plantId: PoisonApplePlants
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/apple.rsi
+
+- type: entity
+  parent: BasePlant
+  id: MTearPlants
+  name: messa's tears
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Kitchen/Plants/mtear.rsi
+  - type: PlantData
+    name: seeds-mtear-name
+    packetPrototype: MTearSeeds
+    productPrototypes: [ FoodMTear ]
+  - type: Plant
+    lifespan: 50
+    maturation: 3
+    production: 5
+    yield: 4
+    potency: 10
+    growthStages: 4
+  - type: PlantGrowth
+    waterConsumption: 0.6
+    nutrientConsumption: 0.5
+  - type: PlantAtmospheric
+    lowHeatTolerance: 278
+    highHeatTolerance: 298
+  - type: PlantChemicals
+    chemicals:
+      RMCSugar:
+        min: 1
+        max: 10
+        potencyDivisor: 1
+      CMKelotane:
+        min: 3
+        max: 5
+        potencyDivisor: 1
+  - type: PlantSpecialChemicals
+    chemicals: [ CMUDigoxin ]
+
+- type: entity
+  parent: BasePlant
+  id: DeathberryPlants
+  name: death berry bush
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Kitchen/Plants/deathberry.rsi
+  - type: PlantData
+    name: seeds-deathberry-name
+    packetPrototype: DeathberrySeeds
+    productPrototypes: [ FoodDeathberry ]
+  - type: Plant
+    lifespan: 20
+    maturation: 5
+    production: 5
+    yield: 3
+    potency: 50
+    growthStages: 6
+  - type: PlantChemicals
+    chemicals:
+      RMCSugar:
+        min: 1
+        max: 1
+        potencyDivisor: 1
+      RMCLexorin:
+        min: 1
+        max: 3
+        potencyDivisor: 1
+  - type: PlantSpecialChemicals
+    chemicals: [ CMUThymol ]
+
+- type: entity
+  parent: BasePlant
+  id: PoisonberryPlants
+  name: poison berry bush
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Kitchen/Plants/poisonberry.rsi
+  - type: PlantData
+    name: seeds-poisonberry-name
+    packetPrototype: PoisonberrySeeds
+    productPrototypes: [ FoodPoisonberry ]
+  - type: Plant
+    lifespan: 20
+    maturation: 5
+    production: 5
+    yield: 2
+    potency: 10
+    growthStages: 6
+  - type: PlantChemicals
+    chemicals:
+      RMCSugar:
+        min: 1
+        max: 1
+        potencyDivisor: 1
+      RMCGenericToxin:
+        min: 3
+        max: 5
+        potencyDivisor: 1
+  - type: PlantSpecialChemicals
+    chemicals: [ CMUThymol ]
+
+- type: entity
+  parent: BasePlant
+  id: PoisonApplePlants
+  name: poison apple tree
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/apple.rsi
+  - type: PlantData
+    name: seeds-poisonapple-name
+    packetPrototype: PoisonAppleSeeds
+    productPrototypes: [ FoodPoisonApple ]
+  - type: Plant
+    lifespan: 55
+    maturation: 6
+    production: 6
+    yield: 3
+    potency: 10
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantChemicals
+    chemicals:
+      CMUCyanide:
+        min: 1
+        max: 10
+        potencyDivisor: 10

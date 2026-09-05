@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Server._CMU14.Weapons.Ranged; // CMU14
+using Content.Server.CMU14.Weapons.Ranged; // CMU14
 using Content.Server._RMC14.NPC;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Hands.Systems;
@@ -8,10 +8,8 @@ using Content.Server.NPC.Queries.Considerations;
 using Content.Server.NPC.Queries.Curves;
 using Content.Server.NPC.Queries.Queries;
 using Content.Server.Nutrition.Components;
-using Content.Server.Nutrition.EntitySystems;
-using Content.Server.Storage.Components;
-using Content.Server.Temperature.Components;
 using Content.Shared._RMC14.Interaction;
+using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Burrow;
 using Content.Shared._RMC14.Xenonids.Construction;
@@ -21,22 +19,26 @@ using Content.Shared._RMC14.Xenonids.Construction.ResinHole;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Atmos.Components;
-using Content.Shared._RMC14.Sentry;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Fluids.Components;
-using Content.Shared.Hands.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Interaction; // CMU14
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Physics; // CMU14
 using Content.Shared.Standing;
+using Content.Shared.Stealth;
+using Content.Shared.Stealth.Components;
+using Content.Shared.Storage.Components;
 using Content.Shared.Stunnable;
+using Content.Shared.Temperature.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Turrets;
 using Content.Shared.Weapons.Melee;
@@ -55,16 +57,13 @@ namespace Content.Server.NPC.Systems;
 /// </summary>
 public sealed partial class NPCUtilitySystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ContainerSystem _container = default!;
-    [Dependency] private DrinkSystem _drink = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private FoodSystem _food = default!;
     [Dependency] private HandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IngestionSystem _ingestion = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
-    [Dependency] private OpenableSystem _openable = default!;
     [Dependency] private PuddleSystem _puddle = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
@@ -75,11 +74,12 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private MobThresholdSystem _thresholdSystem = default!;
     [Dependency] private TurretTargetSettingsSystem _turretTargetSettings = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private RMCInteractionSystem _rmcInteraction = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
+    [Dependency] private SharedStealthSystem _stealth = default!;
     [Dependency] private StandingStateSystem _standing = default!;
-
-    private EntityQuery<PuddleComponent> _puddleQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
 
     private ObjectPool<HashSet<EntityUid>> _entPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>(), 256);
@@ -88,13 +88,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     private List<EntityUid> _entityList = new();
     private HashSet<Entity<IComponent>> _entitySet = new();
     private List<EntityPrototype.ComponentRegistryEntry> _compTypes = new();
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _puddleQuery = GetEntityQuery<PuddleComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-    }
 
     /// <summary>
     /// Runs the UtilityQueryPrototype and returns the best-matching entities.
@@ -112,7 +105,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
         if (_container.TryGetContainingContainer(owner, out _))
             return UtilityResult.Empty;
 
-        var weh = _proto.Index<UtilityQueryPrototype>(proto);
+        var weh = ProtoMan.Index<UtilityQueryPrototype>(proto);
         var ents = _entPool.Get();
 
         foreach (var query in weh.Query)
@@ -183,7 +176,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             case InverseBoolCurve:
                 return conScore.Equals(0f) ? 1f : 0f;
             case PresetCurve presetCurve:
-                return GetScore(_proto.Index<UtilityCurvePresetPrototype>(presetCurve.Preset).Curve, conScore);
+                return GetScore(ProtoMan.Index<UtilityCurvePresetPrototype>(presetCurve.Preset).Curve, conScore);
             case QuadraticCurve quadraticCurve:
                 return Math.Clamp(quadraticCurve.Slope * MathF.Pow(conScore - quadraticCurve.XOffset, quadraticCurve.Exponent) + quadraticCurve.YOffset, 0f, 1f);
             default:
@@ -196,41 +189,39 @@ public sealed partial class NPCUtilitySystem : EntitySystem
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
         switch (consideration)
         {
-            case FoodValueCon:
+            case FoodValueCon foodValueConsideration:
             {
-                if (!TryComp<FoodComponent>(targetUid, out var food))
-                    return 0f;
-
-                // mice can't eat unpeeled bananas, need monkey's help
-                if (_openable.IsClosed(targetUid))
-                    return 0f;
-
-                if (!_food.IsDigestibleBy(owner, targetUid, food))
+                // do we have a mouth available? Is the food item opened?
+                if (!_ingestion.CanConsume(owner, targetUid))
                     return 0f;
 
                 var avoidBadFood = !HasComp<IgnoreBadFoodComponent>(owner);
 
                 // only eat when hungry or if it will eat anything
-                if (TryComp<HungerComponent>(owner, out var hunger) && hunger.CurrentThreshold > HungerThreshold.Okay && avoidBadFood)
+                if (TryComp<SatiationComponent>(owner, out var satiation) &&
+                    _satiation.IsValueInRange((owner, satiation), SatiationSystem.Hunger, below: foodValueConsideration.HungerThreshold) &&
+                    avoidBadFood)
                     return 0f;
 
                 // no mouse don't eat the uranium-235
                 if (avoidBadFood && HasComp<BadFoodComponent>(targetUid))
                     return 0f;
 
-                return 1f;
-            }
-            case DrinkValueCon:
-            {
-                if (!TryComp<DrinkComponent>(targetUid, out var drink))
+                var nutrition = _ingestion.TotalNutrition(targetUid, owner);
+                if (nutrition == 0.0f)
                     return 0f;
 
-                // can't drink closed drinks
-                if (_openable.IsClosed(targetUid))
+                return 1f;
+            }
+            case DrinkValueCon drinkValueConsideration:
+            {
+                // can't drink closed drinks and can't drink with a mask on...
+                if (!_ingestion.CanConsume(owner, targetUid))
                     return 0f;
 
                 // only drink when thirsty
-                if (TryComp<ThirstComponent>(owner, out var thirst) && thirst.CurrentThirstThreshold > ThirstThreshold.Okay)
+                if (TryComp<SatiationComponent>(owner, out var satiation) &&
+                    _satiation.IsValueInRange((owner, satiation), SatiationSystem.Thirst, below: drinkValueConsideration.ThirstThreshold))
                     return 0f;
 
                 // no janicow don't drink the blood puddle
@@ -238,7 +229,9 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                     return 0f;
 
                 // needs to have something that will satiate thirst, mice wont try to drink 100% pure mutagen.
-                var hydration = _drink.TotalHydration(targetUid, drink);
+                // We don't check if the solution is metabolizable cause all drinks should be currently.
+                // If that changes then simply use the other overflow.
+                var hydration = _ingestion.TotalHydration(targetUid);
                 if (hydration <= 1.0f)
                     return 0f;
 
@@ -314,6 +307,15 @@ public sealed partial class NPCUtilitySystem : EntitySystem
 
                 return Math.Clamp(distance / radius, 0f, 1f);
             }
+            case TargetIsVisibleCon:
+            {
+                if (!TryComp(targetUid, out StealthComponent? stealth))
+                    return 1f; // If there is no StealthComponent, we see it.
+
+                // Checking the visibility level
+                var visibility = _stealth.GetVisibility(targetUid, stealth);
+                return visibility >= 0.5f ? 1f : 0f; // Visibility threshold 0.5
+            }
             case TargetAmmoCon:
             {
                 if (!HasComp<GunComponent>(targetUid))
@@ -333,11 +335,13 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             }
             case TargetHealthCon con:
             {
-                if (!TryComp(targetUid, out DamageableComponent? damage))
+                if (!TryComp(targetUid, out DamageableComponent? damage) || !TryComp(targetUid, out MobThresholdsComponent? threshold))
                     return 0f;
-                if (con.TargetState != MobState.Invalid && _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, damage.TotalDamage, out var percentage))
+
+                var totalDamage = _damageable.GetTotalDamage((targetUid, damage));
+                if (con.TargetState != MobState.Invalid && _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, totalDamage, out var percentage, threshold))
                     return Math.Clamp((float)(1 - percentage), 0f, 1f);
-                if (_thresholdSystem.TryGetIncapPercentage(targetUid, damage.TotalDamage, out var incapPercentage))
+                if (_thresholdSystem.TryGetIncapPercentage(targetUid, totalDamage, out var incapPercentage, threshold))
                     return Math.Clamp((float)(1 - incapPercentage), 0f, 1f);
                 return 0f;
             }
@@ -415,7 +419,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                     if (!TryComp<TemperatureComponent>(targetUid, out var temperature))
                         return 0f;
 
-                    return temperature.CurrentTemperature <= con.MinTemp ? 1f : 0f;
+                    return temperature.Temperature <= con.MinTemp ? 1f : 0f;
                 }
             case TargetIsNotDeadCon:
             {
@@ -506,7 +510,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                 if (compQuery.Components.Count == 0)
                     return;
 
-                var mapPos = _transform.GetMapCoordinates(owner, xform: _xformQuery.GetComponent(owner));
+                var mapPos = _transform.GetMapCoordinates(owner, xform: Transform(owner));
                 _compTypes.Clear();
                 var i = -1;
                 EntityPrototype.ComponentRegistryEntry compZero = default!;
@@ -596,7 +600,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     private void RecursiveAdd(EntityUid uid, HashSet<EntityUid> entities)
     {
         // TODO: Probably need a recursive struct enumerator on engine.
-        var xform = _xformQuery.GetComponent(uid);
+        var xform = Transform(uid);
         var enumerator = xform.ChildEnumerator;
         entities.Add(uid);
 
@@ -618,11 +622,12 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                 {
                     foreach (var comp in compFilter.Components)
                     {
-                        if (HasComp(ent, comp.Value.Component.GetType()))
-                            continue;
-
-                        _entityList.Add(ent);
-                        break;
+                        var hasComp = HasComp(ent, comp.Value.Component.GetType());
+                        if (!compFilter.RetainWithComp == hasComp)
+                        {
+                            _entityList.Add(ent);
+                            break;
+                        }
                     }
                 }
 
@@ -706,5 +711,13 @@ public readonly record struct UtilityResult(Dictionary<EntityUid, float> Entitie
             return EntityUid.Invalid;
 
         return Entities.MinBy(x => x.Value).Key;
+    }
+
+    /// <summary>
+    /// Returns a GetEnumerable sorted in descending score.
+    /// </summary>
+    public IEnumerable<KeyValuePair<EntityUid, float>> GetEnumerable()
+    {
+        return Entities.OrderByDescending(x => x.Value);
     }
 }

@@ -1,34 +1,38 @@
 using Content.Server.Hands.Systems;
 using Content.Server.Preferences.Managers;
+using Content.Server.Storage.EntitySystems;
 using Content.Shared.Access.Components;
 using Content.Shared.Clothing;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Hands.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.PDA;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Station;
+using Content.Shared.Storage;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.Clothing.Systems;
 
 public sealed partial class OutfitSystem : EntitySystem
 {
     [Dependency] private IServerPreferencesManager _preferenceManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private HandsSystem _handSystem = default!;
     [Dependency] private InventorySystem _invSystem = default!;
     [Dependency] private SharedStationSpawningSystem _spawningSystem = default!;
+    [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
+    [Dependency] private StorageSystem _storageSystem = default!;
 
-    public bool SetOutfit(EntityUid target, string gear, Action<EntityUid, EntityUid>? onEquipped = null)
+    public bool SetOutfit(EntityUid target, string gear, Action<EntityUid, EntityUid>? onEquipped = null, bool unremovable = false)
     {
         if (!TryComp(target, out InventoryComponent? inventoryComponent))
             return false;
 
-        if (!_prototypeManager.TryIndex<StartingGearPrototype>(gear, out var startingGear))
+        if (!ProtoMan.TryIndex<StartingGearPrototype>(gear, out var startingGear))
             return false;
 
         HumanoidCharacterProfile? profile = null;
@@ -60,14 +64,42 @@ public sealed partial class OutfitSystem : EntitySystem
                 }
 
                 _invSystem.TryEquip(target, equipmentEntity, slot.Name, silent: true, force: true, inventory: inventoryComponent);
+                if (unremovable)
+                    EnsureComp<UnremoveableComponent>(equipmentEntity);
 
                 onEquipped?.Invoke(target, equipmentEntity);
             }
         }
 
+        var coords = Transform(target).Coordinates;
+        foreach (var (slotName, storageContainers) in startingGear.Storage)
+        {
+            if (storageContainers.Count == 0)
+                continue;
+
+            if (!_invSystem.TryGetSlotEntity(target, slotName, out var slotEnt))
+                continue;
+
+            if (TryComp<StorageComponent>(slotEnt, out var storage))
+            {
+                foreach (var entProto in storageContainers)
+                {
+                    var spawnedEntity = SpawnAtPosition(entProto, coords);
+                    _storageSystem.Insert(slotEnt.Value, spawnedEntity, out _, user: null, storageComp: storage, playSound: false);
+                }
+            }
+            else if (TryComp<ItemSlotsComponent>(slotEnt, out var itemSlots))
+            {
+                foreach (var entProto in storageContainers)
+                {
+                    var spawnedEntity = SpawnAtPosition(entProto, coords);
+                    _itemSlotsSystem.TryInsertEmpty((slotEnt.Value, itemSlots), spawnedEntity, null, excludeUserAudio: true);
+                }
+            }
+        }
+
         if (TryComp(target, out HandsComponent? handsComponent))
         {
-            var coords = Comp<TransformComponent>(target).Coordinates;
             foreach (var prototype in startingGear.Inhand)
             {
                 var inhandEntity = Spawn(prototype, coords);
@@ -76,18 +108,18 @@ public sealed partial class OutfitSystem : EntitySystem
         }
 
         // See if this starting gear is associated with a job
-        var jobs = _prototypeManager.EnumeratePrototypes<JobPrototype>();
+        var jobs = ProtoMan.EnumeratePrototypes<JobPrototype>();
         foreach (var job in jobs)
         {
             if (job.StartingGear != gear)
                 continue;
 
             // Don't require a player, so this works on Urists
-            profile ??= TryComp<HumanoidAppearanceComponent>(target, out var comp)
-                ? HumanoidCharacterProfile.DefaultWithSpecies(comp.Species)
+            profile ??= TryComp<HumanoidProfileComponent>(target, out var comp)
+                ? HumanoidCharacterProfile.DefaultWithSpecies(comp.Species, comp.Sex)
                 : new HumanoidCharacterProfile();
 
-            var (key, proto) = LoadoutSystem.GetJobLoadoutInfo(job.ID, _prototypeManager);
+            var (key, proto) = LoadoutSystem.GetJobLoadoutInfo(job.ID, ProtoMan);
             if (proto == null)
                 break;
 
@@ -97,7 +129,7 @@ public sealed partial class OutfitSystem : EntitySystem
             {
                 // If they don't have a loadout for the role, make a default one
                 roleLoadout = new RoleLoadout(proto.ID);
-                roleLoadout.SetDefault(profile, session, _prototypeManager);
+                roleLoadout.SetDefault(profile, session, ProtoMan);
             }
 
             // Equip the target with the job loadout

@@ -14,18 +14,19 @@ public sealed partial class MeleeSoundComponent : Component
     /// Specified sounds to apply when the entity takes damage with the specified group.
     /// Will fallback to defaults if none specified.
     /// </summary>
-    [DataField("soundGroups")]
+    [DataField]
     public Dictionary<ProtoId<DamageGroupPrototype>, SoundSpecifier>? SoundGroups;
 
     /// <summary>
     /// Specified sounds to apply when the entity takes damage with the specified type.
     /// Will fallback to defaults if none specified.
     /// </summary>
-    [DataField("soundTypes")]
+    [DataField]
     public Dictionary<ProtoId<DamageTypePrototype>, SoundSpecifier>? SoundTypes;
 
     /// <summary>
     /// Sound that plays if no damage is done.
     /// </summary>
-    [DataField("noDamageSound")] public SoundSpecifier? NoDamageSound;
+    [DataField]
+    public SoundSpecifier? NoDamageSound;
 }

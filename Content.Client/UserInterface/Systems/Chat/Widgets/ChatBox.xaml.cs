@@ -1179,26 +1179,30 @@ public partial class ChatBox : UIWidget
         if (_colorWholeMessage)
             formatted.Pop();
 
-        return FilterProblematicTags(formatted, allowCommandLinks: false);
+        return FilterProblematicTags(formatted, allowCommandLinks: true);
     }
 
     private static string StripChatActionCommandLink(string markup, ChatMessage message)
     {
-        if ((!message.GhostFollowEntity.Valid && !message.XenoWatchEntity.Valid) ||
-            !markup.StartsWith("[cmdlink=", StringComparison.OrdinalIgnoreCase))
+        if (!message.GhostFollowEntity.Valid && !message.XenoWatchEntity.Valid)
         {
             return markup;
         }
 
-        var tagEnd = markup.IndexOf("/]", StringComparison.Ordinal);
-        if (tagEnd < 0)
-            return markup;
+        while (markup.StartsWith("[cmdlink=", StringComparison.OrdinalIgnoreCase))
+        {
+            var tagEnd = markup.IndexOf("/]", StringComparison.Ordinal);
+            if (tagEnd < 0)
+                return markup;
 
-        var afterTag = tagEnd + 2;
-        if (afterTag < markup.Length && markup[afterTag] == ' ')
-            afterTag++;
+            var afterTag = tagEnd + 2;
+            if (afterTag < markup.Length && markup[afterTag] == ' ')
+                afterTag++;
 
-        return markup[afterTag..];
+            markup = markup[afterTag..];
+        }
+
+        return markup;
     }
 
     private static string RemoveOuterColorMarkup(string markup)
@@ -1255,6 +1259,7 @@ public partial class ChatBox : UIWidget
             {
                 markup = StripVisiblePrefix(markup, $@"\[{message.Display.ChannelLabel}\] ");
                 markup = StripVisiblePrefix(markup, $"[{message.Display.ChannelLabel}] ");
+                markup = StripRadioChannelPrefix(markup);
             }
         }
 
@@ -1276,6 +1281,19 @@ public partial class ChatBox : UIWidget
             default:
                 return markup;
         }
+    }
+
+    private static string StripRadioChannelPrefix(string markup)
+    {
+        var index = GetVisibleTextStart(markup);
+        if (index < 0 || index + 2 > markup.Length || markup[index] != '\\' || markup[index + 1] != '[')
+            return markup;
+
+        var end = markup.IndexOf(@"\] ", index + 2, StringComparison.Ordinal);
+        if (end < 0)
+            return markup;
+
+        return markup.Remove(index, end + 3 - index);
     }
 
     private static string StripVisiblePrefix(string markup, string prefix)

@@ -91,8 +91,9 @@
     range: 1.0
     spread: 1.5
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Weed
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -135,7 +136,7 @@
       methods: [Touch]
       effects:
       - !type:HealthChange
-        scaleByQuantity: true
+        scaling: true
         damage:
           types:
             Heat: 4
@@ -178,12 +179,16 @@
   - type: QueenEyeVision
   - type: Damageable
     damage:
-      groups:
-        Brute: 6
+      types:
+        Blunt: 2
+        Slash: 2
+        Piercing: 2
   - type: XenoWeeds
     healOnStopSpreading:
-      groups:
-        Brute: -6
+      types:
+        Blunt: -2
+        Slash: -2
+        Piercing: -2
   - type: Tag
     tags:
     - XenoWeedNode
@@ -344,8 +349,10 @@
   - type: QueenEyeVision
   - type: XenoWeeds
     healOnStopSpreading:
-      groups:
-        Brute: -6
+      types:
+        Blunt: -2
+        Slash: -2
+        Piercing: -2
   - type: XenoConstructionPlasmaCost
     plasma: 75
   - type: Tag
@@ -417,6 +424,7 @@
     factions:
     - RMCXeno
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
@@ -488,8 +496,10 @@
         acts: [ "Destruction" ]
   - type: XenoWeeds
     healOnStopSpreading:
-      groups:
-        Brute: -6
+      types:
+        Blunt: -2
+        Slash: -2
+        Piercing: -2
   - type: Tag
     tags:
     - XenoWeedNode

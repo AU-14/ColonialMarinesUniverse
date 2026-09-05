@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Xenonids.Fortify;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
@@ -55,6 +56,7 @@ public sealed partial class XenoCollisionSystem : EntitySystem
         SubscribeLocalEvent<StunFriendlyXenoOnStepComponent, MobStateChangedEvent>(OnStunUpdated);
         SubscribeLocalEvent<StunFriendlyXenoOnStepComponent, XenoRestEvent>(OnStunUpdated);
         SubscribeLocalEvent<StunFriendlyXenoOnStepComponent, StunnedEvent>(OnStunUpdated);
+        SubscribeLocalEvent<StunFriendlyXenoOnStepComponent, KnockedDownEvent>(OnStunUpdated);
         SubscribeLocalEvent<StunFriendlyXenoOnStepComponent, StatusEffectEndedEvent>(OnStunUpdated);
         SubscribeLocalEvent<StunFriendlyXenoOnStepComponent, XenoOvipositorChangedEvent>(OnStunUpdated);
         SubscribeLocalEvent<StunFriendlyXenoOnStepComponent, PreventCollideEvent>(OnPreventCollide);
@@ -62,6 +64,7 @@ public sealed partial class XenoCollisionSystem : EntitySystem
         SubscribeLocalEvent<StunHostilesOnStepComponent, MobStateChangedEvent>(OnStunUpdatedHostile);
         SubscribeLocalEvent<StunHostilesOnStepComponent, XenoRestEvent>(OnStunUpdatedHostile);
         SubscribeLocalEvent<StunHostilesOnStepComponent, StunnedEvent>(OnStunUpdatedHostile);
+        SubscribeLocalEvent<StunHostilesOnStepComponent, KnockedDownEvent>(OnStunUpdatedHostile);
         SubscribeLocalEvent<StunHostilesOnStepComponent, StatusEffectEndedEvent>(OnStunUpdatedHostile);
         SubscribeLocalEvent<StunHostilesOnStepComponent, XenoOvipositorChangedEvent>(OnStunUpdatedHostile);
     }
@@ -79,7 +82,7 @@ public sealed partial class XenoCollisionSystem : EntitySystem
     {
         ent.Comp.Enabled = _mobState.IsAlive(ent) &&
                            !HasComp<XenoRestingComponent>(ent) &&
-                           !_statusEffects.HasStatusEffect(ent, ent.Comp.DisableStatus) &&
+                           !HasDisablingStatus(ent, ent.Comp.DisableStatus) &&
                            CompOrNull<XenoAttachedOvipositorComponent>(ent) is not { Running: true };
         Dirty(ent);
     }
@@ -88,9 +91,21 @@ public sealed partial class XenoCollisionSystem : EntitySystem
     {
         ent.Comp.Enabled = _mobState.IsAlive(ent) &&
                            !HasComp<XenoRestingComponent>(ent) &&
-                           !_statusEffects.HasStatusEffect(ent, ent.Comp.DisableStatus) &&
+                           !HasDisablingStatus(ent, ent.Comp.DisableStatus) &&
                            CompOrNull<XenoAttachedOvipositorComponent>(ent) is not { Running: true };
         Dirty(ent);
+    }
+
+    private bool HasDisablingStatus(EntityUid uid, string status)
+    {
+        return status switch
+        {
+            "Stun" => TryComp<StunnedComponent>(uid, out var stunned) &&
+                      stunned.LifeStage <= ComponentLifeStage.Running,
+            "KnockedDown" => TryComp<KnockedDownComponent>(uid, out var knockedDown) &&
+                             knockedDown.LifeStage <= ComponentLifeStage.Running,
+            _ => _statusEffects.HasStatusEffect(uid, status),
+        };
     }
 
     private void OnPreventCollide(Entity<StunFriendlyXenoOnStepComponent> ent, ref PreventCollideEvent args)

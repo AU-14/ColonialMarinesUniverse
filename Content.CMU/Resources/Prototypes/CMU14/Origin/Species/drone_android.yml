@@ -1,0 +1,75 @@
+- type: species
+  id: DroneAndroid
+  name: cmu-species-name-drone-android
+  roundStart: false
+  prototype: CMUDroneAndroid
+  dollPrototype: AppearanceDroneAndroid
+  skinColoration: Hues
+  defaultSoundsBySex:
+  - AU14WorkingJoeSounds
+  - AU14WorkingJoeSounds
+  - AU14WorkingJoeSounds
+  voices:
+  - AU14WorkingJoeSounds
+
+- type: markingsGroup
+  parent: Human
+  id: DroneAndroid
+
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceDroneAndroid
+  categories: [ HideSpawnMenu ]
+  name: drone android appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: CMUPartDroneAndroidTorso
+      Head: CMUPartDroneAndroidHead
+      ArmLeft: CMUPartRoboticLeftArm
+      ArmRight: CMUPartRoboticRightArm
+      HandLeft: CMUPartRoboticLeftHand
+      HandRight: CMUPartRoboticRightHand
+      LegLeft: CMUPartRoboticLeftLeg
+      LegRight: CMUPartRoboticRightLeg
+      FootLeft: CMUPartRoboticLeftFoot
+      FootRight: CMUPartRoboticRightFoot
+      Brain: CMUOrganHumanBrain
+      Eyes: CMUOrganHumanEyes
+      Lungs: CMUOrganHumanLungs
+      Heart: CMUOrganHumanHeart
+      Stomach: CMUOrganHumanStomach
+      Liver: CMUOrganHumanLiver
+      Kidneys: CMUOrganHumanKidneys
+  - type: HumanoidProfile
+    species: DroneAndroid
+    voice: AU14WorkingJoeSounds
+
+- type: entity
+  id: CMUPartDroneAndroidVisual
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/DroneAndroid/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: CMU14/Mobs/DroneAndroid/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: DroneAndroid
+
+- type: entity
+  parent: [ CMUPartDroneAndroidVisual, CMUPartHumanTorso ]
+  id: CMUPartDroneAndroidTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
+
+- type: entity
+  parent: [ CMUPartDroneAndroidVisual, CMUPartHumanHead ]
+  id: CMUPartDroneAndroidHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.HeadTop

@@ -41,7 +41,7 @@ public sealed partial class RMCUserInterfaceSystem : EntitySystem
     public bool CanOpenUI(Entity<ActivatableUIBlacklistComponent?> ent, Entity<UserBlacklistActivatableUIComponent?> user, Enum? key)
     {
         if (Resolve(ent, ref ent.Comp, false) &&
-            _whitelist.IsBlacklistPass(ent.Comp.Blacklist, user))
+            _whitelist.IsWhitelistPass(ent.Comp.Blacklist, user))
         {
             return false;
         }
