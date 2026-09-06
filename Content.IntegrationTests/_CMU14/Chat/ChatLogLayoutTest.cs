@@ -1,0 +1,134 @@
+using System.Linq;
+using System.Numerics;
+using Content.Client.UserInterface.Systems.Chat;
+using Content.Client.UserInterface.Systems.Chat.Widgets;
+using Content.IntegrationTests.Fixtures;
+using Content.Shared.CCVar;
+using Content.Shared.Chat;
+using Robust.Client.UserInterface;
+using Robust.Shared.Configuration;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
+
+namespace Content.IntegrationTests.CMU14.Chat;
+
+[TestFixture, NonParallelizable]
+public sealed class ChatLogLayoutTest : GameTest
+{
+    public override PoolSettings PoolSettings => new() { InLobby = true, Dirty = true };
+
+    [TestCase(false, false)]
+    [TestCase(true, false)]
+    [TestCase(true, true)]
+    public async Task MessagesReceivedWhileChatIsDetachedAreLaidOutWhenItReturns(bool split, bool horizontal)
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var ui = Client.ResolveDependency<IUserInterfaceManager>();
+            var update = ui.GetType().GetMethod("FrameUpdate")!;
+            var config = Client.ResolveDependency<IConfigurationManager>();
+            config.SetCVar(CCVars.ChatLegacyMode, false);
+            config.SetCVar(CCVars.ChatSplitPane, ChatUserSettings.SaveSplitPane(
+                split, ChatUserSettings.RadioTabId, ChatUserSettings.DefaultSplitSecondaryRatioPercent, horizontal));
+            using var host = new Control { SetSize = new Vector2(300, 160) };
+            // Theme/font settings give cached ChatBoxes an explicit sheet. Reattaching their screen
+            // then skips the usual recursive restyle, which would otherwise refresh layout for us.
+            var chat = new ChatBox { Stylesheet = ui.Stylesheet, MinSize = Vector2.Zero };
+            var panel = chat.Contents;
+            panel.Clear();
+            chat.SecondaryContents.Clear();
+            host.AddChild(chat);
+            ui.WindowRoot.AddChild(host);
+
+            void Settle()
+            {
+                for (var frame = 0; frame < 20; frame++)
+                    update.Invoke(ui, [new FrameEventArgs(1f / 60f)]);
+            }
+
+            Settle();
+            ui.WindowRoot.RemoveChild(host);
+            for (var i = 0; i < 30; i++)
+            {
+                var text = $"Message {i}: This radio message arrives before the game screen opens.";
+                panel.AddMessage(new ChatMessage(ChatChannel.Radio, text, "", default, null),
+                    FormattedMessage.FromUnformatted(text), Color.White);
+                if (split)
+                {
+                    chat.SecondaryContents.AddMessage(new ChatMessage(ChatChannel.Radio, text, "", default, null),
+                        FormattedMessage.FromUnformatted(text), Color.White);
+                }
+            }
+
+            // Drain layout queues while the screen is detached, as happens while joining a server.
+            Settle();
+            ui.WindowRoot.AddChild(host);
+            Settle();
+            AssertRowsDoNotOverlap(panel, 30);
+            if (split)
+                AssertRowsDoNotOverlap(chat.SecondaryContents, 30);
+        });
+    }
+
+    [Test]
+    public async Task MessagesRemainSeparateAfterStartupAndResize()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var ui = Client.ResolveDependency<IUserInterfaceManager>();
+            var update = ui.GetType().GetMethod("FrameUpdate")!;
+            using var panel = new ChatLogPanel { SetSize = Vector2.Zero };
+            ui.WindowRoot.AddChild(panel);
+
+            void Settle(int frames = 20)
+            {
+                for (var frame = 0; frame < frames; frame++)
+                    update.Invoke(ui, [new FrameEventArgs(1f / 60f)]);
+            }
+
+            for (var i = 0; i < 100; i++)
+            {
+                var text = $"Message {i}: This is a radio message that wraps onto several lines in a narrow chat panel.";
+                panel.AddMessage(new ChatMessage(ChatChannel.Radio, text, "", default, null),
+                    FormattedMessage.FromUnformatted(text), Color.White);
+            }
+
+            Settle();
+            foreach (var size in new[]
+                     {
+                         new Vector2(300, 160), new Vector2(160, 60), new Vector2(600, 400), new Vector2(300, 160),
+                     })
+            {
+                panel.SetSize = size;
+                Settle(1);
+                AssertRowsDoNotOverlap(panel, 100);
+            }
+        });
+    }
+
+    private static void AssertRowsDoNotOverlap(ChatLogPanel panel, int expectedCount)
+    {
+        var rows = Descendants(panel).OfType<ChatMessageRow>().ToArray();
+        Assert.That(rows, Has.Length.EqualTo(expectedCount));
+        for (var i = 0; i < rows.Length; i++)
+        {
+            Assert.That(rows[i].Height, Is.GreaterThan(0), $"Row {i} must be measured at panel size {panel.Size}");
+            if (i > 0)
+            {
+                Assert.That(rows[i].Position.Y,
+                    Is.GreaterThanOrEqualTo(rows[i - 1].Position.Y + rows[i - 1].Height),
+                    $"Row {i} overlaps its predecessor at panel size {panel.Size}");
+            }
+        }
+    }
+
+    private static IEnumerable<Control> Descendants(Control control)
+    {
+        foreach (var child in control.Children)
+        {
+            yield return child;
+            foreach (var descendant in Descendants(child))
+                yield return descendant;
+        }
+    }
+}

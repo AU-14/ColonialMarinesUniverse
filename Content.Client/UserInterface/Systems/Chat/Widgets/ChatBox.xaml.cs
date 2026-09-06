@@ -181,6 +181,30 @@ public partial class ChatBox : UIWidget
         Repopulate();
     }
 
+    protected override void EnteredTree()
+    {
+        base.EnteredTree();
+
+        // Cached screens receive messages while detached. The engine discards their queued layout
+        // updates, and our explicit stylesheet prevents reparenting from restyling this subtree.
+        // Invalidate every container so cached measurements cannot hide the new rows and tabs.
+        InvalidateChatMeasure(this);
+        for (var ancestor = Parent; ancestor != null; ancestor = ancestor.Parent)
+        {
+            ancestor.InvalidateMeasure();
+        }
+    }
+
+    private static void InvalidateChatMeasure(Control control)
+    {
+        foreach (var child in control.Children)
+        {
+            InvalidateChatMeasure(child);
+        }
+
+        control.InvalidateMeasure();
+    }
+
     protected override void Resized()
     {
         base.Resized();
