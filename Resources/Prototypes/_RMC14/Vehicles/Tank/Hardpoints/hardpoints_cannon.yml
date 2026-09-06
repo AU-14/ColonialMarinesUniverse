@@ -13,7 +13,7 @@
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
-    maxIntegrity: 500
+    maxIntegrity: 550
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -76,7 +76,7 @@
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
-    maxIntegrity: 350
+    maxIntegrity: 400
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     fireWhileRotatingGraceDegrees: 180
@@ -103,9 +103,9 @@
     baseShotDelay: 0.7
     baseScatter: 10
     initialWindupDelay: 0.7
-    spinUpTime: 6
+    spinUpTime: 4
     graceAfterStop: 2
-    spinDownTime: 3
+    spinDownTime: 4
     minSpinLevel: 1
     maxSpinLevel: 11
     rateTiers: [1, 1, 2, 2, 3, 3, 3, 4, 4, 4, 5]
@@ -160,7 +160,7 @@
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
-    maxIntegrity: 500
+    maxIntegrity: 550
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -364,7 +364,7 @@
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
-    maxIntegrity: 400
+    maxIntegrity: 450
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     showOverlay: true
