@@ -123,6 +123,14 @@
   - type: CipherHintPaper
     informDelivery: true
 
+- type: entity
+  parent: CMUWYPaper
+  id: CMUCorruptedHiveEggHandlingNotice
+  name: classified ovum handling notice
+  description: A prominent Weyland-Yutani handling notice marked "READ BEFORE OPENING."
+  components:
+  - type: Paper
+    content: cmu-paper-ciph-egg-crate-notice
 
 
 

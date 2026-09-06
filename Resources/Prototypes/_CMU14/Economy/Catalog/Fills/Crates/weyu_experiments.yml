@@ -18,13 +18,14 @@
   id: CMUCrateSecureCipheringExperiment
   parent: RMCCrateSecureWeYa
   name: secure Weyland-Yutani crate
-  description: A secure Weyland-Yutani crate. You don't know what is in it, but there is a rather large "CLASSIFIED" label and a plethora of warning semiotics.
+  description: A secure Weyland-Yutani crate. A large "CLASSIFIED" label directs authorized personnel to read the enclosed specimen-handling notice before opening the egg.
   suffix: CMU, Xeno Eggs
   components:
   - type: StorageFill
     contents:
       - id: XenoEgg
         amount: 1
+      - id: CMUCorruptedHiveEggHandlingNotice
 
 - type: entity
   id: AU14CrateSecureWeYuDrugs

@@ -46,12 +46,6 @@ public sealed partial class Ciphering : RMCChemicalEffect
                         continue;
                     hives.Add("prime", ent);
                 }
-                if (met.EntityPrototype.ID == "CMUCorruptedHive")
-                {
-                    if (hives.ContainsKey("corrupted"))
-                        continue;
-                    hives.Add("corrupted", ent);
-                }
                 if (met.EntityPrototype.ID == "CMUAlphaHive")
                 {
                     if (hives.ContainsKey("alpha"))
@@ -84,13 +78,7 @@ public sealed partial class Ciphering : RMCChemicalEffect
             switch ((int)MathF.Round(Potency))
             {
                 case 2:
-                    var ghive = EntityUid.Invalid;
-                    if (!hives.ContainsKey("corrupted"))
-                    {
-                        ghive = entman.Spawn("CMUCorruptedHive");
-                    }
-                    else ghive = hives["corrupted"];
-                    parasys.SetHive(targ, ghive);
+                    // CMU14: corrupted hives are created by injecting an intact egg, not an infected host.
                     break;
                 case 3:
                     var ahive = EntityUid.Invalid;

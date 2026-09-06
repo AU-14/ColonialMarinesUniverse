@@ -1,8 +1,8 @@
 using System.Linq;
+using Content.Shared._CMU14.Xenonids.CorruptedHive;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship; // CMU14
-using Content.Shared._RMC14.Roles;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Egg;
@@ -81,8 +81,6 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     private readonly HashSet<EntityUid> _climbable = new();
     private readonly HashSet<EntityUid> _doors = new();
     private readonly HashSet<EntityUid> _intersecting = new();
-
-    private static readonly TimeSpan CorruptedHiveQueenPlaytime = TimeSpan.FromHours(30);
 
     private EntityQuery<MobStateComponent> _mobStateQuery;
 
@@ -272,23 +270,12 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         if (!TryComp(xeno, out ActorComponent? actor))
             return false;
 
-        var requirement = new TotalJobsTimeRequirement
-        {
-            Group = "CMJobsXeno",
-            Time = CorruptedHiveQueenPlaytime,
-        };
-
-        var playTimes = _playtime.GetPlayTimes(actor.PlayerSession);
-
-        if (requirement.Check(
+        if (CMUCorruptedHiveRequirements.IsEligible(
                 EntityManager,
                 _prototypes,
-                null,
-                playTimes,
-                out _))
-        {
+                _playtime,
+                actor.PlayerSession))
             return true;
-        }
 
         if (doPopup)
         {
