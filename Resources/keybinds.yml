@@ -76,10 +76,6 @@ binds:
 - function: CameraReset
   type: State
   key: NumpadNum8
-- function: RotateCameraWithMouse
-  type: State
-  key: MouseMiddle
-  priority: -10
 - function: ZoomOut
   type: State
   key: NumpadNum4
