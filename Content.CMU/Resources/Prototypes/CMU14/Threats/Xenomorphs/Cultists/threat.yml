@@ -10,8 +10,8 @@
   winconditions:
     - KillAllColonistRule
     - KillAllXenoRule
-  spawnDelayMin: 1200
-  spawnDelayMax: 2400
+  spawnDelayMin: 600
+  spawnDelayMax: 1200
 
 - type: partySpawn
   id: cultistPartyThreat
