@@ -223,7 +223,7 @@ namespace Content.Client.Options.UI.Tabs
                     _cfg.SaveToFile();
                 };
 
-                KeybindsContainer.AddChild(newCheckBox);
+                AddTo(newCheckBox);
             }
 
             AddHeader("ui-options-header-rmc");
@@ -324,7 +324,7 @@ namespace Content.Client.Options.UI.Tabs
                     }
                 };
 
-                KeybindsContainer.AddChild(row);
+                AddTo(row);
             }
 
             AddEmoteSlot("cmu-ui-options-emote-slot-1", CCVars.EmoteSlot1);

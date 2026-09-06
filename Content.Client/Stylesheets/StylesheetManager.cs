@@ -1,10 +1,14 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets.Stylesheets;
 using Content.Shared.CCVar;
+using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.RichText;
 using Robust.Shared.Configuration;
 using Robust.Shared.IoC;
 using Robust.Shared.Reflection;
@@ -17,6 +21,7 @@ namespace Content.Client.Stylesheets
         [Dependency] private ILogManager _logManager = default!;
         [Dependency] private IReflectionManager _reflection = default!;
         [Dependency] private IResourceCache _resCache = default!;
+        [Dependency] private ISystemFontManager _systemFonts = default!;
         [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
 
         public Stylesheet SheetNanotrasen { get; private set; } = default!;
@@ -38,6 +43,39 @@ namespace Content.Client.Stylesheets
         public HashSet<Type> UnusedSheetlets { get; private set; } = [];
         /// <inheritdoc />
         public event Action? ChatFontChanged;
+        public event Action? CrtThemeChanged;
+
+        private CmuUiFonts? _uiFonts;
+        private CmuUiFonts UiFonts => _uiFonts ??= new CmuUiFonts(_resCache, _systemFonts);
+
+        public Font ApplyUiFont(Font original, string primaryPath, int size) => UiFonts.Wrap(original, primaryPath, size);
+
+        private void OnUiFontChanged(string family)
+        {
+            UiFonts.Select(family);
+            var oldNano = SheetNanotrasen;
+            var oldSystem = SheetSystem;
+            SheetNanotrasen = new NanotrasenStylesheet(new BaseStylesheet.NoConfig(), this).Stylesheet;
+            SheetSystem = new SystemStylesheet(new BaseStylesheet.NoConfig(), this).Stylesheet;
+            Stylesheets["Nanotrasen"] = SheetNanotrasen;
+            Stylesheets["System"] = SheetSystem;
+            foreach (var root in _userInterfaceManager.AllRoots)
+                RefreshFontOverrides(root, oldNano, oldSystem);
+            RefreshCrtTheme();
+            IoCManager.Resolve<FontTagHijackHolder>().HijackUpdated();
+        }
+
+        private void RefreshFontOverrides(Control control, Stylesheet oldNano, Stylesheet oldSystem)
+        {
+            if (ReferenceEquals(control.Stylesheet, oldNano))
+                control.Stylesheet = SheetNanotrasen;
+            else if (ReferenceEquals(control.Stylesheet, oldSystem))
+                control.Stylesheet = SheetSystem;
+            if (control is Label { FontOverride: { } font } label)
+                label.FontOverride = UiFonts.Refresh(font);
+            foreach (var child in control.Children)
+                RefreshFontOverrides(child, oldNano, oldSystem);
+        }
 
         public void Initialize()
         {
@@ -49,6 +87,7 @@ namespace Content.Client.Stylesheets
             var tys = _reflection.FindTypesWithAttribute<CommonSheetletAttribute>();
             UnusedSheetlets = [..tys];
 
+            UiFonts.Select(_configurationManager.GetCVar(CCVars.CMUUiFont));
             Stylesheets = new Dictionary<string, Stylesheet>();
             SheetNanotrasen = Init(new NanotrasenStylesheet(new BaseStylesheet.NoConfig(), this));
             SheetSystem = Init(new SystemStylesheet(new BaseStylesheet.NoConfig(), this));
@@ -61,6 +100,7 @@ namespace Content.Client.Stylesheets
             RefreshNanoSheet();
             SheetSpace = new StyleSpace(_resCache).Stylesheet; // TODO: REMOVE (obsolete)
 
+            _configurationManager.OnValueChanged(CCVars.CMUUiFont, OnUiFontChanged);
             _configurationManager.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _configurationManager.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
 
@@ -83,32 +123,39 @@ namespace Content.Client.Stylesheets
         {
             StyleNano.SetCrtUiEnabled(enabled);
             StyleNano.SetCrtPalette(color);
-            RefreshNanoSheet();
+            RefreshCrtTheme();
         }
 
         public void ResetCrtUiPreview()
         {
             StyleNano.SetCrtUiEnabled(_configurationManager.GetCVar(CCVars.CrtUiEnabled));
             StyleNano.SetCrtPalette(_configurationManager.GetCVar(CCVars.CrtUiColor));
-            RefreshNanoSheet();
+            RefreshCrtTheme();
         }
 
         private void OnCrtUiEnabledChanged(bool enabled)
         {
             StyleNano.SetCrtUiEnabled(enabled);
-            RefreshNanoSheet();
+            RefreshCrtTheme();
         }
 
         private void OnCrtUiColorChanged(string color)
         {
             StyleNano.SetCrtPalette(color);
+            RefreshCrtTheme();
+        }
+
+        private void RefreshCrtTheme()
+        {
             RefreshNanoSheet();
+            CrtThemeChanged?.Invoke();
+            RefreshOpenUi();
         }
 
         /// <summary>
         ///     Rebuilding the sheet is only half of it - message rows and the channel prompt bake a
         ///     FontOverride at construction and will not pick a new one up. ChatBox listens to the
-        ///     same cvar and rebuilds itself; see ChatBox.OnChatReadableFontChanged. Everything
+        ///     ChatFontChanged event and rebuilds itself. Everything
         ///     outside chat is caught by the full refresh below.
         /// </summary>
         private void OnChatReadableFontChanged(bool enabled)
@@ -154,10 +201,6 @@ namespace Content.Client.Stylesheets
         ///     CRT typography to the windows that opt out of it on purpose - the admin-help
         ///     conversation windows are readable prose and are meant to stay in a proportional face.
         ///     </para>
-        ///     <para>
-        ///     Not called from <see cref="RefreshNanoSheet"/> itself, because that runs on every
-        ///     tick of the colour picker's preview and a whole-tree restyle per tick is not free.
-        ///     </para>
         /// </remarks>
         private void RefreshOpenUi()
         {
@@ -170,10 +213,25 @@ namespace Content.Client.Stylesheets
 
         private void RefreshNanoSheet()
         {
+            var previous = SheetNano;
             var legacyNano = new StyleNano(_resCache).Stylesheet;
             SheetNano = new Stylesheet(
                 SheetNanotrasen.Rules.Concat(legacyNano.Rules).ToArray());
             _userInterfaceManager.Stylesheet = SheetNano;
+            if (previous != null)
+            {
+                foreach (var root in _userInterfaceManager.AllRoots)
+                    ReplaceLegacySheet(root, previous);
+            }
+        }
+
+        private void ReplaceLegacySheet(Control control, Stylesheet previous)
+        {
+            // Windows with an explicit sheet do not inherit the manager's replacement.
+            if (ReferenceEquals(control.Stylesheet, previous))
+                control.Stylesheet = SheetNano;
+            foreach (var child in control.Children)
+                ReplaceLegacySheet(child, previous);
         }
 
         private int _styleRuleCount;

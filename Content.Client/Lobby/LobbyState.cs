@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Client._CMU14.Interface;
 using Content.Client._CMU14.Lobby;
+using Content.Client._CMU14.UserInterface.Options;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client.Audio;
 using Content.Client.GameTicking.Managers;
@@ -55,6 +56,7 @@ namespace Content.Client.Lobby
         // The faction choices, opened from JoinRoundButton. Held so a second press re-focuses the
         // one window rather than stacking another copy on top of it.
         private JoinRoundWindow? _joinRoundWindow;
+        private CmuUiSetupWindow? _uiSetupWindow;
         private bool _clockPlaced;
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
@@ -111,6 +113,12 @@ namespace Content.Client.Lobby
             // RMC14/CMU: the faction choices used to be three buttons on the lobby panel. They now
             // live in JoinRoundWindow, opened from one button; the handlers below are unchanged.
             Lobby.JoinRoundButton.OnPressed += OnJoinRoundPressed;
+
+            if (CmuUiSetupWindow.NeedsSetup(_cfg))
+            {
+                _uiSetupWindow = new CmuUiSetupWindow();
+                _uiSetupWindow.OpenCentered();
+            }
         }
 
         protected override void Shutdown()
@@ -139,6 +147,8 @@ namespace Content.Client.Lobby
             Lobby.JoinRoundButton.OnPressed -= OnJoinRoundPressed;
             _joinRoundWindow?.Close();
             _joinRoundWindow = null;
+            _uiSetupWindow?.Close();
+            _uiSetupWindow = null;
 
             Lobby = null;
         }

@@ -57,10 +57,9 @@ public sealed class ChannelSelectorButton : ChatPopupButton<ChannelSelectorPopup
     /// </summary>
     public void RefreshChatFont()
     {
-        if (!StyleNano.CrtUiEnabled)
-            return;
-
-        Label.FontOverride = StyleNano.GetChatFont(IoCManager.Resolve<IResourceCache>());
+        Label.FontOverride = StyleNano.CrtUiEnabled
+            ? StyleNano.GetChatFont(IoCManager.Resolve<IResourceCache>())
+            : null;
     }
 
     protected override UIBox2 GetPopupPosition()

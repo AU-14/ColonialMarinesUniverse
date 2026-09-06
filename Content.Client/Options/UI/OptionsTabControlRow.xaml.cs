@@ -53,6 +53,8 @@ public sealed partial class OptionsTabControlRow : Control
 
     private ValueList<BaseOption> _options;
 
+    public event Action? OnApplied;
+
     public OptionsTabControlRow()
     {
         RobustXamlLoader.Load(this);
@@ -219,7 +221,9 @@ public sealed partial class OptionsTabControlRow : Control
         ResetButton.Disabled = !anyModified;
     }
 
-    private void ApplyButtonPressed(BaseButton.ButtonEventArgs obj)
+    private void ApplyButtonPressed(BaseButton.ButtonEventArgs obj) => ApplyChanges();
+
+    public void ApplyChanges()
     {
         foreach (var option in _options)
         {
@@ -227,6 +231,7 @@ public sealed partial class OptionsTabControlRow : Control
                 option.SaveValue();
         }
 
+        OnApplied?.Invoke();
         _cfg.SaveToFile();
         UpdateButtonState();
     }

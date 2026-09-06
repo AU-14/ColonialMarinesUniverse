@@ -79,11 +79,8 @@ public sealed partial class ChatMessageRow : PanelContainer
             AccentSize = metrics.AccentSize,
             BorderColor = accent,
             BorderThickness = isAnnouncement ? new Thickness(2, 0, 0, 0) : new Thickness(0),
-            // A content margin, not a margin on ChatPanes: DoDraw paints the row's full box, so a
-            // wrapper margin insets the fill along with the text and leaves bare ground down every
-            // tinted row. This is the message column - crtChatInput's inset (8) plus the channel
-            // chip's own (6) has to equal it, by hand.
-            ContentMarginLeftOverride = 14,
+            // Keep prefixes close to the edge while leaving the row tint flush with the panel.
+            ContentMarginLeftOverride = 4,
             // Leave room for the corner triangle so it never sits on top of the text.
             ContentMarginRightOverride = 4 + metrics.AccentSize,
             // Asymmetric on purpose: the 1.25 line height puts its leading under the last line, so

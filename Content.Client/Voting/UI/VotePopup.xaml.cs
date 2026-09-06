@@ -27,7 +27,7 @@ namespace Content.Client.Voting.UI
 
         private readonly VoteManager.ActiveVote _vote;
         private readonly Button[] _voteButtons;
-        // Only populated under CRT, where each option is a bar with its count on the right.
+        // Separate counts are shown for CRT vote bars and hidden in the standard theme.
         private readonly Label[] _voteCounts;
         private readonly NetEntity? _targetEntity;
         private int _optionColumns = -1;
@@ -66,8 +66,7 @@ namespace Content.Client.Voting.UI
 
             ApplyCrtPalette();
             CrtLobbyTheme.Apply(this);
-            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
-            _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _stylesheetManager.CrtThemeChanged += OnThemeChanged;
             _cfg.OnValueChanged(CCVars.CMUVoteUiLarge, OnVoteUiLargeChanged);
 
             if (_vote.TargetEntity != null && _vote.TargetEntity != 0)
@@ -77,7 +76,7 @@ namespace Content.Client.Voting.UI
                 FollowVoteTarget.OnPressed += _ => AttemptFollowVoteEntity();
             }
 
-            Modulate = Color.White.WithAlpha(0.96f);
+            Modulate = Color.White;
             _voteButtons = new Button[vote.Entries.Length];
             _voteCounts = new Label[vote.Entries.Length];
             var group = new ButtonGroup();
@@ -99,12 +98,12 @@ namespace Content.Client.Voting.UI
                 button.Label.HorizontalExpand = true;
                 button.Label.VAlign = Label.VAlignMode.Center;
 
-                if (StyleNano.CrtUiEnabled)
                 {
                     // The count is its own label so it can sit hard right while the name stays left -
                     // a Button has exactly one Label and it cannot align two things at once.
                     var count = new Label
                     {
+                        Visible = StyleNano.CrtUiEnabled,
                         HorizontalAlignment = HAlignment.Right,
                         VerticalAlignment = VAlignment.Center,
                         Margin = new Thickness(0, 0, 10, 0),
@@ -139,8 +138,7 @@ namespace Content.Client.Voting.UI
         {
             base.Dispose(disposing);
 
-            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
-            _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _stylesheetManager.CrtThemeChanged -= OnThemeChanged;
             _cfg.UnsubValueChanged(CCVars.CMUVoteUiLarge, OnVoteUiLargeChanged);
         }
 
@@ -151,22 +149,22 @@ namespace Content.Client.Voting.UI
             ReflowOptions(GetRawOptionTexts());
         }
 
-        private void OnCrtUiEnabledChanged(bool _)
+        private void OnThemeChanged()
         {
             ApplyCrtPalette();
             CrtLobbyTheme.Apply(this);
-        }
-
-        private void OnCrtUiColorChanged(string _)
-        {
-            ApplyCrtPalette();
-            CrtLobbyTheme.Apply(this);
+            UpdateData();
         }
 
         private void ApplyCrtPalette()
         {
             Stylesheet = _stylesheetManager.SheetNano;
             VotePanel.PanelOverride = CreateVotePanelStyleBox();
+            VoteCaller.FontColorOverride = CrtTerminalPalette.Text;
+            MinimizedTitle.FontColorOverride = CrtTerminalPalette.TextBright;
+            MinimizeButton.Label.FontColorOverride = CrtTerminalPalette.TextBright;
+            RestoreButton.Label.FontColorOverride = CrtTerminalPalette.TextBright;
+            FollowVoteTarget.Label.FontColorOverride = CrtTerminalPalette.TextBright;
         }
 
         /// <summary>
@@ -231,6 +229,8 @@ namespace Content.Client.Voting.UI
                 buttonTexts[i] = buttonText;
                 _voteButtons[i].ToolTip = buttonText;
 
+                _voteCounts[i].Visible = StyleNano.CrtUiEnabled;
+                _voteButtons[i].TextAlign = StyleNano.CrtUiEnabled ? Label.AlignMode.Left : Label.AlignMode.Center;
                 if (StyleNano.CrtUiEnabled)
                 {
                     var isOurs = _vote.OurVote == i;
@@ -254,22 +254,18 @@ namespace Content.Client.Voting.UI
                         IsOurVote = isOurs,
                         AccentWidth = isOurs ? 4f : 2f,
                     };
-                    _voteButtons[i].Label.FontColorOverride = isOurs
-                        ? CrtTerminalPalette.TextBright
-                        : CrtTerminalPalette.Text;
+                    _voteButtons[i].Label.FontColorOverride = CrtTerminalPalette.TextBright;
 
                     if (_voteCounts[i] is { } count)
                     {
                         count.Text = _vote.DisplayVotes ? entry.Votes.ToString() : string.Empty;
-                        count.FontColorOverride = isOurs
-                            ? CrtTerminalPalette.Accent
-                            : entry.Votes > 0
-                                ? CrtTerminalPalette.TextBright
-                                : CrtTerminalPalette.TextDim;
+                        count.FontColorOverride = CrtTerminalPalette.TextBright;
                     }
                 }
                 else
                 {
+                    _voteButtons[i].StyleBoxOverride = null;
+                    _voteButtons[i].Label.FontColorOverride = null;
                     _voteButtons[i].Text = buttonText;
                 }
 

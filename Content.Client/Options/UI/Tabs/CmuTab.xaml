@@ -4,25 +4,8 @@
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
             <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
-                <Label Text="{Loc 'ui-options-cmu-crt'}" StyleClasses="LabelKeyText" />
-                <CheckBox Name="CrtUiEnabledCheckBox" Text="{Loc 'ui-options-crt-ui-enabled'}" />
-                <!-- CRT colour picker, switched off for now. Uncomment this and the four blocks
-                     marked "CRT colour picker" in CmuTab.xaml.cs to bring it back; nothing else was
-                     removed. The cvar, the palette resolution and every window's subscription to
-                     accessibility.crt_ui_color are all still live, so the theme still honours
-                     whatever colour is configured - players just cannot change it from here.
-                <ui:OptionColorSlider Name="CrtUiColorSlider"
-                                      Title="{Loc 'ui-options-crt-ui-color'}" />
-                     -->
-                <CheckBox Name="ChatReadableFontCheckBox"
-                          Text="{Loc 'ui-options-crt-chat-readable-font'}"
-                          ToolTip="{Loc 'ui-options-crt-chat-readable-font-tooltip'}" />
-                <ui:OptionDropDown Name="ChatBigFontDropDown"
-                                   Title="{Loc 'ui-options-crt-chat-big-font'}"
-                                   ToolTip="{Loc 'ui-options-crt-chat-big-font-tooltip'}" />
-                <ui:OptionDropDown Name="ChatRowTintDropDown"
-                                   Title="{Loc 'ui-options-crt-chat-row-tint'}"
-                                   ToolTip="{Loc 'ui-options-crt-chat-row-tint-tooltip'}" />
+                <Button Name="OpenUiSetupButton" Text="{Loc 'cmu-ui-setup-open'}" Margin="0 0 0 8" />
+                <ui:CmuAppearanceOptions Name="Appearance" />
 
                 <Label Text="{Loc 'ui-options-cmu-runechat'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="RunechatSpeechBubblesCheckBox" Text="{Loc 'ui-options-runechat-speech'}" />
@@ -38,6 +21,10 @@
                 <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" />
 
                 <Label Text="{Loc 'cmu-ui-options-accessibility'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
+                <CheckBox Name="ExplosionScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-enabled'}" />
+                <CheckBox Name="ExplosionScreenShakeIgnoreFarCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-ignore-far'}" />
+                <CheckBox Name="FirearmScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-firearm-screen-shake-enabled'}" />
+                <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
                 <CheckBox Name="AutoIngestCheckBox"
                           Text="{Loc 'cmu-ui-options-auto-ingest'}"
                           ToolTip="{Loc 'cmu-ui-options-auto-ingest-tooltip'}" />

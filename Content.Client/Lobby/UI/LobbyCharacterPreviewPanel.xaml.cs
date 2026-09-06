@@ -30,11 +30,20 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
+        RefreshTheme();
+
+        UpdateIgnoreAllegianceText(IgnoreAllegianceButton.Pressed);
+        IgnoreAllegianceButton.OnToggled += args => UpdateIgnoreAllegianceText(args.Pressed);
+    }
+
+    public void RefreshTheme()
+    {
         // The CRT theme styles every button label at one size via a stylesheet rule. FontOverride
         // is the reliable way to make just this one bigger - another style class would tie with
         // that rule on specificity.
-        if (StyleNano.CrtUiEnabled)
-            IgnoreAllegianceButton.Label.FontOverride = StyleNano.GetCrtFont(_resourceCache, 10);
+        IgnoreAllegianceButton.Label.FontOverride = StyleNano.CrtUiEnabled
+            ? StyleNano.GetCrtFont(_resourceCache, 10)
+            : null;
 
         // Base menu only: toggled on turns the button solid red. The default Pressed state for a
         // plain Button is a thin highlighted border, easy to miss at a glance for something that
@@ -42,12 +51,8 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         // CrtButton, so this is left alone there.
         if (!StyleNano.CrtUiEnabled)
             IgnoreAllegianceButton.AddStyleClass(StyleNano.StyleClassButtonToggleRed);
-
-        // Colour alone is never a safe state indicator - readable differently depending on vision,
-        // and on the CRT theme specifically the accent is player-configurable, so "red" can't be
-        // assumed to contrast with it. The label states on/off directly instead.
-        UpdateIgnoreAllegianceText(IgnoreAllegianceButton.Pressed);
-        IgnoreAllegianceButton.OnToggled += args => UpdateIgnoreAllegianceText(args.Pressed);
+        else
+            IgnoreAllegianceButton.RemoveStyleClass(StyleNano.StyleClassButtonToggleRed);
     }
 
     private void UpdateIgnoreAllegianceText(bool pressed)

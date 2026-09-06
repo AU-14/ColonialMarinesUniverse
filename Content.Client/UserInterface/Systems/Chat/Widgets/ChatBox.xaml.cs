@@ -158,7 +158,7 @@ public partial class ChatBox : UIWidget
         _config.OnValueChanged(CCVars.ChatColorWholeMessage, OnColorWholeMessageCvarChanged);
         _stylesheetManager.ChatFontChanged += RemakeForChatFontChange;
         _config.OnValueChanged(CCVars.CMUChatRowTint, OnChatRowTintCvarChanged);
-        _config.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledCvarChanged);
+        _stylesheetManager.CrtThemeChanged += OnCrtThemeChanged;
 
         _tabs = ChatUserSettings.LoadTabs(_config.GetCVar(CCVars.ChatTabs));
         _styles = ChatUserSettings.LoadStyles(_config.GetCVar(CCVars.ChatChannelStyles));
@@ -653,26 +653,10 @@ public partial class ChatBox : UIWidget
                 button.AddStyleClass(StyleNano.StyleClassCrtChatTabSelected);
             else
                 button.RemoveStyleClass(StyleNano.StyleClassCrtChatTabSelected);
-            // Modulate multiplies the whole control, its stylebox included, so using it to carry
-            // "active" repainted the tab's fill as well as its label - which is how the strip ended
-            // up off the ladder no matter what the stylesheet said. Under CRT the fill already says
-            // active (Surface1 resting, Surface4 selected), so only the label wants colouring.
-            if (StyleNano.CrtUiEnabled)
-            {
-                button.Modulate = Color.White;
-                button.Label.FontColorOverride = button.Pressed
-                    ? CrtTerminalPalette.TextBright
-                    : CrtTerminalPalette.TextDim;
-            }
-            else
-            {
-                // White, not the pale green this used to be. Off-theme nothing else on the
-                // screen is green, and an active tab is signalled perfectly well by being brighter
-                // than the inactive ones.
-                button.Modulate = tabId == _activeTabId
-                    ? Color.White
-                    : Color.FromHex("#737987");
-            }
+            button.Modulate = Color.White;
+            button.Label.FontColorOverride = button.Pressed
+                ? CrtTerminalPalette.TextBright
+                : CrtTerminalPalette.Text;
         }
 
         UpdateTabDragVisuals();
@@ -1128,6 +1112,7 @@ public partial class ChatBox : UIWidget
     /// </summary>
     private void RemakeForChatFontChange()
     {
+        Stylesheet = _stylesheetManager.SheetNano;
         ChatInput.ChannelSelector.RefreshChatFont();
         Contents.RefreshChatFont();
         SecondaryContents.RefreshChatFont();
@@ -1144,11 +1129,17 @@ public partial class ChatBox : UIWidget
 
     // The whitelist depends on the theme, so it has to be rebuilt here - the already-rendered rows
     // were filtered against the old one and only Repopulate puts them back through the new one.
-    private void OnCrtUiEnabledCvarChanged(bool enabled)
+    private void OnCrtThemeChanged()
     {
+        Stylesheet = _stylesheetManager.SheetNano;
+        var enabled = StyleNano.CrtUiEnabled;
         _whitelist = BuildMarkupWhitelist(enabled);
         ApplyTabHeaderBackground(enabled);
-        Repopulate();
+        ChatWindowPanel.PanelOverride = null;
+        ChatWindowPanel.InvalidateStyleSheet();
+        ChatWindowPanel.ForceRunStyleUpdate();
+        ChatUIController.SetChatWindowOpacity(ChatWindowPanel, _config.GetCVar(CCVars.ChatWindowOpacity));
+        RemakeForChatFontChange();
     }
 
     /// <summary>
@@ -1661,7 +1652,7 @@ public partial class ChatBox : UIWidget
         _config.UnsubValueChanged(CCVars.ChatColorWholeMessage, OnColorWholeMessageCvarChanged);
         _stylesheetManager.ChatFontChanged -= RemakeForChatFontChange;
         _config.UnsubValueChanged(CCVars.CMUChatRowTint, OnChatRowTintCvarChanged);
-        _config.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledCvarChanged);
+        _stylesheetManager.CrtThemeChanged -= OnCrtThemeChanged;
         ChatInput.Input.OnTextEntered -= OnTextEntered;
         ChatInput.Input.OnKeyBindDown -= OnInputKeyBindDown;
         ChatInput.Input.OnTextChanged -= OnTextChanged;

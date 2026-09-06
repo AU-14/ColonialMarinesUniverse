@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Shared.Chat;
@@ -28,7 +28,7 @@ public sealed class ChatLogPanel : PanelContainer
     private int _pendingScrollToBottomFrames;
     private int _pendingLayoutRefreshFrames;
     private float _lastLayoutWidth = -1f;
-    private float _lastScrollTarget;
+
 
     public int EntryCount => _rows.ChildCount;
 
@@ -148,10 +148,9 @@ public sealed class ChatLogPanel : PanelContainer
     /// </summary>
     public void RefreshChatFont()
     {
-        if (!StyleNano.CrtUiEnabled)
-            return;
-
-        _scrollToLatest.Label.FontOverride = StyleNano.GetChatFont(IoCManager.Resolve<IResourceCache>());
+        _scrollToLatest.Label.FontOverride = StyleNano.CrtUiEnabled
+            ? StyleNano.GetChatFont(IoCManager.Resolve<IResourceCache>())
+            : null;
     }
 
     public ChatMessageRow AddMessage(ChatMessage message, FormattedMessage formatted, Color color, Color? accentOverride = null, int? fontSize = null)
@@ -238,7 +237,6 @@ public sealed class ChatLogPanel : PanelContainer
         if (_pendingScrollToBottomFrames > 0)
         {
             _scroll.VScroll = float.MaxValue;
-            _lastScrollTarget = _scroll.VScroll;
             _scrollToLatest.Visible = false;
             _pendingScrollToBottomFrames--;
         }
@@ -332,7 +330,6 @@ public sealed class ChatLogPanel : PanelContainer
         _isAtBottom = true;
         _followingBottom = true;
         _scroll.VScroll = float.MaxValue;
-        _lastScrollTarget = _scroll.VScroll;
         _scrollToLatest.Visible = false;
 
         // Rebuilt tab contents can take multiple layout passes before ScrollContainer
@@ -353,25 +350,18 @@ public sealed class ChatLogPanel : PanelContainer
         _isAtBottom = false;
         _followingBottom = false;
         _pendingScrollToBottomFrames = 0;
-        _lastScrollTarget = _scroll.VScroll;
         _scrollToLatest.Visible = true;
     }
 
     private void UpdateScrollState()
     {
         var scrollTarget = _scroll.VScroll;
-        var scrolledUp = scrollTarget < _lastScrollTarget - ScrollDirectionTolerance;
-        _lastScrollTarget = scrollTarget;
 
+        // Replacing a tab can clamp the old offset while new rows are still being measured.
+        // That geometry change must not cancel follow mode; input handlers do that explicitly.
         var scrollBottom = scrollTarget + _scroll.Height + BottomTolerance;
         var contentHeight = _rows.DesiredSize.Y;
         _isAtBottom = scrollBottom >= contentHeight;
-
-        if (scrolledUp && !_isAtBottom)
-        {
-            StopFollowingBottom();
-            return;
-        }
 
         if (_isAtBottom)
         {

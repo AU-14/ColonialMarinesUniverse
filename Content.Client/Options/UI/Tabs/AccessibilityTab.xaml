@@ -22,15 +22,6 @@
                     <BoxContainer Name="AnnouncementPresetOverridesContainer" Orientation="Vertical" />
                 </cmu:CmuOptionSection>
 
-                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-cmu'}">
-                    <CheckBox Name="ExplosionScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-enabled'}" />
-                    <CheckBox Name="ExplosionScreenShakeIgnoreFarCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-ignore-far'}" />
-                    <CheckBox Name="FirearmScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-firearm-screen-shake-enabled'}" />
-                    <!-- New upstream option. Required, not optional: AccessibilityTab.xaml.cs
-                         references it, so the tab does not compile without it. -->
-                    <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
-                </cmu:CmuOptionSection>
-
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-accessibility-header-reduced-motion'}">
                     <CheckBox Name="ReducedMotionCheckBox" Text="{Loc 'ui-options-reduced-motion'}"
                               ToolTip="{Loc 'ui-options-reduced-motion-tooltip'}" />

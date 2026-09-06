@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Configuration;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
@@ -110,6 +110,20 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> CMUChatReadableFont =
         CVarDef.Create("cmu.chat_readable_font", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    public const string CMUUiFontTheme = "theme";
+    public const string CMUUiFontNotoSans = "noto-sans";
+    public const string CMUUiFontComicSans = "comic-sans";
+    public const string CMUUiFontRobotoMono = "roboto-mono";
+    public const string CMUUiFontCozette = "cozette";
+    public const string CMUUiFontNotoSansDisplay = "noto-sans-display";
+
+    /// <summary>Font family for menus and chat; theme keeps each theme's original typography.</summary>
+    public static readonly CVarDef<string> CMUUiFont =
+        CVarDef.Create("cmu.ui_font", CMUUiFontTheme, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>Whether this client has completed or saved its UI setup.</summary>
+    public static readonly CVarDef<bool> CMUUiConfigured =
+        CVarDef.Create("cmu.ui_configured", false, CVar.CLIENTONLY | CVar.ARCHIVE);
     public const string CMUChatBigFontOff = "off";
     public const string CMUChatBigFontOne = "one";
     public const string CMUChatBigFontTwo = "two";
@@ -136,13 +150,14 @@ public sealed partial class CCVars
     ///     <see cref="CMUChatRowTintOff"/>. Off is what the theme shipped with; every row sat on the
     ///     ground and only the prefix said which channel it was.
     /// </summary>
-    /// <remarks>
-    ///     Muted rather than full by default: the two differ only in saturation, and the loud version
-    ///     of the admin band is the one thing about the upstream fills that was worth objecting to.
-    ///     See docs/cmu/13-chat.md for the tint recipe.
-    /// </remarks>
     public static readonly CVarDef<string> CMUChatRowTint =
-        CVarDef.Create("cmu.chat_row_tint", CMUChatRowTintMuted, CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.chat_row_tint", CMUChatRowTintFull, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Draw the CRT scanline effect over chat independently of other menu effects.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUChatCrtHaze =
+        CVarDef.Create("cmu.chat_crt_haze", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     ///     Overall strength of the CRT effect - scanlines, grain and the roll bar together, 0 to 1.

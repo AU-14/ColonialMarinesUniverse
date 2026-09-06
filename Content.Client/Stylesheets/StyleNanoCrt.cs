@@ -1188,52 +1188,35 @@ namespace Content.Client.Stylesheets
                 ContentMarginBottomOverride = 5,
             };
 
-            // The channel-selector popup that sits on top of the chat input row. Deliberately much
-            // tighter than CrtInsetPanel (8/8/6/6): this is a strip spanning the input bar, not a
-            // window, and the CRT button chrome inside it already carries 3px + a border of its own.
-            // No fill at all when resting. This is the change that stops the tab strip reading as
-            // boxes: with nothing else filled, the selected tab cannot look like a chip stacked on a
-            // strip stacked on a panel. A resting tab is now just its label on the chat's ground.
-            // The bottom margin leaves room for the selected tab's underline so tabs do not shift
-            // vertically as selection moves between them.
-            // Left is cut down to 2 (was 14) - applies to every tab, but the one it's actually for is
-            // the first: with it, ALL's own text lands close to where the 10px band inset (see
-            // ChatBandInset in ChatBox.xaml.cs) already put it, matching the row prefixes and the
-            // input prompt below rather than sitting noticeably further in. Every later tab's own
-            // left padding shrinks the same way, which also pulls the tabs a bit closer together -
-            // an acceptable side effect, not the point. Right keeps the old 14.
+            // Visible fills and bright text distinguish available tabs from disabled controls.
             var crtChatTab = new StyleBoxFlat
             {
-                BackgroundColor = Color.Transparent,
-                ContentMarginLeftOverride = 2,
-                ContentMarginRightOverride = 14,
+                BackgroundColor = CrtTerminalPalette.Surface2,
+                BorderColor = CrtTerminalPalette.Line,
+                BorderThickness = new Thickness(1),
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
                 ContentMarginTopOverride = 5,
                 ContentMarginBottomOverride = 5,
             };
 
-            // Hover is one step off the ground and no more. It has to be visible without competing
-            // with selection, which is now drawn in accent.
             var crtChatTabHover = new StyleBoxFlat(crtChatTab)
             {
-                BackgroundColor = CrtTerminalPalette.Surface2,
+                BackgroundColor = CrtTerminalPalette.Surface3,
+                BorderColor = CrtTerminalPalette.Text,
             };
 
-            // Selection is a 2px accent rule, not a fill - agreed 2026-08-19 against the alternatives
-            // (inverted accent block, Surface4 fill). This is a deliberate exception to the theme's
-            // borderless rule and it earns it: the rule marks *selection*, it is accent-coloured so
-            // it cannot be mistaken for structure, and it never sits between two surfaces - which is
-            // exactly what made the Line hairline ambiguous everywhere else.
-            //
-            // The 2px comes out of the bottom content margin rather than adding to it, so a selected
-            // tab is the same height as a resting one.
             var crtChatTabSelected = new StyleBoxFlat(crtChatTab)
             {
-                BackgroundColor = Color.Transparent,
+                BackgroundColor = CrtTerminalPalette.Surface3,
                 BorderColor = CrtTerminalPalette.Accent,
-                BorderThickness = new Thickness(0, 0, 0, 2),
-                ContentMarginBottomOverride = 3,
+                BorderThickness = new Thickness(1, 1, 1, 2),
+                ContentMarginBottomOverride = 4,
             };
 
+            // The channel-selector popup that sits on top of the chat input row. Deliberately much
+            // tighter than CrtInsetPanel (8/8/6/6): this is a strip spanning the input bar, not a
+            // window, and the CRT button chrome inside it already carries 3px + a border of its own.
             var crtChatPopup = new StyleBoxFlat
             {
                 BackgroundColor = CrtInsetBackground,

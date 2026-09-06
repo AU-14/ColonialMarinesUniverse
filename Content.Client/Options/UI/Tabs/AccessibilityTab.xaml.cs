@@ -55,11 +55,6 @@ public sealed partial class AccessibilityTab : Control
                 new OptionDropDownCVar<int>.ValueOption((int) NightVisionColor.Blue, Loc.GetString("rmc-ui-options-night-vision-color-blue")),
             ]);
 
-        Control.AddOptionCheckBox(CCVars.ExplosionScreenShakeEnabled, ExplosionScreenShakeEnabledCheckBox);
-        Control.AddOptionCheckBox(CCVars.ExplosionScreenShakeIgnoreFar, ExplosionScreenShakeIgnoreFarCheckBox);
-        Control.AddOptionCheckBox(CCVars.FirearmScreenShakeEnabled, FirearmScreenShakeEnabledCheckBox);
-        Control.AddOptionCheckBox(CCVars.MuteScriptedSounds, MuteScriptedSoundsCheckBox);
-
         Control.AddOptionCheckBox(CCVars.AccessibilityClientCensorNudity, CensorNudityCheckBox);
 
         Control.Initialize();
