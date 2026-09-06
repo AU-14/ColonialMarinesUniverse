@@ -13,12 +13,11 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.vote_ui_large", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
-    ///     Playtime in minutes below which the guidebook opens itself in the lobby, or 0 to never do
-    ///     it. Was a hardcoded 60, which means every fresh client - including a second test client on
-    ///     the same machine - opens with the guidebook covering the middle of the screen.
+    ///     Playtime in minutes below which the guidebook opens itself in the lobby.
+    ///     Disabled by default (0); players can open the guidebook manually.
     /// </summary>
     public static readonly CVarDef<int> CMUGuidebookAutoOpenPlaytime =
-        CVarDef.Create("cmu.guidebook_auto_open_minutes", 60, CVar.CLIENTONLY);
+        CVarDef.Create("cmu.guidebook_auto_open_minutes", 0, CVar.CLIENTONLY);
 
     /// <summary>
     ///     Opens one or more of the small CRT panels on startup so they can be looked at without
