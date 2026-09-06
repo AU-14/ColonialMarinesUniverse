@@ -1296,6 +1296,10 @@ public partial class ChatBox : UIWidget
 
     private void AddLine(ChatMessage msg, ChatLogPanel contents, Queue<RepeatedMessage> repeatQueue)
     {
+        var cmChat = _entManager.SystemOrNull<CMChatSystem>();
+        if (cmChat?.TryRepetition(repeatQueue, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender, msg.LanguageIcon) ?? false)
+            return;
+
         var style = ChatUserSettings.ResolveStyle(_styles, msg);
         var styleColor = ChatUserSettings.ResolveColor(style);
         var fontSize = ChatUserSettings.ResolveFontSize(style) ??
@@ -1310,14 +1314,8 @@ public partial class ChatBox : UIWidget
         var accentColor = styleColor ?? msg.Display?.AccentColor ?? crtColor;
         var messageColor = styleColor ?? msg.MessageColorOverride ?? msg.Display?.AccentColor ?? crtColor ?? msg.Channel.TextColor();
         var bodyColor = _colorWholeMessage ? messageColor : StructuredMessageTextColor;
-        var formatted = CreateFormattedMessage(msg, messageColor, style);
-
-        var cmChat = _entManager.SystemOrNull<CMChatSystem>();
-        if (cmChat?.TryRepetition(repeatQueue, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender, msg.LanguageIcon) ?? false)
-            return;
-
-        var row = contents.AddMessage(msg, formatted, bodyColor, accentColor, fontSize);
-        cmChat?.TrackRepetition(repeatQueue, row, formatted, msg.SenderEntity, msg.Message, msg.Channel, msg.LanguageIcon);
+        var entry = contents.AddMessage(msg, () => CreateFormattedMessage(msg, messageColor, style), bodyColor, accentColor, fontSize);
+        cmChat?.TrackRepetition(repeatQueue, entry, msg.SenderEntity, msg.Message, msg.Channel, msg.LanguageIcon);
     }
 
     private void AddLegacyLine(ChatMessage msg)

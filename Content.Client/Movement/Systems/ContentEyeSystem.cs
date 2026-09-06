@@ -56,9 +56,12 @@ public sealed partial class ContentEyeSystem : SharedContentEyeSystem
     public override void FrameUpdate(float frameTime)
     {
         base.FrameUpdate(frameTime);
-        var eyeEntities = AllEntityQuery<ContentEyeComponent, EyeComponent>();
-        while (eyeEntities.MoveNext(out var entity, out ContentEyeComponent? contentComponent, out EyeComponent? eyeComponent))
+        var eyeEntities = AllEntityQuery<ContentEyeComponent, EyeComponent, MetaDataComponent>();
+        while (eyeEntities.MoveNext(out var entity, out _, out var eyeComponent, out var metadata))
         {
+            // Retained PVS history cannot supply a visible camera until it re-enters view.
+            if ((metadata.Flags & MetaDataFlags.Detached) != 0)
+                continue;
             UpdateEyeOffset((entity, eyeComponent));
             UpdateEyeRotation((entity, eyeComponent));
         }
@@ -68,9 +71,11 @@ public sealed partial class ContentEyeSystem : SharedContentEyeSystem
     {
         base.Update(frameTime);
         // TODO: Ideally we wouldn't want this to run in both FrameUpdate and Update, but we kind of have to since the visual update happens in FrameUpdate, but interaction update happens in Update. It's a workaround and a better solution should be found.
-        var eyeEntities = AllEntityQuery<ContentEyeComponent, EyeComponent>();
-        while (eyeEntities.MoveNext(out var entity, out ContentEyeComponent? contentComponent, out EyeComponent? eyeComponent))
+        var eyeEntities = AllEntityQuery<ContentEyeComponent, EyeComponent, MetaDataComponent>();
+        while (eyeEntities.MoveNext(out var entity, out _, out var eyeComponent, out var metadata))
         {
+            if ((metadata.Flags & MetaDataFlags.Detached) != 0)
+                continue;
             UpdateEyeOffset((entity, eyeComponent));
         }
     }

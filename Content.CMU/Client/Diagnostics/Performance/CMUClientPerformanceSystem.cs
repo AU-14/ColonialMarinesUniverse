@@ -21,6 +21,9 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
 {
     private const double ReportSeconds = 5;
     private const double InventorySeconds = 15;
+    // Retain a completed busy frame while the next frame is still being written. The default
+    // engine ring can overwrite even one detailed frame before the reader gets to it.
+    internal const int MinimumProfileLogSize = 262144;
     internal static readonly ResPath OutputDirectory = new("/client-performance");
 
     [Dependency] private IClyde _clyde = default!;
@@ -65,6 +68,10 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
     private string? _lastPath;
     private bool _profilerOwned;
     private bool _zDiagnosticsOwned;
+    private bool _profileBufferOwned;
+    private int _previousProfileBufferSize;
+    private long _lastLostFrames;
+    private int _lastInvalidFrames;
     private bool _changingSettings;
 
     public bool Capturing => _reader != null;
@@ -74,6 +81,7 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
         base.Initialize();
         _sawmill = _log.GetSawmill("cmu.client-performance");
         Subs.CVar(_config, CVars.ProfEnabled, OnProfilerChanged);
+        Subs.CVar(_config, CVars.ProfBufferSize, OnProfileBufferChanged);
         Subs.CVar(_config, CMUZLevelsCVars.ClientDiagnosticsEnabled, OnZDiagnosticsChanged);
     }
 
@@ -98,13 +106,17 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
         _lastPath = path.ToString();
         _profilerOwned = !_config.GetCVar(CVars.ProfEnabled);
         _zDiagnosticsOwned = !_config.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled);
-        _reader = new CMUClientProfileReader(_profiler.Buffer.IndexWriteOffset);
+        _previousProfileBufferSize = _config.GetCVar(CVars.ProfBufferSize);
+        _profileBufferOwned = _previousProfileBufferSize < MinimumProfileLogSize;
         try
         {
             _changingSettings = true;
+            if (_profileBufferOwned)
+                _config.SetCVar(CVars.ProfBufferSize, MinimumProfileLogSize);
             _config.SetCVar(CVars.ProfEnabled, true);
             _config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, true);
             _changingSettings = false;
+            _reader = new CMUClientProfileReader(_profiler.Buffer.IndexWriteOffset);
             _started = _lastReport = _timing.RealTime;
             _ends = _started + TimeSpan.FromSeconds(seconds);
             _nextInventory = _started + TimeSpan.FromSeconds(InventorySeconds);
@@ -123,10 +135,11 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
             var text = new StringBuilder();
             text.AppendLine($"CMU CLIENT PERFORMANCE CAPTURE v1 utc={DateTime.UtcNow:O} durationSeconds={seconds} spikeMs={F(spikeMs)}");
             text.AppendLine("All times are milliseconds; allocations are bytes on the sampled main thread. Timing scopes are inclusive and overlap: do not sum parent and child costs.");
+            text.AppendLine("When allocationRatePartial=True, bytesPerSecond is a lower bound from retained frames; missing frames must not be interpreted as zero allocation.");
             text.AppendLine("Frame work excludes the engine sleep/FPS limiter but may include GPU/driver waits. Wall frame time includes waiting. GC counters are collection counts, not GC pause durations.");
             text.AppendLine("GPU utilization/VRAM, process heap/RSS, background-thread allocations and call stacks are unavailable through this content capture. It identifies instrumented scopes, not individual methods inside them.");
             text.AppendLine("Reports every 5s; inventory every 15s. Worst work and allocation frames are preserved per window. Report/start/stop frames are excluded; per-frame reader overhead is reported separately. Profiling itself still has overhead.");
-            text.AppendLine($"limits: eventsPerFrame={CMUClientProfileReader.MaxEventsPerFrame} scopePaths={CMUClientProfileReader.MaxScopes} wallSamples=4096; data loss/truncation is reported explicitly.");
+            text.AppendLine($"limits: eventsPerFrame={CMUClientProfileReader.MaxEventsPerFrame} scopePaths={CMUClientProfileReader.MaxScopes} wallSamples=4096 profileLogEntries={_profiler.Buffer.LogBuffer.Length}; data loss/truncation is reported explicitly.");
             AppendSettings(text);
             AppendContext(text, "start");
             AppendInventory(text);
@@ -248,7 +261,9 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
         _wallFrames.Sort();
         text.AppendLine($"REPORT reason={reason} elapsed={F((now - _started).TotalSeconds)} windowSeconds={F(elapsed)} utc={DateTime.UtcNow:O}");
         text.AppendLine($"wall: frames={_wallCount} fps={F(_wallTotal > 0 ? _wallCount * 1000 / _wallTotal : 0)} meanMs={F(_wallCount > 0 ? _wallTotal / _wallCount : 0)} p50Ms={F(Percentile(0.50))} p95Ms={F(Percentile(0.95))} p99Ms={F(Percentile(0.99))} maxMs={F(_wallMax)} maxFrame={_wallMaxFrame} spikes={_spikes} thresholdMs={F(_spikeMs)} unfocusedFrames={_unfocusedFrames} percentileSamples={_wallFrames.Count} omittedPercentileSamples={_wallCount - _wallFrames.Count}");
-        text.AppendLine($"profile: enabled={_profiler.IsEnabled} frames={_reader.Frames} meanWorkMs={F(_reader.Frames > 0 ? _reader.TotalWorkMs / _reader.Frames : 0)} allocatedBytes={_reader.TotalAllocatedBytes} bytesPerSecond={F(_reader.TotalAllocatedBytes / elapsed)} lostFramesTotal={_reader.LostFrames} oversizedFramesTotal={_reader.OversizedFrames} invalidFramesTotal={_reader.InvalidFrames} droppedScopeEventsTotal={_reader.DroppedScopeEvents} excludedDiagnosticFramesTotal={_reader.ExcludedFrames}");
+        var lostFrames = _reader.LostFrames - _lastLostFrames;
+        var partialAllocations = lostFrames > 0 || _reader.InvalidFrames > _lastInvalidFrames;
+        text.AppendLine($"profile: enabled={_profiler.IsEnabled} frames={_reader.Frames} meanWorkMs={F(_reader.Frames > 0 ? _reader.TotalWorkMs / _reader.Frames : 0)} allocatedBytes={_reader.TotalAllocatedBytes} bytesPerSecond={F(_reader.TotalAllocatedBytes / elapsed)} allocationRatePartial={partialAllocations} lostFramesWindow={lostFrames} lostFramesTotal={_reader.LostFrames} oversizedFramesTotal={_reader.OversizedFrames} invalidFramesTotal={_reader.InvalidFrames} droppedScopeEventsTotal={_reader.DroppedScopeEvents} excludedDiagnosticFramesTotal={_reader.ExcludedFrames} profileLogEntries={_profiler.Buffer.LogBuffer.Length}");
         text.AppendLine($"reader-overhead: totalMs={F(_readerMs)} maxMs={F(_readerMaxMs)} bytes={_readerBytes}; included in sampled CMUClientPerformanceSystem time");
         var net = _network.Statistics;
         text.AppendLine($"network-window: rxBytesPerSecond={F(Math.Max(0, net.ReceivedBytes - _lastNetwork.ReceivedBytes) / elapsed)} txBytesPerSecond={F(Math.Max(0, net.SentBytes - _lastNetwork.SentBytes) / elapsed)} rxPackets={Math.Max(0, net.ReceivedPackets - _lastNetwork.ReceivedPackets)} txPackets={Math.Max(0, net.SentPackets - _lastNetwork.SentPackets)} countersReset={net.ReceivedBytes < _lastNetwork.ReceivedBytes || net.SentBytes < _lastNetwork.SentBytes}");
@@ -275,6 +290,8 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
 
     private void ResetWindow()
     {
+        _lastLostFrames = _reader?.LostFrames ?? 0;
+        _lastInvalidFrames = _reader?.InvalidFrames ?? 0;
         _reader?.ResetWindow();
         _wallFrames.Clear();
         _wallCount = _spikes = _unfocusedFrames = 0;
@@ -310,10 +327,12 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
                 _config.SetCVar(CVars.ProfEnabled, false);
             if (_zDiagnosticsOwned)
                 _config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, false);
+            if (_profileBufferOwned)
+                _config.SetCVar(CVars.ProfBufferSize, _previousProfileBufferSize);
         }
         finally
         {
-            _changingSettings = _profilerOwned = _zDiagnosticsOwned = false;
+            _changingSettings = _profilerOwned = _zDiagnosticsOwned = _profileBufferOwned = false;
             var writer = _writer;
             _writer = null;
             writer?.Dispose();
@@ -330,6 +349,12 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
     {
         if (!_changingSettings)
             _zDiagnosticsOwned = false;
+    }
+
+    private void OnProfileBufferChanged(int size)
+    {
+        if (!_changingSettings)
+            _profileBufferOwned = false;
     }
 
     private void OnEntityCreated(Entity<MetaDataComponent> entity) => _created++;

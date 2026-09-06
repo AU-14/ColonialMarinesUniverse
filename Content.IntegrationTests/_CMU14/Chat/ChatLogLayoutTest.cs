@@ -20,6 +20,100 @@ public sealed class ChatLogLayoutTest : GameTest
 
     [TestCase(false)]
     [TestCase(true)]
+    public async Task LongHistoryOnlyKeepsViewportRowsInTheControlTree(bool crt)
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var ui = Client.ResolveDependency<IUserInterfaceManager>();
+            var update = ui.GetType().GetMethod("FrameUpdate")!.CreateDelegate<Action<FrameEventArgs>>(ui);
+            Client.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.CrtUiEnabled, crt);
+            using var panel = new ChatLogPanel { SetSize = new Vector2(540, 400) };
+            ui.WindowRoot.AddChild(panel);
+            for (var i = 0; i < ChatLogPanel.MaxEntries; i++)
+            {
+                var text = $"Radio message {i}: A long transmission that wraps across multiple lines in the chat panel.";
+                panel.AddMessage(new ChatMessage(ChatChannel.Radio, text, "", default, null),
+                    FormattedMessage.FromUnformatted(text), Color.White);
+            }
+
+            for (var frame = 0; frame < 20; frame++)
+                update(new FrameEventArgs(1f / 60f));
+
+            Assert.That(panel.EntryCount, Is.EqualTo(ChatLogPanel.MaxEntries), "Keep the full scrollback history");
+            Assert.That(Descendants(panel).OfType<ChatMessageRow>().Count(), Is.LessThan(120),
+                "Offscreen history must not remain in the UI update/layout tree");
+        });
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task ScrollbackIsLazyAndPreservesRepeatsAndTheReaderWhenHistoryIsTrimmed(bool crt)
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var ui = Client.ResolveDependency<IUserInterfaceManager>();
+            var update = ui.GetType().GetMethod("FrameUpdate")!.CreateDelegate<Action<FrameEventArgs>>(ui);
+            Client.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.CrtUiEnabled, crt);
+            using var panel = new ChatLogPanel { SetSize = new Vector2(540, 400) };
+            ui.WindowRoot.AddChild(panel);
+            var entries = new List<ChatLogEntry>();
+            var formattedCount = 0;
+            for (var i = 0; i < ChatLogPanel.MaxEntries; i++)
+            {
+                var text = $"Radio {i}: " + string.Concat(Enumerable.Repeat("A wrapping message. ", i % 7 + 1));
+                entries.Add(panel.AddMessage(new ChatMessage(ChatChannel.Radio, text, "", default, null),
+                    () =>
+                    {
+                        formattedCount++;
+                        return FormattedMessage.FromUnformatted(text);
+                    }, Color.White));
+            }
+            Assert.That(formattedCount, Is.Zero, "Repopulating a tab must not format its entire history");
+
+            void Settle()
+            {
+                for (var frame = 0; frame < 20; frame++)
+                    update(new FrameEventArgs(1f / 60f));
+            }
+
+            Settle();
+            var scroll = Descendants(panel).OfType<ScrollContainer>().Single();
+            var bar = Descendants(panel).OfType<VScrollBar>().Single(b => b.Parent != scroll);
+            Assert.That(formattedCount, Is.LessThan(120));
+            Assert.That(entries[^1].Row, Is.Not.Null, "The newest message must be visible initially");
+            Assert.That(entries[0].Row, Is.Null);
+            TestContext.Progress.WriteLine($"CRT={crt}: {panel.EntryCount} history entries, " +
+                $"{Descendants(panel).OfType<ChatMessageRow>().Count()} active rows, {formattedCount} formatted messages");
+
+            entries[0].SetRepeatCount(9);
+            bar.Value = 0;
+            Settle();
+            Assert.That(entries[0].Row, Is.Not.Null, "The oldest retained message remains accessible");
+            Assert.That(Descendants(entries[0].Row!).OfType<Label>().Any(l => l.Visible && l.Text == "x9"), Is.True,
+                "An offscreen repeat count must survive materialization");
+            Assert.That(entries[^1].Row, Is.Null);
+
+            bar.Value = (bar.MaxValue - bar.Page) / 2;
+            Settle();
+            var anchor = entries.Where(e => e.Row != null && e.Row.Position.Y + e.Row.Height > scroll.VScroll)
+                .MinBy(e => e.Row!.Position.Y)!;
+            var previousY = anchor.Row!.Position.Y - scroll.VScroll;
+            panel.AddMessage(new ChatMessage(ChatChannel.Radio, "new", "", default, null),
+                FormattedMessage.FromUnformatted("new"), Color.White);
+            Settle();
+            Assert.That(panel.EntryCount, Is.EqualTo(ChatLogPanel.MaxEntries));
+            Assert.That(anchor.Row, Is.Not.Null);
+            Assert.That(anchor.Row!.Position.Y - scroll.VScroll, Is.EqualTo(previousY).Within(0.1f),
+                "Dropping the oldest history entry must preserve the visible message and pixel offset");
+            AssertRowsDoNotOverlap(panel, ChatLogPanel.MaxEntries);
+            panel.ScrollToBottom();
+            Settle();
+            Assert.That(bar.IsAtEnd, Is.True);
+        });
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
     public async Task WrappedHistoryLayoutSettlesAfterChanges(bool crt)
     {
         await Client.WaitAssertion(() =>
@@ -46,7 +140,7 @@ public sealed class ChatLogLayoutTest : GameTest
 
             void AssertSettled(int expectedCount)
             {
-                // Startup and resize deliberately refresh layout for eight frames. Once settled,
+                // Allow startup and resize layout to settle. Once settled,
                 // a width mismatch must not keep requeuing text measurement on every idle frame.
                 for (var frame = 0; frame < 20; frame++)
                     update(new FrameEventArgs(1f / 60f));
@@ -145,6 +239,16 @@ public sealed class ChatLogLayoutTest : GameTest
             ui.WindowRoot.AddChild(host);
             Settle();
             AssertRowsDoNotOverlap(panel, 30);
+            foreach (var scroll in Descendants(chat).OfType<ScrollContainer>())
+            {
+                if (!scroll.VisibleInTree)
+                    continue;
+                TestContext.Progress.WriteLine($"Split={split}, horizontal={horizontal}: {scroll.GetType().Name} " +
+                    $"name={scroll.Name} parent={scroll.Parent?.Name} size={scroll.Size} " +
+                    $"measure={scroll.IsMeasureValid} arrange={scroll.IsArrangeValid}");
+                Assert.That(scroll.IsMeasureValid, Is.True, $"Split={split}, horizontal={horizontal} must settle");
+                Assert.That(scroll.IsArrangeValid, Is.True);
+            }
             if (split)
                 AssertRowsDoNotOverlap(chat.SecondaryContents, 30);
         });
@@ -188,8 +292,11 @@ public sealed class ChatLogLayoutTest : GameTest
 
     private static void AssertRowsDoNotOverlap(ChatLogPanel panel, int expectedCount)
     {
-        var rows = Descendants(panel).OfType<ChatMessageRow>().ToArray();
-        Assert.That(rows, Has.Length.EqualTo(expectedCount));
+        var rows = Descendants(panel).OfType<ChatMessageRow>().OrderBy(row => row.Position.Y).ToArray();
+        Assert.That(panel.EntryCount, Is.EqualTo(expectedCount));
+        Assert.That(rows.Length, Is.LessThanOrEqualTo(expectedCount));
+        if (expectedCount > 0)
+            Assert.That(rows, Is.Not.Empty);
         for (var i = 0; i < rows.Length; i++)
         {
             Assert.That(rows[i].Height, Is.GreaterThan(0), $"Row {i} must be measured at panel size {panel.Size}");

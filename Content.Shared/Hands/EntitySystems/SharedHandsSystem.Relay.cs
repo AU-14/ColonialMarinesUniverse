@@ -35,16 +35,28 @@ public abstract partial class SharedHandsSystem
     private void RefRelayEvent<T>(Entity<HandsComponent> entity, ref T args)
     {
         var ev = CoreRelayEvent(entity, ref args);
-        args = ev.Args;
+        if (ev != null)
+            args = ev.Args;
     }
 
-    private HeldRelayedEvent<T> CoreRelayEvent<T>(Entity<HandsComponent> entity, ref T args)
+    private HeldRelayedEvent<T>? CoreRelayEvent<T>(Entity<HandsComponent> entity, ref T args)
     {
-        var ev = new HeldRelayedEvent<T>(args);
-
-        foreach (var held in EnumerateHeld(entity.AsNullable()))
+        HeldRelayedEvent<T>? ev = null;
+        // Keep EnumerateHeld's active-hand-first order without allocating its yield iterator.
+        // Camera offsets run during both prediction and rendering, often with both hands empty.
+        if (TryGetActiveItem(entity.AsNullable(), out var active))
         {
-            RaiseLocalEvent(held, ref ev);
+            ev = new HeldRelayedEvent<T>(args);
+            RaiseLocalEvent(active.Value, ref ev);
+        }
+
+        foreach (var name in entity.Comp.SortedHands)
+        {
+            if (name == entity.Comp.ActiveHandId || !TryGetHeldItem(entity.AsNullable(), name, out var held))
+                continue;
+
+            ev ??= new HeldRelayedEvent<T>(args);
+            RaiseLocalEvent(held.Value, ref ev);
         }
 
         return ev;

@@ -111,6 +111,32 @@ public sealed class CMUClientPerformanceTest
     }
 
     [Test]
+    public void CaptureBufferRetainsBusyFrameWhileNextFrameIsBeingWritten()
+    {
+        var profiler = CreateProfiler(logSize: CMUClientPerformanceSystem.MinimumProfileLogSize);
+        var start = BeginFrame(profiler, 1, out var root);
+        for (var i = 0; i < 45000; i++)
+            profiler.WriteValue("Count", i);
+        EndFrame(profiler, start, root, 0.04f, 12000);
+
+        var nextStart = BeginFrame(profiler, 2, out var nextRoot);
+        for (var i = 0; i < 45000; i++)
+            profiler.WriteValue("Count", i);
+        var reader = new CMUClientProfileReader(0);
+        reader.Read(profiler, -1);
+        Assert.That(reader.LostFrames, Is.Zero);
+        Assert.That(reader.Frames, Is.EqualTo(1));
+        Assert.That(reader.WorstWork.Detailed, Is.True);
+        Assert.That(reader.TotalAllocatedBytes, Is.EqualTo(12000));
+
+        EndFrame(profiler, nextStart, nextRoot, 0.05f, 14000);
+        reader.Read(profiler, -1);
+        Assert.That(reader.LostFrames, Is.Zero);
+        Assert.That(reader.Frames, Is.EqualTo(2));
+        Assert.That(reader.TotalAllocatedBytes, Is.EqualTo(26000));
+    }
+
+    [Test]
     public void OversizedStallRetainsRootTimingAndExplicitlyReportsMissingDetails()
     {
         var profiler = CreateProfiler(logSize: 131072);

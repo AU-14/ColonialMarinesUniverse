@@ -19,7 +19,7 @@ public sealed class ChatLogPanel : PanelContainer
 
     private readonly ChatScrollContainer _scroll;
     private readonly VScrollBar _scrollBar;
-    private readonly BoxContainer _rows;
+    private readonly ChatLogList _rows;
     private readonly Button _scrollToLatest;
     private bool _syncingScrollBar;
     private float _lastSyncedBarValue;
@@ -30,7 +30,7 @@ public sealed class ChatLogPanel : PanelContainer
     private float _lastLayoutWidth = -1f;
 
 
-    public int EntryCount => _rows.ChildCount;
+    public int EntryCount => _rows.EntryCount;
 
     public ChatLogPanel()
     {
@@ -51,7 +51,7 @@ public sealed class ChatLogPanel : PanelContainer
         // itself. Two reasons the built-in one doesn't work here: ScrollContainer adds it before any
         // content, so it draws *underneath* the message rows, and it overlays the right-hand edge of
         // those rows, which is exactly where ChatMessageRow puts its channel accent triangle.
-        _scroll = new ChatScrollContainer
+        _scroll = new ChatScrollContainer(this)
         {
             HorizontalExpand = true,
             VerticalExpand = true,
@@ -84,17 +84,10 @@ public sealed class ChatLogPanel : PanelContainer
 
         root.AddChild(new ChatScrollLayout(_scroll, _scrollBar));
 
-        _rows = new BoxContainer
+        _rows = new ChatLogList
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 0,
             HorizontalExpand = true,
-            VerticalExpand = false,
-            // Messages sit on the floor and grow upward, the way a terminal does. Align rather than a
-            // leading spacer: an expanding spacer is measured, and ScrollContainer measures its
-            // content unbounded, so the spacer's DesiredSize.Y explodes and every scroll computation
-            // reading _rows.DesiredSize.Y breaks with it. Align only moves children at arrange time.
-            Align = BoxContainer.AlignMode.End
+            VerticalExpand = false
         };
 
         _scroll.AddChild(_rows);
@@ -143,30 +136,29 @@ public sealed class ChatLogPanel : PanelContainer
             : null;
     }
 
-    public ChatMessageRow AddMessage(ChatMessage message, FormattedMessage formatted, Color color, Color? accentOverride = null, int? fontSize = null)
+    public ChatLogEntry AddMessage(ChatMessage message, FormattedMessage formatted, Color color, Color? accentOverride = null, int? fontSize = null)
     {
-        var row = new ChatMessageRow(message, formatted, color, accentOverride, fontSize);
-        _rows.AddChild(row);
+        return AddMessage(message, () => formatted, color, accentOverride, fontSize);
+    }
 
-        while (_rows.ChildCount > MaxEntries)
-        {
-            _rows.RemoveChild(0);
-        }
+    public ChatLogEntry AddMessage(ChatMessage message, Func<FormattedMessage> format, Color color, Color? accentOverride = null, int? fontSize = null)
+    {
+        var entry = new ChatLogEntry(message, format, color, accentOverride, fontSize);
+        var removedHeight = _rows.Add(entry);
+        if (!_followingBottom && removedHeight > 0)
+            _scroll.VScroll = MathF.Max(0, _scroll.VScroll - removedHeight);
 
         if (_followingBottom || _isAtBottom)
             QueueScrollToBottom();
         else
             _scrollToLatest.Visible = true;
 
-        return row;
+        return entry;
     }
 
     public void Clear()
     {
-        while (_rows.ChildCount > 0)
-        {
-            _rows.RemoveChild(0);
-        }
+        _rows.Clear();
 
         _isAtBottom = true;
         _scrollToLatest.Visible = false;
@@ -329,10 +321,8 @@ public sealed class ChatLogPanel : PanelContainer
 
     private void QueueLayoutRefresh()
     {
-        // RichTextLabel caches line breaks during measure. On startup, chat rows
-        // can be created before the separated chat panel reaches its final width,
-        // so keep refreshing briefly until the real width has settled.
-        _pendingLayoutRefreshFrames = 8;
+        // A width change remeasures the visible rows at their final available width.
+        _pendingLayoutRefreshFrames = 1;
     }
 
     private void StopFollowingBottom()
@@ -414,7 +404,33 @@ public sealed class ChatLogPanel : PanelContainer
 
     private sealed class ChatScrollContainer : ScrollContainer
     {
+        private readonly ChatLogPanel _owner;
         public event Action<float, float, float>? OnUserMouseWheel;
+
+        public ChatScrollContainer(ChatLogPanel owner)
+        {
+            _owner = owner;
+        }
+
+        protected override Vector2 MeasureOverride(Vector2 availableSize)
+        {
+            _owner._rows.SetViewport(VScroll, availableSize.Y, _owner._followingBottom);
+            return base.MeasureOverride(availableSize);
+        }
+
+        protected override Vector2 ArrangeOverride(Vector2 finalSize)
+        {
+            base.ArrangeOverride(finalSize);
+            // ScrollContainer now knows the updated height, so it can accept an anchor correction
+            // without clamping it against the previous window's estimated scrollbar maximum.
+            var offset = _owner._rows.AnchoredScroll;
+            if (MathF.Abs(VScroll - offset) > 0.01f)
+            {
+                VScroll = offset;
+                base.ArrangeOverride(finalSize);
+            }
+            return finalSize;
+        }
 
         protected override void MouseWheel(GUIMouseWheelEventArgs args)
         {

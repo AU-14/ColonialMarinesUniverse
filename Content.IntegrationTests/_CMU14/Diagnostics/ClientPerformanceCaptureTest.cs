@@ -42,16 +42,21 @@ public sealed class ClientPerformanceCaptureTest
             var resources = pair.Client.ResolveDependency<IResourceManager>();
             var system = pair.Client.EntMan.System<CMUClientPerformanceSystem>();
             var profiler = config.GetCVar(CVars.ProfEnabled);
+            var bufferSize = config.GetCVar(CVars.ProfBufferSize);
             var zDiagnostics = config.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled);
             try
             {
                 foreach (var alreadyEnabled in new[] { false, true })
                 {
                     config.SetCVar(CVars.ProfEnabled, alreadyEnabled);
+                    var previousBufferSize = alreadyEnabled ? 524288 : 8192;
+                    config.SetCVar(CVars.ProfBufferSize, previousBufferSize);
                     config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, alreadyEnabled);
                     system.StartCapture(5, 20);
                     Assert.That(system.Capturing, Is.True);
                     Assert.That(config.GetCVar(CVars.ProfEnabled), Is.True);
+                    Assert.That(config.GetCVar(CVars.ProfBufferSize), Is.GreaterThanOrEqualTo(262144),
+                        "Keep a busy completed frame while the next frame is being written");
                     Assert.That(config.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled), Is.True);
                     Assert.That(system.StartCapture(5, 20), Does.Contain("already running"));
                     system.ManualReport();
@@ -59,6 +64,7 @@ public sealed class ClientPerformanceCaptureTest
                     system.StopCapture();
                     Assert.That(system.Capturing, Is.False);
                     Assert.That(config.GetCVar(CVars.ProfEnabled), Is.EqualTo(alreadyEnabled));
+                    Assert.That(config.GetCVar(CVars.ProfBufferSize), Is.EqualTo(previousBufferSize));
                     Assert.That(config.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled), Is.EqualTo(alreadyEnabled));
                 }
 
@@ -66,12 +72,14 @@ public sealed class ClientPerformanceCaptureTest
                 config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, false);
                 system.StartCapture(5, 20);
                 // A manual toggle after startup transfers ownership back to the user.
+                config.SetCVar(CVars.ProfBufferSize, 131072);
                 config.SetCVar(CVars.ProfEnabled, false);
                 config.SetCVar(CVars.ProfEnabled, true);
                 config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, false);
                 config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, true);
                 system.StopCapture();
                 Assert.That(config.GetCVar(CVars.ProfEnabled), Is.True);
+                Assert.That(config.GetCVar(CVars.ProfBufferSize), Is.EqualTo(131072));
                 Assert.That(config.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled), Is.True);
 
                 var directory = new ResPath("/client-performance");
@@ -94,6 +102,7 @@ public sealed class ClientPerformanceCaptureTest
                 if (system.Capturing)
                     system.StopCapture();
                 config.SetCVar(CVars.ProfEnabled, profiler);
+                config.SetCVar(CVars.ProfBufferSize, bufferSize);
                 config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, zDiagnostics);
             }
         });

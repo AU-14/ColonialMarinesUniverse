@@ -36,13 +36,13 @@
                  margin only has to cover the gap between the gutter and the true edge, not the
                  gutter's own width.
                  No bottom margin - the input row sits directly on the log. -->
-            <BoxContainer Name="ChatPanes" Access="Public" Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True" VerticalExpand="True" Margin="0 2 2 0">
+            <widgets:ChatPaneLayout Name="ChatPanes" Access="Public" Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True" VerticalExpand="True" Margin="0 2 2 0">
                 <widgets:ChatLogPanel Name="Contents" Access="Public" HorizontalExpand="True" VerticalExpand="True" />
                 <BoxContainer Name="SecondaryPane" Access="Public" Visible="False" Orientation="Vertical" SeparationOverride="0" HorizontalExpand="True" VerticalExpand="True">
                     <widgets:ChatSplitResizeHandle Name="SecondaryResizeHandle" Access="Public" HorizontalExpand="True" MinHeight="4"/>
                     <widgets:ChatLogPanel Name="SecondaryContents" Access="Public" HorizontalExpand="True" VerticalExpand="True" />
                 </BoxContainer>
-            </BoxContainer>
+            </widgets:ChatPaneLayout>
             <OutputPanel Name="LegacyContents" Access="Public" Visible="False" HorizontalExpand="True" VerticalExpand="True" Margin="8 8 8 4" ShowScrollDownButton="True" />
             <!-- Flush to the chat panel's left, right and bottom borders; its own stylebox adds only
                  the top rule. -->

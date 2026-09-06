@@ -46,6 +46,8 @@ frame: they are the latest available samples and may come from different phases/
 FPS window with substantial swap time can reflect VSync, GPU/driver waiting or frame limiting; it
 does not by itself prove a CPU rendering bottleneck. Missing profiler samples are reported as missing,
 not interpreted as zero workload.
+Each report includes `lostFramesWindow` and `allocationRatePartial`. When the latter is true,
+`bytesPerSecond` is a lower bound from retained frames, not a complete allocation rate.
 
 Disabled by default. Only the active capture subscribes to churn events. Parsing reuses an interned
 scope tree, scans at most eight newly completed frames per update and 50,000 events per frame, and
@@ -58,7 +60,9 @@ mark truncation and suppress comparisons against incomplete inventories.
 Startup/report frames are excluded from both profiler aggregation and wall statistics to avoid
 diagnostic dumps creating their own incidents. The per-frame reader and profiling instrumentation
 still add measurable overhead. Reports flush to disk every five seconds. The default capture ends
-after two minutes; durations are limited to 5–1,800 seconds. The command restores profiler and Z
+after two minutes; durations are limited to 5–1,800 seconds. Captures temporarily reserve at least
+262,144 profiler log entries so busy frames survive until the reader runs. A larger existing buffer
+is preserved. The command restores the previous buffer size and profiler and Z
 diagnostic settings it enabled, preserves settings that were already on, and yields ownership when
 the user changes those settings during a capture. File/diagnostic errors stop collection and release
 the hooks. No engine-submodule changes are required.
