@@ -41,6 +41,8 @@
   description: A small grenade containing a vial of deadly nerve gas. Usually knocks out the targets for long enough to allow RMCs to take them out. You can almost hear your Instructor's screaming in the back of your head, mentioning something about a gas mask. It is set to detonate in 3.5 seconds.
   suffix: RM
   components:
+  - type: CMUGrenadeDetonationMode
+    impactSpawn: CMUImpactNeuroGas
   - type: Sprite
     sprite: _AU14/Weapons/Grenades/RMC/HSDP.rsi
   - type: SpawnOnTrigger

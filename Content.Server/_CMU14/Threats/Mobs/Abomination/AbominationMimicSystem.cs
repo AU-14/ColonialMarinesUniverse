@@ -4,6 +4,7 @@ using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
 using Content.Server.Radio.Components;
 using Content.Shared._CMU14.Threats.Mobs.Abomination;
+using Content.Server._CMU14.Weapons.Ranged;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -60,6 +61,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private GunIFFSystem _gunIff = default!;
+    [Dependency] private CMUHostileIFFSystem _hostileIFF = default!;
     [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
@@ -435,7 +437,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
 
     private void ApplyIffFactions(EntityUid disguised, IEnumerable<string> iffFactions)
     {
-        _gunIff.ClearUserFactions(disguised);
+        _hostileIFF.StripIFF(disguised);
         foreach (string faction in iffFactions)
         {
             _gunIff.AddUserFaction(disguised, faction);

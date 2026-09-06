@@ -155,6 +155,18 @@
 
 - type: entity
   parent: AU14HeadsetOpforMarine
+  id: CMU14HeadsetOpforJTAC
+  name: OPFOR JTAC radio headset
+  description: This is used by OPFOR personnel to communicate on the radio, including the JTAC channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforJTAC
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
   id: AU14HeadsetOpforAuxiliary
   name: OPFOR Auxiliary support radio headset
   description: This is used by OPFOR auxiliary support personnel to communicate on the radio.

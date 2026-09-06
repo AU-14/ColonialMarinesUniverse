@@ -29,8 +29,8 @@
     - XenoThreat
     - NeomorphsThreat
     # - AbominationsThreatDS # no xenocf markers
-#   - ApeThreatDS # Sunday
-#   - BadBloodClanThreat # Saturday
+    - ApeThreatDS
+    - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers
     - CultistThreatCF

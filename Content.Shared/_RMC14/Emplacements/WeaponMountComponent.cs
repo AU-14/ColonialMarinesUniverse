@@ -6,6 +6,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using RmcDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Shared._RMC14.Emplacements;
 
@@ -144,6 +145,18 @@ public sealed partial class WeaponMountComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool AcidableWhileDeployed;
+
+    /// <summary>
+    ///     Draw depth used while the mount has no assembled weapon.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public RmcDrawDepth EmptyDrawDepth = RmcDrawDepth.Items;
+
+    /// <summary>
+    ///     Draw depth used while the mount has an assembled weapon.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public RmcDrawDepth OccupiedDrawDepth = RmcDrawDepth.Mobs;
 
     [DataField]
     public SoundSpecifier? UndeploySound = new SoundPathSpecifier("/Audio/Items/screwdriver.ogg");

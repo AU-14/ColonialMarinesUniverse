@@ -1,0 +1,55 @@
+- type: entity
+  parent: RMCGunRackBase
+  id: CMUGunRackMP5AltWallEmpty
+  name: MP5A5 wall-mounted gun rack
+  suffix: MP5A5, Empty
+  description: A wall-mounted gun rack with a fixed slot designed to hold one MP5A5 submachine gun.
+  components:
+  - type: Transform
+    noRot: false
+  - type: ContainerContainer
+    containers:
+      item_1: !type:ContainerSlot
+        showEnts: false
+        occludes: true
+        ent: null
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/GunRacks/mp5_wall_rack.rsi
+  - type: ItemSlots
+    slots:
+      item_1:
+        name: MP5A5
+        whitelist:
+          tags:
+          - RMCWeaponSMGMP5Alt
+  - type: ItemMapper
+    mapLayers:
+      fill_1:
+        minCount: 1
+        whitelist:
+          tags:
+          - RMCWeaponSMGMP5Alt
+
+- type: entity
+  parent: CMUGunRackMP5AltWallEmpty
+  id: CMUGunRackMP5AltWallFilled
+  suffix: MP5A5 Drum, Filled
+  components:
+  - type: ItemSlots
+    slots:
+      item_1:
+        name: MP5A5
+        startingItem: CMUWeaponSMGMP5AltDrum
+        whitelist:
+          tags:
+          - RMCWeaponSMGMP5Alt
+
+- type: entity
+  parent: CMUGunRackMP5AltWallFilled
+  id: CMUGunRackMP5AltWallFilledPilotSkill
+  suffix: MP5A5 Drum, Filled, Pilot 1
+  components:
+  - type: CMUItemSlotSkillRequired
+    skills:
+      RMCSkillPilot: 1
+    failPopup: cmu-mp5-rack-pilot-skill-denied

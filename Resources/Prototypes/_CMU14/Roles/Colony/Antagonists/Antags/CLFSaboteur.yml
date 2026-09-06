@@ -1,0 +1,74 @@
+- type: entity
+  id: CLFSaboteur
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ CLFSaboteurRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: cmu-antag-clf-saboteur-greeting
+        color: OliveDrab
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: CMUGearCLFSaboteur
+      components:
+      - type: CLFSaboteur
+        sabotageGoal: 12
+      mindRoles:
+      - MindRoleCLFSaboteur
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFSaboteur
+  name: CLF Saboteur Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFSaboteurRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: CLFSaboteurRole
+  name: cmu-antag-clf-saboteur-name
+  setPreference: true
+  objective: cmu-antag-clf-saboteur-objective
+
+- type: startingGear
+  id: CMUGearCLFSaboteur
+  equipment:
+    back: CMUSatchelCLF
+    pocket1: CMHandsLatex
+    pocket2: CMMultitool
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - AU14RemoteSignallerAdvanced
+    - AU14IEDLarge
+    - AU14IEDLarge
+    - AU14IED
+    - AU14IED
+
+- type: entity
+  parent: CMSatchel
+  id: CMUSatchelCLF
+  suffix: CLF Saboteur
+  components:
+  - type: IgnoreContentsSize
+    items:
+      sizes:
+      - Huge
+  - type: Storage
+    grid:
+    - 0,0,19,3

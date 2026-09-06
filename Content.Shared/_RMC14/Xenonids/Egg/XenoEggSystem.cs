@@ -129,7 +129,7 @@ public sealed partial class XenoEggSystem : EntitySystem
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
         // Ovipositor cooldown reset is xeno-specific; skip for human-vs-human hijacks
-        if (ev.IsHumanHijack)
+        if (ev.HijackerType == DropshipHijackerType.Human) // CMU14
             return;
 
         var query = EntityQueryEnumerator<XenoOvipositorCapableComponent>();

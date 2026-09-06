@@ -70,13 +70,12 @@
     interfaces:
       enum.SurveillanceCameraMonitorUiKey.Key:
         type: SurveillanceCameraMonitorBoundUserInterface
-  - type: DeviceNetwork
-    deviceNetId: Reserved
-    receiveFrequencyId: SurveillanceCamera
-    transmitFrequencyId: SurveillanceCamera
   - type: WirelessNetworkConnection
     range: 400
   - type: SurveillanceCameraMonitor
+  - type: CameraNetworkReceiver
+    networks: [SurveillanceCameraCLF]
+    supportedSources: Standard
 
 # The spy camera: a pocketable wireless camera on the private CLF subnet. Carry it, drop it on the ground, or
 # wrench it down to anchor it against a wall - it feeds the cell's monitor either way.
@@ -104,12 +103,9 @@
   - type: Anchorable
   - type: Rotatable
     rotateWhileAnchored: true
-  - type: WirelessNetworkConnection
-    range: 400
-  - type: DeviceNetwork
-    deviceNetId: Reserved
-    receiveFrequencyId: SurveillanceCameraCLF
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraCLF]
+    sourceKinds: Standard
   - type: SurveillanceCamera
     networkSet: true
     nameSet: false

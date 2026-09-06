@@ -96,7 +96,7 @@ public sealed partial class XenoRageSystem : EntitySystem
         var validTarget = false;
         foreach (var entity in args.HitEntities)
         {
-            if (!_xeno.CanAbilityAttackTarget(xeno.Owner, entity))
+            if (!_xeno.CanGainRewardsFromTarget(xeno.Owner, entity)) // CMU14: no rewards from vehicles
                 continue;
 
             validTarget = true;

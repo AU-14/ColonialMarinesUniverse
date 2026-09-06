@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCWeaponFlamer
   id: RMCWeaponFL3Flamer
   name: flammenwerfer 3 heavy incineration unit
@@ -7,6 +7,10 @@
   - type: Corrodible
     isCorrodible: false
   - type: RMCMagneticItem
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - PyroWhitelist
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/FL3/fl3_inhands.rsi
     layers:

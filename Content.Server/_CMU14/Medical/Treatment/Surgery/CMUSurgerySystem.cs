@@ -4,8 +4,10 @@ using Content.Shared._CMU14.DroneOperator;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Components;
@@ -176,6 +178,13 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         _transform.SetCoordinates(part, Transform(body).Coordinates);
 
         _transform.AttachToGridOrMap(part);
+
+        var hadInfection = HasComp<AbominationInfectionComponent>(body);
+        var severed = new BodyPartSeveredEvent(body, part, limbPart.PartType);
+        RaiseLocalEvent(part, ref severed, broadcast: true);
+
+        if (hadInfection && !HasComp<AbominationInfectionComponent>(body))
+            _popup.PopupEntity(Loc.GetString("cmu-medical-amputation-cured-infection"), body, user, PopupType.Medium);
 
         if (StatusForPart(limbPart.PartType, limbPart.Symmetry) is { } statusProto)
             _status.TrySetStatusEffectDuration(body, statusProto, duration: null);

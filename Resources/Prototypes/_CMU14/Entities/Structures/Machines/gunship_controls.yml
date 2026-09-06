@@ -1,0 +1,23 @@
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMUComputerGunshipControls
+  name: Gunship Controls
+  description: A flight computer used to navigate and designate tactical landings for a gunship.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/gunship_controls.rsi
+    state: gunship_console
+  # Retained as a marker for gunship-console crash effects. Interaction and UI
+  # behavior come entirely from CMComputerDropshipNavigation.
+  - type: GunshipControls
+  - type: DropshipNavigationComputer
+    canTacticalLand: true
+    tacticalLandFootprintOverride: 9, 15
+  - type: WhitelistedShuttle
+    faction: govfor
+    ShuttleType: Dropship
+  - type: TacticalMapComputer
+    faction: govfor
+  - type: RequiresSkill
+    skills:
+      RMCSkillPilot: 1

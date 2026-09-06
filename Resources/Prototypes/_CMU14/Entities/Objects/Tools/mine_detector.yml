@@ -1,0 +1,26 @@
+- type: entity
+  parent: BaseItem
+  id: MineDetector
+  name: mine detector
+  description: A device that detects land mines in the surrounding area. It has a switch for two modes (LONG/SHORT).
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Devices/minedetector.rsi
+    layers:
+    - state: minedetector
+      map: [ "enum.MineDetectorVisualLayers.Base" ]
+    - state: minedetector_folded
+      map: [ "enum.MineDetectorVisualLayers.Folded" ]
+    state: minedetector
+  - type: Item
+    size: Normal
+  - type: Clothing
+    slots:
+    - suitstorage
+    - belt
+  - type: MineDetector
+  - type: Appearance
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno

@@ -88,6 +88,10 @@
       components:
       - Xeno
       - CMUPathogenWalker
+#  - type: GunUserWhitelist # CMU14
+#    whitelist:
+#      components:
+#      - DemoSpecWhitelist
 
 - type: entity
   parent: [RMCBaseWeaponLauncher, RMCBaseAttachableHolder]
@@ -125,6 +129,10 @@
       components:
       - Xeno
       - CMUPathogenWalker
+  - type: GunUserWhitelist # CMU14: demo specialist only
+    whitelist:
+      components:
+      - DemoSpecWhitelist
 
 # 84mm HE
 - type: entity

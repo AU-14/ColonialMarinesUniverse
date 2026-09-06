@@ -1,3 +1,4 @@
+using Content.Client._CMU14.Interface;
 using Content.Client.Administration.Managers;
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
@@ -38,6 +39,29 @@ namespace Content.Client.Options.UI
             UpdateTabs();
             _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+
+            SetUpCrtScreen();
+            _cfg.OnValueChanged(CCVars.CMUCrtMenuEffect, OnMenuEffectChanged);
+        }
+
+        /// <summary>
+        ///     The surface texture only - scanlines and grain. No bulge, no roll bar, and a much
+        ///     weaker vignette than the prop terminal uses: this is a page of settings being read,
+        ///     not a piece of set dressing. Pitch, grain and intensity still come from the shared
+        ///     cvars, so tuning those moves both.
+        /// </summary>
+        private void SetUpCrtScreen()
+        {
+            CrtOverlay.Source = CrtContent;
+            CrtOverlay.Curvature = 0f;
+            CrtOverlay.Vignette = 0.12f;
+            CrtOverlay.Roll = false;
+            CrtOverlay.Visible = _cfg.GetCVar(CCVars.CMUCrtMenuEffect) && StyleNano.CrtUiEnabled;
+        }
+
+        private void OnMenuEffectChanged(bool _)
+        {
+            SetUpCrtScreen();
         }
 
         [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
@@ -47,6 +71,7 @@ namespace Content.Client.Options.UI
 
             _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _cfg.UnsubValueChanged(CCVars.CMUCrtMenuEffect, OnMenuEffectChanged);
             CmuTab.CrtUiPreviewChanged -= OnCrtUiPreviewChanged;
             OnClose -= ResetCrtUiPreview;
             ResetCrtUiPreview();

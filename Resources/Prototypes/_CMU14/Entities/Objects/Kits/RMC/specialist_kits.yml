@@ -105,6 +105,9 @@
         amount: 1
       - id: AU14MagazineSniperL64A3
         amount: 18
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: SniperWhitelist
 
 - type: entity
   parent: RMCKitBase
@@ -137,6 +140,9 @@
         amount: 4
       - id: AU14Packet20MMGrenadeHESHRMCFilled
         amount: 4
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: GrenadeSpecWhitelist
 
 - type: entity
   parent: BaseItem

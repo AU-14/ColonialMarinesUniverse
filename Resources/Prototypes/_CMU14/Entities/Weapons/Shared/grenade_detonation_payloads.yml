@@ -1,0 +1,56 @@
+- type: entity
+  parent: RMCSmoke
+  id: CMUImpactRMCSmoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 7.5
+  - type: EvenSmoke
+    spawn: CMUImpactRMCSmoke
+    range: 2
+
+- type: entity
+  parent: RMCSmokePhosphorusWeak
+  id: CMUImpactRMCSmokePhosphorusWeak
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: EvenSmoke
+    spawn: RMCSmokePhosphorusNoSpreadWeak
+    initialSpread: 2
+    range: 2
+
+- type: entity
+  parent: RMCSmokePhosphorus
+  id: CMUImpactRMCSmokePhosphorus
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 3.75
+  - type: EvenSmoke
+    spawn: RMCSmokePhosphorusNoSpreadStrong
+    initialSpread: 2
+    range: 2
+
+- type: entity
+  parent: CMU14TearGas
+  id: CMUImpactTearGas
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 9
+  - type: EvenSmoke
+    spawn: CMUImpactTearGas
+    range: 1
+
+- type: entity
+  parent: AU14GrenadeNeuroGas
+  id: CMUImpactNeuroGas
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 9
+  - type: EvenSmoke
+    spawn: CMUImpactNeuroGas
+    range: 3

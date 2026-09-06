@@ -1,12 +1,17 @@
+using Content.Shared._CMU14.Dropship.AttachmentPoint;
+using Content.Shared._CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.Coordinates;
+using Content.Shared.Maps;
+using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -20,6 +25,7 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private TurfSystem _turf = default!;
     [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -51,7 +57,18 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
         if (!TryComp(deployableEnt, out RMCOrbitalDeployableComponent? deployable))
             return false;
 
-        var dropLocation =_map.AlignToGrid(target.ToCoordinates());
+        EntityCoordinates dropLocation;
+        var point = Transform(deployer).ParentUid;
+        if (HasComp<GunshipUtilityAttachmentPointComponent>(point))
+        {
+            // Tactical-hover state and the ground map are server-authoritative.
+            if (_net.IsClient || !TryGetGunshipDropLocation(deployer, point, user, out dropLocation))
+                return false;
+        }
+        else
+        {
+            dropLocation = _map.AlignToGrid(target.ToCoordinates());
+        }
 
         if (deployable.DeployBlacklist is { } blacklist)
         {
@@ -118,6 +135,46 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
             deployerComp.DropScatter,
             deployable.UseParachute);
 
+        return true;
+    }
+
+    private bool TryGetGunshipDropLocation(
+        EntityUid deployer,
+        EntityUid point,
+        EntityUid user,
+        out EntityCoordinates dropLocation)
+    {
+        dropLocation = default;
+        if (!_dropship.TryGetGridDropship(deployer, out var dropship) ||
+            !TryComp(dropship.Owner, out DropshipTacticalHoverComponent? hover) ||
+            hover.AltitudeTransitionAt != null ||
+            hover.GroundMap is not { } groundMap ||
+            !TryComp(groundMap, out MapGridComponent? groundGrid))
+        {
+            _popup.PopupPredictedCursor(Loc.GetString("cmu-gunship-lag14-requires-stable-hover"),
+                user,
+                PopupType.SmallCaution);
+            return false;
+        }
+
+        var worldPosition = _transform.GetWorldPosition(point);
+        var tile = _map.WorldToTile(groundMap, groundGrid, worldPosition);
+        if (!_map.TryGetTileRef(groundMap, groundGrid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
+        {
+            _popup.PopupPredictedCursor(Loc.GetString("cmu-gunship-lag14-no-ground-below"), user, PopupType.SmallCaution);
+            return false;
+        }
+
+        const CollisionGroup blockMask = CollisionGroup.Impassable |
+                                         CollisionGroup.MidImpassable |
+                                         CollisionGroup.HighImpassable;
+        if (_turf.IsTileBlocked(tileRef, blockMask))
+        {
+            _popup.PopupPredictedCursor(Loc.GetString("cmu-gunship-lag14-area-obstructed"), user, PopupType.SmallCaution);
+            return false;
+        }
+
+        dropLocation = new EntityCoordinates(groundMap, _map.TileCenterToVector(groundMap, groundGrid, tile));
         return true;
     }
 

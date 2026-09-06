@@ -16,7 +16,7 @@
   - type: InteractionOutline
   - type: WallMount
   - type: ApcPowerReceiver
-    needsPower: false # TODO RMC14 power
+    needsPower: false
   - type: ExtensionCableReceiver
   - type: Eye
     zoom: 0.5, 0.5
@@ -56,7 +56,27 @@
           params:
             volume: -8
   - type: RMCCamera
-    id: RMCSurveillanceCameraAlmayer
+  - type: SurveillanceCamera
+    nameSet: true
+    networkSet: false
+    setupAvailableNetworks:
+    - RMCSurveillanceCameraAlmayer
+    - RMCMonitorCameraAlamo
+    - RMCMonitorCameraNormandy
+  - type: WiresPanel
+  - type: Wires
+    alwaysRandomize: true
+    layoutId: SurveillanceCamera
+  - type: UserInterface
+    interfaces:
+      enum.SurveillanceCameraSetupUiKey.Camera:
+        type: SurveillanceCameraSetupBoundUi
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: CameraNetworkMember
+    networks: [RMCSurveillanceCameraAlmayer]
+    sourceKinds: Rmc
+  - type: CameraMapMarker
   - type: Corrodible
     isCorrodible: false
 
@@ -84,10 +104,9 @@
       enum.RMCCameraUiKey.Key:
         type: RMCCameraBui
   - type: RMCCameraComputer
-    protoIds:
-    - RMCSurveillanceCameraAlmayer
-    - RMCMonitorCameraAlamo
-    - RMCMonitorCameraNormandy
+  - type: CameraNetworkReceiver
+    networks: [RMCSurveillanceCameraAlmayer, RMCMonitorCameraAlamo, RMCMonitorCameraNormandy]
+    supportedSources: Rmc
   - type: WallMount
     arc: 360
 
@@ -97,8 +116,15 @@
   description: It's used to monitor the dropship.
   suffix: "Alamo"
   components:
+  - type: ApcPowerReceiver
+    needsPower: true
   - type: RMCCamera
+  - type: SurveillanceCamera
     id: RMCMonitorCameraAlamo
+    nameSet: true
+  - type: CameraNetworkMember
+    networks: [RMCMonitorCameraAlamo]
+    sourceKinds: Rmc
 
 - type: entity
   parent: RMCSurveillanceCameraAlmayer
@@ -106,8 +132,15 @@
   description: It's used to monitor the dropship.
   suffix: "Normandy"
   components:
+  - type: ApcPowerReceiver
+    needsPower: true
   - type: RMCCamera
+  - type: SurveillanceCamera
     id: RMCMonitorCameraNormandy
+    nameSet: true
+  - type: CameraNetworkMember
+    networks: [RMCMonitorCameraNormandy]
+    sourceKinds: Rmc
 
 - type: entity
   parent: MarkerBase
@@ -124,7 +157,9 @@
     state: camera
     cycle: true
   - type: RMCCamera
-    id: RMCMonitorCameraLandingZone
+  - type: CameraNetworkMember
+    networks: [RMCMonitorCameraLandingZone]
+    sourceKinds: Rmc
   - type: RMCStaticZoomLevel
   - type: Eye
     zoom: 0.9, 0.9

@@ -31,6 +31,7 @@
   abstract: true
   id: RMCM40DPTags
   components:
+  - type: CMUGrenadeDetonationMode
   - type: Tag
     tags:
     - Grenade
@@ -99,6 +100,8 @@
   name: 30mm HSDP smoke grenade
   description: The 30mm HSDP is a small, but powerful smoke grenade. Based off the same platform as the 30mm HEDP. It is set to detonate in 2.5 seconds.
   components:
+  - type: CMUGrenadeDetonationMode
+    impactSpawn: CMUImpactRMCSmoke
   - type: OnUseTimerTrigger
     delay: 2.5
   - type: Sprite
@@ -327,6 +330,7 @@
   name: M07 Training Grenade
   description: A harmless reusable version of the 30mm HEDP, used for training. Capable of being loaded into a grenade launcher, or thrown by hand.
   components:
+  - type: CMUGrenadeDetonationMode
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m07training.rsi
   - type: SoundOnTrigger
@@ -365,6 +369,8 @@
   name: 30mm WPDP white phosphorus grenade
   description: The 30mm WPDP is a small, but powerful phosphorus grenade. It is set to detonate in 2 seconds.
   components:
+  - type: CMUGrenadeDetonationMode
+    impactSpawn: CMUImpactRMCSmokePhosphorusWeak
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40wpdp.rsi
   - type: OnUseTimerTrigger
@@ -386,6 +392,8 @@
   name: 30mm CCDP chemical compound grenade
   description: The 30mm CCDP is a small, but powerful chemical compound grenade, similar in effect to WPDP. Word on the block says that the CCDP doesn't actually release White Phosphorus, but some other chemical developed in We-Ya labs.
   components:
+  - type: CMUGrenadeDetonationMode
+    impactSpawn: CMUImpactRMCSmokePhosphorus
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/ied.rsi
   - type: SpawnOnTrigger

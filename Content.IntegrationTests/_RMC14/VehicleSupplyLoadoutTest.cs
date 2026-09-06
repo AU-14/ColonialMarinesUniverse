@@ -96,7 +96,7 @@ public sealed class VehicleSupplyLoadoutTest
     }
 
     [Test]
-    public async Task BlackfootEntriesRaisePackedSupportBundle()
+    public async Task BlackfootEntriesAreDisabled()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -109,22 +109,7 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            var blackfoots = console!.Vehicles
-                .Where(v => v.Vehicle.Id.StartsWith("VehicleBlackfoot"))
-                .ToList();
-
-            Assert.That(blackfoots, Is.Not.Empty);
-            foreach (var entry in blackfoots)
-            {
-                Assert.That(entry.Bundle.Select(id => id.Id), Is.EquivalentTo(new[]
-                {
-                    "CMUBlackfootLandingPadFoldedProp",
-                    "CMUBlackfootFuelPumpCrate",
-                    "CMUBlackfootFlightComputerCrate",
-                    "CMUBlackfootAerospaceTug",
-                }), entry.Vehicle.Id);
-                Assert.That(entry.Bundle.Select(id => id.Id), Does.Not.Contain("CMUBlackfootLandingPad"));
-            }
+            Assert.That(console!.Vehicles.Any(entry => entry.Vehicle.Id.StartsWith("VehicleBlackfoot")), Is.False);
         });
 
         await pair.CleanReturnAsync();
@@ -650,6 +635,7 @@ public sealed class VehicleSupplyLoadoutTest
     }
 
     [Test]
+    [Ignore("Blackfoot commented out from vehicle_supply.yml (PR1816)")]
     public async Task BlackfootLoadoutOptionsInstallIntoDeclaredSlots()
     {
         await using var pair = await PoolManager.GetServerClient();

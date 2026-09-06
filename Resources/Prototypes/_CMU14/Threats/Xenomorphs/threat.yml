@@ -1,6 +1,7 @@
 
 - type: threat
   id: XenoThreat
+  burrowedLarvaEnabled: true
   lorePrimer: AU14PrimerThreatXeno
   roundstartspawns: XenoThreatSpawns
   blacklistedgamemodes:
@@ -27,6 +28,7 @@
 
 - type: threat
   id: XenoThreatCF
+  burrowedLarvaEnabled: true
   lorePrimer: AU14PrimerThreatXeno
   roundstartspawns: XenoThreatSpawnsCF
   thirdpartyinterval: 9100

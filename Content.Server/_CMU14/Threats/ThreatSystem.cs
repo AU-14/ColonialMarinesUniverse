@@ -962,6 +962,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
     private void AddThreatFaction(EntityUid entity)
     {
+        EnsureComp<ThreatComponent>(entity);
         EnsureComp<NpcFactionMemberComponent>(entity);
         _npcFaction.AddFaction((entity, CompOrNull<NpcFactionMemberComponent>(entity)), threatNPCFaction);
         RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(entity));

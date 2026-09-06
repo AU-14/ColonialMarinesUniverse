@@ -352,8 +352,6 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         trophy = Spawn(prototype, Transform(target).Coordinates);
         var trophyComp = EnsureComp<YautjaTrophyComponent>(trophy);
         trophyComp.Kind = kind;
-        trophyComp.Source = target;
-        trophyComp.Hunter = hunter;
         trophyComp.SourceName = GetSourceName(target, kind);
         Dirty(trophy, trophyComp);
         ApplyTrophyName(trophy, target, kind, trophyComp.SourceName);

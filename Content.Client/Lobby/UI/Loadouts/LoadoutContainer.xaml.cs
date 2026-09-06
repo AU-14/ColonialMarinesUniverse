@@ -19,6 +19,9 @@ public sealed partial class LoadoutContainer : BoxContainer
     private readonly EntityUid? _entity;
 
     public Button Select => SelectButton;
+    public Button Remove => RemoveButton;
+
+    public bool IsSelected { get; set; }
 
     public string? Text
     {
@@ -26,12 +29,13 @@ public sealed partial class LoadoutContainer : BoxContainer
         set => SelectButton.Text = value;
     }
 
-    public LoadoutContainer(ProtoId<LoadoutPrototype> proto, bool disabled, FormattedMessage? reason)
+    public LoadoutContainer(ProtoId<LoadoutPrototype> proto, bool disabled, FormattedMessage? reason, bool repeatable = false)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
         SelectButton.Disabled = disabled;
+        SelectButton.ToggleMode = !repeatable;
 
         if (disabled && reason != null)
         {

@@ -23,6 +23,7 @@ public sealed partial class MarineOrdersSystem : SharedMarineOrdersSystem
         SubscribeLocalEvent<SquadLeaderComponent, ComponentInit>(OnSquadLeaderInit);
         SubscribeLocalEvent<SquadLeaderComponent, ComponentStartup>(OnSquadLeaderStartup);
         SubscribeLocalEvent<SquadLeaderComponent, ComponentShutdown>(OnSquadLeaderShutdown);
+        SubscribeLocalEvent<SkillsComponent, ComponentInit>(OnSkillsInit);
         SubscribeLocalEvent<MarineOrdersComponent, SkillChangedEvent>(OnSkillChanged);
     }
 
@@ -44,6 +45,12 @@ public sealed partial class MarineOrdersSystem : SharedMarineOrdersSystem
             return;
 
         SyncOrderActions(ent);
+    }
+
+    private void OnSkillsInit(Entity<SkillsComponent> ent, ref ComponentInit args)
+    {
+        if (TryComp<MarineOrdersComponent>(ent, out var orders))
+            SyncOrderActions((ent, orders));
     }
 
     private void OnSquadLeaderInit(Entity<SquadLeaderComponent> ent, ref ComponentInit args)

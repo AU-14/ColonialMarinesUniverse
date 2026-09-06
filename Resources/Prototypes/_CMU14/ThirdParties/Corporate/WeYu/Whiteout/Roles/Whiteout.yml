@@ -49,6 +49,7 @@
   name: WY Whiteout Operative
   components:
   - type: GhostTakeoverAvailable
+  - type: PyroWhitelist
   - type: GhostRoleApplySpecial
     squad: SquadPMC
   - type: GhostRole

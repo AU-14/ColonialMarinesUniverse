@@ -10,8 +10,18 @@
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
-    - state: mag-0
-      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: ItemMapper
+    containerWhitelist:
+    - gun_magazine
+    mapLayers:
+      mag-0:
+        whitelist:
+          tags:
+          - CMUMagazineSMGMP5Stick
+      mag-1:
+        whitelist:
+          tags:
+          - CMUMagazineSMGMP5Drum
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/SMGs/mp5alt.rsi
   - type: Gun
@@ -101,7 +111,14 @@
     offsets:
       rmc-aslot-barrel: 0.715, 0
       rmc-aslot-rail: 0, 0.09
-      rmc-aslot-underbarrel: 0.35, -0.28
+      rmc-aslot-underbarrel: 0.1875, -0.3125
       rmc-aslot-stock: -0.1, 0
   - type: GunDamageModifier
     multiplier: 1.2
+  - type: Tag
+    tags:
+    - RMCWeaponSMG
+    - RMCWeaponSMGMP5Alt
+
+- type: Tag
+  id: RMCWeaponSMGMP5Alt

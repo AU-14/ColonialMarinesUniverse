@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Chat;
 using Robust.Client.Graphics;
@@ -58,8 +59,26 @@ public sealed class ChatTabOverflowPopup : Popup
                 HorizontalExpand = true,
                 MinHeight = 28,
                 StyleClasses = { StyleNano.StyleClassChatChannelSelectorButton },
-                Modulate = active ? Color.FromHex("#9fd0b3") : Color.FromHex("#737987")
             };
+
+            // Same split as the tab strip: under CRT the fill carries the state and Modulate is
+            // left alone, because it multiplies the stylebox as well as the label. These rows are
+            // plain Buttons rather than ChatTabButtons, so the tab classes are added by hand.
+            if (StyleNano.CrtUiEnabled)
+            {
+                button.AddStyleClass(StyleNano.StyleClassCrtChatTab);
+                if (active)
+                    button.AddStyleClass(StyleNano.StyleClassCrtChatTabSelected);
+
+                button.Label.FontColorOverride = active
+                    ? CrtTerminalPalette.TextBright
+                    : CrtTerminalPalette.TextDim;
+            }
+            else
+            {
+                button.Modulate = active ? Color.White : Color.FromHex("#737987");
+            }
+
             button.OnPressed += _ =>
             {
                 Close();

@@ -1,0 +1,49 @@
+- type: entity
+  parent: RMCGunRackBase
+  id: CMUGunRackGenericEmpty
+  name: wall-mounted gun rack
+  suffix: Generic, Two Guns, Empty
+  description: A wall-mounted rack with room for two firearms.
+  components:
+  - type: Transform
+    noRot: false
+  - type: ContainerContainer
+    containers:
+      item_1: !type:ContainerSlot
+        showEnts: false
+        occludes: true
+        ent: null
+      item_2: !type:ContainerSlot
+        showEnts: false
+        occludes: true
+        ent: null
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/GunRacks/generic_gunrack.rsi
+    noRot: true
+    layers:
+    - state: empty
+    - map: [ "enum.CMUGunRackVisualLayers.Gun1" ]
+      visible: false
+    - map: [ "enum.CMUGunRackVisualLayers.Gun2" ]
+      visible: false
+    - state: mask
+  - type: ItemSlots
+    slots:
+      item_1:
+        name: Gun
+        whitelist:
+          components:
+          - Gun
+      item_2:
+        name: Gun
+        whitelist:
+          components:
+          - Gun
+  - type: CMUGunRackVisualizer
+    slots:
+    - item_1
+    - item_2
+    offsets:
+    - -0.125, 0
+    - 0.125, 0
+    scale: 0.8, 0.8

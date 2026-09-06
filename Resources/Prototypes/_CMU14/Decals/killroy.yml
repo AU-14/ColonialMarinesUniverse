@@ -1,0 +1,8 @@
+- type: decal
+  id: CMUDecalKillroy
+  parent: CMDecalBase
+  tags: ["station", "markings"]
+  defaultCustomColor: true
+  sprite:
+    sprite: _CMU14/Decals/killroy.rsi
+    state: killroy

@@ -117,6 +117,7 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 25
+  - type: ClusterLimitHits
 
 # Shotgun trap (Phase 4d): no blast, just a point-blank cone of buckshot into whoever trips it. The trigger
 # reaches a little further and needs less overlap than the tripwire, so a fast runner still sets it off.

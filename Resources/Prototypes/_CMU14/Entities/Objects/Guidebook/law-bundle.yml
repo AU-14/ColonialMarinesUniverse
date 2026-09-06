@@ -16,6 +16,8 @@
         - Paper
         - Folder
         - Stamp
+      components:
+      - UniversalPaperTool
   - type: StorageFill
     contents:
       - id: AU14GuidebookLawMarine

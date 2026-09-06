@@ -146,6 +146,7 @@ cmu-medical-surgery-self-not-secured = Buckle yourself to a chair, bed, or rolle
 cmu-medical-surgery-self-not-allowed = You can't perform that surgery on yourself.
 cmu-medical-surgery-step-pain-uncontrolled = The patient is in too much pain to continue surgery. Use anesthesia or strong painkillers before trying again.
 cmu-medical-amputation-success = The limb is removed.
+cmu-medical-amputation-cured-infection = The flesh dies with the limb.
 
 # ---- Tool category names (used in the BUI button + armed line) -------
 
@@ -331,6 +332,7 @@ cmu-body-scanner-part-eschar = eschar
 cmu-body-scanner-part-splinted = splinted
 cmu-body-scanner-part-cast = casted
 cmu-body-scanner-part-tourniquet = tourniqueted
+cmu-body-scanner-part-flesh-infection = localized infection
 cmu-body-scanner-part-missing-limb = missing / severed limb
 cmu-body-scanner-line-organ = { $organ }: { $stage } ({ $current } / { $max })
 cmu-body-scanner-line-missing-organ = Missing { $organ } in { $part }
@@ -338,11 +340,13 @@ cmu-body-scanner-title-state = State
 cmu-body-scanner-title-damage = Damage
 cmu-body-scanner-title-blood = Blood
 cmu-body-scanner-title-heart = Heart
+cmu-body-scanner-title-flesh-infection = Infection
 cmu-body-scanner-title-no-data = Diagnostics
 cmu-body-scanner-title-missing-organ = Missing { $organ }
 cmu-body-scanner-detail-damage = total { $total } (brute { $brute }, burn { $burn })
 cmu-body-scanner-detail-blood = { $blood } / { $max }
 cmu-body-scanner-detail-heart-stopped = no activity detected
+cmu-body-scanner-detail-flesh-infection-systemic = systemic
 cmu-body-scanner-detail-heart-active = { $bpm } bpm
 cmu-body-scanner-detail-no-data = No diagnostic data available.
 cmu-body-scanner-detail-organ = { $stage } ({ $current } / { $max })

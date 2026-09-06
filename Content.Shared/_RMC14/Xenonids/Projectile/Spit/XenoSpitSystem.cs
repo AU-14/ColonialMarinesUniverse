@@ -274,7 +274,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             projectile.Shooter is not { Valid: true } shooter)
             return;
 
-        if (!_xeno.CanAbilityAttackTarget(shooter, args.Target))
+        if (!_xeno.CanGainRewardsFromTarget(shooter, args.Target)) // CMU14: no rewards from vehicles
             return;
 
         if (HasComp<XenoCaughtInTrapComponent>(args.Target))
@@ -433,7 +433,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
         }
 
-        if (!_xeno.CanAbilityAttackTarget(shooter, args.Target))
+        if (!_xeno.CanGainRewardsFromTarget(shooter, args.Target)) // CMU14: no rewards from vehicles
             return;
 
         _xenoShield.ApplyShield(shooter, ent.Comp.Shield, ent.Comp.Amount, addShield: true, maxShield: ent.Comp.Max.Double());

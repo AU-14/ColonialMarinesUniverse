@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Client._RMC14.Emplacements;
 using Content.Client.Hands.Systems;
 using Content.Client.Resources;
+using Content.Shared._CMU14.Dropship.TacticalLand;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.CombatMode;
 using Content.Shared.Weapons.Ranged.Components;
@@ -88,6 +89,18 @@ public sealed class CombatModeIndicatorsOverlay : Overlay
         var mousePosMap = _eye.PixelToMap(mouseScreenPosition);
         if (mousePosMap.MapId != args.MapId)
             return;
+
+        // The linked pilot HUD supplies its own direct-fire reticle. Do not
+        // draw the generic hand/melee sight over it.
+        if (_player.LocalEntity is { } pilot &&
+            _entMan.TryGetComponent(pilot, out GunshipPilotHudComponent? pilotHud) &&
+            pilotHud.Dropship != null &&
+            pilotHud.HasDirectFireWeapon &&
+            pilotHud.ViewOffset == 0 &&
+            !pilotHud.RearView)
+        {
+            return;
+        }
 
         var handEntity = _hands.GetActiveHandEntity();
         var isHandGunItem = _entMan.HasComponent<GunComponent>(handEntity);

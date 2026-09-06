@@ -29,7 +29,7 @@
     - Burst
     - FullAuto
     recoilUnwielded: 5
-    scatterWielded: 7
+    scatterWielded: 6
     scatterUnwielded: 19
     baseFireRate: 7.5
     burstScatterMult: 2
@@ -53,7 +53,7 @@
           - RMCMagazineRifleM54CHEAP
           - RMCMagazineRifleM54CWP
   - type: GunDamageModifier
-    multiplier: 1.1
+    multiplier: 1.35
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:

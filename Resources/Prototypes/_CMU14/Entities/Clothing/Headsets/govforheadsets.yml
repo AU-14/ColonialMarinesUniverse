@@ -155,6 +155,18 @@
       - AU14EncryptionKeyGovforJTAC
 
 - type: entity
+  parent: AU14HeadsetGovforMarine
+  id: CMU14HeadsetGovforJTAC
+  name: GOVFOR JTAC radio headset
+  description: This is used by GOVFOR personnel to communicate on the radio, including the JTAC channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforJTAC
+
+- type: entity
   parent: RMCHeadsetShip
   id: AU14HeadsetGovforAuxiliary
   name: GOVFOR Auxiliary support headset

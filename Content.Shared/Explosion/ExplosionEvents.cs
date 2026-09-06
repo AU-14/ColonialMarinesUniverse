@@ -4,6 +4,18 @@ using Content.Shared.Inventory;
 namespace Content.Shared.Explosion;
 
 /// <summary>
+/// Raised directed at an explosive immediately before its explosion is queued.
+/// Allows entity-specific systems to adjust the strength of that single explosion
+/// without mutating the explosive component or its prototype.
+/// </summary>
+[ByRefEvent]
+public record struct GetExplosionTriggerPropertiesEvent(float TotalIntensity, float MaxIntensity)
+{
+    public float TotalIntensity = TotalIntensity;
+    public float MaxIntensity = MaxIntensity;
+}
+
+/// <summary>
 ///     Raised directed at an entity to determine its explosion resistance, probably right before it is about to be
 ///     damaged by one.
 /// </summary>

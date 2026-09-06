@@ -773,18 +773,11 @@ namespace Content.Client.Vehicle
 
         private Angle GetBaseRotation(EntityUid baseUid, Angle angleOffset)
         {
-            var rotation = _transform.GetWorldRotation(baseUid);
-            if (_moverQ.TryComp(baseUid, out var mover) && mover.CurrentDirection != Vector2i.Zero)
-                rotation = new Vector2(mover.CurrentDirection.X, mover.CurrentDirection.Y).ToWorldAngle();
-
-            return rotation + angleOffset;
+            return _transform.GetWorldRotation(baseUid) + angleOffset;
         }
 
         private Angle GetVehicleFacingAngle(EntityUid vehicle, Angle vehicleRot)
         {
-            if (_moverQ.TryComp(vehicle, out var mover) && mover.CurrentDirection != Vector2i.Zero)
-                return new Vector2(mover.CurrentDirection.X, mover.CurrentDirection.Y).ToWorldAngle();
-
             return vehicleRot;
         }
 
@@ -845,10 +838,7 @@ namespace Content.Client.Vehicle
 
         private Direction GetBaseDirection(EntityUid baseUid, Angle baseRotation)
         {
-            if (_moverQ.TryComp(baseUid, out var mover) && mover.CurrentDirection != Vector2i.Zero)
-                return mover.CurrentDirection.AsDirection();
-
-            return baseRotation.GetCardinalDir();
+            return VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(baseRotation);
         }
 
         private bool TryGetVehicle(EntityUid turretUid, out EntityUid vehicle)
@@ -916,4 +906,3 @@ namespace Content.Client.Vehicle
         }
     }
 }
-

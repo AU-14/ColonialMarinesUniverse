@@ -51,6 +51,29 @@
     cost: 400
 
 - type: entity
+  parent: RMCDropshipAttachmentAmmo
+  id: CMUDropshipAttachmentAmmoM4332Flares
+  name: M4332 large signal flare box
+  description: A large reinforced box containing sixty signal flares for the M4332 Signal Flare Launcher.
+  components:
+  - type: Sprite
+    layers:
+    - state: 30mm_crate_10
+      color: "#8FCF91"
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipDirectFirePoint
+  - type: DropshipAmmo
+    rounds: 15
+    maxRounds: 15
+    roundsPerShot: 1
+    weapon: CMUDropshipAttachmentM4332FlareLauncher
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 250
+
+- type: entity
   parent: RMCDropshipAttachmentAmmoGAU
   id: RMCDropshipAttachmentAmmoGAUAP
   name: PGU-105 30mm Anti-tank ammo crate

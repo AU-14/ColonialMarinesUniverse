@@ -1,4 +1,4 @@
-using Content.Server.Chat.Managers; // CMU14
+using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Preferences.Managers;
 using Content.Server.Voting.Managers;
@@ -125,6 +125,8 @@ namespace Content.Server.AU14.Round
         {
             _state.SelectedThreat = threat;
             _sawmill.Debug($"[AuRoundSystem] Selected threat set to: {threat?.ID ?? "null"}");
+            var ev = new ThreatSelectedEvent();
+            RaiseLocalEvent(ref ev);
         }
 
         public bool UsesPostRoundstartThreatVote()

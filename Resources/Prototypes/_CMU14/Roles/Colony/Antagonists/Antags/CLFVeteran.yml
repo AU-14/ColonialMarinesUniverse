@@ -1,0 +1,70 @@
+- type: entity
+  id: CLFVeteran
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: CLFVeteranRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ CLFVeteranRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      jobBlacklist:
+      - AU14JobCLFGuerilla
+      - AU14JobCLFSapper
+      - AU14JobCLFCellLeader
+      - AU14JobCLFRadioOperator
+      - AU14JobCLFPhysician
+      - AU14JobCLFSurgeon
+      briefing:
+        text: clfveteran-role-greeting
+        color: OliveDrab
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: AU14GearCLFVeteran
+      components:
+      - type: CLFVeteran
+      - type: ColonyBounty
+        bounty: 1450
+        reason: Known CLF insurgent - armed and dangerous
+        recordName: CLF Veteran (Unknown)
+        capturedFaxPaper: AUPaperCLFVeteranCaptured
+      - type: Skills
+        skills:
+          RMCSkillFirearms: 3
+          RMCSkillMeleeWeapons: 3
+          RMCSkillCqc: 3
+          RMCSkillEndurance: 3
+          RMCSkillFireman: 3
+          RMCSkillConstruction: 3
+          RMCSkillLeadership: 3
+          RMCSkillMedical: 3
+          RMCSkillPolice: 1
+          RMCSkillSurgery: 3
+      mindRoles:
+      - MindRoleCLFVeteran
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFVeteran
+  name: CLF Veteran Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFVeteranRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: CLFVeteranRole
+  name: roles-antag-clfveteran-name
+  setPreference: true
+  objective: roles-antag-clfveteran-objective
+
+- type: startingGear
+  id: AU14GearCLFVeteran
+  equipment:
+    suitstorage: AU14WeaponRevolverM44Inscribed

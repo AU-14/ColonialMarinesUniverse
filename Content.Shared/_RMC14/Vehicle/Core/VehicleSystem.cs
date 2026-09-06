@@ -480,7 +480,8 @@ public sealed partial class VehicleSystem : EntitySystem
         var vehiclePos = _transform.GetWorldPosition(vehicleXform);
         var userPos = _transform.GetWorldPosition(userXform);
         var delta = userPos - vehiclePos;
-        var localDelta = (-vehicleXform.LocalRotation).RotateVec(delta);
+        var vehicleRotation = _transform.GetWorldRotation(vehicleXform);
+        var localDelta = (-vehicleRotation).RotateVec(delta);
 
         if (bypassEntry)
         {

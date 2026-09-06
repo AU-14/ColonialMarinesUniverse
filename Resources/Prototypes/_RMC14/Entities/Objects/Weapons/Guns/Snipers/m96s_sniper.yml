@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCBaseWeaponSniperRifle
   id: CMM96SSniperRifle
   name: M42A scoped rifle
@@ -22,6 +22,10 @@
   - type: Tag
     tags:
     - CMM96SSniperRifle
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - SniperWhitelist
   - type: MeleeWeapon
     damage:
       types:

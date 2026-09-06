@@ -121,6 +121,7 @@ cmu-yautja-thrall-marked-master = You claim {$target} as your thrall.
 cmu-yautja-thrall-marked-target = {$hunter} claims you as a Yautja thrall.
 cmu-yautja-thrall-broadcast = {$hunter} has claimed {$target} as a thrall.
 cmu-yautja-thrall-raise-invalid = The bracer cannot raise that. Only intact dead humanoids can serve.
+cmu-yautja-thrall-raise-limit = Too many raised thralls already walk. The bracer cannot sustain another until one of them falls.
 cmu-yautja-thrall-raised-others = {$target} shudders back to a twisted semblance of life!
 cmu-yautja-thrall-raised-examine = Their skin has an ashen pallor, and their movements carry a subtle wrongness.
 cmu-yautja-thrall-raise-cover-refuse = The corrupted flesh rejects the covering.

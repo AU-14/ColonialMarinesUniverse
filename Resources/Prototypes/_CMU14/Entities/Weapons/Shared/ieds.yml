@@ -55,6 +55,7 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 20
+  - type: ClusterLimitHits
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container

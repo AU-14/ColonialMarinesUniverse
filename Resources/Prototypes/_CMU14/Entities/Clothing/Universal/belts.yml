@@ -658,6 +658,48 @@
     - id: RMCWeaponRevolverMatebaNoStun
 
 - type: entity
+  parent: AU14BeltHolsterPistolBlack
+  id: AU14BeltHolsterPistolBlackHandcannonFilled
+  name: M276 pattern Peregrine handcannon holster rig
+  suffix: Black, AU14, Filled, Handcannon
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolHandcannonHI
+      amount: 3
+    - id: RMCMagazinePistolHandcannonHIAP
+      amount: 3
+    - id: RMCWeaponPistolHandcannon
+
+- type: entity
+  parent: AU14BeltHolsterPistolBlack
+  id: AU14BeltHolsterPistolBlackHandcannonGoldFilled
+  name: M276 pattern golden Peregrine handcannon holster rig
+  suffix: Black, AU14, Filled, Gold Handcannon
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolHandcannonHI
+      amount: 3
+    - id: RMCMagazinePistolHandcannonHIAP
+      amount: 3
+    - id: RMCWeaponPistolHandcannonGold
+
+- type: entity
+  parent: AU14BeltHolsterPistolBlack
+  id: AU14BeltHolsterPistolBlackHandcannonWinterWyvernFilled
+  name: M276 pattern Winter Wyvern handcannon holster rig
+  suffix: Black, AU14, Filled, Winter Wyvern
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolHandcannonHI
+      amount: 3
+    - id: RMCMagazinePistolHandcannonHIAP
+      amount: 3
+    - id: RMCWeaponPistolHandcannonWinterWyvern
+
+- type: entity
   parent: RMCMatebaBelt
   id: AU14MatebaSpecialBeltFilledAmmo
   name: M276 pattern Mateba Special holster rig

@@ -5,6 +5,7 @@ using Content.Server._RMC14.Rules;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
+using Content.Server.Maps;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
@@ -101,7 +102,14 @@ public sealed class CMURoundExtrasSystem : EntitySystem
             _mapAnnounced = true;
 
             if (_auRound.GetSelectedPlanet()?.Announcement is { } announcement)
-                _marineAnnounce.AnnounceARESStaging(null, announcement, null, "rmc-announcement-ares-map");
+            {
+                GameMapPrototype? shipProto = null;
+                if (_auRound.GetSelectedGovforShip() is { } shipId)
+                    _prototypes.TryIndex<GameMapPrototype>(shipId, out shipProto);
+
+                _marineAnnounce.AnnounceARESStaging(null, announcement, null, "rmc-announcement-ares-map",
+                    ship: _distressSignal.GetWarshipName(shipProto));
+            }
         }
     }
 

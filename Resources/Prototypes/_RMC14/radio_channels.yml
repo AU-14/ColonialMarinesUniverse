@@ -9,7 +9,7 @@
 
 # Almayer channels
 - type: radioChannel
-  id: MarineCommon
+  id: MarineCommon # used by ARES
   name: chat-radio-marine-common
   keycode: "ć" #; and g in cm13
   frequency: 1480

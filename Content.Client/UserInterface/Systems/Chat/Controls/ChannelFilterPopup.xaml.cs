@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.Chat;
 using Content.Shared.CCVar;
+using Content.Client.Lobby.UI;
+using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Chat;
 using Robust.Shared.Utility;
 using Robust.Shared.Configuration;
@@ -96,6 +98,61 @@ public sealed partial class ChannelFilterPopup : Popup
         {
             UpdateHighlights(highlights);
         }
+
+        ApplyCrtTheme();
+    }
+
+    /// <summary>
+    ///     Every panel in this popup is authored with a baked <c>PanelOverride</c> colour, which also
+    ///     beats any stylesheet rule. For CRT users, drop those and use style classes so the popup
+    ///     tracks the palette, then let <see cref="CrtLobbyTheme"/> tag the buttons, labels, line
+    ///     edits and scrollbars.
+    /// </summary>
+    /// <remarks>
+    ///     Safe to use CrtLobbyTheme here even though it skips chat: it only bails on a
+    ///     <c>ChatBox</c>, and this popup is created into the modal root, not under one.
+    /// </remarks>
+    private void ApplyCrtTheme()
+    {
+        if (!StyleNano.CrtUiEnabled)
+            return;
+
+        FilterPopupPanel.PanelOverride = null;
+        FilterPopupPanel.AddStyleClass(StyleNano.StyleClassCrtPanel);
+        ApplyCrtTheme(FilterPopupPanel);
+    }
+
+    /// <summary>
+    ///     Re-themes a subtree built after construction. Both halves are needed: CrtLobbyTheme only
+    ///     tags controls that exist when it runs, and it never touches <see cref="PanelContainer"/>,
+    ///     which the rows here author with their own baked colours.
+    /// </summary>
+    private static void ApplyCrtTheme(Control container)
+    {
+        if (!StyleNano.CrtUiEnabled)
+            return;
+
+        foreach (var panel in GetDescendantPanels(container))
+        {
+            panel.PanelOverride = null;
+            panel.AddStyleClass(StyleNano.StyleClassCrtInsetPanel);
+        }
+
+        CrtLobbyTheme.Apply(container);
+    }
+
+    private static IEnumerable<PanelContainer> GetDescendantPanels(Control root)
+    {
+        foreach (var child in root.Children)
+        {
+            if (child is PanelContainer panel)
+                yield return panel;
+
+            foreach (var nested in GetDescendantPanels(child))
+            {
+                yield return nested;
+            }
+        }
     }
 
     public bool IsActive(ChatChannel channel)
@@ -169,6 +226,8 @@ public sealed partial class ChannelFilterPopup : Popup
                 FilterVBox.AddChild(checkbox);
             }
         }
+
+        ApplyCrtTheme(FilterVBox);
     }
 
     public void SetFiltersReadOnly(bool readOnly)
@@ -224,6 +283,8 @@ public sealed partial class ChannelFilterPopup : Popup
         RenameTabButton.Disabled = activeTab == null || activeIsAll;
         RemoveTabButton.Disabled = tabs.Count <= 1 ||
                                    string.Equals(activeTabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase);
+
+        ApplyCrtTheme(TabsList);
     }
 
     public void ConfigureRadioFilters(IReadOnlyList<ChatRadioTarget> radios, IReadOnlyList<string> activeLabels, bool radioEnabled)
@@ -253,7 +314,9 @@ public sealed partial class ChannelFilterPopup : Popup
                 Text = radio.Name,
                 Pressed = allRadios || activeLabels.Any(label => string.Equals(label, radio.Label, StringComparison.OrdinalIgnoreCase)),
                 Disabled = !radioEnabled,
-                Modulate = Color.TryFromHex(radio.Color, out var radioColor) ? radioColor : Color.White
+                Modulate = Color.TryFromHex(radio.Color, out var radioColor) ? radioColor : Color.White,
+                // Match the channel filters in the column beside these.
+                MinHeight = 26
             };
 
             var capturedLabel = radio.Label;
@@ -266,6 +329,8 @@ public sealed partial class ChannelFilterPopup : Popup
             RadioFilterVBox.AddChild(checkbox);
             _radioFilterStates[capturedLabel] = checkbox;
         }
+
+        ApplyCrtTheme(RadioFilterVBox);
     }
 
     public void ConfigureStyles(IReadOnlyList<ChatStyleSettings> styles, IReadOnlyList<ChatStyleTarget> targets)
@@ -392,6 +457,8 @@ public sealed partial class ChannelFilterPopup : Popup
 
             StyleRows.AddChild(rowPanel);
         }
+
+        ApplyCrtTheme(StyleRows);
     }
 
     public void SetLegacyMode(bool enabled)

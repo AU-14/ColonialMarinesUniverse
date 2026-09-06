@@ -16,7 +16,7 @@ public sealed partial class SemiPermanentInjuryTriggerSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedStatusEffectsSystem _status = default!;
 
-    private static readonly TimeSpan NerveDamageDuration = TimeSpan.FromMinutes(30);
+    private static readonly TimeSpan NerveDamageDuration = TimeSpan.FromMinutes(15);
     private static readonly EntProtoId NerveDamageArm = "StatusEffectCMUNerveDamageArm";
     private static readonly EntProtoId NerveDamageFoot = "StatusEffectCMUNerveDamageFoot";
     private static readonly EntProtoId NerveDamageHand = "StatusEffectCMUNerveDamageHand";
@@ -64,6 +64,9 @@ public sealed partial class SemiPermanentInjuryTriggerSystem : EntitySystem
         if (!IsEnabled())
             return;
         if (!TryResolveNerveStatus(args.Type, out var statusId))
+            return;
+
+        if (_status.TryGetStatusEffect(args.Body, statusId, out _))
             return;
 
         _status.TrySetStatusEffectDuration(args.Body, statusId, NerveDamageDuration);

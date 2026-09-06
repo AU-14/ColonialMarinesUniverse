@@ -1,0 +1,69 @@
+- type: entity
+  id: CorporateSpy
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ CorporateSpyRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: spy-role-greeting
+        color: DarkSlateGray
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: AU14GearCorporateSpy
+      components:
+      - type: CorporateAgent
+        corporation: Laselle Bionational
+        paperPrototype: CMUPaperLASELLE
+        requiredItems: 2
+        wyCounterIntel: true
+      - type: ColonyBounty
+        bounty: 1625
+        reason: Corporate espionage - theft of Weyland-Yutani research
+        recordName: Laselle Operative (Unknown)
+        includePrints: true
+        capturedFaxPaper: CMUPaperColonyAntagCaptured
+      mindRoles:
+      - MindRoleCorporateSpy
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCorporateSpy
+  name: Corporate Spy Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CorporateSpyRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: CorporateSpyRole
+  name: roles-antag-spy-name
+  setPreference: true
+  objective: roles-antag-spy-objective
+
+- type: startingGear
+  id: AU14GearCorporateSpy
+  equipment:
+    pocket1: AU14IDCardCorporateSpy
+    pocket2: CMUCorporateDataLink
+
+- type: entity
+  parent: BaseItem
+  id: CMUCorporateDataLink
+  name: corporate data link
+  description: A portable transmitter used to exfiltrate high value research assets offworld. Activate it once you have the goods on you.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _AU14/Items/laptop.rsi
+    state: laptop_off_objective
+  - type: CorporateDataLink

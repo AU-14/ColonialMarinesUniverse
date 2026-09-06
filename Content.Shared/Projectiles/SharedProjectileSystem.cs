@@ -143,6 +143,17 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (ev.Handled)
             return;
 
+        // ProjectileHitEvent is directed at the projectile so projectile-side
+        // effects can alter the hit. Also notify the entity that was actually
+        // struck after those alterations. This notification is authoritative:
+        // server hull integrity must not participate in client prediction or
+        // leave target entities in the predicted-reset bookkeeping.
+        if (_net.IsServer)
+        {
+            var targetHit = new ProjectileHitTargetEvent(ev.Damage, uid, component.Shooter);
+            RaiseLocalEvent(target, ref targetHit);
+        }
+
         var coordinates = Transform(projectile).Coordinates;
         var otherName = ToPrettyString(target);
         var modifiedDamage = _net.IsServer
@@ -625,3 +636,14 @@ public record struct ProjectileReflectAttemptEvent(EntityUid ProjUid, Projectile
 /// </summary>
 [ByRefEvent]
 public record struct ProjectileHitEvent(DamageSpecifier Damage, EntityUid Target, EntityUid? Shooter = null, bool Handled = false);
+
+/// <summary>
+/// Raised authoritatively on the entity struck by a projectile after
+/// projectile-side hit modifiers have run, but before ordinary target damage
+/// is applied.
+/// </summary>
+[ByRefEvent]
+public readonly record struct ProjectileHitTargetEvent(
+    DamageSpecifier Damage,
+    EntityUid Projectile,
+    EntityUid? Shooter = null);

@@ -56,9 +56,9 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-#   - AbominationsThreatDS # Sunday
-#   - ApeThreatDS # Sunday
-#   - BadBloodClanThreat # Saturday
+    - AbominationsThreatDS
+    - ApeThreatDS
+    - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF
     - CultistThreatCF

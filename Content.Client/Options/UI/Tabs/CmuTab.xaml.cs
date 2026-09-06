@@ -25,14 +25,59 @@ public sealed partial class CmuTab : Control
         IoCManager.InjectDependencies(this);
 
         var crtUiEnabled = Control.AddOption(new OptionCrtUiEnabled(Control, _cfg, CrtUiEnabledCheckBox));
-        CrtUiColorSlider.Slider.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv;
-        var crtUiColor = Control.AddOption(new OptionCrtUiColor(Control, _cfg, CrtUiColorSlider));
         crtUiEnabled.PreviewValueChanged += UpdateCrtUiOptionsPreview;
-        crtUiColor.PreviewValueChanged += UpdateCrtUiOptionsPreview;
+
+        // CRT colour picker (1/4) - switched off. Re-enable together with the slider in CmuTab.xaml
+        // and the three blocks below. OptionCrtUiColor itself is left whole and untouched.
+        // No SelectorType to set any more - CmuColorPicker is HSV by construction.
+        // var crtUiColor = Control.AddOption(new OptionCrtUiColor(Control, _cfg, CrtUiColorSlider));
+        // crtUiColor.PreviewValueChanged += UpdateCrtUiOptionsPreview;
+
+        // Not previewed like the two above, and not hidden when CRT is off either - it only does
+        // anything under the CRT theme, but it is an accessibility setting and hiding it behind
+        // another toggle is how people fail to find it. It applies on Apply like every other
+        // checkbox here.
+        Control.AddOptionCheckBox(CCVars.CMUChatReadableFont, ChatReadableFontCheckBox);
+
+        // Directly under the readable-font box because the two compose - they are the same setting
+        // to a player ("make chat easier to read"), split only because one changes the face and the
+        // other the size, and either is useful without the other.
+        // Off first here, unlike the tint below: normal size is the default and the list reads as
+        // strength ascending from it.
+        Control.AddOptionDropDown(
+            CCVars.CMUChatBigFont,
+            ChatBigFontDropDown,
+            [
+                new OptionDropDownCVar<string>.ValueOption(
+                    CCVars.CMUChatBigFontOff,
+                    Loc.GetString("ui-options-crt-chat-big-font-off")),
+                new OptionDropDownCVar<string>.ValueOption(
+                    CCVars.CMUChatBigFontOne,
+                    Loc.GetString("ui-options-crt-chat-big-font-one")),
+                new OptionDropDownCVar<string>.ValueOption(
+                    CCVars.CMUChatBigFontTwo,
+                    Loc.GetString("ui-options-crt-chat-big-font-two")),
+            ]);
+
+        // Muted first, because it is the default and the list reads as strength descending.
+        Control.AddOptionDropDown(
+            CCVars.CMUChatRowTint,
+            ChatRowTintDropDown,
+            [
+                new OptionDropDownCVar<string>.ValueOption(
+                    CCVars.CMUChatRowTintMuted,
+                    Loc.GetString("ui-options-crt-chat-row-tint-muted")),
+                new OptionDropDownCVar<string>.ValueOption(
+                    CCVars.CMUChatRowTintFull,
+                    Loc.GetString("ui-options-crt-chat-row-tint-full")),
+                new OptionDropDownCVar<string>.ValueOption(
+                    CCVars.CMUChatRowTintOff,
+                    Loc.GetString("ui-options-crt-chat-row-tint-off")),
+            ]);
 
         Control.AddOptionCheckBox(CCVars.ChatEnableRunechatBubbles, RunechatSpeechBubblesCheckBox);
         Control.AddOptionPercentSlider(CCVars.ChatRunechatBubbleScale, RunechatSpeechBubbleScaleSlider, 0.5f, 2f);
-        Control.AddOptionCheckBox(CCVars.ChatGhostFollowButton, ChatGhostFollowButton);
+        Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.TargetedHealingEnabled, TargetedHealingCheckBox);
@@ -46,15 +91,25 @@ public sealed partial class CmuTab : Control
         UpdateCrtUiOptionsVisibility();
     }
 
+    /// <summary>
+    ///     Nothing to show or hide while the colour picker is switched off. Kept as a method so
+    ///     re-enabling it is one uncommented line rather than a reshuffle of its two callers.
+    /// </summary>
     private void UpdateCrtUiOptionsVisibility()
     {
-        CrtUiColorSlider.Visible = CrtUiEnabledCheckBox.Pressed;
+        // CRT colour picker (2/4).
+        // CrtUiColorSlider.Visible = CrtUiEnabledCheckBox.Pressed;
     }
 
     private void UpdateCrtUiOptionsPreview()
     {
         UpdateCrtUiOptionsVisibility();
-        CrtUiPreviewChanged?.Invoke(CrtUiEnabledCheckBox.Pressed, CrtUiColorSlider.Slider.Color.ToHex());
+
+        // CRT colour picker (3/4). With no picker to read, the preview uses the colour already in
+        // the cvar - so toggling the theme on and off still previews in the configured colour
+        // rather than snapping to a default the player never chose.
+        CrtUiPreviewChanged?.Invoke(CrtUiEnabledCheckBox.Pressed, _cfg.GetCVar(CCVars.CrtUiColor));
+        // CrtUiPreviewChanged?.Invoke(CrtUiEnabledCheckBox.Pressed, CrtUiColorSlider.Picker.Color.ToHex());
     }
 
     private sealed class OptionCrtUiEnabled : BaseOptionCVar<bool>
@@ -127,6 +182,10 @@ public sealed partial class CmuTab : Control
         }
     }
 
+    /// <summary>
+    ///     CRT colour picker (4/4). Unused while the picker is switched off - deliberately left
+    ///     whole rather than deleted, so turning it back on is uncommenting, not rewriting.
+    /// </summary>
     private sealed class OptionCrtUiColor : BaseOptionCVar<string>
     {
         private readonly OptionColorSlider _slider;
@@ -136,20 +195,18 @@ public sealed partial class CmuTab : Control
 
         protected override string Value
         {
-            get => _slider.Slider.Color.ToHex();
+            get => _slider.Picker.Color.ToHex();
             set
             {
                 _suppressColorChanged = true;
                 try
                 {
-                    _slider.Slider.Color = ResolveCrtColor(value);
+                    _slider.Picker.Color = ResolveCrtColor(value);
                 }
                 finally
                 {
                     _suppressColorChanged = false;
                 }
-
-                UpdateLabelColor();
             }
         }
 
@@ -161,13 +218,10 @@ public sealed partial class CmuTab : Control
         {
             _slider = slider;
 
-            slider.Slider.OnColorChanged += _ =>
+            slider.Picker.OnColorChanged += _ =>
             {
                 if (_suppressColorChanged)
-                {
-                    UpdateLabelColor();
                     return;
-                }
 
                 ValueChanged();
             };
@@ -194,18 +248,12 @@ public sealed partial class CmuTab : Control
         protected override void ValueChanged()
         {
             base.ValueChanged();
-            UpdateLabelColor();
             NotifyPreviewValueChanged();
         }
 
         protected override bool IsValueEqual(string a, string b)
         {
             return ResolveCrtColor(a).ToHex() == ResolveCrtColor(b).ToHex();
-        }
-
-        private void UpdateLabelColor()
-        {
-            _slider.ExampleLabel.FontColorOverride = _slider.Slider.Color;
         }
 
         private void NotifyPreviewValueChanged()

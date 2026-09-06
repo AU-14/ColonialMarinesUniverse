@@ -115,4 +115,9 @@
   components:
   - type: IFFFaction
 
-# TODO: PART
+# ├──[ THREATS ]─────────────────────────────────────────────────────┤
+- type: entity
+  id: FactionXeno
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction

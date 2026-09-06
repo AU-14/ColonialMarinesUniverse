@@ -115,13 +115,14 @@ public sealed partial class RMCMagneticSystem : EntitySystem
 
     private bool CanReturn(Entity<RMCMagneticItemComponent> ent, EntityUid user, out EntityUid magnetizer, out EntityUid? receivingItem, out string receivingContainer)
     {
-        if (!ent.Comp.NeedsMagneticField)
-        {
-            magnetizer = user;
-            receivingItem = null;
-            receivingContainer = "";
-            return true;
-        }
+        // CMU14: receivers must see the event even without a magnetic field, or the broiler never reclaims a dropped flamer
+        //if (!ent.Comp.NeedsMagneticField)
+        //{
+        //    magnetizer = user;
+        //    receivingItem = null;
+        //    receivingContainer = "";
+        //    return true;
+        //}
 
         var ev = new RMCMagnetizeItemEvent(user, ent.Owner, ent.Comp.MagnetizeToSlots, SlotFlags.OUTERCLOTHING | SlotFlags.POCKET);
         RaiseLocalEvent(user, ref ev);
@@ -129,7 +130,7 @@ public sealed partial class RMCMagneticSystem : EntitySystem
         magnetizer = ev.Magnetizer ?? default;
         receivingItem = ev.ReceivingItem;
         receivingContainer = ev.ReceivingContainer;
-        return magnetizer != default;
+        return ent.Comp.NeedsMagneticField ? magnetizer != default : true; // CMU14
     }
 
     private bool TryReturn(Entity<RMCMagneticItemComponent> ent, EntityUid user)

@@ -1,3 +1,4 @@
+using Content.Server._CMU14.Chat; // CMU14
 using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Server.AU14.Round;
 using Content.Server.Chat.Systems;
@@ -111,9 +112,15 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         if (Math.Abs(oldTariff - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            _chat.DispatchGlobalAnnouncement(
+            //_chat.DispatchGlobalAnnouncement(
+            //    $"Corporate transit tariff has been set to {clamped:F0}%. Submission payouts to the colony have been adjusted.",
+            //    "Corporate Affairs",
+            //    playSound: true,
+            //    announcementSound: sound); // CMU14: xenos must not receive colony announcements
+            _chat.DispatchFilteredAnnouncement(
+                ColonyAnnouncements.Recipients(EntityManager), // CMU14
                 $"Corporate transit tariff has been set to {clamped:F0}%. Submission payouts to the colony have been adjusted.",
-                "Corporate Affairs",
+                sender: "Corporate Affairs",
                 playSound: true,
                 announcementSound: sound);
         }

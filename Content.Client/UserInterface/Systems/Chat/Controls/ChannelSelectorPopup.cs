@@ -1,3 +1,4 @@
+using Content.Client.Stylesheets;
 using Content.Shared.Chat;
 using Robust.Client.UserInterface.Controls;
 using static Robust.Client.UserInterface.Controls.BaseButton;
@@ -30,17 +31,27 @@ public sealed class ChannelSelectorPopup : Popup
 
     public ChannelSelectorPopup()
     {
+        // This used to be a bare row of buttons with no backdrop at all, drawn straight over the
+        // game behind it - which is why it was so hard to read. The panel comes from a style class
+        // rather than a PanelOverride so it follows the CRT palette when that changes.
+        var panel = new PanelContainer();
+        panel.AddStyleClass(StyleNano.CrtUiEnabled
+            ? StyleNano.StyleClassCrtChatPopup
+            : StyleNano.StyleClassChatSubPanel);
+        AddChild(panel);
+
         _channelSelectorHBox = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 1
+            SeparationOverride = 1,
+            HorizontalExpand = true
         };
 
         _chatUIController = UserInterfaceManager.GetUIController<ChatUIController>();
         _chatUIController.SelectableChannelsChanged += SetChannels;
         SetChannels(_chatUIController.SelectableChannels);
 
-        AddChild(_channelSelectorHBox);
+        panel.AddChild(_channelSelectorHBox);
     }
 
     public ChatSelectChannel? FirstChannel

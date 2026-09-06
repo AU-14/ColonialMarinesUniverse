@@ -1,0 +1,7 @@
+- type: loadoutGroup
+  id: GOVFORXOSidearmBeltAU14
+  name: au14-loadout-group-commander-sidearm-belt
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - XOSidearmM48A5AU14

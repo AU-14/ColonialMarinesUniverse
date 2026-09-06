@@ -227,6 +227,8 @@
   description: A railing, for your hands. Woooow.
   components:
     - type: VehicleSmashable
+    - type: Transform
+      gridTraversal: false
     - type: Anchorable
     - type: Sprite
       drawdepth: WallTops

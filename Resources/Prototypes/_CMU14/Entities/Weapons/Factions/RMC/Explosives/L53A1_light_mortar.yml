@@ -58,14 +58,8 @@
     interfaces:
       enum.MortarUiKey.Key:
         type: MortarBui
-      enum.RMCCameraUiKey.Key:
-        type: RMCCameraBui
   - type: ActivatableUI
     key: enum.MortarUiKey.Key
-  - type: RMCCameraComputer
-    protoIds:
-    - RMCMortarCamera
-    title: rmc-mortar-camera-title
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -109,8 +103,6 @@
     zoom: 0.5, 0.5
     drawFov: false
   - type: RMCStaticZoomLevel
-  - type: RMCCamera
-    id: AU14MortarKitRMC
   - type: MortarCamera
   - type: TimedDespawn
     lifetime: 180

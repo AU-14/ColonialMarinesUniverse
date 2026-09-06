@@ -13,6 +13,10 @@ public sealed class ChannelFilterCheckbox : CheckBox
     {
         Channel = channel;
         Text = Loc.GetString($"hud-chatbox-channel-{Channel}");
+
+        // The CRT box these pick up is tight enough that the rows read as a cramped list without
+        // a floor on the height.
+        MinHeight = 26;
     }
 
     private void UpdateText(int? unread)

@@ -1,0 +1,49 @@
+- type: entity
+  id: Arsonist
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ ArsonistRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: cmu-antag-arsonist-greeting
+        color: DarkOrange
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: CMUGearArsonist
+      components:
+      - type: Arsonist
+        alertThreshold: 1
+        wantedThreshold: 8
+      mindRoles:
+      - MindRoleArsonist
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleArsonist
+  name: Arsonist Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: ArsonistRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: ArsonistRole
+  name: cmu-antag-arsonist-name
+  setPreference: true
+  objective: cmu-antag-arsonist-objective
+
+- type: startingGear
+  id: CMUGearArsonist
+  equipment:
+    suitstorage: RMCWeaponFlamerColony
+    pocket1: RMCTankFlamerColony
+    pocket2: RMCTankFlamerColony

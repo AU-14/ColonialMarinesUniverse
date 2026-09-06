@@ -7,6 +7,7 @@
   - type: VehicleSmashable
   - type: Transform
     anchored: true
+    gridTraversal: false
   - type: Sprite
     sprite: _RMC14/Structures/platforms.rsi
   - type: InteractionOutline
@@ -25,6 +26,7 @@
   components:
   - type: Transform
     anchored: true
+    gridTraversal: false
   - type: Sprite
     sprite: _RMC14/Structures/platforms.rsi
   - type: InteractionOutline

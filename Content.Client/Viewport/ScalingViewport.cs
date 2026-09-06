@@ -34,10 +34,17 @@ namespace Content.Client.Viewport
         private ScalingViewportRenderScaleMode _renderScaleMode = ScalingViewportRenderScaleMode.Fixed;
         private ScalingViewportIgnoreDimension _ignoreDimension = ScalingViewportIgnoreDimension.None;
         private int _fixedRenderScale = 1;
+        private TimeSpan _nextRenderAt;
 
         private readonly List<CopyPixelsDelegate<Rgba32>> _queuedScreenshots = new();
 
         public int CurrentRenderScale => _curRenderScale;
+
+        /// <summary>
+        /// Optional render throttle for secondary camera feeds. Zero preserves
+        /// the normal behavior of rendering every frame.
+        /// </summary>
+        public TimeSpan MinimumRenderInterval { get; set; }
 
         /// <summary>
         ///     Enables CMU multi-Z composition for this viewport.
@@ -156,13 +163,20 @@ namespace Content.Client.Viewport
 
             DebugTools.AssertNotNull(_viewport);
 
-            if (RenderZLevels)
-                RenderZLevelPasses(_viewport!);
-            else
+            var renderNow = MinimumRenderInterval <= TimeSpan.Zero ||
+                            _timing.CurTime >= _nextRenderAt ||
+                            _queuedScreenshots.Count != 0;
+            if (renderNow)
             {
-                NoteZRenderBypassed("viewport RenderZLevels=false");
-                ClearZLevelCompositeState();
-                _viewport!.Render();
+                _nextRenderAt = _timing.CurTime + MinimumRenderInterval;
+                if (RenderZLevels)
+                    RenderZLevelPasses(_viewport!);
+                else
+                {
+                    NoteZRenderBypassed("viewport RenderZLevels=false");
+                    ClearZLevelCompositeState();
+                    _viewport!.Render();
+                }
             }
 
             if (_queuedScreenshots.Count != 0)

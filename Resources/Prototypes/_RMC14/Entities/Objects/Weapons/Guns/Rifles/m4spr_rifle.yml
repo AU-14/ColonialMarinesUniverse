@@ -205,6 +205,10 @@
     baseFireRate: 2.8
     baseFireModes:
     - SemiAuto
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - ScoutWhitelist
   - type: ItemSlots
     slots:
       gun_magazine:

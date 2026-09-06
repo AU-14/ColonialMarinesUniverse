@@ -1,0 +1,68 @@
+- type: entity
+  id: StrikeOrganizer
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: StrikeOrganizerRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ StrikeOrganizerRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: strikeorganizer-role-greeting
+        color: DarkRed
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: AU14GearStrikeOrganizer
+      components:
+      - type: StrikeOrganizer
+      mindRoles:
+      - MindRoleStrikeOrganizer
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleStrikeOrganizer
+  name: Strike Organizer Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: StrikeOrganizerRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: StrikeOrganizerRole
+  name: roles-antag-strikeorganizer-name
+  setPreference: true
+  objective: roles-antag-strikeorganizer-objective
+
+- type: startingGear
+  id: AU14GearStrikeOrganizer
+  equipment:
+    back: AU14StrikeOrganizerBackpack
+    pocket1: CMUStrikePetition
+
+- type: entity
+  parent: Paper
+  id: CMUStrikePetition
+  name: strike petition
+  description: A petition demanding better conditions and pay. Use it in hand to sign.
+  components:
+  - type: StrikePetition
+    goal: 12
+
+- type: entity
+  parent: RMCBackpackRTO # TODO: verify against NewComms
+  id: AU14StrikeOrganizerBackpack
+  name: organizer's radio pack
+  description: A radio telephone pack carried by a labor organizer.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMegaphone
+    - id: RMCSpaceCash1000
+      amount: 4

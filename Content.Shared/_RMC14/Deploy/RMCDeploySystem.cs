@@ -522,6 +522,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
             if (setup.StorageOriginalEntity) //it is already stored inside the entity with such a flag, the entity itself will be deleted soon after that
             {
                 childComp.InShutdown = true; // this will really work only in the process of deleting the entity that stores the original entity, in other cases it does not matter
+                childComp.OriginalEntity = EntityUid.Invalid; // CMU14
                 Dirty(entity, childComp);
                 continue;
             }
@@ -532,6 +533,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
                     continue;
 
                 childComp.InShutdown = true;
+                childComp.OriginalEntity = EntityUid.Invalid; // CMU14
                 Dirty(entity, childComp);
                 _toDelete.Add(entity);
             }

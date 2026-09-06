@@ -555,6 +555,11 @@ public sealed partial class XenoSystem : EntitySystem
         return HasComp<MarineComponent>(target) || HasComp<XenoComponent>(target);
     }
 
+    // CMU14 method: the Blackfoot is a valid ability target so strikes and spits can damage
+    // it, but hitting it must never pay out xeno rewards; those come from creatures only
+    public bool CanGainRewardsFromTarget(EntityUid xeno, EntityUid target)
+        => CanAbilityAttackTarget(xeno, target) && !HasComp<BlackfootFlightComponent>(target);
+
     public bool CanHeal(EntityUid xeno)
     {
         var ev = new XenoHealAttemptEvent();

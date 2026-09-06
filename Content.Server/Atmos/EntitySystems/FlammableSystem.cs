@@ -498,9 +498,17 @@ namespace Content.Server.Atmos.EntitySystems
             _timer -= UpdateTime;
 
             // TODO: This needs cleanup to take off the crust from TemperatureComponent and shit.
+            // CMU14: fire protection and damage handlers can add FlammableComponents mid-iteration
+            // and invalidate the query enumerator, so iterate over a snapshot instead
+            var flammables = new List<(EntityUid Uid, FlammableComponent Flammable)>();
             var query = EntityQueryEnumerator<FlammableComponent>();
             while (query.MoveNext(out var uid, out var flammable))
+                flammables.Add((uid, flammable));
+
+            foreach (var (uid, flammable) in flammables)
             {
+                if (flammable.Deleted) // CMU14
+                    continue;
                 // Slowly dry ourselves off if wet.
                 if (flammable.FireStacks < 0)
                 {

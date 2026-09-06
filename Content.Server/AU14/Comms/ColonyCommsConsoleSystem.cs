@@ -1,3 +1,4 @@
+using Content.Server._CMU14.Chat; // CMU14
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.AU14;
@@ -37,10 +38,11 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
         // Send to radio channel (for intercoms)
         _radioSystem.SendRadioMessage(source, message, "colonyAlert", source);
 
-        // Send global announcement to everyone
+        // Send announcement to everyone except xenos // CMU14
         var sender = Loc.GetString("colony-comms-console-announcement-title");
         var announcementSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-        _chatSystem.DispatchGlobalAnnouncement(message, sender, playSound: true, announcementSound: announcementSound);
+        //_chatSystem.DispatchGlobalAnnouncement(message, sender, playSound: true, announcementSound: announcementSound); // CMU14: xenos must not receive colony alerts
+        _chatSystem.DispatchFilteredAnnouncement(ColonyAnnouncements.Recipients(_entityManager), message, source, sender, playSound: true, announcementSound: announcementSound); // CMU14
     }
 
     private void OnSendMessageBuiMsg(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleSendMessageBuiMsg args)

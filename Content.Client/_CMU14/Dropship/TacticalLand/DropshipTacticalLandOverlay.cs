@@ -49,15 +49,15 @@ public sealed class DropshipTacticalLandOverlay : Overlay
         var transform = _entMan.System<SharedTransformSystem>();
         var eyeWorld = transform.GetWorldPosition(eyeXform);
 
-        var w = pilotEye.Footprint.X;
-        var h = pilotEye.Footprint.Y;
+        var rotated = pilotEye.RotationQuarterTurns % 2 != 0;
+        var w = rotated ? pilotEye.Footprint.Y : pilotEye.Footprint.X;
+        var h = rotated ? pilotEye.Footprint.X : pilotEye.Footprint.Y;
         var halfW = w / 2;
         var halfH = h / 2;
 
         var snapX = MathF.Floor(eyeWorld.X) + 0.5f;
         var snapY = MathF.Floor(eyeWorld.Y) + 0.5f;
 
-        var blocked = new HashSet<Vector2i>(pilotEye.BlockedTiles);
         var handle = args.WorldHandle;
         var clear = pilotEye.ClearForLanding;
 
@@ -69,7 +69,7 @@ public sealed class DropshipTacticalLandOverlay : Overlay
 
         handle.DrawRect(footprint, clear ? FootprintClearFill : FootprintBlockedFill);
         DrawGrid(handle, footprint, clear ? GridClear : GridBlocked);
-        DrawBlockedTiles(handle, blocked, snapX, snapY);
+        DrawBlockedTiles(handle, pilotEye.BlockedTiles, snapX, snapY);
 
         var perimeter = clear ? PerimeterClear : PerimeterBlocked;
         handle.DrawRect(footprint, perimeter, false);
@@ -77,6 +77,7 @@ public sealed class DropshipTacticalLandOverlay : Overlay
 
         DrawCornerBrackets(handle, footprint, perimeter);
         DrawCenterReticle(handle, new Vector2(snapX, snapY), clear ? CenterClear : CenterBlocked);
+        DrawHeading(handle, new Vector2(snapX, snapY), pilotEye.RotationQuarterTurns, perimeter);
     }
 
     private static void DrawGrid(DrawingHandleWorld handle, Box2 footprint, Color color)
@@ -88,7 +89,11 @@ public sealed class DropshipTacticalLandOverlay : Overlay
             handle.DrawLine(new Vector2(footprint.Left, y), new Vector2(footprint.Right, y), color);
     }
 
-    private static void DrawBlockedTiles(DrawingHandleWorld handle, HashSet<Vector2i> blocked, float snapX, float snapY)
+    private static void DrawBlockedTiles(
+        DrawingHandleWorld handle,
+        IReadOnlyList<Vector2i> blocked,
+        float snapX,
+        float snapY)
     {
         foreach (var offset in blocked)
         {
@@ -134,5 +139,22 @@ public sealed class DropshipTacticalLandOverlay : Overlay
         handle.DrawLine(center + new Vector2(0.28f, 0f), center + new Vector2(0.55f, 0f), color);
         handle.DrawLine(center + new Vector2(0f, -0.55f), center + new Vector2(0f, -0.28f), color);
         handle.DrawLine(center + new Vector2(0f, 0.28f), center + new Vector2(0f, 0.55f), color);
+    }
+
+    private static void DrawHeading(DrawingHandleWorld handle, Vector2 center, byte quarterTurns, Color color)
+    {
+        var direction = (quarterTurns % 4) switch
+        {
+            1 => new Vector2(1f, 0f),
+            2 => new Vector2(0f, -1f),
+            3 => new Vector2(-1f, 0f),
+            _ => new Vector2(0f, 1f),
+        };
+        var side = new Vector2(-direction.Y, direction.X);
+        var tip = center + direction * 1.25f;
+
+        handle.DrawLine(center + direction * 0.6f, tip, color);
+        handle.DrawLine(tip, tip - direction * 0.35f + side * 0.22f, color);
+        handle.DrawLine(tip, tip - direction * 0.35f - side * 0.22f, color);
     }
 }

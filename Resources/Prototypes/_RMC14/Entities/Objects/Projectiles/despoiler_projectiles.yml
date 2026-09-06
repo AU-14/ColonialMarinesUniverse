@@ -17,6 +17,7 @@
         Piercing: 0
     deleteOnCollide: true
   - type: XenoProjectile
+  - type: XenoAcidProjectile
   - type: XenoDespoilerAcidBarrageProjectile
     lingeringAcidChance: 0.25
     lingeringAcidProto: RMCEffectDespoilerLingeringAcid

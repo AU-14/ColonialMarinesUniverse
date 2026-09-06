@@ -1,74 +1,106 @@
+using Content.Shared.Camera;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.SurveillanceCamera;
 
-// Camera monitor state. If the camera is null, there should be a blank
-// space where the camera is.
 [Serializable, NetSerializable]
-public sealed class SurveillanceCameraMonitorUiState : BoundUserInterfaceState
+public sealed class CameraSessionNetworkUiData(NetEntity network, string name)
 {
-    // The active camera on the monitor. If this is null, the part of the UI
-    // that contains the monitor should clear.
-    public NetEntity? ActiveCamera { get; }
-
-    // Currently available subnets. Does not send the entirety of the possible
-    // cameras to view because that could be really, really large
-    public HashSet<string> Subnets { get; }
-
-    public string ActiveAddress;
-
-    // Currently active subnet.
-    public string ActiveSubnet { get; }
-
-    // Known cameras, by address and name.
-    public Dictionary<string, string> Cameras { get; }
-
-    public SurveillanceCameraMonitorUiState(NetEntity? activeCamera, HashSet<string> subnets, string activeAddress, string activeSubnet, Dictionary<string, string> cameras)
-    {
-        ActiveCamera = activeCamera;
-        Subnets = subnets;
-        ActiveAddress = activeAddress;
-        ActiveSubnet = activeSubnet;
-        Cameras = cameras;
-    }
+    public NetEntity Network { get; } = network;
+    public string Name { get; } = name;
 }
 
 [Serializable, NetSerializable]
-public sealed class SurveillanceCameraMonitorSwitchMessage : BoundUserInterfaceMessage
+public sealed class CameraSessionCameraUiData(NetEntity camera, string name, bool active)
 {
-    public string Address { get; }
-
-    public SurveillanceCameraMonitorSwitchMessage(string address)
-    {
-        Address = address;
-    }
+    public NetEntity Camera { get; } = camera;
+    public string Name { get; } = name;
+    public bool Active { get; } = active;
 }
 
 [Serializable, NetSerializable]
-public sealed class SurveillanceCameraMonitorSubnetRequestMessage : BoundUserInterfaceMessage
+public sealed class CameraSessionDirectoryUiData(
+    NetEntity? activeCamera,
+    string? activeCameraName,
+    List<CameraSessionNetworkUiData> networks,
+    NetEntity? activeNetwork,
+    List<CameraSessionCameraUiData> cameras,
+    bool mapEnabled)
 {
-    public string Subnet { get; }
-
-    public SurveillanceCameraMonitorSubnetRequestMessage(string subnet)
-    {
-        Subnet = subnet;
-    }
+    public NetEntity? ActiveCamera { get; } = activeCamera;
+    public string? ActiveCameraName { get; } = activeCameraName;
+    public List<CameraSessionNetworkUiData> Networks { get; } = networks;
+    public NetEntity? ActiveNetwork { get; } = activeNetwork;
+    public List<CameraSessionCameraUiData> Cameras { get; } = cameras;
+    public bool MapEnabled { get; } = mapEnabled;
 }
 
-// Sent when the user requests that the cameras on the current subnet be refreshed.
 [Serializable, NetSerializable]
-public sealed class SurveillanceCameraRefreshCamerasMessage : BoundUserInterfaceMessage
-{}
+public sealed class CameraSessionSnapshotMessage(
+    uint sessionId,
+    ulong revision,
+    CameraSessionDirectoryUiData directory) : BoundUserInterfaceMessage
+{
+    public uint SessionId { get; } = sessionId;
+    public ulong Revision { get; } = revision;
+    public CameraSessionDirectoryUiData Directory { get; } = directory;
+}
 
-// Sent when the user requests that the subnets known by the monitor be refreshed.
 [Serializable, NetSerializable]
-public sealed class SurveillanceCameraRefreshSubnetsMessage : BoundUserInterfaceMessage
-{}
+public sealed class CameraSessionDeltaMessage(
+    uint sessionId,
+    ulong baseRevision,
+    ulong revision,
+    CameraSessionDirectoryUiData directory) : BoundUserInterfaceMessage
+{
+    public uint SessionId { get; } = sessionId;
+    public ulong BaseRevision { get; } = baseRevision;
+    public ulong Revision { get; } = revision;
+    public CameraSessionDirectoryUiData Directory { get; } = directory;
+}
 
-// Sent when the user wants to disconnect the monitor from the camera.
 [Serializable, NetSerializable]
-public sealed class SurveillanceCameraDisconnectMessage : BoundUserInterfaceMessage
-{}
+public sealed class CameraSessionGeometryMessage(
+    uint sessionId,
+    NetEntity? network,
+    ulong markerRevision,
+    CameraMapUiState geometry) : BoundUserInterfaceMessage
+{
+    public uint SessionId { get; } = sessionId;
+    public NetEntity? Network { get; } = network;
+    public ulong MarkerRevision { get; } = markerRevision;
+    public CameraMapUiState Geometry { get; } = geometry;
+}
+
+[Serializable, NetSerializable]
+public sealed class CameraSessionResetMessage(uint sessionId) : BoundUserInterfaceMessage
+{
+    public uint SessionId { get; } = sessionId;
+}
+
+[Serializable, NetSerializable]
+public sealed class CameraSessionResyncMessage(uint sessionId) : BoundUserInterfaceMessage
+{
+    public uint SessionId { get; } = sessionId;
+}
+
+[Serializable, NetSerializable]
+public sealed class CameraSessionSelectMessage(NetEntity camera) : BoundUserInterfaceMessage
+{
+    public NetEntity Camera { get; } = camera;
+}
+
+[Serializable, NetSerializable]
+public sealed class CameraSessionSelectNetworkMessage(NetEntity network) : BoundUserInterfaceMessage
+{
+    public NetEntity Network { get; } = network;
+}
+
+[Serializable, NetSerializable]
+public sealed class CameraSessionDisconnectMessage : BoundUserInterfaceMessage
+{
+}
 
 [Serializable, NetSerializable]
 public enum SurveillanceCameraMonitorUiKey : byte
@@ -95,6 +127,21 @@ public sealed class SurveillanceCameraSetupBoundUiState : BoundUserInterfaceStat
         NameDisabled = nameDisabled;
         NetworkDisabled = networkDisabled;
     }
+}
+
+[Serializable, NetSerializable]
+public sealed class SurveillanceCameraLogicalNetworkSetupBoundUiState(
+    string name,
+    ProtoId<CameraNetworkPrototype>? network,
+    List<ProtoId<CameraNetworkPrototype>> networks,
+    bool nameDisabled,
+    bool networkDisabled) : BoundUserInterfaceState
+{
+    public string Name { get; } = name;
+    public ProtoId<CameraNetworkPrototype>? Network { get; } = network;
+    public List<ProtoId<CameraNetworkPrototype>> Networks { get; } = networks;
+    public bool NameDisabled { get; } = nameDisabled;
+    public bool NetworkDisabled { get; } = networkDisabled;
 }
 
 [Serializable, NetSerializable]

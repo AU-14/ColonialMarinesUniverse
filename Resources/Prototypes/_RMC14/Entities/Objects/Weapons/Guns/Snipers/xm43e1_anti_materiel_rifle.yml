@@ -7,6 +7,10 @@
   - type: GuideHelp
     guides:
     - RMCGuideRoleSpecSniper
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - SniperWhitelist
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Snipers/xm43e1/xm43e1_inhands.rsi
     layers:

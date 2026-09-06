@@ -79,7 +79,6 @@
   id: AU14JobFORECONSquadleader
   name: FORECON Section Leader (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadFORECON

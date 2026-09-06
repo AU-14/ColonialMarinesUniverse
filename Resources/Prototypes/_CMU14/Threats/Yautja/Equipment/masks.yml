@@ -1975,6 +1975,12 @@
   name: bone thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
   - type: Sprite
     sprite: _CMU14/Yautja/masks/thrallmask_bone.rsi
     layers:
@@ -1991,6 +1997,12 @@
   name: crimson thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
   - type: Sprite
     sprite: _CMU14/Yautja/masks/thrallmask_crimson.rsi
     layers:
@@ -2007,6 +2019,12 @@
   name: ebony thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
   - type: Sprite
     sprite: _CMU14/Yautja/masks/thrallmask_ebony.rsi
     layers:
@@ -2023,6 +2041,12 @@
   name: gold thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
   - type: Sprite
     sprite: _CMU14/Yautja/masks/thrallmask_gold.rsi
     layers:
@@ -2039,6 +2063,12 @@
   name: silver thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
   - type: Sprite
     sprite: _CMU14/Yautja/masks/thrallmask_silver.rsi
     layers:

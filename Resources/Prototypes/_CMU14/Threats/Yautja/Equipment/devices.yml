@@ -9,6 +9,7 @@
     state: icon
   - type: Clothing
     sprite: _CMU14/Yautja/bracer.rsi
+  - type: YautjaTechItem
   - type: YautjaBracer
     charge: 3000
     maxCharge: 3000
@@ -133,6 +134,7 @@
   - type: YautjaBracer
     enableRecall: false
     enableRaiseThrall: true
+    maxRaiseThrall: 3
     cloakDuration: 8
     cloakCooldown: 30
     cloakWarningBefore: 3
@@ -249,6 +251,7 @@
     - Suitstorage
   - type: Item
     size: Small
+  - type: YautjaTechItem
   - type: Tag
     tags:
     - GasMask
@@ -442,6 +445,7 @@
     quickEquip: false
     slots:
     - back
+  - type: YautjaTechItem
   - type: ThermalCloak
     grantAction: false
     opacity: 0.02
@@ -1076,9 +1080,11 @@
   suffix: Yautja, Filled
   components:
   - type: Storage
-    maxItemSize: Small
     grid:
-    - 0,0,7,1
+    - 0,0,15,1
+    whitelist:
+      components:
+      - YautjaMedicalItem
   - type: StorageFill
     contents:
     - id: CMUYautjaAdvancedBruisePack
@@ -1103,6 +1109,7 @@
   - type: Item
     size: Small
     sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTechItem
   - type: Storage
     maxItemSize: Small
     grid:

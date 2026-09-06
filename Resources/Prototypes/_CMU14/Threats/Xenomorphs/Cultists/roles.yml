@@ -97,6 +97,23 @@
     back:
     - XenoEgg
 
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCultist
+  name: Xeno Cultist Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CultistRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CultistRole
+  name: roles-antag-cultist-name
+  setPreference: false
+  objective: roles-antag-cultist-objective
+  isCM: true
+
 - type: playTimeTracker
   id: AU14JobCultist
   isHumanoid: true

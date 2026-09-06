@@ -5,6 +5,7 @@ using Content.Server.Jobs;
 using Content.Server.Station.Systems;
 using Content.Shared._CMU14.Round.Roles;
 using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Marines.Orders;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Inventory;
@@ -27,6 +28,7 @@ public sealed class RoundJobProfileTest
     private static readonly ProtoId<JobPrototype> GovforLogisticsTechnician = "AU14JobGOVFORAuxTech";
     private static readonly ProtoId<JobPrototype> OpforLogisticsTechnician = "AU14JobOPFORAuxTech";
     private static readonly ProtoId<JobPrototype> GovforNurse = "AU14JobGOVFORNurse";
+    private static readonly ProtoId<JobPrototype> GovforVehicleCommander = "AU14JobGOVFORVehicleCommander";
     private static readonly ProtoId<JobPrototype> GovforWorkingJoe = "AU14JobGOVFORWorkingJoe";
     private static readonly ProtoId<JobPrototype> OpforWorkingJoe = "AU14JobOPFORWorkingJoe";
     private static readonly EntProtoId GovforAuxiliaryHeadset = "AU14HeadsetGovforAuxiliary";
@@ -214,6 +216,42 @@ public sealed class RoundJobProfileTest
 
             server.EntMan.DeleteEntity(govfor);
             server.EntMan.DeleteEntity(opfor);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task VehicleCommanderSpawnsWithMarineOrderActions()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var stationSpawning = server.System<StationSpawningSystem>();
+            var profile = new HumanoidCharacterProfile();
+            var commander = stationSpawning.SpawnPlayerMob(
+                testMap.GridCoords,
+                GovforVehicleCommander,
+                profile,
+                station: null);
+
+            try
+            {
+                var orders = server.EntMan.GetComponent<MarineOrdersComponent>(commander);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(orders.MoveActionEntity, Is.Not.Null);
+                    Assert.That(orders.HoldActionEntity, Is.Not.Null);
+                    Assert.That(orders.FocusActionEntity, Is.Not.Null);
+                });
+            }
+            finally
+            {
+                server.EntMan.DeleteEntity(commander);
+            }
         });
 
         await pair.CleanReturnAsync();

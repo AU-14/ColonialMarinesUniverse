@@ -23,27 +23,49 @@ public sealed partial class WantedSystem : EntitySystem
         while (faxQuery.MoveNext(out var faxEnt, out var faxComp))
         {
             if (faxComp.FaxName == faxname || (faxname2 != null && faxComp.FaxName == faxname2))
-            {
-                var synthPaper = entityManager.SpawnEntity(papername, MapCoordinates.Nullspace);
-
-                if (entityManager.TryGetComponent<PaperComponent>(synthPaper, out var paperComp) &&
-                    entityManager.TryGetComponent<MetaDataComponent>(synthPaper, out var metaComp))
-                {
-                    var printout = new FaxPrintout(
-                        paperComp.Content,
-                        metaComp.EntityName,
-                        null, // No label
-                        papername,
-                        paperComp.StampState,
-                        paperComp.StampedBy
-                    );
-
-                    faxSystem.Receive(faxEnt, printout, null, faxComp);
-                }
-
-                entityManager.DeleteEntity(synthPaper);
-            }
+                PrintPaperPrototype(faxSystem, entityManager, faxEnt, faxComp, papername); // CMU14
         }
+    }
+
+    /// <summary>
+    /// CMU14: sends a paper prototype to every fax machine tagged with the given group,
+    /// plus an optional extra named machine.
+    /// </summary>
+    public void SendPaperToGroup(string group, string papername, string? extraFaxName = null)
+    {
+        var faxQuery = _entManager.EntityQueryEnumerator<FaxMachineComponent>();
+        while (faxQuery.MoveNext(out var faxEnt, out var faxComp))
+        {
+            if (!faxComp.Groups.Contains(group, StringComparer.OrdinalIgnoreCase)
+                && (extraFaxName == null || faxComp.FaxName != extraFaxName))
+                continue;
+
+            PrintPaperPrototype(_faxSystem, _entManager, faxEnt, faxComp, papername);
+        }
+    }
+
+    // CMU14 method: shared print+receive for paper-proto fax sends
+    private static void PrintPaperPrototype(FaxSystem faxSystem, IEntityManager entityManager,
+        EntityUid faxEnt, FaxMachineComponent faxComp, string papername)
+    {
+        var synthPaper = entityManager.SpawnEntity(papername, MapCoordinates.Nullspace);
+
+        if (entityManager.TryGetComponent<PaperComponent>(synthPaper, out var paperComp) &&
+            entityManager.TryGetComponent<MetaDataComponent>(synthPaper, out var metaComp))
+        {
+            var printout = new FaxPrintout(
+                paperComp.Content,
+                metaComp.EntityName,
+                null, // No label
+                papername,
+                paperComp.StampState,
+                paperComp.StampedBy
+            );
+
+            faxSystem.Receive(faxEnt, printout, null, faxComp);
+        }
+
+        entityManager.DeleteEntity(synthPaper);
     }
 
     /// <summary>
@@ -60,10 +82,12 @@ public sealed partial class WantedSystem : EntitySystem
     /// <summary>
     /// Sends a fax with dynamic content to every fax machine tagged with the given group.
     /// </summary>
-    public bool SendFaxToGroup(string group, string paperTitle, string content, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, string paperPrototype = "CMPaper")
+    // CMU14: extraFaxName - optional named machine that also receives the fax
+    public bool SendFaxToGroup(string group, string paperTitle, string content, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, string paperPrototype = "CMPaper", string? extraFaxName = null)
     {
         return SendFaxToMatching(
-            faxComp => faxComp.Groups.Contains(group, StringComparer.OrdinalIgnoreCase),
+            faxComp => faxComp.Groups.Contains(group, StringComparer.OrdinalIgnoreCase)
+                || (extraFaxName != null && faxComp.FaxName == extraFaxName),
             paperTitle, content, stampState, stampedBy, paperPrototype
         );
     }

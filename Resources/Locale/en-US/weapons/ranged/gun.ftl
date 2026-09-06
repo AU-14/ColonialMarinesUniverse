@@ -26,6 +26,9 @@ gun-ballistic-transfer-target-full = {CAPITALIZE(THE($entity))} is already fully
 gun-ballistic-transfer-cancelled = Your reload was interrupted!
 gun-ballistic-transfer-primed = You can't load a primed {$ammoEntity}!
 
+# CMU14
+cmu-gun-ballistic-spent = You can't load a spent {$ammoEntity}!
+
 # CartridgeAmmo
 gun-cartridge-spent = It is [color=red]spent[/color].
 gun-cartridge-unspent = It is [color=lime]not spent[/color].

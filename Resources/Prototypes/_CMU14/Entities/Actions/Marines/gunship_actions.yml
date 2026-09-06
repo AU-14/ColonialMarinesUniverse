@@ -1,0 +1,74 @@
+- type: entity
+  id: ActionGunshipMasterAlarmSilence
+  name: Master Alarm Silence
+  description: Silence or restore all audible gunship alarms. Visual warnings remain active.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Dropship.TacticalLand.GunshipMasterAlarmToggleActionEvent
+  - type: Action
+    checkCanInteract: false
+    useDelay: 0.25
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: integrity
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionGunshipCycleCamera
+  name: Cycle Maneuvering Camera
+  description: Cycle the maneuvering camera through rear, lower, upper, and off.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Dropship.TacticalLand.GunshipCycleCameraActionEvent
+  - type: Action
+    checkCanInteract: false
+    useDelay: 0.25
+    icon:
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: down
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionGunshipDropshipOutline
+  name: View Dropship Outline
+  description: Toggle the dropship footprint outline on the upper and lower maneuvering cameras.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Dropship.TacticalLand.GunshipDropshipOutlineToggleActionEvent
+  - type: Action
+    checkCanInteract: false
+    useDelay: 0.25
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionGunshipPilotPanning
+  name: Toggle Pilot Camera Panning
+  description: Enable or disable mouse-directed pilot camera panning.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Dropship.TacticalLand.GunshipPilotPanningToggleActionEvent
+  - type: Action
+    checkCanInteract: false
+    useDelay: 0.25
+    icon:
+      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+    itemIconStyle: BigItem
+
+- type: entity
+  id: ActionGunshipPilotZoom
+  name: Toggle 1.5x Pilot Zoom
+  description: Toggle scope-style 1.5x magnification for the pilot camera.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Dropship.TacticalLand.GunshipPilotZoomToggleActionEvent
+  - type: Action
+    checkCanInteract: false
+    useDelay: 0.25
+    icon:
+      sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+      state: sniperscope
+    itemIconStyle: BigItem

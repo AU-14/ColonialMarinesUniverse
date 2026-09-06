@@ -90,7 +90,6 @@
   id: AU14JobFORECONSupportTech
   name: FORECON Support Tech (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadFORECON

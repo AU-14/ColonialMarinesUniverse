@@ -9,6 +9,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -22,6 +23,8 @@ namespace Content.Shared.Movement.Systems
     /// </summary>
     public abstract partial class SharedMoverController
     {
+        [Dependency] private INetManager _net = default!;
+
         public bool CameraRotationLocked { get; set; }
 
         public static ProtoId<AlertPrototype> WalkingAlert = "Walking";
@@ -59,6 +62,7 @@ namespace Content.Shared.Movement.Systems
             SubscribeLocalEvent<InputMoverComponent, EntParentChangedMessage>(OnInputParentChange);
 
             SubscribeLocalEvent<FollowedComponent, EntParentChangedMessage>(OnFollowedParentChange);
+            SubscribeAllEvent<CameraMouseRotationEvent>(OnCameraMouseRotation);
 
             Subs.CVar(_configManager, CCVars.CameraRotationLocked, obj => CameraRotationLocked = obj, true);
             Subs.CVar(_configManager, CCVars.GameDiagonalMovement, value => DiagonalMovementEnabled = value, true);
@@ -158,6 +162,32 @@ namespace Content.Shared.Movement.Systems
 
             mover.TargetRelativeRotation += angle;
             Dirty(uid, mover);
+        }
+
+        public bool SetCameraRotation(EntityUid uid, Angle angle, bool immediate = false)
+        {
+            if (CameraRotationLocked || !MoverQuery.TryGetComponent(uid, out var mover))
+                return false;
+
+            angle = angle.Reduced();
+            mover.TargetRelativeRotation = angle;
+            if (immediate)
+            {
+                mover.RelativeRotation = angle;
+                mover.LerpTarget = TimeSpan.Zero;
+            }
+
+            Dirty(uid, mover);
+            return true;
+        }
+
+        private void OnCameraMouseRotation(CameraMouseRotationEvent ev, EntitySessionEventArgs args)
+        {
+            if (args.SenderSession.AttachedEntity is not { } uid || !double.IsFinite(ev.Radians))
+                return;
+
+            if (SetCameraRotation(uid, new Angle(ev.Radians), immediate: true) && _net.IsServer)
+                RaiseNetworkEvent(new CameraMouseRotationAckEvent(ev.Radians), args.SenderSession);
         }
 
         public void ResetCamera(EntityUid uid)

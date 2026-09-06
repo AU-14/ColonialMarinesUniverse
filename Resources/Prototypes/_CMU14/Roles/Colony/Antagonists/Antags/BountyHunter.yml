@@ -1,0 +1,46 @@
+- type: entity
+  id: BountyHunter
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ BountyHunterRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: cmu-antag-bounty-hunter-greeting
+        color: Goldenrod
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: CMUGearBountyHunter
+      components:
+      - type: BountyHunter
+      mindRoles:
+      - MindRoleBountyHunter
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleBountyHunter
+  name: Bounty Hunter Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: BountyHunterRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: BountyHunterRole
+  name: cmu-antag-bounty-hunter-name
+  setPreference: true
+  objective: cmu-antag-bounty-hunter-objective
+
+- type: startingGear
+  id: CMUGearBountyHunter
+  equipment:
+    pocket1: RMCHandcuffs
+    pocket2: RMCSpaceCash1000

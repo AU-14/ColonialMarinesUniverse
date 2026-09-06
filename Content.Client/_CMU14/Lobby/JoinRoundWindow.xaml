@@ -1,0 +1,23 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:ui="clr-namespace:Content.Client._CMU14.Interface"
+               MinWidth="{x:Static ui:CmuPanelMetrics.ChoiceWindowWidth}">
+    <!-- A ground and a slot. The four faction choices are CmuChoiceCards built in the code-behind,
+         which is also where their colours live - see CmuChoiceCard for why the look is not a style
+         class.
+
+         This window used to spell all four cards out here, with the same StyleBoxFlat, the same
+         content margins and the same 0.72 description alpha restated in the code-behind. The card
+         was extracted for the staff-help window and this one, its origin, was never migrated - so
+         the two windows drew the same shape from two copies of the code. This is that migration.
+
+         Metrics come from CmuPanelMetrics rather than literals, so this window and the staff-help
+         window are padded and spaced identically instead of by coincidence. -->
+    <PanelContainer StyleClasses="CrtPanelFill" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Name="Choices" Access="Public" Orientation="Vertical" HorizontalExpand="True"
+                      Margin="{x:Static ui:CmuPanelMetrics.PanelPadding}"
+                      SeparationOverride="{x:Static ui:CmuPanelMetrics.RowSeparation}">
+            <Label Text="{Loc 'cmu-lobby-join-round-prompt'}" StyleClasses="CrtDimText" />
+        </BoxContainer>
+    </PanelContainer>
+</DefaultWindow>

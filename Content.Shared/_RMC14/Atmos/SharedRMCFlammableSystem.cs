@@ -73,6 +73,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
     private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
+    private readonly List<EntityUid> _igniteContacts = new(); // CMU14: igniting anchors new fire on the tile, mutating the anchored set mid-enumeration
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
 
@@ -995,10 +996,11 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             while (applyQuery.MoveNext(out var uid, out var apply))
             {
                 var enumerator = _rmcMap.GetAnchoredEntitiesEnumerator(uid);
+                _igniteContacts.Clear(); // CMU14: snapshot the tile, igniting mutates the anchored set
                 while (enumerator.MoveNext(out var contact))
-                {
+                    _igniteContacts.Add(contact);
+                foreach (var contact in _igniteContacts)
                     TryIgnite((uid, apply), contact, true);
-                }
 
                 if (apply.InitDamaged)
                     continue;

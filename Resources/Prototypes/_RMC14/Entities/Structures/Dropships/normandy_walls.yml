@@ -10,6 +10,29 @@
     sprite: _RMC14/Structures/Dropships/normandy.rsi
   - type: Icon
     sprite: _RMC14/Structures/Dropships/normandy.rsi
+  - type: DropshipCrashDestructibleWall
+    components:
+    - type: Damageable
+      damageContainer: StructuralMarine
+      damageModifierSet: CMU14StructuralMarine
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 500
+        behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - type: ExaminableDamage
+      messages: RMCWallMessages
+    - type: RMCIntegrityExamine
+    - type: RMCRepairable
+      heal: 250
+      delay: 2
+    - type: RMCWallExplosionDeletable
+    - type: DestroyedByExplosionType
+    - type: DamageMultiplierFlags
+      flags: Turf
 
 - type: entity
   parent: [CMBaseNormandyWall, CMAlamoWall1]
@@ -1281,6 +1304,31 @@
     state: "101a"
 
 - type: entity
+  parent: CMNormandyWall101a
+  id: CMNormandyDirectFireAttachPoint
+  name: direct-fire attach point
+  description: A forward-facing mount for pilot-controlled gunship weapons. Heavy equipment must be installed with a powerloader.
+  suffix: Direct Fire
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/normandy.rsi
+    layers:
+    - map: [ "enum.DropshipWeaponPointLayers.Layer" ]
+      offset: 0.5, 0.5
+    - state: "101a"
+  - type: Occluder
+    enabled: false
+  - type: InteractionOutline
+  - type: Clickable
+  - type: DropshipWeaponPoint
+    dirOffset: Flip
+  - type: GunshipDirectFirePoint
+  - type: Appearance
+  - type: Tag
+    tags:
+    - RMCDropshipDirectFirePoint
+
+- type: entity
   parent: [CMBaseNormandyWall, CMAlamoWall102]
   id: CMNormandyWall102
   suffix: 102
@@ -1312,3 +1360,63 @@
     state: "104"
   - type: Icon
     state: "104"
+
+- type: entity
+  parent: CMBaseNormandyWall
+  id: CMNormandyWall105
+  suffix: 105, Gunship Top
+  components:
+  - type: Sprite
+    state: "105"
+  - type: Icon
+    state: "105"
+
+- type: entity
+  parent: CMBaseNormandyWall
+  id: CMNormandyWall106
+  suffix: 106, Gunship Bottom
+  components:
+  - type: Sprite
+    state: "106"
+  - type: Icon
+    state: "106"
+
+- type: entity
+  parent: CMBaseNormandyWall
+  id: CMNormandyWall107
+  suffix: 107, Gunship Middle Left
+  components:
+  - type: Sprite
+    state: "107"
+  - type: Icon
+    state: "107"
+
+- type: entity
+  parent: CMBaseNormandyWall
+  id: CMNormandyWall108
+  suffix: 108, Gunship Middle Right
+  components:
+  - type: Sprite
+    state: "108"
+  - type: Icon
+    state: "108"
+
+- type: entity
+  parent: CMBaseNormandyWall
+  id: CMNormandyWall109
+  suffix: 109, Gunship Wing Left
+  components:
+  - type: Sprite
+    state: "109"
+  - type: Icon
+    state: "109"
+
+- type: entity
+  parent: CMBaseNormandyWall
+  id: CMNormandyWall110
+  suffix: 110, Gunship Wing Right
+  components:
+  - type: Sprite
+    state: "110"
+  - type: Icon
+    state: "110"

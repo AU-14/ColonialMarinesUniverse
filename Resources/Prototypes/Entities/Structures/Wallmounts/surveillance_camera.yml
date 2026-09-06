@@ -43,8 +43,6 @@
   - type: ApcPowerReceiver
   - type: ExtensionCableReceiver
   - type: Eye
-  - type: WiredNetworkConnection
-  - type: DeviceNetworkRequiresPower
   - type: Transform
     anchored: true
   - type: WiresPanel
@@ -105,9 +103,10 @@
   name: camera
   suffix: Constructed
   components:
-    - type: DeviceNetwork
-      deviceNetId: Wired
-      transmitFrequencyId: SurveillanceCamera
+    - type: CameraNetworkMember
+      networks: []
+      sourceKinds: Standard
+    - type: CameraMapMarker
     - type: SurveillanceCamera
       setupAvailableNetworks:
         - SurveillanceCameraEngineering
@@ -125,10 +124,10 @@
   name: camera
   suffix: Engineering
   components:
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCameraEngineering
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraEngineering]
+    sourceKinds: Standard
+  - type: CameraMapMarker
   - type: SurveillanceCamera
     networkSet: true
 
@@ -138,10 +137,10 @@
   name: camera
   suffix: Security
   components:
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCameraSecurity
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraSecurity]
+    sourceKinds: Standard
+  - type: CameraMapMarker
   - type: SurveillanceCamera
     networkSet: true
 
@@ -151,10 +150,10 @@
   name: camera
   suffix: Science
   components:
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCameraScience
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraScience]
+    sourceKinds: Standard
+  - type: CameraMapMarker
   - type: SurveillanceCamera
     networkSet: true
 
@@ -164,10 +163,10 @@
   name: camera
   suffix: Supply
   components:
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCameraSupply
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraSupply]
+    sourceKinds: Standard
+  - type: CameraMapMarker
   - type: SurveillanceCamera
     networkSet: true
 
@@ -177,10 +176,10 @@
   name: camera
   suffix: Command
   components:
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCameraCommand
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraCommand]
+    sourceKinds: Standard
+  - type: CameraMapMarker
   - type: SurveillanceCamera
     networkSet: true
 
@@ -190,10 +189,10 @@
   name: camera
   suffix: Service
   components:
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCameraService
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraService]
+    sourceKinds: Standard
+  - type: CameraMapMarker
   - type: SurveillanceCamera
     networkSet: true
 
@@ -203,10 +202,10 @@
   name: camera
   suffix: Medical
   components:
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCameraMedical
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraMedical]
+    sourceKinds: Standard
+  - type: CameraMapMarker
   - type: SurveillanceCamera
     networkSet: true
 
@@ -216,10 +215,10 @@
   name: camera
   suffix: General
   components:
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCameraGeneral
-    transmitFrequencyId: SurveillanceCamera
+  - type: CameraNetworkMember
+    networks: [SurveillanceCameraGeneral]
+    sourceKinds: Standard
+  - type: CameraMapMarker
   - type: SurveillanceCamera
     networkSet: true
 

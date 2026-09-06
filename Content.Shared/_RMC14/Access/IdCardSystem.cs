@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.Access.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Clothing.EntitySystems;
@@ -9,19 +10,50 @@ using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
+using Robust.Shared.Timing; // CMU14
 
 namespace Content.Shared._RMC14.Access;
 
 public sealed partial class IdCardSystem : EntitySystem
 {
+    private static readonly TimeSpan OwnerSweepEvery = TimeSpan.FromSeconds(5); // CMU14
+
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!; // CMU14
+
+    private TimeSpan _nextOwnerSweep; // CMU14
 
     public override void Initialize()
     {
         SubscribeLocalEvent<IdCardComponent, UseInHandEvent>(OnUseInHand, before: [typeof(ClothingSystem)] );
         SubscribeLocalEvent<IdCardComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<MarineComponent, InteractUsingEvent>(OnInteractUsing);
+    }
+
+    // CMU14: cards outlive their owner; a dangling OriginalOwner/Id errors on every PVS state send until swept
+    public override void Update(float frameTime)
+    {
+        if (_timing.CurTime < _nextOwnerSweep)
+            return;
+
+        _nextOwnerSweep = _timing.CurTime + OwnerSweepEvery;
+        var cards = EntityQueryEnumerator<IdCardComponent>();
+        while (cards.MoveNext(out var uid, out var card))
+        {
+            if (card.OriginalOwner is { } owner && TerminatingOrDeleted(owner))
+            {
+                card.OriginalOwner = null;
+                Dirty(uid, card);
+            }
+
+            if (TryComp<IdCardOwnerComponent>(uid, out var cardOwner) &&
+                TerminatingOrDeleted(cardOwner.Id))
+            {
+                cardOwner.Id = EntityUid.Invalid;
+                Dirty(uid, cardOwner);
+            }
+        }
     }
 
     private void OnInteractUsing(Entity<MarineComponent> ent, ref InteractUsingEvent args)

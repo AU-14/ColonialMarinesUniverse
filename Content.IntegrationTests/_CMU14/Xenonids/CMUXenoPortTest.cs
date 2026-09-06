@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared._RMC14.Explosion.Components;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
+using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared.Actions.Components;
 using Content.Shared.Projectiles;
 using Robust.Shared.GameObjects;
@@ -12,6 +13,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests._CMU14.Xenonids;
 
@@ -436,6 +438,42 @@ public sealed class CMUXenoPortTest
 
             await pair.CleanReturnAsync();
         }
+    }
+
+    [Test]
+    public async Task DroneAndDroneStrainsKeepCombatT2Evolutions()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            var gardener = entMan.SpawnEntity("CMXenoDroneGardener", map.GridCoords);
+            var healer = entMan.SpawnEntity("CMXenoDroneHealer", map.GridCoords);
+
+            try
+            {
+                var combatT2s = new[] { "CMXenoLurker", "CMXenoSpitter", "CMXenoWarrior", "CMXenoBull" };
+                foreach (var xeno in new[] { drone, gardener, healer })
+                {
+                    var proto = entMan.GetComponent<MetaDataComponent>(xeno).EntityPrototype?.ID;
+                    var evolution = entMan.GetComponent<XenoEvolutionComponent>(xeno);
+                    foreach (var t2 in combatT2s)
+                        Assert.That(evolution.EarlyEvolvesTo, Does.Contain(new EntProtoId(t2)), $"{proto} missing combat T2 {t2}");
+                }
+            }
+            finally
+            {
+                entMan.DeleteEntity(drone);
+                entMan.DeleteEntity(gardener);
+                entMan.DeleteEntity(healer);
+            }
+        });
+
+        await pair.CleanReturnAsync();
     }
 
     private static Entity<ActionComponent> SpawnAction(IEntityManager entMan)

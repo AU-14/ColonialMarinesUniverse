@@ -75,12 +75,16 @@ public sealed partial class AttachableIFFSystem : EntitySystem
         if (!ent.Comp.PreventFriendlyFire)
             return;
 
+        // CMU14: attachable IFF follows the gun's toggle when the gun has one
+        if (TryComp<GunIFFComponent>(ent, out var gunIff) && !gunIff.Enabled)
+            return;
+
         CheckPreventFriendlyFire(ent.Owner, ref args);
     }
 
     private void OnGunIFFAttemptShoot(Entity<GunIFFComponent> ent, ref AttemptShootEvent args)
     {
-        if (!ent.Comp.PreventFriendlyFire)
+        if (!ent.Comp.PreventFriendlyFire || !ent.Comp.Enabled) // CMU14: honor the gun's IFF toggle
             return;
 
         CheckPreventFriendlyFire(ent.Owner, ref args);
@@ -239,7 +243,9 @@ public sealed partial class AttachableIFFSystem : EntitySystem
 
     private void OnGunAttachableIFFAmmoShot(Entity<GunAttachableIFFComponent> ent, ref AmmoShotEvent args)
     {
-        _gunIFF.GiveAmmoIFF(ent, ref args, false, true);
+        // CMU14: hardcoded true stomped the toggle GunIFFSystem stamped before this handler
+        var enabled = !TryComp<GunIFFComponent>(ent, out var gunIff) || gunIff.Enabled;
+        _gunIFF.GiveAmmoIFF(ent, ref args, false, enabled);
     }
 
     private void OnGunAttachableIFFExamined(Entity<GunAttachableIFFComponent> ent, ref ExaminedEvent args)

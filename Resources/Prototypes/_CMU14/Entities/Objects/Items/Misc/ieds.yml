@@ -52,6 +52,7 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 25
+  - type: ClusterLimitHits
   - type: ExplodeOnTrigger
 
 - type: entity
@@ -89,6 +90,7 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 35
+  - type: ClusterLimitHits
   - type: ExplodeOnTrigger
 
 - type: entity
@@ -137,6 +139,7 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 40
+  - type: ClusterLimitHits
   - type: ExplodeOnTrigger
   - type: GibOnTrigger
     deleteItems: false

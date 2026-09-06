@@ -46,7 +46,7 @@
   parent: CMDrinkWEYAWaterBottle30
   id: RMCDrinkWEYABugJuice
   name: Weyland-Yutani Bug Juice Protein Drink
-  description: We-Ya brand plastic bottle full of toxic looking green goo, tastes like kiwi, but you are more than sure that there is none of it here.
+  description: We-Yu brand plastic bottle full of toxic looking green goo, tastes like kiwi, but you are more than sure that there is none of it here.
   components:
   - type: SolutionContainerManager
     solutions:

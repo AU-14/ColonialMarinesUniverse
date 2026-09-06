@@ -184,7 +184,8 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         string message,
         SoundSpecifier? sound = null,
         LocId? announcement = null,
-        string? faction = null)
+        string? faction = null,
+        string? ship = null) // CMU14: header name for the ares-map announcement
     {
     }
 
@@ -354,10 +355,10 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         return Loc.GetString("rmc-announcement-message", ("author", author), ("message", message));
     }
 
-    public string FormatARESStaging(LocId? author, string message)
+    public string FormatARESStaging(LocId? author, string message, string? ship = null) // CMU14: ship header name
     {
         author ??= "rmc-announcement-ares-message";
-        return Loc.GetString(author, ("message", FormattedMessage.EscapeText(message)));
+        return Loc.GetString(author, ("message", FormattedMessage.EscapeText(message)), ("ship", ship ?? string.Empty));
     }
 
     public string FormatARES(string message)

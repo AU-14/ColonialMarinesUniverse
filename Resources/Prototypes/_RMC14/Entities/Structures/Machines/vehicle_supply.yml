@@ -900,41 +900,41 @@
 #      - VehicleBlackfootLaunchers
 #      - VehicleBlackfootDoorGun
 #      - VehicleBlackfootReconSystem
-    - name: AE-71E VTOL (Recon)
-      vehicle: VehicleBlackfootRecon
-      group: vehicle-support
-      bundle:
-      - CMUBlackfootLandingPadFoldedProp
-      - CMUBlackfootFuelPumpCrate
-      - CMUBlackfootFlightComputerCrate
-      - CMUBlackfootAerospaceTug
-      loadoutCategories:
-      - id: primary
-        name: Primary
-        options:
-        - id: VehicleBlackfootLaunchers
-          name: flare launchers
-          item: VehicleBlackfootLaunchers
-          slot: launchers
-      - id: secondary
-        name: Secondary
-        options:
-        - id: VehicleBlackfootReconSystem
-          name: recon system
-          item: VehicleBlackfootReconSystem
-          slot: recon
-      - id: support
-        name: Support
-        options:
-        - id: VehicleBlackfootSensorArray
-          name: sensor array
-          item: VehicleBlackfootSensorArray
-          slot: sensors
-      hardpoints:
-      - VehicleBlackfootThrusters
-      - VehicleBlackfootLaunchers
-      - VehicleBlackfootReconSystem
-      - VehicleBlackfootSensorArray
+#    - name: AE-71E VTOL (Recon) # Temporarily unavailable from vehicle storage.
+#      vehicle: VehicleBlackfootRecon
+#      group: vehicle-support
+#      bundle:
+#      - CMUBlackfootLandingPadFoldedProp
+#      - CMUBlackfootFuelPumpCrate
+#      - CMUBlackfootFlightComputerCrate
+#      - CMUBlackfootAerospaceTug
+#      loadoutCategories:
+#      - id: primary
+#        name: Primary
+#        options:
+#        - id: VehicleBlackfootLaunchers
+#          name: flare launchers
+#          item: VehicleBlackfootLaunchers
+#          slot: launchers
+#      - id: secondary
+#        name: Secondary
+#        options:
+#        - id: VehicleBlackfootReconSystem
+#          name: recon system
+#          item: VehicleBlackfootReconSystem
+#          slot: recon
+#      - id: support
+#        name: Support
+#        options:
+#        - id: VehicleBlackfootSensorArray
+#          name: sensor array
+#          item: VehicleBlackfootSensorArray
+#          slot: sensors
+#      hardpoints:
+#      - VehicleBlackfootThrusters
+#      - VehicleBlackfootLaunchers
+#      - VehicleBlackfootReconSystem
+#      - VehicleBlackfootSensorArray
     # CMU14 Begin: commandeered civilian vehicles, added to lifts via GovFor tech tree
     - name: Civilian Van
       vehicle: AU14VehicleCivVan

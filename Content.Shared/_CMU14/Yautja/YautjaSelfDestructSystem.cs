@@ -156,6 +156,14 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
                 QueueDel(victim);
         }
 
+        foreach (var nearby in _lookup.GetEntitiesInRange<BodyComponent>(epicenter, bracer.Comp.SelfDestructGibRadius))
+        {
+            if (nearby.Owner == user || TerminatingOrDeleted(nearby.Owner)) // wearer is gibbed above
+                continue;
+
+            _body.GibBody(nearby.Owner, true, nearby.Comp, splatModifier: bracer.Comp.SelfDestructGibSplatModifier);
+        }
+
         DestroyEquipment(equipment);
     }
 

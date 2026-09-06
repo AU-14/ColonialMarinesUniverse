@@ -1,0 +1,42 @@
+- type: entity
+  id: CLFSleeperAgent
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: CLFSleeperAgentRule
+  - type: AntagSelection
+    selectionTime: PostPlayerSpawn
+    definitions:
+    - prefRoles: [ CLFSleeperAgentRole ]
+      max: 1
+      playerRatio: 20
+      jobWhitelist:
+      - AU14JobGOVFORSquadSergeant
+      - AU14JobGOVFORSectionSergeant
+      - AU14JobGOVFORPlatOp
+      - AU14JobGOVFORMilitaryPoliceMan
+      briefing:
+        text: clf-sleeper-agent-role-greeting
+        color: OliveDrab
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      components:
+      - type: CLFSleeperAgent
+      mindRoles:
+      - MindRoleCLFSleeperAgent
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFSleeperAgent
+  name: CLF Sleeper Agent Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFSleeperAgentRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: CLFSleeperAgentRole
+  name: roles-antag-clf-sleeper-agent-name
+  setPreference: true
+  objective: roles-antag-clf-sleeper-agent-objective

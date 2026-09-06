@@ -21,9 +21,10 @@ namespace Content.Shared._CMU14.Threats.Mobs.Abomination;
 public sealed partial class AbominationInfectionComponent : Component
 {
     /// <summary>
-    ///     Body part the flesh is anchored to. Which limb is hidden from the
-    ///     host and from medbay — amputation inside the window is a dice roll.
-    ///     Null when the host has no severable limbs (animals).
+    ///     Extremity (arm, hand, leg or foot) the flesh is anchored to. Which
+    ///     one is hidden from the host and from medbay — amputation inside the
+    ///     window is a dice roll. Null when the host has no severable
+    ///     extremities (animals).
     /// </summary>
     [DataField]
     public EntityUid? AnchoredPart;

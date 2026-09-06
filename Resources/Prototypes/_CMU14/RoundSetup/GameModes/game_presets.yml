@@ -3,10 +3,14 @@
   alias:
   - colonyfall
   name: Colony Fall
-# showInVote: true # DS-only
-  maxPlayers: 60
+  showInVote: true
+  maxPlayers: 45
   description: Live in an offworld colony as it falls into chaos.
   burrowedLarvaEnabled: false
+  thirdPartyAutoSpawn: true
+  thirdPartyInterval: 2250
+  thirdPartyRatio: 0.25
+  maxThirdParties: 2
   supportedPlanets:
   - SharedPlanetPool
 # - AUPlanetLV624 # Green Hell # missing threat spawns, scenario fails
@@ -24,7 +28,7 @@
   requiresGovforVote: true
   supportedPlanets:
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
-#  - AUPlanetShepherdsPride
+# - AUPlanetShepherdsPride # lot of forests/chokes
   - CMUPlanetHopesRetreat
 # - AUPlanetLV747 # Solaris Gulch
 # - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails
@@ -47,9 +51,9 @@
   alias:
   - insurgency
   name: Insurgency
-# showInVote: true # DS-only
+  showInVote: true
   description: Insurgency mode
-  minPlayers: 35
+  minPlayers: 30
   burrowedLarvaEnabled: false
   requiresGovforVote: true
   thirdPartyAutoSpawn: true
@@ -75,17 +79,21 @@
   name: Force on Force
   showInVote: true
   description: Two units face each other in combat.
-  minPlayers: 500
+  minPlayers: 80
   requiresOpforVote: true
   requiresGovforVote: true
+  thirdPartyAutoSpawn: true
+  thirdPartyInterval: 1800
+  thirdPartyRatio: 0.10
+  maxThirdParties: 4
   supportedPlanets:
-  - SharedPlanetPool
-  - AUPlanetGixensCaverns
-  - AUPlanetFlight
-  - AUPlanetLV759 # Hybrisa Metro
-  - AUPlanetCorsatStation
-  - AUPlanetSorokyne
-  - AUPlanetTrijent
+  - SharedPlanetPool # Only Maintained maps can process feedback (Shep doesn't have base)
+# - AUPlanetGixensCaverns
+# - AUPlanetFlight
+# - AUPlanetLV759 # Hybrisa Metro
+# - AUPlanetCorsatStation
+# - AUPlanetSorokyne
+# - AUPlanetTrijent
   rules:
   - AuVoteRule
   - PlatoonSpawn

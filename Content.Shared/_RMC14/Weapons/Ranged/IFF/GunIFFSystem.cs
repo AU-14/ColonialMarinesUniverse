@@ -75,21 +75,23 @@ public sealed partial class GunIFFSystem : EntitySystem
         }
     }
 
+    // CMU14 Method: the shooter toggling IFF off accepts friendly-fire risk - EntityIFF targets
+    // (sentries, cloaked) used to be blocked regardless of the toggle
     private void OnProjectileIFFPreventCollide(Entity<ProjectileIFFComponent> ent, ref PreventCollideEvent args)
     {
-        if (args.Cancelled)
+        if (args.Cancelled || !ent.Comp.Enabled)
             return;
 
         foreach (var faction in ent.Comp.Factions)
         {
-            if (HasComp<EntityIFFComponent>(args.OtherEntity) && IsInFaction(args.OtherEntity, faction))
-            {
-                args.Cancelled = true;
-                return;
-            }
-
-            if (!ent.Comp.Enabled)
-                continue;
+            // if (HasComp<EntityIFFComponent>(args.OtherEntity) && IsInFaction(args.OtherEntity, faction))
+            // {
+            //     args.Cancelled = true;
+            //     return;
+            // }
+            //
+            // if (!ent.Comp.Enabled)
+            //     continue;
 
             if (IsInFaction(args.OtherEntity, faction))
             {

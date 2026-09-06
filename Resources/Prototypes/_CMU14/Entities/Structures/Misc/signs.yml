@@ -68,3 +68,13 @@
   components:
   - type: Sprite
     state: schaefer_dirty
+
+- type: entity
+  parent: AU14LandingSignBase
+  id: CMU14DangerMines
+  name: Mine field warning
+  description: A sign reading 'DANGER MINES!'.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Devices/minedetector.rsi
+    state: mine_warning

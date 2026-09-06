@@ -63,13 +63,14 @@ public sealed partial class RecoveryNodeSystem : EntitySystem
         var possibleTargets = new List<EntityUid>();
         foreach (var nearbyEntity in nearbyEntities)
         {
-            if (!_hive.FromSameHive(ent, nearbyEntity) ||
-                !HasComp<XenoComponent>(nearbyEntity) ||
-                !HasComp<XenoRestingComponent>(nearbyEntity) ||
-                !TryComp<DamageableComponent>(nearbyEntity, out var damageComp) ||
-                damageComp.TotalDamage <= 0 ||
-                !HasComp<MobStateComponent>(nearbyEntity) ||
-                _mob.IsDead(nearbyEntity))
+            if (!_hive.FromSameHive(ent, nearbyEntity)
+                || !HasComp<XenoComponent>(nearbyEntity)
+                || (!HasComp<XenoRestingComponent>(nearbyEntity)
+                && !_mob.IsCritical(nearbyEntity)) // CMU14: crit xenos count as resting
+                || !TryComp<DamageableComponent>(nearbyEntity, out var damageComp)
+                || damageComp.TotalDamage <= 0
+                || !HasComp<MobStateComponent>(nearbyEntity)
+                || _mob.IsDead(nearbyEntity))
             {
                 continue;
             }

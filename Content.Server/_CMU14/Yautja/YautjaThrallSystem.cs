@@ -1,6 +1,7 @@
 using Content.Server.Chat.Managers;
 using Content.Server._CMU14.Language;
 using Content.Server._CMU14.Round.Objectives;
+using Content.Server._CMU14.Weapons.Ranged;
 using Content.Server.Electrocution;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared._CMU14.Yautja;
@@ -55,6 +56,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     [Dependency] private ElectrocutionSystem _electrocution = default!;
     [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private GunIFFSystem _iff = default!;
+    [Dependency] private CMUHostileIFFSystem _hostileIFF = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -86,6 +88,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         SubscribeLocalEvent<YautjaThrallComponent, ComponentRemove>(OnThrallRemoved);
         SubscribeLocalEvent<YautjaThrallComponent, TakeGhostRoleEvent>(OnThrallTakeGhostRole);
         SubscribeLocalEvent<YautjaThrallComponent, IsEquippingTargetAttemptEvent>(OnThrallEquipAttempt);
+        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<YautjaComponent, EntityTerminatingEvent>(OnMasterTerminating);
         SubscribeLocalEvent<YautjaHivebrokenXenoComponent, RefreshNameModifiersEvent>(OnHivebrokenRefreshName);
 
         SubscribeLocalEvent<YautjaBracerComponent, YautjaLinkThrallBracerActionEvent>(OnLinkThrallBracer);
@@ -221,6 +225,42 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 
         if (args.Kind == YautjaMarkKind.Thrall)
             ReleaseThrall(args.Target, thrall, args.Hunter);
+    }
+
+    private void OnMobStateChanged(MobStateChangedEvent args)
+    {
+        if (args.NewMobState != MobState.Dead)
+            return;
+
+        var master = args.Target;
+        var raised = new List<EntityUid>();
+        var query = EntityQueryEnumerator<YautjaThrallComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.Master == master && comp.RaisedByBracer != null)
+                raised.Add(uid);
+        }
+
+        foreach (var uid in raised)
+        {
+            _mob.ChangeMobState(uid, MobState.Dead, origin: master);
+            RemCompDeferred<YautjaThrallComponent>(uid);
+            _adminLog.Add(LogType.Action, LogImpact.High,
+                $"{ToPrettyString(master):master} died; raised thrall {ToPrettyString(uid):thrall} is unbound and dies");
+        }
+    }
+
+    private void OnMasterTerminating(EntityUid uid, YautjaComponent comp, ref EntityTerminatingEvent args)
+    {
+        var query = EntityQueryEnumerator<YautjaThrallComponent>();
+        while (query.MoveNext(out var thrallId, out var thrall))
+        {
+            if (thrall.Master != uid)
+                continue;
+
+            thrall.Master = null;
+            ClearThrallLinks(thrallId, thrall);
+        }
     }
 
     private void OnThrallRemoved(Entity<YautjaThrallComponent> ent, ref ComponentRemove args)
@@ -547,6 +587,12 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             return;
         }
 
+        if (ent.Comp.MaxRaiseThrall > 0 && CountAliveThralls(ent.Owner) >= ent.Comp.MaxRaiseThrall)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-raise-limit"), user, user, PopupType.SmallCaution);
+            return;
+        }
+
         if (!_power.HasPowerPopup(user, ent.Comp.RaiseThrallCost))
             return;
 
@@ -560,6 +606,13 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 
         MakeThrall(user, target, "Raised from the dead");
 
+        if (TryComp(target, out YautjaThrallComponent? raisedComp))
+        {
+            raisedComp.Raised = true;
+            raisedComp.RaisedByBracer = ent.Owner;
+            Dirty(target, raisedComp);
+        }
+
         if (TryComp(target, out HumanoidAppearanceComponent? humanoid)
             && !HasComp<YautjaComponent>(target))
         {
@@ -567,14 +620,11 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             {
                 thrallComp.OriginalSkinColor = humanoid.SkinColor;
                 thrallComp.OriginalEyeColor = humanoid.EyeColor;
-                thrallComp.Raised = true;
             }
 
             _humanoid.SetSkinColor(target, Color.FromHex("#8f9a8b"), true, false, humanoid);
             humanoid.EyeColor = Color.FromHex("#b8d94a");
             Dirty(target, humanoid);
-            if (TryComp(target, out YautjaThrallComponent? raised))
-                Dirty(target, raised);
 
             foreach (var slot in StrippedOnRaiseSlots)
             {
@@ -782,7 +832,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 
     private void SetHivebrokenIffFaction(EntityUid target, YautjaHivebreakerComponent hivebreaker)
     {
-        _iff.ClearUserFactions(target);
+        _hostileIFF.StripIFF(target);
         _iff.AddUserFaction(target, hivebreaker.ThrallIffFaction);
     }
 
@@ -906,6 +956,19 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             RemComp<YautjaHivebrokenXenoComponent>(target);
 
         _nameModifier.RefreshNameModifiers(target);
+    }
+
+    private int CountAliveThralls(EntityUid bracer)
+    {
+        var count = 0;
+        var query = EntityQueryEnumerator<YautjaThrallComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.RaisedByBracer == bracer && !_mob.IsDead(uid))
+                count++;
+        }
+
+        return count;
     }
 
     private bool TryFindThrall(EntityUid master, out Entity<YautjaThrallComponent> thrall)
@@ -1130,10 +1193,11 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         receiver = default;
         if (!CanUseThrallBracer(bracer, user)
                 || !TryComp(user, out YautjaThrallComponent? thrall)
-                || Deleted(thrall.Master))
+                || thrall.Master is not { } master
+                || Deleted(master))
             return false;
 
-        receiver = thrall.Master;
+        receiver = master;
         return true;
     }
 

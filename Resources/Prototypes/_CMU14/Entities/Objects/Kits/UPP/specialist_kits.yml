@@ -47,6 +47,9 @@
         amount: 1
       - id: RMCMagazineSniperType88
         amount: 15
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: SniperWhitelist
 
 - type: entity
   parent: RMCKitBase

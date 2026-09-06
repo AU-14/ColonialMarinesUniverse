@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server._CMU14.Dropship.TacticalLand;
+using Content.Shared._CMU14.Dropship.Integrity;
 using Content.Server._RMC14.GameStates;
 using Content.Server._RMC14.Marines;
 using Content.Server.AU14.Round;
@@ -195,11 +196,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 }
 
                 _alertLevelSystem.Set(RMCAlertLevels.Red, _dropshipId, false, false);
-                _marineAnnounce.AnnounceToMarines(Loc.GetString("rmc-announcement-unidentified-lifesigns",
-                    ("name", dropshipName),
-                    ("count", xenoCount)),
-                    dropship.UnidentifledlifesignsSound,
-                    faction: victimFaction);
+
+                // CMU14: (opt-in) only shuttles whose nav computer declares a faction announce
+                if (victimFaction != null)
+                    _marineAnnounce.AnnounceToMarines(Loc.GetString("rmc-announcement-unidentified-lifesigns",
+                        ("name", dropshipName),
+                        ("count", xenoCount)),
+                        dropship.UnidentifledlifesignsSound,
+                        faction: victimFaction);
             }
         }
     }
@@ -564,14 +568,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             return false;
         }
 
-        if (TryComp(dropshipId.Value, out DropshipTacticalHoverComponent? tacticalHover) &&
-            tacticalHover.ReturnDestination != destination)
-        {
-            if (user != null)
-                _popup.PopupEntity("Tactical hover must return before routing elsewhere.", computer.Owner, user.Value, PopupType.MediumCaution);
-
-            return false;
-        }
+        var reroutingFromTacticalHover = HasComp<DropshipTacticalHoverComponent>(dropshipId.Value);
 
         if (HasComp<ThirdPartyDropshipReturnedComponent>(dropshipId.Value))
         {
@@ -594,7 +591,8 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         if (TryComp(dropshipId, out FTLComponent? existingFtl))
         {
             // During hijack, allow overriding FTL cooldown (the ship has already landed)
-            if (hijack && existingFtl.State == FTLState.Cooldown)
+            if ((hijack || reroutingFromTacticalHover) &&
+                existingFtl.State is FTLState.Cooldown or FTLState.Available)
             {
                 RemComp<FTLComponent>(dropshipId.Value);
             }
@@ -709,6 +707,8 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             destCoords = destCoords.Offset(new Vector2(-0.5f, -0.5f));
 
         _shuttle.FTLToCoordinates(dropshipId.Value, shuttleComp, destCoords, rotation, startupTime: startupTime, hyperspaceTime: hyperspaceTime);
+        if (reroutingFromTacticalHover)
+            _tacticalLand.EndTacticalHoverForReroute(dropshipId.Value);
         ResetThirdPartyAutoReturnCountdown(dropshipId.Value);
 
         if (hijack)
@@ -814,9 +814,10 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             return;
 
         var doorLockStatus = GetDoorLockStatus(grid);
-        var canCancelTacticalHover = HasComp<DropshipTacticalHoverComponent>(grid);
+        var tacticalHoverActive = HasComp<DropshipTacticalHoverComponent>(grid);
 
-        if (!TryComp(grid, out FTLComponent? ftl) ||
+        if (tacticalHoverActive ||
+            !TryComp(grid, out FTLComponent? ftl) ||
             !ftl.Running ||
             ftl.State == FTLState.Available)
         {
@@ -885,8 +886,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 destinations.Add(destination);
             }
 
-            var canTacticalLand = !canCancelTacticalHover &&
-                                  (computer.Comp.CanTacticalLand || IsStrictThirdPartyFaction(whitelistedFaction));
+            var canTacticalLand = computer.Comp.CanTacticalLand || IsStrictThirdPartyFaction(whitelistedFaction);
 
             var canWithdrawReturn = false;
             if (whitelistedFaction != null && _withdrawConsole.IsWithdrawReturnUnlocked(whitelistedFaction))
@@ -896,7 +896,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                                     (HasComp<RMCPlanetComponent>(gridXform.MapUid.Value) || HasComp<RMCPlanetComponent>(grid));
             }
 
-            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, canCancelTacticalHover);
+            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, tacticalHoverActive);
             _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, state);
             return;
         }
@@ -914,7 +914,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 departureName = Name(departureUid);
         }
 
-        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus, canCancelTacticalHover);
+        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus);
         _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, travelState);
     }
 
@@ -1369,11 +1369,34 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
             ftl.VisualizerProto = null;
 
-            if (dropship.Destination == null)
+            // Hull-integrity crashes have their own warning, impact, and
+            // explosion sequence. DropshipComponent.Crashed is still set to
+            // permanently lock out flight, but must not also start the legacy
+            // hijack-crash sequence below.
+            if (TryComp(uid, out DropshipIntegrityComponent? integrity) &&
+                (integrity.Crashing || integrity.Wrecked))
+            {
+                continue;
+            }
+
+            // The collision-course announcement, incoming audio, and orbital
+            // explosion belong exclusively to the hijack sequence. Crashed is
+            // also used by ordinary hull-integrity wrecks to permanently lock
+            // flight, so it is not sufficient evidence that a hijack is active.
+            if (dropship.HijackLandAt == null)
                 continue;
 
-            var destinationCoords = _transform.GetMapCoordinates(dropship.Destination.Value);
-            var destinationEntityCoords = _transform.GetMoverCoordinates(dropship.Destination.Value);
+            if (dropship.Destination is not { } destination ||
+                TerminatingOrDeleted(destination) ||
+                !TryComp(destination, out TransformComponent? destinationTransform))
+            {
+                dropship.Destination = null;
+                Dirty(uid, dropship);
+                continue;
+            }
+
+            var destinationCoords = _transform.GetMapCoordinates(destination, destinationTransform);
+            var destinationEntityCoords = _transform.GetMoverCoordinates(destination, destinationTransform);
             var destinationFilter = Filter.BroadcastMap(destinationCoords.MapId);
 
             if (dropship.HijackLandAt - dropship.AnnounceCrashTime <= time && !dropship.AnnouncedCrash)

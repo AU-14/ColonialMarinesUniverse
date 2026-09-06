@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   id: RMCType88SniperRifle
   name: Type 88 designated marksman rifle
@@ -22,6 +22,10 @@
   - type: Tag
     tags:
     - RMCType88SniperRifle
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - SniperWhitelist
   - type: MeleeWeapon
     damage:
       types:

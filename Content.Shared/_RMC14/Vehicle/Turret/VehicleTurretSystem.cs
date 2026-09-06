@@ -201,7 +201,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         VehicleTurretComponent anchorTurret)
     {
         var vehicleRot = _transform.GetWorldRotation(vehicle);
-        var baseFacingAngle = GetVehicleFacingAngle(vehicle, vehicleRot);
+        var baseFacingAngle = vehicleRot;
         var anchorFacingAngle = GetOffsetFacing(anchorTurret, anchorTurret, vehicleRot, baseFacingAngle);
         var anchorLocalOffset = (-vehicleRot).RotateVec(GetPixelOffset(anchorTurret, anchorFacingAngle) / PixelsPerMeter);
         var localRot = Angle.Zero;
@@ -335,14 +335,6 @@ public sealed partial class VehicleTurretSystem : EntitySystem
     private static Angle GetDirectionalAngle(Direction dir)
     {
         return dir.ToAngle();
-    }
-
-    public Angle GetVehicleFacingAngle(EntityUid vehicle, Angle vehicleRot)
-    {
-        if (TryComp(vehicle, out GridVehicleMoverComponent? mover) && mover.CurrentDirection != Vector2i.Zero)
-            return new Vector2(mover.CurrentDirection.X, mover.CurrentDirection.Y).ToWorldAngle();
-
-        return vehicleRot;
     }
 
     public Angle GetOffsetFacing(

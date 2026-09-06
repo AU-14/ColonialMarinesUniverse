@@ -1,0 +1,55 @@
+- type: entity
+  id: Fugitive
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: FugitiveRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ FugitiveRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: fugitive-role-greeting
+        color: CornflowerBlue
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      components:
+      - type: Fugitive
+      - type: ColonyBounty
+        bounty: 1550
+        reason: Fugitive from justice
+        recordNamePrefix: "Fugitive: "
+        attachToOwnRecord: true
+        includePrints: true
+        includeDna: true
+        deadCounts: false
+        capturedFaxPaper: AUPaperFugitiveCaptured
+      mindRoles:
+      - MindRoleFugitive
+      startingGear: AU14GearFugitive
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleFugitive
+  name: Wanted Fugitive Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: FugitiveRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: FugitiveRole
+  name: roles-antag-fugitive-name
+  setPreference: true
+  objective: roles-antag-fugitive-objective
+
+- type: startingGear
+  id: AU14GearFugitive
+  equipment:
+    pocket1: AU14ObjectiveItemWYLaptop

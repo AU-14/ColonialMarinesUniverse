@@ -227,6 +227,14 @@ public sealed partial class ThreatVoteSystem : EntitySystem
                 return;
             }
 
+            if (args.Winner == null && args.Winners.Length > 0)
+            {
+                string tiedIds = string.Join(", ", args.Winners.OfType<ThreatPrototype>().Select(threat => threat.ID));
+                Sawmill.Warning($"[ThreatVoteSystem] No clear majority in threat vote; drew '{selected.ID}' at random from tied candidates [{tiedIds}].");
+            }
+
+            Sawmill.Debug($"[ThreatVoteSystem] Threat vote tally: selected={selected.ID}; "
+                + string.Join(", ", prepared.Candidates.Zip(args.Votes, (candidate, votes) => $"{candidate.Threat.ID}={votes}")));
             args.ResolveWinner(selected);
             FinishThreatVote(prepared, selected, assignedJobs);
         };

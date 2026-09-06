@@ -88,6 +88,45 @@
     state: towergun_folding
 
 - type: entity
+  parent: RMCML66DNestMetal
+  id: RMCML66DNestDropship
+  suffix: Dropship
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: WeaponMount
+    occupiedDrawDepth: Overdoors
+    emptyDrawDepth: Overdoors
+
+- type: entity
+  parent: RMCML66DNestDropship
+  id: CMUM2CDoorGunDropship
+  name: M2C heavy machine gun
+  suffix: Dropship
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
+    layers:
+    - state: m2c
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - state: m2c_magazine
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+    - state: m2c_overheat
+      map: [ "enum.WeaponMountComponentVisualLayers.Overheated" ]
+      visible: false
+  - type: WeaponMount
+    fixedWeaponPrototype: CMUMachineGunM2CDropshipLoaded
+    isWeaponSecured: true
+    isWeaponLocked: true
+    canRotateWithoutTool: true
+    mountExclusionAreaSize: 0
+    barricadeExclusionAreaSize: 0
+    occupiedDrawDepth: Overdoors
+    emptyDrawDepth: Overdoors
+
+- type: entity
   parent: [RMCBaseWeaponMount, BaseDeployFoldable, BaseItem]
   id: RMCML66DMount
   name: M56D mount

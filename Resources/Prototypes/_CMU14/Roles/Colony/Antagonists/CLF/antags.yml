@@ -1,0 +1,112 @@
+# ├──[ CLF base ]────────────────────────────────────────────────────┤
+- type: entity
+  abstract: true
+  parent: BaseMindRoleAntag
+  id: CMUAntagCLFBaseEntity
+
+- type: antag
+  abstract: true
+  parent: CMUAntagColonyBase
+  id: CMUAntagCLFBase
+  setPreference: false
+  isCM: true
+  antagonist: true
+
+# ├──[ CLF subverted synth ]─────────────────────────────────────────┤
+- type: entity
+  parent: CMUAntagCLFBaseEntity
+  id: MindRoleCLFSubvertedSynth
+  name: CLF Subverted Synth Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFSubvertedSynthRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  parent: CMUAntagCLFBase
+  id: CLFSubvertedSynthRole
+  name: roles-antag-clf-subverted-synth-name
+  objective: roles-antag-clf-subverted-synth-objective
+
+# ├──[ CLF Recruit (tattooed into the CLF) ]─────────────────────────┤
+- type: entity
+  parent: CMUAntagCLFBaseEntity
+  id: MindRoleCLFRecruit
+  name: CLF Recruit Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFRecruitRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  parent: CMUAntagCLFBase
+  id: CLFRecruitRole
+  name: roles-antag-clf-recruit-name
+  objective: roles-antag-clf-recruit-objective
+
+# ├──[ CLF Guerrilla ]───────────────────────────────────────────────┤
+- type: entity
+  parent: CMUAntagCLFBaseEntity
+  id: MindRoleCLFGuerrilla
+  name: CLF Guerrilla Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFGuerrillaRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  parent: CMUAntagCLFBase
+  id: CLFGuerrillaRole
+  name: roles-antag-clf-guerrilla-name
+  objective: roles-antag-clf-guerrilla-objective
+
+# ├──[ CLF Physician ]───────────────────────────────────────────────┤
+- type: entity
+  parent: CMUAntagCLFBaseEntity
+  id: MindRoleCLFPhysician
+  components:
+  - type: MindRole
+    antagPrototype: CLFPhysicianRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  parent: CMUAntagCLFBase
+  id: CLFPhysicianRole
+  name: roles-antag-clf-physician-name
+  objective: roles-antag-clf-doctor-objective
+
+# ├──[ CLF Surgeon ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: CMUAntagCLFBaseEntity
+  id: MindRoleCLFSurgeon
+  components:
+  - type: MindRole
+    antagPrototype: CLFSurgeonRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  parent: CMUAntagCLFBase
+  id: CLFSurgeonRole
+  name: roles-antag-clf-surgeon-name
+  objective: roles-antag-clf-doctor-objective
+
+# ├──[ CLF Leader ]──────────────────────────────────────────────────┤
+- type: entity
+  parent: CMUAntagCLFBaseEntity
+  id: MindRoleCLFLeader
+  components:
+  - type: MindRole
+    antagPrototype: CLFLeaderRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  parent: CMUAntagCLFBase
+  id: CLFLeaderRole
+  name: roles-antag-clf-leader-name
+  objective: roles-antag-clf-leader-objective

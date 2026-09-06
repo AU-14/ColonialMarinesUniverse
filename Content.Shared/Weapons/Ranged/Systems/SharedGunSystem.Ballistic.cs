@@ -106,6 +106,18 @@ public abstract partial class SharedGunSystem
         if (_whitelistSystem.IsWhitelistFailOrNull(component.Whitelist, ammo))
             return false;
 
+        // CMU14: spent casings cannot be reloaded into guns
+        if (TryComp(ammo, out CartridgeAmmoComponent? spentCartridge) && spentCartridge.Spent)
+        {
+            Popup(
+                Loc.GetString("cmu-gun-ballistic-spent",
+                    ("ammoEntity", ammo)),
+                uid,
+                loader);
+
+            return false;
+        }
+
         //Prevent primed grenades or other primed ordanance from being loaded into weapons.
         if (HasComp<ActiveTimerTriggerComponent>(ammo))
         {

@@ -1,9 +1,11 @@
 using Content.Client._RMC14.Emplacements;
 using Content.Client.CombatMode;
 using Content.Client.Hands.Systems;
+using Content.Shared._CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.CombatMode;
 using Content.Shared.CCVar;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Configuration;
@@ -18,6 +20,7 @@ public sealed partial class RMCCombatModeUISystem : EntitySystem
     [Dependency] private CombatModeSystem _combatMode = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private IPlayerManager _player = default!;
     [Dependency] private RMCCombatModeSystem _rmcCombatMode = default!;
     [Dependency] private IUserInterfaceManager _ui = default!;
     [Dependency] private RMCWeaponControllerSystem _rmcSharedWeaponController = default!;
@@ -36,9 +39,27 @@ public sealed partial class RMCCombatModeUISystem : EntitySystem
         if (_ui.CurrentlyHovered is not IViewportControl)
             return;
 
-        if (!_crosshairsEnabled || !_combatMode.IsInCombatMode())
+        var directFirePilot = false;
+        if (_combatMode.IsInCombatMode() &&
+            _player.LocalEntity is { } pilot &&
+            TryComp(pilot, out GunshipPilotHudComponent? pilotHud))
+        {
+            directFirePilot = pilotHud.Dropship != null &&
+                pilotHud.HasDirectFireWeapon &&
+                pilotHud.ViewOffset == 0 &&
+                !pilotHud.RearView;
+        }
+
+        if ((!_crosshairsEnabled && !directFirePilot) || !_combatMode.IsInCombatMode())
         {
             _ui.CurrentlyHovered.CustomCursorShape = null;
+            return;
+        }
+
+        if (directFirePilot)
+        {
+            _crosshairCursor ??= _clyde.CreateCursor(new Image<Rgba32>(1, 1), Vector2i.Zero);
+            _ui.CurrentlyHovered.CustomCursorShape = _crosshairCursor;
             return;
         }
 

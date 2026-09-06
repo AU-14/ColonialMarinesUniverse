@@ -51,6 +51,10 @@
       components:
       - Xeno
       - CMUPathogenWalker
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - PyroWhitelist
 
 - type: entity
   parent: RMCTankFlamer

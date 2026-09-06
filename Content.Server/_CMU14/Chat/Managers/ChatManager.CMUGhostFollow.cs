@@ -1,11 +1,8 @@
 // ReSharper disable CheckNamespace
 
-using Content.Server.Ghost;
 using Content.Server._RMC14.Xenonids.Watch;
-using Content.Shared._CMU14.Ghost;
 using Content.Shared._CMU14.Xenonids.Watch;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared.CCVar;
 using Robust.Shared.Network;
 
 namespace Content.Server.Chat.Managers;
@@ -28,6 +25,8 @@ internal sealed partial class ChatManager
         return customWrappedMessage;
     }
 
+    // Parked while the button's presentation is reworked. Returning false leaves every caller's
+    // message unchanged, so the call chain stays intact for when it comes back.
     private bool TryCreateGhostFollowButton(
         string wrappedMessage,
         EntityUid source,
@@ -37,28 +36,7 @@ internal sealed partial class ChatManager
     {
         customWrappedMessage = wrappedMessage;
         followEntity = default;
-
-        if (!source.Valid || !ShouldShowGhostFollowButton(recipient))
-            return false;
-
-        followEntity = _entityManager.GetNetEntity(source);
-        var buttonText = Loc.GetString("cmu-chat-manager-follow-button");
-        customWrappedMessage = $"[cmdlink=\"{buttonText}\" command=\"{CMUGhostFollowCommand.CommandName} {followEntity}\" /] {wrappedMessage}";
-        return true;
-    }
-
-    private bool ShouldShowGhostFollowButton(INetChannel recipient)
-    {
-        if (!_player.TryGetSessionByChannel(recipient, out var session))
-            return false;
-
-        if (!_entityManager.TrySystem(out GhostSystem? ghost) ||
-            !ghost.CanGhostFollow(session, out _))
-        {
-            return false;
-        }
-
-        return _netConfigManager.GetClientCVar(recipient, CCVars.ChatGhostFollowButton);
+        return false;
     }
 
     private bool TryCreateXenoWatchButton(

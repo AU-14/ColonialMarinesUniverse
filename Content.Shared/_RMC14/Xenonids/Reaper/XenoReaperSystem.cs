@@ -96,7 +96,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
 
         foreach (var hit in args.HitEntities)
         {
-            if (!_xeno.CanAbilityAttackTarget(xeno, hit))
+            if (!_xeno.CanGainRewardsFromTarget(xeno, hit)) // CMU14: no rewards from vehicles
                 continue;
 
             AddFleshResin(xeno, xeno.Comp.MeleeGain);
@@ -155,7 +155,8 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (_net.IsServer)
             SpawnAttachedTo(xeno.Comp.RaptureEffect, args.Target.ToCoordinates());
 
-        AddFleshResin(xeno, xeno.Comp.RaptureGain);
+        if (_xeno.CanGainRewardsFromTarget(xeno, args.Target)) // CMU14: no rewards from vehicles
+            AddFleshResin(xeno, xeno.Comp.RaptureGain);
     }
 
     private void OnFleshBloomAction(Entity<XenoReaperComponent> xeno, ref XenoFleshBloomActionEvent args)

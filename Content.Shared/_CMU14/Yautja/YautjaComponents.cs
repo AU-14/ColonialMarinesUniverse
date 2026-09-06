@@ -209,6 +209,9 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     };
 
     [DataField]
+    public int MaxRaiseThrall;
+
+    [DataField]
     public EntProtoId OpenBracerMenuActionId = "CMUActionYautjaOpenBracerMenu";
     [ViewVariables]
     public EntityUid? OpenBracerMenuAction;
@@ -348,17 +351,19 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public ProtoId<ExplosionPrototype> SelfDestructExplosion = "RMCOB";
     [DataField]
-    public float SelfDestructTotalIntensity = 2450;
+    public float SelfDestructTotalIntensity = 14000;
     [DataField]
-    public float SelfDestructIntensitySlope = 10;
+    public float SelfDestructIntensitySlope = 16;
     [DataField]
-    public float SelfDestructMaxIntensity = 98;
+    public float SelfDestructMaxIntensity = 150;
     [DataField]
-    public int SelfDestructMaxTileBreak = 3;
+    public int SelfDestructMaxTileBreak = 5;
     [DataField]
     public TimeSpan SelfDestructWarningEvery = TimeSpan.FromSeconds(1);
     [DataField]
     public float SelfDestructGibSplatModifier = 5f;
+    [DataField]
+    public float SelfDestructGibRadius = 3.5f;
     [DataField]
     public float SelfDestructEquipmentDestroyRadius = 2f;
 
@@ -570,10 +575,13 @@ public sealed partial class YautjaThrallComponent : Component
 {
 
     [DataField, AutoNetworkedField]
-    public EntityUid Master;
+    public EntityUid? Master;
 
     [DataField, AutoNetworkedField]
     public bool Raised;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? RaisedByBracer;
 
     // Raised thralls wear the corruption on their skin; kept to restore on release.
     public Color? OriginalSkinColor;
@@ -1235,12 +1243,6 @@ public sealed partial class YautjaTrophyComponent : Component
 
     [DataField, AutoNetworkedField]
     public YautjaTrophyKind Kind;
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? Source;
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? Hunter;
 
     [DataField, AutoNetworkedField]
     public string SourceName = string.Empty;

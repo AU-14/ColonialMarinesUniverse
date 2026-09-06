@@ -210,7 +210,8 @@ public sealed partial class XenoLeapSystem : EntitySystem
         var target = _transform.ToMapCoordinates(args.Coordinates);
         var direction = target.Position - origin.Position;
 
-        if (direction == Vector2.Zero)
+        if (direction == Vector2.Zero ||
+            !float.IsFinite(direction.Length() / xeno.Comp.Strength)) // CMU14: NaN target coords (zero-normalized NPC destinations) or zero strength crashed FromSeconds below
             return;
 
         var length = direction.Length();

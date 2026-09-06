@@ -1,0 +1,48 @@
+- type: entity
+  id: Vigilante
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ VigilanteRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: cmu-antag-vigilante-greeting
+        color: DarkRed
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: CMUGearVigilante
+      components:
+      - type: Vigilante
+      mindRoles:
+      - MindRoleVigilante
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleVigilante
+  name: Vigilante Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: VigilanteRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: VigilanteRole
+  name: cmu-antag-vigilante-name
+  setPreference: true
+  objective: cmu-antag-vigilante-objective
+
+- type: startingGear
+  id: CMUGearVigilante
+  equipment:
+    mask: RMCMaskBalaclava
+    suitstorage: RMCBaseballBat
+    pocket1: RMCZipties
+    pocket2: RMCZipties

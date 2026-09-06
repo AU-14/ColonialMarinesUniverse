@@ -1,0 +1,76 @@
+# Over-the-top variant of MeleeDebugGib. Admin/debug spawn only.
+- type: entity
+  name: bang stick maximum gibber
+  parent: MeleeDebugGib
+  id: MeleeDebugGibInsane
+  description: hit REALLY hard ye
+  suffix: DEBUG, CMU
+  components:
+  - type: InsaneGib
+    splatModifier: 5
+    extraGibImpulse: 20
+    spawnOffset: 0.75
+    extraGibs:
+      HeadHuman:
+        min: 1
+        max: 2
+      TorsoHuman:
+        min: 1
+        max: 2
+      LeftArmHuman:
+        min: 2
+        max: 3
+      RightArmHuman:
+        min: 2
+        max: 3
+      LeftHandHuman:
+        min: 1
+        max: 2
+      RightHandHuman:
+        min: 1
+        max: 2
+      LeftLegHuman:
+        min: 2
+        max: 3
+      RightLegHuman:
+        min: 2
+        max: 3
+      LeftFootHuman:
+        min: 1
+        max: 2
+      RightFootHuman:
+        min: 1
+        max: 2
+      OrganHumanBrain:
+        min: 1
+        max: 2
+      OrganHumanEyes:
+        min: 1
+        max: 2
+      OrganHumanHeart:
+        min: 2
+        max: 3
+      OrganHumanLungs:
+        min: 1
+        max: 2
+      OrganHumanLiver:
+        min: 1
+        max: 2
+      OrganHumanStomach:
+        min: 1
+        max: 2
+      OrganHumanKidneys:
+        min: 1
+        max: 2
+      OrganHumanTongue:
+        min: 1
+        max: 2
+      OrganHumanEars:
+        min: 1
+        max: 2
+      OrganHumanAppendix:
+        min: 1
+        max: 2
+      PuddleBlood:
+        min: 4
+        max: 8

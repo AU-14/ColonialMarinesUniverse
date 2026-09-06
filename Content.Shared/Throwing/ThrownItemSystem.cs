@@ -33,6 +33,8 @@ namespace Content.Shared.Throwing
         [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; //CMU
         [Dependency] private SharedTransformSystem _transform = default!; private const string ThrowingFixture = "throw-fixture";
 
+        private readonly List<(EntityUid Uid, ThrownItemComponent Thrown, PhysicsComponent Physics)> _thrownSnapshot = new(); // CMU14
+
 
         public override void Initialize()
         {
@@ -229,9 +231,17 @@ namespace Content.Shared.Throwing
         {
             base.Update(frameTime);
 
+            // CMU14: LandEvent handlers can add or remove ThrownItemComponents mid-iteration and
+            // invalidate the query enumerator, so iterate over a snapshot instead
+            _thrownSnapshot.Clear();
             var query = EntityQueryEnumerator<ThrownItemComponent, PhysicsComponent>();
             while (query.MoveNext(out var uid, out var thrown, out var physics))
+                _thrownSnapshot.Add((uid, thrown, physics));
+
+            foreach (var (uid, thrown, physics) in _thrownSnapshot)
             {
+                if (thrown.Deleted) // CMU14
+                    continue;
                 // If you remove this check verify slipping for other entities is networked properly.
                 if (_netMan.IsClient && !physics.Predict)
                     continue;

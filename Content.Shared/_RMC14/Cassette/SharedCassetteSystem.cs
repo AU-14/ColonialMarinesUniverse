@@ -2,6 +2,7 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Clothing;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Examine;
@@ -48,12 +49,43 @@ public abstract partial class SharedCassetteSystem : EntitySystem
         SubscribeLocalEvent<CassettePlayerComponent, GotUnequippedEvent>(OnPlayerUnequipped);
         SubscribeLocalEvent<CassettePlayerComponent, ExaminedEvent>(OnPlayerExamined);
         SubscribeLocalEvent<CassettePlayerComponent, AfterAutoHandleStateEvent>(OnPlayerState);
+        SubscribeLocalEvent<ActionComponent, EntityTerminatingEvent>(OnActionTerminating); // CMU14
         SubscribeLocalEvent<CassettePlayerComponent, EntRemovedFromContainerMessage>(OnPlayerRemovedFromContainer);
         SubscribeLocalEvent<CassettePlayerComponent, GetVerbsEvent<AlternativeVerb>>(OnPlayerGetVerbsAlternative);
 
         SubscribeLocalEvent<CassetteTapeComponent, ExaminedEvent>(OnTapeExamined);
         SubscribeLocalEvent<CassetteTapeComponent, UseInHandEvent>(OnPlayerUseInHand);
         SubscribeLocalEvent<CassetteTapeComponent, GetVerbsEvent<AlternativeVerb>>(OnTapeGetVerbsAlternative);
+    }
+
+    // CMU14: wearer deletion kills the action entities, leaving dangling refs that error on every PVS state send
+    private void OnActionTerminating(Entity<ActionComponent> ent, ref EntityTerminatingEvent args)
+    {
+        var players = EntityQueryEnumerator<CassettePlayerComponent>();
+        while (players.MoveNext(out var uid, out var comp))
+        {
+            var dirty = false;
+            if (comp.PlayPauseAction == ent)
+            {
+                comp.PlayPauseAction = null;
+                dirty = true;
+            }
+
+            if (comp.NextAction == ent)
+            {
+                comp.NextAction = null;
+                dirty = true;
+            }
+
+            if (comp.RestartAction == ent)
+            {
+                comp.RestartAction = null;
+                dirty = true;
+            }
+
+            if (dirty)
+                Dirty(uid, comp);
+        }
     }
 
     private void OnPlayerDetached(PlayerDetachedEvent ev)

@@ -83,6 +83,10 @@ public sealed partial class ThreatPrototype : IPrototype
 
     // if xeno evo should send messages
 
+    /// <summary>Whether the hive's burrowed larva pool stays active with this threat; xeno-lineage threats only.</summary>
+    [DataField("burrowedLarvaEnabled")]
+    public bool BurrowedLarvaEnabled { get; private set; }
+
     /// <summary>
     ///     Optional job scaling prototype for human job slots.
     ///     Used by ColonyFall and DistressSignal modes (Insurgency/FOF use Planet instead).

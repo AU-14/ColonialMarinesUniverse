@@ -17,6 +17,8 @@ using Content.Shared.Popups;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Dropship.Utility.Systems;
 
@@ -30,6 +32,8 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedRMCNPCSystem _rmcNpc = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SentrySystem _sentry = default!;
@@ -105,6 +109,16 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
 
     private void OnRemovedFromContainer(Entity<RMCEquipmentDeployerComponent> ent, ref EntGotRemovedFromContainerMessage args)
     {
+        // A server container/parent update can remove the deployer while the
+        // client is applying game state (notably when a crashed dropship's
+        // contents are reparented). Trying to insert its deployed equipment
+        // during that same removal recursively mutates container metadata and
+        // can produce the mutually-exclusive InContainer + Detached flags.
+        // The authoritative component/container state is already part of the
+        // update being applied, so do not predict another transition here.
+        if (_timing.ApplyingState)
+            return;
+
         if (ent.Comp.DeployEntity != null)
         {
             TryDeploy(ent,  false);
@@ -209,6 +223,15 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
         if (!equipmentDeployerComponent.IsDeployable)
             return false;
 
+        // Some equipment requires map/z-level checks that only the server can perform.
+        if (equipmentDeployerComponent.ServerAuthoritativeDeployment && _net.IsClient)
+            return false;
+
+        var attempt = new RMCEquipmentDeployAttemptEvent(deploy, deployOffset, user);
+        RaiseLocalEvent(deployer, attempt);
+        if (attempt.Cancelled)
+            return false;
+
         if (user != null)
         {
             if (_entityWhitelist.IsBlacklistPass(equipmentDeployerComponent.Blacklist, user.Value))
@@ -263,6 +286,13 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
             : equipmentDeployerComponent.UnDeployAudio;
 
         _audio.PlayPredicted(audio, Transform(deployer).Coordinates, user);
+
+        if (deployingEntity is { } equipment)
+        {
+            var deployedEvent = new RMCEquipmentDeployedEvent(deploy, equipment);
+            RaiseLocalEvent(deployer, deployedEvent);
+        }
+
         return true;
     }
 
@@ -314,7 +344,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     /// <param name="equipmentDeployer">The <see cref="RMCEquipmentDeployerComponent"/> of the deployer</param>
     public void SetAutoDeploy(EntityUid deployer, bool autoDeploy, RMCEquipmentDeployerComponent? equipmentDeployer = null)
     {
-        if (!Resolve(deployer, ref equipmentDeployer, false))
+        if (!Resolve(deployer, ref equipmentDeployer, false) || !equipmentDeployer.CanAutoDeploy)
             return;
 
         equipmentDeployer.AutoDeploy = autoDeploy;

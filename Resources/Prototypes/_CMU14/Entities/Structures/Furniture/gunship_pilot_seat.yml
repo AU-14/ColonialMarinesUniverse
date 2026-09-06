@@ -1,0 +1,16 @@
+- type: entity
+  parent: RMCSeatArmored
+  id: CMUGunshipPilotSeat
+  name: Gunship Pilot Seat
+  description: A reinforced flight-control seat linked to the dropship's tactical-hover systems.
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    state: pilot-chair
+  - type: GunshipPilotSeat
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]

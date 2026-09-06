@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._CMU14.Weapons.Ranged; // CMU14
 using Content.Server._RMC14.NPC;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Hands.Systems;
@@ -27,11 +28,13 @@ using Content.Shared.Examine;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Inventory;
+using Content.Shared.Interaction; // CMU14
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
+using Content.Shared.Physics; // CMU14
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Tools.Systems;
@@ -67,6 +70,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private WeldableSystem _weldable = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!; // CMU14
     [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private MobThresholdSystem _thresholdSystem = default!;
@@ -336,6 +340,13 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                 if (_thresholdSystem.TryGetIncapPercentage(targetUid, damage.TotalDamage, out var incapPercentage))
                     return Math.Clamp((float)(1 - incapPercentage), 0f, 1f);
                 return 0f;
+            }
+            // CMU14: stationary guns must validate the path a bullet would take
+            case TargetBulletLOSCon:
+            {
+                var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
+
+                return _interaction.InRangeUnobstructed(owner, targetUid, radius + 0.5f, CollisionGroup.BulletImpassable) ? 1f : 0f;
             }
             case TargetInLOSCon:
             {

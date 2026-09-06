@@ -59,6 +59,15 @@ namespace Content.Server.Explosion.EntitySystems
     public record struct BeforeTriggerEvent(EntityUid Triggered, EntityUid? User, bool Cancelled = false);
 
     /// <summary>
+    /// Raised directed at an entity immediately before its SpawnOnTrigger payload is spawned.
+    /// </summary>
+    [ByRefEvent]
+    public record struct GetSpawnOnTriggerPrototypeEvent(EntProtoId Prototype)
+    {
+        public EntProtoId Prototype = Prototype;
+    }
+
+    /// <summary>
     /// Raised when timer trigger becomes active.
     /// </summary>
     [ByRefEvent]
@@ -173,18 +182,20 @@ namespace Content.Server.Explosion.EntitySystems
         private void OnSpawnTrigger(Entity<SpawnOnTriggerComponent> ent, ref TriggerEvent args)
         {
             var xform = Transform(ent);
+            var payload = new GetSpawnOnTriggerPrototypeEvent(ent.Comp.Proto);
+            RaiseLocalEvent(ent.Owner, ref payload);
 
             if (ent.Comp.mapCoords)
             {
                 var mapCoords = _transformSystem.GetMapCoordinates(ent, xform);
-                Spawn(ent.Comp.Proto, mapCoords);
+                Spawn(payload.Prototype, mapCoords);
             }
             else
             {
                 var coords = xform.Coordinates;
                 if (!coords.IsValid(EntityManager))
                     return;
-                Spawn(ent.Comp.Proto, coords);
+                Spawn(payload.Prototype, coords);
 
             }
         }

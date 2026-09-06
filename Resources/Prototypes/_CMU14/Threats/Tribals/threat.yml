@@ -1,3 +1,10 @@
+- type: lorePrimer
+  id: AU14PrimerThreatTribals
+  threattext: "Protect your home and repel the invaders"
+  KnowledgeLevelsGovforThreat:
+    "Intelligent stone age society dedicated to protecting its homeworld, secure those crystals at all costs": 1
+
+# Colony Fall
 - type: threat
   id: TribalsThreatCF
   lorePrimer: AU14PrimerThreatTribals
@@ -7,8 +14,6 @@
   winconditions:
   - KillAllTribeRule
   minplayers: 0
-
-
 
 - type: partySpawn
   id: tribalsParty
@@ -32,12 +37,6 @@
       whenToBeginScaling: 60
       maximum: 4
   spawnTogether: false
-
-- type: lorePrimer
-  id: AU14PrimerThreatTribals
-  threattext: "Protect your home and repel the invaders"
-  KnowledgeLevelsGovforThreat:
-    "Intelligent stone age society dedicated to protecting its homeworld, secure those crystals at all costs": 1
 
 # Tribal third-party — drops a roundstart party of natives onto the map.
 - type: thirdParty

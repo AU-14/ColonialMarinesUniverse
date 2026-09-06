@@ -5,7 +5,8 @@ clf-tattoo-already-member = They're already a member of the CLF.
 clf-tattoo-no-ink = The tattoo gun is out of ink.
 clf-tattoo-not-clf = You must be a CLF member to use this.
 clf-tattoo-target-blocked = They can't be inducted into the CLF.
-clf-tattoo-already-pending = They're already considering an offer.
+# CMU14: popup removed with the "already considering" hard block in CLFTattooSystem
+# clf-tattoo-already-pending = They're already considering an offer.
 clf-tattoo-begin = Someone begins tattooing you...
 clf-tattoo-begin-user = You begin tattooing {$target}...
 clf-tattoo-success = You finish tattooing {$target} into the CLF.

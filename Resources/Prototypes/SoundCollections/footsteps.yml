@@ -255,3 +255,9 @@
   - /Audio/Effects/Footsteps/heelsclack3.ogg
   - /Audio/Effects/Footsteps/heelsclack4.ogg
   - /Audio/Effects/Footsteps/heelsclack5.ogg
+
+
+- type: soundCollection #when stepping over razor wire
+  id: FootstepBarbedWire
+  files:
+  - /Audio/_RMC14/Items/barbed_wire_movement.ogg

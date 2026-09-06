@@ -1,5 +1,9 @@
+using Content.Server.Ghost;
+using Content.Server.Mind;
+using Content.Server.Popups;
 using Content.Server.Station.Components;
 using Content.Server.Stunnable;
+using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.CCVar;
@@ -8,6 +12,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.AU14;
 using Content.Shared.Coordinates;
@@ -18,6 +23,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.StatusEffect;
 using Robust.Server.Audio;
@@ -41,8 +47,12 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
 {
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private LarvaQueueSystem _larvaQueue = default!;
+    [Dependency] private MindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private PopupSystem _popup = default!;
     [Dependency] private RMCCameraShakeSystem _rmcCameraShake = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -72,22 +82,56 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
 
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
-        if (ev.IsHumanHijack || HasActiveDistressRule())
+        if (ev.HijackerType is DropshipHijackerType.Human or DropshipHijackerType.Other
+            || HasActiveDistressRule())
             return;
 
-        // Classic rule also deletes planet-bound xenos here; we only need the boarder count
+        // Classic rule deletes planet-bound xenos here; mirror it so stranded neomorphs can't
+        // linger on the planet after the hijack endgame moves to the ship
         var xenoAmount = 0;
         var xenos = EntityQueryEnumerator<XenoComponent, MobStateComponent, TransformComponent>();
-        while (xenos.MoveNext(out var xeno, out _, out _, out var xform))
+        while (xenos.MoveNext(out var xeno, out var comp, out _, out var xform))
         {
             if (_mobState.IsDead(xeno))
                 continue;
 
             if (xform.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(xeno.ToCoordinates()))
+            {
+                if (TryComp(xeno, out ActorComponent? actor))
+                {
+                    var session = actor.PlayerSession;
+                    Entity<MindComponent> mind;
+
+                    if (_mind.TryGetMind(session, out var mindId, out var mindComp))
+                        mind = (mindId, mindComp);
+                    else
+                        mind = _mind.CreateMind(session.UserId);
+
+                    var ghost = _ghost.SpawnGhost((mind.Owner, mind.Comp), xeno);
+                    if (ghost != null)
+                        EnsureComp<JoinXenoCooldownIgnoreComponent>(ghost.Value);
+
+                    var origin = _transform.GetMoverCoordinates(xeno);
+                    _popup.PopupCoordinates(
+                        Loc.GetString("rmc-xeno-hibernation"),
+                        origin,
+                        Filter.SinglePlayer(session),
+                        true,
+                        PopupType.MediumXeno);
+
+                    if (comp.CountedInSlots && _hive.GetHive(xeno) is { } hive)
+                        _larvaQueue.AddToLarvaQueueFront(hive, session.UserId);
+                }
+
+                QueueDel(xeno);
                 continue;
+            }
 
             xenoAmount++;
         }
+
+        if (ev.HijackerType == DropshipHijackerType.Pathogen)
+            return;
 
         var shipMapIds = new HashSet<MapId>();
         var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();

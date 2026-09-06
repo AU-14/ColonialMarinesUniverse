@@ -1,0 +1,17 @@
+- type: antag
+  id: ExpedTrailerRole
+  name: roles-antag-exped-traitor-name
+  antagonist: true
+  category: roles-antag-category-prometheus
+  setPreference: false
+  objective: roles-antag-exped-traitor-objective
+  isCM: true
+
+- type: antag
+  id: MonsterRole
+  name: monster-traitor-name
+  antagonist: true
+  category: roles-antag-category-prometheus
+  setPreference: false
+  objective: monster-traitor-objective
+  isCM: true

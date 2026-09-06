@@ -1,0 +1,135 @@
+# MP5 magazines
+# These are intentionally not added to any vendor, loadout, map, kit, crate, or random-spawn pool.
+
+- type: entity
+  parent: CMMagazineSMGMP5
+  id: CMUMagazineSMGMP5Drum
+  name: MP5 drum magazine (9mm)
+  description: A 60-round drum magazine for MP5-pattern submachine guns.
+  suffix: Drum
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSmg
+    - CMMagazineSMGMP5
+    - CMUMagazineSMGMP5Drum
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - CMCartridge9mmSMG
+    proto: CMCartridge9mmSMG
+    capacity: 60
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Guns/Ammunition/Magazines/mp5drum.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+
+- type: entity
+  parent: CMMagazineSMGMP5
+  id: CMUMagazineSMGMP5AP
+  name: MP5 AP magazine (9mm)
+  description: A 30-round MP5 magazine loaded with armor-piercing 9mm ammunition.
+  suffix: AP
+  components:
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - CMCartridgePistol9mmAP
+    proto: CMCartridgePistolM77AP
+    capacity: 30
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/mp5.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MMAP
+
+- type: entity
+  parent: CMUMagazineSMGMP5AP
+  id: CMUMagazineSMGMP5APDrum
+  name: MP5 AP drum magazine (9mm)
+  description: A 60-round drum magazine for MP5-pattern submachine guns, loaded with armor-piercing 9mm ammunition.
+  suffix: AP, Drum
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSmg
+    - CMMagazineSMGMP5
+    - CMUMagazineSMGMP5Drum
+  - type: BallisticAmmoProvider
+    capacity: 60
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Guns/Ammunition/Magazines/mp5drum.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#1F951F"
+
+- type: entity
+  parent: CMMagazineSMGMP5
+  id: CMUMagazineSMGMP5SquashHead
+  name: MP5 squash-head magazine (9mm)
+  description: A 30-round MP5 magazine loaded with 9mm squash-head ammunition.
+  suffix: Squash-Head
+  components:
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - RMCCartridgeSMG9mmSquashHead
+    proto: RMCCartridgeSMG9mmSquashHead
+    capacity: 30
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/mp5.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#9C9A19"
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MMSH
+
+- type: entity
+  parent: CMUMagazineSMGMP5SquashHead
+  id: CMUMagazineSMGMP5SquashHeadDrum
+  name: MP5 squash-head drum magazine (9mm)
+  description: A 60-round drum magazine for MP5-pattern submachine guns, loaded with 9mm squash-head ammunition.
+  suffix: Squash-Head, Drum
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSmg
+    - CMMagazineSMGMP5
+    - CMUMagazineSMGMP5Drum
+  - type: BallisticAmmoProvider
+    capacity: 60
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Guns/Ammunition/Magazines/mp5drum.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#9C9A19"
+
+- type: Tag
+  id: CMUMagazineSMGMP5Stick
+
+- type: Tag
+  id: CMUMagazineSMGMP5Drum

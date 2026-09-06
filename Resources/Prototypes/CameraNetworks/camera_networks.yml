@@ -1,0 +1,86 @@
+- type: cameraNetwork
+  id: SurveillanceCameraEngineering
+  name: camera-network-engineering
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraSecurity
+  name: camera-network-security
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraScience
+  name: camera-network-science
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraSupply
+  name: camera-network-supply
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraCommand
+  name: camera-network-command
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraService
+  name: camera-network-service
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraMedical
+  name: camera-network-medical
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraGeneral
+  name: camera-network-general
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraEntertainment
+  name: camera-network-entertainment
+  configurable: true
+
+- type: cameraNetwork
+  id: SurveillanceCameraCLF
+  name: camera-network-clf
+
+- type: cameraNetwork
+  id: CMUSurveillanceCameraColonyCMB
+  name: camera-network-cmu-colony-cmb
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUSurveillanceCameraColonyGOVFOR
+  name: camera-network-cmu-colony-govfor
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUSurveillanceCameraColonyWEYU
+  name: camera-network-cmu-colony-weyu
+  configurable: true
+
+- type: cameraNetwork
+  id: RMCMonitorCameraAlamo
+  name: camera-network-rmc-monitor-camera-alamo
+  configurable: true
+
+- type: cameraNetwork
+  id: RMCMonitorCameraLandingZone
+  name: camera-network-rmc-monitor-camera-landing-zone
+
+- type: cameraNetwork
+  id: RMCMonitorCameraNormandy
+  name: camera-network-rmc-monitor-camera-normandy
+  configurable: true
+
+- type: cameraNetwork
+  id: RMCSurveillanceCameraAlmayer
+  name: camera-network-rmc-surveillance-camera-almayer
+  configurable: true
+
+- type: cameraNetwork
+  id: RMCTelevision
+  name: rmc-television-title

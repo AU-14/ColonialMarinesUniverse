@@ -36,6 +36,7 @@ public sealed partial class WeedKillerSystem : EntitySystem
     private EntityQuery<DeletedByWeedKillerComponent> _deletedByWeedKillerQuery;
 
     private static readonly EntProtoId WeedKiller = "RMCGasWeedKiller";
+    private const int WeedKillerRadius = 1; // CMU14: +1 tile ≈ +20% coverage
     private TimeSpan _dropshipDelay;
     private TimeSpan _disableDuration;
 
@@ -109,6 +110,29 @@ public sealed partial class WeedKillerSystem : EntitySystem
             {
                 if (comp.AreaPrototypes.Contains(areaId))
                     comp.Positions.Add(((gridId.Value, grid), position));
+            }
+
+            // CMU14: dilate covered tiles by WeedKillerRadius; LZ coverage is area-shaped, not a radius
+            if (WeedKillerRadius > 0 && comp.Positions.Count > 0)
+            {
+                var grownGrid = comp.Positions[0].Grid;
+                var grown = new HashSet<Vector2i>();
+                foreach (var (_, indices) in comp.Positions)
+                {
+                    for (var x = -WeedKillerRadius; x <= WeedKillerRadius; x++)
+                    {
+                        for (var y = -WeedKillerRadius; y <= WeedKillerRadius; y++)
+                        {
+                            var grownIndices = indices + new Vector2i(x, y);
+                            if (_map.TryGetTileRef(grownGrid, grownGrid.Comp, grownIndices, out var tile)
+                                && !tile.Tile.IsEmpty)
+                                grown.Add(grownIndices);
+                        }
+                    }
+                }
+
+                comp.Positions.Clear();
+                comp.Positions.AddRange(grown.Select(i => (grownGrid, i)));
             }
         }
     }

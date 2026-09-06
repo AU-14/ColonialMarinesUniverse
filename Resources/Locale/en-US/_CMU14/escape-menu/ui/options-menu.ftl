@@ -1,6 +1,9 @@
-cmu-ui-options-chat-follow-button = As ghost, show follow buttons next to chat messages
 cmu-ui-options-examine-log-in-chat = Show detailed examine breakdown of characters in chat
 cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat like in SS13
+
+cmu-ui-options-voting = Voting
+cmu-ui-options-vote-ui-large = Larger vote popup
+cmu-ui-options-vote-ui-large-tooltip = Draws votes with wider options and taller rows. Easier to read on high resolutions and ultrawide displays.
 
 cmu-ui-options-general-construction = Construction
 cmu-ui-options-construction-mode = Construction Mode

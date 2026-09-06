@@ -52,10 +52,10 @@
     - Burst
     soundGunshot:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m4spr.ogg
-#  - type: GunUserWhitelist
-#    whitelist:
-#      components:
-#      - ScoutWhitelist
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - ScoutWhitelist
   - type: Corrodible
     isCorrodible: false
   - type: Clothing

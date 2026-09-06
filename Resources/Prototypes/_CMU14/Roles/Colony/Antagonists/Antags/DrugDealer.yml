@@ -1,0 +1,72 @@
+- type: entity
+  id: DrugDealer
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: DrugDealerRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ DrugDealerRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: dealer-role-greeting
+        color: MediumVioletRed
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: AU14GearDrugDealer
+      components:
+      - type: DrugDealer
+      - type: ColonyBounty
+        bounty: 1225
+        reason: Distribution of controlled substances - wanted alive for prosecution
+        recordName: Narcotics Dealer (Unknown)
+        includePrints: true
+        deadCounts: false
+        capturedFaxPaper: CMUPaperColonyAntagCaptured
+      mindRoles:
+      - MindRoleDrugDealer
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleDrugDealer
+  name: Drug Dealer Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: DrugDealerRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: DrugDealerRole
+  name: roles-antag-dealer-name
+  setPreference: true
+  objective: roles-antag-dealer-objective
+
+- type: startingGear
+  id: AU14GearDrugDealer
+  equipment:
+    back: AU14DrugDealerDrugBackpack
+
+- type: entity
+  parent: RMCSatchelBlack
+  id: AU14DrugDealerDrugBackpack
+  name: drug dealer's satchel
+  description: A black satchel filled with illicit substances.
+  components:
+  - type: StorageFill
+    contents:
+    - id: Joint
+      amount: 7
+    - id: AU14DrugDealerDrugBottle
+      amount: 5
+    - id: AU14PillBottleSpaceDrugs
+      amount: 6
+    - id: RMCSyringeDrugs
+      amount: 3
+    - id: AU14PillBottleRMCPsilocybin
+      amount: 4

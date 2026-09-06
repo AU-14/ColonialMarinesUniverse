@@ -1299,12 +1299,9 @@
       state: generic_panel_open
   - type: Computer
     board: SurveillanceCameraMonitorCircuitboard
-  - type: DeviceNetwork
-    deviceNetId: Wired
-    receiveFrequencyId: SurveillanceCamera
-    transmitFrequencyId: SurveillanceCamera
-  - type: WiredNetworkConnection
-  - type: DeviceNetworkRequiresPower
+  - type: CameraNetworkReceiver
+    networks: [SurveillanceCameraEngineering, SurveillanceCameraSecurity, SurveillanceCameraScience, SurveillanceCameraSupply, SurveillanceCameraCommand, SurveillanceCameraService, SurveillanceCameraMedical, SurveillanceCameraGeneral]
+    supportedSources: Standard
   - type: SurveillanceCameraMonitor
   - type: ActivatableUI
     key: enum.SurveillanceCameraMonitorUiKey.Key
@@ -1338,13 +1335,11 @@
       state: generic_panel_open
   - type: Computer
     board: SurveillanceWirelessCameraMonitorCircuitboard
-  - type: DeviceNetwork
-    deviceNetId: Wireless
-    receiveFrequencyId: SurveillanceCamera
-    transmitFrequencyId: SurveillanceCamera
   - type: WirelessNetworkConnection
     range: 200
-  - type: DeviceNetworkRequiresPower
+  - type: CameraNetworkReceiver
+    networks: [SurveillanceCameraEngineering, SurveillanceCameraSecurity, SurveillanceCameraScience, SurveillanceCameraSupply, SurveillanceCameraCommand, SurveillanceCameraService, SurveillanceCameraMedical, SurveillanceCameraGeneral, SurveillanceCameraEntertainment]
+    supportedSources: Standard
   - type: Speech
     speechVerb: Robotic
   - type: SurveillanceCameraSpeaker

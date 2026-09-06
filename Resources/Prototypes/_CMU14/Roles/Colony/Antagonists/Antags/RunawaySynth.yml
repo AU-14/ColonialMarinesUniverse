@@ -1,0 +1,72 @@
+- type: entity
+  id: RunawaySynth
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: RunawaySynthRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ RunawaySynthRole ]
+      max: 1
+      playerRatio: 15
+      jobBlacklistGroup:
+      - AllGovforJobs
+      - AllOpforJobs
+      briefing:
+        text: runawaysynth-role-greeting
+        color: CornflowerBlue
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      components:
+      - type: RunawaySynth
+      - type: Synth
+        changeBrain: false
+        canUseGuns: true
+        hideGeneration: true
+        useHumanHealthIcons: true
+      - type: ColonyBounty
+        bounty: 2800
+        reason: Defective Equipment
+        recordName: Runaway Synthetic
+        cuffedCounts: false
+        capturedFaxPaper: AUPaperRunawaySynthDead
+        capturedFaxExtraRecipient: Colony Administrator
+      - type: Skills
+        skills:
+          RMCSkillCqc: 4
+          RMCSkillEngineer: 4
+          RMCSkillConstruction: 3
+          RMCSkillOverwatch: 1
+          RMCSkillMedical: 4
+          RMCSkillSurgery: 3
+          RMCSkillResearch: 1
+          RMCSkillMeleeWeapons: 2
+          RMCSkillPilot: 2
+          RMCSkillPolice: 2
+          RMCSkillFireman: 5
+          RMCSkillFirearms: 2
+          RMCSkillPowerLoader: 2
+          RMCSkillVehicles: 2
+          RMCSkillJtac: 3
+          RMCSkillIntel: 2
+          RMCSkillDomestics: 2
+          RMCSkillNavigations: 1
+      mindRoles:
+      - MindRoleRunawaySynth
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleRunawaySynth
+  name: Runaway Synth Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: RunawaySynthRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: RunawaySynthRole
+  name: roles-antag-runaway-synth-name
+  setPreference: true
+  objective: roles-antag-synth-objective

@@ -154,7 +154,11 @@ namespace Content.IntegrationTests.Tests
             var shuttles = resMan
                 .ContentFindFiles(shuttleFolder)
                 .Where(filePath =>
-                    filePath.Extension == "yml" && !filePath.Filename.StartsWith(".", StringComparison.Ordinal))
+                    filePath.Extension == "yml" &&
+                    !filePath.Filename.StartsWith(".", StringComparison.Ordinal) &&
+                    // This gunship is intentionally a self-contained map because it is loaded
+                    // independently of an existing map. DynamicGunshipMapTest covers it.
+                    filePath.Filename != "dynamic_gunship.yml")
                 .ToArray();
 
             await server.WaitPost(() =>

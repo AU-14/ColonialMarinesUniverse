@@ -164,11 +164,14 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             totalIntensity ??= RadiusToIntensity((float)radius, explosive.IntensitySlope, explosive.MaxIntensity);
         totalIntensity ??= explosive.TotalIntensity;
 
+        var properties = new GetExplosionTriggerPropertiesEvent(totalIntensity.Value, explosive.MaxIntensity);
+        RaiseLocalEvent(uid, ref properties);
+
         QueueExplosion(uid,
             explosive.ExplosionType,
-            (float)totalIntensity,
+            Math.Max(0, properties.TotalIntensity),
             explosive.IntensitySlope,
-            explosive.MaxIntensity,
+            Math.Max(0, properties.MaxIntensity),
             explosive.TileBreakScale,
             explosive.MaxTileBreak,
             explosive.CanCreateVacuum,

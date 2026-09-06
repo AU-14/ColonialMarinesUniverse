@@ -1,4 +1,12 @@
 # Bad Blood Clan — dishonored Yautja hunters. Distress Signal only.
+- type: lorePrimer
+  id: AU14PrimerThreatBadBlood
+  threattext: "You are a Bad Blood — a dishonored Yautja cast out from your clan. You are no longer bound by the code. Hunt everything."
+  KnowledgeLevelsGovforThreat:
+    "Threat Unknown": 1
+    "Anomalous cloaked contacts detected. Something is hunting us.": 2
+    "Yautja confirmed in AO. Expect plasma casters, cloaking technology, and wrist blades.": 3
+
 # Base: 1 leader + 3 grunts. Scales at 1:20 (one extra grunt per 20 players above 40).
 - type: threat
   id: BadBloodClanThreat
@@ -25,11 +33,3 @@
       scale: 0.05
       whenToBeginScaling: 40
   spawnTogether: true
-
-- type: lorePrimer
-  id: AU14PrimerThreatBadBlood
-  threattext: "You are a Bad Blood — a dishonored Yautja cast out from your clan. You are no longer bound by the code. Hunt everything."
-  KnowledgeLevelsGovforThreat:
-    "Threat Unknown": 1
-    "Anomalous cloaked contacts detected. Something is hunting us.": 2
-    "Yautja confirmed in AO. Expect plasma casters, cloaking technology, and wrist blades.": 3

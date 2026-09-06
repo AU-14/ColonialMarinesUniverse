@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Atmos;
+using Content.Shared._CMU14.Dropship.DirectFire;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Explosion.Implosion;
 using Content.Shared.Damage;
@@ -10,7 +11,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedDropshipWeaponSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(GunshipDirectFireSystem))]
 public sealed partial class DropshipAmmoComponent : Component
 {
     [DataField, AutoNetworkedField]

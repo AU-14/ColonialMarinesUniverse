@@ -1,0 +1,13 @@
+# The SubvertedSynth rule entity was a stub: its AntagSelection definition only had prefRoles,
+# no components or mindRoles, so adding the rule did nothing. Live subversion runs entirely
+# through the SynthSubverter flow in Content.Server/_CMU14/Threats/Mobs/SubvertedSynth,
+# which adds MindRoleCLFSubvertedSynth directly - the role protos in antags.yml stay in use.
+# - type: entity
+#   parent: BaseGameRule
+#   id: SubvertedSynth
+#   components:
+#   - type: SubvertedSynthRule
+#   - type: AntagSelection
+#     selectionTime: PostPlayerSpawn
+#     definitions:
+#     - prefRoles: [ CLFSubvertedSynthRole ]
