@@ -67,6 +67,9 @@ public sealed partial class NpcFactionSystem : EntitySystem
         {
             ent.Comp.HostileFactions.UnionWith(ent.Comp.AddHostileFactions);
         }
+
+        // CMU14: runtime faction membership and relations are also used by client ally checks.
+        Dirty(ent);
     }
 
     /// <summary>
