@@ -42,23 +42,23 @@
   components:
   - type: InitialBody
     organs:
-      Torso: OrganYautjaTorso
-      Head: OrganYautjaHead
-      ArmLeft: OrganYautjaArmLeft
-      ArmRight: OrganYautjaArmRight
-      HandRight: OrganYautjaHandRight
-      HandLeft: OrganYautjaHandLeft
-      LegLeft: OrganYautjaLegLeft
-      LegRight: OrganYautjaLegRight
-      FootLeft: OrganYautjaFootLeft
-      FootRight: OrganYautjaFootRight
-      Brain: OrganHumanBrain
-      Eyes: OrganHumanEyes
-      Lungs: OrganHumanLungs
-      Heart: OrganHumanHeart
-      Stomach: OrganHumanStomach
-      Liver: OrganHumanLiver
-      Kidneys: OrganHumanKidneys
+      Torso: CMUPartYautjaTorso
+      Head: CMUPartYautjaHead
+      ArmLeft: CMUPartYautjaLeftArm
+      ArmRight: CMUPartYautjaRightArm
+      HandRight: CMUPartYautjaRightHand
+      HandLeft: CMUPartYautjaLeftHand
+      LegLeft: CMUPartYautjaLeftLeg
+      LegRight: CMUPartYautjaRightLeg
+      FootLeft: CMUPartYautjaLeftFoot
+      FootRight: CMUPartYautjaRightFoot
+      Brain: CMUOrganHumanBrain
+      Eyes: CMUOrganHumanEyes
+      Lungs: CMUOrganHumanLungs
+      Heart: CMUOrganHumanHeart
+      Stomach: CMUOrganHumanStomach
+      Liver: CMUOrganHumanLiver
+      Kidneys: CMUOrganHumanKidneys
   - type: HumanoidProfile
     species: Yautja
     voice: CMUMaleYautja

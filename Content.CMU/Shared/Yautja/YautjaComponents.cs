@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.Chat.Prototypes;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Alert;
@@ -11,6 +12,7 @@ using Content.Shared.NPC.Prototypes;
 using Content.Shared.Speech;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Acid;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
@@ -55,6 +57,43 @@ public sealed partial class YautjaComponent : Component
         { 160, 0.9f },
         { 240, 0.8f },
     };
+
+    [DataField]
+    public Dictionary<FixedPoint2, float> FrontlineSlowOnDamageThresholds = new()
+    {
+        { 200, 0.95f },
+        { 240, 0.85f },
+    };
+
+    [DataField]
+    public float PainAccumulationMultiplier = 0.5f;
+
+    [DataField]
+    public FractureSeverity MinimumPenalizingFractureSeverity = FractureSeverity.Simple;
+
+    [DataField]
+    public float MedicalMovementPenaltyFloor = 0.8f;
+
+    [DataField]
+    public float MedicalAimPenaltyCeiling = 1.35f;
+
+    [DataField]
+    public float MedicalActionSpeedPenaltyCeiling = 1.35f;
+
+    [DataField]
+    public float HumanMedicineClearanceMultiplier = 1.5f;
+
+    [DataField]
+    public float PoisonClearanceMultiplier = 1.5f;
+
+    [DataField]
+    public float AlcoholClearanceMultiplier = 2f;
+
+    [DataField]
+    public HashSet<ProtoId<ReagentPrototype>> NativeReagents =
+    [
+        "CMUYautjaAnalgesic",
+    ];
 
     [DataField]
     public ProtoId<DamageModifierSetPrototype>? DamageModifierSet = "CMUYautja";
@@ -143,6 +182,33 @@ public sealed partial class YautjaComponent : Component
     [ViewVariables]
     public EntityUid? VoiceDeathLaughAction;
 
+    [DataField]
+    public EntProtoId HonorRoarActionId = "CMUActionYautjaHonorRoar";
+
+    [ViewVariables]
+    public EntityUid? HonorRoarAction;
+
+    [DataField]
+    public float HonorRoarRange = 5f;
+
+    [DataField]
+    public TimeSpan HonorRoarDuration = TimeSpan.FromSeconds(5);
+
+    [DataField]
+    public SoundSpecifier HonorRoarSound = new SoundCollectionSpecifier("CMUYautjaRoars");
+
+    [DataField]
+    public EntProtoId HuntingLeapActionId = "CMUActionYautjaHuntingLeap";
+
+    [ViewVariables]
+    public EntityUid? HuntingLeapAction;
+
+    [DataField]
+    public float HuntingLeapRange = 7f;
+
+    [DataField]
+    public float HuntingLeapSpeed = 30f;
+
     private static List<ProtoId<EmotePrototype>> GetDefaultAllowedEmotes()
     {
         var emotes = new List<ProtoId<EmotePrototype>>();
@@ -169,6 +235,19 @@ public sealed partial class YautjaComponent : Component
         sounds.Add(Sex.Unsexed, "CMUMaleYautja");
         return sounds;
     }
+}
+
+[RegisterComponent]
+public sealed partial class YautjaHuntingLeapingComponent : Component
+{
+    [DataField]
+    public EntityUid Target;
+
+    [DataField]
+    public EntityUid Weapon;
+
+    [DataField]
+    public bool Resolved;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -469,6 +548,12 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
 
     [DataField]
     public TimeSpan CloakCooldown = TimeSpan.Zero;
+
+    [DataField]
+    public TimeSpan CloakCombatLockout = TimeSpan.FromSeconds(6);
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan CloakCombatLockoutUntil;
 
     [DataField]
     public TimeSpan CloakWarningBefore = TimeSpan.FromSeconds(5);
@@ -909,9 +994,6 @@ public sealed partial class YautjaRecallableComponent : Component
 {
     [DataField, AutoNetworkedField]
     public EntityUid? YautjaOwner;
-
-    [DataField]
-    public float Range = 10f;
 }
 
 [RegisterComponent]

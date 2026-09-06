@@ -6,6 +6,7 @@
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem
+  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/weapons.rsi
     state: clan_sword
@@ -79,8 +80,6 @@
       contact: Stab
       penetration: Medium
       energy: Medium
-  - type: YautjaRecallable
-    range: 12
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -116,8 +115,6 @@
     thrown:
       contact: Fragment
       penetration: Low
-  - type: YautjaRecallable
-    range: 12
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -320,8 +317,6 @@
   - type: EmbeddableProjectile
     sound: /Audio/Weapons/star_hit.ogg
   - type: LandAtCursor
-  - type: YautjaRecallable
-    range: 12
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -358,8 +353,6 @@
       contact: Fragment
       penetration: Low
   - type: LandAtCursor
-  - type: YautjaRecallable
-    range: 12
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -403,6 +396,7 @@
   components:
   - type: YautjaTechItem
     blockMelee: false
+  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/weapons.rsi
     state: clan_shield
@@ -527,8 +521,6 @@
       penetration: Medium
       energy: Medium
   - type: LandAtCursor
-  - type: YautjaRecallable
-    range: 12
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -791,6 +783,7 @@
   description: A compact crescent-shaped Yautja device that rapidly forms and fires alloy spikes.
   components:
   - type: YautjaTechItem
+  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/guns.rsi
     layers:
@@ -844,6 +837,7 @@
   description: A rare Yautja energy rifle with an internal self-charging cell.
   components:
   - type: YautjaTechItem
+  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/guns.rsi
     layers:
@@ -898,6 +892,7 @@
   description: A compact Yautja plasma sidearm with a small self-charging cell.
   components:
   - type: YautjaTechItem
+  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/guns.rsi
     layers:

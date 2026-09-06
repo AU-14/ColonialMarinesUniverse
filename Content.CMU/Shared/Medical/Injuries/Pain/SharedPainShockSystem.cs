@@ -9,6 +9,7 @@ using Content.Shared.CMU14.Medical.Injuries.Pain.Events;
 using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Medical.Injuries.Wounds.Events;
+using Content.Shared.CMU14.Medical.Injuries;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Part;
@@ -836,6 +837,8 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         var multiplier = Math.Clamp(1f - GetAccumulationSuppression(body), 0f, 1f);
         if (TryComp<ChemicalPainSensitivityComponent>(body, out var sensitivity))
             multiplier *= MathF.Max(1f, sensitivity.Multiplier);
+        if (TryComp<CMUMedicalResilienceComponent>(body, out var resilience))
+            multiplier *= Math.Clamp(resilience.PainAccumulationMultiplier, 0f, 1f);
         return multiplier;
     }
 

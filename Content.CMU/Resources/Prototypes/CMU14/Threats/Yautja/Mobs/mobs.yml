@@ -8,8 +8,10 @@
   - type: Language
     spokenLanguages:
     - Yautja
+    - Xeno
     understoodLanguages:
     - Yautja
+    - Xeno
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja

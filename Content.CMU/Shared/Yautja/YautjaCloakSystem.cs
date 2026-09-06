@@ -1,10 +1,13 @@
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor.ThermalCloak;
 using Content.Shared._RMC14.Chemistry;
+using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Atmos.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -13,6 +16,7 @@ using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Devour;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Robust.Shared.Audio.Systems;
@@ -48,6 +52,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, XenoDevouredEvent>(OnDevour);
         SubscribeLocalEvent<YautjaComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
         SubscribeLocalEvent<YautjaComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
     }
 
@@ -124,11 +129,28 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
         if (enabling)
         {
+            if (GetDamageOverTimeBlocker(user) is { } blocker)
+            {
+                _popup.PopupClient(Loc.GetString(GetDamageOverTimePopup(blocker)), user, user, PopupType.MediumCaution);
+                return false;
+            }
+
             if (bracer.Comp.CloakCooldown > TimeSpan.Zero &&
                 _timing.CurTime < bracer.Comp.CloakCooldownUntil)
             {
                 var remaining = (int) Math.Ceiling((bracer.Comp.CloakCooldownUntil - _timing.CurTime).TotalSeconds);
                 _popup.PopupClient(Loc.GetString("cmu-yautja-cloak-cooldown", ("seconds", remaining)), user, user, PopupType.SmallCaution);
+                return false;
+            }
+
+            if (_timing.CurTime < bracer.Comp.CloakCombatLockoutUntil)
+            {
+                var remaining = (int) Math.Ceiling((bracer.Comp.CloakCombatLockoutUntil - _timing.CurTime).TotalSeconds);
+                _popup.PopupClient(
+                    Loc.GetString("cmu-yautja-cloak-blocked-combat", ("seconds", remaining)),
+                    user,
+                    user,
+                    PopupType.SmallCaution);
                 return false;
             }
 
@@ -323,6 +345,66 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         ForceDecloak(ent.Owner);
     }
 
+    private void OnAnyDamageChanged(Entity<DamageableComponent> target, ref DamageChangedEvent args)
+    {
+        if (_net.IsClient ||
+            args.Origin is not { } origin ||
+            args.DamageDelta?.AnyPositive() != true ||
+            (args.Tool == null && args.Impact.Delivery == DamageImpactDelivery.Unspecified))
+        {
+            return;
+        }
+
+        ApplyOffensiveCombatLockout(origin);
+    }
+
+    public void ApplyOffensiveCombatLockout(EntityUid attacker)
+    {
+        if (!HasComp<YautjaComponent>(attacker) ||
+            HasComp<YautjaBadBloodComponent>(attacker) ||
+            !_power.TryGetWornBracer(attacker, out var bracer))
+        {
+            return;
+        }
+
+        var until = _timing.CurTime + bracer.Comp.CloakCombatLockout;
+        if (until <= bracer.Comp.CloakCombatLockoutUntil)
+            return;
+
+        bracer.Comp.CloakCombatLockoutUntil = until;
+        Dirty(bracer);
+    }
+
+    public YautjaCloakDotBlocker? GetDamageOverTimeBlocker(EntityUid user)
+    {
+        if (HasComp<UserAcidedComponent>(user))
+            return YautjaCloakDotBlocker.Acid;
+
+        if (TryComp(user, out FlammableComponent? flammable) &&
+            flammable.OnFire &&
+            flammable.Damage.AnyPositive())
+        {
+            return YautjaCloakDotBlocker.Fire;
+        }
+
+        if (HasComp<UserDamageOverTimeComponent>(user))
+        {
+            return YautjaCloakDotBlocker.Other;
+        }
+
+        return null;
+    }
+
+    private static string GetDamageOverTimePopup(YautjaCloakDotBlocker blocker)
+    {
+        return blocker switch
+        {
+            YautjaCloakDotBlocker.Acid => "cmu-yautja-cloak-blocked-acid",
+            YautjaCloakDotBlocker.Fire => "cmu-yautja-cloak-blocked-fire",
+            _ => "cmu-yautja-cloak-blocked-dot",
+        };
+    }
+
     private void ToggleLayers(EntityUid user, HashSet<HumanoidVisualLayers> layers, bool showLayers)
     {
         foreach (var layer in layers)
@@ -370,4 +452,11 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             ? Loc.GetString("cmu-yautja-identity-unknown")
             : Name(uid);
     }
+}
+
+public enum YautjaCloakDotBlocker : byte
+{
+    Acid,
+    Fire,
+    Other,
 }

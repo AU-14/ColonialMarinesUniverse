@@ -465,19 +465,32 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     }
 
     // RMC14
-    public bool AttemptLightAttack(EntityUid user, EntityUid weaponUid, MeleeWeaponComponent weapon, EntityUid target, bool requireCombatMode)
+    public bool AttemptLightAttack(EntityUid user,
+        EntityUid weaponUid,
+        MeleeWeaponComponent weapon,
+        EntityUid target,
+        bool requireCombatMode,
+        bool predicted = true,
+        EntProtoId? animationOverride = null)
     {
         if (!TryComp(target, out TransformComponent? targetXform))
             return false;
 
-        return AttemptAttack(user, weaponUid, weapon, new LightAttackEvent(GetNetEntity(target), GetNetEntity(weaponUid), GetNetCoordinates(targetXform.Coordinates)), null, requireCombatMode);
+        return AttemptAttack(user, weaponUid, weapon, new LightAttackEvent(GetNetEntity(target), GetNetEntity(weaponUid), GetNetCoordinates(targetXform.Coordinates)), null, requireCombatMode, predicted, animationOverride);
     }
 
     /// <summary>
     /// Called when a windup is finished and an attack is tried.
     /// </summary>
     /// <returns>True if attack successful</returns>
-    private bool AttemptAttack(EntityUid user, EntityUid weaponUid, MeleeWeaponComponent weapon, AttackEvent attack, ICommonSession? session, bool requireCombatMode = true) //added requireCombatMode param
+    private bool AttemptAttack(EntityUid user,
+        EntityUid weaponUid,
+        MeleeWeaponComponent weapon,
+        AttackEvent attack,
+        ICommonSession? session,
+        bool requireCombatMode = true,
+        bool predicted = true,
+        EntProtoId? lightAnimationOverride = null) //added requireCombatMode param
     {
         var curTime = Timing.CurTime;
 
@@ -583,8 +596,8 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
             switch (attack)
             {
                 case LightAttackEvent light:
-                    DoLightAttack(user, light, weaponUid, weapon, session);
-                    animation = GetLightAttackAnimation(user, weaponUid, weapon);
+                    DoLightAttack(user, light, weaponUid, weapon, session, predicted);
+                    animation = lightAnimationOverride ?? GetLightAttackAnimation(user, weaponUid, weapon);
                     range = _rmcMelee.GetUserLightAttackRange(user, target, weapon); // RMC14
                     break;
                 case DisarmAttackEvent disarm:
@@ -604,7 +617,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
             }
 
             // RMC14
-            DoLungeAnimation(user, weaponUid, weapon.Angle, TransformSystem.ToMapCoordinates(GetCoordinates(attack.Coordinates)), range, animation);
+            DoLungeAnimation(user, weaponUid, weapon.Angle, TransformSystem.ToMapCoordinates(GetCoordinates(attack.Coordinates)), range, animation, predicted);
         }
 
         var attackEv = new MeleeAttackEvent(weaponUid);
@@ -637,7 +650,12 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
 
     protected abstract bool InRange(EntityUid user, EntityUid target, float range, ICommonSession? session);
 
-    protected virtual void DoLightAttack(EntityUid user, LightAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session)
+    protected virtual void DoLightAttack(EntityUid user,
+        LightAttackEvent ev,
+        EntityUid meleeUid,
+        MeleeWeaponComponent component,
+        ICommonSession? session,
+        bool predicted)
     {
         // If I do not come back later to fix Light Attacks being Heavy Attacks you can throw me in the spider pit -Errant
         var damage = GetDamage(meleeUid, user, component) * GetHeavyDamageModifier(meleeUid, user, component);
@@ -669,7 +687,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
             }
             var missEvent = new MeleeHitEvent(new List<EntityUid>(), user, meleeUid, damage, null);
             RaiseLocalEvent(meleeUid, missEvent);
-            _meleeSound.PlaySwingSound(user, meleeUid, component);
+            _meleeSound.PlaySwingSound(user, meleeUid, component, predicted);
             return;
         }
 
@@ -732,7 +750,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         }
 
         if (damageResult is { } soundDamage)
-            _meleeSound.PlayHitSound(target.Value, user, GetHighestDamageSound(soundDamage, ProtoMan), hitEvent.HitSoundOverride, component);
+            _meleeSound.PlayHitSound(target.Value, user, GetHighestDamageSound(soundDamage, ProtoMan), hitEvent.HitSoundOverride, component, predicted);
 
         if (!TerminatingOrDeleted(target.Value))
         {
@@ -1278,7 +1296,13 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         return true;
     }
 
-    private void DoLungeAnimation(EntityUid user, EntityUid weapon, Angle angle, MapCoordinates coordinates, float length, string? animation)
+    private void DoLungeAnimation(EntityUid user,
+        EntityUid weapon,
+        Angle angle,
+        MapCoordinates coordinates,
+        float length,
+        string? animation,
+        bool predicted)
     {
         // TODO: Assert that offset eyes are still okay.
         if (!TryComp(user, out TransformComponent? userXform))
@@ -1298,7 +1322,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         if (localPos.Length() > visualLength)
             localPos = localPos.Normalized() * visualLength;
 
-        DoLunge(user, weapon, angle, localPos, animation);
+        DoLunge(user, weapon, angle, localPos, animation, predicted);
     }
 
     public abstract void DoLunge(EntityUid user, EntityUid weapon, Angle angle, Vector2 localPos, string? animation, bool predicted = true);

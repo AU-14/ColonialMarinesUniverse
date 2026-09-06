@@ -50,7 +50,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodBane
   name: bad blood bane bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -66,7 +66,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodCommando
   name: bad blood commando bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -82,7 +82,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodCommandoAlt
   name: bad blood commando alternate bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -98,7 +98,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodEmissaryClassic
   name: bad blood emissary classic bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -114,7 +114,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodEmissaryDesert
   name: bad blood emissary desert bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -130,7 +130,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodEmissaryJungle
   name: bad blood emissary jungle bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -146,7 +146,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodEmissarySnow
   name: bad blood emissary snow bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -162,7 +162,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodEmissaryUrban
   name: bad blood emissary urban bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -178,7 +178,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodLunatic
   name: bad blood lunatic bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -194,7 +194,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodPatchwork
   name: bad blood patchwork bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -210,7 +210,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodPatchworkAlt
   name: bad blood patchwork alternate bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -226,7 +226,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodScav
   name: bad blood scav bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -242,7 +242,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodScavAlt
   name: bad blood scav alternate bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -258,7 +258,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskBadBloodVenator
   name: bad blood venator bio-mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -1970,7 +1970,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskThrallBone
   name: bone thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -1992,7 +1992,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskThrallCrimson
   name: crimson thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -2014,7 +2014,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskThrallEbony
   name: ebony thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -2036,7 +2036,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskThrallGold
   name: gold thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.
@@ -2058,7 +2058,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBase
   id: CMUYautjaMaskThrallSilver
   name: silver thrall mask
   description: A beautifully designed alien hunting mask, both ornate and functional.

@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Server.Humanoid;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Injuries;
 using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
@@ -39,6 +40,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCStatusEffectSystem _rmcStatusEffects = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private YautjaHonorboundAbilitiesSystem _honorboundAbilities = default!;
 
     private const string YautjaSpecies = "Yautja";
     private const string DreadlocksMarking = "CMUYautjaDreadlocksStandard";
@@ -69,11 +71,13 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     private void OnYautjaMapInit(Entity<YautjaComponent> ent, ref MapInitEvent args)
     {
         SetYautjaName(ent);
+        _honorboundAbilities.GrantActions(ent);
     }
 
     private void OnRandomHumanoidSpawned(Entity<YautjaComponent> ent, ref RandomHumanoidSpawnedEvent args)
     {
         ApplyIntrinsicStats(ent);
+        _honorboundAbilities.GrantActions(ent);
     }
 
     private void OnIdentityChanged(Entity<YautjaComponent> ent, ref IdentityChangedEvent args)
@@ -94,9 +98,27 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (ent.Comp.StunResistance > 0f)
             _rmcStatusEffects.GiveStunResistance(ent, ent.Comp.StunResistance);
 
+        var badBlood = HasComp<YautjaBadBloodComponent>(ent);
         var slowOnDamage = EnsureComp<SlowOnDamageComponent>(ent);
-        slowOnDamage.SpeedModifierThresholds = new(ent.Comp.SlowOnDamageThresholds);
+        slowOnDamage.SpeedModifierThresholds = new(badBlood
+            ? ent.Comp.SlowOnDamageThresholds
+            : ent.Comp.FrontlineSlowOnDamageThresholds);
         Dirty(ent, slowOnDamage);
+
+        if (badBlood)
+        {
+            RemComp<CMUMedicalResilienceComponent>(ent);
+        }
+        else
+        {
+            var resilience = EnsureComp<CMUMedicalResilienceComponent>(ent);
+            resilience.PainAccumulationMultiplier = ent.Comp.PainAccumulationMultiplier;
+            resilience.MinimumPenalizingFractureSeverity = ent.Comp.MinimumPenalizingFractureSeverity;
+            resilience.MovementPenaltyFloor = ent.Comp.MedicalMovementPenaltyFloor;
+            resilience.AimPenaltyCeiling = ent.Comp.MedicalAimPenaltyCeiling;
+            resilience.ActionSpeedPenaltyCeiling = ent.Comp.MedicalActionSpeedPenaltyCeiling;
+            Dirty(ent, resilience);
+        }
 
         var damageable = EnsureComp<DamageableComponent>(ent);
         _damageable.SetDamageModifierSetId((ent.Owner, damageable), ent.Comp.DamageModifierSet?.Id);

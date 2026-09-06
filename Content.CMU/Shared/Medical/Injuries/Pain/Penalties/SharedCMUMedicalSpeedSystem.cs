@@ -11,6 +11,7 @@ using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Medical.Injuries.Pain.Events;
+using Content.Shared.CMU14.Medical.Injuries;
 using Content.Shared.Body.Part;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
@@ -183,6 +184,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         if (!IsLayerEnabled())
             return 1f;
         var mult = 1f;
+        TryComp(body, out CMUMedicalResilienceComponent? resilience);
 
         foreach (var (partUid, partComp) in MedicalIndex.GetBodyParts(body))
         {
@@ -191,7 +193,8 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
             if (TryComp<FractureComponent>(partUid, out var frac))
             {
                 var sev = Fracture.GetEffectiveSeverity((partUid, frac));
-                if (sev != FractureSeverity.None)
+                var minimumSeverity = resilience?.MinimumPenalizingFractureSeverity ?? FractureSeverity.Hairline;
+                if (sev.IsAtLeast(minimumSeverity))
                     mult *= (float)FractureProfile.Get(sev).MovementMult;
             }
             if (TryComp<CMUCastComponent>(partUid, out var cast) && cast.ImmobilizesLimb)
@@ -207,7 +210,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         if (HasComp<RecoveringFromSurgeryComponent>(body))
             mult = MathF.Min(mult, 0.7f);
 
-        return MathF.Max(mult, 0.20f);
+        return MathF.Max(mult, resilience?.MovementPenaltyFloor ?? 0.20f);
     }
 
     public float ComputeAimSwayMultiplier(EntityUid body)
@@ -216,6 +219,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         if (!IsLayerEnabled())
             return nerveMultiplier;
         var mult = 1f;
+        TryComp(body, out CMUMedicalResilienceComponent? resilience);
 
         foreach (var (partUid, partComp) in MedicalIndex.GetBodyParts(body))
         {
@@ -224,7 +228,8 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
             if (!TryComp<FractureComponent>(partUid, out var frac))
                 continue;
             var sev = Fracture.GetEffectiveSeverity((partUid, frac));
-            if (sev != FractureSeverity.None)
+            var minimumSeverity = resilience?.MinimumPenalizingFractureSeverity ?? FractureSeverity.Hairline;
+            if (sev.IsAtLeast(minimumSeverity))
                 mult *= (float)FractureProfile.Get(sev).AimSwayMult;
         }
 
@@ -246,7 +251,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
             };
         }
 
-        return MathF.Min(mult * nerveMultiplier, 2.5f);
+        return MathF.Min(mult * nerveMultiplier, resilience?.AimPenaltyCeiling ?? 2.5f);
     }
 
     public float ComputeActionSpeedMultiplier(EntityUid body)
@@ -255,6 +260,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         if (!IsLayerEnabled())
             return nerveMultiplier;
         var mult = 1f;
+        TryComp(body, out CMUMedicalResilienceComponent? resilience);
 
         foreach (var organ in MedicalIndex.GetOrgans(body))
         {
@@ -265,7 +271,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         if (TryComp<PainShockComponent>(body, out var pain))
             mult *= CMUPainTierPenaltyMultipliers.GetActionSpeedMultiplier(Pain.GetEffectiveTier(body, pain));
 
-        return MathF.Min(mult * nerveMultiplier, 3.0f);
+        return MathF.Min(mult * nerveMultiplier, resilience?.ActionSpeedPenaltyCeiling ?? 3.0f);
     }
 
     private float GetNerveStimulationMultiplier(EntityUid body)

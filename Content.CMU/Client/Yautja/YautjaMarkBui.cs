@@ -17,8 +17,13 @@ public sealed class YautjaMarkBui : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<YautjaMarkWindow>();
-        _window.OnMark += (target, kind, reason) => SendMessage(new YautjaMarkPanelMarkMsg(target, kind, reason));
-        _window.OnUnmark += (target, kind) => SendMessage(new YautjaMarkPanelUnmarkMsg(target, kind));
+        _window.OnMark += (record, revision, kind, reason) =>
+            SendMessage(new YautjaMarkPanelMarkMsg(record, revision, kind, reason));
+        _window.OnUnmark += (record, revision, kind) =>
+            SendMessage(new YautjaMarkPanelUnmarkMsg(record, revision, kind));
+        _window.OnChange += (record, revision, oldKind, newKind, reason) =>
+            SendMessage(new YautjaMarkPanelChangeMsg(record, revision, oldKind, newKind, reason));
+        _window.OnRefresh += (history, page) => SendMessage(new YautjaMarkPanelRefreshMsg(history, page));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
