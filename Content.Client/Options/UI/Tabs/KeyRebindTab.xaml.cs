@@ -207,24 +207,21 @@ namespace Content.Client.Options.UI.Tabs
                 OnSearchTextChanged(new LineEdit.LineEditEventArgs(SearchBar, string.Empty));
             };
 
-            // Each header opens a collapsible section and everything after it goes inside, matching
-            // the other options tabs. This tab is the longest of them by far, so folding matters
-            // most here.
-            CmuOptionSection? section = null;
-
             void AddTo(Control child)
             {
-                if (section == null)
-                    KeybindsContainer.AddChild(child);
-                else
-                    section.AddOption(child);
+                KeybindsContainer.AddChild(child);
             }
 
             void AddHeader(string headerContents)
             {
-              section = new CmuOptionSection { Title = Loc.GetString(headerContents) };
-              KeybindsContainer.AddChild(section);
-              _allControls.Add(section); 
+                var headerLabel = new Label
+                {
+                    Text = Loc.GetString(headerContents),
+                    Margin = new Thickness(0, 10, 0, 5)
+                };
+                headerLabel.AddStyleClass("LabelHeading");
+                AddTo(headerLabel);
+                _allControls.Add(headerLabel);
             }
 
             void AddButton(BoundKeyFunction function)
@@ -240,18 +237,10 @@ namespace Content.Client.Options.UI.Tabs
                 CheckBox newCheckBox = new CheckBox() { Text = Loc.GetString(checkBoxName) };
                 newCheckBox.Pressed = currentState;
                 newCheckBox.OnToggled += callBackOnClick;
-
-            void AddCheckBox(string checkBoxName, bool currentState, Action<BaseButton.ButtonToggledEventArgs>? callBackOnClick)
-            {
-                CheckBox newCheckBox = new CheckBox() { Text = Loc.GetString(checkBoxName) };
-                newCheckBox.Pressed = currentState;
-                newCheckBox.OnToggled += callBackOnClick;
                 AddTo(newCheckBox);
                 _allControls.Add(newCheckBox);
             }
-            }
 
-            AddHeader("ui-options-header-rmc");
             AddButton(CMKeyFunctions.RMCActivateAttachableBarrel);
             AddButton(CMKeyFunctions.RMCActivateAttachableRail);
             AddButton(CMKeyFunctions.RMCActivateAttachableStock);
@@ -450,7 +439,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.WindowCloseRecent);
             AddButton(EngineKeyFunctions.EscapeMenu);
             AddButton(ContentKeyFunctions.EscapeContext);
-
             AddHeader("ui-options-header-misc");
             AddButton(ContentKeyFunctions.TakeScreenshot);
             AddButton(ContentKeyFunctions.TakeScreenshotNoUI);
@@ -496,7 +484,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.TextCursorBegin);
             AddButton(EngineKeyFunctions.TextCursorEnd);
 
-            AddHeader("ui-options-header-text-cursor-select");
             AddButton(EngineKeyFunctions.TextCursorSelect);
             AddButton(EngineKeyFunctions.TextCursorSelectLeft);
             AddButton(EngineKeyFunctions.TextCursorSelectRight);
@@ -507,7 +494,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.TextCursorSelectBegin);
             AddButton(EngineKeyFunctions.TextCursorSelectEnd);
 
-            AddHeader("ui-options-header-text-edit");
             AddButton(EngineKeyFunctions.TextBackspace);
             AddButton(EngineKeyFunctions.TextDelete);
             AddButton(EngineKeyFunctions.TextWordBackspace);
@@ -520,13 +506,11 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.TextCut);
             AddButton(EngineKeyFunctions.TextPaste);
 
-            AddHeader("ui-options-header-text-chat");
             AddButton(EngineKeyFunctions.TextHistoryPrev);
             AddButton(EngineKeyFunctions.TextHistoryNext);
             AddButton(EngineKeyFunctions.TextReleaseFocus);
             AddButton(EngineKeyFunctions.TextScrollToBottom);
 
-            AddHeader("ui-options-header-text-other");
             AddButton(EngineKeyFunctions.TextTabComplete);
             AddButton(EngineKeyFunctions.TextCompleteNext);
             AddButton(EngineKeyFunctions.TextCompletePrev);
@@ -627,14 +611,18 @@ namespace Content.Client.Options.UI.Tabs
         {
             var searchText = args.Text.ToLowerInvariant();
 
-            foreach (var control in _allControls)
+            if (string.IsNullOrWhiteSpace(searchText))
             {
-                if (string.IsNullOrWhiteSpace(searchText))
+                foreach (var control in _allControls)
                 {
                     control.Visible = true;
-                    continue;
                 }
+                return;
+            }
 
+            var matchingControls = new HashSet<Control>();
+            foreach (var control in _allControls)
+            {
                 if (control is KeyControl keyControl)
                 {
                     var functionName = Loc.GetString(
@@ -646,21 +634,17 @@ namespace Content.Client.Options.UI.Tabs
                     var matchesName = functionName.Contains(searchText);
                     var matchesKeybind = bind1Text.Contains(searchText) || bind2Text.Contains(searchText);
 
-                    control.Visible = matchesName || matchesKeybind;
-                }
-                else if (control is Label label)
-                {
-                    var labelText = label.Text?.ToLowerInvariant() ?? string.Empty;
-                    control.Visible = labelText.Contains(searchText);
+                    if (matchesName || matchesKeybind)
+                        matchingControls.Add(control);
                 }
                 else if (control is CheckBox checkBox)
                 {
                     var checkBoxText = checkBox.Text?.ToLowerInvariant() ?? string.Empty;
-                    control.Visible = checkBoxText.Contains(searchText);
+                    if (checkBoxText.Contains(searchText))
+                        matchingControls.Add(control);
                 }
                 else if (control is BoxContainer boxContainer)
                 {
-                    var hasMatchingChild = false;
                     foreach (var child in boxContainer.Children)
                     {
                         if (child is Label childLabel)
@@ -668,16 +652,38 @@ namespace Content.Client.Options.UI.Tabs
                             var childText = childLabel.Text?.ToLowerInvariant() ?? string.Empty;
                             if (childText.Contains(searchText))
                             {
-                                hasMatchingChild = true;
+                                matchingControls.Add(control);
                                 break;
                             }
                         }
                     }
-                    control.Visible = hasMatchingChild;
+                }
+            }
+
+            for (var i = 0; i < _allControls.Count; i++)
+            {
+                var control = _allControls[i];
+
+                if (control is Label label && label.HasStyleClass("LabelHeading"))
+                {
+                    var hasMatchingUnder = false;
+                    for (var j = i + 1; j < _allControls.Count; j++)
+                    {
+                        var nextControl = _allControls[j];
+                        if (nextControl is Label nextLabel && nextLabel.HasStyleClass("LabelHeading"))
+                            break;
+
+                        if (matchingControls.Contains(nextControl))
+                        {
+                            hasMatchingUnder = true;
+                            break;
+                        }
+                    }
+                    control.Visible = hasMatchingUnder;
                 }
                 else
                 {
-                    control.Visible = true;
+                    control.Visible = matchingControls.Contains(control);
                 }
             }
         }
