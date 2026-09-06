@@ -1,11 +1,13 @@
 using System.Numerics;
 using Content.Server.Humanoid;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.Commendations;
 using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.StatusEffect;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -16,6 +18,7 @@ using Content.Shared.IdentityManagement.Components;
 using Content.Server.Humanoid.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
 using Content.Shared.StatusIcon.Components;
@@ -31,8 +34,10 @@ namespace Content.Server.CMU14.Yautja;
 public sealed partial class YautjaStatsSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
+    [Dependency] private GunIFFSystem _iff = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private NamingSystem _naming = default!;
@@ -83,6 +88,12 @@ public sealed partial class YautjaStatsSystem : EntitySystem
 
     private void ApplyIntrinsicStats(Entity<YautjaComponent> ent)
     {
+        // The human base supplies colonist allegiance and marine commendation eligibility.
+        _faction.ClearFactions(ent.Owner, false);
+        _faction.AddFaction(ent.Owner, ent.Comp.NpcFaction);
+        _iff.SetUserFaction(ent.Owner, ent.Comp.IffFaction);
+        RemComp<CommendationReceiverComponent>(ent);
+
         var movement = EnsureComp<MovementSpeedModifierComponent>(ent);
         _movement.ChangeBaseSpeed(ent, ent.Comp.BaseWalkSpeed, ent.Comp.BaseSprintSpeed, movement.BaseAcceleration, movement);
         EnsureComp<IgnoreXenoWeedsSlowdownComponent>(ent);
