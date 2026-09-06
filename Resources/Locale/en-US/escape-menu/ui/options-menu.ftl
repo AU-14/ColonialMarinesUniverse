@@ -119,6 +119,10 @@ ui-options-binds-explanation = Click to change binding, right-click to clear
 ui-options-unbound = Unbound
 ui-options-bind-reset = Reset
 ui-options-key-prompt = Press a key...
+ui-options-search-placeholder = Search controls...
+ui-options-search-by-key = Search by Key
+ui-options-search-by-key-active = Press a key:
+ui-options-cancel-search-by-key = Cancel
 
 ui-options-header-movement = Movement
 ui-options-header-camera = Camera
