@@ -26,6 +26,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.Dataset;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
+using Content.Shared.Drunk;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Hands;
@@ -143,6 +144,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         SubscribeLocalEvent<CMUDroneControlTabletComponent, EntityTerminatingEvent>(OnTabletTerminating);
 
         SubscribeLocalEvent<CMUDroneAndroidComponent, ComponentInit>(OnDroneInit);
+        SubscribeLocalEvent<CMUDroneAndroidComponent, BeforeStatusEffectAddedEvent>(OnDroneBeforeStatusEffectAdded);
         SubscribeLocalEvent<CMUDroneAndroidComponent, InteractUsingEvent>(OnDroneInteractUsing);
         SubscribeLocalEvent<CMUDroneAndroidComponent, CMUDroneModuleInstallDoAfterEvent>(OnDroneModuleInstallComplete);
         SubscribeLocalEvent<CMUDroneAndroidComponent, CMUDroneModuleUninstallDoAfterEvent>(OnDroneModuleUninstallComplete);
@@ -451,6 +453,12 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     private void OnDroneInit(Entity<CMUDroneAndroidComponent> ent, ref ComponentInit args)
     {
         EnsureModuleContainer(ent);
+    }
+
+    private void OnDroneBeforeStatusEffectAdded(Entity<CMUDroneAndroidComponent> ent, ref BeforeStatusEffectAddedEvent args)
+    {
+        if (args.Effect == SharedDrunkSystem.Drunk)
+            args.Cancelled = true;
     }
 
     private void OnDroneInteractUsing(Entity<CMUDroneAndroidComponent> ent, ref InteractUsingEvent args)
