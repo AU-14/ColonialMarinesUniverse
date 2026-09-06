@@ -30,7 +30,7 @@
   roundComponents:
   - type: ANPRCRadioUser
   - type: Skills
-    preset: AU14SkillPresetPlatoonAuxiliarySupportSynth
+    preset: AU14SkillPresetSynth
   - type: JobPrefix
     prefix: au14-job-prefix-govforauxsupportsynth
   - type: TacticalMapIcon
@@ -63,47 +63,11 @@
     RMC:
     - type: Skills
       skills:
-        RMCSkillCqc: 5
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 4
-        RMCSkillConstruction: 3
-        RMCSkillFirearms: 2
-        RMCSkillOverwatch: 1
-        RMCSkillMedical: 4
-        RMCSkillSurgery: 4
-        RMCSkillResearch: 1
-        RMCSkillMeleeWeapons: 2
-        RMCSkillPilot: 2
-        RMCSkillPolice: 2
-        RMCSkillFireman: 5
-        RMCSkillPowerLoader: 2
-        RMCSkillVehicles: 2
-        RMCSkillJtac: 3
-        RMCSkillIntel: 2
-        RMCSkillDomestics: 2
-        RMCSkillNavigations: 1
+        preset: AU14SkillPresetSynth
     UPP:
     - type: Skills
       skills:
-        RMCSkillCqc: 5
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 4
-        RMCSkillConstruction: 3
-        RMCSkillFirearms: 2
-        RMCSkillOverwatch: 1
-        RMCSkillMedical: 4
-        RMCSkillSurgery: 4
-        RMCSkillResearch: 1
-        RMCSkillMeleeWeapons: 2
-        RMCSkillPilot: 2
-        RMCSkillPolice: 2
-        RMCSkillFireman: 5
-        RMCSkillPowerLoader: 2
-        RMCSkillVehicles: 2
-        RMCSkillJtac: 3
-        RMCSkillIntel: 2
-        RMCSkillDomestics: 2
-        RMCSkillNavigations: 1
+        preset: AU14SkillPresetSynth
 
   requirements:
   - !type:OverallPlaytimeRequirement
