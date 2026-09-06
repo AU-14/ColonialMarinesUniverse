@@ -132,26 +132,8 @@ namespace Content.Client.Lobby.UI
                 BackgroundColor = StyleNano.CrtBackground,
                 BorderColor = StyleNano.CrtGreenDim,
                 CornerColor = StyleNano.CrtGreen.WithAlpha(0.18f),
-                ScanlineColor = StyleNano.CrtGreen.WithAlpha(0.012f),
-                GridColor = StyleNano.CrtGreen.WithAlpha(0.01f),
-                NoiseColor = StyleNano.CrtGreenSoft.WithAlpha(0.038f),
-                PixelationColor = StyleNano.CrtGreen.WithAlpha(0.028f),
-                PixelationShadowColor = StyleNano.CrtPanelBackground.WithAlpha(0.12f),
                 BorderThickness = new Thickness(1),
-                DrawGrid = true,
-                DrawNoise = false,
-                DrawPixelation = true,
                 CornerLength = 16,
-                GridSpacing = 320,
-                PixelationBlockSize = 3,
-                PixelationSpacing = 190,
-                PixelationChance = 14,
-                PixelationClusterSize = 2,
-                PixelationSeed = 89,
-                NoiseSpacing = 8,
-                NoiseChance = 11,
-                MaxScanlines = 5,
-                NoiseSeed = 53
             };
         }
 

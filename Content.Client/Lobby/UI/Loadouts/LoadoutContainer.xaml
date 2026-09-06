@@ -4,6 +4,7 @@
          HorizontalExpand="True"
          MouseFilter="Ignore"
          Margin="0 0 0 5">
+    <Button Name="RemoveButton" Text="−" Visible="False" Margin="0 0 5 0" MinWidth="36" />
     <Button Name="SelectButton" ToggleMode="True" Margin="0 0 5 0" HorizontalExpand="True"/>
     <PanelContainer SetSize="64 64" HorizontalAlignment="Right" StyleClasses="PanelDeep">
         <SpriteView Name="Sprite" Scale="4 4" MouseFilter="Stop"/>

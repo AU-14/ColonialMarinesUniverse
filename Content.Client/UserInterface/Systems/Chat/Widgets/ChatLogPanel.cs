@@ -1,5 +1,9 @@
+﻿using System.Numerics;
+using Content.Client._CMU14.Interface;
+using Content.Client.Stylesheets;
 using Content.Shared.Chat;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
@@ -14,8 +18,11 @@ public sealed class ChatLogPanel : PanelContainer
     private const float ScrollDirectionTolerance = 1f;
 
     private readonly ChatScrollContainer _scroll;
+    private readonly VScrollBar _scrollBar;
     private readonly BoxContainer _rows;
     private readonly Button _scrollToLatest;
+    private bool _syncingScrollBar;
+    private float _lastSyncedBarValue;
     private bool _isAtBottom = true;
     private bool _followingBottom = true;
     private int _pendingScrollToBottomFrames;
@@ -40,25 +47,66 @@ public sealed class ChatLogPanel : PanelContainer
         };
         AddChild(root);
 
+        // The scrollbar is a sibling of the scroll area, not the one ScrollContainer draws inside
+        // itself. Two reasons the built-in one doesn't work here: ScrollContainer adds it before any
+        // content, so it draws *underneath* the message rows, and it overlays the right-hand edge of
+        // those rows, which is exactly where ChatMessageRow puts its channel accent triangle.
+        var scrollRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 0,
+            HorizontalExpand = true,
+            VerticalExpand = true
+        };
+        root.AddChild(scrollRow);
+
         _scroll = new ChatScrollContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true,
             HScrollEnabled = false,
             VScrollEnabled = true,
-            ReserveScrollbarSpace = true
+            // Hidden *and* not reserving: ReservesSpace=false is what drops its DesiredSize to zero,
+            // which is what stops ScrollContainer insetting the rows for a bar that isn't drawn.
+            // Hiding it does cost two things the engine would otherwise do for us, both handled in
+            // FrameUpdate: applying VScrollTarget to VScroll, and resetting the offset to zero when
+            // everything fits.
+            ReserveScrollbarSpace = false,
+            VScrollBarHidden = true
         };
         _scroll.OnUserMouseWheel += OnUserMouseWheel;
         _scroll.OnScrolled += UpdateScrollState;
-        root.AddChild(_scroll);
+        scrollRow.AddChild(_scroll);
+
+        _scrollBar = new VScrollBar
+        {
+            VerticalExpand = true,
+            // Matches crtChatScrollGrabber's own computed minimum (its content margins sum to 10) -
+            // this is a floor, not the thing actually setting the width, but it should say the same
+            // number as the stylebox or the two silently drift apart on the next retune.
+            MinWidth = 10
+        };
+        _scrollBar.OnValueChanged += OnScrollBarValueChanged;
+        // Chat is skipped by CrtLobbyTheme (Apply returns early on a ChatBox), so this is set here
+        // rather than picked up by the tree walk.
+        if (StyleNano.CrtUiEnabled)
+            _scrollBar.AddStyleClass(StyleNano.StyleClassCrtChatScrollBar);
+
+        scrollRow.AddChild(_scrollBar);
 
         _rows = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             SeparationOverride = 0,
             HorizontalExpand = true,
-            VerticalExpand = false
+            VerticalExpand = false,
+            // Messages sit on the floor and grow upward, the way a terminal does. Align rather than a
+            // leading spacer: an expanding spacer is measured, and ScrollContainer measures its
+            // content unbounded, so the spacer's DesiredSize.Y explodes and every scroll computation
+            // reading _rows.DesiredSize.Y breaks with it. Align only moves children at arrange time.
+            Align = BoxContainer.AlignMode.End
         };
+
         _scroll.AddChild(_rows);
 
         _scrollToLatest = new Button
@@ -66,11 +114,44 @@ public sealed class ChatLogPanel : PanelContainer
             Text = "Scroll to latest",
             Visible = false,
             HorizontalAlignment = HAlignment.Center,
-            MinWidth = 150,
-            StyleClasses = { OutputPanel.StyleClassOutputPanelScrollDownButton }
+            MinSize = new Vector2(200, 30),
+            // Text only, no plate: a filled button here reads as a lump sitting on the log. The box
+            // has to be overridden rather than removed, or the whole rect stops being clickable -
+            // StyleBoxOverride also beats any stylesheet rule, including the CRT one added below.
+            StyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.Transparent }
         };
+
+        if (StyleNano.CrtUiEnabled)
+        {
+            // Sized to the log, not above it. This was 12 against a chat that is 8 everywhere else,
+            // so the one control that appears over the messages was also the largest text in the
+            // panel. Accent rather than body text because it is the only thing here that is an
+            // action - and with the fill deliberately removed, colour is all it has left to say so.
+            _scrollToLatest.AddStyleClass(StyleNano.StyleClassCrtButton);
+            _scrollToLatest.Label.FontOverride =
+                StyleNano.GetChatFont(IoCManager.Resolve<IResourceCache>());
+            _scrollToLatest.Label.FontColorOverride = CrtTerminalPalette.Accent;
+            _scrollToLatest.MinSize = new Vector2(160, 20);
+            // The button is 160 wide and the label is not, so without this the text sits at its left
+            // edge rather than under the middle of the log. See CrtLobbyTheme.ApplyControl - chat is
+            // skipped by that walk, so it has to be repeated here.
+            _scrollToLatest.Label.HorizontalExpand = true;
+        }
+
         _scrollToLatest.OnPressed += _ => ScrollToBottom();
         root.AddChild(_scrollToLatest);
+    }
+
+    /// <summary>
+    ///     Re-read the chat font onto the scroll-to-latest button: its FontOverride is baked once and
+    ///     outlives a stylesheet rebuild, and it is not a row, so a repopulate never rebuilds it.
+    /// </summary>
+    public void RefreshChatFont()
+    {
+        if (!StyleNano.CrtUiEnabled)
+            return;
+
+        _scrollToLatest.Label.FontOverride = StyleNano.GetChatFont(IoCManager.Resolve<IResourceCache>());
     }
 
     public ChatMessageRow AddMessage(ChatMessage message, FormattedMessage formatted, Color color, Color? accentOverride = null, int? fontSize = null)
@@ -154,13 +235,88 @@ public sealed class ChatLogPanel : PanelContainer
             _pendingLayoutRefreshFrames--;
         }
 
-        if (_pendingScrollToBottomFrames <= 0)
+        if (_pendingScrollToBottomFrames > 0)
+        {
+            _scroll.VScroll = float.MaxValue;
+            _lastScrollTarget = _scroll.VScroll;
+            _scrollToLatest.Visible = false;
+            _pendingScrollToBottomFrames--;
+        }
+
+        // Apply the scroll target by hand. ScrollContainer positions its content from the bar's
+        // Value, but the mouse wheel (and VScrollTarget) only write ValueTarget - ScrollBar.FrameUpdate
+        // is what normally eases one into the other, and that never runs for us because
+        // Control.DoFrameUpdateRecursive returns early on an invisible control and we hide the
+        // built-in bar. Without this the log does not move at all.
+        if (_scroll.VScroll != _scroll.VScrollTarget)
+            _scroll.VScroll = _scroll.VScrollTarget;
+
+        // Re-derive from geometry every frame rather than trusting ScrollContainer.OnScrolled.
+        // That event only fires when the scroll value itself changes, so anything that moves the
+        // bottom without scrolling - a message arriving, a rewrap, the scroll-to-latest button
+        // appearing and taking height off the log - used to leave the state stale, which is how the
+        // button got stuck on screen after scrolling back down.
+        UpdateScrollState();
+        SyncScrollBar();
+    }
+
+    /// <summary>
+    ///     Mirrors the scroll area's state onto the gutter's bar. Driven from FrameUpdate because
+    ///     the content height changes on message add, tab switch, resize and rewrap, and there is no
+    ///     single event covering all of those.
+    /// </summary>
+    private void SyncScrollBar()
+    {
+        var content = _rows.DesiredSize.Y;
+        var page = _scroll.Height;
+
+        _syncingScrollBar = true;
+
+        if (page <= 0 || content <= page)
+        {
+            // Nothing to scroll. A full-length grabber keeps the gutter reading as a scrollbar
+            // rather than an empty channel.
+            _scrollBar.MaxValue = 1;
+            _scrollBar.Page = 1;
+            _scrollBar.Value = 0;
+
+            // ScrollContainer.GetScrollValue zeroes the offset when everything fits - but only if
+            // the bar was hidden by *it*. We hide it deliberately (VScrollBarHidden), and the engine
+            // explicitly leaves the value alone in that case. ArrangeOverride also doesn't reset the
+            // hidden bar's stale Page/MaxValue, so without this the log could still be dragged
+            // around when there was nothing to scroll.
+            // Writing VScroll also resets ValueTarget, so the apply step in FrameUpdate won't drag
+            // it straight back.
+            if (_scroll.VScroll != 0)
+                _scroll.VScroll = 0;
+        }
+        else
+        {
+            _scrollBar.MaxValue = content;
+            _scrollBar.Page = page;
+            _scrollBar.Value = _scroll.VScroll;
+        }
+
+        _lastSyncedBarValue = _scrollBar.Value;
+        _syncingScrollBar = false;
+    }
+
+    private void OnScrollBarValueChanged(Robust.Client.UserInterface.Controls.Range range)
+    {
+        // The flag covers writes made directly by SyncScrollBar; the value check covers the ones
+        // that come back a frame later, when ScrollBar.FrameUpdate lerps Value towards the
+        // ValueTarget we set. Without it every frame of a smooth scroll looks like a user drag.
+        if (_syncingScrollBar || MathF.Abs(_scrollBar.Value - _lastSyncedBarValue) < 0.01f)
             return;
 
-        _scroll.VScrollTarget = float.MaxValue;
-        _lastScrollTarget = _scroll.VScrollTarget;
-        _scrollToLatest.Visible = false;
-        _pendingScrollToBottomFrames--;
+        _scroll.VScroll = _scrollBar.Value;
+
+        // Dragging the grabber is a deliberate scroll, so stop snapping back to the newest message
+        // unless it was dragged to the end.
+        if (_scrollBar.IsAtEnd)
+            ScrollToBottom();
+        else
+            StopFollowingBottom();
     }
 
     private void OnUserMouseWheel(float deltaY, float previousTarget, float currentTarget)
@@ -175,8 +331,8 @@ public sealed class ChatLogPanel : PanelContainer
     {
         _isAtBottom = true;
         _followingBottom = true;
-        _scroll.VScrollTarget = float.MaxValue;
-        _lastScrollTarget = _scroll.VScrollTarget;
+        _scroll.VScroll = float.MaxValue;
+        _lastScrollTarget = _scroll.VScroll;
         _scrollToLatest.Visible = false;
 
         // Rebuilt tab contents can take multiple layout passes before ScrollContainer
@@ -197,13 +353,13 @@ public sealed class ChatLogPanel : PanelContainer
         _isAtBottom = false;
         _followingBottom = false;
         _pendingScrollToBottomFrames = 0;
-        _lastScrollTarget = _scroll.VScrollTarget;
+        _lastScrollTarget = _scroll.VScroll;
         _scrollToLatest.Visible = true;
     }
 
     private void UpdateScrollState()
     {
-        var scrollTarget = _scroll.VScrollTarget;
+        var scrollTarget = _scroll.VScroll;
         var scrolledUp = scrollTarget < _lastScrollTarget - ScrollDirectionTolerance;
         _lastScrollTarget = scrollTarget;
 

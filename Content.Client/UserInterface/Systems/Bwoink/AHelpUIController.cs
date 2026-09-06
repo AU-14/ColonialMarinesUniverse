@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Client._CMU14.Interface;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
@@ -591,12 +592,9 @@ public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
 
     public void DiscordRelayChanged(bool active)
     {
+        // Still tracked for its other readers; only the label it drove is gone. BwoinkPanel's
+        // conduct button already says messages are relayed to Discord.
         _discordRelayActive = active;
-
-        if (_chatPanel != null)
-        {
-            _chatPanel.RelayedToDiscordLabel.Visible = active;
-        }
     }
 
     public void PeopleTypingUpdated(BwoinkPlayerTypingUpdated args)
@@ -624,29 +622,42 @@ public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
             return false;
         _chatPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(_ownerId, text, true, false));
         _chatPanel.InputTextChanged += text => InputTextChanged?.Invoke(_ownerId, text);
-        _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
+        // 600x360 - roughly 20% up from the 500x300 this opened at before. No SetSize: MinSize alone
+        // is what the window opens at when nothing forces it larger, and DefaultWindow has none.
         _window = new DefaultWindow()
         {
             Title=Loc.GetString("bwoink-user-title"),
-            MinSize = new Vector2(500, 300),
+            MinSize = new Vector2(600, 360),
         };
         _window.Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetNano;
         _window.OnClose += () => { OnClose?.Invoke(); };
         _window.OnOpen += () => { OnOpen?.Invoke(); };
+        // CrtScreenPanel, not CrtPanel: CrtPanel draws a full bordered frame, and BwoinkPanel's own
+        // input row (see BwoinkPanel.xaml) already carries its own rule lines - a bordered frame
+        // around a bordered row is the box-in-a-box this window is meant to stop having.
         var rootPanel = new PanelContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true,
-            StyleClasses = { StyleNano.StyleClassCrtPanel }
+            StyleClasses = { StyleNano.StyleClassCrtScreenPanel }
         };
         rootPanel.AddChild(_chatPanel);
         _window.Contents.AddChild(rootPanel);
         CrtLobbyTheme.ApplyWindow(_window, includeChat: true, useCrtTypography: false);
 
-        var introText = Loc.GetString("bwoink-system-introductory-message");
-        var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, introText);
+        var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, BuildIntroText());
         Receive(introMessage);
         return true;
+    }
+
+    // One message, not five: a header coloured in code rather than baked into the loc string, then
+    // the bullet body. Stays a normal log line so it scrolls away with the conversation. Internal so
+    // CmuPanelPreviewSystem can show the same text without faking EnsureInit's setup.
+    internal static string BuildIntroText()
+    {
+        var introHeader = Loc.GetString("bwoink-system-introductory-header");
+        var introBody = Loc.GetString("bwoink-system-introductory-message");
+        return $"[bold][color={CrtTerminalPalette.Caution.ToHex()}]{introHeader}[/color][/bold]\n{introBody}";
     }
 
     public void Dispose()

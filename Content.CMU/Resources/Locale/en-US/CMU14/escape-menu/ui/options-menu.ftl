@@ -4,6 +4,9 @@ cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat l
 cmu-ui-options-accessibility = Accessibility
 cmu-ui-options-auto-ingest = Automatically continue eating and drinking
 cmu-ui-options-auto-ingest-tooltip = After the first bite or sip, continue consuming the held item until it is empty or the action is interrupted.
+cmu-ui-options-voting = Voting
+cmu-ui-options-vote-ui-large = Larger vote popup
+cmu-ui-options-vote-ui-large-tooltip = Draws votes with wider options and taller rows. Easier to read on high resolutions and ultrawide displays.
 
 cmu-ui-options-general-construction = Construction
 cmu-ui-options-construction-mode = Construction Mode

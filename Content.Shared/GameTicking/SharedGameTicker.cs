@@ -113,14 +113,44 @@ namespace Content.Shared.GameTicking
         }
     }
 
+    /// <summary>
+    ///     One column of the lobby's round-info table: a heading with its value shown underneath.
+    ///     Rendered as a grid rather than pre-formatted text so columns stay aligned at any panel
+    ///     width and however long the value is.
+    /// </summary>
+    [Serializable, NetSerializable]
+    public sealed class LobbyRoundInfoField
+    {
+        public string Label { get; }
+        public string Value { get; }
+
+        /// <summary>
+        ///     Hex colour for the value, e.g. "#007EE7". Null keeps the default body colour.
+        /// </summary>
+        public string? Color { get; }
+
+        public LobbyRoundInfoField(string label, string value, string? color = null)
+        {
+            Label = label;
+            Value = value;
+            Color = color;
+        }
+    }
+
     [Serializable, NetSerializable]
     public sealed partial class TickerLobbyInfoEvent : EntityEventArgs
     {
         public string TextBlob { get; }
 
-        public TickerLobbyInfoEvent(string textBlob)
+        /// <summary>
+        ///     Structured round info for the lobby table. Laid out two columns per row, in order.
+        /// </summary>
+        public List<LobbyRoundInfoField> RoundInfo { get; }
+
+        public TickerLobbyInfoEvent(string textBlob, List<LobbyRoundInfoField>? roundInfo = null)
         {
             TextBlob = textBlob;
+            RoundInfo = roundInfo ?? new List<LobbyRoundInfoField>();
         }
     }
 

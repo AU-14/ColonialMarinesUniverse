@@ -64,6 +64,7 @@ au14-job-prefix-journalist = PRESS
 au14-job-name-civiliancolonyadministrator = Colony Administrator
 au14-job-description-civiliancolonyadministrator = Oversee all colony operations. You’re the boss, for better or worse.
 au14-job-prefix-colonyadministrator = ADMIN
+au14-loadout-group-colony-administrator-skills = Skills
 
 au14-job-name-civilianfreightsystemsspecialist = Freight Systems Specialist
 au14-job-description-civilianfreightsystemsspecialist = Manage the ASRS and coordinate incoming and outgoing supplies.

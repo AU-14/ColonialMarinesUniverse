@@ -174717,7 +174717,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 360
           - 359
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -174754,7 +174753,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 363
           - 362
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -174791,7 +174789,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 18022
           - 18026
           - 18025
           - 18024
@@ -174813,8 +174810,7 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - 18030
+          ents: []
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -174853,7 +174849,6 @@ entities:
           occludes: True
           ents:
           - 18033
-          - 18032
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -176029,43 +176024,6 @@ entities:
     - type: Transform
       pos: 270.5,-116.5
       parent: 1
-- proto: RMCMatebaBeltLuxuriousFilled
-  entities:
-  - uid: 360
-    components:
-    - type: Transform
-      parent: 358
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 363
-    components:
-    - type: Transform
-      parent: 361
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 18022
-    components:
-    - type: Transform
-      parent: 18021
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 18030
-    components:
-    - type: Transform
-      parent: 18029
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 18032
-    components:
-    - type: Transform
-      parent: 18031
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: RMCMechPowerLoader
   entities:
   - uid: 18181

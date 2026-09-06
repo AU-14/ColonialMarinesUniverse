@@ -27,6 +27,11 @@ public interface IStylesheetManager
     void PreviewCrtUi(bool enabled, string color);
     void ResetCrtUiPreview();
 
+    /// <summary>
+    /// Raised after chat fonts and open controls have been restyled.
+    /// </summary>
+    event Action? ChatFontChanged;
+
     ///
     /// Sheetlets marked with CommonSheetlet that have not satisfied the type constraints of any stylesheet
     ///

@@ -1,5 +1,7 @@
-using System;
+﻿using System;
 using System.Numerics;
+using Content.Client._CMU14.Interface;
+using Content.Client.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -38,13 +40,29 @@ public sealed class ChatTabButton : Button
     {
         TabId = tabId;
         DefaultCursorShape = CursorShape.Hand;
+
+        // Match the CRT-styled buttons elsewhere in the UI (AHelp, Call Vote...). Set here rather
+        // than via CrtLobbyTheme because tabs are created and destroyed as channels change, and that
+        // pass only tags controls that already exist when it runs.
+        if (StyleNano.CrtUiEnabled)
+        {
+            AddStyleClass(StyleNano.StyleClassCrtChatTab);
+
+            // Tabs carry a MinWidth of at least 58, so the label is narrower than the button and
+            // would sit at its left edge - with the selection underline spanning the full width, an
+            // active tab's rule looked offset from its own text. See CrtLobbyTheme.ApplyControl for
+            // why this cannot come from the stylesheet.
+            Label.HorizontalExpand = true;
+        }
     }
 
     public void SetDragVisualState(bool dragging, bool dropTarget)
     {
         StyleBoxOverride = (dragging, dropTarget) switch
         {
-            (true, _) => CreateDragStyle(Color.FromHex("#173523"), Color.FromHex("#7fd89a"), new Thickness(1)),
+            // Through the palette so the drag feedback follows the theme; hardcoded it was the
+            // one green left on an off-theme screen.
+            (true, _) => CreateDragStyle(CrtTerminalPalette.Surface2, CrtTerminalPalette.Accent, new Thickness(1)),
             (_, true) => CreateDragStyle(Color.FromHex("#1b2638"), Color.FromHex("#82b7ff"), new Thickness(2)),
             _ => null
         };

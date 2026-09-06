@@ -8,6 +8,7 @@
   - type: Skills
     skills:
       RMCSkillCqc: 1
+      RMCSkillEndurance: 1
       RMCSkillEngineer: 1
       RMCSkillConstruction: 1
       RMCSkillOverwatch: 1
@@ -19,6 +20,7 @@
       RMCSkillDomestics: 1
       RMCSkillNavigations: 1
       RMCSkillFirearms: 2
+  - type: MarineOrders
   - type: JobPrefix
     prefix: au14-job-prefix-colonyadministrator
   - type: TacticalMapIcon
@@ -93,7 +95,7 @@
 
 - type: roleLoadout
   id: JobAU14JobCivilianColonyAdministrator
-  points: 7
+  points: 50 #Make sure to revist the amount of points here after this has been merged for a bit, as this is initally a rather arbitrary amount
   groups:
   - CivSatchelAU14
   - CivFootwearAU14
@@ -105,3 +107,111 @@
   - EyewearRMC
   - MasksRMC
   - HeadwearCLFAU14
+  - ColonyAdministratorBeltCMU
+  - ColonyAdministratorSkillsAU14
+
+- type: loadoutGroup
+  id: ColonyAdministratorSkillsAU14
+  name: au14-loadout-group-colony-administrator-skills
+  minLimit: 0
+  maxLimit: 21
+  loadouts:
+  - ColonyAdministratorLeadershipSkillAU14
+  - ColonyAdministratorMedicalSkillAU14
+  - ColonyAdministratorCqcSkillAU14
+  - ColonyAdministratorEnduranceSkillAU14
+  - ColonyAdministratorMeleeWeaponsSkillAU14
+  - ColonyAdministratorSurgerySkillAU14
+  - ColonyAdministratorEngineerSkillAU14
+  - ColonyAdministratorConstructionSkillAU14
+  - ColonyAdministratorPoliceSkillAU14
+
+- type: loadout
+  id: ColonyAdministratorLeadershipSkillAU14
+  dummyEntity: RMCSkillLeadership
+  cost: 5
+  maxSelections: 4
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillLeadership
+    amount: 1
+
+- type: loadout
+  id: ColonyAdministratorMedicalSkillAU14
+  dummyEntity: RMCSkillMedical
+  cost: 5
+  maxSelections: 4
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillMedical
+    amount: 1
+
+- type: loadout
+  id: ColonyAdministratorCqcSkillAU14
+  dummyEntity: RMCSkillCqc
+  cost: 5
+  maxSelections: 2
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillCqc
+    amount: 1
+
+- type: loadout
+  id: ColonyAdministratorEnduranceSkillAU14
+  dummyEntity: RMCSkillEndurance
+  cost: 5
+  maxSelections: 2
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillEndurance
+    amount: 1
+
+- type: loadout
+  id: ColonyAdministratorMeleeWeaponsSkillAU14
+  dummyEntity: RMCSkillMeleeWeapons
+  cost: 5
+  maxSelections: 1
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillMeleeWeapons
+    amount: 1
+
+- type: loadout
+  id: ColonyAdministratorSurgerySkillAU14
+  dummyEntity: RMCSkillSurgery
+  cost: 5
+  maxSelections: 2
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillSurgery
+    amount: 1
+
+- type: loadout
+  id: ColonyAdministratorEngineerSkillAU14
+  dummyEntity: RMCSkillEngineer
+  cost: 5
+  maxSelections: 2
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillEngineer
+    amount: 1
+
+- type: loadout
+  id: ColonyAdministratorConstructionSkillAU14
+  dummyEntity: RMCSkillConstruction
+  cost: 5
+  maxSelections: 2
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillConstruction
+    amount: 1
+
+- type: loadout
+  id: ColonyAdministratorPoliceSkillAU14
+  dummyEntity: RMCSkillPolice
+  cost: 5
+  maxSelections: 1
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: RMCSkillPolice
+    amount: 1

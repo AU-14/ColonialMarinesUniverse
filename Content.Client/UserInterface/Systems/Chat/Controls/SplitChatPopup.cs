@@ -11,24 +11,24 @@ namespace Content.Client.UserInterface.Systems.Chat.Controls;
 public sealed class SplitChatPopup : Popup
 {
     private readonly BoxContainer _tabs;
+    private readonly Button _stackedButton;
+    private readonly Button _sideBySideButton;
 
     public event Action<string?>? OnTabSelected;
 
+    /// <summary>
+    ///     Raised with true for side-by-side panes, false for stacked.
+    /// </summary>
+    public event Action<bool>? OnDirectionSelected;
+
     public SplitChatPopup()
     {
-        var panel = new PanelContainer
-        {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#07090B"),
-                BorderColor = Color.FromHex("#263039"),
-                BorderThickness = new Thickness(1),
-                ContentMarginLeftOverride = 8,
-                ContentMarginRightOverride = 8,
-                ContentMarginTopOverride = 8,
-                ContentMarginBottomOverride = 8
-            }
-        };
+        // Style class rather than a PanelOverride so the popup follows the CRT palette instead of
+        // keeping whatever colour was baked in when it was built.
+        var panel = new PanelContainer();
+        panel.AddStyleClass(StyleNano.CrtUiEnabled
+            ? StyleNano.StyleClassCrtChatPopup
+            : StyleNano.StyleClassChatSubPanel);
         AddChild(panel);
 
         var root = new BoxContainer
@@ -39,11 +39,24 @@ public sealed class SplitChatPopup : Popup
         };
         panel.AddChild(root);
 
-        root.AddChild(new Label
+        root.AddChild(CreateHeading(Loc.GetString("hud-chatbox-split-direction")));
+
+        var directions = new BoxContainer
         {
-            Text = Loc.GetString("hud-chatbox-split-picker"),
-            Modulate = Color.FromHex("#D6DCE0")
-        });
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 2
+        };
+        root.AddChild(directions);
+
+        _stackedButton = CreateItemButton(Loc.GetString("hud-chatbox-split-direction-stacked"));
+        _stackedButton.OnPressed += _ => OnDirectionSelected?.Invoke(false);
+        directions.AddChild(_stackedButton);
+
+        _sideBySideButton = CreateItemButton(Loc.GetString("hud-chatbox-split-direction-side"));
+        _sideBySideButton.OnPressed += _ => OnDirectionSelected?.Invoke(true);
+        directions.AddChild(_sideBySideButton);
+
+        root.AddChild(CreateHeading(Loc.GetString("hud-chatbox-split-picker")));
 
         _tabs = new BoxContainer
         {
@@ -51,6 +64,42 @@ public sealed class SplitChatPopup : Popup
             SeparationOverride = 4
         };
         root.AddChild(_tabs);
+    }
+
+    private static Label CreateHeading(string text)
+    {
+        var label = new Label { Text = text };
+        if (StyleNano.CrtUiEnabled)
+            label.AddStyleClass(StyleNano.StyleClassCrtHeading);
+
+        return label;
+    }
+
+    private static Button CreateItemButton(string text)
+    {
+        var button = new Button
+        {
+            Text = text,
+            ToggleMode = true,
+            HorizontalExpand = true,
+            MinHeight = 26,
+            StyleClasses = { StyleNano.StyleClassChatChannelSelectorButton }
+        };
+
+        // Chat is skipped by CrtLobbyTheme, so every CRT class in here is set by hand.
+        if (StyleNano.CrtUiEnabled)
+            button.AddStyleClass(StyleNano.StyleClassCrtButton);
+
+        return button;
+    }
+
+    /// <summary>
+    ///     Reflects which way the panes are currently split.
+    /// </summary>
+    public void SetDirection(bool horizontal)
+    {
+        _stackedButton.Pressed = !horizontal;
+        _sideBySideButton.Pressed = horizontal;
     }
 
     public void ConfigureTabs(IReadOnlyList<ChatTabSettings> tabs, string activeTabId, bool splitEnabled)
@@ -63,18 +112,8 @@ public sealed class SplitChatPopup : Popup
         foreach (var tab in tabs)
         {
             var capturedId = tab.Id;
-            var button = new Button
-            {
-                Text = tab.Title,
-                ToggleMode = true,
-                Pressed = splitEnabled && string.Equals(tab.Id, activeTabId, StringComparison.OrdinalIgnoreCase),
-                HorizontalExpand = true,
-                MinHeight = 28,
-                StyleClasses = { StyleNano.StyleClassChatChannelSelectorButton },
-                Modulate = splitEnabled && string.Equals(tab.Id, activeTabId, StringComparison.OrdinalIgnoreCase)
-                    ? Color.FromHex("#9fd0b3")
-                    : Color.FromHex("#737987")
-            };
+            var button = CreateItemButton(tab.Title);
+            button.Pressed = splitEnabled && string.Equals(tab.Id, activeTabId, StringComparison.OrdinalIgnoreCase);
             button.OnPressed += _ =>
             {
                 Close();
@@ -86,14 +125,8 @@ public sealed class SplitChatPopup : Popup
         if (!splitEnabled)
             return;
 
-        var closeButton = new Button
-        {
-            Text = Loc.GetString("hud-chatbox-split-close"),
-            HorizontalExpand = true,
-            MinHeight = 28,
-            StyleClasses = { StyleNano.StyleClassChatChannelSelectorButton },
-            Modulate = Color.FromHex("#ff8787")
-        };
+        var closeButton = CreateItemButton(Loc.GetString("hud-chatbox-split-close"));
+        closeButton.ToggleMode = false;
         closeButton.OnPressed += _ =>
         {
             Close();

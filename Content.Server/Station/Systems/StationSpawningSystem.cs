@@ -266,6 +266,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 EquipRoleName(jobEntity, loadout, loadoutProto);
 
             DoJobSpecials(job, jobEntity);
+            if (loadout != null && loadoutProto != null)
+                ApplyRoleLoadoutEffects(jobEntity, loadout, loadoutProto);
+
             ApplyRegulationAppearance(jobEntity, profile);
             ApplyTeamFaction(jobEntity, team);
 
@@ -299,7 +302,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         }
 
         if (loadout != null && loadoutProto != null)
-            EquipRoleLoadout(entity.Value, loadout, loadoutProto);
+            EquipRoleLoadout(entity.Value, loadout, loadoutProto, applyEffects: false);
 
         if (prototype?.StartingGear != null)
         {
@@ -381,6 +384,11 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             SetPdaAndIdCardDataWithSplitJob(entity.Value, metaDataEntity.EntityName, prototype, originalPrototype ?? prototype, station);
 
         DoJobSpecials(job, entity.Value);
+
+        // Job profiles establish the base skill preset, so loadout upgrades must run afterwards.
+        if (loadout != null && loadoutProto != null)
+            ApplyRoleLoadoutEffects(entity.Value, loadout, loadoutProto);
+
         ApplyRegulationAppearance(entity.Value, profile);
         _identity.QueueIdentityUpdate(entity.Value);
 
