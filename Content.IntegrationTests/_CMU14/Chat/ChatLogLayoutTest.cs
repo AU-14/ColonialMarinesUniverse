@@ -6,6 +6,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -16,6 +17,85 @@ namespace Content.IntegrationTests.CMU14.Chat;
 public sealed class ChatLogLayoutTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { InLobby = true, Dirty = true };
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task WrappedHistoryLayoutSettlesAfterChanges(bool crt)
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var ui = Client.ResolveDependency<IUserInterfaceManager>();
+            var update = ui.GetType().GetMethod("FrameUpdate")!.CreateDelegate<Action<FrameEventArgs>>(ui);
+            Client.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.CrtUiEnabled, crt);
+            using var panel = new ChatLogPanel { SetSize = new Vector2(540, 650) };
+            ui.WindowRoot.AddChild(panel);
+            var scroll = Descendants(panel).OfType<ScrollContainer>().Single();
+            var scrollBar = Descendants(panel).OfType<VScrollBar>().Single(bar => bar.Parent != scroll);
+
+            void AddMessages(int count)
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    var text = $"Marine {i} says, This is a representative radio message " +
+                        "with enough text to wrap in the chat panel.";
+                    panel.AddMessage(new ChatMessage(ChatChannel.Radio, text, "", default, null)
+                        { GhostFollowEntity = new NetEntity(123) },
+                        FormattedMessage.FromUnformatted(text), Color.White);
+                }
+            }
+
+            void AssertSettled(int expectedCount)
+            {
+                // Startup and resize deliberately refresh layout for eight frames. Once settled,
+                // a width mismatch must not keep requeuing text measurement on every idle frame.
+                for (var frame = 0; frame < 20; frame++)
+                    update(new FrameEventArgs(1f / 60f));
+
+                for (var frame = 0; frame < 3; frame++)
+                {
+                    update(new FrameEventArgs(1f / 60f));
+                    Assert.That(scroll.IsMeasureValid, Is.True, "Chat must finish measuring between idle frames");
+                    Assert.That(scroll.IsArrangeValid, Is.True);
+                }
+
+                Assert.That(panel.EntryCount, Is.EqualTo(expectedCount));
+                Assert.That(scrollBar.Position.X, Is.EqualTo(scroll.Width).Within(0.01f),
+                    "Scrollbar must not cover messages");
+                Assert.That(scroll.Width + scrollBar.Width, Is.EqualTo(scroll.Parent!.Width).Within(0.01f));
+                AssertRowsDoNotOverlap(panel, expectedCount);
+            }
+
+            AddMessages(500);
+            AssertSettled(500);
+            Assert.That(scrollBar.IsAtEnd, Is.True);
+
+            // Showing the scroll-to-latest button changes the space available to the viewport.
+            scrollBar.Value = (scrollBar.MaxValue - scrollBar.Page) / 2;
+            AssertSettled(500);
+            var previousScroll = scroll.VScroll;
+            AddMessages(1);
+            AssertSettled(501);
+            Assert.That(scroll.VScroll, Is.EqualTo(previousScroll).Within(0.01f),
+                "Incoming chat must preserve the reader's position");
+            panel.ScrollToBottom();
+            AssertSettled(501);
+            Assert.That(scrollBar.IsAtEnd, Is.True);
+
+            foreach (var size in new[] { new Vector2(300, 160), new Vector2(700, 320), new Vector2(540, 650) })
+            {
+                panel.SetSize = size;
+                AssertSettled(501);
+                Assert.That(scrollBar.IsAtEnd, Is.True);
+            }
+
+            // Tabs clear and rebuild the same log with a different selection from history.
+            panel.Clear();
+            AssertSettled(0);
+            AddMessages(50);
+            AssertSettled(50);
+            Assert.That(scrollBar.IsAtEnd, Is.True);
+        });
+    }
 
     [TestCase(false, false)]
     [TestCase(true, false)]

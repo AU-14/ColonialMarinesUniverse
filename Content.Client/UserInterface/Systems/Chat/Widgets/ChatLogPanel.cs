@@ -51,15 +51,6 @@ public sealed class ChatLogPanel : PanelContainer
         // itself. Two reasons the built-in one doesn't work here: ScrollContainer adds it before any
         // content, so it draws *underneath* the message rows, and it overlays the right-hand edge of
         // those rows, which is exactly where ChatMessageRow puts its channel accent triangle.
-        var scrollRow = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 0,
-            HorizontalExpand = true,
-            VerticalExpand = true
-        };
-        root.AddChild(scrollRow);
-
         _scroll = new ChatScrollContainer
         {
             HorizontalExpand = true,
@@ -76,7 +67,6 @@ public sealed class ChatLogPanel : PanelContainer
         };
         _scroll.OnUserMouseWheel += OnUserMouseWheel;
         _scroll.OnScrolled += UpdateScrollState;
-        scrollRow.AddChild(_scroll);
 
         _scrollBar = new VScrollBar
         {
@@ -92,7 +82,7 @@ public sealed class ChatLogPanel : PanelContainer
         if (StyleNano.CrtUiEnabled)
             _scrollBar.AddStyleClass(StyleNano.StyleClassCrtChatScrollBar);
 
-        scrollRow.AddChild(_scrollBar);
+        root.AddChild(new ChatScrollLayout(_scroll, _scrollBar));
 
         _rows = new BoxContainer
         {
@@ -381,6 +371,45 @@ public sealed class ChatLogPanel : PanelContainer
 
         _pendingScrollToBottomFrames = 0;
         _scrollToLatest.Visible = true;
+    }
+
+    /// <summary>
+    ///     Reserves the scrollbar's width before measuring the message area. A horizontal BoxContainer
+    ///     measures the scroll area at the full width but arranges it narrower, causing wrapped text
+    ///     to change size and invalidate the scroll area's measurement again on every frame.
+    /// </summary>
+    private sealed class ChatScrollLayout : Container
+    {
+        private readonly ChatScrollContainer _scroll;
+        private readonly VScrollBar _scrollBar;
+
+        public ChatScrollLayout(ChatScrollContainer scroll, VScrollBar scrollBar)
+        {
+            _scroll = scroll;
+            _scrollBar = scrollBar;
+            HorizontalExpand = true;
+            VerticalExpand = true;
+            AddChild(scroll);
+            AddChild(scrollBar);
+        }
+
+        protected override Vector2 MeasureOverride(Vector2 availableSize)
+        {
+            _scrollBar.Measure(availableSize);
+            var scrollWidth = MathF.Max(0, availableSize.X - _scrollBar.DesiredSize.X);
+            _scroll.Measure(new Vector2(scrollWidth, availableSize.Y));
+
+            return new Vector2(_scroll.DesiredSize.X + _scrollBar.DesiredSize.X,
+                MathF.Max(_scroll.DesiredSize.Y, _scrollBar.DesiredSize.Y));
+        }
+
+        protected override Vector2 ArrangeOverride(Vector2 finalSize)
+        {
+            var scrollWidth = MathF.Max(0, finalSize.X - _scrollBar.DesiredSize.X);
+            _scroll.Arrange(UIBox2.FromDimensions(Vector2.Zero, new Vector2(scrollWidth, finalSize.Y)));
+            _scrollBar.Arrange(new UIBox2(scrollWidth, 0, finalSize.X, finalSize.Y));
+            return finalSize;
+        }
     }
 
     private sealed class ChatScrollContainer : ScrollContainer
