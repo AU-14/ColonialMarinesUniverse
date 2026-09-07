@@ -10,7 +10,7 @@
         role: AU14JobGOVFORPlatCo
         time: 36000 # 10 hrs
   equipment:
-    belt: AU14MatebaCustomBeltFilledAmmo
+    belt: RMCMatebaBeltFilled
 
 - type: loadout
   id: PlatCOSidearmMatebaSpecialAU14
@@ -21,7 +21,7 @@
         role: AU14JobGOVFORPlatCo
         time: 36000 # 10 hrs
   equipment:
-    belt:  AU14MatebaSpecialBeltFilledAmmo
+    belt:  AU14MatebaSpecialBeltFilled
 
 - type: loadout
   id: PlatCOSidearmM48A5AU14

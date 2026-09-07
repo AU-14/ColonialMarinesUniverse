@@ -7,7 +7,7 @@
       role: AU14JobCivilianColonyAdministrator
       time: 36000 # 10 hours
   equipment:
-    belt: AU14MatebaCustomBeltFilledAmmo
+    belt: RMCMatebaBeltFilled
 
 - type: loadout
   id: ColonyAdministratorSidearmMatebaSpecialAU14
@@ -18,7 +18,7 @@
       role: AU14JobCivilianColonyAdministrator
       time: 36000 # 10 hours
   equipment:
-    belt: AU14MatebaSpecialBeltFilledAmmo
+    belt: AU14MatebaSpecialBeltFilled
 
 - type: loadout
   id: ColonyAdministratorHandcannonBeltAU14
