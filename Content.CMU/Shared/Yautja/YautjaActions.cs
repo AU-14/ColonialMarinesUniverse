@@ -72,6 +72,10 @@ public sealed partial class YautjaVoiceDeathCryActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaVoiceDeathLaughActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaHonorRoarActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaHuntingLeapActionEvent : EntityTargetActionEvent;
+
 public sealed partial class YautjaAbominationRushActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaAbominationRoarActionEvent : InstantActionEvent;
@@ -173,36 +177,61 @@ public sealed class YautjaBracerPanelCommandMsg(YautjaBracerPanelCommand command
 }
 
 [Serializable, NetSerializable]
-public sealed class YautjaMarkPanelState(List<YautjaMarkPanelEntry> entries) : BoundUserInterfaceState
+public sealed class YautjaMarkPanelState(List<YautjaMarkPanelEntry> entries, uint revision = 0,
+    bool history = false, int page = 0, int pages = 1) : BoundUserInterfaceState
 {
     public readonly List<YautjaMarkPanelEntry> Entries = entries;
+    public readonly uint Revision = revision;
+    public readonly bool History = history;
+    public readonly int Page = page;
+    public readonly int Pages = pages;
 }
 
 [Serializable, NetSerializable]
-public sealed class YautjaMarkPanelEntry(NetEntity entity, string name, bool isXeno, List<YautjaMarkKind> marks)
+public sealed class YautjaMarkPanelEntry(int recordId, string name, bool isXeno, List<YautjaMarkKind> marks,
+    List<YautjaMarkKind> ownedMarks, bool available)
 {
-    public readonly NetEntity Entity = entity;
+    public readonly int RecordId = recordId;
     public readonly string Name = name;
     public readonly bool IsXeno = isXeno;
     public readonly List<YautjaMarkKind> Marks = marks;
+    public readonly List<YautjaMarkKind> OwnedMarks = ownedMarks;
+    public readonly bool Available = available;
 }
 
 [Serializable, NetSerializable]
-public sealed class YautjaMarkPanelRefreshMsg : BoundUserInterfaceMessage;
+public sealed class YautjaMarkPanelRefreshMsg(bool history = false, int page = 0) : BoundUserInterfaceMessage
+{
+    public readonly bool History = history;
+    public readonly int Page = page;
+}
 
 [Serializable, NetSerializable]
-public sealed class YautjaMarkPanelMarkMsg(NetEntity target, YautjaMarkKind kind, string? reason) : BoundUserInterfaceMessage
+public sealed class YautjaMarkPanelMarkMsg(int recordId, uint revision, YautjaMarkKind kind, string? reason) : BoundUserInterfaceMessage
 {
-    public readonly NetEntity Target = target;
+    public readonly int RecordId = recordId;
+    public readonly uint Revision = revision;
     public readonly YautjaMarkKind Kind = kind;
     public readonly string? Reason = reason;
 }
 
 [Serializable, NetSerializable]
-public sealed class YautjaMarkPanelUnmarkMsg(NetEntity target, YautjaMarkKind kind) : BoundUserInterfaceMessage
+public sealed class YautjaMarkPanelUnmarkMsg(int recordId, uint revision, YautjaMarkKind kind) : BoundUserInterfaceMessage
 {
-    public readonly NetEntity Target = target;
+    public readonly int RecordId = recordId;
+    public readonly uint Revision = revision;
     public readonly YautjaMarkKind Kind = kind;
+}
+
+[Serializable, NetSerializable]
+public sealed class YautjaMarkPanelChangeMsg(int recordId, uint revision, YautjaMarkKind oldKind,
+    YautjaMarkKind newKind, string? reason) : BoundUserInterfaceMessage
+{
+    public readonly int RecordId = recordId;
+    public readonly uint Revision = revision;
+    public readonly YautjaMarkKind OldKind = oldKind;
+    public readonly YautjaMarkKind NewKind = newKind;
+    public readonly string? Reason = reason;
 }
 
 [Serializable, NetSerializable]

@@ -152,7 +152,7 @@ public sealed class MetabolismToxicityTest
                 Assert.That(stages, Has.Length.EqualTo(5));
                 foreach (var stage in stages)
                 {
-                    var ev = new MetabolismRateModifyEvent(body, stage.ID, new HashSet<CMUMetabolismClass>(), 1f);
+                    var ev = new MetabolismRateModifyEvent(body, stage.ID, "Water", new HashSet<CMUMetabolismClass>(), 1f);
                     entities.EventBus.RaiseLocalEvent(body, ref ev);
                     Assert.That(ev.Multiplier, Is.EqualTo(0.25f),
                         $"Clearance multiplier did not apply to stage {stage.ID}.");

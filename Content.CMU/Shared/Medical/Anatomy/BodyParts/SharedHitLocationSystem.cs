@@ -250,7 +250,7 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
 
     private static SlotFlags SlotsForPart(BodyPartType type) => type switch
     {
-        BodyPartType.Head => SlotFlags.HEAD,
+        BodyPartType.Head => SlotFlags.HEAD | SlotFlags.MASK,
         BodyPartType.Torso => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING,
         BodyPartType.Arm => SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING,
         BodyPartType.Hand => SlotFlags.GLOVES,

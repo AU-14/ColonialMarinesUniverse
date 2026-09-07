@@ -8,3 +8,30 @@
   color: "#2cf274"
   recognizable: true
   physicalDesc: reagent-physical-desc-ferrous
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUYautjaAnalgesic
+  name: reagent-name-cmu-yautja-analgesic
+  desc: reagent-desc-cmu-yautja-analgesic
+  flavor: metallic
+  physicalDesc: reagent-physical-desc-ferrous
+  color: "#62d995"
+  overdose: 20
+  criticalOverdose: 30
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+      - !type:CMUApplyPainSuppressionEffect
+        accumulationSuppression: 0.5
+        tierSuppression: 2
+        decayBonus: 1
+        durationPerUnit: 5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          min: 20
+        damage:
+          types:
+            Poison: 2

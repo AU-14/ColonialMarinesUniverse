@@ -704,23 +704,15 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         if (!HasComp<YautjaComponent>(user))
             return false;
 
-        if (!TryComp(ent.Owner, out YautjaRecallableComponent? recallable))
-        {
+        if (!TryComp(ent.Owner, out YautjaRecallableComponent? recallable) ||
+            recallable.YautjaOwner is not { } existing ||
+            TerminatingOrDeleted(existing))
+            return false;
+
+        owner = existing;
+        if (owner == user)
             ent.Comp.YautjaOwner = user;
-            owner = user;
-            return true;
-        }
 
-        if (recallable.YautjaOwner is { } existing && existing != user)
-        {
-            owner = existing;
-            return true;
-        }
-
-        recallable.YautjaOwner = user;
-        Dirty(ent.Owner, recallable);
-        ent.Comp.YautjaOwner = user;
-        owner = user;
         return true;
     }
 

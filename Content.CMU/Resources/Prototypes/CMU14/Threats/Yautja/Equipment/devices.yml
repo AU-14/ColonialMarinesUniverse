@@ -4,6 +4,8 @@
   name: hunting bracer
   description: A heavy wrist computer packed with alien hunting tools.
   components:
+  - type: Insulated
+    coefficient: 0
   - type: Sprite
     sprite: CMU14/Yautja/bracer.rsi
     state: icon
@@ -236,7 +238,8 @@
 
 - type: entity
   parent: [ CMBaseMask, CMUBaseGasMaskFilterSlot ]
-  id: CMUYautjaMask
+  id: CMUYautjaMaskBase
+  abstract: true
   name: bio-mask
   description: An alien hunting mask with a built-in tactical visor.
   components:
@@ -281,6 +284,20 @@
     green: false
     blockScopes: true
     ignoreUserOnlyHalf: true
+
+- type: entity
+  parent: CMUYautjaMaskBase
+  id: CMUYautjaMask
+  name: bio-mask
+  description: An alien hunting mask with a built-in tactical visor.
+  components:
+  - type: CMArmor
+    melee: 25
+    bullet: 30
+    bio: 25
+    explosionArmor: 10
+    coveredZones:
+    - Head
 
 - type: entity
   parent: IDCardStandard
@@ -563,7 +580,6 @@
   - type: StaminaDamageOnEmbed
     damage: 15
   - type: YautjaRecallable
-    range: 12
 
 - type: entity
   parent: BaseWeaponBattery
@@ -988,6 +1004,7 @@
   description: A compact alien applicator for rapid emergency treatment.
   suffix: Yautja
   components:
+  - type: YautjaRecallable
   - type: Sprite
     sprite: CMU14/Yautja/healing_gun.rsi
     state: healing_gun

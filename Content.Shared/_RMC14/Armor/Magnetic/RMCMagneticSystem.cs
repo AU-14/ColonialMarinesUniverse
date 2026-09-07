@@ -157,6 +157,21 @@ public sealed partial class RMCMagneticSystem : EntitySystem
         Dirty(ent);
     }
 
+    public void UnlinkForForcedDrop(EntityUid item)
+    {
+        if (TryComp(item, out RMCSlingPouchItemComponent? sling) &&
+            TryComp(sling.Pouch, out RMCSlingPouchComponent? pouch) &&
+            pouch.Item == item)
+        {
+            pouch.Item = null;
+            Dirty(sling.Pouch, pouch);
+        }
+
+        RemComp<RMCReturnToInventoryComponent>(item);
+        RemComp<RMCMagneticItemComponent>(item);
+        RemComp<RMCSlingPouchItemComponent>(item);
+    }
+
     public void OnSlingDrop(Entity<RMCSlingPouchComponent> pouch, ref InventoryRelayedEvent<RMCMagnetizeItemEvent> args)
     {
         var item = args.Args.Item;

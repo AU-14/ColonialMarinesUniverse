@@ -59,6 +59,6 @@ public sealed partial class YautjaHealthShardHalfComponent : Component
         { "CMBicaridine", FixedPoint2.New(15) },
         { "CMKelotane", FixedPoint2.New(15) },
         { "CMTricordrazine", FixedPoint2.New(15) },
-        { "CMUParacetamol", FixedPoint2.New(15) },
+        { "CMUYautjaAnalgesic", FixedPoint2.New(10) },
     };
 }

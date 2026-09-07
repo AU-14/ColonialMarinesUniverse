@@ -74,3 +74,70 @@
 - type: entity
   parent: [ OrganBaseFootRight, OrganYautjaExternal ]
   id: OrganYautjaFootRight
+
+# CMU medical anatomy. These retain Yautja visuals while using the complete
+# regional wound, fracture, severance, and organ-health model.
+- type: entity
+  id: CMUPartYautjaVisual
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/body.rsi
+  - type: VisualOrgan
+    data:
+      sprite: CMU14/Yautja/body.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Yautja
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanTorso ]
+  id: CMUPartYautjaTorso
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanHead ]
+  id: CMUPartYautjaHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanLeftArm ]
+  id: CMUPartYautjaLeftArm
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanRightArm ]
+  id: CMUPartYautjaRightArm
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanLeftHand ]
+  id: CMUPartYautjaLeftHand
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanRightHand ]
+  id: CMUPartYautjaRightHand
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanLeftLeg ]
+  id: CMUPartYautjaLeftLeg
+  components:
+  - type: MovementBodyPart
+    walkSpeed: 3.7
+    sprintSpeed: 7.1
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanRightLeg ]
+  id: CMUPartYautjaRightLeg
+  components:
+  - type: MovementBodyPart
+    walkSpeed: 3.7
+    sprintSpeed: 7.1
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanLeftFoot ]
+  id: CMUPartYautjaLeftFoot
+
+- type: entity
+  parent: [ CMUPartYautjaVisual, CMUPartHumanRightFoot ]
+  id: CMUPartYautjaRightFoot

@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids.Construction.DeployedTraps;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Insight;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Ball;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Scattered;
@@ -73,6 +74,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoInsightSystem _insight = default!;
+    [Dependency] private YautjaAcidResponseSystem _yautjaAcid = default!;
 
     private static readonly ProtoId<AlertPrototype> FireAlert = "Fire";
     private static readonly ProtoId<ReagentPrototype> AcidRemovedBy = "Water";
@@ -334,6 +336,14 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
         }
 
+        // Yautja are immune to acid-imposed slows and paralysis, but damage still applies
+        if (HasComp<XenoAcidProjectileComponent>(spit.Owner) &&
+            _yautjaAcid.ShouldSkipAcidMoveEffects(target))
+        {
+            PredictedQueueDel(spit.Owner);
+            return;
+        }
+
         var filter = Filter.Pvs(target);
         if (TryComp(spit, out XenoProjectileShotComponent? shot) &&
             shot.Shooter is { } shooter)
@@ -529,7 +539,11 @@ public sealed partial class XenoSpitSystem : EntitySystem
 
         if (paralyze != default)
         {
-            _stun.TryParalyze(acided.Owner, paralyze, true);
+            // Yautja are immune to acid-imposed paralysis
+            if (!_yautjaAcid.ShouldSkipAcidMoveEffects(acided.Owner))
+            {
+                _stun.TryParalyze(acided.Owner, paralyze, true);
+            }
             acided.Comp.ResistsNeeded = resists;
         }
 

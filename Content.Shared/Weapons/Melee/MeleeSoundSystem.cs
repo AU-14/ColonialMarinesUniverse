@@ -3,6 +3,7 @@ using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
 
 namespace Content.Shared.Weapons.Melee;
 
@@ -20,9 +21,15 @@ public sealed partial class MeleeSoundSystem : EntitySystem
     /// for immediate feedback, misses and such
     /// (Swinging a weapon goes "whoosh" whether it hits or not)
     /// </summary>
-    public void PlaySwingSound(EntityUid userUid, EntityUid weaponUid, MeleeWeaponComponent weaponComponent)
+    public void PlaySwingSound(EntityUid userUid,
+        EntityUid weaponUid,
+        MeleeWeaponComponent weaponComponent,
+        bool predicted = true)
     {
-        _audio.PlayPredicted(weaponComponent.SwingSound, weaponUid, userUid);
+        if (predicted)
+            _audio.PlayPredicted(weaponComponent.SwingSound, weaponUid, userUid);
+        else
+            _audio.PlayPvs(weaponComponent.SwingSound, weaponUid);
     }
 
     /// <summary>
@@ -32,7 +39,12 @@ public sealed partial class MeleeSoundSystem : EntitySystem
     /// </summary>
     /// <param name="damageType"> Serves as a lookup key for a hit sound </param>
     /// <param name="hitSoundOverride"> A sound can be supplied by the <see cref="MeleeHitEvent"/> itself to override everything else </param>
-    public void PlayHitSound(EntityUid targetUid, EntityUid? userUid, string? damageType, SoundSpecifier? hitSoundOverride, MeleeWeaponComponent weaponComponent)
+    public void PlayHitSound(EntityUid targetUid,
+        EntityUid? userUid,
+        string? damageType,
+        SoundSpecifier? hitSoundOverride,
+        MeleeWeaponComponent weaponComponent,
+        bool predicted = true)
     {
         var hitSound      = weaponComponent.HitSound;
         var noDamageSound = weaponComponent.NoDamageSound;
@@ -52,17 +64,17 @@ public sealed partial class MeleeSoundSystem : EntitySystem
         {
             if (damageType == null && damageSoundComp.NoDamageSound != null)
             {
-                _audio.PlayPredicted(damageSoundComp.NoDamageSound, coords, userUid, damageSoundComp.NoDamageSound.Params.WithVariation(DamagePitchVariation));
+                PlaySound(damageSoundComp.NoDamageSound, coords, userUid, damageSoundComp.NoDamageSound.Params.WithVariation(DamagePitchVariation), predicted);
                 playedSound = true;
             }
             else if (damageType != null && damageSoundComp.SoundTypes?.TryGetValue(damageType, out var damageSoundType) == true)
             {
-                _audio.PlayPredicted(damageSoundType, coords, userUid, damageSoundType.Params.WithVariation(DamagePitchVariation));
+                PlaySound(damageSoundType, coords, userUid, damageSoundType.Params.WithVariation(DamagePitchVariation), predicted);
                 playedSound = true;
             }
             else if (damageType != null && damageSoundComp.SoundGroups?.TryGetValue(damageType, out var damageSoundGroup) == true)
             {
-                _audio.PlayPredicted(damageSoundGroup, coords, userUid, damageSoundGroup.Params.WithVariation(DamagePitchVariation));
+                PlaySound(damageSoundGroup, coords, userUid, damageSoundGroup.Params.WithVariation(DamagePitchVariation), predicted);
                 playedSound = true;
             }
         }
@@ -72,17 +84,17 @@ public sealed partial class MeleeSoundSystem : EntitySystem
         {
             if (hitSoundOverride != null && damageType != null)
             {
-                _audio.PlayPredicted(hitSoundOverride, coords, userUid, hitSoundOverride.Params.WithVariation(DamagePitchVariation));
+                PlaySound(hitSoundOverride, coords, userUid, hitSoundOverride.Params.WithVariation(DamagePitchVariation), predicted);
                 playedSound = true;
             }
             else if (hitSound != null && damageType != null)
             {
-                _audio.PlayPredicted(hitSound, coords, userUid, hitSound.Params.WithVariation(DamagePitchVariation));
+                PlaySound(hitSound, coords, userUid, hitSound.Params.WithVariation(DamagePitchVariation), predicted);
                 playedSound = true;
             }
             else
             {
-                _audio.PlayPredicted(noDamageSound, coords, userUid, noDamageSound.Params.WithVariation(DamagePitchVariation));
+                PlaySound(noDamageSound, coords, userUid, noDamageSound.Params.WithVariation(DamagePitchVariation), predicted);
                 playedSound = true;
             }
         }
@@ -97,17 +109,29 @@ public sealed partial class MeleeSoundSystem : EntitySystem
                 case "Heat":
                 case "Radiation":
                 case "Cold":
-                    _audio.PlayPredicted(new SoundPathSpecifier("/Audio/Items/welder.ogg"), targetUid, userUid, AudioParams.Default.WithVariation(DamagePitchVariation));
+                    PlaySound(new SoundPathSpecifier("/Audio/Items/welder.ogg"), coords, userUid, AudioParams.Default.WithVariation(DamagePitchVariation), predicted);
                     break;
                 // No damage, fallback to tappies
                 case null:
-                    _audio.PlayPredicted(new SoundCollectionSpecifier("WeakHit"), targetUid, userUid, AudioParams.Default.WithVariation(DamagePitchVariation));
+                    PlaySound(new SoundCollectionSpecifier("WeakHit"), coords, userUid, AudioParams.Default.WithVariation(DamagePitchVariation), predicted);
                     break;
                 case "Brute":
-                    _audio.PlayPredicted(new SoundCollectionSpecifier("MetalThud"), targetUid, userUid, AudioParams.Default.WithVariation(DamagePitchVariation));
+                    PlaySound(new SoundCollectionSpecifier("MetalThud"), coords, userUid, AudioParams.Default.WithVariation(DamagePitchVariation), predicted);
                     break;
             }
         }
+    }
+
+    private void PlaySound(SoundSpecifier? sound,
+        EntityCoordinates coordinates,
+        EntityUid? userUid,
+        AudioParams audioParams,
+        bool predicted)
+    {
+        if (predicted)
+            _audio.PlayPredicted(sound, coordinates, userUid, audioParams);
+        else
+            _audio.PlayPvs(sound, coordinates, audioParams);
     }
 
 }

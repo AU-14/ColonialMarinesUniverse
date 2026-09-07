@@ -194,6 +194,7 @@ public sealed partial class MetabolizerSystem : EntitySystem
             var rateEvent = new MetabolismRateModifyEvent(
                 actualEntity,
                 stage,
+                reagent.Prototype,
                 entry.CMUToxicity,
                 1f);
             RaiseLocalEvent(actualEntity, ref rateEvent);
