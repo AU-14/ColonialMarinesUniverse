@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
 using Content.Shared.Friction;
+using Content.Shared.Ghost.Components; // CMU14
 using Content.Shared.Gravity;
 using Content.Shared.Inventory;
 using Content.Shared.Maps;
@@ -68,6 +69,7 @@ public abstract partial class SharedMoverController : VirtualController
     [Dependency] protected EntityQuery<PullableComponent> PullableQuery = default!;
     [Dependency] protected EntityQuery<TransformComponent> XformQuery = default!;
     [Dependency] protected EntityQuery<CMUTileMovementComponent> TileMovementQuery = default!;
+    [Dependency] protected EntityQuery<GhostComponent> GhostQuery = default!; // CMU14
 
     private static readonly ProtoId<TagPrototype> FootstepSoundTag = "FootstepSound";
 
@@ -260,7 +262,9 @@ public abstract partial class SharedMoverController : VirtualController
         ContentTileDefinition? tileDef = null;
 
         // Try doing tile movement instead of the usual analog movement, if this entity has it enabled.
-        if (TileMovementQuery.TryComp(uid, out var tileMovement))
+        if (TileMovementQuery.TryComp(uid, out var tileMovement) // CMU14: ghosts and contained mobs never slide
+            && !GhostQuery.HasComponent(uid)
+            && !_container.IsEntityInContainer(uid))
         {
             if (!weightless && !inAirHelpless)
             {

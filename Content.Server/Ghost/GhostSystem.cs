@@ -296,9 +296,11 @@ namespace Content.Server.Ghost
             }
 
             var playerWarps = GetPlayerWarps(entity).ToList();
-            RefreshWarpPreviewOverrides(args.SenderSession, playerWarps);
+            // CMU14: scope preview overrides to one tab so opening the menu doesn't force-send every player at once
+            var tab = msg.Tab ?? GhostWarpGrouping.GetDefaultTab(playerWarps);
+            RefreshWarpPreviewOverrides(args.SenderSession, playerWarps.Where(w => GhostWarpGrouping.GetWarpTab(w) == tab));
 
-            var response = new GhostWarpsResponseEvent(playerWarps.Concat(GetLocationWarps()).ToList());
+            var response = new GhostWarpsResponseEvent(playerWarps.Concat(GetLocationWarps()).ToList(), tab); // CMU14
             RaiseNetworkEvent(response, args.SenderSession.Channel);
         }
 
@@ -307,7 +309,7 @@ namespace Content.Server.Ghost
             ClearWarpPreviewOverrides(args.SenderSession);
         }
 
-        private void RefreshWarpPreviewOverrides(ICommonSession session, IReadOnlyList<GhostWarp> warps)
+        private void RefreshWarpPreviewOverrides(ICommonSession session, IEnumerable<GhostWarp> warps) // CMU14
         {
             ClearWarpPreviewOverrides(session);
 

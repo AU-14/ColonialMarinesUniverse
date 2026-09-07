@@ -43,6 +43,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
         public event Action<NetEntity>? WarpClicked;
         public event Action? OnGhostnadoClicked;
         public event Action? OnWarpToRandomClicked;
+        // CMU14 event: raised when the active tab changes so the server can rescope preview overrides
+        public event Action<string?>? ActiveTabChanged;
 
         public GhostTargetWindow()
         {
@@ -106,7 +108,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
         public void UpdateWarps(IEnumerable<GhostWarp> warps)
         {
             _warps = warps
-                .OrderBy(w => GetTabOrder(GetTabName(w)))
+                .OrderBy(w => GhostWarpGrouping.GetTabOrder(GetTabName(w))) // CMU14: order logic shared with the server
                 .ThenBy(w => GetTabName(w), OrdinalComparer)
                 .ThenBy(w => GetSectionOrder(GetSectionName(w)))
                 .ThenBy(w => GetSectionName(w), OrdinalComparer)
@@ -570,6 +572,9 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
         private void SetActiveTab(TabState? activeTab)
         {
+            if (_activeTab?.Name != activeTab?.Name) // CMU14: tab switch rescopes the server's preview overrides
+                ActiveTabChanged?.Invoke(activeTab?.Name);
+
             _activeTab = activeTab;
 
             foreach (var tab in _tabs)
@@ -711,32 +716,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                    GetSectionName(warp) == activeSubTab;
         }
 
-        private static int GetTabOrder(string tab)
-        {
-            return tab switch
-            {
-                GhostWarpGrouping.TabMilitary => 0,
-                GhostWarpGrouping.TabGovfor => 0,
-                GhostWarpGrouping.TabXenos => 1,
-                GhostWarpGrouping.TabCorruptedHive => 2,
-                GhostWarpGrouping.TabOpfor => 3,
-                GhostWarpGrouping.TabYautja => 4,
-                GhostWarpGrouping.TabThirdParty => 5,
-                GhostWarpGrouping.TabSurvivors => 6,
-                GhostWarpGrouping.TabWeYaPmc => 7,
-                GhostWarpGrouping.TabClf => 8,
-                GhostWarpGrouping.TabSpp => 9,
-                GhostWarpGrouping.TabTseRoyal => 10,
-                GhostWarpGrouping.TabCmbProvost => 11,
-                GhostWarpGrouping.TabThreat => 12,
-                GhostWarpGrouping.TabCursed => 13,
-                GhostWarpGrouping.TabApe => 14,
-                GhostWarpGrouping.TabLocations => 98,
-                GhostWarpGrouping.TabOther => 99,
-                _ => 50,
-            };
-        }
-
         private static int GetSectionOrder(string section)
         {
             if (section == GhostWarpGrouping.SectionAll)
@@ -776,15 +755,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             };
         }
 
-        private static string GetTabName(GhostWarp warp)
-        {
-            if (!string.IsNullOrWhiteSpace(warp.Tab))
-                return warp.Tab;
-
-            return warp.IsWarpPoint
-                ? GhostWarpGrouping.TabLocations
-                : GhostWarpGrouping.TabOther;
-        }
+        private static string GetTabName(GhostWarp warp) => // CMU14: shared with the server's default tab pick
+            GhostWarpGrouping.GetWarpTab(warp);
 
         private static string GetSectionName(GhostWarp warp)
         {

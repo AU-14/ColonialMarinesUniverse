@@ -3,7 +3,7 @@ CMU is a multiplayer sandbox game set in the Alien universe. It is a fork of RMC
 
 ## Links
 
-[CMU Discord](https://discord.gg/FtsCESsrzD)
+[CMU Discord](https://discord.gg/colonialmarines)
 
 ## Contributing
 
