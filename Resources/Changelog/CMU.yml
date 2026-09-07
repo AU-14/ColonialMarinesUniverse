@@ -10588,5 +10588,57 @@
   id: 678
   time: '2026-09-05T19:02:45.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1897
+- author: DoguhanOzgurAkca
+  changes:
+  - message: rework the lobby UI partially.
+    type: Tweak
+  id: 679
+  time: '2026-09-06T13:19:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1854
+- author: johnnny34y
+  changes:
+  - message: HAZOPS XMP5A6 damage modified buffed to 1.35 and spread reduced by one.
+    type: Tweak
+  id: 680
+  time: '2026-09-06T13:20:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1888
+- author: CatoChristopherMrow
+  changes:
+  - message: Added sidearms for Colony Admin
+    type: Add
+  - message: Removed the mataba from stable garrison redux
+    type: Remove
+  - message: Colony Admins can now spend points to customize their skills, to better
+      suit their previous carrier
+    type: Add
+  - message: Robbed the XO of their mataba
+    type: Remove
+  id: 681
+  time: '2026-09-06T13:20:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1892
+- author: Berkin101
+  changes:
+  - message: Barricade collisions are now fixed!
+    type: Fix
+  id: 682
+  time: '2026-09-06T13:24:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1878
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed the pilot hud and the dropship movement
+    type: Fix
+  id: 683
+  time: '2026-09-07T04:41:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1903
+- author: maertayn
+  changes:
+  - message: 'Updated contrib docs, AI-agent conventions: read CONTRIBUTING.md & bootstrap
+      AGENTS-CMU.md'
+    type: Code
+  - message: Scope ghost warp PVS override to selected tab mobs to regain performance
+    type: Add
+  id: 684
+  time: '2026-09-07T13:11:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1907
 Name: CMU
 Order: -1
