@@ -218,9 +218,9 @@ namespace Content.Client.Ghost
             GhostRoleCountUpdated?.Invoke(msg);
         }
 
-        public void RequestWarps()
+        public void RequestWarps(string? tab = null) // CMU14: tab scopes the server's preview overrides
         {
-            RaiseNetworkEvent(new GhostWarpsRequestEvent());
+            RaiseNetworkEvent(new GhostWarpsRequestEvent(tab));
         }
 
         public void ReturnToBody()

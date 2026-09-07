@@ -16,6 +16,8 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
 
     [UISystemDependency] private readonly GhostSystem? _system = default;
 
+    private string? _serverTab; // CMU14: tab the server last scoped preview overrides to
+
     private GhostGui? Gui => UIManager.GetActiveUIWidgetOrNull<GhostGui>();
 
     public override void Initialize()
@@ -99,6 +101,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         if (Gui?.TargetWindow is not { } window)
             return;
 
+        _serverTab = msg.Tab; // CMU14
         window.UpdateWarps(msg.Warps);
         window.Populate();
     }
@@ -117,6 +120,16 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
     {
         var msg = new GhostWarpToTargetRequestEvent(player);
         _net.SendSystemNetworkMessage(msg);
+    }
+
+    // CMU14 method: only one tab's entities are force-sent at a time; re-request when another tab is opened
+    private void OnActiveTabChanged(string? tab)
+    {
+        if (tab == null || tab == _serverTab)
+            return;
+
+        _serverTab = tab;
+        _system?.RequestWarps(tab);
     }
 
     private void OnGhostnadoClicked()
@@ -141,6 +154,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         Gui.GhostRolesPressed += GhostRolesPressed;
         Gui.TargetWindow.WarpClicked += OnWarpClicked;
         Gui.TargetWindow.OnClose += OnWarpsClosed;
+        Gui.TargetWindow.ActiveTabChanged += OnActiveTabChanged; // CMU14
         Gui.TargetWindow.OnGhostnadoClicked += OnGhostnadoClicked;
         Gui.LateJoinPressed += LateJoinPressed;
         Gui.TargetWindow.OnWarpToRandomClicked += OnWarpToRandomClicked;
@@ -158,6 +172,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         Gui.GhostRolesPressed -= GhostRolesPressed;
         Gui.TargetWindow.WarpClicked -= OnWarpClicked;
         Gui.TargetWindow.OnClose -= OnWarpsClosed;
+        Gui.TargetWindow.ActiveTabChanged -= OnActiveTabChanged; // CMU14
         Gui.TargetWindow.OnGhostnadoClicked -= OnGhostnadoClicked;
         Gui.TargetWindow.OnWarpToRandomClicked -= OnWarpToRandomClicked;
         Gui.LateJoinPressed -= LateJoinPressed;
@@ -177,6 +192,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
 
         window.ClearWarps();
         window.OpenCentered();
+        _serverTab = null; // CMU14: fresh open, the server picks the default tab
         _system?.RequestWarps();
     }
 

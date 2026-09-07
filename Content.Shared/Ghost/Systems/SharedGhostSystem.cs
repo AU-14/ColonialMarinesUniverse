@@ -132,6 +132,15 @@ public abstract partial class SharedGhostSystem : EntitySystem
 [Serializable, NetSerializable]
 public sealed partial class GhostWarpsRequestEvent : EntityEventArgs
 {
+    public GhostWarpsRequestEvent(string? tab = null) // CMU14 method
+    {
+        Tab = tab;
+    }
+
+    /// <summary>
+    /// Tab to scope live preview overrides to; null lets the server pick the default tab.
+    /// </summary>
+    public string? Tab { get; } // CMU14
 }
 
 /// <summary>
@@ -246,15 +255,21 @@ public partial struct GhostWarp
 [Serializable, NetSerializable]
 public sealed partial class GhostWarpsResponseEvent : EntityEventArgs
 {
-    public GhostWarpsResponseEvent(List<GhostWarp> warps)
+    public GhostWarpsResponseEvent(List<GhostWarp> warps, string? tab = null) // CMU14 method
     {
         Warps = warps;
+        Tab = tab;
     }
 
     /// <summary>
     /// A list of warp points.
     /// </summary>
     public List<GhostWarp> Warps { get; }
+
+    /// <summary>
+    /// The tab live preview overrides were scoped to for this response.
+    /// </summary>
+    public string? Tab { get; } // CMU14
 }
 
 /// <summary>
