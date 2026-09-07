@@ -1,5 +1,3 @@
-<!-- CMU14 file: replaces the upstream security policy -->
-
 # Reporting a security vulnerability
 
 Report vulnerabilities privately!

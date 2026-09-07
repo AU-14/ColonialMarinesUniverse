@@ -1,5 +1,3 @@
-<!-- CMU14 file: modernized from the upstream code of conduct -->
-
 # CMU Code of Conduct
 
 CMU is built by volunteers from all over the world. Developers, mappers, spriters, testers,

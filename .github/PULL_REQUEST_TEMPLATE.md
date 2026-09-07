@@ -1,4 +1,4 @@
-<!-- Guidelines: https://docs.spacestation14.io/en/getting-started/pr-guideline -->
+<!-- Guidelines: CONTRIBUTING.md at the repository root --> <!-- CMU14 -->
 
 ## About the PR
 <!-- What did you change? -->
@@ -20,8 +20,10 @@ Small fixes/refactors are exempt. Media may be used in progress reports with cre
 
 ## Requirements
 <!-- Confirm the following by placing an X in the brackets [X]: -->
-- [ ] I have read and am following the [Pull Request and Changelog Guidelines](https://docs.spacestation14.com/en/general-development/codebase-info/pull-request-guidelines.html).
+- [ ] I have read and am following the [contributing guidelines](CONTRIBUTING.md).
 - [ ] I have tested this pull request and written instructions on how to test it.
+- [ ] My tests assert behavior that can break: no locked-in values or mirrored implementation ([CONVENTIONS.md](CONVENTIONS.md#tests)).
+- [ ] Every change outside the CMU zones carries a CMU14 tag; new files and prototypes are in CMU zones.
 - [ ] I have added media to this PR or it does not require an ingame showcase.
 - [ ] I have included a **brief** detail of the major changes for this PR in the changelog below.
 - [ ] By submitting this code and/or assets, I confirm that I either own them or have provided the correct necessary licenses to use and distribute them. I agree to be fully responsible for any legal claims or issues arising from the use of these materials.
