@@ -12,26 +12,9 @@
   - type: NpcFactionMember
     factions:
     - ColonySynth
+  - type: ANPRCRadioUser
   - type: Skills
-    skills:
-      RMCSkillCqc: 4
-      RMCSkillEngineer: 4
-      RMCSkillConstruction: 3
-      RMCSkillOverwatch: 1
-      RMCSkillMedical: 4
-      RMCSkillSurgery: 4
-      RMCSkillResearch: 1
-      RMCSkillMeleeWeapons: 2
-      RMCSkillPilot: 2
-      RMCSkillPolice: 2
-      RMCSkillFireman: 5
-      RMCSkillFirearms: 2
-      RMCSkillPowerLoader: 2
-      RMCSkillVehicles: 2
-      RMCSkillJtac: 3
-      RMCSkillIntel: 2
-      RMCSkillDomestics: 2
-      RMCSkillNavigations: 1
+    preset: AU14SkillPresetSynth
   - type: JobPrefix
     prefix: au14-job-prefix-civiliancolonysynthetic
   - type: TacticalMapIcon
@@ -121,6 +104,7 @@
   - ColonySynthPouchesRightAU14
   - ColonySynthSuitSpecialAU14
   - ColonySynthBeltAU14
+  - SynthAccesoriesSpecialAU14
   - SynthGlovesAU14
   - SynthEquipmentAU14
   - SynthGlassesAU14

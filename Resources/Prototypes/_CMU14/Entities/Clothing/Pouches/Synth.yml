@@ -38,6 +38,7 @@
       - RMCGrenadeFlashBang
       - Radio
       - Grenade
+      - CMClipboard
       components:
       - Handcuff
       - Flash
@@ -54,5 +55,6 @@
     - id: RMCHandcuffs
     - id: RMCHandcuffs
     - id: RMCHandcuffs
+    - id: CMClipboard
 #    - id: Pepperspray # TODO RMC14
     - id: ForensicScanner # TODO RMC14 cm clue scanner

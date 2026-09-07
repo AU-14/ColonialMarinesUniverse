@@ -36,7 +36,7 @@
       RMCSkillLeadership: 1
       RMCSkillIntel: 1
       RMCSkillMedical: 4
-      RMCSkillSurgery: 4
+      RMCSkillSurgery: 3
       RMCSkillPolice: 1
 
 - type: entity
@@ -56,7 +56,7 @@
       RMCSkillMedical: 2
       RMCSkillSurgery: 1
       RMCSkillJtac: 1
-      
+
 - type: entity
   id: AU14SkillPresetMilitaryNurse
   name: Nurse
