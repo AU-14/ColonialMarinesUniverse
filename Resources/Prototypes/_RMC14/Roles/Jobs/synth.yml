@@ -117,7 +117,9 @@
   - type: ParalyzeImmuneFrom
     whitelist:
       tags:
-      - RMCSynthGrabbable
+      - RMCSynthGrabbable 
+  - type: DamageModifier
+    modifierSet: RMCSynthetic
 
 - type: entity
   id: RMCSynthHudComponents
