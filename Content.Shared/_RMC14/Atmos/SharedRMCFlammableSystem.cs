@@ -399,13 +399,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (intensity != null || duration != null)
         {
             var ignite = EnsureComp<RMCIgniteOnCollideComponent>(spawned);
-            if (intensity != null)
-                ignite.Intensity = intensity.Value;
-
-            if (duration != null)
-                ignite.Duration = duration.Value;
-
-            Dirty(spawned, ignite);
+            SetIntensityDuration((spawned, ignite, null), intensity, duration);
         }
 
         var onCollide = EnsureComp<DamageOnCollideComponent>(spawned);
@@ -871,7 +865,6 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             stepping.ArmorMultiplier = ignite.ArmorMultiplier;
             if (TryComp<RMCFireArmorDebuffModifierComponent>(uid, out var mod))
                 stepping.ArmorMultiplier *= mod.DebuffModifier;
-            _armor.UpdateArmorValue((uid, null));
         }
 
         var coords = _transform.GetMoverCoordinates(uid);
@@ -1113,6 +1106,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             var steppingQuery = EntityQueryEnumerator<SteppingOnFireComponent, PhysicsComponent>();
             while (steppingQuery.MoveNext(out var uid, out var stepping, out var body))
             {
+                var previousArmorMultiplier = stepping.ArmorMultiplier;
                 stepping.ArmorMultiplier = 1;
                 Dirty(uid, stepping);
 
@@ -1141,6 +1135,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
                 if (!isStepping)
                     RemCompDeferred<SteppingOnFireComponent>(uid);
+                else if (stepping.ArmorMultiplier != previousArmorMultiplier)
+                    _armor.UpdateArmorValue((uid, null));
             }
         }
         catch (Exception e)

@@ -53,6 +53,8 @@ public sealed partial class OptionsTabControlRow : Control
 
     private ValueList<BaseOption> _options;
 
+    public event Action? OnApplied;
+
     public OptionsTabControlRow()
     {
         RobustXamlLoader.Load(this);
@@ -219,7 +221,9 @@ public sealed partial class OptionsTabControlRow : Control
         ResetButton.Disabled = !anyModified;
     }
 
-    private void ApplyButtonPressed(BaseButton.ButtonEventArgs obj)
+    private void ApplyButtonPressed(BaseButton.ButtonEventArgs obj) => ApplyChanges();
+
+    public void ApplyChanges()
     {
         foreach (var option in _options)
         {
@@ -227,6 +231,7 @@ public sealed partial class OptionsTabControlRow : Control
                 option.SaveValue();
         }
 
+        OnApplied?.Invoke();
         _cfg.SaveToFile();
         UpdateButtonState();
     }
@@ -541,12 +546,10 @@ public sealed partial class OptionColorSliderCVar : BaseOptionCVar<string>
 
     protected override string Value
     {
-        get => _slider.Slider.Color.ToHex();
-        set
-        {
-            _slider.Slider.Color = Color.FromHex(value);
-            UpdateLabelColor();
-        }
+        get => _slider.Picker.Color.ToHex();
+        // The fallback overload, not the throwing one: the hex is user-editable now, and a stored
+        // CVar can be hand-edited too.
+        set => _slider.Picker.Color = Color.FromHex(value, Color.White);
     }
 
     /// <summary>
@@ -570,16 +573,8 @@ public sealed partial class OptionColorSliderCVar : BaseOptionCVar<string>
     {
         _slider = slider;
 
-        slider.Slider.OnColorChanged += _ =>
-        {
-            ValueChanged();
-            UpdateLabelColor();
-        };
-    }
-
-    private void UpdateLabelColor()
-    {
-        _slider.ExampleLabel.FontColorOverride = Color.FromHex(Value);
+        // No label recolouring here any more - the picker shows the colour on its own swatch.
+        slider.Picker.OnColorChanged += _ => ValueChanged();
     }
 }
 

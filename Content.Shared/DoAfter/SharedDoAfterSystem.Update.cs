@@ -23,6 +23,7 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
     [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
 
     private DoAfter[] _doAfters = Array.Empty<DoAfter>();
+    private readonly List<(EntityUid Uid, ActiveDoAfterComponent Active, DoAfterComponent Component)> _activeDoAfters = new();
 
     public override void Update(float frameTime)
     {
@@ -30,9 +31,18 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
 
         var time = GameTiming.CurTime;
 
+        // Callbacks can start do-afters on other entities, invalidating the live query.
+        _activeDoAfters.Clear();
         var enumerator = EntityQueryEnumerator<ActiveDoAfterComponent, DoAfterComponent>();
         while (enumerator.MoveNext(out var uid, out var active, out var comp))
         {
+            _activeDoAfters.Add((uid, active, comp));
+        }
+
+        foreach (var (uid, active, comp) in _activeDoAfters)
+        {
+            if (active.Deleted || comp.Deleted || TerminatingOrDeleted(uid) || Paused(uid))
+                continue;
 
             try
             {
@@ -83,6 +93,7 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
             }
 
         }
+        _activeDoAfters.Clear();
     }
 
     protected void Update(

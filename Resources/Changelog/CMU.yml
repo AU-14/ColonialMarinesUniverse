@@ -10581,5 +10581,12 @@
   id: 677
   time: '2026-09-03T06:28:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1891
+- author: johnnny34y
+  changes:
+  - message: The new dynamic gunships now spawn correctly
+    type: Fix
+  id: 678
+  time: '2026-09-05T19:02:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1897
 Name: CMU
 Order: -1

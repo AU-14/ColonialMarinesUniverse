@@ -45,6 +45,7 @@ ui-options-event-music = Event Music
 ui-options-admin-sounds = Play Admin Sounds
 ui-options-bwoink-sound = Play AHelp Notification Sound
 ui-options-volume-label = Volume
+ui-options-audio-toggles = Sounds
 
 ## Graphics menu
 
@@ -358,13 +359,28 @@ cmd-options-help = Usage: options [tab]
 
 ## Accessibility menu
 
-ui-options-accessability-header-cmu = CMU
+ui-options-accessability-header-cmu = CMU Specific
 ui-options-accessability-header-visuals = Visuals
 ui-options-accessability-header-content = Content
+ui-options-accessability-header-announcements = Announcements
+ui-options-accessability-header-opacity = Opacity
+ui-options-accessability-header-highlights = Chat highlights
 
 ui-options-enable-color-name = Add colors to character names
 ui-options-colorblind-friendly = Colorblind friendly mode
 ui-options-crt-ui-enabled = Use CRT UI theme
+ui-options-crt-chat-readable-font = Readable chat font
+ui-options-crt-chat-readable-font-tooltip = Draws chat in a plain proportional font instead of the terminal one. The rest of the CRT theme is unaffected.
+ui-options-crt-chat-big-font = Big chat font
+ui-options-crt-chat-big-font-tooltip = Draws chat larger than normal. Chat only - nothing else in the interface changes size. Works with or without the readable font above.
+ui-options-crt-chat-big-font-off = Normal
+ui-options-crt-chat-big-font-one = Big (+1)
+ui-options-crt-chat-big-font-two = Bigger (+2)
+ui-options-crt-chat-row-tint = Chat row tint
+ui-options-crt-chat-row-tint-tooltip = Tints radio, OOC, dead, admin and server messages by channel so they can be picked out of the log at a glance.
+ui-options-crt-chat-row-tint-muted = Muted
+ui-options-crt-chat-row-tint-full = Full
+ui-options-crt-chat-row-tint-off = None
 ui-options-crt-ui-color = UI colour
 ui-options-crt-ui-color-green = Green (default)
 ui-options-crt-ui-color-blue = Blue

@@ -25,6 +25,12 @@ namespace Content.Shared.CMU14.Yautja;
 public sealed partial class YautjaComponent : Component
 {
     [DataField]
+    public ProtoId<NpcFactionPrototype> NpcFaction = "CMUYautja";
+
+    [DataField]
+    public EntProtoId<IFFFactionComponent> IffFaction = "FactionYautja";
+
+    [DataField]
     public LocId RankName = "cmu-yautja-rank-hunter";
 
     [DataField]

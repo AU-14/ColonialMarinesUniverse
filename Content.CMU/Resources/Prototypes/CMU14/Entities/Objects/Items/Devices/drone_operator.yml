@@ -2,7 +2,7 @@
   parent: CMBackpackMarine
   id: CMUDroneOperatorChoicePackFilled
   name: drone operator deployment pack
-  description: Contains a drone selection kit. Use the kit to choose humanoid or tracked drone equipment after deployment.
+  description: Contains a drone selection kit. Use the kit to choose humanoid drone, gun UGV, or flamer UGV equipment after deployment.
   suffix: Filled
   components:
   - type: Sprite
@@ -19,7 +19,7 @@
   parent: BaseItem
   id: CMUDronePlatformKit
   name: drone selection kit
-  description: Use this kit to choose one humanoid or tracked combat drone assembly package.
+  description: Use this kit to choose one humanoid drone, gun UGV, or flamer UGV assembly package.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Storage/procase_mini.rsi

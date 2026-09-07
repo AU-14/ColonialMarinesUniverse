@@ -4,18 +4,17 @@ using Robust.Shared.Configuration;
 namespace Content.Shared.CCVar;
 
 /// <summary>
-/// Controls how an unfilled round-start minimum job slot may ignore player job preferences.
+/// Legacy minimum-staffing fallback modes, retained for configuration compatibility.
 /// </summary>
 public enum MinimumJobFallback : int // needs int backing because cvar
 {
     /// <summary>
-    /// Select a player who prefers another role in the target job's primary department.
+    /// Previously selected a player who preferred another role in the target job's primary department.
     /// </summary>
     SameDepartment = 1,
 
     /// <summary>
-    /// First select a player who prefers another role in the target job's primary department,
-    /// then select any player who otherwise qualifies for the target job.
+    /// Previously selected a player from the same department, then any otherwise eligible player.
     /// </summary>
     AnyEligiblePlayer = 2,
 
@@ -168,8 +167,8 @@ public sealed partial class CCVars
         GameRoleWhitelist = CVarDef.Create("game.role_whitelist", true, CVar.SERVER | CVar.REPLICATED);
 
     /// <summary>
-    ///     Determines how unfilled round-start minimum job slots fall back when no player prefers the job.
-    ///     Role bans, whitelists, playtime requirements, and antag restrictions always apply.
+    ///     Legacy setting retained so existing server configurations still load. No longer used by assignment:
+    ///     minimum staffing never overrides Never job preferences.
     /// </summary>
     public static readonly CVarDef<MinimumJobFallback>
         GameMinimumJobFallback = CVarDef.Create("game.minimum_job_fallback", MinimumJobFallback.None,

@@ -123,47 +123,47 @@ public sealed partial class XenoDrainStingComponent : Component
     public TimeSpan SurgeHeadbiteSoundDelay = TimeSpan.FromSeconds(0.5);
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true), AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
 [Access(typeof(XenoSentinelSystem))]
 public sealed partial class XenoIntoxicatedComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int Stacks;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int MaxStacks = 30;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextTick;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan TickEvery = TimeSpan.FromSeconds(2);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public FixedPoint2 TickBaseDamage = FixedPoint2.New(1);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float TickDamageStackDivisor = 10;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int TickDecay = 1;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int HighStackThreshold = 20;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float HighStackSlowAtThreshold = 0.85f;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float HighStackSlowAtMax = 0.5f;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int ResistReduction = 8;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan ResistDuration = TimeSpan.FromSeconds(3);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? LastSource;
 }
 

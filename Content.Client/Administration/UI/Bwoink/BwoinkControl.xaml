@@ -6,9 +6,14 @@
     VerticalExpand="True">
     <PanelContainer StyleClasses="BackgroundDark" HorizontalExpand="True" VerticalExpand="True">
         <SplitContainer Orientation="Vertical" ResizeMode="NotResizable" HorizontalExpand="True" VerticalExpand="True">
+            <!-- The MinWidths matter as much as the window's MinSize. This divider is draggable, and
+                 SplitContainer defaults to SplitResizeMode.RespectChildrenMinSize, which clamps it
+                 against each child's DesiredSize - so without a floor here the chat pane can be
+                 dragged down to nothing even in a full-size window, measuring its message labels
+                 narrower than a single word and tripping the engine's word-wrap assert. -->
             <SplitContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
-                <cc:PlayerListControl Access="Public" Name="ChannelSelector" HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="2" />
-                <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="2">
+                <cc:PlayerListControl Access="Public" Name="ChannelSelector" HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="2" MinWidth="200" />
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="2" MinWidth="360">
                     <BoxContainer Access="Public" Name="BwoinkArea" VerticalExpand="True" HorizontalExpand="True" />
                 </BoxContainer>
             </SplitContainer>

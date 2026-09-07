@@ -10,6 +10,8 @@
   - AU14CCLawProcedures
   - AU14CCLawMilitary
   - AU14CCLawCriminalCode
+  - AU14CCLawMilitia
+  - AU14CCLawExecutions
 
 - type: guideEntry
   parent: RMC
@@ -38,6 +40,20 @@
   name: Military Presence
   priority: 4
   text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawMilitary.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawMilitia
+  name: Militia and Civil Defense
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawMilitia.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawExecutions
+  name: Executions
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawExecutions.xml"
 
 - type: guideEntry
   parent: RMC

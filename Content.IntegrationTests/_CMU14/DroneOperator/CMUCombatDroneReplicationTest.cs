@@ -24,6 +24,8 @@ public sealed class CMUCombatDroneReplicationTest
         {
             var entities = pair.Server.EntMan;
             var drone = entities.SpawnEntity("CMUCombatDrone", map.GridCoords);
+            var component = entities.GetComponent<CMUCombatDroneComponent>(drone);
+            Assert.That(component.TurretVisual, Is.Not.Null, "The gun UGV must spawn its independently rotating turret.");
             pair.Server.PlayerMan.SetAttachedEntity(pair.Player!, drone);
             droneNet = entities.GetNetEntity(drone);
         });

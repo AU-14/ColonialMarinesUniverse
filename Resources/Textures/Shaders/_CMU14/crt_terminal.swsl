@@ -1,0 +1,122 @@
+light_mode unshaded;
+
+uniform highp float pitch;
+uniform highp float intensity;
+uniform highp float staticAmount;
+
+uniform highp float rollPeriod;
+uniform highp float rollSweep;
+uniform highp float rollHeight;
+uniform highp float rollDisplace;
+uniform highp float rollLift;
+
+// Scheduled artifacts - tear, chroma split, line dropout. Amplitude defaults to 0, so every
+// surface that does not ask for them is bit-identical to before this existed.
+uniform highp float artifactAmount;
+uniform highp float artifactPeriod;
+uniform highp float artifactSweep;
+// 0 = cycle by hash. 1 = tear, 2 = chroma split, 3 = dropout. Forcing one is for the control-kit
+// window, where the point is to look at each in isolation rather than wait for it to come round.
+uniform highp float artifactMode;
+
+uniform highp float curvature;
+uniform highp float vignette;
+uniform highp float aspect;
+
+uniform highp vec3 phosphor;
+
+const highp float TAU = 6.28318530718;
+const highp float PI = 3.14159265359;
+
+void fragment() {
+    highp float lit = intensity;
+
+    // r2 in real pixel proportions, 1 at the corners. In UV alone a wide control is treated as
+    // square, so the falloff becomes an ellipse and bites unevenly on the two axes.
+    highp vec2 centred = UV * 2.0 - 1.0;
+    highp vec2 asp = vec2(aspect, 1.0);
+    highp vec2 inPixels = centred * asp;
+    highp float r2 = dot(inPixels, inPixels) / dot(asp, asp);
+
+    // Barrel. No masking and no surround: the casing is a texture whose transparent cut-out defines
+    // the screen's shape, so the shader has no business drawing an edge of its own. Everything it
+    // painted out here previously had to be colour-matched against the backdrop by hand, and never
+    // quite was. Clamping the sample instead means the corners smear the outermost backdrop pixel -
+    // a flat colour, so there is nothing to streak - and the cut-out hides them regardless.
+    highp vec2 warped = (centred * (1.0 + curvature * r2)) * 0.5 + 0.5;
+
+    // Roll bar. A Gaussian envelope eases the shear in and out; the sine inside it pushes the image
+    // one way then back, which reads as a tear rather than a clean sideways slide.
+    highp float cycle = fract(TIME / max(rollPeriod, 0.001)) * (rollPeriod / max(rollSweep, 0.001));
+    highp float bandY = cycle * (1.0 + rollHeight * 4.0) - rollHeight * 2.0;
+    highp float inSweep = step(cycle, 1.0);
+
+    highp float dist = abs(warped.y - bandY) / max(rollHeight, 0.0001);
+    highp float fall = exp(-dist * dist * 1.6) * inSweep * lit;
+    highp float shear = sin(dist * 3.1) * rollDisplace * fall;
+
+    // Scheduled artifacts. The cadence is fixed and the *character* varies: a hash of the cycle
+    // index picks which artifact fires, where it lands and how hard, so no two events look alike
+    // while the schedule stays predictable and bounded. Randomising the timing instead would be
+    // memoryless, and a memoryless process reads as constant noise at any probability - which is
+    // the thing that made the first CRT attempts feel like constant flashing.
+    highp float aRaw = TIME / max(artifactPeriod, 0.001);
+    highp float aIndex = floor(aRaw);
+    highp float aPhase = fract(aRaw) * (artifactPeriod / max(artifactSweep, 0.001));
+    highp float aOn = step(aPhase, 1.0) * step(0.0001, artifactAmount);
+
+    highp vec2 aHash = zRandom(vec2(aIndex * 0.137, aIndex * 0.911));
+    highp float aPick = mix(floor(aHash.x * 3.0) + 1.0, artifactMode, step(0.5, artifactMode));
+
+    // Half-sine over the sweep, so an event eases in and out instead of popping on for N frames.
+    highp float aEnv = sin(clamp(aPhase, 0.0, 1.0) * PI) * aOn * artifactAmount * lit;
+    highp float aBandY = aHash.y;
+    highp float aHalf = 0.02 + aHash.x * 0.05;
+    highp float inBand = step(abs(warped.y - aBandY), aHalf);
+
+    // Tear: a hard sideways offset on one band, deliberately un-eased. The roll bar already covers
+    // the smooth case; this one has to read as a dropped line rather than a wobble.
+    highp float tear = inBand * step(abs(aPick - 1.0), 0.5) * aEnv * (aHash.x - 0.5) * 0.24;
+
+    // Chroma split: whole surface, not banded - a channel offset over a strip reads as a coloured
+    // box rather than as the tube losing convergence.
+    highp float chroma = step(abs(aPick - 2.0), 0.5) * aEnv * 0.006;
+
+    // Dropout: a band darkens. Dip only, never a lift, for the same reason the grain's lifting half
+    // is capped - anything adding light becomes a wash.
+    highp float drop = inBand * step(abs(aPick - 3.0), 0.5) * aEnv * 0.85;
+
+    highp vec2 srcUv = clamp(warped + vec2(shear + tear, 0.0), 0.0, 1.0);
+    highp vec4 base = zTexture(srcUv);
+
+    // Red and blue pulled from either side of the sample point. At chroma = 0 both land on srcUv,
+    // so this is a no-op for every surface that has not asked for the artifact.
+    highp float chromaR = zTexture(clamp(srcUv + vec2(chroma, 0.0), 0.0, 1.0)).r;
+    highp float chromaB = zTexture(clamp(srcUv - vec2(chroma, 0.0), 0.0, 1.0)).b;
+
+    // Scanlines. Cosine, so a soft bright centre easing into a dark gap rather than a hard bar.
+    //
+    // Squared, and deeper. A plain cosine spends half its period part-way dark, which averages out
+    // as an overall dimming rather than reading as lines - the tube looked like it had been turned
+    // down instead of like it had a raster. Squaring narrows the dark trough towards a line and the
+    // higher coefficient puts back the contrast that narrowing costs. Scanlines only: grain and the
+    // roll bar keep their own amplitudes, so this cannot be reached by raising `intensity`.
+    highp float phase = (FRAGCOORD.y / max(pitch, 1.0)) + TIME * 0.02;
+    highp float gap = 0.5 - 0.5 * cos(phase * TAU);
+    highp float dark = gap * gap * 0.85 * lit;
+
+    // Grain. The lifting half is capped well below the dipping half: anything adding light on every
+    // pixel every frame becomes a permanent wash, and a wash you stare at for minutes is fatiguing.
+    highp vec2 noise = zRandom(FRAGCOORD.xy * SCREEN_PIXEL_SIZE + vec2(TIME * 11.0, TIME * 7.0));
+    highp float grain = (noise.x - 0.5) * staticAmount * 0.5 * lit;
+
+    highp float vig = 1.0 - clamp(vignette * r2 * r2, 0.0, 1.0);
+
+    highp vec3 rgb = vec3(chromaR, base.g, chromaB);
+    rgb = rgb * (1.0 - dark + max(grain, 0.0) * 0.35 - max(-grain, 0.0));
+    rgb = rgb + phosphor * fall * rollLift;
+    rgb = rgb * (1.0 - drop);
+    rgb = rgb * vig;
+
+    COLOR = vec4(rgb, 1.0);
+}

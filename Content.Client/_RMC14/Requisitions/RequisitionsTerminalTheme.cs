@@ -31,13 +31,8 @@ public sealed record RequisitionsTerminalTheme(
             BackgroundColor = color,
             BorderColor = Accent.WithAlpha(0.45f),
             BorderThickness = new Thickness(1),
-            ScanlineColor = Accent.WithAlpha(0.025f),
-            GridColor = Accent.WithAlpha(0.025f),
             CornerColor = Accent.WithAlpha(0.65f),
-            DrawGrid = grid,
             DrawCornerTicks = corners,
-            MaxScanlines = 5,
-            ScanlineSpacing = 72,
         };
     }
 
@@ -50,7 +45,6 @@ public sealed record RequisitionsTerminalTheme(
             BorderColor = hue.WithAlpha(0.65f),
             BorderThickness = new Thickness(1),
             DrawCornerTicks = false,
-            DrawScanlines = false,
             ContentMarginLeftOverride = 10,
             ContentMarginRightOverride = 10,
             ContentMarginTopOverride = 5,

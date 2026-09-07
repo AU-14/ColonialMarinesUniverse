@@ -14,6 +14,9 @@ public sealed partial class CMUDronePlatformKitComponent : Component
     public EntProtoId TrackedPack = "CMUCombatDroneOperatorPackFilled";
 
     [DataField]
+    public EntProtoId FlamerPack = "CMUFlamerDroneOperatorPackFilled";
+
+    [DataField]
     public bool Claimed;
 }
 
@@ -22,6 +25,7 @@ public enum CMUDronePlatform : byte
 {
     Humanoid,
     Tracked,
+    Flamer,
 }
 
 [Serializable, NetSerializable]

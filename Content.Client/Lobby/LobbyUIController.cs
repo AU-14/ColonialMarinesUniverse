@@ -232,7 +232,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         if (character is not HumanoidCharacterProfile humanoid)
         {
             PreviewPanel.ProfilePreviewSpriteView.ClearPreview();
-            PreviewPanel.SetSummaryText(string.Empty);
+            PreviewPanel.SetSummaryText(string.Empty, string.Empty);
             PreviewPanel.SetJobText(string.Empty);
             _lobbyPreviewJobIndex = 0;
             _lobbyPreviewJobTimer = 0;
@@ -246,7 +246,14 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         var entry = GetCurrentLobbyPreviewJob(humanoid);
         var dummy = LoadProfileEntity(humanoid, entry?.Job, true);
         PreviewPanel.SetSprite(dummy);
-        PreviewPanel.SetSummaryText(humanoid.Summary);
+        // Built here rather than using humanoid.Summary so the name, pronoun and age can be
+        // coloured individually; Summary is a single plain string shared with other UI.
+        PreviewPanel.SetSummaryText(
+            Loc.GetString("lobby-character-summary-name", ("name", humanoid.Name)),
+            Loc.GetString(
+                "lobby-character-summary-age",
+                ("gender", humanoid.Gender.ToString().ToLowerInvariant()),
+                ("age", humanoid.Age)));
         PreviewPanel.SetJobText(entry?.DisplayName ?? string.Empty);
     }
 

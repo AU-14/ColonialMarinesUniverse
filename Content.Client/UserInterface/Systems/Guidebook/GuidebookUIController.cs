@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Client.Gameplay;
 using Content.Client.Guidebook;
 using Content.Client.Guidebook.Controls;
@@ -27,7 +27,8 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private JobRequirementsManager _jobRequirements = default!;
 
-    private const int PlaytimeOpenGuidebook = 60;
+    // Was a const. A second client on the same machine is always "new", so this fired every launch
+    // and covered the screen - see CMUGuidebookAutoOpenPlaytime.
 
     private GuidebookWindow? _guideWindow;
     private MenuButton? GuidebookButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.GuidebookButton;
@@ -51,8 +52,11 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         _guideWindow.OnClose += OnWindowClosed;
         _guideWindow.OnOpen += OnWindowOpen;
 
+        var autoOpenBelow = _configuration.GetCVar(CCVars.CMUGuidebookAutoOpenPlaytime);
+
         if (state is LobbyState &&
-            _jobRequirements.FetchOverallPlaytime() < TimeSpan.FromMinutes(PlaytimeOpenGuidebook))
+            autoOpenBelow > 0 &&
+            _jobRequirements.FetchOverallPlaytime() < TimeSpan.FromMinutes(autoOpenBelow))
         {
             OpenGuidebook();
             _guideWindow.RecenterWindow(new(0.5f, 0.5f));

@@ -82,7 +82,7 @@ public sealed class ForceInterestTest : GameTest
     }
 
     [Test]
-    public async Task ScheduledThreatRequiresInterestEvenAfterItsArrivalTime()
+    public async Task ScheduledThreatIsHiddenUntilArrivalAndThenRequiresInterest()
     {
         var map = await Pair.CreateTestMap();
         uint id = 0;
@@ -93,16 +93,16 @@ public sealed class ForceInterestTest : GameTest
             SEntMan.SpawnEntity("threatentityspawnmarker", map.GridCoords);
             var threat = Server.ProtoMan.Index<ThreatPrototype>("TestForceInterestThreat");
             SEntMan.System<ThreatSystem>().SchedulePendingThreatSpawn(threat, map.MapId, new(), TimeSpan.FromSeconds(1));
-            var force = SEntMan.System<ForceInterestSystem>().GetForces(ServerSession!).Single();
-            id = force.Identifier;
-            Assert.That(force.Ready, Is.False);
-            Assert.That(force.TotalRoles, Is.EqualTo(1));
+            Assert.That(SEntMan.System<ForceInterestSystem>().GetForces(ServerSession!), Is.Empty);
         });
         await RunSeconds(2);
         await Server.WaitAssertion(() =>
         {
             var interest = SEntMan.System<ForceInterestSystem>();
-            Assert.That(interest.GetForces(ServerSession!).Single().Ready, Is.True);
+            var force = interest.GetForces(ServerSession!).Single();
+            id = force.Identifier;
+            Assert.That(force.Ready, Is.True);
+            Assert.That(force.TotalRoles, Is.EqualTo(1));
             Assert.That(SEntMan.EntityQuery<UnclaimedForceRoleComponent>().Count(), Is.Zero);
             interest.SetInterest(ServerSession!, id, true);
             Assert.That(interest.GetForces(ServerSession!).Single().InterestedPlayers, Is.EqualTo(1));
@@ -133,14 +133,18 @@ public sealed class ForceInterestTest : GameTest
             interest.SetInterest(ServerSession!, shelved, true);
             Assert.That(interest.GetForces(ServerSession!).Single(force => force.Identifier == shelved).InterestedPlayers, Is.EqualTo(1));
             interest.SetInterest(ServerSession!, scheduled, true);
+            Assert.That(interest.GetForces(ServerSession!).Select(force => force.Identifier), Is.EqualTo(new[] { shelved }));
         });
         await RunSeconds(2);
         await Server.WaitAssertion(() =>
         {
             Assert.That(spawned, Is.Zero, "a scheduled force must wait for its arrival time");
             var interest = SEntMan.System<ForceInterestSystem>();
-            interest.SetInterest(ServerSession!, scheduled, false);
             interest.SetReady(scheduled);
+            Assert.That(interest.GetForces(ServerSession!).Single(force => force.Identifier == scheduled).InterestedPlayers,
+                Is.Zero, "interest sent before a force is due must be ignored");
+            interest.SetInterest(ServerSession!, scheduled, true);
+            interest.SetInterest(ServerSession!, scheduled, false);
         });
         await RunSeconds(2);
         await Server.WaitAssertion(() =>
@@ -165,8 +169,9 @@ public sealed class ForceInterestTest : GameTest
         {
             Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
             var interest = SEntMan.System<ForceInterestSystem>();
-            id = interest.QueueForce("Waiting", new Dictionary<string, int> { ["TestForceInterestBody"] = 1 }, _ => true, false);
+            id = interest.QueueForce("Waiting", new Dictionary<string, int> { ["TestForceInterestBody"] = 2 }, _ => true);
             interest.SetInterest(ServerSession!, id, true);
+            Assert.That(interest.GetForces(ServerSession!).Single().InterestedPlayers, Is.EqualTo(1));
             Server.PlayerMan.SetAttachedEntity(ServerSession!, SEntMan.SpawnEntity(null, map.GridCoords));
         });
         await RunSeconds(2);
@@ -221,7 +226,7 @@ public sealed class ForceInterestTest : GameTest
         {
             var window = new GhostRolesWindow();
             window.BeginEntryUpdate();
-            window.AddForceEntry(new ForceInterestInfo(1, "Scheduled marines", 10, 4, 7, false, true, true));
+            window.AddForceEntry(new ForceInterestInfo(1, "Called marines", 10, 4, 7, true, true, true));
             window.EndEntryUpdate();
             Assert.That(window.FindControl<PanelContainer>("ContentPanel").Visible, Is.True);
             Assert.That(window.FindControl<Label>("NoRolesMessage").Visible, Is.False);

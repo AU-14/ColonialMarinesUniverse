@@ -66,6 +66,9 @@ namespace Content.Server.Atmos.EntitySystems
 
         private readonly Dictionary<Entity<FlammableComponent>, float> _fireEvents = new();
 
+        // CMU14: retain snapshot capacity between updates without retaining component references.
+        private readonly List<(EntityUid Uid, FlammableComponent Flammable)> _flammableUpdateQueue = new();
+
         // RMC14
         private EntityQuery<SteppingOnFireComponent> _steppingOnFireQuery;
 
@@ -484,17 +487,28 @@ namespace Content.Server.Atmos.EntitySystems
             }
             _fireEvents.Clear();
 
+            try
+            {
+                UpdateFlammables();
+            }
+            finally
+            {
+                _flammableUpdateQueue.Clear();
+            }
+        }
+
+        private void UpdateFlammables()
+        {
             var curTime = _timing.CurTime;
 
             // TODO: This needs cleanup to take off the crust from TemperatureComponent and shit.
             // CMU14: fire protection and damage handlers can add FlammableComponents mid-iteration
             // and invalidate the query enumerator, so iterate over a snapshot instead
-            var flammables = new List<(EntityUid Uid, FlammableComponent Flammable)>();
             var query = EntityQueryEnumerator<FlammableComponent, TransformComponent>();
             while (query.MoveNext(out var uid, out var flammable, out _))
-                flammables.Add((uid, flammable));
+                _flammableUpdateQueue.Add((uid, flammable));
 
-            foreach (var (uid, flammable) in flammables)
+            foreach (var (uid, flammable) in _flammableUpdateQueue)
             {
                 if (flammable.Deleted)
                     continue;
@@ -512,13 +526,16 @@ namespace Content.Server.Atmos.EntitySystems
                 if (flammable.FireStacks < 0)
                     flammable.FireStacks = MathF.Min(0, flammable.FireStacks + 1);
 
-                if (!flammable.OnFire)
-                {
+                // RMC14: acid burns also use the fire alert to stop, drop, and roll.
+                var showAlert = new ShowFireAlertEvent(flammable.OnFire);
+                RaiseLocalEvent(uid, ref showAlert);
+                if (showAlert.Show)
+                    _alertsSystem.ShowAlert(uid, flammable.FireAlert);
+                else
                     _alertsSystem.ClearAlert(uid, flammable.FireAlert);
-                    continue;
-                }
 
-                _alertsSystem.ShowAlert(uid, flammable.FireAlert);
+                if (!flammable.OnFire)
+                    continue;
 
                 if (flammable.FireStacks <= 0)
                 {
@@ -526,13 +543,15 @@ namespace Content.Server.Atmos.EntitySystems
                     continue;
                 }
 
-                var air = _atmosphereSystem.GetContainingMixture(uid);
-
-                // If we're in an oxygenless environment, put the fire out.
-                if (air == null || air.GetMoles(Gas.Oxygen) < 1f)
+                // RMC14: incendiary fuel burns independently of simulated map atmosphere.
+                if (!TryComp<OnFireComponent>(uid, out var onFire) || onFire.Intensity <= 0 || onFire.Duration <= 0)
                 {
-                    TryExtinguish((uid, flammable));
-                    continue;
+                    var air = _atmosphereSystem.GetContainingMixture(uid);
+                    if (air == null || air.GetMoles(Gas.Oxygen) < 1f)
+                    {
+                        TryExtinguish((uid, flammable));
+                        continue;
+                    }
                 }
 
                 var source = EnsureComp<IgnitionSourceComponent>(uid);

@@ -1,18 +1,18 @@
-<Control xmlns="https://spacestation14.io"
-         xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
-    <controls:StripeBack HasBottomEdge="False">
-        <BoxContainer Orientation="Horizontal" Align="End" Margin="2">
+<Control xmlns="https://spacestation14.io">
+    <!-- A top rule instead of StripeBack's full box. This row already sits inside the window frame
+         and the tab panel, so a third rectangle drawn around three bordered buttons was the bulk of
+         what made the footer look so heavy. Even separation rather than a margin on one button. -->
+    <PanelContainer StyleClasses="CrtFooterRow">
+        <BoxContainer Orientation="Horizontal" Align="End" SeparationOverride="6">
             <Button Name="DefaultButton"
                     Text="{Loc 'ui-options-default'}"
-                    TextAlign="Center"
-                    Margin="8 0" />
+                    TextAlign="Center" />
 
             <Button Name="ResetButton"
                     Text="{Loc 'ui-options-reset-all'}"
                     StyleClasses="negative" />
             <Button Name="ApplyButton"
-                    Text="{Loc 'ui-options-apply'}"
-                    StyleClasses="OpenLeft" />
+                    Text="{Loc 'ui-options-apply'}" />
         </BoxContainer>
-    </controls:StripeBack>
+    </PanelContainer>
 </Control>

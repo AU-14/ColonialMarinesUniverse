@@ -97,6 +97,25 @@ public sealed class RoleLoadoutBudgetMergeRegressionTest : GameTest
           points: 10
           groups:
           - RoleLoadoutBudgetUnlimited
+
+        - type: loadout
+          id: RoleLoadoutBudgetRepeatable
+          cost: 3
+          maxSelections: 2
+
+        - type: loadoutGroup
+          id: RoleLoadoutBudgetRepeatableUnlimited
+          name: generic-unknown
+          minLimit: 0
+          maxLimit: 0
+          loadouts:
+          - RoleLoadoutBudgetRepeatable
+
+        - type: roleLoadout
+          id: RoleLoadoutBudgetRepeatableRole
+          points: 10
+          groups:
+          - RoleLoadoutBudgetRepeatableUnlimited
         """;
 
     [Test]
@@ -225,6 +244,44 @@ public sealed class RoleLoadoutBudgetMergeRegressionTest : GameTest
                 }));
                 Assert.That(edited.Points, Is.EqualTo(6));
             });
+        });
+    }
+
+    [Test]
+    public async Task UnlimitedGroupValidatesRepeatableSelectionCapAndChargesEachCopy()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var loadout = new RoleLoadout("RoleLoadoutBudgetRepeatableRole")
+            {
+                Points = 999,
+                SelectedLoadouts =
+                {
+                    ["RoleLoadoutBudgetRepeatableUnlimited"] =
+                    [
+                        new Loadout { Prototype = "RoleLoadoutBudgetRepeatable" },
+                        new Loadout { Prototype = "RoleLoadoutBudgetRepeatable" },
+                        new Loadout { Prototype = "RoleLoadoutBudgetRepeatable" },
+                    ],
+                },
+            };
+
+            loadout.EnsureValid(new HumanoidCharacterProfile(), null, Server.InstanceDependencyCollection);
+            Assert.Multiple(() =>
+            {
+                Assert.That(loadout.SelectedLoadouts["RoleLoadoutBudgetRepeatableUnlimited"], Has.Count.EqualTo(2));
+                Assert.That(loadout.Points, Is.EqualTo(4));
+            });
+
+            Assert.That(loadout.AddLoadout(
+                "RoleLoadoutBudgetRepeatableUnlimited", "RoleLoadoutBudgetRepeatable", SProtoMan), Is.False);
+            Assert.That(loadout.Points, Is.EqualTo(4));
+            Assert.That(loadout.RemoveLoadout(
+                "RoleLoadoutBudgetRepeatableUnlimited", "RoleLoadoutBudgetRepeatable", SProtoMan), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(7));
+            Assert.That(loadout.AddLoadout(
+                "RoleLoadoutBudgetRepeatableUnlimited", "RoleLoadoutBudgetRepeatable", SProtoMan), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(4));
         });
     }
 

@@ -89,6 +89,9 @@
         Heat: 2
   - type: ExaminableDamage
     messages: RMCBarricadeMessages
+  - type: DirectionalBulletBlocker
+    frontBlockAngle: 180
+    blockChance: 0.4
   - type: BarricadeBlock
     bidirectional: true
     blocking: 30

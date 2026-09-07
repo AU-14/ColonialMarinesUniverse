@@ -1,11 +1,13 @@
 <cc:CMUDronePlatformKitWindow xmlns="https://spacestation14.io"
                             xmlns:cc="clr-namespace:Content.Client.CMU14.DroneOperator"
-                            Title="{Loc 'cmu-drone-platform-title'}" MinSize="380 190">
+                            Title="{Loc 'cmu-drone-platform-title'}" MinSize="380 260">
     <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="12">
         <Label Text="{Loc 'cmu-drone-platform-prompt'}" />
         <Button Name="HumanoidButton" Text="{Loc 'cmu-drone-platform-humanoid'}" />
         <Label Text="{Loc 'cmu-drone-platform-humanoid-description'}" StyleClasses="LabelSubText" />
         <Button Name="TrackedButton" Text="{Loc 'cmu-drone-platform-tracked'}" />
         <Label Text="{Loc 'cmu-drone-platform-tracked-description'}" StyleClasses="LabelSubText" />
+        <Button Name="FlamerButton" Text="{Loc 'cmu-drone-platform-flamer'}" />
+        <Label Text="{Loc 'cmu-drone-platform-flamer-description'}" StyleClasses="LabelSubText" />
     </BoxContainer>
 </cc:CMUDronePlatformKitWindow>

@@ -35,6 +35,7 @@ namespace Content.Client.GameTicking.Managers
         [ViewVariables] public ProtoId<LobbyBackgroundPrototype>? LobbyBackground { get; private set; }
         [ViewVariables] public bool DisallowedLateJoin { get; private set; }
         [ViewVariables] public string? ServerInfoBlob { get; private set; }
+        [ViewVariables] public IReadOnlyList<LobbyRoundInfoField> ServerRoundInfo { get; private set; } = Array.Empty<LobbyRoundInfoField>();
         [ViewVariables] public TimeSpan StartTime { get; private set; }
         [ViewVariables] public new bool Paused { get; private set; }
         [ViewVariables] public string CurrentMapName { get; private set; } = string.Empty;
@@ -152,6 +153,7 @@ namespace Content.Client.GameTicking.Managers
         private void LobbyInfo(TickerLobbyInfoEvent message)
         {
             ServerInfoBlob = message.TextBlob;
+            ServerRoundInfo = message.RoundInfo;
 
             InfoBlobUpdated?.Invoke();
         }

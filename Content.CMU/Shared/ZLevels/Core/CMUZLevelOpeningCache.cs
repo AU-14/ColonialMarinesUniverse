@@ -443,6 +443,9 @@ public sealed class CMUZLevelOpeningCache
         SharedMapSystem map,
         ITileDefinitionManager tileDefinition)
     {
+        if (!float.IsFinite(localSourcePosition.X) || !float.IsFinite(localSourcePosition.Y))
+            return false;
+
         if (sourceInsideOpening)
             return IsOpeningPerimeterTile(grid, tile, map, tileDefinition);
 

@@ -8,8 +8,10 @@
     checkCanInteract: false
     itemIconStyle: BigItem
   - type: Sprite
-    sprite: _RMC14/Objects/Devices/command_tablet.rsi
-    state: cotablet
+    layers:
+    - sprite: _RMC14/Objects/Devices/command_tablet.rsi
+      state: cotablet
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   parent: BaseAction
@@ -21,8 +23,10 @@
     checkCanInteract: false
     itemIconStyle: BigItem
   - type: Sprite
-    sprite: CMU14/Structures/vehicles/cargo_carrier.rsi
-    state: cargo_open
+    layers:
+    - sprite: CMU14/Structures/vehicles/cargo_carrier.rsi
+      state: cargo_open
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   parent: BaseAction
@@ -34,5 +38,7 @@
     checkCanInteract: false
     itemIconStyle: BigItem
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Grenades/rcm20mm/he.rsi
-    state: icon
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Grenades/rcm20mm/he.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]

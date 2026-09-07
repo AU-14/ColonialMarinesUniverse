@@ -7,13 +7,13 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.Projectiles;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
 public sealed partial class ProjectileComponent : Component
 {
     /// <summary>
     ///     The angle of the fired projectile.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Angle Angle;
 
     /// <summary>
@@ -25,13 +25,13 @@ public sealed partial class ProjectileComponent : Component
     /// <summary>
     ///     User that shot this projectile.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Shooter;
 
     /// <summary>
     ///     Weapon used to shoot.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Weapon;
 
     /// <summary>
@@ -41,7 +41,7 @@ public sealed partial class ProjectileComponent : Component
     /// Since projectiles spawn inside the shooter,
     /// they have to ignore the shooter for a little while while they fly away.
     /// </remarks>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan DelayToAcknowledgeShooter = TimeSpan.FromSeconds(1);
 
     /// <summary>
@@ -90,7 +90,7 @@ public sealed partial class ProjectileComponent : Component
     /// <summary>
     ///     If true, the projectile has hit enough targets and should no longer interact with further collisions pending deletion.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool ProjectileSpent;
 
     /// <summary>
@@ -116,6 +116,6 @@ public sealed partial class ProjectileComponent : Component
     /// This can be set on both the Projectile and ShootAtFixedPoint Components.
     /// The default value is null for no cap. The minimum value between the two is used.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float? MaxFixedRange;
 }

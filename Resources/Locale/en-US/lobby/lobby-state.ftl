@@ -9,6 +9,11 @@ lobby-state-player-status-not-ready = Not Ready
 lobby-state-player-status-ready = Ready
 lobby-state-player-status-observer = Observer
 lobby-state-player-status-round-not-started = The round hasn't started yet
+
+# Compact forms for the lobby round-info table, where the ROUND TIME heading already provides
+# the context that the longer strings above spell out.
+lobby-state-round-time-short = {$hours}h {$minutes}m
+lobby-state-round-not-started-short = Not started
 lobby-state-player-status-round-time =
     The round time is: {$hours} {$hours ->
     [1]hour

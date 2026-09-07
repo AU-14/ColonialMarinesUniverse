@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.StatusIcon;
 using Content.Shared.Tools;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.DroneOperator;
@@ -220,6 +221,7 @@ public sealed partial class CMURemotePilotingComponent : Component
     public EntityUid MindId;
     public bool BlocksInput = true;
     public TimeSpan BodyMoveGraceUntil;
+    public EntityCoordinates BodyStartCoordinates;
     public bool HadSsdIndicator;
     public ProtoId<SsdIconPrototype> SsdIndicatorIcon = "SSDIcon";
 }

@@ -115,7 +115,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
 
     public ForceInterestInfo[] GetForces(ICommonSession player)
     {
-        return _forces.Select(pair => new ForceInterestInfo(pair.Key, pair.Value.Name,
+        return _forces.Where(pair => pair.Value.Ready).Select(pair => new ForceInterestInfo(pair.Key, pair.Value.Name,
             pair.Value.TotalRoles, pair.Value.Interested.Count, ForceInterest.RequiredPlayers(pair.Value.TotalRoles),
             pair.Value.Ready, pair.Value.Interested.Contains(player.UserId), CanJoin(pair.Value, player.UserId))).ToArray();
     }
@@ -127,7 +127,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
 
         if (!interested)
             force.Interested.Remove(player.UserId);
-        else if (CanJoin(force, player.UserId))
+        else if (force.Ready && CanJoin(force, player.UserId))
             force.Interested.Add(player.UserId);
 
         _ghostRole.UpdateAllEui();

@@ -127,6 +127,7 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
             }
 
             var loadouts = groupProto.MaxLimit > 0 ? groupLoadouts[..Math.Min(groupLoadouts.Count, groupProto.MaxLimit)] : groupLoadouts;
+            var selectionCounts = new Dictionary<ProtoId<LoadoutPrototype>, int>();
 
             // Validate first
             for (var i = loadouts.Count - 1; i >= 0; i--)
@@ -147,6 +148,13 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
                     continue;
                 }
 
+                var selectedCount = selectionCounts.GetValueOrDefault(loadout.Prototype);
+                if (selectedCount >= Math.Max(1, loadoutProto.MaxSelections))
+                {
+                    loadouts.RemoveAt(i);
+                    continue;
+                }
+
                 // Validate the loadout can be applied (e.g. points).
                 if (!IsValid(profile, session, loadout.Prototype, collection, out _))
                 {
@@ -154,6 +162,7 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
                     continue;
                 }
 
+                selectionCounts[loadout.Prototype] = selectedCount + 1;
                 Apply(loadoutProto);
             }
 
@@ -333,6 +342,10 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
     public bool AddLoadout(ProtoId<LoadoutGroupPrototype> selectedGroup, ProtoId<LoadoutPrototype> selectedLoadout, IPrototypeManager protoManager)
     {
         var groupLoadouts = SelectedLoadouts[selectedGroup];
+        var loadoutProto = protoManager.Index(selectedLoadout);
+
+        if (groupLoadouts.Count(loadout => loadout.Prototype == selectedLoadout) >= Math.Max(1, loadoutProto.MaxSelections))
+            return false;
 
         // Need to unselect existing ones if we're at or above limit
         var groupProto = protoManager.Index(selectedGroup);
@@ -342,10 +355,10 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
         {
             var loadout = groupLoadouts[i];
 
-            if (loadout.Prototype != selectedLoadout)
+            if (loadout.Prototype != selectedLoadout || loadoutProto.MaxSelections > 1)
             {
                 // Remove any other loadouts that might push it above the limit.
-                if (limit > 0)
+                if (limit > 0 && loadout.Prototype != selectedLoadout)
                 {
                     limit--;
                     groupLoadouts.RemoveAt(i);
@@ -358,6 +371,9 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
             DebugTools.Assert(false);
             return false;
         }
+
+        if (limit > 0)
+            return false;
 
         groupLoadouts.Add(new Loadout()
         {

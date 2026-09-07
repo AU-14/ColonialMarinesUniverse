@@ -201,6 +201,13 @@ public sealed partial class CMUZLevelsSystem
         Vector2 globalPos,
         Vector2 eyeOffset)
     {
+        var probeGlobalPos = globalPos + eyeOffset;
+        if (!float.IsFinite(probeGlobalPos.X) || !float.IsFinite(probeGlobalPos.Y))
+        {
+            ClearViewerProbes((viewerUid, viewer));
+            return 0;
+        }
+
         if (!_viewerProbeEyes.TryGetValue(viewerUid, out var probes))
             return 0;
 
@@ -399,6 +406,15 @@ public sealed partial class CMUZLevelsSystem
         var globalPos = _transform.GetWorldPosition(xform);
         var eyeOffset = GetViewerProbeOffset(ent);
         var probeGlobalPos = globalPos + eyeOffset;
+        if (!float.IsFinite(probeGlobalPos.X) || !float.IsFinite(probeGlobalPos.Y))
+        {
+            if (Prof.IsEnabled)
+                _profilePvsSkippedViewers++;
+
+            ClearViewerProbes(ent);
+            return;
+        }
+
         var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), xform, map.Value, globalPos, _stairPreviewPositions);
         SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions);
         BuildWantedProbeDepths(map.Value, probeGlobalPos, _wantedProbeDepths, stairPreviewUp);

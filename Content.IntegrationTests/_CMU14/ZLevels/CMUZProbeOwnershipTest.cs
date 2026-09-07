@@ -27,6 +27,48 @@ public sealed class CMUZProbeOwnershipTest : GameTest
     // Includes the normal 4 Hz reconciliation interval, not just immediate event-driven refreshes.
     private const int RefreshTicks = 20;
 
+    [TestCase(float.NaN)]
+    [TestCase(float.PositiveInfinity)]
+    [TestCase(float.NegativeInfinity)]
+    public async Task InvalidProbeOffsetClearsProbesAndCanResume(float coordinate)
+    {
+        try
+        {
+            await CreateScenario();
+            await SubscribeCamera();
+            EntityUid[] oldEyes = [];
+            await Server.WaitAssertion(() =>
+            {
+                var liveEyes = AssertLiveProbes().Eyes;
+                oldEyes = liveEyes.ToArray();
+                var subscribers = Server.System<ViewSubscriberSystem>();
+                var eyes = Server.System<SharedEyeSystem>();
+                try
+                {
+                    eyes.SetOffset(_camera, new Vector2(coordinate));
+                    subscribers.RemoveViewSubscriber(_camera, ServerSession!);
+                    Assert.DoesNotThrow(() => subscribers.AddViewSubscriber(_camera, ServerSession!));
+                    Assert.That(SComp<CMUZLevelViewerComponent>(_camera).Eyes, Is.Empty);
+                }
+                finally
+                {
+                    eyes.SetOffset(_camera, Vector2.Zero);
+                }
+
+                subscribers.RemoveViewSubscriber(_camera, ServerSession!);
+                subscribers.AddViewSubscriber(_camera, ServerSession!);
+                var restoredEyes = AssertLiveProbes().Eyes;
+                Assert.That(restoredEyes.Intersect(oldEyes), Is.Empty);
+            });
+            await Pair.RunTicksSync(RefreshTicks);
+            await Server.WaitAssertion(() => AssertOldProbesRemoved(oldEyes));
+        }
+        finally
+        {
+            await CleanupScenario();
+        }
+    }
+
     [Test]
     public async Task SubscriberComponentShutdownRemovesOwnedViewerAndProbeSubscriptions()
     {

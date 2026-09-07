@@ -1,7 +1,4 @@
-<Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Vertical">
-        <Label Name="TitleLabel" Access="Public" />
-        <Label Name="ExampleLabel" Access="Public" />
-        <ColorSelectorSliders Name="Slider" Access="Public" HorizontalExpand="True" />
-    </BoxContainer>
+<Control xmlns="https://spacestation14.io"
+         xmlns:picker="clr-namespace:Content.Client._CMU14.UserInterface.ColorPicker">
+    <picker:CmuColorPicker Name="Picker" Access="Public" HorizontalExpand="True" />
 </Control>

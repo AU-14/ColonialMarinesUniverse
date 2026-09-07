@@ -14,6 +14,7 @@ public sealed class CMUDronePlatformKitTest
 {
     [TestCase(CMUDronePlatform.Humanoid, "CMUDroneBodyFrame", 13)]
     [TestCase(CMUDronePlatform.Tracked, "CMUCombatDroneHull", 7)]
+    [TestCase(CMUDronePlatform.Flamer, "CMUFlamerDroneHull", 7)]
     public async Task InGameChoiceUnpacksOneKitThroughTheUi(CMUDronePlatform platform, string hullId, int itemCount)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });

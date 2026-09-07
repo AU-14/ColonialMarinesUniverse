@@ -1,72 +1,76 @@
 <Control xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:ui="clr-namespace:Content.Client.Options.UI">
+         xmlns:ui="clr-namespace:Content.Client.Options.UI"
+         xmlns:cmu="clr-namespace:Content.Client._CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
-            <BoxContainer Orientation="Vertical" Margin="8">
-                <Label Text="{Loc 'cm-ui-rmc14'}"
-                        StyleClasses="LabelKeyText"/>
-                <CheckBox Name="RMCChatSquadColorModeCheckBox" Text="{Loc 'rmc-ui-options-chat-squad-color-mode'}" />
-                <CheckBox Name="RMCUseAlternateSpritesCheckBox" Text="{Loc 'rmc-ui-options-alternate-sprites'}" />
-                <ui:OptionDropDown Name="AnnouncementStyleDropDown" Title="{Loc 'rmc-ui-options-announcements-style'}" />
-                <Label Name="AnnouncementPresetOverridesLabel" Text="{Loc 'rmc-ui-options-announcements-style-per-announcement'}"
-                        StyleClasses="LabelKeyText"/>
-                <BoxContainer Name="AnnouncementPresetOverridesContainer" Orientation="Vertical" />
-                <ui:OptionDropDown Name="RMCNightVisionColorDropDown" Title="{Loc 'rmc-ui-options-night-vision-color'}" />
-                <Label Text="{Loc 'ui-options-accessability-header-cmu'}"
-                       StyleClasses="LabelKeyText"/>
-                <CheckBox Name="ExplosionScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-enabled'}" />
-                <CheckBox Name="ExplosionScreenShakeIgnoreFarCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-ignore-far'}" />
-                <CheckBox Name="FirearmScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-firearm-screen-shake-enabled'}" />
-                <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
-                <Label Text="{Loc 'ui-options-accessibility-header-reduced-motion'}"
-                       StyleClasses="LabelKeyText"/>
-                <CheckBox Name="ReducedMotionCheckBox"
-                    Text="{Loc 'ui-options-reduced-motion'}"
-                    ToolTip="{Loc 'ui-options-reduced-motion-tooltip'}" />
-                <GridContainer Columns="2" HorizontalExpand="True" Margin="8 8 8 8">
-                    <CheckBox Name="DisableAiStaticCheckBox"
-                        Text="{Loc 'ui-options-disable-ai-static'}"
-                        ToolTip="{Loc 'ui-options-disable-ai-static-tooltip'}" />
-                    <CheckBox Name="DisableBlurryVisionCheckBox"
-                        Text="{Loc 'ui-options-disable-blurry-vision'}"
-                        ToolTip="{Loc 'ui-options-disable-blurry-vision-tooltip'}" />
-                    <CheckBox Name="DisableDrunkOverlayCheckBox"
-                        Text="{Loc 'ui-options-disable-drunk-overlay'}"
-                        ToolTip="{Loc 'ui-options-disable-drunk-overlay-tooltip'}" />
-                    <CheckBox Name="DisableFlashEffectCheckBox"
-                        Text="{Loc 'ui-options-disable-flash-effect'}"
-                        ToolTip="{Loc 'ui-options-disable-flash-effect-tooltip'}" />
-                    <CheckBox Name="DisableHeatDistortionCheckBox"
-                        Text="{Loc 'ui-options-disable-heat-distortion'}"
-                        ToolTip="{Loc 'ui-options-disable-heat-distortion-tooltip'}" />
-                    <CheckBox Name="DisableNightVisionNoiseCheckBox"
-                        Text="{Loc 'ui-options-disable-nv-noise'}"
-                        ToolTip="{Loc 'ui-options-disable-nv-noise-tooltip'}" />
-                    <CheckBox Name="DisableRainbowOverlayCheckBox"
-                        Text="{Loc 'ui-options-disable-rainbow-overlay'}"
-                        ToolTip="{Loc 'ui-options-disable-rainbow-overlay-tooltip'}" />
-                    <CheckBox Name="DisableSinguloWarpCheckBox"
-                        Text="{Loc 'ui-options-disable-singulo-warp'}"
-                        ToolTip="{Loc 'ui-options-disable-singulo-warp-tooltip'}" />
-                </GridContainer>
-                <Label Text="{Loc 'ui-options-accessibility-header-visuals'}"
-                       StyleClasses="LabelKeyText"/>
-                <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />
-                <CheckBox Name="ColorblindFriendlyCheckBox" Text="{Loc 'ui-options-colorblind-friendly'}" />
-                <CheckBox Name="XenoAbilityPreviewsCheckBox" Text="{Loc 'rmc-ui-options-xeno-ability-previews'}" />
-                <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
-                <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
-                <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider" Title="{Loc 'ui-options-speech-bubble-text-opacity'}" />
-                <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider" Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}" />
-                <ui:OptionSlider Name="SpeechBubbleBackgroundOpacitySlider" Title="{Loc 'ui-options-speech-bubble-background-opacity'}" />
-                <CheckBox Name="AutoFillHighlightsCheckBox" Text="{Loc 'ui-options-auto-fill-highlights'}" />
-                <ui:OptionColorSlider Name="HighlightsColorSlider"
-                    Title="{Loc 'ui-options-highlights-color'}"
-                    Example="{Loc 'ui-options-highlights-color-example'}"/>
-                <Label Text="{Loc 'ui-options-accessibility-header-content'}"
-                       StyleClasses="LabelKeyText"/>
-                <CheckBox Name="CensorNudityCheckBox" Text="{Loc 'ui-options-censor-nudity'}" />
+            <!-- Grouped by what an option *does*, not by which fork added it, and each group folds
+                 from its heading. The four opacity sliders in particular were buried at the end of
+                 "Visuals" among unrelated checkboxes with no separation between them. -->
+            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2">
+                <cmu:CmuOptionSection Title="{Loc 'cm-ui-rmc14'}">
+                    <CheckBox Name="RMCChatSquadColorModeCheckBox" Text="{Loc 'rmc-ui-options-chat-squad-color-mode'}" />
+                    <CheckBox Name="RMCUseAlternateSpritesCheckBox" Text="{Loc 'rmc-ui-options-alternate-sprites'}" />
+                    <ui:OptionDropDown Name="RMCNightVisionColorDropDown" Title="{Loc 'rmc-ui-options-night-vision-color'}" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-announcements'}">
+                    <ui:OptionDropDown Name="AnnouncementStyleDropDown" Title="{Loc 'rmc-ui-options-announcements-style'}" />
+                    <Label Name="AnnouncementPresetOverridesLabel"
+                           Text="{Loc 'rmc-ui-options-announcements-style-per-announcement'}"
+                           StyleClasses="LabelKeyText" />
+                    <BoxContainer Name="AnnouncementPresetOverridesContainer" Orientation="Vertical" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessibility-header-reduced-motion'}">
+                    <CheckBox Name="ReducedMotionCheckBox" Text="{Loc 'ui-options-reduced-motion'}"
+                              ToolTip="{Loc 'ui-options-reduced-motion-tooltip'}" />
+                    <GridContainer Columns="2" HorizontalExpand="True" Margin="8 8 8 8">
+                        <CheckBox Name="DisableAiStaticCheckBox" Text="{Loc 'ui-options-disable-ai-static'}"
+                                  ToolTip="{Loc 'ui-options-disable-ai-static-tooltip'}" />
+                        <CheckBox Name="DisableBlurryVisionCheckBox" Text="{Loc 'ui-options-disable-blurry-vision'}"
+                                  ToolTip="{Loc 'ui-options-disable-blurry-vision-tooltip'}" />
+                        <CheckBox Name="DisableDrunkOverlayCheckBox" Text="{Loc 'ui-options-disable-drunk-overlay'}"
+                                  ToolTip="{Loc 'ui-options-disable-drunk-overlay-tooltip'}" />
+                        <CheckBox Name="DisableFlashEffectCheckBox" Text="{Loc 'ui-options-disable-flash-effect'}"
+                                  ToolTip="{Loc 'ui-options-disable-flash-effect-tooltip'}" />
+                        <CheckBox Name="DisableHeatDistortionCheckBox" Text="{Loc 'ui-options-disable-heat-distortion'}"
+                                  ToolTip="{Loc 'ui-options-disable-heat-distortion-tooltip'}" />
+                        <CheckBox Name="DisableNightVisionNoiseCheckBox" Text="{Loc 'ui-options-disable-nv-noise'}"
+                                  ToolTip="{Loc 'ui-options-disable-nv-noise-tooltip'}" />
+                        <CheckBox Name="DisableRainbowOverlayCheckBox" Text="{Loc 'ui-options-disable-rainbow-overlay'}"
+                                  ToolTip="{Loc 'ui-options-disable-rainbow-overlay-tooltip'}" />
+                        <CheckBox Name="DisableSinguloWarpCheckBox" Text="{Loc 'ui-options-disable-singulo-warp'}"
+                                  ToolTip="{Loc 'ui-options-disable-singulo-warp-tooltip'}" />
+                    </GridContainer>
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessibility-header-visuals'}">
+                    <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
+                    <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />
+                    <CheckBox Name="ColorblindFriendlyCheckBox" Text="{Loc 'ui-options-colorblind-friendly'}" />
+                    <CheckBox Name="XenoAbilityPreviewsCheckBox" Text="{Loc 'rmc-ui-options-xeno-ability-previews'}" />
+                </cmu:CmuOptionSection>
+
+                <!-- Their own group: four sliders of the same kind read as a set, and the three
+                     speech-bubble ones only make sense next to each other. -->
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-opacity'}">
+                    <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
+                    <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider" Title="{Loc 'ui-options-speech-bubble-text-opacity'}" />
+                    <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider" Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}" />
+                    <ui:OptionSlider Name="SpeechBubbleBackgroundOpacitySlider" Title="{Loc 'ui-options-speech-bubble-background-opacity'}" />
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-highlights'}">
+                    <CheckBox Name="AutoFillHighlightsCheckBox" Text="{Loc 'ui-options-auto-fill-highlights'}" />
+                    <ui:OptionColorSlider Name="HighlightsColorSlider"
+                        Title="{Loc 'ui-options-highlights-color'}"
+                        Palette="CMUHighlightColors"/>
+                </cmu:CmuOptionSection>
+
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-content'}">
+                    <CheckBox Name="CensorNudityCheckBox" Text="{Loc 'ui-options-censor-nudity'}" />
+                </cmu:CmuOptionSection>
             </BoxContainer>
         </ScrollContainer>
         <ui:OptionsTabControlRow Name="Control" Access="Public" />

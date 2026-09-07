@@ -71,6 +71,9 @@ public sealed partial class CMUDronePlatformKitSystem : EntitySystem
             case CMUDronePlatform.Tracked:
                 pack = ent.Comp.TrackedPack;
                 break;
+            case CMUDronePlatform.Flamer:
+                pack = ent.Comp.FlamerPack;
+                break;
             default:
                 return false;
         }

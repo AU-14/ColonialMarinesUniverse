@@ -3,27 +3,33 @@
              xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="8 8 8 8" VerticalExpand="True">
-                <Label Text="{Loc 'ui-options-cmu-crt'}" StyleClasses="LabelKeyText" />
-                <CheckBox Name="CrtUiEnabledCheckBox" Text="{Loc 'ui-options-crt-ui-enabled'}" />
-                <ui:OptionColorSlider Name="CrtUiColorSlider"
-                                      Title="{Loc 'ui-options-crt-ui-color'}"
-                                      Example="{Loc 'ui-options-crt-ui-color-example'}" />
+            <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
+                <Button Name="OpenUiSetupButton" Text="{Loc 'cmu-ui-setup-open'}" Margin="0 0 0 8" />
+                <ui:CmuAppearanceOptions Name="Appearance" />
 
-                <Label Text="{Loc 'ui-options-cmu-runechat'}" StyleClasses="LabelKeyText" />
+                <Label Text="{Loc 'ui-options-cmu-runechat'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="RunechatSpeechBubblesCheckBox" Text="{Loc 'ui-options-runechat-speech'}" />
                 <ui:OptionSlider Name="RunechatSpeechBubbleScaleSlider" Title="{Loc 'ui-options-runechat-speech-scale'}" />
 
-                <Label Text="{Loc 'ui-options-cmu-chat'}" StyleClasses="LabelKeyText" />
+                <Label Text="{Loc 'cmu-ui-options-voting'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
+                <CheckBox Name="VoteUiLargeCheckBox"
+                          Text="{Loc 'cmu-ui-options-vote-ui-large'}"
+                          ToolTip="{Loc 'cmu-ui-options-vote-ui-large-tooltip'}" />
+
+                <Label Text="{Loc 'ui-options-cmu-chat'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="ExamineLogInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-log-in-chat'}" />
                 <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" />
 
-                <Label Text="{Loc 'cmu-ui-options-accessibility'}" StyleClasses="LabelKeyText" />
+                <Label Text="{Loc 'cmu-ui-options-accessibility'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
+                <CheckBox Name="ExplosionScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-enabled'}" />
+                <CheckBox Name="ExplosionScreenShakeIgnoreFarCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-ignore-far'}" />
+                <CheckBox Name="FirearmScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-firearm-screen-shake-enabled'}" />
+                <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
                 <CheckBox Name="AutoIngestCheckBox"
                           Text="{Loc 'cmu-ui-options-auto-ingest'}"
                           ToolTip="{Loc 'cmu-ui-options-auto-ingest-tooltip'}" />
 
-                <Label Text="{Loc 'cmu-ui-options-medical'}" StyleClasses="LabelKeyText" />
+                <Label Text="{Loc 'cmu-ui-options-medical'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="TargetedHealingCheckBox"
                           Text="{Loc 'cmu-ui-options-targeted-healing'}"
                           ToolTip="{Loc 'cmu-ui-options-targeted-healing-tooltip'}" />
@@ -34,12 +40,12 @@
                           Text="{Loc 'cmu-ui-options-ui-less-surgery'}"
                           ToolTip="{Loc 'cmu-ui-options-ui-less-surgery-tooltip'}" />
 
-                <Label Text="{Loc 'cmu-ui-options-vocal'}" StyleClasses="LabelKeyText" />
+                <Label Text="{Loc 'cmu-ui-options-vocal'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="ScreamOnHotbarCheckBox"
                           Text="{Loc 'cmu-ui-options-scream-on-hotbar'}"
                           ToolTip="{Loc 'cmu-ui-options-scream-on-hotbar-tooltip'}" />
 
-                <Label Text="{Loc 'ui-options-cmu-zlevels'}" StyleClasses="LabelKeyText" />
+                <Label Text="{Loc 'ui-options-cmu-zlevels'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <ui:OptionSlider Name="ZLevelBlurSlider" Title="{Loc 'ui-options-zlevel-blur'}" />
                 <ui:OptionSlider Name="FaintLookUpOpacitySlider" Title="{Loc 'ui-options-faint-look-up-opacity'}" />
             </BoxContainer>

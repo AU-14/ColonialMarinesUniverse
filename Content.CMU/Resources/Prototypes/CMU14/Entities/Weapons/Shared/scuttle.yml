@@ -7,30 +7,18 @@
   - type: OrbitalCannonExplosion
     multiZ: true
     steps:
-    # Stage 1 - t=0s, initial breach
-    - type: RMCOBXenoTunnel
-      total: 80000
-      slope: 4000
-      max: 400
-      delay: 0
+    # Stage 1 - t=0s
     - fire: CMUTileFireOBAegis
       fireRange: 45
-    # Stage 2 - t=15s, the hull gives
-    - type: RMCOBXenoTunnel
-      total: 220000
-      slope: 40
-      max: 500
-      delay: 15
+      delay: 0
+    # Stage 2 - t=15s
     - fire: CMUTileFireOBAegis
       fireRange: 60
-    # Stage 3 - t=30s, the kill shot
-    - type: RMCOBXenoTunnel
-      total: 600000
-      slope: 25
-      max: 700
-      delay: 30
+      delay: 15
+    # Stage 3 - t=30s
     - fire: CMUTileFireOBAegis
       fireRange: 75
+      delay: 30
 
 - type: entity
   parent: CMUSelfDestructWarheadExplosion
@@ -41,19 +29,11 @@
   - type: OrbitalCannonExplosion
     multiZ: true
     steps:
-    # Stage 1 - t=0s, initial breach
-    - type: RMCOBXenoTunnel
-      total: 80000
-      slope: 4000
-      max: 400
-      delay: 0
+    # Stage 1 - t=0s
     - fire: CMUTileFireOBAegis
       fireRange: 30
-    # Stage 2 - t=15s, the hull gives
-    - type: RMCOBXenoTunnel
-      total: 120000
-      slope: 40
-      max: 500
-      delay: 15
+      delay: 0
+    # Stage 2 - t=15s
     - fire: CMUTileFireOBAegis
       fireRange: 45
+      delay: 15

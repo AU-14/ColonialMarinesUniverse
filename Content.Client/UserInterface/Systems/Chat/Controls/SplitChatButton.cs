@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
@@ -11,9 +12,11 @@ public sealed class SplitChatButton : ChatPopupButton<SplitChatPopup>
     {
         Text = $"{Loc.GetString("hud-chatbox-split-toggle")} +";
         MinWidth = 66;
-        MinHeight = 25;
+        MinHeight = 26;
         ToolTip = Loc.GetString("hud-chatbox-split-tooltip");
         StyleClasses.Add(StyleNano.StyleClassChatChannelSelectorButton);
+
+        AddStyleClass(StyleNano.StyleClassCrtChatTab);
     }
 
     public void SetSplitState(bool enabled, string? tabTitle)
@@ -21,7 +24,11 @@ public sealed class SplitChatButton : ChatPopupButton<SplitChatPopup>
         Text = enabled && !string.IsNullOrWhiteSpace(tabTitle)
             ? $"{Loc.GetString("hud-chatbox-split-toggle")} {tabTitle}"
             : $"{Loc.GetString("hud-chatbox-split-toggle")} +";
-        Modulate = enabled ? Color.FromHex("#9fd0b3") : Color.FromHex("#737987");
+        Modulate = Color.White;
+        Label.FontColorOverride = enabled
+            ? CrtTerminalPalette.TextBright
+            : CrtTerminalPalette.Text;
+
         MinWidth = enabled && tabTitle != null ? Math.Max(92, 54 + tabTitle.Length * 8) : 66;
     }
 

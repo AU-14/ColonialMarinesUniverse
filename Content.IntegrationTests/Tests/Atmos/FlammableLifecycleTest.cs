@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Water;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
+using Content.Shared.Alert;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Damage.Systems;
@@ -22,6 +23,92 @@ namespace Content.IntegrationTests.Tests.Atmos;
 [TestOf(typeof(RMCFlammableSystem))]
 public sealed class FlammableLifecycleTest : GameTest
 {
+    [TestCase("CMMobHuman")]
+    [TestCase("CMXenoDrone")]
+    public async Task RmcFireKeepsBurningWithoutSimulatedAtmosphere(string prototype)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var target = SEntMan.SpawnEntity(prototype, map.GridCoords);
+            IgniteRmc(target, 10, 10, 10);
+
+            Server.System<ServerFlammableSystem>().Update(0f);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.GetComponent<FlammableComponent>(target).OnFire, Is.True,
+                    "RMC fire must not go out on the first update when the map has no simulated atmosphere");
+                Assert.That(TotalDamage(target), Is.GreaterThan(0),
+                    "RMC incendiary fire must deal damage without simulated oxygen");
+            });
+        });
+    }
+
+    [Test]
+    public async Task IdleUpdatesReuseSnapshotStorage()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            for (var i = 0; i < 512; i++)
+            {
+                var uid = SEntMan.SpawnEntity(null, map.GridCoords);
+                SEntMan.EnsureComponent<FlammableComponent>(uid).NextUpdate = TimeSpan.MaxValue;
+            }
+
+            var system = Server.System<ServerFlammableSystem>();
+            // Warm the snapshot capacity and update path before measuring steady-state allocations.
+            system.Update(0f);
+            system.Update(0f);
+
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            for (var i = 0; i < 10; i++)
+                system.Update(0f);
+            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.LessThan(4096),
+                "idle updates should not allocate a fresh snapshot of every flammable entity each tick");
+        });
+    }
+
+    [Test]
+    public async Task ProtectionHandlerCanAddFlammablesDuringUpdate()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            _ = Server.System<FlammableLifecycleProbeSystem>();
+            SetOxygenAtmosphere(map.MapUid);
+            var first = SpawnBurnable(map.MapId, 0);
+            var second = SpawnBurnable(map.MapId, 1);
+            var added = SEntMan.SpawnEntity(null, map.GridCoords);
+            SEntMan.EnsureComponent<FireProtectionProbeComponent>(first).OnProtection = () =>
+            {
+                var flammable = SEntMan.EnsureComponent<FlammableComponent>(added);
+                flammable.NextUpdate = SGameTiming.CurTime;
+                flammable.FireStacks = -2f;
+            };
+            IgniteOrdinary(first, 4);
+            IgniteOrdinary(second, 4);
+
+            var system = Server.System<ServerFlammableSystem>();
+            system.Update(0f);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(TotalDamage(first), Is.GreaterThan(0));
+                Assert.That(TotalDamage(second), Is.GreaterThan(0));
+                Assert.That(SEntMan.GetComponent<FlammableComponent>(added).FireStacks, Is.EqualTo(-2f),
+                    "components added by fire handlers should join the next update's snapshot");
+            });
+
+            system.Update(0f);
+            Assert.That(SEntMan.GetComponent<FlammableComponent>(added).FireStacks, Is.EqualTo(-1f),
+                "the next update should process the newly added flammable component");
+        });
+    }
+
     [Test]
     public async Task OrdinaryFireScalesWithStacksAndProtection()
     {
@@ -164,7 +251,7 @@ public sealed class FlammableLifecycleTest : GameTest
 
             IgniteRmc(immune, 10, 10, 10);
             IgniteRmc(bypass, 10, 10, 10);
-            IgniteRmc(oxygenless, 10, 10, 10);
+            IgniteOrdinary(oxygenless, 10);
         });
 
         await Pair.RunTicksSync(1);
@@ -277,6 +364,44 @@ public sealed class FlammableLifecycleTest : GameTest
     }
 
     [Test]
+    public async Task AcidBurnKeepsStopDropRollAlertUntilResisted()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid human = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            PrepareBurnable(human);
+            SEntMan.EnsureComponent<UserAcidedComponent>(human);
+
+            var alerts = Server.System<AlertsSystem>();
+            Assert.That(alerts.IsShowingAlert(human, "Fire"), Is.True,
+                "acid burns must show the stop-drop-roll alert");
+            Assert.That(SEntMan.GetComponent<FlammableComponent>(human).OnFire, Is.False,
+                "this regression covers acid burns without ordinary fire");
+
+            Server.System<ServerFlammableSystem>().Update(0f);
+
+            Assert.That(alerts.IsShowingAlert(human, "Fire"), Is.True,
+                "the fire update must keep the alert available while acid is still burning");
+            Assert.That(alerts.ActivateAlert(human, SProtoMan.Index(SEntMan.GetComponent<FlammableComponent>(human).FireAlert)), Is.True);
+        });
+
+        await Pair.RunTicksSync(1);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.HasComponent<UserAcidedComponent>(human), Is.False,
+                    "stop-drop-roll must remove the acid burn");
+                Assert.That(Server.System<AlertsSystem>().IsShowingAlert(human, "Fire"), Is.False);
+            });
+        });
+    }
+
+    [Test]
     public async Task StopDropRollUsesRmcResistStacksInsteadOfPositiveFade()
     {
         var map = await Pair.CreateTestMap();
@@ -373,6 +498,7 @@ public sealed class FlammableLifecycleTest : GameTest
 public sealed partial class FireProtectionProbeComponent : Component
 {
     public float Reduction;
+    public Action OnProtection;
 }
 
 [RegisterComponent]
@@ -396,6 +522,7 @@ public sealed class FlammableLifecycleProbeSystem : EntitySystem
         Entity<FireProtectionProbeComponent> ent,
         ref GetFireProtectionEvent args)
     {
+        ent.Comp.OnProtection?.Invoke();
         args.Reduce(ent.Comp.Reduction);
     }
 

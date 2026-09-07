@@ -14,6 +14,7 @@ using Content.Client.Gameplay;
 using Content.Client.Ghost;
 using Content.Client.Mind;
 using Content.Client.Roles;
+using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
@@ -307,19 +308,52 @@ public sealed partial class ChatUIController : UIController
         if (panel is null)
             return;
 
-        Color color;
-        if (panel.PanelOverride is StyleBoxFlat styleBoxFlat)
-            color = styleBoxFlat.BackgroundColor;
-        else if (panel.TryGetStyleProperty<StyleBox>(PanelContainer.StylePropertyPanel, out var style)
-                 && style is StyleBoxFlat propStyleBoxFlat)
-            color = propStyleBoxFlat.BackgroundColor;
-        else
-            color = Color.FromHex("#25252ADD");
+        SetChatWindowOpacity(panel, opacity);
+    }
 
-        panel.PanelOverride = new StyleBoxFlat
+    internal static void SetChatWindowOpacity(PanelContainer panel, float opacity)
+    {
+        // Read the base colour from the stylesheet, never from the panel's own current override.
+        // This used to check PanelOverride first, which meant each call re-read the result of the
+        // last one and multiplied alpha into it again - the log got darker every time the opacity
+        // setting was touched, and never recovered without a restart.
+        StyleBoxFlat? source = null;
+        if (panel.TryGetStyleProperty<StyleBox>(PanelContainer.StylePropertyPanel, out var style)
+            && style is StyleBoxFlat propStyleBoxFlat)
         {
-            BackgroundColor = color.WithAlpha(opacity)
+            source = propStyleBoxFlat;
+        }
+
+        // Under the CRT theme the ground is stated outright rather than looked up. This runs during
+        // startup and can fire before the style class reaches the panel, in which case the lookup
+        // above fails and the old fallback baked ChatBackgroundColor - a near-black tuned for the
+        // base theme - into a PanelOverride that then beat the class for the rest of the session.
+        // That is why the log stayed black no matter what the stylesheet said.
+        var color = StyleNano.CrtUiEnabled
+            ? CrtTerminalPalette.Surface1
+            : source?.BackgroundColor ?? StyleNano.ChatBackgroundColor;
+
+        // Opaque under the CRT theme. The surface ladder works by exact tones, and drawing Surface1
+        // at partial alpha composites it against Surface0 behind, landing on a colour that is darker
+        // than either and belongs to neither - which is why the log kept reading as black however the
+        // ladder was tuned. Translucency is a base-theme affordance; here it fights the palette.
+        var box = new StyleBoxFlat
+        {
+            BackgroundColor = StyleNano.CrtUiEnabled ? color : color.WithAlpha(opacity)
         };
+
+        // Carry the source's padding across. The override replaces the styled box wholesale, so
+        // building a bare StyleBoxFlat silently dropped whatever content margins the style class
+        // set and left the log's text flush against its own edge.
+        if (source != null)
+        {
+            box.ContentMarginLeftOverride = source.ContentMarginLeftOverride;
+            box.ContentMarginRightOverride = source.ContentMarginRightOverride;
+            box.ContentMarginTopOverride = source.ContentMarginTopOverride;
+            box.ContentMarginBottomOverride = source.ContentMarginBottomOverride;
+        }
+
+        panel.PanelOverride = box;
     }
 
     public void SetMainChat(bool setting)

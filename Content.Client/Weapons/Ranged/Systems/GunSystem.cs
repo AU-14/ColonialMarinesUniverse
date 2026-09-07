@@ -531,7 +531,9 @@ public sealed partial class GunSystem : SharedGunSystem
         var ent = Spawn(message.Prototype, coordinates);
         TransformSystem.SetWorldRotationNoLerp(ent, message.Angle);
 
-        if (_vehicleTurretMuzzleOffset.TryGetGunPose(gunUid, null, out var origin, out var rotation))
+        // CMU14: anchor UGV flashes to the independently aimed, elevated barrel sprite.
+        var droneFlash = _combatDroneTurret.AttachMuzzleFlash(ent, gunUid, message.Angle);
+        if (!droneFlash && _vehicleTurretMuzzleOffset.TryGetGunPose(gunUid, null, out var origin, out var rotation))
         {
             var renderedMap = TransformSystem.ToMapCoordinates(origin);
             var effectXform = Transform(ent);
@@ -545,7 +547,7 @@ public sealed partial class GunSystem : SharedGunSystem
             track.Offset = offset;
             track.RotationOffset = rotationOffset;
         }
-        else if (tracked != null)
+        else if (!droneFlash && tracked != null)
         {
             var track = EnsureComp<TrackUserComponent>(ent);
             track.User = tracked;

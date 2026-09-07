@@ -16,8 +16,8 @@
   - KillAllColonistRule
   - KillAllAbominationsRule
   minplayers: 0
-  spawnDelayMin: 1200
-  spawnDelayMax: 2400
+  spawnDelayMin: 600
+  spawnDelayMax: 1200
 
 - type: partySpawn
   id: abominationsParty

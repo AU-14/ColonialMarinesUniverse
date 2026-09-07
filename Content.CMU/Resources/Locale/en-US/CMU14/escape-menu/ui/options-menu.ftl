@@ -2,8 +2,13 @@ cmu-ui-options-examine-log-in-chat = Show detailed examine breakdown of characte
 cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat like in SS13
 
 cmu-ui-options-accessibility = Accessibility
+cmu-ui-options-chat-crt-haze = CRT haze over chat
+cmu-ui-options-chat-crt-haze-tooltip = Draw scanlines over chat. Turn this off for clear text while keeping CRT effects elsewhere.
 cmu-ui-options-auto-ingest = Automatically continue eating and drinking
 cmu-ui-options-auto-ingest-tooltip = After the first bite or sip, continue consuming the held item until it is empty or the action is interrupted.
+cmu-ui-options-voting = Voting
+cmu-ui-options-vote-ui-large = Larger vote popup
+cmu-ui-options-vote-ui-large-tooltip = Draws votes with wider options and taller rows. Easier to read on high resolutions and ultrawide displays.
 
 cmu-ui-options-general-construction = Construction
 cmu-ui-options-construction-mode = Construction Mode
@@ -30,3 +35,19 @@ cmu-ui-options-emote-slot-5 = Emote Slot 5 plays:
 cmu-ui-options-emote-slot-6 = Emote Slot 6 plays:
 cmu-ui-options-emote-slot-7 = Emote Slot 7 plays:
 cmu-ui-options-emote-slot-8 = Emote Slot 8 plays:
+
+cmu-ui-options-font = UI font
+cmu-ui-options-font-tooltip = Changes text throughout menus and chat. Comic Sans uses Comic Neue when Comic Sans MS is not installed.
+cmu-ui-font-theme = Theme default
+cmu-ui-font-original = Original (Noto Sans)
+cmu-ui-font-comic-sans = Comic Sans
+cmu-ui-font-roboto-mono = Roboto Mono
+cmu-ui-font-cozette = Cozette
+cmu-ui-font-noto-display = Noto Sans Display
+cmu-ui-options-menu-crt-effect = CRT texture on menus
+cmu-ui-options-crt-intensity = CRT effect strength
+cmu-ui-setup-title = Make yourself comfortable
+cmu-ui-setup-introduction = Welcome to CMU! Choose how your interface looks and how you read chat. You can change all of these later in Options → CMU.
+cmu-ui-setup-later = Remind me next time
+cmu-ui-setup-save = Save and continue
+cmu-ui-setup-open = Open UI setup

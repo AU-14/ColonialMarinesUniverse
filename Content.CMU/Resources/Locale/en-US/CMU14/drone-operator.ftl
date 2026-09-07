@@ -1,5 +1,5 @@
 cmu-job-name-govfordroneoperator = Drone Operator
-cmu-job-description-govfordroneoperator = Assemble, link, and remotely pilot a drone android or a tracked combat drone.
+cmu-job-description-govfordroneoperator = Assemble, link, and remotely pilot a drone android, gun UGV, or flamer UGV.
 cmu-job-prefix-govfordroneoperator = DRO
 
 cmu-species-name-drone-android = Drone Android
@@ -75,6 +75,7 @@ cmu-drone-control-ended-tablet-lost = The drone control session ends as the tabl
 cmu-drone-control-ended-drone-disabled = The drone control session ends as the drone is disabled.
 cmu-drone-control-ended-drone-lost = The drone control session ends as the drone is lost.
 cmu-drone-control-ended-operator-moved = The drone control session ends as your body is disturbed.
+cmu-drone-control-ended-operator-hurt = The drone control session ends as you are hurt.
 cmu-drone-control-ended-operator-disabled = The drone control session ends as your body is disabled.
 cmu-drone-control-ended-link-lost = The drone control session ends as the link is lost.
 cmu-drone-control-ended-leash = The drone control session ends as the drone leaves tablet range.

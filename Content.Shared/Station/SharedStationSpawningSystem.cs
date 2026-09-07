@@ -30,7 +30,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     /// <summary>
     ///     Equips the data from a `RoleLoadout` onto an entity.
     /// </summary>
-    public void EquipRoleLoadout(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto)
+    public void EquipRoleLoadout(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto, bool applyEffects = true)
     {
         // Order loadout selections by the order they appear on the prototype.
         foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)))
@@ -47,7 +47,31 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             }
         }
 
+        if (applyEffects)
+            ApplyRoleLoadoutEffects(entity, loadout, roleProto);
+
         EquipRoleName(entity, loadout, roleProto);
+    }
+
+    /// <summary>
+    /// Applies gameplay effects from selected loadouts in their configured group order.
+    /// This can be called separately when another spawn step must establish base state first.
+    /// </summary>
+    public void ApplyRoleLoadoutEffects(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto)
+    {
+        foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)))
+        {
+            foreach (var selected in group.Value)
+            {
+                if (!ProtoMan.TryIndex(selected.Prototype, out var loadoutProto))
+                    continue;
+
+                foreach (var effect in loadoutProto.Effects)
+                {
+                    effect.ApplyToEntity(entity, EntityManager, ProtoMan);
+                }
+            }
+        }
     }
 
     /// <summary>

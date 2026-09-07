@@ -1,21 +1,19 @@
 <controls:StaffHelpWindow
     xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Mentor"
-    Title="Admin and Mentor Help">
-    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
-        <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
-            <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
-                <BoxContainer Orientation="Vertical" Margin="8 6" SeparationOverride="5">
-                    <RichTextLabel Text="For reporting issues with another player to an admin, or asking about the rules" />
-                    <Button Name="AdminHelpButton" Access="Public" Text="Admin Help" />
-                </BoxContainer>
-            </PanelContainer>
-            <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
-                <BoxContainer Orientation="Vertical" Margin="8 6" SeparationOverride="5">
-                    <RichTextLabel Text="For asking questions about the game" />
-                    <Button Name="MentorHelpButton" Access="Public" Text="Mentor Help" />
-                </BoxContainer>
-            </PanelContainer>
-        </BoxContainer>
+    xmlns:ui="clr-namespace:Content.Client._CMU14.Interface"
+    Title="Admin and Mentor Help"
+    MinWidth="{x:Static ui:CmuPanelMetrics.ChoiceWindowWidth}">
+    <!-- Just a ground and a slot. The two choices are CmuChoiceCards built in the code-behind, which
+         is where their colours live - see CmuChoiceCard for why the look is not a style class.
+
+         Padding, spacing and minimum width come from CmuPanelMetrics, the same source the join-round
+         window reads. The two windows are the same kind of object - a short stack of choice cards -
+         and they should not be arriving at 620 and 640, or at their insets, independently. -->
+    <PanelContainer StyleClasses="CrtPanelFill" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Name="Choices" Access="Public" Orientation="Vertical" HorizontalExpand="True"
+                      Margin="{x:Static ui:CmuPanelMetrics.PanelPadding}"
+                      SeparationOverride="{x:Static ui:CmuPanelMetrics.RowSeparation}" />
     </PanelContainer>
 </controls:StaffHelpWindow>
