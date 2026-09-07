@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Whitelist;

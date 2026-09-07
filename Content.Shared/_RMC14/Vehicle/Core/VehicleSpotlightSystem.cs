@@ -152,7 +152,7 @@ public sealed partial class VehicleSpotlightSystem : EntitySystem
                 if (string.IsNullOrWhiteSpace(slot.Id))
                     continue;
 
-                if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) || !itemSlot.HasItem)
+                if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                     continue;
 
                 var item = itemSlot.Item!.Value;

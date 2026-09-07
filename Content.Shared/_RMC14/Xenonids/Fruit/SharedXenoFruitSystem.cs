@@ -17,6 +17,8 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
@@ -642,7 +644,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         if (!TryComp(user, out DamageableComponent? damage))
             return false;
 
-        if (!fruit.Comp.CanConsumeAtFull && damage.TotalDamage == 0)
+        if (!fruit.Comp.CanConsumeAtFull && _damageable.GetTotalDamage((user, damage)) == 0)
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-health-full"), user, user);
             return false;
@@ -714,7 +716,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         if (!TryComp(target, out DamageableComponent? damage))
             return false;
 
-        if (!fruit.Comp.CanConsumeAtFull && damage.TotalDamage == 0)
+        if (!fruit.Comp.CanConsumeAtFull && _damageable.GetTotalDamage((target, damage)) == 0)
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-pick-failed-health-full-target"), user, user);
             return false;
@@ -893,7 +895,7 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
     private void OnXenoFruitEffectSpeedShutdown(Entity<XenoFruitEffectSpeedComponent> xeno, ref ComponentShutdown ev)
     {
         _popup.PopupClient(Loc.GetString("rmc-xeno-fruit-effect-end"), xeno.Owner, xeno.Owner, PopupType.MediumCaution);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnXenoFruitSpeedRefresh(Entity<XenoFruitEffectSpeedComponent> xeno, ref RefreshMovementSpeedModifiersEvent args)

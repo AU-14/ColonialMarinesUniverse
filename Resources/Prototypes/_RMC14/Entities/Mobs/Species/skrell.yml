@@ -1,20 +1,18 @@
 - type: entity
   save: false
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceSkrell
+  - RMCBaseMobSpeciesOrganic
   id: RMCMobSkrell
   name: Urist R McFrog
   suffix: RMC14
   components:
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: Skrell
   - type: Speech
     speechVerb: Skrell
     allowedEmotes: [ 'RMCSkrellPeep', 'RMCSkrellAnger', 'RMCSkrellTrill', 'RMCSkrellWarble' ]
   - type: Vocal
-    sounds:
-      Male: RMCMaleSkrell
-      Unsexed: RMCMaleSkrell
-      Female: RMCFemaleSkrell
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:
@@ -26,6 +24,6 @@
     name: cm-chatsan-replacement-skrell
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearanceSkrell
   id: MobSkrellDummy
   categories: [ HideSpawnMenu ]

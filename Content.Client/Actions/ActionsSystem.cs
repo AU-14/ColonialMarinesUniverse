@@ -4,10 +4,10 @@ using Content.Client._RMC14.Movement;
 using Content.Shared._RMC14.Actions;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
-using Content.Shared.Charges.Systems;
 using Content.Shared.Mapping;
 using Content.Shared.Maps;
 using JetBrains.Annotations;
+using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameStates;
@@ -19,7 +19,6 @@ using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
-using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using YamlDotNet.RepresentationModel;
 
@@ -30,11 +29,11 @@ namespace Content.Client.Actions
     {
         public delegate void OnActionReplaced(EntityUid actionId);
 
-        [Dependency] private SharedChargesSystem _sharedCharges = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
-        [Dependency] private IPrototypeManager _proto = default!;
         [Dependency] private IResourceManager _resources = default!;
         [Dependency] private MetaDataSystem _metaData = default!;
+        [Dependency] private ISerializationManager _serialization = default!;
+        [Dependency] private SpriteSystem _sprite = default!;
 
         public event Action<EntityUid>? OnActionAdded;
         public event Action<EntityUid>? OnActionRemoved;
@@ -74,8 +73,6 @@ namespace Content.Client.Actions
 
         public override void UpdateAction(Entity<ActionComponent> ent)
         {
-            // TODO: Decouple this.
-            ent.Comp.IconColor = _sharedCharges.GetCurrentCharges(ent.Owner) == 0 ? ent.Comp.DisabledIconColor : ent.Comp.OriginalIconColor;
             base.UpdateAction(ent);
             if (_playerManager.LocalEntity != ent.Comp.AttachedEntity)
                 return;
@@ -159,6 +156,16 @@ namespace Content.Client.Actions
             ActionsUpdated?.Invoke();
         }
 
+        /// <summary>
+        /// True if this action has a distinct sprite layer to show while toggled,
+        /// rather than just highlighting whatever slot displays it.
+        /// </summary>
+        public bool HasToggleIcon(EntityUid? actionId)
+        {
+            return TryComp<SpriteComponent>(actionId, out var sprite)
+                && _sprite.LayerExists((actionId.Value, sprite), ActionVisuals.IconToggled);
+        }
+
         public IEnumerable<Entity<ActionComponent>> GetClientActions()
         {
             if (_playerManager.LocalEntity is not { } user)
@@ -172,7 +179,7 @@ namespace Content.Client.Actions
             LinkAllActions(component);
         }
 
-        private void OnPlayerDetached(EntityUid uid, ActionsComponent component, LocalPlayerDetachedEvent? args = null)
+        private void OnPlayerDetached(EntityUid uid, ActionsComponent component, LocalPlayerDetachedEvent args)
         {
             UnlinkAllActions();
         }
@@ -261,12 +268,12 @@ namespace Content.Client.Actions
                 else if (map.TryGet<ValueDataNode>("entity", out var entityNode))
                 {
                     var id = new EntProtoId(entityNode.Value);
-                    var proto = _proto.Index(id);
+                    var proto = ProtoMan.Index(id);
                     actionId = Spawn(MappingEntityAction);
                     SetIcon(actionId, new SpriteSpecifier.EntityPrototype(id));
                     SetEvent(actionId, new StartPlacementActionEvent()
                     {
-                        PlacementOption = "SnapgridCenter",
+                        PlacementOption = proto.PlacementMode,
                         EntityType = id
                     });
                     _metaData.SetEntityName(actionId, proto.Name);
@@ -274,7 +281,7 @@ namespace Content.Client.Actions
                 else if (map.TryGet<ValueDataNode>("tileId", out var tileNode))
                 {
                     var id = new ProtoId<ContentTileDefinition>(tileNode.Value);
-                    var proto = _proto.Index(id);
+                    var proto = ProtoMan.Index(id);
                     actionId = Spawn(MappingEntityAction);
                     if (proto.Sprite is {} sprite)
                         SetIcon(actionId, new SpriteSpecifier.Texture(sprite));
@@ -291,8 +298,27 @@ namespace Content.Client.Actions
                     continue;
                 }
 
+                if (assignmentNode is SequenceDataNode sequenceAssignments)
+                {
+                    try
+                    {
+                        var nodeAssignments = _serialization.Read<List<(byte Hotbar, byte Slot)>>(sequenceAssignments, notNullableOverride: true);
+
+                        foreach (var index in nodeAssignments)
+                        {
+                            assignments.Add(new SlotAssignment(index.Hotbar, index.Slot, actionId));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Failed to parse action assignments: {ex}");
+                    }
+                }
+
                 AddActionDirect((user, actions), actionId);
             }
+
+            AssignSlot?.Invoke(assignments);
         }
 
         private void OnWorldTargetAttempt(Entity<WorldTargetActionComponent> ent, ref ActionTargetAttemptEvent args)
@@ -314,9 +340,10 @@ namespace Content.Client.Actions
             // this is the actual entity-world targeting magic
             EntityUid? targetEnt = null;
             if (TryComp<EntityTargetActionComponent>(ent, out var entity) &&
-                ValidateEntityTarget(user, args.Input.EntityUid, (uid, entity)))
+                args.Input.EntityUid is { Valid: true } entityUid &&
+                ValidateEntityTarget(user, entityUid, (uid, entity)))
             {
-                targetEnt = args.Input.EntityUid;
+                targetEnt = entityUid;
             }
 
             if (action.ClientExclusive)
@@ -341,6 +368,14 @@ namespace Content.Client.Actions
             if (args.Handled)
                 return;
 
+            args.Handled = true;
+
+            if (args.Input.EntityUid is not { Valid: true } entity)
+            {
+                RaisePredictiveEvent(new RMCMissedTargetActionEvent(GetNetEntity(ent)));
+                return;
+            }
+
             // Let world-target actions handle entity-world targeting, including floor clicks.
             var (uid, comp) = ent;
             if (comp.Event is not {} ev)
@@ -348,15 +383,6 @@ namespace Content.Client.Actions
                 DebugTools.Assert(HasComp<WorldTargetActionComponent>(ent), $"Action {ToPrettyString(ent)} requires WorldTargetActionComponent for entity-world targeting");
                 return;
             }
-
-            if (args.Input.EntityUid is not { Valid: true } entity)
-            {
-                args.Handled = true;
-                RaisePredictiveEvent(new RMCMissedTargetActionEvent(GetNetEntity(ent))); // RMC14
-                return;
-            }
-
-            args.Handled = true;
 
             var action = args.Action;
             var user = args.User;

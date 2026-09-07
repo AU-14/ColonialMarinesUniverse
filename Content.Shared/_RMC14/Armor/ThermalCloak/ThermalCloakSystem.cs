@@ -7,7 +7,6 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
-using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
@@ -15,6 +14,7 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
+using Content.Shared.Trigger.Systems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
@@ -34,7 +34,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoidSystem = default!;
+    [Dependency] private SharedHideableHumanoidLayersSystem _humanoidLayers = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -57,7 +57,8 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         SubscribeLocalEvent<EntityActiveInvisibleComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
 
         SubscribeLocalEvent<GunComponent, AttemptShootEvent>(OnAttemptShoot);
-        SubscribeLocalEvent<CancelUseWithCloakComponent, UseInHandEvent>(OnTimerUse, before: [typeof(SharedTriggerSystem)]);
+        SubscribeLocalEvent<CancelUseWithCloakComponent, UseInHandEvent>(OnTimerUse,
+            before: [typeof(TriggerSystem), typeof(TriggerOnIgniterUseSystem)]);
         SubscribeLocalEvent<UncloakOnHitComponent, ProjectileHitEvent>(OnAcidProjectile);
     }
 
@@ -120,10 +121,10 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (!_inventory.InSlotWithFlags((ent, null, null), SlotFlags.BACK))
             return;
 
-        var comp = EnsureComp<EntityTurnInvisibleComponent>(args.Equipee);
+        var comp = EnsureComp<EntityTurnInvisibleComponent>(args.EquipTarget);
         comp.RestrictWeapons = ent.Comp.RestrictWeapons;
         comp.UncloakWeaponLock = ent.Comp.UncloakWeaponLock;
-        Dirty(args.Equipee, comp);
+        Dirty(args.EquipTarget, comp);
     }
 
     private void OnUnequipped(Entity<ThermalCloakComponent> ent, ref GotUnequippedEvent args)
@@ -134,8 +135,8 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (_inventory.InSlotWithFlags((ent, null, null), SlotFlags.BACK))
             return;
 
-        SetInvisibility(ent, args.Equipee, false, false);
-        RemCompDeferred<EntityTurnInvisibleComponent>(args.Equipee);
+        SetInvisibility(ent, args.EquipTarget, false, false);
+        RemCompDeferred<EntityTurnInvisibleComponent>(args.EquipTarget);
     }
 
     public void SetInvisibility(Entity<ThermalCloakComponent> ent, EntityUid user, bool enabling, bool forced)
@@ -312,7 +313,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
     {
         foreach (HumanoidVisualLayers layer in layers)
         {
-            _humanoidSystem.SetLayerVisibility(equipee, layer, showLayers);
+            _humanoidLayers.SetPermanentLayerOcclusion(equipee, layer, !showLayers);
         }
     }
 

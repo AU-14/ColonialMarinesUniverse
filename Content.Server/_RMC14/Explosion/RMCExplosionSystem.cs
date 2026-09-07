@@ -14,11 +14,15 @@ using Content.Shared.Examine;
 using Content.Shared.Humanoid;
 using Content.Shared.Popups;
 using Content.Shared.Sticky;
+using Content.Shared.Trigger.Components;
 using Robust.Server.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using SharedActiveTimerTriggerEvent = Content.Shared.Trigger.ActiveTimerTriggerEvent;
+using SharedTriggerEvent = Content.Shared.Trigger.TriggerEvent;
+using SharedTriggerSystem = Content.Shared.Trigger.Systems.TriggerSystem;
 
 namespace Content.Server._RMC14.Explosion;
 
@@ -33,7 +37,7 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private SharedTriggerSystem _trigger = default!;
 
     private readonly Dictionary<string, ProtoId<DecalPrototype>[]> _scorchDecalsByTag = new();
 
@@ -41,10 +45,10 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<TriggerEvent>(OnTrigger);
-        SubscribeLocalEvent<ActiveTimerTriggerEvent>(OnActiveTimerTrigger);
+        SubscribeLocalEvent<MetaDataComponent, SharedTriggerEvent>(OnTrigger);
+        SubscribeLocalEvent<MetaDataComponent, SharedActiveTimerTriggerEvent>(OnActiveTimerTrigger);
 
-        SubscribeLocalEvent<CMVocalizeTriggerComponent, ActiveTimerTriggerEvent>(OnVocalizeTriggered);
+        SubscribeLocalEvent<CMVocalizeTriggerComponent, SharedActiveTimerTriggerEvent>(OnVocalizeTriggered);
 
         SubscribeLocalEvent<RMCExplosiveDeleteComponent, EntityStuckEvent>(OnExplosiveDeleteWallsStuck);
 
@@ -56,20 +60,25 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
         CacheDecals("RMCScorchSmall");
     }
 
-    private void OnActiveTimerTrigger(ref ActiveTimerTriggerEvent ev)
+    private void OnActiveTimerTrigger(Entity<MetaDataComponent> ent, ref SharedActiveTimerTriggerEvent ev)
     {
         var rmcEv = new RMCActiveTimerTriggerEvent();
-        RaiseLocalEvent(ev.Triggered, ref rmcEv);
+        RaiseLocalEvent(ent.Owner, ref rmcEv);
     }
 
-    private void OnTrigger(TriggerEvent ev)
+    private void OnTrigger(Entity<MetaDataComponent> ent, ref SharedTriggerEvent ev)
     {
-        var rmcEv = new RMCTriggerEvent(ev.User, ev.Handled);
-        RaiseLocalEvent(ev.Triggered, ref rmcEv);
-        ev.Handled = rmcEv.Handled;
+        if (ev.Key is not null && ev.Key != SharedTriggerSystem.DefaultTriggerKey)
+            return;
+
+        // Legacy RMC effects form their own handled chain. An unrelated Shared trigger effect that
+        // ran first must not suppress them; only propagate the RMC result back into the Shared event.
+        var rmcEv = new RMCTriggerEvent(ev.User, false);
+        RaiseLocalEvent(ent.Owner, ref rmcEv);
+        ev.Handled |= rmcEv.Handled;
     }
 
-    private void OnVocalizeTriggered(Entity<CMVocalizeTriggerComponent> ent, ref ActiveTimerTriggerEvent args)
+    private void OnVocalizeTriggered(Entity<CMVocalizeTriggerComponent> ent, ref SharedActiveTimerTriggerEvent args)
     {
         SpawnAttachedTo(ent.Comp.Effect, ent.Owner.ToCoordinates());
 
@@ -82,7 +91,7 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
         popup = Loc.GetString(ent.Comp.OthersPopup, ("user", user), ("used", ent.Owner));
         _popup.PopupEntity(popup, user, Filter.PvsExcept(user), true, ent.Comp.PopupType);
 
-        var gender = CompOrNull<HumanoidAppearanceComponent>(user)?.Sex ?? Sex.Unsexed;
+        var gender = CompOrNull<HumanoidProfileComponent>(user)?.Sex ?? Sex.Unsexed;
         if (!ent.Comp.Sounds.TryGetValue(gender, out var sound))
             return;
 

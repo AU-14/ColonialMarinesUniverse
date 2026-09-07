@@ -18,7 +18,7 @@ using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Robust.Client.GameObjects;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
-using Content.Shared._CMU14.Xenomorphs.Larva;
+using Content.Shared.CMU14.Xenomorphs.Larva;
 
 namespace Content.Client._RMC14.Xenonids;
 
@@ -35,6 +35,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
 
         SubscribeLocalEvent<XenoComponent, KnockedDownEvent>(OnXenoKnockedDown);
         SubscribeLocalEvent<XenoComponent, StatusEffectEndedEvent>(OnXenoStatusEffectEnded);
+        SubscribeLocalEvent<KnockedDownComponent, ComponentStartup>(OnKnockedDownStartup);
         SubscribeLocalEvent<XenoComponent, GetDrawDepthEvent>(OnXenoGetDrawDepth);
 
         _animateQuery = GetEntityQuery<XenoAnimateMovementComponent>();
@@ -48,6 +49,12 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
     private void OnXenoStatusEffectEnded(Entity<XenoComponent> xeno, ref StatusEffectEndedEvent args)
     {
         UpdateSprite(xeno.Owner);
+    }
+
+    private void OnKnockedDownStartup(Entity<KnockedDownComponent> ent, ref ComponentStartup args)
+    {
+        if (HasComp<XenoComponent>(ent))
+            UpdateSprite(ent.Owner);
     }
 
     private void OnXenoGetDrawDepth(Entity<XenoComponent> ent, ref GetDrawDepthEvent args)
@@ -77,7 +84,7 @@ public sealed partial class XenoVisualizerSystem : VisualizerSystem<XenoComponen
             state = mobState.CurrentState;
 
         Resolve(entity, ref input, ref thrown, ref leaping, ref knocked, false);
-        if (knocked != null && state != MobState.Dead)
+        if (knocked is { LifeStage: <= ComponentLifeStage.Running } && state != MobState.Dead)
             state = MobState.Critical;
 
         if (sprite is not { BaseRSI: { } rsi } ||

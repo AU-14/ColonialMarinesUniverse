@@ -11,15 +11,15 @@ using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.Fax;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Ghost;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Maps;
 using Content.Server.Mind;
+using Content.Server.Nutrition.EntitySystems;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
@@ -69,9 +69,9 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Actions;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.CCVar;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
@@ -79,6 +79,7 @@ using Content.Shared.Destructible;
 using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -90,7 +91,8 @@ using Content.Shared.Popups;
 using Content.Shared.Preferences;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Roles;
-using Content.Shared.StatusEffect;
+using Content.Shared.Roles.Components;
+using Content.Shared.Station.Components;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
@@ -125,7 +127,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private FaxSystem _fax = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
     [Dependency] private XenoHiveSystem _hive = default!;
-    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private ServerSatiationSystem _satiation = default!;
     [Dependency] private ItemCamouflageSystem _camo = default!;
     [Dependency] private LarvaQueueSystem _larvaQueue = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
@@ -133,7 +135,6 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private IGameMapManager _gameMap = default!; // CMU14: warship name for ARES announcements
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private PlayTimeTrackingSystem _playTime = default!;
     [Dependency] private IServerPreferencesManager _prefsManager = default!;
@@ -169,9 +170,6 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private ISerializationManager _serialization = default!;
     [Dependency] private XenoMaturingSystem _maturing = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
-    [Dependency] private AuRoundSystem _auRound = default!; // CMU14
-
-    private const string DistressSignalPreset = "DistressSignal"; // CMU14
 
     private readonly HashSet<string> _operationNames = new();
     private readonly HashSet<string> _operationPrefixes = new();
@@ -213,10 +211,10 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [ViewVariables]
     private RMCPlanet? SelectedPlanetMap { get; set; }
 
-    private string? _cmuPlanetMapName; // CMU14
+    private string? _cmuPlanetMapName;
 
     [ViewVariables]
-    public string? SelectedPlanetMapName => SelectedPlanetMap?.Proto.Name ?? _cmuPlanetMapName; // CMU14
+    public string? SelectedPlanetMapName => SelectedPlanetMap?.Proto.Name ?? _cmuPlanetMapName;
 
     [ViewVariables]
     public string? OperationName { get; private set; }
@@ -784,8 +782,13 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     EnsureComp<AlmayerComponent>(xform.GridUid.Value);
                 }
 
-                if (comp.SetHunger && TryComp(ev.SpawnResult, out HungerComponent? hunger))
-                    _hunger.SetHunger(ev.SpawnResult.Value, 50.0f, hunger);
+                if (comp.SetHunger && TryComp(ev.SpawnResult, out SatiationComponent? satiation))
+                {
+                    _satiation.SetValue(
+                        (ev.SpawnResult.Value, satiation),
+                        SatiationSystem.Hunger,
+                        50.0f);
+                }
             }
 
             return;
@@ -821,7 +824,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     {
 
         _config.SetCVar(CCVars.GameDisallowLateJoins, false);
-        _cmuPlanetMapName = null; // CMU14
+        _cmuPlanetMapName = null;
 
         if (!_autoBalance)
             return;
@@ -862,13 +865,6 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         ev.Handled = TryEndActiveDistressRound(
             DistressSignalRuleResult.MinorXenoVictory,
             "cmu-distress-signal-minorxenovictory-no-hijack");
-
-        if (ev.Handled || // CMU14
-            (GameTicker.CurrentPreset?.ID ?? GameTicker.Preset?.ID ?? _auRound.SelectedPreset?.ID) != DistressSignalPreset)
-            return;
-
-        GameTicker.EndRound(Loc.GetString("cmu-distress-signal-minorxenovictory-no-hijack")); // CMU14
-        ev.Handled = true;
     }
 
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
@@ -991,7 +987,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     !TryComp<MindComponent>(mindContainer.Mind, out var mind))
                     continue;
 
-                foreach (var roleId in mind.MindRoles)
+                foreach (var roleId in mind.MindRoleContainer.ContainedEntities)
                 {
                     if (!TryComp<MindRoleComponent>(roleId, out var mindRole))
                         continue;
@@ -1695,8 +1691,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 component.StartARESAnnouncements &&
                 SelectedPlanetMap.Value.Comp.Announcement is { } announcement)
             {
-                _marineAnnounce.AnnounceARESStaging(default, announcement, announcement: "rmc-announcement-ares-map",
-                    ship: GetWarshipName(_gameMap.GetSelectedMap())); // CMU14
+                _marineAnnounce.AnnounceARESStaging(default, announcement, announcement: "rmc-announcement-ares-map");
             }
         }
 
@@ -1754,16 +1749,12 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         _usingCustomOperationName = true;
     }
 
-    // CMU14 method: rule-less presets (e.g. CMU DistressSignal) feed planet/operation names in for
-    // the tactical map and marine announcements; reuses the classic generator, honoring admin-custom names
     public void SetCmuRoundInfo(string? planetMapName)
     {
         _cmuPlanetMapName = planetMapName;
         OperationName = GetRandomOperationName();
     }
 
-    // CMU14 method: display name of a warship gameMap, from its station's mapNameTemplate
-    // (what StationNameSetup names the ship), falling back to the prototype's mapName
     public string? GetWarshipName(GameMapPrototype? map)
     {
         if (map == null)
@@ -2152,10 +2143,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
         foreach (var child in toKnock)
         {
-            if (!TryComp<StatusEffectsComponent>(child, out var status))
-                continue;
-
-            _stuns.TryParalyze(child, _hijackStunTime, true, status);
+            _stuns.TryParalyze(child, _hijackStunTime, true);
         }
     }
 

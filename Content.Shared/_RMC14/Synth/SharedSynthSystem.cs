@@ -11,6 +11,7 @@ using Content.Shared.Bed.Sleep;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -351,7 +352,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
             var othersMsg = Loc.GetString("rmc-synth-repair-brute-finish", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
             _popup.PopupPredicted(selfMsg, othersMsg, user, user);
         }
-        else if (HasComp<RMCCableCoilComponent>(args.Used) && _stack.Use(args.Used.Value, 1))
+        else if (HasComp<RMCCableCoilComponent>(args.Used) && _stack.TryUse(args.Used.Value, 1))
         {
             if (synth.Comp.CableCoilDamageToRepair != null)
                 _damageable.TryChangeDamage(synth, synth.Comp.CableCoilDamageToRepair, true, false, origin: args.User);
@@ -393,10 +394,11 @@ public abstract partial class SharedSynthSystem : EntitySystem
         if (!TryComp<DamageableComponent>(synth, out var damageable))
             return false;
 
-        if (damageable.Damage.Empty)
+        var currentDamage = _damageable.GetAllDamage((synth, damageable));
+        if (currentDamage.Empty)
             return false;
 
-        var damage = damageable.Damage.GetDamagePerGroup(_prototypes);
+        var damage = currentDamage.GetDamagePerGroup(_prototypes);
         var groupDmg = damage.GetValueOrDefault(group);
 
         if (groupDmg <= FixedPoint2.Zero)

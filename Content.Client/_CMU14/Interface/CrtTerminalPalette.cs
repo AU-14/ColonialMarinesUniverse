@@ -56,14 +56,24 @@ public static class CrtTerminalPalette
 
     private static bool Crt => StyleNano.CrtUiEnabled;
 
+    private static Color Tint(string green)
+    {
+        var original = Color.ToHsv(Color.FromHex(green));
+        var defaultAccent = Color.ToHsv(Color.FromHex("#46FF8E"));
+        var accent = Color.ToHsv(StyleNano.CrtGreen);
+        var hue = (original.X + accent.X - defaultAccent.X + 1f) % 1f;
+        var saturation = Math.Clamp(original.Y * accent.Y / defaultAccent.Y, 0f, 1f);
+        return Color.FromHsv(new Vector4(hue, saturation, original.Z, 1f));
+    }
+
     /// <summary>Behind everything. Not pure black - a phosphor tube never is.</summary>
-    public static Color Void => Crt ? Color.FromHex("#040705") : Color.FromHex("#0E0E10");
+    public static Color Void => Crt ? Tint("#040705") : Color.FromHex("#0E0E10");
 
     /// <summary>Window body.</summary>
-    public static Color Surface0 => Crt ? Color.FromHex("#071009") : Color.FromHex("#1A1A1D");
+    public static Color Surface0 => Crt ? Tint("#071009") : Color.FromHex("#1A1A1D");
 
     /// <summary>A section or group within the body.</summary>
-    public static Color Surface1 => Crt ? Color.FromHex("#0D1A12") : Color.FromHex("#212126");
+    public static Color Surface1 => Crt ? Tint("#0D1A12") : Color.FromHex("#212126");
 
     /// <summary>
     ///     One row inside a section, and the resting fill of a button.
@@ -74,10 +84,10 @@ public static class CrtTerminalPalette
     ///     value and every button on the lobby vanished into the panel behind it - same fill, no
     ///     border, nothing to see. Distinct fills are half the fix; the border below is the rest.
     /// </remarks>
-    public static Color Surface2 => Crt ? Color.FromHex("#152F20") : Color.FromHex("#343440");
+    public static Color Surface2 => Crt ? Tint("#152F20") : Color.FromHex("#343440");
 
     /// <summary>Header and status strips; hover.</summary>
-    public static Color Surface3 => Crt ? Color.FromHex("#204833") : Color.FromHex("#42424F");
+    public static Color Surface3 => Crt ? Tint("#204833") : Color.FromHex("#42424F");
 
     /// <summary>
     ///     Selected. The ladder needed a fourth step: with only three, hover and selected both landed
@@ -85,26 +95,26 @@ public static class CrtTerminalPalette
     ///     one. Off-theme this is NanoUI's own button colour, which is what a pressed or selected
     ///     control looked like before any of this existed.
     /// </summary>
-    public static Color Surface4 => Crt ? Color.FromHex("#2E6241") : Color.FromHex("#525266");
+    public static Color Surface4 => Crt ? Tint("#2E6241") : Color.FromHex("#525266");
 
     /// <summary>Hairline, for the few places a rule still says something a fill cannot.</summary>
-    public static Color Line => Crt ? Color.FromHex("#2A5238") : Color.FromHex("#4A4A57");
+    public static Color Line => Crt ? Tint("#2A5238") : Color.FromHex("#4A4A57");
 
     /// <summary>Field labels and other secondary text.</summary>
-    public static Color TextDim => Crt ? Color.FromHex("#4E9C6B") : Color.FromHex("#9A9A9A");
+    public static Color TextDim => Crt ? Tint("#4E9C6B") : Color.FromHex("#9A9A9A");
 
     /// <summary>Body text.</summary>
-    public static Color Text => Crt ? Color.FromHex("#8FE9AE") : Color.FromHex("#E0E0E0");
+    public static Color Text => Crt ? Tint("#8FE9AE") : Color.FromHex("#E0E0E0");
 
     /// <summary>Headings and values worth reading first.</summary>
-    public static Color TextBright => Crt ? Color.FromHex("#C9FFDC") : Color.White;
+    public static Color TextBright => Crt ? Tint("#C9FFDC") : Color.White;
 
     /// <summary>
     ///     The phosphor itself. Bars, pips, active states. Off-theme it is NanoGold, matching
     ///     <see cref="StyleNano.CrtGreen"/>, which has always fallen back to the same colour - so
     ///     the two ways of asking for "the accent" agree in both modes.
     /// </summary>
-    public static Color Accent => Crt ? Color.FromHex("#46FF8E") : StyleNano.NanoGold;
+    public static Color Accent => StyleNano.CrtGreen;
 
     public static Color Caution => Crt ? Color.FromHex("#FFB454") : StyleNano.ConcerningOrangeFore;
 

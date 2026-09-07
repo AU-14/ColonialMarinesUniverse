@@ -4,35 +4,35 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._RMC14.Xenonids.Parasite;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
 [Access(typeof(SharedXenoParasiteSystem))]
 public sealed partial class XenoParasiteComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan ManualAttachDelay = TimeSpan.FromSeconds(2);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan SelfAttachDelay = TimeSpan.FromSeconds(1);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan ParalyzeTime = TimeSpan.FromMinutes(1.5);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float InfectRange = 1.5f;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? InfectedVictim;
 
     /// <summary>
     ///     How long it takes for the parasite to fall off the victim's mask, finishing the infecting process.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan FallOffDelay = TimeSpan.FromSeconds(15);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan? FallOffAt;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool FellOff;
 
     /// <summary>
@@ -50,12 +50,9 @@ public sealed partial class XenoParasiteComponent : Component
     /// </summary>
     public bool InfectorLarvaClaimPending;
 
-    [AutoNetworkedField]
     public int BaseTemporaryCollisionMask;
 
-    [AutoNetworkedField]
     public bool LeapCollisionActive;
 
-    [AutoNetworkedField]
     public bool ThrownCollisionActive;
 }

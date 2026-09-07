@@ -14,7 +14,7 @@ public sealed partial class RMCRevivableComponent : Component
     public TimeSpan UnrevivableDelay = TimeSpan.FromMinutes(5);
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
-    public TimeSpan UnrevivableAt = TimeSpan.Zero;
+    public TimeSpan? UnrevivableAt;
 
     [DataField, AutoNetworkedField]
     public LocId UnrevivableReasonMessage = "rmc-defibrillator-unrevivable";

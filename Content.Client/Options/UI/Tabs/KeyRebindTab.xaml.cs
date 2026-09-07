@@ -1,7 +1,7 @@
 using System.Numerics;
 using Content.Client._CMU14.UserInterface.Options;
 using Content.Client.Stylesheets;
-using Content.Shared._CMU14.Input;
+using Content.Shared.CMU14.Input;
 using Content.Shared._RMC14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Chat.Prototypes;
@@ -17,7 +17,6 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.Input;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -116,11 +115,11 @@ namespace Content.Client.Options.UI.Tabs
             _deferCommands.Add(_inputManager.SaveToUserData);
         }
 
-        // Emotes usable by a bare Human, for the emote-keybind pickers below. Spawns a throwaway
-        // nullspace copy of the actual human mob (not the lightweight character-preview dummy,
+        // Emotes usable by a bare Human, for the emote-keybind pickers below. Creates a throwaway
+        // uninitialized copy of the actual human mob (not the lightweight character-preview dummy,
         // which is missing Hands/Vocal/Speech/etc. and would fail almost every emote whitelist)
-        // so the same whitelist/blacklist checks the emotes wheel uses can run without requiring
-        // the local player to actually be playing a human right now.
+        // so the same whitelist/blacklist checks the emotes wheel uses can run without triggering
+        // normal mob startup or shutdown side effects.
         private List<EmotePrototype> GetHumanAvailableEmotes()
         {
             var result = new List<EmotePrototype>();
@@ -131,7 +130,7 @@ namespace Content.Client.Options.UI.Tabs
                     return result;
 
                 var whitelistSystem = _entityManager.System<EntityWhitelistSystem>();
-                var dummy = _entityManager.SpawnEntity(HumanMobPrototype, MapCoordinates.Nullspace);
+                var dummy = _entityManager.CreateEntityUninitialized(HumanMobPrototype);
 
                 try
                 {
@@ -145,7 +144,7 @@ namespace Content.Client.Options.UI.Tabs
                         if (!whitelistSystem.IsWhitelistPassOrNull(emote.Whitelist, dummy))
                             continue;
 
-                        if (whitelistSystem.IsBlacklistPass(emote.Blacklist, dummy))
+                        if (whitelistSystem.IsWhitelistPass(emote.Blacklist, dummy))
                             continue;
 
                         if (!emote.Available && (speech == null || !speech.AllowedEmotes.Contains(emote.ID)))
@@ -241,6 +240,20 @@ namespace Content.Client.Options.UI.Tabs
                 _allControls.Add(newCheckBox);
             }
 
+            void AddToggleCvarCheckBox(string checkBoxName, CVarDef<bool> cvar)
+            {
+                var newCheckBox = new CheckBox { Text = Loc.GetString(checkBoxName) };
+                newCheckBox.Pressed = _cfg.GetCVar(cvar);
+                newCheckBox.OnToggled += args =>
+                {
+                    _cfg.SetCVar(cvar, args.Pressed);
+                    _cfg.SaveToFile();
+                };
+
+                AddTo(newCheckBox);
+            }
+
+            AddHeader("ui-options-header-rmc");
             AddButton(CMKeyFunctions.RMCActivateAttachableBarrel);
             AddButton(CMKeyFunctions.RMCActivateAttachableRail);
             AddButton(CMKeyFunctions.RMCActivateAttachableStock);
@@ -352,7 +365,9 @@ namespace Content.Client.Options.UI.Tabs
             AddEmoteSlot("cmu-ui-options-emote-slot-8", CCVars.EmoteSlot8);
 
             AddHeader("ui-options-header-general");
-            AddCheckBox("ui-options-hotkey-keymap", _cfg.GetCVar(CVars.DisplayUSQWERTYHotkeys), HandleToggleUSQWERTYCheckbox);
+            AddToggleCvarCheckBox("ui-options-hotkey-keymap", CVars.DisplayUSQWERTYHotkeys);
+            AddToggleCvarCheckBox("ui-options-hold-to-attack-melee", CCVars.ControlHoldToAttackMelee);
+            AddToggleCvarCheckBox("ui-options-hold-to-attack-ranged", CCVars.ControlHoldToAttackRanged);
 
             AddHeader("ui-options-header-movement");
             AddButton(EngineKeyFunctions.MoveUp);
@@ -362,6 +377,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.Walk);
             AddCheckBox("ui-options-hotkey-toggle-walk", _cfg.GetCVar(CCVars.ToggleWalk), HandleToggleWalk);
             InitToggleWalk();
+            AddButton(ContentKeyFunctions.ToggleKnockdown);
 
             AddHeader("ui-options-header-camera");
             AddButton(EngineKeyFunctions.CameraRotateLeft);
@@ -473,6 +489,8 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.ShowDebugMonitors);
             AddButton(EngineKeyFunctions.HideUI);
             AddButton(ContentKeyFunctions.InspectEntity);
+            AddButton(ContentKeyFunctions.InspectServerComponent);
+            AddButton(ContentKeyFunctions.InspectClientComponent);
 
             AddHeader("ui-options-header-text-cursor");
             AddButton(EngineKeyFunctions.TextCursorLeft);
@@ -947,9 +965,9 @@ namespace Content.Client.Options.UI.Tabs
                     HorizontalAlignment = HAlignment.Left
                 };
 
-                BindButton1 = new BindButton(parent, this, StyleBase.ButtonOpenRight);
-                BindButton2 = new BindButton(parent, this, StyleBase.ButtonOpenLeft);
-                ResetButton = new Button { Text = Loc.GetString("ui-options-bind-reset"), StyleClasses = { StyleBase.ButtonCaution } };
+                BindButton1 = new BindButton(parent, this, StyleClass.ButtonOpenRight);
+                BindButton2 = new BindButton(parent, this, StyleClass.ButtonOpenLeft);
+                ResetButton = new Button { Text = Loc.GetString("ui-options-bind-reset"), StyleClasses = { StyleClass.Negative } };
 
                 var hBox = new BoxContainer
                 {

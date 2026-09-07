@@ -1865,7 +1865,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
 
             var state = string.Empty;
             var usesOverlay = false;
-            if (_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) && itemSlot.HasItem)
+            if (_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) && itemSlot.HasItem)
             {
                 var item = itemSlot.Item!.Value;
                 state = ResolveVisualState(item, out usesOverlay);
@@ -1904,7 +1904,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) || !itemSlot.HasItem)
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                 continue;
 
             var item = itemSlot.Item!.Value;
@@ -1925,7 +1925,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                 if (string.IsNullOrWhiteSpace(turretSlot.Id))
                     continue;
 
-                if (!_itemSlots.TryGetSlot(item, turretSlot.Id, out var turretItemSlot, attachedItemSlots) ||
+                if (!_itemSlots.TryGetSlot((item, attachedItemSlots), turretSlot.Id, out var turretItemSlot) ||
                     !turretItemSlot.HasItem)
                 {
                     continue;
@@ -2020,7 +2020,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                 if (string.IsNullOrWhiteSpace(slot.Id))
                     continue;
 
-                if (!_itemSlots.TryGetSlot(item, slot.Id, out var itemSlot, attachedItemSlots) || !itemSlot.HasItem)
+                if (!_itemSlots.TryGetSlot((item, attachedItemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                     continue;
 
                 var child = itemSlot.Item!.Value;

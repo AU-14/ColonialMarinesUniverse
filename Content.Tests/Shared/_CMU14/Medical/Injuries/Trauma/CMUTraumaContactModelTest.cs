@@ -1,10 +1,10 @@
-using Content.Shared._CMU14.Medical.Injuries.Trauma;
+using Content.Shared.CMU14.Medical.Injuries.Trauma;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using NUnit.Framework;
 
-namespace Content.Tests.Shared._CMU14.Medical.Injuries.Trauma;
+namespace Content.Tests.Shared.CMU14.Medical.Injuries.Trauma;
 
 [TestFixture, TestOf(typeof(CMUTraumaContactModel))]
 public sealed class CMUTraumaContactModelTest

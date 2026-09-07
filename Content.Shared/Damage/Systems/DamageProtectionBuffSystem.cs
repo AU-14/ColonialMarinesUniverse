@@ -1,8 +1,8 @@
-﻿using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Components;
 
 namespace Content.Shared.Damage.Systems;
 
-public sealed class DamageProtectionBuffSystem : EntitySystem
+public sealed partial class DamageProtectionBuffSystem : EntitySystem
 {
     public override void Initialize()
     {
@@ -11,9 +11,9 @@ public sealed class DamageProtectionBuffSystem : EntitySystem
         SubscribeLocalEvent<DamageProtectionBuffComponent, DamageModifyEvent>(OnDamageModify);
     }
 
-    private void OnDamageModify(EntityUid uid, DamageProtectionBuffComponent component, DamageModifyEvent args)
+    private void OnDamageModify(Entity<DamageProtectionBuffComponent> ent, ref DamageModifyEvent args)
     {
-        foreach (var modifier in component.Modifiers.Values)
+        foreach (var modifier in ent.Comp.Modifiers.Values)
             args.Damage = DamageSpecifier.ApplyModifierSet(args.Damage, modifier);
     }
 }

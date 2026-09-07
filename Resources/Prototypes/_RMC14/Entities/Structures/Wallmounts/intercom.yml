@@ -71,6 +71,7 @@
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -274,4 +275,3 @@
     - MarineEcho
     - MarineFoxtrot
     - Colony
-

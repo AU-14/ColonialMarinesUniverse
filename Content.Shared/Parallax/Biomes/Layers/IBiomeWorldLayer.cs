@@ -1,5 +1,6 @@
 using Content.Shared.Maps;
 using Robust.Shared.Prototypes;
+
 namespace Content.Shared.Parallax.Biomes.Layers;
 
 /// <summary>

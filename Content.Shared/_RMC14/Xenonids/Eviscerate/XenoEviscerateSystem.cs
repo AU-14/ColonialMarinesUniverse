@@ -1,10 +1,12 @@
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Xenonids.Heal;
 using Content.Shared._RMC14.Xenonids.Rage;
 using Content.Shared._RMC14.Xenonids.Sweep;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.Interaction;
@@ -29,6 +31,7 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private SharedInteractionSystem _interact = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private XenoRageSystem _rage = default!;
@@ -71,7 +74,7 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
         {
             args.Handled = true;
 
-            _stun.TrySlowdown(xeno, windupTime, false, 0f, 0f);
+            _slow.TryRoot(xeno, windupTime, refresh: false, applyChemical: true);
             _rage.IncrementRage(xeno.Owner, -1);
 
             if (rage > 1)

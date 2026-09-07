@@ -34,12 +34,12 @@
     replaceableTiles:
     - Plating
     - Lattice
-    - TrainLattice
     replacementTiles:
     - FloorMetalFoam
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: RMCMetalFoamWall
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:

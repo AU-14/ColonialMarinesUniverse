@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Sensor;
 using Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Utility;
 

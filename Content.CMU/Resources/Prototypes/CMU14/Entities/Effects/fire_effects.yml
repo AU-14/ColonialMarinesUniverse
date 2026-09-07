@@ -1,0 +1,11 @@
+- type: entity
+  id: AU14FireVisualOverlay
+  save: false
+  components:
+  - type: Sprite
+    sprite: _RMC14/Mobs/Effects/on_fire_xeno.rsi
+    drawdepth: Effects
+    layers:
+    - state: simple_onfire
+      shader: unshaded
+      color: "#FFA500"

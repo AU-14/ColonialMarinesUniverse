@@ -1,6 +1,6 @@
-using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
 using Content.Shared._RMC14.Temperature;
+using Content.Shared.Temperature.Components;
 
 namespace Content.Server._RMC14.Temperature;
 
@@ -10,12 +10,12 @@ public sealed partial class RMCTemperatureSystem : SharedRMCTemperatureSystem
 
     public override float GetTemperature(EntityUid entity)
     {
-        return CompOrNull<TemperatureComponent>(entity)?.CurrentTemperature ?? 0;
+        return CompOrNull<TemperatureComponent>(entity)?.Temperature ?? 0;
     }
 
     public override void ForceChangeTemperature(EntityUid entity, float temperature)
     {
-        _temperature.ForceChangeTemperature(entity, temperature);
+        _temperature.RMCSetTemperature(entity, temperature);
     }
 
     public override bool TryGetCurrentTemperature(EntityUid uid, out float temperature)
@@ -26,7 +26,7 @@ public sealed partial class RMCTemperatureSystem : SharedRMCTemperatureSystem
             return true;
         }
 
-        temperature = temperatureComp.CurrentTemperature;
+        temperature = temperatureComp.Temperature;
         return false;
     }
 }

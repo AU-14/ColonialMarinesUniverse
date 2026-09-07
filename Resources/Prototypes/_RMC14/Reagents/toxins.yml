@@ -8,7 +8,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.05
       effects:
       - !type:Toxic
@@ -24,7 +25,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       #TODO hurts on inject equal to amount
       metabolismRate: 0.05
       effects:
@@ -49,7 +51,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.05
       effects:
       - !type:Hypoxemic
@@ -68,14 +71,14 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.05
       effects: #TODO Hallucinations +2 max 40.
       - !type:ModifyStatusEffect
         effectProto: StatusEffectSeeingRainbow
         type: Add
         time: 2 #TODO max 40
-        refresh: false
       - !type:Emote
         emote: Laugh #TODO twitches, drools, moans.
         showInChat: true
@@ -85,13 +88,12 @@
         #TODO more jitter at 30 OD
       - !type:GenericStatusEffect
         conditions:
-        - !type:ReagentThreshold #TODO 2 brain damage/s at 50 OD
+        - !type:ReagentCondition #TODO 2 brain damage/s at 50 OD
           min: 50
         key: Unconscious
         component: RMCUnconscious
-        type: Add
+        type: Update
         time: 40
-        refresh: true
 
 - type: reagent
   parent: [ CMReagent, Romerol ]
@@ -104,11 +106,11 @@
   worksOnTheDead: true
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       effects:
         - !type:CauseZombieInfection
           conditions:
-            - !type:ReagentThreshold
+            - !type:ReagentCondition
               min: 5
 
 - type: reagent
@@ -124,7 +126,8 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.05
       effects:
       - !type:Toxic
@@ -135,16 +138,15 @@
         probability: 0.01 #TODO makes them confused and eventually sleepy
       - !type:GenericStatusEffect
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 15
         key: Unconscious
         component: RMCUnconscious
-        type: Add
+        type: Update
         time: 3
-        refresh: true
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 25
         damage:
           types:
@@ -159,7 +161,8 @@
   color: "#CF3600"
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.2
       effects:
       - !type:Hypoxemic
@@ -169,7 +172,6 @@
         component: Drowsiness
         time: 4
         type: Add
-        refresh: false
 
 - type: reagent
   parent: CMReagent
@@ -181,7 +183,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.4
       effects:
       - !type:Biocidic
@@ -203,7 +206,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.4
       effects:
       - !type:Corrosive
@@ -225,7 +229,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.4
       effects:
       - !type:RMCAlchemistPain
@@ -258,7 +263,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.4
       effects:
       - !type:Corrosive
@@ -276,7 +282,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.4
       effects:
       - !type:Hemolytic
@@ -304,7 +311,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.4
       effects:
       - !type:AdjustTemperature
@@ -326,7 +334,8 @@
   unknown: true
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.4
       effects:
       - !type:RMCAlchemistPurgeNonToxins

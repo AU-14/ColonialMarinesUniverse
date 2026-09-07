@@ -6,9 +6,9 @@
     whitelist:
       components:
       - Gun
-      - Stunbaton
       - CrewMonitoringConsole
       tags:
+      - Stunbaton
       #TODO any analyzer - plant etc
       - Radio
       - RMCG8Pouch

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared._RMC14.Marines.Skills;

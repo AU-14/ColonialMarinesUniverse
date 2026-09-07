@@ -18,6 +18,7 @@ using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
+using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
@@ -48,10 +49,11 @@ public abstract partial class SharedCassetteSystem : EntitySystem
         SubscribeLocalEvent<CassettePlayerComponent, GetEquipmentVisualsEvent>(OnPlayerGetEquipmentVisuals, after: [typeof(ClothingSystem)]);
         SubscribeLocalEvent<CassettePlayerComponent, GotUnequippedEvent>(OnPlayerUnequipped);
         SubscribeLocalEvent<CassettePlayerComponent, ExaminedEvent>(OnPlayerExamined);
-        SubscribeLocalEvent<CassettePlayerComponent, AfterAutoHandleStateEvent>(OnPlayerState);
         SubscribeLocalEvent<ActionComponent, EntityTerminatingEvent>(OnActionTerminating); // CMU14
         SubscribeLocalEvent<CassettePlayerComponent, EntRemovedFromContainerMessage>(OnPlayerRemovedFromContainer);
         SubscribeLocalEvent<CassettePlayerComponent, GetVerbsEvent<AlternativeVerb>>(OnPlayerGetVerbsAlternative);
+        SubscribeLocalEvent<CassettePlayerComponent, ComponentGetState>(OnPlayerGetState);
+        SubscribeLocalEvent<CassettePlayerComponent, ComponentHandleState>(OnPlayerHandleState);
 
         SubscribeLocalEvent<CassetteTapeComponent, ExaminedEvent>(OnTapeExamined);
         SubscribeLocalEvent<CassetteTapeComponent, UseInHandEvent>(OnPlayerUseInHand);
@@ -86,6 +88,59 @@ public abstract partial class SharedCassetteSystem : EntitySystem
             if (dirty)
                 Dirty(uid, comp);
         }
+    }
+
+    private void OnPlayerGetState(Entity<CassettePlayerComponent> ent, ref ComponentGetState args)
+    {
+        TryGetNetEntity(ent.Comp.PlayPauseAction, out var playPauseAction);
+        TryGetNetEntity(ent.Comp.NextAction, out var nextAction);
+        TryGetNetEntity(ent.Comp.RestartAction, out var restartAction);
+        TryGetNetEntity(ent.Comp.AudioStream, out var audioStream);
+
+        args.State = new CassettePlayerComponentState
+        {
+            PlayPauseActionId = ent.Comp.PlayPauseActionId,
+            PlayPauseAction = playPauseAction,
+            NextActionId = ent.Comp.NextActionId,
+            NextAction = nextAction,
+            RestartActionId = ent.Comp.RestartActionId,
+            RestartAction = restartAction,
+            Slots = ent.Comp.Slots,
+            ContainerId = ent.Comp.ContainerId,
+            AudioStream = audioStream,
+            State = ent.Comp.State,
+            AudioParams = ent.Comp.AudioParams,
+            Tape = ent.Comp.Tape,
+            PlayPauseSound = ent.Comp.PlayPauseSound,
+            InsertEjectSound = ent.Comp.InsertEjectSound,
+            WornSprite = ent.Comp.WornSprite,
+            MusicSprite = ent.Comp.MusicSprite,
+        };
+    }
+
+    private void OnPlayerHandleState(Entity<CassettePlayerComponent> ent, ref ComponentHandleState args)
+    {
+        if (args.Current is not CassettePlayerComponentState state)
+            return;
+
+        ent.Comp.PlayPauseActionId = state.PlayPauseActionId;
+        ent.Comp.PlayPauseAction = EnsureEntity<CassettePlayerComponent>(state.PlayPauseAction, ent);
+        ent.Comp.NextActionId = state.NextActionId;
+        ent.Comp.NextAction = EnsureEntity<CassettePlayerComponent>(state.NextAction, ent);
+        ent.Comp.RestartActionId = state.RestartActionId;
+        ent.Comp.RestartAction = EnsureEntity<CassettePlayerComponent>(state.RestartAction, ent);
+        ent.Comp.Slots = state.Slots;
+        ent.Comp.ContainerId = state.ContainerId;
+        ent.Comp.AudioStream = EnsureEntity<CassettePlayerComponent>(state.AudioStream, ent);
+        ent.Comp.State = state.State;
+        ent.Comp.AudioParams = state.AudioParams;
+        ent.Comp.Tape = state.Tape;
+        ent.Comp.PlayPauseSound = state.PlayPauseSound;
+        ent.Comp.InsertEjectSound = state.InsertEjectSound;
+        ent.Comp.WornSprite = state.WornSprite;
+        ent.Comp.MusicSprite = state.MusicSprite;
+
+        _item.VisualsChanged(ent);
     }
 
     private void OnPlayerDetached(PlayerDetachedEvent ev)
@@ -290,11 +345,6 @@ public abstract partial class SharedCassetteSystem : EntitySystem
             else
                 args.PushMarkup(Loc.GetString("rmc-cassette-player-examine-none"));
         }
-    }
-
-    private void OnPlayerState(Entity<CassettePlayerComponent> ent, ref AfterAutoHandleStateEvent args)
-    {
-        _item.VisualsChanged(ent);
     }
 
     private void OnPlayerRemovedFromContainer(Entity<CassettePlayerComponent> ent, ref EntRemovedFromContainerMessage args)

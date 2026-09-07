@@ -1,0 +1,623 @@
+using System.Numerics;
+using Content.Server.Chat.Systems;
+using Content.Server.Radio.Components;
+using Content.Shared.CMU14.Callsigns;
+using Content.Shared.CMU14.Radio;
+using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.Language.Prototypes;
+using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Radio;
+using Content.Shared.Chat;
+using Content.Shared.Radio;
+using Content.Shared.Radio.Components;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
+
+namespace Content.Server.CMU14.Radio;
+
+public sealed partial class ANPRCRadioSystem
+{
+    private void OnChatGetPrefix(Entity<WearingANPRCComponent> ent, ref ChatGetPrefixEvent args)
+    {
+        if (args.Channel == null || args.Channel.ID != ANPRCSentinelChannel.Id)
+            return;
+
+        if (!TryComp(ent.Comp.Radio, out ANPRCRadioComponent? radio))
+            return;
+
+        if (!HasComp<ANPRCRadioUserComponent>(ent.Owner))
+        {
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-not-authorized"), ent.Owner);
+            args.Channel = null;
+
+            return;
+        }
+
+        if (!ValidateTransmit((ent.Comp.Radio, radio), ent.Owner))
+        {
+            args.Channel = null;
+            return;
+        }
+
+        if (radio.Mode == RadioMode.CipherText && string.IsNullOrEmpty(_crypto.GetFillFaction(ent.Comp.Radio)))
+        {
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-ct-mode-no-fill"), ent.Owner);
+            args.Channel = null;
+
+            return;
+        }
+
+        if (radio.FrequencyOverrides.ContainsKey(radio.ActiveSlot))
+        {
+            ent.Comp.PendingANPRCTransmit = true;
+            return;
+        }
+
+        if (!radio.Presets.TryGetValue(radio.ActiveSlot, out var channelId) ||
+            string.IsNullOrEmpty(channelId.Id))
+        {
+            _cmChat.ChatMessageToOne(
+                Loc.GetString("anprc-slot-empty", ("slot", radio.ActiveSlot + 1)),
+                ent.Owner);
+
+            args.Channel = null;
+            return;
+        }
+
+        if (!_prototype.TryIndex(channelId, out var realChannel))
+        {
+            args.Channel = null;
+            return;
+        }
+
+        ent.Comp.PendingANPRCTransmit = true;
+        args.Channel = realChannel;
+    }
+
+    private void OnWearerSpeakerName(Entity<WearingANPRCComponent> ent, ref TransformSpeakerNameEvent args)
+    {
+        if (!TryComp(ent.Comp.Radio, out ANPRCRadioComponent? radio) || !radio.NameMaskActive)
+            return;
+
+        args.VoiceName = GetOnAirName((ent.Comp.Radio, radio));
+    }
+
+    private void OnRadioSpeakerName(Entity<ANPRCRadioComponent> ent, ref TransformSpeakerNameEvent args)
+    {
+        // the radio entity only speaks for itself (radio checks), always mask
+        args.VoiceName = GetOnAirName(ent);
+    }
+
+    // a manually set callsign is a station override, otherwise the pack goes on air
+    // under the wearer's assigned callsign so renames/squad changes/wearer swaps
+    // propagate without touching the pack
+    private string GetOnAirName(Entity<ANPRCRadioComponent> radio)
+    {
+        if (!string.IsNullOrWhiteSpace(radio.Comp.Callsign))
+            return radio.Comp.Callsign;
+
+        var wearerCallsign = GetWearerCallsign(radio);
+
+        return string.IsNullOrEmpty(wearerCallsign)
+            ? Loc.GetString("anprc-unknown-station")
+            : wearerCallsign;
+    }
+
+    private string GetWearerCallsign(EntityUid radio)
+    {
+        var wearer = Transform(radio).ParentUid;
+
+        if (wearer.IsValid() &&
+            TryComp(wearer, out AU14CallsignComponent? assigned) &&
+            !string.IsNullOrEmpty(assigned.Callsign))
+        {
+            return assigned.Callsign;
+        }
+
+        return string.Empty;
+    }
+
+    private bool ValidateTransmit(Entity<ANPRCRadioComponent> ent, EntityUid user, bool quiet = false)
+    {
+        var radio = ent.Comp;
+
+        if (!radio.Enabled || (!radio.IsEquipped && !radio.Planted))
+        {
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-radio-off"), user);
+            return false;
+        }
+
+        if (radio.MonitorEnabled)
+        {
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-monitor-no-transmit"), user);
+            return false;
+        }
+
+        if (radio.ActiveSlot < 0)
+        {
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-no-active-slot"), user);
+            return false;
+        }
+
+        if (!_powerCell.HasCharge(ent.Owner, GetTransmitCost(radio)))
+        {
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-battery-insufficient"), user);
+            return false;
+        }
+
+        return true;
+    }
+
+    private static float GetTransmitCost(ANPRCRadioComponent radio)
+    {
+        return radio.TransmitChargeCost * radio.TxPower.ChargeMultiplier() * radio.Mode.ChargeMultiplier();
+    }
+
+    private void OnSpeak(Entity<WearingANPRCComponent> ent, ref EntitySpokeEvent args)
+    {
+        var wearing = ent.Comp;
+
+        if (!wearing.PendingANPRCTransmit)
+        {
+            LogHeadsetTraffic(ent, ref args);
+            return;
+        }
+
+        wearing.PendingANPRCTransmit = false;
+
+        if (args.Channel == null)
+            return;
+
+        if (!TryComp(wearing.Radio, out ANPRCRadioComponent? radio))
+            return;
+
+        if (!radio.Enabled || !radio.IsEquipped)
+            return;
+
+        var pack = new Entity<ANPRCRadioComponent>(wearing.Radio, radio);
+
+        TransmitThroughPack(ent.Owner, pack, GetOnAirName(pack), ref args);
+    }
+
+    // the pack keeps a book on what its wearer put out over their own headset. this
+    // runs before HeadsetSystem has had its say, so args.Channel is still whatever
+    // prefix was typed - key or no key - and the log has to satisfy itself the message
+    // is really going on air before writing anything down. without that check, cycling
+    // every radio prefix in the game reads the whole frequency plan back off the panel
+    private void LogHeadsetTraffic(Entity<WearingANPRCComponent> ent, ref EntitySpokeEvent args)
+    {
+        if (args.Channel == null || args.Channel.Frequency == RadioFrequency.Off)
+            return;
+
+        if (!TryComp(ent.Comp.Radio, out ANPRCRadioComponent? logRadio) || !logRadio.Enabled)
+            return;
+
+        if (!SpeakerTransmitsOn(ent.Owner, args.Channel))
+            return;
+
+        // log headset traffic under what actually went on air: the callsign
+        // on a callsign-faction net, the plain name on an open channel
+        var logName = AU14Callsigns.IsCallsignChannel(args.Channel) &&
+                      TryComp(ent.Owner, out AU14CallsignComponent? ownCallsign) &&
+                      !string.IsNullOrEmpty(ownCallsign.Callsign)
+            ? ownCallsign.Callsign
+            : Name(ent.Owner);
+
+        AppendNetLog(
+            logRadio,
+            _timing.CurTime.TotalSeconds,
+            logName,
+            FormatLogChannel(logRadio, args.Channel),
+            args.Message);
+
+        UpdateBuiState(new Entity<ANPRCRadioComponent>(ent.Comp.Radio, logRadio));
+    }
+
+    // whether this message is genuinely leaving the speaker on this net: a worn headset
+    // holding the key and not read-only on it, or an intrinsic transmitter that carries
+    // it. mirrors what HeadsetSystem and RadioSystem check a moment later
+    private bool SpeakerTransmitsOn(EntityUid speaker, RadioChannelPrototype channel)
+    {
+        if (TryComp(speaker, out WearingHeadsetComponent? wearingHeadset) &&
+            TryComp(wearingHeadset.Headset, out EncryptionKeyHolderComponent? keys) &&
+            keys.Channels.Contains(channel.ID) &&
+            !keys.ReadOnlyChannels.Contains(channel.ID))
+        {
+            return true;
+        }
+
+        return TryComp(speaker, out IntrinsicRadioTransmitterComponent? intrinsic) &&
+               intrinsic.Channels.Contains(channel.ID);
+    }
+
+    // sends one spoken message out through the pack (raw frequency or the active preset
+    // net), handles battery cost, COMSEC warning, name masking, DF exposure and logging.
+    // speaker is the wearer or a handset user at the pack
+    private void TransmitThroughPack(
+        EntityUid speaker,
+        Entity<ANPRCRadioComponent> pack,
+        string senderName,
+        ref EntitySpokeEvent args)
+    {
+        var radio = pack.Comp;
+
+        // sign language and the like never go over the air. the headsets already refuse
+        // to carry them; without the same check here the pack is the way around that
+        if (_prototype.TryIndex(args.Language, out LanguagePrototype? spokenLanguage) &&
+            !spokenLanguage.CanUseRadio)
+        {
+            args.Channel = null;
+            _cmChat.ChatMessageToOne(
+                Loc.GetString("anprc-language-no-radio", ("language", spokenLanguage.Name)),
+                speaker);
+
+            return;
+        }
+
+        // the set cannot search and talk at once. stay silent or stop sweeping
+        if (radio.SweepEnabled)
+        {
+            args.Channel = null;
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-tx-blocked"), speaker);
+            return;
+        }
+
+        // callsign goes out as the speaker name, message body carries no prefix
+        var outMessage = args.Message;
+
+        if (radio.FrequencyOverrides.TryGetValue(radio.ActiveSlot, out var frequency))
+        {
+            args.Channel = null;
+
+            _powerCell.TryUseCharge(pack.Owner, GetTransmitCost(radio));
+            _tunable.BroadcastOnFrequency(speaker, frequency, outMessage, senderName, args.Language);
+
+            AppendNetLog(
+                radio,
+                _timing.CurTime.TotalSeconds,
+                senderName,
+                $"{TunableFrequencySystem.FormatFreq(frequency)} MHz",
+                outMessage);
+
+            UpdateBuiState(pack);
+            return;
+        }
+
+        if (args.Channel == null || !HasPreset(radio, args.Channel.ID))
+            return;
+
+        var channel = args.Channel;
+        args.Channel = null;
+
+        _powerCell.TryUseCharge(pack.Owner, GetTransmitCost(radio));
+
+        // callsigns are procedure on the callsign factions' nets only. a pack tuned
+        // to an open channel - colony, WEYU, CMB - puts the speaker on air under
+        // their own name and rank, and the log records what actually went out
+        var callsignNet = _comms.EnabledOn(channel) && AU14Callsigns.IsCallsignChannel(channel);
+
+        if (!callsignNet)
+            senderName = Name(speaker);
+
+        var unsecured = _comms.EnabledOn(channel) &&
+                        !string.IsNullOrEmpty(channel.Faction) &&
+                        radio.Mode != RadioMode.PlainText &&
+                        !_crypto.HasMatchingCrypto(pack.Owner, channel);
+
+        if (unsecured)
+        {
+            _cmChat.ChatMessageToOne(
+                Loc.GetString(
+                    "anprc-comsec-unsecured",
+                    ("channel", channel.LocalizedName),
+                    ("faction", channel.Faction)),
+                speaker);
+        }
+
+        var sourceWasExempt = HasComp<TelecomExemptComponent>(speaker);
+        var radioWasExempt = HasComp<TelecomExemptComponent>(pack.Owner);
+
+        if (!sourceWasExempt)
+            EnsureComp<TelecomExemptComponent>(speaker);
+
+        if (!radioWasExempt)
+            EnsureComp<TelecomExemptComponent>(pack.Owner);
+
+        // strip the job prefix for the duration of the send so the radio line is just
+        // the callsign, no name no role. with the overhaul disabled, or on an open
+        // channel where the callsign does not apply, this goes out unmasked
+        JobPrefixComponent? jobPrefix = null;
+        var hadJobPrefix = callsignNet && TryComp(speaker, out jobPrefix);
+        var savedPrefix = jobPrefix?.Prefix ?? default;
+        var savedAdditionalPrefix = jobPrefix?.AdditionalPrefix;
+
+        if (hadJobPrefix)
+            RemComp<JobPrefixComponent>(speaker);
+
+        radio.NameMaskActive = callsignNet;
+
+        try
+        {
+            _radio.SendRadioMessage(speaker, outMessage, channel, pack.Owner, args.Language);
+        }
+        finally
+        {
+            radio.NameMaskActive = false;
+
+            if (hadJobPrefix)
+            {
+                var restored = EnsureComp<JobPrefixComponent>(speaker);
+                restored.Prefix = savedPrefix;
+                restored.AdditionalPrefix = savedAdditionalPrefix;
+                Dirty(speaker, restored);
+            }
+        }
+
+        if (!sourceWasExempt)
+            RemCompDeferred<TelecomExemptComponent>(speaker);
+
+        if (!radioWasExempt)
+            RemCompDeferred<TelecomExemptComponent>(pack.Owner);
+
+        TryDirectionFind(speaker, radio, channel, unsecured);
+
+        AppendNetLog(
+            radio,
+            _timing.CurTime.TotalSeconds,
+            senderName,
+            FormatLogChannel(radio, channel),
+            outMessage);
+
+        UpdateBuiState(pack);
+    }
+
+    private void TryDirectionFind(
+        EntityUid source,
+        ANPRCRadioComponent radio,
+        RadioChannelPrototype channel,
+        bool unsecured)
+    {
+        if (!_comms.EnabledOn(channel) || string.IsNullOrEmpty(channel.Faction))
+            return;
+
+        var plainText = radio.Mode == RadioMode.PlainText;
+        float baseChance;
+
+        if (plainText)
+        {
+            baseChance = radio.DFChancePlainText;
+        }
+        else if (unsecured)
+        {
+            baseChance = radio.DFChanceUnsecured;
+        }
+        else if (radio.Mode == RadioMode.FrequencyHopping)
+        {
+            baseChance = radio.DFChanceSecuredFH;
+        }
+        else
+        {
+            return;
+        }
+
+        if (radio.DFReportFactions.Count == 0)
+            return;
+
+        var now = _timing.CurTime;
+        var position = _transform.GetWorldPosition(source);
+
+        if (now - radio.DFLastTransmitTime > radio.DFAccumDecay ||
+            (position - radio.DFLastTransmitPos).Length() > radio.DFAccumResetDistance)
+        {
+            radio.DFAccumulation = 0f;
+        }
+
+        var chance = (baseChance + radio.DFAccumulation) * radio.TxPower.DFMultiplier();
+
+        if (_garble.GetJamIntensity(source) != RadioJamIntensity.None)
+            chance += radio.DFChanceJamBonus;
+
+        radio.DFAccumulation += radio.DFAccumBonus;
+        radio.DFLastTransmitTime = now;
+        radio.DFLastTransmitPos = position;
+
+        if (!_random.Prob(Math.Clamp(chance, 0f, 0.9f)))
+            return;
+
+        foreach (var viewerFaction in radio.DFReportFactions)
+        {
+            if (_tacticalMap.CreateFactionIntelBlip(source, radio.OperatorFaction, viewerFaction) is not { } location)
+                continue;
+
+            var faction = viewerFaction;
+
+            Timer.Spawn(
+                radio.DFPingDuration,
+                () => _tacticalMap.EraseFactionIntelBlip(location.GridId, location.Key, faction));
+        }
+    }
+
+    private void OnRadioCheck(Entity<ANPRCRadioComponent> ent, ref ANPRCRadioCheckMsg args)
+    {
+        var radio = ent.Comp;
+
+        if (!ValidateTransmit(ent, args.Actor))
+            return;
+
+        if (!radio.Presets.TryGetValue(radio.ActiveSlot, out var channelId) ||
+            string.IsNullOrEmpty(channelId.Id) ||
+            !_prototype.TryIndex(channelId, out var channel))
+        {
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-no-active-slot"), args.Actor);
+            return;
+        }
+
+        _powerCell.TryUseCharge(ent.Owner, GetTransmitCost(radio));
+
+        // source is the radio itself, OnRadioSpeakerName swaps in the callsign.
+        // phrased per the voice procedure guidebook: addressee, self-id, request
+        _radio.SendRadioMessage(
+            ent.Owner,
+            Loc.GetString("anprc-radio-check-call", ("station", GetOnAirName(ent))),
+            channel,
+            ent.Owner);
+
+        var (fullRange, partialRange) = _range.GetAnchorRanges(ent.Owner);
+
+        var senderPos = _transform.GetWorldPosition(ent.Owner);
+        var senderMap = Transform(ent.Owner).MapID;
+        var senderWearer = Transform(ent.Owner).ParentUid;
+        var clear = new List<string>();
+        var degraded = new List<string>();
+
+        // gated nets carry traffic wherever any anchor covers, not just around this
+        // pack. the check has to grade stations the same way the traffic gate does or
+        // it reports dead air to a platoon that can hear the operator fine
+        var gated = channel.AnchorGated;
+
+        var query = EntityQueryEnumerator<ANPRCRadioComponent, TransformComponent>();
+
+        while (query.MoveNext(out var otherUid, out var other, out var otherXform))
+        {
+            if (otherUid == ent.Owner || !other.Enabled || !other.IsEquipped)
+                continue;
+
+            if (!_range.InVerticalReach(otherXform.MapID, senderMap, 1))
+                continue;
+
+            if (!HasPreset(other, channelId.Id))
+                continue;
+
+            AddStation(ent.Owner, otherUid, gated, channelId.Id, senderPos, fullRange, partialRange,
+                GetOnAirName((otherUid, other)), clear, degraded);
+        }
+
+        var headsetQuery = EntityQueryEnumerator<WearingHeadsetComponent, TransformComponent>();
+
+        while (headsetQuery.MoveNext(out var wearerUid, out var wearingHeadset, out var wearerXform))
+        {
+            if (wearerUid == senderWearer)
+                continue;
+
+            if (!_range.InVerticalReach(wearerXform.MapID, senderMap, 1))
+                continue;
+
+            if (!TryComp(wearingHeadset.Headset, out EncryptionKeyHolderComponent? keys) ||
+                !keys.Channels.Contains(channelId.Id))
+            {
+                continue;
+            }
+
+            var label = TryComp(wearerUid, out AU14CallsignComponent? wearerCallsign) &&
+                        !string.IsNullOrEmpty(wearerCallsign.Callsign)
+                ? wearerCallsign.Callsign
+                : Name(wearerUid);
+
+            AddStation(ent.Owner, wearerUid, gated, channelId.Id, senderPos, fullRange, partialRange,
+                label, clear, degraded);
+        }
+
+        // earpieces grant the net to the wearer directly rather than through a worn
+        // headset, so the queries above miss them. a cell of earpieces and one manpack
+        // would otherwise report nothing heard while the whole cell is listening
+        var earpieceQuery = EntityQueryEnumerator<AccessoryHeadsetComponent>();
+
+        while (earpieceQuery.MoveNext(out _, out var earpiece))
+        {
+            if (earpiece.RadioGrantedTo is not { } earpieceWearer ||
+                earpieceWearer == senderWearer ||
+                !Exists(earpieceWearer))
+            {
+                continue;
+            }
+
+            if (!earpiece.Channels.Contains(channelId))
+                continue;
+
+            if (!_range.InVerticalReach(Transform(earpieceWearer).MapID, senderMap, 1))
+                continue;
+
+            var earpieceLabel = TryComp(earpieceWearer, out AU14CallsignComponent? earpieceCallsign) &&
+                                !string.IsNullOrEmpty(earpieceCallsign.Callsign)
+                ? earpieceCallsign.Callsign
+                : Name(earpieceWearer);
+
+            AddStation(ent.Owner, earpieceWearer, gated, channelId.Id, senderPos, fullRange, partialRange,
+                earpieceLabel, clear, degraded);
+        }
+
+        var nothingHeard = Loc.GetString("anprc-radio-check-nothing-heard");
+
+        _cmChat.ChatMessageToOne(
+            Loc.GetString(
+                "anprc-radio-check-report",
+                ("clear", clear.Count == 0 ? nothingHeard : string.Join(", ", clear)),
+                ("degraded", degraded.Count == 0 ? nothingHeard : string.Join(", ", degraded))),
+            args.Actor);
+
+        if (_garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None &&
+            _garble.TryGetNearestJammerDirection(ent.Owner, out var jammerDirection))
+        {
+            _cmChat.ChatMessageToOne(
+                Loc.GetString("anprc-radio-check-interference", ("bearing", ShortBearing(jammerDirection))),
+                args.Actor);
+        }
+    }
+
+    private static string ShortBearing(Direction direction)
+    {
+        return direction switch
+        {
+            Direction.North => "N",
+            Direction.NorthEast => "NE",
+            Direction.East => "E",
+            Direction.SouthEast => "SE",
+            Direction.South => "S",
+            Direction.SouthWest => "SW",
+            Direction.West => "W",
+            Direction.NorthWest => "NW",
+            _ => "?"
+        };
+    }
+
+    private void AddStation(
+        EntityUid pack,
+        EntityUid station,
+        bool gated,
+        string channelId,
+        Vector2 senderPos,
+        float fullRange,
+        float partialRange,
+        string label,
+        List<string> clear,
+        List<string> degraded)
+    {
+        if (gated)
+        {
+            // the worn pack is itself an anchor for its presets, so stations standing
+            // next to the operator still grade through this path
+            switch (_range.GetRangeTier(station, channelId, out _))
+            {
+                case ANPRCRangeTier.Full:
+                    clear.Add(label);
+                    return;
+                case ANPRCRangeTier.Partial:
+                    degraded.Add(label);
+                    return;
+                default:
+                    return;
+            }
+        }
+
+        var distance = (senderPos - _transform.GetWorldPosition(station)).Length();
+
+        if (distance <= fullRange)
+            clear.Add(label);
+        else if (distance <= partialRange)
+            degraded.Add(label);
+    }
+}

@@ -43,6 +43,7 @@
       components:
       - EntityStorage
   - type: Damageable
+  - type: Injurable
     damageContainer: Xeno
   - type: Destructible
     thresholds: []
@@ -121,7 +122,7 @@
   - type: ContentEye
   - type: CameraRecoil
   - type: MindContainer
-    showExamineInfo: true
+  - type: MindExaminable
   - type: StatusIcon
   - type: RotationVisuals
     defaultRotation: 0
@@ -181,14 +182,19 @@
         layer:
         - BulletImpassable
   - type: CMSurgeryTarget
-  - type: Gibbable
   - type: RMCGibOnDeath
   - type: RMCSpawnEntitiesOnGib
     entities:
     - RMCDecalSpawnerGibsDrone # TODO one for every caste
     - RMCGibEffectXenoSmall # TODO larger gib effect for larger xenos
   - type: Body
-    prototype: Xenonid
+    requiredLegs: 0
+  - type: InitialBody
+    organs:
+      Head: RMCHeadXeno
+      Heart: RMCOrganXenoHeart
+    relationships:
+      Head: [ Heart ]
   - type: Xeno
   - type: VehicleDamageMultiplier
   - type: XenoRegen
@@ -303,8 +309,10 @@
   - type: ShortExamine
   - type: DamageMobState
     critDamage:
-      groups:
-        Brute: 1.25
+      types:
+        Blunt: 0.41
+        Slash: 0.42
+        Piercing: 0.42
   - type: AffectableByWeeds
   - type: ComplexInteraction
   - type: UserLimitHits
@@ -325,7 +333,7 @@
     - enum.VendingMachineUiKey.Key
     - enum.PaperUiKey.Key
     - enum.RMCCameraUiKey.Key
-  - type: ActiveInputMover
+  - type: RMCActiveInputMover
   - type: HiveTracker
     trackerModes:
     - Queen
@@ -433,8 +441,10 @@
       collection: RCMXenoClaw
     animation: RMCWeaponArcXenoClaw
     damage:
-      groups:
-        Brute: 12
+      types:
+        Blunt: 4
+        Slash: 4
+        Piercing: 4
     soundSwing:
       path: /Audio/_RMC14/Weapons/alien_claw_swipe.ogg
       params:
@@ -517,8 +527,10 @@
   components:
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
     tailRange: 2.5
 
 - type: entity

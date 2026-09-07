@@ -6,7 +6,7 @@ namespace Content.Client._RMC14.Chat;
 
 public sealed class RepeatedMessage
 {
-    public readonly ChatMessageRow? Row;
+    public readonly ChatLogEntry? Row;
     public readonly int Index;
     public readonly FormattedMessage FormattedMessage;
     public readonly NetEntity SenderEntity;
@@ -17,8 +17,7 @@ public sealed class RepeatedMessage
     public int Count = 1;
 
     public RepeatedMessage(
-        ChatMessageRow row,
-        FormattedMessage formattedMessage,
+        ChatLogEntry row,
         NetEntity senderEntity,
         string message,
         ChatChannel channel,
@@ -26,7 +25,7 @@ public sealed class RepeatedMessage
     {
         Row = row;
         Index = -1;
-        FormattedMessage = formattedMessage;
+        FormattedMessage = new FormattedMessage();
         SenderEntity = senderEntity;
         Message = message;
         Channel = channel;

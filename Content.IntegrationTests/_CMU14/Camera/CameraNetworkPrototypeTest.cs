@@ -8,6 +8,7 @@ using Content.Server.SurveillanceCamera;
 using Content.Shared._RMC14.Camera;
 using Content.Shared.Camera;
 using Content.Shared.Construction.Prototypes;
+using Content.Shared.SurveillanceCamera.Components;
 using Content.Shared.Wires;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;

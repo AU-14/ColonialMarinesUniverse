@@ -1,0 +1,40 @@
+<controls:RequisitionsLoadBayLayout xmlns="https://spacestation14.io" xmlns:controls="clr-namespace:Content.Client._RMC14.Requisitions">
+  <PanelContainer Name="RootPanel" HorizontalExpand="True" VerticalExpand="True">
+    <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8">
+      <PanelContainer Name="StatusPanel"><BoxContainer Orientation="Horizontal" Margin="10 6" SeparationOverride="8">
+        <Label Text="{Loc 'cmu-asrs-load-bay'}"/><controls:RequisitionsRollingLabel Name="BudgetLabel" HorizontalExpand="True"/>
+        <controls:RequisitionsRollingLabel Name="ProjectedBudgetLabel"/><Label Name="PlatformLabel"/><Button Name="PlatformButton" MinWidth="96"/>
+      </BoxContainer></PanelContainer>
+      <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+        <Button Name="ItemsTabButton" Text="{Loc 'cmu-asrs-tab-items'}" MinWidth="130"/><Button Name="BundlesTabButton" Text="{Loc 'cmu-asrs-tab-bundles'}" MinWidth="130"/>
+        <Control HorizontalExpand="True"/><Label Name="StyleSubtitleLabel" Text="{Loc 'cmu-asrs-load-control'}"/>
+      </BoxContainer>
+      <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="8">
+        <PanelContainer Name="FilterPanel" SetWidth="235"><BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
+          <Label Text="{Loc 'cmu-asrs-catalog-index'}"/><ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VerticalExpand="True"><BoxContainer Name="CategoriesContainer" Orientation="Vertical" SeparationOverride="2"/></ScrollContainer>
+          <PanelContainer Name="ItemPreviewPanel" Visible="False" MinHeight="164"><BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="3">
+            <Label Text="{Loc 'cmu-asrs-holographic-inspection'}"/>
+            <LayoutContainer Name="ItemPreviewStage" MinHeight="94"><controls:RequisitionsTurntablePreview Name="PreviewIcon" SetSize="92 92"/><controls:RequisitionsScanLine Name="PreviewScanLine" SetSize="120 2"/></LayoutContainer>
+            <Label Name="PreviewNameLabel" ClipText="True"/><Label Name="PreviewMetaLabel" ClipText="True"/>
+          </BoxContainer></PanelContainer>
+        </BoxContainer></PanelContainer>
+        <PanelContainer Name="CatalogPanel" HorizontalExpand="True"><BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
+          <LineEdit Name="SearchBar" PlaceHolder="{Loc 'cmu-asrs-search-items'}" HorizontalExpand="True"/>
+          <BoxContainer Orientation="Horizontal"><Label Text="{Loc 'cmu-asrs-feed-rack'}" HorizontalExpand="True"/><Label Name="ResultCountLabel"/></BoxContainer>
+          <PanelContainer Name="PackingHintPanel"><Label Name="PackingHintLabel" Margin="8 4"/></PanelContainer>
+          <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VerticalExpand="True"><BoxContainer Name="ItemsContainer" Orientation="Vertical" SeparationOverride="4"/></ScrollContainer>
+        </BoxContainer></PanelContainer>
+        <PanelContainer Name="CartPanel" SetWidth="410"><BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
+          <BoxContainer Orientation="Horizontal"><Label Text="{Loc 'cmu-asrs-physical-manifest'}" HorizontalExpand="True"/><Label Name="CartStateLabel"/></BoxContainer>
+          <BoxContainer Orientation="Horizontal" SeparationOverride="4"><Label Text="{Loc 'cmu-asrs-platform-slots'}"/><BoxContainer Name="PlatformSlotsContainer" Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="3"/></BoxContainer>
+          <Label Name="CartEmptyLabel" Text="{Loc 'cmu-asrs-cart-empty'}"/>
+          <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VerticalExpand="True"><BoxContainer Name="CartContainer" Orientation="Vertical" SeparationOverride="5"/></ScrollContainer>
+          <PanelContainer Name="CartSummaryPanel"><BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="2"><Label Name="CartCostLabel"/><Label Name="CartWeightLabel"/><Label Name="CartCratesLabel"/><Label Name="CartCapacityLabel"/></BoxContainer></PanelContainer>
+          <PanelContainer Name="CheckoutStagePanel" Visible="False"><BoxContainer Orientation="Vertical" Margin="8"><Label Name="CheckoutPhaseLabel" Align="Center"/><ProgressBar Name="CheckoutProgress" MinValue="0" MaxValue="1"/></BoxContainer></PanelContainer>
+          <PanelContainer Name="ReceiptPanel" Visible="False"><BoxContainer Orientation="Vertical" Margin="8"><Label Text="{Loc 'cmu-asrs-line-printer'}"/><Label Name="ReceiptLabel"/><Button Name="ReceiptDismissButton" Text="{Loc 'cmu-asrs-receipt-dismiss'}"/></BoxContainer></PanelContainer>
+          <Label Name="FeedbackLabel"/><Button Name="CheckoutButton" Text="{Loc 'cmu-asrs-seal-dispatch'}" MinHeight="46"/>
+        </BoxContainer></PanelContainer>
+      </BoxContainer>
+    </BoxContainer>
+  </PanelContainer>
+</controls:RequisitionsLoadBayLayout>

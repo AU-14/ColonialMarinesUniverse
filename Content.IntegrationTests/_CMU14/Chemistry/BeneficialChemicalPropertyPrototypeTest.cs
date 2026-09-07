@@ -1,32 +1,37 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
-using Content.Server.Botany;
-using Content.Server.Botany.Components;
-using Content.Server._AU14.Chemistry.Reagents;
-using Content.Server._AU14.Chemistry.Research;
-using Content.Shared._AU14.Chemistry.Reagents;
-using Content.Shared._AU14.Chemistry.Research;
-using Content.Shared._CMU14.Chemistry.Effects;
-using Content.Shared._CMU14.Chemistry.Effects.Positive;
-using Content.Shared._CMU14.Chemistry.Effects.Special;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Traits.NicotineAddiction;
+using Content.Server.CMU14.Chemistry.Reagents;
+using Content.Server.CMU14.Chemistry.Research;
+using Content.Server.CMU14.Chemistry.HydroTrayEffects;
+using Content.Server.GameTicking;
+using Content.Shared.CMU14.Chemistry.Reagents;
+using Content.Shared.CMU14.Chemistry.Research;
+using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Chemistry.Effects.Positive;
+using Content.Shared.CMU14.Chemistry.Effects.Special;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Traits.NicotineAddiction;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Chemistry;
-using Content.Shared._CMU14.Chemistry.Reagent;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared._RMC14.Chemistry.Effects;
+using Content.Shared._RMC14.Chemistry.Effects.Negative;
 using Content.Shared._RMC14.Chemistry.Effects.Positive;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body.Part;
+using Content.Shared.Botany.Components;
+using Content.Shared.Botany.Systems;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -34,9 +39,13 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
+using Content.Shared.EntityConditions.Conditions;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
+using Content.Shared.Item.ItemToggle;
 using Content.Shared.Medical;
+using Content.Shared.Metabolism;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -46,7 +55,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Reflection;
 
-namespace Content.IntegrationTests._CMU14.Chemistry;
+namespace Content.IntegrationTests.CMU14.Chemistry;
 
 [TestFixture]
 public sealed class BeneficialChemicalPropertyPrototypeTest
@@ -97,7 +106,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
           overdose: 10
           criticalOverdose: 20
           metabolisms:
-            Medicine:
+            Bloodstream:
               metabolismRate: 0.1
               effects:
         {{string.Join('\n', PropertyIds.Select(id => $"      - !type:{id}\n        potency: 2"))}}
@@ -112,7 +121,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
           overdose: 35
           criticalOverdose: 40
           metabolisms:
-            Medicine:
+            Bloodstream:
               metabolismRate: 0.1
               effects:
               - !type:Defibrillating
@@ -122,18 +131,21 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
           id: {{InorganicTarget}}
           components:
           - type: Damageable
+          - type: Injurable
             damageContainer: StructuralInorganic
 
         - type: entity
           id: {{OrganicTarget}}
           components:
           - type: Damageable
+          - type: Injurable
             damageContainer: Biological
 
         - type: entity
           id: {{XenoTarget}}
           components:
           - type: Damageable
+          - type: Injurable
             damageContainer: StructuralInorganic
           - type: RepairableXenoStructure
             plasmaCost: 1
@@ -176,6 +188,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     public async Task AdminContractRegistersAndMaterializesItsGeneratedChemical()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await pair.CreateTestMap();
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -263,7 +276,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
             var reflection = pair.Server.ResolveDependency<IReflectionManager>();
             var systems = pair.Server.ResolveDependency<IEntitySystemManager>();
             var reagent = prototypes.Index<ReagentPrototype>(TestReagent);
-            var effects = reagent.Metabolisms!.Values
+            var effects = reagent.Metabolisms!.Metabolisms.Values
                 .SelectMany(entry => entry.Effects)
                 .ToArray();
 
@@ -284,7 +297,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                     Assert.That(effect, Is.InstanceOf<EntityEffect>());
 
                     var chemical = (RMCChemicalEffect)effect;
-                    var guidebook = chemical.GuidebookEffectDescription(prototypes, systems);
+                    var guidebook = chemical.EntityEffectGuidebookText(prototypes, systems);
                     Assert.That(guidebook, Is.Not.Null.And.Not.Empty, $"{id} has no guidebook description.");
                     Assert.That(guidebook, Does.Not.Contain("PLACEHOLDER").IgnoreCase,
                         $"{id} still has placeholder guidebook text.");
@@ -292,6 +305,147 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                         $"{id} still advertises an unimplemented effect.");
                 }
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task EveryGeneratedPropertyResolvesToOneTypedChemicalEffect()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+
+        await pair.Server.WaitAssertion(() =>
+        {
+            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
+            var reflection = pair.Server.ResolveDependency<IReflectionManager>();
+            var properties = prototypes.EnumeratePrototypes<ReagentPropertyPrototype>()
+                .Where(property => !property.Abstract && !string.IsNullOrWhiteSpace(property.EffectName))
+                .ToArray();
+
+            Assert.That(properties, Has.Length.EqualTo(102));
+            Assert.That(properties.Select(property => property.ID), Is.Unique);
+            Assert.That(properties.Select(property => property.EffectName), Is.Unique);
+            Assert.Multiple(() =>
+            {
+                foreach (var property in properties)
+                {
+                    Assert.That(reflection.TryLooseGetType(property.EffectName, out var effectType), Is.True,
+                        $"{property.ID} has no typed effect named {property.EffectName}.");
+                    Assert.That(effectType != null && typeof(RMCChemicalEffect).IsAssignableFrom(effectType), Is.True,
+                        $"{property.ID} resolves to a non-chemical effect.");
+                }
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task EveryReagentUsesAResolvedMetabolismStage()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+
+        await pair.Server.WaitAssertion(() =>
+        {
+            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
+            var legacyGroups = new HashSet<string>
+            {
+                "Medicine",
+                "Food",
+                "Narcotic",
+                "Alcohol",
+                "Poison",
+            };
+
+            Assert.Multiple(() =>
+            {
+                foreach (var reagent in prototypes.EnumeratePrototypes<ReagentPrototype>())
+                {
+                    if (reagent.Metabolisms == null)
+                        continue;
+
+                    foreach (var stage in reagent.Metabolisms.Metabolisms.Keys)
+                    {
+                        Assert.That(legacyGroups, Does.Not.Contain(stage.Id),
+                            $"Reagent {reagent.ID} still uses legacy metabolism group {stage.Id}.");
+                        Assert.That(prototypes.HasIndex<MetabolismStagePrototype>(stage), Is.True,
+                            $"Reagent {reagent.ID} uses missing metabolism stage {stage.Id}.");
+                    }
+                }
+
+                var nutriment = prototypes.Index<ReagentPrototype>("Nutriment");
+                Assert.That(nutriment.Metabolisms!.Metabolisms.Keys.Select(stage => stage.Id),
+                    Does.Contain("Metabolites"),
+                    "Base Nutriment's intentional Metabolites-stage effects were moved to Digestion.");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AdminContractDynamicallyLoadsEveryGeneratedPropertyExactlyOnce()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await pair.CreateTestMap();
+
+        await pair.Server.WaitAssertion(() =>
+        {
+            const string generatedId = "TAU-ALL-TYPED-PROPERTIES-TEST";
+            var server = pair.Server;
+            var entities = server.EntMan;
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var reflection = server.ResolveDependency<IReflectionManager>();
+            // Test maps do not raise the lifecycle event that prepares generator classes and property buckets.
+            entities.EventBus.RaiseEvent(EventSource.Local, new LoadingMapsEvent([]));
+            var properties = prototypes.EnumeratePrototypes<ReagentPropertyPrototype>()
+                .Where(property => !property.Abstract && !string.IsNullOrWhiteSpace(property.EffectName))
+                .OrderBy(property => property.ID)
+                .ToArray();
+            var console = entities.SpawnEntity("CMUAdminChemicalContractConsole", MapCoordinates.Nullspace);
+            EntityUid? contract = null;
+
+            try
+            {
+                Assert.That(properties, Has.Length.EqualTo(102));
+                var data = new GeneratedReagentData
+                {
+                    ID = generatedId,
+                    Name = "Omniproperty test reagent",
+                    Class = ReagentClass.Ultra,
+                    GenTier = 3,
+                    RecipeHint = "CMInaprovaline",
+                    Effects = properties.ToDictionary(property => property.ID, _ => 1),
+                };
+
+                contract = entities.System<ServerResearchDataTerminalSystem>()
+                    .IssueAdminContract(console, data);
+                Assert.That(contract, Is.Not.Null);
+                Assert.That(prototypes.HasIndex<ReagentPrototype>(generatedId), Is.True);
+
+                var reagent = prototypes.Index<ReagentPrototype>(generatedId);
+                var effects = reagent.Metabolisms!.Metabolisms.Values
+                    .SelectMany(entry => entry.Effects)
+                    .ToArray();
+                Assert.That(effects, Has.Length.EqualTo(properties.Length));
+                Assert.That(effects.Select(effect => effect.GetType()), Is.Unique);
+                Assert.Multiple(() =>
+                {
+                    foreach (var property in properties)
+                    {
+                        Assert.That(reflection.TryLooseGetType(property.EffectName, out var effectType), Is.True);
+                        Assert.That(effects.Count(effect => effect.GetType() == effectType), Is.EqualTo(1),
+                            $"Generated property {property.ID} did not load exactly one {property.EffectName} effect.");
+                    }
+                });
+            }
+            finally
+            {
+                if (contract is { } contractEntity && entities.EntityExists(contractEntity))
+                    entities.DeleteEntity(contractEntity);
+                entities.DeleteEntity(console);
+            }
         });
 
         await pair.CleanReturnAsync();
@@ -308,7 +462,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
             var entities = pair.Server.EntMan;
             var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
             var reagent = prototypes.Index<ReagentPrototype>(TestReagent);
-            var effects = reagent.Metabolisms!.Values
+            var effects = reagent.Metabolisms!.Metabolisms.Values
                 .SelectMany(entry => entry.Effects)
                 .OfType<RMCChemicalEffect>()
                 .ToArray();
@@ -321,8 +475,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                     var human = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
                     try
                     {
-                        Assert.That(
-                            () => effect.Effect(ReagentArgs(human, entities, reagent, quantity)),
+                        Assert.That(() => ApplyEffect(entities, human, effect, reagent, quantity),
                             Throws.Nothing,
                             $"{effect.GetType().Name} failed at bloodstream quantity {quantity}u.");
                         Assert.That(entities.EntityExists(human), Is.True,
@@ -334,6 +487,78 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                             entities.DeleteEntity(human);
                     }
                 }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task TypedReagentConditionUsesLiveSourceAndCurrentContextReagent()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        await pair.LoadPrototypes([ReagentPrototype]);
+
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
+            var reagent = prototypes.Index<ReagentPrototype>(TestReagent);
+            var target = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            try
+            {
+                var implicitCondition = new Antitoxic
+                {
+                    Potency = 2,
+                    Conditions = [new ReagentCondition { Min = 2 }],
+                };
+                var explicitCondition = new Antitoxic
+                {
+                    Potency = 2,
+                    Conditions = [new ReagentCondition { Reagent = "Water", Min = 2 }],
+                };
+                var boundedCondition = new Antitoxic
+                {
+                    Potency = 2,
+                    Conditions = [new ReagentCondition { Min = 2, Max = 3 }],
+                };
+                var invertedCondition = new Antitoxic
+                {
+                    Potency = 2,
+                    Conditions = [new ReagentCondition { Min = 2, Max = 3, Inverted = true }],
+                };
+                var system = entities.System<SharedEntityEffectsSystem>();
+
+                var insufficient = new Solution(TestReagent, 1);
+                var sufficient = new Solution(TestReagent, 2);
+                var excessive = new Solution(TestReagent, 4);
+                var explicitSource = new Solution(TestReagent, 1);
+                explicitSource.AddReagent("Water", 2);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(TryApply(system, target, implicitCondition, reagent, insufficient), Is.False);
+                    Assert.That(TryApply(system, target, implicitCondition, reagent, sufficient), Is.True,
+                        "The implicit condition did not bind to the current context reagent.");
+                    Assert.That(TryApply(system, target, explicitCondition, reagent, sufficient), Is.False);
+                    Assert.That(TryApply(system, target, explicitCondition, reagent, explicitSource), Is.True,
+                        "The explicit condition did not inspect its named reagent in the live source.");
+                    Assert.That(TryApply(system, target, implicitCondition, reagent, null), Is.False,
+                        "A reagent condition passed without a source solution.");
+                    Assert.That(TryApply(system, target, boundedCondition, reagent, sufficient), Is.True);
+                    Assert.That(TryApply(system, target, boundedCondition, reagent, excessive), Is.False,
+                        "The reagent condition ignored its maximum quantity.");
+                    Assert.That(TryApply(system, target, invertedCondition, reagent, sufficient), Is.False,
+                        "Central condition inversion did not reject a matching source.");
+                    Assert.That(TryApply(system, target, invertedCondition, reagent, insufficient), Is.True,
+                        "Central condition inversion did not accept a non-matching source.");
+                    Assert.That(TryApply(system, target, invertedCondition, reagent, null), Is.True,
+                        "The missing-source false result was not centrally inverted.");
+                });
+            }
+            finally
+            {
+                entities.DeleteEntity(target);
             }
         });
 
@@ -398,7 +623,8 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         {
             var entities = pair.Server.EntMan;
             var human = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var defibrillator = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var defibrillator = entities.SpawnEntity("CMDefibrillator", MapCoordinates.Nullspace);
+            var user = entities.SpawnEntity("MobHuman", MapCoordinates.Nullspace);
             try
             {
                 var damageable = entities.System<DamageableSystem>();
@@ -408,9 +634,6 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                     ? organ
                     : throw new AssertionException("Test human has no heart.");
                 var heartComponent = entities.GetComponent<HeartComponent>(heart);
-
-                SetField(heartComponent, nameof(HeartComponent.Stopped), true);
-                SetField(heartComponent, nameof(HeartComponent.BeatsPerMinute), 0);
 
                 var damage = new DamageSpecifier
                 {
@@ -422,17 +645,20 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                     },
                 };
                 damageable.TryChangeDamage(human, damage, true, interruptsDoAfters: false);
+                entities.System<MobStateSystem>().ChangeMobState(human, MobState.Dead);
+                var damageBefore = damageable.GetTotalDamage(human);
 
                 Assert.That(bloodstream.TryGetChemicalSolution(human, out var solution, out _), Is.True);
-                solution.Comp.Solution.AddReagent(TestReagent, 2);
-
-                entities.EnsureComponent<DefibrillatorComponent>(defibrillator);
-                var attempt = new RMCDefibrillatorDamageModifyEvent(human, new DamageSpecifier());
-                entities.EventBus.RaiseLocalEvent(defibrillator, ref attempt);
+                Assert.That(entities.System<SharedSolutionContainerSystem>().TryAddReagent(solution, TestReagent, 2), Is.True);
+                Assert.That(entities.System<ItemToggleSystem>().TryActivate(defibrillator, user: user), Is.True);
+                var defibs = entities.System<SharedDefibrillatorSystem>();
+                Assert.That(defibs.CanZap(defibrillator, human, user), Is.True);
+                defibs.Zap(defibrillator, human, user);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(attempt.Heal.GetTotal(), Is.LessThan(FixedPoint2.Zero));
+                    Assert.That(damageable.GetTotalDamage(human), Is.LessThan(damageBefore));
+                    Assert.That(entities.GetComponent<MobStateComponent>(human).CurrentState, Is.Not.EqualTo(MobState.Dead));
                     Assert.That(solution.Comp.Solution.GetTotalPrototypeQuantity(TestReagent),
                         Is.EqualTo((FixedPoint2)1));
                     Assert.That(heartComponent.Stopped, Is.False);
@@ -442,6 +668,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
             {
                 entities.DeleteEntity(human);
                 entities.DeleteEntity(defibrillator);
+                entities.DeleteEntity(user);
             }
         });
 
@@ -511,7 +738,7 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
             var status = entities.System<ChemicalPropertyStatusSystem>();
             var medical = entities.System<CMUChemicalMedicalSystem>();
             var index = entities.System<CMUMedicalBodyIndexSystem>();
-            var statusEffects = entities.System<SharedStatusEffectsSystem>();
+        var statusEffects = entities.System<StatusEffectsSystem>();
 
             var human = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             spawned.Add(human);
@@ -555,20 +782,20 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                 Assert.That(medical.DamageOrgan<CMUBrainComponent>(noOrgans, 1, "Shock"), Is.False);
             });
 
-            var painkilling = reagent.Metabolisms!.Values
+            var painkilling = reagent.Metabolisms!.Metabolisms.Values
                 .SelectMany(entry => entry.Effects)
                 .OfType<Painkilling>()
                 .Single();
             statusEffects.TryRemoveStatusEffect(human, "StatusEffectDrowsiness");
             statusEffects.TryRemoveStatusEffect(human, "StatusEffectCMUUnconscious");
-            painkilling.Effect(ReagentArgs(human, entities, reagent, 9.99f));
+            ApplyEffect(entities, human, painkilling, reagent, 9.99f);
             Assert.That(statusEffects.HasStatusEffect(human, "StatusEffectDrowsiness"), Is.False);
 
-            painkilling.Effect(ReagentArgs(human, entities, reagent, 10));
+            ApplyEffect(entities, human, painkilling, reagent, 10);
             Assert.That(statusEffects.HasStatusEffect(human, "StatusEffectDrowsiness"), Is.True);
             statusEffects.TryRemoveStatusEffect(human, "StatusEffectDrowsiness");
 
-            painkilling.Effect(ReagentArgs(human, entities, reagent, 20));
+            ApplyEffect(entities, human, painkilling, reagent, 20);
             Assert.Multiple(() =>
             {
                 Assert.That(statusEffects.HasStatusEffect(human, "StatusEffectDrowsiness"), Is.True);
@@ -577,15 +804,15 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
 
             entities.EnsureComponent<NicotineAddictionComponent>(human);
             entities.System<ChemicalAddictionSystem>().AddOrSatisfy(human, TestReagent);
-            var antiaddictive = reagent.Metabolisms.Values
+            var antiaddictive = reagent.Metabolisms.Metabolisms.Values
                 .SelectMany(entry => entry.Effects)
                 .OfType<Antiaddictive>()
                 .Single();
-            antiaddictive.Effect(ReagentArgs(human, entities, reagent, 1));
-            antiaddictive.Effect(ReagentArgs(human, entities, reagent, 1));
+            ApplyEffect(entities, human, antiaddictive, reagent, 1);
+            ApplyEffect(entities, human, antiaddictive, reagent, 1);
 
             TestRepairingContact(entities, reagent, spawned);
-            TestHydroponics(entities, reagent, spawned);
+            TestHydroponics(entities, prototypes, spawned);
             TestBonesAndShrapnel(entities, index, human);
 
             var earlyInfection = entities.SpawnEntity(null, MapCoordinates.Nullspace);
@@ -664,14 +891,47 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         Assert.That(ev.Multiplier, Is.EqualTo(1f));
     }
 
-    private static EntityEffectReagentArgs ReagentArgs(
-        EntityUid target,
+    private static bool ApplyEffect(
         IEntityManager entities,
+        EntityUid target,
+        EntityEffect effect,
         ReagentPrototype reagent,
-        FixedPoint2 bloodstreamQuantity)
+        FixedPoint2 bloodstreamQuantity,
+        ReagentEffectOrigin origin = ReagentEffectOrigin.Metabolism,
+        EntityUid? organ = null)
     {
         var source = new Solution(TestReagent, bloodstreamQuantity);
-        return new EntityEffectReagentArgs(target, entities, null, source, 1, reagent, null, 1);
+        var quantity = new ReagentQuantity(TestReagent, bloodstreamQuantity);
+        var context = new ReagentEffectContext(
+            reagent,
+            source,
+            null,
+            organ,
+            quantity,
+            origin == ReagentEffectOrigin.Metabolism ? "Bloodstream" : null,
+            origin == ReagentEffectOrigin.Reaction ? ReactionMethod.Touch : null,
+            origin);
+        return entities.System<SharedEntityEffectsSystem>()
+            .TryApplyEffect(target, effect, reagentContext: context);
+    }
+
+    private static bool TryApply(
+        SharedEntityEffectsSystem system,
+        EntityUid target,
+        EntityEffect effect,
+        ReagentPrototype reagent,
+        Solution? source)
+    {
+        var context = new ReagentEffectContext(
+            reagent,
+            source,
+            null,
+            null,
+            new ReagentQuantity(TestReagent, 0.25f),
+            "Bloodstream",
+            null,
+            ReagentEffectOrigin.Metabolism);
+        return system.TryApplyEffect(target, effect, scale: 0.25f, reagentContext: context);
     }
 
     private static void TestRepairingContact(
@@ -691,14 +951,12 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         ApplyDamage(damageable, xeno, "Structural", 30);
         ApplyDamage(damageable, organic, "Blunt", 30);
 
-        var contact = new ReactionEntityEvent(
-            ReactionMethod.Touch,
-            reagent,
-            new ReagentQuantity(TestReagent, 1),
-            null);
-        entities.EventBus.RaiseLocalEvent(inorganic, ref contact);
-        entities.EventBus.RaiseLocalEvent(organic, ref contact);
-        entities.EventBus.RaiseLocalEvent(xeno, ref contact);
+        var source = new Solution(TestReagent, 1);
+        var quantity = new ReagentQuantity(TestReagent, 1);
+        var reactive = entities.System<ReactiveSystem>();
+        reactive.ReactionEntity(inorganic, ReactionMethod.Touch, reagent, quantity, source);
+        reactive.ReactionEntity(organic, ReactionMethod.Touch, reagent, quantity, source);
+        reactive.ReactionEntity(xeno, ReactionMethod.Touch, reagent, quantity, source);
 
         Assert.Multiple(() =>
         {
@@ -710,60 +968,136 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
 
     private static void TestHydroponics(
         IEntityManager entities,
-        ReagentPrototype reagent,
+        IPrototypeManager prototypes,
         ICollection<EntityUid> spawned)
     {
-        var tray = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+        var tray = entities.SpawnEntity("hydroponicsTray", MapCoordinates.Nullspace);
+        var plantEntity = entities.SpawnEntity("WheatPlants", MapCoordinates.Nullspace);
         spawned.Add(tray);
-        var plant = entities.EnsureComponent<PlantHolderComponent>(tray);
-        var seed = new SeedData();
-        SetField(seed, nameof(SeedData.Unique), true);
-        SetField(seed, nameof(SeedData.Endurance), 100f);
-        SetField(seed, nameof(SeedData.Potency), 50f);
-        plant.Seed = seed;
-        plant.Health = 20f;
-        plant.Toxins = 5f;
+        spawned.Add(plantEntity);
+        var trayComponent = entities.GetComponent<PlantTrayComponent>(tray);
+        var plant = entities.GetComponent<PlantHolderComponent>(plantEntity);
+        entities.System<PlantTraySystem>().PlantingPlantInTray((tray, trayComponent), plantEntity);
+        SetField(trayComponent, nameof(PlantTrayComponent.ToxinLevel), 0f);
+        SetField(plant, nameof(PlantHolderComponent.MutationLevel), 0f);
 
-        var hydroArgs = new EntityEffectHydroArgs(tray, entities, null, null, 1, reagent, null, 1);
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Antitoxic>(1, hydroArgs));
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Anticorrosive>(1, hydroArgs));
+        var carcinogenic = new Carcinogenic { Potency = 2 };
+        var carcinogenicSource = new Solution(TestReagent, 1);
+        var carcinogenicContext = new ReagentEffectContext(
+            prototypes.Index<ReagentPrototype>(TestReagent),
+            carcinogenicSource,
+            null,
+            null,
+            new ReagentQuantity(TestReagent, 1),
+            null,
+            null,
+            ReagentEffectOrigin.Hydroponics);
+        Assert.That(entities.System<SharedEntityEffectsSystem>()
+            .TryApplyEffect(tray, carcinogenic, reagentContext: carcinogenicContext), Is.True);
         Assert.Multiple(() =>
         {
-            Assert.That(plant.Toxins, Is.Zero);
-            Assert.That(plant.Health, Is.EqualTo(25f));
+            Assert.That(trayComponent.ToxinLevel, Is.EqualTo(1.5f));
+            // Legacy hydro mutation adds the plant's default MutationMod (1) to the processed 1u quantity.
+            Assert.That(plant.MutationLevel, Is.EqualTo(20f));
         });
 
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Hepatopeutic>(1, hydroArgs));
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Nephropeutic>(1, hydroArgs));
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Pneumopeutic>(1, hydroArgs));
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Oculopeutic>(1, hydroArgs));
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Neuropeutic>(1, hydroArgs));
+        SetField(trayComponent, nameof(PlantTrayComponent.ToxinLevel), 5f);
+        SetField(plant, nameof(PlantHolderComponent.Health), 20f);
+
+        var solutions = entities.System<SharedSolutionContainerSystem>();
+        Assert.That(solutions.TryGetSolution(tray, trayComponent.SoilSolutionName, out var soil), Is.True);
+        soil!.Value.Comp.Solution.AddReagent(TestReagent, 5);
+        entities.System<PlantTraySystem>().UpdateReagents((tray, trayComponent));
         Assert.Multiple(() =>
         {
-            Assert.That(plant.MutationController.Fields["Plant Cancer"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Gluttony"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Light Tolerance"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Weed Tolerance"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Toxin Tolerance"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Endurance"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Lifespan"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Production"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Maturity"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Potency"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Bioluminescence"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Flowers"], Is.EqualTo(1));
-            Assert.That(plant.MutationController.Fields["Mutate Species"], Is.EqualTo(1));
+            Assert.That(trayComponent.ToxinLevel, Is.Zero);
+            // Antitoxic clears all 5 toxin first; Anticorrosive then heals 0.5 potency * 1u * 5.
+            Assert.That(plant.Health, Is.EqualTo(22.5f));
+            Assert.That(soil.Value.Comp.Solution.GetTotalPrototypeQuantity(TestReagent),
+                Is.EqualTo((FixedPoint2)4),
+                "The RMC hydro effect consumed or scaled from more than the processed 1u tick quantity.");
         });
 
-        SetField(seed, nameof(SeedData.Immutable), true);
-        plant.MutationController.Fields["Potency"] = 0;
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Oculopeutic>(5, hydroArgs));
-        Assert.That(plant.MutationController.Fields["Potency"], Is.Zero);
+        Assert.That(entities.GetComponent<CMUChemicalMutationWhitelistComponent>(plantEntity).AllowedMutations,
+            Is.EquivalentTo(new[]
+            {
+                "ChangeLifespan",
+                "ChangeEndurance",
+                "ChangeWaterConsumption",
+                "ChangeNutrientConsumption",
+                "ChangeToxinsTolerance",
+                "ChangeWeedTolerance",
+                "ChangeProduction",
+                "ChangeMaturation",
+                "ChangePotency",
+                "ChangeSpecies",
+            }));
 
-        plant.Dead = true;
-        plant.Toxins = 5f;
-        entities.EventBus.RaiseEvent(EventSource.Local, new HydroTickEvent<Antitoxic>(1, hydroArgs));
-        Assert.That(plant.Toxins, Is.EqualTo(5f));
+        Assert.Multiple(() =>
+        {
+            Assert.That(IsMutationCancelled(entities, prototypes, plantEntity, "ChangePotency"), Is.False,
+                "The chemical whitelist rejected one of its explicitly enabled mutations.");
+            Assert.That(IsMutationCancelled(entities, prototypes, plantEntity, "ChangeHarvest"), Is.True,
+                "The chemical whitelist allowed a mutation outside its union.");
+        });
+
+        soil.Value.Comp.Solution.AddReagent(TestReagent, 1);
+        entities.System<PlantTraySystem>().UpdateReagents((tray, trayComponent));
+        Assert.That(entities.GetComponent<CMUChemicalMutationWhitelistComponent>(plantEntity).AllowedMutations,
+            Has.Count.EqualTo(10), "Repeated chemical ticks duplicated whitelist entries.");
+
+        var suppressionExpiry = entities
+            .GetComponent<CMUChemicalMutationSuppressionComponent>(plantEntity)
+            .ExpiresAt;
+        SetField(plant, nameof(PlantHolderComponent.MutationLevel), 1f);
+        entities.System<PlantMutationSystem>().SpeciesChange(
+            (plantEntity, entities.GetComponent<PlantDataComponent>(plantEntity)),
+            "MeatWheatPlants");
+        var replacement = trayComponent.PlantEntity;
+        Assert.That(replacement, Is.Not.Null.And.Not.EqualTo(plantEntity));
+        plantEntity = replacement!.Value;
+        spawned.Add(plantEntity);
+        plant = entities.GetComponent<PlantHolderComponent>(plantEntity);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(plant.MutationLevel, Is.Zero,
+                "Species replacement did not complete its forced mutation pass.");
+            Assert.That(entities.GetComponent<CMUChemicalMutationWhitelistComponent>(plantEntity).AllowedMutations,
+                Has.Count.EqualTo(10), "Species replacement lost or duplicated the mutation whitelist.");
+            Assert.That(entities.GetComponent<CMUChemicalMutationSuppressionComponent>(plantEntity).ExpiresAt,
+                Is.EqualTo(suppressionExpiry), "Species replacement changed the active Cardiopeutic expiry.");
+            Assert.That(IsMutationCancelled(entities, prototypes, plantEntity, "ChangePotency"), Is.False);
+            Assert.That(IsMutationCancelled(entities, prototypes, plantEntity, "ChangeHarvest"), Is.True);
+        });
+
+        entities.RemoveComponent<CMUChemicalMutationWhitelistComponent>(plantEntity);
+        Assert.Multiple(() =>
+        {
+            Assert.That(IsMutationCancelled(entities, prototypes, plantEntity, "ChangeChemicals"), Is.True,
+                "Cardiopeutic did not suppress chemical-production mutation.");
+            Assert.That(IsMutationCancelled(entities, prototypes, plantEntity, "ChangeHarvest"), Is.False,
+                "Cardiopeutic suppressed a mutation other than ChangeChemicals.");
+        });
+
+        SetField(plant, nameof(PlantHolderComponent.Dead), true);
+        SetField(trayComponent, nameof(PlantTrayComponent.ToxinLevel), 5f);
+        soil.Value.Comp.Solution.AddReagent(TestReagent, 1);
+        entities.System<PlantTraySystem>().UpdateReagents((tray, trayComponent));
+        Assert.That(trayComponent.ToxinLevel, Is.EqualTo(5f));
+    }
+
+    private static bool IsMutationCancelled(
+        IEntityManager entities,
+        IPrototypeManager prototypes,
+        EntityUid plant,
+        string mutationName)
+    {
+        var prototype = prototypes.Index<RandomPlantMutationListPrototype>("RandomPlantMutations");
+        var mutation = prototype.Mutations.Single(candidate => candidate.Name == mutationName);
+        var ev = new BeforeRandomPlantMutationEvent(plant, mutation);
+        entities.EventBus.RaiseLocalEvent(plant, ref ev);
+        return ev.Cancelled;
     }
 
     private static void TestBonesAndShrapnel(
@@ -825,3 +1159,5 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         field.SetValue(target, value);
     }
 }
+
+#pragma warning restore RA0002

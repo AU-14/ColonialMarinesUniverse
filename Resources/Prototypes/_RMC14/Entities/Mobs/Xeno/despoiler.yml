@@ -89,8 +89,10 @@
   - type: XenoTailStab
     toggle: false
     tailDamage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: MeleeWeapon
     damage:
       types:

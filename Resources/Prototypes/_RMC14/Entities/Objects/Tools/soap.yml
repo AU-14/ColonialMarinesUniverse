@@ -15,9 +15,9 @@
     size: Tiny  
   - type: Physics
     bodyType: Dynamic
-  - type: SolutionContainerManager
-    solutions:
-      soap:
+  - type: Solution
+    id: soap
+    solution:
         maxVol: 50
         reagents:
         - ReagentId: SoapReagent
@@ -35,7 +35,7 @@
   - type: FlavorProfile
     flavors:
       - clean
-  - type: Food
+  - type: Edible
     solution: soap
   - type: BadFood
   - type: CleansForensics

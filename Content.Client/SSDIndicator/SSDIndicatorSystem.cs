@@ -16,7 +16,6 @@ namespace Content.Client.SSDIndicator;
 /// </summary>
 public sealed partial class SSDIndicatorSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private MobStateSystem _mobState = default!;
 
@@ -42,15 +41,14 @@ public sealed partial class SSDIndicatorSystem : EntitySystem
 
         if (_mobState.IsDead(uid) ||
             HasComp<ActiveNPCComponent>(uid) ||
-            !TryComp<MindContainerComponent>(uid, out var mindContainer) ||
-            !mindContainer.ShowExamineInfo)
+            !HasComp<MindExaminableComponent>(uid))
         {
             return;
         }
 
         if (!_iconCache.TryGetValue(component.Icon, out var icon))
         {
-            icon = _prototype.Index(component.Icon);
+            icon = ProtoMan.Index(component.Icon);
             _iconCache[component.Icon] = icon;
         }
 

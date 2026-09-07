@@ -1,6 +1,8 @@
+using Content.Client.Resources;
 using Content.Client.Stylesheets;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.Atmos.Monitor;
 using Content.Shared.FixedPoint;
 using Content.Shared.Temperature;
@@ -22,6 +24,7 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
 
     private readonly IEntityManager _entManager;
     private readonly IResourceCache _cache;
+    private readonly SharedAtmosphereSystem _atmosphere;
 
     private Dictionary<AtmosAlarmType, string> _alarmStrings = new Dictionary<AtmosAlarmType, string>()
     {
@@ -37,14 +40,15 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
 
         _entManager = IoCManager.Resolve<IEntityManager>();
         _cache = IoCManager.Resolve<IResourceCache>();
+        _atmosphere = _entManager.System<SharedAtmosphereSystem>();
 
         NetEntity = uid;
         Coordinates = coordinates;
 
         // Load fonts
-        var headerFont = new VectorFont(_cache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Bold.ttf"), 11);
-        var normalFont = new VectorFont(_cache.GetResource<FontResource>("/Fonts/NotoSansDisplay/NotoSansDisplay-Regular.ttf"), 11);
-        var smallFont = new VectorFont(_cache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf"), 10);
+        var headerFont = _cache.GetFont("/Fonts/NotoSans/NotoSans-Bold.ttf", 11);
+        var normalFont = _cache.GetFont("/Fonts/NotoSansDisplay/NotoSansDisplay-Regular.ttf", 11);
+        var smallFont = _cache.GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 10);
 
         // Set fonts
         TemperatureHeaderLabel.FontOverride = headerFont;
@@ -68,7 +72,7 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
         Coordinates = _entManager.GetCoordinates(entry.Coordinates);
 
         // Load fonts
-        var normalFont = new VectorFont(_cache.GetResource<FontResource>("/Fonts/NotoSansDisplay/NotoSansDisplay-Regular.ttf"), 11);
+        var normalFont = _cache.GetFont("/Fonts/NotoSansDisplay/NotoSansDisplay-Regular.ttf", 11);
 
         // Update alarm state
         if (!_alarmStrings.TryGetValue(entry.AlarmState, out var alarmString))
@@ -149,7 +153,7 @@ public sealed partial class AtmosAlarmEntryContainer : BoxContainer
                     foreach ((var gas, (var mol, var percent, var alert)) in keyValuePairs)
                     {
                         FixedPoint2 gasPercent = percent * 100f;
-                        var gasAbbreviation = Atmospherics.GasAbbreviations.GetValueOrDefault(gas, Loc.GetString("gas-unknown-abbreviation"));
+                        var gasAbbreviation = Loc.GetString(_atmosphere.GetGas(gas).Abbreviation);
 
                         var gasLabel = new Label()
                         {

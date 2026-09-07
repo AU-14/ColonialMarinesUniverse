@@ -73,7 +73,7 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
 
     private void ApplyCrtPalette()
     {
-        Stylesheet = _stylesheetManager.SheetNano;
+        ((Control) this).Stylesheet = _stylesheetManager.SheetNano;
         CrtLobbyTheme.Apply(this);
     }
 

@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Weapons.Ranged.Ammo;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Robust.Shared.Random;
 
 namespace Content.Shared._RMC14.Weapons.Ranged;

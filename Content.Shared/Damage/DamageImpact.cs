@@ -48,11 +48,20 @@ public enum DamageImpactEnergy : byte
     Severe,
 }
 
+[Flags]
+[Serializable, NetSerializable]
+public enum DamageImpactContext : byte
+{
+    None = 0,
+    PointBlank = 1 << 0,
+}
+
 public readonly record struct DamageImpact(
     DamageImpactDelivery Delivery,
     DamageImpactContact Contact,
     DamageImpactPenetration Penetration,
-    DamageImpactEnergy Energy)
+    DamageImpactEnergy Energy,
+    DamageImpactContext Context = DamageImpactContext.None)
 {
     private static readonly FixedPoint2 MediumEnergyThreshold = FixedPoint2.New(20);
     private static readonly FixedPoint2 HighEnergyThreshold = FixedPoint2.New(45);
@@ -61,12 +70,13 @@ public readonly record struct DamageImpact(
         Delivery != DamageImpactDelivery.Unspecified ||
         Contact != DamageImpactContact.Unspecified ||
         Penetration != DamageImpactPenetration.Unspecified ||
-        Energy != DamageImpactEnergy.Unspecified;
+        Energy != DamageImpactEnergy.Unspecified ||
+        Context != DamageImpactContext.None;
 
     public static DamageImpact Generic => default;
 
     public static DamageImpact Projectile =>
-        new(DamageImpactDelivery.Projectile, DamageImpactContact.Stab, DamageImpactPenetration.High, DamageImpactEnergy.High);
+        new(DamageImpactDelivery.Projectile, DamageImpactContact.Generic, DamageImpactPenetration.High, DamageImpactEnergy.High);
 
     public static DamageImpact Explosion =>
         new(DamageImpactDelivery.Explosion, DamageImpactContact.Blast, DamageImpactPenetration.Forced, DamageImpactEnergy.Severe);
@@ -93,6 +103,27 @@ public readonly record struct DamageImpact(
             contact,
             penetration,
             GetEnergy(damage, heavy));
+    }
+
+    /// <summary>
+    /// Infers projectile impact traits for callers whose projectile prototype has no explicit profile.
+    /// Projectile collision code should prefer <see cref="DamageImpactProfileComponent.Projectile"/>.
+    /// </summary>
+    public static DamageImpact ForProjectile(DamageSpecifier damage)
+    {
+        var energy = GetEnergy(damage);
+        var penetration = energy switch
+        {
+            DamageImpactEnergy.High or DamageImpactEnergy.Severe => DamageImpactPenetration.High,
+            DamageImpactEnergy.Medium => DamageImpactPenetration.Medium,
+            _ => DamageImpactPenetration.Low,
+        };
+
+        return new DamageImpact(
+            DamageImpactDelivery.Projectile,
+            DamageImpactContact.Generic,
+            penetration,
+            energy);
     }
 
     public static DamageImpact ForThrown(DamageSpecifier damage)
@@ -166,7 +197,8 @@ public readonly record struct DamageImpact(
             Delivery == DamageImpactDelivery.Unspecified ? fallback.Delivery : Delivery,
             Contact == DamageImpactContact.Unspecified ? fallback.Contact : Contact,
             Penetration == DamageImpactPenetration.Unspecified ? fallback.Penetration : Penetration,
-            Energy == DamageImpactEnergy.Unspecified ? fallback.Energy : Energy);
+            Energy == DamageImpactEnergy.Unspecified ? fallback.Energy : Energy,
+            Context | fallback.Context);
     }
 
     private static DamageImpactContact GetDominantContact(DamageSpecifier damage)

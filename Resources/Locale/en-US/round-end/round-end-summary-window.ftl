@@ -35,13 +35,13 @@ round-end-summary-window-player-observer = Observer
 round-end-summary-window-player-antagonist = Antagonist
 round-end-summary-window-player-observer-role = Observer
 round-end-summary-window-stat-bones-broken = Bones broken
-round-end-summary-window-stat-bones-broken-detail = Fractures recorded during the round.
+round-end-summary-window-stat-bones-broken-detail = New fractures during the round; worsening and recovery do not add another break.
 round-end-summary-window-stat-surgeries = Surgeries completed
 round-end-summary-window-stat-surgeries-detail = Completed surgical procedures on patients.
 round-end-summary-window-stat-pain-shock = Pain shock entries
 round-end-summary-window-stat-pain-shock-detail = Times bodies crossed into pain shock.
 round-end-summary-window-stat-organ-crises = Organ crises
-round-end-summary-window-stat-organ-crises-detail = Organ stage changes across patients.
+round-end-summary-window-stat-organ-crises-detail = Episodes in which an organ entered a failing or dead state.
 round-end-summary-window-stat-defibs = Defib attempts
 round-end-summary-window-stat-defibs-detail = Defibrillator attempts recorded this round.
 round-end-summary-window-stat-limbs-stolen = Limbs stolen
@@ -56,3 +56,20 @@ round-end-summary-window-stat-shrapnel-embedded = Shrapnel embedded
 round-end-summary-window-stat-shrapnel-embedded-detail = Foreign bodies lodged in patients.
 round-end-summary-window-stat-bleeds-stopped = Bleeds stopped
 round-end-summary-window-stat-bleeds-stopped-detail = Internal bleeding cases cleared.
+
+
+round-end-summary-window-player-manifest-tab-search-placeholder = Search players, roles, types...
+
+round-end-summary-window-player-manifest-tab-sort-character = Character
+
+round-end-summary-window-player-manifest-tab-sort-role = Role
+
+round-end-summary-window-player-manifest-tab-sort-player-type = Type
+
+round-end-summary-window-player-manifest-tab-sort-player = Player
+
+round-end-summary-window-player-manifest-tab-sort-player-type-antag = Antagonist
+
+round-end-summary-window-player-manifest-tab-sort-player-type-crew = Crew
+
+round-end-summary-window-player-manifest-tab-sort-player-type-observer = Observer

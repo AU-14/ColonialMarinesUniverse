@@ -1,0 +1,101 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobCLFEngineer
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFEngineer
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUColonist
+    - CLF
+  - type: CLFMember
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-clf-prefix-engineer
+  - type: StartingMindRole
+    mindRole: MindRoleCLFGuerrilla
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
+  name: cmu-clf-name-engineer
+  description: cmu-clf-description
+  playTimeTracker: CMUJobCLFEngineer
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearCLFEngineer
+  spawnMenuRoleName: CLF Engineer (Reinforcements)
+  icon: RMCJobIconCLFEngineer
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCLF
+  id: CMUIntelThirdPartyCLFEngineerReinforcements
+  name: CLF Engineer Reinforcements
+  components:
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-clf-name-engineer
+    description: cmu-clf-description-reinforcement
+    job: CMUJobCLFEngineer
+    raffle:
+      settings: short
+    rules: cmu-clf-rules
+
+- type: startingGear
+  id: CMUGearCLFEngineer
+  equipment:
+    head: RMCHelmetWelding
+    mask: RMCCombatUtilityKnifeA
+    ears: RMCHeadsetDistressCLF
+    jumpsuit: RMCJumpsuitCLFWebbingBuckshot
+    outerClothing: RMCCoatMilitia
+    gloves: CMHandsInsulated
+    shoes: RMCShoesBrown
+    id: CMUIDCardCLFEngineer
+    belt: CMBeltUtilityFilled
+    back: RMCSatchelLightpackWelder
+    pocket1: RMCPouchConstructionFillLowGrade
+    pocket2: RMCPouchFirstAidERTFill
+  inhand:
+  - WeaponShotgunM357Sawn
+  - CMShellShotgunBuckshot
+  storage:
+    back:
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosivePlastic
+    - RMCGrenadeMolotov
+    - RMCMRECLF
+    - RMCFlashlight
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    outerClothing:
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+
+- type: playTimeTracker
+  id: CMUJobCLFEngineer

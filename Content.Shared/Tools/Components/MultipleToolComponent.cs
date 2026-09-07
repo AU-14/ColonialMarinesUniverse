@@ -12,7 +12,7 @@ public sealed partial class MultipleToolComponent : Component
     public sealed partial class ToolEntry
     {
         [DataField(required: true)]
-        public HashSet<ProtoId<ToolQualityPrototype>> Behavior = [];
+        public HashSet<ProtoId<ToolQualityPrototype>> Behavior = new();
 
         [DataField]
         public SoundSpecifier? UseSound;

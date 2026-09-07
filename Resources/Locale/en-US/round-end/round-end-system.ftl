@@ -7,8 +7,11 @@ round-end-system-shuttle-recalled-announcement = The emergency shuttle has been 
 round-end-system-shuttle-sender-announcement = Station
 round-end-system-round-restart-eta-announcement = Restarting the round in {$time} {$units}...
 
-eta-units-minutes = minutes
-eta-units-seconds = seconds
-
-# CMU14: endroundhold
-cmu-round-end-held-announcement = A win condition or shuttle tried to end the round, but the round-end hold is active (endroundhold). The round continues under admin control - end it with endround when you are ready.
+eta-units-minutes = {$amount ->
+    [one] minute
+    *[other] minutes
+}
+eta-units-seconds = {$amount ->
+    [one] second
+    *[other] seconds
+}

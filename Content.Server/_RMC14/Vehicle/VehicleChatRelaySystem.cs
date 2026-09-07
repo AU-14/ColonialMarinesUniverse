@@ -1,7 +1,7 @@
 using Content.Server.Chat.Systems;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle.Viewport;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.Player;
 using static Content.Server.Chat.Systems.ChatSystem;

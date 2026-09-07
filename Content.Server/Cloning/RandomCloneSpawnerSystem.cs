@@ -1,7 +1,5 @@
 using Content.Server.Cloning.Components;
-using Content.Shared.Mind;
-using Content.Shared.Mobs.Systems;
-using Robust.Shared.Prototypes;
+using Content.Shared.Objectives.Systems;
 using Robust.Shared.Random;
 
 namespace Content.Server.Cloning;
@@ -12,10 +10,9 @@ namespace Content.Server.Cloning;
 public sealed partial class RandomCloneSpawnerSystem : EntitySystem
 {
     [Dependency] private CloningSystem _cloning = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
-    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private AliveHumanoidTargetSystem _target = default!;
 
     public override void Initialize()
     {
@@ -28,13 +25,13 @@ public sealed partial class RandomCloneSpawnerSystem : EntitySystem
     {
         QueueDel(ent.Owner);
 
-        if (!_prototypeManager.TryIndex(ent.Comp.Settings, out var settings))
+        if (!ProtoMan.TryIndex(ent.Comp.Settings, out var settings))
         {
             Log.Error($"Used invalid cloning settings {ent.Comp.Settings} for RandomCloneSpawner");
             return;
         }
 
-        var allHumans = _mind.GetAliveHumans();
+        var allHumans = _target.GetMinds();
 
         if (allHumans.Count == 0)
             return;

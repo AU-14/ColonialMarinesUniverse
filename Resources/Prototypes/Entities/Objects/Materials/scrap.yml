@@ -12,8 +12,9 @@
     sprite: Objects/Materials/Scrap/generic.rsi
     size: Normal
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: FlimsyMetallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -37,8 +38,9 @@
   components:
   - type: InteractionOutline
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: FlimsyMetallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -152,7 +154,7 @@
     size: Large
     shape:
     - 0,0,4,4 # 5x5
-    heldPrefix: "airlock"
+    heldPrefix: "airlock-1"
   - type: MultiHandedItem
   - type: Tag
     tags:
@@ -176,6 +178,7 @@
     size: Normal
     shape:
     - 0,0,3,0
+    heldPrefix: "airlock-3"
   - type: Tag
     tags:
     - Recyclable
@@ -195,6 +198,8 @@
   - type: Sprite
     layers:
     - state: junk-bucket
+  - type: Item
+    heldPrefix: "bucket"
   - type: Tag
     tags:
     - Recyclable
@@ -213,6 +218,8 @@
   - type: Sprite
     layers:
     - state: junk-camera
+  - type: Item
+    heldPrefix: "camera"
   - type: Tag
     tags:
     - Recyclable
@@ -232,6 +239,8 @@
   - type: Sprite
     layers:
     - state: junk-canister-1
+  - type: Item
+    heldPrefix: "canister-1"
   - type: Tag
     tags:
     - Recyclable
@@ -252,6 +261,7 @@
     - state: junk-canister-2
   - type: Item
     size: Small
+    heldPrefix: "canister-2"
   - type: Tag
     tags:
     - Recyclable
@@ -296,6 +306,8 @@
     - state: junk-fax
   - type: Item
     size: Huge
+    heldPrefix: "fax"
+  - type: MultiHandedItem
   - type: Tag
     tags:
     - Recyclable
@@ -315,6 +327,8 @@
   - type: Sprite
     layers:
     - state: junk-fireextinguisher
+  - type: Item
+    heldPrefix: "extinguisher"
   - type: Tag
     tags:
     - Recyclable
@@ -337,7 +351,7 @@
     size: Large
     shape:
     - 0,0,4,4 # 5x5
-    heldPrefix: firelock-1
+    heldPrefix: "firelock-1"
   - type: MultiHandedItem
   - type: Tag
     tags:
@@ -361,7 +375,7 @@
     size: Large
     shape:
     - 0,0,4,4 # 5x5
-    heldPrefix: firelock-2
+    heldPrefix: "firelock-2"
   - type: MultiHandedItem
   - type: Tag
     tags:
@@ -382,6 +396,7 @@
     - state: junk-firelock-3
   - type: Item
     size: Large
+    heldPrefix: "firelock-3"
   - type: Tag
     tags:
     - Recyclable
@@ -408,6 +423,7 @@
         junk-intercom-2: ""
         junk-intercom-3: ""
   - type: Item
+    heldPrefix: "intercom"
   - type: Tag
     tags:
     - Recyclable
@@ -429,7 +445,7 @@
     - state: junk-jetpack
   - type: Item
     size: Huge
-    heldPrefix: jetpack
+    heldPrefix: "jetpack"
   - type: Tag
     tags:
     - Recyclable
@@ -457,6 +473,7 @@
         junk-medkit-2: ""
   - type: Item
     size: Large
+    heldPrefix: "medkit"
   - type: Tag
     tags:
     - Recyclable
@@ -477,6 +494,7 @@
     - state: junk-mop-bucket
   - type: Item
     size: Huge
+    heldPrefix: "mop"
   - type: Tag
     tags:
     - Recyclable
@@ -485,6 +503,22 @@
   - type: PhysicalComposition
     materialComposition:
       Plastic: 1500 # 15 sheets
+
+- type: entity
+  parent: BaseScrap
+  id: ScrapTarget
+  name: bloodied target
+  description: Seems like something must have gotten in the way of its purpose.
+  components:
+  - type: Sprite
+    layers:
+    - state: junk-target
+  - type: Item
+    size: Huge
+    heldPrefix: "target"
+  - type: PhysicalComposition
+    materialComposition:
+      Wood: 1000 # 10 sheets
 
 - type: entity
   parent: BaseScrap
@@ -497,6 +531,7 @@
     - state: junk-pai
   - type: Item
     size: Small
+    heldPrefix: "pai"
   - type: Tag
     tags:
     - Recyclable
@@ -518,6 +553,7 @@
     - state: junk-pai-gold
   - type: Item
     size: Small
+    heldPrefix: "gold"
   - type: Tag
     tags:
     - Recyclable
@@ -549,6 +585,7 @@
         tube-y: ""
   - type: Item
     size: Small
+    heldPrefix: "tube"
   - type: Tag
     tags:
     - Recyclable
@@ -605,7 +642,7 @@
   parent: BaseScrapLarge
   id: ScrapGeneratorUraniumLeaking
   name: leaking S.U.P.E.R.P.A.C.M.A.N. generator
-  description: A S.U.P.E.R.P.A.C.M.A.N. generator that appears to have had some kind of catastrophic failure. Its leaking uranium.
+  description: A S.U.P.E.R.P.A.C.M.A.N. generator that appears to have had some kind of catastrophic failure. It's leaking uranium.
   components:
   - type: Sprite
     sprite: Objects/Materials/Scrap/generator.rsi
@@ -690,6 +727,9 @@
     sprite: Objects/Materials/Scrap/generator.rsi
     layers:
       - state: uranium_generator_fuel_tank
+  - type: Item
+    sprite: Objects/Materials/Scrap/generator.rsi
+    heldPrefix: "fuel"
   - type: Tag
     tags:
     - Recyclable

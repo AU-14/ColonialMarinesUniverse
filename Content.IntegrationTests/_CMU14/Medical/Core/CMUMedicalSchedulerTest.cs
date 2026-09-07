@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Core;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.IntegrationTests._CMU14.Medical.Core;
+namespace Content.IntegrationTests.CMU14.Medical.Core;
 
 [TestFixture]
 public sealed class CMUMedicalSchedulerTest

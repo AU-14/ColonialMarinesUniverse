@@ -1,5 +1,9 @@
+using System.Linq;
 using Content.Server.GameTicking;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Destructible;
+using Content.Shared.Destructible.Thresholds.Triggers;
 
 namespace Content.Server.Destructible.Thresholds.Triggers;
 
@@ -21,14 +25,26 @@ public sealed partial class GameModeTrigger : IThresholdTrigger
     [DataField("invert")]
     public bool Invert { get; set; }
 
-    public bool Reached(DamageableComponent damageable, DestructibleSystem system)
+    public bool Reached(Entity<DamageableComponent> damageable, SharedDestructibleSystem system)
     {
-        var ticker = system.EntityManager.System<GameTicker>();
+        if (system is not DestructibleSystem serverSystem)
+            return false;
+
+        var ticker = serverSystem.EntityManager.System<GameTicker>();
         var preset = ticker.CurrentPreset ?? ticker.Preset;
         if (preset == null)
             return false;
 
         var match = Modes.Contains(preset.ID);
         return Invert ? !match : match;
+    }
+
+    public int CompareTo(IThresholdTrigger? other) => 0;
+
+    public bool Equals(IThresholdTrigger? other)
+    {
+        return other is GameModeTrigger trigger &&
+               Invert == trigger.Invert &&
+               Modes.SequenceEqual(trigger.Modes);
     }
 }

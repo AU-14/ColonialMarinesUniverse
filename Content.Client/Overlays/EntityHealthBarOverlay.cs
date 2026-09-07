@@ -2,7 +2,8 @@ using System.Numerics;
 using Content.Client.StatusIcon;
 using Content.Client.UserInterface.Systems;
 using Content.Shared._RMC14.CrashLand;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -35,6 +36,7 @@ public sealed class EntityHealthBarOverlay : Overlay
     private readonly ProgressColorSystem _progressColor;
     private readonly EntityLookupSystem _lookup;
     private readonly IGameTiming _timing;
+    private readonly DamageableSystem _damageable;
 
     private readonly EntityQuery<CrashLandingComponent> _crashLandingQuery;
     private readonly EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
@@ -62,6 +64,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         _lookup = _entManager.System<EntityLookupSystem>();
         _crashLandingQuery = _entManager.GetEntityQuery<CrashLandingComponent>();
         _paraDroppingQuery = _entManager.GetEntityQuery<ParaDroppingComponent>();
+        _damageable = _entManager.System<DamageableSystem>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -72,13 +75,14 @@ public sealed class EntityHealthBarOverlay : Overlay
         var metaQuery = _entManager.GetEntityQuery<MetaDataComponent>();
         var mobQuery = _entManager.GetEntityQuery<MobStateComponent>();
         var damageQuery = _entManager.GetEntityQuery<DamageableComponent>();
+        var injurableQuery = _entManager.GetEntityQuery<InjurableComponent>();
         var spriteQuery = _entManager.GetEntityQuery<SpriteComponent>();
         var statusQuery = _entManager.GetEntityQuery<StatusIconComponent>();
 
         const float scale = 1f;
         var scaleMatrix = Matrix3Helpers.CreateScale(new Vector2(scale, scale));
         var rotationMatrix = Matrix3Helpers.CreateRotation(-rotation);
-        _prototype.TryIndex(StatusIcon, out var statusIcon);
+        _prototype.Resolve(StatusIcon, out var statusIcon);
 
         _healthCandidates.Clear();
         _lookup.GetEntitiesIntersecting(
@@ -93,6 +97,7 @@ public sealed class EntityHealthBarOverlay : Overlay
             var mobThresholdsComponent = candidate.Comp;
             if (!mobQuery.TryGetComponent(uid, out var mobStateComponent) ||
                 !damageQuery.TryGetComponent(uid, out var damageableComponent) ||
+                !injurableQuery.TryGetComponent(uid, out var injurableComponent) ||
                 !spriteQuery.TryGetComponent(uid, out var spriteComponent))
             {
                 continue;
@@ -110,7 +115,7 @@ public sealed class EntityHealthBarOverlay : Overlay
                 xform.MapID != args.MapId)
                 continue;
 
-            if (damageableComponent.DamageContainerID == null || !DamageContainers.Contains(damageableComponent.DamageContainerID))
+            if (injurableComponent.DamageContainer == null || !DamageContainers.Contains(injurableComponent.DamageContainer))
                 continue;
 
             // we use the status icon component bounds if specified otherwise use sprite
@@ -123,7 +128,11 @@ public sealed class EntityHealthBarOverlay : Overlay
                 continue;
 
             // we are all progressing towards death every day
-            if (GetCachedProgress(uid, mobStateComponent, damageableComponent, mobThresholdsComponent) is not { } deathProgress)
+            if (GetCachedProgress(uid,
+                    mobStateComponent,
+                    damageableComponent,
+                    injurableComponent,
+                    mobThresholdsComponent) is not { } deathProgress)
                 continue;
 
             var worldMatrix = Matrix3Helpers.CreateTranslation(worldPos);
@@ -136,7 +145,7 @@ public sealed class EntityHealthBarOverlay : Overlay
             var yOffset = bounds.Height * EyeManager.PixelsPerMeter / 2 - 3f;
             var widthOfMob = bounds.Width * EyeManager.PixelsPerMeter;
 
-            var position = new Vector2(-widthOfMob / EyeManager.PixelsPerMeter / 2, yOffset / EyeManager.PixelsPerMeter);
+            var position = new Vector2(spriteComponent.Offset.X - widthOfMob / EyeManager.PixelsPerMeter / 2, spriteComponent.Offset.Y + yOffset / EyeManager.PixelsPerMeter);
             var color = GetProgressColor(deathProgress.ratio, deathProgress.inCrit);
 
             //RMC14
@@ -174,20 +183,22 @@ public sealed class EntityHealthBarOverlay : Overlay
         EntityUid uid,
         MobStateComponent mobState,
         DamageableComponent damageable,
+        InjurableComponent injurable,
         MobThresholdsComponent thresholds)
     {
         var now = _timing.RealTime;
+        var totalDamage = _damageable.GetTotalDamage((uid, damageable));
         if (_progressCache.TryGetValue(uid, out var cached)
             && cached.Expires > now
             && cached.State == mobState.CurrentState
-            && cached.TotalDamage == damageable.TotalDamage)
+            && cached.TotalDamage == totalDamage)
         {
             return cached.Progress;
         }
 
         if (cached is null)
         {
-            if (_progressCache.Count > MaxCachedHealthEntities)
+            if (_progressCache.Count >= MaxCachedHealthEntities)
                 _progressCache.Clear();
 
             cached = new CachedHealthProgress();
@@ -196,26 +207,32 @@ public sealed class EntityHealthBarOverlay : Overlay
 
         cached.Expires = now + HealthProgressCacheLifetime;
         cached.State = mobState.CurrentState;
-        cached.TotalDamage = damageable.TotalDamage;
-        cached.Progress = CalcProgress(uid, mobState, damageable, thresholds);
+        cached.TotalDamage = totalDamage;
+        cached.Progress = CalcProgress(uid, mobState, totalDamage, injurable, thresholds);
         return cached.Progress;
     }
 
     /// <summary>
     /// Returns a ratio between 0 and 1, and whether the entity is in crit.
     /// </summary>
-    private (float ratio, bool inCrit)? CalcProgress(EntityUid uid, MobStateComponent component, DamageableComponent dmg, MobThresholdsComponent thresholds)
+    private (float ratio, bool inCrit)? CalcProgress(
+        EntityUid uid,
+        MobStateComponent component,
+        FixedPoint2 totalDamage,
+        InjurableComponent injurable,
+        MobThresholdsComponent thresholds)
     {
-        if (_mobStateSystem.IsAlive(uid, component))
-        {
-            if (dmg.HealthBarThreshold != null && dmg.TotalDamage < dmg.HealthBarThreshold)
-                return null;
+        var isAlive = _mobStateSystem.IsAlive(uid, component);
+        if (ShouldHideHealthBar(isAlive, totalDamage, injurable.HealthBarThreshold))
+            return null;
 
-            if (!_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Critical, out var threshold, thresholds) &&
-                !_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out threshold, thresholds))
+        if (isAlive)
+        {
+            if (!_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Critical, out var stateThreshold, thresholds) &&
+                !_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out stateThreshold, thresholds))
                 return (1, false);
 
-            var ratio = 1 - ((FixedPoint2)(dmg.TotalDamage / threshold)).Float();
+            var ratio = 1 - ((FixedPoint2)(totalDamage / stateThreshold)).Float();
             return (ratio, false);
         }
 
@@ -227,13 +244,16 @@ public sealed class EntityHealthBarOverlay : Overlay
                 return (1, true);
             }
 
-            var ratio = 1 - ((dmg.TotalDamage - critThreshold) / (deadThreshold - critThreshold)).Value.Float();
+            var ratio = 1 - ((totalDamage - critThreshold) / (deadThreshold - critThreshold)).Value.Float();
 
             return (ratio, true);
         }
 
         return (0, true);
     }
+
+    internal static bool ShouldHideHealthBar(bool isAlive, FixedPoint2 totalDamage, FixedPoint2? threshold)
+        => isAlive && threshold is { } minimum && totalDamage < minimum;
 
     public Color GetProgressColor(float progress, bool crit)
     {

@@ -1,66 +1,9 @@
-# All the Vulpkanin customization
-
-# Ears Markings
-- type: marking
-  id: VulpEar
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: vulp
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: vulp-inner
-
-- type: marking
-  id: VulpEarFade
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: vulp
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: vulp-fade
-
-- type: marking
-  id: VulpEarSharp
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: vulp
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: vulp-sharp
-
-- type: marking
-  id: VulpEarJackal
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: jackal
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: jackal-inner
-
-- type: marking
-  id: VulpEarTerrier
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: terrier
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: terrier-inner
+# RMC-only Vulpkanin customization retained alongside the upstream marking set.
 
 - type: marking
   id: VulpEarWolf
   bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
       state: wolf
@@ -68,41 +11,9 @@
       state: wolf-inner
 
 - type: marking
-  id: VulpEarFennec
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: fennec
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: fennec-inner
-
-- type: marking
-  id: VulpEarFox
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: fox
-
-- type: marking
-  id: VulpEarOtie
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: otie
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: otie-inner
-
-- type: marking
   id: VulpEarTajaran
   bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
       state: msai
@@ -110,28 +21,9 @@
       state: msai-inner
 
 - type: marking
-  id: VulpEarShock
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: shock
-
-- type: marking
-  id: VulpEarCoyote
-  bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
-      state: coyote
-
-- type: marking
   id: VulpEarDalmatian
   bodyPart: HeadTop
-  markingCategory: HeadTop
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/ear_markings.rsi
       state: dalmatian
@@ -141,8 +33,7 @@
 - type: marking
   id: VulpSnouted
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
   - sprite: _RMC14/Mobs/Vulpkanin/parts.rsi
     state: snout
@@ -150,8 +41,7 @@
 - type: marking
   id: VulpSnoutAlt
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
       state: muzzle_alt
@@ -159,21 +49,9 @@
       state: nose
 
 - type: marking
-  id: VulpSnout
-  bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
-      state: muzzle
-    - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
-      state: nose
-
-- type: marking
   id: VulpSnoutSharp
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
       state: muzzle_sharp
@@ -183,8 +61,7 @@
 - type: marking
   id: VulpSnoutFade
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
       state: muzzle_fade
@@ -192,39 +69,9 @@
       state: nose
 
 - type: marking
-  id: VulpSnoutMask
-  bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
-      state: mask
-    - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
-      state: nose
-
-- type: marking
-  id: VulpSnoutBlaze
-  bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
-      state: blaze
-
-- type: marking
-  id: VulpSnoutPatch
-  bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
-      state: patch
-
-- type: marking
   id: VulpSnoutShort
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/short_snout.rsi
       state: m_snout_fscanid_FRONT_primary
@@ -236,8 +83,7 @@
 - type: marking
   id: VulpSnoutShortAlt1
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/short_snout.rsi
       state: m_snout_fscanidalt_FRONT_primary
@@ -249,8 +95,7 @@
 - type: marking
   id: VulpSnoutShortAlt2
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/short_snout.rsi
       state: m_snout_fscanidalt2_FRONT_primary
@@ -260,8 +105,7 @@
 - type: marking
   id: VulpSnoutShortAlt3
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/short_snout.rsi
       state: m_snout_fscanidalt3_FRONT_primary
@@ -273,8 +117,7 @@
 - type: marking
   id: VulpSnoutWolf
   bodyPart: Snout
-  markingCategory: Snout
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/wolf_snout.rsi
       state: m_snout_fwolf_FRONT_primary
@@ -286,8 +129,7 @@
 - type: marking
   id: VulpHeadTiger
   bodyPart: Head
-  markingCategory: Head
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
       state: tiger_head
@@ -295,8 +137,7 @@
 - type: marking
   id: VulpHeadTigerFace
   bodyPart: Head
-  markingCategory: Head
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
       state: tiger_face
@@ -304,8 +145,7 @@
 - type: marking
   id: VulpHeadSlash
   bodyPart: Head
-  markingCategory: Head
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/head_markings.rsi
       state: slash
@@ -314,8 +154,7 @@
 - type: marking
   id: VulpTail
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: vulp
@@ -325,8 +164,7 @@
 - type: marking
   id: VulpTailTip
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: vulp
@@ -336,8 +174,7 @@
 - type: marking
   id: VulpTailAlt
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: vulp_alt
@@ -347,8 +184,7 @@
 - type: marking
   id: VulpTailAltTip
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: vulp_alt
@@ -358,8 +194,7 @@
 - type: marking
   id: VulpTailFox
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: fox
@@ -369,8 +204,7 @@
 - type: marking
   id: VulpTailFoxTip
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: fox
@@ -378,30 +212,9 @@
       state: fox-tip
 
 - type: marking
-  id: VulpTailCoyote
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
-      state: coyote
-
-- type: marking
-  id: VulpTailHusky
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
-      state: husky-inner
-    - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
-      state: husky-outer
-
-- type: marking
   id: VulpTailHuskyAlt
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: husky
@@ -409,44 +222,23 @@
 - type: marking
   id: VulpTailFox2
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: fox2
 
 - type: marking
-  id: VulpTailFennec
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
-      state: fennec
-
-- type: marking
   id: VulpTailOtie
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: otie
 
 - type: marking
-  id: VulpTailFluffy
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
-      state: fluffy
-
-- type: marking
   id: VulpTailFox3
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/fox3_tail.rsi
       state: m_tail_fox3_
@@ -454,8 +246,7 @@
 - type: marking
   id: VulpTailFox4
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/fox4_tail.rsi
       state: m_tail_fox4_primary
@@ -465,8 +256,7 @@
 - type: marking
   id: VulpTailDalmation #These will need locale
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: dalmatian
@@ -474,8 +264,7 @@
 - type: marking
   id: VulpTailAustralianShepherd
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/australianshepherd_tail.rsi
       state: m_tail_australianshepherd_primary
@@ -485,85 +274,39 @@
 - type: marking
   id: VulpTailStraight
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/straight_tail.rsi
       state: m_tail_straighttail_primary
 
 - type: marking
-  id: VulpTailLong
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/long_tail.rsi
-      state: long
-    - sprite: _RMC14/Mobs/Vulpkanin/long_tail.rsi
-      state: long-tip
-
-# Body Markings (Chest)
-- type: marking
-  id: VulpBellyCrest
-  bodyPart: Chest
-  markingCategory: Chest
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
-      state: belly_crest
-
-- type: marking
-  id: VulpBellyFull
-  bodyPart: Chest
-  markingCategory: Chest
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
-      state: belly_full
-
-- type: marking
-  id: VulpBellyFox
-  bodyPart: Chest
-  markingCategory: Chest
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
-      state: belly_fox
-
-
-# Leg Markings
-- type: marking
   id: VulpPointsFeet
-  markingCategory: Overlay
   bodyPart: RFoot
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
       state: points_feet
 
 - type: marking
   id: VulpPointsCrestLegs
-  markingCategory: Legs
   bodyPart: LLeg
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
       state: points_crest-legs
 
 - type: marking
   id: VulpPointsFadeLegs
-  markingCategory: Legs
   bodyPart: LLeg
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
       state: points_fade-legs
 
 - type: marking
   id: VulpPointsSharpLegs
-  markingCategory: Legs
   bodyPart: LLeg
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
       state: points_sharp-legs
@@ -571,274 +314,41 @@
 # Arm Markings
 - type: marking
   id: VulpPointsHands
-  markingCategory: Overlay
   bodyPart: RHand
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
       state: points_hands
 
 - type: marking
   id: VulpPointsCrestArms
-  markingCategory: Arms
   bodyPart: LArm
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
       state: points_crest-arms
 
 - type: marking
   id: VulpPointsFadeArms
-  markingCategory: Arms
   bodyPart: LArm
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
       state: points_fade-arms
 
 - type: marking
   id: VulpPointsSharpArms
-  markingCategory: Arms
   bodyPart: LArm
-  speciesRestriction: [Vulpkanin]
+  groupWhitelist: [ Vulpkanin ]
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/body_markings.rsi
       state: points_sharp-arms
 
 # Hairs
 - type: marking
-  id: VulpHairAdhara
-  bodyPart: Hair
-  speciesRestriction: [Vulpkanin]
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: adhara
-
-- type: marking
-  id: VulpHairAnita
-  bodyPart: Hair
-  speciesRestriction: [Vulpkanin]
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: anita
-
-- type: marking
-  id: VulpHairApollo
-  bodyPart: Hair
-  speciesRestriction: [Vulpkanin]
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: apollo
-
-- type: marking
-  id: VulpHairBelle
-  bodyPart: Hair
-  speciesRestriction: [Vulpkanin]
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: belle
-
-- type: marking
-  id: VulpHairBraided
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: braided
-
-- type: marking
-  id: VulpHairBun
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: bun
-
-- type: marking
-  id: VulpHairCleanCut
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: clean_cut
-
-- type: marking
-  id: VulpHairCurl
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: curl
-
-- type: marking
-  id: VulpHairHawk
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: hawk
-
-- type: marking
-  id: VulpHairJagged
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: jagged
-
-- type: marking
-  id: VulpHairJeremy
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: jeremy
-
-- type: marking
-  id: VulpHairKajam
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: kajam
-
-- type: marking
-  id: VulpHairKeid
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: keid
-
-- type: marking
-  id: VulpHairKleeia
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: kleeia
-
-- type: marking
-  id: VulpHairMizar
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: mizar
-
-- type: marking
-  id: VulpHairPunkBraided
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: punkbraided
-
-- type: marking
-  id: VulpHairRaine
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: raine
-
-- type: marking
-  id: VulpHairRough
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: rough
-
-- type: marking
-  id: VulpHairShort
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: short
-
-- type: marking
-  id: VulpHairShort2
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: short2
-
-- type: marking
-  id: VulpHairSpike
-  bodyPart: Hair
-  markingCategory: Hair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/hair.rsi
-      state: spike
-
-# Facial Hairs
-- type: marking
-  id: VulpFacialHairRuff
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/facial_hair.rsi
-      state: ruff
-
-- type: marking
-  id: VulpFacialHairElder
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/facial_hair.rsi
-      state: elder
-
-- type: marking
-  id: VulpFacialHairElderChin
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/facial_hair.rsi
-      state: elder_chin
-
-- type: marking
-  id: VulpFacialHairKita
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  speciesRestriction: [Vulpkanin]
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/facial_hair.rsi
-      state: kita
-
-# Animated Markings
-
-- type: marking
   id: VulpTailAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: vulp_wag
@@ -848,8 +358,7 @@
 - type: marking
   id: VulpTailTipAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: vulp_wag
@@ -859,8 +368,7 @@
 - type: marking
   id: VulpTailFoxAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: fox_wag
@@ -870,8 +378,7 @@
 - type: marking
   id: VulpTailFoxTipAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: fox_wag
@@ -881,26 +388,15 @@
 - type: marking
   id: VulpTailBushyAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: bushfluff_wag
 
 - type: marking
-  id: VulpTailCoyoteAnimated
-  bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
-  sprites:
-    - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
-      state: coyote_wag
-
-- type: marking
   id: VulpTailCorgiAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: corgi_wag
@@ -908,8 +404,7 @@
 - type: marking
   id: VulpTailDalmatianAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/tail_markings.rsi
       state: dalmatian_wag
@@ -917,8 +412,7 @@
 - type: marking
   id: VulpTailAustralianShepherdAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/australianshepherd_tail.rsi
       state: m_tail_australianshepherd_primary_wag
@@ -928,8 +422,7 @@
 - type: marking
   id: VulpTailStraightAnimated
   bodyPart: Tail
-  markingCategory: Tail
-  speciesRestriction: []
+  groupWhitelist: []
   sprites:
     - sprite: _RMC14/Mobs/Vulpkanin/straight_tail.rsi
       state: m_tail_straighttail_primary_wag

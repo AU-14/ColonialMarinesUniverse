@@ -1,12 +1,13 @@
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.Organs;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Part;
-using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Robust.Shared.Serialization;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Medical.Scanner;
 
@@ -16,7 +17,7 @@ public sealed class HealthScannerBuiState(
     FixedPoint2 blood,
     FixedPoint2 maxBlood,
     float? temperature,
-    Solution? chemicals,
+    List<HealthScannerChemicalReadout>? chemicals,
     bool bleeding)
     : BoundUserInterfaceState
 {
@@ -24,7 +25,10 @@ public sealed class HealthScannerBuiState(
     public readonly FixedPoint2 Blood = blood;
     public readonly FixedPoint2 MaxBlood = maxBlood;
     public readonly float? Temperature = temperature;
-    public readonly Solution? Chemicals = chemicals;
+    public const int MaximumChemicalReadouts = 64;
+    public readonly List<HealthScannerChemicalReadout> KnownChemicals = chemicals ?? [];
+    public bool UnknownChemicals;
+    public int OmittedKnownChemicals;
     public readonly bool Bleeding = bleeding;
     public Dictionary<BodyPartType, CMUBodyPartReadout>? CMUParts;
     public List<CMUOrganReadout>? CMUOrgans;
@@ -48,6 +52,13 @@ public sealed class HealthScannerBuiState(
     public bool VictimInfected;
     public bool HolocardXeno;
 }
+
+/// <summary>A diagnostic projection never exposes reagent-instance metadata or unknown prototypes.</summary>
+[Serializable, NetSerializable]
+public readonly record struct HealthScannerChemicalReadout(
+    ProtoId<ReagentPrototype> Prototype,
+    FixedPoint2 Quantity,
+    bool Overdose);
 
 [Serializable, NetSerializable]
 public sealed class HealthScannerStateMessage(HealthScannerBuiState state) : BoundUserInterfaceMessage

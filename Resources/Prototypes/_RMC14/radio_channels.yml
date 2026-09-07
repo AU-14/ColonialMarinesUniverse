@@ -3,7 +3,7 @@
   id: MarineHighCommand
   name: chat-radio-marine-highcommand
   keycode: "Ĥ" #z in cm13
-  frequency: 1471
+  frequency: 147.1
   color: "#318779"
   longRange: true
 
@@ -12,7 +12,7 @@
   id: MarineCommon # used by ARES
   name: chat-radio-marine-common
   keycode: "ć" #; and g in cm13
-  frequency: 1480
+  frequency: 148.0
   color: "#B4B4B4"
   colorblindColor: "#6FD08C"
   longRange: true
@@ -23,7 +23,7 @@
   id: MarineCommand
   name: chat-radio-marine-command
   keycode: "ü" #v in cm13
-  frequency: 1481
+  frequency: 148.1
   color: "#5b96d4"
   longRange: true
   tower: true
@@ -32,7 +32,7 @@
   id: MarineMedical
   name: chat-radio-marine-medical
   keycode: "ň" #m in cm13
-  frequency: 1482
+  frequency: 148.2
   color: "#009771"
   longRange: true
   tower: true
@@ -41,7 +41,7 @@
   id: MarineEngineer
   name: chat-radio-marine-engineer
   keycode: "ě" #n in cm13
-  frequency: 1483
+  frequency: 148.3
   color: "#e4860c"
   longRange: true
   tower: true
@@ -50,7 +50,7 @@
   id: MarineMilitaryPolice
   name: chat-radio-marine-military-police
   keycode: "Þ" #p in cm13
-  frequency: 1484
+  frequency: 148.4
   color: "#be324f"
   longRange: true
   tower: true
@@ -59,7 +59,7 @@
   id: MarineRequisition
   name: chat-radio-marine-requisition
   keycode: "?" #u in cm13
-  frequency: 1485
+  frequency: 148.5
   color: "#b17324"
   longRange: true
   tower: true
@@ -68,7 +68,7 @@
   id: MarineIntel
   name: chat-radio-marine-intel
   keycode: "ź" #t in cm13
-  frequency: 1486
+  frequency: 148.6
   color: "#059705"
   longRange: true
   tower: true
@@ -77,7 +77,7 @@
   id: MarineJTAC
   name: chat-radio-marine-jtac
   keycode: "ø" #j in CM13
-  frequency: 1487
+  frequency: 148.7
   color: "#ad3b98"
   longRange: true
   tower: true
@@ -87,7 +87,7 @@
   id: MarineAlpha
   name: chat-radio-marine-alpha
   keycode: "ä" #a in cm13
-  frequency: 1491
+  frequency: 149.1
   color: "#F0433E"
   longRange: true
   tower: true
@@ -96,7 +96,7 @@
   id: MarineBravo
   name: chat-radio-marine-bravo
   keycode: "ó" #b in cm13
-  frequency: 1492
+  frequency: 149.2
   color: "#B9A76D"
   longRange: true
   tower: true
@@ -105,7 +105,7 @@
   id: MarineCharlie
   name: chat-radio-marine-charlie
   keycode: "í" #c in cm13
-  frequency: 1493
+  frequency: 149.3
   color: "#7A967E"
   longRange: true
   tower: true
@@ -114,7 +114,7 @@
   id: MarineDelta
   name: chat-radio-marine-delta
   keycode: "Ɖ" #d in cm13
-  frequency: 1494
+  frequency: 149.4
   color: "#038ae1"
   longRange: true
   tower: true
@@ -123,7 +123,7 @@
   id: MarineEcho
   name: chat-radio-marine-echo
   keycode: "ɨ" #e in cm13
-  frequency: 1495
+  frequency: 149.5
   color: "#3be1b1"
   longRange: true
   tower: true
@@ -132,7 +132,7 @@
   id: MarineFoxtrot
   name: chat-radio-marine-foxtrot
   keycode: "ƒ" #f in cm13
-  frequency: 1496
+  frequency: 149.6
   color: "#c23c07"
   longRange: true
   tower: true

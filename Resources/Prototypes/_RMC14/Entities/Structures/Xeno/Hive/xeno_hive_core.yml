@@ -73,7 +73,7 @@
     range: 11.848 #rounded to 3 decimals
   - type: EvolutionBonus
   - type: WarpPoint
-    location: hive core
+    location: cmu-warp-location-hive-core
   - type: XenoStructureMapTracked
   - type: TacticalMapTracked
   - type: TacticalMapIcon
@@ -117,7 +117,7 @@
   - type: HiveConstructionLimited
     id: HiveCoreXeno
   - type: WarpPoint
-    location: hive core
+    location: cmu-warp-location-hive-core
   - type: RMCAlternateSprite
     normalSprite: _RMC14/Structures/Xenos/hive_structures.rsi
     alternateSprite: _RMC14/Structures/Xenos/hive_structures_old.rsi
@@ -174,7 +174,7 @@
   - type: HiveConstructionLimited
     id: HivePylonXeno
   - type: WarpPoint
-    location: hive pylon
+    location: cmu-warp-location-hive-pylon
   - type: RMCAlternateSprite
     normalSprite: _RMC14/Structures/Xenos/hive_structures.rsi
     alternateSprite: _RMC14/Structures/Xenos/hive_structures_old.rsi

@@ -21,9 +21,8 @@ public sealed partial class Electrogenetic : RMCChemicalEffect
                $"Removes 1u of this chemical from the solution when defibrillated";
     }
 
-    public DamageSpecifier CalculateHeal(DamageableSystem damageable, EntityUid target, IEntityManager entityManager)
+    public DamageSpecifier CalculateHeal(SharedRMCDamageableSystem rmcDamageable, EntityUid target)
     {
-        var rmcDamageable = entityManager.System<SharedRMCDamageableSystem>();
         var heal = new DamageSpecifier();
         heal = rmcDamageable.DistributeHealingCached(target, BruteGroup, HealAmount, heal);
         heal = rmcDamageable.DistributeHealingCached(target, BurnGroup, HealAmount, heal);

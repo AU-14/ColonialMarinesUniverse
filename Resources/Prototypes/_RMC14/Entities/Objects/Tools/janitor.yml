@@ -93,16 +93,24 @@
   - type: Item
     sprite: _RMC14/Objects/Misc/Janitorial/light_replacer.rsi
   - type: LightReplacer
-    contents:
-    - id: RMCLightTube
-      amount: 50
-    - id: RMCLightBulb
-      amount: 50
+    activeLightTube: RMCLightTube
+    activeLightBulb: RMCLightBulb
+  - type: EntityProvider
+    entityCounter:
+      RMCLightTube: 50
+      RMCLightBulb: 50
+    whitelist:
+      components:
+      - LightBulb
   - type: StaticPrice
     price: 100
   - type: ContainerContainer
     containers:
-      light_replacer_storage: !type:Container
+      entity-provider: !type:Container
+  - type: UserInterface
+    interfaces:
+      enum.LightReplacerUiKey.Key:
+        type: LightReplacerMenuBoundUserInterface
   - type: Tag
     tags:
     - LightReplacer
@@ -112,10 +120,10 @@
   id: RMCLightReplacerEmpty
   suffix: Empty
   components:
-  - type: LightReplacer
-    contents:
-    - id: RMCLightTube
-      amount: 0
+  - type: EntityProvider
+    entityCounter:
+      RMCLightTube: 0
+      RMCLightBulb: 0
 
 - type: entity
   parent: RMCLightReplacer
@@ -123,7 +131,7 @@
   name: light replacer
   suffix: Empty
   components:
-  - type: LightReplacer
-    contents:
-    - id: RMCLightTube
-      amount: 0
+  - type: EntityProvider
+    entityCounter:
+      RMCLightTube: 0
+      RMCLightBulb: 0

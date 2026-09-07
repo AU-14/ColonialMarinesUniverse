@@ -1,53 +1,49 @@
 using Content.Shared.FixedPoint;
-using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.Chemistry.Components;
 
 /// <summary>
-///     Component that allows an entity instantly transfer liquids by interacting with objects that have solutions.
+/// Allows an entity to instantly transfer liquids by interacting with objects that have solutions.
+/// Retained for fork hyposprays; upstream injectors use <see cref="InjectorComponent"/> instead.
 /// </summary>
-[RegisterComponent, NetworkedComponent]
-[AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class HyposprayComponent : Component
 {
     /// <summary>
-    ///     Solution that will be used by hypospray for injections.
+    /// Solution used by the hypospray for injections.
     /// </summary>
     [DataField]
     public string SolutionName = "hypospray";
 
     /// <summary>
-    ///     Amount of the units that will be transfered.
+    /// Amount transferred per use.
     /// </summary>
-    [AutoNetworkedField]
-    [DataField]
+    [DataField, AutoNetworkedField]
     public FixedPoint2 TransferAmount = FixedPoint2.New(5);
 
     /// <summary>
-    ///     Sound that will be played when injecting.
+    /// Sound played when injecting.
     /// </summary>
     [DataField]
     public SoundSpecifier InjectSound = new SoundPathSpecifier("/Audio/Items/hypospray.ogg");
 
     /// <summary>
-    /// Decides whether you can inject everything or just mobs.
+    /// Whether this hypospray may inject non-mob entities.
     /// </summary>
-    [AutoNetworkedField]
-    [DataField(required: true)]
-    public bool OnlyAffectsMobs = false;
+    [DataField(required: true), AutoNetworkedField]
+    public bool OnlyAffectsMobs;
 
     /// <summary>
-    /// If this can draw from containers in mob-only mode.
+    /// Whether mob-only mode can still draw from solution containers.
     /// </summary>
-    [AutoNetworkedField]
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool CanContainerDraw = true;
 
     /// <summary>
-    /// Whether or not the hypospray is able to draw from containers or if it's a single use
-    /// device that can only inject.
+    /// Whether this device can only inject and cannot draw.
     /// </summary>
     [DataField]
-    public bool InjectOnly = false;
+    public bool InjectOnly;
 }

@@ -10,11 +10,11 @@
   color: "#A8A8A8"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -28,11 +28,11 @@
   unknown: true
   durationMod: 1
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM? 0.005 would be right but impossible because fixed point 2
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -47,7 +47,8 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.1
       effects:
       - !type:Biocidic
@@ -63,11 +64,11 @@
   flavor: metallic
   color: "#6E3B08"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -81,24 +82,33 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.1
       effects:
       - !type:Toxic
         potency: 1
       - !type:HealthChange #TODO PROPERTY_NEUTRALIZING = 1
         damage:
-          groups:
-            Burn: 0.25
-            Toxin: 0.125
+          types:
+            Heat: 0.06
+            Shock: 0.06
+            Cold: 0.06
+            Caustic: 0.07
+            Poison: 0.06
+            Radiation: 0.06
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         damage:
-          groups:
-            Burn: 0.5
-            Toxin: 0.25
+          types:
+            Heat: 0.12
+            Shock: 0.12
+            Cold: 0.13
+            Caustic: 0.13
+            Poison: 0.12
+            Radiation: 0.13
 
 - type: reagent
   parent: RMCReagentElement
@@ -111,11 +121,11 @@
   color: "#F7C430"
   class: Rare
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -130,11 +140,11 @@
   radiusMod: 0.2
   intensityMod: -0.5
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent #TODO if over blood limit take limb damage, oxy damage, move slower
   parent: RMCReagentElement
@@ -149,7 +159,7 @@
   criticalOverdose: 50
   flags: Medical, Scannable
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Hemogenic
@@ -172,7 +182,8 @@
   durationMod: -0.1
   radiusMod: -0.01
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.1
       effects:
       - !type:HealthChange
@@ -198,7 +209,8 @@
   color: "#484848"
   unknown: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.1
       effects:
       - !type:GenericStatusEffect
@@ -220,11 +232,11 @@
   color: "#A0A0A0"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -240,11 +252,11 @@
   durationMod: 0.1
   radiusMod: -0.12
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -257,7 +269,8 @@
   color: "#C7C7C7"
   unknown: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.1
       effects:
       - !type:Carcinogenic
@@ -276,11 +289,11 @@
   color: "#A8A8A8"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -294,11 +307,11 @@
   class: Rare
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -311,11 +324,11 @@
   color: "#BF8C00"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -328,11 +341,11 @@
   color: "#808080"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -346,7 +359,8 @@
   class: Rare
   unknown: true
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.1
       effects:
       - !type:Carcinogenic
@@ -364,11 +378,11 @@
   intensityMod: 0.75
   radiusMod: -0.08
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent
   parent: RMCReagentElement
@@ -380,11 +394,11 @@
   color: "#808080"
   unknown: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1 every 200 seconds in CM?
       effects:
-      - !type:ChemVomit
-        probability: 0
+        - !type:Vomit
+          probability: 0
 
 - type: reagent # TODO rmc14
   parent: [RMCReagentElement, BaseAlcohol]
@@ -397,45 +411,50 @@
   flavor: alcohol
   color: "#404030"
   metabolisms:
-    Alcohol:
+    Metabolites:
+      cmuToxicity: [ Alcohol ]
       metabolismRate: 0.1
       effects:
       - !type:Drunk
         boozePower: 6.38
       - !type:Drunk
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 60
         boozePower: 9.69
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 60
         damage:
-          groups:
-            Toxin: 0.625
-            Airloss: 1.25
-      - !type:ChemVomit
+          types:
+            Poison: 0.31
+            Radiation: 0.31
+            Asphyxiation: 0.62
+            Bloodloss: 0.63
+      - !type:Vomit
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 60
         probability: 0.12
       - !type:Drunk
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 100
         boozePower: 13.125
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 100
         damage:
-          groups:
-            Toxin: 1.2
-            Airloss: 2.5
-      - !type:ChemVomit
+          types:
+            Poison: 0.6
+            Radiation: 0.6
+            Asphyxiation: 1.25
+            Bloodloss: 1.25
+      - !type:Vomit
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 100
         probability: 0.25 #TODO Liver damage
 
@@ -450,7 +469,7 @@
   color: white
   unknown: true # Yes a health analyzer can't detect sugar. How about that
   metabolisms:
-    Food:
+    Digestion:
       metabolismRate: 0.1
       effects:
       - !type:Nutritious
@@ -475,7 +494,8 @@
   toxin: true
   metabolisms:
     #TODO hurts on inject equal to amount
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       metabolismRate: 0.05
       effects:
       - !type:Toxic

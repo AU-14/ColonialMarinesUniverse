@@ -145,6 +145,10 @@
   parent: RMCTileFire
   id: RMCTileFireBlue
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 120
   - type: Sprite
     layers:
     - map: [ "base" ]
@@ -155,6 +159,10 @@
     intensity: 40
     duration: 45
     maxStacks: 40
+    armorMultiplier: 0.5
+    armorWhitelist:
+      components:
+      - Xeno
     burnColor: "#00b8ff"
   - type: TileFire
     id: RMCTileFireBlue
@@ -555,6 +563,10 @@
   id: RMCTileFireHCNapalm
   suffix: HC Napalm
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 135
   - type: Sprite
     color: "#c51c1c"
     layers:
@@ -612,6 +624,10 @@
   id: RMCTileFireNapalmEX
   suffix: Napalm EX
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 120
   - type: Sprite
     color: "#641dd6"
     layers:
@@ -641,6 +657,10 @@
   id: RMCTileFireR189
   suffix: R189
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 150
   - type: Sprite
     color: "#ffe49c"
     layers:
@@ -670,6 +690,10 @@
   id: RMCTileFireNapalmBase
   suffix: Base Napalm
   components:
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 81
   - type: Sprite
     color: "#D05006"
     layers:

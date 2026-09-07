@@ -1,8 +1,8 @@
-using Content.Server._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Diagnostics.Examine;
-using Content.Shared._CMU14.Medical.Injuries.Trauma;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Diagnostics.Examine;
+using Content.Shared.CMU14.Medical.Injuries.Trauma;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -11,7 +11,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Medical.Diagnostics;
+namespace Content.IntegrationTests.CMU14.Medical.Diagnostics;
 
 [TestFixture]
 public sealed class CMUMedicalExamineProjectionTest

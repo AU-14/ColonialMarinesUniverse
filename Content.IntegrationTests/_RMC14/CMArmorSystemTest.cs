@@ -1,8 +1,12 @@
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._RMC14.Armor;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Inventory;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
@@ -18,6 +22,7 @@ public sealed class CMArmorSystemTest
     private const string TestArmorEntity = "RMCArmorInvalidOriginDamageable";
     private const string TestOuterBioArmor = "RMCTestOuterBioArmor";
     private const string TestInnerBioArmor = "RMCTestInnerBioArmor";
+    private const string TestMaskBioArmor = "RMCTestMaskBioArmor";
     private const string TestChestBioArmor = "RMCTestChestBioArmor";
     private static readonly ProtoId<DamageTypePrototype> HeatDamageType = "Heat";
     private static readonly ProtoId<DamageTypePrototype> SlashDamageType = "Slash";
@@ -49,6 +54,16 @@ public sealed class CMArmorSystemTest
   - type: Clothing
     slots:
     - innerClothing
+  - type: CMArmor
+    bio: 40
+
+- type: entity
+  id: {TestMaskBioArmor}
+  name: {TestMaskBioArmor}
+  components:
+  - type: Clothing
+    slots:
+    - mask
   - type: CMArmor
     bio: 40
 
@@ -180,6 +195,50 @@ public sealed class CMArmorSystemTest
     }
 
     [Test]
+    public async Task MaskArmorProtectsHeadSlots()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var protoMan = server.ResolveDependency<IPrototypeManager>();
+            var damageable = entMan.System<DamageableSystem>();
+            var hitLocation = entMan.System<SharedHitLocationSystem>();
+            var inventory = entMan.System<InventorySystem>();
+            var heat = protoMan.Index(HeatDamageType);
+
+            var headDamage = ApplyForcedHitDamage(
+                entMan,
+                damageable,
+                hitLocation,
+                inventory,
+                heat,
+                BodyPartType.Head,
+                TestMaskBioArmor,
+                "mask");
+            var torsoDamage = ApplyForcedHitDamage(
+                entMan,
+                damageable,
+                hitLocation,
+                inventory,
+                heat,
+                BodyPartType.Torso,
+                TestMaskBioArmor,
+                "mask");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(headDamage, Is.LessThan(torsoDamage));
+                Assert.That(torsoDamage, Is.GreaterThan(FixedPoint2.Zero));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task ArmorCoverageOverrideNarrowsMatchingSlot()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -253,3 +312,5 @@ public sealed class CMArmorSystemTest
         }
     }
 }
+
+#pragma warning restore RA0002

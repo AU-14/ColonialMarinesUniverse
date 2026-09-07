@@ -25,6 +25,7 @@
   - type: Pullable
   - type: Rotatable
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -78,4 +79,3 @@
   - type: Construction
     graph: CMWindoor
     node: assemblySecure
-

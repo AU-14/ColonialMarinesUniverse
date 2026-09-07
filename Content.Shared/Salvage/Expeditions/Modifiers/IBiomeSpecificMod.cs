@@ -1,4 +1,5 @@
 using Robust.Shared.Prototypes;
+
 namespace Content.Shared.Salvage.Expeditions.Modifiers;
 
 public interface IBiomeSpecificMod : ISalvageMod

@@ -1,6 +1,6 @@
 using Content.Server._RMC14.Marines;
 using Content.Server._RMC14.Marines.Roles.Ranks;
-using Content.Server.AU14.Roles;
+using Content.Server.CMU14.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;

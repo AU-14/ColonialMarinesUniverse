@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Survivor;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.Body.Events;
 using Content.Shared.Database;
+using Content.Shared.Gibbing;
 using Content.Shared.Mind.Components;
 using Content.Shared.Roles.Jobs;
 using Content.Shared.Whitelist;

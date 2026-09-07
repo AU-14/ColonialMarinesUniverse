@@ -17,7 +17,7 @@ public sealed partial class DungeonJob
         SplineDungeonConnectorDunGen gen,
         List<Dungeon> dungeons,
         HashSet<Vector2i> reservedTiles,
-        Random random)
+        IRobustRandom random)
     {
         // NOOP
         if (dungeons.Count <= 1)
@@ -100,13 +100,13 @@ public sealed partial class DungeonJob
                 allTiles.Add(node);
                 Tile tile;
 
-                if (Prob(random, 0.9f))
+                if (random.Prob(0.9f))
                 {
                     tile = new Tile(widen.TileId);
                 }
                 else
                 {
-                    tile = GetVariantTile(widen, random);
+                    tile = _tile.GetVariantTile(widen, random);
                 }
 
                 tiles.Add((node, tile));

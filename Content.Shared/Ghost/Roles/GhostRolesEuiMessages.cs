@@ -1,5 +1,7 @@
 using Content.Shared.Eui;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Roles;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Ghost.Roles
@@ -15,10 +17,14 @@ namespace Content.Shared.Ghost.Roles
         public string Description { get; set; }
         public string Rules { get; set; }
 
-        // TODO ROLE TIMERS
-        // Actually make use of / enforce this requirement?
-        // Why is this even here.
-        // Move to ghost role prototype & respect CCvars.GameRoleTimerOverride
+        /// <summary>
+        /// A list of all antag and job prototype IDs of the ghost role and its mind role(s).
+        /// </summary>
+        public (List<ProtoId<JobPrototype>>?,List<ProtoId<AntagPrototype>>?)  RolePrototypes;
+
+        /// <summary>
+        /// Optional requirements that replace the linked role prototype requirements for this ghost role.
+        /// </summary>
         public HashSet<JobRequirement>? Requirements { get; set; }
 
         /// <inheritdoc cref="GhostRoleKind"/>
@@ -41,10 +47,12 @@ namespace Content.Shared.Ghost.Roles
     public sealed class GhostRolesEuiState : EuiStateBase
     {
         public GhostRoleInfo[] GhostRoles { get; }
+        public ForceInterestInfo[] Forces { get; }
 
-        public GhostRolesEuiState(GhostRoleInfo[] ghostRoles)
+        public GhostRolesEuiState(GhostRoleInfo[] ghostRoles, ForceInterestInfo[]? forces = null)
         {
             GhostRoles = ghostRoles;
+            Forces = forces ?? [];
         }
     }
 

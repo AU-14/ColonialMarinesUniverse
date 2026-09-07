@@ -1,10 +1,12 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared._CMU14.ZLevels.Vehicles;
+using Content.Shared.ActionBlocker;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Destructible;
 using Content.Shared.Doors.Systems;
@@ -36,6 +38,7 @@ namespace Content.Shared.Vehicle;
 public sealed partial class GridVehicleMoverSystem : EntitySystem
 {
     [Dependency] private SharedTransformSystem transform = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedMapSystem map = default!;
     [Dependency] private SharedPhysicsSystem physics = default!;
     [Dependency] private EntityLookupSystem lookup = default!;
@@ -308,6 +311,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         if (!TryComp(ent.Owner, out VehicleComponent? vehicle) || vehicle.Operator is not { } operatorUid)
             return;
+
+        if (!_actionBlocker.CanConsciouslyPerformAction(operatorUid))
+        {
+            args.CanRun = false;
+            return;
+        }
 
         if (!HasComp<XenoComponent>(operatorUid))
             return;

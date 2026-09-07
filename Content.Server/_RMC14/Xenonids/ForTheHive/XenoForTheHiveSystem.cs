@@ -9,6 +9,7 @@ using Content.Server._RMC14.Spawners;
 using Robust.Shared.Map;
 using Content.Server.Chat.Systems;
 using Content.Server._RMC14.Xenonids.Respawn;
+using Content.Shared.Chat;
 
 namespace Content.Server._RMC14.Xenonids.ForTheHive;
 

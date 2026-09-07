@@ -48,10 +48,11 @@ namespace Content.Shared.Movement.Components
         public float BaseAcceleration = DefaultAcceleration;
 
         /// <summary>
-        /// The body's base friction modifier that is applied in *all* circumstances.
+        /// Multiplies both <see cref="DefaultFriction"/> and <see cref="DefaultFrictionNoInput"/> before
+        /// contextual friction modifiers are applied. A value of 1 preserves the default physical damping baseline.
         /// </summary>
         [AutoNetworkedField, DataField]
-        public float BaseFriction = 1; // RMC14 DefaultFriction;
+        public float BaseFriction = 1;
 
         /// <summary>
         /// Minimum speed a mob has to be moving before applying movement friction.

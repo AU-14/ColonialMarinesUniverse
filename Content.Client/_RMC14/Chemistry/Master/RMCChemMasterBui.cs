@@ -1,14 +1,13 @@
 using System.Linq;
 using Content.Client._RMC14.UserInterface;
 using Content.Client.Chemistry.Containers.EntitySystems;
-using Content.Shared._CMU14.Chemistry.Stimmaster;
+using Content.Shared.CMU14.Chemistry.Stimmaster;
 using Content.Shared._RMC14.Chemistry.ChemMaster;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Extensions;
 using Content.Shared._RMC14.IconLabel;
 using Content.Shared._RMC14.UserInterface;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.FixedPoint;
@@ -275,8 +274,7 @@ public sealed partial class RMCChemMasterBui : BoundUserInterface, IRefreshableB
             return false;
 
         name = entityPrototype.Name;
-        if (!entityPrototype.TryComp<SolutionContainerManagerComponent>(out var manager, EntMan.ComponentFactory) ||
-            !_solution.TryGetSolution(manager, "pen", out var injectorSolution))
+        if (!_solution.TryGetSolution(entityPrototype, "pen", out var injectorSolution))
         {
             return false;
         }

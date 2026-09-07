@@ -1,6 +1,6 @@
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -27,9 +27,10 @@ public sealed class ZLevelNetworkTest
                 var entMan = server.EntMan;
                 var zLevels = entMan.System<CMUZLevelsSystem>();
 
-                lowerMap = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-                shipMap = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-                upperMap = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+                var mapSystem = entMan.System<SharedMapSystem>();
+                lowerMap = mapSystem.CreateMap();
+                shipMap = mapSystem.CreateMap();
+                upperMap = mapSystem.CreateMap();
 
                 var networkEnt = zLevels.CreateZNetwork();
                 network = networkEnt;
@@ -110,10 +111,11 @@ public sealed class ZLevelNetworkTest
                 var entMan = server.EntMan;
                 var zLevels = entMan.System<CMUZLevelsSystem>();
 
-                lowerMap = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-                shipMap = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-                upperMap = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-                higherMap = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+                var mapSystem = entMan.System<SharedMapSystem>();
+                lowerMap = mapSystem.CreateMap();
+                shipMap = mapSystem.CreateMap();
+                upperMap = mapSystem.CreateMap();
+                higherMap = mapSystem.CreateMap();
 
                 var networkEnt = zLevels.CreateZNetwork();
                 network = networkEnt;

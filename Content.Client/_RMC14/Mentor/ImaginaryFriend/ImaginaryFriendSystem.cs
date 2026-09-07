@@ -1,6 +1,6 @@
 using Content.Client.Ghost;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 

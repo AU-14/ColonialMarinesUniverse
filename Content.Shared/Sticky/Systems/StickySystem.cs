@@ -68,7 +68,7 @@ public sealed partial class StickySystem : EntitySystem
 
         // check whitelist and blacklist
         if (_whitelist.IsWhitelistFail(comp.Whitelist, target) ||
-            _whitelist.IsBlacklistPass(comp.Blacklist, target))
+            _whitelist.IsWhitelistPass(comp.Blacklist, target))
             return false;
 
         var attemptEv = new AttemptEntityStickEvent(target, user);
@@ -87,7 +87,7 @@ public sealed partial class StickySystem : EntitySystem
         if (comp.StickPopupStart != null)
         {
             var msg = Loc.GetString(comp.StickPopupStart);
-            _popup.PopupClient(msg, user, user);
+            _popup.PopupEntity(msg, user, user);
         }
 
         // start sticking object to target
@@ -103,7 +103,7 @@ public sealed partial class StickySystem : EntitySystem
 
     private void OnStickyDoAfter(Entity<StickyComponent> ent, ref StickyDoAfterEvent args)
     {
-        // target is the sticky item when unsticking and the surface when sticking, it will never be null
+        // target is the surface when sticking/unsticking, it will never be null
         if (args.Handled || args.Cancelled || args.Args.Target is not {} target)
             return;
 
@@ -138,11 +138,11 @@ public sealed partial class StickySystem : EntitySystem
         if (comp.UnstickPopupStart != null)
         {
             var msg = Loc.GetString(comp.UnstickPopupStart);
-            _popup.PopupClient(msg, user, user);
+            _popup.PopupEntity(msg, user, user);
         }
 
         // start unsticking object
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, comp.UnstickDelay, new StickyDoAfterEvent(), uid, target: uid)
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, comp.UnstickDelay, new StickyDoAfterEvent(), uid, target: stuckTo)
         {
             BreakOnMove = true,
             NeedHand = true,
@@ -167,7 +167,7 @@ public sealed partial class StickySystem : EntitySystem
         if (comp.StickPopupSuccess != null)
         {
             var msg = Loc.GetString(comp.StickPopupSuccess);
-            _popup.PopupClient(msg, user, user);
+            _popup.PopupEntity(msg, user, user);
         }
 
         // send information to appearance that entity is stuck
@@ -209,7 +209,7 @@ public sealed partial class StickySystem : EntitySystem
         if (comp.UnstickPopupSuccess != null)
         {
             var msg = Loc.GetString(comp.UnstickPopupSuccess);
-            _popup.PopupClient(msg, user, user);
+            _popup.PopupEntity(msg, user, user);
         }
 
         comp.StuckTo = null;

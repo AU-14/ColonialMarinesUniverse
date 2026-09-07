@@ -11,6 +11,8 @@ using Content.Shared._RMC14.Sentry;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -29,6 +31,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBuckleSystem _buckle = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -234,7 +237,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
 
         if (user != null)
         {
-            if (_entityWhitelist.IsBlacklistPass(equipmentDeployerComponent.Blacklist, user.Value))
+            if (_entityWhitelist.IsWhitelistPass(equipmentDeployerComponent.Blacklist, user.Value))
                 return false;
 
             if (_alert.Get() < equipmentDeployerComponent.AlertLevelRequired && deploy)
@@ -398,10 +401,11 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
         if (!TryComp(deployed, out DamageableComponent? damageable))
             return false;
 
-        if (damageable.TotalDamage <= 0)
+        var totalDamage = _damageable.GetTotalDamage((deployed, damageable));
+        if (totalDamage <= 0)
             return false;
 
-        damage = damageable.TotalDamage;
+        damage = totalDamage;
         return true;
     }
 }

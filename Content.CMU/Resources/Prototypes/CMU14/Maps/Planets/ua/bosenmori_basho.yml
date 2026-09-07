@@ -1,0 +1,62 @@
+- type: entity
+  id: AUPlanetBosenmoriBasho
+  name: Bosenmori Basho
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Bosenmori Basho"
+    mapId: BosenmoriBasho
+    inRotation: true
+    lorePrimer: AU14PrimerPlanetBosenmoriBasho
+    allegiance: UA
+    camouflage: Desert
+    announcement: "The colony of Bosenmori Basho has gone silent. A response force has been dispatched to investigate the distress signal."
+    platoonsGovfor:
+    - LACN
+    - USCM
+    - WEYU
+    - CMBCIU
+    - RMC
+    - HAZOPS
+    platoonsOpfor:
+    - UPP
+    - ProdigySF
+    - VAIPO
+    defaultgovfor: USCM
+    defaultopfor: VAIPO
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    threats:
+    - XenoThreat
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: lorePrimer
+  id: AU14PrimerPlanetBosenmoriBasho
+  planetText: "Date 2181 - Bosenmori Basho, UA controlled."
+
+- type: entity
+  parent: MarkerBase
+  id: CMUBosenmoriMultiTileVehicleMarker
+  name: multitile vehicle marker
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    visible: false
+
+- type: gameMap
+  id: BosenmoriBasho
+  mapName: "Bosenmori Basho"
+  mapPath: "/Maps/_AU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ0.yml"
+  mapsBelow: []
+  mapsAbove: []
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    BosenmoriBasho:
+      stationProto: StandardUNMCWarship
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: "Bosenmori Basho"

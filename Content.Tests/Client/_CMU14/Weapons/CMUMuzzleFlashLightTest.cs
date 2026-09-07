@@ -6,7 +6,7 @@ using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.UnitTesting;
 
-namespace Content.Tests.Client._CMU14.Weapons;
+namespace Content.Tests.Client.CMU14.Weapons;
 
 [TestFixture]
 public sealed class CMUMuzzleFlashLightTest : RobustUnitTest

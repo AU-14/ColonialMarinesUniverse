@@ -24,7 +24,9 @@ public partial class GuideEntry
     public string Id = default!;
 
     /// <summary>
-    ///     The name of this guide. This gets localized.
+    ///     The name shown for this guide. This may be either a localization message ID
+    ///     or literal display text.
+    ///     Clients should attempt localization and fall back to the value itself.
     /// </summary>
     [DataField(required: true)] public string Name = default!;
 

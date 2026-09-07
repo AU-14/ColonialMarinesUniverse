@@ -1,0 +1,211 @@
+- type: entity
+  id: CMUCargoCarrier
+  components:
+  - type: Vehicle
+    movementKind: Grid
+    transferDamage: false
+    requiresHands: false
+  - type: VehicleOperatorDamage
+  - type: Clickable
+  - type: RMCIgnoreGhostInteractionLimits
+  - type: RequireProjectileTarget
+  - type: Physics
+    bodyType: Dynamic
+  - type: CMUZPhysics
+  - type: CMUVehicleZTraversal
+  - type: CMUZLevelViewer
+  - type: Fixtures
+    fixtures:
+      world:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.45,-0.95,0.45,0.95
+        density: 1000
+        mask:
+        - Impassable
+        - HighImpassable
+        - LowImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+      mob:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.45,-0.95,0.45,0.95
+        density: 1000
+        mask:
+        - MidImpassable
+        - BarricadeImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+  - type: Damageable
+    damageModifierSet: VehicleFrameCLFVan
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: MeleeReceivedMultiplier
+    xenoMultiplier: 5
+    otherMultiplier: 1
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: CMU14/Structures/vehicles/cargo_carrier.rsi
+    layers:
+    - map: [ base ]
+      state: cargo_closed
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUCargoVehicleVisuals.BayOpen:
+        base:
+          True: { state: cargo_open }
+          False: { state: cargo_closed }
+  - type: VehicleSound
+    runningSound:
+      path: /Audio/_RMC14/Vehicle/box_van_driving.ogg
+      params:
+        volume: -7
+        pitch: 1.15
+    runningSoundCooldown: 2.3
+    hornSound: /Audio/Effects/double_beep.ogg
+    hornCooldown: 1
+    collisionSound:
+      path: /Audio/Effects/metal_thud1.ogg
+      params:
+        volume: -2
+    collisionSoundCooldown: 1.5
+    collisionSoundMinSpeed: 4
+  - type: DoAfter
+  - type: InputMover
+  - type: GridVehicleMover
+    maxSpeed: 5
+    acceleration: 4
+    deceleration: 10
+    maxReverseSpeed: 3
+    reverseAcceleration: 4
+    maxRotationSpeedDegrees: 90
+    rotationAccelerationDegrees: 180
+    rotationDecelerationDegrees: 180
+    turnDelay: 0
+    turnInPlace: true
+    canSmashWalls: false
+    canPushVehicles: false
+  - type: CMUCargoVehicle
+    automaticArmDamage: 300
+    maximumDamage: 400
+    cargoDelay: 2
+    detonationDelay: 5
+    beepInterval: 1
+    beepSound:
+      path: /Audio/_RMC14/Medical/reset_key_shortbeep.ogg
+      params:
+        volume: -5
+    rampSound:
+      path: /Audio/_RMC14/Machines/hydraulics_1.ogg
+      params:
+        volume: -3
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 160
+    intensitySlope: 6
+    maxIntensity: 16
+    canCreateVacuum: false
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+
+- type: entity
+  parent: BaseItem
+  id: CMUCargoCarrierController
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+  - type: Item
+    size: Small
+  - type: CMUCargoVehicleController
+
+- type: entity
+  parent: BaseStructureDynamic
+  id: CMUCargoCarrierWreck
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: CMU14/Structures/vehicles/cargo_carrier.rsi
+    state: cargo_closed
+    color: "#555555"
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.45,-0.95,0.45,0.95
+        density: 1000
+        mask:
+        - Impassable
+        - HighImpassable
+        - LowImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+  - type: Damageable
+    damageModifierSet: StructuralMetallic
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: Corrodible
+    isCorrodible: true
+    structure: true
+  - type: RMCWallExplosionDeletable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ExplosionResistance
+    damageCoefficient: 0
+
+- type: entity
+  parent: BaseItem
+  id: CMUCargoCarrierDebris
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/cargo_carrier.rsi
+    state: cargo_debris_1
+  - type: Item
+    size: Tiny
+  - type: Tag
+    tags:
+    - Trash
+
+- type: entity
+  parent: CMUCargoCarrierDebris
+  id: CMUCargoCarrierDebrisSide
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: cargo_debris_2
+
+- type: entity
+  parent: CMUCargoCarrierDebris
+  id: CMUCargoCarrierDebrisHood
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: cargo_debris_3
+
+- type: entity
+  parent: CMUCargoCarrierDebris
+  id: CMUCargoCarrierDebrisBumper
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: cargo_debris_4

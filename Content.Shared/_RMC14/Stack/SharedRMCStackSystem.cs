@@ -9,7 +9,7 @@ public abstract partial class SharedRMCStackSystem : EntitySystem
 
     public virtual EntityUid? Split(Entity<StackComponent?> stack, int amount, EntityCoordinates spawnPosition)
     {
-        _stack.Use(stack, amount);
+        _stack.TryUse(stack, amount);
         return null;
     }
 }

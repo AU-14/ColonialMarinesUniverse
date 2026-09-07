@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Content.Client.Changelog;
 using Content.Client.Credits;
@@ -184,7 +184,7 @@ namespace Content.Client.Info
                     // CrtLobbyTheme checks for this class and leaves it alone.
                     StyleClasses = { StyleNano.StyleClassCrtServerInfoText },
                 };
-                label.SetMessage(FormattedMessage.FromMarkupOrThrow(trimmed));
+                label.SetMessage(FormattedMessage.FromMarkupOrThrow(trimmed), tagsAllowed: null);
                 _extraLines.AddChild(label);
             }
         }

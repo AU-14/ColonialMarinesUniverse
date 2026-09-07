@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Linq;
 using Content.Client.Guidebook.RichText;
 using Content.Client.Lobby.UI;
@@ -29,11 +28,13 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
     [Dependency] private IResourceManager _resourceManager = default!;
     [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
-    private Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry> _entries = new();
+    private Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry> _entries = [];
 
     private readonly ISawmill _sawmill;
+    private bool _subscribedToCvars;
 
-    public ProtoId<GuideEntryPrototype> LastEntry;
+    public ProtoId<GuideEntryPrototype>? Selected { get; private set; }
+
 
     public GuidebookWindow()
     {
@@ -43,6 +44,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         ApplyCrtPalette();
 
         Tree.OnSelectedItemChanged += OnSelectionChanged;
+        TableOfContents.OnSelectedItemChanged += OnTableOfContentsSelectionChanged;
 
         SearchBar.OnTextChanged += _ =>
         {
@@ -51,15 +53,27 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
         _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
         _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
+        _subscribedToCvars = true;
     }
 
     [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
     protected override void Dispose(bool disposing)
     {
+        Shutdown();
         base.Dispose(disposing);
+    }
+
+    /// <summary>
+    /// Unsubscribes callbacks owned by this window before it is removed from the UI tree.
+    /// </summary>
+    public void Shutdown()
+    {
+        if (!_subscribedToCvars)
+            return;
 
         _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
         _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
+        _subscribedToCvars = false;
     }
 
     private void OnCrtUiColorChanged(string _)
@@ -76,7 +90,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     private void ApplyCrtPalette()
     {
-        Stylesheet = _stylesheetManager.SheetNano;
+        ((Control) this).Stylesheet = _stylesheetManager.SheetNano;
         CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 
@@ -115,7 +129,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
             UserInterfaceManager.DeferAction(() =>
             {
-                if (control.GetControlScrollPosition() is not {} position)
+                if (control.GetControlScrollPosition() is not { } position)
                     return;
 
                 Scroll.HScrollTarget = position.X;
@@ -130,6 +144,10 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
     {
         if (item != null && item.Metadata is GuideEntry entry)
         {
+            // do nothing if the guide is the same as the currently selected one
+            if (entry.Id == Selected)
+                return;
+
             ShowGuide(entry);
 
             var isRulesEntry = entry.RuleEntry;
@@ -140,12 +158,29 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             ClearSelectedGuide();
     }
 
+    private void OnTableOfContentsSelectionChanged(TreeItem? item)
+    {
+        if (item is null || item.Metadata is not Label entry)
+            return;
+
+        UserInterfaceManager.DeferAction(() =>
+        {
+            if (entry.GetControlScrollPosition() is not { } position)
+                return;
+
+            Scroll.HScrollTarget = position.X;
+            Scroll.VScrollTarget = position.Y;
+        });
+    }
+
     public void ClearSelectedGuide()
     {
         Placeholder.Visible = true;
         EntryContainer.Visible = false;
         SearchContainer.Visible = false;
         EntryContainer.RemoveAllChildren();
+
+        Selected = null;
     }
 
     private void ShowGuide(GuideEntry entry)
@@ -168,11 +203,11 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
         CrtLobbyTheme.Apply(EntryContainer, useCrtTypography: false);
 
-        LastEntry = entry.Id;
+        Selected = entry.Id;
 
         var (linkableControls, linkControls) = GetLinkableControlsAndLinks(EntryContainer);
 
-        HashSet<IPrototype> availablePrototypeLinks = new();
+        HashSet<IPrototype> availablePrototypeLinks = [];
         foreach (var linkableControl in linkableControls)
         {
             var prototype = linkableControl.RepresentedPrototype;
@@ -186,48 +221,109 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
             if (prototype != null && availablePrototypeLinks.Contains(prototype))
                 linkControl.EnablePrototypeLink();
         }
+
+        RepopulateTableOfContents();
     }
 
-    public void UpdateGuides(
+    private int? HeadingDepth(Label control)
+    {
+        if (control.StyleClasses.Contains("LabelHeadingBigger"))
+            return 1;
+        else if (control.StyleClasses.Contains("LabelHeading"))
+            return 2;
+        else if (control.StyleClasses.Contains("LabelKeyText"))
+            return 3;
+
+        return null;
+    }
+
+    private void RepopulateTableOfContents()
+    {
+        TableOfContents.Clear();
+
+        var firstEntry = TableOfContents.AddItem(null);
+        firstEntry.Label.Text = Loc.GetString("guidebook-toc-header");
+
+        var labels = EntryContainer.GetControlOfType<Label>(true);
+        var stack = new Stack<(TreeItem Item, int Depth)>();
+
+        foreach (var label in labels)
+        {
+            if (HeadingDepth(label) is not { } depth)
+                continue;
+
+            while (stack.TryPeek(out var previous) && previous.Depth >= depth)
+            {
+                stack.Pop();
+            }
+
+            var item = stack.TryPeek(out var parent)
+                ? TableOfContents.AddItem(parent.Item)
+                : TableOfContents.AddItem(firstEntry);
+            item.Label.Text = label.Text;
+            item.Metadata = label;
+
+            stack.Push((item, depth));
+        }
+
+        // Expand all entries, but collapse the first one
+        TableOfContents.SetAllExpanded(true);
+        firstEntry.SetExpanded(false);
+        CrtLobbyTheme.Apply(TableOfContents, useCrtTypography: false);
+    }
+
+    /// <summary>
+    /// Updates the guides used in the window.
+    /// Returns whether the guides changed.
+    /// </summary>
+    public bool UpdateGuides(
         Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry> entries,
         List<ProtoId<GuideEntryPrototype>>? rootEntries = null,
         ProtoId<GuideEntryPrototype>? forceRoot = null,
         ProtoId<GuideEntryPrototype>? selected = null)
     {
-        _entries = entries;
-        RepopulateTree(rootEntries, forceRoot);
-        ClearSelectedGuide();
-
-        Split.State = SplitContainer.SplitState.Auto;
-        if (entries.Count == 1)
+        // check if old and new entries are equal
+        var sameAsLastUpdate = entries.Count != _entries.Count || !entries.All(_entries.Contains);
+        if (sameAsLastUpdate)
         {
-            TreeBox.Visible = false;
-            Split.ResizeMode = SplitContainer.SplitResizeMode.NotResizable;
-            selected = entries.Keys.First();
+            _entries = entries;
+            RepopulateTree(rootEntries, forceRoot);
+            Split.State = SplitContainer.SplitState.Auto;
+            if (entries.Count == 1)
+            {
+                TreeBox.Visible = false;
+                Split.ResizeMode = SplitContainer.SplitResizeMode.NotResizable;
+                selected = entries.Keys.First();
+            }
+            else
+            {
+                TreeBox.Visible = true;
+                Split.ResizeMode = SplitContainer.SplitResizeMode.RespectChildrenMinSize;
+            }
         }
+
+        if (selected == null)
+            ClearSelectedGuide();
         else
-        {
-            TreeBox.Visible = true;
-            Split.ResizeMode = SplitContainer.SplitResizeMode.RespectChildrenMinSize;
-        }
-
-        if (selected != null)
         {
             var item = Tree.Items.FirstOrDefault(x => x.Metadata is GuideEntry entry && entry.Id == selected);
             Tree.SetSelectedIndex(item?.Index);
         }
+
+        return sameAsLastUpdate;
     }
 
     private IEnumerable<GuideEntry> GetSortedEntries(List<ProtoId<GuideEntryPrototype>>? rootEntries)
     {
         if (rootEntries == null)
         {
-            HashSet<ProtoId<GuideEntryPrototype>> entries = new(_entries.Keys);
+            HashSet<ProtoId<GuideEntryPrototype>> entries = [.. _entries.Keys];
             foreach (var entry in _entries.Values)
             {
                 entries.ExceptWith(entry.Children);
             }
-            rootEntries = entries.ToList();
+
+            rootEntries = [.. entries];
         }
 
         // Only roots need to be sorted.
@@ -251,7 +347,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
     {
         Tree.Clear();
 
-        HashSet<ProtoId<GuideEntryPrototype>> addedEntries = new();
+        HashSet<ProtoId<GuideEntryPrototype>> addedEntries = [];
 
         var parent = forcedRoot == null ? null : AddEntry(forcedRoot.Value, null, addedEntries);
         foreach (var entry in GetSortedEntries(roots))
@@ -296,8 +392,6 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     private void HandleFilter()
     {
-        var emptySearch = SearchBar.Text.Trim().Length == 0;
-
         if (Tree.SelectedItem != null && Tree.SelectedItem.Metadata is GuideEntry entry && entry.FilterEnabled)
         {
             var foundElements = EntryContainer.GetSearchableControls();
@@ -311,8 +405,8 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
     private static (List<IPrototypeRepresentationControl>, List<IPrototypeLinkControl>) GetLinkableControlsAndLinks(Control parent)
     {
-        List<IPrototypeRepresentationControl> linkableList = new();
-        List<IPrototypeLinkControl> linkList = new();
+        List<IPrototypeRepresentationControl> linkableList = [];
+        List<IPrototypeLinkControl> linkList = [];
 
         foreach (var child in parent.Children)
         {

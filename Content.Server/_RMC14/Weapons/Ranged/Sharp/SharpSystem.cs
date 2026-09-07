@@ -1,5 +1,4 @@
 using System.Numerics;
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Aura;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Weapons.Common;
@@ -14,6 +13,7 @@ using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.StepTrigger.Components;
 using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Trigger.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;

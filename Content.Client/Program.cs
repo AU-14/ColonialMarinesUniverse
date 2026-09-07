@@ -1,4 +1,5 @@
 using Robust.Client;
+using Robust.Shared;
 
 namespace Content.Client
 {
@@ -7,7 +8,12 @@ namespace Content.Client
         [STAThread]
         public static void Main(string[] args)
         {
-            ContentStart.Start(args);
+            ContentStart.StartLibrary(args, new GameControllerOptions
+            {
+                MountOptions = new MountOptions(
+                    dirMounts: new List<string> { "../../Content.CMU/Resources" },
+                    zipMounts: new List<string>()),
+            });
         }
     }
 }

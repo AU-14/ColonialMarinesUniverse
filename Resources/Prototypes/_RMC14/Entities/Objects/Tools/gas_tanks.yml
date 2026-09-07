@@ -6,6 +6,18 @@
   parent: GasTankBase
   id: CMGasTankBase
   components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: integrity-unshaded-0
+      sprite: Objects/Tanks/generic.rsi
+      map: [ "enum.MaxPressureVisualLayers.BaseUnshaded" ]
+      shader: unshaded
+      visible: false
+    - state: mask
+      sprite: Objects/Tanks/generic.rsi
+      map: [ "enum.MaxPressureVisualLayers.Base" ]
+      visible: false
   - type: PhysicalComposition
     materialComposition: {}
 
@@ -22,7 +34,7 @@
     size: Normal
     sprite: _RMC14/Objects/Tanks/anesthetic.rsi
   - type: GasTank
-    outputPressure: 30.4
+    releasePressure: 30.4
   - type: Clothing
     sprite: _RMC14/Objects/Tanks/anesthetic.rsi
 
@@ -203,8 +215,9 @@
       types:
         Blunt: 5
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: DamageOnHighSpeedImpact
     minimumSpeed: 2
     damage: {}

@@ -451,7 +451,9 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
             used: args.Holder)
         {
             NeedHand = attachable.Comp.DoAfterNeedHand,
-            BreakOnMove = attachable.Comp.DoAfterBreakOnMove
+            BreakOnMove = attachable.Comp.DoAfterBreakOnMove,
+            // The attachable is contained by its holder, so generic world-range checks reject it.
+            DistanceThreshold = null,
         });
 
         Dirty(attachable);

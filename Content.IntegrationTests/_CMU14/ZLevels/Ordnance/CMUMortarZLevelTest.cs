@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Ordnance;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Maps;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
 
-namespace Content.IntegrationTests._CMU14.ZLevels.Ordnance;
+namespace Content.IntegrationTests.CMU14.ZLevels.Ordnance;
 
 [TestFixture]
 public sealed class CMUMortarZLevelTest

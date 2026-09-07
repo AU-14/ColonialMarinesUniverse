@@ -2,7 +2,7 @@ using System.Linq; // CMU14
 using Content.Shared.Access.Components;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
-using Content.Shared.AU14.Util;
+using Content.Shared.CMU14.Util;
 using Content.Shared.NPC.Components; // CMU14
 using Content.Shared.NPC.Prototypes; // CMU14
 using Content.Shared.PDA;

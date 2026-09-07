@@ -9,6 +9,10 @@ namespace Content.Client.UserInterface.Systems.Chat.Controls;
 [Virtual]
 public class ChatInputBox : PanelContainer
 {
+    public const string StyleClassChatPanel = "ChatPanel";
+    public const string StyleClassChatLineEdit = "ChatLineEdit";
+    public const string StyleClassChatFilterOptionButton = "ChatFilterOptionButton";
+
     public readonly ChannelSelectorButton ChannelSelector;
     public readonly HistoryLineEdit Input;
     public readonly ChannelFilterButton FilterButton;
@@ -31,7 +35,7 @@ public class ChatInputBox : PanelContainer
         {
             Name = "ChannelSelector",
             ToggleMode = true,
-            StyleClasses = {"chatSelectorOptionButton"},
+            StyleClasses = { ChannelSelectorItemButton.StyleClassChatSelectorOptionButton },
             // Under CRT the chip sizes to its own label - a fixed 74 stretched three letters into a
             // slab. The bar's height comes from CrtChatInput's 8px padding there, so neither
             // minimum is load-bearing any more.
@@ -46,17 +50,17 @@ public class ChatInputBox : PanelContainer
             Name = "Input",
             PlaceHolder = GetChatboxInfoPlaceholder(),
             HorizontalExpand = true,
-            StyleClasses = {"chatLineEdit"}
+            StyleClasses = { StyleClassChatLineEdit }
         };
         Container.AddChild(Input);
         FilterButton = new ChannelFilterButton
         {
             Name = "FilterButton",
-            StyleClasses = {"chatFilterOptionButton"},
+            StyleClasses = { StyleClassChatFilterOptionButton },
             MinSize = new Vector2(28, 26)
         };
         Container.AddChild(FilterButton);
-        AddStyleClass(StyleNano.StyleClassChatSubPanel);
+        AddStyleClass(StyleClassChatPanel);
         ChannelSelector.OnChannelSelect += UpdateActiveChannel;
     }
 
@@ -78,12 +82,17 @@ public class ChatInputBox : PanelContainer
 
     private static string GetChatboxInfoPlaceholder()
     {
-        return (BoundKeyHelper.IsBound(ContentKeyFunctions.FocusChat), BoundKeyHelper.IsBound(ContentKeyFunctions.CycleChatChannelForward)) switch
-        {
-            (true, true) => Loc.GetString("hud-chatbox-info", ("talk-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.FocusChat)), ("cycle-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.CycleChatChannelForward))),
-            (true, false) => Loc.GetString("hud-chatbox-info-talk", ("talk-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.FocusChat))),
-            (false, true) => Loc.GetString("hud-chatbox-info-cycle", ("cycle-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.CycleChatChannelForward))),
-            (false, false) => Loc.GetString("hud-chatbox-info-unbound")
-        };
+        return (BoundKeyHelper.IsBound(ContentKeyFunctions.FocusChat),
+                BoundKeyHelper.IsBound(ContentKeyFunctions.CycleChatChannelForward)) switch
+            {
+                (true, true) => Loc.GetString("hud-chatbox-info",
+                    ("talk-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.FocusChat)),
+                    ("cycle-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.CycleChatChannelForward))),
+                (true, false) => Loc.GetString("hud-chatbox-info-talk",
+                    ("talk-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.FocusChat))),
+                (false, true) => Loc.GetString("hud-chatbox-info-cycle",
+                    ("cycle-key", BoundKeyHelper.ShortKeyName(ContentKeyFunctions.CycleChatChannelForward))),
+                (false, false) => Loc.GetString("hud-chatbox-info-unbound")
+            };
     }
 }

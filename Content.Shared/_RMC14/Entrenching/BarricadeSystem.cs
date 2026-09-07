@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Emplacements;
 using Content.Shared.Construction.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Item.ItemToggle.Components;
@@ -24,6 +26,7 @@ namespace Content.Shared._RMC14.Entrenching;
 public sealed partial class BarricadeSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
@@ -189,8 +192,9 @@ public sealed partial class BarricadeSystem : EntitySystem
         var bagsSalvaged = barricade.MaxMaterial;
         if (bagsSalvaged <= 0 && TryComp(full, out FullSandbagComponent? fullSandbag))
             bagsSalvaged = fullSandbag.StackRequired;
-        if (TryComp(args.Target, out DamageableComponent? damageable))
-            bagsSalvaged -= Math.Max((int) damageable.TotalDamage / barricade.MaterialLossDamageInterval - 1, 0);
+        if (args.Target is { } target && TryComp(target, out DamageableComponent? damageable))
+            bagsSalvaged -= Math.Max((int) _damageable.GetTotalDamage((target, damageable)) /
+                barricade.MaterialLossDamageInterval - 1, 0);
 
         if (TryComp(args.Target, out BarbedComponent? barbed) && barbed.IsBarbed)
             Spawn(barbed.Spawn, GetCoordinates(args.Coordinates));
@@ -204,7 +208,7 @@ public sealed partial class BarricadeSystem : EntitySystem
         }
 
         if (TryComp(full, out StackComponent? fullStack))
-            _stack.SetCount(full, bagsSalvaged, fullStack);
+            _stack.SetCount((full, fullStack), bagsSalvaged);
     }
 
     private void OnDoAfter(Entity<EntrenchingToolComponent> tool, ref EntrenchingToolDoAfterEvent args)
@@ -498,12 +502,12 @@ public sealed partial class BarricadeSystem : EntitySystem
 
         if (full.Comp.StackRequired > 1)
         {
-            var count = _stack.GetCount(full);
+            var count = _stack.GetCount((full.Owner, null));
             if (count < full.Comp.StackRequired)
                 return;
 
             if (TryComp(full, out StackComponent? fullStack))
-                _stack.SetCount(full, count - full.Comp.StackRequired, fullStack);
+                _stack.SetCount((full.Owner, fullStack), count - full.Comp.StackRequired);
             else
                 QueueDel(full);
         }
@@ -782,15 +786,15 @@ public sealed partial class BarricadeSystem : EntitySystem
 
         if (TryComp(empty, out StackComponent? stack))
         {
-            var stackCount = _stack.GetCount(empty, stack);
+            var stackCount = _stack.GetCount((empty.Owner, stack));
             toRemove = Math.Min(toRemove, stackCount);
-            _stack.SetCount(empty, stackCount - toRemove, stack);
+            _stack.SetCount((empty.Owner, stack), stackCount - toRemove);
 
             if (_net.IsServer)
             {
                 var filled = Spawn(empty.Comp.Filled, coordinates);
                 var filledStack = EnsureComp<StackComponent>(filled);
-                _stack.SetCount(filled, toRemove, filledStack);
+                _stack.SetCount((filled, filledStack), toRemove);
             }
         }
         else

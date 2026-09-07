@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._RMC14.Tools;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.EntitySystems;
@@ -5,6 +6,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Item.ItemToggle;
+using Content.Shared.Localizations;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.Tools.Components;
@@ -13,25 +15,26 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Tools.Systems;
 
 public abstract partial class SharedToolSystem : EntitySystem
 {
-    [Dependency] private   IPrototypeManager _protoMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] protected ISharedAdminLogManager AdminLogger = default!;
-    [Dependency] private   ITileDefinitionManager _tileDefManager = default!;
-    [Dependency] private   SharedAudioSystem _audioSystem = default!;
-    [Dependency] private   SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private ITileDefinitionManager _tileDefManager = default!;
+    [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] protected SharedInteractionSystem InteractionSystem = default!;
     [Dependency] protected ItemToggleSystem ItemToggle = default!;
-    [Dependency] private   SharedMapSystem _maps = default!;
-    [Dependency] private   SharedPopupSystem _popup = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] protected SharedSolutionContainerSystem SolutionContainerSystem = default!;
-    [Dependency] private   SharedTransformSystem _transformSystem = default!;
-    [Dependency] private   TileSystem _tiles = default!;
-    [Dependency] private   TurfSystem _turfs = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private TileSystem _tiles = default!;
+    [Dependency] private TurfSystem _turfs = default!;
 
     public const string CutQuality = "Cutting";
     public const string PulseQuality = "Pulsing";
@@ -70,21 +73,7 @@ public abstract partial class SharedToolSystem : EntitySystem
             return;
 
         var message = new FormattedMessage();
-
-        // Create a list to store tool quality names
-        var toolQualities = new List<string>();
-
-        // Loop through tool qualities and add localized names to the list
-        foreach (var toolQuality in ent.Comp.Qualities)
-        {
-            if (_protoMan.TryIndex(toolQuality, out var protoToolQuality))
-            {
-                toolQualities.Add(Loc.GetString(protoToolQuality.Name));
-            }
-        }
-
-        // Combine the qualities into a single string and localize the final message
-        var qualitiesString = string.Join(", ", toolQualities);
+        var qualitiesString = GetQualitiesText(ent.Comp.Qualities);
 
         // Add the localized message to the FormattedMessage object
         message.AddMarkupPermissive(Loc.GetString("tool-component-qualities", ("qualities", qualitiesString)));
@@ -183,6 +172,19 @@ public abstract partial class SharedToolSystem : EntitySystem
         if (ev.Handled)
             delay = ev.Delay;
 
+        string examineText;
+        var qualitiesText = GetQualitiesText(toolQualitiesNeeded, true);
+
+        if (target is not null)
+        {
+            examineText = Loc.GetString("tool-component-target-doafter-examine",
+                ("user", user),
+                ("quality", qualitiesText),
+                ("target", target.Value));
+        }
+        else
+            examineText = Loc.GetString("tool-component-doafter-examine", ("quality", qualitiesText));
+
         var toolEvent = new ToolDoAfterEvent(fuel, doAfterEv, GetNetEntity(target)) { Predicted = predicted };
         var doAfterArgs = new DoAfterArgs(EntityManager, user, delay / toolComponent.SpeedModifier, toolEvent, tool, target: target, used: tool)
         {
@@ -192,6 +194,7 @@ public abstract partial class SharedToolSystem : EntitySystem
             NeedHand = tool != user,
             AttemptFrequency = fuel > 0 ? AttemptFrequency.EveryTick : AttemptFrequency.Never,
             DuplicateCondition = duplicateCondition,
+            ExamineText = examineText,
         };
 
         _doAfterSystem.TryStartDoAfter(doAfterArgs, out id);
@@ -233,7 +236,34 @@ public abstract partial class SharedToolSystem : EntitySystem
             doAfterEv,
             out _,
             fuel,
-            toolComponent);
+            toolComponent,
+            duplicateCondition);
+    }
+
+    /// <summary>
+    ///     Method used to get the localized names of the quality prototypes.
+    /// </summary>
+    /// <returns>Localized combined string from the quality prototypes names</returns>
+    public string GetQualitiesText(IEnumerable<ProtoId<ToolQualityPrototype>> qualities, bool lowercase = false)
+    {
+        // Create a list to store tool quality names
+        var toolQualities = new List<string>();
+
+        // Loop through tool qualities and add localized names to the list
+        foreach (var toolQuality in qualities)
+        {
+            if (!ProtoMan.Resolve(toolQuality, out var protoToolQuality))
+                continue;
+
+            var toAdd = Loc.GetString(protoToolQuality.Name);
+            if (lowercase)
+                toAdd = toAdd.ToLower();
+
+            toolQualities.Add(toAdd);
+        }
+
+        // Combine the qualities into a single string and localize the final message
+        return ContentLocalizationManager.FormatList(toolQualities);
     }
 
     /// <summary>
@@ -283,6 +313,13 @@ public abstract partial class SharedToolSystem : EntitySystem
         return !beforeAttempt.Cancelled;
     }
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        UpdateWelders();
+    }
+
     #region DoAfterEvents
 
     [Serializable, NetSerializable]
@@ -324,7 +361,7 @@ public abstract partial class SharedToolSystem : EntitySystem
             if (evClone == WrappedEvent)
                 return this;
 
-            return new ToolDoAfterEvent(Fuel, evClone, OriginalTarget);
+            return new ToolDoAfterEvent(Fuel, evClone, OriginalTarget) { Predicted = Predicted };
         }
 
         public override bool IsDuplicate(DoAfterEvent other)

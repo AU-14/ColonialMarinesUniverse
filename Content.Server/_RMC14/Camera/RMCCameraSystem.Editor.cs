@@ -9,6 +9,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.Item;
 using Content.Shared.SurveillanceCamera;
+using Content.Shared.SurveillanceCamera.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Camera;

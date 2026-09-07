@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.Dropship.TacticalLand;
 
 namespace Content.IntegrationTests._CMU14.Dropship;
 

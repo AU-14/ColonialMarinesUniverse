@@ -14,6 +14,7 @@
                 </cmu:CmuOptionSection>
 
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-volume-label'}">
+                    <ui:OptionDropDown Name="DropDownAudioDevice" Title="{Loc 'ui-options-audio-device'}" />
                     <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'ui-options-master-volume'}" />
                     <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'ui-options-midi-volume'}" />
                     <ui:OptionSlider Name="SliderVolumeAmbientMusic" Title="{Loc 'ui-options-ambient-music-volume'}" />
@@ -31,6 +32,8 @@
                     <CheckBox Name="EventMusicCheckBox" Text="{Loc 'ui-options-event-music'}" />
                     <CheckBox Name="AdminSoundsCheckBox" Text="{Loc 'ui-options-admin-sounds'}" />
                     <CheckBox Name="BwoinkSoundCheckBox" Text="{Loc 'ui-options-bwoink-sound'}" />
+                    <CheckBox Name="AudioHrtfCheckBox" Text="{Loc 'ui-options-audio-hrtf'}" />
+                    <CheckBox Name="MuteUnfocusedCheckBox" Text="{Loc 'ui-options-mute-unfocused'}" />
                 </cmu:CmuOptionSection>
             </BoxContainer>
         </ScrollContainer>

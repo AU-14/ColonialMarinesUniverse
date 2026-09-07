@@ -1,0 +1,67 @@
+- type: entity
+  parent: SquadBase
+  id: SquadGovfor
+  name: Alpha
+  components:
+  - type: AU14SquadCallsign
+    word: SABRE
+  - type: SquadTeam
+    color: "#F0433E"
+    radio: radioGovforAlpha
+    supplyDropPadSquad: SquadAlpha
+    group: GOVFOR
+    roundStart: true
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_alpha
+
+- type: entity
+  parent: SquadGovfor
+  id: SquadGovforBravo
+  name: Bravo
+  components:
+  - type: AU14SquadCallsign
+    word: DAGGER
+  - type: SquadTeam
+    roundStart: true
+    color: "#c7b646"
+    group: GOVFOR
+    radio: radioGovforBravo
+    supplyDropPadSquad: SquadBravo
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_bravo
+
+- type: entity
+  parent: SquadGovfor
+  id: SquadGovforCharlie
+  name: Charlie
+  components:
+  - type: AU14SquadCallsign
+    word: PIKE
+  - type: SquadTeam
+    roundStart: true
+    group: GOVFOR
+    color: "#9D3EF0"
+    radio: radioGovforCharlie
+    supplyDropPadSquad: SquadCharlie
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_charlie
+
+- type: entity
+  parent: SquadGovfor
+  id: SquadGovforIntel
+  name: Auxiliary
+  components:
+  - type: AU14SquadCallsign
+    word: LONGBOW
+  - type: SquadTeam
+    group: GOVFOR
+    roundStart: true
+    color: "#228B22"
+    radio: radioGovforIntel
+    supplyDropPadSquad: SquadDelta
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_intel

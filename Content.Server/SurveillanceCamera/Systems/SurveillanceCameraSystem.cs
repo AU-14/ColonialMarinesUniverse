@@ -3,8 +3,10 @@ using Content.Server.Emp;
 using Content.Server.Wires;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Camera;
+using Content.Shared.Emp;
 using Content.Shared.Power;
 using Content.Shared.SurveillanceCamera;
+using Content.Shared.SurveillanceCamera.Components;
 using Content.Shared.Verbs;
 using Content.Shared.Wires;
 using Robust.Server.GameObjects;
@@ -13,7 +15,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.SurveillanceCamera;
 
-public sealed partial class SurveillanceCameraSystem : EntitySystem
+public sealed partial class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
 {
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
@@ -55,17 +57,15 @@ public sealed partial class SurveillanceCameraSystem : EntitySystem
 
     public override void Initialize()
     {
+        base.Initialize();
+
         SubscribeLocalEvent<SurveillanceCameraComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<SurveillanceCameraComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<SurveillanceCameraComponent, PowerChangedEvent>(OnPowerChanged);
         SubscribeLocalEvent<SurveillanceCameraComponent, SurveillanceCameraSetupSetName>(OnSetName);
         SubscribeLocalEvent<SurveillanceCameraComponent, SurveillanceCameraSetupSetNetwork>(OnSetNetwork);
-        SubscribeLocalEvent<SurveillanceCameraComponent, GetVerbsEvent<AlternativeVerb>>(AddVerbs);
         SubscribeLocalEvent<SurveillanceCameraComponent, PanelChangedEvent>(OnPanelChanged);
         SubscribeLocalEvent<SurveillanceCameraComponent, CameraSessionSelectionChangedEvent>(OnSessionSelectionChanged);
-
-        SubscribeLocalEvent<SurveillanceCameraComponent, EmpPulseEvent>(OnEmpPulse);
-        SubscribeLocalEvent<SurveillanceCameraComponent, EmpDisabledRemoved>(OnEmpDisabledRemoved);
     }
 
     private void OnStartup(Entity<SurveillanceCameraComponent> ent, ref ComponentStartup args)
@@ -76,7 +76,7 @@ public sealed partial class SurveillanceCameraSystem : EntitySystem
         // would mutate their runtime state during startup.
     }
 
-    private void AddVerbs(EntityUid uid, SurveillanceCameraComponent component, GetVerbsEvent<AlternativeVerb> verbs)
+    protected override void AddVerbs(EntityUid uid, SurveillanceCameraComponent component, GetVerbsEvent<AlternativeVerb> verbs)
     {
         if (!_wires.IsPanelOpen(uid))
             return;
@@ -165,7 +165,7 @@ public sealed partial class SurveillanceCameraSystem : EntitySystem
         return true;
     }
 
-    private void OpenSetupInterface(EntityUid uid, EntityUid player, SurveillanceCameraComponent? camera = null)
+    protected override void OpenSetupInterface(EntityUid uid, EntityUid player, SurveillanceCameraComponent? camera = null)
     {
         if (!Resolve(uid, ref camera))
             return;
@@ -257,7 +257,7 @@ public sealed partial class SurveillanceCameraSystem : EntitySystem
         UpdateVisuals(camera, component);
     }
 
-    public void SetActive(EntityUid camera, bool setting, SurveillanceCameraComponent? component = null)
+    public override void SetActive(EntityUid camera, bool setting, SurveillanceCameraComponent? component = null)
     {
         if (!Resolve(camera, ref component))
         {
@@ -310,7 +310,7 @@ public sealed partial class SurveillanceCameraSystem : EntitySystem
         UpdateVisuals(camera.Owner, camera.Comp);
     }
 
-    private void OnEmpPulse(EntityUid uid, SurveillanceCameraComponent component, ref EmpPulseEvent args)
+    protected override void OnEmpPulse(EntityUid uid, SurveillanceCameraComponent component, ref EmpPulseEvent args)
     {
         if (component.Active)
         {
@@ -320,7 +320,7 @@ public sealed partial class SurveillanceCameraSystem : EntitySystem
         }
     }
 
-    private void OnEmpDisabledRemoved(EntityUid uid, SurveillanceCameraComponent component, ref EmpDisabledRemoved args)
+    protected override void OnEmpDisabledRemoved(EntityUid uid, SurveillanceCameraComponent component, ref EmpDisabledRemovedEvent args)
     {
         SetActive(uid, true);
     }

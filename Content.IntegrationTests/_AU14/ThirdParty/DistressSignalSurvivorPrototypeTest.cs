@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server._CMU14.Threats;
-using Content.Shared._CMU14.Threats;
+using Content.Server.CMU14.Threats;
+using Content.Shared.CMU14.Threats;
 using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.ThirdParty;
+namespace Content.IntegrationTests.CMU14.ThirdParty;
 
 [TestFixture]
 public sealed class DistressSignalSurvivorPrototypeTest
@@ -15,15 +15,24 @@ public sealed class DistressSignalSurvivorPrototypeTest
         "AU14IntelThirdPartyMarksmanGOVFOR",
         "AU14IntelThirdPartySniperGOVFOR",
         "CLFCellReinforcementsIntel",
+        "CLFCellReinforcementsIntelEngineer",
         "CLFCellReinforcementsIntelMachineGunner",
+        "CLFCellReinforcementsIntelSpecialist",
+        "CLFCellReinforcementsSurv",
         "CLFSurvsBig",
         "CLFSurvsMedium",
         "CLFSurvsSmall",
+        "DiplomaticAttaches",
+        "DiplomaticAttachesSurv",
         "FORECON",
         "FORECONAlt",
         "FORECONAlt2",
         "FORECONFirstRecon",
         "FORECONKillTeam",
+        "FreeCompanyRaiders",
+        "FreeCompanyRaidersSurv",
+        "Freelancers",
+        "FreelancersSurv",
         "IPIE",
         "IPIESynth",
         "LACNSniperteam",
@@ -51,9 +60,18 @@ public sealed class DistressSignalSurvivorPrototypeTest
         "ProdigySurvLarge",
         "ProdigySurvMedium",
         "ProdigySurvSmall",
+        "ProdigyLawyer",
+        "TWEParamarines",
+        "TWEParamarinesCommand",
+        "TWEParamarinesSurv",
+        "UPPLineCommandos",
+        "UPPLineSquad",
+        "UPPLineSquadSurv",
         "WYHT",
+        "WYExecutivesSurv",
         "WYPMCParty",
         "WYPMCPartyAlt",
+        "WYPMCWhiteout",
     };
 
     [Test]

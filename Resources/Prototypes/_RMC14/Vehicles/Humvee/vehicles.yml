@@ -6,6 +6,8 @@
   components:
   - type: Vehicle
     movementKind: Grid
+    transferDamage: false
+  - type: VehicleOperatorDamage
   - type: Clickable
   - type: RMCIgnoreGhostInteractionLimits
   - type: RequireProjectileTarget
@@ -13,7 +15,7 @@
     maxSpeed: 6
     acceleration: 5
     deceleration: 12
-    maxRotationSpeedDegrees: 45
+    maxRotationSpeedDegrees: 90
     rotationAccelerationDegrees: 90
     rotationDecelerationDegrees: 120
     turnDelay: 0.25
@@ -212,8 +214,9 @@
           components:
           - HardpointItem
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
@@ -225,8 +228,9 @@
   description: A medical-configured humvee outfitted for field triage.
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
@@ -295,8 +299,9 @@
   description: A transport humvee configured for passenger movement.
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
@@ -373,8 +378,9 @@
           components:
           - HardpointItem
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameARC
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 800
     bypassEntryOnZero: true

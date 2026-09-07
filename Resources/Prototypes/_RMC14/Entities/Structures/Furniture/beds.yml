@@ -21,8 +21,9 @@
     node: bed
   - type: RMCMesonsNonviewable
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoDamage:
       types:
@@ -182,6 +183,7 @@
         mask:
         - TableMask
   - type: Damageable
+  - type: Injurable
   - type: Destructible
     thresholds:
       - trigger:

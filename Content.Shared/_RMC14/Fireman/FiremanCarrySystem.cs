@@ -3,7 +3,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared._CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Chemistry.Effects;
 using Content.Shared.ActionBlocker;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;

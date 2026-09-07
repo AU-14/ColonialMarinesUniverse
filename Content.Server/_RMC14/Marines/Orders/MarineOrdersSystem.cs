@@ -3,6 +3,7 @@ using Content.Server.Chat.Systems;
 using Content.Shared._RMC14.Marines.Orders;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.Chat;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Random;
 

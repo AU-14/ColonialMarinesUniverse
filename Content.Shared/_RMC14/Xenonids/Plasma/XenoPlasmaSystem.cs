@@ -49,7 +49,7 @@ public sealed partial class XenoPlasmaSystem : EntitySystem
 
     private void OnXenoPlasmaRemove(Entity<XenoPlasmaComponent> ent, ref ComponentRemove args)
     {
-        _alerts.ClearAlert(ent, ent.Comp.Alert);
+        _alerts.ClearAlert((ent.Owner, null), ent.Comp.Alert);
     }
 
     private void OnXenoRejuvenate(Entity<XenoPlasmaComponent> xeno, ref RejuvenateEvent args)
@@ -194,7 +194,10 @@ public sealed partial class XenoPlasmaSystem : EntitySystem
             var max = _alerts.GetMaxSeverity(xeno.Comp.Alert);
             var severity = max - ContentHelpers.RoundToLevels(level, xeno.Comp.MaxPlasma, max + 1);
             string? plasmaResourceMessage = (int)xeno.Comp.Plasma + " / " + xeno.Comp.MaxPlasma;
-            _alerts.ShowAlert(xeno, xeno.Comp.Alert, (short)severity, dynamicMessage: plasmaResourceMessage);
+            _alerts.ShowAlert((xeno.Owner, null),
+                xeno.Comp.Alert,
+                (short)severity,
+                dynamicMessage: plasmaResourceMessage);
         }
     }
 

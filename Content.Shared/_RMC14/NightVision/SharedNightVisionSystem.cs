@@ -70,7 +70,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
     private void OnNightVisionRemove(Entity<NightVisionComponent> ent, ref ComponentRemove args)
     {
         if (ent.Comp.Alert is { } alert)
-            _alerts.ClearAlert(ent, alert);
+            _alerts.ClearAlert((ent.Owner, null), alert);
 
         NightVisionRemoved(ent);
     }
@@ -111,7 +111,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         if (!ent.Comp.EnableOnEquip)
             return;
 
-        EnableNightVisionItem(ent, args.Equipee);
+        EnableNightVisionItem(ent, args.EquipTarget);
     }
 
     private void OnNightVisionItemGotUnequipped(Entity<NightVisionItemComponent> ent, ref GotUnequippedEvent args)
@@ -119,7 +119,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         if (ent.Comp.SlotFlags != args.SlotFlags)
             return;
 
-        DisableNightVisionItem(ent, args.Equipee);
+        DisableNightVisionItem(ent, args.EquipTarget);
     }
 
     private void OnNightVisionItemActionRemoved(Entity<NightVisionItemComponent> ent, ref ActionRemovedEvent args)
@@ -249,7 +249,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
             var max = _alerts.GetMaxSeverity(alert);
             var min = _alerts.GetMinSeverity(alert);
             var severity = state > max ? max : (state < min ? min : state);
-            _alerts.ShowAlert(ent, alert, severity);
+            _alerts.ShowAlert((ent.Owner, null), alert, severity);
         }
 
         NightVisionChanged(ent);

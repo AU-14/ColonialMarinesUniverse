@@ -1,5 +1,5 @@
 using Content.Shared._RMC14.Atmos;
-using Content.Shared._CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Explosion.Implosion;
 using Content.Shared.Damage;

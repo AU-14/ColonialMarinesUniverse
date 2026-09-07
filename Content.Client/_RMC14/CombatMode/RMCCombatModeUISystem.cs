@@ -1,7 +1,7 @@
 using Content.Client._RMC14.Emplacements;
 using Content.Client.CombatMode;
 using Content.Client.Hands.Systems;
-using Content.Shared._CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.CombatMode;
 using Content.Shared.CCVar;
 using Robust.Client.Graphics;

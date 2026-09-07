@@ -374,6 +374,11 @@
     damage:
       types:
         Piercing: 60
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: High
+      energy: High
   - type: CMArmorPiercing
     amount: 20
   - type: RMCProjectileAccuracy
@@ -389,6 +394,11 @@
     damage:
       types:
         Piercing: 60
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: High
+      energy: High
   - type: CMArmorPiercing
     amount: 5
   - type: RMCStunOnHit
@@ -431,6 +441,11 @@
     damage:
       types:
         Piercing: 100
+  - type: DamageImpactProfile
+    projectile:
+      contact: Fragment
+      penetration: High
+      energy: Severe
   - type: CMArmorPiercing
     amount: 50
   - type: RMCStunOnHit

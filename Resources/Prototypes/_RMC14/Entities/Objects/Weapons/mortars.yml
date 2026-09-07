@@ -45,6 +45,7 @@
     isCorrodible: false
   - type: Mortar
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Evasion;
 using Content.Shared._RMC14.Input;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -117,7 +118,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        if (args.Equipee == args.EquipTarget &&
+        if (args.User == args.EquipTarget &&
             TryCancelIfResting(drop, ref args))
         {
             args.Reason = "rmc-cant-while-resting";
@@ -129,7 +130,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        if (args.Unequipee == args.UnEquipTarget &&
+        if (args.User == args.UnEquipTarget &&
             TryCancelIfResting(drop, ref args))
         {
             args.Reason = "rmc-cant-while-resting";
@@ -199,7 +200,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
     private void OnRestStood(Entity<RMCRestComponent> ent, ref StoodEvent args)
     {
         ent.Comp.Resting = false;
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
         Dirty(ent);
     }
 

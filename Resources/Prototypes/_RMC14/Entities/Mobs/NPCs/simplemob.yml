@@ -9,6 +9,9 @@
   abstract: true
   suffix: CM
   components:
+  - type: Tag
+    tags:
+    - DoorBumpOpener # RMC mobs allow stun; do not inherit BaseSimpleMob's StunImmune tag.
   - type: NameIdentifier
     group: GenericNumber
   - type: ShortExamine
@@ -22,7 +25,20 @@
     angle: 0
     animation: WeaponArcBite
   - type: Body
-    prototype: Animal
+    requiredLegs: 0
+  - type: InitialBody
+    organs:
+      Torso: TorsoAnimal
+      Legs: LegsAnimal
+      Feet: FeetAnimal
+      Lungs: OrganAnimalLungs
+      Stomach: OrganAnimalStomach
+      Liver: OrganAnimalLiver
+      Heart: OrganAnimalHeart
+      Kidneys: OrganAnimalKidneys
+    relationships:
+      Torso: [ Legs, Lungs, Stomach, Liver, Heart, Kidneys ]
+      Legs: [ Feet ]
   - type: Climbing
   - type: RMCRevivable
   - type: RMCMedicalExamine
@@ -32,14 +48,18 @@
   - type: CrashLandable
   - type: Woundable
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Biological
     healthBarThreshold: 2 # some of these mobs literally only have 10 hit points
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.7
     baseSprintSpeed: 5
   - type: Bloodstream
-    bloodMaxVolume: 150
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 150
   - type: StatusEffects
     allowed:
     - Stun
@@ -52,7 +72,6 @@
     - Drunk
     - SlurredSpeech
     - RatvarianLanguage
-    - PressureImmunity
     - Muted
     - Pacified
     - StaminaModifier
@@ -65,22 +84,22 @@
     speedModifierThresholds:
       60: 0.7
       80: 0.5
-  - type: Hunger
-    thresholds:
-      Overfed: 100
-      Okay: 50
-      Peckish: 25
-      Starving: 10
-      Dead: 0
-    baseDecayRate: 0.05
-  - type: Thirst
-    thresholds:
-      OverHydrated: 200
-      Okay: 150
-      Thirsty: 100
-      Parched: 10
-      Dead: 0
-    baseDecayRate: 0.04
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: RMCSimpleMobHunger
+      Thirst:
+        prototype: RMCSimpleMobThirst
+  - type: SatiationSpeedModifier
+    satiations:
+      Hunger:
+        thresholds:
+          Peckish: 0.9
+          Starving: 0.675 # Historical 0.9 peckish and 0.75 starving modifiers stacked.
+      Thirst:
+        thresholds:
+          Thirsty: 0.9
+          Parched: 0.72 # Historical 0.9 thirsty and 0.8 parched modifiers stacked.
   - type: FixedIdentity
     name: rmc-host
     whitelist:
@@ -88,14 +107,27 @@
       - Xeno
 
 - type: entity
-  parent: RMCSimpleMob
+  parent: [RMCSimpleMob, BaseSlicingRefinable]
   id: RMCRodent # Required to preserve upstream mouse behavior for rodent children.
   name: Abstract rodent
   abstract: true
   suffix: CM
   components:
   - type: Body
-    prototype: Mouse
+    requiredLegs: 0
+  - type: InitialBody
+    organs:
+      Torso: TorsoAnimal
+      Legs: LegsAnimal
+      Feet: FeetAnimal
+      Lungs: OrganAnimalLungs
+      Stomach: OrganMouseStomach
+      Liver: OrganAnimalLiver
+      Heart: OrganAnimalHeart
+      Kidneys: OrganAnimalKidneys
+    relationships:
+      Torso: [ Legs, Lungs, Stomach, Liver, Heart, Kidneys ]
+      Legs: [ Feet ]
   - type: Speech
     speechSounds: Squeak
     speechVerb: SmallMob
@@ -125,37 +157,33 @@
         - SmallMobLayer
   - type: MobState
   - type: Deathgasp
-  - type: Food
+  - type: Edible
   - type: FlavorProfile
     flavors:
     - meaty
-  - type: Thirst
-    startingThirst: 25  # spawn with Okay thirst state
-    thresholds:
-      OverHydrated: 35
-      Okay: 25
-      Thirsty: 15
-      Parched: 10
-      Dead: 0
-    baseDecayRate: 0.04
-  - type: Hunger
-    thresholds:
-      Overfed: 35
-      Okay: 25
-      Peckish: 15
-      Starving: 10
-      Dead: 0
-    baseDecayRate: 0.5 # I'm very hungry! Give me. The cheese.
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: RMCRodentHunger
+      Thirst:
+        prototype: RMCRodentThirst
   - type: Extractable
     grindableSolutionName: food
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      reagents:
         - ReagentId: UncookedAnimalProteins
           Quantity: 3
   - type: Butcherable
     spawned:
+    - id: FoodMeatRat
+      amount: 1
+  - type: ToolRefinable
+    qualityNeeded: Slicing
+    refineTime: 8
+    popupType: LargeCaution
+    refineResult:
     - id: FoodMeatRat
       amount: 1
   - type: ReplacementAccent
@@ -166,10 +194,7 @@
     - Mouse
     - Meat
   - type: Vocal
-    sounds:
-      Male: Mouse
-      Female: Mouse
-      Unsexed: Mouse
+    emoteSounds: Mouse
   - type: CombatMode # I dont think this is needed
   - type: MeleeWeapon
     soundHit:
@@ -180,7 +205,10 @@
       types:
         Piercing: 0
   - type: Bloodstream
-    bloodMaxVolume: 50
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 50
   - type: BadFood
   - type: ZombieImmune
   - type: FireVisuals
@@ -282,8 +310,21 @@
             state: human_acid_enhanced
             visible: true
   - type: Body
-    prototype: Primate
     requiredLegs: 1
+  - type: InitialBody
+    organs:
+      Torso: TorsoPrimate
+      Hands: HandsAnimal
+      Legs: LegsAnimal
+      Feet: FeetAnimal
+      Lungs: OrganAnimalLungs
+      Stomach: OrganAnimalStomach
+      Liver: OrganAnimalLiver
+      Heart: OrganAnimalHeart
+      Kidneys: OrganAnimalKidneys
+    relationships:
+      Torso: [ Hands, Legs, Lungs, Stomach, Liver, Heart, Kidneys ]
+      Legs: [ Feet ]
   - type: CreamPied
   - type: FireVisuals
     sprite: Mobs/Effects/onfire.rsi

@@ -17,7 +17,6 @@
     startingCharge: 1000
   - type: PowerCell
   - type: Appearance
-  - type: PowerCellVisuals
   - type: Riggable
   - type: Tag
     tags:
@@ -191,7 +190,6 @@
     maxCharge: 30000
     startingCharge: 30000
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 1000
   - type: PhysicalComposition
     materialComposition:

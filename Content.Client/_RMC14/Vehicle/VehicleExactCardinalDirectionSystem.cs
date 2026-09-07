@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Vehicle.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Graphics.RSI;
-using Robust.Shared.Maths;
 
 namespace Content.Client._RMC14.Vehicle;
 
@@ -20,12 +18,9 @@ public sealed partial class VehicleExactCardinalDirectionSystem : EntitySystem
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
-    private readonly Dictionary<EntityUid, Direction> _lastDirections = new();
-
     public override void Initialize()
     {
         UpdatesAfter.Add(typeof(VehicleTurretVisualSystem));
-        SubscribeLocalEvent<SpriteComponent, ComponentShutdown>(OnSpriteShutdown);
     }
 
     public override void FrameUpdate(float frameTime)
@@ -47,14 +42,6 @@ public sealed partial class VehicleExactCardinalDirectionSystem : EntitySystem
     {
         var screenRotation = _transform.GetWorldRotation(uid) + _eye.CurrentEye.Rotation;
         var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(screenRotation);
-
-        // Transform and eye rotation still need a cheap per-frame direction
-        // calculation, but sprite layers only need mutation when their selected
-        // cardinal sector changes.
-        if (_lastDirections.TryGetValue(uid, out var lastDirection) && lastDirection == direction)
-            return;
-
-        _lastDirections[uid] = direction;
 
         sprite.EnableDirectionOverride = true;
         sprite.DirectionOverride = direction;
@@ -79,10 +66,5 @@ public sealed partial class VehicleExactCardinalDirectionSystem : EntitySystem
 
             _sprite.LayerSetRotation((uid, sprite), i, -direction.ToAngle());
         }
-    }
-
-    private void OnSpriteShutdown(Entity<SpriteComponent> ent, ref ComponentShutdown args)
-    {
-        _lastDirections.Remove(ent.Owner);
     }
 }

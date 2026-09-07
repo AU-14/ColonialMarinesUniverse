@@ -1,0 +1,11 @@
+- type: factionIcon
+  id: CMUXenoHiveAlly
+  priority: 11
+  locationPreference: Right
+  visibleToGhosts: false
+  showTo:
+    components:
+    - Xeno
+  icon:
+    sprite: /Textures/_RMC14/Interface/xeno_hud.rsi
+    state: hudalien_ally

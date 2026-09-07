@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Gibbing;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;

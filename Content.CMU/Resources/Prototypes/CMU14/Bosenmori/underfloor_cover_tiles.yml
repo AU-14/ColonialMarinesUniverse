@@ -1,0 +1,310 @@
+# Generated Bosenmori intact-turf aliases. Do not hand-edit; rerun tools/audit-bosenmori-conversion.ts.
+- type: tile
+  parent: CMFloorAsteroidFloor
+  id: CMUBosenmoriCoveredCMFloorAsteroidFloor
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorCorsatBasicRetroSquaresLight
+  id: CMUBosenmoriCoveredCMFloorCorsatBasicRetroSquaresLight
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorCorsatCargo
+  id: CMUBosenmoriCoveredCMFloorCorsatCargo
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPlanet
+  id: CMUBosenmoriCoveredCMFloorSteelPlanet
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPlanetPurpleFull
+  id: CMUBosenmoriCoveredCMFloorSteelPlanetPurpleFull
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrison
+  id: CMUBosenmoriCoveredCMFloorSteelPrison
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonBlue2
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonBlue2
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonBlue6
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonBlue6
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonBrightClean
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonBrightClean
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkBrown0
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkBrown0
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkBrown1
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkBrown1
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkBrown3
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkBrown3
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkBrown4
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkBrown4
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkBrown5
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkBrown5
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkBrown7
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkBrown7
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkBrownCorners2
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkBrownCorners2
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkRed3
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkRed3
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkRed5
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkRed5
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonDarkRed7
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonDarkRed7
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonGreenBlue0
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonGreenBlue0
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonGreenBlue1
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonGreenBlue1
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonGreenBlue2
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonGreenBlue2
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonGreenBlueCorner1
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonGreenBlueCorner1
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonGreenBlueCorner3
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonGreenBlueCorner3
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonPlate
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonPlate
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonPlateCaution0
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonPlateCaution0
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonPlateCaution1
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonPlateCaution1
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonPlateCaution2
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonPlateCaution2
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonPlateCaution3
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonPlateCaution3
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonPlateMarked
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonPlateMarked
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonWhiteFull
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonWhiteFull
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonWhitePurpleCorner0
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonWhitePurpleCorner0
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelPrisonWhitePurpleCorner2
+  id: CMUBosenmoriCoveredCMFloorSteelPrisonWhitePurpleCorner2
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelShivaMultiTile
+  id: CMUBosenmoriCoveredCMFloorSteelShivaMultiTile
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorSteelSterileDark
+  id: CMUBosenmoriCoveredCMFloorSteelSterileDark
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorStriped0
+  id: CMUBosenmoriCoveredCMFloorStriped0
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorStriped2
+  id: CMUBosenmoriCoveredCMFloorStriped2
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorStriped4
+  id: CMUBosenmoriCoveredCMFloorStriped4
+  isSubfloor: false
+
+- type: tile
+  parent: CMFloorTest0
+  id: CMUBosenmoriCoveredCMFloorTest0
+  isSubfloor: false
+
+- type: tile
+  parent: CMPlanetGCircuit
+  id: CMUBosenmoriCoveredCMPlanetGCircuit
+  isSubfloor: false
+
+- type: tile
+  parent: CMPlanetMattedGrass3
+  id: CMUBosenmoriCoveredCMPlanetMattedGrass3
+  isSubfloor: false
+
+- type: tile
+  parent: CMPlanetMattedGrass4
+  id: CMUBosenmoriCoveredCMPlanetMattedGrass4
+  isSubfloor: false
+
+- type: tile
+  parent: CMPlanetTatami
+  id: CMUBosenmoriCoveredCMPlanetTatami
+  isSubfloor: false
+
+- type: tile
+  parent: CMUBosenmoriExact103c10c90bd42017
+  id: CMUBosenmoriCoveredCMUBosenmoriExact103c10c90bd42017
+  isSubfloor: false
+
+- type: tile
+  parent: CMUBosenmoriExact33bb35301abf7ff9
+  id: CMUBosenmoriCoveredCMUBosenmoriExact33bb35301abf7ff9
+  isSubfloor: false
+
+- type: tile
+  parent: CMUBosenmoriExact66b0de159b0c15c5
+  id: CMUBosenmoriCoveredCMUBosenmoriExact66b0de159b0c15c5
+  isSubfloor: false
+
+- type: tile
+  parent: CMUBosenmoriExact93f730d271a121f9
+  id: CMUBosenmoriCoveredCMUBosenmoriExact93f730d271a121f9
+  isSubfloor: false
+
+- type: tile
+  parent: CMUBosenmoriExact954361d14f9ec125
+  id: CMUBosenmoriCoveredCMUBosenmoriExact954361d14f9ec125
+  isSubfloor: false
+
+- type: tile
+  parent: CMUBosenmoriExacta77eb44c355bd64b
+  id: CMUBosenmoriCoveredCMUBosenmoriExacta77eb44c355bd64b
+  isSubfloor: false
+
+- type: tile
+  parent: CMUBosenmoriExactdadc6df0e2c8f84d
+  id: CMUBosenmoriCoveredCMUBosenmoriExactdadc6df0e2c8f84d
+  isSubfloor: false
+
+- type: tile
+  parent: RMCFloorKutjevoFloor1
+  id: CMUBosenmoriCoveredRMCFloorKutjevoFloor1
+  isSubfloor: false
+
+- type: tile
+  parent: RMCFloorKutjevoMulti1
+  id: CMUBosenmoriCoveredRMCFloorKutjevoMulti1
+  isSubfloor: false
+
+- type: tile
+  parent: RMCFloorKutjevoMulti2
+  id: CMUBosenmoriCoveredRMCFloorKutjevoMulti2
+  isSubfloor: false
+
+- type: tile
+  parent: RMCFloorKutjevoTan2
+  id: CMUBosenmoriCoveredRMCFloorKutjevoTan2
+  isSubfloor: false
+
+- type: tile
+  parent: RMCFloorPlatingNoBuild
+  id: CMUBosenmoriCoveredRMCFloorPlatingNoBuild
+  isSubfloor: false
+
+- type: tile
+  parent: RMCFloorResearchContainmentFloor2North
+  id: CMUBosenmoriCoveredRMCFloorResearchContainmentFloor2North
+  isSubfloor: false
+
+- type: tile
+  parent: RMCFloorSteelPlanetDark
+  id: CMUBosenmoriCoveredRMCFloorSteelPlanetDark
+  isSubfloor: false
+
+- type: tile
+  parent: RMCFloorStrataFakeWood
+  id: CMUBosenmoriCoveredRMCFloorStrataFakeWood
+  isSubfloor: false
+
+- type: tile
+  parent: RMCPlanetRedDesert
+  id: CMUBosenmoriCoveredRMCPlanetRedDesert
+  isSubfloor: false
+
+- type: tile
+  parent: RMCPlanetRedDesertDirt
+  id: CMUBosenmoriCoveredRMCPlanetRedDesertDirt
+  isSubfloor: false
+
+- type: tile
+  parent: RMCPlanetSand1Rock
+  id: CMUBosenmoriCoveredRMCPlanetSand1Rock
+  isSubfloor: false
+
+- type: tile
+  parent: RMCWoodInside
+  id: CMUBosenmoriCoveredRMCWoodInside
+  isSubfloor: false

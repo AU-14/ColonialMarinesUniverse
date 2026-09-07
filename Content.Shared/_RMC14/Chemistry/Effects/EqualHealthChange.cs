@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -9,7 +10,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.Effects;
 
-public sealed partial class EqualHealthChange : EntityEffect
+public sealed partial class EqualHealthChange : EntityEffectBase<EqualHealthChange>
 {
     [DataField(required: true)]
     [JsonPropertyName("damage")]
@@ -19,7 +20,7 @@ public sealed partial class EqualHealthChange : EntityEffect
     [JsonPropertyName("ignoreResistances")]
     public bool IgnoreResistances = true;
 
-    protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
         var damages = new List<string>();
         var heals = false;
@@ -47,23 +48,32 @@ public sealed partial class EqualHealthChange : EntityEffect
 
         var healsordeals = heals ? (deals ? "both" : "heals") : (deals ? "deals" : "none");
 
-        return Loc.GetString("reagent-effect-guidebook-health-change",
+        return Loc.GetString("entity-effect-guidebook-health-change",
             ("chance", Probability),
             ("changes", ContentLocalizationManager.FormatList(damages)),
             ("healsordeals", healsordeals));
     }
 
-    public override void Effect(EntityEffectBaseArgs args)
+}
+
+public sealed partial class EqualHealthChangeEntityEffectSystem
+    : EntityEffectSystem<MetaDataComponent, EqualHealthChange>
+{
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
+
+    protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<EqualHealthChange> args)
     {
         var damage = new DamageSpecifier();
-        var rmcDamageable = args.EntityManager.System<SharedRMCDamageableSystem>();
-        var scale = (args as EntityEffectReagentArgs)?.Scale ?? 1;
-        foreach (var (group, amount) in Damage)
+        foreach (var (group, amount) in args.Effect.Damage)
         {
-            damage = rmcDamageable.DistributeDamageCached(args.TargetEntity, group, amount * scale, damage);
+            damage = _rmcDamageable.DistributeDamageCached(entity.Owner, group, amount * args.Scale, damage);
         }
 
-        args.EntityManager.System<DamageableSystem>()
-            .TryChangeDamage(args.TargetEntity, damage, IgnoreResistances, interruptsDoAfters: false);
+        _damageable.TryChangeDamage(
+            entity.Owner,
+            damage,
+            args.Effect.IgnoreResistances,
+            interruptsDoAfters: false);
     }
 }

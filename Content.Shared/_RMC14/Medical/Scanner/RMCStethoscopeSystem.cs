@@ -3,7 +3,10 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -13,6 +16,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -27,8 +31,13 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
     [Dependency] private InventorySystem _inventorySystem = default!;
     [Dependency] private SharedContainerSystem _containerSystem = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
+    private const string NeckSlot = "neck";
     private static readonly string[] AccessorySlots = ["jumpsuit", "outerClothing"];
 
     public override void Initialize()
@@ -40,21 +49,75 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
 
     private void OnStethoAfterInteract(EntityUid uid, RMCStethoscopeComponent comp, ref AfterInteractEvent args)
     {
-        if (args.Handled)
+        if (args.Handled || !args.CanReach || args.Used != uid || args.Target is not { } target)
             return;
-        if (!HasStethoscope(args.User, out _))
-            return;
-        if (args.Target == null)
-            return;
-        ShowStethoPopup(args.User, args.Target.Value);
-        args.Handled = true;
+        args.Handled = TryExamine(args.User, target, (uid, comp), fromVerb: false);
     }
 
-    private void ShowStethoPopup(EntityUid user, EntityUid target)
+    /// <summary>One server-owned output route for held tools and worn-tool verbs.</summary>
+    public bool TryExamine(EntityUid user, EntityUid patient, Entity<RMCStethoscopeComponent> tool, bool fromVerb)
     {
-        var scanResult = GetStethoscopeResults(target, user);
-        var popupText = scanResult.ToString();
-        _popup.PopupClient(popupText, user, user);
+        if (!CanExamine(user, patient, tool, fromVerb))
+            return false;
+
+        // The server emits the popup/tooltip. A predicted interaction must not
+        // also disclose the fallback aggregate readout on the client.
+        if (_net.IsClient)
+            return true;
+
+        var request = new RMCStethoscopeExamineRequest(user, patient, tool, fromVerb);
+        RaiseLocalEvent(ref request);
+        if (!request.Handled && CanExamine(user, patient, tool, fromVerb))
+            ShowResult(user, patient, GetStethoscopeResults(patient, user), fromVerb);
+        return true;
+    }
+
+    public void ShowResult(EntityUid user, EntityUid patient, FormattedMessage result, bool fromVerb)
+    {
+        if (_net.IsClient)
+            return;
+        if (fromVerb)
+            _examine.SendExamineTooltip(user, patient, result, getVerbs: false, centerAtCursor: false);
+        else
+            _popup.PopupClient(result.ToString(), patient, user);
+    }
+
+    public bool CanExamine(EntityUid user, EntityUid patient, Entity<RMCStethoscopeComponent> tool, bool fromVerb)
+    {
+        return IsLive(user) && IsLive(patient) && IsCurrentTool(user, tool, fromVerb) &&
+               _blocker.CanInteract(user, patient) &&
+               (fromVerb || _blocker.CanUseHeldEntity(user, tool)) &&
+               _interaction.InRangeAndAccessible(user, patient) &&
+               // Permission/range callbacks may delete entities or change the tool.
+               IsLive(user) && IsLive(patient) && IsCurrentTool(user, tool, fromVerb);
+    }
+
+    private bool IsLive(EntityUid uid) => !TerminatingOrDeleted(uid) && !EntityManager.IsQueuedForDeletion(uid);
+
+    private bool IsCurrentTool(EntityUid user, Entity<RMCStethoscopeComponent> tool, bool fromVerb)
+    {
+        return IsLive(tool) && tool.Comp.LifeStage < ComponentLifeStage.Stopping &&
+               TryComp<RMCStethoscopeComponent>(tool, out var current) && ReferenceEquals(current, tool.Comp) &&
+               IsAvailable(user, tool, fromVerb);
+    }
+
+    private bool IsAvailable(EntityUid user, EntityUid tool, bool fromVerb)
+    {
+        if (_hands.TryGetActiveItem(user, out var held) && held == tool)
+            return true;
+        if (!fromVerb)
+            return false;
+        if (_inventorySystem.TryGetSlotEntity(user, NeckSlot, out var neck) && neck == tool)
+            return true;
+        foreach (var slot in AccessorySlots)
+        {
+            if (_inventorySystem.TryGetSlotEntity(user, slot, out var clothing) && IsLive(clothing.Value) &&
+                TryComp<UniformAccessoryHolderComponent>(clothing.Value, out var holder) &&
+                _containerSystem.TryGetContainer(clothing.Value, holder.ContainerId, out var container) &&
+                container.ContainedEntities.Contains(tool))
+                return true;
+        }
+        return false;
     }
 
     private void OnGlobalStethoscopeExamineVerb(GetVerbsEvent<ExamineVerb> args)
@@ -63,22 +126,33 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
             return;
         if (!HasStethoscope(args.User, out var stethoscope))
             return;
-        var examineMarkup = GetStethoscopeResults(args.Target, args.User);
-        _examine.AddDetailedExamineVerb(args,
-            Comp<RMCStethoscopeComponent>(stethoscope),
-            examineMarkup,
-            Loc.GetString("rmc-stethoscope-verb-text"),
-            "/Textures/_RMC14/Objects/Medical/stethoscope.rsi/icon.png",
-            Loc.GetString("rmc-stethoscope-verb-message"));
+        var tool = new Entity<RMCStethoscopeComponent>(stethoscope, Comp<RMCStethoscopeComponent>(stethoscope));
+        args.Verbs.Add(new ExamineVerb
+        {
+            Act = () => TryExamine(args.User, args.Target, tool, fromVerb: true),
+            Text = Loc.GetString("rmc-stethoscope-verb-text"),
+            Message = Loc.GetString("rmc-stethoscope-verb-message"),
+            Category = VerbCategory.Examine,
+            // IconEntity also binds the network verb identity to the exact tool;
+            // a stale menu cannot silently select a replacement stethoscope.
+            IconEntity = GetNetEntity(stethoscope),
+        });
     }
 
     private bool HasStethoscope(EntityUid user, out EntityUid stethoscope)
     {
         stethoscope = EntityUid.Invalid;
         if (_hands.TryGetActiveItem(user, out var held) &&
-            HasComp<RMCStethoscopeComponent>(held.Value))
+            IsLive(held.Value) && HasComp<RMCStethoscopeComponent>(held.Value))
         {
             stethoscope = held.Value;
+            return true;
+        }
+
+        if (_inventorySystem.TryGetSlotEntity(user, NeckSlot, out var neck) &&
+            IsLive(neck.Value) && HasComp<RMCStethoscopeComponent>(neck.Value))
+        {
+            stethoscope = neck.Value;
             return true;
         }
 
@@ -92,7 +166,7 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
                 continue;
             foreach (var accessory in container.ContainedEntities)
             {
-                if (!HasComp<RMCStethoscopeComponent>(accessory))
+                if (!IsLive(accessory) || !HasComp<RMCStethoscopeComponent>(accessory))
                     continue;
                 stethoscope = accessory;
                 return true;
@@ -149,7 +223,7 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
             return null;
         }
 
-        var totalDamage = damageable.Damage.GetTotal().Float();
+        var totalDamage = _damageable.GetAllDamage((target, damageable)).GetTotal().Float();
         var maxHealthThreshold = thresholds.Thresholds.Count > 0
             ? (float)thresholds.Thresholds.Keys.Max()
             : 100f;

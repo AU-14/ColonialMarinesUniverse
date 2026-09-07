@@ -18,12 +18,12 @@ using Content.Shared.Input;
 using JetBrains.Annotations;
 using Robust.Client.Audio;
 using Robust.Client.Graphics;
+using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
-using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Network;
@@ -40,6 +40,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IClyde _clyde = default!;
     [Dependency] private IUserInterfaceManager _uiManager = default!;
+    [Dependency] private IInputManager _input = default!;
     [Dependency] private StaffHelpUIController _staffHelp = default!;
     [UISystemDependency] private AudioSystem _audio = default!;
 
@@ -104,15 +105,13 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         _bwoinkSystem = system;
         _bwoinkSystem.OnBwoinkTextMessageRecieved += ReceivedBwoink;
 
-        CommandBinds.Builder
-            .Bind(ContentKeyFunctions.OpenAHelp,
-                InputCmdHandler.FromDelegate(_ => ToggleWindow()))
-            .Register<AHelpUIController>();
+        _input.SetInputCommand(ContentKeyFunctions.OpenAHelp,
+            InputCmdHandler.FromDelegate(_ => _staffHelp.ToggleWindow()));
     }
 
     public void OnSystemUnloaded(BwoinkSystem system)
     {
-        CommandBinds.Unregister<AHelpUIController>();
+        _input.SetInputCommand(ContentKeyFunctions.OpenAHelp, null);
 
         DebugTools.Assert(_bwoinkSystem != null);
         _bwoinkSystem!.OnBwoinkTextMessageRecieved -= ReceivedBwoink;
@@ -146,7 +145,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         if (message.PlaySound && localPlayer.UserId != message.TrueSender)
         {
             if (_aHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
-                _audio.PlayGlobal(new ResolvedPathSpecifier(_aHelpSound), Filter.Local(), false);
+                _audio.PlayGlobal(_aHelpSound, Filter.Local(), false);
             _clyde.RequestWindowAttention();
         }
 
@@ -229,16 +228,16 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
 
         helper.Control.Orphan();
-        helper.Window.Orphan();
+        helper.Window.Dispose();
         helper.Window = null;
         helper.EverOpened = false;
 
-        var monitor = _clyde.EnumerateMonitors().First();
+        var monitor = _clyde.EnumerateMonitors().FirstOrDefault();
 
         helper.ClydeWindow = _clyde.CreateWindow(new WindowCreateParameters
         {
             Maximized = false,
-            Title = "Admin Help",
+            Title = Loc.GetString("bwoink-admin-title"),
             Monitor = monitor,
             Width = 900,
             Height = 500
@@ -289,13 +288,13 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
 
         if (red)
         {
-            GameAHelpButton?.StyleClasses.Add(MenuButton.StyleClassRedTopButton);
-            LobbyAHelpButton?.StyleClasses.Add(StyleNano.StyleClassButtonColorRed);
+            GameAHelpButton?.StyleClasses.Add(StyleClass.Negative);
+            LobbyAHelpButton?.StyleClasses.Add(StyleClass.Negative);
         }
         else
         {
-            GameAHelpButton?.StyleClasses.Remove(MenuButton.StyleClassRedTopButton);
-            LobbyAHelpButton?.StyleClasses.Remove(StyleNano.StyleClassButtonColorRed);
+            GameAHelpButton?.StyleClasses.Remove(StyleClass.Negative);
+            LobbyAHelpButton?.StyleClasses.Remove(StyleClass.Negative);
         }
     }
 
@@ -438,7 +437,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
                 {
                     panel.Orphan();
                 }
-                Control?.Orphan();
+                Control?.Dispose();
             }
             // window wont be closed here so we will invoke ourselves
             OnClose?.Invoke();
@@ -521,7 +520,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
         if (_activePanelMap.TryGetValue(channelId, out var existingPanel))
             return existingPanel;
 
-        _activePanelMap[channelId] = existingPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(channelId, text, Window?.Bwoink.PlaySound.Pressed ?? true, Window?.Bwoink.AdminOnly.Pressed ?? false));
+        _activePanelMap[channelId] = existingPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(channelId, text, Control?.PlaySound.Pressed ?? true, Control?.AdminOnly.Pressed ?? false));
         existingPanel.InputTextChanged += text => InputTextChanged?.Invoke(channelId, text);
         existingPanel.Visible = false;
         if (!Control!.BwoinkArea.Children.Contains(existingPanel))
@@ -575,14 +574,14 @@ public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
 
     public void ToggleWindow()
     {
-        EnsureInit(_discordRelayActive);
-        if (_window!.IsOpen)
+        var createdWindow = EnsureInit(_discordRelayActive);
+        if (!createdWindow && _window!.IsOpen)
         {
             _window.Close();
         }
         else
         {
-            _window.OpenCentered();
+            _window!.OpenCentered();
         }
     }
 
@@ -613,10 +612,14 @@ public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
         _window!.OpenCentered();
     }
 
-    private void EnsureInit(bool relayActive)
+    /// <summary>
+    /// Create new ahelp window or return existing window
+    /// </summary>
+    /// <returns>True if new window was created</returns>
+    private bool EnsureInit(bool relayActive)
     {
         if (_window is { Disposed: false })
-            return;
+            return false;
         _chatPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(_ownerId, text, true, false));
         _chatPanel.InputTextChanged += text => InputTextChanged?.Invoke(_ownerId, text);
         // 600x360 - roughly 20% up from the 500x300 this opened at before. No SetSize: MinSize alone
@@ -644,6 +647,7 @@ public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
 
         var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, BuildIntroText());
         Receive(introMessage);
+        return true;
     }
 
     // One message, not five: a header coloured in code rather than baked into the loc string, then

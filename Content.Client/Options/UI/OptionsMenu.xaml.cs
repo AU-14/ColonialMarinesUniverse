@@ -1,4 +1,5 @@
 using Content.Client._CMU14.Interface;
+using Content.Client._CMU14.UserInterface.Options;
 using Content.Client.Administration.Managers;
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
@@ -35,10 +36,10 @@ namespace Content.Client.Options.UI
             Tabs.SetTabTitle(7, Loc.GetString("ui-options-tab-admin"));
 
             CmuTab.CrtUiPreviewChanged += OnCrtUiPreviewChanged;
+            CmuTab.OpenUiSetupRequested += OpenUiSetup;
             OnClose += ResetCrtUiPreview;
             UpdateTabs();
-            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
-            _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _stylesheetManager.CrtThemeChanged += ApplyCrtPalette;
 
             SetUpCrtScreen();
             _cfg.OnValueChanged(CCVars.CMUCrtMenuEffect, OnMenuEffectChanged);
@@ -53,6 +54,7 @@ namespace Content.Client.Options.UI
         private void SetUpCrtScreen()
         {
             CrtOverlay.Source = CrtContent;
+            CrtOverlay.Phosphor = CrtTerminalPalette.Accent;
             CrtOverlay.Curvature = 0f;
             CrtOverlay.Vignette = 0.12f;
             CrtOverlay.Roll = false;
@@ -69,28 +71,23 @@ namespace Content.Client.Options.UI
         {
             base.Dispose(disposing);
 
-            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
-            _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _stylesheetManager.CrtThemeChanged -= ApplyCrtPalette;
             _cfg.UnsubValueChanged(CCVars.CMUCrtMenuEffect, OnMenuEffectChanged);
             CmuTab.CrtUiPreviewChanged -= OnCrtUiPreviewChanged;
+            CmuTab.OpenUiSetupRequested -= OpenUiSetup;
             OnClose -= ResetCrtUiPreview;
             ResetCrtUiPreview();
         }
 
-        private void OnCrtUiEnabledChanged(bool _)
+        private void OpenUiSetup()
         {
-            ApplyCrtPalette();
-        }
-
-        private void OnCrtUiColorChanged(string _)
-        {
-            ApplyCrtPalette();
+            Close();
+            new CmuUiSetupWindow().OpenCentered();
         }
 
         private void OnCrtUiPreviewChanged(bool enabled, string color)
         {
             _stylesheetManager.PreviewCrtUi(enabled, color);
-            ApplyCrtPalette();
         }
 
         private void ResetCrtUiPreview()
@@ -102,6 +99,7 @@ namespace Content.Client.Options.UI
         {
             Stylesheet = _stylesheetManager.SheetNano;
             CrtLobbyTheme.ApplyWindow(this, useCrtTypography: false);
+            SetUpCrtScreen();
         }
 
         public void UpdateTabs()

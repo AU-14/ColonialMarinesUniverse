@@ -1,3 +1,4 @@
+using Content.Client.Graphics;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Robust.Client.GameObjects;
@@ -9,18 +10,13 @@ namespace Content.Client.Movement.Systems;
 public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
 {
     private static readonly ProtoId<ShaderPrototype> HorizontalCut = "HorizontalCut";
-    private const string ShaderId = "HorizontalCut"; // CMU14: keyed id required by the v288 multi post-shader API
 
-    [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private SpriteSystem _sprite = default!; // CMU14
-
-    private EntityQuery<SpriteComponent> _spriteQuery;
+    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _spriteQuery = GetEntityQuery<SpriteComponent>();
 
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentStartup>(OnOcclusionStartup);
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentShutdown>(OnOcclusionShutdown);
@@ -29,6 +25,9 @@ public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
 
     private void OnOcclusionAuto(Entity<FloorOcclusionComponent> ent, ref AfterAutoHandleStateEvent args)
     {
+        if (!ent.Comp.Running)
+            return;
+
         SetShader(ent.Owner, ent.Comp.Enabled);
     }
 
@@ -52,19 +51,18 @@ public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
         if (!_spriteQuery.Resolve(sprite.Owner, ref sprite.Comp, false))
             return;
 
-        // CMU14: obsolete PostShader property clears every keyed entry on the sprite (thermal cloaks, holograms);
-        // the guard below only made sense for the single-slot API it was protecting
-        // var shader = _proto.Index(HorizontalCut).Instance();
-        // if (sprite.Comp.PostShader is not null && sprite.Comp.PostShader != shader)
-        //     return;
+        var shader = ProtoMan.Index(HorizontalCut).Instance();
 
         if (enabled)
         {
-            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, _proto.Index(HorizontalCut).InstanceUnique())); // CMU14
+            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ContentPostShaderIds.FloorOcclusion, shader)
+            {
+                Before = ContentPostShaderIds.BeforeOutlines,
+            });
         }
         else
         {
-            _sprite.RemovePostShader(sprite, ShaderId); // CMU14
+            _sprite.RemovePostShader(sprite, ContentPostShaderIds.FloorOcclusion);
         }
     }
 }

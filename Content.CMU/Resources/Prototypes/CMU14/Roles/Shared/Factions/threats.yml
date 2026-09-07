@@ -1,0 +1,54 @@
+- type: npcFaction
+  id: THREAT
+  hostile:
+  - GOVFOR
+  - OPFOR
+  - CLF
+  - AUColonist # covers Civilian via inheritance
+  - CMUYautja
+  - CMUAPE
+  - Abomination
+  - RMCXeno
+  - SimpleNeutral # small hosts (e.g. neutral monkeys to be targeted by acehuggers)
+  - UNMC # legacy
+  - NanoTrasen # legacy
+  - SPP # legacy
+  - Halcyon # legacy
+  - TSE # legacy
+  - WeYa # legacy
+
+- type: npcFaction
+  parent: THREAT
+  id: RMCXeno
+  name: Prime Hive
+  hidden: true
+
+- type: npcFaction
+  parent: RMCXeno
+  id: CMU14PathogenWalker
+  name: Mycelial Confluence
+
+- type: npcFaction
+  id: CMUCorruptedHive
+  name: Corrupted Hive
+
+- type: npcFaction
+  parent: THREAT
+  id: CMUAPE
+  name: Apes
+
+- type: npcFaction
+  id: RMCDumb
+  hostile:
+  - THREAT
+  - GOVFOR
+  - OPFOR
+  - AUColonist
+  - CMUYautja
+  - SimpleNeutral
+  - UNMC # legacy
+  - NanoTrasen # legacy
+  - SPP # legacy
+  - Halcyon # legacy
+  - TSE # legacy
+  - WeYa # legacy

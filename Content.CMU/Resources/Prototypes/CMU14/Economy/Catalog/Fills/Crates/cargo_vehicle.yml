@@ -1,0 +1,10 @@
+- type: entity
+  parent: RMCSecureCaseStrapped
+  id: CMUCrateCargoCarrier
+  components:
+  - type: CrateOpenable
+    spawn:
+    - id: CMUCargoCarrierController
+      amount: 1
+  - type: SpawnOnTerminate
+    spawn: CMUCargoCarrier

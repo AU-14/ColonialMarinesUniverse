@@ -24690,38 +24690,6 @@ entities:
     - type: Transform
       pos: -5.5,-40.5
       parent: 2
-- proto: TowelColorBlack
-  entities:
-  - uid: 4120
-    components:
-    - type: Transform
-      pos: -17.730303,-12.577909
-      parent: 2
-  - uid: 4121
-    components:
-    - type: Transform
-      pos: -17.49072,-12.629993
-      parent: 2
-  - uid: 4122
-    components:
-    - type: Transform
-      pos: -17.230303,-12.609159
-      parent: 2
-  - uid: 4123
-    components:
-    - type: Transform
-      pos: 8.246813,49.79269
-      parent: 2
-  - uid: 4124
-    components:
-    - type: Transform
-      pos: 8.496813,49.79269
-      parent: 2
-  - uid: 4125
-    components:
-    - type: Transform
-      pos: 8.715563,49.79269
-      parent: 2
 - proto: VMarkerShipAutomaticRifleman
   entities:
   - uid: 4126

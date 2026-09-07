@@ -3,13 +3,17 @@ using System.Numerics;
 using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Client.Resources;
-using Content.Shared._CMU14.Xenonids.Watch;
+using Content.Client.UserInterface.RichText;
+using Content.Client._RMC14.Chat;
+using Content.Shared.CMU14.Ghost;
+using Content.Shared.CMU14.Xenonids.Watch;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Robust.Client.Console;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.RichText;
 using Robust.Shared.Configuration;
 using Robust.Shared.IoC;
 using Robust.Shared.Utility;
@@ -18,6 +22,21 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
 public sealed partial class ChatMessageRow : PanelContainer
 {
+    internal static readonly Type[] AllowedMarkupTags =
+    [
+        typeof(BoldItalicTag),
+        typeof(BoldTag),
+        typeof(BulletTag),
+        typeof(ChatCommandLinkTag),
+        typeof(ColorTag),
+        typeof(FontTag),
+        typeof(HeadingTag),
+        typeof(ItalicTag),
+        typeof(LanguageIconTag),
+        typeof(MonoTag),
+        typeof(ScrambleTag),
+    ];
+
     [Dependency] private IClientConsoleHost _consoleHost = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
     [Dependency] private IConfigurationManager _config = default!;
@@ -60,11 +79,8 @@ public sealed partial class ChatMessageRow : PanelContainer
             AccentSize = metrics.AccentSize,
             BorderColor = accent,
             BorderThickness = isAnnouncement ? new Thickness(2, 0, 0, 0) : new Thickness(0),
-            // A content margin, not a margin on ChatPanes: DoDraw paints the row's full box, so a
-            // wrapper margin insets the fill along with the text and leaves bare ground down every
-            // tinted row. This is the message column - crtChatInput's inset (8) plus the channel
-            // chip's own (6) has to equal it, by hand.
-            ContentMarginLeftOverride = 14,
+            // Keep prefixes close to the edge while leaving the row tint flush with the panel.
+            ContentMarginLeftOverride = 4,
             // Leave room for the corner triangle so it never sits on top of the text.
             ContentMarginRightOverride = 4 + metrics.AccentSize,
             // Asymmetric on purpose: the 1.25 line height puts its leading under the last line, so
@@ -113,6 +129,12 @@ public sealed partial class ChatMessageRow : PanelContainer
             });
         }
 
+        if (message.GhostFollowEntity.Valid)
+        {
+            var followButton = CreateFollowButton(message, metrics, textColor);
+            row.AddChild(followButton);
+        }
+
         if (message.XenoWatchEntity.Valid)
         {
             var watchButton = CreateXenoWatchButton(message, metrics, textColor);
@@ -138,7 +160,7 @@ public sealed partial class ChatMessageRow : PanelContainer
                 : StyleNano.StyleClassCrtChatText);
         }
 
-        _messageLabel.SetMessage(formatted, defaultColor: textColor);
+        _messageLabel.SetMessage(ReplaceCommandLinkTags(formatted), AllowedMarkupTags, defaultColor: textColor);
         row.AddChild(_messageLabel);
 
         _repeatBadge = new Label
@@ -152,6 +174,17 @@ public sealed partial class ChatMessageRow : PanelContainer
             FontOverride = sideFont
         };
         row.AddChild(_repeatBadge);
+    }
+
+    private Button CreateFollowButton(ChatMessage message, RowMetrics metrics, Color textColor)
+    {
+        var followButton = CreateChatActionButton(
+            Loc.GetString("cmu-chat-manager-follow-button"),
+            Loc.GetString("cmu-chat-manager-follow-button-tooltip"),
+            metrics,
+            textColor);
+        followButton.OnPressed += _ => _consoleHost.ExecuteCommand($"{CMUGhostFollowCommand.CommandName} {message.GhostFollowEntity}");
+        return followButton;
     }
 
     private Button CreateXenoWatchButton(ChatMessage message, RowMetrics metrics, Color textColor)
@@ -193,6 +226,27 @@ public sealed partial class ChatMessageRow : PanelContainer
     {
         _repeatBadge.Visible = count > 1;
         _repeatBadge.Text = $"x{count}";
+    }
+
+    internal static FormattedMessage ReplaceCommandLinkTags(FormattedMessage message)
+    {
+        var output = new FormattedMessage(message.Count);
+        foreach (var node in message)
+        {
+            if (node.Name == "cmdlink")
+            {
+                output.PushTag(new MarkupNode(
+                    ChatCommandLinkTag.TagName,
+                    node.Value,
+                    node.Attributes,
+                    node.Closing));
+                continue;
+            }
+
+            output.PushTag(node);
+        }
+
+        return output;
     }
 
     public void RefreshLayout()

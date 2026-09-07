@@ -47,6 +47,18 @@ public sealed partial class RadioJammerComponent : Component
     public RadioJamSetting[] Settings;
 
     /// <summary>
+    /// Radio carrier frequencies that are NOT jammed by this jammer.
+    /// </summary>
+    [DataField]
+    public HashSet<RadioFrequency> FrequenciesExcluded = [];
+
+    /// <summary>
+    /// Device-network frequencies that are NOT jammed. These are routing identifiers, not radio carrier units.
+    /// </summary>
+    [DataField]
+    public HashSet<uint> DeviceFrequenciesExcluded = [];
+
+    /// <summary>
     /// Index of the currently selected setting.
     /// </summary>
     [DataField]

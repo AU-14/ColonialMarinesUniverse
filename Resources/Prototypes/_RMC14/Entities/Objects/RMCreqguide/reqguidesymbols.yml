@@ -31,9 +31,9 @@
   - type: Sprite
     layers:
     - state: paper_words
-    map: ["enum.PaperVisualLayers.Writing"]
-    color: "#9ef5ff"
-    visible: true
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#9ef5ff"
+      visible: true
 
 - type: entity
   parent: RMCPaperRequisitionInvoice

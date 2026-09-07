@@ -5,14 +5,14 @@
   description: The standard issue rifle of the UA. Commonly carried by most combat personnel. Uses 10x24mm caseless ammunition.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/USCM/m41mk2.rsi
+    sprite: CMU14/Weapons/Guns/USCM/m41mk2.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/USCM/m41mk2.rsi
+    sprite: CMU14/Weapons/Guns/USCM/m41mk2.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -637,6 +637,11 @@
     damage:
       types:
         Piercing: 40
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 24
@@ -717,6 +722,11 @@
   id: BulletRifle10x24mmTracer
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:

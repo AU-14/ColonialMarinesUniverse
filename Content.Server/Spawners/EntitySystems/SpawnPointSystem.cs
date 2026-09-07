@@ -1,10 +1,10 @@
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
-using Content.Server.AU14.Roles;
+using Content.Server.CMU14.Roles;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Systems;
-using Content.Shared._CMU14.Round.Roles;
-using Content.Shared.AU14;
+using Content.Shared.CMU14.Round.Roles;
+using Content.Shared.CMU14;
 using Content.Shared.Roles;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -166,7 +166,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 possiblePositions.Add(xform.Coordinates);
             }
             else if (spawnPoint.SpawnType == SpawnPointType.Job &&
-                     (args.Job == null || spawnPoint.Job == args.Job))
+                     (args.Job == null || spawnPoint.Job == null || spawnPoint.Job == args.Job))
             {
                 if (isLateJoin)
                     preferredPositions.Add(xform.Coordinates);
@@ -178,12 +178,18 @@ public sealed partial class SpawnPointSystem : EntitySystem
         // Last resort: any spawn point.
         if (preferredPositions.Count == 0 && possiblePositions.Count == 0)
         {
-            var pts2 = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
-            if (pts2.MoveNext(out var _, out var _, out var xform2))
-                possiblePositions.Add(xform2.Coordinates);
+            // Ok we've still not returned, but we need to put them /somewhere/.
+            // TODO: Refactor gameticker spawning code so we don't have to do this!
+            var points2 = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
+
+            if (points2.MoveNext(out _, out var xform))
+            {
+                Log.Error($"Unable to pick a valid spawn point, picking random spawner as a backup.\nRunLevel: {_gameTicker.RunLevel} Station: {ToPrettyString(args.Station)} Job: {args.Job}");
+                possiblePositions.Add(xform.Coordinates);
+            }
             else
             {
-                Log.Error("No spawn points were available!");
+                Log.Error($"No spawn points were available!\nRunLevel: {_gameTicker.RunLevel} Station: {ToPrettyString(args.Station)} Job: {args.Job}");
                 return;
             }
         }

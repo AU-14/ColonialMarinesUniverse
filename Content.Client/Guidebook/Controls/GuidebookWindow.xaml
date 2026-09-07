@@ -16,6 +16,9 @@
                 <cc:VSeparator StyleClasses="LowDivider" Margin="4 0"/>
             </BoxContainer>
             <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="4">
+                <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+                    <fancyTree:FancyTree Name="TableOfContents" HorizontalExpand="True" Margin="4"/>
+                </PanelContainer>
                 <PanelContainer Name="SearchContainer" StyleClasses="CrtInsetPanel" Visible="False" HorizontalExpand="True">
                     <LineEdit
                         Name="SearchBar"

@@ -19,7 +19,7 @@ public sealed partial class ClothingGrantComponentsSystem : EntitySystem
         if (!_net.IsServer)
             return;
 
-        EntityManager.AddComponents(args.Equipee, ent.Comp.Components);
+        EntityManager.AddComponents(args.EquipTarget, ent.Comp.Components);
     }
 
     private void OnUnequipped(Entity<ClothingGrantComponentsComponent> ent, ref GotUnequippedEvent args)
@@ -27,6 +27,6 @@ public sealed partial class ClothingGrantComponentsSystem : EntitySystem
         if (!_net.IsServer)
             return;
 
-        EntityManager.RemoveComponents(args.Equipee, ent.Comp.Components);
+        EntityManager.RemoveComponents(args.EquipTarget, ent.Comp.Components);
     }
 }

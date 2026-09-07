@@ -1,3 +1,50 @@
+- type: entity
+  name: syringe box
+  parent: BoxCardboard
+  id: BoxSyringe
+  description: A box full of syringes.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: Syringe
+        amount: 6
+  - type: Sprite
+    layers:
+      - state: box
+      - state: syringe
+
+- type: entity
+  name: pill canister box
+  parent: BoxCardboard
+  id: BoxPillCanister
+  description: A box full of pill canisters.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: PillCanister
+        amount: 9
+  - type: Sprite
+    layers:
+      - state: box
+      - state: pillbox
+
+- type: entity
+  name: bottle box
+  parent: BoxCardboard
+  id: BoxBottle
+  description: A box full of bottles.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: ChemistryEmptyBottle01
+        amount: 6
+  - type: Sprite
+    layers:
+      - state: box
+      - state: bottle
 
 - type: entity
   name: sterile mask box
@@ -5,9 +52,10 @@
   id: BoxSterileMask
   description: This box contains sterile medical masks.
   components:
-  - type: StorageFill
-    contents:
-      - id: ClothingMaskSterile
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: ClothingMaskSterile
         amount: 4
   - type: Sprite
     layers:
@@ -20,9 +68,10 @@
   id: BoxLatexGloves
   description: Contains sterile latex gloves.
   components:
-  - type: StorageFill
-    contents:
-      - id: ClothingHandsGlovesLatex
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: ClothingHandsGlovesLatex
         amount: 4
   - type: Sprite
     layers:
@@ -35,9 +84,10 @@
   id: BoxNitrileGloves
   description: Contains sterile nitrile gloves. Better than latex.
   components:
-  - type: StorageFill
-    contents:
-      - id: ClothingHandsGlovesNitrile
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: ClothingHandsGlovesNitrile
         amount: 4
   - type: Sprite
     layers:
@@ -50,14 +100,16 @@
   id: BoxBodyBag
   description: Contains body bags.
   components:
-  - type: StorageFill
-    contents:
-      - id: BodyBagFolded
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: BodyBagFolded
         amount: 4
   - type: Sprite
     layers:
       - state: box
       - state: bodybags
+  - type: Storage # TODO cardboard boxes shouldn't have whitelisting
     whitelist:
       tags:
         - BodyBag
@@ -70,29 +122,15 @@
   components:
   - type: Storage
     grid:
-    - 0,0,2,1
-  - type: StorageFill
-    contents:
-      - id: BaseChemistryEmptyVial
-        amount: 6
-  - type: Sprite
-    layers:
-      - state: box
-      - state: vials
-
-- type: entity
-  name: bottle box
-  parent: BoxCardboard
-  id: BoxBottle
-  description: A box full of empty bottles.
-  components:
-  - type: Storage
-    grid:
-    - 0,0,2,1
-  - type: StorageFill
-    contents:
-      - id: ChemistryEmptyBottle01
-        amount: 6
+    - 0,0,3,1
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: ChemistryEmptyVial
+          amount: 3
+        - id: ChemistryEmptyVialSmall
+        rolls: 2 # group the small vials on the right column
   - type: Sprite
     layers:
       - state: box

@@ -69,7 +69,7 @@
   - type: ContainerFill
     containers:
       item:
-      - AU14ToolMachete
+      - CMM2132Machete
 
 - type: entity
   parent: RMCScabbardBase
