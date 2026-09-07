@@ -32,10 +32,6 @@
   <Project Path="Content.IntegrationTests/Content.IntegrationTests.csproj" />
   <Project Path="Content.MapRenderer/Content.MapRenderer.csproj" />
   <Project Path="Content.Packaging/Content.Packaging.csproj" />
-  <Project Path="Content.PatreonParser/Content.PatreonParser.csproj">
-    <BuildType Solution="DebugOpt|*" Project="Debug" />
-    <BuildType Solution="Tools|*" Project="Debug" />
-  </Project>
   <Project Path="Content.Replay/Content.Replay.csproj" />
   <Project Path="Content.Scripts/Content.Scripts.csproj">
     <BuildType Solution="DebugOpt|*" Project="Debug" />
