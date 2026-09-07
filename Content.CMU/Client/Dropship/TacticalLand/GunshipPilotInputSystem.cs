@@ -144,7 +144,7 @@ public sealed partial class GunshipPilotInputSystem : EntitySystem
     /// </summary>
     public bool TryAdjustThrustFromMouseWheel(float delta)
     {
-        if (_player.LocalEntity is not { } pilot || !IsLinkedGunshipPilot(pilot))
+        if (_player.LocalEntity is not { } pilot || !IsFlightControlPilot(pilot))
             return false;
 
         var steps = Math.Sign(delta);
@@ -157,20 +157,20 @@ public sealed partial class GunshipPilotInputSystem : EntitySystem
 
     private void SendThrustAdjustment(EntityUid? pilot, int steps)
     {
-        if (pilot is not { } user || !IsLinkedGunshipPilot(user))
+        if (pilot is not { } user || !IsFlightControlPilot(user))
             return;
 
         RaiseNetworkEvent(new GunshipThrustAdjustEvent(steps));
     }
 
-    private bool IsLinkedGunshipPilot(EntityUid pilot)
+    private bool IsFlightControlPilot(EntityUid pilot)
     {
-        return TryComp(pilot, out GunshipPilotHudComponent? hud) &&
-               hud.Dropship != null &&
-               hud.FlightControlsAvailable &&
-               TryComp(pilot, out BuckleComponent? buckle) &&
+        // The seat supplies flight controls; the optional visor only supplies
+        // the HUD. The server validates tactical hover for every input.
+        return TryComp(pilot, out BuckleComponent? buckle) &&
                buckle.BuckledTo is { } seat &&
-               HasComp<GunshipPilotSeatComponent>(seat);
+               TryComp(seat, out GunshipPilotSeatComponent? pilotSeat) &&
+               pilotSeat.Pilot == pilot;
     }
 
     private bool IsSeatedGunshipPilot(EntityUid pilot)
@@ -194,13 +194,7 @@ public sealed partial class GunshipPilotInputSystem : EntitySystem
             return;
         }
 
-        if (pilot is not { } user ||
-            !TryComp(user, out GunshipPilotHudComponent? hud) ||
-            hud.Dropship == null ||
-            !hud.FlightControlsAvailable ||
-            !TryComp(user, out BuckleComponent? buckle) ||
-            buckle.BuckledTo is not { } seat ||
-            !HasComp<GunshipPilotSeatComponent>(seat))
+        if (pilot is not { } user || !IsFlightControlPilot(user))
         {
             _pressedActions.Remove(action);
             return;

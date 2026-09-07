@@ -100,6 +100,8 @@ public sealed partial class DropshipTacticalLandSystem
         SubscribeLocalEvent<GunshipPilotSeatComponent, GunshipPilotZoomToggleActionEvent>(OnPilotZoomToggle);
         SubscribeLocalEvent<GunshipPilotVisorComponent, GotEquippedEvent>(OnGunshipVisorEquipped);
         SubscribeLocalEvent<GunshipPilotVisorComponent, GotUnequippedEvent>(OnGunshipVisorUnequipped);
+        SubscribeLocalEvent<GunshipPilotVisorComponent, ComponentStartup>(OnGunshipVisorStartup);
+        SubscribeLocalEvent<GunshipPilotVisorComponent, ComponentShutdown>(OnGunshipVisorShutdown);
         SubscribeLocalEvent<DropshipTacticalHoverComponent, GunshipCrashStartedEvent>(OnGunshipCrashStarted);
         SubscribeLocalEvent<DropshipTacticalHoverComponent, TileChangedEvent>(OnGunshipFootprintTileChanged);
         SubscribeLocalEvent<DropshipIntegrityComponent, ComponentShutdown>(OnDropshipIntegrityShutdown);
@@ -109,6 +111,25 @@ public sealed partial class DropshipTacticalLandSystem
         SubscribeNetworkEvent<GunshipPilotPanningInputEvent>(OnGunshipPilotPanningInput);
         SubscribeNetworkEvent<GunshipOpenNavigationInputEvent>(OnGunshipOpenNavigationInput);
         SubscribeNetworkEvent<GunshipDirectFireAimEvent>(OnGunshipDirectFireAim);
+    }
+
+    private void OnGunshipVisorStartup(Entity<GunshipPilotVisorComponent> ent, ref ComponentStartup args)
+    {
+        // Lowering a flight visor adds this component to an already-worn helmet,
+        // so there is no GotEquippedEvent to register its wearer.
+        var wearer = Transform(ent).ParentUid;
+        if (_pilotInventory.TryGetSlotEntity(wearer, "head", out var helmet) && helmet == ent.Owner)
+            _gunshipHudWearers.Add(wearer);
+    }
+
+    private void OnGunshipVisorShutdown(Entity<GunshipPilotVisorComponent> ent, ref ComponentShutdown args)
+    {
+        var wearer = Transform(ent).ParentUid;
+        if (!_pilotInventory.TryGetSlotEntity(wearer, "head", out var helmet) || helmet != ent.Owner)
+            return;
+
+        _gunshipHudWearers.Remove(wearer);
+        CleanupGunshipHud(wearer);
     }
 
     private void OnGunshipVisorEquipped(Entity<GunshipPilotVisorComponent> ent, ref GotEquippedEvent args)
@@ -717,9 +738,7 @@ public sealed partial class DropshipTacticalLandSystem
             args.SenderSession.AttachedEntity is not { } pilot ||
             !TryGetControlledGunshipSeat(pilot, out var seat) ||
             Transform(seat).GridUid is not { } grid ||
-            !HasComp<DropshipTacticalHoverComponent>(grid) ||
-            !TryComp(pilot, out GunshipPilotHudComponent? hud) ||
-            hud.Dropship == null)
+            !HasComp<DropshipTacticalHoverComponent>(grid))
         {
             return;
         }
