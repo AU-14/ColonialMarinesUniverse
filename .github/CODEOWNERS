@@ -1,4 +1,15 @@
 # Last match in file takes precedence.
 
-# Ping for all PRs
-* @DrSmugleaf @QuietlyWhisper
+# CMU14 fork owners: troytroy400 (host/owner), maertayn & TheHellFireo (code maintainers)
+# Code zones and bulk content directories are exempt.
+* @maertayn @TheHellFireo @troytroy400
+/Content.Client/ 
+/Content.Shared/ 
+/Content.Server/ 
+/Content.CMU/ 
+/Resources/Audio/ 
+/Resources/Locale/ 
+/Resources/Maps/ 
+/Resources/Prototypes/ 
+/Resources/ServerInfo/ 
+/Resources/Textures/ 
