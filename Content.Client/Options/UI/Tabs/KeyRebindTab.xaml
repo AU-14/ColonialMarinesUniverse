@@ -1,8 +1,15 @@
 ﻿<Control xmlns="https://spacestation14.io"
          xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
     <BoxContainer Orientation="Vertical">
+        <BoxContainer Orientation="Horizontal" Margin="8 8 8 8">
+            <LineEdit Name="SearchBar" HorizontalExpand="True" PlaceHolder="{Loc 'ui-options-search-placeholder'}" />
+            <Control MinSize="8 0" />
+            <Button Name="SearchByKeyButton" Text="{Loc 'ui-options-search-by-key'}" />
+            <Control MinSize="8 0" />
+            <Button Name="CancelSearchByKeyButton" Text="{Loc 'ui-options-cancel-search-by-key'}" Visible="True" StyleClasses="Caution" />
+        </BoxContainer>
         <ScrollContainer VerticalExpand="True">
-            <BoxContainer Name="KeybindsContainer" Orientation="Vertical" Margin="8 8 8 8">
+            <BoxContainer Name="KeybindsContainer" Orientation="Vertical" Margin="8 0 8 8">
 
                 <!-- Keybind buttons are added here in the C# code -->
 

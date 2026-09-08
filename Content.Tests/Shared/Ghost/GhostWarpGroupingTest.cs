@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.Ghost.Systems;
 using NUnit.Framework;
 
