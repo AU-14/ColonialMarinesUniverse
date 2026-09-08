@@ -1,15 +1,29 @@
 # Last match in file takes precedence.
 
-# CMU14 fork owners: troytroy400 (host/owner), maertayn & TheHellFireo (code maintainers)
+# troytroy400 (host/owner) & AK5intow (co-host), Twinkle (head moderator)
+# maertayn & TheHellFireo (code maintainers)
+# Nzzy (sprite maintainer), Vencallium (map maintainer)
+
 # Code zones and bulk content directories are exempt.
-* @maertayn @TheHellFireo @troytroy400
+* @maertayn @TheHellFireo
+/Content.CMU/ 
+/Content.Server/ 
 /Content.Client/ 
 /Content.Shared/ 
-/Content.Server/ 
-/Content.CMU/ 
+/Content.Tests/ 
+/Content.IntegrationTests/ 
+/Resources/ServerInfo/ 
+/Resources/Prototypes/ 
 /Resources/Audio/ 
 /Resources/Locale/ 
 /Resources/Maps/ 
-/Resources/Prototypes/ 
-/Resources/ServerInfo/ 
 /Resources/Textures/ 
+
+/Resources/Textures/ @NzzyFk
+/Content.CMU/Resources/Textures/ @NzzyFk
+
+/Resources/Maps/ @Vencallium
+/Content.CMU/Resources/Maps/ @Vencallium
+
+/Resources/ServerInfo/ @troytroy400 @AK5intow @twinklezzzz
+/Content.CMU/Resources/ServerInfo/ @troytroy400 @AK5intow @twinklezzzz
