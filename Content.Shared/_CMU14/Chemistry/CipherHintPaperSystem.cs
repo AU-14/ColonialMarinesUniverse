@@ -39,6 +39,7 @@ public sealed partial class CipherHintPaperSystem : EntitySystem
             content += Loc.GetString("cmu-paper-ciph-hint-subheader") + '\n';
             content += Loc.GetString("cmu-paper-ciph-hint", ("CIPH", "Ciphering"), ("A", ciph[0]), ("B", ciph[1]), ("C", ciph[2])) + '\n';
             content += Loc.GetString("cmu-paper-xeno-knowledge") + '\n';
+            content += Loc.GetString("cmu-paper-ciph-egg-instructions") + '\n';
             if (ent.Comp.InformDelivery)
             {
                 content += Loc.GetString("cmu-paper-xeno-sample-deliv") + '\n';

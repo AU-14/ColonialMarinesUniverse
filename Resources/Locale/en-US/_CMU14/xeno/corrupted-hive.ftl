@@ -1,0 +1,9 @@
+cmu-corrupted-hive-claim-title = Take the corrupted facehugger?
+cmu-corrupted-hive-claim-message = Your royal blood has produced a facehugger belonging to a new, corrupted hive. Do you want to take control of it?
+cmu-corrupted-hive-claim-yes = Take the facehugger
+cmu-corrupted-hive-claim-no = Leave it
+cmu-corrupted-hive-claim-reserved = That facehugger is being offered to its progenitor Queen.
+cmu-corrupted-hive-claim-insufficient-hours = You need at least 5 hours as a Threat Member to take a corrupted-hive facehugger.
+cmu-corrupted-hive-ghost-role-name = Corrupted Hive Facehugger
+cmu-corrupted-hive-ghost-role-description = Take control of a facehugger that will found a new, corrupted xenonid hive.
+cmu-corrupted-hive-ghost-role-rules = You are the first member of a new corrupted hive. Survive, infect a host, and develop the hive through normal xenonid evolution.

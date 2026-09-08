@@ -50,6 +50,14 @@
     - state: egg_item
       map: [ "enum.XenoEggLayers.Base" ]
   - type: XenoEgg
+  # CMU14: WY ciphering experiments can convert loose or planted intact eggs.
+  - type: CMUCipherableXenoEgg
+  - type: SolutionContainerManager
+    solutions:
+      cmu_ciphering:
+        maxVol: 5
+  - type: InjectableSolution
+    solution: cmu_ciphering
   - type: Damageable
     damageContainer: StructuralXeno
   - type: RMCMesonsNonviewable
