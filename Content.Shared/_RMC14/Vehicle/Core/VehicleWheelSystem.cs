@@ -20,7 +20,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 {
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
+    [Dependency] private Content.Shared.Vehicle.Systems.VehicleSystem _vehicles = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCRepairableSystem _repairable = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -101,7 +101,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 
         foreach (var slotId in component.Slots)
         {
-            if (_itemSlots.TryGetSlot(uid, slotId, out _, itemSlots))
+            if (_itemSlots.TryGetSlot((uid, itemSlots), slotId, out _))
                 continue;
 
             var slot = new ItemSlot
@@ -109,7 +109,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
                 Whitelist = component.WheelWhitelist,
             };
 
-            _itemSlots.AddItemSlot(uid, slotId, slot, itemSlots);
+            _itemSlots.AddItemSlot((uid, itemSlots), slotId, slot);
         }
     }
 
@@ -128,7 +128,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 
         foreach (var slotId in component.Slots)
         {
-            if (!_itemSlots.TryGetSlot(uid, slotId, out var slot, itemSlots) || !slot.HasItem)
+            if (!_itemSlots.TryGetSlot((uid, itemSlots), slotId, out var slot) || !slot.HasItem)
                 return false;
 
             if (slot.Item is not { } wheel || !IsWheelFunctional(wheel))
@@ -147,7 +147,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 
         foreach (var slotId in component.Slots)
         {
-            if (_itemSlots.TryGetSlot(uid, slotId, out var slot, itemSlots) &&
+            if (_itemSlots.TryGetSlot((uid, itemSlots), slotId, out var slot) &&
                 slot.HasItem)
             {
                 count++;
@@ -166,7 +166,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 
         foreach (var slotId in component.Slots)
         {
-            if (_itemSlots.TryGetSlot(uid, slotId, out var slot, itemSlots) &&
+            if (_itemSlots.TryGetSlot((uid, itemSlots), slotId, out var slot) &&
                 slot.HasItem &&
                 slot.Item is { } wheel &&
                 IsWheelFunctional(wheel))
@@ -189,7 +189,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 
         foreach (var slotId in component.Slots)
         {
-            if (!_itemSlots.TryGetSlot(uid, slotId, out var slot, itemSlots) || !slot.HasItem)
+            if (!_itemSlots.TryGetSlot((uid, itemSlots), slotId, out var slot) || !slot.HasItem)
                 continue;
 
             installed++;
@@ -248,7 +248,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 
         foreach (var slotId in wheels.Slots)
         {
-            if (!_itemSlots.TryGetSlot(vehicle, slotId, out var slot, itemSlots) ||
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slotId, out var slot) ||
                 slot.Item is not { } wheel)
                 continue;
 

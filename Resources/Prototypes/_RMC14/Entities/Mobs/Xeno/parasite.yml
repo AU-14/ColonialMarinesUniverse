@@ -16,7 +16,7 @@
     raffle:
       settings: parasiteTimeRequirement
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
   - type: FiremanCarriable
     canThrow: true
     carrierWhitelist:
@@ -103,7 +103,7 @@
   - type: Clothing
     quickEquip: false
     slots: [mask]
-    sprite: _AU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
   - type: HideLayerClothing
     slots:
     - Snout
@@ -125,9 +125,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: parasite
-  - type: AddAccentClothing
-    accent: ReplacementAccent
-    replacement: mumble
+  - type: RelayedReplacementAccent
+    accent: mumble
   - type: Blindfold
   - type: StandingState
     downSound: null

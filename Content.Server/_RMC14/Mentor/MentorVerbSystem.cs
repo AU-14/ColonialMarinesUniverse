@@ -1,5 +1,5 @@
 using Content.Server._RMC14.Mentor.ImaginaryFriend;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;

@@ -38,8 +38,11 @@
   - type: DamageOverTime
     affectsDead: false
     armorPiercingDamage:
-      groups:
-        Burn: 3
+      types:
+        Heat: 0.75
+        Shock: 0.75
+        Cold: 0.75
+        Caustic: 0.75
     emotes:
     popup: "You feel your skin tingling!"
   - type: Appearance

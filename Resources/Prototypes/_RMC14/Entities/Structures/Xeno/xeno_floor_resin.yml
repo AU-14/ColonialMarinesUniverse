@@ -35,6 +35,7 @@
     drawdepth: FloorObjects
     state: sticky
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

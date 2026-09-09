@@ -300,7 +300,7 @@ public sealed partial class OverwatchSquadView : Control
             CrateStatus.Text = Loc.GetString("rmc-overwatch-console-cooldown", ("seconds", (int)supplyTimeLeft.TotalSeconds));
             LaunchButton.Disabled = true;
         }
-        else
+        else if (!LaunchButton.IsConfirming)
         {
             LaunchButton.Disabled = false;
         }
@@ -316,7 +316,9 @@ public sealed partial class OverwatchSquadView : Control
             OrbitalStatus.Text = HasOrbital
                 ? "[color=green][bold] \\[ READY \\][/bold][/color]"
                 : "[color=red][bold] \\[ NOT READY \\][/bold][/color]";
-            OrbitalFireButton.Disabled = false;
+            // Setting Disabled also cancels ConfirmButton's pending confirmation.
+            if (!OrbitalFireButton.IsConfirming)
+                OrbitalFireButton.Disabled = false;
         }
     }
 }

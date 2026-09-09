@@ -1,0 +1,25 @@
+<BoxContainer xmlns="https://spacestation14.io"
+              xmlns:ui="clr-namespace:Content.Client.Options.UI"
+              Orientation="Vertical" SeparationOverride="2">
+    <Label Text="{Loc 'ui-options-cmu-crt'}" StyleClasses="LabelKeyText" />
+    <CheckBox Name="CrtUiEnabledCheckBox" Text="{Loc 'ui-options-crt-ui-enabled'}" />
+    <ui:OptionColorSlider Name="CrtUiColorSlider"
+              Title="{Loc 'ui-options-crt-ui-color'}" />
+    <ui:OptionDropDown Name="UiFontDropDown" Title="{Loc 'cmu-ui-options-font'}"
+                       ToolTip="{Loc 'cmu-ui-options-font-tooltip'}" />
+    <CheckBox Name="CrtMenuEffectCheckBox" Text="{Loc 'cmu-ui-options-menu-crt-effect'}" />
+    <ui:OptionSlider Name="CrtIntensitySlider" Title="{Loc 'cmu-ui-options-crt-intensity'}" />
+    <CheckBox Name="ChatCrtHazeCheckBox"
+              Text="{Loc 'cmu-ui-options-chat-crt-haze'}"
+              ToolTip="{Loc 'cmu-ui-options-chat-crt-haze-tooltip'}" />
+    <CheckBox Name="ChatReadableFontCheckBox"
+              Text="{Loc 'ui-options-crt-chat-readable-font'}"
+              ToolTip="{Loc 'ui-options-crt-chat-readable-font-tooltip'}" />
+    <ui:OptionDropDown Name="ChatBigFontDropDown"
+           Title="{Loc 'ui-options-crt-chat-big-font'}"
+           ToolTip="{Loc 'ui-options-crt-chat-big-font-tooltip'}" />
+    <ui:OptionDropDown Name="ChatRowTintDropDown"
+           Title="{Loc 'ui-options-crt-chat-row-tint'}"
+           ToolTip="{Loc 'ui-options-crt-chat-row-tint-tooltip'}" />
+
+</BoxContainer>

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "UGV sprites by nzzy (Discord), supplied for CMU. Hull and turret separated with source pixels for independent aiming. License not specified in the supplied metadata.",
+  "size": {
+    "x": 48,
+    "y": 48
+  },
+  "states": [
+    {
+      "name": "healthy",
+      "directions": 4
+    },
+    {
+      "name": "damaged",
+      "directions": 4
+    },
+    {
+      "name": "destroyed",
+      "directions": 4
+    },
+    {
+      "name": "healthy-hull",
+      "directions": 4
+    },
+    {
+      "name": "healthy-turret",
+      "directions": 4
+    },
+    {
+      "name": "damaged-hull",
+      "directions": 4
+    },
+    {
+      "name": "damaged-turret",
+      "directions": 4
+    }
+  ]
+}

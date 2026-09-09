@@ -157,7 +157,7 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: WarpPoint
-    location: alien cocoon
+    location: cmu-warp-location-alien-cocoon
   - type: RMCTrackable
   - type: HiveKingCocoon
   - type: MeleeReceivedMultiplier

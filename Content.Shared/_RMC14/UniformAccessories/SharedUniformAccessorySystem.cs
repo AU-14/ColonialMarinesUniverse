@@ -85,7 +85,7 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
         {
             if (TryComp<UniformAccessoryComponent>(accessory, out var accessoryComp))
             {
-                if (accessoryComp.User is { } acccessoryUser && !BelongsToUser(acccessoryUser, args.Equipee))
+                if (accessoryComp.User is { } acccessoryUser && !BelongsToUser(acccessoryUser, args.EquipTarget))
                 {
                     _container.Remove(accessory, container);
                     return;

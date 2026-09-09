@@ -21,6 +21,7 @@ using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Physics.Collision.Shapes;
 
 namespace Content.Shared._RMC14.Deploy;

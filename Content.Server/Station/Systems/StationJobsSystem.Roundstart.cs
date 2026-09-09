@@ -1,14 +1,13 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
-using Content.Server.AU14.Round;
-using Content.Server.Players.PlayTimeTracking;
+using Content.Server.CMU14.Round;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
-using Robust.Server.Player;
+using Content.Shared.Station.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -19,34 +18,55 @@ namespace Content.Server.Station.Systems;
 // Contains code for round-start spawning.
 public sealed partial class StationJobsSystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IBanManager _banManager = default!;
-    [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private AuJobSelectionSystem _auJobSelectionSystem = default!;
     [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
 
-    private Dictionary<int, HashSet<string>> _jobsByWeight = default!;
-    private List<int> _orderedWeights = default!;
     // Toggle used for ForceOnForce overflow assignment to alternate GOVFOR/OPFOR rifleman
     private bool _forceOnForceNextGovfor = true;
 
-    /// <summary>
-    /// Sets up some tables used by AssignJobs, including jobs sorted by their weights, and a list of weights in order from highest to lowest.
-    /// </summary>
-    private void InitializeRoundStart()
+    private int GetJobWeight(EntityUid station, JobPrototype job)
     {
-        // Reset alternation each round so ForceOnForce starts consistently.
-        _forceOnForceNextGovfor = true;
-        _jobsByWeight = new Dictionary<int, HashSet<string>>();
-        foreach (var job in _prototypeManager.EnumeratePrototypes<JobPrototype>())
-        {
-            if (!_jobsByWeight.ContainsKey(job.Weight))
-                _jobsByWeight.Add(job.Weight, new HashSet<string>());
+        var jobWeights = TryComp<StationDataComponent>(station, out var stationData)
+            ? stationData.JobWeights
+            : null;
 
-            _jobsByWeight[job.Weight].Add(job.ID);
+        return TryGetJobWeight(job, jobWeights, out var weight) ? weight : 0;
+    }
+
+    /// <summary>
+    /// Resolves a job's map-specific weight, falling back to the global default profile.
+    /// </summary>
+    /// <returns>True, using the legacy per-job weight when neither profile defines this job.</returns>
+    public bool TryGetJobWeight(
+        JobPrototype job,
+        ProtoId<JobWeightPrototype>? mapWeights,
+        out int weight)
+    {
+        if (mapWeights != null
+            && ProtoMan.TryIndex(mapWeights.Value, out var mapProfile)
+            && mapProfile.Weights.TryGetValue(job.ID, out weight))
+        {
+            return true;
         }
 
-        _orderedWeights = _jobsByWeight.Keys.OrderByDescending(i => i).ToList();
+        if (ProtoMan.TryIndex(JobWeightPrototype.Default, out var defaultProfile)
+            && defaultProfile.Weights.TryGetValue(job.ID, out weight))
+        {
+            return true;
+        }
+
+        weight = job.Weight;
+        return true;
+    }
+
+    /// <summary>
+    /// Returns whether the global fallback job-weight profile is available.
+    /// </summary>
+    public bool HasDefaultJobWeights()
+    {
+        return ProtoMan.HasIndex<JobWeightPrototype>(JobWeightPrototype.Default);
     }
 
     /// <summary>
@@ -55,18 +75,24 @@ public sealed partial class StationJobsSystem
     /// </summary>
     /// <param name="profiles">The profiles to use for selection.</param>
     /// <param name="stations">List of stations to assign for.</param>
-    /// <param name="useRoundStartJobs">Whether or not to use the round-start jobs for the stations instead of their current jobs.</param>
+    /// <param name="useRoundStartJobs">Whether or not to use the round-start minimum jobs for the stations.</param>
     /// <returns>List of players and their assigned jobs.</returns>
     /// <remarks>
     /// You probably shouldn't use useRoundStartJobs mid-round if the station has been available to join,
     /// as there may end up being more round-start slots than available slots, which can cause weird behavior.
-    /// A warning to all who enter ye cursed lands: This function is long and mildly incomprehensible. Best used without touching.
+    /// Allocation considers High, Medium, then Low preferences across all stations.
+    /// Within each preference level, minimum roles are filled first in station order, using station job weights.
+    /// Remaining slots use random player order. Never roles stay unassigned even when minimum staffing is unmet.
     /// </remarks>
-    public Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> AssignJobs(Dictionary<NetUserId, HumanoidCharacterProfile> profiles, IReadOnlyList<EntityUid> stations, bool useRoundStartJobs = true)
+    public Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> AssignJobs(
+        Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
+        IReadOnlyList<EntityUid> stations,
+        bool useRoundStartJobs = true)
     {
         DebugTools.Assert(stations.Count > 0);
 
-        InitializeRoundStart();
+        // Reset alternation each round so ForceOnForce starts consistently.
+        _forceOnForceNextGovfor = true;
 
         if (profiles.Count == 0)
             return new();
@@ -82,8 +108,11 @@ public sealed partial class StationJobsSystem
         var forcedToRemove = new List<NetUserId>();
         foreach (var (player, jobId) in forcedAssignments)
         {
-            if (!profiles.ContainsKey(player))
+            if (!profiles.TryGetValue(player, out var profile) ||
+                !profile.JobPriorities.TryGetValue(jobId, out var priority) || priority <= JobPriority.Never)
+            {
                 continue;
+            }
             // Find a station with the job available
             EntityUid? assignedStation = null;
             ProtoId<JobPrototype>? protoJob = null;
@@ -118,203 +147,156 @@ public sealed partial class StationJobsSystem
             profiles.Remove(player);
         }
 
-        // The jobs left on the stations. This collection is modified as jobs are assigned to track what's available.
+        // The maximum jobs left on each station. This is modified as players are assigned.
         var stationJobs = new Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>>();
+        var stationMinimumJobs = new Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>>();
         foreach (var station in stations)
         {
-            if (useRoundStartJobs)
-            {
-                stationJobs.Add(station, GetRoundStartJobs(station).ToDictionary(x => x.Key, x => x.Value));
-            }
-            else
-            {
-                stationJobs.Add(station, GetJobs(station).ToDictionary(x => x.Key, x => x.Value));
-            }
+            stationJobs.Add(station, GetJobs(station).ToDictionary(x => x.Key, x => x.Value));
+            stationMinimumJobs.Add(
+                station,
+                useRoundStartJobs
+                    ? GetRoundStartJobs(station)
+                    : new Dictionary<ProtoId<JobPrototype>, int?>());
         }
 
+        // Jobs assigned after this point must satisfy bans, antag restrictions, and any other candidate filter.
+        // The minimum phase selects players for a job, and the maximum phase selects jobs for a player.
+        var jobCandidates = GetJobCandidates(profiles);
+        var playerCandidates = GetPlayerCandidates(jobCandidates);
 
-        // We reuse this collection. It tracks what jobs we're currently trying to select players for.
-        var currentlySelectingJobs = new Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>>(stations.Count);
-        foreach (var station in stations)
+        var stationRequiredJobs = stationMinimumJobs.ToDictionary(
+            pair => pair.Key,
+            pair => pair.Value
+                .Where(x => x.Value is > 0)
+                .OrderByDescending(x => GetJobWeight(pair.Key, ProtoMan.Index(x.Key)))
+                .ThenBy(x => x.Key.Id)
+                .Select(x => x.Key)
+                .ToList());
+
+        // Finish each preference level across every station before considering a lower preference.
+        // Staffing requirements and job weights only take precedence within the same preference level.
+        for (var priority = JobPriority.High; priority > JobPriority.Never; priority--)
         {
-            currentlySelectingJobs.Add(station, new Dictionary<ProtoId<JobPrototype>, int?>());
-        }
-
-        // And these.
-        // Tracks what players are available for a given job in the current iteration of selection.
-        var jobPlayerOptions = new Dictionary<ProtoId<JobPrototype>, HashSet<NetUserId>>();
-        // Tracks the total number of slots for the given stations in the current iteration of selection.
-        var stationTotalSlots = new Dictionary<EntityUid, int>(stations.Count);
-        // The share of the players each station gets in the current iteration of job selection.
-        var stationShares = new Dictionary<EntityUid, int>(stations.Count);
-
-        // Ok so the general algorithm:
-        // We start with the highest weight jobs and work our way down. We filter jobs by weight when selecting as well.
-        // Weight > Priority > Station.
-        foreach (var weight in _orderedWeights)
-        {
-            for (var selectedPriority = JobPriority.High; selectedPriority > JobPriority.Never; selectedPriority--)
+            foreach (var station in stations)
             {
-                if (profiles.Count == 0)
-                    goto endFunc;
-
-                var candidates = GetPlayersJobCandidates(weight, selectedPriority, profiles);
-
-                var optionsRemaining = 0;
-
-                // Assigns a player to the given station, updating all the bookkeeping while at it.
-                void AssignPlayer(NetUserId player, ProtoId<JobPrototype> job, EntityUid station)
+                foreach (var job in stationRequiredJobs[station])
                 {
-                    // Remove the player from all possible jobs as that's faster than actually checking what they have selected.
-                    foreach (var (k, players) in jobPlayerOptions)
+                    while (stationMinimumJobs[station][job] is > 0 && profiles.Count > 0)
                     {
-                        players.Remove(player);
-                        if (players.Count == 0)
-                            jobPlayerOptions.Remove(k);
-                    }
-
-                    stationJobs[station][job]--;
-                    profiles.Remove(player);
-                    assigned.Add(player, (job, station));
-
-                    optionsRemaining--;
-                }
-
-                jobPlayerOptions.Clear(); // We reuse this collection.
-
-                // Goes through every candidate, and adds them to jobPlayerOptions, so that the candidate players
-                // have an index sorted by job. We use this (much) later when actually assigning people to randomly
-                // pick from the list of candidates for the job.
-                foreach (var (user, jobs) in candidates)
-                {
-                    foreach (var job in jobs)
-                    {
-                        if (!jobPlayerOptions.ContainsKey(job))
-                            jobPlayerOptions.Add(job, new HashSet<NetUserId>());
-
-                        jobPlayerOptions[job].Add(user);
-                    }
-
-                    optionsRemaining++;
-                }
-
-                // We reuse this collection, so clear it's children.
-                foreach (var slots in currentlySelectingJobs)
-                {
-                    slots.Value.Clear();
-                }
-
-                // Go through every station..
-                foreach (var station in stations)
-                {
-                    var slots = currentlySelectingJobs[station];
-
-                    // Get all of the jobs in the selected weight category.
-                    foreach (var (job, slot) in stationJobs[station])
-                    {
-                        if (_jobsByWeight[weight].Contains(job))
-                            slots.Add(job, slot);
-                    }
-                }
-
-
-                // Clear for reuse.
-                stationTotalSlots.Clear();
-
-                // Intentionally discounts the value of uncapped slots! They're only a single slot when deciding a station's share.
-                foreach (var (station, jobs) in currentlySelectingJobs)
-                {
-                    stationTotalSlots.Add(
-                        station,
-                        (int)jobs.Values.Sum(x => x ?? 1)
-                        );
-                }
-
-                var totalSlots = 0;
-
-                // LINQ moment.
-                // totalSlots = stationTotalSlots.Sum(x => x.Value);
-                foreach (var (_, slot) in stationTotalSlots)
-                {
-                    totalSlots += slot;
-                }
-
-                if (totalSlots == 0)
-                    continue; // No slots so just move to the next iteration.
-
-                // Clear for reuse.
-                stationShares.Clear();
-
-                // How many players we've distributed so far. Used to grant any remaining slots if we have leftovers.
-                var distributed = 0;
-
-                // Goes through each station and figures out how many players we should give it for the current iteration.
-                foreach (var station in stations)
-                {
-                    // Calculates the percent share then multiplies.
-                    stationShares[station] = (int)Math.Floor(((float)stationTotalSlots[station] / totalSlots) * candidates.Count);
-                    distributed += stationShares[station];
-                }
-
-                // Avoids the fair share problem where if there's two stations and one player neither gets one.
-                // We do this by simply selecting a station randomly and giving it the remaining share(s).
-                if (distributed < candidates.Count)
-                {
-                    var choice = _random.Pick(stations);
-                    stationShares[choice] += candidates.Count - distributed;
-                }
-
-                // Actual meat, goes through each station and shakes the tree until everyone has a job.
-                foreach (var station in stations)
-                {
-                    if (stationShares[station] == 0)
-                        continue;
-
-                    // The jobs we're selecting from for the current station.
-                    var currStationSelectingJobs = currentlySelectingJobs[station];
-                    // We only need this list because we need to go through this in a random order.
-                    // Oh the misery, another allocation.
-                    var allJobs = currStationSelectingJobs.Keys.ToList();
-                    _random.Shuffle(allJobs);
-                    // And iterates through all it's jobs in a random order until the count settles.
-                    // No, AFAIK it cannot be done any saner than this. I hate "shaking" collections as much
-                    // as you do but it's what seems to be the absolute best option here.
-                    // It doesn't seem to show up on the chart, perf-wise, anyway, so it's likely fine.
-                    int priorCount;
-                    do
-                    {
-                        priorCount = stationShares[station];
-
-                        foreach (var job in allJobs)
+                        if (stationJobs[station][job] is <= 0 ||
+                            !TryPickCandidate(job, priority, jobCandidates, out var player))
                         {
-                            if (stationShares[station] == 0)
-                                break;
-
-                            if (currStationSelectingJobs[job] != null && currStationSelectingJobs[job] == 0)
-                                continue; // Can't assign this job.
-
-                            if (!jobPlayerOptions.ContainsKey(job))
-                                continue;
-
-                            // Picking players it finds that have the job set.
-                            var player = _random.Pick(jobPlayerOptions[job]);
-                            AssignPlayer(player, job, station);
-                            stationShares[station]--;
-
-                            if (currStationSelectingJobs[job] != null)
-                                currStationSelectingJobs[job]--;
-
-                            if (optionsRemaining == 0)
-                                goto done;
+                            break;
                         }
-                    } while (priorCount != stationShares[station]);
+
+                        AssignPlayer(player, job, station, stationJobs, stationMinimumJobs,
+                            jobCandidates, playerCandidates, profiles, assigned);
+                    }
                 }
-                done: ;
+            }
+
+            // Optional slots compete at the same preference level as minimum slots.
+            foreach (var station in stations)
+            {
+                var players = profiles.Keys.ToList();
+                _random.Shuffle(players);
+
+                foreach (var player in players)
+                {
+                    if (TryPickJob(player, station, priority, stationJobs, playerCandidates, out var job))
+                    {
+                        AssignPlayer(player, job, station, stationJobs, stationMinimumJobs,
+                            jobCandidates, playerCandidates, profiles, assigned);
+                    }
+                }
             }
         }
 
-        endFunc:
         return assigned;
+    }
+
+    private void RemovePlayerFromCandidates(
+        NetUserId player,
+        Dictionary<ProtoId<JobPrototype>, Dictionary<JobPriority, HashSet<NetUserId>>> jobCandidates,
+        Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> playerCandidates)
+    {
+        foreach (var priorities in jobCandidates.Values)
+        {
+            foreach (var players in priorities.Values)
+            {
+                players.Remove(player);
+            }
+        }
+
+        playerCandidates.Remove(player);
+    }
+
+    private bool TryPickCandidate(
+        ProtoId<JobPrototype> job,
+        JobPriority priority,
+        Dictionary<ProtoId<JobPrototype>, Dictionary<JobPriority, HashSet<NetUserId>>> jobCandidates,
+        out NetUserId player)
+    {
+        if (!jobCandidates.TryGetValue(job, out var candidates) ||
+            !candidates.TryGetValue(priority, out var players) || players.Count == 0)
+        {
+            player = default;
+            return false;
+        }
+
+        player = _random.Pick(players);
+        return true;
+    }
+
+    private bool TryPickJob(
+        NetUserId player,
+        EntityUid station,
+        JobPriority priority,
+        Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>> stationJobs,
+        Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> playerCandidates,
+        out ProtoId<JobPrototype> job)
+    {
+        if (!playerCandidates.TryGetValue(player, out var candidates) ||
+            !candidates.TryGetValue(priority, out var jobs))
+        {
+            job = default;
+            return false;
+        }
+
+        var availableJobs = jobs
+            .Where(jobId => stationJobs[station].TryGetValue(jobId, out var slots) && slots is null or > 0)
+            .ToList();
+        if (availableJobs.Count == 0)
+        {
+            job = default;
+            return false;
+        }
+
+        job = _random.Pick(availableJobs);
+        return true;
+    }
+
+    private void AssignPlayer(
+        NetUserId player,
+        ProtoId<JobPrototype> job,
+        EntityUid station,
+        Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>> stationJobs,
+        Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>> stationMinimumJobs,
+        Dictionary<ProtoId<JobPrototype>, Dictionary<JobPriority, HashSet<NetUserId>>> jobCandidates,
+        Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> playerCandidates,
+        Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assigned)
+    {
+        if (stationJobs[station][job] is { } slots)
+            stationJobs[station][job] = slots - 1;
+
+        if (stationMinimumJobs[station].TryGetValue(job, out var minimum) && minimum is > 0)
+            stationMinimumJobs[station][job] = minimum - 1;
+
+        RemovePlayerFromCandidates(player, jobCandidates, playerCandidates);
+        profiles.Remove(player);
+        assigned.Add(player, (job, station));
     }
 
     /// <summary>
@@ -333,16 +315,15 @@ public sealed partial class StationJobsSystem
         var givenStations = stations.ToList();
         if (givenStations.Count == 0)
             return; // Don't attempt to assign them if there are no stations.
-        // For players without jobs, give them the overflow job if they have that set...
+
+        // Overflow opt-in does not override Never for individual jobs.
         // Determine the current preset so we can apply gamemode specific overflow behaviour.
         var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
 
         foreach (var player in allPlayersToAssign)
         {
             if (assignedJobs.ContainsKey(player))
-            {
                 continue;
-            }
 
             var profile = profiles[player];
             if (profile.PreferenceUnavailable != PreferenceUnavailableMode.SpawnAsOverflow)
@@ -366,6 +347,12 @@ public sealed partial class StationJobsSystem
             }
 
             // Try to select a station+overflow job pair according to gamemode rules.
+            var bannedRoles = _banManager.GetRoleBans(player)?.Select(role => role.RoleId).ToHashSet();
+            var allowedJobs = profile.JobPriorities
+                .Where(preference => preference.Value > JobPriority.Never &&
+                    (bannedRoles == null || !bannedRoles.Contains(preference.Key.Id)))
+                .Select(preference => preference.Key)
+                .ToHashSet();
             foreach (var station in givenStations)
             {
                 ProtoId<JobPrototype>? chosenOverflow = null;
@@ -375,7 +362,9 @@ public sealed partial class StationJobsSystem
                 var protoGovRifle = new ProtoId<JobPrototype>("AU14JobGOVFORSquadRifleman");
                 var protoOpfRifle = new ProtoId<JobPrototype>("AU14JobOPFORSquadRifleman");
 
-                var stationOverflows = GetOverflowJobs(station);
+                var stationOverflows = GetOverflowJobs(station)
+                    .Where(allowedJobs.Contains)
+                    .ToHashSet();
 
                 // Colony modes: prefer colonist
                 if (!string.IsNullOrEmpty(presetId) && (presetId.Equals("Insurgency", StringComparison.InvariantCultureIgnoreCase) || presetId.Equals("ColonyFall", StringComparison.InvariantCultureIgnoreCase)))
@@ -391,19 +380,22 @@ public sealed partial class StationJobsSystem
                     if (stationFaction.TryGetValue(station, out var faction) && faction != null && faction == "govfor")
                     {
                         var jobs = GetJobs(station);
-                        if (jobs.ContainsKey(protoGovRifle) || stationOverflows.Contains(protoGovRifle))
+                        if (allowedJobs.Contains(protoGovRifle) &&
+                            (jobs.ContainsKey(protoGovRifle) || stationOverflows.Contains(protoGovRifle)))
                             chosenOverflow = protoGovRifle;
                     }
 
                     // Fallback: any station that has the job
                     if (chosenOverflow == null)
                     {
-                        if (stationOverflows.Contains(protoGovRifle))
+                        if (allowedJobs.Contains(protoGovRifle) &&
+                            stationOverflows.Contains(protoGovRifle))
                             chosenOverflow = protoGovRifle;
                         else
                         {
                             var jobs = GetJobs(station);
-                            if (jobs.ContainsKey(protoGovRifle))
+                            if (allowedJobs.Contains(protoGovRifle) &&
+                                jobs.ContainsKey(protoGovRifle))
                                 chosenOverflow = protoGovRifle;
                         }
                     }
@@ -419,18 +411,21 @@ public sealed partial class StationJobsSystem
                     if (stationFaction.TryGetValue(station, out var faction) && faction != null && ((wantGov && faction == "govfor") || (!wantGov && faction == "opfor")))
                     {
                         var jobs = GetJobs(station);
-                        if (jobs.ContainsKey(wantProto) || stationOverflows.Contains(wantProto))
+                        if (allowedJobs.Contains(wantProto) &&
+                            (jobs.ContainsKey(wantProto) || stationOverflows.Contains(wantProto)))
                             chosenOverflow = wantProto;
                     }
                     else
                     {
                         // Otherwise, if the station has the job in overflow or regular jobs, pick it as fallback.
-                        if (stationOverflows.Contains(wantProto))
+                        if (allowedJobs.Contains(wantProto) &&
+                            stationOverflows.Contains(wantProto))
                             chosenOverflow = wantProto;
                         else
                         {
                             var jobs = GetJobs(station);
-                            if (jobs.ContainsKey(wantProto))
+                            if (allowedJobs.Contains(wantProto) &&
+                                jobs.ContainsKey(wantProto))
                                 chosenOverflow = wantProto;
                         }
                     }
@@ -476,53 +471,100 @@ public sealed partial class StationJobsSystem
     }
 
     /// <summary>
-    /// Gets all jobs that the input players have that match the given weight and priority.
+    /// Gets all jobs that the input players can receive, grouped by their selected preference priority.
     /// </summary>
-    /// <param name="weight">Weight to find, if any.</param>
-    /// <param name="selectedPriority">Priority to find, if any.</param>
     /// <param name="profiles">Profiles to look in.</param>
-    /// <returns>Players and a list of their matching jobs.</returns>
-    private Dictionary<NetUserId, List<string>> GetPlayersJobCandidates(int? weight, JobPriority? selectedPriority, Dictionary<NetUserId, HumanoidCharacterProfile> profiles)
+    /// <returns>Jobs and their eligible players, grouped by player preference.</returns>
+    private Dictionary<ProtoId<JobPrototype>, Dictionary<JobPriority, HashSet<NetUserId>>> GetJobCandidates(
+        IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles)
     {
-        var outputDict = new Dictionary<NetUserId, List<string>>(profiles.Count);
+        var outputDict = new Dictionary<ProtoId<JobPrototype>, Dictionary<JobPriority, HashSet<NetUserId>>>();
+
+        var antags = _antag.GetAntagJobs();
+        var antagBlocked = _antag.GetPreSelectedAntagSessions();
 
         foreach (var (player, profile) in profiles)
         {
             var roleBans = _banManager.GetJobBans(player);
-            var antagBlocked = _antag.GetPreSelectedAntagSessions();
             var profileJobs = profile.JobPriorities.Keys.Select(k => new ProtoId<JobPrototype>(k)).ToList();
             var ev = new StationJobsGetCandidatesEvent(player, profileJobs);
             RaiseLocalEvent(ref ev);
 
-            List<string>? availableJobs = null;
+            // Shouldn't happen but you know :P
+            if (!_player.TryGetSessionById(player, out var session))
+                continue;
+
+            var (whitelist, blacklist) = antags.GetValueOrDefault(session);
 
             foreach (var jobId in profileJobs)
             {
-                var priority = profile.JobPriorities[jobId];
-
-                if (!(priority == selectedPriority || selectedPriority is null))
+                if (!profile.JobPriorities.TryGetValue(jobId, out var priority) || priority == JobPriority.Never)
                     continue;
 
-                if (!_prototypeManager.TryIndex(jobId, out var job))
+                if (!ProtoMan.Resolve(jobId, out var job))
                     continue;
 
-                if (!job.CanBeAntag && (!_player.TryGetSessionById(player, out var session) || antagBlocked.Contains(session)))
+                if (!job.CanBeAntag && antagBlocked.Contains(session))
                     continue;
 
-                if (weight is not null && job.Weight != weight.Value)
+                if (whitelist != null && !whitelist.Contains(jobId))
                     continue;
 
-                if (!(roleBans == null || !roleBans.Contains(jobId)))
+                if (blacklist != null && blacklist.Contains(jobId))
                     continue;
 
-                availableJobs ??= new List<string>(profile.JobPriorities.Count);
-                availableJobs.Add(jobId);
+                if (!(roleBans == null || !roleBans.Contains(jobId))) //TODO: Replace with IsRoleBanned
+                    continue;
+
+                if (!outputDict.TryGetValue(jobId, out var priorities))
+                {
+                    priorities = new Dictionary<JobPriority, HashSet<NetUserId>>();
+                    outputDict.Add(jobId, priorities);
+                }
+
+                if (!priorities.TryGetValue(priority, out var players))
+                {
+                    players = new HashSet<NetUserId>();
+                    priorities.Add(priority, players);
+                }
+
+                players.Add(player);
             }
-
-            if (availableJobs is not null)
-                outputDict.Add(player, availableJobs);
         }
 
         return outputDict;
+    }
+
+    /// <summary>
+    /// Builds the inverse candidate index used by the player-first maximum-slot phase.
+    /// </summary>
+    private static Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>> GetPlayerCandidates(
+        Dictionary<ProtoId<JobPrototype>, Dictionary<JobPriority, HashSet<NetUserId>>> jobCandidates)
+    {
+        var output = new Dictionary<NetUserId, Dictionary<JobPriority, List<ProtoId<JobPrototype>>>>();
+        foreach (var (job, priorities) in jobCandidates)
+        {
+            foreach (var (priority, players) in priorities)
+            {
+                foreach (var player in players)
+                {
+                    if (!output.TryGetValue(player, out var playerPriorities))
+                    {
+                        playerPriorities = new Dictionary<JobPriority, List<ProtoId<JobPrototype>>>();
+                        output.Add(player, playerPriorities);
+                    }
+
+                    if (!playerPriorities.TryGetValue(priority, out var jobs))
+                    {
+                        jobs = new List<ProtoId<JobPrototype>>();
+                        playerPriorities.Add(priority, jobs);
+                    }
+
+                    jobs.Add(job);
+                }
+            }
+        }
+
+        return output;
     }
 }

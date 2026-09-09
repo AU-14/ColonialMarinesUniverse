@@ -1,0 +1,64 @@
+- type: species
+  id: Yautja
+  name: species-name-yautja
+  roundStart: false
+  prototype: CMUMobYautja
+  maleFirstNames: CMUNamesYautjaFirst
+  femaleFirstNames: CMUNamesYautjaFirst
+  lastNames: CMUNamesYautjaLast
+  naming: FirstLast
+  defaultSkinTone: "#ffffff"
+  dollPrototype: AppearanceYautja
+  skinColoration: Hues
+  sexes:
+  - Male
+  - Female
+  defaultSoundsBySex:
+  - CMUMaleYautja
+  - CMUFemaleYautja
+  - CMUMaleYautja
+  voices:
+  - CMUMaleYautja
+  - CMUFemaleYautja
+  minAge: 100
+  youngAge: 200
+  oldAge: 600
+  maxAge: 1200
+
+- type: markingsGroup
+  id: Yautja
+  onlyGroupWhitelisted: true
+  limits:
+    enum.HumanoidVisualLayers.Hair:
+      limit: 1
+      required: true
+      default: [ CMUYautjaDreadlocksStandard ]
+
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceYautja
+  categories: [ HideSpawnMenu ]
+  name: yautja appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: CMUPartYautjaTorso
+      Head: CMUPartYautjaHead
+      ArmLeft: CMUPartYautjaLeftArm
+      ArmRight: CMUPartYautjaRightArm
+      HandRight: CMUPartYautjaRightHand
+      HandLeft: CMUPartYautjaLeftHand
+      LegLeft: CMUPartYautjaLeftLeg
+      LegRight: CMUPartYautjaRightLeg
+      FootLeft: CMUPartYautjaLeftFoot
+      FootRight: CMUPartYautjaRightFoot
+      Brain: CMUOrganHumanBrain
+      Eyes: CMUOrganHumanEyes
+      Lungs: CMUOrganHumanLungs
+      Heart: CMUOrganHumanHeart
+      Stomach: CMUOrganHumanStomach
+      Liver: CMUOrganHumanLiver
+      Kidneys: CMUOrganHumanKidneys
+  - type: HumanoidProfile
+    species: Yautja
+    voice: CMUMaleYautja

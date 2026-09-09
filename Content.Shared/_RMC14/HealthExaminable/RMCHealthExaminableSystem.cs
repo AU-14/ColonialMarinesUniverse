@@ -1,10 +1,12 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Diagnostics.Examine;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Diagnostics.Examine;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
@@ -16,6 +18,7 @@ namespace Content.Shared._RMC14.HealthExaminable;
 public sealed partial class RMCHealthExaminableSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private CMUMedicalExamineProjectionSystem _woundProjection = default!;
 
@@ -51,12 +54,13 @@ public sealed partial class RMCHealthExaminableSystem : EntitySystem
                 ? GetCmuLocalizedSuppressions(ent)
                 : default;
 
+            var damagePerGroup = _damageable.GetDamagePerGroup((ent, damageable));
             foreach (var group in ent.Comp.Groups)
             {
                 if ((group == BruteGroup && suppress.Brute) || (group == BurnGroup && suppress.Burn))
                     continue;
 
-                if (!damageable.DamagePerGroup.TryGetValue(group, out var groupDamage))
+                if (!damagePerGroup.TryGetValue(group, out var groupDamage))
                     continue;
 
                 for (var i = Thresholds.Length - 1; i >= 0; i--)

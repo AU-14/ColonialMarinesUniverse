@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.Spawners.Components;
-using Content.Server.Storage.Components;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared._RMC14.Storage;
 using Content.Shared.Item;
@@ -50,7 +49,7 @@ public sealed partial class StorageSystem
             var ent = Spawn(spawnPrototype, coordinates);
 
             // No, you are not allowed to fill a container with entity spawners.
-            DebugTools.Assert(!_prototype.Index<EntityPrototype>(spawnPrototype)
+            DebugTools.Assert(!ProtoMan.Index<EntityPrototype>(spawnPrototype)
                 .HasComponent(typeof(RandomSpawnerComponent)));
 
             if (!TryComp<ItemComponent>(ent, out var itemComp))
@@ -108,7 +107,7 @@ public sealed partial class StorageSystem
         foreach (var item in spawnItems)
         {
             // No, you are not allowed to fill a container with entity spawners.
-            DebugTools.Assert(!_prototype.Index<EntityPrototype>(item)
+            DebugTools.Assert(!ProtoMan.Index<EntityPrototype>(item)
                 .HasComponent(typeof(RandomSpawnerComponent)));
             var ent = Spawn(item, coordinates);
 

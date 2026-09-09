@@ -1,0 +1,65 @@
+- type: entity
+  parent: CMUCombatDroneOperatorPackFilled
+  id: CMUFlamerDroneOperatorPackFilled
+  name: flamer UGV operator field pack
+  description: A flamer UGV hull, claw incinerator assembly, two fuel tanks, controller, and repair supplies.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUDroneControlTablet
+    - id: CMUFlamerDroneHull
+    - id: CMUFlamerDroneTurretAssembly
+    - id: CMUFlamerDroneFuelTank
+      amount: 2
+    - id: CMWelder
+    - id: RMCCableCoil30
+
+- type: entity
+  parent: CMUCombatDroneHull
+  id: CMUFlamerDroneHull
+  name: flamer UGV hull
+  description: A folded tracked chassis with articulated claws. Place it on the ground, install its claw incinerator assembly, then load a fuel tank to bring it online.
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/CombatDrone/flamer_ugv.rsi
+    layers:
+    - state: body
+      color: "#9d9d9d"
+      map: ["enum.CMUCombatDroneVisuals.Turret"]
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUCombatDroneVisuals.Turret:
+        enum.CMUCombatDroneVisuals.Turret:
+          True: {state: body, color: "#ffffff"}
+          False: {state: body, color: "#9d9d9d"}
+  - type: CMUCombatDroneHull
+    weapon: Flamer
+    dronePrototype: CMUFlamerDrone
+
+- type: entity
+  parent: BaseItem
+  id: CMUFlamerDroneTurretAssembly
+  name: UGV claw incinerator assembly
+  description: A fuel regulator and twin flame nozzles for the flamer UGV's articulated claws. Install it on a flamer UGV hull.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/m34.rsi
+    state: base
+  - type: Item
+    size: Normal
+  - type: CMUCombatDroneTurretAssembly
+    weapon: Flamer
+
+- type: entity
+  parent: RMCTankFlamer
+  id: CMUFlamerDroneFuelTank
+  name: UGV incinerator fuel tank
+  description: A 200-unit napalm tank for the flamer UGV. It can be refilled from compatible fuel supplies.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 200
+        reagents:
+        - ReagentId: RMCNapalmUT
+          Quantity: 200

@@ -12,6 +12,8 @@ public sealed partial class EmitterSystem : SharedEmitterSystem
     /// <inheritdoc/>
     public override void Initialize()
     {
+        base.Initialize();
+
         SubscribeLocalEvent<EmitterComponent, AppearanceChangeEvent>(OnAppearanceChange);
     }
 

@@ -89,7 +89,7 @@ humanoid-profile-editor-synthetic-locked = You are not whitelisted for the synth
 humanoid-profile-editor-synthetic-locked-job = This character is not marked as synthetic.
 humanoid-profile-editor-synthetic-locked-job-non-synthetic = This character is marked as synthetic and can only take synthetic jobs.
 humanoid-profile-editor-preference-unavailable-stay-in-lobby-button = Stay in lobby if preference unavailable.
-humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button = Be default job if preference unavailable.
+humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button = Be {INDEFINITE($overflowJob)} {$overflowJob} if preference unavailable.
 humanoid-profile-editor-preference-jumpsuit = Jumpsuit
 humanoid-profile-editor-preference-jumpskirt = Jumpskirt
 humanoid-profile-editor-preference-backpack = Backpack
@@ -135,3 +135,34 @@ humanoid-profile-editor-segment-flight = Vehicle Crew
 humanoid-profile-editor-segment-support = Support
 humanoid-profile-editor-segment-leader = Infantry NCO
 humanoid-profile-editor-segment-line = Line Infantry
+
+
+humanoid-profile-editor-randomize = Randomize
+
+humanoid-profile-editor-randomize-unlocked-button = Randomize unlocked
+
+humanoid-profile-editor-randomize-name-button = Name
+
+humanoid-profile-editor-randomize-species-button = Species
+
+humanoid-profile-editor-randomize-age-button = Age
+
+humanoid-profile-editor-randomize-sex-button = Sex
+
+humanoid-profile-editor-randomize-skin-button = Skin color
+
+humanoid-profile-editor-randomize-eye-button = Eye color
+
+humanoid-profile-editor-randomize-markings-button = Markings
+
+humanoid-profile-editor-voice-label = Voice:
+
+humanoid-profile-editor-randomizer-lock-tooltip = Prevents the value from being randomized
+
+humanoid-profile-editor-voice-masculine = Masculine
+
+humanoid-profile-editor-voice-feminine = Feminine
+
+humanoid-profile-editor-voice-neutral = Neutral
+
+humanoid-profile-editor-voice-none = Unnamed Voice

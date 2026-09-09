@@ -5,7 +5,7 @@ using Content.Server.Mind;
 using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Popups;
 using Robust.Shared.Player;

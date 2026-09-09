@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Antag;
 using Content.Server.EUI;
@@ -16,19 +17,20 @@ using Content.Shared.GameTicking.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mind.Components;
-using Content.Shared.Mindshield.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
+using Content.Shared.Revolutionary;
 using Content.Shared.Revolutionary.Components;
+using Content.Shared.Roles.Components;
 using Content.Shared.Stunnable;
-using Content.Shared.Zombies;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared.Cuffs.Components;
 using Robust.Shared.Player;
+using Content.Shared.Mindshield;
 
 namespace Content.Server.GameTicking.Rules;
 
@@ -51,6 +53,7 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
     [Dependency] private RoundEndSystem _roundEnd = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private MindShieldSystem _mindShield = default!;
 
     //Used in OnPostFlash, no reference to the rule component is available
     public readonly ProtoId<NpcFactionPrototype> RevolutionaryNpcFaction = "Revolutionary";
@@ -103,7 +106,7 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
         var index = (commandLost ? 1 : 0) | (revsLost ? 2 : 0);
         args.AddLine(Loc.GetString(Outcomes[index]));
 
-        var sessionData = _antag.GetAntagIdentifiers(uid);
+        var sessionData = _antag.GetAntagIdentifiers(uid).ToList();
         args.AddLine(Loc.GetString("rev-headrev-count", ("initialCount", sessionData.Count)));
         foreach (var (mind, data, name) in sessionData)
         {
@@ -117,6 +120,7 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
 
             // TODO: someone suggested listing all alive? revs maybe implement at some point
         }
+        args.AddLine("");
     }
 
     private void OnGetBriefing(EntityUid uid, RevolutionaryRoleComponent comp, ref GetBriefingEvent args)
@@ -139,15 +143,20 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
         if (!_mind.TryGetMind(ev.Target, out var mindId, out var mind) && !alwaysConvertible)
             return;
 
-        if (HasComp<RevolutionaryComponent>(ev.Target) ||
-            HasComp<MindShieldComponent>(ev.Target) ||
-            !HasComp<HumanoidAppearanceComponent>(ev.Target) &&
+        if (!HasComp<HumanoidProfileComponent>(ev.Target) &&
             !alwaysConvertible ||
             !_mobState.IsAlive(ev.Target) ||
-            HasComp<ZombieComponent>(ev.Target))
+            !HasComp<RevolutionaryConverterComponent>(ev.Used))
         {
             return;
         }
+
+        var attemptConvertEv = new AttemptConvertRevolutionaryEvent();
+        RaiseLocalEvent(ev.Target, ref attemptConvertEv);
+
+        _mindShield.GetMindshieldStatus(ev.Target, out var isMindshielded, out _);
+        if (attemptConvertEv.Cancelled || isMindshielded)
+            return;
 
         _npcFaction.AddFaction(ev.Target, RevolutionaryNpcFaction);
         var revComp = EnsureComp<RevolutionaryComponent>(ev.Target);
@@ -161,7 +170,10 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
             if (_mind.TryGetMind(ev.User.Value, out var revMindId, out _))
             {
                 if (_role.MindHasRole<RevolutionaryRoleComponent>(revMindId, out var role))
+                {
                     role.Value.Comp2.ConvertedCount++;
+                    Dirty(role.Value.Owner, role.Value.Comp2);
+                }
             }
         }
 
@@ -228,7 +240,7 @@ public sealed partial class RevolutionaryRuleSystem : GameRuleSystem<Revolutiona
                     continue;
 
                 _npcFaction.RemoveFaction(uid, RevolutionaryNpcFaction);
-                _stun.TryParalyze(uid, stunTime, true);
+                _stun.TryUpdateParalyzeDuration(uid, stunTime);
                 RemCompDeferred<RevolutionaryComponent>(uid);
                 _popup.PopupEntity(Loc.GetString("rev-break-control", ("name", Identity.Entity(uid, EntityManager))), uid);
                 _adminLogManager.Add(LogType.Mind, LogImpact.Medium, $"{ToPrettyString(uid)} was deconverted due to all Head Revolutionaries dying.");

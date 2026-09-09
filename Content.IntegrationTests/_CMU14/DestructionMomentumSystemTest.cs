@@ -1,6 +1,7 @@
-using Content.Server._CMU14.Destruction;
-using Content.Shared._CMU14.Destruction;
+using Content.Server.CMU14.Destruction;
+using Content.Shared.CMU14.Destruction;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using System.Numerics;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -59,7 +60,7 @@ public sealed class DestructionMomentumSystemTest
             Assert.That(momentum.TryGetBreakCost(target, 2f, 100f, out var fullCost), Is.True);
             Assert.That(fullCost, Is.EqualTo(MathF.Sqrt(2f)).Within(0.001f));
 
-            damageable.TryChangeDamage(target, new DamageSpecifier { DamageDict = { ["Blunt"] = 75 } }, true);
+            damageable.SetDamage(target, new DamageSpecifier { DamageDict = { ["Blunt"] = 75 } });
 
             Assert.That(momentum.TryGetBreakCost(target, 2f, 100f, out var damagedCost), Is.True);
             Assert.That(damagedCost, Is.EqualTo(MathF.Sqrt(0.5f)).Within(0.001f));

@@ -1,8 +1,8 @@
 using Content.Shared._RMC14.Item;
-using Content.Shared.AU14;
-using Content.Shared.AU14.Allegiance;
-using Content.Shared._CMU14.Threats;
-using Content.Shared.AU14.util;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Allegiance;
+using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.util;
 using Content.Shared.Paper;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;

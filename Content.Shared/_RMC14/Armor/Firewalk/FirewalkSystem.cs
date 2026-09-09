@@ -66,7 +66,7 @@ public sealed partial class FirewalkSystem : EntitySystem
         if (_inventory.InSlotWithFlags((ent, null, null), ent.Comp.Slots))
             return;
 
-        var user = args.Equipee;
+        var user = args.EquipTarget;
         DisableFirewalk(ent, user);
     }
 

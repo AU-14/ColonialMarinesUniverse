@@ -1,6 +1,6 @@
 - type: entity
   id: ChemMaster
-  parent: [ BaseMachinePowered, ConstructibleMachine ]
+  parent: [ BaseMachinePowered, ConstructibleMachine, BaseConstructibleMachineDestructible ]
   name: ChemMaster 4000
   description: An industrial grade chemical manipulator with pill and bottle production included.
   placement:
@@ -41,17 +41,12 @@
         - MachineLayer
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 50
+    - trigger: !type:DamageTrigger
+        damage: 175
       behaviors:
       - !type:PlaySoundBehavior
         sound:
           collection: MetalGlassBreak
-      - !type:ChangeConstructionNodeBehavior
-        node: machineFrame
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
   - type: ActivatableUI
     key: enum.ChemMasterUiKey.Key
   - type: ActivatableUIRequiresPower
@@ -90,11 +85,11 @@
           tags:
           - Bottle
           - PillCanister
-  - type: SolutionContainerManager
-    solutions:
-      buffer:
-        maxVol: 1000
-        canReact: false
+  - type: Solution # Chemmaster is special in how it interacts with reagents. For now.
+    id: buffer
+    solution:
+      maxVol: 1000
+      canReact: false
   - type: DumpableSolution
     solution: buffer
     unlimited: true
@@ -102,3 +97,4 @@
     guides:
     - Chemicals
     - Chemist
+  - type: AmbientMusicMarkerMedical

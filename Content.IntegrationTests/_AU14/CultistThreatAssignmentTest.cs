@@ -2,22 +2,24 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server._CMU14.Threats;
-using Content.Server.Radio.Components;
-using Content.Shared.AU14;
-using Content.Shared._CMU14.Threats;
+using Content.Server.CMU14.Threats;
+using Content.Server.GameTicking;
+using Content.Shared.Access.Systems;
+using Content.Shared.Radio.Components;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Chat;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
-using Content.Shared._CMU14.Threats.Mobs.Xeno;
+using Content.Shared.CMU14.Threats.Mobs.Xeno;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Vendors;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
-using HasKnowledgeOfXenoLanguageComponent = Content.Shared._CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
+using HasKnowledgeOfXenoLanguageComponent = Content.Shared.CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
 
 namespace Content.IntegrationTests._AU14;
 
@@ -26,7 +28,19 @@ public sealed class CultistThreatAssignmentTest
 {
     private static readonly ProtoId<JobPrototype> ThreatMemberJob = "AU14JobThreatMember";
     private static readonly ProtoId<JobPrototype> CultistJob = "AU14JobCultist";
-    private static readonly ProtoId<ThreatPrototype> CultistThreat = "CultistThreatCF";
+    private static readonly ProtoId<ThreatPrototype> CultistThreat = "TestCultistAssignmentThreat";
+
+    [TestPrototypes]
+    private const string Prototypes = """
+        - type: threat
+          id: TestCultistAssignmentThreat
+          roundstartspawns: TestCultistAssignmentSpawn
+        - type: partySpawn
+          id: TestCultistAssignmentSpawn
+          leadersToSpawn: {}
+          gruntsToSpawn:
+            cultistJob: 1
+        """;
 
     [Test]
     public async Task AssignedCultistThreatMemberKeepsCultistJobAndMindRole()
@@ -45,6 +59,7 @@ public sealed class CultistThreatAssignmentTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            entMan.System<GameTicker>().JoinAsObserver(player);
             entMan.SpawnEntity("threatmemberspawnmarker", map.GridCoords);
 
             var threat = server.ProtoMan.Index(CultistThreat);
@@ -57,10 +72,11 @@ public sealed class CultistThreatAssignmentTest
                 threat,
                 map.MapId,
                 assignedJobs,
-                [player.UserId]);
+                [player.UserId],
+                playerCount: 16);
         });
 
-        await pair.RunTicksSync(5);
+        await pair.RunSeconds(2);
 
         await server.WaitAssertion(() =>
         {
@@ -87,6 +103,9 @@ public sealed class CultistThreatAssignmentTest
                 Assert.That(jobSystem.MindTryGetJobId(mindId.Value, out var job) ? job : null, Is.EqualTo(CultistJob));
                 Assert.That(MindHasRolePrototype(entMan, mind, "MindRoleCultist"), Is.True);
                 Assert.That(roleSystem.MindHasRole<JobRoleComponent>(mindId.Value), Is.True);
+                Assert.That(entMan.System<IdExaminableSystem>().GetInfo(cultist),
+                    Does.Not.Contain("Prime Hive"),
+                    "cultist hive affiliation must not be exposed by ID examination");
             });
         });
 
@@ -95,7 +114,7 @@ public sealed class CultistThreatAssignmentTest
 
     private static bool MindHasRolePrototype(IEntityManager entMan, MindComponent mind, string prototype)
     {
-        foreach (var role in mind.MindRoles)
+        foreach (var role in mind.MindRoleContainer.ContainedEntities)
         {
             if (entMan.TryGetComponent(role, out MetaDataComponent? meta) &&
                 meta.EntityPrototype?.ID == prototype)

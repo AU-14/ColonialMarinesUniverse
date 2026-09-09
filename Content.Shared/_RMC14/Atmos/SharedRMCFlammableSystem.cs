@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -15,6 +15,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Directions;
@@ -154,20 +155,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var water = false;
-        foreach (var container in args.Solution.Comp.Containers)
-        {
-            if (!_solutionContainer.TryGetSolution(args.Solution.Owner, container, out _, out var solution))
-                continue;
-
-            if (solution.ContainsPrototype(WaterReagent))
-            {
-                water = true;
-                break;
-            }
-        }
-
-        if (!water)
+        if (!args.Solution.Comp.Solution.ContainsPrototype(WaterReagent))
             return;
 
         if (ent.Comp.ExtinguishInstantly)
@@ -341,7 +329,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (args.Target != ent.Owner ||
             user == args.Target ||
             !TryComp(user, out FirePatterComponent? patter) ||
-            _entityWhitelist.IsBlacklistPass(patter.Blacklist, ent) ||
+            _entityWhitelist.IsWhitelistPass(patter.Blacklist, ent) ||
             !TryComp(ent, out FlammableComponent? flammable) ||
             !flammable.OnFire)
         {
@@ -411,13 +399,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (intensity != null || duration != null)
         {
             var ignite = EnsureComp<RMCIgniteOnCollideComponent>(spawned);
-            if (intensity != null)
-                ignite.Intensity = intensity.Value;
-
-            if (duration != null)
-                ignite.Duration = duration.Value;
-
-            Dirty(spawned, ignite);
+            SetIntensityDuration((spawned, ignite, null), intensity, duration);
         }
 
         var onCollide = EnsureComp<DamageOnCollideComponent>(spawned);
@@ -883,7 +865,6 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             stepping.ArmorMultiplier = ignite.ArmorMultiplier;
             if (TryComp<RMCFireArmorDebuffModifierComponent>(uid, out var mod))
                 stepping.ArmorMultiplier *= mod.DebuffModifier;
-            _armor.UpdateArmorValue((uid, null));
         }
 
         var coords = _transform.GetMoverCoordinates(uid);
@@ -1125,6 +1106,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             var steppingQuery = EntityQueryEnumerator<SteppingOnFireComponent, PhysicsComponent>();
             while (steppingQuery.MoveNext(out var uid, out var stepping, out var body))
             {
+                var previousArmorMultiplier = stepping.ArmorMultiplier;
                 stepping.ArmorMultiplier = 1;
                 Dirty(uid, stepping);
 
@@ -1153,6 +1135,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
                 if (!isStepping)
                     RemCompDeferred<SteppingOnFireComponent>(uid);
+                else if (stepping.ArmorMultiplier != previousArmorMultiplier)
+                    _armor.UpdateArmorValue((uid, null));
             }
         }
         catch (Exception e)

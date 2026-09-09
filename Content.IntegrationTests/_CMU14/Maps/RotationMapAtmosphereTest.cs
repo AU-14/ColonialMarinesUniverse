@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Rules;
+using Content.Shared.Maps;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Maps;
+namespace Content.IntegrationTests.CMU14.Maps;
 
 [TestFixture]
 public sealed class RotationMapAtmosphereTest

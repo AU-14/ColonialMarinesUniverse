@@ -7,6 +7,7 @@ using Content.Client.Storage;
 using Content.Client.Storage.Systems;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Item;
+using Content.Shared._RMC14.Storage;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
 using Content.Shared.Item;
@@ -115,7 +116,7 @@ public sealed partial class StorageWindow : BaseWindow
             HorizontalExpand = true,
             Name = "StorageLabel",
             ClipText = true,
-            Text = "Dummy",
+            Text = Loc.GetString("comp-storage-window-dummy"),
             StyleClasses =
             {
                 "FancyWindowTitle",
@@ -582,6 +583,7 @@ public sealed partial class StorageWindow : BaseWindow
         }
 
         var itemSystem = _entity.System<ItemSystem>();
+        var rmcStorageSystem = _entity.System<RMCStorageSystem>();
         var storageSystem = _entity.System<StorageSystem>();
         var handsSystem = _entity.System<HandsSystem>();
 
@@ -605,7 +607,8 @@ public sealed partial class StorageWindow : BaseWindow
             currentLocation = dragging.Location;
         }
         else if (handsSystem.GetActiveHandEntity() is { } handEntity &&
-                 storageSystem.CanInsert(StorageEntity.Value, handEntity, _player.LocalEntity, out _, storageComp: storageComponent, ignoreLocation: true))
+                 storageSystem.CanInsert(StorageEntity.Value, handEntity, out _, storageComp: storageComponent, ignoreLocation: true) &&
+                 rmcStorageSystem.CanInsert((StorageEntity.Value, storageComponent), handEntity, _player.LocalEntity, out _))
         {
             currentEnt = handEntity;
             currentLocation = new ItemStorageLocation(_storageController.DraggingRotation, Vector2i.Zero);
@@ -743,12 +746,17 @@ public sealed partial class StorageWindow : BaseWindow
             return;
 
         var storageSystem = _entity.System<StorageSystem>();
+        var rmcStorageSystem = _entity.System<RMCStorageSystem>();
         var handsSystem = _entity.System<HandsSystem>();
 
         if (args.Function == ContentKeyFunctions.MoveStoredItem && StorageEntity != null)
         {
+            if (!_entity.TryGetComponent(StorageEntity.Value, out StorageComponent? storageComponent))
+                return;
+
             if (handsSystem.GetActiveHandEntity() is { } handEntity &&
-                storageSystem.CanInsert(StorageEntity.Value, handEntity, _player.LocalEntity, out _))
+                storageSystem.CanInsert(StorageEntity.Value, handEntity, out _, storageComp: storageComponent) &&
+                rmcStorageSystem.CanInsert((StorageEntity.Value, storageComponent), handEntity, _player.LocalEntity, out _))
             {
                 if (!CMInventoryExtensions.TryGetFirst(StorageEntity.Value, handEntity, out var insertLocation))
                     return;

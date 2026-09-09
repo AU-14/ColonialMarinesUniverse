@@ -1,6 +1,6 @@
 - type: entity
+  parent: [ BaseStructureDynamic, StructureHealthFurniture ]
   id: PottedPlantBase
-  parent: BaseStructureDynamic
   name: potted plant
   description: A little bit of nature contained in a pot.
   abstract: true
@@ -28,8 +28,10 @@
   - type: Speech
     speechVerb: Plant # for pais (In the secret stash)
   - type: SecretStash
-    tryInsertItemSound: /Audio/Effects/plant_rustle.ogg
-    tryRemoveItemSound: /Audio/Effects/plant_rustle.ogg
+    tryInsertItemSound:
+      collection: CMUPottedPlantRustle
+    tryRemoveItemSound:
+      collection: CMUPottedPlantRustle
     secretStashName: secret-stash-plant
   - type: ContainerContainer
     containers:
@@ -40,18 +42,21 @@
     sprite: Structures/Furniture/potted_plants.rsi
     size: Huge
   - type: Damageable
-    damageContainer: StructuralInorganic # The pot. Not the plant. Or is it plastic?
+    damageModifierSet: RockMod
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 50
+        damage: 40
       behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
       - !type:PlaySoundBehavior
         sound:
-          path: /Audio/Effects/plant_rustle.ogg
+          collection: CMUPottedPlantRustle
+      - !type:PlaySoundBehavior
+        sound:
+          collection: CMUPottedPlantBreak
+          params:
+            volume: -6
   - type: InteractedBlacklist
     blacklist:
       components:

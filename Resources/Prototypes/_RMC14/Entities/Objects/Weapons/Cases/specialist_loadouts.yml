@@ -139,7 +139,7 @@
     - state: demo
       map: [ label ]
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous
     grid:
     - 0,0,15,3
   - type: StorageFill
@@ -183,7 +183,7 @@
     - state: demo
       map: [ label ]
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous
     grid:
     - 0,0,15,3
   - type: StorageFill
@@ -477,13 +477,14 @@
     - 0,0,13,3
   - type: Sprite
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
-  - type: Icon
-    sprite: _RMC14/Objects/Storage/procase_mini.rsi
     layers:
     - state: closed
       map: [ base ]
     - state: loader
       map: [ label ]
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+    state: closed
   - type: StorageFill
     contents:
     - id: RMCArmorM3TDemo

@@ -286,7 +286,7 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         var buff = EnsureComp<XenoThermoregulatingComponent>(xeno);
         buff.ExpiresAt = _timing.CurTime + TimeSpan.FromSeconds(5);
         Dirty(xeno.Owner, buff);
-        _speed.RefreshMovementSpeedModifiers(xeno);
+        _speed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnThermoregulatingRefreshSpeed(Entity<XenoThermoregulatingComponent> xeno, ref RefreshMovementSpeedModifiersEvent args)

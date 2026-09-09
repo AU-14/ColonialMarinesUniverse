@@ -1,8 +1,12 @@
 using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Dodge;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
+using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
 using Robust.Shared.Spawners;
@@ -21,6 +25,7 @@ public sealed partial class XenoDancerAfterimageSystem : EntitySystem
     private static readonly TimeSpan AfterimageInterval = TimeSpan.FromSeconds(0.1);
 
     [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private TransformSystem _transform = default!;
@@ -90,7 +95,21 @@ public sealed partial class XenoDancerAfterimageSystem : EntitySystem
         _sprite.SetColor((clone, cloneSprite), sourceSprite.Color.WithAlpha(AfterimageAlpha));
 
         var shimmer = new Vector2(_random.NextFloat(-0.08f, 0.08f), _random.NextFloat(-0.08f, 0.08f));
-        _sprite.SetOffset((clone, cloneSprite), sourceSprite.Offset + shimmer);
+        var snapshotOffset = sourceSprite.Offset + shimmer;
+        // CMU: the source's elevation exists only during rendering. This immutable afterimage has no
+        // Z physics, so capture its elevation once alongside the copied semantic sprite presentation.
+        if (_config.GetCVar(CMUZLevelsCVars.Enabled) &&
+            TryComp(source, out CMUZPhysicsComponent? zPhysics) && zPhysics.LocalPosition != 0f)
+        {
+            snapshotOffset += new Vector2(0f, zPhysics.LocalPosition * CMUSharedZLevelsSystem.ZLevelVisualOffset);
+            cloneSprite.NoRotation = true;
+            if (zPhysics.LocalPosition > 0f)
+            {
+                _sprite.SetDrawDepth((clone, cloneSprite),
+                    Math.Max(sourceSprite.DrawDepth, (int) Shared.DrawDepth.DrawDepth.OverMobs));
+            }
+        }
+        _sprite.SetOffset((clone, cloneSprite), snapshotOffset);
 
         _transform.SetLocalRotationNoLerp(clone, sourceXform.LocalRotation);
 

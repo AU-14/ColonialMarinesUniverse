@@ -1,4 +1,5 @@
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
@@ -15,17 +16,15 @@ public sealed partial class Nutritious : RMCChemicalEffect
         return $"Restores [color=green]{updatedFactor * ActualPotency}[/color] nutrients to the body and satiates hunger";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var entityManager = args.EntityManager;
         var target = args.TargetEntity;
-        var mobStateSystem = entityManager.System<MobStateSystem>();
-        var hungerSystem = entityManager.System<HungerSystem>();
 
-        if (mobStateSystem.IsDead(target))
+        if (system.MobState.IsDead(target) ||
+            !system.TryGetSatiation(target, out var satiation))
             return;
 
-        var updatedFactor = NutrimentFactor + ActualPotency;
-        hungerSystem.ModifyHunger(target, updatedFactor * ActualPotency);
+        var updatedFactor = NutrimentFactor + args.ActualPotency;
+        system.Satiation.ModifyValue((target, satiation), SatiationSystem.Hunger, updatedFactor * args.ActualPotency);
     }
 }

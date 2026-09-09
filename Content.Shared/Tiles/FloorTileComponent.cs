@@ -12,8 +12,8 @@ namespace Content.Shared.Tiles
     [RegisterComponent, NetworkedComponent]
     public sealed partial class FloorTileComponent : Component
     {
-        [DataField("outputs")]
-        public List<ProtoId<ContentTileDefinition>>? OutputTiles;
+        [DataField]
+        public List<ProtoId<ContentTileDefinition>>? Outputs;
 
         [DataField("placeTileSound")] public SoundSpecifier PlaceTileSound =
             new SoundPathSpecifier("/Audio/Items/genhit.ogg")

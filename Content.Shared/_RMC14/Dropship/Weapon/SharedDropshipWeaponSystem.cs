@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Content.Shared._CMU14.Dropship.AttachmentPoint;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Camera;
@@ -25,11 +25,13 @@ using Content.Shared._RMC14.Rangefinder;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Administration.Logs;
-using Content.Shared.AU14.Round;
+using Content.Shared.CMU14.Round;
 using Content.Shared.Chat;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
@@ -1358,7 +1360,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (ent.Comp.Abbreviation == null)
             return;
 
-        args.AddModifier(ent.Comp.Abbreviation);
+        args.AddModifier("rmc-laser-designator-signal-flare-name", extraArgs: ("id", ent.Comp.Abbreviation));
     }
 
     private void UpdateTarget(Entity<DropshipTerminalWeaponsComponent> ent, EntityUid target)

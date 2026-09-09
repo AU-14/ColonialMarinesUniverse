@@ -9,6 +9,7 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
 
     private const float UnrevivableScanInterval = 1f;
     private float _scanAccumulator;
@@ -23,9 +24,9 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
     private void OnMobstateChanged(Entity<RMCRevivableComponent> ent, ref MobStateChangedEvent args)
     {
         if (args.NewMobState == MobState.Dead)
-            ent.Comp.UnrevivableAt = _timing.CurTime + ent.Comp.UnrevivableDelay;
+            ent.Comp.UnrevivableAt = _timing.CurTime - _metadata.GetPauseTime(ent.Owner) + ent.Comp.UnrevivableDelay;
         else
-            ent.Comp.UnrevivableAt = TimeSpan.Zero;
+            ent.Comp.UnrevivableAt = null;
 
         Dirty(ent);
     }
@@ -35,7 +36,7 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
         if (!TryComp<RMCRevivableComponent>(uid, out var revivable))
             return;
 
-        if (revivable.UnrevivableAt == TimeSpan.Zero)
+        if (revivable.UnrevivableAt == null)
             return;
 
         revivable.UnrevivableAt += time;
@@ -74,12 +75,11 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
         if (!Resolve(ent.Owner, ref ent.Comp, false))
             return 0;
 
-        if (ent.Comp.UnrevivableAt == TimeSpan.Zero)
+        if (ent.Comp.UnrevivableAt is not { } end)
             return 0;
 
-        var now = _timing.CurTime;
-        var end = ent.Comp.UnrevivableAt;
-        var start = ent.Comp.UnrevivableAt - ent.Comp.UnrevivableDelay;
+        var now = _timing.CurTime - _metadata.GetPauseTime(ent.Owner);
+        var start = end - ent.Comp.UnrevivableDelay;
 
         var progress = (now - start) / (end - start);
         return (int)(maxStages * progress);
@@ -103,10 +103,10 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
             if (IsUnrevivable(uid))
                 continue;
 
-            if (revivable.UnrevivableAt == TimeSpan.Zero)
+            if (revivable.UnrevivableAt is not { } deadline)
                 continue;
 
-            if (_timing.CurTime < revivable.UnrevivableAt)
+            if (_timing.CurTime < deadline)
                 continue;
 
             MakeUnrevivable((uid, revivable));

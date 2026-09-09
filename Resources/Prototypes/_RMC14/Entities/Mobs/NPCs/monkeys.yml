@@ -24,10 +24,7 @@
     speechVerb: Reptilian
     allowedEmotes: ['Thump']
   - type: Vocal
-    sounds:
-      Male: MaleReptilian
-      Female: FemaleReptilian
-      Unsexed: MaleReptilian
+    emoteSounds: MaleReptilian
   - type: BodyEmotes
     soundsId: ReptilianBodyEmotes
   - type: TypingIndicator
@@ -115,10 +112,7 @@
     speechVerb: Vulpkanin
     allowedEmotes: [ 'Bark', 'Snarl', 'Whine', 'Growl', 'Yip' ]
   - type: Vocal
-    sounds:
-      Male: RMCMaleVulpkanin
-      Female: RMCFemaleVulpkanin
-      Unsexed: RMCMaleVulpkanin
+    emoteSounds: RMCMaleVulpkanin
   - type: MeleeWeapon
     soundHit:
       collection: AlienClaw
@@ -160,10 +154,7 @@
     speechVerb: Skrell
     allowedEmotes: [ 'RMCSkrellPeep', 'RMCSkrellAnger', 'RMCSkrellTrill', 'RMCSkrellWarble' ]
   - type: Vocal
-    sounds:
-      Male: RMCMaleSkrell
-      Unsexed: RMCMaleSkrell
-      Female: RMCFemaleSkrell
+    emoteSounds: RMCMaleSkrell
 
 - type: entity
   parent: [RMCSmallHost]
@@ -203,10 +194,7 @@
   - type: TypingIndicator
     proto: vox
   - type: Vocal
-    sounds:
-      Male: UnisexVox
-      Female: UnisexVox
-      Unsexed: UnisexVox
+    emoteSounds: UnisexVox
   - type: MeleeWeapon
     soundHit:
       collection: AlienClaw
@@ -245,10 +233,7 @@
   - type: ReplacementAccent
     accent: nymph
   - type: Vocal
-    sounds:
-      Male: RMCMaleAvali
-      Unsexed: RMCMaleAvali
-      Female: RMCFemaleAvali
+    emoteSounds: RMCMaleAvali
   - type: Wagging
     action: ActionToggleAvaliWagging
   - type: Speech

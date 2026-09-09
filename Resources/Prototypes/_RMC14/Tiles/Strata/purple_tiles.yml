@@ -8,7 +8,7 @@
 - type: tile
   parent: RMCFloorStrataPurpleBase
   id: RMCFloorStrataPurple
-  name: purple metal tile
+  name: tiles-rmc-legacy-purple-metal-tile
   sprite: /Textures/_RMC14/Tiles/strata/purple1.png
 
 - type: tile

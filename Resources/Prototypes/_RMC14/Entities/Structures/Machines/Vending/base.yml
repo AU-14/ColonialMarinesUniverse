@@ -73,6 +73,7 @@
   - type: Physics
     bodyType: Static
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralMarine
   - type: Destructible # TODO RMC14 some of these should just be knocked over with a do after by xenos
     thresholds:

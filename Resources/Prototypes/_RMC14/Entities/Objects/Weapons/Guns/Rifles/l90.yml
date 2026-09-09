@@ -807,6 +807,11 @@
   id: BulletRifle7x43mm
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:

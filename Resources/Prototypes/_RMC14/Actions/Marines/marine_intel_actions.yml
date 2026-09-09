@@ -4,8 +4,11 @@
   components:
   - type: Action
     checkCanInteract: false
-    icon:
-      entity: CMFolderWhite
     autoPopulate: false # CMU14
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Misc/paper.rsi
+      state: folder_white
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ViewIntelObjectivesActionEvent

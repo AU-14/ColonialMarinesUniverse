@@ -1,8 +1,6 @@
 using Content.Shared.Inventory.Events;
 using Content.Shared.Overlays;
 using Robust.Client.Graphics;
-using Robust.Client.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Client.Overlays;
@@ -13,7 +11,6 @@ namespace Content.Client.Overlays;
 public sealed partial class ShowHealthBarsSystem : EquipmentHudSystem<ShowHealthBarsComponent>
 {
     [Dependency] private IOverlayManager _overlayMan = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private EntityHealthBarOverlay _overlay = default!;
@@ -24,7 +21,7 @@ public sealed partial class ShowHealthBarsSystem : EquipmentHudSystem<ShowHealth
 
         SubscribeLocalEvent<ShowHealthBarsComponent, AfterAutoHandleStateEvent>(OnHandleState);
 
-        _overlay = new(EntityManager, _prototype, _timing);
+        _overlay = new(EntityManager, ProtoMan, _timing);
     }
 
     private void OnHandleState(Entity<ShowHealthBarsComponent> ent, ref AfterAutoHandleStateEvent args)
@@ -35,6 +32,9 @@ public sealed partial class ShowHealthBarsSystem : EquipmentHudSystem<ShowHealth
     protected override void UpdateInternal(RefreshEquipmentHudEvent<ShowHealthBarsComponent> component)
     {
         base.UpdateInternal(component);
+
+        _overlay.DamageContainers.Clear();
+        _overlay.StatusIcon = null;
 
         foreach (var comp in component.Components)
         {

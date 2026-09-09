@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._CMU14.Visuals;
+using Content.Shared.CMU14.Visuals;
 using Content.Shared.Containers;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.Prototypes;

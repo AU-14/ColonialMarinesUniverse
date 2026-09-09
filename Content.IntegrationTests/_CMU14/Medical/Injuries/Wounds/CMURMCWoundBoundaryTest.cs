@@ -1,16 +1,20 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using RMCWoundsSystem = Content.Server._RMC14.Medical.Wounds.WoundsSystem;
 
-namespace Content.IntegrationTests._CMU14.Medical.Injuries.Wounds;
+namespace Content.IntegrationTests.CMU14.Medical.Injuries.Wounds;
 
 [TestFixture]
 public sealed class CMURMCWoundBoundaryTest
@@ -152,3 +156,5 @@ public sealed class CMURMCWoundBoundaryTest
         return damage;
     }
 }
+
+#pragma warning restore RA0002

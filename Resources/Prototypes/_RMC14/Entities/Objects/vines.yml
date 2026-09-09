@@ -43,6 +43,7 @@
         - MidImpassable
   - type: Damageable
     damageModifierSet: Wood
+  - type: Injurable
   - type: Destructible
     thresholds:
     - trigger:
@@ -51,7 +52,7 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
-  - type: Temperature
+  - type: TemperatureDamage
     heatDamage:
       types:
         Heat: 5
@@ -70,7 +71,7 @@
       methods: [Touch]
       effects:
       - !type:HealthChange
-        scaleByQuantity: true
+        scaling: true
         damage:
           types:
             Heat: 10

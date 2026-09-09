@@ -1,9 +1,9 @@
 using System.Numerics;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.ZJump;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.ZJump;
 using NUnit.Framework;
-using CMUXenoZJumpSystem = Content.Shared._CMU14.Threats.Mobs.Xeno.ZJump.CMUXenoZJumpSystem;
+using CMUXenoZJumpSystem = Content.Shared.CMU14.Threats.Mobs.Xeno.ZJump.CMUXenoZJumpSystem;
 
-namespace Content.Tests.Shared._CMU14.Xenonids;
+namespace Content.Tests.Shared.CMU14.Xenonids;
 
 [TestFixture]
 public sealed class CMUXenoZJumpTest

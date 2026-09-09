@@ -18,6 +18,7 @@ using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics;
@@ -49,6 +50,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
 
         SubscribeLocalEvent<XenoFortifyComponent, CMGetArmorEvent>(OnXenoFortifyGetArmor);
         SubscribeLocalEvent<XenoFortifyComponent, BeforeStatusEffectAddedEvent>(OnXenoFortifyBeforeStatusAdded);
+        SubscribeLocalEvent<XenoFortifyComponent, KnockDownAttemptEvent>(OnXenoFortifyKnockdownAttempt);
         SubscribeLocalEvent<XenoFortifyComponent, GetExplosionResistanceEvent>(OnXenoFortifyGetExplosionResistance);
 
         SubscribeLocalEvent<XenoFortifyComponent, ChangeDirectionAttemptEvent>(OnXenoFortifyCancel);
@@ -97,6 +99,12 @@ public sealed partial class XenoFortifySystem : EntitySystem
     private void OnXenoFortifyBeforeStatusAdded(Entity<XenoFortifyComponent> xeno, ref BeforeStatusEffectAddedEvent args)
     {
         if (xeno.Comp.Fortified && xeno.Comp.ImmuneToStatuses.Contains(args.Effect.Id))
+            args.Cancelled = true;
+    }
+
+    private void OnXenoFortifyKnockdownAttempt(Entity<XenoFortifyComponent> xeno, ref KnockDownAttemptEvent args)
+    {
+        if (xeno.Comp.Fortified)
             args.Cancelled = true;
     }
 
@@ -210,7 +218,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
             _transform.AnchorEntity((xeno, Transform(xeno)));
         }
         else
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         FortifyUpdated(xeno);
     }
@@ -235,7 +243,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
             _physics.TrySetBodyType(xeno, BodyType.KinematicController);
         }
         else
-            _speed.RefreshMovementSpeedModifiers(xeno);
+            _speed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         FortifyUpdated(xeno);
     }

@@ -158,7 +158,7 @@ public partial class ChatBox : UIWidget
         _config.OnValueChanged(CCVars.ChatColorWholeMessage, OnColorWholeMessageCvarChanged);
         _stylesheetManager.ChatFontChanged += RemakeForChatFontChange;
         _config.OnValueChanged(CCVars.CMUChatRowTint, OnChatRowTintCvarChanged);
-        _config.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledCvarChanged);
+        _stylesheetManager.CrtThemeChanged += OnCrtThemeChanged;
 
         _tabs = ChatUserSettings.LoadTabs(_config.GetCVar(CCVars.ChatTabs));
         _styles = ChatUserSettings.LoadStyles(_config.GetCVar(CCVars.ChatChannelStyles));
@@ -179,6 +179,30 @@ public partial class ChatBox : UIWidget
         SetSplitChatEnabled(_splitChatEnabled, repopulate: false, save: false);
         ApplyChatMode();
         Repopulate();
+    }
+
+    protected override void EnteredTree()
+    {
+        base.EnteredTree();
+
+        // Cached screens receive messages while detached. The engine discards their queued layout
+        // updates, and our explicit stylesheet prevents reparenting from restyling this subtree.
+        // Invalidate every container so cached measurements cannot hide the new rows and tabs.
+        InvalidateChatMeasure(this);
+        for (var ancestor = Parent; ancestor != null; ancestor = ancestor.Parent)
+        {
+            ancestor.InvalidateMeasure();
+        }
+    }
+
+    private static void InvalidateChatMeasure(Control control)
+    {
+        foreach (var child in control.Children)
+        {
+            InvalidateChatMeasure(child);
+        }
+
+        control.InvalidateMeasure();
     }
 
     protected override void Resized()
@@ -653,26 +677,10 @@ public partial class ChatBox : UIWidget
                 button.AddStyleClass(StyleNano.StyleClassCrtChatTabSelected);
             else
                 button.RemoveStyleClass(StyleNano.StyleClassCrtChatTabSelected);
-            // Modulate multiplies the whole control, its stylebox included, so using it to carry
-            // "active" repainted the tab's fill as well as its label - which is how the strip ended
-            // up off the ladder no matter what the stylesheet said. Under CRT the fill already says
-            // active (Surface1 resting, Surface4 selected), so only the label wants colouring.
-            if (StyleNano.CrtUiEnabled)
-            {
-                button.Modulate = Color.White;
-                button.Label.FontColorOverride = button.Pressed
-                    ? CrtTerminalPalette.TextBright
-                    : CrtTerminalPalette.TextDim;
-            }
-            else
-            {
-                // White, not the pale green this used to be. Off-theme nothing else on the
-                // screen is green, and an active tab is signalled perfectly well by being brighter
-                // than the inactive ones.
-                button.Modulate = tabId == _activeTabId
-                    ? Color.White
-                    : Color.FromHex("#737987");
-            }
+            button.Modulate = Color.White;
+            button.Label.FontColorOverride = button.Pressed
+                ? CrtTerminalPalette.TextBright
+                : CrtTerminalPalette.Text;
         }
 
         UpdateTabDragVisuals();
@@ -1128,6 +1136,7 @@ public partial class ChatBox : UIWidget
     /// </summary>
     private void RemakeForChatFontChange()
     {
+        Stylesheet = _stylesheetManager.SheetNano;
         ChatInput.ChannelSelector.RefreshChatFont();
         Contents.RefreshChatFont();
         SecondaryContents.RefreshChatFont();
@@ -1144,11 +1153,17 @@ public partial class ChatBox : UIWidget
 
     // The whitelist depends on the theme, so it has to be rebuilt here - the already-rendered rows
     // were filtered against the old one and only Repopulate puts them back through the new one.
-    private void OnCrtUiEnabledCvarChanged(bool enabled)
+    private void OnCrtThemeChanged()
     {
+        Stylesheet = _stylesheetManager.SheetNano;
+        var enabled = StyleNano.CrtUiEnabled;
         _whitelist = BuildMarkupWhitelist(enabled);
         ApplyTabHeaderBackground(enabled);
-        Repopulate();
+        ChatWindowPanel.PanelOverride = null;
+        ChatWindowPanel.InvalidateStyleSheet();
+        ChatWindowPanel.ForceRunStyleUpdate();
+        ChatUIController.SetChatWindowOpacity(ChatWindowPanel, _config.GetCVar(CCVars.ChatWindowOpacity));
+        RemakeForChatFontChange();
     }
 
     /// <summary>
@@ -1281,6 +1296,10 @@ public partial class ChatBox : UIWidget
 
     private void AddLine(ChatMessage msg, ChatLogPanel contents, Queue<RepeatedMessage> repeatQueue)
     {
+        var cmChat = _entManager.SystemOrNull<CMChatSystem>();
+        if (cmChat?.TryRepetition(repeatQueue, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender, msg.LanguageIcon) ?? false)
+            return;
+
         var style = ChatUserSettings.ResolveStyle(_styles, msg);
         var styleColor = ChatUserSettings.ResolveColor(style);
         var fontSize = ChatUserSettings.ResolveFontSize(style) ??
@@ -1295,14 +1314,8 @@ public partial class ChatBox : UIWidget
         var accentColor = styleColor ?? msg.Display?.AccentColor ?? crtColor;
         var messageColor = styleColor ?? msg.MessageColorOverride ?? msg.Display?.AccentColor ?? crtColor ?? msg.Channel.TextColor();
         var bodyColor = _colorWholeMessage ? messageColor : StructuredMessageTextColor;
-        var formatted = CreateFormattedMessage(msg, messageColor, style);
-
-        var cmChat = _entManager.SystemOrNull<CMChatSystem>();
-        if (cmChat?.TryRepetition(repeatQueue, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender, msg.LanguageIcon) ?? false)
-            return;
-
-        var row = contents.AddMessage(msg, formatted, bodyColor, accentColor, fontSize);
-        cmChat?.TrackRepetition(repeatQueue, row, formatted, msg.SenderEntity, msg.Message, msg.Channel, msg.LanguageIcon);
+        var entry = contents.AddMessage(msg, () => CreateFormattedMessage(msg, messageColor, style), bodyColor, accentColor, fontSize);
+        cmChat?.TrackRepetition(repeatQueue, entry, msg.SenderEntity, msg.Message, msg.Channel, msg.LanguageIcon);
     }
 
     private void AddLegacyLine(ChatMessage msg)
@@ -1353,26 +1366,30 @@ public partial class ChatBox : UIWidget
         if (_colorWholeMessage)
             formatted.Pop();
 
-        return FilterProblematicTags(formatted, allowCommandLinks: false);
+        return FilterProblematicTags(formatted, allowCommandLinks: true);
     }
 
     private static string StripChatActionCommandLink(string markup, ChatMessage message)
     {
-        if ((!message.GhostFollowEntity.Valid && !message.XenoWatchEntity.Valid) ||
-            !markup.StartsWith("[cmdlink=", StringComparison.OrdinalIgnoreCase))
+        if (!message.GhostFollowEntity.Valid && !message.XenoWatchEntity.Valid)
         {
             return markup;
         }
 
-        var tagEnd = markup.IndexOf("/]", StringComparison.Ordinal);
-        if (tagEnd < 0)
-            return markup;
+        while (markup.StartsWith("[cmdlink=", StringComparison.OrdinalIgnoreCase))
+        {
+            var tagEnd = markup.IndexOf("/]", StringComparison.Ordinal);
+            if (tagEnd < 0)
+                return markup;
 
-        var afterTag = tagEnd + 2;
-        if (afterTag < markup.Length && markup[afterTag] == ' ')
-            afterTag++;
+            var afterTag = tagEnd + 2;
+            if (afterTag < markup.Length && markup[afterTag] == ' ')
+                afterTag++;
 
-        return markup[afterTag..];
+            markup = markup[afterTag..];
+        }
+
+        return markup;
     }
 
     private static string RemoveOuterColorMarkup(string markup)
@@ -1429,6 +1446,7 @@ public partial class ChatBox : UIWidget
             {
                 markup = StripVisiblePrefix(markup, $@"\[{message.Display.ChannelLabel}\] ");
                 markup = StripVisiblePrefix(markup, $"[{message.Display.ChannelLabel}] ");
+                markup = StripRadioChannelPrefix(markup);
             }
         }
 
@@ -1450,6 +1468,19 @@ public partial class ChatBox : UIWidget
             default:
                 return markup;
         }
+    }
+
+    private static string StripRadioChannelPrefix(string markup)
+    {
+        var index = GetVisibleTextStart(markup);
+        if (index < 0 || index + 2 > markup.Length || markup[index] != '\\' || markup[index + 1] != '[')
+            return markup;
+
+        var end = markup.IndexOf(@"\] ", index + 2, StringComparison.Ordinal);
+        if (end < 0)
+            return markup;
+
+        return markup.Remove(index, end + 3 - index);
     }
 
     private static string StripVisiblePrefix(string markup, string prefix)
@@ -1643,7 +1674,7 @@ public partial class ChatBox : UIWidget
         _config.UnsubValueChanged(CCVars.ChatColorWholeMessage, OnColorWholeMessageCvarChanged);
         _stylesheetManager.ChatFontChanged -= RemakeForChatFontChange;
         _config.UnsubValueChanged(CCVars.CMUChatRowTint, OnChatRowTintCvarChanged);
-        _config.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledCvarChanged);
+        _stylesheetManager.CrtThemeChanged -= OnCrtThemeChanged;
         ChatInput.Input.OnTextEntered -= OnTextEntered;
         ChatInput.Input.OnKeyBindDown -= OnInputKeyBindDown;
         ChatInput.Input.OnTextChanged -= OnTextChanged;

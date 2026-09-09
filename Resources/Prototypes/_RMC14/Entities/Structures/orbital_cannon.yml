@@ -217,7 +217,7 @@
       delay: 0.6
       explosionEffect: RMCExplosionEffectClusterOB
   - type: WarpPoint
-    location: 1 orbital bombardment
+    location: cmu-warp-location-orbital-bombardment-one
 
 - type: entity
   parent: MarkerBase
@@ -247,7 +247,7 @@
     - fire: RMCTileFireOBAegis
       fireRange: 35
   - type: WarpPoint
-    location: 1 orbital bombardment
+    location: cmu-warp-location-orbital-bombardment-one
 
 - type: entity
   parent: MarkerBase
@@ -267,7 +267,7 @@
     - fire: RMCTileFireOB
       fireRange: 18
   - type: WarpPoint
-    location: 1 orbital bombardment
+    location: cmu-warp-location-orbital-bombardment-one
 
 - type: entity
   parent: MarkerBase
@@ -291,7 +291,7 @@
       checkProtectionPer: true
       explosionEffect: RMCExplosionEffectClusterOB
   - type: WarpPoint
-    location: 1 orbital bombardment
+    location: cmu-warp-location-orbital-bombardment-one
 
 - type: entity
   id: RMCOrbitalCannonComputer

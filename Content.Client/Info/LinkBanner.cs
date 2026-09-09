@@ -1,4 +1,4 @@
-﻿using Content.Client._RMC14.LinkAccount;
+using Content.Client._RMC14.LinkAccount;
 using Content.Client._RMC14.Roadmap;
 using Content.Client.Changelog;
 using Content.Client.Stylesheets;
@@ -66,7 +66,7 @@ namespace Content.Client.Info
             buttons.AddChild(changelogButton);
 
             var roadmapButton = NewLinkButton(Loc.GetString("cm-ui-roadmap"));
-            roadmapButton.AddStyleClass(StyleBase.ButtonCaution);
+            roadmapButton.AddStyleClass(StyleClass.Negative);
             roadmapButton.Visible = false;
             roadmapButton.OnPressed += _ => UserInterfaceManager.GetUIController<RoadmapUIController>().ToggleRoadmap();
             buttons.AddChild(roadmapButton);

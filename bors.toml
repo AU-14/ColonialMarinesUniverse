@@ -1,3 +1,0 @@
-status = ["Required Checks"]
-timeout_sec = 1800 # 30 minutes
-use_squash_merge = true # Shame this can't use GH squash but what can you do

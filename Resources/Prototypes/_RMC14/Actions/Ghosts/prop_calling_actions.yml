@@ -6,9 +6,16 @@
   components:
   - type: Action
     checkCanInteract: false
-    icon: { sprite: _RMC14/Interface/prop_calling.rsi, state: RMC_observeraction_not_joining }
-    iconOn: { sprite: _RMC14/Interface/prop_calling.rsi, state: RMC_observeraction_joining }
     autoPopulate: false # CMU14
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/prop_calling.rsi
+      state: RMC_observeraction_not_joining
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Interface/prop_calling.rsi
+      state: RMC_observeraction_joining
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
 
 - type: entity
   id: ActionCallProps
@@ -17,9 +24,11 @@
   description: Calls over all entities who have signed up for prop calling.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Interface/prop_calling.rsi
-      state: RMC_observeraction_call_props
     autoPopulate: false # CMU14
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/prop_calling.rsi
+      state: RMC_observeraction_call_props
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CallOverPropsEvent

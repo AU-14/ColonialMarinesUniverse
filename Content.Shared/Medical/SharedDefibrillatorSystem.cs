@@ -1,0 +1,323 @@
+using Content.Shared.Atmos.Rotting;
+using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Medical.Defibrillator;
+using Content.Shared._RMC14.TrainingDummy;
+using Content.Shared.Chat;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.DoAfter;
+using Content.Shared.Electrocution;
+using Content.Shared.IdentityManagement;
+using Content.Shared.Interaction;
+using Content.Shared.Inventory;
+using Content.Shared.Item.ItemToggle;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
+using Content.Shared.PowerCell;
+using Content.Shared.Timing;
+using Content.Shared.Traits.Assorted;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Player;
+
+namespace Content.Shared.Medical;
+
+/// <summary>
+/// This handles interactions and logic relating to <see cref="DefibrillatorComponent"/>
+/// </summary>
+public abstract partial class SharedDefibrillatorSystem : EntitySystem
+{
+    [Dependency] private SharedChatSystem _chat = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedElectrocutionSystem _electrocution = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private SharedRottingSystem _rotting = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private RMCDefibrillatorSystem _rmcDefibrillator = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+
+    [SubscribeLocalEvent]
+    private void OnAfterInteract(Entity<DefibrillatorComponent> ent, ref AfterInteractEvent args)
+    {
+        if (args.Handled || args.Target is not { } target)
+            return;
+
+        args.Handled = TryStartZap(ent.AsNullable(), target, args.User);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnDoAfter(Entity<DefibrillatorComponent> ent, ref DefibrillatorZapDoAfterEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (args.Cancelled)
+        {
+            _rmcDefibrillator.StopChargingAudio(ent);
+            return;
+        }
+
+        _rmcDefibrillator.StopChargingAudio(ent);
+
+        if (args.Target is not { } target)
+            return;
+
+        if (!CanZap(ent.AsNullable(), target, args.User))
+            return;
+
+        args.Handled = true;
+        Zap(ent.AsNullable(), target, args.User);
+    }
+
+    /// <summary>
+    /// Checks if you can actually defib a target.
+    /// </summary>
+    /// <param name="ent">The defbrillator being used.</param>
+    /// <param name="target">Uid of the target getting defibbed.</param>
+    /// <param name="user">Uid of the entity using the defibrillator.</param>
+    /// <returns>
+    /// Returns true if the target is valid to be defibed, false otherwise.
+    /// </returns>
+    public bool CanZap(Entity<DefibrillatorComponent?> ent, EntityUid target, EntityUid? user = null)
+    {
+        if (!Resolve(ent, ref ent.Comp) || !CanContinueZap((ent.Owner, ent.Comp), target))
+            return false;
+
+        if (!_toggle.IsActivated(ent.Owner))
+        {
+            _popup.PopupEntity(Loc.GetString("defibrillator-not-on"), ent.Owner, user);
+            return false;
+        }
+
+        if (!TryComp<UseDelayComponent>(ent, out var useDelay) || _useDelay.IsDelayed((ent.Owner, useDelay), ent.Comp.DelayId))
+            return false;
+
+        if (!_powerCell.HasActivatableCharge(ent.Owner, user: user, predicted: true))
+            return false;
+
+        if (!ent.Comp.CanDefibCrit &&
+            TryComp(target, out MobStateComponent? targetMobState) &&
+            targetMobState.CurrentState == MobState.Critical)
+        {
+            return false;
+        }
+
+        if (TryComp(target, out RMCDefibrillatorBlockedComponent? blocked))
+        {
+            _popup.PopupEntity(Loc.GetString(blocked.Popup, ("target", target)), ent.Owner, user);
+            return false;
+        }
+
+        var slots = _inventory.GetSlotEnumerator(target, SlotFlags.OUTERCLOTHING);
+        while (slots.MoveNext(out var slot))
+        {
+            if (!TryComp(slot.ContainedEntity, out RMCDefibrillatorBlockedComponent? clothingBlocked))
+                continue;
+
+            _popup.PopupEntity(Loc.GetString(clothingBlocked.Popup, ("target", target)), ent.Owner, user);
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Tries to start defibrillating the target. If the target is valid, will start the defib do-after.
+    /// </summary>
+    /// <param name="ent">The defbrillator being used.</param>
+    /// <param name="target">Uid of the target getting defibbed.</param>
+    /// <param name="user">Uid of the entity using the defibrillator.</param>
+    /// <returns>
+    /// Returns true if the defibrillation do-after started, otherwise false.
+    /// </returns>
+    public bool TryStartZap(Entity<DefibrillatorComponent?> ent, EntityUid target, EntityUid user)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return false;
+
+        if (!CanZap(ent, target, user))
+            return false;
+
+        var delay = ent.Comp.DoAfterDuration +
+                    ent.Comp.SkillMultiplierDuration * _skills.GetSkillDelayMultiplier(user, ent.Comp.Skill);
+        var doAfter = new DoAfterArgs(EntityManager, user, delay, new DefibrillatorZapDoAfterEvent(),
+            ent.Owner, target, ent.Owner)
+        {
+            NeedHand = true,
+            BreakOnMove = !ent.Comp.AllowDoAfterMovement,
+            BreakOnHandChange = false,
+            DuplicateCondition = DuplicateConditions.SameEvent,
+            TargetEffect = "RMCEffectHealBusy",
+            MovementThreshold = 0.5f,
+            RootEntity = true
+        };
+
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            return false;
+
+        _rmcDefibrillator.StartChargingAudio((ent.Owner, ent.Comp), user);
+        _popup.PopupEntity(Loc.GetString("defibrillator-begin", ("name", Identity.Entity(user, EntityManager)), ("target", Identity.Entity(target, EntityManager))), target, PopupType.SmallCaution);
+        return true;
+    }
+
+    /// <summary>
+    /// Tries to defibrillate the target with the given defibrillator.
+    /// </summary>
+    /// <param name="ent">The defbrillator being used.</param>
+    /// <param name="target">Uid of the target getting defibbed.</param>
+    /// <param name="user">Uid of the entity using the defibrillator.</param>
+    public void Zap(Entity<DefibrillatorComponent?> ent, EntityUid target, EntityUid user)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        var selfEvent = new SelfBeforeDefibrillatorZapsEvent(user, ent.Owner, target);
+        RaiseLocalEvent(user, selfEvent);
+
+        target = selfEvent.DefibTarget;
+
+        // Ensure thet new target is still valid.
+        if (selfEvent.Cancelled || !CanZap(ent, target, user))
+            return;
+
+        var targetEvent = new TargetBeforeDefibrillatorZapsEvent(user, ent.Owner, target);
+        RaiseLocalEvent(target, targetEvent);
+
+        target = targetEvent.DefibTarget;
+
+        if (targetEvent.Cancelled || !CanZap(ent, target, user))
+            return;
+
+        // Preserve the fork's last-charge and cancellation contract: redirects and all
+        // target validation happen before the charge is consumed.
+        if (!CanContinueZap((ent.Owner, ent.Comp), target) || !_powerCell.TryUseActivatableCharge(ent.Owner, user: user))
+            return;
+
+        if (TryComp<UseDelayComponent>(ent, out var useDelay))
+        {
+            _useDelay.SetLength((ent.Owner, useDelay), ent.Comp.ZapDelay, id: ent.Comp.DelayId);
+            _useDelay.TryResetDelay((ent.Owner, useDelay), id: ent.Comp.DelayId);
+        }
+
+        _audio.PlayPredicted(ent.Comp.ZapSound, ent, user);
+        Entity<DefibrillatorComponent> defibEnt = (ent, ent.Comp);
+        var failedRevive = TryRevive(defibEnt, user, target, true);
+        if (!CanContinueZap(defibEnt, target))
+            return;
+
+        // A callback can zap another patient. Each operation owns its contact snapshot.
+        var interactors = new HashSet<EntityUid>();
+        _interaction.GetEntitiesInteractingWithTarget(target, interactors);
+        foreach (var interactor in interactors)
+        {
+            if (!CanContinueZap(defibEnt, target))
+                break;
+            if (!TerminatingOrDeleted(interactor) && !EntityManager.IsQueuedForDeletion(interactor))
+                TryRevive(defibEnt, user, interactor, false);
+        }
+
+        if (!CanContinueZap(defibEnt, target))
+            return;
+
+        var sound = failedRevive
+            ? ent.Comp.FailureSound
+            : ent.Comp.SuccessSound;
+        _audio.PlayPredicted(sound, ent.Owner, user);
+
+        var ev = new TargetDefibrillatedEvent(user, target, (ent.Owner, ent.Comp), interactors);
+        RaiseLocalEvent(target, ref ev);
+
+        // if we don't have enough power left for another shot, turn it off
+        if (!_powerCell.HasActivatableCharge(ent.Owner))
+            _toggle.TryDeactivate(ent.Owner);
+    }
+
+    private bool TryRevive(Entity<DefibrillatorComponent> ent, EntityUid user, EntityUid target, bool isOriginal)
+    {
+        bool failedRevive = true;
+        if (_rotting.IsRotten(target))
+        {
+            _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-rotten"), InGameICChatType.Speak, true);
+        }
+        else if (TryComp<UnrevivableComponent>(target, out var unrevivable))
+        {
+            _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString(unrevivable.ReasonMessage), InGameICChatType.Speak, true);
+        }
+        else
+        {
+            TryComp<MobStateComponent>(target, out var targetMobState);
+
+            var heal = ent.Comp.ZapHeal;
+            if (_mobState.IsDead(target, targetMobState))
+            {
+                var rmcEvent = new RMCDefibrillatorDamageModifyEvent(target, new DamageSpecifier(heal));
+                RaiseLocalEvent(ent.Owner, ref rmcEvent);
+                if (CanContinueZap(ent, target) && !rmcEvent.Cancelled && rmcEvent.Target == target &&
+                    rmcEvent.Attempt is { } attempt && !attempt.Cancelled)
+                {
+                    failedRevive = !_rmcDefibrillator.TryRevive(target, attempt, rmcEvent.Heal, user, device: ent);
+                    if (!failedRevive && CanContinueZap(ent, target))
+                    {
+                        var revived = new RMCDefibrillatorRevivedEvent(target);
+                        RaiseLocalEvent(ent.Owner, ref revived);
+                    }
+                }
+            }
+            else
+            {
+                _damageable.TryChangeDamage(target, heal, true, origin: user);
+            }
+
+            if (!CanContinueZap(ent, target))
+                return true;
+
+            if (_mind.TryGetMind(target, out var mindUid, out var mindComp) &&
+                _player.TryGetSessionById(mindComp.UserId, out var playerSession))
+            {
+                // notify them they're being revived.
+                if (mindComp.CurrentEntity != target)
+                    OpenReturnToBodyEui((mindUid, mindComp), playerSession);
+            }
+            else if (!HasComp<RMCTrainingDummyComponent>(target))
+            {
+                if (HasComp<MindContainerComponent>(target))
+                    _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-no-mind"), InGameICChatType.Speak, true); //target can host a mind but doesn't
+                else
+                    _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-not-living"), InGameICChatType.Speak, true); //target couldn't have hosted a mind
+            }
+        }
+
+        _electrocution.TryDoElectrocution(
+            target,
+            ent.Owner,
+            ent.Comp.ZapDamage,
+            ent.Comp.WritheDuration,
+            true,
+            ignoreInsulation: isOriginal
+        );
+
+        return failedRevive;
+    }
+
+    // TODO: SharedEuiManager so that we can just directly open the eui from shared.
+    private bool CanContinueZap(Entity<DefibrillatorComponent> ent, EntityUid target)
+    {
+        return !TerminatingOrDeleted(target) && !EntityManager.IsQueuedForDeletion(target) &&
+               !TerminatingOrDeleted(ent.Owner) && !EntityManager.IsQueuedForDeletion(ent.Owner) &&
+               TryComp<DefibrillatorComponent>(ent.Owner, out var current) && ReferenceEquals(current, ent.Comp);
+    }
+
+    protected virtual void OpenReturnToBodyEui(Entity<MindComponent> mind, ICommonSession session) { }
+}

@@ -108,8 +108,9 @@
       - "enum.RMCDamageOverlayVisuals.DamageOverlay"
       - "enum.RMCDamageOverlayVisuals.AdditionalDamageOverlay"
     - type: Damageable
-      damageContainer: Inorganic
       damageModifierSet: CMBurnBarricade
+    - type: Injurable
+      damageContainer: Inorganic
     - type: RMCConstructionUpgradeTarget
       upgrades: null
       downgrade: RMCBiohazardUpgrade
@@ -138,8 +139,9 @@
       - "enum.RMCDamageOverlayVisuals.DamageOverlay"
       - "enum.RMCDamageOverlayVisuals.AdditionalDamageOverlay"
     - type: Damageable
-      damageContainer: Inorganic
       damageModifierSet: CMBruteBarricade
+    - type: Injurable
+      damageContainer: Inorganic
     - type: RMCConstructionUpgradeTarget
       upgrades: null
       downgrade: RMCBruteUpgrade
@@ -188,6 +190,7 @@
       - state: turnstile
       - map: [ "acided" ]
     - type: Damageable
+    - type: Injurable
       damageContainer: Inorganic
     - type: Destructible
       thresholds:
@@ -243,8 +246,9 @@
       delay: 10
       fuelUsed: 2
     - type: Damageable
-      damageContainer: StructuralMarine
       damageModifierSet: StructuralMarine
+    - type: Injurable
+      damageContainer: StructuralMarine
     - type: Destructible
       thresholds:
       - trigger:

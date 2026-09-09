@@ -3,7 +3,8 @@ using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Stomp;
 using Content.Shared.DoAfter;
 using Content.Shared.Physics;
-using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
@@ -44,7 +45,7 @@ public sealed class XenoStompTest
             {
                 var entMan = server.EntMan;
                 var physics = entMan.System<SharedPhysicsSystem>();
-                var status = entMan.System<StatusEffectQuerySystem>();
+                var status = entMan.System<StatusEffectsSystem>();
                 var transform = entMan.System<SharedTransformSystem>();
                 var origin = transform.GetMapCoordinates(burrower);
                 var barricadeTarget = transform.GetMapCoordinates(marine);
@@ -85,8 +86,8 @@ public sealed class XenoStompTest
                 entMan.EventBus.RaiseLocalEvent(burrower, stomp);
 
                 Assert.That(stomp.Handled, Is.True);
-                Assert.That(status.TryGetTime(marine, "Stun", out _), Is.True);
-                Assert.That(status.TryGetTime(wallMarine, "Stun", out _), Is.False);
+                Assert.That(status.HasStatusEffect(marine, SharedStunSystem.ParalyzeId), Is.True);
+                Assert.That(status.HasStatusEffect(wallMarine, SharedStunSystem.ParalyzeId), Is.False);
             });
         }
         finally

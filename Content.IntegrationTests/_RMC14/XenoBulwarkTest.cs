@@ -1,3 +1,5 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -7,8 +9,10 @@ using Content.Shared._RMC14.Xenonids.Bulwark;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Projectiles;
-using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -157,7 +161,7 @@ public sealed class XenoBulwarkTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectQuerySystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var xeno = entMan.SpawnEntity("CMXenoWarriorBulwark", map.GridCoords);
             var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
             var action = SpawnAction(entMan);
@@ -166,8 +170,14 @@ public sealed class XenoBulwarkTest
             {
                 RaiseTailSwing(entMan, xeno, action);
 
-                Assert.That(status.TryGetTime(target, "Stun", out var time), Is.True);
-                Assert.That(time!.Value.Item2 - time.Value.Item1, Is.GreaterThanOrEqualTo(TimeSpan.FromSeconds(1)));
+                Assert.That(status.TryGetTime(target, SharedStunSystem.ParalyzeId, out var time), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(time.StartEffectTime, Is.Not.Null);
+                    Assert.That(time.EndEffectTime, Is.Not.Null);
+                    Assert.That(time.EndEffectTime!.Value - time.StartEffectTime!.Value,
+                        Is.GreaterThanOrEqualTo(TimeSpan.FromSeconds(1)));
+                });
             }
             finally
             {
@@ -464,3 +474,5 @@ public sealed class XenoBulwarkTest
         return entities;
     }
 }
+
+#pragma warning restore RA0002

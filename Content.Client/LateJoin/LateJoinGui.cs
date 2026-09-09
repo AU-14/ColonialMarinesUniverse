@@ -72,7 +72,7 @@ namespace Content.Client.LateJoin
                 Margin = new Thickness(8),
             };
 
-            Contents.AddChild(new PanelContainer
+            ContentsContainer.AddChild(new PanelContainer
             {
                 HorizontalExpand = true,
                 VerticalExpand = true,
@@ -199,6 +199,17 @@ namespace Content.Client.LateJoin
                     }
                 });
 
+                if (_configManager.GetCVar(CCVars.CrewManifestWithoutEntity))
+                {
+                    var crewManifestButton = new Button
+                    {
+                        Text = Loc.GetString("crew-manifest-button-label")
+                    };
+                    crewManifestButton.OnPressed += _ => _crewManifest.RequestCrewManifest(id);
+
+                    _base.AddChild(crewManifestButton);
+                }
+
 
 
                 var jobListScroll = new ScrollContainer()
@@ -243,7 +254,13 @@ namespace Content.Client.LateJoin
                         jobsAvailable.Add(_prototypeManager.Index<JobPrototype>(jobId));
                     }
 
-                    jobsAvailable.Sort(JobUIComparer.Instance);
+                    if (JobUIComparer.TryCreate(
+                            _prototypeManager,
+                            _gameTicker.JobWeightsByStation.GetValueOrDefault(id),
+                            out var comparer))
+                    {
+                        jobsAvailable.Sort(comparer);
+                    }
 
                     // Do not display departments with no jobs available.
                     if (jobsAvailable.Count == 0)
@@ -392,7 +409,6 @@ namespace Content.Client.LateJoin
             }
         }
 
-        [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

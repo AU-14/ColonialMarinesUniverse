@@ -2,8 +2,6 @@ using System.Text;
 using Content.Server.Atmos;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
-using Content.Server.Speech;
-using Content.Server.Speech.Components;
 using Content.Shared._RMC14.UniversalRecorder;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared.Atmos;
@@ -18,6 +16,8 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Paper;
 using Content.Shared.Popups;
+using Content.Shared.Speech;
+using Content.Shared.Speech.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
@@ -117,7 +117,7 @@ public sealed partial class UniversalRecorderSystem : EntitySystem
     private void OnRecorderInit(Entity<UniversalRecorderComponent> ent, ref ComponentInit args)
     {
         EnsureComp<UniversalRecorderRuntimeComponent>(ent);
-        _itemSlots.AddItemSlot(ent, UniversalRecorderComponent.TapeSlotId, ent.Comp.TapeSlot);
+        _itemSlots.AddItemSlot(ent.Owner, UniversalRecorderComponent.TapeSlotId, ent.Comp.TapeSlot);
     }
 
     private void OnRecorderMapInit(Entity<UniversalRecorderComponent> ent, ref MapInitEvent args)
@@ -127,7 +127,7 @@ public sealed partial class UniversalRecorderSystem : EntitySystem
 
     private void OnRecorderRemove(Entity<UniversalRecorderComponent> ent, ref ComponentRemove args)
     {
-        _itemSlots.RemoveItemSlot(ent, ent.Comp.TapeSlot);
+        _itemSlots.RemoveItemSlot(ent.Owner, ent.Comp.TapeSlot);
     }
 
     private void OnTapeMapInit(Entity<UniversalRecorderTapeComponent> ent, ref MapInitEvent args)
@@ -1060,7 +1060,7 @@ public sealed partial class UniversalRecorderSystem : EntitySystem
     {
         tape = default;
 
-        if (!_itemSlots.TryGetSlot(ent, UniversalRecorderComponent.TapeSlotId, out var slot) ||
+        if (!_itemSlots.TryGetSlot(ent.Owner, UniversalRecorderComponent.TapeSlotId, out var slot) ||
             slot.Item is not { } item ||
             !TryComp(item, out UniversalRecorderTapeComponent? tapeComp))
         {

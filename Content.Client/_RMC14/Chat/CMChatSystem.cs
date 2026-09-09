@@ -80,9 +80,9 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
         return false;
     }
 
-    public void TrackRepetition(Queue<RepeatedMessage> repeatQueue, ChatMessageRow row, FormattedMessage message, NetEntity sender, string unwrapped, ChatChannel channel, string? languageIcon)
+    public void TrackRepetition(Queue<RepeatedMessage> repeatQueue, ChatLogEntry row, NetEntity sender, string unwrapped, ChatChannel channel, string? languageIcon)
     {
-        repeatQueue.Enqueue(new RepeatedMessage(row, message, sender, unwrapped, channel, languageIcon));
+        repeatQueue.Enqueue(new RepeatedMessage(row, sender, unwrapped, channel, languageIcon));
         TrimRepeatQueue(repeatQueue);
     }
 

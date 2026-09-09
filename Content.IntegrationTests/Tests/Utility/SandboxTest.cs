@@ -1,6 +1,7 @@
 using Content.Client.IoC;
 using Content.Client.Parallax.Managers;
 using Robust.Client;
+using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.IoC;
@@ -29,7 +30,11 @@ public sealed class SandboxTest
                 typeof(Shared.Entry.EntryPoint).Assembly,
                 typeof(Client.Entry.EntryPoint).Assembly
             },
-            Options = new GameControllerOptions { LoadConfigAndUserData = false }
+            Options = new GameControllerOptions
+            {
+                LoadConfigAndUserData = false,
+                MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources"], zipMounts: []),
+            }
         };
 
         options.BeforeStart += () =>

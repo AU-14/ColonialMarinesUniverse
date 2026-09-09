@@ -54,13 +54,13 @@
   parent: CMMREFoodBase
   id: CMMREFoodSide
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 1.6
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 8
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 8
+      reagents:
         - ReagentId: Nutriment
           Quantity: 6
         - ReagentId: TableSalt

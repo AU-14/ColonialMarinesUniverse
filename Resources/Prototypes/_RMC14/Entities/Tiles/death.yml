@@ -11,8 +11,10 @@
   - type: DamageOnCollide
     damageDead: false
     damage:
-      groups:
-        Brute: 5000
+      types:
+        Blunt: 1666.66
+        Slash: 1666.67
+        Piercing: 1666.67
     whitelist:
       components:
       - MobState

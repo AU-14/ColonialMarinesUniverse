@@ -1,7 +1,7 @@
 using System.Numerics;
 using Content.Client._CMU14.UserInterface.Options;
 using Content.Client.Stylesheets;
-using Content.Shared._CMU14.Input;
+using Content.Shared.CMU14.Input;
 using Content.Shared._RMC14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Chat.Prototypes;
@@ -17,7 +17,6 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.Input;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -50,12 +49,10 @@ namespace Content.Client.Options.UI.Tabs
             new();
 
         private readonly List<Action> _deferCommands = new();
+        
+        private readonly List<Control> _allControls = new(); //CMU14
+        private bool _searchingByKey; //CMU14
 
-        private void HandleToggleUSQWERTYCheckbox(BaseButton.ButtonToggledEventArgs args)
-        {
-            _cfg.SetCVar(CVars.DisplayUSQWERTYHotkeys, args.Pressed);
-            _cfg.SaveToFile();
-        }
 
         private void InitToggleWalk()
         {
@@ -112,11 +109,11 @@ namespace Content.Client.Options.UI.Tabs
             _deferCommands.Add(_inputManager.SaveToUserData);
         }
 
-        // Emotes usable by a bare Human, for the emote-keybind pickers below. Spawns a throwaway
-        // nullspace copy of the actual human mob (not the lightweight character-preview dummy,
+        // Emotes usable by a bare Human, for the emote-keybind pickers below. Creates a throwaway
+        // uninitialized copy of the actual human mob (not the lightweight character-preview dummy,
         // which is missing Hands/Vocal/Speech/etc. and would fail almost every emote whitelist)
-        // so the same whitelist/blacklist checks the emotes wheel uses can run without requiring
-        // the local player to actually be playing a human right now.
+        // so the same whitelist/blacklist checks the emotes wheel uses can run without triggering
+        // normal mob startup or shutdown side effects.
         private List<EmotePrototype> GetHumanAvailableEmotes()
         {
             var result = new List<EmotePrototype>();
@@ -127,7 +124,7 @@ namespace Content.Client.Options.UI.Tabs
                     return result;
 
                 var whitelistSystem = _entityManager.System<EntityWhitelistSystem>();
-                var dummy = _entityManager.SpawnEntity(HumanMobPrototype, MapCoordinates.Nullspace);
+                var dummy = _entityManager.CreateEntityUninitialized(HumanMobPrototype);
 
                 try
                 {
@@ -141,7 +138,7 @@ namespace Content.Client.Options.UI.Tabs
                         if (!whitelistSystem.IsWhitelistPassOrNull(emote.Whitelist, dummy))
                             continue;
 
-                        if (whitelistSystem.IsBlacklistPass(emote.Blacklist, dummy))
+                        if (whitelistSystem.IsWhitelistPass(emote.Blacklist, dummy))
                             continue;
 
                         if (!emote.Available && (speech == null || !speech.AllowedEmotes.Contains(emote.ID)))
@@ -185,23 +182,42 @@ namespace Content.Client.Options.UI.Tabs
                 });
             };
 
-            // Each header opens a collapsible section and everything after it goes inside, matching
-            // the other options tabs. This tab is the longest of them by far, so folding matters
-            // most here.
-            CmuOptionSection? section = null;
+            // CMU14 --start
+            SearchBar.OnTextChanged += OnSearchTextChanged; 
 
+            SearchByKeyButton.OnPressed += _ =>
+            {
+                _searchingByKey = true;
+                SearchByKeyButton.Text = Loc.GetString("ui-options-search-by-key-active");
+                CancelSearchByKeyButton.AddStyleClass("red-cancel");
+            };
+
+            CancelSearchByKeyButton.OnPressed += _ =>
+            {
+                _searchingByKey = false;
+                SearchByKeyButton.Text = Loc.GetString("ui-options-search-by-key");
+                CancelSearchByKeyButton.RemoveStyleClass("red-cancel");
+                SearchBar.Text = string.Empty;
+                OnSearchTextChanged(new LineEdit.LineEditEventArgs(SearchBar, string.Empty));
+            };
+            // CMU14 --end
+            
             void AddTo(Control child)
             {
-                if (section == null)
-                    KeybindsContainer.AddChild(child);
-                else
-                    section.AddOption(child);
+                KeybindsContainer.AddChild(child); //CMU 14
             }
 
             void AddHeader(string headerContents)
-            {
-                section = new CmuOptionSection { Title = Loc.GetString(headerContents) };
-                KeybindsContainer.AddChild(section);
+            {   //CMU14 --start
+                var headerLabel = new Label 
+                {
+                    Text = Loc.GetString(headerContents),
+                    Margin = new Thickness(0, 10, 0, 5)
+                };
+                headerLabel.AddStyleClass("LabelHeading");
+                AddTo(headerLabel);
+                _allControls.Add(headerLabel);
+                //CMU14 --end
             }
 
             void AddButton(BoundKeyFunction function)
@@ -209,6 +225,7 @@ namespace Content.Client.Options.UI.Tabs
                 var control = new KeyControl(this, function);
                 AddTo(control);
                 _keyControls.Add(function, control);
+                _allControls.Add(control); //CMU14
             }
 
             void AddCheckBox(string checkBoxName, bool currentState, Action<BaseButton.ButtonToggledEventArgs>? callBackOnClick)
@@ -216,8 +233,22 @@ namespace Content.Client.Options.UI.Tabs
                 CheckBox newCheckBox = new CheckBox() { Text = Loc.GetString(checkBoxName) };
                 newCheckBox.Pressed = currentState;
                 newCheckBox.OnToggled += callBackOnClick;
+                AddTo(newCheckBox);
+                _allControls.Add(newCheckBox); //CMU14
+            }
+
+            void AddToggleCvarCheckBox(string checkBoxName, CVarDef<bool> cvar)
+            {
+                var newCheckBox = new CheckBox { Text = Loc.GetString(checkBoxName) };
+                newCheckBox.Pressed = _cfg.GetCVar(cvar);
+                newCheckBox.OnToggled += args =>
+                {
+                    _cfg.SetCVar(cvar, args.Pressed);
+                    _cfg.SaveToFile();
+                };
 
                 AddTo(newCheckBox);
+                _allControls.Add(newCheckBox); //CMU14
             }
 
             AddHeader("ui-options-header-rmc");
@@ -318,9 +349,10 @@ namespace Content.Client.Options.UI.Tabs
                     }
                 };
 
-                KeybindsContainer.AddChild(row);
+                KeybindsContainer.AddChild(row); // CMU14
+                _allControls.Add(row); // CMU14
             }
-
+            // CMU14
             AddEmoteSlot("cmu-ui-options-emote-slot-1", CCVars.EmoteSlot1);
             AddEmoteSlot("cmu-ui-options-emote-slot-2", CCVars.EmoteSlot2);
             AddEmoteSlot("cmu-ui-options-emote-slot-3", CCVars.EmoteSlot3);
@@ -331,7 +363,9 @@ namespace Content.Client.Options.UI.Tabs
             AddEmoteSlot("cmu-ui-options-emote-slot-8", CCVars.EmoteSlot8);
 
             AddHeader("ui-options-header-general");
-            AddCheckBox("ui-options-hotkey-keymap", _cfg.GetCVar(CVars.DisplayUSQWERTYHotkeys), HandleToggleUSQWERTYCheckbox);
+            AddToggleCvarCheckBox("ui-options-hotkey-keymap", CVars.DisplayUSQWERTYHotkeys);
+            AddToggleCvarCheckBox("ui-options-hold-to-attack-melee", CCVars.ControlHoldToAttackMelee);
+            AddToggleCvarCheckBox("ui-options-hold-to-attack-ranged", CCVars.ControlHoldToAttackRanged);
 
             AddHeader("ui-options-header-movement");
             AddButton(EngineKeyFunctions.MoveUp);
@@ -341,6 +375,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.Walk);
             AddCheckBox("ui-options-hotkey-toggle-walk", _cfg.GetCVar(CCVars.ToggleWalk), HandleToggleWalk);
             InitToggleWalk();
+            AddButton(ContentKeyFunctions.ToggleKnockdown);
 
             AddHeader("ui-options-header-camera");
             AddButton(EngineKeyFunctions.CameraRotateLeft);
@@ -418,7 +453,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.WindowCloseRecent);
             AddButton(EngineKeyFunctions.EscapeMenu);
             AddButton(ContentKeyFunctions.EscapeContext);
-
             AddHeader("ui-options-header-misc");
             AddButton(ContentKeyFunctions.TakeScreenshot);
             AddButton(ContentKeyFunctions.TakeScreenshotNoUI);
@@ -453,6 +487,8 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.ShowDebugMonitors);
             AddButton(EngineKeyFunctions.HideUI);
             AddButton(ContentKeyFunctions.InspectEntity);
+            AddButton(ContentKeyFunctions.InspectServerComponent);
+            AddButton(ContentKeyFunctions.InspectClientComponent);
 
             AddHeader("ui-options-header-text-cursor");
             AddButton(EngineKeyFunctions.TextCursorLeft);
@@ -464,7 +500,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.TextCursorBegin);
             AddButton(EngineKeyFunctions.TextCursorEnd);
 
-            AddHeader("ui-options-header-text-cursor-select");
             AddButton(EngineKeyFunctions.TextCursorSelect);
             AddButton(EngineKeyFunctions.TextCursorSelectLeft);
             AddButton(EngineKeyFunctions.TextCursorSelectRight);
@@ -475,7 +510,6 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.TextCursorSelectBegin);
             AddButton(EngineKeyFunctions.TextCursorSelectEnd);
 
-            AddHeader("ui-options-header-text-edit");
             AddButton(EngineKeyFunctions.TextBackspace);
             AddButton(EngineKeyFunctions.TextDelete);
             AddButton(EngineKeyFunctions.TextWordBackspace);
@@ -488,13 +522,11 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.TextCut);
             AddButton(EngineKeyFunctions.TextPaste);
 
-            AddHeader("ui-options-header-text-chat");
             AddButton(EngineKeyFunctions.TextHistoryPrev);
             AddButton(EngineKeyFunctions.TextHistoryNext);
             AddButton(EngineKeyFunctions.TextReleaseFocus);
             AddButton(EngineKeyFunctions.TextScrollToBottom);
 
-            AddHeader("ui-options-header-text-other");
             AddButton(EngineKeyFunctions.TextTabComplete);
             AddButton(EngineKeyFunctions.TextCompleteNext);
             AddButton(EngineKeyFunctions.TextCompletePrev);
@@ -505,6 +537,204 @@ namespace Content.Client.Options.UI.Tabs
             }
         }
 
+        // CMU14 Search by keybind handler
+        private void HandleSearchByKey(KeyEventArgs keyEvent)
+        {
+            var key = keyEvent.Key;
+
+            // Figure out modifiers based on key event
+            var mods = new List<Keyboard.Key>();
+            if (keyEvent.Control && key != Keyboard.Key.Control)
+            {
+                mods.Add(Keyboard.Key.Control);
+            }
+
+            if (keyEvent.Shift && key != Keyboard.Key.Shift)
+            {
+                mods.Add(Keyboard.Key.Shift);
+            }
+
+            if (keyEvent.Alt && key != Keyboard.Key.Alt)
+            {
+                mods.Add(Keyboard.Key.Alt);
+            }
+
+            if (keyEvent.System && key != Keyboard.Key.LSystem && key != Keyboard.Key.RSystem)
+            {
+                mods.Add(Keyboard.Key.LSystem);
+            }
+
+            var keyString = new List<string>();
+            foreach (var mod in mods)
+            {
+                keyString.Add(mod.ToString());
+            }
+            keyString.Add(key.ToString());
+            var searchedKeyString = string.Join("+", keyString);
+            SearchByKeyButton.Text = $"{Loc.GetString("ui-options-search-by-key")} {searchedKeyString}";
+
+            var matchingControls = new HashSet<Control>();
+            foreach (var control in _allControls)
+            {
+                if (control is KeyControl keyControl)
+                {
+                    var activeBinds = _inputManager.GetKeyBindings(keyControl.Function);
+                    var matchesKey = false;
+
+                    foreach (var bind in activeBinds)
+                    {
+                        if (bind.BaseKey != key)
+                            continue;
+
+                        var bindMods = new List<Keyboard.Key>();
+                        if (bind.Mod1 != Keyboard.Key.Unknown)
+                            bindMods.Add(bind.Mod1);
+                        if (bind.Mod2 != Keyboard.Key.Unknown)
+                            bindMods.Add(bind.Mod2);
+                        if (bind.Mod3 != Keyboard.Key.Unknown)
+                            bindMods.Add(bind.Mod3);
+
+                        if (mods.Count == bindMods.Count)
+                        {
+                            var allMatch = true;
+                            foreach (var mod in mods)
+                            {
+                                if (!bindMods.Contains(mod))
+                                {
+                                    allMatch = false;
+                                    break;
+                                }
+                            }
+
+                            if (allMatch)
+                            {
+                                matchesKey = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (matchesKey)
+                        matchingControls.Add(control);
+                }
+            }
+
+            for (var i = 0; i < _allControls.Count; i++)
+            {
+                var control = _allControls[i];
+
+                if (control is Label label && label.HasStyleClass("LabelHeading"))
+                {
+                    var hasMatchingUnder = false;
+                    for (var j = i + 1; j < _allControls.Count; j++)
+                    {
+                        var nextControl = _allControls[j];
+                        if (nextControl is Label nextLabel && nextLabel.HasStyleClass("LabelHeading"))
+                            break;
+
+                        if (matchingControls.Contains(nextControl))
+                        {
+                            hasMatchingUnder = true;
+                            break;
+                        }
+                    }
+                    control.Visible = hasMatchingUnder;
+                }
+                else if (control is CheckBox)
+                {
+                    control.Visible = false;
+                }
+                else
+                {
+                    control.Visible = matchingControls.Contains(control);
+                }
+            }
+
+            _searchingByKey = false;
+        }
+
+        private void OnSearchTextChanged(LineEdit.LineEditEventArgs args)
+        {
+            var searchText = args.Text.ToLowerInvariant();
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                foreach (var control in _allControls)
+                {
+                    control.Visible = true;
+                }
+                return;
+            }
+
+            var matchingControls = new HashSet<Control>();
+            foreach (var control in _allControls)
+            {
+                if (control is KeyControl keyControl)
+                {
+                    var functionName = Loc.GetString(
+                        $"ui-options-function-{CaseConversion.PascalToKebab(keyControl.Function.FunctionName)}").ToLowerInvariant();
+
+                    var bind1Text = keyControl.BindButton1.Button.Text?.ToLowerInvariant() ?? string.Empty;
+                    var bind2Text = keyControl.BindButton2.Button.Text?.ToLowerInvariant() ?? string.Empty;
+
+                    var matchesName = functionName.Contains(searchText);
+                    var matchesKeybind = bind1Text.Contains(searchText) || bind2Text.Contains(searchText);
+
+                    if (matchesName || matchesKeybind)
+                        matchingControls.Add(control);
+                }
+                else if (control is CheckBox checkBox)
+                {
+                    var checkBoxText = checkBox.Text?.ToLowerInvariant() ?? string.Empty;
+                    if (checkBoxText.Contains(searchText))
+                        matchingControls.Add(control);
+                }
+                else if (control is BoxContainer boxContainer)
+                {
+                    foreach (var child in boxContainer.Children)
+                    {
+                        if (child is Label childLabel)
+                        {
+                            var childText = childLabel.Text?.ToLowerInvariant() ?? string.Empty;
+                            if (childText.Contains(searchText))
+                            {
+                                matchingControls.Add(control);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (var i = 0; i < _allControls.Count; i++)
+            {
+                var control = _allControls[i];
+
+                if (control is Label label && label.HasStyleClass("LabelHeading"))
+                {
+                    var hasMatchingUnder = false;
+                    for (var j = i + 1; j < _allControls.Count; j++)
+                    {
+                        var nextControl = _allControls[j];
+                        if (nextControl is Label nextLabel && nextLabel.HasStyleClass("LabelHeading"))
+                            break;
+
+                        if (matchingControls.Contains(nextControl))
+                        {
+                            hasMatchingUnder = true;
+                            break;
+                        }
+                    }
+                    control.Visible = hasMatchingUnder;
+                }
+                else
+                {
+                    control.Visible = matchingControls.Contains(control);
+                }
+            }
+        }
+        // CMU14 --end
+        
         private void UpdateKeyControl(KeyControl control)
         {
             var activeBinds = _inputManager.GetKeyBindings(control.Function);
@@ -584,6 +814,60 @@ namespace Content.Client.Options.UI.Tabs
         private void InputManagerOnFirstChanceOnKeyEvent(KeyEventArgs keyEvent, KeyEventType type)
         {
             DebugTools.Assert(IsInsideTree);
+            
+            // CMU14
+            if (_searchingByKey)
+            {
+                if (type == KeyEventType.Down)
+                {
+                    var pressedKey = keyEvent.Key;
+
+                    var pressedMods = new List<Keyboard.Key>();
+                    if (keyEvent.Control && pressedKey != Keyboard.Key.Control)
+                    {
+                        pressedMods.Add(Keyboard.Key.Control);
+                    }
+
+                    if (keyEvent.Shift && pressedKey != Keyboard.Key.Shift)
+                    {
+                        pressedMods.Add(Keyboard.Key.Shift);
+                    }
+
+                    if (keyEvent.Alt && pressedKey != Keyboard.Key.Alt)
+                    {
+                        pressedMods.Add(Keyboard.Key.Alt);
+                    }
+
+                    if (keyEvent.System && pressedKey != Keyboard.Key.LSystem && pressedKey != Keyboard.Key.RSystem)
+                    {
+                        pressedMods.Add(Keyboard.Key.LSystem);
+                    }
+
+                    var keyString = new List<string>();
+                    foreach (var mod in pressedMods)
+                    {
+                        keyString.Add(mod.ToString());
+                    }
+                    keyString.Add(pressedKey.ToString());
+                    SearchByKeyButton.Text = $"{Loc.GetString("ui-options-search-by-key-active")} {string.Join("+", keyString)}";
+                }
+                else if (type == KeyEventType.Up)
+                {
+                    var mousePos = UserInterfaceManager.MousePositionScaled.Position;
+                    var cancelButtonRect = CancelSearchByKeyButton.GlobalRect;
+
+                    if (cancelButtonRect.Contains(mousePos))
+                    {
+                        return;
+                    }
+
+                    HandleSearchByKey(keyEvent);
+                    keyEvent.Handle();
+                }
+                // CMU14 --end
+                
+                return;
+            }
 
             if (_currentlyRebinding == null)
             {
@@ -712,9 +996,9 @@ namespace Content.Client.Options.UI.Tabs
                     HorizontalAlignment = HAlignment.Left
                 };
 
-                BindButton1 = new BindButton(parent, this, StyleBase.ButtonOpenRight);
-                BindButton2 = new BindButton(parent, this, StyleBase.ButtonOpenLeft);
-                ResetButton = new Button { Text = Loc.GetString("ui-options-bind-reset"), StyleClasses = { StyleBase.ButtonCaution } };
+                BindButton1 = new BindButton(parent, this, StyleClass.ButtonOpenRight);
+                BindButton2 = new BindButton(parent, this, StyleClass.ButtonOpenLeft);
+                ResetButton = new Button { Text = Loc.GetString("ui-options-bind-reset"), StyleClasses = { StyleClass.Negative } };
 
                 var hBox = new BoxContainer
                 {

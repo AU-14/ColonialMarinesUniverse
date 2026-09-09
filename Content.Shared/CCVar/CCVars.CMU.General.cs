@@ -9,7 +9,7 @@ public sealed partial class CCVars
     /// The content remains loadable while rollout is disabled.
     /// </summary>
     public static readonly CVarDef<bool> CMUEnableGunshipOverhaul =
-        CVarDef.Create("cmu.game.enable_gunship_overhaul", false, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.game.enable_gunship_overhaul", true, CVar.SERVERONLY | CVar.ARCHIVE);
 
     /// <summary>
     ///     Part of the CLF intel console claim feature, when Govfor seizes it the game sends a fax

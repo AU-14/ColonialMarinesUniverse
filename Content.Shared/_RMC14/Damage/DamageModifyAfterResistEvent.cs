@@ -18,13 +18,15 @@ public sealed class DamageModifyAfterResistEvent : EntityEventArgs, IInventoryRe
     public EntityUid? Origin;
     public EntityUid? Tool;
     public DamageImpact Impact;
+    public readonly EntityUid? TargetPartEntity;
 
-    public DamageModifyAfterResistEvent(DamageSpecifier damage, EntityUid? origin = null, EntityUid? tool = null, DamageImpact impact = default)
+    public DamageModifyAfterResistEvent(DamageSpecifier damage, EntityUid? origin = null, EntityUid? tool = null, DamageImpact impact = default, EntityUid? targetPartEntity = null)
     {
         OriginalDamage = damage;
         Damage = damage;
         Origin = origin;
         Tool = tool;
         Impact = impact;
+        TargetPartEntity = targetPartEntity;
     }
 }

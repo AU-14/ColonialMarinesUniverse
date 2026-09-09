@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Dropship.Integrity;
+using Content.Shared.CMU14.Dropship.Integrity;
 
 namespace Content.IntegrationTests._CMU14.Dropship;
 

@@ -10,7 +10,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.GameTicking;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
@@ -117,7 +117,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         RemoveFromAllQueues(userId, hiveId);
 
         var wait = TimeSpan.FromSeconds(_config.GetCVar(RMCCVars.RMCLarvaQueueWaitSeconds));
-        if (HasComp<JoinXenoCooldownIgnoreComponent>(ent) || _timing.CurTime - ghost.TimeOfDeath >= wait)
+        if (HasComp<JoinXenoCooldownIgnoreComponent>(ent) || _timing.RealTime - ghost.TimeOfDeath >= wait)
         {
             queue.AddReady(userId);
             _popup.PopupEntity(
@@ -134,7 +134,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         _popup.PopupEntity(
             Loc.GetString(
                 "rmc-xeno-larva-prequeue-added",
-                ("seconds", Math.Max(0, (int) Math.Ceiling((readyAt - _timing.CurTime).TotalSeconds)))),
+                ("seconds", Math.Max(0, (int) Math.Ceiling((readyAt - _timing.RealTime).TotalSeconds)))),
             actorEntity,
             actorEntity);
     }
@@ -219,6 +219,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
+        var realTime = _timing.RealTime;
         _emptyQueues.Clear();
         _expiredClaims.Clear();
 
@@ -235,7 +236,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
 
         foreach (var (hiveId, queue) in _queues)
         {
-            var promoted = queue.PromoteWaiting(time);
+            var promoted = queue.PromoteWaiting(realTime);
             if (promoted.Count > 0)
             {
                 NotifyReadyPositions(hiveId);

@@ -1,6 +1,6 @@
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Diagnostics.Examine;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Diagnostics.Examine;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Body.Components;

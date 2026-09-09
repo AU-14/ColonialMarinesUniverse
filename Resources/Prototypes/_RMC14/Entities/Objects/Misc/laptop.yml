@@ -16,7 +16,6 @@
         enum.ToggleableVisuals.Enabled:
           True: { state: hangar_comp }
           False: { state: hangar_comp_open }
-    sprite: _RMC14/Objects/Devices/dropship_maint_comp.rsi
   - type: Item
     size: Large
     sprite: _RMC14/Objects/Devices/dropship_maint_comp.rsi
@@ -42,7 +41,6 @@
         enum.ToggleableVisuals.Enabled:
           True: { state: hangar_comp }
           False: { state: hangar_comp_open }
-    sprite: _RMC14/Objects/Devices/dropship_maint_comp.rsi
   - type: Item
     size: Large
     sprite: _RMC14/Objects/Devices/dropship_maint_comp.rsi

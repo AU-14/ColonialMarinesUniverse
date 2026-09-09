@@ -21,8 +21,6 @@
   components:
   - type: AccessReader
     access: [["CMAccessBrig"]]
-  - type: PaintableAirlock
-    department: CMMilitaryPolice
 
 - type: entity
   parent: CMAirlockSecurity

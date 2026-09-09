@@ -6,6 +6,7 @@
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="6">
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 0 0 4">
                 <Label Name="BudgetLabel" Access="Public" HorizontalExpand="True" />
+                <Button Name="ItemsModeButton" Access="Public" Text="{Loc 'cmu-asrs-return-items'}" StyleClasses="ButtonSquare" MinWidth="110" Margin="0 0 4 0" />
                 <Button Name="PlatformButton" Access="Public" StyleClasses="ButtonSquare" MinWidth="72" />
             </BoxContainer>
             <RichTextLabel Name="PlatformLabel" Access="Public" Margin="0 0 0 4" />

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server.AU14.Roles;
+using Content.Server.CMU14.Roles;
 using Content.Server.Jobs;
 using Content.Server.Station.Systems;
-using Content.Shared._CMU14.Round.Roles;
+using Content.Shared.CMU14.Round.Roles;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Orders;
 using Content.Shared._RMC14.Marines.Squads;
@@ -15,7 +15,7 @@ using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.Roles;
+namespace Content.IntegrationTests.CMU14.Roles;
 
 [TestFixture]
 public sealed class RoundJobProfileTest
@@ -31,6 +31,7 @@ public sealed class RoundJobProfileTest
     private static readonly ProtoId<JobPrototype> GovforVehicleCommander = "AU14JobGOVFORVehicleCommander";
     private static readonly ProtoId<JobPrototype> GovforWorkingJoe = "AU14JobGOVFORWorkingJoe";
     private static readonly ProtoId<JobPrototype> OpforWorkingJoe = "AU14JobOPFORWorkingJoe";
+    private static readonly ProtoId<JobPrototype> ProvostRepresentative = "CMUJobINDFORProvostAdvisor";
     private static readonly EntProtoId GovforAuxiliaryHeadset = "AU14HeadsetGovforAuxiliary";
     private static readonly EntProtoId OpforAuxiliaryHeadset = "AU14HeadsetOpforAuxiliary";
     private static readonly EntProtoId GovforAuxiliarySquad = "SquadGovforIntel";
@@ -58,8 +59,11 @@ public sealed class RoundJobProfileTest
                 if (string.IsNullOrWhiteSpace(job.RoundForce))
                     missing.Add($"{job.ID} uses roundProfiles but has no roundForce");
 
-                if (string.IsNullOrWhiteSpace(job.RoundRole))
-                    missing.Add($"{job.ID} uses roundProfiles but has no roundRole");
+                if (job.RoundSide is RoundJobSide.Govfor or RoundJobSide.Opfor &&
+                    string.IsNullOrWhiteSpace(job.RoundRole))
+                {
+                    missing.Add($"{job.ID} is a platoon-side profile job but has no roundRole");
+                }
 
                 foreach (var profileId in job.RoundProfiles)
                 {
@@ -75,7 +79,7 @@ public sealed class RoundJobProfileTest
     }
 
     [Test]
-    public async Task Au14JobsDoNotKeepAddComponentSpecials()
+    public async Task Au14JobsKeepOnlyDeliberateSpeechStyleAddComponentSpecials()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -84,6 +88,7 @@ public sealed class RoundJobProfileTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var jobsWithLegacySpecials = new List<string>();
+            var speechStyleJobs = new List<string>();
 
             foreach (var job in prototypes.EnumeratePrototypes<JobPrototype>())
             {
@@ -93,10 +98,60 @@ public sealed class RoundJobProfileTest
                     continue;
                 }
 
-                jobsWithLegacySpecials.Add(job.ID);
+                foreach (var special in job.Special.OfType<AddComponentSpecial>())
+                {
+                    foreach (var component in special.Components.Keys)
+                    {
+                        if (component == "RMCSpeechBubbleSpecificStyle")
+                            speechStyleJobs.Add(job.ID);
+                        else
+                            jobsWithLegacySpecials.Add($"{job.ID}:{component}");
+                    }
+                }
             }
 
-            Assert.That(jobsWithLegacySpecials, Is.Empty, string.Join("\n", jobsWithLegacySpecials));
+            Assert.Multiple(() =>
+            {
+                Assert.That(jobsWithLegacySpecials, Is.Empty, string.Join("\n", jobsWithLegacySpecials));
+                Assert.That(speechStyleJobs.Distinct(), Is.EquivalentTo(new[]
+                {
+                    "AU14JobGOVFORadvisor",
+                    "AU14JobGOVFORSectionSergeant",
+                    "AU14JobGOVFORSquadSergeant",
+                }));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ProvostForceProfileResolvesFactionWithoutSquadRole()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var profiles = server.System<RoundJobProfileSystem>();
+            var provost = prototypes.Index(ProvostRepresentative);
+            NpcFactionMemberComponent? faction = null;
+
+            foreach (var resolved in profiles.GetProfileComponents(provost))
+            {
+                if (resolved.Components.TryGetValue("NpcFactionMember", out var entry))
+                    faction = entry.Component as NpcFactionMemberComponent;
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(provost.RoundSide, Is.EqualTo(RoundJobSide.Indfor));
+                Assert.That(provost.RoundForce, Is.EqualTo("PROVOST"));
+                Assert.That(provost.RoundRole, Is.Null);
+                Assert.That(faction, Is.Not.Null);
+                Assert.That(faction!.Factions.Select(id => id.Id), Is.EqualTo(new[] { "PROVOST" }));
+            });
         });
 
         await pair.CleanReturnAsync();

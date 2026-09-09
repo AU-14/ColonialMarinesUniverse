@@ -10,29 +10,29 @@ public sealed partial class ReactiveComponent : Component
     /// <summary>
     ///     A dictionary of reactive groups -> methods that work on them.
     /// </summary>
-    [DataField("groups", readOnly: true, serverOnly: true)]
+    [DataField("groups")]
     public Dictionary<ProtoId<ReactiveGroupPrototype>, HashSet<ReactionMethod>>? ReactiveGroups;
 
     /// <summary>
     ///     Special reactions that this prototype can specify, outside of any that reagents already apply.
     ///     Useful for things like monkey cubes, which have a really prototype-specific effect.
     /// </summary>
-    [DataField("reactions", true, serverOnly: true)]
+    [DataField]
     public List<ReactiveReagentEffectEntry>? Reactions;
 }
 
 [DataDefinition]
 public sealed partial class ReactiveReagentEffectEntry
 {
-    [DataField("methods")]
+    [DataField]
     public HashSet<ReactionMethod> Methods = default!;
 
-    [DataField("reagents")]
-    public HashSet<ProtoId<ReagentPrototype>>? Reagents = null;
+    [DataField]
+    public HashSet<ProtoId<ReagentPrototype>>? Reagents;
 
-    [DataField("effects", required: true)]
-    public List<EntityEffect> Effects = default!;
+    [DataField(required: true)]
+    public EntityEffect[] Effects = default!;
 
-    [DataField("groups", readOnly: true, serverOnly: true)]
+    [DataField("groups")]
     public Dictionary<ProtoId<ReactiveGroupPrototype>, HashSet<ReactionMethod>>? ReactiveGroups { get; private set; }
 }

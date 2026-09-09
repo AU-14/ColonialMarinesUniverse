@@ -27,6 +27,7 @@ using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Configuration;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -85,6 +86,9 @@ public sealed partial class HiveBoonSystem : EntitySystem
     public override void Initialize()
     {
         _excludedFromKingVoteQuery = GetEntityQuery<ExcludedFromKingVoteComponent>();
+
+        SubscribeLocalEvent<HiveBoonsComponent, ComponentGetState>(OnBoonsGetState);
+        SubscribeLocalEvent<HiveBoonsComponent, ComponentHandleState>(OnBoonsHandleState);
 
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<HiveBoonActivateFireResistanceEvent>(OnActivateFireResistance);

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Client._CMU14.Interface;
 using Content.Client._CMU14.Lobby;
+using Content.Client._CMU14.UserInterface.Options;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client.Audio;
 using Content.Client.GameTicking.Managers;
@@ -13,7 +14,7 @@ using Content.Client.Playtime;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Client.Voting;
-using Content.Shared.AU14.Allegiance;
+using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
 using Robust.Client;
@@ -23,6 +24,7 @@ using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Client.Lobby
@@ -47,12 +49,14 @@ namespace Content.Client.Lobby
         /// Whether the player wants to ignore allegiance for spawning the current character.
         /// </summary>
         public bool IgnoreAllegiance { get; set; }
+        [Dependency] private IPrototypeManager _protoMan = default!;
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
         // The faction choices, opened from JoinRoundButton. Held so a second press re-focuses the
         // one window rather than stacking another copy on top of it.
         private JoinRoundWindow? _joinRoundWindow;
+        private CmuUiSetupWindow? _uiSetupWindow;
         private bool _clockPlaced;
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
@@ -94,6 +98,8 @@ namespace Content.Client.Lobby
             Lobby.CharacterPreview.PrevCharacterButton.OnPressed += OnPrevCharPressed;
             Lobby.CharacterPreview.NextCharacterButton.OnPressed += OnNextCharPressed;
             Lobby.CharacterPreview.IgnoreAllegianceToggle.OnToggled += OnIgnoreAllegianceToggled;
+            Lobby.CharacterPreview.IgnoreAllegianceToggle.Pressed = false;
+            SetIgnoreAllegiance(false);
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
             Lobby.RoundClock.PositionChanged += OnRoundClockMoved;
@@ -107,6 +113,12 @@ namespace Content.Client.Lobby
             // RMC14/CMU: the faction choices used to be three buttons on the lobby panel. They now
             // live in JoinRoundWindow, opened from one button; the handlers below are unchanged.
             Lobby.JoinRoundButton.OnPressed += OnJoinRoundPressed;
+
+            if (CmuUiSetupWindow.NeedsSetup(_cfg))
+            {
+                _uiSetupWindow = new CmuUiSetupWindow();
+                _uiSetupWindow.OpenCentered();
+            }
         }
 
         protected override void Shutdown()
@@ -135,6 +147,8 @@ namespace Content.Client.Lobby
             Lobby.JoinRoundButton.OnPressed -= OnJoinRoundPressed;
             _joinRoundWindow?.Close();
             _joinRoundWindow = null;
+            _uiSetupWindow?.Close();
+            _uiSetupWindow = null;
 
             Lobby = null;
         }
@@ -492,15 +506,22 @@ namespace Content.Client.Lobby
 
         private void UpdateLobbyBackground()
         {
-            if (_gameTicker.LobbyBackground != null)
+            if (_protoMan.TryIndex(_gameTicker.LobbyBackground, out var proto))
             {
-                Lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(_gameTicker.LobbyBackground );
+                Lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(proto.Background);
+
+                var markup = Loc.GetString("lobby-state-background-text",
+                    ("backgroundTitle", Loc.GetString(proto.Title)),
+                    ("backgroundArtist", Loc.GetString(proto.Artist)));
+
+                Lobby!.LobbyBackground.SetMarkup(markup);
             }
             else
             {
                 Lobby!.Background.Texture = null;
-            }
 
+                Lobby!.LobbyBackground.SetMarkup(Loc.GetString("lobby-state-background-no-background-text"));
+            }
         }
 
         private void SetReady(bool newReady)
@@ -595,11 +616,16 @@ namespace Content.Client.Lobby
 
         private void OnIgnoreAllegianceToggled(BaseButton.ButtonToggledEventArgs args)
         {
-            IgnoreAllegiance = args.Pressed;
+            SetIgnoreAllegiance(args.Pressed);
+        }
+
+        private void SetIgnoreAllegiance(bool ignoreAllegiance)
+        {
+            IgnoreAllegiance = ignoreAllegiance;
             var netManager = IoCManager.Resolve<Robust.Shared.Network.IClientNetManager>();
             var msg = new MsgIgnoreAllegiance
             {
-                IgnoreAllegiance = args.Pressed
+                IgnoreAllegiance = ignoreAllegiance
             };
             netManager.ClientSendMessage(msg);
         }

@@ -1,40 +1,40 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server._CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Shared._RMC14.Dropship;
-using Content.Shared.AU14.Round;
-using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU14.Round;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Shuttles.Components;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using ThirdPartySystem = Content.Server._CMU14.Ops.ThirdParty.ThirdPartySystem;
+using ThirdPartySystem = Content.Server.CMU14.Ops.ThirdParty.ThirdPartySystem;
 
-namespace Content.IntegrationTests._AU14.ThirdParty;
+namespace Content.IntegrationTests.CMU14.ThirdParty;
 
 [TestFixture]
 public sealed class RmcErtThirdPartyDropshipMapTest
 {
     private static readonly (ResPath Path, int Leaders, int Members, int Entities)[] DropshipMaps =
     {
-        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml"), 1, 10, 3),
-        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_tse_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml"), 1, 10, 3),
+        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_tse_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml"), 4, 8, 3),
     };
 
     private static readonly (ResPath Path, int Leaders, int Members, int Entities)[] MapFormatDropshipMaps =
     {
-        (new("/Maps/_AU14/ShuttlesDropships/genericthirdpartyshuttle.yml"), 4, 5, 3),
-        (new("/Maps/_CMU14/Shuttles/black_ert.yml"), 4, 8, 3),
-        (new("/Maps/_CMU14/Shuttles/cmbtransport_ert.yml"), 4, 6, 3),
-        (new("/Maps/_CMU14/Shuttles/icrctransport_ert.yml"), 4, 6, 3),
-        (new("/Maps/_CMU14/Shuttles/white_ert.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/ShuttlesDropships/genericthirdpartyshuttle.yml"), 4, 5, 3),
+        (new("/Maps/CMU14/Shuttles/black_ert.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/Shuttles/cmbtransport_ert.yml"), 4, 6, 3),
+        (new("/Maps/CMU14/Shuttles/icrctransport_ert.yml"), 4, 6, 3),
+        (new("/Maps/CMU14/Shuttles/white_ert.yml"), 4, 8, 3),
     };
 
     private static readonly ProtoId<ThirdPartyPrototype> MissionariesParty = "MissionariesParty";
@@ -112,8 +112,8 @@ public sealed class RmcErtThirdPartyDropshipMapTest
             var entities = server.EntMan;
             var mapLoader = server.System<MapLoaderSystem>();
             var mapSystem = server.System<SharedMapSystem>();
-            mapSystem.CreateMap(out var mapId);
 
+            mapSystem.CreateMap(out var mapId);
             Assert.That(
                 mapLoader.TryLoadGrid(mapId, new ResPath("/Maps/_RMC14/alamo.yml"), out var grid),
                 Is.True);

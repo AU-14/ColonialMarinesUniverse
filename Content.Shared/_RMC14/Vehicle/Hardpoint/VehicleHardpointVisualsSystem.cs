@@ -80,7 +80,7 @@ public sealed partial class VehicleHardpointVisualsSystem : EntitySystem
             var layerKey = layer.ToLowerInvariant();
             var state = string.Empty;
             var usesOverlay = false;
-            if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots))
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot))
                 continue;
 
             if (itemSlot.HasItem)
@@ -161,7 +161,7 @@ public sealed partial class VehicleHardpointVisualsSystem : EntitySystem
                 if (string.IsNullOrWhiteSpace(slot.Id))
                     continue;
 
-                if (!_itemSlots.TryGetSlot(item, slot.Id, out var itemSlot, attachedItemSlots) || !itemSlot.HasItem)
+                if (!_itemSlots.TryGetSlot((item, attachedItemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                     continue;
 
                 var child = itemSlot.Item!.Value;

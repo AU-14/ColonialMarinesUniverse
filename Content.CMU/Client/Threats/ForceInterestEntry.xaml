@@ -1,0 +1,6 @@
+<BoxContainer xmlns="https://spacestation14.io" Orientation="Vertical" SeparationOverride="4" Margin="4">
+    <Label Name="ForceName" StyleClasses="CrtHeading" />
+    <Label Name="Counts" />
+    <Label Name="Status" StyleClasses="CrtDimText" />
+    <Button Name="InterestButton" />
+</BoxContainer>

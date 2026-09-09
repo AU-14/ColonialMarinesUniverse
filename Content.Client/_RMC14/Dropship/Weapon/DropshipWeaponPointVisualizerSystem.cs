@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._CMU14.Dropship.DirectFire;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;

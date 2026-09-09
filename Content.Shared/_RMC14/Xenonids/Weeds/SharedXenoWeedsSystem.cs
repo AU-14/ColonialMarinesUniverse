@@ -21,6 +21,8 @@ using Content.Shared.Climbing.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Maps;

@@ -342,8 +342,10 @@
     sprite: _RMC14/Objects/Medical/Surgery/saw.rsi
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 15
+      types:
+        Blunt: 5
+        Slash: 5
+        Piercing: 5
     soundHit:
       path: /Audio/Items/drill_hit.ogg
   - type: Tool

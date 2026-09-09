@@ -28,8 +28,11 @@
   - type: DamageOverTime
     affectsDead: false
     armorPiercingDamage:
-      groups:
-        Burn: 4
+      types:
+        Heat: 1
+        Shock: 1
+        Cold: 1
+        Caustic: 1
     emotes:
     - Cough
     - Gasp

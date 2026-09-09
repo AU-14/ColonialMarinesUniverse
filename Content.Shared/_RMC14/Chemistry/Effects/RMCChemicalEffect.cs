@@ -1,138 +1,206 @@
+using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Chemistry;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.Effects;
 
-public abstract partial class RMCChemicalEffect : EntityEffect
+/// <summary>
+/// Base data for the generated RMC/CMU chemical-property family.
+/// Runtime state must stay in <see cref="RMCReagentEffectArgs"/>; these objects are shared prototypes.
+/// </summary>
+public abstract partial class RMCChemicalEffect : EntityEffectBase<RMCChemicalEffect>
 {
     [DataField]
     public float Potency;
 
-    private float _moddedPotency;
-
     /// <summary>
-    ///     The value that should be used in actual calculations for chemical effect
-    ///     Halved since potency is halved before being used
+    /// The unboosted property level used by guidebook text and non-runtime callers.
     /// </summary>
-    public float ActualPotency => (_moddedPotency != 0 ? _moddedPotency : Potency) * 0.5f;
+    public float ActualPotency => Potency * 0.5f;
 
-    /// <summary>
-    ///     Boost-aware property level. Numeric benefits should normally be based on this value so
-    ///     level N remains exactly N times the level-one value before a safety cap is applied.
-    /// </summary>
     public float LinearLevel => ActualPotency * 2f;
 
-    // Halved again since chemicals tick every second in SS14, not every 2
+    // Chemicals tick every second here rather than every two seconds in the source design.
     public float PotencyPerSecond => ActualPotency * 0.5f;
 
     [DataField]
     public float NutFactor;
+
     [DataField]
     public float NutMetabolism;
 
     public float NutrimentFactor => NutFactor * NutMetabolism;
 
-    public override void Effect(EntityEffectBaseArgs args)
-    {
-        if (args is EntityEffectReagentArgs { Reagent: { } reagent } reagentArgs && args is not EntityEffectHydroArgs)
-        {
-            if (args.EntityManager.TryGetComponent<MobStateComponent>(args.TargetEntity, out var mobState))
-            {
-                var dead = mobState.CurrentState == MobState.Dead;
-                if ((dead && !ProcessOnDead) || (!dead && !ProcessOnLiving))
-                    return;
-            }
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+        => ReagentEffectGuidebookText(prototype, entSys);
 
-            var damageable = args.EntityManager.System<DamageableSystem>();
-            var scale = reagentArgs.Scale;
-            var boost = CalculateReagentBoost(reagentArgs);
-            _moddedPotency = Potency + boost;
-            var scaledPotency = PotencyPerSecond * scale;
-            Tick(damageable, scaledPotency, reagentArgs);
+    protected virtual string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+        => null;
 
-            var totalQuantity = FixedPoint2.Zero;
-            if (reagentArgs.Source != null)
-                totalQuantity = reagentArgs.Source.GetTotalPrototypeQuantity(reagent.ID);
-
-            if (reagent.Overdose != null && totalQuantity >= reagent.Overdose)
-                TickOverdose(damageable, scaledPotency, reagentArgs);
-
-            if (reagent.CriticalOverdose != null && totalQuantity >= reagent.CriticalOverdose)
-                TickCriticalOverdose(damageable, scaledPotency, reagentArgs);
-        }
-        else if (args is EntityEffectHydroArgs { Reagent: { } hydro } hydroArgs)
-        {
-            var damageable = args.EntityManager.System<DamageableSystem>();
-            var scale = hydroArgs.Scale;
-            var boost = CalculateReagentBoost(hydroArgs);
-            _moddedPotency = Potency + boost;
-            var scaledPotency = PotencyPerSecond * scale;
-            TickHydroTray(damageable, scaledPotency, hydroArgs);
-        }
-        
-    }
-
-    private static float CalculateReagentBoost(EntityEffectReagentArgs args)
-    {
-        var boost = 0f;
-        if (args.Reagent?.Metabolisms == null)
-            return boost;
-
-        foreach (var (_, entry) in args.Reagent.Metabolisms)
-        {
-            foreach (var effect in entry.Effects)
-            {
-                if (effect is RMCChemicalEffect rmcEffect)
-                {
-                    rmcEffect.ReagentBoost(args, ref boost);
-                }
-            }
-        }
-        return boost;
-    }
-
-
-
-    protected virtual void ReagentBoost(EntityEffectReagentArgs args, ref float boost)
+    protected virtual void ReagentBoost(
+        RMCChemicalEffectSystem system,
+        RMCReagentEffectArgs args,
+        ref float boost)
     {
     }
 
     /// <summary>
-    ///     Generated reagents that contain a corpse-active property are metabolized as a whole on
-    ///     dead mobs. This per-effect guard prevents their unrelated co-properties from also firing.
+    /// Generated reagents with a corpse-active property are metabolized as a whole on dead mobs.
+    /// This per-effect guard prevents unrelated co-properties from firing too.
     /// </summary>
     protected virtual bool ProcessOnDead => false;
 
     protected virtual bool ProcessOnLiving => true;
 
-    protected virtual void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected virtual void Tick(
+        RMCChemicalEffectSystem system,
+        DamageableSystem damageable,
+        FixedPoint2 potency,
+        RMCReagentEffectArgs args)
     {
     }
 
-    protected virtual void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected virtual void TickOverdose(
+        RMCChemicalEffectSystem system,
+        DamageableSystem damageable,
+        FixedPoint2 potency,
+        RMCReagentEffectArgs args)
     {
     }
 
-    protected virtual void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected virtual void TickCriticalOverdose(
+        RMCChemicalEffectSystem system,
+        DamageableSystem damageable,
+        FixedPoint2 potency,
+        RMCReagentEffectArgs args)
     {
     }
 
-    protected virtual void TickHydroTray(DamageableSystem damageable, FixedPoint2 potency, EntityEffectHydroArgs args)
+    protected virtual void TickHydroTray(
+        RMCChemicalEffectSystem system,
+        DamageableSystem damageable,
+        FixedPoint2 potency,
+        RMCReagentEffectArgs args)
     {
+    }
+
+    internal void Apply(
+        RMCChemicalEffectSystem system,
+        DamageableSystem damageable,
+        EntityUid target,
+        float scale,
+        EntityUid? user,
+        ReagentEffectContext context)
+    {
+        var boost = CalculateReagentBoost(system, target, scale, user, context);
+        var actualPotency = (Potency + boost) * 0.5f;
+        var effectArgs = new RMCReagentEffectArgs(target, scale, user, context, actualPotency);
+        var scaledPotency = effectArgs.PotencyPerSecond * scale;
+
+        if (context.Origin == ReagentEffectOrigin.Hydroponics)
+        {
+            TickHydroTray(system, damageable, scaledPotency, effectArgs);
+            return;
+        }
+
+        if (system.TryGetMobState(target, out var mobState))
+        {
+            var dead = mobState.CurrentState == MobState.Dead;
+            if ((dead && !ProcessOnDead) || (!dead && !ProcessOnLiving))
+                return;
+        }
+
+        Tick(system, damageable, scaledPotency, effectArgs);
+
+        var totalQuantity = context.Source?.GetTotalPrototypeQuantity(context.Reagent.ID) ?? FixedPoint2.Zero;
+        if (context.Reagent.Overdose != null && totalQuantity >= context.Reagent.Overdose)
+            TickOverdose(system, damageable, scaledPotency, effectArgs);
+
+        if (context.Reagent.CriticalOverdose != null && totalQuantity >= context.Reagent.CriticalOverdose)
+            TickCriticalOverdose(system, damageable, scaledPotency, effectArgs);
+    }
+
+    private float CalculateReagentBoost(
+        RMCChemicalEffectSystem system,
+        EntityUid target,
+        float scale,
+        EntityUid? user,
+        ReagentEffectContext context)
+    {
+        var boost = 0f;
+        var args = new RMCReagentEffectArgs(target, scale, user, context, ActualPotency);
+
+        if (context.Reagent.Metabolisms == null)
+            return boost;
+
+        foreach (var (_, entry) in context.Reagent.Metabolisms.Metabolisms)
+        {
+            foreach (var effect in entry.Effects)
+            {
+                if (effect is RMCChemicalEffect rmcEffect)
+                    rmcEffect.ReagentBoost(system, args, ref boost);
+            }
+        }
+
+        return boost;
     }
 }
-[ByRefEvent]
-public struct HydroTickEvent<T> where T : RMCChemicalEffect
+
+/// <summary>
+/// Immutable per-application data for an RMC chemical effect.
+/// </summary>
+public readonly record struct RMCReagentEffectArgs(
+    EntityUid TargetEntity,
+    float Scale,
+    EntityUid? User,
+    ReagentEffectContext Context,
+    float ActualPotency)
 {
-    public FixedPoint2 Potency;
-    public EntityEffectHydroArgs Args;
-    public HydroTickEvent(FixedPoint2 potency, EntityEffectHydroArgs args)
-    {
-        Potency = potency;
-        Args = args;
-    }
+    public ReagentPrototype Reagent => Context.Reagent;
+    public float LinearLevel => ActualPotency * 2f;
+    public float PotencyPerSecond => ActualPotency * 0.5f;
 }
 
+/// <summary>
+/// Typed hydroponics bridge for the nine chemical properties that affect a plant holder.
+/// </summary>
+[ByRefEvent]
+public readonly record struct HydroTickEvent<T>(
+    EntityUid Target,
+    FixedPoint2 Potency,
+    ReagentQuantity Quantity) where T : RMCChemicalEffect;
+
+/// <summary>
+/// Single dispatcher for the complete RMC chemical-property subclass family.
+/// </summary>
+public sealed partial class RMCChemicalEffectSystem : EntityEffectSystem<MetaDataComponent, RMCChemicalEffect>
+{
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+
+    private EntityQuery<MobStateComponent> _mobStateQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _mobStateQuery = GetEntityQuery<MobStateComponent>();
+    }
+
+    protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<RMCChemicalEffect> args)
+    {
+        if (args.ReagentContext is not { } context)
+            return;
+
+        var effect = args.Effect;
+        effect.Apply(this, _damageable, entity, args.Scale, args.User, context);
+    }
+
+    internal bool TryGetMobState(EntityUid uid, [NotNullWhen(true)] out MobStateComponent? component)
+        => _mobStateQuery.TryComp(uid, out component);
+}

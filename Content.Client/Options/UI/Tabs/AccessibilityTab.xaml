@@ -16,26 +16,37 @@
 
                 <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-announcements'}">
                     <ui:OptionDropDown Name="AnnouncementStyleDropDown" Title="{Loc 'rmc-ui-options-announcements-style'}" />
-                    <!-- Per-announcement overrides, from upstream. The container is filled in code;
-                         nothing references it yet on either side, but it is upstream's UI for the
-                         announcement work and dropping it would quietly diverge from them. -->
                     <Label Name="AnnouncementPresetOverridesLabel"
                            Text="{Loc 'rmc-ui-options-announcements-style-per-announcement'}"
                            StyleClasses="LabelKeyText" />
                     <BoxContainer Name="AnnouncementPresetOverridesContainer" Orientation="Vertical" />
                 </cmu:CmuOptionSection>
 
-                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-cmu'}">
-                    <CheckBox Name="ExplosionScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-enabled'}" />
-                    <CheckBox Name="ExplosionScreenShakeIgnoreFarCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-ignore-far'}" />
-                    <CheckBox Name="FirearmScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-firearm-screen-shake-enabled'}" />
-                    <!-- New upstream option. Required, not optional: AccessibilityTab.xaml.cs
-                         references it, so the tab does not compile without it. -->
-                    <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessibility-header-reduced-motion'}">
+                    <CheckBox Name="ReducedMotionCheckBox" Text="{Loc 'ui-options-reduced-motion'}"
+                              ToolTip="{Loc 'ui-options-reduced-motion-tooltip'}" />
+                    <GridContainer Columns="2" HorizontalExpand="True" Margin="8 8 8 8">
+                        <CheckBox Name="DisableAiStaticCheckBox" Text="{Loc 'ui-options-disable-ai-static'}"
+                                  ToolTip="{Loc 'ui-options-disable-ai-static-tooltip'}" />
+                        <CheckBox Name="DisableBlurryVisionCheckBox" Text="{Loc 'ui-options-disable-blurry-vision'}"
+                                  ToolTip="{Loc 'ui-options-disable-blurry-vision-tooltip'}" />
+                        <CheckBox Name="DisableDrunkOverlayCheckBox" Text="{Loc 'ui-options-disable-drunk-overlay'}"
+                                  ToolTip="{Loc 'ui-options-disable-drunk-overlay-tooltip'}" />
+                        <CheckBox Name="DisableFlashEffectCheckBox" Text="{Loc 'ui-options-disable-flash-effect'}"
+                                  ToolTip="{Loc 'ui-options-disable-flash-effect-tooltip'}" />
+                        <CheckBox Name="DisableHeatDistortionCheckBox" Text="{Loc 'ui-options-disable-heat-distortion'}"
+                                  ToolTip="{Loc 'ui-options-disable-heat-distortion-tooltip'}" />
+                        <CheckBox Name="DisableNightVisionNoiseCheckBox" Text="{Loc 'ui-options-disable-nv-noise'}"
+                                  ToolTip="{Loc 'ui-options-disable-nv-noise-tooltip'}" />
+                        <CheckBox Name="DisableRainbowOverlayCheckBox" Text="{Loc 'ui-options-disable-rainbow-overlay'}"
+                                  ToolTip="{Loc 'ui-options-disable-rainbow-overlay-tooltip'}" />
+                        <CheckBox Name="DisableSinguloWarpCheckBox" Text="{Loc 'ui-options-disable-singulo-warp'}"
+                                  ToolTip="{Loc 'ui-options-disable-singulo-warp-tooltip'}" />
+                    </GridContainer>
                 </cmu:CmuOptionSection>
 
-                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessability-header-visuals'}">
-                    <CheckBox Name="ReducedMotionCheckBox" Text="{Loc 'ui-options-reduced-motion'}" />
+                <cmu:CmuOptionSection Title="{Loc 'ui-options-accessibility-header-visuals'}">
+                    <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
                     <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />
                     <CheckBox Name="ColorblindFriendlyCheckBox" Text="{Loc 'ui-options-colorblind-friendly'}" />
                     <CheckBox Name="XenoAbilityPreviewsCheckBox" Text="{Loc 'rmc-ui-options-xeno-ability-previews'}" />

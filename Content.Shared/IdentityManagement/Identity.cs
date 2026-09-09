@@ -1,6 +1,6 @@
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.IdentityManagement;
-using Content.Shared._CMU14.Yautja;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Whitelist;
 
@@ -16,7 +16,13 @@ public static class Identity
     /// <summary>
     ///     Returns the name that should be used for this entity for identity purposes.
     /// </summary>
-    public static IdentityEntity Name(EntityUid uid, IEntityManager ent, EntityUid? viewer=null)
+    /// <remarks>
+    /// This will return the true identity of the entity if called before the
+    /// identity component has been initialized — this may occur for example if
+    /// the client raises an event in response to an entity entering PVS for
+    /// the first time.
+    /// </remarks>
+    public static IdentityEntity Name(EntityUid uid, IEntityManager ent, EntityUid? viewer = null)
     {
         if (!uid.IsValid())
             return new IdentityEntity(uid, string.Empty);
@@ -50,7 +56,7 @@ public static class Identity
         if (!ent.TryGetComponent<IdentityComponent>(uid, out var identity))
             return new IdentityEntity(uid, uidName);
 
-        var ident = identity.IdentityEntitySlot.ContainedEntity;
+        var ident = identity.IdentityEntitySlot?.ContainedEntity;
         if (ident is null)
             return new IdentityEntity(uid, uidName);
 
@@ -75,6 +81,7 @@ public static class Identity
     /// <param name="viewer">
     ///     If this entity can see through identities, this method will always return the actual target entity.
     /// </param>
+    /// <inheritdoc cref="Name" path="remarks" />
     public static EntityUid Entity(EntityUid uid, IEntityManager ent, EntityUid? viewer = null)
     {
         if (!ent.TryGetComponent<IdentityComponent>(uid, out var identity))
@@ -83,7 +90,7 @@ public static class Identity
         if (viewer != null && CanSeeThroughIdentity(uid, viewer.Value, ent))
             return uid;
 
-        return identity.IdentityEntitySlot.ContainedEntity ?? uid;
+        return identity.IdentityEntitySlot?.ContainedEntity ?? uid;
     }
 
     public static bool CanSeeThroughIdentity(EntityUid uid, EntityUid viewer, IEntityManager ent)

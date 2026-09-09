@@ -1,16 +1,22 @@
 - type: entity
   id: RMCHeadXeno
+  parent:
+  - OrganBase
+  - OrganBaseParent
+  - OrganBaseChildExternal
   name: "xenonid head"
   categories:
   - HideSpawnMenu
   components:
+  - type: Organ
+    category: Head
   - type: BodyPart
     partType: Head
     vital: true
-  - type: ContainerContainer
-    containers:
-      bodypart: !type:Container
-        ents: []
+    children: {}
+    organs:
+      heart: { id: heart }
+  - type: Sprite
   - type: Tag
     tags:
       - Head

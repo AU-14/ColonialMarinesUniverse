@@ -4,10 +4,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/Actions/despoiler.rsi
-      state: acid_barrage
     checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/Actions/despoiler.rsi
+      state: acid_barrage
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDespoilerAcidBarrageActionEvent
   - type: XenoDespoilerAcidBarrageAction
@@ -38,11 +40,13 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/Actions/despoiler.rsi
-      state: caustic_embrace
     checkCanInteract: false
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/Actions/despoiler.rsi
+      state: caustic_embrace
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 5
     checkCanAccess: false
@@ -72,11 +76,13 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/Actions/despoiler.rsi
-      state: oozing_wounds
     checkCanInteract: false
     useDelay: 25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/Actions/despoiler.rsi
+      state: oozing_wounds
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDespoilerOozingWoundsActionEvent
   - type: XenoDespoilerOozingWoundsAction
@@ -100,11 +106,13 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/Actions/despoiler.rsi
-      state: catalyze
     checkCanInteract: false
     useDelay: 20
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/Actions/despoiler.rsi
+      state: catalyze
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDespoilerCatalyzeActionEvent
   - type: XenoDespoilerCatalyzeAction

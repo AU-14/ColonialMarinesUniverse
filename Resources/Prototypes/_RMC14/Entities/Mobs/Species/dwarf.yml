@@ -1,6 +1,8 @@
 - type: entity
   save: false
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceDwarf
+  - RMCBaseMobSpeciesOrganic
   id: CMMobDwarf
   name: Urist C.M McHands The Dwarf
   suffix: RMC14
@@ -13,12 +15,8 @@
     drawdepth: Mobs
     scale: 1, 0.8
   - type: Vocal
-    sounds:
-      Male: RMCMaleDwarf
-      Unsexed: RMCMaleDwarf #sorry fem-leaning enbies
-      Female: RMCFemaleDwarf
   - type: ReplacementAccent
-    accent: dwarf
+    accent: scottish
   - type: Speech
     speechSounds: Bass
   - type: FixedIdentity

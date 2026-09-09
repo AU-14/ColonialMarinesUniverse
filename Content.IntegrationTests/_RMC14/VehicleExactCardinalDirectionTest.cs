@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared._RMC14.Vehicle;
 using Robust.Shared.Maths;
 
@@ -25,5 +26,27 @@ public sealed class VehicleExactCardinalDirectionTest
     {
         var actual = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(Angle.FromDegrees(degrees));
         Assert.That(actual, Is.EqualTo(expected));
+    }
+
+    [TestCase(45)]
+    [TestCase(80)]
+    [TestCase(135)]
+    [TestCase(225)]
+    [TestCase(315)]
+    public void DirectionalOffsetPreservesResidualChassisRotation(double degrees)
+    {
+        var facing = Angle.FromDegrees(degrees);
+        var offset = new Vector2(3f, 11f);
+        var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(facing);
+        var localOffset = VehicleTurretDirectionHelpers.GetLocalOffsetForRenderDirection(offset, facing);
+
+        var renderedOffset = facing.RotateVec(localOffset);
+        var expected = (facing - direction.ToAngle()).RotateVec(offset);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(renderedOffset.X, Is.EqualTo(expected.X).Within(0.0001f));
+            Assert.That(renderedOffset.Y, Is.EqualTo(expected.Y).Within(0.0001f));
+        });
     }
 }

@@ -79,7 +79,7 @@
   - type: HiveConstructionLimited
     id: HiveClusterXeno
   - type: WarpPoint
-    location: hive cluster
+    location: cmu-warp-location-hive-cluster
   - type: RMCAlternateSprite
     normalSprite: _RMC14/Structures/Xenos/hive_cluster.rsi
     alternateSprite: _RMC14/Structures/Xenos/hive_cluster_old.rsi

@@ -16,6 +16,7 @@ public sealed partial class RandomSentienceRule : StationEventSystem<RandomSenti
 
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
+
     protected override void Started(EntityUid uid, RandomSentienceRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         if (!TryGetRandomStation(out var station))

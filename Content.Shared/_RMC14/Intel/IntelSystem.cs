@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared._CMU14.Round.Objectives.Components;
+using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -21,6 +21,7 @@ using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
@@ -30,6 +31,7 @@ using Content.Shared.NameModifier.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Storage;
+using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -712,7 +714,8 @@ public sealed partial class IntelSystem : EntitySystem
                 {
                     break;
                 }
-                else if (_entityStorage.Insert(intel, nearby))
+                else if (TryComp(nearby, out EntityStorageComponent? entityStorage) &&
+                         _entityStorage.Insert(intel, nearby, entityStorage))
                 {
                     break;
                 }

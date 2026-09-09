@@ -49,7 +49,7 @@ public sealed partial class FarSightSystem : EntitySystem
 
     private void OnFarSightEquipped(Entity<FarSightItemComponent> ent, ref GotEquippedEvent args)
     {
-        var user = args.Equipee;
+        var user = args.EquipTarget;
 
         if (!_inventory.InSlotWithFlags((ent, null, null), ent.Comp.Slots))
             return;
@@ -59,7 +59,7 @@ public sealed partial class FarSightSystem : EntitySystem
 
     private void OnFarSightUnequipped(Entity<FarSightItemComponent> ent, ref GotUnequippedEvent args)
     {
-        var user = args.Equipee;
+        var user = args.EquipTarget;
 
         if (_inventory.InSlotWithFlags((ent, null, null), ent.Comp.Slots))
             return;

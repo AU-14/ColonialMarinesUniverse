@@ -1,5 +1,6 @@
 ﻿using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Requisitions.Components;
 
@@ -18,6 +19,24 @@ public sealed partial class RequisitionsComputerComponent : Component
 
     [DataField(required: true), AutoNetworkedField, AlwaysPushInheritance]
     public List<RequisitionsCategory> Categories = new();
+
+    /// <summary>
+    /// Server-derived catalog of deterministic items that can be purchased without their legacy bundle.
+    /// </summary>
+    [AutoNetworkedField]
+    public List<RequisitionsItemEntry> ItemCatalog = new();
+
+    /// <summary>
+    /// Per-item price and weight corrections for cases where the derived values are not appropriate.
+    /// </summary>
+    [DataField]
+    public List<RequisitionsItemOverride> ItemOverrides = new();
+
+    [DataField]
+    public EntProtoId ItemShipmentCrate = "CMUASRSShipmentCrate";
+
+    [DataField]
+    public int ItemShipmentWeightLimit = 32;
 
     public readonly Dictionary<(int Category, int Order), RequisitionsStockStatus> Stock = new();
 

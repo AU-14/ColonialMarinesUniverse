@@ -216,47 +216,29 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     {
         if (!TryComp<HiveComponent>(hiveEnt, out var hive))
             return;
-        if (alliance)
-        {
-            hive.Allies.Add(faction);
-        }
-        else
-        {
-            hive.Allies.Remove(faction);
-        }
-        //just made some BULLSHIT!!
-        var factionsQuery = EntityQueryEnumerator<NpcFactionMemberComponent>();
-        while (factionsQuery.MoveNext(out EntityUid ent, out var comp))
-        {
-            if (comp.Factions.Contains(faction))
-                DirtyEntity(ent);
-        }
+
+        var changed = alliance ? hive.Allies.Add(faction) : hive.Allies.Remove(faction);
+        if (changed)
+            Dirty(hiveEnt, hive); // CMU14: clients read alliances from the hive, not its allies.
     }
 
     public void SetHiveIndividualAlly(EntityUid ent, EntityUid hiveEnt, bool alliance)
     {
         if (!TryComp<HiveComponent>(hiveEnt, out var hive))
             return;
-        if (alliance)
-        {
-            hive.IndividualAllies.Add(ent);
-        }
-        else
-        {
-            hive.IndividualAllies.Remove(ent);
-        }
-        DirtyEntity(ent);
+
+        var changed = alliance ? hive.IndividualAllies.Add(ent) : hive.IndividualAllies.Remove(ent);
+        if (changed)
+            Dirty(hiveEnt, hive); // CMU14
     }
 
     public void ClearHiveIndividualAllies(EntityUid hiveEnt)
     {
-        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive) || hive.IndividualAllies.Count == 0)
             return;
-        foreach (var item in hive.IndividualAllies)
-        {
-            hive.IndividualAllies.Remove(item);
-            DirtyEntity(item);
-        }
+
+        hive.IndividualAllies.Clear();
+        Dirty(hiveEnt, hive); // CMU14
     }
 
     /// <summary>

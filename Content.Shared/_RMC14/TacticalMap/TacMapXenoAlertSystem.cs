@@ -14,10 +14,10 @@ public sealed partial class TacMapXenoAlertSystem : EntitySystem
 
     private void OnStartup(Entity<TacMapXenoAlertComponent> ent, ref ComponentStartup args)
     {
-        _alerts.ShowAlert(ent, ent.Comp.Alert);
+        _alerts.ShowAlert((ent.Owner, null), ent.Comp.Alert);
     }
     private void OnRemove(Entity<TacMapXenoAlertComponent> ent, ref ComponentRemove args)
     {
-        _alerts.ClearAlert(ent, ent.Comp.Alert);
+        _alerts.ClearAlert((ent.Owner, null), ent.Comp.Alert);
     }
 }

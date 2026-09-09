@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Chemistry.Stimmaster;
+using Content.Shared.CMU14.Chemistry.Stimmaster;
 using Content.Shared._RMC14.Chemistry.ChemMaster;
 using Content.Shared._RMC14.UserInterface;
 using Robust.Client.Timing;

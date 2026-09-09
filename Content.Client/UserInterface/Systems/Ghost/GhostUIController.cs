@@ -2,8 +2,8 @@ using Content.Client.Gameplay;
 using Content.Client.Ghost;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Ghost.Widgets;
-using Content.Shared.Ghost;
-using Robust.Client.Console;
+using Content.Shared.Ghost.Components;
+using Content.Shared.Ghost.Systems;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 
@@ -13,9 +13,10 @@ namespace Content.Client.UserInterface.Systems.Ghost;
 public sealed partial class GhostUIController : UIController, IOnSystemChanged<GhostSystem>
 {
     [Dependency] private IEntityNetworkManager _net = default!;
-    [Dependency] private IClientConsoleHost _consoleHost = default!;
 
-    [UISystemDependency] private GhostSystem? _system = default;
+    [UISystemDependency] private readonly GhostSystem? _system = default;
+
+    private string? _serverTab; // CMU14: tab the server last scoped preview overrides to
 
     private GhostGui? Gui => UIManager.GetActiveUIWidgetOrNull<GhostGui>();
 
@@ -100,6 +101,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         if (Gui?.TargetWindow is not { } window)
             return;
 
+        _serverTab = msg.Tab; // CMU14
         window.UpdateWarps(msg.Warps);
         window.Populate();
     }
@@ -120,9 +122,25 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         _net.SendSystemNetworkMessage(msg);
     }
 
+    // CMU14 method: only one tab's entities are force-sent at a time; re-request when another tab is opened
+    private void OnActiveTabChanged(string? tab)
+    {
+        if (tab == null || tab == _serverTab)
+            return;
+
+        _serverTab = tab;
+        _system?.RequestWarps(tab);
+    }
+
     private void OnGhostnadoClicked()
     {
         var msg = new GhostnadoRequestEvent();
+        _net.SendSystemNetworkMessage(msg);
+    }
+
+    private void OnWarpToRandomClicked()
+    {
+        var msg = new WarpToRandomRequestEvent();
         _net.SendSystemNetworkMessage(msg);
     }
 
@@ -135,8 +153,11 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         Gui.ReturnToBodyPressed += ReturnToBody;
         Gui.GhostRolesPressed += GhostRolesPressed;
         Gui.TargetWindow.WarpClicked += OnWarpClicked;
+        Gui.TargetWindow.OnClose += OnWarpsClosed;
+        Gui.TargetWindow.ActiveTabChanged += OnActiveTabChanged; // CMU14
         Gui.TargetWindow.OnGhostnadoClicked += OnGhostnadoClicked;
         Gui.LateJoinPressed += LateJoinPressed;
+        Gui.TargetWindow.OnWarpToRandomClicked += OnWarpToRandomClicked;
 
         UpdateGui();
     }
@@ -150,7 +171,10 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         Gui.ReturnToBodyPressed -= ReturnToBody;
         Gui.GhostRolesPressed -= GhostRolesPressed;
         Gui.TargetWindow.WarpClicked -= OnWarpClicked;
+        Gui.TargetWindow.OnClose -= OnWarpsClosed;
+        Gui.TargetWindow.ActiveTabChanged -= OnActiveTabChanged; // CMU14
         Gui.TargetWindow.OnGhostnadoClicked -= OnGhostnadoClicked;
+        Gui.TargetWindow.OnWarpToRandomClicked -= OnWarpToRandomClicked;
         Gui.LateJoinPressed -= LateJoinPressed;
 
         Gui.Hide();
@@ -168,7 +192,14 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
 
         window.ClearWarps();
         window.OpenCentered();
+        _serverTab = null; // CMU14: fresh open, the server picks the default tab
         _system?.RequestWarps();
+    }
+
+    private void OnWarpsClosed()
+    {
+        _net.SendSystemNetworkMessage(new GhostWarpsCloseEvent());
+        Gui?.TargetWindow.ClearWarps();
     }
 
     private void GhostRolesPressed()

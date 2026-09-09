@@ -78,9 +78,9 @@
   - type: SolutionContainerVisuals
     maxFillLevels: 5
     fillBaseName: beaker
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    id: beaker
+    solution:
         maxVol: 60
   - type: Openable
     opened: true
@@ -125,9 +125,9 @@
       visible: false
   - type: Item
     sprite: _RMC14/Objects/Medical/large_beaker.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    id: beaker
+    solution:
         maxVol: 120
   - type: SolutionContainerVisuals
     maxFillLevels: 5
@@ -171,9 +171,8 @@
       visible: false
   - type: Item
     sprite: _RMC14/Objects/Medical/high_capacity_beaker.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 300
   - type: SolutionContainerVisuals
     maxFillLevels: 5
@@ -272,8 +271,9 @@
         type: TransferAmountBoundUserInterface
   - type: Appearance
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Glass
+  - type: Injurable
+    damageContainer: Inorganic
   - type: DnaSubstanceTrace
 
 # Minitank /obj/item/reagent_container/glass/minitank
@@ -293,9 +293,8 @@
   - type: Item
     size: Normal
     sprite: _RMC14/Objects/Tanks/minitank.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 180
   - type: SolutionContainerVisuals
     maxFillLevels: 5
@@ -475,9 +474,9 @@
   - type: SolutionContainerVisuals
     maxFillLevels: 6
     fillBaseName: vial
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    id: beaker
+    solution:
         maxVol: 30
   - type: SolutionTransfer
     transferAmount: 5
@@ -517,9 +516,9 @@
   description: A small glass vial. Can hold up to 30 units. Contains Tricordrazine, a weak general use medicine for treating damage.
   suffix: Filled, Tricordrazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    id: beaker
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: CMTricordrazine

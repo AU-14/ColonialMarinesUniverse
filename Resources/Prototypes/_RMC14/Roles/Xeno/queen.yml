@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobXenoBase
   id: CMXenoQueen
   name: cm-job-name-xeno-queen
@@ -17,7 +17,7 @@
   weight: 100
   requireAdminNotify: true
   hidden: false
-  supervisors: nobody
+  supervisors: cm-job-supervisors-nobody
   jobPreviewEntity: RMCPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno
@@ -32,7 +32,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Queen/queen.rsi
+    sprite: CMU14/Mobs/Xenos/Queen/queen.rsi
     layers:
     - state: alive
       scale: 0.5, 0.5

@@ -8,21 +8,23 @@ namespace Content.Shared.Construction.Steps
     [DataDefinition]
     public sealed partial class ToolConstructionGraphStep : ConstructionGraphStep
     {
-        [DataField("tool", required:true)]
-        public ProtoId<ToolQualityPrototype> Tool { get; private set; }
+        [DataField(required:true)]
+        public ProtoId<ToolQualityPrototype> Tool;
 
-        [DataField("fuel")] public float Fuel { get; private set; } = 10;
+        [DataField]
+        public float Fuel = 10;
 
-        [DataField("examine")] public string ExamineOverride { get; private set; } = string.Empty;
+        [DataField]
+        public LocId? Examine;
 
         // RMC14
         [DataField] public DuplicateConditions DuplicateConditions { get; private set; }
 
         public override void DoExamine(ExaminedEvent examinedEvent)
         {
-            if (!string.IsNullOrEmpty(ExamineOverride))
+            if (Examine is { } examineOverride)
             {
-                examinedEvent.PushMarkup(Loc.GetString(ExamineOverride));
+                examinedEvent.PushMarkup(Loc.GetString(examineOverride));
                 return;
             }
 

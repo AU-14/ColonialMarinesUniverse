@@ -8,7 +8,7 @@
   flavor: nutriment
   color: "#664330"
   metabolisms:
-    Food:
+    Metabolites:
       metabolismRate: 0.1
       effects:
       - !type:Neogenetic
@@ -19,6 +19,11 @@
         nutMetabolism: 0.1
       - !type:Hemogenic
         potency: 1
+  plantMetabolism:
+  - !type:PlantAdjustNutrition
+    amount: 1.5
+  - !type:PlantAdjustHealth
+    amount: 0.75
   pricePerUnit: 2
 
 - type: reagent
@@ -58,11 +63,12 @@
   color: white
   meltingPoint: 146.0
   metabolisms:
-    Food:
+    Metabolites:
       effects:
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
         conditions:
-        - !type:ReagentThreshold #Only satiates when eaten with nutriment
+        - !type:ReagentCondition #Only satiates when eaten with nutriment
           reagent: Nutriment
           min: 0.1
         factor: 1

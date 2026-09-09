@@ -1,8 +1,10 @@
 using System.Linq;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Chat.Prototypes;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
@@ -33,7 +35,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedPowerCellSystem _powerCell = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
 
     private readonly HashSet<EntityUid> _packsToUpdate = [];
 
@@ -57,7 +59,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         SubscribeLocalEvent<BloodPackComponent, MapInitEvent>(OnBloodPackMapInit);
         SubscribeLocalEvent<BloodPackComponent, AfterAutoHandleStateEvent>(OnBloodPackAfterState);
-        SubscribeLocalEvent<BloodPackComponent, SolutionContainerChangedEvent>(OnBloodPackSolutionChanged);
+        SubscribeLocalEvent<BloodPackComponent, SolutionChangedEvent>(OnBloodPackSolutionChanged);
         SubscribeLocalEvent<BloodPackComponent, AfterInteractEvent>(OnBloodPackAfterInteract);
         SubscribeLocalEvent<BloodPackComponent, AttachBloodPackDoAfterEvent>(OnBloodPackAttachDoAfter);
         SubscribeLocalEvent<BloodPackComponent, GotUnequippedHandEvent>(OnBloodPackUnequippedHand);
@@ -177,7 +179,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         UpdatePackVisuals(pack);
     }
 
-    private void OnBloodPackSolutionChanged(Entity<BloodPackComponent> pack, ref SolutionContainerChangedEvent args)
+    private void OnBloodPackSolutionChanged(Entity<BloodPackComponent> pack, ref SolutionChangedEvent args)
     {
         UpdatePackVisuals(pack);
     }
@@ -562,6 +564,11 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         _popup.PopupClient(msg, iv, user);
     }
 
+    private static int GetVisualFillPercentage(Solution solution)
+    {
+        return (int) SharedSolutionContainerSystem.PercentFull(solution);
+    }
+
     protected void UpdatePackVisuals(Entity<BloodPackComponent> pack)
     {
         if (!_solutionContainer.TryGetSolution(pack.Owner, pack.Comp.Solution, out _, out var solution))
@@ -574,7 +581,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
             TryComp(container.Owner, out IVDripComponent? iv))
         {
             iv.FillColor = solution.GetColor(_prototype);
-            iv.FillPercentage = (int) (solution.Volume / solution.MaxVolume * 100);
+            iv.FillPercentage = GetVisualFillPercentage(solution);
             Dirty(container.Owner, iv);
             UpdateIVAppearance((container.Owner, iv));
         }
@@ -601,7 +608,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
                 continue;
 
             iv.Comp.FillColor = solution.GetColor(_prototype);
-            iv.Comp.FillPercentage = (int) (solution.Volume / solution.MaxVolume * 100);
+            iv.Comp.FillPercentage = GetVisualFillPercentage(solution);
             Dirty(iv);
             UpdateIVAppearance(iv);
             return;
@@ -637,7 +644,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         if (_solutionContainer.TryGetSolution(pack.Owner, pack.Comp.Solution, out var solEnt))
         {
             var solution = solEnt.Value.Comp.Solution;
-            pack.Comp.FillPercentage = solution.Volume / solution.MaxVolume;
+            pack.Comp.FillPercentage = FixedPoint2.FromHundredths(GetVisualFillPercentage(solution));
             pack.Comp.FillColor = solution.GetColor(_prototype);
         }
         else

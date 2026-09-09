@@ -13,6 +13,9 @@ public sealed partial class DropshipDestinationComponent : Component
     public bool AutoRecall;
 
     [DataField, AutoNetworkedField]
+    public bool CanBePrimary = true;
+
+    [DataField, AutoNetworkedField]
     public int LightSearchRadius = 14;
 
     [DataField, AutoNetworkedField]

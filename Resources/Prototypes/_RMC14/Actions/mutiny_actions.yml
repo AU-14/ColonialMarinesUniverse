@@ -6,10 +6,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: hudmutineer
     useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: hudmutineer
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction

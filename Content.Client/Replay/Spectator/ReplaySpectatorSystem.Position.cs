@@ -79,7 +79,7 @@ public sealed partial class ReplaySpectatorSystem
         if (_player.LocalUser != DefaultUser)
             return; // Already spectating some session.
 
-        if (_player.LocalEntity is not {} uid)
+        if (_player.LocalEntity is not { } uid)
             return;
 
         var netEnt = GetNetEntity(uid);
@@ -127,18 +127,15 @@ public sealed partial class ReplaySpectatorSystem
 
         if (data.Local != null && data.Local.Value.Coords.IsValid(EntityManager))
         {
-            var newXform = SpawnSpectatorGhost(data.Local.Value.Coords, false);
-            _transform.SetLocalRotation(newXform.Owner, data.Local.Value.Rot, newXform.Comp);
+            SpawnSpectatorGhost(data.Local.Value.Coords, false, data.Local.Value.Rot);
         }
         else if (data.World != null && data.World.Value.Coords.IsValid(EntityManager))
         {
-            var newXform = SpawnSpectatorGhost(data.World.Value.Coords, true);
-            _transform.SetLocalRotation(newXform.Owner, data.World.Value.Rot, newXform.Comp);
+            SpawnSpectatorGhost(data.World.Value.Coords, true, data.World.Value.Rot);
         }
         else if (TryFindFallbackSpawn(out var coords))
         {
-            var newXform = SpawnSpectatorGhost(coords, true);
-            _transform.SetLocalRotation(newXform.Owner, 0, newXform.Comp);
+            SpawnSpectatorGhost(coords, true);
         }
         else
         {
@@ -177,7 +174,7 @@ public sealed partial class ReplaySpectatorSystem
                 continue;
 
             if (!station && stationFound)
-               continue;
+                continue;
 
             maxUid = (uid, grid);
             maxSize = size;

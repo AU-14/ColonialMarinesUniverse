@@ -143,7 +143,7 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
 
     public void SendLastRealTick()
     {
-        if (_net.IsServer)
+        if (_net.IsServer || !_timing.IsFirstTimePredicted)
             return;
 
         RaiseNetworkEvent(new RMCSetLastRealTickEvent(GetLastRealTick(null), GetClientSubstep())); // CMU14

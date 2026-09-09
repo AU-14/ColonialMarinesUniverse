@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Aura;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.Timing;
@@ -32,6 +33,7 @@ public sealed partial class XenoShardSystem : EntitySystem
     [Dependency] private XenoEnergySystem _energy = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedRMCExplosionSystem _explosion = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     [Dependency] private INetManager _net = default!;
     [Dependency] private XenoSystem _xeno = default!;
@@ -73,7 +75,8 @@ public sealed partial class XenoShardSystem : EntitySystem
 
     private void OnShardHitBy(Entity<XenoShardComponent> ent, ref DamageChangedEvent args)
     {
-        if (args.Damageable.Damage == null || args.Damageable.Damage.GetTotal() <= FixedPoint2.Zero)
+        var currentDamage = _damageable.GetAllDamage((ent.Owner, args.Damageable));
+        if (currentDamage.GetTotal() <= FixedPoint2.Zero)
             return;
 
         if (!HasComp<ProjectileComponent>(args.Tool))
@@ -153,7 +156,7 @@ public sealed partial class XenoShardSystem : EntitySystem
             projectileHitLimit: ent.Comp.ProjectileHitLimit
         );
 
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
         args.Handled = true;
     }

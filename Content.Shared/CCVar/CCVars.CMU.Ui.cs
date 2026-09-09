@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Configuration;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
@@ -13,12 +13,11 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.vote_ui_large", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
-    ///     Playtime in minutes below which the guidebook opens itself in the lobby, or 0 to never do
-    ///     it. Was a hardcoded 60, which means every fresh client - including a second test client on
-    ///     the same machine - opens with the guidebook covering the middle of the screen.
+    ///     Playtime in minutes below which the guidebook opens itself in the lobby.
+    ///     Disabled by default (0); players can open the guidebook manually.
     /// </summary>
     public static readonly CVarDef<int> CMUGuidebookAutoOpenPlaytime =
-        CVarDef.Create("cmu.guidebook_auto_open_minutes", 60, CVar.CLIENTONLY);
+        CVarDef.Create("cmu.guidebook_auto_open_minutes", 0, CVar.CLIENTONLY);
 
     /// <summary>
     ///     Opens one or more of the small CRT panels on startup so they can be looked at without
@@ -111,6 +110,20 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> CMUChatReadableFont =
         CVarDef.Create("cmu.chat_readable_font", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    public const string CMUUiFontTheme = "theme";
+    public const string CMUUiFontNotoSans = "noto-sans";
+    public const string CMUUiFontComicSans = "comic-sans";
+    public const string CMUUiFontRobotoMono = "roboto-mono";
+    public const string CMUUiFontCozette = "cozette";
+    public const string CMUUiFontNotoSansDisplay = "noto-sans-display";
+
+    /// <summary>Font family for menus and chat; theme keeps each theme's original typography.</summary>
+    public static readonly CVarDef<string> CMUUiFont =
+        CVarDef.Create("cmu.ui_font", CMUUiFontTheme, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>Whether this client has completed or saved its UI setup.</summary>
+    public static readonly CVarDef<bool> CMUUiConfigured =
+        CVarDef.Create("cmu.ui_configured", false, CVar.CLIENTONLY | CVar.ARCHIVE);
     public const string CMUChatBigFontOff = "off";
     public const string CMUChatBigFontOne = "one";
     public const string CMUChatBigFontTwo = "two";
@@ -137,13 +150,14 @@ public sealed partial class CCVars
     ///     <see cref="CMUChatRowTintOff"/>. Off is what the theme shipped with; every row sat on the
     ///     ground and only the prefix said which channel it was.
     /// </summary>
-    /// <remarks>
-    ///     Muted rather than full by default: the two differ only in saturation, and the loud version
-    ///     of the admin band is the one thing about the upstream fills that was worth objecting to.
-    ///     See docs/cmu/13-chat.md for the tint recipe.
-    /// </remarks>
     public static readonly CVarDef<string> CMUChatRowTint =
-        CVarDef.Create("cmu.chat_row_tint", CMUChatRowTintMuted, CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.chat_row_tint", CMUChatRowTintFull, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Draw the CRT scanline effect over chat independently of other menu effects.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUChatCrtHaze =
+        CVarDef.Create("cmu.chat_crt_haze", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     ///     Overall strength of the CRT effect - scanlines, grain and the roll bar together, 0 to 1.

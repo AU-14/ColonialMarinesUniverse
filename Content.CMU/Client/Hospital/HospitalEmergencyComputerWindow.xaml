@@ -1,0 +1,40 @@
+<controls:HospitalEmergencyComputerWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Hospital"
+    Title="Emergency Computer" MinSize="540 420">
+    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+        <Label Text="Hospital Emergency Shuttle" StyleClasses="LabelHeading" />
+        <Label Name="StatusLabel" Access="Public" Text="Standing by" />
+        <Label Name="LandingZoneLabel" Access="Public" Text="Landing zone: searching" StyleClasses="LabelSubText" />
+
+        <PanelContainer StyleClasses="LowDivider" MinHeight="2" />
+
+        <Label Text="Incident Report" StyleClasses="LabelSubText" />
+        <RichTextLabel Name="IncidentReportLabel" Access="Public" Text="No active incident." MinSize="0 72" MaxWidth="500" HorizontalExpand="True" />
+
+        <GridContainer Columns="2" HorizontalExpand="True">
+            <Label Text="Casualties:" />
+            <Label Name="CasualtiesLabel" Access="Public" Text="0" />
+            <Label Text="Severity:" />
+            <Label Name="SeverityLabel" Access="Public" Text="0" />
+            <Label Text="Reward:" />
+            <Label Name="RewardLabel" Access="Public" Text="$0" />
+            <Label Text="Patients:" />
+            <Label Name="PatientsLabel" Access="Public" Text="0 / 0 cleared" />
+            <Label Text="Timer:" />
+            <Label Name="TimerLabel" Access="Public" Text="--" />
+        </GridContainer>
+
+        <PanelContainer StyleClasses="LowDivider" MinHeight="2" />
+
+        <Label Name="AuditLabel" Access="Public" Text="Last audit: no payout recorded" StyleClasses="LabelSubText" />
+
+        <GridContainer Columns="2" HorizontalExpand="True">
+            <Button Name="ApproveLandingButton" Access="Public" Text="Approve Landing" HorizontalExpand="True" />
+            <Button Name="SkipContractButton" Access="Public" Text="Skip Contract" HorizontalExpand="True" />
+            <Button Name="ReleaseShuttleButton" Access="Public" Text="Release Shuttle" HorizontalExpand="True" />
+            <Button Name="RequestPickupButton" Access="Public" Text="Request Pickup" HorizontalExpand="True" />
+        </GridContainer>
+    </BoxContainer>
+</controls:HospitalEmergencyComputerWindow>

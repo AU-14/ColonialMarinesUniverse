@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.Graphics;
 using Content.Shared.Interaction;
 using Content.Shared.Whitelist;
 using Robust.Client.GameObjects;
@@ -17,18 +18,17 @@ public sealed partial class TargetOutlineSystem : EntitySystem
 {
     private static readonly ProtoId<ShaderPrototype> ShaderTargetValid = "SelectionOutlineInrange";
     private static readonly ProtoId<ShaderPrototype> ShaderTargetInvalid = "SelectionOutline";
-    private const string ShaderId = "TargetOutline"; // CMU14: keyed id required by the v288 multi post-shader API
 
     [Dependency] private IEyeManager _eyeManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private IInputManager _inputManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
-    [Dependency] private SpriteSystem _sprite = default!; // CMU14
+    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private bool _enabled = false;
 
@@ -85,8 +85,8 @@ public sealed partial class TargetOutlineSystem : EntitySystem
     {
         base.Initialize();
 
-        _shaderTargetValid = _prototypeManager.Index(ShaderTargetValid).InstanceUnique();
-        _shaderTargetInvalid = _prototypeManager.Index(ShaderTargetInvalid).InstanceUnique();
+        _shaderTargetValid = ProtoMan.Index(ShaderTargetValid).InstanceUnique();
+        _shaderTargetInvalid = ProtoMan.Index(ShaderTargetInvalid).InstanceUnique();
     }
 
     public void Disable()
@@ -134,11 +134,10 @@ public sealed partial class TargetOutlineSystem : EntitySystem
         var bounds = new Box2(mousePos - LookupVector, mousePos + LookupVector);
         _targetCandidates.Clear();
         _lookup.GetEntitiesIntersecting(_eyeManager.CurrentEye.Position.MapId, bounds, _targetCandidates, LookupFlags.Approximate | LookupFlags.Static);
-        var spriteQuery = GetEntityQuery<SpriteComponent>();
 
         foreach (var entity in _targetCandidates)
         {
-            if (!spriteQuery.TryGetComponent(entity, out var sprite) || !sprite.Visible)
+            if (!_spriteQuery.TryGetComponent(entity, out var sprite) || !sprite.Visible)
                 continue;
 
             // Check the predicate
@@ -158,11 +157,10 @@ public sealed partial class TargetOutlineSystem : EntitySystem
 
             if (!valid)
             {
-                // CMU14: keyed removal only drops our own entry
-                // if (_highlightedSprites.Remove(sprite) && (sprite.PostShader == _shaderTargetValid || sprite.PostShader == _shaderTargetInvalid))
+                // was this previously valid?
                 if (_highlightedSprites.Remove(sprite))
                 {
-                    _sprite.RemovePostShader(sprite, ShaderId); // CMU14
+                    _sprite.RemovePostShader(sprite, ContentPostShaderIds.TargetOutline);
                     sprite.RenderOrder = 0;
                 }
 
@@ -179,14 +177,11 @@ public sealed partial class TargetOutlineSystem : EntitySystem
                 valid = (origin - target).LengthSquared() <= Range;
             }
 
-            // CMU14: obsolete PostShader property clears every keyed entry on the sprite, guard only fed the single-slot API
-            // if (sprite.PostShader != null &&
-            //     sprite.PostShader != _shaderTargetValid &&
-            //     sprite.PostShader != _shaderTargetInvalid)
-            //     return;
-
             // highlight depending on whether its in or out of range
-            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, valid ? _shaderTargetValid : _shaderTargetInvalid)); // CMU14
+            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ContentPostShaderIds.TargetOutline, valid ? _shaderTargetValid : _shaderTargetInvalid)
+            {
+                After = ContentPostShaderIds.AfterBaseEffects,
+            });
             sprite.RenderOrder = EntityManager.CurrentTick.Value;
             _highlightedSprites.Add(sprite);
         }
@@ -196,11 +191,7 @@ public sealed partial class TargetOutlineSystem : EntitySystem
     {
         foreach (var sprite in _highlightedSprites)
         {
-            // CMU14: keyed removal, other entries (cloaks, holograms) are no longer clobbered
-            // if (sprite.PostShader != _shaderTargetValid && sprite.PostShader != _shaderTargetInvalid)
-            //     continue;
-
-            _sprite.RemovePostShader(sprite, ShaderId); // CMU14
+            _sprite.RemovePostShader(sprite, ContentPostShaderIds.TargetOutline);
             sprite.RenderOrder = 0;
         }
 

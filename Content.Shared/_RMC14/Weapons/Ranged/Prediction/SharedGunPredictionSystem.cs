@@ -29,19 +29,19 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
 
         if (user == null ||
             !_combatMode.IsInCombatMode(user) ||
-            !_gun.TryGetGun(user.Value, out var ent, out var gun))
+            !_gun.TryGetGun(user.Value, out var gun))
         {
             return null;
         }
 
-        if (ent != GetEntity(netGun))
+        if (gun.Owner != GetEntity(netGun))
             return null;
 
         var shootCoordinates = GetCoordinates(coordinates);
         if (!shootCoordinates.IsValid(EntityManager)) // CMU14: stale client coordinates after their parent entity was deleted
             return null;
         var shootMapCoordinates = _transform.ToMapCoordinates(shootCoordinates);
-        if (!IsSameMap(ent, shootMapCoordinates))
+        if (!IsSameMap(gun.Owner, shootMapCoordinates))
             return null;
 
         var targetUid = GetEntity(target);
@@ -58,13 +58,13 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
         }
 
 #pragma warning disable RA0002
-        gun.ShootCoordinates = shootCoordinates;
-        gun.Target = targetUid;
+        gun.Comp.ShootCoordinates = shootCoordinates;
+        gun.Comp.Target = targetUid;
 #pragma warning restore RA0002
         if (rearmSemiAuto)
-            _gun.ResetShotCounter(ent, gun);
+            _gun.ResetShotCounter(gun.Owner, gun.Comp);
 
-        return _gun.AttemptShoot(user.Value, ent, gun, projectiles, session);
+        return _gun.AttemptShoot(user.Value, gun, projectiles, session);
     }
 
     protected bool IsSameMap(EntityUid entity, EntityUid other)

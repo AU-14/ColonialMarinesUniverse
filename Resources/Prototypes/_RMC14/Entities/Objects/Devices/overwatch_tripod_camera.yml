@@ -22,6 +22,7 @@
           True: { state: deployed }
           False: { state: undeployed }
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: RMCOverwatchTripodCamera
     deploySound:

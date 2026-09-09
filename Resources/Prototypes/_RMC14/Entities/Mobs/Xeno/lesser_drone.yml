@@ -15,7 +15,7 @@
     raffle:
       settings: short
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/LesserDrone/lesser_drone.rsi # AU14-Edit Start
+    sprite: CMU14/Mobs/Xenos/LesserDrone/lesser_drone.rsi # AU14-Edit Start
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -90,12 +90,16 @@
     plasmaRegenOnWeeds: 4
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 24
+      types:
+        Blunt: 8
+        Slash: 8
+        Piercing: 8
   - type: Tackle
     min: 4
     max: 5

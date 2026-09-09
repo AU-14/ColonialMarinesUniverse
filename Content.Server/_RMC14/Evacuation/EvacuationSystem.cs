@@ -62,7 +62,7 @@ public sealed partial class EvacuationSystem : SharedEvacuationSystem
         }
 
         var shuttle = EnsureComp<ShuttleComponent>(grid);
-        if (GetEvacuationProgress() < 100 &&
+        if (GetEvacuationProgress(grid) < 100 &&
             crashLandChance > 0 &&
             _random.Prob(crashLandChance) &&
             _crashLand.TryGetCrashLandLocation(out var location))

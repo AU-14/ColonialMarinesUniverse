@@ -100,7 +100,7 @@
   suffix: Opfor
   components:
   - type: OverwatchConsole
-    canOrbitalBombardment: false
+    canOrbitalBombardment: true
     group: OPFOR
   - type: TacticalMapComputer
     faction: opfor

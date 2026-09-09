@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using System.Reflection;
-using Content.Server._CMU14.Medical.Treatment.FirstAid;
-using Content.Server._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Anatomy.Bones;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Core;
-using Content.Shared._CMU14.Medical.Treatment.FirstAid;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Server.CMU14.Medical.Treatment.FirstAid;
+using Content.Server.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Anatomy.Bones;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Treatment.FirstAid;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared.Body.Part;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.IntegrationTests._CMU14.Medical.Core;
+namespace Content.IntegrationTests.CMU14.Medical.Core;
 
 [TestFixture]
 public sealed class CMUMedicalFeatureDeadlineTest

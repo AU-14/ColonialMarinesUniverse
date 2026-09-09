@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using Content.Server._AU14.Radio;
+using Content.Server.CMU14.Radio;
 using Content.Server._RMC14.Language.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Station.Systems;
-using Content.Shared._AU14.CCVar;
-using Content.Shared._AU14.Radio;
+using Content.Shared.CMU14.CCVar;
+using Content.Shared.CMU14.Radio;
 using Content.Shared._RMC14.Language.Components;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared.Inventory;
@@ -16,7 +16,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._AU14.Radio;
+namespace Content.IntegrationTests.CMU14.Radio;
 
 // the AN/PRC net log used to write down the frequency of any net whose prefix the
 // wearer typed, whether or not they held the key and whether or not the message ever
@@ -166,7 +166,12 @@ public sealed class ANPRCNetLogLeakTest
 
                 const string spoken = "Убей его";
 
-                var traffic = new ANPRCDirectTrafficReceivedEvent(reader, "GIBBS", 1469, spoken, Foreign);
+                var traffic = new ANPRCDirectTrafficReceivedEvent(
+                    reader,
+                    "GIBBS",
+                    RadioFrequency.FromKilohertz(146_900),
+                    spoken,
+                    Foreign);
                 entities.EventBus.RaiseLocalEvent(station, ref traffic);
 
                 // the set keeps the sounds it caught, whoever ends up reading them
@@ -184,7 +189,12 @@ public sealed class ANPRCNetLogLeakTest
                 Assert.That(forNobody.Single().Message, Is.Not.EqualTo(spoken));
 
                 // a language the reader does have still reads straight
-                var plain = new ANPRCDirectTrafficReceivedEvent(reader, "GIBBS", 1469, "kill him", Common);
+                var plain = new ANPRCDirectTrafficReceivedEvent(
+                    reader,
+                    "GIBBS",
+                    RadioFrequency.FromKilohertz(146_900),
+                    "kill him",
+                    Common);
                 entities.EventBus.RaiseLocalEvent(station, ref plain);
 
                 var rendered = radios.BuildNetLog((station, radio), new[] { reader });

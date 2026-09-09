@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Examine;
 using Content.Shared.HealthExaminable;
 using Content.Shared.Verbs;

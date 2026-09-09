@@ -44,7 +44,7 @@ public sealed partial class SentryUpgradeBui : BoundUserInterface
                 if (!_prototypes.TryIndex(upgradeId, out var upgradeProto))
                     continue;
 
-                var button = new RadialMenuTextureButton
+                var button = new RadialMenuButton
                 {
                     StyleClasses = { "RadialMenuButton" },
                     SetSize = new Vector2(64, 64),

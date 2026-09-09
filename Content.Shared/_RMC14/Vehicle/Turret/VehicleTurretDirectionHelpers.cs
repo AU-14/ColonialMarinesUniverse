@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Robust.Shared.Maths;
 
 namespace Content.Shared._RMC14.Vehicle;
@@ -27,5 +28,11 @@ public static class VehicleTurretDirectionHelpers
             return Direction.North;
 
         return Direction.South;
+    }
+
+    public static Vector2 GetLocalOffsetForRenderDirection(Vector2 offset, Angle facing)
+    {
+        var direction = GetRenderAlignedCardinalDir(facing);
+        return (-direction.ToAngle()).RotateVec(offset);
     }
 }
