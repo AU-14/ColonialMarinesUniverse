@@ -49,16 +49,10 @@ namespace Content.Client.Options.UI.Tabs
             new();
 
         private readonly List<Action> _deferCommands = new();
+        
+        private readonly List<Control> _allControls = new(); //CMU14
+        private bool _searchingByKey; //CMU14
 
-        private readonly List<Control> _allControls = new();
-
-        private bool _searchingByKey;
-
-        private void HandleToggleUSQWERTYCheckbox(BaseButton.ButtonToggledEventArgs args)
-        {
-            _cfg.SetCVar(CVars.DisplayUSQWERTYHotkeys, args.Pressed);
-            _cfg.SaveToFile();
-        }
 
         private void InitToggleWalk()
         {
@@ -188,7 +182,8 @@ namespace Content.Client.Options.UI.Tabs
                 });
             };
 
-            SearchBar.OnTextChanged += OnSearchTextChanged;
+            // CMU14 --start
+            SearchBar.OnTextChanged += OnSearchTextChanged; 
 
             SearchByKeyButton.OnPressed += _ =>
             {
@@ -205,15 +200,16 @@ namespace Content.Client.Options.UI.Tabs
                 SearchBar.Text = string.Empty;
                 OnSearchTextChanged(new LineEdit.LineEditEventArgs(SearchBar, string.Empty));
             };
-
+            // CMU14 --end
+            
             void AddTo(Control child)
             {
-                KeybindsContainer.AddChild(child);
+                KeybindsContainer.AddChild(child); //CMU 14
             }
 
             void AddHeader(string headerContents)
-            {
-                var headerLabel = new Label
+            {   //CMU14 --start
+                var headerLabel = new Label 
                 {
                     Text = Loc.GetString(headerContents),
                     Margin = new Thickness(0, 10, 0, 5)
@@ -221,6 +217,7 @@ namespace Content.Client.Options.UI.Tabs
                 headerLabel.AddStyleClass("LabelHeading");
                 AddTo(headerLabel);
                 _allControls.Add(headerLabel);
+                //CMU14 --end
             }
 
             void AddButton(BoundKeyFunction function)
@@ -228,7 +225,7 @@ namespace Content.Client.Options.UI.Tabs
                 var control = new KeyControl(this, function);
                 AddTo(control);
                 _keyControls.Add(function, control);
-                _allControls.Add(control);
+                _allControls.Add(control); //CMU14
             }
 
             void AddCheckBox(string checkBoxName, bool currentState, Action<BaseButton.ButtonToggledEventArgs>? callBackOnClick)
@@ -237,7 +234,7 @@ namespace Content.Client.Options.UI.Tabs
                 newCheckBox.Pressed = currentState;
                 newCheckBox.OnToggled += callBackOnClick;
                 AddTo(newCheckBox);
-                _allControls.Add(newCheckBox);
+                _allControls.Add(newCheckBox); //CMU14
             }
 
             void AddToggleCvarCheckBox(string checkBoxName, CVarDef<bool> cvar)
@@ -251,7 +248,7 @@ namespace Content.Client.Options.UI.Tabs
                 };
 
                 AddTo(newCheckBox);
-                _allControls.Add(newCheckBox);
+                _allControls.Add(newCheckBox); //CMU14
             }
 
             AddHeader("ui-options-header-rmc");
@@ -352,10 +349,10 @@ namespace Content.Client.Options.UI.Tabs
                     }
                 };
 
-                KeybindsContainer.AddChild(row);
-                _allControls.Add(row);
+                KeybindsContainer.AddChild(row); // CMU14
+                _allControls.Add(row); // CMU14
             }
-
+            // CMU14
             AddEmoteSlot("cmu-ui-options-emote-slot-1", CCVars.EmoteSlot1);
             AddEmoteSlot("cmu-ui-options-emote-slot-2", CCVars.EmoteSlot2);
             AddEmoteSlot("cmu-ui-options-emote-slot-3", CCVars.EmoteSlot3);
@@ -540,6 +537,7 @@ namespace Content.Client.Options.UI.Tabs
             }
         }
 
+        // CMU14 Search by keybind handler
         private void HandleSearchByKey(KeyEventArgs keyEvent)
         {
             var key = keyEvent.Key;
@@ -735,7 +733,8 @@ namespace Content.Client.Options.UI.Tabs
                 }
             }
         }
-
+        // CMU14 --end
+        
         private void UpdateKeyControl(KeyControl control)
         {
             var activeBinds = _inputManager.GetKeyBindings(control.Function);
@@ -815,7 +814,8 @@ namespace Content.Client.Options.UI.Tabs
         private void InputManagerOnFirstChanceOnKeyEvent(KeyEventArgs keyEvent, KeyEventType type)
         {
             DebugTools.Assert(IsInsideTree);
-
+            
+            // CMU14
             if (_searchingByKey)
             {
                 if (type == KeyEventType.Down)
@@ -864,7 +864,8 @@ namespace Content.Client.Options.UI.Tabs
                     HandleSearchByKey(keyEvent);
                     keyEvent.Handle();
                 }
-
+                // CMU14 --end
+                
                 return;
             }
 
