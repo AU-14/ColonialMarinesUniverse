@@ -44,7 +44,7 @@
   - /Audio/Effects/metal_thud2.ogg
   - /Audio/Effects/metal_thud3.ogg
 
-- type: soundCollection
+- type: soundCollection # CMU14
   id: XenoQueenBreath
   files:
   - /Audio/_RMC14/Xeno/alien_queen_breath1.ogg

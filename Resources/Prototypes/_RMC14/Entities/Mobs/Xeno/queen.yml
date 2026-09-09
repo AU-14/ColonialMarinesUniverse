@@ -180,7 +180,7 @@
       collection: XenoFootstepLarge
       params:
         volume: 0
-  - type: RandomSound
+  - type: RandomSound # CMU14
     sound:
       collection: XenoQueenBreath
       params:
