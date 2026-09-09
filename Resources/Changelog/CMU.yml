@@ -10640,5 +10640,12 @@
   id: 684
   time: '2026-09-07T13:11:37.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1907
+- author: Berkin101
+  changes:
+  - message: Added a search bar to options->controls.
+    type: Add
+  id: 685
+  time: '2026-09-09T14:03:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1911
 Name: CMU
 Order: -1
