@@ -14,6 +14,6 @@
     Blunt: 0.5
     Slash: 0.5
     Piercing: 0.5
-    Heat: 0.8
+    Heat: 0.3 // (so that they can burn for about as long as a working joe does, seeing as how they cant use guns even if their hacked/runaway it should be fair)
     Shock: 0.8
     Cold: 0.8
