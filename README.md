@@ -51,7 +51,6 @@ The **May 1, 2026** licensing cutoff was introduced in
 The repository's `LICENSE.TXT` was subsequently changed from MIT to AGPL-3.0 on **May 13, 2026**, in
 [commit f41c414ca0ec][license-file-change]. The cutoff above comes from the earlier README change.
 
-License exceptions must be clearly declared in the affected file and its header, along with the reason for the exception.
 
 ### Assets
 
