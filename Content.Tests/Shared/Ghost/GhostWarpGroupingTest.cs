@@ -1,3 +1,4 @@
+using System; // CMU14: needed for Array.Empty
 using Content.Shared.Ghost.Systems;
 using NUnit.Framework;
 
