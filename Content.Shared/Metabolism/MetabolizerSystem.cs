@@ -191,6 +191,7 @@ public sealed partial class MetabolizerSystem : EntitySystem
                 return;
 
             var actualEntity = ent.Comp2?.Body ?? solutionOwner.Value;
+            // CMU Related Change
             var rateEvent = new MetabolismRateModifyEvent(
                 actualEntity,
                 stage,

@@ -33,6 +33,7 @@ public static class Identity
 
         var uidName = meta.EntityName;
 
+        // CMU Related Change
         var yautjaViewer = viewer != null && ent.HasComponent<YautjaComponent>(viewer.Value);
 
         if (yautjaViewer && ent.HasComponent<YautjaComponent>(uid))

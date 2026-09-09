@@ -90,6 +90,7 @@ public sealed partial class XenoScreechSystem : EntitySystem
             SpawnAttachedTo(xeno.Comp.Effect, xeno.Owner.ToCoordinates());
     }
 
+    // CMU Related Change
     public bool ApplyScreechEffects(EntityUid xeno, EntityUid receiver, TimeSpan slowTime, TimeSpan blindTime)
     {
         if (_mobState.IsDead(receiver))
@@ -106,6 +107,7 @@ public sealed partial class XenoScreechSystem : EntitySystem
         return true;
     }
 
+    // CMU Related Change
     public void Deafen(EntityUid xeno, EntityUid receiver, TimeSpan time)
     {
         if (_mobState.IsDead(receiver))

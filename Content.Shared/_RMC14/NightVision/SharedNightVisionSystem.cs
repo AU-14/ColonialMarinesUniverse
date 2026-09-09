@@ -295,6 +295,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
                     item.Comp.HadNightVision = true;
                     item.Comp.PreviousState = nightVision.State;
                     item.Comp.PreviousGreen = nightVision.Green;
+                    // CMU Related Change
                     item.Comp.PreviousOverlay = nightVision.Overlay;
                     item.Comp.PreviousMesons = nightVision.Mesons;
                     item.Comp.PreviousExperimentalMesonFov = nightVision.ExperimentalMesonFov;
@@ -317,6 +318,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
 
                 nightVision.State = defaultState;
                 nightVision.Green = item.Comp.Green;
+                // CMU Related Change
                 nightVision.Overlay = item.Comp.Overlay;
                 nightVision.Mesons = item.Comp.Mesons;
                 nightVision.ExperimentalMesonFov = item.Comp.ExperimentalMesonFov;
@@ -333,6 +335,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
                 {
                     State = defaultState,
                     Green = item.Comp.Green,
+                    // CMU Related Change
                     Overlay = item.Comp.Overlay,
                     Mesons = item.Comp.Mesons,
                     ExperimentalMesonFov = item.Comp.ExperimentalMesonFov,
@@ -405,6 +408,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
                 // Restore the previous component state so innate synth night vision survives item toggles.
                 nightVision.State = item.Comp.PreviousState;
                 nightVision.Green = item.Comp.PreviousGreen;
+                // CMU Related Change
                 nightVision.Overlay = item.Comp.PreviousOverlay;
                 nightVision.Mesons = item.Comp.PreviousMesons;
                 nightVision.ExperimentalMesonFov = item.Comp.PreviousExperimentalMesonFov;
@@ -424,6 +428,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         item.Comp.HadNightVision = false;
         item.Comp.PreviousState = NightVisionState.Off;
         item.Comp.PreviousGreen = false;
+        // CMU Related Change
         item.Comp.PreviousOverlay = false;
         item.Comp.PreviousMesons = false;
         item.Comp.PreviousExperimentalMesonFov = false;

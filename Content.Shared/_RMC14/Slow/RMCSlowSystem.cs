@@ -50,6 +50,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     public bool TrySlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false)
     {
+        // CMU Related Change
         if (IsRegularYautja(ent))
             return false;
 
@@ -75,6 +76,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     public bool TrySuperSlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false)
     {
+        // CMU Related Change
         if (IsRegularYautja(ent))
             return false;
 
@@ -103,6 +105,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     public bool TryRoot(EntityUid ent, TimeSpan duration, bool refresh = true, bool applyChemical = false)
     {
+        // CMU Related Change
         if (IsRegularYautja(ent))
             return false;
 
@@ -131,6 +134,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
         return true;
     }
 
+    // CMU Related Change
     private bool IsRegularYautja(EntityUid ent)
     {
         return HasComp<YautjaComponent>(ent) && !HasComp<YautjaBadBloodComponent>(ent);

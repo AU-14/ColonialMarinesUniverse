@@ -69,6 +69,7 @@ public sealed partial class TackleSystem : EntitySystem
 
         DoDisarmEffects(user, target);
 
+        // CMU Related Change
         if (TryComp(target, out YautjaComponent? yautja) &&
             !HasComp<YautjaBadBloodComponent>(target) &&
             HasComp<XenoComponent>(user))

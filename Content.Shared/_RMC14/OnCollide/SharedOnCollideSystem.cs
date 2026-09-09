@@ -126,6 +126,7 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
 
         _xenoSpit.SetAcidCombo(other, ent.Comp.AcidComboDuration, ent.Comp.AcidComboDamage, ent.Comp.AcidComboParalyze, ent.Comp.AcidComboResists);
 
+        // CMU Related Change
         // Skip paralysis for Yautja when it's acidic damage
         if (ent.Comp.Paralyze > TimeSpan.Zero && !_standing.IsDown(other) && (!_size.TryGetSize(other, out var size) || size < RMCSizes.Big))
         {

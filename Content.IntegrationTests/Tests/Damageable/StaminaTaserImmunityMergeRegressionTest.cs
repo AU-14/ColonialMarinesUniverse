@@ -81,6 +81,7 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
                 RaiseThrownHit(taserCollide, collideImmune);
                 RaiseThrownHit(plainCollide, collidePlain);
 
+                // CMU Related Change
                 AssertStamina(hitImmune, 0, false, false,
                     "Taser-tagged melee stamina damage is skipped for Yautja");
                 AssertStamina(hitNormal, 10, true, true,
@@ -119,6 +120,7 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
         SEntMan.EventBus.RaiseLocalEvent(projectile, ref ev);
     }
 
+    // CMU Related Change
     private void AssertStamina(EntityUid target, float expectedDamage, bool decayActive, bool statusActive, string message)
     {
         var stamina = SEntMan.GetComponent<StaminaComponent>(target);

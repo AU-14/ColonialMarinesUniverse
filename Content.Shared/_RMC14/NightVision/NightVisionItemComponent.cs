@@ -63,6 +63,7 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public bool Green;
 
+    // CMU Related Change
     /// <summary>
     /// Whether night-vision-visible entities are rendered through occlusion.
     /// </summary>
@@ -129,6 +130,7 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public bool PreviousGreen;
 
+    // CMU Related Change
     [DataField, AutoNetworkedField]
     public bool PreviousOverlay;
 
