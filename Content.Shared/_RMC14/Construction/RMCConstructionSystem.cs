@@ -19,6 +19,7 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Robust.Shared.Map;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Collision.Shapes;
@@ -60,6 +61,8 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         SubscribeLocalEvent<DropshipHijackLandedEvent>(OnDropshipHijackLanded);
 
         SubscribeLocalEvent<RMCConstructionPreventCollideComponent, PreventCollideEvent>(OnConstructionPreventCollide);
+        SubscribeLocalEvent<RMCConstructionPreventCollideComponent, ComponentGetState>(OnPreventCollideGetState);
+        SubscribeLocalEvent<RMCConstructionPreventCollideComponent, ComponentHandleState>(OnPreventCollideHandleState);
 
         SubscribeLocalEvent<RMCConstructionItemComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<RMCConstructionItemComponent, RMCConstructionBuildDoAfterEvent>(OnBuildDoAfter);

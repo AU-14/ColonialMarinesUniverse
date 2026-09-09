@@ -11,6 +11,7 @@ It never automatically invokes `serverperf deep` or retains per-entity details. 
 ## Default behavior
 
 - Diagnostics and healthy one-minute heartbeats are enabled.
+- Log output is enabled by default (`cmu.server_performance.log_enabled = true`). An explicit saved false value still mutes it; `cmuperf status` and runtime configuration should be checked when deploying to an existing server.
 - A real frame of 250 ms opens an incident immediately; 1,000 ms is critical.
 - TPS or average FPS below 80% of target for three seconds opens an incident.
 - Recovery requires all triggers to remain healthy for ten seconds; low-TPS/FPS signals must first reach 95% of target.
@@ -18,6 +19,8 @@ It never automatically invokes `serverperf deep` or retains per-entity details. 
 - The flight-recorder profiler is enabled during startup so the completed frames before a trigger are still in its ring.
 - Disabling the monitor unhooks its ECS event handlers and disables the profiler only when the monitor still owns that enablement; an administrator-owned profiler is left alone.
 - Detailed reports have a two-minute cooldown. Incident opening/updates/recovery are never hidden by that cooldown.
+- Critical stalls can force a fresh detailed report during an existing incident, at most once every 30 seconds, so a later severe stall is not lost behind an earlier churn report.
+- Error counts and representative existing errors are attached to detailed reports and summarized every 30 seconds when nonzero. At most 32 sources are retained and four samples are emitted, each capped at 2,048 characters. These identify coincident failures, not proof of CPU/GC attribution.
 - Healthy churn baselines refresh every five minutes and at startup/round boundaries.
 
 ## Log records
@@ -50,6 +53,8 @@ The principal records are:
 | `ecs-churn` | Top prototype/component net growth or map creation since the healthy baseline. |
 | `inbound-network-message` | Top decoded inbound message types during the latest sample interval. |
 | `detail-suppressed` | Scalar incident was recorded, but detailed parsing was still on cooldown. |
+| `error-window` / `error-source` | Error rate, source counts, and bounded samples, including failures on PVS worker threads. |
+| `phase-window` | Wall time between module callbacks, with the worst tick: simulation/timers/tasks, post-tick work and state sending, engine frame work, and frame tail/wait/input. The last category includes idle time and is not a CPU measurement. Windows accumulate since the previous detailed report. |
 
 Every incident line has a stable `incidentId`. Group all rows with the same ID before drawing conclusions.
 
@@ -64,6 +69,11 @@ Every incident line has a stable `incidentId`. Group all rows with the same ID b
 7. Inspect send/receive rates. Message-type attribution is decoded **inbound** traffic only; the engine does not expose per-type outbound totals through this API.
 8. Correlate the incident window with external heap/RSS, GC pause, CPU, and thread-pool metrics.
 9. If memory continues rising, take two dumps several minutes apart under comparable load and compare surviving type/root growth.
+
+Use `phase-window` to distinguish a long simulation tick from a long post-tick/state-send interval when the
+profiler has no finer PVS scope. `post-tick-and-state-send` includes content post-tick callbacks and game-state
+generation/serialization/sending; it does not separate those substeps or identify GC pauses. Pair it with
+`error-source` and external runtime metrics before attributing a stall to a particular method.
 
 ## Admin commands
 
@@ -97,6 +107,7 @@ All automatic-monitor CVars are server-only and archived. In the table, the firs
 | CVar | Default | Effect |
 | --- | ---: | --- |
 | `cmu.server_performance.enabled` | `true` | Master switch. |
+| `log_enabled` | `true` | Write diagnostic logs; does not control metrics or collection. |
 | `sample_interval` | `1` s | Full observation cadence; hard stalls are still checked every frame. |
 | `warmup` | `30` s | Suppresses rate/growth triggers after startup or a new round. Hard stalls/allocation/network remain active. |
 | `heartbeat_interval` | `60` s | Healthy log heartbeat; `0` disables it. |

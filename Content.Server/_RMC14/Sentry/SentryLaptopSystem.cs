@@ -256,6 +256,7 @@ public sealed partial class SentryLaptopSystem : SharedSentryLaptopSystem
 
     private void OnSentryShutdown(Entity<SentryComponent> sentry, ref ComponentShutdown args)
     {
+        UnlinkSentryFromLaptops(sentry);
         var sentryNet = GetNetEntity(sentry.Owner);
         var watchers = EntityQueryEnumerator<SentryLaptopWatcherComponent>();
 

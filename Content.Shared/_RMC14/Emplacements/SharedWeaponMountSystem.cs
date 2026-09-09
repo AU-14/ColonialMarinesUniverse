@@ -504,7 +504,8 @@ public abstract partial class SharedWeaponMountSystem : EntitySystem
             _scope.StartScoping((weapon, scope), args.Buckle);
         }
 
-        _actions.AddAction(args.Buckle, ref ent.Comp.DismountActionEntity, ent.Comp.DismountAction, args.Buckle);
+        // The mount owns this reusable action; successive operators only receive it temporarily.
+        _actions.AddAction(args.Buckle, ref ent.Comp.DismountActionEntity, ent.Comp.DismountAction, ent.Owner);
     }
 
     private void OnUnStrapped(Entity<WeaponMountComponent> ent, ref UnstrappedEvent args)
