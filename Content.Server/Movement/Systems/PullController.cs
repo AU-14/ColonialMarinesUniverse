@@ -106,7 +106,7 @@ public sealed partial class PullController : VirtualController
     private bool OnRequestMovePulledObject(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
     {
         if (session?.AttachedEntity is not { } player ||
-            !player.IsValid())
+            !player.IsValid() || !coords.IsValid(EntityManager))
         {
             return false;
         }

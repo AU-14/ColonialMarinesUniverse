@@ -62,7 +62,7 @@ public sealed partial class SapperSnareSystem : EntitySystem
     private void OnSnareTriggered(EntityUid uid, SapperSnareComponent comp, ref TriggerEvent args)
     {
         // The step gate already spared friendlies, but re-check in case something else set it off.
-        if (args.User is not { } tripper || HasComp<CLFMemberComponent>(tripper))
+        if (args.User is not { } tripper || TerminatingOrDeleted(tripper) || HasComp<CLFMemberComponent>(tripper))
             return;
 
         if (HasComp<SapperSnaredComponent>(tripper))
@@ -103,8 +103,11 @@ public sealed partial class SapperSnareSystem : EntitySystem
     private void OnSnaredShutdown(Entity<SapperSnaredComponent> ent, ref ComponentShutdown args)
     {
         // Free their movement immediately (in case they were cut loose early, before the root expired).
-        RemComp<RMCRootedComponent>(ent);
-        _speed.RefreshMovementSpeedModifiers((ent.Owner, null));
+        if (!TerminatingOrDeleted(ent.Owner))
+        {
+            RemComp<RMCRootedComponent>(ent);
+            _speed.RefreshMovementSpeedModifiers((ent.Owner, null));
+        }
 
         // Take the cuffs off by deleting them - the snare's cuffs are conjured by the trap, so they vanish
         // with it instead of leaving a free pair on the floor. Removal from the container cleans up the

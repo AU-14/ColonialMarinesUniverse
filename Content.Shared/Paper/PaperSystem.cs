@@ -104,7 +104,7 @@ public sealed partial class PaperSystem : EntitySystem
             if (entity.Comp.StampedBy.Count > 0)
             {
                 var commaSeparated =
-                    string.Join(", ", entity.Comp.StampedBy.Select(s => Loc.GetString(s.StampedName)));
+                    string.Join(", ", entity.Comp.StampedBy.Select(s => s.GetDisplayName()));
                 args.PushMarkup(
                     Loc.GetString(
                         "paper-component-examine-detail-stamped-by",

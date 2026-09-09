@@ -176,6 +176,7 @@ namespace Content.Server.Entry
         public override void Update(ModUpdateLevel level, FrameEventArgs frameEventArgs)
         {
             base.Update(level, frameEventArgs);
+            _performanceDiagnostics.ObservePhase(level);
 
             switch (level)
             {

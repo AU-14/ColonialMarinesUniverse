@@ -109,6 +109,9 @@ namespace Content.Server.Database
                 return;
             }
 
+            // EF can insert the replacement high-priority job before deleting the old one. PostgreSQL's
+            // filtered unique index checks each statement, so flush removals first in the same transaction.
+            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
             var oldProfile = db.DbContext.Profile
                 .Include(p => p.Preference)
                 .Where(p => p.Preference.UserId == userId.UserId)
@@ -122,6 +125,12 @@ namespace Content.Server.Database
                 .Include(p => p.SquadPreference)
                 .AsSplitQuery()
                 .SingleOrDefault(h => h.Slot == slot);
+
+            if (oldProfile is { Jobs.Count: > 0 })
+            {
+                oldProfile.Jobs.Clear();
+                await db.DbContext.SaveChangesAsync();
+            }
 
             var newProfile = ConvertProfiles(humanoid, slot, oldProfile);
             if (oldProfile == null)
@@ -138,6 +147,7 @@ namespace Content.Server.Database
             }
 
             await db.DbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
 
         private static async Task DeleteCharacterSlot(ServerDbContext db, NetUserId userId, int slot)

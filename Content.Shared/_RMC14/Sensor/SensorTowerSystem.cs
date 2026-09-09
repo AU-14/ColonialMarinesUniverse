@@ -189,6 +189,9 @@ public sealed partial class SensorTowerSystem : EntitySystem
             return;
         }
 
+        if (ent.Comp.State is SensorTowerState.Off or SensorTowerState.On)
+            return;
+
         var correctQuality = ent.Comp.State switch
         {
             SensorTowerState.Weld => ent.Comp.WeldingQuality,

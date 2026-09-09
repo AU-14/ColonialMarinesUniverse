@@ -22,6 +22,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.DeviceNetwork.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Containers;
+using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using SentryAlertEvent = Content.Shared._RMC14.Sentry.Laptop.SentryAlertEvent;
@@ -58,6 +59,8 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
         SubscribeLocalEvent<SentryLaptopComponent, ComponentShutdown>(OnLaptopShutdown);
         SubscribeLocalEvent<SentryLaptopComponent, ActivatableUIOpenAttemptEvent>(OnLaptopUIOpenAttempt);
         SubscribeLocalEvent<SentryLaptopComponent, EntParentChangedMessage>(OnLaptopParentChanged);
+        SubscribeLocalEvent<SentryLaptopComponent, ComponentGetState>(OnLaptopGetState);
+        SubscribeLocalEvent<SentryLaptopComponent, ComponentHandleState>(OnLaptopHandleState);
 
         SubscribeLocalEvent<SentryLaptopLinkedComponent, ComponentShutdown>(OnSentryLinkedShutdown);
 
@@ -499,22 +502,43 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
 
     public void UnlinkSentry(Entity<SentryLaptopComponent> laptop, EntityUid sentry)
     {
-        if (!laptop.Comp.LinkedSentries.Remove(sentry))
+        // Device-link cleanup may already have removed the cached link. Names must still be removed.
+        var changed = laptop.Comp.LinkedSentries.Remove(sentry);
+        changed |= laptop.Comp.SentryCustomNames.Remove(sentry);
+
+        if (TryComp<DeviceLinkSourceComponent>(laptop, out var source) &&
+            TryComp<DeviceLinkSinkComponent>(sentry, out var sink))
+            _deviceLink.RemoveSinkFromSource(laptop, sentry, source, sink);
+
+        if (TryComp<SentryLaptopLinkedComponent>(sentry, out var linked) && linked.LinkedLaptop == laptop.Owner)
+        {
+            linked.LinkedLaptop = null;
+            if (linked.LifeStage < ComponentLifeStage.Stopping)
+                RemComp<SentryLaptopLinkedComponent>(sentry);
+        }
+
+        if (!changed)
             return;
 
-        if (TryComp<DeviceLinkSinkComponent>(sentry, out var sink))
-            _deviceLink.RemoveAllFromSink(sentry, sink);
-
-        laptop.Comp.SentryCustomNames.Remove(sentry);
-        RemComp<SentryLaptopLinkedComponent>(sentry);
-
-        if (TryComp<SentryTargetingComponent>(sentry, out var targeting))
+        if (!TerminatingOrDeleted(sentry) && TryComp<SentryTargetingComponent>(sentry, out var targeting))
             _sentryTargeting.ResetToDefault((sentry, targeting));
 
         if (laptop.Comp.LinkedSentries.Count == 0)
             SetPowered(laptop, false);
 
         Dirty(laptop);
+    }
+
+    protected void UnlinkSentryFromLaptops(EntityUid sentry)
+    {
+        // A device can be linked to multiple laptops, while its legacy backlink stores only one.
+        var query = EntityQueryEnumerator<SentryLaptopComponent>();
+        while (query.MoveNext(out var uid, out var laptop))
+        {
+            if (!TerminatingOrDeleted(uid) &&
+                (laptop.LinkedSentries.Contains(sentry) || laptop.SentryCustomNames.ContainsKey(sentry)))
+                UnlinkSentry((uid, laptop), sentry);
+        }
     }
 
     private void UnlinkAllSentries(Entity<SentryLaptopComponent> laptop)
@@ -642,15 +666,25 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
     {
         var linked = new List<EntityUid>();
 
-        if (TryComp<DeviceLinkSourceComponent>(laptop, out var source))
+        if (_net.IsServer && TryComp<DeviceLinkSourceComponent>(laptop, out var source))
         {
             foreach (var sink in source.LinkedPorts.Keys)
             {
-                if (HasComp<SentryComponent>(sink))
+                if (!TerminatingOrDeleted(sink) && HasComp<SentryComponent>(sink))
                     linked.Add(sink);
             }
 
-            laptop.Comp.LinkedSentries = linked.ToHashSet();
+            foreach (var stale in laptop.Comp.LinkedSentries.Concat(laptop.Comp.SentryCustomNames.Keys).Distinct().ToArray())
+            {
+                if (!linked.Contains(stale))
+                    UnlinkSentry(laptop, stale);
+            }
+
+            if (!laptop.Comp.LinkedSentries.SetEquals(linked))
+            {
+                laptop.Comp.LinkedSentries = linked.ToHashSet();
+                Dirty(laptop);
+            }
             return linked;
         }
 
