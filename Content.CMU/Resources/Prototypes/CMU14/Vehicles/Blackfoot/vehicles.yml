@@ -4,6 +4,8 @@
   name: AD-71E Blackfoot
   description: A compact VTOL aircraft intended for multi-Z operations.
   components:
+  - type: RMCNightVisionVisible
+    priority: -2
   - type: Vehicle
     movementKind: Grid
     transferDamage: false
