@@ -245,6 +245,9 @@
     addComponents:
     - type: XenoScreech
     - type: XenoQueenSpit
+    # CMU14 - Overwrites the immature order, so matured queens order their extra abilities correctly
+    - type: RMCActionOrder
+      id: CMXenoQueen
     addActions:
     - ActionXenoScreech
     - ActionXenoQueenSpit
@@ -318,12 +321,17 @@
     components:
     - type: RMCGibOnDeath
 
+# CMU14 - Queens start immature, so this is the id their action bar order is saved under until they mature
+- type: entity
+  abstract: true
+  id: CMXenoQueenImmature
+
 - type: entity
   parent: RMCXenoQueenBase
   id: CMXenoQueen
   components:
   - type: RMCActionOrder
-    id: CMXenoQueen
+    id: CMXenoQueenImmature
   # - type: XenoEvolution #can be enabled for events like april fools.
   #   strains:
   #   - RMCXenoQueenMaid
