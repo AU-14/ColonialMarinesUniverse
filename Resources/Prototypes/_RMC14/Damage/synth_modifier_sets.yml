@@ -8,7 +8,7 @@
     Shock: 0.9
     Cold: 0.9
 
-- type: damageModifierSet
+- type: damageModifierSet # CMU14
   id: RMCSynthetic
   coefficients:
     Blunt: 0.5
