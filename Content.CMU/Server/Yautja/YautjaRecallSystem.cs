@@ -67,8 +67,7 @@ public sealed partial class YautjaRecallSystem : EntitySystem
         }
 
         var userCoords = _transform.GetMapCoordinates(args.Performer);
-        EntityUid? closest = null;
-        var closestDistance = float.MaxValue;
+        var candidates = new List<(float Distance, EntityUid Item)>();
         var acidBlocked = false;
         var containerBlocked = false;
 
@@ -97,14 +96,10 @@ public sealed partial class YautjaRecallSystem : EntitySystem
                 continue;
 
             var distance = (itemCoords.Position - userCoords.Position).LengthSquared();
-            if (distance >= closestDistance)
-                continue;
-
-            closest = uid;
-            closestDistance = distance;
+            candidates.Add((distance, uid));
         }
 
-        if (closest is not { } item)
+        if (candidates.Count == 0)
         {
             var message = acidBlocked
                 ? "cmu-yautja-recall-acid"
@@ -115,16 +110,28 @@ public sealed partial class YautjaRecallSystem : EntitySystem
             return;
         }
 
-        if (!_hands.CanPickupAnyHand(args.Performer, item, checkActionBlocker: false) ||
-            !_power.HasPowerPopup(args.Performer, 70))
+        if (!_power.HasPowerPopup(args.Performer, 70))
             return;
 
-        if (!_hands.TryPickupAnyHand(args.Performer, item, checkActionBlocker: false))
-            return;
+        candidates.Sort((left, right) =>
+        {
+            var distance = left.Distance.CompareTo(right.Distance);
+            return distance != 0 ? distance : left.Item.Id.CompareTo(right.Item.Id);
+        });
 
-        _power.TryRemovePower(args.Performer, 70);
-        _audio.PlayPredicted(ent.Comp.RecallSound, item, args.Performer);
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-recall-success", ("item", item)), args.Performer, args.Performer);
+        foreach (var (_, item) in candidates)
+        {
+            if (!_hands.CanPickupAnyHand(args.Performer, item, checkActionBlocker: false) ||
+                !_hands.TryPickupAnyHand(args.Performer, item, checkActionBlocker: false))
+                continue;
+
+            _power.TryRemovePower(args.Performer, 70);
+            _audio.PlayPredicted(ent.Comp.RecallSound, item, args.Performer);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-recall-success", ("item", item)), args.Performer, args.Performer);
+            return;
+        }
+
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-recall-none"), args.Performer, args.Performer, PopupType.SmallCaution);
     }
 
     private bool IsEnclosed(EntityUid item)

@@ -157,6 +157,7 @@ public sealed partial class RMCMagneticSystem : EntitySystem
         Dirty(ent);
     }
 
+    // CMU Related Change
     public void UnlinkForForcedDrop(EntityUid item)
     {
         if (TryComp(item, out RMCSlingPouchItemComponent? sling) &&

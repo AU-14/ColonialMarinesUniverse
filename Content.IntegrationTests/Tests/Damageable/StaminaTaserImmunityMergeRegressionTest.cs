@@ -81,16 +81,17 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
                 RaiseThrownHit(taserCollide, collideImmune);
                 RaiseThrownHit(plainCollide, collidePlain);
 
-                AssertStamina(hitImmune, 0, false,
+                // CMU Related Change
+                AssertStamina(hitImmune, 0, false, false,
                     "Taser-tagged melee stamina damage is skipped for Yautja");
-                AssertStamina(hitNormal, 10, true,
+                AssertStamina(hitNormal, 10, true, true,
                     "the same Taser-tagged melee source retains the vanilla path for ordinary targets");
-                AssertStamina(hitPlain, 10, true,
-                    "untagged melee stamina damage still affects Yautja");
-                AssertStamina(collideImmune, 0, false,
+                AssertStamina(hitPlain, 10, true, false,
+                    "untagged melee stamina damage still accumulates without slowing Yautja");
+                AssertStamina(collideImmune, 0, false, false,
                     "Taser-tagged collide stamina damage is skipped for Yautja");
-                AssertStamina(collidePlain, 10, true,
-                    "untagged collide stamina damage still affects Yautja");
+                AssertStamina(collidePlain, 10, true, false,
+                    "untagged collide stamina damage still accumulates without slowing Yautja");
             }
             finally
             {
@@ -119,16 +120,16 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
         SEntMan.EventBus.RaiseLocalEvent(projectile, ref ev);
     }
 
-    private void AssertStamina(EntityUid target, float expectedDamage, bool active, string message)
+    // CMU Related Change
+    private void AssertStamina(EntityUid target, float expectedDamage, bool decayActive, bool statusActive, string message)
     {
         var stamina = SEntMan.GetComponent<StaminaComponent>(target);
         var status = SEntMan.System<StatusEffectsSystem>();
         Assert.Multiple(() =>
         {
             Assert.That(stamina.StaminaDamage, Is.EqualTo(expectedDamage), message);
-            Assert.That(SEntMan.HasComponent<ActiveStaminaComponent>(target), Is.EqualTo(active), message);
-            Assert.That(status.HasStatusEffect(target, SharedStaminaSystem.StaminaLow), Is.EqualTo(active),
-                "the upstream stamina status lifecycle must remain reachable on allowed hits");
+            Assert.That(SEntMan.HasComponent<ActiveStaminaComponent>(target), Is.EqualTo(decayActive), message);
+            Assert.That(status.HasStatusEffect(target, SharedStaminaSystem.StaminaLow), Is.EqualTo(statusActive), message);
         });
     }
 }

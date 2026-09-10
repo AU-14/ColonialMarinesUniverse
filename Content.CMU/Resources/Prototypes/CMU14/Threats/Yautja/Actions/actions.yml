@@ -318,7 +318,7 @@
   id: CMUActionYautjaRecall
   components:
   - type: Action
-    useDelay: 10
+    useDelay: 5
   - type: Sprite
     layers:
     - sprite: CMU14/Yautja/smart_disc.rsi

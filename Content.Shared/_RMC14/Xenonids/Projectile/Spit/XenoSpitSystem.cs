@@ -336,6 +336,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
         }
 
+        // CMU Related Change
         // Yautja are immune to acid-imposed slows and paralysis, but damage still applies
         if (HasComp<XenoAcidProjectileComponent>(spit.Owner) &&
             _yautjaAcid.ShouldSkipAcidMoveEffects(target))
@@ -539,6 +540,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
 
         if (paralyze != default)
         {
+            // CMU Related Change
             // Yautja are immune to acid-imposed paralysis
             if (!_yautjaAcid.ShouldSkipAcidMoveEffects(acided.Owner))
             {

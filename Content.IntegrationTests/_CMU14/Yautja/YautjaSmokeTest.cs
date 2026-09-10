@@ -1,5 +1,8 @@
 using System.Linq;
 using Content.Server.Humanoid.Systems;
+using Content.Shared._RMC14.MotionDetector;
+using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -7,6 +10,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
+using Content.Shared.Overlays;
 using Content.Shared.Radio;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
@@ -41,6 +45,104 @@ public sealed class YautjaSmokeTest
         "CMUYautjaClanArmorCrimson",
         "CMUYautjaClanArmorBone",
     };
+
+    [Test]
+    public async Task BiomaskDoesNotContainMotionDetector()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var hunter = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+
+            try
+            {
+                Assert.That(inventory.TryGetSlotEntity(hunter, "mask", out var mask), Is.True);
+                Assert.That(mask, Is.Not.Null);
+                Assert.That(entMan.HasComponent<MotionDetectorComponent>(mask), Is.False);
+            }
+            finally
+            {
+                entMan.DeleteEntity(hunter);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task BiomaskVisorAppliesThermalOverlay()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hunter = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+
+            try
+            {
+                var vision = entMan.GetComponent<NightVisionComponent>(hunter);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(vision.State, Is.EqualTo(NightVisionState.Full));
+                    Assert.That(vision.Overlay, Is.True);
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(hunter);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task BiomaskProvidesIntegratedHealthHudWithoutJobIcons()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var hunter = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+            var xeno = entMan.SpawnEntity("CMXenoWarrior", MapCoordinates.Nullspace);
+
+            try
+            {
+                Assert.That(inventory.TryGetSlotEntity(hunter, "mask", out var mask), Is.True);
+                Assert.That(mask, Is.Not.Null);
+                Assert.That(entMan.HasComponent<ShowJobIconsComponent>(mask), Is.False);
+                Assert.That(entMan.HasComponent<HolocardScannerComponent>(mask), Is.True);
+
+                var bars = entMan.GetComponent<ShowHealthBarsComponent>(mask!.Value);
+                var icons = entMan.GetComponent<ShowHealthIconsComponent>(mask.Value);
+                var xenoContainer = entMan.GetComponent<Content.Shared.Damage.Components.InjurableComponent>(xeno)
+                    .DamageContainer;
+                var expectedContainers = new[] { "Biological", "BiologicalMetaphysical", "Inorganic", "Silicon", "Xeno" };
+                Assert.Multiple(() =>
+                {
+                    Assert.That(xenoContainer?.Id, Is.EqualTo("Xeno"));
+                    Assert.That(bars.DamageContainers.Select(id => id.Id), Is.EquivalentTo(expectedContainers));
+                    Assert.That(icons.DamageContainers.Select(id => id.Id), Is.EquivalentTo(expectedContainers));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(xeno);
+                entMan.DeleteEntity(hunter);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task DirectYautjaSpawnGetsCoreLoadout()

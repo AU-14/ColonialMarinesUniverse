@@ -22,6 +22,7 @@ public sealed class CMArmorSystemTest
     private const string TestArmorEntity = "RMCArmorInvalidOriginDamageable";
     private const string TestOuterBioArmor = "RMCTestOuterBioArmor";
     private const string TestInnerBioArmor = "RMCTestInnerBioArmor";
+    // CMU Related Change
     private const string TestMaskBioArmor = "RMCTestMaskBioArmor";
     private const string TestChestBioArmor = "RMCTestChestBioArmor";
     private static readonly ProtoId<DamageTypePrototype> HeatDamageType = "Heat";
@@ -57,6 +58,7 @@ public sealed class CMArmorSystemTest
   - type: CMArmor
     bio: 40
 
+# CMU Related Change
 - type: entity
   id: {TestMaskBioArmor}
   name: {TestMaskBioArmor}
@@ -194,6 +196,7 @@ public sealed class CMArmorSystemTest
         await pair.CleanReturnAsync();
     }
 
+    // CMU Related Change
     [Test]
     public async Task MaskArmorProtectsHeadSlots()
     {

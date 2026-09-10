@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -46,6 +47,8 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<YautjaComponent, ComponentRemove>(OnYautjaRemoved);
         SubscribeLocalEvent<YautjaMarkComponent, MobStateChangedEvent>(OnMarkedMobStateChanged);
+        SubscribeLocalEvent<NewXenoEvolvedEvent>(OnNewXenoEvolved);
+        SubscribeLocalEvent<XenoDevolvedEvent>(OnXenoDevolved);
         SubscribeLocalEvent<EntityTerminatingEvent>(OnEntityTerminating);
 
         Subs.BuiEvents<YautjaBracerComponent>(YautjaMarkUIKey.Key, subs =>
@@ -55,6 +58,49 @@ public sealed partial class YautjaMarkSystem : EntitySystem
             subs.Event<YautjaMarkPanelUnmarkMsg>(OnUnmarkMsg);
             subs.Event<YautjaMarkPanelChangeMsg>(OnChangeMsg);
         });
+    }
+
+    private void OnNewXenoEvolved(ref NewXenoEvolvedEvent args)
+    {
+        TransferXenoIdentity(args.OldXeno, args.NewXeno);
+    }
+
+    private void OnXenoDevolved(ref XenoDevolvedEvent args)
+    {
+        TransferXenoIdentity(args.OldXeno, args.NewXeno);
+    }
+
+    private void TransferXenoIdentity(EntityUid oldXeno, EntityUid newXeno)
+    {
+        if (_net.IsClient || oldXeno == newXeno)
+            return;
+
+        if (TryComp(oldXeno, out YautjaMarkComponent? oldMarks))
+        {
+            var newMarks = EnsureComp<YautjaMarkComponent>(newXeno);
+            foreach (var (kind, hunter) in oldMarks.Marks)
+                newMarks.Marks[kind] = hunter;
+
+            Dirty(newXeno, newMarks);
+            EnsureComp<StatusIconComponent>(newXeno);
+            RemComp<YautjaMarkComponent>(oldXeno);
+        }
+
+        var query = EntityQueryEnumerator<YautjaHuntJournalComponent>();
+        while (query.MoveNext(out var hunter, out var journal))
+        {
+            if (!journal.Targets.Remove(oldXeno, out var recordId) ||
+                !journal.Records.TryGetValue(recordId, out var record))
+                continue;
+
+            journal.Targets[newXeno] = recordId;
+            record.Target = newXeno;
+            record.Name = Name(newXeno);
+            if (journal.Visible.Remove(oldXeno))
+                journal.Visible.Add(newXeno);
+            SnapshotMarks(hunter, newXeno, record);
+            journal.Revision++;
+        }
     }
 
     public override void Update(float frameTime)

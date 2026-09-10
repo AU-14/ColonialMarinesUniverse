@@ -5,6 +5,7 @@ using Content.Shared.CMU14.Yautja;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
+using Content.Shared.Item;
 using Content.Shared.Storage.Components;
 using Robust.Shared.Containers;
 
@@ -159,6 +160,60 @@ public sealed class YautjaRecallTest
             Assert.That(charge.Float(), Is.EqualTo(3000));
         });
 
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RecallSkipsUnpickableCandidatesAndProgressesThroughBoundItems()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var hands = entities.System<SharedHandsSystem>();
+            var inventory = entities.System<InventorySystem>();
+            var hunter = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            entities.EnsureComponent<YautjaComponent>(hunter);
+            var bracer = entities.SpawnEntity("CMUYautjaBracer", map.GridCoords);
+            Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
+
+            var unpickable = entities.SpawnEntity("CMUYautjaClanSword", map.GridCoords.Offset(new Vector2(20, 0)));
+            entities.GetComponent<YautjaRecallableComponent>(unpickable).YautjaOwner = hunter;
+            entities.RemoveComponent<ItemComponent>(unpickable);
+
+            var first = entities.SpawnEntity("CMUYautjaHealingGun", map.GridCoords.Offset(new Vector2(30, 0)));
+            entities.GetComponent<YautjaRecallableComponent>(first).YautjaOwner = hunter;
+            var second = entities.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(40, 0)));
+            entities.GetComponent<YautjaRecallableComponent>(second).YautjaOwner = hunter;
+
+            RaiseRecall(entities, hunter, bracer);
+            RaiseRecall(entities, hunter, bracer);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(hands.IsHolding(hunter, unpickable), Is.False);
+                Assert.That(hands.IsHolding(hunter, first), Is.True);
+                Assert.That(hands.IsHolding(hunter, second), Is.True);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RecallCooldownIsFiveSeconds()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var action = entities.SpawnEntity("CMUActionYautjaRecall", MapCoordinates.Nullspace);
+            Assert.That(entities.GetComponent<ActionComponent>(action).UseDelay,
+                Is.EqualTo(TimeSpan.FromSeconds(5)));
+        });
         await pair.CleanReturnAsync();
     }
 
