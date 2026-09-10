@@ -4,6 +4,12 @@ namespace Content.Shared.CCVar;
 
 public sealed partial class CCVars
 {
+    // CMU14 Begin: keep gameplay stalls separate from routine entity growth.
+    /// <summary>Open incidents for entity/component growth and churn, even when gameplay timing is healthy.</summary>
+    public static readonly CVarDef<bool> CMUServerPerformanceChurnIncidents =
+        CVarDef.Create("cmu.server_performance.churn_incidents", false, CVar.SERVERONLY | CVar.ARCHIVE);
+    // CMU14 End
+
     /// <summary>
     ///     Enables automatic CMU server performance incident detection and reporting.
     /// </summary>

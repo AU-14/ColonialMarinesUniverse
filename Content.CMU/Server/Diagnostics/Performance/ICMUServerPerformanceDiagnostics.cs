@@ -7,6 +7,9 @@ public interface ICMUServerPerformanceDiagnostics
     void Initialize();
     void Update();
     void ObservePhase(ModUpdateLevel level);
+    void EndFrameCallbacks();
+    void RequestSyncReport(long syncIncidentId);
+    string GetCorrelationContext();
     void Shutdown();
     string GetStatus();
     bool CaptureManualReport();
