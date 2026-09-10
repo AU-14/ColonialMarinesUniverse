@@ -121,7 +121,8 @@ public sealed partial class YautjaRecallSystem : EntitySystem
 
         foreach (var (_, item) in candidates)
         {
-            if (!_hands.CanPickupAnyHand(args.Performer, item, checkActionBlocker: false) ||
+            if (!_hands.CanPickupAnyHand(args.Performer, item, checkActionBlocker: false)
+            || !_hands....
                 !_hands.TryPickupAnyHand(args.Performer, item, checkActionBlocker: false))
                 continue;
 
