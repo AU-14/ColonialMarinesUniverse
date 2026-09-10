@@ -4,6 +4,8 @@
   name: armored personnel carrier
   description: A rugged armored personnel carrier outfitted for battlefield support.
   components:
+  - type: RMCNightVisionVisible # CMU14
+    priority: -2
   - type: Vehicle
     movementKind: Grid
     transferDamage: false

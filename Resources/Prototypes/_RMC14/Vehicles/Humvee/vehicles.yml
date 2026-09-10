@@ -4,6 +4,8 @@
   name: humvee
   description: A fast armored utility vehicle outfitted for patrols and support.
   components:
+  - type: RMCNightVisionVisible # CMU14
+    priority: -2
   - type: Vehicle
     movementKind: Grid
     transferDamage: false
