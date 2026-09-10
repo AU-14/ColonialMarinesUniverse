@@ -118,8 +118,8 @@
     whitelist:
       tags:
       - RMCSynthGrabbable 
-  - type: DamageModifier
-    modifierSet: CMUSynthetic
+  - type: DamageModifier # CMU14
+    modifierSet: RMCSynthetic 
 
 - type: entity
   id: RMCSynthHudComponents
