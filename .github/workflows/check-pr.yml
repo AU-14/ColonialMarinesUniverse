@@ -28,7 +28,8 @@ jobs:
           const pr = context.payload.pull_request;
           const messages = [];
 
-          const maintainer = ['MEMBER', 'OWNER', 'COLLABORATOR'].includes(pr.author_association);
+          // org members and the owner only, direct collaborators are still checked
+          const maintainer = ['MEMBER', 'OWNER'].includes(pr.author_association);
 
           // template defaults or a missing :cl: in the PR description
           const description = pr.body || '';
