@@ -8,7 +8,10 @@ internal readonly record struct CMUPerformanceProfileFrame(
     long? Frame,
     double TimeSeconds,
     long AllocatedBytes,
-    int TickCount);
+    int TickCount,
+    bool Partial = false,
+    long? FirstTick = null,
+    long? LastTick = null);
 
 internal readonly record struct CMUPerformanceProfileSample(
     string Kind,
@@ -35,7 +38,17 @@ internal sealed record CMUPerformanceProfileReport(
     IReadOnlyList<CMUPerformanceProfileSample> Samples,
     IReadOnlyList<CMUPerformanceProfileCounter> Counters,
     int EventsRead,
-    bool Truncated);
+    bool Truncated,
+    CMUPerformanceProfileCoverage Coverage);
+
+internal readonly record struct CMUPerformanceProfileCoverage(
+    string Status,
+    int EventCapacity,
+    int IndexCapacity,
+    int IndexedFrames,
+    int OverwrittenFrames,
+    int PartialFrames,
+    long UnindexedEvents);
 
 internal readonly record struct CMUPerformanceProfileCandidate(
     long Offset,
@@ -72,15 +85,16 @@ internal static class CMUPerformanceProfilerReader
         for (long offset = start; offset < buffer.IndexWriteOffset; offset++)
         {
             ref ProfIndex index = ref buffer.Index(offset);
-            if (!IsValidFrame(buffer, index, validLogStart))
+            if (!TryGetRetainedRange(buffer, index, validLogStart, out var startPos))
                 continue;
 
             TimeAndAllocSample timing = GetFrameTiming(buffer, index);
             if (found && timing.Alloc < frame.AllocatedBytes)
                 continue;
 
-            int tickCount = GetTickCount(profiler, buffer, index);
-            frame = new(offset, TryGetFrameNumber(profiler, buffer, index), timing.Time, timing.Alloc, tickCount);
+            int tickCount = GetTickCount(profiler, buffer, index, startPos);
+            bool partial = startPos != index.StartPos;
+            frame = new(offset, partial ? null : TryGetFrameNumber(profiler, buffer, index), timing.Time, timing.Alloc, tickCount, partial);
             found = true;
         }
 
@@ -94,7 +108,7 @@ internal static class CMUPerformanceProfilerReader
         int eventLimit)
     {
         if (!profiler.IsEnabled)
-            return new([], [], [], 0, false);
+            return new([], [], [], 0, false, new("disabled", 0, 0, 0, 0, 0, 0));
 
         ProfBuffer buffer = profiler.Buffer;
         int framesToRead = Math.Clamp(frameLimit, 1, 128);
@@ -103,20 +117,40 @@ internal static class CMUPerformanceProfilerReader
         long validIndexStart = Math.Max(0, buffer.IndexWriteOffset - buffer.IndexBuffer.LongLength);
         var candidates = new List<CMUPerformanceProfileCandidate>((int) Math.Min(int.MaxValue,
             buffer.IndexWriteOffset - validIndexStart));
+        int indexed = 0;
+        int overwritten = 0;
+        int partialFrames = 0;
+        long lastEnd = 0;
         for (long offset = validIndexStart; offset < buffer.IndexWriteOffset; offset++)
         {
             ref ProfIndex index = ref buffer.Index(offset);
-            if (!IsValidFrame(buffer, index, validLogStart))
+            if (index.Type != ProfIndexType.Frame)
                 continue;
+            indexed++;
+            lastEnd = Math.Max(lastEnd, index.EndPos);
+            if (!TryGetRetainedRange(buffer, index, validLogStart, out var startPos))
+            {
+                if (index.StartPos < validLogStart)
+                    overwritten++;
+                continue;
+            }
+            if (startPos != index.StartPos)
+                partialFrames++;
 
             TimeAndAllocSample timing = GetFrameTiming(buffer, index);
             candidates.Add(new(
                 offset,
                 timing.Time,
                 timing.Alloc,
-                GetTickCount(profiler, buffer, index),
-                index.EndPos - index.StartPos));
+                GetTickCount(profiler, buffer, index, startPos),
+                index.EndPos - startPos));
         }
+
+        var coverage = new CMUPerformanceProfileCoverage(
+            candidates.Count > 0 ? (partialFrames > 0 ? "partial-history" : "available") :
+            indexed == 0 ? "no-completed-frames" : overwritten > 0 ? "history-overwritten" : "invalid-frame-data",
+            buffer.LogBuffer.Length, buffer.IndexBuffer.Length, indexed, overwritten, partialFrames,
+            lastEnd > 0 ? Math.Max(0, buffer.LogWriteOffset - lastEnd) : 0);
 
         IReadOnlyList<long> selectedOffsets = SelectFrameOffsets(
             candidates,
@@ -124,7 +158,7 @@ internal static class CMUPerformanceProfilerReader
             eventsToRead,
             out bool truncated);
         if (selectedOffsets.Count == 0)
-            return new([], [], [], 0, false);
+            return new([], [], [], 0, false, coverage);
 
         var indices = selectedOffsets.ToList();
         var frames = new List<CMUPerformanceProfileFrame>(indices.Count);
@@ -136,20 +170,17 @@ internal static class CMUPerformanceProfilerReader
         {
             ref ProfIndex index = ref buffer.Index(offset);
             TimeAndAllocSample frameTiming = GetFrameTiming(buffer, index);
-            frames.Add(new(
-                offset,
-                TryGetFrameNumber(profiler, buffer, index),
-                frameTiming.Time,
-                frameTiming.Alloc,
-                GetTickCount(profiler, buffer, index)));
-
-            long start = index.StartPos;
+            long start = Math.Max(index.StartPos, validLogStart);
             long remaining = eventsToRead - eventsRead;
             if (index.EndPos - start > remaining)
             {
                 start = index.EndPos - remaining;
                 truncated = true;
             }
+
+            bool partial = start != index.StartPos;
+            long? firstTick = null;
+            long? lastTick = null;
 
             for (long logOffset = start; logOffset < index.EndPos && eventsRead < eventsToRead; logOffset++)
             {
@@ -158,6 +189,11 @@ internal static class CMUPerformanceProfilerReader
                 switch (log.Type)
                 {
                     case ProfLogType.Value:
+                        if (log.Value.Value.Type == ProfValueType.Int64 && profiler.GetString(log.Value.StringId) == "Tick")
+                        {
+                            firstTick ??= log.Value.Value.Int64;
+                            lastTick = log.Value.Value.Int64;
+                        }
                         AddValue(profiler, entitySystemNames, samples, counters, log.Value);
                         break;
                     case ProfLogType.GroupEnd:
@@ -171,6 +207,10 @@ internal static class CMUPerformanceProfilerReader
                         break;
                 }
             }
+
+            frames.Add(new(offset, partial ? null : TryGetFrameNumber(profiler, buffer, index),
+                frameTiming.Time, frameTiming.Alloc, GetTickCount(profiler, buffer, index, start),
+                partial, firstTick, lastTick));
         }
 
         return new(
@@ -178,7 +218,8 @@ internal static class CMUPerformanceProfilerReader
             samples.Values.Select(sample => sample.ToRow()).ToArray(),
             counters.Values.Select(counter => counter.ToRow()).ToArray(),
             eventsRead,
-            truncated);
+            truncated,
+            coverage);
     }
 
     internal static IReadOnlyList<long> SelectFrameOffsets(
@@ -301,13 +342,17 @@ internal static class CMUPerformanceProfilerReader
         counter.Add(value);
     }
 
-    private static bool IsValidFrame(ProfBuffer buffer, ProfIndex index, long validLogStart)
+    internal static bool TryGetRetainedRange(ProfBuffer buffer, ProfIndex index, long validLogStart, out long start)
     {
-        return index.Type == ProfIndexType.Frame &&
-               index.StartPos >= validLogStart &&
-               index.StartPos >= 0 &&
-               index.EndPos > index.StartPos &&
-               index.EndPos <= buffer.LogWriteOffset;
+        start = Math.Max(index.StartPos, validLogStart);
+        if (index.Type != ProfIndexType.Frame || index.StartPos < 0 || index.EndPos <= start ||
+            index.EndPos > buffer.LogWriteOffset)
+            return false;
+
+        // A frame can overwrite its own beginning. Its retained end still contains the full frame's
+        // timing/allocation and finished scopes; report that tail explicitly as partial evidence.
+        ref ProfLog end = ref buffer.Log(index.EndPos - 1);
+        return end.Type == ProfLogType.GroupEnd && end.GroupEnd.Value.Type == ProfValueType.TimeAllocSample;
     }
 
     private static long? TryGetFrameNumber(ProfManager profiler, ProfBuffer buffer, ProfIndex index)
@@ -331,9 +376,9 @@ internal static class CMUPerformanceProfilerReader
         return end.GroupEnd.Value.TimeAllocSample;
     }
 
-    private static int GetTickCount(ProfManager profiler, ProfBuffer buffer, ProfIndex index)
+    private static int GetTickCount(ProfManager profiler, ProfBuffer buffer, ProfIndex index, long start)
     {
-        for (long offset = index.StartPos; offset < index.EndPos; offset++)
+        for (long offset = index.EndPos - 1; offset >= start; offset--)
         {
             ref ProfLog log = ref buffer.Log(offset);
             if (log.Type != ProfLogType.Value ||
@@ -344,7 +389,7 @@ internal static class CMUPerformanceProfilerReader
             return Math.Max(0, log.Value.Value.Int32);
         }
 
-        return 0;
+        return -1;
     }
 
     private sealed class SampleAccumulator(string kind, string name, bool entitySystem)

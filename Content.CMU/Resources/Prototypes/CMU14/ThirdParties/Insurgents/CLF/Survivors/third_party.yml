@@ -53,7 +53,7 @@
   leadersToSpawn:
     AU14CLFSurvLeader: 1
   gruntsToSpawn:
-    AU14JobCLFSurvFighter: 2
+    AU14CLFSurvFighter: 2
     AU14JCLFSurvSurgeon: 1
   scalewithpop: false
   spawnTogether: true

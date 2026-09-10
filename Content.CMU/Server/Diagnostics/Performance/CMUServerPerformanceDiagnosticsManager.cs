@@ -89,6 +89,20 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
     private long _profileIndexOffset;
     private CMUPerformanceProfileFrame? _maxAllocatedFrameSinceSample;
     private bool _allocationBreachPending;
+    private long _pendingSyncIncidentId;
+    private TimeSpan _nextSyncDetailTime;
+    private TimeSpan _nextStallLogTime;
+    private TimeSpan? _lastStallTime;
+    private uint _lastStallTick;
+    private double _lastStallMs;
+    private int _stallFrames;
+    private int _gameplayStallFrames;
+    private int _suppressedStallLogs;
+    private double _stallFrameTotalMs;
+    private long? _retryProfileAfterIndex;
+    private long _retryProfileIncidentId;
+    private long _retryProfileSyncIncidentId;
+    private TimeSpan _lastDetailTime;
 
     // Cached observable metric values. Callbacks never enumerate game state.
     private long _metricEnabled;
@@ -119,6 +133,9 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             return;
 
         _initialized = true;
+        // Respect explicit config/command-line values. More history survives a busy frame by default.
+        _config.OverrideDefault(CVars.ProfBufferSize, Math.Max(65536, _config.GetCVar(CVars.ProfBufferSize)));
+        _config.OverrideDefault(CVars.ProfIndexSize, Math.Max(512, _config.GetCVar(CVars.ProfIndexSize)));
         _enabled = _config.GetCVar(CCVars.CMUServerPerformanceDiagnosticsEnabled);
         _metricEnabled = _enabled ? 1 : 0;
         _ticker = _entitySystemManager.GetEntitySystem<GameTicker>();
@@ -146,6 +163,28 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             _phases.Mark(level, _timing.RealTime, _timing.CurTick.Value);
     }
 
+    public void EndFrameCallbacks()
+    {
+        if (_initialized && _enabled)
+            _phases.EndFrameCallbacks(_timing.RealTime, _timing.CurTick.Value);
+    }
+
+    public void RequestSyncReport(long syncIncidentId)
+    {
+        if (_initialized && _enabled && _pendingSyncIncidentId == 0 && _timing.RealTime >= _nextSyncDetailTime)
+            _pendingSyncIncidentId = syncIncidentId;
+    }
+
+    public string GetCorrelationContext()
+    {
+        var now = _timing.RealTime;
+        return Invariant(
+            $"perfIncidentId={_activeIncidentId} serverTps={_lastObservation?.AchievedTps ?? 0:F2} ",
+            $"serverTpsValid={_lastObservation?.TpsValid ?? false} perfSampleAgeSeconds={(_lastObservation == null ? -1 : (now - _lastObservation.RealTime).TotalSeconds):F2} ",
+            $"lastStallTick={_lastStallTick} lastStallMs={_lastStallMs:F2} ",
+            $"lastStallAgeSeconds={(_lastStallTime == null ? -1 : (now - _lastStallTime.Value).TotalSeconds):F2}");
+    }
+
     public void Update()
     {
         if (!_initialized)
@@ -155,6 +194,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             return;
 
         TimeSpan now = _timing.RealTime;
+        RetryCompletedProfile();
         _metricLastCompletedTick = _timing.CurTick.Value;
         bool allocationBreach = ProbeProfiler(now);
 
@@ -173,7 +213,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         double stallThreshold = Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceStallMilliseconds));
         bool hardStall = stallThreshold > 0 &&
                          _timing.RealFrameTime.TotalMilliseconds >= stallThreshold;
-        if (!hardStall && !allocationBreach && now < _nextSampleTime)
+        if (!hardStall && !allocationBreach && _pendingSyncIncidentId == 0 && now < _nextSampleTime)
             return;
 
         Sample(now);
@@ -210,7 +250,9 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             $"tick={observation.Tick} targetTps={observation.TargetTps:F2} achievedTps={observation.AchievedTps:F2} ",
             $"fps={observation.AverageFps:F2} frameMs={observation.FrameMilliseconds:F2} ",
             $"entities={observation.EntityCount} components={observation.ComponentCount} ",
-            $"players={observation.Players} profiler={_profiler.IsEnabled} metrics={_config.GetCVar(CVars.MetricsEnabled)}");
+            $"players={observation.Players} profiler={_profiler.IsEnabled} metrics={_config.GetCVar(CVars.MetricsEnabled)} ",
+            $"profilerEventCapacity={_profiler.Buffer.LogBuffer.Length} profilerIndexCapacity={_profiler.Buffer.IndexBuffer.Length} ",
+            $"churnIncidents={_config.GetCVar(CCVars.CMUServerPerformanceChurnIncidents)} capturePhase=input-post-engine");
     }
 
     public bool CaptureManualReport()
@@ -354,10 +396,21 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
 
         CMUPerformanceIncidentEvaluation evaluation = _detector.Evaluate(sample, thresholds);
         HandleEvaluation(observation, evaluation);
+        if (thresholds.StallMilliseconds > 0 && observation.FrameMilliseconds >= thresholds.StallMilliseconds)
+            RecordStall(observation);
         // A severe new stall must not disappear behind an earlier churn incident's two-minute cooldown.
         double criticalMs = _config.GetCVar(CCVars.CMUServerPerformanceCriticalStallMilliseconds);
-        if (criticalMs > 0 && observation.FrameMilliseconds >= criticalMs && now >= _nextStallDetailTime)
-            CaptureDetailedReport(observation, "critical-stall", bypassCooldown: false);
+        bool gameplayStall = IsGameplay(observation) && thresholds.StallMilliseconds > 0 &&
+                             observation.FrameMilliseconds >= thresholds.StallMilliseconds;
+        if ((gameplayStall || criticalMs > 0 && observation.FrameMilliseconds >= criticalMs) && now >= _nextStallDetailTime)
+            CaptureDetailedReport(observation, gameplayStall ? "gameplay-stall" : "critical-stall", bypassCooldown: false);
+        if (_pendingSyncIncidentId != 0)
+        {
+            _nextSyncDetailTime = now + TimeSpan.FromSeconds(30);
+            if (_lastDetailTime != now)
+                CaptureDetailedReport(observation, "client-sync", bypassCooldown: true);
+            _pendingSyncIncidentId = 0;
+        }
         if (now >= _nextErrorReportTime)
             LogErrorWindow(now);
         UpdateMetrics(observation);
@@ -422,6 +475,8 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
                     $"previousReasons={CMUPerformanceIncidentDetector.FormatReasons(evaluation.PreviousReasons)} ",
                     $"worstFrameMs={_worstFrameMilliseconds:F2} worstTps={FiniteOrZero(_worstTps):F2} ",
                     $"worstFps={FiniteOrZero(_worstFps):F2} worstAllocatedBytes={_worstAllocatedBytes} ",
+                    $"stallFrames={_stallFrames} gameplayStallFrames={_gameplayStallFrames} stallFrameTotalMs={_stallFrameTotalMs:F2} ",
+                    $"suppressedStallLogs={_suppressedStallLogs} durationIncludesRecoveryAndOtherTriggers=true ",
                     $"suppressedDetailReports={_suppressedDetailReports}"));
                 _metricIncidentActive = 0;
                 _activeIncidentId = 0;
@@ -489,13 +544,49 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             $"nextSeconds={baselineSeconds:F1}"));
     }
 
+    private void RecordStall(in CMUServerPerformanceObservation observation)
+    {
+        _stallFrames++;
+        _stallFrameTotalMs += observation.FrameMilliseconds;
+        if (IsGameplay(observation))
+            _gameplayStallFrames++;
+        _lastStallTime = observation.RealTime;
+        _lastStallTick = observation.Tick;
+        _lastStallMs = observation.FrameMilliseconds;
+        if (observation.RealTime < _nextStallLogTime)
+        {
+            _suppressedStallLogs++;
+            return;
+        }
+
+        _nextStallLogTime = observation.RealTime + TimeSpan.FromSeconds(1);
+        var phase = _phases.LastFrameWorst;
+        _sawmill.Warning(Invariant(
+            $"[CMU-PERF] stall incidentId={_activeIncidentId} scope={Scope(observation)} round={observation.RoundId} ",
+            $"observedTick={observation.Tick} frameMs={observation.FrameMilliseconds:F2} stallFrames={_stallFrames} ",
+            $"phase={phase.Name ?? "unknown"} phaseMaxMs={phase.MaxMs:F3} phaseWorstTick={phase.WorstTick} ",
+            $"includesWait={phase.Name == "frame-tail-wait-and-input"} phaseWindow=input-to-input ",
+            $"players={observation.Players} attachedPlayers={observation.AttachedPlayers} ",
+            $"achievedTps={observation.AchievedTps:F2} tpsValid={observation.TpsValid} suppressedStallLogs={_suppressedStallLogs}"));
+    }
+
+    private static bool IsGameplay(in CMUServerPerformanceObservation observation) =>
+        observation.RoundState == "InRound" && !observation.Paused && observation.RoundSeconds >= 30;
+
+    private static string Scope(in CMUServerPerformanceObservation observation) =>
+        observation.Paused ? "paused" : IsGameplay(observation) ? "gameplay" : observation.RoundState == "InRound" ? "round-start" :
+        observation.RoundState == "PostRound" ? "post-round" : observation.Tick <= 1 ? "startup" : "lobby-or-loading";
+
     private void CaptureDetailedReport(
         in CMUServerPerformanceObservation observation,
         string source,
         bool bypassCooldown)
     {
         _detailPending = false;
-        _nextStallDetailTime = observation.RealTime + TimeSpan.FromSeconds(30);
+        _lastDetailTime = observation.RealTime;
+        double stallMs = _config.GetCVar(CCVars.CMUServerPerformanceStallMilliseconds);
+        if (stallMs > 0 && observation.FrameMilliseconds >= stallMs)
+            _nextStallDetailTime = observation.RealTime + TimeSpan.FromSeconds(30);
         if (!bypassCooldown)
         {
             double cooldown = Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceDetailCooldown));
@@ -515,9 +606,18 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             systemNames,
             frames,
             maxEvents);
+        if (profile.Frames.Count == 0 && _profiler.IsEnabled)
+        {
+            // Input processing can itself be slow. Its current frame is not indexed until this
+            // callback returns, so make one retry next frame without waiting for the detail cooldown.
+            _retryProfileAfterIndex = _profiler.Buffer.IndexWriteOffset;
+            _retryProfileIncidentId = _activeIncidentId;
+            _retryProfileSyncIncidentId = _pendingSyncIncidentId;
+        }
 
         _sawmill.Warning(Invariant(
             $"[CMU-PERF] detail-begin incidentId={_activeIncidentId} source={source} profiler={_profiler.IsEnabled} ",
+            $"syncIncidentId={_pendingSyncIncidentId} scope={Scope(observation)} observedTick={observation.Tick} ",
             $"profileFrames={profile.Frames.Count} profileEvents={profile.EventsRead} truncated={profile.Truncated} ",
             $"baselineEntitiesCreated={baseline.EntitiesCreated} currentEntitiesCreated={current.EntitiesCreated} ",
             $"baselineComponentsAdded={baseline.ComponentsAdded} currentComponentsAdded={current.ComponentsAdded}"));
@@ -531,9 +631,12 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
                 $"includesWait={phase.Name == "frame-tail-wait-and-input"}"));
         }
         LogErrorWindow(observation.RealTime);
-        LogChurnRows("prototype-churn", CMUPerformanceChurnTracker.GetPrototypeRows(baseline, current, top));
-        LogChurnRows("component-churn", CMUPerformanceChurnTracker.GetComponentRows(baseline, current, top));
-        LogChurnRows("map-creates", CMUPerformanceChurnTracker.GetMapCreationRows(baseline, current, top));
+        if (source == "manual" || _config.GetCVar(CCVars.CMUServerPerformanceChurnIncidents))
+        {
+            LogChurnRows("prototype-churn", CMUPerformanceChurnTracker.GetPrototypeRows(baseline, current, top));
+            LogChurnRows("component-churn", CMUPerformanceChurnTracker.GetComponentRows(baseline, current, top));
+            LogChurnRows("map-creates", CMUPerformanceChurnTracker.GetMapCreationRows(baseline, current, top));
+        }
 
         foreach (CMUNetworkMessageRate message in observation.MessageRates.Take(top))
         {
@@ -577,6 +680,25 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         }
     }
 
+    private void RetryCompletedProfile()
+    {
+        if (_retryProfileAfterIndex is not { } index || _profiler.Buffer.IndexWriteOffset <= index)
+            return;
+        _retryProfileAfterIndex = null;
+        if (_retryProfileIncidentId != _activeIncidentId)
+            return;
+        var names = _entitySystemManager.GetEntitySystemTypes().Select(type => type.Name).ToHashSet(StringComparer.Ordinal);
+        var report = CMUPerformanceProfilerReader.Capture(_profiler, names,
+            _config.GetCVar(CCVars.CMUServerPerformanceProfileFrames),
+            _config.GetCVar(CCVars.CMUServerPerformanceProfileMaxEvents));
+        _sawmill.Warning(Invariant(
+            $"[CMU-PERF] profile-retry incidentId={_activeIncidentId} syncIncidentId={_retryProfileSyncIncidentId} observedTick={_timing.CurTick} ",
+            $"reason=frame-completed originalIndex={index} currentIndex={_profiler.Buffer.IndexWriteOffset} ",
+            $"profileFrames={report.Frames.Count} profileEvents={report.EventsRead}"));
+        LogProfile(report, Math.Clamp(_config.GetCVar(CCVars.CMUServerPerformanceReportTop), 1, 25));
+        _profileIndexOffset = _profiler.Buffer.IndexWriteOffset + 1;
+    }
+
     private void CapturePendingDetailIfReady(in CMUServerPerformanceObservation observation)
     {
         if (!_detailPending || observation.RealTime < _nextDetailTime)
@@ -587,11 +709,24 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
 
     private void LogProfile(CMUPerformanceProfileReport profile, int top)
     {
+        var coverage = profile.Coverage;
+        _sawmill.Warning(Invariant(
+            $"[CMU-PERF] profile-coverage incidentId={_activeIncidentId} status={coverage.Status} ",
+            $"eventCapacity={coverage.EventCapacity} indexCapacity={coverage.IndexCapacity} indexedFrames={coverage.IndexedFrames} ",
+            $"overwrittenFrames={coverage.OverwrittenFrames} partialFrames={coverage.PartialFrames} unindexedEvents={coverage.UnindexedEvents} ",
+            $"eventBudgetTruncated={profile.Truncated} frameTimeIncludesSleep=false"));
         if (profile.Frames.Count == 0)
         {
+            string action = coverage.Status switch
+            {
+                "disabled" => "enable-prof.enabled-before-reproduction",
+                "no-completed-frames" => "wait-for-first-completed-frame",
+                "history-overwritten" => "increase-prof.buffer_size-and-capture-before-catchup",
+                _ => "inspect-profiler-frame-data",
+            };
             _sawmill.Warning(Invariant(
                 $"[CMU-PERF] profile-unavailable incidentId={_activeIncidentId} enabled={_profiler.IsEnabled} ",
-                $"hint=enable-profiler-before-incident"));
+                $"reason={coverage.Status} action={action}"));
             return;
         }
 
@@ -601,7 +736,9 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         {
             _sawmill.Warning(Invariant(
                 $"[CMU-PERF] profile-frame incidentId={_activeIncidentId} index={frame.IndexOffset} frame={frame.Frame?.ToString(CultureInfo.InvariantCulture) ?? "unknown"} ",
-                $"timeMs={frame.TimeSeconds * 1000:F3} allocatedBytes={frame.AllocatedBytes} ticks={frame.TickCount}"));
+                $"timeMs={frame.TimeSeconds * 1000:F3} allocatedBytes={frame.AllocatedBytes} ticks={frame.TickCount} ",
+                $"partial={frame.Partial} firstRetainedTick={frame.FirstTick?.ToString(CultureInfo.InvariantCulture) ?? "unknown"} ",
+                $"lastRetainedTick={frame.LastTick?.ToString(CultureInfo.InvariantCulture) ?? "unknown"}"));
         }
 
         LogProfileRows("system-time", profile.Samples
@@ -621,9 +758,11 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             .OrderByDescending(row => row.TotalAllocatedBytes)
             .Take(Math.Min(top, 5)));
 
-        foreach (CMUPerformanceProfileCounter counter in profile.Counters
+        var gcCounters = profile.Counters.Where(row => row.Name is "Gen 0 Count" or "Gen 1 Count" or "Gen 2 Count");
+        foreach (CMUPerformanceProfileCounter counter in gcCounters.Concat(profile.Counters
+                     .Except(gcCounters)
                      .OrderByDescending(row => row.Total)
-                     .Take(Math.Min(top, 10)))
+                     .Take(Math.Min(top, 10))))
         {
             _sawmill.Warning(Invariant(
                 $"[CMU-PERF] profile-counter incidentId={_activeIncidentId} name={SanitizeName(counter.Name)} ",
@@ -663,7 +802,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         string severity)
     {
         return Invariant(
-            $"[CMU-PERF] {kind} incidentId={incidentId} severity={severity} ",
+            $"[CMU-PERF] {kind} incidentId={incidentId} severity={severity} scope={Scope(observation)} ",
             $"reasons={CMUPerformanceIncidentDetector.FormatReasons(reasons)} tick={observation.Tick} ",
             $"round={observation.RoundId} roundState={observation.RoundState} roundSeconds={observation.RoundSeconds:F1} ",
             $"paused={observation.Paused} warmup={observation.SuppressRateTriggers} ",
@@ -790,6 +929,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         _maxAllocatedFrameSinceSample = null;
         _allocationBreachPending = false;
         _nextProfilerProbeTime = now;
+        _retryProfileAfterIndex = null;
         double warmupSeconds = Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceWarmup));
         _warmupUntil = now + TimeSpan.FromSeconds(warmupSeconds);
         _warmupBaselinePending = warmupSeconds > 0;
@@ -914,6 +1054,8 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         _sawmill.Info(Invariant(
             $"[CMU-PERF] startup enabled={_enabled} logEnabled={_config.GetCVar(CCVars.CMUServerPerformanceLogEnabled)} profiler={_profiler.IsEnabled} ",
             $"profilerEnabledByDiagnostics={_profilerEnabledByDiagnostics} metrics={metrics} ",
+            $"profilerEventCapacity={_profiler.Buffer.LogBuffer.Length} profilerIndexCapacity={_profiler.Buffer.IndexBuffer.Length} ",
+            $"capturePhase=input-post-engine churnIncidents={_config.GetCVar(CCVars.CMUServerPerformanceChurnIncidents)} ",
             $"sampleSeconds={Math.Max(0.1, _config.GetCVar(CCVars.CMUServerPerformanceSampleInterval)):F2} ",
             $"stallMs={Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceStallMilliseconds)):F1} ",
             $"criticalStallMs={Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceCriticalStallMilliseconds)):F1}"));
@@ -935,6 +1077,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
 
     private CMUPerformanceIncidentThresholds ReadThresholds()
     {
+        bool churn = _config.GetCVar(CCVars.CMUServerPerformanceChurnIncidents);
         return new(
             Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceStallMilliseconds)),
             Math.Clamp(_config.GetCVar(CCVars.CMUServerPerformanceLowTpsRatio), 0, 1),
@@ -942,10 +1085,10 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceBreachDuration)),
             Math.Clamp(_config.GetCVar(CCVars.CMUServerPerformanceRecoveryRatio), 0, 1),
             Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceRecoveryDuration)),
-            Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceEntityGrowthPerMinute)),
-            Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceEntityChurnPerMinute)),
-            Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceComponentGrowthPerMinute)),
-            Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceComponentChurnPerMinute)),
+            churn ? Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceEntityGrowthPerMinute)) : 0,
+            churn ? Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceEntityChurnPerMinute)) : 0,
+            churn ? Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceComponentGrowthPerMinute)) : 0,
+            churn ? Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceComponentChurnPerMinute)) : 0,
             Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceSendMiBPerSecond)) * BytesPerMiB,
             Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceReceiveMiBPerSecond)) * BytesPerMiB,
             Math.Max(0, _config.GetCVar(CCVars.CMUServerPerformanceAllocationMiBPerFrame)) * BytesPerMiB);
@@ -981,6 +1124,10 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
 
     private void ResetWorst(in CMUServerPerformanceObservation observation)
     {
+        _stallFrames = 0;
+        _gameplayStallFrames = 0;
+        _stallFrameTotalMs = 0;
+        _suppressedStallLogs = 0;
         _worstFrameMilliseconds = observation.FrameMilliseconds;
         _worstTps = observation.TpsValid ? observation.AchievedTps : double.PositiveInfinity;
         _worstFps = observation.AverageFps;
