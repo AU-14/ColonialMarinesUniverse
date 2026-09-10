@@ -16,6 +16,7 @@
     state: catwalk
   - type: Transform
     anchored: true
+    gridTraversal: false
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepCatwalk

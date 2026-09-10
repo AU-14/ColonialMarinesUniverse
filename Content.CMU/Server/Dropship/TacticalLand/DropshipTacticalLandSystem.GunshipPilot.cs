@@ -1255,6 +1255,17 @@ public sealed partial class DropshipTacticalLandSystem
                              targetTile.GridIndices))
                 {
                     flightHover.FlightTerrainCandidates.Add(anchored);
+                    // Nonblocking terrain (ladders, grates, and other floor
+                    // structures) needs its original pose preserved too. It
+                    // will never enter the hard-fixture loop below.
+                    if (!flightHover.FlightTerrainAnchors.ContainsKey(anchored) &&
+                        TryComp(anchored, out TransformComponent? terrainXform) &&
+                        terrainXform.ParentUid == targetMap)
+                    {
+                        flightHover.FlightTerrainAnchors.Add(anchored,
+                            new DropshipTerrainAnchorPose(terrainXform.LocalPosition, terrainXform.LocalRotation));
+                    }
+
                     if (IsHardFlightCandidate(anchored, blockMask))
                         candidates.Add(anchored);
                 }

@@ -76,6 +76,7 @@
   components:
   - type: Transform
     anchored: true
+    gridTraversal: false
   - type: Physics
     bodyType: Static
     canCollide: false
