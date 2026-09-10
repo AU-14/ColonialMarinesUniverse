@@ -219,11 +219,11 @@ jobs:
     needs: labels
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      - uses: actions/labeler@v6.1.0
+      - uses: actions/labeler@v7.0.0
         with:
           repo-token: ${{ github.token }}
           configuration-path: .github/labeler.yml
