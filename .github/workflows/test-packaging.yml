@@ -51,7 +51,7 @@ jobs:
             restore: dotnet restore --runtime win-x64 /p:TargetOs=Windows
 
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
           submodules: false
@@ -62,7 +62,7 @@ jobs:
           git submodule update --init --recursive --depth=1
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5.2.0
+        uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
