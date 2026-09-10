@@ -71,7 +71,6 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     }
 
     private bool IsRegularYautja(EntityUid uid)
-        => !HasComp<T>();
     {
         return !HasComp<YautjaBadBloodComponent>(uid);
     }
