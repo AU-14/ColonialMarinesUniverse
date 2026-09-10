@@ -48,6 +48,8 @@
         whitelist:
           tags:
           - RMCTankFlamer
+  - type: WieldDelay
+    baseDelay: 1.0 #CMU14 Change
   - type: Wieldable
   - type: WieldableSpeedModifiers
     base: 0.5
