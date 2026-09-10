@@ -1,8 +1,11 @@
 using Content.Shared._RMC14.Cassette;
+using Content.Shared._RMC14.Construction;
+using Content.Shared._RMC14.Sentry.Laptop;
 using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Sentinel;
 using Content.Shared.Botany.Items.Components;
+using Content.Shared.Placeable;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.GameObjects;
@@ -16,6 +19,7 @@ namespace Content.IntegrationTests.Tests._RMC14.Networking;
 public sealed class StaleEntityStateTest
 {
     [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Shooter))]
+    [TestCase(typeof(RMCConstructionPreventCollideComponent), nameof(RMCConstructionPreventCollideComponent.Target))]
     [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Weapon))]
     [TestCase(typeof(XenoIntoxicatedComponent), nameof(XenoIntoxicatedComponent.LastSource))]
     [TestCase(typeof(XenoParasiteComponent), nameof(XenoParasiteComponent.InfectedVictim))]
@@ -73,6 +77,27 @@ public sealed class StaleEntityStateTest
             ownerNet = entities.GetNetEntity(owner);
             sourceNet = entities.GetNetEntity(source);
 
+            // Opening/power follow the parent surface when a laptop first enters the client's PVS.
+            var table = entities.SpawnEntity(null, map.GridCoords);
+            entities.AddComponent<PlaceableSurfaceComponent>(table);
+            entities.System<SharedTransformSystem>().SetParent(owner, table);
+
+            var collision = entities.AddComponent<RMCConstructionPreventCollideComponent>(owner);
+            collision.Target = source;
+            collision.Range = 3f;
+            components.Add(collision);
+
+            var laptop = entities.AddComponent<SentryLaptopComponent>(owner);
+            SetField(laptop, nameof(laptop.IsOpen), true);
+            SetField(laptop, nameof(laptop.IsPowered), true);
+            SetField(laptop, nameof(laptop.Range), 42f);
+            SetField(laptop, nameof(laptop.MaxLinkedSentries), 5);
+            SetField(laptop, nameof(laptop.LinkedSentries), new HashSet<EntityUid> { source });
+            SetField(laptop, nameof(laptop.SentryCustomNames), new Dictionary<EntityUid, string> { [source] = "North gate" });
+            SetField(laptop, nameof(laptop.Watchers), new List<EntityUid> { source });
+            SetField(laptop, nameof(laptop.CurrentCamera), (EntityUid?) source);
+            components.Add(laptop);
+
             var projectile = entities.AddComponent<ProjectileComponent>(owner);
             projectile.Shooter = source;
             projectile.Weapon = source;
@@ -116,6 +141,8 @@ public sealed class StaleEntityStateTest
                 var entities = pair.Client.EntMan;
                 var clientOwner = entities.GetEntity(ownerNet);
                 var expected = deleted ? EntityUid.Invalid : entities.GetEntity(sourceNet);
+                var collision = entities.GetComponent<RMCConstructionPreventCollideComponent>(clientOwner);
+                var laptop = entities.GetComponent<SentryLaptopComponent>(clientOwner);
                 var projectile = entities.GetComponent<ProjectileComponent>(clientOwner);
                 var intoxicated = entities.GetComponent<XenoIntoxicatedComponent>(clientOwner);
                 var parasite = entities.GetComponent<XenoParasiteComponent>(clientOwner);
@@ -123,6 +150,25 @@ public sealed class StaleEntityStateTest
                 var boons = entities.GetComponent<HiveBoonsComponent>(clientOwner);
                 Assert.Multiple(() =>
                 {
+                    Assert.That(collision.Target, Is.EqualTo(expected));
+                    Assert.That(collision.Range, Is.EqualTo(3f));
+                    Assert.That(laptop.IsOpen, Is.True);
+                    Assert.That(laptop.IsPowered, Is.True);
+                    Assert.That(laptop.Range, Is.EqualTo(42f));
+                    Assert.That(laptop.MaxLinkedSentries, Is.EqualTo(5));
+                    Assert.That(laptop.CurrentCamera, Is.EqualTo(expected));
+                    if (deleted)
+                    {
+                        Assert.That(laptop.LinkedSentries, Is.Empty);
+                        Assert.That(laptop.SentryCustomNames, Is.Empty);
+                        Assert.That(laptop.Watchers, Is.Empty);
+                    }
+                    else
+                    {
+                        Assert.That(laptop.LinkedSentries, Is.EquivalentTo(new[] { expected }));
+                        Assert.That(laptop.SentryCustomNames[expected], Is.EqualTo("North gate"));
+                        Assert.That(laptop.Watchers, Is.EqualTo(new[] { expected }));
+                    }
                     Assert.That(projectile.Shooter, Is.EqualTo(expected));
                     Assert.That(projectile.Weapon, Is.EqualTo(expected));
                     Assert.That(projectile.MaxFixedRange, Is.EqualTo(17f));

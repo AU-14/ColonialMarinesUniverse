@@ -8,6 +8,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared.Roles;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Robust.Shared.Configuration;
@@ -136,6 +137,31 @@ namespace Content.IntegrationTests.Tests.Preferences
             await db.SaveCharacterSlotAsync(username, null, 1);
             var prefs = await db.GetPlayerPreferencesAsync(username);
             Assert.That(prefs!.Profiles, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public async Task ReplacingHighPriorityJobPreservesUniquePriorityAndOtherPreferences()
+        {
+            var db = GetDb(Pair.Server);
+            var user = NewUserId();
+            var original = CharlieCharlieson().WithJobPriorities(new Dictionary<ProtoId<JobPrototype>, JobPriority>
+            {
+                ["FirstJob"] = JobPriority.High, ["SecondJob"] = JobPriority.Low,
+            });
+            await db.InitPrefsAsync(user, original);
+            foreach (var job in new[] { "SecondJob", "FirstJob", "SecondJob" })
+            {
+                var updated = original.WithJobPriority(job, JobPriority.High);
+                await db.SaveCharacterSlotAsync(user, updated, 0);
+                var prefs = await db.GetPlayerPreferencesAsync(user);
+                var saved = prefs!.Profiles.Single();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(saved.Jobs.Count(row => row.Priority == DbJobPriority.High), Is.EqualTo(1));
+                    Assert.That(saved.Jobs.Single(row => row.Priority == DbJobPriority.High).JobName, Is.EqualTo(job));
+                    Assert.That(saved.CharacterName, Is.EqualTo(original.Name));
+                });
+            }
         }
 
         [Test]

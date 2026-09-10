@@ -5,32 +5,32 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Sentry.Laptop;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedSentryLaptopSystem))]
 public sealed partial class SentryLaptopComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool IsOpen;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool IsPowered;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float Range = 20f;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public HashSet<EntityUid> LinkedSentries = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int MaxLinkedSentries = 99;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Dictionary<EntityUid, string> SentryCustomNames = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public List<EntityUid> Watchers = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? CurrentCamera;
 
 }

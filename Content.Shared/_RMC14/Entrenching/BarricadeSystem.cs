@@ -844,6 +844,10 @@ public sealed partial class BarricadeSystem : EntitySystem
         grid = default;
         tileRef = default;
 
+        // A repeated dig do-after can outlive the grid that supplied its original coordinates.
+        if (!coordinates.IsValid(EntityManager))
+            return false;
+
         if (checkUseDelay &&
             TryComp(tool, out UseDelayComponent? useDelay) &&
             _useDelay.IsDelayed((tool, useDelay)))

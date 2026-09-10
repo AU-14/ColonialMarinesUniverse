@@ -86,7 +86,8 @@ public sealed partial class RMCLocalizationManager
             return true;
         }
 
-        if (_entity.GetComponent<MetaDataComponent>(entity).EntityPrototype is not {} prototype)
+        if (!_entity.TryGetComponent<MetaDataComponent>(entity, out var metadata) ||
+            metadata.EntityPrototype is not {} prototype)
         {
             value = null;
             return false;

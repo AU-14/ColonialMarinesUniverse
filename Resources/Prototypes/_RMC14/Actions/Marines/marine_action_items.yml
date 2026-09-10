@@ -506,6 +506,7 @@
   components:
   - type: Action
     itemIconStyle: NoItem
+    raiseOnUser: true
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/marine_emplacement_actions.rsi

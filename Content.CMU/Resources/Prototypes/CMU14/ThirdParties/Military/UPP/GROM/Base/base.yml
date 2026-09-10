@@ -228,7 +228,7 @@
     - id: RMCMagazinePistolT73
       amount: 2
     - id: RMCMagazineLMGQYJ72
-      amount: 3
+      amount: 2
 
 - type: entity
   parent: RMCPouchMagazine
