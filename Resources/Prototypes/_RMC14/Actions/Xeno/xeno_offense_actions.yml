@@ -13,6 +13,7 @@
       state: corrosive_acid
       map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
+    repeat: true # CMU14
     checkCanAccess: false
     range: 2
   - type: EntityTargetAction

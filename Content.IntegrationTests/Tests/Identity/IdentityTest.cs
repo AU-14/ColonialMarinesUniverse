@@ -1,5 +1,6 @@
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared.IdentityManagement;
@@ -13,6 +14,41 @@ namespace Content.IntegrationTests.Tests.Identity;
 [TestOf(typeof(IdentitySystem))]
 public sealed class IdentityTest : GameTest
 {
+    // CMU Related Change
+    [Test]
+    public async Task YautjaBypassesUnknownThreatIdentity()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid threat = default;
+        EntityUid hunter = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            var metadata = Server.System<MetaDataSystem>();
+            threat = SEntMan.SpawnEntity(null, map.GridCoords);
+            metadata.SetEntityName(threat, "XX-121 Warrior");
+            SEntMan.AddComponent<ThreatComponent>(threat);
+
+            var fixedIdentity = SEntMan.AddComponent<FixedIdentityComponent>(threat);
+            fixedIdentity.Name = "cmu-job-name-xeno-unknown";
+            fixedIdentity.Whitelist = new EntityWhitelist
+            {
+                Components = ["Yautja"],
+            };
+
+            hunter = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.AddComponent<YautjaComponent>(hunter);
+        });
+
+        await Pair.RunTicksSync(1);
+
+        await Server.WaitAssertion(() =>
+        {
+            var identity = Content.Shared.IdentityManagement.Identity.Name(threat, SEntMan, hunter);
+            Assert.That(identity.Name, Is.EqualTo("XX-121 Warrior"));
+        });
+    }
+
     [Test]
     public async Task IdentityLookupHandlesLifecycleFixedIdentityAndYautjaRules()
     {

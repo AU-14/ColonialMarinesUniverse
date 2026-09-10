@@ -10647,5 +10647,54 @@
   id: 685
   time: '2026-09-09T14:03:58.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1911
+- author: Berkin101
+  changes:
+  - message: Added a search bar to options->controls.
+    type: Add
+  id: 686
+  time: '2026-09-09T14:03:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1911
+- author: TheHellFireo
+  changes:
+  - message: Fixed deleted sentries causing repeated network-state failures and delayed
+      updates.
+    type: Fix
+  - message: Fixed several equipment, interaction, stamp, and character-save errors.
+    type: Fix
+  - message: Added bounded error summaries and phase timings to server stall reports.
+    type: Admin
+  id: 687
+  time: '2026-09-09T20:38:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1915
+- author: deepdarkdepths
+  changes:
+  - message: Queen has breathing sounds now.
+    type: Add
+  id: 688
+  time: '2026-09-09T21:04:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1914
+- author: deepdarkdepths
+  changes:
+  - message: Queen now has separate ability bar ordering for both immature and mature
+      states to avoid having to redo them every time you spawn in.
+    type: Fix
+  id: 689
+  time: '2026-09-10T04:53:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1917
+- author: deepdarkdepths
+  changes:
+  - message: Added xeno vision to large vehicles.
+    type: Tweak
+  id: 690
+  time: '2026-09-10T04:53:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1918
+- author: deepdarkdepths
+  changes:
+  - message: Xeno acid action remains toggled until deactivated or another ability
+      is used
+    type: Tweak
+  id: 691
+  time: '2026-09-10T04:54:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1919
 Name: CMU
 Order: -1

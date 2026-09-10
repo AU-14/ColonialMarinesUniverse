@@ -33,9 +33,10 @@ public static class Identity
 
         var uidName = meta.EntityName;
 
-        if (viewer != null &&
-            ent.HasComponent<YautjaComponent>(uid) &&
-            ent.HasComponent<YautjaComponent>(viewer.Value))
+        // CMU Related Change
+        var yautjaViewer = viewer != null && ent.HasComponent<YautjaComponent>(viewer.Value);
+
+        if (yautjaViewer && ent.HasComponent<YautjaComponent>(uid))
         {
             return new IdentityEntity(uid, uidName);
         }
@@ -44,7 +45,8 @@ public static class Identity
         if (viewer != null &&
             ent.TryGetComponent(uid, out FixedIdentityComponent? fixedIdentity) &&
             fixedIdentity.Name is { } nameId &&
-            whitelistSystem.IsWhitelistPass(fixedIdentity.Whitelist, viewer.Value))
+            whitelistSystem.IsWhitelistPass(fixedIdentity.Whitelist, viewer.Value) &&
+            !yautjaViewer)
         {
             var name = Loc.GetString(nameId);
             var ev = new RMCGetFixedIdentityEvent(name, uid);

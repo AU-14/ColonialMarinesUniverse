@@ -58,6 +58,9 @@ public sealed partial class YautjaComponent : Component
     public float ShoveChanceBonus = 0.2f;
 
     [DataField]
+    public float XenoTackleSuccessChance = 0.5f;
+
+    [DataField]
     public Dictionary<FixedPoint2, float> SlowOnDamageThresholds = new()
     {
         { 160, 0.9f },
@@ -78,7 +81,7 @@ public sealed partial class YautjaComponent : Component
     public FractureSeverity MinimumPenalizingFractureSeverity = FractureSeverity.Simple;
 
     [DataField]
-    public float MedicalMovementPenaltyFloor = 0.8f;
+    public float MedicalMovementPenaltyFloor = 1f;
 
     [DataField]
     public float MedicalAimPenaltyCeiling = 1.35f;

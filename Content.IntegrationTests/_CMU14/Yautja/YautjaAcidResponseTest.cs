@@ -66,7 +66,7 @@ public sealed class YautjaAcidResponseTest
     }
 
     [Test]
-    public async Task AcidMovementImmunityExcludesBadBlood()
+    public async Task RegularYautjaRejectAcidAndNeuroMovementEffects()
     {
         await using var pair = await PoolManager.GetServerClient();
         var map = await pair.CreateTestMap();
@@ -91,8 +91,8 @@ public sealed class YautjaAcidResponseTest
             var neuro = entities.SpawnEntity("XenoQueenNeuroSpitProjectile", map.GridCoords);
             var neuroHit = new ProjectileHitEvent(new DamageSpecifier(), regular);
             entities.EventBus.RaiseLocalEvent(neuro, ref neuroHit);
-            Assert.That(entities.System<StandingStateSystem>().IsDown(regular), Is.True,
-                "neurotoxin must retain its normal movement effect");
+            Assert.That(entities.System<StandingStateSystem>().IsDown(regular), Is.False,
+                "neurotoxin must not paralyze a regular Yautja");
             entities.DeleteEntity(regular);
             entities.DeleteEntity(badBlood);
         });

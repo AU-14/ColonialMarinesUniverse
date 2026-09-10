@@ -1,5 +1,7 @@
 using System.Linq;
 using Content.Shared._RMC14.Stealth;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory;
 using Robust.Shared.GameObjects;
@@ -103,6 +105,44 @@ public sealed class YautjaMarkJournalTest
             var historical = journal.Records.Values.Single(record => record.WasMarked);
             Assert.That(historical.Target, Is.Null,
                 "deleting a marked entity must preserve its private history snapshot");
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task MarkTransfersWhenXenoEvolves()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            var (hunter, bracer) = SpawnHunter(em, map.GridCoords);
+            var oldXeno = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(2, 0)));
+            var newXeno = em.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(2, 0)));
+            em.EnsureComponent<XenoComponent>(oldXeno);
+            em.EnsureComponent<XenoComponent>(newXeno);
+            var evolution = em.EnsureComponent<XenoEvolutionComponent>(oldXeno);
+            var marks = em.System<YautjaMarkSystem>();
+
+            Assert.That(marks.TryMark(bracer, hunter, oldXeno, YautjaMarkKind.Prey, null), Is.True);
+
+            var evolved = new NewXenoEvolvedEvent((oldXeno, evolution), newXeno, true);
+            em.EventBus.RaiseLocalEvent(newXeno, ref evolved, true);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(marks.IsMarkedBy(oldXeno, YautjaMarkKind.Prey, hunter), Is.False);
+                Assert.That(marks.IsMarkedBy(newXeno, YautjaMarkKind.Prey, hunter), Is.True);
+                var journal = em.GetComponent<YautjaHuntJournalComponent>(hunter);
+                Assert.That(journal.Records.Values.Single(record => record.WasMarked).Target,
+                    Is.EqualTo(newXeno));
+            });
+
+            Assert.That(marks.TryChangeMark(bracer, hunter, newXeno, YautjaMarkKind.Prey,
+                YautjaMarkKind.Dishonored, null), Is.True);
+            Assert.That(marks.TryClearMark(newXeno, YautjaMarkKind.Dishonored, hunter), Is.True);
+            Assert.That(marks.TryMark(bracer, hunter, newXeno, YautjaMarkKind.Prey, null), Is.True);
         });
         await pair.CleanReturnAsync();
     }

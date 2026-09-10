@@ -4,6 +4,8 @@
   name: M34A2 Longstreet
   description: "An older light tank made for all ground forces of the United Americas, although being phased out due to being outdated by the American Army and the CCAF, the longstreet still remains in service with USCM and LACN detachments in colonial sectors."
   components:
+  - type: RMCNightVisionVisible # CMU14
+    priority: -2
   - type: Vehicle
     movementKind: Grid
     transferDamage: false

@@ -63,6 +63,13 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public bool Green;
 
+    // CMU Related Change
+    /// <summary>
+    /// Whether night-vision-visible entities are rendered through occlusion.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Overlay;
+
     /// <summary>
     /// Whether the wearer receives meson-style FoV behavior.
     /// </summary>
@@ -122,6 +129,10 @@ public sealed partial class NightVisionItemComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool PreviousGreen;
+
+    // CMU Related Change
+    [DataField, AutoNetworkedField]
+    public bool PreviousOverlay;
 
     /// <summary>
     /// Previous wearer meson state restored when this item is disabled.

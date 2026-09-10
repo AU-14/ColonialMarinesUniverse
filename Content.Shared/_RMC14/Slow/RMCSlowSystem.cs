@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Movement;
 using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Rejuvenate;
@@ -49,6 +50,10 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     public bool TrySlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false)
     {
+        // CMU Related Change
+        if (IsRegularYautja(ent))
+            return false;
+
         if (!TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow))
             return false;
 
@@ -71,6 +76,10 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     public bool TrySuperSlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false)
     {
+        // CMU Related Change
+        if (IsRegularYautja(ent))
+            return false;
+
         if (_timing.ApplyingState)
             return false;
 
@@ -96,6 +105,10 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     public bool TryRoot(EntityUid ent, TimeSpan duration, bool refresh = true, bool applyChemical = false)
     {
+        // CMU Related Change
+        if (IsRegularYautja(ent))
+            return false;
+
         var adjustedDuration = duration;
         if (applyChemical)
         {
@@ -119,6 +132,12 @@ public sealed partial class RMCSlowSystem : EntitySystem
         Dirty(ent, slowdown);
 
         return true;
+    }
+
+    // CMU Related Change
+    private bool IsRegularYautja(EntityUid ent)
+    {
+        return HasComp<YautjaComponent>(ent) && !HasComp<YautjaBadBloodComponent>(ent);
     }
 
     private void OnAdded<T>(Entity<T> ent, ref ComponentStartup args) where T : IComponent

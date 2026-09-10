@@ -282,8 +282,19 @@
     slotFlags: MASK
     defaultState: Full
     green: false
+    overlay: true
     blockScopes: true
     ignoreUserOnlyHalf: true
+  - type: ShowHealthBars
+    damageContainers: &yautjaMaskHealthContainers
+    - Biological
+    - BiologicalMetaphysical
+    - Inorganic
+    - Silicon
+    - Xeno
+  - type: HolocardScanner
+  - type: ShowHealthIcons
+    damageContainers: *yautjaMaskHealthContainers
 
 - type: entity
   parent: CMUYautjaMaskBase

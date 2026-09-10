@@ -465,6 +465,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     }
 
     // RMC14
+    // CMU Related Change
     public bool AttemptLightAttack(EntityUid user,
         EntityUid weaponUid,
         MeleeWeaponComponent weapon,
@@ -483,6 +484,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     /// Called when a windup is finished and an attack is tried.
     /// </summary>
     /// <returns>True if attack successful</returns>
+    // CMU Related Change
     private bool AttemptAttack(EntityUid user,
         EntityUid weaponUid,
         MeleeWeaponComponent weapon,
@@ -650,6 +652,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
 
     protected abstract bool InRange(EntityUid user, EntityUid target, float range, ICommonSession? session);
 
+    // CMU Related Change
     protected virtual void DoLightAttack(EntityUid user,
         LightAttackEvent ev,
         EntityUid meleeUid,
@@ -1296,6 +1299,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         return true;
     }
 
+    // CMU Related Change
     private void DoLungeAnimation(EntityUid user,
         EntityUid weapon,
         Angle angle,
@@ -1325,6 +1329,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         DoLunge(user, weapon, angle, localPos, animation, predicted);
     }
 
+    // CMU Related Change
     public abstract void DoLunge(EntityUid user, EntityUid weapon, Angle angle, Vector2 localPos, string? animation, bool predicted = true);
 
     /// <summary>
