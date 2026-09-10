@@ -10696,5 +10696,17 @@
   id: 691
   time: '2026-09-10T04:54:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1919
+- author: TheHellFireo
+  changes:
+  - message: Fixed stale area-power references and power loads after equipment is
+      removed or moved.
+    type: Fix
+  - message: Fixed missing fighters in small CLF survivor groups.
+    type: Fix
+  - message: Improved gameplay stall and client synchronization diagnostics.
+    type: Admin
+  id: 692
+  time: '2026-09-10T13:35:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921
 Name: CMU
 Order: -1
