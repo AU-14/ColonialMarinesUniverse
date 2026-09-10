@@ -1,5 +1,9 @@
+# CMU14 owned custom configuration .toml file
+#
+# This loads whenever TOOLS is defined: Debug, DebugOpt and Tools builds; not Release
+# LoadBuildConfigPresets() and config.preset_development=true config.preset_debug=true
 [build]
-engine_version = "v278.0.0"
+engine_version = "v289.0.0"
 
 [game]
 defaultpreset = "Insurgency"
@@ -37,6 +41,14 @@ max_ip_connections = 413
 grid_splitting = false
 maxlinvelocity = 72
 target_minimum_tickrate = 90
+
+[atmos]
+space_wind = true
+grid_impulse = true
+max_process_time = 3
+
+[explosion]
+can_create_vacuum = false
 
 [procgen]
 preload = false

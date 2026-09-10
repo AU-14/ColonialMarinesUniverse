@@ -49,6 +49,7 @@ jobs:
               'W: Backlog': { color: 'cfd3d7', description: 'Backlog item.' },
               'W: Next': { color: '0e8a16', description: 'Prioritized next work.' },
               'Toolshed': { color: '006b75', description: 'Toolshed-related issue or PR.' },
+              'Dependencies': { color: '0366d6', description: 'Automated dependency updates.' },
             };
 
             const owner = context.repo.owner;
@@ -218,11 +219,11 @@ jobs:
     needs: labels
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      - uses: actions/labeler@v6.1.0
+      - uses: actions/labeler@v7.0.0
         with:
           repo-token: ${{ github.token }}
           configuration-path: .github/labeler.yml

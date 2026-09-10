@@ -33,8 +33,6 @@
     - FullAuto
     soundGunshot:
       collection: RMCFlamerShoot
-  - type: UseDelay
-    delay: 2
   - type: ShootUseDelay
   - type: ContainerContainer
     containers:
@@ -50,6 +48,8 @@
         whitelist:
           tags:
           - RMCTankFlamer
+  - type: WieldDelay
+    baseDelay: 1.0 #CMU14 Change
   - type: Wieldable
   - type: WieldableSpeedModifiers
     base: 0.5

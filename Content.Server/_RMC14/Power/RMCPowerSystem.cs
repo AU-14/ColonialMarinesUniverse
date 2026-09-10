@@ -94,6 +94,7 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
     protected override void OnReceiverMapInit(Entity<RMCPowerReceiverComponent> ent, ref MapInitEvent args)
     {
+        base.OnReceiverMapInit(ent, ref args); // CMU14: newly initialized receivers still need area registration.
         if (!TryComp(ent, out ApcPowerReceiverComponent? receiver))
             return;
 

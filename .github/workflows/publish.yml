@@ -35,7 +35,7 @@ jobs:
     outputs:
       already-published: ${{ steps.start.outputs.already-published }}
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
         with:
           persist-credentials: true
           submodules: false
@@ -82,7 +82,7 @@ jobs:
             restore: dotnet restore Content.Server/Content.Server.csproj --runtime linux-x64 /p:TargetOs=Linux
 
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
         with:
           persist-credentials: true
           submodules: false
@@ -94,7 +94,7 @@ jobs:
 
       - name: Checkout ColonialMarinesAudio
         if: ${{ env.AUDIO_REPO_TOKEN != '' }}
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7
         with:
           repository: AU-14/ColonialMarinesAudio
           token: ${{ env.AUDIO_REPO_TOKEN }}
@@ -110,7 +110,7 @@ jobs:
           du -sh Content.CMU/Resources/Audio/CMU14/Private/
           rm -rf __audio-overlay
 
-      - uses: actions/setup-dotnet@v5.2.0
+      - uses: actions/setup-dotnet@v6.0.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
@@ -130,7 +130,7 @@ jobs:
         run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build --no-restore -- ${{ matrix.command }} --no-restore
 
       - name: Upload ${{ matrix.name }} package
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7
         with:
           name: release-${{ matrix.name }}
           path: release/*.zip
@@ -152,7 +152,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [publish_start, package]
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
         with:
           persist-credentials: true
           submodules: false

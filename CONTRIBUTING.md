@@ -116,9 +116,11 @@ The short list that catches most first PRs. Full detail in [CONVENTIONS.md](CONV
   `dotnet run --project Content.Client` (Windows wrappers: `runserver.bat`, `runclient.bat`).
 - Build configurations: `Debug` has asserts on and halts on the first one, use it for
   breakpoints and catching failures at the source. `Release` runs asserts off and keeps
-  going, so most day-to-day playtesting happens there. `Tools` is `Release` plus the
-  in-game dev tools; `DebugOpt` keeps asserts while optimizing. Select with `-c`, e.g.
-  `dotnet run --project Content.Server -c Release`.
+  going, so most day-to-day playtesting happens there. `DebugOpt` keeps asserts while
+  optimizing. Everything except `Release` defines the `TOOLS` symbol, so dev
+  tools and `development.toml` config preset are active; `Tools` is
+  `Release` plus those. `Debug`/`DebugOpt` also try to load a `debug.toml` preset (missing
+  one is skipped). Select with `-c`, e.g. `dotnet run --project Content.Server -c Release`.
 - Before working on maps, configure the map merge driver once - without it git silently falls
   back to line-based merging of map YAML:
 

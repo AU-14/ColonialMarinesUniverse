@@ -15,12 +15,12 @@ jobs:
 
     steps:
     - name: Checkout Master
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
           submodules: recursive
 
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4.1.0
+      uses: actions/setup-dotnet@v6.0.0
       with:
         dotnet-version: 10.0.x
 
@@ -71,7 +71,7 @@ jobs:
     name: Error for ${{ matrix.value.name }}
     steps:
       - name: Checkout Master
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Create Issue
         uses: dblock/create-a-github-issue@v3
