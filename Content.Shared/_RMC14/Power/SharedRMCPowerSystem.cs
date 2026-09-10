@@ -79,6 +79,8 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         _areaQuery = GetEntityQuery<AreaComponent>();
         _powerReceiverQuery = GetEntityQuery<RMCPowerReceiverComponent>();
 
+        InitializeCMUAreaPowerState(); // CMU14: handle stale members without mutating collections during PVS.
+
         SubscribeLocalEvent<RMCApcComponent, ComponentStartup>(OnApcStartup);
         SubscribeLocalEvent<RMCApcComponent, MapInitEvent>(OnApcUpdate);
         SubscribeLocalEvent<RMCApcComponent, EntParentChangedMessage>(OnApcUpdate);
@@ -362,16 +364,9 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         ToUpdate.Add(ent);
     }
 
+    // CMU14 method: spatial lookup is no longer reliable after detach or during deletion.
     private void OnReceiverRemove<T>(Entity<RMCPowerReceiverComponent> ent, ref T args)
-    {
-        if (!TryGetPowerArea(ent, out var area) ||
-            TerminatingOrDeleted(area))
-        {
-            return;
-        }
-
-        GetAreaReceivers(area, ent.Comp.Channel).Remove(ent);
-    }
+        => RemoveCMUReceiverFromArea(ent);
 
     private void OnFusionReactorMapInit(Entity<RMCFusionReactorComponent> ent, ref MapInitEvent args)
     {
@@ -1200,12 +1195,10 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
                 if (_powerReceiverQuery.TryComp(update, out var receiver))
                 {
-                    if (_areaPowerQuery.TryComp(receiver.Area, out var oldArea))
-                    {
-                        GetAreaReceivers((receiver.Area.Value, oldArea), receiver.Channel).Remove(update);
-                        oldArea.Load[(int) receiver.Channel] -= receiver.LastLoad;
-                        Dirty(update, receiver);
-                    }
+                    // CMU14 Begin: update old membership/load once and notify clients of the old area.
+                    RemoveCMUReceiverFromArea((update, receiver));
+                    Dirty(update, receiver);
+                    // CMU14 End
                 }
 
                 if (!TryGetPowerArea(update, out var area))
