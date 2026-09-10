@@ -49,6 +49,7 @@ jobs:
               'W: Backlog': { color: 'cfd3d7', description: 'Backlog item.' },
               'W: Next': { color: '0e8a16', description: 'Prioritized next work.' },
               'Toolshed': { color: '006b75', description: 'Toolshed-related issue or PR.' },
+              'Dependencies': { color: '0366d6', description: 'Automated dependency updates.' },
             };
 
             const owner = context.repo.owner;

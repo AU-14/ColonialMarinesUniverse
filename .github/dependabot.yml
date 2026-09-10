@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - "*"
+    labels:
+      - Dependencies
+
+  # Engine-coupled NuGet pins live in the RobustToolbox submodule's props file,
+  # which dependabot cannot see, so only CMU-owned versions in
+  # Directory.Packages.props get update PRs.
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    labels:
+      - Dependencies

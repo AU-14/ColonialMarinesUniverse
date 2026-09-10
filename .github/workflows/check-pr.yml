@@ -1,0 +1,188 @@
+name: Check PR
+
+# All advisory checks (template, changelog, submodules) post a single comment.
+# Each message carries an invisible marker and is skipped once posted, so
+# pushes re-run the checks without duplicate comments.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: check-pr-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check PR and post one advisory comment
+      uses: actions/github-script@v9.0.0
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          const messages = [];
+
+          const maintainer = ['MEMBER', 'OWNER', 'COLLABORATOR'].includes(pr.author_association);
+
+          // template defaults or a missing :cl: in the PR description
+          const description = pr.body || '';
+          if (!maintainer && description.trim() !== '') {
+            const template = [];
+
+            const defaults = [
+              'add: Added fun!',
+              'remove: Removed fun!',
+              'tweak: Changed fun!',
+              'fix: Fixed fun!',
+              'map: Mapped fun!',
+              'admin: Admin related change!',
+              'code: Code related change for contributors!'
+            ];
+
+            const found = defaults.filter(line => description.includes(line));
+            if (found.length > 0) {
+              template.push(`It looks like your PR description contains the default changelog entries from the template:\n\n` +
+                `${found.map(l => `- \`${l}\``).join('\n')}\n\n` +
+                `Please replace it with your actual changelog entries, or remove them entirely.`);
+            }
+
+            if (!description.includes(':cl:')) {
+              template.push(`You are missing the required \`:cl:\` emoji-tag for the changelog bot.\n\n` +
+                `Please add a changelog section in your PR description detailing major changes, like:\n\n` +
+                `\`\`\`\n:cl:\n- add: New feature added\n- fix: Resolved a bug\n\`\`\`\n\n` +
+                `If your change does not need a changelog, you can add an empty one:\n\n` +
+                `\`\`\`\n:cl:\n\`\`\``);
+            }
+
+            if (template.length > 0)
+              messages.push(`<!-- check-pr:template -->\n\n${template.join('\n\n')}`);
+          }
+
+          // the raw diff is the merge-base diff with no file cap, unlike pulls.listFiles
+          const diff = (await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: pr.number,
+            mediaType: { format: 'diff' }
+          })).data;
+          const sections = ('\n' + diff).split('\ndiff --git ');
+
+          // manual edits to the generated changelog files
+          const editsChangelog = sections.some(s => s.startsWith('a/Resources/Changelog/CMU.yml '));
+          const editsParts = sections.some(s => s.startsWith('a/Resources/Changelog/Parts/'));
+          if (editsChangelog || editsParts) {
+            let changelog = '';
+            if (editsChangelog) {
+              changelog += `It looks like this PR modifies \`Resources/Changelog/CMU.yml\`.\n\n` +
+                `That file is generated automatically by the changelog bot from the \`:cl:\` section of PR descriptions, ` +
+                `so manual edits will be overwritten on the next update.\n\n`;
+            }
+            if (editsParts) {
+              changelog += `It looks like this PR adds or edits files in \`Resources/Changelog/Parts/\`.\n\n` +
+                `Hand-written parts are picked up by \`Tools/update_changelog_parts.py\` and do work, ` +
+                `but they are very discouraged: the \`:cl:\` section of the PR description is the normal ` +
+                `method, and parts are extra work for no gain.\n\n`;
+            }
+
+            changelog += `Please make your changelog entries in the PR description instead:\n\n` +
+              `\`\`\`\n:cl:\n- add: New feature added\n\`\`\`\n\n` +
+              `If you already have a \`:cl:\` section, just remove the changelog file changes from this PR.`;
+
+            messages.push(`<!-- check-pr:changelog -->\n\n${changelog}`);
+          }
+
+          // submodule pointers are maintainer territory
+          const submodules = maintainer ? {} : {
+            'RobustToolbox': { owner: 'space-wizards', repo: 'RobustToolbox' },
+            'RSI.NET': { owner: 'space-wizards', repo: 'RSI.NET' }
+          };
+
+          let changedCount = 0;
+          let downgrade = false;
+
+          for (const [path, sub] of Object.entries(submodules)) {
+            const section = sections.find(s => s.startsWith(`a/${path} b/`));
+            const oldSha = section?.match(/^-Subproject commit ([0-9a-f]{40})/m)?.[1];
+            const newSha = section?.match(/^\+Subproject commit ([0-9a-f]{40})/m)?.[1];
+            if (oldSha === newSha) continue;
+
+            changedCount++;
+
+            if (!oldSha || !newSha) {
+              messages.push(`<!-- check-pr:submodules ${path} ${oldSha ?? 'gone'} -> ${newSha ?? 'gone'} -->\n` +
+                `This PR ${!newSha ? 'removes' : 'adds'} the \`${path}\` submodule.\n\n` +
+                `Submodule pointers are maintainer territory, drop these changes unless that was intentional.`);
+              continue;
+            }
+
+            let submodule = `<!-- check-pr:submodules ${path} ${oldSha} -> ${newSha} -->\n` +
+              `This PR updates the \`${path}\` submodule pointer:\n` +
+              `\`${oldSha.slice(0, 10)}\` → \`${newSha.slice(0, 10)}\` ` +
+              `([compare](https://github.com/${sub.owner}/${sub.repo}/compare/${oldSha}...${newSha}))`;
+
+            try {
+              const { data } = await github.request('GET /repos/{owner}/{repo}/compare/{basehead}', {
+                owner: sub.owner,
+                repo: sub.repo,
+                basehead: `${oldSha}...${newSha}`
+              });
+              if (data.status === 'behind') {
+                downgrade = true;
+                submodule += `\n\n:warning: **This is a downgrade, the new commit is ${data.behind_by} commits behind the current one.**\n` +
+                  `Submodules must only move forward. To update the engine see the wiki, do not restore an old pointer.`;
+              } else if (data.status === 'ahead') {
+                submodule += `\n\nForward update, ${data.ahead_by} commits ahead.`;
+              } else if (data.status === 'diverged') {
+                submodule += `\n\nThe new commit has diverged from the current one (${data.ahead_by} ahead, ${data.behind_by} behind).`;
+              }
+            } catch (e) {
+              submodule += `\n\nCould not determine the update direction (commit not found in \`${sub.owner}/${sub.repo}\`), verify manually.`;
+            }
+
+            messages.push(submodule);
+          }
+
+          if (messages.length === 0) return;
+
+          // one comment per PR state; each message opens with its dedup marker
+          const comments = await github.paginate(github.rest.issues.listComments, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: pr.number,
+            per_page: 100
+          });
+          const fresh = messages.filter(m => !comments.some(c => c.body.includes(m.split('\n')[0])));
+          if (downgrade)
+            core.setFailed('Submodule downgrade detected, the pointer must only move forward.');
+          if (fresh.length === 0) return;
+
+          const submoduleFresh = fresh.some(m => m.includes('check-pr:submodules'));
+          const others = pr.changed_files - changedCount;
+          if (submoduleFresh && others > 0)
+            fresh.push(`:information_source: The submodule update ships alongside ${others} other changed file${others === 1 ? '' : 's'}. Keep engine syncs pointer-only where possible so they stay reviewable.`);
+
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: pr.number,
+            body: fresh.join('\n\n')
+          });
+
+  close-master-pr:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    if: (github.event.action == 'opened' || github.event.action == 'ready_for_review')
+      && (github.head_ref == 'master' || github.head_ref == 'main' || github.head_ref == 'develop' || github.head_ref == 'stable' || github.head_ref == 'staging')
+      && github.event.pull_request.head.repo.fork
+    steps:
+    - name: Close and comment
+      uses: superbrothers/close-pull-request@v3.1.2
+      with:
+        comment: "Thank you for your contribution! It appears you created a pull request from the master branch or another main development branch. This is [something you should avoid doing](https://jmeridth.com/posts/do-not-issue-pull-requests-from-your-master-branch/), and thus this pull request has been automatically closed. \n \n We suggest you follow [the SS14 git usage documentation](https://docs.spacestation14.com/en/general-development/setup/git-for-the-ss14-developer.html). \n \n You can move your current work to another branch by following [these commands](https://ohshitgit.com/#accidental-commit-master). Then, you may recreate your pull request using the new branch."
