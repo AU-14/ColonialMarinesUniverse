@@ -1,0 +1,60 @@
+﻿<Document>
+  # Departments
+
+    These are non-modifiable SOP's that cannot be changed unless approved by a member of Provost.
+
+  ## Department Equipment
+    Department issued equipment, clothing and weapons may not be provided to others unless given approval from the head of the department.
+
+  ## Medical
+    ### Chief Medical Officer
+      - Holds complete authority over the medbay, medical preperations, research and surgery on board the ship/installation, except when overuled by the Commander.
+      - May authorize or prohibit any type of research or experimentation.
+    ### Medical Regulations
+      - Pills must be stored in a sealed, labelled container showing either the maximum dosage before overdose or the number of units provided.
+      - Loose chemicals containing anything other than water or welding fuel must be labelled with their contents and maximum safe dosage.
+
+  ## Engineering
+    ### Engineer Officer
+      - Holds complete authority over ship/installation modifications, repairs and maintenance, except when overuled by the Commander.
+    ### Engineering Regulations
+      - May not dismantle or deconstruct any vital area's of the ship/installation to create modifications.
+      - May not dismantle or deconstruct any area's of the ship/installation to gather materials.
+      - Ship/Installation modifications cannot be done purely for decorative purposes and must have a reason behind it.
+
+  ## Requsitions
+    ### Logistics Officer
+      - Holds complete authority over requsitions and it's equipment as well as any purchases made through the ASRS, except when overuled by the Commander.
+    ### Requsition Regulations
+      - The right to deny service to any personnel with a valid reason, such as threats, not wearing a uniform or armor etc.
+      - Any equipment taken from requsitions by a non-member of requsitions without permission is treated as theft.
+      - May collect and distrubute weapons and equipment given to them by other departments as well as found within the squad preperation bays.
+      - May not distrubute any items taken from vendors in other departments without permission with the exception of the vendors found within the squad preperation bays.
+
+  ## Military Police
+    ### Chief of Military Police
+      - Holds the ultimate authority in regards to UCMJ on board the ship/installation.
+      - May grant non-members of command military police equipment and clothing as well as permission to carry out UCMJ law.
+      - Settles any SOP or UCMJ related dispute.
+    ### Military Police Regulations
+      - Must always carry non-lethal detainment methods to perform their duties.
+      - Permitted access to all area's of the ship with the exception of the AI core and synthethic areas.
+      - Must always uphold UCMJ law and cannot ignore a crime or reported crime.
+
+  ## Synthetics and AI
+    ### APOLLO
+      - APOLLO's core may only be accessed by the Engineering Officer, Commander and Synthetics and requires approval from APOLLO.
+      - Trespassing past initial security gates will result in non-lethal removal from the area.
+      - Trespassing into APOLLO's core will result in imediate lethal harm.
+    ### Synthetics
+      - Required to uphold all crew orders so long as they do not violate their directives or would otherwise stunt their operational capability, such as being told to hand over their surgical equipment.
+      - Must maintain the Medical Bay or Requsitions in the absence of department staff, they may never replace department staff, for example being held in Medbay so a Doctor may deploy.
+      - Must arrest individuals who have commited a crime and bring them to a member of military police or command, they may not sentance the individual arrested.
+      - Expected to perform all tasks to exceptional standard, they may specialise in a specific role but should not neglect their other tasks.
+      - May operate completely independently and without orders so long as their task is benefiting the operation.
+      - May operate vehicles that do not have any weapons attached to them.
+      - May carry weapons, knives and any equipment either for transport or to help perform their duties.
+    ### Working Joes
+      - Working Joes perform on orders directly from APOLLO and may take orders from crew members so long as they are simple tasks.
+
+</Document>
