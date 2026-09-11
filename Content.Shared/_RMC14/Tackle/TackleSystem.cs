@@ -69,26 +69,38 @@ public sealed partial class TackleSystem : EntitySystem
 
         DoDisarmEffects(user, target);
 
-        // CMU Related Change
-        if (TryComp(target, out YautjaComponent? yautja) &&
-            !HasComp<YautjaBadBloodComponent>(target) &&
-            HasComp<XenoComponent>(user))
+        // CMU14 Begin: regular Yautja require several successful Xeno tackle rolls.
+        if (TryComp(target, out YautjaComponent? yautja)
+            && !HasComp<YautjaBadBloodComponent>(target)
+            && HasComp<XenoComponent>(user))
         {
             if (_net.IsClient)
                 return;
 
             if (!_random.Prob(yautja.XenoTackleSuccessChance))
             {
-                _adminLog.Add(LogType.RMCTackle, $"{ToPrettyString(user)} tried to tackle {ToPrettyString(target)}.");
-                var selfPopup = Loc.GetString("cm-tackle-try-self", ("target", Identity.Name(target, EntityManager, user)));
-                var targetPopup = Loc.GetString("cm-tackle-try-target", ("user", Identity.Name(user, EntityManager, target)));
-                DoPvsPopups(user,
-                    target,
-                    selfPopup,
-                    targetPopup,
-                    other => Loc.GetString("cm-tackle-try-observer",
-                        ("user", Identity.Name(user, EntityManager, other)),
-                        ("target", Identity.Name(target, EntityManager, other))));
+                ShowYautjaTackleAttempt(user, target);
+                return;
+            }
+
+            var now = _timing.CurTime;
+            var progress = EnsureComp<YautjaTackleProgressComponent>(target);
+            if (progress.Successes > 0 && now >= progress.LastSuccessAt + yautja.XenoTackleExpireAfter)
+                progress.Successes = 0;
+
+            progress.Successes++;
+            progress.LastSuccessAt = now;
+
+            if (progress.Successes < Math.Max(1, yautja.XenoTackleSuccessesRequired))
+            {
+                ShowYautjaTackleAttempt(user, target);
+                return;
+            }
+
+            RemComp<YautjaTackleProgressComponent>(target);
+            if (HasComp<KnockedDownComponent>(target))
+            {
+                ShowYautjaTackleAttempt(user, target);
                 return;
             }
 
@@ -110,6 +122,7 @@ public sealed partial class TackleSystem : EntitySystem
             _stun.TryKnockdown(target.Owner, yautjaKnockdown * 2, true, drop: false, force: true);
             return;
         }
+        // CMU14 End
 
         var time = _timing.CurTime;
         var recently = EnsureComp<TackledRecentlyComponent>(user);
@@ -337,6 +350,21 @@ public sealed partial class TackleSystem : EntitySystem
     private void DoDisarmEffects(EntityUid user, EntityUid target)
     {
         _colorFlash.RaiseEffect(Color.Aqua, new List<EntityUid> { target }, Filter.PvsExcept(user));
+    }
+
+    // CMU14 method: shared feedback for unsuccessful or incomplete Yautja tackle sequences.
+    private void ShowYautjaTackleAttempt(EntityUid user, EntityUid target)
+    {
+        _adminLog.Add(LogType.RMCTackle, $"{ToPrettyString(user)} tried to tackle {ToPrettyString(target)}.");
+        var selfPopup = Loc.GetString("cm-tackle-try-self", ("target", Identity.Name(target, EntityManager, user)));
+        var targetPopup = Loc.GetString("cm-tackle-try-target", ("user", Identity.Name(user, EntityManager, target)));
+        DoPvsPopups(user,
+            target,
+            selfPopup,
+            targetPopup,
+            other => Loc.GetString("cm-tackle-try-observer",
+                ("user", Identity.Name(user, EntityManager, other)),
+                ("target", Identity.Name(target, EntityManager, other))));
     }
 
     private float GetYautjaShoveChanceBonus(EntityUid user)

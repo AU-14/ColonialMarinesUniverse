@@ -22,6 +22,64 @@ public sealed partial class TacticalMapSystem
             "colonist")
     };
 
+    private static readonly SpriteSpecifier.Rsi YautjaPreyIcon = new(
+        new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"),
+        "enemy_blip");
+
+    public bool TrySetYautjaPreyBlip(EntityUid source, out EntityUid gridId)
+    {
+        gridId = default;
+        if (!_transformQuery.TryComp(source, out var xform)
+            || xform.GridUid is not { } sourceGrid
+            || !_mapGridQuery.TryComp(sourceGrid, out var gridComp)
+            || !_tacticalMapQuery.TryComp(sourceGrid, out var tacticalMap)
+            || !_transform.TryGetGridTilePosition((source, xform), out var indices, gridComp))
+        {
+            return false;
+        }
+
+        var sourceBlip = FindBlipInMap(source.Id, tacticalMap);
+        var blip = sourceBlip is { } existing
+            ? existing with { Indices = indices }
+            : new TacticalMapBlip(
+                indices,
+                YautjaPreyIcon,
+                Color.FromHex("#FFB347"),
+                TacticalMapBlipStatus.Alive,
+                null,
+                false);
+
+        tacticalMap.YautjaBlips[source.Id] = blip;
+        tacticalMap.NextUpdatePerFaction["YAUTJA"] = TimeSpan.Zero;
+        tacticalMap.MapDirty = true;
+        gridId = sourceGrid;
+        return true;
+    }
+
+    public void RemoveYautjaPreyBlip(EntityUid source, EntityUid? gridId = null)
+    {
+        if (gridId is { } mapUid
+            && TryComp(mapUid, out TacticalMapComponent? tacticalMap))
+        {
+            if (tacticalMap.YautjaBlips.Remove(source.Id))
+            {
+                tacticalMap.NextUpdatePerFaction["YAUTJA"] = TimeSpan.Zero;
+                tacticalMap.MapDirty = true;
+            }
+            return;
+        }
+
+        var maps = EntityQueryEnumerator<TacticalMapComponent>();
+        while (maps.MoveNext(out var map))
+        {
+            if (map.YautjaBlips.Remove(source.Id))
+            {
+                map.NextUpdatePerFaction["YAUTJA"] = TimeSpan.Zero;
+                map.MapDirty = true;
+            }
+        }
+    }
+
     public (EntityUid GridId, int Key)? CreateFactionIntelBlip(
         EntityUid source,
         string sourceFactionLower,

@@ -30,6 +30,8 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Cuffs.Components;
+using Content.Shared.CMU14.TacticalMap; // CMU14
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Database;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind.Components;
@@ -89,6 +91,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
     private EntityQuery<OpforMapTrackedComponent> _opforMapTrackedQuery;
     private EntityQuery<GovforMapTrackedComponent> _govforMapTrackedQuery;
     private EntityQuery<ClfMapTrackedComponent> _clfMapTrackedQuery;
+    private EntityQuery<YautjaMapTrackedComponent> _yautjaMapTrackedQuery; // CMU14
     private EntityQuery<VehicleInteriorOccupantComponent> _vehicleOccupantQuery;
 
     private readonly HashSet<Entity<TacticalMapTrackedComponent>> _toInit = new();
@@ -120,6 +123,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         _opforMapTrackedQuery = GetEntityQuery<OpforMapTrackedComponent>();
         _govforMapTrackedQuery = GetEntityQuery<GovforMapTrackedComponent>();
         _clfMapTrackedQuery = GetEntityQuery<ClfMapTrackedComponent>();
+        _yautjaMapTrackedQuery = GetEntityQuery<YautjaMapTrackedComponent>(); // CMU14
         _vehicleOccupantQuery = GetEntityQuery<VehicleInteriorOccupantComponent>();
 
         SubscribeLocalEvent<VehicleInteriorComponent, MoveEvent>(OnVehicleMove);
@@ -327,14 +331,31 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
     {
         if (HasComp<GhostComponent>(ent))
         {
+            // CMU14 Begin: observers may inspect the private hunter channel too.
             var changed = !ent.Comp.Marines || !ent.Comp.Xenos || !ent.Comp.Opfor
-                || !ent.Comp.Govfor || !ent.Comp.Clf || !ent.Comp.LiveUpdate;
+                || !ent.Comp.Govfor || !ent.Comp.Clf || !ent.Comp.Yautja || !ent.Comp.LiveUpdate;
             ent.Comp.Marines = ent.Comp.Xenos = ent.Comp.Opfor = ent.Comp.Govfor = ent.Comp.Clf = true;
+            ent.Comp.Yautja = true;
+            // CMU14 End
             ent.Comp.LiveUpdate = true;
             if (changed)
                 Dirty(ent);
             return;
         }
+
+        // CMU14 Begin: Yautja maps are live, private, and faction-isolated.
+        if (HasComp<YautjaComponent>(ent))
+        {
+            var changed = !ent.Comp.Yautja || ent.Comp.Marines || ent.Comp.Xenos
+                || ent.Comp.Opfor || ent.Comp.Govfor || ent.Comp.Clf || !ent.Comp.LiveUpdate;
+            ent.Comp.Yautja = true;
+            ent.Comp.Marines = ent.Comp.Xenos = ent.Comp.Opfor = ent.Comp.Govfor = ent.Comp.Clf = false;
+            ent.Comp.LiveUpdate = true;
+            if (changed)
+                Dirty(ent);
+            return;
+        }
+        // CMU14 End
 
         if (HasComp<XenoComponent>(ent))
         {
@@ -371,16 +392,19 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             }
         }
 
-        var current = (ent.Comp.Marines, ent.Comp.Opfor, ent.Comp.Govfor, ent.Comp.Clf);
-        var desired = (marines, opfor, govfor, clf);
+        // CMU14 Begin: clear a stale private-channel grant when faction identity changes.
+        var current = (ent.Comp.Marines, ent.Comp.Opfor, ent.Comp.Govfor, ent.Comp.Clf, ent.Comp.Yautja);
+        var desired = (marines, opfor, govfor, clf, false);
         if (current != desired)
         {
             ent.Comp.Marines = marines;
             ent.Comp.Opfor = opfor;
             ent.Comp.Govfor = govfor;
             ent.Comp.Clf = clf;
+            ent.Comp.Yautja = false;
             Dirty(ent);
         }
+        // CMU14 End
     }
 
     private void OnComputerStartup(Entity<TacticalMapComputerComponent> ent, ref ComponentStartup args)
@@ -1285,6 +1309,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         tacticalMap.OpforBlips.Remove(tracked.Owner.Id);
         tacticalMap.GovforBlips.Remove(tracked.Owner.Id);
         tacticalMap.ClfBlips.Remove(tracked.Owner.Id);
+        tacticalMap.YautjaBlips.Remove(tracked.Owner.Id); // CMU14
         tacticalMap.MapDirty = true;
         tracked.Comp.Map = null;
     }
@@ -1394,6 +1419,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                         map.OpforBlips.Remove(ent.Owner.Id);
                         map.GovforBlips.Remove(ent.Owner.Id);
                         map.ClfBlips.Remove(ent.Owner.Id);
+                        map.YautjaBlips.Remove(ent.Owner.Id); // CMU14
                         map.MapDirty = true;
                     }
                 }
@@ -1405,6 +1431,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                     curMap.OpforBlips.Remove(ent.Owner.Id);
                     curMap.GovforBlips.Remove(ent.Owner.Id);
                     curMap.ClfBlips.Remove(ent.Owner.Id);
+                    curMap.YautjaBlips.Remove(ent.Owner.Id); // CMU14
                     curMap.MapDirty = true;
                 }
 
@@ -1477,8 +1504,17 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         bool placed = false;
 
+        // CMU14 Begin: hunter markers never enter another faction's bucket.
+        if (_yautjaMapTrackedQuery.HasComp(ent))
+        {
+            tacticalMap.YautjaBlips[ent.Owner.Id] = blip;
+            tacticalMap.MapDirty = true;
+            placed = true;
+        }
+        // CMU14 End
+
         // Xeno categories keep existing behavior
-        if (_xenoMapTrackedQuery.HasComp(ent))
+        if (!placed && _xenoMapTrackedQuery.HasComp(ent)) // CMU14
         {
             tacticalMap.XenoBlips[ent.Owner.Id] = blip;
             tacticalMap.MapDirty = true;
@@ -1622,6 +1658,12 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 blips[id] = orig with { Image = enemyRsi, HiveLeader = false };
             }
         }
+
+        // CMU14 Begin: this channel contains fellow hunters and live five-minute trap pings.
+        user.Comp.YautjaBlips = user.Comp.Yautja
+            ? map.YautjaBlips.ToDictionary()
+            : new Dictionary<int, TacticalMapBlip>();
+        // CMU14 End
 
         if (user.Comp.Xenos)
         {
@@ -1846,6 +1888,8 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             return govforBlip;
         if (map.ClfBlips.TryGetValue(entityId, out var clfBlip))
             return clfBlip;
+        if (map.YautjaBlips.TryGetValue(entityId, out var yautjaBlip)) // CMU14
+            return yautjaBlip; // CMU14
         return null;
     }
 
@@ -2358,7 +2402,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 continue;
 
             // Process updates per-faction using the NextUpdatePerFaction dictionary on the map component.
-            var factions = new[] { "MARINES", "XENONIDS", "OPFOR", "GOVFOR", "CLF" };
+            var factions = new[] { "MARINES", "XENONIDS", "OPFOR", "GOVFOR", "CLF", "YAUTJA" }; // CMU14
 
             foreach (var faction in factions)
             {
@@ -2415,6 +2459,8 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                         UpdateUserData((userId, userComp), map);
                     else if (faction == "CLF" && userComp.Clf)
                         UpdateUserData((userId, userComp), map);
+                    else if (faction == "YAUTJA" && userComp.Yautja) // CMU14
+                        UpdateUserData((userId, userComp), map); // CMU14
                 }
 
                 // Update tunnel UI users as well
@@ -2431,6 +2477,8 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                         UpdateUserData((tunnelUserId, tunnelUserComp), map);
                     else if (faction == "CLF" && tunnelUserComp.Clf)
                         UpdateUserData((tunnelUserId, tunnelUserComp), map);
+                    else if (faction == "YAUTJA" && tunnelUserComp.Yautja) // CMU14
+                        UpdateUserData((tunnelUserId, tunnelUserComp), map); // CMU14
                 }
             }
 

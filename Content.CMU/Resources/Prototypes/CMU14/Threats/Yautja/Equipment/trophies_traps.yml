@@ -618,6 +618,7 @@
         Piercing: 20
         Slash: 15
     paralyzeTime: 4
+    preyTrackingDuration: 300
   - type: StepTrigger
     active: false
     intersectRatio: 0.15

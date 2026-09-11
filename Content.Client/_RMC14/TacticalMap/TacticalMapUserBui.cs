@@ -170,7 +170,11 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             return;
         }
 
-        var totalCount = user.MarineBlips.Count + user.XenoBlips.Count + user.XenoStructureBlips.Count + user.OpforBlips.Count + user.GovforBlips.Count + user.ClfBlips.Count + user.WeYuBlips.Count + user.AbominationBlips.Count; // CMU14: WeYu, Abomination
+        // CMU14 Begin: custom tactical-map channels.
+        var totalCount = user.MarineBlips.Count + user.XenoBlips.Count + user.XenoStructureBlips.Count
+            + user.OpforBlips.Count + user.GovforBlips.Count + user.ClfBlips.Count
+            + user.WeYuBlips.Count + user.AbominationBlips.Count + user.YautjaBlips.Count;
+        // CMU14 End
         var blips = new TacticalMapBlip[totalCount];
         var entityIds = new int[totalCount];
         var i = 0;
@@ -230,6 +234,15 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             entityIds[i] = entityId;
             i++;
         }
+
+        // CMU14 Begin: hunters and temporarily trapped prey.
+        foreach (var (entityId, blip) in user.YautjaBlips)
+        {
+            blips[i] = blip;
+            entityIds[i] = entityId;
+            i++;
+        }
+        // CMU14 End
 
         Window.Wrapper.UpdateBlips(blips, entityIds);
 

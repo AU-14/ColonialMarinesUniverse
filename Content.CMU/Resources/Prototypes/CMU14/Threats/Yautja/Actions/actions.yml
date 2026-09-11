@@ -9,6 +9,20 @@
 
 - type: entity
   parent: CMUYautjaActionBase
+  id: CMUActionYautjaOpenTacticalMap
+  name: Open Hunting Map
+  description: Track fellow hunters and prey recently caught in a hunting trap.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Structures/Machines/map_table.rsi
+      state: maptable
+  - type: InstantAction
+    event: !type:OpenTacticalMapActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleVisor
   components:
   - type: Action

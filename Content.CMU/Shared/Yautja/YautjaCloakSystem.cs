@@ -8,6 +8,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Examine;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -19,6 +20,7 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
+using Content.Shared.Tag;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
@@ -30,6 +32,8 @@ namespace Content.Shared.CMU14.Yautja;
 
 public sealed partial class YautjaCloakSystem : EntitySystem
 {
+    private const float MaximumCloakedMovingOpacity = 0.035f;
+
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedHideableHumanoidLayersSystem _humanoidLayers = default!;
@@ -38,9 +42,12 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private TagSystem _tags = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
+
+    private static readonly ProtoId<TagPrototype> HideContextMenuTag = "HideContextMenu";
 
     public override void Initialize()
     {
@@ -52,6 +59,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, XenoDevouredEvent>(OnDevour);
         SubscribeLocalEvent<YautjaComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
         SubscribeLocalEvent<YautjaComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<YautjaComponent, ExamineAttemptEvent>(OnExamineAttempt);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
     }
@@ -205,7 +213,9 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             var activeInvisibility = EnsureComp<EntityActiveInvisibleComponent>(user);
             var cloakUser = EnsureComp<ThermalCloakUserComponent>(user);
             cloakUser.Opacity = bracer.Comp.CloakOpacity;
-            cloakUser.MovingOpacity = MathF.Max(bracer.Comp.CloakMovingOpacity, bracer.Comp.CloakOpacity);
+            cloakUser.MovingOpacity = MathF.Min(
+                MathF.Max(bracer.Comp.CloakMovingOpacity, bracer.Comp.CloakOpacity),
+                MaximumCloakedMovingOpacity);
             cloakUser.LerpSpeed = 0.33f;
             var isMoving = TryComp<PhysicsComponent>(user, out var physics)
                         && physics.LinearVelocity.LengthSquared() > 0.01f;
@@ -225,6 +235,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 EnsureComp<EntityIFFComponent>(user);
 
             ToggleLayers(user, bracer.Comp.CloakedHideLayers, false);
+            HideFromContextMenu(user);
             SpawnCloakEffects(user, bracer.Comp.CloakEffect);
 
             var popupOthers = Loc.GetString("rmc-cloak-activate-others", ("user", YautjaDisplayName(user)));
@@ -254,6 +265,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             _popup.PopupPredicted(selfPopup, otherPopup, user, user, PopupType.Medium);
 
             ToggleLayers(user, bracer.Comp.CloakedHideLayers, true);
+            RestoreContextMenu(user);
             SpawnCloakEffects(user, bracer.Comp.UncloakEffect);
 
             if (bracer.Comp.CloakHideNightVision)
@@ -272,6 +284,22 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private void HideFromContextMenu(EntityUid user)
+    {
+        if (!_tags.AddTag(user, HideContextMenuTag))
+            return;
+
+        EnsureComp<YautjaCloakContextHiddenComponent>(user);
+    }
+
+    private void RestoreContextMenu(EntityUid user)
+    {
+        if (!RemComp<YautjaCloakContextHiddenComponent>(user))
+            return;
+
+        _tags.RemoveTag(user, HideContextMenuTag);
     }
 
     public void ForceDecloak(EntityUid user)
@@ -343,6 +371,18 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             return;
 
         ForceDecloak(ent.Owner);
+    }
+
+    private void OnExamineAttempt(Entity<YautjaComponent> ent, ref ExamineAttemptEvent args)
+    {
+        if (args.Cancelled ||
+            !TryComp(ent, out EntityTurnInvisibleComponent? cloak) ||
+            !cloak.Enabled)
+        {
+            return;
+        }
+
+        args.Cancel();
     }
 
     private void OnAnyDamageChanged(Entity<DamageableComponent> target, ref DamageChangedEvent args)
