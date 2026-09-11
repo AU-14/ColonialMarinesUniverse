@@ -118,7 +118,7 @@
     whitelist:
       tags:
       - RMCSynthGrabbable
-  - type: Armor
+  - type: Armor #CMU14
     modifiers:
       coefficients:
         Blunt: 0.5
