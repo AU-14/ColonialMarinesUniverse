@@ -194,7 +194,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/apc_transport_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: 20 # CMU14 - increased capacity so APCs can take entire squads.
+    maxPassengers: 20 # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 3
     entryPoints:
     - offset: 1.5,0
@@ -243,7 +243,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/apc_medical_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: 15 # CMU14 - increased capacity so APCs can take entire squads.
+    maxPassengers: 15 # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 3
     entryPoints:
     - offset: 1.5,0
@@ -290,7 +290,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/apc_command_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: 15 # CMU14 - increased capacity so APCs can take entire squads.
+    maxPassengers: # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 3
     entryPoints:
     - offset: 1.5,0
@@ -415,7 +415,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/spp_apc_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: 20 # CMU14 - increased capacity so APCs can take entire squads.
+    maxPassengers: 20 # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 4
     entryPoints:
     - offset: -1.5,0
