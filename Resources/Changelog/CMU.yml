@@ -10708,5 +10708,16 @@
   id: 692
   time: '2026-09-10T13:35:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921
+- author: OverusedMeme
+  changes:
+  - message: The M240 now has a wield delay of 1 second, the M240-T now has a wield
+      delay of 1.75 seconds
+    type: Tweak
+  - message: Fixed an issue where spam wielding the M240 and M240-T would double the
+      amount of time required until you can shoot.
+    type: Fix
+  id: 693
+  time: '2026-09-10T15:30:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1920
 Name: CMU
 Order: -1
