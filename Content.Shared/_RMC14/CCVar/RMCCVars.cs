@@ -159,7 +159,7 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.dropship_fabricator_starting_points", 10000, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> RMCDropshipFabricatorGainEverySeconds =
-        CVarDef.Create("rmc.dropship_fabricator_gain_every_seconds", 0.5f, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("rmc.dropship_fabricator_gain_every_seconds", 0.5f, CVar.REPLICATED | CVar.SERVER); // CMU14: increase dropship fabricator point generation
 
     public static readonly CVarDef<bool> RMCDropshipCASDebug =
         CVarDef.Create("rmc.dropship_cas_debug", false, CVar.REPLICATED | CVar.SERVER);
