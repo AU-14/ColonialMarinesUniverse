@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Prototypes;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -26,6 +27,10 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
     private static readonly Color FriendlyColor = new(0.14f, 1f, 0.25f, 0.95f);
     private static readonly Color NeutralColor = new(1f, 0.58f, 0.08f, 0.95f);
     private static readonly Color HostileColor = new(1f, 0.08f, 0.08f, 0.98f);
+    private static readonly EntProtoId<IFFFactionComponent> ClfIff = "FactionCLF";
+    private static readonly EntProtoId<IFFFactionComponent> ColonistIff = "FactionSurvivor";
+    private static readonly ProtoId<NpcFactionPrototype> ClfFaction = "CLF";
+    private static readonly ProtoId<NpcFactionPrototype> ColonistFaction = "AUColonist";
 
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
@@ -200,8 +205,32 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
     private ShaderInstance GetRelationshipShader(EntityUid pilot, EntityUid target)
     {
         GetIffFactions(target, _targetIff);
+        var concealedClf = _targetIff.Contains(ClfIff) ||
+                           TryComp(target, out NpcFactionMemberComponent? apparentFaction) &&
+                           apparentFaction.Factions.Contains(ClfFaction);
+        if (concealedClf)
+        {
+            // Only the dropship silhouette sees this identity. Do not expose
+            // the insurgent's real IFF or NPC hostility through the outline.
+            _targetIff.Clear();
+            _targetIff.Add(ColonistIff);
+        }
+
         if (_pilotIff.Overlaps(_targetIff))
             return _friendlyShader;
+
+        if (concealedClf)
+        {
+            if (TryComp(pilot, out NpcFactionMemberComponent? observer))
+            {
+                if (observer.Factions.Contains(ColonistFaction) || observer.FriendlyFactions.Contains(ColonistFaction))
+                    return _friendlyShader;
+                if (observer.HostileFactions.Contains(ColonistFaction))
+                    return _hostileShader;
+            }
+
+            return _neutralShader;
+        }
 
         if (TryComp(pilot, out NpcFactionMemberComponent? pilotFaction) &&
             TryComp(target, out NpcFactionMemberComponent? targetFaction))
