@@ -118,8 +118,15 @@
     whitelist:
       tags:
       - RMCSynthGrabbable
-    - type: DamageReceivedModifier
-     multiplier: 0.5
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.5
+        Heat: 0.5
+        Shock: 0.8
+        Cold: 0.8
   
 - type: entity
   id: RMCSynthHudComponents
