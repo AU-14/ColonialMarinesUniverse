@@ -118,8 +118,7 @@
     whitelist:
       tags:
       - RMCSynthGrabbable 
-  - type: DamageModifier   # CMU 14
-    modifierSet: RMCSynthetic 
+
 
 - type: entity
   id: RMCSynthHudComponents
@@ -153,3 +152,4 @@
   - type: Respirator # CMU14: stops crit/underwater gasp loop (synths don't breathe)
     damage: { }
     damageRecovery: { }
+  - newDamageModifier: RMCSynthetic
