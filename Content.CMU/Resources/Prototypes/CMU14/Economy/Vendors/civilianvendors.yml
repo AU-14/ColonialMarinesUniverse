@@ -50,6 +50,13 @@
       - id: CMJumpsuitLiaison
       - id: CMJumpsuitLiaisonBlazer
       - id: CMJumpsuitLiaisonCharcoal
+    - name: Ties
+      choices: { CMUcivilianclothestie: 1 }
+      entries:
+      - id: ClothingNeckTieRed
+      - id: ClothingNeckTieDet
+      - id: ClothingNeckTieSci
+      - id: ClothingNeckTieSerious
     - name: Flannels
       choices: { CMUcivilianflannel: 1 }
       entries:
