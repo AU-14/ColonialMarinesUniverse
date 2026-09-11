@@ -174,9 +174,9 @@
     - ActionXenoDevolve
   - type: XenoParasiteThrower
   - type: XenoEvolution
-    max: 500
-    evolvesTo:
-    - CMXenoReaper
+ #   max: 500 # CMU14 - Needs a rework before re-enabling
+ #  evolvesTo:
+ #  - CMXenoReaper
     strains:
     - RMCXenoCarrierEggsac
   - type: RMCActionOrder
