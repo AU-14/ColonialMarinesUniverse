@@ -337,7 +337,9 @@ public sealed class ASRSOrderDeliveryRegressionTest : GameTest
         component.ToggleDelay = TimeSpan.FromHours(1);
         component.LowerDelay = TimeSpan.Zero;
         component.RaiseDelay = TimeSpan.Zero;
-        Server.System<RequisitionsSystem>().Update(0f);
+        for (var i = 0; i < 200 && component.Mode != RequisitionsElevatorMode.Raised; i++)
+            Server.System<RequisitionsSystem>().Update(0f);
+        Assert.That(component.Mode, Is.EqualTo(RequisitionsElevatorMode.Raised));
     }
 
     private void BeginLowerForSell(EntityUid elevator)

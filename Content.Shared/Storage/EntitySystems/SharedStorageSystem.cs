@@ -1429,22 +1429,31 @@ public abstract partial class SharedStorageSystem : EntitySystem
             }
         }
 
+        // CMU14 Begin: compute storage occupancy and rotated shapes once per search, rather
+        // than rebuilding every stored item's shape for every candidate cell.
+        var occupied = BuildPlacementOccupancy((storageEnt.Owner, storageEnt.Comp), itemEnt.Owner);
+        var rotations = new List<(Angle Rotation, IReadOnlyList<Box2i> Shape)>();
+        for (var angle = startAngle; angle <= Angle.FromDegrees(360 - startAngle); angle += Math.PI / 2f)
+        {
+            rotations.Add((angle, ItemSystem.GetAdjustedItemShape(storageEnt, itemEnt, angle, Vector2i.Zero)));
+        }
+
         for (var y = storageBounding.Bottom; y <= storageBounding.Top; y++)
         {
             for (var x = storageBounding.Left; x <= storageBounding.Right; x++)
             {
-                for (var angle = startAngle; angle <= Angle.FromDegrees(360 - startAngle); angle += Math.PI / 2f)
+                foreach (var (angle, shape) in rotations)
                 {
-                    var location = new ItemStorageLocation(angle, (x, y));
-                    if (ItemFitsInGridLocation(itemEnt, storageEnt, location))
+                    if (FitsPlacementOccupancy(occupied, shape, (x, y)))
                     {
-                        storageLocation = location;
+                        storageLocation = new ItemStorageLocation(angle, (x, y));
                         return true;
                     }
                 }
             }
         }
 
+        // CMU14 End
         return false;
     }
 
@@ -1522,37 +1531,13 @@ public abstract partial class SharedStorageSystem : EntitySystem
     /// <summary>
     /// Checks if an item fits into a specific spot on a storage grid.
     /// </summary>
+    // CMU14 method: use the shared occupancy check for stored locations.
     public bool ItemFitsInGridLocation(
         Entity<ItemComponent?> itemEnt,
         Entity<StorageComponent?> storageEnt,
         ItemStorageLocation location)
     {
-        if (!Resolve(itemEnt, ref itemEnt.Comp) || !Resolve(storageEnt, ref storageEnt.Comp))
-            return false;
-
-        var position = location.Position;
-        var rotation = location.Rotation;
-        var gridBounds = storageEnt.Comp.Grid.GetBoundingBox();
-        if (!gridBounds.Contains(position))
-            return false;
-
-        var itemShape = ItemSystem.GetAdjustedItemShape(storageEnt, itemEnt, rotation, position);
-
-        foreach (var box in itemShape)
-        {
-            for (var offsetY = box.Bottom; offsetY <= box.Top; offsetY++)
-            {
-                for (var offsetX = box.Left; offsetX <= box.Right; offsetX++)
-                {
-                    var pos = (offsetX, offsetY);
-
-                    if (!IsGridSpaceEmpty(itemEnt, storageEnt, pos))
-                        return false;
-                }
-            }
-        }
-
-        return true;
+        return ItemFitsInGridLocation(itemEnt, storageEnt, location.Position, location.Rotation);
     }
 
     // private bool ItemFitsInGridLocation(
@@ -1611,6 +1596,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
     /// <summary>
     /// Checks if an item fits into a specific spot on a storage grid.
     /// </summary>
+    // CMU14 method: build occupancy once instead of recomputing item shapes for each occupied cell.
     public bool ItemFitsInGridLocation(
         Entity<ItemComponent?> itemEnt,
         Entity<StorageComponent?> storageEnt,
@@ -1625,22 +1611,8 @@ public abstract partial class SharedStorageSystem : EntitySystem
             return false;
 
         var itemShape = ItemSystem.GetAdjustedItemShape(storageEnt, itemEnt, rotation, position);
-
-        foreach (var box in itemShape)
-        {
-            for (var offsetY = box.Bottom; offsetY <= box.Top; offsetY++)
-            {
-                for (var offsetX = box.Left; offsetX <= box.Right; offsetX++)
-                {
-                    var pos = (offsetX, offsetY);
-
-                    if (!IsGridSpaceEmpty(itemEnt, storageEnt, pos))
-                        return false;
-                }
-            }
-        }
-
-        return true;
+        var occupied = BuildPlacementOccupancy((storageEnt.Owner, storageEnt.Comp), itemEnt.Owner);
+        return FitsPlacementOccupancy(occupied, itemShape, Vector2i.Zero);
     }
 
     /// <summary>
@@ -1780,7 +1752,9 @@ public abstract partial class SharedStorageSystem : EntitySystem
         }
     }
 
-    private void AddOccupied(IReadOnlyList<Box2i> adjustedShape, Dictionary<Vector2i, ulong> occupied)
+    // CMU14 method: optionally constrain occupancy to the storage grid's existing chunks.
+    private void AddOccupied(IReadOnlyList<Box2i> adjustedShape, Dictionary<Vector2i, ulong> occupied,
+        bool onlyExistingChunks = false)
     {
         foreach (var box in adjustedShape)
         {
@@ -1792,7 +1766,8 @@ public abstract partial class SharedStorageSystem : EntitySystem
             while (chunkEnumerator.MoveNext(out var chunk))
             {
                 var chunkOrigin = chunk.Value * StorageComponent.ChunkSize;
-                var existing = occupied.GetOrNew(chunkOrigin);
+                if (!occupied.TryGetValue(chunkOrigin, out var existing) && onlyExistingChunks)
+                    continue;
 
                 // Box may not necessarily be in 1 chunk so clamp it.
                 var left = Math.Max(chunkOrigin.X, box.Left);

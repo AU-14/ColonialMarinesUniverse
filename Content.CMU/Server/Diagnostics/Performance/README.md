@@ -12,20 +12,28 @@ It never automatically invokes `serverperf deep` or retains per-entity details. 
 
 - Diagnostics and healthy one-minute heartbeats are enabled.
 - Log output is enabled by default (`cmu.server_performance.log_enabled = true`). An explicit saved false value still mutes it; `cmuperf status` and runtime configuration should be checked when deploying to an existing server.
-- A real frame of 250 ms opens an incident immediately; 1,000 ms is critical.
+- A real frame of 50 ms opens an incident during gameplay after the first 30 round seconds (`gameplay_stall_ms`). Other phases use 250 ms (`stall_ms`); 1,000 ms is critical. Set the gameplay threshold to zero to use the general threshold throughout.
 - TPS or average FPS below 80% of target for three seconds opens an incident.
 - Recovery requires all triggers to remain healthy for ten seconds; low-TPS/FPS signals must first reach 95% of target.
 - Network throughput and main-thread allocation can independently open an incident. ECS growth/churn stays in scalar telemetry but does not open incidents by default; opt in with `churn_incidents = true`. Detailed ECS rankings remain available in manual reports.
 - The flight-recorder profiler is enabled during startup so the completed frames before a trigger are still in its ring.
 - Disabling the monitor unhooks its ECS event handlers and disables the profiler only when the monitor still owns that enablement; an administrator-owned profiler is left alone.
 - Detailed reports have a two-minute cooldown. Incident opening/updates/recovery are never hidden by that cooldown.
-- Gameplay stalls (250 ms, after the first 30 round seconds) and critical lifecycle stalls can force a fresh detailed report during an existing incident, at most once every 30 seconds. New client sync incidents have a separate 30-second capture allowance even when TPS is healthy.
+- Stalls and allocation spikes can force a fresh detailed report during an existing incident. They use a separate ten-second allowance; a spike twice as large can capture sooner, with a one-second minimum spacing. New client sync incidents have a separate 30-second capture allowance even when TPS is healthy.
 - `scope=gameplay`, `paused`, `round-start`, `post-round`, `startup`, or `lobby-or-loading` separates gameplay from lifecycle work. `stall` rows identify individual frames (at most one row per second); incident close includes all observed stall counts, summed stalled-frame wall time, and suppressed row counts. Incident duration includes recovery and is not frozen time.
-- The server profiler defaults to at least 65,536 events and 512 indices. Explicit config values and larger existing buffers are preserved. Startup logs show effective capacities.
+- The server profiler defaults to at least 65,536 events and 512 indices, and the capture budget defaults to 65,536 events. Explicit config values and larger existing buffers are preserved. Startup logs show effective capacities. An in-progress input frame gets one completion retry even if older completed frames were available.
 - Error counts and representative existing errors are attached to detailed reports and summarized every 30 seconds when nonzero. At most 32 sources are retained and four samples are emitted, each capped at 2,048 characters. These identify coincident failures, not proof of CPU/GC attribution.
 - Healthy churn baselines refresh every five minutes and at startup/round boundaries.
 
 ## Log records
+
+`profile-frame-sample` attributes work and allocations to a specific profiler frame `index`; use it before comparing the older aggregate `profile-sample` rows. Nested scope timings are inclusive and must not be summed. A partial frame can still have missing scopes, and its missing time must remain unattributed.
+
+`operation` records retain slow player-spawn, storage-fill and requisitions work independently of the profiler ring, including the job or storage prototype, start tick, elapsed time and main-thread allocations. At most 32 recent operations are retained; reports discard entries older than two seconds. These scopes cover synchronous work, including synchronous work entered from an async continuation, and do not identify every possible callback.
+
+`runtime-window` reports process-wide GC pause time since the previous diagnostics update. Its `windowMs` defines the interval; it is not a per-method or exact-profiler-frame measurement. This helps distinguish GC pauses from CPU work without guessing from allocation counts alone.
+
+Timed-action completion scopes use `CMU DoAfter <event type>` so expensive pickup, medical, construction or other callbacks can be separated. The scope includes synchronous awaited continuations. `CMU Diagnostics Report` identifies the reporter's own cost.
 
 Search the named sawmill or the stable prefix:
 
@@ -39,7 +47,7 @@ The principal records are:
 | Record | Meaning |
 | --- | --- |
 | `startup` | Effective startup state, profiler state, metrics state, and main thresholds. |
-| `runtime-metrics-disabled` | Content cannot see retained heap/RSS/GC/thread-pool counters; enable external metrics. |
+| `runtime-metrics-disabled` | Retained heap/RSS/thread-pool counters need external metrics; GC pause windows remain available. |
 | `tracking-reset` / `epoch-reset` | Bounded ECS counters and rate windows were safely re-anchored. |
 | `heartbeat` | Healthy/warmup scalar snapshot. Absence is externally alertable. |
 | `baseline-refresh` | New healthy prototype/component churn comparison point. |
@@ -55,6 +63,9 @@ The principal records are:
 | `profile-retry` | One follow-up capture after an unavailable current frame has been finalized; bypasses the normal cooldown. |
 | `stall` | Frame wall time, scope, latest input-to-input phase maximum and tick, including whether that phase contains idle time. |
 | `profile-sample` | Ranked system/engine timing and allocation aggregate. |
+| `profile-frame-sample` | Inclusive scope timing and allocation for a specific profiler frame index. |
+| `operation` | Recent slow synchronous spawn, storage-fill or requisitions operation, retained outside the profiler ring. |
+| `runtime-window` | Process-wide GC pause delta and the measured interval. |
 | `profile-counter` | Integer profiler counters, including frame GC collection deltas when present. |
 | `ecs-churn` | Top prototype/component net growth or map creation since the healthy baseline. |
 | `inbound-network-message` | Top decoded inbound message types during the latest sample interval. |
@@ -146,7 +157,8 @@ All automatic-monitor CVars are server-only and archived. In the table, the firs
 | `heartbeat_interval` | `60` s | Healthy log heartbeat; `0` disables it. |
 | `incident_update_interval` | `30` s | Sustained-incident update cadence. |
 | `baseline_interval` | `300` s | Healthy churn baseline cadence. |
-| `stall_ms` | `250` ms | Immediate hard-frame trigger; `0` disables it. |
+| `stall_ms` | `250` ms | General hard-frame trigger; `0` disables this threshold. |
+| `gameplay_stall_ms` | `50` ms | Lower frame threshold after 30 round seconds; `0` uses the general threshold. |
 | `critical_stall_ms` | `1000` ms | Critical severity threshold. |
 | `low_tps_ratio` | `0.80` | Sustained achieved-TPS trigger fraction. |
 | `low_fps_ratio` | `0.80` | Sustained average-FPS trigger fraction. |
@@ -162,7 +174,7 @@ All automatic-monitor CVars are server-only and archived. In the table, the firs
 | `allocation_mib_per_frame` | `32` | Profiled main-thread allocation trigger. |
 | `enable_profiler` | `true` | Enables the profiler during diagnostics startup if it is off. |
 | `profile_frames` | `8` | Maximum selected frames in a detail report, mixing slowest, highest-allocation, recent tick-bearing, and newest frames. |
-| `profile_max_events` | `20000` | Hard profiler parse bound. |
+| `profile_max_events` | `65536` | Hard profiler parse bound. |
 | `report_top` | `10` | Rows per detail category, clamped to 1–25. |
 | `detail_cooldown` | `120` s | Minimum spacing between automatic detail reports. |
 
@@ -176,6 +188,8 @@ churn_incidents = false
 sample_interval = 1
 heartbeat_interval = 60
 stall_ms = 250
+gameplay_stall_ms = 50
+profile_max_events = 65536
 critical_stall_ms = 1000
 low_tps_ratio = 0.80
 low_fps_ratio = 0.80
@@ -196,13 +210,13 @@ client_state_health_enabled = true
 The correct logging key is `cmu.server_performance.log_enabled`; the old
 `log.cmu.server_performance.log_enabled` key is invalid. These content changes must be deployed to both
 server and clients for application-progress reports. Runtime metrics below still need external scraping;
-the diagnostic logger does not claim to measure GC pauses or retained heap itself.
+the diagnostic logger measures process-wide GC pause windows but does not measure retained heap.
 
 Increasing profiler rings preserves more pre-trigger history but consumes more fixed memory and makes a report scan larger. The automatic parser still caps frames and events.
 
 ## Runtime and process telemetry
 
-The content sandbox does not allow direct calls to `GC`, `Process`, or `ThreadPool`. The automatic logs therefore cannot honestly report retained managed heap, process working set/private bytes, CPU, handles, thread count, or thread-pool starvation.
+The diagnostics manager under `Content.CMU/Server` is compiled into `Content.Server`, which runs without the client sandbox and can read GC pause and allocation counters. Server gameplay code calls its bounded operation scopes through the diagnostics interface. Client and shared code keep using the sandbox-compatible engine profiler. The automatic logs do not report retained managed heap, process working set/private bytes, CPU, handles, thread count, or thread-pool starvation.
 
 Use the existing engine metrics endpoint for that layer:
 
