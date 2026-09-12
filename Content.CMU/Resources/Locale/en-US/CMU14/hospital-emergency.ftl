@@ -1,0 +1,26 @@
+# Hospital emergency shuttle console
+hospital-emergency-window-title = Emergency Computer
+hospital-emergency-header = Hospital Emergency Shuttle
+hospital-emergency-status-standing-by = Standing by
+hospital-emergency-landing-zone-searching = Landing zone: searching
+hospital-emergency-landing-zone-linked = Landing zone: linked
+hospital-emergency-landing-zone-unavailable = Landing zone: unavailable
+hospital-emergency-incident-report-heading = Incident Report
+hospital-emergency-no-active-incident = No active incident.
+hospital-emergency-casualties-label = Casualties:
+hospital-emergency-severity-label = Severity:
+hospital-emergency-reward-label = Reward:
+hospital-emergency-patients-label = Patients:
+hospital-emergency-timer-label = Timer:
+hospital-emergency-severity-value = { $severity } / 3
+hospital-emergency-reward-value = ${ $amount }
+hospital-emergency-patients-value = { $active } active / { $cleared } cleared
+hospital-emergency-timer-seconds = { $seconds }s
+hospital-emergency-audit-none = Last audit: no payout recorded
+hospital-emergency-audit-vip-penalty = , ${ $amount } VIP penalty
+hospital-emergency-audit-death-penalty = , ${ $amount } death penalty
+hospital-emergency-audit-summary = Last audit: ${ $payout } paid, { $missed } missed injuries{ $vip }{ $death }
+hospital-emergency-approve-landing = Approve Landing
+hospital-emergency-skip-contract = Skip Contract
+hospital-emergency-release-shuttle = Release Shuttle
+hospital-emergency-request-pickup = Request Pickup
