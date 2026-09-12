@@ -42,6 +42,17 @@ corporate-console-withdraw-no-tax = No income tax on withdrawals.
 corporate-console-announcement-sender = Corporate Affairs
 corporate-console-tariff-announcement = Corporate transit tariff has been set to { $percent }%. Submission payouts to the colony have been adjusted.
 
+# Budget console
+budget-console-title = Budget Console
+budget-console-current-budget = Current Budget: { $amount }
+budget-console-withdraw-cash = Withdraw Cash:
+budget-console-dispense-salaries = Dispense All Salaries
+budget-console-transfer-department = Transfer to Department:
+budget-console-amount-placeholder = Amount
+budget-console-department-entry = { $department } (Budget: ${ $amount })
+budget-console-transfer = Transfer
+budget-console-no-departments = No departments found.
+
 # Cash vendor
 cash-vendor-credit = Credit:
 cash-vendor-amount = ${ $amount }
