@@ -28,6 +28,24 @@ cmu-medical-cast-ready-remove = The cast is ready to come off.
 cmu-medical-cast-broke = The cast cracks apart as the bone breaks again.
 cmu-medical-cast-malunion = The bone has set wrong.
 
+# Body part picker used by bandaging.
+cmu-medical-body-part-picker-header = Pick a part to bandage
+cmu-medical-body-part-picker-empty = No wounds to bandage.
+cmu-medical-body-part-picker-entry = { $part } — { $count } { $count ->
+    [one] wound
+   *[other] wounds
+}
+cmu-medical-body-part-side-left = Left 
+cmu-medical-body-part-side-right = Right 
+cmu-medical-body-part-type-other = Other
+cmu-medical-body-part-type-torso = Torso
+cmu-medical-body-part-type-head = Head
+cmu-medical-body-part-type-arm = Arm
+cmu-medical-body-part-type-hand = Hand
+cmu-medical-body-part-type-leg = Leg
+cmu-medical-body-part-type-foot = Foot
+cmu-medical-body-part-type-tail = Tail
+
 cmu-robotic-limb-repair-brute-start-self = You begin repairing dents in your { $limb }.
 cmu-robotic-limb-repair-brute-start-user = You begin repairing dents in { THE($target) }'s { $limb }.
 cmu-robotic-limb-repair-brute-start-others = { THE($user) } begins repairing dents in { THE($target) }'s { $limb }.
