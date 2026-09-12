@@ -10719,5 +10719,21 @@
   id: 693
   time: '2026-09-10T15:30:49.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1920
+- author: Vencallium
+  changes:
+  - message: Increased dropship fabricator point generation to 2 points per second.
+    type: Tweak
+  id: 694
+  time: '2026-09-11T17:19:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1925
+- author: TheHellFireo
+  changes:
+  - message: Reduced hitches when filling storage and preparing large supply deliveries.
+    type: Fix
+  - message: Improved capture and attribution of short gameplay stalls.
+    type: Admin
+  id: 695
+  time: '2026-09-12T00:24:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1933
 Name: CMU
 Order: -1
