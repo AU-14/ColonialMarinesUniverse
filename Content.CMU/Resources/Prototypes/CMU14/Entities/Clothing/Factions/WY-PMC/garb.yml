@@ -1,6 +1,6 @@
 - type: entity
   parent: RMCHelmetGarbBase
-  id: CMUHelmetGarbPlatemask
+  id: CMUHelmetGarbPMCPlatemask
   name: 12 pattern platemask
   description: The complimentary, but not necessary platemask, attachable to Mk10 open combat helmets. Useful against shrapnel or just in the cold enviroment, but with enough force it will easily be ripped off.
   components:
@@ -16,7 +16,7 @@
 
 - type: entity
   parent: RMCHelmetGarbBase
-  id: CMUHelmetGarbGoggles
+  id: CMUHelmetGarbPMCGoggles
   name: 14 pattern goggles
   description: The complimentary, but not necessary googles, attachable to Mk10 open combat helmets. An additional protection to the eyes, be it a cold wind, or a spit from a rioting civilian. It's a true talent to be able to see through them easily, without HUD visor.
   components:
@@ -32,7 +32,7 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUHelmetGarbNeckerchief
+  id: CMUHelmetGarbPMCNeckerchief
   name: PMC Armor Neckerchief
   description: A small neckerchief, for the Weyland Yutani PMC armor. Style is most important thing for contractor.
   components:
@@ -48,7 +48,7 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUHelmetGarbPads
+  id: CMUHelmetGarbPMCPads
   name: M4 Shoulder Pads
   description: Attachable supplementary armor for the M4 armor system of Weyland Yutani PMC. Protects from glancing hits and covers the arm opening in the cuirass against shrapnel.
   components:
@@ -64,7 +64,7 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUHelmetGarbPadsAlt
+  id: CMUHelmetGarbPMCPadsAlt
   name: M4 Light Shoulder Pads
   description: Attachable supplementary armor for the M4 armor system of Weyland Yutani PMC. Protects from glancing hits and covers the arm opening in the cuirass against shrapnel.
   components:
@@ -80,7 +80,7 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUHelmetGarbBraces
+  id: CMUHelmetGarbPMCBraces
   name: M4 Vambraces
   description: Attachable supplementary armor for the M4 armor system of Weyland Yutani PMC. A pair of composite ballistic vambraces to shield the forearms, with straps to ensure it doesn't ride up or down.
   components:
@@ -96,7 +96,7 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUHelmetGarbBracesAlt
+  id: CMUHelmetGarbPMCBracesAlt
   name: M4 Black Vambraces
   description: Attachable supplementary armor for the M4 armor system of Weyland Yutani PMC. A pair of composite ballistic vambraces to shield the forearms, with straps to ensure it doesn't ride up or down.
   components:
@@ -112,7 +112,7 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUHelmetGarbLapPanel
+  id: CMUHelmetGarbPMCLapPanel
   name: M4 Lap Panel
   description: Attachable supplementary armor for the M4 armor system of Weyland Yutani PMC. Shear thickening liquid armor piece covering the abdomen and groin, with an additional ruggedized boron carbide strike face for the genitals. Clasps to the inside of the M4 cuirass.
   components:
@@ -128,7 +128,7 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUHelmetGarbKneepads
+  id: CMUHelmetGarbPMCKneepads
   name: M4 Kneepads
   description: Attachable supplementary armor for the M4 armor system of Weyland Yutani PMC. High impact ruggedized outer shell and polymer internals protect from shrapnel as well as low power ballistics.
   components:
@@ -144,7 +144,7 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUHelmetGarbGreaves
+  id: CMUHelmetGarbPMCGreaves
   name: M4 Greaves
   description: Attachable supplementary armor for the M4 armor system of Weyland Yutani PMC. Lightweight polymer clamshell-style plates enclose the lower legs to provide shrapnel and pistol protection.
   components:
