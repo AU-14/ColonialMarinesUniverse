@@ -405,7 +405,7 @@
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: StorageFill
     contents:
-      - id: AU14WeaponRifleM41AMK1PMC
+      - id: CMU14WeaponRifleM41AMK1PMC
         amount: 1
       - id: CMMagazineRifleM54CMK1AP
         amount: 1
