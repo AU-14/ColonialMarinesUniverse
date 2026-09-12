@@ -20,7 +20,7 @@
     bio: 15
     explosionArmor: 20
   - type: RMCArmorSpeedTier
-    speedTier: medium
+    speedTier: light
   - type: ClothingSpeedModifier # light armor speed
     walkModifier: .0.80
     sprintModifier: .0.80
