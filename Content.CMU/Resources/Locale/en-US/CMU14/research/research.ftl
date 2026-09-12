@@ -36,6 +36,8 @@ research-report-element = [italic] - {$NAME}[/italic]
 research-report-unable-analyze = [italic]ERROR: Unable to analyze emission spectrum of sample.[/italic]
 
 xrf-report-error = Analysis of ERROR
+research-xrf-scanner-conflict = The sample was removed before the scan could begin.
+xrf-scanner-vial-name = vial ({ $reagent })
 
 research-report-analysis-name = Analysis of {$NAME1}{$NAME2}
 

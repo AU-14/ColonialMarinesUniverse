@@ -66,7 +66,17 @@
   - type: ContainerContainer
     containers:
       submission: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
       disposals: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      DisposalUnitComponent: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: DisposalUnit
     whitelist:
       tags:
@@ -76,7 +86,10 @@
       - Fruit
       - CottonBoll
       - CMUGrain
-
+    container:
+      ents: []
+      showEnts: False
+      occludes: True
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointSteel
@@ -84,6 +97,20 @@
   suffix: Steel
   description: A place to submit  resources for shipping.
   components:
+  - type: ContainerContainer
+    containers:
+      submission: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      disposals: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      DisposalUnitComponent: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: SubmissionStorage
     rewards:
       SteelOre: 10
@@ -91,7 +118,10 @@
     whitelist:
       tags:
       - SteelOre
-
+    container:
+      ents: []
+      showEnts: False
+      occludes: True
 - type: Tag
   id: SteelOre
 
@@ -102,6 +132,20 @@
   suffix: Wood
   description: A place to submit  resources for shipping.
   components:
+  - type: ContainerContainer
+    containers:
+      submission: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      disposals: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      DisposalUnitComponent: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: SubmissionStorage
     rewards:
       AUwood: 20
@@ -109,7 +153,10 @@
     whitelist:
       tags:
       - AUwood
-
+    container:
+      ents: []
+      showEnts: False
+      occludes: True
 - type: Tag
   id: AUwood
 
@@ -120,6 +167,20 @@
   description: A place to submit  resources for shipping.
   suffix: Vegetables
   components:
+  - type: ContainerContainer
+    containers:
+      submission: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      disposals: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      DisposalUnitComponent: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: SubmissionStorage
     rewards:
       Vegetable: 2
@@ -127,13 +188,30 @@
     whitelist:
       tags:
       - Vegetable
-
+    container:
+      ents: []
+      showEnts: False
+      occludes: True
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointFruit
   name: submission point (fruit)
   description: A place to submit  resources for shipping.
   components:
+  - type: ContainerContainer
+    containers:
+      submission: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      disposals: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      DisposalUnitComponent: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: SubmissionStorage
     rewards:
       Fruit: 2
@@ -141,12 +219,29 @@
     whitelist:
       tags:
       - Fruit
-
+    container:
+      ents: []
+      showEnts: False
+      occludes: True
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointCrop
   name: submission point (crop)
   components:
+  - type: ContainerContainer
+    containers:
+      submission: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      disposals: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      DisposalUnitComponent: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: SubmissionStorage
     rewards:
       Wheat: 5
@@ -216,7 +311,10 @@
       #- CottonBoll
       - Cherry
       - AUwood
-
+    container:
+      ents: []
+      showEnts: False
+      occludes: True
 - type: entity
   parent: RMCCommunicationsConsoleBase
   id: AUColonyCommsConsole

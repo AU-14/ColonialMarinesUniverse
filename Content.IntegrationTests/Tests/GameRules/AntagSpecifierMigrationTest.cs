@@ -110,7 +110,7 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
   id: AntagMigrationReplacement
   prefRoles: [ RunawaySynthRole ]
   jobBlacklist: [ AU14JobCLFGuerilla ]
-  jobBlacklistGroup: [ AllGovforJobs ]
+  jobBlacklistGroup: [ AllGovforJobs, AllOpforJobs ]
 
 - type: entity
   id: AntagMigrationReplacementRule

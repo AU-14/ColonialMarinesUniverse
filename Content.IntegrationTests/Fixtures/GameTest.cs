@@ -227,6 +227,9 @@ public abstract partial class GameTest
     [TearDown]
     public virtual async Task DoTeardown()
     {
+        if (Pair == null)
+            return; // Setup failed before a pair was acquired.
+
         try
         {
             // In some cool future we might be able to make this only throw out the pair
@@ -235,6 +238,14 @@ public abstract partial class GameTest
             // So not yet.
             if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
             {
+                // Dirty disposal emits a warning that can replace the adapter's failure message.
+                TestContext.Out.WriteLine(TestContext.CurrentContext.Result.Message);
+                TestContext.Out.WriteLine(TestContext.CurrentContext.Result.StackTrace);
+                foreach (var assertion in TestContext.CurrentContext.Result.Assertions)
+                {
+                    TestContext.Out.WriteLine(assertion.Message);
+                    TestContext.Out.WriteLine(assertion.StackTrace);
+                }
                 _pairDestroyed = true; // Blow it up, we failed and it might be screwed.
                 return;
             }
@@ -247,10 +258,10 @@ public abstract partial class GameTest
             // And other teardown logic will go here. Eventually.
 
         }
-        catch (Exception)
+        catch (Exception exception)
         {
             _pairDestroyed = true;
-            Assert.Fail();
+            TestContext.Out.WriteLine(exception);
             throw;
         }
         finally

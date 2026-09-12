@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Tests.Helpers;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -8,6 +9,8 @@ using Robust.Shared.Audio.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 
 namespace Content.IntegrationTests.Tests.Weapons;
@@ -48,6 +51,8 @@ public sealed class FlyBySoundTest : GameTest
   components:
   - type: Physics
     bodyType: Dynamic
+  - type: TileFrictionModifier
+    modifier: 0
   - type: Fixtures
     fixtures:
       fly-by:
@@ -88,16 +93,25 @@ public sealed class FlyBySoundTest : GameTest
         EntityUid predicted = default;
         await client.WaitPost(() =>
         {
-            predicted = client.EntMan.SpawnEntity(ProjectilePrototype, client.Transform(clientListener).Coordinates);
+            predicted = client.EntMan.SpawnEntity(ProjectilePrototype,
+                client.Transform(clientListener).Coordinates.Offset(new Vector2(1.1f, 0)));
             client.EntMan.EnsureComponent<PredictedProjectileClientComponent>(predicted);
+            client.EntMan.EnsureComponent<TestListenerComponent>(predicted);
             client.EntMan.System<SharedPhysicsSystem>().UpdateIsPredicted(predicted);
+
+            // Enter the listener's range during prediction, rather than starting in contact
+            // while the physics system is rebuilding contacts for a received state.
+            client.EntMan.System<SharedPhysicsSystem>().SetLinearVelocity(predicted, new Vector2(-20, 0));
 
             AssertSingleFlyByFixture(client.EntMan, predicted);
         });
-        await client.WaitRunTicks(2);
+        await client.WaitRunTicks(8);
 
         await client.WaitAssertion(() =>
         {
+            Assert.That(client.EntMan.System<FlyByContactProbeSystem>().Count(predicted,
+                contact => contact.OurFixtureId == SharedFlyBySoundSystem.FlyByFixture && contact.OtherEntity == clientListener),
+                Is.EqualTo(1));
             var sounds = client.EntMan.EntityQuery<AudioComponent>()
                 .Where(audio => audio.FileName == SoundPath)
                 .Where(audio => client.Transform(audio.Owner).ParentUid == clientListener)
@@ -172,6 +186,10 @@ public sealed class FlyBySoundTest : GameTest
             await pair.RunTicksSync(2);
             await client.WaitAssertion(() => AssertSingleFlyByFixture(client.EntMan, clientAuthoritative));
         }
+    }
+
+    public sealed partial class FlyByContactProbeSystem : TestListenerSystem<StartCollideEvent>
+    {
     }
 
     private static void AssertSingleFlyByFixture(IEntityManager entMan, EntityUid uid)

@@ -3,3 +3,11 @@
   id: CMUBaseMobSpeciesUPPLine
   abstract: true
   suffix: CMU, UPP, Line
+
+- type: entity
+  parent: AU14SquadTD
+  id: CMUSquadUPPLine
+  name: UPP Line
+  components:
+  - type: SquadTeam
+    group: UPP Line

@@ -6,6 +6,8 @@ using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
 using Robust.Shared.Timing;
 
+using Robust.Shared.GameStates;
+
 namespace Content.Shared.CombatMode;
 
 public abstract partial class SharedCombatModeSystem : EntitySystem
@@ -20,6 +22,8 @@ public abstract partial class SharedCombatModeSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CombatModeComponent, ComponentGetState>(OnCombatModeGetState);
+        SubscribeLocalEvent<CombatModeComponent, ComponentHandleState>(OnCombatModeHandleState);
         SubscribeLocalEvent<CombatModeComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CombatModeComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<CombatModeComponent, ToggleCombatActionEvent>(OnActionPerform);

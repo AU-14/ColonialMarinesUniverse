@@ -1,9 +1,11 @@
 using System.Reflection;
 using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Server.GameTicking;
 using Content.Shared.Follower;
 using Content.Shared.Follower.Components;
 using Content.Shared.Tag;
+using Content.Shared.CCVar;
 using Robust.Shared.Map;
 
 namespace Content.IntegrationTests.Tests.Follower;
@@ -19,6 +21,7 @@ public sealed class FollowerMergeRegressionTest : GameTest
     };
 
     [Test]
+    [EnsureCVar(Side.Server, typeof(CCVars), nameof(CCVars.ConsoleLoginLocal), false)]
     public async Task InvalidEntitiesParentsAndTransfersAreSafeWhileRandomSelectionRetainsFilters()
     {
         var session = ServerSession!;
@@ -28,6 +31,7 @@ public sealed class FollowerMergeRegressionTest : GameTest
 
         await Server.WaitPost(() =>
         {
+            Server.ResolveDependency<Content.Server.Administration.Managers.IAdminManager>().DeAdmin(session);
             var mapSystem = Server.System<SharedMapSystem>();
             var followSystem = Server.System<FollowerSystem>();
             var tagSystem = Server.System<TagSystem>();

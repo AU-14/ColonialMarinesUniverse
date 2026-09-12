@@ -40,14 +40,14 @@ public sealed partial class AmbassadorThirdPartyWindow : DefaultWindow
                 !_calledParties.Contains(id))
             {
                 OnCallThirdParty?.Invoke(id);
-                StatusLabel.Text = "Requesting support...";
+                StatusLabel.Text = Loc.GetString("ambassador-third-party-requesting");
             }
         };
     }
 
     public void UpdateState(AmbassadorThirdPartyBuiState s)
     {
-        BudgetLabel.Text = $"Budget: ${s.Budget:F0}";
+        BudgetLabel.Text = Loc.GetString("ambassador-console-budget", ("amount", s.Budget.ToString("F0")));
 
         var newIds = s.CallableParties.Keys.ToList();
         var changed = !_thirdPartyIds.SequenceEqual(newIds) || !_calledParties.SetEquals(s.CalledParties);
@@ -64,9 +64,9 @@ public sealed partial class AmbassadorThirdPartyWindow : DefaultWindow
 
             if (_thirdPartyIds.Count == 0)
             {
-                StatusLabel.Text = "No third parties available to call.";
+                StatusLabel.Text = Loc.GetString("ambassador-third-party-none");
                 SelectThirdParty(null);
-                CostLabel.Text = "Cost: N/A";
+                CostLabel.Text = Loc.GetString("ambassador-third-party-cost-na");
                 return;
             }
 
@@ -77,8 +77,14 @@ public sealed partial class AmbassadorThirdPartyWindow : DefaultWindow
                 var id = _thirdPartyIds[i];
                 var info = s.CallableParties[id];
                 var label = _calledParties.Contains(id)
-                    ? $"{info.DisplayName} - ${info.Cost:F0} [CALLED]"
-                    : $"{info.DisplayName} - ${info.Cost:F0}";
+                    ? Loc.GetString(
+                        "ambassador-third-party-entry-called",
+                        ("name", info.DisplayName),
+                        ("cost", info.Cost.ToString("F0")))
+                    : Loc.GetString(
+                        "ambassador-third-party-entry",
+                        ("name", info.DisplayName),
+                        ("cost", info.Cost.ToString("F0")));
 
                 ThirdPartyList.Add(new ItemList.Item(ThirdPartyList)
                 {
@@ -107,12 +113,14 @@ public sealed partial class AmbassadorThirdPartyWindow : DefaultWindow
 
         if (id == null || !_thirdParties.TryGetValue(id, out var info))
         {
-            CostLabel.Text = _thirdPartyIds.Count == 0 ? "Cost: N/A" : "Cost: $0";
+            CostLabel.Text = _thirdPartyIds.Count == 0
+                ? Loc.GetString("ambassador-third-party-cost-na")
+                : Loc.GetString("ambassador-third-party-cost", ("cost", "0"));
             CallBtn.Disabled = true;
             return;
         }
 
-        CostLabel.Text = $"Cost: ${info.Cost:F0}";
+        CostLabel.Text = Loc.GetString("ambassador-third-party-cost", ("cost", info.Cost.ToString("F0")));
         CallBtn.Disabled = _calledParties.Contains(id);
     }
 }

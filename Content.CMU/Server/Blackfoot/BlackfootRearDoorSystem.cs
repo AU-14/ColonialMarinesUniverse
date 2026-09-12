@@ -66,14 +66,16 @@ public sealed partial class BlackfootRearDoorSystem : EntitySystem
             vehicle is not { } vehicleUid ||
             !TryComp(vehicleUid, out BlackfootRearDoorComponent? rearDoor))
         {
-            _popup.PopupEntity("This control is not linked to a Blackfoot rear door.", args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-blackfoot-rear-door-control-unlinked"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
         rearDoor.Open = !rearDoor.Open;
         Dirty(vehicleUid, rearDoor);
 
-        _popup.PopupEntity(rearDoor.Open ? "Rear door opened." : "Rear door closed.", args.User, args.User);
+        _popup.PopupEntity(Loc.GetString(rearDoor.Open
+            ? "cmu-blackfoot-rear-door-opened"
+            : "cmu-blackfoot-rear-door-closed"), args.User, args.User);
         args.Handled = true;
     }
 
@@ -139,7 +141,7 @@ public sealed partial class BlackfootRearDoorSystem : EntitySystem
         if (ent.Comp.Open || args.EntryIndex != ent.Comp.RearEntryIndex)
             return;
 
-        _popup.PopupEntity("Open the rear door before boarding from the back.", args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-blackfoot-rear-door-board-blocked"), args.User, args.User, PopupType.SmallCaution);
         args.Cancelled = true;
     }
 
@@ -150,7 +152,7 @@ public sealed partial class BlackfootRearDoorSystem : EntitySystem
 
         if (!ent.Comp.Open)
         {
-            _popup.PopupEntity("Open the rear door before exiting from the back.", args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-blackfoot-rear-door-exit-blocked"), args.User, args.User, PopupType.SmallCaution);
             args.Cancelled = true;
             return;
         }
@@ -162,7 +164,7 @@ public sealed partial class BlackfootRearDoorSystem : EntitySystem
             return;
         }
 
-        _popup.PopupEntity("The Blackfoot is moving too fast to jump out.", args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-blackfoot-rear-door-airborne-exit-blocked"), args.User, args.User, PopupType.SmallCaution);
         args.Cancelled = true;
     }
 

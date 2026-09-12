@@ -14,12 +14,12 @@
       <!-- Header -->
       <BoxContainer Orientation="Horizontal" SeparationOverride="10">
         <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
-          <Label Name="HeaderTitleLabel" Text="COMMS NET DIRECTORY" FontColorOverride="#C7D7EA" />
+          <Label Name="HeaderTitleLabel" Text="{Loc au14-callsign-console-header}" FontColorOverride="#C7D7EA" />
           <Label Name="FactionLabel" Text="---" FontColorOverride="#6BC7FF" />
         </BoxContainer>
         <BoxContainer Orientation="Vertical" SeparationOverride="2">
-          <Label Name="EditModeLabel" Text="READ ONLY" FontColorOverride="#9DB5D1" HorizontalAlignment="Right" />
-          <Label Name="EntryCountLabel" Text="0 stations" FontColorOverride="#9DB5D1" HorizontalAlignment="Right" />
+          <Label Name="EditModeLabel" Text="{Loc au14-callsign-console-mode-readonly}" FontColorOverride="#9DB5D1" HorizontalAlignment="Right" />
+          <Label Name="EntryCountLabel" Text="" FontColorOverride="#9DB5D1" HorizontalAlignment="Right" />
         </BoxContainer>
       </BoxContainer>
 

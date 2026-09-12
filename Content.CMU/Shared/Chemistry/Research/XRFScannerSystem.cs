@@ -141,7 +141,7 @@ public abstract partial class XRFScannerSystem : EntitySystem
             return;
         if (sample.Count == 0)
         {
-            _popups.PopupEntity("research-xrf-scanner-conflict", ent.Owner);
+            _popups.PopupEntity(Loc.GetString("research-xrf-scanner-conflict"), ent.Owner);
             return;
         }
         ent.Comp.Processing = true;
@@ -254,7 +254,7 @@ public abstract partial class XRFScannerSystem : EntitySystem
                 PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-unknown"));
                 return;
             }
-            _mets.SetEntityName(sample.ContainedEntities[0], string.Format("vial ({0})", reagent.LocalizedName));
+            _mets.SetEntityName(sample.ContainedEntities[0], Loc.GetString("xrf-scanner-vial-name", ("reagent", reagent.LocalizedName)));
             DirtyEntity(sample.ContainedEntities[0]);
             if (_net.IsServer)
             {

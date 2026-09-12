@@ -97,13 +97,13 @@ public sealed class CMUItemStainTest
   parent: Puddle
   id: {WaterPuddle}
   components:
-  - type: SolutionContainerManager
-    solutions:
-      puddle:
-        maxVol: 1000
-        reagents:
-        - ReagentId: Water
-          Quantity: 10
+  - type: Solution
+    id: puddle
+    solution:
+      maxVol: 1000
+      reagents:
+      - ReagentId: Water
+        Quantity: 10
 ";
 
     [Test]

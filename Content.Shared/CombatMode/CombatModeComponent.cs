@@ -11,7 +11,7 @@ namespace Content.Shared.CombatMode
     ///     This is used to differentiate between regular item interactions or
     ///     using *everything* as a weapon.
     /// </summary>
-    [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+    [RegisterComponent, NetworkedComponent]
     [Access(typeof(SharedCombatModeSystem))]
     public sealed partial class CombatModeComponent : Component
     {
@@ -35,17 +35,17 @@ namespace Content.Shared.CombatMode
         [DataField]
         public EntProtoId CombatToggleAction = "ActionCombatModeToggle";
 
-        [DataField, AutoNetworkedField]
+        [DataField]
         public EntityUid? CombatToggleActionEntity;
 
-        [ViewVariables(VVAccess.ReadWrite), DataField("isInCombatMode"), AutoNetworkedField]
+        [ViewVariables(VVAccess.ReadWrite), DataField("isInCombatMode")]
         public bool IsInCombatMode;
 
         /// <summary>
         ///     Will add <see cref="MouseRotatorComponent"/> and <see cref="NoRotateOnMoveComponent"/>
         ///     to entities with this flag enabled that enter combat mode, and vice versa for removal.
         /// </summary>
-        [DataField, AutoNetworkedField]
+        [DataField]
         public bool ToggleMouseRotator = true;
     }
 }
