@@ -20,10 +20,10 @@
     bio: 15
     explosionArmor: 20
   - type: RMCArmorSpeedTier
-    speedTier: medium
+    speedTier: light
   - type: ClothingSpeedModifier # light armor speed
-    walkModifier: .725
-    sprintModifier: .725
+    walkModifier: 0.80
+    sprintModifier: 0.80
   - type: ExplosionResistance
     damageCoefficient: 0
     worn: false
@@ -46,8 +46,8 @@
   - type: RMCArmorSpeedTier
     speedTier: medium
   - type: ClothingSpeedModifier
-    walkModifier: 0.666
-    sprintModifier: 0.666
+    walkModifier: 0.725
+    sprintModifier: 0.725
   - type: ExplosionResistance
     damageCoefficient: 0
     worn: false
@@ -70,8 +70,8 @@
   - type: RMCArmorSpeedTier
     speedTier: medium
   - type: ClothingSpeedModifier
-    walkModifier: 0.666
-    sprintModifier: 0.666
+    walkModifier: 0.725
+    sprintModifier: 0.725
   - type: ExplosionResistance
     damageCoefficient: 0
     worn: false

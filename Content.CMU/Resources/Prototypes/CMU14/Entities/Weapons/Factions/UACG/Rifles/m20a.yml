@@ -19,21 +19,23 @@
   - type: Clothing
     sprite: CMU14/Weapons/Guns/UACG/m20a.rsi
   - type: Gun
-    shotsPerBurst: 3
+    shotsPerBurst: 4
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
     - Burst
+    - FullAuto
     soundGunshot:
       collection: AU14M41FireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
     - Burst
+    - FullAuto
     recoilUnwielded: 4
-    scatterWielded: 6
-    scatterUnwielded: 20
-    baseFireRate: 3.5
+    scatterWielded: 5
+    scatterUnwielded: 15
+    baseFireRate: 5.0
     burstScatterMult: 1
     modifiers:
       Burst:
@@ -41,7 +43,13 @@
         maxScatterModifier: 10
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
+        shotsToMaxScatter: 8
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 8
   - type: MagazineAmmoProvider
     autoEject: false
     soundAutoEject: null
@@ -131,21 +139,21 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 40
+        Piercing: 35
   - type: DamageImpactProfile
     projectile:
       contact: Generic
       penetration: Medium
       energy: Medium
   - type: CMArmorPiercing
-    amount: 5
+    amount: 15
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 24
       falloff: 9999
       ignoreModifiers: true
-    - range: 7
-      falloff: 4
+    - range: 8
+      falloff: 5
   - type: RMCProjectileAccuracy
     accuracy: 105
     thresholds:
