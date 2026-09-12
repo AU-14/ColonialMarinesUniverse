@@ -518,15 +518,13 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
             return false;
         }
 
-        return AllowsUnmappedHoverAir(_round.SelectedPreset?.ID, _round.GetSelectedPlanet()?.MapId, level.Depth);
+        return AllowsUnmappedHoverAir(_round.SelectedPreset?.ID, level.Depth);
     }
 
-    private static bool AllowsUnmappedHoverAir(string? preset, string? planet, int depth)
+    private static bool AllowsUnmappedHoverAir(string? preset, int depth)
     {
         return depth == 1 &&
-               string.Equals(preset, "DistressSignal", StringComparison.OrdinalIgnoreCase) &&
-               !string.IsNullOrWhiteSpace(planet) &&
-               !string.Equals(planet, "hopesretreat", StringComparison.OrdinalIgnoreCase);
+               string.Equals(preset, "DistressSignal", StringComparison.OrdinalIgnoreCase);
     }
 
     private IReadOnlyList<Vector2i> GetRotatedFootprintOffsets(DropshipPilotEyeComponent eye)
