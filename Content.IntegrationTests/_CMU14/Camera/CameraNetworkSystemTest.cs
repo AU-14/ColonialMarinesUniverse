@@ -136,8 +136,9 @@ public sealed class CameraNetworkSystemTest
         }
     }
 
-    [Test]
-    public async Task RoundCleanupRecreatesSeedNetworksBeforeReceiversSpawn()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task SeedNetworkDeletionRecreatesSeedsBeforeReceiversSpawn(bool roundCleanup)
     {
         var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
         try
@@ -147,7 +148,8 @@ public sealed class CameraNetworkSystemTest
             await server.WaitAssertion(() =>
             {
                 var entities = server.EntMan;
-                entities.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+                if (roundCleanup)
+                    entities.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
                 foreach (var network in entities.EntityQuery<CameraNetworkIdentityComponent>().ToArray())
                     entities.DeleteEntity(network.Owner);
             });
