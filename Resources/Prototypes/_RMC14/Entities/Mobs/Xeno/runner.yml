@@ -161,14 +161,19 @@
   parent: CMXenoRunnerBase
   id: CMXenoRunner
   components:
+  - type: DamageEvasion # CMU14
+    damageThreshold: 120
+    damageWindow: 3
+    evasionBonus: 75
+    evasionDuration: 4
   - type: GuideHelp
     guides:
     - RMCGuideRoleRunner
   - type: MobThresholds
     thresholds:
       0: Alive
-      230: Critical
-      330: Dead
+      270: Critical
+      360: Dead
   - type: Xeno
     actionIds:
     - ActionXenoRest
