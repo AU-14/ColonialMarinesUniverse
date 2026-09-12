@@ -1,6 +1,12 @@
 - type: entity
   id: CMUCargoCarrier
   components:
+  - type: ContainerContainer
+    containers:
+      cmu-cargo-crate: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Vehicle
     movementKind: Grid
     transferDamage: false

@@ -85,6 +85,12 @@
   name: drone android body frame
   description: A bare synthetic torso frame with sealed limb ports and an empty activation socket.
   components:
+  - type: ContainerContainer
+    containers:
+      cmu-drone-frame-parts: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Mobs/DroneAndroid/parts.rsi
     state: torso_m

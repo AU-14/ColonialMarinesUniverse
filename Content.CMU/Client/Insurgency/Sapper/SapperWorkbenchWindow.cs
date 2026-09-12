@@ -29,7 +29,7 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
     {
         _prototype = IoCManager.Resolve<IPrototypeManager>();
 
-        Title = "Sapper's Workbench";
+        Title = Loc.GetString("insfor-sapper-workbench-window-title");
         MinSize = new Vector2(720, 520);
 
         var root = new BoxContainer
@@ -46,7 +46,11 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
             Margin = new Thickness(0, 0, 0, 8),
         };
 
-        _gunsmithingButton = new Button { Text = "Gunsmithing", HorizontalExpand = true };
+        _gunsmithingButton = new Button
+        {
+            Text = Loc.GetString("insfor-sapper-workbench-tab-gunsmithing"),
+            HorizontalExpand = true,
+        };
         _gunsmithingButton.OnPressed += _ =>
         {
             _tab = WorkbenchTab.Gunsmithing;
@@ -56,7 +60,11 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
 
         // "Fabrication", not "Trap Crafting": the tab also builds the spy-camera net, the siphon
         // rig, and the Switch chip.
-        _craftingButton = new Button { Text = "Fabrication", HorizontalExpand = true };
+        _craftingButton = new Button
+        {
+            Text = Loc.GetString("insfor-sapper-workbench-tab-fabrication"),
+            HorizontalExpand = true,
+        };
         _craftingButton.OnPressed += _ =>
         {
             _tab = WorkbenchTab.Crafting;
@@ -126,12 +134,16 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
 
         weaponRow.AddChild(new Label
         {
-            Text = state.WeaponName ?? "No weapon loaded",
+            Text = state.WeaponName ?? Loc.GetString("insfor-sapper-workbench-no-weapon-loaded"),
             HorizontalExpand = true,
             VerticalAlignment = VAlignment.Center,
         });
 
-        var take = new Button { Text = "Take Weapon", Disabled = state.WeaponName == null };
+        var take = new Button
+        {
+            Text = Loc.GetString("insfor-sapper-workbench-take-weapon-button"),
+            Disabled = state.WeaponName == null,
+        };
         take.OnPressed += _ => OnTakeWeapon?.Invoke();
         weaponRow.AddChild(take);
         _body.AddChild(weaponRow);
@@ -144,7 +156,7 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
         };
         _body.AddChild(columns);
 
-        var slotsPanel = CreatePanel("Attachment Slots");
+        var slotsPanel = CreatePanel(Loc.GetString("insfor-sapper-workbench-attachment-slots"));
         slotsPanel.HorizontalExpand = true;
         columns.AddChild(slotsPanel);
 
@@ -152,16 +164,26 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
             AddSlotRow(slotsPanel, slot);
 
         if (state.Slots.Count == 0)
-            slotsPanel.AddChild(new Label { Text = "Load a weapon to show its slots.", Margin = new Thickness(4) });
+        {
+            slotsPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("insfor-sapper-workbench-load-weapon-slots"),
+                Margin = new Thickness(4),
+            });
+        }
 
-        var statsPanel = CreatePanel("Buffs / Debuffs");
+        var statsPanel = CreatePanel(Loc.GetString("insfor-sapper-workbench-buffs-debuffs"));
         statsPanel.HorizontalExpand = true;
         statsPanel.Margin = new Thickness(8, 0, 0, 0);
         columns.AddChild(statsPanel);
 
         if (state.Stats.Count == 0)
         {
-            statsPanel.AddChild(new Label { Text = "No attachment modifiers applied.", Margin = new Thickness(4) });
+            statsPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("insfor-sapper-workbench-no-modifiers"),
+                Margin = new Thickness(4),
+            });
             return;
         }
 
@@ -185,18 +207,32 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
             Margin = new Thickness(4, 2),
         };
 
+        var attachment = slot.AttachmentName ?? Loc.GetString("insfor-sapper-workbench-empty");
         row.AddChild(new Label
         {
-            Text = $"{slot.SlotName}: {slot.AttachmentName ?? "empty"}",
+            Text = Loc.GetString(
+                "insfor-sapper-workbench-slot",
+                ("slot", slot.SlotName),
+                ("attachment", attachment)),
             HorizontalExpand = true,
             VerticalAlignment = VAlignment.Center,
         });
 
-        var add = new Button { Text = "+Add", Disabled = !slot.CanAdd, MinWidth = 70 };
+        var add = new Button
+        {
+            Text = Loc.GetString("insfor-sapper-workbench-add"),
+            Disabled = !slot.CanAdd,
+            MinWidth = 70,
+        };
         add.OnPressed += _ => OnAddAttachment?.Invoke(slot.SlotId);
         row.AddChild(add);
 
-        var remove = new Button { Text = "-Remove", Disabled = !slot.CanRemove, MinWidth = 82 };
+        var remove = new Button
+        {
+            Text = Loc.GetString("insfor-sapper-workbench-remove"),
+            Disabled = !slot.CanRemove,
+            MinWidth = 82,
+        };
         remove.OnPressed += _ => OnRemoveAttachment?.Invoke(slot.SlotId);
         row.AddChild(remove);
 
@@ -205,13 +241,17 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
 
     private void BuildCrafting(SapperWorkbenchBuiState state)
     {
-        var materialsPanel = CreatePanel("Materials");
+        var materialsPanel = CreatePanel(Loc.GetString("insfor-sapper-workbench-materials"));
         materialsPanel.Margin = new Thickness(0, 0, 0, 8);
         _body.AddChild(materialsPanel);
 
         if (state.Materials.Count == 0)
         {
-            materialsPanel.AddChild(new Label { Text = "No materials loaded", Margin = new Thickness(4) });
+            materialsPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("insfor-sapper-workbench-no-materials-loaded"),
+                Margin = new Thickness(4),
+            });
         }
 
         foreach (var material in state.Materials)
@@ -224,12 +264,19 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
             };
             row.AddChild(new Label
             {
-                Text = $"{material.Name}: {material.Count}",
+                Text = Loc.GetString(
+                    "insfor-sapper-workbench-material",
+                    ("name", material.Name),
+                    ("count", material.Count)),
                 HorizontalExpand = true,
                 VerticalAlignment = VAlignment.Center,
             });
 
-            var eject = new Button { Text = "Eject", MinWidth = 60 };
+            var eject = new Button
+            {
+                Text = Loc.GetString("insfor-sapper-workbench-eject"),
+                MinWidth = 60,
+            };
             var id = material.Id;
             eject.OnPressed += _ => OnEjectMaterial?.Invoke(id);
             row.AddChild(eject);
@@ -285,10 +332,14 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
             return;
 
         var help = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, Margin = new Thickness(4, 0, 4, 6) };
-        help.AddChild(new Label { Text = "Loose Ingredients Help", StyleClasses = { "LabelKeyText" } });
         help.AddChild(new Label
         {
-            Text = "These must lie loose on or next to the bench to be consumed:",
+            Text = Loc.GetString("insfor-sapper-workbench-loose-help"),
+            StyleClasses = { "LabelKeyText" },
+        });
+        help.AddChild(new Label
+        {
+            Text = Loc.GetString("insfor-sapper-workbench-loose-help-description"),
             Modulate = Color.Gray,
         });
         help.AddChild(rows);
@@ -342,7 +393,7 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
                 }
                 ingredients.AddChild(new Label
                 {
-                    Text = $"x{ing.Count} {ing.Name}",
+                    Text = Loc.GetString("insfor-sapper-workbench-ingredient", ("count", ing.Count), ("name", ing.Name)),
                     Modulate = Color.Gray,
                     VerticalAlignment = VAlignment.Center,
                     Margin = new Thickness(2, 0, 8, 0),
@@ -355,7 +406,7 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
 
         var craft = new Button
         {
-            Text = "Craft",
+            Text = Loc.GetString("insfor-sapper-workbench-craft"),
             Disabled = !recipe.CanBuild,
             VerticalAlignment = VAlignment.Center,
             MinWidth = 60,
@@ -387,8 +438,11 @@ public sealed class SapperWorkbenchWindow : DefaultWindow
     private static string FormatMaterials(Dictionary<string, int> materials)
     {
         return materials.Count == 0
-            ? "No materials"
-            : string.Join(", ", materials.Select(kvp => $"{kvp.Key} {kvp.Value}"));
+            ? Loc.GetString("insfor-sapper-workbench-no-materials")
+            : string.Join(", ", materials.Select(kvp => Loc.GetString(
+                "insfor-sapper-workbench-material-cost",
+                ("name", kvp.Key),
+                ("count", kvp.Value))));
     }
 
     private enum WorkbenchTab : byte

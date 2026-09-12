@@ -8,10 +8,12 @@
   - type: Action
     checkCanInteract: false
     useDelay: 0.25
-    icon:
-      sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
-      state: integrity
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
+      state: integrity
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionGunshipCycleCamera
@@ -23,10 +25,12 @@
   - type: Action
     checkCanInteract: false
     useDelay: 0.25
-    icon:
-      sprite: CMU14/ZLevels/Actions/misc.rsi
-      state: down
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/ZLevels/Actions/misc.rsi
+      state: down
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionGunshipDropshipOutline
@@ -38,10 +42,12 @@
   - type: Action
     checkCanInteract: false
     useDelay: 0.25
-    icon:
-      sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
-      state: targeting-reticle
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionGunshipPilotPanning
@@ -53,10 +59,12 @@
   - type: Action
     checkCanInteract: false
     useDelay: 0.25
-    icon:
-      sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
-      state: targeting-reticle
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionGunshipPilotZoom
@@ -68,7 +76,9 @@
   - type: Action
     checkCanInteract: false
     useDelay: 0.25
-    icon:
-      sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
-      state: sniperscope
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+      state: sniperscope
+      map: ["enum.ActionVisuals.Icon"]

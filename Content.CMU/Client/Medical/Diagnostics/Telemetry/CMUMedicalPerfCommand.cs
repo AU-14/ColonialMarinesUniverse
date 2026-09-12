@@ -24,14 +24,14 @@ public sealed partial class CMUMedicalPerfCommand : IConsoleCommand
     private readonly HashSet<Entity<MarineComponent>> _marineIcons = new();
 
     public string Command => "cmu_medical_perf";
-    public string Description => "Reports nearby CMU medical client visibility and overlay candidate counts.";
-    public string Help => "Usage: cmu_medical_perf [range=12]";
+    public string Description => Loc.GetString("cmu-cmd-medical-perf-desc");
+    public string Help => Loc.GetString("cmu-cmd-medical-perf-help");
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (shell.Player?.AttachedEntity is not { } player)
         {
-            shell.WriteError("You must be attached to an entity.");
+            shell.WriteError(Loc.GetString("cmu-cmd-medical-perf-no-entity"));
             return;
         }
 
@@ -47,7 +47,7 @@ public sealed partial class CMUMedicalPerfCommand : IConsoleCommand
         var origin = xform.GetMapCoordinates(player);
         if (origin.MapId == MapId.Nullspace)
         {
-            shell.WriteError("Attached entity is in nullspace.");
+            shell.WriteError(Loc.GetString("cmu-cmd-medical-perf-nullspace"));
             return;
         }
 
@@ -73,15 +73,20 @@ public sealed partial class CMUMedicalPerfCommand : IConsoleCommand
         lookup.GetEntitiesInRange(origin, range, _healthBars, flags);
         lookup.GetEntitiesInRange(origin, range, _marineIcons, flags);
 
-        shell.WriteLine($"CMU medical perf around {range:F1}m:");
-        shell.WriteLine($"  local toggles: statusIcons={_configuration.GetCVar(CCVars.LocalStatusIconsEnabled)}, marineOverlay={_configuration.GetCVar(RMCCVars.RMCMarineOverlayEnabled)}");
-        shell.WriteLine($"  local HUD comps: healthBars={_entities.HasComponent<ShowHealthBarsComponent>(player)}, healthIcons={_entities.HasComponent<ShowHealthIconsComponent>(player)}, marineIcons={_entities.HasComponent<ShowMarineIconsComponent>(player)}");
-        shell.WriteLine($"  nearby visible entities: {_nearby.Count}");
-        shell.WriteLine($"  nearby CMU bodies: {cmuBodies}");
-        shell.WriteLine($"  visible attached CMU internals: {attachedInternals}");
-        shell.WriteLine($"  status icon candidates: {_statusIcons.Count}");
-        shell.WriteLine($"  health bar candidates: {_healthBars.Count}");
-        shell.WriteLine($"  marine icon candidates: {_marineIcons.Count}");
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-heading", ("range", range.ToString("F1"))));
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-toggles",
+            ("statusIcons", _configuration.GetCVar(CCVars.LocalStatusIconsEnabled)),
+            ("marineOverlay", _configuration.GetCVar(RMCCVars.RMCMarineOverlayEnabled))));
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-hud",
+            ("healthBars", _entities.HasComponent<ShowHealthBarsComponent>(player)),
+            ("healthIcons", _entities.HasComponent<ShowHealthIconsComponent>(player)),
+            ("marineIcons", _entities.HasComponent<ShowMarineIconsComponent>(player))));
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-nearby", ("count", _nearby.Count)));
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-bodies", ("count", cmuBodies)));
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-internals", ("count", attachedInternals)));
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-status-candidates", ("count", _statusIcons.Count)));
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-health-candidates", ("count", _healthBars.Count)));
+        shell.WriteLine(Loc.GetString("cmu-cmd-medical-perf-marine-candidates", ("count", _marineIcons.Count)));
     }
 
     private bool IsAttachedCmuInternal(EntityUid uid)

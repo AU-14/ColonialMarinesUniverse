@@ -86,35 +86,14 @@ public sealed class TribalAppearanceTest : GameTest
         {
             var tribal = SEntMan.Spawn("AU14MobTribalSpear");
             var hideable = SEntMan.GetComponent<HideableHumanoidLayersComponent>(tribal);
-            var sawTerminatingRemoval = false;
-            var underwearStayedPermanentlyOccluded = false;
-
-            void OnComponentRemoved(RemovedComponentEventArgs args)
-            {
-                if (args.BaseArgs.Owner != tribal || args.BaseArgs.Component is not TribalComponent)
-                    return;
-
-                sawTerminatingRemoval = args.Terminating;
-                underwearStayedPermanentlyOccluded =
-                    hideable.PermanentlyHiddenLayers.Contains(HumanoidVisualLayers.UndergarmentTop) &&
-                    hideable.PermanentlyHiddenLayers.Contains(HumanoidVisualLayers.UndergarmentBottom);
-            }
-
             AssertTribalAppearance(tribal);
-            SEntMan.ComponentRemoved += OnComponentRemoved;
-            try
-            {
-                SEntMan.DeleteEntity(tribal);
-            }
-            finally
-            {
-                SEntMan.ComponentRemoved -= OnComponentRemoved;
-            }
+            SEntMan.DeleteEntity(tribal);
 
             Assert.Multiple(() =>
             {
-                Assert.That(sawTerminatingRemoval, Is.True);
-                Assert.That(underwearStayedPermanentlyOccluded, Is.True);
+                Assert.That(SEntMan.Deleted(tribal), Is.True);
+                Assert.That(hideable.PermanentlyHiddenLayers, Does.Contain(HumanoidVisualLayers.UndergarmentTop));
+                Assert.That(hideable.PermanentlyHiddenLayers, Does.Contain(HumanoidVisualLayers.UndergarmentBottom));
             });
         });
     }

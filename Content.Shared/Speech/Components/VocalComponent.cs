@@ -9,7 +9,7 @@ namespace Content.Shared.Speech.Components;
 /// <summary>
 ///     Component required for entities to be able to do vocal emotions.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(VocalSystem))]
 public sealed partial class VocalComponent : Component
 {
@@ -18,32 +18,27 @@ public sealed partial class VocalComponent : Component
     /// Emote ID for screaming (for whilhelm scream)
     /// </summary>
     [DataField]
-    [AutoNetworkedField]
     public ProtoId<EmotePrototype> ScreamId = "Scream";
 
     /// <summary>
     /// Sound specifier for Wilhelm scream
     /// </summary>
     [DataField]
-    [AutoNetworkedField]
     public SoundSpecifier Wilhelm = new SoundPathSpecifier("/Audio/Voice/Human/wilhelm_scream.ogg");
 
     /// <summary>
     /// Odds that screaming will be a Wilhelm scream
     /// </summary>
     [DataField]
-    [AutoNetworkedField]
     public float WilhelmProbability = 0.0002f;
 
     /// <summary>
     /// Default Emote Action to grant
     /// </summary>
     [DataField]
-    [AutoNetworkedField]
     public EntProtoId? EmoteAction = "ActionScream";
 
     [DataField]
-    [AutoNetworkedField]
     public EntityUid? EmoteActionEntity;
 
     /// <summary>
@@ -52,6 +47,5 @@ public sealed partial class VocalComponent : Component
     ///     Generally everything should have this set. This provides the sounds for Urists as well.
     /// </summary>
     [DataField]
-    [AutoNetworkedField]
     public ProtoId<EmoteSoundsPrototype>? EmoteSounds;
 }

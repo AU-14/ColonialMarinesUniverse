@@ -8,6 +8,9 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Shuttles.Components;
 using Content.Shared.Antag;
+using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Rules;
+using Content.Shared.Preferences;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Robust.Shared.Map.Components;
@@ -52,6 +55,15 @@ public sealed class AllGamePresetsStartTest : AntagTest
         });
 
         var preset = SProtoMan.Index<GamePresetPrototype>(presetId);
+        CMDistressSignalRuleComponent? distress = null;
+        foreach (var ruleId in preset.Rules)
+        {
+            if (SProtoMan.Index(ruleId).TryComp<CMDistressSignalRuleComponent>(out var rule, SEntMan.ComponentFactory))
+                distress = rule;
+        }
+        var minimumXenos = distress is { RequireXenoPlayers: true }
+            ? Server.CfgMan.GetCVar(RMCCVars.RMCDistressXenosMinimum)
+            : 0;
 
         // Spawn the minimum number of players.
         var players = new List<ICommonSession>();
@@ -60,6 +72,8 @@ public sealed class AllGamePresetsStartTest : AntagTest
         await Server.WaitPost(() =>
         {
             min = STicker.GetMinimumPlayerCount(preset);
+            if (minimumXenos > 0)
+                min = Math.Max(min, minimumXenos + 1); // Include a marine alongside the required xeno volunteers.
         });
 
         // We should already have one client connected, and we need to check the min
@@ -107,6 +121,20 @@ public sealed class AllGamePresetsStartTest : AntagTest
         }
 
         await Pair.RunUntilSynced();
+
+        if (distress != null && minimumXenos > 0)
+        {
+            // The minimal station map has no planet landmarks for the xeno volunteers.
+            var xenoMap = await Pair.CreateTestMap();
+            await Server.WaitPost(() =>
+            {
+                SEntMan.SpawnEntity("CMSpawnPointXeno", xenoMap.GridCoords);
+                SEntMan.SpawnEntity("CMSpawnPointXenoLeader", xenoMap.GridCoords);
+            });
+            for (var candidate = 1; candidate <= minimumXenos; candidate++)
+                await Pair.SetJobPriority(distress.XenoSelectableJob, JobPriority.High, players[candidate].UserId);
+            await Pair.SetJobPriority(distress.QueenJob, JobPriority.High, players[1].UserId);
+        }
 
         // This also ensures that admin commands work properly :P
         await Server.WaitPost(() =>

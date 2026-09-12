@@ -71,9 +71,10 @@ public sealed class ExamineMergeRegressionTest : GameTest
                     Assert.That(examine.CanExamine(xenoWatcher, target), Is.False);
                 });
 
-                var queen = Spawn("MobHuman", firstMap.GridCoords, entities);
-                var queenTarget = Spawn("MobHuman", firstMap.GridCoords.Offset(new Vector2(20, 0)), entities);
-                var visionSeed = Spawn("ExamineMergeQueenVisionSeed", firstMap.GridCoords.Offset(new Vector2(20, 0)), entities);
+                // Keep the vision seed and target on the test grid's floor tile.
+                var queen = Spawn("MobHuman", firstMap.GridCoords.Offset(new Vector2(20, 0)), entities);
+                var queenTarget = Spawn("MobHuman", firstMap.GridCoords, entities);
+                var visionSeed = Spawn("ExamineMergeQueenVisionSeed", firstMap.GridCoords, entities);
                 EnsureExaminer(queen);
                 var queenAction = SEntMan.EnsureComponent<QueenEyeActionComponent>(queen);
                 SetField(queenAction, "Eye", (EntityUid?) visionSeed);

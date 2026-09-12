@@ -22,6 +22,7 @@ public sealed class InteractingEntitiesTest : InteractionTest
     {
         await SpawnTarget(MobHuman);
         var puller = await SpawnEntity(MobHuman, ToServer(TargetCoords));
+        await Pair.RunUntilSynced();
 
         var pullSys = SEntMan.System<PullingSystem>();
         await Server.WaitAssertion(() =>

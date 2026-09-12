@@ -25,9 +25,8 @@ public sealed partial class NukeLightCommand : LocalizedEntityCommands
     private static readonly Color DefaultColor = Color.Orange;
 
     public override string Command => "nuke:lights";
-    public override string Description => "Deletes lights in a radius around you, use 'help nuke:lights' for more info.";
-    public override string Help =>
-        "Usage: nuke:lights [radius=80] [energy=80] [duration=4] [x y mapId] [color=Orange]";
+    public override string Description => Loc.GetString("cmu-cmd-nuke-lights-desc");
+    public override string Help => Loc.GetString("cmu-cmd-nuke-lights-help");
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -42,16 +41,16 @@ public sealed partial class NukeLightCommand : LocalizedEntityCommands
         var duration = DefaultDuration;
         var color = DefaultColor;
 
-        if (!TryParseFloat(shell, args, 0, "radius", ref radius) ||
-            !TryParseFloat(shell, args, 1, "energy", ref energy) ||
-            !TryParseFloat(shell, args, 2, "duration", ref duration))
+        if (!TryParseFloat(shell, args, 0, Loc.GetString("cmu-cmd-nuke-lights-hint-radius"), ref radius) ||
+            !TryParseFloat(shell, args, 1, Loc.GetString("cmu-cmd-nuke-lights-hint-energy"), ref energy) ||
+            !TryParseFloat(shell, args, 2, Loc.GetString("cmu-cmd-nuke-lights-hint-duration"), ref duration))
         {
             return;
         }
 
         if (radius <= 0f || energy <= 0f || duration <= 0f)
         {
-            shell.WriteError("Radius, energy, and duration must be greater than zero.");
+            shell.WriteError(Loc.GetString("cmu-cmd-nuke-lights-positive"));
             return;
         }
 
@@ -68,19 +67,19 @@ public sealed partial class NukeLightCommand : LocalizedEntityCommands
         }
         else
         {
-            shell.WriteError("No attached entity. Provide x y mapId explicitly.");
+            shell.WriteError(Loc.GetString("cmu-cmd-nuke-lights-no-attached"));
             return;
         }
 
         if (args.Length == 7 && !Color.TryParse(args[6], out color))
         {
-            shell.WriteError($"Failed to parse color '{args[6]}'. Use a name like Orange or a hex value like #ff8a00.");
+            shell.WriteError(Loc.GetString("cmu-cmd-nuke-lights-color-error", ("color", args[6])));
             return;
         }
 
         if (!_map.MapExists(coords.MapId))
         {
-            shell.WriteError($"Map {coords.MapId} does not exist.");
+            shell.WriteError(Loc.GetString("cmu-cmd-nuke-lights-map-missing", ("mapId", coords.MapId)));
             return;
         }
 
@@ -96,20 +95,24 @@ public sealed partial class NukeLightCommand : LocalizedEntityCommands
 
         _pvs.AddGlobalOverride(uid);
 
-        shell.WriteLine($"Spawned global nuke light {uid} at {coords.Position} on map {coords.MapId} for {duration:0.###}s.");
+        shell.WriteLine(Loc.GetString("cmu-cmd-nuke-lights-spawned",
+            ("uid", uid),
+            ("position", coords.Position),
+            ("mapId", coords.MapId),
+            ("duration", duration.ToString("0.###", CultureInfo.InvariantCulture))));
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         return args.Length switch
         {
-            1 => CompletionResult.FromHint("radius"),
-            2 => CompletionResult.FromHint("energy"),
-            3 => CompletionResult.FromHint("duration"),
-            4 => CompletionResult.FromHint("x"),
-            5 => CompletionResult.FromHint("y"),
-            6 => CompletionResult.FromHint("mapId"),
-            7 => CompletionResult.FromHint("color"),
+            1 => CompletionResult.FromHint(Loc.GetString("cmu-cmd-nuke-lights-hint-radius")),
+            2 => CompletionResult.FromHint(Loc.GetString("cmu-cmd-nuke-lights-hint-energy")),
+            3 => CompletionResult.FromHint(Loc.GetString("cmu-cmd-nuke-lights-hint-duration")),
+            4 => CompletionResult.FromHint(Loc.GetString("cmu-cmd-nuke-lights-hint-x")),
+            5 => CompletionResult.FromHint(Loc.GetString("cmu-cmd-nuke-lights-hint-y")),
+            6 => CompletionResult.FromHint(Loc.GetString("cmu-cmd-nuke-lights-hint-map-id")),
+            7 => CompletionResult.FromHint(Loc.GetString("cmu-cmd-nuke-lights-hint-color")),
             _ => CompletionResult.Empty
         };
     }
@@ -122,7 +125,7 @@ public sealed partial class NukeLightCommand : LocalizedEntityCommands
         if (float.TryParse(args[index], NumberStyles.Float, CultureInfo.InvariantCulture, out value))
             return true;
 
-        shell.WriteError($"Failed to parse {name} '{args[index]}'.");
+        shell.WriteError(Loc.GetString("cmu-cmd-nuke-lights-parse-value", ("name", name), ("value", args[index])));
         return false;
     }
 
@@ -133,13 +136,13 @@ public sealed partial class NukeLightCommand : LocalizedEntityCommands
         if (!float.TryParse(args[3], NumberStyles.Float, CultureInfo.InvariantCulture, out var x) ||
             !float.TryParse(args[4], NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
         {
-            shell.WriteError($"Failed to parse coordinates '{args[3]}' '{args[4]}'.");
+            shell.WriteError(Loc.GetString("cmu-cmd-nuke-lights-parse-coordinates", ("x", args[3]), ("y", args[4])));
             return false;
         }
 
         if (!int.TryParse(args[5], NumberStyles.Integer, CultureInfo.InvariantCulture, out var mapId))
         {
-            shell.WriteError($"Failed to parse map ID '{args[5]}'.");
+            shell.WriteError(Loc.GetString("cmu-cmd-nuke-lights-parse-map-id", ("mapId", args[5])));
             return false;
         }
 

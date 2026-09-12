@@ -124,6 +124,12 @@
     containers:
       board: !type:Container
         ents: []
+        showEnts: False
+        occludes: True
+      ItemCabinet: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Corrodible
     isCorrodible: false
   - type: InteractedBlacklist
@@ -137,6 +143,16 @@
   id: CMASRSConsolePowered
   suffix: Powered
   components:
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      ItemCabinet: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: ApcPowerReceiver
     powerLoad: 0
     needsPower: false # intentionally!
@@ -244,6 +260,16 @@
   id: CMASRSConsoleGovfor
   name: ASRS console (Govfor)
   components:
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      ItemCabinet: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessGovforReq" ] ]
   - type: RequisitionsComputer
@@ -254,6 +280,16 @@
   id: CMASRSConsoleOpfor
   name: ASRS console (Opfor)
   components:
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      ItemCabinet: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: AccessReader
     access: [ [ "AU14AccessOpforCommand" ], [ "AU14AccessOpforReq" ] ]
   - type: RequisitionsComputer
@@ -280,6 +316,16 @@
   id: CMASRSConsoleColony
   name: ASRS console (Colony)
   components:
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      ItemCabinet: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: AccessReader
     access: [ [ "CMAccessRequisitions" ], [ "CMAccessColonyCommand" ] ]
   - type: RequisitionsComputer

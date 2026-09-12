@@ -58,6 +58,12 @@
   id: AU14DumpsterBlue
   suffix: Blue
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: blue
     layers:
@@ -70,6 +76,12 @@
   id: AU14DumpsterYellow
   suffix: Yellow
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: yellow
     layers:
@@ -82,6 +94,12 @@
   id: AU14DumpsterRed
   suffix: Red
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: red
     layers:
@@ -94,6 +112,12 @@
   id: AU14DumpsterGreen
   suffix: Green
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: green
     layers:
@@ -106,6 +130,12 @@
   id: AU14DumpsterOrange
   suffix: Orange
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: orange
     layers:
@@ -118,6 +148,12 @@
   id: AU14DumpsterPurple
   suffix: Purple
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: purple
     layers:
@@ -130,6 +166,12 @@
   id: AU14DumpsterWeYu
   suffix: We-Yu
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: we-yu
     layers:

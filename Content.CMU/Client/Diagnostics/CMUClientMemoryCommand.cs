@@ -19,14 +19,8 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
     [Dependency] private IGameTiming _timing = default!;
 
     public string Command => "cmu_client_memory";
-    public string Description => "Prints client entity, component, prototype, and map counts.";
-    public string Help =>
-        "Usage:\n" +
-        "  cmu_client_memory snapshot [top=15]\n" +
-        "  cmu_client_memory baseline [top=15]\n" +
-        "  cmu_client_memory diff [top=15]\n" +
-        "\n" +
-        "Use baseline, wait while counts grow, then diff.";
+    public string Description => Loc.GetString("cmu-cmd-client-memory-desc");
+    public string Help => Loc.GetString("cmu-cmd-client-memory-help");
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -40,7 +34,7 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
                 break;
             case "baseline":
                 _baseline = CollectSnapshot();
-                shell.WriteLine($"Client memory baseline captured at tick {_baseline.Tick:N0}.");
+                shell.WriteLine(Loc.GetString("cmu-cmd-client-memory-baseline", ("tick", $"{_baseline.Tick:N0}")));
                 WriteSnapshot(shell, _baseline, top, null);
                 break;
             case "diff":
@@ -52,7 +46,7 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
                 shell.WriteLine(Help);
                 break;
             default:
-                shell.WriteError($"Unknown mode '{mode}'.");
+                shell.WriteError(Loc.GetString("cmu-cmd-client-memory-unknown-mode", ("mode", mode)));
                 shell.WriteLine(Help);
                 break;
         }
@@ -138,16 +132,20 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
 
     private static void WriteSnapshot(IConsoleShell shell, Snapshot snapshot, int top, Snapshot? previous)
     {
-        shell.WriteLine("== CMU Client Counts ==");
-        shell.WriteLine($"Tick: {snapshot.Tick:N0}");
-        shell.WriteLine("Runtime memory, GC, process, and ThreadPool counters are omitted by the content sandbox.");
-        shell.WriteLine($"Entities: {snapshot.EntityCount:N0}{FormatDelta(snapshot.EntityCount, previous?.EntityCount)} | Components: {snapshot.ComponentCount:N0}{FormatDelta(snapshot.ComponentCount, previous?.ComponentCount)}");
+        shell.WriteLine(Loc.GetString("cmu-cmd-client-memory-title"));
+        shell.WriteLine(Loc.GetString("cmu-cmd-client-memory-tick", ("tick", $"{snapshot.Tick:N0}")));
+        shell.WriteLine(Loc.GetString("cmu-cmd-client-memory-sandbox-note"));
+        shell.WriteLine(Loc.GetString("cmu-cmd-client-memory-counts",
+            ("entities", $"{snapshot.EntityCount:N0}"),
+            ("entityDelta", FormatDelta(snapshot.EntityCount, previous?.EntityCount)),
+            ("components", $"{snapshot.ComponentCount:N0}"),
+            ("componentDelta", FormatDelta(snapshot.ComponentCount, previous?.ComponentCount))));
         shell.WriteLine("");
-        WriteCounterRows(shell, "Top components", snapshot.ComponentCounts, previous?.ComponentCounts, top);
+        WriteCounterRows(shell, Loc.GetString("cmu-cmd-client-memory-top-components"), snapshot.ComponentCounts, previous?.ComponentCounts, top);
         shell.WriteLine("");
-        WriteCounterRows(shell, "Top prototypes", snapshot.PrototypeCounts, previous?.PrototypeCounts, top);
+        WriteCounterRows(shell, Loc.GetString("cmu-cmd-client-memory-top-prototypes"), snapshot.PrototypeCounts, previous?.PrototypeCounts, top);
         shell.WriteLine("");
-        WriteCounterRows(shell, "Maps", snapshot.MapCounts, previous?.MapCounts, Math.Min(top, 30));
+        WriteCounterRows(shell, Loc.GetString("cmu-cmd-client-memory-maps"), snapshot.MapCounts, previous?.MapCounts, Math.Min(top, 30));
     }
 
     private static void WriteCounterRows(
@@ -157,7 +155,7 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
         IReadOnlyDictionary<string, int>? previous,
         int top)
     {
-        shell.WriteLine($"== {title} ==");
+        shell.WriteLine(Loc.GetString("cmu-cmd-client-memory-section", ("title", title)));
 
         var keys = previous == null
             ? current.Keys
@@ -173,14 +171,18 @@ public sealed partial class CMUClientMemoryCommand : IConsoleCommand
 
         if (rows.Length == 0)
         {
-            shell.WriteLine("  none");
+            shell.WriteLine(Loc.GetString("cmu-cmd-client-memory-none"));
             return;
         }
 
         for (var i = 0; i < rows.Length; i++)
         {
             var row = rows[i];
-            shell.WriteLine($"{i + 1,3}. {row.Key,-48} count={row.Value,7:N0}{FormatDelta(row.Value, previous?.GetValueOrDefault(row.Key))}");
+            shell.WriteLine(Loc.GetString("cmu-cmd-client-memory-row",
+                ("index", $"{i + 1,3}"),
+                ("key", $"{row.Key,-48}"),
+                ("count", $"{row.Value,7:N0}"),
+                ("delta", FormatDelta(row.Value, previous?.GetValueOrDefault(row.Key)))));
         }
     }
 

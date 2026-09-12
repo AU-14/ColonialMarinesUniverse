@@ -128,10 +128,19 @@ public static partial class PoolManager
         };
 
         var server = new RobustIntegrationTest.ServerIntegrationInstance(options);
-        await server.WaitIdleAsync();
-        server.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
-        server.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
-        return (server, logHandler);
+        try
+        {
+            await server.WaitIdleAsync();
+            server.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
+            server.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
+            return (server, logHandler);
+        }
+        catch
+        {
+            // The caller cannot dispose a server that failed before it was returned.
+            server.Dispose();
+            throw;
+        }
     }
 
     public static void Startup(params Assembly[] extra)

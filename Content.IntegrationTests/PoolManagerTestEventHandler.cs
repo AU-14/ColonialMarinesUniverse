@@ -3,8 +3,8 @@
 [SetUpFixture]
 public sealed class PoolManagerTestEventHandler
 {
-    // This value is completely arbitrary.
-    private static TimeSpan MaximumTotalTestingTimeLimit => TimeSpan.FromMinutes(45);
+    // Full local runs need more time for map loading and server startups than individual CI shards.
+    private static TimeSpan MaximumTotalTestingTimeLimit => TimeSpan.FromMinutes(75);
     private static TimeSpan HardStopTimeLimit => MaximumTotalTestingTimeLimit.Add(TimeSpan.FromMinutes(1));
 
     [OneTimeSetUp]

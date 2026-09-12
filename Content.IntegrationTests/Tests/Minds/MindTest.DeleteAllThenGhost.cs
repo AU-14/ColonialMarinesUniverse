@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using Content.Shared.Camera;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -18,16 +19,14 @@ public sealed partial class MindTests
         Assert.That(pair.Server.EntMan.EntityExists(pair.PlayerData?.Mind));
 
         // Delete **everything** without deleting attached parent/child hierarchies in the same game state.
-        await pair.DeleteAllEntitiesLeafFirst();
+        // Camera identities are persistent services that regenerate when deleted.
+        await pair.DeleteAllEntitiesLeafFirst(ent => pair.Server.EntMan.HasComponent<CameraNetworkIdentityComponent>(ent));
 
-        Assert.That(pair.Server.EntMan.EntityCount, Is.EqualTo(0));
+        Assert.That(pair.Server.EntMan.GetEntities(), Has.All.Matches<EntityUid>(
+            ent => pair.Server.EntMan.HasComponent<CameraNetworkIdentityComponent>(ent)));
 
-        foreach (var ent in pair.Client.EntMan.GetEntities())
-        {
-            Console.WriteLine(pair.Client.EntMan.ToPrettyString(ent));
-        }
-
-        Assert.That(pair.Client.EntMan.EntityCount, Is.EqualTo(0));
+        var services = pair.Server.EntMan.GetEntities().Select(ent => pair.Server.EntMan.GetNetEntity(ent)).ToArray();
+        Assert.That(pair.Client.EntMan.GetEntities().Select(ent => pair.Client.EntMan.GetNetEntity(ent)), Is.EquivalentTo(services));
 
         // Create a new map.
         MapId mapId = default;

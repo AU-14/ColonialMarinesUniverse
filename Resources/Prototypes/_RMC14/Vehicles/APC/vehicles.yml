@@ -194,7 +194,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/apc_transport_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: 10
+    maxPassengers: 20 # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 3
     entryPoints:
     - offset: 1.5,0
@@ -208,6 +208,43 @@
   parent: VehicleAPCBase
   id: VehicleAPC
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers: []
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: MarineMapTracked
   - type: TacticalMapTracked
   - type: TacticalMapIcon
@@ -221,6 +258,43 @@
   name: armored personnel carrier (medical)
   description: A medical-configured APC outfitted with triage markings.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers: []
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: Sprite
     layers:
     - map: [ base ]
@@ -243,7 +317,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/apc_medical_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: 10
+    maxPassengers: 15 # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 3
     entryPoints:
     - offset: 1.5,0
@@ -268,6 +342,43 @@
   name: armored personnel carrier (command)
   description: A command-configured APC bristling with sensors and comms gear.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers: []
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: Sprite
     layers:
     - map: [ base ]
@@ -290,7 +401,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/apc_command_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: 10
+    maxPassengers: 15 # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 3
     entryPoints:
     - offset: 1.5,0
@@ -315,6 +426,45 @@
   name: UPP armored personnel carrier
   description: An armored personnel carrier configured for UPP forces.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: GridVehicleMover
     maxSpeed: 5
     acceleration: 2.0
@@ -415,7 +565,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/spp_apc_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: 14
+    maxPassengers: 20 # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 4
     entryPoints:
     - offset: -1.5,0
@@ -431,6 +581,43 @@
   name: Weyland-Yutani armored personnel carrier
   description: An armored personnel carrier operated by Weyland-Yutani's private military contractors.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers: []
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/apc.rsi
     layers:

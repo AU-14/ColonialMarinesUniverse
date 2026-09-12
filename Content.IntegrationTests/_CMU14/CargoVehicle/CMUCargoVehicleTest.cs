@@ -303,8 +303,11 @@ public sealed class CMUCargoVehicleTest
             var entities = server.EntMan;
             var asrs = entities.SpawnEntity("WYPMCCargoCatalog", map.GridCoords);
             var itemCatalog = entities.GetComponent<RequisitionsComputerComponent>(asrs).ItemCatalog;
-            Assert.That(itemCatalog.Any(entry => entry.Prototype.Id == CarrierId), Is.True);
-            Assert.That(itemCatalog.Any(entry => entry.Prototype.Id == ControllerId), Is.True);
+            // Machinery stays in its deployment crate so it can be unpacked away from the delivery pad.
+            var deploymentEntry = itemCatalog.Single(entry => entry.Prototype.Id == DeploymentCrateId);
+            Assert.That(deploymentEntry.Cost, Is.EqualTo(3000));
+            Assert.That(itemCatalog.Any(entry => entry.Prototype.Id == CarrierId), Is.False);
+            Assert.That(itemCatalog.Any(entry => entry.Prototype.Id == ControllerId), Is.False);
 
             carrierBefore = CountPrototype(entities, CarrierId);
             controllerBefore = CountPrototype(entities, ControllerId);

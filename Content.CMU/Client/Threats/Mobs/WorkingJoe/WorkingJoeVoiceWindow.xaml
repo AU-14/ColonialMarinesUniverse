@@ -1,5 +1,5 @@
 <DefaultWindow xmlns="https://spacestation14.io"
-               Title="Working Joe Voice Synthesizer"
+               Title="{Loc working-joe-voice-window-title}"
                MinSize="750 550"
                SetSize="750 550">
 
@@ -21,7 +21,7 @@
 
             <LineEdit
                 Name="SearchBar"
-                PlaceHolder="Search voicelines..."
+                PlaceHolder="{Loc working-joe-voice-search-placeholder}"
                 HorizontalExpand="True" />
 
             <ScrollContainer

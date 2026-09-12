@@ -16,6 +16,8 @@ using Candidate = Content.Client.CMU14.ZLevels.Lighting.CMUZLevelProjectedLighti
 namespace Content.IntegrationTests.CMU14.ZLevels;
 
 [TestFixture]
+// These assertions read process-wide diagnostic counters shared by all test clients.
+[NonParallelizable]
 public sealed class CMUZClientDiagnosticsTest : GameTest
 {
     [TestCase(0.6f, 1f)]
@@ -83,6 +85,7 @@ public sealed class CMUZClientDiagnosticsTest : GameTest
                 {
                     config.SetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled, diagnostics);
                     var stats = CMUZLevelProjectedLightingSystem.LastProjectedLightingDebugStats;
+                    var previousQueries = stats.SourceQueries;
                     var previousBuilds = stats.PortalLightQueryBuilds;
                     var previousRays = stats.Raycasts;
                     var previousChecks = stats.TransmissionChecks;
@@ -99,12 +102,13 @@ public sealed class CMUZClientDiagnosticsTest : GameTest
                     Assert.That(candidates, Is.EqualTo(expected), "Diagnostics must not own aperture completeness or lighting output.");
                     if (diagnostics)
                     {
-                        Assert.That(stats.SourceQueries, Is.EqualTo(3));
+                        Assert.That(stats.SourceQueries, Is.EqualTo(previousQueries + 3));
                         Assert.That(stats.PortalLightQueryBuilds, Is.EqualTo(openingLimit == 0 ? 1 : 0));
                         Assert.That(stats.TransmissionChecks, Is.GreaterThan(0));
                     }
                     else
                     {
+                        Assert.That(stats.SourceQueries, Is.EqualTo(previousQueries));
                         Assert.That(stats.PortalLightQueryBuilds, Is.EqualTo(previousBuilds));
                         Assert.That(stats.Raycasts, Is.EqualTo(previousRays));
                         Assert.That(stats.TransmissionChecks, Is.EqualTo(previousChecks));

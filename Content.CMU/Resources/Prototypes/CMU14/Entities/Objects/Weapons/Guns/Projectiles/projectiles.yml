@@ -4,6 +4,12 @@
   name: LTB APFSDS cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -31,6 +37,12 @@
   name: LTB HEAT cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -59,6 +71,12 @@
   name: LTB HE cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -85,6 +103,12 @@
   name: LTB canister cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -110,6 +134,12 @@
   name: LTB napalm cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
