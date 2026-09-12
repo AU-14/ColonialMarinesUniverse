@@ -41,3 +41,19 @@ corporate-console-withdraw-tax-note = Note: Withdrawals are subject to { $percen
 corporate-console-withdraw-no-tax = No income tax on withdrawals.
 corporate-console-announcement-sender = Corporate Affairs
 corporate-console-tariff-announcement = Corporate transit tariff has been set to { $percent }%. Submission payouts to the colony have been adjusted.
+
+# Cash vendor
+cash-vendor-credit = Credit:
+cash-vendor-amount = ${ $amount }
+cash-vendor-scan-id = Scan ID
+cash-vendor-clear-department = Clear Dept
+cash-vendor-return-change = Return Change
+cash-vendor-department-budget = Dept Budget:
+cash-vendor-department-budget-value = ${ $amount } ({ $department })
+cash-vendor-search-placeholder = Search...
+cash-vendor-footer-hint = Insert cash, then select item.
+cash-vendor-prices-include-tax = Prices incl. tax
+cash-vendor-sales-tax = Sales Tax: { $percent }%
+cash-vendor-no-sales-tax = No sales tax
+cash-vendor-buy = Buy
+cash-vendor-no-items = No items available.
