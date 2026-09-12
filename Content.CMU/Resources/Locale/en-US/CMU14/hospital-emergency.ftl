@@ -25,6 +25,19 @@ hospital-emergency-skip-contract = Skip Contract
 hospital-emergency-release-shuttle = Release Shuttle
 hospital-emergency-request-pickup = Request Pickup
 
+# Hospital transport / recovery
+hospital-emergency-transport-waiting-navigation = Hospital transport is waiting for navigation, a valid destination, or flight cooldown.
+hospital-emergency-transport-original-map-required = Hospital transport requires an unoccupied destination on its original hospital map.
+hospital-emergency-flight-not-committed = Hospital flight was not committed. Passengers remain assigned; departure will be retried.
+hospital-emergency-recovery-original-map-required = Hospital transport recovery requires its original hospital map and surviving shuttle.
+hospital-emergency-recovery-unload-before-retirement = Hospital transport recovered. Unload remaining occupants and belongings before retirement.
+hospital-emergency-recovery-restore-map-identity = Restore the original leased map identity before moving this transport or reclaiming its contents.
+hospital-emergency-recovery-board-everything = Board all people and belongings on the return map before hospital recovery.
+hospital-emergency-recovery-restore-landing-marker = Restore the hospital landing marker on its original map to recover this transport.
+hospital-emergency-recovery-verb = Recover hospital transport
+hospital-emergency-recovery-verb-message = Cancel this transport's trip and return its remaining passengers to the hospital without settling a bill.
+hospital-emergency-recovery-cancelled = Transport trip cancelled for recovery. Patients remain assigned to the hospital.
+
 # Admin command
 hospital-emergency-command-description = Sets the seconds until the next hospital evacuation shuttle incident.
 hospital-emergency-command-help = Usage: hospitalincidenttimer <seconds>
