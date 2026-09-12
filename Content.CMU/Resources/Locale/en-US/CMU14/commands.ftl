@@ -54,3 +54,21 @@ cmu-cmd-multiz-map-missing = No map with MapId { $mapId }.
 cmu-cmd-multiz-map-changed = Map { $mapId } Multi Z-Level set to { $enabled }. Players { $permission } build AU14 z-level stairs/floors here.
 cmu-cmd-multiz-can-build = can now
 cmu-cmd-multiz-cannot-build = can no longer
+
+# Z-network weather
+cmd-znetwork-weather-desc = Sets weather for all maps in a zNetwork.
+cmd-znetwork-weather-help = znetwork-weather <zNetwork entity> <weather|null> [duration seconds]
+cmu-cmd-znetwork-weather-entity-missing = Unable to find entity { $entity }.
+cmu-cmd-znetwork-weather-component-missing = Target entity does not have CMUZLevelsNetworkComponent: { $entity }.
+cmu-cmd-znetwork-weather-network-hint = zNetwork net entity
+cmu-cmd-znetwork-weather-duration-hint = Duration in seconds
+
+# Tool permissions
+cmu-cmd-toolperm-desc = Grant, revoke, or list per-tool editor permissions by ckey.
+cmu-cmd-toolperm-help = Usage: toolperm add <ckey> <tool> | toolperm remove <ckey> <tool> | toolperm list
+    Tools: { $tools }
+cmu-cmd-toolperm-no-grants = No tool grants.
+cmu-cmd-toolperm-unknown-tool = Unknown tool '{ $tool }'. Tools: { $tools }
+cmu-cmd-toolperm-granted = Granted '{ $tool }' to { $ckey }.
+cmu-cmd-toolperm-revoked = Revoked '{ $tool }' from { $ckey }.
+cmu-cmd-toolperm-no-change = Nothing changed.
