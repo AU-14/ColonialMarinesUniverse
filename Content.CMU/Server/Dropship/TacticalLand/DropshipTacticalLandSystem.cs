@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.Server.CMU14.Dropship.Integrity;
+using Content.Server.CMU14.Round;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server._RMC14.Dropship;
 using Content.Shared.CMU14.Dropship.TacticalLand;
@@ -55,6 +56,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private DropshipIntegritySystem _integrity = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private AuRoundSystem _round = default!;
 
     private static readonly TimeSpan FootprintTickInterval = TimeSpan.FromMilliseconds(150);
     private static readonly TimeSpan HoverEffectUpdateInterval = TimeSpan.FromMilliseconds(50);
@@ -424,6 +426,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
 
     private void UpdateFootprint(Entity<DropshipPilotEyeComponent> eye, TransformComponent xform)
     {
+        var allowUnmappedAir = CanHoverOverUnmappedAir(eye.Comp, xform);
         var footprintOffsets = GetRotatedFootprintOffsets(eye.Comp);
         var blocked = eye.Comp.BlockedTilesScratch;
         blocked.Clear();
@@ -454,7 +457,9 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
                 }
                 else if (!_map.TryGetTileRef(gridUid, grid, t, out var tileRef))
                 {
-                    blockedThis = true;
+                    // Empty upper maps have no chunks. Hovering must not require an
+                    // invisible floor, which would also prevent items falling through.
+                    blockedThis = !allowUnmappedAir;
                 }
                 else
                 {
@@ -496,6 +501,32 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         {
             PushUiState((console, nav), pilot);
         }
+    }
+
+    private bool CanHoverOverUnmappedAir(DropshipPilotEyeComponent eye, TransformComponent xform)
+    {
+        if (eye.Console is not { } console ||
+            !TryComp(console, out DropshipTacticalLandSessionComponent? session) ||
+            !IsTacticalHover(session, xform) ||
+            session.InitialMap is not { } initialMap ||
+            !HasComp<RMCPlanetComponent>(initialMap) ||
+            xform.MapUid is not { } map ||
+            !TryComp(map, out CMUZLevelMapComponent? level) ||
+            !_zLevels.TryMapOffset(initialMap, TacticalHoverMapOffset, out var upperMap) ||
+            upperMap.Value.Owner != map)
+        {
+            return false;
+        }
+
+        return AllowsUnmappedHoverAir(_round.SelectedPreset?.ID, _round.GetSelectedPlanet()?.MapId, level.Depth);
+    }
+
+    private static bool AllowsUnmappedHoverAir(string? preset, string? planet, int depth)
+    {
+        return depth == 1 &&
+               string.Equals(preset, "DistressSignal", StringComparison.OrdinalIgnoreCase) &&
+               !string.IsNullOrWhiteSpace(planet) &&
+               !string.Equals(planet, "hopesretreat", StringComparison.OrdinalIgnoreCase);
     }
 
     private IReadOnlyList<Vector2i> GetRotatedFootprintOffsets(DropshipPilotEyeComponent eye)

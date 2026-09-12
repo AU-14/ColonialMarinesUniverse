@@ -49,7 +49,8 @@
   mapName: "Bosenmori Basho"
   mapPath: "/Maps/_AU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ0.yml"
   mapsBelow: []
-  mapsAbove: []
+  mapsAbove:
+  - /Maps/_AU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ1.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0
