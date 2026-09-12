@@ -63,7 +63,13 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
     {
         if (comp.ActionState != CaptureObjectiveComponent.FlagActionState.Idle)
         {
-            _popup.PopupEntity($"The flag is already being {(comp.ActionState == CaptureObjectiveComponent.FlagActionState.Hoisting ? "hoisted" : "lowered")}!", uid, args.User, PopupType.Medium);
+            _popup.PopupEntity(
+                Loc.GetString(comp.ActionState == CaptureObjectiveComponent.FlagActionState.Hoisting
+                    ? "cmu-capture-objective-already-hoisting"
+                    : "cmu-capture-objective-already-lowering"),
+                uid,
+                args.User,
+                PopupType.Medium);
             return;
         }
 
@@ -80,7 +86,7 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
             comp.ActionState = CaptureObjectiveComponent.FlagActionState.Lowering;
             comp.ActionUser = args.User;
             comp.ActionUserFaction = comp.CurrentController;
-            _popup.PopupEntity($"You begin lowering the flag...", uid, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("cmu-capture-objective-begin-lowering"), uid, args.User, PopupType.Medium);
             return;
         }
 
@@ -96,7 +102,7 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
 
         if (allowed == null)
         {
-            _popup.PopupEntity($"Your faction cannot raise this flag.", uid, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("cmu-capture-objective-faction-cannot-raise"), uid, args.User, PopupType.Medium);
             return;
         }
 
@@ -106,7 +112,11 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
 
         var platoonName = GetPlatoonNameForFaction(allowed);
         var displayName = !string.IsNullOrEmpty(platoonName) ? platoonName : allowed;
-        _popup.PopupEntity($"You begin raising the flag for {displayName}...", uid, args.User, PopupType.Medium);
+        _popup.PopupEntity(
+            Loc.GetString("cmu-capture-objective-begin-raising", ("faction", displayName)),
+            uid,
+            args.User,
+            PopupType.Medium);
     }
 
     private void OnHoistFlagDoAfter(EntityUid uid, CaptureObjectiveComponent comp, CaptureHoistFlagDoAfterEvent args)
@@ -123,7 +133,7 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
         if (!string.IsNullOrEmpty(comp.CurrentController))
         {
             comp.CurrentController = string.Empty;
-            _popup.PopupEntity($"You have lowered the flag.", uid, popupUser, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("cmu-capture-objective-lowered"), uid, popupUser, PopupType.Medium);
         }
         else
         {
@@ -131,7 +141,11 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
             var allowed = comp.CurrentController;
             var platoonName = GetPlatoonNameForFaction(allowed);
             var displayName = !string.IsNullOrEmpty(platoonName) ? platoonName : allowed;
-            _popup.PopupEntity($"You have raised the flag for {displayName}.", uid, popupUser, PopupType.Medium);
+            _popup.PopupEntity(
+                Loc.GetString("cmu-capture-objective-raised", ("faction", displayName)),
+                uid,
+                popupUser,
+                PopupType.Medium);
         }
     }
 
@@ -164,7 +178,7 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
                         if (!string.IsNullOrEmpty(comp.CurrentController))
                         {
                             comp.CurrentController = string.Empty;
-                            _popup.PopupEntity($"The flag has been lowered due to heavy damage!", uid, PopupType.Medium);
+                            _popup.PopupEntity(Loc.GetString("cmu-capture-objective-damage-lowered"), uid, PopupType.Medium);
                         }
                     }
                 }
