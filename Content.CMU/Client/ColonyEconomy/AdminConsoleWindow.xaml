@@ -2,41 +2,41 @@
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client.CMU14.ColonyEconomy"
-    Title="Administration Console" MinSize="480 520">
+    Title="{Loc admin-console-title}" MinSize="480 520">
     <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8">
-            <Label Name="ColonyBudgetLabel" Access="Public" Text="Colony Budget: $0"
+            <Label Name="ColonyBudgetLabel" Access="Public" Text="{Loc admin-console-colony-budget}"
                    StyleClasses="LabelHeading" Margin="0 4" />
 
-            <Label Text="-- Sales Tax --" Margin="0 6" />
-            <Label Name="CurrentTaxLabel" Access="Public" Text="Current Sales Tax: 0%"
+            <Label Text="{Loc admin-console-sales-tax-section}" Margin="0 6" />
+            <Label Name="CurrentTaxLabel" Access="Public" Text="{Loc admin-console-current-sales-tax}"
                    Margin="0 2" />
-            <Label Text="Applies to cash vendors and corporate ASRS orders. Tax revenue goes to the colony budget."
+            <Label Text="{Loc admin-console-sales-tax-description}"
                    StyleClasses="LabelSubText" Margin="0 2" />
             <BoxContainer Orientation="Horizontal" SeparationOverride="4" Margin="0 4">
-                <Label Text="New Tax (0–50%): " />
-                <LineEdit Name="TaxInput" Access="Public" PlaceHolder="e.g. 10"
+                <Label Text="{Loc admin-console-new-tax}" />
+                <LineEdit Name="TaxInput" Access="Public" PlaceHolder="{Loc admin-console-tax-placeholder}"
                           HorizontalExpand="True" SizeFlagsStretchRatio="2" />
-                <Button Name="SetTaxButton" Access="Public" Text="Apply" />
+                <Button Name="SetTaxButton" Access="Public" Text="{Loc colony-economy-apply}" />
             </BoxContainer>
 
-            <Label Text="-- Income Tax --" Margin="0 6" />
-            <Label Name="CurrentIncomeTaxLabel" Access="Public" Text="Current Income Tax: 0%"
+            <Label Text="{Loc admin-console-income-tax-section}" Margin="0 6" />
+            <Label Name="CurrentIncomeTaxLabel" Access="Public" Text="{Loc admin-console-current-income-tax}"
                    Margin="0 2" />
-            <Label Text="Deducted from salary payouts and corporate cash withdrawals. Revenue goes to the colony budget."
+            <Label Text="{Loc admin-console-income-tax-description}"
                    StyleClasses="LabelSubText" Margin="0 2" />
             <BoxContainer Orientation="Horizontal" SeparationOverride="4" Margin="0 4">
-                <Label Text="New Tax (0–50%): " />
-                <LineEdit Name="IncomeTaxInput" Access="Public" PlaceHolder="e.g. 10"
+                <Label Text="{Loc admin-console-new-tax}" />
+                <LineEdit Name="IncomeTaxInput" Access="Public" PlaceHolder="{Loc admin-console-tax-placeholder}"
                           HorizontalExpand="True" SizeFlagsStretchRatio="2" />
-                <Button Name="SetIncomeTaxButton" Access="Public" Text="Apply" />
+                <Button Name="SetIncomeTaxButton" Access="Public" Text="{Loc colony-economy-apply}" />
             </BoxContainer>
 
-            <Label Text="-- Colony Economy Overview --" Margin="0 6" />
+            <Label Text="{Loc colony-economy-overview}" Margin="0 6" />
             <BoxContainer Name="EconomyStatusPanel" Access="Public" Orientation="Vertical" Margin="4 2" />
 
-            <Label Text="-- Third Party Support --" Margin="0 6" />
-            <Button Name="OpenThirdPartyBtn" Access="Public" Text="Open Third Party Menu"
+            <Label Text="{Loc colony-economy-third-party-support}" Margin="0 6" />
+            <Button Name="OpenThirdPartyBtn" Access="Public" Text="{Loc colony-economy-open-third-party-menu}"
                     HorizontalExpand="True" Margin="0 4" />
         </BoxContainer>
     </ScrollContainer>
