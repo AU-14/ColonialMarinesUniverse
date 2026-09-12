@@ -16,6 +16,8 @@ using Candidate = Content.Client.CMU14.ZLevels.Lighting.CMUZLevelProjectedLighti
 namespace Content.IntegrationTests.CMU14.ZLevels;
 
 [TestFixture]
+// These assertions read process-wide diagnostic counters shared by all test clients.
+[NonParallelizable]
 public sealed class CMUZClientDiagnosticsTest : GameTest
 {
     [TestCase(0.6f, 1f)]
