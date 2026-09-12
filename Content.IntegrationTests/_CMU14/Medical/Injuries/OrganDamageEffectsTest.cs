@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Reflection;
+using Content.IntegrationTests.CMU14.Medical.Anatomy;
 using Content.Server.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -157,15 +158,17 @@ public sealed class OrganDamageEffectsTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var timing = server.ResolveDependency<IGameTiming>();
         EntityUid human = default;
+        EntityUid heart = default;
 
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
+            entMan.System<CMUHeartPressureProbeSystem>();
             var index = entMan.System<CMUMedicalBodyIndexSystem>();
             human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var heart = GetOrgan<HeartComponent>(index, human);
+            heart = GetOrgan<HeartComponent>(index, human);
+            entMan.AddComponent<CMUHeartPressureProbeComponent>(human).Origin = heart;
             var heartComp = entMan.GetComponent<HeartComponent>(heart);
             GetField<Dictionary<OrganDamageStage, FixedPoint2>>(
                 heartComp,
@@ -173,7 +176,6 @@ public sealed class OrganDamageEffectsTest
             GetField<Dictionary<OrganDamageStage, FixedPoint2>>(
                 heartComp,
                 nameof(HeartComponent.ToxinPerSecond))[OrganDamageStage.Failing] = FixedPoint2.New(2);
-            SetField(heartComp, nameof(HeartComponent.NextOrganDamageTick), timing.CurTime);
             DamageOrgan(entMan, human, heart, 52);
         });
 
@@ -182,11 +184,14 @@ public sealed class OrganDamageEffectsTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
+            // Settle the interval regardless of the pooled service's scan phase, and measure
+            // heart-originated pressure separately from respiratory recovery.
+            entMan.System<SharedHeartSystem>().TickPulse(heart);
+            var pressure = entMan.GetComponent<CMUHeartPressureProbeComponent>(human);
             Assert.Multiple(() =>
             {
-                Assert.That(damage.GetValueOrDefault("Asphyxiation"), Is.GreaterThan(FixedPoint2.Zero));
-                Assert.That(damage.GetValueOrDefault("Poison"), Is.GreaterThan(FixedPoint2.Zero));
+                Assert.That(pressure.Asphyx, Is.GreaterThan(FixedPoint2.Zero));
+                Assert.That(pressure.Toxin, Is.GreaterThan(FixedPoint2.Zero));
             });
             entMan.DeleteEntity(human);
         });
