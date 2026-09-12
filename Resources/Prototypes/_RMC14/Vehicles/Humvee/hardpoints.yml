@@ -24,6 +24,7 @@
     repairRate: 0.0165
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleWheelItem
 
 - type: entity
@@ -142,6 +143,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 125
+    integrity: 125
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     showOverlay: true
@@ -189,6 +191,8 @@
   name: ARC cannon
   description: A burst-fire cannon configured for an ARC humvee turret.
   components:
+  - type: HardpointIntegrity
+    integrity: 125
   - type: Gun
     fireRate: 5 # 0.2 seconds between shots
     burstFireRate: 5
@@ -213,6 +217,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 100
+    integrity: 100
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     showOverlay: true
@@ -265,6 +270,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 100
+    integrity: 100
   - type: VehiclePlow
     structureDamageMultiplier: 1.5
   - type: HardpointVisual
@@ -289,6 +295,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleSpotlightModifier
     radiusMultiplier: 2.0
   - type: HardpointVisual
@@ -310,5 +317,6 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 100
+    integrity: 100
   - type: HardpointVisual
     vehicleState: humveehatch_0

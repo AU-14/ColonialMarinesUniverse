@@ -28,6 +28,7 @@
     repairRate: 0.0165
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleWheelItem
   - type: RemoveComponents
     components:
@@ -49,6 +50,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 350
+    integrity: 350
   - type: VehicleTurret
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
@@ -93,6 +95,7 @@
     repairRate: 0.008
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleTurret
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
@@ -142,6 +145,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 100
+    integrity: 100
   - type: HardpointVisual
     vehicleState: comms_relay_0
   - type: VehicleSensor
@@ -163,6 +167,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleTurret
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
@@ -266,6 +271,8 @@
   id: VehicleAPCM56FPWPortGunRight
   name: APC port gun (starboard)
   components:
+  - type: HardpointIntegrity
+    integrity: 100
   - type: GunFireArc
     arc: 90
     angleOffset: 90
@@ -280,6 +287,8 @@
   id: VehicleAPCM56FPWPortGunLeft
   name: APC port gun (port)
   components:
+  - type: HardpointIntegrity
+    integrity: 100
   - type: GunFireArc
     arc: 90
     angleOffset: -90

@@ -300,6 +300,7 @@ public sealed class GunOwnerPenaltyRegressionTest : GameTest
                 var hands = Server.System<SharedHandsSystem>();
                 var holders = Server.System<AttachableHolderSystem>();
                 user = Spawn("CMMobHuman", map.GridCoords, cleanup);
+                SEntMan.EnsureComponent<CMUHumanMedicalComponent>(user);
                 holder = Spawn("GunOwnerPenaltyTestHolder", map.GridCoords, cleanup);
                 plain = Spawn("GunOwnerPenaltyTestPlainGun", map.GridCoords, cleanup);
                 nested = Spawn("GunOwnerPenaltyTestAttachableA", map.GridCoords, cleanup);

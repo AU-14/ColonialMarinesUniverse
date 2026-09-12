@@ -208,6 +208,22 @@
   parent: VehicleAPCBase
   id: VehicleAPC
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: MarineMapTracked
   - type: TacticalMapTracked
   - type: TacticalMapIcon
@@ -221,6 +237,22 @@
   name: armored personnel carrier (medical)
   description: A medical-configured APC outfitted with triage markings.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: Sprite
     layers:
     - map: [ base ]
@@ -268,6 +300,22 @@
   name: armored personnel carrier (command)
   description: A command-configured APC bristling with sensors and comms gear.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: Sprite
     layers:
     - map: [ base ]
@@ -315,6 +363,22 @@
   name: UPP armored personnel carrier
   description: An armored personnel carrier configured for UPP forces.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: GridVehicleMover
     maxSpeed: 5
     acceleration: 2.0
@@ -431,6 +495,22 @@
   name: Weyland-Yutani armored personnel carrier
   description: An armored personnel carrier operated by Weyland-Yutani's private military contractors.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 7
+    energy: 3
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/apc.rsi
     layers:

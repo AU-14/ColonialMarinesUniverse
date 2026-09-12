@@ -11,7 +11,12 @@
     lockedFriendlyFactions:
     - AUWeYu
     - WeYa
-
+    friendlyFactions:
+    - AUWeYu
+    - WeYa
+    deployedFriendlyFactions:
+    - AUWeYu
+    - WeYa
 - type: entity
   parent: RMCTurretAlmayer
   id: AU14TurretAlmayerWeYu
@@ -22,7 +27,12 @@
     lockedFriendlyFactions:
     - AUWeYu
     - WeYa
-
+    friendlyFactions:
+    - AUWeYu
+    - WeYa
+    deployedFriendlyFactions:
+    - AUWeYu
+    - WeYa
 - type: entity
   parent: RMCDeployerSentry
   id: AU14DeployerSentryWeYu

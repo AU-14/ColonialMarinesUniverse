@@ -410,6 +410,8 @@
   - type: HideLayerClothing
     slots:
     - Snout
+    layers:
+      Snout: HEAD
   - type: MycotoxinProtection
     fullProtection: true
 
@@ -457,6 +459,8 @@
     - Snout
 
 # M3-T Demo Spec
+    layers:
+      Snout: HEAD
 - type: entity
   parent: ArmorHelmetM10
   id: RMCArmorHelmetM3TDemo

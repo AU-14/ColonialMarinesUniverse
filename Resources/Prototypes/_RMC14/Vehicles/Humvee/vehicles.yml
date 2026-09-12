@@ -207,6 +207,15 @@
   parent: VehicleHumveeBase
   id: VehicleHumvee
   components:
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+  - type: PointLight
+    radius: 6
   - type: ItemSlots
     slots:
       turret:
@@ -222,13 +231,24 @@
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
-
+    integrity: 1000
 - type: entity
   parent: VehicleHumveeBase
   id: VehicleHumveeMedical
   name: humvee (medical)
   description: A medical-configured humvee outfitted for field triage.
   components:
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: support
+    - state: ""
+      layer: support-2
+  - type: PointLight
+    radius: 6
   - type: Damageable
     damageModifierSet: StructuralMarine
   - type: Injurable
@@ -236,6 +256,7 @@
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
+    integrity: 1000
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/humvee_medical.rsi
     layers:
@@ -300,6 +321,17 @@
   name: humvee (transport)
   description: A transport humvee configured for passenger movement.
   components:
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: support
+    - state: ""
+      layer: support-2
+  - type: PointLight
+    radius: 6
   - type: Damageable
     damageModifierSet: VehicleFrameHumvee
   - type: Injurable
@@ -307,6 +339,7 @@
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
+    integrity: 1000
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/humvee_transport.rsi
     layers:
@@ -371,6 +404,15 @@
   name: humvee (arc)
   description: A humvee configured for ARC interior layout.
   components:
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+  - type: PointLight
+    radius: 6
   - type: ItemSlots
     slots:
       turret:
@@ -386,6 +428,7 @@
   - type: HardpointIntegrity
     maxIntegrity: 800
     bypassEntryOnZero: true
+    integrity: 800
   - type: VehicleDeployable
     deployTime: 5
     undeployTime: 5

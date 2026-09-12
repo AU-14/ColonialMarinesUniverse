@@ -35,3 +35,32 @@
         - ReagentId: AbominationVenom
           Quantity: 15
   - type: Injector
+
+# Weyland-Yutani's counteragent cures infection at any stage.
+- type: reagent
+  id: AbominationCounteragent
+  name: reagent-name-abomination-counteragent
+  group: Biological
+  desc: reagent-desc-abomination-counteragent
+  physicalDesc: reagent-physical-desc-opaque
+  flavor: bitter
+  color: "#7fb2a5"
+  metabolisms:
+    Bloodstream:
+      effects:
+      - !type:CureAbominationInfection
+        probability: 1.0
+
+- type: entity
+  parent: BaseSyringe
+  id: AU14AbominationCounteragentSyringe
+  name: experimental counteragent syringe
+  description: A syringe of pale, opaque fluid. The label just reads 'COUNTERAGENT - TEST BATCH'.
+  components:
+  - type: Solution
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: AbominationCounteragent
+        Quantity: 15
+  - type: Injector

@@ -18,6 +18,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 100
+    integrity: 100
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
@@ -66,6 +67,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 350
+    integrity: 350
   - type: VehicleTurret
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/sppvan.rsi
@@ -106,6 +108,8 @@
   name: SPP van wheel
   description: A reinforced wheel for SPP vans.
   components:
+  - type: HardpointIntegrity
+    integrity: 250
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/sppvan.rsi
     state: spp_tires

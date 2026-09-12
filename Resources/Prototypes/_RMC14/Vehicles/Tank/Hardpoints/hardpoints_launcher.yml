@@ -14,6 +14,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 300
+    integrity: 300
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -89,6 +90,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -162,6 +164,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -231,6 +234,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 350
+    integrity: 350
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -299,6 +303,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 350
+    integrity: 350
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -366,6 +371,7 @@
     repairRate: 0.0125
   - type: HardpointIntegrity
     maxIntegrity: 350
+    integrity: 350
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: false

@@ -414,12 +414,17 @@
   parent: VehicleBoxVanBase
   id: VehicleBoxVan
 
+  components:
+  - type: PointLight
+    radius: 6
 - type: entity
   parent: VehicleBoxVanBase
   id: VehiclePizzaVan
   name: pizza van
   description: A van repurposed for pizza delivery, still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/pizza_van.rsi
     offset: "0,0.5"
@@ -510,6 +515,9 @@
     - map: [ rmc-wheels ]
       state: wheels_1
   - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: secondary
   - type: ItemSlots
     slots:
       secondary:
@@ -622,6 +630,8 @@
   name: Kheshig-1 LMP (logistics)
   description: A mine-resistant, multi-purpose vehicle utilized by the UPP for groundside operations.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/sppvan_logistics.rsi
     layers:
@@ -664,6 +674,8 @@
   name: CMB paddywagon
   description: A van used by the Colonial Marshal Bureau to transport both prisoners and officers alike.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/marshalpaddywagon.rsi
     offset: "0,0.5"

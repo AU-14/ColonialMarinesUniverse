@@ -371,17 +371,67 @@
   parent: VehicleBlackfootBase
   id: VehicleBlackfoot
 
+  components:
+  - type: HardpointIntegrity
+    integrity: 500
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: thrusters
+    - state: ""
+      layer: launchers
+    - state: ""
+      layer: support
 - type: entity
   parent: VehicleBlackfootDoorGunBase
   id: VehicleBlackfootDoorGunVariant
   suffix: Door Gun
 
+  components:
+  - type: HardpointIntegrity
+    integrity: 500
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: thrusters
+    - state: ""
+      layer: launchers
+    - state: ""
+      layer: door-gun
+    - state: ""
+      layer: support
 - type: entity
   parent: VehicleBlackfootReconBase
   id: VehicleBlackfootRecon
   suffix: Recon
 
+  components:
+  - type: HardpointIntegrity
+    integrity: 500
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: thrusters
+    - state: ""
+      layer: launchers
+    - state: ""
+      layer: door-gun
+    - state: ""
+      layer: support
+    - state: ""
+      layer: sensors
 - type: entity
   parent: VehicleBlackfootTransportBase
   id: VehicleBlackfootTransport
   suffix: Transport
+  components:
+  - type: HardpointIntegrity
+    integrity: 500
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: thrusters
+    - state: ""
+      layer: launchers
+    - state: ""
+      layer: support

@@ -163,7 +163,7 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
             var vehicle = ClientEntity("ActionVehicleToggleView");
 
             AssertRsiLayer(spriteSystem, ClientEntity("ActionMarineCallToAttention"), ActionVisuals.Icon,
-                "/Textures/Actions/GOVFOR/call_to_attention.rsi", "attention", visible: true);
+                "/Textures/CMU14/Actions/GOVFOR/call_to_attention.rsi", "attention", visible: true);
             AssertRsiLayer(spriteSystem, ClientEntity("RMCActionViewIntelObjectives"), ActionVisuals.Icon,
                 "/Textures/_RMC14/Objects/Misc/paper.rsi", "folder_white", visible: true);
             AssertTextureLayer(spriteSystem, ClientEntity("ActionWendigoVoice"), ActionVisuals.Icon,

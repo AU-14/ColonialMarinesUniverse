@@ -207,6 +207,11 @@
     - HeadTop
     - HeadSide
     - Snout
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Mask/coif.rsi
   - type: IdentityBlocker
@@ -233,6 +238,12 @@
   id: RMCMaskCoifGreen
   name: UNMC green balaclava
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/green_coif.rsi
   - type: Clothing
@@ -243,6 +254,12 @@
   id: RMCMaskCoifGrey
   name: UNMC grey balaclava
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/grey_coif.rsi
   - type: Clothing
@@ -253,6 +270,12 @@
   id: RMCMaskCoifTan
   name: UNMC tan balaclava
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/tan_coif.rsi
   - type: Clothing
@@ -264,6 +287,12 @@
   name: M8 pattern armored coif
   description: An armored coif designed to conceal both the identity of the operator and act as an air-filter.
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: CMArmor
     melee: 20
     bio: 30
@@ -307,11 +336,24 @@
   name: SOF armored balaclava
   description: Designed for maximum protection -- and badassery. Provides protection against facial attacks, filters toxins, and conceals the wearer's identity.
 
+  components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
 - type: entity
   parent: RMCMaskBalaclavaMARSOC
   id: RMCMaskBalaclavaSPPCommando
   name: UPP armored commando balaclava
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/spp_commando_coif.rsi
   - type: Clothing
@@ -389,6 +431,12 @@
   name: keffiyeh
   description: A traditional headscarf worn for protection from the elements and to conceal the face. Typically made of cotton, it can provide shade from the sun, guard against dust, and serve as camouflage in arid environments. Often worn by soldiers and civilians alike in desert and hostile regions, the keffiyeh has become a symbol of cultural identity and resilience.
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh.rsi
   - type: Clothing
@@ -400,6 +448,12 @@
   parent: RMCMaskKeffiyeh
   id: RMCMaskKeffiyehBlack
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_black.rsi
   - type: Clothing
@@ -409,6 +463,12 @@
   parent: RMCMaskKeffiyeh
   id: RMCMaskKeffiyehBlue
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_blue.rsi
   - type: Clothing
@@ -418,6 +478,12 @@
   parent: RMCMaskKeffiyeh
   id: RMCMaskKeffiyehGreen
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_green.rsi
   - type: Clothing
@@ -427,6 +493,12 @@
   parent: RMCMaskKeffiyeh
   id: RMCMaskKeffiyehWhite
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_white.rsi
   - type: Clothing
@@ -436,6 +508,12 @@
   parent: RMCMaskKeffiyeh
   id: RMCMaskKeffiyehRed
   components:
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_red.rsi
   - type: Clothing

@@ -234,6 +234,23 @@
   parent: VehicleTankBase
   id: VehicleTank
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
   - type: MarineMapTracked
   - type: TacticalMapTracked
   - type: TacticalMapIcon
@@ -247,6 +264,23 @@
   name: M34A2 Longstreet 'Yutani'
   description: A light tank used by the Yutani Corporation for security and military operations, often seen in colonial sectors where Yutani has a presence.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/wytank.rsi
     layers:
@@ -302,6 +336,17 @@
   name: M34E1 Armored Engineering Vehicle
   description: An unarmed engineering vehicle built on the chassis of a Longstreet Tank, fitted with a reinforced plow, built for hauling personnel/cargo and clearing enemy defenses without interrupting the flow of combat.
   components:
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
   - type: VehiclePlowChassis
     structureDamageMultiplier: 4
     poweredDemolitionDamagePerSecond: 2000
@@ -362,6 +407,7 @@
   - type: HardpointIntegrity
     maxIntegrity: 1500
     bypassEntryOnZero: true
+    integrity: 1500
   - type: GridVehicleMover
     maxSpeed: 1.8
     acceleration: 0.9
@@ -384,7 +430,7 @@
     wallSmashSlowdownDuration: 0.2
     speedAtZeroIntegrity: 0.7
   - type: VehicleEnter
-    interiorPath: /Maps/Vehicles/arv.yml
+    interiorPath: /Maps/CMU14/Vehicles/arv.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -403,6 +449,23 @@
   name: Cheetah 2A Light Tank
   description: A light-weight tank made for all ground forces of the UPP.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
   - type: VehicleEnter
     interiorPath: /Maps/_RMC14/Vehicles/spp_tank_interior.yml
     enterDoAfter: 1.0
@@ -501,6 +564,23 @@
   name: Cheetah 2A Light Command Tank
   description: A light-weight command tank made for all ground forces of the UPP.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
   - type: VehicleEnter
     interiorPath: /Maps/_RMC14/Vehicles/spp_tank_command_interior.yml
     enterDoAfter: 1.0
@@ -518,6 +598,23 @@
   name: FV150 Hobelar LCT
   description: The FV150 ‘Hobelar’ Light Cavalry Tank is a 6m long, 6m wide, 8m tall support vehicle for the RMC. Originally procured for the Special Air Service operations as an Airborne tank, this model has been made into a support vehicle for the Royal Marines thanks to a change of symbol and technological design. Entrance at the back.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
   - type: VehicleEnter
     interiorPath: /Maps/_RMC14/Vehicles/tank_interior.yml
     enterDoAfter: 1.0

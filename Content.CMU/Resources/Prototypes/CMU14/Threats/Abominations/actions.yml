@@ -261,9 +261,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Structures/Machines/map_table.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Structures/Machines/map_table.rsi
       state: maptable
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:OpenTacticalMapActionEvent
 
@@ -275,9 +277,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: Objects/Specific/Chemistry/syringe.rsi
-      state: syringe_base0
     useDelay: 120
+  - type: Sprite
+    layers:
+    - sprite: Objects/Specific/Chemistry/syringe.rsi
+      state: syringe_base0
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:AbominationMimicDrawVenomActionEvent

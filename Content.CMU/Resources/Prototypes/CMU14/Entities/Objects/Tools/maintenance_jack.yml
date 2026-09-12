@@ -79,12 +79,18 @@
     - Screwdriver
   - type: Tool
     qualities:
-      - Prying
-      - Anchoring
-      - Screwing
-      - VehicleServicing
-    useSound:
-      path: /Audio/Items/jaws_pry.ogg
+    - Prying
+    useSound: !type:SoundPathSpecifier
+      path: /Audio/Items/crowbar.ogg
+      params:
+        volume: 0
+        variation: null
+        rolloffFactor: 1
+        referenceDistance: 1
+        playOffsetSeconds: 0
+        pitch: 1
+        maxDistance: 15
+        loop: False
   - type: Prying
     pryPowered: true
     force: true

@@ -125,6 +125,7 @@ public sealed class ReagentGrinderWorkflowTest : GameTest
         await server.WaitPost(() =>
         {
             var transform = server.EntMan.System<SharedTransformSystem>();
+            transform.Unanchor(nearest);
             transform.SetCoordinates(nearest, map.GridCoords.Offset(new Vector2(20, 0)));
         });
         await Pair.RunTicksSync(2);

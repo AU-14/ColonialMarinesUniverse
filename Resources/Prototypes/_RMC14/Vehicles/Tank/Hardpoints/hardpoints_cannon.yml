@@ -14,6 +14,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 550
+    integrity: 550
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -77,6 +78,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 400
+    integrity: 400
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     fireWhileRotatingGraceDegrees: 180
@@ -120,6 +122,7 @@
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 4
     accuracyMultiplierUnwielded: 4
+    modifiedAccuracyMultiplier: 4
   - type: BallisticAmmoProvider
     cycleable: false
     proto: VehicleCartridgeLTAAAP
@@ -161,6 +164,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 550
+    integrity: 550
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -231,6 +235,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -299,6 +304,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -365,6 +371,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 450
+    integrity: 450
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     showOverlay: true

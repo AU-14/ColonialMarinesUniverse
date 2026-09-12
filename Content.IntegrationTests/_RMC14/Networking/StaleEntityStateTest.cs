@@ -5,8 +5,10 @@ using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Sentinel;
 using Content.Shared.Botany.Items.Components;
+using Content.Shared.CombatMode;
 using Content.Shared.Placeable;
 using Content.Shared.Projectiles;
+using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -19,6 +21,8 @@ namespace Content.IntegrationTests.Tests._RMC14.Networking;
 public sealed class StaleEntityStateTest
 {
     [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Shooter))]
+    [TestCase(typeof(TimerTriggerComponent), nameof(TimerTriggerComponent.User))]
+    [TestCase(typeof(CombatModeComponent), nameof(CombatModeComponent.CombatToggleActionEntity))]
     [TestCase(typeof(RMCConstructionPreventCollideComponent), nameof(RMCConstructionPreventCollideComponent.Target))]
     [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Weapon))]
     [TestCase(typeof(XenoIntoxicatedComponent), nameof(XenoIntoxicatedComponent.LastSource))]

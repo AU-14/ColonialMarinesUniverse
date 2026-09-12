@@ -202,7 +202,7 @@ public sealed class StunBatonTests : InteractionTest
 
         // Spawn a target mob.
         await SpawnTarget(HumanProtoId);
-        SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value);
+        await Server.WaitPost(() => SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value));
         var standingStateComp = Comp<StandingStateComponent>();
         var staminaComp = Comp<StaminaComponent>();
         Entity<DamageableComponent> mob = (STarget.Value, Comp<DamageableComponent>());
@@ -276,7 +276,7 @@ public sealed class StunBatonTests : InteractionTest
 
         // Spawn a target mob.
         await SpawnTarget(HumanProtoId);
-        SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value);
+        await Server.WaitPost(() => SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value));
         var standingStateComp = Comp<StandingStateComponent>();
         var staminaComp = Comp<StaminaComponent>();
         Entity<DamageableComponent> mob = (STarget.Value, Comp<DamageableComponent>());

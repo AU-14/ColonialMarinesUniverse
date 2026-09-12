@@ -235,6 +235,14 @@ public abstract partial class GameTest
             // So not yet.
             if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
             {
+                // Dirty disposal emits a warning that can replace the adapter's failure message.
+                TestContext.Progress.WriteLine(TestContext.CurrentContext.Result.Message);
+                TestContext.Progress.WriteLine(TestContext.CurrentContext.Result.StackTrace);
+                foreach (var assertion in TestContext.CurrentContext.Result.Assertions)
+                {
+                    TestContext.Progress.WriteLine(assertion.Message);
+                    TestContext.Progress.WriteLine(assertion.StackTrace);
+                }
                 _pairDestroyed = true; // Blow it up, we failed and it might be screwed.
                 return;
             }
@@ -247,10 +255,10 @@ public abstract partial class GameTest
             // And other teardown logic will go here. Eventually.
 
         }
-        catch (Exception)
+        catch (Exception exception)
         {
             _pairDestroyed = true;
-            Assert.Fail();
+            TestContext.Progress.WriteLine(exception);
             throw;
         }
         finally
