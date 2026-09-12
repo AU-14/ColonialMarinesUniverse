@@ -35,7 +35,7 @@ public sealed partial class WendigoVoiceWindow : DefaultWindow
 
         var allButton = new Button
         {
-            Text = "All",
+            Text = Loc.GetString("wendigo-voice-category-all"),
             HorizontalExpand = true,
             ToggleMode = true,
             Pressed = _selectedCategory == null
@@ -113,7 +113,7 @@ public sealed partial class WendigoVoiceWindow : DefaultWindow
         {
             LineList.AddChild(new Label
             {
-                Text = "No results.",
+                Text = Loc.GetString("wendigo-voice-no-results"),
                 FontColorOverride = Color.FromHex("#888888"),
                 HorizontalAlignment = HAlignment.Center,
                 Margin = new(0, 12)
