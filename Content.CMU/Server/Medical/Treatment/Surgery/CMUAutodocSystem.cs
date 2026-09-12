@@ -123,6 +123,9 @@ public sealed partial class CMUAutodocSystem : EntitySystem
                 continue;
             }
 
+            if (Paused(console))
+                continue;
+
             RefreshUi(console, comp);
         }
 

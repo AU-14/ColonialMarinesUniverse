@@ -51,7 +51,8 @@ public sealed class HiddenAppearanceSystem : EntitySystem
 
     private void OnSetGenderMapInit(Entity<RMCSetGenderOnMapInitComponent> ent, ref MapInitEvent args)
     {
-        _profile.SetGender(ent.Owner, ent.Comp.Gender);
+        if (TryComp<HumanoidProfileComponent>(ent, out var profile))
+            _profile.SetGender((ent.Owner, profile), ent.Comp.Gender);
     }
 
     private void OnHidePlayerIdentitiesChanged(bool value)

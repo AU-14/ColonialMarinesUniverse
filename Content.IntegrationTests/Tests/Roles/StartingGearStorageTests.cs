@@ -26,6 +26,7 @@ public sealed class StartingGearPrototypeStorageTest : GameTest
         var protos = server.ProtoMan
             .EnumeratePrototypes<StartingGearPrototype>()
             .Where(p => !p.Abstract)
+            .Where(p => !pair.IsTestPrototype(p))
             .ToList()
             .OrderBy(p => p.ID);
 

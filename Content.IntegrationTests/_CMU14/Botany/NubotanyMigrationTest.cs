@@ -142,6 +142,7 @@ public sealed class NubotanyMigrationTest
             Assert.That(solution!.Value.Comp.Solution.GetTotalPrototypeQuantity("CMUUrishiol"),
                 Is.EqualTo((FixedPoint2) 3),
                 "The mango packet's deliberate urishiol payload was lost during the plantId migration.");
+            server.EntMan.DeleteEntity(mangoPacket);
         });
 
         await pair.CleanReturnAsync();

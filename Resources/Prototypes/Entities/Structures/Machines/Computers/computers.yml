@@ -363,6 +363,12 @@
   name: criminal records computer
   description: This can be used to check criminal records. Only security can modify them.
   components:
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: CriminalRecordsConsole
   - type: UserInterface
     interfaces:

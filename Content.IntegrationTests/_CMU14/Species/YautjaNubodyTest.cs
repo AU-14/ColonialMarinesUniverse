@@ -19,33 +19,33 @@ public sealed class YautjaNubodyTest : GameTest
 {
     private static readonly Dictionary<string, string> ExternalOrgans = new()
     {
-        ["Torso"] = "OrganYautjaTorso",
-        ["Head"] = "OrganYautjaHead",
-        ["ArmLeft"] = "OrganYautjaArmLeft",
-        ["ArmRight"] = "OrganYautjaArmRight",
-        ["HandLeft"] = "OrganYautjaHandLeft",
-        ["HandRight"] = "OrganYautjaHandRight",
-        ["LegLeft"] = "OrganYautjaLegLeft",
-        ["LegRight"] = "OrganYautjaLegRight",
-        ["FootLeft"] = "OrganYautjaFootLeft",
-        ["FootRight"] = "OrganYautjaFootRight",
+        ["Torso"] = "CMUPartYautjaTorso",
+        ["Head"] = "CMUPartYautjaHead",
+        ["ArmLeft"] = "CMUPartYautjaLeftArm",
+        ["ArmRight"] = "CMUPartYautjaRightArm",
+        ["HandLeft"] = "CMUPartYautjaLeftHand",
+        ["HandRight"] = "CMUPartYautjaRightHand",
+        ["LegLeft"] = "CMUPartYautjaLeftLeg",
+        ["LegRight"] = "CMUPartYautjaRightLeg",
+        ["FootLeft"] = "CMUPartYautjaLeftFoot",
+        ["FootRight"] = "CMUPartYautjaRightFoot",
     };
 
     private static readonly Dictionary<string, string> InternalOrgans = new()
     {
-        ["Brain"] = "OrganHumanBrain",
-        ["Eyes"] = "OrganHumanEyes",
-        ["Lungs"] = "OrganHumanLungs",
-        ["Heart"] = "OrganHumanHeart",
-        ["Stomach"] = "OrganHumanStomach",
-        ["Liver"] = "OrganHumanLiver",
-        ["Kidneys"] = "OrganHumanKidneys",
+        ["Brain"] = "CMUOrganHumanBrain",
+        ["Eyes"] = "CMUOrganHumanEyes",
+        ["Lungs"] = "CMUOrganHumanLungs",
+        ["Heart"] = "CMUOrganHumanHeart",
+        ["Stomach"] = "CMUOrganHumanStomach",
+        ["Liver"] = "CMUOrganHumanLiver",
+        ["Kidneys"] = "CMUOrganHumanKidneys",
     };
 
     [SidedDependency(Side.Server)] private HumanoidOrganAppearanceSystem _organAppearance = default!;
 
     [Test]
-    public async Task ConservativeGraphPreservesVisualsWithoutAddingMedicalOrgans()
+    public async Task MedicalGraphPreservesYautjaVisuals()
     {
         await Server.WaitIdleAsync();
         await Server.WaitAssertion(() =>
@@ -84,10 +84,10 @@ public sealed class YautjaNubodyTest : GameTest
 
                     Assert.Multiple(() =>
                     {
-                        Assert.That(SEntMan.HasComponent<BodyPartHealthComponent>(organ), Is.False,
-                            "the conservative bridge must not grant legacy part-health behavior");
-                        Assert.That(SEntMan.HasComponent<OrganHealthComponent>(organ), Is.False,
-                            "stock Human internals must not silently become CMU medical organs");
+                        Assert.That(SEntMan.HasComponent<BodyPartHealthComponent>(organ), Is.EqualTo(ExternalOrgans.ContainsKey(organComponent.Category.Value.Id)),
+                            "external anatomy must retain regional damage support");
+                        Assert.That(SEntMan.HasComponent<OrganHealthComponent>(organ), Is.EqualTo(InternalOrgans.ContainsKey(organComponent.Category.Value.Id)),
+                            "internal anatomy must retain organ-health support");
                     });
                 }
 

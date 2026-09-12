@@ -945,7 +945,7 @@
 - type: tile
   id: CMUBosenmoriExact103c10c90bd42017
   # CMSS13 source: /turf/open/floor/whitebluefull/northeast
-  name: "northeast"
+  name: cmu-bosenmori-tile-northeast
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/b3a201db17ca012b8df6.png
   baseTurf: Plating
   isSubfloor: false
@@ -987,7 +987,7 @@
 - type: tile
   id: CMUBosenmoriExact1093d1b84374c419
   # CMSS13 source: /turf/open/floor/warningcorner
-  name: "warningcorner"
+  name: cmu-bosenmori-tile-warningcorner
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/53aebc6a93e995ff7fa2.png
   baseTurf: Plating
   isSubfloor: false
@@ -1621,7 +1621,7 @@
 - type: tile
   id: CMUBosenmoriExact1ce6de74cae9decc
   # CMSS13 source: /turf/open/floor/filtrationside/west
-  name: "west filtrationside"
+  name: cmu-bosenmori-tile-west-filtrationside
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/dd81f7103f95dc8b8ff0.png
   baseTurf: Plating
   isSubfloor: false
@@ -2084,7 +2084,7 @@
 - type: tile
   id: CMUBosenmoriExact247a752584dcd21a
   # CMSS13 source: /turf/open/desert/desert_shore/shore_corner1
-  name: "shore corner1"
+  name: cmu-bosenmori-tile-shore-corner1
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/0d1ee7294b2192917ce3.png
   baseTurf: Plating
   isSubfloor: false
@@ -2198,7 +2198,7 @@
 - type: tile
   id: CMUBosenmoriExact26d204550cac6a48
   # CMSS13 source: /turf/open/floor/strata/faux_metal
-  name: "faux metal"
+  name: cmu-bosenmori-tile-faux-metal
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/9c2ff1e7781ff4eddf1d.png
   baseTurf: Plating
   isSubfloor: false
@@ -2875,7 +2875,7 @@
 - type: tile
   id: CMUBosenmoriExact30c5ac3525c1c3ce
   # CMSS13 source: /turf/open/floor/plating/plating_catwalk
-  name: "plating catwalk"
+  name: cmu-bosenmori-tile-plating-catwalk
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/03e5c9b49774d729434c.png
   baseTurf: Plating
   isSubfloor: false
@@ -3046,7 +3046,7 @@
 - type: tile
   id: CMUBosenmoriExact3382f163dceaacf7
   # CMSS13 source: /turf/open/floor/warningcorner/north
-  name: "north warningcorner"
+  name: cmu-bosenmori-tile-north-warningcorner
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/53aebc6a93e995ff7fa2.png
   baseTurf: Plating
   isSubfloor: false
@@ -3078,7 +3078,7 @@
 - type: tile
   id: CMUBosenmoriExact33bb35301abf7ff9
   # CMSS13 source: /turf/open/floor/almayer/w_y2
-  name: "w y2"
+  name: cmu-bosenmori-tile-w-y2
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/eaf632582eb2c3993e75.png
   baseTurf: Plating
   isSubfloor: false
@@ -3471,7 +3471,7 @@
 - type: tile
   id: CMUBosenmoriExact38e6df894d4c22e7
   # CMSS13 source: /turf/open/floor/filtrationside/northeast
-  name: "northeast"
+  name: cmu-bosenmori-tile-northeast
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/dd81f7103f95dc8b8ff0.png
   baseTurf: Plating
   isSubfloor: false
@@ -4074,7 +4074,7 @@
 - type: tile
   id: CMUBosenmoriExact40a365888e916637
   # CMSS13 source: /turf/open/floor/almayer/plating_striped/west
-  name: "west plating striped"
+  name: cmu-bosenmori-tile-west-plating-striped
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/ef38a81b9571b6c5e64c.png
   baseTurf: Plating
   isSubfloor: false
@@ -4864,7 +4864,7 @@
 - type: tile
   id: CMUBosenmoriExact4f1141cdf862bd1e
   # CMSS13 source: /turf/open/floor/interior/plastic/alt
-  name: "alt"
+  name: cmu-bosenmori-tile-alt
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/79e42f62b27176d2d5dc.png
   baseTurf: Plating
   isSubfloor: false
@@ -5022,7 +5022,7 @@
 - type: tile
   id: CMUBosenmoriExact512586c934fb2767
   # CMSS13 source: /turf/open/floor/filtrationside/north
-  name: "north filtrationside"
+  name: cmu-bosenmori-tile-north-filtrationside
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/dd81f7103f95dc8b8ff0.png
   baseTurf: Plating
   isSubfloor: false
@@ -5374,7 +5374,7 @@
 - type: tile
   id: CMUBosenmoriExact56d5fd8a6ccdee20
   # CMSS13 source: /turf/open/floor/plating/plating_catwalk/aicore
-  name: "aicore"
+  name: cmu-bosenmori-tile-aicore
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/9728ccc954f6e85b2651.png
   baseTurf: Plating
   isSubfloor: false
@@ -6378,7 +6378,7 @@
 - type: tile
   id: CMUBosenmoriExact66b0de159b0c15c5
   # CMSS13 source: /turf/open/floor/almayer/tcomms
-  name: "tcomms"
+  name: cmu-bosenmori-tile-tcomms
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/49cd32a16f8b6e159202.png
   baseTurf: Plating
   isSubfloor: false
@@ -6570,7 +6570,7 @@
 - type: tile
   id: CMUBosenmoriExact690809b1e794a816
   # CMSS13 source: /turf/open/floor/almayer/w_y1
-  name: "w y1"
+  name: cmu-bosenmori-tile-w-y1
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/6f6acb48ada8ab7b0c2e.png
   baseTurf: Plating
   isSubfloor: false
@@ -6884,7 +6884,7 @@
 - type: tile
   id: CMUBosenmoriExact6d274f672a351ee3
   # CMSS13 source: /turf/open/floor/almayer/research/containment/corner4
-  name: "corner4"
+  name: cmu-bosenmori-tile-corner4
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/bb98369c98c2a91a6fd9.png
   baseTurf: Plating
   isSubfloor: false
@@ -6939,7 +6939,7 @@
 - type: tile
   id: CMUBosenmoriExact6e4ddee9acf12afe
   # CMSS13 source: /turf/open/floor/filtrationside/northwest
-  name: "northwest"
+  name: cmu-bosenmori-tile-northwest
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/dd81f7103f95dc8b8ff0.png
   baseTurf: Plating
   isSubfloor: false
@@ -7076,7 +7076,7 @@
 - type: tile
   id: CMUBosenmoriExact71458b9636ce49b2
   # CMSS13 source: /turf/open/floor/almayer_hull/blackfull
-  name: "blackfull"
+  name: cmu-bosenmori-tile-blackfull
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/20b6e0b4985224cab19e.png
   baseTurf: Plating
   isSubfloor: false
@@ -7620,7 +7620,7 @@
 - type: tile
   id: CMUBosenmoriExact79b8f78e5002f1a6
   # CMSS13 source: /turf/open/floor/filtrationside/east
-  name: "east filtrationside"
+  name: cmu-bosenmori-tile-east-filtrationside
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/dd81f7103f95dc8b8ff0.png
   baseTurf: Plating
   isSubfloor: false
@@ -9149,7 +9149,7 @@
 - type: tile
   id: CMUBosenmoriExact93f730d271a121f9
   # CMSS13 source: /turf/open/floor/shiva/floor3
-  name: "floor3"
+  name: cmu-bosenmori-tile-floor3
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/d96f730aad18a4d1f3da.png
   baseTurf: Plating
   isSubfloor: false
@@ -9227,7 +9227,7 @@
 - type: tile
   id: CMUBosenmoriExact954361d14f9ec125
   # CMSS13 source: /turf/open/floor/shiva/multi_tiles/east
-  name: "east multi tiles"
+  name: cmu-bosenmori-tile-east-multi-tiles
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/f3682ec283000dacf3ec.png
   baseTurf: Plating
   isSubfloor: false
@@ -9852,7 +9852,7 @@
 - type: tile
   id: CMUBosenmoriExacta19958615384b143
   # CMSS13 source: /turf/open/desert/desert_shore/shore_corner1/north
-  name: "north shore corner1"
+  name: cmu-bosenmori-tile-north-shore-corner1
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/5607fc50f457f2012d79.png
   baseTurf: Plating
   isSubfloor: false
@@ -10271,7 +10271,7 @@
 - type: tile
   id: CMUBosenmoriExacta77eb44c355bd64b
   # CMSS13 source: /turf/open/floor/redyellowfull
-  name: "redyellowfull"
+  name: cmu-bosenmori-tile-redyellowfull
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/fea75ba6b8f840ac77f9.png
   baseTurf: Plating
   isSubfloor: false
@@ -10568,7 +10568,7 @@
 - type: tile
   id: CMUBosenmoriExactab8251ee5c239b14
   # CMSS13 source: /turf/open/floor/almayer/w_y0
-  name: "w y0"
+  name: cmu-bosenmori-tile-w-y0
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/6890e20f926fb247a89c.png
   baseTurf: Plating
   isSubfloor: false
@@ -10656,7 +10656,7 @@
 - type: tile
   id: CMUBosenmoriExactad02ed385ec0290f
   # CMSS13 source: /turf/open/floor/almayer/research/containment/corner/east
-  name: "east corner"
+  name: cmu-bosenmori-tile-east-corner
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/b598bdf3d949167c61e0.png
   baseTurf: Plating
   isSubfloor: false
@@ -10816,7 +10816,7 @@
 - type: tile
   id: CMUBosenmoriExactaed0c4297b2926bf
   # CMSS13 source: /turf/open/floor/almayer/plating_striped/east
-  name: "east plating striped"
+  name: cmu-bosenmori-tile-east-plating-striped
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/ef38a81b9571b6c5e64c.png
   baseTurf: Plating
   isSubfloor: false
@@ -11009,7 +11009,7 @@
 - type: tile
   id: CMUBosenmoriExactb2a41c460b582db8
   # CMSS13 source: /turf/open/floor/warningcorner/west
-  name: "west warningcorner"
+  name: cmu-bosenmori-tile-west-warningcorner
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/53aebc6a93e995ff7fa2.png
   baseTurf: Plating
   isSubfloor: false
@@ -11277,7 +11277,7 @@
 - type: tile
   id: CMUBosenmoriExactb78a603081ca15fa
   # CMSS13 source: /turf/open/floor/almayer/research/containment/floor2/north
-  name: "north floor2"
+  name: cmu-bosenmori-tile-north-floor2
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/1b5f49155763e787c6c1.png
   baseTurf: Plating
   isSubfloor: false
@@ -11285,7 +11285,7 @@
 - type: tile
   id: CMUBosenmoriExactb7a930fbbff0674a
   # CMSS13 source: /turf/open/floor/plating/plating_catwalk/aicore/white
-  name: "white aicore"
+  name: cmu-bosenmori-tile-white-aicore
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/be0e97f51376a9f51d14.png
   baseTurf: Plating
   isSubfloor: false
@@ -11809,7 +11809,7 @@
 - type: tile
   id: CMUBosenmoriExactc23826c4eddf6edd
   # CMSS13 source: /turf/open/floor/almayer/research/containment/corner2
-  name: "corner2"
+  name: cmu-bosenmori-tile-corner2
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/1e1b4410fb56cb6d0b64.png
   baseTurf: Plating
   isSubfloor: false
@@ -12239,7 +12239,7 @@
 - type: tile
   id: CMUBosenmoriExactc89ef7d1baa4ed75
   # CMSS13 source: /turf/open/floor/almayer/research/containment/corner3
-  name: "corner3"
+  name: cmu-bosenmori-tile-corner3
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/76b68bb87e30c6baf8ad.png
   baseTurf: Plating
   isSubfloor: false
@@ -12628,7 +12628,7 @@
 - type: tile
   id: CMUBosenmoriExactcd4ae5b4a2423514
   # CMSS13 source: /turf/open/desert/desert_shore/shore_corner1/west
-  name: "west shore corner1"
+  name: cmu-bosenmori-tile-west-shore-corner1
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/77c69c52e82d6fd15261.png
   baseTurf: Plating
   isSubfloor: false
@@ -13346,7 +13346,7 @@
 - type: tile
   id: CMUBosenmoriExactda3eac70cae1a077
   # CMSS13 source: /turf/open/floor/almayer/research/containment/corner/north
-  name: "north corner"
+  name: cmu-bosenmori-tile-north-corner
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/b598bdf3d949167c61e0.png
   baseTurf: Plating
   isSubfloor: false
@@ -13378,7 +13378,7 @@
 - type: tile
   id: CMUBosenmoriExactdadc6df0e2c8f84d
   # CMSS13 source: /turf/open/floor/shiva/multi_tiles/north
-  name: "north multi tiles"
+  name: cmu-bosenmori-tile-north-multi-tiles
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/f3682ec283000dacf3ec.png
   baseTurf: Plating
   isSubfloor: false
@@ -13795,7 +13795,7 @@
 - type: tile
   id: CMUBosenmoriExacte226c64e27d3490c
   # CMSS13 source: /turf/open/floor/shiva/north
-  name: "north shiva"
+  name: cmu-bosenmori-tile-north-shiva
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/3f10a40268418a4cf434.png
   baseTurf: Plating
   isSubfloor: false
@@ -14828,7 +14828,7 @@
 - type: tile
   id: CMUBosenmoriExactf24210d1e86c999b
   # CMSS13 source: /turf/open/floor/asteroid
-  name: "asteroid"
+  name: cmu-bosenmori-tile-asteroid
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/de7efa692df459a839c7.png
   baseTurf: Plating
   isSubfloor: false
@@ -15142,7 +15142,7 @@
 - type: tile
   id: CMUBosenmoriExactf66d2aecbffb91d1
   # CMSS13 source: /turf/open/floor/wood/ship
-  name: "ship"
+  name: cmu-bosenmori-tile-ship
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/9c2ff1e7781ff4eddf1d.png
   baseTurf: Plating
   isSubfloor: false
@@ -15374,7 +15374,7 @@
 - type: tile
   id: CMUBosenmoriExactf98665d1c0ab4ca2
   # CMSS13 source: /turf/open/floor/warningcorner/east
-  name: "east warningcorner"
+  name: cmu-bosenmori-tile-east-warningcorner
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/53aebc6a93e995ff7fa2.png
   baseTurf: Plating
   isSubfloor: false
@@ -15591,7 +15591,7 @@
 - type: tile
   id: CMUBosenmoriExactfb4d03cac4eb1266
   # CMSS13 source: /turf/open/floor/almayer/research/containment/floor2/west
-  name: "west floor2"
+  name: cmu-bosenmori-tile-west-floor2
   sprite: /Textures/CMU14/Bosenmori/Exact/Tiles/1b5f49155763e787c6c1.png
   baseTurf: Plating
   isSubfloor: false

@@ -32,7 +32,7 @@
       machine_parts: !type:Container
   - type: ApcPowerReceiver
     needsPower: false # TODO RMC14
-    powerLoad: 0 #15 kW
+    powerLoad: 1
   - type: Charger
     chargeRate: 1000
     chargeLevelSteps: 6
@@ -69,6 +69,8 @@
   id: RMCRechargerLocked
   suffix: locked
   components:
+  - type: ApcPowerReceiver
+    powerLoad: 1
   - type: Transform
     anchored: true
   - type: Anchorable

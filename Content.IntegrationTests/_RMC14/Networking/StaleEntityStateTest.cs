@@ -5,8 +5,12 @@ using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Sentinel;
 using Content.Shared.Botany.Items.Components;
+using Content.Shared.Chat.Prototypes;
+using Content.Shared.CombatMode;
 using Content.Shared.Placeable;
 using Content.Shared.Projectiles;
+using Content.Shared.Speech.Components;
+using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -19,6 +23,9 @@ namespace Content.IntegrationTests.Tests._RMC14.Networking;
 public sealed class StaleEntityStateTest
 {
     [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Shooter))]
+    [TestCase(typeof(VocalComponent), nameof(VocalComponent.EmoteActionEntity))]
+    [TestCase(typeof(TimerTriggerComponent), nameof(TimerTriggerComponent.User))]
+    [TestCase(typeof(CombatModeComponent), nameof(CombatModeComponent.CombatToggleActionEntity))]
     [TestCase(typeof(RMCConstructionPreventCollideComponent), nameof(RMCConstructionPreventCollideComponent.Target))]
     [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Weapon))]
     [TestCase(typeof(XenoIntoxicatedComponent), nameof(XenoIntoxicatedComponent.LastSource))]
@@ -36,6 +43,8 @@ public sealed class StaleEntityStateTest
             var source = entities.SpawnEntity(null, MapCoordinates.Nullspace);
             var component = (Component) Activator.CreateInstance(componentType)!;
             entities.AddComponent(owner, component);
+            // Some components create their own reference during startup.
+            SetField(component, field, (EntityUid?) null);
 
             object GetReference()
             {
@@ -86,6 +95,12 @@ public sealed class StaleEntityStateTest
             collision.Target = source;
             collision.Range = 3f;
             components.Add(collision);
+
+            var vocal = entities.AddComponent<VocalComponent>(owner);
+            SetField(vocal, nameof(vocal.EmoteActionEntity), (EntityUid?) source);
+            SetField(vocal, nameof(vocal.WilhelmProbability), 0.25f);
+            SetField(vocal, nameof(vocal.EmoteSounds), (ProtoId<EmoteSoundsPrototype>?) new ProtoId<EmoteSoundsPrototype>("FemaleSlime"));
+            components.Add(vocal);
 
             var laptop = entities.AddComponent<SentryLaptopComponent>(owner);
             SetField(laptop, nameof(laptop.IsOpen), true);
@@ -142,6 +157,7 @@ public sealed class StaleEntityStateTest
                 var clientOwner = entities.GetEntity(ownerNet);
                 var expected = deleted ? EntityUid.Invalid : entities.GetEntity(sourceNet);
                 var collision = entities.GetComponent<RMCConstructionPreventCollideComponent>(clientOwner);
+                var vocal = entities.GetComponent<VocalComponent>(clientOwner);
                 var laptop = entities.GetComponent<SentryLaptopComponent>(clientOwner);
                 var projectile = entities.GetComponent<ProjectileComponent>(clientOwner);
                 var intoxicated = entities.GetComponent<XenoIntoxicatedComponent>(clientOwner);
@@ -152,6 +168,11 @@ public sealed class StaleEntityStateTest
                 {
                     Assert.That(collision.Target, Is.EqualTo(expected));
                     Assert.That(collision.Range, Is.EqualTo(3f));
+                    Assert.That(vocal.EmoteActionEntity, Is.EqualTo(expected));
+                    Assert.That(vocal.ScreamId.Id, Is.EqualTo("Scream"));
+                    Assert.That(vocal.WilhelmProbability, Is.EqualTo(0.25f));
+                    Assert.That(vocal.EmoteAction?.Id, Is.EqualTo("ActionScream"));
+                    Assert.That(vocal.EmoteSounds?.Id, Is.EqualTo("FemaleSlime"));
                     Assert.That(laptop.IsOpen, Is.True);
                     Assert.That(laptop.IsPowered, Is.True);
                     Assert.That(laptop.Range, Is.EqualTo(42f));

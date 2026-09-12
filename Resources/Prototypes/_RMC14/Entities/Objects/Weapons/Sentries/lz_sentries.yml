@@ -69,6 +69,9 @@
   name: UA-577 spaceborne gauss turret
   description: A fully-automated defence turret with mid-range targeting capabilities. Armed with a modified M32-S Autocannon and an internal belt feed.
   components:
+  - type: UserIFF
+    factions: []
+  - type: EntityIFF
   - type: PointLight
     radius: 40
     energy: 10.0

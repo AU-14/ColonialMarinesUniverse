@@ -27,6 +27,12 @@
   name: gun UGV hull
   description: A folded tracked chassis. Place it on the ground, install its pulse turret, then load a standard or AP ammunition box to bring it online.
   components:
+  - type: ContainerContainer
+    containers:
+      cmu-combat-drone-turret: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Mobs/CombatDrone/ugv.rsi
     layers:

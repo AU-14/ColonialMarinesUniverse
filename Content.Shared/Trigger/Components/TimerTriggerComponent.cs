@@ -13,38 +13,38 @@ namespace Content.Shared.Trigger.Components;
 /// Can play a sound while the timer is active.
 /// The time can be set by other components, for example <see cref="RandomTimerTriggerComponent"/>.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
 public sealed partial class TimerTriggerComponent : Component
 {
     /// <summary>
     /// The keys that will activate the timer.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public List<string> KeysIn = new() { TriggerSystem.DefaultTriggerKey };
 
     /// <summary>
     /// The key that will trigger once the timer is finished.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string? KeyOut = "timer";
 
     /// <summary>
     /// The time after which this timer will trigger after it is activated.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan Delay = TimeSpan.FromSeconds(1);
 
     /// <summary>
     /// If not empty, a user can use verbs to configure the delay to one of these options.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public List<TimeSpan> DelayOptions = new();
 
     /// <summary>
     /// The time at which this trigger will activate.
     /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    [AutoNetworkedField, AutoPausedField]
+    [AutoPausedField]
     public TimeSpan NextTrigger = TimeSpan.Zero;
 
     /// <summary>
@@ -70,32 +70,32 @@ public sealed partial class TimerTriggerComponent : Component
     /// <summary>
     /// The time between beeps.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan BeepInterval = TimeSpan.FromSeconds(1);
 
     /// <summary>
     /// The entity that activated this trigger.
     /// TODO: use WeakEntityReference once the engine PR is merged!
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? User;
 
     /// <summary>
     /// The beeping sound, if any.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public SoundSpecifier? BeepSound;
 
     /// <summary>
     /// Whether you can examine the item to see its timer or not.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool Examinable = true;
 
     /// <summary>
     /// The popup to show the user when starting the timer, if any.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public LocId? Popup = "timer-trigger-activated";
 
     #region GuidebookData

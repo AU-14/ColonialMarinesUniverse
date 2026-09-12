@@ -14,6 +14,7 @@
     repairRate: 0.007
   - type: HardpointIntegrity
     maxIntegrity: 1000
+    integrity: 1000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorBallistic
@@ -37,6 +38,7 @@
     repairRate: 0.007
   - type: HardpointIntegrity
     maxIntegrity: 1000
+    integrity: 1000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorConcussive
@@ -61,6 +63,7 @@
     repairRate: 0.007
   - type: HardpointIntegrity
     maxIntegrity: 1000
+    integrity: 1000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorCaustic
@@ -84,6 +87,7 @@
     repairRate: 0.007
   - type: HardpointIntegrity
     maxIntegrity: 1000
+    integrity: 1000
   - type: VehicleArmorHardpoint
     modifierSets:
     - VehicleArmorPaladin

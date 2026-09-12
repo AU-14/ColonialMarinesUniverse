@@ -33,7 +33,7 @@ namespace Content.IntegrationTests.Tests
             var testSystem = server.System<SaveLoadSaveTestSystem>();
             testSystem.Enabled = true;
 
-            Assume.That(SEntMan.EntityCount.Equals(0), "Lingering entities at the start of CreateSaveLoadSaveGrid");
+            var baselineEntities = await GetBaselineEntities();
 
             var rp1 = new ResPath("/save load save 1.yml");
             var rp2 = new ResPath("/save load save 2.yml");
@@ -94,7 +94,7 @@ namespace Content.IntegrationTests.Tests
                 mapSystem.DeleteMap(mapId0);
                 mapSystem.DeleteMap(mapId1);
             });
-            Assert.That(SEntMan.EntityCount.Equals(0), "Lingering entities at the end of CreateSaveLoadSaveGrid");
+            await AssertBaselineEntities(baselineEntities);
         }
 
         private new const string TestMap = "Maps/bagel.yml";
@@ -112,7 +112,7 @@ namespace Content.IntegrationTests.Tests
             var testSystem = server.System<SaveLoadSaveTestSystem>();
             testSystem.Enabled = true;
 
-            Assume.That(SEntMan.EntityCount.Equals(0), "Lingering entities at the start of LoadSaveTicksSaveBagel");
+            var baselineEntities = await GetBaselineEntities();
 
             var rp1 = new ResPath("/load save ticks save 1.yml");
             var rp2 = new ResPath("/load save ticks save 2.yml");
@@ -177,7 +177,7 @@ namespace Content.IntegrationTests.Tests
 
             testSystem.Enabled = false;
             await server.WaitPost(() => mapSys.DeleteMap(mapId));
-            Assert.That(SEntMan.EntityCount.Equals(0), "Lingering entities at the end of LoadSaveTicksSaveBagel");
+            await AssertBaselineEntities(baselineEntities);
         }
 
         /// <summary>
@@ -204,7 +204,7 @@ namespace Content.IntegrationTests.Tests
             var testSystem = server.System<SaveLoadSaveTestSystem>();
             testSystem.Enabled = true;
 
-            Assume.That(SEntMan.EntityCount.Equals(0), "Lingering entities at the start of LoadTickLoadBagel");
+            var baselineEntities = await GetBaselineEntities();
 
             MapId mapId1 = default;
             MapId mapId2 = default;
@@ -253,7 +253,22 @@ namespace Content.IntegrationTests.Tests
                 mapSys.DeleteMap(mapId1);
                 mapSys.DeleteMap(mapId2);
             });
-            Assert.That(SEntMan.EntityCount.Equals(0), "Lingering entities at the end of LoadTickLoadBagel");
+            await AssertBaselineEntities(baselineEntities);
+        }
+
+        private async Task<EntityUid[]> GetBaselineEntities()
+        {
+            // Let round-scoped services, such as camera network seeds, initialize before loading maps.
+            await Server.WaitRunTicks(1);
+            EntityUid[] baseline = [];
+            await Server.WaitPost(() => baseline = SEntMan.GetEntities().ToArray());
+            return baseline;
+        }
+
+        private async Task AssertBaselineEntities(EntityUid[] baseline)
+        {
+            await Server.WaitAssertion(() => Assert.That(SEntMan.GetEntities(), Is.EquivalentTo(baseline),
+                "Deleting the test maps must restore the original entity set."));
         }
 
         /// <summary>
