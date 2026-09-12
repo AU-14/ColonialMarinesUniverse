@@ -874,7 +874,6 @@
         amount: 60
       - id: RMCMagazineRifleMAR40
         amount: 60 
-      - id: 
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
