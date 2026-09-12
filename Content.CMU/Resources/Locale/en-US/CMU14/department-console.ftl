@@ -34,6 +34,15 @@ department-console-category = Category: { $category }
 department-console-item-cost = ${ $amount }
 department-console-order = Order
 department-console-no-items = No items in this category.
+department-console-unknown = Unknown
+department-console-access-denied = Access denied.
+department-console-hired = { $name } has been hired to { $department }.
+department-console-announcement-sender = { $department } Dept.
+department-console-order-no-reason = No reason given
+department-console-order-no-location = No location specified
+department-console-salary-insufficient = [bold]{ $department }[/bold]: Insufficient department budget (need ${ $need }, have ${ $have })
+department-console-salary-dispensed = [bold]{ $department }[/bold]: ${ $amount } dispensed
+department-console-income-tax = ({ $amount } income tax)
 
 colony-comms-console-title = Communications Console
 colony-comms-console-send-message = Send Message
