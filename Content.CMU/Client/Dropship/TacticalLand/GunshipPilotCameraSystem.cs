@@ -275,10 +275,9 @@ public sealed partial class GunshipPilotCameraSystem : EntitySystem
     }
 
     private bool IsSelectingTacticalDestination(EntityUid pilot)
-    {
-        return TryComp(pilot, out EyeComponent? eye) &&
-               eye.Target is { } target && HasComp<DropshipPilotEyeComponent>(target);
-    }
+        => TryComp(pilot, out EyeComponent? eye)
+        && eye.Target is { } target
+        && HasComp<DropshipPilotEyeComponent>(target);
 
     private static void ResetPilotCursor(EyeCursorOffsetComponent cursor)
     {

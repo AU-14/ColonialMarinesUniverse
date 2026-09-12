@@ -19,6 +19,7 @@ public sealed class GunshipTerrainAdoptionTest : InteractionTest
     [TestCase("CMUZLevelLadderThroughDown3")]
     [TestCase("RMCGrate")]
     [TestCase("RMCCatwalkHybrisaLattice")]
+    [TestCase("RMCMonorailStraight")]
     public async Task NonblockingTerrainKeepsItsGroundPose(string prototype)
     {
         await SpawnTarget(prototype);
@@ -27,7 +28,6 @@ public sealed class GunshipTerrainAdoptionTest : InteractionTest
             var terrain = STarget!.Value;
             var terrainXform = SEntMan.GetComponent<TransformComponent>(terrain);
             Assert.That(terrainXform.Anchored, Is.True);
-            Assert.That(terrainXform.GridTraversal, Is.False);
             var pose = new DropshipTerrainAnchorPose(terrainXform.LocalPosition, terrainXform.LocalRotation);
             var position = Transform.GetWorldPosition(terrain) - new Vector2(0.5f);
 

@@ -16,7 +16,7 @@
     state: catwalk
   - type: Transform
     anchored: true
-    gridTraversal: false
+    gridTraversal: false # CMU14: fixed terrain must not transfer to passing dropship grids
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepCatwalk

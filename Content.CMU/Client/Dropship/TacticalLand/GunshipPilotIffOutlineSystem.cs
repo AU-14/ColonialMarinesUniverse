@@ -33,6 +33,7 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
     private static readonly ProtoId<NpcFactionPrototype> ColonistFaction = "AUColonist";
 
     [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -204,10 +205,11 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
 
     private ShaderInstance GetRelationshipShader(EntityUid pilot, EntityUid target)
     {
-        GetIffFactions(target, _targetIff);
-        var concealedClf = _targetIff.Contains(ClfIff) ||
-                           TryComp(target, out NpcFactionMemberComponent? apparentFaction) &&
-                           apparentFaction.Factions.Contains(ClfFaction);
+        var hasIdentification = GetIffFactions(target, _targetIff);
+        var concealedClf = _targetIff.Contains(ClfIff)
+            || !hasIdentification
+            && TryComp(target, out NpcFactionMemberComponent? apparentFaction)
+            && apparentFaction.Factions.Contains(ClfFaction);
         if (concealedClf)
         {
             // Only the dropship silhouette sees this identity. Do not expose
@@ -219,11 +221,18 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
         if (_pilotIff.Overlaps(_targetIff))
             return _friendlyShader;
 
-        if (concealedClf)
+        var apparentColonist = _targetIff.Contains(ColonistIff);
+        // An equipped ID is the visible identity, including an unrecognized
+        // or blank ID. NPC allegiance must not reveal who is wearing it.
+        if (hasIdentification && !apparentColonist)
+            return _neutralShader;
+
+        if (apparentColonist)
         {
             if (TryComp(pilot, out NpcFactionMemberComponent? observer))
             {
-                if (observer.Factions.Contains(ColonistFaction) || observer.FriendlyFactions.Contains(ColonistFaction))
+                if (observer.Factions.Contains(ColonistFaction)
+                    || observer.FriendlyFactions.Contains(ColonistFaction))
                     return _friendlyShader;
                 if (observer.HostileFactions.Contains(ColonistFaction))
                     return _hostileShader;
@@ -252,11 +261,24 @@ public sealed partial class GunshipPilotIffOutlineSystem : EntitySystem
         return _neutralShader;
     }
 
-    private void GetIffFactions(EntityUid entity, HashSet<EntProtoId<IFFFactionComponent>> factions)
+    private bool GetIffFactions(EntityUid entity, HashSet<EntProtoId<IFFFactionComponent>> factions)
     {
         factions.Clear();
+        var hasIdentification = false;
+        var slots = _inventory.GetSlotEnumerator(entity, SlotFlags.IDCARD);
+        while (slots.NextItem(out var item))
+        {
+            hasIdentification = true;
+            if (TryComp(item, out ItemIFFComponent? iff))
+                factions.UnionWith(iff.Factions);
+        }
+
+        if (hasIdentification)
+            return true;
+
         var ev = new GetIFFFactionEvent(SlotFlags.IDCARD, factions);
         RaiseLocalEvent(entity, ref ev);
+        return false;
     }
 
     private void ApplyHighlight(EntityUid uid, SpriteComponent sprite, ShaderInstance shader)

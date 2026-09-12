@@ -1261,9 +1261,9 @@ public sealed partial class DropshipTacticalLandSystem
                     // Nonblocking terrain (ladders, grates, and other floor
                     // structures) needs its original pose preserved too. It
                     // will never enter the hard-fixture loop below.
-                    if (!flightHover.FlightTerrainAnchors.ContainsKey(anchored) &&
-                        TryComp(anchored, out TransformComponent? terrainXform) &&
-                        terrainXform.ParentUid == targetMap)
+                    if (!flightHover.FlightTerrainAnchors.ContainsKey(anchored)
+                        && TryComp(anchored, out TransformComponent? terrainXform)
+                        && terrainXform.ParentUid == targetMap)
                     {
                         flightHover.FlightTerrainAnchors.Add(anchored,
                             new DropshipTerrainAnchorPose(terrainXform.LocalPosition, terrainXform.LocalRotation));
@@ -2079,7 +2079,10 @@ public sealed partial class DropshipTacticalLandSystem
 
         _eye.SetTarget(pilot, remote ? eye : null, pilotEye);
         _eye.SetDrawFov(pilot, !remote, pilotEye);
-        var panning = linked && seat.Comp.ViewOffset == 0 && !seat.Comp.RearView && seat.Comp.PilotPanning;
+        var panning = linked
+            && seat.Comp.ViewOffset == 0
+            && !seat.Comp.RearView
+            && seat.Comp.PilotPanning;
         _eye.SetPvsScale((pilot, pilotEye), linked
             ? panning ? GunshipPilotPanningPvsScale : GunshipPilotPvsScale
             : seat.Comp.OriginalPvsScale);
