@@ -66,7 +66,13 @@ public sealed class FollowerClientStateResetTest : GameTest
                     Array.Empty<SessionState>(),
                     Array.Empty<NetEntity>());
                 Client.ResolveDependency<IClientGameStateManager>().PartialStateReset(state, resetAllEntities: true);
+
+                // The synthetic reset deletes replicated entities while the server still has them.
+                // Disconnect before another tick can apply stale player states during teardown.
+                Client.ResolveDependency<IClientNetManager>().ClientDisconnect("Follower reset fixture completed.");
             });
+            await Pair.ReallyBeIdle(10);
+            Assert.That(Client.ResolveDependency<IClientNetManager>().IsConnected, Is.False);
         }
         finally
         {
