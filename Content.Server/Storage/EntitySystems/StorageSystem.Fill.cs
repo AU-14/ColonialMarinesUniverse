@@ -1,5 +1,9 @@
 using System.Linq;
 using Content.Server.Spawners.Components;
+// CMU14 Begin: bounded delivery preparation and fill diagnostics.
+using Content.Server.CMU14.Diagnostics.Performance;
+using Content.Server.Storage.Components;
+// CMU14 End
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared._RMC14.Storage;
 using Content.Shared.Item;
@@ -13,6 +17,7 @@ namespace Content.Server.Storage.EntitySystems;
 
 public sealed partial class StorageSystem
 {
+    [Dependency] private ICMUServerPerformanceDiagnostics _cmuPerformance = default!; // CMU14
     private void OnStorageFillMapInit(EntityUid uid, StorageFillComponent component, MapInitEvent args)
     {
         if (component.Contents.Count == 0)
@@ -34,6 +39,7 @@ public sealed partial class StorageSystem
 
     private void FillStorage(Entity<StorageFillComponent?, StorageComponent?> entity)
     {
+        using var operation = _cmuPerformance.MeasureOperation("storage-fill", MetaData(entity.Owner).EntityPrototype?.ID); // CMU14
         var (uid, component, storage) = entity;
 
         if (!Resolve(uid, ref component, ref storage))
@@ -96,6 +102,7 @@ public sealed partial class StorageSystem
 
     private void FillEntityStorage(Entity<StorageFillComponent?, EntityStorageComponent?> entity)
     {
+        using var operation = _cmuPerformance.MeasureOperation("entity-storage-fill", MetaData(entity.Owner).EntityPrototype?.ID); // CMU14
         var (uid, component, entityStorageComp) = entity;
 
         if (!Resolve(uid, ref component, ref entityStorageComp))
@@ -104,6 +111,13 @@ public sealed partial class StorageSystem
         var coordinates = Transform(uid).Coordinates;
 
         var spawnItems = EntitySpawnCollection.GetSpawns(component.Contents, Random);
+        // CMU14 Begin: preserve the fill roll while spreading shipment spawns over ticks.
+        if (TryComp<DeferredEntityStorageFillComponent>(uid, out var deferred))
+        {
+            deferred.Prototypes.AddRange(spawnItems);
+            return;
+        }
+        // CMU14 End
         foreach (var item in spawnItems)
         {
             // No, you are not allowed to fill a container with entity spawners.

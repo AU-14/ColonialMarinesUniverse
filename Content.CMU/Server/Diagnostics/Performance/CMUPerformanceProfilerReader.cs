@@ -39,7 +39,12 @@ internal sealed record CMUPerformanceProfileReport(
     IReadOnlyList<CMUPerformanceProfileCounter> Counters,
     int EventsRead,
     bool Truncated,
-    CMUPerformanceProfileCoverage Coverage);
+    CMUPerformanceProfileCoverage Coverage)
+{
+    public IReadOnlyList<CMUPerformanceFrameSamples> FrameSamples { get; init; } = [];
+}
+
+internal sealed record CMUPerformanceFrameSamples(long IndexOffset, IReadOnlyList<CMUPerformanceProfileSample> Samples);
 
 internal readonly record struct CMUPerformanceProfileCoverage(
     string Status,
@@ -163,11 +168,13 @@ internal static class CMUPerformanceProfilerReader
         var indices = selectedOffsets.ToList();
         var frames = new List<CMUPerformanceProfileFrame>(indices.Count);
         var samples = new Dictionary<string, SampleAccumulator>(StringComparer.Ordinal);
+        var frameSamples = new List<CMUPerformanceFrameSamples>(indices.Count);
         var counters = new Dictionary<string, CounterAccumulator>(StringComparer.Ordinal);
         int eventsRead = 0;
 
         foreach (long offset in indices)
         {
+            var localSamples = new Dictionary<string, SampleAccumulator>(StringComparer.Ordinal);
             ref ProfIndex index = ref buffer.Index(offset);
             TimeAndAllocSample frameTiming = GetFrameTiming(buffer, index);
             long start = Math.Max(index.StartPos, validLogStart);
@@ -194,13 +201,13 @@ internal static class CMUPerformanceProfilerReader
                             firstTick ??= log.Value.Value.Int64;
                             lastTick = log.Value.Value.Int64;
                         }
-                        AddValue(profiler, entitySystemNames, samples, counters, log.Value);
+                        AddValue(profiler, entitySystemNames, localSamples, counters, log.Value);
                         break;
                     case ProfLogType.GroupEnd:
                         AddSample(
                             profiler,
                             entitySystemNames,
-                            samples,
+                            localSamples,
                             "group",
                             log.GroupEnd.StringId,
                             log.GroupEnd.Value);
@@ -211,6 +218,15 @@ internal static class CMUPerformanceProfilerReader
             frames.Add(new(offset, partial ? null : TryGetFrameNumber(profiler, buffer, index),
                 frameTiming.Time, frameTiming.Alloc, GetTickCount(profiler, buffer, index, start),
                 partial, firstTick, lastTick));
+            var rows = localSamples.Values.Select(sample => sample.ToRow()).ToArray();
+            frameSamples.Add(new(offset, rows));
+            foreach (var (key, local) in localSamples)
+            {
+                if (!samples.TryGetValue(key, out var total))
+                    samples.Add(key, local);
+                else
+                    total.Merge(local);
+            }
         }
 
         return new(
@@ -219,7 +235,7 @@ internal static class CMUPerformanceProfilerReader
             counters.Values.Select(counter => counter.ToRow()).ToArray(),
             eventsRead,
             truncated,
-            coverage);
+            coverage) { FrameSamples = frameSamples };
     }
 
     internal static IReadOnlyList<long> SelectFrameOffsets(
@@ -399,6 +415,15 @@ internal static class CMUPerformanceProfilerReader
         private double _maxSeconds;
         private long _totalAllocatedBytes;
         private long _maxAllocatedBytes;
+
+        public void Merge(SampleAccumulator other)
+        {
+            _count += other._count;
+            _totalSeconds += other._totalSeconds;
+            _maxSeconds = Math.Max(_maxSeconds, other._maxSeconds);
+            _totalAllocatedBytes += other._totalAllocatedBytes;
+            _maxAllocatedBytes = Math.Max(_maxAllocatedBytes, other._maxAllocatedBytes);
+        }
 
         public void Add(TimeAndAllocSample sample)
         {

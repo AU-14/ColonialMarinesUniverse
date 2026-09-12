@@ -10,6 +10,7 @@ public interface ICMUServerPerformanceDiagnostics
     void EndFrameCallbacks();
     void RequestSyncReport(long syncIncidentId);
     string GetCorrelationContext();
+    CMUPerformanceOperationScope MeasureOperation(string name, string? prototype = null);
     void Shutdown();
     string GetStatus();
     bool CaptureManualReport();
