@@ -70,7 +70,7 @@
         amount: 40
       - id: AU14WYPMCArmorMin
         amount: 30
-      - id: CMUHelmetGarbNeckerchief
+      - id: CMUHelmetGarbPMCNeckerchief
         amount: 40
       - id: CMUHelmetGarbPMCPads
         amount: 40
@@ -82,9 +82,9 @@
         amount: 30
       - id: CMUHelmetGarbPMCLapPanel
         amount: 40
-      - id: CMUHelmetGarbKneepads
+      - id: CMUHelmetGarbPMCKneepads
         amount: 40
-      - id: CMUHelmetGarbGreaves
+      - id: CMUHelmetGarbPMCGreaves
         amount: 30
     - name: Backpack
       entries:
