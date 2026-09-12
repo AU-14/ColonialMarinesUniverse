@@ -43,6 +43,12 @@
         maxScatterModifier: 10
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 7
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 6
   - type: MagazineAmmoProvider
     autoEject: false
