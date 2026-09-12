@@ -1,1 +1,9 @@
 cmu-chemical-irritant-trip = You stumble and trip.
+cmu-chemical-irritant-exposure-eyes-sting = Your eyes sting!
+cmu-chemical-irritant-exposure-lungs-burn = Your lungs burn!
+cmu-chemical-irritant-exposure-cough = You cough uncontrollably!
+cmu-chemical-irritant-exposure-skin-burns = Your skin burns!
+cmu-chemical-irritant-exposure-gasp = You gasp for air!
+cmu-chemical-irritant-exposure-dying = You feel like dying!
+cmu-chemical-irritant-exposure-stop = Make it stop!
+cmu-chemical-irritant-exposure-stiffens = Your body stiffens!
