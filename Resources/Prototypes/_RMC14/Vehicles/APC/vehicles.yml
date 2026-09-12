@@ -290,7 +290,7 @@
     interiorPath: /Maps/_RMC14/Vehicles/apc_command_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
-    maxPassengers: # CMU14: increased capacity so APCs can take entire squads.
+    maxPassengers: 15 # CMU14: increased capacity so APCs can take entire squads.
     maxXenos: 3
     entryPoints:
     - offset: 1.5,0
