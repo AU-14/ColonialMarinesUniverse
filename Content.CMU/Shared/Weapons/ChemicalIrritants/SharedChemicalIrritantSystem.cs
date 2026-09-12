@@ -243,7 +243,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
             chem.LastTripTime = time;
             _stun.TryParalyze(victim, profile.TripStunTime, true);
 
-            _popup.PopupEntity(Loc.GetString("You stumble and trip."), victim, victim, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-chemical-irritant-trip"), victim, victim, PopupType.MediumCaution);
         }
 
         // Exposure message (rate-limited)
