@@ -71,6 +71,20 @@
         crate: AU14Cratealcoholicdrinks
     - name: Gear
       entries:
+      - cost: 150
+        crate: RMCBeltHolsterPistol
+      - cost: 150
+        crate: RMCBeltHolsterRevolver
+      - cost: 150
+        crate: CMBeltSecurityMarshal
+      - cost: 550
+        crate: RMCCoatMilitiaVest
+      - cost: 50
+        crate: RMCScabbardMachete
+      - cost: 400
+        crate: RMCPouchMachete
+      - cost: 300
+        crate: AU14AttachmentTwoPointSling
       - cost: 350
         crate: AU14CrateBoxCivBinocs
       - cost: 385
@@ -135,6 +149,8 @@
         crate: RMCCrateSuppliesCrayons
     - name: Weapons
       entries:
+      - cost: 1000
+        crate: RMCWeaponShotgunM37A1
       - cost: 2000
         crate: AU14CrateBoxAR10
       - cost: 1300
