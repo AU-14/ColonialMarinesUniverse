@@ -35,8 +35,9 @@ cmu-medical-body-part-picker-entry = { $part } — { $count } { $count ->
     [one] wound
    *[other] wounds
 }
-cmu-medical-body-part-side-left = Left 
-cmu-medical-body-part-side-right = Right 
+cmu-medical-body-part-sided = { $side } { $type }
+cmu-medical-body-part-side-left = Left
+cmu-medical-body-part-side-right = Right
 cmu-medical-body-part-type-other = Other
 cmu-medical-body-part-type-torso = Torso
 cmu-medical-body-part-type-head = Head
