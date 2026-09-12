@@ -641,6 +641,8 @@
         amount: 5
       - id: RMCArmorM4RMarshallMedium
         amount: 5
+      - id: RMCArmorM4RLight
+        amount: 5 
     - name: Backpack
       entries:
       - id: RMCBackpackRTO
@@ -692,15 +694,27 @@
   - type: CMAutomatedVendor
     sections:
     - name: Essential Equipment
-      takeAll: CMUEssentialEquipment
+      takeAll: CMUAREssentialEquipment
       entries:
-      - id: RMCWeaponRifleM54CE2
-    - name: Gun Munitions
+      - id: RMCSmartGun
+      - id: RMCScabbardMacheteSGFilled
+      - id: RMCGlassesSmartGunSight
+      - id: RMCPowerCellSmartgun
+      - id: RMCPouchDrumPMC
+    - name: Smartgun Harness
+      choices: { SmartgunHarness: 1 }
       entries:
-      - id: CMMagazineRifleM54CE2
-        amount: 50
-      - id: CMMagazineRifleM54CE2HT
-        amount: 15
+      - id: AU14ArmorSmartGunDesertCombatHarness
+      - id: AU14ArmorSmartGunJungleCombatHarness
+    - name: Smartgun Belts
+      choices: { SmartgunBelts: 1 }
+      entries:
+      - id: RMCBeltSmartGunOperatorPistolFilled
+      - id: CMBeltSmartGunOperatorFilled
+    - name: Smartgun Munitions
+      entries:
+      - id: RMCMagazineSmartGun
+        amount: 40
 
 - type: entity
   parent: ColMarTechBase
@@ -847,7 +861,7 @@
       choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: AU14KitWeaponM16A1
-      - id: AU14KitWeaponM16A2
+      - id: AU14KitWeaponMar40
       - id: AU14KitWeaponMP5
       - id: AU14KitWeaponP90
     - name: Weapon Ammunition
@@ -858,6 +872,9 @@
         amount: 60
       - id: RMCMagazineSMGPDW90
         amount: 60
+      - id: RMCMagazineRifleMAR40
+        amount: 60 
+      - id: 
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
@@ -895,21 +912,21 @@
     - name: HG 37-12 Pump Shotgun
       entries:
       - id: RMCWeaponShotgunHG3712
-        amount: 1
+        amount: 2
       - id: RMCAttachmentS6ReflexSight
-        amount: 1
+        amount: 2
       - id: RMCAttachmentFlashlightGrip
-        amount: 1
+        amount: 2
       - id: RMCBoxShotgunBuckshot
         amount: 12
       - id: RMCBoxShotgunSlugs
         amount: 10
       - id: RMCBoxShotgunFlechette
-        amount: 8
+        amount: 10
     - name: XM38 Tactical Shotgun
       entries:
       - id: RMCWeaponShotgunXM38
-        amount: 1
+        amount: 3
       - id: RMCAttachmentS6ReflexSight
         amount: 1
       - id: RMCAttachmentFlashlightGrip
@@ -1047,6 +1064,10 @@
         amount: 3
       - id: RMCXM51Case
         amount: 2
+      - id: RMCWeaponLMGM60 
+        amount: 2
+      - id: RMCWeaponMar50LMG
+        amount: 1
     - name: primary ammunition
       entries:
       - id: RMCMagazineRifleM16
@@ -1071,6 +1092,16 @@
         amount: 10
       - id: RMCMagazineShotgunXM51
         amount: 10
+      - id: RMCMagazineLMGM60 
+        amount: 40
+      - id: RMCMagazineMar50LMG
+        amount: 20
+      - id: RMCMagazineRifleMAR40Ext
+        amount: 15
+      - id: RMCMagazineRifleMAR40
+        amount: 30
+      - id: RMCMagazineSMGPDW90AP
+        amount: 15
     - name: secondary ammunition
       entries:
       - id: CMMagazinePistolM1984
