@@ -5,11 +5,11 @@
     Title="{Loc admin-console-title}" MinSize="480 520">
     <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8">
-            <Label Name="ColonyBudgetLabel" Access="Public" Text="{Loc admin-console-colony-budget}"
+            <Label Name="ColonyBudgetLabel" Access="Public" Text=""
                    StyleClasses="LabelHeading" Margin="0 4" />
 
             <Label Text="{Loc admin-console-sales-tax-section}" Margin="0 6" />
-            <Label Name="CurrentTaxLabel" Access="Public" Text="{Loc admin-console-current-sales-tax}"
+            <Label Name="CurrentTaxLabel" Access="Public" Text=""
                    Margin="0 2" />
             <Label Text="{Loc admin-console-sales-tax-description}"
                    StyleClasses="LabelSubText" Margin="0 2" />
@@ -21,7 +21,7 @@
             </BoxContainer>
 
             <Label Text="{Loc admin-console-income-tax-section}" Margin="0 6" />
-            <Label Name="CurrentIncomeTaxLabel" Access="Public" Text="{Loc admin-console-current-income-tax}"
+            <Label Name="CurrentIncomeTaxLabel" Access="Public" Text=""
                    Margin="0 2" />
             <Label Text="{Loc admin-console-income-tax-description}"
                    StyleClasses="LabelSubText" Margin="0 2" />
