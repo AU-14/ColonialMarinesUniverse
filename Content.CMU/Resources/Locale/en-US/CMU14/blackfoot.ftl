@@ -5,12 +5,3 @@ cmu-blackfoot-rear-door-closed = Rear door closed.
 cmu-blackfoot-rear-door-board-blocked = Open the rear door before boarding from the back.
 cmu-blackfoot-rear-door-exit-blocked = Open the rear door before exiting from the back.
 cmu-blackfoot-rear-door-airborne-exit-blocked = The Blackfoot is moving too fast to jump out.
-
-cmu-blackfoot-landing-pad-pack-hint = Use tools to pack the Blackfoot landing pad.
-cmu-blackfoot-landing-pad-unlinked = No deployed Blackfoot landing pad is linked.
-cmu-blackfoot-landing-pad-no-aircraft = No Blackfoot is parked on the landing pad.
-cmu-blackfoot-landing-pad-cycle-started = Blackfoot refuel and recharge cycle started.
-cmu-blackfoot-landing-pad-recharge-only = No linked fuel pump found; Blackfoot recharge cycle started.
-cmu-blackfoot-landing-pad-cycle-stopped = Blackfoot refuel and recharge cycle stopped.
-cmu-blackfoot-landing-pad-invalid-ground = The landing pad must be deployed on valid ground.
-cmu-blackfoot-landing-pad-area-blocked = The landing pad needs a clear 3x3 deployment area.
