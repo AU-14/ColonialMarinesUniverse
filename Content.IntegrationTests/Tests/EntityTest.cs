@@ -301,6 +301,7 @@ namespace Content.IntegrationTests.Tests
                 "HumanoidAppearance",
                 "StorageFill",
                 "EntityTableContainerFill",
+                "Loadout", // Starting gear can deliberately drop loose items, such as a corpse's held equipment.
                 "GhostRole",
                 "GhostRoleApplySpecial",
                 "CMUObjective",

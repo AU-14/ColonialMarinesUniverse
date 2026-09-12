@@ -133,6 +133,7 @@ public sealed class CameraNetworkSystem : EntitySystem
         // other round-cleanup subscribers cannot manufacture duplicate identities.
         _pendingMarkerReceivers.Clear();
         _mobileMarkerUpdates.Clear();
+        _seedNetworksInitialized = false;
         MarkerRevision = 0;
     }
 

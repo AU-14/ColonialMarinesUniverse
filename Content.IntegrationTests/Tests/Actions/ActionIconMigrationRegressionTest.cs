@@ -175,6 +175,8 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
                 ActionVisuals.IconToggled,
                 out initialDynamicLayer,
                 false);
+            if (!hasReservedLayer)
+                initialDynamicLayer = -1;
             Assert.That(Client.System<AppearanceSystem>().TryGetData<SpriteSpecifier>(
                 dynamicAction,
                 ActionState.DynamicIconToggled,
@@ -268,13 +270,19 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
                 "/Textures/Interface/Actions/scream.png", visible: true, expectedLayer: dynamicLayer);
         });
 
-        await Server.WaitPost(() => Server.System<ServerActionsSystem>().SetIconOn(dynamic, entityIcon));
+        await Server.WaitPost(() =>
+        {
+            Server.System<ServerActionsSystem>().SetIconOn(dynamic, entityIcon);
+            Server.System<ServerActionsSystem>().SetIconOn(vehicleServer, textureIcon);
+        });
         await Pair.RunUntilSynced();
         await Client.WaitAssertion(() =>
         {
             var spriteSystem = Client.System<SpriteSystem>();
             var dynamicAction = ClientEntity("CMActionToggleAttachable");
             var layer = GetLayer(spriteSystem, dynamicAction, ActionVisuals.IconToggled, out var index);
+            AssertTextureLayer(spriteSystem, ClientEntity("ActionVehicleToggleView"), ActionVisuals.IconToggled,
+                "/Textures/Interface/Actions/scream.png", visible: false, expectedLayer: initialVehicleToggledLayer);
             Assert.Multiple(() =>
             {
                 Assert.That(index, Is.EqualTo(dynamicLayer));
@@ -317,6 +325,20 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
                     "static toggled layers must retain their original map");
                 Assert.That(GetLayer(spriteSystem, vehicle, ActionVisuals.IconToggled).Color, Is.EqualTo(Color.Magenta));
             });
+            AssertTextureLayer(spriteSystem, vehicle, ActionVisuals.IconToggled,
+                "/Textures/Interface/Actions/eyeclose.png", visible: true, color: Color.Magenta);
+        });
+
+        await Server.WaitPost(() => Server.System<ServerActionsSystem>().SetToggled(dynamic, true));
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var sprites = Client.System<SpriteSystem>();
+            var action = ClientEntity("CMActionToggleAttachable");
+            Assert.That(GetLayer(sprites, action, ActionVisuals.Icon).Visible, Is.True,
+                "toggling after clearing a dynamic icon must fall back to the normal icon");
+            Assert.That(GetLayer(sprites, action, ActionVisuals.IconToggled).Visible, Is.False);
+            Assert.That(Client.System<ClientActionsSystem>().HasToggleIcon(action), Is.False);
         });
 
         await Client.WaitAssertion(() =>
