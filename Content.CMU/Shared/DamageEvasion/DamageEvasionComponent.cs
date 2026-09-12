@@ -1,5 +1,4 @@
 ﻿using Content.Shared._RMC14.Evasion;
-using Content.Shared.CMU;
 using Content.Shared.FixedPoint;
 
 namespace Content.Shared.CMU;

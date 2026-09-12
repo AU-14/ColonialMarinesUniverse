@@ -1,5 +1,4 @@
 ﻿using Content.Shared._RMC14.Evasion;
-using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Robust.Shared.Timing;
 using Content.Shared.Jittering;
