@@ -22,6 +22,7 @@ public sealed partial class TacticalMapComponent : Component // CMU14 Class: Cus
        ["GOVFOR"] = TimeSpan.FromSeconds(1),
        ["CLF"] = TimeSpan.FromSeconds(1),
        ["WEYU"] = TimeSpan.FromSeconds(1),
+       ["YAUTJA"] = TimeSpan.FromSeconds(1), // CMU14
     };
 
     // Default: Marines (legacy)
@@ -91,4 +92,7 @@ public sealed partial class TacticalMapComponent : Component // CMU14 Class: Cus
     // Abominations
     [DataField]
     public Dictionary<int, TacticalMapBlip> AbominationBlips = new();
+
+    [DataField] // CMU14
+    public Dictionary<int, TacticalMapBlip> YautjaBlips = new();
 }

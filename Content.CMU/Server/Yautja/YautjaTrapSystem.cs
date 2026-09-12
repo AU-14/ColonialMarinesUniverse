@@ -1,8 +1,10 @@
 using Content.Server.Administration.Logs;
+using Content.Server.CMU14.TacticalMap;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
+using Content.Shared.Eye;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -36,7 +38,9 @@ public sealed partial class YautjaTrapSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private StepTriggerSystem _stepTrigger = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedVisibilitySystem _visibility = default!;
     [Dependency] private YautjaRitualSystem _ritual = default!;
+    [Dependency] private YautjaPreyTrackingSystem _preyTracking = default!;
 
     public override void Initialize()
     {
@@ -46,6 +50,12 @@ public sealed partial class YautjaTrapSystem : EntitySystem
         SubscribeLocalEvent<YautjaTrapComponent, GettingPickedUpAttemptEvent>(OnGettingPickedUpAttempt);
         SubscribeLocalEvent<YautjaTrapComponent, StepTriggerAttemptEvent>(OnStepTriggerAttempt);
         SubscribeLocalEvent<YautjaTrapComponent, StepTriggeredOnEvent>(OnStepTriggeredOn);
+        SubscribeLocalEvent<YautjaTrapComponent, ComponentStartup>(OnComponentStartup);
+    }
+
+    private void OnComponentStartup(Entity<YautjaTrapComponent> trap, ref ComponentStartup args)
+    {
+        SetTrapVisibility(trap.Owner, trap.Comp.Armed);
     }
 
     private void OnUseInHand(Entity<YautjaTrapComponent> trap, ref UseInHandEvent args)
@@ -66,10 +76,10 @@ public sealed partial class YautjaTrapSystem : EntitySystem
 
     private void OnGetInteractionVerbs(Entity<YautjaTrapComponent> trap, ref GetVerbsEvent<InteractionVerb> args)
     {
-        if (!trap.Comp.Armed ||
-            !args.CanAccess ||
-            !args.CanInteract ||
-            !HasComp<YautjaComponent>(args.User))
+        if (!trap.Comp.Armed
+            || !args.CanAccess
+            || !args.CanInteract
+            || !HasComp<YautjaComponent>(args.User))
         {
             return;
         }
@@ -131,6 +141,7 @@ public sealed partial class YautjaTrapSystem : EntitySystem
         trap.Comp.TrapOwner = user;
         trap.Comp.Armed = true;
         Dirty(trap);
+        SetTrapVisibility(trap.Owner, true);
 
         var xform = Transform(trap);
         _transform.AnchorEntity(trap, xform);
@@ -158,6 +169,7 @@ public sealed partial class YautjaTrapSystem : EntitySystem
 
         trap.Comp.Armed = false;
         Dirty(trap);
+        SetTrapVisibility(trap.Owner, false);
 
         _transform.Unanchor(trap);
 
@@ -207,6 +219,7 @@ public sealed partial class YautjaTrapSystem : EntitySystem
         _stun.TryParalyze(tripper, trap.Comp.ParalyzeTime, true);
         if (trap.Comp.TrapOwner is { } trapOwner)
             _ritual.TryClaimCaptive(trapOwner, tripper, true);
+        _preyTracking.Track(tripper, trap.Comp.PreyTrackingDuration);
 
         _audio.PlayPvs(trap.Comp.TriggerSound, trap);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-trap-triggered"), tripper, tripper, PopupType.MediumCaution);
@@ -219,16 +232,22 @@ public sealed partial class YautjaTrapSystem : EntitySystem
 
     private bool CanTriggerTrap(Entity<YautjaTrapComponent> trap, EntityUid tripper)
     {
-        if (!trap.Comp.Armed ||
-            Deleted(tripper) ||
-            tripper == trap.Comp.TrapOwner ||
-            HasComp<YautjaComponent>(tripper) ||
-            !TryComp<MobStateComponent>(tripper, out var mobState) ||
-            !_mobState.IsAlive(tripper, mobState))
+        if (!trap.Comp.Armed
+            || Deleted(tripper)
+            || tripper == trap.Comp.TrapOwner
+            || HasComp<YautjaComponent>(tripper)
+            || !TryComp<MobStateComponent>(tripper, out var mobState)
+            || !_mobState.IsAlive(tripper, mobState))
         {
             return false;
         }
 
         return true;
+    }
+
+    private void SetTrapVisibility(EntityUid trap, bool armed)
+    {
+        var layer = armed ? VisibilityFlags.Yautja : VisibilityFlags.Normal;
+        _visibility.SetLayer(trap, (ushort) layer);
     }
 }

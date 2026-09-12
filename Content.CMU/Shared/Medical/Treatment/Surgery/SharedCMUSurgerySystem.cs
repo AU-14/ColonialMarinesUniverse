@@ -335,16 +335,24 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     {
         if (!IsSurgeryEnabled())
             return;
-        if (!SurgicalTraits.RemoveTrait(args.Part, ent.Comp.Trait))
+        if (!TryResolveSurgicalTrait(args.Part, ent.Comp.Trait))
         {
             args.Failed = true;
             return;
         }
+    }
 
-        if (ent.Comp.Trait == CMUSurgicalTrait.VascularTear)
-            Wounds.SuppressInternalBleed(args.Part);
-        else if (ent.Comp.Trait == CMUSurgicalTrait.EmbeddedForeignBody)
-            Shrapnel.TryClearShrapnel(args.Part);
+    public bool TryResolveSurgicalTrait(EntityUid part, CMUSurgicalTrait trait)
+    {
+        if (!SurgicalTraits.RemoveTrait(part, trait))
+            return false;
+
+        if (trait == CMUSurgicalTrait.VascularTear)
+            Wounds.SuppressInternalBleed(part);
+        else if (trait == CMUSurgicalTrait.EmbeddedForeignBody)
+            Shrapnel.TryClearShrapnel(part);
+
+        return true;
     }
 
     protected virtual void ApplyOrganRemovalSideEffects(EntityUid user, EntityUid body, EntityUid organ, string slot)

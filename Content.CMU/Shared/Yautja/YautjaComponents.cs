@@ -61,6 +61,12 @@ public sealed partial class YautjaComponent : Component
     public float XenoTackleSuccessChance = 0.5f;
 
     [DataField]
+    public int XenoTackleSuccessesRequired = 4;
+
+    [DataField]
+    public TimeSpan XenoTackleExpireAfter = TimeSpan.FromSeconds(4);
+
+    [DataField]
     public Dictionary<FixedPoint2, float> SlowOnDamageThresholds = new()
     {
         { 160, 0.9f },
@@ -535,10 +541,10 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public SoundSpecifier CloakOffSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/pred_cloakoff.wav");
 
     [DataField]
-    public float CloakOpacity = 0.02f;
+    public float CloakOpacity;
 
     [DataField]
-    public float CloakMovingOpacity = 0.10f;
+    public float CloakMovingOpacity;
 
     [DataField]
     public bool CloakRestrictWeapons = true;
@@ -867,6 +873,12 @@ public sealed partial class YautjaHealingGunComponent : Component
 
     [DataField]
     public bool RepairsFractures;
+
+    [DataField]
+    public TimeSpan DeepRepairDuration = TimeSpan.FromSeconds(10);
+
+    [DataField]
+    public bool RepairsOrgans = true;
 
     [DataField]
     public SoundSpecifier? HealSound;
@@ -1566,6 +1578,9 @@ public sealed partial class YautjaTrapComponent : Component
 
     [DataField]
     public TimeSpan ParalyzeTime = TimeSpan.FromSeconds(4);
+
+    [DataField]
+    public TimeSpan PreyTrackingDuration = TimeSpan.FromMinutes(5);
 
     [DataField]
     public SoundSpecifier ArmSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/pred_attach.wav");

@@ -110,6 +110,7 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
             ent.Comp.Clf = true;
             ent.Comp.WeYu = true; // CMU14
             ent.Comp.Abomination = true; // CMU14
+            ent.Comp.Yautja = true; // CMU14
             ent.Comp.LiveUpdate = true;
         }
 
@@ -354,6 +355,8 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
             return clfBlip;
         if (map.WeYuBlips.TryGetValue(entityId, out var weyuBlip))
             return weyuBlip;
+        if (map.YautjaBlips.TryGetValue(entityId, out var yautjaBlip)) // CMU14
+            return yautjaBlip; // CMU14
         return null;
     }
 }

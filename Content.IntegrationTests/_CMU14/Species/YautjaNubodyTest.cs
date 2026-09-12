@@ -13,39 +13,40 @@ using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests.CMU14.Species;
 
+// CMU14 Test: Yautja CMU medical anatomy and visual-body integration.
 [TestFixture]
 [TestOf(typeof(SharedVisualBodySystem))]
 public sealed class YautjaNubodyTest : GameTest
 {
     private static readonly Dictionary<string, string> ExternalOrgans = new()
     {
-        ["Torso"] = "OrganYautjaTorso",
-        ["Head"] = "OrganYautjaHead",
-        ["ArmLeft"] = "OrganYautjaArmLeft",
-        ["ArmRight"] = "OrganYautjaArmRight",
-        ["HandLeft"] = "OrganYautjaHandLeft",
-        ["HandRight"] = "OrganYautjaHandRight",
-        ["LegLeft"] = "OrganYautjaLegLeft",
-        ["LegRight"] = "OrganYautjaLegRight",
-        ["FootLeft"] = "OrganYautjaFootLeft",
-        ["FootRight"] = "OrganYautjaFootRight",
+        ["Torso"] = "CMUPartYautjaTorso",
+        ["Head"] = "CMUPartYautjaHead",
+        ["ArmLeft"] = "CMUPartYautjaLeftArm",
+        ["ArmRight"] = "CMUPartYautjaRightArm",
+        ["HandLeft"] = "CMUPartYautjaLeftHand",
+        ["HandRight"] = "CMUPartYautjaRightHand",
+        ["LegLeft"] = "CMUPartYautjaLeftLeg",
+        ["LegRight"] = "CMUPartYautjaRightLeg",
+        ["FootLeft"] = "CMUPartYautjaLeftFoot",
+        ["FootRight"] = "CMUPartYautjaRightFoot",
     };
 
     private static readonly Dictionary<string, string> InternalOrgans = new()
     {
-        ["Brain"] = "OrganHumanBrain",
-        ["Eyes"] = "OrganHumanEyes",
-        ["Lungs"] = "OrganHumanLungs",
-        ["Heart"] = "OrganHumanHeart",
-        ["Stomach"] = "OrganHumanStomach",
-        ["Liver"] = "OrganHumanLiver",
-        ["Kidneys"] = "OrganHumanKidneys",
+        ["Brain"] = "CMUOrganHumanBrain",
+        ["Eyes"] = "CMUOrganHumanEyes",
+        ["Lungs"] = "CMUOrganHumanLungs",
+        ["Heart"] = "CMUOrganHumanHeart",
+        ["Stomach"] = "CMUOrganHumanStomach",
+        ["Liver"] = "CMUOrganHumanLiver",
+        ["Kidneys"] = "CMUOrganHumanKidneys",
     };
 
     [SidedDependency(Side.Server)] private HumanoidOrganAppearanceSystem _organAppearance = default!;
 
     [Test]
-    public async Task ConservativeGraphPreservesVisualsWithoutAddingMedicalOrgans()
+    public async Task MedicalGraphPreservesYautjaVisualsAndUsesCmuAnatomy()
     {
         await Server.WaitIdleAsync();
         await Server.WaitAssertion(() =>
@@ -82,13 +83,6 @@ public sealed class YautjaNubodyTest : GameTest
                     Assert.That(organComponent.Category, Is.Not.Null);
                     found.Add(organComponent.Category!.Value.Id, organ);
 
-                    Assert.Multiple(() =>
-                    {
-                        Assert.That(SEntMan.HasComponent<BodyPartHealthComponent>(organ), Is.False,
-                            "the conservative bridge must not grant legacy part-health behavior");
-                        Assert.That(SEntMan.HasComponent<OrganHealthComponent>(organ), Is.False,
-                            "stock Human internals must not silently become CMU medical organs");
-                    });
                 }
 
                 Assert.That(found.Keys, Is.EquivalentTo(ExternalOrgans.Keys.Concat(InternalOrgans.Keys)));
@@ -97,6 +91,7 @@ public sealed class YautjaNubodyTest : GameTest
 
                 foreach (var category in ExternalOrgans.Keys)
                 {
+                    Assert.That(SEntMan.HasComponent<BodyPartHealthComponent>(found[category]), Is.True, category);
                     var visual = SEntMan.GetComponent<VisualOrganComponent>(found[category]);
                     Assert.Multiple(() =>
                     {
@@ -104,6 +99,9 @@ public sealed class YautjaNubodyTest : GameTest
                         Assert.That(visual.Profile.SkinColor, Is.EqualTo(Color.White), category);
                     });
                 }
+
+                foreach (var category in InternalOrgans.Keys)
+                    Assert.That(SEntMan.HasComponent<OrganHealthComponent>(found[category]), Is.True, category);
 
                 var head = SEntMan.GetComponent<VisualOrganComponent>(found["Head"]);
                 var torso = SEntMan.GetComponent<VisualOrganComponent>(found["Torso"]);
