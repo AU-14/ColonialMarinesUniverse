@@ -24,3 +24,10 @@ hospital-emergency-approve-landing = Approve Landing
 hospital-emergency-skip-contract = Skip Contract
 hospital-emergency-release-shuttle = Release Shuttle
 hospital-emergency-request-pickup = Request Pickup
+
+# Admin command
+hospital-emergency-command-description = Sets the seconds until the next hospital evacuation shuttle incident.
+hospital-emergency-command-help = Usage: hospitalincidenttimer <seconds>
+hospital-emergency-command-no-idle-computers = No idle hospital emergency computers are waiting for a shuttle incident.
+hospital-emergency-command-updated = Updated { $count } hospital emergency computer(s). Next alert in { $seconds } seconds.
+hospital-emergency-command-seconds-hint = <seconds>
