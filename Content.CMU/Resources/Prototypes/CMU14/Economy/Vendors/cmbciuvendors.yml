@@ -860,13 +860,13 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM16A1
+      - id: AU14KitWeaponM20A
       - id: AU14KitWeaponMar40
       - id: AU14KitWeaponMP5
       - id: AU14KitWeaponP90
     - name: Weapon Ammunition
       entries:
-      - id: RMCMagazineRifleM16
+      - id: AU14MagazineRifleM20A
         amount: 60
       - id: CMMagazineSMGMP5
         amount: 60
@@ -1042,10 +1042,8 @@
     sections:
     - name: Standard issue primaries
       entries:
-      - id: AU14WeaponRifleM16A2
+      - id: AUWeaponRifleM20A
         amount: 30
-      - id: AU14WeaponRifleM16A1
-        amount: 20
       - id: WeaponSMGMP5
         amount: 30
       - id: RMCWeaponSMGPDW90
@@ -1070,10 +1068,8 @@
         amount: 1
     - name: primary ammunition
       entries:
-      - id: RMCMagazineRifleM16
+      - id: AU14MagazineRifleM20A
         amount: 200
-      - id: CMUMagazineRifleM16Extended
-        amount: 20
       - id: CMMagazineSMGMP5
         amount: 200
       - id: RMCMagazineSMGPDW90
@@ -1114,7 +1110,7 @@
         amount: 200
     - name: Magazine Boxes
       entries:
-      - id: RMCBoxMagazineRifleM16
+      - id: RMCCrateBoxBulletsRifle
         amount: 2
       - id: CMUBoxMagazineSMGMP5
         amount: 2
