@@ -5,7 +5,7 @@
     Title="{Loc corporate-console-title}" MinSize="480 480">
     <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8">
-            <Label Name="CorporateBudgetLabel" Access="Public" Text="{Loc corporate-console-budget}"
+            <Label Name="CorporateBudgetLabel" Access="Public" Text=""
                    StyleClasses="LabelHeading" Margin="0 4" />
 
             <!-- Withdraw -->
@@ -23,7 +23,7 @@
 
             <!-- Transit Tariff -->
             <Label Text="{Loc corporate-console-transit-tariff-section}" Margin="0 6" />
-            <Label Name="CurrentTariffLabel" Access="Public" Text="{Loc corporate-console-current-transit-tariff}"
+            <Label Name="CurrentTariffLabel" Access="Public" Text=""
                    Margin="0 2" />
             <Label Text="{Loc corporate-console-transit-tariff-description}"
                    StyleClasses="LabelSubText" Margin="0 2" />
