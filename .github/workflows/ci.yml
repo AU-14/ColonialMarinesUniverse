@@ -626,5 +626,6 @@ jobs:
           echo "--- $shard shard filter ---"
           echo "$FILTER"
           cd bin/Content.IntegrationTests || exit 1
+          # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
           dotnet test Content.IntegrationTests.dll \
-            --verbosity normal --filter "$FILTER" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed
+            --verbosity normal --filter "$FILTER" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000

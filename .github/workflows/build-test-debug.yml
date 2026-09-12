@@ -74,7 +74,8 @@ jobs:
         CMU_TEST_FILTER: ${{ matrix.suite.filter }}
       run: |
         $env:DOTNET_gcServer=1
-        dotnet test --no-build --configuration DebugOpt --verbosity normal --filter "$env:CMU_TEST_FILTER" Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
+        # NUnit otherwise drops the execution filter when a group exceeds 2,000 tests.
+        dotnet test --no-build --configuration DebugOpt --verbosity normal --filter "$env:CMU_TEST_FILTER" Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000 NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
 
     - name: Archive NUnit3 test results.
       if: always()
