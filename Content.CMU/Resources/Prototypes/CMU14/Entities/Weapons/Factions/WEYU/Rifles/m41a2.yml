@@ -3,7 +3,7 @@
   name: M41A/2 pulse rifle MK1
   suffix: PMC
   id: CMU14WeaponRifleM41AMK1PMC
-  description: Pulse action 10x24mm caseless assault rifle of the USCMC, personal friend of any Marine. This one is painted in a fresh coat of the newer Humbrol 76 camouflage and is used by Force Reconnaissance & MARSOC units.
+  description: A modified version M41A pulse rifle re-engineered for better weight and handling, and an high degree of accuracy brought about by a precise two-round burst system.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/WY/m41a2mk1.rsi
