@@ -5,7 +5,7 @@
     Title="{Loc ambassador-console-title}" MinSize="500 450">
     <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-            <Label Name="BudgetLabel" Access="Public" Text="{Loc ambassador-console-budget, amount='0'}" StyleClasses="LabelHeading" Margin="4 4" />
+            <Label Name="BudgetLabel" Access="Public" Text="" StyleClasses="LabelHeading" Margin="4 4" />
             <Label Name="FactionLabel" Access="Public" Text="" Margin="4 2" />
             <Label Text="{Loc ambassador-console-withdraw-section}" Margin="4 2" />
             <BoxContainer Orientation="Horizontal" Margin="4 2">
