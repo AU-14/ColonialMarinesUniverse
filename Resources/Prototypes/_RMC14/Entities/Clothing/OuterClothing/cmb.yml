@@ -46,8 +46,8 @@
   - type: RMCArmorSpeedTier
     speedTier: medium
   - type: ClothingSpeedModifier
-    walkModifier: 0.70
-    sprintModifier: 0.70
+    walkModifier: 0.725
+    sprintModifier: 0.725
   - type: ExplosionResistance
     damageCoefficient: 0
     worn: false
@@ -70,8 +70,8 @@
   - type: RMCArmorSpeedTier
     speedTier: medium
   - type: ClothingSpeedModifier
-    walkModifier: 0.70
-    sprintModifier: 0.70
+    walkModifier: 0.725
+    sprintModifier: 0.725
   - type: ExplosionResistance
     damageCoefficient: 0
     worn: false
