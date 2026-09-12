@@ -40,7 +40,7 @@
     recoilUnwielded: 4
     scatterWielded: 4
     scatterUnwielded: 20
-    baseFireRate: 2.75
+    baseFireRate: 3.5 # Like L23
     burstScatterMult: 1
     modifiers:
       Burst:
