@@ -22,8 +22,8 @@
   - type: RMCArmorSpeedTier
     speedTier: medium
   - type: ClothingSpeedModifier # light armor speed
-    walkModifier: .725
-    sprintModifier: .725
+    walkModifier: .0.897
+    sprintModifier: .0.897
   - type: ExplosionResistance
     damageCoefficient: 0
     worn: false
@@ -46,8 +46,8 @@
   - type: RMCArmorSpeedTier
     speedTier: medium
   - type: ClothingSpeedModifier
-    walkModifier: 0.666
-    sprintModifier: 0.666
+    walkModifier: 0.70
+    sprintModifier: 0.70
   - type: ExplosionResistance
     damageCoefficient: 0
     worn: false
@@ -70,8 +70,8 @@
   - type: RMCArmorSpeedTier
     speedTier: medium
   - type: ClothingSpeedModifier
-    walkModifier: 0.666
-    sprintModifier: 0.666
+    walkModifier: 0.70
+    sprintModifier: 0.70
   - type: ExplosionResistance
     damageCoefficient: 0
     worn: false
