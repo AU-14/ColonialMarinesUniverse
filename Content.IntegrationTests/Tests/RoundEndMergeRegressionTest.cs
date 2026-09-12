@@ -17,7 +17,6 @@ public sealed class RoundEndMergeRegressionTest : GameTest
     [SidedDependency(Side.Client)] private readonly IUserInterfaceManager _uiManager = null!;
 
     [Test]
-    [RunOnSide(Side.Client)]
     public async Task SummaryWindowDeduplicatesRoundAndPreservesStatsSearchAndSortContracts()
     {
         var players = new[]
