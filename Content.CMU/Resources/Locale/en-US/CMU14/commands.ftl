@@ -72,3 +72,35 @@ cmu-cmd-toolperm-unknown-tool = Unknown tool '{ $tool }'. Tools: { $tools }
 cmu-cmd-toolperm-granted = Granted '{ $tool }' to { $ckey }.
 cmu-cmd-toolperm-revoked = Revoked '{ $tool }' from { $ckey }.
 cmu-cmd-toolperm-no-change = Nothing changed.
+
+# Nuke utilities
+cmu-cmd-nuke-decals-desc = Deletes decals from every loaded grid.
+cmu-cmd-nuke-decals-help = nuke:decals [all (true/false, default: false)] [decalId...] - Deletes decals from every loaded grid.
+    By default this will only delete cleanable decals (like blood/dirt etc.) to spare map details.
+    To delete all decals (including mapper placed details), pass 'true' as the first argument.
+cmu-cmd-nuke-decals-scope-all = all decals
+cmu-cmd-nuke-decals-scope-cleanable = cleanable only
+cmu-cmd-nuke-decals-summary = Removed { $removed } decals ({ $scope }) from { $grids } grids.
+cmu-cmd-nuke-decals-summary-filtered = Removed { $removed } decals matching { $filterCount } ids ({ $scope }) from { $grids } grids.
+cmu-cmd-nuke-decals-skipped = [nuke:decals] { $count } matching decals were found but skipped because they have disabled defaultCleanable (janitor clean).
+cmu-cmd-nuke-decals-retry = To delete them, run the command again starting with 'true' ('nuke:decals true { $ids }').
+cmu-cmd-nuke-decals-hint-first = [all (default: false)] or [decalId]
+cmu-cmd-nuke-decals-hint-id = [decalId...]
+
+cmu-cmd-nuke-lights-desc = Deletes lights in a radius around you; use 'help nuke:lights' for more info.
+cmu-cmd-nuke-lights-help = Usage: nuke:lights [radius=80] [energy=80] [duration=4] [x y mapId] [color=Orange]
+cmu-cmd-nuke-lights-positive = Radius, energy, and duration must be greater than zero.
+cmu-cmd-nuke-lights-no-attached = No attached entity. Provide x y mapId explicitly.
+cmu-cmd-nuke-lights-color-error = Failed to parse color '{ $color }'. Use a name like Orange or a hex value like #ff8a00.
+cmu-cmd-nuke-lights-map-missing = Map { $mapId } does not exist.
+cmu-cmd-nuke-lights-spawned = Spawned global nuke light { $uid } at { $position } on map { $mapId } for { $duration }s.
+cmu-cmd-nuke-lights-parse-value = Failed to parse { $name } '{ $value }'.
+cmu-cmd-nuke-lights-parse-coordinates = Failed to parse coordinates '{ $x }' '{ $y }'.
+cmu-cmd-nuke-lights-parse-map-id = Failed to parse map ID '{ $mapId }'.
+cmu-cmd-nuke-lights-hint-radius = radius
+cmu-cmd-nuke-lights-hint-energy = energy
+cmu-cmd-nuke-lights-hint-duration = duration
+cmu-cmd-nuke-lights-hint-x = x
+cmu-cmd-nuke-lights-hint-y = y
+cmu-cmd-nuke-lights-hint-map-id = mapId
+cmu-cmd-nuke-lights-hint-color = color
