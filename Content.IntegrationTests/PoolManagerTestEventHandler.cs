@@ -3,7 +3,7 @@
 [SetUpFixture]
 public sealed class PoolManagerTestEventHandler
 {
-    // Leave room for the full suite's map loading and server startups within the 90-minute CI job.
+    // Full local runs need more time for map loading and server startups than individual CI shards.
     private static TimeSpan MaximumTotalTestingTimeLimit => TimeSpan.FromMinutes(75);
     private static TimeSpan HardStopTimeLimit => MaximumTotalTestingTimeLimit.Add(TimeSpan.FromMinutes(1));
 
