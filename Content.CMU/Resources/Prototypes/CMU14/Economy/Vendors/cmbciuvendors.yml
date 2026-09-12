@@ -1,4 +1,4 @@
-# Apparel, equipment, medic, aircrew, command, AR, section-leader, weaponry, special-weapons
+ # Apparel, equipment, medic, aircrew, command, AR, section-leader, weaponry, special-weapons
 - type: entity
   parent: ColMarTechBase
   id: AU14CMBCIUapparelvendor
@@ -1071,6 +1071,7 @@
         amount: 2
       - id: RMCWeaponMar50LMG
         amount: 1
+      - id: RMCWeaponShotgunXM38
     - name: primary ammunition
       entries:
       - id: AU14MagazineRifleM20A
@@ -1082,11 +1083,11 @@
       - id: RMCMagazineSMGPDW90AP
         amount: 15
       - id: RMCBoxShotgunBuckshot
-        amount: 20
+        amount: 25
       - id: RMCBoxShotgunFlechette
-        amount: 20
+        amount: 25
       - id: RMCBoxShotgunSlugs
-        amount: 20
+        amount: 25
       - id: CMMagazineRifleM54CE2
         amount: 25
       - id: CMMagazineRifleM54CE2HT
