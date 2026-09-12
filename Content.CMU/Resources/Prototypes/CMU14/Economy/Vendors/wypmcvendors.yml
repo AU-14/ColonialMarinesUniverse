@@ -48,7 +48,9 @@
       entries:
       - id: AU14WYPMCHelmet
         amount: 40
-      - id: AU14HelmetGarbRiotVisor
+      - id: CMUHelmetGarbPMCPlatemask
+        amount: 40
+      - id: CMUHelmetGarbPMCGoggles
         amount: 40
       - id: AU14WYPMCBallCap
         amount: 20
@@ -67,6 +69,22 @@
       - id: AU14WYPMCArmor
         amount: 40
       - id: AU14WYPMCArmorMin
+        amount: 30
+      - id: CMUHelmetGarbNeckerchief
+        amount: 40
+      - id: CMUHelmetGarbPMCPads
+        amount: 40
+      - id: CMUHelmetGarbPMCPadsAlt
+        amount: 30
+      - id: CMUHelmetGarbPMCBraces
+        amount: 40
+      - id: CMUHelmetGarbPMCBracesAlt
+        amount: 30
+      - id: CMUHelmetGarbPMCLapPanel
+        amount: 40
+      - id: CMUHelmetGarbKneepads
+        amount: 40
+      - id: CMUHelmetGarbGreaves
         amount: 30
     - name: Backpack
       entries:
