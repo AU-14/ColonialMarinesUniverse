@@ -80,11 +80,11 @@
     - RMCGrenadeIED
     - RMCGrenadeIED
     - RMCMRECLF
-    - CMUMagazineRifleM16Extended
-    - CMUMagazineRifleM16Extended
+    - CMUMagazineRifleM16APExt
+    - CMUMagazineRifleM16APExt
     outerClothing:
-    - CMUMagazineRifleM16Extended
-    - CMUMagazineRifleM16Extended
+    - CMUMagazineRifleM16APExt
+    - CMUMagazineRifleM16APExt
 
 
 - type: entity

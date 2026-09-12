@@ -165,7 +165,6 @@
           tags:
           - RMCAttachmentMOU53Stock
       rmc-aslot-underbarrel:
-        startingAttachble: RMCAttachmentExtinguisher
         whitelist:
           tags:
           - RMCAttachmentGyroscopicStabilizer

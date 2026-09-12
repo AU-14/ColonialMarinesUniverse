@@ -295,5 +295,95 @@
       rmc-aslot-underbarrel: 0.31, -0.283
 
 
+- type: entity
+  parent: CMMagazineRifleBase
+  id: CMUMagazineRifleM16AP
+  name: M16 'Green-Tip' 20 Round Magazine (5.56x45mm)
+  description: "A 20-round 5.56x45mm magazine developed in the early 1970s for the M16 series rifles."
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - CMUMagazineRifleM16AP
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMUCartridgeRifleM16AP
+    proto: CMUCartridgeRifleM16AP
+    capacity: 20
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/Civilian/m16ap.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: BulletRifle556x45mmM16AP
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: CMUMagazineRifleM16APExt
+  name: M16 'Green-Tip' 30 Round Magazine (5.56x45mm)
+  description: "A 30-round 5.56x45mm magazine developed in the early 1970s for the M16 series rifles."
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - CMUMagazineRifleM16APExt
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMUCartridgeRifleM16AP
+    proto: CMUCartridgeRifleM16AP
+    capacity: 30
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/Civilian/m16apext.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: BulletRifle556x45mmM16AP
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: CMUCartridgeRifleM16AP
+  name: AP Cartridge (5.56x45)
+  description: A Armor Piercing 5.56x45 rifle cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgeRifleM16AP
+  - type: CartridgeAmmo
+    proto: BulletRifle556x45mmM16AP
+
+- type: entity
+  parent: BulletRifle556x45mm
+  id: BulletRifle556x45mmM16AP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 40
+  - type: CMArmorPiercing
+    amount: 50
+
 - type: Tag
   id: CMUMagazineRifleM16Extended
+
+- type: Tag
+  id: CMUMagazineRifleM16AP
+
+- type: Tag
+  id: CMUMagazineRifleM16APExt
+
+- type: Tag
+  id: CMUCartridgeRifleM16AP
