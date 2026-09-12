@@ -24,3 +24,33 @@ cmu-cmd-savebuild-desc = Save the player-built entities in a box around you to a
 cmu-cmd-savebuild-help = savebuild <name> [radius 0-5]
 cmu-cmd-savebuild-player-only = This command can only be run by a player.
 cmu-cmd-savebuild-radius-number = Radius must be a number.
+cmu-cmd-buildsave-desc = Open the build-save selection panel.
+cmu-cmd-buildsave-help = buildsave
+
+# Z-level building
+cmu-cmd-digup-desc = Dig straight up one z-level, surfacing at your current horizontal position.
+cmu-cmd-digup-help = au_digup
+cmu-cmd-digdown-desc = Dig straight down, creating/descending into a stone z-level beneath you.
+cmu-cmd-digdown-help = au_digdown
+cmu-cmd-zdig-player-only = This command must be run by an in-game player.
+cmu-cmd-digup-success = Dug up a level.
+cmu-cmd-digup-failed = Could not dig up here (nothing above, a wall blocks the spot above, or the feature is disabled).
+cmu-cmd-digdown-success = Dug down a level.
+cmu-cmd-digdown-failed = Could not dig down here (map opted out, feature disabled, or a hand-authored level is already below).
+
+cmu-cmd-multiz-desc = List maps with their AU14 Multi Z-Level (vertical building) status, or toggle it per map / globally.
+cmu-cmd-multiz-help = au_multiz  (list)  |  au_multiz <mapId> <on|off>  |  au_multiz global <on|off>
+cmu-cmd-multiz-enabled = ENABLED
+cmu-cmd-multiz-disabled = DISABLED
+cmu-cmd-multiz-yes = Yes
+cmu-cmd-multiz-no = No
+cmu-cmd-multiz-global-list = Global AU14 z-building: { $state }  (toggle: au_multiz global on|off)
+cmu-cmd-multiz-map-list =   MapId { $mapId } { $map } - Multi Z-Level: { $enabled }
+cmu-cmd-multiz-usage = Usage: au_multiz <mapId|global> <on|off>
+cmu-cmd-multiz-invalid-state = Second argument must be 'on' or 'off'.
+cmu-cmd-multiz-global-changed = Global AU14 z-building is now { $state }.
+cmu-cmd-multiz-invalid-map = Map argument must be a numeric MapId (run 'au_multiz' to list them) or 'global'.
+cmu-cmd-multiz-map-missing = No map with MapId { $mapId }.
+cmu-cmd-multiz-map-changed = Map { $mapId } Multi Z-Level set to { $enabled }. Players { $permission } build AU14 z-level stairs/floors here.
+cmu-cmd-multiz-can-build = can now
+cmu-cmd-multiz-cannot-build = can no longer
