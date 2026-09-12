@@ -21,7 +21,8 @@
         amount: 2
       - id: RMCMagazineRifleMAR40
         amount: 7
-  - type: entity
+        
+- type: entity
   parent: RMCKitBase
   id: AU14KitWeaponM20a
   name: M20A rifle case
