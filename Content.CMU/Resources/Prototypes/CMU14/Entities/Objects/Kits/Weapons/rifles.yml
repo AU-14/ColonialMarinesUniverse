@@ -387,3 +387,27 @@
         amount: 1
       - id: AU14MagazineRifleXM20A2
         amount: 5
+
+- type: entity
+  parent: RMCKitBase
+  id: CMU14KitWeaponM41AMK1PMC
+  name: M41A/2 MK1 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMU14WeaponRifleM41AMK1PMC
+        amount: 1
+      - id: CMMagazineRifleM54CMK1AP
+        amount: 1
+      - id: CMMagazineRifleM54CMK1
+        amount: 8

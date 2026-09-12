@@ -48,7 +48,9 @@
       entries:
       - id: AU14WYPMCHelmet
         amount: 40
-      - id: AU14HelmetGarbRiotVisor
+      - id: CMUHelmetGarbPMCPlatemask
+        amount: 40
+      - id: CMUHelmetGarbPMCGoggles
         amount: 40
       - id: AU14WYPMCBallCap
         amount: 20
@@ -67,6 +69,22 @@
       - id: AU14WYPMCArmor
         amount: 40
       - id: AU14WYPMCArmorMin
+        amount: 30
+      - id: CMUHelmetGarbPMCNeckerchief
+        amount: 40
+      - id: CMUHelmetGarbPMCPads
+        amount: 40
+      - id: CMUHelmetGarbPMCPadsAlt
+        amount: 30
+      - id: CMUHelmetGarbPMCBraces
+        amount: 40
+      - id: CMUHelmetGarbPMCBracesAlt
+        amount: 30
+      - id: CMUHelmetGarbPMCLapPanel
+        amount: 40
+      - id: CMUHelmetGarbPMCKneepads
+        amount: 40
+      - id: CMUHelmetGarbPMCGreaves
         amount: 30
     - name: Backpack
       entries:
@@ -194,10 +212,10 @@
     sections:
     - name: Food
       entries:
-      - id: CMMRE
+      - id: RMCMREWeYa
         name: MRE
         amount: 30
-      - id: RMCBoxMRE
+      - id: RMCBoxMREWEYA
         amount: 5
     - name: Tools
       entries:
@@ -713,8 +731,8 @@
       takeAll: CMUAREssentialEquipmentClothing
       entries:
       - id: RMCJumpsuitVeteranPMCGunner
-      - id: CMArmorM4PMCSmartGunHarness
-      - id: ArmorHelmetPMCGunner
+      - id: CMU14WYPMCArmorSmarGunHarness
+      - id: AU14ArmorHelmetPMCTactical
     - name: Smartgun Munitions
       entries:
       - id: RMCMagazineSmartGun
@@ -875,6 +893,7 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
+      - id: CMU14KitWeaponM41AMK1PMC
       - id: CMUGunCaseRifleNSG23
       - id: AU14KitWeaponFP9000
       - id: AU14KitWeaponM39B2
@@ -885,6 +904,8 @@
       - id: RMCMagazineSMGFP9000
         amount: 60
       - id: CMMagazineSMGM63
+        amount: 60
+      - id: CMMagazineRifleM54CMK1
         amount: 60
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
@@ -984,6 +1005,8 @@
         amount: 20
       - id: RMCWeaponRifleSSG45NoLockStripped
         amount: 20
+      - id: CMU14WeaponRifleM41AMK1PMC
+        amount: 20
     - name: standard issue secondaries
       entries:
       - id: RMCWeaponPistolM77Empty
@@ -1024,6 +1047,12 @@
         amount: 30
       - id: RMCMagazineRifleSSG45
         amount: 100
+      - id: CMMagazineRifleM54CMK1
+        amount: 100
+      - id: CMMagazineRifleM54CMK1AP
+        amount: 10
+      - id: CMMagazineRifleM54CMK1Tracer
+        amount: 5
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
