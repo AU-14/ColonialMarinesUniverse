@@ -20,7 +20,8 @@ jobs:
         os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    # The same integration suite takes over an hour across the CI shards.
+    timeout-minutes: 90
 
     steps:
     - name: Checkout Master
@@ -57,7 +58,7 @@ jobs:
       shell: pwsh
       run: |
         $env:DOTNET_gcServer=1
-        dotnet test --no-build --configuration DebugOpt Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
+        dotnet test --no-build --configuration DebugOpt --verbosity normal Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
 
     - name: Archive NUnit3 test results.
       if: always()
