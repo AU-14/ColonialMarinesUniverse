@@ -78,6 +78,10 @@
         amount: 4
       - id: CMSatchelMarine
         amount: 20
+      - id: CMBackpackMarine
+        amount: 20
+      - id: CMSatchelMarineTech
+        amount: 20
     - name: Belts
       entries:
       - id: AU14BeltMarineBlack
@@ -1002,6 +1006,8 @@
       entries:
       - id: CMSatchelMarine
       - id: CMSatchelSecurity
+      - id: CMSatchelMarineTech
+      - id: CMBackpackMarine
     - name: Pouches
       choices: { RMCPouch: 2 }
       entries:
