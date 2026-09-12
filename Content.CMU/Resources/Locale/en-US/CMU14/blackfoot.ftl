@@ -34,3 +34,12 @@ cmu-blackfoot-flight-computer-start-refuel = Start refuel
 cmu-blackfoot-flight-computer-stop-refuel = Stop refuel
 cmu-blackfoot-flight-computer-start-recharge = Start recharge
 cmu-blackfoot-flight-computer-stop-recharge = Stop recharge
+
+cmu-blackfoot-weapon-stowed = The Blackfoot is stowed.
+cmu-blackfoot-weapon-taking-off = The Blackfoot weapons are safed during takeoff.
+cmu-blackfoot-weapon-landing = The Blackfoot weapons are safed during landing.
+cmu-blackfoot-weapon-crashed = The Blackfoot is too damaged to fire.
+cmu-blackfoot-weapon-invalid-state = The Blackfoot cannot fire in the current flight state.
+cmu-blackfoot-weapon-stealth = The Blackfoot cannot fire while stealth is active.
+cmu-blackfoot-weapon-rear-door = Open the rear door before firing the door gun.
+cmu-blackfoot-weapon-launcher-airborne = The Blackfoot launchers can only fire while airborne.
