@@ -58,6 +58,12 @@ public sealed partial class CCVars
     public static readonly CVarDef<float> CMUServerPerformanceStallMilliseconds =
         CVarDef.Create("cmu.server_performance.stall_ms", 250f, CVar.SERVERONLY | CVar.ARCHIVE);
 
+    // CMU14 Begin: capture short gameplay stalls independently of loading stalls.
+    /// <summary>Lower stall threshold during active gameplay. Zero uses the general stall threshold.</summary>
+    public static readonly CVarDef<float> CMUServerPerformanceGameplayStallMilliseconds =
+        CVarDef.Create("cmu.server_performance.gameplay_stall_ms", 50f, CVar.SERVERONLY | CVar.ARCHIVE);
+    // CMU14 End
+
     /// <summary>
     ///     A single real frame at or above this duration is classified as critical.
     /// </summary>
@@ -153,7 +159,7 @@ public sealed partial class CCVars
     ///     Maximum profiler events parsed for one detailed incident report.
     /// </summary>
     public static readonly CVarDef<int> CMUServerPerformanceProfileMaxEvents =
-        CVarDef.Create("cmu.server_performance.profile_max_events", 20000, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.server_performance.profile_max_events", 65536, CVar.SERVERONLY | CVar.ARCHIVE); // CMU14: cover the default profiler ring.
 
     /// <summary>
     ///     Maximum entries emitted per category in detailed performance reports.

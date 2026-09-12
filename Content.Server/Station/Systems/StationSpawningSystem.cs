@@ -1,6 +1,7 @@
 using System.Collections.Frozen;
 using Content.Server.Access.Systems;
 using Content.Server.CMU14.Roles;
+using Content.Server.CMU14.Diagnostics.Performance; // CMU14
 using Content.Server.CMU14.Round;
 using Content.Server.Humanoid;
 using Content.Server.Jobs;
@@ -73,6 +74,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     [Dependency] private MarkingManager _markingManager = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private MindSystem _mindSystem = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!; // CMU14
 
     private static readonly PlatoonJobClass[] PlatoonJobClasses = Enum.GetValues<PlatoonJobClass>();
     private static readonly FrozenDictionary<PlatoonJobClass, string> PlatoonJobClassNames = PlatoonJobClasses.ToFrozenDictionary(v => v, v => v.ToString());
@@ -175,6 +177,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         EntityUid? entity = null)
     {
         // --- Platoon job override logic start ---
+        using var operation = _performance.MeasureOperation("player-spawn", job?.Id); // CMU14: retain slow spawn attribution.
         string? jobId = job?.ToString();
         var originalJob = job;
         _prototypeManager.Resolve(originalJob, out JobPrototype? originalPrototype);

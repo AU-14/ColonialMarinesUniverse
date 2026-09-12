@@ -10,6 +10,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Tag;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Profiling; // CMU14
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -23,6 +24,10 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedMoverController _mover = default!;
     [Dependency] private TagSystem _tag = default!;
+    // CMU14 Begin: cached timed-action profiler names.
+    [Dependency] private ProfManager _profiler = default!;
+    private readonly Dictionary<Type, string> _completionProfileNames = new();
+    // CMU14 End
 
     /// <summary>
     ///     We'll use an excess time so stuff like finishing effects can show.
@@ -105,6 +110,15 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
     private void RaiseDoAfterEvents(DoAfter doAfter, DoAfterComponent component)
     {
         var ev = doAfter.Args.Event;
+        // CMU14 Begin: attribute expensive callbacks, including awaited continuations, to their timed action.
+        var eventType = ev.GetType();
+        if (!_completionProfileNames.TryGetValue(eventType, out var profileName))
+        {
+            profileName = $"CMU DoAfter {eventType.Name}";
+            _completionProfileNames.Add(eventType, profileName);
+        }
+        using var profile = _profiler.Group(profileName);
+        // CMU14 End
         ev.Handled = false;
         ev.Repeat = false;
         ev.DoAfter = doAfter;
