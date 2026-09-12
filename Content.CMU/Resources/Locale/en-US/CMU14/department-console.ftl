@@ -1,8 +1,41 @@
 department-console-salaries-dispensed = Salaries have been dispensed to all department employees.
 department-console-salary-announcement-title = Colony Payroll
 
+department-console-title = Department Console
+department-console-management-tab = Management
+department-console-orders-tab = Orders
+department-console-department = Department
+department-console-department-budget = Department Budget: ${ $amount }
+department-console-withdraw-label = Withdraw: $
+department-console-amount-placeholder = Amount
+department-console-withdraw-cash = Withdraw Cash
+department-console-default-salary-label = Default Salary: $
+department-console-set-default-salary = Set Default Salary
+department-console-hire-hint = Use an ID card on the console to hire.
+department-console-employees = Employees:
+department-console-announcement = Department Announcement:
+department-console-announcement-placeholder = Type announcement...
+department-console-send = Send
+department-console-reason = Reason:
+department-console-reason-placeholder = Reason for order...
+department-console-deliver-to = Deliver to:
+department-console-delivery-placeholder = Delivery location...
+department-console-categories = Categories:
+department-console-select-category = Select a category
+department-console-salary = ${ $amount }
+department-console-salary-custom = ${ $amount } (custom)
+department-console-salary-placeholder = Salary
+department-console-set = Set
+department-console-reset = Reset
+department-console-fire = Fire
+department-console-no-employees = No employees.
+department-console-no-catalog = No catalog available.
+department-console-category = Category: { $category }
+department-console-item-cost = ${ $amount }
+department-console-order = Order
+department-console-no-items = No items in this category.
+
 colony-comms-console-title = Communications Console
 colony-comms-console-send-message = Send Message
 colony-comms-console-toggle-siren = Toggle Siren
 colony-comms-console-announcement-title = Colony
-
