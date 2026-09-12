@@ -35,7 +35,7 @@
     recoilUnwielded: 4
     scatterWielded: 5
     scatterUnwielded: 15
-    baseFireRate: 4.0
+    baseFireRate: 5.0
     burstScatterMult: 1
     modifiers:
       Burst:
@@ -43,13 +43,13 @@
         maxScatterModifier: 10
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 7
+        shotsToMaxScatter: 8
       FullAuto:
         fireDelay: 0
         maxScatterModifier: 13
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
+        shotsToMaxScatter: 8
   - type: MagazineAmmoProvider
     autoEject: false
     soundAutoEject: null
