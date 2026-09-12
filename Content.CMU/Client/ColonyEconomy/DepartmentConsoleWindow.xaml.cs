@@ -17,15 +17,15 @@ public sealed partial class DepartmentConsoleWindow : DefaultWindow
     public DepartmentConsoleWindow()
     {
         RobustXamlLoader.Load(this);
-        TabContainer.SetTabTitle(ManagementTab, "Management");
-        TabContainer.SetTabTitle(OrdersTab, "Orders");
+        TabContainer.SetTabTitle(ManagementTab, Loc.GetString("department-console-management-tab"));
+        TabContainer.SetTabTitle(OrdersTab, Loc.GetString("department-console-orders-tab"));
     }
 
     public void UpdateState(DepartmentConsoleBuiState state)
     {
         DeptNameLabel.Text = state.DepartmentName;
-        DeptBudgetLabel.Text = $"Department Budget: ${state.DepartmentBudget:F0}";
-        OrdersBudgetLabel.Text = $"Department Budget: ${state.DepartmentBudget:F0}";
+        DeptBudgetLabel.Text = Loc.GetString("department-console-department-budget", ("amount", state.DepartmentBudget.ToString("F0")));
+        OrdersBudgetLabel.Text = Loc.GetString("department-console-department-budget", ("amount", state.DepartmentBudget.ToString("F0")));
         DefaultSalaryInput.Text = state.DefaultSalary.ToString();
 
         // Rebuild employee list
@@ -55,19 +55,22 @@ public sealed partial class DepartmentConsoleWindow : DefaultWindow
 
             var salaryLabel = new Label
             {
-                Text = emp.HasOverride ? $"${emp.Salary} (custom)" : $"${emp.Salary}",
+                Text = Loc.GetString(emp.HasOverride
+                        ? "department-console-salary-custom"
+                        : "department-console-salary",
+                    ("amount", emp.Salary)),
                 HorizontalExpand = true,
                 SizeFlagsStretchRatio = 1
             };
 
             var salaryInput = new LineEdit
             {
-                PlaceHolder = "Salary",
+                PlaceHolder = Loc.GetString("department-console-salary-placeholder"),
                 HorizontalExpand = true,
                 SizeFlagsStretchRatio = 1
             };
 
-            var setSalaryBtn = new Button { Text = "Set" };
+            var setSalaryBtn = new Button { Text = Loc.GetString("department-console-set") };
             var idCopy = emp.IdCardUid;
             setSalaryBtn.OnPressed += _ =>
             {
@@ -75,10 +78,10 @@ public sealed partial class DepartmentConsoleWindow : DefaultWindow
                     OnSetIndividualSalaryPressed?.Invoke(idCopy, salary);
             };
 
-            var resetBtn = new Button { Text = "Reset" };
+            var resetBtn = new Button { Text = Loc.GetString("department-console-reset") };
             resetBtn.OnPressed += _ => OnRemoveOverridePressed?.Invoke(idCopy);
 
-            var fireBtn = new Button { Text = "Fire" };
+            var fireBtn = new Button { Text = Loc.GetString("department-console-fire") };
             fireBtn.OnPressed += _ => OnFirePressed?.Invoke(idCopy);
 
             row.AddChild(nameLabel);
@@ -94,13 +97,13 @@ public sealed partial class DepartmentConsoleWindow : DefaultWindow
 
         if (state.Employees.Count == 0)
         {
-            EmployeeList.AddChild(new Label { Text = "No employees." });
+            EmployeeList.AddChild(new Label { Text = Loc.GetString("department-console-no-employees") });
         }
 
         // Rebuild order catalog categories
         OrderCategoryList.RemoveAllChildren();
         OrderItemList.RemoveAllChildren();
-        SelectedCategoryLabel.Text = "Select a category";
+        SelectedCategoryLabel.Text = Loc.GetString("department-console-select-category");
 
         for (var catIdx = 0; catIdx < state.Catalog.Count; catIdx++)
         {
@@ -113,14 +116,14 @@ public sealed partial class DepartmentConsoleWindow : DefaultWindow
 
         if (state.Catalog.Count == 0)
         {
-            OrderCategoryList.AddChild(new Label { Text = "No catalog available." });
+            OrderCategoryList.AddChild(new Label { Text = Loc.GetString("department-console-no-catalog") });
         }
     }
 
     private void ShowCategory(DepartmentOrderCatalogCategory category)
     {
         OrderItemList.RemoveAllChildren();
-        SelectedCategoryLabel.Text = $"Category: {category.Name}";
+        SelectedCategoryLabel.Text = Loc.GetString("department-console-category", ("category", category.Name));
 
         foreach (var entry in category.Entries)
         {
@@ -139,12 +142,12 @@ public sealed partial class DepartmentConsoleWindow : DefaultWindow
 
             var costLabel = new Label
             {
-                Text = $"${entry.Cost}",
+                Text = Loc.GetString("department-console-item-cost", ("amount", entry.Cost)),
                 HorizontalExpand = true,
                 SizeFlagsStretchRatio = 1
             };
 
-            var orderBtn = new Button { Text = "Order" };
+            var orderBtn = new Button { Text = Loc.GetString("department-console-order") };
             var catIdx = entry.CategoryIndex;
             var entIdx = entry.EntryIndex;
             orderBtn.OnPressed += _ =>
@@ -163,7 +166,7 @@ public sealed partial class DepartmentConsoleWindow : DefaultWindow
 
         if (category.Entries.Count == 0)
         {
-            OrderItemList.AddChild(new Label { Text = "No items in this category." });
+            OrderItemList.AddChild(new Label { Text = Loc.GetString("department-console-no-items") });
         }
     }
 }

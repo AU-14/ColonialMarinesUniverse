@@ -1,5 +1,5 @@
 <DefaultWindow xmlns="https://spacestation14.io"
-               Title="Wendigo Voice Mimicry"
+               Title="{Loc wendigo-voice-window-title}"
                MinSize="500 500"
                SetSize="500 500">
 
@@ -17,7 +17,7 @@
 
             <LineEdit
                 Name="SearchBar"
-                PlaceHolder="Search..."
+                PlaceHolder="{Loc wendigo-voice-search-placeholder}"
                 HorizontalExpand="True" />
 
             <ScrollContainer

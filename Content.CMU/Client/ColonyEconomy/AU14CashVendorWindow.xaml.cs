@@ -27,18 +27,25 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
     public void UpdateState(AU14CashVendorBuiState state)
     {
         _lastState = state;
-        InsertedCashLabel.Text = $"${state.InsertedCash:F0}";
+        InsertedCashLabel.Text = Loc.GetString("cash-vendor-amount", ("amount", state.InsertedCash.ToString("F0")));
         ReturnChangeBtn.Disabled = state.InsertedCash <= 0;
         TaxFooterLabel.Text = state.SalesTaxPercent > 0
-            ? $"Sales Tax: {state.SalesTaxPercent:F0}%"
-            : "No sales tax";
+            ? Loc.GetString("cash-vendor-sales-tax", ("percent", state.SalesTaxPercent.ToString("F0")))
+            : Loc.GetString("cash-vendor-no-sales-tax");
 
         ScanIdBtn.Visible = state.AllowDepartmentBudget;
-        ScanIdBtn.Text = state.HasDepartmentMode ? "Clear Dept" : "Scan ID";
+        ScanIdBtn.Text = state.HasDepartmentMode
+            ? Loc.GetString("cash-vendor-clear-department")
+            : Loc.GetString("cash-vendor-scan-id");
 
         DeptBudgetRow.Visible = state.HasDepartmentMode;
         if (state.HasDepartmentMode)
-            DeptBudgetLabel.Text = $"${state.DepartmentBudget:F0}  ({state.DepartmentName})";
+        {
+            DeptBudgetLabel.Text = Loc.GetString(
+                "cash-vendor-department-budget-value",
+                ("amount", state.DepartmentBudget.ToString("F0")),
+                ("department", state.DepartmentName));
+        }
 
         RefreshList();
     }
@@ -90,7 +97,7 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
 
             var priceLabel = new Label
             {
-                Text = $"${item.EffectivePrice}",
+                Text = Loc.GetString("cash-vendor-amount", ("amount", item.EffectivePrice)),
                 MinWidth = 40,
                 HorizontalAlignment = HAlignment.Right
             };
@@ -99,7 +106,7 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
                 ? _lastState.DepartmentBudget >= item.EffectivePrice
                 : _lastState.InsertedCash >= item.EffectivePrice;
 
-            var buyBtn = new Button { Text = "Buy", MinWidth = 50 };
+            var buyBtn = new Button { Text = Loc.GetString("cash-vendor-buy"), MinWidth = 50 };
             var idxCopy = item.Index;
             buyBtn.Disabled = !canAfford;
             buyBtn.OnPressed += _ => OnBuyPressed?.Invoke(idxCopy);
@@ -111,6 +118,6 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
         }
 
         if (ItemList.ChildCount == 0)
-            ItemList.AddChild(new Label { Text = "No items available." });
+            ItemList.AddChild(new Label { Text = Loc.GetString("cash-vendor-no-items") });
     }
 }

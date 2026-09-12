@@ -24,7 +24,7 @@ public sealed class BudgetConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInt
         if (_window == null || state is not BudgetConsoleBuiState s)
             return;
 
-        _window.BudgetLabel.Text = $"Current Budget: {s.Budget:C}";
+        _window.BudgetLabel.Text = Loc.GetString("budget-console-current-budget", ("amount", s.Budget.ToString("C")));
 
         // Rebuild department list
         _window.DepartmentList.RemoveAllChildren();
@@ -38,12 +38,15 @@ public sealed class BudgetConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInt
 
             var label = new Label
             {
-                Text = $"{dept.Name} (Budget: ${dept.Budget:F0})",
+                Text = Loc.GetString(
+                    "budget-console-department-entry",
+                    ("department", dept.Name),
+                    ("amount", dept.Budget.ToString("F0"))),
                 HorizontalExpand = true,
                 SizeFlagsStretchRatio = 2
             };
 
-            var transferBtn = new Button { Text = "Transfer" };
+            var transferBtn = new Button { Text = Loc.GetString("budget-console-transfer") };
             var deptUidCopy = dept.Uid;
             transferBtn.OnPressed += _ =>
             {
@@ -58,7 +61,7 @@ public sealed class BudgetConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInt
 
         if (s.Departments.Count == 0)
         {
-            _window.DepartmentList.AddChild(new Label { Text = "No departments found." });
+            _window.DepartmentList.AddChild(new Label { Text = Loc.GetString("budget-console-no-departments") });
         }
     }
 }

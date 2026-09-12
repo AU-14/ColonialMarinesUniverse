@@ -61,11 +61,11 @@
       severeSlowTime: 4
       dyloveneEfficiency: 3
       exposureMessages:
-      - "You feel like dying!"
-      - "Your lungs burn!"
-      - "You cough uncontrollably!"
-      - "Make it stop!"
-      - "Your body stiffens!"
+      - cmu-chemical-irritant-exposure-dying
+      - cmu-chemical-irritant-exposure-lungs-burn
+      - cmu-chemical-irritant-exposure-cough
+      - cmu-chemical-irritant-exposure-stop
+      - cmu-chemical-irritant-exposure-stiffens
   - type: DeleteOnExplosion
 
 

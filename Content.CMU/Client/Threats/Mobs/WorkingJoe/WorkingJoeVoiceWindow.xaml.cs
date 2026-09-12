@@ -16,6 +16,9 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
         "Curious", "Interrogation", "Identification", "Concern"
     };
 
+    private const string AllButtonName = "WorkingJoeVoiceAllButton";
+    private const string FavoritesButtonName = "WorkingJoeVoiceFavoritesButton";
+    private const string RecentButtonName = "WorkingJoeVoiceRecentButton";
     private const int MaxRecent = 5;
     private readonly WorkingJoeVoiceFavorites _favorites;
     private readonly List<string> _recentIds = new();
@@ -46,7 +49,8 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
 
         var allButton = new Button
         {
-            Text = "All",
+            Name = AllButtonName,
+            Text = Loc.GetString("working-joe-voice-category-all"),
             HorizontalExpand = true,
             ToggleMode = true,
             Pressed = _selectedCategory == null && !_showFavorites
@@ -62,7 +66,8 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
 
         var favButton = new Button
         {
-            Text = "★ Favorites",
+            Name = FavoritesButtonName,
+            Text = Loc.GetString("working-joe-voice-category-favorites"),
             HorizontalExpand = true,
             ToggleMode = true,
             Pressed = _showFavorites
@@ -78,7 +83,8 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
 
         var recentButton = new Button
         {
-            Text = "⏲ Recent",
+            Name = RecentButtonName,
+            Text = Loc.GetString("working-joe-voice-category-recent"),
             HorizontalExpand = true,
             ToggleMode = true,
             Pressed = _selectedCategory == "__recent"
@@ -123,7 +129,7 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
 
             var label = new Label
             {
-                Text = "Questions",
+                Text = Loc.GetString("working-joe-voice-category-questions"),
                 FontColorOverride = Color.FromHex("#AAAAAA"),
                 HorizontalAlignment = HAlignment.Center,
                 Margin = new(0, 2)
@@ -163,11 +169,11 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
             if (child is not Button btn)
                 continue;
 
-            if (btn.Text == "All")
+            if (btn.Name == AllButtonName)
                 btn.Pressed = _selectedCategory == null && !_showFavorites;
-            else if (btn.Text == "★ Favorites")
+            else if (btn.Name == FavoritesButtonName)
                 btn.Pressed = _showFavorites;
-            else if (btn.Text == "⏲ Recent")
+            else if (btn.Name == RecentButtonName)
                 btn.Pressed = _selectedCategory == "__recent";
             else
                 btn.Pressed = btn.Text == _selectedCategory;
@@ -194,14 +200,14 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
         {
             filtered = _allLines
                 .Where(l => _favorites.Contains(l.EmoteId))
-                .Where(l => string.IsNullOrEmpty(search) || l.DisplayName.ToLowerInvariant().Contains((string)search))
+                .Where(l => string.IsNullOrEmpty(search) || l.DisplayName.ToLowerInvariant().Contains(search))
                 .ToList();
         }
         else
         {
             filtered = _allLines
                 .Where(l => _selectedCategory == null || l.Category == _selectedCategory)
-                .Where(l => string.IsNullOrEmpty(search) || l.DisplayName.ToLowerInvariant().Contains((string)search))
+                .Where(l => string.IsNullOrEmpty(search) || l.DisplayName.ToLowerInvariant().Contains(search))
                 .ToList();
         }
 
@@ -220,7 +226,9 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
                 Text = isFav ? "★" : "☆",
                 MinWidth = 30,
                 MaxWidth = 30,
-                ToolTip = isFav ? "Remove from favorites" : "Add to favorites"
+                ToolTip = Loc.GetString(isFav
+                    ? "working-joe-voice-favorite-remove"
+                    : "working-joe-voice-favorite-add")
             };
             string emoteId = line.EmoteId;
             favButton.OnPressed += _ =>
@@ -250,7 +258,7 @@ public sealed partial class WorkingJoeVoiceWindow : DefaultWindow
         {
             LineList.AddChild(new Label
             {
-                Text = "No results.",
+                Text = Loc.GetString("working-joe-voice-no-results"),
                 FontColorOverride = Color.FromHex("#888888"),
                 HorizontalAlignment = HAlignment.Center,
                 Margin = new(0, 12)

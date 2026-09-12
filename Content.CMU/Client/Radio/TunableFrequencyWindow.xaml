@@ -4,7 +4,7 @@
                MinHeight="110">
 
   <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
-    <Label Name="CurrentLabel" Text="FREQ: ---.---" FontColorOverride="#C8D2E8" />
+    <Label Name="CurrentLabel" Text="{Loc tunable-radio-current-freq-placeholder}" FontColorOverride="#C8D2E8" />
     <BoxContainer Orientation="Horizontal" SeparationOverride="4">
       <LineEdit Name="FreqInput"
                 HorizontalExpand="True"
