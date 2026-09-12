@@ -117,6 +117,10 @@ public sealed partial class SleepingSystem : EntitySystem
     /// </summary>
     private void OnSleepStateChanged(Entity<MobStateComponent> ent, ref SleepStateChangedEvent args)
     {
+        // Network state and entity deletion already own their component removals.
+        if (_gameTiming.ApplyingState || TerminatingOrDeleted(ent))
+            return;
+
         if (args.FellAsleep)
         {
             // Just in case we're not using the sleeping status

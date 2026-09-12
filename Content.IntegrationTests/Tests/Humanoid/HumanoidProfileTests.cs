@@ -59,8 +59,8 @@ public sealed class HumanoidProfileTests : GameTest
             Assert.That(humanoidComponent.Species, Is.EqualTo(SlimePerson));
             Assert.That(humanoidComponent.Voice, Is.EqualTo(SlimeVoice));
 
-            Assert.That(voiceComponent.EmoteSounds, Is.EqualTo(new ProtoId<EmoteSoundsPrototype>("RMCFemaleSlime")),
-                "legacy slime voices resolve to the migrated RMC sound bank");
+            Assert.That(voiceComponent.EmoteSounds, Is.EqualTo(SlimeVoice),
+                "the selected profile voice overrides the species default sound bank");
         });
     }
 

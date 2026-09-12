@@ -38,7 +38,9 @@ public sealed class PopupVisibilityMergeRegressionTest : GameTest
                 // The display entity is deliberately invisible so a display-keyed gate fails the positive controls.
                 SEntMan.EnsureComponent<EntityActiveInvisibleComponent>(display);
                 SEntMan.EnsureComponent<EntityActiveInvisibleComponent>(entityInvisibleRecipient);
-                SEntMan.EnsureComponent<XenoActiveInvisibleComponent>(xenoInvisibleRecipient);
+                var invisible = SEntMan.EnsureComponent<XenoActiveInvisibleComponent>(xenoInvisibleRecipient);
+                typeof(XenoActiveInvisibleComponent).GetField(nameof(XenoActiveInvisibleComponent.ExpiresAt))!
+                    .SetValue(invisible, Server.Timing.CurTime + TimeSpan.FromMinutes(5));
                 Server.PlayerMan.SetAttachedEntity(session, observer);
             });
             await Pair.RunUntilSynced();

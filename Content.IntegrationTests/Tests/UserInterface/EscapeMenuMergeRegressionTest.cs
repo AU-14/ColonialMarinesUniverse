@@ -19,7 +19,7 @@ public sealed class EscapeMenuMergeRegressionTest : GameTest
         EscapeUIController controller = null!;
         ClientGameTicker ticker = null!;
         EscapeMenu window = null!;
-        var state = new GameplayState();
+        GameplayState state = null!;
         var originalSeeOwnNotes = Server.CfgMan.GetCVar(CCVars.SeeOwnNotes);
         var baselineTickerHandlers = 0;
         var entered = false;
@@ -27,6 +27,7 @@ public sealed class EscapeMenuMergeRegressionTest : GameTest
         {
             await Client.WaitAssertion(() =>
             {
+                state = new GameplayState();
                 controller = Client.ResolveDependency<IUserInterfaceManager>().GetUIController<EscapeUIController>();
                 ticker = Client.System<ClientGameTicker>();
                 baselineTickerHandlers = HandlerCount(ticker, "RoundStatusUpdated");

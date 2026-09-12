@@ -129,7 +129,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         SubscribeLocalEvent<TacticalMapComponent, MapInitEvent>(OnTacticalMapMapInit);
 
-        SubscribeLocalEvent<TacticalMapUserComponent, ComponentStartup>(OnUserStartup);
+        SubscribeLocalEvent<TacticalMapUserComponent, MapInitEvent>(OnUserMapInit);
         SubscribeLocalEvent<TacticalMapUserComponent, RoleAddedEvent>(OnUserFactionChanged);
         SubscribeLocalEvent<TacticalMapUserComponent, MindAddedMessage>(OnUserFactionChanged);
 
@@ -242,7 +242,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         }
     }
 
-    private void OnUserStartup(Entity<TacticalMapUserComponent> ent, ref ComponentStartup args)
+    private void OnUserMapInit(Entity<TacticalMapUserComponent> ent, ref MapInitEvent args)
     {
         _actions.AddAction(ent, ref ent.Comp.Action, ent.Comp.ActionId);
 

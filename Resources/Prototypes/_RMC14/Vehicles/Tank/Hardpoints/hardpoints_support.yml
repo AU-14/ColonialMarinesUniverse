@@ -51,6 +51,12 @@
   name: smoke launcher
   description: A smoke launcher support attachment for a tank.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: slauncher_0
   - type: HardpointItem
@@ -109,6 +115,12 @@
   name: Improper L-39T Smoke Discharger
   description: A support module for the FV150, based off those used by the UA for their vehicles.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Structures/vehicles/fv150/icons.rsi
     state: slauncher_0
@@ -172,6 +184,12 @@
   name: flare module
   description: A flare launcher support attachment for a tank.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: slauncher_1
   - type: HardpointItem

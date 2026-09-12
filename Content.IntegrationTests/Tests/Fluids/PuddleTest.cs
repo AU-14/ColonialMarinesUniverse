@@ -93,7 +93,7 @@ namespace Content.IntegrationTests.Tests.Fluids
                 var tile = testMap.Tile;
                 var gridUid = tile.GridUid;
                 var (x, y) = tile.GridIndices;
-                var coordinates = new EntityCoordinates(gridUid, x, y);
+                var coordinates = new EntityCoordinates(gridUid, x + 0.5f, y + 0.5f);
 
                 Assert.That(
                     decalSystem.TryAddDecal(

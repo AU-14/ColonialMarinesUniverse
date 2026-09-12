@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Text;
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
+using Content.Shared.CMU14.DroneOperator;
 using Robust.Shared;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.Configuration;
@@ -361,7 +362,13 @@ namespace Content.IntegrationTests.Tests
                     var serverEntities = new HashSet<EntityUid>(Entities(server.EntMan));
                     var clientEntities = new HashSet<EntityUid>(Entities(client.EntMan));
                     EntityUid uid = default;
-                    await server.WaitPost(() => uid = server.EntMan.SpawnEntity(protoId, coords));
+                    EntProtoId? ruinedCore = null;
+                    await server.WaitPost(() =>
+                    {
+                        uid = server.EntMan.SpawnEntity(protoId, coords);
+                        if (server.EntMan.TryGetComponent<CMUDroneAndroidComponent>(uid, out var drone))
+                            ruinedCore = drone.RuinedCorePrototype;
+                    });
                     await pair.RunTicksSync(3);
 
                     // If the entity deleted itself, check that it didn't spawn other entities
@@ -388,6 +395,8 @@ namespace Content.IntegrationTests.Tests
 
                     await server.WaitPost(() => server.EntMan.DeleteEntity(uid));
                     await pair.RunTicksSync(3);
+                    if (ruinedCore is { } corePrototype)
+                        await DeleteExpectedDroneCore(pair, corePrototype, serverEntities, clientEntities);
                     await CleanupTransientEntities(pair, serverEntities);
 
                     // Check that the number of entities has gone back to the original value.
@@ -399,6 +408,35 @@ namespace Content.IntegrationTests.Tests
                         BuildDiffString(clientEntities, Entities(client.EntMan), client.EntMan));
                 }
             });
+        }
+
+        private static async Task DeleteExpectedDroneCore(
+            Pair.TestPair pair,
+            EntProtoId prototype,
+            HashSet<EntityUid> serverBaseline,
+            HashSet<EntityUid> clientBaseline)
+        {
+            EntityUid[] cores = [];
+            await pair.Server.WaitAssertion(() =>
+            {
+                var entities = pair.Server.EntMan;
+                cores = entities.GetEntities().Where(uid => !serverBaseline.Contains(uid) &&
+                    entities.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == prototype.Id).ToArray();
+                Assert.That(cores, Has.Length.EqualTo(1), "a deleted drone must leave exactly one ruined core");
+            });
+            await pair.Client.WaitAssertion(() =>
+            {
+                var entities = pair.Client.EntMan;
+                Assert.That(entities.GetEntities().Count(uid => !clientBaseline.Contains(uid) &&
+                    entities.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == prototype.Id), Is.EqualTo(1),
+                    "the ruined core must replicate before cleanup");
+            });
+            await pair.Server.WaitPost(() =>
+            {
+                foreach (var core in cores)
+                    pair.Server.EntMan.DeleteEntity(core);
+            });
+            await pair.RunTicksSync(3);
         }
 
         /// <summary>

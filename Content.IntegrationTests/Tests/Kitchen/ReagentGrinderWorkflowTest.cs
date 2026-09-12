@@ -308,6 +308,7 @@ public sealed class ReagentGrinderWorkflowTest : GameTest
 
     private async Task AssertLinkedTo(EntityUid grinder, EntityUid fridge)
     {
+        await Pair.RunUntilSynced();
         await Pair.Server.WaitAssertion(() =>
         {
             var component = Pair.Server.EntMan.GetComponent<ReagentGrinderComponent>(grinder);
@@ -326,6 +327,7 @@ public sealed class ReagentGrinderWorkflowTest : GameTest
 
     private async Task AssertUnlinked(EntityUid grinder)
     {
+        await Pair.RunUntilSynced();
         await Pair.Server.WaitAssertion(() =>
         {
             var component = Pair.Server.EntMan.GetComponent<ReagentGrinderComponent>(grinder);

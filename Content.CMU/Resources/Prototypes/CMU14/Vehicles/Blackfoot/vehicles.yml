@@ -372,6 +372,21 @@
   id: VehicleBlackfoot
 
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      thrusters: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      launchers: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 500
   - type: VehicleHardpointVisuals
@@ -388,6 +403,25 @@
   suffix: Door Gun
 
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      thrusters: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      launchers: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      door-gun: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 500
   - type: VehicleHardpointVisuals
@@ -406,6 +440,29 @@
   suffix: Recon
 
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      thrusters: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      launchers: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      door-gun: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      recon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      sensors: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 500
   - type: VehicleHardpointVisuals
@@ -425,6 +482,21 @@
   id: VehicleBlackfootTransport
   suffix: Transport
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      thrusters: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      launchers: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 500
   - type: VehicleHardpointVisuals

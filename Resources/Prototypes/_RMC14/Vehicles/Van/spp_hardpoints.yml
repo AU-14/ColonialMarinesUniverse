@@ -4,6 +4,13 @@
   name: SPP van turret
   description: A roof-mounted turret fitted to an SPP van.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/sppvan.rsi
     state: van_turret_0
@@ -55,6 +62,12 @@
   name: SPP van cannon
   description: A turret-mounted cannon for an SPP van.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/sppvan.rsi
     state: t60p3m_0

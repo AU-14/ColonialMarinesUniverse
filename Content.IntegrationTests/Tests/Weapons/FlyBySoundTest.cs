@@ -88,13 +88,18 @@ public sealed class FlyBySoundTest : GameTest
         EntityUid predicted = default;
         await client.WaitPost(() =>
         {
-            predicted = client.EntMan.SpawnEntity(ProjectilePrototype, client.Transform(clientListener).Coordinates);
+            predicted = client.EntMan.SpawnEntity(ProjectilePrototype,
+                client.Transform(clientListener).Coordinates.Offset(new Vector2(1.1f, 0)));
             client.EntMan.EnsureComponent<PredictedProjectileClientComponent>(predicted);
             client.EntMan.System<SharedPhysicsSystem>().UpdateIsPredicted(predicted);
 
+            // Enter the listener's range during prediction, rather than starting in contact
+            // while the physics system is rebuilding contacts for a received state.
+            client.EntMan.System<SharedPhysicsSystem>().SetLinearVelocity(predicted, new Vector2(-5, 0));
+
             AssertSingleFlyByFixture(client.EntMan, predicted);
         });
-        await client.WaitRunTicks(2);
+        await client.WaitRunTicks(8);
 
         await client.WaitAssertion(() =>
         {

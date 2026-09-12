@@ -208,19 +208,40 @@
   parent: VehicleAPCBase
   id: VehicleAPC
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
     slots:
     - wheel-1
   - type: VehicleHardpointVisuals
-    layers:
-    - state: ""
-      layer: primary
-    - state: ""
-      layer: secondary
-    - state: ""
-      layer: support
+    layers: []
   - type: PointLight
     radius: 7
     energy: 3
@@ -237,19 +258,40 @@
   name: armored personnel carrier (medical)
   description: A medical-configured APC outfitted with triage markings.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
     slots:
     - wheel-1
   - type: VehicleHardpointVisuals
-    layers:
-    - state: ""
-      layer: primary
-    - state: ""
-      layer: secondary
-    - state: ""
-      layer: support
+    layers: []
   - type: PointLight
     radius: 7
     energy: 3
@@ -300,19 +342,40 @@
   name: armored personnel carrier (command)
   description: A command-configured APC bristling with sensors and comms gear.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
     slots:
     - wheel-1
   - type: VehicleHardpointVisuals
-    layers:
-    - state: ""
-      layer: primary
-    - state: ""
-      layer: secondary
-    - state: ""
-      layer: support
+    layers: []
   - type: PointLight
     radius: 7
     energy: 3
@@ -363,6 +426,33 @@
   name: UPP armored personnel carrier
   description: An armored personnel carrier configured for UPP forces.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
@@ -372,10 +462,6 @@
     layers:
     - state: ""
       layer: primary
-    - state: ""
-      layer: secondary
-    - state: ""
-      layer: support
   - type: PointLight
     radius: 7
     energy: 3
@@ -495,19 +581,40 @@
   name: Weyland-Yutani armored personnel carrier
   description: An armored personnel carrier operated by Weyland-Yutani's private military contractors.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-north: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      port-gun-south: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
     slots:
     - wheel-1
   - type: VehicleHardpointVisuals
-    layers:
-    - state: ""
-      layer: primary
-    - state: ""
-      layer: secondary
-    - state: ""
-      layer: support
+    layers: []
   - type: PointLight
     radius: 7
     energy: 3

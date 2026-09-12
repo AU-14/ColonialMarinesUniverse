@@ -465,6 +465,12 @@
   name: M707 spotter tripod
   description: A deployed tripod for supporting the M707 spotter scope.
   components:
+  - type: ContainerContainer
+    containers:
+      vulture_spotter_scope: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/vulture_spotter.rsi
     layers:

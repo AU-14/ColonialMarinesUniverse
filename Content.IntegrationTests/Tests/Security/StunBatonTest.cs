@@ -183,6 +183,7 @@ public sealed class StunBatonTests : InteractionTest
     [Description("Checks that an activated stun baton stuns the target")]
     public async Task StunBatonTest()
     {
+        await AddGravity(MapData.MapUid);
         // Prevent the test mob from suffocating.
         await AddAtmosphere();
 

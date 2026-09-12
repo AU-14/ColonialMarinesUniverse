@@ -38,6 +38,13 @@
   name: UPP APC turret
   description: A rotating turret mount for an UPP APC.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/sppapc.rsi
     state: apc_turret_0
@@ -89,6 +96,12 @@
   name: UPP APC minigun
   description: A minigun fitted to an UPP APC turret.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 500
   - type: Sprite
@@ -129,6 +142,12 @@
   name: UPP APC autocannon
   description: A frontal autocannon hardpoint for an UPP APC.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 350
   - type: Sprite
@@ -154,6 +173,12 @@
   name: HJ35 APC launcher
   description: A missile launcher fitted to the secondary mount of an UPP APC.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/sppapc.rsi
     state: hj35launcher
@@ -175,6 +200,12 @@
   name: UPP APC flare launcher
   description: A flare launcher hardpoint for UPP APC support slots.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 500
   - type: Sprite

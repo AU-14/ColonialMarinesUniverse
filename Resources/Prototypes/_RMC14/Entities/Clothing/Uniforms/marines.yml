@@ -126,6 +126,12 @@
   name: M3 MOPP Suit
   description: M3 MOPP suits are specially designed and engineered to protect the wearer from unshielded exposure to any Chemical, Biological, Radiological, or Nuclear (CBRN) threats in the field. The suit has a recommended lifespan of twenty-four hours once contact with a toxic environment is made, but depending on the severity this can be shortened to eight hours or less.
   components:
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/Marine/cbrnsuit.rsi
   - type: CMArmor

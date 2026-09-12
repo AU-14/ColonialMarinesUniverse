@@ -133,6 +133,12 @@
   name: humvee cannon
   description: A fixed forward cannon for a humvee hardpoint.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: humveecannon
   - type: HardpointItem
@@ -191,6 +197,12 @@
   name: ARC cannon
   description: A burst-fire cannon configured for an ARC humvee turret.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 125
   - type: Gun
@@ -207,6 +219,12 @@
   name: humvee launcher
   description: A launcher hardpoint for a humvee.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: humveelauncher
   - type: HardpointItem

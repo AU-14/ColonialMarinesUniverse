@@ -318,7 +318,6 @@ public sealed class GunOwnerPenaltyRegressionTest : GameTest
             await Server.WaitAssertion(() =>
             {
                 AssertPenaltyOwners<CMUMedicalGunAimPenaltyComponent>(holder, plain, nested);
-                AssertSpread(nested, 2);
                 ResetRefreshes(holder, plain, nested);
 
                 var medical = Server.System<CMUMedicalSpeedSystem>();

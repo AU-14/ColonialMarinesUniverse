@@ -48,6 +48,21 @@
   description: A device that can record dialogue on magnetic tape and play it back. Good for appeals or witness statements.
   suffix: Empty
   components:
+  - type: ItemSlots
+    allowSmartEquip: False
+  - type: UniversalRecorderRuntime
+    warningSent: False
+    waitingForHissLoop: False
+    state: Stopped
+    recordingStartedAt: 0
+    recordingBaseOffset: 0
+    playbackStream: null
+    playbackStartStream: null
+    playbackIndex: 0
+    pendingSilenceSeconds: null
+    nextPrintAt: 0
+    nextPlaybackAt: 0
+    hissLoopStartAt: 0
   - type: Sprite
     layers:
     - map: ["enum.UniversalRecorderVisualLayers.Base"]
@@ -59,6 +74,21 @@
   name: universal recorder
   description: A device that can record dialogue on magnetic tape and play it back. Good for appeals or witness statements.
   components:
+  - type: ItemSlots
+    allowSmartEquip: False
+  - type: UniversalRecorderRuntime
+    warningSent: False
+    waitingForHissLoop: False
+    state: Stopped
+    recordingStartedAt: 0
+    recordingBaseOffset: 0
+    playbackStream: null
+    playbackStartStream: null
+    playbackIndex: 0
+    pendingSilenceSeconds: null
+    nextPrintAt: 0
+    nextPlaybackAt: 0
+    hissLoopStartAt: 0
   - type: UniversalRecorder
     tapeSlot:
       startingItem: RMCUniversalRecorderTape

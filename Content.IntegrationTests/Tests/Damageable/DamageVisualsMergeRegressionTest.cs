@@ -72,7 +72,7 @@ public sealed class DamageVisualsMergeRegressionTest : GameTest
     [EnsureCVar(Side.Server, typeof(CMUMedicalCCVars), nameof(CMUMedicalCCVars.Enabled), false)]
     public async Task ZeroVisibilityDisplacementAndGroupColorPreserveMergedSemantics()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var pair = Pair;
         var server = pair.Server;
         var client = pair.Client;
         var serverEntities = server.EntMan;
@@ -222,7 +222,6 @@ public sealed class DamageVisualsMergeRegressionTest : GameTest
             serverEntities.DeleteEntity(overlay);
             serverEntities.DeleteEntity(human);
         });
-        await pair.CleanReturnAsync();
     }
 
     private static DamageSpecifier Damage(string type, float amount)

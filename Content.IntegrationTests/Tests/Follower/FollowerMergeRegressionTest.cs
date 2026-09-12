@@ -31,6 +31,7 @@ public sealed class FollowerMergeRegressionTest : GameTest
 
         await Server.WaitPost(() =>
         {
+            Server.ResolveDependency<Content.Server.Administration.Managers.IAdminManager>().DeAdmin(session);
             var mapSystem = Server.System<SharedMapSystem>();
             var followSystem = Server.System<FollowerSystem>();
             var tagSystem = Server.System<TagSystem>();

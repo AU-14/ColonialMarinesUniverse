@@ -54,6 +54,12 @@
   name: Blackfoot flare launcher pod
   description: A Blackfoot pilot-operated utility flare launcher pod.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: launchers
   - type: HardpointIntegrity
@@ -118,6 +124,12 @@
   name: M866 automatic grenade launcher
   description: A rear-door automatic grenade launcher for the AD-71E Blackfoot.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: doorgun-module
   - type: HardpointIntegrity

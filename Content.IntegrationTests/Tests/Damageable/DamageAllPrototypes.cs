@@ -1,6 +1,7 @@
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Utility;
+using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
@@ -42,6 +43,16 @@ public sealed class DamageAllPrototypesTest : GameTest
                     // Intentionally cannot take damage, ignore it.
                     if (SEntMan.HasComponent<GodmodeComponent>(entity))
                         continue;
+
+                    // Carried eggs intentionally reject damage; planted eggs must be damageable.
+                    await Server.WaitPost(() =>
+                    {
+                        if (SEntMan.TryGetComponent<XenoEggComponent>(entity, out var egg))
+                        {
+                            egg.State = XenoEggState.Grown;
+                            SEntMan.Dirty(entity, egg);
+                        }
+                    });
 
                     var canBeDamaged = false;
 

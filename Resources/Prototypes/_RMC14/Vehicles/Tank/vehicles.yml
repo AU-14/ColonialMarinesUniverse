@@ -234,6 +234,29 @@
   parent: VehicleTankBase
   id: VehicleTank
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
@@ -264,6 +287,29 @@
   name: M34A2 Longstreet 'Yutani'
   description: A light tank used by the Yutani Corporation for security and military operations, often seen in colonial sectors where Yutani has a presence.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
@@ -336,6 +382,21 @@
   name: M34E1 Armored Engineering Vehicle
   description: An unarmed engineering vehicle built on the chassis of a Longstreet Tank, fitted with a reinforced plow, built for hauling personnel/cargo and clearing enemy defenses without interrupting the flow of combat.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: VehicleWheelSlots
     slots:
     - wheel-1
@@ -449,6 +510,29 @@
   name: Cheetah 2A Light Tank
   description: A light-weight tank made for all ground forces of the UPP.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
@@ -564,6 +648,29 @@
   name: Cheetah 2A Light Command Tank
   description: A light-weight command tank made for all ground forces of the UPP.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
@@ -598,6 +705,29 @@
   name: FV150 Hobelar LCT
   description: The FV150 ‘Hobelar’ Light Cavalry Tank is a 6m long, 6m wide, 8m tall support vehicle for the RMC. Originally procured for the Special Air Service operations as an Airborne tank, this model has been made into a support vehicle for the Royal Marines thanks to a change of symbol and technological design. Entrance at the back.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: HardpointIntegrity
     integrity: 1000
   - type: VehicleWheelSlots
@@ -605,8 +735,6 @@
     - wheel-1
   - type: VehicleHardpointVisuals
     layers:
-    - state: ""
-      layer: armor
     - state: ""
       layer: primary
     - state: ""

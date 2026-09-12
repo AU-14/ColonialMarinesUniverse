@@ -16,6 +16,3 @@
 
   - node: Campfire
     entity: RMCCampfire
-  components:
-  - type: Campfire
-    fuel: 5

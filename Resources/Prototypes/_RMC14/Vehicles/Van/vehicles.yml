@@ -502,6 +502,16 @@
   name: Kheshig-1 LMP (armed)
   description: A mine-resistant, multi-purpose vehicle utilized by the UPP for groundside operations.
   components:
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     layers:
     - map: [ base ]
