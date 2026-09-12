@@ -168,7 +168,6 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
 
     private void UpdateIrritantExposure(EntityUid victim, ChemicalIrritantComponent chem)
     {
-
         if (_mobState.IsDead(victim))
         {
             RemCompDeferred<ChemicalIrritantComponent>(victim);
@@ -235,6 +234,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
             if (_random.Prob(profile.SevereSlowChance))
                 _slow.TrySlowdown(victim, profile.SevereSlowTime);
         }
+
         // High-dose trip/fall
         if (chem.IrritantAmount >= profile.TripThreshold &&
             _random.Prob(profile.TripChance) &&
@@ -251,10 +251,10 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         {
             chem.LastMessage = time;
 
-            var message = _random.Pick(profile.ExposureMessages);
+            var messageId = _random.Pick(profile.ExposureMessages);
 
             _popup.PopupEntity(
-                message,
+                Loc.GetString(messageId),
                 victim,
                 victim,
                 PopupType.SmallCaution);
@@ -267,6 +267,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
             || HasComp<XenoComponent>(victim)
             || HasComp<AbominationComponent>(victim);
     }
+
     private bool TryGetFilterFromMask(EntityUid victim, out EntityUid filterId, out GasMaskFilterComponent filter)
     {
         filterId = EntityUid.Invalid;
@@ -307,6 +308,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
 
         return false;
     }
+
     public void ReduceIrritant(EntityUid victim, float amount)
     {
         if (!TryComp<ChemicalIrritantComponent>(victim, out var chem))
@@ -323,6 +325,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
 
         Dirty(victim, chem);
     }
+
     private bool TryGetFilterFromItem(EntityUid item, out EntityUid filterId, out GasMaskFilterComponent filter)
     {
         filterId = EntityUid.Invalid;
