@@ -994,7 +994,10 @@ public sealed partial class YautjaCharacterProfile
         {
             ["Head"] = new()
             {
-                [HumanoidVisualLayers.Hair] = [new(GetQuillMarkingId(YautjaQuillStyle.Standard), [skin])],
+                [HumanoidVisualLayers.Hair] = new List<Marking>
+                {
+                    new(GetQuillMarkingId(YautjaQuillStyle.Standard), [skin]),
+                },
             },
         });
     }

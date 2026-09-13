@@ -1,0 +1,527 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/clothing/pouches.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "UNUSED"
+    },
+    {
+      "name": "unused_a"
+    },
+    {
+      "name": "\u002Bunused_a_half"
+    },
+    {
+      "name": "\u002Bunused_a_full"
+    },
+    {
+      "name": "unused2"
+    },
+    {
+      "name": "\u002Bunused2_half"
+    },
+    {
+      "name": "\u002Bunused2_full"
+    },
+    {
+      "name": "unused4"
+    },
+    {
+      "name": "\u002Bunused4_full"
+    },
+    {
+      "name": "large_pills"
+    },
+    {
+      "name": "\u002Blarge_pills_half"
+    },
+    {
+      "name": "\u002Blarge_pills_full"
+    },
+    {
+      "name": "injectors_short"
+    },
+    {
+      "name": "\u002Binjectors_short_half"
+    },
+    {
+      "name": "\u002Binjectors_short_full"
+    },
+    {
+      "name": "frt_med_long"
+    },
+    {
+      "name": "\u002Bfrt_med_long_half"
+    },
+    {
+      "name": "\u002Bfrt_med_long_full"
+    },
+    {
+      "name": "AMMO"
+    },
+    {
+      "name": "small_ammo_mag"
+    },
+    {
+      "name": "\u002Bsmall_ammo_mag_full"
+    },
+    {
+      "name": "medium_ammo_mag"
+    },
+    {
+      "name": "\u002Bmedium_ammo_mag_half"
+    },
+    {
+      "name": "\u002Bmedium_ammo_mag_full"
+    },
+    {
+      "name": "large_ammo_mag"
+    },
+    {
+      "name": "\u002Blarge_ammo_mag_half"
+    },
+    {
+      "name": "\u002Blarge_ammo_mag_full"
+    },
+    {
+      "name": "medium_shotshells"
+    },
+    {
+      "name": "\u002Bmedium_shotshells_half"
+    },
+    {
+      "name": "\u002Bmedium_shotshells_full"
+    },
+    {
+      "name": "large_shotshells"
+    },
+    {
+      "name": "\u002Blarge_shotshells_half"
+    },
+    {
+      "name": "\u002Blarge_shotshells_full"
+    },
+    {
+      "name": "pistol_mag"
+    },
+    {
+      "name": "\u002Bpistol_mag_half"
+    },
+    {
+      "name": "\u002Bpistol_mag_full"
+    },
+    {
+      "name": "large_pistol_mag"
+    },
+    {
+      "name": "\u002Blarge_pistol_mag_half"
+    },
+    {
+      "name": "\u002Blarge_pistol_mag_full"
+    },
+    {
+      "name": "socdrums"
+    },
+    {
+      "name": "\u002Bsocdrums_half"
+    },
+    {
+      "name": "\u002Bsocdrums_full"
+    },
+    {
+      "name": "WEAPON"
+    },
+    {
+      "name": "pistol"
+    },
+    {
+      "name": "\u002Bpistol_full"
+    },
+    {
+      "name": "bayonet"
+    },
+    {
+      "name": "\u002Bbayonet_half"
+    },
+    {
+      "name": "\u002Bbayonet_full"
+    },
+    {
+      "name": "explosive"
+    },
+    {
+      "name": "\u002Bexplosive_half"
+    },
+    {
+      "name": "\u002Bexplosive_full"
+    },
+    {
+      "name": "large_explosive"
+    },
+    {
+      "name": "\u002Blarge_explosive_half"
+    },
+    {
+      "name": "command_pouch"
+    },
+    {
+      "name": "\u002Bcommand_pouch_binos"
+    },
+    {
+      "name": "\u002Bcommand_pouch_binos_flap"
+    },
+    {
+      "name": "\u002Bcommand_pouch_tablet"
+    },
+    {
+      "name": "\u002Bcommand_pouch_tablet_flap"
+    },
+    {
+      "name": "\u002Blarge_explosive_full"
+    },
+    {
+      "name": "macheteB_holster"
+    },
+    {
+      "name": "macheteB_holster_full"
+    },
+    {
+      "name": "MARINE UTILITY"
+    },
+    {
+      "name": "fueltank_pouch"
+    },
+    {
+      "name": "\u002Bfueltank_pouch_half"
+    },
+    {
+      "name": "\u002Bfueltank_pouch_full"
+    },
+    {
+      "name": "flare"
+    },
+    {
+      "name": "\u002Bflare_half"
+    },
+    {
+      "name": "\u002Bflare_full"
+    },
+    {
+      "name": "sling"
+    },
+    {
+      "name": "\u002Bsling_full"
+    },
+    {
+      "name": "MARINE MEDICAL"
+    },
+    {
+      "name": "injectors"
+    },
+    {
+      "name": "\u002Binjectors_half"
+    },
+    {
+      "name": "\u002Binjectors_full"
+    },
+    {
+      "name": "frt_med"
+    },
+    {
+      "name": "\u002Bfrt_med_half"
+    },
+    {
+      "name": "\u002Bfrt_med_full"
+    },
+    {
+      "name": "stimulant"
+    },
+    {
+      "name": "\u002Bstimulant_half"
+    },
+    {
+      "name": "\u002Bstimulant_full"
+    },
+    {
+      "name": "MEDBAY"
+    },
+    {
+      "name": "medkit"
+    },
+    {
+      "name": "\u002Bmedkit_half"
+    },
+    {
+      "name": "\u002Bmedkit_full"
+    },
+    {
+      "name": "medical"
+    },
+    {
+      "name": "\u002Bmedical_half"
+    },
+    {
+      "name": "\u002Bmedical_full"
+    },
+    {
+      "name": "firstaid"
+    },
+    {
+      "name": "\u002Bfirstaid_half"
+    },
+    {
+      "name": "\u002Bfirstaid_full"
+    },
+    {
+      "name": "syringe"
+    },
+    {
+      "name": "\u002Bsyringe_half"
+    },
+    {
+      "name": "\u002Bsyringe_full"
+    },
+    {
+      "name": "autoinjector"
+    },
+    {
+      "name": "\u002Bautoinjector_half"
+    },
+    {
+      "name": "\u002Bautoinjector_full"
+    },
+    {
+      "name": "vial"
+    },
+    {
+      "name": "\u002Bvial_half"
+    },
+    {
+      "name": "\u002Bvial_full"
+    },
+    {
+      "name": "chemist"
+    },
+    {
+      "name": "\u002Bchemist_half"
+    },
+    {
+      "name": "\u002Bchemist_full"
+    },
+    {
+      "name": "pressurized_reagent_canister"
+    },
+    {
+      "name": "\u002Bpressurized_reagent_canister_loaded"
+    },
+    {
+      "name": "\u002Bpressurized_reagent_canister_full"
+    },
+    {
+      "name": "CIVILIAN_ENGINEER"
+    },
+    {
+      "name": "survival"
+    },
+    {
+      "name": "\u002Bsurvival_half"
+    },
+    {
+      "name": "\u002Bsurvival_full"
+    },
+    {
+      "name": "radio"
+    },
+    {
+      "name": "\u002Bradio_half"
+    },
+    {
+      "name": "\u002Bradio_full"
+    },
+    {
+      "name": "document"
+    },
+    {
+      "name": "\u002Bdocument_half"
+    },
+    {
+      "name": "\u002Bdocument_full"
+    },
+    {
+      "name": "electronics"
+    },
+    {
+      "name": "\u002Belectronics_half"
+    },
+    {
+      "name": "\u002Belectronics_full"
+    },
+    {
+      "name": "medium_powercell"
+    },
+    {
+      "name": "\u002Bmedium_powercell_half"
+    },
+    {
+      "name": "\u002Bmedium_powercell_full"
+    },
+    {
+      "name": "construction"
+    },
+    {
+      "name": "\u002Bconstruction_half"
+    },
+    {
+      "name": "\u002Bconstruction_full"
+    },
+    {
+      "name": "tools"
+    },
+    {
+      "name": "\u002Btools_half"
+    },
+    {
+      "name": "\u002Btools_full"
+    },
+    {
+      "name": "GENERAL"
+    },
+    {
+      "name": "small_drop"
+    },
+    {
+      "name": "\u002Bsmall_drop_half"
+    },
+    {
+      "name": "\u002Bsmall_drop_full"
+    },
+    {
+      "name": "medium_drop"
+    },
+    {
+      "name": "\u002Bmedium_drop_half"
+    },
+    {
+      "name": "\u002Bmedium_drop_full"
+    },
+    {
+      "name": "large_drop"
+    },
+    {
+      "name": "\u002Blarge_drop_half"
+    },
+    {
+      "name": "\u002Blarge_drop_full"
+    },
+    {
+      "name": "cassette_pouch"
+    },
+    {
+      "name": "cassette_pouch_1"
+    },
+    {
+      "name": "cassette_pouch_2"
+    },
+    {
+      "name": "cassette_pouch_closed"
+    },
+    {
+      "name": "SPECIAL"
+    },
+    {
+      "name": "socmed"
+    },
+    {
+      "name": "\u002Bsocmed_half"
+    },
+    {
+      "name": "\u002Bsocmed_full"
+    },
+    {
+      "name": "soctools"
+    },
+    {
+      "name": "\u002Bsoctools_half"
+    },
+    {
+      "name": "\u002Bsoctools_full"
+    },
+    {
+      "name": "dart_pouch"
+    },
+    {
+      "name": "\u002Bdart_pouch_full"
+    },
+    {
+      "name": "WY"
+    },
+    {
+      "name": "wy_firstaid"
+    },
+    {
+      "name": "\u002Bwy_firstaid_half"
+    },
+    {
+      "name": "\u002Bwy_firstaid_full"
+    },
+    {
+      "name": "wy_ammo_mag"
+    },
+    {
+      "name": "\u002Bwy_ammo_mag_half"
+    },
+    {
+      "name": "\u002Bwy_ammo_mag_full"
+    },
+    {
+      "name": "wy_ammo_mag_small"
+    },
+    {
+      "name": "\u002Bwy_ammo_mag_small_half"
+    },
+    {
+      "name": "\u002Bwy_ammo_mag_small_full"
+    },
+    {
+      "name": "wy_sgdrums_ammo"
+    },
+    {
+      "name": "\u002Bwy_sgdrums_ammo_half"
+    },
+    {
+      "name": "\u002Bwy_sgdrums_ammo_full"
+    },
+    {
+      "name": "wy_medkit"
+    },
+    {
+      "name": "\u002Bwy_medkit_half"
+    },
+    {
+      "name": "\u002Bwy_medkit_full"
+    },
+    {
+      "name": "wy_construction"
+    },
+    {
+      "name": "\u002Bwy_construction_half"
+    },
+    {
+      "name": "\u002Bwy_construction_full"
+    },
+    {
+      "name": "wy_medicpack"
+    },
+    {
+      "name": "\u002Bwy_medicpack_half"
+    },
+    {
+      "name": "\u002Bwy_medicpack_full"
+    }
+  ]
+}
