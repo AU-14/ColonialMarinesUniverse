@@ -1,7 +1,8 @@
+using Content.Shared.Damage.Systems;
 using System.Linq;
-using Content.Server._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Server.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -13,7 +14,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaMedicompProgressTest

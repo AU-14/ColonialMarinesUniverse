@@ -1,6 +1,6 @@
 chat-radio-marine-highcommand = HighCom
 
-chat-radio-marine-common = Almayer
+chat-radio-marine-common = Warship
 chat-radio-marine-command = CMD
 chat-radio-marine-medical = MedSci
 chat-radio-marine-engineer = Engi

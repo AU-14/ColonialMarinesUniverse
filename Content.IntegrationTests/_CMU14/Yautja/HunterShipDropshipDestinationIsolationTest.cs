@@ -5,14 +5,14 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship;
-using Content.Shared.AU14.Round;
+using Content.Shared.CMU14.Round;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class HunterShipDropshipDestinationIsolationTest
@@ -66,9 +66,9 @@ public sealed class HunterShipDropshipDestinationIsolationTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            entMan.EventBus.RaiseLocalEvent(ertConsole, new AfterActivatableUIOpenEvent(human, human));
-            entMan.EventBus.RaiseLocalEvent(ordinaryConsole, new AfterActivatableUIOpenEvent(human, human));
-            entMan.EventBus.RaiseLocalEvent(yautjaConsole, new AfterActivatableUIOpenEvent(yautja, yautja));
+            entMan.EventBus.RaiseLocalEvent(ertConsole, new AfterActivatableUIOpenEvent(human));
+            entMan.EventBus.RaiseLocalEvent(ordinaryConsole, new AfterActivatableUIOpenEvent(human));
+            entMan.EventBus.RaiseLocalEvent(yautjaConsole, new AfterActivatableUIOpenEvent(yautja));
         });
 
         await server.WaitAssertion(() =>

@@ -7,7 +7,9 @@
     event: !type:RingBellActionEvent
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: Objects/Misc/desk_bell.rsi
-      state: normal
     useDelay: 0
+  - type: Sprite
+    layers:
+    - sprite: Objects/Misc/desk_bell.rsi
+      state: icon-bell
+      map: ["enum.ActionVisuals.Icon"]

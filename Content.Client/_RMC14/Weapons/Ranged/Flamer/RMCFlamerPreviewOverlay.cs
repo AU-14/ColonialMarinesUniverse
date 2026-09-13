@@ -59,9 +59,10 @@ public sealed class RMCFlamerPreviewOverlay : Overlay
         if (player == null)
             return;
 
-        if (!_guns.TryGetGun(player.Value, out var gunUid, out _))
+        if (!_guns.TryGetGun(player.Value, out var gun))
             return;
 
+        var gunUid = gun.Owner;
         var wielded = false;
         if (_wieldableQ.TryComp(gunUid, out var wieldable))
         {

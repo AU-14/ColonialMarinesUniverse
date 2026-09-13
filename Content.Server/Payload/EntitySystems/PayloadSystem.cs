@@ -1,10 +1,10 @@
 using Content.Server.Administration.Logs;
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Payload.Components;
 using Content.Shared.Tag;
+using Content.Shared.Trigger;
 using Content.Shared.Chemistry.EntitySystems;
 using Robust.Shared.Containers;
 using Robust.Shared.Serialization.Manager;
@@ -17,13 +17,18 @@ namespace Content.Server.Payload.EntitySystems;
 
 public sealed partial class PayloadSystem : EntitySystem
 {
-    [Dependency] private TagSystem _tagSystem = default!;
-    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private TransformSystem _transform = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private ISerializationManager _serializationManager = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     private static readonly ProtoId<TagPrototype> PayloadTag = "Payload";
+
+    // TODO: Construction System Integration tests and remove the EnsureContainer from ConstructionSystem. :(
+    private static readonly string PayloadContainer = "payload";
+    private static readonly string TriggerContainer = "payloadTrigger";
 
     public override void Initialize()
     {
@@ -31,41 +36,40 @@ public sealed partial class PayloadSystem : EntitySystem
 
         SubscribeLocalEvent<PayloadCaseComponent, TriggerEvent>(OnCaseTriggered);
         SubscribeLocalEvent<PayloadTriggerComponent, TriggerEvent>(OnTriggerTriggered);
+        SubscribeLocalEvent<PayloadCaseComponent, AttemptTimerTriggerEvent>(OnAttemptTimerTrigger);
+        SubscribeLocalEvent<PayloadCaseComponent, ContainerIsInsertingAttemptEvent>(OnInsertAttempt);
         SubscribeLocalEvent<PayloadCaseComponent, EntInsertedIntoContainerMessage>(OnEntityInserted);
         SubscribeLocalEvent<PayloadCaseComponent, EntRemovedFromContainerMessage>(OnEntityRemoved);
         SubscribeLocalEvent<PayloadCaseComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<ChemicalPayloadComponent, TriggerEvent>(HandleChemicalPayloadTrigger);
     }
 
-    public IEnumerable<EntityUid> GetAllPayloads(EntityUid uid, ContainerManagerComponent? contMan = null)
+    public IEnumerable<EntityUid> GetAllPayloads(EntityUid uid)
     {
-        if (!Resolve(uid, ref contMan, false))
+        if (!_container.TryGetContainer(uid, PayloadContainer, out var container))
             yield break;
 
-        foreach (var container in contMan.Containers.Values)
+        foreach (var entity in container.ContainedEntities)
         {
-            foreach (var entity in container.ContainedEntities)
-            {
-                if (_tagSystem.HasTag(entity, PayloadTag))
-                    yield return entity;
-            }
+            if (_tagSystem.HasTag(entity, PayloadTag))
+                yield return entity;
         }
     }
 
-    private void OnCaseTriggered(EntityUid uid, PayloadCaseComponent component, TriggerEvent args)
+    private void OnCaseTriggered(EntityUid uid, PayloadCaseComponent component, ref TriggerEvent args)
     {
-        if (!TryComp(uid, out ContainerManagerComponent? contMan))
-            return;
-
+        // TODO: Adjust to the new trigger system
         // Pass trigger event onto all contained payloads. Payload capacity configurable by construction graphs.
-        foreach (var ent in GetAllPayloads(uid, contMan))
+        foreach (var ent in GetAllPayloads(uid))
         {
-            RaiseLocalEvent(ent, args, false);
+            RaiseLocalEvent(ent, ref args, false);
         }
     }
 
-    private void OnTriggerTriggered(EntityUid uid, PayloadTriggerComponent component, TriggerEvent args)
+    private void OnTriggerTriggered(EntityUid uid, PayloadTriggerComponent component, ref TriggerEvent args)
     {
+        // TODO: Adjust to the new trigger system
+
         if (!component.Active)
             return;
 
@@ -75,12 +79,50 @@ public sealed partial class PayloadSystem : EntitySystem
         // Ensure we don't enter a trigger-loop
         DebugTools.Assert(!_tagSystem.HasTag(uid, PayloadTag));
 
-        RaiseLocalEvent(parent, args, false);
+        RaiseLocalEvent(parent, ref args);
+    }
+
+    private void OnAttemptTimerTrigger(Entity<PayloadCaseComponent> ent, ref AttemptTimerTriggerEvent args)
+    {
+        // The legacy timer API only validated and described chemical contents when a user armed the case.
+        if (args.User is not { } user ||
+            !_container.TryGetContainer(ent, PayloadContainer, out var container) ||
+            container.ContainedEntities.Count == 0 ||
+            !TryComp(container.ContainedEntities[0], out ChemicalPayloadComponent? payload))
+        {
+            return;
+        }
+
+        if (payload.BeakerSlotA.Item is not { } beakerA ||
+            payload.BeakerSlotB.Item is not { } beakerB ||
+            !TryComp(beakerA, out FitsInDispenserComponent? fitsA) ||
+            !TryComp(beakerB, out FitsInDispenserComponent? fitsB) ||
+            !_solutionContainerSystem.TryGetSolution(beakerA, fitsA.Solution, out _, out var solutionA) ||
+            !_solutionContainerSystem.TryGetSolution(beakerB, fitsB.Solution, out _, out var solutionB))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
+        args.LogMessage =
+            $"{ToPrettyString(user):user} started a {args.Delay.TotalSeconds} second timer trigger on entity " +
+            $"{ToPrettyString(ent.Owner):timer}, which contains " +
+            $"{SharedSolutionContainerSystem.ToPrettyString(solutionA)} in one beaker and " +
+            $"{SharedSolutionContainerSystem.ToPrettyString(solutionB)} in the other.";
+    }
+
+    private void OnInsertAttempt(Entity<PayloadCaseComponent> ent, ref ContainerIsInsertingAttemptEvent args)
+    {
+        if (args.Container.ID == PayloadContainer && !_tagSystem.HasTag(args.EntityUid, PayloadTag))
+            args.Cancel();
+
+        if (args.Container.ID == TriggerContainer && !HasComp<PayloadTriggerComponent>(args.EntityUid))
+            args.Cancel();
     }
 
     private void OnEntityInserted(EntityUid uid, PayloadCaseComponent _, EntInsertedIntoContainerMessage args)
     {
-        if (!TryComp(args.Entity, out PayloadTriggerComponent? trigger))
+        if (args.Container.ID != TriggerContainer || !TryComp(args.Entity, out PayloadTriggerComponent? trigger))
             return;
 
         trigger.Active = true;
@@ -110,7 +152,7 @@ public sealed partial class PayloadSystem : EntitySystem
 
     private void OnEntityRemoved(EntityUid uid, PayloadCaseComponent component, EntRemovedFromContainerMessage args)
     {
-        if (!TryComp(args.Entity, out PayloadTriggerComponent? trigger))
+        if (args.Container.ID != TriggerContainer || !TryComp(args.Entity, out PayloadTriggerComponent? trigger))
             return;
 
         trigger.Active = false;
@@ -146,6 +188,9 @@ public sealed partial class PayloadSystem : EntitySystem
 
     private void HandleChemicalPayloadTrigger(Entity<ChemicalPayloadComponent> entity, ref TriggerEvent args)
     {
+        if (args.Key != null && !entity.Comp.KeysIn.Contains(args.Key))
+            return;
+
         if (entity.Comp.BeakerSlotA.Item is not EntityUid beakerA
             || entity.Comp.BeakerSlotB.Item is not EntityUid beakerB
             || !TryComp(beakerA, out FitsInDispenserComponent? compA)

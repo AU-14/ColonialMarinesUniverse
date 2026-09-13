@@ -66,6 +66,7 @@
       state: lz_detector_installed
   - type: CameraSignalGranter
     protoIds:
+    # CameraSignalGranter now accepts logical camera-network prototype IDs.
     - RMCMonitorCameraLandingZone
   - type: DropshipFabricatorPrintable
     category: Equipment

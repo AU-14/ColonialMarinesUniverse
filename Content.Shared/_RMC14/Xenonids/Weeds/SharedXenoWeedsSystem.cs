@@ -21,6 +21,8 @@ using Content.Shared.Climbing.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Maps;
@@ -28,6 +30,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
+using Content.Shared.Tag;
 using Content.Shared.Whitelist;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
@@ -48,12 +51,9 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
 {
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDirectionalAttackBlockSystem _directionBlocker = default!;
-    [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
-    [Dependency] private SharedGameTicker _gameTicker = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
@@ -66,10 +66,11 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private EntityManager _entities = default!;
-    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private WeedboundWallSystem _weedboundWall = default!;
     [Dependency] private DesignerNodeBindingSystem _designerBinding = default!;
+    [Dependency] private TagSystem _tags = default!;
+
+    private static readonly ProtoId<TagPrototype> PlatformTag = "Platform";
 
     private readonly HashSet<EntityUid> _toUpdate = new();
     private readonly HashSet<EntityUid> _intersecting = new();
@@ -629,7 +630,8 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
             foreach (var entity in entities)
             {
                 if (!HasComp<ClimbableComponent>(entity) && !HasComp<RMCReactorPoweredLightComponent>(entity) ||
-                    HasComp<BarricadeComponent>(entity))
+                    HasComp<BarricadeComponent>(entity) ||
+                    _tags.HasTag(entity, PlatformTag))
                     continue;
 
                 _popup.PopupClient(Loc.GetString("rmc-xeno-weeds-blocked"),

@@ -1,0 +1,11 @@
+- type: entity
+  parent: CMMobHuman
+  id: CMUBaseMobSpeciesAttaches
+  abstract: true
+  suffix: CMU, Attaches
+  components:
+  - type: GhostTakeoverAvailable
+  - type: NpcFactionMember
+    factions:
+    - Civilian
+  - type: RandomHumanoidAppearance

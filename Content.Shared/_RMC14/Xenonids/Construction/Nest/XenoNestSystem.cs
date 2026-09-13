@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Ghost;
 using Content.Shared._RMC14.Inventory;
@@ -17,13 +17,16 @@ using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
+using Content.Shared.Ghost.Systems;
 using Content.Shared.Hands.Components;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
 using Content.Shared.Maps;
+using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Components;
@@ -34,6 +37,7 @@ using Content.Shared.Popups;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
+using Content.Shared.Verbs;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -80,7 +84,7 @@ public sealed partial class XenoNestSystem : EntitySystem
         _xenoNestSurfaceQuery = GetEntityQuery<XenoNestSurfaceComponent>();
         _xenoWeedableQuery = GetEntityQuery<XenoWeedableComponent>();
 
-        SubscribeLocalEvent<GhostAttemptHandleEvent>(OnNestedGhostAttemptHandle);
+        SubscribeLocalEvent<XenoNestedComponent, GhostAttemptEvent>(OnNestedGhostAttempt);
 
         SubscribeLocalEvent<XenoComponent, GetUsedEntityEvent>(OnXenoGetUsedEntity);
 
@@ -94,6 +98,8 @@ public sealed partial class XenoNestSystem : EntitySystem
         SubscribeLocalEvent<XenoNestComponent, ComponentRemove>(OnNestRemove);
         SubscribeLocalEvent<XenoNestComponent, EntityTerminatingEvent>(OnNestTerminating);
         SubscribeLocalEvent<XenoNestComponent, InteractHandEvent>(OnNestInteractHand);
+        SubscribeLocalEvent<XenoNestComponent, GetVerbsEvent<InteractionVerb>>(OnNestGetVerbs);
+        SubscribeLocalEvent<XenoNestComponent, XenoUnnestDoAfterEvent>(OnUnnestDoAfter);
 
         SubscribeLocalEvent<XenoNestableComponent, BeforeRangedInteractEvent>(OnNestableBeforeRangedInteract);
         SubscribeLocalEvent<XenoNestableComponent, ShouldHandleVirtualItemInteractEvent>(OnNestableShouldHandle);
@@ -149,6 +155,65 @@ public sealed partial class XenoNestSystem : EntitySystem
     {
         DetachNested(ent, ent.Comp.Nested);
     }
+
+    private void OnNestGetVerbs(Entity<XenoNestComponent> ent, ref GetVerbsEvent<InteractionVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract)
+            return;
+
+        if (ent.Comp.Nested is null)
+            return;
+
+        if (!HasComp<XenoComponent>(args.User) || !_hive.FromSameHive(ent.Owner, args.User))
+            return;
+
+        var user = args.User;
+        var nest = ent.Owner;
+        args.Verbs.Add(new InteractionVerb
+        {
+            Text = Loc.GetString("rmc-xeno-nest-unnest-verb"),
+            Act = () => TryStartUnnest(user, nest),
+        });
+    }
+
+    public bool TryStartUnnest(EntityUid user, Entity<XenoNestComponent?> nest)
+    {
+        if (!Resolve(nest, ref nest.Comp, false) || nest.Comp.Nested is not { } nested)
+            return false;
+
+        var ev = new XenoUnnestDoAfterEvent();
+        var doAfter = new DoAfterArgs(EntityManager, user, nest.Comp.UnnestDelay, ev, nest.Owner, nest.Owner)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+        };
+
+        if (_doAfter.TryStartDoAfter(doAfter))
+        {
+            var message = Loc.GetString("rmc-xeno-nest-unnest-start", ("target", Identity.Name(nested, EntityManager, user)));
+            _popup.PopupClient(message, user, user);
+        }
+
+        return true;
+    }
+
+    private void OnUnnestDoAfter(Entity<XenoNestComponent> ent, ref XenoUnnestDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled)
+            return;
+
+        if (ent.Comp.Nested is not { } nested)
+            return;
+
+        args.Handled = true;
+
+        if (_net.IsClient)
+            return;
+
+        DetachNested(ent.Owner, nested);
+        _adminLog.Add(LogType.RMCXenoNest, $"{ToPrettyString(args.User):user} released {ToPrettyString(nested):victim} from nest {ToPrettyString(ent.Owner):nest}");
+    }
+
 
     private void OnNestInteractHand(Entity<XenoNestComponent> ent, ref InteractHandEvent args)
     {
@@ -483,19 +548,14 @@ public sealed partial class XenoNestSystem : EntitySystem
             args.Multiply(ent.Comp.IncubationMultiplier);
     }
 
-    private void OnNestedGhostAttemptHandle(GhostAttemptHandleEvent args)
+    private void OnNestedGhostAttempt(Entity<XenoNestedComponent> ent, ref GhostAttemptEvent args)
     {
-        if (args.Mind.CurrentEntity is not { } ent ||
-            !TryComp(ent, out XenoNestedComponent? nested))
-        {
-            return;
-        }
-
-        if (args.Mind.UserId is not { } userId)
+        if (!TryComp(args.Mind, out MindComponent? mind) ||
+            mind.UserId is not { } userId)
             return;
 
-        nested.GhostedId = userId;
-        Dirty(ent, nested);
+        ent.Comp.GhostedId = userId;
+        Dirty(ent);
     }
 
     public bool TryStartNesting(EntityUid user, Entity<XenoNestSurfaceComponent> surface, EntityUid victim, out DoAfterId? doAfterId, bool allDirs = false)
@@ -712,6 +772,9 @@ public sealed partial class XenoNestSystem : EntitySystem
         {
             return;
         }
+
+        if (xform.MapUid is not { } map || Terminating(map))
+            return;
 
         if (TryComp(nested, out XenoNestedComponent? nestedComp))
         {

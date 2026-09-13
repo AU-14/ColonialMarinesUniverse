@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Linq;
 using Content.Client.UserInterface.Systems.Chat;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
@@ -9,13 +9,13 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Client.Popups;
 using Robust.Client.UserInterface;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaHuntdataCleanupTest
@@ -474,10 +474,7 @@ public sealed class YautjaHuntdataCleanupTest
                 ui.RaiseUiMessage(
                     otherBracer,
                     YautjaMarkUIKey.Key,
-                    new YautjaMarkPanelUnmarkMsg(entMan.GetNetEntity(target), kind)
-                    {
-                        Actor = otherHunter,
-                    });
+                    YautjaTestMarkMessages.Unmark(entMan, otherHunter, target, kind));
 
                 Assert.That(marks.IsMarkedBy(target, kind, ownerHunter), Is.True,
                     "CMSS13 only lets the original living hunter undo their honored/dishonored mark.");
@@ -560,10 +557,7 @@ public sealed class YautjaHuntdataCleanupTest
                 ui.RaiseUiMessage(
                     otherBracer,
                     YautjaMarkUIKey.Key,
-                    new YautjaMarkPanelUnmarkMsg(entMan.GetNetEntity(target), YautjaMarkKind.GearCarrier)
-                    {
-                        Actor = otherHunter,
-                    });
+                    YautjaTestMarkMessages.Unmark(entMan, otherHunter, target, YautjaMarkKind.GearCarrier));
 
                 Assert.That(marks.TryGetMarkOwner(target, YautjaMarkKind.GearCarrier, out _), Is.False,
                     "CMSS13 unmark_gear() lets a living Yautja unmark an existing gear carrier; it does not require the original marker.");
@@ -649,10 +643,7 @@ public sealed class YautjaHuntdataCleanupTest
                 ui.RaiseUiMessage(
                     bracer,
                     YautjaMarkUIKey.Key,
-                    new YautjaMarkPanelUnmarkMsg(entMan.GetNetEntity(target), kind)
-                    {
-                        Actor = hunter,
-                    });
+                    YautjaTestMarkMessages.Unmark(entMan, hunter, target, kind));
 
                 Assert.That(marks.TryGetMarkOwner(target, kind, out _), Is.False,
                     "The original marker can undo their honored/dishonored mark in CMSS13.");

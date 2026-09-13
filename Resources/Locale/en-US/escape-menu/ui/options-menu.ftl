@@ -45,6 +45,7 @@ ui-options-event-music = Event Music
 ui-options-admin-sounds = Play Admin Sounds
 ui-options-bwoink-sound = Play AHelp Notification Sound
 ui-options-volume-label = Volume
+ui-options-audio-toggles = Sounds
 
 ## Graphics menu
 
@@ -54,9 +55,9 @@ ui-options-misc-label = Misc
 ui-options-interface-label = Interface
 
 
-ui-options-auto-fill-highlights = Auto-fill the highlights with the character's information
-ui-options-highlights-color = Highlighs color:
-ui-options-highlights-color-example = This is an highlighted text!
+ui-options-auto-fill-highlights = Automatically set the highlights list based on your character's name and job
+ui-options-highlights-color = Highlights color:
+ui-options-highlights-color-example = This is highlighted text.
 ui-options-show-held-item = Show held item next to cursor
 ui-options-show-combat-mode-indicators = Show combat mode indicators with cursor
 ui-options-opaque-storage-window = Opaque storage window
@@ -119,6 +120,10 @@ ui-options-binds-explanation = Click to change binding, right-click to clear
 ui-options-unbound = Unbound
 ui-options-bind-reset = Reset
 ui-options-key-prompt = Press a key...
+ui-options-search-placeholder = Search keybinds...
+ui-options-search-by-key = Search by key
+ui-options-search-by-key-active = Searching by key:
+ui-options-cancel-search-by-key = Cancel
 
 ui-options-header-movement = Movement
 ui-options-header-camera = Camera
@@ -149,6 +154,7 @@ ui-options-function-walk = Walk
 ui-options-function-camera-rotate-left = Rotate left
 ui-options-function-camera-rotate-right = Rotate right
 ui-options-function-camera-reset = Reset
+ui-options-function-rotate-camera-with-mouse = Rotate with mouse
 ui-options-function-zoom-in = Zoom in
 ui-options-function-zoom-out = Zoom out
 ui-options-function-reset-zoom = Reset zoom
@@ -202,7 +208,7 @@ ui-options-function-open-character-menu = Open character menu
 ui-options-function-open-context-menu = Open context menu
 ui-options-function-open-crafting-menu = Open crafting menu
 ui-options-function-open-inventory-menu = Open inventory
-ui-options-function-open-a-help = Open admin and mentor help
+ui-options-function-open-a-help = Open admin help
 ui-options-function-open-abilities-menu = Open action menu
 ui-options-function-open-emotes-menu = Open emotes menu
 ui-options-function-toggle-round-end-summary-window = Toggle round end summary window
@@ -357,13 +363,28 @@ cmd-options-help = Usage: options [tab]
 
 ## Accessibility menu
 
-ui-options-accessability-header-cmu = CMU
+ui-options-accessability-header-cmu = CMU Specific
 ui-options-accessability-header-visuals = Visuals
 ui-options-accessability-header-content = Content
+ui-options-accessability-header-announcements = Announcements
+ui-options-accessability-header-opacity = Opacity
+ui-options-accessability-header-highlights = Chat highlights
 
 ui-options-enable-color-name = Add colors to character names
 ui-options-colorblind-friendly = Colorblind friendly mode
 ui-options-crt-ui-enabled = Use CRT UI theme
+ui-options-crt-chat-readable-font = Readable chat font
+ui-options-crt-chat-readable-font-tooltip = Draws chat in a plain proportional font instead of the terminal one. The rest of the CRT theme is unaffected.
+ui-options-crt-chat-big-font = Big chat font
+ui-options-crt-chat-big-font-tooltip = Draws chat larger than normal. Chat only - nothing else in the interface changes size. Works with or without the readable font above.
+ui-options-crt-chat-big-font-off = Normal
+ui-options-crt-chat-big-font-one = Big (+1)
+ui-options-crt-chat-big-font-two = Bigger (+2)
+ui-options-crt-chat-row-tint = Chat row tint
+ui-options-crt-chat-row-tint-tooltip = Tints radio, OOC, dead, admin and server messages by channel so they can be picked out of the log at a glance.
+ui-options-crt-chat-row-tint-muted = Muted
+ui-options-crt-chat-row-tint-full = Full
+ui-options-crt-chat-row-tint-off = None
 ui-options-crt-ui-color = UI colour
 ui-options-crt-ui-color-green = Green (default)
 ui-options-crt-ui-color-blue = Blue
@@ -371,7 +392,7 @@ ui-options-crt-ui-color-orange = Orange
 ui-options-crt-ui-color-red = Red
 ui-options-crt-ui-color-purple = Purple
 ui-options-crt-ui-color-example = Preview text
-ui-options-reduced-motion = Reduce motion of visual effects
+ui-options-reduced-motion = Reduce general visual effects
 ui-options-screen-shake-intensity = Screen shake intensity
 ui-options-explosion-screen-shake-enabled = Screen shake from nearby explosions
 ui-options-explosion-screen-shake-ignore-far = Ignore explosions more than 25 tiles away
@@ -423,3 +444,92 @@ ui-options-admin-enable-overlay-starting-job = Show starting job
 ui-options-admin-overlay-merge-distance = Stack merge distance
 ui-options-admin-overlay-ghost-fade-distance = Ghost overlay fade range from mouse
 ui-options-admin-overlay-ghost-hide-distance = Ghost overlay hide range from mouse
+
+
+ui-options-mute-unfocused = Mute audio when unfocused
+
+ui-options-audio-device = Output device:
+
+ui-options-audio-device-default = System default
+
+ui-options-audio-hrtf = Enable HRTF Audio Processing (Requires Restart)
+
+ui-options-chat-follow-button = As ghost, show a follow button next to chat messages
+
+ui-options-max-fps = Maximum FPS:
+
+ui-options-max-fps-display-rate = Display Rate
+
+ui-options-max-fps-tooltip = Maximum framerate the client should run at. Set to 0 for no limit. This has no effect if VSync is enabled.
+
+ui-options-filter-label = Scaling filter:
+
+ui-options-filter-nearest = Nearest (no smoothing)
+
+ui-options-filter-bilinear = Bilinear (smoothed)
+
+ui-options-sharpness = Sharpness:
+
+## Controls menu
+
+ui-options-hold-to-attack-melee = Hold to attack (melee)
+
+ui-options-hold-to-attack-ranged = Hold to attack (ranged)
+
+ui-options-function-toggle-knockdown = Toggle Crawling
+
+ui-options-function-inspect-entity-tooltip = Open a ViewVariables window for the entity your mouse is currently hovering over.
+
+ui-options-function-inspect-server-component = Inspect Server Component
+
+ui-options-function-inspect-server-component-tooltip = Open a ViewVariables window with the server component set by the "quickinspect" command for the entity your mouse is currently hovering over.
+
+ui-options-function-inspect-client-component = Inspect Client Component
+
+ui-options-function-inspect-client-component-tooltip = Open a ViewVariables window with the client component set by the "quickinspect" command for the entity your mouse is currently hovering over.
+
+ui-options-accessibility-header-reduced-motion = Reduced Motion
+
+ui-options-accessibility-header-visuals = Visuals
+
+ui-options-accessibility-header-content = Content
+
+ui-options-reduced-motion-tooltip = Toggle on to show alternative sprites with reduced motion for some items.
+
+# accessibility option tooltips taken from CVar summary blocks.
+
+ui-options-disable-ai-static = AI camera static
+
+ui-options-disable-ai-static-tooltip = Replaces the AI static camera effect with a plain gradient.
+
+ui-options-disable-blurry-vision = Blurry vision
+
+ui-options-disable-blurry-vision-tooltip = Replaces the movement in the blurry shader with a static effect.
+
+ui-options-disable-drunk-overlay = Drunk overlay
+
+ui-options-disable-drunk-overlay-tooltip = Replaces the movement in the drunk shader with a static offset.
+
+ui-options-disable-flash-effect = Flash
+
+ui-options-disable-flash-effect-tooltip = Replaces the 'flash' effect with a reduced movement equivalent.
+
+ui-options-disable-heat-distortion = Heat distortion
+
+ui-options-disable-heat-distortion-tooltip = Decreases motion on the heat distortion shader.
+
+ui-options-disable-nv-noise = Night vision overlay
+
+ui-options-disable-nv-noise-tooltip = Disables the noise effect on the night vision overlay.
+
+ui-options-disable-rainbow-overlay = Rainbow overlay
+
+ui-options-disable-rainbow-overlay-tooltip = Replaces the movement in the rainbow overlay shader with a static offset.
+
+ui-options-disable-singulo-warp = Singularity
+
+ui-options-disable-singulo-warp-tooltip = Disables the screen warping effect on the singularity.
+
+ui-options-admin-strip-overlay-title = Strip Overlay
+
+ui-options-admin-strip-overlay-setting = Show strip overlay by default

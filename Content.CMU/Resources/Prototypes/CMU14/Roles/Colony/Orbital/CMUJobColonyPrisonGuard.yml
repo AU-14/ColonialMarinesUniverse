@@ -1,0 +1,56 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobColonyPrisonGuard
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: ColonyPrisonGuard
+  roundComponents:
+  - type: Skills
+    preset: RMCSkillPresetSurvivorMarshal
+  - type: JobPrefix
+    prefix: cmu-colony-prefix-prison-guard
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: mp
+  name: cmu-colony-name-prison-guard
+  description: cmu-colony-description-prison-guard
+  setPreference: true
+  playTimeTracker: CMUJobColonyPrisonGuard
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearColonyPrisonGuard
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-colony-supervisors-colonist
+  spawnMenuRoleName: Colony Prison Guard (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearColonyPrisonGuard
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: CMJumpsuitLiaisonBlack
+    back: CMSatchelSecuritySurvivorFill
+    outerClothing: RMCArmorVestWeYa
+    ears: RMCHeadsetDistressWeYa
+    head: RMCArmorHelmetPMCDark
+    gloves: RMCHandsVeteran
+    shoes: RMCShoesJackboots
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointColonyPrisonGuard
+  name: Spawn Point Colony Prison Guard
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobColonyPrisonGuard
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobColonyPrisonGuard
+  isHumanoid: true

@@ -3,14 +3,11 @@ using Content.Client._RMC14.Movement;
 using Content.Client._RMC14.Weapons.Melee;
 using Content.Client.Gameplay;
 using Content.Shared._RMC14.Input;
-using Content.Shared._RMC14.Tackle;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared.CombatMode;
+using Content.Shared.CCVar;
 using Content.Shared.Effects;
-using Content.Shared.Hands.Components;
-using Content.Shared.Mobs.Components;
-using Content.Shared.StatusEffect;
 using Content.Shared.Vehicle.Components; // CMU14
+using Content.Shared.IdentityManagement;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
@@ -20,6 +17,7 @@ using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.State;
+using Robust.Shared.Configuration;
 using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -37,8 +35,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
     [Dependency] private MapSystem _map = default!;
     [Dependency] private SpriteSystem _sprite = default!;
-
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private const string MeleeLungeKey = "melee-lunge";
 
@@ -49,7 +46,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     public override void Initialize()
     {
         base.Initialize();
-        _xformQuery = GetEntityQuery<TransformComponent>();
+
         SubscribeNetworkEvent<MeleeLungeEvent>(OnMeleeLunge);
         UpdatesOutsidePrediction = true;
     }
@@ -87,7 +84,12 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         var altDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.UseSecondary);
         var wideDown = _inputSystem.CmdStates.GetState(CMKeyFunctions.CMXenoWideSwing);
 
-        if (weapon.AutoAttack || useDown != BoundKeyState.Down && altDown != BoundKeyState.Down && wideDown != BoundKeyState.Down)
+        if (ShouldStopAttack(
+                weapon.AutoAttack,
+                useDown,
+                altDown,
+                wideDown,
+                _cfg.GetCVar(CCVars.ControlHoldToAttackMelee)))
         {
             if (weapon.Attacking)
             {
@@ -111,7 +113,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
         EntityCoordinates coordinates;
 
-        if (_map.TryFindGridAt(mousePos, out var gridUid, out _))
+        if (Maps.TryFindGridAt(mousePos, out var gridUid, out _))
         {
             coordinates = TransformSystem.ToCoordinates(gridUid, mousePos);
         }
@@ -166,6 +168,18 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
             ClientHeavyAttack(entity, coordinates, weaponUid, weapon);
     }
 
+    internal static bool ShouldStopAttack(
+        bool autoAttack,
+        BoundKeyState use,
+        BoundKeyState alt,
+        BoundKeyState wide,
+        bool holdToAttack)
+    {
+        return autoAttack ||
+               (use != BoundKeyState.Down && alt != BoundKeyState.Down && wide != BoundKeyState.Down) ||
+               holdToAttack;
+    }
+
     protected override bool InRange(EntityUid user, EntityUid target, float range, ICommonSession? session)
     {
         if (TryComp<VehicleComponent>(target, out var vehicle) // CMU14: vehicle lerp between ticks, client diverged from server
@@ -195,7 +209,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     public void ClientHeavyAttack(EntityUid user, EntityCoordinates coordinates, EntityUid meleeUid, MeleeWeaponComponent component)
     {
         // Only run on first prediction to avoid the potential raycast entities changing.
-        if (!_xformQuery.TryGetComponent(user, out var userXform) ||
+        if (!TryComp(user, out TransformComponent? userXform) ||
             !Timing.IsFirstTimePredicted)
         {
             return;
@@ -283,5 +297,37 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         // Entity might not have been sent by PVS.
         if (Exists(ent) && Exists(entWeapon))
             DoLunge(ent, entWeapon, ev.Angle, ev.LocalPos, ev.Animation);
+    }
+
+    protected override void UndamagedAttack(Entity<MeleeWeaponComponent> ent, EntityUid target, EntityUid user)
+    {
+        if (ent.Comp.UndamagedAlertThreshold == 0)
+            return;
+
+        if (ent.Comp.LastUndamagedHitEntity != target)
+        {
+            ent.Comp.UndamagedSwings = 0;
+            ent.Comp.LastUndamagedHitEntity = target;
+        }
+
+        ent.Comp.UndamagedSwings++;
+        if (ent.Comp.UndamagedSwings >= ent.Comp.UndamagedAlertThreshold)
+        {
+            if (ent.Owner == user)
+            {
+                PopupSystem.PopupEntity(Loc.GetString("melee-self-weapon-dealt-no-damage", ("target", Identity.Entity(target, EntityManager, user))), target, user);
+            }
+            else
+            {
+                PopupSystem.PopupEntity(Loc.GetString("melee-weapon-dealt-no-damage", ("weapon", ent), ("target", Identity.Entity(target, EntityManager, user))), target, user);
+            }
+
+            ent.Comp.UndamagedSwings = 0;
+        }
+    }
+
+    protected override void ResetUndamagedSwingsCount(Entity<MeleeWeaponComponent> ent)
+    {
+        ent.Comp.UndamagedSwings = 0;
     }
 }

@@ -1,0 +1,86 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineSapper
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPLineSapper
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+  - type: JobPrefix
+    prefix: cmu-uppline-prefix-sapper
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-uppline-name-sapper
+  description: cmu-uppline-description
+  playTimeTracker: CMUJobUPPLineSapper
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPLineSapper
+  spawnMenuRoleName: UPP Line Infantry Sapper (3rd party)
+  greeting: cmu-uppline-greeting
+  icon: RMCJobIconSPPEngineer
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineSapper
+  name: UPP Line Infantry Sapper
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-sapper
+    description: cmu-uppline-description
+    reregister: false
+    job: CMUJobUPPLineSapper
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineSapper
+  equipment:
+    head: ArmorHelmetSPPEngineer
+    eyes: RMCWeldingGoggles
+    mask: CMMaskGas
+    jumpsuit: CMJumpsuitSPPEngi
+    outerClothing: RMCArmorSPPRifleman
+    gloves: RMCHandsVeteranInsulated
+    shoes: RMCBootsSPPFilled
+    suitstorage: RMCWeaponRifleType71Flamer
+    id: CMUIDCardUPPLineSapper
+    belt: RMCType71BeltFilled
+    back: RMCSatchelSPPWelderEngineer
+    pocket1: RMCPouchAutoinjectorFill
+    pocket2: RMCPouchConstructionFillFull
+  inhand:
+  - RMCToolWebbingSmallFilled
+
+- type: playTimeTracker
+  id: CMUJobUPPLineSapper

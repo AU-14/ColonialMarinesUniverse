@@ -94,7 +94,7 @@
     layers:
     - state: mg_system
   - type: DropshipFabricatorPrintable
-    cost: 50
+    cost: 500
   - type: DropshipUtility
   - type: DropshipAttachedSprite
     sprite:
@@ -107,7 +107,9 @@
     attachableTypes:
     - RMCDropshipUtilityPoint
     - RMCDropshipWeaponPoint
+    - CMUGunshipHardpointAttachmentPoint
   - type: RMCEquipmentDeployer
+    deployPrototype: RMCML66DNestDropship
     isDeployableByHand: true
     utilityDeployedSprite:
       sprite: _RMC14/Objects/dropship_utility_attachments.rsi
@@ -118,6 +120,19 @@
     blacklist:
       components:
       - Xeno
+  - type: GunshipDoorGunnerAttachment
+
+- type: entity
+  parent: RMCDropshipAttachmentDoorGun
+  id: CMUDropshipAttachmentDoorGunM2C
+  name: MTU-4C M2C Door Gunner Hardpoint System
+  description: A box that deploys a crew-served M2C heavy machine gun. Fits on gunship hardpoint attachment points.
+  components:
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - CMUGunshipHardpointAttachmentPoint
+  - type: RMCEquipmentDeployer
+    deployPrototype: CMUM2CDoorGunDropship
 
 - type: entity
   parent: RMCDropshipAttachmentUtility
@@ -177,3 +192,53 @@
       sprite: _RMC14/Objects/dropship_utility_attachments.rsi
       state: launch_bay_deployed
   - type: RMCOrbitalDeployer
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+    - CMUGunshipUtilityAttachmentPoint
+
+- type: entity
+  parent: RMCDropshipAttachmentUtility
+  id: CMUDropshipAttachmentEEXRappelSystem
+  name: EEX Rappel System
+  description: An extendable rappel system for deploying marines from a dropship in tactical hover. Requires solid, unobstructed ground one level below.
+  components:
+  - type: Sprite
+    layers:
+    - state: paradrop_system
+  - type: DropshipFabricatorPrintable
+    cost: 300
+  - type: DropshipUtility
+  - type: DropshipAttachedSprite
+    sprite:
+      sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+      state: paradrop_system_deployed
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+    - CMUGunshipUtilityAttachmentPoint
+  - type: RMCEquipmentDeployer
+    deployPrototype: CMUEEXRappelDropshipEndpoint
+    dropShipWindowButtonText: Rappel
+    canAutoDeploy: false
+    isDeployableByHand: true
+    serverAuthoritativeDeployment: true
+    utilityDeployedSprite:
+      sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+      state: paradrop_system_deployed
+  - type: EEXRappelSystem
+
+- type: entity
+  parent: CMUZLevelRopeThroughDown2
+  id: CMUEEXRappelDropshipEndpoint
+  name: EEX rappel line
+  description: An extendable rappel line leading down from the dropship.
+  components:
+  - type: Sprite
+    drawdepth: SmallObjects
+
+- type: entity
+  parent: CMUZLevelRopeThroughUp
+  id: CMUEEXRappelGroundEndpoint
+  name: EEX rappel line
+  description: An extendable rappel line leading back up to the dropship.

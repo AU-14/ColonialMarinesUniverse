@@ -1,8 +1,8 @@
 using Content.Server._RMC14.Rules;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
-using Content.Server._CMU14.Round.Objectives;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round.Objectives;
+using Content.Server.CMU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Database;
@@ -18,7 +18,6 @@ using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
 using Robust.Server;
-using Robust.Server.GameObjects;
 using Robust.Server.GameStates;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Console;
@@ -97,7 +96,7 @@ namespace Content.Server.GameTicking
             InitializePlayer();
             InitializeLobbyBackground();
             InitializeGamePreset();
-            DebugTools.Assert(_prototypeManager.Index(FallbackOverflowJob).Name == FallbackOverflowJobName,
+            DebugTools.Assert(ProtoMan.Index(FallbackOverflowJob).Name == FallbackOverflowJobName,
                 "Overflow role does not have the correct name!");
             InitializeGameRules();
             InitializeReplays();
@@ -159,6 +158,11 @@ namespace Content.Server.GameTicking
             }
             // Send the requesting player to the lobby
             PlayerJoinLobby(args.SenderSession);
+        }
+
+        public static int GetRoundId(IEntitySystemManager esm)
+        {
+            return esm.GetEntitySystemOrNull<GameTicker>()?.RoundId ?? 0;
         }
     }
 }

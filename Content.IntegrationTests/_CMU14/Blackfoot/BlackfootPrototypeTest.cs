@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Numerics;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Weapons.Ranged.Ammo.BulletBox;
 using Content.Shared.Containers.ItemSlots;
@@ -25,7 +25,7 @@ using Robust.Shared.Utility;
 using Robust.UnitTesting;
 using YamlDotNet.RepresentationModel;
 
-namespace Content.IntegrationTests._CMU14.Blackfoot;
+namespace Content.IntegrationTests.CMU14.Blackfoot;
 
 [TestFixture]
 public sealed class BlackfootPrototypeTest
@@ -234,7 +234,7 @@ public sealed class BlackfootPrototypeTest
 
     private static (List<Vector2> PassengerSeats, Vector2? Pilot, Vector2? M866) ReadDoorGunSeatLayout(IResourceManager resources)
     {
-        using var file = resources.ContentFileRead(new ResPath("/Maps/_CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml"));
+        using var file = resources.ContentFileRead(new ResPath("/Maps/CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml"));
         using var reader = new StreamReader(file);
         var yamlStream = new YamlStream();
         yamlStream.Load(reader);

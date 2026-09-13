@@ -28,8 +28,9 @@
       node: Grille
       deconstructionTarget: start
     - type: Damageable
-      damageContainer: StructuralInorganic
       damageModifierSet: PerforatedMetallic
+    - type: Injurable
+      damageContainer: StructuralInorganic
     - type: PowerConsumer
       showInMonitor: false
     - type: Electrified
@@ -119,8 +120,9 @@
       bodyType: Static
       canCollide: false
     - type: Damageable
-      damageContainer: Inorganic
       damageModifierSet: FlimsyMetallic
+    - type: Injurable
+      damageContainer: Inorganic
     - type: Destructible
       thresholds:
         - trigger:

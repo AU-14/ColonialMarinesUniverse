@@ -1,7 +1,8 @@
-using Content.Shared.MapText;
+﻿using Content.Shared.MapText;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.RichText;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameStates;
 using Robust.Shared.Utility;
@@ -17,24 +18,6 @@ public sealed partial class MapTextSystem : SharedMapTextSystem
     [Dependency] private IResourceCache _resourceCache = default!;
     [Dependency] private IOverlayManager _overlayManager = default!;
 
-    private static readonly IReadOnlyDictionary<string, ResPath> FontPaths = new Dictionary<string, ResPath>
-    {
-        ["Default"] = new("/Fonts/NotoSans/NotoSans-Regular.ttf"),
-        ["DefaultItalic"] = new("/Fonts/NotoSans/NotoSans-Italic.ttf"),
-        ["DefaultBold"] = new("/Fonts/NotoSans/NotoSans-Bold.ttf"),
-        ["DefaultBoldItalic"] = new("/Fonts/NotoSans/NotoSans-BoldItalic.ttf"),
-        ["NotoSansDisplay"] = new("/Fonts/NotoSansDisplay/NotoSansDisplay-Regular.ttf"),
-        ["NotoSansDisplayItalic"] = new("/Fonts/NotoSansDisplay/NotoSansDisplay-Italic.ttf"),
-        ["NotoSansDisplayBold"] = new("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"),
-        ["NotoSansDisplayBoldItalic"] = new("/Fonts/NotoSansDisplay/NotoSansDisplay-BoldItalic.ttf"),
-        ["BoxRound"] = new("/Fonts/Boxfont-round/Boxfont Round.ttf"),
-        ["Cozette"] = new("/Fonts/Cozette/CozetteVector.ttf"),
-        ["CozetteBold"] = new("/Fonts/Cozette/CozetteVectorBold.ttf"),
-        ["AnimalSilence"] = new("/Fonts/Animal Silence.otf"),
-        ["Monospace"] = new("/EngineFonts/NotoSans/NotoSansMono-Regular.ttf"),
-        ["Emoji"] = new("/Fonts/NotoEmoji.ttf"),
-    };
-
     private MapTextOverlay _overlay = default!;
 
     /// <inheritdoc/>
@@ -46,13 +29,15 @@ public sealed partial class MapTextSystem : SharedMapTextSystem
         _overlay = new MapTextOverlay(_configManager, EntityManager, _uiManager, _transform);
         _overlayManager.AddOverlay(_overlay);
 
-        DebugTools.Assert(FontPaths.ContainsKey(SharedMapTextComponent.DefaultFont));
+        // TODO move font prototype to robust.shared, then use ProtoId<FontPrototype>
+        DebugTools.Assert(ProtoMan.HasIndex<FontPrototype>(SharedMapTextComponent.DefaultFont));
     }
 
     private void OnComponentStartup(Entity<MapTextComponent> ent, ref ComponentStartup args)
     {
         CacheText(ent.Comp);
-        DebugTools.Assert(FontPaths.ContainsKey(ent.Comp.FontId));
+        // TODO move font prototype to robust.shared, then use ProtoId<FontPrototype>
+        DebugTools.Assert(ProtoMan.HasIndex<FontPrototype>(ent.Comp.FontId));
     }
 
     private void HandleCompState(Entity<MapTextComponent> ent, ref ComponentHandleState args)
@@ -78,21 +63,17 @@ public sealed partial class MapTextSystem : SharedMapTextSystem
             ? Loc.GetString(component.LocText)
             : component.Text;
 
-        component.CachedFont = CreateFont(component.FontId, component.FontSize);
-        if (component.CachedFont == null)
+        if (!ProtoMan.TryIndex<FontPrototype>(component.FontId, out var fontPrototype))
         {
             component.CachedText = Loc.GetString("map-text-font-error");
             component.Color = Color.Red;
-            component.CachedFont = CreateFont(SharedMapTextComponent.DefaultFont, 14);
+
+            if (ProtoMan.TryIndex<FontPrototype>(SharedMapTextComponent.DefaultFont, out var @default))
+                component.CachedFont = new VectorFont(_resourceCache.GetResource<FontResource>(@default.Path), 14);
             return;
         }
-    }
 
-    private VectorFont? CreateFont(string fontId, int size)
-    {
-        if (!FontPaths.TryGetValue(fontId, out var path))
-            return null;
-
-        return new VectorFont(_resourceCache.GetResource<FontResource>(path), size);
+        var fontResource = _resourceCache.GetResource<FontResource>(fontPrototype.Path);
+        component.CachedFont = new VectorFont(fontResource, component.FontSize);
     }
 }

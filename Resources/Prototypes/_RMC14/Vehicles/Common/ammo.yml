@@ -164,7 +164,7 @@
   description: Ammunition for light tank cannons. A squash-head shell that splats a plastic charge against the target before detonating, sending a heavy shockwave through the armor. Excellent structural damage with a moderate blast, and can bring down walls, but doesn't need to penetrate to work.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_hesh
       map: [ "enum.BulletBoxLayers.Fill" ]
@@ -356,6 +356,11 @@
     damage:
       types:
         Piercing: 36
+  - type: RMCProjectileAccuracy # CMU14: vehicle cannon, flatter falloff than the sentry block it inherits
+    accuracy: 110
+    thresholds:
+    - range: 30
+      falloff: 5
 
 - type: entity
   parent: CMBulletSentry10x50mm
@@ -382,6 +387,11 @@
         Piercing: 50
   - type: CMArmorPiercing
     amount: 15
+  - type: RMCProjectileAccuracy # CMU14: vehicle cannon, flatter falloff than the sentry block it inherits
+    accuracy: 110
+    thresholds:
+    - range: 30
+      falloff: 5
 
 - type: entity
   parent: CMBulletSentry10x50mm

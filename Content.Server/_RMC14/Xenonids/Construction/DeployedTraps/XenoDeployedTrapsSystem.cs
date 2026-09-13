@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Xenonids.Construction.DeployedTraps;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.StepTrigger.Systems;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
@@ -14,6 +15,7 @@ namespace Content.Server._RMC14.Xenonids.Construction.DeployedTraps;
 public sealed partial class XenoDeployedTrapsSystem : EntitySystem
 {
     [Dependency] private RMCSlowSystem _root = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -39,7 +41,8 @@ public sealed partial class XenoDeployedTrapsSystem : EntitySystem
         var destroyed = false;
         if (_destructible.TryGetDestroyedAt(trap.Owner, out var totalHealth))
         {
-            destroyed = args.Damageable.TotalDamage + args.DamageDelta.GetTotal() > totalHealth;
+            destroyed = _damageable.GetTotalDamage((trap.Owner, args.Damageable)) +
+                args.DamageDelta.GetTotal() > totalHealth;
         }
         QueueDel(trap);
     }

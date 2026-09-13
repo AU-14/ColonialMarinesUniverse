@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server._CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Verbs;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
@@ -10,7 +10,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.HunterShip;
+namespace Content.IntegrationTests.CMU14.HunterShip;
 
 [TestFixture]
 public sealed class HunterShipLadderTest

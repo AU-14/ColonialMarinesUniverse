@@ -1,14 +1,20 @@
 - type: entity
   id: ActionVehicleToggleView
+  parent: BaseAction
   name: Toggle View
   description: Switch between the interior and exterior view.
   components:
   - type: InstantAction
     event: !type:VehicleToggleViewActionEvent
   - type: Action
-    icon: Interface/Actions/eyeopen.png
-    iconOn: Interface/Actions/eyeclose.png
     itemIconStyle: BigAction
+  - type: Sprite
+    layers:
+    - texture: Interface/Actions/eyeopen.png
+      map: ["enum.ActionVisuals.Icon"]
+    - texture: Interface/Actions/eyeclose.png
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
 
 - type: entity
   id: ActionVehicleDeploy
@@ -22,19 +28,23 @@
 
 - type: entity
   id: ActionVehicleLock
+  parent: BaseAction
   name: Toggle Vehicle Lock
   description: Locks or unlocks vehicle entry doors.
   components:
   - type: InstantAction
     event: !type:VehicleLockActionEvent
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/id_lock_actions.rsi
-      state: id_lock_unlocked
-    iconOn:
-      sprite: _RMC14/Actions/id_lock_actions.rsi
-      state: id_lock_locked
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/id_lock_actions.rsi
+      state: id_lock_unlocked
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/id_lock_actions.rsi
+      state: id_lock_locked
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
 
 - type: entity
   id: ActionVehicleSelectHardpoint

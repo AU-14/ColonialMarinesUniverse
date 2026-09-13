@@ -1,0 +1,10 @@
+# Maps votable in every mode that inlines this pool
+# These maps are actively maintained or in excellent shape
+- type: GamePlanetPool
+  id: SharedPlanetPool
+  planets:
+  - AUPlanetShepherdsPride
+  - CMUPlanetLament # Barkers
+  - CMUPlanetHopesRetreat
+  - AUPlanetStableGarrison # v1 nostalgia
+  - CMUPlanetStableGarrisonRedux

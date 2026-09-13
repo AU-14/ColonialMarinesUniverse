@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -627,7 +627,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
                 continue;
             }
 
-            for (var i = comp.Tiles.Count - 1; i >= 0; i--)
+            for (var i = 0; i < comp.Tiles.Count; i++)
             {
                 var tile = comp.Tiles[i];
                 if (time < tile.At)
@@ -635,7 +635,10 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
                 comp.Tiles.RemoveAt(i);
                 if (!_zLevels.TryProjectToGround(_transform.ToCoordinates(tile.Coordinates), out var fireCoordinates))
+                {
+                    i--;
                     continue;
+                }
 
                 var fire = Spawn(comp.Spawn, fireCoordinates);
 

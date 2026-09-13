@@ -5,6 +5,7 @@
          xmlns:ui="clr-namespace:Content.Client.Lobby.UI"
          xmlns:namedItems="clr-namespace:Content.Client._RMC14.NamedItems"
          xmlns:userInterface="clr-namespace:Content.Client._RMC14.UserInterface"
+         xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
          HorizontalExpand="True">
         <!-- Left side -->
         <BoxContainer Orientation="Vertical" Margin="10 10 10 10" HorizontalExpand="True">
@@ -14,21 +15,35 @@
                 <BoxContainer Orientation="Vertical">
                     <ui:HighlightedContainer>
                         <BoxContainer Orientation="Vertical">
-                            <ui:HighlightedContainer>
-                                <BoxContainer Orientation="Vertical">
-                                    <BoxContainer Orientation="Horizontal" VerticalExpand="True">
-                                        <Label Text="{Loc 'humanoid-profile-editor-name-label'}" />
-                                        <LineEdit Name="NameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
-                                        <Button Name="NameRandomize" Text="{Loc 'humanoid-profile-editor-name-random-button'}" />
-                                    </BoxContainer>
-                                    <Button Name="RandomizeEverythingButton" HorizontalAlignment="Center"
-                                            HorizontalExpand="False" MaxWidth="256"
-                                            Text="{Loc 'humanoid-profile-editor-randomize-everything-button'}" />
-                                    <RichTextLabel Name="WarningLabel" HorizontalExpand="False"
-                                                   VerticalExpand="True" MaxWidth="425"
-                                                   HorizontalAlignment="Left" />
-                                </BoxContainer>
-                            </ui:HighlightedContainer>
+                            <BoxContainer Orientation="Horizontal" VerticalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-name-label'}" />
+                                <LineEdit Name="NameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
+                            </BoxContainer>
+                            <RichTextLabel Name="WarningLabel" HorizontalExpand="False"
+                                            VerticalExpand="True" MaxWidth="425"
+                                            HorizontalAlignment="Left" />
+                        </BoxContainer>
+                    </ui:HighlightedContainer>
+                </BoxContainer>
+                <!-- Randomizer -->
+                <BoxContainer Orientation="Vertical">
+                    <ui:HighlightedContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="{Loc 'humanoid-profile-editor-randomize'}" HorizontalAlignment="Center"/>
+                            <PanelContainer StyleClasses="LowDivider" Margin="0 10"/>
+                            <GridContainer Columns="2" MinWidth="250" HorizontalExpand="True">
+                                <ui:RandomizeLockButton For="Name" LabelText="{Loc 'humanoid-profile-editor-randomize-name-button'}"/>
+                                <ui:RandomizeLockButton For="Species" LabelText="{Loc 'humanoid-profile-editor-randomize-species-button'}"/>
+                                <ui:RandomizeLockButton For="Age" LabelText="{Loc 'humanoid-profile-editor-randomize-age-button'}"/>
+                                <ui:RandomizeLockButton For="Sex" LabelText="{Loc 'humanoid-profile-editor-randomize-sex-button'}"/>
+                                <ui:RandomizeLockButton For="Skin" LabelText="{Loc 'humanoid-profile-editor-randomize-skin-button'}"/>
+                                <ui:RandomizeLockButton For="Eyes" LabelText="{Loc 'humanoid-profile-editor-randomize-eye-button'}"/>
+                                <ui:RandomizeLockButton For="Markings" LabelText="{Loc 'humanoid-profile-editor-randomize-markings-button'}"/>
+                            </GridContainer>
+                            <Button
+                                Name="RandomizeUnlockedButton"
+                                MaxWidth="256"
+                                Text="{Loc 'humanoid-profile-editor-randomize-unlocked-button'}"/>
                         </BoxContainer>
                     </ui:HighlightedContainer>
                 </BoxContainer>
@@ -117,6 +132,18 @@
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SexButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- Voice -->
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-voice-label'}" />
+                                    <Control HorizontalExpand="True" />
+                                    <OptionButton Name="VoiceButton" HorizontalAlignment="Right" />
+                                </BoxContainer>
+                                <!-- Pronouns -->
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
+                                </BoxContainer>
                                 <!-- Show clothing -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-clothing'}" />
@@ -137,11 +164,6 @@
                                 <Label Text="{Loc 'humanoid-profile-editor-skin-color-label'}" />
                                 <Slider HorizontalExpand="True" Name="Skin" MinValue="0" MaxValue="100" Value="20" />
                                 <BoxContainer Name="RgbSkinColorContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True" />
-                            </BoxContainer>
-                            <!-- Hair -->
-                            <BoxContainer Margin="10" Orientation="Horizontal">
-                                <humanoid:SingleMarkingPicker Name="HairStylePicker" Category="Hair" />
-                                <humanoid:SingleMarkingPicker Name="FacialHairPicker" Category="FacialHair" />
                             </BoxContainer>
                             <!-- Eyes -->
                             <BoxContainer Margin="10" Orientation="Vertical">
@@ -176,11 +198,6 @@
                                 <OptionButton Name="OriginButton" HorizontalAlignment="Right" />
                             </BoxContainer>
                             <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" ToolTip="{Loc 'humanoid-profile-editor-pronouns-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
-                            </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-height-label'}" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
                                 <LineEdit Name="HeightFeetEdit" MinSize="22 0" MaxWidth="22" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
@@ -202,16 +219,19 @@
                                 <Control HorizontalExpand="True"/>
                                 <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
                             </BoxContainer>
+                            <ColorSelectorSliders Name="CharacterSkinColorPicker" HorizontalExpand="True" />
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
                                 <Label Name="HairColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
                             </BoxContainer>
+                            <ColorSelectorSliders Name="CharacterHairColorPicker" HorizontalExpand="True" />
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
                                 <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
                             </BoxContainer>
+                            <ColorSelectorSliders Name="CharacterEyeColorPicker" HorizontalExpand="True" />
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-hide-meta-label'}" ToolTip="{Loc 'humanoid-profile-editor-hide-meta-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
@@ -235,8 +255,8 @@
                             <RichTextLabel Name="RegulationAppearanceInfo" HorizontalExpand="True" Margin="10 10 10 0" />
                             <!-- Hair -->
                             <BoxContainer Margin="10" Orientation="Horizontal">
-                                <humanoid:SingleMarkingPicker Name="RegulationHairStylePicker" Category="Hair" />
-                                <humanoid:SingleMarkingPicker Name="RegulationFacialHairPicker" Category="FacialHair" />
+                                <humanoid:RegulationMarkingPicker Name="RegulationHairStylePicker" Layer="Hair" />
+                                <humanoid:RegulationMarkingPicker Name="RegulationFacialHairPicker" Layer="FacialHair" />
                             </BoxContainer>
                         </BoxContainer>
                     </ScrollContainer>
@@ -321,9 +341,7 @@
                 </BoxContainer>
                 <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10">
                     <!-- Markings -->
-                    <ScrollContainer VerticalExpand="True">
-                        <humanoid:MarkingPicker Name="Markings" IgnoreCategories="Hair,FacialHair" />
-                    </ScrollContainer>
+                    <humanoid:MarkingPicker Name="Markings" HorizontalExpand="True" VerticalExpand="True" />
                 </BoxContainer>
                 <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">
                     <!-- Named Items -->
@@ -337,7 +355,7 @@
                       VerticalAlignment="Center"
                       MinWidth="300"
                       MaxWidth="300">
-            <SpriteView Name="SpriteView" Scale="8 8" Margin="4" SizeFlagsStretchRatio="1" />
+            <profile:ProfilePreviewSpriteView Name="SpriteView" Scale="8 8" Margin="4" SizeFlagsStretchRatio="1" />
             <Label Name="PreviewJobLabel"
                    HorizontalAlignment="Center"
                    ClipText="True"

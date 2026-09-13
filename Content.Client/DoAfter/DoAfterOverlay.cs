@@ -43,6 +43,15 @@ public sealed class DoAfterOverlay : Overlay
     private const float StartX = 2;
     private const float EndX = 22f;
 
+    // Time after which the doafter will lerp to max alpha.
+    private static readonly TimeSpan MaxAlphaTime = TimeSpan.FromSeconds(0.3f);
+
+    // After finishing, how long it takes to fade out to 0 alpha
+    private static readonly TimeSpan FadeoutAlphaTime = TimeSpan.FromSeconds(0.2f);
+
+    // Time after which the doafter will lerp to its final y offset.
+    private static readonly TimeSpan MaxYPosTime = TimeSpan.FromSeconds(0.5f);
+
     public override OverlaySpace Space => _overlay.HasOverlay<NightVisionOverlay>()
         ? OverlaySpace.WorldSpace
         : OverlaySpace.WorldSpaceBelowFOV;
@@ -127,21 +136,21 @@ public sealed class DoAfterOverlay : Overlay
             foreach (var doAfter in comp.DoAfters.Values)
             {
                 // Hide some DoAfters from other players for stealthy actions (ie: thieving gloves)
-                var alpha = 1f;
+                var maxAlpha = 1f;
                 if (doAfter.Args.Hidden || isInContainer)
                 {
                     if (uid != localEnt)
                         continue;
 
                     // Hints to the local player that this do-after is not visible to other players.
-                    alpha = 0.5f;
+                    maxAlpha = 0.5f;
                 }
 
-                //RMC14
+                // RMC14
                 if (!doAfter.Args.ForceVisible)
                 {
                     // Don't show the doafter bar to other clients if the entity's sprite isn't visible.
-                    if(!sprite.Visible && uid != localEnt)
+                    if (!sprite.Visible && uid != localEnt)
                         continue;
 
                     // RMC: If the local player is a xeno and the target is not, hide doafter bars behind FOV shadow.
@@ -153,8 +162,9 @@ public sealed class DoAfterOverlay : Overlay
                         continue;
                     }
 
-                    // Set the doafter bar alpha to the alpha of the sprite.
-                    alpha = sprite.Color.A;
+                    // Set the doafter bar alpha to the alpha of the sprite, without making hidden local hints
+                    // more visible than the shared do-after rules allow.
+                    maxAlpha = Math.Min(maxAlpha, sprite.Color.A);
 
                     // The system using this component does not edit the sprite alpha, so we use separate logic for it.
                     var invisibleQuery = _entManager.GetEntityQuery<EntityActiveInvisibleComponent>();
@@ -162,12 +172,22 @@ public sealed class DoAfterOverlay : Overlay
 
                     // Make the doafter bar alpha the same as the opacity of the invisibility.
                     if (invisible != null)
-                        alpha = invisible.Opacity;
+                        maxAlpha = Math.Min(maxAlpha, invisible.Opacity);
                 }
+
+                var elapsed = time - doAfter.StartTime;
+
+                var alpha = MathHelper.Lerp(0f, maxAlpha, (float)Math.Clamp(elapsed / MaxAlphaTime, 0.0, 1.0));
+                // fade out if doafter finished
+                if (elapsed >= doAfter.Args.Delay)
+                    alpha = MathHelper.Lerp(maxAlpha, 0f, (float)Math.Clamp((elapsed - doAfter.Args.Delay) / FadeoutAlphaTime, 0.0, 1.0));
 
                 // Use the sprite itself if we know its bounds. This means short or tall sprites don't get overlapped
                 // by the bar.
-                var yOffset = _sprite.GetLocalBounds((uid, sprite)).Height / 2f + 0.05f;
+                var spriteBounds = _sprite.GetLocalBounds((uid, sprite));
+                var yFinished = spriteBounds.Height / 2f + 0.05f;
+                var yStart = yFinished / 6f;
+                var yOffset = MathHelper.Lerp(yStart, yFinished, Easings.OutSine((float)Math.Clamp(elapsed / MaxYPosTime, 0.0, 1.0)));
 
                 // Position above the entity (we've already applied the matrix transform to the entity itself)
                 // Offset by the texture size for every do_after we have.
@@ -183,7 +203,7 @@ public sealed class DoAfterOverlay : Overlay
                 // if we're cancelled then flick red / off.
                 if (doAfter.CancelledTime != null)
                 {
-                    var elapsed = doAfter.CancelledTime.Value - doAfter.StartTime;
+                    elapsed = doAfter.CancelledTime.Value - doAfter.StartTime;
                     elapsedRatio = (float)Math.Min(1, elapsed.TotalSeconds / doAfter.Args.Delay.TotalSeconds);
                     var cancelElapsed = (time - doAfter.CancelledTime.Value).TotalSeconds;
                     var flash = Math.Floor(cancelElapsed / FlashTime) % 2 == 0;
@@ -191,7 +211,6 @@ public sealed class DoAfterOverlay : Overlay
                 }
                 else
                 {
-                    var elapsed = time - doAfter.StartTime;
                     elapsedRatio = (float)Math.Min(1, elapsed.TotalSeconds / doAfter.Args.Delay.TotalSeconds);
                     color = GetProgressColor(elapsedRatio, alpha);
                 }

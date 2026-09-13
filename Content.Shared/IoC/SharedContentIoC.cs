@@ -6,13 +6,13 @@ namespace Content.Shared.IoC
 {
     public static class SharedContentIoC
     {
-        public static void Register()
+        public static void Register(IDependencyCollection deps)
         {
-            IoCManager.Register<MarkingManager, MarkingManager>();
-            IoCManager.Register<ContentLocalizationManager, ContentLocalizationManager>();
+            deps.Register<MarkingManager, MarkingManager>();
+            deps.Register<ContentLocalizationManager, ContentLocalizationManager>();
 
             // RMC14
-            IoCManager.Register<RMCLocalizationManager>();
+            deps.Register<RMCLocalizationManager>();
         }
     }
 }

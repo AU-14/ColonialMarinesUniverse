@@ -1,0 +1,98 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWeYuGoonLeader
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WeYuGoonLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: goon_leader
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+      RMCSkillEndurance: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillMedical: 1
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillLeadership: 1
+      RMCSkillFirearms: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-weyuexec-prefix-goonleader
+  name: cmu-weyuexec-name-goonleader
+  description: cmu-weyuexec-description-goonleader
+  playTimeTracker: CMUJobWeYuGoonLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearWeYuGoonLeader
+  spawnMenuRoleName: WY Corporate Security Lead (event)
+  greeting: cmu-weyuexec-greeting-security
+  icon: CMJobIconLiaison
+  joinNotifyCrew: false
+  supervisors: cmu-weyuexec-supervisors-sitedirector
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWeYuGoonLeader
+  name: WY Corporate Security Lead
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-weyuexec-name-goonleader
+    description: cmu-weyuexec-description-goonleader
+    reregister: false
+    job: CMUJobWeYuGoonLeader
+    raffle:
+      settings: short
+    rules: cmu-weyuexec-rules
+
+- type: startingGear
+  id: CMUGearWeYuGoonLeader
+  equipment:
+    id: CMUIDCardWeYuGoonLeader
+    ears: RMCHeadsetDistressGoonLeader
+    jumpsuit: RMCJumpsuitVeteranPMCCorporateLead
+    outerClothing: CMArmorM4PMCCorporateLead
+    gloves: RMCHandsVeteranPMC
+    head: ArmorHelmetPMCCorporateLead
+    shoes: RMCBootsPMCFilled
+    back: RMCSatchelLightpack
+    belt: RMCM77BeltPMCFilled
+    suitstorage: RMCWeaponRifleSSG45
+    pocket1: RMCPouchMagazineLarge
+    pocket2: RMCPouchFirstAidPMCFill
+  storage:
+    back:
+    - CMStunbaton
+    - RMCZipties
+    - RMCZipties
+    - RMCZipties
+    - CMCrowbar
+    - RMCMREWeYa
+    pocket1:
+    - RMCMagazineRifleSSG45AP
+    - RMCMagazineRifleSSG45AP
+    - RMCMagazineRifleSSG45AP
+    - RMCMagazineRifleSSG45AP
+    outerClothing:
+    - RMCMagazineRifleSSG45AP
+    - RMCMagazineRifleSSG45AP
+
+- type: playTimeTracker
+  id: CMUJobWeYuGoonLeader

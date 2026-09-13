@@ -9991,5 +9991,925 @@
   id: 650
   time: '2026-08-23T07:25:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1860
+- author: Vencallium
+  changes:
+  - message: Beneficial generated-chemical properties now provide their advertised
+      medical, stimulant, organ, botanical, and specialized treatment effects.
+    type: Add
+  - message: Beneficial chemical properties now become linearly more effective at
+      higher generated levels while retaining overdose risks and safety limits.
+    type: Tweak
+  - message: Defibrillating chemicals can now revive medically viable corpses and
+      correctly trigger Electrogenetic reagents.
+    type: Fix
+  - message: Overlapping temporary chemical properties now use the strongest active
+      source and expire correctly.
+    type: Fix
+  - message: Administrators can now create custom generated-chemical contracts and
+      materialize them as 30-unit vials using the admin chemical contract console.
+    type: Add
+  id: 651
+  time: '2026-08-23T10:19:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1852
+- author: maertayn
+  changes:
+  - message: Platoon vote is delayed by a minute after a fresh restart (democracy!)
+    type: Tweak
+  - message: Carryover votes are now at 50% strength (showing real/tallied votes)
+      & threat carryover votes gone + threat votes don't randomly assign your vote
+      when you don't pick (only actual player input counts to threat roll)
+    type: Tweak
+  - message: XO, Deputy Administrator and CLF Leader added to priority roles (fills
+      first)
+    type: Tweak
+  - message: Ghost hotbar cleanup (still available in the actions menu, just not default)
+    type: Tweak
+  - message: WeYu and CLF alliance consoles - Weyland-Yutani and CLF command can now
+      set diplomatic standing (friendly, neutral, hostile) with every faction (grants
+      turrets/accesses on friendly relations)
+    type: Add
+  - message: Alliance console rows and headers now use proper faction names instead
+      of ids
+    type: Add
+  - message: CLF cell kit now deploys an alliance console alongside the intel gear
+    type: Map
+  - message: Faction relations now inherit - listing THREAT covers xenos, pathogen
+      walkers, apes and abominations without duplicating lists (or self-targeting)
+    type: Code
+  - message: Sentry turrets can no longer target Provost personnel
+    type: Fix
+  - message: USS Bush Redux sentry deployers are platoon aware and functional without
+      having to tune it - WY PMC crews get locked corporate IFF turrets instead
+    type: Map
+  - message: Dumb turrets now shoot pathogen walkers and the rest of the threat family
+    type: Fix
+  - message: 'GOVFOR tech tree rework - third-party unlocks are back: CMB, ICRC, S&R
+      K9, LACN snipers, US Army, FORECON kill team, PART Sierra, Armored Division,
+      KRAKEN (Tier IV AEGIS Nuke) + objective scaled prices'
+    type: Add
+  - message: Prototypes relocated (Intel, objectives, languages, plants, entity lists)
+      & third-party roles migrated to RoundJobProfiles
+    type: Code
+  - message: Examining an ID card now shows the wearer's faction(s) for use with Alliance
+      Consoles
+    type: Add
+  - message: Buffed objective reward points on completion across the board
+    type: Tweak
+  - message: Tech summons (Prodigy, provost, WY scientists, K9, FORECON) now carry
+      proper faction tags, so alliance standings actually apply to them - tech summons
+      are still neutral, they decide their allegiance as they please (doesn't apply
+      to the WeYu/CLF call-ins)
+    type: Add
+  - message: Type 23 shotgun case now fits the stocked ginormous shotgun
+    type: Fix
+  - message: K92-S is now an all-round bulky multitool for synths (screwdriver, wrench,
+      crowbar, vehicle servicing)
+    type: Tweak
+  - message: RMCInvisible cloak shader no longer breaks under forced premultiplied
+      pass (engine update broke shaders)
+    type: Fix
+  - message: Colony intercom spam no longer floods ghost chat
+    type: Fix
+  - message: planets.yml has been turned from a giant monster file into individual
+      maps in the Maps/Planets/ directory
+    type: Code
+  - message: Map & platoon rotations (feedback/experimenting)
+    type: Tweak
+  id: 652
+  time: '2026-08-23T21:20:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1861
+- author: ArturUr1
+  changes:
+  - message: Phrases about registering synthetics for Working Joe's have been added.
+    type: Add
+  id: 653
+  time: '2026-08-24T02:20:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1863
+- author: ArturUr1
+  changes:
+  - message: Phrases about registering synthetics for Working Joe's have been added.
+    type: Add
+  id: 654
+  time: '2026-08-24T02:20:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1863
+- author: maertayn
+  changes:
+  - message: Govfor announcement to the colony when they are evacuating (round is
+      ending)
+    type: Add
+  - message: Add full threat lists to every planet that supports their spawns
+    type: Tweak
+  - message: Differentiate repeating objectives with a blue hue instead of showing
+      a perpetual uncompleted
+    type: Tweak
+  - message: Civilian vehicles should now have wheels attached by default
+    type: Fix
+  - message: Kill objectives not working for post-round start threats (threat vote
+      & late joins)
+    type: Fix
+  id: 655
+  time: '2026-08-24T02:23:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1862
+- author: maertayn
+  changes:
+  - message: Govfor announcement to the colony when they are evacuating (round is
+      ending)
+    type: Add
+  - message: Add full threat lists to every planet that supports their spawns
+    type: Tweak
+  - message: Differentiate repeating objectives with a blue hue instead of showing
+      a perpetual uncompleted
+    type: Tweak
+  - message: Civilian vehicles should now have wheels attached by default
+    type: Fix
+  - message: Kill objectives not working for post-round start threats (threat vote
+      & late joins)
+    type: Fix
+  id: 656
+  time: '2026-08-24T02:23:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1862
+- author: Vencallium
+  changes:
+  - message: Added the Stimmaster 1000 for fabricating, labeling, filling, ejecting,
+      and smartfridge-transferring custom autoinjectors.
+    type: Add
+  - message: Plant bags can now bulk-load produce into reagent grinders and convert
+      eligible produce into seeds at seed extractors.
+    type: Add
+  - message: Increased reagent grinder chamber capacity to 50 items.
+    type: Tweak
+  id: 657
+  time: '2026-08-25T02:46:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1864
+- author: ver0098
+  changes:
+  - message: L66A2 GPMG added to TWE Requisitions
+    type: Add
+  id: 658
+  time: '2026-08-25T22:14:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1865
+- author: deepdarkdepths
+  changes:
+  - message: Fixed larva and facehuggers being unable to fit under single-entity double
+      doors.
+    type: Fix
+  - message: Laser designator lasers are visible through walls with nightvision.
+    type: Tweak
+  - message: Xenos that try to move while resting will now wake up. No more fat-fingering
+      the rest key during combat and paying the price.
+    type: Tweak
+  - message: Fixed Major Evolution boon not working when queen was out of ovi.
+    type: Fix
+  - message: Made some boons check for hive, to avoid issues when two or more hives
+      exist at the same time.
+    type: Fix
+  - message: Fixed being unable to weed on tiles with ledges or platforms.
+    type: Fix
+  - message: Fixed ghosts not following xenos after they evolve.
+    type: Fix
+  - message: Xenos can now release nested hosts with right click verb. You must target
+      the nest sprite to do this.
+    type: Add
+  id: 659
+  time: '2026-08-25T22:57:01.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1866
+- author: murdocstarsim
+  changes:
+  - message: Lots of SOP / UCMJ changes below.
+    type: Add
+  - message: All junior officers have been executed, not to worry we have now replaced
+      them with staff officers, all mention of junior officers have been removed from
+      SOP.
+    type: Add
+  - message: Blind drops have been altered, there is no limit on how many personnel
+      may drop, however it must be volountary, also we have prohibited Command Staff
+      and Shipside Staff from blind dropping. We didn't particularly like seeing our
+      auxiliarry technicians blind drop...
+    type: Add
+  - message: A primary LZ must now be chosen and defended. Hopefully no more random
+      hijacks...
+    type: Add
+  - message: EO has been granted permission for ship construction and deconstruction
+      of non vital area's to create whatever they wish! EO to Brig, I need a donut
+      dispenser please.
+    type: Add
+  - message: Rank pins are now mandatory under uniform regulations, trooper where
+      is your rank pin!
+    type: Add
+  - message: IO's and EO's are now no longer breaking SOP by deploying before a FOB
+      has been established! Not that anyone noticed...
+    type: Add
+  - message: Department Heads (CMP, CMO, LO) can now deploy to the FOB if they are
+      the only members of their department, you can't hide from the law son...
+    type: Add
+  - message: Provost has bestowed the gift of executions upon Whitelisted Commanders,
+      Commanders may now execute members of the military for breaking capital crimes.
+      Better get in line or risk losing your head!
+    type: Add
+  - message: 6 New capital crimes have been added, most to do with civilians and unlawfully
+      harming them or their property, check your fire!
+    type: Add
+  - message: Transfer of commandership has been simplified. No longer will you argue
+      for twenty minutes over who becomes commander.
+    type: Add
+  - message: DNR's have been added as their own section alongside executions. CMO
+      please DNR me because I can't stand it surrounded by idiots...
+    type: Add
+  - message: Geneva based crime temporarily removed as the new capital crimes serve
+      as a replacement in a much shorter and non 40 paragraph section. Less reading,
+      simplier crimes, more taser beating by MPs!
+    type: Add
+  id: 660
+  time: '2026-08-25T22:57:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1853
+- author: deepdarkdepths
+  changes:
+  - message: Crusher is now properly rooted for its entire charge doafter.
+    type: Fix
+  id: 661
+  time: '2026-08-25T23:23:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1867
+- author: maertayn
+  changes:
+  - message: Nuked the SCADA-like scenario system (overkill design, drift with legacy
+      systems, and overly complex for its usecase)
+    type: Code
+  - message: CLF no longer show their faction affiliation when you shift+click them
+    type: Fix
+  - message: Facehugger/parasite unable to leap or infect buckled (chairs) players
+    type: Fix
+  - message: Caseless weapons don't eject casings anymore (let me know if I missed
+      some)
+    type: Tweak
+  - message: Neomorph caste (neomorph) can regurgitate now
+    type: Fix
+  - message: Consoles have lost their hard collision, so you can move through them
+      (they blocked Z-transitions)
+    type: Tweak
+  - message: Fixed offset for the upper right weapon slot on GP
+    type: Fix
+  - message: Fixed the firemissions display showing inverted cardinal directions
+    type: Fix
+  - message: Loadout items not spawning if there is no room for them (storage), they
+      drop on the ground
+    type: Fix
+  - message: TacMap table for WeYu (tracks WY PMCs too) and Govfor/Opfor dynamic (vmarker)
+      on Bush
+    type: Add
+  - message: TacMap providing full map vision without having sensors (on Stable Garrison
+      et al.)
+    type: Fix
+  - message: Kill/Eliminate objectives not tracking threats that spawned late (threat
+      vote) or evolutions (WIP)
+    type: Fix
+  - message: Structures like weeds, walls, missing proper npcFaction groupings (sentries
+      now target)
+    type: Fix
+  - message: Merged cluttered spaghetti planet map files into _CMU14/Maps/Planets/<allegiance>/*
+    type: Code
+  - message: Added spawnthreat (manually spawn threat on markers or your location),
+      endroundhold (block going to postround if victory conditions are met, e.g. three
+      spawned threats don't fight to end early) commands
+    type: Admin
+  - message: Fixed the CMU TacMap blips after far too long of having to squint
+    type: Add
+  id: 662
+  time: '2026-08-26T00:14:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1868
+- author: TheMaiji
+  changes:
+  - message: Infected marines no longer cough, puke, stumble or jitter, hiding the
+      abomination infection until transformation. Health scan shows poison.
+    type: Tweak
+  - message: Mimic entities no longer appear on the Bioscan threat readout.
+    type: Tweak
+  - message: Mirror and mimic status icons are now only visible to admin-ghosts, not
+      regular ghosts.
+    type: Tweak
+  id: 663
+  time: '2026-08-27T01:36:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1870
+- author: maertayn
+  changes:
+  - message: Bad Blood bracers can raise dead humanoids as thralls (DS) and any ghost
+      can claim - raised thralls show an ashen pallor and yellow-green eyes, and cannot
+      cover their hands or face
+    type: Add
+  - message: Yautja bracers can fabricate field rations and hunting canteens, to mitigate
+      hunger/thirst
+    type: Add
+  - message: Bad Blood clans spawn 1 leader + 3 grunts, scaling with pip from 40 players
+      - threat votes no longer pad the clan with absurd amounts
+    type: Tweak
+  - message: Bad Blood cloak lasts 8 sec with a 30 sec recharge and 3 sec warning
+      before failing; moving while cloaked produces a faint shimmer (like the Scout)
+    type: Tweak
+  - message: 'Bad Blood plasma caster lethal bolts no longer hit like atomic warheads:
+      aimed shots still hurt, nearby tiles barely scorch (immobilizer/eradicator modes
+      are disabled pending tweaks)'
+    type: Tweak
+  - message: Bad Blood armor no longer shrugs off rifle munitions
+    type: Tweak
+  - message: Yautja move slower, are less fire-resistant, and can no longer fire or
+      pick up human guns (their own tech and melee tools still work)
+    type: Tweak
+  - message: Rounds no longer end when all Yautja die while another hostile threat
+      is still active
+    type: Fix
+  - message: Wrist blades and scimitars extract embedded shrapnel like a knife
+    type: Fix
+  - message: The CLF cell (DAGD) broadcast now goes out 25-40 seconds after the intel
+      console is claimed, and fluent translations
+    type: Tweak
+  - message: Tile movement fixes for grid seams and z-level transitions (WIP)
+    type: Fix
+  - message: 'Survivor supplements: roundstart survivors receive bonus gear (gasmasks
+      + filter), gated by skills (construction >=2  gives metal sheets)'
+    type: Add
+  - message: 'Third Party military squads and civilians ported from upstream roles:
+      UPP line squads/variants, Govforr, CMB, WeYu civilian parties, dropship-inserted
+      CLF, freelancer, raider, TWE paramarine (WIP)'
+    type: Add
+  - message: WeYu fetch objectives with a WeYu intel analyzer machine
+    type: Add
+  - message: 'Pathogen xeno fixes: spore sac targeting, direct spore infection (poppers),
+      mycotoxin injection, watch tracking, tactical map blips, and corrected sprites,
+      hive/tacmap always show and more'
+    type: Fix
+  - message: Evacuation announcements only play once self-destruct is armed; xeno
+      tier caps count living xenos only (burrowed larva banks no longer inflate them);
+      abominations can pry doors
+    type: Fix
+  - message: 'Analyzer-warning sweep: readonly DI fields, partial classes, unused
+      fields removed (bulk of files changes)'
+    type: Code
+  - message: Tribal Threat (CF) got armor, skill buffs and speaks English
+    type: Tweak
+  - message: Crit whispering is back (can be disabled with the cmu.game.crit_whisper
+      CVar)
+    type: Add
+  - message: Threat vote happens at round start, so losing no longer holds you as
+      a locked observer until threat spawn, you're notified immediately and free to
+      JIP
+    type: Add
+  id: 664
+  time: '2026-08-27T07:11:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1871
+- author: potatoed6
+  changes:
+  - message: fixed ranks not being overriden (CO in specific) also now they will display
+      correctly on ARES announcement
+    type: Fix
+  id: 665
+  time: '2026-08-28T13:36:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1873
+- author: maertayn
+  changes:
+  - message: Aboms tactical map (shows aboms & nest blips)
+    type: Add
+  - message: Abom infection can be cured by severing the respective limb within 4
+      minutes of infection, 'tis but a scratch!
+    type: Add
+  - message: Abom spit/acid spray flies much faster (doubled speed) and at proper
+      ranges
+    type: Tweak
+  - message: Disguised mimics can secrete clotted syringes
+    type: Add
+  - message: Grunt aboms sprint at human speeds & aboms slowly heal burn damage when
+      off-weeds
+    type: Tweak
+  - message: Abom projectiles and melee no longer hit fellow abominations
+    type: Fix
+  - message: Flesh kudzu spreads faster and no longer harms abominations or disguised
+      mimics
+    type: Tweak
+  - message: Flesh nests spawn aboms faster as more nests are built (doubled), and
+      are now visible to motion trackers
+    type: Tweak
+  - message: Assimilated players become ghosts and their body is raffled
+    type: Tweak
+  - message: Weyland-Yutani counteragent syringes that cure any stage of infection,
+      bought via ASRS ($9500)
+    type: Add
+  - message: DS rounds now get map inserts, planet/operation names and the Apollo
+      greeting at round start
+    type: Add
+  - message: Hijack song + crash FX and larva surge were missing for DS
+    type: Fix
+  - message: Rounds no longer hang when xenos win without hijacking
+    type: Fix
+  - message: Planet side survivors no longer block a xeno victory on dropship crashes
+    type: Fix
+  - message: Xeno evolution no longer locked when dropship lands on DS
+    type: Fix
+  id: 666
+  time: '2026-08-28T14:21:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1876
+- author: maertayn
+  changes:
+  - message: Update planet brief announcement to show the correct warship (dynamic)
+    type: Tweak
+  - message: Yautja bracer overload/self-destruct can gib within 4-tiles and the explosion
+      blast is more dangerous/capable
+    type: Tweak
+  - message: Hijack permitted for Skitter & Yautjas
+    type: Fix
+  - message: Abom infection tweaks, can now appear in hands/feet as well as arms/legs
+    type: Tweak
+  - message: Show abom flesh infection's limb location on the health scanner, severing
+      a limb can cure if you're quick - be too late and the scanner will say it's
+      systemic (only cured by antidote/counteragent)
+    type: Add
+  - message: Govfor/Opfor HM receive the JTAC headset to communicate with air (for
+      evacs)
+    type: Add
+  - message: Specialist weapons are now locked to their class behind whitelists (requires
+      pamphlets to obtain) - SMAW not included (yet?)
+    type: Add
+  - message: Sprinter/popper sprites & pathogen mob stances raised so pheromone auras
+      are more visible (WIP)
+    type: Fix
+  - message: Pathogen walker unable to interact with backpacks (their scout cloak)
+    type: Fix
+  - message: Delete planet-bound xenos/neomorphs during Hijack
+    type: Fix
+  - message: Crit recovery healing (no resting requirement) for xenomorphs
+    type: Add
+  - message: Show build ghosts/purple markers for Overmind (when in eye)
+    type: Fix
+  - message: Drone bull evolution
+    type: Fix
+  id: 667
+  time: '2026-08-29T05:29:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1879
+- author: Operator
+  changes:
+  - message: Grenade Detonation Modes [Impact+Timed]
+    type: Add
+  - message: Gave all 30mm grenade types the GrenadeDetonationMode tag, allowing all
+      30mm base types [starting with HEDP] to toggle between an impact mode and explosive
+      mode.
+    type: Tweak
+  id: 668
+  time: '2026-08-29T05:30:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1869
+- author: ararajdadasdasda
+  changes:
+  - message: weapon specialist whitelists to drone
+    type: Add
+  id: 669
+  time: '2026-08-29T06:24:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1875
+- author: maertayn
+  changes:
+  - message: Strip friendly IFF from yautja thralls, abom mimics, pathogen walkers
+      default items - can still pickup another id card receive friendly IFF
+    type: Fix
+  id: 670
+  time: '2026-08-29T07:25:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1880
+- author: maertayn
+  changes:
+  - message: 'New colony antags: Arsonist, Bounty Hunter, CLF Saboteur, Vigilante,
+      WY-Agent'
+    type: Add
+  - message: Added colony antag systems to most of the solo antags
+    type: Add
+  - message: Round end summary of colony antag achievements based on their new systems
+    type: Add
+  - message: Gate hijack larva surge mechanics for xeno hijackers only
+    type: Tweak
+  - message: Capped Yautja thrall resurrection to three thralls, per bracer, if their
+      master dies so will they
+    type: Fix
+  - message: Fix xeno leap NaN, reagent heat capacity, enumerator, and log cache races
+    type: Fix
+  id: 671
+  time: '2026-08-29T18:07:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1883
+- author: maertayn
+  changes:
+  - message: Spent casings being recycled as live ammunition
+    type: Fix
+  - message: Yautja equipment (id-locked) not severing arms
+    type: Fix
+  - message: APC vehicle med vendor access
+    type: Fix
+  - message: Invisibility shader and lurker cloak (again)
+    type: Fix
+  - message: Turrets require LOS to fire, and stationary turrets snap to targets
+    type: Tweak
+  - message: Weedkiller is roughly ~20% larger
+    type: Tweak
+  - message: Cassettes not playing audio because the server package had empty placeholder
+      files (to conserve space)
+    type: Fix
+  - message: Server hostname (on the Hub) changes every round based on day and game
+      preset
+    type: Add
+  - message: FoF into rotation at 80 pop, time fo' fraggin' (heavy WIP)
+    type: Add
+  - message: Hide colony announcements from xeno/threats
+    type: Fix
+  - message: Third party dropships would announce a Govfor hijack if threats took
+      it
+    type: Fix
+  - message: Dropped magnetic weapon/flamer not returning to broiler
+    type: Fix
+  - message: Tattoo gun hard-locked by an orphaned offer
+    type: Fix
+  - message: No xeno rewards (e.g. lurker acid/reaper berserker) from blackfoot/vehicles
+    type: Fix
+  id: 672
+  time: '2026-08-30T16:03:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1887
+- author: Berkin101
+  changes:
+  - message: Razorwires now make noises when walked on and have an appropriate hit
+      sound.
+    type: Tweak
+  id: 673
+  time: '2026-08-31T14:16:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1882
+- author: Berkin101
+  changes:
+  - message: Mine Detectors
+    type: Add
+  - message: Mine Signs
+    type: Add
+  id: 674
+  time: '2026-08-31T14:16:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1872
+- author: TheMaiji
+  changes:
+  - message: Camera consoles now use logical camera subnets and can display authorized
+      cameras on a shared multi-deck map.
+    type: Add
+  - message: Authorized users can manage CMU and RMC camera subnets, memberships,
+      and camera names from supported consoles.
+    type: Add
+  - message: Camera power, wire, movement, removal, and MAP-wire visibility changes
+      now update console lists and map markers.
+    type: Tweak
+  - message: Camera selection, names, remote-grid maps, and live feeds stay synchronized
+      after subnet and deck changes.
+    type: Fix
+  id: 675
+  time: '2026-08-31T19:30:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1825
+- author: CatoChristopherMrow
+  changes:
+  - message: Entirely reworked gunships
+    type: Add
+  - message: AEVs now act like bulldozers
+    type: Tweak
+  - message: Fixed deployable dropship sentries not updating to the alliance console
+      settings if deployed after the settings were changed
+    type: Fix
+  - message: Leadership skill now automatically grants the marine orders button.
+    type: Fix
+  - message: disabled the blackfoot in favor of the new gunship system (for now at
+      least. It might come to some specific platoons again.)
+    type: Tweak
+  id: 676
+  time: '2026-08-31T20:43:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1816
+- author: IMGXKILLER
+  changes:
+  - message: Replaced 6 Capital crimes for one Geneva Crime
+    type: Add
+  id: 677
+  time: '2026-09-03T06:28:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1891
+- author: johnnny34y
+  changes:
+  - message: The new dynamic gunships now spawn correctly
+    type: Fix
+  id: 678
+  time: '2026-09-05T19:02:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1897
+- author: DoguhanOzgurAkca
+  changes:
+  - message: rework the lobby UI partially.
+    type: Tweak
+  id: 679
+  time: '2026-09-06T13:19:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1854
+- author: johnnny34y
+  changes:
+  - message: HAZOPS XMP5A6 damage modified buffed to 1.35 and spread reduced by one.
+    type: Tweak
+  id: 680
+  time: '2026-09-06T13:20:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1888
+- author: CatoChristopherMrow
+  changes:
+  - message: Added sidearms for Colony Admin
+    type: Add
+  - message: Removed the mataba from stable garrison redux
+    type: Remove
+  - message: Colony Admins can now spend points to customize their skills, to better
+      suit their previous carrier
+    type: Add
+  - message: Robbed the XO of their mataba
+    type: Remove
+  id: 681
+  time: '2026-09-06T13:20:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1892
+- author: Berkin101
+  changes:
+  - message: Barricade collisions are now fixed!
+    type: Fix
+  id: 682
+  time: '2026-09-06T13:24:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1878
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed the pilot hud and the dropship movement
+    type: Fix
+  id: 683
+  time: '2026-09-07T04:41:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1903
+- author: maertayn
+  changes:
+  - message: 'Updated contrib docs, AI-agent conventions: read CONTRIBUTING.md & bootstrap
+      AGENTS-CMU.md'
+    type: Code
+  - message: Scope ghost warp PVS override to selected tab mobs to regain performance
+    type: Add
+  id: 684
+  time: '2026-09-07T13:11:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1907
+- author: Berkin101
+  changes:
+  - message: Added a search bar to options->controls.
+    type: Add
+  id: 685
+  time: '2026-09-09T14:03:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1911
+- author: Berkin101
+  changes:
+  - message: Added a search bar to options->controls.
+    type: Add
+  id: 686
+  time: '2026-09-09T14:03:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1911
+- author: TheHellFireo
+  changes:
+  - message: Fixed deleted sentries causing repeated network-state failures and delayed
+      updates.
+    type: Fix
+  - message: Fixed several equipment, interaction, stamp, and character-save errors.
+    type: Fix
+  - message: Added bounded error summaries and phase timings to server stall reports.
+    type: Admin
+  id: 687
+  time: '2026-09-09T20:38:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1915
+- author: deepdarkdepths
+  changes:
+  - message: Queen has breathing sounds now.
+    type: Add
+  id: 688
+  time: '2026-09-09T21:04:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1914
+- author: deepdarkdepths
+  changes:
+  - message: Queen now has separate ability bar ordering for both immature and mature
+      states to avoid having to redo them every time you spawn in.
+    type: Fix
+  id: 689
+  time: '2026-09-10T04:53:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1917
+- author: deepdarkdepths
+  changes:
+  - message: Added xeno vision to large vehicles.
+    type: Tweak
+  id: 690
+  time: '2026-09-10T04:53:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1918
+- author: deepdarkdepths
+  changes:
+  - message: Xeno acid action remains toggled until deactivated or another ability
+      is used
+    type: Tweak
+  id: 691
+  time: '2026-09-10T04:54:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1919
+- author: TheHellFireo
+  changes:
+  - message: Fixed stale area-power references and power loads after equipment is
+      removed or moved.
+    type: Fix
+  - message: Fixed missing fighters in small CLF survivor groups.
+    type: Fix
+  - message: Improved gameplay stall and client synchronization diagnostics.
+    type: Admin
+  id: 692
+  time: '2026-09-10T13:35:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921
+- author: TheHellFireo
+  changes:
+  - message: Fixed stale area-power references and power loads after equipment is
+      removed or moved.
+    type: Fix
+  - message: Fixed missing fighters in small CLF survivor groups.
+    type: Fix
+  - message: Improved gameplay stall and client synchronization diagnostics.
+    type: Admin
+  id: 693
+  time: '2026-09-10T13:35:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921
+- author: OverusedMeme
+  changes:
+  - message: The M240 now has a wield delay of 1 second, the M240-T now has a wield
+      delay of 1.75 seconds
+    type: Tweak
+  - message: Fixed an issue where spam wielding the M240 and M240-T would double the
+      amount of time required until you can shoot.
+    type: Fix
+  id: 694
+  time: '2026-09-10T15:30:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1920
+- author: OverusedMeme
+  changes:
+  - message: The M240 now has a wield delay of 1 second, the M240-T now has a wield
+      delay of 1.75 seconds
+    type: Tweak
+  - message: Fixed an issue where spam wielding the M240 and M240-T would double the
+      amount of time required until you can shoot.
+    type: Fix
+  id: 695
+  time: '2026-09-10T15:30:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1920
+- author: Vencallium
+  changes:
+  - message: Increased dropship fabricator point generation to 2 points per second.
+    type: Tweak
+  id: 696
+  time: '2026-09-11T17:19:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1925
+- author: Vencallium
+  changes:
+  - message: Increased dropship fabricator point generation to 2 points per second.
+    type: Tweak
+  id: 697
+  time: '2026-09-11T17:19:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1925
+- author: TheHellFireo
+  changes:
+  - message: Reduced hitches when filling storage and preparing large supply deliveries.
+    type: Fix
+  - message: Improved capture and attribution of short gameplay stalls.
+    type: Admin
+  id: 698
+  time: '2026-09-12T00:24:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1933
+- author: TheHellFireo
+  changes:
+  - message: Reduced hitches when filling storage and preparing large supply deliveries.
+    type: Fix
+  - message: Improved capture and attribution of short gameplay stalls.
+    type: Admin
+  id: 699
+  time: '2026-09-12T00:24:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1933
+- author: flex5hybrid
+  changes:
+  - message: Moved hardcoded CMU user-facing strings into Fluent localization.
+    type: Code
+  id: 700
+  time: '2026-09-12T22:41:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1938
+- author: flex5hybrid
+  changes:
+  - message: Moved hardcoded CMU user-facing strings into Fluent localization.
+    type: Code
+  id: 701
+  time: '2026-09-12T22:41:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1938
+- author: Vencallium
+  changes:
+  - message: "Fixed tactical hovering over empty +1 airspace during Distress Signal,\
+      \ excluding Hope\u2019s Retreat."
+    type: Fix
+  - message: Added an empty upper z-level to Bosenmori Basho.
+    type: Map
+  id: 702
+  time: '2026-09-12T23:40:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1939
+- author: Vencallium
+  changes:
+  - message: "Fixed tactical hovering over empty +1 airspace during Distress Signal,\
+      \ excluding Hope\u2019s Retreat."
+    type: Fix
+  - message: Added an empty upper z-level to Bosenmori Basho.
+    type: Map
+  id: 703
+  time: '2026-09-12T23:40:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1939
+- author: CatoChristopherMrow
+  changes:
+  - message: Added various belts, a new gun, and a few other qol items to colony cargo.
+    type: Add
+  id: 704
+  time: '2026-09-12T23:40:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1930
+- author: CatoChristopherMrow
+  changes:
+  - message: Added various belts, a new gun, and a few other qol items to colony cargo.
+    type: Add
+  id: 705
+  time: '2026-09-12T23:40:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1930
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed gunships stealing some tiles, along with other various minor fixes
+    type: Fix
+  id: 706
+  time: '2026-09-12T23:41:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1924
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed gunships stealing some tiles, along with other various minor fixes
+    type: Fix
+  id: 707
+  time: '2026-09-12T23:41:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1924
+- author: Nox38
+  changes:
+  - message: APCs should now fit full squads inside.
+    type: Tweak
+  id: 708
+  time: '2026-09-12T23:48:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1936
+- author: Nox38
+  changes:
+  - message: APCs should now fit full squads inside.
+    type: Tweak
+  id: 709
+  time: '2026-09-12T23:48:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1936
+- author: deepdarkdepths
+  changes:
+  - message: Added a new damage based evasion mechanic for Runner.
+    type: Add
+  - message: Runner has slightly more HP.
+    type: Tweak
+  id: 710
+  time: '2026-09-13T00:27:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1940
+- author: deepdarkdepths
+  changes:
+  - message: Added a new damage based evasion mechanic for Runner.
+    type: Add
+  - message: Runner has slightly more HP.
+    type: Tweak
+  id: 711
+  time: '2026-09-13T00:27:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1940
+- author: silasadam
+  changes:
+  - message: Added Yautja Limb regeneration
+    type: Add
+  - message: Yautja healing gun can heal IB/Fracs/Eschar/etc on a long do-after.
+    type: Tweak
+  - message: Yautja take several tackles to knock down. [4]
+    type: Tweak
+  - message: Yautja hunting traps are now completely invisible to everyone except
+      the yautja.
+    type: Tweak
+  - message: Yautja cloak has been returned to true-cloak status.
+    type: Tweak
+  - message: Yautja have a map symbol&hunting traps track the target for 5 minutes.
+    type: Add
+  id: 712
+  time: '2026-09-13T00:28:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1931
+- author: silasadam
+  changes:
+  - message: Added Yautja Limb regeneration
+    type: Add
+  - message: Yautja healing gun can heal IB/Fracs/Eschar/etc on a long do-after.
+    type: Tweak
+  - message: Yautja take several tackles to knock down. [4]
+    type: Tweak
+  - message: Yautja hunting traps are now completely invisible to everyone except
+      the yautja.
+    type: Tweak
+  - message: Yautja cloak has been returned to true-cloak status.
+    type: Tweak
+  - message: Yautja have a map symbol&hunting traps track the target for 5 minutes.
+    type: Add
+  id: 713
+  time: '2026-09-13T00:28:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1931
+- author: deepdarkdepths
+  changes:
+  - message: Base and Berserker Ravager stat values tweaked.
+    type: Tweak
+  id: 714
+  time: '2026-09-13T01:32:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1943
 Name: CMU
 Order: -1

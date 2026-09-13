@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.ZLevels.Ordnance;
+using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Alert;
@@ -50,7 +50,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        EnsureComp<AreaInfoComponent>(args.Equipee);
+        EnsureComp<AreaInfoComponent>(args.EquipTarget);
     }
 
     private void OnGotUnequipped(Entity<GrantAreaInfoComponent> ent, ref GotUnequippedEvent args)
@@ -60,8 +60,8 @@ public sealed partial class AreaInfoSystem : EntitySystem
 
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
-        if (!_inv.TryGetInventoryEntity<GrantAreaInfoComponent>(args.Equipee, out _))
-            RemCompDeferred<AreaInfoComponent>(args.Equipee);
+        if (!_inv.TryGetInventoryEntity<GrantAreaInfoComponent>(args.EquipTarget, out _))
+            RemCompDeferred<AreaInfoComponent>(args.EquipTarget);
     }
     private void OnMapInit(Entity<AreaInfoComponent> ent, ref MapInitEvent args)
     {
@@ -69,7 +69,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
     }
     private void OnRemove(Entity<AreaInfoComponent> ent, ref ComponentRemove args)
     {
-        _alerts.ClearAlert(ent, ent.Comp.Alert);
+        _alerts.ClearAlert((ent.Owner, null), ent.Comp.Alert);
     }
 
     private void OnMoveEvent(Entity<AreaInfoComponent> ent, ref MoveEvent args)
@@ -105,7 +105,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
         if (GetAreaInfo(ent, checkMove) is not { areaName: var areaName, ceilingLevel: var ceilingLevel, restrictions: var restrictions })
             return;
 
-        _alerts.ShowAlert(ent, ent.Comp.Alert,
+        _alerts.ShowAlert((ent.Owner, null), ent.Comp.Alert,
             severity: ceilingLevel,
             dynamicMessage: Loc.GetString("rmc-area-info",
                 ("area", areaName),

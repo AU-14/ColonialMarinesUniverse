@@ -1,3 +1,4 @@
+using Content.Shared.Blocking.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,7 +6,7 @@ using Content.Client.ContextMenu.UI;
 using Content.Client.Gameplay;
 using Content.Client.Inventory;
 using Content.Client.Verbs.UI;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
@@ -21,7 +22,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaGearContextMenuTest
@@ -160,7 +161,7 @@ public sealed class YautjaGearContextMenuTest
                         {
                             var blocking = entMan.System<BlockingSystem>();
                             var blockingComponent = entMan.GetComponent<BlockingComponent>(deployed);
-                            Assert.That(blocking.StartBlocking(deployed, blockingComponent, hunter), Is.True, scenario.Name);
+                            Assert.That(blocking.RaiseShield((deployed, blockingComponent), hunter), Is.True, scenario.Name);
                         }
 
                         serverVerbs = entMan.System<Content.Server.Verbs.VerbSystem>()
@@ -244,7 +245,7 @@ public sealed class YautjaGearContextMenuTest
                                 Assert.That(hands.IsHolding(hunter, deployed), Is.False, scenario.Name);
 
                                 if (entMan.TryGetComponent(deployed, out BlockingComponent blocking))
-                                    Assert.That(blocking.IsBlocking, Is.False, scenario.Name);
+                                    Assert.That(blocking.IsRaised, Is.False, scenario.Name);
                             });
                         }
                     });
@@ -360,8 +361,8 @@ public sealed class YautjaGearContextMenuTest
 
                                 var blocking = entMan.System<BlockingSystem>();
                                 var blockingComponent = entMan.GetComponent<BlockingComponent>(deployed);
-                                Assert.That(blocking.StartBlocking(deployed, blockingComponent, hunter), Is.True, scenario.Name);
-                                Assert.That(blockingComponent.IsBlocking, Is.True, scenario.Name);
+                                Assert.That(blocking.RaiseShield((deployed, blockingComponent), hunter), Is.True, scenario.Name);
+                                Assert.That(blockingComponent.IsRaised, Is.True, scenario.Name);
                             }
 
                             if (world)

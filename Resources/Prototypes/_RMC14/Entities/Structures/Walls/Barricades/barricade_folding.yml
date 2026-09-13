@@ -22,8 +22,9 @@
   - type: DirectionalAttackBlocker
     maxHealth: 350
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMFoldingBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: RMCRepairable
     heal: 200
     skill: RMCSkillConstruction

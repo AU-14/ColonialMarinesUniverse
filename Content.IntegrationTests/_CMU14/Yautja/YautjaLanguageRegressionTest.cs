@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server._RMC14.Language.Systems;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
@@ -15,7 +15,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaLanguageRegressionTest
@@ -56,9 +56,11 @@ public sealed class YautjaLanguageRegressionTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
-            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            entMan.System<SharedMapSystem>().CreateMap(out var mapId);
+            var coordinates = new MapCoordinates(System.Numerics.Vector2.Zero, mapId);
+            hunter = entMan.SpawnEntity("CMMobHuman", coordinates);
+            bracer = entMan.SpawnEntity("CMUYautjaBracer", coordinates);
+            human = entMan.SpawnEntity("CMMobHuman", coordinates);
             entMan.EnsureComponent<YautjaComponent>(hunter);
 
             Assert.That(entMan.System<InventorySystem>().TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
@@ -124,6 +126,9 @@ public sealed class YautjaLanguageRegressionTest
             entMan.EventBus.RaiseLocalEvent(bracer, new UseInHandEvent(human));
             AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
 
+            Assert.That(inventory.TryEquip(human, bracer, "gloves", silent: true, force: true), Is.True);
+            AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
+
             Assert.That(inventory.TryUnequip(human, "gloves", silent: true, force: true), Is.True);
             AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
         });
@@ -159,6 +164,7 @@ public sealed class YautjaLanguageRegressionTest
             {
                 LoadConfigAndUserData = false,
                 LoadContentResources = true,
+                MountOptions = new Robust.Shared.MountOptions(dirMounts: ["../../Content.CMU/Resources"], zipMounts: []),
             },
             ContentAssemblies =
             [

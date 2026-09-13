@@ -1,9 +1,9 @@
 using System.Linq;
-using Content.Server._CMU14.Medical.Treatment.FieldCare;
-using Content.Server._CMU14.Medical.Injuries.Wounds;
-using Content.Shared._CMU14.Medical.Treatment.FieldCare;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Medical.Treatment.FieldCare;
+using Content.Server.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Medical.Treatment.FieldCare;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
@@ -17,7 +17,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Medical.Treatment.FieldCare;
+namespace Content.IntegrationTests.CMU14.Medical.Treatment.FieldCare;
 
 [TestFixture]
 public sealed class CMUMedicalFieldMixingTest

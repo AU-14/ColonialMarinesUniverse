@@ -9,7 +9,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaRadioRegressionTest
@@ -87,7 +87,7 @@ public sealed class YautjaRadioRegressionTest
             var hunter = server.EntMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
             var chat = server.EntMan.System<ChatSystem>();
 
-            Assert.That(chat.TryProccessRadioMessage(hunter, ":g test message", out var output, out var channel), Is.True);
+            Assert.That(chat.TryProcessRadioMessage(hunter, ":g test message", out var output, out var channel), Is.True);
             Assert.That(output, Is.EqualTo("Test message"));
             Assert.That(channel!.ID, Is.EqualTo("CMUYautja"));
         });

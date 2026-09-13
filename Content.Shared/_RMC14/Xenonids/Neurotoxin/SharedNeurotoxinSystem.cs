@@ -1,5 +1,5 @@
-using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.GasMask;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.GasMask;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Chat;
@@ -17,9 +17,10 @@ using Content.Shared.Chat;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Drugs;
 using Content.Shared.Drunk;
-using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -41,6 +42,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using System.Numerics;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Xenonids.Neurotoxin;
 
@@ -57,11 +59,12 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
-    [Dependency] private SharedSlurredSystem _slurred = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedDrunkSystem _drunk = default!;
     [Dependency] private ThrowingSystem _throwing = default!; //It's how this fakes movement
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
@@ -170,7 +173,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
                             foreach (var item in mask.ContainedEntities)
                             {
                                 if (TryComp<ItemSlotsComponent>(item, out var islot) &&
-                                    _itemSlot.TryGetSlot(item, "filter", out var slot, islot) &&
+                                    _itemSlot.TryGetSlot((item, islot), "filter", out var slot) &&
                                     slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
                                     TryComp<GasMaskFilterComponent>(slot.ContainerSlot.ContainedEntity.Value, out var filt))
                                 {
@@ -193,7 +196,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
                                 foreach (var aitem in hslot.Container.ContainedEntities)
                                 {
                                     if (TryComp<ItemSlotsComponent>(aitem, out var islot) &&
-                                            _itemSlot.TryGetSlot(aitem, "filter", out var slot, islot) &&
+                                            _itemSlot.TryGetSlot((aitem, islot), "filter", out var slot) &&
                                             slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
                                             TryComp<GasMaskFilterComponent>
                                             (slot.ContainerSlot.ContainedEntity.Value, out var filt))
@@ -267,7 +270,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
             //Basic Effects
             _stamina.DoStaminaDamage(uid, neuro.StaminaDamagePerTick, visual: false);
-            _statusEffects.TryAddStatusEffect<DrunkComponent>(uid, "Drunk", neuro.DizzyStrength, true);
+            _drunk.TryApplyDrunkenness(uid, neuro.DizzyStrength);
 
             NeurotoxinNonStackingEffects(uid, neuro, time, out var coughChance, out var stumbleChance);
             NeurotoxinStackingEffects(uid, neuro, time);
@@ -287,7 +290,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("rmc-stumble"), uid, uid, PopupType.MediumCaution);
                 _daze.TryDaze(uid, neuro.DazeLength * 5, true, stutter: true);
                 _jitter.DoJitter(uid, neuro.StumbleJitterTime, true);
-                _statusEffects.TryAddStatusEffect<DrunkComponent>(uid, "Drunk", neuro.DizzyStrengthOnStumble, true);
+                _drunk.TryApplyDrunkenness(uid, neuro.DizzyStrengthOnStumble);
                 var ev = new NeurotoxinEmoteEvent() { Emote = neuro.PainId };
                 RaiseLocalEvent(uid, ev);
             }
@@ -416,7 +419,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
             {
                 neurotoxin.LastAccentTime = currTime;
                 if (_random.Prob(0.5f))
-                    _slurred.DoSlur(victim, neurotoxin.AccentTime);
+                    _newStatusEffects.TryAddStatusEffectDuration(victim, SlurredSystem.Stutter, neurotoxin.AccentTime);
                 else
                     _stutter.DoStutter(victim, neurotoxin.AccentTime, true);
             }
@@ -435,7 +438,10 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
         if (neurotoxin.NeurotoxinAmount >= 20)
         {
-            _statusEffects.TryAddStatusEffect<TemporaryBlindnessComponent>(victim, "TemporaryBlindness", neurotoxin.BlindTime, true);
+            _newStatusEffects.TryUpdateStatusEffectDuration(
+                victim,
+                BlindnessSystem.BlindingStatusEffect,
+                neurotoxin.BlindTime);
         }
 
         if (neurotoxin.NeurotoxinAmount >= 27)

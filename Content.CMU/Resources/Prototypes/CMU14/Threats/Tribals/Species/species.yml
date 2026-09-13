@@ -1,0 +1,12 @@
+# Tribal species — anatomically identical to Human, but with a distinct
+# species name so examine / identity strings call them out as Na'vi
+# instead of "Human".
+# TribalAppearanceSystem forces this species id onto every Tribal mob
+# on map-init and removes the human undergarment layers.
+- type: species
+  id: Tribal
+  name: species-name-tribal
+  roundStart: false
+  prototype: CMMobHuman
+  dollPrototype: AppearanceCMUHuman
+  skinColoration: HumanToned

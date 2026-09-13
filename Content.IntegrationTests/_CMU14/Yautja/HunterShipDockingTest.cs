@@ -17,7 +17,7 @@ using Robust.Shared.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class HunterShipDockingTest
@@ -43,7 +43,7 @@ public sealed class HunterShipDockingTest
                 Assert.That(marker.TryGetComponent<AirlockComponent>(out _, factory), Is.False,
                     "The landing-pad docking marker must not be an airlock.");
                 Assert.That(landingPad.TryGetComponent<GridSpawnerComponent>(out var spawner, factory), Is.True);
-                Assert.That(spawner!.Spawn, Is.EqualTo(new ResPath("/Maps/_CMU14/Shuttles/hunter_shuttle.yml")));
+                Assert.That(spawner!.Spawn, Is.EqualTo(new ResPath("/Maps/CMU14/Shuttles/hunter_shuttle.yml")));
             });
         });
 
@@ -212,7 +212,7 @@ public sealed class HunterShipDockingTest
             var loader = entMan.System<MapLoaderSystem>();
             var tiles = server.ResolveDependency<ITileDefinitionManager>();
 
-            Assert.That(loader.TryLoadGrid(map.MapId, new ResPath("/Maps/_CMU14/Shuttles/hunter_shuttle.yml"), out var grid), Is.True);
+            Assert.That(loader.TryLoadGrid(map.MapId, new ResPath("/Maps/CMU14/Shuttles/hunter_shuttle.yml"), out var grid), Is.True);
             Assert.That(grid, Is.Not.Null);
             var shuttle = grid!.Value.Owner;
 

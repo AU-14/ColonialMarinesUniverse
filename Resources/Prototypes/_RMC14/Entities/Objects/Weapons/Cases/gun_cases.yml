@@ -418,9 +418,9 @@
   description: A gun case containing the M41AE2 heavy pulse rifle. You can get additional ammunition at requisitions.
   components:
   - type: Storage
-    maxItemSize: Ginormous
+    maxItemSize: Colossal
     grid:
-    - 0,0,7,1
+    - 0,0,8,5
     whitelist:
       tags:
       - RMCWeaponRifleM54CE2
@@ -745,8 +745,10 @@
   name: type 23 shotgunner equipment case
   description: A gun case containing an Type 23 tactical shotgun, a box of high-dispersive shock grenades, and a box of buckshot shells.
   components:
+  - type: Item
+    size: Ginormous # CMU14
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous # CMU14: starting stock bumps the gun's size to Ginormous
     grid:
     - 0,0,21,3
   - type: StorageFill

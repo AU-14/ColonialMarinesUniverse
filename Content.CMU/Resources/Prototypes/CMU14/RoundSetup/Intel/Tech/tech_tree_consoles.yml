@@ -1,0 +1,87 @@
+# ├──[ GOVFOR ]──────────────────────────────────────────────────────┤
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCTechTreeConsoleGovfor
+  name: govfor tech tree console
+  description: A GovFor tech console used to make tech purchases for GovFor.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: techweb
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TechControlConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.TechControlConsoleUI.Key:
+        type: TechControlConsoleBui
+  - type: TechControlConsole
+    team: govfor
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+# ├──[ OPFOR ]───────────────────────────────────────────────────────┤
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCTechTreeConsoleOpfor
+  name: opfor tech tree console
+  description: An OpFor tech console used to make tech purchases for OpFor.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: techweb
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TechControlConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.TechControlConsoleUI.Key:
+        type: TechControlConsoleBui
+  - type: TechControlConsole
+    team: opfor
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+# ├──[ CLF ]─────────────────────────────────────────────────────────┤
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCTechTreeConsoleCLF
+  name: CLF tech tree console
+  description: A CLF tech console used to make tech purchases for CLF.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: techweb
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TechControlConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.TechControlConsoleUI.Key:
+        type: TechControlConsoleBui
+  - type: TechControlConsole
+    team: clf
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno

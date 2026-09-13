@@ -9,8 +9,8 @@ namespace Content.Shared.Coordinates.Helpers
         public static EntityCoordinates SnapToGrid(this EntityCoordinates coordinates, IEntityManager? entMan = null)
         {
             IoCManager.Resolve(ref entMan);
-
             var xformSys = entMan.System<SharedTransformSystem>();
+
             var gridId = xformSys.GetGrid(coordinates);
 
             if (gridId == null)

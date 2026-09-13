@@ -3,7 +3,7 @@
   parent: BaseItem
   id: CMFoodBase
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: Item
     size: Small
@@ -24,13 +24,12 @@
   name: frosted jelly donut
   description: You jelly?
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 2 # 3 bites
   - type: Sprite
     state: jellyDonut2
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 5
         reagents:
         - ReagentId: Nutriment
@@ -52,13 +51,12 @@
   name: jelly donut
   description: You jelly?
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 2 # 3 bites
   - type: Sprite
     state: jellyDonut1
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 5
         reagents:
         - ReagentId: Nutriment
@@ -81,13 +79,13 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: cookie-peanutbutter
-  - type: Food
+  - type: Edible
     transferAmount: 3
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
         - ReagentId: Nutriment
           Quantity: 2
         - ReagentId: RMCPeanutButter
@@ -103,16 +101,16 @@
   id: RMCFoodPBJSandwich
   description: A sweet and savory sandwich loved by adults and marines alike!
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: pbandj
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
         - ReagentId: Nutriment
           Quantity: 4
         - ReagentId: RMCPeanutButter
@@ -134,15 +132,15 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: onigiri
-  - type: Food
+  - type: Edible
     transferAmount: 3
     trash:
     - FoodBowlBig
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
         - ReagentId: Nutriment
           Quantity: 5
   - type: FlavorProfile
@@ -160,11 +158,10 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: carbonara
-  - type: Food
+  - type: Edible
     transferAmount: 3
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 20
         reagents:
         - ReagentId: Nutriment
@@ -184,7 +181,7 @@
   - type: FlavorProfile
     flavors:
     - rice
-    - mango
+    - rmcmango
     - sweet
   - type: Sprite
     layers:
@@ -193,7 +190,7 @@
 
 - type: entity
   name: banh mi
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodBanhMi
   description: Banh Mi, for Banh You
   components:
@@ -205,18 +202,19 @@
     - bread
     - vegetables
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 60
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 60
+      reagents:
         - ReagentId: Nutriment
           Quantity: 30
-  - type: SliceableFood
-    slice: FoodBanhMiHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodBanhMiHalf
+      amount: 2
 
 - type: entity
   name: banh mi half
@@ -232,19 +230,19 @@
     - bread
     - vegetables
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
         - ReagentId: Nutriment
           Quantity: 15
 
 - type: entity
   name: chicken parm hero
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodChickenParmHero
   description: Now thats a sandwich, fuggedaboutit!
   components:
@@ -257,20 +255,21 @@
     - bread
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 60
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 60
+      reagents:
         - ReagentId: Nutriment
           Quantity: 16
         - ReagentId: Protein
           Quantity: 10
-  - type: SliceableFood
-    slice: FoodChickenParmHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodChickenParmHalf
+      amount: 2
 
 - type: entity
   name: chicken parm half
@@ -287,13 +286,13 @@
     - tomato
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
         - ReagentId: Nutriment
           Quantity: 8
         - ReagentId: Protein
@@ -301,7 +300,7 @@
 
 - type: entity
   name: meatball sub
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodMeatballSub
   description: Made with the secrets of Death Kwon Do!
   components:
@@ -314,20 +313,21 @@
     - bread
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 60
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 60
+      reagents:
         - ReagentId: Nutriment
           Quantity: 16
         - ReagentId: Protein
           Quantity: 10
-  - type: SliceableFood
-    slice: FoodMeatballSubHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodMeatballSubHalf
+      amount: 2
 
 - type: entity
   name: meatball sub half
@@ -344,13 +344,13 @@
     - tomato
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
         - ReagentId: Nutriment
           Quantity: 8
         - ReagentId: Protein
@@ -358,7 +358,7 @@
 
 - type: entity
   name: gabagool sandwich
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodGabagool
   description: Woke up this morning, got yourself a sandwich.
   components:
@@ -371,18 +371,19 @@
     - bitter
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 60
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 60
+      reagents:
         - ReagentId: Nutriment
           Quantity: 30
-  - type: SliceableFood
-    slice: FoodGabagoolHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodGabagoolHalf
+      amount: 2
 
 - type: entity
   name: gabagool sandwich half
@@ -399,19 +400,19 @@
     - bitter
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
         - ReagentId: Nutriment
           Quantity: 15
 
 - type: entity
   name: cheesesteak
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodCheesesteak
   description: If your hands aren't greasy holding it, is it really a cheesesteak?
   components:
@@ -423,20 +424,21 @@
     - bread
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 60
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 60
+      reagents:
         - ReagentId: Nutriment
           Quantity: 16
         - ReagentId: Protein
           Quantity: 10
-  - type: SliceableFood
-    slice: FoodCheesesteakHalf
-    count: 2
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodCheesesteakHalf
+      amount: 2
 
 - type: entity
   name: cheesesteak half
@@ -452,13 +454,13 @@
     - bread
     - cheesy
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
         - ReagentId: Nutriment
           Quantity: 8
         - ReagentId: Protein
@@ -485,18 +487,18 @@
         yorkshire-pudding: ""
         yorkshire-pudding-1: ""
         yorkshire-pudding-2: ""
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      reagents:
         - ReagentId: Nutriment
           Quantity: 5
-  - type: Food
+  - type: Edible
     transferAmount: 5
 
 - type: entity
   name: black forest cake
-  parent: CMFoodBase
+  parent: [CMFoodBase, BaseSlicingRefinableFood]
   id: FoodCakeBlackForest
   description: The cake is a lie no more!
   components:
@@ -508,18 +510,19 @@
     - chocolate
     - creamy
     - cherry
-  - type: Food
+  - type: Edible
     transferAmount: 3
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 60
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 60
+      reagents:
         - ReagentId: Nutriment
           Quantity: 30
-  - type: SliceableFood
-    slice: FoodBlackForestSlice
-    count: 6
+  - type: ToolRefinable
+    refineResult:
+    - id: FoodBlackForestSlice
+      amount: 6
 
 - type: entity
   name: black forest cake slice
@@ -537,13 +540,13 @@
     - creamy
   - type: Item
     size: Tiny
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
         - ReagentId: Nutriment
           Quantity: 6
 
@@ -559,13 +562,13 @@
   - type: FlavorProfile
     flavors:
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 8
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 8
+      reagents:
         - ReagentId: Protein
           Quantity: 4
   - type: Construction
@@ -584,13 +587,13 @@
   - type: FlavorProfile
     flavors:
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 8
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 8
+      reagents:
         - ReagentId: Nutriment
           Quantity: 2
         - ReagentId: Protein
@@ -609,13 +612,13 @@
     flavors:
     - meaty
     - bread
-  - type: Food
+  - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 8
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 8
+      reagents:
         - ReagentId: Nutriment
           Quantity: 6
         - ReagentId: Protein
@@ -636,13 +639,13 @@
     - garlic
     - meaty
     - egg
-  - type: Food
+  - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
         - ReagentId: Nutriment
           Quantity: 12
         - ReagentId: Protein
@@ -664,13 +667,13 @@
     - fishy
     - egg
     - bitter
-  - type: Food
+  - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
         - ReagentId: Nutriment
           Quantity: 12
         - ReagentId: Protein
@@ -691,13 +694,13 @@
     - garlic
     - chicken
     - egg
-  - type: Food
+  - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
         - ReagentId: Nutriment
           Quantity: 12
         - ReagentId: Protein
@@ -718,13 +721,13 @@
     - garlic
     - bacon
     - egg
-  - type: Food
+  - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
         - ReagentId: Nutriment
           Quantity: 12
         - ReagentId: Protein
@@ -743,13 +746,13 @@
     flavors:
     - potatoes
     - meaty
-  - type: Food
+  - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 16
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 16
+      reagents:
         - ReagentId: Nutriment
           Quantity: 8
         - ReagentId: Protein
@@ -769,13 +772,13 @@
     - potatoes
     - meaty
     - butter
-  - type: Food
+  - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 16
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 16
+      reagents:
         - ReagentId: Nutriment
           Quantity: 8
         - ReagentId: Protein

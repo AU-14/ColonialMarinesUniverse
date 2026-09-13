@@ -98,7 +98,16 @@
   id: RMCDropshipWeaponPoint
 
 - type: Tag
+  id: RMCDropshipDirectFirePoint
+
+- type: Tag
   id: RMCDropshipUtilityPoint
+
+- type: Tag
+  id: CMUGunshipHardpointAttachmentPoint
+
+- type: Tag
+  id: CMUGunshipUtilityAttachmentPoint
 
 - type: Tag
   id: WeaponSMGM63
@@ -138,12 +147,6 @@
 
 - type: Tag
   id: RMCScrewdriver
-
-- type: Tag
-  id: RMCStraightRazor
-
-- type: Tag
-  id: LightReplacer
 
 - type: Tag
   id: ThrowingKnife
@@ -213,3 +216,5 @@
 
 - type: Tag
   id: RMCDataDisk
+- type: Tag
+  id: RMCStraightRazor

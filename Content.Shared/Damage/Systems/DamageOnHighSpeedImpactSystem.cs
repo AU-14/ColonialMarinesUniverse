@@ -46,14 +46,18 @@ public sealed partial class DamageOnHighSpeedImpactSystem : EntitySystem
         component.LastHit = _gameTiming.CurTime;
 
         if (_robustRandom.Prob(component.StunChance))
-            _stun.TryStun(uid, TimeSpan.FromSeconds(component.StunSeconds), true);
+            _stun.TryUpdateStunDuration(uid, TimeSpan.FromSeconds(component.StunSeconds));
 
         var damageScale = component.SpeedDamageFactor * speed / component.MinimumSpeed;
 
         _damageable.TryChangeDamage(uid, component.Damage * damageScale);
 
         if (_gameTiming.IsFirstTimePredicted)
-            _audio.PlayPvs(component.SoundHit, uid, AudioParams.Default.WithVariation(0.125f).WithVolume(-0.125f));
+        {
+            var audioParams = component.SoundHit?.Params ?? AudioParams.Default;
+            audioParams = audioParams.WithVariation(0.125f).AddVolume(-0.125f);
+            _audio.PlayPvs(component.SoundHit, uid, audioParams);
+        }
         _color.RaiseEffect(Color.Red, new List<EntityUid>() { uid }, Filter.Pvs(uid, entityManager: EntityManager));
     }
 

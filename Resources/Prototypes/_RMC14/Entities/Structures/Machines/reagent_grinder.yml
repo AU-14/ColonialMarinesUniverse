@@ -20,7 +20,7 @@
           True: {state: "juicer1"}
           False: {state: "juicer0"}
   - type: ReagentGrinder
-    storageMaxEntities: 10
+    storageMaxEntities: 50
   - type: RMCPowerReceiver
     idleLoad: 5
     activeLoad: 100

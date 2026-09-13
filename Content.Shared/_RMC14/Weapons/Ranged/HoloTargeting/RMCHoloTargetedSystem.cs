@@ -1,4 +1,5 @@
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.StatusEffect;
 
 namespace Content.Shared._RMC14.Weapons.Ranged.HoloTargeting;

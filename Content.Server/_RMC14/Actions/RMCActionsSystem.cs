@@ -15,6 +15,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private RMCActionsManager _manager = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private readonly ISharedPlayerManager _player = default!;
 
     private readonly Dictionary<(NetUserId User, EntProtoId Id), RMCActionOrderData> _toUpdate = new();
     private string _actionComponentName = string.Empty;
@@ -28,6 +29,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
 
         SubscribeNetworkEvent<RMCActionOrderChangeEvent>(OnActionOrder);
 
+        SubscribeLocalEvent<RMCActionOrderComponent, ComponentStartup>(OnOrderStartup); // CMU14
         SubscribeLocalEvent<RMCActionOrderComponent, PlayerAttachedEvent>(OnOrderAttached);
     }
 
@@ -73,15 +75,37 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
         }
     }
 
+    // CMU14 method
+    private void OnOrderStartup(Entity<RMCActionOrderComponent> ent, ref ComponentStartup args)
+    {
+        // Entities swap this component out to change which order they use, e.g. queen maturing into extra abilities.
+        if (_player.TryGetSessionByEntity(ent, out var player))
+            LoadOrder(ent, player);
+    }
+
+    // CMU14 method
     private void OnOrderAttached(Entity<RMCActionOrderComponent> ent, ref PlayerAttachedEvent args)
     {
-        if (_manager.GetOrder(args.Player.UserId, ent.Comp.Id) is not { } order)
+        LoadOrder(ent, args.Player);
+    }
+
+    // CMU14 method
+    private void LoadOrder(Entity<RMCActionOrderComponent> ent, ICommonSession player)
+    {
+        if (_manager.GetOrder(player.UserId, ent.Comp.Id) is not { } order)
             return;
 
         ent.Comp.Order = order.Actions;
         ent.Comp.HiddenActions = order.HiddenActions;
         ent.Comp.HiddenActionsKnown = order.HiddenActionsKnown;
         Dirty(ent);
+
+        // The actions saved under this id are not the ones the client sorted itself by, so make it sort again.
+        var ev = new RMCActionOrderLoadedEvent(
+            order.Actions.ToList(),
+            order.HiddenActions.ToList(),
+            order.HiddenActionsKnown);
+        RaiseNetworkEvent(ev, player);
     }
 
     private void OnLoaded(ICommonSession user, Dictionary<EntProtoId, RMCActionOrderData>? allActions)

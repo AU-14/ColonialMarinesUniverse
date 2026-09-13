@@ -1,0 +1,40 @@
+- type: entity
+  parent: AUSubmissionPointBase
+  id: AUSalvageSubmissionPoint
+  name: salvage submission point
+  description: A collection unit for salvaged goods. Insert items to receive payment based on their grade.
+  suffix: Salvage
+  components:
+  - type: ContainerContainer
+    containers:
+      submission: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      disposals: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      DisposalUnitComponent: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: SubmissionStorage
+    rewards:
+      SalvageTier1: 6
+      SalvageTier2: 12
+      SalvageTier3: 18
+      SalvageTier4: 24
+      SalvageTier5: 30
+  - type: DisposalUnit
+    whitelist:
+      tags:
+      - SalvageTier1
+      - SalvageTier2
+      - SalvageTier3
+      - SalvageTier4
+      - SalvageTier5
+    container:
+      ents: []
+      showEnts: False
+      occludes: True

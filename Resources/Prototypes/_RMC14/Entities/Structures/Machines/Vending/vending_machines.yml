@@ -79,11 +79,6 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: VendingMachine
     pack: CMVendomat
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
-    offState: off
-    brokenState: broken
-    normalState: normal-unshaded
   - type: Corrodible
     timeToApply: 4
     structure: true
@@ -135,6 +130,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
   - type: VendingMachine
     pack: CMVendorCoffee
+  - type: VendingMachineVisuals
     ejectState: eject-unshaded
 
 - type: entity
@@ -492,6 +488,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: CMVendorSec
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
   - type: AccessReader
@@ -542,6 +539,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: RMCVendorRiot
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
   - type: AccessReader
@@ -575,6 +573,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: CMVendorSEA
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
   - type: AccessReader
@@ -610,6 +609,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/nutri.rsi
   - type: VendingMachine
     pack: CMVendorNutri
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
 
@@ -646,6 +646,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/seeds.rsi
   - type: VendingMachine
     pack: CMVendorSeeds
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
 

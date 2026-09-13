@@ -11,15 +11,15 @@ using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.Fax;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Ghost;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Maps;
 using Content.Server.Mind;
+using Content.Server.Nutrition.EntitySystems;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
@@ -69,9 +69,9 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Actions;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Shared.CCVar;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
@@ -79,6 +79,7 @@ using Content.Shared.Destructible;
 using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -90,7 +91,8 @@ using Content.Shared.Popups;
 using Content.Shared.Preferences;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Roles;
-using Content.Shared.StatusEffect;
+using Content.Shared.Roles.Components;
+using Content.Shared.Station.Components;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
@@ -125,7 +127,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private FaxSystem _fax = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
     [Dependency] private XenoHiveSystem _hive = default!;
-    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private ServerSatiationSystem _satiation = default!;
     [Dependency] private ItemCamouflageSystem _camo = default!;
     [Dependency] private LarvaQueueSystem _larvaQueue = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
@@ -209,8 +211,10 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [ViewVariables]
     private RMCPlanet? SelectedPlanetMap { get; set; }
 
+    private string? _cmuPlanetMapName;
+
     [ViewVariables]
-    public string? SelectedPlanetMapName => SelectedPlanetMap?.Proto.Name;
+    public string? SelectedPlanetMapName => SelectedPlanetMap?.Proto.Name ?? _cmuPlanetMapName;
 
     [ViewVariables]
     public string? OperationName { get; private set; }
@@ -778,8 +782,13 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     EnsureComp<AlmayerComponent>(xform.GridUid.Value);
                 }
 
-                if (comp.SetHunger && TryComp(ev.SpawnResult, out HungerComponent? hunger))
-                    _hunger.SetHunger(ev.SpawnResult.Value, 50.0f, hunger);
+                if (comp.SetHunger && TryComp(ev.SpawnResult, out SatiationComponent? satiation))
+                {
+                    _satiation.SetValue(
+                        (ev.SpawnResult.Value, satiation),
+                        SatiationSystem.Hunger,
+                        50.0f);
+                }
             }
 
             return;
@@ -815,6 +824,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     {
 
         _config.SetCVar(CCVars.GameDisallowLateJoins, false);
+        _cmuPlanetMapName = null;
 
         if (!_autoBalance)
             return;
@@ -862,7 +872,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         // For human hijacks, build a set of map IDs belonging to the hijacker's faction ship(s).
         // For xeno hijacks, keep legacy behavior (Almayer maps).
         var targetShipMaps = new HashSet<MapId>();
-        if (ev.IsHumanHijack && !string.IsNullOrEmpty(ev.HijackerFaction))
+        if (ev.HijackerType == DropshipHijackerType.Human && !string.IsNullOrEmpty(ev.HijackerFaction)) // CMU14
         {
             // Scan ShipFactionComponent grids matching the hijacker's faction
             var shipQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
@@ -889,7 +899,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         }
 
         // Only do xeno-specific cleanup for xeno hijacks
-        if (!ev.IsHumanHijack)
+        if (ev.HijackerType != DropshipHijackerType.Human) // CMU14
         {
             var hiveStructures = EntityQueryEnumerator<HiveConstructionLimitedComponent, TransformComponent>();
             while (hiveStructures.MoveNext(out var id, out _, out var xform))
@@ -977,7 +987,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     !TryComp<MindComponent>(mindContainer.Mind, out var mind))
                     continue;
 
-                foreach (var roleId in mind.MindRoles)
+                foreach (var roleId in mind.MindRoleContainer.ContainedEntities)
                 {
                     if (!TryComp<MindRoleComponent>(roleId, out var mindRole))
                         continue;
@@ -1739,6 +1749,29 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         _usingCustomOperationName = true;
     }
 
+    public void SetCmuRoundInfo(string? planetMapName)
+    {
+        _cmuPlanetMapName = planetMapName;
+        OperationName = GetRandomOperationName();
+    }
+
+    public string? GetWarshipName(GameMapPrototype? map)
+    {
+        if (map == null)
+            return null;
+
+        foreach (var station in map.Stations.Values)
+        {
+            foreach (var entry in station.StationComponentOverrides.Values)
+            {
+                if (entry.Component is StationNameSetupComponent setup)
+                    return setup.StationNameTemplate;
+            }
+        }
+
+        return map.MapName;
+    }
+
     private void StartPlanetVote()
     {
         if (!_config.GetCVar(RMCCVars.RMCPlanetMapVote))
@@ -2110,10 +2143,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
         foreach (var child in toKnock)
         {
-            if (!TryComp<StatusEffectsComponent>(child, out var status))
-                continue;
-
-            _stuns.TryParalyze(child, _hijackStunTime, true, status);
+            _stuns.TryParalyze(child, _hijackStunTime, true);
         }
     }
 

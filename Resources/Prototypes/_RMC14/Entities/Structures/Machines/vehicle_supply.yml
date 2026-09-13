@@ -127,6 +127,22 @@
       - VehicleHumveeSnowplow
       - VehicleHumveeOverlight
       - VehicleHumveeWheel
+    # CMU14 Begin: ARC humvee, granted by the WY tech tree node; no group so the grant is never blocked
+    - name: M2420 JTMV Armed (ARC)
+      vehicle: VehicleHumveeARC
+      unlock: VehicleHumveeARC
+      hardpoints:
+      - VehicleHumveeTurret
+      - VehicleHumveeTurretArmed
+      - VehicleHumveeARCTurret
+      - VehicleHumveeCannon
+      - VehicleHumveeARCCannon
+      - VehicleHumveeLauncher
+      - VehicleHumveeSnowplow
+      - VehicleHumveeOverlight
+      - VehicleHumveeHatch
+      - VehicleHumveeWheel
+    # CMU14 End
     - name: Kheshig-1 Transport (UPP)
       vehicle: VehicleSPPVan
       group: vehicle-support
@@ -815,7 +831,7 @@
           item: TWEVehicleTankArtilleryModule
           slot: support
         - id: VehicleTankSnowplowTWE
-          name: Snowplow 
+          name: Snowplow
           item: VehicleTankSnowplowTWE
           slot: support
       hardpoints:
@@ -884,41 +900,113 @@
 #      - VehicleBlackfootLaunchers
 #      - VehicleBlackfootDoorGun
 #      - VehicleBlackfootReconSystem
-    - name: AE-71E VTOL (Recon)
-      vehicle: VehicleBlackfootRecon
-      group: vehicle-support
-      bundle:
-      - CMUBlackfootLandingPadFoldedProp
-      - CMUBlackfootFuelPumpCrate
-      - CMUBlackfootFlightComputerCrate
-      - CMUBlackfootAerospaceTug
+#    - name: AE-71E VTOL (Recon) # Temporarily unavailable from vehicle storage.
+#      vehicle: VehicleBlackfootRecon
+#      group: vehicle-support
+#      bundle:
+#      - CMUBlackfootLandingPadFoldedProp
+#      - CMUBlackfootFuelPumpCrate
+#      - CMUBlackfootFlightComputerCrate
+#      - CMUBlackfootAerospaceTug
+#      loadoutCategories:
+#      - id: primary
+#        name: Primary
+#        options:
+#        - id: VehicleBlackfootLaunchers
+#          name: flare launchers
+#          item: VehicleBlackfootLaunchers
+#          slot: launchers
+#      - id: secondary
+#        name: Secondary
+#        options:
+#        - id: VehicleBlackfootReconSystem
+#          name: recon system
+#          item: VehicleBlackfootReconSystem
+#          slot: recon
+#      - id: support
+#        name: Support
+#        options:
+#        - id: VehicleBlackfootSensorArray
+#          name: sensor array
+#          item: VehicleBlackfootSensorArray
+#          slot: sensors
+#      hardpoints:
+#      - VehicleBlackfootThrusters
+#      - VehicleBlackfootLaunchers
+#      - VehicleBlackfootReconSystem
+#      - VehicleBlackfootSensorArray
+    # CMU14 Begin: commandeered civilian vehicles, added to lifts via GovFor tech tree
+    - name: Civilian Van
+      vehicle: AU14VehicleCivVan
+      unlock: AU14VehicleCivVan
+      group: vehicle-civ
       loadoutCategories:
-      - id: primary
-        name: Primary
+      - id: wheels
+        name: Wheels
         options:
-        - id: VehicleBlackfootLaunchers
-          name: flare launchers
-          item: VehicleBlackfootLaunchers
-          slot: launchers
-      - id: secondary
-        name: Secondary
-        options:
-        - id: VehicleBlackfootReconSystem
-          name: recon system
-          item: VehicleBlackfootReconSystem
-          slot: recon
-      - id: support
-        name: Support
-        options:
-        - id: VehicleBlackfootSensorArray
-          name: sensor array
-          item: VehicleBlackfootSensorArray
-          slot: sensors
+        - id: RMCVanWheel
+          name: wheel
+          item: RMCVanWheel
+          slot: wheel-1
       hardpoints:
-      - VehicleBlackfootThrusters
-      - VehicleBlackfootLaunchers
-      - VehicleBlackfootReconSystem
-      - VehicleBlackfootSensorArray
+      - RMCVanWheel
+    - name: Civilian Truck
+      vehicle: AU14VehicleCivTruck
+      unlock: AU14VehicleCivTruck
+      group: vehicle-civ
+      loadoutCategories:
+      - id: wheels
+        name: Wheels
+        options:
+        - id: RMCVanWheel
+          name: wheel
+          item: RMCVanWheel
+          slot: wheel-1
+      hardpoints:
+      - RMCVanWheel
+    - name: Civilian Armored Truck
+      vehicle: AU14VehicleCivArmoredTruck
+      unlock: AU14VehicleCivArmoredTruck
+      group: vehicle-civ
+      loadoutCategories:
+      - id: wheels
+        name: Wheels
+        options:
+        - id: RMCVanWheel
+          name: wheel
+          item: RMCVanWheel
+          slot: wheel-1
+      hardpoints:
+      - RMCVanWheel
+    - name: Paddy Wagon
+      vehicle: AU14VehicleCivHSVan
+      unlock: AU14VehicleCivHSVan
+      group: vehicle-civ
+      loadoutCategories:
+      - id: wheels
+        name: Wheels
+        options:
+        - id: RMCVanWheel
+          name: wheel
+          item: RMCVanWheel
+          slot: wheel-1
+      hardpoints:
+      - RMCVanWheel
+    - name: EMS Ambulance
+      vehicle: AU14VehicleCivEMSAmbulance
+      unlock: AU14VehicleCivEMSAmbulance
+      group: vehicle-civ
+      loadoutCategories:
+      - id: wheels
+        name: Wheels
+        options:
+        - id: RMCVanWheel
+          name: wheel
+          item: RMCVanWheel
+          slot: wheel-1
+      hardpoints:
+      - RMCVanWheel
+    # CMU14 End
 #    - name: blackfoot (transport)
 #      vehicle: VehicleBlackfootTransport
 #      group: vehicle-support

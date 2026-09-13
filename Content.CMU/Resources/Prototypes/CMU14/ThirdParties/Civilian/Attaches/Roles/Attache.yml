@@ -1,0 +1,85 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobAttache
+  roundSide: ThirdParty
+  roundForce: Attaches
+  roundRole: Attache
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUGearPresetAttache
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillIntel: 1
+  - type: JobPrefix
+    prefix: cmu-attache-prefix
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-attache-name
+  description: cmu-attache-description
+  playTimeTracker: CMUJobAttache
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearAttache
+  spawnMenuRoleName: Diplomatic Attache (3rd party)
+  greeting: cmu-attache-greeting
+  icon: AU14JobIconColonyColonist
+  joinNotifyCrew: false
+  supervisors: cmu-attache-supervisors
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesAttaches
+  id: CMUJobAttache
+  name: Diplomatic Attache
+  components:
+  - type: EquipEntityPreset
+    preset: CMUGearPresetAttache
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-attache-name
+    description: cmu-attache-description
+    reregister: false
+    job: CMUJobAttache
+    raffle:
+      settings: short
+    rules: cmu-attache-rules
+
+- type: startingGear
+  id: CMUGearAttache
+  equipment:
+    back: CMSatchelFilledFaxResponder
+    belt: CMClipboard
+    pocket1: RMCPouchGeneralLarge
+    pocket2: RMCPouchDocument
+    id: AU14IDCardColonyColonist
+
+- type: entity
+  id: CMUGearPresetAttache
+  name: attache outfit preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomOutfits:
+    - [ CMJumpsuitTShirtRed, RMCJacketCorporateBlue, RMCHeadCapFlippable, RMCShoesLaceup ]
+    - [ RMCSwatLeaderCMBUniform, RMCCoatBureauMarshal, RMCHeadCapBureau, RMCShoesLaceup ]
+    - [ CMJumpsuitLiaisonCorporateFormal, RMCJacketCorporateKhaki, ClothingHeadHatFedoraBrown, RMCShoesLaceup ]
+    - [ CMJumpsuitProvost, RMCProvostCommandJacket, RMCHeadBeretProvost, CMBootsBlackFilled ]
+    - [ CMJumpsuitSPPOfficer, RMCCoatSPP, CMHeadCapSPPUshanka, RMCBootsSPP ]
+    - [ CMJumpsuitBO, RMCHeadRoyalBeret, RMCBootsRoyal ]
+    - [ CMJumpsuitXOFormal, CMCoatXOFormal, RMCHeadCapFlippable, RMCShoesLaceup ]
+    - [ CMJumpsuitLiaisonBlack, RMCJacketCorporateFormal, RMCHeadCapWestonYamadaDark, RMCShoesLaceup ]
+
+- type: playTimeTracker
+  id: CMUJobAttache

@@ -20,7 +20,7 @@ public sealed partial class SunShadowOverlay : Overlay
     [Dependency] private IPrototypeManager _protoManager = default!;
     private readonly IEntityManager _entManager;
     private readonly EntityLookupSystem _lookup;
-    private readonly SharedMapSystem _mapSystem;
+    private readonly SharedMapSystem _mapSys;
     private readonly SharedTransformSystem _xformSys;
 
     private readonly HashSet<Entity<SunShadowCastComponent>> _shadows = new();
@@ -31,8 +31,8 @@ public sealed partial class SunShadowOverlay : Overlay
     {
         _entManager = entManager;
         IoCManager.InjectDependencies(this);
-        _mapSystem = _entManager.System<SharedMapSystem>();
         _xformSys = _entManager.System<SharedTransformSystem>();
+        _mapSys = _entManager.System<SharedMapSystem>();
         _lookup = _entManager.System<EntityLookupSystem>();
         ZIndex = AfterLightTargetOverlay.ContentZIndex + 1;
     }
@@ -48,7 +48,7 @@ public sealed partial class SunShadowOverlay : Overlay
             return;
 
         _grids.Clear();
-        _mapSystem.FindGridsIntersecting(args.MapId,
+        _mapSys.FindGridsIntersecting(args.MapId,
             args.WorldBounds.Enlarged(SunShadowComponent.MaxLength),
             ref _grids);
 

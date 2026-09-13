@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Vehicles;
+using Content.Shared.CMU14.ZLevels.Vehicles;
 using NUnit.Framework;
 using Robust.Shared.Maths;
 
-namespace Content.Tests.Shared._CMU14.ZLevels;
+namespace Content.Tests.Shared.CMU14.ZLevels;
 
 [TestFixture]
 public sealed class CMUVehicleSupportFootprintTest

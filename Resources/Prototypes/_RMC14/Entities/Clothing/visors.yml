@@ -160,11 +160,8 @@
     ignoreRedundancy: true
   - type: ComponentToggler
     components:
-    - type: PointLight # this exists purely to stop the game from crying that component toggler isnt on the visor.
-      enabled: true
-      radius: 1
-      softness: 1
-      color: "#000000"
+    - type: GunshipPilotVisor
+      nightVisionTint: "#AEB7C2"
   - type: Visor
     toggledSprite:
       sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi
@@ -180,6 +177,10 @@
   components:
   - type: Sprite
     state: po_visor_darkblue
+  - type: ComponentToggler
+    components:
+    - type: GunshipPilotVisor
+      nightVisionTint: "#315EA8"
   - type: Visor
     toggledSprite:
       sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi
@@ -195,6 +196,10 @@
   components:
   - type: Sprite
     state: po_visor_lightblue
+  - type: ComponentToggler
+    components:
+    - type: GunshipPilotVisor
+      nightVisionTint: "#55BCEB"
   - type: Visor
     toggledSprite:
       sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi
@@ -210,6 +215,10 @@
   components:
   - type: Sprite
     state: po_visor_purple
+  - type: ComponentToggler
+    components:
+    - type: GunshipPilotVisor
+      nightVisionTint: "#A45BC7"
   - type: Visor
     toggledSprite:
       sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi
@@ -225,6 +234,10 @@
   components:
   - type: Sprite
     state: po_visor_red
+  - type: ComponentToggler
+    components:
+    - type: GunshipPilotVisor
+      nightVisionTint: "#D95757"
   - type: Visor
     toggledSprite:
       sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi
@@ -240,6 +253,10 @@
   components:
   - type: Sprite
     state: po_visor_yellow
+  - type: ComponentToggler
+    components:
+    - type: GunshipPilotVisor
+      nightVisionTint: "#D9BD43"
   - type: Visor
     toggledSprite:
       sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi

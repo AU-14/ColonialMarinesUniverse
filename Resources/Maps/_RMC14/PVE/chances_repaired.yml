@@ -103301,14 +103301,14 @@ entities:
     - type: Transform
       pos: 30.5,-38.5
       parent: 1
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 12181
     components:
     - type: Transform
       pos: -12,27
       parent: 1
-- proto: RMCTacticalMapTableLarge
+- proto: CMUTacticalMapTableLargeGovfor
   entities:
   - uid: 2571
     components:

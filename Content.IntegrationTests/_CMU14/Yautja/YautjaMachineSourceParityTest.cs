@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using Content.Server.Destructible;
 using Content.Server.Power.Components;
 using Content.Server.Construction.Components;
 using Content.Server._RMC14.TacticalMap;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.Body.Part;
@@ -30,13 +31,13 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaMachineSourceParityTest
 {
-    private static readonly ResPath YautjaMachinesRsi = new("/Textures/_CMU14/Yautja/Structures/yautja_machines.rsi");
-    private static readonly ResPath HunterShipYautjaMachinesRsi = new("/Textures/_CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi");
+    private static readonly ResPath YautjaMachinesRsi = new("/Textures/CMU14/Yautja/Structures/yautja_machines.rsi");
+    private static readonly ResPath HunterShipYautjaMachinesRsi = new("/Textures/CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi");
     private static readonly IReadOnlyDictionary<ProtoId<MaterialPrototype>, int> NoMaterials =
         new Dictionary<ProtoId<MaterialPrototype>, int>();
 
@@ -765,7 +766,7 @@ public sealed class YautjaMachineSourceParityTest
 
         yield return new Cmss13YautjaMonitorConsoleVisualRow(
             "CMUYautjaStructureYautjaMachinesSmallmonitor",
-            "Tools/_CMU14/HunterShipPort/Hunter_Ship.dmm /obj/structure/showcase smallmonitor placements",
+            "Tools/CMU14/HunterShipPort/Hunter_Ship.dmm /obj/structure/showcase smallmonitor placements",
             Name: null,
             Description: null,
             IconState: "smallmonitor",

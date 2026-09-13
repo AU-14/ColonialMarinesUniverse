@@ -7,6 +7,7 @@ using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Timing;
 using Robust.Shared.Audio;
+using Content.Shared.GameTicking.Prototypes;
 
 namespace Content.Shared.GameTicking
 {
@@ -14,13 +15,18 @@ namespace Content.Shared.GameTicking
     {
         [Dependency] private IReplayRecordingManager _replay = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
+        /// <summary>
+        ///     A list storing the start times of all game rules that have been started this round.
+        ///     Game rules can be started and stopped at any time, including midround.
+        /// </summary>
+        public abstract IReadOnlyList<(TimeSpan, string)> AllPreviousGameRules { get; }
 
         // See ideally these would be pulled from the job definition or something.
         // But this is easier, and at least it isn't hardcoded.
         //TODO: Move these, they really belong in StationJobsSystem or a cvar.
-        public static readonly ProtoId<JobPrototype> FallbackOverflowJob = "CMRifleman";
+        public static readonly ProtoId<JobPrototype> FallbackOverflowJob = "AU14JobGOVFORSquadRifleman";
 
-        public const string FallbackOverflowJobName = "cm-job-name-rifleman";
+        public const string FallbackOverflowJobName = "au14-job-name-govforsquadrifleman";
 
         // TODO network.
         // Probably most useful for replays, round end info, and probably things like lobby menus.
@@ -89,14 +95,14 @@ namespace Content.Shared.GameTicking
     public sealed partial class TickerLobbyStatusEvent : EntityEventArgs
     {
         public bool IsRoundStarted { get; }
-        public string? LobbyBackground { get; }
+        public ProtoId<LobbyBackgroundPrototype>? LobbyBackground { get; }
         public bool YouAreReady { get; }
         // UTC.
         public TimeSpan StartTime { get; }
         public TimeSpan RoundStartTimeSpan { get; }
         public bool Paused { get; }
 
-        public TickerLobbyStatusEvent(bool isRoundStarted, string? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused)
+        public TickerLobbyStatusEvent(bool isRoundStarted, ProtoId<LobbyBackgroundPrototype>? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused)
         {
             IsRoundStarted = isRoundStarted;
             LobbyBackground = lobbyBackground;
@@ -107,14 +113,44 @@ namespace Content.Shared.GameTicking
         }
     }
 
+    /// <summary>
+    ///     One column of the lobby's round-info table: a heading with its value shown underneath.
+    ///     Rendered as a grid rather than pre-formatted text so columns stay aligned at any panel
+    ///     width and however long the value is.
+    /// </summary>
+    [Serializable, NetSerializable]
+    public sealed class LobbyRoundInfoField
+    {
+        public string Label { get; }
+        public string Value { get; }
+
+        /// <summary>
+        ///     Hex colour for the value, e.g. "#007EE7". Null keeps the default body colour.
+        /// </summary>
+        public string? Color { get; }
+
+        public LobbyRoundInfoField(string label, string value, string? color = null)
+        {
+            Label = label;
+            Value = value;
+            Color = color;
+        }
+    }
+
     [Serializable, NetSerializable]
     public sealed partial class TickerLobbyInfoEvent : EntityEventArgs
     {
         public string TextBlob { get; }
 
-        public TickerLobbyInfoEvent(string textBlob)
+        /// <summary>
+        ///     Structured round info for the lobby table. Laid out two columns per row, in order.
+        /// </summary>
+        public List<LobbyRoundInfoField> RoundInfo { get; }
+
+        public TickerLobbyInfoEvent(string textBlob, List<LobbyRoundInfoField>? roundInfo = null)
         {
             TextBlob = textBlob;
+            RoundInfo = roundInfo ?? new List<LobbyRoundInfoField>();
         }
     }
 
@@ -174,7 +210,8 @@ namespace Content.Shared.GameTicking
     [Serializable, NetSerializable]
     public sealed partial class TickerJobsAvailableEvent(
         Dictionary<NetEntity, string> stationNames,
-        Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> jobsAvailableByStation)
+        Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> jobsAvailableByStation,
+        Dictionary<NetEntity, ProtoId<JobWeightPrototype>?> jobWeightsByStation)
         : EntityEventArgs
     {
         /// <summary>
@@ -183,6 +220,8 @@ namespace Content.Shared.GameTicking
         public Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> JobsAvailableByStation { get; } = jobsAvailableByStation;
 
         public Dictionary<NetEntity, string> StationNames { get; } = stationNames;
+
+        public Dictionary<NetEntity, ProtoId<JobWeightPrototype>?> JobWeightsByStation { get; } = jobWeightsByStation;
     }
 
     [Serializable, NetSerializable, DataDefinition]

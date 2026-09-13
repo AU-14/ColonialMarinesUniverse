@@ -1,9 +1,9 @@
 using System.Linq;
-using Content.Client._CMU14.Yautja.Lobby;
-using Content.Shared._CMU14.Yautja;
+using Content.Client.CMU14.Yautja.Lobby;
+using Content.Shared.CMU14.Yautja;
 using NUnit.Framework;
 
-namespace Content.Tests.Client._CMU14.Yautja;
+namespace Content.Tests.Client.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaProfileEditorLayoutTest

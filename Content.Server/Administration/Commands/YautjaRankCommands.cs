@@ -1,11 +1,11 @@
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server.Administration.Logs;
 using Content.Server.Database;
 using Content.Server.Players.JobWhitelist;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands;

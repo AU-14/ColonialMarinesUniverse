@@ -1,9 +1,8 @@
 using Content.Client._RMC14.Medical.HUD;
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Overlays;
 using Content.Shared.StatusIcon.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.Overlays;
 
@@ -12,9 +11,7 @@ namespace Content.Client.Overlays;
 /// </summary>
 public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealthIconsComponent>
 {
-    [Dependency] private IPrototypeManager _prototypeMan = default!;
     [Dependency] private CMHealthIconsSystem _healthIcons = default!;
-
     [ViewVariables]
     public HashSet<string> DamageContainers = new();
 
@@ -22,7 +19,7 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
     {
         base.Initialize();
 
-        SubscribeLocalEvent<DamageableComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
+        SubscribeLocalEvent<InjurableComponent, GetStatusIconsEvent>(OnGetStatusIconsEvent);
         SubscribeLocalEvent<ShowHealthIconsComponent, AfterAutoHandleStateEvent>(OnHandleState);
     }
 
@@ -30,6 +27,7 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
     {
         base.UpdateInternal(component);
 
+        DamageContainers.Clear();
         foreach (var comp in component.Components)
         {
             foreach (var damageContainerId in comp.DamageContainers)
@@ -51,12 +49,19 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
         RefreshOverlay();
     }
 
-    private void OnGetStatusIconsEvent(Entity<DamageableComponent> entity, ref GetStatusIconsEvent args)
+    private void OnGetStatusIconsEvent(Entity<InjurableComponent> entity, ref GetStatusIconsEvent args)
     {
         if (!IsActive)
             return;
 
-        if (_healthIcons.TryGetIcon(entity, out var healthIcon))
+        if (entity.Comp.DamageContainer == null ||
+            !DamageContainers.Contains(entity.Comp.DamageContainer) ||
+            !TryComp(entity, out DamageableComponent? damageable))
+        {
+            return;
+        }
+
+        if (_healthIcons.TryGetIcon((entity.Owner, damageable), out var healthIcon))
             args.StatusIcons.Add(healthIcon);
     }
 }

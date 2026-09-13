@@ -56,7 +56,7 @@ namespace Content.Client.Info
             PopulateTutorial(tutorialList);
 
             panel.AddChild(rootContainer);
-            Contents.AddChild(panel);
+            ContentsContainer.AddChild(panel);
             CrtLobbyTheme.Apply(this, useCrtTypography: false);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
             _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);

@@ -19,7 +19,7 @@ public sealed partial class SSDIndicatorSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     private bool _icSsdSleep;
     private float _icSsdSleepTime;
@@ -64,12 +64,12 @@ public sealed partial class SSDIndicatorSystem : EntitySystem
     // Prevents mapped mobs to go to sleep immediately
     private void OnMapInit(EntityUid uid, SSDIndicatorComponent component, MapInitEvent args)
     {
-        if (_icSsdSleep &&
-            component.IsSSD &&
-            component.FallAsleepTime == TimeSpan.Zero)
-        {
-            component.FallAsleepTime = _timing.CurTime + TimeSpan.FromSeconds(_icSsdSleepTime);
-        }
+        if (!_icSsdSleep || !component.IsSSD)
+            return;
+
+        component.FallAsleepTime = _timing.CurTime + TimeSpan.FromSeconds(_icSsdSleepTime);
+        component.NextUpdate = _timing.CurTime + component.UpdateInterval;
+        Dirty(uid, component);
     }
 
     public override void Update(float frameTime)
@@ -82,23 +82,27 @@ public sealed partial class SSDIndicatorSystem : EntitySystem
         if (!_net.IsServer || !_icSsdSleep)
             return;
 
+        var curTime = _timing.CurTime;
         var query = EntityQueryEnumerator<SSDIndicatorComponent>();
 
         while (query.MoveNext(out var uid, out var ssd))
         {
-            // Forces the entity to sleep when the time has come
-            if (ssd.IsSSD &&
-                ssd.FallAsleepTime <= _timing.CurTime &&
-                !TerminatingOrDeleted(uid))
-            {
-                if (!_statusEffects.TrySetStatusEffectDuration(uid, StatusEffectSSDSleeping, null))
-                    continue;
+            // Forces the entity to sleep when the time has come.
+            if (!ssd.IsSSD
+                || ssd.NextUpdate > curTime
+                || ssd.FallAsleepTime > curTime
+                || TerminatingOrDeleted(uid))
+                continue;
 
-                // Don't keep retrying every tick once the effect is applied — TrySetStatusEffectDuration
-                // walks ActiveStatusEffects on the target every call. Reset on PlayerDetached.
-                ssd.FallAsleepTime = _timing.CurTime + SsdSleepRetrySuppression;
-                Dirty(uid, ssd);
+            if (_statusEffects.TrySetStatusEffectDuration(uid, StatusEffectSSDSleeping))
+            {
+                // Do not keep walking the status container after the permanent effect is applied.
+                // PlayerDetached resets FallAsleepTime for a later disconnect.
+                ssd.FallAsleepTime = curTime + SsdSleepRetrySuppression;
             }
+
+            ssd.NextUpdate = curTime + ssd.UpdateInterval;
+            Dirty(uid, ssd);
         }
     }
 }

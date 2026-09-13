@@ -6,7 +6,7 @@ using System.Numerics;
 using Content.Client.Popups;
 using Content.IntegrationTests.Pair;
 using Content.Server.Mind;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Components;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
@@ -18,7 +18,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaRackAccessTest
@@ -30,8 +30,8 @@ public sealed class YautjaRackAccessTest
             AppContext.BaseDirectory,
             "..",
             "..",
-            "Content.Client",
-            "_CMU14",
+            "Content.CMU",
+            "Client",
             "Yautja",
             "YautjaGearRackClientSystem.cs");
 
@@ -54,7 +54,7 @@ public sealed class YautjaRackAccessTest
             var rack = entMan.SpawnEntity("CMUYautjaLoadoutVendor", MapCoordinates.Nullspace);
             try
             {
-                var ev = new ActivatableUIOpenAttemptEvent(user);
+                var ev = new ActivatableUIOpenAttemptEvent(user, false);
                 entMan.EventBus.RaiseLocalEvent(rack, ev);
                 Assert.That(ev.Cancelled, Is.True);
             }
@@ -104,7 +104,7 @@ public sealed class YautjaRackAccessTest
             var entMan = client.EntMan;
             var user = entMan.SpawnEntity("CMMobHuman", map.CGridCoords);
             var rack = entMan.SpawnEntity("CMUYautjaLoadoutVendor", map.CGridCoords);
-            var ev = new ActivatableUIOpenAttemptEvent(user);
+            var ev = new ActivatableUIOpenAttemptEvent(user, false);
             entMan.EventBus.RaiseLocalEvent(rack, ev);
             Assert.That(ev.Cancelled, Is.True);
             Assert.That(entMan.System<PopupSystem>().WorldLabels,
@@ -120,7 +120,7 @@ public sealed class YautjaRackAccessTest
             var session = server.PlayerMan.Sessions.Single();
             server.PlayerMan.SetAttachedEntity(session, user);
 
-            var ev = new ActivatableUIOpenAttemptEvent(user);
+            var ev = new ActivatableUIOpenAttemptEvent(user, false);
             entMan.EventBus.RaiseLocalEvent(rack, ev);
             Assert.That(ev.Cancelled, Is.True);
         });
@@ -291,7 +291,7 @@ public sealed class YautjaRackAccessTest
 
     private static bool RackOpenCancelled(IEntityManager entMan, EntityUid rack, EntityUid user)
     {
-        var ev = new ActivatableUIOpenAttemptEvent(user);
+        var ev = new ActivatableUIOpenAttemptEvent(user, false);
         entMan.EventBus.RaiseLocalEvent(rack, ev);
         return ev.Cancelled;
     }
@@ -338,7 +338,7 @@ public sealed class YautjaRackAccessTest
             var session = server.PlayerMan.Sessions.Single();
             server.PlayerMan.SetAttachedEntity(session, user);
 
-            var ev = new ActivatableUIOpenAttemptEvent(user);
+            var ev = new ActivatableUIOpenAttemptEvent(user, false);
             entMan.EventBus.RaiseLocalEvent(rack, ev);
 
             Assert.That(ev.Cancelled, Is.True, $"CMSS13 denied rack access should cancel opening and show `{expected}`.");

@@ -1,0 +1,21 @@
+# Tags a disguised mimic with a visible faction icon for viewers that
+# either still wear their abomination shell (Abomination) OR are
+# themselves wearing a face (AbominationMimicTransformed). Lets the
+# flesh-hivemind recognise its own kind even when both parties are
+# disguised in the colony.
+- type: factionIcon
+  id: AbominationFaction
+  priority: 11
+  # Do not show this to ordinary dead-player ghosts — a dead (and potentially
+  # revivable) colonist watching could spot the marker on a disguised mimic and
+  # carry that knowledge back. Living abominations (shell or disguised form)
+  # and admin ghosts (aghost) can still see it.
+  visibleToGhosts: false
+  visibleToAdminGhosts: true
+  showTo:
+    components:
+    - Abomination
+    - AbominationMimicTransformed
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: Zombie

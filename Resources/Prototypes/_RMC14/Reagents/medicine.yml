@@ -8,7 +8,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Antitoxic
@@ -29,7 +29,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Focusing
@@ -45,7 +45,7 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.03
       effects:
       - !type:Antitoxic
@@ -62,7 +62,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Neogenetic
@@ -76,12 +76,12 @@
   desc: reagent-desc-cmcryoxadone
   color: "#4acaca"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:EqualHealthChange
         conditions:
-        - !type:Temperature
+        - !type:TemperatureCondition
           max: 170
         damage:
         - Brute: -1
@@ -100,7 +100,7 @@
   criticalOverdose: 25
   class: Uncommon
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Anticorrosive
@@ -116,7 +116,7 @@
   criticalOverdose: 50
   class: Common
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Oxygenating
@@ -133,7 +133,7 @@
   criticalOverdose: 15
   class: Uncommon
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Oxygenating
@@ -151,7 +151,7 @@
   overdose: 10.5
   criticalOverdose: 20
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.2
       effects:
       - !type:Electrogenetic
@@ -166,14 +166,15 @@
         additive: true
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 10.5
         damage:
-          groups:
-            Toxin: 0.38
+          types:
+            Poison: 0.19
+            Radiation: 0.19
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 20
         damage:
           types:
@@ -190,7 +191,7 @@
   overdose: 110
   class: Common
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.5
       effects:
       - !type:Allergenic
@@ -219,7 +220,7 @@
   criticalOverdose: 50
   class: Common
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Anticorrosive
@@ -235,7 +236,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Thermostabilizing
@@ -252,7 +253,7 @@
   criticalOverdose: 50
   class: Uncommon
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Neogenetic
@@ -273,7 +274,7 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Neogenetic
@@ -291,28 +292,35 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
-      - !type:ChemHealEyeDamage
+      - !type:EyeDamage
       - !type:Oculopeutic
         potency: 2
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         damage:
-          groups:
-            Toxin: 0.5
+          types:
+            Poison: 0.25
+            Radiation: 0.25
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 50 #TODO 0.5 brain damage/s
         damage:
-          groups:
-            Brute: 0.5
-            Burn: 0.5
-            Toxin: 1.5
+          types:
+            Blunt: 0.16
+            Slash: 0.17
+            Piercing: 0.17
+            Heat: 0.12
+            Shock: 0.12
+            Cold: 0.13
+            Caustic: 0.13
+            Poison: 0.75
+            Radiation: 0.75
 
 # TODO RMC14 other effects
 - type: reagent
@@ -322,12 +330,12 @@
   desc: reagent-desc-cmclonexadone
   color: "#51b4db"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:EqualHealthChange
         conditions:
-        - !type:Temperature
+        - !type:TemperatureCondition
           max: 170
         damage:
         - Brute: -2.25
@@ -345,7 +353,7 @@
   overdose: 15
   criticalOverdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:EqualHealthChange
@@ -367,7 +375,7 @@
   flavor: medicine
   color: "#C8A5DC"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1, 200 seconds is 0.005, but fixed point 2
       effects:
       - !type:PopupMessage #TODO -2 confusion stat and message in 5 min intervals
@@ -382,7 +390,7 @@
   desc: reagent-desc-rmccitalopram
   color: "#C8A5DC"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1, 200 seconds
       effects:
       - !type:PopupMessage #TODO -1 confusion stat and message in 5 min intervals
@@ -397,7 +405,7 @@
   desc: reagent-desc-rmcparoxetine
   color: "#C8A5DC"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.01 # 1, 200 seconds
       effects:
       - !type:PopupMessage #TODO -3 confusion stat and message in 5 min intervals
@@ -408,7 +416,6 @@
         effectProto: StatusEffectSeeingRainbow
         type: Add
         time: 1.5 #TODO max 30
-        refresh: false
       - !type:Jitter
       - !type:Emote
         emote: Laugh #TODO twitches, drools, moans.
@@ -425,12 +432,12 @@
   flavor: medicine
   color: "#5FB0C7"
   metabolisms:
-    Medicine:
+    Bloodstream:
       effects:
         - !type:CureZombieInfection
           innoculate: true
           conditions:
-            - !type:ReagentThreshold
+            - !type:ReagentCondition
               min: 5
 
 - type: reagent
@@ -443,7 +450,7 @@
   criticalOverdose: 50
   class: Uncommon
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Ketogenic

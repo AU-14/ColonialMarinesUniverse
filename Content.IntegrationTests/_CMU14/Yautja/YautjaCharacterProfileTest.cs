@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Server._CMU14.Yautja;
-using Content.Client._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
+using Content.Client.CMU14.Yautja;
 using Content.Client.Humanoid;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Xenonids.Acid;
@@ -26,7 +26,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaCharacterProfileTest
@@ -34,14 +34,9 @@ public sealed class YautjaCharacterProfileTest
     [Test]
     public void YautjaProfileCopiesWithoutChangingNormalSpecies()
     {
-        var yautjaAppearance = new HumanoidCharacterAppearance()
-            .WithSkinColor(new Color((byte) 56, (byte) 90, (byte) 48))
-            .WithEyeColor(Color.Gold)
-            .WithHairColor(new Color((byte) 24, (byte) 18, (byte) 14))
-            .WithMarkings(new List<Marking>
-            {
-                new("CMUYautjaDreadlocksStandard", new List<Color> { new((byte) 24, (byte) 18, (byte) 14) }),
-            });
+        var yautjaAppearance = YautjaCharacterProfile.Default
+                .WithSkinColor(YautjaSkinColor.Green)
+                .WithEyeColor(YautjaEyeColor.Gold).Appearance.Clone();
 
         var yautja = YautjaCharacterProfile.Default
             .WithName("Kainde Amedha")
@@ -63,7 +58,7 @@ public sealed class YautjaCharacterProfileTest
             .WithCapeColor(new Color((byte) 0x2a, (byte) 0x5c, (byte) 0x8a))
             .WithFlavorText("A quiet hunter.");
 
-        var normal = HumanoidCharacterProfile.DefaultWithSpecies("Human")
+        var normal = new HumanoidCharacterProfile()
             .WithName("John Human")
             .WithYautjaProfile(yautja);
 
@@ -188,7 +183,7 @@ public sealed class YautjaCharacterProfileTest
         var yautja = YautjaCharacterProfile.Default
             .WithSkinColor(YautjaSkinColor.Green)
             .WithEyeColor(YautjaEyeColor.Copper);
-        var quills = yautja.Appearance.Markings.Single(marking => marking.MarkingId == yautja.QuillMarkingId);
+        var quills = YautjaCharacterProfile.GetQuillMarkings(yautja.Appearance).Single(marking => marking.MarkingId == yautja.QuillMarkingId);
 
         Assert.Multiple(() =>
         {
@@ -216,7 +211,7 @@ public sealed class YautjaCharacterProfileTest
                     YautjaEyeColor.Slate,
                 }));
             Assert.That(yautja.Appearance.SkinColor, Is.EqualTo(skinColor));
-            Assert.That(yautja.Appearance.HairColor, Is.EqualTo(skinColor));
+            Assert.That(YautjaCharacterProfile.GetQuillColor(yautja.Appearance), Is.EqualTo(skinColor));
             Assert.That(quills.MarkingColors.Single(), Is.EqualTo(skinColor));
             Assert.That(yautja.Appearance.EyeColor,
                 Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Copper)));
@@ -237,7 +232,7 @@ public sealed class YautjaCharacterProfileTest
         var skinColor = Enum.Parse<YautjaSkinColor>(enumName);
         var expected = new Color(red, green, blue);
         var profile = YautjaCharacterProfile.Default.WithSkinColor(skinColor);
-        var quills = profile.Appearance.Markings.Single(marking => marking.MarkingId == profile.QuillMarkingId);
+        var quills = YautjaCharacterProfile.GetQuillMarkings(profile.Appearance).Single(marking => marking.MarkingId == profile.QuillMarkingId);
 
         Assert.Multiple(() =>
         {
@@ -246,7 +241,7 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(YautjaCharacterProfile.GetSkinColorColor(skinColor), Is.EqualTo(expected));
             Assert.That(profile.SkinColor, Is.EqualTo(skinColor));
             Assert.That(profile.Appearance.SkinColor, Is.EqualTo(expected));
-            Assert.That(profile.Appearance.HairColor, Is.EqualTo(expected));
+            Assert.That(YautjaCharacterProfile.GetQuillColor(profile.Appearance), Is.EqualTo(expected));
             Assert.That(quills.MarkingColors.Single(), Is.EqualTo(expected));
         });
     }
@@ -268,7 +263,7 @@ public sealed class YautjaCharacterProfileTest
                     var profile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja");
                     profile.Appearance = profile.Appearance.WithSkinColor(
                         YautjaCharacterProfile.GetSkinColorColor(skinColor));
-                    entMan.System<HumanoidAppearanceSystem>().LoadProfile(dummy, profile);
+                    YautjaTestAppearance.Apply(entMan, dummy, profile);
 
                     var sprite = entMan.GetComponent<SpriteComponent>(dummy);
                     Assert.That(sprite.LayerMapTryGet(HumanoidVisualLayers.Chest, out var chestLayer), Is.True);
@@ -276,22 +271,22 @@ public sealed class YautjaCharacterProfileTest
                     Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"),
                         $"{skinColor} must neutralize the warm source texture instead of inheriting its yellow cast.");
 
-                    entMan.System<HumanoidAppearanceSystem>().LoadProfile(
+                    YautjaTestAppearance.Apply(entMan,
                         dummy,
                         HumanoidCharacterProfile.DefaultWithSpecies("Human"));
 
                     Assert.That(chest.ShaderPrototype, Is.Null,
                         "The Yautja skin shader must not leak when a preview dummy is reused for another species.");
 
-                    entMan.System<HumanoidAppearanceSystem>().LoadProfile(
+                    YautjaTestAppearance.Apply(entMan,
                         dummy,
                         HumanoidCharacterProfile.DefaultWithSpecies("Yautja"));
-                    entMan.System<HumanoidAppearanceSystem>().SetSkinColor(
-                        dummy,
-                        YautjaCharacterProfile.GetSkinColorColor(skinColor));
+                    YautjaTestAppearance.Apply(entMan, dummy,
+                        HumanoidCharacterProfile.DefaultWithSpecies("Yautja").WithCharacterAppearance(
+                            profile.Appearance.WithSkinColor(YautjaCharacterProfile.GetSkinColorColor(skinColor))));
                     Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"));
 
-                    entMan.System<HumanoidAppearanceSystem>().LoadProfile(
+                    YautjaTestAppearance.Apply(entMan,
                         dummy,
                         HumanoidCharacterProfile.DefaultWithSpecies("WorkingJoe"));
 
@@ -319,19 +314,19 @@ public sealed class YautjaCharacterProfileTest
             .WithSkinColor(YautjaSkinColor.Blue)
             .WithQuillStyle(YautjaQuillStyle.LongTied);
         var copied = fixedColor.Clone();
-        var fixedQuills = fixedColor.Appearance.Markings.Single(marking =>
+        var fixedQuills = YautjaCharacterProfile.GetQuillMarkings(fixedColor.Appearance).Single(marking =>
             marking.MarkingId == "CMUYautjaDreadlocksLongTied");
 
         Assert.Multiple(() =>
         {
             Assert.That(YautjaCharacterProfile.Default.DreadColor, Is.EqualTo(YautjaDreadColor.MatchSkin));
-            Assert.That(linked.Appearance.HairColor,
+            Assert.That(YautjaCharacterProfile.GetQuillColor(linked.Appearance),
                 Is.EqualTo(new Color((byte) 105, (byte) 57, (byte) 59)));
             Assert.That(fixedColor.DreadColor, Is.EqualTo(YautjaDreadColor.Brown));
-            Assert.That(fixedColor.Appearance.HairColor, Is.EqualTo(brown));
+            Assert.That(YautjaCharacterProfile.GetQuillColor(fixedColor.Appearance), Is.EqualTo(brown));
             Assert.That(fixedQuills.MarkingColors.Single(), Is.EqualTo(brown));
             Assert.That(copied.DreadColor, Is.EqualTo(YautjaDreadColor.Brown));
-            Assert.That(copied.Appearance.HairColor, Is.EqualTo(brown));
+            Assert.That(YautjaCharacterProfile.GetQuillColor(copied.Appearance), Is.EqualTo(brown));
         });
     }
 
@@ -357,7 +352,7 @@ public sealed class YautjaCharacterProfileTest
 
             Assert.That(accessory.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
             var state = sprite!.AllLayers.First().RsiState.Name;
-            var rsiPath = new ResPath("/Textures/_CMU14/Yautja/mask_accessories_onmob.rsi");
+            var rsiPath = new ResPath("/Textures/CMU14/Yautja/mask_accessories_onmob.rsi");
 
             Assert.Multiple(() =>
             {
@@ -385,7 +380,7 @@ public sealed class YautjaCharacterProfileTest
             var cache = client.ResolveDependency<IResourceCache>();
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.EntMan.ComponentFactory;
-            var onMobRsiPath = new ResPath("/Textures/_CMU14/Yautja/mask_accessories_onmob.rsi");
+            var onMobRsiPath = new ResPath("/Textures/CMU14/Yautja/mask_accessories_onmob.rsi");
 
             Assert.That(cache.TryGetResource<RSIResource>(onMobRsiPath, out var onMobResource), Is.True);
             Assert.That(onMobResource!.RSI.Size, Is.EqualTo(new Vector2i(32, 64)),
@@ -408,7 +403,7 @@ public sealed class YautjaCharacterProfileTest
                     Assert.That(prototype.Description, Is.EqualTo("An ornate addition to your mask."), row.Id);
                     Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                     Assert.That(sprite!.BaseRSI?.Path,
-                        Is.EqualTo(new ResPath("/Textures/_CMU14/Yautja/mask_accessories.rsi")),
+                        Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/mask_accessories.rsi")),
                         $"{row.Id} maps CMSS13 icons/obj/items/hunter/pred_mask_accessories.dmi.");
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo(row.State),
                         $"{row.Id} CMSS13 post-vendor icon_state");
@@ -469,7 +464,7 @@ public sealed class YautjaCharacterProfileTest
             foreach (var row in ProfileMaskRows())
             {
                 var prototype = prototypes.Index<EntityPrototype>(row.Id);
-                var rsiPath = new ResPath($"/Textures/_CMU14/Yautja/masks/{row.State}.rsi");
+                var rsiPath = new ResPath($"/Textures/CMU14/Yautja/masks/{row.State}.rsi");
 
                 Assert.Multiple(() =>
                 {
@@ -482,7 +477,7 @@ public sealed class YautjaCharacterProfileTest
                         $"{row.Id} maps CMSS13 pred_mask.dmi icon_state {row.State}.");
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), row.Id);
                     Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
-                    Assert.That(clothing!.RsiPath, Is.EqualTo($"_CMU14/Yautja/masks/{row.State}.rsi"),
+                    Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{row.State}.rsi"),
                         $"{row.Id} maps CMSS13 item_state_slots WEAR_FACE {row.State}.");
                     Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True,
                         $"{row.Id} profile mask RSI exists.");
@@ -536,7 +531,7 @@ public sealed class YautjaCharacterProfileTest
             foreach (var row in SpecialMaskRows())
             {
                 var prototype = prototypes.Index<EntityPrototype>(row.Id);
-                var rsiPath = new ResPath($"/Textures/_CMU14/Yautja/masks/{row.Rsi}.rsi");
+                var rsiPath = new ResPath($"/Textures/CMU14/Yautja/masks/{row.Rsi}.rsi");
 
                 Assert.Multiple(() =>
                 {
@@ -546,7 +541,7 @@ public sealed class YautjaCharacterProfileTest
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(rsiPath), row.Id);
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), row.Id);
                     Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, row.Id);
-                    Assert.That(clothing!.RsiPath, Is.EqualTo($"_CMU14/Yautja/masks/{row.Rsi}.rsi"), row.Id);
+                    Assert.That(clothing!.RsiPath, Is.EqualTo($"CMU14/Yautja/masks/{row.Rsi}.rsi"), row.Id);
                     Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True, row.Id);
                     Assert.That(resource!.RSI.Size, Is.EqualTo(row.RsiSize), row.Id);
                     Assert.That(resource.RSI.TryGetState("equipped-MASK", out _), Is.True, row.Id);
@@ -624,7 +619,7 @@ public sealed class YautjaCharacterProfileTest
     [Test]
     public void MaskAccessoryPreviewLayerIsOffsetToHelmet()
     {
-        Assert.That(Content.Client._CMU14.Yautja.YautjaMaskAccessoryVisualSystem.OnMobOffset,
+        Assert.That(Content.Client.CMU14.Yautja.YautjaMaskAccessoryVisualSystem.OnMobOffset,
             Is.EqualTo(new Vector2(0f, 0.5f)),
             "CMSS13 mask accessory overlays need to be lifted from the body center onto the helmet in the SS14 preview.");
     }
@@ -647,7 +642,7 @@ public sealed class YautjaCharacterProfileTest
         Assert.Multiple(() =>
         {
             Assert.That(yautja.QuillMarkingId, Is.EqualTo("CMUYautjaDreadlocksShortWide"));
-            Assert.That(yautja.Appearance.Markings,
+            Assert.That(YautjaCharacterProfile.GetQuillMarkings(yautja.Appearance),
                 Has.Exactly(1).Matches<Marking>(marking => marking.MarkingId == "CMUYautjaDreadlocksShortWide"));
         });
     }
@@ -896,7 +891,7 @@ public sealed class YautjaCharacterProfileTest
                     entity,
                     YautjaCharacterProfile.Default.WithGender(Gender.Female));
 
-                var humanoid = entMan.GetComponent<HumanoidAppearanceComponent>(entity);
+                var humanoid = entMan.GetComponent<HumanoidProfileComponent>(entity);
                 Assert.Multiple(() =>
                 {
                     Assert.That(humanoid.Sex, Is.EqualTo(Sex.Female));
@@ -945,10 +940,10 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(entMan.TryGetComponent<CorrodibleComponent>(uid, out var corrodible), Is.True,
                 $"{row.Id} maps source unacidable.");
             Assert.That(corrodible!.IsCorrodible, Is.False, $"{row.Id} maps source unacidable.");
-            Assert.That(armor.Melee, Is.EqualTo(40), $"{row.Id} maps hunter mask armor_melee = CLOTHING_ARMOR_MEDIUM.");
-            Assert.That(armor.Bullet, Is.EqualTo(50), $"{row.Id} maps hunter mask armor_bullet = CLOTHING_ARMOR_HIGH.");
-            Assert.That(armor.Bio, Is.EqualTo(45), $"{row.Id} maps hunter mask armor_bio = CLOTHING_ARMOR_MEDIUMHIGH.");
-            Assert.That(armor.ExplosionArmor, Is.EqualTo(50), $"{row.Id} maps hunter mask armor_bomb = CLOTHING_ARMOR_HIGH.");
+            Assert.That(armor.Melee, Is.EqualTo(25), $"{row.Id} retains the current CMU frontline mask balance.");
+            Assert.That(armor.Bullet, Is.EqualTo(30), $"{row.Id} retains the current CMU frontline mask balance.");
+            Assert.That(armor.Bio, Is.EqualTo(25), $"{row.Id} retains the current CMU frontline mask balance.");
+            Assert.That(armor.ExplosionArmor, Is.EqualTo(10), $"{row.Id} retains the current CMU frontline mask balance.");
             Assert.That(entMan.GetComponent<ParasiteResistanceComponent>(uid).MaxCount, Is.EqualTo(100),
                 $"{row.Id} inherits CMSS13 hunter anti_hug = 100.");
         });
@@ -958,7 +953,7 @@ public sealed class YautjaCharacterProfileTest
     {
         var meta = entMan.GetComponent<MetaDataComponent>(uid);
         var clothing = entMan.GetComponent<ClothingComponent>(uid);
-        var armor = entMan.GetComponent<CMArmorComponent>(uid);
+        entMan.TryGetComponent<CMArmorComponent>(uid, out var armor);
 
         Assert.Multiple(() =>
         {
@@ -970,10 +965,16 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(entMan.HasComponent<YautjaTechItemComponent>(uid), Is.True, row.Id);
             Assert.That(entMan.TryGetComponent<CorrodibleComponent>(uid, out var corrodible), Is.True, row.Id);
             Assert.That(corrodible!.IsCorrodible, Is.False, row.Id);
-            Assert.That(armor.Melee, Is.EqualTo(row.Melee), row.Id);
-            Assert.That(armor.Bullet, Is.EqualTo(row.Bullet), row.Id);
-            Assert.That(armor.Bio, Is.EqualTo(row.Bio), row.Id);
-            Assert.That(armor.ExplosionArmor, Is.EqualTo(row.Explosion), row.Id);
+            if (row.Id.StartsWith("CMUYautjaMaskThrall", StringComparison.Ordinal))
+                Assert.That(armor, Is.Null, $"{row.Id} retains the current unarmored thrall balance.");
+            else
+            {
+                Assert.That(armor, Is.Not.Null, row.Id);
+                Assert.That(armor!.Melee, Is.EqualTo(row.Melee), row.Id);
+                Assert.That(armor.Bullet, Is.EqualTo(row.Bullet), row.Id);
+                Assert.That(armor.Bio, Is.EqualTo(row.Bio), row.Id);
+                Assert.That(armor.ExplosionArmor, Is.EqualTo(row.Explosion), row.Id);
+            }
             Assert.That(entMan.GetComponent<ParasiteResistanceComponent>(uid).MaxCount, Is.EqualTo(row.AntiHug), row.Id);
             Assert.That(entMan.GetComponent<RMCImmuneToIgnitionComponent>(uid).IntensityResistance, Is.EqualTo(10),
                 $"{row.Id} maps CMSS13 fire_intensity_resistance = 10.");
@@ -1029,10 +1030,10 @@ public sealed class YautjaCharacterProfileTest
                 thrallDescription,
                 $"thrallmask_{material.ToLowerInvariant()}",
                 new Vector2i(32, 32),
-                40,
-                45,
-                40,
-                45,
+                0,
+                0,
+                0,
+                0,
                 5);
     }
 
@@ -1049,10 +1050,10 @@ public sealed class YautjaCharacterProfileTest
             description,
             rsi,
             rsiSize ?? new Vector2i(32, 32),
-            40,
-            50,
-            45,
-            50,
+            25,
+            30,
+            25,
+            10,
             100);
     }
 

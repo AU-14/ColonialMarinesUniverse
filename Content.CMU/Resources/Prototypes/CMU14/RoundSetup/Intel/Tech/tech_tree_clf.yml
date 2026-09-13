@@ -1,0 +1,77 @@
+- type: entity
+  parent: RMCIntelTechTree
+  id: CMUIntelTechTree_CLF
+  name: intel tech tree (CLF)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+# ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 1: Cell support & reinforcements ]───────────────────────┤
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 6
+          increase: 2
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: Insurgent Reinforcements
+          description: Summon reinforcements from a neighboring cell.
+          cost: 25
+          increase: 6
+          repurchasable: true
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CLFCellReinforcementsIntel
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Machine Gunner
+          description: Summon a machine gunner from a neighboring cell.
+          cost: 8
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CLFCellReinforcementsIntelMachineGunner
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Call VAISO read on WY
+          description: Send intel on local WY facility to VAISO, summoning them for a raid. They are not hostile to CLF but not required to help directly!
+          cost: 50
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: VAISO
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Call Prodigy Armed Repair Team Yankee
+          description: Summon a PMC team from PART, specifically Yankee Squad, They are not hostile to CLF but not required to help directly!
+          cost: 45
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTY
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon

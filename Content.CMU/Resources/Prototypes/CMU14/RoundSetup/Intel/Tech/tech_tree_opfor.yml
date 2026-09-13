@@ -1,0 +1,36 @@
+- type: entity
+  parent: RMCIntelTechTree
+  id: CMUIntelTechTree_OPFOR # TODO
+  name: intel tech tree (OpFor)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+# ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+# ├──[ Tier 1: Requisition budget ]──────────────────────────────────┤
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 12
+          increase: 3
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author:  SPECIAL ASSETS AUTHORIZED
+            message: Additional supply budget has been authorised for this operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req

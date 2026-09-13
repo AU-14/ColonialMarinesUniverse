@@ -23,7 +23,7 @@ public sealed partial class XenoCrueltySystem : EntitySystem
         bool hit = false;
         foreach (var ent in args.HitEntities)
         {
-            if (!_xeno.CanAbilityAttackTarget(xeno, ent))
+            if (!_xeno.CanGainRewardsFromTarget(xeno, ent)) // CMU14: no rewards from vehicles
                 continue;
 
             hit = true;

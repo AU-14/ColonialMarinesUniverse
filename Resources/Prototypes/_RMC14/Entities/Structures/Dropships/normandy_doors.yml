@@ -7,6 +7,22 @@
     sprite: _RMC14/Structures/Dropships/normandy.rsi
 
 - type: entity
+  parent: CMNormandyDoor
+  id: CMNormandyDoorSinglePort
+  suffix: Single, Port
+  components:
+  - type: Door
+    location: Port
+
+- type: entity
+  parent: CMNormandyDoor
+  id: CMNormandyDoorSingleStarboard
+  suffix: Single, Starboard
+  components:
+  - type: Door
+    location: Starboard
+
+- type: entity
   parent: RMCDropshipDoorAftBase
   id: CMNormandyDoorAft
   name: lexington cargo door

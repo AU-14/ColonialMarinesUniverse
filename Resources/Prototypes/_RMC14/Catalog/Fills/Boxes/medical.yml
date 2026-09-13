@@ -36,9 +36,10 @@
         amount: 7
   - type: Sprite
     state: bodybags
+  - type: Storage
     whitelist:
       tags:
-        - BodyBag
+      - BodyBag
 
 - type: entity
   name: box of pill bottles

@@ -22,8 +22,6 @@
   components:
   - type: AccessReader
     access: [["RMCAccessCommand"]]
-  - type: PaintableAirlock
-    department: CMCommand
 
 - type: entity
   parent: CMAirlockCommand

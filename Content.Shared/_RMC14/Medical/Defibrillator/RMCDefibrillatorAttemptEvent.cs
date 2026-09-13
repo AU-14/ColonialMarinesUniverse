@@ -1,3 +1,5 @@
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+
 namespace Content.Shared._RMC14.Medical.Defibrillator;
 
 public sealed class RMCDefibrillatorAttemptEvent : CancellableEntityEventArgs
@@ -18,6 +20,11 @@ public sealed class RMCDefibrillatorAttemptEvent : CancellableEntityEventArgs
     public bool AllowBeatingHeart { get; }
 
     public string? CancelReason { get; private set; }
+
+    public CMUHeartRevivalToken? Heart { get; set; }
+
+    /// <summary>Effects may consume an accepted attempt once, including failed revival effects.</summary>
+    internal bool Consumed;
 
     public void Cancel(string reason)
     {

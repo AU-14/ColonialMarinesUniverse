@@ -1,4 +1,4 @@
-using Content.Shared._AU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared._RMC14.Construction.Prototypes;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Emplacements;
@@ -19,6 +19,7 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Robust.Shared.Map;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Collision.Shapes;
@@ -60,6 +61,8 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         SubscribeLocalEvent<DropshipHijackLandedEvent>(OnDropshipHijackLanded);
 
         SubscribeLocalEvent<RMCConstructionPreventCollideComponent, PreventCollideEvent>(OnConstructionPreventCollide);
+        SubscribeLocalEvent<RMCConstructionPreventCollideComponent, ComponentGetState>(OnPreventCollideGetState);
+        SubscribeLocalEvent<RMCConstructionPreventCollideComponent, ComponentHandleState>(OnPreventCollideHandleState);
 
         SubscribeLocalEvent<RMCConstructionItemComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<RMCConstructionItemComponent, RMCConstructionBuildDoAfterEvent>(OnBuildDoAfter);
@@ -257,7 +260,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
             var costEv = new RMCConstructionCostEvent(args.User, stack.StackTypeId, baseCost, baseCost);
             RaiseLocalEvent(args.User, ref costEv, true);
             var paidCost = Math.Max(1, costEv.Cost);
-            if (!_stack.Use(ent.Owner, paidCost, stack))
+            if (!_stack.TryUse((ent.Owner, stack), paidCost))
             {
                 var message = Loc.GetString("rmc-construction-more-material", ("material", ent.Owner), ("object", entry.Name));
                 _popup.PopupEntity(message, args.User, args.User, PopupType.SmallCaution);

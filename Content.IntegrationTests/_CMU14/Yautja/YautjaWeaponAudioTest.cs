@@ -7,12 +7,12 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Audio;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaWeaponAudioTest
 {
-    private static readonly Regex AudioPathRegex = new(@"^\s*path:\s*(/Audio/_CMU14/Yautja/\S+)");
+    private static readonly Regex AudioPathRegex = new(@"^\s*path:\s*(/Audio/CMU14/Yautja/\S+)");
 
     [Test]
     public async Task YautjaWeaponAudioPathsPointToExistingFiles()
@@ -25,7 +25,7 @@ public sealed class YautjaWeaponAudioTest
             var resources = server.ResolveDependency<IResourceManager>();
             var audio = server.EntMan.System<AudioSystem>();
             var missing = new List<string>();
-            var equipmentPath = new ResPath("/Prototypes/_CMU14/Threats/Yautja/Equipment");
+            var equipmentPath = new ResPath("/Prototypes/CMU14/Threats/Yautja/Equipment");
 
             foreach (var prototypePath in resources.ContentFindFiles(equipmentPath)
                          .Where(path => path.Extension == "yml" && !path.Filename.StartsWith('.')))
@@ -68,7 +68,7 @@ public sealed class YautjaWeaponAudioTest
         {
             var resources = server.ResolveDependency<IResourceManager>();
             var audio = server.EntMan.System<AudioSystem>();
-            var audioRoot = new ResPath("/Audio/_CMU14/Yautja");
+            var audioRoot = new ResPath("/Audio/CMU14/Yautja");
             var files = resources.ContentFindFiles(audioRoot)
                 .Where(path => path.Extension is "wav" or "ogg")
                 .ToList();
@@ -94,7 +94,7 @@ public sealed class YautjaWeaponAudioTest
         await server.WaitAssertion(() =>
         {
             var resources = server.ResolveDependency<IResourceManager>();
-            var audioRoot = new ResPath("/Audio/_CMU14/Yautja");
+            var audioRoot = new ResPath("/Audio/CMU14/Yautja");
             var nonMono = new List<string>();
             var unreadable = new List<string>();
 

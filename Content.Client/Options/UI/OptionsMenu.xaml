@@ -1,18 +1,32 @@
 <DefaultWindow xmlns="https://spacestation14.io"
             xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
             xmlns:options="clr-namespace:Content.Client._RMC14.UserInterface.Options"
+            xmlns:cmu="clr-namespace:Content.Client._CMU14.Interface"
             Title="{Loc 'ui-options-title'}"
             MinSize="800 450">
-    <PanelContainer StyleClasses="CrtPanel" VerticalExpand="True" HorizontalExpand="True">
-        <TabContainer Name="Tabs" Access="Public" StyleClasses="CrtTabContainer" VerticalExpand="True" HorizontalExpand="True">
-            <tabs:MiscTab Name="MiscTab" />
-            <tabs:GraphicsTab Name="GraphicsTab" />
-            <tabs:KeyRebindTab Name="KeyRebindTab" />
-            <tabs:AudioTab Name="AudioTab" />
-            <options:VoicelinesTab Name="VoicelinesTab" />
-            <tabs:AccessibilityTab Name="AccessibilityTab" />
-            <tabs:CmuTab Name="CmuTab" />
-            <tabs:AdminOptionsTab Name="AdminOptionsTab" />
-        </TabContainer>
-    </PanelContainer>
+    <!-- CrtContent holds everything the shader re-draws; CrtOverlay is its sibling and draws after
+         it, so the shaded copy covers the original. See CrtScreenControl for why it has to be a
+         sibling rather than a parent. -->
+    <Control>
+        <Control Name="CrtContent" HorizontalExpand="True" VerticalExpand="True">
+            <!-- CrtPanelFill, not CrtPanel: a plain ground with no border and no inset, so this is
+                 still not a third concentric rectangle. It exists because TabContainer paints its
+                 panel only *below* the tab strip - the strip itself is left transparent, and inside
+                 the CRT render target transparent came out white past the last tab. Same rule as the
+                 chat: give it a ground rather than leaving a hole. -->
+            <PanelContainer StyleClasses="CrtPanelFill" HorizontalExpand="True" VerticalExpand="True">
+            <TabContainer Name="Tabs" Access="Public" StyleClasses="CrtTabContainer" VerticalExpand="True" HorizontalExpand="True">
+                <tabs:MiscTab Name="MiscTab" />
+                <tabs:GraphicsTab Name="GraphicsTab" />
+                <tabs:KeyRebindTab Name="KeyRebindTab" />
+                <tabs:AudioTab Name="AudioTab" />
+                <options:VoicelinesTab Name="VoicelinesTab" />
+                <tabs:AccessibilityTab Name="AccessibilityTab" />
+                <tabs:CmuTab Name="CmuTab" />
+                <tabs:AdminOptionsTab Name="AdminOptionsTab" />
+            </TabContainer>
+            </PanelContainer>
+        </Control>
+        <cmu:CrtScreenControl Name="CrtOverlay" HorizontalExpand="True" VerticalExpand="True" />
+    </Control>
 </DefaultWindow>

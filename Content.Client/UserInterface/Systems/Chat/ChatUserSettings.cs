@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Content.Client._CMU14.Interface;
+using Content.Client.Stylesheets;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Robust.Shared.Maths;
@@ -36,6 +38,12 @@ public sealed class ChatSplitSettings
     public bool Enabled { get; set; }
     public string SecondaryTabId { get; set; } = ChatUserSettings.RadioTabId;
     public int SecondaryRatioPercent { get; set; } = ChatUserSettings.DefaultSplitSecondaryRatioPercent;
+
+    /// <summary>
+    ///     Panes side by side rather than stacked. Defaults to stacked, which is how the split
+    ///     behaved before the option existed.
+    /// </summary>
+    public bool Horizontal { get; set; }
 }
 
 public sealed record ChatStyleTarget(string Key, string Name, string DefaultColor, int? DefaultFontSize = null);
@@ -64,7 +72,18 @@ public static class ChatUserSettings
     private static readonly Regex FirstFontTag = new(@"\[font(?<attrs>[^\]]*)\]", RegexOptions.IgnoreCase);
     private static readonly Regex FontSizeAttribute = new(@"\s+size=(?<size>\d+)", RegexOptions.IgnoreCase);
 
-    public static readonly ChatStyleTarget[] BaseStyleTargets =
+    /// <summary>
+    ///     Default per-channel colours. Returns the CRT set under the terminal theme, where sixteen
+    ///     unrelated hues would undo the palette that everything else now obeys.
+    /// </summary>
+    /// <remarks>
+    ///     Only ever the <em>defaults</em>. A user who has customised their styles has them saved in
+    ///     <c>CCVars.ChatChannelStyles</c> and keeps them; nothing here overwrites that.
+    /// </remarks>
+    public static ChatStyleTarget[] BaseStyleTargets =>
+        StyleNano.CrtUiEnabled ? CrtStyleTargets : NanoStyleTargets;
+
+    private static readonly ChatStyleTarget[] NanoStyleTargets =
     {
         new(ChannelKey(ChatChannel.Local), "Local / Say", "#D6DCE0"),
         new(ChannelKey(ChatChannel.Whisper), "Whisper", "#B8BEC4"),
@@ -83,6 +102,84 @@ public static class ChatUserSettings
         new(ChannelKey(ChatChannel.Damage), "Damage", "#FF8A70"),
         new(ChannelKey(ChatChannel.Visual), "Actions", "#D6DCE0")
     };
+
+    /// <summary>
+    ///     The CRT set. Sixteen distinct colours, because channels have to be told apart at a glance -
+    ///     deadchat, whisper, LOOC and OOC are different conversations and must not share a tone.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///     An earlier revision collapsed these to six steps of the green ladder on the theory that the
+    ///     prefix column already names each channel. It does, but reading a prefix is not the same as
+    ///     recognising a colour, and a log where five channels are the same green is slower to scan
+    ///     even though nothing is ambiguous. Variety is the point of these; the palette discipline
+    ///     belongs to the surfaces.
+    ///     </para>
+    ///     <para>
+    ///     <b>Conversation colours are readable, not loud.</b> These land on the whole message body
+    ///     whenever <c>chat.color_whole_message</c> is on, which is its default - so a channel people
+    ///     actually talk on cannot be a saturated alarm colour. Admin is the case that proved it: the
+    ///     effective colour was <c>ChatChannelExtensions.TextColor</c>'s pure <c>Color.Red</c>, and a
+    ///     conversation rendered in it is exhausting to read. It is a light red here - still
+    ///     recognisably admin, comfortable at length.
+    ///     </para>
+    ///     <para>
+    ///     Strong red stays with the things that are genuinely brief and genuinely urgent: admin
+    ///     alerts and damage. That is the distinction - red is for errors and warnings, not for text
+    ///     someone is going to keep writing.
+    ///     </para>
+    /// </remarks>
+    private static readonly ChatStyleTarget[] CrtStyleTargets =
+    {
+        new(ChannelKey(ChatChannel.Local), "Local / Say", "#D6DCE0"),
+        new(ChannelKey(ChatChannel.Whisper), "Whisper", "#B8BEC4"),
+        new(ChannelKey(ChatChannel.Emotes), "Emotes", "#C9A7EA"),
+        new(ChannelKey(ChatChannel.Radio), "Radio", "#9FE7B2"),
+        new(LabelKey("RAD"), "Radio: RAD", "#9FE7B2"),
+        new(ChannelKey(ChatChannel.LOOC), "LOOC", "#61D7D6"),
+        new(ChannelKey(ChatChannel.OOC), "OOC", "#73BDF6"),
+        new(ChannelKey(ChatChannel.Dead), "Deadchat", "#B9A2FF"),
+
+        // Lightened from the #FF7777 the settings table has always offered, and a long way from the
+        // Color.Red that was actually being drawn. Admins type paragraphs at people.
+        new(ChannelKey(ChatChannel.Admin), "Admin", "#FF9E9E"),
+
+        // Short, urgent, occasional - these are the ones red is for.
+        new(ChannelKey(ChatChannel.AdminAlert), "Admin Alert", "#FF5F5F"),
+        new(ChannelKey(ChatChannel.Damage), "Damage", "#FF8A70"),
+
+        new(ChannelKey(ChatChannel.AdminChat), "Admin Chat", "#FF72C7"),
+        new(ChannelKey(ChatChannel.MentorChat), "Mentor Chat", "#FFB55F"),
+        new(ChannelKey(ChatChannel.Server), "Server", "#DDA94B"),
+        new(ChannelKey(ChatChannel.Notifications), "Notifications", "#DDA94B"),
+        new(ChannelKey(ChatChannel.Visual), "Actions", "#D6DCE0")
+    };
+
+    /// <summary>
+    ///     The CRT colour for a channel, or null when the terminal theme is off.
+    /// </summary>
+    /// <remarks>
+    ///     Reads <see cref="CrtStyleTargets"/> rather than repeating it. The table above is what the
+    ///     settings window offers as each channel's default swatch; this is what actually paints a
+    ///     message when the user has not overridden it. Those started out as two separate lists and
+    ///     changing only the first one did nothing visible at all - the settings UI showed the new
+    ///     colours while the log kept drawing <c>ChatChannelExtensions.TextColor</c>'s
+    ///     <c>LightSkyBlue</c>.
+    /// </remarks>
+    public static Color? CrtChannelColor(ChatChannel channel)
+    {
+        if (!StyleNano.CrtUiEnabled)
+            return null;
+
+        var key = ChannelKey(channel);
+        foreach (var target in CrtStyleTargets)
+        {
+            if (string.Equals(target.Key, key, StringComparison.OrdinalIgnoreCase))
+                return Color.TryFromHex(target.DefaultColor, out var defaultColor) ? defaultColor : null;
+        }
+
+        return null;
+    }
 
     public static IReadOnlyList<ChatStyleTarget> CreateStyleTargets(IEnumerable<RadioChannelPrototype>? radioChannels = null)
     {
@@ -229,16 +326,19 @@ public static class ChatUserSettings
                 : RadioTabId,
             SecondaryRatioPercent = fields.Count >= 3 && int.TryParse(fields[2], out var ratio)
                 ? NormalizeSplitRatioPercent(ratio)
-                : DefaultSplitSecondaryRatioPercent
+                : DefaultSplitSecondaryRatioPercent,
+            // Fourth field, appended after the fact. Parsing by field count is what makes a value
+            // saved before this existed load as stacked rather than being thrown away.
+            Horizontal = fields.Count >= 4 && fields[3] == "1"
         };
     }
 
-    public static string SaveSplitPane(bool enabled, string secondaryTabId, int secondaryRatioPercent)
+    public static string SaveSplitPane(bool enabled, string secondaryTabId, int secondaryRatioPercent, bool horizontal)
     {
         var tabId = string.IsNullOrWhiteSpace(secondaryTabId)
             ? RadioTabId
             : secondaryTabId.Trim();
-        return $"{(enabled ? "1" : "0")}|{EscapeValue(tabId)}|{NormalizeSplitRatioPercent(secondaryRatioPercent)}";
+        return $"{(enabled ? "1" : "0")}|{EscapeValue(tabId)}|{NormalizeSplitRatioPercent(secondaryRatioPercent)}|{(horizontal ? "1" : "0")}";
     }
 
     public static List<ChatTabSettings> CreateDefaultTabs()

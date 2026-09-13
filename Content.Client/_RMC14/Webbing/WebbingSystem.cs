@@ -89,13 +89,13 @@ public sealed partial class WebbingSystem : SharedWebbingSystem
 
     private void OnClothingEquipped(Entity<WebbingClothingComponent> clothing, ref GotEquippedEvent args)
     {
-        if (_player.LocalEntity == args.Equipee)
+        if (_player.LocalEntity == args.EquipTarget)
             PlayerWebbingUpdated?.Invoke();
     }
 
     private void OnClothingUnequipped(Entity<WebbingClothingComponent> clothing, ref GotUnequippedEvent args)
     {
-        if (_player.LocalEntity == args.Equipee)
+        if (_player.LocalEntity == args.EquipTarget)
             PlayerWebbingUpdated?.Invoke();
     }
 

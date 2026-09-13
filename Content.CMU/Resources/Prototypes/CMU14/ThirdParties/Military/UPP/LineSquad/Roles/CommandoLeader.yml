@@ -1,0 +1,101 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineCommandoLeader
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPLineCommandoLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 1
+  - type: JobPrefix
+    prefix: cmu-uppline-prefix-commando-leader
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-uppline-name-commando-leader
+  description: cmu-uppline-description-commando
+  playTimeTracker: CMUJobUPPLineCommandoLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPLineCommandoLeader
+  spawnMenuRoleName: UPP Naval Infantry Commando Leader (3rd party)
+  greeting: cmu-uppline-greeting
+  icon: RMCJobIconSPPCommandoLeader
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineCommandoLeader
+  name: UPP Naval Infantry Commando Leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-commando-leader
+    description: cmu-uppline-description-commando
+    reregister: false
+    job: CMUJobUPPLineCommandoLeader
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineCommandoLeader
+  equipment:
+    head: CMHeadCapSPPBeret
+    jumpsuit: CMJumpsuitSPP
+    outerClothing: RMCArmorSPPCommando
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    suitstorage: RMCWeaponRifleType73Filled
+    mask: RMCMaskBalaclavaSPPCommando
+    id: CMUIDCardUPPLineCommandoLeader
+    belt: RMCBeltHolsterPistolSPPNPZ92
+    back: RMCBackpackSPPCommando
+    pocket1: RMCPouchMagazineLarge
+    pocket2: RMCPouchExplosiveFilledPlasticExplosives
+  storage:
+    back:
+    - RMCMRESPP
+    - CMPacketGrenadeHighExplosiveFilled
+    - CMPacketGrenadeHighExplosiveFilled
+    - CMCrowbar
+    - RMCRangefinder
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - RMCBoxZiptie
+    outerClothing:
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    pocket1:
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+
+- type: playTimeTracker
+  id: CMUJobUPPLineCommandoLeader

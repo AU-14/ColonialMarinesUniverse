@@ -17,6 +17,9 @@ public sealed class TacticalMapFactionTest
             Assert.That(SharedTacticalMapSystem.NormalizeHumanFaction("GOVFOR-RMC"), Is.EqualTo(SharedTacticalMapSystem.GovforFaction));
             Assert.That(SharedTacticalMapSystem.NormalizeHumanFaction("opfor"), Is.EqualTo(SharedTacticalMapSystem.OpforFaction));
             Assert.That(SharedTacticalMapSystem.NormalizeHumanFaction("CLF"), Is.EqualTo(SharedTacticalMapSystem.ClfFaction));
+            Assert.That(SharedTacticalMapSystem.NormalizeHumanFaction("WEYU"), Is.EqualTo(SharedTacticalMapSystem.WeYuFaction)); // CMU14
+            Assert.That(SharedTacticalMapSystem.NormalizeHumanFaction("WY"), Is.EqualTo(SharedTacticalMapSystem.WeYuFaction)); // CMU14
+            Assert.That(SharedTacticalMapSystem.NormalizeHumanFaction("AUWeYu"), Is.EqualTo(SharedTacticalMapSystem.WeYuFaction)); // CMU14
         });
     }
 
@@ -30,6 +33,7 @@ public sealed class TacticalMapFactionTest
             Assert.That(SharedTacticalMapSystem.NormalizeMapFaction("govfor"), Is.EqualTo(SharedTacticalMapSystem.GovforFaction));
             Assert.That(SharedTacticalMapSystem.NormalizeMapFaction("xeno"), Is.EqualTo(SharedTacticalMapSystem.XenosFaction));
             Assert.That(SharedTacticalMapSystem.NormalizeMapFaction("thirdparty"), Is.EqualTo("THIRDPARTY"));
+            Assert.That(SharedTacticalMapSystem.NormalizeMapFaction("weyu"), Is.EqualTo(SharedTacticalMapSystem.WeYuFaction)); // CMU14
         });
     }
 }

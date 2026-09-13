@@ -1,5 +1,5 @@
 using Content.IntegrationTests.Pair;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Actions.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
@@ -10,7 +10,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaMcastePhase8Test

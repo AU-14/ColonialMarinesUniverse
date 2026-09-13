@@ -1,0 +1,15 @@
+- type: entity
+  parent: ActionMarineBase
+  id: ActionMarineGovforSilence
+  name: Issue Order - Silence
+  description: Commands the area into silence. Nearby personnel can only whisper for 15 seconds.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/GOVFOR/commander_silence.rsi
+      state: silence
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:AU14SilenceActionEvent

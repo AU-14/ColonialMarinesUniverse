@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Clothing;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -8,7 +9,7 @@ namespace Content.Shared.Clothing.EntitySystems;
 
 public sealed partial class HideLayerClothingSystem : EntitySystem
 {
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedHideableHumanoidLayersSystem _hideableHumanoidLayers = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -34,9 +35,22 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
         SetLayerVisibility(ent!, args.Wearer, hideLayers: false);
     }
 
+    public void RefreshLayerVisibility(Entity<HideLayerClothingComponent?, ClothingComponent?> clothing)
+    {
+        if (!Resolve(clothing.Owner, ref clothing.Comp1, ref clothing.Comp2) ||
+            clothing.Comp2.InSlot == null ||
+            clothing.Comp2.InSlotFlag is not { } inSlot ||
+            inSlot == SlotFlags.NONE)
+        {
+            return;
+        }
+
+        SetLayerVisibility(clothing, Transform(clothing).ParentUid, hideLayers: true);
+    }
+
     private void SetLayerVisibility(
         Entity<HideLayerClothingComponent?, ClothingComponent?> clothing,
-        Entity<HumanoidAppearanceComponent?> user,
+        Entity<HideableHumanoidLayersComponent?> user,
         bool hideLayers)
     {
         if (_timing.ApplyingState)
@@ -51,7 +65,6 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
 
         hideLayers &= IsEnabled(clothing!);
 
-        var hideable = user.Comp.HideLayersOnEquip;
         var inSlot = clothing.Comp2.InSlotFlag ?? SlotFlags.NONE;
 
         // This method should only be getting called while the clothing is equipped (though possibly currently in
@@ -60,22 +73,46 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
         DebugTools.AssertNotNull(clothing.Comp2.InSlotFlag);
         DebugTools.AssertNotEqual(inSlot, SlotFlags.NONE);
 
-        var dirty = false;
-
         // iterate the HideLayerClothingComponent's layers map and check that
         // the clothing is (or was)equipped in a matching slot.
         foreach (var (layer, validSlots) in clothing.Comp1.Layers)
         {
-            if (!hideable.Contains(layer))
-                continue;
-
             // Only update this layer if we are currently equipped to the relevant slot.
             if (validSlots.HasFlag(inSlot))
-                _humanoid.SetLayerVisibility(user!, layer, !hideLayers, inSlot, ref dirty);
+            {
+                var hideLayer = hideLayers && !IsRevealedByFold(clothing.Owner, layer);
+                _hideableHumanoidLayers.SetLayerOcclusion(user, layer, hideLayer, inSlot);
+            }
         }
 
-        if (dirty)
-            Dirty(user!);
+        // Fallback for obsolete field: assume we want to hide **all** layers, as long as we are equipped to any
+        // relevant clothing slot
+#pragma warning disable CS0618 // Type or member is obsolete
+        if (clothing.Comp1.Slots is { } slots && clothing.Comp2.Slots.HasFlag(inSlot))
+#pragma warning restore CS0618 // Type or member is obsolete
+        {
+            foreach (var layer in slots)
+            {
+                _hideableHumanoidLayers.SetLayerOcclusion(user, layer, hideLayers, inSlot);
+            }
+        }
+    }
+
+    private bool IsRevealedByFold(EntityUid clothing, HumanoidVisualLayers layer)
+    {
+        if (!TryComp<RMCClothingFoldableComponent>(clothing, out var foldable) ||
+            foldable.ActivatedPrefix is not { } prefix)
+        {
+            return false;
+        }
+
+        foreach (var type in foldable.Types)
+        {
+            if (type.Prefix == prefix && type.RevealLayers?.Contains(layer) == true)
+                return true;
+        }
+
+        return false;
     }
 
     private bool IsEnabled(Entity<HideLayerClothingComponent, ClothingComponent> clothing)

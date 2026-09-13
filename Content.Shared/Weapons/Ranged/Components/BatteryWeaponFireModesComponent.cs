@@ -51,6 +51,12 @@ public sealed partial class BatteryWeaponFireMode
     public float FireCost = 100;
 
     /// <summary>
+    /// Wether or not this fire mode can be used by pacifists
+    /// </summary>
+    [DataField]
+    public bool PacifismAllowedMode = false;
+
+    /// <summary>
     /// Optional fire rate to apply while this firing mode is selected.
     /// Conversion from CMSS13 fire_delay: 1 / (fire_delay / 10).
     /// </summary>

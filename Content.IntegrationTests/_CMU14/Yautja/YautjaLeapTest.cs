@@ -1,5 +1,5 @@
-using Content.Server._CMU14.Yautja;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
@@ -8,7 +8,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using System.Numerics;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaLeapTest

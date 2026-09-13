@@ -1,0 +1,78 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobParamarineRifleman
+  roundSide: ThirdParty
+  roundForce: CMUParamarines
+  roundRole: ParamarineRifleman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 1
+  - type: JobPrefix
+    prefix: cmu-paramarines-prefix-rifleman
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-paramarines-name-rifleman
+  description: cmu-paramarines-description
+  playTimeTracker: CMUJobParamarineRifleman
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearParamarineRifleman
+  spawnMenuRoleName: TWE Royal Paramarine Rifleman (3rd party)
+  greeting: cmu-paramarines-greeting
+  icon: RMCJobIconParamarine
+  joinNotifyCrew: false
+  supervisors: cmu-paramarines-leader
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesParamarines
+  id: CMUJobParamarineRifleman
+  name: TWE Royal Paramarine Rifleman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadParamarines
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-paramarines-name-rifleman
+    description: cmu-paramarines-description
+    reregister: false
+    job: CMUJobParamarineRifleman
+    raffle:
+      settings: short
+    rules: cmu-paramarines-rules
+
+- type: startingGear
+  id: CMUGearParamarineRifleman
+  equipment:
+    head: RMCHeadParaBeret
+    jumpsuit: RMCJumpsuitMarineParaL88
+    outerClothing: RMCArmorParaVest
+    gloves: RMCHandsVeteranRoyalMarine
+    shoes: RMCBootsRoyalFilled
+    ears: RMCHeadsetPara
+    belt: RMCBeltHolsterPistolParaM44Random
+    back: RMCSatchelLightpackFilledPara
+    pocket1: RMCPouchFirstAidSplintsGauzeOintment
+    pocket2: RMCPouchFlareL96Filled
+    suitstorage: RMCWeaponRifleL88A2Filled
+    id: CMUIDCardParamarineRifleman
+
+- type: playTimeTracker
+  id: CMUJobParamarineRifleman

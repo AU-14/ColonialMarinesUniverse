@@ -15,7 +15,7 @@ public sealed class XenoGhostRoleAvailabilityTest
     [TestPrototypes] // CMU14
     private const string Prototypes = @"
 - type: entity
-  id: CMUGhostRoleTestEntity
+  id: RMCXenoGhostRoleAvailabilityTestEntity
   components:
   - type: MindContainer
   - type: MobState
@@ -74,7 +74,7 @@ public sealed class XenoGhostRoleAvailabilityTest
 
         await server.WaitAssertion(() =>
         {
-            mob = entMan.SpawnEntity("CMUGhostRoleTestEntity", MapCoordinates.Nullspace);
+            mob = entMan.SpawnEntity("RMCXenoGhostRoleAvailabilityTestEntity", MapCoordinates.Nullspace);
             entMan.EnsureComponent<MindContainerComponent>(mob);
 
             var mindId = mind.CreateMind(player.UserId, "Ghosted Mob");

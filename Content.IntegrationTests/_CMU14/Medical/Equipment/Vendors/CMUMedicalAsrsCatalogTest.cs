@@ -4,7 +4,7 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Storage.Components;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Medical.Equipment.Vendors;
+namespace Content.IntegrationTests.CMU14.Medical.Equipment.Vendors;
 
 [TestFixture]
 public sealed class CMUMedicalAsrsCatalogTest
@@ -22,7 +22,7 @@ public sealed class CMUMedicalAsrsCatalogTest
         "USCMCargoCatalog",
         "RMCCargoCatalog",
         "UPPCargoCatalog",
-        "WEYUCargoCatalog",
+        "WYPMCCargoCatalog",
         "VAIPOCargoCatalog",
         "ProdigyCargoCatalog",
         "LACNCargoCatalog",

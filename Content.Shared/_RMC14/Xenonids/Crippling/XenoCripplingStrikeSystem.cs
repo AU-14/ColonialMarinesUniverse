@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Aura;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Melee.Events;
@@ -69,7 +70,7 @@ public sealed partial class XenoCripplingStrikeSystem : EntitySystem
         Dirty(xeno, active);
 
         _popup.PopupClient(Loc.GetString(xeno.Comp.ActivateText), xeno, xeno);
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         if (xeno.Comp.AuraColor is { } color)
             _aura.GiveAura(xeno, color, xeno.Comp.ActiveDuration, 1);
@@ -123,7 +124,7 @@ public sealed partial class XenoCripplingStrikeSystem : EntitySystem
     private void OnActiveCripplingRemove(Entity<XenoActiveCripplingStrikeComponent> xeno, ref ComponentRemove args)
     {
         if (!TerminatingOrDeleted(xeno))
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnVictimCripplingModify(Entity<VictimCripplingStrikeDamageComponent> victim, ref DamageModifyEvent args)

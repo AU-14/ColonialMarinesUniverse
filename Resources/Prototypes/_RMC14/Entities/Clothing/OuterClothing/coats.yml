@@ -89,9 +89,9 @@
     whitelist:
       components:
       - RMCLighter
-      - Stunbaton
       - Gun
       tags:
+      - Stunbaton
       - Handcuffs
       - GasTank
       - Flashlight
@@ -120,9 +120,9 @@
       - Blowtorch
       - Gun
       - RMCLighter
-      - Stunbaton
       - CrewMonitoringConsole
       tags:
+      - Stunbaton
       #TODO any analyzer - plant etc
       - Multitool
       - Radio
@@ -158,11 +158,11 @@
     whitelist:
       components:
       - RMCLighter
-      - Stunbaton
       - Gun
       - CrewMonitoringConsole
       - CassettePlayer
       tags:
+      - Stunbaton
       - Handcuffs
       - GasTank
       - Flashlight
@@ -193,9 +193,9 @@
       components:
       - CMSurgeryTool
       - RMCLighter
-      - Stunbaton
       - Gun
       tags:
+      - Stunbaton
       - DiscreteHealthAnalyzer
       - CMOintment
       - CMTraumaKit

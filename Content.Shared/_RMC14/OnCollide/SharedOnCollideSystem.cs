@@ -1,12 +1,14 @@
 using Content.Shared._RMC14.Armor.ThermalCloak;
 using Content.Shared._RMC14.Atmos;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
@@ -30,6 +32,7 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private YautjaAcidResponseSystem _yautjaAcid = default!;
 
     private EntityQuery<CollideChainComponent> _collideChainQuery;
     private EntityQuery<DamageOnCollideComponent> _damageOnCollideQuery;
@@ -128,9 +131,19 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
 
         _xenoSpit.SetAcidCombo(other, ent.Comp.AcidComboDuration, ent.Comp.AcidComboDamage, ent.Comp.AcidComboParalyze, ent.Comp.AcidComboResists);
 
+        // CMU Related Change
+        // Skip paralysis for Yautja when it's acidic damage
         if (ent.Comp.Paralyze > TimeSpan.Zero && !_standing.IsDown(other) && (!_size.TryGetSize(other, out var size) || size < RMCSizes.Big))
         {
-            _stun.TryParalyze(other, ent.Comp.Paralyze, true);
+            // Yautja are immune to acid-imposed paralysis, but vulnerable to other paralyze sources
+            if (ent.Comp.Acidic && _yautjaAcid.ShouldSkipAcidMoveEffects(other))
+            {
+                // Skip paralysis for acid damage on Yautja
+            }
+            else
+            {
+                _stun.TryParalyze(other, ent.Comp.Paralyze, true);
+            }
 
             if (!didEmote)
                 DoEmote(ent, other);

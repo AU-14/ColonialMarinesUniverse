@@ -4,3 +4,6 @@ discord-round-notifications-end-ping-restart = <@&{$roleId}> A new round will be
 discord-round-notifications-end-ping-reboot = <@&{$roleId}> The server will be rebooting shortly for an automatic update.
 discord-round-notifications-unknown-map = unknown
 discord-round-notifications-gamemode-voted = Has been voted
+
+
+discord-round-notifications-end-ping = <@&{$roleId}>, a new round will start soon!

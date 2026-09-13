@@ -1,6 +1,6 @@
 using System;
-using Content.Client._CMU14.Yautja;
-using Content.Shared._CMU14.Yautja;
+using Content.Client.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using NUnit.Framework;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -9,7 +9,7 @@ using Robust.Shared.Localization;
 using Robust.Shared.Network;
 using Robust.UnitTesting;
 
-namespace Content.Tests.Client._CMU14.Yautja;
+namespace Content.Tests.Client.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaClanAdminWindowTest : RobustUnitTest

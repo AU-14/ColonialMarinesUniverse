@@ -4,6 +4,8 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Climbing.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
@@ -25,7 +27,7 @@ namespace Content.Server._RMC14.Synth;
 public sealed partial class RMCSyntheticMaintenanceStationSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private ClimbSystem _climb = default!;
     [Dependency] private ContainerSystem _container = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -207,7 +209,7 @@ public sealed partial class RMCSyntheticMaintenanceStationSystem : EntitySystem
     private bool TryRepair(EntityUid contained, Entity<RMCSyntheticMaintenanceStationComponent> station)
     {
         if (!TryComp(contained, out DamageableComponent? damageable) ||
-            damageable.TotalDamage <= FixedPoint2.Zero)
+            _damageable.GetTotalDamage((contained, damageable)) <= FixedPoint2.Zero)
         {
             return false;
         }
@@ -224,7 +226,7 @@ public sealed partial class RMCSyntheticMaintenanceStationSystem : EntitySystem
     private bool TryRestoreBlood(EntityUid contained, Entity<RMCSyntheticMaintenanceStationComponent> station)
     {
         if (!TryComp(contained, out BloodstreamComponent? bloodstream) ||
-            _bloodstream.GetBloodLevelPercentage((contained, bloodstream)) >= 0.999f)
+            _bloodstream.GetBloodLevel((contained, bloodstream)) >= 0.999f)
         {
             return false;
         }

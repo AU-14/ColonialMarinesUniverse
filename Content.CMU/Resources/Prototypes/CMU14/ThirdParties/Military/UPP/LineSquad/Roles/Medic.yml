@@ -1,0 +1,82 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineMedic
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPLineMedic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 2
+  - type: JobPrefix
+    prefix: cmu-uppline-prefix-medic
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-uppline-name-medic
+  description: cmu-uppline-description
+  playTimeTracker: CMUJobUPPLineMedic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPLineMedic
+  spawnMenuRoleName: UPP Line Infantry Medic (3rd party)
+  greeting: cmu-uppline-greeting
+  icon: RMCJobIconSPPMedic
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineMedic
+  name: UPP Line Infantry Medic
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-medic
+    description: cmu-uppline-description
+    reregister: false
+    job: CMUJobUPPLineMedic
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineMedic
+  equipment:
+    head: CMHeadCapSPP
+    eyes: RMCGlassesMedicalHUDGlasses
+    jumpsuit: CMJumpsuitSPPMedic
+    outerClothing: RMCArmorSPPSupport
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    suitstorage: RMCWeaponSMGType64
+    id: CMUIDCardUPPLineMedic
+    belt: CMBeltMedicBagFilled
+    back: RMCSatchelSPPMedic
+    pocket1: RMCPouchMedkitFillSPP
+    pocket2: RMCPouchMagazineType64
+
+- type: playTimeTracker
+  id: CMUJobUPPLineMedic

@@ -8,7 +8,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Lock;
 using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
@@ -168,9 +168,8 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
             }
             else
             {
-                SharedEntityStorageComponent? entityStorageComp = null;
-                if (_entityStorage.ResolveStorage(uid, ref entityStorageComp))
-                    _entityStorage.CloseStorage(uid, entityStorageComp); // Close a locker before locking it.
+                if (TryComp<EntityStorageComponent>(uid, out var entityStorageComp))
+                    _entityStorage.CloseStorage((uid, entityStorageComp)); // Close a locker before locking it.
                 _lock.Lock(uid, null, lockComp);
             }
         }

@@ -1,44 +1,39 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <WarningsAsErrors>RA0032;nullable</WarningsAsErrors>
+    <WarningsAsErrors>RA0032;nullable;CS8785</WarningsAsErrors>
   </PropertyGroup>
   <Import Project="../MSBuild/Content.props" />
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="All" />
+    <PackageReference Include="System.Numerics.Tensors" />
     <PackageReference Include="YamlDotNet" />
   </ItemGroup>
   <Import Project="..\RobustToolbox\Imports\Lidgren.props" />
-  <Import Project="..\RobustToolbox\Imports\Client.props" />
   <Import Project="..\RobustToolbox\Imports\Shared.props" />
+
   <ItemGroup>
     <ProjectReference Include="..\Content.Shared.Database\Content.Shared.Database.csproj" />
   </ItemGroup>
+
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
   <Import Project="..\RobustToolbox\MSBuild\Robust.CompNetworkGenerator.targets" />
+  <Import Project="..\RobustToolbox\MSBuild\Robust.EntitySystemSubscriptionsGenerator.targets" />
 
   <ItemGroup>
     <ProjectReference Include="..\Content.Analyzers\Content.Analyzers.csproj" Condition="'$(SkipRobustAnalyzer)' != 'true'" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AU14\Actions\" />
-    <Folder Include="AU14\Areas\" />
-    <Folder Include="AU14\Extract\" />
-    <Folder Include="_CMU14\Round\Antags\" />
-    <Folder Include="_CMU14\Util\CCVars\" />
+    <Compile Include="..\Content.CMU\Shared\**\*.cs" Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
     <Folder Include="_RMC14\Extract\" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="_RMC14\Areas\ExtractAreaComponent.cs" />
     <Compile Remove="_RMC14\Areas\FetchReturnPointAreaComponent.cs" />
-    <Compile Remove="_CMU14\Ape\ApeDestroyEvents.cs" />
-    <Compile Remove="_CMU14\Ape\ApeChargeDoAfterEvent.cs" />
-    <Compile Remove="_CMU14\Ape\ApeChargeComponent.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Explosion\Components\CMUOnLightTimerTriggerComponent.cs" />
+    <Compile Remove="..\Content.CMU\Shared\Ape\ApeDestroyEvents.cs" />
+    <Compile Remove="..\Content.CMU\Shared\Ape\ApeChargeDoAfterEvent.cs" />
+    <Compile Remove="..\Content.CMU\Shared\Ape\ApeChargeComponent.cs" />
   </ItemGroup>
 </Project>

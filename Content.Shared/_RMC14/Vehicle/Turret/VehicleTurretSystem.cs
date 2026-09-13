@@ -1,6 +1,6 @@
 using System;
 using System.Numerics;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -201,9 +201,10 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         VehicleTurretComponent anchorTurret)
     {
         var vehicleRot = _transform.GetWorldRotation(vehicle);
-        var baseFacingAngle = GetVehicleFacingAngle(vehicle, vehicleRot);
+        var baseFacingAngle = vehicleRot;
         var anchorFacingAngle = GetOffsetFacing(anchorTurret, anchorTurret, vehicleRot, baseFacingAngle);
-        var anchorLocalOffset = (-vehicleRot).RotateVec(GetPixelOffset(anchorTurret, anchorFacingAngle) / PixelsPerMeter);
+        var anchorPixelOffset = GetPixelOffset(anchorTurret, anchorFacingAngle) / PixelsPerMeter;
+        var anchorLocalOffset = GetVehicleLocalOffset(anchorTurret, anchorPixelOffset, vehicleRot, anchorFacingAngle);
         var localRot = Angle.Zero;
         if (anchorTurret.RotateToCursor)
             localRot = anchorTurret.WorldRotation;
@@ -245,7 +246,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
             }
             else
             {
-                turretLocalOffset = (-vehicleRot).RotateVec(worldOffset);
+                turretLocalOffset = GetVehicleLocalOffset(turret, worldOffset, vehicleRot, turretFacingAngle);
                 relativeAnchorOffset = (-localRot).RotateVec(turretLocalOffset);
             }
             turretCoords = new EntityCoordinates(anchorUid, relativeAnchorOffset);
@@ -337,12 +338,16 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         return dir.ToAngle();
     }
 
-    public Angle GetVehicleFacingAngle(EntityUid vehicle, Angle vehicleRot)
+    private static Vector2 GetVehicleLocalOffset(
+        VehicleTurretComponent turret,
+        Vector2 offset,
+        Angle vehicleRot,
+        Angle facing)
     {
-        if (TryComp(vehicle, out GridVehicleMoverComponent? mover) && mover.CurrentDirection != Vector2i.Zero)
-            return new Vector2(mover.CurrentDirection.X, mover.CurrentDirection.Y).ToWorldAngle();
+        if (turret.UseDirectionalOffsets)
+            return VehicleTurretDirectionHelpers.GetLocalOffsetForRenderDirection(offset, facing);
 
-        return vehicleRot;
+        return (-vehicleRot).RotateVec(offset);
     }
 
     public Angle GetOffsetFacing(

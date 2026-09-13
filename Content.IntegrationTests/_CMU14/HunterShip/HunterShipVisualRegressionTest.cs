@@ -1,12 +1,13 @@
+using Content.Client.VendingMachines;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Server._CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Marines.HyperSleep;
-using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Access.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Bed.Cryostorage;
@@ -18,7 +19,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Storage.Components;
 using Content.Shared.VendingMachines;
 using Content.Shared.Verbs;
-using Content.Server._CMU14.Light;
+using Content.Server.CMU14.Light;
 using Content.Server.Medical;
 using Content.Server.Power.Components;
 using Content.Server.Storage.Components;
@@ -38,7 +39,7 @@ using Content.Shared.Power.Components;
 using ServerPointLightComponent = Robust.Server.GameObjects.PointLightComponent;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
-namespace Content.IntegrationTests._CMU14.HunterShip;
+namespace Content.IntegrationTests.CMU14.HunterShip;
 
 [TestFixture]
 public sealed class HunterShipVisualRegressionTest
@@ -616,6 +617,8 @@ public sealed class HunterShipVisualRegressionTest
         EntityUid hunter = default;
         EntityUid locker = default;
         EntityUid firstFood = default;
+        Content.Shared.FixedPoint.FixedPoint2 initialFoodVolume = default;
+        var priorAudio = new HashSet<EntityUid>();
 
         await server.WaitPost(() =>
         {
@@ -629,8 +632,9 @@ public sealed class HunterShipVisualRegressionTest
 
             foreach (var item in storage.Contents.ContainedEntities)
             {
-                Assert.That(entMan.HasComponent<FoodComponent>(item), Is.True);
-                Assert.That(entMan.GetComponent<FoodComponent>(item).UseSound, Is.Not.Null);
+                Assert.That(entMan.HasComponent<EdibleComponent>(item), Is.True);
+                var edible = entMan.GetComponent<EdibleComponent>(item);
+                Assert.That(edible.UseSound ?? server.ProtoMan.Index(edible.Edible).UseSound, Is.Not.Null);
             }
 
             foreach (var id in new[]
@@ -641,8 +645,9 @@ public sealed class HunterShipVisualRegressionTest
                      })
             {
                 var placed = entMan.SpawnEntity(id, map.GridCoords.Offset(new Vector2(2, 0)));
-                Assert.That(entMan.HasComponent<FoodComponent>(placed), Is.True);
-                Assert.That(entMan.GetComponent<FoodComponent>(placed).UseSound, Is.Not.Null, id);
+                Assert.That(entMan.HasComponent<EdibleComponent>(placed), Is.True);
+                var edible = entMan.GetComponent<EdibleComponent>(placed);
+                Assert.That(edible.UseSound ?? server.ProtoMan.Index(edible.Edible).UseSound, Is.Not.Null, id);
             }
         });
 
@@ -652,28 +657,42 @@ public sealed class HunterShipVisualRegressionTest
         {
             var entMan = server.EntMan;
             var storage = entMan.GetComponent<EntityStorageComponent>(locker);
-            var food = entMan.System<FoodSystem>();
+            var food = entMan.System<IngestionSystem>();
             var storageSystem = entMan.System<EntityStorageSystem>();
             var interaction = entMan.System<SharedInteractionSystem>();
 
-            Assert.That(food.IsDigestibleBy(hunter, firstFood), Is.True);
+            Assert.That(food.CanConsume(hunter, firstFood), Is.True);
             Assert.That(storageSystem.Remove(firstFood, locker, storage), Is.True);
+            Assert.That(entMan.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>().TryPickupAnyHand(hunter, firstFood), Is.True);
             var hunterXform = entMan.GetComponent<TransformComponent>(hunter);
             var foodXform = entMan.GetComponent<TransformComponent>(firstFood);
-            Assert.That(food.GetUsesRemaining(firstFood), Is.GreaterThan(0));
-            Assert.That(food.IsMouthBlocked(hunter), Is.False);
+            Assert.That(food.EdibleVolume((firstFood, entMan.GetComponent<EdibleComponent>(firstFood))), Is.GreaterThan(Content.Shared.FixedPoint.FixedPoint2.Zero));
+            Assert.That(food.HasMouthAvailable(hunter), Is.True);
+            var body = entMan.System<Content.Shared.Body.BodySystem>();
+            Assert.That(body.TryGetOrgansWithComponent<StomachComponent>(hunter, out var stomachs), Is.True,
+                "The Yautja body must have a stomach for the current ingestion system.");
+            Assert.That(food.IsDigestibleBy(firstFood, stomachs!, out _), Is.True,
+                "Hunter ship meat must be digestible by the Yautja stomach.");
+            Assert.That(interaction.InRangeAndAccessible(hunter, firstFood, IngestionSystem.MaxFeedDistance), Is.True,
+                "Food must be accessible within eating range.");
+            Assert.That(entMan.System<Content.Shared.ActionBlocker.ActionBlockerSystem>().CanInteract(hunter, firstFood), Is.True);
             Assert.That(interaction.InRangeUnobstructed(hunter, firstFood), Is.True,
                 $"hunter={hunterXform.Coordinates} food={foodXform.Coordinates}");
-            var result = food.TryFeed(hunter, hunter, firstFood, entMan.GetComponent<FoodComponent>(firstFood));
-            Assert.That(result.Success, Is.True,
-                $"handled={result.Handled} hunter={hunterXform.Coordinates} food={foodXform.Coordinates}");
+            var result = food.TryIngest(hunter, firstFood);
+            Assert.That(result, Is.True,
+                $"started={result} hunter={hunterXform.Coordinates} food={foodXform.Coordinates}");
+            initialFoodVolume = food.EdibleVolume((firstFood, entMan.GetComponent<EdibleComponent>(firstFood)));
+            priorAudio = entMan.EntityQuery<AudioComponent>().Select(audio => audio.Owner).ToHashSet();
         });
 
-        await pair.RunTicksSync(20);
+        await PoolManager.WaitUntil(server,
+            () => server.EntMan.EntityQuery<AudioComponent>().Any(audio => !priorAudio.Contains(audio.Owner)),
+            maxTicks: 120);
         await server.WaitAssertion(() =>
         {
-            Assert.That(server.EntMan.EntityQuery<AudioComponent>().Any(), Is.True,
-                "Eating food must create an audio entity on the hunter ship.");
+            var food = server.EntMan.System<IngestionSystem>();
+            Assert.That(food.EdibleVolume((firstFood, server.EntMan.GetComponent<EdibleComponent>(firstFood))), Is.LessThan(initialFoodVolume),
+                "The bite must consume food and create a sound after the ingestion delay.");
         });
 
         await pair.CleanReturnAsync();

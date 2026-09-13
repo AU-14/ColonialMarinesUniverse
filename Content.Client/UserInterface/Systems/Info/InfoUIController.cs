@@ -19,7 +19,7 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
     public RulesPopup? RulesPopup;
     private RulesAndInfoWindow? _infoWindow;
 
-    private static readonly ProtoId<GuideEntryPrototype> DefaultRuleset = "DefaultRuleset";
+    private static readonly ProtoId<GuideEntryPrototype> DefaultRuleset = "RMCOverview"; // CMU
 
     public ProtoId<GuideEntryPrototype> RulesEntryId = DefaultRuleset;
 
@@ -39,7 +39,7 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
             "",
             (_, _, _) =>
         {
-            OnAcceptPressed();
+            OnAcceptPressed(true);
         });
     }
 
@@ -81,9 +81,10 @@ public sealed partial class InfoUIController : UIController, IOnStateExited<Game
         _consoleHost.ExecuteCommand("quit");
     }
 
-    private void OnAcceptPressed()
+    private void OnAcceptPressed(bool fuckRules)
     {
-        _netManager.ClientSendMessage(new RulesAcceptedMessage());
+        var message = new RulesAcceptedMessage() { FuckRules = fuckRules };
+        _netManager.ClientSendMessage(message);
 
         RulesPopup?.Orphan();
         RulesPopup = null;

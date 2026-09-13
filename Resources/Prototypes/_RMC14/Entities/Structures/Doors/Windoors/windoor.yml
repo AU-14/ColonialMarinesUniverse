@@ -48,8 +48,9 @@
     needsPower: false
   - type: ExtensionCableReceiver
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: WindowMessages
   - type: Destructible

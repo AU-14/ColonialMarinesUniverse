@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using Content.Client.Administration.Systems;
@@ -271,8 +271,10 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         _staffHelpWindow.OpenCentered();
         UIManager.ClickSound();
 
-        if (_unread)
-            _staffHelpWindow.MentorHelpButton.AddStyleClass(StyleNano.StyleClassButtonColorRed);
+        // Not a style class any more: the choice cards style their buttons with a StyleBoxOverride,
+        // which beats every stylesheet rule, so ButtonColorRed would have been added and never
+        // drawn. See StaffHelpWindow.SetMentorUnread.
+        _staffHelpWindow.SetMentorUnread(_unread);
 
         _staffHelpWindow.AdminHelpButton.OnPressed += _ =>
         {

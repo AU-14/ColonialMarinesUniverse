@@ -1,3 +1,4 @@
+using Content.Shared.Camera;
 using Content.Shared._RMC14.Camera;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -10,7 +11,6 @@ public abstract partial class SharedDropshipElectronicSystemSystem : EntitySyste
 {
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDropshipSystem _dropship = default!;
-    [Dependency] private SharedRMCCameraSystem _rmcCamera = default!;
 
     private const int MinSpread = 0;
     private const int MinBulletSpread = 1;
@@ -79,15 +79,9 @@ public abstract partial class SharedDropshipElectronicSystemSystem : EntitySyste
 
             foreach (var protoId in ent.Comp.ProtoIds)
             {
-                if (remove)
-                    _rmcCamera.RemoveProtoId(cameraComputer, protoId);
-                else
-                {
-                    _rmcCamera.AddProtoId(cameraComputer, protoId);
-                }
-                _rmcCamera.RefreshCameras(protoId);
+                var ev = new CameraNetworkGrantRequestEvent(protoId, ent.Owner, !remove);
+                RaiseLocalEvent(uid, ref ev);
             }
-            Dirty(uid, cameraComputer);
         }
     }
 }

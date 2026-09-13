@@ -1,3 +1,5 @@
+using Content.Shared.Ghost.Components;
+using Content.Shared.Speech;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -5,17 +7,17 @@ using System.Reflection;
 using Content.Client.Popups;
 using Content.Client.StatusIcon;
 using Content.Client.Viewport;
-using Content.Client._CMU14.Yautja;
+using Content.Client.CMU14.Yautja;
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Server.Destructible;
 using Content.Server.Emp;
 using Content.Server.Examine;
 using Content.Server.Speech;
-using Content.Server.Speech.Components;
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Ghost;
+using Content.Shared.Speech.Components;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Ghost;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Chat;
@@ -47,7 +49,7 @@ using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Utility;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaFalconRuntimeTest
@@ -758,7 +760,7 @@ public sealed class YautjaFalconRuntimeTest
                     out falcon,
                     out drone);
 
-                emp.DoEmpEffects(drone, 1000, 30);
+                emp.DoEmpEffects(drone, 1000, TimeSpan.FromSeconds(30));
             });
 
             await pair.RunTicksSync(3);
@@ -1165,7 +1167,7 @@ public sealed class YautjaFalconRuntimeTest
 
     private static SpriteSpecifier.Rsi FalconHudIcon(string state)
     {
-        return new SpriteSpecifier.Rsi(new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi"), state);
+        return new SpriteSpecifier.Rsi(new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_gear.rsi"), state);
     }
 
     private static List<string> HudIconStates(IReadOnlyList<StatusIconData> icons)

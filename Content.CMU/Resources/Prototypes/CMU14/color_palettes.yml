@@ -1,0 +1,38 @@
+﻿# Preset swatches offered by CmuColorPicker. The palette prototype kind already existed
+# (Content.Shared/Decals/ColorPalettePrototype.cs) but had no instances anywhere, so these are the
+# first. Per-use-case rather than one shared set: a chat highlight has to stay legible on the dark
+# chat background, where an eye colour has no such constraint.
+
+- type: palette
+  id: CMUHighlightColors
+  name: cmu-color-palette-highlights
+  colors:
+    cyan: '#17FFC1FF'
+    green: '#7CFF6BFF'
+    lime: '#C8FF5AFF'
+    yellow: '#FFE45EFF'
+    orange: '#FFA65EFF'
+    red: '#FF7B7BFF'
+    pink: '#FF8FD0FF'
+    magenta: '#E38FFFFF'
+    violet: '#B49CFFFF'
+    blue: '#7FB6FFFF'
+    teal: '#6FE8E0FF'
+    white: '#F2F2F2FF'
+
+- type: palette
+  id: CMUEyeColors
+  name: cmu-color-palette-eyes
+  colors:
+    brown: '#5B3A21FF'
+    hazel: '#8E7135FF'
+    amber: '#B77A2BFF'
+    green: '#4C7A3AFF'
+    olive: '#6E7B3FFF'
+    blue: '#3E6FA3FF'
+    pale-blue: '#8FB6D8FF'
+    grey: '#7C8388FF'
+    dark-grey: '#4A4F53FF'
+    black: '#1C1C1EFF'
+    red: '#8A2B2BFF'
+    violet: '#6B4B8AFF'

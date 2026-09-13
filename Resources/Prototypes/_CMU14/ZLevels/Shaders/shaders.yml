@@ -1,4 +1,0 @@
-- type: shader
-  id: CMUZBlur
-  kind: source
-  path: "/Textures/_CMU14/ZLevels/Shaders/zblur.swsl"

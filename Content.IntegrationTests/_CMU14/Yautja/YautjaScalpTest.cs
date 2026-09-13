@@ -1,7 +1,8 @@
+using Content.Shared.Ghost.Components;
 using System.Linq;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server.Examine;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Ghost;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -15,7 +16,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaScalpTest
@@ -72,7 +73,7 @@ public sealed class YautjaScalpTest
             var prototype = prototypes.Index<EntityPrototype>("CMUYautjaScalp");
 
             Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
-            Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_CMU14/Yautja/yautja_items.rsi")));
+            Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/yautja_items.rsi")));
             Assert.That(sprite.AllLayers.Select(layer => layer.RsiState.Name),
                 Is.EqualTo(new[] { "scalp_1", "scalp_1_blood" }),
                 "CMSS13 /obj/item/scalp default icon_state plus blood overlay.");
@@ -115,6 +116,7 @@ public sealed class YautjaScalpTest
                 Assert.That(inventory.TryEquip(gearHunter, gearBracer, "gloves", silent: true, force: true), Is.True);
                 metadata.SetEntityName(hunter, "A'ke Ret");
                 metadata.SetEntityName(prey, "Guan Thwei");
+                entMan.System<HumanoidProfileSystem>().SetGender(prey, Robust.Shared.Enums.Gender.Male);
                 metadata.SetEntityName(honoringHunter, "Ki'cte Pa");
                 metadata.SetEntityName(gearHunter, "N'dui Tkeh");
                 entMan.EnsureComponent<YautjaHonorWorthComponent>(prey).LifeKillsTotal = 6;
@@ -237,9 +239,9 @@ public sealed class YautjaScalpTest
             hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new(1, 0)));
             entMan.EnsureComponent<YautjaComponent>(hunter);
-            var appearance = entMan.GetComponent<HumanoidAppearanceComponent>(prey);
-            appearance.CachedHairColor = hairColor;
-            entMan.Dirty(prey, appearance);
+            entMan.System<Content.Server.Humanoid.HumanoidOrganAppearanceSystem>().SetMarkings(
+                prey, "Head", HumanoidVisualLayers.Hair,
+                [new Content.Shared.Humanoid.Markings.Marking("HumanHairBob", [hairColor])]);
 
             scalp = trophies.SpawnRuntimeScalp(prey, hunter);
             scalpNet = entMan.GetNetEntity(scalp);

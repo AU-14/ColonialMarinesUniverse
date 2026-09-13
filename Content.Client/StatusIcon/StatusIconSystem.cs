@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Stealth;
 using Content.Shared.CCVar;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared.Stealth.Components;
@@ -125,8 +125,21 @@ public sealed partial class StatusIconSystem : SharedStatusIconSystem
         if (viewer == ent.Owner)
             return true;
 
-        if (data.VisibleToGhosts && HasComp<GhostComponent>(viewer))
-            return true;
+        if (viewer is { } viewerUid && TryComp<GhostComponent>(viewerUid, out var ghost))
+        {
+            bool adminGhost = ghost.CanGhostInteract;
+
+            // Regular dead-player ghosts see the icon only when VisibleToGhosts
+            // is set.
+            if (data.VisibleToGhosts && !adminGhost)
+                return true;
+
+            // Admin ghosts (aghost) see it when either flag is set. Historically
+            // VisibleToGhosts covered everyone; VisibleToAdminGhosts lets an
+            // icon be admin-ghost-only.
+            if (adminGhost && (data.VisibleToGhosts || data.VisibleToAdminGhosts))
+                return true;
+        }
 
         if (data.HideInContainer && (ent.Comp.Flags & MetaDataFlags.InContainer) != 0)
             return false;

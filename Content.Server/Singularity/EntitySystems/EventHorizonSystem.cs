@@ -1,15 +1,13 @@
 using System.Numerics;
 using Content.Server.Administration.Logs;
 using Content.Server.Singularity.Events;
-using Content.Server.Station.Components;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
 using Content.Shared.Mind.Components;
 using Content.Shared.Singularity.Components;
 using Content.Shared.Singularity.EntitySystems;
+using Content.Shared.Station.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Containers;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
@@ -35,17 +33,14 @@ public sealed partial class EventHorizonSystem : SharedEventHorizonSystem
     [Dependency] private SharedTransformSystem _xformSystem = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
     #endregion Dependencies
 
     private static readonly ProtoId<TagPrototype> HighRiskItemTag = "HighRiskItem";
 
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-
     public override void Initialize()
     {
         base.Initialize();
-
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
 
         SubscribeLocalEvent<MapGridComponent, EventHorizonAttemptConsumeEntityEvent>(PreventConsume);
         SubscribeLocalEvent<StationDataComponent, EventHorizonAttemptConsumeEntityEvent>(PreventConsume);

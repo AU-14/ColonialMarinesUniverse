@@ -24,14 +24,14 @@ namespace Content.Server.Power.Components
             Net?.QueueNetworkReconnect();
         }
 
-        protected override void AddSelfToNet(EntityUid uid, IApcNet apcNet)
+        protected override void AddSelfToNet(IApcNet apcNet)
         {
-            apcNet.AddPowerProvider(uid, this);
+            apcNet.AddPowerProvider(Owner, this);
         }
 
-        protected override void RemoveSelfFromNet(EntityUid uid, IApcNet apcNet)
+        protected override void RemoveSelfFromNet(IApcNet apcNet)
         {
-            apcNet.RemovePowerProvider(uid, this);
+            apcNet.RemovePowerProvider(Owner, this);
         }
     }
 }

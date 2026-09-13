@@ -205,6 +205,10 @@
     baseFireRate: 2.8
     baseFireModes:
     - SemiAuto
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - ScoutWhitelist
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -463,6 +467,11 @@
   id: BulletRifleM5SPRHVP
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:

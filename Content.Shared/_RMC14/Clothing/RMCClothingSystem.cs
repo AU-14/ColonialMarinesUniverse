@@ -21,6 +21,7 @@ public sealed partial class RMCClothingSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private SharedUniformAccessorySystem _uniformAccessories = default!;
+    [Dependency] private HideLayerClothingSystem _hideLayerClothing = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
@@ -70,7 +71,7 @@ public sealed partial class RMCClothingSystem : EntitySystem
     private void OnNoClothingSlowUpdate<T>(Entity<NoClothingSlowdownComponent> ent, ref T args) where T : EntityEventArgs
     {
         ent.Comp.Active = !_inventory.TryGetSlotEntity(ent, ent.Comp.Slot, out _);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private void OnNoClothingSlowRefresh(Entity<NoClothingSlowdownComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
@@ -182,5 +183,6 @@ public sealed partial class RMCClothingSystem : EntitySystem
 
         _clothing.SetEquippedPrefix(ent.Owner, ent.Comp.ActivatedPrefix);
         _uniformAccessories.SetAccessoriesHidden(ent.Owner, hideAccessories);
+        _hideLayerClothing.RefreshLayerVisibility(ent.Owner);
     }
 }

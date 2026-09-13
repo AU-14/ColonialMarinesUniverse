@@ -1,0 +1,74 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWeYuLawyer
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WeYuLawyer
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: exec_spec
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillCqc: 0
+      RMCSkillFirearms: 0
+      RMCSkillEndurance: 0
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-weyuexec-prefix-lawyer
+  name: cmu-weyuexec-name-lawyer
+  description: cmu-weyuexec-description-lawyer
+  playTimeTracker: CMUJobWeYuLawyer
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearWeYuLawyer
+  spawnMenuRoleName: WY Corporate Lawyer (event)
+  greeting: cmu-weyuexec-greeting
+  icon: CMJobIconLiaison
+  joinNotifyCrew: false
+  supervisors: cmu-weyuexec-supervisors-sitedirector
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWeYuLawyer
+  name: WY Corporate Lawyer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-weyuexec-name-lawyer
+    description: cmu-weyuexec-description-lawyer
+    reregister: false
+    job: CMUJobWeYuLawyer
+    raffle:
+      settings: short
+    rules: cmu-weyuexec-rules
+
+- type: startingGear
+  id: CMUGearWeYuLawyer
+  equipment:
+    id: CMUIDCardWeYuLawyer
+    ears: RMCHeadsetDistressLawyerWeYa
+    jumpsuit: CMJumpsuitLiaisonBlue
+    outerClothing: RMCJacketCorporateBlue
+    back: CMSatchel
+    shoes: RMCShoesLaceup
+    pocket1: RMCUniversalRecorder
+  storage:
+    back:
+    - CMClipboard
+    - CMPenClicky
+
+- type: playTimeTracker
+  id: CMUJobWeYuLawyer

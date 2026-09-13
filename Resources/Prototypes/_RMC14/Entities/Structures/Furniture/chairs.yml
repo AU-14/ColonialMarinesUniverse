@@ -21,8 +21,9 @@
     - RMCSeat
   - type: RMCMesonsNonviewable
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoDamage:
       types:

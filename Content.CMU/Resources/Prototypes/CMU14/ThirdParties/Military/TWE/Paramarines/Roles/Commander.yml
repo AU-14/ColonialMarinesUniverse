@@ -1,0 +1,79 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobParamarineCommander
+  roundSide: ThirdParty
+  roundForce: CMUParamarines
+  roundRole: ParamarineCommander
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_commander
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 2
+      RMCSkillLeadership: 3
+  - type: JobPrefix
+    prefix: cmu-paramarines-prefix-commander
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-paramarines-name-commander
+  description: cmu-paramarines-description-commander
+  playTimeTracker: CMUJobParamarineCommander
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearParamarineCommander
+  spawnMenuRoleName: TWE Royal Paramarine Commander (3rd party)
+  greeting: cmu-paramarines-greeting
+  icon: RMCJobIconParaCommander
+  joinNotifyCrew: false
+  supervisors: cmu-paramarines-commander
+  accessGroups:
+  - ColonistAllAccessNoArmory
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesParamarines
+  id: CMUJobParamarineCommander
+  name: TWE Royal Paramarine Commander
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadParamarines
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-paramarines-name-commander
+    description: cmu-paramarines-description-commander
+    reregister: false
+    job: CMUJobParamarineCommander
+    raffle:
+      settings: short
+    rules: cmu-paramarines-rules
+
+- type: startingGear
+  id: CMUGearParamarineCommander
+  equipment:
+    head: RMCHeadCapPeakedPara
+    jumpsuit: RMCJumpsuitMarineParaService
+    outerClothing: RMCJacketParaCOJacketFilled
+    gloves: RMCHandsVeteranRoyalMarine
+    shoes: RMCBootsRoyalFilled
+    ears: RMCHeadsetParaOfficer
+    eyes: RMCGlassesAviators
+    belt: RMCBeltHolsterPistolParaCustom
+    back: RMCSatchelBlackFillParaCO
+    pocket1: RMCPouchSurvivalFill
+    pocket2: RMCPouchGeneralLargeFilledParaCO
+    id: CMUIDCardParamarineCommander
+
+- type: playTimeTracker
+  id: CMUJobParamarineCommander

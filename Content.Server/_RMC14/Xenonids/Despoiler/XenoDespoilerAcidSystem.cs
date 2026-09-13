@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Weapons.Melee.Events;

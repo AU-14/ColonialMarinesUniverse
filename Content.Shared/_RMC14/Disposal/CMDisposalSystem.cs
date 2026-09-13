@@ -13,7 +13,8 @@ public sealed class CMDisposalSystem : EntitySystem
     private void OnUndisposableInsertedAttempt(Entity<UndisposableComponent> ent, ref ContainerGettingInsertedAttemptEvent args)
     {
         if (TryComp(args.Container.Owner, out DisposalUnitComponent? unit) &&
-            args.Container.ID == unit.Container.ID)
+            unit.Container is { } container &&
+            args.Container.ID == container.ID)
         {
             args.Cancel();
         }

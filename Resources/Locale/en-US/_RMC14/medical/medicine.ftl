@@ -1,4 +1,4 @@
-﻿reagent-name-cmdylovene = Dylovene
+reagent-name-cmdylovene = Dylovene
 reagent-desc-cmdylovene = General use anti-toxin, that neutralizes most toxins in the bloodstream. Commonly used in many advanced chemicals. Can be used as a mild anti-hallucinogen and to reduce tiredness.
 
 reagent-name-cmethylredoxrazine = Ethylredoxrazine

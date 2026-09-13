@@ -112224,7 +112224,7 @@ entities:
     - type: Transform
       pos: 30.5,-38.5
       parent: 1
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 12316
     components:

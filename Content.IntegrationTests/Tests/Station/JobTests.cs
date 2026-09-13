@@ -1,15 +1,16 @@
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
 using Content.Server.Jobs;
 using Content.Shared._RMC14.Chat;
-using Robust.Shared.Prototypes;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Station;
 
 [TestFixture]
 [TestOf(typeof(SharedJobSystem))]
-public sealed class JobTest
+public sealed class JobTest : GameTest
 {
     private const string CommanderSpeechStyle = "commanderSpeech";
     private const string SpeechBubbleStyleComponent = "RMCSpeechBubbleSpecificStyle";
@@ -41,7 +42,7 @@ public sealed class JobTest
     [Test]
     public async Task PrimaryDepartmentsTest()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var prototypeManager = server.ResolveDependency<IPrototypeManager>();
@@ -72,13 +73,12 @@ public sealed class JobTest
                 }
             }
         });
-        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task CommandBubbleOverrideJobsUseCommanderSpeechStyle()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var prototypeManager = server.ResolveDependency<IPrototypeManager>();
@@ -96,13 +96,12 @@ public sealed class JobTest
             }
         });
 
-        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task AU14JuniorOfficerJobsDoNotGetInnateCommandSpeech()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var prototypeManager = server.ResolveDependency<IPrototypeManager>();
@@ -118,7 +117,6 @@ public sealed class JobTest
             }
         });
 
-        await pair.CleanReturnAsync();
     }
 
     private static bool TryGetSpeechBubbleStyle(JobPrototype job, out string style)

@@ -1,0 +1,69 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobParamarineTeamLeader
+  roundSide: ThirdParty
+  roundForce: CMUParamarines
+  roundRole: ParamarineTeamLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_teamleader
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 2
+      RMCSkillLeadership: 2
+  - type: JobPrefix
+    prefix: cmu-paramarines-prefix-team-leader
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-paramarines-name-team-leader
+  description: cmu-paramarines-description
+  playTimeTracker: CMUJobParamarineTeamLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearParamarineTeamLeader
+  spawnMenuRoleName: TWE Royal Paramarine Team Leader (3rd party)
+  greeting: cmu-paramarines-greeting
+  icon: RMCJobIconParaTeamLeader
+  joinNotifyCrew: false
+  supervisors: cmu-paramarines-commander
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesParamarines
+  id: CMUJobParamarineTeamLeader
+  name: TWE Royal Paramarine Team Leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadParamarines
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-paramarines-name-team-leader
+    description: cmu-paramarines-description
+    reregister: false
+    job: CMUJobParamarineTeamLeader
+    raffle:
+      settings: short
+    rules: cmu-paramarines-rules
+
+- type: startingGear
+  parent: CMUGearParamarineRifleman
+  id: CMUGearParamarineTeamLeader
+  equipment:
+    head: RMCHeadParaBeretLead
+
+- type: playTimeTracker
+  id: CMUJobParamarineTeamLeader

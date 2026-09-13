@@ -1,5 +1,4 @@
 using Content.Server.DeviceLinking.Components;
-using Content.Server.NodeContainer;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Power.Nodes;
 using Content.Server.Power.NodeGroups;
@@ -26,15 +25,9 @@ public sealed partial class PowerSensorSystem : EntitySystem
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
 
-    private EntityQuery<NodeContainerComponent> _nodeQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-
     public override void Initialize()
     {
         base.Initialize();
-
-        _nodeQuery = GetEntityQuery<NodeContainerComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
 
         SubscribeLocalEvent<PowerSensorComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<PowerSensorComponent, ExaminedEvent>(OnExamined);
@@ -98,28 +91,19 @@ public sealed partial class PowerSensorSystem : EntitySystem
         var nodeContainer = Comp<NodeContainerComponent>(uid);
         var deviceNode = (CableDeviceNode) nodeContainer.Nodes[cable.Node];
 
-        var charge = 0f;
-        var chargingState = false;
-        var dischargingState = false;
-
         // update state based on the power stats retrieved from the selected power network
-        var xform = _xformQuery.GetComponent(uid);
-        if (xform.GridUid is not { } gridUid || !TryComp(gridUid, out MapGridComponent? grid))
+        var xform = Transform(uid);
+        if (!TryComp(xform.GridUid, out MapGridComponent? grid))
             return;
 
-        var cables = deviceNode.GetReachableNodes(xform, _nodeQuery, _xformQuery, (gridUid, grid), EntityManager);
-        foreach (var node in cables)
-        {
-            if (node.NodeGroup == null)
-                continue;
+        if (deviceNode.NodeGroup == null)
+            return;
 
-            var group = (IBasePowerNet) node.NodeGroup;
-            var stats = _powerNet.GetNetworkStatistics(group.NetworkNode);
-            charge = comp.Output ? stats.OutStorageCurrent : stats.InStorageCurrent;
-            chargingState = charge > comp.LastCharge;
-            dischargingState = charge < comp.LastCharge;
-            break;
-        }
+        var group = (IBasePowerNet) deviceNode.NodeGroup;
+        var stats = _powerNet.GetNetworkStatistics(group.NetworkNode);
+        var charge = comp.Output ? stats.OutStorageCurrent : stats.InStorageCurrent;
+        var chargingState = charge > comp.LastCharge;
+        var dischargingState = charge < comp.LastCharge;
 
         comp.LastCharge = charge;
 

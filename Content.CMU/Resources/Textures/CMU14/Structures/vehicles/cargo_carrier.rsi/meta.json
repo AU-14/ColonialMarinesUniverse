@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprites from CM-SS13 cargo.aseprite, contributed by thwompa. Source: https://github.com/thwompa/cmss13/blob/parting-gift/icons/thwomp/cargo.aseprite",
+  "size": {
+    "x": 96,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "cargo_closed",
+      "directions": 4
+    },
+    {
+      "name": "cargo_open",
+      "directions": 4
+    },
+    {
+      "name": "cargo_debris_1"
+    },
+    {
+      "name": "cargo_debris_2"
+    },
+    {
+      "name": "cargo_debris_3"
+    },
+    {
+      "name": "cargo_debris_4"
+    }
+  ]
+}

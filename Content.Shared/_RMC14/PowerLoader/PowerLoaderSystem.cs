@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared.CMU14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.ElectronicSystem;
@@ -222,7 +223,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         _mover.SetRelay(buckle, ent);
         _interaction.SetRelay(buckle, ent, relay);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
         SyncHands(ent);
     }
 
@@ -233,7 +234,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         RemCompDeferred<RelayInputMoverComponent>(buckle);
         RemCompDeferred<InteractionRelayComponent>(buckle);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
         DeleteVirtuals(ent, buckle);
 
         if (ent.Comp.DoAfter != null && _doAfter.IsRunning(ent.Comp.DoAfter.Id))
@@ -654,7 +655,8 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         }
 
         if (!TryComp(used, out PowerLoaderAttachableComponent? attachableComponent) ||
-            !_tag.HasAnyTag(target, attachableComponent.AttachableTypes))
+            !_tag.HasAnyTag(target, attachableComponent.AttachableTypes) ||
+            !IsAllowedSpecializedAttachment(target, used))
         {
             return;
         }
@@ -670,6 +672,27 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         };
         if (_doAfter.TryStartDoAfter(doAfter) && TryComp<PowerLoaderComponent>(args.User, out var loader))
             loader.DoAfter = ev.DoAfter;
+    }
+
+    private bool IsAllowedSpecializedAttachment(EntityUid point, EntityUid attachment)
+    {
+        var prototype = MetaData(attachment).EntityPrototype?.ID;
+        if (prototype == null)
+            return false;
+
+        if (TryComp(point, out GunshipHardpointAttachmentPointComponent? hardpoint) &&
+            !hardpoint.AllowedAttachments.Contains(prototype))
+        {
+            return false;
+        }
+
+        if (TryComp(point, out GunshipUtilityAttachmentPointComponent? utility) &&
+            !utility.AllowedAttachments.Contains(prototype))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void OnActivePilotPreventCollide(Entity<ActivePowerLoaderPilotComponent> ent, ref PreventCollideEvent args)
@@ -1048,7 +1071,8 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
     private void SyncHands(Entity<PowerLoaderComponent> loader)
     {
-        if (_net.IsClient)
+        // Recursive deletion removes held cargo and raises hand events before the loader is gone.
+        if (_net.IsClient || TerminatingOrDeleted(loader.Owner))
             return;
 
         var virtualContainer = _container.EnsureContainer<Container>(loader, loader.Comp.VirtualContainerId);

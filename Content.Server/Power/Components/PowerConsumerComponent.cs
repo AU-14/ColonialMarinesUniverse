@@ -30,14 +30,14 @@ namespace Content.Server.Power.Components
 
         public PowerState.Load NetworkLoad { get; } = new();
 
-        protected override void AddSelfToNet(EntityUid uid, IBasePowerNet powerNet)
+        protected override void AddSelfToNet(IBasePowerNet powerNet)
         {
-            powerNet.AddConsumer(uid, this);
+            powerNet.AddConsumer(Owner, this);
         }
 
-        protected override void RemoveSelfFromNet(EntityUid uid, IBasePowerNet powerNet)
+        protected override void RemoveSelfFromNet(IBasePowerNet powerNet)
         {
-            powerNet.RemoveConsumer(uid, this);
+            powerNet.RemoveConsumer(Owner, this);
         }
     }
 }

@@ -1,0 +1,10 @@
+cmu-freelancer-name-rifleman = Freelancer Rifleman
+cmu-freelancer-name-medic = Freelancer Medic
+cmu-freelancer-name-leader = Freelancer Leader
+cmu-freelancer-description = A gun for hire. Whoever pays the credits gets the bullets, everyone else gets to take their chances.
+cmu-freelancer-prefix-rifleman = FRFN
+cmu-freelancer-prefix-medic = FMED
+cmu-freelancer-prefix-leader = FSL
+cmu-freelancer-leader = the freelancer team leader
+cmu-freelancer-rules = You are a freelancer, a soldier of fortune. You are neutral toward everyone unless your contract says otherwise. Stay professional, follow the contract, and get paid.
+cmu-freelancer-greeting = You are a freelancer. Your team has taken a contract in this theatre. Follow your leader, honor the contract, and get out rich or not at all.

@@ -91,9 +91,10 @@ public sealed partial class MappingScreen : InGameScreen
             UpdateDecal();
         };
 
-        for (var i = 0; i < _placement.AllModeNames.Length; i++)
+        var modes = _placement.AllModeNames;
+        for (var i = 0; i < modes.Length; i++)
         {
-            EntityPlacementMode.AddItem(_placement.AllModeNames[i], i);
+            EntityPlacementMode.AddItem(modes[i], i);
         }
 
         Pick.Texture.TexturePath = "/Textures/Interface/eyedropper.svg.png";

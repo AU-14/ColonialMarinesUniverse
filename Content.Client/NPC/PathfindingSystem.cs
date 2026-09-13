@@ -19,6 +19,7 @@ namespace Content.Client.NPC
         [Dependency] private IEyeManager _eyeManager = default!;
         [Dependency] private IGameTiming _timing = default!;
         [Dependency] private IInputManager _inputManager = default!;
+        [Dependency] private IOverlayManager _overlayManager = default!;
         [Dependency] private IResourceCache _cache = default!;
         [Dependency] private NPCSteeringSystem _steering = default!;
         [Dependency] private MapSystem _mapSystem = default!;
@@ -27,37 +28,7 @@ namespace Content.Client.NPC
         public PathfindingDebugMode Modes
         {
             get => _modes;
-            set
-            {
-                var overlayManager = IoCManager.Resolve<IOverlayManager>();
-
-                if (value == PathfindingDebugMode.None)
-                {
-                    Breadcrumbs.Clear();
-                    Polys.Clear();
-                    overlayManager.RemoveOverlay<PathfindingOverlay>();
-                }
-                else if (!overlayManager.HasOverlay<PathfindingOverlay>())
-                {
-                    overlayManager.AddOverlay(new PathfindingOverlay(EntityManager, _eyeManager, _inputManager, _cache, this, _mapSystem, _transformSystem));
-                }
-
-                if ((value & PathfindingDebugMode.Steering) != 0x0)
-                {
-                    _steering.DebugEnabled = true;
-                }
-                else
-                {
-                    _steering.DebugEnabled = false;
-                }
-
-                _modes = value;
-
-                RaiseNetworkEvent(new RequestPathfindingDebugMessage()
-                {
-                    Mode = _modes,
-                });
-            }
+            set => SetModes(value, true);
         }
 
         private PathfindingDebugMode _modes = PathfindingDebugMode.None;
@@ -84,14 +55,12 @@ namespace Content.Client.NPC
             if (!_timing.IsFirstTimePredicted)
                 return;
 
-            for (var i = 0; i < Routes.Count; i++)
+            for (var i = Routes.Count - 1; i >= 0; i--)
             {
                 var route = Routes[i];
 
-                if (_timing.RealTime < route.Time)
-                    break;
-
-                Routes.RemoveAt(i);
+                if (_timing.RealTime >= route.Time)
+                    Routes.RemoveAt(i);
             }
         }
 
@@ -113,9 +82,40 @@ namespace Content.Client.NPC
 
         public override void Shutdown()
         {
+            SetModes(PathfindingDebugMode.None, false);
             base.Shutdown();
-            // Don't send any messages to server, just shut down quietly.
-            _modes = PathfindingDebugMode.None;
+        }
+
+        private void SetModes(PathfindingDebugMode value, bool raiseNetworkEvent)
+        {
+            if (value == PathfindingDebugMode.None)
+            {
+                Breadcrumbs.Clear();
+                Polys.Clear();
+                Routes.Clear();
+                _overlayManager.RemoveOverlay<PathfindingOverlay>();
+            }
+            else if (!_overlayManager.HasOverlay<PathfindingOverlay>())
+            {
+                _overlayManager.AddOverlay(new PathfindingOverlay(EntityManager,
+                    _eyeManager,
+                    _inputManager,
+                    _cache,
+                    this,
+                    _mapSystem,
+                    _transformSystem));
+            }
+
+            _steering.DebugEnabled = (value & PathfindingDebugMode.Steering) != 0x0;
+            _modes = value;
+
+            if (raiseNetworkEvent)
+            {
+                RaiseNetworkEvent(new RequestPathfindingDebugMessage
+                {
+                    Mode = _modes,
+                });
+            }
         }
 
         private void OnBreadcrumbs(PathBreadcrumbsMessage ev)

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCWeaponFlamer
   id: RMCWeaponFlamerSPP
   name: LPO80 incinerator unit
@@ -53,6 +53,10 @@
   components:
   - type: Corrodible
     isCorrodible: false
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - PyroWhitelist
   - type: RMCCanUseBroiler
   - type: RMCIgniter
     enabled: true

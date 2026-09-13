@@ -1,4 +1,4 @@
-﻿rmc-lobby-join-xeno = Join Monsters
+rmc-lobby-join-xeno = Join Monsters
 rmc-lobby-join-colonists = Join Colonists
 rmc-lobby-join-other = Join Other
 rmc-lobby-join-opfor = Join Opfor

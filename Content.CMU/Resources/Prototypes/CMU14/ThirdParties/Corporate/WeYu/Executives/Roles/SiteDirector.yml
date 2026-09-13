@@ -1,0 +1,94 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWeYuSiteDirector
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WeYuSiteDirector
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_sd
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillMedical: 2
+      RMCSkillCqc: 1
+      RMCSkillLeadership: 3
+      RMCSkillOverwatch: 1
+      RMCSkillEndurance: 3
+      RMCSkillJtac: 4
+      RMCSkillExecution: 1
+  - type: MarineOrders
+  - type: Language
+    spokenLanguages:
+    - English
+    - Japanese
+    understoodLanguages:
+    - English
+    - Japanese
+    currentLanguage: English
+    defaultLanguage: English
+  - type: JobPrefix
+    prefix: cmu-weyuexec-prefix-sitedirector
+  name: cmu-weyuexec-name-sitedirector
+  description: cmu-weyuexec-description-sitedirector
+  playTimeTracker: CMUJobWeYuSiteDirector
+  ranks:
+    RMCRankWeYaDirector: []
+  startingGear: CMUGearWeYuSiteDirector
+  spawnMenuRoleName: WY Site Director (event)
+  greeting: cmu-weyuexec-greeting
+  icon: RMCJobIconPMCDirector
+  joinNotifyCrew: false
+  supervisors: cmu-weyuexec-supervisors-hq
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWeYuSiteDirector
+  name: WY Site Director
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-weyuexec-name-sitedirector
+    description: cmu-weyuexec-description-sitedirector
+    reregister: false
+    job: CMUJobWeYuSiteDirector
+    raffle:
+      settings: short
+    rules: cmu-weyuexec-rules
+
+- type: startingGear
+  id: CMUGearWeYuSiteDirector
+  equipment:
+    id: CMUIDCardWeYuSiteDirector
+    jumpsuit: RMCJumpsuitVeteranPMCDirector
+    outerClothing: RMCArmorPMCDirector
+    head: ArmorHelmetPMCDirector
+    belt: RMCMatebaBeltLuxuriousFilled
+    shoes: RMCBootsPMCFilled
+    ears: RMCHeadsetDistressPMCDirector
+    back: CMSatchel
+    pocket1: RMCPouchCommand
+    pocket2: RMCPouchGeneralLarge
+  storage:
+    pocket1:
+    - RMCRangefinder
+
+- type: playTimeTracker
+  id: CMUJobWeYuSiteDirector

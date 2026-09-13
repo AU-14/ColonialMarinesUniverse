@@ -1,5 +1,5 @@
 using Content.Shared._RMC14.Ghost;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 

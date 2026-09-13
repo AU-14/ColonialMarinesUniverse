@@ -4,6 +4,8 @@
   name: M240-T incinerator unit #cmu14
   description: An improved version of the M240 incinerator unit, the M240-T model is capable of dispersing a larger variety of fuel types. #cmu14
   components:
+  - type: UseDelay
+    delay: 3
   - type: Corrodible
     isCorrodible: false
   - type: Sprite
@@ -12,8 +14,8 @@
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/m34t.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/m34t.rsi
-  - type: UseDelay
-    delay: 3
+  - type: WieldDelay #CMU14 Change
+    baseDelay: 1.75
   - type: AttachableHolder # NOTE: The nozzle is only for the base M34.
     slots:
       rmc-aslot-rail:
@@ -51,6 +53,10 @@
       components:
       - Xeno
       - CMUPathogenWalker
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - PyroWhitelist
 
 - type: entity
   parent: RMCTankFlamer

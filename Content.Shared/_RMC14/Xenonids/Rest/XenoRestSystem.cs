@@ -16,6 +16,7 @@ using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
@@ -30,6 +31,7 @@ public sealed partial class XenoRestSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
 
     public override void Initialize()
     {
@@ -213,5 +215,42 @@ public sealed partial class XenoRestSystem : EntitySystem
     public bool IsResting(Entity<XenoRestingComponent?> ent)
     {
         return Resolve(ent, ref ent.Comp, false);
+    }
+
+    public bool TryRestAction(Entity<XenoComponent?> ent, bool ignoreCooldown = false, bool ignoreEnabled = false)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        foreach (var (actionId, actionComp) in _rmcActions.GetActionsWithEvent<XenoRestActionEvent>(ent))
+        {
+            if (actionComp.AttachedEntity != ent.Owner)
+                continue;
+
+            if (!ignoreEnabled && actionComp is not { Enabled: true })
+                continue;
+
+            if (!ignoreCooldown && actionComp.Cooldown.HasValue && actionComp.Cooldown.Value.End > _timing.CurTime)
+                continue;
+
+            _actions.PerformAction(ent.Owner, (actionId, actionComp));
+            return true;
+        }
+
+        // Xeno had no rest action for some reason.
+        return false;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        // If a resting xeno tries to move while resting, unrest them if possible.
+        var query = EntityQueryEnumerator<XenoRestingComponent, InputMoverComponent>();
+        while (query.MoveNext(out var xeno, out var rest, out var mover))
+        {
+            if (rest.Running && mover.HasDirectionalMovement)
+                TryRestAction(xeno);
+        }
     }
 }

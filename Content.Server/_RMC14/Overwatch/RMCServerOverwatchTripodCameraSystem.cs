@@ -11,15 +11,15 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.Overwatch;
 
-public sealed class RMCServerOverwatchTripodCameraSystem : EntitySystem
+public sealed partial class RMCServerOverwatchTripodCameraSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly RMCOverwatchTripodCameraSystem _tripod = default!;
+    [Dependency] private  ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  RMCOverwatchTripodCameraSystem _tripod = default!;
 
     public override void Initialize()
     {

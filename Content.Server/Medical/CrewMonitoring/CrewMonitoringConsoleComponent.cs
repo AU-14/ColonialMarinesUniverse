@@ -1,5 +1,6 @@
-using Content.Server._CMU14.Yautja;
 using Content.Shared.Medical.SuitSensor;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.Medical.SuitSensors;
 
 namespace Content.Server.Medical.CrewMonitoring;
 

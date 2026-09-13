@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseItem
+  parent: [SolutionFood, BaseItem]
   id: BasePaper
   abstract: true
   components:
@@ -8,9 +8,15 @@
     - Document
     - Paper
   - type: Appearance
+  - type: Reactive
+    groups:
+      Flammable: [ Touch ]
+      Extinguish: [ Touch ]
+  - type: ExtinguishableSetCollisionWake
   - type: Flammable
     fireSpread: true
     alwaysCombustible: true
+    canExtinguish: true
     damage:
       types:
         Heat: 1
@@ -19,14 +25,9 @@
     normalState: fire
   - type: Damageable
     damageModifierSet: Wood
+  - type: Injurable
   - type: Destructible
     thresholds:
-    - trigger: # Excess damage, don't spawn entities
-        !type:DamageTrigger
-        damage: 100
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Destruction"]
     - trigger:
         !type:DamageTrigger
         damage: 15
@@ -38,21 +39,19 @@
             max: 1
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
-  - type: Food
-    solution: food
+  - type: Edible
     delay: 7
     forceFeedDelay: 7
   - type: FlavorProfile
     flavors:
     - paper
   - type: BadFood
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 1
-        reagents:
-        - ReagentId: Fiber
-          Quantity: 1
+  - type: Solution
+    solution:
+      maxVol: 2.5 # I consider paper to be like material sheets, so we divide their capacity by 12
+      reagents:
+      - ReagentId: Fiber
+        Quantity: 1.25
   - type: FixedIdentity
     name: rmc-paper
     whitelist:
@@ -64,13 +63,18 @@
       - Xeno
   - type: Item
     size: Tiny
+    inhandVisuals:
+      left:
+      - state: paper-inhand-left
+      right:
+      - state: paper-inhand-right
   - type: PhysicalComposition
 
 - type: entity
-  name: paper
   parent: BasePaper
   id: Paper
-  description: 'A piece of white paper.'
+  name: paper
+  description: A piece of white paper.
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -92,7 +96,9 @@
       enum.PaperUiKey.Key:
         type: PaperBoundUserInterface
   - type: FaxableObject
+  - type: PaperVisualizer
   - type: PaperVisuals
+  - type: StationAiWhitelist
 
 - type: entity
   name: paper scrap
@@ -137,9 +143,6 @@
     - state: paper_stamp-generic
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
-  - type: GuideHelp
-    guides:
-    - ArtifactReports
   - type: PaperVisuals
     headerImagePath: "/Textures/Interface/Paper/paper_heading_artifact_analyzer.svg.96dpi.png"
     headerMargin: 0.0, 16.0, 0.0, 0.0
@@ -177,6 +180,14 @@
     backgroundModulate: "#e6e6fa"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 32.0, 0.0, 32.0, 16.0
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: paper-inhand-left
+        color: "#e6e6fa"
+      right:
+      - state: paper-inhand-right
+        color: "#e6e6fa"
 
 - type: entity
   name: cargo invoice
@@ -211,6 +222,14 @@
     contentMargin: 16.0, 16.0, 16.0, 16.0
     headerImagePath: "/Textures/Interface/Paper/paper_heading_cargo_invoice.svg.96dpi.png"
     headerMargin: 0.0, 0.0, 0.0, 12.0
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: paper-inhand-left
+        color: "#9ef5ff"
+      right:
+      - state: paper-inhand-right
+        color: "#9ef5ff"
 
 - type: entity
   id: PaperNanoTaskItem
@@ -286,6 +305,14 @@
     guides:
     - CargoBounties
     - Cargo
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: paper-inhand-left
+        color: "#f7e574"
+      right:
+      - state: paper-inhand-right
+        color: "#f7e574"
 
 - type: entity
   id: PaperSalvageJobLabel
@@ -321,6 +348,14 @@
   - type: JobBoardLabel
   - type: StaticPrice #infinitely printable
     price: 0
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: paper-inhand-left
+        color: "#f7e574"
+      right:
+      - state: paper-inhand-right
+        color: "#f7e574"
 
 - type: entity
   name: character sheet
@@ -349,6 +384,14 @@
     contentImageModulate: "#cccccc"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 16.0, 16.0, 16.0, 16.0
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: paper-inhand-left
+        color: "#cccccc"
+      right:
+      - state: paper-inhand-right
+        color: "#cccccc"
 
 - type: entity
   parent: Paper
@@ -434,6 +477,8 @@
         insertSound: /Audio/Effects/packetrip.ogg
         ejectSound: /Audio/Effects/packetrip.ogg
         whitelist:
+          components:
+            - Cash
           tags:
             - Paper
   - type: ActivatableUI
@@ -445,6 +490,11 @@
         type: PaperBoundUserInterface
   - type: Item
     size: Tiny
+    inhandVisuals:
+      left:
+      - state: envelope-inhand-left
+      right:
+      - state: envelope-inhand-right
   - type: Tag
     tags:
     - Trash
@@ -472,3 +522,5 @@
       - !type:EmptyAllContainersBehaviour
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: Injurable
+  - type: StationAiWhitelist

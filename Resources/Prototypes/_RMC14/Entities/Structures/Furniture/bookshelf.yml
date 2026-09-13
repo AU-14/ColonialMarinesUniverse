@@ -14,6 +14,7 @@
     maxFillLevels: 5
     fillBaseName: book
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

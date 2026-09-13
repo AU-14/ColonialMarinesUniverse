@@ -2,6 +2,7 @@ name: Diff RSIs
 
 on:
   pull_request_target:
+    types: [ opened, reopened, synchronize, ready_for_review ]
     paths:
       - '**.rsi/**.png'
 
@@ -19,7 +20,7 @@ jobs:
     name: Diff
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7
 
       - name: Get changed files
         id: files

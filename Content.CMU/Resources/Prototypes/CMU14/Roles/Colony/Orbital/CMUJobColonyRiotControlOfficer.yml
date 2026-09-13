@@ -1,0 +1,62 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobColonyRiotControlOfficer
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: ColonyRiotControlOfficer
+  roundComponents:
+  - type: Skills
+    preset: RMCSkillPresetSurvivorMarshal
+  - type: JobPrefix
+    prefix: cmu-colony-prefix-riot-control-officer
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: mp
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_cmb
+  name: cmu-colony-name-riot-control-officer
+  description: cmu-colony-description-riot-control-officer
+  setPreference: true
+  playTimeTracker: CMUJobColonyRiotControlOfficer
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearColonyRiotControlOfficer
+  icon: RMCJobIconBureauDeputy
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-colony-supervisors-colonist
+  spawnMenuRoleName: Colony Riot Control Officer (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearColonyRiotControlOfficer
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: RMCJumpsuitRiotControl
+    outerClothing: RMCArmorPMCRiot
+    head: ArmorHelmetPMCRiotShield
+    eyes: RMCGlassesSecurityBlue
+    gloves: CMHandsBlackMarine
+    shoes: RMCBootsPMCFilled
+    ears: RMCHeadsetDistressBureauDamaged
+    back: CMSatchelSecuritySurvivorFill
+    pocket1: RMCPouchSurvivalBlackFilled
+    pocket2: RMCPouchMagazineLarge
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointColonyRiotControlOfficer
+  name: Spawn Point Colony Riot Control Officer
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobColonyRiotControlOfficer
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobColonyRiotControlOfficer
+  isHumanoid: true

@@ -17,6 +17,8 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
     [Dependency] private ILocalizationManager _loc = default!;
     [UISystemDependency] private CharacterInfoSystem _characterInfo = default!;
 
+    private string _chatSpeechDoubleQuoteBegin = default!;
+
     private static readonly Regex StartDoubleQuote = new("\"$");
     private static readonly Regex EndDoubleQuote = new("^\"|(?<=^@)\"");
     private static readonly Regex StartAtSign = new("^@");
@@ -33,6 +35,7 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
     private string? _highlightsColor;
 
     private bool _autoFillHighlightsEnabled;
+    private string _autoHighlights = "";
 
     /// <summary>
     ///     The boolean that keeps track of the 'OnCharacterUpdated' event, whenever it's a player attaching or opening the character info panel.
@@ -43,7 +46,14 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
 
     private void InitializeHighlights()
     {
-        _config.OnValueChanged(CCVars.ChatAutoFillHighlights, (value) => { _autoFillHighlightsEnabled = value; }, true);
+        _config.OnValueChanged(CCVars.ChatAutoFillHighlights, (value) =>
+        {
+            _autoFillHighlightsEnabled = value;
+            if (value)
+                UpdateAutoFillHighlights();
+            else
+                ReloadHighlights();
+        }, true);
 
         _config.OnValueChanged(CCVars.ChatHighlightsColor, (value) => { _highlightsColor = value; }, true);
 
@@ -54,6 +64,8 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
         {
             UpdateHighlights(highlights, true);
         }
+
+        _chatSpeechDoubleQuoteBegin = _loc.GetString("chat-manager-speech-double-quote-begin");
     }
 
     public void OnSystemLoaded(CharacterInfoSystem system)
@@ -74,7 +86,7 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
         // If auto highlights are enabled generate a request for new character info
         // that will be used to determine the highlights.
         _charInfoIsAttach = true;
-        _characterInfo.RequestCharacterInfo();
+        _characterInfo?.RequestCharacterInfo();
     }
 
     public void UpdateHighlights(string newHighlights, bool firstLoad = false)
@@ -86,11 +98,26 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
         _config.SetCVar(CCVars.ChatHighlights, newHighlights);
         _config.SaveToFile();
 
+        ReloadHighlights();
+        HighlightsUpdated?.Invoke(newHighlights);
+    }
+
+    public void ReloadHighlights()
+    {
         _highlights.Clear();
+
+        var combined = _config.GetCVar(CCVars.ChatHighlights);
+        if (_autoFillHighlightsEnabled && !string.IsNullOrEmpty(_autoHighlights))
+        {
+            if (string.IsNullOrEmpty(combined))
+                combined = _autoHighlights;
+            else
+                combined += "\n" + _autoHighlights;
+        }
 
         // We first subdivide the highlights based on newlines to prevent replacing
         // a valid "\n" tag and adding it to the final regex.
-        var splittedHighlights = newHighlights.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var splittedHighlights = combined.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         for (var i = 0; i < splittedHighlights.Length; i++)
         {
@@ -118,7 +145,8 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
             }
 
             // Make sure any name tagged as ours gets highlighted only when others say it.
-            keyword = StartAtSign.Replace(keyword, AfterSpeakerHighlightContext);
+            keyword = StartAtSign.Replace(keyword,
+                $@"(?:{AfterSpeakerHighlightContext}|(?<=(?<=(L?OOC|DEAD|ADMIN):.*:.*)|(?<=,.*{_chatSpeechDoubleQuoteBegin}.*)|(?<=\n.*)))");
 
             _highlights.Add(keyword);
         }
@@ -135,7 +163,7 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
         if (!_charInfoIsAttach)
             return;
 
-        var (_, job, _, _, entityName, _) = data;
+        var (_, _, _, jobId, jobTitle, entityName, _) = data;
 
         // Mark this entity's name as our character name for the "UpdateHighlights" function.
         var newHighlights = "@" + entityName;
@@ -149,14 +177,24 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
         if (newHighlights.Count(c => c == '-') > 1)
             newHighlights = newHighlights.Split('-')[0] + "\n@" + newHighlights.Split('-')[^1];
 
-        // Convert the job title to kebab-case and use it as a key for the loc file.
-        var jobKey = job.Replace(' ', '-').ToLower();
+        string? jobMatches = null;
+        if (!string.IsNullOrWhiteSpace(jobTitle))
+        {
+            var dynamicJobKey = jobTitle.Replace(' ', '-').ToLowerInvariant();
+            _loc.TryGetString($"highlights-{dynamicJobKey}", out jobMatches);
+        }
 
-        if (_loc.TryGetString($"highlights-{jobKey}", out var jobMatches))
+        if (jobMatches == null && jobId is { } id)
+        {
+            var jobKey = id.Id.Replace(' ', '-').ToLowerInvariant();
+            _loc.TryGetString($"highlights-{jobKey}", out jobMatches);
+        }
+
+        if (jobMatches != null)
             newHighlights += '\n' + jobMatches.Replace(", ", "\n");
 
-        UpdateHighlights(newHighlights);
-        HighlightsUpdated?.Invoke(newHighlights);
+        _autoHighlights = newHighlights;
+        ReloadHighlights();
         _charInfoIsAttach = false;
     }
 }

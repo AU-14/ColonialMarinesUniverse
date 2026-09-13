@@ -34,8 +34,10 @@
     roundsPerShot: 40
     fireMissionDelay: 1
     damage:
-      groups:
-        Brute: 105
+      types:
+        Blunt: 35
+        Slash: 35
+        Piercing: 35
     armorPiercing: 10
     weapon: RMCDropshipAttachmentGau21Cannon
     soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
@@ -51,6 +53,29 @@
     cost: 400
 
 - type: entity
+  parent: RMCDropshipAttachmentAmmo
+  id: CMUDropshipAttachmentAmmoM4332Flares
+  name: M4332 large signal flare box
+  description: A large reinforced box containing sixty signal flares for the M4332 Signal Flare Launcher.
+  components:
+  - type: Sprite
+    layers:
+    - state: 30mm_crate_10
+      color: "#8FCF91"
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipDirectFirePoint
+  - type: DropshipAmmo
+    rounds: 15
+    maxRounds: 15
+    roundsPerShot: 1
+    weapon: CMUDropshipAttachmentM4332FlareLauncher
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 250
+
+- type: entity
   parent: RMCDropshipAttachmentAmmoGAU
   id: RMCDropshipAttachmentAmmoGAUAP
   name: PGU-105 30mm Anti-tank ammo crate
@@ -64,8 +89,10 @@
     ammoType: 30mm_crate_hv
     bulletSpread: 4
     damage:
-      groups:
-        Brute: 80
+      types:
+        Blunt: 26.66
+        Slash: 26.67
+        Piercing: 26.67
     armorPiercing: 40
     travelTime: 6
   - type: DropshipFabricatorPrintable

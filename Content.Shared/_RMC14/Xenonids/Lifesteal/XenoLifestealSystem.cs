@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -50,7 +52,7 @@ public sealed partial class XenoLifestealSystem : EntitySystem
         var found = false;
         foreach (var hit in args.HitEntities)
         {
-            if (!_xeno.CanAbilityAttackTarget(xeno, hit))
+            if (!_xeno.CanGainRewardsFromTarget(xeno, hit)) // CMU14: no rewards from vehicles
                 continue;
 
             found = true;
@@ -66,7 +68,7 @@ public sealed partial class XenoLifestealSystem : EntitySystem
         if (!_damageableQuery.TryComp(xeno, out var damageable))
             return;
 
-        var total = damageable.TotalDamage;
+        var total = _damageable.GetTotalDamage((xeno, damageable));
         if (total == FixedPoint2.Zero)
             return;
 
@@ -76,7 +78,7 @@ public sealed partial class XenoLifestealSystem : EntitySystem
         var lifesteal = xeno.Comp.BasePercentage;
         foreach (var hit in _targets)
         {
-            if (!_xeno.CanAbilityAttackTarget(xeno, hit))
+            if (!_xeno.CanGainRewardsFromTarget(xeno, hit)) // CMU14: no rewards from vehicles
                 continue;
 
             lifesteal += xeno.Comp.TargetIncreasePercentage;

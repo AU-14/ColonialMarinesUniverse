@@ -13,7 +13,8 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.DoAfter;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
+using Content.Shared.Ghost.Systems;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Robust.Shared.GameObjects;
@@ -1034,7 +1035,7 @@ public sealed class LarvaQueueJoinXenoUiTest
         {
             ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
             var ghostComp = entMan.GetComponent<GhostComponent>(ghost);
-            ghostSystem.SetTimeOfDeath((ghost, ghostComp), timing.CurTime - TimeSpan.FromMinutes(3));
+            ghostSystem.SetTimeOfDeath((ghost, ghostComp), timing.RealTime - TimeSpan.FromMinutes(3));
 
             Assert.That(entMan.HasComponent<GhostComponent>(ghost), Is.True);
             Assert.That(parasiteRoles.UserCheck(ghost), Is.True);

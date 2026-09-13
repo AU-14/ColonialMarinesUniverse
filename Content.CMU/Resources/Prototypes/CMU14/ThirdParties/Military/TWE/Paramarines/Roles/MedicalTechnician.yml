@@ -1,0 +1,73 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobParamarineMedicalTechnician
+  roundSide: ThirdParty
+  roundForce: CMUParamarines
+  roundRole: ParamarineMedicalTechnician
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_medic
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: cmu-paramarines-prefix-medic
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-paramarines-name-medic
+  description: cmu-paramarines-description
+  playTimeTracker: CMUJobParamarineMedicalTechnician
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearParamarineMedicalTechnician
+  spawnMenuRoleName: TWE Royal Paramarine Medical Technician (3rd party)
+  greeting: cmu-paramarines-greeting
+  icon: RMCJobIconParaMedicalTechnican
+  joinNotifyCrew: false
+  supervisors: cmu-paramarines-leader
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesParamarines
+  id: CMUJobParamarineMedicalTechnician
+  name: TWE Royal Paramarine Medical Technician
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadParamarines
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-paramarines-name-medic
+    description: cmu-paramarines-description
+    reregister: false
+    job: CMUJobParamarineMedicalTechnician
+    raffle:
+      settings: short
+    rules: cmu-paramarines-rules
+
+- type: startingGear
+  parent: CMUGearParamarineRifleman
+  id: CMUGearParamarineMedicalTechnician
+  equipment:
+    jumpsuit: RMCJumpsuitMarineParaPDW90
+    back: RMCBackpackRCMMedicPVPFilledParaMedic
+    eyes: RMCGlassesMedicalHUDGlasses
+    belt: RMCMedicalL75RCMFillPara
+    suitstorage: RMCWeaponSMGPDW90TSE
+
+- type: playTimeTracker
+  id: CMUJobParamarineMedicalTechnician

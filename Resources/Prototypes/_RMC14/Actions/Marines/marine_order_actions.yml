@@ -6,9 +6,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
       state: focus
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:FocusActionEvent
 
@@ -20,9 +22,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
       state: hold
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:HoldActionEvent
 
@@ -34,8 +38,10 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/marine_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
       state: move
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:MoveActionEvent

@@ -10,6 +10,7 @@ using Content.Shared.NPC.Systems;
 using Content.Shared._RMC14.Weapons.Ranged.Homing;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;

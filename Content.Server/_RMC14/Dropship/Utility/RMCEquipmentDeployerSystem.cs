@@ -31,7 +31,7 @@ public sealed class RMCEquipmentDeployerSystem : SharedRMCEquipmentDeployerSyste
         ent.Comp.IsDeployable = true;
         Dirty(ent);
 
-        if (!ent.Comp.AutoDeploy)
+        if (!ent.Comp.CanAutoDeploy || !ent.Comp.AutoDeploy)
             return;
 
         var deployOffset = Vector2.Zero;

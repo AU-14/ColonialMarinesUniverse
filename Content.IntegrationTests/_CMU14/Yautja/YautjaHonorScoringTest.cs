@@ -1,9 +1,9 @@
 using System.Numerics;
 using System.Linq;
 using Content.Client.Popups;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server.Examine;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -13,7 +13,7 @@ using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaHonorScoringTest

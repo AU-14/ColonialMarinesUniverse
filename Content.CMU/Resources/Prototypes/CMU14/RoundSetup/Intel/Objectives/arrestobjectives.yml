@@ -1,0 +1,72 @@
+- type: entity
+  name: Arrest enemies Objective
+  parent: MarkerBase
+  id: arrestteamobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: arrestteamobjbasic
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    factions:
+    - opfor
+    - govfor
+    repeating: true
+    objectiveLevel: 1
+    customPoints: 15
+    maxRepeatable: 1
+    objectiveDescription: "Arrest enemy combatants"
+  - type: ArrestObjective
+    factionToArrest: govfor
+    arrestCount: 2
+    removeKillMark: true
+
+- type: entity
+  name: Arrest CLF Objective
+  parent: MarkerBase
+  id: arrestclfobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: govforarrestclfobj
+    factionNeutral: false
+    allowedPresets:
+    - Insurgency
+    factions:
+    - govfor
+    repeating: true
+    objectiveLevel: 1
+    customPoints: 20
+    maxRepeatable: 3
+    objectiveDescription: "Arrest Threats"
+  - type: ArrestObjective
+    factionToArrest: clf
+    arrestCount: 2
+    removeKillMark: true
+
+- type: entity
+  name: Arrest GOVFOR Objective
+  parent: MarkerBase
+  id: arrestgovforobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: clfarrestgovforobj
+    factionNeutral: false
+    allowedPresets:
+    - Insurgency
+    factions:
+    - clf
+    repeating: true
+    objectiveLevel: 1
+    customPoints: 20
+    maxRepeatable: 3
+    objectiveDescription: "Arrest GOVFOR soldiers"
+  - type: ArrestObjective
+    factionToArrest: govfor
+    arrestCount: 2
+    removeKillMark: true

@@ -5,18 +5,18 @@ using Content.Server.Mind;
 using Content.Server.Players.JobWhitelist;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server._RMC14.LinkAccount;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaBoostyWhitelistTest
@@ -102,7 +102,7 @@ public sealed class YautjaBoostyWhitelistTest
             var stations = pair.Server.EntMan.EntityQueryEnumerator<StationJobsComponent>();
             while (stations.MoveNext(out var station, out var jobs))
             {
-                if (!jobs.JobList.TryGetValue("CMUYautjaHunter", out var slots) || slots == 0)
+                if (!pair.Server.EntMan.System<StationJobsSystem>().TryGetJobSlot(station, "CMUYautjaHunter", out var slots, jobs) || slots == 0)
                     continue;
 
                 hunterStation = station;
@@ -124,7 +124,7 @@ public sealed class YautjaBoostyWhitelistTest
             Assert.That(mind, Is.Not.Null);
             Assert.That(pair.Server.System<SharedJobSystem>().MindTryGetJobId(mind!.Value, out var job), Is.True);
             Assert.That(job, Is.EqualTo("CMUYautjaHunter"));
-            Assert.That(pair.Server.EntMan.GetComponent<HumanoidAppearanceComponent>(player.AttachedEntity.Value).Species,
+            Assert.That(pair.Server.EntMan.GetComponent<HumanoidProfileComponent>(player.AttachedEntity.Value).Species,
                 Is.EqualTo("Yautja"));
         });
 

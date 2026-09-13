@@ -1,0 +1,29 @@
+- type: entity
+  parent: ClothingOuterBase
+  id: CMUArmorBoneTribal
+  name: tribal bone armor
+  description: Plates of bone and hide lashed together with sinew. Turns a claw, turns a blade. A rifle round, less so.
+  components:
+  - type: Sprite
+    sprite: Clothing/OuterClothing/Armor/bone_armor.rsi
+  - type: Clothing
+    sprite: Clothing/OuterClothing/Armor/bone_armor.rsi
+  - type: CMArmor
+    melee: 45
+    bullet: 50
+    bio: 10
+    explosionArmor: 15
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMUHelmetBoneTribal
+  name: tribal skull helm
+  description: The hollowed skull of some great beast, worn as a helm. It has seen many hunts.
+  components:
+  - type: Sprite
+    sprite: Clothing/Head/Helmets/bone_helmet.rsi
+  - type: Clothing
+    sprite: Clothing/Head/Helmets/bone_helmet.rsi
+  - type: CMArmor
+    melee: 25
+    bullet: 20

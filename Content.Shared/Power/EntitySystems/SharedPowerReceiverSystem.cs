@@ -68,7 +68,7 @@ public abstract partial class SharedPowerReceiverSystem : EntitySystem
         if (playSwitchSound)
         {
             _audio.PlayPredicted(new SoundPathSpecifier("/Audio/Machines/machine_switch.ogg"), uid, user: user,
-                AudioParams.Default.WithVolume(-2f));
+                AudioParams.Default.AddVolume(-2f));
         }
 
         if (_netMan.IsClient && receiver.PowerDisabled)
@@ -92,8 +92,19 @@ public abstract partial class SharedPowerReceiverSystem : EntitySystem
         // NOOP on server because client has 0 idea of load so we can't raise it properly in shared.
     }
 
-	/// <summary>
-	/// Checks if entity is APC-powered device, and if it have power.
+    /// <summary>
+    /// Sets the power load of this power receiver.
+    /// </summary>
+    public void SetLoad(Entity<SharedApcPowerReceiverComponent?> entity, float load)
+    {
+        if (!ResolveApc(entity.Owner, ref entity.Comp))
+            return;
+
+        entity.Comp.Load = load;
+    }
+
+    /// <summary>
+    /// Checks if entity is APC-powered device, and if it have power.
     /// </summary>
     public bool IsPowered(Entity<SharedApcPowerReceiverComponent?> entity)
     {

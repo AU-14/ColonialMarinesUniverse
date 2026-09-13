@@ -13,6 +13,8 @@ using Content.Shared.Climbing.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -143,7 +145,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
             _receiverClawsQuery.TryComp(wall, out var receiver))
         {
             var targetDamage = FixedPoint2.New(receiver.MaxHealth * 0.9f);
-            if (damageable.TotalDamage < targetDamage)
+            if (_damageable.GetTotalDamage((wall, damageable)) < targetDamage)
                 SetWallDamage((wall, damageable), targetDamage);
         }
 
@@ -350,7 +352,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (!_stack.Use(stackUid, hole.Comp.RepairMaterialCost, stack))
+        if (!_stack.TryUse((stackUid, stack), hole.Comp.RepairMaterialCost))
             return;
 
         var ammo = new List<(EntityUid? Entity, IShootable Shootable)>();
@@ -629,7 +631,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
     private bool IsDamageNearCap(Entity<XenoAcidHoleWallComponent> wall, DamageableComponent damageable, ReceiverXenoClawsComponent receiver)
     {
         var threshold = FixedPoint2.New(receiver.MaxHealth * wall.Comp.DamageNearCapRatio);
-        return damageable.TotalDamage >= threshold;
+        return _damageable.GetTotalDamage((wall, damageable)) >= threshold;
     }
 
     private bool HasRequiredClaws(ReceiverXenoClawsComponent receiver, EntityUid attacker, XenoComponent xeno)
@@ -664,7 +666,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
     private void SetWallDamage(Entity<DamageableComponent> wall, FixedPoint2 damage)
     {
         var damageSpecifier = new DamageSpecifier(_prototype.Index(AcidHoleDamage), damage);
-        _damageable.SetDamage(wall.Owner, wall.Comp, damageSpecifier);
+        _damageable.SetDamage(wall.AsNullable(), damageSpecifier);
     }
 
     private void ReplaceWallWithDamagedGirder(Entity<XenoAcidHoleWallComponent> wall)

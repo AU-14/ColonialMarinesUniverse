@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "All sprites (unless stated otherwise further in the copyright) have been originally made by Nzzy. As of commit https://github.com/AU-14/ColonialMarinesUniverse/commit/c00734db4327fa5672cbc11494cd2a0cc0e50453 , almost all sprites in this folder have been changed, reworked or updated in some way by hutcrime. Appearance of a sprite name or reference in the following list indicates no visual change, or any change at all made in said sprite as of mentioned commit; colony_pilot, corporate_assistant, all sprites made by potatoed. | Foreman, FSS, and Head of Service made by hutcrime. Sprites circle_background.png and square_background.png added by hutcrime. | Journalist partially taken from https://github.com/space-wizards/space-station-14/blob/master/Resources/Textures/Interface/Misc/job_icons.rsi/Reporter.png | Ambassadors, laselle_liaison and working_joe made by potatoed. | All authors mentioned are mentioned as their usernames (preferrably), or nicknames (if their username is unknown), on Discord. | Tacmap blips in this RSI are auto-generated from cmucolonyjobicons.rsi by Tools/generate_tacmap_blips.py (margin trim, leader pip crop, no other artistic change).",
+  "size": {
+    "x": 12,
+    "y": 12
+  },
+  "states": [
+    {
+      "name": "admin"
+    },
+    {
+      "name": "admin_assistant"
+    },
+    {
+      "name": "advisor"
+    },
+    {
+      "name": "cca_ambassador"
+    },
+    {
+      "name": "circle_background"
+    },
+    {
+      "name": "colonist"
+    },
+    {
+      "name": "colony_pilot"
+    },
+    {
+      "name": "corporate_assistant"
+    },
+    {
+      "name": "engineer"
+    },
+    {
+      "name": "ero"
+    },
+    {
+      "name": "foreman"
+    },
+    {
+      "name": "fss"
+    },
+    {
+      "name": "fsw"
+    },
+    {
+      "name": "head_of_engineering"
+    },
+    {
+      "name": "head_of_service"
+    },
+    {
+      "name": "head_physician"
+    },
+    {
+      "name": "icrc_cmo"
+    },
+    {
+      "name": "icrc_doctor"
+    },
+    {
+      "name": "icrc_nurse"
+    },
+    {
+      "name": "icsc_ambassador"
+    },
+    {
+      "name": "journalist"
+    },
+    {
+      "name": "kelland_warden"
+    },
+    {
+      "name": "laselle_liaison"
+    },
+    {
+      "name": "mob_boss"
+    },
+    {
+      "name": "mob_goon"
+    },
+    {
+      "name": "nurse"
+    },
+    {
+      "name": "orbital_manager"
+    },
+    {
+      "name": "orbital_security"
+    },
+    {
+      "name": "physician"
+    },
+    {
+      "name": "prisoner"
+    },
+    {
+      "name": "shopkeep"
+    },
+    {
+      "name": "square_background"
+    },
+    {
+      "name": "synth"
+    },
+    {
+      "name": "twe_ambassador"
+    },
+    {
+      "name": "ua_ambassador"
+    },
+    {
+      "name": "upp_ambassador"
+    },
+    {
+      "name": "wms"
+    },
+    {
+      "name": "working_joe"
+    }
+  ]
+}

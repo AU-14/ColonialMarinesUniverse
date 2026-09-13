@@ -1,0 +1,84 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineSpecialist
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPLineSpecialist
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillSpecialistWeapons: 1
+  - type: JobPrefix
+    prefix: cmu-uppline-prefix-specialist
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-uppline-name-specialist
+  description: cmu-uppline-description
+  playTimeTracker: CMUJobUPPLineSpecialist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPLineSpecialist
+  spawnMenuRoleName: UPP Line Infantry Specialist (3rd party)
+  greeting: cmu-uppline-greeting
+  icon: RMCJobIconSPPSpecialist
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineSpecialist
+  name: UPP Line Infantry Specialist
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-specialist
+    description: cmu-uppline-description
+    reregister: false
+    job: CMUJobUPPLineSpecialist
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineSpecialist
+  equipment:
+    head: ArmorHelmetSPPHeavy
+    jumpsuit: CMJumpsuitSPP
+    outerClothing: RMCArmorSPPHeavySpecialist
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    suitstorage: RMCWeaponLMGQYJ72
+    id: CMUIDCardUPPLineSpecialist
+    belt: RMCT73BeltFilled
+    back: RMCSatchelSPPRifleman
+    pocket1: RMCPouchAutoinjectorFill
+    pocket2: RMCPouchExplosiveFilledC4SPP
+  storage:
+    back:
+    - RMCMotionDetector
+
+- type: playTimeTracker
+  id: CMUJobUPPLineSpecialist

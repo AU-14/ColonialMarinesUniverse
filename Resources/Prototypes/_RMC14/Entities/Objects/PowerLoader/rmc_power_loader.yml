@@ -54,6 +54,7 @@
     containers:
       rmc-mech-pilot: !type:ContainerSlot
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: FootstepModifier
     footstepSoundCollection:
@@ -115,6 +116,7 @@
   - type: InputMover
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: FootstepModifier
     footstepSoundCollection:

@@ -1,16 +1,20 @@
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
-using Content.Shared.Gibbing.Components;
-using Content.Shared.AU14;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.CMU14;
+using Content.Shared.Gibbing;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared.Traits.Assorted;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Random;
-using ApeComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeComponent;
+using ApeComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeComponent;
 
 namespace Content.Shared._RMC14.Gibbing;
 
@@ -24,6 +28,7 @@ public sealed partial class RMCGibSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private INetManager _net = default!;
 
@@ -54,17 +59,24 @@ public sealed partial class RMCGibSystem : EntitySystem
         if (HasComp<ApeComponent>(ent))
             return;
 
-        if (!HasComp<GibbableComponent>(ent))
-            return;
-
         if (args.NewMobState != MobState.Dead)
             return;
+
+        // Ordinary overkill must not consume the revival window. A target that goes directly
+        // from alive to dead can still suffer the existing catastrophic gib outcome.
+        if (_thresholds.IsDamageThresholdUpdateInProgress(ent) &&
+            args.OldMobState == MobState.Critical &&
+            HasComp<RMCRevivableComponent>(ent) &&
+            !HasComp<UnrevivableComponent>(ent))
+        {
+            return;
+        }
 
         var gibProbability = ent.Comp.GibChance;
 
         if (TryComp<MobThresholdsComponent>(ent, out var thresholds) && TryComp<DamageableComponent>(ent, out var damageable))
         {
-            var damage = damageable.Damage.GetTotal();
+            var damage = _damageable.GetAllDamage((ent.Owner, damageable)).GetTotal();
             var dead = _thresholds.GetThresholdForState(ent, MobState.Dead, thresholds);
             gibProbability += (float)(damage - dead) * ent.Comp.DamageGibMultiplier;
         }

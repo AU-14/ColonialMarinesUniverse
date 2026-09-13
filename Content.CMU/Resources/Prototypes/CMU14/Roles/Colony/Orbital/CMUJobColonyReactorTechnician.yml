@@ -1,0 +1,47 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobColonyReactorTechnician
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: ColonyReactorTechnician
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 3
+  - type: JobPrefix
+    prefix: cmu-colony-prefix-reactor-technician
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
+      state: colonist
+  name: cmu-colony-name-reactor-technician
+  description: cmu-colony-description-reactor-technician
+  setPreference: true
+  playTimeTracker: CMUJobColonyReactorTechnician
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearColonyReactorTechnician
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-colony-supervisors-colonist
+  spawnMenuRoleName: Colony Reactor Technician (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearColonyReactorTechnician
+  equipment:
+    jumpsuit: RMCJumpsuitNormCivilianWhiteAlt
+    pocket2: RMCWelderIndustrial
+    id: AU14IDCardColonyColonist
+  storage:
+    back:
+    - RMCMaskGasSPP
+
+- type: playTimeTracker
+  id: CMUJobColonyReactorTechnician
+  isHumanoid: true

@@ -37,7 +37,7 @@ public sealed partial class PathfindingSystem
     /// <summary>
     /// Gets a spline path from start to end.
     /// </summary>
-    public SplinePathResult GetSplinePath(SplinePathArgs args, Random random)
+    public SplinePathResult GetSplinePath(SplinePathArgs args, IRobustRandom random)
     {
         var start = args.Args.Start;
         var end = args.Args.End;
@@ -86,7 +86,7 @@ public sealed partial class PathfindingSystem
                 var perpLine = pointBPerp - pointAPerp;
                 var perpHalfway = perpLine.Length() / 2f;
 
-                var splinePoint = (pointAPerp + perpLine.Normalized() * NextFloat(random, -args.MaxRatio, args.MaxRatio) * perpHalfway).Floored();
+                var splinePoint = (pointAPerp + perpLine.Normalized() * random.NextFloat(-args.MaxRatio, args.MaxRatio) * perpHalfway).Floored();
 
                 // We essentially take (A, B) and turn it into (A, C) & (C, B)
                 pairs[i] = (pointA, splinePoint);

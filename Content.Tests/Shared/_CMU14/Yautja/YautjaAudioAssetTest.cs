@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 
-namespace Content.Tests.Shared._CMU14.Yautja;
+namespace Content.Tests.Shared.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaAudioAssetTest
@@ -12,7 +12,7 @@ public sealed class YautjaAudioAssetTest
     [TestCase("pred_cloakoff_modern.wav")]
     public void PositionalYautjaCloakAudioIsMono(string filename)
     {
-        var path = Path.Combine(FindRepositoryRoot(), "Resources", "Audio", "_CMU14", "Yautja", filename);
+        var path = Path.Combine(FindRepositoryRoot(), "Content.CMU", "Resources", "Audio", "CMU14", "Yautja", filename);
         Assert.That(File.Exists(path), Is.True, $"Audio asset must exist: {path}");
 
         using var stream = File.OpenRead(path);

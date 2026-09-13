@@ -8,14 +8,31 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 public sealed class ChatSplitResizeHandle : PanelContainer
 {
     private bool _dragging;
+    private bool _horizontal;
 
     public event Action<GUIMouseMoveEventArgs>? OnDragged;
     public event Action? OnDragEnded;
 
+    /// <summary>
+    ///     Which way the panes are split, and so which way this handle slides. Horizontal means the
+    ///     panes sit side by side and the handle is a vertical bar between them.
+    /// </summary>
+    public bool Horizontal
+    {
+        get => _horizontal;
+        set
+        {
+            _horizontal = value;
+            DefaultCursorShape = RestingCursor;
+        }
+    }
+
+    private CursorShape RestingCursor => _horizontal ? CursorShape.HResize : CursorShape.VResize;
+
     public ChatSplitResizeHandle()
     {
         MouseFilter = MouseFilterMode.Stop;
-        DefaultCursorShape = CursorShape.VResize;
+        DefaultCursorShape = RestingCursor;
     }
 
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
@@ -50,6 +67,6 @@ public sealed class ChatSplitResizeHandle : PanelContainer
     {
         base.MouseExited();
         if (!_dragging)
-            DefaultCursorShape = CursorShape.VResize;
+            DefaultCursorShape = RestingCursor;
     }
 }

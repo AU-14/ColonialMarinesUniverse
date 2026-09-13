@@ -1,9 +1,11 @@
+using Content.Shared.Damage.Systems;
+using Content.Shared.Blocking.Components;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Content.Client.Popups;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Tether;
 using Content.Shared.Actions.Components;
 using Content.Shared.Blocking;
@@ -39,7 +41,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaMeleeWeaponTest
@@ -427,7 +429,7 @@ public sealed class YautjaMeleeWeaponTest
                         "CMSS13 attack_self() keeps the extended combi-stick at w_class = SIZE_LARGE.");
                     Assert.That(DamageTotal(melee.GetDamage(combistick, human)), Is.EqualTo((FixedPoint2) 30),
                         "CMSS13 wield() sets force = force_wielded = MELEE_FORCE_TIER_6.");
-                    Assert.That(entMan.HasComponent<SharpComponent>(combistick), Is.True,
+                    Assert.That(entMan.GetComponent<Content.Shared.Tools.Components.ToolComponent>(combistick).Qualities.Contains("Slicing"), Is.True,
                         "CMSS13 attack_self() keeps the extended sharp combi-stick state.");
                 });
             }
@@ -482,7 +484,7 @@ public sealed class YautjaMeleeWeaponTest
                     "CMSS13 combistick force_unwielded = MELEE_FORCE_TIER_2 while extended but not wielded.");
 
                 var wieldable = entMan.GetComponent<WieldableComponent>(combistick);
-                Assert.That(wield.TryWield(combistick, wieldable, hunter), Is.True);
+                Assert.That(wield.TryWield((combistick, wieldable), hunter), Is.True);
 
                 var wielded = melee.GetDamage(combistick, hunter);
                 Assert.That(DamageTotal(wielded), Is.EqualTo((FixedPoint2) 30),
@@ -572,7 +574,7 @@ public sealed class YautjaMeleeWeaponTest
                 SetupChainedLink(entMan, owner, pickedUp);
                 SetupChainedLink(entMan, owner, deleted);
 
-                var pickupAttempt = new GettingPickedUpAttemptEvent(nonOwner, pickedUp);
+                var pickupAttempt = new GettingPickedUpAttemptEvent(nonOwner, pickedUp, true);
                 entMan.EventBus.RaiseLocalEvent(pickedUp, pickupAttempt);
                 Assert.That(pickupAttempt.Cancelled, Is.False,
                     "CMSS13 on_pickup() warns the original holder and cleans up the chain, but does not block pickup.");
@@ -831,11 +833,11 @@ public sealed class YautjaMeleeWeaponTest
                     var block = entMan.GetComponent<BlockingComponent>(shield);
 
                     Assert.That(item.HeldPrefix, Is.EqualTo(heldPrefix), prototype);
-                    Assert.That(blocking.StartBlocking(shield, block, hunter), Is.True, prototype);
+                    Assert.That(blocking.RaiseShield((shield, block), hunter), Is.True, prototype);
                     Assert.That(item.HeldPrefix, Is.EqualTo($"{heldPrefix}_ready"),
                         $"CMSS13 /obj/item/weapon/shield/riot/yautja/raise_shield() sets item_state to [base_icon_state]_ready for {prototype}.");
 
-                    Assert.That(blocking.StopBlocking(shield, block, hunter), Is.True, prototype);
+                    Assert.That(blocking.LowerShield((shield, block), hunter), Is.True, prototype);
                     Assert.That(item.HeldPrefix, Is.EqualTo(heldPrefix),
                         $"CMSS13 /obj/item/weapon/shield/riot/yautja/lower_shield() restores item_state to base_icon_state for {prototype}.");
                 }
@@ -909,7 +911,7 @@ public sealed class YautjaMeleeWeaponTest
                 thrown.Thrower = hunter;
 
                 var hit = new ThrowDoHitEvent(combistick, hunter, thrown);
-                entMan.EventBus.RaiseLocalEvent(combistick, hit);
+                entMan.EventBus.RaiseLocalEvent(combistick, ref hit);
 
                 Assert.Multiple(() =>
                 {
@@ -919,7 +921,7 @@ public sealed class YautjaMeleeWeaponTest
                         "CMSS13 chained weapon launch_impact() makes a Yautja put the chained weapon in hand.");
                     Assert.That(entMan.HasComponent<ThrownItemComponent>(combistick), Is.False,
                         "A successful local catch must stop the thrown item so it is no longer flying.");
-                    Assert.That(damageable.TotalDamage, Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, damageable)).GetTotal(), Is.EqualTo(FixedPoint2.Zero),
                         "CMSS13 chained weapon catch returns before parent launch_impact(), so throwforce damage is not applied to the Yautja catcher.");
                     Assert.That(stamina.StaminaDamage, Is.EqualTo(0f),
                         "The local handled Yautja catch must skip generic throw-hit stamina.");
@@ -967,7 +969,7 @@ public sealed class YautjaMeleeWeaponTest
                 thrown.Thrower = hunter;
 
                 var hit = new ThrowDoHitEvent(combistick, hunter, thrown);
-                entMan.EventBus.RaiseLocalEvent(combistick, hit);
+                entMan.EventBus.RaiseLocalEvent(combistick, ref hit);
 
                 Assert.Multiple(() =>
                 {
@@ -977,7 +979,7 @@ public sealed class YautjaMeleeWeaponTest
                         "A full-handed Yautja cannot catch the chained weapon because CMSS13 put_in_hands(src) failed.");
                     Assert.That(entMan.HasComponent<ThrownItemComponent>(combistick), Is.True,
                         "The local thrown item should not be stopped by the failed catch branch.");
-                    Assert.That(damageable.TotalDamage, Is.GreaterThan(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, damageable)).GetTotal(), Is.GreaterThan(FixedPoint2.Zero),
                         "Falling through to parent launch_impact() should allow local generic throw damage.");
                     Assert.That(stamina.StaminaDamage, Is.EqualTo(0f),
                         "Combistick only carries local throw damage, not a stamina-on-collide component.");
@@ -1401,7 +1403,7 @@ public sealed class YautjaMeleeWeaponTest
                 victim = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new(1, 0)));
                 dagger = entMan.SpawnEntity("CMUYautjaCeremonialDagger", map.GridCoords);
                 mobState.ChangeMobState(victim, MobState.Dead);
-                damageBefore = entMan.GetComponent<DamageableComponent>(victim).TotalDamage;
+                damageBefore = entMan.System<DamageableSystem>().GetAllDamage(victim).GetTotal();
 
                 foreach (var (partUid, _) in body.GetBodyChildren(victim))
                 {
@@ -1434,7 +1436,7 @@ public sealed class YautjaMeleeWeaponTest
                         "CMSS13 only keeps current_flayer during the active flay datum do_after; the first pass should finish before the recursive stage loop is ported.");
                     Assert.That(flayed.NextStage, Is.EqualTo(YautjaFlayingStage.Scalp),
                         "CMSS13 creates the flaying datum after the first cuts with FLAY_STAGE_SCALP as the next recursive stage.");
-                    Assert.That(damageable.TotalDamage - damageBefore, Is.EqualTo((FixedPoint2) 15),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((victim, damageable)).GetTotal() - damageBefore, Is.EqualTo((FixedPoint2) 15),
                         "CMSS13 applies 15 BRUTE to each limb during the first pass; local aggregate damage records one source pass while part health stores the per-limb ledger.");
                     Assert.That(partCount, Is.GreaterThan(0),
                         "The test fixture must expose local body parts before it can verify the CMSS13 per-limb damage loop.");
@@ -1639,6 +1641,7 @@ public sealed class YautjaMeleeWeaponTest
         EntityUid hunter = default;
         EntityUid dagger = default;
         EntityUid limb = default;
+        var limbName = string.Empty;
         EntityUid? previousAttached = null;
         CultureInfo? previousCulture = null;
 
@@ -1658,6 +1661,7 @@ public sealed class YautjaMeleeWeaponTest
                 hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
                 dagger = entMan.SpawnEntity("CMUYautjaCeremonialDagger", map.GridCoords);
                 limb = entMan.SpawnEntity("CMUPartHumanLeftArm", map.GridCoords.Offset(new(1, 0)));
+                limbName = entMan.GetComponent<MetaDataComponent>(limb).EntityName;
 
                 entMan.EnsureComponent<YautjaComponent>(hunter);
                 Assert.That(hands.TryPickupAnyHand(hunter, dagger), Is.True);
@@ -1688,7 +1692,7 @@ public sealed class YautjaMeleeWeaponTest
 
             await pair.ReallyBeIdle(10);
 
-            await AssertClientHasPopup(client, "You decide not to flay left human arm.");
+            await AssertClientHasPopup(client, $"You decide not to flay {limbName}.");
 
             await server.WaitAssertion(() =>
             {

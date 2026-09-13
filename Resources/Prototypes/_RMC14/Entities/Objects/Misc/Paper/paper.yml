@@ -33,9 +33,9 @@
     - Trash
     - Paper
   - type: Appearance
+  - type: PaperVisualizer
   - type: PaperVisuals
   - type: Flammable
-    intensity: 10
     fireSpread: true
     canResistFire: false
     alwaysCombustible: true
@@ -48,6 +48,7 @@
     normalState: fire
   - type: Damageable
     damageModifierSet: Wood
+  - type: Injurable
   - type: Destructible
     thresholds:
     - trigger:
@@ -76,17 +77,17 @@
       - Xeno
   - type: EmitSoundOnPickup
     sound:
-      path: /Audio/_RMC14/Handling/paper_pickup.ogg
+      collection: RMCPaperPickup
       params:
         volume: -4
   - type: EmitSoundOnDrop
     sound:
-      path: /Audio/_RMC14/Handling/paper_drop.ogg
+      collection: RMCPaperDrop
       params:
         volume: -5
   - type: EmitSoundOnLand
     sound:
-      path: /Audio/_RMC14/Handling/paper_drop.ogg
+      collection: RMCPaperDrop
       params:
         volume: -5
   - type: Clothing
@@ -237,7 +238,7 @@
   - type: PaperLabelType
     paperType: Invoice
   - type: PaperVisuals
-    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundImagePath: "/Textures/CMU14/Interface/Paper/paper_bkg.png"
     backgroundModulate: "#9ef5ff"
     contentImageModulate: "#9ef5ff"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0

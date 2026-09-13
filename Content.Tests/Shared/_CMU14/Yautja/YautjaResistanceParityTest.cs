@@ -1,13 +1,13 @@
 using System;
 using System.IO;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage.Prototypes;
 using NUnit.Framework;
 using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
 
-namespace Content.Tests.Shared._CMU14.Yautja;
+namespace Content.Tests.Shared.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaResistanceParityTest : ContentUnitTest
@@ -25,9 +25,10 @@ public sealed class YautjaResistanceParityTest : ContentUnitTest
             AppContext.BaseDirectory,
             "..",
             "..",
+            "Content.CMU",
             "Resources",
             "Prototypes",
-            "_CMU14",
+            "CMU14",
             "Threats",
             "Yautja",
             "Species",

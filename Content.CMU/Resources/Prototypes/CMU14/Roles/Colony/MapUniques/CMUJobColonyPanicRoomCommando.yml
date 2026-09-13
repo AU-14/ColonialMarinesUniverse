@@ -1,0 +1,65 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobColonyPanicRoomCommando
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: ColonyPanicRoomCommando
+  roundComponents:
+  - type: Skills
+    preset: RMCSkillPresetPMCCommando
+  - type: JobPrefix
+    prefix: cmu-colony-prefix-panic-room-commando
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pmc_gun
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_wy_com
+  name: cmu-colony-name-panic-room-commando
+  description: cmu-colony-description-panic-room-commando
+  setPreference: true
+  playTimeTracker: CMUJobColonyPanicRoomCommando
+  ranks:
+    RMCRankWeYaCommando: []
+  startingGear: CMUGearColonyPanicRoomCommando
+  icon: RMCJobIconPMCCommando
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-colony-supervisors-colonist
+  spawnMenuRoleName: Colony Panic Room Commando (CMU)
+  accessGroups:
+  - Colonist
+  - auwy
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearColonyPanicRoomCommando
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: RMCJumpsuitVeteranPMCCommandoSurvivor
+    shoes: RMCBootsPMCCommandoFilled
+    head: ArmorHelmetPMCCommandoSurvivor
+    ears: RMCHeadsetHvHWeYaPMCCommando
+    belt: RMCBeltPMCFilledCommando
+    mask: RMCMaskCoifPMC
+    outerClothing: CMArmorM4PMCCommandoSurvivorFilled
+    gloves: RMCHandsVeteranPMCCommandoSurvivor
+    suitstorage: RMCWeaponRifleM54CWhiteCommando
+    pocket1: RMCPouchSurvivalBlackFilled
+    pocket2: RMCPouchFirstAidPMCFill
+    back: RMCSatchelPMCCommandoFilled
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointColonyPanicRoomCommando
+  name: Spawn Point Colony Panic Room Commando
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobColonyPanicRoomCommando
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobColonyPanicRoomCommando
+  isHumanoid: true

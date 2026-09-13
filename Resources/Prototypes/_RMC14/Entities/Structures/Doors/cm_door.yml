@@ -82,9 +82,8 @@
   - type: IconSmooth
     key: doors
     mode: NoSprite
-  - type: PaintableAirlock
-    group: Standard
-    department: CMSquad
+  - type: Paintable
+    group: AirlockStandard
   - type: AccessReader
   - type: StaticPrice
     price: 150
@@ -147,8 +146,9 @@
           "/Audio/Weapons/smash.ogg"
   - type: AirlockReceiverXenoClaws
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: CMU14StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

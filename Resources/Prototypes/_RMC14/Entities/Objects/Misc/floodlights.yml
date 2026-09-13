@@ -24,6 +24,7 @@
   - type: InteractionOutline
   - type: Repairable
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: PointLight
     enabled: true
@@ -107,6 +108,7 @@
     node: completed
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: PointLight
     enabled: true
@@ -442,6 +444,7 @@
     node: completed
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

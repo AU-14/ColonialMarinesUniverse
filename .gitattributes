@@ -1,3 +1,4 @@
+# CMU14 file
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
@@ -28,4 +29,5 @@
 # Set the merge driver for YAML map data
 # dotnet run --project ./Content.Tools "$@"
 ###############################################################################
-Resources/Maps/**.yml merge=mapping-merge-driver
+Resources/Maps/**/*.yml merge=mapping-merge-driver
+Content.CMU/Resources/Maps/**/*.yml merge=mapping-merge-driver

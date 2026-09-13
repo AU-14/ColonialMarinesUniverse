@@ -274,7 +274,7 @@
     blacklist:
       components:
       - Xeno
-      - CMUPathogenWalker
+#     - CMUPathogenWalker # CMU14
   - type: DestroyOnPreset
     preset: DistressSignal
 

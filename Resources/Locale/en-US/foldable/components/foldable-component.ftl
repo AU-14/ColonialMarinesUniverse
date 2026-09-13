@@ -14,3 +14,8 @@ fold-unzip-verb = Unzip
 
 fold-strap-verb = Strap on
 fold-unstrap-verb = Unstrap
+
+
+fold-lower-visor-verb = Lower visor
+
+fold-raise-visor-verb = Raise visor

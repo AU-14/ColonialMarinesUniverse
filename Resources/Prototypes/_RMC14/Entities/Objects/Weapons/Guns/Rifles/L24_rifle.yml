@@ -5,14 +5,14 @@
   description: Pulse action 8.8x51mm caseless assault rifle of the Royal Marine Commandos, personal friend of any Marine Commando. Comes with semi-auto and burst-fire firemodes and features an integrated 30mm grenade launcher that can hold two grenades on backup with one in the chamber.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/RMC/L23.rsi
+    sprite: CMU14/Weapons/Guns/RMC/L23.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/RMC/L23.rsi
+    sprite: CMU14/Weapons/Guns/RMC/L23.rsi
   - type: Gun
     shotsPerBurst: 3
     selectedMode: FullAuto
@@ -270,6 +270,7 @@
     - RMCCartridgeRifleL24
   - type: CartridgeAmmo
     proto: BulletRifle888x51mm
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: CMBaseCartridgeRifle
@@ -283,6 +284,7 @@
     - RMCCartridgeRifleL24AP
   - type: CartridgeAmmo
     proto: BulletRifle888x51mmAP
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: CMBaseCartridgeRifle
@@ -296,6 +298,7 @@
     - RMCCartridgeRifleL24HEAP
   - type: CartridgeAmmo
     proto: BulletRifle888x51mmHEAP
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: CMBaseCartridgeRifle
@@ -309,6 +312,7 @@
     - RMCCartridgeRifleL24Incendiary
   - type: CartridgeAmmo
     proto: BulletRifle888x51mmIncendiary
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: BulletRifle10x24mm

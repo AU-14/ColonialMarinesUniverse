@@ -1,3 +1,4 @@
+using Content.Client.Stylesheets;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -21,7 +22,8 @@ namespace Content.Client.Resources
 
         public static Font GetFont(this IResourceCache cache, ResPath path, int size)
         {
-            return new VectorFont(cache.GetResource<FontResource>(path), size);
+            var font = new VectorFont(cache.GetResource<FontResource>(path), size);
+            return IoCManager.Resolve<IStylesheetManager>().ApplyUiFont(font, path.ToString(), size);
         }
 
         public static Font GetFont(this IResourceCache cache, string path, int size)
@@ -35,7 +37,7 @@ namespace Content.Client.Resources
             for (var i = 0; i < path.Length; i++)
                 fs[i] = new VectorFont(cache.GetResource<FontResource>(path[i]), size);
 
-            return new StackedFont(fs);
+            return IoCManager.Resolve<IStylesheetManager>().ApplyUiFont(new StackedFont(fs), path[0].ToString(), size);
         }
 
         public static Font GetFont(this IResourceCache cache, string[] path, int size)

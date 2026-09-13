@@ -51,6 +51,7 @@
       map: [ "enum.XenoEggLayers.Base" ]
   - type: XenoEgg
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: RMCMesonsNonviewable
     xenoVisible: true
@@ -69,6 +70,9 @@
       behaviors:
       - !type:BurnBodyBehavior { }
   - type: XenoFriendly
+  - type: NpcFactionMember # CMU14: hostile structure, valid sentry/turret target
+    factions:
+    - RMCXeno
   - type: StepTrigger
     requiredTriggeredSpeed: 0
     intersectRatio: 0.5
@@ -139,6 +143,7 @@
     - map: [ "egg" ]
       state: egg_exploded
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

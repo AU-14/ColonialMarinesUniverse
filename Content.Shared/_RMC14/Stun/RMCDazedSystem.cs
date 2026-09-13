@@ -6,15 +6,16 @@ using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Stun;
 
 public sealed partial class RMCDazedSystem : EntitySystem
 {
     [Dependency] private SharedChargesSystem _charges = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffect = default!;
+    [Dependency] private NewStatusEffectsSystem _statusEffect = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
 
     public static readonly EntProtoId StatusEffectDazed = "Dazed";
 
@@ -75,7 +76,7 @@ public sealed partial class RMCDazedSystem : EntitySystem
             appliedEffect = true;
 
         if (appliedEffect && stutter)
-            _stutter.DoStutter(uid, time, true, status);
+            _stutter.DoStutter(uid, time, true);
 
         return appliedEffect;
     }

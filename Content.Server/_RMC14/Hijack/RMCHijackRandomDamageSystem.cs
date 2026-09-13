@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Hijack;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
@@ -197,10 +199,11 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
             return;
 
         var targetTotal = targetDamage.GetTotal();
-        if (targetTotal <= FixedPoint2.Zero || damageable.TotalDamage >= targetTotal)
+        var totalDamage = _damageable.GetTotalDamage((uid, damageable));
+        if (targetTotal <= FixedPoint2.Zero || totalDamage >= targetTotal)
             return;
 
-        var remaining = targetTotal - damageable.TotalDamage;
+        var remaining = targetTotal - totalDamage;
         var damage = targetDamage * (remaining / targetTotal);
 
         _damageable.TryChangeDamage(uid, damage, true, damageable: damageable);

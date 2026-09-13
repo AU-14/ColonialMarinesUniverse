@@ -3,6 +3,7 @@ using Content.Client.Gameplay;
 using Content.Client.Lobby;
 using Content.Client.RoundEnd;
 using Content.Shared.GameTicking;
+using Content.Shared.GameTicking.Prototypes;
 using Content.Shared.GameWindow;
 using Content.Shared.Roles;
 using JetBrains.Annotations;
@@ -26,13 +27,15 @@ namespace Content.Client.GameTicking.Managers
 
         private Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>>  _jobsAvailable = new();
         private Dictionary<NetEntity, string> _stationNames = new();
+        private Dictionary<NetEntity, ProtoId<JobWeightPrototype>?> _jobWeightsByStation = new();
 
         [ViewVariables] public bool AreWeReady { get; private set; }
         [ViewVariables] public bool IsGameStarted { get; private set; }
         [ViewVariables] public ResolvedSoundSpecifier? RestartSound { get; private set; }
-        [ViewVariables] public string? LobbyBackground { get; private set; }
+        [ViewVariables] public ProtoId<LobbyBackgroundPrototype>? LobbyBackground { get; private set; }
         [ViewVariables] public bool DisallowedLateJoin { get; private set; }
         [ViewVariables] public string? ServerInfoBlob { get; private set; }
+        [ViewVariables] public IReadOnlyList<LobbyRoundInfoField> ServerRoundInfo { get; private set; } = Array.Empty<LobbyRoundInfoField>();
         [ViewVariables] public TimeSpan StartTime { get; private set; }
         [ViewVariables] public new bool Paused { get; private set; }
         [ViewVariables] public string CurrentMapName { get; private set; } = string.Empty;
@@ -42,8 +45,11 @@ namespace Content.Client.GameTicking.Managers
         [ViewVariables] public TimeSpan CurrentRoundElapsedTime { get; private set; }
         [ViewVariables] private TimeSpan? _roundElapsedTimeReceivedAt;
 
+        public override IReadOnlyList<(TimeSpan, string)> AllPreviousGameRules => new List<(TimeSpan, string)>();
+
         [ViewVariables] public IReadOnlyDictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> JobsAvailable => _jobsAvailable;
         [ViewVariables] public IReadOnlyDictionary<NetEntity, string> StationNames => _stationNames;
+        [ViewVariables] public IReadOnlyDictionary<NetEntity, ProtoId<JobWeightPrototype>?> JobWeightsByStation => _jobWeightsByStation;
 
         public event Action? InfoBlobUpdated;
         public event Action? RoundStatusUpdated;
@@ -113,6 +119,12 @@ namespace Content.Client.GameTicking.Managers
                 _stationNames[weh.Key] = weh.Value;
             }
 
+            _jobWeightsByStation.Clear();
+            foreach (var (station, jobWeights) in message.JobWeightsByStation)
+            {
+                _jobWeightsByStation[station] = jobWeights;
+            }
+
             LobbyJobsAvailableUpdated?.Invoke(JobsAvailable);
         }
 
@@ -141,6 +153,7 @@ namespace Content.Client.GameTicking.Managers
         private void LobbyInfo(TickerLobbyInfoEvent message)
         {
             ServerInfoBlob = message.TextBlob;
+            ServerRoundInfo = message.RoundInfo;
 
             InfoBlobUpdated?.Invoke();
         }

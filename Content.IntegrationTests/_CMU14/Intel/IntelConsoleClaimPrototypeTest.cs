@@ -1,9 +1,9 @@
-using Content.Shared._CMU14.Intel;
+using Content.Shared.CMU14.Intel;
 using Content.Shared._RMC14.Intel;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Intel;
+namespace Content.IntegrationTests.CMU14.Intel;
 
 [TestFixture]
 public sealed class IntelConsoleClaimPrototypeTest
@@ -26,7 +26,7 @@ public sealed class IntelConsoleClaimPrototypeTest
                 Assert.That(prototype.TryComp<ClaimableIntelConsoleComponent>(out var claim, factory), Is.True);
                 Assert.That(claim!.ClaimingTeam, Is.EqualTo(Team.GovFor));
                 Assert.That(claim.RequiredPreset, Is.EqualTo("Insurgency"));
-                Assert.That(claim.ClaimTime, Is.EqualTo(TimeSpan.FromSeconds(10)));
+                Assert.That(claim.ClaimTime, Is.EqualTo(TimeSpan.FromSeconds(45)));
             });
         });
 

@@ -16,6 +16,7 @@
     state: full
   - type: Damageable
     damageModifierSet: null
+  - type: Injurable
   - type: Destructible
     thresholds:
     - trigger:
@@ -56,8 +57,6 @@
   components:
   - type: Sprite
     color: "#8B7B5B"
-  - type: Icon
-    color: "#8B7B5B"
 
 - type: entity
   parent: BaseStructure
@@ -96,8 +95,9 @@
     destroy: true
   - type: Animateable
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: PlaceableSurface
   - type: Fixtures
     fixtures:
@@ -165,8 +165,6 @@
   id: RMCTableReinforcedRequisitionBrown
   components:
   - type: Sprite
-    color: "#ffb84d"
-  - type: Icon
     color: "#ffb84d"
 
 - type: entity
@@ -291,8 +289,6 @@
   components:
   - type: Sprite
     color: "#98A3AB"
-  - type: Icon
-    color: "#98A3AB"
 
 - type: entity
   parent: RMCTablePrison
@@ -301,8 +297,6 @@
   components:
   - type: Sprite
     color: "#ffe6e6"
-  - type: Icon
-    color: "#ffe6e6"
 
 - type: entity
   parent: RMCTablePrison
@@ -310,8 +304,6 @@
   suffix: Prison, Brown
   components:
   - type: Sprite
-    color: "#8B7B5B"
-  - type: Icon
     color: "#8B7B5B"
 
 # Hunter
@@ -351,8 +343,9 @@
   - type: Physics
     bodyType: Static
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: PlaceableSurface
   - type: Fixtures
     fixtures:

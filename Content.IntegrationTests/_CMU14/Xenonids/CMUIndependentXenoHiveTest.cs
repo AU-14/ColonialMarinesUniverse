@@ -5,7 +5,7 @@ using Content.Server.Maps;
 using Content.Server._RMC14.Admin;
 using Content.Server._RMC14.TacticalMap;
 using Content.Server._RMC14.Xenonids.Hive;
-using Content.Shared._CMU14.Xenonids.Hive;
+using Content.Shared.CMU14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Weeds;
@@ -19,7 +19,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Xenonids;
+namespace Content.IntegrationTests.CMU14.Xenonids;
 
 [TestFixture]
 public sealed class CMUIndependentXenoHiveTest
@@ -139,7 +139,7 @@ public sealed class CMUIndependentXenoHiveTest
             {
                 Assert.That(eggComp!.State, Is.EqualTo(XenoEggState.Growing));
                 Assert.That(eggComp.CanSpawnGhostParasite, Is.False);
-                Assert.That(eggComp.CurrentSprite, Is.EqualTo("_CMU14/HunterShip/mob/xenos/effects.rsi"));
+                Assert.That(eggComp.CurrentSprite, Is.EqualTo("CMU14/HunterShip/mob/xenos/effects.rsi"));
                 Assert.That(eggAssignment!.Hive, Is.EqualTo(CMUHunterShipHiveKind.Forsaken));
                 Assert.That(weedsAssignment!.Hive, Is.EqualTo(CMUHunterShipHiveKind.Forsaken));
             });
@@ -152,7 +152,7 @@ public sealed class CMUIndependentXenoHiveTest
                     prototypeId);
                 Assert.That(itemEgg.TryComp<CMUHunterShipHiveAssignmentComponent>(out var assignment, components), Is.True,
                     prototypeId);
-                Assert.That(itemComp!.CurrentSprite, Is.EqualTo("_CMU14/HunterShip/mob/xenos/effects.rsi"),
+                Assert.That(itemComp!.CurrentSprite, Is.EqualTo("CMU14/HunterShip/mob/xenos/effects.rsi"),
                     prototypeId);
                 Assert.That(assignment!.Hive, Is.EqualTo(prototypeId.Contains("Variant02")
                     ? CMUHunterShipHiveKind.Forsaken

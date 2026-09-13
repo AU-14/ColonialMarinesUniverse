@@ -1,4 +1,3 @@
-﻿using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
@@ -9,7 +8,6 @@ namespace Content.Shared.Body.Part;
 [Access(typeof(SharedBodySystem))]
 public sealed partial class BodyPartComponent : Component
 {
-    // Need to set this on container changes as it may be several transform parents up the hierarchy.
     /// <summary>
     /// Parent body for this part.
     /// </summary>
@@ -19,10 +17,8 @@ public sealed partial class BodyPartComponent : Component
     [DataField, AutoNetworkedField]
     public BodyPartType PartType = BodyPartType.Other;
 
-    // TODO BODY Replace with a simulation of organs
     /// <summary>
-    ///     Whether or not the owning <see cref="Body"/> will die if all
-    ///     <see cref="BodyComponent"/>s of this type are removed from it.
+    /// Whether removal of every body part of this type is fatal to the owning body.
     /// </summary>
     [DataField("vital"), AutoNetworkedField]
     public bool IsVital;
@@ -31,21 +27,20 @@ public sealed partial class BodyPartComponent : Component
     public BodyPartSymmetry Symmetry = BodyPartSymmetry.None;
 
     /// <summary>
-    /// Child body parts attached to this body part.
+    /// Configured child-part slot schema. Occupants are represented by Nubody relationships.
     /// </summary>
     [DataField, AutoNetworkedField]
     public Dictionary<string, BodyPartSlot> Children = new();
 
     /// <summary>
-    /// Organs attached to this body part.
+    /// Configured internal-organ slot schema. Occupants are represented by Nubody relationships.
     /// </summary>
     [DataField, AutoNetworkedField]
     public Dictionary<string, OrganSlot> Organs = new();
-
 }
 
 /// <summary>
-/// Contains metadata about a body part in relation to its slot.
+/// Metadata about a child body-part slot.
 /// </summary>
 [NetSerializable, Serializable]
 [DataRecord]
@@ -59,10 +54,10 @@ public partial struct BodyPartSlot
         Id = id;
         Type = type;
     }
-};
+}
 
 /// <summary>
-/// Contains metadata about an organ part in relation to its slot.
+/// Metadata about an internal-organ slot.
 /// </summary>
 [NetSerializable, Serializable]
 [DataRecord]
@@ -74,4 +69,4 @@ public partial struct OrganSlot
     {
         Id = id;
     }
-};
+}

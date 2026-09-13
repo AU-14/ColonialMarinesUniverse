@@ -116,7 +116,10 @@ public sealed partial class RMCProjectileSystem : EntitySystem
         if (projectile.Comp.ShotFrom == null || projectile.Comp.MinRemainingDamageMult < 0)
             return;
 
-        var distance = (_transform.GetMoverCoordinates(args.Target).Position - projectile.Comp.ShotFrom.Value.Position).Length();
+        var targetCoordinates = _transform.GetMoverCoordinates(args.Target);
+        if (!projectile.Comp.ShotFrom.Value.TryDistance(EntityManager, _transform, targetCoordinates, out var distance))
+            return;
+
         var minDamage = args.Damage.GetTotal() * projectile.Comp.MinRemainingDamageMult;
         foreach (var threshold in projectile.Comp.Thresholds)
         {

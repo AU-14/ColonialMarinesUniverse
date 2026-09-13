@@ -1,3 +1,5 @@
+using Content.Shared.Kitchen.Components;
+using Content.Shared.Power.Components;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Kitchen.Visualizers;
@@ -29,7 +31,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using ServerSmesComponent = Content.Server.Power.SMES.SmesComponent;
 
-namespace Content.IntegrationTests._CMU14.HunterShip;
+namespace Content.IntegrationTests.CMU14.HunterShip;
 
 [TestFixture]
 public sealed class HunterShipYautjaMachineryTest
@@ -175,8 +177,9 @@ public sealed class HunterShipYautjaMachineryTest
             Assert.That(cryoPod.CoverOnState, Is.EqualTo("pred_cell-on-occupied"), CryoId);
             Assert.That(cryoPod.CoverOffState, Is.EqualTo("pred_cell-off-occupied"), CryoId);
             Assert.That(cryoPod.EntryDelay, Is.EqualTo(2f), CryoId);
-            Assert.That(cryo.TryGetComponent<HealthAnalyzerComponent>(out var health, factory), Is.True, CryoId);
-            Assert.That(health!.ScanDelay, Is.EqualTo(TimeSpan.Zero), CryoId);
+            // CryoPodSystem now builds the patient scan directly in the cryopod UI.
+            Assert.That(cryo.TryGetComponent<UserInterfaceComponent>(out var cryoUi, factory), Is.True, CryoId);
+            Assert.That(server.EntMan.System<SharedUserInterfaceSystem>().HasUi(default, CryoPodUiKey.Key, cryoUi), Is.True, CryoId);
             Assert.That(cryo.TryGetComponent<ItemSlotsComponent>(out var slots, factory), Is.True, CryoId);
             Assert.That(slots!.Slots.Keys, Does.Contain("beakerSlot"), CryoId);
             Assert.That(cryo.TryGetComponent<ContainerManagerComponent>(out var containers, factory), Is.True, CryoId);
@@ -213,7 +216,7 @@ public sealed class HunterShipYautjaMachineryTest
         {
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.EntMan.ComponentFactory;
-            var spritePath = new ResPath("/Textures/_CMU14/HunterShip/obj/structures/machinery/power.rsi");
+            var spritePath = new ResPath("/Textures/CMU14/HunterShip/obj/structures/machinery/power.rsi");
 
             foreach (var row in CableTerminalRows())
             {
@@ -241,7 +244,7 @@ public sealed class HunterShipYautjaMachineryTest
 
                 Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, row.Id);
                 var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
-                Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith("_CMU14/HunterShip/obj/structures/machinery/power.rsi"), row.Id);
+                Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith("CMU14/HunterShip/obj/structures/machinery/power.rsi"), row.Id);
                 Assert.That(rsiIcon.RsiState, Is.EqualTo("term"), row.Id);
             }
         });
@@ -307,17 +310,17 @@ public sealed class HunterShipYautjaMachineryTest
         Assert.That(smes!.StaticOverlayStates, Is.True, prototype.ID);
         Assert.That(prototype.TryGetComponent<BatteryComponent>(out var battery, factory), Is.True, prototype.ID);
         Assert.That(battery!.MaxCharge, Is.EqualTo(8000000f), prototype.ID);
-        Assert.That(battery.CurrentCharge, Is.EqualTo(8000000f), prototype.ID);
+        Assert.That(battery.StartingCharge, Is.EqualTo(8000000f), prototype.ID);
         Assert.That(prototype.TryGetComponent<PowerMonitoringDeviceComponent>(out var monitoring, factory), Is.True, prototype.ID);
-        Assert.That(monitoring!.SpritePath, Is.EqualTo("_CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi"), prototype.ID);
+        Assert.That(monitoring!.SpritePath, Is.EqualTo("CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi"), prototype.ID);
         Assert.That(monitoring.SpriteState, Is.EqualTo("smes"), prototype.ID);
     }
 
     private static MachineryRow[] MachineryRows()
     {
-        var yautjaMachines = new ResPath("/Textures/_CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi");
-        var cryo = new ResPath("/Textures/_CMU14/Yautja/Structures/cryogenics2.rsi");
-        var transformer = new ResPath("/Textures/_CMU14/HunterShip/obj/structures/props/industrial/power_transformer.rsi");
+        var yautjaMachines = new ResPath("/Textures/CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi");
+        var cryo = new ResPath("/Textures/CMU14/Yautja/Structures/cryogenics2.rsi");
+        var transformer = new ResPath("/Textures/CMU14/HunterShip/obj/structures/props/industrial/power_transformer.rsi");
 
         return
         [

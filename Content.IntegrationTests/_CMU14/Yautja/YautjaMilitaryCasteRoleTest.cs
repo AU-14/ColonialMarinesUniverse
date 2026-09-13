@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Client._CMU14.Yautja;
+using Content.Client.CMU14.Yautja;
 using Content.Server.Station.Systems;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -23,7 +23,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaMilitaryCasteRoleTest
@@ -36,7 +36,7 @@ public sealed class YautjaMilitaryCasteRoleTest
         await pair.Client.WaitAssertion(() =>
         {
             var cache = pair.Client.ResolveDependency<IResourceCache>();
-            var path = new ResPath("/Textures/_CMU14/Yautja/mcaste_gear_worn.rsi");
+            var path = new ResPath("/Textures/CMU14/Yautja/mcaste_gear_worn.rsi");
 
             Assert.That(cache.TryGetResource<RSIResource>(path, out var resource), Is.True);
             Assert.That(resource!.RSI.Size, Is.EqualTo(new Vector2i(32, 32)));
@@ -69,7 +69,7 @@ public sealed class YautjaMilitaryCasteRoleTest
         {
             var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
             var factory = pair.Server.EntMan.ComponentFactory;
-            var wornPath = "_CMU14/Yautja/mcaste_gear_worn.rsi";
+            var wornPath = "CMU14/Yautja/mcaste_gear_worn.rsi";
 
             var expectedStates = new Dictionary<string, string>
             {

@@ -1,0 +1,36 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Credits to project_breckon for making the mine detector sprites for CMU14",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "minedetector"
+        },
+        {
+            "name": "minedetector_r",
+            "directions": 4
+        },
+        {
+            "name": "minedetector_l",
+            "directions": 4
+        },
+        {
+            "name": "minedetector_folded"
+        },
+        {
+            "name": "minedetector_folded_r",
+            "directions": 4
+        },
+        {
+            "name": "minedetector_folded_l",
+            "directions": 4
+        },
+        {
+            "name": "mine_warning"
+        }
+    ]
+}

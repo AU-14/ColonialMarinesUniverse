@@ -123,11 +123,11 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        var leaderTracker = EnsureComp<SquadLeaderTrackerComponent>(args.Equipee);
+        var leaderTracker = EnsureComp<SquadLeaderTrackerComponent>(args.EquipTarget);
         leaderTracker.TrackerModes = ent.Comp.TrackerModes;
         leaderTracker.ManualMode = false;
-        SetMode((args.Equipee, leaderTracker), ent.Comp.DefaultMode);
-        Dirty(args.Equipee, leaderTracker);
+        SetMode((args.EquipTarget, leaderTracker), ent.Comp.DefaultMode);
+        Dirty(args.EquipTarget, leaderTracker);
     }
 
     private void OnGotUnequipped(Entity<GrantSquadLeaderTrackerComponent> ent, ref GotUnequippedEvent args)
@@ -138,8 +138,8 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        if (!_inventory.TryGetInventoryEntity<GrantSquadLeaderTrackerComponent>(args.Equipee, out _))
-            RemCompDeferred<SquadLeaderTrackerComponent>(args.Equipee);
+        if (!_inventory.TryGetInventoryEntity<GrantSquadLeaderTrackerComponent>(args.EquipTarget, out _))
+            RemCompDeferred<SquadLeaderTrackerComponent>(args.EquipTarget);
     }
 
     private void OnMapInit(Entity<SquadLeaderTrackerComponent> ent, ref MapInitEvent args)
@@ -159,7 +159,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         if (trackerMode == null)
             return;
 
-        _alerts.ClearAlert(ent, trackerMode.Alert);
+        _alerts.ClearAlert((ent.Owner, null), trackerMode.Alert);
     }
 
     private void OnSquadLeaderTrackerClicked(Entity<SquadLeaderTrackerComponent> ent, ref SquadLeaderTrackerClickedEvent args)
@@ -653,7 +653,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
     private void UpdateDirection(Entity<SquadLeaderTrackerComponent> ent, MapCoordinates? coordinates = null, string squad = "")
     {
-        _alerts.ClearAlertCategory(ent, SquadTrackerCategory);
+        _alerts.ClearAlertCategory((ent.Owner, null), SquadTrackerCategory);
 
         _prototypeManager.TryIndex(ent.Comp.Mode, out var trackerMode);
         if (trackerMode == null)
@@ -796,6 +796,12 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
             tracker.UpdateAt = time + tracker.UpdateEvery;
             var targetSquadName = "";
+
+            if (tracker.Target is { } deletedTarget && TerminatingOrDeleted(deletedTarget)) // CMU14: target can die while tracked; prune before any use so map lookups and PVS sync don't error
+            {
+                tracker.Target = null;
+                Dirty(uid, tracker);
+            }
 
             // Swap target to the new SquadLeader after it is swapped.
             if (tracker.Target != null && tracker.Mode == SquadLeaderMode && !HasComp<SquadLeaderComponent>(tracker.Target))

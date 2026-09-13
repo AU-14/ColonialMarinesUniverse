@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;

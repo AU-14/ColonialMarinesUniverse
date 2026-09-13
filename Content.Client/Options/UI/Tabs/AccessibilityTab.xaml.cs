@@ -20,7 +20,18 @@ public sealed partial class AccessibilityTab : Control
 
         Control.AddOptionCheckBox(CCVars.ChatEnableColorName, EnableColorNameCheckBox);
         Control.AddOptionCheckBox(CCVars.AccessibilityColorblindFriendly, ColorblindFriendlyCheckBox);
+
         Control.AddOptionCheckBox(CCVars.ReducedMotion, ReducedMotionCheckBox);
+        Control.AddOptionCheckBox(CCVars.DisableAiStatic, DisableAiStaticCheckBox);
+        Control.AddOptionCheckBox(CCVars.DisableBlurryVision, DisableBlurryVisionCheckBox);
+        Control.AddOptionCheckBox(CCVars.DisableDrunkOverlay, DisableDrunkOverlayCheckBox);
+        Control.AddOptionCheckBox(CCVars.DisableFlashEffect, DisableFlashEffectCheckBox);
+        Control.AddOptionCheckBox(CCVars.DisableHeatDistortion, DisableHeatDistortionCheckBox);
+        Control.AddOptionCheckBox(CCVars.DisableNightVisionNoise, DisableNightVisionNoiseCheckBox);
+        Control.AddOptionCheckBox(CCVars.DisableRainbowOverlay, DisableRainbowOverlayCheckBox);
+        Control.AddOptionCheckBox(CCVars.DisableSinguloWarp, DisableSinguloWarpCheckBox);
+
+        Control.AddOptionPercentSlider(CCVars.ScreenShakeIntensity, ScreenShakeIntensitySlider);
         Control.AddOptionPercentSlider(CCVars.ChatWindowOpacity, ChatWindowOpacitySlider);
         Control.AddOptionPercentSlider(CCVars.SpeechBubbleTextOpacity, SpeechBubbleTextOpacitySlider);
         Control.AddOptionPercentSlider(CCVars.SpeechBubbleSpeakerOpacity, SpeechBubbleSpeakerOpacitySlider);
@@ -43,11 +54,6 @@ public sealed partial class AccessibilityTab : Control
                 new OptionDropDownCVar<int>.ValueOption((int) NightVisionColor.Red, Loc.GetString("rmc-ui-options-night-vision-color-red")),
                 new OptionDropDownCVar<int>.ValueOption((int) NightVisionColor.Blue, Loc.GetString("rmc-ui-options-night-vision-color-blue")),
             ]);
-
-        Control.AddOptionCheckBox(CCVars.ExplosionScreenShakeEnabled, ExplosionScreenShakeEnabledCheckBox);
-        Control.AddOptionCheckBox(CCVars.ExplosionScreenShakeIgnoreFar, ExplosionScreenShakeIgnoreFarCheckBox);
-        Control.AddOptionCheckBox(CCVars.FirearmScreenShakeEnabled, FirearmScreenShakeEnabledCheckBox);
-        Control.AddOptionCheckBox(CCVars.MuteScriptedSounds, MuteScriptedSoundsCheckBox);
 
         Control.AddOptionCheckBox(CCVars.AccessibilityClientCensorNudity, CensorNudityCheckBox);
 

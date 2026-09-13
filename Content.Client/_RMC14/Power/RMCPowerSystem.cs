@@ -1,4 +1,4 @@
-﻿using Content.Client.Power.Components;
+using Content.Client.Power.Components;
 using Content.Shared._RMC14.Power;
 using Robust.Client.GameObjects;
 

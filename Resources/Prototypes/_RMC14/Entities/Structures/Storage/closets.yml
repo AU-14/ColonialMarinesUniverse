@@ -42,8 +42,9 @@
     flags:
     - None
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

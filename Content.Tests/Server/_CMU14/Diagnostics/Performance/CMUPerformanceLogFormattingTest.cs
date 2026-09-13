@@ -1,8 +1,8 @@
 using System.Globalization;
-using Content.Server._CMU14.Diagnostics.Performance;
+using Content.Server.CMU14.Diagnostics.Performance;
 using NUnit.Framework;
 
-namespace Content.Tests.Server._CMU14.Diagnostics.Performance;
+namespace Content.Tests.Server.CMU14.Diagnostics.Performance;
 
 [TestFixture]
 public sealed class CMUPerformanceLogFormattingTest

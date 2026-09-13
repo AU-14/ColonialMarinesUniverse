@@ -29,7 +29,7 @@ rmc-announcement-ares-online = [color=#CECECE][font size=16][bold]APOLLO Central
 
     {$message}[/bold][/font][/color]
 
-rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]UNS Almayer[/bold][/font][/color][color=red][font size=16][bold]
+rmc-announcement-ares-map = [color=#CECECE][font size=16][bold]{$ship}[/bold][/font][/color][color=red][font size=16][bold]
 
     {$message}[/bold][/font][/color]
 

@@ -12,7 +12,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaChemistryVisualTest
@@ -69,7 +69,7 @@ public sealed class YautjaChemistryVisualTest
                     spriteSystem,
                     clientBackendBeaker.Value,
                     "CMUHunterShipSilverCatalystBeaker",
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/chemistry.rsi"),
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/chemistry.rsi"),
                     new ResPath("/Textures/_RMC14/Objects/Medical/large_beaker.rsi"),
                     "beakerlarge",
                     5);
@@ -79,7 +79,7 @@ public sealed class YautjaChemistryVisualTest
                     spriteSystem,
                     clientPlacedBeakerOffset6x9.Value,
                     "CMUHunterShipPlacedBeakerBeakersilverSouthOffset6x9",
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/chemistry.rsi"),
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/chemistry.rsi"),
                     new ResPath("/Textures/_RMC14/Objects/Medical/large_beaker.rsi"),
                     "beakerlarge",
                     5);
@@ -89,7 +89,7 @@ public sealed class YautjaChemistryVisualTest
                     spriteSystem,
                     clientPlacedBeakerOffsetNeg5x0.Value,
                     "CMUHunterShipPlacedBeakerBeakersilverSouthOffsetNeg5x0",
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/chemistry.rsi"),
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/chemistry.rsi"),
                     new ResPath("/Textures/_RMC14/Objects/Medical/large_beaker.rsi"),
                     "beakerlarge",
                     5);
@@ -99,7 +99,7 @@ public sealed class YautjaChemistryVisualTest
                     spriteSystem,
                     clientVial.Value,
                     "CMUHunterShipPlacedBaseChemistryEmptyVialVialSouthOffset1x7",
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/chemistry.rsi"),
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/chemistry.rsi"),
                     new ResPath("/Textures/_RMC14/Objects/Chemistry/vials.rsi"),
                     "vial",
                     6);

@@ -1,0 +1,87 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobUPPLineLeader
+  roundSide: ThirdParty
+  roundForce: UPPLine
+  roundRole: UPPLineLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 1
+  - type: JobPrefix
+    prefix: cmu-uppline-prefix-leader
+  - type: Language
+    spokenLanguages:
+    - Russian
+    - English
+    - Mandarin
+    understoodLanguages:
+    - Russian
+    - English
+    - Mandarin
+    currentLanguage: Russian
+    defaultLanguage: Russian
+  name: cmu-uppline-name-leader
+  description: cmu-uppline-description
+  playTimeTracker: CMUJobUPPLineLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUPPLineLeader
+  spawnMenuRoleName: UPP Line Infantry Squad Leader (3rd party)
+  greeting: cmu-uppline-greeting
+  icon: RMCJobIconSPPLeader
+  joinNotifyCrew: false
+  supervisors: cmu-uppline-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPLineLeader
+  name: UPP Line Infantry Squad Leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-uppline-name-leader
+    description: cmu-uppline-description
+    reregister: false
+    job: CMUJobUPPLineLeader
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  id: CMUGearUPPLineLeader
+  equipment:
+    head: CMHeadCapSPPBeret
+    jumpsuit: CMJumpsuitSPP
+    outerClothing: RMCArmorSPPRifleman
+    gloves: RMCHandsVeteranSPP
+    shoes: RMCBootsSPPFilled
+    suitstorage: RMCWeaponRifleType71
+    id: CMUIDCardUPPLineLeader
+    belt: RMCBeltHolsterRevolverZHNK72Fill
+    back: RMCSatchelSPPRifleman
+    pocket1: RMCPouchAutoinjectorFill
+    pocket2: RMCPouchFuelTankFilledExtinguisher
+  storage:
+    back:
+    - RMCBoxZiptie
+    - RMCMagazineRifleType71AP
+    - RMCMagazineRifleType71AP
+
+- type: playTimeTracker
+  id: CMUJobUPPLineLeader

@@ -11,10 +11,8 @@ using Content.Shared.Tools.Components;
 using Content.Shared.Wires;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Timing;
 using SharedToolSystem = Content.Shared.Tools.Systems.SharedToolSystem;
 
 namespace Content.Shared.Radio.EntitySystems;
@@ -24,7 +22,6 @@ namespace Content.Shared.Radio.EntitySystems;
 /// </summary>
 public sealed partial class EncryptionKeySystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -57,7 +54,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
             _hands.PickupOrDrop(args.User, ent, dropNear: true);
         }
 
-        _popup.PopupPredicted(Loc.GetString("encryption-keys-all-extracted"), uid, args.User);
+        _popup.PopupEntity(Loc.GetString("encryption-keys-all-extracted"), uid, args.User);
         _audio.PlayPredicted(component.KeyExtractionSound, uid, args.User);
     }
 
@@ -80,7 +77,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
                 component.Channels.UnionWith(key.Channels);
                 component.ReadOnlyChannels.UnionWith(key.ReadOnlyChannels);
                 if (!HasComp<RMCStaticDefaultChannelComponent>(uid))
-                    component.DefaultChannel ??= key.DefaultChannel;
+                    component.DefaultChannel ??= key.DefaultChannel?.Id;
             }
         }
         //RMC14
@@ -118,25 +115,25 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     {
         if (!component.KeysUnlocked)
         {
-            _popup.PopupClient(Loc.GetString("encryption-keys-are-locked"), uid, args.User);
+            _popup.PopupEntity(Loc.GetString("encryption-keys-are-locked"), uid, args.User);
             return;
         }
 
         if (TryComp<WiresPanelComponent>(uid, out var panel) && !panel.Open)
         {
-            _popup.PopupClient(Loc.GetString("encryption-keys-panel-locked"), uid, args.User);
+            _popup.PopupEntity(Loc.GetString("encryption-keys-panel-locked"), uid, args.User);
             return;
         }
 
         if (component.KeySlots <= component.KeyContainer.ContainedEntities.Count)
         {
-            _popup.PopupClient(Loc.GetString("encryption-key-slots-already-full"), uid, args.User);
+            _popup.PopupEntity(Loc.GetString("encryption-key-slots-already-full"), uid, args.User);
             return;
         }
 
         if (_container.Insert(args.Used, component.KeyContainer))
         {
-            _popup.PopupClient(Loc.GetString("encryption-key-successfully-installed"), uid, args.User);
+            _popup.PopupEntity(Loc.GetString("encryption-key-successfully-installed"), uid, args.User);
             _audio.PlayPredicted(component.KeyInsertionSound, args.Target, args.User);
             args.Handled = true;
             return;
@@ -148,19 +145,19 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     {
         if (!component.KeysUnlocked)
         {
-            _popup.PopupClient(Loc.GetString("encryption-keys-are-locked"), uid, args.User);
+            _popup.PopupEntity(Loc.GetString("encryption-keys-are-locked"), uid, args.User);
             return;
         }
 
         if (!_wires.IsPanelOpen(uid))
         {
-            _popup.PopupClient(Loc.GetString("encryption-keys-panel-locked"), uid, args.User);
+            _popup.PopupEntity(Loc.GetString("encryption-keys-panel-locked"), uid, args.User);
             return;
         }
 
         if (component.KeyContainer.ContainedEntities.Count == 0)
         {
-            _popup.PopupClient(Loc.GetString("encryption-keys-no-keys"), uid, args.User);
+            _popup.PopupEntity(Loc.GetString("encryption-keys-no-keys"), uid, args.User);
             return;
         }
 
@@ -193,7 +190,7 @@ public sealed partial class EncryptionKeySystem : EntitySystem
                 AddChannelsExamine(component.Channels,
                     component.DefaultChannel,
                     args,
-                    _protoManager,
+                    ProtoMan,
                     "examine-encryption-channel",
                     component.ReadOnlyChannels);
             }
@@ -208,7 +205,13 @@ public sealed partial class EncryptionKeySystem : EntitySystem
         if(component.Channels.Count > 0)
         {
             args.PushMarkup(Loc.GetString("examine-encryption-channels-prefix"));
-            AddChannelsExamine(component.Channels, component.DefaultChannel, args, _protoManager, "examine-encryption-channel", component.ReadOnlyChannels);
+            AddChannelsExamine(
+                component.Channels,
+                component.DefaultChannel,
+                args,
+                ProtoMan,
+                "examine-encryption-channel",
+                component.ReadOnlyChannels);
         }
     }
 
@@ -218,12 +221,18 @@ public sealed partial class EncryptionKeySystem : EntitySystem
     /// <param name="channels">HashSet of channels in headset, encryptionkey or etc.</param>
     /// <param name="protoManager">IPrototypeManager for getting prototypes of channels with their variables.</param>
     /// <param name="channelFTLPattern">String that provide id of pattern in .ftl files to format channel with variables of it.</param>
-    public void AddChannelsExamine(HashSet<string> channels, string? defaultChannel, ExaminedEvent examineEvent, IPrototypeManager protoManager, string channelFTLPattern, HashSet<ProtoId<RadioChannelPrototype>>? ReadonlyChannels)
+    public void AddChannelsExamine(
+        HashSet<ProtoId<RadioChannelPrototype>> channels,
+        string? defaultChannel,
+        ExaminedEvent examineEvent,
+        IPrototypeManager protoManager,
+        string channelFTLPattern,
+        HashSet<ProtoId<RadioChannelPrototype>>? readOnlyChannels = null)
     {
         RadioChannelPrototype? proto;
         foreach (var id in channels)
         {
-            proto = _protoManager.Index<RadioChannelPrototype>(id);
+            proto = protoManager.Index<RadioChannelPrototype>(id);
 
             var key = id == SharedChatSystem.CommonChannel
                 ? SharedChatSystem.RadioCommonPrefix.ToString()
@@ -231,17 +240,17 @@ public sealed partial class EncryptionKeySystem : EntitySystem
 
 
             var readOnlyMarkup = "";
-            if (ReadonlyChannels != null && ReadonlyChannels.Contains(id))
+            if (readOnlyChannels != null && readOnlyChannels.Contains(id))
                 readOnlyMarkup = " Read Only";
 
             examineEvent.PushMarkup(Loc.GetString(channelFTLPattern,
                 ("color", proto.Color),
                 ("key", key),
                 ("id", proto.LocalizedName),
-                ("freq", proto.Frequency / 10f)) + $"{readOnlyMarkup}");
+                ("freq", proto.Frequency.FormatMegahertz())) + readOnlyMarkup);
         }
 
-        if (defaultChannel != null && _protoManager.TryIndex(defaultChannel, out proto))
+        if (defaultChannel != null && protoManager.TryIndex(defaultChannel, out proto))
         {
             if (HasComp<HeadsetComponent>(examineEvent.Examined))
             {

@@ -6,9 +6,8 @@
   components:
   - type: Label
     currentLabel: reagent-name-cminaprovaline
-  - type: SolutionContainerManager
-    solutions:
-      injector:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: CMInaprovaline
@@ -22,9 +21,8 @@
   components:
   - type: Label
     currentLabel: reagent-name-cmdylovene
-  - type: SolutionContainerManager
-    solutions:
-      injector:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: CMDylovene
@@ -38,9 +36,8 @@
   components:
   - type: Label
     currentLabel: drugs
-  - type: SolutionContainerManager
-    solutions:
-      injector:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: RMCSpaceDrugs

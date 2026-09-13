@@ -41,6 +41,7 @@
         mask:
         - MobLayer
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

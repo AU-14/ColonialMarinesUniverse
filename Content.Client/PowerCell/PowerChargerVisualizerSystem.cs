@@ -1,10 +1,9 @@
-using Content.Shared.Power;
-using Content.Shared.PowerCell; // RMC14
+using Content.Shared.Power.Components;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.PowerCell;
 
-public sealed class PowerChargerVisualizerSystem : VisualizerSystem<PowerChargerVisualsComponent>
+public sealed partial class PowerChargerVisualizerSystem : VisualizerSystem<PowerChargerVisualsComponent>
 {
     protected override void OnAppearanceChange(EntityUid uid, PowerChargerVisualsComponent comp, ref AppearanceChangeEvent args)
     {
@@ -26,7 +25,7 @@ public sealed class PowerChargerVisualizerSystem : VisualizerSystem<PowerCharger
         if (SpriteSystem.LayerExists((uid, args.Sprite), PowerChargerVisualLayers.Light))
         {
             if (!string.IsNullOrEmpty(comp.ChargeLevelState) &&
-                AppearanceSystem.TryGetData<byte>(uid, PowerCellVisuals.ChargeLevel, out var chargeLevel, args.Component))
+                AppearanceSystem.TryGetData<byte>(uid, CellVisual.ChargeLevel, out var chargeLevel, args.Component))
             {
                 var chargeState = string.Format(comp.ChargeLevelState, chargeLevel);
                 SpriteSystem.LayerSetRsiState((uid, args.Sprite), PowerChargerVisualLayers.Light, chargeState);

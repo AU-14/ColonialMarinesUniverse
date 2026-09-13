@@ -10,6 +10,7 @@ using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
@@ -60,6 +61,7 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
         SubscribeLocalEvent<XenoBurrowComponent, ExamineAttemptEvent>(PreventExamine);
 
         SubscribeLocalEvent<XenoBurrowComponent, BeforeStatusEffectAddedEvent>(PreventEffects);
+        SubscribeLocalEvent<XenoBurrowComponent, KnockDownAttemptEvent>(PreventKnockdown);
         SubscribeLocalEvent<XenoBurrowComponent, BeforeDamageChangedEvent>(PreventDamage);
         SubscribeLocalEvent<XenoBurrowComponent, PreventCollideEvent>(PreventCollision);
         SubscribeLocalEvent<XenoBurrowComponent, InteractionAttemptEvent>(PreventInteraction);
@@ -91,6 +93,12 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
 
         // Note: If any beneficial effects is added that makes sense underground, this may have to be more precise
         args.Cancelled = true;
+    }
+
+    private void PreventKnockdown(Entity<XenoBurrowComponent> burrower, ref KnockDownAttemptEvent args)
+    {
+        if (burrower.Comp.Active)
+            args.Cancelled = true;
     }
 
     private void OnBurrowedCancel<T>(Entity<XenoBurrowComponent> burrower, ref T args) where T : CancellableEntityEventArgs

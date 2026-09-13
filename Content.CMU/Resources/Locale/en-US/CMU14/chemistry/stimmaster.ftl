@@ -1,0 +1,16 @@
+cmu-stimmaster-injectors = [bold]Stored autoinjectors[/bold]
+cmu-stimmaster-none = No autoinjectors fabricated.
+cmu-stimmaster-create = Fabricate Injectors
+cmu-stimmaster-fill = Fill Selected Injectors
+cmu-stimmaster-fill-injector = Fill
+cmu-stimmaster-injector-volume = {$amount} / {$capacity}u
+cmu-stimmaster-fabrication-title = Autoinjector Fabrication
+cmu-stimmaster-fabrication-header = Select an injector type and quantity. Each injector costs 0.2 metal and 0.2 glass.
+cmu-stimmaster-fabrication-option = {$name} — {$capacity}u capacity
+cmu-stimmaster-fabrication-amount = Quantity:
+cmu-stimmaster-fabrication-confirm = Fabricate Selected Injectors
+cmu-stimmaster-no-selection-or-chemicals = Select at least one stored injector and add chemicals to the buffer.
+cmu-stimmaster-not-enough-chemicals-for-injector = There are not enough chemicals to completely fill the next selected injector.
+cmu-stimmaster-not-enough-materials = The Stimmaster needs 0.2 metal and 0.2 glass for every injector.
+cmu-stimmaster-storage-full = The Stimmaster does not have room for that many injectors.
+cmu-stimmaster-eject-material = {$material} ({$sheets} sheets)

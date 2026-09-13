@@ -6,8 +6,8 @@ using Content.Server.Chat.Systems;
 using Content.Server._RMC14.Chat.Chat;
 using Content.Client.Popups;
 using Content.Client.UserInterface.Systems.Chat;
-using Content.Server._CMU14.Yautja;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -32,7 +32,7 @@ using Robust.Shared.Localization;
 using Robust.Shared.Player;
 using Robust.Client.UserInterface;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaHivebreakerThrallRuntimeTest

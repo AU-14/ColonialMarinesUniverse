@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Xenonids.Neurotoxin;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Movement.Events;
@@ -78,7 +79,7 @@ public abstract partial class SharedParaDropSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        EnsureComp<ParaDroppableComponent>(args.Equipee);
+        EnsureComp<ParaDroppableComponent>(args.EquipTarget);
     }
 
     private void OnGotUnEquipped(Entity<GrantParaDroppableComponent> ent, ref GotUnequippedEvent args)
@@ -89,7 +90,7 @@ public abstract partial class SharedParaDropSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        RemComp<ParaDroppableComponent>(args.Equipee);
+        RemComp<ParaDroppableComponent>(args.EquipTarget);
     }
 
     private void OnAttemptCrashLand(Entity<CrashLandOnTouchComponent> ent, ref AttemptCrashLandEvent args)

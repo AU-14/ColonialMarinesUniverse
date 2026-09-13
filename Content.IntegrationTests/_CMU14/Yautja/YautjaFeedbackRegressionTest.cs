@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Database;
 using Content.Server.Station.Systems;
-using Content.Server._CMU14.Yautja;
-using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Body.Part;
@@ -22,7 +22,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaFeedbackRegressionTest
@@ -47,8 +47,8 @@ public sealed class YautjaFeedbackRegressionTest
 
             await server.WaitAssertion(() =>
             {
-                var appearance = server.EntMan.GetComponent<HumanoidAppearanceComponent>(hunter);
-                Assert.That(appearance.SkinColor,
+                var appearance = server.EntMan.GetComponent<HumanoidProfileComponent>(hunter);
+                Assert.That(YautjaTestAppearance.SkinColor(server.EntMan, hunter),
                     Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Red)));
             });
         }

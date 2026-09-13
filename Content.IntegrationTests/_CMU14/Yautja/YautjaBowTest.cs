@@ -1,3 +1,7 @@
+using Content.Shared.Blocking.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Power.Components;
+using Content.Shared.Trigger.Components.Triggers;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -5,7 +9,7 @@ using System.Numerics;
 using Content.IntegrationTests.Pair;
 using Content.Client.Popups;
 using Content.Server.Administration.Logs;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server._RMC14.Scorch;
 using Content.Server.Atmos.Components;
 using Content.Server.Emp;
@@ -20,7 +24,7 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Access.Components;
 using Content.Shared.Atmos.Components;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
@@ -56,7 +60,7 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
-using Content.Shared.Explosion.Components.OnTrigger;
+using Content.Shared.Trigger.Components.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Containers.ItemSlots;
@@ -119,7 +123,7 @@ using Robust.Shared.Timing;
 using Robust.Client.GameObjects;
 using ServerPointLightComponent = Robust.Server.GameObjects.PointLightComponent;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaBowTest
@@ -426,13 +430,13 @@ public sealed class YautjaBowTest
 
                 Assert.That(baseHeat, Is.EqualTo((FixedPoint2) 55),
                     "CMSS13 /datum/ammo/energy/yautja/rifle/bolt sets BURN damage = 55.");
-                Assert.That(damageable.Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.Zero));
+                Assert.That(entMan.System<DamageableSystem>().GetAllDamage((xeno, damageable)).DamageDict.GetValueOrDefault("Heat"), Is.EqualTo(FixedPoint2.Zero));
                 Assert.That(status.TryGetTime(xeno, "YautjaInterference", out _), Is.False);
 
                 var ev = new ProjectileHitEvent(new DamageSpecifier(), xeno, hunter);
                 entMan.EventBus.RaiseLocalEvent(projectile, ref ev);
 
-                Assert.That(damageable.Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(41.25)),
+                Assert.That(entMan.System<DamageableSystem>().GetAllDamage((xeno, damageable)).DamageDict.GetValueOrDefault("Heat"), Is.EqualTo(FixedPoint2.New(41.25)),
                     "CMSS13 rifle bolts add damage * 0.75 extra BURN damage to xenos in on_hit_mob().");
                 Assert.That(status.TryGetTime(xeno, "YautjaInterference", out var time), Is.True,
                     "CMSS13 rifle bolts call add_interference(30, 30) on xenos.");
@@ -451,8 +455,9 @@ public sealed class YautjaBowTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task YautjaIncendiaryPlasmaBoltsApplyCmss13FireStacksOnProjectileHit()
+    [TestCase(10f)]
+    [TestCase(30f)]
+    public async Task YautjaIncendiaryPlasmaBoltsApplyCmss13FireStacksOnProjectileHit(float maximumStacks)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -477,6 +482,10 @@ public sealed class YautjaBowTest
 
             try
             {
+                // Exercise the source formula as well as the current engine's fire-stack cap.
+                foreach (var target in new[] { humanPistolTarget, xenoPistolTarget, humanRifleTarget, xenoRifleTarget, xenoCarbineTarget })
+                    entMan.GetComponent<FlammableComponent>(target).MaximumFireStacks = maximumStacks;
+
                 RaiseProjectileHit(entMan, pistolHumanProjectile, humanPistolTarget, hunter);
                 RaiseProjectileHit(entMan, pistolXenoProjectile, xenoPistolTarget, hunter);
                 RaiseProjectileHit(entMan, rifleHumanProjectile, humanRifleTarget, hunter);
@@ -484,7 +493,7 @@ public sealed class YautjaBowTest
 
                 var battery = entMan.GetComponent<BatteryComponent>(carbine);
                 var coordinates = entMan.GetComponent<TransformComponent>(carbine).Coordinates;
-                batterySystem.SetCharge(carbine, 1, battery);
+                batterySystem.SetCharge((carbine, battery), 1);
 
                 var ammo = new TakeAmmoEvent(1, new List<(EntityUid? Entity, IShootable Shootable)>(), coordinates, hunter);
                 entMan.EventBus.RaiseLocalEvent(carbine, ammo);
@@ -605,7 +614,7 @@ public sealed class YautjaBowTest
                 {
                     Assert.That(emp.Range, Is.EqualTo(4));
                     Assert.That(emp.EnergyConsumption, Is.EqualTo(50000));
-                    Assert.That(emp.DisableDuration, Is.EqualTo(10));
+                    Assert.That(emp.DisableDuration, Is.EqualTo(TimeSpan.FromSeconds(10)));
                 });
             }
             finally
@@ -655,7 +664,7 @@ public sealed class YautjaBowTest
                 Assert.That(slots.TryInsert(bow, "projectiles", arrow, hunter), Is.True);
 
                 var wieldable = entMan.GetComponent<WieldableComponent>(bow);
-                Assert.That(wield.TryWield(bow, wieldable, hunter), Is.True);
+                Assert.That(wield.TryWield((bow, wieldable), hunter), Is.True);
 
                 entMan.GetComponent<YautjaBracerComponent>(bracer).Charge = 1500;
             });
@@ -666,7 +675,7 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var slots = entMan.System<ItemSlotsSystem>();
-                var trigger = entMan.System<Content.Server.Explosion.EntitySystems.TriggerSystem>();
+                var trigger = entMan.System<Content.Shared.Trigger.Systems.TriggerSystem>();
                 var gunSystem = entMan.System<Content.Server.Weapons.Ranged.Systems.GunSystem>();
                 var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
 
@@ -770,7 +779,7 @@ public sealed class YautjaBowTest
                 Assert.That(slots.TryInsert(bow, "projectiles", arrow, hunter), Is.True);
 
                 var wieldable = entMan.GetComponent<WieldableComponent>(bow);
-                Assert.That(wield.TryWield(bow, wieldable, hunter), Is.True);
+                Assert.That(wield.TryWield((bow, wieldable), hunter), Is.True);
 
                 entMan.GetComponent<YautjaBracerComponent>(bracer).Charge = 1500;
             });
@@ -781,7 +790,7 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var slots = entMan.System<ItemSlotsSystem>();
-                var trigger = entMan.System<Content.Server.Explosion.EntitySystems.TriggerSystem>();
+                var trigger = entMan.System<Content.Shared.Trigger.Systems.TriggerSystem>();
                 var gunSystem = entMan.System<Content.Server.Weapons.Ranged.Systems.GunSystem>();
                 var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
 
@@ -961,7 +970,7 @@ public sealed class YautjaBowTest
             {
                 var gun = entMan.GetComponent<GunComponent>(bow);
 
-                AssertSoundPath(gun.SoundGunshot!, "/Audio/_CMU14/Yautja/bow_shot.ogg");
+                AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/bow_shot.ogg");
             }
             finally
             {
@@ -1155,7 +1164,7 @@ public sealed class YautjaBowTest
             {
                 Assert.Multiple(() =>
                 {
-                    Assert.That(entMan.HasComponent<SharpComponent>(arrow), Is.True);
+                    Assert.That(entMan.GetComponent<Content.Shared.Tools.Components.ToolComponent>(arrow).Qualities.Contains("Slicing"), Is.True);
                     Assert.That(entMan.TryGetComponent<MeleeWeaponComponent>(arrow, out var melee), Is.True);
                     Assert.That(melee!.Damage.DamageDict["Piercing"], Is.EqualTo((FixedPoint2) 20));
                 });
@@ -2255,7 +2264,7 @@ public sealed class YautjaBowTest
                     .Single(uid => entMan.HasComponent<YautjaTrapComponent>(uid));
                 var trap = entMan.GetComponent<YautjaTrapComponent>(snare);
 
-                const string tableHitPath = "/Audio/_CMU14/Yautja/tablehit1.ogg";
+                const string tableHitPath = "/Audio/CMU14/Yautja/tablehit1.ogg";
                 Assert.Multiple(() =>
                 {
                     AssertSoundPath(trap.TriggerSound, tableHitPath);
@@ -2310,6 +2319,9 @@ public sealed class YautjaBowTest
                 snare = EntityPrototypeIds(entMan, "CMUYautjaSnareArrow")
                     .Single(uid => entMan.HasComponent<YautjaTrapComponent>(uid));
                 snareNet = entMan.GetNetEntity(snare);
+                Assert.That(entMan.GetComponent<YautjaTrapComponent>(snare).TrappedMob, Is.EqualTo(human));
+                Assert.That(entMan.System<SharedAppearanceSystem>().TryGetData<bool>(snare, ToggleableVisuals.Enabled, out var enabled), Is.True);
+                Assert.That(enabled, Is.True);
             });
 
             await pair.ReallyBeIdle(10);
@@ -2318,6 +2330,9 @@ public sealed class YautjaBowTest
             {
                 var entMan = client.EntMan;
                 Assert.That(entMan.TryGetEntity(snareNet, out var clientSnare), Is.True);
+
+                Assert.That(entMan.System<SharedAppearanceSystem>().TryGetData<bool>(clientSnare.Value, ToggleableVisuals.Enabled, out var enabled), Is.True);
+                Assert.That(enabled, Is.True, "The client must receive the sprung snare state.");
 
                 var sprites = entMan.System<SpriteSystem>();
                 var sprite = entMan.GetComponent<SpriteComponent>(clientSnare.Value);
@@ -2429,7 +2444,7 @@ public sealed class YautjaBowTest
                 {
                     Assert.That(storage.StoredItems, Has.Count.EqualTo(12));
                     Assert.That(
-                        storageSystem.CanInsert(pouch, extra, null, out var reason, storage),
+                        storageSystem.CanInsert(pouch, extra, out var reason, storage),
                         Is.False,
                         "CMSS13 hunting pouch rejects a thirteenth medium-or-smaller item.");
                     Assert.That(reason, Is.EqualTo("comp-storage-insufficient-capacity"),
@@ -2532,8 +2547,8 @@ public sealed class YautjaBowTest
                     Assert.That(lanternLight.Radius, Is.EqualTo(6f));
                     Assert.That(lanternLight.Color, Is.EqualTo(Color.FromHex("#FFC458FF")));
                     Assert.That(lanternBattery.MaxCharge, Is.EqualTo(600f));
-                    Assert.That(lanternBattery.CurrentCharge, Is.EqualTo(600f));
-                    Assert.That(lanternRecharger.AutoRecharge, Is.True);
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((lantern, lanternBattery)), Is.EqualTo(600f));
+                    Assert.That(lanternRecharger.AutoRechargeRate, Is.GreaterThan(0));
                     Assert.That(lanternRecharger.AutoRechargeRate, Is.EqualTo(2f));
                     Assert.That(lanternPrice.Price, Is.EqualTo(40));
                     Assert.That(lanternHandheld.ToggleAction, Is.EqualTo("CMUActionYautjaToggleLantern"),
@@ -2676,7 +2691,7 @@ public sealed class YautjaBowTest
             Assert.That(lanternSprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_RMC14/Objects/Tools/Light/lantern.rsi")));
             Assert.That(lanternSprite.AllLayers.Select(layer => layer.RsiState.Name).ToArray(),
                 Is.EqualTo(new[] { "lantern", "lantern-on" }));
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHivebreaker", "_CMU14/Yautja/yautja_items.rsi", "emitter-xeno");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHivebreaker", "CMU14/Yautja/yautja_items.rsi", "emitter-xeno");
 
             var medicompPrototype = prototypes.Index<EntityPrototype>("CMUYautjaMedicomp");
             Assert.That(medicompPrototype.TryGetComponent<SpriteComponent>(out var medicompSprite, factory), Is.True);
@@ -2765,7 +2780,7 @@ public sealed class YautjaBowTest
                 prototypes,
                 factory,
                 "CMUYautjaToolbelt",
-                "_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi",
+                "CMU14/HunterShip/obj/items/hunter/pred_gear.rsi",
                 "utilitybelt_pred");
         });
 
@@ -2777,6 +2792,7 @@ public sealed class YautjaBowTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        var map = await pair.CreateTestMap();
 
         await server.WaitAssertion(() =>
         {
@@ -2802,7 +2818,8 @@ public sealed class YautjaBowTest
 
                     foreach (var row in Cmss13CommunicatorChannelRows())
                     {
-                        var communicator = SpawnAndTrack(entMan, row.CommunicatorId, spawned);
+                        var communicator = entMan.SpawnEntity(row.CommunicatorId, map.GridCoords);
+                        spawned.Add(communicator);
                         var holder = entMan.GetComponent<EncryptionKeyHolderComponent>(communicator);
 
                         Assert.That(holder.KeyContainer.ContainedEntities, Has.Count.EqualTo(1),
@@ -2908,7 +2925,7 @@ public sealed class YautjaBowTest
                             var hypospray = entMan.GetComponent<HyposprayComponent>(uid);
                             var refillable = entMan.GetComponent<CMRefillableSolutionComponent>(uid);
                             var useDelay = entMan.GetComponent<UseDelayComponent>(uid);
-                            var solutions = entMan.GetComponent<SolutionContainerManagerComponent>(uid);
+                            var solutions = entMan.GetComponent<SolutionManagerComponent>(uid);
 
                             Assert.That(hypospray.TransferAmount, Is.EqualTo((FixedPoint2) hypo.TransferAmount),
                                 $"{row.Id} one-shot source injector dose mapping");
@@ -2948,11 +2965,11 @@ public sealed class YautjaBowTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
 
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaAdvancedBruisePack", "_CMU14/Yautja/yautja_items.rsi", "brute_herbs");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaAdvancedOintment", "_CMU14/Yautja/yautja_items.rsi", "burn_herbs");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingGun", "_CMU14/Yautja/medical.rsi", "healing_gun");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHerbalCase", "_CMU14/Yautja/medical.rsi", "surgical_case");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaMedicomp", "_CMU14/Yautja/yautja_items.rsi", "medicomp");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaAdvancedBruisePack", "CMU14/Yautja/yautja_items.rsi", "brute_herbs");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaAdvancedOintment", "CMU14/Yautja/yautja_items.rsi", "burn_herbs");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingGun", "CMU14/Yautja/medical.rsi", "healing_gun");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHerbalCase", "CMU14/Yautja/medical.rsi", "surgical_case");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaMedicomp", "CMU14/Yautja/yautja_items.rsi", "medicomp");
         });
 
         await pair.CleanReturnAsync();
@@ -2999,7 +3016,7 @@ public sealed class YautjaBowTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
 
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaPolishingRag", "_CMU14/Yautja/yautja_items.rsi", "polishing_rag");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaPolishingRag", "CMU14/Yautja/yautja_items.rsi", "polishing_rag");
         });
 
         await pair.CleanReturnAsync();
@@ -3087,7 +3104,7 @@ public sealed class YautjaBowTest
                         var hypospray = entMan.GetComponent<HyposprayComponent>(uid);
                         var refillable = entMan.GetComponent<CMRefillableSolutionComponent>(uid);
                         var useDelay = entMan.GetComponent<UseDelayComponent>(uid);
-                        var solutions = entMan.GetComponent<SolutionContainerManagerComponent>(uid);
+                        var solutions = entMan.GetComponent<SolutionManagerComponent>(uid);
 
                         Assert.Multiple(() =>
                         {
@@ -3139,10 +3156,10 @@ public sealed class YautjaBowTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
 
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaBracerIdChip", "_CMU14/HunterShip/obj/items/radio.rsi", "upp_key");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaBracerIdChip", "CMU14/HunterShip/obj/items/radio.rsi", "upp_key");
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaStabilisingCrystal", "_RMC14/Objects/Medical/emergency_auto_injector.rsi", "autoinjector");
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaHumanStabilisingCrystal", "_RMC14/Objects/Medical/emergency_auto_injector.rsi", "autoinjector");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingGel", "_CMU14/Yautja/medical.rsi", "healing_gel");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingGel", "CMU14/Yautja/medical.rsi", "healing_gel");
         });
 
         await pair.CleanReturnAsync();
@@ -3241,7 +3258,7 @@ public sealed class YautjaBowTest
                 prototypes,
                 factory,
                 "CMUYautjaHoundObservationPad",
-                "_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi",
+                "CMU14/HunterShip/obj/items/hunter/pred_gear.rsi",
                 "houndpad");
         });
 
@@ -4609,7 +4626,7 @@ public sealed class YautjaBowTest
                          ("CMUYautjaMetalChains", "metal_chain"),
                      })
             {
-                AssertPrototypeIconState(prototypes, factory, id, "_CMU14/Yautja/yautja_items.rsi", state);
+                AssertPrototypeIconState(prototypes, factory, id, "CMU14/Yautja/yautja_items.rsi", state);
             }
         });
 
@@ -4775,7 +4792,7 @@ public sealed class YautjaBowTest
                     prototypes,
                     factory,
                     row.Id,
-                    "_CMU14/Yautja/yautja_items.rsi",
+                    "CMU14/Yautja/yautja_items.rsi",
                     row.SpriteState);
             }
         });
@@ -4824,7 +4841,7 @@ public sealed class YautjaBowTest
                     prototypes,
                     factory,
                     row.Id,
-                    "_CMU14/Yautja/yautja_items.rsi",
+                    "CMU14/Yautja/yautja_items.rsi",
                     row.SpriteState);
             }
         });
@@ -4995,11 +5012,11 @@ public sealed class YautjaBowTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
 
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaWristBladesAttachment", "_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "wrist");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaScimitarAttachment", "_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "scim");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaScimitarAltAttachment", "_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "scim_alt");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaChainGauntletsAttachment", "_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "metal_gauntlet");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaBracerShieldAttachment", "_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "bracer_shield_off");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaWristBladesAttachment", "CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "wrist");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaScimitarAttachment", "CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "scim");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaScimitarAltAttachment", "CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "scim_alt");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaChainGauntletsAttachment", "CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "metal_gauntlet");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaBracerShieldAttachment", "CMU14/HunterShip/obj/items/hunter/pred_gear.rsi", "bracer_shield_off");
         });
 
         await pair.CleanReturnAsync();
@@ -5280,7 +5297,7 @@ public sealed class YautjaBowTest
                 {
                     Assert.That(storage.StoredItems, Has.Count.EqualTo(8));
                     Assert.That(
-                        storageSystem.CanInsert(quiver, extraArrow, null, out var reason, storage),
+                        storageSystem.CanInsert(quiver, extraArrow, out var reason, storage),
                         Is.False,
                         "CMSS13 quiver has storage_slots = 8, so a ninth bow/arrow item must be rejected.");
                     Assert.That(reason, Is.EqualTo("rmc-storage-limit-cant-fit"));
@@ -5325,15 +5342,15 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(
-                        storageSystem.CanInsert(quiver, bow, null, out _, storage),
+                        storageSystem.CanInsert(quiver, bow, out _, storage),
                         Is.True,
                         "CMSS13 quiver can_hold includes /obj/item/weapon/gun/bow.");
                     Assert.That(
-                        storageSystem.CanInsert(quiver, arrow, null, out _, storage),
+                        storageSystem.CanInsert(quiver, arrow, out _, storage),
                         Is.True,
                         "CMSS13 quiver can_hold includes /obj/item/arrow.");
                     Assert.That(
-                        storageSystem.CanInsert(quiver, crowbar, null, out _, storage),
+                        storageSystem.CanInsert(quiver, crowbar, out _, storage),
                         Is.False,
                         "CMSS13 quiver can_hold excludes non-bow, non-arrow items.");
                 });
@@ -6235,7 +6252,7 @@ public sealed class YautjaBowTest
             var cache = client.ResolveDependency<IResourceCache>();
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.EntMan.ComponentFactory;
-            var rsiPath = new ResPath("/Textures/_CMU14/Yautja/bow.rsi");
+            var rsiPath = new ResPath("/Textures/CMU14/Yautja/bow.rsi");
 
             var prototype = prototypes.Index<EntityPrototype>("CMUYautjaHuntingBow");
             Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
@@ -6588,7 +6605,7 @@ public sealed class YautjaBowTest
                 {
                     var item = Spawn(allowed);
                     Assert.That(
-                        storageSystem.CanInsert(medicomp, item, null, out _, medicompStorage),
+                        storageSystem.CanInsert(medicomp, item, out _, medicompStorage),
                         Is.True,
                         $"CMSS13 /obj/item/storage/medicomp can_hold includes {allowed}'s source type.");
                 }
@@ -6603,7 +6620,7 @@ public sealed class YautjaBowTest
                 {
                     var item = Spawn(rejected);
                     Assert.That(
-                        storageSystem.CanInsert(medicomp, item, null, out _, medicompStorage),
+                        storageSystem.CanInsert(medicomp, item, out _, medicompStorage),
                         Is.False,
                         $"CMSS13 /obj/item/storage/medicomp rejects unrelated {rejected}.");
                 }
@@ -6621,7 +6638,7 @@ public sealed class YautjaBowTest
 
                 var thirteenthAnalyzer = Spawn("CMUYautjaAlienHealthAnalyzer");
                 Assert.That(
-                    storageSystem.CanInsert(filledMedicomp, thirteenthAnalyzer, null, out _, filledMedicompStorage),
+                    storageSystem.CanInsert(filledMedicomp, thirteenthAnalyzer, out _, filledMedicompStorage),
                     Is.False,
                     "CMSS13 /obj/item/storage/medicomp rejects a thirteenth allowed item.");
 
@@ -6638,7 +6655,7 @@ public sealed class YautjaBowTest
                 {
                     var item = Spawn(allowed);
                     Assert.That(
-                        storageSystem.CanInsert(herbalCase, item, null, out _, herbalStorage),
+                        storageSystem.CanInsert(herbalCase, item, out _, herbalStorage),
                         Is.True,
                         $"CMSS13 /obj/item/storage/herbal_case can_hold includes only predator advanced medicine; {allowed} should fit.");
                 }
@@ -6647,7 +6664,7 @@ public sealed class YautjaBowTest
                 {
                     var item = Spawn(rejected);
                     Assert.That(
-                        storageSystem.CanInsert(herbalCase, item, null, out _, herbalStorage),
+                        storageSystem.CanInsert(herbalCase, item, out _, herbalStorage),
                         Is.False,
                         $"CMSS13 /obj/item/storage/herbal_case rejects generic marine medicine {rejected}.");
                 }
@@ -7619,7 +7636,7 @@ public sealed class YautjaBowTest
                 Assert.That(prototype.Name, Is.EqualTo(row.SourceName), $"{row.SourceType} name");
                 Assert.That(prototype.Description, Is.EqualTo(row.SourceDescription), $"{row.SourceType} description");
                 Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, $"{row.SourceType} sprite");
-                Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi")),
+                Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi")),
                     $"{row.SourceType} imports CMSS13 pred_vendor.dmi");
                 Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo(row.InitialIconState),
                     $"{row.SourceType} initial icon_state");
@@ -9307,7 +9324,7 @@ public sealed class YautjaBowTest
                         "CMSS13 smartdisc throwforce has no separate stamina payload; keep local collide stamina aligned to throwforce.");
                     Assert.That(staminaEmbed.Damage, Is.EqualTo(0f),
                         "CMSS13 smartdisc embeddable = FALSE means no embed stamina payload.");
-                    Assert.That(recallable.Range, Is.EqualTo(12f),
+                    Assert.That(entMan.GetComponent<ItemThrowRangeComponent>(disc).Range, Is.EqualTo(12f),
                         "CMSS13 boomerang throws back toward the user with range 12.");
                     Assert.That(entMan.TryGetComponent<MeleeWeaponComponent>(disc, out var melee), Is.True,
                         "CMSS13 smartdisc force = 15 means the held item must also be a melee weapon.");
@@ -9333,7 +9350,7 @@ public sealed class YautjaBowTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
 
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaSmartDisc", "_CMU14/Yautja/smart_disc.rsi", "icon");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaSmartDisc", "CMU14/Yautja/smart_disc.rsi", "icon");
         });
 
         await pair.CleanReturnAsync();
@@ -9399,6 +9416,7 @@ public sealed class YautjaBowTest
             try
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
+                BindRecallable(entMan, disc, hunter);
                 Assert.That(hands.TryPickupAnyHand(hunter, disc), Is.True);
 
                 var use = new UseInHandEvent(hunter);
@@ -9458,6 +9476,8 @@ public sealed class YautjaBowTest
                 hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
                 disc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(1, 0)));
                 departedPrey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(5, 0)));
+
+                BindRecallable(entMan, disc, hunter);
 
                 var smartDisc = entMan.GetComponent<YautjaSmartDiscComponent>(disc);
                 smartDisc.RetargetDelay = retargetDelay;
@@ -9536,6 +9556,7 @@ public sealed class YautjaBowTest
             try
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
+                BindRecallable(entMan, disc, hunter);
                 faction.AddFaction((friendlyNonYautja, null), "CMUYautja");
                 entMan.System<MobStateSystem>().ChangeMobState(deadPrey, MobState.Dead);
 
@@ -9594,7 +9615,7 @@ public sealed class YautjaBowTest
                 smartDisc.Hits = 3;
 
                 var hit = new ThrowDoHitEvent(disc, hunter, thrown);
-                entMan.EventBus.RaiseLocalEvent(disc, hit);
+                entMan.EventBus.RaiseLocalEvent(disc, ref hit);
 
                 Assert.Multiple(() =>
                 {
@@ -9604,7 +9625,7 @@ public sealed class YautjaBowTest
                         "CMSS13 smartdisc launch_impact() sets throwing = FALSE after a successful catch.");
                     Assert.That(smartDisc.Active, Is.False,
                         "A caught local smart-disc should be returned to the inactive item state.");
-                    Assert.That(damageable.TotalDamage, Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, damageable)).GetTotal(), Is.EqualTo(FixedPoint2.Zero),
                         "CMSS13 smartdisc catch returns before parent launch_impact(), so throwforce damage is not applied to the Yautja catcher.");
                     Assert.That(stamina.StaminaDamage, Is.EqualTo(0f),
                         "CMSS13 smartdisc catch returns before parent launch_impact(), so local collide stamina is not applied to the Yautja catcher.");
@@ -9654,7 +9675,7 @@ public sealed class YautjaBowTest
                 thrown.Thrower = hunter;
 
                 var hit = new ThrowDoHitEvent(disc, hunter, thrown);
-                entMan.EventBus.RaiseLocalEvent(disc, hit);
+                entMan.EventBus.RaiseLocalEvent(disc, ref hit);
 
                 Assert.Multiple(() =>
                 {
@@ -9662,7 +9683,7 @@ public sealed class YautjaBowTest
                         "A full-handed Yautja cannot put the smart-disc in hand.");
                     Assert.That(entMan.HasComponent<ThrownItemComponent>(disc), Is.True,
                         "CMSS13 launch_impact() only sets throwing = FALSE inside the successful put_in_hands() branch.");
-                    Assert.That(damageable.TotalDamage, Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, damageable)).GetTotal(), Is.EqualTo(FixedPoint2.Zero),
                         "CMSS13 smartdisc launch_impact() still returns before parent impact for any Yautja hit, even when put_in_hands() fails.");
                     Assert.That(stamina.StaminaDamage, Is.EqualTo(0f),
                         "The local handled Yautja impact must skip generic throw-hit stamina even if the catcher has no free hands.");
@@ -9699,6 +9720,8 @@ public sealed class YautjaBowTest
             disc = entMan.SpawnEntity("CMUYautjaSmartDisc", map.GridCoords.Offset(new Vector2(1, 0)));
 
             entMan.EnsureComponent<YautjaComponent>(hunter);
+
+            BindRecallable(entMan, disc, hunter);
 
             var thrown = entMan.EnsureComponent<ThrownItemComponent>(disc);
             thrown.Thrower = hunter;
@@ -9788,6 +9811,8 @@ public sealed class YautjaBowTest
                 discNet = entMan.GetNetEntity(disc);
 
                 entMan.EnsureComponent<YautjaComponent>(hunter);
+
+                BindRecallable(entMan, disc, hunter);
                 entMan.GetComponent<YautjaSmartDiscComponent>(disc).BoomerangVisualDuration = TimeSpan.FromSeconds(10);
             });
 
@@ -9890,6 +9915,7 @@ public sealed class YautjaBowTest
             try
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
+                BindRecallable(entMan, disc, hunter);
 
                 var thrown = entMan.EnsureComponent<ThrownItemComponent>(disc);
                 thrown.Thrower = hunter;
@@ -9945,6 +9971,7 @@ public sealed class YautjaBowTest
             try
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
+                BindRecallable(entMan, disc, hunter);
 
                 var thrown = entMan.EnsureComponent<ThrownItemComponent>(disc);
                 thrown.Thrower = hunter;
@@ -9996,6 +10023,7 @@ public sealed class YautjaBowTest
             try
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
+                BindRecallable(entMan, disc, hunter);
 
                 var thrown = entMan.EnsureComponent<ThrownItemComponent>(disc);
                 thrown.Thrower = hunter;
@@ -10053,6 +10081,7 @@ public sealed class YautjaBowTest
             try
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
+                BindRecallable(entMan, disc, hunter);
 
                 var thrown = entMan.EnsureComponent<ThrownItemComponent>(disc);
                 thrown.Thrower = hunter;
@@ -10215,7 +10244,7 @@ public sealed class YautjaBowTest
                 physicsSystem.SetBodyStatus(disc, physics, BodyStatus.InAir);
 
                 var hit = new ThrowDoHitEvent(disc, prey, thrown);
-                entMan.EventBus.RaiseLocalEvent(disc, hit);
+                entMan.EventBus.RaiseLocalEvent(disc, ref hit);
 
                 Assert.Multiple(() =>
                 {
@@ -10276,7 +10305,7 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/weapon/harpoon/yautja source description.");
                     Assert.That(item.HeldPrefix, Is.EqualTo("harpoon"),
                         "CMSS13 /obj/item/weapon/harpoon/yautja item_state = \"harpoon\".");
-                    Assert.That(entMan.HasComponent<SharpComponent>(harpoon), Is.True,
+                    Assert.That(entMan.GetComponent<Content.Shared.Tools.Components.ToolComponent>(harpoon).Qualities.Contains("Slicing"), Is.True,
                         "CMSS13 /obj/item/weapon/harpoon/yautja sets sharp and edge.");
                     Assert.That(DamageTotal(melee.Damage), Is.EqualTo((FixedPoint2) 10),
                         "CMSS13 /obj/item/weapon/harpoon/yautja New() sets force = MELEE_FORCE_TIER_2.");
@@ -10292,8 +10321,8 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/weapon/harpoon/yautja flags_item omits ITEM_PREDATOR.");
                     Assert.That(entMan.HasComponent<ClothingComponent>(harpoon), Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja does not set flags_equip_slot.");
-                    Assert.That(entMan.HasComponent<YautjaRecallableComponent>(harpoon), Is.False,
-                        "CMSS13 /obj/item/weapon/harpoon/yautja is not a chained recall weapon.");
+                    Assert.That(entMan.HasComponent<YautjaRecallableComponent>(harpoon), Is.True,
+                        "CMU retains manual recall binding for the harpoon.");
                     Assert.That(entMan.HasComponent<LandAtCursorComponent>(harpoon), Is.False,
                         "CMSS13 /obj/item/weapon/harpoon/yautja does not set throw_speed = SPEED_VERY_FAST.");
                     Assert.That(entMan.HasComponent<DisarmMalusComponent>(harpoon), Is.False,
@@ -10312,7 +10341,7 @@ public sealed class YautjaBowTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
 
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHarpoon", "_CMU14/Yautja/weapons.rsi", "spike");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHarpoon", "CMU14/Yautja/weapons.rsi", "spike");
         });
 
         await pair.CleanReturnAsync();
@@ -10393,7 +10422,7 @@ public sealed class YautjaBowTest
                     Assert.That(chainshirtClothing.Slots, Is.EqualTo(SlotFlags.INNERCLOTHING),
                         "CMSS13 thrall chainshirt inherits the chainshirt under-clothing slot.");
                     AssertCmss13ArmorStats(entMan, chainshirt, "CMUYautjaThrallChainshirt", new Cmss13ProtectionStats(10, 35, 40, 45));
-                    AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, chainshirt, "CMUYautjaThrallChainshirt");
+                    AssertThrallEquipmentAccessible(entMan, chainshirt);
                     AssertNonCorrodible(entMan, chainshirt);
 
                     var gearBox = SpawnAndTrack(entMan, "CMUYautjaThrallGearBox", spawned);
@@ -10459,8 +10488,8 @@ public sealed class YautjaBowTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
 
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaSimpleRelayBeacon", "_CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi", "thrall_teleporter");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaThrallGearBox", "_CMU14/HunterShip/obj/structures/closet.rsi", "pred_coffin");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaSimpleRelayBeacon", "CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi", "thrall_teleporter");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaThrallGearBox", "CMU14/HunterShip/obj/structures/closet.rsi", "pred_coffin");
         });
 
         await pair.CleanReturnAsync();
@@ -10498,10 +10527,10 @@ public sealed class YautjaBowTest
                         Assert.That(meta.EntityName, Is.EqualTo(row.Name), $"{row.Id} CMSS13 inherited source name");
                         Assert.That(meta.EntityDescription, Is.EqualTo(row.Description), $"{row.Id} CMSS13 inherited source description");
                         Assert.That(clothing.Slots, Is.EqualTo(row.Slots), $"{row.Id} CMSS13 equip slot mapping");
-                        Assert.That(armor.Melee, Is.EqualTo(row.Melee), $"{row.Id} CMSS13 armor_melee local tier mapping");
-                        Assert.That(armor.Bullet, Is.EqualTo(row.Bullet), $"{row.Id} CMSS13 armor_bullet local tier mapping");
-                        Assert.That(armor.Bio, Is.EqualTo(row.Bio), $"{row.Id} CMSS13 armor_bio local tier mapping");
-                        Assert.That(armor.ExplosionArmor, Is.EqualTo(row.ExplosionArmor), $"{row.Id} CMSS13 armor_bomb local tier mapping");
+                        Assert.That(armor.Melee, Is.EqualTo(row.Melee), $"{row.Id} expected melee protection");
+                        Assert.That(armor.Bullet, Is.EqualTo(row.Bullet), $"{row.Id} expected bullet protection");
+                        Assert.That(armor.Bio, Is.EqualTo(row.Bio), $"{row.Id} expected biological protection");
+                        Assert.That(armor.ExplosionArmor, Is.EqualTo(row.ExplosionArmor), $"{row.Id} expected explosion protection");
                         Assert.That(examineText, Does.Contain(row.DamagedExamineText),
                             $"{row.Id} should expose the CMSS13 YAUTJA_REPAIR_DAMAGED examine line.");
 
@@ -10667,7 +10696,7 @@ public sealed class YautjaBowTest
                             $"{id} should start with the local /obj/item/weapon/yautja/knife equivalent.");
                         Assert.That(entMan.TryGetComponent<ItemSlotsComponent>(item, out var itemSlots), Is.True,
                             $"{id} should expose the source boot knife through an item slot.");
-                        Assert.That(itemSlotsSystem.TryGetSlot(item, "item", out var itemSlot, itemSlots), Is.True,
+                        Assert.That(itemSlotsSystem.TryGetSlot((item, itemSlots), "item", out var itemSlot), Is.True,
                             $"{id} should expose the source boot knife slot.");
                         Assert.That(itemSlot!.ContainerSlot?.ContainedEntity, Is.Not.Null,
                             $"{id} should spawn the source boot knife item into its slot.");
@@ -10769,7 +10798,7 @@ public sealed class YautjaBowTest
 
         Assert.That(entMan.TryGetComponent<ItemSlotsComponent>(greaves, out var itemSlots), Is.True,
             $"{greavesId} should map CMSS13 allowed_items_typecache to its local greaves item slot.");
-        Assert.That(itemSlotsSystem.TryGetSlot(greaves, "item", out var slot, itemSlots), Is.True,
+        Assert.That(itemSlotsSystem.TryGetSlot((greaves, itemSlots), "item", out var slot), Is.True,
             $"{greavesId} should expose the CMSS13 boot-storage slot.");
         Assert.That(slot!.Whitelist, Is.Not.Null,
             $"{greavesId} should restrict the greaves item slot to the CMSS13 allowed_items_typecache.");
@@ -10787,9 +10816,9 @@ public sealed class YautjaBowTest
             var item = entMan.SpawnEntity(acceptedId, coordinates);
             spawned.Add(item);
 
-            Assert.That(itemSlotsSystem.TryInsert(greaves, "item", item, user, itemSlots), Is.True,
+            Assert.That(itemSlotsSystem.TryInsert((greaves, itemSlots), "item", item, user), Is.True,
                 $"{greavesId} should accept {acceptedId} from the CMSS13 allowed_items_typecache local mapping.");
-            Assert.That(itemSlotsSystem.TryEject(greaves, "item", null, out var ejected, itemSlots), Is.True,
+            Assert.That(itemSlotsSystem.TryEject((greaves, itemSlots), "item", null, out var ejected), Is.True,
                 $"{greavesId} should eject {acceptedId} after validating insertion.");
             Assert.That(ejected, Is.EqualTo(item));
         }
@@ -10799,7 +10828,7 @@ public sealed class YautjaBowTest
             var item = entMan.SpawnEntity(rejectedId, coordinates);
             spawned.Add(item);
 
-            Assert.That(itemSlotsSystem.TryInsert(greaves, "item", item, user, itemSlots), Is.False,
+            Assert.That(itemSlotsSystem.TryInsert((greaves, itemSlots), "item", item, user), Is.False,
                 $"{greavesId} should reject {rejectedId} because it is outside the CMSS13 allowed_items_typecache local mapping.");
         }
     }
@@ -11466,9 +11495,9 @@ public sealed class YautjaBowTest
                             row.MaskId,
                         });
 
-                        AssertBadBloodArmorPiece(entMan, row.ArmorId, row.ArmorName, row.ArmorDescription, SlotFlags.OUTERCLOTHING, row.ArmorSprite);
-                        AssertBadBloodArmorPiece(entMan, row.MaskId, row.MaskName, row.MaskDescription, SlotFlags.MASK | SlotFlags.SUITSTORAGE, row.MaskSprite, blockPickup: false);
-                        AssertBadBloodArmorPiece(entMan, row.GreavesId, row.GreavesName, row.GreavesDescription, SlotFlags.FEET, row.GreavesSprite);
+                        AssertBadBloodArmorPiece(entMan, row.ArmorId, row.ArmorName, row.ArmorDescription, SlotFlags.OUTERCLOTHING, row.ArmorSprite, humanAccessible: true);
+                        AssertBadBloodArmorPiece(entMan, row.MaskId, row.MaskName, row.MaskDescription, SlotFlags.MASK | SlotFlags.SUITSTORAGE, row.MaskSprite, blockPickup: false, humanAccessible: true);
+                        AssertBadBloodArmorPiece(entMan, row.GreavesId, row.GreavesName, row.GreavesDescription, SlotFlags.FEET, row.GreavesSprite, humanAccessible: true);
                     }
                 });
             }
@@ -11528,7 +11557,8 @@ public sealed class YautjaBowTest
                         var greaves = EntityPrototypeIds(entMan, row.GreavesId).Single();
 
                         AssertCmss13ArmorStats(entMan, armor, row.ArmorId, row.ArmorStats);
-                        AssertCmss13ArmorStats(entMan, mask, row.MaskId, row.MaskStats);
+                        Assert.That(entMan.HasComponent<CMArmorComponent>(mask), Is.False,
+                            $"{row.MaskId} keeps the current unarmored thrall mask balance.");
                         AssertCmss13ArmorStats(entMan, greaves, row.GreavesId, row.GreavesStats);
                         Assert.That(entMan.GetComponent<ParasiteResistanceComponent>(mask).MaxCount, Is.EqualTo(row.MaskAntiHugMaxCount),
                             $"{row.MaskId} inherits CMSS13 /obj/item/clothing/mask/gas/yautja anti_hug = 5.");
@@ -11680,7 +11710,7 @@ public sealed class YautjaBowTest
                         "CMSS13 firing a spike does not reset an overdue last_regen threshold.");
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
-                    AssertSoundPath(gun.SoundGunshot!, "/Audio/_CMU14/Yautja/woodhit.ogg");
+                    AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/woodhit.ogg");
                     Assert.That(entMan.HasComponent<WieldableComponent>(launcher), Is.True);
                     Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(launcher), Is.True,
                         "CMSS13 /obj/item/weapon/gun/launcher/spike sets flags_item = ITEM_PREDATOR|TWOHANDED.");
@@ -11718,7 +11748,7 @@ public sealed class YautjaBowTest
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
                 var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
 
-                Assert.That(gun.UpdateBasicEntityAmmoCount(launcher, 11, ammo), Is.True);
+                Assert.That(gun.UpdateBasicEntityAmmoCount((launcher, ammo), 11), Is.True);
                 recharge.RechargeChance = 1f;
                 entMan.Dirty(launcher, recharge);
             });
@@ -11749,7 +11779,7 @@ public sealed class YautjaBowTest
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
                 var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
 
-                Assert.That(gun.UpdateBasicEntityAmmoCount(launcher, 11, ammo), Is.True);
+                Assert.That(gun.UpdateBasicEntityAmmoCount((launcher, ammo), 11), Is.True);
                 recharge.RechargeChance = 1f;
                 dueAtBoundary = timing.CurTime;
                 recharge.NextCharge = dueAtBoundary;
@@ -11807,7 +11837,7 @@ public sealed class YautjaBowTest
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
                 var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
 
-                Assert.That(gun.UpdateBasicEntityAmmoCount(launcher, 10, ammo), Is.True);
+                Assert.That(gun.UpdateBasicEntityAmmoCount((launcher, ammo), 10), Is.True);
                 recharge.RechargeChance = 0f;
                 failedDueAt = timing.CurTime - TimeSpan.FromSeconds(1);
                 recharge.NextCharge = failedDueAt;
@@ -12150,7 +12180,7 @@ public sealed class YautjaBowTest
                 var item = entMan.GetComponent<ItemComponent>(pistol);
                 var clothing = entMan.GetComponent<ClothingComponent>(pistol);
                 var gun = entMan.GetComponent<GunComponent>(pistol);
-                var ammo = entMan.GetComponent<ProjectileBatteryAmmoProviderComponent>(pistol);
+                var ammo = entMan.GetComponent<BatteryAmmoProviderComponent>(pistol);
                 var battery = entMan.GetComponent<BatteryComponent>(pistol);
                 var recharge = entMan.GetComponent<BatterySelfRechargerComponent>(pistol);
                 var fireModes = entMan.GetComponent<BatteryWeaponFireModesComponent>(pistol);
@@ -12169,9 +12199,9 @@ public sealed class YautjaBowTest
                     Assert.That(ammo.FireCost, Is.EqualTo(1));
                     Assert.That(battery.MaxCharge, Is.EqualTo(40),
                         "CMSS13 plasma pistol has charge_time = 40.");
-                    Assert.That(battery.CurrentCharge, Is.EqualTo(40),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, battery)), Is.EqualTo(40),
                         "CMSS13 plasma pistol starts at its maximum charge_time.");
-                    Assert.That(recharge.AutoRecharge, Is.True);
+                    Assert.That(recharge.AutoRechargeRate, Is.GreaterThan(0));
                     Assert.That(recharge.AutoRechargeRate, Is.EqualTo(1),
                         "CMSS13 process() restores one charge_time per tick until 40.");
                     Assert.That(fireModes.FireModes, Has.Count.EqualTo(2));
@@ -12253,7 +12283,7 @@ public sealed class YautjaBowTest
                 var item = entMan.GetComponent<ItemComponent>(rifle);
                 var clothing = entMan.GetComponent<ClothingComponent>(rifle);
                 var gun = entMan.GetComponent<GunComponent>(rifle);
-                var ammo = entMan.GetComponent<ProjectileBatteryAmmoProviderComponent>(rifle);
+                var ammo = entMan.GetComponent<BatteryAmmoProviderComponent>(rifle);
                 var battery = entMan.GetComponent<BatteryComponent>(rifle);
                 var recharge = entMan.GetComponent<BatterySelfRechargerComponent>(rifle);
 
@@ -12272,9 +12302,9 @@ public sealed class YautjaBowTest
                         "CMSS13 plasma rifle load_into_chamber() subtracts 7 charge_time per shot.");
                     Assert.That(battery.MaxCharge, Is.EqualTo(100),
                         "CMSS13 plasma rifle has charge_time = 100.");
-                    Assert.That(battery.CurrentCharge, Is.EqualTo(100),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, battery)), Is.EqualTo(100),
                         "CMSS13 plasma rifle starts at its maximum charge_time.");
-                    Assert.That(recharge.AutoRecharge, Is.True);
+                    Assert.That(recharge.AutoRechargeRate, Is.GreaterThan(0));
                     Assert.That(recharge.AutoRechargeRate, Is.EqualTo(1),
                         "CMSS13 plasma rifle process() restores one charge_time per tick until 100.");
                     Assert.That(entMan.HasComponent<WieldableComponent>(rifle), Is.True,
@@ -12313,7 +12343,7 @@ public sealed class YautjaBowTest
                 var clothing = entMan.GetComponent<ClothingComponent>(carbine);
                 var plasma = entMan.GetComponent<YautjaPlasmaWeaponComponent>(carbine);
                 var gun = entMan.GetComponent<GunComponent>(carbine);
-                var ammo = entMan.GetComponent<ProjectileBatteryAmmoProviderComponent>(carbine);
+                var ammo = entMan.GetComponent<BatteryAmmoProviderComponent>(carbine);
                 var battery = entMan.GetComponent<BatteryComponent>(carbine);
                 var recharge = entMan.GetComponent<BatterySelfRechargerComponent>(carbine);
                 var fireModes = entMan.GetComponent<BatteryWeaponFireModesComponent>(carbine);
@@ -12325,13 +12355,13 @@ public sealed class YautjaBowTest
                     Assert.That(meta.EntityDescription, Is.EqualTo("A short-barreled rapid-fire assault weapon only given to military caste soldiers, unsuitable for hunting actual prey. Features a deadly burst-fire mode, alongside incendiary or impact-explosive rounds. Although more accurate when wielded, it can be fired with one hand."));
                     Assert.That(item.Size.Id, Is.EqualTo("Large"),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/plasmacarbine sets w_class = SIZE_LARGE.");
-                    Assert.That(item.RsiPath, Is.EqualTo("_CMU14/Yautja/pred_guns_inhands.rsi"),
+                    Assert.That(item.RsiPath, Is.EqualTo("CMU14/Yautja/pred_guns_inhands.rsi"),
                         "CMSS13 plasma carbine inherits Yautja pred gun hand visuals.");
                     Assert.That(item.HeldPrefix, Is.EqualTo("plasmacarbine"),
                         "CMSS13 plasma carbine sets item_state = \"plasmacarbine\".");
                     Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/plasmacarbine sets flags_equip_slot = SLOT_BACK.");
-                    Assert.That(clothing.RsiPath, Is.EqualTo("_CMU14/Yautja/pred_guns_back.rsi"),
+                    Assert.That(clothing.RsiPath, Is.EqualTo("CMU14/Yautja/pred_guns_back.rsi"),
                         "CMSS13 plasma carbine inherits its back-slot item_state from the Yautja pred gun DMI family.");
                     Assert.That(clothing.EquippedPrefix, Is.EqualTo("plasmacarbine"),
                         "CMSS13 plasma carbine uses item_state = \"plasmacarbine\" for back-slot visuals.");
@@ -12349,9 +12379,9 @@ public sealed class YautjaBowTest
                     Assert.That(ammo.FireCost, Is.EqualTo(1));
                     Assert.That(battery.MaxCharge, Is.EqualTo(40),
                         "CMSS13 plasma carbine has charge_time = 40.");
-                    Assert.That(battery.CurrentCharge, Is.EqualTo(40),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, battery)), Is.EqualTo(40),
                         "CMSS13 plasma carbine starts at its maximum charge_time.");
-                    Assert.That(recharge.AutoRecharge, Is.True);
+                    Assert.That(recharge.AutoRechargeRate, Is.GreaterThan(0));
                     Assert.That(recharge.AutoRechargeRate, Is.EqualTo(1),
                         "CMSS13 process() restores one charge_time per tick until 40.");
                     Assert.That(fireModes.FireModes, Has.Count.EqualTo(2));
@@ -12423,7 +12453,7 @@ public sealed class YautjaBowTest
             Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
             Assert.Multiple(() =>
             {
-                Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_CMU14/Yautja/pred_guns.rsi")),
+                Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/pred_guns.rsi")),
                     "CMSS13 plasma carbine inherits the Yautja gun icon DMI.");
                 Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("plasmacarbine"),
                     "CMSS13 plasma carbine sets icon_state = \"plasmacarbine\".");
@@ -12506,7 +12536,7 @@ public sealed class YautjaBowTest
                 server.PlayerMan.SetAttachedEntity(session, hunter);
 
                 var battery = entMan.GetComponent<BatteryComponent>(carbine);
-                batterySystem.SetCharge(carbine, 39, battery);
+                batterySystem.SetCharge((carbine, battery), 39);
                 Assert.That(hands.TryPickupAnyHand(hunter, carbine), Is.True);
             });
 
@@ -12565,8 +12595,8 @@ public sealed class YautjaBowTest
                 previousAttached = session.AttachedEntity;
                 server.PlayerMan.SetAttachedEntity(session, hunter);
 
-                batterySystem.SetCharge(rifle, 99, entMan.GetComponent<BatteryComponent>(rifle));
-                batterySystem.SetCharge(pistol, 39, entMan.GetComponent<BatteryComponent>(pistol));
+                batterySystem.SetCharge(rifle, 99);
+                batterySystem.SetCharge(pistol, 39);
                 Assert.That(hands.TryPickupAnyHand(hunter, rifle), Is.True);
                 Assert.That(hands.TryPickupAnyHand(hunter, pistol), Is.True);
             });
@@ -12645,7 +12675,7 @@ public sealed class YautjaBowTest
                         "CMSS13 plasma carbine set_gun_config_values(): FIRE_DELAY_TIER_9, SCATTER_AMOUNT_TIER_9/6 and BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_10/8.");
                 });
 
-                batterySystem.SetCharge(carbine, 1, battery);
+                batterySystem.SetCharge((carbine, battery), 1);
 
                 var incendiaryAmmo = new TakeAmmoEvent(1, new List<(EntityUid? Entity, IShootable Shootable)>(), coordinates, hunter);
                 entMan.EventBus.RaiseLocalEvent(carbine, incendiaryAmmo);
@@ -12659,23 +12689,23 @@ public sealed class YautjaBowTest
                         "CMSS13 plasma carbine default mode creates /datum/ammo/energy/yautja/rifle/bolt.");
                     Assert.That(entMan.HasComponent<ServerPointLightComponent>(firstProjectile.Value), Is.True,
                         "CMSS13 load_into_chamber() calls projectile.set_light(1).");
-                    Assert.That(battery.CurrentCharge, Is.EqualTo(0),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, battery)), Is.EqualTo(0),
                         "CMSS13 plasma carbine default shot_cost subtracts 1 after creating the projectile.");
                 });
 
                 entMan.DeleteEntity(firstProjectile.Value);
                 firstProjectile = null;
 
-                Assert.That(battery.CurrentCharge, Is.EqualTo(1),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, battery)), Is.EqualTo(1),
                     "CMSS13 delete_bullet(projectile, refund = TRUE) refunds the default shot_cost for an unfired prepared projectile.");
 
                 var explosiveBattery = entMan.GetComponent<BatteryComponent>(explosiveCarbine);
                 var explosiveFireModes = entMan.GetComponent<BatteryWeaponFireModesComponent>(explosiveCarbine);
                 var explosiveCoordinates = entMan.GetComponent<TransformComponent>(explosiveCarbine).Coordinates;
-                Assert.That(fireModeSystem.TrySetFireMode(explosiveCarbine, explosiveFireModes, 1), Is.True);
+                Assert.That(fireModeSystem.TrySetFireMode((explosiveCarbine, explosiveFireModes), 1), Is.True);
                 Assert.That(explosiveFireModes.CurrentFireMode, Is.EqualTo(1));
 
-                batterySystem.SetCharge(explosiveCarbine, 1, explosiveBattery);
+                batterySystem.SetCharge((explosiveCarbine, explosiveBattery), 1);
 
                 var explosiveAmmo = new TakeAmmoEvent(1, new List<(EntityUid? Entity, IShootable Shootable)>(), explosiveCoordinates, hunter);
                 entMan.EventBus.RaiseLocalEvent(explosiveCarbine, explosiveAmmo);
@@ -12689,14 +12719,14 @@ public sealed class YautjaBowTest
                         "CMSS13 plasma carbine impact-explosive mode creates the caster single-lethal projectile.");
                     Assert.That(entMan.HasComponent<ServerPointLightComponent>(secondProjectile.Value), Is.True,
                         "CMSS13 load_into_chamber() also lights the impact-explosive projectile.");
-                    Assert.That(explosiveBattery.CurrentCharge, Is.EqualTo(0),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((explosiveCarbine, explosiveBattery)), Is.EqualTo(0),
                         "CMSS13 has_ammunition() allows charge_time >= 1, then load_into_chamber() subtracts the 2-charge explosive shot cost; local battery clamps at zero.");
                 });
 
                 entMan.DeleteEntity(secondProjectile.Value);
                 secondProjectile = null;
 
-                Assert.That(explosiveBattery.CurrentCharge, Is.EqualTo(1),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((explosiveCarbine, explosiveBattery)), Is.EqualTo(1),
                     "CMSS13 delete_bullet(projectile, refund = TRUE) restores the locally clamped charge that was actually spent.");
             }
             finally
@@ -12742,7 +12772,7 @@ public sealed class YautjaBowTest
             {
                 var battery = entMan.GetComponent<BatteryComponent>(carbine);
                 var coordinates = entMan.GetComponent<TransformComponent>(carbine).Coordinates;
-                batterySystem.SetCharge(carbine, 1, battery);
+                batterySystem.SetCharge((carbine, battery), 1);
 
                 var incendiaryAmmo = new TakeAmmoEvent(1, new List<(EntityUid? Entity, IShootable Shootable)>(), coordinates, hunter);
                 entMan.EventBus.RaiseLocalEvent(carbine, incendiaryAmmo);
@@ -12750,7 +12780,7 @@ public sealed class YautjaBowTest
                 Assert.That(incendiaryProjectile, Is.Not.Null);
 
                 var xenoDamage = entMan.GetComponent<DamageableComponent>(xeno);
-                Assert.That(xenoDamage.Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.Zero));
+                Assert.That(entMan.System<DamageableSystem>().GetAllDamage((xeno, xenoDamage)).DamageDict.GetValueOrDefault("Heat"), Is.EqualTo(FixedPoint2.Zero));
                 Assert.That(status.TryGetTime(xeno, "YautjaInterference", out _), Is.False);
 
                 var hit = new ProjectileHitEvent(new DamageSpecifier(), xeno, hunter);
@@ -12764,7 +12794,7 @@ public sealed class YautjaBowTest
                     AssertIncendiaryPayload(entMan,
                         incendiaryProjectile.Value,
                         "CMSS13 rifle-bolt carbine mode keeps bullet_trait_incendiary.");
-                    Assert.That(xenoDamage.Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(41.25)),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((xeno, xenoDamage)).DamageDict.GetValueOrDefault("Heat"), Is.EqualTo(FixedPoint2.New(41.25)),
                         "CMSS13 rifle-bolt carbine mode keeps the rifle xeno extra-burn branch.");
                     Assert.That(status.TryGetTime(xeno, "YautjaInterference", out var time), Is.True,
                         "CMSS13 rifle-bolt carbine mode keeps the rifle xeno interference branch.");
@@ -12774,8 +12804,8 @@ public sealed class YautjaBowTest
                 var explosiveBattery = entMan.GetComponent<BatteryComponent>(explosiveCarbine);
                 var explosiveFireModes = entMan.GetComponent<BatteryWeaponFireModesComponent>(explosiveCarbine);
                 var explosiveCoordinates = entMan.GetComponent<TransformComponent>(explosiveCarbine).Coordinates;
-                Assert.That(fireModeSystem.TrySetFireMode(explosiveCarbine, explosiveFireModes, 1), Is.True);
-                batterySystem.SetCharge(explosiveCarbine, 2, explosiveBattery);
+                Assert.That(fireModeSystem.TrySetFireMode((explosiveCarbine, explosiveFireModes), 1), Is.True);
+                batterySystem.SetCharge((explosiveCarbine, explosiveBattery), 2);
 
                 var explosiveAmmo = new TakeAmmoEvent(1, new List<(EntityUid? Entity, IShootable Shootable)>(), explosiveCoordinates, hunter);
                 entMan.EventBus.RaiseLocalEvent(explosiveCarbine, explosiveAmmo);
@@ -13066,7 +13096,7 @@ public sealed class YautjaBowTest
                         Is.EqualTo("A pair of powerful, shoulder-mounted energy weapons that are remotely operated via bracers. Unlike normal plasma casters, they only feature one fire mode, and are designed to obliterate most targets without leaving any material behind."));
                     Assert.That(item.Size.Id, Is.EqualTo("Ginormous"),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/cannon sets w_class = SIZE_HUGE; local Ginormous is the no-storage huge weapon footprint used by this deployed pack item.");
-                    Assert.That(item.RsiPath, Is.EqualTo("_CMU14/Yautja/mcaste_gear.rsi"),
+                    Assert.That(item.RsiPath, Is.EqualTo("CMU14/Yautja/mcaste_gear.rsi"),
                         "CMSS13 dual plasma cannons hand/back item icons use hunter/mcaste_gear.dmi.");
                     Assert.That(item.HeldPrefix, Is.EqualTo("plasma_cannons"),
                         "CMSS13 dual plasma cannons item_state = \"plasma_cannons\".");
@@ -13074,7 +13104,7 @@ public sealed class YautjaBowTest
                         "CMSS13 dual plasma cannons set fire_delay = FIRE_DELAY_TIER_2 * 6.");
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
-                    AssertSoundPath(gun.SoundGunshot!, "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
+                    AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
                     Assert.That(tech.BlockPickup, Is.True);
                     Assert.That(tech.ShootDeniedPopup.Id, Is.EqualTo("cmu-yautja-spike-launcher-denied"));
                     Assert.That(linked.Projectile.Id, Is.EqualTo("CMUYautjaCasterLanceBolt"),
@@ -13114,7 +13144,7 @@ public sealed class YautjaBowTest
             Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
             Assert.Multiple(() =>
             {
-                Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_CMU14/Yautja/mcaste_gear.rsi")),
+                Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/mcaste_gear.rsi")),
                     "CMSS13 dual plasma cannons use icons/obj/items/hunter/mcaste_gear.dmi.");
                 Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("plasma_cannons"),
                     "CMSS13 dual plasma cannons icon_state = \"plasma_cannons\".");
@@ -13179,9 +13209,9 @@ public sealed class YautjaBowTest
             try
             {
                 var battery = entMan.GetComponent<BatteryComponent>(rifle);
-                batterySystem.SetCharge(rifle, 6, battery);
+                batterySystem.SetCharge((rifle, battery), 6);
 
-                var ammo = entMan.GetComponent<ProjectileBatteryAmmoProviderComponent>(rifle);
+                var ammo = entMan.GetComponent<BatteryAmmoProviderComponent>(rifle);
                 var userCoords = entMan.GetComponent<TransformComponent>(hunter).Coordinates;
                 var attempt = new AttemptShootEvent(hunter, null, userCoords, userCoords);
 
@@ -13339,19 +13369,19 @@ public sealed class YautjaBowTest
                     AssertCasterMode(casterComp.Modes[0],
                         "cmu-yautja-caster-mode-stun",
                         "CMUYautjaCasterStunBolt",
-                        "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
+                        "/Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
                     AssertCasterMode(casterComp.Modes[1],
                         "cmu-yautja-caster-mode-immobilizer",
                         "CMUYautjaCasterImmobilizerBolt",
-                        "/Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav");
+                        "/Audio/CMU14/Yautja/Weapons/Plasma/pulse.wav");
                     AssertCasterMode(casterComp.Modes[2],
                         "cmu-yautja-caster-mode-lethal",
                         "CMUYautjaCasterLethalBolt",
-                        "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav");
+                        "/Audio/CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav");
                     AssertCasterMode(casterComp.Modes[3],
                         "cmu-yautja-caster-mode-eradicator",
                         "CMUYautjaCasterEradicatorBolt",
-                        "/Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav");
+                        "/Audio/CMU14/Yautja/Weapons/Plasma/pulse.wav");
                 });
             }
             finally
@@ -13659,13 +13689,13 @@ public sealed class YautjaBowTest
             var entMan = server.EntMan;
             var capes = new Dictionary<string, (string Name, string Sprite)>
             {
-                ["CMUYautjaCapeFull"] = ("yautja cape", "_CMU14/Yautja/cape_full.rsi"),
-                ["CMUYautjaCapeCeremonial"] = ("yautja ceremonial cape", "_CMU14/Yautja/cape_ceremonial.rsi"),
-                ["CMUYautjaCapeThird"] = ("yautja third-cape", "_CMU14/Yautja/cape_third.rsi"),
-                ["CMUYautjaCapeHalf"] = ("yautja half-cape", "_CMU14/Yautja/cape_half.rsi"),
-                ["CMUYautjaCapeQuarter"] = ("yautja quarter-cape", "_CMU14/Yautja/cape_quarter.rsi"),
-                ["CMUYautjaCapePoncho"] = ("yautja poncho", "_CMU14/Yautja/cape_poncho.rsi"),
-                ["CMUYautjaCapeDamaged"] = ("yautja damaged cape", "_CMU14/Yautja/cape_damaged.rsi"),
+                ["CMUYautjaCapeFull"] = ("yautja cape", "CMU14/Yautja/cape_full.rsi"),
+                ["CMUYautjaCapeCeremonial"] = ("yautja ceremonial cape", "CMU14/Yautja/cape_ceremonial.rsi"),
+                ["CMUYautjaCapeThird"] = ("yautja third-cape", "CMU14/Yautja/cape_third.rsi"),
+                ["CMUYautjaCapeHalf"] = ("yautja half-cape", "CMU14/Yautja/cape_half.rsi"),
+                ["CMUYautjaCapeQuarter"] = ("yautja quarter-cape", "CMU14/Yautja/cape_quarter.rsi"),
+                ["CMUYautjaCapePoncho"] = ("yautja poncho", "CMU14/Yautja/cape_poncho.rsi"),
+                ["CMUYautjaCapeDamaged"] = ("yautja damaged cape", "CMU14/Yautja/cape_damaged.rsi"),
             };
 
             var spawned = capes.Keys
@@ -13717,13 +13747,13 @@ public sealed class YautjaBowTest
             var factory = client.ResolveDependency<IComponentFactory>();
             var capes = new Dictionary<string, ResPath>
             {
-                ["CMUYautjaCapeFull"] = new("/Textures/_CMU14/Yautja/cape_full.rsi"),
-                ["CMUYautjaCapeCeremonial"] = new("/Textures/_CMU14/Yautja/cape_ceremonial.rsi"),
-                ["CMUYautjaCapeThird"] = new("/Textures/_CMU14/Yautja/cape_third.rsi"),
-                ["CMUYautjaCapeHalf"] = new("/Textures/_CMU14/Yautja/cape_half.rsi"),
-                ["CMUYautjaCapeQuarter"] = new("/Textures/_CMU14/Yautja/cape_quarter.rsi"),
-                ["CMUYautjaCapePoncho"] = new("/Textures/_CMU14/Yautja/cape_poncho.rsi"),
-                ["CMUYautjaCapeDamaged"] = new("/Textures/_CMU14/Yautja/cape_damaged.rsi"),
+                ["CMUYautjaCapeFull"] = new("/Textures/CMU14/Yautja/cape_full.rsi"),
+                ["CMUYautjaCapeCeremonial"] = new("/Textures/CMU14/Yautja/cape_ceremonial.rsi"),
+                ["CMUYautjaCapeThird"] = new("/Textures/CMU14/Yautja/cape_third.rsi"),
+                ["CMUYautjaCapeHalf"] = new("/Textures/CMU14/Yautja/cape_half.rsi"),
+                ["CMUYautjaCapeQuarter"] = new("/Textures/CMU14/Yautja/cape_quarter.rsi"),
+                ["CMUYautjaCapePoncho"] = new("/Textures/CMU14/Yautja/cape_poncho.rsi"),
+                ["CMUYautjaCapeDamaged"] = new("/Textures/CMU14/Yautja/cape_damaged.rsi"),
             };
 
             Assert.Multiple(() =>
@@ -14160,8 +14190,8 @@ public sealed class YautjaBowTest
                 var bracerBlock = entMan.GetComponent<BlockingComponent>(bracerShield);
                 var clanBlock = entMan.GetComponent<BlockingComponent>(clanShield);
 
-                AssertDamageModifierEqual(bracerBlock.PassiveBlockDamageModifer, clanBlock.PassiveBlockDamageModifer);
-                AssertDamageModifierEqual(bracerBlock.ActiveBlockDamageModifier, clanBlock.ActiveBlockDamageModifier);
+                AssertDamageModifierEqual(bracerBlock.PassiveBlockModifier, clanBlock.PassiveBlockModifier);
+                AssertDamageModifierEqual(bracerBlock.ActiveBlockModifier, clanBlock.ActiveBlockModifier);
                 Assert.That(bracerBlock.PassiveBlockFraction, Is.EqualTo(clanBlock.PassiveBlockFraction));
                 Assert.That(bracerBlock.ActiveBlockFraction, Is.EqualTo(clanBlock.ActiveBlockFraction));
             }
@@ -14306,8 +14336,8 @@ public sealed class YautjaBowTest
                 var incoming = new DamageSpecifier { DamageDict = { ["Piercing"] = 10 } };
 
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming), origin: frontAttacker, tool: frontAttacker);
-                var unblockedPiercing = userDamage.Damage.DamageDict["Piercing"];
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
+                var unblockedPiercing = entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Piercing");
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
 
                 Assert.That(hands.TryPickupAnyHand(hunter, combistick), Is.True);
                 var blockingComponent = entMan.GetComponent<BlockingComponent>(combistick);
@@ -14315,34 +14345,34 @@ public sealed class YautjaBowTest
                 var sourceBlock = entMan.GetComponent<YautjaSourceShieldBlockComponent>(combistick);
                 sourceBlock.ReadiedBlock = (YautjaSourceShieldChance) 100;
                 sourceBlock.PassiveBlock = YautjaSourceShieldChance.None;
-                Assert.That(blocking.StartBlocking(combistick, blockingComponent, hunter), Is.True);
+                Assert.That(blocking.RaiseShield((combistick, blockingComponent), hunter), Is.True);
 
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming), origin: frontAttacker, tool: frontAttacker);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Piercing"], Is.LessThan(unblockedPiercing),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.LessThan(unblockedPiercing),
                         "An extended, readied combistick should use the CMSS13 two-handed directional shield path against front attacks.");
-                    Assert.That(weaponDamage.Damage.DamageDict["Piercing"], Is.GreaterThan(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((combistick, weaponDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.GreaterThan(FixedPoint2.Zero),
                         "A successful source shield block transfers damage into the defensive combistick.");
                 });
 
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
-                damageable.SetAllDamage(combistick, weaponDamage, FixedPoint2.Zero);
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
+                damageable.SetAllDamage((combistick, weaponDamage), FixedPoint2.Zero);
 
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming), origin: backAttacker, tool: backAttacker);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Piercing"], Is.EqualTo(unblockedPiercing),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.EqualTo(unblockedPiercing),
                         "CMSS13 SHIELD_DIRECTIONAL_TWOHANDS should not block attacks from behind.");
-                    Assert.That(weaponDamage.Damage.DamageDict["Piercing"], Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((combistick, weaponDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.EqualTo(FixedPoint2.Zero),
                         "Back attacks should not transfer damage into the combistick.");
                 });
 
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
-                damageable.SetAllDamage(combistick, weaponDamage, FixedPoint2.Zero);
-                Assert.That(blocking.StopBlocking(combistick, blockingComponent, hunter), Is.True);
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
+                damageable.SetAllDamage((combistick, weaponDamage), FixedPoint2.Zero);
+                Assert.That(blocking.LowerShield((combistick, blockingComponent), hunter), Is.True);
                 sourceBlock.ReadiedBlock = YautjaSourceShieldChance.None;
                 sourceBlock.PassiveBlock = (YautjaSourceShieldChance) 100;
 
@@ -14350,9 +14380,9 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Piercing"], Is.EqualTo(unblockedPiercing),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.EqualTo(unblockedPiercing),
                         "The located CMSS13 combistick source has no passive_block row; passive local blocking must remain disabled.");
-                    Assert.That(weaponDamage.Damage.DamageDict["Piercing"], Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((combistick, weaponDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.EqualTo(FixedPoint2.Zero),
                         "A passive combistick shield roll should not transfer damage.");
                 });
             }
@@ -14400,12 +14430,12 @@ public sealed class YautjaBowTest
                 var incoming = new DamageSpecifier { DamageDict = { ["Piercing"] = 10 } };
 
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming), origin: shooter, tool: projectile);
-                var unblockedPiercing = userDamage.Damage.DamageDict["Piercing"];
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
+                var unblockedPiercing = entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Piercing");
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
 
                 Assert.That(hands.TryPickupAnyHand(hunter, combistick), Is.True);
                 var blockingComponent = entMan.GetComponent<BlockingComponent>(combistick);
-                Assert.That(blocking.StartBlocking(combistick, blockingComponent, hunter), Is.True);
+                Assert.That(blocking.RaiseShield((combistick, blockingComponent), hunter), Is.True);
 
                 var sourceBlock = entMan.GetComponent<YautjaSourceShieldBlockComponent>(combistick);
                 Assert.That(sourceBlock.ReadiedBlock, Is.EqualTo(YautjaSourceShieldChance.High));
@@ -14416,14 +14446,14 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Piercing"], Is.EqualTo(unblockedPiercing),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.EqualTo(unblockedPiercing),
                         "Seed 39's relevant deterministic roll is between 12 and 30 percent, so it must fail the production 30 percent SHIELD_CHANCE_HIGH multiplied by PROJECTILE_BLOCK_PERC_40 (12 percent).");
-                    Assert.That(weaponDamage.Damage.DamageDict["Piercing"], Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((combistick, weaponDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.EqualTo(FixedPoint2.Zero),
                         "A failed projectile shield roll should not transfer damage into the combistick.");
                 });
 
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
-                damageable.SetAllDamage(combistick, weaponDamage, FixedPoint2.Zero);
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
+                damageable.SetAllDamage((combistick, weaponDamage), FixedPoint2.Zero);
 
                 sourceBlock.ProjectileBlockFraction = 1f;
                 random.SetSeed(39);
@@ -14431,14 +14461,14 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Piercing"], Is.LessThan(unblockedPiercing),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.LessThan(unblockedPiercing),
                         "The same deterministic roll should block when the projectile multiplier is removed and the 30 percent base chance is used.");
-                    Assert.That(weaponDamage.Damage.DamageDict["Piercing"], Is.GreaterThan(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((combistick, weaponDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.GreaterThan(FixedPoint2.Zero),
                         "A successful projectile shield roll transfers damage into the defensive combistick.");
                 });
 
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
-                damageable.SetAllDamage(combistick, weaponDamage, FixedPoint2.Zero);
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
+                damageable.SetAllDamage((combistick, weaponDamage), FixedPoint2.Zero);
 
                 sourceBlock.ProjectileBlockFraction = 0.4f;
                 random.SetSeed(1);
@@ -14446,9 +14476,9 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Piercing"], Is.LessThan(unblockedPiercing),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.LessThan(unblockedPiercing),
                         "Seed 1's relevant deterministic roll must succeed the production 12 percent projectile block chance.");
-                    Assert.That(weaponDamage.Damage.DamageDict["Piercing"], Is.GreaterThan(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((combistick, weaponDamage)).DamageDict.GetValueOrDefault("Piercing"), Is.GreaterThan(FixedPoint2.Zero),
                         "A successful production projectile block transfers damage into the combistick.");
                 });
             }
@@ -14490,8 +14520,8 @@ public sealed class YautjaBowTest
                 var incoming = new DamageSpecifier { DamageDict = { ["Blunt"] = 10 } };
 
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming));
-                var unblockedBlunt = userDamage.Damage.DamageDict["Blunt"];
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
+                var unblockedBlunt = entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Blunt");
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
 
                 Assert.That(hands.TryPickupAnyHand(hunter, shield), Is.True);
                 Assert.That(entMan.HasComponent<BlockingUserComponent>(hunter), Is.True);
@@ -14502,23 +14532,23 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Blunt"], Is.EqualTo(unblockedBlunt),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.EqualTo(unblockedBlunt),
                         "A failed CMSS13 shield_chance roll should leave the incoming damage unblocked.");
-                    Assert.That(shieldDamage.Damage.DamageDict["Blunt"], Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((shield, shieldDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.EqualTo(FixedPoint2.Zero),
                         "The shield should only absorb damage after the chance roll succeeds.");
                 });
 
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
-                damageable.SetAllDamage(shield, shieldDamage, FixedPoint2.Zero);
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
+                damageable.SetAllDamage((shield, shieldDamage), FixedPoint2.Zero);
 
                 sourceBlock.PassiveBlock = (YautjaSourceShieldChance) 100;
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming));
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Blunt"], Is.LessThan(unblockedBlunt),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.LessThan(unblockedBlunt),
                         "A successful passive source block should use the existing local passive block fraction.");
-                    Assert.That(shieldDamage.Damage.DamageDict["Blunt"], Is.GreaterThan(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((shield, shieldDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.GreaterThan(FixedPoint2.Zero),
                         "The shield should receive the transferred damage through its own passive block modifier.");
                 });
             }
@@ -14562,17 +14592,17 @@ public sealed class YautjaBowTest
                 var incoming = new DamageSpecifier { DamageDict = { ["Blunt"] = 10 } };
 
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming));
-                var unblockedBlunt = userDamage.Damage.DamageDict["Blunt"];
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
+                var unblockedBlunt = entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Blunt");
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
 
                 Assert.That(hands.TryPickupAnyHand(hunter, shield), Is.True);
                 var blockingComponent = entMan.GetComponent<BlockingComponent>(shield);
-                Assert.That(blocking.StartBlocking(shield, blockingComponent, hunter), Is.True);
-                Assert.That(blockingComponent.IsBlocking, Is.True);
+                Assert.That(blocking.RaiseShield((shield, blockingComponent), hunter), Is.True);
+                Assert.That(blockingComponent.IsRaised, Is.True);
 
                 Assert.That(hands.TryDrop(hunter, shield), Is.True);
                 Assert.That(inventory.TryEquip(hunter, shield, "back", silent: true, force: true), Is.True);
-                Assert.That(blockingComponent.IsBlocking, Is.False,
+                Assert.That(blockingComponent.IsRaised, Is.False,
                     "Moving a readied Yautja shield out of the hand must clear active blocking before it reaches the back slot.");
 
                 var sourceBlock = entMan.GetComponent<YautjaSourceShieldBlockComponent>(shield);
@@ -14585,9 +14615,9 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Blunt"], Is.EqualTo(unblockedBlunt),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.EqualTo(unblockedBlunt),
                         "A Yautja shield with source blocks_on_back = FALSE must not passively block while worn on the back.");
-                    Assert.That(shieldDamage.Damage.DamageDict["Blunt"], Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((shield, shieldDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.EqualTo(FixedPoint2.Zero),
                         "Back-slot shields that fail the source back-block gate should not receive transferred block damage.");
                 });
             }
@@ -14633,12 +14663,12 @@ public sealed class YautjaBowTest
                 var incoming = new DamageSpecifier { DamageDict = { ["Blunt"] = 10 } };
 
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming), origin: frontAttacker);
-                var unblockedBlunt = userDamage.Damage.DamageDict["Blunt"];
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
+                var unblockedBlunt = entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Blunt");
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
 
                 Assert.That(hands.TryPickupAnyHand(hunter, shield), Is.True);
                 var blockingComponent = entMan.GetComponent<BlockingComponent>(shield);
-                Assert.That(blocking.StartBlocking(shield, blockingComponent, hunter), Is.True);
+                Assert.That(blocking.RaiseShield((shield, blockingComponent), hunter), Is.True);
 
                 var sourceBlock = entMan.GetComponent<YautjaSourceShieldBlockComponent>(shield);
                 sourceBlock.ReadiedBlock = (YautjaSourceShieldChance) 100;
@@ -14648,22 +14678,22 @@ public sealed class YautjaBowTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Blunt"], Is.LessThan(unblockedBlunt),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.LessThan(unblockedBlunt),
                         "A readied CMSS13 directional shield should block attacks from the facing cone.");
-                    Assert.That(shieldDamage.Damage.DamageDict["Blunt"], Is.GreaterThan(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((shield, shieldDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.GreaterThan(FixedPoint2.Zero),
                         "The shield should absorb part of a front attack after a successful readied source roll.");
                 });
 
-                damageable.SetAllDamage(hunter, userDamage, FixedPoint2.Zero);
-                damageable.SetAllDamage(shield, shieldDamage, FixedPoint2.Zero);
+                damageable.SetAllDamage((hunter, userDamage), FixedPoint2.Zero);
+                damageable.SetAllDamage((shield, shieldDamage), FixedPoint2.Zero);
 
                 damageable.TryChangeDamage(hunter, new DamageSpecifier(incoming), origin: backAttacker);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(userDamage.Damage.DamageDict["Blunt"], Is.EqualTo(unblockedBlunt),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((hunter, userDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.EqualTo(unblockedBlunt),
                         "A CMSS13 directional shield should not block attacks from behind even while readied.");
-                    Assert.That(shieldDamage.Damage.DamageDict["Blunt"], Is.EqualTo(FixedPoint2.Zero),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage((shield, shieldDamage)).DamageDict.GetValueOrDefault("Blunt"), Is.EqualTo(FixedPoint2.Zero),
                         "Back attacks should not transfer damage into the shield.");
                 });
             }
@@ -14690,7 +14720,7 @@ public sealed class YautjaBowTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<Content.Shared.StatusEffectNew.StatusEffectsSystem>();
             var timing = server.ResolveDependency<IGameTiming>();
 
             var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
@@ -15619,7 +15649,7 @@ public sealed class YautjaBowTest
                 Assert.That(slots.TryInsert(bow, "projectiles", arrow, hunter), Is.True, source);
 
                 var wieldable = entMan.GetComponent<WieldableComponent>(bow);
-                Assert.That(wield.TryWield(bow, wieldable, hunter), Is.True, source);
+                Assert.That(wield.TryWield((bow, wieldable), hunter), Is.True, source);
             });
 
             await pair.RunTicksSync(pair.SecondsToTicks(1.1f));
@@ -15779,7 +15809,7 @@ public sealed class YautjaBowTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(flammable.FireStacks, Is.EqualTo(fireStacks).Within(0.001f), source);
+            Assert.That(flammable.FireStacks, Is.EqualTo(MathF.Min(fireStacks, flammable.MaximumFireStacks)).Within(0.001f), source);
             Assert.That(flammable.OnFire, Is.True, source);
         });
     }
@@ -15884,6 +15914,21 @@ public sealed class YautjaBowTest
         Assert.That(corrodible!.IsCorrodible, Is.False, $"{id} should not be acid-corrodible.");
     }
 
+    private static void BindRecallable(IEntityManager entMan, EntityUid item, EntityUid hunter)
+    {
+        var bind = new UseInHandEvent(hunter);
+        entMan.EventBus.RaiseLocalEvent(item, bind);
+        Assert.That(bind.Handled, Is.True, "The first use binds the item before its normal activation.");
+        Assert.That(entMan.GetComponent<YautjaRecallableComponent>(item).YautjaOwner, Is.EqualTo(hunter));
+    }
+
+    private static void AssertThrallEquipmentAccessible(IEntityManager entMan, EntityUid item)
+    {
+        var tech = entMan.GetComponent<YautjaTechItemComponent>(item);
+        Assert.That(tech.BlockPickup || tech.BlockUse || tech.BlockMelee || tech.BlockThrow || tech.BlockShoot,
+            Is.False, "CMU retains human access to thrall clothing.");
+    }
+
     private static void AssertYautjaTechItemBlocksLikeCmss13ItemPredator(
         IEntityManager entMan,
         EntityUid item,
@@ -15918,13 +15963,13 @@ public sealed class YautjaBowTest
             Assert.That(meta.EntityDescription,
                 Is.EqualTo("A high-power incendiary device used to rapidly expunge evidence of hives or dishonorable foes. Unsurprisingly, it is just as effective in direct combat, and lightweight enough to be fired with one hand."),
                 $"{id} CMSS13 source description");
-            Assert.That(item.RsiPath, Is.EqualTo("_CMU14/Yautja/pred_guns_inhands.rsi"),
+            Assert.That(item.RsiPath, Is.EqualTo("CMU14/Yautja/pred_guns_inhands.rsi"),
                 $"{id} CMSS13 item_icons left/right hand pred gun DMIs");
             Assert.That(item.HeldPrefix, Is.EqualTo("defoliator"),
                 $"{id} CMSS13 item_state = \"defoliator\"");
             Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK),
                 $"{id} CMSS13 flags_equip_slot = SLOT_BACK");
-            Assert.That(clothing.RsiPath, Is.EqualTo("_CMU14/Yautja/pred_guns_back.rsi"),
+            Assert.That(clothing.RsiPath, Is.EqualTo("CMU14/Yautja/pred_guns_back.rsi"),
                 $"{id} CMSS13 item_icons WEAR_BACK uses guns_by_type/pred_guns.dmi");
             Assert.That(clothing.EquippedPrefix, Is.EqualTo("defoliator"),
                 $"{id} CMSS13 item_state = \"defoliator\" drives the equipped back sprite.");
@@ -15961,7 +16006,7 @@ public sealed class YautjaBowTest
     {
         var meta = entMan.GetComponent<MetaDataComponent>(tank);
         var flamerTank = entMan.GetComponent<RMCFlamerTankComponent>(tank);
-        var solutions = entMan.GetComponent<SolutionContainerManagerComponent>(tank);
+        var solutions = entMan.GetComponent<SolutionManagerComponent>(tank);
 
         Assert.Multiple(() =>
         {
@@ -16073,7 +16118,7 @@ public sealed class YautjaBowTest
         Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
         Assert.Multiple(() =>
         {
-            Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_CMU14/Yautja/pred_guns.rsi")),
+            Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/pred_guns.rsi")),
                 $"{id} CMSS13 icon = icons/obj/items/weapons/guns/guns_by_faction/pred.dmi");
             Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("defoliator"),
                 $"{id} CMSS13 icon_state = \"defoliator\"");
@@ -16090,7 +16135,7 @@ public sealed class YautjaBowTest
         Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
         Assert.Multiple(() =>
         {
-            Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_CMU14/Yautja/pred_gun_ammo.rsi")),
+            Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/pred_gun_ammo.rsi")),
                 $"{id} CMSS13 icon = icons/obj/items/weapons/guns/ammo_by_faction/pred.dmi");
             Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("defoliator"),
                 $"{id} CMSS13 icon_state = \"defoliator\"");
@@ -16101,10 +16146,10 @@ public sealed class YautjaBowTest
     {
         var armor = entMan.GetComponent<CMArmorComponent>(item);
 
-        Assert.That(armor.Melee, Is.EqualTo(stats.Melee), $"{id} CMSS13 armor_melee local tier mapping");
-        Assert.That(armor.Bullet, Is.EqualTo(stats.Bullet), $"{id} CMSS13 armor_bullet local tier mapping");
-        Assert.That(armor.Bio, Is.EqualTo(stats.Bio), $"{id} CMSS13 armor_bio local tier mapping");
-        Assert.That(armor.ExplosionArmor, Is.EqualTo(stats.ExplosionArmor), $"{id} CMSS13 armor_bomb local tier mapping");
+        Assert.That(armor.Melee, Is.EqualTo(stats.Melee), $"{id} expected melee protection");
+        Assert.That(armor.Bullet, Is.EqualTo(stats.Bullet), $"{id} expected bullet protection");
+        Assert.That(armor.Bio, Is.EqualTo(stats.Bio), $"{id} expected biological protection");
+        Assert.That(armor.ExplosionArmor, Is.EqualTo(stats.ExplosionArmor), $"{id} expected explosion protection");
     }
 
     private static string[] ActionPrototypeIds(IEntityManager entMan, IEnumerable<EntityUid> actions)
@@ -16166,7 +16211,8 @@ public sealed class YautjaBowTest
         string description,
         SlotFlags slots,
         string spritePath,
-        bool blockPickup = true)
+        bool blockPickup = true,
+        bool humanAccessible = false)
     {
         var item = EntityPrototypeIds(entMan, id).Single();
         var meta = entMan.GetComponent<MetaDataComponent>(item);
@@ -16177,6 +16223,12 @@ public sealed class YautjaBowTest
         Assert.That(clothing.Slots, Is.EqualTo(slots), $"{id} CMSS13 equip slot mapping");
         Assert.That(clothing.RsiPath, Is.EqualTo(spritePath), $"{id} CMSS13 icon_state sprite mapping");
         AssertNonCorrodible(entMan, item);
+
+        if (humanAccessible)
+        {
+            AssertThrallEquipmentAccessible(entMan, item);
+            return;
+        }
 
         Assert.That(entMan.TryGetComponent<YautjaTechItemComponent>(item, out var tech), Is.True,
             $"{id} source flags_item = ITEM_PREDATOR mapping");
@@ -16206,17 +16258,23 @@ public sealed class YautjaBowTest
         var item = EntityPrototypeIds(entMan, id).Single();
         var meta = entMan.GetComponent<MetaDataComponent>(item);
         var clothing = entMan.GetComponent<ClothingComponent>(item);
-        var armor = entMan.GetComponent<CMArmorComponent>(item);
+        entMan.TryGetComponent<CMArmorComponent>(item, out var armor);
         var examineText = examine.GetExamineText(item, hunter).ToMarkup();
 
         Assert.That(meta.EntityName, Is.EqualTo(name), $"{id} CMSS13 source name");
         Assert.That(meta.EntityDescription, Is.EqualTo(description), $"{id} CMSS13 source description");
         Assert.That(clothing.Slots, Is.EqualTo(slots), $"{id} CMSS13 equip slot mapping");
         Assert.That(clothing.RsiPath, Is.EqualTo(spritePath), $"{id} CMSS13 icon_state sprite mapping");
-        Assert.That(armor.Melee, Is.EqualTo(stats.Melee), $"{id} CMSS13 armor_melee local tier mapping");
-        Assert.That(armor.Bullet, Is.EqualTo(stats.Bullet), $"{id} CMSS13 armor_bullet local tier mapping");
-        Assert.That(armor.Bio, Is.EqualTo(stats.Bio), $"{id} CMSS13 armor_bio local tier mapping");
-        Assert.That(armor.ExplosionArmor, Is.EqualTo(stats.ExplosionArmor), $"{id} CMSS13 armor_bomb local tier mapping");
+        if ((slots & SlotFlags.MASK) != 0)
+            Assert.That(armor, Is.Null, $"{id} keeps the current unarmored Bad Blood mask balance.");
+        else
+        {
+            Assert.That(armor, Is.Not.Null, id);
+            Assert.That(armor!.Melee, Is.EqualTo(stats.Melee), $"{id} expected melee protection");
+            Assert.That(armor.Bullet, Is.EqualTo(stats.Bullet), $"{id} expected bullet protection");
+            Assert.That(armor.Bio, Is.EqualTo(stats.Bio), $"{id} expected biological protection");
+            Assert.That(armor.ExplosionArmor, Is.EqualTo(stats.ExplosionArmor), $"{id} expected explosion protection");
+        }
         Assert.That(examineText, Does.Contain(stats.DamagedExamineText),
             $"{id} should expose the CMSS13 YAUTJA_REPAIR_DAMAGED examine line.");
         AssertNonCorrodible(entMan, item);
@@ -16425,7 +16483,7 @@ public sealed class YautjaBowTest
         {
             Assert.That(entMan.TryGetComponent<WelderComponent>(uid, out var welder), Is.True,
                 $"{row.Id} should remain a local welder.");
-            Assert.That(entMan.TryGetComponent<SolutionContainerManagerComponent>(uid, out var solutions), Is.True,
+            Assert.That(entMan.TryGetComponent<SolutionManagerComponent>(uid, out var solutions), Is.True,
                 $"{row.Id} should expose CMSS13 max_fuel through its fuel solution.");
             Assert.That(
                 solutionSystem.TryGetSolution((uid, solutions), welder!.FuelSolutionName, out _, out var solution),
@@ -17140,7 +17198,7 @@ public sealed class YautjaBowTest
 
     private static IEnumerable<Cmss13ButcherOutputRow> Cmss13ButcherOutputRows()
     {
-        const string yautjaItems = "_CMU14/Yautja/yautja_items.rsi";
+        const string yautjaItems = "CMU14/Yautja/yautja_items.rsi";
 
         yield return new Cmss13ButcherOutputRow(
             "CMUYautjaHumanHide",
@@ -17171,7 +17229,7 @@ public sealed class YautjaBowTest
             "CMUYautjaHumanButcheredRemains",
             "",
             "",
-            "_CMU14/HunterShip/effects/blood.rsi",
+            "CMU14/HunterShip/effects/blood.rsi",
             "remains",
             Cmss13ButcherOutputKind.EffectDecal);
 
@@ -17179,14 +17237,14 @@ public sealed class YautjaBowTest
             "CMUYautjaXenoButcheredRemains",
             "",
             "",
-            "_CMU14/HunterShip/effects/blood.rsi",
+            "CMU14/HunterShip/effects/blood.rsi",
             "remainsxeno",
             Cmss13ButcherOutputKind.EffectDecal);
     }
 
     private static IEnumerable<Cmss13McasteItemRow> Cmss13McasteItemRows()
     {
-        const string mcaste = "_CMU14/Yautja/mcaste_gear.rsi";
+        const string mcaste = "CMU14/Yautja/mcaste_gear.rsi";
         var bracerStats = new Cmss13ProtectionStats(20, 20, 20, 25);
         var poweredStats = new Cmss13ProtectionStats(35, 50, 35, 40);
 
@@ -17195,7 +17253,7 @@ public sealed class YautjaBowTest
             "militarized bracers",
             "A set of high-tech bracers that are relatively simple when compared to those used in hunting, forgoing most advanced functions in exchange for an auto-self destruct system that activates on death.",
             "Normal",
-            "_CMU14/Yautja/bracer.rsi",
+            "CMU14/Yautja/bracer.rsi",
             "bracer_ebony",
             SlotFlags.GLOVES,
             bracerStats,
@@ -17638,7 +17696,8 @@ public sealed class YautjaBowTest
             "clan mask",
             "A beautifully designed metallic face mask, both ornate and functional.",
             SlotFlags.MASK | SlotFlags.SUITSTORAGE,
-            new Cmss13ProtectionStats(medium, high, mediumHigh, high),
+            // Keep the CMU frontline balance selected for the rebase.
+            new Cmss13ProtectionStats(25, 30, 25, 10),
             true,
             false,
             100);
@@ -17773,10 +17832,11 @@ public sealed class YautjaBowTest
             "clan mask",
             "A beautifully designed metallic face mask, both ornate and functional.",
             SlotFlags.MASK | SlotFlags.SUITSTORAGE,
-            medium,
-            mediumHigh,
-            medium,
-            high,
+            // Current CMU biomask balance.
+            25,
+            30,
+            25,
+            10,
             "It has been worn from long use and poor maintenance.",
             true,
             false,
@@ -17813,7 +17873,7 @@ public sealed class YautjaBowTest
             "alien stone armor",
             "A suit of armor made entirely out of stone. Looks incredibly heavy.",
             SlotFlags.OUTERCLOTHING,
-            "_CMU14/Yautja/armor_heavy_clan.rsi",
+            "CMU14/Yautja/armor_heavy_clan.rsi",
             "icon",
             new Cmss13ProtectionStats(40, 50, 45, 50),
             AllowedStorage: true);
@@ -17823,7 +17883,7 @@ public sealed class YautjaBowTest
             "alien stone mask",
             "A beautifully designed face mask, ornate but non-functional and made entirely of stone.",
             SlotFlags.MASK | SlotFlags.SUITSTORAGE,
-            "_CMU14/Yautja/masks/pred_mask1_ebony.rsi",
+            "CMU14/Yautja/masks/pred_mask1_ebony.rsi",
             "icon",
             new Cmss13ProtectionStats(10, 10, 0, 10));
 
@@ -17832,7 +17892,7 @@ public sealed class YautjaBowTest
             "alien stone greaves",
             "A pair of armored, perfectly balanced boots. Perfect for running through cement because they're incredibly heavy.",
             SlotFlags.FEET,
-            "_CMU14/Yautja/greaves_clan_2.rsi",
+            "CMU14/Yautja/greaves_clan_2.rsi",
             "icon",
             new Cmss13ProtectionStats(40, 50, 45, 50));
     }
@@ -17940,6 +18000,8 @@ public sealed class YautjaBowTest
             medium,
             high,
             "It has been damaged by long use and poor maintenance.");
+        // Master reduced patchwork-family bullet protection to 20.
+        var patchworkStats = armorStats with { Bullet = 20 };
         var maskStats = new Cmss13ArmorStats(
             medium,
             mediumHigh,
@@ -17957,89 +18019,89 @@ public sealed class YautjaBowTest
             "CMUYautjaBadBloodArmorPatchwork",
             "CMUYautjaMaskBadBloodPatchwork",
             "CMUYautjaBadBloodGreavesPatchwork",
-            "_CMU14/Yautja/armor_badblood_patchwork.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_patchwork.rsi",
-            "_CMU14/Yautja/greaves_badblood_patchwork.rsi",
-            armorStats,
+            "CMU14/Yautja/armor_badblood_patchwork.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_patchwork.rsi",
+            "CMU14/Yautja/greaves_badblood_patchwork.rsi",
+            patchworkStats,
             maskStats,
             greavesStats);
         yield return new BadBloodArmorSetRow(
             "CMUYautjaBadBloodArmorPatchworkAlt",
             "CMUYautjaMaskBadBloodPatchworkAlt",
             "CMUYautjaBadBloodGreavesPatchworkAlt",
-            "_CMU14/Yautja/armor_badblood_patchwork_alt.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_patchworkalt.rsi",
-            "_CMU14/Yautja/greaves_badblood_patchwork_alt.rsi",
-            armorStats,
+            "CMU14/Yautja/armor_badblood_patchwork_alt.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_patchworkalt.rsi",
+            "CMU14/Yautja/greaves_badblood_patchwork_alt.rsi",
+            patchworkStats,
             maskStats,
             greavesStats);
         yield return new BadBloodArmorSetRow(
             "CMUYautjaBadBloodArmorLunatic",
             "CMUYautjaMaskBadBloodLunatic",
             "CMUYautjaBadBloodGreavesLunatic",
-            "_CMU14/Yautja/armor_badblood_lunatic.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_lunatic.rsi",
-            "_CMU14/Yautja/greaves_badblood_lunatic.rsi",
-            armorStats,
+            "CMU14/Yautja/armor_badblood_lunatic.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_lunatic.rsi",
+            "CMU14/Yautja/greaves_badblood_lunatic.rsi",
+            patchworkStats,
             maskStats,
             greavesStats);
         yield return new BadBloodArmorSetRow(
             "CMUYautjaBadBloodArmorScavenger",
             "CMUYautjaMaskBadBloodScav",
             "CMUYautjaBadBloodGreavesScavenger",
-            "_CMU14/Yautja/armor_badblood_scavenger.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_scav.rsi",
-            "_CMU14/Yautja/greaves_badblood_scavenger.rsi",
-            armorStats,
+            "CMU14/Yautja/armor_badblood_scavenger.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_scav.rsi",
+            "CMU14/Yautja/greaves_badblood_scavenger.rsi",
+            patchworkStats,
             maskStats,
             greavesStats);
         yield return new BadBloodArmorSetRow(
             "CMUYautjaBadBloodArmorScavengerAlt",
             "CMUYautjaMaskBadBloodScavAlt",
             "CMUYautjaBadBloodGreavesScavengerAlt",
-            "_CMU14/Yautja/armor_badblood_scavenger_alt.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_scavalt.rsi",
-            "_CMU14/Yautja/greaves_badblood_scavenger_alt.rsi",
-            armorStats,
+            "CMU14/Yautja/armor_badblood_scavenger_alt.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_scavalt.rsi",
+            "CMU14/Yautja/greaves_badblood_scavenger_alt.rsi",
+            patchworkStats,
             maskStats,
             greavesStats);
         yield return new BadBloodArmorSetRow(
             "CMUYautjaBadBloodArmorVenator",
             "CMUYautjaMaskBadBloodVenator",
             "CMUYautjaBadBloodGreavesVenator",
-            "_CMU14/Yautja/armor_badblood_venator.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_venator.rsi",
-            "_CMU14/Yautja/greaves_badblood_venator.rsi",
-            armorStats,
+            "CMU14/Yautja/armor_badblood_venator.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_venator.rsi",
+            "CMU14/Yautja/greaves_badblood_venator.rsi",
+            patchworkStats,
             maskStats,
             greavesStats);
         yield return new BadBloodArmorSetRow(
             "CMUYautjaBadBloodArmorCommando",
             "CMUYautjaMaskBadBloodCommando",
             "CMUYautjaBadBloodGreavesCommando",
-            "_CMU14/Yautja/armor_badblood_commando.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_commando.rsi",
-            "_CMU14/Yautja/greaves_badblood_commando.rsi",
-            armorStats,
+            "CMU14/Yautja/armor_badblood_commando.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_commando.rsi",
+            "CMU14/Yautja/greaves_badblood_commando.rsi",
+            patchworkStats,
             maskStats,
             greavesStats);
         yield return new BadBloodArmorSetRow(
             "CMUYautjaBadBloodArmorCommandoAlt",
             "CMUYautjaMaskBadBloodCommandoAlt",
             "CMUYautjaBadBloodGreavesCommandoAlt",
-            "_CMU14/Yautja/armor_badblood_commando_alt.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_commandoalt.rsi",
-            "_CMU14/Yautja/greaves_badblood_commando_alt.rsi",
-            armorStats,
+            "CMU14/Yautja/armor_badblood_commando_alt.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_commandoalt.rsi",
+            "CMU14/Yautja/greaves_badblood_commando_alt.rsi",
+            patchworkStats,
             maskStats,
             greavesStats);
         yield return new BadBloodArmorSetRow(
             "CMUYautjaEmissaryArmorCamoConforming",
             "CMUYautjaMaskBadBloodEmissaryClassic",
             "CMUYautjaEmissaryGreavesCamoConforming",
-            "_CMU14/Yautja/armor_emissary_classic.rsi",
-            "_CMU14/Yautja/masks/pred_mask_bb_emissary_classic.rsi",
-            "_CMU14/Yautja/greaves_emissary_classic.rsi",
+            "CMU14/Yautja/armor_emissary_classic.rsi",
+            "CMU14/Yautja/masks/pred_mask_bb_emissary_classic.rsi",
+            "CMU14/Yautja/greaves_emissary_classic.rsi",
             armorStats,
             maskStats,
             greavesStats,
@@ -18069,9 +18131,9 @@ public sealed class YautjaBowTest
                     ? "CMUYautjaMaskBadBloodEmissaryClassic"
                     : $"CMUYautjaMaskBadBloodEmissary{suffix}",
                 $"CMUYautjaEmissaryGreaves{suffix}",
-                $"_CMU14/Yautja/armor_emissary_{camo}.rsi",
-                $"_CMU14/Yautja/masks/pred_mask_bb_emissary_{camo}.rsi",
-                $"_CMU14/Yautja/greaves_emissary_{camo}.rsi");
+                $"CMU14/Yautja/armor_emissary_{camo}.rsi",
+                $"CMU14/Yautja/masks/pred_mask_bb_emissary_{camo}.rsi",
+                $"CMU14/Yautja/greaves_emissary_{camo}.rsi");
         }
     }
 
@@ -18088,8 +18150,8 @@ public sealed class YautjaBowTest
         {
             yield return (
                 type,
-                $"_CMU14/Yautja/armor_emissary_{camo}.rsi",
-                $"_CMU14/Yautja/greaves_emissary_{camo}.rsi");
+                $"CMU14/Yautja/armor_emissary_{camo}.rsi",
+                $"CMU14/Yautja/greaves_emissary_{camo}.rsi");
         }
     }
 
@@ -18145,41 +18207,41 @@ public sealed class YautjaBowTest
             "CMUYautjaThrallArmorEbony",
             "CMUYautjaMaskThrallEbony",
             "CMUYautjaThrallGreavesEbony",
-            "_CMU14/Yautja/armor_thrall_ebony.rsi",
-            "_CMU14/Yautja/masks/thrallmask_ebony.rsi",
-            "_CMU14/Yautja/greaves_thrall_ebony.rsi");
+            "CMU14/Yautja/armor_thrall_ebony.rsi",
+            "CMU14/Yautja/masks/thrallmask_ebony.rsi",
+            "CMU14/Yautja/greaves_thrall_ebony.rsi");
         yield return new ThrallArmorMaterialRow(
             "CMUYautjaThrallArmorSilverBundle",
             "CMUYautjaThrallArmorSilver",
             "CMUYautjaMaskThrallSilver",
             "CMUYautjaThrallGreavesSilver",
-            "_CMU14/Yautja/armor_thrall_silver.rsi",
-            "_CMU14/Yautja/masks/thrallmask_silver.rsi",
-            "_CMU14/Yautja/greaves_thrall_silver.rsi");
+            "CMU14/Yautja/armor_thrall_silver.rsi",
+            "CMU14/Yautja/masks/thrallmask_silver.rsi",
+            "CMU14/Yautja/greaves_thrall_silver.rsi");
         yield return new ThrallArmorMaterialRow(
             "CMUYautjaThrallArmorGoldBundle",
             "CMUYautjaThrallArmorGold",
             "CMUYautjaMaskThrallGold",
             "CMUYautjaThrallGreavesGold",
-            "_CMU14/Yautja/armor_thrall_gold.rsi",
-            "_CMU14/Yautja/masks/thrallmask_gold.rsi",
-            "_CMU14/Yautja/greaves_thrall_gold.rsi");
+            "CMU14/Yautja/armor_thrall_gold.rsi",
+            "CMU14/Yautja/masks/thrallmask_gold.rsi",
+            "CMU14/Yautja/greaves_thrall_gold.rsi");
         yield return new ThrallArmorMaterialRow(
             "CMUYautjaThrallArmorCrimsonBundle",
             "CMUYautjaThrallArmorCrimson",
             "CMUYautjaMaskThrallCrimson",
             "CMUYautjaThrallGreavesCrimson",
-            "_CMU14/Yautja/armor_thrall_crimson.rsi",
-            "_CMU14/Yautja/masks/thrallmask_crimson.rsi",
-            "_CMU14/Yautja/greaves_thrall_crimson.rsi");
+            "CMU14/Yautja/armor_thrall_crimson.rsi",
+            "CMU14/Yautja/masks/thrallmask_crimson.rsi",
+            "CMU14/Yautja/greaves_thrall_crimson.rsi");
         yield return new ThrallArmorMaterialRow(
             "CMUYautjaThrallArmorBoneBundle",
             "CMUYautjaThrallArmorBone",
             "CMUYautjaMaskThrallBone",
             "CMUYautjaThrallGreavesBone",
-            "_CMU14/Yautja/armor_thrall_bone.rsi",
-            "_CMU14/Yautja/masks/thrallmask_bone.rsi",
-            "_CMU14/Yautja/greaves_thrall_bone.rsi");
+            "CMU14/Yautja/armor_thrall_bone.rsi",
+            "CMU14/Yautja/masks/thrallmask_bone.rsi",
+            "CMU14/Yautja/greaves_thrall_bone.rsi");
     }
 
     public readonly record struct BloodedThrallBracerMaterialRow(
@@ -18193,27 +18255,27 @@ public sealed class YautjaBowTest
         yield return new BloodedThrallBracerMaterialRow(
             "CMUYautjaBloodedThrallBracerEbonyBundle",
             "CMUYautjaBloodedThrallBracer",
-            "_CMU14/Yautja/bracer.rsi",
+            "CMU14/Yautja/bracer.rsi",
             "bracer_ebony");
         yield return new BloodedThrallBracerMaterialRow(
             "CMUYautjaBloodedThrallBracerSilverBundle",
             "CMUYautjaBloodedThrallBracerSilver",
-            "_CMU14/Yautja/bracer.rsi",
+            "CMU14/Yautja/bracer.rsi",
             "bracer_silver");
         yield return new BloodedThrallBracerMaterialRow(
             "CMUYautjaBloodedThrallBracerGoldBundle",
             "CMUYautjaBloodedThrallBracerGold",
-            "_CMU14/Yautja/bracer.rsi",
+            "CMU14/Yautja/bracer.rsi",
             "bracer_bronze");
         yield return new BloodedThrallBracerMaterialRow(
             "CMUYautjaBloodedThrallBracerCrimsonBundle",
             "CMUYautjaBloodedThrallBracerCrimson",
-            "_CMU14/Yautja/bracer.rsi",
+            "CMU14/Yautja/bracer.rsi",
             "bracer_crimson");
         yield return new BloodedThrallBracerMaterialRow(
             "CMUYautjaBloodedThrallBracerBoneBundle",
             "CMUYautjaBloodedThrallBracerBone",
-            "_CMU14/Yautja/bracer.rsi",
+            "CMU14/Yautja/bracer.rsi",
             "bracer_bone");
     }
 
@@ -18233,7 +18295,7 @@ public sealed class YautjaBowTest
         bool RequiresWield = false,
         float? WieldBonusDamageTotal = null,
         bool LandAtCursor = false,
-        bool Recallable = false,
+        bool Recallable = true,
         bool ToggleTinyStorage = false,
         float? ToggleStorageDamageTotal = null);
 
@@ -18250,7 +18312,7 @@ public sealed class YautjaBowTest
             1.25f,
             30,
             25,
-            Recallable: false);
+            Recallable: true);
         yield return new Cmss13RackedMeleeRow(
             "CMUYautjaDualWarScythe",
             "/obj/item/weapon/yautja/scythe",
@@ -18502,8 +18564,8 @@ public sealed class YautjaBowTest
 
     private static IEnumerable<Cmss13WeaponVisualSoundRow> Cmss13WeaponVisualSoundRows()
     {
-        const string weapons = "/Textures/_CMU14/Yautja/weapons.rsi";
-        const string guns = "/Textures/_CMU14/Yautja/guns.rsi";
+        const string weapons = "/Textures/CMU14/Yautja/weapons.rsi";
+        const string guns = "/Textures/CMU14/Yautja/guns.rsi";
 
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaChainwhip",
@@ -18681,7 +18743,7 @@ public sealed class YautjaBowTest
             "spike_launcher",
             "spike_launcher",
             WieldedPrefix: "spike_launcher",
-            GunShotSoundPath: "/Audio/_CMU14/Yautja/woodhit.ogg");
+            GunShotSoundPath: "/Audio/CMU14/Yautja/woodhit.ogg");
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaPlasmaRifle",
             "/obj/item/weapon/gun/energy/yautja/plasmarifle",
@@ -18689,7 +18751,7 @@ public sealed class YautjaBowTest
             "plasma_rifle",
             "plasma_rifle",
             WieldedPrefix: "plasma_rifle",
-            GunShotSoundPath: "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav");
+            GunShotSoundPath: "/Audio/CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav");
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaPlasmaPistol",
             "/obj/item/weapon/gun/energy/yautja/plasmapistol",
@@ -18697,7 +18759,7 @@ public sealed class YautjaBowTest
             "plasma_pistol",
             "plasma_pistol",
             WieldedPrefix: "plasma_pistol",
-            GunShotSoundPath: "/Audio/_CMU14/Yautja/Weapons/Plasma/pulse3.wav");
+            GunShotSoundPath: "/Audio/CMU14/Yautja/Weapons/Plasma/pulse3.wav");
     }
 
     private static IEnumerable<Cmss13WeaponNoEmbedRow> Cmss13WeaponNoEmbedRows()
@@ -19208,7 +19270,7 @@ public sealed class YautjaBowTest
     private static void AssertDamageModifierEqual(DamageModifierSet actual, DamageModifierSet expected)
     {
         Assert.That(actual.Coefficients, Is.EqualTo(expected.Coefficients));
-        Assert.That(actual.FlatReduction, Is.EqualTo(expected.FlatReduction));
+        Assert.That(actual.FlatReductions, Is.EqualTo(expected.FlatReductions));
     }
 
     private static void AssertVendorRow(
@@ -19246,7 +19308,7 @@ public sealed class YautjaBowTest
         {
             Assert.That(meta.EntityName, Is.EqualTo(sourceName));
             Assert.That(meta.EntityDescription, Is.EqualTo(sourceDescription));
-            Assert.That(entMan.HasComponent<SharpComponent>(sword), Is.True);
+            Assert.That(entMan.GetComponent<Content.Shared.Tools.Components.ToolComponent>(sword).Qualities.Contains("Slicing"), Is.True);
             Assert.That(item.Size.Id, Is.EqualTo("Large"),
                 "CMSS13 /obj/item/weapon/yautja/sword sets w_class = SIZE_LARGE.");
             Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK),
@@ -19285,7 +19347,7 @@ public sealed class YautjaBowTest
                 $"{row.Id} {row.SourcePath} should not inherit a local wearable slot.");
         }
 
-        Assert.That(entMan.HasComponent<SharpComponent>(uid), Is.EqualTo(row.Sharp),
+        Assert.That(entMan.TryGetComponent<Content.Shared.Tools.Components.ToolComponent>(uid, out var tool) && tool.Qualities.Contains("Slicing"), Is.EqualTo(row.Sharp),
             $"{row.Id} {row.SourcePath} sharp/edge local mapping");
         if (row.ItemPredator)
             AssertYautjaTechItemBlocksLikeCmss13ItemPredator(entMan, uid, row.Id);
@@ -19327,7 +19389,7 @@ public sealed class YautjaBowTest
         Assert.That(entMan.HasComponent<LandAtCursorComponent>(uid), Is.EqualTo(row.LandAtCursor),
             $"{row.Id} {row.SourcePath} SPEED_VERY_FAST throw behavior local mapping");
         Assert.That(entMan.HasComponent<YautjaRecallableComponent>(uid), Is.EqualTo(row.Recallable),
-            $"{row.Id} {row.SourcePath} chained recall local mapping");
+            $"{row.Id} {row.SourcePath} CMU manual recall binding");
 
         if (row.ToggleTinyStorage)
         {

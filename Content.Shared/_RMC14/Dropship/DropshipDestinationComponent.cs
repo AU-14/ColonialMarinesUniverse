@@ -1,5 +1,5 @@
-using System.Numerics;
 using Robust.Shared.GameStates;
+using System.Numerics;
 
 namespace Content.Shared._RMC14.Dropship;
 
@@ -12,6 +12,9 @@ public sealed partial class DropshipDestinationComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool AutoRecall;
+
+    [DataField, AutoNetworkedField]
+    public bool CanBePrimary = true;
 
     [DataField, AutoNetworkedField]
     public int LightSearchRadius = 14;

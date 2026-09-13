@@ -43490,7 +43490,7 @@ entities:
     - type: Transform
       pos: -3.5,-38.5
       parent: 1
-- proto: RMCTacticalMapTableLarge
+- proto: CMUTacticalMapTableLargeGovfor
   entities:
   - uid: 5513
     components:

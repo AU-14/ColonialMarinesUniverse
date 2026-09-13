@@ -84,6 +84,30 @@ public sealed partial class GridVehicleMoverComponent : Component
     public float ReverseAcceleration = 4f;
 
     /// <summary>
+    /// maximum chassis rotation speed while steering, in degrees per second
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float MaxRotationSpeedDegrees = 22.5f;
+
+    /// <summary>
+    /// chassis angular acceleration while steering, in degrees per second squared
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float RotationAccelerationDegrees = 45f;
+
+    /// <summary>
+    /// chassis angular deceleration after steering is released, in degrees per second squared
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float RotationDecelerationDegrees = 60f;
+
+    /// <summary>
+    /// current signed chassis angular speed, in degrees per second
+    /// </summary>
+    [AutoNetworkedField]
+    public float AngularVelocityDegrees;
+
+    /// <summary>
     /// forward offset used when placing the vehicle on tiles
     /// </summary>
     [DataField, AutoNetworkedField]
@@ -216,10 +240,18 @@ public sealed partial class GridVehicleMoverComponent : Component
     public bool IsPushMove;
 
     /// <summary>
-    /// whether the vehicle is currently moving
+    /// whether the vehicle is currently moving or turning in place
     /// </summary>
     [AutoNetworkedField]
     public bool IsMoving;
+
+    /// <summary>
+    /// Whether the vehicle is currently driving a powered plow into a structure.
+    /// Counts as movement for engine audio and tread animation while collision
+    /// keeps the chassis stationary.
+    /// </summary>
+    [AutoNetworkedField]
+    public bool IsPoweredDemolishing;
 
     /// <summary>
     /// minimum xeno size that blocks this vehicle
@@ -282,7 +314,11 @@ public sealed partial class GridVehicleMoverComponent : Component
     [DataField]
     public bool CanSmashWalls;
 
-    /// <summary>Damage dealt to the wall per collision tick while ramming.</summary>
+    /// <summary>
+    /// Raw obstacle damage generated per squared unit of impact speed. The
+    /// vehicle spends only the speed required to reach the target's remaining
+    /// destruction threshold.
+    /// </summary>
     [DataField]
     public float WallSmashDamage = 75f;
 
@@ -320,9 +356,9 @@ public sealed partial class GridVehicleMoverComponent : Component
     [DataField]
     public float WallSmashMinSpeed;
 
-    /// <summary>Server-tracked time of the next allowed smash tick. Not for YAML.</summary>
+    /// <summary>Server-tracked time of the next mob-collision self-damage tick. Not for YAML.</summary>
     [AutoNetworkedField]
-    public TimeSpan NextWallSmashAt;
+    public TimeSpan NextMobCollisionSelfDamageAt;
 
     /// <summary>
     /// Hull integrity damage dealt to the vehicle when it rams a mob (not counting the damage to the mob itself).

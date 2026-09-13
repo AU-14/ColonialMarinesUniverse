@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Client._CMU14.Yautja;
+using Content.Client.CMU14.Yautja;
 using Content.Shared._RMC14.Holiday;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Medical.Refill;

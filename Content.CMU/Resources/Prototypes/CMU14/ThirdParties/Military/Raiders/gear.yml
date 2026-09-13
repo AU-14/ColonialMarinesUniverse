@@ -1,0 +1,27 @@
+- type: entity
+  parent: RMCWeaponRifleXM40
+  id: CMUWeaponRifleXM40Raider
+  name: XM40 assault rifle
+  suffix: CMU
+  description: An experimental pre-M41A pattern rifle that never saw wide adoption. This one fell off a marine logistics convoy and into free company hands. Integrated suppressor, burst-fire, accepts M41A MK2 and proprietary magazines.
+
+- type: entity
+  parent: RMCJumpsuitMarsocWebbingBuckshot
+  id: CMUJumpsuitRaiderWebbingBuckshot
+  name: raider fatigues
+  suffix: CMU
+  description: Black combat fatigues, stripped of insignia and restitched for a raiding outfit. The buckshot webbing comes pre-loaded.
+
+- type: entity
+  parent: RMCArmorMARSOCXM40
+  id: CMUArmorRaiderXM40
+  name: raider plate carrier
+  suffix: CMU
+  description: A heavily customized suit of M3 pattern armor, repainted and re-stitched until nothing points back at its original owners. Comes stuffed with looted HEAP magazines.
+
+- type: entity
+  parent: RMCSatchelMARSOC
+  id: CMUSatchelRaider
+  name: raider combat pack
+  suffix: CMU
+  description: A streamlined combat pack of military make, looted honest and paid for in blood. It has outlived at least three previous owners.

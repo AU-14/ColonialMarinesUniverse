@@ -12,6 +12,8 @@
   - type: StorageFillVisualizer
     fillBaseName: icon
     maxFillLevels: 2
+  - type: ItemCounter
+    layerStates: [] # StorageFillVisualizer replaces the inherited ashtray layers.
   - type: PhysicalComposition
     materialComposition: # "Plastic" ¯\_(ツ)_/¯
       CMSteel: 30

@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 
 namespace Content.Shared._RMC14.Vehicle;
 

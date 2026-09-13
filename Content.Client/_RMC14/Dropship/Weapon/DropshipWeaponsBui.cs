@@ -634,14 +634,18 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                                               Loc.GetString("rmc-dropship-equipment-deployer-status",
                                                   ("deployed", equipmentDeployer.IsDeployed
                                                       ? Loc.GetString("rmc-dropship-equipment-deployed")
-                                                      : Loc.GetString("rmc-dropship-equipment-undeployed"))) + "\n" +
-                                              Loc.GetString("rmc-dropship-equipment-deployer-auto-deploy",
-                                                  ("autoDeploy", equipmentDeployer.AutoDeploy
-                                                      ? Loc.GetString("rmc-dropship-equipment-enabled")
-                                                      : Loc.GetString("rmc-dropship-equipment-disabled")));
+                                                      : Loc.GetString("rmc-dropship-equipment-undeployed"))) +
+                                              (equipmentDeployer.CanAutoDeploy
+                                                  ? "\n" + Loc.GetString("rmc-dropship-equipment-deployer-auto-deploy",
+                                                      ("autoDeploy", equipmentDeployer.AutoDeploy
+                                                          ? Loc.GetString("rmc-dropship-equipment-enabled")
+                                                          : Loc.GetString("rmc-dropship-equipment-disabled")))
+                                                  : string.Empty);
 
                     screen.LeftRow.SetData(one: !equipmentDeployer.IsDeployed ? equipmentDeploy : equipmentRetract,
-                        two: !equipmentDeployer.AutoDeploy ? equipmentAutoDeployOn : equipmentAutoDeployOff);
+                        two: equipmentDeployer.CanAutoDeploy
+                            ? !equipmentDeployer.AutoDeploy ? equipmentAutoDeployOn : equipmentAutoDeployOff
+                            : null);
                 }
                 break;
             }
@@ -983,7 +987,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         bool WantsClf() => string.IsNullOrEmpty(faction) || faction == "CLF";
 
         var lines = EntMan.GetComponentOrNull<TacticalMapLinesComponent>(Owner);
-        if (lines != null)
+        if (lines != null) // CMU14 Statement
         {
             if (WantsMarines())
                 wrapper.Map.Lines.AddRange(lines.MarineLines);
@@ -995,6 +999,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 wrapper.Map.Lines.AddRange(lines.GovforLines);
             if (WantsClf())
                 wrapper.Map.Lines.AddRange(lines.ClfLines);
+            if (faction == "WEYU")
+                wrapper.Map.Lines.AddRange(lines.WeYuLines);
         }
 
         var labels = EntMan.GetComponentOrNull<TacticalMapLabelsComponent>(Owner);
@@ -1032,6 +1038,13 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             if (WantsClf())
             {
                 foreach (var label in labels.ClfLabels)
+                {
+                    allLabels[label.Key] = label.Value;
+                }
+            }
+            if (faction == "WEYU") // CMU14
+            {
+                foreach (var label in labels.WeYuLabels)
                 {
                     allLabels[label.Key] = label.Value;
                 }
@@ -1167,6 +1180,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             {
                 EntMan.TryGetComponent(contained, out DropshipWeaponComponent? weapon);
                 EntMan.TryGetComponent(contained, out RMCEquipmentDeployerComponent? deployer);
+
+                if (weapon?.DirectFireOnly == true)
+                    continue;
 
                 if (weapon == null && deployer == null)
                     continue;

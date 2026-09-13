@@ -1,9 +1,9 @@
 using Content.Server.Database;
-using Content.Server._CMU14.Yautja;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Robust.Shared.Network;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaRankPersistenceTest

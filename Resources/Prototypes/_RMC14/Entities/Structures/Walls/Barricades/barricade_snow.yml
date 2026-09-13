@@ -15,8 +15,9 @@
     southDrawDepth: OverMobs
   - type: Barricade
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
   - type: InteractionOutline
   - type: NailgunRepairable
     # cm13 max_health%: 1

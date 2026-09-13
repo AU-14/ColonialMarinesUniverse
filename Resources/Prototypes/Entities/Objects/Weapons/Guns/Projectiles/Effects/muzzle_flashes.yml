@@ -1,0 +1,66 @@
+- type: entity
+  id: MuzzleFlashEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    offset: 0.33, 0
+    layers:
+    - shader: unshaded
+      map: [ "enum.EffectLayers.Unshaded" ]
+      sprite: _RMC14/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_bullet_high_RMC
+  - type: TimedDespawn
+    lifetime: 1.0
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: AnimationPlayer
+  - type: EffectVisuals
+
+- type: entity
+  parent: MuzzleFlashEffect
+  id: MuzzleFlashEffectOmnilaser
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    offset: 0.15, 0
+    layers:
+    - shader: unshaded
+      map: [ "enum.EffectLayers.Unshaded" ]
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
+      state: omnilaser_flash
+
+- type: entity
+  parent: MuzzleFlashEffect
+  id: MuzzleFlashEffectHeavyLaser
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    offset: 0.15, 0
+    layers:
+    - shader: unshaded
+      map: [ "enum.EffectLayers.Unshaded" ]
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
+      state: heavylaser_flash
+
+- type: entity
+  parent: MuzzleFlashEffect
+  id: MuzzleFlashEffectVehicleOver
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    offset: 0, 0
+
+- type: entity
+  parent: MuzzleFlashEffectVehicleOver
+  id: MuzzleFlashEffectVehicleOverLarge
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    offset: 0.2, 0
+    scale: "1.6, 1.6"

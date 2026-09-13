@@ -1,3 +1,5 @@
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared._RMC14.Armor;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -5,7 +7,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaDamageRegressionTest
@@ -39,7 +41,7 @@ public sealed class YautjaDamageRegressionTest
 
             try
             {
-                var before = entMan.GetComponent<DamageableComponent>(hunter).TotalDamage;
+                var before = entMan.System<DamageableSystem>().GetAllDamage(hunter).GetTotal();
                 var delta = damageable.TryChangeDamage(
                     hunter,
                     new DamageSpecifier(prototypes.Index<DamageGroupPrototype>("Brute"), 45),
@@ -49,7 +51,7 @@ public sealed class YautjaDamageRegressionTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(delta, Is.Not.Null);
-                    Assert.That(entMan.GetComponent<DamageableComponent>(hunter).TotalDamage - before,
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage(hunter).GetTotal() - before,
                         Is.GreaterThan(FixedPoint2.Zero),
                         "A Ravager's ordinary melee attack must not be rounded to zero by hunter armor.");
                 });

@@ -68,6 +68,11 @@
   - type: BulletholeGenerator
   - type: RMCBullet
   - type: RMCProjectileAccuracy
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Low
+      energy: Low
   - type: Projectile
     soundHit:
       path: /Audio/_RMC14/Bullets/bullet_impact1.ogg

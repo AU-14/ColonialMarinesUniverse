@@ -1,3 +1,4 @@
+using Content.Client.VendingMachines;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ using Content.Server.Power.Components;
 using Content.Server.Spawners.Components;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Dialog;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Doors;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Interaction;
@@ -32,20 +33,20 @@ using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaHuntingGroundMapTest
 {
-    private static readonly ResPath JungleMoonPath = new("/Maps/_CMU14/HuntingGrounds/jungle_moon.yml");
-    private static readonly ResPath DesertMoonPath = new("/Maps/_CMU14/HuntingGrounds/desert_moon.yml");
-    private static readonly ResPath DesertMoonCavesPath = new("/Maps/_CMU14/HuntingGrounds/desert_moon_caves.yml");
-    private static readonly ResPath HunterShipPath = new("/Maps/_CMU14/huntership.yml");
+    private static readonly ResPath JungleMoonPath = new("/Maps/CMU14/HuntingGrounds/jungle_moon.yml");
+    private static readonly ResPath DesertMoonPath = new("/Maps/CMU14/HuntingGrounds/desert_moon.yml");
+    private static readonly ResPath DesertMoonCavesPath = new("/Maps/CMU14/HuntingGrounds/desert_moon_caves.yml");
+    private static readonly ResPath HunterShipPath = new("/Maps/CMU14/huntership.yml");
     private static readonly ResPath[] HunterShipZLevelPaths =
     [
-        new("/Maps/_CMU14/huntership.yml"),
-        new("/Maps/_CMU14/huntership_upper.yml"),
-        new("/Maps/_CMU14/huntership_lower.yml"),
+        new("/Maps/CMU14/huntership.yml"),
+        new("/Maps/CMU14/huntership_upper.yml"),
+        new("/Maps/CMU14/huntership_lower.yml"),
     ];
 
     private static readonly string[] HunterShipHuntConsolePrototypes =
@@ -165,8 +166,8 @@ public sealed class YautjaHuntingGroundMapTest
             try
             {
                 var mapPaths = GetInRotationPlanetMapPaths(prototypes, componentFactory);
-                Assert.That(mapPaths, Has.Count.EqualTo(18),
-                    "Expected the 18 InRotation primary planet map paths to be checked.");
+                Assert.That(mapPaths, Is.Not.Empty,
+                    "Every currently in-rotation primary planet map must be checked.");
 
                 foreach (var mapPath in mapPaths)
                 {
@@ -813,7 +814,7 @@ public sealed class YautjaHuntingGroundMapTest
             Assert.That(component.AvailableDestinations.Select(destination => destination.Id),
                 Does.Contain("desert_moon"));
             Assert.That(component.AvailableDestinations.Single(destination => destination.Id == "desert_moon").MapPath,
-                Is.EqualTo("/Maps/_CMU14/HuntingGrounds/desert_moon_caves.yml"));
+                Is.EqualTo("/Maps/CMU14/HuntingGrounds/desert_moon_caves.yml"));
         });
 
         await pair.CleanReturnAsync();

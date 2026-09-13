@@ -7,6 +7,10 @@
   - type: GuideHelp
     guides:
     - RMCGuideRoleSpecSniper
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - SniperWhitelist
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Snipers/xm43e1/xm43e1_inhands.rsi
     layers:
@@ -126,6 +130,7 @@
     - RMCCartridgeSniper10x99mmAntiMateriel
   - type: CartridgeAmmo
     proto: RMCBulletSniper10x99mmAntiMateriel
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: CMBulletSniper10x28mm
@@ -139,6 +144,11 @@
       types:
         Piercing: 125
         Structural: 1275
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Forced
+      energy: Severe
   - type: CMArmorPiercing
     amount: 75
   - type: RMCPenetratingProjectile

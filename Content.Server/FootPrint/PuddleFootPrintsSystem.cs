@@ -1,5 +1,4 @@
 using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Fluids;
@@ -34,8 +33,7 @@ public sealed partial class PuddleFootPrintsSystem : EntitySystem
         if (!TryComp<AppearanceComponent>(uid, out var appearance)
             || !TryComp<PuddleComponent>(uid, out var puddle)
             || !TryComp<FootPrintsComponent>(args.Tripper, out var tripper)
-            || !TryComp<SolutionContainerManagerComponent>(uid, out var solutionManager)
-            || !_solutionContainer.ResolveSolution((uid, solutionManager), puddle.SolutionName, ref puddle.Solution, out var solutions))
+            || !_solutionContainer.ResolveSolution(uid, puddle.SolutionName, ref puddle.Solution, out var solutions))
             return;
 
         if (solutions.Contents.Count <= 0)

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
-using Content.Server._CMU14.Yautja;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using NUnit.Framework;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaClanAdminStateStoreTest
@@ -122,7 +122,7 @@ public sealed class YautjaClanAdminStateStoreTest
         var resources = pair.Server.ResolveDependency<IResourceManager>();
 
         using var stream = resources.ContentFileRead(
-            new ResPath("/Locale/ru-RU/_CMU14/yautja/admin_clan.ftl"));
+            new ResPath("/Locale/ru-RU/CMU14/yautja/admin_clan.ftl"));
         using var reader = new StreamReader(stream);
         var text = await reader.ReadToEndAsync();
         await pair.CleanReturnAsync();

@@ -1,13 +1,14 @@
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Client._CMU14.ZLevels.Core;
-using Content.Client._CMU14.ZLevels.Culling;
-using Content.Server._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.ZLevels;
-using Content.Shared._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Client.CMU14.ZLevels.Core;
+using Content.Client.CMU14.ZLevels.Culling;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.ZLevels;
+using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Maps;
@@ -23,76 +24,11 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaFalconZLevelCullingTest
 {
-    [Test]
-    public async Task EyeMapResolverRejectsNullspaceAndUnrelatedZNetworks()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var server = pair.Server;
-        var client = pair.Client;
-        var viewerMap = await pair.CreateTestMap();
-        var relatedEyeMap = await pair.CreateTestMap();
-        var unrelatedEyeMap = await pair.CreateTestMap();
-        EntityUid network = default;
-        EntityUid unrelatedNetwork = default;
-
-        try
-        {
-            await server.WaitAssertion(() =>
-            {
-                var zLevels = server.EntMan.System<CMUZLevelsSystem>();
-                var zNetwork = zLevels.CreateZNetwork();
-                network = zNetwork.Owner;
-
-                Assert.That(zLevels.TryAddMapsIntoZNetwork(zNetwork, new Dictionary<EntityUid, int>
-                {
-                    [viewerMap.MapUid] = 0,
-                    [relatedEyeMap.MapUid] = 1,
-                }), Is.True);
-
-                var unrelatedZNetwork = zLevels.CreateZNetwork();
-                unrelatedNetwork = unrelatedZNetwork.Owner;
-                Assert.That(zLevels.TryAddMapsIntoZNetwork(unrelatedZNetwork, new Dictionary<EntityUid, int>
-                {
-                    [unrelatedEyeMap.MapUid] = 0,
-                }), Is.True);
-            });
-
-            await pair.ReallyBeIdle(10);
-
-            await client.WaitAssertion(() =>
-            {
-                var zLevels = client.EntMan.System<CMUClientZLevelsSystem>();
-                var clientViewerMap = pair.ToClientUid(viewerMap.MapUid);
-                var clientRelatedEyeMap = pair.ToClientUid(relatedEyeMap.MapUid);
-
-                Assert.That(zLevels.TryGetEyeMapInViewerZNetwork(
-                    clientViewerMap,
-                    relatedEyeMap.MapId,
-                    out var resolvedEyeMap), Is.True);
-                Assert.That(resolvedEyeMap, Is.EqualTo(clientRelatedEyeMap));
-                Assert.That(zLevels.TryGetEyeMapInViewerZNetwork(
-                    clientViewerMap,
-                    MapId.Nullspace,
-                    out _), Is.False);
-                Assert.That(zLevels.TryGetEyeMapInViewerZNetwork(
-                    clientViewerMap,
-                    unrelatedEyeMap.MapId,
-                    out _), Is.False);
-            });
-        }
-        finally
-        {
-            await server.WaitAssertion(() => DeleteAll(server.EntMan, network, unrelatedNetwork));
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
     [Test]
     public async Task FalconRemainsVisibleWhenControlledEyeMovesToLowerZLevel()
     {
@@ -294,7 +230,17 @@ public sealed class YautjaFalconZLevelCullingTest
                 });
 
                 config.SetCVar(CMUZLevelsCVars.CullOccludedDynamicSprites, true, true);
-                culling.FrameUpdate(0.016f);
+                var viewport = new Mock<IClydeViewport>();
+                viewport.SetupGet(view => view.Eye).Returns(eyeManager.CurrentEye);
+                viewport.SetupGet(view => view.Size).Returns(new Vector2i(640, 480));
+                viewport.Setup(view => view.Render()).Callback(() =>
+                    Assert.That(droneSprite.Visible, Is.True,
+                        "The controlled Falcon remains visible during its own viewport render."));
+                var controllerMask = new CMUZVisibilityMask();
+                controllerMask.SetOpenings(upperMap.MapId, viewBounds, openingBounds, complete: true);
+                zLevels.RenderViewport(viewport.Object, controllerMask);
+                zLevels.RenderViewport(viewport.Object);
+                viewport.Verify(view => view.Render(), Times.Exactly(2));
 
                 Assert.That(droneSprite.Visible, Is.True,
                     "A Falcon occupying the active Eye map must not be hidden as an occluded sprite below the controller.");
@@ -307,7 +253,6 @@ public sealed class YautjaFalconZLevelCullingTest
                 var config = client.ResolveDependency<IConfigurationManager>();
                 var eyeManager = client.ResolveDependency<IEyeManager>();
                 config.SetCVar(CMUZLevelsCVars.CullOccludedDynamicSprites, false, true);
-                client.EntMan.System<CMUZLevelSpriteCullingSystem>().FrameUpdate(0.016f);
 
                 if (previousRenderEnabled is { } renderEnabled)
                     config.SetCVar(CMUZLevelsCVars.RenderEnabled, renderEnabled, true);

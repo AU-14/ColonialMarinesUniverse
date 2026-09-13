@@ -24,7 +24,7 @@ public sealed partial class PuddleDecalVisualsComponent : Component
     public bool RandomRotation = true;
 
     [ViewVariables]
-    public uint? DecalId;
+    public DecalIndex? DecalId;
 
     [ViewVariables]
     public EntityUid? GridUid;

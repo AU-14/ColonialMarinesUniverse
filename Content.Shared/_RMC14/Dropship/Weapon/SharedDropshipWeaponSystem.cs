@@ -1,7 +1,8 @@
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Camera;
@@ -24,11 +25,13 @@ using Content.Shared._RMC14.Rangefinder;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Administration.Logs;
-using Content.Shared.AU14.Round;
+using Content.Shared.CMU14.Round;
 using Content.Shared.Chat;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
@@ -97,7 +100,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     [Dependency] private PowerLoaderSystem _powerloader = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private SharedRMCCameraSystem _rmcCamera = default!;
     [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
     [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
     [Dependency] private RMCImplosionSystem _rmcImplosion = default!;
@@ -316,6 +318,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private void OnTerminalMapInit(Entity<DropshipTerminalWeaponsComponent> ent, ref MapInitEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         var targets = new List<TargetEnt>();
         var targetsQuery = EntityQueryEnumerator<DropshipTargetComponent>();
 
@@ -358,6 +363,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private void OnDropshipTargetMapInit(Entity<DropshipTargetComponent> ent, ref MapInitEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         var netEnt = GetNetEntity(ent);
         var terminals = EntityQueryEnumerator<DropshipTerminalWeaponsComponent>();
         while (terminals.MoveNext(out var uid, out var terminal))
@@ -376,36 +384,33 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             var creatorFaction = string.IsNullOrWhiteSpace(ent.Comp.CreatorFaction) ? null : ent.Comp.CreatorFaction;
 
             // If the target is faction-bound, only add it to consoles of that faction
-            if (!string.IsNullOrEmpty(creatorFaction))
+            if (!string.IsNullOrEmpty(creatorFaction) &&
+                (string.IsNullOrEmpty(consoleFaction) ||
+                 !creatorFaction.Equals(consoleFaction, StringComparison.OrdinalIgnoreCase)))
             {
-                if (string.IsNullOrEmpty(consoleFaction) ||
-                    !creatorFaction.Equals(consoleFaction, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
+                continue;
             }
 
             targets.Add(new TargetEnt(netEnt, ent.Comp.Abbreviation));
             Dirty(uid, terminal);
         }
 
-        if (!TryComp(ent, out MetaDataComponent? metaData) || metaData.EntityPrototype == null)
-            return;
-
-        var prototype = metaData.EntityPrototype.ID;
-
         AddComp(ent, new RMCCameraComponent
         {
-            Id = prototype,
             Rename = false,
             NameOverride = $"{Name(ent)} [{ent.Comp.Abbreviation}]",
         }, true);
-
-        _rmcCamera.RefreshCameras(prototype);
     }
 
     private void OnDropshipTargetRemove<T>(Entity<DropshipTargetComponent> ent, ref T args)
     {
+        // Terminal target lists and target-eye ownership are replicated,
+        // server-authoritative state. Targets routinely leave client PVS during
+        // map transfers and crashes; changing those lists client-side dirties
+        // predicted entities during rollback.
+        if (_net.IsClient)
+            return;
+
         var netUid = GetNetEntity(ent);
         var terminals = EntityQueryEnumerator<DropshipTerminalWeaponsComponent>();
         while (terminals.MoveNext(out var uid, out var terminal))
@@ -437,15 +442,11 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             Dirty(uid, terminal);
         }
 
-        if (_net.IsServer && TryComp(ent, out MetaDataComponent? metaData) && metaData.EntityPrototype is { } prototype)
+        if (_net.IsServer)
         {
             RemComp<RMCCameraComponent>(ent);
             RemComp<EyeComponent>(ent);
-            _rmcCamera.RefreshCameras(prototype);
         }
-
-        if (_net.IsClient)
-            return;
 
         foreach (var (_, eye) in ent.Comp.Eyes)
         {
@@ -455,6 +456,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private void OnDropshipTargetEyeRemove<T>(Entity<DropshipTargetEyeComponent> ent, ref T args)
     {
+        if (_net.IsClient)
+            return;
+
         if (TerminatingOrDeleted(ent.Comp.Target) ||
             !TryComp(ent.Comp.Target, out DropshipTargetComponent? target))
         {
@@ -1113,6 +1117,17 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             dropship.Comp.AttachmentPoints.Count == 0)
             return;
 
+        if (!TryComp(selectedSystem, out RMCOrbitalDeployerComponent? deployer))
+            return;
+
+        var point = Transform(selectedSystem.Value).ParentUid;
+        if (HasComp<GunshipUtilityAttachmentPointComponent>(point))
+        {
+            _rmcOrbitalDeployable.TryDeploy(selectedSystem.Value, selectedSystem.Value, args.Actor, deployer);
+            RefreshWeaponsUI(ent);
+            return;
+        }
+
         if (ent.Comp.Target is not { } target)
             return;
 
@@ -1128,9 +1143,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                 return;
             }
         }
-
-        if (!TryComp(selectedSystem, out RMCOrbitalDeployerComponent? deployer))
-            return;
 
         _rmcOrbitalDeployable.TryDeploy(selectedSystem.Value, target,  args.Actor, deployer);
 
@@ -1348,7 +1360,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (ent.Comp.Abbreviation == null)
             return;
 
-        args.AddModifier(ent.Comp.Abbreviation);
+        args.AddModifier("rmc-laser-designator-signal-flare-name", extraArgs: ("id", ent.Comp.Abbreviation));
     }
 
     private void UpdateTarget(Entity<DropshipTerminalWeaponsComponent> ent, EntityUid target)
@@ -1731,6 +1743,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         {
             if (_net.IsClient)
                 continue;
+
+            if (!flight.Target.IsValid(EntityManager)) // CMU14: the target grid can be deleted before the marker spawns
+            {
+                QueueDel(uid);
+                continue;
+            }
 
             if (!flight.WarnedSound)
             {
@@ -2385,6 +2403,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     private bool CanFire(EntityUid uid, DropshipWeaponStrikeType strikeType, EntityUid? actor = null, int requiredShots = 1, DropshipWeaponComponent? weapon = null)
     {
         if (!Resolve(uid, ref weapon, false))
+            return false;
+
+        if (weapon.DirectFireOnly)
             return false;
 
         Entity<DropshipComponent> dropship = default;

@@ -1,12 +1,12 @@
-using Content.Client._CMU14.BalanceRating;
-using Content.Shared._CMU14.BalanceRating;
+using Content.Client.CMU14.BalanceRating;
+using Content.Shared.CMU14.BalanceRating;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.BalanceRating;
+namespace Content.IntegrationTests.CMU14.BalanceRating;
 
 [TestFixture]
 public sealed class CMUBalanceRatingPopupTest

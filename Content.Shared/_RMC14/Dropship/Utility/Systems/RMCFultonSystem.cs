@@ -125,7 +125,7 @@ public sealed partial class RMCFultonSystem : EntitySystem
         _transform.SetMapCoordinates(target, new MapCoordinates(_fultonCount++ * 50, 0, mapId));
 
         if (args.Used != null)
-            _stack.Use(args.Used.Value, 1);
+            _stack.TryUse(args.Used.Value, 1);
     }
 
     private MapId EnsureMap()

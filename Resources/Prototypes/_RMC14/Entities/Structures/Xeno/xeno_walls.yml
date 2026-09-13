@@ -314,8 +314,9 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: ReflectiveResin
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: XenoConstructionPlasmaCost
     plasma: 145
     scalingCost: true

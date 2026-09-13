@@ -1,0 +1,81 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobParamarineSynthetic
+  roundSide: ThirdParty
+  roundForce: CMUParamarines
+  roundRole: ParamarineSynthetic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 3
+      RMCSkillMeleeWeapons: 2
+  - type: JobPrefix
+    prefix: cmu-paramarines-prefix-synthetic
+  - type: Language
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-paramarines-name-synthetic
+  description: cmu-paramarines-description-synthetic
+  playTimeTracker: CMUJobParamarineSynthetic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearParamarineSynthetic
+  spawnMenuRoleName: TWE Royal Paramarine Synthetic (3rd party)
+  greeting: cmu-paramarines-greeting
+  icon: RMCJobIconParaSupportSynthetic
+  joinNotifyCrew: false
+  supervisors: cmu-paramarines-leader
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesParamarines
+  id: CMUJobParamarineSynthetic
+  name: TWE Royal Paramarine Synthetic
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadParamarines
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-paramarines-name-synthetic
+    description: cmu-paramarines-description-synthetic
+    reregister: false
+    job: CMUJobParamarineSynthetic
+    raffle:
+      settings: short
+    rules: cmu-paramarines-rules
+
+- type: startingGear
+  parent: CMUGearParamarineRifleman
+  id: CMUGearParamarineSynthetic
+  equipment:
+    head: RMCHeadParaBeret
+    jumpsuit: RMCJumpsuitMarinePara
+    outerClothing: RMCArmorParaSynthVestFill
+    belt: RMCMedicalL75RCMFillPara
+    back: RMCSatchelLightpackFilledParaSynth
+    pocket1: RMCPouchSurvivalSynthFill
+    pocket2: RMCPouchElectronics
+    suitstorage: RMCFlashlight
+
+- type: playTimeTracker
+  id: CMUJobParamarineSynthetic

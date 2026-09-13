@@ -6,10 +6,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._RMC14.Attachable.Systems;
 
-public sealed class AttachableIFFDebugOverlaySystem : EntitySystem
+public sealed partial class AttachableIFFDebugOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IOverlayManager _overlayManager = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IOverlayManager _overlayManager = default!;
 
     private static readonly TimeSpan SampleLifetime = TimeSpan.FromSeconds(2);
 

@@ -1,39 +1,49 @@
+using Content.Shared.Kitchen;
 using Content.Shared.Storage;
+using Content.Shared.Tools.Systems;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.Nutrition.Components
+namespace Content.Shared.Nutrition.Components;
+
+/// <summary>
+/// Indicates that the entity can be butchered through use of a butcher hook.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(SharedKitchenSpikeSystem), typeof(ToolRefinableSystem), Other = AccessPermissions.Read)]
+public sealed partial class ButcherableComponent : Component
 {
     /// <summary>
-    /// Indicates that the entity can be thrown on a kitchen spike for butchering.
+    /// List of the entities that this entity should spawn after being butchered.
     /// </summary>
-    [RegisterComponent, NetworkedComponent]
-    public sealed partial class ButcherableComponent : Component
-    {
-        [DataField("spawned", required: true)]
-        public List<EntitySpawnEntry> SpawnedEntities = new();
+    /// <remarks>
+    /// Note that <see cref="SharedKitchenSpikeSystem"/> spawns one item at a time and decreases the amount until it's zero and then removes the entry.
+    /// </remarks>
+    [DataField("spawned", required: true), AutoNetworkedField]
+    public List<EntitySpawnEntry> SpawnedEntities = [];
 
-        [ViewVariables(VVAccess.ReadWrite), DataField("butcherDelay")]
-        public float ButcherDelay = 8.0f;
+    /// <summary>
+    /// Time required to butcher that entity.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float ButcherDelay = 8.0f;
 
-        [ViewVariables(VVAccess.ReadWrite), DataField("butcheringType")]
-        public ButcheringType Type = ButcheringType.Knife;
+    /// <summary>
+    /// Selects which legacy butchering route can consume this entity.
+    /// Tool refinement remains independently available when configured.
+    /// </summary>
+    [DataField("butcheringType"), AutoNetworkedField]
+    public ButcheringType Type = ButcheringType.Knife;
 
-                [ViewVariables(VVAccess.ReadWrite), DataField("waitForRot")]
-                public bool WaitForRot = false;
+    /// <summary>
+    /// If true, tool refinement and kitchen spikes must wait until the victim is unrevivable.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool WaitForRot;
+}
 
-
-
-        /// <summary>
-        /// Prevents butchering same entity on two and more spikes simultaneously and multiple doAfters on the same Spike
-        /// </summary>
-        [ViewVariables]
-        public bool BeingButchered;
-    }
-
-    public enum ButcheringType : byte
-    {
-        Knife, // e.g. goliaths
-        Spike, // e.g. monkeys
-        Gibber, // e.g. humans. TODO
-    }
+public enum ButcheringType : byte
+{
+    Knife,
+    Spike,
+    Gibber,
 }

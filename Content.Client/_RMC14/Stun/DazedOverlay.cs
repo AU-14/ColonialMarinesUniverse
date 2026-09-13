@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Shared._RMC14.Stun;
-using Content.Shared.StatusEffectNew.Components;
+using Content.Shared.StatusEffectNew;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
@@ -14,8 +14,8 @@ public sealed partial class DazedOverlay : Overlay
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
-    private readonly IEntityManager _entManager;
     private readonly IPlayerManager _playerManager;
+    private readonly StatusEffectsSystem _statusEffects;
 
     private readonly ShaderInstance _vignetteShader;
 
@@ -24,8 +24,8 @@ public sealed partial class DazedOverlay : Overlay
 
     public DazedOverlay(IEntityManager entManager, IPlayerManager playerManager, IPrototypeManager prototypeManager)
     {
-        _entManager = entManager;
         _playerManager = playerManager;
+        _statusEffects = entManager.System<StatusEffectsSystem>();
 
         _vignetteShader = prototypeManager.Index(CircleMaskShader).InstanceUnique();
     }
@@ -34,14 +34,10 @@ public sealed partial class DazedOverlay : Overlay
     // being tied to a single hardcoded status effect, since several sources can apply this vignette.
     private RMCDazedComponent? GetStrongestDazed(EntityUid uid)
     {
-        if (!_entManager.TryGetComponent(uid, out StatusEffectContainerComponent? container))
-            return null;
-
         RMCDazedComponent? strongest = null;
-        foreach (var effect in container.ActiveStatusEffects)
+        foreach (var effect in _statusEffects.EnumerateStatusEffects<RMCDazedComponent>((uid, null)))
         {
-            if (!_entManager.TryGetComponent(effect, out RMCDazedComponent? candidate))
-                continue;
+            var candidate = effect.Comp2;
 
             if (strongest == null || candidate.Alpha > strongest.Alpha)
                 strongest = candidate;

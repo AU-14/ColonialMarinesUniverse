@@ -1,23 +1,17 @@
 - type: entity
   save: false
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceAvali
+  - RMCBaseMobSpeciesOrganic
   id: CMMobAvali
   name: Urist C.M McRaptor
   suffix: RMC14
   components:
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: Avali
-    hideLayersOnEquip:
-    - UndergarmentTop
-    - HeadTop
-    - HeadSide
   - type: Sprite
     drawdepth: Mobs
   - type: Vocal
-    sounds:
-      Male: RMCMaleAvali
-      Unsexed: RMCMaleAvali
-      Female: RMCFemaleAvali
   - type: Wagging 
     action: ActionToggleAvaliWagging
   - type: Speech
@@ -40,6 +34,6 @@
     name: cm-chatsan-replacement-avali
 
 - type: entity
-  parent: BaseSpeciesDummy
+  parent: AppearanceAvali
   id: MobAvaliDummy
   categories: [ HideSpawnMenu ]

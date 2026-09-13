@@ -58,16 +58,6 @@
     BlueCuracao: 2
 
 - type: reaction
-  id: RMCVodka
-  reactants:
-    Enzyme:
-      amount: 1
-    JuicePotato:
-      amount: 1
-  products:
-    Vodka: 2
-
-- type: reaction
   id: Sake
   reactants:
     Enzyme:
@@ -358,7 +348,7 @@
     Blood:
       amount: 5
   effects:
-  - !type:CreateEntityReactionEffect
+  - !type:SpawnEntity
     entity: FoodMeat
 
 - type: reaction
@@ -374,5 +364,5 @@
     EggCooked:
       amount: 5
   effects:
-  - !type:CreateEntityReactionEffect
+  - !type:SpawnEntity
     entity: FoodMealFriedegg

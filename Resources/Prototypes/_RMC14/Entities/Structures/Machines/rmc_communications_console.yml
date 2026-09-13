@@ -26,6 +26,7 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.45"
         density: 60
+        hard: false # CMU14: stops blocking movement or Z-transitions
         mask:
         - MachineMask
         layer:
@@ -244,22 +245,6 @@
         - MidImpassable
         - LowImpassable
   - type: PlaceableSurface
-
-- type: entity
-  parent: RMCTacticalMapTable
-  id: RMCTacticalMapTableGovfor
-  suffix: Govfor
-  components:
-  - type: TacticalMapComputer
-    faction: govfor
-
-- type: entity
-  parent: RMCTacticalMapTableLarge
-  id: RMCTacticalMapTableLargeGovfor
-  suffix: Govfor, Large
-  components:
-  - type: TacticalMapComputer
-    faction: govfor
 
 - type: entity
   parent: RMCTacticalMapTableLarge

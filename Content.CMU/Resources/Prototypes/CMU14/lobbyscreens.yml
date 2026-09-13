@@ -1,0 +1,31 @@
+- type: lobbyBackground
+  id: AU14LobbyDropship
+  background: /Textures/CMU14/Lobby/Dropship.png
+
+- type: lobbyBackground
+  id: AU14LobbyCLF
+  background: /Textures/CMU14/Lobby/CLF.png
+
+- type: lobbyBackground
+  id: AU14LobbyHAZOPS
+  background: /Textures/CMU14/Lobby/HAZOPS.png
+
+- type: lobbyBackground
+  id: AU14LobbyXenos
+  background: /Textures/CMU14/Lobby/Xenos.png
+
+- type: lobbyBackground
+  id: AU14LobbyCLFRiot
+  background: /Textures/CMU14/Lobby/clfriot.png
+
+- type: lobbyBackground
+  id: AU14LobbyWendigoFollowed
+  background: /Textures/CMU14/Lobby/WendigoFollowed.png
+
+- type: lobbyBackground
+  id: CMU14LobbyWorkingJoes
+  background: /Textures/CMU14/Lobby/Joes.png
+
+- type: lobbyBackground
+  id: CMU14LobbyXenoWar
+  background: /Textures/CMU14/Lobby/XenoWar.png

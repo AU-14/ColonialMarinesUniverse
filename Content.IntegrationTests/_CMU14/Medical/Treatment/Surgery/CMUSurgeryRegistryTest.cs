@@ -1,9 +1,9 @@
 using System.Linq;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.Body.Part;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Medical.Treatment.Surgery;
+namespace Content.IntegrationTests.CMU14.Medical.Treatment.Surgery;
 
 [TestFixture]
 public sealed class CMUSurgeryRegistryTest
@@ -113,6 +113,32 @@ public sealed class CMUSurgeryRegistryTest
                 Assert.That(armIds, Does.Contain(LaterTestSurgery));
                 Assert.That(torsoSurgeries.Any(definition =>
                     definition.Id.Id is TestSurgery or LaterTestSurgery), Is.False);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase(BodyPartType.Arm)]
+    [TestCase(BodyPartType.Hand)]
+    [TestCase(BodyPartType.Leg)]
+    [TestCase(BodyPartType.Foot)]
+    public async Task LimbRemovalAndReattachmentAreEligibleForEveryExtremity(BodyPartType partType)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var flow = server.EntMan.System<SharedCMUSurgeryFlowSystem>();
+            var surgeryIds = flow.GetEligibleDefinitions(partType)
+                .Select(definition => definition.Id.Id)
+                .ToList();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(surgeryIds, Does.Contain("CMUSurgeryRemoveLimb"));
+                Assert.That(surgeryIds, Does.Contain("CMUSurgeryReattachLimb"));
             });
         });
 

@@ -9,12 +9,13 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Rangefinder;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared._CMU14.ZLevels.Ordnance;
+using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Construction.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
@@ -556,7 +557,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
     }
 
 
-    public void PopupWarning(MapCoordinates coordinates, float range, LocId warning, LocId warningAbove, bool chat = false)
+    public void PopupWarning(MapCoordinates coordinates, float range, LocId warning, LocId warningAbove, bool chat = false, string? direction = null) // CMU14
     {
         foreach (var session in _player.NetworkedSessions)
         {
@@ -573,10 +574,9 @@ public abstract partial class SharedMortarSystem : EntitySystem
             if (distance > range)
                 continue;
 
-            var direction = distanceVec.GetDir().ToString().ToUpperInvariant();
             var msg = distance < 1
                 ? Loc.GetString(warningAbove)
-                : Loc.GetString(warning, ("direction", direction));
+                : Loc.GetString(warning, ("direction", direction ?? distanceVec.GetDir().ToString().ToUpperInvariant())); // CMU14
             _popup.PopupEntity(msg, recipient, recipient, PopupType.LargeCaution);
 
             if (chat)

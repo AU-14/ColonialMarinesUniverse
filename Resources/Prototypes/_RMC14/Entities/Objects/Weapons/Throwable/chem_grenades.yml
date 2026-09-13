@@ -68,11 +68,12 @@
     graph: RMCCustomGrenadeGraph
     node: grenade
   - type: DeleteOnTrigger
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound:
         path: /Audio/Effects/Chemistry/bubbles.ogg
         params:
             variation: 0.2
+    positional: true
 
 - type: entity
   parent: ChemicalPayload
@@ -97,9 +98,8 @@
   id: RMCBeakerMetalFoamAluminum
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
           - ReagentId: RMCAluminum
@@ -110,9 +110,8 @@
   id: RMCBeakerMetalFoamingAgent
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
           - ReagentId: FoamingAgent
@@ -140,11 +139,12 @@
       - RMCChemicalPayloadWeedkiller
       payloadTrigger:
       - RMCTimerTrigger
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound:
         path: /Audio/Effects/smoke.ogg
         params:
             variation: 0.2
+    positional: true
 
 - type: entity
   parent: RMCChemicalPayloadMetalFoam
@@ -163,9 +163,8 @@
   id: RMCBeakerWeedkillerPlantBGone
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
           - ReagentId: PlantBGone
@@ -178,9 +177,8 @@
   id: RMCBeakerWeedkillerPhosphorus
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 60
         reagents:
           - ReagentId: RMCSugar

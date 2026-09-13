@@ -5,7 +5,7 @@ using System.Numerics;
 using Content.Client.Popups;
 using Content.Server.Administration.Logs;
 using Content.Server.Mind;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;
@@ -16,7 +16,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared._RMC14.Vendors;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
@@ -38,7 +38,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaYoungbloodTest
@@ -169,7 +169,7 @@ public sealed class YautjaYoungbloodTest
     }
 
     [Test]
-    public async Task MaskEquipGrantsActionsHudAndLeavesVisorOffLikeCmss13()
+    public async Task MaskEquipGrantsActionsHudAndEnablesYautjaVisor()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -188,8 +188,8 @@ public sealed class YautjaYoungbloodTest
 
                 var maskComp = entMan.GetComponent<YautjaMaskComponent>(mask);
                 Assert.That(maskComp.User, Is.EqualTo(youngblood));
-                Assert.That(maskComp.VisorEnabled, Is.False);
-                Assert.That(entMan.HasComponent<NightVisionComponent>(youngblood), Is.False);
+                Assert.That(maskComp.VisorEnabled, Is.True);
+                Assert.That(entMan.HasComponent<NightVisionComponent>(youngblood), Is.True);
                 Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(youngblood), Is.True);
 
                 Assert.That(maskComp.ToggleVisorAction, Is.Not.Null);
@@ -198,8 +198,8 @@ public sealed class YautjaYoungbloodTest
 
                 Assert.That(maskComp.ToggleVisorAction, Is.Not.Null);
                 var actionComp = entMan.GetComponent<ActionComponent>(maskComp.ToggleVisorAction!.Value);
-                Assert.That(actionComp.Toggled, Is.False,
-                    "CMSS13 equipped() grants mask actions/HUDs but does not switch current_goggles from VISION_MODE_OFF.");
+                Assert.That(actionComp.Toggled, Is.True,
+                    "CMU master enables the visor and its action when a Yautja equips the mask.");
             }
             finally
             {
@@ -226,7 +226,7 @@ public sealed class YautjaYoungbloodTest
 
         try
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -244,25 +244,12 @@ public sealed class YautjaYoungbloodTest
             {
                 var entMan = server.EntMan;
                 var maskComp = entMan.GetComponent<YautjaMaskComponent>(mask);
-                Assert.That(maskComp.VisorEnabled, Is.False);
-                Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(wearer), Is.True);
-            });
-
-            await server.WaitPost(() =>
-            {
-                RaiseToggleVisor(server.EntMan, wearer, mask);
-            });
-
-            await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                var maskComp = entMan.GetComponent<YautjaMaskComponent>(mask);
                 Assert.That(maskComp.VisorEnabled, Is.True);
                 Assert.That(entMan.HasComponent<NightVisionComponent>(wearer), Is.True);
                 Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(wearer), Is.True);
             });
 
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 RaiseToggleVisor(server.EntMan, wearer, mask);
             });
@@ -279,7 +266,7 @@ public sealed class YautjaYoungbloodTest
                     "CMSS13 togglesight() only changes the vision mode; mask HUDs are removed by dropped(), not by add_vision(OFF).");
             });
 
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -296,7 +283,7 @@ public sealed class YautjaYoungbloodTest
         }
         finally
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 foreach (var uid in new[] { wearer, bracer, mask })
@@ -476,7 +463,7 @@ public sealed class YautjaYoungbloodTest
 
         try
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -501,7 +488,6 @@ public sealed class YautjaYoungbloodTest
                 bracerComp.Charge = 2;
                 bracerComp.Regen = 0;
 
-                RaiseToggleVisor(entMan, hunter, mask);
 
                 Assert.That(maskComp.Drain, Is.EqualTo((FixedPoint2) 3));
                 Assert.That(maskComp.VisorEnabled, Is.True);
@@ -531,7 +517,7 @@ public sealed class YautjaYoungbloodTest
         }
         finally
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var loc = server.ResolveDependency<ILocalizationManager>();
@@ -547,8 +533,9 @@ public sealed class YautjaYoungbloodTest
                 }
             });
 
-            await pair.CleanReturnAsync();
         }
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -1029,7 +1016,7 @@ public sealed class YautjaYoungbloodTest
 
         try
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -1044,26 +1031,26 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(inventory.TryEquip(wearer, mask, "mask", silent: true, force: true), Is.True);
 
                 var maskComp = entMan.GetComponent<YautjaMaskComponent>(mask);
-                Assert.That(maskComp.VisorEnabled, Is.False);
-                AssertSoundPath(maskComp.ToggleVisorSound, "/Audio/_CMU14/Yautja/Equipment/pred_vision.wav");
-                AssertSoundPath(maskComp.ZoomOnSound, "/Audio/_CMU14/Yautja/pred_zoom_on.ogg");
-                AssertSoundPath(maskComp.ZoomOffSound, "/Audio/_CMU14/Yautja/pred_zoom_off.ogg");
+                Assert.That(maskComp.VisorEnabled, Is.True);
+                AssertSoundPath(maskComp.ToggleVisorSound, "/Audio/CMU14/Yautja/Equipment/pred_vision.wav");
+                AssertSoundPath(maskComp.ZoomOnSound, "/Audio/CMU14/Yautja/pred_zoom_on.ogg");
+                AssertSoundPath(maskComp.ZoomOffSound, "/Audio/CMU14/Yautja/pred_zoom_off.ogg");
 
                 var getActions = new GetItemActionsEvent(actions, wearer, mask, SlotFlags.MASK);
                 entMan.EventBus.RaiseLocalEvent(mask, getActions);
                 Assert.That(maskComp.ToggleZoomAction, Is.Not.Null);
 
                 AssertActionPlaysSound(entMan, () => RaiseToggleVisor(entMan, wearer, mask), maskComp.ToggleVisorSound);
-                Assert.That(maskComp.VisorEnabled, Is.True);
-                AssertActionPlaysSound(entMan, () => RaiseToggleVisor(entMan, wearer, mask), maskComp.ToggleVisorSound);
                 Assert.That(maskComp.VisorEnabled, Is.False);
+                AssertActionPlaysSound(entMan, () => RaiseToggleVisor(entMan, wearer, mask), maskComp.ToggleVisorSound);
+                Assert.That(maskComp.VisorEnabled, Is.True);
                 AssertActionPlaysSound(entMan, () => RaiseToggleMaskZoom(entMan, wearer, mask, maskComp.ToggleZoomAction), maskComp.ZoomOnSound);
                 AssertActionPlaysSound(entMan, () => RaiseToggleMaskZoom(entMan, wearer, mask, maskComp.ToggleZoomAction), maskComp.ZoomOffSound);
             });
         }
         finally
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 foreach (var uid in new[] { wearer, bracer, mask })
@@ -1073,8 +1060,9 @@ public sealed class YautjaYoungbloodTest
                 }
             });
 
-            await pair.CleanReturnAsync();
         }
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -1091,7 +1079,7 @@ public sealed class YautjaYoungbloodTest
 
         try
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -1120,7 +1108,6 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(helmetMask.ToggleVisorAction, Is.Not.Null);
                 Assert.That(helmetMask.ToggleZoomAction, Is.Not.Null);
 
-                RaiseToggleVisor(entMan, wearer, helmet);
 
                 Assert.That(helmetMask.VisorEnabled, Is.True);
                 Assert.That(inventory.TryGetSlotEntity(wearer, "eyes", out visorGlasses), Is.True);
@@ -1140,7 +1127,7 @@ public sealed class YautjaYoungbloodTest
         }
         finally
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 foreach (var uid in new[] { wearer, bracer, helmet, visorGlasses.GetValueOrDefault() })
@@ -1168,7 +1155,7 @@ public sealed class YautjaYoungbloodTest
 
         try
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -1182,7 +1169,6 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(inventory.TryEquip(wearer, helmet, "head", silent: true, force: true), Is.True);
 
                 var helmetMask = entMan.GetComponent<YautjaMaskComponent>(helmet);
-                RaiseToggleVisor(entMan, wearer, helmet);
 
                 Assert.That(helmetMask.VisorEnabled, Is.True);
                 Assert.That(inventory.TryGetSlotEntity(wearer, "eyes", out originalVisorGlasses), Is.True);
@@ -1210,7 +1196,7 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(entMan.Deleted(originalVisorGlasses!.Value), Is.True);
             });
 
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -1239,7 +1225,7 @@ public sealed class YautjaYoungbloodTest
         }
         finally
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 foreach (var uid in new[] { wearer, bracer, helmet, originalVisorGlasses.GetValueOrDefault() })
@@ -1249,8 +1235,9 @@ public sealed class YautjaYoungbloodTest
                 }
             });
 
-            await pair.CleanReturnAsync();
         }
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -1259,7 +1246,7 @@ public sealed class YautjaYoungbloodTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var client = pair.Client;
-        var sourceSprite = new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi");
+        var sourceSprite = new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_gear.rsi");
 
         await client.WaitAssertion(() =>
         {
@@ -1282,7 +1269,7 @@ public sealed class YautjaYoungbloodTest
             Assert.That(glasses.Description, Is.EqualTo("A vision overlay generated by the Bio-Mask. Used for low-light conditions."));
 
             Assert.That(glasses.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True);
-            Assert.That(clothing!.RsiPath, Is.EqualTo("_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi"));
+            Assert.That(clothing!.RsiPath, Is.EqualTo("CMU14/HunterShip/obj/items/hunter/pred_gear.rsi"));
             Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.EYES));
 
             Assert.That(glasses.TryGetComponent<ItemComponent>(out var item, factory), Is.True);
@@ -1321,7 +1308,7 @@ public sealed class YautjaYoungbloodTest
 
         try
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -1352,7 +1339,6 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(inventory.TryEquip(wearer, bracer, "gloves", silent: true, force: true), Is.True);
                 Assert.That(inventory.TryEquip(wearer, mask, "mask", silent: true, force: true), Is.True);
 
-                RaiseToggleVisor(entMan, wearer, mask);
 
                 Assert.That(entMan.GetComponent<YautjaMaskComponent>(mask).VisorEnabled, Is.True);
                 Assert.That(entMan.HasComponent<NightVisionItemComponent>(mask), Is.False);
@@ -1367,7 +1353,7 @@ public sealed class YautjaYoungbloodTest
                 var userNightVision = entMan.GetComponent<NightVisionComponent>(wearer);
                 Assert.That(userNightVision.State, Is.EqualTo(NightVisionState.Full));
                 Assert.That(userNightVision.Green, Is.False);
-                Assert.That(userNightVision.Overlay, Is.False);
+                Assert.That(userNightVision.Overlay, Is.True, "The visor retains CMU master's night-vision highlighting.");
                 Assert.That(userNightVision.SeeThroughContainers, Is.False);
                 Assert.That(userNightVision.Mesons, Is.False);
                 Assert.That(userNightVision.BlockScopes, Is.True);
@@ -1375,7 +1361,7 @@ public sealed class YautjaYoungbloodTest
         }
         finally
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 foreach (var uid in new[] { wearer, bracer, mask, visorGlasses.GetValueOrDefault() })
@@ -1385,8 +1371,9 @@ public sealed class YautjaYoungbloodTest
                 }
             });
 
-            await pair.CleanReturnAsync();
         }
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -1510,7 +1497,7 @@ public sealed class YautjaYoungbloodTest
 
         try
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
@@ -1530,7 +1517,6 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(maskComp.ToggleVisorAction, Is.Not.Null);
                 Assert.That(maskComp.ToggleZoomAction, Is.Not.Null);
 
-                RaiseToggleVisor(entMan, wearer, mask);
                 var zoomEv = RaiseToggleMaskZoom(entMan, wearer, mask, maskComp.ToggleZoomAction);
                 Assert.That(zoomEv.Handled, Is.True);
 
@@ -1574,7 +1560,7 @@ public sealed class YautjaYoungbloodTest
         }
         finally
         {
-            await server.WaitPost(() =>
+            await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 foreach (var uid in new[] { wearer, bracer, mask, visorGlasses.GetValueOrDefault() })
@@ -1584,8 +1570,9 @@ public sealed class YautjaYoungbloodTest
                 }
             });
 
-            await pair.CleanReturnAsync();
         }
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]

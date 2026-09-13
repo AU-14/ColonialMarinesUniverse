@@ -1,5 +1,5 @@
 using System.IO;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;

@@ -1,19 +1,21 @@
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using System.Linq;
 using Content.Server.Medical.CrewMonitoring;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Medical.CrewMonitoring;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaCrewMonitoringTest

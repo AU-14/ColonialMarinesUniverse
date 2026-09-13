@@ -11,7 +11,7 @@ using Content.Server.Maps;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Voting;
 using Robust.Server.Player;
@@ -220,7 +220,7 @@ namespace Content.Server.Voting.Managers
                 var optionCarryoverVotes = GetCarryoverVotes(carryoverKey, optionKey);
                 optionKeys[i] = optionKey;
                 carryoverVotes[i] = optionCarryoverVotes;
-                entries[i] = new VoteEntry(option.data, GetCarryoverOptionText(option.text, optionCarryoverVotes));
+                entries[i] = new VoteEntry(option.data, GetCarryoverOptionText(option.text, optionCarryoverVotes, optionCarryoverVotes / 2)); // CMU14
             }
 
             var start = _timing.RealTime;
@@ -472,10 +472,10 @@ namespace Content.Server.Voting.Managers
             return options.CarryoverKey ?? options.Title;
         }
 
-        private static string GetCarryoverOptionText(string text, int carryoverVotes)
-        {
-            return carryoverVotes > 0 ? $"{text} [+{carryoverVotes}]" : text;
-        }
+        // CMU14: show the halved effective value and the raw banked carryover, e.g. "Option [+12(25)]"
+        private static string GetCarryoverOptionText(string text, int carryoverVotes, int effectiveVotes)
+            // return carryoverVotes > 0 ? $"{text} [+{effectiveVotes}]" : text; // [+12]
+            => carryoverVotes > 0 ? $"{text} [+{effectiveVotes}({carryoverVotes})]" : text; // [+12(25)]
 
         private int GetCarryoverVotes(string? carryoverKey, string optionKey)
         {
@@ -522,7 +522,7 @@ namespace Content.Server.Voting.Managers
             var effectiveVotes = new int[vote.Entries.Length];
             for (var i = 0; i < vote.Entries.Length; i++)
             {
-                effectiveVotes[i] = vote.Entries[i].Votes + vote.CarryoverVotes[i];
+                effectiveVotes[i] = vote.Entries[i].Votes + vote.CarryoverVotes[i] / 2; // CMU14: carryover counts at half strength
             }
 
             return effectiveVotes;
@@ -771,7 +771,7 @@ namespace Content.Server.Voting.Managers
                 public IEnumerator<KeyValuePair<object, int>> GetEnumerator()
                 {
                     return _reg.Entries
-                        .Select((e, i) => KeyValuePair.Create(e.Data, e.Votes + _reg.CarryoverVotes[i]))
+                        .Select((e, i) => KeyValuePair.Create(e.Data, e.Votes + _reg.CarryoverVotes[i] / 2)) // CMU14: carryover counts at half strength
                         .GetEnumerator();
                 }
 
@@ -794,7 +794,7 @@ namespace Content.Server.Voting.Managers
                         if (!_reg.Entries[i].Data.Equals(key))
                             continue;
 
-                        value = _reg.Entries[i].Votes + _reg.CarryoverVotes[i];
+                        value = _reg.Entries[i].Votes + _reg.CarryoverVotes[i] / 2; // CMU14: carryover counts at half strength
                         return true;
                     }
 
@@ -816,7 +816,7 @@ namespace Content.Server.Voting.Managers
                 }
 
                 public IEnumerable<object> Keys => _reg.Entries.Select(c => c.Data);
-                public IEnumerable<int> Values => _reg.Entries.Select((c, i) => c.Votes + _reg.CarryoverVotes[i]);
+                public IEnumerable<int> Values => _reg.Entries.Select((c, i) => c.Votes + _reg.CarryoverVotes[i] / 2); // CMU14: carryover counts at half strength
             }
         }
 

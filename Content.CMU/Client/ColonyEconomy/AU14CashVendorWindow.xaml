@@ -1,0 +1,36 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    MinHeight="300" MinWidth="320">
+    <BoxContainer Orientation="Vertical">
+        <!-- Cash display header -->
+        <BoxContainer Orientation="Horizontal" Margin="8 4">
+            <Label Text="{Loc cash-vendor-credit}" StyleClasses="LabelKeyText" />
+            <Label Name="InsertedCashLabel" Access="Public" Text="" StyleClasses="LabelKeyText" HorizontalExpand="True" />
+            <Button Name="ScanIdBtn" Access="Public" Text="{Loc cash-vendor-scan-id}" MinWidth="80" Visible="False" />
+            <Button Name="ReturnChangeBtn" Access="Public" Text="{Loc cash-vendor-return-change}" MinWidth="120" />
+        </BoxContainer>
+        <!-- Department budget row (visible when dept mode active) -->
+        <BoxContainer Name="DeptBudgetRow" Access="Public" Orientation="Horizontal" Margin="8 2" Visible="False">
+            <Label Text="{Loc cash-vendor-department-budget}" StyleClasses="LabelKeyText" />
+            <Label Name="DeptBudgetLabel" Access="Public" Text="" StyleClasses="LabelKeyText" HorizontalExpand="True" />
+        </BoxContainer>
+        <PanelContainer StyleClasses="LowDivider" />
+        <!-- Search bar -->
+        <LineEdit Name="SearchBar" Access="Public" PlaceHolder="{Loc cash-vendor-search-placeholder}" HorizontalExpand="True" Margin="4 4" />
+        <!-- Item list -->
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False" Margin="4 0">
+            <BoxContainer Name="ItemList" Access="Public" Orientation="Vertical" SeparationOverride="2" />
+        </ScrollContainer>
+        <!-- Footer -->
+        <BoxContainer Orientation="Vertical">
+            <PanelContainer StyleClasses="LowDivider" />
+            <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
+                <Label Text="{Loc cash-vendor-footer-hint}" StyleClasses="WindowFooterText" />
+                <Label Name="TaxFooterLabel" Access="Public" Text="{Loc cash-vendor-prices-include-tax}" StyleClasses="WindowFooterText"
+                       HorizontalAlignment="Right" HorizontalExpand="True" Margin="0 0 5 0" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

@@ -648,7 +648,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
     {
         beaker = default;
         solution = default;
-        if (!_itemSlots.TryGetSlot(chemMaster, chemMaster.Comp.BeakerSlot, out slot) ||
+        if (!_itemSlots.TryGetSlot((chemMaster.Owner, null), chemMaster.Comp.BeakerSlot, out slot) ||
             slot.ContainerSlot?.ContainedEntity is not { } contained)
         {
             return false;

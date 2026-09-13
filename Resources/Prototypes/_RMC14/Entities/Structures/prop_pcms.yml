@@ -25,6 +25,7 @@
     state: base
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

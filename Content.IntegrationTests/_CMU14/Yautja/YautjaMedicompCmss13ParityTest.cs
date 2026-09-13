@@ -17,7 +17,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaMedicompCmss13ParityTest
@@ -96,12 +96,14 @@ public sealed class YautjaMedicompCmss13ParityTest
             AssertCrystalPrototypeFacts(
                 clientPrototypes,
                 clientFactory,
+                entMan.System<SharedSolutionContainerSystem>(),
                 "CMUYautjaAutoInjector",
                 reagentId: "thwei",
                 expectedOverlayColor: Color.White);
             AssertCrystalPrototypeFacts(
                 clientPrototypes,
                 clientFactory,
+                entMan.System<SharedSolutionContainerSystem>(),
                 "CMUYautjaThrallAutoInjector",
                 reagentId: "dathwei",
                 expectedOverlayColor: Color.FromHex("#c46b41"));
@@ -148,9 +150,9 @@ public sealed class YautjaMedicompCmss13ParityTest
             {
                 var medicompStorage = entMan.GetComponent<StorageComponent>(medicomp);
 
-                Assert.That(storageSystem.CanInsert(medicomp, herbCase, null, out _, medicompStorage), Is.True,
+                Assert.That(storageSystem.CanInsert(medicomp, herbCase, out _, medicompStorage), Is.True,
                     "CMSS13 medicomp can_hold includes /obj/item/storage/herbal_case.");
-                Assert.That(storageSystem.CanInsert(medicomp, mcasteHerbs, null, out _, medicompStorage), Is.False,
+                Assert.That(storageSystem.CanInsert(medicomp, mcasteHerbs, out _, medicompStorage), Is.False,
                     "CMSS13 medicomp does not admit the sibling military-caste herb container.");
 
                 AssertDiscreteMedicompContents(entMan, entMan.GetComponent<StorageComponent>(filled),
@@ -212,7 +214,7 @@ public sealed class YautjaMedicompCmss13ParityTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.EntMan.ComponentFactory;
             var cache = client.ResolveDependency<IResourceCache>();
-            var rsi = cache.GetResource<RSIResource>(new ResPath("/Textures/_CMU14/Yautja/medical.rsi")).RSI;
+            var rsi = cache.GetResource<RSIResource>(new ResPath("/Textures/CMU14/Yautja/medical.rsi")).RSI;
 
             Assert.That(rsi.Size, Is.EqualTo(new Vector2i(32, 32)));
             Assert.That(rsi.TryGetState("thwei_1", out var thwei), Is.True);
@@ -222,15 +224,15 @@ public sealed class YautjaMedicompCmss13ParityTest
             Assert.That(healingGunOn!.DelayCount, Is.EqualTo(9));
             Assert.That(healingGunOn.GetDelays(), Is.EqualTo(new[] { 19f, 19f, 19f, 19f, 19f, 19f, 19f, 19f, 19f }));
 
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaHealingGel", "/Textures/_CMU14/Yautja/medical.rsi", "healing_gel");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaStabilizerGel", "/Textures/_CMU14/Yautja/medical.rsi", "stabilizer_gel");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaWoundClamp", "/Textures/_CMU14/Yautja/medical.rsi", "wound_clamp");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaHealingGun", "/Textures/_CMU14/Yautja/medical.rsi", "healing_gun");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaAutoInjector", "/Textures/_CMU14/Yautja/medical.rsi", "crystal", "thwei_1");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaThrallAutoInjector", "/Textures/_CMU14/Yautja/medical.rsi", "crystal", "thwei_1");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaAlienHealthAnalyzer", "/Textures/_CMU14/Yautja/medical.rsi", "scanner");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaHerbalCase", "/Textures/_CMU14/Yautja/medical.rsi", "surgical_case", "surgical_case");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaMedicomp", "/Textures/_CMU14/Yautja/yautja_items.rsi", "medicomp", "medicomp", "medicomp_open");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaHealingGel", "/Textures/CMU14/Yautja/medical.rsi", "healing_gel");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaStabilizerGel", "/Textures/CMU14/Yautja/medical.rsi", "stabilizer_gel");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaWoundClamp", "/Textures/CMU14/Yautja/medical.rsi", "wound_clamp");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaHealingGun", "/Textures/CMU14/Yautja/medical.rsi", "healing_gun");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaAutoInjector", "/Textures/CMU14/Yautja/medical.rsi", "crystal", "thwei_1");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaThrallAutoInjector", "/Textures/CMU14/Yautja/medical.rsi", "crystal", "thwei_1");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaAlienHealthAnalyzer", "/Textures/CMU14/Yautja/medical.rsi", "scanner");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaHerbalCase", "/Textures/CMU14/Yautja/medical.rsi", "surgical_case", "surgical_case");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaMedicomp", "/Textures/CMU14/Yautja/yautja_items.rsi", "medicomp", "medicomp", "medicomp_open");
         });
 
         await pair.CleanReturnAsync();
@@ -239,6 +241,7 @@ public sealed class YautjaMedicompCmss13ParityTest
     private static void AssertCrystalPrototypeFacts(
         IPrototypeManager prototypes,
         IComponentFactory factory,
+        SharedSolutionContainerSystem solutionSystem,
         string id,
         string reagentId,
         Color expectedOverlayColor)
@@ -246,20 +249,20 @@ public sealed class YautjaMedicompCmss13ParityTest
         var prototype = prototypes.Index<EntityPrototype>(id);
         Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
         Assert.That(prototype.TryGetComponent<HyposprayComponent>(out var hypospray, factory), Is.True, id);
-        Assert.That(prototype.TryGetComponent<SolutionContainerManagerComponent>(out var solutions, factory), Is.True, id);
+        Assert.That(solutionSystem.TryGetSolution(prototype, "pen", out var pen), Is.True, id);
         Assert.That(prototype.TryGetComponent<SolutionContainerVisualsComponent>(out var visuals, factory), Is.True, id);
         var layers = sprite!.AllLayers.ToArray();
 
         Assert.Multiple(() =>
         {
-            Assert.That(sprite.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_CMU14/Yautja/medical.rsi")), $"{id} scoped RSI");
+            Assert.That(sprite.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/medical.rsi")), $"{id} scoped RSI");
             Assert.That(layers.Select(layer => layer.RsiState.Name).ToArray(), Is.EqualTo(new[] { "crystal", "thwei_1" }), $"{id} CMSS13 crystal states");
             Assert.That(layers[1].Color, Is.EqualTo(expectedOverlayColor), $"{id} source overlay color");
             Assert.That(hypospray!.TransferAmount, Is.EqualTo((FixedPoint2) 30), $"{id} CMSS13 amount_per_transfer_from_this = 30");
-            Assert.That(solutions!.Solutions["pen"].MaxVolume, Is.EqualTo((FixedPoint2) 30), $"{id} CMSS13 volume = 30");
-            Assert.That(solutions.Solutions["pen"].Contents.Count, Is.EqualTo(1), $"{id} contains one source-equivalent reagent");
-            Assert.That(solutions.Solutions["pen"].Contents.First().Reagent.Prototype, Is.EqualTo(reagentId), $"{id} reagent id");
-            Assert.That(solutions.Solutions["pen"].Contents.First().Quantity, Is.EqualTo((FixedPoint2) 30), $"{id} reagent quantity");
+            Assert.That(pen!.MaxVolume, Is.EqualTo((FixedPoint2) 30), $"{id} CMSS13 volume = 30");
+            Assert.That(pen!.Contents.Count, Is.EqualTo(1), $"{id} contains one source-equivalent reagent");
+            Assert.That(pen!.Contents.First().Reagent.Prototype, Is.EqualTo(reagentId), $"{id} reagent id");
+            Assert.That(pen!.Contents.First().Quantity, Is.EqualTo((FixedPoint2) 30), $"{id} reagent quantity");
             Assert.That(visuals!.FillBaseName, Is.EqualTo("thwei_"), $"{id} filled state prefix");
             Assert.That(visuals.EmptySpriteName, Is.Null, $"{id} empty state must hide the fill layer");
         });
@@ -272,7 +275,7 @@ public sealed class YautjaMedicompCmss13ParityTest
         string reagentId)
     {
         var hypospray = entMan.GetComponent<HyposprayComponent>(uid);
-        var solutions = entMan.GetComponent<SolutionContainerManagerComponent>(uid);
+        var solutions = entMan.GetComponent<SolutionManagerComponent>(uid);
 
         Assert.That(hypospray.TransferAmount, Is.EqualTo((FixedPoint2) 30));
         Assert.That(solutionSystem.TryGetSolution((uid, solutions), "pen", out _, out var solution), Is.True);

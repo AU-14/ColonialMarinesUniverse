@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.TacticalMap;
@@ -150,6 +150,10 @@ public sealed partial class RMCPlanetSystem : EntitySystem
 
     public bool TryGetOffset(MapCoordinates coordinates, out Vector2i offset)
     {
+        // All connected planet levels use the surface's targeting coordinate offset.
+        if (TryGetPlanetSurfaceCoordinates(coordinates, out var surfaceCoordinates))
+            coordinates = surfaceCoordinates;
+
         var entCoords = _transform.ToCoordinates(coordinates);
         if (_transform.GetGrid(entCoords) is { } gridId &&
             TryComp(gridId, out RMCPlanetComponent? gridPlanet))

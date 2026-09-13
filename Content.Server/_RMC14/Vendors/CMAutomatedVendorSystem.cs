@@ -1,5 +1,5 @@
 using Content.Shared._RMC14.Vendors;
-using Content.Server._CMU14.Round.Objectives;
+using Content.Server.CMU14.Round.Objectives;
 using Robust.Server.GameObjects;
 
 namespace Content.Server._RMC14.Vendors;

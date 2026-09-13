@@ -1,5 +1,7 @@
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
+using Content.Shared.CMU14.Xenomorphs.Pathogen; // CMU14
+using Content.Shared._RMC14.TacticalMap; // CMU14
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -115,6 +117,21 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
 
         xenos.Sort((a, b) => string.CompareOrdinal(a.Name, b.Name));
 
+        // CMU14: the pathogen hive is anchored on its core, not a queen body.
+        if (HasComp<CMUPathogenHiveMemberComponent>(ent.Owner))
+        {
+            var structures = EntityQueryEnumerator<XenoStructureMapTrackedComponent, HiveMemberComponent, MetaDataComponent>();
+            while (structures.MoveNext(out var uid, out _, out var member, out var metaData))
+            {
+                if (member.Hive != hive.Owner)
+                    continue;
+
+                xenos.Add(new Xeno(GetNetEntity(uid), Name(uid, metaData), metaData.EntityPrototype?.ID));
+            }
+
+            xenos.Sort((a, b) => string.CompareOrdinal(a.Name, b.Name));
+        }
+
         _ui.SetUiState(ent.Owner, XenoWatchUIKey.Key, new XenoWatchBuiState(xenos, hive.Comp.BurrowedLarva));
     }
 
@@ -178,6 +195,9 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
 
     private bool HasQueenPopup(EntityUid xeno)
     {
+        // CMU14: pathogens have no queen; their hive persists through the core
+        if (HasComp<CMUPathogenHiveMemberComponent>(xeno))
+            return true;
 
         if (_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, _hive.GetHive(xeno)))
             return true;

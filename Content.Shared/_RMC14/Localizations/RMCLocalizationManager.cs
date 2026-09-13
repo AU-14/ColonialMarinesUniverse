@@ -27,7 +27,7 @@ public sealed partial class RMCLocalizationManager
 
         var entity0 = args.Args[0].Value;
         if (entity0 is IdentityEntity identity)
-            entity0 = identity;
+            entity0 = identity.Entity;
 
         if (entity0 is EntityUid entity)
         {
@@ -60,7 +60,7 @@ public sealed partial class RMCLocalizationManager
 
         var entity0 = args.Args[0].Value;
         if (entity0 is IdentityEntity identity)
-            entity0 = identity;
+            entity0 = identity.Entity;
 
         if (entity0 is EntityUid entity)
         {
@@ -86,7 +86,8 @@ public sealed partial class RMCLocalizationManager
             return true;
         }
 
-        if (_entity.GetComponent<MetaDataComponent>(entity).EntityPrototype is not {} prototype)
+        if (!_entity.TryGetComponent<MetaDataComponent>(entity, out var metadata) ||
+            metadata.EntityPrototype is not {} prototype)
         {
             value = null;
             return false;

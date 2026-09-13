@@ -16,6 +16,7 @@ using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -44,6 +45,7 @@ namespace Content.Server._RMC14.Xenonids.Construction.ResinHole;
 public sealed partial class XenoResinHoleSystem : SharedXenoResinHoleSystem
 {
     [Dependency] private ISharedAdminLogManager _adminLogs = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
@@ -326,7 +328,8 @@ public sealed partial class XenoResinHoleSystem : SharedXenoResinHoleSystem
         var destroyed = false;
         if (_destructible.TryGetDestroyedAt(resinHole.Owner, out var totalHealth))
         {
-            destroyed = args.Damageable.TotalDamage + args.DamageDelta.GetTotal() > totalHealth;
+            destroyed = _damageable.GetTotalDamage((resinHole.Owner, args.Damageable)) +
+                args.DamageDelta.GetTotal() > totalHealth;
         }
         ActivateTrap(resinHole, destroyed);
     }

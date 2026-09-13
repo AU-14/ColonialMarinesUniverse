@@ -1,5 +1,6 @@
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
 
@@ -7,6 +8,7 @@ namespace Content.Shared._RMC14.Xenonids.Damage;
 
 public sealed partial class RMCDamagePopupSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
 
     public override void Initialize()
@@ -19,7 +21,11 @@ public sealed partial class RMCDamagePopupSystem : EntitySystem
         if (!TryComp(ent, out DamageableComponent? damageable))
             return;
 
-        ShowClientDamagePopup(ent, damageable.TotalDamage, ent.Comp.Type, args.Origin, args.DamageDelta);
+        ShowClientDamagePopup(ent,
+            _damageable.GetTotalDamage((ent, damageable)),
+            ent.Comp.Type,
+            args.Origin,
+            args.DamageDelta);
     }
 
     private void ShowClientDamagePopup(EntityUid target, FixedPoint2 damageTotal, DamagePopupType type, EntityUid? origin, DamageSpecifier? damageDelta)

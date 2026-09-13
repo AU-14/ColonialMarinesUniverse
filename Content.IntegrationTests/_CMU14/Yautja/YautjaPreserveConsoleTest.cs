@@ -4,8 +4,8 @@ using System.Numerics;
 using Content.Client.Popups;
 using Content.Server.Administration.Logs;
 using Content.Server.Power.Components;
-using Content.Server._CMU14.Yautja;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Power;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -21,7 +21,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaPreserveConsoleTest

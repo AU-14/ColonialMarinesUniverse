@@ -1,0 +1,38 @@
+- type: entity
+  id: AU14AbominationSpitProjectile
+  name: spit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Clickable
+  - type: Sprite
+    sprite: _RMC14/Objects/Xeno/xeno_projectiles.rsi
+    layers:
+    - state: xeno_acid_weak
+      shader: unshaded
+  - type: Physics
+    bodyType: Dynamic
+    linearDamping: 0
+    angularDamping: 0
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+        - XenoProjectileImpassable
+  - type: Projectile
+    impactEffect: null
+    soundHit:
+      path: /Audio/_RMC14/Xeno/acid_impact1.ogg
+    damage:
+      types:
+        Heat: 20
+  - type: CMArmorPiercing
+    amount: 10
+  - type: RMCProjectileAccuracy
+    accuracy: 110
+  - type: AbominationProjectile

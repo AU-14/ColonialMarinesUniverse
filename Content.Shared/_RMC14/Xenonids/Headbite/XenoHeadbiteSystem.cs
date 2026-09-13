@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
@@ -103,7 +105,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
 
         if (_mobThresholds.TryGetDeadThreshold(target, out var mobThreshold) && TryComp<DamageableComponent>(target, out var damageable))
         {
-            var lethalAmountOfDamage = mobThreshold.Value - damageable.TotalDamage;
+            var lethalAmountOfDamage = mobThreshold.Value - _damage.GetTotalDamage((target, damageable));
             var type = _prototypeManager.Index<DamageTypePrototype>(LethalDamageType);
             var damage = new DamageSpecifier(type, lethalAmountOfDamage);
             _damage.TryChangeDamage(target, damage, true, origin: xeno);

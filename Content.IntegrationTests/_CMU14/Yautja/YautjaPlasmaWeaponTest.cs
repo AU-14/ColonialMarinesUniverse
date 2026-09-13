@@ -1,20 +1,22 @@
+using Content.Shared.Power.Components;
+using Content.Shared.Trigger.Systems;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Popups;
 using Content.Client.Weapons.Ranged.Systems;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Weapons.Common;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Damage;
-using Content.Shared.Explosion.Components.OnTrigger;
+using Content.Shared.Trigger.Components.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -22,7 +24,8 @@ using Content.Shared.Inventory;
 using Content.Shared.CombatMode;
 using Content.Shared.Projectiles;
 using Content.Shared.Popups;
-using Content.Shared.StatusEffect;
+using Content.Shared.Stunnable;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Temperature;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Vehicle.Components;
@@ -39,12 +42,11 @@ using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaPlasmaWeaponTest
 {
-    private static readonly string[] CasterStunStatuses = ["Stun", "KnockedDown"];
 
     public enum CasterHandRemovalOperation
     {
@@ -224,9 +226,9 @@ public sealed class YautjaPlasmaWeaponTest
                 Assert.That(toggleIncendiary.Handled, Is.True);
 
                 var battery = entMan.GetComponent<BatteryComponent>(pistol);
-                batterySystem.SetCharge(pistol, 4, battery);
+                batterySystem.SetCharge((pistol, battery), 4);
 
-                var ammo = entMan.GetComponent<ProjectileBatteryAmmoProviderComponent>(pistol);
+                var ammo = entMan.GetComponent<BatteryAmmoProviderComponent>(pistol);
                 var coordinates = entMan.GetComponent<TransformComponent>(pistol).Coordinates;
                 var takeAmmo = new TakeAmmoEvent(1, new List<(EntityUid? Entity, IShootable Shootable)>(), coordinates, hunter);
                 entMan.EventBus.RaiseLocalEvent(pistol, takeAmmo);
@@ -237,7 +239,7 @@ public sealed class YautjaPlasmaWeaponTest
                         "CMSS13 plasma pistol incendiary mode sets shot_cost = 5.");
                     Assert.That(takeAmmo.Ammo, Has.Count.EqualTo(1),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/plasmapistol/has_ammunition() returns TRUE when charge_time >= 1 even in incendiary mode.");
-                    Assert.That(battery.CurrentCharge, Is.EqualTo(0),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, battery)), Is.EqualTo(0),
                         "CMSS13 load_into_chamber() subtracts shot_cost after creating the projectile; local battery charge clamps at zero.");
                 });
             }
@@ -275,7 +277,7 @@ public sealed class YautjaPlasmaWeaponTest
             try
             {
                 var rifleBattery = entMan.GetComponent<BatteryComponent>(rifle);
-                batterySystem.SetCharge(rifle, 100, rifleBattery);
+                batterySystem.SetCharge((rifle, rifleBattery), 100);
 
                 var rifleAmmo = new TakeAmmoEvent(
                     1,
@@ -288,17 +290,17 @@ public sealed class YautjaPlasmaWeaponTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(rifleProjectile, Is.Not.Null);
-                    Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(93),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(93),
                         "CMSS13 plasma rifle load_into_chamber() subtracts 7 charge_time before the projectile is fired.");
                 });
 
                 entMan.DeleteEntity(rifleProjectile!.Value);
                 rifleProjectile = null;
 
-                Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(100),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(100),
                     "CMSS13 /plasmarifle/delete_bullet(projectile, refund = TRUE) refunds 7 charge_time for an unfired prepared projectile.");
 
-                batterySystem.SetCharge(rifle, 100, rifleBattery);
+                batterySystem.SetCharge((rifle, rifleBattery), 100);
 
                 var firedRifleAmmo = new TakeAmmoEvent(
                     1,
@@ -317,7 +319,7 @@ public sealed class YautjaPlasmaWeaponTest
                 entMan.DeleteEntity(firedRifleProjectile.Value);
                 firedRifleProjectile = null;
 
-                Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(93),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(93),
                     "CMSS13 only passes refund = TRUE for deleted prepared projectiles; projectiles that were fired keep their spent charge.");
 
                 var toggleIncendiary = new UniqueActionEvent(hunter);
@@ -325,7 +327,7 @@ public sealed class YautjaPlasmaWeaponTest
                 Assert.That(toggleIncendiary.Handled, Is.True);
 
                 var pistolBattery = entMan.GetComponent<BatteryComponent>(pistol);
-                batterySystem.SetCharge(pistol, 40, pistolBattery);
+                batterySystem.SetCharge((pistol, pistolBattery), 40);
 
                 var pistolAmmo = new TakeAmmoEvent(
                     1,
@@ -338,14 +340,14 @@ public sealed class YautjaPlasmaWeaponTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(pistolProjectile, Is.Not.Null);
-                    Assert.That(pistolBattery.CurrentCharge, Is.EqualTo(35),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, pistolBattery)), Is.EqualTo(35),
                         "CMSS13 plasma pistol incendiary mode sets shot_cost = 5 and subtracts it after creating the projectile.");
                 });
 
                 entMan.DeleteEntity(pistolProjectile!.Value);
                 pistolProjectile = null;
 
-                Assert.That(pistolBattery.CurrentCharge, Is.EqualTo(40),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, pistolBattery)), Is.EqualTo(40),
                     "CMSS13 /plasmapistol/delete_bullet(projectile, refund = TRUE) refunds the current shot_cost for an unfired prepared projectile.");
             }
             finally
@@ -392,7 +394,7 @@ public sealed class YautjaPlasmaWeaponTest
                 Assert.That(toggleIncendiary.Handled, Is.True);
 
                 var pistolBattery = entMan.GetComponent<BatteryComponent>(pistol);
-                batterySystem.SetCharge(pistol, 4, pistolBattery);
+                batterySystem.SetCharge((pistol, pistolBattery), 4);
 
                 var pistolAmmo = new TakeAmmoEvent(
                     1,
@@ -405,21 +407,21 @@ public sealed class YautjaPlasmaWeaponTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(pistolProjectile, Is.Not.Null);
-                    Assert.That(pistolBattery.CurrentCharge, Is.EqualTo(0),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, pistolBattery)), Is.EqualTo(0),
                         "CMSS13 plasma pistol subtracts shot_cost after creating the projectile; local battery clamps when less charge was available.");
                 });
 
                 entMan.DeleteEntity(pistolProjectile!.Value);
                 pistolProjectile = null;
 
-                Assert.That(pistolBattery.CurrentCharge, Is.EqualTo(4),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, pistolBattery)), Is.EqualTo(4),
                     "Refunding a locally clamped low-charge shot must restore only the charge that was actually spent, not create extra charge.");
 
                 var carbineFireModes = entMan.GetComponent<BatteryWeaponFireModesComponent>(carbine);
-                Assert.That(fireModeSystem.TrySetFireMode(carbine, carbineFireModes, 1), Is.True);
+                Assert.That(fireModeSystem.TrySetFireMode((carbine, carbineFireModes), 1), Is.True);
 
                 var carbineBattery = entMan.GetComponent<BatteryComponent>(carbine);
-                batterySystem.SetCharge(carbine, 1, carbineBattery);
+                batterySystem.SetCharge((carbine, carbineBattery), 1);
 
                 var carbineAmmo = new TakeAmmoEvent(
                     1,
@@ -432,14 +434,14 @@ public sealed class YautjaPlasmaWeaponTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(carbineProjectile, Is.Not.Null);
-                    Assert.That(carbineBattery.CurrentCharge, Is.EqualTo(0),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, carbineBattery)), Is.EqualTo(0),
                         "CMSS13 plasma carbine impact-explosive mode subtracts shot_cost after creating the projectile; local battery clamps when less charge was available.");
                 });
 
                 entMan.DeleteEntity(carbineProjectile!.Value);
                 carbineProjectile = null;
 
-                Assert.That(carbineBattery.CurrentCharge, Is.EqualTo(1),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, carbineBattery)), Is.EqualTo(1),
                     "Low-charge carbine impact-explosive refund must restore only the single local charge that was actually spent.");
             }
             finally
@@ -480,19 +482,19 @@ public sealed class YautjaPlasmaWeaponTest
                 var rifleBattery = entMan.GetComponent<BatteryComponent>(rifle);
                 var pistolBattery = entMan.GetComponent<BatteryComponent>(pistol);
                 var carbineBattery = entMan.GetComponent<BatteryComponent>(carbine);
-                batterySystem.SetCharge(rifle, 50, rifleBattery);
-                batterySystem.SetCharge(pistol, 20, pistolBattery);
-                batterySystem.SetCharge(carbine, 20, carbineBattery);
+                batterySystem.SetCharge((rifle, rifleBattery), 50);
+                batterySystem.SetCharge((pistol, pistolBattery), 20);
+                batterySystem.SetCharge((carbine, carbineBattery), 20);
 
                 batterySystem.Update(0.5f);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(50),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(50),
                         "CMSS13 plasma rifle process() increments charge_time by one only when the object process runs; half a local second should not create fractional charge.");
-                    Assert.That(pistolBattery.CurrentCharge, Is.EqualTo(20),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, pistolBattery)), Is.EqualTo(20),
                         "CMSS13 plasma pistol process() increments charge_time by one only when the object process runs; half a local second should not create fractional charge.");
-                    Assert.That(carbineBattery.CurrentCharge, Is.EqualTo(20),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, carbineBattery)), Is.EqualTo(20),
                         "CMSS13 plasma carbine process() increments charge_time by one only when the object process runs; half a local second should not create fractional charge.");
                 });
 
@@ -500,11 +502,11 @@ public sealed class YautjaPlasmaWeaponTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(51),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(51),
                         "After one accumulated process tick, the rifle gains exactly one charge_time.");
-                    Assert.That(pistolBattery.CurrentCharge, Is.EqualTo(21),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, pistolBattery)), Is.EqualTo(21),
                         "After one accumulated process tick, the pistol gains exactly one charge_time.");
-                    Assert.That(carbineBattery.CurrentCharge, Is.EqualTo(21),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, carbineBattery)), Is.EqualTo(21),
                         "After one accumulated process tick, the carbine gains exactly one charge_time.");
                 });
 
@@ -512,11 +514,11 @@ public sealed class YautjaPlasmaWeaponTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(53),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(53),
                         "CMSS13 plasma rifle process() cannot gain fractional charge_time from leftover frame time.");
-                    Assert.That(pistolBattery.CurrentCharge, Is.EqualTo(23),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, pistolBattery)), Is.EqualTo(23),
                         "CMSS13 plasma pistol process() cannot gain fractional charge_time from leftover frame time.");
-                    Assert.That(carbineBattery.CurrentCharge, Is.EqualTo(23),
+                    Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, carbineBattery)), Is.EqualTo(23),
                         "CMSS13 plasma carbine process() cannot gain fractional charge_time from leftover frame time.");
                 });
             }
@@ -544,50 +546,76 @@ public sealed class YautjaPlasmaWeaponTest
             var entMan = server.EntMan;
             var batterySystem = entMan.System<BatterySystem>();
             var rifle = entMan.SpawnEntity("CMUYautjaPlasmaRifle", MapCoordinates.Nullspace);
-            var continuousCell = entMan.SpawnEntity("PowerCellMicroreactor", MapCoordinates.Nullspace);
 
             try
             {
                 var rifleBattery = entMan.GetComponent<BatteryComponent>(rifle);
                 var rifleRecharger = entMan.GetComponent<BatterySelfRechargerComponent>(rifle);
-                batterySystem.SetCharge(rifle, 50, rifleBattery);
+                batterySystem.SetCharge((rifle, rifleBattery), 50);
 
                 for (var i = 0; i < 60; i++)
                     batterySystem.Update(1f / 60f);
 
-                Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(51),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(51),
                     "Exactly sixty 1/60-second frames must reach the first one-second recharge boundary.");
 
                 for (var i = 60; i < 300; i++)
                     batterySystem.Update(1f / 60f);
 
-                Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(55),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(55),
                     "Five seconds split into 300 frames must produce all five whole recharge intervals.");
 
-                batterySystem.SetCharge(rifle, 50, rifleBattery);
+                batterySystem.SetCharge((rifle, rifleBattery), 50);
                 rifleRecharger.AutoRechargeAccumulatorSeconds = default;
 
                 for (var i = 0; i < 100; i++)
                     batterySystem.Update(0.01f);
 
-                Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(51),
+                Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(51),
                     "One hundred 0.01-second frames must reach the same one-second boundary without float drift.");
 
-                var continuousBattery = entMan.GetComponent<BatteryComponent>(continuousCell);
-                batterySystem.SetCharge(continuousCell, 50, continuousBattery);
-                batterySystem.Update(0.25f);
 
-                Assert.That(continuousBattery.CurrentCharge, Is.EqualTo(53),
-                    "BatterySelfRecharger entities without an interval must retain continuous recharge behavior.");
             }
             finally
             {
-                foreach (var uid in new[] { rifle, continuousCell })
+                foreach (var uid in new[] { rifle })
                 {
                     if (!entMan.Deleted(uid))
                         entMan.DeleteEntity(uid);
                 }
             }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ContinuousBatteryRechargeUsesElapsedSimulationTime()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var timing = server.ResolveDependency<IGameTiming>();
+        EntityUid cell = default;
+        TimeSpan start = default;
+
+        await server.WaitAssertion(() =>
+        {
+            cell = server.EntMan.SpawnEntity("PowerCellMicroreactor", MapCoordinates.Nullspace);
+            server.System<BatterySystem>().SetCharge(cell, 50);
+            start = timing.CurTime;
+        });
+
+        await server.WaitRunTicks(15);
+
+        await server.WaitAssertion(() =>
+        {
+            var rate = server.EntMan.GetComponent<BatterySelfRechargerComponent>(cell).AutoRechargeRate;
+            var elapsed = (float) (timing.CurTime - start).TotalSeconds;
+            Assert.That(elapsed, Is.GreaterThan(0));
+            Assert.That(server.System<BatterySystem>().GetCharge(cell),
+                Is.EqualTo(50 + rate * elapsed).Within(0.001f),
+                "Non-interval batteries use the current predicted charge model.");
+            server.EntMan.DeleteEntity(cell);
         });
 
         await pair.CleanReturnAsync();
@@ -806,8 +834,8 @@ public sealed class YautjaPlasmaWeaponTest
 
                 Assert.That(entMan.GetComponent<CombatModeComponent>(clientHunter).IsInCombatMode, Is.True);
                 Assert.That(entMan.HasComponent<YautjaComponent>(clientHunter), Is.True);
-                Assert.That(gunSystem.TryGetGun(clientHunter, out var activeGun, out _), Is.True);
-                Assert.That(activeGun, Is.EqualTo(clientCaster));
+                Assert.That(gunSystem.TryGetGun(clientHunter, out var activeGun), Is.True);
+                Assert.That(activeGun.Owner, Is.EqualTo(clientCaster));
                 Assert.That(timing.IsFirstTimePredicted, Is.True);
 
                 loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
@@ -1266,7 +1294,6 @@ public sealed class YautjaPlasmaWeaponTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectQuerySystem>();
             var shooter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
             var projectile = entMan.SpawnEntity("CMUYautjaCasterStunBolt", map.GridCoords);
             var human = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
@@ -1277,19 +1304,19 @@ public sealed class YautjaPlasmaWeaponTest
             try
             {
                 RaiseProjectileHit(entMan, projectile, human, shooter);
-                AssertCasterStun(status, human, TimeSpan.FromSeconds(4),
+                AssertCasterStun(entMan, human, TimeSpan.FromSeconds(4),
                     "CMSS13 caster single_stun adds one second to stun_time for humans.");
 
                 RaiseProjectileHit(entMan, projectile, xeno, shooter);
-                AssertCasterStun(status, xeno, TimeSpan.FromSeconds(3),
-                    "CMSS13 caster single_stun uses its base stun_time for non-Yautja, non-predalien carbon targets.");
+                AssertCasterStun(entMan, xeno, TimeSpan.FromSeconds(3 * 0.667),
+                    "The caster's three-second base stun respects RMC's 0.667 xeno duration multiplier.");
 
                 RaiseProjectileHit(entMan, projectile, yautja, shooter);
-                AssertNoCasterStun(status, yautja,
+                AssertNoCasterStun(entMan, yautja,
                     "CMSS13 caster single_stun returns early for Yautja targets.");
 
                 RaiseProjectileHit(entMan, projectile, predalien, shooter);
-                AssertNoCasterStun(status, predalien,
+                AssertNoCasterStun(entMan, predalien,
                     "CMSS13 caster single_stun returns early for predalien targets.");
             }
             finally
@@ -1315,7 +1342,6 @@ public sealed class YautjaPlasmaWeaponTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectQuerySystem>();
             var shooter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
             var projectile = entMan.SpawnEntity("CMUYautjaCasterImmobilizerBolt", map.GridCoords);
             var hitObject = entMan.SpawnEntity("CMTable", map.GridCoords);
@@ -1329,29 +1355,28 @@ public sealed class YautjaPlasmaWeaponTest
             {
                 RaiseProjectileHit(entMan, projectile, hitObject, shooter);
 
-                AssertCasterStun(status, human, TimeSpan.FromSeconds(6),
+                AssertCasterStun(entMan, human, TimeSpan.FromSeconds(6),
                     "CMSS13 plasma immobilizer area stun uses stun_time = 6 for normal carbon targets.");
-                AssertCasterStun(status, xeno, TimeSpan.FromSeconds(6),
-                    "CMSS13 plasma immobilizer includes non-predalien xenos in orange(stun_range, projectile).");
-                AssertCasterStun(status, yautja, TimeSpan.FromSeconds(4),
-                    "CMSS13 plasma immobilizer reduces Yautja stun_time by two seconds instead of making them immune.");
-                AssertNoCasterStun(status, predalien,
+                AssertCasterStun(entMan, xeno, TimeSpan.FromSeconds(6 * 0.667),
+                    "The immobilizer's six-second area stun respects RMC's 0.667 xeno duration multiplier.");
+                AssertNoCasterStun(entMan, yautja,
+                    "The current master's regular hunter immunity also rejects immobilizer stun.");
+                AssertNoCasterStun(entMan, predalien,
                     "CMSS13 plasma immobilizer skips predalien targets.");
-                AssertNoCasterStun(status, outsideRange,
+                AssertNoCasterStun(entMan, outsideRange,
                     "CMSS13 plasma immobilizer only affects targets inside stun_range = 7.");
 
-                ClearCasterStun(status, human);
-                ClearCasterStun(status, xeno);
-                ClearCasterStun(status, yautja);
+                ClearCasterStun(entMan, human);
+                ClearCasterStun(entMan, xeno);
 
                 var maxRange = new ProjectileFixedDistanceStopEvent();
                 entMan.EventBus.RaiseLocalEvent(projectile, ref maxRange);
 
-                AssertCasterStun(status, human, TimeSpan.FromSeconds(6),
+                AssertCasterStun(entMan, human, TimeSpan.FromSeconds(6),
                     "CMSS13 plasma immobilizer do_at_max_range() runs the same area stun as direct impact.");
-                AssertCasterStun(status, yautja, TimeSpan.FromSeconds(4),
-                    "CMSS13 max-range immobilizer area stun keeps the same Yautja duration reduction.");
-                AssertNoCasterStun(status, predalien,
+                AssertNoCasterStun(entMan, yautja,
+                    "Max-range immobilizer stun respects the same regular hunter immunity.");
+                AssertNoCasterStun(entMan, predalien,
                     "CMSS13 max-range immobilizer area stun still skips predaliens.");
             }
             finally
@@ -1492,31 +1517,46 @@ public sealed class YautjaPlasmaWeaponTest
     }
 
     private static void AssertCasterStun(
-        StatusEffectQuerySystem status,
+        IEntityManager entMan,
         EntityUid target,
         TimeSpan expectedDuration,
-        string source)
+        string source,
+        bool expectKnockdown = true)
     {
-        foreach (var key in CasterStunStatuses)
+        var status = entMan.System<StatusEffectsSystem>();
+        Assert.That(status.TryGetTime(target, SharedStunSystem.StunId, out var stun), Is.True, source);
+        Assert.That(stun.EndEffectTime - stun.StartEffectTime, Is.EqualTo(expectedDuration).Within(TimeSpan.FromMilliseconds(1)), $"{source} Stun duration.");
+        Assert.That(entMan.HasComponent<StunnedComponent>(target), Is.True, source);
+        Assert.That(entMan.HasComponent<KnockedDownComponent>(target), Is.EqualTo(expectKnockdown), source);
+
+        if (!expectKnockdown)
         {
-            Assert.That(status.TryGetTime(target, key, out var time), Is.True, $"{source} Missing {key}.");
-            Assert.That(time!.Value.Item2 - time.Value.Item1, Is.EqualTo(expectedDuration), $"{source} {key} duration.");
+            Assert.That(status.HasStatusEffect(target, SharedStunSystem.ParalyzeId), Is.False, source);
+            return;
+        }
+
+        if (entMan.HasComponent<CrawlerComponent>(target))
+        {
+            var knockedDown = entMan.GetComponent<KnockedDownComponent>(target);
+            Assert.That(knockedDown.NextUpdate - stun.StartEffectTime, Is.EqualTo(expectedDuration), $"{source} Knockdown duration.");
+        }
+        else
+        {
+            Assert.That(status.TryGetTime(target, SharedStunSystem.ParalyzeId, out var paralyze), Is.True, source);
+            Assert.That(paralyze.EndEffectTime - paralyze.StartEffectTime, Is.EqualTo(expectedDuration), $"{source} Paralysis duration.");
         }
     }
 
-    private static void AssertNoCasterStun(StatusEffectQuerySystem status, EntityUid target, string source)
+    private static void AssertNoCasterStun(IEntityManager entMan, EntityUid target, string source)
     {
-        foreach (var key in CasterStunStatuses)
-        {
-            Assert.That(status.TryGetTime(target, key, out _), Is.False, $"{source} Unexpected {key}.");
-        }
+        var status = entMan.System<StatusEffectsSystem>();
+        Assert.That(status.HasStatusEffect(target, SharedStunSystem.StunId), Is.False, source);
+        Assert.That(status.HasStatusEffect(target, SharedStunSystem.ParalyzeId), Is.False, source);
+        Assert.That(entMan.HasComponent<KnockedDownComponent>(target), Is.False, source);
     }
 
-    private static void ClearCasterStun(StatusEffectQuerySystem status, EntityUid target)
+    private static void ClearCasterStun(IEntityManager entMan, EntityUid target)
     {
-        foreach (var key in CasterStunStatuses)
-        {
-            status.TryRemoveStatusEffect(target, key);
-        }
+        entMan.System<SharedStunSystem>().TryClearStunAndKnockdown(target);
     }
 }

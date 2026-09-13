@@ -6,7 +6,7 @@ using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Random;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
@@ -476,7 +476,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
             _gun.ShootProjectile(projectile, diff, Vector2.Zero, xeno, xeno, speed);
             _zLevelShooting.ApplyProjectileVisualOffset(projectile, projectileVisualOffset);
 
-            var ev = new ProjectileShotEvent(xeno, predicted);
+            var ev = new Content.Shared._RMC14.Projectiles.ProjectileShotEvent(xeno, predicted);
             RaiseLocalEvent(projectile, ref ev);
 
             ammoShotEvent.FiredProjectiles.Add(projectile);

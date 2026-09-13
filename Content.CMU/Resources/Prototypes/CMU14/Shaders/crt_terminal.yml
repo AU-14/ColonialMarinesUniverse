@@ -1,0 +1,21 @@
+- type: shader
+  id: CMUCrtTerminal
+  kind: source
+  path: "/Textures/Shaders/_CMU14/crt_terminal.swsl"
+  params:
+    pitch: 3.0
+    intensity: 1.0
+    staticAmount: 0.35
+    rollPeriod: 19.0
+    rollSweep: 2.1
+    rollHeight: 0.045
+    rollDisplace: 0.053
+    rollLift: 0.08
+    # 0 = off. Every existing surface keeps the roll bar and nothing else until it opts in.
+    artifactAmount: 0.0
+    artifactPeriod: 11.0
+    artifactSweep: 0.5
+    artifactMode: 0.0
+    curvature: 0.05
+    vignette: 0.35
+    aspect: 1.0

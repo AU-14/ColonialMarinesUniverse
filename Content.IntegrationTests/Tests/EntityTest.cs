@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
+using Content.Shared.CMU14.DroneOperator;
 using Robust.Shared;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.Configuration;
@@ -11,15 +14,42 @@ using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager.Attributes;
+using Robust.Shared.Spawners;
 
 namespace Content.IntegrationTests.Tests
 {
     [TestFixture]
     [TestOf(typeof(EntityUid))]
-    [NonParallelizable] // RMC14: We have some many entities that this causes a OOM.
-    public sealed class EntityTest
+    [NonParallelizable] // RMC14: The fork's prototype count makes these bulk-spawn tests prone to OOMs.
+    public sealed class EntityTest : GameTest
     {
-        private static readonly ProtoId<EntityCategoryPrototype> SpawnerCategory = "Spawner";
+        private static readonly HashSet<ProtoId<EntityCategoryPrototype>> IgnoredCategories = ["Spawner", "Debug"];
+
+        private static readonly string[] BulkSpawnExcludedComponents =
+        [
+            "ConditionalSpawner",
+            "RandomSpawner",
+            "EntityTableSpawner",
+            "GameRule",
+            "StationData",
+            "GhostRole",
+            "GhostRoleApplySpecial",
+            "HiveKingCocoon",
+            "HivePylon",
+            "CMUObjective",
+            "CMUObjectiveMaster"
+        ];
+
+        private static readonly string[] ConnectedBulkSpawnExcludedComponents =
+        [
+            "SpawnOnMapInit",
+            "SpawnOnTerminate",
+            "GridSpawner",
+            "CorpseSpawner",
+            "HumanoidAppearance",
+            "StorageFill",
+            "EntityTableContainerFill"
+        ];
 
         private static IEnumerable<(EntityUid, TComp)> Query<TComp>(IEntityManager entityMan)
             where TComp : Component
@@ -35,34 +65,45 @@ namespace Content.IntegrationTests.Tests
         {
             for (var pass = 0; pass < maxPasses; pass++)
             {
-                var entityMetas = Query<MetaDataComponent>(entityMan)
+                var entities = Query<MetaDataComponent>(entityMan)
                     .Where(tuple => !tuple.Item2.EntityDeleted)
                     .ToList();
 
-                if (entityMetas.Count == 0)
+                if (entities.Count == 0)
                     return;
 
-                foreach (var (uid, _) in entityMetas)
+                foreach (var (uid, _) in entities)
                 {
                     entityMan.DeleteEntity(uid);
                 }
             }
         }
 
+        public override PoolSettings PoolSettings => new()
+        {
+            Connected = true,
+            Dirty = true
+        };
+
+        public static PoolSettings Disconnected => new()
+        {
+            Dirty = true,
+        };
+
         [Test]
+        [PairConfig(nameof(Disconnected))]
         public async Task SpawnAndDeleteAllEntitiesOnDifferentMaps()
         {
             // This test dirties the pair as it simply deletes ALL entities when done. Overhead of restarting the round
             // is minimal relative to the rest of the test.
-            var settings = new PoolSettings { Dirty = true };
-            await using var pair = await PoolManager.GetServerClient(settings);
+            var pair = Pair;
             var server = pair.Server;
 
             var entityMan = server.ResolveDependency<IEntityManager>();
             var prototypeMan = server.ResolveDependency<IPrototypeManager>();
             var mapSystem = entityMan.System<SharedMapSystem>();
 
-            List<string> protoIds = null;
+            List<string> protoIds = null!;
             await server.WaitPost(() =>
             {
                 protoIds = prototypeMan
@@ -71,71 +112,46 @@ namespace Content.IntegrationTests.Tests
                     .Where(p => !pair.IsTestPrototype(p))
                     .Where(p => !p.Components.ContainsKey("MapGrid")) // This will smash stuff otherwise.
                     .Where(p => !p.Components.ContainsKey("RoomFill")) // This comp can delete all entities, and spawn others
-                    .Where(p => !p.Components.ContainsKey("ConditionalSpawner")) // Spawns arbitrary prototypes as a side effect.
-                    .Where(p => !p.Components.ContainsKey("RandomSpawner")) // Spawns arbitrary prototypes as a side effect.
-                    .Where(p => !p.Components.ContainsKey("EntityTableSpawner")) // Spawns arbitrary prototypes as a side effect.
-                    .Where(p => !p.Components.ContainsKey("GameRule")) // Starts global game-rule side effects.
-                    .Where(p => !p.Components.ContainsKey("StationData")) // Sets up global station state when spawned directly.
-                    .Where(p => !p.Components.ContainsKey("GhostRole")) // Ghost role entities can spawn squads/loadouts as side effects.
-                    .Where(p => !p.Components.ContainsKey("GhostRoleApplySpecial")) // Spawns special-role setup on direct entity spawn.
-                    .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
-                    .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
-                    .Where(p => !p.Components.ContainsKey("CMUObjective")) // Starts objective state when spawned directly.
-                    .Where(p => !p.Components.ContainsKey("CMUObjectiveMaster")) // Activates unrelated objectives as a side effect.
-                    .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
+                    .Where(p => !BulkSpawnExcludedComponents.Any(p.Components.ContainsKey))
+                    .Where(p => p.Categories.All(x => !IgnoredCategories.Contains(x.ID)))
                     .Select(p => p.ID)
                     .ToList();
             });
 
-            for (var i = 0; i < protoIds.Count; i += 100)
+            const int chunkSize = 100;
+            for (var i = 0; i < protoIds.Count; i += chunkSize)
             {
-                var max = i + 100;
-                if (max >= protoIds.Count)
-                    max = protoIds.Count;
-
-                var chunk = protoIds[i..max];
+                var chunk = protoIds.GetRange(i, Math.Min(chunkSize, protoIds.Count - i));
                 await server.WaitPost(() =>
                 {
-                    foreach (var spawn in chunk)
+                    foreach (var protoId in chunk)
                     {
                         mapSystem.CreateMap(out var mapId);
                         var grid = mapSystem.CreateGridEntity(mapId);
                         // TODO: Fix this better in engine.
                         mapSystem.SetTile(grid.Owner, grid.Comp, Vector2i.Zero, new Tile(1));
-                        var coord = new EntityCoordinates(grid.Owner, 0, 0);
-                        entityMan.SpawnEntity(spawn, coord);
+                        entityMan.SpawnEntity(protoId, new EntityCoordinates(grid.Owner, 0, 0));
                     }
                 });
 
                 await server.WaitPost(() =>
                 {
                     DeleteAllEntities(entityMan);
-
-                    Assert.Multiple(() =>
-                    {
-                        foreach (var (uid, meta) in Query<MetaDataComponent>(entityMan))
-                        {
-                            Assert.Fail($"Failed to delete {meta.EntityPrototype}, NAME: {meta.EntityName}");
-                        }
-
-                        Assert.That(entityMan.EntityCount, Is.Zero, $"One of these prototypes is to blame: {string.Join(",", chunk)}");
-                    });
+                    Assert.That(entityMan.EntityCount, Is.Zero,
+                        $"One of these prototypes is to blame: {string.Join(",", chunk)}");
                 });
 
                 GC.Collect();
             }
-
-            await pair.CleanReturnAsync();
         }
 
         [Test]
+        [PairConfig(nameof(Disconnected))]
         [Ignore("RMC14: meteor breakage can trip a container remove destination assert.")]
         public async Task SpawnAndDeleteAllEntitiesInTheSameSpot()
         {
-            // This test dirties the pair as it simply deletes ALL entities when done. Overhead of restarting the round
-            // is minimal relative to the rest of the test.
-            var settings = new PoolSettings { Dirty = true };
-            await using var pair = await PoolManager.GetServerClient(settings);
+            var pair = Pair;
+            Assert.That(pair.Client.Session, Is.Null);
             var server = pair.Server;
             var map = await pair.CreateTestMap();
 
@@ -158,7 +174,7 @@ namespace Content.IntegrationTests.Tests
                     entityMan.SpawnEntity(protoId, map.GridCoords);
                 }
             });
-            await server.WaitRunTicks(15);
+            await server.WaitRunTicks(450); // 15 seconds, enough to trigger most update loops
             await server.WaitPost(() =>
             {
                 static IEnumerable<(EntityUid, TComp)> Query<TComp>(IEntityManager entityMan)
@@ -180,8 +196,6 @@ namespace Content.IntegrationTests.Tests
 
                 Assert.That(entityMan.EntityCount, Is.Zero);
             });
-
-            await pair.CleanReturnAsync();
         }
 
         /// <summary>
@@ -191,17 +205,13 @@ namespace Content.IntegrationTests.Tests
         [Test]
         public async Task SpawnAndDirtyAllEntities()
         {
-            // This test dirties the pair as it simply deletes ALL entities when done. Overhead of restarting the round
-            // is minimal relative to the rest of the test.
-            var settings = new PoolSettings { Connected = true, Dirty = true };
-            await using var pair = await PoolManager.GetServerClient(settings);
+            var pair = Pair;
             var server = pair.Server;
-            var client = pair.Client;
 
             var cfg = server.ResolveDependency<IConfigurationManager>();
             var prototypeMan = server.ResolveDependency<IPrototypeManager>();
-            var sEntMan = server.ResolveDependency<IEntityManager>();
-            var mapSys = server.System<SharedMapSystem>();
+            var entityMan = server.ResolveDependency<IEntityManager>();
+            var mapSystem = server.System<SharedMapSystem>();
 
             Assert.That(cfg.GetCVar(CVars.NetPVS), Is.False);
 
@@ -211,48 +221,28 @@ namespace Content.IntegrationTests.Tests
                 .Where(p => !pair.IsTestPrototype(p))
                 .Where(p => !p.Components.ContainsKey("MapGrid")) // This will smash stuff otherwise.
                 .Where(p => !p.Components.ContainsKey("RoomFill")) // This comp can delete all entities, and spawn others
-                .Where(p => !p.Components.ContainsKey("ConditionalSpawner")) // Spawns arbitrary prototypes as a side effect.
-                .Where(p => !p.Components.ContainsKey("RandomSpawner")) // Spawns arbitrary prototypes as a side effect.
-                .Where(p => !p.Components.ContainsKey("EntityTableSpawner")) // Spawns arbitrary prototypes as a side effect.
-                .Where(p => !p.Components.ContainsKey("GameRule")) // Starts global game-rule side effects.
-                .Where(p => !p.Components.ContainsKey("StationData")) // Sets up global station state when spawned directly.
-                .Where(p => !p.Components.ContainsKey("SpawnOnMapInit")) // Spawns arbitrary prototypes as a side effect.
-                .Where(p => !p.Components.ContainsKey("SpawnOnTerminate")) // Spawns arbitrary prototypes as a side effect.
-                .Where(p => !p.Components.ContainsKey("GridSpawner")) // Spawns grids as a side effect.
-                .Where(p => !p.Components.ContainsKey("CorpseSpawner")) // Spawns arbitrary prototypes as a side effect.
-                .Where(p => !p.Components.ContainsKey("GhostRole")) // Ghost role entities can spawn squads/loadouts as side effects.
-                .Where(p => !p.Components.ContainsKey("GhostRoleApplySpecial")) // Spawns special-role setup on direct entity spawn.
-                .Where(p => !p.Components.ContainsKey("HumanoidAppearance")) // Humanoid body children trip connected-client cleanup when spawned directly.
-                .Where(p => !p.Components.ContainsKey("StorageFill")) // Filled containers create child entities that trip connected-client cleanup.
-                .Where(p => !p.Components.ContainsKey("EntityTableContainerFill")) // Filled containers create child entities that trip connected-client cleanup.
-                .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
-                .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
-                .Where(p => !p.Components.ContainsKey("CMUObjective")) // Starts objective state when spawned directly.
-                .Where(p => !p.Components.ContainsKey("CMUObjectiveMaster")) // Activates unrelated objectives as a side effect.
-                .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
+                .Where(p => !BulkSpawnExcludedComponents.Any(p.Components.ContainsKey))
+                .Where(p => !ConnectedBulkSpawnExcludedComponents.Any(p.Components.ContainsKey))
+                .Where(p => p.Categories.All(x => !IgnoredCategories.Contains(x.ID)))
                 .Select(p => p.ID)
                 .ToList();
 
             const int chunkSize = 100;
             for (var i = 0; i < protoIds.Count; i += chunkSize)
             {
-                var max = i + chunkSize;
-                if (max >= protoIds.Count)
-                    max = protoIds.Count;
-                var chunk = protoIds[i..max];
-
+                var chunk = protoIds.GetRange(i, Math.Min(chunkSize, protoIds.Count - i));
                 await server.WaitPost(() =>
                 {
                     foreach (var protoId in chunk)
                     {
-                        mapSys.CreateMap(out var mapId);
-                        var grid = mapSys.CreateGridEntity(mapId);
+                        mapSystem.CreateMap(out var mapId);
+                        var grid = mapSystem.CreateGridEntity(mapId);
                         // TODO: Fix this better in engine.
-                        mapSys.SetTile(grid.Owner, grid.Comp, Vector2i.Zero, new Tile(1));
-                        var ent = sEntMan.SpawnEntity(protoId, new EntityCoordinates(grid.Owner, 0.5f, 0.5f));
-                        foreach (var (_, component) in sEntMan.GetNetComponents(ent))
+                        mapSystem.SetTile(grid.Owner, grid.Comp, Vector2i.Zero, new Tile(1));
+                        var ent = entityMan.SpawnEntity(protoId, new EntityCoordinates(grid.Owner, 0.5f, 0.5f));
+                        foreach (var (_, component) in entityMan.GetNetComponents(ent))
                         {
-                            sEntMan.Dirty(ent, component);
+                            entityMan.Dirty(ent, component);
                         }
                     }
                 });
@@ -261,23 +251,13 @@ namespace Content.IntegrationTests.Tests
 
                 await server.WaitPost(() =>
                 {
-                    DeleteAllEntities(sEntMan);
-
-                    Assert.Multiple(() =>
-                    {
-                        foreach (var (uid, meta) in Query<MetaDataComponent>(sEntMan))
-                        {
-                            Assert.Fail($"Failed to delete {meta.EntityPrototype}, NAME: {meta.EntityName}");
-                        }
-
-                        Assert.That(sEntMan.EntityCount, Is.Zero, $"One of these prototypes is to blame: {string.Join(",", chunk)}");
-                    });
+                    DeleteAllEntities(entityMan);
+                    Assert.That(entityMan.EntityCount, Is.Zero,
+                        $"One of these prototypes is to blame: {string.Join(",", chunk)}");
                 });
 
                 GC.Collect();
             }
-
-            await pair.CleanReturnAsync();
         }
 
         /// <summary>
@@ -293,27 +273,25 @@ namespace Content.IntegrationTests.Tests
         ///
         /// Note that this isn't really a strict requirement, and there are probably quite a few edge cases. Its a pretty
         /// crude test to try catch issues like this, and possibly should just be disabled.
-        /// Vehicles should be added to the growing list of exclusions, if we intend to keep this enabled.
         /// </remarks>
         [Test]
         public async Task SpawnAndDeleteEntityCountTest()
         {
-            var settings = new PoolSettings { Connected = true, Dirty = true };
-            await using var pair = await PoolManager.GetServerClient(settings);
+            var pair = Pair;
             var mapSys = pair.Server.System<SharedMapSystem>();
             var server = pair.Server;
             var client = pair.Client;
 
-            var excluded = new[] // supports Components and Prototypes
+            var excluded = new[]
             {
                 "MapGrid",
                 "GameRule",
                 "StationEvent",
                 "StationData",
                 "TimedDespawn",
-                "AnnounceOnSpawn", // makes an announcement on mapInit.
-                "HiveCore", // Spreads weeds
-                "RequisitionsComputer", // Creates requisitions account
+                "AnnounceOnSpawn", // Makes an announcement on map init.
+                "HiveCore",
+                "RequisitionsComputer",
                 "EvenSmoke",
                 "SpawnOnTerminate",
                 "DropshipFabricator",
@@ -323,32 +301,29 @@ namespace Content.IntegrationTests.Tests
                 "HumanoidAppearance",
                 "StorageFill",
                 "EntityTableContainerFill",
+                "Loadout", // Starting gear can deliberately drop loose items, such as a corpse's held equipment.
                 "GhostRole",
                 "GhostRoleApplySpecial",
                 "CMUObjective",
                 "CMUObjectiveMaster",
-                // RMC14
                 "ActivateDropshipWeaponOnSpawn",
                 "AmbientSound",
                 "HiveKingCocoon",
                 "TriggerOnSpawn",
-                // RMC14
-                // CMU14
-                "AU14CrateCASNapalm", // StorageFill leaves its large dropship ammo detached from the crate in this generic test.
-                "VehicleLTBCannonImpact", // Shrapnel lingers longer than test case
-                "VehicleTankRocketLauncher", // Smoke lingers (failed to delete itself)
+                "AU14CrateCASNapalm",
+                "VehicleLTBCannonImpact",
+                "VehicleTankRocketLauncher",
                 "VehicleProjectileDragonFlame",
                 "VehicleProjectileDragonFlameShard",
                 "VehicleTankFlamerImpact",
                 "VehicleProjectileTankFlamer",
-                "VehicleDragonFlameImpact", // Flames linger
+                "VehicleDragonFlameImpact",
                 "VehiclePizzaVan",
                 "VehiclePizzaVanBack1",
                 "VehiclePizzaVanBack3",
                 "VehiclePizzaVanBackground1",
-                "VehicleHumveeMedicalBackDoor1", // Backdoor not cleaned up
+                "VehicleHumveeMedicalBackDoor1",
                 "VehiclePeekAnchor",
-                // CMU14
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);
@@ -357,10 +332,9 @@ namespace Content.IntegrationTests.Tests
                 .EnumeratePrototypes<EntityPrototype>()
                 .Where(p => !p.Abstract)
                 .Where(p => !pair.IsTestPrototype(p))
-                // .Where(p => !excluded.Contains(p.Components.ContainsKey))
-                .Where(p => !excluded.Any(c => p.Components.ContainsKey(c))) // components excluded
-                .Where(p => !excluded.Contains(p.ID)) // prototypes excluded from cleanup test
-                .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
+                .Where(p => !excluded.Any(p.Components.ContainsKey))
+                .Where(p => !excluded.Contains(p.ID))
+                .Where(p => p.Categories.All(x => !IgnoredCategories.Contains(x.ID)))
                 .Select(p => p.ID)
                 .ToList();
 
@@ -377,7 +351,7 @@ namespace Content.IntegrationTests.Tests
             await pair.RunTicksSync(3);
 
             // We consider only non-audio entities, as some entities will just play sounds when they spawn.
-            int Count(IEntityManager ent) =>  ent.EntityCount - ent.Count<AudioComponent>();
+            int Count(IEntityManager ent) => ent.EntityCount - ent.Count<AudioComponent>();
             IEnumerable<EntityUid> Entities(IEntityManager entMan) => entMan.GetEntities().Where(e => !entMan.HasComponent<AudioComponent>(e));
 
             await Assert.MultipleAsync(async () =>
@@ -389,12 +363,20 @@ namespace Content.IntegrationTests.Tests
                     var serverEntities = new HashSet<EntityUid>(Entities(server.EntMan));
                     var clientEntities = new HashSet<EntityUid>(Entities(client.EntMan));
                     EntityUid uid = default;
-                    await server.WaitPost(() => uid = server.EntMan.SpawnEntity(protoId, coords));
+                    EntProtoId? ruinedCore = null;
+                    await server.WaitPost(() =>
+                    {
+                        uid = server.EntMan.SpawnEntity(protoId, coords);
+                        if (server.EntMan.TryGetComponent<CMUDroneAndroidComponent>(uid, out var drone))
+                            ruinedCore = drone.RuinedCorePrototype;
+                    });
                     await pair.RunTicksSync(3);
 
                     // If the entity deleted itself, check that it didn't spawn other entities
                     if (!server.EntMan.EntityExists(uid))
                     {
+                        await CleanupTransientEntities(pair, serverEntities);
+
                         Assert.That(Count(server.EntMan), Is.EqualTo(count), $"Server prototype {protoId} failed on deleting itself\n" +
                             BuildDiffString(serverEntities, Entities(server.EntMan), server.EntMan));
                         Assert.That(Count(client.EntMan), Is.EqualTo(clientCount), $"Client prototype {protoId} failed on deleting itself\n" +
@@ -414,6 +396,9 @@ namespace Content.IntegrationTests.Tests
 
                     await server.WaitPost(() => server.EntMan.DeleteEntity(uid));
                     await pair.RunTicksSync(3);
+                    if (ruinedCore is { } corePrototype)
+                        await DeleteExpectedDroneCore(pair, corePrototype, serverEntities, clientEntities);
+                    await CleanupTransientEntities(pair, serverEntities);
 
                     // Check that the number of entities has gone back to the original value.
                     Assert.That(Count(server.EntMan), Is.EqualTo(count), $"Server prototype {protoId} failed on deletion: count didn't reset properly\n" +
@@ -424,8 +409,62 @@ namespace Content.IntegrationTests.Tests
                         BuildDiffString(clientEntities, Entities(client.EntMan), client.EntMan));
                 }
             });
+        }
 
-            await pair.CleanReturnAsync();
+        private static async Task DeleteExpectedDroneCore(
+            Pair.TestPair pair,
+            EntProtoId prototype,
+            HashSet<EntityUid> serverBaseline,
+            HashSet<EntityUid> clientBaseline)
+        {
+            EntityUid[] cores = [];
+            await pair.Server.WaitAssertion(() =>
+            {
+                var entities = pair.Server.EntMan;
+                cores = entities.GetEntities().Where(uid => !serverBaseline.Contains(uid) &&
+                    entities.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == prototype.Id).ToArray();
+                Assert.That(cores, Has.Length.EqualTo(1), "a deleted drone must leave exactly one ruined core");
+            });
+            await pair.Client.WaitAssertion(() =>
+            {
+                var entities = pair.Client.EntMan;
+                Assert.That(entities.GetEntities().Count(uid => !clientBaseline.Contains(uid) &&
+                    entities.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == prototype.Id), Is.EqualTo(1),
+                    "the ruined core must replicate before cleanup");
+            });
+            await pair.Server.WaitPost(() =>
+            {
+                foreach (var core in cores)
+                    pair.Server.EntMan.DeleteEntity(core);
+            });
+            await pair.RunTicksSync(3);
+        }
+
+        /// <summary>
+        /// Deletes any entities with <see cref="TimedDespawnComponent"/> that were not present in the baseline snapshot.
+        /// Some entities spawn transient side-effects on deletion (e.g. explosion visuals). These side-effect entities
+        /// use TimedDespawn and would persist across test iterations, corrupting baseline entity counts and causing
+        /// cascading assertion failures.
+        /// </summary>
+        private static async Task CleanupTransientEntities(Pair.TestPair pair, HashSet<EntityUid> baselineEntities)
+        {
+            var server = pair.Server;
+            await server.WaitPost(() =>
+            {
+                var toRemove = new List<EntityUid>();
+                var query = server.EntMan.AllEntityQueryEnumerator<TimedDespawnComponent>();
+                while (query.MoveNext(out var uid, out _))
+                {
+                    if (!baselineEntities.Contains(uid))
+                        toRemove.Add(uid);
+                }
+
+                foreach (var uid in toRemove)
+                {
+                    server.EntMan.DeleteEntity(uid);
+                }
+            });
+            await pair.RunTicksSync(3);
         }
 
         private static string BuildDiffString(IEnumerable<EntityUid> oldEnts, IEnumerable<EntityUid> newEnts, IEntityManager entMan)
@@ -492,21 +531,18 @@ namespace Content.IntegrationTests.Tests
                 "StationData", // errors when removed mid-round
                 "StationJobs",
                 "Actor", // We aren't testing actor components, those need their player session set.
-                "BlobFloorPlanBuilder", // Implodes if unconfigured.
-                "DebrisFeaturePlacerController", // Above.
-                "LoadedChunk", // Worldgen chunk loading malding.
                 "BiomeSelection", // Whaddya know, requires config.
                 "ActivatableUI", // Requires enum key
             };
 
-            await using var pair = await PoolManager.GetServerClient();
+            var pair = Pair;
             var server = pair.Server;
             var entityManager = server.ResolveDependency<IEntityManager>();
             var componentFactory = server.ResolveDependency<IComponentFactory>();
             var logmill = server.ResolveDependency<ILogManager>().GetSawmill("EntityTest");
 
             await pair.CreateTestMap();
-            await server.WaitRunTicks(15);
+            await server.WaitRunTicks(5);
             var testLocation = pair.TestMap.GridCoords;
 
             await server.WaitAssertion(() =>
@@ -552,8 +588,6 @@ namespace Content.IntegrationTests.Tests
                     }
                 });
             });
-
-            await pair.CleanReturnAsync();
         }
     }
 }

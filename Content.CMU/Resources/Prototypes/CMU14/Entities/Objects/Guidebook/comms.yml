@@ -1,0 +1,47 @@
+- type: guideEntry
+  parent: RMC
+  id: AU14Comms
+  name: cmu-guide-entry-comms
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsIndex.xml"
+  priority: 2
+  children:
+  - AU14CommsFirstNet
+  - AU14CommsANPRC
+  - AU14CommsHeadsets
+  - AU14CommsVoiceProcedure
+  - AU14CommsQuickRef
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CommsFirstNet
+  name: cmu-guide-entry-comms-network
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsFirstNet.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CommsANPRC
+  name: cmu-guide-entry-comms-anprc
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsANPRC.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CommsHeadsets
+  name: cmu-guide-entry-comms-headsets
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsHeadsets.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CommsVoiceProcedure
+  name: cmu-guide-entry-comms-voice
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsVoiceProcedure.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CommsQuickRef
+  name: cmu-guide-entry-comms-quick-reference
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsQuickRef.xml"

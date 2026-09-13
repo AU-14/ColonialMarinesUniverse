@@ -18,11 +18,12 @@
   storage:
     back:
     - RMCAdminAccessConfigurator
-    - HandheldHealthAnalyzerUnpowered
+    - HandheldHealthAnalyzer
     - CMHealthAnalyzer
     - DoorRemoteAll
     - AdminHypo
     - MeleeDebug200
+    - MeleeDebugGibInsane # CMU14
     - ToolDebug
     - AU14TabletGovfor
     - AU14TabletOpfor

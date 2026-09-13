@@ -10,6 +10,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Alert;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
@@ -80,8 +81,9 @@ public sealed partial class XenoSentinelSystem : EntitySystem
         SubscribeLocalEvent<XenoDrainStingComponent, XenoDrainStingActionEvent>(OnDrainStingAction);
 
         SubscribeLocalEvent<XenoIntoxicatedComponent, ComponentStartup>(OnIntoxicatedStartup);
+        SubscribeLocalEvent<XenoIntoxicatedComponent, ComponentGetState>(OnIntoxicatedGetState);
+        SubscribeLocalEvent<XenoIntoxicatedComponent, ComponentHandleState>(OnIntoxicatedHandleState);
         SubscribeLocalEvent<XenoIntoxicatedComponent, ComponentRemove>(OnIntoxicatedRemove);
-        SubscribeLocalEvent<XenoIntoxicatedComponent, AfterAutoHandleStateEvent>(OnIntoxicatedAfterState);
         SubscribeLocalEvent<XenoIntoxicatedComponent, MobStateChangedEvent>(OnIntoxicatedMobStateChanged);
         SubscribeLocalEvent<XenoIntoxicatedComponent, RejuvenateEvent>(OnIntoxicatedRejuvenate);
         SubscribeLocalEvent<XenoIntoxicatedComponent, RefreshMovementSpeedModifiersEvent>(OnIntoxicatedRefreshSpeed);
@@ -173,13 +175,13 @@ public sealed partial class XenoSentinelSystem : EntitySystem
 
     private void OnToxicSlashSpeedStartup(Entity<XenoToxicSlashSpeedComponent> xeno, ref ComponentStartup args)
     {
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnToxicSlashSpeedShutdown(Entity<XenoToxicSlashSpeedComponent> xeno, ref ComponentShutdown args)
     {
         if (!TerminatingOrDeleted(xeno))
-            _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+            _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnToxicSlashRefreshSpeed(Entity<XenoToxicSlashSpeedComponent> xeno, ref RefreshMovementSpeedModifiersEvent args)
@@ -274,7 +276,7 @@ public sealed partial class XenoSentinelSystem : EntitySystem
     private void OnIntoxicatedStartup(Entity<XenoIntoxicatedComponent> ent, ref ComponentStartup args)
     {
         if (_net.IsServer)
-            _alerts.ShowAlert(ent, IntoxicatedAlert);
+            _alerts.ShowAlert((ent.Owner, null), IntoxicatedAlert);
 
         UpdateIntoxicatedMovement(ent, ent.Comp);
     }
@@ -282,18 +284,13 @@ public sealed partial class XenoSentinelSystem : EntitySystem
     private void OnIntoxicatedRemove(Entity<XenoIntoxicatedComponent> ent, ref ComponentRemove args)
     {
         if (_net.IsServer)
-            _alerts.ClearAlert(ent, IntoxicatedAlert);
+            _alerts.ClearAlert((ent.Owner, null), IntoxicatedAlert);
 
         StopIntoxicatedResist(ent);
         RemCompDeferred<XenoSlowVisualsComponent>(ent);
 
         if (!TerminatingOrDeleted(ent))
-            _movementSpeed.RefreshMovementSpeedModifiers(ent);
-    }
-
-    private void OnIntoxicatedAfterState(Entity<XenoIntoxicatedComponent> ent, ref AfterAutoHandleStateEvent args)
-    {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+            _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private void OnIntoxicatedMobStateChanged(Entity<XenoIntoxicatedComponent> ent, ref MobStateChangedEvent args)

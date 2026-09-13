@@ -2,6 +2,8 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Tools;
 using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -150,7 +152,7 @@ public sealed partial class RMCUpgradeSystem : EntitySystem
         {
             if (TryComp<StackComponent>(upgradeItem, out var stack) && stack.StackTypeId == upgradeComp.Material)
             {
-                if (!_stack.Use(upgradeItem.Value, upgradeComp.Amount, stack))
+                if (!_stack.TryUse((upgradeItem.Value, stack), upgradeComp.Amount))
                 {
                     var failPopup = Loc.GetString(upgradeComp.FailurePopup, ("ent", ent));
                     _popup.PopupClient(failPopup, ent, user, PopupType.SmallCaution);
@@ -181,14 +183,14 @@ public sealed partial class RMCUpgradeSystem : EntitySystem
         DamageSpecifier? transferredDamage = null;
 
         if (TryComp<DamageableComponent>(ent, out var damageComp))
-            transferredDamage = damageComp.Damage;
+            transferredDamage = _damageable.GetAllDamage((ent.Owner, damageComp));
 
         var spawn = Spawn(targetEntity, coordinates, rotation: rotation.GetCardinalDir().ToAngle());
         _popup.PopupEntity(popup, spawn, user);
 
         // transfer damage
         if (transferredDamage != null && TryComp<DamageableComponent>(spawn, out var newDamageComp))
-            _damageable.SetDamage(spawn, newDamageComp, transferredDamage);
+            _damageable.SetDamage((spawn, newDamageComp), transferredDamage);
 
         var upgradeEv = new RMCConstructionUpgradedEvent(spawn, ent.Owner);
         RaiseLocalEvent(ent.Owner, upgradeEv);

@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Server.Audio;
@@ -17,6 +19,7 @@ namespace Content.Server._RMC14.Xenonids.Despoiler;
 public sealed partial class XenoDespoilerOozingWoundsSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private MobThresholdSystem _mobThresholds = default!;
@@ -165,7 +168,8 @@ public sealed partial class XenoDespoilerOozingWoundsSystem : EntitySystem
             return 0;
         }
 
-        var hpFrac = 1f - Math.Clamp((float)(dmg.TotalDamage / deadThreshold.Value), 0f, 1f);
+        var totalDamage = _damageable.GetTotalDamage((uid, dmg));
+        var hpFrac = 1f - Math.Clamp((float)(totalDamage / deadThreshold.Value), 0f, 1f);
 
         var severity = 0;
         if (hpFrac <= action.SeverityHpThreshold1) severity++;

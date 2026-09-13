@@ -81086,7 +81086,7 @@ entities:
     - type: Transform
       pos: 44.5,15.5
       parent: 1
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 29
     components:
@@ -81098,7 +81098,7 @@ entities:
     - type: Transform
       pos: -36.5,-25.5
       parent: 1
-- proto: RMCTacticalMapTableLargeRotated
+- proto: CMUTacticalMapTableLargeRotatedGovfor
   entities:
   - uid: 4265
     components:

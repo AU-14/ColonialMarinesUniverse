@@ -4,7 +4,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.Effects;
 
-public sealed partial class StabilizeTemperature : EntityEffect
+public sealed partial class StabilizeTemperature : EntityEffectBase<StabilizeTemperature>
 {
     [DataField(required: true)]
     public float Stable;
@@ -12,26 +12,32 @@ public sealed partial class StabilizeTemperature : EntityEffect
     [DataField(required: true)]
     public float Change;
 
-    protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
         return $"Stabilizes the temperature of the body that it is in to {Stable} degrees, by {Change} degrees at a time";
     }
 
-    public override void Effect(EntityEffectBaseArgs args)
+}
+
+public sealed partial class StabilizeTemperatureEntityEffectSystem
+    : EntityEffectSystem<MetaDataComponent, StabilizeTemperature>
+{
+    [Dependency] private readonly SharedRMCTemperatureSystem _temperature = default!;
+
+    protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<StabilizeTemperature> args)
     {
-        var sys = args.EntityManager.EntitySysManager.GetEntitySystem<SharedRMCTemperatureSystem>();
-        var current = sys.GetTemperature(args.TargetEntity);
-        if (Math.Abs(current - Stable) < 0.01)
+        var current = _temperature.GetTemperature(entity);
+        if (Math.Abs(current - args.Effect.Stable) < 0.01)
             return;
 
-        var change = Change;
-        if (args is EntityEffectReagentArgs reagentArgs)
-            change *= reagentArgs.Scale.Float();
+        var change = args.Effect.Change;
+        if (args.ReagentContext != null)
+            change *= args.Scale;
 
-        var temp = current > Stable
-            ? Math.Max(Stable, current - change)
-            : Math.Min(Stable, current + change);
+        var temp = current > args.Effect.Stable
+            ? Math.Max(args.Effect.Stable, current - change)
+            : Math.Min(args.Effect.Stable, current + change);
 
-        sys.ForceChangeTemperature(args.TargetEntity, temp);
+        _temperature.ForceChangeTemperature(entity, temp);
     }
 }

@@ -16,7 +16,7 @@
     - ForceFixRotations
     - HideContextMenu
   - type: WarpPoint
-    location: GM marker
+    location: cmu-warp-location-gm-marker
   - type: RMCVisibleToGhostsOnly
   - type: Appearance
   - type: MarineMapTracked
@@ -29,7 +29,7 @@
   suffix: Exclamation
   components:
   - type: WarpPoint
-    location: GM marker (!)
+    location: cmu-warp-location-gm-marker-exclamation
   - type: Sprite
     layers:
     - state: exclamation
@@ -45,7 +45,7 @@
   suffix: Question
   components:
   - type: WarpPoint
-    location: GM marker (?)
+    location: cmu-warp-location-gm-marker-question
   - type: Sprite
     layers:
     - state: question
@@ -61,7 +61,7 @@
   suffix: Circle
   components:
   - type: WarpPoint
-    location: GM marker (O)
+    location: cmu-warp-location-gm-marker-circle
   - type: Sprite
     layers:
     - state: circle
@@ -77,7 +77,7 @@
   suffix: X
   components:
   - type: WarpPoint
-    location: GM marker (X)
+    location: cmu-warp-location-gm-marker-x
   - type: Sprite
     layers:
     - state: x
@@ -93,7 +93,7 @@
   suffix: Dollar
   components:
   - type: WarpPoint
-    location: GM marker ($)
+    location: cmu-warp-location-gm-marker-dollar
   - type: Sprite
     layers:
     - state: dollar
@@ -109,7 +109,7 @@
   suffix: Sword
   components:
   - type: WarpPoint
-    location: GM marker (Sword)
+    location: cmu-warp-location-gm-marker-sword
   - type: Sprite
     layers:
     - state: sword
@@ -125,7 +125,7 @@
   suffix: Shield
   components:
   - type: WarpPoint
-    location: GM marker (Shield)
+    location: cmu-warp-location-gm-marker-shield
   - type: Sprite
     layers:
     - state: shield
@@ -141,7 +141,7 @@
   suffix: Hash
   components:
   - type: WarpPoint
-    location: GM marker (Hash)
+    location: cmu-warp-location-gm-marker-hash
   - type: Sprite
     layers:
     - state: hash
@@ -157,7 +157,7 @@
   suffix: Star
   components:
   - type: WarpPoint
-    location: GM marker (Star)
+    location: cmu-warp-location-gm-marker-star
   - type: Sprite
     layers:
     - state: star
@@ -166,4 +166,3 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: gm_star
-  

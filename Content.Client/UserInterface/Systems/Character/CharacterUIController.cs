@@ -6,7 +6,7 @@ using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Character.Controls;
 using Content.Client.UserInterface.Systems.Character.Windows;
 using Content.Client.UserInterface.Systems.Objectives.Controls;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Input;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -139,14 +139,13 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
             return;
         }
 
-        var (entity, job, objectives, briefing, entityName, lorePrimerLines) = data;
+        var (entity, objectives, briefing, jobId, jobTitle, entityName, lorePrimerLines) = data;
 
         _window.SpriteView.SetEntity(entity);
 
         UpdateRoleType();
-
         _window.NameLabel.Text = entityName;
-        _window.SubText.Text = job;
+        _window.SubText.Text = GetJobTitle(jobTitle, jobId);
         _window.LorePrimerContainer.RemoveAllChildren();
         _window.LorePrimerLabel.Visible = lorePrimerLines.Count > 0;
 
@@ -163,7 +162,6 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
             lineLabel.SetMessage(msg);
             _window.LorePrimerContainer.AddChild(lineLabel);
         }
-
         _window.Objectives.RemoveAllChildren();
         _window.ObjectivesLabel.Visible = objectives.Any();
 
@@ -181,7 +179,7 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
 
             var objectiveLabel = new RichTextLabel
             {
-                StyleClasses = { StyleNano.StyleClassTooltipActionTitle }
+                StyleClasses = { StyleClass.TooltipTitle }
             };
             objectiveLabel.SetMessage(objectiveText);
 
@@ -294,5 +292,16 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
             _characterInfo.RequestCharacterInfo();
             _window.Open();
         }
+    }
+
+    private string GetJobTitle(string jobTitle, ProtoId<JobPrototype>? jobId)
+    {
+        if (!string.IsNullOrWhiteSpace(jobTitle))
+            return jobTitle;
+
+        if (jobId is { } id && _prototypeManager.TryIndex(id, out var job))
+            return Loc.GetString(job.Name);
+
+        return Loc.GetString("character-info-no-profession");
     }
 }

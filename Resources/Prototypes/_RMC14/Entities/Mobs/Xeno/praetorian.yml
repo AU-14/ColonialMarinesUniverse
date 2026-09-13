@@ -14,7 +14,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Praetorian/praetorian.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Praetorian/praetorian.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -50,19 +50,18 @@
   - type: XenoDevour
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoRoyalBlood
-          Quantity: 200
-        - ReagentId: CMUXenoPlasmaPhero
-          Quantity: 200
-        - ReagentId: CMUXenoPlasmaNeuro
-          Quantity: 200
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoRoyalBlood
+        Quantity: 200
+      - ReagentId: CMUXenoPlasmaPhero
+        Quantity: 200
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 200
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoRoyalBlood
@@ -80,12 +79,16 @@
     explosionArmor: 40
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 48
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
   - type: Tackle
     chance: 0.45
   - type: Fixtures
@@ -185,7 +188,7 @@
     guides:
     - RMCGuideRoleValkyrie
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Praetorian/valkyrie_praetorian.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Praetorian/valkyrie_praetorian.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -256,7 +259,7 @@
   suffix: Dancer
   components:
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Praetorian/dancer_praetorian.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Praetorian/dancer_praetorian.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -280,8 +283,10 @@
   - type: XenoDodge
   - type: XenoImpale
     damage:
-      groups:
-        Brute: 60
+      types:
+        Blunt: 20
+        Slash: 20
+        Piercing: 20
   - type: XenoTailTrip
   - type: XenoHidden
   - type: RMCActionOrder
@@ -297,7 +302,7 @@
     guides:
     - RMCGuideRoleVanguard
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Praetorian/vanguard_praetorian.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Praetorian/vanguard_praetorian.rsi # AU14-Edit
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -324,8 +329,10 @@
   - type: VanguardShield
   - type: XenoPierce
     damage:
-      groups:
-        Brute: 45
+      types:
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
   - type: XenoLeap
     plasmaCost: 50
     delay: 0
@@ -334,8 +341,10 @@
     moveDelayTime: 0
   - type: XenoBlitz
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoCleave
   - type: XenoHidden
   - type: RMCActionOrder
@@ -350,7 +359,7 @@
     guides:
     - RMCGuideRoleOppressor
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Praetorian/oppressor_praetorian.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Praetorian/oppressor_praetorian.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -363,8 +372,10 @@
     - ActionXenoDevolve
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: XenoStrain
     name: rmc-xeno-oppressor-name
     description: rmc-xeno-oppressor-description
@@ -399,12 +410,16 @@
   - type: XenoTailLash
   - type: XenoDislocate
     damage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: XenoSmackdown
     damage:
-      groups:
-        Brute: 15
+      types:
+        Blunt: 5
+        Slash: 5
+        Piercing: 5
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoPraetorianOppressor

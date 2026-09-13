@@ -1,0 +1,83 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineRifleman
+  name: TWE royal paramarine rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineRifleman
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineTeamLeader
+  name: TWE royal paramarine team leader id card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineTeamLeader
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineCommander
+  name: TWE royal paramarine commander ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineCommander
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineAssaultEngineer
+  name: TWE royal paramarine assault engineer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineAssaultEngineer
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineMedicalTechnician
+  name: TWE royal paramarine medical technician ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineMedicalTechnician
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarinePilot
+  name: TWE royal paramarine pilot ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarinePilot
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineSynthetic
+  name: TWE royal paramarine synthetic ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineSynthetic
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF

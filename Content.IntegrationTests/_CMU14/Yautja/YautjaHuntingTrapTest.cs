@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Server.Cargo.Components;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Item;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
@@ -8,7 +8,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaHuntingTrapTest
@@ -71,7 +71,7 @@ public sealed class YautjaHuntingTrapTest
             var prototype = prototypes.Index<EntityPrototype>("CMUYautjaHuntingTrap");
 
             Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
-            Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_CMU14/Yautja/yautja_items.rsi")));
+            Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/yautja_items.rsi")));
             Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("yauttrap0"),
                 "CMSS13 /obj/item/hunting_trap icon_state = \"yauttrap0\".");
         });

@@ -1,0 +1,6 @@
+Comic Neue by Craig Rozynski and contributors.
+Source: https://github.com/crozynski/comicneue
+Revision: ef5be72411141d01f0b865df8edb47e552c11c3c
+License: SIL Open Font License 1.1 (see OFL.txt and AUTHORS.txt).
+These unmodified fonts provide the fallback for the Comic Sans UI preference when
+Comic Sans MS is not installed. Microsoft font files are not bundled.

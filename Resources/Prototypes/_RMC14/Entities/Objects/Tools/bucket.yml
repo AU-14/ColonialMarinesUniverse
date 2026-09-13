@@ -13,10 +13,10 @@
       visible: false
   - type: Item
     size: Huge
-  - type: SolutionContainerManager
-    solutions:
-      bucket:
-        maxVol: 120
+  - type: Solution
+    id: bucket
+    solution:
+      maxVol: 120
   - type: Appearance
   - type: SolutionContainerVisuals
     maxFillLevels: 3
@@ -37,9 +37,11 @@
       types:
         Blunt: 0
   - type: Clickable
-  - type: Drink
+  - type: Edible
+    edible: Drink
     solution: bucket
-    ignoreEmpty: true
+    destroyOnEmpty: false
+    utensil: Spoon
   - type: Spillable
     solution: bucket
   - type: DrawableSolution
@@ -50,7 +52,6 @@
     solution: bucket
   - type: SolutionItemStatus
     solution: bucket
-    fillBaseName: bucket-
   - type: MixableSolution
     solution: bucket
   - type: ExaminableSolution
@@ -87,10 +88,10 @@
     size: Normal
   - type: SolutionContainerVisuals
     fillBaseName: mopbucket-
-  - type: SolutionContainerManager
-    solutions:
-      bucket:
-        maxVol: 240
+  - type: Solution
+    id: bucket
+    solution:
+      maxVol: 240
   - type: PhysicalComposition
     materialComposition:
       CMSteel: 4000
@@ -113,10 +114,10 @@
     size: Normal
   - type: SolutionContainerVisuals
     fillBaseName: janibucket-
-  - type: SolutionContainerManager
-    solutions:
-      bucket:
-        maxVol: 500
+  - type: Solution
+    id: bucket
+    solution:
+      maxVol: 500
   - type: FitsInDispenser
     solution: bucket
   - type: SolutionTransfer

@@ -1,13 +1,14 @@
+using Content.Shared.Item;
+using Robust.Client.ResourceManagement;
+using Robust.Shared.Serialization.TypeSerializers.Implementations;
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.Item;
+using Content.Shared.Prototypes;
 using Robust.Client.GameObjects;
-using Robust.Client.ResourceManagement;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations;
-using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.Tests;
 
@@ -15,18 +16,21 @@ namespace Content.IntegrationTests.Tests;
 /// Tests to see if any entity prototypes specify solution fill level sprites that don't exist.
 /// </summary>
 [TestFixture]
-public sealed class FillLevelSpriteTest
+public sealed class FillLevelSpriteTest : GameTest
 {
     private static readonly string[] HandStateNames = ["left", "right"];
+    private static readonly string[] EquipStateNames = ["back", "suitstorage"];
 
     [Test]
     public async Task FillLevelSpritesExist()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var client = pair.Client;
         var protoMan = client.ResolveDependency<IPrototypeManager>();
         var componentFactory = client.ResolveDependency<IComponentFactory>();
-        var resourceCache = client.ResolveDependency<IResourceCache>();
+        var entMan = client.ResolveDependency<IEntityManager>();
+        var spriteSystem = client.System<SpriteSystem>();
+        var resources = client.ResolveDependency<IResourceCache>();
 
         await client.WaitAssertion(() =>
         {
@@ -37,58 +41,72 @@ public sealed class FillLevelSpriteTest
                 .OrderBy(p => p.ID)
                 .ToList();
 
-            foreach (var proto in protos)
+            Assert.Multiple(() =>
             {
-                Assert.That(proto.TryComp<SolutionContainerVisualsComponent>(out var visuals, componentFactory));
-                Assert.That(proto.TryComp<SpriteComponent>(out var sprite, componentFactory));
-
-                var rsi = sprite.BaseRSI;
-                var hasFillLayer = sprite.LayerMapTryGet(SolutionContainerLayers.Fill, out _, false);
-                if (visuals.FillSprite is SpriteSpecifier.Rsi fillSprite)
+                foreach (var proto in protos)
                 {
-                    var rsiPath = SpriteSpecifierSerializer.TextureRoot / fillSprite.RsiPath;
-                    Assert.That(resourceCache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True,
-                        $"{proto.ID} fillSprite RSI {rsiPath} should load");
-                    rsi = resource!.RSI;
-                }
-
-                var inhandRsi = rsi;
-                if (proto.TryComp<ItemComponent>(out var item, componentFactory) && item.RsiPath != null)
-                {
-                    var rsiPath = SpriteSpecifierSerializer.TextureRoot / item.RsiPath;
-                    Assert.That(resourceCache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True,
-                        $"{proto.ID} item in-hand RSI {rsiPath} should load");
-                    inhandRsi = resource!.RSI;
-                }
-
-                // Test base sprite fills
-                if (hasFillLayer && !string.IsNullOrEmpty(visuals.FillBaseName))
-                {
-                    for (var i = 1; i <= visuals.MaxFillLevels; i++)
+                    Assert.That(proto.TryComp<SolutionContainerVisualsComponent>(out var visuals, componentFactory));
+                    Assert.That(proto.TryComp<SpriteComponent>(out var sprite, componentFactory));
+                    if (!proto.HasComponent<AppearanceComponent>(componentFactory))
                     {
-                        var state = $"{visuals.FillBaseName}{i}";
-                        Assert.That(rsi.TryGetState(state, out _), @$"{proto.ID} has SolutionContainerVisualsComponent with
-                            MaxFillLevels = {visuals.MaxFillLevels}, but {rsi.Path} doesn't have state {state}!");
+                        Assert.Fail(@$"{proto.ID} has SolutionContainerVisualsComponent but no AppearanceComponent.");
                     }
-                }
 
-                // Test inhand sprite fills
-                if (!string.IsNullOrEmpty(visuals.InHandsFillBaseName))
-                {
-                    for (var i = 1; i <= visuals.InHandsMaxFillLevels; i++)
+                    // Test base sprite fills
+                    if (!string.IsNullOrEmpty(visuals.FillBaseName) && visuals.MaxFillLevels > 0)
                     {
-                        foreach (var handname in HandStateNames)
+                        var entity = entMan.Spawn(proto.ID);
+                        if (!spriteSystem.LayerMapTryGet(entity, SolutionContainerLayers.Fill, out var fillLayerId, false))
                         {
-                            var state = $"inhand-{handname}{visuals.InHandsFillBaseName}{i}";
-                            Assert.That(inhandRsi.TryGetState(state, out _), @$"{proto.ID} has SolutionContainerVisualsComponent with
-                                InHandsMaxFillLevels = {visuals.InHandsMaxFillLevels}, but {inhandRsi.Path} doesn't have state {state}!");
+                            Assert.Fail(@$"{proto.ID} has SolutionContainerVisualsComponent but no fill layer map.");
                         }
+                        if (!spriteSystem.TryGetLayer(entity, fillLayerId, out var fillLayer, false))
+                        {
+                            Assert.Fail(@$"{proto.ID} somehow lost a layer.");
+                        }
+                        var rsi = fillLayer.ActualRsi;
 
+                        for (var i = 1; i <= visuals.MaxFillLevels; i++)
+                        {
+                            var state = $"{visuals.FillBaseName}{i}";
+                            Assert.That(rsi.TryGetState(state, out _), @$"{proto.ID} has SolutionContainerVisualsComponent with
+                                MaxFillLevels = {visuals.MaxFillLevels}, but {rsi.Path} doesn't have state {state}!");
+                        }
+                    }
+
+                    // Test inhand sprite fills
+                    if (!string.IsNullOrEmpty(visuals.InHandsFillBaseName) && visuals.InHandsMaxFillLevels > 0)
+                    {
+                        var rsi = sprite.BaseRSI;
+                        if (proto.TryComp<ItemComponent>(out var item, componentFactory) && item.RsiPath != null)
+                            rsi = resources.GetResource<RSIResource>(SpriteSpecifierSerializer.TextureRoot / item.RsiPath).RSI;
+                        for (var i = 1; i <= visuals.InHandsMaxFillLevels; i++)
+                        {
+                            foreach (var handname in HandStateNames)
+                            {
+                                var state = $"inhand-{handname}{visuals.InHandsFillBaseName}{i}";
+                                Assert.That(rsi.TryGetState(state, out _), @$"{proto.ID} has SolutionContainerVisualsComponent with
+                                    InHandsMaxFillLevels = {visuals.InHandsMaxFillLevels}, but {rsi.Path} doesn't have state {state}!");
+                            }
+                        }
+                    }
+
+                    // Test equipped sprite fills
+                    if (!string.IsNullOrEmpty(visuals.EquippedFillBaseName) && visuals.EquippedMaxFillLevels > 0)
+                    {
+                        var rsi = sprite.BaseRSI;
+                        for (var i = 1; i <= visuals.EquippedMaxFillLevels; i++)
+                        {
+                            foreach (var equipName in EquipStateNames)
+                            {
+                                var state = $"equipped-{equipName}{visuals.EquippedFillBaseName}{i}";
+                                Assert.That(rsi.TryGetState(state, out _), @$"{proto.ID} has SolutionContainerVisualsComponent with
+                                    EquippedMaxFillLevels = {visuals.EquippedMaxFillLevels}, but {rsi.Path} doesn't have state {state}!");
+                            }
+                        }
                     }
                 }
-            }
+            });
         });
-
-        await pair.CleanReturnAsync();
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Content.Client.Medical.CrewMonitoring;
+using Content.Shared.Medical.SuitSensors;
 using Content.Shared.Medical.SuitSensor;
 using NUnit.Framework;
 

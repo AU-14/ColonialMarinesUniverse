@@ -16,8 +16,9 @@
     sprite: _RMC14/Structures/Furniture/bench.rsi
     state: bench_left
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoDamage:
       types:

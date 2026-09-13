@@ -1,0 +1,11 @@
+- type: entity
+  parent: CMMobHuman
+  id: CMUBaseMobSpeciesFreelancers
+  abstract: true
+  suffix: CMU, Freelancers
+  components:
+  - type: GhostTakeoverAvailable
+  - type: NpcFactionMember
+    factions:
+    - CMUFreelancers
+  - type: RandomHumanoidAppearance

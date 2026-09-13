@@ -1,5 +1,5 @@
 using Content.Server.Examine;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.Interaction;
 using Robust.Shared.Containers;
@@ -7,7 +7,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaSkeletonTrophyTest

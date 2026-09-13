@@ -1,0 +1,107 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobPMCWhiteout
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: PMCWhiteout
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: cmu-whiteout-prefix
+  - type: Language
+    spokenLanguages:
+    - English
+    - Japanese
+    understoodLanguages:
+    - English
+    - Japanese
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-whiteout-name
+  description: cmu-whiteout-description
+  playTimeTracker: CMUJobPMCWhiteout
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearPMCWhiteout
+  spawnMenuRoleName: WY Whiteout Operative (event)
+  greeting: cmu-whiteout-greeting
+  icon: RMCJobIconPMCWhiteout
+  joinNotifyCrew: false
+  supervisors: cmu-whiteout-leader
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobPMCWhiteout
+  name: WY Whiteout Operative
+  components:
+  - type: GhostTakeoverAvailable
+  - type: PyroWhitelist
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-whiteout-name
+    description: cmu-whiteout-description
+    reregister: false
+    job: CMUJobPMCWhiteout
+    raffle:
+      settings: short
+    rules: cmu-whiteout-rules
+
+- type: startingGear
+  id: CMUGearPMCWhiteout
+  equipment:
+    id: CMUIDCardPMCWhiteout
+    jumpsuit: RMCJumpsuitVeteranPMCCommando
+    outerClothing: CMArmorM4PMCCommando
+    gloves: RMCHandsVeteranPMCCommando
+    head: ArmorHelmetPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    mask: RMCMaskCoifPMC
+    ears: RMCHeadsetDistressPMC
+    back: RMCSatchelPMC
+    belt: RMCWeaponFL3FlamerWhiteout
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: RMCPouchMagazineLargePMC
+    suitstorage: RMCWeaponRifleM54C2Whiteout
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - CMCrowbar
+    - RMCTankFlamerFL3Whiteout
+    - RMCTankFlamerFL3Whiteout
+    outerClothing:
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    pocket1:
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    pocket2:
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+    - RMCMagazineRifleM54CHEAP
+
+- type: playTimeTracker
+  id: CMUJobPMCWhiteout

@@ -1,0 +1,120 @@
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLaw
+  name: cmu-guide-entry-cclaw
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLaw.xml"
+  priority: 3
+  children:
+  - AU14CCLawGeneral
+  - AU14CCLawCorporate
+  - AU14CCLawProcedures
+  - AU14CCLawMilitary
+  - AU14CCLawCriminalCode
+  - AU14CCLawMilitia
+  - AU14CCLawExecutions
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawGeneral
+  name: cmu-guide-entry-cclaw-general
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawGeneral.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawCorporate
+  name: cmu-guide-entry-cclaw-corporate
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawCorporate.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawProcedures
+  name: cmu-guide-entry-cclaw-procedures
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawProcedures.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawMilitary
+  name: cmu-guide-entry-cclaw-military
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawMilitary.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawMilitia
+  name: cmu-guide-entry-cclaw-militia
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawMilitia.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawExecutions
+  name: cmu-guide-entry-cclaw-executions
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawExecutions.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawCriminalCode
+  name: cmu-guide-entry-cclaw-criminal-code
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/AU14CCLawCriminalCode.xml"
+  children:
+  - AU14CCLawOptionalCharges
+  - AU14CCLawMinorCrimes
+  - AU14CCLawArmsControl
+  - AU14CCLawMajorCrimes
+  - AU14CCLawCapitalCrimes
+  - AU14CCLawPrecautionary
+  - AU14CCLawEmergency
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawOptionalCharges
+  name: cmu-guide-entry-cclaw-optional
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/Crimes/AU14CCLawOptionalCharges.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawMinorCrimes
+  name: cmu-guide-entry-cclaw-minor
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/Crimes/AU14CCLawMinorCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawArmsControl
+  name: cmu-guide-entry-cclaw-arms-control
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/Crimes/AU14CCLawArmsControl.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawMajorCrimes
+  name: cmu-guide-entry-cclaw-major
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/Crimes/AU14CCLawMajorCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawCapitalCrimes
+  name: cmu-guide-entry-cclaw-capital
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/Crimes/AU14CCLawCapitalCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawPrecautionary
+  name: cmu-guide-entry-cclaw-precautionary
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/Crimes/AU14CCLawPrecautionary.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CCLawEmergency
+  name: cmu-guide-entry-cclaw-emergency
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/CCLaw/Crimes/AU14CCLawEmergency.xml"

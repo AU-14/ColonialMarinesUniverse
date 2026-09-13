@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server._RMC14.Vehicle;
+using Content.Shared._RMC14.Intel.Tech; // CMU14
 using Content.Shared._RMC14.Vehicle.Supply;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.UserInterface;
 using NUnit.Framework;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing; // CMU14
 
 namespace Content.IntegrationTests._RMC14;
 
@@ -43,6 +45,10 @@ public sealed class VehicleSupplyLoadoutTest
 
             foreach (var entry in console!.Vehicles)
             {
+                // CMU14: tech-unlock entries (civ vehicles) ship without loadout categories
+                if (entry.Unlock != null)
+                    continue;
+
                 Assert.That(entry.LoadoutCategories, Is.Not.Empty, $"{entry.Vehicle.Id} has no loadout categories");
 
                 foreach (var cat in entry.LoadoutCategories)
@@ -90,7 +96,7 @@ public sealed class VehicleSupplyLoadoutTest
     }
 
     [Test]
-    public async Task BlackfootEntriesRaisePackedSupportBundle()
+    public async Task BlackfootEntriesAreDisabled()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -103,22 +109,7 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            var blackfoots = console!.Vehicles
-                .Where(v => v.Vehicle.Id.StartsWith("VehicleBlackfoot"))
-                .ToList();
-
-            Assert.That(blackfoots, Is.Not.Empty);
-            foreach (var entry in blackfoots)
-            {
-                Assert.That(entry.Bundle.Select(id => id.Id), Is.EquivalentTo(new[]
-                {
-                    "CMUBlackfootLandingPadFoldedProp",
-                    "CMUBlackfootFuelPumpCrate",
-                    "CMUBlackfootFlightComputerCrate",
-                    "CMUBlackfootAerospaceTug",
-                }), entry.Vehicle.Id);
-                Assert.That(entry.Bundle.Select(id => id.Id), Does.Not.Contain("CMUBlackfootLandingPad"));
-            }
+            Assert.That(console!.Vehicles.Any(entry => entry.Vehicle.Id.StartsWith("VehicleBlackfoot")), Is.False);
         });
 
         await pair.CleanReturnAsync();
@@ -244,7 +235,9 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            vehicleIds = console!.Vehicles.Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
+            vehicleIds = console!.Vehicles
+                .Where(v => v.Unlock == null) // CMU14: tech-gated civ vehicles are not seeded without their unlock
+                .Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
 
             consoleUid = entMan.SpawnEntity(ConsoleId, map.GridCoords);
             lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
@@ -318,6 +311,128 @@ public sealed class VehicleSupplyLoadoutTest
         await pair.CleanReturnAsync();
     }
 
+    // CMU14 method: additional tech grants must stay claimable after the vehicle's group was claimed
+    [Test]
+    public async Task AdditionalTechGrantBypassesClaimedGroup()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid consoleUid = default;
+        EntityUid lift = default;
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            consoleUid = entMan.SpawnEntity(ConsoleId, map.GridCoords);
+            lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+
+            // support group claimed by the logistics van, as in a live round
+            var liftComp = entMan.GetComponent<VehicleSupplyLiftComponent>(lift);
+            liftComp.Ordered.Add("vehiclesppvanlogistics");
+            liftComp.OrderedGroups["vehicle-support"] = "vehiclesppvanlogistics";
+            liftComp.Stored.Remove("vehiclesppvanlogistics");
+            entMan.Dirty(lift, liftComp);
+
+            entMan.EventBus.RaiseEvent(EventSource.Local, new TechUnlockVehicleEvent("VehicleHumvee") // CMU14
+            {
+                Additional = true,
+            });
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var ui = server.EntMan.System<SharedUserInterfaceSystem>();
+            Assert.That(ui.TryGetUiState<VehicleSupplyBuiState>(consoleUid, VehicleSupplyUIKey.Key, out var state), Is.True);
+
+            var humvee = state!.Available.SingleOrDefault(v => v.Id == "VehicleHumvee");
+            Assert.That(humvee, Is.Not.Null);
+            Assert.That(humvee!.Count, Is.EqualTo(1), "dead base stock replaced by the grant");
+
+            var available = state.Available.Select(v => v.Id).ToHashSet();
+            Assert.That(available, Does.Not.Contain("VehicleSPPVanLogistics"), "the ordered van stays claimed");
+            Assert.That(available, Does.Not.Contain("VehicleSPPVanArmed"), "group mates stay hidden");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14 method: an additional grant must actually spawn when the same prototype was already deployed
+    [Test]
+    public async Task AdditionalTechGrantSpawnsWhenSameVehicleAlreadyOrdered()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid consoleUid = default;
+        EntityUid lift = default;
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            consoleUid = entMan.SpawnEntity(ConsoleId, map.GridCoords);
+            lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+
+            // the round's seeded humvee was deployed earlier
+            var liftComp = entMan.GetComponent<VehicleSupplyLiftComponent>(lift);
+            liftComp.Ordered.Add("vehiclehumvee");
+            liftComp.OrderedGroups["vehicle-support"] = "vehiclehumvee";
+            liftComp.Deployed.Add("vehiclehumvee");
+            liftComp.Stored.Remove("vehiclehumvee");
+            entMan.Dirty(lift, liftComp);
+
+            entMan.EventBus.RaiseEvent(EventSource.Local, new TechUnlockVehicleEvent("VehicleHumvee") // CMU14
+            {
+                Additional = true,
+            });
+        });
+
+        await pair.RunTicksSync(5);
+
+        // finish the raise as the console's lift toggle does: stock consumed, vehicle queued
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var timing = server.ResolveDependency<IGameTiming>();
+
+            var liftComp = entMan.GetComponent<VehicleSupplyLiftComponent>(lift);
+            Assert.That(liftComp.Stored.TryGetValue("vehiclehumvee", out var stored) && stored == 1, Is.True);
+            liftComp.Stored.Remove("vehiclehumvee");
+            liftComp.PendingVehicle = "VehicleHumvee";
+            liftComp.PendingVehicleGroup = "vehicle-support";
+            liftComp.Mode = VehicleSupplyLiftMode.Raising;
+            liftComp.ToggledAt = timing.CurTime - TimeSpan.FromSeconds(15);
+            entMan.Dirty(lift, liftComp);
+        });
+
+        await pair.RunTicksSync(2);
+
+        await server.WaitAssertion(() =>
+        {
+            var liftComp = server.EntMan.GetComponent<VehicleSupplyLiftComponent>(lift);
+            Assert.That(liftComp.ActiveVehicleId, Is.EqualTo("VehicleHumvee"), "the grant must actually spawn");
+            Assert.That(CountPrototype(server.EntMan, "VehicleHumvee"), Is.EqualTo(1));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task ConsoleBackfillsLiftWhenLiftInitializedFirst()
     {
@@ -339,7 +454,9 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            vehicleIds = console!.Vehicles.Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
+            vehicleIds = console!.Vehicles
+                .Where(v => v.Unlock == null) // CMU14: tech-gated civ vehicles are not seeded without their unlock
+                .Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
             lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
         });
 
@@ -518,6 +635,7 @@ public sealed class VehicleSupplyLoadoutTest
     }
 
     [Test]
+    [Ignore("Blackfoot commented out from vehicle_supply.yml (PR1816)")]
     public async Task BlackfootLoadoutOptionsInstallIntoDeclaredSlots()
     {
         await using var pair = await PoolManager.GetServerClient();

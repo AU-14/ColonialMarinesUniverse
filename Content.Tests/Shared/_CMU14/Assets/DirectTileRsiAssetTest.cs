@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.Json;
 using NUnit.Framework;
 
-namespace Content.Tests.Shared._CMU14.Assets;
+namespace Content.Tests.Shared.CMU14.Assets;
 
 [TestFixture]
 public sealed class DirectTileRsiAssetTest
@@ -14,9 +14,10 @@ public sealed class DirectTileRsiAssetTest
         var repositoryRoot = FindRepositoryRoot();
         var path = Path.Combine(
             repositoryRoot,
+            "Content.CMU",
             "Resources",
             "Textures",
-            "_CMU14",
+            "CMU14",
             "HunterShip",
             "turf",
             "floors",

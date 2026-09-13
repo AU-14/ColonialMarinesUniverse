@@ -1,10 +1,11 @@
+using Content.Shared.Damage.Systems;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Content.Server._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
@@ -21,7 +22,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaHealingParityTest
@@ -43,7 +44,7 @@ public sealed class YautjaHealingParityTest
                 factory,
                 resources,
                 "CMUSurgeryStepMcompStabilizeWounds",
-                ["/Audio/_CMU14/Yautja/Medical/clothingrustle1.ogg"],
+                ["/Audio/CMU14/Yautja/Medical/clothingrustle1.ogg"],
                 "/Audio/_RMC14/Medical/Surgery/cautery2.ogg",
                 "/Audio/_RMC14/Medical/Surgery/organ1.ogg");
             AssertStepAudio(
@@ -53,7 +54,7 @@ public sealed class YautjaHealingParityTest
                 "CMUSurgeryStepMcompTendWounds",
                 [
                     "/Audio/_RMC14/Medical/Surgery/retractor1.ogg",
-                    "/Audio/_CMU14/Yautja/Medical/heal_gun.ogg",
+                    "/Audio/CMU14/Yautja/Medical/heal_gun.ogg",
                 ],
                 "/Audio/_RMC14/Medical/Surgery/retractor2.ogg",
                 "/Audio/_RMC14/Medical/Surgery/organ2.ogg");
@@ -77,7 +78,7 @@ public sealed class YautjaHealingParityTest
                 AssertSoundPath(
                     resources,
                     hypospray!.InjectSound,
-                    "/Audio/_CMU14/Yautja/Medical/pred_crystal_inject.ogg");
+                    "/Audio/CMU14/Yautja/Medical/pred_crystal_inject.ogg");
             }
 
             foreach (var herbId in new[] { "CMUYautjaAdvancedBruisePack", "CMUYautjaAdvancedOintment" })
@@ -262,7 +263,7 @@ public sealed class YautjaHealingParityTest
     private static void AssertMedicineEffects(ReagentPrototype reagent, Dictionary<string, float> expected)
     {
         Assert.That(reagent.Metabolisms, Is.Not.Null, reagent.ID);
-        Assert.That(reagent.Metabolisms!.TryGetValue("Medicine", out var medicine), Is.True, reagent.ID);
+        Assert.That(reagent.Metabolisms!.Metabolisms.TryGetValue("Bloodstream", out var medicine), Is.True, reagent.ID);
         Assert.That(medicine!.Effects.Length, Is.EqualTo(expected.Count), reagent.ID);
 
         foreach (var (typeName, potency) in expected)

@@ -1,8 +1,6 @@
-using System.Linq;
 using Content.Client.PDA;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
-using Content.Shared.Inventory;
 using Robust.Client.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;

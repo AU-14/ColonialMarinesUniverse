@@ -1,13 +1,14 @@
 using System.Numerics;
 using Content.Server._RMC14.TacticalMap;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.TacticalMap;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.Inventory;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaBracerTacticalMapTest
@@ -150,8 +151,9 @@ public sealed class YautjaBracerTacticalMapTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task HunterBracerDropRestoresExistingTacticalMapIcon()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task HunterBracerDropRestoresExistingTacticalMapIcon(bool innateTracking)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -159,6 +161,7 @@ public sealed class YautjaBracerTacticalMapTest
 
         EntityUid hunter = default;
         EntityUid bracer = default;
+        var expectedTrackDead = false;
 
         await server.WaitAssertion(() =>
         {
@@ -172,6 +175,13 @@ public sealed class YautjaBracerTacticalMapTest
             entMan.EnsureComponent<YautjaComponent>(hunter);
 
             tacticalMaps.SetIcon(hunter, HellhoundIcon);
+            if (innateTracking)
+            {
+                tacticalMaps.EnsureTracked(hunter, trackDead: true);
+                tacticalMaps.SetYautjaTracked(hunter, true);
+            }
+            expectedTrackDead = entMan.TryGetComponent<TacticalMapTrackedComponent>(hunter, out var tracked)
+                && tracked.TrackDead;
             Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
         });
 
@@ -203,7 +213,8 @@ public sealed class YautjaBracerTacticalMapTest
             {
                 Assert.That(icon.Icon, Is.EqualTo(HellhoundIcon),
                     "The bracer-owned marker must restore a preexisting tactical-map icon instead of deleting it on drop.");
-                Assert.That(tacticalMaps.TryGetBlip(tacticalMap, "YAUTJA", hunter.Id, out _), Is.False);
+                Assert.That(tacticalMaps.TryGetBlip(tacticalMap, "YAUTJA", hunter.Id, out _), Is.EqualTo(innateTracking));
+                Assert.That(entMan.GetComponent<TacticalMapTrackedComponent>(hunter).TrackDead, Is.EqualTo(expectedTrackDead));
             });
         });
 

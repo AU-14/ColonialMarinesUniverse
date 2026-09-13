@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Slow;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Standing;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
 using Content.Shared.Whitelist;
@@ -26,6 +26,7 @@ using Content.Shared.UserInterface;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Explosion.Components;
 using Robust.Shared.Utility;
@@ -49,7 +50,7 @@ public sealed partial class HardpointSystem : EntitySystem
     private const string FailureRepairColor = "#9fd3ff";
 
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
+    [Dependency] private Content.Shared.Vehicle.Systems.VehicleSystem _vehicles = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private VehicleWheelSystem _wheels = default!;
@@ -110,7 +111,7 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!IsValidHardpoint(args.Entity, ent.Comp, slot))
         {
             if (TryComp<ItemSlotsComponent>(ent.Owner, out var itemSlots))
-                _itemSlots.TryEject(ent.Owner, args.Container.ID, null, out _, itemSlots, excludeUserAudio: true);
+                _itemSlots.TryEject((ent.Owner, itemSlots), args.Container.ID, null, out _, excludeUserAudio: true);
 
             return;
         }
@@ -135,7 +136,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
     private void OnRemoved(Entity<HardpointSlotsComponent> ent, ref EntRemovedFromContainerMessage args)
     {
-        if (!TryGetSlot(ent.Comp, args.Container.ID, out _))
+        if (TerminatingOrDeleted(ent.Owner) || !TryGetSlot(ent.Comp, args.Container.ID, out _))
             return;
 
         var state = EnsureState(ent.Owner);
@@ -225,7 +226,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) || !itemSlot.HasItem)
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                 continue;
 
             var item = itemSlot.Item!.Value;
@@ -242,7 +243,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 if (string.IsNullOrWhiteSpace(turretSlot.Id))
                     continue;
 
-                if (!_itemSlots.TryGetSlot(item, turretSlot.Id, out var turretItemSlot, turretItemSlots) ||
+                if (!_itemSlots.TryGetSlot((item, turretItemSlots), turretSlot.Id, out var turretItemSlot) ||
                     !turretItemSlot.HasItem)
                 {
                     continue;
@@ -310,7 +311,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) || !itemSlot.HasItem)
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                 continue;
 
             RefreshGunModifiers(itemSlot.Item!.Value);
@@ -326,7 +327,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 if (string.IsNullOrWhiteSpace(turretSlot.Id))
                     continue;
 
-                if (_itemSlots.TryGetSlot(itemSlot.Item.Value, turretSlot.Id, out var turretItemSlot, turretItemSlots) &&
+                if (_itemSlots.TryGetSlot((itemSlot.Item.Value, turretItemSlots), turretSlot.Id, out var turretItemSlot) &&
                     turretItemSlot.HasItem)
                 {
                     RefreshGunModifiers(turretItemSlot.Item!.Value);
@@ -1402,7 +1403,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (_itemSlots.TryGetSlot(uid, slot.Id, out var existingSlot, itemSlots))
+            if (_itemSlots.TryGetSlot((uid, itemSlots), slot.Id, out var existingSlot))
             {
                 // HardpointSlotSystem owns click installation; generic item slots should not eat repair/removal tool clicks.
                 _itemSlots.SetInsertOnInteract(uid, existingSlot, false, itemSlots);
@@ -1438,7 +1439,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 Whitelist = whitelist,
             };
 
-            _itemSlots.AddItemSlot(uid, slot.Id, itemSlot, itemSlots);
+            _itemSlots.AddItemSlot((uid, itemSlots), slot.Id, itemSlot);
             _itemSlots.SetInsertOnInteract(uid, itemSlot, false, itemSlots);
 
             if (slot.DisableEject)
@@ -1519,7 +1520,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (!slot.Required)
                 continue;
 
-            if (!_itemSlots.TryGetSlot(uid, slot.Id, out var itemSlot, itemSlots) || !itemSlot.HasItem)
+            if (!_itemSlots.TryGetSlot((uid, itemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                 return false;
 
             if (itemSlot.Item is { } item && TryComp(item, out HardpointIntegrityComponent? integrity) && integrity.Integrity <= 0f)
@@ -1619,7 +1620,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(owner, slot.Id, out var itemSlot, itemSlots) || !itemSlot.HasItem)
+            if (!_itemSlots.TryGetSlot((owner, itemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                 continue;
 
             if (itemSlot.Item is not { } item)
@@ -1653,7 +1654,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(hardpoint, slot.Id, out var itemSlot, childItemSlots) ||
+            if (!_itemSlots.TryGetSlot((hardpoint, childItemSlots), slot.Id, out var itemSlot) ||
                 itemSlot.Item is not { } childHardpoint)
             {
                 continue;
@@ -1899,7 +1900,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) ||
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) ||
                 itemSlot.Item is not { } item ||
                 !TryComp(item, out HardpointIntegrityComponent? integrity))
             {
@@ -2617,7 +2618,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            var hasItem = _itemSlots.TryGetSlot(uid, slot.Id, out var itemSlot, itemSlots) && itemSlot.HasItem;
+            var hasItem = _itemSlots.TryGetSlot((uid, itemSlots), slot.Id, out var itemSlot) && itemSlot.HasItem;
             string? installedName = null;
             NetEntity? installedEntity = null;
             float integrity = 0f;
@@ -2676,7 +2677,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (_itemSlots.TryGetSlot(owner, slot.Id, out var itemSlot, itemSlots) && itemSlot.HasItem)
+            if (_itemSlots.TryGetSlot((owner, itemSlots), slot.Id, out var itemSlot) && itemSlot.HasItem)
                 return true;
         }
 
@@ -2696,7 +2697,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 continue;
 
             var compositeId = VehicleTurretSlotIds.Compose(parentSlotId, turretSlot.Id);
-            var hasItem = _itemSlots.TryGetSlot(turretUid, turretSlot.Id, out var itemSlot, turretItemSlots) &&
+            var hasItem = _itemSlots.TryGetSlot((turretUid, turretItemSlots), turretSlot.Id, out var itemSlot) &&
                           itemSlot.HasItem;
             string? installedName = null;
             NetEntity? installedEntity = null;
@@ -2792,7 +2793,7 @@ public sealed partial class HardpointSystem : EntitySystem
         return true;
     }
 
-    // Used to Rejuv (Content.Server/_CMU14/Blackfoot/VehicleRejuvenateSystem)
+    // Used to Rejuv (Content.Server/Blackfoot/VehicleRejuvenateSystem)
     public void ResetAllHardpointsToFullHealth(EntityUid vehicle)
     {
         if (!TryComp<HardpointSlotsComponent>(vehicle, out var hardpoints)

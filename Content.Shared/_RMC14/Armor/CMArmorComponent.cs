@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Armor;

@@ -133,6 +133,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     {
         var groupKey = GetEntryGroupKey(entry);
         return groupKey != null &&
+               !lift.TechGranted.Contains(key) && // CMU14: tech-granted extras ignore group claims
                lift.OrderedGroups.TryGetValue(groupKey, out var claimedKey) &&
                claimedKey != key;
     }
@@ -141,9 +142,31 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     {
         var groupKey = GetEntryGroupKey(entry);
         return groupKey != null &&
+               !lift.TechGranted.Contains(key) && // CMU14
                !string.IsNullOrWhiteSpace(lift.PendingVehicleGroup) &&
                lift.PendingVehicleGroup == groupKey &&
                Normalize(lift.PendingVehicle) != key;
+    }
+
+    // CMU14 method: raw group claim check for a vehicle key, resolved from any console entry defining it
+    private bool IsVehicleGroupClaimedByOther(VehicleSupplyLiftComponent lift, string key)
+    {
+        var consoleQuery = EntityQueryEnumerator<VehicleSupplyConsoleComponent>();
+        while (consoleQuery.MoveNext(out _, out var console))
+        {
+            foreach (var entry in console.Vehicles)
+            {
+                if (Normalize(entry.Vehicle.Id) != key)
+                    continue;
+
+                var groupKey = GetEntryGroupKey(entry);
+                return groupKey != null &&
+                       lift.OrderedGroups.TryGetValue(groupKey, out var claimedKey) &&
+                       claimedKey != key;
+            }
+        }
+
+        return false;
     }
 
     private static bool IsEntryAvailableForConsole(VehicleSupplyLiftComponent lift, VehicleSupplyEntry entry, string key)
@@ -346,6 +369,22 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         var liftQuery = EntityQueryEnumerator<VehicleSupplyLiftComponent>();
         while (liftQuery.MoveNext(out var uid, out var lift))
         {
+            // CMU14: additional grants stack on top of the group/one-use limits
+            if (ev.Additional)
+            {
+                if (!lift.TechGranted.Contains(unlock) &&
+                    IsVehicleGroupClaimedByOther(lift, unlock))
+                {
+                    // the group was spent on another variant, its seeded stock here is dead
+                    lift.Stored.Remove(unlock);
+                }
+
+                lift.TechGranted.Add(unlock);
+                AddStored(lift, unlock);
+                Dirty(uid, lift);
+                continue;
+            }
+
             if (GetStoredCount(lift, unlock) > 0 || IsVehicleClaimed(lift, unlock))
                 continue;
 
@@ -830,7 +869,8 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             return;
         }
 
-        if (comp.Ordered.Contains(key))
+        if (comp.Ordered.Contains(key)
+            && !comp.TechGranted.Contains(key)) // CMU14: tech-granted extras bypass the one-use spawn guard
         {
             comp.PendingVehicle = string.Empty;
             comp.PendingVehicleGroup = string.Empty;
@@ -1825,7 +1865,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
 
             var state = string.Empty;
             var usesOverlay = false;
-            if (_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) && itemSlot.HasItem)
+            if (_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) && itemSlot.HasItem)
             {
                 var item = itemSlot.Item!.Value;
                 state = ResolveVisualState(item, out usesOverlay);
@@ -1864,7 +1904,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) || !itemSlot.HasItem)
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                 continue;
 
             var item = itemSlot.Item!.Value;
@@ -1885,7 +1925,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                 if (string.IsNullOrWhiteSpace(turretSlot.Id))
                     continue;
 
-                if (!_itemSlots.TryGetSlot(item, turretSlot.Id, out var turretItemSlot, attachedItemSlots) ||
+                if (!_itemSlots.TryGetSlot((item, attachedItemSlots), turretSlot.Id, out var turretItemSlot) ||
                     !turretItemSlot.HasItem)
                 {
                     continue;
@@ -1980,7 +2020,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                 if (string.IsNullOrWhiteSpace(slot.Id))
                     continue;
 
-                if (!_itemSlots.TryGetSlot(item, slot.Id, out var itemSlot, attachedItemSlots) || !itemSlot.HasItem)
+                if (!_itemSlots.TryGetSlot((item, attachedItemSlots), slot.Id, out var itemSlot) || !itemSlot.HasItem)
                     continue;
 
                 var child = itemSlot.Item!.Value;

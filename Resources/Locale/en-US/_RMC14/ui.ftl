@@ -5,6 +5,7 @@ rmc-ui-options-hijack-song-volume = Hijack song volume:
 rmc-ui-options-xeno-ability-previews = Show xeno ability previews
 
 rmc-ui-voicelines = Voicelines
+rmc-ui-audio-voicelines-self-header = Your own sounds
 rmc-ui-options-tab-voicelines = Voicelines
 rmc-ui-audio-voicelines-yourself = Play voicelines from yourself
 rmc-ui-audio-voicelines-arachnid = Play voicelines for arachnids

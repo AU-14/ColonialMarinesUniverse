@@ -1,4 +1,6 @@
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Interaction;
@@ -6,7 +8,7 @@ using Content.Shared.Interaction.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaHealingGunCmss13ParityTest
@@ -28,7 +30,7 @@ public sealed class YautjaHealingGunCmss13ParityTest
             try
             {
                 damageable.TryChangeDamage(user, new DamageSpecifier(prototypes.Index<DamageTypePrototype>("Blunt"), 30));
-                var beforeHeal = entMan.GetComponent<DamageableComponent>(user).TotalDamage;
+                var beforeHeal = entMan.System<DamageableSystem>().GetAllDamage(user).GetTotal();
 
                 var firstUse = new UseInHandEvent(user);
                 entMan.EventBus.RaiseLocalEvent(gun, firstUse);
@@ -38,7 +40,7 @@ public sealed class YautjaHealingGunCmss13ParityTest
                 {
                     Assert.That(firstUse.Handled, Is.False,
                         "CMSS13 healing_gun is a Medicomp surgery tool, not a direct-use injector.");
-                    Assert.That(entMan.GetComponent<DamageableComponent>(user).TotalDamage, Is.EqualTo(beforeHeal),
+                    Assert.That(entMan.System<DamageableSystem>().GetAllDamage(user).GetTotal(), Is.EqualTo(beforeHeal),
                         "Using the loaded gun in hand must not apply treatment outside the surgery flow.");
                     Assert.That(gunComp.Loaded, Is.True,
                         "The loaded capsule is consumed only when the Medicomp tend-wounds step completes.");

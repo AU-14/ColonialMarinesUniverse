@@ -51,9 +51,11 @@ public sealed partial class SupplyDropWindow : DefaultWindow
 
         var time = IoCManager.Resolve<IGameTiming>().CurTime;
         var cooldown = NextUpdateAt - time;
-        if (cooldown < TimeSpan.Zero)
+        if (cooldown <= TimeSpan.Zero)
         {
-            LaunchButton.Disabled = false;
+            // Setting Disabled also cancels ConfirmButton's pending confirmation.
+            if (!LaunchButton.IsConfirming)
+                LaunchButton.Disabled = false;
             CooldownBar.Visible = false;
             LaunchStatusLabel.Visible = true;
             return;

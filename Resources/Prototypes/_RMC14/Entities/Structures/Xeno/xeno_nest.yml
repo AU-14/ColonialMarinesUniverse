@@ -33,6 +33,7 @@
         hard: false
   - type: Clickable
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

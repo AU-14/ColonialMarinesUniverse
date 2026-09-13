@@ -7,7 +7,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaResistanceParityTest
@@ -69,7 +69,8 @@ public sealed class YautjaResistanceParityTest
 
                 var unconscious = new RMCStatusEffectTimeEvent("Unconscious", TimeSpan.FromSeconds(3));
                 server.EntMan.EventBus.RaiseLocalEvent(yautja, ref unconscious);
-                Assert.That(unconscious.Duration, Is.EqualTo(TimeSpan.FromSeconds(3)));
+                Assert.That(unconscious.Duration, Is.EqualTo(TimeSpan.Zero),
+                    "Regular Yautja retain CMU's unconsciousness immunity.");
             });
         }
         finally

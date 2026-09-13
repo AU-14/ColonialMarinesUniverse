@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;

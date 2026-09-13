@@ -17,7 +17,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
   - type: Fixtures
     fixtures:
       fix1:
@@ -75,17 +75,16 @@
     plasmaRegenOnWeeds: 7
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaNeuro
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -110,8 +109,10 @@
     inject:
       RMCMolecularAcid: 6
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: XenoSprayAcid
     acid: XenoAcidSprayStrong
     barricadeDamage:
@@ -119,8 +120,10 @@
         Heat: 5
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 22.5
+      types:
+        Blunt: 7.5
+        Slash: 7.5
+        Piercing: 7.5
   - type: Tackle
     chance: 0.25
     stunMin: 3
@@ -160,14 +163,17 @@
     affectsDead: false
     affectsInfectedNested: false
     toxinDamage:
-        groups:
-          Toxin: 2
+        types:
+          Poison: 1
+          Radiation: 1
     oxygenDamage:
         types:
           Asphyxiation: 150
     coughDamage:
-        groups:
-          Brute: 5
+        types:
+          Blunt: 1.66
+          Slash: 1.67
+          Piercing: 1.67
   - type: RMCXenoDamageVisuals
     prefix: boiler
   - type: TacticalMapIcon
@@ -219,7 +225,7 @@
   suffix: Sapper
   components:
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -257,8 +263,10 @@
     inject:
       RMCMolecularAcid: 6
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: XenoAcidMine
   - type: XenoAcidShotgun
   - type: XenoDeployTraps
@@ -266,5 +274,3 @@
   - type: XenoAdrenalineSurge
   - type: RMCActionOrder
     id: RMCXenoBoilerSapper
-
-

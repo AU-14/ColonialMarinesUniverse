@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Throwing;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -31,8 +31,10 @@ namespace Content.Shared.Throwing
         [Dependency] private SharedGravitySystem _gravity = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; //CMU
-        [Dependency] private SharedTransformSystem _transform = default!; private const string ThrowingFixture = "throw-fixture";
+        [Dependency] private SharedTransformSystem _transform = default!;
 
+        private const string ThrowingFixture = "throw-fixture";
+        private readonly List<(EntityUid Uid, ThrownItemComponent Thrown, PhysicsComponent Physics)> _thrownSnapshot = new(); // CMU14
 
         public override void Initialize()
         {
@@ -47,6 +49,9 @@ namespace Content.Shared.Throwing
         }
         private void PreventCollision(EntityUid uid, ThrownItemComponent component, ref PreventCollideEvent args)
         {
+            if (HasComp<ThrownHitUserComponent>(uid))
+                return;
+
             if (args.OtherEntity == component.Thrower)
             {
                 args.Cancelled = true;
@@ -165,7 +170,7 @@ namespace Content.Shared.Throwing
 
         public void StopThrow(EntityUid uid, ThrownItemComponent thrownItemComponent)
         {
-            // Remove the temporary throwing fixture before rebuilding contacts. Rebuilding
+            // CMU14: remove the temporary throwing fixture before rebuilding contacts. Rebuilding
             // with the fixture still attached can destroy a live contact and trip the
             // physics awake-body assertion when a thrown entity goes to sleep.
             if (TryComp(uid, out FixturesComponent? manager))
@@ -225,17 +230,27 @@ namespace Content.Shared.Throwing
                 _adminLogger.Add(LogType.ThrowHit, LogImpact.Low,
                     $"{ToPrettyString(thrown):thrown} thrown by {ToPrettyString(component.Thrower.Value):thrower} hit {ToPrettyString(target):target}.");
 
-            RaiseLocalEvent(target, new ThrowHitByEvent(thrown, target, component), true);
-            RaiseLocalEvent(thrown, new ThrowDoHitEvent(thrown, target, component), true);
+            var hitByEv = new ThrowHitByEvent(thrown, target, component);
+            var doHitEv = new ThrowDoHitEvent(thrown, target, component);
+            RaiseLocalEvent(target, ref hitByEv, true);
+            RaiseLocalEvent(thrown, ref doHitEv, true);
         }
 
         public override void Update(float frameTime)
         {
             base.Update(frameTime);
 
+            // CMU14: LandEvent handlers can add or remove ThrownItemComponents mid-iteration and
+            // invalidate the query enumerator, so iterate over a snapshot instead
+            _thrownSnapshot.Clear();
             var query = EntityQueryEnumerator<ThrownItemComponent, PhysicsComponent>();
             while (query.MoveNext(out var uid, out var thrown, out var physics))
+                _thrownSnapshot.Add((uid, thrown, physics));
+
+            foreach (var (uid, thrown, physics) in _thrownSnapshot)
             {
+                if (thrown.Deleted) // CMU14
+                    continue;
                 // If you remove this check verify slipping for other entities is networked properly.
                 if (_netMan.IsClient && !physics.Predict)
                     continue;

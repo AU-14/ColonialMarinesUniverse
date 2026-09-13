@@ -1,0 +1,172 @@
+- type: entity
+  abstract: true
+  parent: RMCTriggerTeleporterViewer
+  id: CMUBosenmoriProjectionViewerBase
+  name: Bosenmori projection viewer
+  suffix: CMU14, Bosenmori
+  components:
+  - type: RMCTeleporterViewer
+    projectionEnabled: false
+    projectAnchored: true
+    projectTiles: true
+
+- type: entity
+  parent: CMUBosenmoriProjectionViewerBase
+  id: CMUBosenmoriProjectionViewer4x4
+  components:
+  - type: RMCTeleporterViewer
+    projectionTileMask: "...#/..##/.###/###."
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.99,-1.99,1.99,1.99"
+        density: 1500
+        hard: false
+        mask:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+        layer:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+
+- type: entity
+  parent: CMUBosenmoriProjectionViewerBase
+  id: CMUBosenmoriProjectionViewer21x5
+  components:
+  - type: RMCTeleporterViewer
+    projectionTileMask: "...###############.../#####################/#####################/#####################/...###############..."
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-10.49,-2.49,10.49,2.49"
+        density: 1500
+        hard: false
+        mask:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+        layer:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+
+- type: entity
+  parent: CMUBosenmoriProjectionViewerBase
+  id: CMUBosenmoriProjectionViewer3x4
+  components:
+  - type: RMCTeleporterViewer
+    projectionTileMask: "##./###/.##/.##"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.49,-1.99,1.49,1.99"
+        density: 1500
+        hard: false
+        mask:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+        layer:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+
+- type: entity
+  parent: CMUBosenmoriProjectionViewerBase
+  id: CMUBosenmoriProjectionViewer6x7
+  components:
+  - type: RMCTeleporterViewer
+    projectionTileMask: "##..../###.../.#####/.#####/.#####/.####./..###."
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-2.99,-3.49,2.99,3.49"
+        density: 1500
+        hard: false
+        mask:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+        layer:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+
+- type: entity
+  parent: CMUBosenmoriProjectionViewerBase
+  id: CMUBosenmoriProjectionViewer11x5
+  components:
+  - type: RMCTeleporterViewer
+    projectionTileMask: "...#####.../###########/###########/###########/...#####..."
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-5.49,-2.49,5.49,2.49"
+        density: 1500
+        hard: false
+        mask:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+        layer:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+
+- type: entity
+  parent: CMUBosenmoriProjectionViewerBase
+  id: CMUBosenmoriProjectionViewer1x1
+  components:
+  - type: RMCTeleporterViewer
+    projectionTileMask: "#"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 1500
+        hard: false
+        mask:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+        layer:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+
+- type: entity
+  parent: CMUBosenmoriProjectionViewerBase
+  id: CMUBosenmoriProjectionViewer6x6
+  components:
+  - type: RMCTeleporterViewer
+    projectionTileMask: ".####./######/######/######/######/######"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-2.99,-2.99,2.99,2.99"
+        density: 1500
+        hard: false
+        mask:
+        - MobMask
+        - MobLayer
+        - GhostImpassable
+        layer:
+        - MobMask
+        - MobLayer
+        - GhostImpassable

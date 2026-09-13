@@ -1,24 +1,56 @@
-<Control xmlns="https://spacestation14.io" MinWidth="560" MaxWidth="1280" RectClipContent="True">
+<Control xmlns="https://spacestation14.io"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:ui="clr-namespace:Content.Client._CMU14.Interface"
+         MinWidth="620" MaxWidth="1280" RectClipContent="True">
     <PanelContainer Name="VotePanel" StyleClasses="CrtPanel" />
 
-    <BoxContainer Name="MainContent" Margin="10 8" Orientation="Vertical" SeparationOverride="6">
-        <Label Name="VoteCaller" StyleClasses="CrtHeading" />
+    <!-- ContentPadding rather than the panel's own inset: the options are the widest thing in here,
+         and at PanelPadding they sat all but touching the border. ContentHorizontalMargin in the
+         code-behind is derived from the same constant - it uses it to work out how many columns
+         fit, and the two drifting apart is how options end up sliced off at the edge. -->
+    <BoxContainer Name="MainContent" Margin="{x:Static ui:CmuPanelMetrics.ContentPadding}"
+                  Orientation="Vertical"
+                  SeparationOverride="{x:Static ui:CmuPanelMetrics.RowSeparation}">
+        <!-- Caller, timer and Hide share one line instead of the timer getting a row of its own -
+             none of the three need the room a dedicated row costs, and the caller line had nothing
+             else in it to its right. CrtHeadingStatus for the timer rather than CrtHeading: the same
+             small size and dim base colour ServerName's own status chip uses next to it in the lobby
+             sidebar, since this is the same shape - a status reading beside a title, not a headline
+             in its own right. Its base colour barely matters regardless, since UpdateData overrides
+             it every frame to the urgency colour (see CmuCountdownUrgency). -->
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+            <!-- Dim caption, not the bright question - "called by" is context, the question below is
+                 the thing you are here to answer. The reverse (caller as the CrtHeading) was backwards
+                 on every vote this popup has ever shown. -->
+            <Label Name="VoteCaller" StyleClasses="CrtDimText" HorizontalExpand="True" VAlign="Center" />
+            <!-- 16, not 8: at 8 the countdown read as part of the Hide button rather than as its own
+                 reading, since the button's own 12px content padding is the only thing between the
+                 two glyph runs and the eye adds the two gaps together. -->
+            <Label Name="TimeLeftText" StyleClasses="CrtHeadingStatus" VAlign="Center" Margin="0 0 16 0" />
+            <Button Name="MinimizeButton" Text="{Loc 'ui-vote-minimize'}"
+                    MinWidth="{x:Static ui:CmuPanelMetrics.ButtonNarrow}" />
+        </BoxContainer>
         <RichTextLabel Name="VoteTitle" StyleClasses="CrtRichText" />
         <Button Margin="0 2" Name="FollowVoteTarget" Text="{Loc 'ui-vote-follow-button-popup'}" Visible="False" />
 
         <GridContainer Columns="3" Name="VoteOptionsContainer" HorizontalExpand="True"
-            HSeparationOverride="8" VSeparationOverride="6" />
-        <BoxContainer Orientation="Horizontal" Margin="0 2 0 0">
-            <ProgressBar Margin="0 0 8 0" HorizontalExpand="True" Name="TimeLeftBar" MinValue="0" MaxValue="1" MinSize="0 20" StyleClasses="CrtProgressBar" />
-            <Label Name="TimeLeftText" StyleClasses="CrtHeading" MinWidth="42" HorizontalAlignment="Right" />
-            <Button Name="MinimizeButton" Text="{Loc 'ui-vote-minimize'}" Margin="8 0 0 0" MinWidth="80" />
-        </BoxContainer>
+            HSeparationOverride="{x:Static ui:CmuPanelMetrics.RowSeparation}"
+            VSeparationOverride="{x:Static ui:CmuPanelMetrics.RowSeparation}" />
     </BoxContainer>
 
-    <BoxContainer Name="MinimizedContent" Margin="10 8" Orientation="Horizontal" Visible="False"
-            HorizontalExpand="True" VerticalAlignment="Center">
+    <BoxContainer Name="MinimizedContent" Margin="{x:Static ui:CmuPanelMetrics.PanelPadding}"
+                  Orientation="Horizontal" Visible="False"
+                  HorizontalExpand="True" VerticalAlignment="Center">
         <Label Name="MinimizedTitle" HorizontalExpand="True" StyleClasses="CrtHeading" ClipText="True" />
         <Label Name="MinimizedTimeLeft" StyleClasses="CrtHeading" MinWidth="42" HorizontalAlignment="Right" Margin="0 0 8 0" />
-        <Button Name="RestoreButton" Text="{Loc 'ui-vote-restore'}" MinWidth="80" />
+        <Button Name="RestoreButton" Text="{Loc 'ui-vote-restore'}"
+                MinWidth="{x:Static ui:CmuPanelMetrics.ButtonNarrow}" />
     </BoxContainer>
+
+    <!-- Last sibling, so it draws over both MainContent and MinimizedContent. Scanlines only, not
+         the full CrtScreenControl pass: the timer bar and the option fills both move every frame
+         this popup is open, and a live subtree must never go under the shader's render-target
+         capture - a stale or misaligned copy draws opaque over the real thing instead of failing
+         loudly. This is the cheap half built for exactly that case. -->
+    <ui:CrtScanlineOverlay Name="VoteScanlines" HorizontalExpand="True" VerticalExpand="True" />
 </Control>

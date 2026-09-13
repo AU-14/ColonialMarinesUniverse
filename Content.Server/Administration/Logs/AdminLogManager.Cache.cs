@@ -60,15 +60,21 @@ public sealed partial class AdminLogManager
     {
         // TODO ADMIN LOGS remove redundant data and don't do a dictionary lookup per log
         var cache = _roundsLogCache[_currentRoundId];
-        cache.Add(log);
-        CacheLogCount.Set(cache.Count);
+        lock (cache) // CMU14: the EUI log search can enumerate this list while logs get cached
+        {
+            cache.Add(log);
+            CacheLogCount.Set(cache.Count);
+        }
     }
 
     private void CacheLogs(IEnumerable<SharedAdminLog> logs)
     {
         var cache = _roundsLogCache[_currentRoundId];
-        cache.AddRange(logs);
-        CacheLogCount.Set(cache.Count);
+        lock (cache) // CMU14
+        {
+            cache.AddRange(logs);
+            CacheLogCount.Set(cache.Count);
+        }
     }
 
     private bool TryGetCache(int roundId, [NotNullWhen(true)] out List<SharedAdminLog>? cache)
@@ -152,7 +158,11 @@ public sealed partial class AdminLogManager
         }
 
         // TODO ADMIN LOGS array pool
-        results = query.ToList();
+        lock (cache) // CMU14: log writes can grow the list while the lazy query materializes
+        {
+            results = query.ToList();
+        }
+
         return true;
     }
 }

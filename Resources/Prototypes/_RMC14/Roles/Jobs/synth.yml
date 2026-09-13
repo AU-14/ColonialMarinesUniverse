@@ -132,8 +132,8 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Infectable
-  - type: Hunger
-  - type: Thirst
+  - type: Satiation
+    satiations: { }
   - type: Perishable
   - type: ThermalRegulator
   - type: Temperature

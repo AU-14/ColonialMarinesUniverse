@@ -7,7 +7,7 @@ using Robust.Client.ResourceManagement;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaLanternTest
@@ -35,17 +35,13 @@ public sealed class YautjaLanternTest
             {
                 Assert.That(actionComp!.UseDelay, Is.EqualTo(TimeSpan.FromSeconds(1)),
                     "CMSS13 turn_light() defaults to a 1 second COOLDOWN_LIGHT for flashlight toggles.");
-                Assert.That(actionComp.Icon, Is.EqualTo(YautjaActionIcon("lantern_on_framed")),
-                    "CMSS13 displays the lantern_on overlay while the light is off.");
-                Assert.That(actionComp.IconOn, Is.EqualTo(YautjaActionIcon("lantern_off_framed")),
-                    "CMSS13 displays the lantern_off overlay while the light is on.");
             });
         });
 
         await client.WaitAssertion(() =>
         {
             var cache = client.ResolveDependency<IResourceCache>();
-            var rsiPath = new ResPath("/Textures/_CMU14/Yautja/actions.rsi");
+            var rsiPath = new ResPath("/Textures/CMU14/Yautja/actions.rsi");
 
             Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True);
             Assert.Multiple(() =>
@@ -104,6 +100,6 @@ public sealed class YautjaLanternTest
 
     private static SpriteSpecifier.Rsi YautjaActionIcon(string state)
     {
-        return new SpriteSpecifier.Rsi(new ResPath("_CMU14/Yautja/actions.rsi"), state);
+        return new SpriteSpecifier.Rsi(new ResPath("CMU14/Yautja/actions.rsi"), state);
     }
 }

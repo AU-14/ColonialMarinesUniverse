@@ -58,6 +58,7 @@
     node: Campfire
   - type: RMCMesonsNonviewable
   - type: Campfire
+    fuel: 5
   - type: PointLight
     enabled: false
     radius: 5

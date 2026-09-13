@@ -1,3 +1,5 @@
+using Content.Client.VendingMachines;
+using Content.Shared.VendingMachines.Components;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -14,7 +16,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.HunterShip;
+namespace Content.IntegrationTests.CMU14.HunterShip;
 
 [TestFixture]
 public sealed class HunterShipYautjaVendingTest
@@ -42,7 +44,7 @@ public sealed class HunterShipYautjaVendingTest
                 Assert.That(sprite.AllLayers.ElementAt(baseLayer).RsiState.Name, Is.EqualTo(row.BaseState), row.Id);
                 Assert.That(sprite.AllLayers.ElementAt(activeLayer).RsiState.Name, Is.EqualTo(row.NormalState), row.Id);
 
-                Assert.That(prototype.TryGetComponent<VendingMachineComponent>(out var vending, factory), Is.True, row.Id);
+                Assert.That(prototype.TryGetComponent<Content.Client.VendingMachines.Components.VendingMachineVisualsComponent>(out var vending, factory), Is.True, row.Id);
                 Assert.Multiple(() =>
                 {
                     Assert.That(vending!.OffState, Is.EqualTo(row.BaseState), row.Id);
@@ -68,7 +70,7 @@ public sealed class HunterShipYautjaVendingTest
         {
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.EntMan.ComponentFactory;
-            var yautjaMachines = new ResPath("/Textures/_CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi");
+            var yautjaMachines = new ResPath("/Textures/CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi");
 
             foreach (var row in VendorRows())
             {
@@ -124,9 +126,9 @@ public sealed class HunterShipYautjaVendingTest
                 Assert.That(vending!.PackPrototypeId, Is.EqualTo(row.Pack), row.Id);
 
                 var inventory = prototypes.Index<VendingMachineInventoryPrototype>(row.Pack);
-                Assert.That(inventory.StartingInventory, Is.EqualTo(row.StartingInventory), row.Id);
-                Assert.That(inventory.ContrabandInventory ?? new Dictionary<string, uint>(), Is.EqualTo(row.ContrabandInventory), row.Id);
-                Assert.That(inventory.EmaggedInventory ?? new Dictionary<string, uint>(), Is.Empty, row.Id);
+                Assert.That(inventory.StartingInventory.ToDictionary(x => x.Key.Id, x => x.Value), Is.EqualTo(row.StartingInventory), row.Id);
+                Assert.That(inventory.ContrabandInventory?.ToDictionary(x => x.Key.Id, x => x.Value) ?? new Dictionary<string, uint>(), Is.EqualTo(row.ContrabandInventory), row.Id);
+                Assert.That(inventory.EmaggedInventory ?? new Dictionary<EntProtoId, uint>(), Is.Empty, row.Id);
             }
 
             var dinnerware = prototypes.Index<EntityPrototype>(DinnerwareId);

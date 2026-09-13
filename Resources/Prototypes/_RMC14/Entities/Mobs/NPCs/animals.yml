@@ -172,7 +172,7 @@
 #-- Pets --
 # TODO: Add a way to pat and pick up pets. Obfuscate names for xenos to refer to them as fuzzies/pets.
 - type: entity
-  parent: RMCSimpleMob
+  parent: [RMCSimpleMob, BaseSlicingRefinable]
   id: RMCMobCorgi
   name: corgi
   description: It's a corgi.
@@ -180,6 +180,13 @@
   components:
   - type: Butcherable
     spawned:
+    - id: FoodMeat
+      amount: 2
+  - type: ToolRefinable
+    qualityNeeded: Slicing
+    refineTime: 8
+    popupType: LargeCaution
+    refineResult:
     - id: FoodMeat
       amount: 2
   - type: ReplacementAccent
@@ -242,7 +249,7 @@
     - HEAD
   - type: WarpPoint
     follow: true
-    location: Mister Wiggles
+    location: cmu-warp-location-mister-wiggles
 
 
 - type: entity
@@ -297,7 +304,7 @@
     animation: WeaponArcBite
     damage:
       types:
-        blunt: 25
+        Blunt: 25
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -357,7 +364,7 @@
       gender: male
   - type: WarpPoint
     follow: true
-    location: Jones
+    location: cmu-warp-location-jones
 
 - type: entity
   parent: RMCMobCatCalico
@@ -367,7 +374,7 @@
   components:
   - type: WarpPoint
     follow: true
-    location: Orion
+    location: cmu-warp-location-orion
 
 - type: entity
   parent: RMCMobCat
@@ -381,7 +388,7 @@
       gender: female
   - type: WarpPoint
     follow: true
-    location: Garry
+    location: cmu-warp-location-garry
 
 # Spawners
 - type: entity

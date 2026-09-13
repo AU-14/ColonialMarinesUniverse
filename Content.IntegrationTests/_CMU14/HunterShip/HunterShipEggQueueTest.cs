@@ -6,7 +6,7 @@ using Content.Server.Ghost.Roles.Components;
 using NUnit.Framework;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.HunterShip;
+namespace Content.IntegrationTests.CMU14.HunterShip;
 
 [TestFixture]
 public sealed class HunterShipEggQueueTest

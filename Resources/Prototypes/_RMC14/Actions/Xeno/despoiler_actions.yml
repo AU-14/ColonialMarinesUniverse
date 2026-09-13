@@ -4,10 +4,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/Actions/despoiler.rsi
-      state: acid_barrage
     checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/Actions/despoiler.rsi
+      state: acid_barrage
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDespoilerAcidBarrageActionEvent
   - type: XenoDespoilerAcidBarrageAction
@@ -30,7 +32,7 @@
     fireSound:
       path: /Audio/_RMC14/Xeno/alien_spitacid2.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -38,11 +40,13 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/Actions/despoiler.rsi
-      state: caustic_embrace
     checkCanInteract: false
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/Actions/despoiler.rsi
+      state: caustic_embrace
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 5
     checkCanAccess: false
@@ -64,7 +68,7 @@
     pounceSound:
       path: /Audio/_RMC14/Xeno/alien_roar1.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -72,11 +76,13 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/Actions/despoiler.rsi
-      state: oozing_wounds
     checkCanInteract: false
     useDelay: 25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/Actions/despoiler.rsi
+      state: oozing_wounds
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDespoilerOozingWoundsActionEvent
   - type: XenoDespoilerOozingWoundsAction
@@ -92,7 +98,7 @@
     castSound:
       path: /Audio/_RMC14/Xeno/acid_sizzle3.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -100,14 +106,16 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Interface/Actions/despoiler.rsi
-      state: catalyze
     checkCanInteract: false
     useDelay: 20
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/Actions/despoiler.rsi
+      state: catalyze
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDespoilerCatalyzeActionEvent
   - type: XenoDespoilerCatalyzeAction
-    hypertensionCost: 2
-    buffDuration: 10
+    hypertensionCost: 1
+    buffDuration: 15
     visualProto: RMCEffectDespoilerCatalyze

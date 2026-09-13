@@ -1,0 +1,86 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobPMCSynthetic
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: PMCSynthetic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 3
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: cmu-whiteout-prefix-synthetic
+  - type: Language
+    spokenLanguages:
+    - English
+    - Japanese
+    understoodLanguages:
+    - English
+    - Japanese
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-whiteout-name-synthetic
+  description: cmu-whiteout-description-synthetic
+  playTimeTracker: CMUJobPMCSynthetic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearPMCSynthetic
+  spawnMenuRoleName: WY PMC Synthetic (event)
+  greeting: cmu-whiteout-greeting
+  icon: RMCJobIconPMCSynthetic
+  joinNotifyCrew: false
+  supervisors: cmu-whiteout-leader
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobPMCSynthetic
+  name: WY PMC Synthetic
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-whiteout-name-synthetic
+    description: cmu-whiteout-description-synthetic
+    reregister: false
+    job: CMUJobPMCSynthetic
+    raffle:
+      settings: short
+    rules: cmu-whiteout-rules
+
+- type: startingGear
+  id: CMUGearPMCSynthetic
+  equipment:
+    head: ArmorHelmetPMCOfficer
+    ears: RMCHeadsetDistressPMC
+    back: RMCPMCSyntheticSmartpack
+    belt: RMCBeltMedicBagPMCFilled
+    suitstorage: RMCScabbardMacheteFilled
+    jumpsuit: RMCJumpsuitVeteranPMCSynth
+    outerClothing: RMCArmorM4PMCSynthFilled
+    shoes: RMCBootsPMCFilled
+    id: CMUIDCardPMCSynthetic
+    pocket1: RMCPouchToolsSocFilledSynthetic
+    pocket2: RMCPouchConstructionFillLowGrade
+  storage:
+    back:
+    - RMCUniversalRecorder
+
+- type: playTimeTracker
+  id: CMUJobPMCSynthetic

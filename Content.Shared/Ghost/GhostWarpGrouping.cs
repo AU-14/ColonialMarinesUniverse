@@ -1,12 +1,13 @@
 using System.Linq;
 
-namespace Content.Shared.Ghost;
+namespace Content.Shared.Ghost.Systems;
 
 public readonly record struct GhostWarpGroupingResult(string Tab, string Section);
 
 public static class GhostWarpGrouping
 {
     public const string TabMilitary = "Military";
+    public const string TabGovfor = "GOVFOR";
     public const string TabXenos = "Xenos";
     public const string TabCorruptedHive = "Corrupted Hive";
     public const string TabOpfor = "OPFOR";
@@ -49,7 +50,7 @@ public static class GhostWarpGrouping
         ["RMCXeno"] = TabXenos,
         ["Xeno"] = TabXenos,
         ["UNMC"] = TabMilitary,
-        ["GOVFOR"] = TabMilitary,
+        ["GOVFOR"] = TabGovfor,
         ["RoyalMarines"] = TabTseRoyal,
         ["TSE"] = TabTseRoyal,
         ["SPP"] = TabSpp,
@@ -145,6 +146,9 @@ public static class GhostWarpGrouping
         if (departmentId == "CMSurvivor")
             return new GhostWarpGroupingResult(TabSurvivors, TabSurvivors);
 
+        if (departmentId == "AU14DepartmentGovernmentForces")
+            return new GhostWarpGroupingResult(TabGovfor, GetMilitarySection(jobId, realDisplayWeight));
+
         if (departmentId != null && MarineDepartments.Contains(departmentId))
             return new GhostWarpGroupingResult(TabMilitary, GetMilitarySection(jobId, realDisplayWeight));
 
@@ -174,6 +178,46 @@ public static class GhostWarpGrouping
             _ => tab,
         };
     }
+
+    // CMU14 method: shared with the server so its default tab pick matches the window's first tab
+    public static int GetTabOrder(string tab)
+    {
+        return tab switch
+        {
+            TabMilitary => 0,
+            TabGovfor => 0,
+            TabXenos => 1,
+            TabCorruptedHive => 2,
+            TabOpfor => 3,
+            TabYautja => 4,
+            TabThirdParty => 5,
+            TabSurvivors => 6,
+            TabWeYaPmc => 7,
+            TabClf => 8,
+            TabSpp => 9,
+            TabTseRoyal => 10,
+            TabCmbProvost => 11,
+            TabThreat => 12,
+            TabCursed => 13,
+            TabApe => 14,
+            TabLocations => 98,
+            TabOther => 99,
+            _ => 50,
+        };
+    }
+
+    // CMU14 method
+    public static string GetWarpTab(GhostWarp warp) =>
+        warp.Tab ?? (warp.IsWarpPoint ? TabLocations : TabOther);
+
+    // CMU14 method: tab the window shows first, so the initial response already carries the right overrides
+    public static string GetDefaultTab(IEnumerable<GhostWarp> warps) =>
+        warps
+            .Select(GetWarpTab)
+            .DefaultIfEmpty(TabOther)
+            .OrderBy(GetTabOrder)
+            .ThenBy(tab => tab, StringComparer.Ordinal)
+            .First();
 
     private static bool IsXenoJob(string? jobId)
     {
@@ -322,7 +366,7 @@ public static class GhostWarpGrouping
 
     private static string GetFactionSection(string tab, string? jobId, int realDisplayWeight)
     {
-        return tab == TabMilitary
+        return tab is TabMilitary or TabGovfor
             ? GetMilitarySection(jobId, realDisplayWeight)
             : GetHumanSection(tab, realDisplayWeight);
     }

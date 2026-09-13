@@ -1,18 +1,20 @@
 ﻿using System.Text.Json.Serialization;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.Effects;
 
-public sealed partial class RemoveDamage : EntityEffect
+public sealed partial class RemoveDamage : EntityEffectBase<RemoveDamage>
 {
     [DataField(required: true)]
     [JsonPropertyName("group")]
     public ProtoId<DamageGroupPrototype> Group;
 
-    protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
         if (!prototype.TryIndex(Group, out var type))
             return null;
@@ -20,26 +22,30 @@ public sealed partial class RemoveDamage : EntityEffect
         return $"Removes all {type.LocalizedName} damage";
     }
 
-    public override void Effect(EntityEffectBaseArgs args)
+}
+
+public sealed partial class RemoveDamageEntityEffectSystem
+    : EntityEffectSystem<DamageableComponent, RemoveDamage>
+{
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
+
+    protected override void Effect(Entity<DamageableComponent> entity, ref EntityEffectEvent<RemoveDamage> args)
     {
-        if (args is EntityEffectReagentArgs reagent && reagent.Scale < 0.95f)
+        if (args.ReagentContext != null && args.Scale < 0.95f)
             return;
 
-        if (!args.EntityManager.TryGetComponent(args.TargetEntity, out DamageableComponent? damageable))
+        if (!_prototype.TryIndex(args.Effect.Group, out var group))
             return;
 
-        var prototypes = IoCManager.Resolve<IPrototypeManager>();
-        if (!prototypes.TryIndex(Group, out var group))
-            return;
-
+        var currentDamage = _damageable.GetAllDamage((entity.Owner, entity.Comp));
         var damage = new DamageSpecifier();
         foreach (var type in group.DamageTypes)
         {
-            if (damageable.Damage.DamageDict.TryGetValue(type, out var amount))
+            if (currentDamage.DamageDict.TryGetValue(type, out var amount))
                 damage.DamageDict[type] = -amount;
         }
 
-        args.EntityManager.System<DamageableSystem>()
-            .TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
+        _damageable.TryChangeDamage(entity, damage, true, interruptsDoAfters: false);
     }
 }

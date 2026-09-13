@@ -15,7 +15,9 @@
   - type: Item
     sprite: _RMC14/Objects/Weapons/Melee/pickaxe.rsi
     size: Large
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: MeleeWeapon
     attackRate: 0.7
     wideAnimationRotation: -135

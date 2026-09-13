@@ -1,0 +1,138 @@
+# Nubody successors for the paired external parts used by the legacy
+# Animal, Mouse, Bloodsucker, Primate, and Ape body graphs.
+- type: entity
+  id: PartAnimal
+  parent: OrganBase
+  name: animal body part
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Reptilian/parts.rsi
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Biological
+  - type: StaticPrice
+    price: 50
+  - type: Tag
+    tags:
+    - Trash
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 3
+      - ReagentId: Blood
+        Quantity: 10
+
+- type: entity
+  id: TorsoAnimal
+  name: animal torso
+  parent:
+  - PartAnimal
+  - OrganBaseParent
+  - OrganBaseChildExternal
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Organ
+    category: Torso
+  - type: Sprite
+    layers:
+    - state: torso_m
+  - type: BodyPart
+    partType: Torso
+    children:
+      legs: { id: legs, type: Leg }
+    organs:
+      lungs: { id: lungs }
+      stomach: { id: stomach }
+      liver: { id: liver }
+      heart: { id: heart }
+      kidneys: { id: kidneys }
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 10
+      - ReagentId: Blood
+        Quantity: 20
+
+- type: entity
+  id: TorsoPrimate
+  name: primate torso
+  parent: TorsoAnimal
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BodyPart
+    partType: Torso
+    children:
+      hands: { id: hands, type: Hand }
+      legs: { id: legs, type: Leg }
+    organs:
+      lungs: { id: lungs }
+      stomach: { id: stomach }
+      liver: { id: liver }
+      heart: { id: heart }
+      kidneys: { id: kidneys }
+
+- type: entity
+  id: HandsAnimal
+  name: animal hands
+  parent:
+  - PartAnimal
+  - OrganBaseChildExternal
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Organ
+    category: Hands
+  - type: Sprite
+    layers:
+    - state: l_hand
+    - state: r_hand
+  - type: BodyPart
+    partType: Hand
+    symmetry: Left
+    children: {}
+    organs: {}
+
+- type: entity
+  id: LegsAnimal
+  name: animal legs
+  parent:
+  - PartAnimal
+  - OrganBaseParent
+  - OrganBaseChildExternal
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Organ
+    category: Legs
+  - type: Sprite
+    layers:
+    - state: l_leg
+    - state: r_leg
+  - type: BodyPart
+    partType: Leg
+    symmetry: None
+    children:
+      feet: { id: feet, type: Foot }
+    organs: {}
+  - type: MovementBodyPart
+
+- type: entity
+  id: FeetAnimal
+  name: animal feet
+  parent:
+  - PartAnimal
+  - OrganBaseChildExternal
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Organ
+    category: Feet
+  - type: Sprite
+    layers:
+    - state: r_foot
+    - state: l_foot
+  - type: BodyPart
+    partType: Foot
+    symmetry: None
+    children: {}
+    organs: {}

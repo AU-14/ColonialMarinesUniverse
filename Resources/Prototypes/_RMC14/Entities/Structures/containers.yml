@@ -33,8 +33,9 @@
     stageLoss: 4
     destroy: true
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

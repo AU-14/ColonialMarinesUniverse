@@ -1,0 +1,58 @@
+- type: entity
+  parent: CMUBaseCombatDrone
+  id: CMUFlamerDrone
+  name: flamer UGV
+  description: A remotely operated tracked UGV with twin claw-mounted flame nozzles. Its incinerator fires across the forward half of the chassis. Weld its frame and replace damaged wiring with cable.
+  suffix: CMU14, Unloaded
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/CombatDrone/flamer_ugv.rsi
+    noRot: true
+    layers:
+    - state: body
+      map: [hull]
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUCombatDroneVisuals.DamageState:
+        hull:
+          Healthy: {color: "#ffffff"}
+          Damaged: {color: "#b2a697"}
+          Destroyed: {color: "#6f6560"}
+  - type: CMUFlamerDrone
+  - type: Gun
+    cameraRecoilScalar: 0
+    fireRate: 0.7
+    soundGunshot:
+      collection: RMCFlamerShoot
+  - type: RMCFlamerAmmoProvider
+  - type: RMCIgniter
+    enabled: true
+    locked: true
+  - type: RMCAmmoEject
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: cmu-flamer-drone-fuel-slot
+        insertSound: /Audio/_RMC14/Weapons/Handling/flamer_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Handling/flamer_unload.ogg
+        whitelist:
+          components: [RMCFlamerTank]
+
+- type: entity
+  parent: RMCEffectWeldingSparks
+  id: CMUFlamerDroneClawEffect
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    scale: 0.5,0.5
+    layers:
+    - state: smoke
+      color: "#ffffff99"
+    - state: welding_sparks
+      shader: unshaded
+      color: "#ffb45c"
+  - type: PointLight
+    color: "#ff8e32"
+    radius: 1.2
+    energy: 2
+    castShadows: false

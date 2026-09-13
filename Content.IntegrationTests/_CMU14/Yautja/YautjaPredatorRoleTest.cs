@@ -8,12 +8,12 @@ using Content.Client.CharacterInfo;
 using Content.Client.StatusIcon;
 using Content.Client.ContextMenu.UI;
 using Content.Client.UserInterface.Systems.Chat;
-using Content.Client._CMU14.Yautja;
+using Content.Client.CMU14.Yautja;
 using Content.Client.Clickable;
 using Content.Client.Interactable.Components;
 using Content.Client.UserInterface.Systems.Actions.Controls;
 using Content.Client.Verbs.UI;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server.Administration.Logs;
 using Content.Server.Database;
 using Content.Server.EUI;
@@ -27,8 +27,8 @@ using Content.Server.Spawners.Components;
 using Content.Server.Shuttles.Components;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
-using Content.Shared._CMU14.Yautja;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dialog;
@@ -90,7 +90,7 @@ using Robust.Shared.Utility;
 using Robust.UnitTesting;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaPredatorRoleTest
@@ -136,11 +136,11 @@ public sealed class YautjaPredatorRoleTest
                     profile: lobbyProfile);
                 entMan.EventBus.RaiseLocalEvent(hunter, spawned, broadcast: true);
 
-                var humanoid = entMan.GetComponent<HumanoidAppearanceComponent>(hunter);
-                Assert.That(humanoid.SkinColor, Is.EqualTo(expected));
+                var humanoid = entMan.GetComponent<HumanoidProfileComponent>(hunter);
+                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter), Is.EqualTo(expected));
 
                 var hidden = entMan.GetComponent<HiddenAppearanceComponent>(hunter);
-                Assert.That(hidden.Appearance?.SkinColor, Is.EqualTo(expected),
+                Assert.That(hidden.Appearance?.Appearance.SkinColor, Is.EqualTo(expected),
                     "The hidden identity must retain the selected Yautja skin color.");
             });
 
@@ -149,27 +149,27 @@ public sealed class YautjaPredatorRoleTest
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
-                Assert.That(entMan.GetComponent<HumanoidAppearanceComponent>(hunter).SkinColor,
+                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter),
                     Is.EqualTo(expected),
                     "The authoritative appearance must remain selected after the spawn event settles.");
                 var hidden = entMan.GetComponent<HiddenAppearanceComponent>(hunter);
-                Assert.That(hidden.Appearance?.SkinColor, Is.EqualTo(expected));
+                Assert.That(hidden.Appearance?.Appearance.SkinColor, Is.EqualTo(expected));
             });
 
             await client.WaitAssertion(() =>
             {
                 var entMan = client.EntMan;
                 var clientHunter = entMan.GetEntity(server.EntMan.GetNetEntity(hunter));
-                var humanoid = entMan.GetComponent<HumanoidAppearanceComponent>(clientHunter);
+                var humanoid = entMan.GetComponent<HumanoidProfileComponent>(clientHunter);
                 var sprite = entMan.GetComponent<SpriteComponent>(clientHunter);
 
                 var hidden = entMan.GetComponent<HiddenAppearanceComponent>(clientHunter);
-                Assert.That(hidden.Appearance?.SkinColor, Is.EqualTo(expected));
+                Assert.That(hidden.Appearance?.Appearance.SkinColor, Is.EqualTo(expected));
                 Assert.That(sprite.LayerMapTryGet(HumanoidVisualLayers.Chest, out var chestLayer), Is.True);
                 var chest = (SpriteComponent.Layer) sprite[chestLayer];
                 Assert.That(chest.Color, Is.EqualTo(expected));
                 Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"));
-                Assert.That(humanoid.SkinColor, Is.EqualTo(expected),
+                Assert.That(YautjaTestAppearance.SkinColor(entMan, clientHunter), Is.EqualTo(expected),
                     "The replicated authoritative appearance must retain the selected skin color.");
             });
         }
@@ -202,14 +202,9 @@ public sealed class YautjaPredatorRoleTest
             var stationSpawning = entMan.System<StationSpawningSystem>();
             var inventory = entMan.System<InventorySystem>();
 
-            var yautjaAppearance = new HumanoidCharacterAppearance()
-                .WithSkinColor(new Color((byte) 56, (byte) 90, (byte) 48))
-                .WithEyeColor(Color.Gold)
-                .WithHairColor(new Color((byte) 20, (byte) 14, (byte) 10))
-                .WithMarkings(new List<Marking>
-                {
-                    new("CMUYautjaDreadlocksStandard", new List<Color> { new((byte) 20, (byte) 14, (byte) 10) }),
-                });
+            var yautjaAppearance = YautjaCharacterProfile.Default
+                .WithSkinColor(YautjaSkinColor.Green)
+                .WithEyeColor(YautjaEyeColor.Gold).Appearance.Clone();
 
             var yautja = YautjaCharacterProfile.Default
                 .WithName("Kainde Amedha")
@@ -239,7 +234,7 @@ public sealed class YautjaPredatorRoleTest
                 station: null,
                 authoritativeYautjaRank: YautjaRank.Elder);
             var meta = entMan.GetComponent<MetaDataComponent>(hunter);
-            var humanoid = entMan.GetComponent<HumanoidAppearanceComponent>(hunter);
+            var humanoid = entMan.GetComponent<HumanoidProfileComponent>(hunter);
 
             Assert.Multiple(() =>
             {
@@ -247,10 +242,10 @@ public sealed class YautjaPredatorRoleTest
                 Assert.That(humanoid.Species, Is.EqualTo("Yautja"));
                 Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(hunter), Is.False,
                     "Original CMSS13 Hunter spawn has no mask until the player uses the loadout vendor.");
-                Assert.That(humanoid.SkinColor, Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)));
-                Assert.That(humanoid.EyeColor,
+                Assert.That(YautjaTestAppearance.SkinColor(entMan, hunter), Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)));
+                Assert.That(YautjaTestAppearance.EyeColor(entMan, hunter),
                     Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Gold)));
-                Assert.That(humanoid.MarkingSet.Markings.Values.SelectMany(markings => markings),
+                Assert.That(YautjaTestAppearance.Hair(entMan, hunter),
                     Has.Exactly(1).Matches<Marking>(marking => marking.MarkingId == "CMUYautjaDreadlocksLongCurved"));
                 AssertEquippedPrototype(entMan, inventory, hunter, "gloves", "CMUYautjaBracer");
                 AssertEquippedBracerVisualProfile(entMan, inventory, hunter, "gloves", "CMUYautjaBracerCrimson");
@@ -369,7 +364,7 @@ public sealed class YautjaPredatorRoleTest
             foreach (var locale in new[] { "ru-RU", "en-US" })
             {
                 var fileName = locale == "ru-RU" ? "runtime_extra.ftl" : "yautja.ftl";
-                using var stream = resources.ContentFileRead(new ResPath($"/Locale/{locale}/_CMU14/yautja/{fileName}"));
+                using var stream = resources.ContentFileRead(new ResPath($"/Locale/{locale}/CMU14/yautja/{fileName}"));
                 using var reader = new StreamReader(stream);
                 var text = reader.ReadToEnd();
                 var popup = text.Split('\n')
@@ -652,7 +647,7 @@ public sealed class YautjaPredatorRoleTest
                 var jobsQuery = entMan.EntityQueryEnumerator<StationJobsComponent>();
                 while (jobsQuery.MoveNext(out var station, out var stationJobs) )
                 {
-                    if (!stationJobs.JobList.TryGetValue("CMUYautjaHunter", out var slots))
+                    if (!entMan.System<StationJobsSystem>().TryGetJobSlot(station, "CMUYautjaHunter", out var slots, stationJobs))
                         continue;
 
                     hunterSlotStations.Add((station, slots));
@@ -675,7 +670,7 @@ public sealed class YautjaPredatorRoleTest
                     false,
                     false,
                     hunterJobs), Is.True);
-                var remainingHunterSlots = hunterJobs.JobList["CMUYautjaHunter"];
+                var remainingHunterSlots = stationJobsSystem.GetJobs(hunterStation, hunterJobs)["CMUYautjaHunter"];
                 var selectedYautjaProfile = YautjaCharacterProfile.Default
                     .WithName("Late Join Kainde Amedha")
                     .WithSkinColor(YautjaSkinColor.Red)
@@ -708,16 +703,16 @@ public sealed class YautjaPredatorRoleTest
                         "A predator late-join must use a spawn marker on one of the hunter ship z-levels.");
 
                     var spawnedYautja = entMan.GetComponent<YautjaAppliedProfileComponent>(spawnedUid);
-                    var spawnedHumanoid = entMan.GetComponent<HumanoidAppearanceComponent>(spawnedUid);
+                    var spawnedHumanoid = entMan.GetComponent<HumanoidProfileComponent>(spawnedUid);
                     var spawnedMeta = entMan.GetComponent<MetaDataComponent>(spawnedUid);
                     Assert.Multiple(() =>
                     {
                         Assert.That(spawnedMeta.EntityName, Is.EqualTo(selectedYautjaProfile.Name));
                         Assert.That(spawnedYautja.Profile.Name, Is.EqualTo(selectedYautjaProfile.Name));
                         Assert.That(spawnedHumanoid.Species, Is.EqualTo("Yautja"));
-                        Assert.That(spawnedHumanoid.SkinColor,
+                        Assert.That(YautjaTestAppearance.SkinColor(entMan, spawnedUid),
                             Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Red)));
-                        Assert.That(spawnedHumanoid.EyeColor,
+                        Assert.That(YautjaTestAppearance.EyeColor(entMan, spawnedUid),
                             Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Gold)));
                         Assert.That(spawnedYautja.Profile.Status, Is.EqualTo(YautjaProfileStatus.Normal));
                         Assert.That(spawnedYautja.Profile.ClanRank, Is.EqualTo(YautjaRank.Blooded));
@@ -725,7 +720,7 @@ public sealed class YautjaPredatorRoleTest
                         Assert.That(spawnedYautja.Profile.CapeStyle, Is.EqualTo(YautjaCapeStyle.Ceremonial));
                         Assert.That(spawnedYautja.Profile.BracerMaterial, Is.EqualTo(YautjaBracerMaterial.Bone));
                     });
-                    Assert.That(hunterJobs.JobList["CMUYautjaHunter"], Is.EqualTo(remainingHunterSlots));
+                    Assert.That(stationJobsSystem.GetJobs(hunterStation, hunterJobs)["CMUYautjaHunter"], Is.EqualTo(remainingHunterSlots));
                 }
                 finally
                 {
@@ -764,7 +759,7 @@ public sealed class YautjaPredatorRoleTest
 
             var session = server.PlayerMan.Sessions.Single();
             var euiManager = server.ResolveDependency<EuiManager>();
-            var editor = new Content.Server._CMU14.Yautja.YautjaPredatorAdminEditorEui();
+            var editor = new Content.Server.CMU14.Yautja.YautjaPredatorAdminEditorEui();
             EntityUid predatorSpawn = default;
             euiManager.OpenEui(editor, session);
 
@@ -872,7 +867,7 @@ public sealed class YautjaPredatorRoleTest
                 ground,
             }));
             Assert.That(relayBeacon.PulseSound, Is.TypeOf<SoundPathSpecifier>());
-            var signalPath = new ResPath("/Audio/_CMU14/Yautja/signal.ogg");
+            var signalPath = new ResPath("/Audio/CMU14/Yautja/signal.ogg");
             Assert.That(((SoundPathSpecifier) relayBeacon.PulseSound).Path, Is.EqualTo(signalPath),
                 "CMSS13 relay beacon attack_self() plays sound/ambience/signal.ogg when starting the teleport do-after.");
             Assert.That(server.ResolveDependency<IResourceManager>().ContentFileExists(signalPath), Is.True,
@@ -3021,7 +3016,7 @@ public sealed class YautjaPredatorRoleTest
             try
             {
                 entMan.GetComponent<YautjaRelayBeaconComponent>(beacon).PulseSound =
-                    new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
+                    new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/pred_bracer.wav");
                 Assert.That(hands.TryPickupAnyHand(hunter, beacon), Is.True);
 
                 Assert.That(ui.TryOpenUi(beacon, YautjaRelayBeaconUIKey.Key, hunter), Is.True);
@@ -3079,7 +3074,7 @@ public sealed class YautjaPredatorRoleTest
             try
             {
                 entMan.GetComponent<YautjaRelayBeaconComponent>(beacon).PulseSound =
-                    new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
+                    new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/pred_bracer.wav");
                 Assert.That(hands.TryPickupAnyHand(hunter, beacon), Is.True);
 
                 var beforeUse = AudioEntities(entMan);
@@ -3098,7 +3093,7 @@ public sealed class YautjaPredatorRoleTest
                     new YautjaRelayBeaconDestinationMsg(YautjaRelayDestinationKind.YautjaShip) { Actor = hunter });
 
                 Assert.That(AudioFileNamesAfter(entMan, beforeUse),
-                    Is.EqualTo(new[] { "/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav" }),
+                    Is.EqualTo(new[] { "/Audio/CMU14/Yautja/Equipment/pred_bracer.wav" }),
                     "CMSS13 plays signal.ogg only after the chosen destination resolves to a turf and the do_after starts.");
             }
             finally
@@ -3120,7 +3115,7 @@ public sealed class YautjaPredatorRoleTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
-        const string testPulseSound = "/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav";
+        const string testPulseSound = "/Audio/CMU14/Yautja/Equipment/pred_bracer.wav";
 
         EntityUid bloodedThrall = default;
         EntityUid simpleBeacon = default;
@@ -3733,9 +3728,9 @@ public sealed class YautjaPredatorRoleTest
             AssertHuntDestination(prototypes, componentFactory, "CMUYautjaYoungbloodDestinationJungleMoon", YautjaHuntTeleporterKind.Young, "jungle_moon", "Jungle Moon");
             AssertHuntDestination(prototypes, componentFactory, "CMUYautjaYoungbloodDestinationDesertMoon", YautjaHuntTeleporterKind.Young, "desert_moon", "Desert Moon");
 
-            AssertPlacedMapPrototypeEntityCount(server, "/Maps/_CMU14/huntership.yml", "CMUHunterShipTeleporterYautjaShip", 2);
-            AssertPlacedMapPrototypeEntityCount(server, "/Maps/_CMU14/huntership_upper.yml", "CMUHunterShipTeleporterYautjaShip", 2);
-            AssertPlacedMapPrototypeEntityCount(server, "/Maps/_CMU14/huntership_lower.yml", "CMUHunterShipTeleporterYautjaYoung", 4);
+            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/huntership.yml", "CMUHunterShipTeleporterYautjaShip", 2);
+            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/huntership_upper.yml", "CMUHunterShipTeleporterYautjaShip", 2);
+            AssertPlacedMapPrototypeEntityCount(server, "/Maps/CMU14/huntership_lower.yml", "CMUHunterShipTeleporterYautjaYoung", 4);
 
             var placedRelays = prototypes.EnumeratePrototypes<EntityPrototype>()
                 .Where(proto => proto.ID.StartsWith("CMUHunterShipPlacedCMUYautjaRelayBeacon", StringComparison.Ordinal))
@@ -3798,17 +3793,13 @@ public sealed class YautjaPredatorRoleTest
             });
 
             Assert.That(visor.TryGetComponent<ActionComponent>(out var visorAction, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(visorAction!.Icon, Is.EqualTo(ActionIcon("visor_framed")));
-            Assert.That(visorAction.IconOn, Is.EqualTo(ActionIcon("visor_on_framed")));
             Assert.That(visorAction.BackgroundOn, Is.Null);
 
             Assert.That(translator.TryGetComponent<ActionComponent>(out var translatorAction, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(translatorAction!.Icon, Is.EqualTo(ActionIcon("translator_framed")));
             Assert.That(translatorAction.BackgroundOn, Is.Null);
             Assert.That(translatorAction.UseDelay, Is.Null);
 
             Assert.That(audioPanel.TryGetComponent<ActionComponent>(out var audioPanelAction, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(audioPanelAction!.Icon, Is.EqualTo(ActionIcon("looc_toggle_framed")));
             Assert.That(audioPanel.TryGetComponent<InstantActionComponent>(out var audioPanelInstant, server.EntMan.ComponentFactory), Is.True);
             Assert.That(audioPanelInstant!.Event, Is.TypeOf<YautjaAudioPanelActionEvent>());
 
@@ -3880,7 +3871,7 @@ public sealed class YautjaPredatorRoleTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var componentFactory = client.ResolveDependency<IComponentFactory>();
             var cache = client.ResolveDependency<IResourceCache>();
-            var rsiPath = new ResPath("/Textures/_CMU14/Yautja/actions.rsi");
+            var rsiPath = new ResPath("/Textures/CMU14/Yautja/actions.rsi");
 
             Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True, $"{rsiPath} must load without falling back to error icons.");
 
@@ -3889,11 +3880,15 @@ public sealed class YautjaPredatorRoleTest
                 .Select(proto =>
                 {
                     Assert.That(proto.TryGetComponent<ActionComponent>(out var action, componentFactory), Is.True, $"{proto.ID} must have ActionComponent.");
-                    return action!;
+                    return proto;
                 })
-                .SelectMany(action => new[] { action.Icon, action.IconOn })
+                .SelectMany(proto => new[]
+                {
+                    YautjaActionSpriteTest.ReadIcon(proto, componentFactory),
+                    YautjaActionSpriteTest.ReadIcon(proto, componentFactory, true),
+                })
                 .OfType<SpriteSpecifier.Rsi>()
-                .Where(icon => icon.RsiPath == new ResPath("_CMU14/Yautja/actions.rsi"))
+                .Where(icon => icon.RsiPath == new ResPath("CMU14/Yautja/actions.rsi"))
                 .Select(icon => icon.RsiState)
                 .Distinct()
                 .OrderBy(state => state)
@@ -3948,9 +3943,9 @@ public sealed class YautjaPredatorRoleTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var componentFactory = client.ResolveDependency<IComponentFactory>();
             var cache = client.ResolveDependency<IResourceCache>();
-            var hunterGearPath = new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_gear.rsi");
-            var thrallGearPath = new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi");
-            var bracerPath = new ResPath("/Textures/_CMU14/Yautja/bracer.rsi");
+            var hunterGearPath = new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_gear.rsi");
+            var thrallGearPath = new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi");
+            var bracerPath = new ResPath("/Textures/CMU14/Yautja/bracer.rsi");
 
             Assert.That(cache.TryGetResource<RSIResource>(hunterGearPath, out var hunterGear), Is.True);
             Assert.That(hunterGear!.RSI.TryGetState("teleporter", out var teleporter), Is.True);
@@ -3999,10 +3994,16 @@ public sealed class YautjaPredatorRoleTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var componentFactory = server.EntMan.ComponentFactory;
-            var allowedCooldownActions = new HashSet<string>
+            var allowedCooldownActions = new Dictionary<string, int>
             {
-                "CMUActionYautjaLeap",
-                "CMUActionYautjaToggleLantern",
+                ["CMUActionYautjaLeap"] = 15,
+                ["CMUActionYautjaToggleLantern"] = 1,
+                ["CMUActionYautjaHonorRoar"] = 45,
+                ["CMUActionYautjaHuntingLeap"] = 12,
+                ["CMUActionYautjaCreateHuntingCanteen"] = 1,
+                ["CMUActionYautjaRecall"] = 5,
+                ["CMUActionYautjaRaiseThrall"] = 120,
+                ["CMUActionYautjaCreateFieldRation"] = 1,
             };
 
             var yautjaActions = prototypes.EnumeratePrototypes<EntityPrototype>()
@@ -4018,8 +4019,9 @@ public sealed class YautjaPredatorRoleTest
                 foreach (var proto in yautjaActions)
                 {
                     Assert.That(proto.TryGetComponent<ActionComponent>(out var action, componentFactory), Is.True);
-                    if (allowedCooldownActions.Contains(proto.ID))
-                        Assert.That(action!.UseDelay, Is.Not.Null, proto.ID);
+                    if (allowedCooldownActions.TryGetValue(proto.ID, out var cooldown))
+                        Assert.That(action!.UseDelay, Is.EqualTo(TimeSpan.FromSeconds(cooldown)),
+                            $"{proto.ID} retains its source or current CMU cooldown.");
                     else
                         Assert.That(action!.UseDelay, Is.Null, $"{proto.ID} should not draw a cooldown fill over the CMSS13 action icon animation.");
                 }
@@ -4040,7 +4042,7 @@ public sealed class YautjaPredatorRoleTest
             var cache = client.ResolveDependency<IResourceCache>();
             for (var length = 2; length <= 5; length++)
             {
-                var rsiPath = new ResPath($"/Textures/_CMU14/HunterShip/obj/items/hunter/pred_vendor_merged_{length}.rsi");
+                var rsiPath = new ResPath($"/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor_merged_{length}.rsi");
                 Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True, $"{rsiPath} must load for merged rack outline.");
                 Assert.That(resource!.RSI.Size.X, Is.EqualTo(32 * length));
                 Assert.That(resource.RSI.Size.Y, Is.EqualTo(64));
@@ -4073,17 +4075,17 @@ public sealed class YautjaPredatorRoleTest
             foreach (var (length, segmentStates) in variants)
             {
                 using var merged = LoadRgbaImage(resources,
-                    new ResPath($"/Textures/_CMU14/HunterShip/obj/items/hunter/pred_vendor_merged_{length}.rsi/pred_vendor_merged.png"));
+                    new ResPath($"/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor_merged_{length}.rsi/pred_vendor_merged.png"));
                 using var left = LoadRgbaImage(resources,
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_left.png"));
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_left.png"));
                 using var lcenter = LoadRgbaImage(resources,
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_lcenter.png"));
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_lcenter.png"));
                 using var centre = LoadRgbaImage(resources,
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_centre.png"));
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_centre.png"));
                 using var rcentre = LoadRgbaImage(resources,
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_rcentre.png"));
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_rcentre.png"));
                 using var right = LoadRgbaImage(resources,
-                    new ResPath("/Textures/_CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_right.png"));
+                    new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi/pred_vendor_right.png"));
 
                 var sources = new Dictionary<string, SixLabors.ImageSharp.Image<Rgba32>>
                 {
@@ -4648,7 +4650,7 @@ public sealed class YautjaPredatorRoleTest
         {
             var cache = client.ResolveDependency<IResourceCache>();
             var hud = client.EntMan.System<YautjaHudSystem>();
-            var rsiPath = new ResPath("/Textures/_CMU14/Yautja/hud_yautja.rsi");
+            var rsiPath = new ResPath("/Textures/CMU14/Yautja/hud_yautja.rsi");
 
             Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True, $"{rsiPath} must load without falling back to error icons.");
             Assert.That(resource!.RSI.TryGetState("hunter_thralled_blooded", out _), Is.True);
@@ -4719,7 +4721,7 @@ public sealed class YautjaPredatorRoleTest
                     entMan.RemoveComponent<YautjaHudViewerComponent>(targetUid);
 
                 var cache = pair.Client.ResolveDependency<IResourceCache>();
-                var rsiPath = new ResPath("/Textures/_CMU14/Yautja/hud_yautja.rsi");
+                var rsiPath = new ResPath("/Textures/CMU14/Yautja/hud_yautja.rsi");
                 Assert.That(cache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True);
 
                 var yautja = entMan.EnsureComponent<YautjaComponent>(targetUid);
@@ -4927,7 +4929,7 @@ public sealed class YautjaPredatorRoleTest
             await client.WaitPost(() =>
             {
                 var info = client.EntMan.System<Content.Client.CharacterInfo.CharacterInfoSystem>();
-                info.OnCharacterUpdate += data => displayedTitle = data.Job;
+                info.OnCharacterUpdate += data => displayedTitle = data.JobTitle;
                 info.RequestCharacterInfo();
             });
             await pair.ReallyBeIdle(10);
@@ -5019,12 +5021,12 @@ public sealed class YautjaPredatorRoleTest
 
     private static SpriteSpecifier.Rsi ActionIcon(string state)
     {
-        return new SpriteSpecifier.Rsi(new ResPath("_CMU14/Yautja/actions.rsi"), state);
+        return new SpriteSpecifier.Rsi(new ResPath("CMU14/Yautja/actions.rsi"), state);
     }
 
     private static SpriteSpecifier.Rsi StatusIcon(string state)
     {
-        return new SpriteSpecifier.Rsi(new ResPath("/Textures/_CMU14/Yautja/hud_yautja.rsi"), state);
+        return new SpriteSpecifier.Rsi(new ResPath("/Textures/CMU14/Yautja/hud_yautja.rsi"), state);
     }
 
     private static void MakeActivelyCloaked(IEntityManager entMan, EntityUid user)

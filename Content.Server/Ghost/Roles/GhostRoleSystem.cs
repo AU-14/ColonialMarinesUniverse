@@ -1,15 +1,14 @@
+using Content.Server.Ghost.Roles.Events;
+using Content.Server.Players.JobWhitelist;
 using System.Linq;
 using Content.Server._RMC14.Ghost.Roles;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
-using Content.Server.Players.JobWhitelist;
 using Content.Server.EUI;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Ghost.Roles.Events;
 using Content.Server.Ghost.Roles.UI;
-using Content.Server.Mind.Commands;
 using Content.Server.Popups;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
@@ -17,14 +16,17 @@ using Content.Shared.Database;
 using Content.Shared.Follower;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Ghost.Roles;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Ghost.Roles.Raffles;
+using Content.Shared.Ghost.Systems;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Players;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Components;
 using Content.Shared.Verbs;
 using Content.Shared._RMC14.Xenonids;
 using JetBrains.Annotations;
@@ -45,6 +47,8 @@ namespace Content.Server.Ghost.Roles;
 [UsedImplicitly]
 public sealed partial class GhostRoleSystem : EntitySystem
 {
+    [Dependency] private JobWhitelistManager _jobWhitelist = default!;
+    [Dependency] private IBanManager _ban = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private EuiManager _euiManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
@@ -56,10 +60,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
     [Dependency] private SharedRoleSystem _roleSystem = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private IBanManager _banManager = default!;
-    [Dependency] private JobWhitelistManager _jobWhitelist = default!;
 
     private uint _nextRoleIdentifier;
     private bool _needsUpdateGhostRoleCount = true;
@@ -262,7 +263,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
             }
 
             var foundWinner = false;
-            var deciderPrototype = _prototype.Index(ghostRole.RaffleConfig.Decider);
+            var deciderPrototype = ProtoMan.Index(ghostRole.RaffleConfig.Decider);
 
             // use the ghost role's chosen winner picker to find a winner
             deciderPrototype.Decider.PickWinner(
@@ -309,20 +310,24 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!CanRequestGhostRole(player))
             return false;
 
-        if (role.Comp.JobProto is { } job)
-        {
-            var jobBans = _banManager.GetJobBans(player.UserId);
-            if (jobBans == null || jobBans.Contains(job))
-                return false;
+        TryPrototypes(role, out var antags, out var jobs);
 
+        // CMU14: faction role whitelists apply to ghost roles too.
+        foreach (var job in jobs)
+        {
             if (!_jobWhitelist.IsAllowed(player, job))
                 return false;
-
-            var ev = new IsJobAllowedEvent(player, job);
-            RaiseLocalEvent(ref ev);
-            if (ev.Cancelled)
-                return false;
         }
+
+        // Preserve the fork's fail-closed role-ban check until the session's ban cache is available.
+        if ((jobs.Count > 0 || antags.Count > 0) && _ban.GetRoleBans(player.UserId) == null)
+            return false;
+
+        if (_ban.IsRoleBanned(player, antags) || _ban.IsRoleBanned(player, jobs))
+            return false;
+
+        if (!IsRoleAllowed(player, jobs, antags, role.Comp.Requirements))
+            return false;
 
         var attempt = new GhostRoleRequestAttemptEvent(player, role.Owner, role.Comp);
         RaiseLocalEvent(role.Owner, ref attempt);
@@ -356,7 +361,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
     private void RemoveRaffleAndUpdateEui(EntityUid entityUid, GhostRoleRaffleComponent raffle)
     {
         _ghostRoleRaffles.Remove(raffle.Identifier);
-        RemComp(entityUid, raffle);
+        if (!raffle.Deleted)
+            RemComp(entityUid, raffle);
         UpdateAllEui();
     }
 
@@ -431,7 +437,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
             return; // should, realistically, never be reached but you never know
 
         var settings = config.SettingsOverride
-                       ?? _prototype.Index<GhostRoleRaffleSettingsPrototype>(config.Settings).Settings;
+                       ?? ProtoMan.Index<GhostRoleRaffleSettingsPrototype>(config.Settings).Settings;
 
         if (settings.MaxDuration < settings.InitialDuration)
         {
@@ -557,7 +563,6 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
         if (!CanRequestGhostRole(player, roleEnt))
             return;
-
         if (roleEnt.Comp.RaffleConfig is not null)
         {
             JoinRaffle(player, identifier);
@@ -569,18 +574,90 @@ public sealed partial class GhostRoleSystem : EntitySystem
     }
 
     /// <summary>
+    /// Collect all role prototypes on the Ghostrole.
+    /// </summary>
+    /// <returns>
+    /// Returns true if at least on role prototype could be found.
+    /// </returns>
+    private bool TryPrototypes(
+        Entity<GhostRoleComponent> roleEnt,
+        out List<ProtoId<AntagPrototype>> antags,
+        out List<ProtoId<JobPrototype>> jobs)
+    {
+        antags = [];
+        jobs = [];
+
+        // If there is a mind already, check its mind roles.
+        // Not sure if this can ever actually happen.
+        if (TryComp<MindContainerComponent>(roleEnt, out var mindCont)
+            && TryComp<MindComponent>(mindCont.Mind, out var mind))
+        {
+            foreach (var role in mind.MindRoleContainer.ContainedEntities)
+            {
+                if(!TryComp<MindRoleComponent>(role, out var comp))
+                    continue;
+
+                if (comp.JobPrototype is not null)
+                    jobs.Add(comp.JobPrototype.Value);
+
+                else if (comp.AntagPrototype is not null)
+                    antags.Add(comp.AntagPrototype.Value);
+            }
+
+            return antags.Count > 0 || jobs.Count > 0;
+        }
+
+        if (roleEnt.Comp.JobProto is not null)
+            jobs.Add(roleEnt.Comp.JobProto.Value);
+
+
+        // If there is no mind, check the mindRole prototypes
+        foreach (var proto in roleEnt.Comp.MindRoles)
+        {
+            if (!ProtoMan.TryIndex(proto, out var indexed)
+                || !indexed.TryComp<MindRoleComponent>(out var roleComp, Factory))
+                continue;
+
+            if (roleComp.JobPrototype is not null)
+                jobs.Add(roleComp.JobPrototype.Value);
+            else if (roleComp.AntagPrototype is not null)
+                antags.Add(roleComp.AntagPrototype.Value);
+            else
+                Log.Debug($"Mind role '{proto}' of '{roleEnt.Comp.RoleName}' has neither a job or antag prototype specified");
+        }
+
+        return antags.Count > 0 || jobs.Count > 0;
+    }
+
+    /// <summary>
+    /// Checks if the player passes the requirements for the supplied roles.
+    /// Returns false if any role fails the check.
+    /// </summary>
+    private bool IsRoleAllowed(
+        ICommonSession player,
+        List<ProtoId<JobPrototype>>? jobIds,
+        List<ProtoId<AntagPrototype>>? antagIds,
+        HashSet<JobRequirement>? requirementsOverride)
+    {
+        var ev = new IsRoleAllowedEvent(
+            player,
+            jobIds,
+            antagIds,
+            requirementsOverride: requirementsOverride);
+        RaiseLocalEvent(ref ev);
+
+        return !ev.Cancelled;
+    }
+
+    /// <summary>
     /// Attempts having the player take over the ghost role with the corresponding ID. Does not start a raffle.
     /// </summary>
     /// <returns>True if takeover was successful, otherwise false.</returns>
     public bool Takeover(ICommonSession player, uint identifier)
     {
-        if (!CanRequestGhostRole(player))
-            return false;
-
+        // UI entry points validate ghost/lobby state and role eligibility before reaching this raw API.
+        // Keeping the gate here prevents sequential programmatic takeovers and leaves spawned roles unusable.
         if (!_ghostRoles.TryGetValue(identifier, out var role))
-            return false;
-
-        if (!CanRequestGhostRole(player, role))
             return false;
 
         var playerNotInGame = _gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status)
@@ -663,7 +740,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         // I genuinely can't think of a single reason why ghost roles need a player's character name,
         // Ghost roles should use anonymised names, but I'm going to leave this to re-enable functionality
         // if (role.JobProto is { } jobId
-        //     && _prototype.TryIndex(jobId, out JobPrototype? jobProto)
+        //     && ProtoMan.TryIndex(jobId, out JobPrototype? jobProto)
         //     && jobProto.UsePlayerProfile)
         //     characterName = GetGhostRoleCharacterName(player, mob);
         // else
@@ -681,9 +758,6 @@ public sealed partial class GhostRoleSystem : EntitySystem
         Log.Debug($"GhostRoleInternalCreateMindAndTransfer: set user id on mind {newMind.Owner} (user {player.UserId})");
 
         _roleSystem.MindAddRoles(newMind.Owner, role.MindRoles, newMind.Comp);
-
-        if (_roleSystem.MindHasRole<GhostRoleMarkerRoleComponent>(newMind!, out var markerRole))
-            markerRole.Value.Comp2.Name = role.RoleName;
     }
 
     /// <summary>
@@ -757,6 +831,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
                 ? _timing.CurTime.Add(raffle.Countdown)
                 : TimeSpan.MinValue;
 
+            TryPrototypes((uid, role), out var antags, out var jobs);
+
             roles.Add(new GhostRoleInfo
             {
                 Identifier = id,
@@ -766,6 +842,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
                 Name = role.RoleName,
                 Description = role.RoleDescription,
                 Rules = role.RoleRules,
+                RolePrototypes = (jobs, antags),
                 Requirements = role.Requirements,
                 Kind = kind,
                 RafflePlayerCount = rafflePlayerCount,
@@ -785,9 +862,9 @@ public sealed partial class GhostRoleSystem : EntitySystem
     private string? GetGhostRolePreviewPrototype(GhostRoleComponent role, MetaDataComponent meta)
     {
         if (role.JobProto is { } jobId &&
-            _prototype.TryIndex(jobId, out JobPrototype? job))
+            ProtoMan.TryIndex(jobId, out JobPrototype? job))
         {
-            return job.JobPreviewEntity?.ToString() ?? job.JobEntity ?? meta.EntityPrototype?.ID;
+            return job.JobPreviewEntity?.ToString() ?? job.JobEntity?.ToString() ?? meta.EntityPrototype?.ID;
         }
 
         return meta.EntityPrototype?.ID;
@@ -893,14 +970,16 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (string.IsNullOrEmpty(component.Prototype))
             throw new NullReferenceException("Prototype string cannot be null or empty!");
 
-        var mob = Spawn(component.Prototype, Transform(uid).Coordinates);
-        _transform.AttachToGridOrMap(mob);
+        if (!_transform.TryGetMapOrGridCoordinates(uid, out var spawnCoordinates))
+            return;
+
+        var mob = Spawn(component.Prototype, spawnCoordinates.Value);
 
         var spawnedEvent = new GhostRoleSpawnerUsedEvent(uid, mob);
-        RaiseLocalEvent(mob, spawnedEvent);
+        RaiseLocalEvent(mob, ref spawnedEvent);
 
         if (ghostRole.MakeSentient)
-            MakeSentientCommand.MakeSentient(mob, EntityManager, ghostRole.AllowMovement, ghostRole.AllowSpeech);
+            _mindSystem.MakeSentient(mob, ghostRole.AllowMovement, ghostRole.AllowSpeech);
 
         EnsureComp<MindContainerComponent>(mob);
 
@@ -963,7 +1042,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         }
 
         if (ghostRole.MakeSentient)
-            MakeSentientCommand.MakeSentient(uid, EntityManager, ghostRole.AllowMovement, ghostRole.AllowSpeech);
+            _mindSystem.MakeSentient(uid, ghostRole.AllowMovement, ghostRole.AllowSpeech);
 
         GhostRoleInternalCreateMindAndTransfer(args.Player, uid, uid, ghostRole);
         UnregisterGhostRole((uid, ghostRole));
@@ -984,7 +1063,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
         foreach (var prototypeID in prototypes)
         {
-            if (_prototype.TryIndex<GhostRolePrototype>(prototypeID, out var prototype))
+            if (ProtoMan.TryIndex<GhostRolePrototype>(prototypeID, out var prototype))
             {
                 var verb = CreateVerb(uid, component, args.User, prototype);
                 verbs.Add(verb);
@@ -1030,7 +1109,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
     public void OnGhostRoleRadioMessage(Entity<GhostRoleMobSpawnerComponent> entity, ref GhostRoleRadioMessage args)
     {
-        if (!_prototype.TryIndex(args.ProtoId, out var ghostRoleProto))
+        if (!ProtoMan.Resolve(args.ProtoId, out var ghostRoleProto))
             return;
 
         // if the prototype chosen isn't actually part of the selectable options, ignore it

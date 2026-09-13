@@ -7,8 +7,10 @@
     itemIconStyle: NoItem
     checkCanInteract: false
     checkConsciousness: false
-    icon:
-      sprite: Mobs/Ghosts/ghost_human.rsi
+  - type: Sprite
+    layers:
+    - sprite: Mobs/Ghosts/ghost_human.rsi
       state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMGhostActionEvent

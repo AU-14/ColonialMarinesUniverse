@@ -1,6 +1,7 @@
 using Content.Server.Storage.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared._RMC14.CrashLand;
+using Content.Shared.Storage.Components;
 
 namespace Content.Server._RMC14.CrashLand;
 
@@ -35,6 +36,6 @@ public sealed partial class CrashLandSystem : SharedCrashLandSystem
             ApplyFallingDamage(entity);
         }
 
-        _entityStorage.OpenStorage(ent);
+        _entityStorage.OpenStorage((ent.Owner, (EntityStorageComponent?) ent.Comp));
     }
 }

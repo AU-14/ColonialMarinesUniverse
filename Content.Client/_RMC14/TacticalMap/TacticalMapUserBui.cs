@@ -127,6 +127,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             Window.Wrapper.Map.Lines.AddRange(lines.OpforLines);
             Window.Wrapper.Map.Lines.AddRange(lines.GovforLines);
             Window.Wrapper.Map.Lines.AddRange(lines.ClfLines);
+            Window.Wrapper.Map.Lines.AddRange(lines.WeYuLines); // CMU14
         }
 
         if (_refreshed)
@@ -141,6 +142,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             Window.Wrapper.Canvas.Lines.AddRange(lines.OpforLines);
             Window.Wrapper.Canvas.Lines.AddRange(lines.GovforLines);
             Window.Wrapper.Canvas.Lines.AddRange(lines.ClfLines);
+            Window.Wrapper.Canvas.Lines.AddRange(lines.WeYuLines); // CMU14
         }
 
         var user = EntMan.GetComponentOrNull<TacticalMapUserComponent>(Owner);
@@ -168,7 +170,11 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             return;
         }
 
-        var totalCount = user.MarineBlips.Count + user.XenoBlips.Count + user.XenoStructureBlips.Count + user.OpforBlips.Count + user.GovforBlips.Count + user.ClfBlips.Count + user.YautjaBlips.Count;
+        // CMU14 Begin: custom tactical-map channels.
+        var totalCount = user.MarineBlips.Count + user.XenoBlips.Count + user.XenoStructureBlips.Count
+            + user.OpforBlips.Count + user.GovforBlips.Count + user.ClfBlips.Count
+            + user.WeYuBlips.Count + user.AbominationBlips.Count + user.YautjaBlips.Count;
+        // CMU14 End
         var blips = new TacticalMapBlip[totalCount];
         var entityIds = new int[totalCount];
         var i = 0;
@@ -215,12 +221,28 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             i++;
         }
 
+        foreach (var (entityId, blip) in user.WeYuBlips) // CMU14
+        {
+            blips[i] = blip;
+            entityIds[i] = entityId;
+            i++;
+        }
+
+        foreach (var (entityId, blip) in user.AbominationBlips) // CMU14
+        {
+            blips[i] = blip;
+            entityIds[i] = entityId;
+            i++;
+        }
+
+        // CMU14 Begin: hunters and temporarily trapped prey.
         foreach (var (entityId, blip) in user.YautjaBlips)
         {
             blips[i] = blip;
             entityIds[i] = entityId;
             i++;
         }
+        // CMU14 End
 
         Window.Wrapper.UpdateBlips(blips, entityIds);
 
@@ -258,6 +280,10 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
                 allLabels[label.Key] = label.Value;
             }
             foreach (var label in labels.ClfLabels)
+            {
+                allLabels[label.Key] = label.Value;
+            }
+            foreach (var label in labels.WeYuLabels) // CMU14
             {
                 allLabels[label.Key] = label.Value;
             }

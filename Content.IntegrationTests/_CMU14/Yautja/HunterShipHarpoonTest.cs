@@ -7,7 +7,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class HunterShipHarpoonTest

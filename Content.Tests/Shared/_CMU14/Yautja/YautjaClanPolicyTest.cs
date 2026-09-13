@@ -1,9 +1,9 @@
 using System;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using NUnit.Framework;
 using Robust.Shared.Network;
 
-namespace Content.Tests.Shared._CMU14.Yautja;
+namespace Content.Tests.Shared.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaClanPolicyTest

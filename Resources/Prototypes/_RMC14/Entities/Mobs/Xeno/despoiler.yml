@@ -83,14 +83,16 @@
     plasmaRegenOnWeeds: 4
   - type: XenoAcid
   - type: CMArmor
-    xenoArmor: 30
-    explosionArmor: 20
+    xenoArmor: 35
+    explosionArmor: 40
   - type: XenoDevour
   - type: XenoTailStab
     toggle: false
     tailDamage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: MeleeWeapon
     damage:
       types:
@@ -120,7 +122,7 @@
     pointsPerSlash: 200
     decayDelay: 10
     decayPerSecond: 120
-    bonusBurnPerStack: 15
+    bonusBurnPerStack: 20
   - type: XenoDespoilerSlashOnHit
     enhanceStacksThreshold: 3
   - type: Tackle
@@ -133,7 +135,7 @@
     gibChance: 1.0
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.4
-    baseSprintSpeed: 4.2
+    baseSprintSpeed: 4.8
   - type: SlowOnPull
     slowdowns:
     - multiplier: 0.6375

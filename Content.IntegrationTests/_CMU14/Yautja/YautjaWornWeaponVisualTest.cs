@@ -9,31 +9,31 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaWornWeaponVisualTest
 {
     private static readonly (string Id, string Sprite, string State)[] BackWeapons =
     [
-        ("CMUYautjaClanSword", "_CMU14/Yautja/pred_gear_worn.rsi", "clansword"),
-        ("CMUYautjaRendingSword", "_CMU14/Yautja/pred_gear_custom_worn.rsi", "rending_sword"),
-        ("CMUYautjaPiercingSword", "_CMU14/Yautja/pred_gear_custom_worn.rsi", "piercing_sword"),
-        ("CMUYautjaSeveringSword", "_CMU14/Yautja/pred_gear_worn.rsi", "clansword_alt3"),
-        ("CMUYautjaDualWarScythe", "_CMU14/Yautja/pred_gear_custom_worn.rsi", "dual_war_scythe"),
-        ("CMUYautjaDoubleWarScythe", "_CMU14/Yautja/pred_gear_custom_worn.rsi", "double_war_scythe"),
-        ("CMUYautjaCruelStaff", "_CMU14/Yautja/pred_gear_custom_worn.rsi", "cruel_staff"),
-        ("CMUYautjaCombistick", "_CMU14/Yautja/pred_gear_worn.rsi", "combistick"),
-        ("CMUYautjaWarAxe", "_CMU14/Yautja/pred_gear_worn.rsi", "war_axe"),
-        ("CMUYautjaClanShield", "_CMU14/Yautja/pred_gear_worn.rsi", "shield"),
-        ("CMUYautjaAncientShield", "_CMU14/Yautja/pred_gear_worn.rsi", "ancient_shield"),
-        ("CMUYautjaAncientShieldAlt", "_CMU14/Yautja/pred_gear_worn.rsi", "ancient_shield_alt"),
-        ("CMUYautjaAncientShieldTemple", "_CMU14/Yautja/pred_gear_custom_worn.rsi", "ancient_shield_temple"),
-        ("CMUYautjaHunterSpear", "_CMU14/Yautja/pred_gear_worn.rsi", "spearhunter"),
-        ("CMUYautjaWarGlaive", "_CMU14/Yautja/pred_gear_worn.rsi", "glaive"),
-        ("CMUYautjaCleavingGlaive", "_CMU14/Yautja/pred_gear_worn.rsi", "glaive_skull"),
-        ("CMUYautjaAncientWarGlaive", "_CMU14/Yautja/pred_gear_worn.rsi", "glaive_alt"),
-        ("CMUYautjaLongaxe", "_CMU14/Yautja/pred_gear_worn.rsi", "longaxe"),
+        ("CMUYautjaClanSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword"),
+        ("CMUYautjaRendingSword", "CMU14/Yautja/pred_gear_custom_worn.rsi", "rending_sword"),
+        ("CMUYautjaPiercingSword", "CMU14/Yautja/pred_gear_custom_worn.rsi", "piercing_sword"),
+        ("CMUYautjaSeveringSword", "CMU14/Yautja/pred_gear_worn.rsi", "clansword_alt3"),
+        ("CMUYautjaDualWarScythe", "CMU14/Yautja/pred_gear_custom_worn.rsi", "dual_war_scythe"),
+        ("CMUYautjaDoubleWarScythe", "CMU14/Yautja/pred_gear_custom_worn.rsi", "double_war_scythe"),
+        ("CMUYautjaCruelStaff", "CMU14/Yautja/pred_gear_custom_worn.rsi", "cruel_staff"),
+        ("CMUYautjaCombistick", "CMU14/Yautja/pred_gear_worn.rsi", "combistick"),
+        ("CMUYautjaWarAxe", "CMU14/Yautja/pred_gear_worn.rsi", "war_axe"),
+        ("CMUYautjaClanShield", "CMU14/Yautja/pred_gear_worn.rsi", "shield"),
+        ("CMUYautjaAncientShield", "CMU14/Yautja/pred_gear_worn.rsi", "ancient_shield"),
+        ("CMUYautjaAncientShieldAlt", "CMU14/Yautja/pred_gear_worn.rsi", "ancient_shield_alt"),
+        ("CMUYautjaAncientShieldTemple", "CMU14/Yautja/pred_gear_custom_worn.rsi", "ancient_shield_temple"),
+        ("CMUYautjaHunterSpear", "CMU14/Yautja/pred_gear_worn.rsi", "spearhunter"),
+        ("CMUYautjaWarGlaive", "CMU14/Yautja/pred_gear_worn.rsi", "glaive"),
+        ("CMUYautjaCleavingGlaive", "CMU14/Yautja/pred_gear_worn.rsi", "glaive_skull"),
+        ("CMUYautjaAncientWarGlaive", "CMU14/Yautja/pred_gear_worn.rsi", "glaive_alt"),
+        ("CMUYautjaLongaxe", "CMU14/Yautja/pred_gear_worn.rsi", "longaxe"),
     ];
 
     private static readonly string[] HeldWeapons =
@@ -132,9 +132,9 @@ public sealed class YautjaWornWeaponVisualTest
         {
             var cache = pair.Client.ResolveDependency<IResourceCache>();
             var directionalRsi = cache.GetResource<RSIResource>(
-                new ResPath("/Textures/_CMU14/Yautja/pred_gear_worn.rsi")).RSI;
+                new ResPath("/Textures/CMU14/Yautja/pred_gear_worn.rsi")).RSI;
             var customRsi = cache.GetResource<RSIResource>(
-                new ResPath("/Textures/_CMU14/Yautja/pred_gear_custom_worn.rsi")).RSI;
+                new ResPath("/Textures/CMU14/Yautja/pred_gear_custom_worn.rsi")).RSI;
 
             foreach (var (_, expectedSprite, stateName) in BackWeapons)
             {
@@ -200,7 +200,7 @@ public sealed class YautjaWornWeaponVisualTest
                 Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, id);
                 Assert.That(clothing!.Slots & SlotFlags.BACK, Is.EqualTo(SlotFlags.BACK),
                     $"{id} must be wearable on the back.");
-                Assert.That(clothing.RsiPath, Is.EqualTo("_CMU14/Yautja/pred_guns_back.rsi"), id);
+                Assert.That(clothing.RsiPath, Is.EqualTo("CMU14/Yautja/pred_guns_back.rsi"), id);
                 Assert.That(clothing.EquippedPrefix, Is.EqualTo(expectedPrefix), id);
 
                 var rsiPath = SpriteSpecifierSerializer.TextureRoot / new ResPath(clothing.RsiPath!);

@@ -1,0 +1,38 @@
+- type: partySpawn
+  id: WYExecutivesSpawn
+  leadersToSpawn:
+    CMUJobWeYuSiteDirector: 1
+  gruntsToSpawn:
+    CMUJobWeYuChiefExecutive: 1
+    CMUJobWeYuDivisionManager: 1
+    CMUJobWeYuLegalSupervisor: 1
+    CMUJobWeYuLegalSpecialist: 1
+    CMUJobWeYuGoonLeader: 1
+    CMUJobWeYuGoon: 2
+    CMUJobWeYuLawyer: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: WYExecutives
+  partyspawn: WYExecutivesSpawn
+  entrymethod: ground
+  weight: 5
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 9
+  roundstart: false
+
+- type: thirdParty
+  parent: WYExecutives
+  id: WYExecutivesSurv
+  displayName: Weyland-Yutani Executive Detail (Survivors)
+  announceAsSurvivors: true
+  weight: 8
+  GhostsNeeded: 0
+  roundstart: true
+  announcearrival: ''
+  blacklistedgamemodes:
+  - insurgency
+  - forceonforce
+  - colonyfall

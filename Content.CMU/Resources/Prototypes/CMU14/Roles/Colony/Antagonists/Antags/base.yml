@@ -1,0 +1,8 @@
+# Shared abstract base for all colony antag prototypes.
+- type: antag
+  abstract: true
+  id: CMUAntagColonyBase
+  setPreference: false
+  antagonist: true
+  category: roles-antag-category-colony
+  isCM: true

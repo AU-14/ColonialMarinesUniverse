@@ -15,3 +15,8 @@ species-name-tribal = tribal
 ## Misc species things
 
 snail-hurt-by-salt-popup = The salty solution burns like acid!
+
+
+species-name-vulpkanin = Vulpkanin
+
+## Misc species things

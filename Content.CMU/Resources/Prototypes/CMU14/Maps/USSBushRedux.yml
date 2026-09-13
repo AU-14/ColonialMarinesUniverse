@@ -1,0 +1,21 @@
+- type: gameMap
+  id: USSBushRedux
+  mapName: USS George Bush
+  allegiance: Neutral
+  mapPath: /Maps/CMU14/USSBushMultiZ/USSBushMultiZ0.yml
+  mapsBelow:
+  - /Maps/CMU14/USSBushMultiZ/USSBushMultiZ-1.yml
+  mapsAbove:
+  - /Maps/CMU14/USSBushMultiZ/USSBushMultiZ1.yml
+  - /Maps/CMU14/USSBushMultiZ/USSBushMultiZ2.yml
+  - /Maps/CMU14/USSBushMultiZ/USSBushMultiZ3.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    USSBushRedux:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'USS George W. Bush'

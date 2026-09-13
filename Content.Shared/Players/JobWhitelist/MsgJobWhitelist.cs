@@ -1,4 +1,4 @@
-﻿using Lidgren.Network;
+using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
@@ -9,8 +9,8 @@ public sealed class MsgJobWhitelist : NetMessage
     public override MsgGroups MsgGroup => MsgGroups.EntityEvent;
 
     public HashSet<string> Whitelist = new();
-    public Content.Shared._CMU14.Yautja.YautjaProfileCapabilities YautjaCapabilities =
-        Content.Shared._CMU14.Yautja.YautjaProfileCapabilities.Default;
+    public Content.Shared.CMU14.Yautja.YautjaProfileCapabilities YautjaCapabilities =
+        Content.Shared.CMU14.Yautja.YautjaProfileCapabilities.Default;
 
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
     {

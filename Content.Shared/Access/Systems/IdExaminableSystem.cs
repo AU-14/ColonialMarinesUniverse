@@ -1,10 +1,14 @@
+using System.Linq; // CMU14
 using Content.Shared.Access.Components;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
-using Content.Shared.AU14.Util;
+using Content.Shared.CMU14.Util;
+using Content.Shared.NPC.Components; // CMU14
+using Content.Shared.NPC.Prototypes; // CMU14
 using Content.Shared.PDA;
 using Content.Shared.Verbs;
 using Content.Shared._RMC14.UniformAccessories;
+using Robust.Shared.Prototypes; // CMU14
 using Robust.Shared.Utility;
 using Robust.Shared.Containers;
 
@@ -13,8 +17,11 @@ namespace Content.Shared.Access.Systems;
 public sealed partial class IdExaminableSystem : EntitySystem
 {
     [Dependency] private ExamineSystemShared _examineSystem = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!; // CMU14
     [Dependency] private InventorySystem _inventorySystem = default!;
     [Dependency] private SharedContainerSystem _containerSystem = default!;
+
+    private readonly HashSet<string> _factionNameBuffer = new(); // CMU14
 
     public override void Initialize()
     {
@@ -60,13 +67,13 @@ public sealed partial class IdExaminableSystem : EntitySystem
                 TryComp<IdCardComponent>(pda.ContainedId, out var idCardFromPda))
             {
                 var jobTitle = GetOverridingJobTitle(uid, idCardFromPda.LocalizedJobTitle);
-                return GetNameAndJob(idCardFromPda, jobTitle);
+                return WithFactions(uid, GetNameAndJob(idCardFromPda, jobTitle)); // CMU14
             }
             // ID Card
             if (TryComp(idUid, out IdCardComponent? idCard))
             {
                 var jobTitle = GetOverridingJobTitle(uid, idCard.LocalizedJobTitle);
-                return GetNameAndJob(idCard, jobTitle);
+                return WithFactions(uid, GetNameAndJob(idCard, jobTitle)); // CMU14
             }
         }
         // If no ID card, check for a JobTitleChangerComponent directly (equipped or uniform accessories)
@@ -77,6 +84,25 @@ public sealed partial class IdExaminableSystem : EntitySystem
             return Loc.GetString("access-id-card-component-owner-name-job-title-text", ("jobSuffix", $" ({overrideJobTitle})"));
         }
         return null;
+    }
+
+    private string WithFactions(EntityUid wearer, string info) // CMU14 Method
+    {
+        if (!TryComp<NpcFactionMemberComponent>(wearer, out var member))
+            return info;
+
+        _factionNameBuffer.Clear();
+        foreach (var faction in member.Factions)
+        {
+            if (_prototypes.TryIndex(faction, out NpcFactionPrototype? proto)
+                && !proto.Hidden // CMU14: covert factions (CLF) must not leak on examine
+                && proto.Name != null)
+                _factionNameBuffer.Add(proto.Name);
+        }
+
+        return _factionNameBuffer.Count == 0
+            ? info
+            : info + "\n" + Loc.GetString("cmu-id-examine-faction", ("factions", string.Join("\n", _factionNameBuffer.OrderBy(n => n))));
     }
 
     private string GetNameAndJob(IdCardComponent id, string? overrideJobTitle = null)

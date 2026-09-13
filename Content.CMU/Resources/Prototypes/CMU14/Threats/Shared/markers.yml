@@ -1,0 +1,71 @@
+- type: entity
+  name: Generic Threat Leader Spawn Marker
+  parent: MarkerBase
+  id: threatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+
+- type: entity
+  name: Generic Threat Member Spawn Marker
+  parent: MarkerBase
+  id: threatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+
+- type: entity
+  name: Generic Threat Entity Spawn Marker
+  parent: MarkerBase
+  id: threatentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
+
+- type: entity
+  name: Parachute Marker
+  parent: MarkerBase
+  id: parachutemarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ParachuteMarker
+
+- type: entity
+  name: Generic Third Party Spawn Marker
+  parent: MarkerBase
+  id: thirdpartyleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+    thirdparty: true
+
+- type: entity
+  name: Generic Third Party Member Spawn Marker
+  parent: MarkerBase
+  id: thirdpartymemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+    thirdparty: true
+
+- type: entity
+  name: Generic Third Party Entity Spawn Marker
+  parent: MarkerBase
+  id: thirdpartyentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
+    thirdparty: true

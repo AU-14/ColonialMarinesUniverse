@@ -4,7 +4,7 @@ using System.Linq;
 using Content.Server.Maps;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.Audio;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Humanoid.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.ContentPack;
@@ -15,7 +15,7 @@ using Robust.Shared.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Utility;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaHuntingGroundAudioAndRolesTest
@@ -23,17 +23,17 @@ public sealed class YautjaHuntingGroundAudioAndRolesTest
     private static readonly (ResPath MapPath, string Collection, string[] Files)[] HuntingGroundSoundscapes =
     [
         (
-            new ResPath("/Maps/_CMU14/HuntingGrounds/jungle_moon.yml"),
+            new ResPath("/Maps/CMU14/HuntingGrounds/jungle_moon.yml"),
             "CMUYautjaHuntingGroundJungle",
             ["alien_creature1.ogg", "alien_creature2.ogg", "alien_creature3.ogg"]),
         // The CMSS13 desert_moon.dmm z-level names are historical: z1 is the cave
         // output and z2 is the surface output stored in the _caves file.
         (
-            new ResPath("/Maps/_CMU14/HuntingGrounds/desert_moon.yml"),
+            new ResPath("/Maps/CMU14/HuntingGrounds/desert_moon.yml"),
             "CMUYautjaHuntingGroundCaves",
             ["rocksfalling1.ogg", "rocksfalling2.ogg"]),
         (
-            new ResPath("/Maps/_CMU14/HuntingGrounds/desert_moon_caves.yml"),
+            new ResPath("/Maps/CMU14/HuntingGrounds/desert_moon_caves.yml"),
             "CMUYautjaHuntingGroundDesert",
             ["wind1.ogg", "wind2.ogg"]),
     ];
@@ -48,7 +48,7 @@ public sealed class YautjaHuntingGroundAudioAndRolesTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var resources = server.ResolveDependency<IResourceManager>();
-            var huntBeginPath = new ResPath("/Audio/_CMU14/Yautja/HuntingGrounds/hunt_begin.ogg");
+            var huntBeginPath = new ResPath("/Audio/CMU14/Yautja/HuntingGrounds/hunt_begin.ogg");
 
             Assert.That(resources.ContentFileExists(huntBeginPath), Is.True, huntBeginPath.ToString());
             Assert.That(ReadVorbisChannelCount(resources, huntBeginPath), Is.EqualTo(1),

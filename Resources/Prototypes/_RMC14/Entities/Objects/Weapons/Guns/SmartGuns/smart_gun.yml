@@ -411,6 +411,7 @@
       map: ["enum.AmmoVisualLayers.Base"]
   - type: CartridgeAmmo
     proto: CMBulletSmartGun10x30mm
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
   - type: Tag
     tags:
     - CMCartridgeSmartGun10x30mm
@@ -453,6 +454,11 @@
     damage:
       types:
         Piercing: 30
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: CMArmorPiercing
     amount: 0
   - type: RMCProjectileDamageFalloff

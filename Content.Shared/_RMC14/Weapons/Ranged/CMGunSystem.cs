@@ -15,6 +15,7 @@ using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
+using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands;
@@ -515,7 +516,10 @@ public sealed partial class CMGunSystem : EntitySystem
                 Dirty(projectile, projectileComp);
             }
 
-            _projectile.ProjectileCollide((projectile, projectileComp, physicsComp), gunComp.Target.Value);
+            _projectile.ProjectileCollide(
+                (projectile, projectileComp, physicsComp),
+                gunComp.Target.Value,
+                context: DamageImpactContext.PointBlank);
         }
 
         userDelay.LastPBAt = _timing.CurTime;
@@ -651,6 +655,16 @@ public sealed partial class CMGunSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
+        var assistedReload = EntityQueryEnumerator<AssistedReloadReceiverComponent>(); // CMU14
+        while (assistedReload.MoveNext(out var aUid, out var receiver)) // CMU14
+        {
+            if (receiver.Weapon is { } weapon && TerminatingOrDeleted(weapon))
+            {
+                receiver.Weapon = null;
+                Dirty(aUid, receiver);
+            }
+        }
+
         var query = EntityQueryEnumerator<ProjectileFixedDistanceComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {

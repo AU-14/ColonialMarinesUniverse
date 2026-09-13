@@ -1,5 +1,5 @@
 using Content.Shared.Damage;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using NUnit.Framework;
 
 namespace Content.Tests.Shared.Medical.CrewMonitoring;

@@ -11,7 +11,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 using Content.Shared.Labels.Components;
 using Content.Shared._RMC14.Requisitions;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
 using Content.Server.Station;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
@@ -179,7 +179,7 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
             !TryComp<StationJobsComponent>(station, out var jobs))
             return null;
 
-        return jobs.JobList.TryGetValue("CMUJobAegisResearcher", out var slots) ? slots : 0;
+        return _stationJobs.TryGetJobSlot(station, "CMUJobAegisResearcher", out var slots, jobs) ? slots : 0;
     }
 
     private EntityUid? TryGetGovforStation()

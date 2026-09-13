@@ -1,15 +1,15 @@
 using Content.Server.Ninja.Events;
-using Content.Server.Power.EntitySystems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Ninja.Components;
 using Content.Shared.Ninja.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Power.EntitySystems;
 
 namespace Content.Server.Ninja.Systems;
 
 public sealed partial class ItemCreatorSystem : SharedItemCreatorSystem
 {
-    [Dependency] private BatterySystem _battery = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
@@ -24,7 +24,7 @@ public sealed partial class ItemCreatorSystem : SharedItemCreatorSystem
     private void OnCreateItem(Entity<ItemCreatorComponent> ent, ref CreateItemEvent args)
     {
         var (uid, comp) = ent;
-        if (comp.Battery is not {} battery)
+        if (comp.Battery is not { } battery)
             return;
 
         args.Handled = true;

@@ -1,0 +1,20 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:picker="clr-namespace:Content.Client._CMU14.UserInterface.ColorPicker">
+    <BoxContainer Orientation="Vertical" SeparationOverride="2">
+        <!-- The row: a wide swatch carrying the disclosure arrow, then the colour named in its own
+             colour. Hex lives in the panel below, next to the gradient. -->
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <ContainerButton Name="SwatchButton" MinSize="44 22" VerticalAlignment="Center">
+                <!-- A glyph rather than a texture: there is no down arrow that pairs with the one up
+                     arrow in the tree, and TextureScale can't be flipped because it feeds measure. -->
+                <Label Name="SwatchArrow" Align="Center"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </ContainerButton>
+            <Label Name="TitleLabel" VerticalAlignment="Center" />
+            <Label Name="NameLabel" HorizontalExpand="True" VerticalAlignment="Center" />
+        </BoxContainer>
+        <!-- Expands in place rather than floating over the tab, so it can't be clipped by the
+             window edge and nothing overlays the options behind it. -->
+        <picker:CmuColorPickerPanel Name="Panel" Visible="False" HorizontalExpand="True" />
+    </BoxContainer>
+</Control>

@@ -1,9 +1,9 @@
 using System.Linq;
 using Content.Shared.Access;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Preferences;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaRankParityTest
@@ -149,7 +149,7 @@ public sealed class YautjaRankParityTest
     public void HumanoidProfileCloneAndEqualityKeepCanonicalClanRank()
     {
         var canonical = YautjaCharacterProfile.Default.WithClanRank(YautjaRank.Elder);
-        var profile = HumanoidCharacterProfile.DefaultWithSpecies("Human")
+        var profile = new HumanoidCharacterProfile()
             .WithName("Kainde")
             .WithYautjaProfile(canonical);
 

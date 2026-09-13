@@ -1,6 +1,7 @@
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Throwing;
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Systems;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Timing;
 

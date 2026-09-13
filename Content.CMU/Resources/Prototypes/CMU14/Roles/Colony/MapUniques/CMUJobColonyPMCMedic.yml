@@ -1,0 +1,63 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobColonyPMCMedic
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: ColonyPMCMedic
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFireman: 1
+      RMCSkillMedical: 3
+  - type: JobPrefix
+    prefix: cmu-colony-prefix-pmc-medic
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmucolonyblips.rsi
+      state: colonist
+  name: cmu-colony-name-pmc-medic
+  description: cmu-colony-description-pmc-medic
+  setPreference: true
+  playTimeTracker: CMUJobColonyPMCMedic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearColonyPMCMedic
+  icon: CMJobIconFieldDoctor
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-colony-supervisors-colonist
+  spawnMenuRoleName: Colony PMC Medic (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMUGearColonyPMCMedic
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: RMCJumpsuitVeteranPMCNoWebbingPatch
+    shoes: RMCBootsPMCFilled
+    gloves: RMCHandsVeteran
+    mask: RMCMaskCoifPMC
+    head: ArmorHelmetPMC
+    outerClothing: CMArmorM4PMCLight
+    back: RMCSatchelPMCMedic
+    belt: RMCM77BeltFilled
+    pocket1: RMCPouchSurvivalBlackFilled
+    pocket2: RMCPouchFirstAidPMCFill
+    eyes: RMCGlassesMedicalHUDGlasses
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointColonyPMCMedic
+  name: Spawn Point Colony PMC Medic
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobColonyPMCMedic
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobColonyPMCMedic
+  isHumanoid: true

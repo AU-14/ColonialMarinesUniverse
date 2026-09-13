@@ -4,8 +4,8 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.IntegrationTests.Pair;
 using Content.Server.Database;
 using Content.Server.Players.JobWhitelist;
-using Content.Server._CMU14.Yautja;
-using Content.Shared._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CCVar;
 using Content.Shared.Eui;
 using Content.Shared.Roles;
@@ -13,7 +13,7 @@ using Robust.Server.Player;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaWhitelistAccessTest

@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -22,6 +23,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
@@ -67,6 +69,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private EntityQuery<ActorComponent> _actor;
     private EntityQuery<MobStateComponent> _mobStateQuery;
@@ -147,9 +150,13 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     {
         var hasOrbital = ev.Cannon.Comp.Status == OrbitalCannonStatus.Chambered;
         var cannonFaction = ev.Cannon.Comp.Faction;
+        var cannonMap = Transform(ev.Cannon).MapID;
         var consoles = EntityQueryEnumerator<OverwatchConsoleComponent>();
         while (consoles.MoveNext(out var uid, out var console))
         {
+            if (!_zLevels.IsSameZNetwork(Transform(uid).MapID, cannonMap))
+                continue;
+
             if (!string.IsNullOrEmpty(cannonFaction) &&
                 !string.Equals(console.Group, cannonFaction, StringComparison.OrdinalIgnoreCase))
                 continue;
@@ -162,9 +169,13 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     private void OnOrbitalCannonLaunch(ref OrbitalCannonLaunchEvent ev)
     {
         var cannonFaction = ev.CannonFaction;
+        var cannonMap = Transform(ev.Cannon).MapID;
         var consoles = EntityQueryEnumerator<OverwatchConsoleComponent>();
         while (consoles.MoveNext(out var uid, out var console))
         {
+            if (!_zLevels.IsSameZNetwork(Transform(uid).MapID, cannonMap))
+                continue;
+
             if (!string.IsNullOrEmpty(cannonFaction) &&
                 !string.Equals(console.Group, cannonFaction, StringComparison.OrdinalIgnoreCase))
                 continue;
@@ -529,7 +540,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
             return;
 
         if (!TryComp(ent, out SupplyDropComputerComponent? computer))
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-supply-drop-not-operational"), args.Actor, PopupType.MediumCaution);
             return;
+        }
 
         _supplyDrop.TryLaunchSupplyDropPopup((ent, computer), args.Actor);
 
@@ -582,11 +596,20 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
     private void OnOverwatchOrbitalLaunchBui(Entity<OverwatchConsoleComponent> ent, ref OverwatchConsoleOrbitalLaunchBuiMsg args)
     {
-        if (!ent.Comp.CanOrbitalBombardment)
+        if (_net.IsClient)
             return;
 
-        if (!_orbitalCannon.TryGetClosestCannon(ent, out var cannon, string.IsNullOrEmpty(ent.Comp.Group) ? null : ent.Comp.Group))
+        if (!ent.Comp.CanOrbitalBombardment)
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-overwatch-orbital-unavailable"), args.Actor, PopupType.LargeCaution);
             return;
+        }
+
+        if (!_orbitalCannon.TryGetClosestCannon(ent, out var cannon, string.IsNullOrEmpty(ent.Comp.Group) ? null : ent.Comp.Group))
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-overwatch-orbital-no-cannon"), args.Actor, PopupType.LargeCaution);
+            return;
+        }
 
         EntityUid squad = default;
         if (TryGetAccessibleSquad(ent.Comp, ent.Comp.Squad, out var accessibleSquad))

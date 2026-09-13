@@ -4,9 +4,9 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Popups;
 using Content.Client.UserInterface.Systems.Chat;
-using Content.Server._CMU14.Yautja;
+using Content.Server.CMU14.Yautja;
 using Content.Server.Administration.Logs;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared.Chat;
@@ -25,7 +25,7 @@ using Robust.Shared.IoC;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Yautja;
+namespace Content.IntegrationTests.CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaThrallPhase8Test
@@ -166,10 +166,7 @@ public sealed class YautjaThrallPhase8Test
                     ui.RaiseUiMessage(
                         badBloodBracer,
                         YautjaMarkUIKey.Key,
-                        new YautjaMarkPanelUnmarkMsg(entMan.GetNetEntity(target), kind)
-                        {
-                            Actor = badBlood,
-                        });
+                        YautjaTestMarkMessages.Unmark(entMan, badBlood, target, kind));
 
                     Assert.That(marks.IsMarkedBy(target, kind, ownerHunter), Is.True,
                         "CMSS13 Bad Blood unmark_honored()/unmark_dishonored()/unmark_thralled() returns before removing source state.");
@@ -482,10 +479,7 @@ public sealed class YautjaThrallPhase8Test
                     ui.RaiseUiMessage(
                         bracer,
                         YautjaMarkUIKey.Key,
-                        new YautjaMarkPanelMarkMsg(entMan.GetNetEntity(target), kind, null)
-                        {
-                            Actor = hunter,
-                        });
+                        YautjaTestMarkMessages.Mark(entMan, hunter, target, kind, null));
                 }
 
                 SendPanelMark(networkThrall, YautjaMarkKind.Thrall);

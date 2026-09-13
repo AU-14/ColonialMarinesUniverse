@@ -1,6 +1,9 @@
-using System.Numerics;
+﻿using System.Numerics;
+using Content.Client._CMU14.Interface;
 using Content.Client.Resources;
+using Content.Client.Stylesheets;
 using Content.Shared.Chat;
+using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
 
@@ -23,6 +26,15 @@ public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
         _resourceCache = IoCManager.Resolve<IResourceCache>();
         _chatUIController = UserInterfaceManager.GetUIController<ChatUIController>();
         ToolTip = Loc.GetString("hud-chatbox-settings-tooltip");
+
+        // Show the gear alone rather than a boxed button. A transparent StyleBoxOverride removes
+        // the panel while leaving the button's whole rectangle clickable - the icon itself is a
+        // TextureRect and would otherwise be the only hittable part. MinSize keeps that rectangle
+        // comfortably larger than the icon.
+        // NOTE: ChatInputBox re-sets MinSize on the instance it builds (it has to, legacy mode
+        // wants zero), so keep the two in step.
+        StyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.Transparent };
+        MinSize = new Vector2(28, 22);
 
         AddChild(
             (_textureRect = new TextureRect
@@ -50,8 +62,8 @@ public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
         if (_textureRect != null)
         {
             var iconSize = legacy
-                ? new Vector2(14, 14)
-                : new Vector2(13, 13);
+                ? new Vector2(18, 18)
+                : new Vector2(20, 20);
             _textureRect.MinSize = iconSize;
             _textureRect.MaxSize = iconSize;
             _textureRect.Texture = _resourceCache.GetTexture(legacy
@@ -92,18 +104,23 @@ public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
     private void UpdateChildColors()
     {
         if (_textureRect == null) return;
+
+        // The stock colours are blue-greys (#7b7e9e and friends), which left the gear as the one
+        // off-palette thing on an otherwise green input row. Under CRT it takes the text ladder
+        // instead: dim at rest, body text on hover, accent while the popup is open.
+        var crt = StyleNano.CrtUiEnabled;
         switch (DrawMode)
         {
             case DrawModeEnum.Normal:
-                _textureRect.ModulateSelfOverride = ColorNormal;
+                _textureRect.ModulateSelfOverride = crt ? CrtTerminalPalette.TextDim : ColorNormal;
                 break;
 
             case DrawModeEnum.Pressed:
-                _textureRect.ModulateSelfOverride = ColorPressed;
+                _textureRect.ModulateSelfOverride = crt ? CrtTerminalPalette.Accent : ColorPressed;
                 break;
 
             case DrawModeEnum.Hover:
-                _textureRect.ModulateSelfOverride = ColorHovered;
+                _textureRect.ModulateSelfOverride = crt ? CrtTerminalPalette.Text : ColorHovered;
                 break;
 
             case DrawModeEnum.Disabled:

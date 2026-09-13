@@ -1,0 +1,72 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobRaider
+  roundSide: ThirdParty
+  roundForce: CMURaiders
+  roundRole: Raider
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 2
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-raider-prefix
+  name: cmu-raider-name
+  description: cmu-raider-description
+  playTimeTracker: CMUJobRaider
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearRaider
+  spawnMenuRoleName: Free Company Raider (3rd party)
+  greeting: cmu-raider-greeting
+  icon: RMCJobIconMarineRaider
+  joinNotifyCrew: false
+  supervisors: cmu-raider-leader
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesRaiders
+  id: CMUJobRaider
+  name: Free Company Raider
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-raider-name
+    description: cmu-raider-description
+    reregister: false
+    job: CMUJobRaider
+    raffle:
+      settings: short
+    rules: cmu-raider-rules
+
+- type: startingGear
+  id: CMUGearRaider
+  equipment:
+    head: RMCArmorHelmetMARSOC
+    mask: RMCMaskBalaclavaMARSOC
+    ears: RMCHeadsetMARSOC
+    jumpsuit: CMUJumpsuitRaiderWebbingBuckshot
+    outerClothing: CMUArmorRaiderXM40
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    suitstorage: CMUWeaponRifleXM40Raider
+    id: CMUIDCardRaider
+    belt: RMCWeaponShotgunXM38Filled
+    back: CMUSatchelRaider
+    pocket1: RMCPouchMedicalSocMarineRaiderFill
+    pocket2: RMCPouchToolsSocMarineRaiderFill
+
+- type: playTimeTracker
+  id: CMUJobRaider

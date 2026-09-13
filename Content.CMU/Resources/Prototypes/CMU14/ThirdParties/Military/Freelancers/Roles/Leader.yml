@@ -1,0 +1,73 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobFreelancerLeader
+  roundSide: ThirdParty
+  roundForce: CMUFreelancers
+  roundRole: FreelancerLeader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 1
+      RMCSkillSpecialistWeapons: 1
+  - type: JobPrefix
+    prefix: cmu-freelancer-prefix-leader
+  name: cmu-freelancer-name-leader
+  description: cmu-freelancer-description
+  playTimeTracker: CMUJobFreelancerLeader
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearFreelancerLeader
+  spawnMenuRoleName: Freelancer Leader (3rd party)
+  greeting: cmu-freelancer-greeting
+  icon: RMCJobIconFreelancerLeader
+  joinNotifyCrew: false
+  supervisors: cmu-freelancer-leader
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: CMUJobFreelancerLeader
+  name: Freelancer Leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-freelancer-name-leader
+    description: cmu-freelancer-description
+    reregister: false
+    job: CMUJobFreelancerLeader
+    raffle:
+      settings: short
+    rules: cmu-freelancer-rules
+
+- type: startingGear
+  id: CMUGearFreelancerLeader
+  equipment:
+    head: RMCHeadBeretFreelancer
+    eyes: RMCGlassesMedicalHUDGlasses
+    belt: RMCMAR50BeltFilled
+    suitstorage: RMCWeaponMar50LMG
+    back: RMCSatchelLightpackFreelancerLeader
+    gloves: RMCHandsVeteran
+    jumpsuit: RMCJumpsuitFreelancer
+    outerClothing: CMArmorFreelancer
+    shoes: RMCBootsSPPFilled
+    id: CMUIDCardFreelancerLeader
+    ears: RMCHeadsetDistressDukesLeader
+    pocket1: RMCPouchFirstAidERTFill
+    pocket2: RMCPouchFlareFilled
+
+- type: playTimeTracker
+  id: CMUJobFreelancerLeader

@@ -1,13 +1,11 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
-using Content.Server.Forensics;
 using Content.Server.GameTicking;
 using Content.Server.Hands.Systems;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Popups;
-using Content.Server.StationRecords.Systems;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Events;
 using Content.Shared.CCVar;
@@ -23,6 +21,8 @@ using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
 using Content.Shared.StationRecords;
+using Content.Shared.StationRecords.Components;
+using Content.Shared.StationRecords.Systems;
 using Content.Shared.Throwing;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -32,7 +32,6 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.Administration.Systems;
 
@@ -49,7 +48,6 @@ public sealed partial class AdminSystem : EntitySystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private PhysicsSystem _physics = default!;
     [Dependency] private PlayTimeTrackingManager _playTime = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedRoleSystem _role = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -238,7 +236,7 @@ public sealed partial class AdminSystem : EntitySystem
         {
             sortWeight = _role.GetRoleCompByTime(mindComp)?.Comp.SortWeight ?? 0;
 
-            if (_proto.TryIndex(mindComp.RoleType, out var role))
+            if (ProtoMan.TryIndex(mindComp.RoleType, out var role))
             {
                 roleType = role;
                 subtype = mindComp.Subtype;
@@ -399,8 +397,13 @@ public sealed partial class AdminSystem : EntitySystem
                 var name = Identity.Entity(entity, EntityManager);
                 _popup.PopupCoordinates(Loc.GetString("admin-erase-popup", ("user", name)), coordinates, PopupType.LargeCaution);
                 var filter = Filter.Pvs(coordinates, 1, EntityManager, _playerManager);
-                var audioParams = new AudioParams().WithVolume(3);
-                _audio.PlayStatic(new SoundPathSpecifier("/Audio/Effects/pop_high.ogg"), filter, coordinates, true, audioParams);
+                _audio.PlayStatic(
+                        "/Audio/Effects/pop_high.ogg",
+                        filter,
+                        coordinates,
+                        true,
+                        AudioParams.Default.AddVolume(3)
+                        );
             }
 
             foreach (var item in _inventory.GetHandOrInventoryEntities(entity))

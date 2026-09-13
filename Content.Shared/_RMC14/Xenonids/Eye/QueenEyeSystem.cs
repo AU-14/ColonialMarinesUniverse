@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Coordinates;
 using Content.Shared.Eye;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;

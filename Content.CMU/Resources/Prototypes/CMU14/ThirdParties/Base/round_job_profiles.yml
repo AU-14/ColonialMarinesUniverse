@@ -1,0 +1,35 @@
+- type: roundJobProfile
+  id: AU14RoundJobProfileThirdParty
+  forceComponents:
+    CMB:
+    - type: NpcFactionMember
+      factions:
+      - AUBureau
+    ICRC:
+    - type: NpcFactionMember
+      factions:
+      - Civilian
+    CLF:
+    - type: NpcFactionMember
+      factions:
+      - CLF
+    PSC:
+    - type: NpcFactionMember
+      factions:
+      - CMUProdigy
+    FORECON:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    K9:
+    - type: NpcFactionMember
+      factions:
+      - Civilian
+    PROVOST:
+    - type: NpcFactionMember
+      factions:
+      - PROVOST
+    WY:
+    - type: NpcFactionMember
+      factions:
+      - AUWeYu

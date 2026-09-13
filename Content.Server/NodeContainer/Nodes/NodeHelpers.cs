@@ -10,19 +10,9 @@ namespace Content.Server.NodeContainer.Nodes
     /// </summary>
     public static class NodeHelpers
     {
-        public static Vector2i TileIndicesFor(IEntityManager entMan, Entity<MapGridComponent> grid, EntityCoordinates coords)
+        public static IEnumerable<Node> GetNodesInTile(EntityQuery<NodeContainerComponent> nodeQuery, Entity<MapGridComponent> grid, Vector2i coords, SharedMapSystem mapSystem)
         {
-            return entMan.System<SharedMapSystem>().TileIndicesFor(grid, coords);
-        }
-
-        public static IEnumerable<Node> GetNodesInTile(
-            EntityQuery<NodeContainerComponent> nodeQuery,
-            IEntityManager entMan,
-            Entity<MapGridComponent> grid,
-            Vector2i coords)
-        {
-            var map = entMan.System<SharedMapSystem>();
-            foreach (var entityUid in map.GetAnchoredEntities(grid, coords))
+            foreach (var entityUid in mapSystem.GetAnchoredEntities(grid, coords))
             {
                 if (!nodeQuery.TryGetComponent(entityUid, out var container))
                     continue;
@@ -34,14 +24,20 @@ namespace Content.Server.NodeContainer.Nodes
             }
         }
 
+        [Obsolete("Use the overload that passes in Entity<MapGridComponent> and SharedMapSystem")]
+        public static IEnumerable<Node> GetNodesInTile(EntityQuery<NodeContainerComponent> nodeQuery, MapGridComponent grid, Vector2i coords)
+        {
+            return GetNodesInTile(nodeQuery, (grid.Owner, grid), coords, IoCManager.Resolve<IEntityManager>().System<SharedMapSystem>());
+        }
+
         public static IEnumerable<(Direction dir, Node node)> GetCardinalNeighborNodes(
             EntityQuery<NodeContainerComponent> nodeQuery,
-            IEntityManager entMan,
             Entity<MapGridComponent> grid,
             Vector2i coords,
+            SharedMapSystem mapSystem,
             bool includeSameTile = true)
         {
-            foreach (var (dir, entityUid) in GetCardinalNeighborCells(entMan, grid, coords, includeSameTile))
+            foreach (var (dir, entityUid) in GetCardinalNeighborCells(grid, coords, mapSystem, includeSameTile))
             {
                 if (!nodeQuery.TryGetComponent(entityUid, out var container))
                     continue;
@@ -53,31 +49,49 @@ namespace Content.Server.NodeContainer.Nodes
             }
         }
 
-        [SuppressMessage("ReSharper", "EnforceForeachStatementBraces")]
-        public static IEnumerable<(Direction dir, EntityUid entity)> GetCardinalNeighborCells(
-            IEntityManager entMan,
-            Entity<MapGridComponent> grid,
+        [Obsolete("Use the overload that passes in Entity<MapGridComponent> and SharedMapSystem")]
+        public static IEnumerable<(Direction dir, Node node)> GetCardinalNeighborNodes(
+            EntityQuery<NodeContainerComponent> nodeQuery,
+            MapGridComponent grid,
             Vector2i coords,
             bool includeSameTile = true)
         {
-            var map = entMan.System<SharedMapSystem>();
+            return GetCardinalNeighborNodes(nodeQuery, (grid.Owner, grid), coords, IoCManager.Resolve<IEntityManager>().System<SharedMapSystem>(), includeSameTile);
+        }
+
+        [SuppressMessage("ReSharper", "EnforceForeachStatementBraces")]
+        public static IEnumerable<(Direction dir, EntityUid entity)> GetCardinalNeighborCells(
+            Entity<MapGridComponent> grid,
+            Vector2i coords,
+            SharedMapSystem mapSystem,
+            bool includeSameTile = true)
+        {
             if (includeSameTile)
             {
-                foreach (var uid in map.GetAnchoredEntities(grid, coords))
+                foreach (var uid in mapSystem.GetAnchoredEntities(grid, coords))
                     yield return (Direction.Invalid, uid);
             }
 
-            foreach (var uid in map.GetAnchoredEntities(grid, coords + (0, 1)))
+            foreach (var uid in mapSystem.GetAnchoredEntities(grid, coords + (0, 1)))
                 yield return (Direction.North, uid);
 
-            foreach (var uid in map.GetAnchoredEntities(grid, coords + (0, -1)))
+            foreach (var uid in mapSystem.GetAnchoredEntities(grid, coords + (0, -1)))
                 yield return (Direction.South, uid);
 
-            foreach (var uid in map.GetAnchoredEntities(grid, coords + (1, 0)))
+            foreach (var uid in mapSystem.GetAnchoredEntities(grid, coords + (1, 0)))
                 yield return (Direction.East, uid);
 
-            foreach (var uid in map.GetAnchoredEntities(grid, coords + (-1, 0)))
+            foreach (var uid in mapSystem.GetAnchoredEntities(grid, coords + (-1, 0)))
                 yield return (Direction.West, uid);
+        }
+
+        [Obsolete("Use the overload that passes in Entity<MapGridComponent> and SharedMapSystem")]
+        public static IEnumerable<(Direction dir, EntityUid entity)> GetCardinalNeighborCells(
+            MapGridComponent grid,
+            Vector2i coords,
+            bool includeSameTile = true)
+        {
+            return GetCardinalNeighborCells((grid.Owner, grid), coords, IoCManager.Resolve<IEntityManager>().System<SharedMapSystem>(), includeSameTile);
         }
     }
 }

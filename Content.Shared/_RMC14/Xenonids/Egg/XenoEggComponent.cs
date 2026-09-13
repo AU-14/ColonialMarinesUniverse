@@ -1,4 +1,4 @@
-﻿using Content.Shared.Physics;
+using Content.Shared.Physics;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Physics.Collision.Shapes;

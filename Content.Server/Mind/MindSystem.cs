@@ -2,9 +2,8 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Server.Administration.Logs;
 using Content.Server.GameTicking;
 using Content.Server.Ghost;
-using Content.Server.Mind.Commands;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Players;
@@ -45,6 +44,16 @@ public sealed partial class MindSystem : SharedMindSystem
 
         if (mind.OwnedEntity != null && !TerminatingOrDeleted(mind.OwnedEntity.Value))
             TransferTo(uid, null, mind: mind, createGhost: false);
+
+        var containers = EntityQueryEnumerator<MindContainerComponent>();
+        while (containers.MoveNext(out var containerUid, out var container))
+        {
+            if (container.LastMind != uid)
+                continue;
+
+            container.LastMind = null;
+            Dirty(containerUid, container);
+        }
 
         mind.OwnedEntity = null;
     }
@@ -185,8 +194,8 @@ public sealed partial class MindSystem : SharedMindSystem
         {
             component = EnsureComp<MindContainerComponent>(entity.Value);
 
-            if (component.HasMind)
-                _ghosts.OnGhostAttempt(component.Mind.Value, false);
+            if (TryGetMind(entity.Value, out var entityMindId, out _) && entityMindId != mindId)
+                _ghosts.OnGhostAttempt(entityMindId, false);
 
             if (TryComp<ActorComponent>(entity.Value, out var actor))
             {
@@ -220,12 +229,18 @@ public sealed partial class MindSystem : SharedMindSystem
         var oldEntity = mind.OwnedEntity;
         if (TryComp(oldEntity, out MindContainerComponent? oldContainer))
         {
-            oldContainer.Mind = null;
-            mind.OwnedEntity = null;
             Entity<MindComponent> mindEnt = (mindId, mind);
             Entity<MindContainerComponent> containerEnt = (oldEntity.Value, oldContainer);
-            RaiseLocalEvent(oldEntity.Value, new MindRemovedMessage(mindEnt, containerEnt));
-            RaiseLocalEvent(mindId, new MindGotRemovedEvent(mindEnt, containerEnt));
+
+            RaiseLocalEvent(oldEntity.Value, new BeforeMindRemovedMessage(mindEnt, containerEnt, entity));
+            RaiseLocalEvent(mindId, new BeforeMindGotRemovedEvent(mindEnt, containerEnt, entity));
+
+            oldContainer.Mind = null;
+            oldContainer.HasMind = false;
+            mind.OwnedEntity = entity;
+
+            RaiseLocalEvent(oldEntity.Value, new MindRemovedMessage(mindEnt, containerEnt, entity));
+            RaiseLocalEvent(mindId, new MindGotRemovedEvent(mindEnt, containerEnt, entity));
             Dirty(oldEntity.Value, oldContainer);
         }
 
@@ -236,6 +251,11 @@ public sealed partial class MindSystem : SharedMindSystem
             // Yes this control flow sucks.
             mind.VisitingEntity = null;
             RemComp<VisitingMindComponent>(entity!.Value);
+            // If you are transferring to your own ghost then you can no longer return to body
+            if (TryComp(entity.Value, out GhostComponent? ghostComponent))
+            {
+                _ghosts.SetCanReturnToBody((entity.Value, ghostComponent), false);
+            }
         }
         else if (mind.VisitingEntity != null
               && (ghostCheckOverride // to force mind transfer, for example from ControlMobVerb
@@ -256,13 +276,19 @@ public sealed partial class MindSystem : SharedMindSystem
 
         if (entity != null)
         {
+            if (component!.Mind.HasValue && TryComp(component!.Mind.Value, out MindComponent? newMind))
+            {
+                TransferTo(component!.Mind.Value, newMind?.VisitingEntity);
+            }
             component!.Mind = mindId;
+            component.LastMind = mindId;
+            component.HasMind = true;
             mind.OwnedEntity = entity;
             mind.OriginalOwnedEntity ??= GetNetEntity(mind.OwnedEntity);
             Entity<MindComponent> mindEnt = (mindId, mind);
             Entity<MindContainerComponent> containerEnt = (entity.Value, component);
-            RaiseLocalEvent(entity.Value, new MindAddedMessage(mindEnt, containerEnt));
-            RaiseLocalEvent(mindId, new MindGotAddedEvent(mindEnt, containerEnt));
+            RaiseLocalEvent(entity.Value, new MindAddedMessage(mindEnt, containerEnt, oldEntity));
+            RaiseLocalEvent(mindId, new MindGotAddedEvent(mindEnt, containerEnt, oldEntity));
             Dirty(entity.Value, component);
         }
     }
@@ -285,7 +311,7 @@ public sealed partial class MindSystem : SharedMindSystem
         if (mind.UserId != null &&
             _players.TryGetSessionById(mind.UserId.Value, out var session))
         {
-            foreach (var role in mind.MindRoles)
+            foreach (var role in mind.MindRoleContainer.ContainedEntities)
             {
                 _pvsOverride.RemoveSessionOverride(role, session);
             }
@@ -335,7 +361,7 @@ public sealed partial class MindSystem : SharedMindSystem
         if (_players.TryGetSessionById(userId.Value, out session))
         {
             _pvsOverride.AddSessionOverride(mindId, session);
-            foreach (var role in mind.MindRoles)
+            foreach (var role in mind.MindRoleContainer.ContainedEntities)
             {
                 _pvsOverride.AddSessionOverride(role, session);
             }
@@ -363,7 +389,7 @@ public sealed partial class MindSystem : SharedMindSystem
             return;
         }
 
-        MakeSentientCommand.MakeSentient(target, EntityManager);
+        MakeSentient(target);
         TransferTo(mindId, target, ghostCheckOverride: true, mind: mind);
     }
 }

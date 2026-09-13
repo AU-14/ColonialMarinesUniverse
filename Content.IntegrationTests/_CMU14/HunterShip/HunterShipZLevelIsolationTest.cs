@@ -1,10 +1,11 @@
 using System.Numerics;
 using System.Reflection;
-using Content.Server._AU14.ZLevelBuilding;
+using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Robust.Server;
+using Robust.Shared;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Log;
@@ -14,7 +15,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting;
 
-namespace Content.IntegrationTests._CMU14.HunterShip;
+namespace Content.IntegrationTests.CMU14.HunterShip;
 
 [TestFixture]
 public sealed class HunterShipZLevelIsolationTest
@@ -34,6 +35,7 @@ public sealed class HunterShipZLevelIsolationTest
             {
                 LoadConfigAndUserData = false,
                 LoadContentResources = true,
+                MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources"], zipMounts: []),
             },
             ContentAssemblies =
             [
@@ -97,7 +99,11 @@ public sealed class HunterShipZLevelIsolationTest
         await server.WaitPost(() =>
         {
             if (actor != default && !server.EntMan.Deleted(actor))
+            {
+                // This fixture uses Actor only to activate streaming, without a player session.
+                server.EntMan.RemoveComponent<ActorComponent>(actor);
                 server.EntMan.DeleteEntity(actor);
+            }
         });
     }
 

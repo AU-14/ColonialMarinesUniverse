@@ -55,6 +55,7 @@
     damage:
       types:
         Heat: 20 # TODO RMC14 damage fall-off and higher at close range
+  - type: XenoAcidProjectile
   - type: CMArmorPiercing
     amount: 10
   - type: XenoProjectile
@@ -133,6 +134,7 @@
     damage:
       types:
         Heat: 16
+  - type: XenoAcidProjectile
   - type: XenoToxicSpitProjectile
   - type: RMCProjectileSkipXenos
   - type: XenoProjectile
@@ -199,6 +201,7 @@
     damage:
       types:
         Heat: 10
+  - type: XenoAcidProjectile
   - type: XenoProjectile
     deleteOnFriendlyXeno: false
   - type: ProjectileMaxRange
@@ -277,6 +280,7 @@
     lifetime: 10
   - type: XenoProjectile
     deleteOnFriendlyXeno: false
+  - type: XenoAcidProjectile
   - type: SpawnOnTerminate
     spawn: RMCSmokeAcid
     popup: rmc-glob-land
@@ -351,14 +355,17 @@
     affectsDead: false
     affectsInfectedNested: false
     toxinDamage:
-      groups:
-        Toxin: 2
+      types:
+        Poison: 1
+        Radiation: 1
     oxygenDamage:
       types:
         Asphyxiation: 150
     coughDamage:
-      groups:
-        Brute: 5
+      types:
+        Blunt: 1.66
+        Slash: 1.67
+        Piercing: 1.67
   - type: RMCProjectileAccuracy
     accuracy: 95
   - type: Ammo
@@ -571,7 +578,7 @@
   - type: Sprite
     sprite: _RMC14/Effects/beam.rsi
     state: oppressor_tail_hook
-    drawDepth: Effects # Draws above mobs
+    drawdepth: Effects # Draws above mobs
   - type: ProjectileMaxRange
     max: 3.5
   - type: PreventCollideWithDead

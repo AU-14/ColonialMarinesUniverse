@@ -2,12 +2,12 @@
 
 namespace Content.Shared._RMC14.Construction;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class RMCConstructionPreventCollideComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float Range = 0.75f;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Target;
 }

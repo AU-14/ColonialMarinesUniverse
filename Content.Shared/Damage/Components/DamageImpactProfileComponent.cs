@@ -14,6 +14,9 @@ public sealed partial class DamageImpactProfileComponent : Component
     [DataField]
     public DamageImpactProfile Thrown = new();
 
+    [DataField]
+    public DamageImpactProfile Projectile = new();
+
     public DamageImpact GetMeleeImpact(DamageImpact fallback, bool heavy)
     {
         if (heavy && HeavyMelee.IsSpecified)
@@ -24,4 +27,7 @@ public sealed partial class DamageImpactProfileComponent : Component
 
     public DamageImpact GetThrownImpact(DamageImpact fallback)
         => Thrown.ApplyTo(fallback, DamageImpactDelivery.Thrown);
+
+    public DamageImpact GetProjectileImpact(DamageImpact fallback)
+        => Projectile.ApplyTo(fallback, DamageImpactDelivery.Projectile);
 }
