@@ -10781,6 +10781,13 @@
   id: 700
   time: '2026-09-12T22:41:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1938
+- author: flex5hybrid
+  changes:
+  - message: Moved hardcoded CMU user-facing strings into Fluent localization.
+    type: Code
+  id: 701
+  time: '2026-09-12T22:41:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1938
 - author: Vencallium
   changes:
   - message: "Fixed tactical hovering over empty +1 airspace during Distress Signal,\
@@ -10788,28 +10795,59 @@
     type: Fix
   - message: Added an empty upper z-level to Bosenmori Basho.
     type: Map
-  id: 701
+  id: 702
+  time: '2026-09-12T23:40:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1939
+- author: Vencallium
+  changes:
+  - message: "Fixed tactical hovering over empty +1 airspace during Distress Signal,\
+      \ excluding Hope\u2019s Retreat."
+    type: Fix
+  - message: Added an empty upper z-level to Bosenmori Basho.
+    type: Map
+  id: 703
   time: '2026-09-12T23:40:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1939
 - author: CatoChristopherMrow
   changes:
   - message: Added various belts, a new gun, and a few other qol items to colony cargo.
     type: Add
-  id: 702
+  id: 704
+  time: '2026-09-12T23:40:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1930
+- author: CatoChristopherMrow
+  changes:
+  - message: Added various belts, a new gun, and a few other qol items to colony cargo.
+    type: Add
+  id: 705
   time: '2026-09-12T23:40:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1930
 - author: CatoChristopherMrow
   changes:
   - message: Fixed gunships stealing some tiles, along with other various minor fixes
     type: Fix
-  id: 703
+  id: 706
+  time: '2026-09-12T23:41:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1924
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed gunships stealing some tiles, along with other various minor fixes
+    type: Fix
+  id: 707
   time: '2026-09-12T23:41:19.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1924
 - author: Nox38
   changes:
   - message: APCs should now fit full squads inside.
     type: Tweak
-  id: 704
+  id: 708
+  time: '2026-09-12T23:48:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1936
+- author: Nox38
+  changes:
+  - message: APCs should now fit full squads inside.
+    type: Tweak
+  id: 709
   time: '2026-09-12T23:48:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1936
 - author: deepdarkdepths
@@ -10818,7 +10856,16 @@
     type: Add
   - message: Runner has slightly more HP.
     type: Tweak
-  id: 705
+  id: 710
+  time: '2026-09-13T00:27:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1940
+- author: deepdarkdepths
+  changes:
+  - message: Added a new damage based evasion mechanic for Runner.
+    type: Add
+  - message: Runner has slightly more HP.
+    type: Tweak
+  id: 711
   time: '2026-09-13T00:27:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1940
 - author: silasadam
@@ -10836,8 +10883,33 @@
     type: Tweak
   - message: Yautja have a map symbol&hunting traps track the target for 5 minutes.
     type: Add
-  id: 706
+  id: 712
   time: '2026-09-13T00:28:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1931
+- author: silasadam
+  changes:
+  - message: Added Yautja Limb regeneration
+    type: Add
+  - message: Yautja healing gun can heal IB/Fracs/Eschar/etc on a long do-after.
+    type: Tweak
+  - message: Yautja take several tackles to knock down. [4]
+    type: Tweak
+  - message: Yautja hunting traps are now completely invisible to everyone except
+      the yautja.
+    type: Tweak
+  - message: Yautja cloak has been returned to true-cloak status.
+    type: Tweak
+  - message: Yautja have a map symbol&hunting traps track the target for 5 minutes.
+    type: Add
+  id: 713
+  time: '2026-09-13T00:28:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1931
+- author: deepdarkdepths
+  changes:
+  - message: Base and Berserker Ravager stat values tweaked.
+    type: Tweak
+  id: 714
+  time: '2026-09-13T01:32:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1943
 Name: CMU
 Order: -1

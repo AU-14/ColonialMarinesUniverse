@@ -32,7 +32,7 @@
     fireSound:
       path: /Audio/_RMC14/Xeno/alien_spitacid2.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -68,7 +68,7 @@
     pounceSound:
       path: /Audio/_RMC14/Xeno/alien_roar1.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -98,7 +98,7 @@
     castSound:
       path: /Audio/_RMC14/Xeno/acid_sizzle3.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -116,6 +116,6 @@
   - type: InstantAction
     event: !type:XenoDespoilerCatalyzeActionEvent
   - type: XenoDespoilerCatalyzeAction
-    hypertensionCost: 2
-    buffDuration: 10
+    hypertensionCost: 1
+    buffDuration: 15
     visualProto: RMCEffectDespoilerCatalyze
