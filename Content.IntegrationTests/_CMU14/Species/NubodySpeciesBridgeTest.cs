@@ -12,6 +12,7 @@ using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared._RMC14.Visor;
 using Content.Shared._RMC14.Webbing;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
@@ -332,9 +333,9 @@ public sealed class NubodySpeciesBridgeTest : GameTest
                 new CMUMedicalBodyPartKey(BodyPartType.Head, BodyPartSymmetry.None),
                 out var head),
                 Is.True);
-            var headDamage = new Content.Shared.Damage.DamageSpecifier();
-            headDamage.DamageDict["Slash"] = 1000;
-            Assert.That(_partHealth.TryApplyPartDamage(headHuman, head, headDamage), Is.True);
+            var severHead = new BodyPartSeverAttemptEvent(headHuman, head, BodyPartType.Head, Surgical: true);
+            SEntMan.EventBus.RaiseLocalEvent(head, ref severHead);
+            Assert.That(severHead.Succeeded, Is.True);
         });
         await Pair.RunTicksSync(1);
 

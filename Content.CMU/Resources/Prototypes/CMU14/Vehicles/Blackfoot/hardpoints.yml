@@ -31,6 +31,7 @@
     state: engines
   - type: HardpointIntegrity
     maxIntegrity: 300
+    integrity: 300
   - type: HardpointVisual
     vehicleState: engines_vtol
 
@@ -53,10 +54,17 @@
   name: Blackfoot flare launcher pod
   description: A Blackfoot pilot-operated utility flare launcher pod.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: launchers
   - type: HardpointIntegrity
     maxIntegrity: 150
+    integrity: 150
   - type: VehicleTurret
     fireWhileRotatingGraceDegrees: 20
     useBarrelDirectionForShots: true
@@ -116,10 +124,17 @@
   name: M866 automatic grenade launcher
   description: A rear-door automatic grenade launcher for the AD-71E Blackfoot.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: doorgun-module
   - type: HardpointIntegrity
     maxIntegrity: 125
+    integrity: 125
   - type: VehicleTurret
     rotateToCursor: true
     fireWhileRotatingGraceDegrees: 30
@@ -196,6 +211,7 @@
     state: radar
   - type: HardpointIntegrity
     maxIntegrity: 100
+    integrity: 100
   - type: HardpointVisual
     vehicleState: recon_vtol
 
@@ -222,5 +238,6 @@
     state: radar
   - type: HardpointIntegrity
     maxIntegrity: 100
+    integrity: 100
   - type: HardpointVisual
     vehicleState: radar_vtol

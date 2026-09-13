@@ -76,6 +76,7 @@ public sealed class CMUCargoVehicleSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CMUCargoVehicleComponent, ComponentInit>(OnVehicleInit);
+        SubscribeLocalEvent<CMUCargoVehicleComponent, MapInitEvent>(OnVehicleMapInit);
         SubscribeLocalEvent<CMUCargoVehicleComponent, DamageChangedEvent>(OnVehicleDamageChanged);
         SubscribeLocalEvent<CMUCargoVehicleComponent, EntityTerminatingEvent>(OnVehicleTerminating);
         SubscribeLocalEvent<CMUCargoVehicleComponent, GetVerbsEvent<AlternativeVerb>>(OnVehicleGetVerbs);
@@ -121,10 +122,13 @@ public sealed class CMUCargoVehicleSystem : EntitySystem
     {
         ent.Comp.CargoContainer = _containers.EnsureContainer<ContainerSlot>(ent.Owner, ent.Comp.CargoContainerId);
 
+        UpdateBayAppearance(ent);
+    }
+
+    private void OnVehicleMapInit(Entity<CMUCargoVehicleComponent> ent, ref MapInitEvent args)
+    {
         if (TryComp(ent.Owner, out VehicleComponent? vehicle))
             _vehicles.TrySetOperator((ent.Owner, vehicle), ent.Owner);
-
-        UpdateBayAppearance(ent);
     }
 
     private void OnVehicleDamageChanged(Entity<CMUCargoVehicleComponent> ent, ref DamageChangedEvent args)

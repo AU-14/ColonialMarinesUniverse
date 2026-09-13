@@ -309,31 +309,35 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         var online = state.Enabled && deployed;
         var ready = online && hasAnyActive && state.ActiveSlot >= 0;
 
-        HeaderPowerLabel.Text = state.Enabled ? "PWR: ON" : "PWR: OFF";
+        HeaderPowerLabel.Text = Loc.GetString(state.Enabled
+            ? "anprc-ui-header-power-on"
+            : "anprc-ui-header-power-off");
         HeaderPowerLabel.FontColorOverride = state.Enabled ? TextGood : TextBad;
 
         if (state.Planted)
         {
-            HeaderLinkLabel.Text = "LINK: RETRANS";
+            HeaderLinkLabel.Text = Loc.GetString("anprc-ui-header-link-retrans");
             HeaderLinkLabel.FontColorOverride = state.Enabled ? TextGood : TextDim;
         }
         else if (!state.IsEquipped)
         {
-            HeaderLinkLabel.Text = "LINK: NOT WORN";
+            HeaderLinkLabel.Text = Loc.GetString("anprc-ui-header-link-not-worn");
             HeaderLinkLabel.FontColorOverride = TextWarn;
         }
         else if (!state.Enabled)
         {
-            HeaderLinkLabel.Text = "LINK: STBY";
+            HeaderLinkLabel.Text = Loc.GetString("anprc-ui-header-link-standby");
             HeaderLinkLabel.FontColorOverride = TextDim;
         }
         else
         {
-            HeaderLinkLabel.Text = hasAnyActive ? "LINK: READY" : "LINK: NO NET";
+            HeaderLinkLabel.Text = Loc.GetString(hasAnyActive
+                ? "anprc-ui-header-link-ready"
+                : "anprc-ui-header-link-no-net");
             HeaderLinkLabel.FontColorOverride = hasAnyActive ? TextGood : TextWarn;
         }
 
-        LcdModeLabel.Text = $"MODE: {ModeShort(state.Mode)}";
+        LcdModeLabel.Text = Loc.GetString("anprc-ui-lcd-mode", ("mode", ModeShort(state.Mode)));
         LcdModeLabel.FontColorOverride = online ? LcdDim : LcdOff;
         CryptoLabel.FontColorOverride = online ? LcdDim : LcdOff;
 
@@ -341,10 +345,10 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         {
             var fStr = FormatFreq(activeDynFreq);
             FrequencyLabel.Text = fStr;
-            ChannelNameLabel.Text = "DIRECT FREQ";
-            ChannelIdLabel.Text = $"FREQ: {fStr}";
-            BandLabel.Text = $"BAND: {BandName(activeDynFreq)}";
-            WaveformLabel.Text = "WF: LOS";
+            ChannelNameLabel.Text = Loc.GetString("anprc-ui-direct-frequency");
+            ChannelIdLabel.Text = Loc.GetString("anprc-ui-frequency", ("frequency", fStr));
+            BandLabel.Text = Loc.GetString("anprc-ui-band", ("band", BandName(activeDynFreq)));
+            WaveformLabel.Text = Loc.GetString("anprc-ui-waveform", ("waveform", "LOS"));
 
             FrequencyLabel.FontColorOverride = ready ? LcdBright : LcdOff;
             ChannelNameLabel.FontColorOverride = ready ? LcdMid : LcdOff;
@@ -356,9 +360,9 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         {
             FrequencyLabel.Text = FormatFreq(PlanFreq(activeProto));
             ChannelNameLabel.Text = activeProto.LocalizedName.ToUpperInvariant();
-            ChannelIdLabel.Text = $"CH: {activeProto.ID}";
-            BandLabel.Text = $"BAND: {BandName(PlanFreq(activeProto))}";
-            WaveformLabel.Text = $"WF: {(activeProto.LongRange ? "SAT" : "LOS")}";
+            ChannelIdLabel.Text = Loc.GetString("anprc-ui-channel", ("channel", activeProto.ID));
+            BandLabel.Text = Loc.GetString("anprc-ui-band", ("band", BandName(PlanFreq(activeProto))));
+            WaveformLabel.Text = Loc.GetString("anprc-ui-waveform", ("waveform", activeProto.LongRange ? "SAT" : "LOS"));
 
             FrequencyLabel.FontColorOverride = ready ? LcdBright : LcdOff;
             ChannelNameLabel.FontColorOverride = ready ? LcdMid : LcdOff;
@@ -369,10 +373,12 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         else
         {
             FrequencyLabel.Text = "-- . ---";
-            ChannelNameLabel.Text = state.ActiveSlot < 0 ? "NO SLOT ACTIVE" : "SLOT EMPTY";
-            ChannelIdLabel.Text = "CH: ---";
-            BandLabel.Text = "BAND: ---";
-            WaveformLabel.Text = "WF: ---";
+            ChannelNameLabel.Text = Loc.GetString(state.ActiveSlot < 0
+                ? "anprc-ui-no-slot-active"
+                : "anprc-ui-slot-empty");
+            ChannelIdLabel.Text = Loc.GetString("anprc-ui-channel-placeholder");
+            BandLabel.Text = Loc.GetString("anprc-ui-band-placeholder");
+            WaveformLabel.Text = Loc.GetString("anprc-ui-waveform-placeholder");
 
             FrequencyLabel.FontColorOverride = LcdOff;
             ChannelNameLabel.FontColorOverride = LcdOff;
@@ -384,40 +390,42 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         if (!online)
         {
             TxIndicator.FontColorOverride = LcdOff;
-            TxLabel.Text = "OFF";
+            TxLabel.Text = Loc.GetString("anprc-ui-tx-off");
             TxLabel.FontColorOverride = LcdOff;
         }
         else if (!hasAnyActive)
         {
             TxIndicator.FontColorOverride = LcdWarning;
-            TxLabel.Text = "NO NET";
+            TxLabel.Text = Loc.GetString("anprc-ui-tx-no-net");
             TxLabel.FontColorOverride = LcdWarning;
         }
         else
         {
             TxIndicator.FontColorOverride = LcdBright;
-            TxLabel.Text = state.MonitorEnabled ? "MON" : "STBY";
+            TxLabel.Text = Loc.GetString(state.MonitorEnabled
+                ? "anprc-ui-tx-monitor"
+                : "anprc-ui-tx-standby");
             TxLabel.FontColorOverride = state.MonitorEnabled ? LcdBright : LcdDim;
         }
 
         if (!deployed)
         {
-            BitStatusLabel.Text = "BIT: NOT SEATED";
+            BitStatusLabel.Text = Loc.GetString("anprc-ui-bit-not-seated");
             BitStatusLabel.FontColorOverride = LcdWarning;
         }
         else if (!state.Enabled)
         {
-            BitStatusLabel.Text = "BIT: OFFLINE";
+            BitStatusLabel.Text = Loc.GetString("anprc-ui-bit-offline");
             BitStatusLabel.FontColorOverride = LcdOff;
         }
         else if (!hasAnyActive)
         {
-            BitStatusLabel.Text = "BIT: NO NET";
+            BitStatusLabel.Text = Loc.GetString("anprc-ui-bit-no-net");
             BitStatusLabel.FontColorOverride = LcdWarning;
         }
         else
         {
-            BitStatusLabel.Text = "BIT: PASS";
+            BitStatusLabel.Text = Loc.GetString("anprc-ui-bit-pass");
             BitStatusLabel.FontColorOverride = LcdBright;
         }
 
@@ -425,32 +433,32 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         SignalBarsLabel.FontColorOverride = ready ? LcdBright : LcdOff;
 
         var batteryFilled = state.HasBattery ? (int)Math.Round(state.BatteryFraction * 6) : 0;
-        BatteryBarsLabel.Text = state.HasBattery ? Bars(batteryFilled, 6) : "NO CELL";
+        BatteryBarsLabel.Text = state.HasBattery ? Bars(batteryFilled, 6) : Loc.GetString("anprc-ui-no-cell");
         BatteryBarsLabel.FontColorOverride = !state.HasBattery ? TextBad
                                             : state.BatteryFraction <= 0.2f ? LcdWarning
                                             : LcdDim;
 
-        AntennaLabel.Text = $"ANT: {state.AntennaLabel}";
+        AntennaLabel.Text = Loc.GetString("anprc-ui-antenna", ("antenna", state.AntennaLabel));
         AntennaLabel.FontColorOverride = online ? LcdDim : LcdOff;
 
         if (!deployed)
         {
-            FaultLabel.Text = "FAULT: NOT WORN";
+            FaultLabel.Text = Loc.GetString("anprc-ui-fault-not-worn");
             FaultLabel.FontColorOverride = TextWarn;
         }
         else if (!state.Enabled)
         {
-            FaultLabel.Text = "FAULT: OFF";
+            FaultLabel.Text = Loc.GetString("anprc-ui-fault-off");
             FaultLabel.FontColorOverride = TextDim;
         }
         else if (!hasAnyActive)
         {
-            FaultLabel.Text = "FAULT: NO NET";
+            FaultLabel.Text = Loc.GetString("anprc-ui-fault-no-net");
             FaultLabel.FontColorOverride = TextWarn;
         }
         else
         {
-            FaultLabel.Text = "FAULT: NONE";
+            FaultLabel.Text = Loc.GetString("anprc-ui-fault-none");
             FaultLabel.FontColorOverride = TextGood;
         }
 
@@ -462,17 +470,16 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         }
         else if (!string.IsNullOrEmpty(state.WearerCallsign))
         {
-            CallsignDisplayLabel.Text = $"{state.WearerCallsign} (AUTO)";
+            CallsignDisplayLabel.Text = Loc.GetString("anprc-ui-callsign-auto", ("callsign", state.WearerCallsign));
             CallsignDisplayLabel.FontColorOverride = TextGood;
         }
         else
         {
-            CallsignDisplayLabel.Text = "UNKNOWN STATION";
+            CallsignDisplayLabel.Text = Loc.GetString("anprc-unknown-station");
             CallsignDisplayLabel.FontColorOverride = TextDim;
         }
 
         RebuildCallsignPresets(state);
-
         RebuildSlotList(state);
 
         var slotCount = state.SlotLabels.Count;
@@ -480,11 +487,11 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         PresetSummaryLabel.FontColorOverride = slotCount > 0 ? TextDim : TextWarn;
         AddSlotButton.Disabled = slotCount >= ANPRCRadioComponent.MaxSlots || !online;
 
-        ModeButton.Text = $"MODE {ModeShort(state.Mode)}";
-        MonitorButton.Text = state.MonitorEnabled ? "MON ON" : "MON OFF";
-        ScanButton.Text = state.ScanEnabled ? "SCAN ON" : "SCAN OFF";
-        SquelchButton.Text = $"SQL {state.SquelchLevel}";
-        TxPowerButton.Text = $"TX {state.TxPower.Short()}";
+        ModeButton.Text = Loc.GetString("anprc-ui-mode-button", ("mode", ModeShort(state.Mode)));
+        MonitorButton.Text = Loc.GetString(state.MonitorEnabled ? "anprc-ui-monitor-on" : "anprc-ui-monitor-off");
+        ScanButton.Text = Loc.GetString(state.ScanEnabled ? "anprc-ui-scan-on" : "anprc-ui-scan-off");
+        SquelchButton.Text = Loc.GetString("anprc-ui-squelch-button", ("level", state.SquelchLevel));
+        TxPowerButton.Text = Loc.GetString("anprc-ui-tx-power-button", ("power", state.TxPower.Short()));
 
         ModeButton.Disabled = !online;
         MonitorButton.Disabled = !online;
@@ -494,16 +501,24 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         MonitorButton.Pressed = state.MonitorEnabled && online;
         ScanButton.Pressed = state.ScanEnabled && online;
 
-        RoleValueLabel.Text = state.Planted ? "RETRANS STATION" : "RTO RELAY";
+        RoleValueLabel.Text = Loc.GetString(state.Planted
+            ? "anprc-ui-role-retrans-station"
+            : "anprc-ui-role-rto-relay");
 
-        RelayValueLabel.Text = online && hasAnyActive ? "ANCHOR" : "STBY";
+        RelayValueLabel.Text = Loc.GetString(online && hasAnyActive
+            ? "anprc-ui-relay-anchor"
+            : "anprc-ui-relay-standby");
         RelayValueLabel.FontColorOverride = online && hasAnyActive ? TextGood : TextDim;
 
-        DiagnosticLineA.Text = online && hasAnyActive ? "ANCHOR: ACTIVE"
-                                          : online ? "ANCHOR: STBY"
-                                                                   : "ANCHOR: OFFLINE";
+        DiagnosticLineA.Text = Loc.GetString(online && hasAnyActive
+            ? "anprc-ui-anchor-active"
+            : online
+                ? "anprc-ui-anchor-standby"
+                : "anprc-ui-anchor-offline");
         DiagnosticLineA.FontColorOverride = online && hasAnyActive ? TextGood : TextDim;
-        DiagnosticLineB.Text = online && hasAnyActive ? "BYPASS: ARMED" : "BYPASS: NO";
+        DiagnosticLineB.Text = Loc.GetString(online && hasAnyActive
+            ? "anprc-ui-bypass-armed"
+            : "anprc-ui-bypass-no");
         DiagnosticLineB.FontColorOverride = online && hasAnyActive ? TextGood : TextDim;
 
         RoleValueLabel.FontColorOverride = online ? TextBright : TextDim;
@@ -511,16 +526,22 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         var hasFill = !string.IsNullOrEmpty(state.CryptoFaction);
         var secured = hasFill && !state.CryptoStale;
 
-        CryptoStatusLabel.Text = secured ? $"SECURED ({state.CryptoDesignation})"
-                                             : hasFill ? $"STALE ({state.CryptoDesignation})"
-                                                        : "UNSECURED";
+        CryptoStatusLabel.Text = secured
+            ? Loc.GetString("anprc-ui-secured", ("designation", state.CryptoDesignation))
+            : hasFill
+                ? Loc.GetString("anprc-ui-stale", ("designation", state.CryptoDesignation))
+                : Loc.GetString("anprc-ui-unsecured");
         CryptoStatusLabel.FontColorOverride = secured ? TextGood : hasFill ? TextWarn : TextBad;
 
         CryptoFillLabel.Text = hasFill
             ? state.CryptoStale
-                ? $"FILL: {state.CryptoDesignation} ({state.CryptoFaction.ToUpperInvariant()}) - SUPERSEDED, RECRYPTO REQUIRED"
-                : $"FILL: {state.CryptoDesignation} ({state.CryptoFaction.ToUpperInvariant()})"
-            : "FILL: NONE - insert fill card to load";
+                ? Loc.GetString("anprc-ui-fill-stale",
+                    ("designation", state.CryptoDesignation),
+                    ("faction", state.CryptoFaction.ToUpperInvariant()))
+                : Loc.GetString("anprc-ui-fill-loaded",
+                    ("designation", state.CryptoDesignation),
+                    ("faction", state.CryptoFaction.ToUpperInvariant()))
+            : Loc.GetString("anprc-ui-fill-none");
         CryptoFillLabel.FontColorOverride = secured ? TextGood : hasFill ? TextWarn : TextDim;
 
         ZeroizeButton.Disabled = !online || !hasFill;
@@ -543,13 +564,19 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
             : Loc.GetString("anprc-power-on-button");
 
         var net = hasActiveDynFreq
-            ? $"DIRECT {FormatFreq(activeDynFreq)}"
-            : activeProto?.LocalizedName ?? "No net";
+            ? Loc.GetString("anprc-ui-footer-direct", ("frequency", FormatFreq(activeDynFreq)))
+            : activeProto?.LocalizedName ?? Loc.GetString("anprc-ui-footer-no-net");
+        var deployment = Loc.GetString(state.Planted
+            ? "anprc-ui-footer-planted"
+            : state.IsEquipped
+                ? "anprc-ui-footer-equipped"
+                : "anprc-ui-footer-unequipped");
+        var power = Loc.GetString(state.Enabled ? "anprc-status-on" : "anprc-status-off");
 
-        StatusLabel.Text =
-            $"{(state.Planted ? "PLANTED" : state.IsEquipped ? "EQUIPPED" : "UNEQUIPPED")}" +
-            $" · {(state.Enabled ? "ON" : "OFF")}" +
-            $" · {net}";
+        StatusLabel.Text = Loc.GetString("anprc-ui-footer-status",
+            ("deployment", deployment),
+            ("power", power),
+            ("net", net));
     }
 
     // only rebuild the dropdown when the pool actually changes, otherwise the periodic
@@ -566,7 +593,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         _callsignPresets.AddRange(state.CallsignPresets);
 
         CallsignPresetButton.Clear();
-        CallsignPresetButton.AddItem("PRESETS", 0);
+        CallsignPresetButton.AddItem(Loc.GetString("anprc-ui-callsign-presets"), 0);
         for (var i = 0; i < _callsignPresets.Count; i++)
         {
             CallsignPresetButton.AddItem(_callsignPresets[i], i + 1);
@@ -599,14 +626,21 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
                 var unknownNet = state.SweepContacts.Any(contact =>
                     contact.Resolved && !contact.Known && contact.Frequency == dynFreq);
 
-                freqText = unknownNet
-                    ? $"{FormatFreq(dynFreq)} MHz · UNKNOWN NET"
-                    : $"{FormatFreq(dynFreq)} MHz · DIRECT";
+                freqText = Loc.GetString(unknownNet
+                        ? "anprc-ui-slot-frequency-unknown"
+                        : "anprc-ui-slot-frequency-direct",
+                    ("frequency", FormatFreq(dynFreq)));
             }
             else if (state.Presets.TryGetValue(slot, out var ch) && _prototype.TryIndex(ch, out var proto))
-                freqText = $"{FormatFreq(PlanFreq(proto))} MHz · {proto.LocalizedName.ToUpperInvariant()}";
+            {
+                freqText = Loc.GetString("anprc-ui-slot-frequency-channel",
+                    ("frequency", FormatFreq(PlanFreq(proto))),
+                    ("channel", proto.LocalizedName.ToUpperInvariant()));
+            }
             else
-                freqText = "--- EMPTY ---";
+            {
+                freqText = Loc.GetString("anprc-ui-slot-frequency-empty");
+            }
 
             var row = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 4 };
 
@@ -622,7 +656,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
 
             var tuneBtn = new Button
             {
-                Text = "TUNE",
+                Text = Loc.GetString("anprc-ui-tune-button"),
                 MinWidth = 52,
                 Disabled = !online,
             };
@@ -630,7 +664,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
 
             var delBtn = new Button
             {
-                Text = "DEL",
+                Text = Loc.GetString("anprc-ui-delete-button"),
                 MinWidth = 44,
             };
             delBtn.OnPressed += _ => OnDeleteSlot?.Invoke(capturedSlot);
@@ -646,7 +680,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
     {
         _entryTargetSlot = slot;
         var label = state.SlotLabels.TryGetValue(slot, out var lbl) ? lbl : $"P{slot + 1}";
-        SlotEntryHeaderLabel.Text = $"TUNE [{label}]:";
+        SlotEntryHeaderLabel.Text = Loc.GetString("anprc-ui-tune-slot-label", ("label", label));
         SlotEntryPanel.Visible = true;
         EntryFreqLineEdit.Text = string.Empty;
         ShowEntryTab(EntryTab.Freq);
@@ -669,7 +703,6 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         EntryTabFreqButton.Pressed = tab == EntryTab.Freq;
         EntryTabNetButton.Pressed = tab == EntryTab.Net;
     }
-
 
     // frequencies come from the round's signal plan carried in the BUI state,
     // the prototype value is only the fallback book number
@@ -709,9 +742,9 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
             var capturedProto = proto;
             var btn = new Button
             {
-                Text = discovered
-                    ? $"{proto.LocalizedName.ToUpperInvariant()}  -  {FormatFreq(PlanFreq(proto))} MHz · INTERCEPT"
-                    : $"{proto.LocalizedName.ToUpperInvariant()}  -  {FormatFreq(PlanFreq(proto))} MHz",
+                Text = Loc.GetString(discovered ? "anprc-ui-net-entry-intercept" : "anprc-ui-net-entry",
+                    ("channel", proto.LocalizedName.ToUpperInvariant()),
+                    ("frequency", FormatFreq(PlanFreq(proto)))),
                 HorizontalExpand = true,
             };
             btn.OnPressed += _ =>
@@ -729,24 +762,28 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         var online = state.Enabled && (state.IsEquipped || state.Planted);
 
         SweepButton.Disabled = !online;
-        SweepButton.Text = state.SweepEnabled ? "STOP SEARCH" : "START SEARCH";
+        SweepButton.Text = Loc.GetString(state.SweepEnabled ? "anprc-ui-stop-search" : "anprc-ui-start-search");
         SweepButton.Pressed = state.SweepEnabled && online;
 
-        SweepStatusLabel.Text = !online ? "OFFLINE" : state.SweepEnabled ? "SEARCHING" : "IDLE";
+        SweepStatusLabel.Text = Loc.GetString(!online
+            ? "anprc-ui-search-offline"
+            : state.SweepEnabled
+                ? "anprc-ui-search-searching"
+                : "anprc-ui-search-idle");
         SweepStatusLabel.FontColorOverride = state.SweepEnabled && online ? TextWarn : TextDim;
 
         if (state.SweepEnabled && online)
         {
-            SweepBandLabel.Text = $"HEAD: {FormatFreq(state.SweepPosition)} MHz";
+            SweepBandLabel.Text = Loc.GetString("anprc-ui-search-head", ("frequency", FormatFreq(state.SweepPosition)));
             SweepBandLabel.FontColorOverride = LcdBright;
-            SweepHintLabel.Text = "NETS DROPPED · TX INHIBITED";
+            SweepHintLabel.Text = Loc.GetString("anprc-ui-search-active-help");
             SweepHintLabel.FontColorOverride = TextWarn;
         }
         else
         {
-            SweepBandLabel.Text = "BAND IDLE";
+            SweepBandLabel.Text = Loc.GetString("anprc-ui-band-idle");
             SweepBandLabel.FontColorOverride = LcdOff;
-            SweepHintLabel.Text = "Searching drops all nets and blocks transmit.";
+            SweepHintLabel.Text = Loc.GetString("anprc-ui-search-help");
             SweepHintLabel.FontColorOverride = TextDim;
         }
 
@@ -756,7 +793,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         {
             SweepContactList.AddChild(new Label
             {
-                Text = "NO CONTACTS",
+                Text = Loc.GetString("anprc-ui-no-contacts"),
                 FontColorOverride = TextDim,
             });
 
@@ -777,9 +814,9 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
                 // work, and it should not read like a prize the operator won
                 row.AddChild(new Label
                 {
-                    Text = contact.Known
-                        ? $"{FormatFreq(contact.Frequency)} MHz · {contact.ChannelName.ToUpperInvariant()} · OWN NET"
-                        : $"{FormatFreq(contact.Frequency)} MHz · {contact.ChannelName.ToUpperInvariant()}",
+                    Text = Loc.GetString(contact.Known ? "anprc-ui-contact-own" : "anprc-ui-contact",
+                        ("frequency", FormatFreq(contact.Frequency)),
+                        ("channel", contact.ChannelName.ToUpperInvariant())),
                     FontColorOverride = contact.Known ? TextDim : TextGood,
                     HorizontalExpand = true,
                     ClipText = true,
@@ -791,7 +828,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
                 {
                     var tuneBtn = new Button
                     {
-                        Text = "TUNE",
+                        Text = Loc.GetString("anprc-ui-tune-button"),
                         MinWidth = 52,
                         Disabled = state.ActiveSlot < 0 || !state.SlotLabels.ContainsKey(state.ActiveSlot),
                     };
@@ -808,7 +845,10 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
                 // partial fix: only the digits earned so far, the rest still masked
                 row.AddChild(new Label
                 {
-                    Text = $"~{MaskDigits(FormatFreq(contact.Frequency), contact.Tier, contact.TierMax)} MHz · PARTIAL {contact.Tier}/{contact.TierMax}",
+                    Text = Loc.GetString("anprc-ui-contact-partial",
+                        ("frequency", MaskDigits(FormatFreq(contact.Frequency), contact.Tier, contact.TierMax)),
+                        ("tier", contact.Tier),
+                        ("tierMax", contact.TierMax)),
                     FontColorOverride = TextWarn,
                     HorizontalExpand = true,
                     ClipText = true,
@@ -837,9 +877,10 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
 
             var line = new Label
             {
-                Text = entry.Intercepted
-                    ? $"[{timeStr}] {entry.SenderName} · {entry.ChannelDisplay} · INTERCEPT"
-                    : $"[{timeStr}] {entry.SenderName} · {entry.ChannelDisplay}",
+                Text = Loc.GetString(entry.Intercepted ? "anprc-ui-log-entry-intercept" : "anprc-ui-log-entry",
+                    ("time", timeStr),
+                    ("sender", entry.SenderName),
+                    ("channel", entry.ChannelDisplay)),
                 FontColorOverride = entry.Intercepted ? TextWarn : TextLog,
                 ClipText = true,
             };
@@ -855,14 +896,14 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
 
         var filtered = _netLogChannelFilter != null || _netLogSearchFilter.Length > 0;
         NetLogCountLabel.Text = filtered
-            ? $"{shown}/{state.NetLog.Count} entries"
-            : $"{state.NetLog.Count} entries";
+            ? Loc.GetString("anprc-ui-log-filtered-count", ("shown", shown), ("total", state.NetLog.Count))
+            : Loc.GetString("anprc-ui-log-count", ("count", state.NetLog.Count));
 
         if (filtered && shown == 0 && state.NetLog.Count > 0)
         {
             NetLogContainer.AddChild(new Label
             {
-                Text = "NO ENTRIES MATCH FILTER",
+                Text = Loc.GetString("anprc-ui-log-no-filter-match"),
                 FontColorOverride = TextDim,
             });
         }
@@ -898,7 +939,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
         _netLogChannels.AddRange(channels);
 
         NetLogChannelFilter.Clear();
-        NetLogChannelFilter.AddItem("ALL NETS", 0);
+        NetLogChannelFilter.AddItem(Loc.GetString("anprc-ui-all-nets"), 0);
         for (var i = 0; i < _netLogChannels.Count; i++)
         {
             NetLogChannelFilter.AddItem(_netLogChannels[i], i + 1);

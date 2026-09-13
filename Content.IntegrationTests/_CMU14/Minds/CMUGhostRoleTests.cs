@@ -185,13 +185,16 @@ public sealed class CMUGhostRoleTests : GameTest
             {
                 Assert.That(component.Requirements, Has.Count.EqualTo(1));
                 Assert.That(info.Requirements, Is.SameAs(component.Requirements));
-                Assert.That(ghostRoleSystem.Takeover(session, component.Identifier), Is.False,
-                    "The server must reject a ghost-role request that fails its explicit requirement override.");
             });
+            ghostRoleSystem.Request(session, component.Identifier);
+            Assert.That(session.AttachedEntity, Is.Null,
+                "The server must reject a ghost-role request that fails its explicit requirement override.");
+            Assert.That(component.Taken, Is.False);
 
             var emptyComponent = entMan.GetComponent<GhostRoleComponent>(emptyRequirementsGhostRole);
             Assert.That(emptyComponent.Requirements, Is.Empty);
-            Assert.That(ghostRoleSystem.Takeover(session, emptyComponent.Identifier), Is.True,
+            ghostRoleSystem.Request(session, emptyComponent.Identifier);
+            Assert.That(session.AttachedEntity, Is.EqualTo(emptyRequirementsGhostRole),
                 "An explicit empty override must replace role-prototype timers rather than fall back to them.");
         });
     }

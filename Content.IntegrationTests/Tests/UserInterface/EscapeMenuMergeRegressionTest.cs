@@ -16,22 +16,25 @@ public sealed class EscapeMenuMergeRegressionTest : GameTest
     [Test]
     public async Task GameplayLifecycleBalancesWindowTickerCvarAndMergedControls()
     {
-        await Client.WaitAssertion(() =>
+        EscapeUIController controller = null!;
+        ClientGameTicker ticker = null!;
+        EscapeMenu window = null!;
+        GameplayState state = null!;
+        var originalSeeOwnNotes = Server.CfgMan.GetCVar(CCVars.SeeOwnNotes);
+        var baselineTickerHandlers = 0;
+        var entered = false;
+        try
         {
-            var ui = Client.ResolveDependency<IUserInterfaceManager>();
-            var controller = ui.GetUIController<EscapeUIController>();
-            var ticker = Client.System<ClientGameTicker>();
-            var state = new GameplayState();
-            var originalSeeOwnNotes = Client.CfgMan.GetCVar(CCVars.SeeOwnNotes);
-            var baselineTickerHandlers = HandlerCount(ticker, "RoundStatusUpdated");
-            var entered = false;
-
-            Assert.That(GetPrivate<EscapeMenu?>(controller, "_escapeWindow"), Is.Null);
-            try
+            await Client.WaitAssertion(() =>
             {
+                state = new GameplayState();
+                controller = Client.ResolveDependency<IUserInterfaceManager>().GetUIController<EscapeUIController>();
+                ticker = Client.System<ClientGameTicker>();
+                baselineTickerHandlers = HandlerCount(ticker, "RoundStatusUpdated");
+                Assert.That(GetPrivate<EscapeMenu?>(controller, "_escapeWindow"), Is.Null);
                 controller.OnStateEntered(state);
                 entered = true;
-                var window = GetPrivate<EscapeMenu>(controller, "_escapeWindow");
+                window = GetPrivate<EscapeMenu>(controller, "_escapeWindow");
                 Assert.Multiple(() =>
                 {
                     Assert.That(window, Is.Not.Null);
@@ -55,14 +58,19 @@ public sealed class EscapeMenuMergeRegressionTest : GameTest
                 });
 
                 Assert.That(window.AdminRemarksButton.Disabled, Is.EqualTo(!originalSeeOwnNotes));
-                Client.CfgMan.SetCVar(CCVars.SeeOwnNotes, !originalSeeOwnNotes);
+            });
+
+            // SeeOwnNotes is server-owned; exercise its actual replicated subscription.
+            await Server.WaitPost(() => Server.CfgMan.SetCVar(CCVars.SeeOwnNotes, !originalSeeOwnNotes));
+            await Pair.RunUntilSynced();
+            await Client.WaitAssertion(() =>
+            {
                 Assert.Multiple(() =>
                 {
                     Assert.That(window.AdminRemarksButton.Disabled, Is.EqualTo(originalSeeOwnNotes));
                     Assert.That(window.AdminRemarksButton.ToolTip,
                         Is.EqualTo(originalSeeOwnNotes ? Loc.GetString("ui-escape-remarks-button-disabled") : null));
                 });
-
                 InvokePrivate(ticker, "RoundStatus", new TickerRoundStatusEvent(
                     "Escape Colony",
                     "Escape Ship",
@@ -93,15 +101,18 @@ public sealed class EscapeMenuMergeRegressionTest : GameTest
                     Assert.That(HandlerCount(ticker, "RoundStatusUpdated"), Is.EqualTo(baselineTickerHandlers));
                 });
 
-                Client.CfgMan.SetCVar(CCVars.SeeOwnNotes, originalSeeOwnNotes);
-            }
-            finally
+            });
+        }
+        finally
+        {
+            await Client.WaitPost(() =>
             {
                 if (entered)
                     controller.OnStateExited(state);
-                Client.CfgMan.SetCVar(CCVars.SeeOwnNotes, originalSeeOwnNotes);
-            }
-        });
+            });
+            await Server.WaitPost(() => Server.CfgMan.SetCVar(CCVars.SeeOwnNotes, originalSeeOwnNotes));
+            await Pair.RunUntilSynced();
+        }
     }
 
     private static int HandlerCount(object instance, string eventName)

@@ -197,7 +197,7 @@
   - type: XenoScissorCut
     damage:
       types:
-        Slash: 40
+        Slash: 75 # CMU14 modified
   - type: PlasmaFrenzy
   - type: XenoEvolution
     strains:
@@ -267,17 +267,17 @@
         Blunt: 15
         Slash: 15
         Piercing: 15
-    - types:
-        Blunt: 23.33
-        Slash: 23.33
-        Piercing: 23.34
+    - types: # CMU14 modified
+        Blunt: 28.33
+        Slash: 28.33
+        Piercing: 28.34
     rangeAtRageLevels: [1.5, 1.5, 1.5, 2.5, 2.5]
     windupReductionAtRageLevels: [0, 0.2, 0.4, 0.6, 1]
   - type: XenoFling # TODO RMC14 target head
     range: 2
     enragedRange: 1
-    healAmount: 75
-    enragedHealAmount: 100
+    healAmount: 95 # CMU14 modified
+    enragedHealAmount: 125 # CMU14 modified
     paralyzeTime: 0
     slowTime: 0
     dazeTime: 4

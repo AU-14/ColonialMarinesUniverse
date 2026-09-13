@@ -4,6 +4,8 @@
   name: foldable wheelchair
   description: Helps those with injuries related to immobility to move freely.
   components:
+  - type: Strap
+    enabled: False
   - type: Item
     size: Large
     sprite: CMU14/Structures/wheelchair.rsi

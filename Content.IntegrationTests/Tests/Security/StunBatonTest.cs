@@ -183,6 +183,7 @@ public sealed class StunBatonTests : InteractionTest
     [Description("Checks that an activated stun baton stuns the target")]
     public async Task StunBatonTest()
     {
+        await AddGravity(MapData.MapUid);
         // Prevent the test mob from suffocating.
         await AddAtmosphere();
 
@@ -202,7 +203,7 @@ public sealed class StunBatonTests : InteractionTest
 
         // Spawn a target mob.
         await SpawnTarget(HumanProtoId);
-        SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value);
+        await Server.WaitPost(() => SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value));
         var standingStateComp = Comp<StandingStateComponent>();
         var staminaComp = Comp<StaminaComponent>();
         Entity<DamageableComponent> mob = (STarget.Value, Comp<DamageableComponent>());
@@ -276,7 +277,7 @@ public sealed class StunBatonTests : InteractionTest
 
         // Spawn a target mob.
         await SpawnTarget(HumanProtoId);
-        SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value);
+        await Server.WaitPost(() => SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value));
         var standingStateComp = Comp<StandingStateComponent>();
         var staminaComp = Comp<StaminaComponent>();
         Entity<DamageableComponent> mob = (STarget.Value, Comp<DamageableComponent>());

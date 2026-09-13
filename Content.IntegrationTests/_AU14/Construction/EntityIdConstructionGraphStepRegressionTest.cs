@@ -9,13 +9,29 @@ namespace Content.IntegrationTests.CMU14.Construction;
 [TestOf(typeof(EntityIdConstructionGraphStep))]
 public sealed class EntityIdConstructionGraphStepRegressionTest : GameTest
 {
+    [TestPrototypes]
+    private const string Prototypes = """
+        - type: constructionGraph
+          id: TestExactPrototypeConstructionGraph
+          start: start
+          graph:
+          - node: start
+            edges:
+            - to: target
+              steps:
+              - entityId: CMPosterMissApril
+                consume: true
+                doAfter: 1
+          - node: target
+        """;
+
     [Test]
     public async Task MissAprilGraphPreservesExactPrototypeMatchingStep()
     {
         await Server.WaitAssertion(() =>
         {
             var graph = SProtoMan.Index<ConstructionGraphPrototype>(
-                "AU14CustomGraph_CMPosterMissApril__AU14__Debug");
+                "TestExactPrototypeConstructionGraph");
             var edge = graph.Edge("start", "target");
             Assert.That(edge, Is.Not.Null);
 

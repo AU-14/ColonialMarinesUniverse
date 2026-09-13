@@ -10,6 +10,16 @@
   description: A Weyland-Yutani corporate supply management terminal. Orders placed here are subject to the current sales tax rate.
   suffix: Corporate, ASRS
   components:
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      ItemCabinet: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: RequisitionsComputer
     faction: corporate
     categories:

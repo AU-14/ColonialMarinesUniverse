@@ -96,7 +96,7 @@ public sealed class ForkAssetStateMigrationRegressionTest : GameTest
                     {
                         Assert.That(sprite.AllLayers.Count(), Is.EqualTo(1), prototype);
                         Assert.That(sprite[0].ActualRsi?.Path,
-                            Is.EqualTo(new ResPath("/Textures/Objects/Tools/cleaner_spray.rsi")), prototype);
+                            Is.EqualTo(new ResPath("/Textures/CMU14/Objects/Tools/cleaner_spray.rsi")), prototype);
                         Assert.That(sprite[0].RsiState.Name, Is.EqualTo(state), prototype);
                         Assert.That(visuals.MaxFillLevels, Is.Zero, prototype);
                         Assert.That(visuals.FillBaseName, Is.Null, prototype);

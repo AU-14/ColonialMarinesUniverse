@@ -4,6 +4,10 @@
   name: WY 571-D omnidirectional sentry gun
   description: A Weyland-Yutani-configured 571-D sentry gun. Its locked corporate IFF recognizes Weyland-Yutani personnel, security, synthetics, contractors, and private military forces.
   components:
+  - type: UserIFF
+    factions:
+    - FactionWEYU
+  - type: EntityIFF
   - type: Tag
     tags:
     - RMCSentryWeYa
@@ -11,18 +15,32 @@
     lockedFriendlyFactions:
     - AUWeYu
     - WeYa
-
+    friendlyFactions:
+    - AUWeYu
+    - WeYa
+    deployedFriendlyFactions:
+    - AUWeYu
+    - WeYa
 - type: entity
   parent: RMCTurretAlmayer
   id: AU14TurretAlmayerWeYu
   name: WY UA-635C static gauss turret
   description: A Weyland-Yutani-configured static gauss turret with a locked corporate IFF.
   components:
+  - type: UserIFF
+    factions:
+    - FactionWEYU
+  - type: EntityIFF
   - type: SentryTargeting
     lockedFriendlyFactions:
     - AUWeYu
     - WeYa
-
+    friendlyFactions:
+    - AUWeYu
+    - WeYa
+    deployedFriendlyFactions:
+    - AUWeYu
+    - WeYa
 - type: entity
   parent: RMCDeployerSentry
   id: AU14DeployerSentryWeYu

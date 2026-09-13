@@ -23,6 +23,7 @@ using Robust.Shared.Map;
 
 namespace Content.IntegrationTests._CMU14.Yautja;
 
+// CMU14 Test: Yautja frontline resilience contracts.
 [TestFixture]
 public sealed class YautjaFrontlineBalanceTest
 {
@@ -198,7 +199,7 @@ public sealed class YautjaFrontlineBalanceTest
     }
 
     [Test]
-    public async Task XenoTackleHasHalfChanceAgainstRegularHunter()
+    public async Task XenoTackleNeedsFourPassedRollsAgainstRegularHunter()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -208,26 +209,18 @@ public sealed class YautjaFrontlineBalanceTest
         {
             var entities = server.EntMan;
             var xeno = entities.SpawnEntity("CMXenoRunner", map.GridCoords);
-            var targets = new List<EntityUid>();
-            for (var i = 0; i < 32; i++)
-            {
-                var target = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-                entities.EnsureComponent<YautjaComponent>(target);
-                targets.Add(target);
-            }
+            var target = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            var yautja = entities.EnsureComponent<YautjaComponent>(target);
+            yautja.XenoTackleSuccessChance = 1f;
 
-            server.ResolveDependency<Robust.Shared.Random.IRobustRandom>().SetSeed(7041);
-            var successes = 0;
-            foreach (var target in targets)
+            for (var i = 1; i <= 4; i++)
             {
                 var tackle = new CMDisarmEvent(xeno);
                 entities.EventBus.RaiseLocalEvent(target, ref tackle);
                 Assert.That(tackle.Handled, Is.True);
-                if (entities.HasComponent<KnockedDownComponent>(target))
-                    successes++;
+                Assert.That(entities.HasComponent<KnockedDownComponent>(target), Is.EqualTo(i == 4),
+                    $"passed tackle roll {i}");
             }
-
-            Assert.That(successes, Is.InRange(7, 25));
         });
 
         await pair.CleanReturnAsync();

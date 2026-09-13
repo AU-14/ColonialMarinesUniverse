@@ -18,6 +18,17 @@
   name: tank turret
   description: A tank turret hardpoint.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      turret-launcher: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/tank.rsi
     state: tank_turret_0
@@ -29,6 +40,7 @@
     repairRate: 0.008
   - type: HardpointIntegrity
     maxIntegrity: 450
+    integrity: 450
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
@@ -74,6 +86,17 @@
   name: Improper TBA3 'Vandeleur' Turret
   description: The TBA3 'Vandeleur' Turret, developed by Weyland Yutani as part of the 'B' upgrade package for the FV150 'Hobelar' Light Cavalry Tank. The Vandeleur is a direct evolution of the original FV150-A turret, with improvements to the internal systems and modularity. It can mount a wide array of weapon systems both quickly and easily, and features an inbuilt flare deployment system.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      turret-launcher: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Structures/vehicles/fv150/exterior.rsi
     state: tank_turret_0
@@ -85,6 +108,7 @@
     repairRate: 0.008
   - type: HardpointIntegrity
     maxIntegrity: 450
+    integrity: 450
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
@@ -130,6 +154,17 @@
   name: tank turret
   description: A tank turret hardpoint.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      turret-launcher: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/wytank.rsi
     state: tank_turret_0
@@ -141,6 +176,7 @@
     repairRate: 0.008
   - type: HardpointIntegrity
     maxIntegrity: 450
+    integrity: 450
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
@@ -196,6 +232,7 @@
     repairRate: 0.0165
   - type: HardpointIntegrity
     maxIntegrity: 300
+    integrity: 300
   - type: VehicleWheelItem
   - type: RemoveComponents
     components:
@@ -217,6 +254,7 @@
     repairRate: 0.0165
   - type: HardpointIntegrity
     maxIntegrity: 300
+    integrity: 300
   - type: VehicleWheelItem
   - type: RemoveComponents
     components:
@@ -238,6 +276,7 @@
   - type: VehicleWheelItem
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: HardpointDamageModifier
     modifierSets:
     - VehicleArmorCaustic

@@ -23,14 +23,19 @@ public sealed partial class ObjectiveIntelWindow : FancyWindow
         int factionPoints,
         Action<int>? unlockCallback = null)
     {
-        Title = "Intel Window";
+        Title = Loc.GetString("objective-intel-window-title");
 
         tiers ??= new List<ObjectiveIntelTierEntry>();
         if (unlockedTier < 0) unlockedTier = 0;
         if (unlockedTier > tiers.Count) unlockedTier = tiers.Count;
 
         ObjectiveIntelTitle.Text = $" {defaultTitle} ";
-        nexttierlabel.Text = $"Next tier: {(unlockedTier >= tiers.Count ? "All tiers unlocked" : unlockedTier + "/" + tiers.Count)}";
+        nexttierlabel.Text = unlockedTier >= tiers.Count
+            ? Loc.GetString("objective-intel-all-tiers-summary")
+            : Loc.GetString(
+                "objective-intel-next-tier",
+                ("current", unlockedTier),
+                ("total", tiers.Count));
         FactionPointsLabel.Text = factionPoints.ToString();
 
         UnlockedBox.DisposeAllChildren();
@@ -47,7 +52,11 @@ public sealed partial class ObjectiveIntelWindow : FancyWindow
 
         if (unlockedTier >= tiers.Count)
         {
-            var all = new Label { Text = "All intel tiers unlocked.", HorizontalAlignment = HAlignment.Center };
+            var all = new Label
+            {
+                Text = Loc.GetString("objective-intel-all-unlocked"),
+                HorizontalAlignment = HAlignment.Center,
+            };
             NextBox.AddChild(all);
         }
         else if (unlockedTier < tiers.Count)
@@ -60,7 +69,7 @@ public sealed partial class ObjectiveIntelWindow : FancyWindow
 
             var unlockBtn = new Button
             {
-                Text = $"Unlock: [{nextTier.CostToUnlock}]",
+                Text = Loc.GetString("objective-intel-unlock", ("cost", nextTier.CostToUnlock)),
                 Disabled = unlockCallback == null,
                 Margin = new Thickness(0, 4, 0, 0),
             };

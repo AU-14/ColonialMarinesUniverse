@@ -103,6 +103,9 @@
   - type: Sprite
     layers:
     - state: weldtank
+  - type: SolutionContainerVisuals
+    maxFillLevels: 0
+    fillBaseName: null
   - type: Solution
     id: tank
     solution:

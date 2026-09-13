@@ -78,6 +78,9 @@ public sealed partial class DropshipTacticalLandSystem
     private const float GunshipCursorPanSpeed = 64f;
     private const float GunshipCursorPvsIncrease = 0.5f;
     private const float GunshipPilotPvsScale = 1f + GunshipCursorPvsIncrease;
+    // Panning is client-local: the server still loads around the pilot.
+    // Cover both the 24-tile displacement and the fully zoomed-out viewport.
+    private const float GunshipPilotPanningPvsScale = 2.25f + GunshipCursorMaxOffset / 10f;
     private TimeSpan _nextGunshipAlarmUpdate;
     private TimeSpan _nextGunshipHudUpdate;
     private readonly HashSet<EntityUid> _gunshipHudWearers = new();
@@ -1255,6 +1258,17 @@ public sealed partial class DropshipTacticalLandSystem
                              targetTile.GridIndices))
                 {
                     flightHover.FlightTerrainCandidates.Add(anchored);
+                    // Nonblocking terrain (ladders, grates, and other floor
+                    // structures) needs its original pose preserved too. It
+                    // will never enter the hard-fixture loop below.
+                    if (!flightHover.FlightTerrainAnchors.ContainsKey(anchored)
+                        && TryComp(anchored, out TransformComponent? terrainXform)
+                        && terrainXform.ParentUid == targetMap)
+                    {
+                        flightHover.FlightTerrainAnchors.Add(anchored,
+                            new DropshipTerrainAnchorPose(terrainXform.LocalPosition, terrainXform.LocalRotation));
+                    }
+
                     if (IsHardFlightCandidate(anchored, blockMask))
                         candidates.Add(anchored);
                 }
@@ -2055,12 +2069,23 @@ public sealed partial class DropshipTacticalLandSystem
             return;
         }
 
+        // Destination selection owns the eye until its session ends. The
+        // periodic flight-camera update must not replace that preview.
+        if (pilotEye.Target is { } target && HasComp<DropshipPilotEyeComponent>(target))
+            return;
+
         var linked = TryComp(pilot, out GunshipPilotHudComponent? hud) && hud.Dropship == dropship;
         var remote = linked && (seat.Comp.ViewOffset != 0 || seat.Comp.RearView);
 
         _eye.SetTarget(pilot, remote ? eye : null, pilotEye);
         _eye.SetDrawFov(pilot, !remote, pilotEye);
-        _eye.SetPvsScale((pilot, pilotEye), linked ? GunshipPilotPvsScale : seat.Comp.OriginalPvsScale);
+        var panning = linked
+            && seat.Comp.ViewOffset == 0
+            && !seat.Comp.RearView
+            && seat.Comp.PilotPanning;
+        _eye.SetPvsScale((pilot, pilotEye), linked
+            ? panning ? GunshipPilotPanningPvsScale : GunshipPilotPvsScale
+            : seat.Comp.OriginalPvsScale);
 
         if (linked && seat.Comp.ViewOffset == 0 && !seat.Comp.RearView && seat.Comp.PilotPanning)
         {

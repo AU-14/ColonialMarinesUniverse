@@ -4,6 +4,12 @@
   name: universal paper tool
   description: A compact document fabrication device manufactured by Weyland-Yutani's Communications & Research and Development Division. Designed for rapid field administration, it accepts standardized paper stock and prints pre-authorized corporate, military, and governmental stationery from its internal template library. Do not ask where the ink comes from.
   components:
+  - type: ContainerContainer
+    containers:
+      paper_slot: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Items/universal_paper_tool.rsi
     state: icon

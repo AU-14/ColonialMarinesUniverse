@@ -538,7 +538,7 @@ public sealed partial class IngestionSystem : EntitySystem
             _forensics.TransferDna(entity, args.Target, false);
 
             // CMU14: Let players choose whether eating and drinking continue automatically.
-            args.Repeat = !args.ForceFed && ShouldAutoIngest(entity);
+            args.Repeat = !args.ForceFed && ShouldAutoIngest(args.User);
             return;
         }
 

@@ -1,6 +1,12 @@
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Utility;
+using Content.Shared._RMC14.Explosion;
+using Content.Shared._RMC14.Mortar;
+using Content.Shared._RMC14.Shields;
+using Content.Shared._RMC14.Xenonids.Egg;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.Heatshield;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
@@ -30,6 +36,7 @@ public sealed class DamageAllPrototypesTest : GameTest
     public async Task TestInjurableComponentOwnersCanTakeDamage()
     {
         var map = await Pair.CreateTestMap();
+        var failures = new List<string>();
 
         try
         {
@@ -39,9 +46,47 @@ public sealed class DamageAllPrototypesTest : GameTest
 
                 try
                 {
+                    // RemoveComponents may opt a derived prototype out of the damage model at map init.
+                    if (!SEntMan.HasComponent<InjurableComponent>(entity))
+                        continue;
+
                     // Intentionally cannot take damage, ignore it.
                     if (SEntMan.HasComponent<GodmodeComponent>(entity))
                         continue;
+
+                    // These temporary structures remove Damageable until replaced by their vulnerable form.
+                    if (SEntMan.HasComponent<InvincibleHiveStructureComponent>(entity))
+                    {
+                        Assert.That(SEntMan.HasComponent<DamageableComponent>(entity), Is.False);
+                        continue;
+                    }
+
+                    // Carried eggs intentionally reject damage; planted eggs must be damageable.
+                    await Server.WaitPost(() =>
+                    {
+                        if (SEntMan.TryGetComponent<XenoEggComponent>(entity, out var egg))
+                        {
+                            egg.State = XenoEggState.Grown;
+                            SEntMan.Dirty(entity, egg);
+                        }
+
+                        // Mortars are invulnerable while packed in their portable item form.
+                        if (SEntMan.TryGetComponent<MortarComponent>(entity, out var mortar))
+                        {
+                            typeof(MortarComponent).GetField(nameof(MortarComponent.Deployed))!.SetValue(mortar, true);
+                            SEntMan.Dirty(entity, mortar);
+                        }
+
+                        if (SEntMan.TryGetComponent<RMCLandmineComponent>(entity, out var mine))
+                        {
+                            mine.Armed = true;
+                            SEntMan.Dirty(entity, mine);
+                        }
+
+                        // Test the underlying damage model after any initial shield is depleted.
+                        if (SEntMan.TryGetComponent<XenoShieldComponent>(entity, out var shield))
+                            SEntMan.System<XenoShieldSystem>().RemoveShield(entity, shield.Shield);
+                    });
 
                     var canBeDamaged = false;
 
@@ -57,10 +102,13 @@ public sealed class DamageAllPrototypesTest : GameTest
                             var damage = new DamageSpecifier(type, FixedPoint2.Epsilon);
                             var previousDamage = _damageableSystem.GetTotalDamage(entity);
                             _damageableSystem.ChangeDamage(entity, damage, ignoreResistances: true);
-                            Assert.That(
-                                _damageableSystem.GetTotalDamage(entity),
-                                Is.EqualTo(FixedPoint2.Epsilon + previousDamage),
-                                $"{injurable} should take {type.ID} damage.");
+                            var expectedDamage = FixedPoint2.Epsilon;
+                            // Heatshield's innate heat protection applies after conventional resistances.
+                            if (type.ID == "Heat" && SEntMan.TryGetComponent<XenoHeatshieldComponent>(entity, out var heatshield))
+                                expectedDamage *= heatshield.FireDamageMultiplier;
+                            var actualDamage = _damageableSystem.GetTotalDamage(entity) - previousDamage;
+                            if (actualDamage != expectedDamage)
+                                failures.Add($"{injurable}: expected {expectedDamage} {type.ID} damage, got {actualDamage}.");
 
                             _damageableSystem.ClearAllDamage(entity);
                         });
@@ -74,6 +122,8 @@ public sealed class DamageAllPrototypesTest : GameTest
                     await Server.WaitPost(() => SEntMan.DeleteEntity(entity));
                 }
             }
+
+            Assert.That(failures, Is.Empty);
         }
         finally
         {

@@ -19,7 +19,7 @@ public sealed partial class UniversalPaperToolWindow : DefaultWindow
 
         HeaderLabel.Text = Loc.GetString("cmu-universal-paper-tool-header");
         ExitButton.OnPressed += _ => Close();
-        Title = "Universal Paper Tool";
+        Title = Loc.GetString("cmu-universal-paper-tool-window-title");
 
         SearchBar.OnTextChanged += _ => RefreshTemplateList();
     }

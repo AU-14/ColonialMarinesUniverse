@@ -12,7 +12,7 @@ public sealed class FactionLanguagePickerWindow : DefaultWindow
 
     public FactionLanguagePickerWindow()
     {
-        Title = "Choose Faction Language";
+        Title = Loc.GetString("faction-language-picker-title");
         Resizable = false;
         CloseButton.Visible = false;
 
@@ -24,7 +24,7 @@ public sealed class FactionLanguagePickerWindow : DefaultWindow
 
         root.AddChild(new Label
         {
-            Text = "Choose a language for your faction.\nAll members will speak and understand it.",
+            Text = Loc.GetString("faction-language-picker-description"),
             Margin = new Thickness(0, 0, 0, 8)
         });
 
@@ -42,7 +42,7 @@ public sealed class FactionLanguagePickerWindow : DefaultWindow
 
     public void Populate(List<string> languages, string factionTag)
     {
-        Title = $"Choose Language | {factionTag}";
+        Title = Loc.GetString("faction-language-picker-title-faction", ("faction", factionTag));
         _buttonContainer.RemoveAllChildren();
 
         foreach (var lang in languages)

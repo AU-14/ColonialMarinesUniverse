@@ -13,11 +13,11 @@ public sealed partial class CMUStomachComponent : Component
     [DataField, AutoNetworkedField]
     public float DigestionMultiplier = 1.0f;
 
-    [DataField]
+    [DataField(readOnly: true)]
     public TimeSpan NextVomitCheck;
 
     public uint PhysiologyRevision;
-    [DataField] public TimeSpan LastPhysiologyUpdate;
+    [DataField(readOnly: true)] public TimeSpan LastPhysiologyUpdate;
     [DataField] public TimeSpan ActiveCheckElapsed;
     [DataField] public OrganDamageStage PhysiologyStage;
     [DataField] public bool PhysiologyActive;

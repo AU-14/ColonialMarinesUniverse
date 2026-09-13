@@ -37,7 +37,7 @@ public sealed class BlackfootFlightComputerWindow : DefaultWindow
 
     public BlackfootFlightComputerWindow()
     {
-        Title = "Blackfoot flight computer";
+        Title = Loc.GetString("cmu-blackfoot-flight-computer-title");
         SetSize = new Vector2(380, 260);
         MinSize = new Vector2(340, 240);
         CloseButton.Visible = true;
@@ -72,15 +72,17 @@ public sealed class BlackfootFlightComputerWindow : DefaultWindow
         };
         status.AddChild(statusRoot);
 
-        _padLabel = Label("Pad: no link", Muted);
-        _pumpLabel = Label("Fuel pump: no link", Muted);
-        _aircraftLabel = Label("Aircraft: none", Muted);
+        _padLabel = Label(Loc.GetString("cmu-blackfoot-flight-computer-pad-no-link"), Muted);
+        _pumpLabel = Label(Loc.GetString("cmu-blackfoot-flight-computer-pump-no-link"), Muted);
+        _aircraftLabel = Label(Loc.GetString("cmu-blackfoot-flight-computer-aircraft-none"), Muted);
         statusRoot.AddChild(_padLabel);
         statusRoot.AddChild(_pumpLabel);
         statusRoot.AddChild(_aircraftLabel);
 
-        root.AddChild(BuildMeter("Fuel", Fuel, out _fuelLabel, out _fuelBar));
-        root.AddChild(BuildMeter("Battery", Battery, out _batteryLabel, out _batteryBar));
+        var fuelName = Loc.GetString("cmu-blackfoot-flight-computer-fuel");
+        var batteryName = Loc.GetString("cmu-blackfoot-flight-computer-battery");
+        root.AddChild(BuildMeter(fuelName, Fuel, out _fuelLabel, out _fuelBar));
+        root.AddChild(BuildMeter(batteryName, Battery, out _batteryLabel, out _batteryBar));
 
         var buttons = new BoxContainer
         {
@@ -90,11 +92,11 @@ public sealed class BlackfootFlightComputerWindow : DefaultWindow
         };
         root.AddChild(buttons);
 
-        _fuelButton = ActionButton("Start refuel", Fuel);
+        _fuelButton = ActionButton(Loc.GetString("cmu-blackfoot-flight-computer-start-refuel"), Fuel);
         _fuelButton.OnPressed += _ => OnFuelToggle?.Invoke();
         buttons.AddChild(_fuelButton);
 
-        _batteryButton = ActionButton("Start recharge", Battery);
+        _batteryButton = ActionButton(Loc.GetString("cmu-blackfoot-flight-computer-start-recharge"), Battery);
         _batteryButton.OnPressed += _ => OnBatteryToggle?.Invoke();
         buttons.AddChild(_batteryButton);
     }
@@ -104,27 +106,49 @@ public sealed class BlackfootFlightComputerWindow : DefaultWindow
         var hasAircraft = state.Aircraft != null;
 
         _padLabel.Text = state.PadLinked
-            ? hasAircraft ? "Pad: aircraft parked" : "Pad: deployed"
-            : "Pad: no deployed pad";
+            ? hasAircraft
+                ? Loc.GetString("cmu-blackfoot-flight-computer-pad-aircraft")
+                : Loc.GetString("cmu-blackfoot-flight-computer-pad-deployed")
+            : Loc.GetString("cmu-blackfoot-flight-computer-pad-none");
         _padLabel.FontColorOverride = state.PadLinked ? Ready : Alert;
 
         _pumpLabel.Text = state.PadLinked
-            ? state.FuelPumpLinked ? "Fuel pump: linked" : "Fuel pump: missing"
-            : "Fuel pump: no pad";
+            ? state.FuelPumpLinked
+                ? Loc.GetString("cmu-blackfoot-flight-computer-pump-linked")
+                : Loc.GetString("cmu-blackfoot-flight-computer-pump-missing")
+            : Loc.GetString("cmu-blackfoot-flight-computer-pump-no-pad");
         _pumpLabel.FontColorOverride = !state.PadLinked
             ? Muted
             : state.FuelPumpLinked ? Ready : Caution;
 
-        _aircraftLabel.Text = hasAircraft ? "Aircraft: Blackfoot linked" : "Aircraft: none";
+        _aircraftLabel.Text = hasAircraft
+            ? Loc.GetString("cmu-blackfoot-flight-computer-aircraft-linked")
+            : Loc.GetString("cmu-blackfoot-flight-computer-aircraft-none");
         _aircraftLabel.FontColorOverride = hasAircraft ? Ready : Muted;
 
-        UpdateMeter(_fuelLabel, _fuelBar, "Fuel", state.Fuel, state.MaxFuel, hasAircraft);
-        UpdateMeter(_batteryLabel, _batteryBar, "Battery", state.Battery, state.MaxBattery, hasAircraft);
+        UpdateMeter(
+            _fuelLabel,
+            _fuelBar,
+            Loc.GetString("cmu-blackfoot-flight-computer-fuel"),
+            state.Fuel,
+            state.MaxFuel,
+            hasAircraft);
+        UpdateMeter(
+            _batteryLabel,
+            _batteryBar,
+            Loc.GetString("cmu-blackfoot-flight-computer-battery"),
+            state.Battery,
+            state.MaxBattery,
+            hasAircraft);
 
-        _fuelButton.Text = state.Refueling ? "Stop refuel" : "Start refuel";
+        _fuelButton.Text = state.Refueling
+            ? Loc.GetString("cmu-blackfoot-flight-computer-stop-refuel")
+            : Loc.GetString("cmu-blackfoot-flight-computer-start-refuel");
         _fuelButton.Disabled = !hasAircraft || !state.FuelPumpLinked;
 
-        _batteryButton.Text = state.Recharging ? "Stop recharge" : "Start recharge";
+        _batteryButton.Text = state.Recharging
+            ? Loc.GetString("cmu-blackfoot-flight-computer-stop-recharge")
+            : Loc.GetString("cmu-blackfoot-flight-computer-start-recharge");
         _batteryButton.Disabled = !hasAircraft;
     }
 
@@ -140,7 +164,7 @@ public sealed class BlackfootFlightComputerWindow : DefaultWindow
         };
         panel.AddChild(root);
 
-        label = Label($"{title}: --", Text);
+        label = Label(Loc.GetString("cmu-blackfoot-flight-computer-meter-empty", ("name", title)), Text);
         root.AddChild(label);
 
         bar = new ProgressBar
@@ -159,14 +183,18 @@ public sealed class BlackfootFlightComputerWindow : DefaultWindow
     {
         if (!active || max <= 0f)
         {
-            label.Text = $"{title}: --";
+            label.Text = Loc.GetString("cmu-blackfoot-flight-computer-meter-empty", ("name", title));
             bar.MinValue = 0f;
             bar.MaxValue = 1f;
             bar.Value = 0f;
             return;
         }
 
-        label.Text = $"{title}: {MathF.Round(value)}/{MathF.Round(max)}";
+        label.Text = Loc.GetString(
+            "cmu-blackfoot-flight-computer-meter-value",
+            ("name", title),
+            ("value", MathF.Round(value)),
+            ("max", MathF.Round(max)));
         bar.MinValue = 0f;
         bar.MaxValue = max;
         bar.Value = Math.Clamp(value, 0f, max);

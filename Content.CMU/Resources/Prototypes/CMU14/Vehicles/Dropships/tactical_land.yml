@@ -4,6 +4,7 @@
   description: A free-look projection of the dropship's nav console.
   categories: [ HideSpawnMenu, DoNotMap ]
   components:
+  - type: GravityAffected
   - type: Sprite
     visible: false
   - type: Visibility

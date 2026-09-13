@@ -26,7 +26,9 @@ public sealed partial class AllianceConsoleWindow : DefaultWindow
     public void UpdateState(AllianceConsoleBuiState state)
     {
         var side = AllianceConsoleComponent.ResolveFaction(_prototypes, state.Faction); // CMU14
-        FactionLabel.Text = $"Alliance Console — {side?.Name ?? state.Faction}";
+        FactionLabel.Text = Loc.GetString(
+            "alliance-console-faction-title",
+            ("faction", side?.Name ?? state.Faction));
 
         // Rebuild faction list if the set of factions changed.
         var existing = _factionButtons.Keys.ToHashSet();
@@ -45,15 +47,15 @@ public sealed partial class AllianceConsoleWindow : DefaultWindow
                 row.AddChild(label);
 
                 var btn = new OptionButton { MinSize = new Vector2(130, 0) };
-                btn.AddItem("Neutral", (int)AllianceStatus.Neutral);
-                btn.AddItem("Friendly", (int)AllianceStatus.Friendly);
-                btn.AddItem("Hostile",  (int)AllianceStatus.Hostile);
+                btn.AddItem(Loc.GetString("alliance-console-status-neutral"), (int) AllianceStatus.Neutral);
+                btn.AddItem(Loc.GetString("alliance-console-status-friendly"), (int) AllianceStatus.Friendly);
+                btn.AddItem(Loc.GetString("alliance-console-status-hostile"), (int) AllianceStatus.Hostile);
 
                 var capturedFaction = faction;
                 btn.OnItemSelected += args =>
                 {
                     btn.SelectId(args.Id);
-                    OnSetStatus?.Invoke(capturedFaction, (AllianceStatus)args.Id);
+                    OnSetStatus?.Invoke(capturedFaction, (AllianceStatus) args.Id);
                 };
 
                 row.AddChild(btn);
@@ -66,7 +68,7 @@ public sealed partial class AllianceConsoleWindow : DefaultWindow
         foreach (var (faction, btn) in _factionButtons)
         {
             var status = state.FactionStatuses.TryGetValue(faction, out var s) ? s : AllianceStatus.Neutral;
-            btn.SelectId((int)status);
+            btn.SelectId((int) status);
         }
     }
 }

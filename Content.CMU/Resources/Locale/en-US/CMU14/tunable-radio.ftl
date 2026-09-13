@@ -7,6 +7,7 @@ tunable-radio-set-button = SET
 tunable-radio-input-placeholder = e.g. 30.500
 
 tunable-radio-current-freq = Current: { $freq } MHz
+tunable-radio-current-freq-placeholder = FREQ: ---.---
 
 tunable-radio-range-note = Range: { $min } - { $max } MHz
 

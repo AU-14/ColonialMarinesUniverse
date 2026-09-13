@@ -7,6 +7,33 @@ namespace Content.Client.Actions;
 
 public sealed partial class ActionIconVisualsSystem : VisualizerSystem<ActionComponent>
 {
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<DynamicActionIconComponent, ActionVisualsShutdownEvent>(OnVisualsShutdown);
+    }
+
+    private void OnVisualsShutdown(Entity<DynamicActionIconComponent> ent, ref ActionVisualsShutdownEvent args)
+    {
+        if (!TerminatingOrDeleted(ent) && TryComp<SpriteComponent>(ent, out var sprite))
+        {
+            if (ent.Comp.CreatedLayer && SpriteSystem.LayerMapTryGet((ent.Owner, sprite), ActionVisuals.IconToggled, out var index, false))
+                SpriteSystem.RemoveLayer((ent.Owner, sprite), index);
+            else if (ent.Comp.OverrideApplied)
+                RestoreToggledIcon((ent.Owner, sprite), ent.Comp);
+        }
+
+        RemComp<DynamicActionIconComponent>(ent);
+    }
+
+    private void RestoreToggledIcon(Entity<SpriteComponent?> sprite, DynamicActionIconComponent icon)
+    {
+        SpriteSystem.LayerSetTexture(sprite, ActionVisuals.IconToggled, icon.OriginalTexture);
+        if (icon.OriginalState.IsValid)
+            SpriteSystem.LayerSetRsi(sprite, ActionVisuals.IconToggled, icon.OriginalRsi, icon.OriginalState);
+        icon.OverrideApplied = false;
+    }
+
     protected override void OnAppearanceChange(EntityUid uid, ActionComponent comp, ref AppearanceChangeEvent args)
     {
         if (args.Sprite == null)
@@ -36,6 +63,18 @@ public sealed partial class ActionIconVisualsSystem : VisualizerSystem<ActionCom
                 out var toggledIcon,
                 args.Component))
         {
+            if (!TryComp<DynamicActionIconComponent>(uid, out var dynamicIcon))
+            {
+                dynamicIcon = AddComp<DynamicActionIconComponent>(uid);
+                dynamicIcon.CreatedLayer = !SpriteSystem.LayerMapTryGet(sprite, ActionVisuals.IconToggled, out var originalIndex, false);
+                if (!dynamicIcon.CreatedLayer && SpriteSystem.TryGetLayer(sprite, originalIndex, out var original, false))
+                {
+                    dynamicIcon.OriginalTexture = original.Texture;
+                    dynamicIcon.OriginalRsi = original.ActualRsi;
+                    dynamicIcon.OriginalState = SpriteSystem.LayerGetRsiState(sprite, originalIndex);
+                }
+            }
+            dynamicIcon.OverrideApplied = true;
             SpriteSystem.LayerMapReserve((uid, args.Sprite), ActionVisuals.IconToggled);
 
             if (toggledIcon is SpriteSpecifier.EntityPrototype)
@@ -46,15 +85,20 @@ public sealed partial class ActionIconVisualsSystem : VisualizerSystem<ActionCom
             else
                 SpriteSystem.LayerSetSprite((uid, args.Sprite), ActionVisuals.IconToggled, toggledIcon);
         }
+        else if (TryComp<DynamicActionIconComponent>(uid, out var dynamicIcon) && dynamicIcon.OverrideApplied)
+        {
+            RestoreToggledIcon(sprite, dynamicIcon);
+        }
 
         if (!AppearanceSystem.TryGetData<bool>(uid, ActionState.Toggled, out var toggled, args.Component))
             toggled = comp.Toggled;
 
-        var hasToggledIcon = SpriteSystem.LayerExists((uid, args.Sprite), ActionVisuals.IconToggled);
+        var hasToggledLayer = SpriteSystem.LayerMapTryGet(sprite, ActionVisuals.IconToggled, out var toggledLayer, false);
+        var hasToggledIcon = hasToggledLayer && SpriteSystem.TryGetLayer(sprite, toggledLayer, out var layer, false) && !layer.Blank;
         SpriteSystem.LayerSetVisible((uid, args.Sprite), ActionVisuals.Icon, !toggled || !hasToggledIcon);
 
-        if (hasToggledIcon)
-            SpriteSystem.LayerSetVisible((uid, args.Sprite), ActionVisuals.IconToggled, toggled);
+        if (hasToggledLayer)
+            SpriteSystem.LayerSetVisible((uid, args.Sprite), ActionVisuals.IconToggled, toggled && hasToggledIcon);
 
         if (AppearanceSystem.TryGetData<Color>(uid, ActionState.Color, out var color, args.Component))
         {

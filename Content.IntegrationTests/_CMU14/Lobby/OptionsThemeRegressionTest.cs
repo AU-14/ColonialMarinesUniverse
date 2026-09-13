@@ -59,6 +59,16 @@ public sealed class OptionsThemeRegressionTest : GameTest
             emotes.Expanded = false;
             Assert.That(emotePicker.VisibleInTree, Is.False);
 
+            var search = keybinds.FindControl<LineEdit>("SearchBar");
+            search.InsertAtCursor(Loc.GetString("cmu-ui-options-emote-slot-1"));
+            Assert.That(emotes.Expanded, Is.True);
+            Assert.That(emotePicker.VisibleInTree, Is.True);
+            Assert.That(general.Visible, Is.False);
+            search.SelectionStart = 0;
+            search.InsertAtCursor(string.Empty);
+            Assert.That(emotes.Expanded, Is.False);
+            Assert.That(general.Visible, Is.True);
+
             var cmu = menu.FindControl<CmuTab>("CmuTab");
             var accessibility = menu.FindControl<AccessibilityTab>("AccessibilityTab");
             foreach (var name in new[]

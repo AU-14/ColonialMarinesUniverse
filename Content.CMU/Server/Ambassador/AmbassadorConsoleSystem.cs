@@ -166,7 +166,9 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                     {
                         comp.Budget = 0;
                         comp.EmbargoActive = false;
-                        AnnounceStatus($"Trade embargo by {comp.FactionName} has ended due to insufficient funds.", comp.FactionName);
+                        AnnounceStatus(
+                            Loc.GetString("ambassador-console-embargo-ended-no-funds", ("faction", comp.FactionName)),
+                            comp.FactionName);
                     }
                 }
             }
@@ -181,7 +183,9 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                     {
                         comp.Budget = 0;
                         comp.TradePactActive = false;
-                        AnnounceStatus($"Trade pact by {comp.FactionName} has ended due to insufficient funds.", comp.FactionName);
+                        AnnounceStatus(
+                            Loc.GetString("ambassador-console-trade-pact-ended-no-funds", ("faction", comp.FactionName)),
+                            comp.FactionName);
                     }
                 }
             }
@@ -196,7 +200,9 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                     {
                         comp.Budget = 0;
                         comp.CommsJamActive = false;
-                        AnnounceStatus($"Communications jamming by {comp.FactionName} has ended due to insufficient funds.", comp.FactionName);
+                        AnnounceStatus(
+                            Loc.GetString("ambassador-console-comms-jam-ended-no-funds", ("faction", comp.FactionName)),
+                            comp.FactionName);
                     }
                 }
             }
@@ -237,7 +243,9 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
     private void AnnounceStatus(string message, string? factionName = null)
     {
-        var sender = factionName != null ? $"{factionName} Embassy" : "Ambassador Console";
+        var sender = factionName != null
+            ? Loc.GetString("ambassador-console-embassy-sender", ("faction", factionName))
+            : Loc.GetString("ambassador-console-default-sender");
         _chat.DispatchGlobalAnnouncement(message, sender, playSound: true, announcementSound: MarineAnnouncementSound);
     }
 
@@ -386,7 +394,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
         if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
         {
-            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
+            _popup.PopupEntity(Loc.GetString("ambassador-console-support-unavailable"), uid, msg.Actor);
             return;
         }
 
@@ -402,11 +410,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         {
             comp.EmbargoTimer = 0f;
             comp.TradePactActive = false;
-            AnnounceStatus($"A trade embargo has been activated by {comp.FactionName}. Submission point payouts are reduced by 20%.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-embargo-enabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         else
         {
-            AnnounceStatus($"The trade embargo by {comp.FactionName} has been lifted.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-embargo-disabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         UpdateAllFactionUi(comp);
     }
@@ -418,11 +430,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         {
             comp.TradePactTimer = 0f;
             comp.EmbargoActive = false;
-            AnnounceStatus($"A trade pact has been activated by {comp.FactionName}. Submission point payouts are increased by 20%.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-trade-pact-enabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         else
         {
-            AnnounceStatus($"The trade pact by {comp.FactionName} has ended.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-trade-pact-disabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         UpdateAllFactionUi(comp);
     }
@@ -456,7 +472,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(msg.Message)) return;
         if (comp.Budget < comp.BroadcastCost) return;
         comp.Budget -= comp.BroadcastCost;
-        var sender = $"{comp.FactionName} Embassy";
+        var sender = Loc.GetString("ambassador-console-embassy-sender", ("faction", comp.FactionName));
         _chat.DispatchGlobalAnnouncement(msg.Message, sender, playSound: true, announcementSound: MarineAnnouncementSound);
         _radio.SendRadioMessage(uid, msg.Message, "colonyAlert", uid);
         UpdateAllFactionUi(comp);
@@ -468,11 +484,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (comp.CommsJamActive)
         {
             comp.CommsJamTimer = 0f;
-            AnnounceStatus($"Planeside communications have been jammed by {comp.FactionName}. All radio transmissions are blocked.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-comms-jam-enabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         else
         {
-            AnnounceStatus($"Communications jamming by {comp.FactionName} has been disabled. Radio transmissions are restored.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-comms-jam-disabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         UpdateAllFactionUi(comp);
     }

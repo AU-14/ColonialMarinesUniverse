@@ -176,7 +176,9 @@ namespace Content.Server.Administration.Systems
                                 jobs.Add(new DialogOption(roleName, ev));
                             }
 
-                            jobs.Sort((a, b) => string.Compare(a.Text, b.Text, StringComparison.Ordinal));
+                            jobs = jobs.OrderBy(option => option.Text, StringComparer.Ordinal)
+                                .ThenBy(option => ((SpawnAsJobDialogEvent) option.Event!).JobId.ToString(), StringComparer.Ordinal)
+                                .ToList();
                             _dialog.OpenOptions(args.User, "Choose a job", jobs);
                         },
                         ConfirmationPopup = true,

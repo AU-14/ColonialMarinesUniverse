@@ -6,9 +6,9 @@ namespace Content.IntegrationTests.Pair;
 
 public sealed partial class TestPair
 {
-    public async Task DeleteAllEntitiesLeafFirst()
+    public async Task DeleteAllEntitiesLeafFirst(Func<EntityUid, bool>? preserve = null)
     {
-        while (Server.EntMan.EntityCount > 0)
+        while (true)
         {
             var deleted = 0;
 
@@ -17,7 +17,7 @@ public sealed partial class TestPair
                 var entMan = Server.EntMan;
                 var xforms = entMan.GetEntityQuery<TransformComponent>();
                 var leaves = entMan.GetEntities()
-                    .Where(ent => IsLeaf(ent, xforms))
+                    .Where(ent => preserve?.Invoke(ent) != true && IsLeaf(ent, xforms))
                     .ToArray();
 
                 deleted = leaves.Length;
@@ -27,7 +27,13 @@ public sealed partial class TestPair
                 }
             });
 
-            Assert.That(deleted, Is.GreaterThan(0), "Unable to find leaf entities while deleting all entities.");
+            if (deleted == 0)
+            {
+                await Server.WaitAssertion(() => Assert.That(Server.EntMan.GetEntities()
+                    .Where(ent => preserve?.Invoke(ent) != true), Is.Empty,
+                    "Unable to find leaf entities while deleting all entities."));
+                return;
+            }
             await RunTicksSync(5);
         }
     }

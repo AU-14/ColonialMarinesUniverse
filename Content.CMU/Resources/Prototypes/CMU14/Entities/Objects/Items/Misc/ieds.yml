@@ -24,6 +24,12 @@
   parent: [BasePlasticExplosive, BaseSyndicateContraband]
   id: AU14IED
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Item
     size: Huge
   - type: Sprite
@@ -61,6 +67,12 @@
   parent: [BasePlasticExplosive, BaseSyndicateContraband]
   id: AU14IEDLarge
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Item
     size: Huge
   - type: Sprite

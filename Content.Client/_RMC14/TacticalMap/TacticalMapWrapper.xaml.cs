@@ -909,6 +909,17 @@ public sealed partial class TacticalMapWrapper : Control
             }
         }
 
+        // CMU14 Begin: resolve the local hunter marker from its private map channel.
+        foreach ((int id, TacticalMapBlip blip) in userComp.YautjaBlips)
+        {
+            if (id == playerNetId)
+            {
+                playerIndices = blip.Indices;
+                return true;
+            }
+        }
+        // CMU14 End
+
         return false;
     }
 

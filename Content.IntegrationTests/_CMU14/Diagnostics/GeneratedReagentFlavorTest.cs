@@ -8,7 +8,8 @@ namespace Content.IntegrationTests.CMU14.Diagnostics;
 [TestFixture]
 public sealed class GeneratedReagentFlavorTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+    // Generated prototypes survive entity cleanup and would change later tests' water reactions.
+    public override PoolSettings PoolSettings => new() { Connected = true, Destructive = true };
 
     [Test]
     public async Task GeneratedReagentHasResolvableFlavor()

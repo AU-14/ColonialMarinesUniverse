@@ -87,6 +87,6 @@ public sealed partial class OrganHealthComponent : Component
     [DataField]
     public float NativeRegenCap = 0.9f;
 
-    [DataField, AutoPausedField]
+    [DataField(readOnly: true), AutoPausedField]
     public TimeSpan NextRegenTick;
 }

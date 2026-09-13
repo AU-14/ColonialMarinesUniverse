@@ -17,7 +17,6 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
     [Dependency] private IComponentFactory _componentFactory = default!;
 
     public override string Command => "znetwork-weather";
-    public override string Description => "Sets weather for all maps in zNetwork";
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -33,13 +32,13 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
         if (!NetEntity.TryParse(args[0], out var targetNet) ||
             !_entities.TryGetEntity(targetNet, out target))
         {
-            shell.WriteError($"Unable to find entity {args[0]}");
+            shell.WriteError(Loc.GetString("cmu-cmd-znetwork-weather-entity-missing", ("entity", args[0])));
             return;
         }
 
         if (!_entities.TryGetComponent<CMUZLevelsNetworkComponent>(target, out var levelComp))
         {
-            shell.WriteError($"Target entity doesnt have CMUZLevelsNetworkComponent {args[0]}");
+            shell.WriteError(Loc.GetString("cmu-cmd-znetwork-weather-component-missing", ("entity", args[0])));
             return;
         }
 
@@ -84,7 +83,7 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
             {
                 options.Add(new CompletionOption(_entities.GetNetEntity(uid).ToString(), meta.EntityName));
             }
-            return CompletionResult.FromHintOptions(options, "zNetwork net entity");
+            return CompletionResult.FromHintOptions(options, Loc.GetString("cmu-cmd-znetwork-weather-network-hint"));
         }
 
         if (args.Length == 2)
@@ -103,9 +102,7 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
         }
 
         if (args.Length == 3)
-        {
-            return CompletionResult.FromHint("Duration in seconds");
-        }
+            return CompletionResult.FromHint(Loc.GetString("cmu-cmd-znetwork-weather-duration-hint"));
 
         return CompletionResult.Empty;
     }

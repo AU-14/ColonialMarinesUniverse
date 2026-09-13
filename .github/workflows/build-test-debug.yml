@@ -14,13 +14,27 @@ concurrency:
 
 jobs:
   build:
+    name: Debug / ${{ matrix.suite.name }}
     if: github.actor != 'PJBot' && github.event.pull_request.draft == false
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        suite:
+          - name: content
+            filter: FullyQualifiedName!~Content.IntegrationTests.Tests.
+          - name: maps_prototypes
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.
+              & (FullyQualifiedName~Map | FullyQualifiedName~Prototype | FullyQualifiedName~EntityTest)
+          - name: gameplay
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.
+              & FullyQualifiedName!~Map & FullyQualifiedName!~Prototype & FullyQualifiedName!~EntityTest
 
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    # Leave room for map-heavy groups on slower runners.
+    timeout-minutes: 90
 
     steps:
     - name: Checkout Master
@@ -50,20 +64,24 @@ jobs:
       run: dotnet build --configuration DebugOpt --no-restore /m
 
     - name: Run Content.Tests
+      if: matrix.suite.name == 'content'
       shell: pwsh
       run: dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0 NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
 
     - name: Run Content.IntegrationTests
       shell: pwsh
+      env:
+        CMU_TEST_FILTER: ${{ matrix.suite.filter }}
       run: |
         $env:DOTNET_gcServer=1
-        dotnet test --no-build --configuration DebugOpt Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
+        # NUnit otherwise drops the execution filter when a group exceeds 2,000 tests.
+        dotnet test --no-build --configuration DebugOpt --verbosity normal --filter "$env:CMU_TEST_FILTER" Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000 NUnit.TestOutputXml="logs" NUnit.WorkDirectory="$(pwd)/test_results"
 
     - name: Archive NUnit3 test results.
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: nunit3-results-${{ matrix.os }}
+        name: nunit3-results-${{ matrix.os }}-${{ matrix.suite.name }}
         path: test_results/*
         retention-days: 7
         compression-level: 9

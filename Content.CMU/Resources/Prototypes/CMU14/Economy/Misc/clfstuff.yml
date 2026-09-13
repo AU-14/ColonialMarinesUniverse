@@ -598,8 +598,28 @@
   - type: RevolverAmmoProvider
     proto: RMCCartridgeRevolver44
     capacity: 10
-    chambers: [ True, True, True, True, True, True, True ]
-    ammoSlots: [ null, null, null, null, null, null, null ]
+    chambers:
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    ammoSlots:
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
   - type: RMCSelectiveFire
     baseFireRate: 6
 

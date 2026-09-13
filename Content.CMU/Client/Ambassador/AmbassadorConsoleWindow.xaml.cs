@@ -17,34 +17,40 @@ public sealed partial class AmbassadorConsoleWindow : DefaultWindow
 
     public void UpdateState(AmbassadorConsoleBuiState s)
     {
-        BudgetLabel.Text = $"Budget: ${s.Budget:F0}";
-        FactionLabel.Text = $"Faction: {s.FactionName}";
+        BudgetLabel.Text = Loc.GetString("ambassador-console-budget", ("amount", s.Budget.ToString("F0")));
+        FactionLabel.Text = Loc.GetString("ambassador-console-faction", ("faction", s.FactionName));
 
         // Economy with prices
         EmbargoStatus.Text = s.EmbargoActive
-            ? $"[ACTIVE] Embargo: -20% submission payouts (${s.EmbargoCostPerMinute:F0}/min)"
-            : $"Embargo: Inactive (${s.EmbargoCostPerMinute:F0}/min)";
+            ? Loc.GetString("ambassador-console-embargo-active", ("cost", s.EmbargoCostPerMinute.ToString("F0")))
+            : Loc.GetString("ambassador-console-embargo-inactive", ("cost", s.EmbargoCostPerMinute.ToString("F0")));
         TradePactStatus.Text = s.TradePactActive
-            ? $"[ACTIVE] Trade Pact: +20% submission payouts (${s.TradePactCostPerMinute:F0}/min)"
-            : $"Trade Pact: Inactive (${s.TradePactCostPerMinute:F0}/min)";
+            ? Loc.GetString("ambassador-console-trade-pact-active", ("cost", s.TradePactCostPerMinute.ToString("F0")))
+            : Loc.GetString("ambassador-console-trade-pact-inactive", ("cost", s.TradePactCostPerMinute.ToString("F0")));
 
         // Comms jam with price
         CommsJamStatus.Text = s.CommsJamActive
-            ? $"[ACTIVE] Comms Jammed - All radio blocked (${s.CommsJamCostPerMinute:F0}/min)"
-            : $"Comms: Normal (${s.CommsJamCostPerMinute:F0}/min)";
+            ? Loc.GetString("ambassador-console-comms-jam-active", ("cost", s.CommsJamCostPerMinute.ToString("F0")))
+            : Loc.GetString("ambassador-console-comms-normal", ("cost", s.CommsJamCostPerMinute.ToString("F0")));
 
         // Broadcast cost
-        BroadcastCostLabel.Text = $"Broadcast cost: ${s.BroadcastCost:F0} per message";
+        BroadcastCostLabel.Text = Loc.GetString("ambassador-console-broadcast-cost", ("cost", s.BroadcastCost.ToString("F0")));
 
         // Signal with prices
-        var signalText = $"Signal: Normal";
-        if (s.SignalBoostActive) signalText = $"[ACTIVE] Signal Boost - Third parties arrive faster (${s.SignalBoostCostPerMinute:F0}/min)";
-        else if (s.SignalJamActive) signalText = $"[ACTIVE] Signal Jam - Third parties arrive slower (${s.SignalJamCostPerMinute:F0}/min)";
-        else signalText = $"Signal: Normal (Boost: ${s.SignalBoostCostPerMinute:F0}/min | Jam: ${s.SignalJamCostPerMinute:F0}/min)";
+        var signalText = Loc.GetString("ambassador-console-signal-normal");
+        if (s.SignalBoostActive)
+            signalText = Loc.GetString("ambassador-console-signal-boost-active", ("cost", s.SignalBoostCostPerMinute.ToString("F0")));
+        else if (s.SignalJamActive)
+            signalText = Loc.GetString("ambassador-console-signal-jam-active", ("cost", s.SignalJamCostPerMinute.ToString("F0")));
+        else
+            signalText = Loc.GetString(
+                "ambassador-console-signal-normal-costs",
+                ("boost", s.SignalBoostCostPerMinute.ToString("F0")),
+                ("jam", s.SignalJamCostPerMinute.ToString("F0")));
         SignalStatus.Text = signalText;
 
         // Radar scan button with price
-        ScanRadarBtn.Text = $"Scan Radar (${s.RadarScanCost:F0})";
+        ScanRadarBtn.Text = Loc.GetString("ambassador-console-scan-radar-cost", ("cost", s.RadarScanCost.ToString("F0")));
 
         // Economy status
         UpdateEconomyStatus(s.EconomyStatus);
@@ -53,13 +59,13 @@ public sealed partial class AmbassadorConsoleWindow : DefaultWindow
         RadarList.RemoveAllChildren();
         if (s.RadarList.Count == 0)
         {
-            RadarList.AddChild(new Label { Text = "No scan data. Press 'Scan Radar' to detect incoming shuttles." });
+            RadarList.AddChild(new Label { Text = Loc.GetString("ambassador-console-radar-no-data") });
         }
         else
         {
             foreach (var name in s.RadarList)
             {
-                RadarList.AddChild(new Label { Text = $"• {name}" });
+                RadarList.AddChild(new Label { Text = Loc.GetString("ambassador-console-radar-entry", ("name", name)) });
             }
         }
     }
@@ -67,18 +73,50 @@ public sealed partial class AmbassadorConsoleWindow : DefaultWindow
     private void UpdateEconomyStatus(EconomyStatusState econ)
     {
         EconomyStatusPanel.RemoveAllChildren();
-        EconomyStatusPanel.AddChild(new Label { Text = $"Sales Tax: {econ.SalesTaxPercent:F0}%" });
-        EconomyStatusPanel.AddChild(new Label { Text = $"Income Tax: {econ.IncomeTaxPercent:F0}%" });
-        EconomyStatusPanel.AddChild(new Label { Text = $"Transit Tariff: {econ.TransitTariffPercent:F0}%" });
+        EconomyStatusPanel.AddChild(new Label
+        {
+            Text = Loc.GetString("ambassador-console-sales-tax", ("value", econ.SalesTaxPercent.ToString("F0")))
+        });
+        EconomyStatusPanel.AddChild(new Label
+        {
+            Text = Loc.GetString("ambassador-console-income-tax", ("value", econ.IncomeTaxPercent.ToString("F0")))
+        });
+        EconomyStatusPanel.AddChild(new Label
+        {
+            Text = Loc.GetString("ambassador-console-transit-tariff", ("value", econ.TransitTariffPercent.ToString("F0")))
+        });
 
         if (econ.ActiveEmbargoes.Count > 0)
-            EconomyStatusPanel.AddChild(new Label { Text = $"Active Embargoes: {string.Join(", ", econ.ActiveEmbargoes)}", StyleClasses = { "Caution" } });
+        {
+            EconomyStatusPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("ambassador-console-active-embargoes", ("values", string.Join(", ", econ.ActiveEmbargoes))),
+                StyleClasses = { "Caution" }
+            });
+        }
         else
-            EconomyStatusPanel.AddChild(new Label { Text = "Embargoes: None", StyleClasses = { "LabelSubText" } });
+        {
+            EconomyStatusPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("ambassador-console-no-embargoes"),
+                StyleClasses = { "LabelSubText" }
+            });
+        }
 
         if (econ.ActiveTradePacts.Count > 0)
-            EconomyStatusPanel.AddChild(new Label { Text = $"Active Trade Pacts: {string.Join(", ", econ.ActiveTradePacts)}" });
+        {
+            EconomyStatusPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("ambassador-console-active-trade-pacts", ("values", string.Join(", ", econ.ActiveTradePacts)))
+            });
+        }
         else
-            EconomyStatusPanel.AddChild(new Label { Text = "Trade Pacts: None", StyleClasses = { "LabelSubText" } });
+        {
+            EconomyStatusPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("ambassador-console-no-trade-pacts"),
+                StyleClasses = { "LabelSubText" }
+            });
+        }
     }
 }

@@ -118,7 +118,7 @@ public sealed class ToolPermissionsWindow : DefaultWindow
             // Clicking the ckey expands/collapses its permissions.
             var header = new Button
             {
-                Text = $"{ckey} ({user.Tools.Count})",
+                Text = Loc.GetString("au14-toolperm-user-header", ("ckey", ckey), ("count", user.Tools.Count)),
                 HorizontalExpand = true,
                 ToggleMode = true,
                 Pressed = _expanded.Contains(ckey),

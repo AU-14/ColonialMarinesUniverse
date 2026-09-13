@@ -25,11 +25,11 @@ public sealed partial class KidneysComponent : Component
     };
 
     // Global time is settled explicitly at every active/frozen boundary.
-    [DataField]
+    [DataField(readOnly: true)]
     public TimeSpan NextSelfDamageTick;
 
     public uint PhysiologyRevision;
-    [DataField] public TimeSpan LastPhysiologyUpdate;
+    [DataField(readOnly: true)] public TimeSpan LastPhysiologyUpdate;
     [DataField] public OrganDamageStage PhysiologyStage;
     [DataField] public bool PhysiologyActive;
     [DataField] public double ToxinRemainder;

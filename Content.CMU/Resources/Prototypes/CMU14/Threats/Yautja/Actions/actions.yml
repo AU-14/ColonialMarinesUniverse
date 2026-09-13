@@ -9,6 +9,20 @@
 
 - type: entity
   parent: CMUYautjaActionBase
+  id: CMUActionYautjaOpenTacticalMap
+  name: Open Hunting Map
+  description: Track fellow hunters and prey recently caught in a hunting trap.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Structures/Machines/map_table.rsi
+      state: maptable
+  - type: InstantAction
+    event: !type:OpenTacticalMapActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleVisor
   components:
   - type: Action
@@ -61,10 +75,12 @@
   id: CMUActionYautjaRaiseThrall
   components:
   - type: Action
-    icon:
-      sprite: CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 120
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
     checkCanAccess: false
@@ -159,10 +175,12 @@
   id: CMUActionYautjaCreateFieldRation
   components:
   - type: Action
-    icon:
-      sprite: Objects/Consumable/Food/meat.rsi
-      state: plain
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: Objects/Consumable/Food/meat.rsi
+      state: plain
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared.CMU14.Yautja.YautjaCreateFieldRationActionEvent
   - type: YautjaPowerAction
@@ -173,10 +191,12 @@
   id: CMUActionYautjaCreateHuntingCanteen
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Objects/Consumable/Drinks/canteen.rsi
-      state: canteen
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Consumable/Drinks/canteen.rsi
+      state: canteen
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared.CMU14.Yautja.YautjaCreateHuntingCanteenActionEvent
   - type: YautjaPowerAction

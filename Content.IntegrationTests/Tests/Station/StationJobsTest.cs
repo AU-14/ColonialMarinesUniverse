@@ -523,12 +523,12 @@ public sealed class StationJobsTest : GameTest
 
         await server.WaitAssertion(() =>
         {
-            // invalidJobs contains all the jobs which can't be set for preference:
-            // i.e. all the jobs that shouldn't be available round-start.
+            // Vanilla roundstart jobs require preference entries. CM jobs use faction/group
+            // selection and deliberately hide concrete jobs from the vanilla preference list.
             var invalidJobs = new HashSet<string>();
             foreach (var job in prototypeManager.EnumeratePrototypes<JobPrototype>())
             {
-                if (!job.SetPreference)
+                if (!job.SetPreference && !job.IsCM)
                     invalidJobs.Add(job.ID);
             }
 
@@ -543,6 +543,8 @@ public sealed class StationJobsTest : GameTest
 
                         foreach (var (job, array) in ((StationJobsComponent) comp).SetupAvailableJobs)
                         {
+                            Assert.That(prototypeManager.HasIndex<JobPrototype>(job), Is.True,
+                                $"Station {stationId} references unknown job {job}.");
                             Assert.That(array.Length, Is.EqualTo(2));
                             Assert.That(array[0] is -1 or >= 0);
                             Assert.That(array[1] is -1 or >= 0);

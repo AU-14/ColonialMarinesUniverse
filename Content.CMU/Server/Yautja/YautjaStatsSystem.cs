@@ -19,6 +19,7 @@ using Content.Shared.CombatMode;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.IdentityManagement.Components;
+using Content.Shared.Eye;
 using Content.Server.Humanoid.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -53,6 +54,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private TagSystem _tags = default!;
     [Dependency] private YautjaHonorboundAbilitiesSystem _honorboundAbilities = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
 
     private const string YautjaSpecies = "Yautja";
     private const string DreadlocksMarking = "CMUYautjaDreadlocksStandard";
@@ -76,9 +78,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     }
 
     private bool IsRegularYautja(EntityUid uid)
-    {
-        return !HasComp<YautjaBadBloodComponent>(uid);
-    }
+        => !HasComp<YautjaBadBloodComponent>(uid);
 
     private void OnStatusEffectTime(Entity<YautjaComponent> ent, ref RMCStatusEffectTimeEvent args)
     {
@@ -123,6 +123,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     {
         SetYautjaName(ent);
         _honorboundAbilities.GrantActions(ent);
+        _eye.RefreshVisibilityMask(ent.Owner);
     }
 
     private void OnRandomHumanoidSpawned(Entity<YautjaComponent> ent, ref RandomHumanoidSpawnedEvent args)

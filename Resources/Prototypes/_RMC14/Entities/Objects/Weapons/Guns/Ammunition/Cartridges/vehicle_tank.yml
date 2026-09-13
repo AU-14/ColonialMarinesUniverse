@@ -113,6 +113,12 @@
   name: ACE flak round
   categories: [ HideSpawnMenu ]
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/bullet_projectiles.rsi
     drawdepth: Effects

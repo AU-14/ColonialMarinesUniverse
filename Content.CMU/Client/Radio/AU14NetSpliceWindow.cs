@@ -85,8 +85,8 @@ public sealed class AU14NetSpliceWindow : DefaultWindow
             SeparationOverride = 1,
         };
 
-        headerLeft.AddChild(new Label { Text = "FEEDER JUNCTION", FontColorOverride = Chrome });
-        headerLeft.AddChild(new Label { Text = "TRUNK SPLICE", FontColorOverride = Muted });
+        headerLeft.AddChild(new Label { Text = Loc.GetString("au14-splice-header-feeder"), FontColorOverride = Chrome });
+        headerLeft.AddChild(new Label { Text = Loc.GetString("au14-splice-header-trunk"), FontColorOverride = Muted });
 
         var headerRight = new BoxContainer
         {

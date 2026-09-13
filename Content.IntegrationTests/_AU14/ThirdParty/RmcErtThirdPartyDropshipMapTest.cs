@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.IntegrationTests.Utility;
 using Content.Server.CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.Threats;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.CMU14.Round;
 using Content.Shared.CMU14.Threats;
@@ -138,15 +140,17 @@ public sealed class RmcErtThirdPartyDropshipMapTest
     [Test]
     public async Task ThirdPartyShuttleSpawnWaitsForManualLaunch()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();
+        var volunteers = await server.AddDummySessions(2);
+        await pair.RunUntilSynced();
 
         EntityUid genericDestination = EntityUid.Invalid;
         EntityUid returnedDestination = EntityUid.Invalid;
         EntityUid thirdPartyDestination = EntityUid.Invalid;
 
-        await server.WaitPost(() =>
+        await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
             var prototypes = server.ResolveDependency<IPrototypeManager>();
@@ -164,7 +168,14 @@ public sealed class RmcErtThirdPartyDropshipMapTest
             thirdPartyDestination = entities.SpawnEntity("CMDropshipDestinationThirdPartyWhitelist", map.GridCoords);
 
             thirdPartySystem.SpawnThirdParty(thirdParty, partySpawn, false);
+            var interest = server.System<ForceInterestSystem>();
+            var force = interest.GetForces(volunteers[0]).Single();
+            Assert.That(force.RequiredPlayers, Is.EqualTo(volunteers.Length));
+            foreach (var volunteer in volunteers)
+                interest.SetInterest(volunteer, force.Identifier, true);
+            Assert.That(interest.GetForces(volunteers[0]).Single().InterestedPlayers, Is.EqualTo(volunteers.Length));
         });
+        await pair.RunTicksSync(60);
 
         await server.WaitAssertion(() =>
         {

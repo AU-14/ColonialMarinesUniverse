@@ -91,9 +91,9 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         while (ambQ.MoveNext(out _, out var amb))
         {
             if (amb.EmbargoActive)
-                embargoes.Add(amb.FactionName ?? "Unknown Faction");
+                embargoes.Add(amb.FactionName ?? Loc.GetString("colony-economy-unknown-faction"));
             if (amb.TradePactActive)
-                tradePacts.Add(amb.FactionName ?? "Unknown Faction");
+                tradePacts.Add(amb.FactionName ?? Loc.GetString("colony-economy-unknown-faction"));
         }
 
         return new EconomyStatusState(salesTax, incomeTax, tariff, embargoes, tradePacts);
@@ -124,15 +124,10 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (Math.Abs(oldTax - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            //_chat.DispatchGlobalAnnouncement(
-            //    $"Colony sales tax has been set to {clamped:F0}%.",
-            //    "Administration",
-            //    playSound: true,
-            //    announcementSound: sound); // CMU14: xenos must not receive colony announcements
             _chat.DispatchFilteredAnnouncement(
-                ColonyAnnouncements.Recipients(EntityManager), // CMU14
-                $"Colony sales tax has been set to {clamped:F0}%.",
-                sender: "Administration",
+                ColonyAnnouncements.Recipients(EntityManager),
+                Loc.GetString("admin-console-sales-tax-announcement", ("percent", $"{clamped:F0}")),
+                sender: Loc.GetString("admin-console-announcement-sender"),
                 playSound: true,
                 announcementSound: sound);
         }
@@ -153,15 +148,10 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (Math.Abs(oldTax - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            //_chat.DispatchGlobalAnnouncement(
-            //    $"Colony income tax has been set to {clamped:F0}%. This affects salary payouts and corporate withdrawals.",
-            //    "Administration",
-            //    playSound: true,
-            //    announcementSound: sound); // CMU14: xenos must not receive colony announcements
             _chat.DispatchFilteredAnnouncement(
-                ColonyAnnouncements.Recipients(EntityManager), // CMU14
-                $"Colony income tax has been set to {clamped:F0}%. This affects salary payouts and corporate withdrawals.",
-                sender: "Administration",
+                ColonyAnnouncements.Recipients(EntityManager),
+                Loc.GetString("admin-console-income-tax-announcement", ("percent", $"{clamped:F0}")),
+                sender: Loc.GetString("admin-console-announcement-sender"),
                 playSound: true,
                 announcementSound: sound);
         }
@@ -186,7 +176,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
 
         if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
         {
-            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
+            _popup.PopupEntity(Loc.GetString("colony-economy-support-dispatch-failed"), uid, msg.Actor);
             return;
         }
 

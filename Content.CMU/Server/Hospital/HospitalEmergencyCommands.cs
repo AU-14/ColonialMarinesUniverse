@@ -11,8 +11,8 @@ namespace Content.Server.CMU14.Hospital;
 public sealed class HospitalIncidentTimerCommand : IConsoleCommand
 {
     public string Command => "hospitalincidenttimer";
-    public string Description => "Sets the seconds until the next hospital evacuation shuttle incident.";
-    public string Help => "Usage: hospitalincidenttimer <seconds>";
+    public string Description => Loc.GetString("hospital-emergency-command-description");
+    public string Help => Loc.GetString("hospital-emergency-command-help");
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -28,17 +28,21 @@ public sealed class HospitalIncidentTimerCommand : IConsoleCommand
         var updated = hospital.SetNextIncidentDelay(TimeSpan.FromSeconds(seconds));
         if (updated == 0)
         {
-            shell.WriteError("No idle hospital emergency computers are waiting for a shuttle incident.");
+            shell.WriteError(Loc.GetString("hospital-emergency-command-no-idle-computers"));
             return;
         }
 
-        shell.WriteLine($"Updated {updated} hospital emergency computer(s). Next alert in {seconds.ToString("0.##", CultureInfo.InvariantCulture)} seconds.");
+        shell.WriteLine(Loc.GetString("hospital-emergency-command-updated",
+            ("count", updated),
+            ("seconds", seconds.ToString("0.##", CultureInfo.InvariantCulture))));
     }
 
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         return args.Length == 1
-            ? CompletionResult.FromHintOptions(new[] { "0", "60", "180", "600", "720" }, "<seconds>")
+            ? CompletionResult.FromHintOptions(
+                new[] { "0", "60", "180", "600", "720" },
+                Loc.GetString("hospital-emergency-command-seconds-hint"))
             : CompletionResult.Empty;
     }
 }

@@ -45,6 +45,9 @@ public sealed class BloodstreamMergeRegressionTest : GameTest
   id: BloodstreamMergeTarget
   components:
   - type: MobState
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Biological
   - type: Bloodstream
     bloodReferenceSolution:
       reagents:
@@ -104,7 +107,7 @@ public sealed class BloodstreamMergeRegressionTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            var ordinary = SSpawnAtPosition("MobHuman", map.GridCoords);
+            var ordinary = SSpawnAtPosition("BloodstreamMergeTarget", map.GridCoords);
             var cmu = SSpawnAtPosition("CMMobHuman", map.GridCoords);
             var synth = SSpawnAtPosition("AU14MobWorkingJoeColony", map.GridCoords);
             var damage = new DamageSpecifier(SProtoMan.Index(Blunt), FixedPoint2.New(1));

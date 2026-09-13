@@ -4,7 +4,7 @@
     MinSize="280 240">
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8">
         <Label Name="HeaderLabel" Access="Public"
-               Text="Pick a part to bandage"
+               Text="{Loc cmu-medical-body-part-picker-header}"
                HorizontalAlignment="Center"
                StyleClasses="LabelHeading" />
         <ScrollContainer VScrollEnabled="True" HorizontalExpand="True" VerticalExpand="True"

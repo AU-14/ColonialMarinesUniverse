@@ -1,4 +1,5 @@
 au14-callsign-console-title = Comms Net Directory
+au14-callsign-console-header = COMMS NET DIRECTORY
 au14-callsign-console-net = { $faction } NET
 au14-callsign-console-mode-edit = NET CONTROL
 au14-callsign-console-mode-readonly = READ ONLY

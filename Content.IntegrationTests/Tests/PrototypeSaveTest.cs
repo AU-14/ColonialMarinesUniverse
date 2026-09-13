@@ -143,7 +143,7 @@ public sealed class PrototypeSaveTest : GameTest
                         }
                         else
                         {
-                            Assert.Fail($"Prototype {prototype.ID} gains a component on spawn: {compName}");
+                            Assert.Fail($"Prototype {prototype.ID} gains a component on spawn: {compName}. Added yaml:\n{compMapping}");
                         }
                     }
 

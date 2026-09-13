@@ -5,6 +5,7 @@ using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Presentation.Visuals;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body;
@@ -22,6 +23,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Medical.Anatomy.BodyParts;
 
@@ -45,6 +47,7 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private OrganRelationSystem _organRelation = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
     private const float StumpBleedDamage = 30f;
     private static readonly SoundSpecifier SeveranceSound =
@@ -58,10 +61,10 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
 
     public void ClearMissingPartStatus(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry)
     {
-        if (TerminatingOrDeleted(body) ||
-            StatusForPart(type, symmetry) is not { } status ||
-            !_status.TryGetStatusEffect(body, status, out var effect) ||
-            TerminatingOrDeleted(effect.Value))
+        if (TerminatingOrDeleted(body)
+            || StatusForPart(type, symmetry) is not { } status
+            || !_status.TryGetStatusEffect(body, status, out var effect)
+            || TerminatingOrDeleted(effect.Value))
             return;
 
         // Attachment commits the end of this exact missing-site source. Queued
@@ -72,12 +75,16 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
 
     private void OnPartSeverAttempt(Entity<BodyPartHealthComponent> ent, ref BodyPartSeverAttemptEvent args)
     {
-        if (args.Cancelled || args.Succeeded || args.Part != ent.Owner ||
-            !TryComp<BodyPartComponent>(args.Part, out var partComp) ||
-            partComp.Body != args.Body || partComp.PartType != args.Type)
+        if (args.Cancelled
+            || args.Succeeded
+            || args.Part != ent.Owner
+            || !TryComp<BodyPartComponent>(args.Part, out var partComp)
+            || partComp.Body != args.Body
+            || partComp.PartType != args.Type)
             return;
 
-        if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled) || !_cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled))
+        if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled)
+            || !_cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled))
         {
             return;
         }
@@ -90,6 +97,26 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
         if (!HasComp<CMUHumanMedicalComponent>(args.Body))
         {
             return;
+        }
+
+        if (!args.Surgical
+            && args.Type is not (BodyPartType.Head or BodyPartType.Torso)
+            && TryComp(args.Body, out YautjaLimbRegenerationComponent? regeneration))
+        {
+            var now = _timing.CurTime;
+            var progress = regeneration.SeverAttempts.GetValueOrDefault(args.Part);
+            var count = now >= progress.LastAttempt + regeneration.SeverAttemptWindow
+                ? 1
+                : progress.Count + 1;
+
+            if (count < Math.Max(1, regeneration.RequiredSeverAttempts))
+            {
+                regeneration.SeverAttempts[args.Part] = new YautjaSeverAttemptProgress(count, now);
+                args.Cancelled = true;
+                return;
+            }
+
+            regeneration.SeverAttempts.Remove(args.Part);
         }
 
         var detachedParts = new List<(EntityUid Part, BodyPartType Type, BodyPartSymmetry Symmetry)>();

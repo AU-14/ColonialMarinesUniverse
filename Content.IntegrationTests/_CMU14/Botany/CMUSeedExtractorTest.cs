@@ -54,8 +54,10 @@ public sealed class CMUSeedExtractorTest
     [Test]
     public async Task PoweredExtractorConvertsEachSeedBearingProduceExactlyOnce()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        // Nullspace entities created here must be flushed before another test borrows this pair.
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
+        var initialPackets = new HashSet<EntityUid>();
         var expectedPotencies = new Dictionary<string, float>
         {
             ["CarrotPlants"] = 37,
@@ -73,6 +75,10 @@ public sealed class CMUSeedExtractorTest
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
+            var existingPackets = entities.EntityQueryEnumerator<SeedComponent>();
+            while (existingPackets.MoveNext(out var packet, out _))
+                initialPackets.Add(packet);
+
             var containers = entities.System<SharedContainerSystem>();
             var botany = entities.System<BotanySystem>();
             extractor = entities.SpawnEntity("CMUTestPoweredSeedExtractor", MapCoordinates.Nullspace);
@@ -116,7 +122,7 @@ public sealed class CMUSeedExtractorTest
                 Assert.That(entities.EntityExists(nonProduce), Is.True);
             });
 
-            var packets = GetSeedPackets(entities);
+            var packets = GetSeedPackets(entities, initialPackets);
             Assert.That(packets.Keys, Is.EquivalentTo(expectedPotencies.Keys));
             foreach (var (plantId, expectedPotency) in expectedPotencies)
             {
@@ -138,7 +144,7 @@ public sealed class CMUSeedExtractorTest
         Dictionary<string, List<SeedComponent>> firstPackets = null!;
         await server.WaitAssertion(() =>
         {
-            firstPackets = GetSeedPackets(server.EntMan);
+            firstPackets = GetSeedPackets(server.EntMan, initialPackets);
             var verb = GetConversionVerb(server.EntMan, extractor, bag, user);
             Assert.That(verb, Is.Not.Null, "The no-seeds path should still be available for a valid plant bag.");
             verb!.Act!();
@@ -148,7 +154,7 @@ public sealed class CMUSeedExtractorTest
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
-            var afterSecondConversion = GetSeedPackets(entities);
+            var afterSecondConversion = GetSeedPackets(entities, initialPackets);
             Assert.That(afterSecondConversion.ToDictionary(pair => pair.Key, pair => pair.Value.Count),
                 Is.EqualTo(firstPackets.ToDictionary(pair => pair.Key, pair => pair.Value.Count)),
                 "A second conversion duplicated packets from already-consumed produce.");
@@ -193,12 +199,17 @@ public sealed class CMUSeedExtractorTest
         return verbs.Verbs.SingleOrDefault(verb => verb.Text == "Convert plant bag into seeds");
     }
 
-    private static Dictionary<string, List<SeedComponent>> GetSeedPackets(IEntityManager entities)
+    private static Dictionary<string, List<SeedComponent>> GetSeedPackets(
+        IEntityManager entities,
+        HashSet<EntityUid> initialPackets)
     {
         var packets = new Dictionary<string, List<SeedComponent>>();
         var query = entities.EntityQueryEnumerator<SeedComponent>();
-        while (query.MoveNext(out _, out var seed))
+        while (query.MoveNext(out var uid, out var seed))
         {
+            if (initialPackets.Contains(uid))
+                continue;
+
             var plantId = seed.PlantProtoId.Id;
             if (!packets.TryGetValue(plantId, out var seeds))
                 packets[plantId] = seeds = new List<SeedComponent>();

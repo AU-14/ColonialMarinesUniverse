@@ -16,10 +16,10 @@ public sealed partial class AdminConsoleWindow : DefaultWindow
 
     public void UpdateState(AdminConsoleBuiState state)
     {
-        ColonyBudgetLabel.Text = $"Colony Budget: ${state.ColonyBudget:F0}";
-        CurrentTaxLabel.Text = $"Current Sales Tax: {state.SalesTaxPercent:F0}%";
+        ColonyBudgetLabel.Text = Loc.GetString("admin-console-colony-budget", ("amount", $"{state.ColonyBudget:F0}"));
+        CurrentTaxLabel.Text = Loc.GetString("admin-console-current-sales-tax", ("percent", $"{state.SalesTaxPercent:F0}"));
         TaxInput.Text = $"{state.SalesTaxPercent:F0}";
-        CurrentIncomeTaxLabel.Text = $"Current Income Tax: {state.IncomeTaxPercent:F0}%";
+        CurrentIncomeTaxLabel.Text = Loc.GetString("admin-console-current-income-tax", ("percent", $"{state.IncomeTaxPercent:F0}"));
         IncomeTaxInput.Text = $"{state.IncomeTaxPercent:F0}";
         UpdateEconomyStatus(state.EconomyStatus);
     }
@@ -27,18 +27,50 @@ public sealed partial class AdminConsoleWindow : DefaultWindow
     private void UpdateEconomyStatus(EconomyStatusState econ)
     {
         EconomyStatusPanel.RemoveAllChildren();
-        EconomyStatusPanel.AddChild(new Label { Text = $"Sales Tax: {econ.SalesTaxPercent:F0}%" });
-        EconomyStatusPanel.AddChild(new Label { Text = $"Income Tax: {econ.IncomeTaxPercent:F0}%" });
-        EconomyStatusPanel.AddChild(new Label { Text = $"Transit Tariff: {econ.TransitTariffPercent:F0}%" });
+        EconomyStatusPanel.AddChild(new Label
+        {
+            Text = Loc.GetString("colony-economy-sales-tax", ("percent", $"{econ.SalesTaxPercent:F0}")),
+        });
+        EconomyStatusPanel.AddChild(new Label
+        {
+            Text = Loc.GetString("colony-economy-income-tax", ("percent", $"{econ.IncomeTaxPercent:F0}")),
+        });
+        EconomyStatusPanel.AddChild(new Label
+        {
+            Text = Loc.GetString("colony-economy-transit-tariff", ("percent", $"{econ.TransitTariffPercent:F0}")),
+        });
 
         if (econ.ActiveEmbargoes.Count > 0)
-            EconomyStatusPanel.AddChild(new Label { Text = $"Active Embargoes: {string.Join(", ", econ.ActiveEmbargoes)}", StyleClasses = { "Caution" } });
+        {
+            EconomyStatusPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("colony-economy-active-embargoes", ("factions", string.Join(", ", econ.ActiveEmbargoes))),
+                StyleClasses = { "Caution" },
+            });
+        }
         else
-            EconomyStatusPanel.AddChild(new Label { Text = "Embargoes: None", StyleClasses = { "LabelSubText" } });
+        {
+            EconomyStatusPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("colony-economy-no-embargoes"),
+                StyleClasses = { "LabelSubText" },
+            });
+        }
 
         if (econ.ActiveTradePacts.Count > 0)
-            EconomyStatusPanel.AddChild(new Label { Text = $"Active Trade Pacts: {string.Join(", ", econ.ActiveTradePacts)}" });
+        {
+            EconomyStatusPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("colony-economy-active-trade-pacts", ("factions", string.Join(", ", econ.ActiveTradePacts))),
+            });
+        }
         else
-            EconomyStatusPanel.AddChild(new Label { Text = "Trade Pacts: None", StyleClasses = { "LabelSubText" } });
+        {
+            EconomyStatusPanel.AddChild(new Label
+            {
+                Text = Loc.GetString("colony-economy-no-trade-pacts"),
+                StyleClasses = { "LabelSubText" },
+            });
+        }
     }
 }

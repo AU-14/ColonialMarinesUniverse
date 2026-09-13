@@ -362,8 +362,8 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
                 continue;
             }
 
-            var name = idCard.FullName ?? "Unknown";
-            var jobTitle = idCard.LocalizedJobTitle ?? "Unknown";
+            var name = idCard.FullName ?? Loc.GetString("department-console-unknown");
+            var jobTitle = idCard.LocalizedJobTitle ?? Loc.GetString("department-console-unknown");
             var hasOverride = comp.SalaryOverrides.ContainsKey(idCardUid);
             var salary = hasOverride ? comp.SalaryOverrides[idCardUid] : comp.DefaultSalary;
 
@@ -459,7 +459,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
         // Check if the user has access to operate the console
         if (!_accessReader.IsAllowed(args.User, uid))
         {
-            _popup.PopupEntity("Access denied.", uid, args.User);
+            _popup.PopupEntity(Loc.GetString("department-console-access-denied"), uid, args.User);
             return;
         }
 
@@ -481,8 +481,8 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
         GrantDepartmentAccess(idCardUid, comp);
         UpdateAllUiForDepartment(uid, comp);
 
-        var name = idCard.FullName ?? "Unknown";
-        _popup.PopupEntity($"{name} has been hired to {comp.DepartmentName}.", uid, args.User);
+        var name = idCard.FullName ?? Loc.GetString("department-console-unknown");
+        _popup.PopupEntity(Loc.GetString("department-console-hired", ("name", name), ("department", comp.DepartmentName)), uid, args.User);
     }
 
     private void OnFire(EntityUid uid, DepartmentConsoleComponent comp, DepartmentConsoleFireBuiMsg msg)
@@ -543,7 +543,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
                 filter.AddPlayer(session);
         }
 
-        var sender = $"{comp.DepartmentName} Dept.";
+        var sender = Loc.GetString("department-console-announcement-sender", ("department", comp.DepartmentName));
         var announcementSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
         _chatSystem.DispatchFilteredAnnouncement(filter, msg.Message, uid, sender, true, announcementSound);
     }
@@ -642,9 +642,9 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
         if (!_requisitions.TryReserveStock(nearestComputer.Value, msg.CategoryIndex, msg.EntryIndex))
             return;
 
-        var orderedBy = "Unknown";
+        var orderedBy = Loc.GetString("department-console-unknown");
         if (_idCard.TryFindIdCard(msg.Actor, out var actorId))
-            orderedBy = actorId.Comp.FullName ?? "Unknown";
+            orderedBy = actorId.Comp.FullName ?? Loc.GetString("department-console-unknown");
 
         var deptOrder = new RequisitionsEntry
         {
@@ -653,8 +653,8 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             Crate = entry.Crate,
             Entities = new List<EntProtoId>(entry.Entities),
             DeptOrderedBy = orderedBy,
-            DeptReason = string.IsNullOrWhiteSpace(msg.Reason) ? "No reason given" : msg.Reason,
-            DeptDeliverTo = string.IsNullOrWhiteSpace(msg.DeliverTo) ? "No location specified" : msg.DeliverTo,
+            DeptReason = string.IsNullOrWhiteSpace(msg.Reason) ? Loc.GetString("department-console-order-no-reason") : msg.Reason,
+            DeptDeliverTo = string.IsNullOrWhiteSpace(msg.DeliverTo) ? Loc.GetString("department-console-order-no-location") : msg.DeliverTo,
             DeptAccessLevel = comp.DepartmentAccessLevel?.Id,
             DeptName = comp.DepartmentName,
         };
@@ -706,7 +706,11 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             // Skip this department if it can't afford its salaries
             if (deptCost > dept.DepartmentBudget)
             {
-                announcements.Add($"[bold]{dept.DepartmentName}[/bold]: Insufficient department budget (need ${deptCost:F0}, have ${dept.DepartmentBudget:F0})");
+                announcements.Add(Loc.GetString(
+                    "department-console-salary-insufficient",
+                    ("department", dept.DepartmentName),
+                    ("need", deptCost.ToString("F0")),
+                    ("have", dept.DepartmentBudget.ToString("F0"))));
                 continue;
             }
 
@@ -736,8 +740,17 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             if (totalTaxCollected > 0)
                 _budget.AddToBudget(totalTaxCollected);
 
-            announcements.Add($"[bold]{dept.DepartmentName}[/bold]: ${deptCost:F0} dispensed" +
-                (totalTaxCollected > 0 ? $" (${totalTaxCollected:F0} income tax)" : ""));
+            var salaryAnnouncement = Loc.GetString(
+                "department-console-salary-dispensed",
+                ("department", dept.DepartmentName),
+                ("amount", deptCost.ToString("F0")));
+            if (totalTaxCollected > 0)
+            {
+                salaryAnnouncement += " " + Loc.GetString(
+                    "department-console-income-tax",
+                    ("amount", totalTaxCollected.ToString("F0")));
+            }
+            announcements.Add(salaryAnnouncement);
 
             dept.DepartmentBudget -= deptCost;
             UpdateAllUiForDepartment(deptUid, dept);

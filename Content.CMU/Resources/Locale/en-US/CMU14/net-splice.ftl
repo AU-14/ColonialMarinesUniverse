@@ -22,6 +22,8 @@ au14-splice-examine-alarmed = [color=#c4453c]The junction cover hangs open and t
 au14-splice-examine-tap = [color=#c46f3c]This was not fitted at the factory.[/color]
 
 au14-splice-window-title = Feeder Junction - Trunk Splice
+au14-splice-header-feeder = FEEDER JUNCTION
+au14-splice-header-trunk = TRUNK SPLICE
 au14-splice-stage = CARRIER { $current } OF { $total }
 au14-splice-probes = PROBES LEFT: { $probes }
 au14-splice-detection = DETECTION: { $percent }%

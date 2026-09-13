@@ -2386,6 +2386,16 @@
   suffix: PVE, RCM
   description: "An L28-pattern shotgun holster rig, equipped with loops to hold loose 12ga shells and featuring a holster on the back capable of holding an L49 assault shotgun.\nShotguns equipped with magnetic harnesses or slings can be strapped directly to the belt, preventing them from being dropped."
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+      item: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Belt/l49.rsi
     layers:

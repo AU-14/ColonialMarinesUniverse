@@ -63,3 +63,6 @@ public sealed partial class YautjaApcSiphonDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class YautjaHealthShardUseDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class YautjaDeepRepairDoAfterEvent : SimpleDoAfterEvent;

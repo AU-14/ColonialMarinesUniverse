@@ -48,7 +48,7 @@ public sealed partial class TribalItemRestrictSystem : EntitySystem
 
 		// Block non-tribals from picking up tribe-tagged items
 		args.Cancel();
-		_popupSystem.PopupClient("You cannot pick this up.", item, args.User);
+		_popupSystem.PopupClient(Loc.GetString("tribal-item-restricted-pickup"), item, args.User);
 	}
 
 	private void OnItemGettingPickedUpAttempt(Entity<ItemComponent> item, ref GettingPickedUpAttemptEvent args)
@@ -66,7 +66,7 @@ public sealed partial class TribalItemRestrictSystem : EntitySystem
 
 		// Block non-tribals from picking up tribe-tagged items
 		args.Cancel();
-		_popupSystem.PopupClient("You cannot pick this up.", item, args.User);
+		_popupSystem.PopupClient(Loc.GetString("tribal-item-restricted-pickup"), item, args.User);
 	}
 
 	private void OnItemEquipAttempt(Entity<ItemComponent> item, ref BeingEquippedAttemptEvent args)
@@ -84,6 +84,6 @@ public sealed partial class TribalItemRestrictSystem : EntitySystem
 
 		// Block non-tribals from equipping tribe-tagged items
 		args.Cancel();
-		_popupSystem.PopupClient("You cannot equip this.", item, args.User);
+		_popupSystem.PopupClient(Loc.GetString("tribal-item-restricted-equip"), item, args.User);
 	}
 }

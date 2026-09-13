@@ -147,7 +147,10 @@
           False: { state: trashgreen }
   - type: DisposalUnit
     flushingState: trashgreen
-
+    container:
+      ents: []
+      showEnts: False
+      occludes: True
 - type: entity
   parent: RMCTrashBinBase
   id: RMCTrashBinBlue
@@ -195,3 +198,7 @@
           False: { state: trashblue }
   - type: DisposalUnit
     flushingState: trashblue
+    container:
+      ents: []
+      showEnts: False
+      occludes: True

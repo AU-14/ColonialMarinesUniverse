@@ -67,14 +67,14 @@ public sealed partial class HospitalEmergencySystem
             Transform(destination).MapUid is not { } mapUid || TransportUnavailable(mapUid) ||
             !TryComp<MapComponent>(mapUid, out var map) || !TryFindNavigationComputer(ship, out var nav))
         {
-            lease.Comp.Failure = "Hospital transport is waiting for navigation, a valid destination, or flight cooldown.";
+            lease.Comp.Failure = Loc.GetString("hospital-emergency-transport-waiting-navigation");
             return false;
         }
         if ((target.Ship is { } occupant && occupant != ship) ||
             ((purpose is HospitalShuttlePurpose.InboundPatients or HospitalShuttlePurpose.PickupInbound or HospitalShuttlePurpose.None) &&
              (!IsOriginalHospitalMap(lease.Comp) || mapUid != lease.Comp.HospitalMap)))
         {
-            lease.Comp.Failure = "Hospital transport requires an unoccupied destination on its original hospital map.";
+            lease.Comp.Failure = Loc.GetString("hospital-emergency-transport-original-map-required");
             return false;
         }
 
@@ -148,7 +148,7 @@ public sealed partial class HospitalEmergencySystem
                 ReferenceEquals(samePrevious, previousDestinationComponent) && samePrevious.Ship == null)
                 _dropship.SetDestinationShip(previous, previousShip);
         }
-        lease.Comp.Failure = "Hospital flight was not committed. Passengers remain assigned; departure will be retried.";
+        lease.Comp.Failure = Loc.GetString("hospital-emergency-flight-not-committed");
         return false;
     }
 
@@ -286,12 +286,12 @@ public sealed partial class HospitalEmergencySystem
     {
         if (TransportUnavailable(lease.Comp.Shuttle) || !IsOriginalHospitalMap(lease.Comp))
         {
-            lease.Comp.Failure = "Hospital transport recovery requires its original hospital map and surviving shuttle.";
+            lease.Comp.Failure = Loc.GetString("hospital-emergency-recovery-original-map-required");
             return false;
         }
         if (Transform(lease.Comp.Shuttle).MapUid == lease.Comp.HospitalMap)
         {
-            lease.Comp.Failure = "Hospital transport recovered. Unload remaining occupants and belongings before retirement.";
+            lease.Comp.Failure = Loc.GetString("hospital-emergency-recovery-unload-before-retirement");
             return true;
         }
         foreach (var (uid, original) in lease.Comp.Maps)
@@ -299,20 +299,20 @@ public sealed partial class HospitalEmergencySystem
             if (!TransportUnavailable(uid) &&
                 (!TryComp<MapComponent>(uid, out var current) || !ReferenceEquals(original, current)))
             {
-                lease.Comp.Failure = "Restore the original leased map identity before moving this transport or reclaiming its contents.";
+                lease.Comp.Failure = Loc.GetString("hospital-emergency-recovery-restore-map-identity");
                 return false;
             }
         }
         if (HasProtectedTransportContent(lease.Comp, offShuttleOnly: true))
         {
-            lease.Comp.Failure = "Board all people and belongings on the return map before hospital recovery.";
+            lease.Comp.Failure = Loc.GetString("hospital-emergency-recovery-board-everything");
             return false;
         }
         var destination = lease.Comp.HospitalDestination;
         if (TransportUnavailable(destination) || !HasComp<HospitalDropshipLandingZoneComponent>(destination) ||
             !HasComp<DropshipDestinationComponent>(destination) || Transform(destination).MapUid != lease.Comp.HospitalMap)
         {
-            lease.Comp.Failure = "Restore the hospital landing marker on its original map to recover this transport.";
+            lease.Comp.Failure = Loc.GetString("hospital-emergency-recovery-restore-landing-marker");
             return false;
         }
         return TryStartHospitalFlight(lease, destination, null, lease.Comp.StartupTime, HospitalShuttlePurpose.None);
@@ -325,9 +325,9 @@ public sealed partial class HospitalEmergencySystem
             return;
         args.Verbs.Add(new AlternativeVerb
         {
-            Text = "Recover hospital transport",
+            Text = Loc.GetString("hospital-emergency-recovery-verb"),
             Message = string.IsNullOrEmpty(lease.Comp.Failure)
-                ? "Cancel this transport's trip and return its remaining passengers to the hospital without settling a bill."
+                ? Loc.GetString("hospital-emergency-recovery-verb-message")
                 : lease.Comp.Failure,
             Act = () => RequestHospitalTransportRecovery(shuttle),
         });
@@ -341,7 +341,7 @@ public sealed partial class HospitalEmergencySystem
         {
             ClearComputerTransport(computer.Comp);
             computer.Comp.Status = HospitalEmergencyStatus.Treating;
-            computer.Comp.TransportFailure = "Transport trip cancelled for recovery. Patients remain assigned to the hospital.";
+            computer.Comp.TransportFailure = Loc.GetString("hospital-emergency-recovery-cancelled");
             UpdateUi(computer);
         }
         lease.Comp.Computer = null;

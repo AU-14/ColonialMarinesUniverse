@@ -52,6 +52,7 @@
     drawdepth: WallTops
   - type: Physics
     bodyType: Static
+    canCollide: False
   - type: Appearance
   - type: Flamability
     chance: 0.2

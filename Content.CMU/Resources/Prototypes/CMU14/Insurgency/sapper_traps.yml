@@ -78,6 +78,12 @@
   name: buried IED
   description: An improvised explosive device buried under the surface, wired to a hidden pressure plate. It packs enough charge to level whatever unlucky enough to stand on it.
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
     drawdepth: BelowMobs
@@ -128,6 +134,12 @@
   name: shotgun trap
   description: A sawn-off barrel lashed to a stake and rigged to a tripline. Step in front and it empties a shell of buckshot into your legs.
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Explosives/Mines/m20_mine.rsi
     drawdepth: BelowMobs

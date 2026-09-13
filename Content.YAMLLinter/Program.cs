@@ -58,8 +58,12 @@ namespace Content.YAMLLinter
             return -1;
         }
 
-        private static async Task<(Dictionary<string, HashSet<ErrorNode>> YamlErrors, List<string> FieldErrors)>
-            ValidateClient()
+        private sealed record ValidationData(
+            Dictionary<string, HashSet<ErrorNode>> YamlErrors,
+            Dictionary<Type, HashSet<string>> DiskPrototypes,
+            Dictionary<Type, HashSet<string>> LoadedPrototypes);
+
+        private static async Task<ValidationData> ValidateClient()
         {
             await using var pair = await PoolManager.GetServerClient(testContext: TestContext);
             var client = pair.Client;
@@ -68,8 +72,7 @@ namespace Content.YAMLLinter
             return result;
         }
 
-        private static async Task<(Dictionary<string, HashSet<ErrorNode>> YamlErrors, List<string> FieldErrors)>
-            ValidateServer()
+        private static async Task<ValidationData> ValidateServer()
         {
             await using var pair = await PoolManager.GetServerClient(testContext: TestContext);
             var server = pair.Server;
@@ -78,13 +81,13 @@ namespace Content.YAMLLinter
             return result;
         }
 
-        private static async Task<(Dictionary<string, HashSet<ErrorNode>>, List<string>)> ValidateInstance(
+        private static async Task<ValidationData> ValidateInstance(
             RobustIntegrationTest.IntegrationInstance instance)
         {
             var protoMan = instance.ResolveDependency<IPrototypeManager>();
-            var reflection = instance.ResolveDependency<IReflectionManager>();
             Dictionary<string, HashSet<ErrorNode>> yamlErrors = default!;
-            List<string> fieldErrors = default!;
+            Dictionary<Type, HashSet<string>> diskPrototypes = default!;
+            var loadedPrototypes = new Dictionary<Type, HashSet<string>>();
 
             await instance.WaitPost(() =>
             {
@@ -108,35 +111,23 @@ namespace Content.YAMLLinter
                         yamlErrors[kind] = set;
                 }
 
-                fieldErrors = ValidateStaticFields(protoMan, reflection, prototypes);
+                diskPrototypes = prototypes;
+                foreach (var kind in protoMan.EnumeratePrototypeKinds())
+                    loadedPrototypes[kind] = protoMan.EnumeratePrototypes(kind).Select(p => p.ID).ToHashSet();
             });
 
-            return (yamlErrors, fieldErrors);
+            return new ValidationData(yamlErrors, diskPrototypes, loadedPrototypes);
         }
 
         private static List<string> ValidateStaticFields(
             IPrototypeManager protoMan,
             IReflectionManager reflection,
-            Dictionary<Type, HashSet<string>> diskPrototypes)
+            Dictionary<Type, HashSet<string>> diskPrototypes,
+            Dictionary<Type, HashSet<string>> loadedPrototypes)
         {
             // [TestPrototypes] are loaded into the live manager by the integration pool, but ValidateDirectory only
             // returns disk prototypes. Only fixtures that declare test prototypes should validate against the loaded
             // set; production and all other types must continue to validate strictly against disk content.
-            var loadedPrototypes = diskPrototypes.ToDictionary(
-                pair => pair.Key,
-                pair => new HashSet<string>(pair.Value));
-
-            foreach (var kind in protoMan.EnumeratePrototypeKinds())
-            {
-                if (!loadedPrototypes.TryGetValue(kind, out var ids))
-                {
-                    ids = new HashSet<string>();
-                    loadedPrototypes[kind] = ids;
-                }
-
-                ids.UnionWith(protoMan.EnumeratePrototypes(kind).Select(prototype => prototype.ID));
-            }
-
             const BindingFlags flags = BindingFlags.Static
                                        | BindingFlags.NonPublic
                                        | BindingFlags.Public
@@ -215,13 +206,42 @@ namespace Content.YAMLLinter
                     yamlErrors[key] = newErrors;
             }
 
-            // Finally, combine the prototype ID field errors.
-            var fieldErrors = serverErrors.FieldErrors
-                .Concat(clientErrors.FieldErrors)
-                .Distinct()
-                .ToList();
+            // Static references can cross sides through the test assembly. Validate them against
+            // both disk catalogs, including server-only kinds that the client deliberately ignores.
+            var diskPrototypes = MergePrototypes(serverErrors.DiskPrototypes, clientErrors.DiskPrototypes);
+            var loadedPrototypes = MergePrototypes(serverErrors.LoadedPrototypes, clientErrors.LoadedPrototypes);
+            var fieldErrors = new List<string>();
+            await using (var pair = await PoolManager.GetServerClient(testContext: TestContext))
+            {
+                foreach (var instance in new RobustIntegrationTest.IntegrationInstance[] { pair.Server, pair.Client })
+                {
+                    await instance.WaitPost(() => fieldErrors.AddRange(ValidateStaticFields(
+                        instance.ResolveDependency<IPrototypeManager>(),
+                        instance.ResolveDependency<IReflectionManager>(),
+                        diskPrototypes,
+                        loadedPrototypes)));
+                }
 
-            return (yamlErrors, fieldErrors);
+                await pair.CleanReturnAsync();
+            }
+
+            return (yamlErrors, fieldErrors.Distinct().ToList());
+        }
+
+        private static Dictionary<Type, HashSet<string>> MergePrototypes(
+            Dictionary<Type, HashSet<string>> first,
+            Dictionary<Type, HashSet<string>> second)
+        {
+            var result = first.ToDictionary(pair => pair.Key, pair => new HashSet<string>(pair.Value));
+            foreach (var (kind, ids) in second)
+            {
+                if (result.TryGetValue(kind, out var existing))
+                    existing.UnionWith(ids);
+                else
+                    result[kind] = new HashSet<string>(ids);
+            }
+
+            return result;
         }
 
         private static async Task<(Assembly[] clientAssemblies, Assembly[] serverAssemblies)>

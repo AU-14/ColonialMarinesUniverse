@@ -17,6 +17,8 @@
     organs:
       heart: { id: heart }
   - type: Sprite
+    sprite: _RMC14/Structures/alien_autopsy.rsi
+    state: sample_drone_head
   - type: Tag
     tags:
       - Head

@@ -18,6 +18,10 @@
     - HeadTop
     - HeadSide
     - Snout
+    layers:
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
   - type: Clothing
     sprite: CMU14/Clothing/LACN/PilotGear/mask.rsi
   - type: BreathMask

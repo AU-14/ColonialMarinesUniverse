@@ -60,6 +60,12 @@
   name: Analyzer Machine (CLF)
   description:  An intel analyzer
   components:
+  - type: ContainerContainer
+    containers:
+      cashSlot: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
   - type: FetchAnalyzer
     faction: clf
   - type: ItemSlots

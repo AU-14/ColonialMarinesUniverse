@@ -4,6 +4,8 @@
   name: Hyperdyne systems Van
   description: A Hyperdyne Systems van, used for synthetic maintance. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/civvan.rsi
     offset: "0,0.5"
@@ -38,6 +40,8 @@
   name: Small Cargo Truck
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/small_truck_turquoise_cargo.rsi
     offset: "0,0.5"
@@ -72,6 +76,8 @@
   name: Small Civilian Truck
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
@@ -106,6 +112,8 @@
   name: Small We-Yu Civilian Truck 
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
@@ -140,6 +148,8 @@
   name: Small White Civilian Truck 
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
@@ -175,6 +185,8 @@
   name: Small Civilian Medical Truck 
   description: An old small cargo truck. This seems to be loaded with medical supplies. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/small_truck_medical.rsi
     offset: "0,0.5"
@@ -210,6 +222,8 @@
   name: Small Garbage Truck 
   description: An old small garbage truck. Stinks. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/small_truck_garbage.rsi
     offset: "0,0.5"
@@ -245,6 +259,8 @@
   name: Brown Truck with cargo barrels
   description: An old small barrels truck. Smells like pure juice. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargobarrels.rsi
     offset: "0,0.5"
@@ -280,6 +296,8 @@
   name: Brown Truck with cargo
   description: An old small cargo truck. Smells like pure juice. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargo.rsi
     offset: "0,0.5"
@@ -315,6 +333,8 @@
   name: Blue Truck with cargo
   description: An old small barrels truck. Smells like pure juice. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/small_truck_blue_cargo.rsi
     offset: "0,0.5"
@@ -350,6 +370,8 @@
   name: Blue truck
   description: An old small cargo truck. Smells like pure juice. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/small_truck_blue.rsi
     offset: "0,0.5"
@@ -385,6 +407,8 @@
   name: An ambulance
   description: An old van used as ambulance for colonial Emergency Medical Service. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/ambulance.rsi
     offset: "0,0.5"
@@ -419,6 +443,8 @@
   name: Police Car
   description: An police Mono Supron, produced by Weyland-Yutani. Still sturdy enough for transport.
   components:
+  - type: PointLight
+    radius: 6
   - type: Sprite
     sprite: CMU14/Structures/vehicles/hybrisavehicles/cop_car.rsi
     offset: "0,0.5"

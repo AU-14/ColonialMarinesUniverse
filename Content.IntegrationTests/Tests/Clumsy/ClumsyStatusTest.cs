@@ -86,9 +86,11 @@ public sealed class ClumsyStatusTest : InteractionTest
     [Test, Description("Test that a gun explodes in a clumsy mob's face and stuns them.")]
     public async Task TestClumsyGun()
     {
+        await AddGravity(MapData.MapUid);
         await Server.WaitPost(() =>
         {
-            SEntMan.EnsureComponent<MobStateComponent>(SPlayer); // So that we are a valid target for SharedStunSystem.StunId
+            SEntMan.EnsureComponent<MobStateComponent>(SPlayer);
+            SEntMan.EnsureComponent<StandingStateComponent>(SPlayer); // Paralysis also requires knockdown support.
             SEntMan.EnsureComponent<TestListenerComponent>(SPlayer);
 
             _sStatusSystem.TrySetStatusEffectDuration(SPlayer, ClumsyStatusAll100);
@@ -101,9 +103,12 @@ public sealed class ClumsyStatusTest : InteractionTest
         await PlaceInHands(GunProto);
         await UseInHand(); // Chamber the gun
         await RunSeconds(0.5f); // Guns have a cooldown when picking them up.
-        await AttemptShoot(Target);
+        await AttemptShoot(Target, assert: false); // Clumsiness cancels the shot after backfiring.
 
-        Assert.That(_sStatusSystem.HasStatusEffect(SPlayer, SharedStunSystem.StunId), Is.True, "Clumsy mob wasn't stunned from shooting a gun.");
+        Assert.That(_sStatusSystem.HasStatusEffect(SPlayer, SharedStunSystem.ParalyzeId), Is.True, "Clumsy mob wasn't paralyzed from shooting a gun.");
+        Assert.That(SEntMan.HasComponent<StunnedComponent>(SPlayer), Is.True);
+        Assert.That(SEntMan.HasComponent<KnockedDownComponent>(SPlayer), Is.True);
+        Assert.That(GetEvents<SelfBeforeGunShotEvent>(SPlayer), Is.Not.Empty);
         foreach (var ev in GetEvents<SelfBeforeGunShotEvent>(SPlayer))
         {
             Assert.That(ev.Cancelled, Is.True, "Clumsy mob didn't cancel gun shoot event.");

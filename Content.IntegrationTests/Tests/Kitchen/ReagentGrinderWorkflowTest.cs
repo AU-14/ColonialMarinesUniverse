@@ -125,6 +125,7 @@ public sealed class ReagentGrinderWorkflowTest : GameTest
         await server.WaitPost(() =>
         {
             var transform = server.EntMan.System<SharedTransformSystem>();
+            transform.Unanchor(nearest);
             transform.SetCoordinates(nearest, map.GridCoords.Offset(new Vector2(20, 0)));
         });
         await Pair.RunTicksSync(2);
@@ -307,6 +308,7 @@ public sealed class ReagentGrinderWorkflowTest : GameTest
 
     private async Task AssertLinkedTo(EntityUid grinder, EntityUid fridge)
     {
+        await Pair.RunUntilSynced();
         await Pair.Server.WaitAssertion(() =>
         {
             var component = Pair.Server.EntMan.GetComponent<ReagentGrinderComponent>(grinder);
@@ -325,6 +327,7 @@ public sealed class ReagentGrinderWorkflowTest : GameTest
 
     private async Task AssertUnlinked(EntityUid grinder)
     {
+        await Pair.RunUntilSynced();
         await Pair.Server.WaitAssertion(() =>
         {
             var component = Pair.Server.EntMan.GetComponent<ReagentGrinderComponent>(grinder);

@@ -1,5 +1,7 @@
 using Content.Client.Damage;
 using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -67,9 +69,10 @@ public sealed class DamageVisualsMergeRegressionTest : GameTest
 ";
 
     [Test]
+    [EnsureCVar(Side.Server, typeof(CMUMedicalCCVars), nameof(CMUMedicalCCVars.Enabled), false)]
     public async Task ZeroVisibilityDisplacementAndGroupColorPreserveMergedSemantics()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var pair = Pair;
         var server = pair.Server;
         var client = pair.Client;
         var serverEntities = server.EntMan;
@@ -219,7 +222,6 @@ public sealed class DamageVisualsMergeRegressionTest : GameTest
             serverEntities.DeleteEntity(overlay);
             serverEntities.DeleteEntity(human);
         });
-        await pair.CleanReturnAsync();
     }
 
     private static DamageSpecifier Damage(string type, float amount)

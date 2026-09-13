@@ -146,7 +146,7 @@ public sealed partial class SpikeBootsSystem : EntitySystem
                     if (!resinEffectsShown)
                     {
                         _popup.PopupEntity(
-                            "You feel the ground crack beneath your boots.",
+                            Loc.GetString("cmu-spike-boots-crush-resin"),
                             uid, uid, PopupType.Small);
 
                         _audio.PlayPvs(ResinCrunchSound, uid);
@@ -183,7 +183,7 @@ public sealed partial class SpikeBootsSystem : EntitySystem
                 if (!damageEffectsShown)
                 {
                     _popup.PopupEntity(
-                        "You feel your boots ripping through flesh.",
+                        Loc.GetString("cmu-spike-boots-step-flesh"),
                         uid, uid, PopupType.SmallCaution);
 
                     _audio.PlayPvs(StepDamageSound, uid);

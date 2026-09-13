@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   id: RMCSentryPremade
   name: turret
@@ -133,6 +133,9 @@
   description: A deployable, semi-automated turret with 360 degree range AI targeting capabilities. Armed with an M30 Autocannon and a 500-round drum magazine.
   suffix: Deployed
   components:
+  - type: UserIFF
+    factions: []
+  - type: EntityIFF
   - type: Fixtures
     fixtures:
       fix1:

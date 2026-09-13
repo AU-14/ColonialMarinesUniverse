@@ -13,6 +13,8 @@
     sprite: CMU14/Yautja/bracer.rsi
   - type: YautjaTechItem
   - type: YautjaBracer
+    cloakOpacity: 0
+    cloakMovingOpacity: 0.035
     charge: 3000
     maxCharge: 3000
     regen: 2
@@ -1024,6 +1026,8 @@
     sprite: CMU14/Yautja/healing_gun.rsi
   - type: YautjaHealingGun
     repairsFractures: true
+    deepRepairDuration: 10
+    repairsOrgans: true
     damageContainers:
     - Biological
     damage:

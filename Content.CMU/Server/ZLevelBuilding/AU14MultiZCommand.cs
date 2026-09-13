@@ -25,8 +25,8 @@ namespace Content.Server.CMU14.ZLevelBuilding;
 public sealed class AU14MultiZCommand : IConsoleCommand
 {
     public string Command => "au_multiz";
-    public string Description => "List maps with their AU14 Multi Z-Level (vertical building) status, or toggle it per map / globally.";
-    public string Help => "au_multiz  (list)  |  au_multiz <mapId> <on|off>  |  au_multiz global <on|off>";
+    public string Description => Loc.GetString("cmu-cmd-multiz-desc");
+    public string Help => Loc.GetString("cmu-cmd-multiz-help");
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -36,26 +36,30 @@ public sealed class AU14MultiZCommand : IConsoleCommand
         // No args: list every map.
         if (args.Length == 0)
         {
-            shell.WriteLine($"Global AU14 z-building: {(building.GloballyEnabled ? "ENABLED" : "DISABLED")}  (toggle: au_multiz global on|off)");
+            shell.WriteLine(Loc.GetString("cmu-cmd-multiz-global-list",
+                ("state", Loc.GetString(building.GloballyEnabled ? "cmu-cmd-multiz-enabled" : "cmu-cmd-multiz-disabled"))));
             var query = entMan.AllEntityQueryEnumerator<MapComponent>();
             while (query.MoveNext(out var uid, out var map))
             {
                 var yes = building.IsEnabledOn(uid);
-                shell.WriteLine($"  MapId {map.MapId,-4} {entMan.ToPrettyString(uid),-28} - Multi Z-Level: {(yes ? "Yes" : "No")}");
+                shell.WriteLine(Loc.GetString("cmu-cmd-multiz-map-list",
+                    ("mapId", $"{map.MapId,-4}"),
+                    ("map", $"{entMan.ToPrettyString(uid),-28}"),
+                    ("enabled", Loc.GetString(yes ? "cmu-cmd-multiz-yes" : "cmu-cmd-multiz-no"))));
             }
             return;
         }
 
         if (args.Length != 2)
         {
-            shell.WriteError("Usage: au_multiz <mapId|global> <on|off>");
+            shell.WriteError(Loc.GetString("cmu-cmd-multiz-usage"));
             return;
         }
 
         var on = args[1].Equals("on", StringComparison.OrdinalIgnoreCase);
         if (!on && !args[1].Equals("off", StringComparison.OrdinalIgnoreCase))
         {
-            shell.WriteError("Second argument must be 'on' or 'off'.");
+            shell.WriteError(Loc.GetString("cmu-cmd-multiz-invalid-state"));
             return;
         }
 
@@ -63,13 +67,14 @@ public sealed class AU14MultiZCommand : IConsoleCommand
         if (args[0].Equals("global", StringComparison.OrdinalIgnoreCase))
         {
             building.GloballyEnabled = on;
-            shell.WriteLine($"Global AU14 z-building is now {(on ? "ENABLED" : "DISABLED")}.");
+            shell.WriteLine(Loc.GetString("cmu-cmd-multiz-global-changed",
+                ("state", Loc.GetString(on ? "cmu-cmd-multiz-enabled" : "cmu-cmd-multiz-disabled"))));
             return;
         }
 
         if (!int.TryParse(args[0], out var mapIdInt))
         {
-            shell.WriteError("Map argument must be a numeric MapId (run 'au_multiz' to list them) or 'global'.");
+            shell.WriteError(Loc.GetString("cmu-cmd-multiz-invalid-map"));
             return;
         }
 
@@ -77,7 +82,7 @@ public sealed class AU14MultiZCommand : IConsoleCommand
         var mapId = new MapId(mapIdInt);
         if (!mapManager.MapExists(mapId))
         {
-            shell.WriteError($"No map with MapId {mapIdInt}.");
+            shell.WriteError(Loc.GetString("cmu-cmd-multiz-map-missing", ("mapId", mapIdInt)));
             return;
         }
 
@@ -86,6 +91,9 @@ public sealed class AU14MultiZCommand : IConsoleCommand
         comp.Enabled = on;
         entMan.Dirty(mapUid, comp);
 
-        shell.WriteLine($"Map {mapIdInt} Multi Z-Level set to {(on ? "Yes" : "No")}. Players {(on ? "can now" : "can no longer")} build AU14 z-level stairs/floors here.");
+        shell.WriteLine(Loc.GetString("cmu-cmd-multiz-map-changed",
+            ("mapId", mapIdInt),
+            ("enabled", Loc.GetString(on ? "cmu-cmd-multiz-yes" : "cmu-cmd-multiz-no")),
+            ("permission", Loc.GetString(on ? "cmu-cmd-multiz-can-build" : "cmu-cmd-multiz-cannot-build"))));
     }
 }

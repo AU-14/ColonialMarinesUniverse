@@ -17,11 +17,8 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
     [Dependency] private IPrototypeManager _protoMan = default!;
 
     public override string Command => "nuke:decals";
-    public override string Description => "Deletes decals from every loaded grid.";
-    public override string Help =>
-        "nuke:decals [all (true/false, default: false)] [decalId...] - Deletes decals from every loaded grid.\n" +
-        " By default this will only delete cleanable decals (like blood/dirt etc.) to spare map details.\n" +
-        " To delete all decals (including mapper placed details), you should pass 'true' as the first argument.";
+    public override string Description => Loc.GetString("cmu-cmd-nuke-decals-desc");
+    public override string Help => Loc.GetString("cmu-cmd-nuke-decals-help");
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -45,14 +42,24 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
             gridCount++;
         }
 
-        var filterMsg = idFilter != null ? $" matching {idFilter.Count} ids" : "";
-        var cleanMsg = all ? " (all decals)" : " (cleanable only)";
-        shell.WriteLine($"Removed {totalRemoved} decals{filterMsg}{cleanMsg} from {gridCount} grids.");
+        var scope = Loc.GetString(all
+            ? "cmu-cmd-nuke-decals-scope-all"
+            : "cmu-cmd-nuke-decals-scope-cleanable");
+        shell.WriteLine(idFilter != null
+            ? Loc.GetString("cmu-cmd-nuke-decals-summary-filtered",
+                ("removed", totalRemoved),
+                ("filterCount", idFilter.Count),
+                ("scope", scope),
+                ("grids", gridCount))
+            : Loc.GetString("cmu-cmd-nuke-decals-summary",
+                ("removed", totalRemoved),
+                ("scope", scope),
+                ("grids", gridCount)));
 
         if (totalSkipped > 0)
         {
-            shell.WriteLine($"[nuke:decals] {totalSkipped} matching decals were found but skipped because they have disabled defaultCleanable (janitor clean).");
-            shell.WriteLine($"To delete them, run the command again starting with 'true' ('nuke:decals true {string.Join(" ", idArray)}').");
+            shell.WriteLine(Loc.GetString("cmu-cmd-nuke-decals-skipped", ("count", totalSkipped)));
+            shell.WriteLine(Loc.GetString("cmu-cmd-nuke-decals-retry", ("ids", string.Join(" ", idArray))));
         }
     }
 
@@ -68,9 +75,9 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
         {
             var options = new List<string> { "true", "false" };
             options.AddRange(decalOptions);
-            return CompletionResult.FromHintOptions(options, "[all (default: false)] or [decalId]");
+            return CompletionResult.FromHintOptions(options, Loc.GetString("cmu-cmd-nuke-decals-hint-first"));
         }
 
-        return CompletionResult.FromHintOptions(decalOptions, "[decalId...]");
+        return CompletionResult.FromHintOptions(decalOptions, Loc.GetString("cmu-cmd-nuke-decals-hint-id"));
     }
 }

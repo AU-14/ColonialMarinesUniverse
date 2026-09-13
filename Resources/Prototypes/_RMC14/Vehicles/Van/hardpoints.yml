@@ -17,5 +17,6 @@
     repairRate: 0.0165
   - type: HardpointIntegrity
     maxIntegrity: 250
+    integrity: 250
   - type: VehicleWheelItem
 

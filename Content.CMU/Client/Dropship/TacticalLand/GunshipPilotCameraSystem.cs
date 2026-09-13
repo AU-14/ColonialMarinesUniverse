@@ -154,6 +154,7 @@ public sealed partial class GunshipPilotCameraSystem : EntitySystem
             TryComp(dropship, out DropshipIntegrityComponent? integrity) &&
             !integrity.Crashing &&
             !integrity.Wrecked &&
+            !IsSelectingTacticalDestination(local) &&
             hud.ViewOffset == 0 &&
             !hud.RearView &&
             !hud.Malfunctions.Contains(DropshipMalfunction.SensorArrayFault))
@@ -233,6 +234,7 @@ public sealed partial class GunshipPilotCameraSystem : EntitySystem
             !TryComp(dropship, out DropshipIntegrityComponent? integrity) ||
             integrity.Crashing ||
             integrity.Wrecked ||
+            IsSelectingTacticalDestination(local) ||
             hud.ViewOffset != 0 ||
             hud.RearView ||
             hud.Malfunctions.Contains(DropshipMalfunction.SensorArrayFault))
@@ -271,6 +273,11 @@ public sealed partial class GunshipPilotCameraSystem : EntitySystem
         if (Vector2.DistanceSquared(_eyeManager.CurrentEye.Zoom, contentEye.TargetZoom) > 0.0001f)
             _eyeManager.CurrentEye.Zoom = contentEye.TargetZoom;
     }
+
+    private bool IsSelectingTacticalDestination(EntityUid pilot)
+        => TryComp(pilot, out EyeComponent? eye)
+        && eye.Target is { } target
+        && HasComp<DropshipPilotEyeComponent>(target);
 
     private static void ResetPilotCursor(EyeCursorOffsetComponent cursor)
     {

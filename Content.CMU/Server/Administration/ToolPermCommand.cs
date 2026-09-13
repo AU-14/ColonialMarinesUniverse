@@ -17,9 +17,9 @@ namespace Content.Server.CMU14.Administration;
 public sealed class ToolPermCommand : IConsoleCommand
 {
     public string Command => "toolperm";
-    public string Description => "Grant, revoke, or list per-tool editor permissions by ckey.";
-    public string Help => "Usage: toolperm add <ckey> <tool> | toolperm remove <ckey> <tool> | toolperm list\n" +
-                          "Tools: " + string.Join(", ", AU14ToolPermissions.AllTools.Select(t => t.Id));
+    public string Description => Loc.GetString("cmu-cmd-toolperm-desc");
+    public string Help => Loc.GetString("cmu-cmd-toolperm-help",
+        ("tools", string.Join(", ", AU14ToolPermissions.AllTools.Select(t => t.Id))));
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -31,7 +31,7 @@ public sealed class ToolPermCommand : IConsoleCommand
             foreach (var (ckey, tools) in perms.AllGrants.OrderBy(kv => kv.Key))
                 shell.WriteLine($"{ckey}: {string.Join(", ", tools.OrderBy(t => t))}");
             if (perms.AllGrants.Count == 0)
-                shell.WriteLine("No tool grants.");
+                shell.WriteLine(Loc.GetString("cmu-cmd-toolperm-no-grants"));
             return;
         }
 
@@ -44,7 +44,9 @@ public sealed class ToolPermCommand : IConsoleCommand
         var tool = args[2];
         if (!AU14ToolPermissions.IsValidTool(tool))
         {
-            shell.WriteError($"Unknown tool '{tool}'. Tools: {string.Join(", ", AU14ToolPermissions.AllTools.Select(t => t.Id))}");
+            shell.WriteError(Loc.GetString("cmu-cmd-toolperm-unknown-tool",
+                ("tool", tool),
+                ("tools", string.Join(", ", AU14ToolPermissions.AllTools.Select(t => t.Id)))));
             return;
         }
 
@@ -52,11 +54,13 @@ public sealed class ToolPermCommand : IConsoleCommand
         if (perms.SetGrant(args[1], tool, grant))
         {
             perms.Save();
-            shell.WriteLine($"{(grant ? "Granted" : "Revoked")} '{tool}' {(grant ? "to" : "from")} {args[1]}.");
+            shell.WriteLine(Loc.GetString(grant ? "cmu-cmd-toolperm-granted" : "cmu-cmd-toolperm-revoked",
+                ("tool", tool),
+                ("ckey", args[1])));
         }
         else
         {
-            shell.WriteLine("Nothing changed.");
+            shell.WriteLine(Loc.GetString("cmu-cmd-toolperm-no-change"));
         }
     }
 }

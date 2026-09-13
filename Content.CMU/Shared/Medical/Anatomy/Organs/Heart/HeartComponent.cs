@@ -45,10 +45,10 @@ public sealed partial class HeartComponent : Component
 
     // The owner settles both heart-entity and patient pause boundaries. Generated
     // offsets on the heart alone cannot handle a paused patient with unpaused organs.
-    [DataField]
+    [DataField(readOnly: true)]
     public TimeSpan LastPhysiologyUpdate;
 
-    [DataField]
+    [DataField(readOnly: true)]
     public TimeSpan NextPulseUpdate;
 
     [DataField]
@@ -83,7 +83,7 @@ public sealed partial class HeartComponent : Component
         { OrganDamageStage.Dead, FixedPoint2.Zero },
     };
 
-    [DataField]
+    [DataField(readOnly: true)]
     public TimeSpan NextOrganDamageTick;
 
     [DataField]

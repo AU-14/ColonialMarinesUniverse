@@ -18,6 +18,8 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
 - type: entity
   id: StaminaMergeTarget
   components:
+  - type: MobState
+  - type: MovementSpeedModifier
   - type: Stamina
     decay: 0
     baseCritThreshold: 100

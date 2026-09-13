@@ -191,10 +191,12 @@ public sealed class RoleSuccessorMergeRegressionTest : GameTest
                         "normal preference assignment must reject a preselected antagonist from canBeAntag:false");
                     Assert.That(candidates.Contains(Beta), Is.True,
                         "the same antagonist remains eligible for an ordinary job without specifier filters");
-                    Assert.That(PickIgnoringPreferences(jobs, Alpha, fallbackProfiles, out _), Is.False,
-                        "minimum-role fallback must apply canBeAntag even though it ignores preferences");
-                    Assert.That(PickIgnoringPreferences(jobs, Beta, fallbackProfiles, out var picked), Is.True,
-                        "an eligible minimum role may use the same player even with no selected job preferences");
+                    Assert.That(PickPreferredCandidate(jobs, Alpha, profiles, JobPriority.High, out _), Is.False,
+                        "minimum-role assignment must apply canBeAntag");
+                    Assert.That(PickPreferredCandidate(jobs, Beta, fallbackProfiles, JobPriority.High, out _), Is.False,
+                        "minimum-role assignment must not assign a job the player did not select");
+                    Assert.That(PickPreferredCandidate(jobs, Beta, profiles, JobPriority.Medium, out var picked), Is.True,
+                        "an eligible selected job remains available to minimum-role assignment");
                     Assert.That(picked, Is.EqualTo(session.UserId));
                 });
             });
@@ -215,7 +217,7 @@ public sealed class RoleSuccessorMergeRegressionTest : GameTest
                     Assert.That(candidates.Contains(Allowed), Is.True);
                     Assert.That(candidates.Contains(Other), Is.False,
                         "upstream antag job whitelists remain authoritative");
-                    Assert.That(PickIgnoringPreferences(jobs, Other, profiles, out _), Is.False);
+                    Assert.That(PickPreferredCandidate(jobs, Other, profiles, JobPriority.High, out _), Is.False);
                 });
             });
 
@@ -235,7 +237,7 @@ public sealed class RoleSuccessorMergeRegressionTest : GameTest
                     Assert.That(candidates.Contains(Allowed), Is.True);
                     Assert.That(candidates.Contains(Blocked), Is.False,
                         "upstream antag job blacklists remain authoritative");
-                    Assert.That(PickIgnoringPreferences(jobs, Blocked, profiles, out _), Is.False);
+                    Assert.That(PickPreferredCandidate(jobs, Blocked, profiles, JobPriority.High, out _), Is.False);
                 });
             });
         }
@@ -478,17 +480,18 @@ public sealed class RoleSuccessorMergeRegressionTest : GameTest
             .Invoke(system, [profiles])!;
     }
 
-    private static bool PickIgnoringPreferences(
+    private static bool PickPreferredCandidate(
         StationJobsSystem system,
         ProtoId<JobPrototype> job,
         IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles,
+        JobPriority priority,
         out NetUserId player)
     {
-        object?[] args = [job, profiles, default(NetUserId)];
+        object?[] args = [job, priority, GetJobCandidates(system, profiles), default(NetUserId)];
         var result = (bool) typeof(StationJobsSystem)
-            .GetMethod("TryPickCandidateIgnoringPreferences", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .GetMethod("TryPickCandidate", BindingFlags.Instance | BindingFlags.NonPublic)!
             .Invoke(system, args)!;
-        player = (NetUserId) args[2]!;
+        player = (NetUserId) args[3]!;
         return result;
     }
 

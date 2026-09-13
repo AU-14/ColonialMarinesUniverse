@@ -4,6 +4,8 @@
   name: M240-T incinerator unit #cmu14
   description: An improved version of the M240 incinerator unit, the M240-T model is capable of dispersing a larger variety of fuel types. #cmu14
   components:
+  - type: UseDelay
+    delay: 3
   - type: Corrodible
     isCorrodible: false
   - type: Sprite

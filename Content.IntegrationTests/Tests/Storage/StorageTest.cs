@@ -38,6 +38,7 @@ public sealed class StorageTest : GameTest
             foreach (var proto in protoManager.EnumeratePrototypes<EntityPrototype>())
             {
                 if (!proto.TryComp<StorageComponent>(out var storage, compFact) ||
+                    proto.HasComp<RemoveOnlyStorageComponent>(compFact) || // A sealed loadout cannot accept items to form an arbitrage loop.
                     storage.Whitelist != null ||
                     storage.MaxItemSize == null ||
                     !proto.TryComp<ItemComponent>(out var item, compFact))

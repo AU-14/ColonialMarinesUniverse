@@ -26,11 +26,11 @@ public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
         _xenoQuery = GetEntityQuery<XenoComponent>();
         _pullableQuery = GetEntityQuery<PullableComponent>();
 
-        SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, StartCollideEvent>(OnCollide);
     }
 
-    private void OnInit(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, ComponentInit args)
+    private void OnMapInit(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, MapInitEvent args)
     {
         var min = (float)comp.MinLifetime.TotalSeconds;
         var max = (float)comp.MaxLifetime.TotalSeconds;

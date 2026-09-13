@@ -10708,6 +10708,18 @@
   id: 692
   time: '2026-09-10T13:35:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921
+- author: TheHellFireo
+  changes:
+  - message: Fixed stale area-power references and power loads after equipment is
+      removed or moved.
+    type: Fix
+  - message: Fixed missing fighters in small CLF survivor groups.
+    type: Fix
+  - message: Improved gameplay stall and client synchronization diagnostics.
+    type: Admin
+  id: 693
+  time: '2026-09-10T13:35:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921
 - author: OverusedMeme
   changes:
   - message: The M240 now has a wield delay of 1 second, the M240-T now has a wield
@@ -10716,8 +10728,116 @@
   - message: Fixed an issue where spam wielding the M240 and M240-T would double the
       amount of time required until you can shoot.
     type: Fix
-  id: 693
+  id: 694
   time: '2026-09-10T15:30:49.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1920
+- author: OverusedMeme
+  changes:
+  - message: The M240 now has a wield delay of 1 second, the M240-T now has a wield
+      delay of 1.75 seconds
+    type: Tweak
+  - message: Fixed an issue where spam wielding the M240 and M240-T would double the
+      amount of time required until you can shoot.
+    type: Fix
+  id: 695
+  time: '2026-09-10T15:30:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1920
+- author: Vencallium
+  changes:
+  - message: Increased dropship fabricator point generation to 2 points per second.
+    type: Tweak
+  id: 696
+  time: '2026-09-11T17:19:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1925
+- author: Vencallium
+  changes:
+  - message: Increased dropship fabricator point generation to 2 points per second.
+    type: Tweak
+  id: 697
+  time: '2026-09-11T17:19:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1925
+- author: TheHellFireo
+  changes:
+  - message: Reduced hitches when filling storage and preparing large supply deliveries.
+    type: Fix
+  - message: Improved capture and attribution of short gameplay stalls.
+    type: Admin
+  id: 698
+  time: '2026-09-12T00:24:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1933
+- author: TheHellFireo
+  changes:
+  - message: Reduced hitches when filling storage and preparing large supply deliveries.
+    type: Fix
+  - message: Improved capture and attribution of short gameplay stalls.
+    type: Admin
+  id: 699
+  time: '2026-09-12T00:24:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1933
+- author: flex5hybrid
+  changes:
+  - message: Moved hardcoded CMU user-facing strings into Fluent localization.
+    type: Code
+  id: 700
+  time: '2026-09-12T22:41:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1938
+- author: Vencallium
+  changes:
+  - message: "Fixed tactical hovering over empty +1 airspace during Distress Signal,\
+      \ excluding Hope\u2019s Retreat."
+    type: Fix
+  - message: Added an empty upper z-level to Bosenmori Basho.
+    type: Map
+  id: 701
+  time: '2026-09-12T23:40:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1939
+- author: CatoChristopherMrow
+  changes:
+  - message: Added various belts, a new gun, and a few other qol items to colony cargo.
+    type: Add
+  id: 702
+  time: '2026-09-12T23:40:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1930
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed gunships stealing some tiles, along with other various minor fixes
+    type: Fix
+  id: 703
+  time: '2026-09-12T23:41:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1924
+- author: Nox38
+  changes:
+  - message: APCs should now fit full squads inside.
+    type: Tweak
+  id: 704
+  time: '2026-09-12T23:48:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1936
+- author: deepdarkdepths
+  changes:
+  - message: Added a new damage based evasion mechanic for Runner.
+    type: Add
+  - message: Runner has slightly more HP.
+    type: Tweak
+  id: 705
+  time: '2026-09-13T00:27:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1940
+- author: silasadam
+  changes:
+  - message: Added Yautja Limb regeneration
+    type: Add
+  - message: Yautja healing gun can heal IB/Fracs/Eschar/etc on a long do-after.
+    type: Tweak
+  - message: Yautja take several tackles to knock down. [4]
+    type: Tweak
+  - message: Yautja hunting traps are now completely invisible to everyone except
+      the yautja.
+    type: Tweak
+  - message: Yautja cloak has been returned to true-cloak status.
+    type: Tweak
+  - message: Yautja have a map symbol&hunting traps track the target for 5 minutes.
+    type: Add
+  id: 706
+  time: '2026-09-13T00:28:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1931
 Name: CMU
 Order: -1
