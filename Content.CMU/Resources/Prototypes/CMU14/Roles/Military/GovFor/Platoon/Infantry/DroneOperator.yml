@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobMilitaryBase
   id: CMUJobDroneOperatorBaseAbstract
@@ -13,6 +15,8 @@
   - AU14GovforSquad
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: CMUJobDroneOperatorBaseAbstract
   id: CMUJobDroneOperatorBase
@@ -94,6 +98,8 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: CMUJobDroneOperatorBase
   id: CMUJobGOVFORDroneOperator
   hidden: false

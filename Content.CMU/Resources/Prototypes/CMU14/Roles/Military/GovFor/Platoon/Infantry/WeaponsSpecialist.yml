@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobWeaponsSpecialistBaseAbstract
@@ -14,6 +16,8 @@
   - AU14GovforWeaponsSpecialist
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobWeaponsSpecialistBaseAbstract
   id: AU14JobWeaponsSpecialistBase
@@ -85,6 +89,8 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobWeaponsSpecialistBase
   id: AU14JobGOVFORWeaponsSpecialist
   hidden: false

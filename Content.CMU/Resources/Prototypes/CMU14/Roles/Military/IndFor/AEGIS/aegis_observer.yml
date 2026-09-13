@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMUJobBaseAegis
   id: CMUJobAegisObserver
   name: cmu-job-name-aegis-observer

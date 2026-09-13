@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobOfficerLogisticsBaseAbstract
@@ -19,6 +21,8 @@
   - aulegacygroupcommand
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobOfficerLogisticsBaseAbstract
   id: AU14JobOfficerLogisticsBase
@@ -83,6 +87,8 @@
 
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobGOVFOROfficerLogistics
   hidden: false
@@ -90,6 +96,8 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobOPFOROfficerLogistics
   roundSide: Opfor
@@ -183,6 +191,8 @@
 
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobGOVFOROfficerLogisticsCMBCIU
   roundForce: CMBCIU
@@ -192,6 +202,8 @@
     AU14RankCMBMarshal: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobGOVFOROfficerLogisticsRMC
   roundForce: RMC
@@ -199,6 +211,8 @@
   spawnMenuRoleName: Logistics Officer (TWE RMC)
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobGOVFOROfficerLogisticsUPP
   roundForce: UPP
@@ -213,6 +227,8 @@
     UPP_JuniorLieutenant: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobGOVFOROfficerLogisticsWYPMC
   roundForce: WYPMC

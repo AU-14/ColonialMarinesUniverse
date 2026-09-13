@@ -1,0 +1,55 @@
+- type: cmuLoadoutItem
+  id: CMUPersonalBallisticGoggles
+  entity: RMCGogglesBallistic
+  price: 40
+  purchaseMode: Deployment
+  jobs:
+  - AU14JobGOVFORSquadRifleman
+  - AU14JobOPFORSquadRifleman
+  - AU14JobCivilianColonyAdministrator
+  category: Eyes
+
+- type: cmuLoadoutItem
+  id: CMUPersonalBlackScarf
+  entity: CMUMaskScarfBlackCosmetic
+  price: 500
+  purchaseMode: Permanent
+  jobs:
+  - AU14JobGOVFORSquadRifleman
+  - AU14JobOPFORSquadRifleman
+  - AU14JobCivilianColonyAdministrator
+  category: Mask
+
+- type: cmuLoadoutItem
+  id: CMUPersonalLargePouch
+  entity: RMCPouchGeneralLarge
+  price: 100
+  purchaseMode: Deployment
+  jobs:
+  - AU14JobGOVFORSquadRifleman
+  - AU14JobOPFORSquadRifleman
+  - AU14JobCivilianColonyAdministrator
+  category: Pouches
+  categoryLimit: 2
+
+- type: cmuLoadoutItem
+  id: CMUPersonalSidearm
+  entity: CMWeaponPistolM1984
+  price: 250
+  purchaseMode: Deployment
+  jobs:
+  - AU14JobGOVFORSquadRifleman
+  - AU14JobOPFORSquadRifleman
+  category: Sidearm
+
+# An actual cosmetic: no protection, skills, storage or other functional benefit.
+- type: entity
+  parent: ClothingMaskBase
+  id: CMUMaskScarfBlackCosmetic
+  name: personal black scarf
+  description: A plain black scarf, purchased for personal use.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/Scarfs/black.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/Scarfs/black.rsi

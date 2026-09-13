@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobSectionSergeantBaseAbstract
@@ -19,6 +21,8 @@
   - AU14GovforCommand
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   abstract: true
   parent: AU14JobSectionSergeantBaseAbstract
   id: AU14JobSectionSergeantBase
@@ -162,6 +166,8 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeant
   # hidden: false # plt. sgt. is disabled
@@ -188,6 +194,8 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobOPFORSectionSergeant
   roundSide: Opfor
@@ -226,6 +234,8 @@
     ears: AU14HeadsetOpforCommand
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantCMBCIU
   roundForce: CMBCIU
@@ -235,6 +245,8 @@
   spawnMenuRoleName: Section Sergeant (CMBCIU)
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantRMC
   roundForce: RMC
@@ -248,6 +260,8 @@
     RMC_Sergeant: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantUPP
   roundForce: UPP
@@ -265,6 +279,8 @@
     UPP_Sergeant: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantWYPMC
   roundForce: WYPMC

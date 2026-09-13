@@ -2,6 +2,7 @@
 # (Construction Editor, Tile Editor, Lathe Editor) without needing the Host admin flag.
 # Grant with: jobwhitelistadd <player> JModEditor
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   id: JModEditor
   name: JMod Editor

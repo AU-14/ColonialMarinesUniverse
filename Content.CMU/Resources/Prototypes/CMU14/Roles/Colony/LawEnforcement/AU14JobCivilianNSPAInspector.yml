@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobLEOLeaderBase
   id: AU14JobCivilianNSPAInspector
   roundSide: Civilian

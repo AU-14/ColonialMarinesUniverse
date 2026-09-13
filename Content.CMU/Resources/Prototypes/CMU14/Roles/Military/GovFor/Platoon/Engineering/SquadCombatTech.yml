@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobSquadCombatTechBaseAbstract
@@ -15,6 +17,8 @@
   - AU14GovforEngineer
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobSquadCombatTechBaseAbstract
   id: AU14JobSquadCombatTechBase
@@ -113,6 +117,8 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTech
   hidden: false
@@ -134,6 +140,8 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobSquadCombatTechBase
   id: AU14JobOPFORSquadCombatTech
   roundSide: Opfor
@@ -172,6 +180,8 @@
     ears: AU14HeadsetOpforMarine
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechRMC
   roundForce: RMC
@@ -189,6 +199,8 @@
     RMC_Marine: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechUPP
   roundForce: UPP
@@ -209,6 +221,8 @@
     UPP_Private: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechWYPMC
   roundForce: WYPMC

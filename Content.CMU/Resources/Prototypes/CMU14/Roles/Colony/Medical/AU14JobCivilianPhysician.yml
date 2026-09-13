@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: CMJobBase
   id: AU14JobCivilianPhysician
   roundSide: Civilian

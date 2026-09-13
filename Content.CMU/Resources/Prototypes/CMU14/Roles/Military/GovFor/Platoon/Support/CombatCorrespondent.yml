@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobGOVFORCombatCorrespondentBaseAbstract
@@ -15,6 +16,7 @@
   hasIcon: false
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobGOVFORCombatCorrespondentBaseAbstract
   id: AU14JobGOVFORCombatCorrespondentBase
@@ -94,6 +96,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobGOVFORCombatCorrespondentBase
   id: AU14JobGOVFORCombatCorrespondent
   hidden: false

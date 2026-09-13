@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobOfficerIntelBaseAbstract
@@ -18,6 +20,8 @@
   - aulegacygroupcommand
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobOfficerIntelBaseAbstract
   id: AU14JobOfficerIntelBase
@@ -89,6 +93,8 @@
 
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerIntelBase
   id: AU14JobGOVFOROfficerIntel
   hidden: false
@@ -96,6 +102,8 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerIntelBase
   id: AU14JobOPFOROfficerIntel
   roundSide: Opfor
@@ -180,6 +188,8 @@
 
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerIntelBase
   id: AU14JobGOVFOROfficerIntelCMBCIU
   roundForce: CMBCIU
@@ -189,6 +199,8 @@
     AU14RankCMBMarshal: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerIntelBase
   id: AU14JobGOVFOROfficerIntelRMC
   roundForce: RMC
@@ -196,6 +208,8 @@
   spawnMenuRoleName: Intelligence Officer (TWE RMC)
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerIntelBase
   id: AU14JobGOVFOROfficerIntelUPP
   roundForce: UPP
@@ -210,6 +224,8 @@
     UPP_SeniorLieutenant: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 115
   parent: AU14JobOfficerIntelBase
   id: AU14JobGOVFOROfficerIntelWYPMC
   roundForce: WYPMC

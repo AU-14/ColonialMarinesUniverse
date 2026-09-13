@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobEngineeringTechBaseAbstract
@@ -13,6 +15,8 @@
   - AU14GovforEngineer
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobEngineeringTechBaseAbstract
   id: AU14JobEngineeringTechBase
@@ -92,6 +96,8 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobEngineeringTechBase
   id: AU14JobGOVFOREngineeringTech
   hidden: false

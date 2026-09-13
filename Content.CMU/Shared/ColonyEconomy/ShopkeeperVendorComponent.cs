@@ -38,10 +38,10 @@ public sealed partial class AU14ShopkeeperVendorComponent : Component
     public List<AU14ShopkeeperListing> Listings = new();
 
     /// <summary>Cash the current customer has inserted but not yet spent.</summary>
-    public float InsertedCash = 0f;
+    public int InsertedCash;
 
     // <summary>Default price applied to inserted items</summary>
-    public float DefaultPrice = 10f;
+    public int DefaultPrice = 10;
 
     public const string StockContainerName = "shopkeeper_stock";
     public const string CashSlotName = "shopkeeper_cash";

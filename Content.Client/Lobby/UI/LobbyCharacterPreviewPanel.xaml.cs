@@ -30,6 +30,11 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
+        // CMU14: access the account and the selected character's paid kit from the lobby.
+        var economy = new Button { Text = Loc.GetString("cmu-economy-title") };
+        economy.OnPressed += _ => IoCManager.Resolve<Robust.Shared.Console.IConsoleHost>().ExecuteCommand("cmubank");
+        VBox.AddChild(economy);
+
         RefreshTheme();
 
         UpdateIgnoreAllegianceText(IgnoreAllegianceButton.Pressed);

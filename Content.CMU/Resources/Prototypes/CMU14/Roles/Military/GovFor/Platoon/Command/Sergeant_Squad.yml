@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobSquadSergeantBaseAbstract # Squad Leader Abstraction
@@ -18,6 +20,8 @@
   - AU14GovforFTL
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   abstract: true
   parent: AU14JobSquadSergeantBaseAbstract
   id: AU14JobSquadSergeantBase # Squad Leader Base
@@ -120,6 +124,8 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase # parent does the heavy lifting
   id: AU14JobGOVFORSquadSergeant # Default Squad Leader
   hidden: false
@@ -147,6 +153,8 @@
   - WeaponsRMC
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobOPFORSquadSergeant
   roundSide: Opfor
@@ -185,6 +193,8 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantCMBCIU
   roundForce: CMBCIU
@@ -195,6 +205,8 @@
     AU14RankCMBSrDeputy: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantRMC
   roundForce: RMC
@@ -203,6 +215,8 @@
   overwatchRoleName: Team Leader
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantUPP
   roundForce: UPP
@@ -213,6 +227,8 @@
     UPP_Plutonowy: []
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantWYPMC
   roundForce: WYPMC

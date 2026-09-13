@@ -98,7 +98,10 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         // Cash slot - add to customer's inserted cash total
         if (args.Container.ID == AU14ShopkeeperVendorComponent.CashSlotName)
         {
-            var count = TryComp<StackComponent>(args.Entity, out var stack) ? stack.Count : 1;
+            if (!TryComp<StackComponent>(args.Entity, out var stack) || stack.StackTypeId != "Dollar" ||
+                stack.Unlimited || stack.Count <= 0 || comp.InsertedCash > int.MaxValue - stack.Count)
+                return;
+            var count = stack.Count;
             comp.InsertedCash += count;
             QueueDel(args.Entity);
             UpdateShopUi(uid, comp);
@@ -129,6 +132,8 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         var listing = comp.Listings[msg.Index];
         var tax = _adminConsole.GetSalesTax();
         var effectivePrice = (int)Math.Ceiling(listing.Price * (1f + tax));
+        if (listing.Price < 1 || effectivePrice < listing.Price)
+            return;
         if (comp.InsertedCash < effectivePrice)
             return;
         var itemEntity = GetEntity(listing.ItemNet);
@@ -147,8 +152,17 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         if (listing.SellerIdCard is { } sellerIdCard &&
             TryComp<IdCardComponent>(sellerIdCard, out var idCard))
         {
-            idCard.AccountBalance += listing.Price;
-            Dirty(sellerIdCard, idCard);
+            if (EntityManager.System<Content.Server.CMU14.PersistentEconomy.CMUPersistentEconomySystem>().Enabled)
+            {
+                // Cash sales remain cash: crediting a bank here would bypass settlement limits.
+                if (listing.Price > 0)
+                    _stack.SpawnMultipleNextToOrDrop(CashPrototype, listing.Price, sellerIdCard);
+            }
+            else
+            {
+                idCard.AccountBalance += listing.Price;
+                Dirty(sellerIdCard, idCard);
+            }
         }
 
         // Remove from stock container and place at vendor's location
@@ -198,7 +212,9 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
 
     private void OnEditDefaultPrice(EntityUid uid, AU14ShopkeeperVendorComponent comp, AU14ShopkeeperEditDefaultPriceBuiMsg msg)
     {
-        comp.DefaultPrice = msg.Index;
+        if (!_accessReader.IsAllowed(msg.Actor, uid))
+            return;
+        comp.DefaultPrice = Math.Clamp(msg.Index, 1, 100_000);
         UpdateShopUi(uid, comp);
     }
     // -- UI helpers -----------------------------------------------------------

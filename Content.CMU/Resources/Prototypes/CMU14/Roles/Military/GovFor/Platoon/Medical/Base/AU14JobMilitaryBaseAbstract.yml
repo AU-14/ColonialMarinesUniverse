@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobMilitaryBaseAbstract

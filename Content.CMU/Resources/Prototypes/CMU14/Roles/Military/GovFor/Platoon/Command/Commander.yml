@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobPlatCoBaseAbstract
@@ -21,6 +22,7 @@
   - aulegacygroupcommand # NOTE: should remove & hard migrate
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobPlatCoBaseAbstract
   id: AU14JobPlatCoBase
@@ -100,6 +102,7 @@
 
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCo
   hidden: false
@@ -107,6 +110,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatCoBase
   id: AU14JobOPFORPlatCo
   roundSide: Opfor
@@ -198,6 +202,7 @@
 
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoCMBCIU
   roundForce: CMBCIU
@@ -207,6 +212,7 @@
     AU14RankCMBMarshal: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoRMC
   roundForce: RMC
@@ -215,6 +221,7 @@
   spawnMenuRoleName: Platoon Commander (TWE RMC)
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoUPP
   roundForce: UPP
@@ -233,6 +240,7 @@
     UPP_Lieutenant: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoWYPMC
   roundForce: WYPMC

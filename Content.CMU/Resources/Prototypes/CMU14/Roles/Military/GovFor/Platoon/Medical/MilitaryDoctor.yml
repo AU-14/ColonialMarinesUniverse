@@ -1,4 +1,6 @@
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobMilitaryBaseAbstract
   id: AU14JobMilitaryDoctorBase
@@ -70,6 +72,8 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobMilitaryDoctorBase
   id: AU14JobGOVFORMilitaryDoctor
   hidden: false
@@ -93,6 +97,8 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
+  cmuSalaryPercent: 105
   parent: AU14JobMilitaryDoctorBase
   id: AU14JobOPFORMilitaryDoctor
   roundSide: Opfor
