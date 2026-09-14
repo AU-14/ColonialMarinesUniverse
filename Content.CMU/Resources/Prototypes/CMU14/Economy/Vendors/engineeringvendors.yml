@@ -75,9 +75,9 @@
         amount: 4
       - id: CMUCanisterAir
         amount: 2
-      - id: SpaceHeater
+      - id: RMCSpaceHeater
         amount: 2
-      - id: PortableScrubber
+      - id: RMCAirScrubberPortable
         amount: 2
       - id: RMCGasTankOxygenFilled
         amount: 4

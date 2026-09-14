@@ -234,8 +234,8 @@
       - id: CMSheetMetal50
         name: metal sheets x50
       - id: CMUCanisterAir
-      - id: PortableScrubber
-      - id: SpaceHeater
+      - id: RMCAirScrubberPortable
+      - id: RMCSpaceHeater
     - name: Miscellaneous
       takeAll: CMUEngineeringMisc
       entries:

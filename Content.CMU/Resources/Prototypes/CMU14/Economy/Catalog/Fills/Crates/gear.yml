@@ -200,7 +200,7 @@
     contents:
     - id: CMUAtmosScanner
       amount: 2
-    - id: PortableScrubber
+    - id: RMCAirScrubberPortable
       amount: 1
     - id: RMCSpaceHeater
       amount: 1

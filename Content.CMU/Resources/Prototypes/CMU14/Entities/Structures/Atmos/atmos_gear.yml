@@ -201,6 +201,110 @@
           Heating: { state: radiator-r }
           Cooling: { state: radiator-r }
 
+# NOTE: Temporary workaround to spacing
+- type: entity
+  parent: AtmosDeviceFanTiny
+  id: RMCTinyFan
+  name: '"Zephyr" TF-2 tiny fan'
+  description: A low fan that holds a room's air in while letting people walk through it. Field crews call it the Zephyr. The breeze is decorative, the seal is not.
+  components:
+  - type: Construction
+    graph: RMCTinyFanGraph
+    node: built
+
+# NOTE: Temporary workaround to spacing
+- type: entity
+  parent: AtmosDeviceFanDirectional
+  id: RMCDirectionalFan
+  name: '"Doorstop" DF-1 directional fan'
+  description: A slim fan that seals one side of a doorway while leaving the lane open for foot traffic. Field crews call it the Doorstop; point it at the draft and it minds the gap all shift.
+  components:
+  - type: Construction
+    graph: RMCDirectionalFanGraph
+    node: built
+
+- type: constructionGraph
+  id: RMCTinyFanGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2
+  - node: built
+    entity: RMCTinyFan
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: constructionGraph
+  id: RMCDirectionalFanGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2
+  - node: built
+    entity: RMCDirectionalFan
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: construction
+  id: RMCTinyFanRecipe
+  name: tiny fan
+  description: A walk-through plug for leaking doorways and hull breaches.
+  graph: RMCTinyFanGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-atmospherics
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: RMCDirectionalFanRecipe
+  name: directional fan
+  description: Seals one side of a gap against gases while leaving the other open.
+  graph: RMCDirectionalFanGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-atmospherics
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  isCM: true
+  conditions:
+  - !type:TileNotBlocked
+
 - type: entity
   parent: [RMCAllowSuitStorageClothingChefApron, ClothingOuterBase]
   id: CMUSuitFirefighter

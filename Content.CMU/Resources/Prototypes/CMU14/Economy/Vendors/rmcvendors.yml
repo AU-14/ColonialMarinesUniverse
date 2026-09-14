@@ -583,6 +583,9 @@
       entries:
       - id: AU14HeadHelmetRMCAircrew
       - id: AU14HeadHelmetRMCAircrewAlt
+      - id: AU14USASFAirCrewHelmet
+      - id: AU14JungleM50Helmet
+      - id: AU14CamoM50Helmet
     - name: Flight Visor
       choices: { CMUPlatoonAirCrewFlightVisor: 1 }
       entries:
@@ -599,6 +602,10 @@
       - id: RMCVisorPilotPurple
       - id: RMCVisorPilotRed
       - id: RMCVisorPilotYellow
+    - name: Flight Mask
+      choices: { CMUPlatoonAirCrewFlightMask: 1 }
+      entries:
+      - id: AU14MaskUSASFPilotOxygen
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }
       entries:

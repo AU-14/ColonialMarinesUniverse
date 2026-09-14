@@ -60,7 +60,7 @@
       - cost: 100
         crate: CMUAtmosScanner
       - cost: 400
-        crate: PortableScrubber
+        crate: RMCAirScrubberPortable
       - cost: 300
         crate: RMCSpaceHeater
       - cost: 150
