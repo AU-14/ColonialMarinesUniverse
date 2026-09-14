@@ -1230,13 +1230,11 @@ public sealed partial class DropshipTacticalLandSystem
         foreach (var rotatedCenter in GetRotatedGunshipFootprintCenters(dropship, targetRotation, boundaryOnly))
         {
             var sample = targetPosition + rotatedCenter;
-            if (!_map.TryGetTileRef(targetMap, targetGrid, sample, out var targetTile))
-                return false;
+            // Flight needs clearance, not a supporting floor, including outside mapped chunks.
+            var targetTile = _map.GetTileRef(targetMap, targetGrid,
+                new MapCoordinates(sample, Transform(targetMap).MapID));
 
             var opening = CMUZLevelOpeningCache.IsOpeningTile(targetTile.Tile, _tile);
-            if (targetTile.Tile.IsEmpty && !opening)
-                return false;
-
             var tileBlocked = !opening &&
                 _turf.IsTileBlocked(targetTile, blockMask, DropshipMinimumBlockingArea);
             var foundPhysicalBlocker = false;
