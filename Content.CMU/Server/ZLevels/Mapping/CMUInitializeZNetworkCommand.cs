@@ -14,7 +14,7 @@ public sealed partial class CMUInitializeZNetworkCommand : LocalizedEntityComman
     [Dependency] private MapSystem _map = default!;
 
     public override string Command => "znetwork-initialize";
-    public override string Description => "Initialize all zNetwork maps. Warning! This will not add all components, that writed in gamemap prototype! So i think this command is useless, because all maps dont have lightning or even atmos :(";
+    public override string Description => "MapInit and unpause all zNetwork maps so they simulate. Initialized maps can no longer be saved with znetwork-save.";
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {

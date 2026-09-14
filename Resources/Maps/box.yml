@@ -10358,6 +10358,9 @@ entities:
       parent: 8364
       rot: 3.141592653589793 rad
       pos: -13.5,-58.5
+    - type: Apc
+      # Telecoms room draws ~20.5 kW against the 20 kW default; the APC would trip in play.
+      maxLoad: 25000
   - uid: 17070
     components:
     - type: MetaData

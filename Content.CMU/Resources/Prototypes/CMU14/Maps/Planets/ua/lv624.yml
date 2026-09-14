@@ -91,7 +91,7 @@
 - type: gameMap
   id: LV624
   mapName: LV-624
-  mapPath: /Maps/CMU14/LV624.yml
+  mapPath: /Maps/CMU14/Legacy/LV624.yml
   minPlayers: 0
   maxPlayers: 65
   maxRandomOffset: 0
@@ -138,6 +138,7 @@
 
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianEngineer: [4, 4]
+            CMUJobCivilianAtmosian: [1, 2]
 
             # Medical
             AU14JobCivilianHeadPhysician: [1, 1]

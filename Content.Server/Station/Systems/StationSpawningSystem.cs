@@ -102,7 +102,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         "CMO",
         "ChiefMP",
         "LogisticsOfficer",
-        "EngineeringOfficer"
+        "EngineeringOfficer",
+        "AdjutantDress",
+        "BrigadierGeneral",
+        "VipEscort"
     };
 
     private static readonly HashSet<string> AuxiliarySquadRoundRoles = new(StringComparer.OrdinalIgnoreCase)

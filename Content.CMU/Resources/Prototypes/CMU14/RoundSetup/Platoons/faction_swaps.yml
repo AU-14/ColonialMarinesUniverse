@@ -1,0 +1,61 @@
+# Govfor-built entities swapped to their Opfor variants when a ship grid flies Opfor
+- type: factionSwapSet
+  id: OpforShipSwaps
+  swaps:
+    ANPRC117GRadio: ANPRC117GRadioOPFOR
+    AU14TabletGovfor: AU14TabletOpfor
+    fetchreturngovfor: fetchreturnopfor
+# ├──[ Doors ]──────────────────────────────────────────┤
+    CMAirlockCommandGovforGlassLocked: CMAirlockCommandOpforGlassLocked
+    CMAirlockCommandGovforLocked: CMAirlockCommandOpforLocked
+    CMAirlockEngineerGovforGlassLocked: CMAirlockEngineerOpforGlassLocked
+    CMAirlockEngineerGovforLocked: CMAirlockEngineerOpforLocked
+    CMAirlockGovforGlassLocked: CMAirlockOpforGlassLocked
+    CMAirlockGovforGlassLockedFTL: CMAirlockOpforGlassLockedFTL
+    CMAirlockGovforLocked: CMAirlockOpforLocked
+    CMAirlockGovforLockedFTL: CMAirlockOpforLockedFTL
+    CMAirlockLogisticsGovforGlassLocked: CMAirlockLogisticsOpforGlassLocked
+    CMAirlockLogisticsGovforLocked: CMAirlockLogisticsOpforLocked
+    CMAirlockMedicalGovforGlassLocked: CMAirlockMedicalOpforGlassLocked
+    CMAirlockMedicalGovforLocked: CMAirlockMedicalOpforLocked
+    CMAirlockSecurityGovforGlassLocked: CMAirlockSecurityOpforGlassLocked
+    CMAirlockSecurityGovforLocked: CMAirlockSecurityOpforLocked
+    CMDoubleDoorCommandGovforGlassLocked: CMDoubleDoorCommandOpforGlassLocked
+    CMDoubleDoorCommandGovforLocked: CMDoubleDoorCommandOpforLocked
+    CMDoubleDoorEngineerGovforGlassLocked: CMDoubleDoorEngineerOpforGlassLocked
+    CMDoubleDoorEngineerGovforLocked: CMDoubleDoorEngineerOpforLocked
+    CMDoubleDoorGovforGlassLocked: CMDoubleDoorOpforGlassLocked
+    CMDoubleDoorGovforLocked: CMDoubleDoorOpforLocked
+    CMDoubleDoorLogisticsGovforGlassLocked: CMDoubleDoorLogisticsOpforGlassLocked
+    CMDoubleDoorLogisticsGovforLocked: CMDoubleDoorLogisticsOpforLocked
+    CMDoubleDoorMedicalGovforGlassLocked: CMDoubleDoorMedicalOpforGlassLocked
+    CMDoubleDoorMedicalGovforLocked: CMDoubleDoorMedicalOpforLocked
+    CMDoubleDoorSecurityGovforGlassLocked: CMDoubleDoorSecurityOpforGlassLocked
+    CMDoubleDoorSecurityGovforLocked: CMDoubleDoorSecurityOpforLocked
+    CMCargoElevatorGovfor: CMCargoElevatorOpfor
+# ├──[ Consoles / Machines ]─────────────────────────────────────────┤
+    AU14ItemLaptopCallsignGOVFOR: AU14ItemLaptopCallsignOPFOR
+    AU14ItemLaptopOverwatchGOVFOR: AU14ItemLaptopOverwatchOPFOR
+    CMASRSConsoleGovfor: CMASRSConsoleOpfor
+    CMUGovforRosterConsole: CMUOpforRosterConsole
+    CMUTacticalMapTableGovfor: CMUTacticalMapTableOpfor
+    CMUTacticalMapTableLargeGovfor: CMUTacticalMapTableLargeOpfor
+    CMUTacticalMapTableLargeRotatedGovfor: CMUTacticalMapTableLargeRotatedOpfor
+    CMUTacticalMapTableLargeSquareGovfor: CMUTacticalMapTableLargeSquareOpfor
+    CMUXRFScannerGovfor: CMUXRFScannerOpfor
+    ComputerObjectivesGovfor: ComputerObjectivesOpfor
+    RMCComputerIntelGovfor: RMCComputerIntelOpfor
+#   RMCGroundsideOperationsConsole: RMCGroundsideOperationsConsoleOpfor
+    RMCGroundsideOperationsConsoleGovfor: RMCGroundsideOperationsConsoleOpfor
+    RMCOverwatchConsoleGovforRotating: RMCOverwatchConsoleOpforRotating
+    RMCOverwatchConsoleGovfor: RMCOverwatchConsoleOpfor
+    RMCTechTreeConsoleGovfor: RMCTechTreeConsoleOpfor
+    AU14AllianceConsoleGovfor: AU14AllianceConsoleOpfor
+    AU14AnalyzerMachine: AU14AnalyzerMachineOpfor
+    AU14WithdrawConsoleGovFor: AU14WithdrawConsoleOpFor
+# ├──[ Structures ]──────────────────────────────────────────────────┤
+    AU14AICoreApolloGOVFOR: AU14AICoreApolloOPFOR
+    AU14CommunicationsTowerGovfor: AU14CommunicationsTowerOpfor
+    AU14CommsArrayShipGovfor: AU14CommsArrayShipOpfor
+    AU14CommsMastGovfor: AU14CommsMastOpfor
+    AU14OrbitalCannonGovfor: AU14OrbitalCannonOpfor

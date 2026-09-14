@@ -98,10 +98,10 @@
     - RMCGogglesBallisticPolarizedOrange
     back:
     - RMCRadioHandheldColony
-    - RMCMagazineRifleM54CHEAPEmpty
-    - RMCMagazineRifleM54CHEAPEmpty
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
     - RMCFlashlight
     pocket2:
     - CMMagazineRifleM54C
-    - RMCMagazineRifleM54CHEAPEmpty
-    - RMCMagazineRifleM54CHEAPEmpty
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C

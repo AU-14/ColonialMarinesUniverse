@@ -102,7 +102,6 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         SubscribeLocalEvent<ColonyAtmComponent, EntInsertedIntoContainerMessage>(OnMoneyInserted);
 
         SubscribeLocalEvent<RequisitionsComputerComponent, MapInitEvent>(OnComputerMapInit);
-        SubscribeLocalEvent<RequisitionsComputerComponent, ComponentStartup>(OnComputerStartup);
         SubscribeLocalEvent<RequisitionsComputerComponent, ComponentShutdown>(OnComputerShutdown);
         SubscribeLocalEvent<RequisitionsComputerComponent, BeforeActivatableUIOpenEvent>(OnComputerBeforeActivatableUIOpen);
 
@@ -116,12 +115,6 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         Subs.CVar(_config, RMCCVars.RMCRequisitionsBalanceGain, v => _gain = v, true);
         Subs.CVar(_config, RMCCVars.RMCRequisitionsFreeCratesXenoDivider, v => _freeCratesXenoDivider = v, true);
         Subs.CVar(_config, AU14CCVars.SellCargoRewards, v => _sellCargoRewards = v, true);
-    }
-
-    private void OnComputerStartup(EntityUid uid, RequisitionsComputerComponent comp, ComponentStartup args)
-    {
-        ApplyPlatoonCatalogToComputer(uid, comp);
-        ResetStock((uid, comp));
     }
 
     private void OnComputerMapInit(EntityUid uid, RequisitionsComputerComponent comp, MapInitEvent args)
@@ -558,12 +551,16 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
             var query = EntityQueryEnumerator<RequisitionsCustomDeliveryComponent>();
 
-            while (query.MoveNext(out var entityUid, out _))
+            while (query.MoveNext(out var entityUid, out var deliveryComp)) // CMU14
             {
                 // If elevator is full, abort and break out of the loop. Any remaining custom deliveries will be on
                 // the next elevator shipment.
                 if (remainingDeliveries <= 0)
                     break;
+
+                if (!string.IsNullOrEmpty(deliveryComp.Faction) // CMU14
+                    && !deliveryComp.Faction.Equals(comp.Faction, StringComparison.OrdinalIgnoreCase))
+                    continue;
 
                 // Remove the component so it doesn't get "delivered" again next elevator cycle.
                 RemCompDeferred<RequisitionsCustomDeliveryComponent>(entityUid);

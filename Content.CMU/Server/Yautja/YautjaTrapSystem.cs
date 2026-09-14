@@ -115,17 +115,11 @@ public sealed partial class YautjaTrapSystem : EntitySystem
         SubscribeLocalEvent<YautjaTrapComponent, StepTriggerAttemptEvent>(OnStepTriggerAttempt);
         SubscribeLocalEvent<YautjaTrapComponent, StepTriggeredOnEvent>(OnStepTriggeredOn);
         SubscribeLocalEvent<YautjaTrapComponent, ComponentShutdown>(OnTrapShutdown);
-        SubscribeLocalEvent<YautjaTrapComponent, ComponentStartup>(OnComponentStartup);
         SubscribeLocalEvent<RMCTetherComponent, XenoHealAttemptEvent>(OnTetheredXenoHealAttempt);
         SubscribeLocalEvent<RMCTetherComponent, MoveEvent>(OnTetheredMove);
         SubscribeLocalEvent<RMCTetherComponent, YautjaTrapBreakFreeAlertEvent>(OnBreakFreeAlert);
         SubscribeLocalEvent<RMCTetherComponent, YautjaTrapBreakFreeDoAfterEvent>(OnBreakFreeDoAfter);
         SubscribeLocalEvent<RMCTetherComponent, ComponentShutdown>(OnTetherShutdown);
-    }
-
-    private void OnComponentStartup(Entity<YautjaTrapComponent> trap, ref ComponentStartup args)
-    {
-        UpdateTrapVisibility(trap);
     }
 
     public override void Update(float frameTime)

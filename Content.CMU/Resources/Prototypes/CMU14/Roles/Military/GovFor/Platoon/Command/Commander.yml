@@ -5,7 +5,7 @@
   name: au14-job-name-govforplatco
   description: au14-job-description-govforplatco
   icon: "AU14JobIconPlatCo"
-  spawnMenuRoleName: Platoon Commander (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-platoon-commander
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFORPlatCo
   dummyStartingGear: AU14GearGOVFORPlatCoDummy

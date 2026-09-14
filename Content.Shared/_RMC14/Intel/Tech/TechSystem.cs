@@ -86,7 +86,7 @@ public sealed partial class TechSystem : EntitySystem
 
     private void OnTechLogisticsDelivery(TechLogisticsDeliveryEvent ev)
     {
-        _requisitions.CreateSpecialDelivery(ev.Object);
+        _requisitions.CreateSpecialDelivery(ev.Object, ev.Team); // CMU14
     }
 
     private void OnControlConsoleBeforeOpen(Entity<TechControlConsoleComponent> ent, ref BeforeActivatableUIOpenEvent args)

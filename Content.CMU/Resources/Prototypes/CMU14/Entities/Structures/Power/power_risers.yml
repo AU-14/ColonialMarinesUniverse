@@ -1,0 +1,82 @@
+# HV Grid risers (tile power).
+# Screwdriver toggles Role (Source/Sink).
+# Crowbar toggles Direction (Up/Down).
+# Multitool opens the service panel; with the panel open, crowbar deconstructs.
+- type: entity
+  parent: [BaseMachinePowered, ConstructibleMachine]
+  id: CMUPowerRiserDown
+  name: PR2-DE Power Riser, Down
+  suffix: CMU, MultiZ
+  description: "Static Direction: Looks at deck below. Crowbar flips direction. Screwdriver toggles role. Multitool opens the panel; pry to deconstruct."
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 50
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 50
+    channel: Environment
+  - type: CMUPowerRiser
+    source: true
+  - type: WiresPanel
+    openingTool: Pulsing
+    examineTextClosed: cmu-zlevel-panel-closed
+    examineTextOpen: cmu-zlevel-panel-open
+  - type: Machine
+    board: CMUPowerRiserMachineCircuitboard
+  - type: CMUZPaired
+    offset: -1
+    pairKind: power
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: PowerSupplier
+    supplyRate: 30000
+    enabled: false
+  - type: Sprite
+    sprite: Structures/Power/substation.rsi
+    layers:
+    - state: substation
+
+- type: entity
+  parent: [BaseMachinePowered, ConstructibleMachine]
+  id: CMUPowerRiserUp
+  name: PR2-UE Power Riser, Up
+  suffix: CMU, MultiZ
+  description: "Static Direction: Looks at deck above. Crowbar flips direction. Screwdriver toggles role. Multitool opens the panel; pry to deconstruct."
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 50
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 50
+    channel: Environment
+  - type: CMUPowerRiser
+  - type: WiresPanel
+    openingTool: Pulsing
+    examineTextClosed: cmu-zlevel-panel-closed
+    examineTextOpen: cmu-zlevel-panel-open
+  - type: Machine
+    board: CMUPowerRiserMachineCircuitboard
+  - type: CMUZPaired
+    offset: 1
+    pairKind: power
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: PowerSupplier
+    supplyRate: 30000
+    enabled: false
+  - type: Sprite
+    sprite: Structures/Power/substation.rsi
+    layers:
+    - state: substation_static

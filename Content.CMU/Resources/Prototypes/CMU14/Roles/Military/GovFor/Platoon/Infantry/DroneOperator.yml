@@ -29,6 +29,12 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: rifleman
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: rifleman
 
   requirements:
   - !type:TraitsRequirement
@@ -133,3 +139,54 @@
   id: CMUCombatDroneOperatorPackLoadout
   equipment:
     back: CMUDroneOperatorChoicePackFilled
+
+- type: job
+  parent: CMUJobDroneOperatorBase
+  id: CMUJobOPFORDroneOperator
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORRifleman"
+  spawnMenuRoleName: Drone Operator (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: CMUGearOPFORDroneOperator
+  dummyStartingGear: CMUGearOPFORDroneOperatorDummy
+  accessGroups:
+  - AU14OpforSquad
+  ignoreAllegiance: true
+
+- type: startingGear
+  id: CMUGearOPFORDroneOperator
+  equipment:
+    id: CMUIDCardOPFORDroneOperator
+    ears: AU14HeadsetOpforMarine
+
+- type: startingGear
+  id: CMUGearOPFORDroneOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+    back: CMUDroneOperatorChoicePackFilled
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardOPFORDroneOperator
+  name: drone operator ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobOPFORDroneOperator
+  - type: ItemIFF
+    factions:
+    - OPFOR
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointOPFORDroneOperator
+  name: Spawn Point OPFOR Drone Operator
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobOPFORDroneOperator
+  - type: Sprite
+    state: syn_spawn

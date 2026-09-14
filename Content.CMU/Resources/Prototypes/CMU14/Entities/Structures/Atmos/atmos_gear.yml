@@ -1,0 +1,296 @@
+- type: entity
+  parent: PortableScrubber
+  id: RMCAirScrubberPortable
+  name: '"Maid" SC-3 portable air scrubber'
+  description: A boxy scrubber that inhales a room's problems and traps them inside. Field crews call it the Maid; leave it in a room, come back to breathable air.
+  components:
+  - type: Transform
+    noRot: false # maps rotate it, inherited noRot aborts map loads
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    noRot: true
+    layers:
+    - state: pscrubber_0
+      map: [ "enum.PortableScrubberVisualLayers.IsRunning" ]
+  - type: PortableScrubberVisuals
+    idleState: pscrubber_0
+    runningState: pscrubber_1
+    readyState: pscrubber_0
+    fullState: pscrubber_0
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: RMCAirScrubberPortable
+  id: RMCAirScrubberStationary
+  name: '"Maid" SC-3S stationary air scrubber'
+  description: The bolted-down model of the Maid line. Same appetite as the portable, none of the wandering.
+  components:
+  - type: Transform
+    noRot: false
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    noRot: true
+    layers:
+    - state: scrubber_0
+      map: [ "enum.PortableScrubberVisualLayers.IsRunning" ]
+  - type: PortableScrubberVisuals
+    idleState: scrubber_0
+    runningState: scrubber_1
+    readyState: scrubber_0
+    fullState: scrubber_0
+
+- type: entity
+  parent: RMCAirScrubberPortable
+  id: RMCAirPumpPortable
+  name: '"Straw" AP-4 portable air pump'
+  description: Siphons a room's air out and bottles it in its tank. Field crews call it the Straw, usually while standing in the room it is draining.
+  components:
+  - type: Transform
+    noRot: false
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    noRot: true
+    layers:
+    - state: psiphon_0
+      map: [ "enum.PortableScrubberVisualLayers.IsRunning" ]
+  - type: PortableScrubberVisuals
+    idleState: psiphon_0
+    runningState: psiphon_1
+    readyState: psiphon_0
+    fullState: psiphon_0
+  - type: AmbientSound
+    enabled: false
+    volume: -5
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/gas_pump.ogg
+
+- type: entity
+  parent: RMCAirPumpPortable
+  id: RMCAirPumpStationary
+  name: '"Straw" AP-4S stationary air pump'
+  description: The stationary model. Large, securely attached, and every bit as thirsty as the portable.
+  components:
+  - type: Transform
+    noRot: false
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    noRot: true
+    layers:
+    - state: siphon_0
+      map: [ "enum.PortableScrubberVisualLayers.IsRunning" ]
+  - type: PortableScrubberVisuals
+    idleState: siphon_0
+    runningState: siphon_1
+    readyState: siphon_0
+    fullState: siphon_0
+
+- type: entity
+  parent: SpaceHeater
+  id: RMCSpaceHeater
+  name: '"Toaster" SH-6 space heater'
+  description: An electric space heater that warms the room by radiation. Two settings, off and on; the manual spends a full page on the difference.
+  components:
+  - type: Transform
+    noRot: false
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    noRot: true
+    layers:
+    - state: sheater0
+      map: [ "enum.SpaceHeaterVisualLayers.Main" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.SpaceHeaterVisuals.State:
+        enum.SpaceHeaterVisualLayers.Main:
+          Off: { state: sheater0 }
+          StandBy: { state: sheater1 }
+          Heating: { state: sheater1 }
+          Cooling: { state: sheater1 }
+  - type: PointLight
+    enabled: false
+    castShadows: false
+    radius: 1.5
+    color: orange
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: SpaceHeater
+  id: RMCRadiator
+  name: '"Kettle" RD-2 radiator'
+  description: A hot-water radiator. Heats the room by convection and announces every cycle with a clank audible three decks away.
+  components:
+  - type: Transform
+    noRot: false
+  - type: Physics
+    bodyType: static
+    canCollide: false
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    noRot: true
+    layers:
+    - state: radiator
+      map: [ "enum.SpaceHeaterVisualLayers.Main" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.SpaceHeaterVisuals.State:
+        enum.SpaceHeaterVisualLayers.Main:
+          Off: { state: radiator }
+          StandBy: { state: radiator }
+          Heating: { state: radiator }
+          Cooling: { state: radiator }
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Corrodible
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: RMCRadiator
+  id: RMCRadiatorRed
+  name: '"Kettle" RD-2R radiator'
+  description: A hot-water radiator like any other, except the handle is red. Nobody at the depot remembers what the red handle does.
+  components:
+  - type: Transform
+    noRot: false
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    noRot: true
+    layers:
+    - state: radiator-r
+      map: [ "enum.SpaceHeaterVisualLayers.Main" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.SpaceHeaterVisuals.State:
+        enum.SpaceHeaterVisualLayers.Main:
+          Off: { state: radiator-r }
+          StandBy: { state: radiator-r }
+          Heating: { state: radiator-r }
+          Cooling: { state: radiator-r }
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingChefApron, ClothingOuterBase]
+  id: CMUSuitFirefighter
+  name: '"Salamander" F-2 firesuit'
+  description: A canvas firesuit rated against fire and heat. Named after the salamander, which also does not sweat.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/firesuit.rsi
+  - type: Item
+    size: Large
+  - type: RMCArmorSpeedTier
+    speedTier: heavy
+  - type: ClothingSpeedModifier
+    walkModifier: 0.62
+    sprintModifier: 0.62
+  - type: TemperatureProtection
+    heatingCoefficient: 0.001
+    coolingCoefficient: 0.3
+  - type: RMCImmuneToIgnition
+    immuneToDirectHits: false
+  - type: AllowSuitStorage
+    whitelist:
+      components:
+      - GasTank
+      tags:
+      - Knife
+      - Pen
+      - Crowbar
+      - Radio
+      - DiscreteHealthAnalyzer
+      - Flashlight
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: CMUArmorFirefighter
+  name: '"PyroTex" PT-LT firesuit'
+  description: The 'PyroTex LT', Fujin's advanced lightweight firesuit. Protects against fire, heat, and a degree of blunt force trauma, in descending order of confidence.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/firefighter.rsi
+  - type: CMArmor
+    melee: 30
+    bio: 15
+    bullet: 10
+    explosionArmor: 10
+  - type: CMHardArmor
+  - type: RMCArmorSpeedTier
+    speedTier: heavy
+  - type: ClothingSpeedModifier
+    walkModifier: 0.62
+    sprintModifier: 0.62
+  - type: TemperatureProtection
+    heatingCoefficient: 0.001
+    coolingCoefficient: 0.3
+  - type: RMCImmuneToIgnition
+    immuneToDirectHits: false
+  - type: AllowSuitStorage
+    whitelist:
+      components:
+      - Gun
+      - BallisticAmmoProvider
+      - GasTank
+      tags:
+      - Stunbaton
+      - Handcuffs
+      - Flashlight
+      - RMCMacheteScabbard
+      - Binoculars
+      - RMCGeneralPistolHolster
+      - RMCGeneralRevolverHolster
+      - RMCFoldingBarricade
+
+- type: entity
+  parent: CMUArmorFirefighter
+  id: CMUArmorFirefighterUPP
+  name: T-20 fire response coat
+  description: A rugged, no-frills fire-resistant overcoat for UPP industrial and emergency crews, built on the PyroTex LT pattern with cheaper domestically produced materials. The heat protection survived the substitution; the comfort did not.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/firefighter.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/firefighter.rsi
+
+- type: entity
+  parent: RMCSuitEVABase
+  id: CMUSuitEVA
+  components:
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True

@@ -13,7 +13,7 @@
   - /Maps/CMU14/Shuttles/alamo.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-    - /Maps/CMU14/ShuttlesDropships/ud_6.yml
+    - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: CMUIntelTechTree_GOVFOR # CMUIntelTechTree_UA (TODO)
@@ -948,8 +948,8 @@
   possibleships:
       - USSBushRedux
   compatibleFighters:
-  - /Maps/CMU14/ShuttlesDropships/f84owl.yml
-  - /Maps/CMU14/ShuttlesDropships/ud_6.yml
+  - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
+  - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -1156,7 +1156,7 @@
   - /Maps/CMU14/Shuttles/alamo.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-    - /Maps/CMU14/ShuttlesDropships/cmbsquadcar.yml
+    - /Maps/CMU14/Vehicles/Dropships/cmbsquadcar.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -1175,8 +1175,8 @@
   - /Maps/CMU14/Shuttles/osprey.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-  - /Maps/CMU14/ShuttlesDropships/f84owl.yml
-  - /Maps/CMU14/ShuttlesDropships/ud_6.yml
+  - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
+  - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
@@ -1443,8 +1443,8 @@
   - /Maps/CMU14/Shuttles/alamo.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-    - /Maps/CMU14/ShuttlesDropships/f84owl.yml
-    - /Maps/CMU14/ShuttlesDropships/ud_6.yml
+    - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
+    - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: CMUIntelTechTree_GOVFOR
@@ -1615,8 +1615,8 @@
   - /Maps/CMU14/Shuttles/alamo.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters:
-    - /Maps/CMU14/ShuttlesDropships/f84owl.yml
-    - /Maps/CMU14/ShuttlesDropships/ud_6.yml
+    - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
+    - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: CMUIntelTechTree_GOVFOR
@@ -1926,8 +1926,8 @@
   - /Maps/CMU14/Shuttles/alamo.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   compatibleFighters: #TODO: RMC Fighters
-    - /Maps/CMU14/ShuttlesDropships/f84owl.yml
-    - /Maps/CMU14/ShuttlesDropships/ud_6.yml
+    - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
+    - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
   possibleships: #TODO: RMC Ship
       - USSBushRedux
   techTree: CMUIntelTechTree_GOVFOR

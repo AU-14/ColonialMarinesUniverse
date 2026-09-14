@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Doors;
+using Content.Shared.CMU14.Threats.Mobs.Ape; // CMU14
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Xenonids;
@@ -264,9 +265,9 @@ public sealed partial class CMDoorSystem : EntitySystem
                 args.Cancelled = true;
         }
 
-        // Xenos can pry powered airlocks
-        if (HasComp<XenoComponent>(args.User) && HasComp<AirlockComponent>(ent))
-            return;
+       if (TryComp<PryingComponent>(args.User, out var pryComp) && pryComp.PryPowered
+           && HasComp<AirlockComponent>(ent))
+           return;
 
         if (_rmcPower.IsPowered(ent))
             args.Cancelled = true;

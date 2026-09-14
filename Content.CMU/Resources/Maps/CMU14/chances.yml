@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 08:50:22
-  entityCount: 24655
+  entityCount: 24656
 maps:
 - 1
 grids:
@@ -41686,6 +41686,13 @@ entities:
 - proto: AU14SpawnPointCivilianEngineer
   entities:
   - uid: 66
+    components:
+    - type: Transform
+      pos: -27.5,66.5
+      parent: 1
+- proto: CMUSpawnPointCivilianAtmosian
+  entities:
+  - uid: 24655
     components:
     - type: Transform
       pos: -27.5,66.5
@@ -175424,7 +175431,7 @@ entities:
       parent: 1
 - proto: CMUYautjaGroundRelayDestination
   entities:
-  - uid: 24655
+  - uid: 24656
     components:
     - type: MetaData
       name: Chances Claim ground relay

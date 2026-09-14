@@ -48,49 +48,49 @@ public sealed class DoAfterCancellationTests : InteractionTest
     public async Task CancelWallConstruct()
     {
         await StartConstruction(WallConstruction.Wall);
-        await InteractUsing(Steel, 5, awaitDoAfters: false);
+        await InteractUsing(CMSteel, 5, awaitDoAfters: false); // CMU14
         await CancelDoAfters();
 
-        await InteractUsing(Steel, 5);
+        await InteractUsing(CMSteel, 5); // CMU14
         ClientAssertPrototype(WallConstruction.Girder, Target);
-        await InteractUsing(Steel, 5, awaitDoAfters: false);
+        await InteractUsing(CMSteel, 5, awaitDoAfters: false); // CMU14
         await CancelDoAfters();
         AssertPrototype(WallConstruction.Girder);
 
-        await InteractUsing(Steel, 5);
+        await InteractUsing(CMSteel, 5); // CMU14
         AssertPrototype(WallConstruction.WallSolid);
     }
 
     [Test]
     public async Task CancelTilePry()
     {
-        await SetTile(Floor);
+        await SetTile(CMFloorSteel); // CMU14
         await InteractUsing(Pry, awaitDoAfters: false);
         await CancelDoAfters();
-        await AssertTile(Floor);
+        await AssertTile(CMFloorSteel); // CMU14
 
         await InteractUsing(Pry);
-        await AssertTile(Plating);
+        await AssertTile(CMPlating); // CMU14: CM floors pry down to CM plating
     }
 
     [Test]
     public async Task CancelRepeatedTilePry()
     {
-        await SetTile(Floor);
+        await SetTile(CMFloorSteel); // CMU14
         await InteractUsing(Pry, awaitDoAfters: false);
         await RunTicks(1);
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1));
-        await AssertTile(Floor);
+        await AssertTile(CMFloorSteel); // CMU14
 
         // Second DoAfter cancels the first.
         await Server.WaitPost(() => InteractSys.UserInteraction(SEntMan.GetEntity(Player), SEntMan.GetCoordinates(TargetCoords), SEntMan.GetEntity(Target)));
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(0));
-        await AssertTile(Floor);
+        await AssertTile(CMFloorSteel); // CMU14
 
         // Third do after will work fine
         await InteractUsing(Pry);
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(0));
-        await AssertTile(Plating);
+        await AssertTile(CMPlating); // CMU14: CM floors pry down to CM plating
     }
 
     [Test]

@@ -25910,7 +25910,7 @@ entities:
     - type: Transform
       pos: -32.86621,8.684347
       parent: 1
-- proto: RMCGasPipeBend
+- proto: CMUGasPipeBend
   entities:
   - uid: 4346
     components:
@@ -26176,7 +26176,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#990000FF'
-- proto: RMCGasPipeFourway
+- proto: CMUGasPipeFourway
   entities:
   - uid: 4381
     components:
@@ -26220,7 +26220,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#0055CCFF'
-- proto: RMCGasPipeStraight
+- proto: CMUGasPipeStraight
   entities:
   - uid: 4387
     components:
@@ -34896,7 +34896,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#0055CCFF'
-- proto: RMCGasPipeTJunction
+- proto: CMUGasPipeTJunction
   entities:
   - uid: 5513
     components:

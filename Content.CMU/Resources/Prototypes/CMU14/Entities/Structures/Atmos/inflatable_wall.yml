@@ -1,0 +1,129 @@
+- type: entity
+  id: CMUInflatableWall
+  name: '"Cork" IW-1 inflatable wall'
+  description: A folded membrane that becomes a wall when you need a wall you do not have. Activate to deflate. Do not puncture.
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/inflatable_wall.rsi
+    state: wall
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 15
+        layer:
+        - WallLayer
+  - type: Damageable
+    damageModifierSet: Inflatable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: DisassembleOnAltVerb
+    prototypeToSpawn: CMUInflatableWallFolded1
+    disassembleTime: 3
+  - type: Airtight
+  - type: Transform
+    anchored: true
+  placement:
+    mode: SnapgridCenter
+
+- type: entity
+  parent: BaseMaterialDoor
+  id: CMUInflatableDoor
+  name: '"Cork" IW-2 inflatable door'
+  description: The Cork line's premium model. Same membrane, now with a zipper. Activate to deflate. Do not puncture.
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/inflatable_door.rsi
+    state: closed
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 15
+        layer:
+        - WallLayer
+  - type: Door
+    occludes: false
+    openSound:
+      path: /Audio/Misc/zip.ogg
+    closeSound:
+      path: /Audio/Misc/zip.ogg
+  - type: Damageable
+    damageModifierSet: Inflatable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: DisassembleOnAltVerb
+    prototypeToSpawn: CMUInflatableDoorFolded1
+    disassembleTime: 3
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMBaseStructure
+  id: CMUInflatableWallBroken
+  name: popped inflatable wall
+  description: The remains of a Cork wall. The air it was holding back and the air it was holding are now the same air.
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/inflatable_wall.rsi
+    state: wall_popped
+  - type: Fixtures
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Damageable
+    damageModifierSet: Inflatable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 10
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  parent: CMUInflatableWallBroken
+  id: CMUInflatableDoorBroken
+  name: popped inflatable door
+  description: The remains of a Cork door. The zipper survived, nothing else worth saving did.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/inflatable_door.rsi
+    state: door_popped

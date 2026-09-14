@@ -21,7 +21,29 @@
         amount: 2
       - id: RMCMagazineRifleMAR40
         amount: 7
-
+        
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM20A
+  name: M20A rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AUWeaponRifleM20A
+        amount: 1
+      - id: AU14MagazineRifleM20A
+        amount: 9
+  
 - type: entity
   parent: RMCKitBase
   id: AU14KitWeaponMar40
@@ -159,28 +181,6 @@
         amount: 1
       - id: AU14WeaponRifleKramerMagazineStandard
         amount: 8
-
-- type: entity
-  parent: RMCKitBase
-  id: AU14KitWeaponM20a
-  name: M20A rifle case
-  components:
-  - type: Item
-    size: Ginormous
-  - type: Storage
-    maxItemSize: Ginormous
-    grid:
-    - 0,0,9,3
-  - type: Sprite
-    sprite: _RMC14/Objects/Storage/procase_mini.rsi
-  - type: Icon
-    sprite: _RMC14/Objects/Storage/procase_mini.rsi
-  - type: StorageFill
-    contents:
-      - id: AUWeaponRifleM20A
-        amount: 1
-      - id: AU14MagazineRifleM20A
-        amount: 9
 
 - type: entity
   parent: RMCKitBase
@@ -387,3 +387,27 @@
         amount: 1
       - id: AU14MagazineRifleXM20A2
         amount: 5
+
+- type: entity
+  parent: RMCKitBase
+  id: CMU14KitWeaponM41AMK1PMC
+  name: M41A/2 MK1 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMU14WeaponRifleM41AMK1PMC
+        amount: 1
+      - id: CMMagazineRifleM54CMK1AP
+        amount: 1
+      - id: CMMagazineRifleM54CMK1
+        amount: 8

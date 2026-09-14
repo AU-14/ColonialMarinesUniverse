@@ -13,8 +13,8 @@
   - type: DropshipCrashDestructibleWall
     components:
     - type: Damageable
-      damageModifierSet: CMU14StructuralMarine
-    - type: Injurable
+      damageModifierSet: CMU14StructuralMarine # CMU14
+    - type: Injurable # CMU14
       damageContainer: StructuralMarine
     - type: Destructible
       thresholds:

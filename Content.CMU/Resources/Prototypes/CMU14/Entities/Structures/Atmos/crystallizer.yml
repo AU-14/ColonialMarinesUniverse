@@ -1,0 +1,151 @@
+# Gas-to-solid machine: consumes pipe gas per recipe (temperature window + mole amounts),
+# mints the output stack on the machine tile. Recipes are added to GasCrystallizerComponent here.
+- type: entity
+  parent: [ BaseMachinePowered, SmallConstructibleMachine, BaseSmallConstructibleMachineDestructible ]
+  id: CMUGasCrystallizer
+  name: '"Rock Candy" C-7 gas crystallizer'
+  description: A Weyland-Yutani gas crystallizer. Piped gas goes in, solid sheets come out, assuming you hit its preferred temperature window. Field crews call it Rock Candy, and the safety card opens with 'it is not candy'. Raw plasma refuses to crystallize; it just sits there, judging you.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    snapCardinals: true
+    granularLayersRendering: true # the 4-dir pipe layer must not cardinal-snap; matches upstream condenser/thermomachine pattern
+    layers:
+    - state: sheater0
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+    - sprite: Structures/Piping/Atmospherics/condenser.rsi
+      state: pipe
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+      renderingStrategy: Default
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { state: sheater1 }
+          False: { state: sheater0 }
+  - type: ApcPowerReceiver
+    powerLoad: 1500
+  - type: Physics
+    bodyType: Dynamic
+  - type: Transform
+    anchored: false # Dynamic body, like the other portable gas machines
+    noRot: false # baseMachine sets noRotate
+  - type: Rotatable
+  - type: Machine
+    board: CMUCrystallizerMachineCircuitboard
+  - type: AtmosDevice
+  - type: PipeRestrictOverlap
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+  - type: GuideHelp
+    guides:
+    - GasMiningAndStorage
+  - type: GasCrystallizer
+    recipes:
+    - gases:
+        Phoron: 40
+      maxTemperature: 283.15
+      output: CMSheetPhoron1
+    - gases:
+        Ammonia: 25
+        CarbonDioxide: 15
+      minTemperature: 293.15
+      maxTemperature: 373.15
+      output: RMCSheetPlastic1
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUCrystallizerMachineCircuitboard
+  name: '"Rock Candy" C-7 crystallizer machine board'
+  description: A machine printed circuit board for a gas crystallizer.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUGasCrystallizer
+    stackRequirements:
+      Manipulator: 2
+      Cable: 2
+      Glass: 1
+
+- type: entity
+  parent: GasThermoMachineHeater
+  id: !type:CreateVariants
+    values: [ CMUGasThermoMachineHeater, CMUGasThermoMachineHeaterAlt1, CMUGasThermoMachineHeaterAlt2 ]
+  suffix: Portable
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: Machine
+    board: CMUThermomachineHeaterMachineCircuitBoard
+  - type: Transform
+    anchored: false # portable
+  - type: Physics
+    bodyType: Dynamic
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/thermomachine.rsi
+        Secondary: Structures/Piping/Atmospherics/thermomachine_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/thermomachine_alt2.rsi
+
+- type: entity
+  parent: GasThermoMachineFreezer
+  id: !type:CreateVariants
+    values: [ CMUGasThermoMachineFreezer, CMUGasThermoMachineFreezerAlt1, CMUGasThermoMachineFreezerAlt2 ]
+  suffix: Portable
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: Machine
+    board: CMUThermomachineFreezerMachineCircuitBoard
+  - type: Transform
+    anchored: false # portable
+  - type: Physics
+    bodyType: Dynamic
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/thermomachine.rsi
+        Secondary: Structures/Piping/Atmospherics/thermomachine_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/thermomachine_alt2.rsi
+
+- type: entity
+  parent: BaseGasCondenser
+  id: !type:CreateVariants
+    values: [ CMUGasCondenser, CMUGasCondenserAlt1, CMUGasCondenserAlt2 ]
+  suffix: Portable
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: Machine
+    board: CMUCondenserMachineCircuitBoard
+  - type: Transform
+    anchored: false # portable
+  - type: Physics
+    bodyType: Dynamic
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/condenser.rsi
+        Secondary: Structures/Piping/Atmospherics/condenser_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/condenser_alt2.rsi

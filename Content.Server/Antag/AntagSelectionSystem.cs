@@ -25,6 +25,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Roles;
+using Content.Shared._RMC14.Marines.Skills; // CMU14
 using Content.Shared.Whitelist;
 using JetBrains.Annotations;
 using Robust.Server.Audio;
@@ -71,6 +72,7 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private PlayTimeTrackingSystem _playTime = default!;
     [Dependency] private RoleSystem _role = default!;
+    [Dependency] private SkillsSystem _skills = default!; // CMU14
     [Dependency] private TransformSystem _transform = default!;
 
     // arbitrary random number to give late joining some mild interest.
@@ -789,6 +791,13 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
             gear.Add(prototype.StartingGear.Value);
 
         _loadout.Equip(antag, gear, prototype.RoleLoadout);
+
+        // CMU14: Grant starting skills without overriding existing higher levels
+        foreach (var skill in prototype.StartingSkills)
+        {
+            if (_skills.GetSkill(antag, skill.Type) < skill.Level)
+                _skills.SetSkill(antag, skill.Type, skill.Level);
+        }
 
         // Ensure that we have the right mind for our entity.
         if (!_mind.TryGetMind(player, out var mind, out var mindComp) || mindComp.OwnedEntity != antag)

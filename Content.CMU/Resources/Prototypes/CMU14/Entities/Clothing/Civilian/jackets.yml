@@ -250,7 +250,7 @@
 
 - type: entity
   parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
-  id: AU14CivilianFullSuitWeYuEngineer
+  id: CMUClothingOuterSuitEngineer
   name: WeYu Engineer Jumpsuit
   description: A water proof jumpsuit designed for the hardworking man.
   components:

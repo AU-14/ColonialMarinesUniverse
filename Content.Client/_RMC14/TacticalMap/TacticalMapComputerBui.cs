@@ -157,6 +157,7 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
             bool WantsWeYu() => faction == "WEYU";
             if (WantsWeYu())
                 Window.Wrapper.Map.Lines.AddRange(lines.WeYuLines);
+            Window.Wrapper.Map.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
         if (_refreshed)
@@ -186,6 +187,7 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
             bool WantsWeYuCanvas() => faction == "WEYU";
             if (WantsWeYuCanvas())
                 Window.Wrapper.Canvas.Lines.AddRange(lines.WeYuLines);
+            Window.Wrapper.Canvas.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
         _refreshed = true;

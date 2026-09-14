@@ -60,7 +60,7 @@
   id: AU14GearCivilianForeman
   equipment:
     head: RMCHardhatBlue
-    jumpsuit: AU14CivilianWeYuEngineerFormanClothes
+    jumpsuit: CMUJumpsuitCivilianForeman
     shoes: RMCBootsCorporate
     id: AU14IDCardColonyForeman
     ears: AU14ColonyAdminHeadset

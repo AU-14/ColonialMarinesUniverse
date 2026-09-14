@@ -2,7 +2,10 @@ using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.IntegrationTests.Utility;
 using Content.Server.Materials;
+using Content.Server.Power.EntitySystems;
 using Content.Shared.Materials;
+using Content.Shared.Power.Components;
+using Content.Shared.Tiles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -17,7 +20,7 @@ public sealed class ReclaimerLoopTest : InteractionTest
 {
     // ProtoIDs we need
     private static readonly EntProtoId ApcId = "APCBasic";
-    private static readonly EntProtoId FloorTileId = "FloorTileItemSteel";
+    private static readonly EntProtoId FloorTileId = "CMTileItemSteel"; // CMU14
 
     private static readonly string[] Reclaimers = GameDataScrounger.EntitiesWithComponent("MaterialReclaimer");
 
@@ -38,7 +41,14 @@ public sealed class ReclaimerLoopTest : InteractionTest
         var reclaimComp = Comp<MaterialReclaimerComponent>(Target);
 
         // Power the reclaimer
-        await SpawnEntity(ApcId, SEntMan.GetCoordinates(TargetCoords));
+        var apc = await SpawnEntity(ApcId, SEntMan.GetCoordinates(TargetCoords));
+        // CMU14: fork APCs spawn fully charged, which would power the reclaimer and make this a live
+        // loop check. Upstream spawns them empty; drain the battery to keep the no-supply precondition.
+        await Server.WaitPost(() =>
+        {
+            var battery = SEntMan.GetComponent<BatteryComponent>(apc);
+            SEntMan.System<BatterySystem>().SetCharge((apc, battery), 0);
+        });
         await RunTicks(1);
         // Set reclaimer to enabled
         await Server.WaitPost(() =>
@@ -69,6 +79,12 @@ public sealed class ReclaimerLoopTest : InteractionTest
 
                 var matInHands = await PlaceInHands(matStack);
                 var matInHandsUid = ToServer(matInHands);
+
+                // CMU14: glass stacks double as placeable floor tiles. With the recycler unpowered the
+                // interaction falls through to tile placement, which consumes the stack; that is tile
+                // behavior, not a recycler loop.
+                if (SEntMan.HasComponent<FloorTileComponent>(matInHandsUid))
+                    continue;
 
                 // Assert we're holding material
                 Assert.That(

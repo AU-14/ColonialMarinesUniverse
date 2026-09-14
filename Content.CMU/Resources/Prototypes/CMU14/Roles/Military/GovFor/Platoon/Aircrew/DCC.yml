@@ -5,7 +5,7 @@
   name: au14-job-name-govfordcc
   description: au14-job-description-govfordcc
   icon: "AU14JobIconDCC"
-  spawnMenuRoleName: Dropship Crew Chief (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-dropship-crew-chief
   startingGear: AU14GearGOVFORDCC
   dummyStartingGear: AU14GearGOVFORDCCDummy
   playTimeTracker: AU14JobGOVFORDCC

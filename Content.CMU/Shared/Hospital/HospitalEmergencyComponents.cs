@@ -60,7 +60,7 @@ public readonly record struct HospitalDischargeAssessment(
 public sealed partial class HospitalEmergencyComputerComponent : Component
 {
     [DataField]
-    public ResPath ShuttlePath = new("/Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml");
+    public ResPath ShuttlePath = new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml");
 
     [DataField]
     public EntProtoId PatientPrototype = "AU14HospitalPatient";

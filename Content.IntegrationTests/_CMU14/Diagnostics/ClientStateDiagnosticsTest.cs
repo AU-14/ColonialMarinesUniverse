@@ -30,7 +30,7 @@ public sealed class ClientStateDiagnosticsTest
             var config = pair.Server.ResolveDependency<IConfigurationManager>();
             config.SetCVar(CCVars.CMUClientStateDiagnosticsEnabled, false);
             config.SetCVar(CCVars.CMUClientStateDiagnosticsEnabled, true);
-            logger = pair.Server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillName);
+            logger = pair.Server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillId);
             logger.AddHandler(capture);
         });
         try
@@ -73,7 +73,7 @@ public sealed class ClientStateDiagnosticsTest
             var states = server.ResolveDependency<IServerGameStateManager>();
             var tick = server.ResolveDependency<IGameTiming>().CurTick;
             var capture = new Capture();
-            var logger = server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillName);
+            var logger = server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillId);
             logger.AddHandler(capture);
             try
             {
@@ -123,7 +123,7 @@ public sealed class ClientStateDiagnosticsTest
             var config = server.ResolveDependency<IConfigurationManager>();
             config.SetCVar(CCVars.CMUClientStateDiagnosticsEnabled, false);
             config.SetCVar(CCVars.CMUClientStateDiagnosticsEnabled, true);
-            logger = server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillName);
+            logger = server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillId);
             logger.AddHandler(capture);
         });
         try
@@ -159,7 +159,7 @@ public sealed class ClientStateDiagnosticsTest
             config.SetCVar(CCVars.CMUClientStateDiagnosticsEnabled, false);
             config.SetCVar(CCVars.CMUClientStateDiagnosticsEnabled, true);
             var capture = new Capture();
-            var logger = server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillName);
+            var logger = server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillId);
             logger.AddHandler(capture);
             try
             {
@@ -206,7 +206,7 @@ public sealed class ClientStateDiagnosticsTest
             config.SetCVar(CCVars.CMUClientStateDiagnosticsEnabled, false);
             config.SetCVar(CCVars.CMUClientStateDiagnosticsEnabled, true);
             var capture = new Capture();
-            var logger = server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillName);
+            var logger = server.ResolveDependency<ILogManager>().GetSawmill(CMUClientStateDiagnosticsSystem.SawmillId);
             logger.AddHandler(capture);
             try
             {

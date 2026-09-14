@@ -52,6 +52,7 @@
   id: Girder
   graph: Girder
   targetNode: girder
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM (inherited by wall/reinforced-wall recipes)
 
 - type: construction
   parent: Girder
@@ -297,6 +298,7 @@
   id: Firelock
   graph: Firelock
   targetNode: Firelock
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM (inherited by FirelockGlass/FirelockEdge)
 
 - type: construction
   parent: Firelock
@@ -332,6 +334,7 @@
   id: BlastDoor
   graph: BlastDoor
   targetNode: blastdoor
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM
 # endregion Shutters
 
 # region Floors
@@ -484,6 +487,7 @@
   id: Airlock
   graph: Airlock
   targetNode: airlock
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM (inherited by AirlockGlass)
 
 - type: construction
   parent: Airlock
@@ -495,6 +499,7 @@
   id: AirlockShuttle
   graph: AirlockShuttle
   targetNode: airlock
+  isCM: true # CMU14: menu-visible; inherited by shuttle glass airlock
 
 - type: construction
   parent: AirlockShuttle
@@ -509,6 +514,7 @@
   id: Windoor
   graph: Windoor
   targetNode: windoor
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM (inherited by secure/glass windoor variants)
 
 # endregion Windoors
 
@@ -517,6 +523,7 @@
   parent: BaseStructureFullTileDirectional
   id: LightTubeFixture
   graph: LightFixture
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM (inherited by tube light variants)
   targetNode: tubeLight
   conditions:
   - !type:TileNotBlocked
@@ -541,6 +548,7 @@
   parent: BaseStructureFullTile
   id: LightGroundFixture
   graph: LightFixture
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM
   targetNode: groundLight
 # endregion Lighting
 

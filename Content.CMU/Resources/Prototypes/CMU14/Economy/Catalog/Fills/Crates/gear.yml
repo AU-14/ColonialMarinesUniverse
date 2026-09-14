@@ -97,7 +97,7 @@
       amount: 1
     - id: CMHandsLatex
       amount: 1
-      
+
 - type: entity
   parent: RMCCrateScience
   id: CMUCrateBiosuitSecurity
@@ -114,7 +114,7 @@
       amount: 1
 
 
-      
+
 - type: entity
   parent: RMCCrateScience
   id: CMUCrateBiosuitVirology
@@ -188,4 +188,137 @@
     - id: RMCHandsTychoGloves
       amount: 1
     - id: RMCShoesTychoBoots
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateAtmosSupplies
+  name: atmospherics supplies crate
+  description: A crate that contains 2 gas analyzers, portable scrubber & space heater and 2 air (oxygen mix) canisters with some paint spray refills.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAtmosScanner
+      amount: 2
+    - id: PortableScrubber
+      amount: 1
+    - id: SpaceHeater
+      amount: 1
+    - id: CMUCanisterAir
+      amount: 2
+    - id: SprayPainterAmmo
+      amount: 3
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateSCBA
+  name: breathing gear crate
+  description: A crate that contains 4 gas masks with filters and 4 filled oxygen tanks.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMaskGas
+      amount: 4
+    - id: CMUGasMaskFilter
+      amount: 4
+    - id: RMCGasTankOxygenFilled
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateHazardGear
+  name: hazard gear crate
+  description: A crate that contains two firesuits, a UPP fire response coat, a pressure suit and inflatable doors for burning or spaced work sites.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUSuitFirefighter
+      amount: 2
+    - id: CMUArmorFirefighterUPP
+      amount: 1
+    - id: CMUSuitEVA
+      amount: 1
+    - id: CMUInflatableDoorFolded1
+      amount: 4
+
+- type: entity
+  parent: RMCCrateConstruction
+  id: CMUCrateEngineeringWiring
+  name: power and alarm wiring crate
+  description: A crate that contains HV, MV and APC cable coils, two colony-spec cable coils, power control modules and alarm, firelock and atmos computer electronics.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CableHVStack
+      amount: 1
+    - id: CableMVStack
+      amount: 1
+    - id: CableApcStack
+      amount: 2
+    - id: RMCCableCoil
+      amount: 2
+    - id: CMAPCElectronics
+      amount: 2
+    - id: AirAlarmElectronics
+      amount: 2
+    - id: FireAlarmElectronics
+      amount: 2
+    - id: FirelockElectronics
+      amount: 2
+    - id: MailingUnitElectronics
+      amount: 2
+    - id: DoorElectronics
+      amount: 2
+    - id: AlertsComputerCircuitboard
+      amount: 1
+    - id: AtmosMonitoringComputerCircuitboard
+      amount: 1
+    - id: CMTRayScanner
+      amount: 1
+
+- type: entity
+  parent: RMCCrateConstruction
+  id: CMUCrateAtmosPhoronKit
+  name: phoron refinery starter kit
+  description: A crate that contains everything to start refining phoron. Plasma and nitrogen canisters, heater and freezer thermomachines and a gas crystallizer. Knowledge of temperatures sold separately.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUCanisterPlasma
+      amount: 1
+    - id: CMUCanisterNitrogen
+      amount: 1
+    - id: CMUGasThermoMachineHeater
+      amount: 1
+    - id: CMUGasThermoMachineFreezer
+      amount: 1
+    - id: CMUGasCrystallizer
+      amount: 1
+
+- type: entity
+  parent: RMCCrateConstruction
+  id: CMUCratePowerStarterKit
+  name: outpost power kit
+  description: A crate that contains everything to bring a small outpost online. A DR-30 portable generator, a stack of solid phoron sheets, low-voltage cable and a power control module.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUPortableGeneratorDragon
+      amount: 1
+    - id: CMSheetPhoron
+      amount: 1
+    - id: CableApcStack
+      amount: 2
+    - id: CMAPCElectronics
+      amount: 1
+
+- type: entity
+  parent: RMCCrateConstruction
+  id: CMUCratePhoronSheets
+  name: phoron sheets crate
+  description: A crate containing 50 solid phoron sheets. Burns in P.A.C.M.A.N.-type generators and nothing else should ever burn this hot.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSheetPhoron
       amount: 1

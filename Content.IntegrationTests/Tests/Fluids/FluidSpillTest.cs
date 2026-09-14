@@ -44,7 +44,7 @@ public sealed class FluidSpill : GameTest
         var mapSystem = server.System<SharedMapSystem>();
         var gameTiming = server.ResolveDependency<IGameTiming>();
         var tileDefinitionManager = server.ResolveDependency<ITileDefinitionManager>();
-        var floorTile = new Tile(tileDefinitionManager["FloorSteel"].TileId);
+        var floorTile = new Tile(tileDefinitionManager["CMFloorSteel"].TileId); // CMU14
         EntityUid gridId = default;
 
         /*

@@ -1,0 +1,64 @@
+# SMES-pattern battery bridge: the cable terminal port isolates the mains side
+# from the tile's HV run, so the discharger can never re-power the net the
+# PowerConsumer senses. Sensing needs a real HV powernet: tile-power maps.
+# On RMC area-power maps the device is inert (no cable nets to sense).
+- type: entity
+  parent: [BaseMachine, ConstructibleMachine]
+  id: CMUAutoTransferSwitch
+  name: ATS-1 automatic transfer switch
+  description: Charges from the mains through its port side and throws the battery onto the emergency circuit the moment they die. The crank takes a few seconds, so hold on. Wire the port side from a cable terminal, the output side into the emergency run. Multitool opens the panel; pry to deconstruct.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableTerminalPortNode
+        nodeGroupID: HVPower
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: Battery
+    netsync: false
+    maxCharge: 800000
+    startingCharge: 800000
+  - type: BatteryCharger
+    voltage: High
+    node: input
+  - type: BatteryDischarger
+    voltage: High
+    node: output
+  - type: PowerNetworkBattery
+    maxSupply: 30000
+    maxChargeRate: 3000
+    supplyRampTolerance: 5000
+    supplyRampRate: 3000
+  - type: PowerConsumer
+    voltage: High
+    node: input
+    drawRate: 10
+  - type: CMUAutoTransferSwitch
+    crankSound:
+      path: /Audio/Machines/generator-tug-1.ogg
+    onlineSound:
+      path: /Audio/Machines/generator-tug-2.ogg
+  - type: WiresPanel
+    openingTool: Pulsing
+    examineTextClosed: cmu-zlevel-panel-closed
+    examineTextOpen: cmu-zlevel-panel-open
+  - type: Machine
+    board: CMUAutoTransferSwitchMachineCircuitboard
+  - type: Sprite
+    sprite: Structures/Power/substation.rsi
+    layers:
+    - state: substation
+      map: [ "enum.CMUAtsVisuals.State" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUAtsVisuals.State:
+        enum.CMUAtsVisuals.State:
+          Standby: { state: substation }
+          Cranking: { state: charging }
+          Online: { state: full }

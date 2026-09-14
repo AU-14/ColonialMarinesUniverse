@@ -5,7 +5,7 @@
   name: au14-job-name-govfordspilot
   description: au14-job-description-govfordspilot
   icon: "AU14JobIconPilotOfficer"
-  spawnMenuRoleName: Pilot Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-pilot-officer
   startingGear: AU14GearGOVFORDSPilot
   dummyStartingGear: AU14GearGOVFORDSPilotDummy
   playTimeTracker: AU14JobGOVFORDSPilot

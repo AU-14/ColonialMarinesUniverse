@@ -111985,7 +111985,7 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
-- proto: RMCInflatableWall
+- proto: CMUInflatableWall # CMU14
   entities:
   - uid: 14104
     components:
@@ -112022,7 +112022,7 @@ entities:
     - type: Transform
       pos: 186.5,18.5
       parent: 1
-- proto: RMCInflatableWallBroken
+- proto: CMUInflatableWallBroken # CMU14
   entities:
   - uid: 14111
     components:

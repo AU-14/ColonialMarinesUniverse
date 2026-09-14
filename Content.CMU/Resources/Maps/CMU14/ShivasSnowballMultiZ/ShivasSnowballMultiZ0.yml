@@ -112811,7 +112811,7 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
-- proto: RMCInflatableWall
+- proto: CMUInflatableWall
   entities:
   - uid: 14245
     components:
@@ -112848,7 +112848,7 @@ entities:
     - type: Transform
       pos: 186.5,18.5
       parent: 1
-- proto: RMCInflatableWallBroken
+- proto: CMUInflatableWallBroken
   entities:
   - uid: 14252
     components:

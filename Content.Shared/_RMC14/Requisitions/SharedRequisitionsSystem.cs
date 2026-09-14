@@ -275,11 +275,11 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
         _purchasesMap = null;
     }
 
-    public void CreateSpecialDelivery(EntProtoId proto)
+    public void CreateSpecialDelivery(EntProtoId proto, string faction = "") // CMU14
     {
         var map = EnsurePurchasesMap();
         var delivery = Spawn(proto, new MapCoordinates(Vector2.Zero, map));
-        EnsureComp<RequisitionsCustomDeliveryComponent>(delivery);
+        EnsureComp<RequisitionsCustomDeliveryComponent>(delivery).Faction = faction; // CMU14
     }
 
     public void AddEntryToCategory(EntityUid ent, RequisitionsComputerComponent? comp, string category, RequisitionsEntry entry)

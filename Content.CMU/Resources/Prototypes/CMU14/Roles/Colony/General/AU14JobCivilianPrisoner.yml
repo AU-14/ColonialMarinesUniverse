@@ -30,7 +30,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-loner
-  spawnMenuRoleName: Colony Prisoner (CMU)
+  spawnMenuRoleName: au14-spawn-role-name-colony-prisoner
   roleWeight: 0.6
 
 - type: startingGear

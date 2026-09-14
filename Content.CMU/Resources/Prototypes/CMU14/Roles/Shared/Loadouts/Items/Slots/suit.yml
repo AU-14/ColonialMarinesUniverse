@@ -158,7 +158,7 @@
   id: CivilianFullSuitWeYuEngineerAU14
   storage:
     back:
-    - AU14CivilianFullSuitWeYuEngineer
+    - CMUClothingOuterSuitEngineer
 
 - type: loadout
   id: CivilianFullSuitParamedicGreenAU14
@@ -178,7 +178,7 @@
 - type: loadout
   id: CivilianFullSuitFirefighterUPPAU14
   equipment:
-    outerClothing: RMCArmorSPPFirefighter
+    outerClothing: CMUArmorFirefighterUPP
 
 - type: loadout
   id: OuterClothingExternalWebbingBlackAU14

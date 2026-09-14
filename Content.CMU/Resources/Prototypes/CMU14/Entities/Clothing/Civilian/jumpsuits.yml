@@ -179,7 +179,7 @@
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
-  id: AU14CivilianWeYuEngineerFormanClothes
+  id: CMUJumpsuitCivilianForeman
   name: We-Yu Engineering Forman Clothes
   description: Clothes designed for WeYu engineering formans.
   components:

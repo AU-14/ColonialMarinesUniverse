@@ -2,8 +2,12 @@
   id: RunawaySynth
   prefRoles: [ RunawaySynthRole ]
   jobBlacklistGroup:
-  - AllGovforJobs
-  - AllOpforJobs
+  - AllGovforCommandStaff
+  - AllOpforCommandStaff
+# jobBlacklist:
+# - AU14JobCivilianCorporateLiaison
+# - AU14JobCivilianColonyAdministrator
+# - AU14JobCivilianOrbitalArbiter
   briefing:
     text: runawaysynth-role-greeting
     color: CornflowerBlue
@@ -15,6 +19,7 @@
     canUseGuns: true
     hideGeneration: true
     useHumanHealthIcons: true
+# - type: SynthGunAccess
   - type: ColonyBounty
     bounty: 2800
     reason: Defective Equipment

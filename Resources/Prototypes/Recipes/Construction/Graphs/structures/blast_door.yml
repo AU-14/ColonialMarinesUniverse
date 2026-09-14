@@ -9,7 +9,7 @@
             - !type:SetAnchor
               value: false
           steps:
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 10
               doAfter: 3
 
@@ -32,7 +32,7 @@
               anchored: false
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
               amount: 10
             - !type:DeleteEntity {}
           steps:

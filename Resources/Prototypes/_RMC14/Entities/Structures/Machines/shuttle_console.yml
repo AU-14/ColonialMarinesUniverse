@@ -22,7 +22,7 @@
   - type: ActivatableUI
     key: enum.DropshipNavigationUiKey.Key
   - type: AccessReader
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -165,7 +165,7 @@
   - type: ActivatableUI
     key: enum.DropshipNavigationUiKey.Key
   - type: AccessReader
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -211,7 +211,7 @@
   - type: ActivatableUI
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -277,7 +277,7 @@
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
     #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -319,7 +319,7 @@
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
     #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -356,7 +356,7 @@
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
     #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:

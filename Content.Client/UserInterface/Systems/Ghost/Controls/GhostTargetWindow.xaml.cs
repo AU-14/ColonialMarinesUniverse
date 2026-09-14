@@ -131,7 +131,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             Populate();
         }
 
-        public void Populate()
+        public void Populate(string? preferredTab = null) // CMU14: lets the server's scoped tab win on a fresh open
         {
             var previousTab = _activeTab?.Name;
             ClearPreviewDummies();
@@ -154,7 +154,9 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
             if (_tabs.Count > 0)
             {
-                var tab = _tabs.FirstOrDefault(tab => tab.Name == previousTab) ?? _tabs[0];
+                var tab = _tabs.FirstOrDefault(tab => tab.Name == previousTab) ?? // CMU14: then the server's tab, then the first
+                          _tabs.FirstOrDefault(tab => tab.Name == preferredTab) ??
+                          _tabs[0];
                 SetActiveTab(tab);
             }
 
