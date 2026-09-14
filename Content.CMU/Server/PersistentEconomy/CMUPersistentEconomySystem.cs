@@ -358,6 +358,7 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
             Balance = account.Balance,
             Stake = round.Stake,
             Cap = round.SettlementCap,
+            Escrow = round.RoundEscrow,
             Credited = round.CashCredited,
             StakeEnabled = account.StakeEnabled,
             Atm = CanUseAtm(player, atm),
@@ -398,33 +399,69 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
                 if (!Guid.TryParse(message.Target, out var target))
                     return false;
                 return Store.Mutate(user, RoundId, key, op => op.Transfer(target, message.Amount));
+            case CMUEconomyAction.WithdrawEscrow:
+                if (message.Amount is <= 0 or > 100_000 || message.Amount > state.RoundEscrow)
+                    return false;
+                return SpawnEscrowWithdrawal(user, body, key, message.Amount);
             case CMUEconomyAction.Withdraw:
                 if (message.Amount is <= 0 or > 100_000)
                     return false;
-                var spawned = new List<EntityUid>();
-                try
-                {
-                    var success = Store.Mutate(user, RoundId, key, op =>
-                    {
-                        if (!op.Change(-message.Amount, "CashWithdrawal", "ATM withdrawal"))
-                            return false;
-                        SpawnCash(body, (int) message.Amount, spawned);
-                        return true;
-                    });
-                    if (!success)
-                        return false;
-                    foreach (var entity in spawned)
-                        GiveItem(body, entity);
-                    return true;
-                }
-                catch
-                {
-                    foreach (var entity in spawned)
-                        if (Exists(entity))
-                            Del(entity);
-                    throw;
-                }
+                return SpawnBankWithdrawal(user, body, key, message.Amount);
         }
         return false;
+    }
+
+    private bool SpawnBankWithdrawal(Guid user, EntityUid body, string key, long amount)
+    {
+        var spawned = new List<EntityUid>();
+        try
+        {
+            var success = Store.Mutate(user, RoundId, key, op =>
+            {
+                if (!op.Change(-amount, "CashWithdrawal", "ATM withdrawal"))
+                    return false;
+                SpawnCash(body, (int) amount, spawned);
+                return true;
+            });
+            if (!success)
+                return false;
+            foreach (var entity in spawned)
+                GiveItem(body, entity);
+            return true;
+        }
+        catch
+        {
+            foreach (var entity in spawned)
+                if (Exists(entity))
+                    Del(entity);
+            throw;
+        }
+    }
+
+    private bool SpawnEscrowWithdrawal(Guid user, EntityUid body, string key, long amount)
+    {
+        var spawned = new List<EntityUid>();
+        try
+        {
+            var success = Store.Mutate(user, RoundId, key, op =>
+            {
+                if (!op.WithdrawEscrow(amount))
+                    return false;
+                SpawnCash(body, (int) amount, spawned);
+                return true;
+            });
+            if (!success)
+                return false;
+            foreach (var entity in spawned)
+                GiveItem(body, entity);
+            return true;
+        }
+        catch
+        {
+            foreach (var entity in spawned)
+                if (Exists(entity))
+                    Del(entity);
+            throw;
+        }
     }
 }
