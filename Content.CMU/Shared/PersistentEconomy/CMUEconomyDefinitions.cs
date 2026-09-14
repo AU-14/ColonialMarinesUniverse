@@ -1,4 +1,5 @@
 using Content.Shared.Eui;
+using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
