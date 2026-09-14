@@ -45,8 +45,9 @@
   - type: XenoDevolve
     devolvesTo:
     - CMXenoRunner
-  - type: XenoEvolve
-    evolvesTo:
+    - type: XenoEvolution
+      max: 500
+      evolvesTo:
     - CMXenoCrusherBase
     - CMXenoRavager
   - type: XenoDevour
