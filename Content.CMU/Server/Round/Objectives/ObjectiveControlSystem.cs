@@ -369,8 +369,44 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
             {
                 if (fetchComp.Catalog)
                     TrySpawnCatalogObjective(proto, presetId, bestPlanetGrid, planetMaps, () => _fetch.HasAvailableCatalogSources(primaryMapId, fetchComp));
+                continue;
+            }
+
+            if (proto.TryComp<HotspotObjectiveComponent>(out var hotspotComp, compFactory))
+            {
+                if (hotspotComp.Catalog && proto.TryComp<CMUObjectiveComponent>(out var hotObjComp, compFactory))
+                    TrySpawnHotspotObjective(proto, hotObjComp, presetId, planetMaps);
             }
         }
+    }
+
+    private void TrySpawnHotspotObjective(EntityPrototype proto, CMUObjectiveComponent objComp, string presetId, HashSet<MapId> planetMaps)
+    {
+        var modeMatch = objComp.AllowedPresets.Count == 0
+            || objComp.AllowedPresets.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase));
+        if (!modeMatch)
+            return;
+
+        if (_allObjectives.Any(o => o.Comp.Id == objComp.Id && Exists(o.Uid) && planetMaps.Contains(Transform(o.Uid).MapID)))
+            return;
+
+        var markers = new List<Entity<TransformComponent>>();
+        var query = EntityQueryEnumerator<CMUObjectiveMarkerComponent, TransformComponent>();
+        while (query.MoveNext(out var marker, out _, out var markerXform))
+        {
+            if (planetMaps.Contains(markerXform.MapID))
+                markers.Add((marker, markerXform));
+        }
+
+        if (markers.Count == 0)
+        {
+            _logs.Warning("[OBJ-CATALOG] Hotspot objective found no objective markers to spawn at.");
+            return;
+        }
+
+        var target = markers[Random.Shared.Next(markers.Count)].Owner;
+        Spawn(proto.ID, Transform(target).Coordinates);
+        _logs.Debug($"[OBJ-CATALOG] Spawned hotspot objective '{proto.ID}' at marker {ToPrettyString(target)}.");
     }
 
     private void TrySpawnCatalogObjective(

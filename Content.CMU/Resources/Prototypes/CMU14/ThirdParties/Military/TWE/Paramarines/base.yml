@@ -9,11 +9,3 @@
     factions:
     - CMUTWE
   - type: RandomHumanoidAppearance
-
-- type: entity
-  parent: SquadPara
-  id: CMUSquadParamarines
-  name: Paramarines
-  components:
-  - type: SquadTeam
-    group: Paramarines

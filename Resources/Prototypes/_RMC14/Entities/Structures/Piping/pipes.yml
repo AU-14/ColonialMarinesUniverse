@@ -1,6 +1,7 @@
 - type: entity
   id: RMCBasePipe
   abstract: true
+  categories: [HideSpawnMenu] # CMU14
   components:
   - type: Item
     size: Small
@@ -46,6 +47,7 @@
   parent: [RMCBasePipe, GasPipeHalf]
   id: RMCGasPipeHalf
   suffix: RMC Half
+  categories: [HideSpawnMenu] # CMU14
   placement:
     mode: SnapgridCenter
   components:
@@ -59,6 +61,7 @@
   parent: [RMCBasePipe, GasPipeStraight]
   id: RMCGasPipeStraight
   suffix: RMC Straight
+  categories: [HideSpawnMenu] # CMU14
   placement:
     mode: SnapgridCenter
   components:
@@ -72,6 +75,7 @@
   parent: [RMCBasePipe, GasPipeBend]
   id: RMCGasPipeBend
   suffix: RMC Bend
+  categories: [HideSpawnMenu] # CMU14
   placement:
     mode: SnapgridCenter
   components:
@@ -85,6 +89,7 @@
   parent: [RMCBasePipe, GasPipeTJunction]
   id: RMCGasPipeTJunction
   suffix: RMC TJunction
+  categories: [HideSpawnMenu] # CMU14
   placement:
     mode: SnapgridCenter
   components:
@@ -98,6 +103,7 @@
   parent: [RMCBasePipe, GasPipeFourway]
   id: RMCGasPipeFourway
   suffix: RMC Fourway
+  categories: [HideSpawnMenu] # CMU14
   placement:
     mode: SnapgridCenter
   components:

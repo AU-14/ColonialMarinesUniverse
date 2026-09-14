@@ -18,6 +18,7 @@ public sealed class ResearchDataTerminalBuiState(
     int credits,
     int clearance,
     int upgradecost,
+    TimeSpan? xLockedUntil,
     bool picked) : BoundUserInterfaceState
 {
     public readonly List<GeneratedReagentData> IDs = ids;
@@ -27,6 +28,7 @@ public sealed class ResearchDataTerminalBuiState(
     public readonly int Credits = credits;
     public readonly int Clearance = clearance;
     public readonly int UpgradeCost = upgradecost;
+    public readonly TimeSpan? XLockedUntil = xLockedUntil;
     public readonly bool Picked = picked;
     
 }

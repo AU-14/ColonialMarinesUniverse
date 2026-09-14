@@ -1,0 +1,24 @@
+- type: entity
+  parent: PortableGeneratorPacman
+  id: CMUPortableGeneratorDragon
+  name: '"Dragon" DR-30 portable generator'
+  suffix: Phoron, 30 kW
+  description: A fuel-burning generator rated for up to 30 kW. Eats solid phoron sheets by the fistful and breathes carbon dioxide - field crews call it the Dragon for a reason.
+  components:
+  - type: Machine
+    board: CMUPortableGeneratorDragonMachineCircuitboard
+  - type: SolidFuelGeneratorAdapter
+    fuelMaterial: CMPhoron
+  - type: MaterialStorage
+    materialWhiteList: [ CMPhoron ]
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUPortableGeneratorDragonMachineCircuitboard
+  name: '"Dragon" DR-30 generator machine board'
+  description: A machine printed circuit board for a portable generator.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUPortableGeneratorDragon

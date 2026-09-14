@@ -39,7 +39,7 @@ public sealed class RecentServerErrorsTest
     {
         var errors = new CMURecentServerErrors();
         errors.Log("runtime", Message(LogEventLevel.Warning, "warning", Now));
-        errors.Log(CMUClientStateDiagnosticsSystem.SawmillName, Message(LogEventLevel.Error, "do not recurse", Now));
+        errors.Log(CMUClientStateDiagnosticsSystem.SawmillId, Message(LogEventLevel.Error, "do not recurse", Now));
         Assert.That(errors.Snapshot(DateTimeOffset.MinValue, 0), Is.Empty);
     }
 

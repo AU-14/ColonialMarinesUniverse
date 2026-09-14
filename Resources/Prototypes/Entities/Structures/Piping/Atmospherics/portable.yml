@@ -47,6 +47,10 @@
         volume: 1
   - type: ApcPowerReceiver
     powerLoad: 2000
+  - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+    idleLoad: 0
+    activeLoad: 2000
+    channel: Environment
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -109,6 +113,10 @@
         - MachineLayer
   - type: ApcPowerReceiver
     powerDisabled: true #starts off
+  - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+    idleLoad: 0
+    activeLoad: 2000
+    channel: Environment
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/Portable/portable_sheater.rsi
     noRot: true

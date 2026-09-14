@@ -5,11 +5,8 @@
   suffix: RM
   description: Ballistic shield used by the royal marines commando. This shield is commonly used during boarding actions due to its lightweight but durable design. Does not help against explosives.
   components:
-    - type: ItemToggle
-    - type: ComponentToggler
-      components:
-      - type: DisarmMalus
-        malus: 0.6
+    - type: DisarmMalus
+      malus: 0.6
     - type: Sprite
       sprite: CMU14/Weapons/Melee/RMC/ballistic_shield.rsi
       state: rmc-ballistic-icon

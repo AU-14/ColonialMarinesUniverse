@@ -292,6 +292,14 @@
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardCivilianAtmosian
+  name: atmospheric technician ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCivilianAtmosian
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyWasteManagementSpecialist
   name: waste management specialist ID card
   components:

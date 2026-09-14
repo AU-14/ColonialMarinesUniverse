@@ -143,6 +143,7 @@
     containers:
       light_bulb: !type:ContainerSlot
   - type: ApcPowerReceiver
+    powerLoad: 40 # CMU14
   - type: Appearance
   - type: RMCPowerReceiver
     idleLoad: 1
@@ -460,6 +461,7 @@
     containers:
       light_bulb: !type:ContainerSlot
   - type: ApcPowerReceiver
+    powerLoad: 40 # CMU14
   - type: Appearance
   - type: RMCPowerReceiver
     idleLoad: 1

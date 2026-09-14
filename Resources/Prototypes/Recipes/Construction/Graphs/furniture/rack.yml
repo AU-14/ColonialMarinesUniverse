@@ -11,7 +11,7 @@
             - !type:SnapToGrid
               southRotation: true
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
     - node: Rack
@@ -20,7 +20,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
           steps:
             - tool: Screwing

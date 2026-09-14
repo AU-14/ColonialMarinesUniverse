@@ -1,0 +1,101 @@
+# Over-the-top variant of MeleeDebugGib. Admin/debug spawn only.
+- type: entity
+  name: bang stick maximum gibber
+  parent: MeleeDebugGib
+  id: MeleeDebugGibInsane
+  description: hit REALLY hard ye
+  suffix: DEBUG, CMU
+  components:
+  - type: InsaneGib
+    splatModifier: 25
+    extraGibImpulse: 45
+    spawnOffset: 3.5
+    extraGibs:
+      OrganHumanHead:
+        min: 1
+        max: 1
+      OrganHumanTorso:
+        min: 1
+        max: 3
+      OrganHumanArmLeft:
+        min: 2
+        max: 4
+      OrganHumanArmRight:
+        min: 2
+        max: 4
+      OrganHumanHandLeft:
+        min: 1
+        max: 4
+      OrganHumanHandRight:
+        min: 1
+        max: 4
+      OrganHumanLegLeft:
+        min: 2
+        max: 4
+      OrganHumanLegRight:
+        min: 2
+        max: 4
+      OrganHumanFootLeft:
+        min: 1
+        max: 4
+      OrganHumanFootRight:
+        min: 1
+        max: 4
+      OrganHumanBrain:
+        min: 1
+        max: 5
+      OrganHumanEyes:
+        min: 1
+        max: 6
+      OrganHumanHeart:
+        min: 1
+        max: 5
+      OrganHumanLungs:
+        min: 1
+        max: 5
+      OrganHumanLiver:
+        min: 1
+        max: 4
+      OrganHumanStomach:
+        min: 1
+        max: 3
+      OrganHumanKidneys:
+        min: 1
+        max: 4
+      OrganHumanTongue:
+        min: 1
+        max: 4
+      OrganHumanEars:
+        min: 1
+        max: 4
+      OrganHumanAppendix:
+        min: 1
+        max: 4
+      PuddleBlood:
+        min: 12
+        max: 24
+
+# Get their attention with this one. Doesn't harm, but does thunder across the entire map.
+- type: entity
+  name: zeus stick
+  parent: BaseItem
+  id: CMUDebugLightningStick
+  description: harmless thunder strike ye
+  suffix: DEBUG, CMU
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Melee/debug.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+    sprite: Objects/Weapons/Melee/debug.rsi
+  - type: DebugLightning
+
+- type: entity
+  name: zeus bolt
+  parent: Lightning
+  id: CMUDebugLightningBolt
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Electrified
+    enabled: false

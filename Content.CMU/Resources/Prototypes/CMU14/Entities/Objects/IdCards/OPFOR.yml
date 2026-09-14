@@ -216,3 +216,68 @@
   components:
   - type: PresetIdCard
     job: AU14JobOPFORWorkingJoe
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORWeaponsSpecialist
+  name: weapons specialist ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORWeaponsSpecialist
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORVehicleCommander
+  name: vehicle commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORVehicleCommander
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFOREngineeringTech
+  name: engineering technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFOREngineeringTech
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORNurse
+  name: nurse ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORNurse
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: AU14IDCardOPFORCombatCorrespondent
+  name: combat correspondent ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORCombatCorrespondent
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: CMUIDCardOPFORAdjutantDress
+  name: high command adjutant ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobOPFORAdjutantDress
+
+- type: entity
+  parent: CMIDCardGold
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardOPFORBrigadierGeneral
+  name: brigadier general ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobOPFORBrigadierGeneral
+
+- type: entity
+  parent: AU14IDCardOPFOR
+  id: CMUIDCardOPFORVipEscort
+  name: VIP escort detail ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobOPFORVipEscort

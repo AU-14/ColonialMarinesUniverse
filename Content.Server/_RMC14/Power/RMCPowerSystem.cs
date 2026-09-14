@@ -7,12 +7,14 @@ using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Power;
 using Content.Shared.Audio;
+using Content.Shared.CMU14.Power;
 using Content.Shared.Examine;
 using Content.Shared.Power;
 using Content.Shared.Power.Components;
 using Content.Shared.PowerCell;
 using Content.Shared.PowerCell.Components;
 using Robust.Shared.Configuration;
+using Robust.Shared.GameObjects; // CMU14
 using Robust.Shared.Containers;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -64,6 +66,7 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
         SubscribeLocalEvent<RMCPowerReceiverComponent, PowerChangedEvent>(OnReceiverPowerChanged);
         SubscribeLocalEvent<RMCPowerUsageDisplayComponent, ExaminedEvent>(OnUsageDisplayEvent);
         SubscribeLocalEvent<CMUZLevelNetworkUpdatedEvent>(OnZLevelNetworkUpdated);
+        SubscribeLocalEvent<ApcPowerReceiverComponent, MapInitEvent>(OnApcReceiverMapInit); // CMU14
 
         Subs.CVar(_config, RMCCVars.RMCPowerUpdateEverySeconds, v => _updateEvery = TimeSpan.FromSeconds(v), true);
         Subs.CVar(_config, RMCCVars.RMCPowerLoadMultiplier, v => _powerLoadMultiplier = v, true);
@@ -94,7 +97,14 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
     protected override void OnReceiverMapInit(Entity<RMCPowerReceiverComponent> ent, ref MapInitEvent args)
     {
+        if (Transform(ent).MapUid is { } map && HasComp<CMUMapUsesTilePowerComponent>(map)) // CMU14: maps opt-out of area power
+        {
+            RemComp<RMCPowerReceiverComponent>(ent);
+            return;
+        }
+
         base.OnReceiverMapInit(ent, ref args); // CMU14: newly initialized receivers still need area registration.
+
         if (!TryComp(ent, out ApcPowerReceiverComponent? receiver))
             return;
 
@@ -113,6 +123,45 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
         if (_appearanceQuery.TryComp(ent, out var appearance))
             _appearance.SetData(ent, PowerDeviceVisuals.Powered, true, appearance);
+    }
+
+    // CMU14 Method: Adopt bare wizden power receivers into area power on a map without CMUMapUsesTilePower,
+    // every APCPowerReceiver becomes a channel with its powerLoad as active load.
+    // Runs on MapInit, not startup: uninitialized maps must not see the claimed component (save tests).
+    // Upstream PowerNetSystem seeds Powered visuals on MapInit too; the event bus allows one
+    // subscriber per comp+event pair, so its line was folded in here.
+    private void OnApcReceiverMapInit(Entity<ApcPowerReceiverComponent> ent, ref MapInitEvent args)
+    {
+        _appearance.SetData(ent, PowerDeviceVisuals.Powered, ent.Comp.Powered);
+
+        if (!ent.Comp.NeedsPower)
+            return;
+
+        // Nullspace stays vanilla: no map means no area power will ever reach it.
+        if (Transform(ent).MapUid is not { } map)
+            return;
+
+        if (HasComp<CMUMapUsesTilePowerComponent>(map))
+        {
+            EnsureComp<ExtensionCableReceiverComponent>(ent);
+            return;
+        }
+
+        if (HasComp<RMCPowerReceiverComponent>(ent))
+            return;
+
+        // Wired into a vanilla APC net, leave it to PowerNetSystem.
+        if (HasComp<ExtensionCableReceiverComponent>(ent))
+            return;
+
+        var receiver = EnsureComp<RMCPowerReceiverComponent>(ent);
+        receiver.Channel = RMCPowerChannel.Environment;
+        receiver.ActiveLoad = (int) ent.Comp.Load;
+        // RMC owns the draw now; a nonzero vanilla Load would still be demanded from the APC net
+        // and overload vanilla maps (TestApcLoad).
+        ent.Comp.Load = 0;
+        Dirty(ent, ent.Comp);
+        ToUpdate.Add(ent);
     }
 
     protected override void PowerUpdated(Entity<RMCAreaPowerComponent> area, RMCPowerChannel channel, bool on)

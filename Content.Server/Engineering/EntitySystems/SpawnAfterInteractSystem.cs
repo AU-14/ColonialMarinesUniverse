@@ -42,7 +42,9 @@ namespace Content.Server.Engineering.EntitySystems
 
             bool IsTileClear()
             {
-                return tileRef.Tile.IsEmpty == false && !_turfSystem.IsTileBlocked(tileRef, CollisionGroup.MobMask);
+                // CMU14: WallLayer covers the inflatables themselves, which otherwise stack on one tile.
+                return tileRef.Tile.IsEmpty == false
+                    && !_turfSystem.IsTileBlocked(tileRef, CollisionGroup.MobMask | CollisionGroup.WallLayer);
             }
 
             if (!IsTileClear())

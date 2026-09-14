@@ -50,12 +50,6 @@ public sealed partial class YautjaTrapSystem : EntitySystem
         SubscribeLocalEvent<YautjaTrapComponent, GettingPickedUpAttemptEvent>(OnGettingPickedUpAttempt);
         SubscribeLocalEvent<YautjaTrapComponent, StepTriggerAttemptEvent>(OnStepTriggerAttempt);
         SubscribeLocalEvent<YautjaTrapComponent, StepTriggeredOnEvent>(OnStepTriggeredOn);
-        SubscribeLocalEvent<YautjaTrapComponent, ComponentStartup>(OnComponentStartup);
-    }
-
-    private void OnComponentStartup(Entity<YautjaTrapComponent> trap, ref ComponentStartup args)
-    {
-        UpdateTrapVisibility(trap);
     }
 
     private void OnUseInHand(Entity<YautjaTrapComponent> trap, ref UseInHandEvent args)

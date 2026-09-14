@@ -210,15 +210,6 @@ public static class GhostWarpGrouping
     public static string GetWarpTab(GhostWarp warp) =>
         warp.Tab ?? (warp.IsWarpPoint ? TabLocations : TabOther);
 
-    // CMU14 method: tab the window shows first, so the initial response already carries the right overrides
-    public static string GetDefaultTab(IEnumerable<GhostWarp> warps) =>
-        warps
-            .Select(GetWarpTab)
-            .DefaultIfEmpty(TabOther)
-            .OrderBy(GetTabOrder)
-            .ThenBy(tab => tab, StringComparer.Ordinal)
-            .First();
-
     private static bool IsXenoJob(string? jobId)
     {
         return jobId?.StartsWith("CMXeno", StringComparison.OrdinalIgnoreCase) == true;

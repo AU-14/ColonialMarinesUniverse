@@ -1,0 +1,29 @@
+- type: entity
+  parent: GasMinerOxygen
+  id: CMUGasMinerOxygenPortable
+  name: OM-2 portable oxygen miner
+  suffix: Portable, 150kPa
+  description: A trailer-sized atmospheric extractor. Trickles out breathable-pressure oxygen while powered - the colony breathes through it, so its power bill is never late.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: GasMiner
+    maxExternalPressure: 150
+    spawnAmount: 20
+  - type: ApcPowerReceiver
+    powerLoad: 1500
+  - type: ExtensionCableReceiver
+
+- type: entity
+  parent: CMUGasMinerOxygenPortable
+  id: CMUGasMinerNitrogenPortable
+  name: NM-2 portable nitrogen miner
+  suffix: Portable, 150kPa
+  description: 'A trailer-sized atmospheric extractor. Trickles out breathable-pressure nitrogen while powered, for blending air, not filling tanks. The name is honest: that is mostly what nitrogen is.'
+  components:
+  - type: GasMiner
+    spawnGas: Nitrogen

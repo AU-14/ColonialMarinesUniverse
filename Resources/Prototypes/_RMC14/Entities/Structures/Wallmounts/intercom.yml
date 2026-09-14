@@ -9,6 +9,10 @@
   - type: ApcPowerReceiver
     powerLoad: 100 # TODO RMC14 power
     needsPower: true
+  - type: RMCPowerReceiver # CMU14
+    idleLoad: 100
+    activeLoad: 100
+    channel: Equipment
   - type: Electrified
     enabled: false
     usesApcPower: true

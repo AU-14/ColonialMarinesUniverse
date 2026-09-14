@@ -151556,7 +151556,7 @@ entities:
     - type: Transform
       pos: 7.369315,-40.479717
       parent: 1
-- proto: RMCInflatableDoor
+- proto: CMUInflatableDoor # CMU14
   entities:
   - uid: 21021
     components:
@@ -151573,14 +151573,14 @@ entities:
     - type: Transform
       pos: 34.5,26.5
       parent: 1
-- proto: RMCInflatableDoorBroken
+- proto: CMUInflatableDoorBroken # CMU14
   entities:
   - uid: 21024
     components:
     - type: Transform
       pos: 35.5,28.5
       parent: 1
-- proto: RMCInflatableWall
+- proto: CMUInflatableWall # CMU14
   entities:
   - uid: 21025
     components:
@@ -151712,7 +151712,7 @@ entities:
     - type: Transform
       pos: 33.5,26.5
       parent: 1
-- proto: RMCInflatableWallBroken
+- proto: CMUInflatableWallBroken # CMU14
   entities:
   - uid: 21051
     components:

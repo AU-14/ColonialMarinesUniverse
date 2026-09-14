@@ -29,6 +29,12 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_ws
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: ws
 
   requirements:
   - !type:TraitsRequirement
@@ -105,3 +111,40 @@
   - CannedDrinksAU14
   - SmokablesRMC
   - WeaponsRMC
+
+- type: job
+  parent: AU14JobWeaponsSpecialistBase
+  id: AU14JobOPFORWeaponsSpecialist
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORWeaponsSpecialist"
+  spawnMenuRoleName: Weapons Specialist (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforWeaponsSpecialist
+  dummyStartingGear: AU14GearopforWeaponsSpecialistDummy
+  accessGroups:
+  - AU14OpforWeaponsSpecialist
+
+- type: startingGear
+  id: AU14GearopforWeaponsSpecialist
+  equipment:
+    id: AU14IDCardOPFORWeaponsSpecialist
+    ears: AU14HeadsetOpforMarine
+
+- type: startingGear
+  id: AU14GearopforWeaponsSpecialistDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORWeaponsSpecialist
+  name: Spawn Point OPFOR Weapons Specialist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORWeaponsSpecialist
+  - type: Sprite
+    state: syn_spawn

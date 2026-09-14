@@ -88,7 +88,7 @@
 - type: gameMap
   id: AU747
   mapName: LV-747 Solaris Gulch
-  mapPath: /Maps/CMU14/Solaris.yml
+  mapPath: /Maps/CMU14/Legacy/Solaris.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0
@@ -136,6 +136,7 @@
 
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianEngineer: [5, 5]
+            CMUJobCivilianAtmosian: [1, 2]
 
             # Medical
             AU14JobCivilianHeadPhysician: [1, 1]

@@ -157,6 +157,17 @@ public sealed partial class ObjectiveControlSystem
 
     public void AwardRawPointsToFaction(string faction, int points) => ApplyWinPoints(faction, points);
 
+    // CMU14 method: standalone hotspot tally, not part of RequiredWinPoints
+    public void AddHotspotPoints(string faction, int points)
+    {
+        if (GetOrReselectObjMaster() is not { } master)
+            return;
+
+        var data = master.GetOrCreateFactionData(faction.ToLowerInvariant());
+        data.HotspotPoints += points;
+        DirtyObjectiveMaster();
+    }
+
     private void ApplyWinPoints(string faction, int points)
     {
         if (GetOrReselectObjMaster() is not { } master)

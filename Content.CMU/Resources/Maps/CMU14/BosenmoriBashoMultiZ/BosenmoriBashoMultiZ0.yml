@@ -138355,7 +138355,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 278.5,45.5
-- proto: OxygenCanister
+- proto: CMUCanisterOxygen
   entities:
   - uid: 47431
     components:
@@ -312161,7 +312161,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 351.5,51.5
-- proto: RMCCommunicationsTower
+- proto: AU14CommunicationsTower
   entities:
   - uid: 50175
     components:
@@ -334415,7 +334415,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 353.5,167.5
-- proto: RMCInflatableDoor
+- proto: CMUInflatableDoor # CMU14
   entities:
   - uid: 42729
     components:
@@ -334447,7 +334447,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 364.5,179.5
-- proto: RMCInflatableDoorBroken
+- proto: CMUInflatableDoorBroken # CMU14
   entities:
   - uid: 39613
     components:
@@ -334459,7 +334459,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 18.5,205.5
-- proto: RMCInflatableWallBroken
+- proto: CMUInflatableWallBroken # CMU14
   entities:
   - uid: 39607
     components:
@@ -353657,7 +353657,7 @@ entities:
       parent: 1
       rot: 4.71238898038469 rad
       pos: 113.5,23.5
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 48244
     components:

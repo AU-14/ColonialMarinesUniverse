@@ -46,7 +46,7 @@ public sealed class PrototypeSaveTest : GameTest
         var prototypes = new List<EntityPrototype>();
         EntityUid uid;
 
-        await pair.CreateTestMap(false, "FloorSteel"); // Wires n such disable ambiance while under the floor
+        await pair.CreateTestMap(false, "CMFloorSteel"); // CMU14: Wires n such disable ambiance while under the floor
         var mapId = pair.TestMap.MapId;
         var grid = pair.TestMap.Grid;
 

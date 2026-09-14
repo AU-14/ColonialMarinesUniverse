@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Power;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines.Skills;
@@ -944,6 +945,9 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
     private bool TryGetPowerArea(EntityUid ent, out Entity<RMCAreaPowerComponent> areaPower)
     {
         areaPower = default;
+        if (Transform(ent).MapUid is { } map && HasComp<CMUMapUsesTilePowerComponent>(map)) // CMU14
+            return false;
+
         if (!_area.TryGetArea(ent, out var area, out _))
             return false;
 

@@ -4,11 +4,17 @@
   jobBlacklistGroup:
   - AllGovforJobs
   - AllOpforJobs
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
+  - AllSynthJobs
   briefing:
     text: cmu-antag-clf-saboteur-greeting
     color: OliveDrab
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
   startingGear: CMUGearCLFSaboteur
+  startingSkills:
+  - type: RMCSkillEngineer
+    level: 2
   components:
   - type: CLFSaboteur
     sabotageGoal: 12

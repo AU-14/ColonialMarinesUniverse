@@ -84,11 +84,11 @@
   id: stablegarrison
   mapName: Stable Garrison
   allegiance: UA
-  mapPath: /Maps/CMU14/garrison.yml
+  mapPath: /Maps/CMU14/garrison_v1.yml
   mapsBelow:
-  - /Maps/CMU14/garrison_below.yml
+  - /Maps/CMU14/garrison_v1_below.yml
   mapsAbove:
-  - /Maps/CMU14/garrison_above.yml
+  - /Maps/CMU14/garrison_v1_above.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0
@@ -138,6 +138,7 @@
 
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianEngineer: [4, 4]
+            CMUJobCivilianAtmosian: [1, 2]
 
             # Medical
             AU14JobCivilianHeadPhysician : [1, 1]

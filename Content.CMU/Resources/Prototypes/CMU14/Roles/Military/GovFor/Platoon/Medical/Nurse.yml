@@ -29,6 +29,12 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_corpsman
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: corpsman
 
   requirements:
   - !type:TraitsRequirement
@@ -118,3 +124,54 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+
+- type: job
+  parent: AU14JobNurseBase
+  id: AU14JobOPFORNurse
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORCorpsman"
+  spawnMenuRoleName: Nurse (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFORNurse
+  dummyStartingGear: AU14GearOPFORNurseDummy
+  accessGroups:
+  - AU14OpforCorpsman
+  - AU14OpforSquad
+
+- type: startingGear
+  id: AU14GearOPFORNurse
+  equipment:
+    id: AU14IDCardOPFORNurse
+    jumpsuit: RMCScrubsOliveNurse
+    shoes: CMBootsBlackFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    ears: AU14HeadsetOpforAuxiliary
+    ears2: RMCM5CameraGear
+    neck: ClothingNeckStethoscope
+
+- type: startingGear
+  id: AU14GearOPFORNurseDummy
+  equipment:
+    jumpsuit: RMCScrubsOliveNurse
+    shoes: CMBootsBlackFilled
+    belt: AU14BeltMedicBagSupportSynth
+    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14SatchelMilitaryDoctor
+    ears: AU14HeadsetOpforAuxiliary
+    ears2: RMCM5CameraGear
+    neck: ClothingNeckStethoscope
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORNurse
+  name: Spawn Point OPFOR Nurse
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORNurse
+  - type: Sprite
+    state: syn_spawn

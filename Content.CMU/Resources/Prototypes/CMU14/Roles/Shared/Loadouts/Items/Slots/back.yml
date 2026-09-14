@@ -27,3 +27,8 @@
   id: MedicalSatchelAU14
   equipment:
     back: CMSatchelMedical
+
+- type: loadout
+  id: IndustrialBackpackAU14
+  equipment:
+    back: CMBackpackEngineer

@@ -53,7 +53,7 @@ public sealed class FootPrintsSystemTest
             map.CreateMap(out var mapId);
             var grid = map.CreateGridEntity(mapId);
 
-            var floorTile = new Tile(tileDefinitionManager["FloorSteel"].TileId);
+            var floorTile = new Tile(tileDefinitionManager["CMFloorSteel"].TileId); // CMU14
             for (var x = 0; x < 3; x++)
                 map.SetTile(grid, new Vector2i(x, 0), floorTile);
 

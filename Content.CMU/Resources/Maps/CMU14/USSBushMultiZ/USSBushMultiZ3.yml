@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v278.0.0
+  engineVersion: v289.0.0
   forkId: ""
   forkVersion: ""
-  time: 08/16/2026 23:06:56
+  time: 09/11/2026 20:05:15
   entityCount: 6
 maps:
 - 1
@@ -62,14 +62,10 @@ entities:
     - type: SpreaderGrid
     - type: GridPathfinding
     - type: Gravity
+      inherent: True
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
-      inherent: True
       enabled: True
-    - type: DecalGrid
-      chunkCollection:
-        version: 2
-        nodes: []
     - type: MapLight
     - type: DayNightCycle
       timeEntries:
@@ -101,54 +97,43 @@ entities:
     - type: Roof
       data: {}
     - type: MapAtmosphere
-      space: False
       mixture:
+        temperature: 2.725
         volume: 2500
+        moles: {}
         immutable: True
-        temperature: 293.15
-        moles:
-        - 21.8124
-        - 81.1594
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
+    - type: ChunkContainer
+      chunkEntities: []
 - proto: RMCLZFloodlight
   entities:
   - uid: 2
     components:
     - type: Transform
+      parent: 1
       rot: -1.5707963267948966 rad
       pos: 18.5,9.5
-      parent: 1
   - uid: 3
     components:
     - type: Transform
+      parent: 1
       rot: -1.5707963267948966 rad
       pos: 18.5,15.5
-      parent: 1
   - uid: 4
     components:
     - type: Transform
+      parent: 1
       rot: -1.5707963267948966 rad
       pos: 23.5,21.5
-      parent: 1
   - uid: 5
     components:
     - type: Transform
+      parent: 1
       rot: -1.5707963267948966 rad
       pos: 29.5,9.5
-      parent: 1
   - uid: 6
     components:
     - type: Transform
+      parent: 1
       rot: -1.5707963267948966 rad
       pos: 29.5,15.5
-      parent: 1
 ...

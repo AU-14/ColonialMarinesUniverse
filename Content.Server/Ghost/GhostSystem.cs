@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Ghost;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Actions;
+using Content.Shared.Body; // CMU14
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -24,6 +25,7 @@ using Content.Shared.Follower.Components;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Ghost.Systems;
 using Content.Shared.GhostTypes;
+using Content.Shared.Item; // CMU14
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -86,6 +88,9 @@ namespace Content.Server.Ghost
         [Dependency] private EntityQuery<GhostComponent> _ghostQuery = default!;
         [Dependency] private EntityQuery<FollowerComponent> _followerQuery = default!;
         [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+        [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!; // CMU14: warp preview child filter
+        [Dependency] private EntityQuery<VisualOrganComponent> _visualOrganQuery = default!; // CMU14
+        [Dependency] private EntityQuery<ItemComponent> _itemQuery = default!; // CMU14
 
         private static readonly ProtoId<TagPrototype> AllowGhostShownByEventTag = "AllowGhostShownByEvent";
         private static readonly ProtoId<DamageTypePrototype> AsphyxiationDamageType = "Asphyxiation";
@@ -296,8 +301,8 @@ namespace Content.Server.Ghost
             }
 
             var playerWarps = GetPlayerWarps(entity).ToList();
-            // CMU14: scope preview overrides to one tab so opening the menu doesn't force-send every player at once
-            var tab = msg.Tab ?? GhostWarpGrouping.GetDefaultTab(playerWarps);
+            // CMU14: scope preview overrides to one tab; Locations needs no overrides so opening the menu sends nothing
+            var tab = msg.Tab ?? GhostWarpGrouping.TabLocations;
             RefreshWarpPreviewOverrides(args.SenderSession, playerWarps.Where(w => GhostWarpGrouping.GetWarpTab(w) == tab));
 
             var response = new GhostWarpsResponseEvent(playerWarps.Concat(GetLocationWarps()).ToList(), tab); // CMU14
@@ -319,8 +324,23 @@ namespace Content.Server.Ghost
                 if (!TryGetEntity(warp.Entity, out var target) || !Exists(target.Value))
                     continue;
 
-                _pvsOverride.AddSessionOverride(target.Value, session);
+                // CMU14: the preview needs only the mob, its visual organs and its worn/held items;
+                // AddForceSend is non-recursive so container contents and internal organs are never sent
+                _pvsOverride.AddForceSend(target.Value, session);
                 overrides.Add(target.Value);
+
+                if (!_xformQuery.TryGetComponent(target.Value, out var xform))
+                    continue;
+
+                var childEnumerator = xform.ChildEnumerator;
+                while (childEnumerator.MoveNext(out var child))
+                {
+                    if (!_visualOrganQuery.HasComp(child) && !_itemQuery.HasComp(child))
+                        continue;
+
+                    _pvsOverride.AddForceSend(child, session);
+                    overrides.Add(child);
+                }
             }
 
             if (overrides.Count > 0)
@@ -335,7 +355,7 @@ namespace Content.Server.Ghost
             foreach (var target in overrides)
             {
                 if (Exists(target))
-                    _pvsOverride.RemoveSessionOverride(target, session);
+                    _pvsOverride.RemoveForceSend(target, session); // CMU14
             }
         }
 

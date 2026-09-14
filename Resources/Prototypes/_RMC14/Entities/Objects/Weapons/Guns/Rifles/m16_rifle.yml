@@ -33,16 +33,16 @@
     modifiers:
       Burst:
         fireDelay: 0.1665
+        maxScatterModifier: 9
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 9
+      FullAuto:
+        fireDelay: 0
         maxScatterModifier: 10
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
-      FullAuto:
-        fireDelay: 0
-        maxScatterModifier: 13
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 4
+        shotsToMaxScatter: 7
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.35
     accuracyMultiplierUnwielded: 0.65

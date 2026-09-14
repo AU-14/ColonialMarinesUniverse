@@ -1,0 +1,117 @@
+# Shared ASRS category abstracts - parent these into any RequisitionsComputer catalog:
+# Categories carry AlwaysPushInheritance, so they append onto a child catalog's own list.
+- type: entity
+  abstract: true
+  id: CMUASRSResearchGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Research
+      entries:
+      - cost: 1000
+        crate: RMCCrateInflatableBarriers
+      - cost: 100
+        crate: CMUCrateResearchTerminal
+      - cost: 900
+        crate: CMUCrateSim
+      - cost: 4000
+        crate: CMUMonkeyCubeCrate
+        maxStock: 1
+        stockReplenishDelay: 1800
+      - cost: 8000
+        crate: CMUExoticCubeCrate
+        maxStock: 1
+        stockReplenishDelay: 1800
+      - cost: 250
+        crate: CMUCrateChemGlasses
+      - cost: 400
+        crate: CMUCrateBiosuitScientist
+      - cost: 4500
+        crate: CMUCratePreciousMetals
+      - cost: 700
+        crate: CMUCrateHazardGear
+      - cost: 500
+        crate: CMUCrateEngineeringWiring
+
+- type: entity
+  abstract: true
+  id: CMUASRSBotanyGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Botany
+      entries:
+      - cost: 350
+        crate: AU14CrateHydroponicsEquipment
+      - cost: 600
+        crate: AU14CrateHydroSeeds
+      - cost: 340
+        crate: CMUHydroponicsTrayPortable
+
+# faction agnostic atmospherics supply for atmospheric technicians
+- type: entity
+  abstract: true
+  id: CMUASRSAtmosGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Atmospherics
+      entries:
+      - cost: 100
+        crate: CMUAtmosScanner
+      - cost: 400
+        crate: PortableScrubber
+      - cost: 300
+        crate: SpaceHeater
+      - cost: 150
+        crate: StorageCanister
+      - cost: 200
+        crate: CMUCanisterAir
+      - cost: 200
+        crate: CMUCanisterOxygen
+      - cost: 200
+        crate: CMUCanisterNitrogen
+      - cost: 250
+        crate: CMUCanisterCarbonDioxide
+      - cost: 250
+        crate: WaterVaporCanister
+      - cost: 400
+        crate: LiquidOxygenCanister
+      - cost: 400
+        crate: LiquidNitrogenCanister
+      - cost: 400
+        crate: AmmoniaCanister
+      - cost: 450
+        crate: LiquidCarbonDioxideCanister
+      - cost: 500
+        crate: CMUCanisterNitrousOxide
+      - cost: 800
+        crate: CMUCanisterPlasma
+      - cost: 2000
+        crate: CMUCanisterPhoron
+      - cost: 600
+        crate: CMUGasCrystallizer
+      - cost: 400
+        crate: CMUGasThermoMachineHeater
+      - cost: 400
+        crate: CMUGasThermoMachineFreezer
+      - cost: 500
+        crate: CMUGasCondenser
+      - cost: 1200
+        crate: CMUCrateAtmosPhoronKit
+      - cost: 900
+        crate: CMUCratePowerStarterKit
+      - cost: 1500
+        crate: CMUGasMinerOxygenPortable
+        maxStock: 1
+        stockReplenishDelay: 3600
+      - cost: 1500
+        crate: CMUGasMinerNitrogenPortable
+        maxStock: 1
+        stockReplenishDelay: 3600
+      - cost: 800
+        crate: TritiumCanister
+      - cost: 800
+        crate: FrezonCanister
+      - cost: 700
+        crate: CMUCratePhoronSheets

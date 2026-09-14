@@ -369,6 +369,9 @@
   components:
   - type: PresetIdCard
     job: CMUJobGOVFORBrigadierGeneral
+  - type: ItemIFF
+    factions:
+    - GOVFOR
 
 - type: entity
   parent: AU14IDCardGOVFOR

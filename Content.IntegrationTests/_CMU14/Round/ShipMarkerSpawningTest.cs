@@ -54,9 +54,6 @@ public sealed class ShipMarkerSpawningTest
                 entities.EnsureComponent<ShipFactionComponent>(grid).Faction = faction;
 
             var map = entities.System<SharedMapSystem>().GetMap(mapId);
-            Assert.That(zLevels.TryMapUp(map, out var upper), Is.True);
-            var upperCoords = new EntityCoordinates(upper!.Value.Owner, new Vector2(2.5f, 66.5f));
-            entities.SpawnEntity("VMarkerShipOverwatchConsole", upperCoords);
 
             var expected = new List<(EntityCoordinates Coordinates, string Prototype)>();
             var vendors = prototypes.Index(platoon.VendorSet!.Value).Vendors;
@@ -68,12 +65,6 @@ public sealed class ShipMarkerSpawningTest
 
                 if (vendors.TryGetValue(marker.Class, out var vendor))
                     expected.Add((transform.Coordinates, vendor.Id));
-                else if (marker.Class == PlatoonMarkerClass.OverwatchConsole)
-                    expected.Add((transform.Coordinates, faction == "govfor"
-                        ? "RMCOverwatchConsoleGovforRotating" : "RMCOverwatchConsoleOpforRotating"));
-                else if (marker.Class == PlatoonMarkerClass.RosterConsole)
-                    expected.Add((transform.Coordinates, faction == "govfor"
-                        ? "CMUGovforRosterConsole" : "CMUOpforRosterConsole"));
             }
 
             Assert.That(expected.Count, Is.GreaterThan(20));
@@ -89,6 +80,16 @@ public sealed class ShipMarkerSpawningTest
                 foreach (var item in expected)
                     Assert.That(spawned.Count(candidate => candidate == item), Is.EqualTo(1),
                         $"{faction}/{platoonId}: expected one {item.Prototype} at {item.Coordinates}");
+
+                // Govfor machines baked into the map must become their Opfor variants on an Opfor ship
+                Assert.That(spawned.Count(c => c.Prototype == "AU14WithdrawConsoleGovFor"),
+                    Is.EqualTo(faction == "govfor" ? 1 : 0));
+                Assert.That(spawned.Count(c => c.Prototype == "AU14WithdrawConsoleOpFor"),
+                    Is.EqualTo(faction == "opfor" ? 1 : 0));
+                Assert.That(spawned.Count(c => c.Prototype == "CMAirlockGovforGlassLocked"),
+                    faction == "govfor" ? Is.GreaterThan(5) : Is.EqualTo(0));
+                Assert.That(spawned.Count(c => c.Prototype == "CMAirlockOpforGlassLocked"),
+                    faction == "opfor" ? Is.GreaterThan(5) : Is.EqualTo(0));
             });
         });
 

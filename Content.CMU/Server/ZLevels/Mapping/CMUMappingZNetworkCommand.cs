@@ -64,6 +64,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
         var network = _zLevel.CreateZNetwork();
         _meta.SetEntityName(network, $"Mapping zNetwork: {mapProto.MapName}");
         Dictionary<EntityUid, int> dict = new();
+        Dictionary<int, ResPath> sourcePaths = new();
 
         List<MapId> createdMaps = new();
 
@@ -82,6 +83,8 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
                 shell.WriteLine("Unloaded all maps created by the failed zNetwork load.");
         }
 
+        // Maps must stay uninitialized: znetwork-save refuses initialized maps
+        // (bakes MapInit artifacts). Playtest doors and atmos on live rounds, not mapping copies.
         var opts = new DeserializationOptions {StoreYamlUids = true};
 
         //Load default map
@@ -92,6 +95,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
             return;
         }
         dict.Add(defaultMapEnt.Value, 0);
+        sourcePaths[0] = mapProto.MapPath;
         createdMaps.Add(defaultMapEnt.Value.Comp.MapId);
         EntityManager.AddComponents(defaultMapEnt.Value, mapProto.ZLevelsComponentOverrides);
         _meta.SetEntityName(defaultMapEnt.Value, $"Mapping {mapProto.MapName}");
@@ -108,6 +112,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
             }
 
             dict.Add(mapEnt.Value, depth);
+            sourcePaths[depth] = path;
             createdMaps.Add(mapEnt.Value.Comp.MapId);
             EntityManager.AddComponents(mapEnt.Value, mapProto.ZLevelsComponentOverrides);
             _meta.SetEntityName(mapEnt.Value, $"Mapping {mapProto.MapName} [{depth}]");
@@ -125,6 +130,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
             }
 
             dict.Add(mapEnt.Value, depth);
+            sourcePaths[depth] = path;
             createdMaps.Add(mapEnt.Value.Comp.MapId);
             EntityManager.AddComponents(mapEnt.Value, mapProto.ZLevelsComponentOverrides);
             _meta.SetEntityName(mapEnt.Value, $"Mapping {mapProto.MapName} [{depth}]");
@@ -148,6 +154,9 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
             CleanupFailedLoad();
             return;
         }
+
+        var sourceComp = EntityManager.AddComponent<CMUZNetworkSourcePathsComponent>(network);
+        sourceComp.Paths = sourcePaths;
 
         //Maps successfully created. run misc helpful mapping commands
         if (player.AttachedEntity is { Valid: true } playerEntity &&

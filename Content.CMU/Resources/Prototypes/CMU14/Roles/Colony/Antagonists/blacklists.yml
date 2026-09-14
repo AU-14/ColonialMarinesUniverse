@@ -1,51 +1,162 @@
 - type: antagJobBlacklist
+  id: AllCLFJobs
+  jobs:
+    - AU14JobCLFGuerilla
+    - AU14JobCLFSapper
+    - AU14JobCLFCellLeader
+    - AU14JobCLFRadioOperator
+    - AU14JobCLFPhysician
+    - AU14JobCLFSurgeon
+
+- type: antagJobBlacklist
+  id: AllWeYuJobs
+  jobs:
+    - AU14JobCivilianCorporateLiaison
+    - AU14JobCivilianCorporateAdminAssistant
+    - AU14JobCivilianCorporateAssistant
+    - AU14JobWYGuard
+    - AU14JobCivilianScientist
+
+- type: antagJobBlacklist
+  id: AllColonyDepartmentHeadJobs
+  jobs:
+    - AU14JobCivilianCorporateLiaison
+    - AU14JobCivilianHeadOfService
+    - AU14JobCivilianHeadPhysician
+    - AU14JobCivilianHeadOfEngineering
+    - AU14JobCivilianColonyAdministrator
+#   - AU14JobCivilianColonyAdminAssistant
+    - AU14JobCivilianOrbitalArbiter
+    - AU14JobCivilianCMBMarshal
+
+- type: antagJobBlacklist
+  id: AllSynthJobs
+  jobs:
+    - AU14JobColonyWorkingJoe
+    - AU14JobCivilianColonySynthetic
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobOPFORAuxSupportSynth
+    - AU14JobGOVFORWorkingJoe
+    - AU14JobOPFORWorkingJoe
+
+- type: antagJobBlacklist
   id: AllGovforJobs
   jobs:
     - AU14JobGOVFORPlatCo
+    - AU14JobGOVFORPlatOp
+    - AU14JobGOVFORAdjutant
+    - CMUJobGOVFORAdjutantDress
+    - CMUJobGOVFORBrigadierGeneral
+    - CMUJobGOVFORVipEscort
+    - AU14JobGOVFORadvisor
+    - AU14JobGOVFOROfficerEngi
+    - AU14JobGOVFORAuxTech
+    - AU14JobGOVFOROfficerIntel
+    - AU14JobGOVFOROfficerLogistics
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFORMilitaryDoctor
     - AU14JobGOVFORPlatoonCorpsman
     - AU14JobGOVFORNurse
-    - AU14JobGOVFORDCC
-    - AU14JobGOVFORPlatOp
-    - AU14JobGOVFORDSPilot
-    - AU14JobGOVFORRadioTelephoneOperator
-    - AU14JobGOVFORRadioTrafficOperator
-    - AU14JobGOVFORSquadSergeant
-    - AU14JobGOVFORSquadAutomaticRifleman
-    - AU14JobGOVFORSquadCombatTech
-    - AU14JobGOVFOREngineeringTech
-    - AU14JobGOVFORSquadRifleman
-    - AU14JobGOVFORAuxSupportSynth
-    - AU14JobGOVFORadvisor
-    - AU14JobGOVFORMilitaryDoctor
+    - AU14JobGOVFOROfficerMP
     - AU14JobGOVFORMilitaryPoliceMan
     - AU14JobGOVFORSectionSergeant
-    - AU14JobGOVFORAuxTech
-    - AU14JobGOVFORWorkingJoe
+    - AU14JobGOVFORSquadSergeant
+    - AU14JobGOVFORRadioTelephoneOperator
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadCombatTech
     - AU14JobGOVFORWeaponsSpecialist
+    - AU14JobGOVFOREngineeringTech
+    - AU14JobGOVFORSquadRifleman
+    - CMUJobGOVFORDroneOperator
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobGOVFORWorkingJoe
+    - AU14JobGOVFORDSPilot
+    - AU14JobGOVFORDCC
     - AU14JobGOVFORVehicleCrewman
     - AU14JobGOVFORVehicleCommander
-    - CMUJobGOVFORDroneOperator
+    - AU14JobGOVFORCombatCorrespondent
 
 - type: antagJobBlacklist
   id: AllOpforJobs
   jobs:
     - AU14JobOPFORPlatCo
-    - AU14JobOPFORPlatoonCorpsman
-    - AU14JobOPFORDCC
     - AU14JobOPFORPlatOp
-    - AU14JobOPFORDSPilot
-    - AU14JobOPFORRadioTelephoneOperator
-    - AU14JobOPFORSquadSergeant
-    - AU14JobOPFORSquadAutomaticRifleman
-    - AU14JobOPFORSquadCombatTech
-    - AU14JobOPFORSquadRifleman
-    - AU14JobOPFORAuxSupportSynth
+    - AU14JobOPFORAdjutant
     - AU14JobOPFORadvisor
+    - AU14JobOPFOROfficerEngi
+    - AU14JobOPFORAuxTech
+    - AU14JobOPFOROfficerIntel
+    - AU14JobOPFOROfficerLogistics
+    - AU14JobOPFOROfficerMedical
     - AU14JobOPFORMilitaryDoctor
+    - AU14JobOPFOROfficerMP
     - AU14JobOPFORMilitaryPoliceMan
     - AU14JobOPFORSectionSergeant
-    - AU14JobOPFORAuxTech
+    - AU14JobOPFORSquadSergeant
+    - AU14JobOPFORRadioTelephoneOperator
+    - AU14JobOPFORSquadAutomaticRifleman
+    - AU14JobOPFORSquadCombatTech
+    - AU14JobOPFORWeaponsSpecialist
+    - AU14JobOPFORPlatoonCorpsman
+    - AU14JobOPFORSquadRifleman
+    - CMUJobOPFORDroneOperator
+    - AU14JobOPFOREngineeringTech
+    - AU14JobOPFORNurse
+    - AU14JobOPFORCombatCorrespondent
+    - AU14JobOPFORVehicleCommander
+    - CMUJobOPFORAdjutantDress
+    - CMUJobOPFORBrigadierGeneral
+    - CMUJobOPFORVipEscort
+    - AU14JobOPFORAuxSupportSynth
     - AU14JobOPFORWorkingJoe
+    - AU14JobOPFORDSPilot
+    - AU14JobOPFORDCC
     - AU14JobOPFORVehicleCrewman
-#   - CMUJobOPFORDroneOperator
-#   - AU14JobOPFORWeaponsSpecialist
+
+- type: antagJobBlacklist
+  id: AllGovforCommandStaff
+  jobs:
+    - AU14JobGOVFORPlatCo
+    - AU14JobGOVFORPlatOp
+    - AU14JobGOVFORAdjutant
+    - CMUJobGOVFORAdjutantDress
+    - CMUJobGOVFORBrigadierGeneral
+    - CMUJobGOVFORVipEscort
+    - AU14JobGOVFORadvisor
+#   - AU14JobGOVFOROfficerEngi
+#   - AU14JobGOVFOROfficerIntel
+#   - AU14JobGOVFOROfficerLogistics
+#   - AU14JobGOVFOROfficerMedical
+#   - AU14JobGOVFORMilitaryDoctor
+    - AU14JobGOVFOROfficerMP
+    - AU14JobGOVFORMilitaryPoliceMan
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSquadSergeant
+    - AU14JobGOVFORDSPilot
+    - AU14JobGOVFORDCC
+    - AU14JobGOVFORVehicleCrewman
+    - AU14JobGOVFORVehicleCommander
+
+- type: antagJobBlacklist
+  id: AllOpforCommandStaff
+  jobs:
+    - AU14JobOPFORPlatCo
+    - AU14JobOPFORPlatOp
+    - AU14JobOPFORAdjutant
+    - CMUJobOPFORAdjutantDress
+    - CMUJobOPFORBrigadierGeneral
+    - CMUJobOPFORVipEscort
+    - AU14JobOPFORadvisor
+#   - AU14JobOPFOROfficerEngi
+#   - AU14JobOPFOROfficerIntel
+#   - AU14JobOPFOROfficerLogistics
+#   - AU14JobOPFOROfficerMedical
+#   - AU14JobOPFORMilitaryDoctor
+    - AU14JobOPFOROfficerMP
+    - AU14JobOPFORMilitaryPoliceMan
+    - AU14JobOPFORSectionSergeant
+    - AU14JobOPFORSquadSergeant
+    - AU14JobOPFORDSPilot
+    - AU14JobOPFORDCC
+    - AU14JobOPFORVehicleCrewman
+    - AU14JobOPFORVehicleCommander

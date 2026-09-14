@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions;
 using Content.Shared.DoAfter;
@@ -37,8 +36,7 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
 
     private void OnZJumpMapInit(Entity<CMUXenoZJumpComponent> xeno, ref MapInitEvent args)
     {
-        if (!HasComp<XenoComponent>(xeno)
-            || xeno.Comp.Action != null
+        if (xeno.Comp.Action != null
             || _actions.AddAction(xeno, xeno.Comp.ActionId) is not { } action)
             return;
 
@@ -50,12 +48,6 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
     {
         if (args.Handled)
             return;
-
-        if (!HasComp<XenoComponent>(xeno))
-        {
-            _popup.PopupClient(Loc.GetString(xeno.Comp.NotXenoPopup), xeno, xeno, PopupType.MediumCaution);
-            return;
-        }
 
         if (!CanStartZJumpWindup(xeno, args.Target, xeno.Comp))
             return;
