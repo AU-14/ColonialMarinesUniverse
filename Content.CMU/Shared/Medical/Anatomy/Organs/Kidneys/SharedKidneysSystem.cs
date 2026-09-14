@@ -65,7 +65,7 @@ public abstract partial class SharedKidneysSystem : EntitySystem
 
     private void OnKidneysRemovedFromBody(Entity<KidneysComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (_net.IsClient)
+        if (Timing.ApplyingState || _net.IsClient)
             return;
 
         AdvanceOrgan(ent, args.OldBody, Timing.CurTime);
@@ -85,7 +85,7 @@ public abstract partial class SharedKidneysSystem : EntitySystem
 
     private void OnKidneysAddedToBody(Entity<KidneysComponent> ent, ref OrganAddedToBodyEvent args)
     {
-        if (_net.IsClient || PhysiologyUnavailable(args.Body))
+        if (Timing.ApplyingState || _net.IsClient || PhysiologyUnavailable(args.Body))
             return;
 
         if (TryComp<MissingKidneysComponent>(args.Body, out var missing))

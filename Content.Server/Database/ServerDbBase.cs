@@ -12,6 +12,11 @@ using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.IP;
 using Content.Shared.CMU14.BalanceRating;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.NamedItems;
+using Content.Shared.Administration.Logs;
+using Content.Shared.CMU14.Allegiance;
+using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.RoundStatistics;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Construction.Prototypes;
@@ -381,13 +386,14 @@ namespace Content.Server.Database
             profile.GamemodeJobPriorities = SerializeGamemodeJobPriorities(humanoid.GamemodeJobPriorities);
             profile.GamemodeAntagPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeAntagPreferences);
             profile.GamemodeThreatPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeThreatPreferences);
+            profile.YautjaProfile = YautjaProfileSerializer.SerializeYautjaProfile(humanoid.YautjaProfile);
             profile.RankPreferences = humanoid.RankPreferences.Count == 0
                 ? null
                 : JsonSerializer.Serialize(
                     humanoid.RankPreferences.ToDictionary(
-                        kvp => kvp.Key,
-                        kvp => kvp.Value.Where(p => p.Value != null)
-                                        .ToDictionary(p => p.Key, p => p.Value)));
+                         kvp => kvp.Key,
+                         kvp => kvp.Value.Where(p => p.Value != null)
+                                         .ToDictionary(p => p.Key, p => p.Value)));
 
             return profile;
         }
@@ -571,8 +577,8 @@ namespace Content.Server.Database
 
             var players = updates.Select(u => u.User.UserId).Distinct().ToArray();
             var dbTimes = (await db.DbContext.PlayTime
-                    .Where(p => players.Contains(p.PlayerId))
-                    .ToArrayAsync())
+                .Where(p => players.Contains(p.PlayerId))
+                .ToArrayAsync())
                 .GroupBy(p => p.PlayerId)
                 .ToDictionary(g => g.Key, g => g.ToDictionary(p => p.Tracker, p => p));
 
@@ -654,6 +660,31 @@ namespace Content.Server.Database
                 .SingleOrDefaultAsync(p => p.UserId == userId.UserId, cancel);
 
             return record == null ? null : MakePlayerRecord(record);
+        }
+
+        public async Task<YautjaRank?> GetYautjaRank(Guid userId)
+        {
+            await using var db = await GetDb();
+
+            return await db.DbContext.Player
+                .Where(player => player.UserId == userId)
+                .Select(player => player.YautjaRank.HasValue
+                    ? (YautjaRank?) player.YautjaRank.Value
+                    : null)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task SetYautjaRank(Guid userId, YautjaRank rank)
+        {
+            await using var db = await GetDb();
+
+            var player = await db.DbContext.Player
+                .SingleOrDefaultAsync(entry => entry.UserId == userId);
+            if (player == null)
+                throw new InvalidOperationException($"Cannot set Yautja rank for unknown player {userId}.");
+
+            player.YautjaRank = (int) rank;
+            await db.DbContext.SaveChangesAsync();
         }
 
         protected async Task<bool> PlayerRecordExists(DbGuard db, NetUserId userId)
@@ -2363,6 +2394,70 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .Include(p => p.Player)
                 .Include(p => p.Tier)
                 .ToListAsync();
+        }
+
+        public async Task<List<RMCPatronTier>> GetPatronTiers()
+        {
+            await using var db = await GetDb();
+            return await db.DbContext.RMCPatronTiers
+                .Include(t => t.Patrons)
+                .OrderBy(t => t.Priority)
+                .ThenBy(t => t.Name)
+                .ToListAsync();
+        }
+
+        public async Task UpsertPatronTier(
+            string name,
+            ulong discordRole,
+            int priority,
+            bool showOnCredits,
+            bool ghostColor,
+            bool namedItems,
+            bool figurines,
+            bool lobbyMessage,
+            bool roundEndShoutout)
+        {
+            await using var db = await GetDb();
+            var tier = await db.DbContext.RMCPatronTiers.FirstOrDefaultAsync(t => t.DiscordRole == discordRole);
+            if (tier == null)
+            {
+                tier = new RMCPatronTier { DiscordRole = discordRole };
+                db.DbContext.RMCPatronTiers.Add(tier);
+            }
+
+            tier.Name = name;
+            tier.Priority = priority;
+            tier.ShowOnCredits = showOnCredits;
+            tier.GhostColor = ghostColor;
+            tier.NamedItems = namedItems;
+            tier.Figurines = figurines;
+            tier.LobbyMessage = lobbyMessage;
+            tier.RoundEndShoutout = roundEndShoutout;
+
+            await db.DbContext.SaveChangesAsync();
+        }
+
+        public async Task<SetPatronTierResult> SetPatronTier(Guid player, string tierName)
+        {
+            await using var db = await GetDb();
+            var tier = await db.DbContext.RMCPatronTiers
+                .FirstOrDefaultAsync(t => t.Name == tierName);
+            if (tier == null)
+                return SetPatronTierResult.TierNotFound;
+
+            if (!await db.DbContext.Player.AnyAsync(p => p.UserId == player))
+                return SetPatronTierResult.PlayerNotFound;
+
+            var patron = await db.DbContext.RMCPatrons.FirstOrDefaultAsync(p => p.PlayerId == player);
+            if (patron == null)
+            {
+                patron = new RMCPatron { PlayerId = player };
+                db.DbContext.RMCPatrons.Add(patron);
+            }
+
+            patron.TierId = tier.Id;
+            await db.DbContext.SaveChangesAsync();
+            return SetPatronTierResult.Success;
         }
 
         public async Task SetGhostColor(Guid player, System.Drawing.Color? color)

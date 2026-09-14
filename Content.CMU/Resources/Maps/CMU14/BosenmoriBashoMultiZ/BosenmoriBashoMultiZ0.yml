@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/01/2026 16:19:36
-  entityCount: 52002
+  entityCount: 51950
 maps:
 - 1
 grids:
@@ -367234,4 +367234,17 @@ entities:
     - type: Transform
       parent: 1
       pos: 383.5,170.5
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 52043
+    components:
+    - type: MetaData
+      name: Bosenmori Basho ground relay
+    - type: Transform
+      pos: 161.5,195.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: bosenmori_basho.ground.relay
+      displayName: Bosenmori Basho Ground Relay
 ...

@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.TacticalMap; // CMU14
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.CCVar;
@@ -200,11 +201,12 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         }
 
         // Helpers to check faction selection
-        bool WantsMarines() => faction == null || faction == MarinesFaction;
-        bool WantsXenos() => faction == null || faction == XenosFaction;
-        bool WantsOpfor() => faction == null || faction == OpforFaction;
-        bool WantsGovfor() => faction == null || faction == GovforFaction;
-        bool WantsClf() => faction == null || faction == ClfFaction;
+        bool WantsMarines() => faction == null || faction == "MARINES" || faction == "UNMC" || faction == string.Empty;
+        bool WantsXenos() => faction == null || faction == "XENONIDS" || faction == "XENONID" || faction == string.Empty;
+        bool WantsOpfor() => faction == null || faction == "OPFOR" || faction == string.Empty;
+        bool WantsGovfor() => faction == null || faction == "GOVFOR" || faction == string.Empty;
+        bool WantsClf() => faction == null || faction == "CLF" || faction == string.Empty;
+        bool WantsYautja() => faction == null || faction == "YAUTJA" || faction == "PREDATOR" || faction == string.Empty;
         bool WantsWeYu() => faction == null || faction == WeYuFaction;
         var sensorsOnline = faction != null && _sensorTowers.HasOnlineSensorForFaction(faction);
 
@@ -223,6 +225,9 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         AddIf(() => WantsGovfor() || sensorsOnline, map.GovforBlips);
         AddIf(() => WantsClf() || sensorsOnline, map.ClfBlips);
         AddIf(WantsWeYu, map.WeYuBlips);
+
+        if (WantsYautja())
+            AddIf(() => true, map.YautjaBlips);
 
             // Ensure infrastructure (comms, sensors, tunnels) is always visible on computers
         // Track their entity ids so we can exclude them from enemy-sprite replacement.
@@ -304,6 +309,8 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
                         isFriendly = map.ClfBlips.ContainsKey(id);
                     else if (up == "WEYU")
                         isFriendly = map.WeYuBlips.ContainsKey(id);
+                    else if (up is "YAUTJA" or "PREDATOR")
+                        isFriendly = map.YautjaBlips.ContainsKey(id);
                 }
 
                 if (!isFriendly)
@@ -354,6 +361,68 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
 
     public virtual void UpdateUserData(Entity<TacticalMapUserComponent> user, TacticalMapComponent map)
     {
+    }
+
+    public void EnsureTracked(EntityUid uid, bool trackDead)
+    {
+        var tracked = EnsureComp<TacticalMapTrackedComponent>(uid);
+        tracked.TrackDead = trackDead;
+        Dirty(uid, tracked);
+    }
+
+    public void SetIcon(EntityUid uid, SpriteSpecifier.Rsi? icon, SpriteSpecifier.Rsi? background = null)
+    {
+        var iconComp = EnsureComp<TacticalMapIconComponent>(uid);
+        iconComp.Icon = icon;
+        iconComp.Background = background;
+        Dirty(uid, iconComp);
+    }
+
+    public void RemoveIcon(EntityUid uid)
+    {
+        RemCompDeferred<TacticalMapIconComponent>(uid);
+    }
+
+    public void SetYautjaTracked(EntityUid uid, bool enabled)
+    {
+        if (enabled)
+            EnsureComp<YautjaMapTrackedComponent>(uid);
+        else
+            RemComp<YautjaMapTrackedComponent>(uid);
+    }
+
+    public void SetYautjaUser(EntityUid uid, bool enabled)
+    {
+        if (!TryComp<TacticalMapUserComponent>(uid, out var user))
+            return;
+
+        user.Yautja = enabled;
+        Dirty(uid, user);
+    }
+
+    public virtual void RefreshTracked(EntityUid uid)
+    {
+    }
+
+    public bool TryGetBlip(TacticalMapComponent map, string bucket, int entityId, out TacticalMapBlip blip)
+    {
+        var blips = bucket.ToUpperInvariant() switch
+        {
+            "MARINES" or "MARINE" => map.MarineBlips,
+            "XENONIDS" or "XENONID" or "XENOS" or "XENO" => map.XenoBlips,
+            "XENO_STRUCTURE" or "XENOSTRUCTURE" or "XENO_STRUCTURES" => map.XenoStructureBlips,
+            "OPFOR" => map.OpforBlips,
+            "GOVFOR" => map.GovforBlips,
+            "CLF" => map.ClfBlips,
+            "YAUTJA" or "PREDATOR" => map.YautjaBlips,
+            _ => null,
+        };
+
+        if (blips != null)
+            return blips.TryGetValue(entityId, out blip);
+
+        blip = default;
+        return false;
     }
 
     private void ToggleMapUI(Entity<TacticalMapUserComponent> user)

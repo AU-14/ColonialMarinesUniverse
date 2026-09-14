@@ -1,4 +1,4 @@
-﻿using Content.Shared.Physics;
+using Content.Shared.Physics;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Physics.Collision.Shapes;
@@ -49,6 +49,12 @@ public sealed partial class XenoEggComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntProtoId Spawn = "CMXenoParasite";
+
+    /// <summary>
+    /// Whether a dead player may claim this egg as a ghost parasite role.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CanSpawnGhostParasite = true;
 
     [DataField]
     public string NormalSprite = "_RMC14/Structures/Xenos/xeno_egg.rsi";

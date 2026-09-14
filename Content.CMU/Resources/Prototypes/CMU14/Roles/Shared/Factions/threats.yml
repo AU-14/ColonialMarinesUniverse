@@ -23,6 +23,24 @@
   name: Prime Hive
   hidden: true
 
+  hostile:
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+  - CMUAPE
+  - CMUYautja
+  - CMUXenoAlpha
+  - CMUXenoForsaken
+  - SimpleNeutral
+
 - type: npcFaction
   parent: RMCXeno
   id: CMU14PathogenWalker
@@ -52,3 +70,42 @@
   - Halcyon # legacy
   - TSE # legacy
   - WeYa # legacy
+- type: npcFaction
+  id: CMUXenoAlpha
+  name: Hunter Ship Alpha Xenos
+  hostile:
+  - CMUXenoForsaken
+  - RMCXeno
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+  - CMUAPE
+  - CMUYautja
+
+- type: npcFaction
+  id: CMUXenoForsaken
+  name: Hunter Ship Forsaken Xenos
+  hostile:
+  - CMUXenoAlpha
+  - RMCXeno
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+  - CMUAPE
+  - CMUYautja

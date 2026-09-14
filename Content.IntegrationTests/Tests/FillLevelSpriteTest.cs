@@ -1,3 +1,6 @@
+using Content.Shared.Item;
+using Robust.Client.ResourceManagement;
+using Robust.Shared.Serialization.TypeSerializers.Implementations;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.Chemistry;
@@ -27,6 +30,7 @@ public sealed class FillLevelSpriteTest : GameTest
         var componentFactory = client.ResolveDependency<IComponentFactory>();
         var entMan = client.ResolveDependency<IEntityManager>();
         var spriteSystem = client.System<SpriteSystem>();
+        var resources = client.ResolveDependency<IResourceCache>();
 
         await client.WaitAssertion(() =>
         {
@@ -74,6 +78,8 @@ public sealed class FillLevelSpriteTest : GameTest
                     if (!string.IsNullOrEmpty(visuals.InHandsFillBaseName) && visuals.InHandsMaxFillLevels > 0)
                     {
                         var rsi = sprite.BaseRSI;
+                        if (proto.TryComp<ItemComponent>(out var item, componentFactory) && item.RsiPath != null)
+                            rsi = resources.GetResource<RSIResource>(SpriteSpecifierSerializer.TextureRoot / item.RsiPath).RSI;
                         for (var i = 1; i <= visuals.InHandsMaxFillLevels; i++)
                         {
                             foreach (var handname in HandStateNames)

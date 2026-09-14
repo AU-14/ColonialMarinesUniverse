@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Components;
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -787,7 +788,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             if (_ghostQuery.HasComponent(uid))
                 continue;
 
-            if (xform.MapUid is not { } mapUid)
+            if (xform.MapUid is not { } mapUid || !IsEnabledOn(mapUid))
                 continue;
 
             if (!TryComp<ZGeneratedStoneComponent>(mapUid, out var stone) ||

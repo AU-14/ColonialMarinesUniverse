@@ -1,0 +1,18 @@
+- type: entity
+  id: CMUSkillPresetYautjaWarrior
+  name: Yautja Warrior
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillAntagonist: 2
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 3
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 5
+      RMCSkillMedical: 2
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPolice: 2
+      RMCSkillSurgery: 3

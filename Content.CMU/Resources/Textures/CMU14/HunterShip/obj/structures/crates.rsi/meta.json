@@ -1,0 +1,417 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/structures/crates.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "supply crates"
+    },
+    {
+      "name": "closed_basic"
+    },
+    {
+      "name": "open_basic"
+    },
+    {
+      "name": "closed_hydro"
+    },
+    {
+      "name": "open_hydro"
+    },
+    {
+      "name": "closed_alpha"
+    },
+    {
+      "name": "open_alpha"
+    },
+    {
+      "name": "closed_bravo"
+    },
+    {
+      "name": "open_bravo"
+    },
+    {
+      "name": "closed_charlie"
+    },
+    {
+      "name": "open_charlie"
+    },
+    {
+      "name": "closed_delta"
+    },
+    {
+      "name": "open_delta"
+    },
+    {
+      "name": "closed_secgear"
+    },
+    {
+      "name": "open_secgear"
+    },
+    {
+      "name": "closed_green"
+    },
+    {
+      "name": "open_green"
+    },
+    {
+      "name": "closed_ammo"
+    },
+    {
+      "name": "open_ammo"
+    },
+    {
+      "name": "closed_ammo_alt"
+    },
+    {
+      "name": "open_ammo_alt"
+    },
+    {
+      "name": "closed_ammo_alt2"
+    },
+    {
+      "name": "open_ammo_alt2"
+    },
+    {
+      "name": "closed_weapons"
+    },
+    {
+      "name": "open_weapons"
+    },
+    {
+      "name": "closed_construction"
+    },
+    {
+      "name": "open_construction"
+    },
+    {
+      "name": "closed_radioactive"
+    },
+    {
+      "name": "open_radioactive"
+    },
+    {
+      "name": "closed_freezer"
+    },
+    {
+      "name": "open_freezer"
+    },
+    {
+      "name": "closed_science"
+    },
+    {
+      "name": "open_science"
+    },
+    {
+      "name": "closed_medical"
+    },
+    {
+      "name": "open_medical"
+    },
+    {
+      "name": "secure_locked_medical"
+    },
+    {
+      "name": "secure_unlocked_medical"
+    },
+    {
+      "name": "secure_open_medical"
+    },
+    {
+      "name": "closed_oxygen"
+    },
+    {
+      "name": "open_oxygen"
+    },
+    {
+      "name": "closed_plastic"
+    },
+    {
+      "name": "open_plastic"
+    },
+    {
+      "name": "closed_woodcrate"
+    },
+    {
+      "name": "open_woodcrate"
+    },
+    {
+      "name": "closed_phoron"
+    },
+    {
+      "name": "open_phoron"
+    },
+    {
+      "name": "closed_explosives"
+    },
+    {
+      "name": "open_explosives"
+    },
+    {
+      "name": "closed_supply"
+    },
+    {
+      "name": "open_supply"
+    },
+    {
+      "name": "critter"
+    },
+    {
+      "name": "critteropen"
+    },
+    {
+      "name": "closed_mcart"
+    },
+    {
+      "name": "open_mcart"
+    },
+    {
+      "name": "closed_mcart_y"
+    },
+    {
+      "name": "open_mcart_y"
+    },
+    {
+      "name": "chests"
+    },
+    {
+      "name": "chest_white"
+    },
+    {
+      "name": "chest_white-o (unused)"
+    },
+    {
+      "name": "chest"
+    },
+    {
+      "name": "chest-o (unused)"
+    },
+    {
+      "name": "packed_in_paper"
+    },
+    {
+      "name": "deliverycrate"
+    },
+    {
+      "name": "deliverycloset"
+    },
+    {
+      "name": "deliverycrateSmall"
+    },
+    {
+      "name": "deliverycrate5"
+    },
+    {
+      "name": "deliverycrate4"
+    },
+    {
+      "name": "deliverycrate3"
+    },
+    {
+      "name": "deliverycrate2"
+    },
+    {
+      "name": "deliverycrate1"
+    },
+    {
+      "name": "delivery_label"
+    },
+    {
+      "name": "delivery_tag"
+    },
+    {
+      "name": "large crates \u0026 cases"
+    },
+    {
+      "name": "densecrate"
+    },
+    {
+      "name": "mulecrate"
+    },
+    {
+      "name": "lisacrate"
+    },
+    {
+      "name": "secure_crate"
+    },
+    {
+      "name": "secure_crate_strapped"
+    },
+    {
+      "name": "case_small"
+    },
+    {
+      "name": "case"
+    },
+    {
+      "name": "case_double"
+    },
+    {
+      "name": "M56D_case"
+    },
+    {
+      "name": "mini crates"
+    },
+    {
+      "name": "mini_crate"
+    },
+    {
+      "name": "mini_chest"
+    },
+    {
+      "name": "mini_chest_b"
+    },
+    {
+      "name": "mini_chest_c"
+    },
+    {
+      "name": "mini_ammo"
+    },
+    {
+      "name": "mini_wooden"
+    },
+    {
+      "name": "mini_case"
+    },
+    {
+      "name": "mini_case_b"
+    },
+    {
+      "name": "mini_case_c"
+    },
+    {
+      "name": "mini_medcase"
+    },
+    {
+      "name": "secure crates"
+    },
+    {
+      "name": "securecratesparks",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "securecrateemag"
+    },
+    {
+      "name": "securecrate_tampered"
+    },
+    {
+      "name": "secure_locked_ammo"
+    },
+    {
+      "name": "secure_unlocked_ammo"
+    },
+    {
+      "name": "secure_open_ammo"
+    },
+    {
+      "name": "secure_locked_basic"
+    },
+    {
+      "name": "secure_unlocked_basic"
+    },
+    {
+      "name": "secure_open_basic"
+    },
+    {
+      "name": "secure_locked_hydro"
+    },
+    {
+      "name": "secure_unlocked_hydro"
+    },
+    {
+      "name": "secure_open_hydro"
+    },
+    {
+      "name": "secure_locked_weapons"
+    },
+    {
+      "name": "secure_open_weapons"
+    },
+    {
+      "name": "secure_unlocked_weapons"
+    },
+    {
+      "name": "secure_locked_surgery"
+    },
+    {
+      "name": "secure_unlocked_surgery"
+    },
+    {
+      "name": "secure_open_surgery"
+    },
+    {
+      "name": "secure_locked_weyland"
+    },
+    {
+      "name": "secure_unlocked_weyland"
+    },
+    {
+      "name": "secure_open_weyland"
+    },
+    {
+      "name": "secure_locked_ob"
+    },
+    {
+      "name": "secure_unlocked_ob"
+    },
+    {
+      "name": "secure_open_ob"
+    },
+    {
+      "name": "secure_locked_explosives"
+    },
+    {
+      "name": "secure_unlocked_explosives"
+    },
+    {
+      "name": "secure_open_explosives"
+    },
+    {
+      "name": "secure_locked_vulture"
+    },
+    {
+      "name": "secure_unlocked_vulture"
+    },
+    {
+      "name": "secure_open_vulture"
+    },
+    {
+      "name": "trashcart"
+    },
+    {
+      "name": "closed_trashcart"
+    },
+    {
+      "name": "open_trashcart"
+    },
+    {
+      "name": "welded_trashcart"
+    },
+    {
+      "name": "foodcart1"
+    },
+    {
+      "name": "foodcart2"
+    },
+    {
+      "name": "foodcart1_open"
+    },
+    {
+      "name": "foodcart2_open"
+    }
+  ]
+}

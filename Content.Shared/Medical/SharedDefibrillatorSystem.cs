@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Defibrillator;
@@ -314,7 +315,7 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
     // TODO: SharedEuiManager so that we can just directly open the eui from shared.
     private bool CanContinueZap(Entity<DefibrillatorComponent> ent, EntityUid target)
     {
-        return !TerminatingOrDeleted(target) && !EntityManager.IsQueuedForDeletion(target) &&
+        return !HasComp<YautjaComponent>(target) && !TerminatingOrDeleted(target) && !EntityManager.IsQueuedForDeletion(target) &&
                !TerminatingOrDeleted(ent.Owner) && !EntityManager.IsQueuedForDeletion(ent.Owner) &&
                TryComp<DefibrillatorComponent>(ent.Owner, out var current) && ReferenceEquals(current, ent.Comp);
     }

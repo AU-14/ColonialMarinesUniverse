@@ -8,10 +8,233 @@
   },
   "states": [
     {
-      "name": "icon"
+      "name": "bracer1"
+    },
+    {
+      "name": "bracer",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
     },
     {
       "name": "equipped-HAND",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_retro"
+    },
+    {
+      "name": "bracer_retro",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-retro",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_ebony"
+    },
+    {
+      "name": "bracer_ebony",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-ebony",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_silver"
+    },
+    {
+      "name": "bracer_silver",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-silver",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_bronze"
+    },
+    {
+      "name": "bracer_bronze",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-bronze",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_crimson"
+    },
+    {
+      "name": "bracer_crimson",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-crimson",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_bone"
+    },
+    {
+      "name": "bracer_bone",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-bone",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_dragon"
+    },
+    {
+      "name": "bracer_dragon",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-dragon",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_collector"
+    },
+    {
+      "name": "bracer_collector",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-collector",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_enforcer"
+    },
+    {
+      "name": "bracer_enforcer",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-enforcer",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_swamp"
+    },
+    {
+      "name": "bracer_swamp",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-swamp",
       "directions": 4
     }
   ]

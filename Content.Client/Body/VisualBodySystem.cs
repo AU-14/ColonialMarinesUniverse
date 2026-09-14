@@ -91,6 +91,7 @@ public sealed partial class VisualBodySystem : SharedVisualBodySystem
             return;
 
         _sprite.LayerSetData(target, index, ent.Comp.Data);
+        ApplyYautjaSkinShader(target, index, ent.Comp.Profile.SkinColor, ent.Comp.Data.Color ?? Color.White, ent.Comp.Layer.Equals(HumanoidVisualLayers.Eyes));
 
         var displacement = ent.Comp.Displacement;
         if (displacement != null && ProtoMan.Resolve(displacement, out var displacementProto))
@@ -256,6 +257,8 @@ public sealed partial class VisualBodySystem : SharedVisualBodySystem
                     _sprite.LayerSetColor(target, spriteLayer, marking.MarkingColors[i]);
                 else
                     _sprite.LayerSetColor(target, spriteLayer, Color.White);
+
+                ApplyYautjaMarkingShader(target, spriteLayer, ent.Owner, proto.BodyPart);
 
                 if (displacement != null && proto.CanBeDisplaced)
                 {

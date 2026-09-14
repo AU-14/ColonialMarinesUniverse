@@ -1,7 +1,3 @@
-# One job + playTimeTracker per abomination caste. Deliberately NOT
-# inheriting CMJobXenoBase (and isXeno: false on the tracker) so the
-# role/playtime systems don't register abominations as xenomorphs.
-
 - type: job
   parent: CMJobBase
   id: AU14AbominationSpider
@@ -67,7 +63,7 @@
 - type: radioChannel
   id: Abomination
   name: chat-radio-abomination
-  keycode: "g"
+  keycode: "9"
   frequency: 42.8
   color: "#6b8f3a"
   longRange: true

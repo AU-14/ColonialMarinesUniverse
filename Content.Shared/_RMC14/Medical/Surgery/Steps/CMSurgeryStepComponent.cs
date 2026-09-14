@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -26,4 +26,11 @@ public sealed partial class CMSurgeryStepComponent : Component
 
     [DataField]
     public ComponentRegistry? BodyRemove;
+
+    /// <summary>
+    ///     Optional source-specific duration. Null preserves the existing
+    ///     two-second CMU surgery timing.
+    /// </summary>
+    [DataField]
+    public float? DoAfterSeconds;
 }

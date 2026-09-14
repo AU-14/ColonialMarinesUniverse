@@ -271,6 +271,7 @@
     - Unconscious
     - TemporaryBlindness
     - Deaf
+    - YautjaInterference
   - type: ImmuneToClothingRequiredStepTrigger
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter

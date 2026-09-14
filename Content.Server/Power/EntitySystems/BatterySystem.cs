@@ -8,6 +8,27 @@ namespace Content.Server.Power.EntitySystems;
 
 public sealed partial class BatterySystem : SharedBatterySystem
 {
+    // CMU14: preserve discrete recharge without replacing the predicted battery model.
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        var query = EntityQueryEnumerator<BatterySelfRechargerComponent, BatteryComponent>();
+        while (query.MoveNext(out var uid, out var recharger, out var battery))
+        {
+            if (recharger.AutoRechargeInterval <= TimeSpan.Zero || recharger.NextAutoRecharge != null)
+                continue;
+
+            var interval = (decimal) recharger.AutoRechargeInterval.TotalSeconds;
+            recharger.AutoRechargeAccumulatorSeconds += (decimal) frameTime;
+            var elapsed = decimal.Floor(recharger.AutoRechargeAccumulatorSeconds / interval) * interval;
+            if (elapsed <= 0)
+                continue;
+
+            recharger.AutoRechargeAccumulatorSeconds -= elapsed;
+            ChangeCharge((uid, battery), recharger.AutoRechargeRate * (float) elapsed);
+        }
+    }
+
     public override void Initialize()
     {
         base.Initialize();

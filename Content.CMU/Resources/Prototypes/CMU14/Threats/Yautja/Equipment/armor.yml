@@ -15,21 +15,24 @@
       - Gun
       - MeleeWeapon
       tags:
-      - Flashlight
       - Knife
-      - RMCMacheteScabbard
-      - RMCScabbardKatana
   - type: YautjaTechItem
   - type: RMCArmorSpeedTier
     speedTier: very light
   - type: CMArmor
     melee: 35
     bullet: 40
-    bio: 45
-    explosionArmor: 40
+    bio: 40
+    explosionArmor: 45
   - type: CMHardArmor
   - type: Corrodible
     isCorrodible: false
+
+  - type: RMCImmuneToIgnition
+    intensityResistance: 10
+    immuneToDirectHits: false
+  - type: StaticPrice
+    price: 100
 
 - type: entity
   parent: CMUYautjaArmorBase
@@ -40,14 +43,14 @@
   - type: CMArmor
     melee: 35
     bullet: 40
-    bio: 45
-    explosionArmor: 40
+    bio: 40
+    explosionArmor: 45
 
 - type: entity
   parent: CMUYautjaHeavyClanArmor
   id: CMUYautjaStoneArmor
   name: alien stone armor
-  description: A suit of armor made entirely out of stone. It looks incredibly heavy.
+  description: A suit of armor made entirely out of stone. Looks incredibly heavy.
   suffix: Yautja, Flavor
   components:
   - type: Sprite
@@ -55,16 +58,25 @@
   - type: Clothing
     sprite: CMU14/Yautja/armor_heavy_clan.rsi
   - type: CMArmor
-    melee: 35
-    bullet: 40
-    bio: 50
-    explosionArmor: 45
+    melee: 40
+    bullet: 50
+    bio: 45
+    explosionArmor: 50
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
 
 - type: entity
   parent: CMUYautjaArmorBase
   id: CMUYautjaClanArmor
   name: clan armor
   description: A suit of armor with light padding. It looks old, yet functional.
+  components:
+  - type: CMArmor
+    melee: 35
+    bullet: 45
+    bio: 45
+    explosionArmor: 50
 
 - type: entity
   parent: CMUYautjaClanArmor
@@ -460,8 +472,9 @@
 - type: entity
   parent: CMUYautjaClanArmor
   id: CMUYautjaThrallArmorEbony
-  name: ebony thrall armor
-  description: A human-sized suit of alien thrall armor.
+  name: alien armor
+  description: Armor made from a strange alloy. It feels cold with an alien weight. It has been adapted to carry both
+    human and alien melee weaponry.
   suffix: Thrall, Ebony
   components:
   - type: YautjaTechItem
@@ -475,10 +488,10 @@
   - type: Clothing
     sprite: CMU14/Yautja/armor_thrall_ebony.rsi
   - type: CMArmor
-    melee: 35
-    bullet: 40
-    bio: 40
-    explosionArmor: 35
+    melee: 45
+    bullet: 45
+    bio: 45
+    explosionArmor: 45
 
 - type: entity
   parent: CMUYautjaThrallArmorEbony
@@ -532,17 +545,28 @@
     sprite: CMU14/Yautja/armor_heavy_clan.rsi
     equipDelay: 2
     unequipDelay: 2
+  - type: YautjaTechItem
   - type: RMCArmorSpeedTier
     speedTier: very light
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.75
+    sprintModifier: 0.75
   - type: HeldSpeedModifier
   - type: CMArmor
-    melee: 35
-    bullet: 40
+    melee: 50
+    bullet: 50
     bio: 50
-    explosionArmor: 50
+    explosionArmor: 55
+  - type: RMCImmuneToIgnition
+    intensityResistance: 20
+    immuneToDirectHits: false
+  - type: AllowSuitStorage
+    whitelist:
+      components:
+      - Gun
+      - MeleeWeapon
+      tags:
+      - Knife
 
 - type: entity
   parent: CMUYautjaHeavyClanArmor
@@ -588,8 +612,6 @@
 - type: entity
   parent: CMUYautjaClanArmor
   id: CMUYautjaBadBloodArmorPatchwork
-  name: patchwork clan armor
-  description: A suit of Yautja armor rebuilt from scavenged and mismatched plates.
   components:
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_patchwork.rsi
@@ -598,13 +620,16 @@
   - type: CMArmor
     melee: 35
     bullet: 20
-    bio: 45
-    explosionArmor: 40
+    bio: 40
+    explosionArmor: 50
+
+  - type: YautjaTechItem
+  - type: YautjaScalableRepair
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorLunatic
-  name: lunatic clan armor
   components:
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_lunatic.rsi
@@ -614,7 +639,6 @@
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorScavenger
-  name: scavenger clan armor
   components:
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_scavenger.rsi
@@ -624,7 +648,6 @@
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorVenator
-  name: venator clan armor
   components:
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_venator.rsi
@@ -634,7 +657,6 @@
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorCommando
-  name: commando clan armor
   components:
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_commando.rsi
@@ -644,7 +666,6 @@
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorBane
-  name: bane clan armor
   components:
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_bane.rsi
@@ -654,7 +675,6 @@
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorPatchworkAlt
-  name: alternate patchwork clan armor
   suffix: Alternate
   components:
   - type: Sprite
@@ -665,7 +685,6 @@
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorScavengerAlt
-  name: alternate scavenger clan armor
   suffix: Alternate
   components:
   - type: Sprite
@@ -676,7 +695,6 @@
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorCommandoAlt
-  name: alternate commando clan armor
   suffix: Alternate
   components:
   - type: Sprite
@@ -690,17 +708,21 @@
   id: CMUYautjaEmissaryArmorClassic
   name: YM4 pattern clan armor
   suffix: Classic
-  description: A suit of oversized armor built from M3 pattern plating and smart-gunner mesh, built for something larger than any normal man.
+  description: A suit of oversized armor built from M3 pattern plating and Smart-Gunner mesh, built for something larger
+    than any normal man.
   components:
   - type: Sprite
     sprite: CMU14/Yautja/armor_emissary_classic.rsi
   - type: Clothing
     sprite: CMU14/Yautja/armor_emissary_classic.rsi
+  - type: YautjaTechItem
   - type: CMArmor
     melee: 35
     bullet: 40
-    bio: 50
-    explosionArmor: 45
+    bio: 40
+    explosionArmor: 50
+  - type: YautjaScalableRepair
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaEmissaryArmorClassic
@@ -753,25 +775,34 @@
   - type: Clothing
     sprite: CMU14/Yautja/body_mesh.rsi
   - type: CMArmor
-    melee: 20
-    bullet: 10
-    bio: 10
-    explosionArmor: 10
+    melee: 10
+    bullet: 40
+    bio: 45
+    explosionArmor: 50
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem
+  - type: StaticPrice
+    price: 50
 
 - type: entity
   parent: CMUYautjaBodyMesh
   id: CMUYautjaAncientAlienMesh
   name: ancient alien mesh suit
   description: A strange alloy weave in the form of a vest. It feels cold with an alien weight.
+  components:
+  - type: CMArmor
+    melee: 10
+    bullet: 35
+    bio: 40
+    explosionArmor: 45
 
 - type: entity
   parent: CMUYautjaBodyMesh
   id: CMUYautjaThrallChainshirt
-  name: thrall chainshirt
-  description: A light alien mesh undersuit sized for a human thrall.
+  name: alien mesh suit
+  description: A strange alloy weave in the form of a vest. It feels cold with an alien weight. It has been adapted for
+    human physiology.
   suffix: Yautja, Thrall
   components:
   - type: YautjaTechItem
@@ -781,10 +812,10 @@
     blockThrow: false
     blockShoot: false
   - type: CMArmor
-    melee: 20
-    bullet: 10
-    bio: 10
-    explosionArmor: 10
+    melee: 10
+    bullet: 35
+    bio: 40
+    explosionArmor: 45
 
 - type: entity
   parent: ClothingShoesBase
@@ -809,12 +840,18 @@
         volume: -4
   - type: YautjaTechItem
   - type: CMArmor
-    melee: 20
-    bullet: 10
-    bio: 10
-    explosionArmor: 10
+    melee: 35
+    bullet: 45
+    bio: 40
+    explosionArmor: 45
   - type: Corrodible
     isCorrodible: false
+
+  - type: RMCImmuneToIgnition
+    intensityResistance: 10
+    immuneToDirectHits: false
+  - type: StaticPrice
+    price: 50
 
 - type: entity
   parent: CMUYautjaGreavesBase
@@ -826,7 +863,8 @@
   parent: CMUYautjaClanGreaves2
   id: CMUYautjaStoneGreaves
   name: alien stone greaves
-  description: Heavy stone greaves balanced for hunters who can carry the impossible.
+  description: A pair of armored, perfectly balanced boots. Perfect for running through cement because they're
+    incredibly heavy.
   suffix: Yautja, Flavor
   components:
   - type: Sprite
@@ -834,16 +872,25 @@
   - type: Clothing
     sprite: CMU14/Yautja/greaves_clan_2.rsi
   - type: CMArmor
-    melee: 20
-    bullet: 10
-    bio: 10
-    explosionArmor: 10
+    melee: 40
+    bullet: 50
+    bio: 45
+    explosionArmor: 50
+  - type: RemoveComponents
+    components:
+    - type: YautjaTechItem
 
 - type: entity
-  parent: CMUYautjaGreavesBase
+  parent: [CMUYautjaGreavesBase, CMUYautjaKnifeGreavesSlot]
   id: CMUYautjaClanGreaves
   name: clan greaves
   description: A pair of armored, perfectly balanced boots. Ideal for running through the jungle.
+  components:
+  - type: CMArmor
+    melee: 45
+    bullet: 50
+    bio: 45
+    explosionArmor: 50
 
 - type: entity
   parent: CMUYautjaClanGreaves
@@ -1037,10 +1084,11 @@
 
 
 - type: entity
-  parent: CMUYautjaClanGreaves
+  parent: [CMUYautjaGreavesBase, CMUYautjaThrallGreavesSlot]
   id: CMUYautjaThrallGreavesEbony
-  name: ebony thrall greaves
-  description: Human-sized alien greaves for a Yautja thrall.
+  name: alien greaves
+  description: Greaves made from scraps of cloth and a strange alloy. They feel cold with an alien weight. They have
+    been adapted for compatibility with human equipment.
   suffix: Thrall, Ebony
   components:
   - type: YautjaTechItem
@@ -1054,10 +1102,10 @@
   - type: Clothing
     sprite: CMU14/Yautja/greaves_thrall_ebony.rsi
   - type: CMArmor
-    melee: 20
-    bullet: 10
-    bio: 10
-    explosionArmor: 10
+    melee: 35
+    bullet: 45
+    bio: 40
+    explosionArmor: 45
 
 - type: entity
   parent: CMUYautjaThrallGreavesEbony
@@ -1102,17 +1150,23 @@
 - type: entity
   parent: CMUYautjaClanGreaves
   id: CMUYautjaBadBloodGreavesPatchwork
-  name: patchwork clan greaves
   components:
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_patchwork.rsi
   - type: Clothing
     sprite: CMU14/Yautja/greaves_badblood_patchwork.rsi
+  - type: YautjaTechItem
+  - type: CMArmor
+    melee: 40
+    bullet: 45
+    bio: 40
+    explosionArmor: 45
+  - type: YautjaScalableRepair
+    damagedText: cmu-yautja-repair-damaged-they
 
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesLunatic
-  name: lunatic clan greaves
   components:
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_lunatic.rsi
@@ -1122,7 +1176,6 @@
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesScavenger
-  name: scavenger clan greaves
   components:
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_scavenger.rsi
@@ -1132,7 +1185,6 @@
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesVenator
-  name: venator clan greaves
   components:
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_venator.rsi
@@ -1142,7 +1194,6 @@
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesCommando
-  name: commando clan greaves
   components:
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_commando.rsi
@@ -1152,7 +1203,6 @@
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesBane
-  name: bane clan greaves
   components:
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_bane.rsi
@@ -1162,7 +1212,6 @@
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesPatchworkAlt
-  name: alternate patchwork clan greaves
   suffix: Alternate
   components:
   - type: Sprite
@@ -1173,7 +1222,6 @@
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesScavengerAlt
-  name: alternate scavenger clan greaves
   suffix: Alternate
   components:
   - type: Sprite
@@ -1184,7 +1232,6 @@
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesCommandoAlt
-  name: alternate commando clan greaves
   suffix: Alternate
   components:
   - type: Sprite
@@ -1196,13 +1243,22 @@
 - type: entity
   parent: CMUYautjaClanGreaves
   id: CMUYautjaEmissaryGreavesClassic
-  name: YM4 pattern clan greaves
+  name: clan combat boots
+  description: A pair of armored boots modified with human armor plating, though still scaled to fit a hunter.
   suffix: Classic
   components:
   - type: Sprite
     sprite: CMU14/Yautja/greaves_emissary_classic.rsi
   - type: Clothing
     sprite: CMU14/Yautja/greaves_emissary_classic.rsi
+  - type: YautjaTechItem
+  - type: CMArmor
+    melee: 40
+    bullet: 45
+    bio: 40
+    explosionArmor: 45
+  - type: YautjaScalableRepair
+    damagedText: cmu-yautja-repair-damaged-they
 
 - type: entity
   parent: CMUYautjaEmissaryGreavesClassic
@@ -1252,6 +1308,8 @@
   - type: Sprite
     sprite: CMU14/Yautja/cape_full.rsi
     state: icon
+    color: "#654321"
+  - type: YautjaCape
   - type: Item
     size: Small
   - type: Clothing
@@ -1263,16 +1321,25 @@
       collection: storageRustle
     unequipSound:
       collection: RMCEquipArmor
+  - type: Corrodible
+    isCorrodible: false
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
 
 - type: entity
   parent: CMUYautjaCapeBase
   id: CMUYautjaCapeFull
-  name: battle-worn cape
+  name: yautja cape
   description: A battle-worn cape passed down by elder Yautja.
 
 - type: entity
   parent: CMUYautjaCapeFull
   id: CMUYautjaCapeCeremonial
+  name: yautja ceremonial cape
   suffix: Ceremonial
   components:
   - type: Sprite
@@ -1284,6 +1351,7 @@
 - type: entity
   parent: CMUYautjaCapeFull
   id: CMUYautjaCapeThird
+  name: yautja third-cape
   suffix: Third
   components:
   - type: Sprite
@@ -1295,6 +1363,7 @@
 - type: entity
   parent: CMUYautjaCapeFull
   id: CMUYautjaCapeHalf
+  name: yautja half-cape
   suffix: Half
   components:
   - type: Sprite
@@ -1306,6 +1375,7 @@
 - type: entity
   parent: CMUYautjaCapeFull
   id: CMUYautjaCapeQuarter
+  name: yautja quarter-cape
   suffix: Quarter
   components:
   - type: Sprite
@@ -1317,7 +1387,7 @@
 - type: entity
   parent: CMUYautjaCapeFull
   id: CMUYautjaCapePoncho
-  name: councilor poncho
+  name: yautja poncho
   components:
   - type: Sprite
     sprite: CMU14/Yautja/cape_poncho.rsi
@@ -1328,6 +1398,7 @@
 - type: entity
   parent: CMUYautjaCapeFull
   id: CMUYautjaCapeDamaged
+  name: yautja damaged cape
   suffix: Damaged
   components:
   - type: Sprite
@@ -1335,3 +1406,283 @@
     state: icon
   - type: Clothing
     sprite: CMU14/Yautja/cape_damaged.rsi
+
+# CMSS13 preference-only legacy and unique armor sets.
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorScalable
+  suffix: Scalable
+  components:
+  - type: YautjaTechItem
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 40
+    explosionArmor: 50
+  - type: YautjaScalableRepair
+    damagedText: cmu-yautja-repair-damaged
+
+- type: entity
+  parent: CMUYautjaEmissaryArmorClassic
+  id: CMUYautjaEmissaryArmorCamoConforming
+  suffix: Camo Conforming
+  components:
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Classic: CMU14/Yautja/armor_emissary_classic.rsi
+      Desert: CMU14/Yautja/armor_emissary_desert.rsi
+      Jungle: CMU14/Yautja/armor_emissary_jungle.rsi
+      Snow: CMU14/Yautja/armor_emissary_snow.rsi
+      Urban: CMU14/Yautja/armor_emissary_urban.rsi
+
+- type: entity
+  parent: CMUYautjaBodyMesh
+  id: CMUYautjaBodyMeshScalable
+  suffix: Scalable
+  components:
+  - type: YautjaTechItem
+  - type: CMArmor
+    melee: 10
+    bullet: 35
+    bio: 40
+    explosionArmor: 45
+  - type: YautjaScalableRepair
+    damagedText: cmu-yautja-repair-worn
+
+- type: entity
+  abstract: true
+  id: CMUYautjaKnifeGreavesSlot
+  components:
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      item:
+        name: cm-knife
+        startingItem: CMUYautjaDuellingKnife
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - CMUYautjaDuellingKnife
+          - CMUYautjaPlasmaPistol
+  - type: CMItemSlots
+    startingItem: CMUYautjaDuellingKnife
+  - type: Appearance
+
+- type: entity
+  abstract: true
+  id: CMUYautjaThrallGreavesSlot
+  components:
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      item:
+        name: cm-knife
+        startingItem: CMUYautjaDuellingKnife
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+          - ThrowingKnife
+          - CMWeaponPistolM1984
+          - RMCb92fs
+          - CMUYautjaDuellingKnife
+          - RMCStraightRazor
+  - type: CMItemSlots
+    startingItem: CMUYautjaDuellingKnife
+  - type: Appearance
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesScalable
+  suffix: Scalable
+  components:
+  - type: YautjaTechItem
+  - type: CMArmor
+    melee: 40
+    bullet: 45
+    bio: 40
+    explosionArmor: 45
+  - type: YautjaScalableRepair
+    damagedText: cmu-yautja-repair-damaged-they
+
+- type: entity
+  parent: CMUYautjaEmissaryGreavesClassic
+  id: CMUYautjaEmissaryGreavesCamoConforming
+  suffix: Camo Conforming
+  components:
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Classic: CMU14/Yautja/greaves_emissary_classic.rsi
+      Desert: CMU14/Yautja/greaves_emissary_desert.rsi
+      Jungle: CMU14/Yautja/greaves_emissary_jungle.rsi
+      Snow: CMU14/Yautja/greaves_emissary_snow.rsi
+      Urban: CMU14/Yautja/greaves_emissary_urban.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorLegacyDragon
+  name: dragon legacy clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_legacy_dragon.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_legacy_dragon.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorLegacySwamp
+  name: swamp legacy clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_legacy_swamp.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_legacy_swamp.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorLegacyEnforcer
+  name: enforcer legacy clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_legacy_enforcer.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_legacy_enforcer.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorLegacyCollector
+  name: collector legacy clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_legacy_collector.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_legacy_collector.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniqueAnubys
+  name: anubys unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_anubys.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_anubys.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniqueCleopatra
+  name: cleopatra unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_cleopatra.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_cleopatra.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniquePlated
+  name: plated unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_plated.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_plated.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaArmorUniqueRonin
+  name: ronin unique clan armor
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/armor_unique_ronin.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/armor_unique_ronin.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesLegacyDragon
+  name: dragon legacy clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_legacy_dragon.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_legacy_dragon.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesLegacySwamp
+  name: swamp legacy clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_legacy_swamp.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_legacy_swamp.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesLegacyEnforcer
+  name: enforcer legacy clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_legacy_enforcer.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_legacy_enforcer.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesLegacyCollector
+  name: collector legacy clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_legacy_collector.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_legacy_collector.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniqueAnubys
+  name: anubys unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_anubys.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_anubys.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniqueCleopatra
+  name: cleopatra unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_cleopatra.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_cleopatra.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniquePlated
+  name: plated unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_plated.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_plated.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaGreavesUniqueRonin
+  name: ronin unique clan greaves
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/greaves_unique_ronin.rsi
+  - type: Clothing
+    sprite: CMU14/Yautja/greaves_unique_ronin.rsi

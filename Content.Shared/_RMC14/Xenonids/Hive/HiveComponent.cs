@@ -50,6 +50,12 @@ public sealed partial class HiveComponent : Component
     [DataField, AutoNetworkedField, ViewVariables]
     public Color HiveUIColor = Color.FromHex("#921992");
 
+    /// <summary>
+    /// Optional NPC faction used by hives that must be hostile to other xeno hives.
+    /// </summary>
+    [DataField, AutoNetworkedField, ViewVariables]
+    public ProtoId<NpcFactionPrototype>? NpcFaction;
+
     //lets them understand humans
     [DataField, AutoNetworkedField, ViewVariables]
     public bool Corrupted = false;

@@ -23,6 +23,17 @@ public sealed partial class BatterySelfRechargerComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan AutoRechargePauseTime = TimeSpan.Zero;
 
+    // CMU14: weapons can recharge on whole process intervals.
+    /// <summary>
+    /// If positive, recharge is applied in whole intervals instead of continuously.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan AutoRechargeInterval;
+
+    [ViewVariables]
+    public decimal AutoRechargeAccumulatorSeconds;
+    // CMU14 end
+
     /// <summary>
     /// Do not auto recharge if this timestamp has yet to happen, set for the auto recharge pause system.
     /// </summary>

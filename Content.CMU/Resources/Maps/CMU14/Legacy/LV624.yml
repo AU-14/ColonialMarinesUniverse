@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 03/29/2026 11:27:10
-  entityCount: 33617
+  entityCount: 33622
 maps:
 - 1
 grids:
@@ -263684,4 +263684,17 @@ entities:
     - type: Transform
       pos: -7.5,-33.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000008
+    components:
+    - type: MetaData
+      name: LV624 ground relay
+    - type: Transform
+      pos: 39.5,-109.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: lv624.ground.relay
+      displayName: LV624 Ground Relay
 ...

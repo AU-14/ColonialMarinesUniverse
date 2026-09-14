@@ -27,6 +27,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     public static float ZLevelOffset = CMUSharedZLevelsSystem.ZLevelVisualOffset;

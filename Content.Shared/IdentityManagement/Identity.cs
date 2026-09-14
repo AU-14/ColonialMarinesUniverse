@@ -36,9 +36,12 @@ public static class Identity
         // CMU Related Change
         var yautjaViewer = viewer != null && ent.HasComponent<YautjaComponent>(viewer.Value);
 
-        if (yautjaViewer && ent.HasComponent<YautjaComponent>(uid))
+        if (yautjaViewer && ent.TryGetComponent(uid, out YautjaComponent? yautja))
         {
-            return new IdentityEntity(uid, uidName);
+            var yautjaName = yautja.BracerNameActive
+                ? uidName
+                : Loc.GetString(yautja.IdentityName);
+            return new IdentityEntity(uid, yautjaName);
         }
 
         var whitelistSystem = ent.System<EntityWhitelistSystem>();
