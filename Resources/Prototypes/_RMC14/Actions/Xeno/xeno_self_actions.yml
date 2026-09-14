@@ -707,7 +707,7 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 3
+    useDelay: 1
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
@@ -716,7 +716,7 @@
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoProduceChemicalActionEvent
   - type: XenoActionPlasma
-    cost: 50
+    cost: 25
   - type: ActionBlockIfResting
 
 - type: entity
