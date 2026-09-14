@@ -45,6 +45,10 @@
   - type: XenoDevolve
     devolvesTo:
     - CMXenoRunner
+  - type: XenoEvolve
+    evolvesTo:
+    - CMXenoCrusherBase
+    - CMXenoRavager
   - type: XenoDevour
   - type: XenoPlasma
     plasma: 340
