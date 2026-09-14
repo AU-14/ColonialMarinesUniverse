@@ -42,8 +42,6 @@ public sealed class CMUEconomyStore : IDisposable
         public long LifetimeSpent { get; set; }
         public DateTime UpdatedAt { get; set; }
         public Dictionary<string, Purchase> Purchases { get; set; } = new();
-        // Profile slots are the existing preferences system's per-player ProfileId.
-        public Dictionary<int, List<string>> Loadouts { get; set; } = new();
         public bool StakeEnabled { get; set; } = true;
     }
 
@@ -59,10 +57,11 @@ public sealed class CMUEconomyStore : IDisposable
         public bool Settled { get; set; }
         public long Stake { get; set; }
         public long SettlementCap { get; set; }
+        /// <summary>Cash deposited during the round but not yet persistent.</summary>
+        public long RoundEscrow { get; set; }
+        /// <summary>Amount actually returned to the persistent bank by settlement.</summary>
         public long CashCredited { get; set; }
         public long StartingBalance { get; set; }
-        public int ActiveMinutes { get; set; }
-        public int PayrollRemainder { get; set; }
         public string Job { get; set; } = "";
     }
 
@@ -199,15 +198,53 @@ public sealed class CMUEconomyStore : IDisposable
             return true;
         }
 
-        public bool Deposit(long cash, bool settlement)
+        public bool DepositToEscrow(long cash)
         {
-            if (!Round.DeploymentIssued || Round.Settled || cash <= 0 || cash > Round.SettlementCap - Round.CashCredited)
+            if (!Round.DeploymentIssued || Round.Settled || cash <= 0)
                 return false;
-            if (!Change(cash, settlement ? "CashSettlement" : "CashDeposit", "Physical cash returned"))
+
+            var remaining = Round.SettlementCap - Round.CashCredited - Round.RoundEscrow;
+            if (cash > remaining)
                 return false;
-            Round.CashCredited += cash;
-            if (settlement)
-                Round.Settled = true;
+
+            Round.RoundEscrow = checked(Round.RoundEscrow + cash);
+            return true;
+        }
+
+        public bool WithdrawEscrow(long cash)
+        {
+            if (!Round.DeploymentIssued || Round.Settled || cash <= 0 || cash > Round.RoundEscrow)
+                return false;
+
+            Round.RoundEscrow -= cash;
+            return true;
+        }
+
+        public bool Settle(long carriedCash)
+        {
+            if (!Round.DeploymentIssued || Round.Settled || carriedCash < 0)
+                return false;
+
+            var capacity = Math.Max(0, Round.SettlementCap - Round.CashCredited);
+            var eligible = checked(Round.RoundEscrow + carriedCash);
+            var settlement = Math.Min(eligible, capacity);
+
+            if (settlement > 0 && !Change(settlement, "CashSettlement", "End of round settlement"))
+                return false;
+
+            Round.CashCredited = checked(Round.CashCredited + settlement);
+            Round.RoundEscrow = 0;
+            Round.Settled = true;
+            return true;
+        }
+
+        public bool ForfeitRound()
+        {
+            if (!Round.DeploymentIssued || Round.Settled)
+                return false;
+
+            Round.RoundEscrow = 0;
+            Round.Settled = true;
             return true;
         }
 
