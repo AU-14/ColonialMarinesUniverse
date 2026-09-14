@@ -93,32 +93,21 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         if (!Enabled || RoundId <= 0 || args.JobId == null || HasComp<XenoComponent>(args.Mob) ||
             !_prototypes.TryIndex<JobPrototype>(args.JobId, out var job) || !job.CmuEconomyEnabled)
             return;
+
         var player = args.Player.UserId;
         _deployed[player] = args.Mob;
         if (Store.ReadRound(player.UserId, RoundId).DeploymentIssued)
             return;
 
-        var account = Store.ReadAccount(player.UserId);
-        var profile = _preferences.GetPreferences(player).IndexOfCharacter(args.Profile);
-        var selections = account.Loadouts.GetValueOrDefault(profile) ?? new List<string>();
-        var items = ValidateItems(selections, account, args.JobId);
-        var cost = items.Sum(i => i.PurchaseMode == CMUPurchaseMode.Permanent ? 0 : i.Price);
-        // Standard issue has already been equipped. An unaffordable optional kit falls back to it.
-        if (cost > account.Balance)
-        {
-            items.Clear();
-            cost = 0;
-        }
-
+        // Optional role loadout presets are handled by CMUEconomyLoadoutSystem before
+        // their entities are spawned. At this point only the round stake is issued.
         var spawned = new List<EntityUid>();
         try
         {
             var success = Store.Mutate(player.UserId, RoundId, $"deploy:{RoundId}:{player}", op =>
             {
-                if (!op.Deploy(cost, StakePercent, StakeCap, MultiplierPercent, args.JobId))
+                if (!op.Deploy(0, StakePercent, StakeCap, MultiplierPercent, args.JobId))
                     return false;
-                foreach (var item in items)
-                    spawned.Add(Spawn(item.Entity, Transform(args.Mob).Coordinates));
                 if (op.Round.Stake > 0)
                     SpawnCash(args.Mob, (int) op.Round.Stake, spawned);
                 return true;
@@ -129,6 +118,7 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
                     Del(entity);
                 return;
             }
+
             foreach (var entity in spawned)
                 GiveItem(args.Mob, entity);
         }
@@ -186,7 +176,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         while (amount > 0)
         {
             var item = Spawn(CashPrototype, Transform(body).Coordinates);
-            // Record each spawned entity before invoking any stack events, for rollback cleanup.
             spawned.Add(item);
             var count = Math.Min(amount, maxCount);
             _stacks.SetCount(item, count);
@@ -197,24 +186,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
     private int StakePercent => Math.Clamp(_config.GetCVar(CMUEconomyCVars.StakePercent), 0, 100);
     private int StakeCap => Math.Clamp(_config.GetCVar(CMUEconomyCVars.StakeCap), 0, 100_000);
     private int MultiplierPercent => Math.Clamp(_config.GetCVar(CMUEconomyCVars.MultiplierPercent), 0, 1000);
-
-    private List<CMULoadoutItemPrototype> ValidateItems(IEnumerable<string> selected, CMUEconomyStore.Account account, string? job)
-    {
-        var result = new List<CMULoadoutItemPrototype>();
-        foreach (var id in selected.Distinct().Take(20))
-        {
-            if (!_prototypes.TryIndex<CMULoadoutItemPrototype>(id, out var item) || item.Price < 0 ||
-                item.Price > CMUEconomyStore.MaximumBalance || item.CategoryLimit is < 1 or > 3 ||
-                !_prototypes.HasIndex(item.Entity) || (job != null && !item.Jobs.Contains(job)) ||
-                item.PurchaseMode == CMUPurchaseMode.Permanent && !account.Purchases.ContainsKey(id))
-                continue;
-            var category = result.Where(i => i.Category == item.Category).ToList();
-            if (category.Count >= item.CategoryLimit || category.Any(i => category.Count >= i.CategoryLimit))
-                continue;
-            result.Add(item);
-        }
-        return result;
-    }
 
     public override void Update(float frameTime)
     {
@@ -287,7 +258,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
             foreach (var container in _containers.GetAllContainers(entity))
             foreach (var child in container.ContainedEntities)
             {
-                // A carried person is not part of the owner's cash inventory.
                 if (!HasComp<MobStateComponent>(child))
                     Visit(child);
             }
@@ -303,7 +273,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         var amount = Math.Min(cash.Sum(c => (long) c.Stack.Count), round.SettlementCap - round.CashCredited);
         if (amount <= 0 && !settlement)
             return false;
-        // No awaits: inventory cannot change between validation, DB commit and consumption.
         var success = Store.Mutate(player, RoundId, key, op =>
         {
             if (op.Round.Settled || !op.Round.DeploymentIssued)
@@ -355,7 +324,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
                 Log.Error($"Economy settlement failed for {player}: {e}");
             }
         }
-        // Physical currency that still exists after settlements is lost when this world ends.
         long lostCash = 0;
         var cashQuery = EntityQueryEnumerator<StackComponent>();
         while (cashQuery.MoveNext(out _, out var cash))
@@ -419,30 +387,22 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         var account = Store.ReadAccount(player.UserId.UserId);
         var round = Store.ReadRound(player.UserId.UserId, RoundId);
         var preferences = _preferences.GetPreferences(player.UserId);
-        var selected = account.Loadouts.GetValueOrDefault(preferences.SelectedCharacterIndex) ?? new List<string>();
-        var items = ValidateItems(selected, account, null);
-        var cost = items.Sum(i => i.PurchaseMode == CMUPurchaseMode.Permanent ? 0 : i.Price);
-        var stake = account.StakeEnabled ? Math.Max(0, account.Balance - cost) * StakePercent / 100 : 0;
-        if (StakeCap > 0)
-            stake = Math.Min(stake, StakeCap);
         return new CMUEconomyState
         {
-            Token = token, ProfileId = preferences.SelectedCharacterIndex,
-            Character = preferences.SelectedCharacter.Name, PlayerId = player.UserId.ToString(),
-            Balance = account.Balance, Stake = round.Stake, Cap = round.SettlementCap, Credited = round.CashCredited,
-            StakeEnabled = account.StakeEnabled, Cost = cost, ProjectedStake = stake, ProjectedCap = stake * MultiplierPercent / 100,
-            Atm = CanUseAtm(player, atm), Status = status,
+            Token = token,
+            ProfileId = preferences.SelectedCharacterIndex,
+            Character = preferences.SelectedCharacter.Name,
+            PlayerId = player.UserId.ToString(),
+            Balance = account.Balance,
+            Stake = round.Stake,
+            Cap = round.SettlementCap,
+            Credited = round.CashCredited,
+            StakeEnabled = account.StakeEnabled,
+            Atm = CanUseAtm(player, atm),
+            Status = status,
             History = Loc.GetString("cmu-economy-statement", ("start", round.StartingBalance), ("final", account.Balance),
                 ("profit", round.CashCredited - round.Stake)) + "\n" + string.Join("\n", Store.History(player.UserId.UserId).Select(e =>
                 $"{e.Timestamp[..16]}  {Loc.GetString("cmu-economy-type-" + e.Type.ToLowerInvariant())}  {e.Amount:+#;-#;0}  → ${e.After}")),
-            Items = _prototypes.EnumeratePrototypes<CMULoadoutItemPrototype>().OrderBy(i => i.Category).ThenBy(i => i.ID)
-                .Select(i => new CMUEconomyItem
-                {
-                    Id = i.ID, Name = _prototypes.Index(i.Entity).Name, Category = i.Category,
-                    Jobs = string.Join(", ", i.Jobs.Select(j => _prototypes.TryIndex<JobPrototype>(j, out var job) ? job.LocalizedName : j)),
-                    Price = i.Price, Permanent = i.PurchaseMode == CMUPurchaseMode.Permanent,
-                    Owned = account.Purchases.ContainsKey(i.ID), Selected = selected.Contains(i.ID),
-                }).ToList(),
         };
     }
 
@@ -452,30 +412,16 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
             return false;
         var user = player.UserId.UserId;
         var key = $"ui:{user}:{message.Token}";
-        var profile = _preferences.GetPreferences(player.UserId).SelectedCharacterIndex;
-        if (message.Action is CMUEconomyAction.Save or CMUEconomyAction.Buy && message.ProfileId != profile)
-            return false;
         switch (message.Action)
         {
             case CMUEconomyAction.Refresh:
                 return true;
             case CMUEconomyAction.Stake:
-                return Store.Mutate(user, RoundId, key, op => { op.Account.StakeEnabled = message.Amount != 0; return true; });
-            case CMUEconomyAction.Save:
-                if (message.Items.Count > 20)
-                    return false;
                 return Store.Mutate(user, RoundId, key, op =>
                 {
-                    var valid = ValidateItems(message.Items, op.Account, null);
-                    if (valid.Count != message.Items.Count)
-                        return false;
-                    op.Account.Loadouts[profile] = valid.Select(i => i.ID).ToList();
+                    op.Account.StakeEnabled = message.Amount != 0;
                     return true;
                 });
-            case CMUEconomyAction.Buy:
-                return _prototypes.TryIndex<CMULoadoutItemPrototype>(message.Target, out var item) &&
-                       item.PurchaseMode == CMUPurchaseMode.Permanent &&
-                       Store.Mutate(user, RoundId, key, op => op.Buy(item.ID, item.Price));
         }
         if (!CanUseAtm(player, atm) || player.AttachedEntity is not { } body)
             return false;
