@@ -1,0 +1,161 @@
+- type: entity
+  id: CorporateRivals
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:FixedAntagCount
+      proto: WeylandYutaniAgent
+      count: 1
+    - !type:FixedAntagCount
+      proto: CorporateSpy
+      count: 1
+
+# ├──[ Weyland Yutani Agent ]────────────────────────────────────────┤
+- type: antagSpecifier
+  id: WeylandYutaniAgent
+  prefRoles: [ WeylandYutaniAgentRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  - AllCLFJobs
+  - AllWeYuJobs
+  briefing:
+    text: cmu-antag-wy-agent-greeting
+    color: DarkSlateGray
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearWeylandYutaniAgent
+  components:
+  - type: CorporateAgent
+    corporation: Weyland-Yutani
+    requiredItems: 2
+  - type: ColonyBounty
+    bounty: 1675
+    reason: Weyland-Yutani black operations - asset recovery
+    recordName: WY Field Operative (Unknown)
+    includePrints: true
+    capturedFaxPaper: CMUPaperColonyAntagCaptured
+  - type: SynthGunAccess
+  mindRoles:
+  - MindRoleWeylandYutaniAgent
+
+- type: entity
+  id: WeylandYutaniAgent
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:FixedAntagCount
+      proto: WeylandYutaniAgent
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleWeylandYutaniAgent
+  name: Weyland-Yutani Agent Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: WeylandYutaniAgentRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: WeylandYutaniAgentRole
+  name: cmu-antag-wy-agent-name
+  setPreference: true
+  objective: cmu-antag-wy-agent-objective
+
+- type: startingGear
+  id: CMUGearWeylandYutaniAgent
+  equipment:
+    pocket1: CMUIDCardWYAgent
+    pocket2: CMUCorporateDataLink
+  storage:
+    back:
+    - CMUPaperWantedWYOperative
+
+# ├──[ Corporate Spy ]───────────────────────────────────────────────┤
+- type: antagSpecifier
+  id: CorporateSpy
+  prefRoles: [ CorporateSpyRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  - AllCLFJobs
+  jobBlacklist:
+  - AU14JobCivilianCorporateLiaison
+  briefing:
+    text: spy-role-greeting
+    color: DarkSlateGray
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearCorporateSpy
+  components:
+  - type: CorporateAgent
+    corporation: Laselle Bionational
+    paperPrototype: CMUPaperLASELLE
+    requiredItems: 2
+    wyCounterIntel: true
+  - type: ColonyBounty
+    bounty: 1625
+    reason: Corporate espionage - theft of Weyland-Yutani research
+    recordName: Laselle Operative (Unknown)
+    includePrints: true
+    includeLanguages: true
+    capturedFaxPaper: CMUPaperColonyAntagCaptured
+  - type: SynthGunAccess
+  mindRoles:
+  - MindRoleCorporateSpy
+
+- type: entity
+  id: CorporateSpy
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:FixedAntagCount
+      proto: CorporateSpy
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCorporateSpy
+  name: Corporate Spy Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: CorporateSpyRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: CorporateSpyRole
+  name: roles-antag-spy-name
+  setPreference: true
+  objective: roles-antag-spy-objective
+
+- type: startingGear
+  id: AU14GearCorporateSpy
+  equipment:
+    pocket1: AU14IDCardCorporateSpy
+    pocket2: CMUCorporateDataLink
+  storage:
+    back:
+    - CMUPaperWantedCorporateSpy
+
+- type: entity
+  parent: BaseItem
+  id: CMUCorporateDataLink
+  name: corporate data link
+  description: A portable transmitter used to exfiltrate high value research assets offworld. Activate it once you have the goods on you.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: CMU14/Items/laptop.rsi
+    state: laptop_off_objective
+  - type: CorporateDataLink

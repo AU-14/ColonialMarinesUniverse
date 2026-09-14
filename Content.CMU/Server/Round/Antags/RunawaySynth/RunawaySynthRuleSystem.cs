@@ -1,10 +1,11 @@
 using Content.Server.CMU14.Systems;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Systems;
-using Content.Shared.StationRecords.Systems;
+using Content.Shared.CMU14.Round.Antags.ColonyBounty;
+using Content.Shared.Humanoid;
 using Content.Server.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.Paper;
-using Content.Shared.StationRecords;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 using Robust.Shared.Random;
 
@@ -13,7 +14,7 @@ namespace Content.Server.CMU14.Round.Antags.RunawaySynth;
 public sealed partial class RunawaySynthRuleSystem : GameRuleSystem<RunawaySynthRuleComponent>
 {
     [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
+    [Dependency] private readonly SuspectDescriptionSystem _suspectDescription = default!;
     [Dependency] private readonly WantedSystem _wantedSystem = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
@@ -25,42 +26,46 @@ public sealed partial class RunawaySynthRuleSystem : GameRuleSystem<RunawaySynth
 
     private void OnSynthSpawned(EntityUid uid, RunawaySynthComponent component, ComponentStartup args)
     {
-        var synthName = EntityManager.GetComponentOrNull<MetaDataComponent>(uid)?.EntityName ?? "Unknown";
-
         var station = _stationSystem.GetOwningStation(uid);
-        var nameList = new List<string> { synthName };
+
+        var lines = new List<string>
+        {
+            _suspectDescription.Describe(uid, _suspectDescription.RandomWitness(uid, station)),
+        };
 
         if (station != null)
         {
-            var allNames = new List<string>();
-            foreach (var (_, record) in _stationRecords.GetRecordsOfType<GeneralStationRecord>(station.Value))
+            var pool = new List<EntityUid>();
+            var enumerator = EntityManager.AllEntityQueryEnumerator<HumanoidProfileComponent>();
+            while (enumerator.MoveNext(out var colonist, out _))
             {
-                if (record.Name != synthName
-                    && !record.Name.Contains("(Unknown)")
-                    && !record.Name.Contains("Fugitive")
-                    && !record.Name.Contains("Runaway"))
-                    allNames.Add(record.Name);
+                if (colonist == uid
+                    || HasComp<ColonyBountyComponent>(colonist)
+                    || _stationSystem.GetOwningStation(colonist) != station)
+                    continue;
+
+                pool.Add(colonist);
             }
 
-            _random.Shuffle(allNames);
-            var count = Math.Min(4, allNames.Count);
-            for (var i = 0; i < count; i++)
-                nameList.Add(allNames[i]);
+            _random.Shuffle(pool);
+            for (var i = 0; i < Math.Min(4, pool.Count); i++)
+                lines.Add(_suspectDescription.Describe(pool[i], null));
         }
 
-        _random.Shuffle(nameList);
+        _random.Shuffle(lines);
 
         var listText = "";
-        for (var i = 0; i < nameList.Count; i++)
-            listText += $"  {i + 1}. {nameList[i]}\n";
+        for (var i = 0; i < lines.Count; i++)
+            listText += $"  {i + 1}. {lines[i]}\n";
 
         _wantedSystem.SendFaxToGroup(
             ColonyCmbFax.MarshalBureauFaxGroup,
             "Fugitive Alert",
             ColonyCmbFax.Build("Fugitive Alert",
-                "A runaway Synthetic has been detected at your colony. One of the following colonists is the synth. " +
-                "Liquidate it and the $2500 bounty is yours.",
-                $"[bold]Suspect List:[/bold]\n{listText}\n"),
+                "A runaway Synthetic has been detected at your colony. Witnesses described the " +
+                "individuals below; one of them is the synth. Match the descriptions to colonists " +
+                "by examination, and liquidate it for the $2800 bounty.",
+                $"[bold]Witness descriptions:[/bold]\n{listText}\n"),
             "paper_stamp-cmb",
             new List<StampDisplayInfo>
             {

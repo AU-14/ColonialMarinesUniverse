@@ -203,6 +203,9 @@
       enum.FactionLanguageUiKey.Key:
         type: FactionLanguageBoundUserInterface
         requireInputValidation: false
+      enum.ReplicantUiKey.Key:
+        type: ReplicantBoundUserInterface
+        requireInputValidation: false
   - type: Infectable
   - type: Tackleable
   - type: XenoNestable

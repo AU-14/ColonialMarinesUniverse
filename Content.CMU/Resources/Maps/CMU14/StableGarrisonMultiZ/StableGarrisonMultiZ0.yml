@@ -148942,6 +148942,13 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: 24.5,-35.5
+- proto: ForensicScanner
+  entities:
+  - uid: 84959
+    components:
+    - type: Transform
+      pos: 236.5,-53.5
+      parent: 1
 - proto: ComputerCriminalRecords
   entities:
   - uid: 10633

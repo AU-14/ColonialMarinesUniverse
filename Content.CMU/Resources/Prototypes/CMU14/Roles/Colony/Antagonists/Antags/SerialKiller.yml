@@ -11,6 +11,10 @@
     text: serialkiller-role-greeting
     color: DarkRed
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearSerialKiller
+  startingSkills:
+    RMCSkillCqc: 2
+    RMCSkillMeleeWeapons: 3
   components:
   - type: SerialKiller
   - type: ColonyBounty
@@ -18,6 +22,8 @@
     reason: Wanted for multiple homicides - suspect at large
     recordName: Serial Killer (Unknown)
     includePrints: true
+    includeDna: true
+    includeLanguages: true
     capturedFaxPaper: AUPaperSerialKillerCaptured
   mindRoles:
   - MindRoleSerialKiller
@@ -31,9 +37,11 @@
   - type: AntagSelection
     selectionTime: JobsAssigned
     antags:
-    - !type:FixedAntagCount
+    - !type:RandomAntagCount
       proto: SerialKiller
-      count: 2
+      range:
+        min: 1
+        max: 2
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -51,3 +59,9 @@
   name: roles-antag-serialkiller-name
   setPreference: true
   objective: roles-antag-serialkiller-objective
+
+- type: startingGear
+  id: AU14GearSerialKiller
+  storage:
+    back:
+    - AUPaperSerialKiller

@@ -34,13 +34,6 @@ public sealed partial class ColonyBountyComponent : Component
     public string? RecordNamePrefix;
 
     /// <summary>
-    /// Attach the criminal record to the antag's own colonist record when one exists,
-    /// so the console shows their identity instead of an alias.
-    /// </summary>
-    [DataField]
-    public bool AttachToOwnRecord;
-
-    /// <summary>
     /// Include the antag's fingerprints on the record.
     /// </summary>
     [DataField]
@@ -53,10 +46,17 @@ public sealed partial class ColonyBountyComponent : Component
     public bool IncludeDna;
 
     /// <summary>
-    /// Being cuffed resolves the bounty.
+    /// Append the antag's non-default spoken languages to the wanted record as a lead.
     /// </summary>
     [DataField]
-    public bool CuffedCounts = true;
+    public bool IncludeLanguages;
+
+    /// <summary>
+    /// Being booked as Detained on the records console resolves the bounty.
+    /// Cuffing alone must not, or the payout confirms identities for free.
+    /// </summary>
+    [DataField]
+    public bool CaptureCounts = true;
 
     /// <summary>
     /// Dying resolves the bounty.
@@ -77,12 +77,18 @@ public sealed partial class ColonyBountyComponent : Component
     public string? CapturedFaxExtraRecipient;
 
     /// <summary>
+    /// Set once law enforcement could identify the antag (own record scanned or Detained
+    /// booked); drives the cover-blown briefing.
+    /// </summary>
+    public bool CoverBlown;
+
+    /// <summary>
     /// Set once the bounty has been paid; prevents repeat payouts.
     /// </summary>
     public bool Paid;
 
     /// <summary>
-    /// True when the payout was for a capture rather than a kill. Only valid once Paid.
+    /// True when the payout came from a Detained booking rather than a kill. Only valid once Paid.
     /// </summary>
     public bool Captured;
 
@@ -90,4 +96,28 @@ public sealed partial class ColonyBountyComponent : Component
     /// Set once the wanted record exists; cleared again if the antag had no station yet.
     /// </summary>
     public bool Registered;
+
+    /// <summary>
+    /// The antag's own station record id, cached so the per-tick Detained check stays O(1).
+    /// Lookup by name would rescan every record on every update.
+    /// </summary>
+    public uint? OwnRecordId;
+
+    /// <summary>
+    /// The name OwnRecordId was resolved under; a mismatch means the antag copied a new
+    /// identity and the copy's record is watched too.
+    /// </summary>
+    public string? OwnRecordName;
+
+    /// <summary>
+    /// Record of a copied identity, if the antag renamed after registration; booking it
+    /// Detained resolves the bounty like the own record does.
+    /// </summary>
+    public uint? CopiedRecordId;
+
+    /// <summary>
+    /// The alias record the bounty was registered under, so escalation can raise the
+    /// bounty marshals see on the console.
+    /// </summary>
+    public uint? AliasRecordId;
 }

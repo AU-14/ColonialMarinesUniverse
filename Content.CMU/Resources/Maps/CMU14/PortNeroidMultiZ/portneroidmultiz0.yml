@@ -58897,7 +58897,7 @@ entities:
           showEnts: False
           occludes: True
           ent: 14
-- proto: AU14DrugDealerDrugBackpack
+- proto: CMUDrugDealerDrugBackpack
   entities:
   - uid: 66
     components:

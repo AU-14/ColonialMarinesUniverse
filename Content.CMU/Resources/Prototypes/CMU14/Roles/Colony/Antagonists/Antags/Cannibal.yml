@@ -11,6 +11,9 @@
     color: DarkRed
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
   startingGear: AU14GearCannibal
+  startingSkills:
+    RMCSkillMedical: 1
+    RMCSkillMeleeWeapons: 1
   components:
   - type: Cannibal
   - type: SynthGunAccess
@@ -26,9 +29,11 @@
   - type: AntagSelection
     selectionTime: JobsAssigned
     antags:
-    - !type:FixedAntagCount
+    - !type:RandomAntagCount
       proto: Cannibal
-      count: 2
+      range:
+        min: 1
+        max: 2
 
 - type: entity
   parent: BaseMindRoleAntag

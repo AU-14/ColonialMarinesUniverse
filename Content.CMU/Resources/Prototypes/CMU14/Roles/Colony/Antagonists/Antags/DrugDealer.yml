@@ -11,10 +11,10 @@
     text: dealer-role-greeting
     color: MediumVioletRed
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-  startingGear: AU14GearDrugDealer
+  startingGear: CMUGearDrugDealer
   startingSkills:
-  - type: RMCSkillMedical
-    level: 1
+    RMCSkillMedical: 2
+    RMCSkillSurgery: 1
   components:
   - type: DrugDealer
   - type: ColonyBounty
@@ -22,6 +22,7 @@
     reason: Distribution of controlled substances - wanted alive for prosecution
     recordName: Narcotics Dealer (Unknown)
     includePrints: true
+    includeLanguages: true
     deadCounts: false
     capturedFaxPaper: CMUPaperColonyAntagCaptured
   mindRoles:
@@ -36,9 +37,11 @@
   - type: AntagSelection
     selectionTime: JobsAssigned
     antags:
-    - !type:FixedAntagCount
+    - !type:RandomAntagCount
       proto: DrugDealer
-      count: 2
+      range:
+        min: 1
+        max: 2
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -58,15 +61,44 @@
   objective: roles-antag-dealer-objective
 
 - type: startingGear
-  id: AU14GearDrugDealer
+  id: CMUGearDrugDealer
   equipment:
-    back: AU14DrugDealerDrugBackpack
+    back: CMUDrugDealerDrugBackpack
+  inhand:
+  - CMUDrugDealerChemKit
+  storage:
+    back:
+    - AUPaperDrugs
 
 - type: entity
-  parent: RMCSatchelBlack
-  id: AU14DrugDealerDrugBackpack
-  name: drug dealer's satchel
-  description: A black satchel filled with illicit substances.
+  parent: RMCBoxCardboard
+  id: CMUDrugDealerChemKit
+  name: unmarked cardboard box
+  description: A plain cardboard box. Something inside rattles like glass.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,19,1 # 10 small bottles
+  - type: StorageFill
+    contents:
+    # One full run each of the methamphetamine and fentanyl reaction chains
+    - id: CMUBottleWater
+    - id: CMUBottleChlorine
+    - id: CMUBottleFluorine
+    - id: CMUBottlePhosphorus
+    - id: CMUBottleSulphuricAcid
+    - id: CMUBottleCarbon
+    - id: CMUBottleEthanol
+    - id: CMUBottleMethylphenidate
+    - id: CMUBottleOxycodone
+    - id: CMUBottleEpinephrine
+
+- type: entity
+  parent: ClothingBackpackSatchelSmugglerUnanchored
+  id: CMUDrugDealerDrugBackpack
+  name: worn satchel
+  suffix: "CMU"
+  description: A scuffed satchel that smells faintly of solvent. Just flat enough to fit underneath floor tiles.
   components:
   - type: StorageFill
     contents:
@@ -80,3 +112,9 @@
       amount: 3
     - id: AU14PillBottleRMCPsilocybin
       amount: 4
+    - id: CannabisSeeds
+      amount: 2
+    - id: RainbowCannabisSeeds
+      amount: 1
+    - id: FlyAmanitaSeeds
+      amount: 2

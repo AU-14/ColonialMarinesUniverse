@@ -13,32 +13,23 @@
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
   startingGear: AU14GearCLFVeteran
   startingSkills:
-  - type: RMCSkillFirearms
-    level: 3
-  - type: RMCSkillMeleeWeapons
-    level: 3
-  - type: RMCSkillCqc
-    level: 3
-  - type: RMCSkillEndurance
-    level: 3
-  - type: RMCSkillFireman
-    level: 3
-  - type: RMCSkillConstruction
-    level: 3
-  - type: RMCSkillLeadership
-    level: 3
-  - type: RMCSkillMedical
-    level: 3
-  - type: RMCSkillPolice
-    level: 1
-  - type: RMCSkillSurgery
-    level: 3
+    RMCSkillFirearms: 3
+    RMCSkillMeleeWeapons: 3
+    RMCSkillCqc: 4
+    RMCSkillEndurance: 3
+    RMCSkillFireman: 4
+    RMCSkillConstruction: 3
+    RMCSkillLeadership: 2
+    RMCSkillMedical: 3
+    RMCSkillPolice: 2
+    RMCSkillSurgery: 3
   components:
   - type: CLFVeteran
   - type: ColonyBounty
     bounty: 1450
     reason: Known CLF insurgent - armed and dangerous
     recordName: CLF Veteran (Unknown)
+    includeLanguages: true
     capturedFaxPaper: AUPaperCLFVeteranCaptured
   mindRoles:
   - MindRoleCLFVeteran
@@ -52,9 +43,11 @@
   - type: AntagSelection
     selectionTime: JobsAssigned
     antags:
-    - !type:FixedAntagCount
+    - !type:RandomAntagCount
       proto: CLFVeteran
-      count: 2
+      range:
+        min: 1
+        max: 2
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -75,5 +68,77 @@
 
 - type: startingGear
   id: AU14GearCLFVeteran
-  equipment:
-    suitstorage: AU14WeaponRevolverM44Inscribed
+  storage:
+    back:
+    - AU14CaseCLFVeteranKeepsake
+    - AUPaperCLFVeteran
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: AU14CaseCLFVeteranKeepsake
+  name: worn keepsake case
+  description: A scuffed personal case that has clearly traveled a long way. The lock is worn from daily use.
+  components:
+  - type: Item
+    size: Normal
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,5,1
+    whitelist:
+      tags:
+      - RMCWeaponRevolverM44
+      - RMCSpeedLoaderM44
+      - RMCSpeedLoader44Marksman
+      - AU14TeleBaton
+  - type: StorageFill
+    contents:
+    - id: AU14TeleBaton
+    - id: AU14WeaponRevolverM44Inscribed
+    - id: RMCSpeedLoaderM44
+      amount: 4
+    - id: RMCSpeedLoader44Marksman
+      amount: 3
+
+# Inscribed M44 - Unique CLF Veteran sidearm
+- type: entity
+  parent: RMCWeaponRevolverM44Custom
+  id: AU14WeaponRevolverM44Inscribed
+  name: inscribed M44 combat revolver
+  description: A well-worn M44 combat revolver with crude inscriptions scratched into the barrel and grip. The words 'FREEDOM OR DEATH' are etched along the side. This weapon has clearly seen many battles.
+  components:
+  - type: RevolverAmmoProvider
+    proto: RMCCartridgeRevolver44
+    capacity: 10
+    chambers:
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    - True
+    ammoSlots:
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+  - type: RMCSelectiveFire
+    baseFireRate: 6
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentRecoilCompensator
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentRailFlashlight
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentLaserSight

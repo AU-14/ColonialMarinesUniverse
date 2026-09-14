@@ -11,6 +11,9 @@
     color: DarkRed
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
   startingGear: AU14GearStrikeOrganizer
+  startingSkills:
+    RMCSkillLeadership: 2
+    RMCSkillEndurance: 2
   components:
   - type: StrikeOrganizer
   - type: SynthGunAccess
@@ -26,9 +29,11 @@
   - type: AntagSelection
     selectionTime: JobsAssigned
     antags:
-    - !type:FixedAntagCount
+    - !type:RandomAntagCount
       proto: StrikeOrganizer
-      count: 2
+      range:
+        min: 1
+        max: 2
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -52,6 +57,9 @@
   equipment:
     back: AU14StrikeOrganizerBackpack
     pocket1: CMUStrikePetition
+  storage:
+    back:
+    - AUPaperStrikeOrganizer
 
 - type: entity
   parent: Paper
@@ -63,7 +71,7 @@
     goal: 12
 
 - type: entity
-  parent: RMCBackpackRTO # TODO: verify against NewComms
+  parent: RMCBackpackRTO
   id: AU14StrikeOrganizerBackpack
   name: organizer's radio pack
   description: A radio telephone pack carried by a labor organizer.
