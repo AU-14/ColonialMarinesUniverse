@@ -2067,8 +2067,13 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
+    deselectOnMiss: false
   - type: EntityTargetAction
-    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoTailInjectionActionEvent
+    targetCheckCanInteract: false
+    event: !type:XenoTailStabEvent
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+    event: !type:XenoDrainStingActionEvent
   - type: XenoOffensiveAction
   - type: ActionBlockIfResting
   - type: ActionInRangeUnobstructed
