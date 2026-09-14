@@ -4,6 +4,8 @@
   jobBlacklistGroup:
   - AllGovforJobs
   - AllOpforJobs
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
   briefing:
     text: cmu-antag-vigilante-greeting
     color: DarkRed
@@ -11,6 +13,7 @@
   startingGear: CMUGearVigilante
   components:
   - type: Vigilante
+  - type: SynthGunAccess
   mindRoles:
   - MindRoleVigilante
 

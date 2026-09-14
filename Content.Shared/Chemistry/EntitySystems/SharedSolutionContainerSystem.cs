@@ -266,11 +266,13 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
 
         // RMC14: Compatibility migration applies legacy inline solutions over manager fills, so
         // prototype-only readers must use the same priority to match the spawned entity.
+#pragma warning disable CS0612 // CMU14
         if (entProto.TryComp<SolutionContainerManagerComponent>(out var legacy, Factory) &&
             legacy.Solutions?.TryGetValue(name, out solution) == true)
         {
             return true;
         }
+#pragma warning restore CS0612 // CMU14
 
         if (TryGetSolutionFill(entProto, out var solutions))
         {
@@ -321,7 +323,9 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
 
     public IEnumerable<(string Id, Solution Solution)> EnumerateSolutions(EntityPrototype entProto)
     {
+#pragma warning disable CS0612 // CMU14
         entProto.TryComp<SolutionContainerManagerComponent>(out var legacy, Factory);
+#pragma warning restore CS0612 // CMU14
         var legacySolutions = legacy?.Solutions;
         var yielded = new HashSet<string>();
         if (entProto.TryComp<SolutionComponent>(out var direct, Factory) && yielded.Add(direct.Id))

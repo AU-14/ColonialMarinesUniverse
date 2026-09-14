@@ -129,13 +129,13 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.evolution_points_accumulate_before_minutes", 15, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<bool> RMCAtmosTileEqualize =
-        CVarDef.Create("rmc.atmos_tile_equalize", false, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("rmc.atmos_tile_equalize", true, CVar.REPLICATED | CVar.SERVER); // CMU14: disable for performance gain
+
+    public static readonly CVarDef<bool> RMCGasTileOverlayUpdate =
+        CVarDef.Create("rmc.gas_tile_overlay_update", true, CVar.REPLICATED | CVar.SERVER); // CMU14: tile gas/fire visuals are core feedback
 
     public static readonly CVarDef<int> RMCWithdrawTimerMinutes =
         CVarDef.Create("rmc.withdraw_timer_minutes", 6, CVar.REPLICATED | CVar.SERVER);
-
-    public static readonly CVarDef<bool> RMCGasTileOverlayUpdate =
-        CVarDef.Create("rmc.gas_tile_overlay_update", false, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<bool> RMCActiveInputMoverEnabled =
         CVarDef.Create("rmc.active_input_mover_enabled", true, CVar.REPLICATED | CVar.SERVER);

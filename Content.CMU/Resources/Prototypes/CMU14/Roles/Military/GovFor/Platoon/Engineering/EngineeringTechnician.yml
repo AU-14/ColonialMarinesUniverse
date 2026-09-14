@@ -28,6 +28,12 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_ct
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: ct
 
   requirements:
   - !type:TraitsRequirement
@@ -111,3 +117,46 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+
+- type: job
+  parent: AU14JobEngineeringTechBase
+  id: AU14JobOPFOREngineeringTech
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORCT"
+  spawnMenuRoleName: Engineering Technician (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFOREngineeringTech
+  dummyStartingGear: AU14GearOPFOREngineeringTechDummy
+  accessGroups:
+  - AU14OpforEngineer
+
+- type: startingGear
+  id: AU14GearOPFOREngineeringTech
+  equipment:
+    id: AU14IDCardOPFOREngineeringTech
+    ears2: RMCM5CameraGear
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatOrange
+    jumpsuit: CMJumpsuitMaintTech
+    ears: AU14HeadsetOpforMarine
+
+- type: startingGear
+  id: AU14GearOPFOREngineeringTechDummy
+  equipment:
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatOrange
+    jumpsuit: CMJumpsuitMaintTech
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFOREngineeringTech
+  name: Spawn Point OPFOR Engineering Technician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFOREngineeringTech
+  - type: Sprite
+    state: syn_spawn

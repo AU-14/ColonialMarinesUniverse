@@ -1,3 +1,6 @@
+# Faction children of this base need mirror IDs, identical except the GOVFOR/OPFOR substring.
+# Slot dealing (FoF) swaps a player's preferences between sides by replacing that substring
+# and drops any preference whose mirrored job prototype does not exist.
 - type: job
   abstract: true
   parent: CMJobBase

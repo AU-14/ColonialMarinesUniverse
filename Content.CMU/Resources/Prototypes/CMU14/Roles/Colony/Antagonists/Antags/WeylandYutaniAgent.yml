@@ -4,6 +4,8 @@
   jobBlacklistGroup:
   - AllGovforJobs
   - AllOpforJobs
+  - AllCLFJobs
+  - AllWeYuJobs
   briefing:
     text: cmu-antag-wy-agent-greeting
     color: DarkSlateGray
@@ -19,6 +21,7 @@
     recordName: WY Field Operative (Unknown)
     includePrints: true
     capturedFaxPaper: CMUPaperColonyAntagCaptured
+  - type: SynthGunAccess
   mindRoles:
   - MindRoleWeylandYutaniAgent
 

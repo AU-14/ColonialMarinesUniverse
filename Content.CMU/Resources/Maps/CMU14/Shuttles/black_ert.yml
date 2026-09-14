@@ -36,6 +36,25 @@ entities:
     - type: Transform
     - type: Map
       mapPaused: True
+    - type: MapAtmosphere
+      space: True
+      mixture:
+        volume: 2500
+        immutable: True
+        temperature: 2.725
+        moles:
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree

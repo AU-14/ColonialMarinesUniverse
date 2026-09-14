@@ -21,18 +21,18 @@ public sealed class RmcErtThirdPartyDropshipMapTest
 {
     private static readonly (ResPath Path, int Leaders, int Members, int Entities)[] DropshipMaps =
     {
-        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml"), 1, 10, 3),
-        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_tse_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/CMU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_clf_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_cmb_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml"), 1, 10, 3),
+        (new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_tse_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_tsepa_shuttle.yml"), 4, 8, 3),
     };
 
     private static readonly (ResPath Path, int Leaders, int Members, int Entities)[] MapFormatDropshipMaps =
     {
-        (new("/Maps/CMU14/ShuttlesDropships/genericthirdpartyshuttle.yml"), 4, 5, 3),
+        (new("/Maps/CMU14/Vehicles/Dropships/genericthirdpartyshuttle.yml"), 4, 5, 3),
         (new("/Maps/CMU14/Shuttles/black_ert.yml"), 4, 8, 3),
         (new("/Maps/CMU14/Shuttles/cmbtransport_ert.yml"), 4, 6, 3),
         (new("/Maps/CMU14/Shuttles/icrctransport_ert.yml"), 4, 6, 3),

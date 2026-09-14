@@ -7,6 +7,10 @@
   name: cmu-access-opfor-squad
 
 - type: accessLevel
+  id: AU14AccessOpforSquadWeaponsSpecialist
+  name: cmu-access-opfor-squad-weapons-specialist
+
+- type: accessLevel
   id: AU14AccessOpforCommand
   name: cmu-access-opfor-command
 

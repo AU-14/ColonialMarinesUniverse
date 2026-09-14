@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMSurvivorScientist
   id: CMSurvivorChancesEnvironmentalResearcher
   name: rmc-job-name-colonist-environmental-researcher
@@ -38,7 +38,7 @@
     outerClothing: RMCLabcoatScience
     gloves: RMCHandsBlack
   inhand:
-  - RMCAtmosScanner
+  - CMUAtmosScanner # CMU14
 
 - type: entity
   parent: CMSpawnPointJobBase

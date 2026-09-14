@@ -128,19 +128,10 @@ namespace Content.Tools
                 {
                     if (ours.Children.ContainsKey(kvp.Key))
                     {
-                        // Both sides added the same key. Try to merge.
-                        var a = ours[kvp.Key];
-                        var b = based[kvp.Key];
-                        var c = kvp.Value; // other[kvp.Key]
-                        if (!TriTypeMatch(a, b, c))
-                        {
-                            Console.WriteLine("Warning: Type mismatch (defaulting to value C) at " + localPath);
-                            ours.Children[kvp.Key] = CopyYamlNodes(c);
-                        }
-                        else
-                        {
-                            MergeYamlNodes(a, b, c, localPath);
-                        }
+                        // Both sides added the same key. No base version exists to diff against,
+                        // so take other's value like the type-mismatch case above.
+                        Console.WriteLine("Warning: Both sides added " + localPath + " (taking other's value).");
+                        ours.Children[kvp.Key] = CopyYamlNodes(kvp.Value);
                     }
                     else
                     {

@@ -1,7 +1,7 @@
 - type: gameMap
   id: tartarusprison
   mapName: Tartarus Prison (Jailbreak
-  mapPath: /Maps/CMU14/TartarusPrison.yml
+  mapPath: /Maps/CMU14/Legacy/TartarusPrison.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

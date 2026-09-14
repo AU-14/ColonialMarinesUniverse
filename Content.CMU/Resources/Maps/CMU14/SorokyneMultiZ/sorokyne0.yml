@@ -48185,6 +48185,23 @@ entities:
     - type: Transform
       pos: 66.5,26.5
       parent: 1
+- proto: CMUSpawnPointCivilianAtmosian
+  entities:
+  - uid: 31188
+    components:
+    - type: Transform
+      pos: 79.5,65.5
+      parent: 1
+  - uid: 31189
+    components:
+    - type: Transform
+      pos: 107.5,107.5
+      parent: 1
+  - uid: 31190
+    components:
+    - type: Transform
+      pos: 66.5,26.5
+      parent: 1
 - proto: AU14SpawnPointCivilianEthicsAndWellnessAdvisor
   entities:
   - uid: 140
@@ -70497,7 +70514,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCArmorSPPFirefighter
+- proto: CMUArmorFirefighterUPP
   entities:
   - uid: 915
     components:
@@ -89403,7 +89420,7 @@ entities:
     - type: Transform
       pos: 68.5,116.5
       parent: 1
-- proto: RMCInflatableWallFolded
+- proto: CMUInflatableWallFolded
   entities:
   - uid: 6288
     components:

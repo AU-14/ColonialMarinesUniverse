@@ -44,7 +44,7 @@
   equipment:
     head: RMCHardhatWhite
     jumpsuit: AU14CivilianWeYuEngineerClothes
-    outerClothing: AU14CivilianFullSuitWeYuEngineer
+    outerClothing: CMUClothingOuterSuitEngineer
     shoes: RMCBootsCorporate
     id: AU14IDCardColonyEngineer
 

@@ -82,6 +82,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: supply
   - type: ApcPowerReceiver
+    powerLoad: 10000 # CMU14
   - type: RMCPowerReceiver
     idleLoad: 0
     activeLoad: 10000

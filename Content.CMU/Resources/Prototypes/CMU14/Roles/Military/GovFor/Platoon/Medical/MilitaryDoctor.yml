@@ -117,9 +117,9 @@
     pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
     back: AU14SatchelMilitaryDoctor
     outerClothing: RMCLabcoat
-    ears: AU14HeadsetGovforAuxiliary
+    ears: AU14HeadsetOpforAuxiliary
     ears2: RMCM5CameraGear
-    id: AU14IDCardGOVFORDoctor
+    id: AU14IDCardOPFORDoctor
     neck: ClothingNeckStethoscope
     eyes: RMCGlassesMedicalHUDGlasses
   inhand:

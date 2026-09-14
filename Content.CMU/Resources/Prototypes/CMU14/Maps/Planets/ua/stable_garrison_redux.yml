@@ -139,6 +139,7 @@
 
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianEngineer: [4, 4]
+            CMUJobCivilianAtmosian: [1, 2]
             AU14JobCivilianMiner: [-1, -1]
 
             # Medical

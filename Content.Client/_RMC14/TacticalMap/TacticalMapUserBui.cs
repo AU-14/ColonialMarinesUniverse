@@ -128,6 +128,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             Window.Wrapper.Map.Lines.AddRange(lines.GovforLines);
             Window.Wrapper.Map.Lines.AddRange(lines.ClfLines);
             Window.Wrapper.Map.Lines.AddRange(lines.WeYuLines); // CMU14
+            Window.Wrapper.Map.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
         if (_refreshed)
@@ -143,6 +144,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             Window.Wrapper.Canvas.Lines.AddRange(lines.GovforLines);
             Window.Wrapper.Canvas.Lines.AddRange(lines.ClfLines);
             Window.Wrapper.Canvas.Lines.AddRange(lines.WeYuLines); // CMU14
+            Window.Wrapper.Canvas.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
         var user = EntMan.GetComponentOrNull<TacticalMapUserComponent>(Owner);

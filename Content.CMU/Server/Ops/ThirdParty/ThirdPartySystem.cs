@@ -698,7 +698,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             {
                 if (!TrySpawnAtMarker(protoId, leaderMarkers, unsafeLeaderMarkers, reusableLeaderMarkers,
                     reusableUnsafeLeaderMarkers, spawnedLeaders, parachuteMode, useDropship, "leader",
-                    ref lastUsedMarker))
+                    !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn leader {protoId}");
             }
         }
@@ -711,7 +711,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             {
                 if (!TrySpawnAtMarker(protoId, gruntMarkers, unsafeGruntMarkers, reusableGruntMarkers,
                     reusableUnsafeGruntMarkers, spawnedGrunts, parachuteMode, useDropship, "grunt",
-                    ref lastUsedMarker))
+                    !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn grunt {protoId}");
             }
         }
@@ -724,7 +724,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             {
                 if (!TrySpawnAtMarker(protoId, entityMarkers, unsafeEntityMarkers, reusableEntityMarkers,
                     reusableUnsafeEntityMarkers, spawnedEnts, parachuteMode, useDropship, "ent",
-                    ref lastUsedMarker))
+                    !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn entity {protoId}");
             }
         }
@@ -929,10 +929,28 @@ public sealed partial class ThirdPartySystem : EntitySystem
             if (!_prototypeManager.TryIndex(party.PartySpawn, out var spawn))
                 continue;
 
+            if (party.RoundStart)
+            {
+                if (_automaticForces.ContainsKey(party.ID))
+                    continue;
+
+                _automaticForces.Add(party.ID, 0);
+                try
+                {
+                    SpawnThirdPartyNow(party, spawn, true, assignedJobs, null);
+                }
+                catch (Exception ex)
+                {
+                    _sawmill.Error($"[ThirdPartySystem] Exception spawning roundstart third party ({party.ID}): {ex}");
+                }
+
+                continue;
+            }
+
             // A threat vote can extend a schedule which already includes round-start survivors.
             if (!_automaticForces.TryGetValue(party.ID, out var id))
             {
-                id = QueueThirdParty(party, spawn, party.RoundStart, null, party.RoundStart, assignedJobs);
+                id = QueueThirdParty(party, spawn, false, null, false, assignedJobs);
                 _automaticForces.Add(party.ID, id);
             }
 
@@ -949,6 +967,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         bool parachuteMode,
         bool useDropship,
         string label,
+        bool trackUnclaimed,
         ref EntityUid? lastUsedMarker)
     {
         bool reusingMarker;
@@ -1016,7 +1035,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
 
             spawnedList.Add(ent);
-            _forceInterest.TrackRole(ent);
+            if (trackUnclaimed)
+                _forceInterest.TrackRole(ent);
 
             // Put marker on a cooldown
             if (!parachuteMode

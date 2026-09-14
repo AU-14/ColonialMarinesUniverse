@@ -491,7 +491,7 @@
     wallSmashSlowdownDuration: 0.2
     speedAtZeroIntegrity: 0.7
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicles/arv.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/arv.yml # CMU14
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8

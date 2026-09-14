@@ -6,7 +6,6 @@ using Content.Shared.CMU14.Radio;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Marines;
-using Content.Shared.CMU14.Radio;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;

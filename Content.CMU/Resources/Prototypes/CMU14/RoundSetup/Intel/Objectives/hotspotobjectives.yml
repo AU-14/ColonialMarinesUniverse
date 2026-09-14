@@ -1,0 +1,30 @@
+# Presence-based zone objective for Force on Force. The strongest alive force inside the
+# rectangular zone scores hotspot points each tick (kept separate from the muted win-point
+# pool), scaled by team size so a minority side earns more per head. Relocates to a fresh
+# objective marker after scoring ticks to keep both teams moving.
+- type: entity
+  id: CMUHotspotObjective
+  name: Hotspot
+  parent: MarkerBase
+  components:
+  - type: CMUObjective
+    id: CMUHotspotObjective
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    factions:
+    - govfor
+    - opfor
+    objectiveLevel: 1
+    objectiveWeight: 2
+    objectiveDescription: "Hold the hotspot. The strongest force inside it scores over time."
+  - type: HotspotObjective
+    catalog: true
+    halfWidth: 7
+    tickSeconds: 10
+    pointsPerTick: 1
+    normalizeByTeamSize: true
+    relocateAfterTicks: 5
+    zoneColorHex: "#FFB300"
+  - type: NavMapBeacon
+    text: Hotspot

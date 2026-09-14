@@ -10,7 +10,8 @@ public sealed partial class ScalingViewport
     {
         base.MouseWheel(args);
 
-        if (_entityManager.System<GunshipPilotInputSystem>().TryAdjustThrustFromMouseWheel(args.Delta.Y))
+        if (_entityManager.EntitySysManager.GetEntitySystemOrNull<GunshipPilotInputSystem>() is { } gunship
+            && gunship.TryAdjustThrustFromMouseWheel(args.Delta.Y))
             args.Handle();
     }
 }

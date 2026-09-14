@@ -61,10 +61,13 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
         _window.NextUpdate = state.NextUpdate;
         _window.TimeLeftBar.MaxValue = (float)(state.NextUpdate - state.LastTime).TotalMilliseconds;
         _window.ChemContainer.RemoveAllChildren();
-        if (state.Credits >= state.UpgradeCost && state.Clearance != 6)
+        var xLocked = state.XLockedUntil is not null && _time.CurTime < state.XLockedUntil.Value;
+        if (state.Credits >= state.UpgradeCost && state.Clearance != 6 && !xLocked)
             _window.Upgrade.Disabled = false;
         else _window.Upgrade.Disabled = true;
-        _window.UpgradeText.Text = Loc.GetString("research-data-ui-improve", ("NUM", state.UpgradeCost));
+        _window.UpgradeText.Text = xLocked
+            ? Loc.GetString("research-data-ui-improve-locked", ("TIME", Math.Ceiling((state.XLockedUntil!.Value - _time.CurTime).TotalMinutes)))
+            : Loc.GetString("research-data-ui-improve", ("NUM", state.UpgradeCost));
         StyleBoxFlat panel = new();
         panel.BackgroundColor = Color.FromHex("#0f0f00");
         panel.BorderColor = Color.FromHex("#ffbf00");

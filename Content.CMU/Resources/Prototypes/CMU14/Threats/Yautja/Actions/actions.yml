@@ -13,11 +13,11 @@
   name: Open Hunting Map
   description: Track fellow hunters and prey recently caught in a hunting trap.
   components:
-  - type: Action
-    itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Structures/Machines/map_table.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Structures/Machines/map_table.rsi
       state: maptable
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:OpenTacticalMapActionEvent
 

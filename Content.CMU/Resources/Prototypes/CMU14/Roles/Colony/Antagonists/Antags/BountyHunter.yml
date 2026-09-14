@@ -4,6 +4,9 @@
   jobBlacklistGroup:
   - AllGovforJobs
   - AllOpforJobs
+  - AllCLFJobs
+  - AllWeYuJobs
+  - AllColonyDepartmentHeadJobs
   briefing:
     text: cmu-antag-bounty-hunter-greeting
     color: Goldenrod
@@ -11,6 +14,7 @@
   startingGear: CMUGearBountyHunter
   components:
   - type: BountyHunter
+  - type: SynthGunAccess
   mindRoles:
   - MindRoleBountyHunter
 

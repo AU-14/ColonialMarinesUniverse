@@ -17,15 +17,18 @@
     id: RMCAdminPDA
   storage:
     back:
-    - RMCAdminAccessConfigurator
-    - HandheldHealthAnalyzer
+    - CMUAdminAccessConfigurator # CMU14
+    - HandheldHealthAnalyzer # CMU14
     - CMHealthAnalyzer
     - DoorRemoteAll
     - AdminHypo
     - MeleeDebug200
     - MeleeDebugGibInsane # CMU14
+    - CMUDebugLightningStick # CMU14
     - ToolDebug
-    - AU14TabletGovfor
-    - AU14TabletOpfor
+    - AU14TabletGovfor #CMU14
+    - AU14TabletOpfor # CMU14
     - RMCWelderAdmin
     - CMMultitool
+    - CMTRayScanner # CMU14
+    - CMUAtmosScanner # CMU14

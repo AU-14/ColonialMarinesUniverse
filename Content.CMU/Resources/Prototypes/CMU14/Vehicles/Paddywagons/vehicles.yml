@@ -18,7 +18,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/PaddyWagonVanEmpty.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/PaddyWagonVanEmpty.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -54,7 +54,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/van_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -90,7 +90,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -126,7 +126,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/van_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 10
@@ -162,7 +162,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -200,7 +200,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -237,7 +237,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -274,7 +274,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -311,7 +311,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -348,7 +348,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/van_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 10
@@ -385,7 +385,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -421,7 +421,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/Ambulance.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/Ambulance.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -457,7 +457,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/CopMonoSupron.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/CopMonoSupron.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8

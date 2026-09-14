@@ -1,0 +1,59 @@
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: CMUThermomachineFreezerMachineCircuitBoard
+  name: freezer thermomachine machine board
+  description: Looks like you could use a screwdriver to flip the board type.
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: CMUGasThermoMachineFreezer
+  - type: Construction
+    deconstructionTarget: null
+    graph: CMUThermomachineBoard
+    node: freezer
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: CMUThermomachineHeaterMachineCircuitBoard
+  name: heater thermomachine machine board
+  description: Looks like you could use a screwdriver to flip the board type.
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: CMUGasThermoMachineHeater
+  - type: Construction
+    deconstructionTarget: null
+    graph: CMUThermomachineBoard
+    node: heater
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: CMUCondenserMachineCircuitBoard
+  name: condenser machine board
+  description: A machine printed circuit board for a condenser.
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: CMUGasCondenser
+
+- type: constructionGraph
+  id: CMUThermomachineBoard
+  start: freezer
+  graph:
+  - node: freezer
+    entity: CMUThermomachineFreezerMachineCircuitBoard
+    edges:
+    - to: heater
+      steps:
+      - tool: Screwing
+        doAfter: 2
+  - node: heater
+    entity: CMUThermomachineHeaterMachineCircuitBoard
+    edges:
+    - to: freezer
+      steps:
+      - tool: Screwing
+        doAfter: 2

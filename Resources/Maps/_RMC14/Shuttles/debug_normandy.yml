@@ -172,7 +172,7 @@ entities:
     - type: Gravity
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
-- proto: AirCanister
+- proto: CMUCanisterAir
   entities:
   - uid: 172
     components:

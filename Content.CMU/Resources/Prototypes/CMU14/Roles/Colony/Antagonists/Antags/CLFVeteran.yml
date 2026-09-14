@@ -4,18 +4,35 @@
   jobBlacklistGroup:
   - AllGovforJobs
   - AllOpforJobs
-  jobBlacklist:
-  - AU14JobCLFGuerilla
-  - AU14JobCLFSapper
-  - AU14JobCLFCellLeader
-  - AU14JobCLFRadioOperator
-  - AU14JobCLFPhysician
-  - AU14JobCLFSurgeon
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
+  - AllSynthJobs
   briefing:
     text: clfveteran-role-greeting
     color: OliveDrab
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
   startingGear: AU14GearCLFVeteran
+  startingSkills:
+  - type: RMCSkillFirearms
+    level: 3
+  - type: RMCSkillMeleeWeapons
+    level: 3
+  - type: RMCSkillCqc
+    level: 3
+  - type: RMCSkillEndurance
+    level: 3
+  - type: RMCSkillFireman
+    level: 3
+  - type: RMCSkillConstruction
+    level: 3
+  - type: RMCSkillLeadership
+    level: 3
+  - type: RMCSkillMedical
+    level: 3
+  - type: RMCSkillPolice
+    level: 1
+  - type: RMCSkillSurgery
+    level: 3
   components:
   - type: CLFVeteran
   - type: ColonyBounty
@@ -23,18 +40,6 @@
     reason: Known CLF insurgent - armed and dangerous
     recordName: CLF Veteran (Unknown)
     capturedFaxPaper: AUPaperCLFVeteranCaptured
-  - type: Skills
-    skills:
-      RMCSkillFirearms: 3
-      RMCSkillMeleeWeapons: 3
-      RMCSkillCqc: 3
-      RMCSkillEndurance: 3
-      RMCSkillFireman: 3
-      RMCSkillConstruction: 3
-      RMCSkillLeadership: 3
-      RMCSkillMedical: 3
-      RMCSkillPolice: 1
-      RMCSkillSurgery: 3
   mindRoles:
   - MindRoleCLFVeteran
 

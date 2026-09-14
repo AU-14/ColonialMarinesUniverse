@@ -18,7 +18,7 @@ public sealed partial class CMUSaveZNetworkCommand : LocalizedEntityCommands
     [Dependency] private MapLoaderSystem _mapLoader = default!;
 
     public override string Command => "znetwork-save";
-    public override string Description => "Save all zNetwork maps to default server folder";
+    public override string Description => "Save all zNetwork maps to their loaded paths, or to a user-data folder";
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
@@ -41,7 +41,7 @@ public sealed partial class CMUSaveZNetworkCommand : LocalizedEntityCommands
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (args.Length < 2)
+        if (args.Length < 1 || args.Length > 2)
         {
             shell.WriteError("Wrong arguments count.");
             return;
@@ -61,6 +61,20 @@ public sealed partial class CMUSaveZNetworkCommand : LocalizedEntityCommands
         {
             shell.WriteError($"Target entity doesnt have CMUZLevelsNetworkComponent {args[0]}");
             return;
+        }
+
+        // one argument: save every level back to the path znetwork-mapping loaded it from
+        Dictionary<int, ResPath>? savePaths = null;
+        if (args.Length == 1)
+        {
+            if (!_entities.TryGetComponent<CMUZNetworkSourcePathsComponent>(target, out var sourceComp))
+            {
+                shell.WriteError(
+                    "This zNetwork has no recorded source paths; load it with znetwork-mapping, or pass a folder name as the second argument.");
+                return;
+            }
+
+            savePaths = sourceComp.Paths;
         }
 
         foreach (var (depth, mapUid) in levelComp.ZLevels)
@@ -89,7 +103,22 @@ public sealed partial class CMUSaveZNetworkCommand : LocalizedEntityCommands
                 return;
             }
 
-            var savePath = new ResPath($"/ZNetworkSaves/{args[1]}/{args[1]}{depth}.yml");
+            ResPath savePath;
+            if (savePaths != null)
+            {
+                if (!savePaths.TryGetValue(depth, out var loadedPath))
+                {
+                    shell.WriteError($"No source path recorded for depth {depth}, skipping.");
+                    continue;
+                }
+
+                savePath = loadedPath;
+            }
+            else
+            {
+                savePath = new ResPath($"/ZNetworkSaves/{args[1]}/{args[1]}{depth}.yml");
+            }
+
             shell.WriteLine(Loc.GetString("cmd-savemap-attempt", ("mapId", mapId), ("path", savePath)));
             if (_mapLoader.TrySaveMap(mapId, savePath))
             {

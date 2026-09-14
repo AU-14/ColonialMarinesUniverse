@@ -69,6 +69,7 @@
   - type: WallMount
     arc: 360
   - type: ApcPowerReceiver
+    powerLoad: 20 # CMU14
   - type: RMCPowerReceiver
     idleLoad: 1
     activeLoad: 20

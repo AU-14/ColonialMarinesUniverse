@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: CMBaseDoor
   id: RMCDropshipDoorBase
   abstract: true
@@ -89,7 +89,7 @@
     powerLoad: 0
     needsPower: false
   - type: AccessReader
-    access: [ [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
   - type: BlockTileFire
 
 - type: entity

@@ -763,13 +763,26 @@ namespace Content.Server.CMU14.Round
                     : 0;
             }
 
+            // Distress Signal promises survivors: spend the budget on them first so a group is
+            // scheduled whenever the population supports one, then let the weighted lottery fill
+            // whatever capacity is left with the planet's other third parties.
             List<ThirdPartyPrototype> selected = SelectThirdPartiesWithinBodyBudget(
-                candidates,
+                candidates.Where(party => party.RoundStart && party.AnnounceAsSurvivors).ToList(),
                 maxThirdParties,
                 bodyBudget,
                 PickWeightedThirdParty,
                 party => bodyCounts[party],
                 out var selectedBodyCount);
+
+            selected.AddRange(SelectAdditionalDistressSignalThirdParties(
+                candidates,
+                selected,
+                maxThirdParties,
+                bodyBudget,
+                PickWeightedThirdParty,
+                party => bodyCounts[party],
+                out _,
+                out var additionalBodyCount));
 
             SetSelectedThirdPartiesInSpawnOrder(selected);
             survivorCount = CalculateAnnouncedSurvivorCount(selected, party => bodyCounts[party]);
@@ -779,7 +792,7 @@ namespace Content.Server.CMU14.Round
 
             _sawmill.Info(
                 $"[AuRoundSystem] Locked Distress Signal third parties before round start: selected={
-                    selected.Count}, bodies={selectedBodyCount}/{bodyBudget}, survivors={survivorCount}, eligibleThreats=[{
+                    selected.Count}, bodies={selectedBodyCount + additionalBodyCount}/{bodyBudget}, survivors={survivorCount}, eligibleThreats=[{
                         string.Join(", ", eligibleThreatIds)}].");
 
             return true;

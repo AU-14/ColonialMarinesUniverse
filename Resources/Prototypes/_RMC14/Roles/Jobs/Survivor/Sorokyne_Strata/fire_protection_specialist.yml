@@ -39,7 +39,7 @@
     back: RMCSatchelLightpack
     mask: RMCMaskGasSPP
     head: RMCArmorHelmetSPPFirefighter
-    outerClothing: RMCArmorSPPFirefighter
+    outerClothing: CMUArmorFirefighterUPP # CMU14
   storage:
     back:
     - RMCAttachmentUnderbarrelExtinguisher

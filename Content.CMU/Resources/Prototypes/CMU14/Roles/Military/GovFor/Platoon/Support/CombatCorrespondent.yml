@@ -30,6 +30,12 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: rifleman
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: rifleman
 
   requirements:
   - !type:TraitsRequirement
@@ -127,3 +133,42 @@
   id: CombatCorrespondentCameraLoadout
   inhand:
   - RMCCameraBroadcasting
+
+- type: job
+  parent: AU14JobGOVFORCombatCorrespondentBase
+  id: AU14JobOPFORCombatCorrespondent
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORRifleman"
+  spawnMenuRoleName: Combat Correspondent (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFORCombatCorrespondent
+  dummyStartingGear: AU14GearOPFORCombatCorrespondentDummy
+  accessGroups:
+  - AU14OpforSquad
+
+- type: startingGear
+  id: AU14GearOPFORCombatCorrespondent
+  equipment:
+    id: AU14IDCardOPFORCombatCorrespondent
+    ears: AU14HeadsetOpforMarine
+    pocket2: RMCCorrespondentMicrophone
+
+- type: startingGear
+  id: AU14GearOPFORCombatCorrespondentDummy
+  equipment:
+    outerClothing: RMCOuterClothingExternalWebbing
+    shoes: AU14BootsJungle
+    head: AU14JunglePatrolCap
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORCombatCorrespondent
+  name: Spawn Point OPFOR Combat Correspondent
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORCombatCorrespondent
+  - type: Sprite
+    state: syn_spawn

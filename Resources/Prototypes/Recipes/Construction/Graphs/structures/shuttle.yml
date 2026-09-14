@@ -9,7 +9,7 @@
       - !type:SetAnchor
         value: false
       steps:
-      - material: Plasteel
+      - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
         amount: 2
         doAfter: 2
 
@@ -36,7 +36,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetPlasteel1
+        prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
         amount: 2
       - !type:DeleteEntity {}
       steps:
@@ -75,7 +75,7 @@
       conditions:
       - !type:EntityAnchored {}
       steps:
-      - material: Plasteel
+      - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
         amount: 2
         doAfter: 1
 
@@ -90,7 +90,7 @@
     - to: wired
       completed:
       - !type:SpawnPrototype
-        prototype: SheetPlasteel1
+        prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
         amount: 2
       steps:
       - tool: Prying
@@ -168,7 +168,7 @@
     - to: skeletonSilver
       completed:
         - !type:SpawnPrototype
-          prototype: SheetRGlass1
+          prototype: SheetRGlass1 # CMU14: refund the upstream sheets the build step consumed; the fork sheet carries CMSteel the airlock never cost
           amount: 2
       steps:
       - tool: Prying

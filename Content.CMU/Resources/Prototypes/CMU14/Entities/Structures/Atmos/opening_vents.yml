@@ -1,0 +1,69 @@
+# Passive equalizer: no pump, no power. Each half sits on its deck at the
+# opening; the pair moves gas by pressure difference, capped per tick.
+# Crowbar flips direction. Screwdriver toggles open/closed.
+# Multitool opens the service panel; with the panel open, crowbar deconstructs.
+- type: entity
+  parent: ConstructibleMachine
+  id: CMUOpeningVentDown
+  name: OV1-DG Opening Vent, Down
+  suffix: CMU, MultiZ
+  description: "Static Direction: Looks at deck below. Crowbar flips direction. Screwdriver opens/closes. Multitool opens the panel; pry to deconstruct."
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: WiresPanel
+    openingTool: Pulsing
+    examineTextClosed: cmu-zlevel-panel-closed
+    examineTextOpen: cmu-zlevel-panel-open
+  - type: Machine
+    board: CMUOpeningVentMachineCircuitboard
+  - type: AtmosDevice
+  - type: CMUOpeningVent
+  - type: CMUZPaired
+    offset: -1
+    pairKind: vent
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _RMC14/Structures/Piping/Atmospherics/vent_pump.rsi
+    layers:
+    - state: off
+
+- type: entity
+  parent: ConstructibleMachine
+  id: CMUOpeningVentUp
+  name: OV1-UG Opening Vent, Up
+  suffix: CMU, MultiZ
+  description: "Static Direction: Looks at deck above. Crowbar flips direction. Screwdriver opens/closes. Multitool opens the panel; pry to deconstruct."
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: WiresPanel
+    openingTool: Pulsing
+    examineTextClosed: cmu-zlevel-panel-closed
+    examineTextOpen: cmu-zlevel-panel-open
+  - type: Machine
+    board: CMUOpeningVentMachineCircuitboard
+  - type: AtmosDevice
+  - type: CMUOpeningVent
+  - type: CMUZPaired
+    offset: 1
+    pairKind: vent
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _RMC14/Structures/Piping/Atmospherics/vent_pump.rsi
+    layers:
+    - state: off
