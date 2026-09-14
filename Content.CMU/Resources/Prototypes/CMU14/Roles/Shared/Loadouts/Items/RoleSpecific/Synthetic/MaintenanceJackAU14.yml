@@ -1,5 +1,4 @@
 - type: loadout
   id: MaintenanceJackAU14
-  cost: 15
   inhand:
   - AU14MaintenanceJackSpecial
