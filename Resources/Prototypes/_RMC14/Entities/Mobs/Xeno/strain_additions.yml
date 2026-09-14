@@ -105,6 +105,7 @@
     - ActionXenoProduceChemical
     - ActionXenoRemoveChemical
     - ActionXenoDevolve
+    - ActionXenoPounce
   - type: XenoStrain
     name: rmc-xeno-alchemist-name
     description: rmc-xeno-alchemist-description
@@ -124,6 +125,12 @@
         Blunt: 13.5
         Slash: 13.5
         Piercing: 11.5
+  - type: XenoTailStab
+    tailDamage:
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
   - type: XenoHidden
   - type: RMCActionOrder
     id: CMXenoSpitterAlchemist
