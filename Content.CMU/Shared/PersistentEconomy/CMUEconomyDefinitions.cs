@@ -5,7 +5,8 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.PersistentEconomy;
 
-public static class CMUEconomyCVars
+[CVarDefs]
+public sealed partial class CMUEconomyCVars : CVars
 {
     public static readonly CVarDef<bool> Enabled = CVarDef.Create("cmu.economy_enabled", true, CVar.SERVERONLY);
     public static readonly CVarDef<int> StakePercent = CVarDef.Create("cmu.economy_stake_percent", 10, CVar.SERVERONLY);
