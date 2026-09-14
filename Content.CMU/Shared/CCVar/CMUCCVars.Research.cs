@@ -27,4 +27,9 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<float> CashRewardMult =
         CVarDef.Create("cmu.research.cashrewardmult", 500f, CVar.SERVERONLY | CVar.ARCHIVE);
+    /// <summary>
+    /// How long into the round, in seconds, before the X clearance (xeno sample) upgrade can be purchased.
+    /// </summary>
+    public static readonly CVarDef<float> XClearanceLockout =
+        CVarDef.Create("cmu.research.xclearancelockout", 3600f, CVar.SERVERONLY | CVar.ARCHIVE);
 }

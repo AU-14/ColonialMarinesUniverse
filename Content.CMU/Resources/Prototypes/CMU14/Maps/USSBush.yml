@@ -2,11 +2,11 @@
   id: USSBush
   mapName: USSBush
   allegiance: Neutral
-  mapPath: /Maps/CMU14/USSBush.yml
+  mapPath: /Maps/CMU14/Legacy/USSBush.yml
   mapsBelow:
-  - /Maps/CMU14/USSBush_below.yml
+  - /Maps/CMU14/Legacy/USSBush_below.yml
   mapsAbove:
-  - /Maps/CMU14/USSBush_above.yml
+  - /Maps/CMU14/Legacy/USSBush_above.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

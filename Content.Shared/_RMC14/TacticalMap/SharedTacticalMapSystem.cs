@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Sensor;
@@ -6,6 +7,7 @@ using Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Components;
 using Robust.Shared.Configuration;
+using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.TacticalMap;
@@ -143,6 +145,33 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
 
         map = default;
         return false;
+    }
+
+    // CMU14 method: draws a rectangle of line segments into the shared line list (FoF KoTH)
+    public void DrawTacticalMapRectangle(Color color, Vector2 center, int halfWidth, int halfHeight, float thickness = 3f)
+    {
+        if (!TryGetTacticalMap(out var map))
+            return;
+
+        var corners = new List<Vector2>(4);
+        corners.Add(new Vector2(center.X - halfWidth, center.Y - halfHeight));
+        corners.Add(new Vector2(center.X + halfWidth, center.Y - halfHeight));
+        corners.Add(new Vector2(center.X + halfWidth, center.Y + halfHeight));
+        corners.Add(new Vector2(center.X - halfWidth, center.Y + halfHeight));
+
+        var rect = new List<TacticalMapLine>(4);
+        for (var i = 0; i < 4; i++)
+        {
+            var a = corners[i];
+            var b = corners[(i + 1) % 4];
+            rect.Add(new TacticalMapLine(new Vector2i((int) a.X, (int) a.Y), new Vector2i((int) b.X, (int) b.Y), color, thickness));
+        }
+
+        // replace previous rect of same color
+        map.Comp.SharedLines.RemoveAll(l => l.Color == color);
+        map.Comp.SharedLines.AddRange(rect);
+
+        Dirty(map);
     }
 
     protected void UpdateMapData(Entity<TacticalMapComputerComponent> computer)
@@ -301,6 +330,7 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         lines.GovforLines = WantsGovfor() ? map.GovforLines : new();
         lines.ClfLines = WantsClf() ? map.ClfLines : new();
         lines.WeYuLines = WantsWeYu() ? map.WeYuLines : new();
+        lines.SharedLines = map.SharedLines.ToList();
         Dirty(computer, lines);
 
         var labels = EnsureComp<TacticalMapLabelsComponent>(computer);

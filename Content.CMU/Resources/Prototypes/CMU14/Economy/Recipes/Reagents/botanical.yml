@@ -1,8 +1,8 @@
 - type: reagent
   parent: CMReagent
   id: CMUAmmonia
-  name: reagent-name-ammonia
-  desc: reagent-desc-ammonia
+  name: reagent-name-botanical-ammonia
+  desc: reagent-desc-botanical-ammonia
   physicalDesc: reagent-physical-desc-pungent
   flavor: bitter
   color: "#404030"
@@ -27,8 +27,8 @@
 - type: reagent
   parent: CMReagent
   id: CMUDiethylamine
-  name: reagent-name-diethylamine
-  desc: reagent-desc-diethylamine
+  name: reagent-name-botanical-diethylamine
+  desc: reagent-desc-botanical-diethylamine
   physicalDesc: reagent-physical-desc-strong-smelling
   flavor: bitter
   color: "#604030"
@@ -45,8 +45,8 @@
 - type: reagent
   parent: CMReagent
   id: CMUUnstableMutagen
-  name: reagent-name-unstable-mutagen
-  desc: reagent-desc-unstable-mutagen
+  name: reagent-name-botanical-unstable-mutagen
+  desc: reagent-desc-botanical-unstable-mutagen
   physicalDesc: reagent-physical-desc-glowing
   flavor: bitter
   color: "#13BC5E"
@@ -218,8 +218,8 @@
 - type: reagent
   parent: CMReagent
   id: CMUPhenol # mutant carrots
-  name: reagent-name-phenol
-  desc: reagent-desc-phenol
+  name: reagent-name-botanical-phenol
+  desc: reagent-desc-botanical-phenol
   physicalDesc: reagent-physical-desc-unidentifiable
   flavor: whiskey
   color: "#c095c9"
@@ -241,8 +241,8 @@
 - type: reagent
   parent: CMReagent
   id: CMUAmatoxin # mutant reishi / regular fly amanita
-  name: reagent-name-amatoxin
-  desc: reagent-desc-amatoxin
+  name: reagent-name-botanical-amatoxin
+  desc: reagent-desc-botanical-amatoxin
   physicalDesc: reagent-physical-desc-unidentifiable
   flavor: bitter
   color: "#792300"

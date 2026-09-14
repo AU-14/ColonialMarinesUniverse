@@ -1,8 +1,11 @@
 - type: antagSpecifier
   id: Cannibal
   prefRoles: [ CannibalRole ]
-  jobWhitelist:
-  - AU14JobCivilianFoodServiceWorker
+  jobBlacklistGroup:
+  - AllGovforCommandStaff
+  - AllOpforCommandStaff
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
   briefing:
     text: cannibal-role-greeting
     color: DarkRed
@@ -10,6 +13,7 @@
   startingGear: AU14GearCannibal
   components:
   - type: Cannibal
+  - type: SynthGunAccess
   mindRoles:
   - MindRoleCannibal
 

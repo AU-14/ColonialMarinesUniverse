@@ -17,6 +17,8 @@ public sealed partial class CMUObjectiveMasterComponent : Robust.Shared.GameObje
         [DataField] public int? MinMajorObjectives;
 
         public int CurrentWinPoints;
+
+        public int HotspotPoints; // FoF KoTH hotspots, decoupled from RequiredWinPoints
     }
 
     [DataField(required: true)]

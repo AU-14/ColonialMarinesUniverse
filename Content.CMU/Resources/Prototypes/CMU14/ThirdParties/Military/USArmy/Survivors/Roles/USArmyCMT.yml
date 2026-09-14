@@ -86,7 +86,7 @@
     head: AU14HelmetUSArmy
     belt: AU14BeltMedicBagSupportSynthRMC
     pocket1: AU14PouchIFAKFill
-    pocket2: AU14PouchIFAKFill
+    pocket2: RMCPouchMagazine
     back: AU14CMDefibrillator
     ears: AU14HeadsetUSArmy
     suitstorage: RMCWeaponRifleM54CFilled
@@ -96,3 +96,7 @@
     outerClothing:
     - RMCRadioHandheldColony
     - RMCFlashlight
+    pocket2:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C

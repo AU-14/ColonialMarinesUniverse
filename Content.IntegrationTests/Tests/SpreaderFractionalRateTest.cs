@@ -80,7 +80,7 @@ public sealed class SpreaderFractionalRateTest : GameTest
         {
             var map = SEntMan.System<SharedMapSystem>();
             var tileDefinitions = Server.ResolveDependency<ITileDefinitionManager>();
-            var floor = new Tile(tileDefinitions["FloorSteel"].TileId);
+            var floor = new Tile(tileDefinitions["CMFloorSteel"].TileId); // CMU14
 
             map.CreateMap(out var mapId);
             var grid = map.CreateGridEntity(mapId);

@@ -1,0 +1,87 @@
+# Deploy targets point at the CMU walls in Structures/Atmos/inflatable_wall.yml.
+# ├──[ Inflatable Wall ]─────────────────────────────────────────────┤
+- type: entity
+  parent: BaseItem
+  id: CMUInflatableWallFolded
+  name: inflatable wall
+  description: A folded membrane which rapidly expands into a large cubical shape on activation.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: CMUInflatableWall
+    count: 25
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  - type: Item
+    sprite: _RMC14/Objects/Misc/inflatable_wall.rsi
+    size: Small
+  - type: SpawnAfterInteract
+    prototype: CMUInflatableWall
+    doAfter: 1
+    removeOnInteract: true
+  - type: Clickable
+  - type: Tag
+    tags:
+    - CMUInflatableBarrier
+    - Inflatable
+
+- type: stack
+  id: CMUInflatableWall
+  name: inflatable wall
+  icon: { sprite: _RMC14/Objects/Misc/inflatable_wall.rsi, state: folded_wall }
+  spawn: CMUInflatableWallFolded1
+  maxCount: 25
+
+- type: entity
+  parent: CMUInflatableWallFolded
+  id: CMUInflatableWallFolded1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# ├──[ Inflatable Door ]─────────────────────────────────────────────┤
+- type: entity
+  parent: BaseItem
+  id: CMUInflatableDoorFolded
+  name: inflatable door
+  description: A folded membrane which rapidly expands into a simple door on activation.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: CMUInflatableDoor
+    count: 10
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/inflatable_door.rsi
+    state: folded_door
+  - type: Item
+    sprite: _RMC14/Objects/Misc/inflatable_door.rsi
+    size: Small
+  - type: SpawnAfterInteract
+    prototype: CMUInflatableDoor
+    doAfter: 1
+    removeOnInteract: true
+  - type: Clickable
+  - type: Tag
+    tags:
+    - CMUInflatableBarrier
+    - Inflatable
+
+- type: stack
+  id: CMUInflatableDoor
+  name: inflatable door
+  icon: { sprite: _RMC14/Objects/Misc/inflatable_door.rsi, state: folded_door }
+  spawn: CMUInflatableDoorFolded1
+  maxCount: 10
+
+- type: entity
+  parent: CMUInflatableDoorFolded
+  id: CMUInflatableDoorFolded1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: Tag
+  id: CMUInflatableBarrier

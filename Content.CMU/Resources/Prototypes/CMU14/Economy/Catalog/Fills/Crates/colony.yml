@@ -1,4 +1,4 @@
-﻿#table parts
+#table parts
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxGamblingTableParts
@@ -440,7 +440,7 @@
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxFirefighting
-  name: Firefighting Crate (3x firefighter helmet, 3x Firefighting Turnout Gear, 6x fire extinguisher)
+  name: Firefighting Crate (3x firefighter helmet, 3x Firefighting Turnout Gear, 6x fire extinguisher, 1x fire-axe)
   components:
   - type: StorageFill
     contents:
@@ -450,6 +450,8 @@
       amount: 3
     - id: CMFireExtinguisher
       amount: 6
+    - id: RMCFireAxe
+      amount: 1
 
 - type: entity
   parent: RMCCrateBase

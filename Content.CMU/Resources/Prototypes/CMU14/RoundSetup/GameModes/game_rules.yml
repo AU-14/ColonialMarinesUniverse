@@ -62,19 +62,22 @@
       AU14JobOPFORRadioTelephoneOperator: 3
       AU14JobOPFORRadioTrafficOperator: 3
       AU14JobOPFORSquadRifleman: 75
-#     CMUJobOPFORDroneOperator: 1
-#     AU14JobOPFORWeaponsSpecialist: 3 # TODO
+      CMUJobOPFORDroneOperator: 1
+      AU14JobOPFORWeaponsSpecialist: 3
       AU14JobOPFORSquadAutomaticRifleman: 3
       AU14JobOPFORSquadCombatTech: 6
+      AU14JobOPFOREngineeringTech: 2
       AU14JobOPFOROfficerLogistics: 1
       AU14JobOPFORAuxTech: 1
       AU14JobOPFOROfficerMedical: 1
       AU14JobOPFORMilitaryDoctor: 3
       AU14JobOPFORPlatoonCorpsman: 9
+      AU14JobOPFORNurse: 2
       AU14JobOPFOROfficerMP: 1
       AU14JobOPFORMilitaryPoliceMan: 2
       AU14JobOPFOROfficerEngi: 1
       AU14JobOPFORVehicleCrewman: 2
+      AU14JobOPFORVehicleCommander: 1
       AU14JobOPFORDSPilot: 2
       AU14JobOPFORDCC: 2
       AU14JobOPFORAuxSupportSynth: 2

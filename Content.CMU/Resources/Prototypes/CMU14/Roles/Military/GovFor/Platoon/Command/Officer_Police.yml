@@ -7,7 +7,7 @@
   name: au14-job-name-govforpolicechief
   description: au14-job-description-govforpolicechief
   icon: "AU14JobIconGovCMP"
-  spawnMenuRoleName: Chief Military Police (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-chief-military-police
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFOROfficerMP
   dummyStartingGear: AU14GearGOVFOROfficerMPDummy

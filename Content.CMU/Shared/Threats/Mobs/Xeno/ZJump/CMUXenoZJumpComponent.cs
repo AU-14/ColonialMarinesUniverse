@@ -17,9 +17,6 @@ public sealed partial class CMUXenoZJumpComponent : Component
     public LocId CancelledPopup = "cmu-xeno-zjump-cancelled";
 
     [DataField]
-    public LocId NotXenoPopup = "cmu-xeno-zjump-fail-not-xeno";
-
-    [DataField]
     public LocId NoZPhysicsPopup = "cmu-xeno-zjump-fail-no-z-physics";
 
     [DataField, AutoNetworkedField]

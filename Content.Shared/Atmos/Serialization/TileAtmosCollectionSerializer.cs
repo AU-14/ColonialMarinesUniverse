@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown;
@@ -31,7 +31,8 @@ public sealed partial class TileAtmosCollectionSerializer : ITypeSerializer<Dict
         // Backwards compatability
         if (version == 1)
         {
-            var tile2 = node["tiles"];
+            if (!node.TryGet("tiles", out var tile2))
+                return tiles;
 
             var mixies = serializationManager.Read<Dictionary<Vector2i, int>?>(tile2, hookCtx, context);
             var unique = serializationManager.Read<List<GasMixture>?>(node["uniqueMixes"], hookCtx, context);

@@ -194721,7 +194721,7 @@ entities:
     - type: Transform
       pos: 73.5,-68.5
       parent: 1
-- proto: RMCInflatableDoor
+- proto: CMUInflatableDoor # CMU14
   entities:
   - uid: 27005
     components:

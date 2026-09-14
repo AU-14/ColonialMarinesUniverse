@@ -11,7 +11,7 @@ maps:
 grids:
 - 1
 orphans: []
-nullspace: []
+nullspace: [2291, 2292, 2293, 2294, 2295, 2296, 2297]
 tilemap:
   1: Space
   3: CMFloorBlack
@@ -173,7 +173,7 @@ tilemap:
   91: RMCFloorResearchContainmentFloor2West
   95: RMCFloorResearchContainmentNorth
 entities:
-- proto: ""
+- proto: ''
   entities:
   - uid: 1
     components:
@@ -4644,18 +4644,8 @@ entities:
         immutable: True
         temperature: 293.15
         moles:
-        - 21.8124
-        - 81.1594
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
+          Oxygen: 21.8124
+          Nitrogen: 81.1594
     - type: RadiationGridResistance
     - type: AreaGrid
       labels: {}
@@ -7711,6 +7701,1350 @@ entities:
         121,-50: CMUAreaLV376WYFacilityAC
         122,-49: CMUAreaLV376WYFacilityAC
         122,-50: CMUAreaLV376WYFacilityAC
+    - type: GasTileOverlay
+    - type: GridAtmosphere
+      version: 2
+      data:
+        uniqueMixes:
+        - temperature: 293.15
+          volume: 2500
+          moles:
+            Oxygen: 21.824879
+            Nitrogen: 82.10312
+        tiles:
+          0,0:
+            0: 1
+          -4,0:
+            0: 1
+          -4,-4:
+            0: 1
+          0,-4:
+            0: 1
+          4,-4:
+            0: 1
+          4,0:
+            0: 1
+          -8,0:
+            0: 1
+          -8,-4:
+            0: 1
+          -12,0:
+            0: 1
+          -12,-4:
+            0: 1
+          -12,-8:
+            0: 1
+          -12,-12:
+            0: 1
+          -8,-8:
+            0: 1
+          -8,-12:
+            0: 1
+          -4,-8:
+            0: 1
+          -4,-12:
+            0: 1
+          0,-8:
+            0: 1
+          0,-12:
+            0: 1
+          4,-8:
+            0: 1
+          4,-12:
+            0: 1
+          8,-12:
+            0: 1
+          8,-8:
+            0: 1
+          8,-4:
+            0: 1
+          8,0:
+            0: 1
+          12,-12:
+            0: 1
+          12,-8:
+            0: 1
+          12,-4:
+            0: 1
+          12,0:
+            0: 1
+          12,4:
+            0: 1
+          8,4:
+            0: 1
+          4,4:
+            0: 1
+          0,4:
+            0: 1
+          -4,4:
+            0: 1
+          -8,4:
+            0: 1
+          -12,4:
+            0: 1
+          -12,-16:
+            0: 1
+          -12,-20:
+            0: 1
+          -8,-16:
+            0: 1
+          -8,-20:
+            0: 1
+          -4,-16:
+            0: 1
+          -4,-20:
+            0: 1
+          0,-16:
+            0: 1
+          0,-20:
+            0: 1
+          4,-16:
+            0: 1
+          4,-20:
+            0: 1
+          8,-16:
+            0: 1
+          8,-20:
+            0: 1
+          12,-16:
+            0: 1
+          12,-20:
+            0: 1
+          18,-20:
+            0: 65295
+          18,-19:
+            0: 255
+          18,-21:
+            0: 65520
+          19,-20:
+            0: 65280
+          19,-19:
+            0: 255
+          19,-21:
+            0: 61166
+          20,-20:
+            0: 47872
+          20,-19:
+            0: 187
+          19,-16:
+            0: 34952
+          19,-15:
+            0: 2184
+          20,-16:
+            0: 65535
+          20,-15:
+            0: 4095
+          30,-13:
+            0: 28679
+          16,-8:
+            0: 1
+          16,-4:
+            0: 1
+          16,0:
+            0: 1
+          16,4:
+            0: 1
+          20,-21:
+            0: 30583
+          21,-20:
+            0: 65518
+          21,-19:
+            0: 61183
+          21,-18:
+            0: 61166
+          21,-17:
+            0: 36590
+          21,-16:
+            0: 65535
+          21,-21:
+            0: 61166
+          22,-20:
+            0: 26230
+          22,-19:
+            0: 26470
+          22,-17:
+            0: 40959
+          22,-18:
+            0: 1760
+          22,-16:
+            0: 65467
+          23,-20:
+            0: 65535
+          23,-19:
+            0: 65522
+          23,-18:
+            0: 12287
+          23,-17:
+            0: 65535
+          23,-16:
+            0: 65535
+          23,-21:
+            0: 12287
+          24,-20:
+            0: 65535
+          24,-19:
+            0: 65520
+          24,-18:
+            0: 4095
+          24,-17:
+            0: 65535
+          21,-15:
+            0: 4095
+          22,-15:
+            0: 955
+          23,-15:
+            0: 255
+          23,-14:
+            0: 61166
+          23,-13:
+            0: 110
+          24,-16:
+            0: 65535
+          24,-15:
+            0: 8959
+          24,-14:
+            0: 65535
+          24,-13:
+            0: 1807
+          24,-12:
+            0: 63351
+          24,-11:
+            0: 255
+          20,-8:
+            0: 1
+          20,-4:
+            0: 1
+          20,0:
+            0: 1
+          20,4:
+            0: 1
+          20,8:
+            0: 1
+          20,12:
+            0: 1
+          16,8:
+            0: 1
+          16,12:
+            0: 1
+          12,8:
+            0: 1
+          12,12:
+            0: 1
+          8,8:
+            0: 1
+          8,12:
+            0: 1
+          4,8:
+            0: 1
+          4,12:
+            0: 1
+          0,8:
+            0: 1
+          0,12:
+            0: 1
+          -4,8:
+            0: 1
+          -4,12:
+            0: 1
+          -8,8:
+            0: 1
+          -8,12:
+            0: 1
+          -12,8:
+            0: 1
+          -12,12:
+            0: 1
+          -16,12:
+            0: 1
+          -16,8:
+            0: 1
+          -16,4:
+            0: 1
+          -16,0:
+            0: 1
+          -16,-4:
+            0: 1
+          -16,-8:
+            0: 1
+          -16,-12:
+            0: 1
+          -16,-16:
+            0: 1
+          -16,-20:
+            0: 1
+          -20,12:
+            0: 1
+          -20,8:
+            0: 1
+          -20,4:
+            0: 1
+          -20,0:
+            0: 1
+          -20,-4:
+            0: 1
+          -20,-8:
+            0: 1
+          -20,-12:
+            0: 1
+          -20,-16:
+            0: 1
+          -20,-20:
+            0: 1
+          -24,12:
+            0: 1
+          -24,8:
+            0: 1
+          -24,4:
+            0: 1
+          -24,0:
+            0: 1
+          -24,-4:
+            0: 1
+          -24,-8:
+            0: 1
+          -24,-12:
+            0: 1
+          -24,-16:
+            0: 1
+          -24,-20:
+            0: 1
+          -28,12:
+            0: 1
+          -28,8:
+            0: 1
+          -28,4:
+            0: 1
+          -28,0:
+            0: 1
+          -28,-4:
+            0: 1
+          -28,-8:
+            0: 1
+          -28,-12:
+            0: 1
+          -28,-16:
+            0: 1
+          -28,-20:
+            0: 1
+          -32,12:
+            0: 1
+          -32,8:
+            0: 1
+          -32,4:
+            0: 1
+          -32,0:
+            0: 1
+          -32,-4:
+            0: 1
+          -32,-8:
+            0: 1
+          -32,-12:
+            0: 1
+          -32,-16:
+            0: 1
+          -32,-20:
+            0: 1
+          -36,12:
+            0: 1
+          -36,8:
+            0: 1
+          -36,4:
+            0: 1
+          -36,0:
+            0: 1
+          -36,-4:
+            0: 1
+          -36,-8:
+            0: 1
+          -36,-12:
+            0: 1
+          -36,-16:
+            0: 1
+          -36,-20:
+            0: 1
+          -36,-24:
+            0: 1
+          -36,-28:
+            0: 1
+          -32,-24:
+            0: 1
+          -32,-28:
+            0: 1
+          -28,-24:
+            0: 1
+          -28,-28:
+            0: 1
+          -24,-24:
+            0: 1
+          -24,-28:
+            0: 1
+          -20,-24:
+            0: 1
+          -20,-28:
+            0: 1
+          -16,-24:
+            0: 1
+          -16,-28:
+            0: 1
+          -12,-24:
+            0: 1
+          -12,-28:
+            0: 1
+          -8,-24:
+            0: 1
+          -8,-28:
+            0: 1
+          -4,-24:
+            0: 1
+          -4,-28:
+            0: 1
+          0,-24:
+            0: 1
+          0,-28:
+            0: 1
+          4,-24:
+            0: 1
+          4,-28:
+            0: 1
+          -36,16:
+            0: 1
+          -36,20:
+            0: 1
+          -32,16:
+            0: 1
+          -32,20:
+            0: 1
+          -28,16:
+            0: 1
+          -28,20:
+            0: 1
+          -24,16:
+            0: 1
+          -24,20:
+            0: 1
+          -20,16:
+            0: 1
+          -20,20:
+            0: 1
+          -16,16:
+            0: 1
+          -16,20:
+            0: 1
+          -12,16:
+            0: 1
+          -12,20:
+            0: 1
+          -8,16:
+            0: 1
+          -8,20:
+            0: 1
+          -4,16:
+            0: 1
+          -4,20:
+            0: 1
+          0,20:
+            0: 1
+          0,16:
+            0: 1
+          4,20:
+            0: 1
+          4,16:
+            0: 1
+          8,20:
+            0: 1
+          8,16:
+            0: 1
+          12,20:
+            0: 1
+          12,16:
+            0: 1
+          16,20:
+            0: 1
+          16,16:
+            0: 1
+          20,20:
+            0: 1
+          20,16:
+            0: 1
+          24,20:
+            0: 1
+          24,16:
+            0: 1
+          24,12:
+            0: 1
+          24,8:
+            0: 1
+          24,4:
+            0: 1
+          24,0:
+            0: 1
+          24,-4:
+            0: 1
+          24,-8:
+            0: 1
+          25,-12:
+            0: 61440
+          25,-11:
+            0: 63743
+          25,-10:
+            0: 255
+          26,-12:
+            0: 12288
+          26,-11:
+            0: 13107
+          26,-10:
+            0: 51
+          25,-16:
+            0: 65535
+          25,-15:
+            0: 63
+          25,-14:
+            0: 13107
+          25,-13:
+            0: 51
+          25,-17:
+            0: 65535
+          26,-16:
+            0: 64989
+          26,-15:
+            0: 34829
+          26,-17:
+            0: 40959
+          26,-14:
+            0: 8
+          27,-16:
+            0: 63351
+          27,-15:
+            0: 13079
+          27,-14:
+            0: 3
+          28,-16:
+            0: 30464
+          28,-15:
+            0: 7
+          25,-20:
+            0: 48059
+          25,-19:
+            0: 48057
+          25,-18:
+            0: 39867
+          25,-21:
+            0: 40959
+          26,-20:
+            0: 32759
+          26,-19:
+            0: 30583
+          26,-18:
+            0: 30583
+          26,-21:
+            0: 32767
+          27,-20:
+            0: 65535
+          27,-19:
+            0: 65535
+          27,-18:
+            0: 4095
+          27,-17:
+            0: 3581
+          28,-20:
+            0: 65535
+          28,-19:
+            0: 65535
+          28,-18:
+            0: 4095
+          28,-17:
+            0: 4095
+          28,20:
+            0: 1
+          28,16:
+            0: 1
+          28,12:
+            0: 1
+          28,8:
+            0: 1
+          28,4:
+            0: 1
+          28,0:
+            0: 1
+          28,-4:
+            0: 1
+          28,-8:
+            0: 1
+          29,-16:
+            0: 34952
+          29,-15:
+            0: 8
+          29,-14:
+            0: 2184
+          30,-16:
+            0: 65535
+          30,-15:
+            0: 28799
+          30,-14:
+            0: 32767
+          29,-17:
+            0: 3549
+          30,-17:
+            0: 4095
+          28,24:
+            0: 1
+          28,28:
+            0: 1
+          24,24:
+            0: 1
+          24,28:
+            0: 1
+          20,24:
+            0: 1
+          20,28:
+            0: 1
+          16,24:
+            0: 1
+          16,28:
+            0: 1
+          12,24:
+            0: 1
+          12,28:
+            0: 1
+          8,24:
+            0: 1
+          8,28:
+            0: 1
+          4,24:
+            0: 1
+          4,28:
+            0: 1
+          0,24:
+            0: 1
+          0,28:
+            0: 1
+          -4,24:
+            0: 1
+          -4,28:
+            0: 1
+          -8,24:
+            0: 1
+          -8,28:
+            0: 1
+          -12,24:
+            0: 1
+          -12,28:
+            0: 1
+          -16,24:
+            0: 1
+          -16,28:
+            0: 1
+          -20,24:
+            0: 1
+          -20,28:
+            0: 1
+          -24,24:
+            0: 1
+          -24,28:
+            0: 1
+          -28,24:
+            0: 1
+          -28,28:
+            0: 1
+          -32,24:
+            0: 1
+          -32,28:
+            0: 1
+          -36,24:
+            0: 1
+          -36,28:
+            0: 1
+          -36,-32:
+            0: 1
+          -32,-32:
+            0: 1
+          -28,-32:
+            0: 1
+          -24,-32:
+            0: 1
+          -20,-32:
+            0: 1
+          -16,-32:
+            0: 1
+          -12,-32:
+            0: 1
+          -8,-32:
+            0: 1
+          -4,-32:
+            0: 1
+          0,-32:
+            0: 1
+          4,-32:
+            0: 1
+          8,-28:
+            0: 1
+          8,-32:
+            0: 1
+          12,-28:
+            0: 1
+          12,-32:
+            0: 1
+          18,-25:
+            0: 65520
+          18,-24:
+            0: 65535
+          19,-25:
+            0: 56592
+          19,-24:
+            0: 7647
+          20,-25:
+            0: 13056
+          16,-32:
+            0: 1
+          20,-24:
+            0: 819
+          20,-28:
+            0: 34944
+          20,-27:
+            0: 34952
+          21,-28:
+            0: 65520
+          21,-27:
+            0: 65523
+          21,-26:
+            0: 60928
+          21,-25:
+            0: 61166
+          21,-24:
+            0: 61166
+          22,-28:
+            0: 65520
+          22,-27:
+            0: 30576
+          22,-26:
+            0: 65280
+          22,-25:
+            0: 30591
+          22,-24:
+            0: 63351
+          23,-28:
+            0: 65520
+          23,-27:
+            0: 65526
+          23,-26:
+            0: 65295
+          23,-25:
+            0: 65295
+          23,-24:
+            0: 61695
+          24,-28:
+            0: 61408
+          24,-26:
+            0: 65422
+          24,-25:
+            0: 65311
+          20,-32:
+            0: 1
+          8,-24:
+            0: 1
+          12,-24:
+            0: 1
+          18,-23:
+            0: 65535
+          18,-22:
+            0: 65535
+          19,-23:
+            0: 7677
+          19,-22:
+            0: 65535
+          20,-23:
+            0: 819
+          20,-22:
+            0: 30583
+          21,-23:
+            0: 61166
+          21,-22:
+            0: 61166
+          22,-23:
+            0: 30719
+          22,-22:
+            0: 30583
+          22,-21:
+            0: 4095
+          23,-23:
+            0: 61695
+          23,-22:
+            0: 4095
+          24,-24:
+            0: 61951
+          24,-23:
+            0: 61951
+          24,-22:
+            0: 8191
+          24,-21:
+            0: 4095
+          27,-24:
+            0: 65359
+          27,-23:
+            0: 65535
+          28,-22:
+            0: 24679
+          27,-22:
+            0: 61695
+          28,-21:
+            0: 1911
+          27,-21:
+            0: 4095
+          27,-27:
+            0: 65280
+          27,-26:
+            0: 65535
+          27,-25:
+            0: 61695
+          28,-32:
+            0: 1
+          25,-24:
+            0: 64733
+          25,-23:
+            0: 56575
+          25,-22:
+            0: 52701
+          25,-25:
+            0: 56783
+          26,-24:
+            0: 64797
+          26,-23:
+            0: 56829
+          26,-22:
+            0: 53725
+          26,-25:
+            0: 53725
+          24,-27:
+            0: 61160
+          25,-28:
+            0: 53520
+          25,-27:
+            0: 56732
+          25,-26:
+            0: 65293
+          26,-27:
+            0: 63232
+          26,-26:
+            0: 64775
+          24,-32:
+            0: 1
+          -12,32:
+            0: 1
+          -8,32:
+            0: 1
+          -4,32:
+            0: 1
+          0,32:
+            0: 1
+          -16,32:
+            0: 1
+          -20,32:
+            0: 1
+          -24,32:
+            0: 1
+          -12,36:
+            0: 1
+          -8,36:
+            0: 1
+          -4,36:
+            0: 1
+          0,36:
+            0: 1
+          4,36:
+            0: 1
+          4,32:
+            0: 1
+          -16,36:
+            0: 1
+          -20,36:
+            0: 1
+          8,32:
+            0: 1
+          12,32:
+            0: 1
+          16,32:
+            0: 1
+          20,32:
+            0: 1
+          -40,0:
+            0: 1
+          -40,4:
+            0: 1
+          -40,8:
+            0: 1
+          -44,0:
+            0: 1
+          -44,4:
+            0: 1
+          -44,8:
+            0: 1
+          -40,12:
+            0: 1
+          -44,12:
+            0: 1
+          28,-36:
+            0: 1
+          28,-40:
+            0: 1
+          32,-32:
+            0: 1
+          32,-36:
+            0: 1
+          32,-40:
+            0: 1
+          36,-32:
+            0: 1
+          36,-36:
+            0: 1
+          36,-40:
+            0: 1
+          40,-32:
+            0: 1
+          40,-36:
+            0: 1
+          40,-40:
+            0: 1
+          44,-24:
+            0: 1
+          44,-28:
+            0: 1
+          44,-20:
+            0: 1
+          44,-16:
+            0: 1
+          44,-12:
+            0: 1
+          -36,-36:
+            0: 1
+          -40,-8:
+            0: 1
+          -40,-12:
+            0: 1
+          -40,-16:
+            0: 1
+          -40,-20:
+            0: 1
+          -40,-24:
+            0: 1
+          -40,-28:
+            0: 1
+          -40,-32:
+            0: 1
+          -40,-36:
+            0: 1
+          -44,-8:
+            0: 1
+          -44,-12:
+            0: 1
+          -44,-16:
+            0: 1
+          -44,-20:
+            0: 1
+          -44,-24:
+            0: 1
+          -44,-28:
+            0: 1
+          -44,-32:
+            0: 1
+          -44,-36:
+            0: 1
+          -48,-8:
+            0: 1
+          -48,-12:
+            0: 1
+          -48,-16:
+            0: 1
+          -48,-20:
+            0: 1
+          -48,-24:
+            0: 1
+          -48,-28:
+            0: 1
+          -48,-32:
+            0: 1
+          -48,-36:
+            0: 1
+          -52,-8:
+            0: 1
+          -52,-12:
+            0: 1
+          -52,-16:
+            0: 1
+          -52,-20:
+            0: 1
+          -52,-24:
+            0: 1
+          -52,-28:
+            0: 1
+          -52,-32:
+            0: 1
+          -52,-36:
+            0: 1
+          -36,-40:
+            0: 1
+          -32,-36:
+            0: 1
+          -32,-40:
+            0: 1
+          -28,-36:
+            0: 1
+          -28,-40:
+            0: 1
+          -24,-36:
+            0: 1
+          -24,-40:
+            0: 1
+          -20,-36:
+            0: 1
+          -20,-40:
+            0: 1
+          -16,-36:
+            0: 1
+          -16,-40:
+            0: 1
+          -12,-36:
+            0: 1
+          -12,-40:
+            0: 1
+          -8,-36:
+            0: 1
+          -8,-40:
+            0: 1
+          -4,-36:
+            0: 1
+          -4,-40:
+            0: 1
+          0,-36:
+            0: 1
+          0,-40:
+            0: 1
+          4,-36:
+            0: 1
+          4,-40:
+            0: 1
+          8,-36:
+            0: 1
+          8,-40:
+            0: 1
+          12,-36:
+            0: 1
+          12,-40:
+            0: 1
+          16,-36:
+            0: 1
+          16,-40:
+            0: 1
+          20,-36:
+            0: 1
+          20,-40:
+            0: 1
+          24,-36:
+            0: 1
+          24,-40:
+            0: 1
+          -56,-8:
+            0: 1
+          -56,-12:
+            0: 1
+          -56,-16:
+            0: 1
+          -56,-20:
+            0: 1
+          -56,-24:
+            0: 1
+          -56,-28:
+            0: 1
+          -56,-32:
+            0: 1
+          -56,-36:
+            0: 1
+          -60,-12:
+            0: 1
+          -60,-16:
+            0: 1
+          -60,-20:
+            0: 1
+          -60,-24:
+            0: 1
+          -60,-28:
+            0: 1
+          -60,-32:
+            0: 1
+          -60,-36:
+            0: 1
+          -60,-8:
+            0: 1
+          -60,-4:
+            0: 1
+          -60,0:
+            0: 1
+          -60,4:
+            0: 1
+          -60,8:
+            0: 1
+          -60,12:
+            0: 1
+          -60,16:
+            0: 1
+          -60,20:
+            0: 1
+          -60,24:
+            0: 1
+          -60,28:
+            0: 1
+          -56,-4:
+            0: 1
+          -56,0:
+            0: 1
+          -56,4:
+            0: 1
+          -56,8:
+            0: 1
+          -56,12:
+            0: 1
+          -56,16:
+            0: 1
+          -56,20:
+            0: 1
+          -56,24:
+            0: 1
+          -56,28:
+            0: 1
+          -52,-4:
+            0: 1
+          -52,0:
+            0: 1
+          -52,4:
+            0: 1
+          -52,8:
+            0: 1
+          -52,12:
+            0: 1
+          -52,16:
+            0: 1
+          -52,20:
+            0: 1
+          -52,24:
+            0: 1
+          -52,28:
+            0: 1
+          -48,-4:
+            0: 1
+          -48,0:
+            0: 1
+          -48,4:
+            0: 1
+          -48,8:
+            0: 1
+          -48,12:
+            0: 1
+          -48,16:
+            0: 1
+          -48,20:
+            0: 1
+          -48,24:
+            0: 1
+          -48,28:
+            0: 1
+          -44,-4:
+            0: 1
+          -44,16:
+            0: 1
+          -44,20:
+            0: 1
+          -44,24:
+            0: 1
+          -44,28:
+            0: 1
+          -40,-4:
+            0: 1
+          -40,16:
+            0: 1
+          -40,20:
+            0: 1
+          -40,24:
+            0: 1
+          -40,28:
+            0: 1
+          -24,36:
+            0: 1
+          -28,36:
+            0: 1
+          -28,32:
+            0: 1
+          -32,36:
+            0: 1
+          -32,32:
+            0: 1
+          -36,36:
+            0: 1
+          -36,32:
+            0: 1
+          -40,36:
+            0: 1
+          -40,32:
+            0: 1
+          -44,36:
+            0: 1
+          -44,32:
+            0: 1
+          -48,36:
+            0: 1
+          -48,32:
+            0: 1
+          -52,36:
+            0: 1
+          -52,32:
+            0: 1
+          -56,36:
+            0: 1
+          -56,32:
+            0: 1
+          -60,36:
+            0: 1
+          -60,32:
+            0: 1
+          8,36:
+            0: 1
+          12,36:
+            0: 1
+          16,36:
+            0: 1
+          20,36:
+            0: 1
+          28,32:
+            0: 1
+          28,36:
+            0: 1
+          24,32:
+            0: 1
+          24,36:
+            0: 1
+          44,-8:
+            0: 1
+          44,-4:
+            0: 1
+          44,0:
+            0: 1
+          44,4:
+            0: 1
+          44,8:
+            0: 1
+          44,12:
+            0: 1
+          44,16:
+            0: 1
+          44,20:
+            0: 1
+          44,24:
+            0: 1
+          44,28:
+            0: 1
+          44,32:
+            0: 1
+          44,36:
+            0: 1
+          40,-8:
+            0: 1
+          40,-4:
+            0: 1
+          40,0:
+            0: 1
+          40,4:
+            0: 1
+          40,8:
+            0: 1
+          40,12:
+            0: 1
+          40,16:
+            0: 1
+          40,20:
+            0: 1
+          40,24:
+            0: 1
+          40,28:
+            0: 1
+          40,32:
+            0: 1
+          40,36:
+            0: 1
+          36,-8:
+            0: 1
+          36,-4:
+            0: 1
+          36,0:
+            0: 1
+          36,4:
+            0: 1
+          36,8:
+            0: 1
+          36,12:
+            0: 1
+          36,16:
+            0: 1
+          36,20:
+            0: 1
+          36,24:
+            0: 1
+          36,28:
+            0: 1
+          36,32:
+            0: 1
+          36,36:
+            0: 1
+          32,-8:
+            0: 1
+          32,-4:
+            0: 1
+          32,0:
+            0: 1
+          32,4:
+            0: 1
+          32,8:
+            0: 1
+          32,12:
+            0: 1
+          32,16:
+            0: 1
+          32,20:
+            0: 1
+          32,24:
+            0: 1
+          32,28:
+            0: 1
+          32,32:
+            0: 1
+          32,36:
+            0: 1
+          44,-32:
+            0: 1
+          44,-36:
+            0: 1
+          44,-40:
+            0: 1
+          -60,-40:
+            0: 1
+          -56,-40:
+            0: 1
+          -52,-40:
+            0: 1
+          -48,-40:
+            0: 1
+          -44,-40:
+            0: 1
+          -40,-40:
+            0: 1
+        chunkSize: 4
+    - type: ExplosionAirtightGrid
+    - type: ChunkContainer
+      chunkEntities:
+      - 2292
+      - 2293
+      - 2294
+      - 2295
+      - 2296
+      - 2297
+      - 2298
 - proto: AU14AICoreCPUMUTHUR
   entities:
   - uid: 1749
@@ -7730,6 +9064,18 @@ entities:
     - type: Transform
       pos: 121.5,-51.5
       parent: 1
+    - type: TacticalMapUser
+      marines: False
+      action: 2291
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions:
+          ents:
+          - 2298
+    - type: Actions
+      actions:
+      - 2291
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 1751
@@ -10446,6 +11792,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1842
     components:
     - type: Transform
@@ -10454,6 +11802,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1843
     components:
     - type: Transform
@@ -10462,6 +11812,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1844
     components:
     - type: Transform
@@ -10470,6 +11822,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1845
     components:
     - type: Transform
@@ -10478,6 +11832,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1846
     components:
     - type: Transform
@@ -10486,6 +11842,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1847
     components:
     - type: Transform
@@ -10494,6 +11852,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1848
     components:
     - type: Transform
@@ -10502,6 +11862,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1849
     components:
     - type: Transform
@@ -10509,6 +11871,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1850
     components:
     - type: Transform
@@ -10517,6 +11881,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1851
     components:
     - type: Transform
@@ -10525,6 +11891,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1852
     components:
     - type: Transform
@@ -10532,6 +11900,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1853
     components:
     - type: Transform
@@ -10539,6 +11909,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1854
     components:
     - type: Transform
@@ -10547,6 +11919,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1855
     components:
     - type: Transform
@@ -10555,6 +11929,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1856
     components:
     - type: Transform
@@ -10563,6 +11939,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1857
     components:
     - type: Transform
@@ -10571,6 +11949,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1858
     components:
     - type: Transform
@@ -10579,6 +11959,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1859
     components:
     - type: Transform
@@ -10587,6 +11969,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1860
     components:
     - type: Transform
@@ -10595,6 +11979,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1861
     components:
     - type: Transform
@@ -10602,6 +11988,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1862
     components:
     - type: Transform
@@ -10610,6 +11998,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1863
     components:
     - type: Transform
@@ -10618,6 +12008,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1864
     components:
     - type: Transform
@@ -10626,6 +12018,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1865
     components:
     - type: Transform
@@ -10634,6 +12028,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1866
     components:
     - type: Transform
@@ -10641,6 +12037,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1867
     components:
     - type: Transform
@@ -10648,6 +12046,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1868
     components:
     - type: Transform
@@ -10656,6 +12056,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1869
     components:
     - type: Transform
@@ -10664,6 +12066,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1870
     components:
     - type: Transform
@@ -10671,6 +12075,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1871
     components:
     - type: Transform
@@ -10679,6 +12085,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1872
     components:
     - type: Transform
@@ -10687,6 +12095,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1873
     components:
     - type: Transform
@@ -10695,6 +12105,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1874
     components:
     - type: Transform
@@ -10703,6 +12115,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 1893
     components:
     - type: Transform
@@ -10711,6 +12125,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
   - uid: 2143
     components:
     - type: Transform
@@ -10719,6 +12135,8 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+    - type: Physics
+      canCollide: False
 - proto: CMUWallLamentRockDark
   entities:
   - uid: 700
@@ -15141,7 +16559,6 @@ entities:
     - type: Transform
       parent: 1755
     - type: Action
-      originalIconColor: '#FFFFFFFF'
       container: 1755
       attachedEntity: 1755
   - uid: 2289
@@ -15151,7 +16568,15 @@ entities:
     - type: Transform
       parent: 1755
     - type: Action
-      originalIconColor: '#FFFFFFFF'
+      container: 1755
+      attachedEntity: 1755
+  - uid: 2298
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 1755
+    - type: Action
       container: 1755
       attachedEntity: 1755
 - proto: RMCAIConsoleInterface
@@ -16040,11 +17465,15 @@ entities:
     - type: Transform
       pos: 95.5,-85.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 5
   - uid: 1807
     components:
     - type: Transform
       pos: 101.5,-71.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 5
 - proto: RMCLightFixtureBlueDoubleOffset
   entities:
   - uid: 58
@@ -17920,24 +19349,32 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 113.5,-71.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 1
   - uid: 1919
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 106.5,-88.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 1
   - uid: 1920
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 109.5,-59.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 1
   - uid: 1921
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 77.5,-81.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 1
 - proto: RMCRotaryPhone
   entities:
   - uid: 1450
@@ -18184,31 +19621,61 @@ entities:
     - type: Transform
       pos: 100.5,-94.5
       parent: 1
+    - type: DisposalUnit
+      container:
+        ents: []
+        showEnts: False
+        occludes: True
   - uid: 1642
     components:
     - type: Transform
       pos: 111.5,-86.5
       parent: 1
+    - type: DisposalUnit
+      container:
+        ents: []
+        showEnts: False
+        occludes: True
   - uid: 1644
     components:
     - type: Transform
       pos: 99.5,-76.5
       parent: 1
+    - type: DisposalUnit
+      container:
+        ents: []
+        showEnts: False
+        occludes: True
   - uid: 1645
     components:
     - type: Transform
       pos: 82.5,-87.5
       parent: 1
+    - type: DisposalUnit
+      container:
+        ents: []
+        showEnts: False
+        occludes: True
   - uid: 1646
     components:
     - type: Transform
       pos: 106.5,-98.5
       parent: 1
+    - type: DisposalUnit
+      container:
+        ents: []
+        showEnts: False
+        occludes: True
   - uid: 1647
     components:
     - type: Transform
       pos: 100.5,-110.5
       parent: 1
+    - type: DisposalUnit
+      container:
+        ents: []
+        showEnts: False
+        occludes: True
 - proto: RMCTrashBinGreen
   entities:
   - uid: 1643
@@ -18216,11 +19683,21 @@ entities:
     - type: Transform
       pos: 108.5,-79.5
       parent: 1
+    - type: DisposalUnit
+      container:
+        ents: []
+        showEnts: False
+        occludes: True
   - uid: 1648
     components:
     - type: Transform
       pos: 93.5,-55.5
       parent: 1
+    - type: DisposalUnit
+      container:
+        ents: []
+        showEnts: False
+        occludes: True
 - proto: RMCWallContainment
   entities:
   - uid: 685
@@ -21653,4 +23130,284 @@ entities:
     - type: Transform
       pos: 99.5,-94.5
       parent: 1
+- proto: ChunkEntity
+  entities:
+  - uid: 2291
+    components:
+    - type: ChunkEntity
+      root: 1
+      chunk: 4,-5
+    - type: DecalChunk
+      maxDecalId: 46
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: CMDecalArrow
+            color: '#FFFFFFFF'
+          decals:
+            19: 76,-77
+            20: 77,-77
+            21: 78,-77
+            22: 79,-77
+        - node:
+            id: CMDecalArrow
+            color: '#FFFFFFFF'
+            angle: 1.5707963267948966 rad
+          decals:
+            29: 74,-80
+        - node:
+            id: CMDecalArrow
+            color: '#FFFFFFFF'
+            angle: 3.141592653589793 rad
+          decals:
+            24: 76,-76
+            25: 77,-76
+            26: 78,-76
+            27: 79,-76
+        - node:
+            id: CMDecalArrow
+            color: '#FFFFFFFF'
+            angle: 4.71238898038469 rad
+          decals:
+            36: 73,-80
+        - node:
+            id: CMDecalStriped0
+            color: '#FFFFFFFF'
+          decals:
+            41: 73,-78
+            42: 74,-78
+            43: 75,-78
+            44: 72,-78
+        - node:
+            id: CMDecalStriped1
+            color: '#FFFFFFFF'
+          decals:
+            45: 73,-80
+            46: 74,-80
+  - uid: 2292
+    components:
+    - type: ChunkEntity
+      root: 1
+      chunk: 5,-5
+    - type: DecalChunk
+      maxDecalId: 62
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: CMDecalArrow
+            color: '#FFFFFFFF'
+          decals:
+            23: 80,-77
+        - node:
+            id: CMDecalArrow
+            color: '#FFFFFFFF'
+            angle: 3.141592653589793 rad
+          decals:
+            28: 80,-76
+        - node:
+            id: CMDecalStriped2
+            color: '#FFFFFFFF'
+          decals:
+            37: 81,-78
+            38: 81,-77
+            39: 81,-76
+            40: 81,-75
+        - node:
+            id: CMUDecalWeylandYutaniFloorLogoLeft
+            color: '#FFFFFFFF'
+            angle: 1.5707963267948966 rad
+          decals:
+            18: 84,-77
+        - node:
+            id: CMUDecalWeylandYutaniFloorLogoRight
+            color: '#FFFFFFFF'
+            angle: 1.5707963267948966 rad
+          decals:
+            17: 84,-76
+        - node:
+            id: RMCDecalHybrisaWarningWest
+            color: '#FFFFFFFF'
+          decals:
+            59: 83,-75
+            60: 83,-76
+            61: 83,-77
+            62: 83,-78
+        - node:
+            id: RMCDecalHybrisaWorkerSign1
+            color: '#FFFFFFFF'
+            angle: 1.5707963267948966 rad
+          decals:
+            57: 83,-77
+        - node:
+            id: RMCDecalHybrisaWorkerSign2
+            color: '#FFFFFFFF'
+            angle: 1.5707963267948966 rad
+          decals:
+            58: 83,-76
+  - uid: 2293
+    components:
+    - type: ChunkEntity
+      root: 1
+      chunk: 4,-6
+    - type: DecalChunk
+      maxDecalId: 48
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: CMDecalArrow
+            color: '#FFFFFFFF'
+            angle: 1.5707963267948966 rad
+          decals:
+            30: 74,-81
+            31: 74,-82
+            32: 74,-83
+        - node:
+            id: CMDecalArrow
+            color: '#FFFFFFFF'
+            angle: 4.71238898038469 rad
+          decals:
+            33: 73,-83
+            34: 73,-82
+            35: 73,-81
+        - node:
+            id: CMDecalStriped0
+            color: '#FFFFFFFF'
+          decals:
+            47: 73,-83
+            48: 74,-83
+  - uid: 2294
+    components:
+    - type: ChunkEntity
+      root: 1
+      chunk: 6,-4
+    - type: DecalChunk
+      maxDecalId: 16
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: CMUDecalWeylandYutaniFloorFlagL
+            color: '#FFFFFFFF'
+            angle: -3.141592653589793 rad
+          decals:
+            14: 98,-54
+        - node:
+            id: CMUDecalWeylandYutaniFloorFlagM
+            color: '#FFFFFFFF'
+            angle: -3.141592653589793 rad
+          decals:
+            15: 97,-54
+        - node:
+            id: CMUDecalWeylandYutaniFloorFlagR
+            color: '#FFFFFFFF'
+            angle: -3.141592653589793 rad
+          decals:
+            16: 96,-54
+  - uid: 2295
+    components:
+    - type: ChunkEntity
+      root: 1
+      chunk: 6,-5
+    - type: DecalChunk
+      maxDecalId: 6
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: CMUDecalWeylandYutaniHugeFloorLogoLines1
+            color: '#FFFFFFFF'
+          decals:
+            1: 110,-78
+        - node:
+            id: CMUDecalWeylandYutaniHugeFloorLogoLines2
+            color: '#FFFFFFFF'
+          decals:
+            2: 111,-78
+        - node:
+            id: CMUDecalWeylandYutaniHugeFloorLogoLines5
+            color: '#FFFFFFFF'
+          decals:
+            5: 110,-79
+        - node:
+            id: CMUDecalWeylandYutaniHugeFloorLogoLines6
+            color: '#FFFFFFFF'
+          decals:
+            6: 111,-79
+  - uid: 2296
+    components:
+    - type: ChunkEntity
+      root: 1
+      chunk: 7,-5
+    - type: DecalChunk
+      maxDecalId: 8
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: CMUDecalWeylandYutaniHugeFloorLogoLines3
+            color: '#FFFFFFFF'
+          decals:
+            3: 112,-78
+        - node:
+            id: CMUDecalWeylandYutaniHugeFloorLogoLines4
+            color: '#FFFFFFFF'
+          decals:
+            4: 113,-78
+        - node:
+            id: CMUDecalWeylandYutaniHugeFloorLogoLines7
+            color: '#FFFFFFFF'
+          decals:
+            7: 112,-79
+        - node:
+            id: CMUDecalWeylandYutaniHugeFloorLogoLines8
+            color: '#FFFFFFFF'
+          decals:
+            8: 113,-79
+  - uid: 2297
+    components:
+    - type: ChunkEntity
+      root: 1
+      chunk: 5,-7
+    - type: DecalChunk
+      maxDecalId: 56
+      decals:
+        version: 1
+        nodes:
+        - node:
+            id: RMCDecalHybrisaCheckpointSign1
+            color: '#FFFFFFFF'
+          decals:
+            49: 93,-109
+        - node:
+            id: RMCDecalHybrisaCheckpointSign1
+            color: '#FFFFFFFF'
+            angle: 3.141592653589793 rad
+          decals:
+            51: 94,-102
+        - node:
+            id: RMCDecalHybrisaCheckpointSign2
+            color: '#FFFFFFFF'
+          decals:
+            50: 94,-109
+        - node:
+            id: RMCDecalHybrisaCheckpointSign2
+            color: '#FFFFFFFF'
+            angle: 3.141592653589793 rad
+          decals:
+            52: 93,-102
+        - node:
+            id: RMCDecalHybrisaStopDecal2
+            color: '#FFFFFFFF'
+          decals:
+            53: 93,-107
+            54: 94,-107
+        - node:
+            id: RMCDecalHybrisaStopDecal4
+            color: '#FFFFFFFF'
+          decals:
+            55: 94,-104
+            56: 93,-104
 ...

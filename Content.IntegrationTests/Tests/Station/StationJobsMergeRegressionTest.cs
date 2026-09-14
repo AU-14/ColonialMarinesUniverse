@@ -30,6 +30,8 @@ public sealed class StationJobsMergeRegressionTest : GameTest
     private static readonly ProtoId<JobPrototype> ThreatLeader = "AU14JobThreatLeader";
     private static readonly ProtoId<JobPrototype> ThreatMember = "AU14JobThreatMember";
     private static readonly ProtoId<JobPrototype> ThirdPartyLeader = "AU14JobThirdPartyLeader";
+    private static readonly ProtoId<JobPrototype> GovforSaw = "AU14JobGOVFORSquadAutomaticRifleman";
+    private static readonly ProtoId<JobPrototype> OpforSaw = "AU14JobOPFORSquadAutomaticRifleman";
 
     [TestPrototypes]
     private const string Prototypes = $@"
@@ -48,6 +50,15 @@ public sealed class StationJobsMergeRegressionTest : GameTest
           AU14JobCivilianColonist: [-1, -1]
           AU14JobGOVFORSquadRifleman: [-1, -1]
           AU14JobOPFORSquadRifleman: [-1, -1]
+          AU14JobGOVFORSquadAutomaticRifleman: [-1, -1]
+          AU14JobOPFORSquadAutomaticRifleman: [-1, -1]
+    MergeGovOnly:
+      mapNameTemplate: MergeGovOnly
+      stationProto: StandardNanotrasenStation
+      components:
+      - type: StationJobs
+        availableJobs:
+          AU14JobGOVFORSquadRifleman: [-1, -1]
 
 - type: entity
   id: StationJobsMergeAnyJobSpawn
@@ -216,6 +227,107 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         finally
         {
             await Server.WaitPost(() => SetCurrentPreset(ticker, originalPreset));
+        }
+    }
+
+    [Test]
+    public async Task OverflowDealtOpforRemapsQueuedGovforRoles()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var originalCurrentPreset = ticker.CurrentPreset;
+
+        EntityUid station = default;
+        await Server.WaitPost(() =>
+        {
+            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map);
+        });
+
+        var dummies = await Server.AddDummySessions(2);
+        var govforOnlyProfiles = dummies.ToDictionary(
+            session => session.UserId,
+            _ => new HumanoidCharacterProfile()
+                .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
+                .WithJobPriority(GovforSaw, JobPriority.Low)
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, forceOnForce);
+                // AssignJobs is the round boundary; it also resets the alternation to GOVFOR.
+                jobs.AssignJobs(new Dictionary<NetUserId, HumanoidCharacterProfile>(), [station]);
+
+                var assigned = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
+                jobs.AssignOverflowJobs(
+                    ref assigned,
+                    new[] { dummies[0].UserId, dummies[1].UserId },
+                    govforOnlyProfiles,
+                    [station]);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(assigned[dummies[0].UserId].Item1, Is.EqualTo((ProtoId<JobPrototype>?) GovforSaw),
+                        "a dealt GOVFOR slot takes the queued GOVFOR role directly");
+                    Assert.That(assigned[dummies[1].UserId].Item1, Is.EqualTo((ProtoId<JobPrototype>?) OpforSaw),
+                        "a dealt OPFOR slot must remap the queued GOVFOR role onto its OPFOR mirror");
+                });
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SetCurrentPreset(ticker, originalCurrentPreset));
+        }
+    }
+
+    [Test]
+    public async Task OverflowDealtOpforIsNotCapturedByGovforOnlyStations()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var originalCurrentPreset = ticker.CurrentPreset;
+
+        EntityUid station = default;
+        await Server.WaitPost(() =>
+        {
+            station = stations.InitializeNewStation(map.Stations["MergeGovOnly"], null, "MergeGovOnly", map);
+        });
+
+        var dummies = await Server.AddDummySessions(2);
+        var profiles = dummies.ToDictionary(
+            session => session.UserId,
+            _ => new HumanoidCharacterProfile()
+                .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
+                .WithJobPriority(Govfor, JobPriority.Low)
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, forceOnForce);
+                jobs.AssignJobs(new Dictionary<NetUserId, HumanoidCharacterProfile>(), [station]);
+
+                // The first success deals GOVFOR and flips the alternation to OPFOR.
+                var first = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
+                jobs.AssignOverflowJobs(ref first, new[] { dummies[0].UserId }, profiles, [station]);
+                Assert.That(first[dummies[0].UserId].Item1, Is.EqualTo((ProtoId<JobPrototype>?) Govfor));
+
+                var second = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
+                jobs.AssignOverflowJobs(ref second, new[] { dummies[1].UserId }, profiles, [station]);
+                Assert.That(second[dummies[1].UserId], Is.EqualTo(((ProtoId<JobPrototype>?) null, EntityUid.Invalid)),
+                    "a dealt OPFOR slot must not fall back into the other side's overflow roles");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SetCurrentPreset(ticker, originalCurrentPreset));
         }
     }
 

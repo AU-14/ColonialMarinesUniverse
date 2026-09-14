@@ -23,7 +23,7 @@ public sealed class TileTransparencyTest : GameTest
                 AssertTile(tiles, "Lattice", expectedTransparent: true);
                 AssertTile(tiles, "CMUFloorEmpty", expectedTransparent: true);
 
-                AssertTile(tiles, "FloorSteel", expectedTransparent: false);
+                AssertTile(tiles, "CMFloorSteel", expectedTransparent: false); // CMU14
                 AssertTile(tiles, "Plating", expectedTransparent: false);
 
                 Assert.That(CMUZLevelOpeningCache.IsOpeningTile(Tile.Empty, tiles), Is.True,

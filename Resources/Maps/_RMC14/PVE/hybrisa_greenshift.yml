@@ -172911,7 +172911,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -198.5,-187.5
       parent: 1
-- proto: RMCInflatableDoor
+- proto: CMUInflatableDoor # CMU14
   entities:
   - uid: 18508
     components:
@@ -173018,7 +173018,7 @@ entities:
     - type: Transform
       pos: -136.5,-195.5
       parent: 1
-- proto: RMCInflatableDoorBroken
+- proto: CMUInflatableDoorBroken # CMU14
   entities:
   - uid: 18529
     components:
@@ -173030,21 +173030,21 @@ entities:
     - type: Transform
       pos: -102.5,-165.5
       parent: 1
-- proto: RMCInflatableDoorFolded
+- proto: CMUInflatableDoorFolded # CMU14
   entities:
   - uid: 18531
     components:
     - type: Transform
       pos: -217.5,-167.5
       parent: 1
-- proto: RMCInflatableDoorFolded1
+- proto: CMUInflatableDoorFolded1 # CMU14
   entities:
   - uid: 18532
     components:
     - type: Transform
       pos: -112.54911,-192.37999
       parent: 1
-- proto: RMCInflatableWall
+- proto: CMUInflatableWall # CMU14
   entities:
   - uid: 18533
     components:
@@ -173061,7 +173061,7 @@ entities:
     - type: Transform
       pos: -9.5,-246.5
       parent: 1
-- proto: RMCInflatableWallBroken
+- proto: CMUInflatableWallBroken # CMU14
   entities:
   - uid: 18536
     components:
@@ -173098,7 +173098,7 @@ entities:
     - type: Transform
       pos: -111.5,-233.5
       parent: 1
-- proto: RMCInflatableWallFolded
+- proto: CMUInflatableWallFolded # CMU14
   entities:
   - uid: 8326
     components:
@@ -173119,7 +173119,7 @@ entities:
     - type: Transform
       pos: -217.5,-167.5
       parent: 1
-- proto: RMCInflatableWallFolded1
+- proto: CMUInflatableWallFolded1 # CMU14
   entities:
   - uid: 18544
     components:

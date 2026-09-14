@@ -59127,6 +59127,38 @@ entities:
     - type: Transform
       pos: 42.5,43.5
       parent: 1
+- proto: CMUSpawnPointCivilianAtmosian
+  entities:
+  - uid: 40211
+    components:
+    - type: Transform
+      pos: 43.5,44.5
+      parent: 1
+  - uid: 40212
+    components:
+    - type: Transform
+      pos: 43.5,42.5
+      parent: 1
+  - uid: 40213
+    components:
+    - type: Transform
+      pos: 42.5,42.5
+      parent: 1
+  - uid: 40214
+    components:
+    - type: Transform
+      pos: 42.5,44.5
+      parent: 1
+  - uid: 40215
+    components:
+    - type: Transform
+      pos: 43.5,43.5
+      parent: 1
+  - uid: 40216
+    components:
+    - type: Transform
+      pos: 42.5,43.5
+      parent: 1
 - proto: AU14SpawnPointCivilianEthicsAndWellnessAdvisor
   entities:
   - uid: 106
@@ -197005,7 +197037,7 @@ entities:
       parent: 1
     missingComponents:
     - EvacuationPump
-- proto: RMCGasPipeBend
+- proto: CMUGasPipeBend
   entities:
   - uid: 21357
     components:
@@ -197031,7 +197063,7 @@ entities:
           showEnts: False
           occludes: True
           ents: []
-- proto: RMCGasPipeStraight
+- proto: CMUGasPipeStraight
   entities:
   - uid: 21359
     components:
@@ -197101,7 +197133,7 @@ entities:
           showEnts: False
           occludes: True
           ents: []
-- proto: RMCGasPipeTJunction
+- proto: CMUGasPipeTJunction
   entities:
   - uid: 21365
     components:

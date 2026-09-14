@@ -1603,6 +1603,9 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         var labels = EnsureComp<TacticalMapLabelsComponent>(user);
         var playerId = user.Owner.Id;
 
+        // CMU14: zone lines (hotspots) go to every viewer, ghosts included
+        lines.SharedLines = map.SharedLines;
+
         // Collect infra ids (comms, sensors, tunnels) so we can exclude them from enemy sprite replacement
         var infraIds = new HashSet<int>();
         var comms = EntityQueryEnumerator<CommunicationsTowerComponent>();

@@ -44,6 +44,10 @@
     priority: 1
   - type: ApcPowerReceiver
     powerLoad: 200
+  - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+    idleLoad: 0
+    activeLoad: 200
+    channel: Environment
   - type: Transform
     noRot: false
   - type: SubFloorHide
@@ -111,6 +115,10 @@
       priority: 1
     - type: ApcPowerReceiver
       powerLoad: 200
+    - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+      idleLoad: 0
+      activeLoad: 200
+      channel: Environment
     - type: Transform
       noRot: false
     - type: SubFloorHide

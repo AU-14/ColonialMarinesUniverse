@@ -1,5 +1,6 @@
 using Content.Shared.CMU14.Threats;
 using Content.Shared.Preferences.Loadouts;
+using Content.Shared._RMC14.Marines.Skills; // CMU14
 using Content.Shared.Roles;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
@@ -124,6 +125,12 @@ public sealed partial class AntagSpecifierPrototype : IPrototype, IInheritingPro
     /// </summary>
     [DataField]
     public List<ProtoId<RoleLoadoutPrototype>>? RoleLoadout;
+
+    /// <summary>
+    /// Skills to grant to the antagonist. Existing skill levels are preserved if higher.
+    /// </summary>
+    [DataField] // CMU14
+    public List<Skill> StartingSkills = new();
 
     /// <summary>
     /// A briefing shown to the player.

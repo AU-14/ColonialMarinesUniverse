@@ -378,6 +378,8 @@ entities:
     - type: RMCAmbientLightEffects
     - type: BecomesStation
       id: AUTrijent
+    - type: GasTileOverlay
+    - type: GridAtmosphere
     - type: MapGrid
       chunks:
         0,0:
@@ -132388,7 +132390,7 @@ entities:
     - type: Transform
       pos: 99.350494,-6.665357
       parent: 1
-- proto: RMCGasPipeBend
+- proto: CMUGasPipeBend
   entities:
   - uid: 12468
     components:
@@ -132888,7 +132890,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#00FF00FF'
-- proto: RMCGasPipeFourway
+- proto: CMUGasPipeFourway
   entities:
   - uid: 12532
     components:
@@ -132925,7 +132927,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#00FF00FF'
-- proto: RMCGasPipeStraight
+- proto: CMUGasPipeStraight
   entities:
   - uid: 12537
     components:
@@ -149826,7 +149828,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#00FF00FF'
-- proto: RMCGasPipeTJunction
+- proto: CMUGasPipeTJunction
   entities:
   - uid: 14707
     components:
@@ -155523,14 +155525,14 @@ entities:
     - type: Transform
       pos: 117.53275,-163.2612
       parent: 1
-- proto: RMCInflatableWallFolded
+- proto: CMUInflatableWallFolded
   entities:
   - uid: 15635
     components:
     - type: Transform
       pos: 55.5792,-72.57634
       parent: 1
-- proto: RMCInflatableWallFolded1
+- proto: CMUInflatableWallFolded1
   entities:
   - uid: 15636
     components:

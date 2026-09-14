@@ -20,7 +20,8 @@ namespace Content.Server.CMU14.Diagnostics;
 /// </summary>
 public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
 {
-    public const string SawmillName = "cmu.client_state";
+    internal const string SawmillId = "cmu.client_state";
+    protected override string SawmillName => SawmillId;
     private const int MaxDetailsPerWindow = 8;
     private const int MaxSummarySamples = 8;
     private static readonly TimeSpan ReportInterval = TimeSpan.FromSeconds(30);

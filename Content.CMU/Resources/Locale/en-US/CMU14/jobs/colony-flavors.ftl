@@ -24,6 +24,10 @@ cmu-colony-name-reactor-technician = Colony Reactor Technician
 cmu-colony-description-reactor-technician = A civilian reactor technician, the only thing standing between the colony and a very warm future.
 cmu-colony-prefix-reactor-technician = RCT
 
+cmu-colony-name-atmosian = Colony Atmospheric Technician
+cmu-colony-description-atmosian = Keep the colony breathing. Chase pressure drops, seal hull breaches, scrub the bad air out, and make every vented room livable again.
+cmu-colony-prefix-atmosian = ATMOS
+
 cmu-colony-name-panic-room-commando = Panic Room Commando
 cmu-colony-description-panic-room-commando = A Weyland-Yutani commando sealed in the site's panic room when everything went wrong. The door just opened, and outside is not what you were briefed to expect.
 cmu-colony-prefix-panic-room-commando = PRC

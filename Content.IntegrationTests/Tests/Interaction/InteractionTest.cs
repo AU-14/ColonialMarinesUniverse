@@ -9,6 +9,7 @@ using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Server.Hands.Systems;
 using Content.Server.Stack;
 using Content.Server.Tools;
+using Content.Shared.CMU14.Power; // CMU14
 using Content.Shared.CombatMode;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
@@ -194,6 +195,12 @@ public abstract partial class InteractionTest : GameTest
             await Pair.CreateTestMap();
         else
             await Pair.LoadTestMap(TestMapPath.Value);
+
+        // CMU14: a generated grid has no RMC areas, so RMC power adoption would strand
+        // spawned machines permanently unpowered. Opt these maps into tile power so
+        // upstream APC wiring behaves as upstream tests expect.
+        if (TestMapPath == null)
+            await Server.WaitPost(() => SEntMan.AddComponent<CMUMapUsesTilePowerComponent>(MapData.MapUid));
 
         PlayerCoords = SEntMan.GetNetCoordinates(Transform.WithEntityId(MapData.GridCoords.Offset(new Vector2(0.5f, 0.5f)), MapData.MapUid));
         TargetCoords = SEntMan.GetNetCoordinates(Transform.WithEntityId(MapData.GridCoords.Offset(new Vector2(1.5f, 0.5f)), MapData.MapUid));

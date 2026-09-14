@@ -25,6 +25,10 @@ public sealed partial class TacticalMapComponent : Component // CMU14 Class: Cus
        ["YAUTJA"] = TimeSpan.FromSeconds(1), // CMU14
     };
 
+    // Lines copied to every tactical map viewer, regardless of faction
+    [DataField]
+    public List<TacticalMapLine> SharedLines = new();
+
     // Default: Marines (legacy)
     [DataField]
     public Dictionary<int, TacticalMapBlip> MarineBlips = new();

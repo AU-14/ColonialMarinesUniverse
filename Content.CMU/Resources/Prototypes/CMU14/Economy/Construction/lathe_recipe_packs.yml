@@ -1,0 +1,17 @@
+# Baseline packs referenced by CM/RMC lathes.
+# Runtime/admin-added recipes are loaded from the custom construction database and
+# republished into these pack ids without committing generated server state.
+- type: latheRecipePack
+  id: AU14AutolatheRecipes
+  recipes: # CMU14: baseline colony electronics - alarm, firelock, disposal, atmos computer boards
+  - AirAlarmElectronics
+  - FireAlarmElectronics
+  - FirelockElectronics
+  - MailingUnitElectronics
+  - DoorElectronics
+  - AlertsComputerCircuitboard
+  - AtmosMonitoringComputerCircuitboard
+
+- type: latheRecipePack
+  id: AU14ArmylatheRecipes
+  recipes: []

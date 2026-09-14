@@ -12,6 +12,7 @@ cmu-access-govfor-requisitions = Govfor Requisitions
 cmu-access-govfor-vehicle-crew = Govfor Vehicle Crew
 cmu-access-opfor = Opfor
 cmu-access-opfor-squad = Opfor Squad
+cmu-access-opfor-squad-weapons-specialist = Opfor Squad WS
 cmu-access-opfor-command = Opfor Command
 cmu-access-opfor-security = Opfor Security
 cmu-access-opfor-medical = Opfor Medical

@@ -4,6 +4,8 @@
   jobBlacklistGroup:
   - AllGovforJobs
   - AllOpforJobs
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
   briefing:
     text: cmu-antag-arsonist-greeting
     color: DarkOrange
@@ -13,6 +15,7 @@
   - type: Arsonist
     alertThreshold: 1
     wantedThreshold: 8
+  - type: SynthGunAccess
   mindRoles:
   - MindRoleArsonist
 

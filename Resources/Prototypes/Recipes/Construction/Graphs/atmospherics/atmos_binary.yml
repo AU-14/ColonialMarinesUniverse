@@ -7,67 +7,67 @@
     edges:
     - to: pressurepump
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: volumepump
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: passivegate
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: valve
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: signalvalve
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: pressureregulator
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: port
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: dualportventpump
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: radiator
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: bendradiator
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
   - node: pressurepump
     entity: !type:CreateVariants
-      values: [ GasPressurePump, GasPressurePumpAlt1, GasPressurePumpAlt2 ]
+      values: [ CMUGasPressurePump, CMUGasPressurePumpAlt1, CMUGasPressurePumpAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -75,7 +75,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -84,7 +84,7 @@
 
   - node: volumepump
     entity: !type:CreateVariants
-      values: [ GasVolumePump, GasVolumePumpAlt1, GasVolumePumpAlt2 ]
+      values: [ CMUGasVolumePump, CMUGasVolumePumpAlt1, CMUGasVolumePumpAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -92,7 +92,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -101,7 +101,7 @@
 
   - node: passivegate
     entity: !type:CreateVariants
-      values: [ GasPassiveGate, GasPassiveGateAlt1, GasPassiveGateAlt2 ]
+      values: [ CMUGasPassiveGate, CMUGasPassiveGateAlt1, CMUGasPassiveGateAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -109,7 +109,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -118,7 +118,7 @@
 
   - node: valve
     entity: !type:CreateVariants
-      values: [ GasValve, GasValveAlt1, GasValveAlt2 ]
+      values: [ CMUGasValve, CMUGasValveAlt1, CMUGasValveAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -126,7 +126,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -135,7 +135,7 @@
 
   - node: signalvalve
     entity: !type:CreateVariants
-      values: [ SignalControlledValve, SignalControlledValveAlt1, SignalControlledValveAlt2 ]
+      values: [ CMUSignalControlledValve, CMUSignalControlledValveAlt1, CMUSignalControlledValveAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -143,7 +143,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -152,7 +152,7 @@
 
   - node: pressureregulator
     entity: !type:CreateVariants
-      values: [ GasPressureRegulator, GasPressureRegulatorAlt1, GasPressureRegulatorAlt2 ]
+      values: [ CMUGasPressureRegulator, CMUGasPressureRegulatorAlt1, CMUGasPressureRegulatorAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -160,7 +160,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -169,7 +169,7 @@
 
   - node: port
     entity: !type:CreateVariants
-      values: [ GasPort, GasPortAlt1, GasPortAlt2 ]
+      values: [ CMUGasPort, CMUGasPortAlt1, CMUGasPortAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -177,7 +177,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -186,7 +186,7 @@
 
   - node: dualportventpump
     entity: !type:CreateVariants
-      values: [ GasDualPortVentPump, GasDualPortVentPumpAlt1, GasDualPortVentPumpAlt2 ]
+      values: [ CMUGasDualPortVentPump, CMUGasDualPortVentPumpAlt1, CMUGasDualPortVentPumpAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -194,7 +194,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -204,7 +204,7 @@
         doAfter: 1
 
   - node: radiator
-    entity: HeatExchanger
+    entity: CMUHeatExchanger # CMU14: slot-0 cmu clone
     edges:
     - to: start
       conditions:
@@ -212,7 +212,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -222,7 +222,7 @@
         doAfter: 1
 
   - node: bendradiator
-    entity: HeatExchangerBend
+    entity: CMUHeatExchangerBend # CMU14: slot-0 cmu clone
     edges:
     - to: start
       conditions:
@@ -230,7 +230,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:

@@ -1,0 +1,60 @@
+# Cross-deck pipe bridge. Crowbar flips direction.
+# Screwdriver is reserved for construction, so layer cycling is locked.
+# Multitool opens the service panel; with the panel open, crowbar deconstructs.
+- type: entity
+  parent: [CMUGasPipeFourway, ConstructibleMachine]
+  id: CMUPipeRiserUp
+  name: PR3-UG Pipe Riser, Up
+  suffix: CMU, MultiZ
+  description: "Static Direction: Looks at deck above. Crowbar flips direction. Multitool opens the panel; pry to deconstruct."
+  components:
+  - type: Construction
+    graph: Machine
+    node: machine
+  - type: AtmosPipeLayers
+    pipeLayersLocked: true
+  - type: WiresPanel
+    openingTool: Pulsing
+    examineTextClosed: cmu-zlevel-panel-closed
+    examineTextOpen: cmu-zlevel-panel-open
+  - type: Machine
+    board: CMUPipeRiserMachineCircuitboard
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+      rmc_vent_container: !type:Container
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: CMUPipeRiser
+  - type: CMUZPaired
+    offset: 1
+    pairKind: pipe
+
+- type: entity
+  parent: [CMUGasPipeFourway, ConstructibleMachine]
+  id: CMUPipeRiserDown
+  name: PR3-DG Pipe Riser, Down
+  suffix: CMU, MultiZ
+  description: "Static Direction: Looks at deck below. Crowbar flips direction. Multitool opens the panel; pry to deconstruct."
+  components:
+  - type: Construction
+    graph: Machine
+    node: machine
+  - type: AtmosPipeLayers
+    pipeLayersLocked: true
+  - type: WiresPanel
+    openingTool: Pulsing
+    examineTextClosed: cmu-zlevel-panel-closed
+    examineTextOpen: cmu-zlevel-panel-open
+  - type: Machine
+    board: CMUPipeRiserMachineCircuitboard
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+      rmc_vent_container: !type:Container
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: CMUPipeRiser
+  - type: CMUZPaired
+    offset: -1
+    pairKind: pipe

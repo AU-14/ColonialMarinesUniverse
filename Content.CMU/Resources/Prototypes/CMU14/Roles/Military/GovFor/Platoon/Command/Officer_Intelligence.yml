@@ -7,7 +7,7 @@
   name: au14-job-name-govforintel
   description: au14-job-description-govforintel
   icon: "AU14JobIconGovIO"
-  spawnMenuRoleName: Intelligence Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-intelligence-officer
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFOROfficerIntel
   dummyStartingGear: AU14GearGOVFOROfficerIntelDummy

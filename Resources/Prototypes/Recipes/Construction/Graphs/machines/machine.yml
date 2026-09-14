@@ -1,11 +1,11 @@
-﻿- type: constructionGraph
+- type: constructionGraph
   id: Machine
   start: start
   graph:
     - node: start
       actions:
         - !type:SpawnPrototype
-          prototype: SheetSteel1
+          prototype: CMSheetMetal1 # CMU14: refund fork metal
         - !type:DeleteEntity
       edges:
         - to: missingWires
@@ -13,12 +13,12 @@
             - !type:SetAnchor
               value: false
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 5
               doAfter: 2.5
         - to: destroyedMachineFrame
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 5
               doAfter: 2.5
 
@@ -35,7 +35,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 5
             - !type:DeleteEntity
           steps:
@@ -116,6 +116,6 @@
               doAfter: 5
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 3
             - !type:DeleteEntity {}

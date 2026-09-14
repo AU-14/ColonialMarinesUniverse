@@ -1,7 +1,8 @@
-﻿using Robust.Shared.Prototypes;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Serialization.Manager.Attributes; // CMU14
 
 namespace Content.Shared._RMC14.Marines.Skills;
 
-[Serializable, NetSerializable]
-public readonly record struct Skill(EntProtoId<SkillDefinitionComponent> Type, int Level);
+[DataRecord, Serializable, NetSerializable] // CMU14
+public readonly partial record struct Skill(EntProtoId<SkillDefinitionComponent> Type, int Level);

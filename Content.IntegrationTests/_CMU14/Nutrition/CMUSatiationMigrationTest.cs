@@ -75,13 +75,12 @@ public sealed class CMUSatiationMigrationTest
             });
 
             var ape = entities.SpawnEntity("CMUMobApe", MapCoordinates.Nullspace);
-            var apeSatiation = entities.GetComponent<SatiationComponent>(ape);
-            AssertChannels(apeSatiation, (Hunger, "CMUApeHunger"));
             Assert.Multiple(() =>
             {
-                Assert.That(satiation.GetMaximumValue((ape, apeSatiation), Hunger), Is.EqualTo(100));
-                Assert.That(satiation.GetMaximumValue((ape, apeSatiation), Thirst), Is.Null,
-                    "The ape deliberately removed Thirst before the Satiation migration.");
+                Assert.That(entities.HasComponent<SatiationComponent>(ape), Is.False,
+                    "The ape no longer runs on the satiation system; its regeneration is passive.");
+                Assert.That(entities.HasComponent<SatiationSpeedModifierComponent>(ape), Is.False,
+                    "Without satiation the ape must not keep the speed modifier either.");
             });
 
             var trainingDummy = entities.SpawnEntity("RMCTrainingDummy", MapCoordinates.Nullspace);

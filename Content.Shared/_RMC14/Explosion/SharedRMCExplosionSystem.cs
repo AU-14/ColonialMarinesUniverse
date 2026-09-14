@@ -243,7 +243,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         if (ent.Comp.Explosion is { } explosion)
             SpawnNextToOrDrop(explosion, ent);
 
-        if (ent.Comp.MaxShrapnel > 0)
+        if (ent.Comp.MaxShrapnel > 0 && Transform(ent).GridUid != null) // CMU14
         {
             foreach (var effect in ent.Comp.ShrapnelEffects)
             {

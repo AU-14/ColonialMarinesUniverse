@@ -191,7 +191,7 @@
       takeAll: CMUEngineeringClothes
       entries:
       - id: AU14CivilianWeYuEngineerClothes
-      - id: AU14CivilianFullSuitWeYuEngineer
+      - id: CMUClothingOuterSuitEngineer
       - id: RMCWeldingGoggles
     - name: Waste Management Clothing
       takeAll: CMUEngineeringClothesWM
@@ -224,6 +224,18 @@
       - id: RMCPouchElectronics
       - id: RMCPouchConstruction
       - id: RMCWebbingDropPouch
+    - name: Atmospherics
+      choices: { CMUEngineerAtmosGear: 5 }
+      entries:
+      - id: CMUAtmosScanner
+        name: gas analyzer
+      - id: CMUInflatableWallFolded
+        name: inflatable walls x25
+      - id: CMSheetMetal50
+        name: metal sheets x50
+      - id: CMUCanisterAir
+      - id: PortableScrubber
+      - id: SpaceHeater
     - name: Miscellaneous
       takeAll: CMUEngineeringMisc
       entries:

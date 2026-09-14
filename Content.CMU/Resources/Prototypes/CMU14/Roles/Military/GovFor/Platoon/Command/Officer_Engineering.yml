@@ -7,7 +7,7 @@
   name: au14-job-name-govforengineering
   description: au14-job-description-govforengineering
   icon: "AU14JobIconGovEO"
-  spawnMenuRoleName: Engineering Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-engineering-officer
   startingGear: AU14GearGOVFOROfficerEngi
   dummyStartingGear: AU14GearGOVFOROfficerEngiDummy
   playTimeTracker: AU14JobGOVFOROfficerEngi

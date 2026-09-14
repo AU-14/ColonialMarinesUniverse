@@ -692,6 +692,14 @@ namespace Content.Server.GameTicking
             if (jobBans != null)
                 restrictedRoles.UnionWith(jobBans);
 
+            // CMU14: ForceOnForce faction lock and mid-round balance.
+            if (lateJoin
+                && _fof.TryDecideSpawn(player, station, jobId, character, restrictedRoles, out var fofJob, out var fofStation))
+            {
+                jobId = fofJob;
+                station = fofStation;
+            }
+
             // Pick best job best on prefs.
             string? presetId = CurrentPreset?.ID ?? Preset?.ID;
             jobId ??= _stationJobs.PickBestAvailableJobWithPriority(station,

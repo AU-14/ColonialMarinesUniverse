@@ -9,7 +9,7 @@
             - !type:SnapToGrid
               southRotation: true
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
 
@@ -19,7 +19,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
             - !type:DeleteEntity {}
           conditions:
@@ -36,7 +36,7 @@
           conditions:
             - !type:EntityAnchored {}
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 2
 
@@ -47,7 +47,7 @@
           conditions:
             - !type:EntityAnchored {}
           steps:
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 2
               doAfter: 1
 
@@ -128,7 +128,7 @@
         - to: girder
           completed:
             - !type:GivePrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
           steps:
             - tool: Welding
@@ -140,7 +140,7 @@
         - to: girder
           completed:
             - !type:GivePrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
           steps:
             - tool: Welding
@@ -238,7 +238,7 @@
           conditions:
             - !type:EntityAnchored { }
           steps:
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 2
               doAfter: 1
 
@@ -249,12 +249,12 @@
           conditions:
             - !type:EntityAnchored { }
           steps:
-            - material: MetalRod
+            - material: CMRodMetal # CMU14: fork rods (CMRodMetal), not upstream MetalRod
               amount: 4
               doAfter: 1
             - tool: Screwing
               doAfter: 2
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 2
               doAfter: 1
 
@@ -262,12 +262,12 @@
           conditions:
             - !type:EntityAnchored { }
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
             - tool: Welding
               doAfter: 4
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 1
               doAfter: 1
 
@@ -276,7 +276,7 @@
             - !type:SnapToGrid
               southRotation: true
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
               amount: 2
           conditions:
             - !type:EntityAnchored { }
@@ -290,7 +290,7 @@
         - to: reinforcedGirder
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
               amount: 2
           steps:
             - tool: Cutting
@@ -342,7 +342,7 @@
         - to: reinforcedGirder
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
               amount: 2
           steps:
             - tool: Cutting
@@ -394,10 +394,10 @@
         - to: reinforcedGirder
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
               amount: 2
             - !type:SpawnPrototype
-              prototype: PartRodMetal1
+              prototype: CMRodMetal # CMU14: refund fork rods
               amount: 4
           steps:
             - tool: Welding
@@ -451,10 +451,10 @@
         - to: reinforcedGirder
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
               amount: 1
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
           steps:
           #To-Do: Add deconstruct visuals

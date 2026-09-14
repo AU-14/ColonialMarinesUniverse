@@ -7,7 +7,7 @@
   name: au14-job-name-govforplatop
   description: au14-job-description-govforplatop
   icon: "AU14JobIconOpsOfc"
-  spawnMenuRoleName: Staff Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-staff-officer
   startingGear: AU14GearGOVFORPlatOp
   dummyStartingGear: AU14GearGOVFORPlatOpDummy
   playTimeTracker: AU14JobGOVFORPlatOp

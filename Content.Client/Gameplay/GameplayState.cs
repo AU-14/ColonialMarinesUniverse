@@ -12,6 +12,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Configuration;
+using Robust.Shared.Log; // CMU14
 using Robust.Shared.Timing;
 
 namespace Content.Client.Gameplay
@@ -25,6 +26,8 @@ namespace Content.Client.Gameplay
         [Dependency] private IUserInterfaceManager _uiManager = default!;
         [Dependency] private ChangelogManager _changelog = default!;
         [Dependency] private IConfigurationManager _configurationManager = default!;
+        [Dependency] private ILogManager _logManager = default!; // CMU14
+        private ISawmill _sawmill = default!; // CMU14
 
         private FpsCounter _fpsCounter = default!;
         private Label _version = default!;
@@ -37,6 +40,7 @@ namespace Content.Client.Gameplay
         {
             IoCManager.InjectDependencies(this);
 
+            _sawmill = _logManager.GetSawmill("gameplay"); // CMU14
             _loadController = _uiManager.GetUIController<GameplayStateLoadController>();
         }
 
@@ -84,9 +88,23 @@ namespace Content.Client.Gameplay
             // Clear viewport to some fallback, whatever.
             _eyeManager.MainViewport = UserInterfaceManager.MainViewport;
             _fpsCounter.Orphan();
-            _uiManager.ClearWindows();
+            try // CMU14: window closes must not abort the state switch (systems are already dead on disconnect)
+            {
+                _uiManager.ClearWindows();
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error("Error closing windows during gameplay shutdown", e);
+            }
             _configurationManager.UnsubValueChanged(CCVars.UILayout, ReloadMainScreenValueChange);
-            UnloadMainScreen();
+            try // CMU14: screen unload runs content controllers; same teardown isolation
+            {
+                UnloadMainScreen();
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error("Error unloading the main screen during gameplay shutdown", e);
+            }
         }
 
         private void ReloadMainScreenValueChange(string _)

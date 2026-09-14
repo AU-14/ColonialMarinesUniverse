@@ -99,6 +99,7 @@ research-data-ui-reprint = [color=#ffbf00][head=3]Reprint Last Contract[/head][/
 research-data-ui-contracts = [color=#ffbf00][head=3]Chemical Contracts[/head][/color]
 research-data-ui-scan-time-idx = [color=#ffbf00][bold]{$TIME}[/bold][/color]
 research-data-ui-improve = [color=#ffbf00][head=3]Improve: {$NUM}CR[/head][/color]
+research-data-ui-improve-locked = {"["}color=#ffbf00][head=3]X clearance in {$TIME}m[/head][/color]
 ui-research-data-terminal-name = Research Data Terminal
 
 research-data-ui-read = [color=#ffbf00][bold]Read[/bold][/color]

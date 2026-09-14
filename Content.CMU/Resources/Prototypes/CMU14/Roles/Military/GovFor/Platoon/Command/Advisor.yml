@@ -6,7 +6,7 @@
   name: au14-job-name-govforadvisor
   description: au14-job-description-govforadvisor
   icon: "AU14JobIconGovAdvisor"
-  spawnMenuRoleName: Platoon Advisor (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-platoon-advisor
   startingGear: AU14GearGOVFORadvisor
   dummyStartingGear: AU14GearGOVFORadvisorDummy
   playTimeTracker: AU14JobGOVFORadvisor

@@ -15,6 +15,7 @@ using Content.Shared.GameTicking.Components;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
+using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared.CMU14;
 
@@ -31,6 +32,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private SharedSupplyDropSystem _supplyDrop = default!;
 
     // Store selected platoons in the system
     private PlatoonPrototype? _selectedGovforPlatoon;
@@ -115,184 +117,6 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         continue;
                     }
 
-                    var doorProtoId = GetLockedDoorPrototype(markerComp.Class, shipFaction.Faction);
-
-                    if (doorProtoId != null)
-                    {
-                        if (_prototypeManager.TryIndex(doorProtoId, out _))
-                            _entityManager.SpawnAttachedTo(doorProtoId, transform.Coordinates, rotation: transform.LocalRotation);
-                        continue;
-                    }
-
-                    // --- OVERWATCH CONSOLE MARKER LOGIC ---
-                    if (markerComp.Class == PlatoonMarkerClass.OverwatchConsole)
-                    {
-                        var overwatchConsoleProtoId = FactionPrototype(shipFaction.Faction,
-                            "RMCOverwatchConsoleGovforRotating", "RMCOverwatchConsoleOpforRotating");
-                        if (overwatchConsoleProtoId != null && _prototypeManager.TryIndex(overwatchConsoleProtoId, out _))
-                        {
-                            _entityManager.SpawnEntity(overwatchConsoleProtoId, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    // --- INTEL COMPUTER MARKER LOGIC ---
-                    if (markerComp.Class == PlatoonMarkerClass.IntelComputer)
-                    {
-                        var intelConsoleProtoId = FactionPrototype(shipFaction.Faction,
-                            "RMCComputerIntelGovfor", "RMCComputerIntelOpfor");
-                        if (intelConsoleProtoId != null && _prototypeManager.TryIndex(intelConsoleProtoId, out _))
-                        {
-                            _entityManager.SpawnEntity(intelConsoleProtoId, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    // --- TECH TREE CONSOLE MARKER LOGIC ---
-                    if (markerComp.Class == PlatoonMarkerClass.TechTree)
-                    {
-                        var techTreeProtoId = FactionPrototype(shipFaction.Faction,
-                            "RMCTechTreeConsoleGovfor", "RMCTechTreeConsoleOpfor");
-                        if (techTreeProtoId != null && _prototypeManager.TryIndex(techTreeProtoId, out _))
-                        {
-                            _entityManager.SpawnEntity(techTreeProtoId, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    // --- GROUNDSIDE OPERATIONS CONSOLE MARKER LOGIC ---
-                    if (markerComp.Class == PlatoonMarkerClass.GroundsideOps)
-                    {
-                        var groundsideProtoId = FactionPrototype(shipFaction.Faction,
-                            "RMCGroundsideOperationsConsole", "RMCGroundsideOperationsConsoleOpfor");
-                        if (groundsideProtoId != null && _prototypeManager.TryIndex(groundsideProtoId, out _))
-                        {
-                            _entityManager.SpawnEntity(groundsideProtoId, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    if (markerComp.Class == PlatoonMarkerClass.RosterConsole)
-                    {
-                        var rosterConsoleProtoId = FactionPrototype(shipFaction.Faction,
-                            "CMUGovforRosterConsole", "CMUOpforRosterConsole");
-                        if (rosterConsoleProtoId != null && _prototypeManager.TryIndex(rosterConsoleProtoId, out _))
-                        {
-                            _entityManager.SpawnEntity(rosterConsoleProtoId, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    if (markerComp.Class == PlatoonMarkerClass.TacticalMap)
-                    {
-                        var tacMapProtoId = shipFaction.Faction switch
-                        {
-                            "govfor" => "CMUTacticalMapTableGovfor",
-                            "opfor" => "CMUTacticalMapTableOpfor",
-                            _ => null,
-                        };
-                        if (tacMapProtoId != null && _prototypeManager.TryIndex(tacMapProtoId, out _))
-                            _entityManager.SpawnEntity(tacMapProtoId, transform.Coordinates);
-                        continue;
-                    }
-
-                    // --- GROUNDSIDE OPS SEGREGATED MARKERS ---
-                    if (markerComp.Class == PlatoonMarkerClass.GroundsideOpsGovfor)
-                    {
-                        _entityManager.SpawnEntity("RMCGroundsideOperationsConsoleGovfor", transform.Coordinates);
-                        continue;
-                    }
-                    if (markerComp.Class == PlatoonMarkerClass.GroundsideOpsOpfor)
-                    {
-                        _entityManager.SpawnEntity("RMCGroundsideOperationsConsoleOpfor", transform.Coordinates);
-                        continue;
-                    }
-
-                    // --- ALLIANCE CONSOLE MARKERS ---
-                    if (markerComp.Class == PlatoonMarkerClass.AllianceConsoleGovfor)
-                    {
-                        _entityManager.SpawnEntity("AU14AllianceConsoleGovfor", transform.Coordinates);
-                        continue;
-                    }
-                    if (markerComp.Class == PlatoonMarkerClass.AllianceConsoleOpfor)
-                    {
-                        _entityManager.SpawnEntity("AU14AllianceConsoleOpfor", transform.Coordinates);
-                        continue;
-                    }
-
-                    // --- ORBITAL CANNON MARKERS ---
-                    if (markerComp.Class == PlatoonMarkerClass.OrbitalCannonGovfor)
-                    {
-                        _entityManager.SpawnEntity("AU14OrbitalCannonGovfor", transform.Coordinates);
-                        continue;
-                    }
-                    if (markerComp.Class == PlatoonMarkerClass.OrbitalCannonOpfor)
-                    {
-                        _entityManager.SpawnEntity("AU14OrbitalCannonOpfor", transform.Coordinates);
-                        continue;
-                    }
-
-                    // --- WITHDRAW CONSOLE MARKERS ---
-                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleGovfor)
-                    {
-                        _entityManager.SpawnEntity("AU14WithdrawConsoleGovFor", transform.Coordinates);
-                        continue;
-                    }
-                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleOpfor)
-                    {
-                        _entityManager.SpawnEntity("AU14WithdrawConsoleOpFor", transform.Coordinates);
-                        continue;
-                    }
-                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleColony)
-                    {
-                        _entityManager.SpawnEntity("AU14WithdrawConsoleColony", transform.Coordinates);
-                        continue;
-                    }
-
-                    // --- COMMAND TABLET MARKERS ---
-                    if (markerComp.Class == PlatoonMarkerClass.CommandTabletGovfor)
-                    {
-                        _entityManager.SpawnEntity("AU14TabletGovfor", transform.Coordinates);
-                        continue;
-                    }
-                    if (markerComp.Class == PlatoonMarkerClass.CommandTabletOpfor)
-                    {
-                        _entityManager.SpawnEntity("AU14TabletOpfor", transform.Coordinates);
-                        continue;
-                    }
-
-                    // --- OBJECTIVES CONSOLE MARKER LOGIC ---
-                    if (markerComp.Class == PlatoonMarkerClass.ObjectivesConsole)
-                    {
-                        string? objectivesConsoleProtoId = null;
-                        if (shipFaction.Faction == "govfor")
-                            objectivesConsoleProtoId = "ComputerObjectivesGovfor";
-                        else if (shipFaction.Faction == "opfor")
-                            objectivesConsoleProtoId = "ComputerObjectivesOpfor";
-                        // Add more factions as needed
-                        if (objectivesConsoleProtoId != null && _prototypeManager.TryIndex(objectivesConsoleProtoId, out _))
-                        {
-                            _entityManager.SpawnEntity(objectivesConsoleProtoId, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    // --- GENERIC FETCH RETURN POINT MARKER LOGIC ---
-                    if (markerComp.Class == PlatoonMarkerClass.ReturnPointGeneric)
-                    {
-                        string? fetchReturnProtoId = null;
-                        if (shipFaction.Faction == "govfor")
-                            fetchReturnProtoId = "fetchreturngovfor";
-                        else if (shipFaction.Faction == "opfor")
-                            fetchReturnProtoId = "fetchreturnopfor";
-                        // Add more factions as needed
-                        if (fetchReturnProtoId != null && _prototypeManager.TryIndex(fetchReturnProtoId, out _))
-                        {
-                            _entityManager.SpawnEntity(fetchReturnProtoId, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
                     if (markerComp.Class == PlatoonMarkerClass.DropshipDestination)
                     {
                         string dropshipDestinationProtoId = "CMDropshipDestinationHome";
@@ -328,56 +152,10 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         }
                     }
 
-                    // --- REQUISITIONS CONSOLE / LIFT MARKER LOGIC (shipside) ---
-                    if (markerComp.Class == PlatoonMarkerClass.RequisitionsConsole)
-                    {
-                        string? reqConsoleProto = null;
-                        // Use ship faction directly for ship markers (don't rely on marker govfor/opfor flags)
-                        if (shipFaction.Faction == "govfor")
-                            reqConsoleProto = "CMASRSConsoleGovfor";
-                        else if (shipFaction.Faction == "opfor")
-                            reqConsoleProto = "CMASRSConsoleOpfor";
-
-                        if (reqConsoleProto != null && _prototypeManager.TryIndex(reqConsoleProto, out _))
-                        {
-                            _entityManager.SpawnEntity(reqConsoleProto, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    if (markerComp.Class == PlatoonMarkerClass.RequisitionsLift)
-                    {
-                        string? liftProto = null;
-                        // For ships we can use the ship faction
-                        if (shipFaction.Faction == "govfor")
-                            liftProto = "CMCargoElevatorGovfor";
-                        else if (shipFaction.Faction == "opfor")
-                            liftProto = "CMCargoElevatorOpfor";
-
-                        if (liftProto != null && _prototypeManager.TryIndex(liftProto, out _))
-                        {
-                            _entityManager.SpawnEntity(liftProto, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    // --- ANALYZER MARKER LOGIC (shipside) ---
-                    if (markerComp.Class == PlatoonMarkerClass.Analyzer)
-                    {
-                        string? analyzerProto = null;
-                        // Use ship faction directly for ship markers
-                        if (shipFaction.Faction == "govfor")
-                            analyzerProto = "AU14AnalyzerMachine";
-                        else if (shipFaction.Faction == "opfor")
-                            analyzerProto = "AU14AnalyzerMachineOpfor";
-
-                        if (analyzerProto != null && _prototypeManager.TryIndex(analyzerProto, out _))
-                        {
-                            _entityManager.SpawnEntity(analyzerProto, transform.Coordinates);
-                        }
-                        continue;
-                    }
                 }
+
+                if (shipFaction.Faction == "opfor")
+                    ConvertGovforEntitiesToOpfor(shipUid, shipTransform);
             }
         }
 
@@ -402,48 +180,6 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 platoon = opPlatoon;
             else
                 continue;
-
-            // --- OVERWATCH CONSOLE MARKER LOGIC ---
-            if (markerComp.Class == PlatoonMarkerClass.OverwatchConsole)
-            {
-                string? overwatchConsoleProtoId = null;
-                if (markerComp.Govfor)
-                    overwatchConsoleProtoId = "RMCOverwatchConsoleGovfor";
-                else if (markerComp.Opfor)
-                    overwatchConsoleProtoId = "RMCOverwatchConsoleOpfor";
-                else if (markerComp.Ship)
-                {
-                    // Try to determine ship faction by parent entity
-                    var parentUid = transform.ParentUid;
-                    if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var shipFaction))
-                    {
-                        overwatchConsoleProtoId = shipFaction.Faction == "govfor"
-                            ? "RMCOverwatchConsoleGovfor"
-                            : shipFaction.Faction == "opfor"
-                                ? "RMCOverwatchConsoleOpfor"
-                                : null;
-                    }
-                }
-
-                if (overwatchConsoleProtoId != null && _prototypeManager.TryIndex(overwatchConsoleProtoId, out _))
-                    _entityManager.SpawnEntity(overwatchConsoleProtoId, transform.Coordinates);
-                continue;
-            }
-
-            // --- OBJECTIVES CONSOLE MARKER LOGIC ---
-            if (markerComp.Class == PlatoonMarkerClass.ObjectivesConsole)
-            {
-                string? objectivesConsoleProtoId = null;
-                if (markerComp.Govfor)
-                    objectivesConsoleProtoId = "ComputerObjectivesGovfor";
-                else if (markerComp.Opfor)
-                    objectivesConsoleProtoId = "ComputerObjectivesOpfor";
-                if (objectivesConsoleProtoId != null && _prototypeManager.TryIndex(objectivesConsoleProtoId, out _))
-                {
-                    _entityManager.SpawnEntity(objectivesConsoleProtoId, transform.Coordinates);
-                }
-                continue;
-            }
 
             // --- VENDOR MARKER LOGIC ---
             if (!TryResolvePlatoonVendor(platoon, markerComp.Class, out var vendorProtoId))
@@ -713,6 +449,48 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         }
     }
 
+    private static readonly ProtoId<FactionSwapSetPrototype> OpforShipSwaps = "OpforShipSwaps";
+
+    private void ConvertGovforEntitiesToOpfor(EntityUid shipUid, TransformComponent shipTransform)
+    {
+        if (!_prototypeManager.TryIndex(OpforShipSwaps, out FactionSwapSetPrototype? swapSet))
+            return;
+
+        var swaps = swapSet.Swaps;
+        // Covers markers spawned above and entities baked into the map; swapping (not editing
+        // components) so MapInit-derived state such as alliance controllable factions is correct.
+        // Membership uses the ship's whole z-network: decks load as separate grids and a bare
+        // GridUid check silently skips every deck but the one that got the faction tag.
+        var toSwap = new List<(EntityUid uid, EntProtoId opforProtoId, TransformComponent transform)>();
+        var supplyDrops = new List<EntityUid>();
+        var query = AllEntityQuery<MetaDataComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var meta, out var transform))
+        {
+            if (!IsMarkerOnShipOrZLevel(shipUid, shipTransform, transform) || meta.EntityPrototype is not { } proto)
+                continue;
+
+            if (swaps.TryGetValue(proto.ID, out var opforProtoId))
+                toSwap.Add((uid, opforProtoId, transform));
+            else if (proto.ID == "RMCSupplyDropConsole")
+                supplyDrops.Add(uid);
+        }
+
+        foreach (var (uid, opforProtoId, transform) in toSwap)
+        {
+            // A renamed target must leave the Govfor entity in place, not delete it unreplaced
+            if (!_prototypeManager.TryIndex<EntityPrototype>(opforProtoId, out _))
+                continue;
+
+            _entityManager.SpawnAttachedTo(opforProtoId, transform.Coordinates, rotation: transform.LocalRotation);
+            _entityManager.DeleteEntity(uid);
+        }
+
+        // No Opfor supply drop console prototype exists; retarget the marine squad binding so
+        // launches resolve the ship pads via SquadOpfor's supplyDropPadSquad.
+        foreach (var uid in supplyDrops)
+            _supplyDrop.SetSquad(uid, "SquadOpfor");
+    }
+
     private void SetPhonesFactionForParent(EntityUid parent, string faction)
     {
         if (!_entityManager.TryGetComponent<TransformComponent>(parent, out var parentTransform))
@@ -751,136 +529,6 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     {
         return faction == "govfor" && planetComp.GovforInShip ||
                faction == "opfor" && planetComp.OpforInShip;
-    }
-
-    private static string? GetLockedDoorPrototype(PlatoonMarkerClass markerClass, string faction)
-    {
-        return markerClass switch
-        {
-            PlatoonMarkerClass.LockedFTLDoor => FactionPrototype(
-                faction,
-                "CMAirlockGovforLockedFTL",
-                "CMAirlockOpforLockedFTL"),
-            PlatoonMarkerClass.LockedFTLGlassDoor => FactionPrototype(
-                faction,
-                "CMAirlockGovforGlassLockedFTL",
-                "CMAirlockOpforGlassLockedFTL"),
-            PlatoonMarkerClass.LockedCommandDoor => FactionPrototype(
-                faction,
-                "CMAirlockCommandGovforLocked",
-                "CMAirlockCommandOpforLocked"),
-            PlatoonMarkerClass.LockedSecurityDoor => FactionPrototype(
-                faction,
-                "CMAirlockSecurityGovforLocked",
-                "CMAirlockSecurityOpforLocked"),
-            PlatoonMarkerClass.LockedSecurityDoorGlass => FactionPrototype(
-                faction,
-                "CMAirlockSecurityGovforGlassLocked",
-                "CMAirlockSecurityOpforGlassLocked"),
-            PlatoonMarkerClass.LockedGlassDoor => FactionPrototype(
-                faction,
-                "CMAirlockGovforGlassLocked",
-                "CMAirlockOpforGlassLocked"),
-            PlatoonMarkerClass.LockedCommandGlassDoor => FactionPrototype(
-                faction,
-                "CMAirlockCommandGovforGlassLocked",
-                "CMAirlockCommandOpforGlassLocked"),
-            PlatoonMarkerClass.LockedEngineeringDoor => FactionPrototype(
-                faction,
-                "CMAirlockEngineerGovforLocked",
-                "CMAirlockEngineerOpforLocked"),
-            PlatoonMarkerClass.LockedEngineeringGlassDoor => FactionPrototype(
-                faction,
-                "CMAirlockEngineerGovforGlassLocked",
-                "CMAirlockEngineerOpforGlassLocked"),
-            PlatoonMarkerClass.LockedMedicalDoor => FactionPrototype(
-                faction,
-                "CMAirlockMedicalGovforLocked",
-                "CMAirlockMedicalOpforLocked"),
-            PlatoonMarkerClass.LockedMedicalGlassDoor => FactionPrototype(
-                faction,
-                "CMAirlockMedicalGovforGlassLocked",
-                "CMAirlockMedicalOpforGlassLocked"),
-            PlatoonMarkerClass.LockedNormalDoor => FactionPrototype(
-                faction,
-                "CMAirlockGovforLocked",
-                "CMAirlockOpforLocked"),
-            PlatoonMarkerClass.LockedDoubleNormalDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorGovforLocked",
-                "CMDoubleDoorOpforLocked"),
-            PlatoonMarkerClass.LockedDoubleGlassDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorGovforGlassLocked",
-                "CMDoubleDoorOpforGlassLocked"),
-            PlatoonMarkerClass.LockedDoubleCommandDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorCommandGovforLocked",
-                "CMDoubleDoorCommandOpforLocked"),
-            PlatoonMarkerClass.LockedDoubleCommandGlassDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorCommandGovforGlassLocked",
-                "CMDoubleDoorCommandOpforGlassLocked"),
-            PlatoonMarkerClass.LockedDoubleSecurityDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorSecurityGovforLocked",
-                "CMDoubleDoorSecurityOpforLocked"),
-            PlatoonMarkerClass.LockedDoubleSecurityGlassDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorSecurityGovforGlassLocked",
-                "CMDoubleDoorSecurityOpforGlassLocked"),
-            PlatoonMarkerClass.LockedDoubleMedicalDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorMedicalGovforLocked",
-                "CMDoubleDoorMedicalOpforLocked"),
-            PlatoonMarkerClass.LockedDoubleMedicalGlassDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorMedicalGovforGlassLocked",
-                "CMDoubleDoorMedicalOpforGlassLocked"),
-            PlatoonMarkerClass.LockedDoubleEngineeringDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorEngineerGovforLocked",
-                "CMDoubleDoorEngineerOpforLocked"),
-            PlatoonMarkerClass.LockedDoubleEngineeringGlassDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorEngineerGovforGlassLocked",
-                "CMDoubleDoorEngineerOpforGlassLocked"),
-            PlatoonMarkerClass.LockedLogisticsDoor => FactionPrototype(
-                faction,
-                "CMAirlockLogisticsGovforLocked",
-                "CMAirlockLogisticsOpforLocked"),
-            PlatoonMarkerClass.LockedLogisticsGlassDoor => FactionPrototype(
-                faction,
-                "CMAirlockLogisticsGovforGlassLocked",
-                "CMAirlockLogisticsOpforGlassLocked"),
-            PlatoonMarkerClass.LockedDoubleLogisticsDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorLogisticsGovforLocked",
-                "CMDoubleDoorLogisticsOpforLocked"),
-            PlatoonMarkerClass.LockedDoubleLogisticsGlassDoor => FactionPrototype(
-                faction,
-                "CMDoubleDoorLogisticsGovforGlassLocked",
-                "CMDoubleDoorLogisticsOpforGlassLocked"),
-            PlatoonMarkerClass.LaptopCallsign => FactionPrototype(
-                faction,
-                "AU14ItemLaptopCallsignGOVFOR",
-                "AU14ItemLaptopCallsignOPFOR"),
-            PlatoonMarkerClass.CommsArrayShip => FactionPrototype(
-                faction,
-                "AU14CommsArrayShipGovfor",
-                "AU14CommsArrayShipOpfor"),
-            _ => null,
-        };
-    }
-
-    private static string? FactionPrototype(string faction, string govforPrototype, string opforPrototype)
-    {
-        return faction switch
-        {
-            "govfor" => govforPrototype,
-            "opfor" => opforPrototype,
-            _ => null,
-        };
     }
 
     private bool IsMarkerOnShipOrZLevel(EntityUid shipUid, TransformComponent shipTransform, TransformComponent markerTransform)

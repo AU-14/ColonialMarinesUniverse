@@ -2,10 +2,33 @@
   id: CLFSleeperAgent
   prefRoles: [ CLFSleeperAgentRole ]
   jobWhitelist:
+  - AU14JobCivilianCorporateLiaison
+  - AU14JobCivilianCMBMarshal
+  - AU14JobCivilianColonyAdministrator
+  - AU14JobGOVFORPlatOp
+  - AU14JobGOVFORAdjutant
   - AU14JobGOVFORSquadSergeant
   - AU14JobGOVFORSectionSergeant
-  - AU14JobGOVFORPlatOp
+# - AU14JobGOVFORRadioTelephoneOperator
+  - AU14JobGOVFORVehicleCommander
   - AU14JobGOVFORMilitaryPoliceMan
+  - AU14JobGOVFOROfficerEngi
+  - AU14JobGOVFOROfficerIntel
+  - AU14JobGOVFOROfficerLogistics
+  - AU14JobGOVFOROfficerMedical
+# - AU14JobGOVFORMilitaryDoctor
+  - AU14JobOPFORPlatOp
+  - AU14JobOPFORAdjutant
+  - AU14JobOPFORSquadSergeant
+  - AU14JobOPFORSectionSergeant
+# - AU14JobOPFORRadioTelephoneOperator
+  - AU14JobOPFORVehicleCommander
+  - AU14JobOPFORMilitaryPoliceMan
+  - AU14JobOPFOROfficerEngi
+  - AU14JobOPFOROfficerIntel
+  - AU14JobOPFOROfficerLogistics
+  - AU14JobOPFOROfficerMedical
+# - AU14JobOPFORMilitaryDoctor
   briefing:
     text: clf-sleeper-agent-role-greeting
     color: OliveDrab

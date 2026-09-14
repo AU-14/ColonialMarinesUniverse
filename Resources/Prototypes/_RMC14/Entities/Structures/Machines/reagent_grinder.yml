@@ -21,6 +21,8 @@
           False: {state: "juicer0"}
   - type: ReagentGrinder
     storageMaxEntities: 50
+  - type: ApcPowerReceiver # CMU14
+    powerLoad: 5 # equals idlePowerDraw
   - type: RMCPowerReceiver
     idleLoad: 5
     activeLoad: 100

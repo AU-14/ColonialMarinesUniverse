@@ -315,7 +315,7 @@
   suffix: CMU, Filled
   components:
   - type: Label
-    currentLabel: biogenic matrix
+    currentLabel: reagent-name-cmu-biogenic-matrix
   - type: Solution
     id: beaker
     solution:

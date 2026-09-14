@@ -28,6 +28,13 @@
   id: AU14OpforSquad
 
 - type: accessGroup
+  id: AU14OpforWeaponsSpecialist
+  tags:
+  - AU14AccessOpforSquadWeaponsSpecialist
+  - AU14AccessOpforSquad
+  - AU14AccessOpfor
+
+- type: accessGroup
   id: AU14OpforFTL
   tags:
   - AU14AccessOpfor

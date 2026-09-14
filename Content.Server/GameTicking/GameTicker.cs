@@ -69,6 +69,7 @@ namespace Content.Server.GameTicking
         [Dependency] private ServerDbEntryManager _dbEntryManager = default!;
         [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
         [Dependency] private ObjectiveControlSystem _auobjectivesystem = default!;
+        [Dependency] private ForceOnForceFactionSystem _fof = default!;
         [ViewVariables] private bool _initialized;
         [ViewVariables] private bool _postInitialized;
 

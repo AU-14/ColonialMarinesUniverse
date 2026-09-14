@@ -1,0 +1,59 @@
+# Machine boards for the cross-deck z-level infrastructure: opening vents,
+# pipe risers, power risers, and the automatic transfer switch.
+# Parts pools use stacks that exist in this fork: Manipulator, Cable, Glass.
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUOpeningVentMachineCircuitboard
+  name: opening vent machine board
+  description: A machine printed circuit board for a cross-deck opening vent.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUOpeningVentDown
+    stackRequirements:
+      Manipulator: 1
+      Cable: 1
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUPipeRiserMachineCircuitboard
+  name: pipe riser machine board
+  description: A machine printed circuit board for a cross-deck pipe riser.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUPipeRiserUp
+    stackRequirements:
+      Manipulator: 1
+      Cable: 1
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUPowerRiserMachineCircuitboard
+  name: power riser machine board
+  description: A machine printed circuit board for a cross-deck HV power riser.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUPowerRiserDown
+    stackRequirements:
+      Manipulator: 2
+      Cable: 2
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUAutoTransferSwitchMachineCircuitboard
+  name: automatic transfer switch machine board
+  description: A machine printed circuit board for an automatic transfer switch.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUAutoTransferSwitch
+    stackRequirements:
+      Manipulator: 1
+      Cable: 2
+      Glass: 1

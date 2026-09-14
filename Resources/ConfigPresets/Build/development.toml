@@ -15,6 +15,10 @@ role_whitelist = false
 admin_job_tracking = true
 role_loadout_timers = false
 
+[cmu]
+# enable in-game: "> cvar cmu.server_performance.log_enabled true"
+server_performance.log_enabled = false
+
 [rmc]
 distress_xenos_minimum = 0  # stop blocking distress testing
 lobby_min_players = 1       # localhost

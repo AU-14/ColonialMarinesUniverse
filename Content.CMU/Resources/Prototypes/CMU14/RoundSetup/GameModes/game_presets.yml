@@ -81,6 +81,7 @@
   showInVote: true
   description: Two units face each other in combat.
   minPlayers: 80
+  burrowedLarvaEnabled: false
   requiresOpforVote: true
   requiresGovforVote: true
   thirdPartyAutoSpawn: true

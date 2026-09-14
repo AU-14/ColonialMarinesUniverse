@@ -6,7 +6,7 @@
   name: au14-job-name-vehiclecrewman
   description: au14-job-description-vehiclecrewman
   icon: "AU14JobIconGovTankCrewman"
-  spawnMenuRoleName: Vehicle Crewman (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-vehicle-crewman
   startingGear: AU14GearGOVFORVehicleCrewman
   dummyStartingGear: AU14GearGOVFORVehicleCrewmanDummy
   playTimeTracker: AU14JobGOVFORVehicleCrewman
