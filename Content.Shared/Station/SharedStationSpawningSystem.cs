@@ -43,6 +43,13 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                     continue;
                 }
 
+                // CMU14 Begin - allow server-side systems to reject a selected preset before it is spawned.
+                var beforeEquip = new BeforeRoleLoadoutEquipEvent(entity, loadoutProto.ID);
+                RaiseLocalEvent(entity, ref beforeEquip);
+                if (beforeEquip.Cancelled)
+                    continue;
+                // CMU14 End
+
                 EquipStartingGear(entity, loadoutProto, raiseEvent: false);
             }
         }
@@ -237,3 +244,11 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
         return null;
     }
 }
+
+// CMU14 Begin - raised before a selected role loadout is spawned so CMU systems can reject it.
+[ByRefEvent]
+public record struct BeforeRoleLoadoutEquipEvent(EntityUid Entity, ProtoId<LoadoutPrototype> Loadout)
+{
+    public bool Cancelled;
+}
+// CMU14 End
