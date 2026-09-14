@@ -124,15 +124,15 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 13.5
-        Slash: 13.5
-        Piercing: 11.5
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: XenoTailStab
     tailDamage:
       types:
-        Blunt: 16
-        Slash: 16
-        Piercing: 16
+        Blunt: 13
+        Slash: 13
+        Piercing: 13
   - type: XenoHidden
   - type: RMCActionOrder
     id: CMXenoSpitterAlchemist
