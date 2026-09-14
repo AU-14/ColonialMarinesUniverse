@@ -123,6 +123,7 @@
   type: "Blacklist"
   entityMatchers:
   - "RMCPlushie.*"
+  - "RMCCanister.*"
   - "RMCPickaxe"
   - "RMCAegisCorpseSpawner"
   - "RMCAegisSpawner"

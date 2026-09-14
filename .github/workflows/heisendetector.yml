@@ -6,9 +6,15 @@ on:
   schedule:
     - cron: "*/15 * * * *"
 
+# A hunt can legitimately take over an hour; overlapping hunts only add load.
+concurrency:
+  group: heisentests
+  cancel-in-progress: true
+
 jobs:
   hunt:
     runs-on: ubuntu-latest
+    timeout-minutes: 100
     outputs:
       matrix: ${{ steps.get_fails.outputs.matrix }}
       count: ${{ steps.get_fails.outputs.count }}
@@ -62,6 +68,7 @@ jobs:
   report:
     needs: [ hunt ]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       issues: write
     strategy:

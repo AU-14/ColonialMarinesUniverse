@@ -20,6 +20,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
     - name: Check PR and post one advisory comment
       uses: actions/github-script@v9.0.0
@@ -178,6 +179,7 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: (github.event.action == 'opened' || github.event.action == 'ready_for_review')
       && (github.head_ref == 'master' || github.head_ref == 'main' || github.head_ref == 'develop' || github.head_ref == 'stable' || github.head_ref == 'staging')
       && github.event.pull_request.head.repo.fork
