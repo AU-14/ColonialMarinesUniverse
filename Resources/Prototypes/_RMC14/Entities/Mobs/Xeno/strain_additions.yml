@@ -108,6 +108,7 @@
     - ActionXenoToxicSpit
     - ActionXenoToxicSlash
     - ActionXenoLeap
+    - ActionXenoParalyzingSlash
   - type: XenoStrain
     name: rmc-xeno-alchemist-name
     description: rmc-xeno-alchemist-description
@@ -211,6 +212,9 @@
     - ActionXenoRapture
     - ActionXenoReaperRedGas
     - ActionXenoDevolve
+    - ActionXenoLunge
+    - ActionXenoDislocate
+    - ActionXenoFling
     tier: 3
     hudOffset: -0.1,0.1
     unlockAt: 900
