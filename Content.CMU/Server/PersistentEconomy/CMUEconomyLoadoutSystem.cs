@@ -1,11 +1,8 @@
 using System.Linq;
 using Content.Shared.Clothing;
 using Content.Shared.CMU14.PersistentEconomy;
-using Content.Shared.Mind;
 using Content.Shared.Preferences.Loadouts;
-using Content.Shared.Roles.Jobs;
 using Content.Shared.Station;
-using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.PersistentEconomy;
@@ -20,8 +17,6 @@ public sealed class CMUEconomyLoadoutSystem : EntitySystem
     [Dependency] private readonly CMUPersistentEconomySystem _economy = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly LoadoutSystem _loadouts = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
 
     public override void Initialize()
     {
@@ -32,9 +27,8 @@ public sealed class CMUEconomyLoadoutSystem : EntitySystem
     private void OnBeforeRoleLoadoutEquip(ref BeforeRoleLoadoutEquipEvent args)
     {
         if (!_economy.Enabled || _economy.RoundId <= 0 ||
-            !TryComp<ActorComponent>(args.Entity, out var actor) ||
-            !_mind.TryGetMind(actor.PlayerSession.UserId, out var mindId, out _) ||
-            !_jobs.MindTryGetJob(mindId, out var job) || !job.CmuEconomyEnabled ||
+            args.PlayerUserId is not { } playerUserId || args.Job is not { } jobId ||
+            !_prototypes.TryIndex<JobPrototype>(jobId, out var job) || !job.CmuEconomyEnabled ||
             !_prototypes.TryIndex<LoadoutPrototype>(args.Loadout, out var loadout))
             return;
 
@@ -47,7 +41,7 @@ public sealed class CMUEconomyLoadoutSystem : EntitySystem
         if (priced == null || priced.Price <= 0)
             return;
 
-        var user = actor.PlayerSession.UserId.UserId;
+        var user = playerUserId.UserId;
         var round = _economy.Store.ReadRound(user, _economy.RoundId);
 
         // Paid preset gear is issued only once per deployment. Respawns do not mint

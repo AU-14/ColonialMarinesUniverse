@@ -1,6 +1,5 @@
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobSectionSergeantBaseAbstract
@@ -22,7 +21,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   abstract: true
   parent: AU14JobSectionSergeantBaseAbstract
   id: AU14JobSectionSergeantBase
@@ -167,7 +165,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeant
   # hidden: false # plt. sgt. is disabled
@@ -195,7 +192,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobOPFORSectionSergeant
   roundSide: Opfor
@@ -235,7 +231,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantCMBCIU
   roundForce: CMBCIU
@@ -246,7 +241,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantRMC
   roundForce: RMC
@@ -261,7 +255,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantUPP
   roundForce: UPP
@@ -280,7 +273,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantWYPMC
   roundForce: WYPMC

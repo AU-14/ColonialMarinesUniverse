@@ -1,6 +1,5 @@
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobVehicleCommanderBaseAbstract
@@ -18,7 +17,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobVehicleCommanderBaseAbstract
   id: AU14JobVehicleCommanderBase
@@ -105,7 +103,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobVehicleCommanderBase
   id: AU14JobGOVFORVehicleCommander
   hidden: false

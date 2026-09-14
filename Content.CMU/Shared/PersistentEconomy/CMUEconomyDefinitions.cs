@@ -50,7 +50,6 @@ public enum CMUEconomyAction : byte
 public sealed class CMUEconomyMessage : EuiMessageBase
 {
     public Guid Token;
-    public int ProfileId;
     public CMUEconomyAction Action;
     public long Amount;
     public string Target = "";
@@ -60,7 +59,6 @@ public sealed class CMUEconomyMessage : EuiMessageBase
 public sealed class CMUEconomyState : EuiStateBase
 {
     public Guid Token;
-    public int ProfileId;
     public string Character = "";
     public string PlayerId = "";
     public long Balance;

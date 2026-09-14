@@ -1,6 +1,5 @@
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobOfficerMPBaseAbstract
@@ -22,7 +21,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobOfficerMPBaseAbstract
   id: AU14JobOfficerMPBase
@@ -93,7 +91,6 @@
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMP
   hidden: false
@@ -102,7 +99,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMPBase
   id: AU14JobOPFOROfficerMP
   roundSide: Opfor
@@ -186,7 +182,6 @@
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMPCMBCIU
   roundForce: CMBCIU
@@ -197,7 +192,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMPRMC
   roundForce: RMC
@@ -206,7 +200,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMPUPP
   roundForce: UPP
@@ -222,7 +215,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMPWYPMC
   roundForce: WYPMC

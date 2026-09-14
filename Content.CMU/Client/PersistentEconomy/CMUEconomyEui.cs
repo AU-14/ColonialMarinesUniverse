@@ -18,7 +18,6 @@ public sealed class CMUEconomyEui : BaseEui
     };
 
     private Guid _token;
-    private int _profileId;
     private bool _pending;
 
     public CMUEconomyEui()
@@ -41,7 +40,6 @@ public sealed class CMUEconomyEui : BaseEui
         SendMessage(new CMUEconomyMessage
         {
             Token = _token,
-            ProfileId = _profileId,
             Action = action,
             Amount = amount,
             Target = target,
@@ -64,7 +62,6 @@ public sealed class CMUEconomyEui : BaseEui
             return;
 
         _token = data.Token;
-        _profileId = data.ProfileId;
         _pending = false;
         _content.DisposeAllChildren();
 
@@ -73,8 +70,9 @@ public sealed class CMUEconomyEui : BaseEui
         Label(Loc.GetString("cmu-economy-round",
             ("stake", data.Stake),
             ("cap", data.Cap),
+            ("escrow", data.Escrow),
             ("credited", data.Credited),
-            ("remaining", Math.Max(0, data.Cap - data.Credited))));
+            ("remaining", Math.Max(0, data.Cap - data.Credited - data.Escrow))));
 
         var stake = new CheckBox
         {
@@ -103,6 +101,11 @@ public sealed class CMUEconomyEui : BaseEui
                     Send(CMUEconomyAction.Withdraw, value);
             });
             Button("cmu-economy-deposit", () => Send(CMUEconomyAction.Deposit));
+            Button("cmu-economy-withdraw-escrow", () =>
+            {
+                if (long.TryParse(amount.Text, out var value))
+                    Send(CMUEconomyAction.WithdrawEscrow, value);
+            });
 
             var recipient = new LineEdit { PlaceHolder = Loc.GetString("cmu-economy-recipient") };
             _content.AddChild(recipient);

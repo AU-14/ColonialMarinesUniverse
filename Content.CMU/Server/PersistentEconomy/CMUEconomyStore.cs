@@ -79,6 +79,22 @@ public sealed class CMUEconomyStore : IDisposable
             return Read<RoundState>(null, "SELECT data FROM cmu_rounds WHERE player=$p AND round=$r", player, round);
     }
 
+    public List<Guid> RoundPlayers(int round)
+    {
+        lock (_gate)
+        {
+            using var cmd = Command(null, "SELECT player FROM cmu_rounds WHERE round=$r", ("$r", round));
+            using var reader = cmd.ExecuteReader();
+            var players = new List<Guid>();
+            while (reader.Read())
+            {
+                if (Guid.TryParse(reader.GetString(0), out var player))
+                    players.Add(player);
+            }
+            return players;
+        }
+    }
+
     public List<Entry> History(Guid player, int? round = null)
     {
         lock (_gate)
@@ -151,18 +167,27 @@ public sealed class CMUEconomyStore : IDisposable
             var player = owner ?? _player;
             var account = GetAccount(player);
             var before = account.Balance;
-            var after = checked(before + amount);
-            if (after < 0 || after > MaximumBalance)
+            if (amount > 0 && before > MaximumBalance - amount ||
+                amount < 0 && before < -amount)
                 return false;
-            account.Balance = after;
-            account.UpdatedAt = DateTime.UtcNow;
+
             // Bank/cash conversions are capital movements, not earnings or spending.
             if (type is not ("RoundStake" or "CashWithdrawal" or "CashDeposit" or "CashSettlement"))
             {
+                if (amount > 0 && account.LifetimeEarned > long.MaxValue - amount ||
+                    amount < 0 && account.LifetimeSpent > long.MaxValue + amount)
+                    return false;
+            }
+
+            var after = before + amount;
+            account.Balance = after;
+            account.UpdatedAt = DateTime.UtcNow;
+            if (type is not ("RoundStake" or "CashWithdrawal" or "CashDeposit" or "CashSettlement"))
+            {
                 if (amount > 0)
-                    account.LifetimeEarned = checked(account.LifetimeEarned + amount);
+                    account.LifetimeEarned += amount;
                 else
-                    account.LifetimeSpent = checked(account.LifetimeSpent - amount);
+                    account.LifetimeSpent -= amount;
             }
             _store.Execute(_transaction, "INSERT INTO cmu_ledger VALUES ($id,$p,$r,$a,$b,$c,$type,$d,$t,$related,$k)",
                 ("$id", Guid.NewGuid().ToString()), ("$p", player.ToString()), ("$r", _round), ("$a", amount),

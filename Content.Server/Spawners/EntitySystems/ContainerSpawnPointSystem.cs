@@ -73,7 +73,8 @@ public sealed partial class ContainerSpawnPointSystem : EntitySystem
             baseCoords,
             args.Job,
             args.HumanoidCharacterProfile,
-            args.Station);
+            args.Station,
+            playerUserId: args.PlayerUserId); // CMU14
 
         _random.Shuffle(possibleContainers);
         foreach (var (uid, spawnPoint, manager, xform) in possibleContainers)

@@ -35,11 +35,11 @@ public sealed class CMUEconomyStoreTest
             Assert.That(round.Stake, Is.EqualTo(750));
             Assert.That(round.SettlementCap, Is.EqualTo(1500));
         });
-        Assert.That(_store.Mutate(_player, 1, "deposit", op => op.Deposit(400, false)), Is.True);
+        Assert.That(_store.Mutate(_player, 1, "deposit", op => op.DepositToEscrow(400)), Is.True);
         Assert.That(_store.Mutate(_player, 1, "withdraw", op => op.Change(-400, "CashWithdrawal", "ATM")), Is.True);
-        Assert.That(_store.Mutate(_player, 1, "over-cap", op => op.Deposit(1101, false)), Is.False);
+        Assert.That(_store.Mutate(_player, 1, "over-cap", op => op.DepositToEscrow(1101)), Is.False);
         Assert.That(_store.Mutate(_player, 1, "salary", op => op.Change(650, "Payroll", "Service")), Is.True);
-        Assert.That(_store.Mutate(_player, 1, "settle", op => op.Deposit(1100, true)), Is.True);
+        Assert.That(_store.Mutate(_player, 1, "settle", op => op.Settle(1100)), Is.True);
         Assert.That(_store.ReadAccount(_player).Balance, Is.EqualTo(8500));
         Assert.That(_store.ReadRound(_player, 1).CashCredited, Is.EqualTo(1500));
         Assert.That(_store.ReadAccount(_player).LifetimeSpent, Is.EqualTo(500));
@@ -89,7 +89,7 @@ public sealed class CMUEconomyStoreTest
     {
         Assert.That(_store.Mutate(_player, 1, "optout", op => { op.Account.StakeEnabled = false; return true; }), Is.True);
         Assert.That(_store.Mutate(_player, 1, "deploy", op => op.Deploy(0, 10, 2000, 200, "job")), Is.True);
-        Assert.That(_store.Mutate(_player, 1, "cash", op => op.Deposit(1, false)), Is.False);
+        Assert.That(_store.Mutate(_player, 1, "cash", op => op.DepositToEscrow(1)), Is.False);
         Assert.That(_store.Mutate(_player, 1, "salary", op => op.Change(6, "Payroll", "Minute")), Is.True);
         Assert.That(_store.ReadAccount(_player).Balance, Is.EqualTo(8006));
     }
@@ -108,11 +108,30 @@ public sealed class CMUEconomyStoreTest
     public void SettlementClosesCashPathAndDoesNotConsumePayrollCapacity()
     {
         _store.Mutate(_player, 1, "deploy", op => op.Deploy(0, 10, 2000, 200, "job"));
-        Assert.That(_store.Mutate(_player, 1, "settle-part", op => op.Deposit(400, true)), Is.True);
-        Assert.That(_store.Mutate(_player, 1, "after-settlement", op => op.Deposit(1, false)), Is.False);
+        Assert.That(_store.Mutate(_player, 1, "escrow", op => op.DepositToEscrow(400)), Is.True);
+        Assert.That(_store.Mutate(_player, 1, "settle-part", op => op.Settle(0)), Is.True);
+        Assert.That(_store.Mutate(_player, 1, "after-settlement", op => op.DepositToEscrow(1)), Is.False);
         Assert.That(_store.ReadRound(_player, 1).Settled, Is.True);
+        Assert.That(_store.Mutate(_player, 1, "repeat-settlement", op => op.Settle(400)), Is.False);
         Assert.That(_store.Mutate(_player, 1, "award", op => op.Change(100, "HazardPay", "Verified event")), Is.True);
         Assert.That(_store.ReadRound(_player, 1).CashCredited, Is.EqualTo(400));
+    }
+
+    [Test]
+    public void EscrowWithdrawalRestoresCashCapacityWithoutCreditingBank()
+    {
+        _store.Mutate(_player, 1, "deploy", op => op.Deploy(0, 10, 2000, 200, "job"));
+        Assert.That(_store.Mutate(_player, 1, "escrow", op => op.DepositToEscrow(600)), Is.True);
+        Assert.That(_store.Mutate(_player, 1, "withdraw-escrow", op => op.WithdrawEscrow(250)), Is.True);
+
+        var round = _store.ReadRound(_player, 1);
+        Assert.Multiple(() =>
+        {
+            Assert.That(round.RoundEscrow, Is.EqualTo(350));
+            Assert.That(round.CashCredited, Is.Zero);
+            Assert.That(_store.ReadAccount(_player).Balance, Is.EqualTo(7200));
+        });
+        Assert.That(_store.Mutate(_player, 1, "withdraw-too-much", op => op.WithdrawEscrow(351)), Is.False);
     }
 
     [Test]
@@ -128,7 +147,7 @@ public sealed class CMUEconomyStoreTest
     }
 
     [Test]
-    public void DatabaseReopenPreservesLimitsPurchasesAndProfileSeparation()
+    public void DatabaseReopenPreservesEscrowLimitsAndPurchases()
     {
         var path = Path.Combine(Path.GetTempPath(), $"cmu-economy-test-{Guid.NewGuid()}.sqlite");
         try
@@ -137,20 +156,15 @@ public sealed class CMUEconomyStoreTest
             {
                 store.Mutate(_player, 5, "seed", op => op.Change(8000, "AdminAdjustment", "Fixture"));
                 store.Mutate(_player, 5, "deploy", op => op.Deploy(0, 10, 2000, 200, "job"));
-                store.Mutate(_player, 5, "deposit", op => op.Deposit(300, false));
-                store.Mutate(_player, 5, "profile", op =>
-                {
-                    op.Account.Loadouts[1] = new() { "scarf" };
-                    op.Account.Loadouts[2] = new() { "goggles" };
-                    return op.Buy("scarf", 100);
-                });
+                store.Mutate(_player, 5, "deposit", op => op.DepositToEscrow(300));
+                store.Mutate(_player, 5, "purchase", op => op.Buy("scarf", 100));
             }
             using (var store = new CMUEconomyStore(path))
             {
-                Assert.That(store.ReadRound(_player, 5).CashCredited, Is.EqualTo(300));
-                Assert.That(store.ReadAccount(_player).Loadouts[2], Is.EqualTo(new[] { "goggles" }));
+                Assert.That(store.ReadRound(_player, 5).RoundEscrow, Is.EqualTo(300));
+                Assert.That(store.RoundPlayers(5), Does.Contain(_player));
                 Assert.That(store.ReadAccount(_player).Purchases.ContainsKey("scarf"), Is.True);
-                Assert.That(store.Mutate(_player, 5, "deposit", op => op.Deposit(300, false)), Is.False);
+                Assert.That(store.Mutate(_player, 5, "deposit", op => op.DepositToEscrow(300)), Is.False);
                 Assert.That(store.Mutate(_player, 5, "new-deploy", op => op.Deploy(0, 10, 2000, 200, "job")), Is.False);
                 Assert.That(store.Mutate(_player, 6, "next-round", op => op.Deploy(0, 10, 2000, 200, "job")), Is.True);
             }

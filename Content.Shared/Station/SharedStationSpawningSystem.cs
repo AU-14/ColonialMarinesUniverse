@@ -8,6 +8,7 @@ using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
+using Robust.Shared.Network; // CMU14
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -30,7 +31,14 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     /// <summary>
     ///     Equips the data from a `RoleLoadout` onto an entity.
     /// </summary>
-    public void EquipRoleLoadout(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto, bool applyEffects = true)
+    // CMU14: authenticated spawn context lets server systems validate paid loadouts.
+    public void EquipRoleLoadout(
+        EntityUid entity,
+        RoleLoadout loadout,
+        RoleLoadoutPrototype roleProto,
+        bool applyEffects = true,
+        NetUserId? playerUserId = null,
+        ProtoId<JobPrototype>? job = null)
     {
         // Order loadout selections by the order they appear on the prototype.
         foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)))
@@ -44,7 +52,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                 }
 
                 // CMU14 Begin - allow server-side systems to reject a selected preset before it is spawned.
-                var beforeEquip = new BeforeRoleLoadoutEquipEvent(entity, loadoutProto.ID);
+                var beforeEquip = new BeforeRoleLoadoutEquipEvent(entity, loadoutProto.ID, playerUserId, job);
                 RaiseLocalEvent(entity, ref beforeEquip);
                 if (beforeEquip.Cancelled)
                     continue;
@@ -247,7 +255,11 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
 
 // CMU14 Begin - raised before a selected role loadout is spawned so CMU systems can reject it.
 [ByRefEvent]
-public record struct BeforeRoleLoadoutEquipEvent(EntityUid Entity, ProtoId<LoadoutPrototype> Loadout)
+public record struct BeforeRoleLoadoutEquipEvent(
+    EntityUid Entity,
+    ProtoId<LoadoutPrototype> Loadout,
+    NetUserId? PlayerUserId,
+    ProtoId<JobPrototype>? Job)
 {
     public bool Cancelled;
 }

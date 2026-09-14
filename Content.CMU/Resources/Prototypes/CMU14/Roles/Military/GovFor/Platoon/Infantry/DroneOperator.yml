@@ -1,6 +1,5 @@
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobMilitaryBase
   id: CMUJobDroneOperatorBaseAbstract
@@ -16,7 +15,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 105
   abstract: true
   parent: CMUJobDroneOperatorBaseAbstract
   id: CMUJobDroneOperatorBase
@@ -105,7 +103,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 105
   parent: CMUJobDroneOperatorBase
   id: CMUJobGOVFORDroneOperator
   hidden: false

@@ -266,7 +266,17 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
     {
         if (!Enabled)
             return;
-        foreach (var player in _deployed.Keys)
+        var participants = _deployed.Keys
+            .Concat(Store.RoundPlayers(RoundId).Select(player => new NetUserId(player)))
+            .Distinct()
+            .Where(player =>
+            {
+                var round = Store.ReadRound(player.UserId, RoundId);
+                return round.DeploymentIssued && !round.Settled;
+            })
+            .ToArray();
+
+        foreach (var player in participants)
         {
             try
             {
@@ -352,7 +362,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         return new CMUEconomyState
         {
             Token = token,
-            ProfileId = preferences.SelectedCharacterIndex,
             Character = preferences.SelectedCharacter.Name,
             PlayerId = player.UserId.ToString(),
             Balance = account.Balance,

@@ -1,6 +1,5 @@
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobSquadSergeantBaseAbstract # Squad Leader Abstraction
@@ -21,7 +20,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   abstract: true
   parent: AU14JobSquadSergeantBaseAbstract
   id: AU14JobSquadSergeantBase # Squad Leader Base
@@ -125,7 +123,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase # parent does the heavy lifting
   id: AU14JobGOVFORSquadSergeant # Default Squad Leader
   hidden: false
@@ -154,7 +151,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobOPFORSquadSergeant
   roundSide: Opfor
@@ -194,7 +190,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantCMBCIU
   roundForce: CMBCIU
@@ -206,7 +201,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantRMC
   roundForce: RMC
@@ -216,7 +210,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantUPP
   roundForce: UPP
@@ -228,7 +221,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 110
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantWYPMC
   roundForce: WYPMC

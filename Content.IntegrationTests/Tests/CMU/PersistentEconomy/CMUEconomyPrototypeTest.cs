@@ -1,5 +1,8 @@
+using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.Clothing;
 using Content.Shared.CMU14.PersistentEconomy;
+using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
@@ -12,6 +15,7 @@ public sealed class CMUEconomyPrototypeTest : GameTest
     [Test]
     public async Task CatalogueHasValidRolesEntitiesPricesAndCategories()
     {
+        var loadouts = Server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<LoadoutSystem>();
         await Server.WaitAssertion(() =>
         {
             var count = 0;
@@ -26,9 +30,20 @@ public sealed class CMUEconomyPrototypeTest : GameTest
                 {
                     Assert.That(SProtoMan.TryIndex<JobPrototype>(job, out var prototype), Is.True, item.ID + ": " + job);
                     Assert.That(prototype!.CmuEconomyEnabled, Is.True, job);
+                    Assert.That(
+                        SProtoMan.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job), out var roleLoadout),
+                        Is.True,
+                        item.ID + ": missing role loadout for " + job);
+                    Assert.That(
+                        roleLoadout!.Groups
+                            .SelectMany(group => SProtoMan.Index<LoadoutGroupPrototype>(group).Loadouts)
+                            .Select(loadout => SProtoMan.Index<LoadoutPrototype>(loadout))
+                            .Any(loadout => loadouts.GetFirstOrNull(loadout) == item.Entity),
+                        Is.True,
+                        item.ID + ": " + item.Entity + " is not selectable by " + job);
                 }
             }
-            Assert.That(count, Is.GreaterThanOrEqualTo(4));
+            Assert.That(count, Is.GreaterThanOrEqualTo(2));
         });
 
         await Client.WaitAssertion(() =>

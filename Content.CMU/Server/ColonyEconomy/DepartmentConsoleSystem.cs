@@ -679,9 +679,6 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     /// </summary>
     public void DispenseSalaries()
     {
-        // Persistent payroll is based on active service, not cards registered at consoles.
-        if (EntityManager.System<Content.Server.CMU14.PersistentEconomy.CMUPersistentEconomySystem>().Enabled)
-            return;
         var announcements = new List<string>();
         var processedDepartments = new HashSet<string>();
         var deptQuery = EntityQueryEnumerator<DepartmentConsoleComponent>();

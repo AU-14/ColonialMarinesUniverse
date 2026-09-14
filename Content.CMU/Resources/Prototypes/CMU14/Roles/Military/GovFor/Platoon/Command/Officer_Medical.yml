@@ -1,6 +1,5 @@
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobOfficerMedicalBaseAbstract
@@ -22,7 +21,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   abstract: true
   parent: AU14JobOfficerMedicalBaseAbstract
   id: AU14JobOfficerMedicalBase
@@ -89,7 +87,6 @@
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedical
   hidden: false
@@ -98,7 +95,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMedicalBase
   id: AU14JobOPFOROfficerMedical
   roundSide: Opfor
@@ -183,7 +179,6 @@
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalCMBCIU
   roundForce: CMBCIU
@@ -194,7 +189,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalRMC
   roundForce: RMC
@@ -202,7 +196,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalUPP
   roundForce: UPP
@@ -218,7 +211,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 115
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalWYPMC
   roundForce: WYPMC

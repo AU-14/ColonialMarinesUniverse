@@ -130,7 +130,8 @@ public sealed partial class ClfSpawnSystem : EntitySystem
                     civilianSpawnLocation.Value,
                     args.Job,
                     args.HumanoidCharacterProfile,
-                    args.Station);
+                    args.Station,
+                    playerUserId: args.PlayerUserId);
                 SpawnJobEquipment(jobId, args.SpawnResult.Value);
                 Log.Info($"CLF Spawn System: Spawned guerilla {jobId} at colony civilian spawn point");
 
@@ -148,7 +149,8 @@ public sealed partial class ClfSpawnSystem : EntitySystem
             _chosenSafehouseLocation.Value,
             args.Job,
             args.HumanoidCharacterProfile,
-            args.Station);
+            args.Station,
+            playerUserId: args.PlayerUserId);
         SpawnJobEquipment(jobId, args.SpawnResult.Value);
         Log.Info($"CLF Spawn System: Spawned {(isCommand ? "command" : "guerilla")} {jobId} at safehouse");
     }

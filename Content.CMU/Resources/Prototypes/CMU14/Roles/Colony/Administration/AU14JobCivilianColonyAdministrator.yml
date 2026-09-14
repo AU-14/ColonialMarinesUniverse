@@ -1,6 +1,5 @@
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 120
   parent: CMJobBase
   id: AU14JobCivilianColonyAdministrator
   roundSide: Civilian

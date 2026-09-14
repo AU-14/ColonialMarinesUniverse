@@ -1,6 +1,5 @@
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobNurseBaseAbstract
@@ -17,7 +16,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 105
   abstract: true
   parent: AU14JobNurseBaseAbstract
   id: AU14JobNurseBase
@@ -110,7 +108,6 @@
 
 - type: job
   cmuEconomyEnabled: true
-  cmuSalaryPercent: 105
   parent: AU14JobNurseBase
   id: AU14JobGOVFORNurse
   hidden: false
