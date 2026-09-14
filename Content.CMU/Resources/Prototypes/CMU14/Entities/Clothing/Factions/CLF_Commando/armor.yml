@@ -1,0 +1,9 @@
+- type: entity
+  parent: RMCArmorPMCRiot
+  id: CMU14CLFCommandoArmor
+  name: UA-M1 repainted body armor
+  description: A stolen set of UA-M1 body armor that is typically used by UA security forces. This set of armor has been repainted with dark brown colours and has had additional kneepads and armpads added to it. It is used by the more professional forces of the Colonial Liberation Front
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/CLF_Commandos/clfspecarmor.rsi
+

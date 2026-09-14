@@ -1,0 +1,23 @@
+- type: partySpawn
+  id: CLFCommandoSpawnIntel
+  leadersToSpawn:
+    AU14IntelThirdPartyCLFCommandoLeaderReinforcements: 1
+  gruntsToSpawn:
+    AU14IntelThirdPartyCLFCommandoReinforcements: 3
+    AU14IntelThirdPartyCLFCommandoMedicReinforcements: 1
+    CMUIntelThirdPartyCLFCommandoEngineerReinforcements: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CLFCellCommandosIntel
+  announceAsSurvivors: true
+  partyspawn: CLFCommandoSpawnIntel
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  weight: 1
+  minplayers: 0
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false
+
