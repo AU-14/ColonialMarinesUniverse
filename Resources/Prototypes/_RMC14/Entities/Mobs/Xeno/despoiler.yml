@@ -84,7 +84,7 @@
   - type: XenoAcid
   - type: CMArmor
     xenoArmor: 35
-    explosionArmor: 40
+    explosionArmor: 20
   - type: XenoDevour
   - type: XenoTailStab
     toggle: false
@@ -122,7 +122,7 @@
     pointsPerSlash: 200
     decayDelay: 10
     decayPerSecond: 120
-    bonusBurnPerStack: 20
+    bonusBurnPerStack: 15
   - type: XenoDespoilerSlashOnHit
     enhanceStacksThreshold: 3
   - type: Tackle
