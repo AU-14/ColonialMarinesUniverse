@@ -152773,7 +152773,7 @@ entities:
     - type: Transform
       pos: -53.58691,-128.51099
       parent: 1
-- proto: RMCCanisterBlack
+- proto: CMUCanisterCarbonDioxide
   entities:
   - uid: 8575
     components:
@@ -152785,7 +152785,7 @@ entities:
     - type: Transform
       pos: -79.5,-65.5
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 13116
     components:
@@ -152812,7 +152812,7 @@ entities:
     - type: Transform
       pos: -59.5,-24.5
       parent: 1
-- proto: RMCCanisterOrange
+- proto: CMUCanisterPlasma
   entities:
   - uid: 8351
     components:

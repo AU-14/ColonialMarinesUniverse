@@ -1,3 +1,5 @@
+# TODO: create an empty canister with no storage based on: StorageCanister named: CMUCanisterEmpty, same sprite as the AirCanister
+
 - type: entity
   parent: AirCanister
   id: CMUCanisterAir
@@ -8,10 +10,22 @@
     - state: grey # TODO: verify colors
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
   parent: OxygenCanister
@@ -20,13 +34,25 @@
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     layers:
-    - state: can-o0
+    - state: blue
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
   parent: NitrogenCanister
@@ -38,10 +64,22 @@
     - state: red
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
   parent: PlasmaCanister
@@ -53,10 +91,22 @@
     - state: orange
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
   parent: CarbonDioxideCanister
@@ -68,10 +118,22 @@
     - state: black
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
   parent: NitrousOxideCanister
@@ -83,10 +145,22 @@
     - state: redws
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
   parent: PlasmaCanister
@@ -100,10 +174,22 @@
     - state: yellow
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
   - type: GasCanister
     air:
       volume: 1500

@@ -62,9 +62,9 @@
       - cost: 400
         crate: PortableScrubber
       - cost: 300
-        crate: SpaceHeater
+        crate: RMCSpaceHeater
       - cost: 150
-        crate: StorageCanister
+        crate: CMUCanisterEmpty
       - cost: 200
         crate: CMUCanisterAir
       - cost: 200

@@ -2070,7 +2070,7 @@ entities:
     - type: Transform
       pos: 7.6352415,2.632206
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 487
     components:

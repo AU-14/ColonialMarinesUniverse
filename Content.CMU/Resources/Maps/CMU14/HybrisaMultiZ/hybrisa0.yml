@@ -154335,7 +154335,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -178.5,-180.5
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 14727
     components:

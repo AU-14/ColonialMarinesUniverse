@@ -79136,7 +79136,7 @@ entities:
     - type: Transform
       pos: -7.277093,-36.793148
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 7911
     components:
@@ -79163,7 +79163,7 @@ entities:
     - type: Transform
       pos: 45.5,-14.5
       parent: 1
-- proto: RMCCanisterOrange
+- proto: CMUCanisterPlasma
   entities:
   - uid: 7916
     components:
@@ -79190,7 +79190,7 @@ entities:
     - type: Transform
       pos: -71.121,6.7016225
       parent: 1
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 7921
     components:

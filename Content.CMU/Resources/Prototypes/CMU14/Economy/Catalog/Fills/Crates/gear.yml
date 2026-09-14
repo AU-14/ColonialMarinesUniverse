@@ -202,7 +202,7 @@
       amount: 2
     - id: PortableScrubber
       amount: 1
-    - id: SpaceHeater
+    - id: RMCSpaceHeater
       amount: 1
     - id: CMUCanisterAir
       amount: 2

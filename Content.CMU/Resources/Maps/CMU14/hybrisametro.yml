@@ -130084,7 +130084,7 @@ entities:
     - type: Transform
       pos: -141.47374,-10.45779
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 10197
     components:

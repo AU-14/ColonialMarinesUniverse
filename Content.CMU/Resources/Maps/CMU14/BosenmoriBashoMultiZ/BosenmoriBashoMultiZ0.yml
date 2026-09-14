@@ -312044,7 +312044,7 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: 88.5,17.5
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 49004
     components:
@@ -312061,7 +312061,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 128.5,112.5
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 51338
     components:

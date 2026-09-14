@@ -165683,7 +165683,7 @@ entities:
       litAt: 1430.7985692
       lit: True
     - type: AlwaysHot
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 14575
     components:

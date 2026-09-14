@@ -16848,14 +16848,14 @@ entities:
     - type: Transform
       pos: 90.5,-78.5
       parent: 1
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 2253
     components:
     - type: Transform
       pos: 109.5,-56.5
       parent: 1
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 2254
     components:
