@@ -2,17 +2,23 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server.GameTicking;
+using Content.Server.GameTicking.Presets;
 using Content.Shared._RMC14.Chemistry.Effects.Positive;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.CMU14.Nutrition;
 using Content.Shared.EntityEffects;
+using Content.Shared.GameTicking;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Prototypes;
+using Content.Shared.Preferences;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Nutrition;
@@ -196,6 +202,92 @@ public sealed class CMUSatiationMigrationTest
     }
 
     [Test]
+    public async Task DistressSignalNutritionHalvesOnlyMarkedPlayerDecay()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var normalHuman = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var distressHuman = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var normalSatiation = entities.GetComponent<SatiationComponent>(normalHuman);
+                var distressSatiation = entities.GetComponent<SatiationComponent>(distressHuman);
+
+                entities.EnsureComponent<DistressSignalNutritionComponent>(distressHuman);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(normalSatiation.Satiations[Hunger].ActualChangeRate,
+                        Is.EqualTo(-0.1f).Within(0.0001));
+                    Assert.That(normalSatiation.Satiations[Thirst].ActualChangeRate,
+                        Is.EqualTo(-0.1f).Within(0.0001));
+                    Assert.That(distressSatiation.Satiations[Hunger].ActualChangeRate,
+                        Is.EqualTo(-0.05f).Within(0.0001));
+                    Assert.That(distressSatiation.Satiations[Thirst].ActualChangeRate,
+                        Is.EqualTo(-0.05f).Within(0.0001));
+                });
+            }
+            finally
+            {
+                entities.DeleteEntity(normalHuman);
+                entities.DeleteEntity(distressHuman);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DistressSignalPresetMarksSpawnedPlayersOnly()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            DummyTicker = false,
+        });
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var ticker = server.System<GameTicker>();
+            var profile = new HumanoidCharacterProfile();
+            var distressHuman = entities.SpawnEntity("CMMobHuman", testMap.GridCoords);
+            var insurgencyHuman = entities.SpawnEntity("CMMobHuman", testMap.GridCoords);
+
+            try
+            {
+                ticker.SetGamePreset(prototypes.Index<GamePresetPrototype>("DistressSignal"));
+                RaisePlayerSpawned(entities, distressHuman, pair.Player!, testMap.MapUid, profile);
+
+                ticker.SetGamePreset(prototypes.Index<GamePresetPrototype>("Insurgency"));
+                RaisePlayerSpawned(entities, insurgencyHuman, pair.Player!, testMap.MapUid, profile);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entities.HasComponent<DistressSignalNutritionComponent>(distressHuman), Is.True);
+                    Assert.That(entities.HasComponent<DistressSignalNutritionComponent>(insurgencyHuman), Is.False);
+                });
+            }
+            finally
+            {
+                ticker.SetGamePreset((GamePresetPrototype?) null);
+                entities.DeleteEntity(distressHuman);
+                entities.DeleteEntity(insurgencyHuman);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task HemogenicKeepsInclusiveTwoHundredGateBelowRmcMaximum()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -260,6 +352,25 @@ public sealed class CMUSatiationMigrationTest
         Assert.That(component.Satiations.Keys, Is.EquivalentTo(expected.Select(entry => entry.Type)));
         foreach (var (type, prototype) in expected)
             Assert.That(component.Satiations[type].Prototype.Id, Is.EqualTo(prototype), type.Id);
+    }
+
+    private static void RaisePlayerSpawned(
+        IEntityManager entities,
+        EntityUid mob,
+        ICommonSession player,
+        EntityUid station,
+        HumanoidCharacterProfile profile)
+    {
+        var spawned = new PlayerSpawnCompleteEvent(
+            mob,
+            player,
+            jobId: null,
+            lateJoin: false,
+            silent: true,
+            joinOrder: 1,
+            station,
+            profile);
+        entities.EventBus.RaiseLocalEvent(mob, spawned, broadcast: true);
     }
 
     private static void AssertSatiationPrototype(
