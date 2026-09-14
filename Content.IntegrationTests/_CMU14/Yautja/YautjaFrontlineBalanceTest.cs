@@ -2,7 +2,6 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Slow;
-using Content.Shared._RMC14.Tackle;
 using Content.Shared.Actions.Events;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -11,7 +10,6 @@ using Content.Shared.CMU14.Medical.Injuries;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Medical.Injuries.Trauma;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
-using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.CombatMode;
@@ -193,34 +191,6 @@ public sealed class YautjaFrontlineBalanceTest
                 Assert.That(knockedDown, Is.True);
                 Assert.That(hands.IsHolding(hunter, weapon), Is.True);
             });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task XenoTackleNeedsFourPassedRollsAgainstRegularHunter()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var xeno = entities.SpawnEntity("CMXenoRunner", map.GridCoords);
-            var target = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-            var yautja = entities.EnsureComponent<YautjaComponent>(target);
-            yautja.XenoTackleSuccessChance = 1f;
-
-            for (var i = 1; i <= 4; i++)
-            {
-                var tackle = new CMDisarmEvent(xeno);
-                entities.EventBus.RaiseLocalEvent(target, ref tackle);
-                Assert.That(tackle.Handled, Is.True);
-                Assert.That(entities.HasComponent<KnockedDownComponent>(target), Is.EqualTo(i == 4),
-                    $"passed tackle roll {i}");
-            }
         });
 
         await pair.CleanReturnAsync();

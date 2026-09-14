@@ -15,13 +15,13 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
-    xenoTackleSuccessChance: 0.5
-    xenoTackleSuccessesRequired: 4
-    xenoTackleExpireAfter: 4
+    xenoTackleSuccessChance: 0.75
+    xenoTackleSuccessesRequired: 3
+    xenoTackleExpireAfter: 10
   - type: YautjaLimbRegeneration
     requiredSeverAttempts: 2
-    severAttemptWindow: 8
-    regrowDelay: 120
+    severAttemptWindow: 30
+    regrowDelay: 300
   - type: TacticalMapTracked
     trackDead: true
   - type: YautjaMapTracked

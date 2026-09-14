@@ -23,7 +23,7 @@
   - type: RMCArmorSpeedTier
     speedTier: very light
   - type: CMArmor
-    melee: 35
+    melee: 25
     bullet: 40
     bio: 45
     explosionArmor: 40
@@ -38,7 +38,7 @@
   description: Ancient armor made from a strange alloy. It feels cold with an alien weight.
   components:
   - type: CMArmor
-    melee: 35
+    melee: 25
     bullet: 40
     bio: 45
     explosionArmor: 40
@@ -55,7 +55,7 @@
   - type: Clothing
     sprite: CMU14/Yautja/armor_heavy_clan.rsi
   - type: CMArmor
-    melee: 35
+    melee: 25
     bullet: 40
     bio: 50
     explosionArmor: 45
