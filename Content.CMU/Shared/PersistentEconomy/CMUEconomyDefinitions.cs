@@ -41,6 +41,7 @@ public enum CMUEconomyAction : byte
     Refresh,
     Withdraw,
     Deposit,
+    WithdrawEscrow,
     Transfer,
     Stake,
 }
@@ -65,6 +66,7 @@ public sealed class CMUEconomyState : EuiStateBase
     public long Balance;
     public long Stake;
     public long Cap;
+    public long Escrow;
     public long Credited;
     public bool StakeEnabled;
     public bool Atm;
