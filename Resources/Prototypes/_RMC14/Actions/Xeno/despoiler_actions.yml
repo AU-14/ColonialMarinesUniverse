@@ -32,7 +32,7 @@
     fireSound:
       path: /Audio/_RMC14/Xeno/alien_spitacid2.ogg
   - type: XenoActionPlasma
-    cost: 80
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -68,7 +68,7 @@
     pounceSound:
       path: /Audio/_RMC14/Xeno/alien_roar1.ogg
   - type: XenoActionPlasma
-    cost: 80
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -98,7 +98,7 @@
     castSound:
       path: /Audio/_RMC14/Xeno/acid_sizzle3.ogg
   - type: XenoActionPlasma
-    cost: 80
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
