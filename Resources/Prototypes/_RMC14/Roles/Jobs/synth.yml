@@ -118,7 +118,9 @@
     whitelist:
       tags:
       - RMCSynthGrabbable
-
+  - type: Damageable #CMU14
+  damageModifierSet: RMCSynth
+  
 - type: entity
   id: RMCSynthHudComponents
   categories: [ HideSpawnMenu ]
