@@ -268,16 +268,16 @@
         Slash: 15
         Piercing: 15
     - types: # CMU14 modified
-        Blunt: 28.33
-        Slash: 28.33
-        Piercing: 28.34
+        Blunt: 23.33
+        Slash: 23.33
+        Piercing: 23.34
     rangeAtRageLevels: [1.5, 1.5, 1.5, 2.5, 2.5]
     windupReductionAtRageLevels: [0, 0.2, 0.4, 0.6, 1]
-  - type: XenoFling # TODO RMC14 target head
+  - type: XenoFling 
     range: 2
     enragedRange: 1
-    healAmount: 95 # CMU14 modified
-    enragedHealAmount: 125 # CMU14 modified
+    healAmount: 75 
+    enragedHealAmount: 100
     paralyzeTime: 0
     slowTime: 0
     dazeTime: 4
