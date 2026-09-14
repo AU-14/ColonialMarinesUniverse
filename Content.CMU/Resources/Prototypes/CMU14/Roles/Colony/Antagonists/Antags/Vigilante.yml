@@ -27,6 +27,7 @@
     antags:
     - !type:FixedAntagCount
       proto: Vigilante
+      count: 2
 
 - type: entity
   parent: BaseMindRoleAntag

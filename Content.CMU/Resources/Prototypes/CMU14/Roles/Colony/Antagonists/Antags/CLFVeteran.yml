@@ -54,6 +54,7 @@
     antags:
     - !type:FixedAntagCount
       proto: CLFVeteran
+      count: 2
 
 - type: entity
   parent: BaseMindRoleAntag

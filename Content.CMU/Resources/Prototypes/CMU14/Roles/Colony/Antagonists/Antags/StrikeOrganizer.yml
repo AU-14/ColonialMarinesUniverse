@@ -28,6 +28,7 @@
     antags:
     - !type:FixedAntagCount
       proto: StrikeOrganizer
+      count: 2
 
 - type: entity
   parent: BaseMindRoleAntag

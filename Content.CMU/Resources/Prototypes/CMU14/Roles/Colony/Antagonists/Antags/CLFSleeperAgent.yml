@@ -49,6 +49,7 @@
     antags:
     - !type:FixedAntagCount
       proto: CLFSleeperAgent
+      count: 2
 
 - type: entity
   parent: BaseMindRoleAntag

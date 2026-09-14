@@ -28,9 +28,7 @@ public sealed partial class BountyHunterSystem : EntitySystem
     }
 
     private void OnHunterSpawned(EntityUid uid, BountyHunterComponent comp, ComponentStartup args)
-    {
-        comp.NextFax = _timing.CurTime + comp.FaxDelay;
-    }
+        => comp.NextFax = _timing.CurTime + comp.FaxDelay;
 
     public override void Update(float frameTime)
     {

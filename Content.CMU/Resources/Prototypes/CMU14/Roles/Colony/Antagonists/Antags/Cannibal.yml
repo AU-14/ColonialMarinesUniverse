@@ -28,6 +28,7 @@
     antags:
     - !type:FixedAntagCount
       proto: Cannibal
+      count: 2
 
 - type: entity
   parent: BaseMindRoleAntag

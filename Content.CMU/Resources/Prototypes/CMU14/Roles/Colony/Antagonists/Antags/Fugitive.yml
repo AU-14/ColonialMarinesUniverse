@@ -37,6 +37,7 @@
     antags:
     - !type:FixedAntagCount
       proto: Fugitive
+      count: 3
 
 - type: entity
   parent: BaseMindRoleAntag

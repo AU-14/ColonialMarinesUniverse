@@ -33,6 +33,7 @@
     antags:
     - !type:FixedAntagCount
       proto: SerialKiller
+      count: 2
 
 - type: entity
   parent: BaseMindRoleAntag

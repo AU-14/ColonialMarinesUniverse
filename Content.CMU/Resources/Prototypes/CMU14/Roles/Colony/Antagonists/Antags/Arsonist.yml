@@ -29,6 +29,7 @@
     antags:
     - !type:FixedAntagCount
       proto: Arsonist
+      count: 3
 
 - type: entity
   parent: BaseMindRoleAntag
