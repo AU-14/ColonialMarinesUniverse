@@ -1,5 +1,6 @@
 ## legacy/deprecated - do not use
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   id: AU14JobGeneralWhitelist
   playTimeTracker: AU14JobGeneralWhitelist

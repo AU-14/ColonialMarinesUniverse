@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobAuxTechBaseAbstract
@@ -16,6 +17,7 @@
   - AU14GovforAuxTech
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobAuxTechBaseAbstract
   id: AU14JobAuxTechBase
@@ -108,6 +110,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobAuxTechBase
   id: AU14JobGOVFORAuxTech
   hidden: false
@@ -130,6 +133,7 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobAuxTechBase
   id: AU14JobOPFORAuxTech
   roundSide: Opfor

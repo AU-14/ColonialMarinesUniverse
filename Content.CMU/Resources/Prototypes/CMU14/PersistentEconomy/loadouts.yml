@@ -1,0 +1,19 @@
+- type: cmuLoadoutItem
+  id: CMUPersonalBallisticGoggles
+  entity: AU14GogglesM1A1PolarizedBallistic
+  price: 40
+  purchaseMode: Deployment
+  jobs:
+  - AU14JobGOVFORSquadRifleman
+  - AU14JobCivilianColonyAdministrator
+  category: Eyes
+
+- type: cmuLoadoutItem
+  id: CMUPersonalBlackScarf
+  entity: RMCMaskScarfBlack
+  price: 500
+  purchaseMode: Permanent
+  jobs:
+  - AU14JobGOVFORSquadRifleman
+  - AU14JobCivilianColonyAdministrator
+  category: Mask

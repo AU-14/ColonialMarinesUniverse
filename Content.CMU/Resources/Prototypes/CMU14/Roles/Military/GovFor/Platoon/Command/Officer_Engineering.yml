@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobOfficerEngiBaseAbstract
@@ -18,6 +19,7 @@
   - aulegacygroupcommand
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobOfficerEngiBaseAbstract
   id: AU14JobOfficerEngiBase
@@ -80,6 +82,7 @@
 
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerEngiBase
   id: AU14JobGOVFOROfficerEngi
   hidden: false
@@ -87,6 +90,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerEngiBase
   id: AU14JobOPFOROfficerEngi
   roundSide: Opfor
@@ -185,6 +189,7 @@
 
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerEngiBase
   id: AU14JobGOVFOROfficerEngiUPP
   roundForce: UPP
@@ -199,6 +204,7 @@
     UPP_SeniorLieutenant: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerEngiBase
   id: AU14JobGOVFOROfficerEngiWYPMC
   roundForce: WYPMC

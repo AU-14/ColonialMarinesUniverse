@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   id: CMUJobColonyRiotControlTeamLeader
   name: cmu-colony-name-riot-control-team-leader

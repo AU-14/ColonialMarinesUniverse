@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobNurseBaseAbstract
@@ -14,6 +15,7 @@
   - AU14GovforSquad
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobNurseBaseAbstract
   id: AU14JobNurseBase
@@ -105,6 +107,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobNurseBase
   id: AU14JobGOVFORNurse
   hidden: false

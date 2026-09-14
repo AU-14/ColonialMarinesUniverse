@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   id: AU14JobCivilianAmbassadorCCA
   roundSide: Civilian
@@ -93,6 +94,7 @@
 # ├──[ CLF ]─────────────────────────────────────────────────────────┤
 
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   id: AU14JobCivilianAmbassadorICSC
   roundSide: Civilian
@@ -187,6 +189,7 @@
   - HeadwearCLFAU14
 
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   id: AU14JobCivilianAmbassadorTWE
   roundSide: Civilian
@@ -279,6 +282,7 @@
   - HeadwearCLFAU14
 
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   id: AU14JobCivilianAmbassadorUA
   roundSide: Civilian
@@ -372,6 +376,7 @@
   - HeadwearCLFAU14
 
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   id: AU14JobCivilianAmbassadorUPP
   roundSide: Civilian

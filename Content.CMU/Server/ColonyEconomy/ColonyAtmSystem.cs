@@ -17,6 +17,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private Content.Server.CMU14.PersistentEconomy.CMUPersistentEconomySystem _economy = default!;
+    [Dependency] private Robust.Server.Player.IPlayerManager _players = default!;
 
     public override void Initialize()
     {
@@ -25,6 +27,15 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         SubscribeLocalEvent<ColonyAtmComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<ColonyAtmComponent, BoundUIClosedEvent>(OnUiClosed);
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmWithdrawBuiMsg>(OnWithdraw);
+        SubscribeLocalEvent<ColonyAtmComponent, ActivateInWorldEvent>(OnActivate);
+    }
+
+    private void OnActivate(EntityUid uid, ColonyAtmComponent comp, ActivateInWorldEvent args)
+    {
+        if (!_economy.Enabled || !_players.TryGetSessionByEntity(args.User, out var player))
+            return;
+        args.Handled = true;
+        _economy.Open(player, uid);
     }
 
     /// <summary>
@@ -34,6 +45,13 @@ public sealed partial class ColonyAtmSystem : EntitySystem
     {
         if (args.Handled)
             return;
+
+        if (_economy.Enabled && _players.TryGetSessionByEntity(args.User, out var player))
+        {
+            args.Handled = true;
+            _economy.Open(player, uid);
+            return;
+        }
 
         if (!TryComp<IdCardComponent>(args.Used, out _))
             return;
@@ -68,6 +86,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
     private void OnWithdraw(EntityUid uid, ColonyAtmComponent comp, ColonyAtmWithdrawBuiMsg msg)
     {
+        if (_economy.Enabled)
+            return;
         if (comp.SwipedCard == null || !TryComp<IdCardComponent>(comp.SwipedCard.Value, out var idCard))
             return;
 
@@ -94,4 +114,3 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         _ui.SetUiState(uid, ColonyAtmUi.Key, state);
     }
 }
-

@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   abstract: true
   id: AU14JobWYGuardBase
@@ -8,6 +9,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobWYGuardBase
   id: AU14JobWYGuard
   roundSide: Civilian

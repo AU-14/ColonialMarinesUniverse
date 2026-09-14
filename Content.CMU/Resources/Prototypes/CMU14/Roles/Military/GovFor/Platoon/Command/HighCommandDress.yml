@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobMilitaryBase
   id: CMUJobGOVFORAdjutantDress
   roundRole: AdjutantDress
@@ -77,6 +78,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobMilitaryBase
   id: CMUJobGOVFORBrigadierGeneral
   roundRole: BrigadierGeneral
@@ -157,6 +159,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobMilitaryBase
   id: CMUJobGOVFORVipEscort
   roundRole: VipEscort

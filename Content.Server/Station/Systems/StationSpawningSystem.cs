@@ -36,6 +36,7 @@ using Content.Shared.Traits;
 using JetBrains.Annotations;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
+using Robust.Shared.Network; // CMU14
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -146,12 +147,18 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     /// <remarks>
     /// This only spawns the character, and does none of the mind-related setup you'd need for it to be playable.
     /// </remarks>
-    public EntityUid? SpawnPlayerCharacterOnStation(EntityUid? station, ProtoId<JobPrototype>? job, HumanoidCharacterProfile? profile, StationSpawningComponent? stationSpawning = null)
+    // CMU14: playerUserId carries the authoritative account through pre-mind loadout spawning.
+    public EntityUid? SpawnPlayerCharacterOnStation(
+        EntityUid? station,
+        ProtoId<JobPrototype>? job,
+        HumanoidCharacterProfile? profile,
+        StationSpawningComponent? stationSpawning = null,
+        NetUserId? playerUserId = null)
     {
         if (station != null && !Resolve(station.Value, ref stationSpawning))
             throw new ArgumentException("Tried to use a non-station entity as a station!", nameof(station));
 
-        var ev = new PlayerSpawningEvent(job, profile, station);
+        var ev = new PlayerSpawningEvent(job, profile, station, playerUserId);
 
         RaiseLocalEvent(ev);
         DebugTools.Assert(ev.SpawnResult is { Valid: true } or null);
@@ -172,12 +179,14 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     /// <param name="station">The station this player is being spawned on.</param>
     /// <param name="entity">The entity to use, if one already exists.</param>
     /// <returns>The spawned entity</returns>
+    // CMU14: playerUserId carries the authoritative account through pre-mind loadout spawning.
     public EntityUid SpawnPlayerMob(
         EntityCoordinates coordinates,
         ProtoId<JobPrototype>? job,
         HumanoidCharacterProfile? profile,
         EntityUid? station,
-        EntityUid? entity = null)
+        EntityUid? entity = null,
+        NetUserId? playerUserId = null)
     {
         // --- Platoon job override logic start ---
         using var operation = _performance.MeasureOperation("player-spawn", job?.Id); // CMU14: retain slow spawn attribution.
@@ -308,7 +317,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         }
 
         if (loadout != null && loadoutProto != null)
-            EquipRoleLoadout(entity.Value, loadout, loadoutProto, applyEffects: false);
+            EquipRoleLoadout(entity.Value, loadout, loadoutProto, applyEffects: false, playerUserId, originalJob);
 
         if (prototype?.StartingGear != null)
         {
@@ -953,11 +962,23 @@ public sealed partial class PlayerSpawningEvent : EntityEventArgs
     /// The target station, if any.
     /// </summary>
     public readonly EntityUid? Station;
+    // CMU14 Begin
+    /// <summary>
+    /// The account that owns this spawn, when it is a real player spawn.
+    /// </summary>
+    public readonly NetUserId? PlayerUserId;
+    // CMU14 End
 
-    public PlayerSpawningEvent(ProtoId<JobPrototype>? job, HumanoidCharacterProfile? humanoidCharacterProfile, EntityUid? station)
+    // CMU14: optional playerUserId identifies authenticated player spawns.
+    public PlayerSpawningEvent(
+        ProtoId<JobPrototype>? job,
+        HumanoidCharacterProfile? humanoidCharacterProfile,
+        EntityUid? station,
+        NetUserId? playerUserId = null)
     {
         Job = job;
         HumanoidCharacterProfile = humanoidCharacterProfile;
         Station = station;
+        PlayerUserId = playerUserId; // CMU14
     }
 }

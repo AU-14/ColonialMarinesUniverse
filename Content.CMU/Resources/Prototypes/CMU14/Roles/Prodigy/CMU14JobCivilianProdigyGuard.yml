@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   abstract: true
   id: CMU14JobCivilianProdigyGuardBase
@@ -8,6 +9,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: CMU14JobCivilianProdigyGuardBase
   id: CMU14JobCivilianProdigyGuard
   roundSide: Civilian

@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobOfficerMedicalBaseAbstract
@@ -19,6 +20,7 @@
   - aulegacygroupcommand
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobOfficerMedicalBaseAbstract
   id: AU14JobOfficerMedicalBase
@@ -84,6 +86,7 @@
 
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedical
   hidden: false
@@ -91,6 +94,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMedicalBase
   id: AU14JobOPFOROfficerMedical
   roundSide: Opfor
@@ -174,6 +178,7 @@
 
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalCMBCIU
   roundForce: CMBCIU
@@ -183,12 +188,14 @@
     AU14RankCMBMarshal: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalRMC
   roundForce: RMC
   spawnMenuRoleName: Chief Medical Officer (TWE RMC)
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalUPP
   roundForce: UPP
@@ -203,6 +210,7 @@
     UPP_SeniorLieutenant: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedicalWYPMC
   roundForce: WYPMC

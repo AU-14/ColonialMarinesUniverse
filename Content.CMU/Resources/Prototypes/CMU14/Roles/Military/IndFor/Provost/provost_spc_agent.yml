@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMUJobMilitaryBaseProvost
   id: CMUJobINDFORProvostSpcAgent
   name: cmu-job-name-corp-provost-spc-agent
