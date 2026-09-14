@@ -5,7 +5,7 @@
   - type: RMCPlanetMapPrototype
     votename: "Bosenmori Basho"
     mapId: BosenmoriBasho
-    inRotation: true
+    inRotation: false
     lorePrimer: AU14PrimerPlanetBosenmoriBasho
     allegiance: UA
     camouflage: Desert
