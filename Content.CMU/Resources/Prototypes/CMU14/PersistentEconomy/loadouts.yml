@@ -1,11 +1,10 @@
 - type: cmuLoadoutItem
   id: CMUPersonalBallisticGoggles
-  entity: RMCGogglesBallistic
+  entity: AU14GogglesM1A1PolarizedBallistic
   price: 40
   purchaseMode: Deployment
   jobs:
   - AU14JobGOVFORSquadRifleman
-  - AU14JobOPFORSquadRifleman
   - AU14JobCivilianColonyAdministrator
   category: Eyes
 
@@ -16,6 +15,5 @@
   purchaseMode: Permanent
   jobs:
   - AU14JobGOVFORSquadRifleman
-  - AU14JobOPFORSquadRifleman
   - AU14JobCivilianColonyAdministrator
   category: Mask

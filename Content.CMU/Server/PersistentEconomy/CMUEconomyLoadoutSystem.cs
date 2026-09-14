@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Clothing;
 using Content.Shared.CMU14.PersistentEconomy;
 using Content.Shared.Preferences.Loadouts;
+using Content.Shared.Roles;
 using Content.Shared.Station;
 using Robust.Shared.Prototypes;
 
@@ -14,9 +15,9 @@ namespace Content.Server.CMU14.PersistentEconomy;
 /// </summary>
 public sealed class CMUEconomyLoadoutSystem : EntitySystem
 {
-    [Dependency] private readonly CMUPersistentEconomySystem _economy = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly LoadoutSystem _loadouts = default!;
+    [Dependency] private CMUPersistentEconomySystem _economy = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private LoadoutSystem _loadouts = default!;
 
     public override void Initialize()
     {
@@ -27,9 +28,14 @@ public sealed class CMUEconomyLoadoutSystem : EntitySystem
     private void OnBeforeRoleLoadoutEquip(ref BeforeRoleLoadoutEquipEvent args)
     {
         if (!_economy.Enabled || _economy.RoundId <= 0 ||
-            args.PlayerUserId is not { } playerUserId || args.Job is not { } jobId ||
-            !_prototypes.TryIndex<JobPrototype>(jobId, out var job) || !job.CmuEconomyEnabled ||
-            !_prototypes.TryIndex<LoadoutPrototype>(args.Loadout, out var loadout))
+            args.PlayerUserId == null || args.Job == null)
+            return;
+
+        var playerUserId = args.PlayerUserId.Value;
+        var jobId = args.Job.Value;
+        var loadoutId = args.Loadout;
+        if (!_prototypes.TryIndex<JobPrototype>(jobId, out var job) || !job.CmuEconomyEnabled ||
+            !_prototypes.TryIndex<LoadoutPrototype>(loadoutId, out var loadout))
             return;
 
         var entity = _loadouts.GetFirstOrNull(loadout);
@@ -56,13 +62,13 @@ public sealed class CMUEconomyLoadoutSystem : EntitySystem
         if (priced.PurchaseMode == CMUPurchaseMode.Permanent && account.Purchases.ContainsKey(priced.ID))
             return;
 
-        var key = $"loadout:{_economy.RoundId}:{user}:{args.Loadout}";
+        var key = $"loadout:{_economy.RoundId}:{user}:{loadoutId}";
         var success = _economy.Store.Mutate(user, _economy.RoundId, key, op =>
         {
             if (priced.PurchaseMode == CMUPurchaseMode.Permanent)
                 return op.Buy(priced.ID, priced.Price);
 
-            return op.Change(-priced.Price, "LoadoutDeployment", $"Loadout preset {args.Loadout}");
+            return op.Change(-priced.Price, "LoadoutDeployment", $"Loadout preset {loadoutId}");
         });
 
         if (!success)
