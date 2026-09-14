@@ -1,6 +1,5 @@
 using System.IO;
 using System.Linq;
-using Content.Server.Afk;
 using Content.Server.EUI;
 using Content.Server.GameTicking;
 using Content.Server.Preferences.Managers;
@@ -25,7 +24,6 @@ using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.ContentPack;
-using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -39,7 +37,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IPlayerManager _players = default!;
-    [Dependency] private IAfkManager _afk = default!;
     [Dependency] private IServerPreferencesManager _preferences = default!;
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private SharedMindSystem _mind = default!;
@@ -55,7 +52,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
 
     private CMUEconomyStore? _store;
     private readonly Dictionary<NetUserId, EntityUid> _deployed = new();
-    private readonly Dictionary<NetUserId, float> _activeSeconds = new();
     private readonly HashSet<NetUserId> _pendingAttachments = new();
     private readonly Dictionary<NetUserId, CMUEconomyEui> _open = new();
     public bool Enabled => _config.GetCVar(CMUEconomyCVars.Enabled);
@@ -82,7 +78,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
     private void OnCleanup(RoundRestartCleanupEvent args)
     {
         _deployed.Clear();
-        _activeSeconds.Clear();
         _pendingAttachments.Clear();
         foreach (var eui in _open.Values.ToArray())
             eui.Close();
@@ -163,7 +158,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         }
         catch (Exception e)
         {
-            // Payment is already committed: retain the item in the world if inventory insertion fails.
             Log.Error($"Economy item {item} could not be placed in {body}'s inventory: {e}");
         }
     }
@@ -192,46 +186,8 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         base.Update(frameTime);
         if (!Enabled || _ticker.RunLevel != GameRunLevel.InRound)
             return;
+
         ProcessAttachments();
-        foreach (var (player, _) in _deployed)
-        {
-            if (!_players.TryGetSessionById(player, out var session) || session.Status != SessionStatus.InGame ||
-                _afk.IsAfk(session) || Body(player) is not { } body || session.AttachedEntity != body || !Alive(body))
-                continue;
-            var seconds = _activeSeconds.GetValueOrDefault(player) + frameTime;
-            _activeSeconds[player] = seconds;
-            if (seconds < 60)
-                continue;
-            var state = Store.ReadRound(player.UserId, RoundId);
-            if (!_prototypes.TryIndex<JobPrototype>(state.Job, out var job) || !job.CmuEconomyEnabled)
-                continue;
-            var minute = state.ActiveMinutes + 1;
-            var payUnits = Math.Clamp(_config.GetCVar(CMUEconomyCVars.Salary), 0, 1000) *
-                           Math.Clamp(job.CmuSalaryPercent, 0, 200) + state.PayrollRemainder;
-            var salary = payUnits / 100;
-            try
-            {
-                if (Store.Mutate(player.UserId, RoundId, $"salary:{RoundId}:{player}:{minute}", op =>
-                    {
-                        if (op.Round.Settled || !op.Round.DeploymentIssued || op.Round.ActiveMinutes != minute - 1)
-                            return false;
-                        if (salary > 0 && !op.Change(salary, "Payroll", "Active service minute"))
-                            return false;
-                        op.Round.ActiveMinutes = minute;
-                        op.Round.PayrollRemainder = payUnits % 100;
-                        return true;
-                    }))
-                {
-                    _activeSeconds[player] -= 60;
-                    Refresh(player);
-                }
-            }
-            catch (Exception e)
-            {
-                _activeSeconds[player] = 0;
-                Log.Error($"Economy payroll failed for {player}: {e}");
-            }
-        }
     }
 
     private EntityUid? Body(NetUserId player)
