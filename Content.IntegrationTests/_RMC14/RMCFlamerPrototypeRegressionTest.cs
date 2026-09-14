@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Content.Shared._RMC14.Wieldable.Components;
 using Content.Shared._RMC14.Xenonids.Acid;
-using Content.Shared.Timing;
+//using Content.Shared.Timing;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests._RMC14;
@@ -19,10 +19,10 @@ public sealed class RMCFlamerPrototypeRegressionTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
-        await server.WaitAssertion(() =>
-        {
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var factory = server.EntMan.ComponentFactory;
+       await server.WaitAssertion(() =>
+       {
+           var prototypes = server.ResolveDependency<IPrototypeManager>();
+           var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(prototype, out var flamer), Is.True);
             Assert.That(flamer!.TryComp<UseDelayComponent>(out var useDelay, factory), Is.True);
@@ -34,7 +34,7 @@ public sealed class RMCFlamerPrototypeRegressionTest
             });
         });
 
-        await pair.CleanReturnAsync();
+       await pair.CleanReturnAsync();
     }
 
     [TestCaseSource(nameof(MeltableWeaponPrototypes))]
