@@ -66,7 +66,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
-  spawnMenuRoleName: WY Liaison (CMU)
+  spawnMenuRoleName: au14-spawn-role-name-wy-liaison
   accessGroups:
   - Colonist
   - auadmin

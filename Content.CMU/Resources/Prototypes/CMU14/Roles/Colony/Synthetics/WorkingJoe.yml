@@ -110,7 +110,7 @@
     - CMUProstheticLeftLeg
     - CMUProstheticRightLeg
   icon: "AU14JobIconColonyWorkingJoe"
-  spawnMenuRoleName: Working Joe (Colony)
+  spawnMenuRoleName: au14-spawn-role-name-working-joe-colony
   supervisors: au14-job-supervisors-workingjoe-colony
   usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeColony

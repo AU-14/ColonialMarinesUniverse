@@ -5,7 +5,7 @@
   name: au14-job-name-vehiclecommander
   description: au14-job-description-vehiclecommander
   icon: "AU14JobIconGovTankCommander"
-  spawnMenuRoleName: Vehicle Commander (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-vehicle-commander
   startingGear: AU14GearGOVFORVehicleCommander
   dummyStartingGear: AU14GearGOVFORVehicleCommanderDummy
   playTimeTracker: AU14JobGOVFORVehicleCommander

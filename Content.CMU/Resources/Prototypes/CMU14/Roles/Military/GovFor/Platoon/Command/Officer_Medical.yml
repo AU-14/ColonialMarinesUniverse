@@ -5,7 +5,7 @@
   name: au14-job-name-govformo
   description: au14-job-description-govformo
   icon: "AU14JobIconGovMO"
-  spawnMenuRoleName: Chief Medical Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-chief-medical-officer
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFOROfficerMedical
   dummyStartingGear: AU14GearGOVFOROfficerMedicalDummy

@@ -5,7 +5,7 @@
   name: au14-job-name-govforadjutant
   description: au14-job-description-govforadjutant
   icon: "AU14JobIconGovAdjutant"
-  spawnMenuRoleName: Executive Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-executive-officer
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFORAdjutant
   dummyStartingGear: AU14GearGOVFORAdjutantDummy
