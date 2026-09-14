@@ -196,7 +196,13 @@ public abstract partial class SatiationSystem : EntitySystem
             currentChangeMod = 1f;
         }
 
-        satiation.ActualChangeRate = proto.BaseChangeRate * currentChangeMod;
+        // CMU14 Distress Signal Nutrition Begin: allow mode-specific per-entity satiation pacing
+        var changeRateEvent = new SatiationChangeRateEvent(
+            satiation.SatiationType,
+            proto.BaseChangeRate * currentChangeMod);
+        RaiseLocalEvent(entity, ref changeRateEvent);
+        satiation.ActualChangeRate = changeRateEvent.ChangeRate;
+        // CMU14 End
         satiation.NextChangeRateModUpdateTime = EvolvesToBoundAt(
             satiation,
             proto,
@@ -251,3 +257,9 @@ public abstract partial class SatiationSystem : EntitySystem
 /// <remarks> This event may be raised even when no change has occurred.</remarks>
 [ByRefEvent]
 public readonly record struct SatiationUpdateEvent(ProtoId<SatiationTypePrototype> Type);
+
+/// <summary>
+/// Raised on an entity when its satiation change rate is recalculated, allowing per-entity modifiers.
+/// </summary>
+[ByRefEvent]
+public record struct SatiationChangeRateEvent(ProtoId<SatiationTypePrototype> Type, float ChangeRate); // CMU14 event
