@@ -105,7 +105,9 @@
     - ActionXenoProduceChemical
     - ActionXenoRemoveChemical
     - ActionXenoDevolve
-    - ActionXenoRush
+    - ActionXenoToxicSpit
+    - ActionXenoToxicSlash
+    - ActionXenoLeap
   - type: XenoStrain
     name: rmc-xeno-alchemist-name
     description: rmc-xeno-alchemist-description
