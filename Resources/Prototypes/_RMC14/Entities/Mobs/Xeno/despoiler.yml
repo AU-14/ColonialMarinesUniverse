@@ -83,7 +83,7 @@
     plasmaRegenOnWeeds: 4
   - type: XenoAcid
   - type: CMArmor
-    xenoArmor: 30
+    xenoArmor: 35
     explosionArmor: 20
   - type: XenoDevour
   - type: XenoTailStab
