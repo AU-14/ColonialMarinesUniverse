@@ -1,5 +1,5 @@
-cmu-economy-title = Bank & personal loadout
-cmu-economy-command-description = Open your persistent bank and personal loadout.
+cmu-economy-title = Persistent bank
+cmu-economy-command-description = Open your persistent bank account.
 cmu-economy-admin-description = Inspect and adjust persistent economy accounts.
 cmu-economy-balance = Bank: ${ $balance }
 cmu-economy-round = Round stake: ${ $stake } | Limit: ${ $cap } | Deposited: ${ $credited } | Remaining: ${ $remaining }
@@ -21,7 +21,7 @@ cmu-economy-save = Save selected kit and update projection
 cmu-economy-refresh = Refresh
 cmu-economy-history = Transaction history (latest 100)
 cmu-economy-ok = Saved.
-cmu-economy-rejected = Operation rejected. Check funds, selection, settlement limit and ATM access.
+cmu-economy-rejected = Operation rejected. Check funds, settlement limit and ATM access.
 cmu-economy-unavailable = Bank unavailable. Contact an administrator to check the operation.
 cmu-economy-type-payroll = Salary
 cmu-economy-type-roleallowance = Role allowance
