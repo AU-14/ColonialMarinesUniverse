@@ -94,8 +94,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         if (Store.ReadRound(player.UserId, RoundId).DeploymentIssued)
             return;
 
-        // Optional role loadout presets are handled by CMUEconomyLoadoutSystem before
-        // their entities are spawned. At this point only the round stake is issued.
         var spawned = new List<EntityUid>();
         try
         {
@@ -133,8 +131,6 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
 
     private void ProcessAttachments()
     {
-        // Ghost roles, threat forces and third parties assign their job AFTER transferring
-        // the mind. Resolve next tick, once their spawn/equipment handlers have completed.
         foreach (var player in _pendingAttachments.ToArray())
         {
             _pendingAttachments.Remove(player);
@@ -222,25 +218,8 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         return result;
     }
 
-    private bool Deposit(Guid player, EntityUid body, string key, bool settlement)
+    private void ConsumeCash(List<(EntityUid Uid, StackComponent Stack)> cash, long amount)
     {
-        var cash = Cash(body);
-        var round = Store.ReadRound(player, RoundId);
-        var amount = Math.Min(cash.Sum(c => (long) c.Stack.Count), round.SettlementCap - round.CashCredited);
-        if (amount <= 0 && !settlement)
-            return false;
-        var success = Store.Mutate(player, RoundId, key, op =>
-        {
-            if (op.Round.Settled || !op.Round.DeploymentIssued)
-                return false;
-            if (amount > 0 && !op.Deposit(amount, settlement))
-                return false;
-            if (settlement)
-                op.Round.Settled = true;
-            return true;
-        });
-        if (!success)
-            return false;
         foreach (var (uid, stack) in cash)
         {
             var take = (int) Math.Min(amount, stack.Count);
@@ -249,6 +228,37 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
             _stacks.SetCount(uid, stack.Count - take, stack);
             amount -= take;
         }
+    }
+
+    private bool DepositToEscrow(Guid player, EntityUid body, string key)
+    {
+        var cash = Cash(body);
+        var round = Store.ReadRound(player, RoundId);
+        var remaining = Math.Max(0, round.SettlementCap - round.CashCredited - round.RoundEscrow);
+        var amount = Math.Min(cash.Sum(c => (long) c.Stack.Count), remaining);
+        if (amount <= 0)
+            return false;
+
+        var success = Store.Mutate(player, RoundId, key, op => op.DepositToEscrow(amount));
+        if (!success)
+            return false;
+
+        ConsumeCash(cash, amount);
+        return true;
+    }
+
+    private bool Settle(Guid player, EntityUid body, string key)
+    {
+        var cash = Cash(body);
+        var round = Store.ReadRound(player, RoundId);
+        var remainingAfterEscrow = Math.Max(0, round.SettlementCap - round.CashCredited - round.RoundEscrow);
+        var carried = Math.Min(cash.Sum(c => (long) c.Stack.Count), remainingAfterEscrow);
+
+        var success = Store.Mutate(player, RoundId, key, op => op.Settle(carried));
+        if (!success)
+            return false;
+
+        ConsumeCash(cash, carried);
         return true;
     }
 
@@ -262,15 +272,10 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
             {
                 var key = $"settlement:{RoundId}:{player}";
                 if (Body(player) is { } body && Alive(body))
-                    Deposit(player.UserId, body, key, true);
+                    Settle(player.UserId, body, key);
                 else
-                    Store.Mutate(player.UserId, RoundId, key, op =>
-                    {
-                        if (op.Round.Settled)
-                            return false;
-                        op.Round.Settled = true;
-                        return true;
-                    });
+                    Store.Mutate(player.UserId, RoundId, key, op => op.ForfeitRound());
+
                 Refresh(player);
                 if (_players.TryGetSessionById(player, out var session))
                     Open(session);
@@ -280,6 +285,7 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
                 Log.Error($"Economy settlement failed for {player}: {e}");
             }
         }
+
         long lostCash = 0;
         var cashQuery = EntityQueryEnumerator<StackComponent>();
         while (cashQuery.MoveNext(out _, out var cash))
@@ -387,7 +393,7 @@ public sealed partial class CMUPersistentEconomySystem : EntitySystem
         switch (message.Action)
         {
             case CMUEconomyAction.Deposit:
-                return Deposit(user, body, key, false);
+                return DepositToEscrow(user, body, key);
             case CMUEconomyAction.Transfer:
                 if (!Guid.TryParse(message.Target, out var target))
                     return false;
