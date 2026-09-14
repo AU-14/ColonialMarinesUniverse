@@ -121,8 +121,8 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 11.5
-        Slash: 11.5
+        Blunt: 13.5
+        Slash: 13.5
         Piercing: 11.5
   - type: XenoHidden
   - type: RMCActionOrder
@@ -224,7 +224,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 15.66
+        Blunt: 16.66
         Slash: 15.67
         Piercing: 15.67
   - type: XenoTailStab
@@ -234,7 +234,7 @@
         Slash: 15
         Piercing: 15
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.5
+    baseWalkSpeed: 2.7
     baseSprintSpeed: 4.25
   - type: RemoveComponents
     components:
@@ -242,11 +242,13 @@
   - type: XenoConstruction
     buildDelay: 2
     canBuild:
-    - WallXenoResin
-    - WallXenoMembrane
-    - DoorXenoResin
+    - WallXenoResinThick
+    - WallXenoResinReflective
+    - WallXenoMembraneThick
+    - DoorXenoResinThick
     - XenoStickyResin
     - XenoFastResin
+    - HiveAcidPillarXeno
     canOrderConstruction:
     - HiveCoreXenoConstructionNode
     - HiveEggMorpherXenoConstructionNode
