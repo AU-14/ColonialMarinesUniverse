@@ -921,6 +921,17 @@ public sealed partial class HumanoidProfileEditor
 
     private void SetThreatPreference(string gamemode, string threat, bool value)
     {
+        // An empty preference set means "open to all" server-side, so a first No press would be a
+        // no-op. Seed every visible threat so the press does what the buttons show.
+        if (Profile != null && Profile.GetThreatPreferencesForGamemode(gamemode).Count == 0)
+        {
+            foreach (var visible in _prototypeManager.EnumeratePrototypes<ThreatPrototype>()
+                         .Where(visible => IsThreatVisibleForGamemode(visible, gamemode)))
+            {
+                Profile = Profile.WithGamemodeThreatPreference(gamemode, visible.ID, true);
+            }
+        }
+
         Profile = Profile?.WithGamemodeThreatPreference(gamemode, new ProtoId<ThreatPrototype>(threat), value);
         SetDirty();
     }
@@ -929,7 +940,10 @@ public sealed partial class HumanoidProfileEditor
     {
         foreach (var (gamemode, threat, yes, no) in _threatPreferenceButtons)
         {
-            var selected = Profile?.GetThreatPreferencesForGamemode(gamemode).Any(id => id.Id == threat) == true;
+            // An empty preference set behaves as "open to all"; show that instead of a false No.
+            var preferences = Profile?.GetThreatPreferencesForGamemode(gamemode);
+            var selected = preferences is not { Count: > 0 }
+                || preferences.Any(id => id.Id == threat);
             yes.Pressed = selected;
             no.Pressed = !selected;
         }
