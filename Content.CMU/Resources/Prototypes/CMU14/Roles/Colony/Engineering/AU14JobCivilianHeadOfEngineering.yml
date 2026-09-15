@@ -49,6 +49,7 @@
   supervisors: au14-job-supervisors-colonyadministrator
   accessGroups:
   - Colonist
+  - auadmin
   - auengi
   - CMCargoTech
   - auheadsofcolony
