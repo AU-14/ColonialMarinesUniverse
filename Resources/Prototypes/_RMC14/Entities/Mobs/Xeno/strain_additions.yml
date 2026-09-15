@@ -212,9 +212,6 @@
     - ActionXenoRapture
     - ActionXenoReaperRedGas
     - ActionXenoDevolve
-    - ActionXenoLunge
-    - ActionXenoDislocate
-    - ActionXenoFling
     tier: 3
     hudOffset: -0.1,0.1
     unlockAt: 900
@@ -225,43 +222,41 @@
   - type: XenoPlasma
     plasma: 500
     maxPlasma: 500
-    plasmaRegenOnWeeds: 5
+    plasmaRegenOnWeeds: 4
   - type: XenoPheromones
     pheromonesMultiplier: 3
     pheroSuffix: strong
   - type: CMArmor
-    xenoArmor: 25
-    explosionArmor: 25
+    xenoArmor: 0
+    explosionArmor: 20
   - type: RMCXenoDamageVisuals
     prefix: reaper
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 16.66
-        Slash: 15.67
-        Piercing: 15.67
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: XenoTailStab
     tailDamage:
       types:
-        Blunt: 15
-        Slash: 15
-        Piercing: 15
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.7
-    baseSprintSpeed: 4.25
+    baseWalkSpeed: 1.8
+    baseSprintSpeed: 3.25
   - type: RemoveComponents
     components:
     - type: XenoEggRetriever
   - type: XenoConstruction
     buildDelay: 2
     canBuild:
-    - WallXenoResinThick
-    - WallXenoResinReflective
-    - WallXenoMembraneThick
-    - DoorXenoResinThick
+    - WallXenoResin
+    - WallXenoMembrane
+    - DoorXenoResin
     - XenoStickyResin
     - XenoFastResin
-    - HiveAcidPillarXeno
     canOrderConstruction:
     - HiveCoreXenoConstructionNode
     - HiveEggMorpherXenoConstructionNode
