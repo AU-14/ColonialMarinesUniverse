@@ -13,6 +13,12 @@ using Content.Shared.Stunnable;
 using Robust.Server.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
+using Content.Shared.CMU;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Events;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
@@ -34,14 +40,42 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private XenoDespoilerCatalyzeFlagSystem _catalyze = default!;
     [Dependency] private XenoDespoilerAcidSystem _acid = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private EntityQuery<XenoDespoilerLingeringAcidComponent> _lingeringQuery;
+    private EntityQuery<PhysicsComponent> _physicsQuery;
+    private EntityQuery<FixturesComponent> _fixturesQuery;
 
     public override void Initialize()
     {
         _lingeringQuery = GetEntityQuery<XenoDespoilerLingeringAcidComponent>();
+        _physicsQuery = GetEntityQuery<PhysicsComponent>();
+        _fixturesQuery = GetEntityQuery<FixturesComponent>();
 
         SubscribeLocalEvent<XenoDespoilerComponent, XenoDespoilerCausticEmbraceActionEvent>(OnUse);
+        SubscribeLocalEvent<XenoDespoilerCausticEmbraceLeapingComponent, StartCollideEvent>(OnCausticEmbraceCollide);
+    }
+
+    public override void Update(float frameTime)
+    {
+        var time = _timing.CurTime;
+        var query = EntityQueryEnumerator<XenoDespoilerCausticEmbraceLeapingComponent>();
+
+        while (query.MoveNext(out var uid, out var leaping))
+        {
+            if (time < leaping.LeapEndTime)
+                continue;
+
+            if (leaping.Empowered)
+            {
+                StopLeap((uid, leaping));
+            }
+            else
+            {
+                FinishLeap(uid, leaping);
+            }
+        }
     }
 
     private void OnUse(EntityUid uid, XenoDespoilerComponent comp, XenoDespoilerCausticEmbraceActionEvent args)
@@ -65,21 +99,29 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
 
         var direction = approach.Normalized();
 
-        if (_catalyze.IsEmpowered(uid, comp))
-        {
-            if (!CanEmpoweredLunge(uid, action, args, dist, out var victim))
+            if (_catalyze.IsEmpowered(uid, comp))
+            {
+                if (!CanEmpoweredLunge(uid, action, args, dist, out var victim))
+                    return;
+
+                if (!_rmcActions.TryUseAction(args))
+                    return;
+
+                StartLeap(
+                    uid,
+                    args.Action,
+                    action,
+                    direction,
+                    dist,
+                    victim.Value,
+                    empowered: true);
+
+                _catalyze.TakeEmpowerment(uid, comp);
+                args.Handled = true;
                 return;
+            }
 
-            if (!_rmcActions.TryUseAction(args))
-                return;
-
-            ExecuteEmpoweredLunge(uid, action, victim.Value);
-            _catalyze.TakeEmpowerment(uid, comp);
-            args.Handled = true;
-            return;
-        }
-
-        var landing = ownerXform.Coordinates.Offset(direction * action.NormalRange);
+        /*var landing = ownerXform.Coordinates.Offset(direction * action.NormalRange);
         var landingMap = _xform.ToMapCoordinates(landing);
         var landingDistance = (landingMap.Position - ownerMap.Position).Length();
 
@@ -100,7 +142,134 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
 
         SpawnSplashAroundExceptBack(uid, action, landing, direction);
 
+        args.Handled = true;*/
+
+        if (!_physicsQuery.TryGetComponent(uid, out var physics))
+            return;
+
+        if (HasComp<XenoDespoilerCausticEmbraceLeapingComponent>(uid))
+            return;
+
+        if (!_rmcActions.TryUseAction(args))
+            return;
+
+        StartLeap(uid, args.Action, action, direction, dist);
         args.Handled = true;
+    }
+
+    private void StartLeap(
+        EntityUid uid,
+        EntityUid actionEntity,
+        XenoDespoilerCausticEmbraceActionComponent action,
+        Vector2 direction,
+        float distance,
+        EntityUid? victim = null,
+        bool empowered = false)
+    {
+        if (!_physicsQuery.TryGetComponent(uid, out var physics))
+            return;
+
+        distance = Math.Clamp(
+            distance,
+            0.1f,
+            empowered ? action.EmpoweredRange : action.NormalRange);
+
+        var leaping = EnsureComp<XenoDespoilerCausticEmbraceLeapingComponent>(uid);
+
+        leaping.Action = actionEntity;
+        leaping.Victim = victim;
+        leaping.Direction = direction;
+        leaping.Empowered = empowered;
+
+        leaping.Destination = _xform.ToCoordinates(
+            _xform.GetMapCoordinates(uid).Offset(direction * distance));
+
+        var leapDuration = TimeSpan.FromSeconds(distance / action.LeapStrength);
+
+        leaping.LeapEndTime = _timing.CurTime + leapDuration;
+
+        var velocity = direction * (distance / (float)leapDuration.TotalSeconds);
+
+        _physics.ResetDynamics(uid, physics);
+        _physics.SetLinearVelocity(uid, velocity, body: physics);
+        _physics.SetBodyStatus(uid, physics, BodyStatus.InAir);
+
+        if (action.PounceSound is { } sound)
+            _audio.PlayPvs(sound, uid);
+    }
+
+    private void StopLeap(Entity<XenoDespoilerCausticEmbraceLeapingComponent> leaping)
+{
+    if (_physicsQuery.TryGetComponent(leaping, out var physics))
+    {
+        _physics.SetLinearVelocity(leaping, Vector2.Zero, body: physics);
+        _physics.SetBodyStatus(leaping, physics, BodyStatus.OnGround);
+    }
+
+    RemCompDeferred<XenoDespoilerCausticEmbraceLeapingComponent>(leaping);
+}
+
+    private void OnCausticEmbraceCollide(
+        Entity<XenoDespoilerCausticEmbraceLeapingComponent> leaping,
+        ref StartCollideEvent args)
+    {
+        if (leaping.Comp.Empowered)
+        {
+            if (leaping.Comp.Victim != args.OtherEntity)
+                return;
+
+            FinishEmpoweredLeap(leaping.Owner, leaping.Comp);
+            return;
+        }
+
+        if (_hive.FromSameHive(leaping.Owner, args.OtherEntity))
+            return;
+
+        FinishLeap(leaping.Owner, leaping.Comp);
+    }
+
+    private void FinishLeap(EntityUid uid,
+        XenoDespoilerCausticEmbraceLeapingComponent leaping)
+    {
+        var action = leaping.Action;
+
+        if (!TryComp<XenoDespoilerCausticEmbraceActionComponent>(action, out var caustic))
+        {
+            StopLeap((uid, leaping));
+            return;
+        }
+
+        var landing = Transform(uid).Coordinates;
+
+        SpawnSplashAroundExceptBack(
+            uid,
+            caustic,
+            landing,
+            leaping.Direction);
+
+        StopLeap((uid, leaping));
+    }
+
+    private void FinishEmpoweredLeap(
+        EntityUid uid,
+        XenoDespoilerCausticEmbraceLeapingComponent leaping)
+    {
+        if (leaping.Victim is not { } victim ||
+            !XenoDespoilerVictims.IsValidVictim(EntityManager, victim, uid))
+        {
+            StopLeap((uid, leaping));
+            return;
+        }
+
+        if (!TryComp<XenoDespoilerCausticEmbraceActionComponent>(
+                leaping.Action,
+                out var action))
+        {
+            StopLeap((uid, leaping));
+            return;
+        }
+
+        ExecuteEmpoweredLunge(uid, action, victim, leaping);
     }
 
     private static Vector2i SnapDirectionToTile(Vector2 dir)
@@ -190,7 +359,7 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
         return true;
     }
 
-    private void ExecuteEmpoweredLunge(EntityUid uid,
+    /*private void ExecuteEmpoweredLunge(EntityUid uid,
         XenoDespoilerCausticEmbraceActionComponent action,
         EntityUid victim)
     {
@@ -203,6 +372,28 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
         _acid.ApplyAcid(victim, uid, enhance: true);
 
         _stun.TryParalyze(victim, action.EmpoweredWeakenDuration, true);
+    }*/
+
+    private void ExecuteEmpoweredLunge(
+        EntityUid uid,
+        XenoDespoilerCausticEmbraceActionComponent action,
+        EntityUid victim,
+        XenoDespoilerCausticEmbraceLeapingComponent leaping)
+    {
+        _damageable.TryChangeDamage(
+            victim,
+            action.EmpoweredDamage,
+            ignoreResistances: false,
+            origin: uid);
+
+        _acid.ApplyAcid(victim, uid, enhance: true);
+
+        _stun.TryParalyze(
+            victim,
+            action.EmpoweredWeakenDuration,
+            true);
+
+        StopLeap((uid, leaping));
     }
 
     private EntityUid? FindEmpoweredVictim(EntityUid caster, XenoDespoilerCausticEmbraceActionEvent args)
