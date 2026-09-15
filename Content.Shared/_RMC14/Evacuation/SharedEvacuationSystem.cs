@@ -203,8 +203,9 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (!_config.GetCVar(CCVars.GridFill))
-            return;
+        // CMU14: lifeboats and escape pods must always spawn for warships.
+        // if (!_config.GetCVar(CCVars.GridFill))
+        //     return;
 
         if (_map == null)
         {
