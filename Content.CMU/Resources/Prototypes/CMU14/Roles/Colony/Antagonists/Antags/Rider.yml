@@ -1,0 +1,289 @@
+- type: antagSpecifier
+  id: Rider
+  prefRoles: [ RiderRole ]
+  jobBlacklistGroup:
+  - AllGovforCommandStaff
+  - AllOpforCommandStaff
+  - AllColonyDepartmentHeadJobs
+  briefing:
+    text: rider-role-greeting
+    color: SpringGreen
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  # TODO startingSkills - need some buffs
+  mindRoles:
+  - MindRoleRider
+
+- type: entity
+  id: Rider
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: RiderRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: Rider
+      playerRatio: 25
+      range:
+        min: 1
+        max: 2
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleRider
+  name: Rider Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: RiderRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: RiderRole
+  name: roles-antag-rider-name
+  setPreference: true
+  objective: roles-antag-rider-objective
+
+# The antag entity itself: tiny, fast, killable, vent-capable
+- type: entity
+  id: CMURiderHatchling
+  parent: BaseSimpleMob
+  name: writhing parasite
+  description: A slick, finger-length thing that moves far too deliberately for an animal.
+  components:
+  - type: Rider
+  - type: Sprite
+    sprite: Mobs/Animals/mouse.rsi
+    state: mouse-0
+    color: "#6d6552"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 130
+        layer:
+        - MobMask
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      15: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.2
+    baseSprintSpeed: 5.5
+  - type: Flammable
+  - type: VentCrawler
+    ventCrawlExamine: rider-vent-examine
+    ventCrawlIcon: parasite
+  - type: Language
+    spokenLanguages:
+    - RiderCant
+    understoodLanguages:
+    - RiderCant
+    currentLanguage: RiderCant
+    defaultLanguage: RiderCant
+  - type: Speech
+    allowedEmotes: []
+  - type: UserInterface
+    interfaces:
+      enum.RiderVoiceUiKey.Key:
+        type: RiderVoiceBoundUserInterface
+        requireInputValidation: false
+
+# Muted spectator body for the host during a seizure burst. A slow ghost
+# shape that drifts on a short leash around the body; only the host and
+# observers ever draw it.
+- type: entity
+  id: CMURiderSeizeProxy
+  name: flickering shape
+  components:
+  - type: Eye
+    drawFov: false
+    visMask:
+    - Normal
+    - Rider
+  - type: Sprite
+    noRot: true
+    drawdepth: Ghosts
+    color: "#6d655277"
+    layers:
+    - sprite: Mobs/Ghosts/ghost_human.rsi
+      state: animated
+      shader: unshaded
+  - type: Physics
+    bodyType: KinematicController
+    bodyStatus: InAir
+  - type: CanMoveInAir
+  - type: MovementIgnoreGravity
+  - type: GravityAffected # added by MovementIgnoreGravity at startup; declared so spawn serialization matches
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 4
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 15
+        layer:
+        - GhostImpassable
+  - type: Input
+    context: "ghost"
+  - type: RMCActiveInputMover
+
+- type: entity
+  id: ActionRiderLatch
+  name: Latch Onto Host
+  description: Leap onto an unconscious victim and disappear inside.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/vent_crawl.rsi
+      state: parasite
+      map: ["enum.ActionVisuals.Icon"]
+  - type: EntityTargetAction
+    event: !type:RiderLatchActionEvent
+
+- type: entity
+  id: ActionRiderVoice
+  name: The Voice
+  description: Whisper to your host, or borrow their mouth.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/vent_crawl.rsi
+      state: parasite
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderVoiceActionEvent
+
+- type: entity
+  id: ActionRiderPunish
+  name: Punish
+  description: Make them hurt. Costs grip.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/vent_crawl.rsi
+      state: parasite
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderPunishActionEvent
+
+- type: entity
+  id: ActionRiderSeize
+  name: Seize
+  description: Take the wheel. They watch from inside. Costs grip dearly.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 180
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/vent_crawl.rsi
+      state: larva
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderSeizeActionEvent
+
+- type: entity
+  id: ActionRiderExit
+  name: Abandon Host
+  description: Leave your host. Silent if they are out cold, loud and visible if not.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/vent_crawl.rsi
+      state: parasite
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderExitActionEvent
+
+- type: entity
+  id: ActionHostResist
+  name: Resist
+  description: Fight the thing inside you. It costs your stamina and everyone can see you struggling.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/vent_crawl.rsi
+      state: unknown
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:HostResistActionEvent
+
+- type: entity
+  id: ActionRiderSurge
+  name: Grant Resilience
+  description: Reward a willing host with a burst of borrowed strength. Willing hosts only.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 120
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/vent_crawl.rsi
+      state: healer
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderSurgeActionEvent
+
+# Surgery: foreign body extraction. Cuts the rider out alive; the chase
+# begins at the operating table. Available on any ridden, opened head.
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMSurgeryStepRemoveParasite
+  name: Extract parasite
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMHemostat
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+  - type: CMSurgeryOperatingTableCondition
+  - type: RiderSurgeryStepEffect
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryParasiteExtraction
+  name: Parasite Extraction
+  description: Removal of a live foreign organism from the cranial cavity.
+  components:
+  - type: CMSurgery
+    priority: -1
+    requirement: CMSurgeryOpenIncision
+    steps:
+    - CMSurgeryStepRemoveParasite
+  - type: RiderSurgeryCondition
+  - type: CMSurgeryPartCondition
+    part: Head
+
+# CMU medical authoring layer: surfaces the surgery in the CMU surgery window
+- type: cmuSurgeryStepMetadata
+  id: CMUSurgeryMetaParasiteExtraction
+  surgery: CMUSurgeryParasiteExtraction
+  displayName: Parasite Extraction
+  validParts: [Head]
+  category: general
+  minSkill: 2
+  steps:
+  - stepId: CMSurgeryStepRemoveParasite
+    label: Extract Parasite
+    toolCategory: hemostat

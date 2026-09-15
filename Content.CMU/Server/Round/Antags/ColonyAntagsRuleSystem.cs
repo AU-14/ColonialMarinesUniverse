@@ -29,7 +29,8 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
         { "CLFSaboteur", 0.30f },
         { "Vigilante", 0.25f },
         { "BountyHunter", 0.20f },
-        { "Replicant", 0.20f }
+        { "Replicant", 0.20f },
+        { "Rider", 0.20f }
     };
 
     public const float CorporateAntagChance = 0.35f;

@@ -66,6 +66,14 @@
                         </BoxContainer>
                     </PanelContainer>
 
+                    <PanelContainer Name="CMURiderBanner" Access="Public" Visible="False" Margin="0 0 0 8">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#8B2F35" BorderColor="#D46A6A" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <Label Name="CMURiderLabel" Access="Public" StyleClasses="LabelHeading"
+                               FontColorOverride="White" Margin="12 7" />
+                    </PanelContainer>
+
                     <PanelContainer Margin="0 0 0 8">
                         <PanelContainer.PanelOverride>
                             <graphics:StyleBoxFlat BackgroundColor="#151E24" BorderColor="#2E4650" BorderThickness="1" />
