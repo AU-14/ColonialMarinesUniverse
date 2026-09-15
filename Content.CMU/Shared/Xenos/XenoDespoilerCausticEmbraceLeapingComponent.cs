@@ -1,9 +1,10 @@
 ﻿using System.Numerics;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 
 namespace Content.Shared.CMU;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class XenoDespoilerCausticEmbraceLeapingComponent : Component
 {
     public EntityUid Action;
