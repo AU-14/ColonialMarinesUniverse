@@ -58,7 +58,7 @@
   - type: XenoToggleCharging
     minimumSteps: 3
     speedPerStage: 0.16
-    plasmaPerStep: 4
+    plasmaPerStep: 6
     sound:
       collection: XenoFootstepLarge
       params:
