@@ -61,12 +61,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/setup-dotnet@v6.0.0
         with:
@@ -139,12 +134,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/download-artifact@v8.0.1
         with:
@@ -178,12 +168,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/download-artifact@v8.0.1
         with:
@@ -252,13 +237,7 @@ jobs:
         if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/setup-python@v7.0.0
         if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
@@ -323,13 +302,7 @@ jobs:
         if: steps.rsi_changes.outputs.run == 'true'
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        if: steps.rsi_changes.outputs.run == 'true'
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/setup-python@v7.0.0
         if: steps.rsi_changes.outputs.run == 'true'
@@ -546,22 +519,19 @@ jobs:
               FullyQualifiedName~Content.IntegrationTests._RMC14
               | FullyQualifiedName~Content.IntegrationTests.Tests._RMC14.
           - name: cmu
-            # CMU14: Include both legacy underscore and current CMU test namespaces.
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.
+              (FullyQualifiedName~Content.IntegrationTests._CMU14
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.)
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera
+          - name: cmu_cameras
+            filter: FullyQualifiedName~Content.IntegrationTests._CMU14.Camera
           - name: au14
             filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/download-artifact@v8.0.1
         with:
@@ -587,18 +557,6 @@ jobs:
           mkdir -p bin/Resources bin/RobustToolbox/Resources
           cp -r Resources/* bin/Resources/
           cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
-
-      - name: Runtime diagnostics
-        if: matrix.shard.name == 'root_1'
-        shell: bash
-        run: |
-          set -euo pipefail
-          pwd
-          realpath .
-          realpath ./Resources || true
-          realpath ./bin/Content.IntegrationTests || true
-          find . -name "Content.IntegrationTests.dll"
-          dotnet test bin/Content.IntegrationTests/Content.IntegrationTests.dll --list-tests
 
       - name: Run ${{ matrix.shard.name }}
         shell: bash
