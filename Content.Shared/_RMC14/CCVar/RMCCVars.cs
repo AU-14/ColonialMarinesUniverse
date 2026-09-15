@@ -306,10 +306,10 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.playtime_amethyst_medal_time_hours", 120, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCPlaytimeEmeraldMedalTimeHours =
-        CVarDef.Create("rmc.playtime_emerald_medal_time_hours", 1000, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("rmc.playtime_emerald_medal_time_hours", 200, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCPlaytimePrismaticMedalTimeHours =
-        CVarDef.Create("rmc.playtime_prismatic_medal_time_hours", 1500, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("rmc.playtime_prismatic_medal_time_hours", 500, CVar.REPLICATED | CVar.SERVER);
     // For the future coder: 2100, 2800, 3600, 4500
 
     public static readonly CVarDef<int> RMCPlaytimeXenoPrefixThreeTimeHours =
