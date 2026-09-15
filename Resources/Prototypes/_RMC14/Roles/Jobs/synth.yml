@@ -119,7 +119,7 @@
       tags:
       - RMCSynthGrabbable
   - type: Damageable #CMU14
-  damageModifierSet: RMCSynth
+    damageModifierSet: RMCSynth
   
 - type: entity
   id: RMCSynthHudComponents
