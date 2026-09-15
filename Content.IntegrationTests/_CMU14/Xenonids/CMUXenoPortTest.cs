@@ -441,7 +441,7 @@ public sealed class CMUXenoPortTest
     }
 
     [Test]
-    public async Task DroneAndDroneStrainsKeepCombatT2Evolutions()
+    public async Task DroneAndDroneStrainsCanEvolveIntoAnyT2()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -456,13 +456,22 @@ public sealed class CMUXenoPortTest
 
             try
             {
-                var combatT2s = new[] { "CMXenoLurker", "CMXenoSpitter", "CMXenoWarrior", "CMXenoBull" };
+                var tier2s = new[]
+                {
+                    "CMXenoCarrier",
+                    "CMXenoBurrower",
+                    "CMXenoHivelord",
+                    "CMXenoLurker",
+                    "CMXenoSpitter",
+                    "CMXenoWarrior",
+                    "CMXenoBull",
+                };
                 foreach (var xeno in new[] { drone, gardener, healer })
                 {
                     var proto = entMan.GetComponent<MetaDataComponent>(xeno).EntityPrototype?.ID;
                     var evolution = entMan.GetComponent<XenoEvolutionComponent>(xeno);
-                    foreach (var t2 in combatT2s)
-                        Assert.That(evolution.EarlyEvolvesTo, Does.Contain(new EntProtoId(t2)), $"{proto} missing combat T2 {t2}");
+                    foreach (var t2 in tier2s)
+                        Assert.That(evolution.EvolvesTo, Does.Contain(new EntProtoId(t2)), $"{proto} missing T2 {t2}");
                 }
             }
             finally
