@@ -86,6 +86,7 @@
     - CMXenoPraetorian
     strains:
     - CMXenoWarriorBulwark
+    - CMXenoWarriorBoxer
   - type: CMArmor
     xenoArmor: 20
     explosionArmor: 40
