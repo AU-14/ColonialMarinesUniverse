@@ -107,7 +107,6 @@
     - ActionXenoDevolve
     - ActionXenoToxicSpit
     - ActionXenoToxicSlash
-    - ActionXenoLeap
     - ActionXenoParalyzingSlash
   - type: XenoStrain
     name: rmc-xeno-alchemist-name
@@ -115,7 +114,7 @@
     popup: rmc-xeno-alchemist-popup
   - type: XenoAlchemist
   - type: CMArmor
-    xenoArmor: 25
+    xenoArmor: 20
     explosionArmor: 25
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.3
