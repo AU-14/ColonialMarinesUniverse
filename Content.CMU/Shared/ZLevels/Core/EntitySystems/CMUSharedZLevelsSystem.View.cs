@@ -313,8 +313,49 @@ public abstract partial class CMUSharedZLevelsSystem
             return true;
         }
 
-        var localFrom = _map.WorldToLocal(openingMap, grid, from) / grid.TileSize;
-        var localTo = _map.WorldToLocal(openingMap, grid, to) / grid.TileSize;
+        foreach (var tile in EnumerateZShotLine((openingMap, grid), from, to))
+        {
+            if (TryUseOpeningTile(tile))
+            {
+                opening = selectedOpening;
+                return true;
+            }
+        }
+
+        if (hasFallbackOpening)
+        {
+            opening = fallbackOpening;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// True when a cross-z shot from <paramref name="from"/> to <paramref name="to"/> crosses no floor
+    /// tiles on <paramref name="map"/>. A map without a grid is fully open air.
+    /// </summary>
+    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to)
+    {
+        if (!_gridQuery.TryComp(map, out var grid))
+            return true;
+
+        foreach (var tile in EnumerateZShotLine((map, grid), from, to))
+        {
+            if (_map.TryGetTileRef(map, grid, tile, out var tileRef) &&
+                !CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private IEnumerable<Vector2i> EnumerateZShotLine(Entity<MapGridComponent> map, Vector2 from, Vector2 to)
+    {
+        var localFrom = _map.WorldToLocal(map, map.Comp, from) / map.Comp.TileSize;
+        var localTo = _map.WorldToLocal(map, map.Comp, to) / map.Comp.TileSize;
         var localDelta = localTo - localFrom;
         var currentTile = new Vector2i((int) MathF.Floor(localFrom.X), (int) MathF.Floor(localFrom.Y));
         var endTile = new Vector2i((int) MathF.Floor(localTo.X), (int) MathF.Floor(localTo.Y));
@@ -330,14 +371,10 @@ public abstract partial class CMUSharedZLevelsSystem
 
         while (true)
         {
-            if (TryUseOpeningTile(currentTile))
-            {
-                opening = selectedOpening;
-                return true;
-            }
+            yield return currentTile;
 
             if (currentTile == endTile)
-                break;
+                yield break;
 
             if (tMaxX < tMaxY)
             {
@@ -356,14 +393,6 @@ public abstract partial class CMUSharedZLevelsSystem
                 tMaxY += tDeltaY;
             }
         }
-
-        if (hasFallbackOpening)
-        {
-            opening = fallbackOpening;
-            return true;
-        }
-
-        return false;
     }
 
     /// <summary>
