@@ -283,7 +283,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             if (originalPrototype != null && TryComp(jobEntity, out MetaDataComponent? metaDataJobEntity))
                 SetPdaAndIdCardData(jobEntity, metaDataJobEntity.EntityName, originalPrototype, station);
 
-            AssignRoundStartSquad(jobEntity, coordinates, job, originalPrototype, jobId, team);
+            AssignRoundStartSquad(jobEntity, coordinates, job, originalPrototype, jobId, team, profile); // CMU14
             return jobEntity;
         }
 
@@ -398,7 +398,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         ApplyRegulationAppearance(entity.Value, profile);
         _identity.QueueIdentityUpdate(entity.Value);
 
-        AssignRoundStartSquad(entity.Value, coordinates, job, originalPrototype, jobId, team);
+        AssignRoundStartSquad(entity.Value, coordinates, job, originalPrototype, jobId, team, profile); // CMU14
 
         ApplyTeamFaction(entity.Value, team);
         return entity.Value;
@@ -410,7 +410,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         ProtoId<JobPrototype>? job,
         JobPrototype? originalPrototype,
         string? originalJobId,
-        string? team)
+        string? team,
+        HumanoidCharacterProfile? profile) // CMU14
     {
         if (team == null || !ShouldAssignToSquad(originalPrototype, originalJobId))
             return;
@@ -438,8 +439,26 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                                    originalJobId?.Contains("rto", StringComparison.OrdinalIgnoreCase) == true ||
                                    originalJobId?.EndsWith("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true;
 
-            // Sergeants: try to place into a squad without a leader where possible (existing behavior)
-            if (isSergeant)
+            // CMU14: Player preference wins over distribution when the squad belongs to this side.
+            // Sergeants still skip a preferred squad that already has a leader so the sitting leader is not demoted.
+            // The menu only offers GovFor squads; force-balanced OpFor players get the mirrored squad by slot.
+            var preferred = profile?.SquadPreference?.Id;
+            if (team == "opfor" && preferred != null)
+            {
+                var mirror = Array.IndexOf(_govforSquads, preferred);
+                if (mirror >= 0)
+                    preferred = _opforSquads[mirror];
+            }
+
+            if (preferred != null // CMU14
+                && Array.IndexOf(candidates, preferred) != -1
+                && (!isSergeant
+                || !_squadSystem.TryEnsureSquad(preferred, out var preferredSquad)
+                || !_squadSystem.TryGetSquadLeader(preferredSquad, out _)))
+                protoId = preferred;
+
+            // CMU14: Sergeants: try to place into a squad without a leader where possible
+            else if (isSergeant)
             {
                 string? chosen = null;
                 foreach (var candidate in candidates)

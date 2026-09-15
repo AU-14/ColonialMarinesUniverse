@@ -107,7 +107,10 @@ public sealed partial class HumanoidProfileEditor
         for (var i = 0; i < squad.SquadPrototypes.Length; i++)
         {
             var squadProto = squad.SquadPrototypes[i];
-            if (!squadProto.TryComp(out SquadTeamComponent? team, _componentFactory) || !team.RoundStart)
+            // Preference menu is GovFor-only; OpFor players get the mirrored squad at spawn.
+            if (!squadProto.TryComp(out SquadTeamComponent? team, _componentFactory)
+                || !team.RoundStart
+                || team.Group != "GOVFOR")
                 continue;
 
             SquadPreferenceButton.AddItem(squadProto.Name, i + 1);
@@ -631,10 +634,13 @@ public sealed partial class HumanoidProfileEditor
         var index = 0;
         if (Profile.SquadPreference is { } preference)
         {
-            var squads = new List<EntityPrototype>(_entManager.System<SquadSystem>().SquadPrototypes)
-                .Select(squad => squad.ID)
-                .ToList();
-            index = squads.IndexOf(preference.Id) + 1;
+            var squads = new List<EntityPrototype>(_entManager.System<SquadSystem>().SquadPrototypes);
+            var squadProto = squads.FirstOrDefault(s => s.ID == preference.Id);
+            if (squadProto != null
+                && squadProto.TryComp(out SquadTeamComponent? team, _componentFactory)
+                && team.RoundStart
+                && team.Group == "GOVFOR")
+                index = squads.IndexOf(squadProto) + 1;
         }
 
         SquadPreferenceButton.SelectId(index);
