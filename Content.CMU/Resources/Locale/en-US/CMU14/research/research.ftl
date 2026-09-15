@@ -136,3 +136,5 @@ research-sim-ui-no-data = [color=black][bold]No data inserted![/bold][/color]
 research-sim-ui-target-data = [head=3]Target Data[/head]
 research-sim-ui-reference-data = [head=3]Reference Data[/head]
 research-sim-ui-price = [bold]Price of the operation: {$COST}[/bold]
+
+cmu-research-reduce-cooldown = -60s cooldown (1 point)

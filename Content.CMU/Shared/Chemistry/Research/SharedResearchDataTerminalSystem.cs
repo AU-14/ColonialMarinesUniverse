@@ -13,23 +13,62 @@ public abstract partial class SharedResearchDataTerminalSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
 
 
-    [ViewVariables(VVAccess.ReadOnly)]
-    public int Clearance = 1; //6 is "X" clearance
-    [ViewVariables(VVAccess.ReadOnly)]
-    public int Credits = 0;
-    [ViewVariables(VVAccess.ReadOnly)]
+    // Legacy callers and admin commands use the corporate research account.
+    public int Clearance { get => GetClearance("corporate"); set => _clearance["corporate"] = value; }
+    public int Credits { get => GetCredits("corporate"); set => _credits["corporate"] = value; }
     public bool DDIDiscovered = false;
+
+    private readonly Dictionary<string, int> _credits = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _clearance = new(StringComparer.OrdinalIgnoreCase);
+
+    public int GetCredits(string faction) => _credits.GetValueOrDefault(faction);
+    public int GetClearance(string faction) => _clearance.GetValueOrDefault(faction, 1);
+
+    /// <summary>Unassigned synthesis machines use their nearest research terminal on the same map.</summary>
+    public string GetFaction(EntityUid machine)
+    {
+        if (TryComp<ResearchDataTerminalComponent>(machine, out var terminal))
+            return terminal.Faction;
+        if (TryComp<XRFScannerComponent>(machine, out var scanner))
+            return scanner.Faction;
+        var transform = Transform(machine);
+        var transforms = EntityManager.System<SharedTransformSystem>();
+        var position = transforms.GetWorldPosition(machine);
+        var distance = float.MaxValue;
+        var faction = "corporate";
+        var query = EntityQueryEnumerator<ResearchDataTerminalComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var comp, out var other))
+        {
+            if (other.MapUid != transform.MapUid)
+                continue;
+            var candidate = System.Numerics.Vector2.DistanceSquared(position, transforms.GetWorldPosition(uid));
+            if (candidate >= distance)
+                continue;
+            distance = candidate;
+            faction = comp.Faction;
+        }
+        return faction;
+    }
 
     protected readonly int _researchLevelIncreaseMult = 3;
     public override void Initialize()
     {
         base.Initialize();
         SubscribeAllEvent<UpdateDataTerminalClearanceEvent>(OnUpdateClearance);
+
     }
 
-    public void UpdateClearance(int points, int clearance)
+    protected void ResetResearchAccounts()
     {
-        var ev = new UpdateDataTerminalClearanceEvent(clearance, points);
+        _credits.Clear();
+        _clearance.Clear();
+    }
+
+    protected virtual void OnResearchBalanceChanged(string faction) { }
+
+    public void UpdateClearance(int points, int clearance, string faction = "corporate")
+    {
+        var ev = new UpdateDataTerminalClearanceEvent(clearance, points, faction);
         RaiseLocalEvent(ev);
         RaiseNetworkEvent(ev);
     }
@@ -39,8 +78,9 @@ public abstract partial class SharedResearchDataTerminalSystem : EntitySystem
     {
         if(args.Clearance != -1)
         {
-            Clearance = args.Clearance;
+            _clearance[args.Faction] = args.Clearance;
         }
-        Credits = args.Credits;
+        _credits[args.Faction] = args.Credits;
+        OnResearchBalanceChanged(args.Faction);
     }
 }
