@@ -16,7 +16,7 @@ public sealed partial class XenoScissorCutComponent : Component
     public float Range = 4;
 
     [DataField, AutoNetworkedField]
-    public TimeSpan SuperSlowDuration = TimeSpan.FromSeconds(5);
+    public TimeSpan SuperSlowDuration = TimeSpan.FromSeconds(4); // CMU14 modified
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier SlashSound = new SoundCollectionSpecifier("AlienClaw");

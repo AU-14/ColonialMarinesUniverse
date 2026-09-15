@@ -28,7 +28,7 @@ public sealed partial class XenoEviscerateComponent : Component
     public TimeSpan WindupTime = TimeSpan.FromSeconds(2);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan StunTime = TimeSpan.FromSeconds(1.85); // CMU14 modified
+    public TimeSpan StunTime = TimeSpan.FromSeconds(1.55); // CMU14 modified
 
     [DataField, AutoNetworkedField]
     public TimeSpan HealDelay = TimeSpan.FromSeconds(0.05);
