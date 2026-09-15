@@ -91,7 +91,7 @@ public sealed partial class XenoReaperComponent : Component
     };
 
     [DataField, AutoNetworkedField]
-    public int CarrionMantleCost = 120;
+    public int CarrionMantleCost = 100;
 
     [DataField, AutoNetworkedField]
     public TimeSpan CarrionMantleDuration = TimeSpan.FromSeconds(8);
@@ -100,7 +100,7 @@ public sealed partial class XenoReaperComponent : Component
     public FixedPoint2 CarrionMantleShieldAmount = FixedPoint2.New(200);
 
     [DataField, AutoNetworkedField]
-    public int CarrionMantleShieldDecay = 80;
+    public int CarrionMantleShieldDecay = 70;
 
     [DataField, AutoNetworkedField]
     public string CarrionMantleShieldVisualState = "king-shield";
