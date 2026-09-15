@@ -43,6 +43,7 @@
       components:
       - EntityStorage
   - type: Damageable
+  - type: DamageOverlay # CMU14: red damage vignette, xenos have no MobDamageable parent to inherit it from
   - type: Injurable
     damageContainer: Xeno
   - type: Destructible
