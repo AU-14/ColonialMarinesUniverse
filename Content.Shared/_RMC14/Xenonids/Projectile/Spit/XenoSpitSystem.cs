@@ -413,13 +413,16 @@ public sealed partial class XenoSpitSystem : EntitySystem
             predicted: false
         );
 
+        if (!args.Handled)
+            return; // CMU14: failed casts (e.g. blocked cross-z shots) must not start the cooldown
+
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoAcidBallActionEvent>(ent))
         {
             _actions.SetCooldown(action.AsNullable(), ent.Comp.Cooldown);
         }
 
-        if (!args.Handled)
-            return;
+        // if (!args.Handled) // CMU14
+        //     return;
 
         _popup.PopupClient(Loc.GetString("rmc-xeno-acid-ball-shoot-self"), ent, ent);
     }
