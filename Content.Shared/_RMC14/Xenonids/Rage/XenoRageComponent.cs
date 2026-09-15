@@ -18,7 +18,7 @@ public sealed partial class XenoRageComponent : Component
     public bool RageLocked = false;
 
     [DataField, AutoNetworkedField]
-    public int ArmorPerRage = 4; // CMU14 modified
+    public int ArmorPerRage = 3;
 
     [DataField, AutoNetworkedField]
     public float SpeedBuffPerRage = 0.028f;
@@ -27,7 +27,7 @@ public sealed partial class XenoRageComponent : Component
     public float AttackSpeedPerRage = 0.28f;
 
     [DataField, AutoNetworkedField]
-    public TimeSpan RageDecayTime = TimeSpan.FromSeconds(5); // CMU14 modified
+    public TimeSpan RageDecayTime = TimeSpan.FromSeconds(3);
 
     [DataField, AutoNetworkedField]
     public TimeSpan RageLockDuration = TimeSpan.FromSeconds(10);
@@ -42,7 +42,7 @@ public sealed partial class XenoRageComponent : Component
     public TimeSpan LastHit;
 
     [DataField, AutoNetworkedField]
-    public FixedPoint2 HealAmount = 65; // CMU14 modified
+    public FixedPoint2 HealAmount = 45; // Equal to the slash damage of the xeno
 
     [DataField, AutoNetworkedField]
     public Color RageLockColor = Color.Black;
