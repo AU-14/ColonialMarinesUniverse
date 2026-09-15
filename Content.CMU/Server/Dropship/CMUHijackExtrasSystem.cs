@@ -68,6 +68,7 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
         new SoundCollectionSpecifier("RMCHijack", AudioParams.Default.WithVolume(-8));
 
     private bool _hijackSongPlayed;
+    private bool _surgeFired;
     private float _hijackShipWeight;
     private int _hijackMinBurrowed;
 
@@ -133,6 +134,12 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
 
         if (ev.HijackerType == DropshipHijackerType.Pathogen)
             return;
+
+        // Planet xeno cleanup above still runs on repeat hijacks. The surge pool itself is once per round.
+        if (_surgeFired)
+            return;
+
+        _surgeFired = true;
 
         var shipMapIds = new HashSet<MapId>();
         var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
@@ -224,6 +231,7 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _hijackSongPlayed = false;
+        _surgeFired = false;
     }
 
     private bool HasActiveDistressRule()
