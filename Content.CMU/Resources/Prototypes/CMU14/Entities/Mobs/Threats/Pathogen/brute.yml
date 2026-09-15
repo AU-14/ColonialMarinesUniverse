@@ -102,7 +102,7 @@
         Piercing: 18
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 27
+    xenoArmor: 35
   - type: XenoClaws
     clawType: VerySharp
   - type: Tackle

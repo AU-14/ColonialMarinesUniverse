@@ -105,20 +105,34 @@
     - ActionXenoProduceChemical
     - ActionXenoRemoveChemical
     - ActionXenoDevolve
+    - ActionXenoToxicSpit
+    - ActionXenoToxicSlash
+    - ActionXenoParalyzingSlash
   - type: XenoStrain
     name: rmc-xeno-alchemist-name
     description: rmc-xeno-alchemist-description
     popup: rmc-xeno-alchemist-popup
   - type: XenoAlchemist
   - type: CMArmor
-    xenoArmor: 10
-    explosionArmor: 15
+    xenoArmor: 20
+    explosionArmor: 25
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.3
+    baseSprintSpeed: 3.8
+  - type: Evasion
+    evasion: 0
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 7.5
-        Slash: 7.5
-        Piercing: 7.5
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
+  - type: XenoTailStab
+    tailDamage:
+      types:
+        Blunt: 13
+        Slash: 13
+        Piercing: 13
   - type: XenoHidden
   - type: RMCActionOrder
     id: CMXenoSpitterAlchemist
