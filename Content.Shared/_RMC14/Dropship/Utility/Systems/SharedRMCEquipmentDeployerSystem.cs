@@ -273,8 +273,11 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
                     _transform.SetLocalRotation(deployingEntity.Value, Transform(deployingEntity.Value).LocalRotation + Angle.FromDegrees(rotationOffset));
 
                 _dropship.TryGetGridFaction(deployer, out var faction);
-                _sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction);
-                if (HasComp<SentryTargetingComponent>(deployingEntity.Value))
+                // CMU14: an unconfigured turret stays asleep instead of treating everything as hostile.
+                //_sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction);
+                //if (HasComp<SentryTargetingComponent>(deployingEntity.Value))
+                //    _rmcNpc.WakeNPC(deployingEntity.Value);
+                if (_sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction))
                     _rmcNpc.WakeNPC(deployingEntity.Value);
             }
         }
