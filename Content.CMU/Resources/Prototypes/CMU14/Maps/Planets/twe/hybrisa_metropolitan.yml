@@ -28,8 +28,6 @@
     # threats:
     # - XenoThreat # map has no threat spawn markers
     # - NeomorphsThreat # map has no threat spawn markers
-    # - AbominationsThreatDS # no xenocf markers
-    # - ApeThreatDS # map has no threat spawn markers
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers

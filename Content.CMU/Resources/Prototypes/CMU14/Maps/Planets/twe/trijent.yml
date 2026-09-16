@@ -59,8 +59,6 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    # - AbominationsThreatDS # no xenocf markers
-    - ApeThreatDS
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers

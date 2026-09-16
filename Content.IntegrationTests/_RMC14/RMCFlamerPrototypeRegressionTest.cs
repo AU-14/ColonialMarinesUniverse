@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared._RMC14.Wieldable.Components;
 using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared.Timing;
 using Robust.Shared.Prototypes;
@@ -12,8 +13,8 @@ public sealed class RMCFlamerPrototypeRegressionTest
     private static readonly EntProtoId M34TFlamer = "RMCWeaponFlamerSpec";
     private static readonly EntProtoId Smaw = "RMCWeaponLauncherM5ATL";
 
-    [TestCaseSource(nameof(FlamerUseDelays))]
-    public async Task FlamersKeepRequestedUseDelay(EntProtoId prototype, double expectedDelaySeconds)
+    [TestCaseSource(nameof(FlamerWieldDelays))]
+    public async Task FlamersKeepWieldDelayWithoutUseDelay(EntProtoId prototype, double expectedWieldDelaySeconds)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -25,7 +26,12 @@ public sealed class RMCFlamerPrototypeRegressionTest
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(prototype, out var flamer), Is.True);
             Assert.That(flamer!.TryComp<UseDelayComponent>(out var useDelay, factory), Is.True);
-            Assert.That(useDelay!.Delay, Is.EqualTo(TimeSpan.FromSeconds(expectedDelaySeconds)));
+            Assert.That(flamer.TryComp<WieldDelayComponent>(out var wieldDelay, factory), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(useDelay!.Delay, Is.EqualTo(TimeSpan.Zero));
+                Assert.That(wieldDelay!.BaseDelay, Is.EqualTo(TimeSpan.FromSeconds(expectedWieldDelaySeconds)));
+            });
         });
 
         await pair.CleanReturnAsync();
@@ -50,10 +56,10 @@ public sealed class RMCFlamerPrototypeRegressionTest
         await pair.CleanReturnAsync();
     }
 
-    private static IEnumerable<TestCaseData> FlamerUseDelays()
+    private static IEnumerable<TestCaseData> FlamerWieldDelays()
     {
-        yield return new TestCaseData(M240Flamer, 2).SetName("M240IncineratorHasTwoSecondUseDelay");
-        yield return new TestCaseData(M34TFlamer, 3).SetName("M34TIncineratorHasThreeSecondUseDelay");
+        yield return new TestCaseData(M240Flamer, 1).SetName("M240IncineratorHasOneSecondWieldDelayWithoutUseDelay");
+        yield return new TestCaseData(M34TFlamer, 1.75).SetName("M240TIncineratorHasOnePointSevenFiveSecondWieldDelayWithoutUseDelay");
     }
 
     private static IEnumerable<TestCaseData> MeltableWeaponPrototypes()
