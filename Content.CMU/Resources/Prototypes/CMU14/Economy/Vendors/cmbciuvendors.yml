@@ -933,7 +933,7 @@
     - name: XM38 Tactical Shotgun
       entries:
       - id: RMCWeaponShotgunXM38
-        amount: 0.3
+        amount: 0.2
       - id: RMCAttachmentS6ReflexSight
         amount: 1
       - id: RMCAttachmentFlashlightGrip
