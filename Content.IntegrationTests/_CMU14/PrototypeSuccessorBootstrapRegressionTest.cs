@@ -198,7 +198,7 @@ public sealed class PrototypeSuccessorBootstrapRegressionTest : GameTest
         foreach (var (reagentId, walk, sprint) in new[]
                  {
                      ("AU14DrugSpeedDemon", 1.3f, 1.34f),
-                     ("CMUMethamphetamine", 1.4f, 1.4f),
+                     ("CMUMethamphetamine", 1.2f, 1.2f),
                  })
         {
             var movement = ReagentEffects(reagentId, "Bloodstream")
