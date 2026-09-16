@@ -11200,5 +11200,28 @@
   id: 728
   time: '2026-09-14T07:32:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1954
+- author: ArturUr1
+  changes:
+  - message: Methamphetamine has been nerfed. Speed multiplier reduced from 1.4 to
+      1.2. Poison damage increased.
+    type: Tweak
+  id: 729
+  time: '2026-09-16T02:36:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1961
+- author: Vencallium
+  changes:
+  - message: Drones can now evolve into any standard tier 2 xenomorph.
+    type: Tweak
+  id: 730
+  time: '2026-09-16T02:39:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1958
+- author: ArturUr1
+  changes:
+  - message: Instant wall construction through the G-menu has been removed. Now you
+      can quickly place frames through it, and build walls through those.
+    type: Tweak
+  id: 731
+  time: '2026-09-16T03:09:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1962
 Name: CMU
 Order: -1
