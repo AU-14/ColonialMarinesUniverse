@@ -114,6 +114,8 @@
     back: AU14CMDefibrillator
     ears: RMCHeadsetGROM
     suitstorage: AU14WeaponRifleAG80Filled
+  inhand:
+  - CMSheetMetal50
 
 - type: playTimeTracker
   id: AU14JobUPPGROMSupportTech
