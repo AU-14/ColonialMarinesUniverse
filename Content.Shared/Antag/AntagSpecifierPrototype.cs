@@ -130,7 +130,7 @@ public sealed partial class AntagSpecifierPrototype : IPrototype, IInheritingPro
     /// Skills to grant to the antagonist. Existing skill levels are preserved if higher.
     /// </summary>
     [DataField] // CMU14
-    public List<Skill> StartingSkills = new();
+    public Dictionary<EntProtoId<SkillDefinitionComponent>, int> StartingSkills = new();
 
     /// <summary>
     /// A briefing shown to the player.

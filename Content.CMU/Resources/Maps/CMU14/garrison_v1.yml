@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 01:48:23
-  entityCount: 49375
+  entityCount: 49376
 maps:
 - 1
 grids:
@@ -106280,6 +106280,13 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 24.5,-35.5
+      parent: 1
+- proto: ForensicScanner
+  entities:
+  - uid: 49404
+    components:
+    - type: Transform
+      pos: 236.5,-53.5
       parent: 1
 - proto: ComputerCriminalRecords
   entities:
@@ -342996,7 +343003,7 @@ entities:
       parent: 1
 - proto: CMUYautjaGroundRelayDestination
   entities:
-  - uid: 49404
+  - uid: 49405
     components:
     - type: MetaData
       name: Stable Garrison ground relay

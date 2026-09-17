@@ -27,6 +27,7 @@ jobs:
   prepare:
     name: Resolve PR merges
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 15
     permissions:
       contents: read
       pull-requests: read
@@ -155,6 +156,7 @@ jobs:
     name: Package ${{ matrix.name }}
     if: always() && needs.prepare.result == 'success'
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 20
     needs: prepare
     strategy:
       fail-fast: false
@@ -248,6 +250,7 @@ jobs:
     name: Publish test merge version
     if: always() && needs.prepare.result == 'success' && needs.package.result == 'success'
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    timeout-minutes: 15
     needs:
       - prepare
       - package

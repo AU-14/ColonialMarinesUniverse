@@ -541,8 +541,17 @@ public sealed partial class HardpointSystem : EntitySystem
             totalMaxIntegrity += integrity.MaxIntegrity;
         }
 
+        // CMU14 Frame Begin: frames kept their last hardpoint-derived cap forever once every
+        // hardpoint was removed, welding a stripped vehicle dead-ended at "intact" (BUG-599)
         if (totalMaxIntegrity <= 0f)
-            return false;
+        {
+            if (frameIntegrity.NativeMaxIntegrity <= 0f)
+                return false;
+
+            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity;
+            totalIntegrity = Math.Clamp(frameIntegrity.Integrity, 0f, totalMaxIntegrity);
+        }
+        // CMU14 Frame End
 
         var previous = frameIntegrity.Integrity;
         var previousMax = frameIntegrity.MaxIntegrity;
@@ -1758,6 +1767,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
     private void OnHardpointIntegrityInit(Entity<HardpointIntegrityComponent> ent, ref ComponentInit args)
     {
+        ent.Comp.NativeMaxIntegrity = ent.Comp.MaxIntegrity; // CMU14: cache configured max before derived refreshes replace it
         if (ent.Comp.Integrity <= 0f)
             ent.Comp.Integrity = ent.Comp.MaxIntegrity;
 

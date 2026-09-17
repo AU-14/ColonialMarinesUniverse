@@ -100,6 +100,9 @@
     back: RMCSatchelSPPFullMarksman
     ears: RMCHeadsetGROM
     suitstorage: RMCWeaponRifleAK4047
+  storage:
+    back:
+    - RMCAttachmentS84xTelescopicScope
 
 - type: playTimeTracker
   id: AU14JobUPPGROMMarksman

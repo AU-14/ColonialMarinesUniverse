@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared.CMU14.Round.Antags.Cannibal; // CMU14
 using Content.Shared.IdentityManagement;
 using Content.Shared.Kitchen;
 using Content.Shared.Kitchen.Components;
@@ -39,7 +40,9 @@ public sealed partial class KitchenSpikeSystem : EntitySystem
             return false;
         }
 
-        if (butcherable.Type != ButcheringType.Spike)
+        // CMU14: colonists are Knife-type, the meat rack takes them alongside animals
+        if (butcherable.Type != ButcheringType.Spike
+            && butcherable.Type != ButcheringType.Knife)
         {
             var message = butcherable.Type == ButcheringType.Knife
                 ? "comp-kitchen-spike-deny-butcher-knife"
@@ -48,8 +51,9 @@ public sealed partial class KitchenSpikeSystem : EntitySystem
             return false;
         }
 
-        if (!butcherable.WaitForRot ||
-            _unrevivable.IsUnrevivable(victim))
+        if (!butcherable.WaitForRot
+            || _unrevivable.IsUnrevivable(victim)
+            || HasComp<CannibalComponent>(user)) // CMU14: only cannibals rack fresh corpses, anyone else waits out the defib window
         {
             return true;
         }

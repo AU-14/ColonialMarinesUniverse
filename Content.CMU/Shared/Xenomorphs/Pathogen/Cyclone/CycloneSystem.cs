@@ -76,7 +76,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
 
     private void OnDoAfter(Entity<CMUXenoCycloneComponent> xeno, ref CMUXenoCycloneDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled)
+        if (args.Cancelled || args.Handled || _mobState.IsDead(xeno))
             return;
 
         args.Handled = true;
@@ -108,7 +108,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
 
             Timer.Spawn(delay, () =>
             {
-                if (TerminatingOrDeleted(xeno))
+                if (TerminatingOrDeleted(xeno) || _mobState.IsDead(xeno))
                     return;
 
                 var hits = SpinHit(xeno, range, damagePerSpin,
@@ -211,7 +211,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
 
         Timer.Spawn(delay, () =>
         {
-            if (TerminatingOrDeleted(xeno))
+            if (TerminatingOrDeleted(xeno) || _mobState.IsDead(xeno))
                 return;
 
             ExecuteCycleSpins(xeno, nextRange, nextDamage,

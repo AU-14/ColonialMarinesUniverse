@@ -161,6 +161,31 @@ public sealed class ForceInterestTest : GameTest
     }
 
     [Test]
+    public async Task ReadyForceDeploysUnderstaffedOnceFallbackDelayExpires()
+    {
+        var spawned = 0;
+        uint id = 0;
+        await Server.WaitAssertion(() =>
+        {
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
+            var interest = SEntMan.System<ForceInterestSystem>();
+            // Two roles need two volunteers. One interested player must not block forever.
+            id = interest.QueueForce("Fallback", new Dictionary<string, int> { ["TestForceInterestBody"] = 2 },
+                _ => { spawned++; return true; });
+            interest.SetInterest(ServerSession!, id, true);
+        });
+        await RunSeconds(2);
+        await Server.WaitAssertion(() =>
+            Assert.That(spawned, Is.Zero, "a ready force must still wait for quorum before the fallback"));
+        await RunSeconds(601);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(spawned, Is.EqualTo(1), "the fallback must deploy a ready force understaffed once the wait expires");
+            Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.False);
+        });
+    }
+
+    [Test]
     public async Task JoiningAnotherBodyRemovesInterestAndRestartClearsQueue()
     {
         var map = await Pair.CreateTestMap();

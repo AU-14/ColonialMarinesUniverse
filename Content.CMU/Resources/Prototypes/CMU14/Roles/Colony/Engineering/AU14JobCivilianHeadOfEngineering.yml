@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 18
   id: AU14JobCivilianHeadOfEngineering
   roundSide: Civilian
   roundForce: COLONY
@@ -49,6 +50,7 @@
   supervisors: au14-job-supervisors-colonyadministrator
   accessGroups:
   - Colonist
+  - auadmin
   - auengi
   - CMCargoTech
   - auheadsofcolony

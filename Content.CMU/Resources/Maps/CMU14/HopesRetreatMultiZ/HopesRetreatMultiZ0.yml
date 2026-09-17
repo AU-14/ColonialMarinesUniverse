@@ -175065,7 +175065,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: GasThermoMachineFreezer
+- proto: RMCSpaceHeater
   entities:
   - uid: 68534
     components:
@@ -180363,14 +180363,14 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 68536
     components:
     - type: Transform
       parent: 1
       pos: -99.5,45.495007
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 50283
     components:
@@ -180382,7 +180382,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -93.5,37.5
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 50281
     components:

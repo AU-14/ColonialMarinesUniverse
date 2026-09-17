@@ -39007,7 +39007,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 79.5,-6.5
       parent: 2
-- proto: RMCCanisterBrokenBase
+- proto: PlasmaCanisterBroken
   entities:
   - uid: 6862
     components:

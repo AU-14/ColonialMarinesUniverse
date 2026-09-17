@@ -19,6 +19,9 @@
     channel: Environment
   - type: CMUPowerRiser
     source: true
+  - type: Construction
+    graph: CMUPowerRiserGraph
+    node: built
   - type: WiresPanel
     openingTool: Pulsing
     examineTextClosed: cmu-zlevel-panel-closed
@@ -58,6 +61,9 @@
     activeLoad: 50
     channel: Environment
   - type: CMUPowerRiser
+  - type: Construction
+    graph: CMUPowerRiserGraph
+    node: built
   - type: WiresPanel
     openingTool: Pulsing
     examineTextClosed: cmu-zlevel-panel-closed
@@ -80,3 +86,47 @@
     sprite: Structures/Power/substation.rsi
     layers:
     - state: substation_static
+
+# Direct build like the pipe riser: the menu only lists isCM recipes and the
+# riser board has no crafting source. Machine still auto-stocks on spawn.
+- type: constructionGraph
+  id: CMUPowerRiserGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2.5
+  - node: built
+    entity: CMUPowerRiserUp
+    edges:
+    - to: start
+      conditions:
+      - !type:WirePanel
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: construction
+  id: CMUPowerRiserRecipe
+  name: power riser
+  description: An HV bridge linking this deck's power grid to the one above or below. Crowbar flips direction, screwdriver toggles source or sink.
+  graph: CMUPowerRiserGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: true
+  isCM: true

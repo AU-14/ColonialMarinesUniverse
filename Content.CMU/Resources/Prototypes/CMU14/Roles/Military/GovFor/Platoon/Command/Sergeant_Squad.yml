@@ -13,7 +13,7 @@
   overwatchShowName: true
   overwatchSortPriority: -5
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 5
   accessGroups:
   - AU14GovforFTL
 

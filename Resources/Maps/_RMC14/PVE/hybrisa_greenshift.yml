@@ -136194,7 +136194,7 @@ entities:
     - type: Transform
       pos: -95.58069,-19.9706
       parent: 1
-- proto: GasPipeStraight
+- proto: CMUGasPipeStraight
   entities:
   - uid: 12792
     components:
@@ -137803,7 +137803,7 @@ entities:
     - type: Transform
       pos: -211.5,-165.5
       parent: 1
-- proto: GasPort
+- proto: CMUGasPort
   entities:
   - uid: 13002
     components:
@@ -137817,7 +137817,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -74.5,-22.5
       parent: 1
-- proto: GasThermoMachineFreezer
+- proto: RMCSpaceHeater
   entities:
   - uid: 13004
     components:
@@ -152773,7 +152773,7 @@ entities:
     - type: Transform
       pos: -53.58691,-128.51099
       parent: 1
-- proto: RMCCanisterBlack
+- proto: CMUCanisterCarbonDioxide
   entities:
   - uid: 8575
     components:
@@ -152785,7 +152785,7 @@ entities:
     - type: Transform
       pos: -79.5,-65.5
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 13116
     components:
@@ -152812,7 +152812,7 @@ entities:
     - type: Transform
       pos: -59.5,-24.5
       parent: 1
-- proto: RMCCanisterOrange
+- proto: CMUCanisterPlasma
   entities:
   - uid: 8351
     components:

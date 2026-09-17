@@ -6,3 +6,23 @@
   antagonist: true
   category: roles-antag-category-colony
   isCM: true
+
+# Colony antag roll. Values are the chance in percent for each rule to fire, rolled independently.
+# If fired rules' combined cost exceeds the round budget, random picks are dropped until it fits.
+- type: weightedRandom
+  id: ColonyAntagTable
+  weights:
+    RunawaySynth: 50
+    Fugitive: 50
+    DrugDealer: 50
+    StrikeOrganizer: 45
+    Arsonist: 40
+    Cannibal: 40
+    CLFSleeperAgent: 40
+    CLFVeteran: 35
+    SerialKiller: 35
+    CLFSaboteur: 30
+    Vigilante: 25
+    BountyHunter: 20
+    Rider: 20
+    Replicant: 20

@@ -11,7 +11,7 @@
   playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   overwatchSortPriority: -3
   overwatchRoleName: Fire Team Leaders
-  displayWeight: 5
+  displayWeight: 3
   accessGroups:
   - AU14GovforFTL
 

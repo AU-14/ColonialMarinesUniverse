@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 12
   id: AU14JobCivilianEmergencyResponseOfficer
   roundSide: Civilian
   roundForce: COLONY

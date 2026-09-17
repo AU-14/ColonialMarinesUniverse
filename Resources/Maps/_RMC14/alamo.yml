@@ -104,7 +104,7 @@ entities:
           volume: -1
         path: /Audio/_RMC14/Dropship/dropship_incoming.ogg
     - type: ImplicitRoof
-- proto: AtmosDeviceFanTiny
+- proto: RMCTinyFan
   entities:
   - uid: 3
     components:

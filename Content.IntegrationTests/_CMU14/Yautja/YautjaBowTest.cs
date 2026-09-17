@@ -17678,7 +17678,7 @@ public sealed class YautjaBowTest
             "ancient alien armor",
             "Ancient armor made from a strange alloy. It feels cold with an alien weight.",
             SlotFlags.OUTERCLOTHING,
-            new Cmss13ProtectionStats(mediumLow, medium, medium, mediumHigh),
+            new Cmss13ProtectionStats(25, medium, medium, mediumHigh),
             true,
             SourceArmorAllowedList: true);
 
@@ -17875,7 +17875,7 @@ public sealed class YautjaBowTest
             SlotFlags.OUTERCLOTHING,
             "CMU14/Yautja/armor_heavy_clan.rsi",
             "icon",
-            new Cmss13ProtectionStats(40, 50, 45, 50),
+            new Cmss13ProtectionStats(25, 50, 45, 50),
             AllowedStorage: true);
 
         yield return new StoneFlavorGearRow(

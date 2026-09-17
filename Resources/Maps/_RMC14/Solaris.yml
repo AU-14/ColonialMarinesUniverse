@@ -178130,7 +178130,7 @@ entities:
     - type: Transform
       pos: 111.5,-53.5
       parent: 1
-- proto: GasFilter
+- proto: CMUGasFilter
   entities:
   - uid: 24323
     components:
@@ -178138,7 +178138,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 30.5,-170.5
       parent: 1
-- proto: GasValve
+- proto: CMUGasValve
   entities:
   - uid: 24324
     components:
@@ -181925,7 +181925,7 @@ entities:
     - type: Transform
       pos: 100.5,-94.5
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 24858
     components:
@@ -181942,7 +181942,7 @@ entities:
     - type: Transform
       pos: 42.5,-174.5
       parent: 1
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 24861
     components:
@@ -181974,7 +181974,7 @@ entities:
     - type: Transform
       pos: 62.5,-118.5
       parent: 1
-- proto: RMCCanisterOrange
+- proto: CMUCanisterPlasma
   entities:
   - uid: 24867
     components:
@@ -181986,7 +181986,7 @@ entities:
     - type: Transform
       pos: 30.5,-168.5
       parent: 1
-- proto: RMCCanisterRed
+- proto: CMUCanisterNitrogen
   entities:
   - uid: 24869
     components:

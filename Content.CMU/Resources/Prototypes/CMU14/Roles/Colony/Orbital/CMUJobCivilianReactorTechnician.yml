@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 12
   id: CMUJobColonyReactorTechnician
   name: cmu-colony-name-reactor-technician
   description: cmu-colony-description-reactor-technician

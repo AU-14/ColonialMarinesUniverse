@@ -16,6 +16,7 @@ using Content.Shared.Gibbing;
 using Content.Shared.Interaction;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Popups;
+using Content.Shared.CMU14.Round.Antags.Cannibal; // CMU14
 using Content.Shared.Random.Helpers;
 using Content.Shared.Storage;
 using Content.Shared.Tools.Components;
@@ -83,9 +84,13 @@ public sealed partial class ToolRefinableSystem : EntitySystem
         }
 
         // Recheck this at completion so a revivability change cannot bypass the initial gate.
-        if (ent.Comp.WaitForRot && !_unrevivable.IsUnrevivable(ent))
+        // CMU14: only cannibals carve fresh corpses, anyone else waits out the defib window
+        if (ent.Comp.WaitForRot
+            && !_unrevivable.IsUnrevivable(ent)
+            && !HasComp<CannibalComponent>(args.User))
         {
             args.IsCancelled = true;
+            args.BlockCause = Loc.GetString("refined-slice-verb-target-not-rotten", ("target", ent.Owner));
             return;
         }
 
@@ -102,7 +107,7 @@ public sealed partial class ToolRefinableSystem : EntitySystem
 
         var component = ent.Comp;
         var uid = ent.Owner;
-        var attemptEvent = new AttemptToolRefineEvent(args.Used);
+        var attemptEvent = new AttemptToolRefineEvent(args.Used) { User = args.User }; // CMU14
         RaiseLocalEvent(args.Target, ref attemptEvent);
         if (attemptEvent.IsCancelled)
         {
@@ -139,7 +144,7 @@ public sealed partial class ToolRefinableSystem : EntitySystem
         else
         {
             // We have the necessary tool, make an attempt to ensure refinement is not blocked.
-            var attemptEvent = new AttemptToolRefineEvent(tool);
+            var attemptEvent = new AttemptToolRefineEvent(tool) { User = user }; // CMU14
             RaiseLocalEvent(args.Target, ref attemptEvent);
 
             if (attemptEvent.IsCancelled)
@@ -183,6 +188,7 @@ public sealed partial class ToolRefinableSystem : EntitySystem
         var getIsBlocked = new AttemptToolRefineEvent(args.Used.Value)
         {
             IsCompletion = true,
+            User = args.User, // CMU14
         };
         RaiseLocalEvent(args.Target.Value, ref getIsBlocked);
         if (getIsBlocked.IsCancelled)
@@ -366,7 +372,8 @@ public sealed partial class ToolRefinableSystem : EntitySystem
 public record struct AttemptToolRefineEvent(
     EntityUid Using,
     bool IsCancelled = false,
-    string? BlockCause = null
+    string? BlockCause = null,
+    EntityUid User = default // CMU14
 )
 {
     /// <summary>

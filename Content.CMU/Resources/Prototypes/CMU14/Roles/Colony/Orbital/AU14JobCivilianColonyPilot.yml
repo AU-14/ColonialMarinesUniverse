@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 6
   id: AU14JobCivilianColonyPilot
   roundSide: Civilian
   roundForce: ORBITAL

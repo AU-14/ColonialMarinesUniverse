@@ -7,6 +7,7 @@ using Content.Client._RMC14.Interaction;
 using Content.Client._RMC14.Dialog;
 using Content.Client.Clickable;
 using Content.Server.Maps;
+using Content.Server.GameTicking.Presets;
 using Content.Server.Power.Components;
 using Content.Server.Spawners.Components;
 using Content.Shared.Access.Components;
@@ -107,7 +108,7 @@ public sealed class YautjaHuntingGroundMapTest
     }
 
     [Test]
-    public async Task InRotationPlanetMapsHaveGroundRelayMarkers()
+    public async Task PlayablePlanetMapsHaveGroundRelayMarkers()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -117,27 +118,18 @@ public sealed class YautjaHuntingGroundMapTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var componentFactory = server.EntMan.ComponentFactory;
             var resources = server.ResolveDependency<IResourceManager>();
-            var checkedPaths = new HashSet<ResPath>();
             var errors = new List<string>();
 
-            foreach (var planetPrototype in prototypes.EnumeratePrototypes<EntityPrototype>())
+            foreach (var mapPath in GetPlayablePlanetMapPaths(prototypes, componentFactory))
             {
-                if (!planetPrototype.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory) ||
-                    !planet!.InRotation ||
-                    !checkedPaths.Add(prototypes.Index<GameMapPrototype>(planet.MapId).MapPath))
-                {
-                    continue;
-                }
-
-                var map = prototypes.Index<GameMapPrototype>(planet.MapId);
-                var markerCount = CountMapPrototypes(resources, map.MapPath)
+                var markerCount = CountMapPrototypes(resources, mapPath)
                     .GetValueOrDefault("CMUYautjaGroundRelayDestination");
-                if (markerCount < 1 || !ContainsLine(resources, map.MapPath, "kind: Ground"))
-                    errors.Add($"{planetPrototype.ID} -> {map.ID} -> {map.MapPath}");
+                if (markerCount < 1 || !ContainsLine(resources, mapPath, "kind: Ground"))
+                    errors.Add(mapPath.ToString());
             }
 
             Assert.That(errors, Is.Empty,
-                "In-rotation planet maps missing a CMUYautjaGroundRelayDestination marker:\n" +
+                "Playable planet maps missing a CMUYautjaGroundRelayDestination marker:\n" +
                 string.Join('\n', errors));
         });
 
@@ -145,7 +137,7 @@ public sealed class YautjaHuntingGroundMapTest
     }
 
     [Test]
-    public async Task InRotationPlanetGroundRelaysAreAwayFromHumanStructures()
+    public async Task PlayablePlanetGroundRelaysAreAwayFromHumanStructures()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var server = pair.Server;
@@ -165,9 +157,9 @@ public sealed class YautjaHuntingGroundMapTest
 
             try
             {
-                var mapPaths = GetInRotationPlanetMapPaths(prototypes, componentFactory);
+                var mapPaths = GetPlayablePlanetMapPaths(prototypes, componentFactory);
                 Assert.That(mapPaths, Is.Not.Empty,
-                    "Every currently in-rotation primary planet map must be checked.");
+                    "Every currently playable primary planet map must be checked.");
 
                 foreach (var mapPath in mapPaths)
                 {
@@ -1295,17 +1287,21 @@ public sealed class YautjaHuntingGroundMapTest
         return loader.TryLoadMap(path, out var map, out _) && map != null;
     }
 
-    private static IReadOnlyList<ResPath> GetInRotationPlanetMapPaths(
+    private static IReadOnlyList<ResPath> GetPlayablePlanetMapPaths(
         IPrototypeManager prototypes,
         IComponentFactory componentFactory)
     {
         var checkedPaths = new HashSet<ResPath>();
         var paths = new List<ResPath>();
+        var presetPlanets = prototypes.EnumeratePrototypes<GamePresetPrototype>()
+            .Where(preset => preset.ShowInVote)
+            .SelectMany(preset => preset.SupportedPlanets ?? Enumerable.Empty<string>())
+            .ToHashSet();
 
         foreach (var planetPrototype in prototypes.EnumeratePrototypes<EntityPrototype>())
         {
             if (!planetPrototype.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory) ||
-                !planet!.InRotation)
+                !(planet!.InRotation || presetPlanets.Contains(planetPrototype.ID)))
             {
                 continue;
             }

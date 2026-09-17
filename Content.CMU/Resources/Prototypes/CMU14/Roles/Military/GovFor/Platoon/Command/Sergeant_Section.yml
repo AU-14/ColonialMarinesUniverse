@@ -14,7 +14,7 @@
   overwatchSortPriority: -6
   overwatchShowName: true
   canBeAntag: false
-  displayWeight: 7
+  displayWeight: 6
   accessGroups:
   - AU14GovforCommand
 

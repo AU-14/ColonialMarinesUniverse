@@ -8,6 +8,7 @@ using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared.CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Round.Antags.Rider;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.Medical.Wounds;
@@ -16,6 +17,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -80,6 +82,22 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         FillHeart(args.Patient, state);
         if (skill >= 1)
             FillPainShockRisk(args.Patient, state);
+        FillRiderReading(args.Patient, state);
+    }
+
+    private void FillRiderReading(EntityUid patient, HealthScannerBuiState state)
+    {
+        if (!TryComp<RiddenComponent>(patient, out var ridden)
+            || !TryComp<RiderComponent>(ridden.Rider, out var rider))
+            return;
+
+        var ride = rider.TotalRideTime;
+        if (ride < TimeSpan.FromMinutes(25))
+            return;
+
+        state.CMURiderReading = Loc.GetString(ride >= TimeSpan.FromMinutes(45)
+            ? "rider-analyzer-foreign"
+            : "rider-analyzer-abnormal");
     }
 
     private void FillPainShockRisk(EntityUid patient, HealthScannerBuiState state)

@@ -66,10 +66,10 @@ public sealed partial class YautjaComponent : Component
     public float ShoveChanceBonus = 0.2f;
 
     [DataField]
-    public float XenoTackleSuccessChance = 0.5f;
+    public float XenoTackleSuccessChance = 0.75f;
 
     [DataField]
-    public int XenoTackleSuccessesRequired = 4;
+    public int XenoTackleSuccessesRequired = 2;
 
     [DataField]
     public TimeSpan XenoTackleExpireAfter = TimeSpan.FromSeconds(4);

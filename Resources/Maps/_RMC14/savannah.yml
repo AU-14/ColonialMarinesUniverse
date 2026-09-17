@@ -57165,14 +57165,14 @@ entities:
     - type: Transform
       pos: -30.5,11.5
       parent: 1
-- proto: GasOutletInjector
+- proto: CMUOutletInjector
   entities:
   - uid: 3816
     components:
     - type: Transform
       pos: 86.5,26.5
       parent: 1
-- proto: GasPassiveVent
+- proto: CMUPassiveVent
   entities:
   - uid: 636
     components:

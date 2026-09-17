@@ -19,10 +19,10 @@ public sealed class RMCFlamerPrototypeRegressionTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
-        await server.WaitAssertion(() =>
-        {
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var factory = server.EntMan.ComponentFactory;
+       await server.WaitAssertion(() =>
+       {
+           var prototypes = server.ResolveDependency<IPrototypeManager>();
+           var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(prototype, out var flamer), Is.True);
             Assert.That(flamer!.TryComp<UseDelayComponent>(out var useDelay, factory), Is.True);
@@ -34,7 +34,7 @@ public sealed class RMCFlamerPrototypeRegressionTest
             });
         });
 
-        await pair.CleanReturnAsync();
+       await pair.CleanReturnAsync();
     }
 
     [TestCaseSource(nameof(MeltableWeaponPrototypes))]

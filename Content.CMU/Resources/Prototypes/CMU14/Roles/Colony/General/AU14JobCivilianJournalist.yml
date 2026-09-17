@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobCivilianJournalist
+  displayWeight: 4
   roundSide: Civilian
   roundForce: COLONY
   roundRole: CivilianJournalist

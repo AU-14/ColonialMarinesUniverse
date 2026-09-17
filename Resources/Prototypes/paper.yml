@@ -1,6 +1,6 @@
 - type: entity
   parent: CMUPaperCMB
-  id: AUPaperRunawaySynth
+  id: AUPaperRunawaySynth # CMU14: bounty figure matches the ColonyBounty payout
   name: Fugitive Alert
   components:
   - type: Paper
@@ -26,7 +26,7 @@
 
       • Under Colonial Law 12-4 regarding unauthorized artificial persons, you are hereby authorized to locate and liquidate the unit.
 
-      • Upon confirmation of liquidation, a bounty of [color=OliveDrab][bold]$2,500[/bold][/color] will be transferred to your office.
+      • Upon confirmation of liquidation, a bounty of [color=OliveDrab][bold]$2,800[/bold][/color] will be transferred to your office.
 
       [bold]Signed,[/bold]
       [color=#dfc189][bolditalic]Regional HQ  [color=black]|[/color][/bolditalic]
@@ -134,7 +134,7 @@
 
       Sheriff,
 
-      • A long-standing [color=DarkRed][bold]fugitive[/color][/bold] with an active warrant has been positively identified operating near your jurisdiction. The subject carries a [color=OliveDrab][bold]substantial[/color][/bold] bounty and is to be apprehended ALIVE. Additional intelligence, including the warrant and suspect profile, has been uploaded to your Records Console.
+      • A long-standing [color=DarkRed][bold]fugitive[/color][/bold] with an active warrant has been reported operating near your jurisdiction. The subject carries a [color=OliveDrab][bold]substantial[/color][/bold] bounty and is to be apprehended ALIVE. The warrant, a witness description of the suspect profile, and their latent prints have been uploaded to your Records Console. A forensic scanner can confirm the match.
 
       [bold]Signed,[/bold]
       [color=#dfc189][bolditalic]Regional HQ  [color=black]|[/color][/bolditalic]
@@ -184,7 +184,7 @@
 
 - type: entity
   parent: CMUPaperCMB
-  id: AUPaperCLFVeteran
+  id: AUPaperCLFVeteran # CMU14: bounty figure matches the ColonyBounty payout
   name: Insurgent Alert
   components:
   - type: Paper
@@ -206,7 +206,7 @@
 
       Sheriff,
 
-      • Colonial Marshal Bureau has identified the presence of a suspected [color=DarkRed][bold]Colonial Liberation Front[/bold][/color] veteran operating within your jurisdiction. While the subject's identity remains unknown, they are believed to be armed, highly trained, and potentially dangerous. A [bolditalic][color=OliveDrab]$2,000[/color][/bolditalic] bounty has been authorized for the suspect's capture. Review your Records Console for the case file and proceed with caution.
+      • Colonial Marshal Bureau has identified the presence of a suspected [color=DarkRed][bold]Colonial Liberation Front[/bold][/color] veteran operating within your jurisdiction. While the subject's identity remains unknown, they are believed to be armed, highly trained, and potentially dangerous. A [bolditalic][color=OliveDrab]$1,450[/color][/bolditalic] bounty has been authorized for the suspect's capture. Review your Records Console for the case file and proceed with caution.
 
       [bold]Signed,[/bold]
       [color=#dfc189][bolditalic]Regional HQ  [color=black]|[/color][/bolditalic]
@@ -354,7 +354,7 @@
 
 - type: entity
   parent: CMUPaperCMB
-  id: AUPaperSerialKiller
+  id: AUPaperSerialKiller # CMU14: bounty figure matches the ColonyBounty payout
   name: Serial Killer Alert
   components:
   - type: Paper
@@ -378,7 +378,7 @@
 
       • The Colonial Marshal Bureau believes a serial murderer is operating within your colony.
 
-      • The suspect's identity remains unknown, however latent fingerprints recovered from multiple crime scenes have been matched and entered into CMB databases. A [bolditalic][color=OliveDrab]$2000[/color][/bolditalic] bounty has been authorized for the suspect's capture or elimination. Consult your Records Console to review the available fingerprint evidence.
+      • The suspect's identity remains unknown, however latent fingerprints recovered from multiple crime scenes have been matched and entered into CMB databases. A [bolditalic][color=OliveDrab]$2,250[/color][/bolditalic] bounty has been authorized for the suspect's capture or elimination. Consult your Records Console to review the available fingerprint evidence.
 
       [bold]Signed,[/bold]
       [color=#dfc189][bolditalic]Regional HQ  [color=black]|[/color][/bolditalic]

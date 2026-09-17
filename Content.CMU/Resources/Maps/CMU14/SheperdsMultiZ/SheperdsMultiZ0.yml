@@ -65743,7 +65743,7 @@ entities:
     - type: Transform
       pos: 4.5,3.5
       parent: 1
-- proto: AtmosDeviceFanTiny
+- proto: RMCTinyFan
   entities:
   - uid: 289600
     components:

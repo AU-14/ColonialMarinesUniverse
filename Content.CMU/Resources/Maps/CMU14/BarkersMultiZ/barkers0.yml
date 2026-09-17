@@ -575770,14 +575770,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 54.5,3.625
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 83427
     components:
     - type: Transform
       parent: 1
       pos: -3.5,-23.5
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 83430
     components:

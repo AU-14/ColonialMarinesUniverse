@@ -1,4 +1,5 @@
 rmc-vehicle-wheel-repaired = Wheel repaired.
+cmu-vehicle-wheel-missing = One of its wheel mounts sits empty; it cannot move like this.
 rmc-vehicle-crash-immobile = The engine stalls from the impact!
 rmc-vehicle-crash-immobile-try-again = The engine is still recovering from the impact.
 rmc-vehicle-crash-immobile-recovered = The engine catches again.

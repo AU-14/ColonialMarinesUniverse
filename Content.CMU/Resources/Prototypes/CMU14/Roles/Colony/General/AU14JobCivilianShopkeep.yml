@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobCivilianShopkeep
+  displayWeight: 2
   roundSide: Civilian
   roundForce: COLONY
   roundRole: CivilianShopkeep

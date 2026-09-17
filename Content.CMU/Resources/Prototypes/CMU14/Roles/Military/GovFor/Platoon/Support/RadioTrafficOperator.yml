@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 3
   id: AU14JobRadioTrafficOperatorBaseAbstract
   name: au14-job-name-radiotrafficoperator
   description: au14-job-description-radiotrafficoperator

@@ -577,13 +577,15 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         RaiseLocalEvent(hive, ref ev, true);
     }
 
-    public bool JoinBurrowedLarva(Entity<HiveComponent> hive, ICommonSession session)
+    public bool JoinBurrowedLarva(Entity<HiveComponent> hive, ICommonSession session, bool ignorePoolGate = false) // CMU14
     {
         if (_net.IsClient)
             return false;
 
-        if (!hive.Comp.BurrowedLarvaEnabled // CMU14
-            || hive.Comp.BurrowedLarva <= 0)
+        // CMU14: presets with the pool disabled (Colony Fall) must still reincarnate sacrificed xenos
+        if (!ignorePoolGate
+            && (!hive.Comp.BurrowedLarvaEnabled
+                || hive.Comp.BurrowedLarva <= 0))
             return false;
 
         if (!TryGetBurrowedLarvaSpawnPosition(hive, out var position))

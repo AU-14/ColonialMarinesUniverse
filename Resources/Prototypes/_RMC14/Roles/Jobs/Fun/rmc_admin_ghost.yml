@@ -4,6 +4,9 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: PropCaller
+  - type: Language # CMU14: aghosts must speak any language over phones and radios
+    defaultLanguage: English
+  - type: AllLanguages
   - type: Loadout
     prototypes: [ RMCMobAghostGear ]
   - type: IntrinsicUI

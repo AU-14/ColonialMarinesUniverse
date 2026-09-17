@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobLEOLeaderBase
+  displayWeight: 18
   id: AU14JobCivilianNSPAInspector
   roundSide: Civilian
   roundForce: NSPA

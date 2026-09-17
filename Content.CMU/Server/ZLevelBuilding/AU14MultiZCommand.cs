@@ -78,7 +78,7 @@ public sealed class AU14MultiZCommand : IConsoleCommand
             return;
         }
 
-        var mapManager = IoCManager.Resolve<SharedMapSystem>();
+        var mapManager = entMan.System<SharedMapSystem>();
         var mapId = new MapId(mapIdInt);
         if (!mapManager.MapExists(mapId))
         {

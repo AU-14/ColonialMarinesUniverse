@@ -175,6 +175,21 @@ public sealed partial class SpawnPointSystem : EntitySystem
             }
         }
 
+        // CMU14 Begin: the station filter above hides job markers on other maps, so colony jobs
+        // handed the warship station ended in the random-spawner backup below. Match the exact
+        // job marker anywhere before that fallback.
+        if (preferredPositions.Count == 0 && possiblePositions.Count == 0)
+        {
+            var jobPoints = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
+            while (jobPoints.MoveNext(out _, out var jobPoint, out var jobXform))
+            {
+                if (jobPoint.SpawnType == SpawnPointType.Job
+                    && (args.Job == null || jobPoint.Job == args.Job))
+                    possiblePositions.Add(jobXform.Coordinates);
+            }
+        }
+        // CMU14 End
+
         // Last resort: any spawn point.
         if (preferredPositions.Count == 0 && possiblePositions.Count == 0)
         {

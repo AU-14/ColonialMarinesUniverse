@@ -12,7 +12,7 @@
   playTimeTracker: AU14JobGOVFOROfficerIntel
   requireAdminNotify: true
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 7
   accessGroups:
   - AU14GovforCommand
   - aulegacygroupcommand

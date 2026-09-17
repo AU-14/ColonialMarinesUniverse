@@ -12,7 +12,7 @@
   playTimeTracker: AU14JobGOVFORMilitaryPoliceMan
   requireAdminNotify: true
   canBeAntag: false
-  displayWeight: 5
+  displayWeight: 4
   accessGroups:
   - AU14GovforSecurity
   - aulegacygroupmilp # NOTE: should remove & hard migrate

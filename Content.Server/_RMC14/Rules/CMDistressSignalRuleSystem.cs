@@ -1002,8 +1002,15 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             //Get the maximum of either remaining marines or minimum amount
             var surgeAmount = Math.Max((int)Math.Ceiling(totalHostWeights * _hijackShipWeight) - xenoAmount, _hijackMinBurrowed);
             var rules = QueryActiveRules();
-            while (rules.MoveNext(out _, out var rule, out _))
+            // CMU14: hijack rewards apply once per round, a repeat hijack must not refund larva or refill the surge
+            while (rules.MoveNext(out var ruleUid, out _, out var rule, out _))
             {
+                if (rule.HijackBoostsApplied)
+                    continue;
+
+                rule.HijackBoostsApplied = true;
+                Dirty(ruleUid, rule);
+
                 // Reset Hivecore Cooldown
                 var hiveComp = EnsureComp<HiveComponent>(rule.Hive);
                 // Add all the stranded xenos up.

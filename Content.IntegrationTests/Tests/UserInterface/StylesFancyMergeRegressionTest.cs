@@ -12,6 +12,7 @@ namespace Content.IntegrationTests.Tests.UserInterface;
 public sealed class StylesFancyMergeRegressionTest : GameTest
 {
     [Test]
+    [NonParallelizable] // CMU14: asserts process-global StyleNano CRT state; parallel pairs write it mid-assert
     public async Task NamedSheetsAndCrtPreviewResetKeepGlobalNanoSheetCoherent()
     {
         await Client.WaitAssertion(() =>

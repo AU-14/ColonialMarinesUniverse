@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobCivilianEthicsAndWellnessAdvisor
+  displayWeight: 8
   roundSide: Civilian
   roundForce: COLONY
   roundRole: CivilianEthicsAndWellnessAdvisor

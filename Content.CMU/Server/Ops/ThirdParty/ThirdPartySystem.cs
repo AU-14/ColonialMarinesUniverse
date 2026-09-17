@@ -7,6 +7,7 @@ using Content.Server.CMU14.VendorMarker;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
+using Content.Server.CMU14.Roles; // CMU14
 using Content.Server.Preferences.Managers;
 using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Construction;
@@ -57,6 +58,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SurvivorSupplementSystem _survivorSupplement = default!; // CMU14
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
@@ -71,8 +73,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private float _signalIntervalMultiplier = 1f;
     private bool _spawningActive;
     private TimeSpan _spawnInterval = TimeSpan.FromMinutes(5);
+    private TimeSpan _arrivalInterval = TimeSpan.FromMinutes(5);
     private float _spawnTimer;
     private List<ThirdPartyPrototype>? _thirdPartyList;
+    private static readonly TimeSpan ArrivalJitter = TimeSpan.FromMinutes(10);
 
     private readonly Dictionary<int, uint> _scheduledForces = new();
     private readonly Dictionary<string, uint> _automaticForces = new();
@@ -114,11 +118,12 @@ public sealed partial class ThirdPartySystem : EntitySystem
             return;
         }
 
-        TimeSpan interval = TimeSpan.FromTicks((long)(_spawnInterval.Ticks * _signalIntervalMultiplier));
+        TimeSpan interval = TimeSpan.FromTicks((long)(_arrivalInterval.Ticks * _signalIntervalMultiplier));
         if (_spawnTimer < interval.TotalSeconds)
             return;
 
         _spawnTimer = 0f;
+        _arrivalInterval = RollArrivalInterval();
         int roll = _random.Next(1, 101);
         int chance = Math.Clamp(party.weight * 10, 5, 100); // Example: weight 1 = 10%, weight 10 = 100%
 
@@ -129,10 +134,21 @@ public sealed partial class ThirdPartySystem : EntitySystem
         }
 
         if (_scheduledForces.TryGetValue(_nextThirdPartyIndex, out var force))
+        {
             _forceInterest.SetReady(force);
+
+            // The ghost-menu entry alone never reaches players who do not open it.
+            if (!string.IsNullOrWhiteSpace(party.AnnounceInbound))
+                _chat.DispatchGlobalAnnouncement(party.AnnounceInbound, string.Empty, false,
+                    colorOverride: Color.DarkOrange);
+        }
 
         _nextThirdPartyIndex++;
     }
+
+    private TimeSpan RollArrivalInterval()
+        => TimeSpan.FromMinutes(Math.Max(1, (int) _spawnInterval.TotalMinutes
+            + _random.Next(-(int) ArrivalJitter.TotalMinutes, (int) ArrivalJitter.TotalMinutes + 1)));
 
     private static ThirdPartyAssignmentCounts CountThirdPartyAssignments(
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs)
@@ -239,10 +255,12 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         // Maintain compatibility with existing code that uses these locals.
         bool useDropship = entryMethod.Equals("shuttle", StringComparison.OrdinalIgnoreCase);
+
+        // CMU14 Begin: aborting dropped the whole party when every LZ was claimed or re-factioned
+        // by a visiting military dropship. Ground insertion still delivers the party.
+        var chosenDestination = EntityUid.Invalid;
         if (useDropship)
         {
-            // Dropship step (existing behavior)
-            EntityUid? chosenDestination = null;
             EntityQueryEnumerator<DropshipDestinationComponent, TransformComponent> destQuery = _entityManager
                 .EntityQueryEnumerator<DropshipDestinationComponent, TransformComponent>();
             while (destQuery.MoveNext(out EntityUid destUid, out DropshipDestinationComponent? destComp,
@@ -255,14 +273,19 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 }
             }
 
-            if (chosenDestination == null)
+            if (chosenDestination == EntityUid.Invalid)
             {
-                _sawmill.Error(
-                    "[ThirdPartySystem] No valid third-party dropship landing destination found. Aborting third party spawn.");
-                return false;
+                _sawmill.Warning(
+                    "[ThirdPartySystem] No valid third-party dropship landing destination found. Falling back to ground spawn.");
+                useDropship = false;
+                entryMethod = "ground";
             }
+        }
+        // CMU14 End
 
-            EntityUid destination = chosenDestination.Value;
+        if (useDropship)
+        {
+            EntityUid destination = chosenDestination;
             _sawmill.Debug($"[ThirdPartySystem] Found valid dropship destination: {destination}");
 
             DeserializationOptions deserializationOpts = DeserializationOptions.Default with { InitializeMaps = true };
@@ -339,8 +362,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
                         case PlatoonMarkerClass.DSPilot:
                             try
                             {
-                                _entityManager.SpawnEntity("CMComputerDropshipNavigationThirdParty",
-                                    markerXform.Coordinates);
+                                // SpawnEntity has no rotation parameter, so spawn attached to keep the marker's rotation
+                                _entityManager.SpawnAttachedTo("CMComputerDropshipNavigationThirdParty",
+                                    markerXform.Coordinates, rotation: markerXform.LocalRotation);
                                 consoleCount++;
                             }
                             catch (Exception ex)
@@ -352,7 +376,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
                         case PlatoonMarkerClass.DSWeapons:
                             try
                             {
-                                _entityManager.SpawnEntity("CMComputerDropshipWeapons", markerXform.Coordinates);
+                                _entityManager.SpawnAttachedTo("CMComputerDropshipWeapons", markerXform.Coordinates, rotation: markerXform.LocalRotation);
                                 consoleCount++;
                             }
                             catch (Exception ex)
@@ -773,6 +797,12 @@ public sealed partial class ThirdPartySystem : EntitySystem
         // Run neighbor-marking now (only once per spawn operation, using the last used marker)
         MarkNeighborsIfNeeded();
 
+        if (roundStart && party.AnnounceAsSurvivors) // CMU14
+        {
+            foreach (EntityUid survivor in spawnedLeaders.Concat(spawnedGrunts))
+                _survivorSupplement.ApplyToSurvivor(survivor);
+        }
+
         if (roundStart && assignedJobs != null)
         {
             var leaderPlayers = new List<NetUserId>();
@@ -881,7 +911,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
     public void StartThirdPartySpawning(ThreatPrototype threat,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null)
     {
-        StartThirdPartySpawning(threat, threat.ThirdPartyInterval, $"threat={threat.ID}", assignedJobs);
+        var planetInterval = _auRoundSystem.GetSelectedPlanet()?.ThirdPartyInterval;
+        StartThirdPartySpawning(threat, planetInterval ?? threat.ThirdPartyInterval, $"threat={threat.ID}", assignedJobs);
     }
 
     public void StartThirdPartySpawning(GamePresetPrototype preset,
@@ -900,6 +931,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         _nextThirdPartyIndex = 0;
         _spawnTimer = 0f;
         _spawnInterval = TimeSpan.FromSeconds(Math.Max(1, intervalSeconds));
+        _arrivalInterval = RollArrivalInterval();
 
         var roundstartCount = 0;
         foreach (ThirdPartyPrototype party in _thirdPartyList)

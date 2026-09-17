@@ -33,6 +33,9 @@
     - FullAuto
     soundGunshot:
       collection: RMCFlamerShoot
+  # CMU14: no flat use delay, cadence is ShootUseDelay plus WieldDelay
+  #- type: UseDelay
+  #  delay: 2
   - type: ShootUseDelay
   - type: ContainerContainer
     containers:

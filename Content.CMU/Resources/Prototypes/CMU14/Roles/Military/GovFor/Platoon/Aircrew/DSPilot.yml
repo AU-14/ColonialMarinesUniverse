@@ -11,7 +11,7 @@
   playTimeTracker: AU14JobGOVFORDSPilot
   requireAdminNotify: true
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 4
   accessGroups:
   - AU14GovforPilot
   - AU14GovforCorpsman

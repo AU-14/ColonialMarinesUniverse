@@ -28,6 +28,7 @@
   requiresGovforVote: true
   supportedPlanets:
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
+  - CMUPlanetStableGarrisonDistress
 # - AUPlanetShepherdsPride # lot of forests/chokes
   - CMUPlanetHopesRetreat
   - AUPlanetBosenmoriBasho

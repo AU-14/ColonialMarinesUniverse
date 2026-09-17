@@ -522,6 +522,10 @@ public abstract partial class SharedHeartSystem : EntitySystem
     {
         if (_net.IsClient || !IsDefibrillationHeartValid(token))
             return false;
+        // Synths have no organ repair path (no metabolism, no synth heart
+        // surgery), so defib trauma would be permanently unrecoverable.
+        if (HasComp<SynthComponent>(token.Body))
+            return true;
         // Preserve the established 3–5 tissue damage. Eligibility itself is read-only;
         // this is reached only after all revival veto listeners have finished.
         var damage = new DamageSpecifier { DamageDict = { ["Blunt"] = FixedPoint2.New(Random.Next(3, 6)) } };

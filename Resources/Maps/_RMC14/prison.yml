@@ -80544,7 +80544,7 @@ entities:
     - type: Transform
       pos: 92.5735,-66.34078
       parent: 1
-- proto: GasPort
+- proto: CMUGasPort
   entities:
   - uid: 4587
     components:
@@ -80575,7 +80575,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -83.5,26.5
       parent: 1
-- proto: GasThermoMachineFreezer
+- proto: RMCSpaceHeater
   entities:
   - uid: 4592
     components:
@@ -85847,21 +85847,19 @@ entities:
     - type: Transform
       pos: 73.5,12.5
       parent: 1
-- proto: RMCCanisterOrange
+- proto: CMUCanisterPlasma
   entities:
   - uid: 5408
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 83.5,31.5
       parent: 1
   - uid: 5409
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 85.5,30.5
       parent: 1
-- proto: RMCCanisterRed
+- proto: CMUCanisterNitrogen
   entities:
   - uid: 5410
     components:
@@ -90901,7 +90899,7 @@ entities:
     - type: Transform
       pos: 47.358067,-0.34992126
       parent: 1
-- proto: CMUInflatableDoor # CMU14
+- proto: CMUInflatableDoor
   entities:
   - uid: 6244
     components:
@@ -90953,7 +90951,7 @@ entities:
     - type: Transform
       pos: 33.5,24.5
       parent: 1
-- proto: CMUInflatableDoorBroken # CMU14
+- proto: CMUInflatableDoorBroken
   entities:
   - uid: 6254
     components:
@@ -91085,7 +91083,7 @@ entities:
     - type: Transform
       pos: -16.5,33.5
       parent: 1
-- proto: CMUInflatableDoorFolded # CMU14
+- proto: CMUInflatableDoorFolded
   entities:
   - uid: 6280
     components:
@@ -91102,7 +91100,7 @@ entities:
     - type: Transform
       pos: -37.520805,-9.424316
       parent: 1
-- proto: CMUInflatableWall # CMU14
+- proto: CMUInflatableWall
   entities:
   - uid: 6283
     components:
@@ -91492,7 +91490,7 @@ entities:
     - type: Transform
       pos: -110.5,-39.5
       parent: 1
-- proto: CMUInflatableWallBroken # CMU14
+- proto: CMUInflatableWallBroken
   entities:
   - uid: 6357
     components:
@@ -91549,7 +91547,7 @@ entities:
     - type: Transform
       pos: -15.5,33.5
       parent: 1
-- proto: CMUInflatableWallFolded # CMU14
+- proto: CMUInflatableWallFolded
   entities:
   - uid: 6368
     components:
@@ -91571,7 +91569,7 @@ entities:
     - type: Transform
       pos: 65.45891,-8.500058
       parent: 1
-- proto: CMUInflatableWallFolded1 # CMU14
+- proto: CMUInflatableWallFolded1
   entities:
   - uid: 6372
     components:

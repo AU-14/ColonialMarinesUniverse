@@ -21,6 +21,7 @@ jobs:
   labels:
     name: Sync and apply labels
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Sync labels and apply event labels
         uses: actions/github-script@v9.0.0
@@ -218,6 +219,7 @@ jobs:
     if: github.event_name == 'pull_request_target'
     needs: labels
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
         with:

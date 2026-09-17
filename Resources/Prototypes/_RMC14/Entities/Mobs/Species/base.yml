@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   save: false
   parent: [BaseSpeciesMob, BaseSlicingRefinable]
   id: RMCBaseMobSpeciesOrganic
@@ -203,6 +203,9 @@
       enum.FactionLanguageUiKey.Key:
         type: FactionLanguageBoundUserInterface
         requireInputValidation: false
+      enum.ReplicantUiKey.Key:
+        type: ReplicantBoundUserInterface
+        requireInputValidation: false
   - type: Infectable
   - type: Tackleable
   - type: XenoNestable
@@ -215,9 +218,11 @@
   - type: AtmosExposed
   - type: Temperature
     specificHeat: 42
-  - type: TemperatureSpeed
+  - type: TemperatureSpeed # CMU14: cold drags marines down before they're hurt
     thresholds:
-      273: 1
+      273: 1.0
+      223: 0.95
+      173: 0.85
   - type: ThermalRegulator
     metabolismHeat: 800
     radiatedHeat: 100
@@ -226,13 +231,36 @@
     shiveringHeatRegulation: 2000
     normalBodyTemperature: 310.15
     thermalRegulationTemperatureThreshold: 25
-  - type: DamageMobState
-    critDamage:
-      types:
-        Asphyxiation: 1
-    nonDeadDamage:
-      types:
-        Asphyxiation: -0.33
+  # CMU14: ambient heat from phoron/plasma fires hurts humans, cold stays harmless.
+  # The firesuits' TemperatureProtection (heatingCoefficient 0.001) keeps firefighters
+  # safe inside the same fires. NOTE: Disabled until we're ready.
+# - type: TemperatureDamage # CMU14
+#   heatDamageThreshold: 1073.15 # 800 C, phoron fire territory
+#   coldDamageThreshold: -150
+#   heatDamage:
+#     types:
+#       Heat: 5
+  # CMU14 NOTE: Disabled until we're ready.
+# - type: Respirator # CMU14
+#   damage:
+#     types:
+#       Asphyxiation: 1.0
+#   damageRecovery:
+#     types:
+#       Asphyxiation: -1.0
+  # CMU14 NOTE: Disabled until we're ready.
+# - type: Barotrauma # CMU14
+#   damage:
+#     types:
+#       Blunt: 0.50
+#       Heat: 0.1
+# - type: DamageMobState
+#   critDamage:
+#     types:
+#       Asphyxiation: 1
+#   nonDeadDamage:
+#     types:
+#       Asphyxiation: -0.33
   - type: NoSlip
   - type: NoClothingSlowdown
   - type: RMCSize

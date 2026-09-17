@@ -91,6 +91,7 @@
 
 - type: job
   parent: AU14JobWorkingJoeBase
+  displayWeight: 4
   id: AU14JobColonyWorkingJoe
   roundSide: Civilian
   roundForce: WORKING_JOE
@@ -134,6 +135,7 @@
 
 - type: job
   parent: AU14JobColonyWorkingJoe
+  displayWeight: 4
   id: AU14JobColonyWorkingJoeHazmat
   roundSide: Civilian
   roundForce: WORKING_JOE

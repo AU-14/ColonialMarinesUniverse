@@ -25,6 +25,7 @@
     govforinship: true
     opforinship: true
     daycycleenabled: false
+    thirdpartyinterval: 1800
     thirdparties:
     - CLFCellReinforcementsSurv
     - FreeCompanyRaidersSurv

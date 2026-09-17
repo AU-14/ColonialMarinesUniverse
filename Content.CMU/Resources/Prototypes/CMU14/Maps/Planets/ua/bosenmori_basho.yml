@@ -28,6 +28,21 @@
     daycycleenabled: true
     threats:
     - XenoThreat
+    thirdpartyinterval: 1800
+    thirdparties:
+    - FreeCompanyRaiders
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - RMCRRT
+    - LACNSniperteam
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - ICRCReliefParty
+    - CMBInvestigationParty
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 

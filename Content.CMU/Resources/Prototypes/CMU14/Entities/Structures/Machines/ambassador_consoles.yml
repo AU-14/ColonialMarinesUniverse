@@ -119,4 +119,6 @@
     budget: 500
     replenishAmount: 10
     replenishInterval: 60
+    callableParties:
+      Freelancers: 4500
 

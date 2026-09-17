@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 4
   id: AU14JobLEOLeaderBase
   name: au14-job-name-leoleader
   description: au14-job-description-leoleader

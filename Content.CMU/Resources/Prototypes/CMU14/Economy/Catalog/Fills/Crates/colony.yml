@@ -440,14 +440,18 @@
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxFirefighting
-  name: Firefighting Crate (3x firefighter helmet, 3x Firefighting Turnout Gear, 6x fire extinguisher, 1x fire-axe)
+  name: Firefighting Crate (3x fire helmet, 2x firesuit, 3x turnout gear, 5x suppression grenade, 6x fire extinguisher, 1x fire-axe)
   components:
   - type: StorageFill
     contents:
-    - id: RMCHardhatRed
+    - id: CMUFireHelmet
       amount: 3
+    - id: CMUSuitFirefighter
+      amount: 2
     - id: AU14CivilianTurnoutGear
       amount: 3
+    - id: CMUFireSuppressantGrenade
+      amount: 5
     - id: CMFireExtinguisher
       amount: 6
     - id: RMCFireAxe

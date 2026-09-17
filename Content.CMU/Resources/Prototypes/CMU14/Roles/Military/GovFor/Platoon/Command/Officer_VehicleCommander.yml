@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 6
   id: AU14JobVehicleCommanderBaseAbstract
   name: au14-job-name-vehiclecommander
   description: au14-job-description-vehiclecommander
