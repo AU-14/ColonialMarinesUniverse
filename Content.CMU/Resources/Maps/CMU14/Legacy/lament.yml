@@ -566282,7 +566282,7 @@ entities:
     - type: Transform
       pos: 54.5,3.625
       parent: 1
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 83425
     components:
@@ -566299,7 +566299,7 @@ entities:
     - type: Transform
       pos: -3.5,-23.5
       parent: 1
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 83428
     components:

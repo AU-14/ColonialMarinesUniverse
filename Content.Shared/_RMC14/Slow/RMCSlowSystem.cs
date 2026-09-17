@@ -274,6 +274,11 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     private void OnModifierEffectEnd(Entity<RMCSpeciesSlowdownModifierComponent> ent, ref StatusEffectEndedEvent args)
     {
+        // CMU14: fires from knockdown component shutdown inside client prediction resets. Re-adding
+        // the networked visuals mid-rollback breaks the reset (collection modified, diverged state).
+        if (_timing.ApplyingState)
+            return;
+
         if (!ent.Comp.StatusesToUpdateOn.Contains(args.Key))
             return;
 

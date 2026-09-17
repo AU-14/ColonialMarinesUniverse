@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 0
   id: AU14JobSquadAutomaticRiflemanBaseAbstract
   name: au14-job-name-govforsquadautomaticrifleman
   description: au14-job-description-govforsquadautomaticrifleman

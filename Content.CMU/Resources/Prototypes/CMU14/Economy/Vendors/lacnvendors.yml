@@ -472,11 +472,11 @@
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
       - id: AU14LACNAirCrewHelmet
+      - id: AU14USASFAirCrewHelmet
       - id: AU14LACNNavyCap
     - name: Flight Visor
       choices: { CMUPlatoonAirCrewFlightVisor: 1 }
       entries:
-      - id: AU14GogglesLAH99VisorHighTech
       - id: AU14GogglesLACNLAH99VisorClear
       - id: AU14GogglesLACNLAH99Visor
       - id: AU14GogglesLACNLAH99VisorMirror

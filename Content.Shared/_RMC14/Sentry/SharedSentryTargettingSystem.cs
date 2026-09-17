@@ -1,8 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared._RMC14.Xenonids.Construction.FloorResin; // CMU14
+using Content.Shared._RMC14.Xenonids.Hive; // CMU14
+using Content.Shared._RMC14.Xenonids.Weeds; // CMU14
 using Content.Shared.CMU14.AllianceConsole;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs; // CMU14
+using Content.Shared.Mobs.Components; // CMU14
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes; // CMU14
 using Content.Shared.Weapons.Ranged.Components;
@@ -333,6 +338,10 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
 
     public IEnumerable<EntityUid> GetNearbyIffHostiles(Entity<SentryTargetingComponent> ent, float range)
     {
+        // CMU14: an unconfigured sentry targets no one, matching IsValidTarget
+        if (ent.Comp.FriendlyFactions.Count == 0)
+            yield break;
+
         BuildFriendlyIff(ent.Comp);
 
         // Check every friendly NPC faction so entities without wearable IFF are still protected.
@@ -354,6 +363,20 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         foreach (var target in _factionLookupBuffer)
             _candidateLookupBuffer.Add(target.Owner);
 
+        // CMU14: with a living hostile mob in range, structures drop out of the set
+        // entirely so turrets never farm resin while a xeno closes in
+        var hostileMobNearby = false;
+        foreach (var candidate in _candidateLookupBuffer)
+        {
+            if (!IsFriendlyTarget(candidate)
+                && TryComp<MobStateComponent>(candidate, out var scanMob)
+                && scanMob.CurrentState != MobState.Dead)
+            {
+                hostileMobNearby = true;
+                break;
+            }
+        }
+
         foreach (var target in _candidateLookupBuffer)
         {
             if (target == ent.Owner)
@@ -362,28 +385,43 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
             if (_container.IsEntityInContainer(target))
                 continue;
 
+            // CMU14: never lock what sentry fire cannot affect: bullets pass over
+            // weeds and floor resin, and invincible hive structures void all damage
+            if (HasComp<XenoWeedsComponent>(target)
+                || HasComp<ResinSlowdownModifierComponent>(target)
+                || HasComp<ResinSpeedupModifierComponent>(target)
+                || HasComp<InvincibleHiveStructureComponent>(target))
+                continue;
+
             // CMU14: factions flagged sentryProtected are never valid targets (e.g. Provost Office)
             if (TryComp<NpcFactionMemberComponent>(target, out var protectedNpc) && IsSentryProtected(protectedNpc))
                 continue;
 
-            if (IsFriendlyByIff(target))
+            if (IsFriendlyTarget(target))
                 continue;
 
-            if (_friendlyNpcFactionBuffer.Count > 0 &&
-                TryComp<NpcFactionMemberComponent>(target, out var targetNpc))
-            {
-                var isFriendly = false;
-                foreach (var f in targetNpc.Factions)
-                {
-                    if (_friendlyNpcFactionBuffer.Contains(f.Id))
-                    {
-                        isFriendly = true;
-                        break;
-                    }
-                }
-                if (isFriendly)
-                    continue;
-            }
+            // CMU14: replaced by IsFriendlyTarget above.
+            //if (IsFriendlyByIff(target))
+            //    continue;
+            //if (_friendlyNpcFactionBuffer.Count > 0 &&
+            //    TryComp<NpcFactionMemberComponent>(target, out var targetNpc))
+            //{
+            //    var isFriendly = false;
+            //    foreach (var f in targetNpc.Factions)
+            //    {
+            //        if (_friendlyNpcFactionBuffer.Contains(f.Id))
+            //        {
+            //            isFriendly = true;
+            //            break;
+            //        }
+            //    }
+            //    if (isFriendly)
+            //        continue;
+            //}
+
+            // CMU14: mobs out-priority structures
+            if (hostileMobNearby && !HasComp<MobStateComponent>(target))
+                continue;
 
             yield return target;
         }
@@ -394,6 +432,25 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         _friendlyIffBuffer.Clear();
         _targetIffBuffer.Clear();
         _friendlyNpcFactionBuffer.Clear();
+    }
+
+    // CMU14 Method
+    private bool IsFriendlyTarget(EntityUid target)
+    {
+        if (IsFriendlyByIff(target))
+            return true;
+
+        if (_friendlyNpcFactionBuffer.Count > 0
+            && TryComp<NpcFactionMemberComponent>(target, out var targetNpc))
+        {
+            foreach (var f in targetNpc.Factions)
+            {
+                if (_friendlyNpcFactionBuffer.Contains(f.Id))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     private void ApplyTargeting(Entity<SentryTargetingComponent> ent)

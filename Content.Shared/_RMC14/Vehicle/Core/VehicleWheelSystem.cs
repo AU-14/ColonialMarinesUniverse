@@ -1,5 +1,6 @@
 using System;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Examine; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Tools.Components;
 using Content.Shared.Vehicle;
@@ -34,6 +35,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
         SubscribeLocalEvent<VehicleWheelSlotsComponent, EntInsertedIntoContainerMessage>(OnWheelInserted);
         SubscribeLocalEvent<VehicleWheelSlotsComponent, EntRemovedFromContainerMessage>(OnWheelRemoved);
         SubscribeLocalEvent<VehicleWheelSlotsComponent, VehicleCanRunEvent>(OnVehicleCanRun);
+        SubscribeLocalEvent<VehicleWheelSlotsComponent, ExaminedEvent>(OnWheelsExamined); // CMU14: empty wheel slots read as unrepairable otherwise (BUG-599)
     }
 
     private void OnWheelInit(Entity<VehicleWheelSlotsComponent> ent, ref ComponentInit args)
@@ -73,6 +75,28 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 
         if (!HasAllWheels(ent.Owner, ent.Comp))
             args.CanRun = false;
+    }
+
+    // CMU14 method
+    private void OnWheelsExamined(Entity<VehicleWheelSlotsComponent> ent, ref ExaminedEvent args)
+    {
+        if (HasEmptyWheelSlot(ent.Owner, ent.Comp))
+            args.PushMarkup(Loc.GetString("cmu-vehicle-wheel-missing"));
+    }
+
+    // CMU14 method
+    private bool HasEmptyWheelSlot(EntityUid uid, VehicleWheelSlotsComponent component, ItemSlotsComponent? itemSlots = null)
+    {
+        if (!Resolve(uid, ref itemSlots, false))
+            return false;
+
+        foreach (var slotId in component.Slots)
+        {
+            if (!_itemSlots.TryGetSlot((uid, itemSlots), slotId, out var slot) || !slot.HasItem)
+                return true;
+        }
+
+        return false;
     }
 
     private void EnsureSlots(EntityUid uid, VehicleWheelSlotsComponent component, ItemSlotsComponent? itemSlots = null)

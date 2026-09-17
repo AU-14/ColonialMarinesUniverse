@@ -132,3 +132,15 @@
   - "RMCTacticalMapTableLargeRotated"
   - "RMCTacticalMapTableLargeSquare"
   - "RMCTacticalMapTable"
+
+# Unused Upstream Prototypes for Atmos (Use the CMU variants)
+- id: "DeprecatedAtmosUpstreamPrototypes"
+  type: "Blacklist"
+  entityMatchers:
+  - "RMCCanister.*"
+  - "(Air|Portable)Scrubber"
+  - "AtmosDeviceFan(Tiny|Directional)"
+  - "Gas(Pipe(Half|Straight|Fourway|Sensor|Manifold)|Vent(Pump|Scrubber)|Passive(Vent|Gate)|OutletInjector|PressurePump|VolumePump|Valve|Port|DualPortVentPump|Filter|Mixer|ThermoMachine(Heater|Freezer)|MinerOxygen).*"
+  - "(Signal|Pressure)ControlledValve.*"
+  - "HeatExchanger.*"
+  - "SpaceHeater"

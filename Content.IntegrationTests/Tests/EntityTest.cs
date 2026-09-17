@@ -324,6 +324,7 @@ namespace Content.IntegrationTests.Tests
                 "VehiclePizzaVanBackground1",
                 "VehicleHumveeMedicalBackDoor1",
                 "VehiclePeekAnchor",
+                "CMURiderHatchling", // CMU14: Requires Rider antag context for proper spawn
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);

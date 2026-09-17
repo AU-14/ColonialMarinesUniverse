@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: -1
   id: AU14JobAuxTechBaseAbstract
   name: au14-job-name-govforAuxTech
   description: au14-job-description-govforAuxTech

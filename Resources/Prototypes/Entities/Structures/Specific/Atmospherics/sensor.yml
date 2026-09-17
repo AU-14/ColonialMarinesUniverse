@@ -75,6 +75,10 @@
   - type: InteractionOutline
   - type: ApcPowerReceiver
   - type: ExtensionCableReceiver
+  - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+    idleLoad: 0
+    activeLoad: 0
+    channel: Environment
   - type: AccessReader
     access: [ [ "Atmospherics" ] ]
   - type: Construction

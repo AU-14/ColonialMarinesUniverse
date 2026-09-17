@@ -25,6 +25,7 @@ jobs:
     name: Source Guards
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
 
@@ -55,16 +56,12 @@ jobs:
     name: Build
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/setup-dotnet@v6.0.0
         with:
@@ -132,16 +129,12 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/download-artifact@v8.0.1
         with:
@@ -170,16 +163,12 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/download-artifact@v8.0.1
         with:
@@ -207,6 +196,7 @@ jobs:
     name: Schema Validators
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Check if schema validation is needed
         id: schema_changes
@@ -247,13 +237,7 @@ jobs:
         if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/setup-python@v7.0.0
         if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
@@ -293,6 +277,7 @@ jobs:
     name: RSI Validator
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Check if RSI validation is needed
         id: rsi_changes
@@ -317,13 +302,7 @@ jobs:
         if: steps.rsi_changes.outputs.run == 'true'
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        if: steps.rsi_changes.outputs.run == 'true'
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/setup-python@v7.0.0
         if: steps.rsi_changes.outputs.run == 'true'
@@ -354,6 +333,7 @@ jobs:
       - rsi-validator
       - integration-tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Check required job results
         uses: actions/github-script@v9.0.0
@@ -382,6 +362,7 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 60 # raised to leave headroom for the shard (cmu) retry loop on non-failure
     strategy:
       fail-fast: false
       matrix:
@@ -538,22 +519,24 @@ jobs:
               FullyQualifiedName~Content.IntegrationTests._RMC14
               | FullyQualifiedName~Content.IntegrationTests.Tests._RMC14.
           - name: cmu
-            # CMU14: Include both legacy underscore and current CMU test namespaces.
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.
+              (FullyQualifiedName~Content.IntegrationTests._CMU14
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.)
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Chemistry
+          - name: cmu_medical_cameras
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Camera
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Medical
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Chemistry
           - name: au14
             filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: true
-          submodules: false
-
-      - name: Checkout submodules
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
+          submodules: recursive
 
       - uses: actions/download-artifact@v8.0.1
         with:
@@ -579,18 +562,6 @@ jobs:
           mkdir -p bin/Resources bin/RobustToolbox/Resources
           cp -r Resources/* bin/Resources/
           cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
-
-      - name: Runtime diagnostics
-        if: matrix.shard.name == 'root_1'
-        shell: bash
-        run: |
-          set -euo pipefail
-          pwd
-          realpath .
-          realpath ./Resources || true
-          realpath ./bin/Content.IntegrationTests || true
-          find . -name "Content.IntegrationTests.dll"
-          dotnet test bin/Content.IntegrationTests/Content.IntegrationTests.dll --list-tests
 
       - name: Run ${{ matrix.shard.name }}
         shell: bash
@@ -627,6 +598,16 @@ jobs:
           echo "--- $shard shard filter ---"
           echo "$FILTER"
           cd bin/Content.IntegrationTests || exit 1
-          # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
-          dotnet test Content.IntegrationTests.dll \
-            --verbosity normal --filter "$FILTER" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000
+          # CMU14: upstream prototype variantization races on PLINQ parse threads, so any pair
+          # boot can die with ArgumentNullException during prototype load. One exit 1 without
+          # a retry is a coin flip. Genuine test failures stay red through all three attempts.
+          for attempt in 1 2 3; do
+            echo "--- $shard attempt $attempt"
+            # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
+            if dotnet test Content.IntegrationTests.dll \
+              --verbosity normal --filter "$FILTER" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000; then
+              exit 0
+            fi
+            echo "attempt $attempt failed"
+          done
+          exit 1

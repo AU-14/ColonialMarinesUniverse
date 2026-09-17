@@ -1,0 +1,502 @@
+- type: antagSpecifier
+  id: Rider
+  prefRoles: [ RiderRole ]
+  jobBlacklistGroup:
+  - AllGovforCommandStaff
+  - AllOpforCommandStaff
+  - AllColonyDepartmentHeadJobs
+  briefing:
+    text: rider-role-greeting
+    color: SpringGreen
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  mindRoles:
+  - MindRoleRider
+
+- type: entity
+  id: Rider
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: RiderRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: Rider
+      playerRatio: 25
+      range:
+        min: 1
+        max: 2
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleRider
+  name: Rider Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: RiderRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: RiderRole
+  name: roles-antag-rider-role-name
+  setPreference: true
+  objective: roles-antag-rider-objective
+
+# The hide shrugs off most physical trauma; fire and chems land fully.
+- type: damageModifierSet
+  id: CMURiderHatchlingHide
+  coefficients:
+    Blunt: 0.4
+    Slash: 0.35
+    Piercing: 0.3
+    Shock: 0.5
+    Cold: 0.5
+
+- type: entity
+  id: CMURiderHatchling
+  parent: BaseSimpleMob
+  suffix: CMU
+  components:
+  - type: Rider
+  - type: GhostRole
+    allowMovement: true
+    allowSpeech: true
+    makeSentient: true
+    name: ghost-role-information-rider-name
+    description: ghost-role-information-rider-description
+    rules: ghost-role-information-rider-rules
+    mindRoles:
+    - MindRoleRider
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+  - type: NightVision
+    innate: true
+    alert: XenoNightVision
+  - type: Sprite
+    sprite: CMU14/Mobs/thirdPartiesXenos/parasite_runner.rsi
+    scale: "0.65, 0.65"
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base", "movement"]
+      state: alive
+    color: "#6d6552"
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+      Dead:
+        Base: dead
+  - type: SoundOnDeath
+    sound:
+      collection: XenoDeath
+  - type: Deathgasp
+    prototype: CMXenoDeathGasp
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: running
+    noMovementLayers:
+      movement:
+        state: alive
+  - type: Tag
+    tags: [ StunImmune ]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 130
+        mask:
+        - SmallMobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - SmallMobLayer
+  - type: CombatMode
+  - type: MeleeWeapon
+    soundHit:
+      collection: MetalThud
+    damage:
+      types:
+        Blunt: 2
+  - type: FiremanCarriable
+    canThrow: true
+  - type: Damageable
+    damageModifierSet: CMURiderHatchlingHide
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      150: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5.5
+    baseSprintSpeed: 9.75
+  - type: Flammable
+    damage:
+      types:
+        Heat: 2.5
+  - type: FireVisuals
+    sprite: Mobs/Effects/onfire.rsi
+    normalState: Generic_mob_burning
+  - type: VentCrawler
+    ventCrawlExamine: rider-vent-examine
+    ventCrawlIcon: parasite
+  # Hands exist only so the hatchling can trigger vent entrance interactions;
+  # the empty WhitelistPickup keeps those hands from looting anything
+  - type: Hands
+    examineShowEmpty: false
+  - type: GiveHands
+    hands:
+    - name: Right Hand
+      location: Right
+    - name: Left Hand
+      location: Left
+  - type: WhitelistPickup
+  - type: Language
+    spokenLanguages:
+    - RiderCant
+    understoodLanguages:
+    - RiderCant
+    currentLanguage: RiderCant
+    defaultLanguage: RiderCant
+  - type: Speech
+    allowedEmotes: []
+
+# Muted spectator body for the host during a seizure burst.
+- type: entity
+  id: CMURiderSeizeProxy
+  name: flickering shape
+  suffix: CMU
+  components:
+  - type: RiderSeizeProxy
+  - type: Eye
+    drawFov: false
+    visMask:
+    - Normal
+    - Rider
+  - type: Sprite
+    noRot: true
+    drawdepth: Ghosts
+    color: "#6d655277"
+    layers:
+    - sprite: Mobs/Ghosts/ghost_human.rsi
+      state: animated
+      shader: unshaded
+  - type: Physics
+    bodyType: KinematicController
+    bodyStatus: InAir
+  - type: CanMoveInAir
+  - type: MovementIgnoreGravity
+  - type: GravityAffected
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 4
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 15
+        layer:
+        - GhostImpassable
+  - type: Input
+    context: "ghost"
+  - type: RMCActiveInputMover
+
+- type: entity
+  id: ActionRiderLatch
+  name: Latch Onto Host
+  description: Leap onto an unconscious victim and disappear inside.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: evolve
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 3
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+    event: !type:RiderLatchActionEvent
+
+- type: entity
+  id: ActionRiderPunish
+  name: Punish
+  description: Make them hurt. Costs grip.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: dislocate
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderPunishActionEvent
+
+- type: entity
+  id: ActionRiderSeize
+  name: Seize
+  description: Take the wheel. They watch from inside. Costs grip dearly.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 180
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderSeizeActionEvent
+
+- type: entity
+  id: ActionRiderExit
+  name: Abandon Host
+  description: Leave your host. Silent if they are out cold, loud and visible if not.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: fling
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderExitActionEvent
+
+- type: entity
+  id: ActionHostResist
+  name: Resist
+  description: Fight the thing inside you. It costs your stamina and everyone can see you struggling.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_scope
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:HostResistActionEvent
+
+- type: entity
+  id: ActionRiderSurge
+  name: Grant Resilience
+  description: Reward a willing host with a burst of borrowed strength. Willing hosts only.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 120
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: psychic_radiance
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderSurgeActionEvent
+
+- type: entity
+  id: ActionRiderCoax
+  name: Coax
+  description: Ease your host's pain and knit their wounds, willing or not. The parasite's carrot.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 60
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: psychic_whisper
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderCoaxActionEvent
+
+- type: entity
+  id: ActionRiderSustain
+  name: Sustain
+  description: Pour strength into the flesh around you. Damage and the wounds beneath it close together. Your rope, to match your stick.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 60
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: warden_heal
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderSustainActionEvent
+
+# Surgery: foreign body extraction. Cuts the rider out alive.
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMSurgeryStepRemoveParasite
+  name: Extract parasite
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMHemostat
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+  - type: CMSurgeryOperatingTableCondition
+  - type: RiderSurgeryStepEffect
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryParasiteExtraction
+  name: Parasite Extraction
+  description: Removal of a live foreign organism from the cranial cavity.
+  components:
+  - type: CMSurgery
+    priority: -1
+    requirement: CMSurgeryOpenIncision
+    steps:
+    - CMSurgeryStepRemoveParasite
+  - type: RiderSurgeryCondition
+  - type: CMSurgeryPartCondition
+    part: Head
+
+# CMU medical authoring layer: surfaces the surgery in the CMU surgery window
+- type: cmuSurgeryStepMetadata
+  id: CMUSurgeryMetaParasiteExtraction
+  surgery: CMUSurgeryParasiteExtraction
+  displayName: Parasite Extraction
+  validParts: [Head]
+  category: general
+  minSkill: 2
+  steps:
+  - stepId: CMSurgeryStepRemoveParasite
+    label: Extract Parasite
+    toolCategory: hemostat
+
+- type: alert
+  id: CMUGrip
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_full
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_16
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_15
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_14
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_13
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_12
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_11
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_10
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_9
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_8
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_7
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_6
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_5
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_4
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_3
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_2
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_1
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_0
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_empty
+  name: Grip
+  description: How tightly you hold on. Abilities spend it, resistance drains it, and it returns on its own.
+  minSeverity: 0
+  maxSeverity: 18
+
+# The phantom: the parasite projected into the host's mind's eye. Rider-layered,
+# so only the host (while it is out), ghosts and admins can see it.
+- type: entity
+  id: CMURiderManifest
+  name: flickering parasite
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RiderManifest
+  - type: Eye
+    drawFov: false
+    visMask:
+    - Normal
+    - Rider
+  - type: Sprite
+    noRot: true
+    drawdepth: Ghosts
+    scale: "0.65, 0.65"
+    color: "#6d655299"
+    layers:
+    - sprite: CMU14/Mobs/thirdPartiesXenos/parasite_runner.rsi
+      state: alive
+      shader: unshaded
+  - type: Physics
+    bodyType: KinematicController
+    bodyStatus: InAir
+  - type: CanMoveInAir
+  - type: MovementIgnoreGravity
+  - type: GravityAffected
+  - type: MovementSpeedModifier
+    # Matches CMURiderHatchling so the projection keeps pace with the real body
+    baseWalkSpeed: 5.5
+    baseSprintSpeed: 9.75
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 15
+        layer:
+        - GhostImpassable
+  - type: Input
+    context: "ghost"
+  - type: RMCActiveInputMover
+
+- type: entity
+  id: ActionRiderManifest
+  name: Mind's Eye
+  description: Project yourself into your host's mind. Watch, drift nearby, point. You cannot touch anything.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: toggle_queen_zoom
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderManifestActionEvent
+
+- type: entity
+  id: ActionRiderWithdraw
+  name: Withdraw
+  description: Slip back inside your host.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: queen_exit
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderWithdrawActionEvent

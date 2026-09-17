@@ -4,6 +4,9 @@
   name: telescopic baton
   description: A telescopic baton for incapacitating people with.
   components:
+  - type: Tag
+    tags:
+    - AU14TeleBaton
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Melee/telebaton.rsi
     layers:
@@ -67,3 +70,6 @@
     damage: 15 # 7 hits
     jitterDuration: 0.4
   - type: UseDelay
+
+- type: Tag
+  id: AU14TeleBaton

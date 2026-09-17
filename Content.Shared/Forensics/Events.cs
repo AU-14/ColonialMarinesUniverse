@@ -11,7 +11,7 @@ public sealed partial class ForensicScannerDoAfterEvent : SimpleDoAfterEvent
 }
 
 [ByRefEvent]
-public readonly record struct ForensicScannerScannedEvent(EntityUid Target);
+public readonly record struct ForensicScannerScannedEvent(EntityUid Scanner, EntityUid Target); // CMU14
 
 [Serializable, NetSerializable]
 public sealed partial class ForensicPadDoAfterEvent : DoAfterEvent

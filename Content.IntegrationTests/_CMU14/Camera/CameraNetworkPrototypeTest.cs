@@ -130,12 +130,12 @@ public sealed class CameraNetworkPrototypeTest
             AssertAnchored(prototypes, factory, "CMUSurveillanceCameraColonyWEYU");
             AssertAnchored(prototypes, factory, "CMUMonitorCameraColonyCMB");
             AssertReceiver(prototypes, factory, "CMUMonitorCameraColonyWEYUSpy", ["CMUSurveillanceCameraColonyCMB", "CMUSurveillanceCameraColonyWEYU"], CameraSourceKinds.Rmc);
+            AssertReceiver(prototypes, factory, "RMCMortarKit", ["RMCMortarCamera"], CameraSourceKinds.Rmc);
+            AssertReceiver(prototypes, factory, "AU14MortarKitRMC", ["RMCMortarCamera"], CameraSourceKinds.Rmc);
+            AssertMember(prototypes, factory, "RMCMortarCamera", ["RMCMortarCamera"], CameraSourceKinds.Rmc, false);
+            AssertMember(prototypes, factory, "AU14MortarCameraRMC", ["RMCMortarCamera"], CameraSourceKinds.Rmc, false);
             foreach (var id in new[]
             {
-                "RMCMortarCamera",
-                "RMCMortarKit",
-                "AU14MortarCameraRMC",
-                "AU14MortarKitRMC",
                 "RMCFlareCAS",
                 "RMCAirFlareCAS",
                 "RMCLaserDesignatorTarget",
@@ -369,10 +369,6 @@ public sealed class CameraNetworkPrototypeTest
                 var factory = server.EntMan.ComponentFactory;
                 foreach (var id in new[]
                 {
-                    "RMCMortarCamera",
-                    "RMCMortarKit",
-                    "AU14MortarCameraRMC",
-                    "AU14MortarKitRMC",
                     "RMCFlareCAS",
                     "RMCAirFlareCAS",
                     "RMCLaserDesignatorTarget",

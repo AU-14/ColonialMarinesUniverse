@@ -3,6 +3,7 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Reactions;
 using JetBrains.Annotations;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Atmos.Reactions;
 
@@ -11,6 +12,8 @@ namespace Content.Server.CMU14.Atmos.Reactions;
 ///     energy per mole (220 kJ vs plasma's 160, hydrogen's 284). Consequence: phoron
 ///     production chambers run above 673 K and must stay O2-free, or the product flashes
 ///     the moment it forms - O2 discipline is part of the refinement loop.
+///     Burning tiles also spawn a real RMC tile fire (CMUTileFirePhoron), so the gas
+///     fire ignites and panics mobs instead of only adding wizden fire stacks.
 /// </summary>
 [UsedImplicitly]
 [DataDefinition]
@@ -19,6 +22,7 @@ public sealed partial class PhoronFireReaction : IGasReactionEffect
     private const float OxygenFullburn = 2f;      // O2 moles consumed per phoron burned
     private const float BurnRateDelta = 20f;      // higher = slower burn
     private const float EnergyReleased = 220e3f;  // hotter than plasma, below hydrogen
+    private static readonly EntProtoId PhoronTileFire = "CMUTileFirePhoron";
 
     public ReactionResult React(GasMixture mixture, IGasMixtureHolder? holder, AtmosphereSystem atmosphereSystem, float heatScale)
     {
@@ -48,7 +52,10 @@ public sealed partial class PhoronFireReaction : IGasReactionEffect
             mixture.Temperature = (temperature * oldHeatCapacity + energyReleased) / newHeatCapacity;
 
         if (location != null && mixture.Temperature > Atmospherics.FireMinimumTemperatureToExist)
+        {
             atmosphereSystem.HotspotExpose(location, mixture.Temperature, mixture.Volume);
+            CMUGasFireBridge.SpawnTileFire(location, PhoronTileFire);
+        }
 
         return ReactionResult.Reacting;
     }

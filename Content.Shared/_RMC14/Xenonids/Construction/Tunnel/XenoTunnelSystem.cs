@@ -773,6 +773,11 @@ public sealed partial class XenoTunnelSystem : EntitySystem
     private void RemoveFromTunnel(EntityUid tunneledMob, EntityUid tunnel)
     {
         RemCompDeferred<InXenoTunnelComponent>(tunneledMob);
+
+        // CMU14: during a deletion cascade the tunnel is terminating and cannot be a drop parent
+        if (TerminatingOrDeleted(tunnel))
+            return;
+
         _transform.DropNextTo(tunneledMob, tunnel);
     }
 

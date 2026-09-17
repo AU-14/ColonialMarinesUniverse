@@ -14,7 +14,7 @@
   whitelisted: true
   whitelistParent: CMUJobSyntheticWhitelist
   isSynthetic: true
-  displayWeight: -1
+  displayWeight: 1
   accessGroups:
   - AU14GovforCommand
   - CMCargoTech

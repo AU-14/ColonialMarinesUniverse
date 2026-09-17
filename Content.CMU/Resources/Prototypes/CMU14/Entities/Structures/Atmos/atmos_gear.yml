@@ -201,6 +201,185 @@
           Heating: { state: radiator-r }
           Cooling: { state: radiator-r }
 
+# NOTE: Temporary workaround to spacing
+- type: entity
+  parent: AtmosDeviceFanTiny
+  id: RMCTinyFan
+  name: '"Zephyr" TF-2 tiny fan'
+  description: A low fan that holds a room's air in while letting people walk through it. Field crews call it the Zephyr. The breeze is decorative, the seal is not.
+  components:
+  - type: Construction
+    graph: RMCTinyFanGraph
+    node: built
+
+# NOTE: Temporary workaround to spacing
+- type: entity
+  parent: AtmosDeviceFanDirectional
+  id: RMCDirectionalFan
+  name: '"Doorstop" DF-1 directional fan'
+  description: A slim fan that seals one side of a doorway while leaving the lane open for foot traffic. Field crews call it the Doorstop; point it at the draft and it minds the gap all shift.
+  components:
+  - type: Construction
+    graph: RMCDirectionalFanGraph
+    node: built
+
+- type: constructionGraph
+  id: RMCTinyFanGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2
+  - node: built
+    entity: RMCTinyFan
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: constructionGraph
+  id: RMCDirectionalFanGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2
+  - node: built
+    entity: RMCDirectionalFan
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: construction
+  id: RMCTinyFanRecipe
+  name: tiny fan
+  description: A walk-through plug for leaking doorways and hull breaches.
+  graph: RMCTinyFanGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-atmospherics
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: RMCDirectionalFanRecipe
+  name: directional fan
+  description: Seals one side of a gap against gases while leaving the other open.
+  graph: RMCDirectionalFanGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-atmospherics
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  isCM: true
+  conditions:
+  - !type:TileNotBlocked
+
+# Pairs with the Salamander firesuit; its FireProtection is what counts as head
+# coverage for the suits' CMUFireCoverage rule.
+- type: entity
+  parent: ClothingHeadBase
+  id: CMUFireHelmet
+  name: '"Salamander" FH-2 fire helmet'
+  description: A brimmed firefighting helmet rated for reentry into a burning compartment. The brim keeps embers off your collar and the ratings keep the paperwork happy.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/firefighter.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/firefighter.rsi
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET
+  - type: CMArmor
+    melee: 20
+    bio: 10
+    explosionArmor: 10
+  - type: FireProtection
+    reduction: 0.15
+  - type: TemperatureProtection
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.2
+
+# One burst reclaims what a pile of air grenades could not: kills tile fires,
+# hotspots and burning mobs in range, while the cold flood chokes the reaction.
+# Frezon *pending* is the coolant, which means the room comes out slightly N2O.
+- type: entity
+  parent: [ BaseEngineeringContraband, VolatileGrenadeBase, TimerGrenadeBase ]
+  id: CMUFireSuppressantGrenade
+  name: '"Salamander" FS-4 fire suppression grenade'
+  description: A chemical burst grenade that fights fire with a flood of freezing coolant. Clear the room, pull the pin, walk away. The atmos techs will find the nitrous oxide later.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/airboom.rsi
+    color: '#4E7FBD'
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    sound: /Audio/Items/smoke_grenade_smoke.ogg
+    positional: true
+  - type: TimerTriggerVisuals
+    primingSound:
+      path: /Audio/Items/smoke_grenade_prime.ogg
+  - type: TimerTrigger
+    delay: 3
+  - type: CMUFireSuppressantOnTrigger
+    radius: 4.5
+  - type: ReleaseGasOnTrigger
+    keysIn:
+    - timer
+    removeFraction: 0.2
+    air:
+      volume: 1000
+      moles:
+        Nitrogen: 2800
+        Frezon: 200
+      temperature: 90
+  - type: GenericVisualizer
+    visuals:
+      enum.ReleaseGasOnTriggerVisuals.Key:
+        enabled:
+          True: { state: active }
+          False: { state: spent }
+  - type: RemoveComponentsOnTrigger
+    keysIn:
+    - timer
+    triggerOnce: true
+    components:
+    - type: TriggerOnUse
+    - type: TimerTrigger
+
 - type: entity
   parent: [RMCAllowSuitStorageClothingChefApron, ClothingOuterBase]
   id: CMUSuitFirefighter
@@ -221,6 +400,10 @@
     coolingCoefficient: 0.3
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
+  - type: FireProtection
+    reduction: 0.9
+  - type: CMUFireCoverage
+    uncoveredHeadPenalty: 0.6
   - type: AllowSuitStorage
     whitelist:
       components:
@@ -257,6 +440,10 @@
     coolingCoefficient: 0.3
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
+  - type: FireProtection
+    reduction: 0.75
+  - type: CMUFireCoverage
+    uncoveredHeadPenalty: 0.65
   - type: AllowSuitStorage
     whitelist:
       components:

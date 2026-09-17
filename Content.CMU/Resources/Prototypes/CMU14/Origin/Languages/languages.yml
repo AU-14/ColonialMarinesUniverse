@@ -707,3 +707,16 @@
     !type:SyllableObfuscation
     replacement: ["ah", "da", "nu", "eu", "tu", "el", "ea", "noi", "voi", "ei", "bun", "rău", "mic", "mare", "om", "nume", "prieten", "dușman", "domn", "doamnă", "casă", "apă", "mâncare", "pâine", "mână", "ochi", "cap", "inimă", "zi", "noapte", "lumină", "întuneric", "foc", "pământ", "aer", "timp", "acum", "apoi", "unde", "cine", "ce", "cum", "de ce", "aici", "acolo", "mergi", "vino", "stai", "așteaptă", "ajutor", "pericol", "armă", "război", "pace", "puternic", "slab", "repede", "încet", "bine", "rău", "nou", "vechi", "adevăr", "minciună", "văd", "aud", "vorbesc", "înțeleg"]
     minSyllables: 2
+
+- type: language
+  id: RiderCant
+  name: "???"
+  description: "A wet, clicking cadence that is not any catalogued language."
+  hideLanguageName: true
+  languageIcon:
+    sprite: _RMC14/Interface/vent_crawl.rsi
+    state: parasite
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["kss", "tk", "cht", "sss", "kkt", "thk", "sk", "zzt", "kk", "tk-tk", "chss", "st", "ks", "ht", "shh", "tz"]
+    maxSyllables: 4

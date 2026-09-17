@@ -217872,7 +217872,7 @@ entities:
     - type: Transform
       pos: 22.959236,-81.51034
       parent: 1
-- proto: GasVentPump
+- proto: CMVentPump
   entities:
   - uid: 26157
     components:

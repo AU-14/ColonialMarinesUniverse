@@ -177,7 +177,7 @@ entities:
       arrivalSound: !type:SoundPathSpecifier
         path: /Audio/_RMC14/Machines/Shuttle/engine_landing.ogg
     - type: ImplicitRoof
-- proto: AtmosDeviceFanTiny
+- proto: RMCTinyFan
   entities:
   - uid: 11
     components:

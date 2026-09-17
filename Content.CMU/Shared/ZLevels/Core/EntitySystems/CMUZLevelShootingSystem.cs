@@ -193,6 +193,16 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         var fromMap = _transform.ToMapCoordinates(fromCoordinates);
         var toMap = _transform.ToMapCoordinates(toCoordinates);
+
+        // Open air between shooter and target: nothing to shoot through, so skip the
+        // opening hunt and range clamp (straight shots at hovering dropships).
+        if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value, fromMap.Position, toMap.Position))
+        {
+            adjustedFromCoordinates = _transform.ToCoordinates(new MapCoordinates(fromMap.Position, map.MapId));
+            adjustedToCoordinates = _transform.ToCoordinates(new MapCoordinates(toMap.Position, map.MapId));
+            return true;
+        }
+
         var clampedTo = ClampCrossZShotTarget(fromMap.Position, toMap.Position);
         if (!_zLevels.TryFindZShotOpening(
                 shooterMap.Value,
@@ -249,6 +259,15 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
                 ? "cmu-zlevel-shoot-up-no-level"
                 : "cmu-zlevel-shoot-down-no-level");
             return false;
+        }
+
+        // Open air between shooter and target: nothing to shoot through, so skip the
+        // opening hunt and range clamp (straight shots at hovering dropships).
+        if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value, fromCoordinates.Position, toCoordinates.Position))
+        {
+            adjustedFromCoordinates = new MapCoordinates(fromCoordinates.Position, map.MapId);
+            adjustedToCoordinates = new MapCoordinates(toCoordinates.Position, map.MapId);
+            return true;
         }
 
         var clampedTo = ClampCrossZShotTarget(fromCoordinates.Position, toCoordinates.Position);

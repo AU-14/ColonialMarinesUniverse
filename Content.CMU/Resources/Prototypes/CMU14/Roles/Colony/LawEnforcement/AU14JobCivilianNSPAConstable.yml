@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobLEOBase
+  displayWeight: 14
   id: AU14JobCivilianNSPAConstable
   roundSide: Civilian
   roundForce: NSPA

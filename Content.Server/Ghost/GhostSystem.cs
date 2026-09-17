@@ -130,9 +130,11 @@ namespace Content.Server.Ghost
         private void OnGhostVis(Entity<GhostComponent> ent, ref GetVisMaskEvent args)
         {
             // If component not deleting they can see ghosts.
-            if (ent.Comp.LifeStage <= ComponentLifeStage.Running)
+            if (ent.Comp.LifeStage <= ComponentLifeStage.Running) // CMU14
             {
-                args.VisibilityMask |= (int)VisibilityFlags.Ghost | (int)VisibilityFlags.ImaginaryFriend; // RMC14
+                args.VisibilityMask |= (int)VisibilityFlags.Ghost
+                | (int)VisibilityFlags.ImaginaryFriend
+                | (int)VisibilityFlags.Rider;
             }
         }
 

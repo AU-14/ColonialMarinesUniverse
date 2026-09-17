@@ -107,7 +107,10 @@ public sealed partial class HumanoidProfileEditor
         for (var i = 0; i < squad.SquadPrototypes.Length; i++)
         {
             var squadProto = squad.SquadPrototypes[i];
-            if (!squadProto.TryComp(out SquadTeamComponent? team, _componentFactory) || !team.RoundStart)
+            // Preference menu is GovFor-only; OpFor players get the mirrored squad at spawn.
+            if (!squadProto.TryComp(out SquadTeamComponent? team, _componentFactory)
+                || !team.RoundStart
+                || team.Group != "GOVFOR")
                 continue;
 
             SquadPreferenceButton.AddItem(squadProto.Name, i + 1);
@@ -631,10 +634,13 @@ public sealed partial class HumanoidProfileEditor
         var index = 0;
         if (Profile.SquadPreference is { } preference)
         {
-            var squads = new List<EntityPrototype>(_entManager.System<SquadSystem>().SquadPrototypes)
-                .Select(squad => squad.ID)
-                .ToList();
-            index = squads.IndexOf(preference.Id) + 1;
+            var squads = new List<EntityPrototype>(_entManager.System<SquadSystem>().SquadPrototypes);
+            var squadProto = squads.FirstOrDefault(s => s.ID == preference.Id);
+            if (squadProto != null
+                && squadProto.TryComp(out SquadTeamComponent? team, _componentFactory)
+                && team.RoundStart
+                && team.Group == "GOVFOR")
+                index = squads.IndexOf(squadProto) + 1;
         }
 
         SquadPreferenceButton.SelectId(index);
@@ -915,6 +921,17 @@ public sealed partial class HumanoidProfileEditor
 
     private void SetThreatPreference(string gamemode, string threat, bool value)
     {
+        // An empty preference set means "open to all" server-side, so a first No press would be a
+        // no-op. Seed every visible threat so the press does what the buttons show.
+        if (Profile != null && Profile.GetThreatPreferencesForGamemode(gamemode).Count == 0)
+        {
+            foreach (var visible in _prototypeManager.EnumeratePrototypes<ThreatPrototype>()
+                         .Where(visible => IsThreatVisibleForGamemode(visible, gamemode)))
+            {
+                Profile = Profile.WithGamemodeThreatPreference(gamemode, visible.ID, true);
+            }
+        }
+
         Profile = Profile?.WithGamemodeThreatPreference(gamemode, new ProtoId<ThreatPrototype>(threat), value);
         SetDirty();
     }
@@ -923,7 +940,10 @@ public sealed partial class HumanoidProfileEditor
     {
         foreach (var (gamemode, threat, yes, no) in _threatPreferenceButtons)
         {
-            var selected = Profile?.GetThreatPreferencesForGamemode(gamemode).Any(id => id.Id == threat) == true;
+            // An empty preference set behaves as "open to all"; show that instead of a false No.
+            var preferences = Profile?.GetThreatPreferencesForGamemode(gamemode);
+            var selected = preferences is not { Count: > 0 }
+                || preferences.Any(id => id.Id == threat);
             yes.Pressed = selected;
             no.Pressed = !selected;
         }

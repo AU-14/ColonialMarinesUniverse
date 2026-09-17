@@ -47,6 +47,9 @@
     openingTool: Pulsing
     examineTextClosed: cmu-zlevel-panel-closed
     examineTextOpen: cmu-zlevel-panel-open
+  - type: Construction
+    graph: CMUAutoTransferSwitchGraph
+    node: built
   - type: Machine
     board: CMUAutoTransferSwitchMachineCircuitboard
   - type: Sprite
@@ -62,3 +65,47 @@
           Standby: { state: substation }
           Cranking: { state: charging }
           Online: { state: full }
+
+# Direct build like the pipe riser: the menu only lists isCM recipes and the
+# ATS board has no crafting source. Machine still auto-stocks on spawn.
+- type: constructionGraph
+  id: CMUAutoTransferSwitchGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2.5
+  - node: built
+    entity: CMUAutoTransferSwitch
+    edges:
+    - to: start
+      conditions:
+      - !type:WirePanel
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: construction
+  id: CMUAutoTransferSwitchRecipe
+  name: automatic transfer switch
+  description: Charges from the mains and throws its battery onto the emergency circuit the moment the mains die. Wire the port side from the mains, the output side into the emergency run.
+  graph: CMUAutoTransferSwitchGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: true
+  isCM: true

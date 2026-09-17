@@ -76,7 +76,14 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; }
 
     [DataField("announcearrival", required: false)]
-    public string? AnnounceArrival { get; private set; } = "A new force has entered the battlefield.";
+    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict zone.";
+
+    /// <summary>
+    ///     Announced when a scheduled party goes ready and starts gathering ghost volunteers,
+    ///     before it deploys. Worded as responders en route so a delayed landing reads as intended.
+    /// </summary>
+    [DataField("announceinbound", required: false)]
+    public string? AnnounceInbound { get; private set; } = "Long range arrays detect an unidentified force moving to answer the distress call. Arrival expected shortly.";
 
     [IdDataField]
     public string ID { get; private set; } = default!;

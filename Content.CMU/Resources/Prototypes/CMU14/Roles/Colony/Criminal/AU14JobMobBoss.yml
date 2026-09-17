@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobMobBoss
+  displayWeight: 10
   roundSide: ThirdParty
   roundForce: MOB
   roundRole: MobBoss

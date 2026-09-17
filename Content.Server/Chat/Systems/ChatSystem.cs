@@ -204,6 +204,12 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (player != null)
             _chatManager.EnsurePlayer(player.UserId).AddEntity(GetNetEntity(source));
 
+        // CMU14: cancellable pre-send hook, mirrors InGameOocMessageAttemptEvent below
+        var icAttempt = new InGameICMessageAttemptEvent(player, desiredType, message);
+        RaiseLocalEvent(source, ref icAttempt, true);
+        if (icAttempt.Cancelled)
+            return;
+
         var currentLanguage = GetCurrentLanguageForSpeech(source);
 
         if (desiredType == InGameICChatType.Speak && message.StartsWith(LocalPrefix))

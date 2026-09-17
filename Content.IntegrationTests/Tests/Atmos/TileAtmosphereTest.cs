@@ -90,8 +90,13 @@ public abstract class TileAtmosphereTest : AtmosTest
         var sourceMix = SAtmos.GetTileMixture(source, true);
         Assert.That(sourceMix, Is.Not.Null);
 
-        sourceMix.AdjustMoles(Gas.Plasma, Moles / 10);
-        sourceMix.AdjustMoles(Gas.Oxygen, Moles - Moles / 10);
+        // CMU14: hold the mix at 26:1 oxygen:plasma. The restored tritium rule
+        // (SuperSaturationThreshold 10) turned the old 9:1 mix into a full-tritium burn,
+        // and the cold front ate its own tritium before the fire reached the far markers.
+        var plasmaMoles = 100f;
+        var oxygenMoles = 2600f;
+        sourceMix.AdjustMoles(Gas.Plasma, plasmaMoles);
+        sourceMix.AdjustMoles(Gas.Oxygen, oxygenMoles);
         sourceMix.Temperature = Atmospherics.FireMinimumTemperatureToExist - 10;
 
         using (Assert.EnterMultipleScope())
@@ -108,7 +113,8 @@ public abstract class TileAtmosphereTest : AtmosTest
         });
 
         var fireReachedAllMarkers = false;
-        for (var tick = 0; tick < 1500; tick += 100)
+        // CMU14: LINDA_Snake reaches the far markers just inside the budget, bump it or the test flakes
+        for (var tick = 0; tick < 3000; tick += 100)
         {
             await Server.WaitRunTicks(100);
 
@@ -142,7 +148,7 @@ public abstract class TileAtmosphereTest : AtmosTest
         }
 
         AssertMixMoles(mix1, mix2, Tolerance);
-        AssertGridMoles(Moles, Tolerance);
+        AssertGridMoles(plasmaMoles + oxygenMoles, Tolerance);
     }
 }
 

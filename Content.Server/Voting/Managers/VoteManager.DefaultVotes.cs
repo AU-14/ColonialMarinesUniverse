@@ -609,7 +609,7 @@ namespace Content.Server.Voting.Managers
             {
                 if(!preset.ShowInVote)
                     continue;
-#if !DEBUG
+#if !DEBUG && !TOOLS
                 if(_playerManager.PlayerCount < (preset.MinPlayers ?? int.MinValue))
                     continue;
 

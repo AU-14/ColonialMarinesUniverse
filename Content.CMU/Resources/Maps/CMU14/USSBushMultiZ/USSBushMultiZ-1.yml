@@ -1272,21 +1272,21 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-67.5
-- proto: GasMinerNitrogenStation
+- proto: CMUGasMinerNitrogenPortable
   entities:
   - uid: 88
     components:
     - type: Transform
       parent: 1
       pos: 10.5,-67.5
-- proto: GasMinerOxygenStation
+- proto: CMUGasMinerOxygenPortable
   entities:
   - uid: 78
     components:
     - type: Transform
       parent: 1
       pos: -4.5,-67.5
-- proto: GasPipeManifold
+- proto: CMUGasPipeManifold
   entities:
   - uid: 73
     components:

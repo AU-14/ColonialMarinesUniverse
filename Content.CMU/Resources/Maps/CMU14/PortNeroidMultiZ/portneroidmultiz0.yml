@@ -58897,7 +58897,7 @@ entities:
           showEnts: False
           occludes: True
           ent: 14
-- proto: AU14DrugDealerDrugBackpack
+- proto: CMUDrugDealerDrugBackpack
   entities:
   - uid: 66
     components:
@@ -179230,7 +179230,7 @@ entities:
     - type: Transform
       pos: 9.483047,91.48619
       parent: 1
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 18262
     components:

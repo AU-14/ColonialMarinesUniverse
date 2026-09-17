@@ -32,6 +32,7 @@ jobs:
     needs: changelog
     if: always() && (needs.changelog.result == 'success' || needs.changelog.result == 'skipped')
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     outputs:
       already-published: ${{ steps.start.outputs.already-published }}
     steps:
@@ -65,6 +66,7 @@ jobs:
       needs.publish_start.result == 'success' &&
       needs.publish_start.outputs.already-published != 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -150,6 +152,7 @@ jobs:
       needs.publish_start.result == 'success' &&
       needs.publish_start.outputs.already-published != 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [publish_start, package]
     steps:
       - uses: actions/checkout@v7

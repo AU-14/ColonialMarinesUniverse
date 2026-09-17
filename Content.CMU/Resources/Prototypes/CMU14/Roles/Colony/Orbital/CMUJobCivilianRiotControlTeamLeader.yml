@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 16
   id: CMUJobColonyRiotControlTeamLeader
   name: cmu-colony-name-riot-control-team-leader
   description: cmu-colony-description-riot-control-team-leader

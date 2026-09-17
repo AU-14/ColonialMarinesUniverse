@@ -21,6 +21,7 @@
   id: CMUCanisters
   defaultStyle: air
   styles:
+    storage: CMUCanisterEmpty
     air: CMUCanisterAir
     oxygen: CMUCanisterOxygen
     nitrogen: CMUCanisterNitrogen

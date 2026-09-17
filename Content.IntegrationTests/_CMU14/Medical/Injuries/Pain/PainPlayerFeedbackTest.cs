@@ -68,10 +68,12 @@ public sealed class PainPlayerFeedbackTest
         {
             var entMan = server.EntMan;
             var damageable = entMan.GetComponent<DamageableComponent>(human);
+            // Respiration healing is staged off in species base.yml, so "stopped" reads as a
+            // frozen value, not a decaying one. Still-running feedback would keep adding damage.
             Assert.That(
                 damageable.Damage.DamageDict.GetValueOrDefault("Asphyxiation"),
-                Is.LessThan(damageAfterDue),
-                "Natural respiration should reduce asphyxiation when no new shock feedback is scheduled.");
+                Is.EqualTo(damageAfterDue),
+                "Shock feedback must stop applying asphyxiation once the pain tier drops.");
             entMan.DeleteEntity(human);
         });
 

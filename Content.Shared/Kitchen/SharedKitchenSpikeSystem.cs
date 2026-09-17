@@ -94,7 +94,9 @@ public sealed partial class SharedKitchenSpikeSystem : EntitySystem
     {
         if (args.Cancelled ||
             TryComp<ButcherableComponent>(args.EntityUid, out var butcherable) &&
-            butcherable.Type == ButcheringType.Spike)
+            // CMU14: colonists are Knife-type, the meat rack takes them alongside animals
+            (butcherable.Type == ButcheringType.Spike
+             || butcherable.Type == ButcheringType.Knife))
         {
             return;
         }

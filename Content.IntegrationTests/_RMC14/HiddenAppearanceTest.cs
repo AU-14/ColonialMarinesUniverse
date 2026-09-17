@@ -59,6 +59,8 @@ public sealed class HiddenAppearanceTest : InteractionTest
     [Test]
     public async Task StateAndViewerArrivalOrderRestoresCanonicalAppearanceWithoutAuthorityMutation()
     {
+        // CMU14: this fork defaults identity hiding off (BUG-576), opt back in for the machinery tests
+        await OverrideCVar(Side.Server, RMCCVars.HidePlayerIdentities, true);
         await SpawnTarget();
 
         var serverBefore = CaptureAuthoritativeState(
@@ -120,6 +122,8 @@ public sealed class HiddenAppearanceTest : InteractionTest
     [Test]
     public async Task OrganLifecycleEquipmentVisibilityAndInventoryRefreshStayLocal()
     {
+        // CMU14: this fork defaults identity hiding off (BUG-576), opt back in for the machinery tests
+        await OverrideCVar(Side.Server, RMCCVars.HidePlayerIdentities, true);
         await SpawnTarget();
         await SetHiddenAppearance(duplicateHair: true, includeUnderwear: true);
         var fullMarkingCount = await GetClientMarkingLayerCount();
@@ -254,6 +258,8 @@ public sealed class HiddenAppearanceTest : InteractionTest
     {
         await OverrideCVar(Side.Client, CCVars.AccessibilityClientCensorNudity, false);
         await OverrideCVar(Side.Server, CCVars.AccessibilityServerCensorNudity, false);
+        // CMU14: this fork defaults identity hiding off (BUG-576), opt back in for the machinery tests
+        await OverrideCVar(Side.Server, RMCCVars.HidePlayerIdentities, true);
         await Client.WaitAssertion(() =>
         {
             var group = CProtoMan.Index<MarkingsGroupPrototype>("Human");
@@ -313,6 +319,8 @@ public sealed class HiddenAppearanceTest : InteractionTest
     [Test]
     public async Task UniformAccessoriesAreHiddenOnlyFromLocalXenosWhileIdentityHidingIsEnabled()
     {
+        // CMU14: this fork defaults identity hiding off (BUG-576), opt back in for the machinery tests
+        await OverrideCVar(Side.Server, RMCCVars.HidePlayerIdentities, true);
         EntityUid serverUniform = default;
         NetEntity uniform = default;
         await Server.WaitPost(() =>

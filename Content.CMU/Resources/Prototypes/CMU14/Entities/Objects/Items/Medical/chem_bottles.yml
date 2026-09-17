@@ -1,0 +1,181 @@
+# Raw chemistry bottles for the drug dealer's cooking kit. Not stocked in any vendor;
+# they only spawn inside AU14DrugDealerChemKit.
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleWater
+  name: water bottle
+  suffix: CMU
+  description: A small bottle. Contains purified water.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: Water
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      Water: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleChlorine
+  name: chlorine bottle
+  suffix: CMU
+  description: A small bottle. Contains chlorine.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: RMCChlorine
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      RMCChlorine: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleFluorine
+  name: fluorine bottle
+  suffix: CMU
+  description: A small bottle. Contains fluorine.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: RMCFluorine
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      RMCFluorine: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottlePhosphorus
+  name: phosphorus bottle
+  suffix: CMU
+  description: A small bottle. Contains phosphorus.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: RMCPhosphorus
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      RMCPhosphorus: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleSulphuricAcid
+  name: sulphuric acid bottle
+  suffix: CMU
+  description: A small bottle. Contains sulphuric acid.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: RMCSulphuricAcid
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      RMCSulphuricAcid: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleCarbon
+  name: carbon bottle
+  suffix: CMU
+  description: A small bottle. Contains carbon.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: RMCCarbon
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      RMCCarbon: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleEthanol
+  name: ethanol bottle
+  suffix: CMU
+  description: A small bottle. Contains ethanol.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: RMCEthanol
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      RMCEthanol: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleMethylphenidate
+  name: methylphenidate bottle
+  suffix: CMU
+  description: A small bottle. Contains methylphenidate.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: RMCMethylphenidate
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      RMCMethylphenidate: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleOxycodone
+  name: oxycodone bottle
+  suffix: CMU
+  description: A small bottle. Contains oxycodone.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: CMUOxycodone
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      CMUOxycodone: 60
+
+- type: entity
+  parent: CMBottleFilled
+  id: CMUBottleEpinephrine
+  name: epinephrine bottle
+  suffix: CMU
+  description: A small bottle. Contains epinephrine.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      CMEpinephrine: 60

@@ -315429,7 +315429,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 105.60274,-115.74004
       parent: 1
-- proto: GasVentPump
+- proto: CMVentPump
   entities:
   - uid: 38552
     components:

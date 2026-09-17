@@ -9,8 +9,8 @@
   description: "Static Direction: Looks at deck above. Crowbar flips direction. Multitool opens the panel; pry to deconstruct."
   components:
   - type: Construction
-    graph: Machine
-    node: machine
+    graph: CMUPipeRiserGraph
+    node: built
   - type: AtmosPipeLayers
     pipeLayersLocked: true
   - type: WiresPanel
@@ -38,8 +38,8 @@
   description: "Static Direction: Looks at deck below. Crowbar flips direction. Multitool opens the panel; pry to deconstruct."
   components:
   - type: Construction
-    graph: Machine
-    node: machine
+    graph: CMUPipeRiserGraph
+    node: built
   - type: AtmosPipeLayers
     pipeLayersLocked: true
   - type: WiresPanel
@@ -58,3 +58,48 @@
   - type: CMUZPaired
     offset: -1
     pairKind: pipe
+
+# Direct build instead of the generic machine-frame flow: the construction menu
+# only lists isCM recipes, and the riser boards have no crafting source anyway.
+# The Machine component still auto-stocks board and parts on spawn.
+- type: constructionGraph
+  id: CMUPipeRiserGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2.5
+  - node: built
+    entity: CMUPipeRiserUp
+    edges:
+    - to: start
+      conditions:
+      - !type:WirePanel
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: construction
+  id: CMUPipeRiserRecipe
+  name: pipe riser
+  description: A fourway pipe bridge linking this deck to the one above or below. Crowbar flips direction.
+  graph: CMUPipeRiserGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-atmospherics
+  objectType: Structure
+  placementMode: AlignAtmosPipeLayers
+  canRotate: false
+  canBuildInImpassable: true
+  isCM: true

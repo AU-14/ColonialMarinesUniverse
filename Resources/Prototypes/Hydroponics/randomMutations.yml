@@ -1,17 +1,19 @@
 - type: randomPlantMutationList
   id: RandomPlantMutations
   mutations:
-    - name: Sentient
-      description: mutation-plant-sentient
-      baseOdds: 0.0072
-      appliesToProduce: false
-      persists: false
-      effect: !type:MakeSentient # existing effect.
-    - name: Slippery
-      description: mutation-plant-slippery
-      baseOdds: 0.036
-      appliesToPlant: false
-      effect: !type:Slipify
+    # CMU14: talking plants don't fit the setting
+    # - name: Sentient
+    #   description: mutation-plant-sentient
+    #   baseOdds: 0.0072
+    #   appliesToProduce: false
+    #   persists: false
+    #   effect: !type:MakeSentient # existing effect.
+    # CMU14: gag mutation, wrong tone
+    # - name: Slippery
+    #   description: mutation-plant-slippery
+    #   baseOdds: 0.036
+    #   appliesToPlant: false
+    #   effect: !type:Slipify
     - name: ChangeSpecies
       baseOdds: 0.036
       appliesToProduce: false
@@ -227,16 +229,18 @@
       persists: false
       effect: !type:PlantChangeTraits
         trait: PlantTraitLigneous
-    - name: Kudzufication
-      baseOdds: 0.036
-      persists: false
-      effect: !type:PlantChangeTraits
-        trait: PlantTraitKudzu
-    - name: ChangeScreaming
-      baseOdds: 0.036
-      persists: false
-      effect: !type:PlantChangeTraits
-        trait: PlantTraitScream
+    # CMU14: no kudzu-spreading plant mutation
+    # - name: Kudzufication
+    #   baseOdds: 0.036
+    #   persists: false
+    #   effect: !type:PlantChangeTraits
+    #     trait: PlantTraitKudzu
+    # CMU14: gag mutation, wrong tone
+    # - name: ChangeScreaming
+    #   baseOdds: 0.036
+    #   persists: false
+    #   effect: !type:PlantChangeTraits
+    #     trait: PlantTraitScream
     - name: ChangeChemicals
       baseOdds: 0.072
       persists: false

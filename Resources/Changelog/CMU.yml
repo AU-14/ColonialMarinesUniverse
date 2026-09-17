@@ -6458,101 +6458,48 @@
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1639
 - author: troytroy400
   changes:
-  - message: LOOC is back. The LHelp test was not worthwhile enough to stay.
-    type: Remove
-  id: 434
-  time: '2026-07-17T05:59:34.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1639
-- author: troytroy400
-  changes:
   - message: Added a hair tie system. If your character has hair long enough to be
       tied back, you can right click your character and tie your hair back into multiple
       styles. To untie your hair, you just right click and untie.
+    type: Add
+  id: 434
+  time: '2026-07-17T09:36:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1640
+- author: toot521
+  changes:
+  - message: Added Altyn-R2M Helmet with parasite resistance, sprite by agentcinnamon
+    type: Add
+  - message: Added Altyn-R2M to UPP Pointman WeaponSpec kit
     type: Add
   id: 435
-  time: '2026-07-17T09:36:41.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1640
-- author: troytroy400
+  time: '2026-07-17T15:03:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1641
+- author: TheHellFireo
   changes:
-  - message: Added a hair tie system. If your character has hair long enough to be
-      tied back, you can right click your character and tie your hair back into multiple
-      styles. To untie your hair, you just right click and untie.
-    type: Add
+  - message: Fixed hands and feet missing from surgery and limb printer options, and
+      stopped extremities from regenerating when parent limbs are reattached.
+    type: Fix
   id: 436
-  time: '2026-07-17T09:36:41.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1640
-- author: toot521
+  time: '2026-07-17T17:40:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1644
+- author: maertayn
   changes:
-  - message: Added Altyn-R2M Helmet with parasite resistance, sprite by agentcinnamon
-    type: Add
-  - message: Added Altyn-R2M to UPP Pointman WeaponSpec kit
+  - message: Added Vehicle Crewman vendors/vmarkers/accesses
+    type: Map
+  - message: LO matches Logistics (Aux) Tech in Construction/Engineering skill
+    type: Tweak
+  - message: Shovel is now a good Govfor alternative to the Pickaxe tool in destroying
+      fragile rocks (4 hits vs. 3 hits)
+    type: Tweak
+  - message: Vehicle crewman getting opposite faction headsets & Ids for Govfor/Opfor
+    type: Fix
+  - message: K92 Maintenance Jack can now actually perform the service vehicles repair
+      step
+    type: Fix
+  - message: K92-S - a new bulky/strong maintenance jack variant for synths/WJ that
+      acts as an all-round combination repair tool
     type: Add
   id: 437
-  time: '2026-07-17T15:03:06.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1641
-- author: toot521
-  changes:
-  - message: Added Altyn-R2M Helmet with parasite resistance, sprite by agentcinnamon
-    type: Add
-  - message: Added Altyn-R2M to UPP Pointman WeaponSpec kit
-    type: Add
-  id: 438
-  time: '2026-07-17T15:03:06.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1641
-- author: TheHellFireo
-  changes:
-  - message: Fixed hands and feet missing from surgery and limb printer options, and
-      stopped extremities from regenerating when parent limbs are reattached.
-    type: Fix
-  id: 439
-  time: '2026-07-17T17:40:43.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1644
-- author: TheHellFireo
-  changes:
-  - message: Fixed hands and feet missing from surgery and limb printer options, and
-      stopped extremities from regenerating when parent limbs are reattached.
-    type: Fix
-  id: 440
-  time: '2026-07-17T17:40:43.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1644
-- author: maertayn
-  changes:
-  - message: Added Vehicle Crewman vendors/vmarkers/accesses
-    type: Map
-  - message: LO matches Logistics (Aux) Tech in Construction/Engineering skill
-    type: Tweak
-  - message: Shovel is now a good Govfor alternative to the Pickaxe tool in destroying
-      fragile rocks (4 hits vs. 3 hits)
-    type: Tweak
-  - message: Vehicle crewman getting opposite faction headsets & Ids for Govfor/Opfor
-    type: Fix
-  - message: K92 Maintenance Jack can now actually perform the service vehicles repair
-      step
-    type: Fix
-  - message: K92-S - a new bulky/strong maintenance jack variant for synths/WJ that
-      acts as an all-round combination repair tool
-    type: Add
-  id: 441
-  time: '2026-07-17T22:00:33.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1645
-- author: maertayn
-  changes:
-  - message: Added Vehicle Crewman vendors/vmarkers/accesses
-    type: Map
-  - message: LO matches Logistics (Aux) Tech in Construction/Engineering skill
-    type: Tweak
-  - message: Shovel is now a good Govfor alternative to the Pickaxe tool in destroying
-      fragile rocks (4 hits vs. 3 hits)
-    type: Tweak
-  - message: Vehicle crewman getting opposite faction headsets & Ids for Govfor/Opfor
-    type: Fix
-  - message: K92 Maintenance Jack can now actually perform the service vehicles repair
-      step
-    type: Fix
-  - message: K92-S - a new bulky/strong maintenance jack variant for synths/WJ that
-      acts as an all-round combination repair tool
-    type: Add
-  id: 442
   time: '2026-07-17T22:00:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1645
 - author: Piticzu
@@ -6561,14 +6508,14 @@
       on stacking Intoxicated with Toxic Spit and Toxic Slash, then consuming those
       stacks with Drain Sting.
     type: Add
-  id: 443
+  id: 438
   time: '2026-07-17T23:25:05.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1642
 - author: toot521
   changes:
   - message: Fixed crucial spelling error in the description of the Kramer Rifle
     type: Fix
-  id: 444
+  id: 439
   time: '2026-07-18T01:16:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1649
 - author: TheHellFireo
@@ -6637,7 +6584,7 @@
       payroll console is unavailable, preventing missed salaries in Colony Fall and
       Insurgency.
     type: Fix
-  id: 445
+  id: 440
   time: '2026-07-18T15:14:45.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1654
 - author: TheHellFireo
@@ -6663,7 +6610,7 @@
   - message: Stranded xenos receive priority for their credited burrowed larva during
       hijack.
     type: Fix
-  id: 446
+  id: 441
   time: '2026-07-18T21:51:11.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1655
 - author: troytroy400
@@ -6696,7 +6643,7 @@
   - message: Inaprovaline overdose no longer makes you have a seizure to prevent cheesy
       chemical spam tactics.
     type: Fix
-  id: 447
+  id: 442
   time: '2026-07-19T08:26:40.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1651
 - author: wray-git
@@ -6837,936 +6784,361 @@
     type: Remove
   - message: Removed map-wide collapse shake behavior
     type: Remove
+  id: 443
+  time: '2026-07-19T17:36:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1600
+- author: wray-git
+  changes:
+  - message: Jerrie's Mod construction style menu. The classic menu can be re-selected
+      in Options > Misc. The classic menu does not have certain features supplied
+      in the Improved construction menu.
+    type: Add
+  - message: Saved Builds. Select structures you built, save them to a file, and place
+      them again later. Only works on entities you built. You can either click the
+      entity or append it by range. Saved builds' files can be shared.
+    type: Add
+  - message: Z-Level building. Dig down into generated caverns and build floors.
+    type: Add
+  - message: OSHA safety requirements for z-level building. Goodluck.
+    type: Add
+  - message: Build partners. Allow another player to include your builds in their
+      saves.
+    type: Add
+  - message: Construction Item Editor, allows you to add entities into the construction
+      menu.
+    type: Add
+  - message: Tiles Editor, allows you to add tiles into the construction menu(for
+      z-levels)
+    type: Add
+  - message: Lathe Editor, allows you to add entities into Autolathe and Armylathes.
+    type: Add
+  - message: Mass Entity Editor, allows you to add entities en-masse into the construction
+      menu.
+    type: Add
+  - message: Z-Level toggle, allows you to allow/ban z-level building(made by this
+      PR) from prototypes and maps. Mapper's boolean to enable/disable overrides this.
+    type: Add
+  - message: '"Look Up" now allows you to first faintly look at upper z-levels, with
+      the second time using it makes you fully look & aim up. No more "why is that
+      empty space shooting me".'
+    type: Tweak
+  - message: Metal, plasteel, and wood barricades now place as a construction ghost
+      instead of an instant build.
+    type: Tweak
+  - message: In-game editors for adding menu items, tiles, and lathe recipes, plus
+      per-recipe Change and Remove, under Admin Tools (Host flag by defualt).
+    type: Admin
+  - message: au_multiz console command to list and toggle which maps allow vertical
+      building.
+    type: Admin
+  - message: There are 3 different modes for saving & loading saved builds, Player,
+      Admin, and Mapper. Player spawns construction ghosts by as if its vanilla, and
+      can only save entities they built themselves. Admin spawns the saved build instantly
+      without any cost. Mapper does the same as Admin, except they are able to save
+      any and all entities spawned in the round.
+    type: Admin
+  - message: The construction menu now runs through one view-agnostic presenter with
+      a spawnlist system, a new entityId construction step, and a Construction verb
+      category.
+    type: Code
+  id: 444
+  time: '2026-07-19T17:36:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1497
+- author: wray-git
+  changes:
+  - message: INSFOR Editor. INSFOR factions can now be made. Every detail about what
+      makes an INSFOR faction is covered.
+    type: Add
+  - message: CLF Leader can now pick which INSFOR faction they want. It is dependent
+      on the GOVFOR faction in the round.
+    type: Add
+  - message: "New Role! \U0001F527\U0001F9F0 CLF Sapper. Able to lay down traps, craft\
+      \ them from the sapper's workbench, and gunsmith-lite. Equipment include: [Tripwire,\
+      \ Audio, Buried *#&, Snare, Spy Camera, \U0001F4B5 Siphon Rig \U0001F4B5 ]"
+    type: Add
+  - message: Siphon Rig, able to siphon from colony budget console, ASRS consoles,
+      and ATMs. ATM siphon is based on how many ATMs are in the round(i.e 10 ATMs
+      would give you 10% of the colony budget)
+    type: Add
+  - message: CLF Sapper's Gunsmithing. Able to forcefully attach any attachments into
+      a weapon.
+    type: Add
+  - message: A switch(attachment). Craftable in the CLF Sapper's Workbench. Horrible
+      decision to use it.
+    type: Add
+  - message: Added "A Package". A box of contents(set by the INSFOR Editor) that selected
+      jobs receive based on the INSFOR faction, if set by the INSFOR Editor(s).
+    type: Add
+  - message: INSFOR Editor function added to Improved Construction Menu
+    type: Tweak
+  - message: CLF Leader can now individually pick the items from the heavy cell kit
+      to place down.
+    type: Tweak
+  - message: INSFOR/CLF can now use captured WS equipment.
+    type: Tweak
+  - message: Each 1 construction skill point reduces material consumption(metal/plasteel/wood)
+      and increases building speed by 10%.
+    type: Tweak
+  - message: Removed the restriction on placing down barricade ghosts and foldable
+      barricades for the ungifted in construction.
+    type: Remove
+  id: 445
+  time: '2026-07-19T17:36:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1541
+- author: maertayn
+  changes:
+  - message: CMUUniversalPaperTool for the Counselor's Law Bundle & AO/LO & Corporate
+      Assistant
+    type: Add
+  - message: EO access to CT vendor
+    type: Tweak
+  id: 446
+  time: '2026-07-19T17:50:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1657
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed CLF surgeon time requirment
+    type: Fix
+  id: 447
+  time: '2026-07-20T03:12:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1660
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Thanks to assistance from the ICSC''s Chrono-Spatial
+      Division, additional limb printers have materialized in the Octanis Complex
+      Hospital and Fort Beauregard Medbay.'
+    type: Add
+  - message: 'Hope''s Retreat: Weyland-Yutani Dog Catchers have successfully removed
+      foreign biomass from deep in the Octanis Complex''s caves.'
+    type: Remove
+  - message: 'Hope''s Retreat: Funds have finally been appropriated to fix the requisitions
+      doors in Fort Beauregard.'
+    type: Fix
+  - message: 'Hope''s Retreat: In the wake of the unfortunate demise of a hardened
+      CLF veteran, the ICSC''s Chrono-Spatial Division has restored timeline integrity
+      and installed several late-join spawns for civilians.'
+    type: Fix
   id: 448
-  time: '2026-07-19T17:36:17.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1600
+  time: '2026-07-20T03:13:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1662
 - author: wray-git
   changes:
-  - message: Jerrie's Mod construction style menu. The classic menu can be re-selected
-      in Options > Misc. The classic menu does not have certain features supplied
-      in the Improved construction menu.
+  - message: Added the smelting crucible. Sit it on a lit fire to render iron ore
+      into metal, metal into plasteel, and scrap electronics into plastic. Melting
+      electronics gives off toxic fumes, so stand back.
     type: Add
-  - message: Saved Builds. Select structures you built, save them to a file, and place
-      them again later. Only works on entities you built. You can either click the
-      entity or append it by range. Saved builds' files can be shared.
+  - message: Drones, hivelords and queens can now spin scab resin across holes in
+      the ground left by cave-ins.
     type: Add
-  - message: Z-Level building. Dig down into generated caverns and build floors.
-    type: Add
-  - message: OSHA safety requirements for z-level building. Goodluck.
-    type: Add
-  - message: Build partners. Allow another player to include your builds in their
-      saves.
-    type: Add
-  - message: Construction Item Editor, allows you to add entities into the construction
-      menu.
-    type: Add
-  - message: Tiles Editor, allows you to add tiles into the construction menu(for
-      z-levels)
-    type: Add
-  - message: Lathe Editor, allows you to add entities into Autolathe and Armylathes.
-    type: Add
-  - message: Mass Entity Editor, allows you to add entities en-masse into the construction
-      menu.
-    type: Add
-  - message: Z-Level toggle, allows you to allow/ban z-level building(made by this
-      PR) from prototypes and maps. Mapper's boolean to enable/disable overrides this.
-    type: Add
-  - message: '"Look Up" now allows you to first faintly look at upper z-levels, with
-      the second time using it makes you fully look & aim up. No more "why is that
-      empty space shooting me".'
+  - message: Saved builds now place where you put them instead of at the corner of
+      the map, and large ones no longer take the server down.
+    type: Fix
+  - message: Fixed the underground river on Shepherd collapsing by itself and dropping
+      the bridges built over it.
+    type: Fix
+  - message: Floor tiles can now be built on beach, coast and shore terrain.
+    type: Fix
+  - message: Ghosts and players are no longer picked up when saving a build.
+    type: Fix
+  - message: Tiles in the construction menu now show their actual sprite instead of
+      generic plating.
+    type: Fix
+  - message: Range selection for saved builds is much smoother with large selections.
     type: Tweak
-  - message: Metal, plasteel, and wood barricades now place as a construction ghost
-      instead of an instant build.
+  - message: Admins can now use Mapper mode for saved builds.
     type: Tweak
-  - message: In-game editors for adding menu items, tiles, and lathe recipes, plus
-      per-recipe Change and Remove, under Admin Tools (Host flag by defualt).
-    type: Admin
-  - message: au_multiz console command to list and toggle which maps allow vertical
-      building.
-    type: Admin
-  - message: There are 3 different modes for saving & loading saved builds, Player,
-      Admin, and Mapper. Player spawns construction ghosts by as if its vanilla, and
-      can only save entities they built themselves. Admin spawns the saved build instantly
-      without any cost. Mapper does the same as Admin, except they are able to save
-      any and all entities spawned in the round.
-    type: Admin
-  - message: The construction menu now runs through one view-agnostic presenter with
-      a spawnlist system, a new entityId construction step, and a Construction verb
-      category.
-    type: Code
-  - message: INSFOR Editor. INSFOR factions can now be made. Every detail about what
-      makes an INSFOR faction is covered.
-    type: Add
-  - message: CLF Leader can now pick which INSFOR faction they want. It is dependent
-      on the GOVFOR faction in the round.
-    type: Add
-  - message: "New Role! \U0001F527\U0001F9F0 CLF Sapper. Able to lay down traps, craft\
-      \ them from the sapper's workbench, and gunsmith-lite. Equipment include: [Tripwire,\
-      \ Audio, Buried *#&, Snare, Spy Camera, \U0001F4B5 Siphon Rig \U0001F4B5 ]"
-    type: Add
-  - message: Siphon Rig, able to siphon from colony budget console, ASRS consoles,
-      and ATMs. ATM siphon is based on how many ATMs are in the round(i.e 10 ATMs
-      would give you 10% of the colony budget)
-    type: Add
-  - message: CLF Sapper's Gunsmithing. Able to forcefully attach any attachments into
-      a weapon.
-    type: Add
-  - message: A switch(attachment). Craftable in the CLF Sapper's Workbench. Horrible
-      decision to use it.
-    type: Add
-  - message: Added "A Package". A box of contents(set by the INSFOR Editor) that selected
-      jobs receive based on the INSFOR faction, if set by the INSFOR Editor(s).
-    type: Add
-  - message: INSFOR Editor function added to Improved Construction Menu
+  - message: Capturing other Z-levels when saving a build is now a checkbox instead
+      of always on.
     type: Tweak
-  - message: CLF Leader can now individually pick the items from the heavy cell kit
-      to place down.
+  - message: The Spawnlist Deleter can now delete a single category instead of the
+      whole spawnlist.
     type: Tweak
-  - message: INSFOR/CLF can now use captured WS equipment.
+  - message: Vendors no longer show the stock count twice.
     type: Tweak
-  - message: Each 1 construction skill point reduces material consumption(metal/plasteel/wood)
-      and increases building speed by 10%.
-    type: Tweak
-  - message: Removed the restriction on placing down barricade ghosts and foldable
-      barricades for the ungifted in construction.
-    type: Remove
-  - message: Z-Sync List, admin menu for controlling which wall prototypes sync across
-      z-level borders.
-    type: Add
-  - message: z-sync whitelist/blacklist persistence, parent-aware matching, blacklist-family
-      expansion, and in-round "pick clicked entity" whitelist/blacklist buttons
-    type: Add
-  - message: Mass Tile Recipe mode to the Mass Entity Editor, including tile search,
-      tile previews, shared cost/category form, and server-side batch tile recipe
-      generation.
-    type: Add
-  - message: Client now has "Faint Look Up opacity" slider in their options, clamped
-      from 5% to 80%.
-    type: Add
-  - message: Separated HUD's viewport now can be centered. Yes.
-    type: Add
-  - message: Collapse vignette feedback for nearby z-level collapses/cave-ins
-    type: Add
-  - message: '(EXPERIMENTAL) multi-z saved-build support: saves/places entities across
-      linked z-levels and creates missing target levels when possible.'
-    type: Add
-  - message: Material shortfall tracking so construction skill discounts cannot be
-      converted into extra refund materials on deconstruction.
-    type: Add
-  - message: Added eyewear, masks, and headwear to CLF and colony/WeYu role loadouts
-    type: Add
-  - message: Separated HUD chat layout can now be shrinked further
-    type: Tweak
-  - message: z-level generated maps to use map-grid entities instead of child grids,
-      improving CMU z-level movement/tile detection
-    type: Tweak
-  - message: cave-in/collapse camera shake from map-wide to local range-limited feedback
-    type: Tweak
-  - message: saved-build names to mark multi-z saves with (Multi-Z). Once again, heavily
-      experimental. Best save per z-level to be sure of your saves.
-    type: Tweak
-  - message: CLF Sapper radio prefix to CIV
-    type: Tweak
-  - message: RobustToolbox `Splitcontainer` with a free resize mode used by the Separated
-      HUD chat
-    type: Tweak
-  - message: Added Z-Sync lists button to the construction's admin tools menu.
-    type: Admin
-  - message: Added mass tile construction recipe tool.
-    type: Admin
-  - message: Removed forced minimum chat width behavior in Separated HUD
-    type: Remove
-  - message: Removed map-wide collapse shake behavior
-    type: Remove
   id: 449
-  time: '2026-07-19T17:36:17.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1600
-- author: wray-git
+  time: '2026-07-20T03:26:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1663
+- author: maertayn
   changes:
-  - message: Jerrie's Mod construction style menu. The classic menu can be re-selected
-      in Options > Misc. The classic menu does not have certain features supplied
-      in the Improved construction menu.
+  - message: ColonialMarinesAudio private repository support
     type: Add
-  - message: Saved Builds. Select structures you built, save them to a file, and place
-      them again later. Only works on entities you built. You can either click the
-      entity or append it by range. Saved builds' files can be shared.
-    type: Add
-  - message: Z-Level building. Dig down into generated caverns and build floors.
-    type: Add
-  - message: OSHA safety requirements for z-level building. Goodluck.
-    type: Add
-  - message: Build partners. Allow another player to include your builds in their
-      saves.
-    type: Add
-  - message: Construction Item Editor, allows you to add entities into the construction
-      menu.
-    type: Add
-  - message: Tiles Editor, allows you to add tiles into the construction menu(for
-      z-levels)
-    type: Add
-  - message: Lathe Editor, allows you to add entities into Autolathe and Armylathes.
-    type: Add
-  - message: Mass Entity Editor, allows you to add entities en-masse into the construction
-      menu.
-    type: Add
-  - message: Z-Level toggle, allows you to allow/ban z-level building(made by this
-      PR) from prototypes and maps. Mapper's boolean to enable/disable overrides this.
-    type: Add
-  - message: '"Look Up" now allows you to first faintly look at upper z-levels, with
-      the second time using it makes you fully look & aim up. No more "why is that
-      empty space shooting me".'
-    type: Tweak
-  - message: Metal, plasteel, and wood barricades now place as a construction ghost
-      instead of an instant build.
-    type: Tweak
-  - message: In-game editors for adding menu items, tiles, and lathe recipes, plus
-      per-recipe Change and Remove, under Admin Tools (Host flag by defualt).
-    type: Admin
-  - message: au_multiz console command to list and toggle which maps allow vertical
-      building.
-    type: Admin
-  - message: There are 3 different modes for saving & loading saved builds, Player,
-      Admin, and Mapper. Player spawns construction ghosts by as if its vanilla, and
-      can only save entities they built themselves. Admin spawns the saved build instantly
-      without any cost. Mapper does the same as Admin, except they are able to save
-      any and all entities spawned in the round.
-    type: Admin
-  - message: The construction menu now runs through one view-agnostic presenter with
-      a spawnlist system, a new entityId construction step, and a Construction verb
-      category.
-    type: Code
   id: 450
-  time: '2026-07-19T17:36:19.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1497
+  time: '2026-07-20T03:26:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1668
 - author: wray-git
   changes:
-  - message: INSFOR Editor. INSFOR factions can now be made. Every detail about what
-      makes an INSFOR faction is covered.
-    type: Add
-  - message: CLF Leader can now pick which INSFOR faction they want. It is dependent
-      on the GOVFOR faction in the round.
-    type: Add
-  - message: "New Role! \U0001F527\U0001F9F0 CLF Sapper. Able to lay down traps, craft\
-      \ them from the sapper's workbench, and gunsmith-lite. Equipment include: [Tripwire,\
-      \ Audio, Buried *#&, Snare, Spy Camera, \U0001F4B5 Siphon Rig \U0001F4B5 ]"
-    type: Add
-  - message: Siphon Rig, able to siphon from colony budget console, ASRS consoles,
-      and ATMs. ATM siphon is based on how many ATMs are in the round(i.e 10 ATMs
-      would give you 10% of the colony budget)
-    type: Add
-  - message: CLF Sapper's Gunsmithing. Able to forcefully attach any attachments into
-      a weapon.
-    type: Add
-  - message: A switch(attachment). Craftable in the CLF Sapper's Workbench. Horrible
-      decision to use it.
-    type: Add
-  - message: Added "A Package". A box of contents(set by the INSFOR Editor) that selected
-      jobs receive based on the INSFOR faction, if set by the INSFOR Editor(s).
-    type: Add
-  - message: INSFOR Editor function added to Improved Construction Menu
-    type: Tweak
-  - message: CLF Leader can now individually pick the items from the heavy cell kit
-      to place down.
-    type: Tweak
-  - message: INSFOR/CLF can now use captured WS equipment.
-    type: Tweak
-  - message: Each 1 construction skill point reduces material consumption(metal/plasteel/wood)
-      and increases building speed by 10%.
-    type: Tweak
-  - message: Removed the restriction on placing down barricade ghosts and foldable
-      barricades for the ungifted in construction.
-    type: Remove
+  - message: Metal, plasteel and wooden barricades built through the construction
+      menu can now be deconstructed again.
+    type: Fix
+  - message: Custom recipes can now ask for multiple units of stackable items like
+      barbed wire, instead of demanding that many separate items.
+    type: Fix
   id: 451
-  time: '2026-07-19T17:36:19.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1541
-- author: wray-git
+  time: '2026-07-20T05:50:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1672
+- author: troytroy400
   changes:
-  - message: Jerrie's Mod construction style menu. The classic menu can be re-selected
-      in Options > Misc. The classic menu does not have certain features supplied
-      in the Improved construction menu.
+  - message: Added Fent (also fentanyl precursor). Insanely effective painkiller with
+      an absurdly dangerous OD + other side effects. Can only be acquired through
+      a chems room.
     type: Add
-  - message: Saved Builds. Select structures you built, save them to a file, and place
-      them again later. Only works on entities you built. You can either click the
-      entity or append it by range. Saved builds' files can be shared.
+  - message: Meth (also includes meth precursor and Meth base to make it). Gives a
+      speed boost, jitter/stutter and tachycardia. Can only be acquired through a
+      chems room.
     type: Add
-  - message: Z-Level building. Dig down into generated caverns and build floors.
+  - message: Oxycodone now gives a subtle vision haze/vignette effect while in your
+      system as the drug is meant to be used mainly for surgery. This should add some
+      reason for paracetamol and tramadol to be used instead of oxy.
     type: Add
-  - message: OSHA safety requirements for z-level building. Goodluck.
+  - message: Added missing regulation hairstyles (Alt CIA, Pulato, Alt Ponytail 4/5,
+      all business cuts and goatee).
     type: Add
-  - message: Build partners. Allow another player to include your builds in their
-      saves.
+  - message: Added a variety of new less desaturated regulation hair colors.
     type: Add
-  - message: Construction Item Editor, allows you to add entities into the construction
-      menu.
+  - message: Added the 6 PvE M1A1 ballistic goggle variants to GOVFOR's eyewear loadouts,
+      each with a prescription variant.
     type: Add
-  - message: Tiles Editor, allows you to add tiles into the construction menu(for
-      z-levels)
+  - message: Added prescription variants for Personal Shades, Sunglasses, and all
+      3 TriMax shades to the loadout options.
     type: Add
-  - message: Lathe Editor, allows you to add entities into Autolathe and Armylathes.
+  - message: Added a huge variety of missing clothing to civilian loadouts.
     type: Add
-  - message: Mass Entity Editor, allows you to add entities en-masse into the construction
-      menu.
+  - message: Added random wilderness spawn markers to make mapping forests/jungles
+      easier.
     type: Add
-  - message: Z-Level toggle, allows you to allow/ban z-level building(made by this
-      PR) from prototypes and maps. Mapper's boolean to enable/disable overrides this.
-    type: Add
-  - message: '"Look Up" now allows you to first faintly look at upper z-levels, with
-      the second time using it makes you fully look & aim up. No more "why is that
-      empty space shooting me".'
+  - message: Removed camo specific items + gas masks from loadouts as they can be
+      acquired in your vendors.
+    type: Remove
+  - message: Naloxone now instantly purges every painkiller from the bloodstream and
+      forces vomiting.
     type: Tweak
-  - message: Metal, plasteel, and wood barricades now place as a construction ghost
-      instead of an instant build.
+  - message: Rules now displays the proper minimum age to play the server (16).
     type: Tweak
-  - message: In-game editors for adding menu items, tiles, and lathe recipes, plus
-      per-recipe Change and Remove, under Admin Tools (Host flag by defualt).
-    type: Admin
-  - message: au_multiz console command to list and toggle which maps allow vertical
-      building.
-    type: Admin
-  - message: There are 3 different modes for saving & loading saved builds, Player,
-      Admin, and Mapper. Player spawns construction ghosts by as if its vanilla, and
-      can only save entities they built themselves. Admin spawns the saved build instantly
-      without any cost. Mapper does the same as Admin, except they are able to save
-      any and all entities spawned in the round.
-    type: Admin
-  - message: The construction menu now runs through one view-agnostic presenter with
-      a spawnlist system, a new entityId construction step, and a Construction verb
-      category.
-    type: Code
+  - message: The nearsighted trait is now fixed, for real this time.
+    type: Fix
+  - message: Prescription eyewear now actually works.
+    type: Fix
+  - message: Rifleman now uses the same loadout eyewear section as everyone else.
+    type: Fix
   id: 452
-  time: '2026-07-19T17:36:19.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1497
-- author: wray-git
+  time: '2026-07-20T06:50:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1673
+- author: rokudara-sen
   changes:
-  - message: INSFOR Editor. INSFOR factions can now be made. Every detail about what
-      makes an INSFOR faction is covered.
+  - message: Added the AN/PRC-117G manpack radio for Radio Telephone Operators and
+      command roles, with up to four programmable preset nets, operator callsigns,
+      and `:r` transmission.
     type: Add
-  - message: CLF Leader can now pick which INSFOR faction they want. It is dependent
-      on the GOVFOR faction in the round.
+  - message: Added relay-based ground comms. Headset traffic on nets loaded in a worn
+      AN/PRC works without a comms tower within 30 tiles at full signal and 45 tiles
+      with degraded signal.
     type: Add
-  - message: "New Role! \U0001F527\U0001F9F0 CLF Sapper. Able to lay down traps, craft\
-      \ them from the sapper's workbench, and gunsmith-lite. Equipment include: [Tripwire,\
-      \ Audio, Buried *#&, Snare, Spy Camera, \U0001F4B5 Siphon Rig \U0001F4B5 ]"
+  - message: 'Added AN/PRC operating modes: Frequency Hopping, Single Channel, Cipher
+      Text, and Plain Text. Each mode trades battery cost, jamming resistance, security,
+      and direction-finding signature, so no single mode dominates.'
     type: Add
-  - message: Siphon Rig, able to siphon from colony budget console, ASRS consoles,
-      and ATMs. ATM siphon is based on how many ATMs are in the round(i.e 10 ATMs
-      would give you 10% of the colony budget)
+  - message: Added a transmit power dial (LO/MED/HI) to the AN/PRC, trading relay
+      range against battery drain and direction-finding exposure.
     type: Add
-  - message: CLF Sapper's Gunsmithing. Able to forcefully attach any attachments into
-      a weapon.
+  - message: Added physical COMSEC fill cards for GOVFOR, OPFOR, and CLF. Secured
+      faction-net traffic is pure static to interceptors without the matching fill,
+      and captured enemy cards can be loaded to decode hostile traffic.
     type: Add
-  - message: A switch(attachment). Craftable in the CLF Sapper's Workbench. Horrible
-      decision to use it.
+  - message: Added the RECRYPTO order, a faction-wide COMSEC changeover that supersedes
+      all previously issued fill cards, including captured ones.
     type: Add
-  - message: Added "A Package". A box of contents(set by the INSFOR Editor) that selected
-      jobs receive based on the INSFOR faction, if set by the INSFOR Editor(s).
+  - message: Added direction finding. Transmitting in the clear, in PT mode, or near
+      enemy jamming can reveal the sender's position as a temporary contact blip on
+      the opposing faction's tactical map, with repeated transmissions from the same
+      spot raising the odds.
     type: Add
-  - message: INSFOR Editor function added to Improved Construction Menu
+  - message: Added retrans stations. A planted AN/PRC relays its faction nets unattended,
+      logs traffic, and drains its battery. Anyone, including the enemy, can pack
+      it up and capture it.
+    type: Add
+  - message: Added signal interception, monitor mode, scan mode, a squelch noise gate,
+      and a filterable 50-entry net log to the AN/PRC.
+    type: Add
+  - message: Added a battery slot and an antenna slot to the AN/PRC. The whip antenna
+      holds relay range on the move, while the mast roughly doubles range when stationary
+      but halves it while moving.
+    type: Add
+  - message: Added a radio check that reports which stations are in clear or degraded
+      range and, inside jamming, gives a bearing to the strongest emitter.
+    type: Add
+  - message: Added a tunable direct frequency from 30.000 to 87.999 MHz, transmitted
+      with `:x`, to all headsets. It works peer-to-peer without towers or keys and
+      can be bridged by an AN/PRC.
+    type: Add
+  - message: Added faction-wide automatic radio callsigns that replace names on faction
+      nets, plus a callsign directory console on overwatch laptops.
+    type: Add
+  - message: Added comms arrays and masts that anchor faction nets over an area. Combat
+      nets require relay coverage from an AN/PRC or array.
+    type: Add
+  - message: Added AN/PRC variants, fill cards, and antennas for GOVFOR, OPFOR, and
+      CLF, with resupply through requisitions and faction vendors.
+    type: Add
+  - message: Added guidebook pages for the AN/PRC-117G, field headsets, voice procedure,
+      and a comms quick reference.
+    type: Add
+  - message: Added role tags on the net for squad leaders and fireteam leaders, shown
+      as `(SL) ALPHA 6` and `(FTL) ALPHA 2-1`.
+    type: Add
+  - message: Added fireteam-based callsigns. A marine's fireteam forms the first half
+      of their numeric suffix, so `ALPHA 2-3` is fireteam two, member three. Callsigns
+      update automatically on reassignment.
+    type: Add
+  - message: Added aircrew callsigns. Pilots answer to `PAPA`, and dropship crew chiefs
+      answer to `CHIEF` within the command element.
+    type: Add
+  - message: Added task groups to the callsign directory console. Net control can
+      create custom-word groups such as `REAPER`, move personnel in and out, and disband
+      them, with callsigns updating automatically.
+    type: Add
+  - message: Added role sections to the callsign directory. Aircrew, military police,
+      medical, and intelligence are listed separately from the command element and
+      only appear when staffed.
+    type: Add
+  - message: Added a buildable field antenna mast, raised from ten metal sheets by
+      engineering-trained personnel, that relays both factions' nets.
+    type: Add
+  - message: Added hull-mounted vehicle radio sets to dropships and vehicle interiors,
+      including APCs, Humvees, tanks, and the Blackfoot, keeping mounted troops on
+      the net at short range.
+    type: Add
+  - message: Added your callsign to your headset's examine text.
+    type: Add
+  - message: "Added per-operation frequency plans: faction net frequencies are randomized\
+      \ every round, and frequency cards print the current assignments \u2014 captured\
+      \ cards are now real intel."
+    type: Add
+  - message: Support synthetics are now radio trained and can operate the AN/PRC.
+    type: Add
+  - message: Radio jammers now degrade AN/PRC transmissions with mode-dependent garble
+      instead of blocking them. They jam both endpoints and also affect direct frequencies.
     type: Tweak
-  - message: CLF Leader can now individually pick the items from the heavy cell kit
-      to place down.
+  - message: Squad leaders no longer have a direct command-channel key. SL-to-command
+      traffic now flows through the RTO or the AN/PRC handset.
     type: Tweak
-  - message: INSFOR/CLF can now use captured WS equipment.
+  - message: 'RECRYPTO now requires command COMSEC authority: Commander, Adjutant,
+      Advisor, or Cell Leader.'
     type: Tweak
-  - message: Each 1 construction skill point reduces material consumption(metal/plasteel/wood)
-      and increases building speed by 10%.
+  - message: MP nets now use the relay network like every other faction net instead
+      of depending on the legacy comms tower.
     type: Tweak
-  - message: Removed the restriction on placing down barricade ghosts and foldable
-      barricades for the ungifted in construction.
-    type: Remove
+  - message: Ambassadors no longer receive callsigns or appear in the net directory.
+    type: Tweak
   id: 453
-  time: '2026-07-19T17:36:19.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1541
-- author: maertayn
+  time: '2026-07-20T07:11:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1568
+- author: MACMAN2003
   changes:
-  - message: CMUUniversalPaperTool for the Counselor's Law Bundle & AO/LO & Corporate
-      Assistant
+  - message: Fixed corrupted hive xenos being able to hurt their allies.
+    type: Fix
+  - message: Weyland-Yutani Researchers can now synthesize chemicals for money.
     type: Add
-  - message: EO access to CT vendor
-    type: Tweak
   id: 454
-  time: '2026-07-19T17:50:06.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1657
-- author: maertayn
-  changes:
-  - message: CMUUniversalPaperTool for the Counselor's Law Bundle & AO/LO & Corporate
-      Assistant
-    type: Add
-  - message: EO access to CT vendor
-    type: Tweak
-  id: 455
-  time: '2026-07-19T17:50:06.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1657
-- author: maertayn
-  changes:
-  - message: CMUUniversalPaperTool for the Counselor's Law Bundle & AO/LO & Corporate
-      Assistant
-    type: Add
-  - message: EO access to CT vendor
-    type: Tweak
-  id: 456
-  time: '2026-07-19T17:50:06.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1657
-- author: CatoChristopherMrow
-  changes:
-  - message: Fixed CLF surgeon time requirment
-    type: Fix
-  id: 457
-  time: '2026-07-20T03:12:27.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1660
-- author: CatoChristopherMrow
-  changes:
-  - message: Fixed CLF surgeon time requirment
-    type: Fix
-  id: 458
-  time: '2026-07-20T03:12:27.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1660
-- author: CatoChristopherMrow
-  changes:
-  - message: Fixed CLF surgeon time requirment
-    type: Fix
-  id: 459
-  time: '2026-07-20T03:12:27.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1660
-- author: sunzu432
-  changes:
-  - message: 'Hope''s Retreat: Thanks to assistance from the ICSC''s Chrono-Spatial
-      Division, additional limb printers have materialized in the Octanis Complex
-      Hospital and Fort Beauregard Medbay.'
-    type: Add
-  - message: 'Hope''s Retreat: Weyland-Yutani Dog Catchers have successfully removed
-      foreign biomass from deep in the Octanis Complex''s caves.'
-    type: Remove
-  - message: 'Hope''s Retreat: Funds have finally been appropriated to fix the requisitions
-      doors in Fort Beauregard.'
-    type: Fix
-  - message: 'Hope''s Retreat: In the wake of the unfortunate demise of a hardened
-      CLF veteran, the ICSC''s Chrono-Spatial Division has restored timeline integrity
-      and installed several late-join spawns for civilians.'
-    type: Fix
-  id: 460
-  time: '2026-07-20T03:13:37.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1662
-- author: sunzu432
-  changes:
-  - message: 'Hope''s Retreat: Thanks to assistance from the ICSC''s Chrono-Spatial
-      Division, additional limb printers have materialized in the Octanis Complex
-      Hospital and Fort Beauregard Medbay.'
-    type: Add
-  - message: 'Hope''s Retreat: Weyland-Yutani Dog Catchers have successfully removed
-      foreign biomass from deep in the Octanis Complex''s caves.'
-    type: Remove
-  - message: 'Hope''s Retreat: Funds have finally been appropriated to fix the requisitions
-      doors in Fort Beauregard.'
-    type: Fix
-  - message: 'Hope''s Retreat: In the wake of the unfortunate demise of a hardened
-      CLF veteran, the ICSC''s Chrono-Spatial Division has restored timeline integrity
-      and installed several late-join spawns for civilians.'
-    type: Fix
-  id: 461
-  time: '2026-07-20T03:13:37.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1662
-- author: sunzu432
-  changes:
-  - message: 'Hope''s Retreat: Thanks to assistance from the ICSC''s Chrono-Spatial
-      Division, additional limb printers have materialized in the Octanis Complex
-      Hospital and Fort Beauregard Medbay.'
-    type: Add
-  - message: 'Hope''s Retreat: Weyland-Yutani Dog Catchers have successfully removed
-      foreign biomass from deep in the Octanis Complex''s caves.'
-    type: Remove
-  - message: 'Hope''s Retreat: Funds have finally been appropriated to fix the requisitions
-      doors in Fort Beauregard.'
-    type: Fix
-  - message: 'Hope''s Retreat: In the wake of the unfortunate demise of a hardened
-      CLF veteran, the ICSC''s Chrono-Spatial Division has restored timeline integrity
-      and installed several late-join spawns for civilians.'
-    type: Fix
-  id: 462
-  time: '2026-07-20T03:13:37.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1662
-- author: wray-git
-  changes:
-  - message: Added the smelting crucible. Sit it on a lit fire to render iron ore
-      into metal, metal into plasteel, and scrap electronics into plastic. Melting
-      electronics gives off toxic fumes, so stand back.
-    type: Add
-  - message: Drones, hivelords and queens can now spin scab resin across holes in
-      the ground left by cave-ins.
-    type: Add
-  - message: Saved builds now place where you put them instead of at the corner of
-      the map, and large ones no longer take the server down.
-    type: Fix
-  - message: Fixed the underground river on Shepherd collapsing by itself and dropping
-      the bridges built over it.
-    type: Fix
-  - message: Floor tiles can now be built on beach, coast and shore terrain.
-    type: Fix
-  - message: Ghosts and players are no longer picked up when saving a build.
-    type: Fix
-  - message: Tiles in the construction menu now show their actual sprite instead of
-      generic plating.
-    type: Fix
-  - message: Range selection for saved builds is much smoother with large selections.
-    type: Tweak
-  - message: Admins can now use Mapper mode for saved builds.
-    type: Tweak
-  - message: Capturing other Z-levels when saving a build is now a checkbox instead
-      of always on.
-    type: Tweak
-  - message: The Spawnlist Deleter can now delete a single category instead of the
-      whole spawnlist.
-    type: Tweak
-  - message: Vendors no longer show the stock count twice.
-    type: Tweak
-  id: 463
-  time: '2026-07-20T03:26:20.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1663
-- author: wray-git
-  changes:
-  - message: Added the smelting crucible. Sit it on a lit fire to render iron ore
-      into metal, metal into plasteel, and scrap electronics into plastic. Melting
-      electronics gives off toxic fumes, so stand back.
-    type: Add
-  - message: Drones, hivelords and queens can now spin scab resin across holes in
-      the ground left by cave-ins.
-    type: Add
-  - message: Saved builds now place where you put them instead of at the corner of
-      the map, and large ones no longer take the server down.
-    type: Fix
-  - message: Fixed the underground river on Shepherd collapsing by itself and dropping
-      the bridges built over it.
-    type: Fix
-  - message: Floor tiles can now be built on beach, coast and shore terrain.
-    type: Fix
-  - message: Ghosts and players are no longer picked up when saving a build.
-    type: Fix
-  - message: Tiles in the construction menu now show their actual sprite instead of
-      generic plating.
-    type: Fix
-  - message: Range selection for saved builds is much smoother with large selections.
-    type: Tweak
-  - message: Admins can now use Mapper mode for saved builds.
-    type: Tweak
-  - message: Capturing other Z-levels when saving a build is now a checkbox instead
-      of always on.
-    type: Tweak
-  - message: The Spawnlist Deleter can now delete a single category instead of the
-      whole spawnlist.
-    type: Tweak
-  - message: Vendors no longer show the stock count twice.
-    type: Tweak
-  id: 464
-  time: '2026-07-20T03:26:20.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1663
-- author: wray-git
-  changes:
-  - message: Added the smelting crucible. Sit it on a lit fire to render iron ore
-      into metal, metal into plasteel, and scrap electronics into plastic. Melting
-      electronics gives off toxic fumes, so stand back.
-    type: Add
-  - message: Drones, hivelords and queens can now spin scab resin across holes in
-      the ground left by cave-ins.
-    type: Add
-  - message: Saved builds now place where you put them instead of at the corner of
-      the map, and large ones no longer take the server down.
-    type: Fix
-  - message: Fixed the underground river on Shepherd collapsing by itself and dropping
-      the bridges built over it.
-    type: Fix
-  - message: Floor tiles can now be built on beach, coast and shore terrain.
-    type: Fix
-  - message: Ghosts and players are no longer picked up when saving a build.
-    type: Fix
-  - message: Tiles in the construction menu now show their actual sprite instead of
-      generic plating.
-    type: Fix
-  - message: Range selection for saved builds is much smoother with large selections.
-    type: Tweak
-  - message: Admins can now use Mapper mode for saved builds.
-    type: Tweak
-  - message: Capturing other Z-levels when saving a build is now a checkbox instead
-      of always on.
-    type: Tweak
-  - message: The Spawnlist Deleter can now delete a single category instead of the
-      whole spawnlist.
-    type: Tweak
-  - message: Vendors no longer show the stock count twice.
-    type: Tweak
-  id: 465
-  time: '2026-07-20T03:26:20.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1663
-- author: maertayn
-  changes:
-  - message: ColonialMarinesAudio private repository support
-    type: Add
-  id: 466
-  time: '2026-07-20T03:26:39.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1668
-- author: maertayn
-  changes:
-  - message: ColonialMarinesAudio private repository support
-    type: Add
-  id: 467
-  time: '2026-07-20T03:26:39.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1668
-- author: maertayn
-  changes:
-  - message: ColonialMarinesAudio private repository support
-    type: Add
-  id: 468
-  time: '2026-07-20T03:26:39.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1668
-- author: wray-git
-  changes:
-  - message: Metal, plasteel and wooden barricades built through the construction
-      menu can now be deconstructed again.
-    type: Fix
-  - message: Custom recipes can now ask for multiple units of stackable items like
-      barbed wire, instead of demanding that many separate items.
-    type: Fix
-  id: 469
-  time: '2026-07-20T05:50:46.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1672
-- author: wray-git
-  changes:
-  - message: Metal, plasteel and wooden barricades built through the construction
-      menu can now be deconstructed again.
-    type: Fix
-  - message: Custom recipes can now ask for multiple units of stackable items like
-      barbed wire, instead of demanding that many separate items.
-    type: Fix
-  id: 470
-  time: '2026-07-20T05:50:46.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1672
-- author: troytroy400
-  changes:
-  - message: Added Fent (also fentanyl precursor). Insanely effective painkiller with
-      an absurdly dangerous OD + other side effects. Can only be acquired through
-      a chems room.
-    type: Add
-  - message: Meth (also includes meth precursor and Meth base to make it). Gives a
-      speed boost, jitter/stutter and tachycardia. Can only be acquired through a
-      chems room.
-    type: Add
-  - message: Oxycodone now gives a subtle vision haze/vignette effect while in your
-      system as the drug is meant to be used mainly for surgery. This should add some
-      reason for paracetamol and tramadol to be used instead of oxy.
-    type: Add
-  - message: Added missing regulation hairstyles (Alt CIA, Pulato, Alt Ponytail 4/5,
-      all business cuts and goatee).
-    type: Add
-  - message: Added a variety of new less desaturated regulation hair colors.
-    type: Add
-  - message: Added the 6 PvE M1A1 ballistic goggle variants to GOVFOR's eyewear loadouts,
-      each with a prescription variant.
-    type: Add
-  - message: Added prescription variants for Personal Shades, Sunglasses, and all
-      3 TriMax shades to the loadout options.
-    type: Add
-  - message: Added a huge variety of missing clothing to civilian loadouts.
-    type: Add
-  - message: Added random wilderness spawn markers to make mapping forests/jungles
-      easier.
-    type: Add
-  - message: Removed camo specific items + gas masks from loadouts as they can be
-      acquired in your vendors.
-    type: Remove
-  - message: Naloxone now instantly purges every painkiller from the bloodstream and
-      forces vomiting.
-    type: Tweak
-  - message: Rules now displays the proper minimum age to play the server (16).
-    type: Tweak
-  - message: The nearsighted trait is now fixed, for real this time.
-    type: Fix
-  - message: Prescription eyewear now actually works.
-    type: Fix
-  - message: Rifleman now uses the same loadout eyewear section as everyone else.
-    type: Fix
-  id: 471
-  time: '2026-07-20T06:50:37.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1673
-- author: troytroy400
-  changes:
-  - message: Added Fent (also fentanyl precursor). Insanely effective painkiller with
-      an absurdly dangerous OD + other side effects. Can only be acquired through
-      a chems room.
-    type: Add
-  - message: Meth (also includes meth precursor and Meth base to make it). Gives a
-      speed boost, jitter/stutter and tachycardia. Can only be acquired through a
-      chems room.
-    type: Add
-  - message: Oxycodone now gives a subtle vision haze/vignette effect while in your
-      system as the drug is meant to be used mainly for surgery. This should add some
-      reason for paracetamol and tramadol to be used instead of oxy.
-    type: Add
-  - message: Added missing regulation hairstyles (Alt CIA, Pulato, Alt Ponytail 4/5,
-      all business cuts and goatee).
-    type: Add
-  - message: Added a variety of new less desaturated regulation hair colors.
-    type: Add
-  - message: Added the 6 PvE M1A1 ballistic goggle variants to GOVFOR's eyewear loadouts,
-      each with a prescription variant.
-    type: Add
-  - message: Added prescription variants for Personal Shades, Sunglasses, and all
-      3 TriMax shades to the loadout options.
-    type: Add
-  - message: Added a huge variety of missing clothing to civilian loadouts.
-    type: Add
-  - message: Added random wilderness spawn markers to make mapping forests/jungles
-      easier.
-    type: Add
-  - message: Removed camo specific items + gas masks from loadouts as they can be
-      acquired in your vendors.
-    type: Remove
-  - message: Naloxone now instantly purges every painkiller from the bloodstream and
-      forces vomiting.
-    type: Tweak
-  - message: Rules now displays the proper minimum age to play the server (16).
-    type: Tweak
-  - message: The nearsighted trait is now fixed, for real this time.
-    type: Fix
-  - message: Prescription eyewear now actually works.
-    type: Fix
-  - message: Rifleman now uses the same loadout eyewear section as everyone else.
-    type: Fix
-  id: 472
-  time: '2026-07-20T06:50:37.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1673
-- author: rokudara-sen
-  changes:
-  - message: Added the AN/PRC-117G manpack radio for Radio Telephone Operators and
-      command roles, with up to four programmable preset nets, operator callsigns,
-      and `:r` transmission.
-    type: Add
-  - message: Added relay-based ground comms. Headset traffic on nets loaded in a worn
-      AN/PRC works without a comms tower within 30 tiles at full signal and 45 tiles
-      with degraded signal.
-    type: Add
-  - message: 'Added AN/PRC operating modes: Frequency Hopping, Single Channel, Cipher
-      Text, and Plain Text. Each mode trades battery cost, jamming resistance, security,
-      and direction-finding signature, so no single mode dominates.'
-    type: Add
-  - message: Added a transmit power dial (LO/MED/HI) to the AN/PRC, trading relay
-      range against battery drain and direction-finding exposure.
-    type: Add
-  - message: Added physical COMSEC fill cards for GOVFOR, OPFOR, and CLF. Secured
-      faction-net traffic is pure static to interceptors without the matching fill,
-      and captured enemy cards can be loaded to decode hostile traffic.
-    type: Add
-  - message: Added the RECRYPTO order, a faction-wide COMSEC changeover that supersedes
-      all previously issued fill cards, including captured ones.
-    type: Add
-  - message: Added direction finding. Transmitting in the clear, in PT mode, or near
-      enemy jamming can reveal the sender's position as a temporary contact blip on
-      the opposing faction's tactical map, with repeated transmissions from the same
-      spot raising the odds.
-    type: Add
-  - message: Added retrans stations. A planted AN/PRC relays its faction nets unattended,
-      logs traffic, and drains its battery. Anyone, including the enemy, can pack
-      it up and capture it.
-    type: Add
-  - message: Added signal interception, monitor mode, scan mode, a squelch noise gate,
-      and a filterable 50-entry net log to the AN/PRC.
-    type: Add
-  - message: Added a battery slot and an antenna slot to the AN/PRC. The whip antenna
-      holds relay range on the move, while the mast roughly doubles range when stationary
-      but halves it while moving.
-    type: Add
-  - message: Added a radio check that reports which stations are in clear or degraded
-      range and, inside jamming, gives a bearing to the strongest emitter.
-    type: Add
-  - message: Added a tunable direct frequency from 30.000 to 87.999 MHz, transmitted
-      with `:x`, to all headsets. It works peer-to-peer without towers or keys and
-      can be bridged by an AN/PRC.
-    type: Add
-  - message: Added faction-wide automatic radio callsigns that replace names on faction
-      nets, plus a callsign directory console on overwatch laptops.
-    type: Add
-  - message: Added comms arrays and masts that anchor faction nets over an area. Combat
-      nets require relay coverage from an AN/PRC or array.
-    type: Add
-  - message: Added AN/PRC variants, fill cards, and antennas for GOVFOR, OPFOR, and
-      CLF, with resupply through requisitions and faction vendors.
-    type: Add
-  - message: Added guidebook pages for the AN/PRC-117G, field headsets, voice procedure,
-      and a comms quick reference.
-    type: Add
-  - message: Added role tags on the net for squad leaders and fireteam leaders, shown
-      as `(SL) ALPHA 6` and `(FTL) ALPHA 2-1`.
-    type: Add
-  - message: Added fireteam-based callsigns. A marine's fireteam forms the first half
-      of their numeric suffix, so `ALPHA 2-3` is fireteam two, member three. Callsigns
-      update automatically on reassignment.
-    type: Add
-  - message: Added aircrew callsigns. Pilots answer to `PAPA`, and dropship crew chiefs
-      answer to `CHIEF` within the command element.
-    type: Add
-  - message: Added task groups to the callsign directory console. Net control can
-      create custom-word groups such as `REAPER`, move personnel in and out, and disband
-      them, with callsigns updating automatically.
-    type: Add
-  - message: Added role sections to the callsign directory. Aircrew, military police,
-      medical, and intelligence are listed separately from the command element and
-      only appear when staffed.
-    type: Add
-  - message: Added a buildable field antenna mast, raised from ten metal sheets by
-      engineering-trained personnel, that relays both factions' nets.
-    type: Add
-  - message: Added hull-mounted vehicle radio sets to dropships and vehicle interiors,
-      including APCs, Humvees, tanks, and the Blackfoot, keeping mounted troops on
-      the net at short range.
-    type: Add
-  - message: Added your callsign to your headset's examine text.
-    type: Add
-  - message: "Added per-operation frequency plans: faction net frequencies are randomized\
-      \ every round, and frequency cards print the current assignments \u2014 captured\
-      \ cards are now real intel."
-    type: Add
-  - message: Support synthetics are now radio trained and can operate the AN/PRC.
-    type: Add
-  - message: Radio jammers now degrade AN/PRC transmissions with mode-dependent garble
-      instead of blocking them. They jam both endpoints and also affect direct frequencies.
-    type: Tweak
-  - message: Squad leaders no longer have a direct command-channel key. SL-to-command
-      traffic now flows through the RTO or the AN/PRC handset.
-    type: Tweak
-  - message: 'RECRYPTO now requires command COMSEC authority: Commander, Adjutant,
-      Advisor, or Cell Leader.'
-    type: Tweak
-  - message: MP nets now use the relay network like every other faction net instead
-      of depending on the legacy comms tower.
-    type: Tweak
-  - message: Ambassadors no longer receive callsigns or appear in the net directory.
-    type: Tweak
-  id: 473
-  time: '2026-07-20T07:11:11.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1568
-- author: rokudara-sen
-  changes:
-  - message: Added the AN/PRC-117G manpack radio for Radio Telephone Operators and
-      command roles, with up to four programmable preset nets, operator callsigns,
-      and `:r` transmission.
-    type: Add
-  - message: Added relay-based ground comms. Headset traffic on nets loaded in a worn
-      AN/PRC works without a comms tower within 30 tiles at full signal and 45 tiles
-      with degraded signal.
-    type: Add
-  - message: 'Added AN/PRC operating modes: Frequency Hopping, Single Channel, Cipher
-      Text, and Plain Text. Each mode trades battery cost, jamming resistance, security,
-      and direction-finding signature, so no single mode dominates.'
-    type: Add
-  - message: Added a transmit power dial (LO/MED/HI) to the AN/PRC, trading relay
-      range against battery drain and direction-finding exposure.
-    type: Add
-  - message: Added physical COMSEC fill cards for GOVFOR, OPFOR, and CLF. Secured
-      faction-net traffic is pure static to interceptors without the matching fill,
-      and captured enemy cards can be loaded to decode hostile traffic.
-    type: Add
-  - message: Added the RECRYPTO order, a faction-wide COMSEC changeover that supersedes
-      all previously issued fill cards, including captured ones.
-    type: Add
-  - message: Added direction finding. Transmitting in the clear, in PT mode, or near
-      enemy jamming can reveal the sender's position as a temporary contact blip on
-      the opposing faction's tactical map, with repeated transmissions from the same
-      spot raising the odds.
-    type: Add
-  - message: Added retrans stations. A planted AN/PRC relays its faction nets unattended,
-      logs traffic, and drains its battery. Anyone, including the enemy, can pack
-      it up and capture it.
-    type: Add
-  - message: Added signal interception, monitor mode, scan mode, a squelch noise gate,
-      and a filterable 50-entry net log to the AN/PRC.
-    type: Add
-  - message: Added a battery slot and an antenna slot to the AN/PRC. The whip antenna
-      holds relay range on the move, while the mast roughly doubles range when stationary
-      but halves it while moving.
-    type: Add
-  - message: Added a radio check that reports which stations are in clear or degraded
-      range and, inside jamming, gives a bearing to the strongest emitter.
-    type: Add
-  - message: Added a tunable direct frequency from 30.000 to 87.999 MHz, transmitted
-      with `:x`, to all headsets. It works peer-to-peer without towers or keys and
-      can be bridged by an AN/PRC.
-    type: Add
-  - message: Added faction-wide automatic radio callsigns that replace names on faction
-      nets, plus a callsign directory console on overwatch laptops.
-    type: Add
-  - message: Added comms arrays and masts that anchor faction nets over an area. Combat
-      nets require relay coverage from an AN/PRC or array.
-    type: Add
-  - message: Added AN/PRC variants, fill cards, and antennas for GOVFOR, OPFOR, and
-      CLF, with resupply through requisitions and faction vendors.
-    type: Add
-  - message: Added guidebook pages for the AN/PRC-117G, field headsets, voice procedure,
-      and a comms quick reference.
-    type: Add
-  - message: Added role tags on the net for squad leaders and fireteam leaders, shown
-      as `(SL) ALPHA 6` and `(FTL) ALPHA 2-1`.
-    type: Add
-  - message: Added fireteam-based callsigns. A marine's fireteam forms the first half
-      of their numeric suffix, so `ALPHA 2-3` is fireteam two, member three. Callsigns
-      update automatically on reassignment.
-    type: Add
-  - message: Added aircrew callsigns. Pilots answer to `PAPA`, and dropship crew chiefs
-      answer to `CHIEF` within the command element.
-    type: Add
-  - message: Added task groups to the callsign directory console. Net control can
-      create custom-word groups such as `REAPER`, move personnel in and out, and disband
-      them, with callsigns updating automatically.
-    type: Add
-  - message: Added role sections to the callsign directory. Aircrew, military police,
-      medical, and intelligence are listed separately from the command element and
-      only appear when staffed.
-    type: Add
-  - message: Added a buildable field antenna mast, raised from ten metal sheets by
-      engineering-trained personnel, that relays both factions' nets.
-    type: Add
-  - message: Added hull-mounted vehicle radio sets to dropships and vehicle interiors,
-      including APCs, Humvees, tanks, and the Blackfoot, keeping mounted troops on
-      the net at short range.
-    type: Add
-  - message: Added your callsign to your headset's examine text.
-    type: Add
-  - message: "Added per-operation frequency plans: faction net frequencies are randomized\
-      \ every round, and frequency cards print the current assignments \u2014 captured\
-      \ cards are now real intel."
-    type: Add
-  - message: Support synthetics are now radio trained and can operate the AN/PRC.
-    type: Add
-  - message: Radio jammers now degrade AN/PRC transmissions with mode-dependent garble
-      instead of blocking them. They jam both endpoints and also affect direct frequencies.
-    type: Tweak
-  - message: Squad leaders no longer have a direct command-channel key. SL-to-command
-      traffic now flows through the RTO or the AN/PRC handset.
-    type: Tweak
-  - message: 'RECRYPTO now requires command COMSEC authority: Commander, Adjutant,
-      Advisor, or Cell Leader.'
-    type: Tweak
-  - message: MP nets now use the relay network like every other faction net instead
-      of depending on the legacy comms tower.
-    type: Tweak
-  - message: Ambassadors no longer receive callsigns or appear in the net directory.
-    type: Tweak
-  id: 474
-  time: '2026-07-20T07:11:11.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1568
-- author: MACMAN2003
-  changes:
-  - message: Fixed corrupted hive xenos being able to hurt their allies.
-    type: Fix
-  - message: Weyland-Yutani Researchers can now synthesize chemicals for money.
-    type: Add
-  id: 475
-  time: '2026-07-20T07:11:46.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1120
-- author: MACMAN2003
-  changes:
-  - message: Fixed corrupted hive xenos being able to hurt their allies.
-    type: Fix
-  - message: Weyland-Yutani Researchers can now synthesize chemicals for money.
-    type: Add
-  id: 476
   time: '2026-07-20T07:11:46.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1120
 - author: rokudara-sen
@@ -7774,14 +7146,14 @@
   - message: AN/PRC antenna slot lookups no longer log a resolve error on entities
       without an ItemSlots component, fixing the entity_counts test shard.
     type: Code
-  id: 477
+  id: 455
   time: '2026-07-20T08:16:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1674
 - author: toot521
   changes:
   - message: Reverted Xenomorph King armor nerf
     type: Tweak
-  id: 478
+  id: 456
   time: '2026-07-20T20:06:10.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1675
 - author: maertayn
@@ -7789,14 +7161,14 @@
   - message: python3 Tools/sync_audio_placeholders.py debug <- allows for CMAudio
       real audio sync
     type: Code
-  id: 479
+  id: 457
   time: '2026-07-21T03:36:19.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1678
 - author: deepdarkdepths
   changes:
   - message: Fixed queen's missing 30 minute resin boost
     type: Fix
-  id: 480
+  id: 458
   time: '2026-07-21T18:30:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1679
 - author: rokudara-sen
@@ -7825,14 +7197,14 @@
   - message: Restored the AN/PRC-117G manpack and CLF base station to the CLF tool
       cache, which the new insurgency cell kit had dropped
     type: Fix
-  id: 481
+  id: 459
   time: '2026-07-21T18:33:44.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1681
 - author: CatoChristopherMrow
   changes:
   - message: Added a attachments section to the clf vendor
     type: Add
-  id: 482
+  id: 460
   time: '2026-07-21T18:34:39.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1676
 - author: P-MCT
@@ -7841,21 +7213,21 @@
       we requested. Instead of the ambulance sirens we jury rigged, now there's a
       proper klaxon alarm system that won't give you tinnitus! Guaranteed!
     type: Tweak
-  id: 483
+  id: 461
   time: '2026-07-22T00:10:01.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1682
 - author: CatoChristopherMrow
   changes:
   - message: Gave CLF surgeon med/surg 4 and leader 1
     type: Tweak
-  id: 484
+  id: 462
   time: '2026-07-22T00:10:37.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1683
 - author: deepdarkdepths
   changes:
   - message: Fixed weld time not scaling with skill correctly
     type: Fix
-  id: 485
+  id: 463
   time: '2026-07-22T02:20:08.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1684
 - author: Helix-ctrl
@@ -7864,16 +7236,7 @@
     type: Tweak
   - message: Give ERO colony comms
     type: Add
-  id: 486
-  time: '2026-07-22T18:41:42.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1688
-- author: Helix-ctrl
-  changes:
-  - message: Changed Colony ERO, Added surgery 1 to ERO, Changed Medical 2 --> 3
-    type: Tweak
-  - message: Give ERO colony comms
-    type: Add
-  id: 487
+  id: 464
   time: '2026-07-22T18:41:42.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1688
 - author: ver0098
@@ -7881,29 +7244,14 @@
   - message: FV150 Holebar LCT has been implemented strictly for high command to unleash
       for now.
     type: Add
-  id: 488
-  time: '2026-07-22T18:44:49.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1686
-- author: ver0098
-  changes:
-  - message: FV150 Holebar LCT has been implemented strictly for high command to unleash
-      for now.
-    type: Add
-  id: 489
+  id: 465
   time: '2026-07-22T18:44:49.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1686
 - author: ver0098
   changes:
   - message: A fresh shipment of equipment has been delivered to requisitions
     type: Add
-  id: 490
-  time: '2026-07-22T20:04:57.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1687
-- author: ver0098
-  changes:
-  - message: A fresh shipment of equipment has been delivered to requisitions
-    type: Add
-  id: 491
+  id: 466
   time: '2026-07-22T20:04:57.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1687
 - author: maertayn
@@ -7912,7 +7260,7 @@
     type: Tweak
   - message: United Americas cassette tape volume 1 and volume 2
     type: Add
-  id: 492
+  id: 467
   time: '2026-07-22T23:38:43.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1690
 - author: blueDev2
@@ -7920,7 +7268,7 @@
   - message: Marines are now prioritized for xeno attacks, even if they are not the
       top sprite from the xeno's POV.
     type: Tweak
-  id: 493
+  id: 468
   time: '2026-07-22T23:56:53.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1677
 - author: troytroy400
@@ -7961,7 +7309,7 @@
       of requiring an admin to load it manually, meaning CLs and otherwise can fax
       admins ICly.
     type: Admin
-  id: 494
+  id: 469
   time: '2026-07-23T08:57:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1680
 - author: JaSeNeSaJ
@@ -7982,7 +7330,7 @@
     type: Tweak
   - message: 'Sheperds'': XenoEgg'
     type: Remove
-  id: 495
+  id: 470
   time: '2026-07-23T09:07:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1691
 - author: johnnny34y
@@ -7990,14 +7338,14 @@
   - message: Re-added the Deagle to HAZOPS vendors & gave it the Opposing Force Deagle
       gunshot sound.
     type: Add
-  id: 496
+  id: 471
   time: '2026-07-23T09:07:38.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1692
 - author: maertayn
   changes:
   - message: Complete Provost overhaul to new systems
     type: Add
-  id: 497
+  id: 472
   time: '2026-07-23T11:24:49.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1693
 - author: shibechef
@@ -8010,7 +7358,7 @@
     type: Tweak
   - message: Sniper backpacks can no longer be worn on the belt slot.
     type: Remove
-  id: 498
+  id: 473
   time: '2026-07-23T12:42:32.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1685
 - author: deepdarkdepths
@@ -8018,7 +7366,7 @@
   - message: Queen can no longer rest in ovi, and plasma trees work properly in ovi
       now.
     type: Tweak
-  id: 499
+  id: 474
   time: '2026-07-23T22:27:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1696
 - author: troytroy400
@@ -8031,21 +7379,21 @@
     type: Fix
   - message: Old upstream traits no longer improperly show up as selectable.
     type: Fix
-  id: 500
+  id: 475
   time: '2026-07-24T13:17:16.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1700
 - author: Sniperzero112
   changes:
   - message: 1 WY MRE, 1 Canteen, 1 Tear Gas, 1 Flash Bang
     type: Add
-  id: 501
+  id: 476
   time: '2026-07-24T20:58:52.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1702
 - author: maertayn
   changes:
   - message: Fixed the Changelog webhook to Discord failing after reaching MAX_ENTRIES
     type: Code
-  id: 502
+  id: 477
   time: '2026-07-24T21:25:27.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1703
 - author: troytroy400
@@ -8056,21 +7404,21 @@
       Via settings you can also enable chat pop-ups showing examine text for all entities,
       like in SS13.
     type: Add
-  id: 503
+  id: 478
   time: '2026-07-24T23:15:00.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1704
 - author: maertayn
   changes:
   - message: Fixed Cassettes not working for Mono channel audio files
     type: Fix
-  id: 504
+  id: 479
   time: '2026-07-24T23:53:18.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1707
 - author: CatoChristopherMrow
   changes:
   - message: Fixed multiple roles lacking proper leadership component
     type: Fix
-  id: 505
+  id: 480
   time: '2026-07-25T00:31:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1705
 - author: rokudara-sen
@@ -8094,21 +7442,21 @@
     type: Add
   - message: The CLF Requisitions Rack now issues the cell's starting comms for free
     type: Tweak
-  id: 506
+  id: 481
   time: '2026-07-25T08:43:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1710
 - author: maertayn
   changes:
   - message: Removes the MarineOrders collection specifier in yaml
     type: Code
-  id: 507
+  id: 482
   time: '2026-07-25T08:47:20.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1708
 - author: maertayn
   changes:
   - message: Fixed Fatal KeyNotFoundException for Thanatometabolic (Research reagent)
     type: Code
-  id: 508
+  id: 483
   time: '2026-07-25T22:43:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1712
 - author: MACMAN2003
@@ -8116,7 +7464,7 @@
   - message: Weyland-Yutani's interstellar shipping division no longer misplaces their
       experimental bioweapon crates.
     type: Fix
-  id: 509
+  id: 484
   time: '2026-07-26T00:06:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1713
 - author: OmerF-afk
@@ -8125,14 +7473,14 @@
     type: Add
   - message: New paper content.
     type: Add
-  id: 510
+  id: 485
   time: '2026-07-26T00:14:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1714
 - author: maertayn
   changes:
   - message: Gasmasks spamming console and showing Error when blood stained
     type: Fix
-  id: 511
+  id: 486
   time: '2026-07-26T05:33:19.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1717
 - author: troytroy400
@@ -8150,7 +7498,7 @@
   - message: Renames Admin Assistant to Deputy Administrator to be more inline with
       its intended role.
     type: Tweak
-  id: 512
+  id: 487
   time: '2026-07-26T08:32:34.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1719
 - author: ver0098
@@ -8160,7 +7508,7 @@
   - message: UPP pyro broiler now fits special fuel tanks and LPO80-T and FL3 no longer
       meltable
     type: Fix
-  id: 513
+  id: 488
   time: '2026-07-26T09:00:27.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1711
 - author: maertayn
@@ -8171,7 +7519,7 @@
   - message: Shuttles/vehicles metadata is now named correctly instead of all being
       named either 'grid' or 'Map Entity'
     type: Map
-  id: 514
+  id: 489
   time: '2026-07-26T11:00:08.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1720
 - author: rokudara-sen
@@ -8198,7 +7546,7 @@
   - message: GOVFOR squad callsigns are now SABRE (Alpha), DAGGER (Bravo), PIKE (Charlie)
       and LONGBOW (Auxiliary), replacing the colour words
     type: Tweak
-  id: 515
+  id: 490
   time: '2026-07-26T11:47:43.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1721
 - author: maertayn
@@ -8208,7 +7556,7 @@
     type: Add
   - message: Empty gamemode rule pages have been hidden for now
     type: Admin
-  id: 516
+  id: 491
   time: '2026-07-26T12:53:16.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1722
 - author: Piticzu
@@ -8229,14 +7577,14 @@
   - message: Grenades fired from launchers are now correctly frozen by the Psychic
       Shield. Hand-thrown grenades still pass through, since they are not projectiles.
     type: Fix
-  id: 517
+  id: 492
   time: '2026-07-26T13:58:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1701
 - author: Nox38
   changes:
   - message: Medical supply vendors are now locked to medical roles.
     type: Tweak
-  id: 518
+  id: 493
   time: '2026-07-26T19:31:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1723
 - author: CatoChristopherMrow
@@ -8244,14 +7592,14 @@
   - message: Fixed surgical lines and graft not being usable after brute and burn
       kits
     type: Fix
-  id: 519
+  id: 494
   time: '2026-07-26T20:06:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1716
 - author: Nox38
   changes:
   - message: Rebuilt Hybrisa's medbay.
     type: Map
-  id: 520
+  id: 495
   time: '2026-07-26T20:06:52.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1724
 - author: troytroy400
@@ -8271,7 +7619,7 @@
   - message: Night vision now obstructs more of your screen when in-use, meaning you
       loose peripheral vision while using it.
     type: Tweak
-  id: 521
+  id: 496
   time: '2026-07-26T21:21:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1725
 - author: yowhatupitk-bit
@@ -8282,7 +7630,7 @@
     type: Fix
   - message: Engineering Technician Rank E1-E2 > E2-E4
     type: Fix
-  id: 522
+  id: 497
   time: '2026-07-28T10:51:23.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1729
 - author: troytroy400
@@ -8320,7 +7668,7 @@
       them. To compensate, SGs have been given a damage and firerate buff. This change
       is experimental and will be tweaked as needed.
     type: Tweak
-  id: 523
+  id: 498
   time: '2026-07-28T13:18:27.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1731
 - author: deepdarkdepths
@@ -8328,7 +7676,7 @@
   - message: Certain Dancer and Warrior abilities no longer have a cooldown upon missing.
       Tailstab has been reverted to its previous state as a thrust attack.
     type: Tweak
-  id: 524
+  id: 499
   time: '2026-07-28T13:40:58.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1715
 - author: troytroy400
@@ -8353,14 +7701,14 @@
     type: Fix
   - message: Doors spawned by VMarkers now properly rotate.
     type: Fix
-  id: 525
+  id: 500
   time: '2026-07-28T19:17:42.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1732
 - author: Michellechkya
   changes:
   - message: Added colonial research synthetic as specialisation
     type: Add
-  id: 526
+  id: 501
   time: '2026-07-28T19:18:10.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1733
 - author: Fejet
@@ -8371,7 +7719,7 @@
       explosionArmor: 20 protection. Boots have: melee: 25, bullet: 25, explosionArmor:
       20 protection.'
     type: Fix
-  id: 527
+  id: 502
   time: '2026-07-29T02:49:36.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1727
 - author: johnnny34y
@@ -8379,7 +7727,7 @@
   - message: Adds a boot-up sound that plays when the HAZOPS Powered Warfighting Armor
       is equipped.
     type: Add
-  id: 528
+  id: 503
   time: '2026-07-29T02:50:10.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1735
 - author: troytroy400
@@ -8407,7 +7755,7 @@
   - message: GOVFOR Medical and Engineering doors now correctly require Medical/Engineering
       access instead of accepting any generic GOVFOR access.
     type: Fix
-  id: 529
+  id: 504
   time: '2026-07-29T20:50:23.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1737
 - author: Piticzu
@@ -8432,14 +7780,14 @@
   - message: The Warlock's ability descriptions now state their costs, ranges, durations
       and effects.
     type: Fix
-  id: 530
+  id: 505
   time: '2026-07-29T22:06:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1730
 - author: ver0098
   changes:
   - message: MOU53 replaced by olympiets breech action shotgun in upp req.
     type: Add
-  id: 531
+  id: 506
   time: '2026-07-29T22:06:37.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1739
 - author: troytroy400
@@ -8464,7 +7812,7 @@
     type: Tweak
   - message: Added a tracer round for the M56 tank cupola.
     type: Add
-  id: 532
+  id: 507
   time: '2026-07-30T00:02:44.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1740
 - author: ver0098
@@ -8486,29 +7834,7 @@
     type: Fix
   - message: FORECON marksman now gets the M4RA Custom instead of the m49a2
     type: Fix
-  id: 533
-  time: '2026-07-30T15:27:41.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1744
-- author: ver0098
-  changes:
-  - message: FV150 LCT is now available in vehicle lift
-    type: Add
-  - message: NSG23 is now in WEYU PMC weapon vendor.
-    type: Add
-  - message: NSG23 (UBF) and MK221 now in WEYU PMC req
-    type: Add
-  - message: Corporate has allocated more funds into security, certain firearms are
-      now in disposal for emergencies.
-    type: Add
-  - message: longstreet/cheetah turret rotation speed has been increased
-    type: Tweak
-  - message: a viewport exterior has been added to longstreet interior
-    type: Add
-  - message: TWE CT now gets brute as a option in their vendor
-    type: Fix
-  - message: FORECON marksman now gets the M4RA Custom instead of the m49a2
-    type: Fix
-  id: 534
+  id: 508
   time: '2026-07-30T15:27:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1744
 - author: MACMAN2003
@@ -8518,17 +7844,7 @@
     type: Add
   - message: You can now synthesize Ammonia and Diethylamine, both potent plant foods.
     type: Add
-  id: 535
-  time: '2026-07-30T15:34:31.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1738
-- author: MACMAN2003
-  changes:
-  - message: Plants are now susceptible to mutation. Be careful what berries you eat,
-      they may be poisonous.
-    type: Add
-  - message: You can now synthesize Ammonia and Diethylamine, both potent plant foods.
-    type: Add
-  id: 536
+  id: 509
   time: '2026-07-30T15:34:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1738
 - author: johnnny34y
@@ -8536,15 +7852,7 @@
   - message: Added a new primary for HAZOPS; the XM20A2. It's somewhere in-between
       a rifle and and LMG.
     type: Add
-  id: 537
-  time: '2026-07-31T04:19:03.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1742
-- author: johnnny34y
-  changes:
-  - message: Added a new primary for HAZOPS; the XM20A2. It's somewhere in-between
-      a rifle and and LMG.
-    type: Add
-  id: 538
+  id: 510
   time: '2026-07-31T04:19:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1742
 - author: blueDev2
@@ -8552,43 +7860,21 @@
   - message: Added an adjustable default price to shop vendors. Newly stocked goods
       are priced at the default price.
     type: Tweak
-  id: 539
-  time: '2026-07-31T04:26:43.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1745
-- author: blueDev2
-  changes:
-  - message: Added an adjustable default price to shop vendors. Newly stocked goods
-      are priced at the default price.
-    type: Tweak
-  id: 540
+  id: 511
   time: '2026-07-31T04:26:43.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1745
 - author: peace-lock
   changes:
   - message: Added clandestine relay station to CLF cell kit.
     type: Add
-  id: 541
-  time: '2026-07-31T04:27:09.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1746
-- author: peace-lock
-  changes:
-  - message: Added clandestine relay station to CLF cell kit.
-    type: Add
-  id: 542
+  id: 512
   time: '2026-07-31T04:27:09.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1746
 - author: MACMAN2003
   changes:
   - message: Hydroponics trays are no longer water soluble.
     type: Fix
-  id: 543
-  time: '2026-07-31T04:27:31.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1747
-- author: MACMAN2003
-  changes:
-  - message: Hydroponics trays are no longer water soluble.
-    type: Fix
-  id: 544
+  id: 513
   time: '2026-07-31T04:27:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1747
 - author: deepdarkdepths
@@ -8604,23 +7890,7 @@
     type: Tweak
   - message: Sentries can no longer be placed inside vehicles.
     type: Fix
-  id: 545
-  time: '2026-07-31T05:44:22.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1741
-- author: deepdarkdepths
-  changes:
-  - message: Pulled targets are now always able to be targeted with harm mode, instead
-      of being stuck just out of range.
-    type: Add
-  - message: Fixed Queen Eye's leash breaking.
-    type: Fix
-  - message: Fixed various Queen Eye performance issues.
-    type: Fix
-  - message: Xenomorphs that lack plasma can use z-jump now.
-    type: Tweak
-  - message: Sentries can no longer be placed inside vehicles.
-    type: Fix
-  id: 546
+  id: 514
   time: '2026-07-31T05:44:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1741
 - author: JaSeNeSaJ
@@ -8633,20 +7903,7 @@
     type: Tweak
   - message: 'Sheperds'': Additional gear locker for WYGuards'
     type: Add
-  id: 547
-  time: '2026-07-31T12:02:43.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1749
-- author: JaSeNeSaJ
-  changes:
-  - message: ZLevel offset from 0.7 (22.5 pixels) to 0.75 (24 pixels)
-    type: Tweak
-  - message: MultiZ sprites for better look and new offset
-    type: Tweak
-  - message: 'Sheperds'': Increased WYGuard and Scientist jobslots by 1'
-    type: Tweak
-  - message: 'Sheperds'': Additional gear locker for WYGuards'
-    type: Add
-  id: 548
+  id: 515
   time: '2026-07-31T12:02:43.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1749
 - author: Michellechkya
@@ -8683,86 +7940,28 @@
     type: Map
   - message: Remapped interior of CMB paddywagon
     type: Map
-  id: 549
-  time: '2026-07-31T14:08:36.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1748
-- author: Michellechkya
-  changes:
-  - message: Added Ryan Gosling vibe
-    type: Add
-  - message: Added Police car
-    type: Add
-  - message: Added Ambulance
-    type: Add
-  - message: Added Hyperdyne systems Van
-    type: Add
-  - message: Added civilian different cargo trucks
-    type: Add
-  - message: Added Civilian armored truck
-    type: Add
-  - message: Added Civilian truck
-    type: Add
-  - message: Added Civilian van
-    type: Add
-  - message: Added garbage truck
-    type: Add
-  - message: Added mining truck
-    type: Add
-  - message: Mapped interior of ambulance
-    type: Map
-  - message: Mapped interior of Vans
-    type: Map
-  - message: Mapped interior of Trucks
-    type: Map
-  - message: Mapped interior of police Mono Supron
-    type: Map
-  - message: Mapped interior of civilian paddywagon
-    type: Map
-  - message: Remapped interior of CMB paddywagon
-    type: Map
-  id: 550
+  id: 516
   time: '2026-07-31T14:08:36.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1748
 - author: CatoChristopherMrow
   changes:
   - message: Brute/burn kits now auto-reapply if needed/valid
     type: Tweak
-  id: 551
-  time: '2026-08-01T13:27:56.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1750
-- author: CatoChristopherMrow
-  changes:
-  - message: Brute/burn kits now auto-reapply if needed/valid
-    type: Tweak
-  id: 552
+  id: 517
   time: '2026-08-01T13:27:56.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1750
 - author: CatoChristopherMrow
   changes:
   - message: Fixed survivors failing to spawn a large amount of the time
     type: Fix
-  id: 553
-  time: '2026-08-01T13:40:03.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1752
-- author: CatoChristopherMrow
-  changes:
-  - message: Fixed survivors failing to spawn a large amount of the time
-    type: Fix
-  id: 554
+  id: 518
   time: '2026-08-01T13:40:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1752
 - author: CatoChristopherMrow
   changes:
   - message: Fixed third party spawning on insurgency
     type: Fix
-  id: 555
-  time: '2026-08-01T13:46:28.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1753
-- author: CatoChristopherMrow
-  changes:
-  - message: Fixed third party spawning on insurgency
-    type: Fix
-  id: 556
+  id: 519
   time: '2026-08-01T13:46:28.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1753
 - author: maertayn
@@ -8773,18 +7972,7 @@
   - message: Total rewrite of objectives, reduced file sizes by half and kept all
       functionality, see _CMU14/Round/Objectives (shared/client/server)
     type: Code
-  id: 557
-  time: '2026-08-01T20:39:50.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1762
-- author: maertayn
-  changes:
-  - message: The full objectives system is back on the menu, it's been gone for far
-      too long
-    type: Add
-  - message: Total rewrite of objectives, reduced file sizes by half and kept all
-      functionality, see _CMU14/Round/Objectives (shared/client/server)
-    type: Code
-  id: 558
+  id: 520
   time: '2026-08-01T20:39:50.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1762
 - author: maertayn
@@ -8805,84 +7993,35 @@
     type: Add
   - message: Player count check for preset votes is skipped in DEBUG builds
     type: Code
-  id: 559
-  time: '2026-08-02T15:49:30.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1766
-- author: maertayn
-  changes:
-  - message: Upon CLF Intel Computer capture, sends faxes to military/warship command
-      and CMB with the remaining CLF roster and a colonyAlert - uses announce for
-      Govfor as fallback (missing valid fax) - happy hunting!
-    type: Add
-  - message: Insfor Editor (Vanilla CLF) would spawn the upstream Intel Computer not
-      the CMU claimable one
-    type: Fix
-  - message: Prodigy (PART) Tech Unlock spawning 32nd & removed random tier 2 skip
-    type: Fix
-  - message: Updated the Objective Console UI
-    type: Add
-  - message: Late/admin spawned objectives are now added to Intel (except duplicate/other
-      preset objectives)
-    type: Add
-  - message: Player count check for preset votes is skipped in DEBUG builds
-    type: Code
-  id: 560
+  id: 521
   time: '2026-08-02T15:49:30.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1766
 - author: johnnny34y
   changes:
   - message: XM20A2 maybe fixed
     type: Fix
-  id: 561
-  time: '2026-08-02T16:20:34.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1765
-- author: johnnny34y
-  changes:
-  - message: XM20A2 maybe fixed
-    type: Fix
-  id: 562
+  id: 522
   time: '2026-08-02T16:20:34.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1765
 - author: verentr
   changes:
   - message: 'temperature requirements from the newly added reagents in #1673.'
     type: Remove
-  id: 563
-  time: '2026-08-02T16:22:15.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1758
-- author: verentr
-  changes:
-  - message: 'temperature requirements from the newly added reagents in #1673.'
-    type: Remove
-  id: 564
+  id: 523
   time: '2026-08-02T16:22:15.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1758
 - author: blueDev2
   changes:
   - message: Hive collapse occurs 10 minutes after queen dies without replacement.
     type: Tweak
-  id: 565
-  time: '2026-08-02T16:36:35.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1760
-- author: blueDev2
-  changes:
-  - message: Hive collapse occurs 10 minutes after queen dies without replacement.
-    type: Tweak
-  id: 566
+  id: 524
   time: '2026-08-02T16:36:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1760
 - author: CatoChristopherMrow
   changes:
   - message: Fixed default sentry IFF
     type: Fix
-  id: 567
-  time: '2026-08-02T16:40:17.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1764
-- author: CatoChristopherMrow
-  changes:
-  - message: Fixed default sentry IFF
-    type: Fix
-  id: 568
+  id: 525
   time: '2026-08-02T16:40:17.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1764
 - author: Vencallium
@@ -8924,49 +8063,7 @@
     type: Add
   - message: Added copious amounts of television to city and fort
     type: Add
-  id: 569
-  time: '2026-08-02T16:47:31.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1743
-- author: Vencallium
-  changes:
-  - message: Added chemistry and surgical bays to Joint Base Schaefer's medbay
-    type: Add
-  - message: Added catwalk and firing platforms to Joint Base Schaefer
-    type: Add
-  - message: Expanded cargo and added vehicle lift to Joint Base Schaefer
-    type: Add
-  - message: Added an ordnance technicians' room in the cargo in Joint Base Schaefer
-    type: Add
-  - message: Added an auxiliary entrance to Joint Base Schaefer accessible via Hangar
-      Bay leading to filtration
-    type: Add
-  - message: Added a 2nd floor and roof access to CMB precinct
-    type: Add
-  - message: Added a 2nd floor and roof access to the University of Albacetrie Medical
-      Center
-    type: Add
-  - message: Added a 2nd floor and a Cuppa Joe's shop to the University of Albacetrie
-      School of Xenogbi
-    type: Add
-  - message: Added roofs to everything; you can access all of them
-    type: Add
-  - message: Added massive sewer expansion housing 4 new discreet CLF spawns
-    type: Add
-  - message: Added massive Weyland-Yutani biomedical research facility
-    type: Add
-  - message: Added catwalks to spaceport
-    type: Add
-  - message: Relocated LZ2 to be apart of the CMB precinct
-    type: Add
-  - message: Map now has copious amounts of rechargers
-    type: Add
-  - message: Caves reworked with a lot of mineable rock
-    type: Add
-  - message: Added journalist office
-    type: Add
-  - message: Added copious amounts of television to city and fort
-    type: Add
-  id: 570
+  id: 526
   time: '2026-08-02T16:47:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1743
 - author: P-MCT
@@ -8974,35 +8071,35 @@
   - message: Tasers no longer insta-stun. It takes 3 consecutive shots out of your
       8 round battery to outright stun an individual.
     type: Tweak
-  id: 571
+  id: 527
   time: '2026-08-02T18:47:11.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1756
 - author: CatoChristopherMrow
   changes:
   - message: Vehicle Commander skills have been set to appropriate WO level
     type: Tweak
-  id: 572
+  id: 528
   time: '2026-08-02T21:37:20.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1772
 - author: maertayn
   changes:
   - message: Hivemind not showing when ghosting and toggling nearby / radio only
     type: Fix
-  id: 573
+  id: 529
   time: '2026-08-02T22:37:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1776
 - author: CatoChristopherMrow
   changes:
   - message: Fixed turrets, again.
     type: Fix
-  id: 574
+  id: 530
   time: '2026-08-02T22:37:48.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1775
 - author: Vencallium
   changes:
   - message: Fixed areas not having proper power Supply/APCs
     type: Tweak
-  id: 575
+  id: 531
   time: '2026-08-02T23:24:06.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1777
 - author: Vencallium
@@ -9011,14 +8108,14 @@
     type: Add
   - message: Fixed We-Yu lab stairs not functioning properly
     type: Fix
-  id: 576
+  id: 532
   time: '2026-08-03T01:57:50.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1779
 - author: TheHellFireo
   changes:
   - message: spawning across connected station z-levels.
     type: Fix
-  id: 577
+  id: 533
   time: '2026-08-03T02:09:57.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1781
 - author: Vencallium
@@ -9035,7 +8132,7 @@
     type: Add
   - message: Lawyer and Arbiter spawner
     type: Add
-  id: 578
+  id: 534
   time: '2026-08-03T08:30:00.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1782
 - author: HotdogMan52
@@ -9047,7 +8144,7 @@
       variant due to the ID lock binding to the user who vends the rifle and not the
       actual user
     type: Tweak
-  id: 579
+  id: 535
   time: '2026-08-04T11:07:09.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1788
 - author: HotdogMan52
@@ -9058,7 +8155,7 @@
     type: Tweak
   - message: stopped GAU-19 from locking up due to IFF
     type: Tweak
-  id: 580
+  id: 536
   time: '2026-08-04T11:07:14.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1787
 - author: verentr
@@ -9076,7 +8173,7 @@
     type: Tweak
   - message: Fixed CMB CIU corpsman vendor, can now take 6 injectors of choice.
     type: Fix
-  id: 581
+  id: 537
   time: '2026-08-04T11:07:42.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1785
 - author: deepdarkdepths
@@ -9087,7 +8184,7 @@
     type: Tweak
   - message: It takes slightly longer for mines to upgrade to the next tier.
     type: Tweak
-  id: 582
+  id: 538
   time: '2026-08-04T11:07:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1784
 - author: P-MCT
@@ -9096,7 +8193,7 @@
       asked for. They're older models and we'll have to order them through the ASRS,
       but for 1500? They'll do us in a pinch.
     type: Add
-  id: 583
+  id: 539
   time: '2026-08-04T11:11:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1755
 - author: P-MCT
@@ -9107,28 +8204,28 @@
     type: Tweak
   - message: New weapon sounds for the L23, L54, SLRa1/2
     type: Tweak
-  id: 584
+  id: 540
   time: '2026-08-05T04:48:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1791
 - author: deepdarkdepths
   changes:
   - message: Barricades and some other structures can no longer be built inside vehicles.
     type: Fix
-  id: 585
+  id: 541
   time: '2026-08-05T04:58:48.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1792
 - author: HotdogMan52
   changes:
   - message: QYJ can now use an S4 2x mini-scope
     type: Tweak
-  id: 586
+  id: 542
   time: '2026-08-05T10:46:18.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1793
 - author: HotdogMan52
   changes:
   - message: Added magazine boxes into cardboard crafting menu, categorized per faction
     type: Add
-  id: 587
+  id: 543
   time: '2026-08-05T18:07:08.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1794
 - author: rokudara-sen
@@ -9161,7 +8258,7 @@
   - message: AU14CommsToggleSystem is now the single source of truth for whether the
       communications overhaul applies to a channel
     type: Code
-  id: 588
+  id: 544
   time: '2026-08-06T12:18:48.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1796
 - author: Sniperzero112
@@ -9172,21 +8269,21 @@
   - message: Changed vendors to have flame turrets instead of sniper & mini variant
       turrets because you got upgrade kits now!
     type: Tweak
-  id: 589
+  id: 545
   time: '2026-08-06T12:19:30.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1795
 - author: Sniperzero112
   changes:
   - message: Removed free turrets from the British!
     type: Fix
-  id: 590
+  id: 546
   time: '2026-08-06T23:37:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1798
 - author: ArturUr1
   changes:
   - message: Synthetic surgery has been upgraded to level 4
     type: Tweak
-  id: 591
+  id: 547
   time: '2026-08-06T23:39:10.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1797
 - author: MACMAN2003
@@ -9197,7 +8294,7 @@
   - message: Monkey cube crates now have a 30 minute cooldown after being bought before
       you can buy another.
     type: Tweak
-  id: 592
+  id: 548
   time: '2026-08-06T23:42:25.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1799
 - author: HotdogMan52
@@ -9208,7 +8305,7 @@
   - message: Replaced current textures for M16 series rifles with new ones made by
       *nzzy*
     type: Tweak
-  id: 593
+  id: 549
   time: '2026-08-07T20:45:29.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1802
 - author: verentr
@@ -9217,21 +8314,21 @@
     type: Fix
   - message: Head Physician now spawns with a colony headset.
     type: Fix
-  id: 594
+  id: 550
   time: '2026-08-07T20:45:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1801
 - author: MACMAN2003
   changes:
   - message: Research now has a section in the guidebook!
     type: Add
-  id: 595
+  id: 551
   time: '2026-08-07T20:46:15.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1800
 - author: potatoed6
   changes:
   - message: Added neomorph threat
     type: Add
-  id: 596
+  id: 552
   time: '2026-08-07T20:47:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1562
 - author: P-MCT
@@ -9251,7 +8348,7 @@
     type: Tweak
   - message: RXF-M5 increased heat damage from 20 to 25. Firerate reduced.
     type: Tweak
-  id: 597
+  id: 553
   time: '2026-08-08T03:59:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1803
 - author: HotdogMan52
@@ -9259,14 +8356,14 @@
   - message: Swapped the 7x43mm ammo box in requisitions to the right one so it can
       actually be used to refill SLR magazines
     type: Tweak
-  id: 598
+  id: 554
   time: '2026-08-09T13:16:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1805
 - author: IMGXKILLER
   changes:
   - message: UNISC Squad Third Party call for Colony Admin.
     type: Add
-  id: 599
+  id: 555
   time: '2026-08-09T13:37:09.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1804
 - author: deepdarkdepths
@@ -9280,7 +8377,7 @@
     type: Tweak
   - message: Brutalize's AP damage reduced.
     type: Tweak
-  id: 600
+  id: 556
   time: '2026-08-10T03:17:21.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1811
 - author: P-MCT
@@ -9293,7 +8390,7 @@
   - message: Requisitions ASRS have now been properly issued all variants of tank
       shell crates.
     type: Tweak
-  id: 601
+  id: 557
   time: '2026-08-10T03:17:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1807
 - author: OverusedMeme
@@ -9304,21 +8401,14 @@
   - message: Both GOVFOR and OPFOR Logistics Officers will have their missing approval
       stamp.
     type: Fix
-  id: 602
+  id: 558
   time: '2026-08-10T03:19:52.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1812
 - author: JaSeNeSaJ
   changes:
   - message: 'DS: M68 thermal cloak (unnerfed)'
     type: Add
-  id: 603
-  time: '2026-08-12T01:54:36.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1813
-- author: JaSeNeSaJ
-  changes:
-  - message: 'DS: M68 thermal cloak (unnerfed)'
-    type: Add
-  id: 604
+  id: 559
   time: '2026-08-12T01:54:36.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1813
 - author: DarkFNC
@@ -9330,47 +8420,21 @@
       one for the CMP). These appear as a hat pick in MP and CMP vendors for most
       factions.
     type: Add
-  id: 605
-  time: '2026-08-12T01:55:08.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1810
-- author: DarkFNC
-  changes:
-  - message: New Lambda floor tile for use by mappers. Made by @Nzzy - Thanks for
-      making this!
-    type: Add
-  - message: Recoloured MP flat style berets in two variants (one for officers and
-      one for the CMP). These appear as a hat pick in MP and CMP vendors for most
-      factions.
-    type: Add
-  id: 606
+  id: 560
   time: '2026-08-12T01:55:08.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1810
 - author: IMGXKILLER
   changes:
   - message: Ghille Suit to Sniper Kit
     type: Add
-  id: 607
-  time: '2026-08-12T01:55:31.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1814
-- author: IMGXKILLER
-  changes:
-  - message: Ghille Suit to Sniper Kit
-    type: Add
-  id: 608
+  id: 561
   time: '2026-08-12T01:55:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1814
 - author: Michellechkya
   changes:
   - message: Added UPP chevrons sprites
     type: Add
-  id: 609
-  time: '2026-08-12T01:57:00.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1815
-- author: Michellechkya
-  changes:
-  - message: Added UPP chevrons sprites
-    type: Add
-  id: 610
+  id: 562
   time: '2026-08-12T01:57:00.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1815
 - author: Vencallium
@@ -9382,19 +8446,7 @@
     type: Fix
   - message: Chemistry vendors now provide consistent stock without random shortages.
     type: Tweak
-  id: 611
-  time: '2026-08-13T21:48:19.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1823
-- author: Vencallium
-  changes:
-  - message: Fixed various mapping issues on Stable Garrison and the USS George W.
-      Bush, including disposals, stairs, utilities, vendors, and misplaced entities.
-    type: Map
-  - message: Chasms can no longer be covered by xenonid weeds.
-    type: Fix
-  - message: Chemistry vendors now provide consistent stock without random shortages.
-    type: Tweak
-  id: 612
+  id: 563
   time: '2026-08-13T21:48:19.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1823
 - author: potatoed6
@@ -9408,21 +8460,7 @@
     type: Add
   - message: new clothes for prodigy.
     type: Add
-  id: 613
-  time: '2026-08-13T21:54:24.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1821
-- author: potatoed6
-  changes:
-  - message: Prodigy liaison, goon, lawyer, PPO for colonies and as a lawyer third
-      party.
-    type: Add
-  - message: Added prodigy survs
-    type: Add
-  - message: Glock 75, Glock 77 and underbarrel taser for prodigy.
-    type: Add
-  - message: new clothes for prodigy.
-    type: Add
-  id: 614
+  id: 564
   time: '2026-08-13T21:54:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1821
 - author: deepdarkdepths
@@ -9430,15 +8468,7 @@
   - message: Evolving into a Corrupted Hive Queen now requires a minimum of 30 hours
       of xeno playtime.
     type: Add
-  id: 615
-  time: '2026-08-13T21:59:53.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1820
-- author: deepdarkdepths
-  changes:
-  - message: Evolving into a Corrupted Hive Queen now requires a minimum of 30 hours
-      of xeno playtime.
-    type: Add
-  id: 616
+  id: 565
   time: '2026-08-13T21:59:53.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1820
 - author: P-MCT
@@ -9465,48 +8495,14 @@
   - message: Snowplow moved to support module section, sacrificing a support module,
       which will allow armor to be placed on the longstreet.
     type: Tweak
-  id: 617
-  time: '2026-08-13T22:02:21.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1817
-- author: P-MCT
-  changes:
-  - message: New patriotism directive straight from HICOM, we've been issued brand
-      new mountable UA Flags as a support module for the longstreet. Oh, and it always
-      emits an active target for CAS as well. Salute to old glory when you see her!
-    type: Add
-  - message: We've just got back our patent rights for the RE700 cupola for the Longstreet,
-      it fires almost twice as fast! But we can't find the IFF module for it. You'll
-      have to do without.
-    type: Add
-  - message: By jove finally! The FV150 adapter mounts for the snowplow & artillery
-      module were just found, and can now be called up via the vehicle support lift.
-    type: Add
-  - message: Good news and bad news lads, the good news. We've just got the hull mounted
-      L98 GPMG up and running. It can lay down a constant field of fire on a 140 degree
-      angle, but you can't hit your rear or flanks.
-    type: Add
-  - message: The bad news, our Longstreet's secondaries we had on loan from the USCM
-      for the FV150 are now being sent back. That includes the Tow, Flamer, M56, &
-      grenade launcher.
-    type: Tweak
-  - message: Snowplow moved to support module section, sacrificing a support module,
-      which will allow armor to be placed on the longstreet.
-    type: Tweak
-  id: 618
+  id: 566
   time: '2026-08-13T22:02:21.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1817
 - author: realtesteraccount
   changes:
   - message: Changed the Cost of the WYPMC 3rd party from 7500 to 17500
     type: Add
-  id: 619
-  time: '2026-08-14T13:15:45.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1826
-- author: realtesteraccount
-  changes:
-  - message: Changed the Cost of the WYPMC 3rd party from 7500 to 17500
-    type: Add
-  id: 620
+  id: 567
   time: '2026-08-14T13:15:45.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1826
 - author: OverusedMeme
@@ -9525,40 +8521,21 @@
   - message: A Spelling issue mixing up the APC Frontal Cannon ammo crate and the
       RE-RE700 Rotary Cannon ammo crate in the ASRS
     type: Fix
-  id: 621
-  time: '2026-08-14T13:17:59.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1824
-- author: OverusedMeme
-  changes:
-  - message: 100 XM20A2 magazines in HAZOP's Standard Ammunition within their requisition
-      vendor, as well as two pre-filled mag boxes of XM20A2.
-    type: Add
-  - message: a crafting recipe for the XM20A2s magazine box
-    type: Add
-  - message: a Mk86 Automatic Grenade Launcher crate case, and it's respective ammo
-      within Govfors ASRS catalog for every platoon (except the UPP)
-    type: Add
-  - message: Replaced incompatible M42A2 collapsible stock with the proper M42A1 wooden
-      stock for HAZOP's requestion vendor.
-    type: Tweak
-  - message: A Spelling issue mixing up the APC Frontal Cannon ammo crate and the
-      RE-RE700 Rotary Cannon ammo crate in the ASRS
-    type: Fix
-  id: 622
+  id: 568
   time: '2026-08-14T13:17:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1824
 - author: P-MCT
   changes:
   - message: Slows speed on the FV150 when the snowplow is attached.
     type: Tweak
-  id: 623
+  id: 569
   time: '2026-08-14T19:22:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1828
 - author: maertayn
   changes:
   - message: AEGIS integration
     type: Add
-  id: 624
+  id: 570
   time: '2026-08-14T22:44:32.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1829
 - author: CatoChristopherMrow
@@ -9578,14 +8555,14 @@
     type: Fix
   - message: Removed fun. Fuck you.
     type: Remove
-  id: 625
+  id: 571
   time: '2026-08-15T04:34:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1830
 - author: CatoChristopherMrow
   changes:
   - message: Med and blood vends now require med 2 instead of a specific job
     type: Tweak
-  id: 626
+  id: 572
   time: '2026-08-15T10:11:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1832
 - author: CatoChristopherMrow
@@ -9597,7 +8574,7 @@
     type: Remove
   - message: Expanded a few webbings and pouch options for synths
     type: Tweak
-  id: 627
+  id: 573
   time: '2026-08-15T21:51:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1833
 - author: Vencallium
@@ -9608,7 +8585,7 @@
   - message: Added a deployable Weyland-Yutani UA-635C sentry system with locked corporate
       IFF recognition.
     type: Add
-  id: 628
+  id: 574
   time: '2026-08-16T01:52:20.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1835
 - author: Vencallium
@@ -9617,7 +8594,7 @@
     type: Add
   - message: Alpha, Bravo & Charlie supply drops to requisitions
     type: Add
-  id: 629
+  id: 575
   time: '2026-08-16T08:09:11.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1836
 - author: TheMaiji
@@ -9626,14 +8603,14 @@
     type: Fix
   - message: Prevent falling vehicles from damaging their buckled occupants.
     type: Fix
-  id: 630
+  id: 576
   time: '2026-08-16T13:46:30.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1837
 - author: CatoChristopherMrow
   changes:
   - message: Fixed govfor pointbuy amount
     type: Fix
-  id: 631
+  id: 577
   time: '2026-08-16T16:55:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1838
 - author: troytroy400
@@ -9646,7 +8623,7 @@
     type: Add
   - message: Filled HESCO barricades can now be barbwired when they are below wall-size.
     type: Tweak
-  id: 632
+  id: 578
   time: '2026-08-16T17:35:48.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1839
 - author: Vencallium
@@ -9654,7 +8631,7 @@
   - message: Restored the CMB Marshal spawn point to the intended upper level of Stable
       Garrison.
     type: Fix
-  id: 633
+  id: 579
   time: '2026-08-16T20:50:28.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1841
 - author: Vencallium
@@ -9663,7 +8640,7 @@
     type: Add
   - message: Duplicate zlevels on Stable Garrison
     type: Fix
-  id: 634
+  id: 580
   time: '2026-08-16T23:11:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1843
 - author: maertayn
@@ -9689,21 +8666,21 @@
     type: Map
   - message: Engine updated from v278 to v288.1
     type: Code
-  id: 635
+  id: 581
   time: '2026-08-17T01:24:39.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1842
 - author: CatoChristopherMrow
   changes:
   - message: Wouldn't YOU like to know, freak.
     type: Tweak
-  id: 636
+  id: 582
   time: '2026-08-17T03:11:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1846
 - author: CatoChristopherMrow
   changes:
   - message: Fixed barker -1 and stable +1
     type: Fix
-  id: 637
+  id: 583
   time: '2026-08-17T15:18:10.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1847
 - author: maertayn
@@ -9716,7 +8693,7 @@
   - message: ship_draft.yml (ShipAmbienceDraft) is an example sound sequence with
       explanatory comments
     type: Code
-  id: 638
+  id: 584
   time: '2026-08-17T19:57:53.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1848
 - author: potatoed6
@@ -9736,7 +8713,7 @@
       to determine rank, so you wont have "Civilian John Marine woke up", instead
       it will be "Major John Marine woke up"
     type: Fix
-  id: 639
+  id: 585
   time: '2026-08-21T15:23:29.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1851
 - author: rokudara-sen
@@ -9759,30 +8736,7 @@
     type: Fix
   - message: Fixed an error when deleting an AN/PRC-117G with an antenna fitted
     type: Fix
-  id: 640
-  time: '2026-08-22T15:27:45.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1856
-- author: rokudara-sen
-  changes:
-  - message: The AN/PRC-117G net log no longer records frequencies for nets you do
-      not have access to. Typing a radio prefix you cannot actually transmit on will
-      no longer create a log entry
-    type: Fix
-  - message: AN/PRC-117G net logs now preserve the language traffic was received in
-      and render it for whoever is reading. A planted station no longer exposes foreign-language
-      traffic in clear, and printed intercepts reflect what the operator actually
-      understood
-    type: Fix
-  - message: AN/PRC-117G transmissions now use the language that was actually spoken.
-      Languages that cannot be carried over radio, such as sign language, no longer
-      work through a manpack or direct frequency
-    type: Fix
-  - message: Direct-frequency (`:x`) traffic is now obfuscated for listeners who do
-      not understand the spoken language, matching normal radio nets
-    type: Fix
-  - message: Fixed an error when deleting an AN/PRC-117G with an antenna fitted
-    type: Fix
-  id: 641
+  id: 586
   time: '2026-08-22T15:27:45.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1856
 - author: deepdarkdepths
@@ -9790,15 +8744,7 @@
   - message: Smartgun damage and firerate values reduced. These values are still stronger
       than what we had before.
     type: Tweak
-  id: 642
-  time: '2026-08-22T15:27:59.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1855
-- author: deepdarkdepths
-  changes:
-  - message: Smartgun damage and firerate values reduced. These values are still stronger
-      than what we had before.
-    type: Tweak
-  id: 643
+  id: 587
   time: '2026-08-22T15:27:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1855
 - author: Vencallium
@@ -9817,26 +8763,7 @@
     type: Admin
   - message: Cleaned up duplicate doors on the third-party shuttle.
     type: Tweak
-  id: 644
-  time: '2026-08-22T15:28:41.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1827
-- author: Vencallium
-  changes:
-  - message: Added hospital emergency shuttle incidents for medical staff.
-    type: Add
-  - message: Added an emergency computer for approving hospital shuttle landings,
-      requesting pickup, and receiving treatment payouts.
-    type: Add
-  - message: Added evacuation patients with incident-themed clothing and randomized
-      trauma.
-    type: Add
-  - message: Added a hospital dropship landing zone marker.
-    type: Add
-  - message: Added a hospital incident timer admin command.
-    type: Admin
-  - message: Cleaned up duplicate doors on the third-party shuttle.
-    type: Tweak
-  id: 645
+  id: 588
   time: '2026-08-22T15:28:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1827
 - author: maertayn
@@ -9876,47 +8803,7 @@
   - message: Scout cloak migration to new engine (v288.1) shader system & high-impact
       range fix
     type: Fix
-  id: 646
-  time: '2026-08-22T17:32:15.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1857
-- author: maertayn
-  changes:
-  - message: Xeno tackle stuns now land again. The queen's (and king) stun no longer
-      resets her own tackle progress, and predicted hits (leaps, lunges, projectiles)
-      now account for physics substeps so client and server agree on what connected
-    type: Fix
-  - message: Warrior lunge grabs hold properly instead of instantly releasing
-    type: Fix
-  - message: Facehugger leaps no longer pass through standing mobs
-    type: Fix
-  - message: Grenades fragmenting while held or worn no longer have their entire blast
-      absorbed by the holder
-    type: Fix
-  - message: Armored gloves for Govfor
-    type: Tweak
-  - message: Larva claim priority now works for infectors
-    type: Fix
-  - message: Spent cartridges drop when fired, magazines drop with an offset near
-      you (admins use nuke:cartridges or nuke:magazines to clean)
-    type: Add
-  - message: Tank not being damaged due to client/server mismatch
-    type: Fix
-  - message: Burrowed larva grows based on player (marine) count
-    type: Add
-  - message: Camera system no longer renames entities to area names
-    type: Fix
-  - message: Parasite resin traps now match the HTN duration
-    type: Fix
-  - message: x1 AEGIS Researcher slot opens up for Govfor when the event is enabled
-      (RP as a classified weapons-testing observer)
-    type: Add
-  - message: Pinpointers now scan across all maps in the Z Network (if you can't find
-      what you're looking for, it's probably above/below you)
-    type: Tweak
-  - message: Scout cloak migration to new engine (v288.1) shader system & high-impact
-      range fix
-    type: Fix
-  id: 647
+  id: 589
   time: '2026-08-22T17:32:15.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1857
 - author: maertayn
@@ -9959,7 +8846,7 @@
   - message: Hope's Retreat SecTech vendor access + deputized Security (recruited
       constables) get the new access also
     type: Fix
-  id: 648
+  id: 590
   time: '2026-08-23T01:54:25.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1858
 - author: JaSeNeSaJ
@@ -9980,7 +8867,7 @@
     type: Tweak
   - message: Increased hiveless odds in experiment subject crate
     type: Tweak
-  id: 649
+  id: 591
   time: '2026-08-23T01:54:47.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1859
 - author: deepdarkdepths
@@ -9988,7 +8875,7 @@
   - message: The Queen can now buy the Minor and Major Boons of Evolution, the Minor
       and Major Boons of Aggression, and the Boon of Adaptability with royal resin.
     type: Add
-  id: 650
+  id: 592
   time: '2026-08-23T07:25:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1860
 - author: Vencallium
@@ -10008,7 +8895,7 @@
   - message: Administrators can now create custom generated-chemical contracts and
       materialize them as 30-unit vials using the admin chemical contract console.
     type: Add
-  id: 651
+  id: 593
   time: '2026-08-23T10:19:39.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1852
 - author: maertayn
@@ -10075,21 +8962,14 @@
     type: Code
   - message: Map & platoon rotations (feedback/experimenting)
     type: Tweak
-  id: 652
+  id: 594
   time: '2026-08-23T21:20:16.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1861
 - author: ArturUr1
   changes:
   - message: Phrases about registering synthetics for Working Joe's have been added.
     type: Add
-  id: 653
-  time: '2026-08-24T02:20:16.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1863
-- author: ArturUr1
-  changes:
-  - message: Phrases about registering synthetics for Working Joe's have been added.
-    type: Add
-  id: 654
+  id: 595
   time: '2026-08-24T02:20:16.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1863
 - author: maertayn
@@ -10107,25 +8987,7 @@
   - message: Kill objectives not working for post-round start threats (threat vote
       & late joins)
     type: Fix
-  id: 655
-  time: '2026-08-24T02:23:18.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1862
-- author: maertayn
-  changes:
-  - message: Govfor announcement to the colony when they are evacuating (round is
-      ending)
-    type: Add
-  - message: Add full threat lists to every planet that supports their spawns
-    type: Tweak
-  - message: Differentiate repeating objectives with a blue hue instead of showing
-      a perpetual uncompleted
-    type: Tweak
-  - message: Civilian vehicles should now have wheels attached by default
-    type: Fix
-  - message: Kill objectives not working for post-round start threats (threat vote
-      & late joins)
-    type: Fix
-  id: 656
+  id: 596
   time: '2026-08-24T02:23:18.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1862
 - author: Vencallium
@@ -10138,14 +9000,14 @@
     type: Add
   - message: Increased reagent grinder chamber capacity to 50 items.
     type: Tweak
-  id: 657
+  id: 597
   time: '2026-08-25T02:46:36.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1864
 - author: ver0098
   changes:
   - message: L66A2 GPMG added to TWE Requisitions
     type: Add
-  id: 658
+  id: 598
   time: '2026-08-25T22:14:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1865
 - author: deepdarkdepths
@@ -10170,7 +9032,7 @@
   - message: Xenos can now release nested hosts with right click verb. You must target
       the nest sprite to do this.
     type: Add
-  id: 659
+  id: 599
   time: '2026-08-25T22:57:01.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1866
 - author: murdocstarsim
@@ -10219,14 +9081,14 @@
       as a replacement in a much shorter and non 40 paragraph section. Less reading,
       simplier crimes, more taser beating by MPs!
     type: Add
-  id: 660
+  id: 600
   time: '2026-08-25T22:57:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1853
 - author: deepdarkdepths
   changes:
   - message: Crusher is now properly rooted for its entire charge doafter.
     type: Fix
-  id: 661
+  id: 601
   time: '2026-08-25T23:23:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1867
 - author: maertayn
@@ -10273,7 +9135,7 @@
     type: Admin
   - message: Fixed the CMU TacMap blips after far too long of having to squint
     type: Add
-  id: 662
+  id: 602
   time: '2026-08-26T00:14:54.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1868
 - author: TheMaiji
@@ -10286,7 +9148,7 @@
   - message: Mirror and mimic status icons are now only visible to admin-ghosts, not
       regular ghosts.
     type: Tweak
-  id: 663
+  id: 603
   time: '2026-08-27T01:36:44.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1870
 - author: maertayn
@@ -10352,7 +9214,7 @@
       a locked observer until threat spawn, you're notified immediately and free to
       JIP
     type: Add
-  id: 664
+  id: 604
   time: '2026-08-27T07:11:40.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1871
 - author: potatoed6
@@ -10360,7 +9222,7 @@
   - message: fixed ranks not being overriden (CO in specific) also now they will display
       correctly on ARES announcement
     type: Fix
-  id: 665
+  id: 605
   time: '2026-08-28T13:36:21.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1873
 - author: maertayn
@@ -10402,7 +9264,7 @@
     type: Fix
   - message: Xeno evolution no longer locked when dropship lands on DS
     type: Fix
-  id: 666
+  id: 606
   time: '2026-08-28T14:21:30.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1876
 - author: maertayn
@@ -10439,7 +9301,7 @@
     type: Fix
   - message: Drone bull evolution
     type: Fix
-  id: 667
+  id: 607
   time: '2026-08-29T05:29:48.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1879
 - author: Operator
@@ -10450,14 +9312,14 @@
       30mm base types [starting with HEDP] to toggle between an impact mode and explosive
       mode.
     type: Tweak
-  id: 668
+  id: 608
   time: '2026-08-29T05:30:14.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1869
 - author: ararajdadasdasda
   changes:
   - message: weapon specialist whitelists to drone
     type: Add
-  id: 669
+  id: 609
   time: '2026-08-29T06:24:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1875
 - author: maertayn
@@ -10465,7 +9327,7 @@
   - message: Strip friendly IFF from yautja thralls, abom mimics, pathogen walkers
       default items - can still pickup another id card receive friendly IFF
     type: Fix
-  id: 670
+  id: 610
   time: '2026-08-29T07:25:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1880
 - author: maertayn
@@ -10484,7 +9346,7 @@
     type: Fix
   - message: Fix xeno leap NaN, reagent heat capacity, enumerator, and log cache races
     type: Fix
-  id: 671
+  id: 611
   time: '2026-08-29T18:07:27.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1883
 - author: maertayn
@@ -10520,7 +9382,7 @@
     type: Fix
   - message: No xeno rewards (e.g. lurker acid/reaper berserker) from blackfoot/vehicles
     type: Fix
-  id: 672
+  id: 612
   time: '2026-08-30T16:03:07.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1887
 - author: Berkin101
@@ -10528,7 +9390,7 @@
   - message: Razorwires now make noises when walked on and have an appropriate hit
       sound.
     type: Tweak
-  id: 673
+  id: 613
   time: '2026-08-31T14:16:25.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1882
 - author: Berkin101
@@ -10537,7 +9399,7 @@
     type: Add
   - message: Mine Signs
     type: Add
-  id: 674
+  id: 614
   time: '2026-08-31T14:16:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1872
 - author: TheMaiji
@@ -10554,7 +9416,7 @@
   - message: Camera selection, names, remote-grid maps, and live feeds stay synchronized
       after subnet and deck changes.
     type: Fix
-  id: 675
+  id: 615
   time: '2026-08-31T19:30:15.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1825
 - author: CatoChristopherMrow
@@ -10571,35 +9433,35 @@
   - message: disabled the blackfoot in favor of the new gunship system (for now at
       least. It might come to some specific platoons again.)
     type: Tweak
-  id: 676
+  id: 616
   time: '2026-08-31T20:43:49.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1816
 - author: IMGXKILLER
   changes:
   - message: Replaced 6 Capital crimes for one Geneva Crime
     type: Add
-  id: 677
+  id: 617
   time: '2026-09-03T06:28:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1891
 - author: johnnny34y
   changes:
   - message: The new dynamic gunships now spawn correctly
     type: Fix
-  id: 678
+  id: 618
   time: '2026-09-05T19:02:45.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1897
 - author: DoguhanOzgurAkca
   changes:
   - message: rework the lobby UI partially.
     type: Tweak
-  id: 679
+  id: 619
   time: '2026-09-06T13:19:56.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1854
 - author: johnnny34y
   changes:
   - message: HAZOPS XMP5A6 damage modified buffed to 1.35 and spread reduced by one.
     type: Tweak
-  id: 680
+  id: 620
   time: '2026-09-06T13:20:09.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1888
 - author: CatoChristopherMrow
@@ -10613,21 +9475,21 @@
     type: Add
   - message: Robbed the XO of their mataba
     type: Remove
-  id: 681
+  id: 621
   time: '2026-09-06T13:20:56.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1892
 - author: Berkin101
   changes:
   - message: Barricade collisions are now fixed!
     type: Fix
-  id: 682
+  id: 622
   time: '2026-09-06T13:24:11.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1878
 - author: CatoChristopherMrow
   changes:
   - message: Fixed the pilot hud and the dropship movement
     type: Fix
-  id: 683
+  id: 623
   time: '2026-09-07T04:41:05.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1903
 - author: maertayn
@@ -10637,21 +9499,14 @@
     type: Code
   - message: Scope ghost warp PVS override to selected tab mobs to regain performance
     type: Add
-  id: 684
+  id: 624
   time: '2026-09-07T13:11:37.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1907
 - author: Berkin101
   changes:
   - message: Added a search bar to options->controls.
     type: Add
-  id: 685
-  time: '2026-09-09T14:03:58.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1911
-- author: Berkin101
-  changes:
-  - message: Added a search bar to options->controls.
-    type: Add
-  id: 686
+  id: 625
   time: '2026-09-09T14:03:58.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1911
 - author: TheHellFireo
@@ -10663,14 +9518,14 @@
     type: Fix
   - message: Added bounded error summaries and phase timings to server stall reports.
     type: Admin
-  id: 687
+  id: 626
   time: '2026-09-09T20:38:28.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1915
 - author: deepdarkdepths
   changes:
   - message: Queen has breathing sounds now.
     type: Add
-  id: 688
+  id: 627
   time: '2026-09-09T21:04:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1914
 - author: deepdarkdepths
@@ -10678,14 +9533,14 @@
   - message: Queen now has separate ability bar ordering for both immature and mature
       states to avoid having to redo them every time you spawn in.
     type: Fix
-  id: 689
+  id: 628
   time: '2026-09-10T04:53:34.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1917
 - author: deepdarkdepths
   changes:
   - message: Added xeno vision to large vehicles.
     type: Tweak
-  id: 690
+  id: 629
   time: '2026-09-10T04:53:55.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1918
 - author: deepdarkdepths
@@ -10693,7 +9548,7 @@
   - message: Xeno acid action remains toggled until deactivated or another ability
       is used
     type: Tweak
-  id: 691
+  id: 630
   time: '2026-09-10T04:54:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1919
 - author: TheHellFireo
@@ -10705,19 +9560,7 @@
     type: Fix
   - message: Improved gameplay stall and client synchronization diagnostics.
     type: Admin
-  id: 692
-  time: '2026-09-10T13:35:04.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921
-- author: TheHellFireo
-  changes:
-  - message: Fixed stale area-power references and power loads after equipment is
-      removed or moved.
-    type: Fix
-  - message: Fixed missing fighters in small CLF survivor groups.
-    type: Fix
-  - message: Improved gameplay stall and client synchronization diagnostics.
-    type: Admin
-  id: 693
+  id: 631
   time: '2026-09-10T13:35:04.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921
 - author: OverusedMeme
@@ -10728,32 +9571,14 @@
   - message: Fixed an issue where spam wielding the M240 and M240-T would double the
       amount of time required until you can shoot.
     type: Fix
-  id: 694
-  time: '2026-09-10T15:30:49.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1920
-- author: OverusedMeme
-  changes:
-  - message: The M240 now has a wield delay of 1 second, the M240-T now has a wield
-      delay of 1.75 seconds
-    type: Tweak
-  - message: Fixed an issue where spam wielding the M240 and M240-T would double the
-      amount of time required until you can shoot.
-    type: Fix
-  id: 695
+  id: 632
   time: '2026-09-10T15:30:49.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1920
 - author: Vencallium
   changes:
   - message: Increased dropship fabricator point generation to 2 points per second.
     type: Tweak
-  id: 696
-  time: '2026-09-11T17:19:43.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1925
-- author: Vencallium
-  changes:
-  - message: Increased dropship fabricator point generation to 2 points per second.
-    type: Tweak
-  id: 697
+  id: 633
   time: '2026-09-11T17:19:43.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1925
 - author: TheHellFireo
@@ -10762,30 +9587,14 @@
     type: Fix
   - message: Improved capture and attribution of short gameplay stalls.
     type: Admin
-  id: 698
-  time: '2026-09-12T00:24:09.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1933
-- author: TheHellFireo
-  changes:
-  - message: Reduced hitches when filling storage and preparing large supply deliveries.
-    type: Fix
-  - message: Improved capture and attribution of short gameplay stalls.
-    type: Admin
-  id: 699
+  id: 634
   time: '2026-09-12T00:24:09.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1933
 - author: flex5hybrid
   changes:
   - message: Moved hardcoded CMU user-facing strings into Fluent localization.
     type: Code
-  id: 700
-  time: '2026-09-12T22:41:22.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1938
-- author: flex5hybrid
-  changes:
-  - message: Moved hardcoded CMU user-facing strings into Fluent localization.
-    type: Code
-  id: 701
+  id: 635
   time: '2026-09-12T22:41:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1938
 - author: Vencallium
@@ -10795,59 +9604,28 @@
     type: Fix
   - message: Added an empty upper z-level to Bosenmori Basho.
     type: Map
-  id: 702
-  time: '2026-09-12T23:40:12.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1939
-- author: Vencallium
-  changes:
-  - message: "Fixed tactical hovering over empty +1 airspace during Distress Signal,\
-      \ excluding Hope\u2019s Retreat."
-    type: Fix
-  - message: Added an empty upper z-level to Bosenmori Basho.
-    type: Map
-  id: 703
+  id: 636
   time: '2026-09-12T23:40:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1939
 - author: CatoChristopherMrow
   changes:
   - message: Added various belts, a new gun, and a few other qol items to colony cargo.
     type: Add
-  id: 704
-  time: '2026-09-12T23:40:35.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1930
-- author: CatoChristopherMrow
-  changes:
-  - message: Added various belts, a new gun, and a few other qol items to colony cargo.
-    type: Add
-  id: 705
+  id: 637
   time: '2026-09-12T23:40:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1930
 - author: CatoChristopherMrow
   changes:
   - message: Fixed gunships stealing some tiles, along with other various minor fixes
     type: Fix
-  id: 706
-  time: '2026-09-12T23:41:19.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1924
-- author: CatoChristopherMrow
-  changes:
-  - message: Fixed gunships stealing some tiles, along with other various minor fixes
-    type: Fix
-  id: 707
+  id: 638
   time: '2026-09-12T23:41:19.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1924
 - author: Nox38
   changes:
   - message: APCs should now fit full squads inside.
     type: Tweak
-  id: 708
-  time: '2026-09-12T23:48:03.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1936
-- author: Nox38
-  changes:
-  - message: APCs should now fit full squads inside.
-    type: Tweak
-  id: 709
+  id: 639
   time: '2026-09-12T23:48:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1936
 - author: deepdarkdepths
@@ -10856,16 +9634,7 @@
     type: Add
   - message: Runner has slightly more HP.
     type: Tweak
-  id: 710
-  time: '2026-09-13T00:27:59.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1940
-- author: deepdarkdepths
-  changes:
-  - message: Added a new damage based evasion mechanic for Runner.
-    type: Add
-  - message: Runner has slightly more HP.
-    type: Tweak
-  id: 711
+  id: 640
   time: '2026-09-13T00:27:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1940
 - author: silasadam
@@ -10883,46 +9652,14 @@
     type: Tweak
   - message: Yautja have a map symbol&hunting traps track the target for 5 minutes.
     type: Add
-  id: 712
-  time: '2026-09-13T00:28:33.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1931
-- author: silasadam
-  changes:
-  - message: Added Yautja Limb regeneration
-    type: Add
-  - message: Yautja healing gun can heal IB/Fracs/Eschar/etc on a long do-after.
-    type: Tweak
-  - message: Yautja take several tackles to knock down. [4]
-    type: Tweak
-  - message: Yautja hunting traps are now completely invisible to everyone except
-      the yautja.
-    type: Tweak
-  - message: Yautja cloak has been returned to true-cloak status.
-    type: Tweak
-  - message: Yautja have a map symbol&hunting traps track the target for 5 minutes.
-    type: Add
-  id: 713
+  id: 641
   time: '2026-09-13T00:28:33.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1931
 - author: deepdarkdepths
   changes:
   - message: Base and Berserker Ravager stat values tweaked.
     type: Tweak
-  id: 714
-  time: '2026-09-13T01:32:34.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1943
-- author: deepdarkdepths
-  changes:
-  - message: Base and Berserker Ravager stat values tweaked.
-    type: Tweak
-  id: 715
-  time: '2026-09-13T01:32:34.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1943
-- author: deepdarkdepths
-  changes:
-  - message: Base and Berserker Ravager stat values tweaked.
-    type: Tweak
-  id: 716
+  id: 642
   time: '2026-09-13T01:32:34.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1943
 - author: ILoveDespoiler
@@ -10930,44 +9667,14 @@
   - message: changed Despoilers Armor, Explosion Armor, Speed, Plasma Costs, Catalyze
       Hypertension Cost, Hypertension Bonus Damage, and Catalyze Buff Duration
     type: Tweak
-  id: 717
-  time: '2026-09-13T14:30:30.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1945
-- author: ILoveDespoiler
-  changes:
-  - message: changed Despoilers Armor, Explosion Armor, Speed, Plasma Costs, Catalyze
-      Hypertension Cost, Hypertension Bonus Damage, and Catalyze Buff Duration
-    type: Tweak
-  id: 718
-  time: '2026-09-13T14:30:30.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1945
-- author: ILoveDespoiler
-  changes:
-  - message: changed Despoilers Armor, Explosion Armor, Speed, Plasma Costs, Catalyze
-      Hypertension Cost, Hypertension Bonus Damage, and Catalyze Buff Duration
-    type: Tweak
-  id: 719
+  id: 643
   time: '2026-09-13T14:30:30.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1945
 - author: flex5hybrid
   changes:
   - message: Made additional spawn menu role names localizable.
     type: Code
-  id: 720
-  time: '2026-09-14T00:03:29.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1947
-- author: flex5hybrid
-  changes:
-  - message: Made additional spawn menu role names localizable.
-    type: Code
-  id: 721
-  time: '2026-09-14T00:03:29.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1947
-- author: flex5hybrid
-  changes:
-  - message: Made additional spawn menu role names localizable.
-    type: Code
-  id: 722
+  id: 644
   time: '2026-09-14T00:03:29.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1947
 - author: maertayn
@@ -11034,141 +9741,7 @@
   - message: '`znetwork-save` will now save the entire loaded multiZ network recursively
       to your bin folder'
     type: Map
-  id: 723
-  time: '2026-09-14T00:53:35.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1950
-- author: maertayn
-  changes:
-  - message: Synth repairs are no longer instant and scale with construction skill
-    type: Tweak
-  - message: X clearance research now costs 16CR and stays locked until 90 minutes
-    type: Tweak
-  - message: The ape threat kit is rebuilt with z-jumps, hurled debris, limb ripping
-      and
-    type: Tweak
-  - message: Overdue various FoF tweaks, fixes and additions - side balancing + opfor
-      roles - hotspot/KoTH has to be playtested by fire for me to tweak/balance it
-      properly
-    type: Tweak
-  - message: Botanical reagents use names distinct from upstream chemistry
-    type: Tweak
-  - message: Atmospherics overhaul, heavy WIP, breathing and over-pressure is still
-      disabled - pipe/power risers and air vents across Z-levels, construction recipes,
-      inflatable walls, crystallizer (turn gas into materials), portable gas miners
-      & generators, power backup generators flick on with loss of power, canisters
-      and pipes, phoron gas and violent fires, colony atmosian, power fixes ahead
-      of tile/grid/powernets
-    type: Add
-  - message: Map atmospherics corrected (GridAtmosphere `fixgridatmos`) across the
-      shared map pool
-    type: Add
-  - message: Fixed the mapping smart-merge driver in Content.Tools after 4 years dormancy
-    type: Map
-  - message: Staircase falling on Stable Garrison Redux near the Diner
-    type: Fix
-  - message: The L66A2 ammo box no longer shows the gun sprite when held
-    type: Fix
-  - message: US Army third-parties spawn with loaded magazines
-    type: Fix
-  - message: Xeno egg and FoF tech deliveries land in the correct faction's ASRS
-    type: Fix
-  - message: TWE Pointman shield raises through its action again
-    type: Fix
-  - message: Disconnecting no longer leaves a black-screen zombie client (duct tape
-      fix of an engine issue)
-    type: Fix
-  - message: Self-destruct SFX is restored, as was lost in Rebase
-    type: Fix
-  - message: The ghost warp menu opens on the locations tab and force sends only preview
-      entities (no more organs, or backpack/pocket items being loaded per entity)
-    type: Fix
-  - message: UPP and Paramarine squads plus the counteragent syringe are back, lost
-      in Rebase
-    type: Fix
-  - message: Survivor spawns are no longer broken, the interest system was holding
-      it hostage
-    type: Fix
-  - message: Colony antags receive starting skills additional to job skill (doesn't
-      overwrite), synth antags can use weapons (malfunctioning) - also job blacklists
-      are significantly different, expect more colonist antags
-    type: Add
-  - message: PlatoonSpawnRuleSystem cleaned up, now uses faction_swaps.yml for Govfor
-      <-> Opfor swaps (includes all missing/forgotten swaps for Bush)
-    type: Code
-  - message: VMarkers for Opfor are removed in favor of simply using Govfor entities,
-      if the ship/planet/grid is Opfor faction it will simply swap it
-    type: Map
-  - message: '`znetwork-save` will now save the entire loaded multiZ network recursively
-      to your bin folder'
-    type: Map
-  id: 724
-  time: '2026-09-14T00:53:35.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1950
-- author: maertayn
-  changes:
-  - message: Synth repairs are no longer instant and scale with construction skill
-    type: Tweak
-  - message: X clearance research now costs 16CR and stays locked until 90 minutes
-    type: Tweak
-  - message: The ape threat kit is rebuilt with z-jumps, hurled debris, limb ripping
-      and
-    type: Tweak
-  - message: Overdue various FoF tweaks, fixes and additions - side balancing + opfor
-      roles - hotspot/KoTH has to be playtested by fire for me to tweak/balance it
-      properly
-    type: Tweak
-  - message: Botanical reagents use names distinct from upstream chemistry
-    type: Tweak
-  - message: Atmospherics overhaul, heavy WIP, breathing and over-pressure is still
-      disabled - pipe/power risers and air vents across Z-levels, construction recipes,
-      inflatable walls, crystallizer (turn gas into materials), portable gas miners
-      & generators, power backup generators flick on with loss of power, canisters
-      and pipes, phoron gas and violent fires, colony atmosian, power fixes ahead
-      of tile/grid/powernets
-    type: Add
-  - message: Map atmospherics corrected (GridAtmosphere `fixgridatmos`) across the
-      shared map pool
-    type: Add
-  - message: Fixed the mapping smart-merge driver in Content.Tools after 4 years dormancy
-    type: Map
-  - message: Staircase falling on Stable Garrison Redux near the Diner
-    type: Fix
-  - message: The L66A2 ammo box no longer shows the gun sprite when held
-    type: Fix
-  - message: US Army third-parties spawn with loaded magazines
-    type: Fix
-  - message: Xeno egg and FoF tech deliveries land in the correct faction's ASRS
-    type: Fix
-  - message: TWE Pointman shield raises through its action again
-    type: Fix
-  - message: Disconnecting no longer leaves a black-screen zombie client (duct tape
-      fix of an engine issue)
-    type: Fix
-  - message: Self-destruct SFX is restored, as was lost in Rebase
-    type: Fix
-  - message: The ghost warp menu opens on the locations tab and force sends only preview
-      entities (no more organs, or backpack/pocket items being loaded per entity)
-    type: Fix
-  - message: UPP and Paramarine squads plus the counteragent syringe are back, lost
-      in Rebase
-    type: Fix
-  - message: Survivor spawns are no longer broken, the interest system was holding
-      it hostage
-    type: Fix
-  - message: Colony antags receive starting skills additional to job skill (doesn't
-      overwrite), synth antags can use weapons (malfunctioning) - also job blacklists
-      are significantly different, expect more colonist antags
-    type: Add
-  - message: PlatoonSpawnRuleSystem cleaned up, now uses faction_swaps.yml for Govfor
-      <-> Opfor swaps (includes all missing/forgotten swaps for Bush)
-    type: Code
-  - message: VMarkers for Opfor are removed in favor of simply using Govfor entities,
-      if the ship/planet/grid is Opfor faction it will simply swap it
-    type: Map
-  - message: '`znetwork-save` will now save the entire loaded multiZ network recursively
-      to your bin folder'
-    type: Map
-  id: 725
+  id: 645
   time: '2026-09-14T00:53:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1950
 - author: jok989372-lgtm
@@ -11177,16 +9750,7 @@
     type: Add
   - message: Added many new accessories for WY PMC.
     type: Add
-  id: 726
-  time: '2026-09-14T01:48:22.0000000+00:00'
-  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1937
-- author: jok989372-lgtm
-  changes:
-  - message: Added new main gun for WY PMC.
-    type: Add
-  - message: Added many new accessories for WY PMC.
-    type: Add
-  id: 727
+  id: 646
   time: '2026-09-14T01:48:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1937
 - author: OverusedMeme
@@ -11197,7 +9761,7 @@
   - message: Fixed an issue which lead to double the amount of time required to wield
       and fire the M240 and M240-T, again.
     type: Fix
-  id: 728
+  id: 647
   time: '2026-09-14T07:32:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1954
 - author: ArturUr1
@@ -11205,14 +9769,14 @@
   - message: Methamphetamine has been nerfed. Speed multiplier reduced from 1.4 to
       1.2. Poison damage increased.
     type: Tweak
-  id: 729
+  id: 648
   time: '2026-09-16T02:36:45.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1961
 - author: Vencallium
   changes:
   - message: Drones can now evolve into any standard tier 2 xenomorph.
     type: Tweak
-  id: 730
+  id: 649
   time: '2026-09-16T02:39:40.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1958
 - author: ArturUr1
@@ -11220,8 +9784,118 @@
   - message: Instant wall construction through the G-menu has been removed. Now you
       can quickly place frames through it, and build walls through those.
     type: Tweak
-  id: 731
+  id: 650
   time: '2026-09-16T03:09:45.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1962
+- author: Vencallium
+  changes:
+  - message: Updated and repaired the Stable Garrison map and added a Distress Signal
+      variant.
+    type: Map
+  - message: Fetch objectives now use medical, research, data, and military placement
+      categories.
+    type: Tweak
+  id: 651
+  time: '2026-09-17T04:09:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1969
+- author: maertayn
+  changes:
+  - message: 'Added Rider antag, a morphling parasite that fuses with a willing/unwilling
+      host to survive, based on the thing from the series, 3 versions: hitchhiker
+      (survive within a host), leapfrog (ride 3 hosts), puppeteer (seize an objective
+      item)'
+    type: Add
+  - message: Added Replicant (evil-twin) synth colony antagonist, steals Id and name
+      of their selected quarry
+    type: Add
+  - message: Cannibal fixes, meat-only diet, can chop/spike non-rotten bodies
+    type: Fix
+  - message: APC Batteries require a doAfter that scales with skill (saboteur) - not
+      a free battery swap min. 7 seconds
+    type: Tweak
+  - message: Up to 3 antags of same type, spawn with your wanted paper as antag (and
+      lighter to burn it), first pass at forensics and detain system, starting supplemental
+      skills for many antags
+    type: Add
+  - message: Bounty Hunters (and CMB) gain forensic suspect descriptions and wanted
+      posters
+    type: Add
+  - message: CMB has to detain people in the system to get rewards, not complete yet
+    type: Tweak
+  - message: Merged CorporateSpy & WeylandYutaniAgent into Corporate Rivals - can
+      spawn in tandem as opposers, or individually alone
+    type: Tweak
+  - message: Admin verbs/smites for manually setting players to colony antags
+    type: Admin
+  - message: Special metal bat for the vigilante, drug dealer satchel can be anchored
+      and hidden under tiles, CLF veteran custom-revolver and AP-ammo + telebaton
+    type: Add
+  - message: Yautja armor and stats reduced
+    type: Tweak
+  - message: Turret targeting prioritizes mobs over structures
+    type: Fix
+  - message: Cross-z shots work against dropships
+    type: Fix
+  - message: Van repair restored after wheel loss, now uses hull integrity
+    type: Fix
+  - message: Survivors spawn with starting equipment
+    type: Fix
+  - message: M2C doorgunner barrel no longer stops movement, a well-placed xeno-leap
+      can commandeer gunships
+    type: Fix
+  - message: Filled CMU canisters deployed across maps replacing the old props
+    type: Map
+  - message: CI timeouts and shard split
+    type: Code
+  - message: Beanieclava completely hides your identity when you fold/unfold it
+    type: Fix
+  - message: Squad preferences respect your setting, transfers to Opfor / FoF also
+    type: Fix
+  - message: Threat vote respects user preferences
+    type: Fix
+  - message: Dead harbinger cyclones, synths irreparable heart damage from defibs,
+      xeno damage vignette, head of engineering access, mortar camera views, lifeboats/escape-pods,
+      larva surge happening more than once, identity obfuscation disabled, acid ball
+      cooldown on failed casts
+    type: Fix
+  - message: Fire suppression grenade, breathable air grenades available in ASRS
+    type: Add
+  - message: Salamander firehelmet, required for the firesuit to protect you against
+      fires
+    type: Add
+  - message: Fire, pressure, heat, asphyxiation damages are still disabled until ready
+    type: Tweak
+  - message: Gas fires spawn RMC tile fires (phoron, plasma, tritium)
+    type: Add
+  - message: Xeno reincarnation not working with borrowed pool disabled
+    type: Fix
+  - message: 2 Colony Synths for Garrison (v1/redux) in tune with other maps
+    type: Tweak
+  - message: Barker's lament not loading due to baked runtimes, reagent generator
+      cache not resetting when maps do
+    type: Fix
+  - message: Various runtime and server exceptions, no fuel in tank popup, leaps not
+      receiving nulled doAfters on shutdown, tunnel removal skips during deletion
+      cascade
+    type: Fix
+  - message: Third party shuttle spawns now fall back to ground spawn if there is
+      no landing/parking space
+    type: Fix
+  - message: Colony jobs fall back to their job markers instead of a random spawn
+      (like warship)
+    type: Fix
+  - message: Sprite lookup client spam, reapplying networked visuals during a rollback
+      (diverged states)
+    type: Fix
+  - message: Inherit vmarker rotation when spawning entities
+    type: Fix
+  - message: Tweaked Govfor & Colony roles on the Ghost Warp closer to hierarchy/function
+    type: Tweak
+  - message: Deploy third parties after 10 minutes of interest and cleanup unused
+      after 4min, and added to DS
+    type: Tweak
+  id: 652
+  time: '2026-09-17T04:20:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1968
 Name: CMU
 Order: -1

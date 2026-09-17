@@ -275,6 +275,10 @@ public sealed partial class HealthScannerBui : BoundUserInterface
 
         UpdateCMUBodyMap(uiState);
 
+        _window.CMURiderBanner.Visible = uiState.CMURiderReading is not null;
+        if (uiState.CMURiderReading is { } riderReading)
+            _window.CMURiderLabel.Text = riderReading;
+
         if (!_window.IsOpen)
         {
             _window.OpenCentered();

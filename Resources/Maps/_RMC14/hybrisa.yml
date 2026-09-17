@@ -136062,7 +136062,7 @@ entities:
     - type: Transform
       pos: -95.58069,-19.9706
       parent: 1
-- proto: GasPort
+- proto: CMUGasPort
   entities:
   - uid: 12279
     components:
@@ -136076,7 +136076,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -74.5,-22.5
       parent: 1
-- proto: GasThermoMachineFreezer
+- proto: RMCSpaceHeater
   entities:
   - uid: 12281
     components:
@@ -151820,7 +151820,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -178.5,-180.5
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 14727
     components:

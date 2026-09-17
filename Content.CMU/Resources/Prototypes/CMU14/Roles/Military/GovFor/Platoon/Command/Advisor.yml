@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 7
   id: AU14JobadvisorBaseAbstract
   name: au14-job-name-govforadvisor
   description: au14-job-description-govforadvisor

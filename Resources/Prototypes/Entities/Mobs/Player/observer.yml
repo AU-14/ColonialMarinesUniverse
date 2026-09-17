@@ -152,6 +152,8 @@
       components:
       - Ladder
     range: 15
+  - type: RMCActionOrder
+    id: MobObserverBase
 
 # proto for player ghosts specifically
 - type: entity

@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Tests.Interaction;
+using Content.Shared.CMU14.Round.Antags.Cannibal; // CMU14
 using Content.Shared.DragDrop;
 using Content.Shared.Kitchen;
 using Content.Shared.Kitchen.Components;
@@ -44,7 +45,7 @@ public sealed class KitchenSpikeWaitForRotTest : InteractionTest
 ";
 
     [Test]
-    public async Task SpikeRejectsKnifeRouteVictim()
+    public async Task SpikeHooksKnifeRouteVictim() // CMU14: Knife-type victims (colonists) hook onto the meat rack like Spike-type animals
     {
         var spikeNet = await SpawnTarget("KitchenSpikeWaitForRotTestSpike");
         var victimNet = await Spawn("KitchenSpikeKnifeVictim");
@@ -52,15 +53,11 @@ public sealed class KitchenSpikeWaitForRotTest : InteractionTest
         var victim = ToServer(victimNet);
         var spikeComponent = SEntMan.GetComponent<KitchenSpikeComponent>(spike);
 
-        await AssertHookRejectedWithPopup(spike, victim, "using a knife");
         await RaiseDragDrop(spike, victim);
-
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(ActiveDoAfters, Is.Empty,
-                "A Knife-route victim must not start the kitchen-spike hook path.");
-            Assert.That(spikeComponent.BodyContainer.ContainedEntity, Is.Null);
-        }
+        Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1),
+            "A Knife-route victim must start the kitchen-spike hook path.");
+        await AwaitDoAfters();
+        Assert.That(spikeComponent.BodyContainer.ContainedEntity, Is.EqualTo(victim));
     }
 
     [Test]
@@ -108,6 +105,24 @@ public sealed class KitchenSpikeWaitForRotTest : InteractionTest
             Assert.That(spikeComponent.BodyContainer.ContainedEntity, Is.Null,
                 "Completion must recheck revivability so a state change cannot bypass the hook gate.");
         }
+    }
+
+    [Test] // CMU14: cannibals may rack a fresh corpse inside the defib window
+    public async Task SpikeHooksWaitForRotVictimForCannibal()
+    {
+        var spikeNet = await SpawnTarget("KitchenSpikeWaitForRotTestSpike");
+        var victimNet = await Spawn("KitchenSpikeWaitForRotVictim");
+        var spike = ToServer(spikeNet);
+        var victim = ToServer(victimNet);
+        var spikeComponent = SEntMan.GetComponent<KitchenSpikeComponent>(spike);
+
+        await Server.WaitPost(() => SEntMan.EnsureComponent<CannibalComponent>(SPlayer));
+
+        await RaiseDragDrop(spike, victim);
+        Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1),
+            "A cannibal must hook a wait-for-rot victim while it is still revivable.");
+        await AwaitDoAfters();
+        Assert.That(spikeComponent.BodyContainer.ContainedEntity, Is.EqualTo(victim));
     }
 
     private async Task AssertHookRejectedWithPopup(EntityUid spike, EntityUid victim, string expectedText)

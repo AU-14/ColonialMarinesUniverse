@@ -120,7 +120,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     if (markerComp.Class == PlatoonMarkerClass.DropshipDestination)
                     {
                         string dropshipDestinationProtoId = "CMDropshipDestinationHome";
-                        var dropshipEntity = _entityManager.SpawnEntity(dropshipDestinationProtoId, transform.Coordinates);
+                        var dropshipEntity = _entityManager.SpawnAttachedTo(dropshipDestinationProtoId, transform.Coordinates, rotation: transform.LocalRotation);
                         // Inherit the metadata name from the marker
                         if (_entityManager.TryGetComponent<MetaDataComponent>(markerUid, out var markerMeta) &&
                             _entityManager.TryGetComponent<MetaDataComponent>(dropshipEntity, out var destMeta))
@@ -139,7 +139,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     {
                         if (_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                         {
-                            var spawned = _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
+                            // SpawnEntity has no rotation parameter, so spawn attached to keep the marker's rotation
+                            var spawned = _entityManager.SpawnAttachedTo(vendorProto.ID, transform.Coordinates, rotation: transform.LocalRotation);
                             SetRequisitionsVendorAccess(spawned, markerComp.Class, shipFaction.Faction);
                             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawned, out var spawnedPhone))
                             {
@@ -186,7 +187,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 continue;
             if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                 continue;
-            var spawnedEnt = _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
+            var spawnedEnt = _entityManager.SpawnAttachedTo(vendorProto.ID, transform.Coordinates, rotation: transform.LocalRotation);
             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawnedEnt, out var spawnedPhone2))
             {
                 spawnedPhone2.Faction = markerComp.Govfor ? "govfor" : "opfor";
@@ -427,7 +428,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         DropshipDestinationComponent.DestinationType type)
     {
         var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
-        var console = _entityManager.SpawnEntity(protoId, transform.Coordinates);
+        var console = _entityManager.SpawnAttachedTo(protoId, transform.Coordinates, rotation: transform.LocalRotation);
         if (!_entityManager.HasComponent<WhitelistedShuttleComponent>(console))
             _entityManager.AddComponent<WhitelistedShuttleComponent>(console);
 

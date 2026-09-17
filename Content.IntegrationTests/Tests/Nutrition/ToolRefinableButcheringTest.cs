@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Tests.Interaction;
+using Content.Shared.CMU14.Round.Antags.Cannibal; // CMU14
 using Content.Shared.Traits.Assorted;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
@@ -94,6 +95,27 @@ public sealed class ToolRefinableButcheringTest : InteractionTest
         await Interact(awaitDoAfters: false);
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1),
             "A completion-time rejection must clear the active tool-target pair for a later valid attempt.");
+
+        await AwaitDoAfters();
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(SEntMan.Deleted(target), Is.True);
+            Assert.That(CountResults(), Is.EqualTo(1));
+        }
+    }
+
+    // CMU14: cannibals bypass the wait-for-rot gate, a fresh corpse is their meal
+    [Test]
+    public async Task CannibalCarvesWaitForRotTarget()
+    {
+        var targetNet = await SpawnTarget("ToolRefinableButcheringWaitTestTarget");
+        var target = ToServer(targetNet);
+
+        await Server.WaitPost(() => SEntMan.EnsureComponent<CannibalComponent>(SPlayer));
+
+        await InteractUsing("ToolRefinableButcheringTestTool", awaitDoAfters: false);
+        Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1),
+            "A cannibal must start carving a fresh wait-for-rot victim.");
 
         await AwaitDoAfters();
         using (Assert.EnterMultipleScope())

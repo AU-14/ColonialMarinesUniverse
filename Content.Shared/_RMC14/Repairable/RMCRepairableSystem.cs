@@ -578,7 +578,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
             }
             else
             {
-                _popup.PopupClient(Loc.GetString("welder-component-no-fuel-in-tank", ("owner", args.Target)), used, args.User);
+                _popup.PopupClient(Loc.GetString("welder-component-no-fuel-in-tank", ("target", args.Target)), used, args.User); // CMU14: fluent string reads $target, not $owner
             }
 
             args.Handled = true;

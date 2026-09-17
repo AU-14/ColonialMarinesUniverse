@@ -25147,7 +25147,7 @@ entities:
     - type: Transform
       pos: -29.475073,7.5553737
       parent: 1
-- proto: GasMinerNitrogenStation
+- proto: CMUGasMinerNitrogenPortable
   entities:
   - uid: 1552
     components:
@@ -25155,7 +25155,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 76.5,-28.5
       parent: 1
-- proto: GasMinerOxygenStation
+- proto: CMUGasMinerOxygenPortable
   entities:
   - uid: 1551
     components:
@@ -25163,7 +25163,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 80.5,-28.5
       parent: 1
-- proto: GasMixer
+- proto: CMUGasMixer
   entities:
   - uid: 1543
     components:
@@ -25171,7 +25171,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 82.5,-26.5
       parent: 1
-- proto: GasOutletInjector
+- proto: CMUOutletInjector
   entities:
   - uid: 1550
     components:
@@ -25184,7 +25184,7 @@ entities:
     - type: Transform
       pos: 81.5,13.5
       parent: 1
-- proto: GasPassiveVent
+- proto: CMUPassiveVent
   entities:
   - uid: 1547
     components:
@@ -25217,7 +25217,7 @@ entities:
     - type: Transform
       pos: 83.5,13.5
       parent: 1
-- proto: GasPressurePump
+- proto: CMUGasPressurePump
   entities:
   - uid: 1553
     components:

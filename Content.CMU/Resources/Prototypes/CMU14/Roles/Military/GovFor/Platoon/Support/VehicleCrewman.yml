@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 2
   id: AU14JobVehicleCrewmanBaseAbstract
   name: au14-job-name-vehiclecrewman
   description: au14-job-description-vehiclecrewman
