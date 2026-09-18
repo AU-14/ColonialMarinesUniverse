@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   displayWeight: 8
   id: AU14JobCivilianNurse

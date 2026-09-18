@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobAdjutantBaseAbstract
@@ -20,6 +21,7 @@
   - aulegacygroupcommand
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobAdjutantBaseAbstract
   id: AU14JobAdjutantBase
@@ -92,6 +94,7 @@
 
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobAdjutantBase
   id: AU14JobGOVFORAdjutant
   hidden: false
@@ -99,6 +102,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobAdjutantBase
   id: AU14JobOPFORAdjutant
   roundSide: Opfor
@@ -190,6 +194,7 @@
 
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobAdjutantBase
   id: AU14JobGOVFORAdjutantCMBCIU
   roundForce: CMBCIU
@@ -199,6 +204,7 @@
     AU14RankCMBMarshal: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobAdjutantBase
   id: AU14JobGOVFORAdjutantRMC
   roundForce: RMC
@@ -206,6 +212,7 @@
   spawnMenuRoleName: Executive Officer (TWE RMC)
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobAdjutantBase
   id: AU14JobGOVFORAdjutantUPP
   roundForce: UPP
@@ -224,6 +231,7 @@
     UPP_Lieutenant: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobAdjutantBase
   id: AU14JobGOVFORAdjutantWYPMC
   roundForce: WYPMC

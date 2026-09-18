@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   displayWeight: 18
   id: AU14JobCivilianOrbitalManager

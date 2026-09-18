@@ -821,7 +821,12 @@ namespace Content.Server.GameTicking
 
             jobPrototype = ProtoMan.Index<JobPrototype>(jobId);
 
-            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, jobId, character);
+            // CMU14: paid loadouts need the authenticated account before the mind is attached.
+            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(
+                station,
+                jobId,
+                character,
+                playerUserId: player.UserId);
             DebugTools.AssertNotNull(mobMaybe);
             mob = mobMaybe!.Value;
 

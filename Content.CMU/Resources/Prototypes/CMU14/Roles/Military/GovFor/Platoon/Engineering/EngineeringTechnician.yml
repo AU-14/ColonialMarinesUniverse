@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   displayWeight: 1
@@ -14,6 +15,7 @@
   - AU14GovforEngineer
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobEngineeringTechBaseAbstract
   id: AU14JobEngineeringTechBase
@@ -99,6 +101,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobEngineeringTechBase
   id: AU14JobGOVFOREngineeringTech
   hidden: false

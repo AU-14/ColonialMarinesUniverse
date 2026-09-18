@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobMilitaryPoliceBaseAbstract
@@ -18,6 +19,7 @@
   - aulegacygroupmilp # NOTE: should remove & hard migrate
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryPoliceBaseAbstract
   id: AU14JobMilitaryPoliceBase
@@ -109,6 +111,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobMilitaryPoliceBase
   id: AU14JobGOVFORMilitaryPoliceMan
   hidden: false
@@ -130,6 +133,7 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobMilitaryPoliceBase
   id: AU14JobOPFORMilitaryPoliceMan
   roundSide: Opfor

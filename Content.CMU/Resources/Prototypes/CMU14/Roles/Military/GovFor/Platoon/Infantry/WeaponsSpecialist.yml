@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobWeaponsSpecialistBaseAbstract
@@ -14,6 +15,7 @@
   - AU14GovforWeaponsSpecialist
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobWeaponsSpecialistBaseAbstract
   id: AU14JobWeaponsSpecialistBase
@@ -91,6 +93,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobWeaponsSpecialistBase
   id: AU14JobGOVFORWeaponsSpecialist
   hidden: false

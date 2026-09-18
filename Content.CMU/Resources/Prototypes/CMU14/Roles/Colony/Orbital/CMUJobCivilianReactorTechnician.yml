@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   displayWeight: 12
   id: CMUJobColonyReactorTechnician

@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   displayWeight: 4
   id: AU14JobLEOLeaderBase

@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   displayWeight: 0
@@ -17,6 +18,7 @@
   - AU14GovforGunner
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobSquadAutomaticRiflemanBaseAbstract
   id: AU14JobSquadAutomaticRiflemanBase
@@ -121,6 +123,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRifleman
   hidden: false
@@ -142,6 +145,7 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobOPFORSquadAutomaticRifleman
   roundSide: Opfor
@@ -180,6 +184,7 @@
     ears: AU14HeadsetOpforMarine
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRiflemanRMC
   roundForce: RMC
@@ -197,6 +202,7 @@
     RMC_Marine: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRiflemanUPP
   roundForce: UPP
@@ -210,6 +216,7 @@
     UPP_Private: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
   roundForce: WYPMC

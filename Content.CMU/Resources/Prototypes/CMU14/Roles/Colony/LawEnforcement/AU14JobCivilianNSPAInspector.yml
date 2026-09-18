@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobLEOLeaderBase
   displayWeight: 18
   id: AU14JobCivilianNSPAInspector

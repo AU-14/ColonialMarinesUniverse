@@ -32,7 +32,7 @@ public sealed partial class AU14CashVendorComponent : Component
     public List<AU14CashVendorEntry> Items = new();
 
     /// <summary>Cash currently inserted by the user (not networked — managed server-side).</summary>
-    public float InsertedCash = 0f;
+    public int InsertedCash;
 
     /// <summary>When true, the UI shows a Scan ID button allowing purchases via department budget.</summary>
     [DataField("allowDepartmentBudget")]
@@ -50,4 +50,3 @@ public sealed partial class AU14CashVendorComponent : Component
     [DataField]
     public float PercentToColony = 0f;
 }
-

@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   displayWeight: 2
@@ -16,6 +17,7 @@
   - AU14GovforVehicleCrew
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobVehicleCrewmanBaseAbstract
   id: AU14JobVehicleCrewmanBase
@@ -62,6 +64,7 @@
 
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobVehicleCrewmanBase
   id: AU14JobGOVFORVehicleCrewman
   hidden: false
@@ -69,6 +72,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobVehicleCrewmanBase
   id: AU14JobOPFORVehicleCrewman
   roundSide: Opfor

@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobMilitaryBase
   displayWeight: 9
   id: CMUJobGOVFORAdjutantDress
@@ -78,6 +79,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobMilitaryBase
   displayWeight: 10
   id: CMUJobGOVFORBrigadierGeneral
@@ -159,6 +161,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobMilitaryBase
   id: CMUJobGOVFORVipEscort
   roundRole: VipEscort

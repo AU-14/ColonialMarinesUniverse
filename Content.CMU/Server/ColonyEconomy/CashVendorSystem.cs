@@ -46,9 +46,10 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
 
     private void OnCashInserted(EntityUid uid, AU14CashVendorComponent comp, EntInsertedIntoContainerMessage args)
     {
-        int count = 1;
-        if (TryComp<StackComponent>(args.Entity, out var stack))
-            count = stack.Count;
+        if (!TryComp<StackComponent>(args.Entity, out var stack) || stack.StackTypeId != "Dollar" ||
+            stack.Unlimited || stack.Count <= 0 || comp.InsertedCash > int.MaxValue - stack.Count)
+            return;
+        var count = stack.Count;
 
         comp.InsertedCash += count;
         QueueDel(args.Entity);
@@ -98,6 +99,8 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
         var item = comp.Items[msg.ItemIndex];
         var tax = _adminConsole.GetSalesTax();
         var effectivePrice = (int) Math.Ceiling(item.BasePrice * (1f + tax));
+        if (item.BasePrice < 0 || effectivePrice < item.BasePrice)
+            return;
         var taxRevenue = effectivePrice - item.BasePrice;
 
         if (comp.ScannedDepartmentConsole is { } consoleUid &&
@@ -112,6 +115,8 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
             if (comp.InsertedCash < effectivePrice)
                 return;
             comp.InsertedCash -= effectivePrice;
+            EntityManager.System<Content.Server.CMU14.PersistentEconomy.CMUPersistentEconomySystem>()
+                .RecordStoreSink(Math.Max(0, item.BasePrice - (long) Math.Floor(item.BasePrice * Math.Clamp(comp.PercentToColony, 0f, 1f))));
         }
 
         if (taxRevenue > 0)

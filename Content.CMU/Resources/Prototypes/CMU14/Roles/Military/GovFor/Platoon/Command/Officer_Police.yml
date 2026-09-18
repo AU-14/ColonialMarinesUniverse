@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobOfficerMPBaseAbstract
@@ -19,6 +20,7 @@
   - aulegacygroupcommand
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobOfficerMPBaseAbstract
   id: AU14JobOfficerMPBase
@@ -88,6 +90,7 @@
 
 # ├──[ Job Prototypes ]──────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMP
   hidden: false
@@ -95,6 +98,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMPBase
   id: AU14JobOPFOROfficerMP
   roundSide: Opfor
@@ -177,6 +181,7 @@
 
 # ├──[ Factions ]────────────────────────────────────────────────────┤
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMPCMBCIU
   roundForce: CMBCIU
@@ -186,6 +191,7 @@
     AU14RankCMBMarshal: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMPRMC
   roundForce: RMC
@@ -193,6 +199,7 @@
   spawnMenuRoleName: Chief MP (TWE RMC)
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMPUPP
   roundForce: UPP
@@ -207,6 +214,7 @@
     UPP_SeniorLieutenant: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMPWYPMC
   roundForce: WYPMC

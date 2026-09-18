@@ -110,8 +110,12 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 }
 
                 var loc = preferred.Count > 0 ? _random.Pick(preferred) : _random.Pick(fallback);
-                args.SpawnResult = _stationSpawning.SpawnPlayerMob(
-                    loc, args.Job, args.HumanoidCharacterProfile, args.Station);
+                args.SpawnResult = _stationSpawning.SpawnPlayerMob( // CMU14
+                    loc,
+                    args.Job,
+                    args.HumanoidCharacterProfile,
+                    args.Station,
+                    playerUserId: args.PlayerUserId);
                 return; // hard return — never touches planet logic
             }
             else
@@ -143,8 +147,12 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 if (preferred.Count > 0 || fallback.Count > 0)
                 {
                     var loc = preferred.Count > 0 ? _random.Pick(preferred) : _random.Pick(fallback);
-                    args.SpawnResult = _stationSpawning.SpawnPlayerMob(
-                        loc, args.Job, args.HumanoidCharacterProfile, args.Station);
+                    args.SpawnResult = _stationSpawning.SpawnPlayerMob( // CMU14
+                        loc,
+                        args.Job,
+                        args.HumanoidCharacterProfile,
+                        args.Station,
+                        playerUserId: args.PlayerUserId);
                     return;
                 }
                 // If nothing found planet-side, fall through to generic logic below.
@@ -213,8 +221,12 @@ public sealed partial class SpawnPointSystem : EntitySystem
             ? _random.Pick(preferredPositions)
             : _random.Pick(possiblePositions);
 
-        args.SpawnResult = _stationSpawning.SpawnPlayerMob(
-            spawnLoc, args.Job, args.HumanoidCharacterProfile, args.Station);
+        args.SpawnResult = _stationSpawning.SpawnPlayerMob( // CMU14
+            spawnLoc,
+            args.Job,
+            args.HumanoidCharacterProfile,
+            args.Station,
+            playerUserId: args.PlayerUserId);
     }
 
     private bool IsOnShip(

@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobCivilianColonyAdministrator
   id: AU14JobCivilianCorporateAdministrator
   roundSide: Civilian

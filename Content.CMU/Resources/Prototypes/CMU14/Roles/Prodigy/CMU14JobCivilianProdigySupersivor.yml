@@ -1,6 +1,7 @@
 # powertripper's job
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: CMJobBase
   id: CMU14JobCivilianProdigySupervisorBase
@@ -10,6 +11,7 @@
   basePlaytimeTracker: true
 
 - type: job
+  cmuEconomyEnabled: true
   parent: CMU14JobCivilianProdigySupervisorBase
   id: CMU14JobCivilianProdigySupervisor
   roundSide: Civilian

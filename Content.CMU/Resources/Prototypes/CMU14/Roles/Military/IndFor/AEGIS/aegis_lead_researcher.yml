@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMUJobBaseAegis
   id: CMUJobAegisLeadResearcher
   name: cmu-job-name-aegis-lead-researcher

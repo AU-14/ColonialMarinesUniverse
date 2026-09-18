@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobRadioTelephoneOperatorBaseAbstract
@@ -16,6 +17,7 @@
   - AU14GovforFTL
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobRadioTelephoneOperatorBaseAbstract
   id: AU14JobRadioTelephoneOperatorBase
@@ -123,6 +125,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperator
   hidden: false
@@ -144,6 +147,7 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobOPFORRadioTelephoneOperator
   roundSide: Opfor
@@ -186,6 +190,7 @@
     ears: AU14HeadsetOpforMarineFTL
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorRMC
   roundForce: RMC
@@ -204,6 +209,7 @@
     RMC_Marine: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorUPP
   roundForce: UPP
@@ -218,6 +224,7 @@
     UPP_Gefreiter: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorWYPMC
   roundForce: WYPMC

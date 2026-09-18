@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobSquadRiflemanBaseAbstract # Rifleman Abstraction
@@ -15,6 +16,7 @@
   hasIcon: false
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobSquadRiflemanBaseAbstract
   id: AU14JobSquadRiflemanBase # Rifleman Base
@@ -139,6 +141,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRifleman
   hidden: false
@@ -160,6 +163,7 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadRiflemanBase
   id: AU14JobOPFORSquadRifleman
   roundSide: Opfor
@@ -198,6 +202,7 @@
     ears: AU14HeadsetOpforMarine
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanCMBCIU
   roundForce: CMBCIU
@@ -215,6 +220,7 @@
   spawnMenuRoleName: Operations Officer (CMBCIU)
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanRMC
   roundForce: RMC
@@ -234,6 +240,7 @@
       requirements: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanUPP
   roundForce: UPP
@@ -247,6 +254,7 @@
     UPP_Private: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanWYPMC
   roundForce: WYPMC

@@ -762,13 +762,23 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             if (_hyperSleepChamberQuery.TryComp(spawner, out var hyperSleep) &&
                 _containers.TryGetContainer(spawner, hyperSleep.ContainerId, out var container))
             {
-                ev.SpawnResult = _stationSpawning.SpawnPlayerMob(spawner.ToCoordinates(), ev.Job, ev.HumanoidCharacterProfile, ev.Station);
+                ev.SpawnResult = _stationSpawning.SpawnPlayerMob( // CMU14
+                    spawner.ToCoordinates(),
+                    ev.Job,
+                    ev.HumanoidCharacterProfile,
+                    ev.Station,
+                    playerUserId: ev.PlayerUserId);
                 _containers.Insert(ev.SpawnResult.Value, container);
             }
             else
             {
                 var coordinates = _transform.GetMoverCoordinates(spawner);
-                ev.SpawnResult = _stationSpawning.SpawnPlayerMob(coordinates, ev.Job, ev.HumanoidCharacterProfile, ev.Station);
+                ev.SpawnResult = _stationSpawning.SpawnPlayerMob( // CMU14
+                    coordinates,
+                    ev.Job,
+                    ev.HumanoidCharacterProfile,
+                    ev.Station,
+                    playerUserId: ev.PlayerUserId);
             }
 
             if (squad != null)

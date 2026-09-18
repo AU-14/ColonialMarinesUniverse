@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobMilitaryBase
   id: AU14JobPlatoonCorpsmanBaseAbstract
@@ -17,6 +18,7 @@
   - AU14GovforSquad
 
 - type: job
+  cmuEconomyEnabled: true
   abstract: true
   parent: AU14JobPlatoonCorpsmanBaseAbstract
   id: AU14JobPlatoonCorpsmanBase
@@ -140,6 +142,7 @@
     state: syn_spawn
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsman
   hidden: false
@@ -161,6 +164,7 @@
   - SmokablesRMC
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobOPFORPlatoonCorpsman
   roundSide: Opfor
@@ -201,6 +205,7 @@
     ears: AU14HeadsetOpforMarine
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsmanCMBCIU
   roundForce: CMBCIU
@@ -214,6 +219,7 @@
     AU14RankCMBDeputy: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsmanRMC
   roundForce: RMC
@@ -227,6 +233,7 @@
     RMC_LanceCorporal: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsmanUPP
   roundForce: UPP
@@ -240,6 +247,7 @@
     UPP_SeniorGefreiter: []
 
 - type: job
+  cmuEconomyEnabled: true
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsmanWYPMC
   roundForce: WYPMC

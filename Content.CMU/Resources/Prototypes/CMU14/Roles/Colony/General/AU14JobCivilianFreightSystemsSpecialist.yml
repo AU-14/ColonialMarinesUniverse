@@ -1,4 +1,5 @@
 - type: job
+  cmuEconomyEnabled: true
   parent: CMJobBase
   displayWeight: 10
   id: AU14JobCivilianFreightSystemsSpecialist

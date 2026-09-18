@@ -18,11 +18,11 @@ public sealed class AU14ShopkeeperListingState
 [Serializable, NetSerializable]
 public sealed class AU14ShopkeeperVendorShopState : BoundUserInterfaceState
 {
-    public float InsertedCash { get; }
+    public int InsertedCash { get; }
     public List<AU14ShopkeeperListingState> Listings { get; }
     public float SalesTaxPercent { get; }
-    public float DefaultPrice {get; }
-    public AU14ShopkeeperVendorShopState(float cash, List<AU14ShopkeeperListingState> listings, float salesTaxPercent = 0f, float defaultPrice = 10f)
+    public int DefaultPrice {get; }
+    public AU14ShopkeeperVendorShopState(int cash, List<AU14ShopkeeperListingState> listings, float salesTaxPercent = 0f, int defaultPrice = 10)
     { InsertedCash = cash; Listings = listings; SalesTaxPercent = salesTaxPercent; DefaultPrice = defaultPrice;}
 }
 [Serializable, NetSerializable]
