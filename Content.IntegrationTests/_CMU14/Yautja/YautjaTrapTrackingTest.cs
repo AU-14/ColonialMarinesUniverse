@@ -30,6 +30,8 @@ public sealed class YautjaTrapTrackingTest
             hunter = entities.SpawnEntity("CMUMobYautja", map.GridCoords);
             trap = entities.SpawnEntity("CMUYautjaHuntingTrap", map.GridCoords);
             prey = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            entities.EnsureComponent<TacticalMapTrackedComponent>(prey);
+            entities.EnsureComponent<MarineMapTrackedComponent>(prey);
         });
         await pair.RunTicksSync(2);
 
@@ -64,6 +66,13 @@ public sealed class YautjaTrapTrackingTest
             var tracking = entities.GetComponent<YautjaTrackedPreyComponent>(prey);
             var yautjaBlips = entities.GetComponent<TacticalMapComponent>(map.Grid).YautjaBlips;
             Assert.That(tracking.ExpiresAt - beforeTrigger, Is.EqualTo(TimeSpan.FromMinutes(5)).Within(TimeSpan.FromSeconds(1)));
+            Assert.That(yautjaBlips.ContainsKey(prey.Id), Is.True);
+            Assert.That(entities.GetComponent<VisibilityComponent>(trap).Layer,
+                Is.EqualTo((ushort) VisibilityFlags.Normal));
+
+            // Refreshing the prey's own faction marker must not erase the
+            // independent five-minute ping introduced by the current master.
+            entities.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>().RefreshTracked(prey);
             Assert.That(yautjaBlips.ContainsKey(prey.Id), Is.True);
         });
 

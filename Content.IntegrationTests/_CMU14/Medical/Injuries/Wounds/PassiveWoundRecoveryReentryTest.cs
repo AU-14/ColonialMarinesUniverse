@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Events;
 #pragma warning disable RA0002 // Inspect committed ledgers and model external component replacement at the public callback boundary.
 using System.Linq;
 using Content.IntegrationTests.CMU14.Medical.Anatomy.BodyParts;

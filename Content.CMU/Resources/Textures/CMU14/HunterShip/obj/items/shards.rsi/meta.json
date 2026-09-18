@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/shards.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "large"
+    },
+    {
+      "name": "medium"
+    },
+    {
+      "name": "small"
+    },
+    {
+      "name": "tiny"
+    },
+    {
+      "name": "shrapnel"
+    },
+    {
+      "name": "shrapnellarge"
+    },
+    {
+      "name": "shrapnelmedium"
+    },
+    {
+      "name": "shrapnelsmall"
+    },
+    {
+      "name": "bonechips"
+    },
+    {
+      "name": "humanbonechips"
+    },
+    {
+      "name": "alienbonechips"
+    },
+    {
+      "name": "legacy_bay"
+    },
+    {
+      "name": "phoron"
+    },
+    {
+      "name": "phoronlarge"
+    },
+    {
+      "name": "phoronmedium"
+    },
+    {
+      "name": "phoronsmall"
+    }
+  ]
+}

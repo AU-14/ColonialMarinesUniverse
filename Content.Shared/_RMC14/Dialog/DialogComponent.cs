@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Dialog;
 
@@ -29,6 +29,14 @@ public sealed partial class DialogComponent : Component
 
     [DataField, AutoNetworkedField]
     public object? ConfirmEvent;
+
+    [DataField]
+    public object? CancelEvent;
+
+    public bool SuppressCancelEvent;
+
+    [DataField]
+    public TimeSpan? CloseAt;
 
     [DataField, AutoNetworkedField]
     public int CharacterLimit = 200;

@@ -367,6 +367,7 @@
   - type: Tag
     tags:
     - Knife
+    - RMCStraightRazor
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Melee/straight_razor.rsi
     layers:

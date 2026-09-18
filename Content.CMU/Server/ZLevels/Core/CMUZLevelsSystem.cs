@@ -1,7 +1,10 @@
 using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.Station.Systems;
+using Content.Server.Shuttles.Components;
+using Content.Server.Shuttles.Systems;
 using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Station.Components;
 using Robust.Server.GameObjects;
@@ -19,6 +22,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private StationSystem _station = default!;
     [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private ShuttleSystem _shuttle = default!;
 
     public CMUZLevelOpeningCache OpeningCache => _zOpeningCache;
 
@@ -33,6 +37,23 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         InitializeSupportActivation();
 
         SubscribeLocalEvent<PostGameMapLoad>(OnGameMapLoad, after: [typeof(StationSystem)]);
+        SubscribeLocalEvent<CMUZLevelsNetworkComponent, EntityTerminatingEvent>(OnZNetworkTerminating);
+    }
+
+    private void OnZNetworkTerminating(Entity<CMUZLevelsNetworkComponent> ent, ref EntityTerminatingEvent args)
+    {
+        foreach (var mapUid in ent.Comp.ZLevels.Values)
+        {
+            if (mapUid is not { } map ||
+                TerminatingOrDeleted(map) ||
+                !TryComp(map, out CMUZLevelMapComponent? levelMap) ||
+                levelMap.NetworkUid != ent.Owner)
+            {
+                continue;
+            }
+
+            RemComp<CMUZLevelMapComponent>(map);
+        }
     }
 
     public override void Update(float frameTime)
@@ -119,6 +140,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
             if (mapDepth != 0)
                 _map.InitializeMap(Comp<MapComponent>(map).MapId);
         }
+        StabilizeZLevelDeckGrids(dict.Keys);
     }
 
     private void AddZLevelGridsToStations(
@@ -146,6 +168,27 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
             }
 
             _station.AddGridToStation(resolvedStation, grid);
+        }
+    }
+
+    private void StabilizeZLevelDeckGrids(IEnumerable<EntityUid> maps)
+    {
+        foreach (var mapUid in maps)
+        {
+            if (!TryComp<MapComponent>(mapUid, out var map))
+                continue;
+
+            var query = EntityQueryEnumerator<MapGridComponent, TransformComponent>();
+            while (query.MoveNext(out var gridUid, out _, out var gridXform))
+            {
+                if (gridXform.MapID != map.MapId)
+                    continue;
+
+                _shuttle.Disable(gridUid);
+
+                if (TryComp<ShuttleComponent>(gridUid, out var shuttle))
+                    shuttle.Enabled = false;
+            }
         }
     }
 

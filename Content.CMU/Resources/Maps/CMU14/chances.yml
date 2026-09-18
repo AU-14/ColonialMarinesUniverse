@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 08:50:22
-  entityCount: 24654
+  entityCount: 24656
 maps:
 - 1
 grids:
@@ -175429,4 +175429,17 @@ entities:
     - type: Transform
       pos: -2.5,-8.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 24656
+    components:
+    - type: MetaData
+      name: Chances Claim ground relay
+    - type: Transform
+      pos: 9.5,58.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: chances-claim.ground.relay
+      displayName: Chances Claim Ground Relay
 ...

@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.GasMask;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.BlurredVision;
@@ -96,6 +97,9 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
     private void OnProjectileHit(Entity<NeurotoxinInjectorComponent> ent, ref ProjectileHitEvent args)
     {
+        if (HasComp<YautjaComponent>(args.Target))
+            return;
+
         if (!HasComp<MarineComponent>(args.Target))
             return;
 
@@ -145,6 +149,9 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
             foreach (var marine in _marines)
             {
+                if (HasComp<YautjaComponent>(marine))
+                    continue;
+
                 if (!neuroGas.AffectsDead && _mobState.IsDead(marine))
                     continue;
 
@@ -239,6 +246,12 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
         while (neuroToxinQuery.MoveNext(out var uid, out var neuro))
         {
+            if (HasComp<YautjaComponent>(uid))
+            {
+                RemCompDeferred<NeurotoxinComponent>(uid);
+                continue;
+            }
+
             if (time < neuro.NextNeuroEffectAt)
                 continue;
 

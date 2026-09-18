@@ -27,6 +27,7 @@ public sealed class YautjaMarkWindow : DefaultWindow
     private readonly Button _markButton;
     private readonly Button _unmarkButton;
     private readonly Button _changeButton;
+    private readonly LineEdit _reason;
 
     public event Action<int, uint, YautjaMarkKind, string?>? OnMark;
     public event Action<int, uint, YautjaMarkKind>? OnUnmark;
@@ -181,6 +182,10 @@ public sealed class YautjaMarkWindow : DefaultWindow
 
         _markKindHelpLabel = YautjaBracerUiStyle.Label(string.Empty, YautjaBracerUiStyle.Dim, "LabelSubText");
         selectionBody.AddChild(_markKindHelpLabel);
+
+        _reason = new LineEdit { HorizontalExpand = true };
+        _reason.OnTextChanged += _ => RefreshActionButtons();
+        selectionBody.AddChild(_reason);
 
         _manageMarkControls = new BoxContainer
         {
@@ -443,14 +448,15 @@ public sealed class YautjaMarkWindow : DefaultWindow
     {
         var hasSelection = _selectedIndex is { } selected && selected >= 0 && selected < _entries.Count;
         var entry = hasSelection ? _entries[_selectedIndex!.Value] : null;
-        var hasOwnedMark = entry is { OwnedMarks.Count: > 0 };
+        var removable = GetRemovableMarks(entry);
+        var hasOwnedMark = removable.Count > 0;
         _oldKindOption.Clear();
         if (entry != null)
         {
-            foreach (var kind in entry.OwnedMarks)
+            foreach (var kind in removable)
                 _oldKindOption.AddItem(Loc.GetString(YautjaMarkSystem.GetMarkName(kind)), (int) kind);
-            if (entry.OwnedMarks.Count > 0)
-                _oldKindOption.SelectId((int) entry.OwnedMarks[0]);
+            if (removable.Count > 0)
+                _oldKindOption.SelectId((int) removable[0]);
         }
         _selectionLabel.Text = hasSelection
             ? Loc.GetString("cmu-yautja-mark-selection", ("target", entry!.Name))
@@ -467,6 +473,14 @@ public sealed class YautjaMarkWindow : DefaultWindow
         RefreshActionButtons();
     }
 
+    private static List<YautjaMarkKind> GetRemovableMarks(YautjaMarkPanelEntry? entry)
+    {
+        var result = entry == null ? new List<YautjaMarkKind>() : new List<YautjaMarkKind>(entry.OwnedMarks);
+        if (entry?.Marks.Contains(YautjaMarkKind.GearCarrier) == true && !result.Contains(YautjaMarkKind.GearCarrier))
+            result.Add(YautjaMarkKind.GearCarrier);
+        return result;
+    }
+
     private void RefreshActionButtons()
     {
         var hasSelection = _selectedIndex is { } selected && selected >= 0 && selected < _entries.Count;
@@ -474,12 +488,18 @@ public sealed class YautjaMarkWindow : DefaultWindow
         var hasOwnedMark = entry is { OwnedMarks.Count: > 0 };
         var desiredKind = (YautjaMarkKind) _markKindOption.SelectedId;
         var desiredAlreadyExists = entry?.Marks.Contains(desiredKind) == true;
+        var oldKindOwned = entry?.OwnedMarks.Contains((YautjaMarkKind) _oldKindOption.SelectedId) == true;
         var sameKind = hasOwnedMark && (YautjaMarkKind) _oldKindOption.SelectedId == desiredKind;
+        var requiresReason = desiredKind is YautjaMarkKind.Thrall or YautjaMarkKind.Blooded;
+        var reasonMissing = requiresReason && string.IsNullOrWhiteSpace(_reason.Text);
+        _reason.PlaceHolder = Loc.GetString(requiresReason
+            ? "cmu-yautja-mark-reason-required"
+            : "cmu-yautja-mark-reason-placeholder");
 
-        _markButton.Disabled = entry is not { Available: true } || desiredAlreadyExists;
-        _unmarkButton.Disabled = !hasOwnedMark || entry is not { Available: true };
-        _changeButton.Disabled = !hasOwnedMark || entry is not { Available: true } ||
-                                 desiredAlreadyExists || sameKind;
+        _markButton.Disabled = entry is not { Available: true } || desiredAlreadyExists || reasonMissing;
+        _unmarkButton.Disabled = GetRemovableMarks(entry).Count == 0 || entry is not { Available: true };
+        _changeButton.Disabled = !oldKindOwned || entry is not { Available: true } ||
+                                 desiredAlreadyExists || sameKind || reasonMissing;
     }
 
     private void RefreshMarkKindHelp()
@@ -512,11 +532,11 @@ public sealed class YautjaMarkWindow : DefaultWindow
         var kind = (YautjaMarkKind) _markKindOption.SelectedId;
         if (remove)
         {
-            if (entry.OwnedMarks.Count > 0)
+            if (GetRemovableMarks(entry).Count > 0)
                 OnUnmark?.Invoke(entry.RecordId, _revision, (YautjaMarkKind) _oldKindOption.SelectedId);
         }
         else
-            OnMark?.Invoke(entry.RecordId, _revision, kind, null);
+            OnMark?.Invoke(entry.RecordId, _revision, kind, _reason.Text);
     }
 
     private void SendChange()
@@ -526,7 +546,7 @@ public sealed class YautjaMarkWindow : DefaultWindow
             return;
         var entry = _entries[selected];
         OnChange?.Invoke(entry.RecordId, _revision, (YautjaMarkKind) _oldKindOption.SelectedId,
-            (YautjaMarkKind) _markKindOption.SelectedId, null);
+            (YautjaMarkKind) _markKindOption.SelectedId, _reason.Text);
     }
 
     private void AddMarkKind(YautjaMarkKind kind)

@@ -26,6 +26,7 @@ using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Nutrition.EntitySystems;
@@ -488,7 +489,12 @@ public sealed partial class IngestionSystem : EntitySystem
 
         var edible = ProtoMan.Index(entity.Comp.Edible);
 
-        _audio.PlayPredicted(entity.Comp.UseSound ?? edible.UseSound, args.Target, args.User);
+        // CMU14: the local eater still hears bites completed outside client prediction.
+        var sound = entity.Comp.UseSound ?? edible.UseSound;
+        if (_net.IsClient && !_timing.IsFirstTimePredicted)
+            _audio.PlayPvs(sound, args.Target);
+        else
+            _audio.PlayPredicted(sound, args.Target, args.User);
 
         var flavors = _flavorProfile.GetLocalizedFlavorsMessage(entity.Owner, args.Target, args.Split);
 

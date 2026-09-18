@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/effects/64x96-hunter_effects.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 119,
+    "y": 92
+  },
+  "states": [
+    {
+      "name": "big_red"
+    },
+    {
+      "name": "med_red_bottom",
+      "directions": 4
+    },
+    {
+      "name": "med_red_bottom_top",
+      "directions": 4
+    },
+    {
+      "name": "small_red",
+      "directions": 4
+    },
+    {
+      "name": "small_red_flipped",
+      "directions": 4
+    }
+  ]
+}

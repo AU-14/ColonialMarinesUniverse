@@ -73,7 +73,7 @@ public sealed partial class ChatSystem
         NetUserId? author = null,
         string? speechStyleClass = null)
     {
-        foreach (var (session, data) in GetRecipients(source, VoiceRange))
+        foreach (var (session, data) in GetRecipients(source, VoiceRange, channel == ChatChannel.Local ? ChatRecipientPurpose.Speech : ChatRecipientPurpose.NonSpeech))
         {
             if ((channel == ChatChannel.Local || channel == ChatChannel.Emotes) &&
                 !CanHearYautjaLocalSpeech(source, session, data))
@@ -229,6 +229,7 @@ public sealed partial class ChatSystem
     private Dictionary<ICommonSession, ICChatRecipientData> GetRecipients(
         EntityUid source,
         float voiceGetRange,
+        ChatRecipientPurpose purpose = ChatRecipientPurpose.NonSpeech,
         bool ignoreXenos = false)
     {
         var recipients = new Dictionary<ICommonSession, ICChatRecipientData>();
@@ -263,7 +264,7 @@ public sealed partial class ChatSystem
 
         RaiseLocalEvent(new ExpandICChatRecipientsEvent(source, voiceGetRange, recipients));
 
-        var ev = new ChatMessageAfterGetRecipients(recipients);
+        var ev = new ChatMessageAfterGetRecipients(recipients, purpose);
         RaiseLocalEvent(source, ref ev);
 
         if (ignoreXenos)

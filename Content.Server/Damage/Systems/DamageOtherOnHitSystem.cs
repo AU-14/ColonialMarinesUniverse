@@ -43,7 +43,7 @@ public sealed partial class DamageOtherOnHitSystem : SharedDamageOtherOnHitSyste
 
     private void OnDoHit(EntityUid uid, DamageOtherOnHitComponent component, ThrowDoHitEvent args)
     {
-        if (TerminatingOrDeleted(args.Target))
+        if (args.Handled || TerminatingOrDeleted(args.Target))
             return;
 
         if (TryComp<DamageOtherBlacklistComponent>(uid, out var blacklist) &&

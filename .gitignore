@@ -23,6 +23,8 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+# CMU14: imported Hunter Ship sprites are source assets, not build output.
+!Content.CMU/Resources/Textures/CMU14/HunterShip/obj/
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory

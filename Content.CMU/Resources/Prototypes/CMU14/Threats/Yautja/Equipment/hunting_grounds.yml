@@ -1,0 +1,88 @@
+- type: entity
+  parent: MarkerBase
+  id: CMUYautjaHuntDestinationBase
+  name: Yautja hunting ground destination
+  description: Invisible destination marker for Yautja hunting ground teleporters.
+  abstract: true
+  components:
+  - type: YautjaHuntTeleportDestination
+
+- type: entity
+  parent: CMUYautjaHuntDestinationBase
+  id: CMUYautjaHuntDestinationJungleMoon
+  name: Jungle Moon hunting ground destination
+  components:
+  - type: YautjaHuntTeleportDestination
+    kind: Ship
+    id: jungle_moon
+    displayName: Jungle Moon
+
+- type: entity
+  parent: CMUYautjaHuntDestinationBase
+  id: CMUYautjaHuntDestinationDesertMoon
+  name: Desert Moon hunting ground destination
+  components:
+  - type: YautjaHuntTeleportDestination
+    kind: Ship
+    id: desert_moon
+    displayName: Desert Moon
+
+- type: entity
+  parent: CMUYautjaHuntDestinationBase
+  id: CMUYautjaYoungbloodDestinationJungleMoon
+  name: Jungle Moon youngblood destination
+  components:
+  - type: YautjaHuntTeleportDestination
+    kind: Young
+    id: jungle_moon
+    displayName: Jungle Moon
+
+- type: entity
+  parent: CMUYautjaHuntDestinationBase
+  id: CMUYautjaYoungbloodDestinationDesertMoon
+  name: Desert Moon youngblood destination
+  components:
+  - type: YautjaHuntTeleportDestination
+    kind: Young
+    id: desert_moon
+    displayName: Desert Moon
+
+- type: entity
+  parent: MarkerBase
+  id: CMUYautjaGroundRelayDestination
+  name: Yautja ground relay destination
+  description: Invisible destination marker for Yautja relay beacons on a ground map.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: YautjaRelayDestination
+    kind: Ground
+
+- type: entity
+  parent: MarkerBase
+  id: CMUYautjaHumanShipRelayDestination
+  name: human ship Yautja relay destination
+  description: Invisible destination marker for Yautja relay beacons.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: YautjaRelayDestination
+    kind: HumanShip
+
+- type: entity
+  parent: MarkerBase
+  id: CMUYautjaHuntPreySpawn
+  name: Yautja hunt prey spawn
+  description: Invisible spawn marker for prey called to a Yautja hunting ground.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: YautjaHuntSpawnPoint
+    kind: Prey
+
+- type: entity
+  parent: MarkerBase
+  id: CMUYautjaYoungbloodSpawn
+  name: Yautja youngblood spawn
+  description: Invisible spawn marker for youngblood blooding calls.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: YautjaHuntSpawnPoint
+    kind: Youngblood

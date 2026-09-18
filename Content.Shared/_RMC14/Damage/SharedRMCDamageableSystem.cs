@@ -41,6 +41,8 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.GasMask;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.Smoke;
 using Content.Shared.Storage;
 using Robust.Shared.Containers;
 
@@ -205,18 +207,29 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
     private void OnMultiplierFlagsDamageModify(Entity<DamageMultiplierFlagsComponent> ent, ref DamageModifyEvent args)
     {
-        if (!_damageableQuery.HasComp(ent) ||
-            !TryComp(args.Tool, out DamageMultipliersComponent? multComponent))
-        {
+        if (!_damageableQuery.HasComp(ent))
             return;
+
+        if (TryComp(args.Tool, out DamageMultipliersComponent? multComponent))
+        {
+            foreach (var flag in multComponent.Multipliers.Keys)
+            {
+                if ((ent.Comp.Flags & flag) == DamageMultiplierFlag.None)
+                    continue;
+
+                args.Damage *= multComponent.Multipliers[flag];
+            }
         }
 
-        foreach (var flag in multComponent.Multipliers.Keys)
+        if (TryComp(args.Tool, out DamageBoostsComponent? boostComponent))
         {
-            if ((ent.Comp.Flags & flag) == DamageMultiplierFlag.None)
-                continue;
+            foreach (var boost in boostComponent.Boosts)
+            {
+                if ((ent.Comp.Flags & boost.Flags) == DamageMultiplierFlag.None)
+                    continue;
 
-            args.Damage *= multComponent.Multipliers[flag];
+                args.Damage += boost.Damage;
+            }
         }
     }
 
@@ -762,6 +775,13 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                     }
                     if (blocked)
                         continue;
+                }
+
+                if (HasComp<YautjaComponent>(user) &&
+                    HasComp<EvenSmokeComponent>(contact) &&
+                    _random.Prob(0.75f))
+                {
+                    continue;
                 }
 
                 if (damage.Damage != null)

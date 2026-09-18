@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/26/2026 17:51:19
-  entityCount: 24711
+  entityCount: 24716
 maps:
 - 1
 grids:
@@ -213478,4 +213478,17 @@ entities:
     - type: Transform
       pos: -148.5,-50.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000005
+    components:
+    - type: MetaData
+      name: Hybrisa Metropolitan ground relay
+    - type: Transform
+      pos: -204.5,-37.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: hybrisa-metropolitan.ground.relay
+      displayName: Hybrisa Metropolitan Ground Relay
 ...

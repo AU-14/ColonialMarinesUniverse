@@ -77,6 +77,11 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
                 SEntMan.EnsureComponent<YautjaComponent>(collideImmune);
                 SEntMan.EnsureComponent<YautjaComponent>(collidePlain);
 
+                // CMU14: Yautja startup removes stamina. Restore it on these synthetic
+                // targets so this test still exercises the tagged hit paths themselves.
+                foreach (var target in new[] { hitImmune, hitPlain, collideImmune, collidePlain })
+                    SEntMan.EnsureComponent<StaminaComponent>(target).Decay = 0;
+
                 RaiseMeleeHit(taserHit, hitImmune);
                 RaiseMeleeHit(taserHit, hitNormal);
                 RaiseMeleeHit(plainHit, hitPlain);

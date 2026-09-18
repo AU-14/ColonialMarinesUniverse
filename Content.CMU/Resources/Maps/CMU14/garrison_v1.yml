@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 01:48:23
-  entityCount: 49398
+  entityCount: 49376
 maps:
 - 1
 grids:
@@ -343001,4 +343001,17 @@ entities:
     - type: Transform
       pos: 236.5,-54.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 49405
+    components:
+    - type: MetaData
+      name: Stable Garrison ground relay
+    - type: Transform
+      pos: 25.5,-57.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: stable-garrison.ground.relay
+      displayName: Stable Garrison Ground Relay
 ...

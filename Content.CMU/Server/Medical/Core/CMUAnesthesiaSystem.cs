@@ -1,4 +1,6 @@
 using Content.Server.Body.Systems;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -51,6 +53,12 @@ public sealed partial class CMUAnesthesiaSystem : EntitySystem
 
     private void OnInternalsChanged(Entity<CMUHumanMedicalComponent> ent, ref CMUInternalsChangedEvent args)
     {
+        if (HasComp<YautjaComponent>(ent))
+        {
+            ClearAnesthesia(ent);
+            return;
+        }
+
         // Shutdown exposes the old Internals component until its callback returns.
         if (!args.Working)
         {

@@ -12,11 +12,13 @@ using Content.Client.Lobby.UI;
 using Content.Client.Message;
 using Content.Client.Playtime;
 using Content.Client.Stylesheets;
+using Content.Client.Players.PlayTimeTracking;
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Client.Voting;
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
+using Content.Shared.Roles;
 using Robust.Client;
 using Robust.Client.Console;
 using Robust.Client.ResourceManagement;
@@ -26,6 +28,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Lobby
 {
@@ -44,6 +47,7 @@ namespace Content.Client.Lobby
         // RMC14
         [Dependency] private LinkAccountManager _linkAccount = default!;
         [Dependency] private IClientPreferencesManager _preferencesManager = default!;
+        [Dependency] private JobRequirementsManager _jobRequirements = default!;
 
         /// <summary>
         /// Whether the player wants to ignore allegiance for spawning the current character.
@@ -109,6 +113,7 @@ namespace Content.Client.Lobby
             _gameTicker.InfoBlobUpdated += UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated += LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated += LobbyLateJoinStatusUpdated;
+            _jobRequirements.Updated += JobRequirementsUpdated;
 
             // RMC14/CMU: the faction choices used to be three buttons on the lobby panel. They now
             // live in JoinRoundWindow, opened from one button; the handlers below are unchanged.
@@ -119,6 +124,9 @@ namespace Content.Client.Lobby
                 _uiSetupWindow = new CmuUiSetupWindow();
                 _uiSetupWindow.OpenCentered();
             }
+
+
+            UpdateLobbyUi();
         }
 
         protected override void Shutdown()
@@ -128,6 +136,7 @@ namespace Content.Client.Lobby
             _gameTicker.InfoBlobUpdated -= UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated -= LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated -= LobbyLateJoinStatusUpdated;
+            _jobRequirements.Updated -= JobRequirementsUpdated;
             _contentAudioSystem.LobbySoundtrackChanged -= UpdateLobbySoundtrackInfo;
 
             _voteManager.ClearPopupContainer();
@@ -429,6 +438,7 @@ namespace Content.Client.Lobby
                 // into a join button.
                 Lobby!.ReadyButton.Visible = false;
                 Lobby!.JoinRoundButton.Visible = true;
+                if (_joinRoundWindow != null) _joinRoundWindow.SetHuntVisible(HasYautjaWhitelist());
             }
             else
             {
@@ -445,6 +455,7 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.Visible = true;
                 Lobby!.JoinRoundButton.Visible = false;
                 _joinRoundWindow?.Close();
+
             }
 
             if (_gameTicker.ServerInfoBlob != null)
@@ -550,6 +561,8 @@ namespace Content.Client.Lobby
             window.JoinColonistsButton.OnPressed += args2 => { window.Close(); OnReadyPressed(args2); };
             window.JoinGovforButton.OnPressed += args2 => { window.Close(); OnJoinGovforPressed(args2); };
             window.JoinOpforButton.OnPressed += args2 => { window.Close(); OnJoinOpforPressed(args2); };
+            window.SetHuntVisible(HasYautjaWhitelist());
+            window.JoinHuntButton.OnPressed += args2 => { window.Close(); OnJoinHuntPressed(args2); };
             window.JoinOtherButton.OnPressed += args2 => { window.Close(); OnJoinOtherPressed(args2); };
             window.OnClose += () =>
             {
@@ -574,6 +587,24 @@ namespace Content.Client.Lobby
         {
              // Open the ghost roles UI (server-driven) to display all ghost roles
              _consoleHost.RemoteExecuteCommand(null, "ghostroles");
+        }
+
+        private void OnJoinHuntPressed(BaseButton.ButtonEventArgs args)
+        {
+            new LateJoinGui("hunt").OpenCentered();
+        }
+
+        private void JobRequirementsUpdated()
+        {
+            UpdateLobbyUi();
+        }
+
+        private bool HasYautjaWhitelist()
+        {
+            if (!_protoMan.TryIndex<JobPrototype>("CMUYautjaHunter", out var hunter))
+                return false;
+
+            return _jobRequirements.CheckWhitelist(hunter, out _);
         }
 
         private void OnPrevCharPressed(BaseButton.ButtonEventArgs args)

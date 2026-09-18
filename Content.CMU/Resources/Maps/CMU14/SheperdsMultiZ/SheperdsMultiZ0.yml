@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/31/2026 09:55:14
-  entityCount: 43500
+  entityCount: 43505
 maps:
 - 1
 grids:
@@ -316627,3 +316627,16 @@ entities:
       rot: 4.71238898038469 rad
       pos: -31.5,-35.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 43363
+    components:
+    - type: MetaData
+      name: Shepherds Pride ground relay
+    - type: Transform
+      pos: 2.5,60.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: shepherds.ground.relay
+      displayName: Shepherds' Pride Ground Relay

@@ -70,7 +70,7 @@ public abstract partial class SharedLiverSystem : EntitySystem
 
     private void OnLiverRemovedFromBody(Entity<LiverComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (_net.IsClient)
+        if (Timing.ApplyingState || _net.IsClient)
             return;
 
         AdvanceOrgan(ent, args.OldBody, Timing.CurTime);
@@ -90,7 +90,7 @@ public abstract partial class SharedLiverSystem : EntitySystem
 
     private void OnLiverAddedToBody(Entity<LiverComponent> ent, ref OrganAddedToBodyEvent args)
     {
-        if (_net.IsClient || PhysiologyUnavailable(args.Body))
+        if (Timing.ApplyingState || _net.IsClient || PhysiologyUnavailable(args.Body))
             return;
 
         if (TryComp<MissingLiverComponent>(args.Body, out var missing))

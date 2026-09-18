@@ -238,6 +238,9 @@ public abstract partial class SharedStaminaSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnThrowHit(EntityUid uid, StaminaDamageOnCollideComponent component, ThrowDoHitEvent args)
     {
+        if (args.Handled)
+            return;
+
         OnCollide(uid, component, args.Target);
     }
 

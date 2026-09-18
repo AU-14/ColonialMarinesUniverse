@@ -280,7 +280,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         EntityUid? origin = null,
         DamageImpact impact = default,
         TargetBodyZone? targetZone = null,
-        MobState? stateAtImpact = null)
+        MobState? stateAtImpact = null,
+        bool ignoreResistance = false)
     {
         if (!_medicalEnabled || !_bodyPartEnabled)
             return false;
@@ -295,7 +296,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (scale != 1f)
             localizable *= scale;
 
-        return TryApplyPartDamageToPart(body, partUid, localizable, origin, tool, mechanism, impact, targetZone, stateAtImpact);
+        return TryApplyPartDamageToPart(body, partUid, localizable, origin, tool, mechanism, impact, targetZone, stateAtImpact, ignoreResistance);
     }
 
     private bool TryApplyPartDamageToPart(
@@ -307,13 +308,14 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         CMUTraumaMechanism? mechanism,
         DamageImpact impact,
         TargetBodyZone? targetZone,
-        MobState? stateAtImpact)
+        MobState? stateAtImpact,
+        bool ignoreResistance)
     {
         if (!TryComp<BodyPartHealthComponent>(partUid, out var health) ||
             !TryComp<BodyPartComponent>(partUid, out var partComp) || partComp.Body != body)
             return false;
 
-        var modified = ApplyResistance(damage, health.Resistance);
+        var modified = ignoreResistance ? damage : ApplyResistance(damage, health.Resistance);
         var total = (float)modified.GetTotal();
         if (total <= 0)
             return false;

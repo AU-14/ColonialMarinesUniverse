@@ -50,6 +50,12 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
     {
         var user = args.Actor;
 
+        if (!ent.Comp.CanSpawnGhostParasite)
+        {
+            _ui.CloseUi(ent.Owner, XenoParasiteGhostUI.Key);
+            return;
+        }
+
         if (!SharedChecks(ent, user))
             return;
 

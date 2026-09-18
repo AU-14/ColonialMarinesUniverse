@@ -75,7 +75,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
 
     private void OnLungsRemovedFromBody(Entity<LungsComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (_net.IsClient)
+        if (Timing.ApplyingState || _net.IsClient)
             return;
 
         if (!_medicalEnabled || !_organEnabled)

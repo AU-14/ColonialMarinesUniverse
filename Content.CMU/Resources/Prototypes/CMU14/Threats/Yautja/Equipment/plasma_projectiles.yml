@@ -1,7 +1,7 @@
 - type: entity
   parent: MuzzleFlashEffect
   id: CMUYautjaPlasmaMuzzleFlash
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: Sprite
     drawdepth: BelowMobs
@@ -20,7 +20,7 @@
 
 - type: entity
   id: CMUYautjaPlasmaImpactEffect
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: TimedDespawn
     lifetime: 0.55
@@ -48,7 +48,7 @@
 
 - type: entity
   id: CMUYautjaPlasmaHeavyImpactEffect
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: TimedDespawn
     lifetime: 0.75
@@ -76,7 +76,7 @@
 
 - type: entity
   id: CMUYautjaPlasmaEradicatorImpactEffect
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: TimedDespawn
     lifetime: 1.15
@@ -104,7 +104,7 @@
 
 - type: entity
   id: CMUYautjaPlasmaSmallShockWave
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: TimedDespawn
     lifetime: 0.45
@@ -115,7 +115,7 @@
 
 - type: entity
   id: CMUYautjaPlasmaHeavyShockWave
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: TimedDespawn
     lifetime: 0.6
@@ -126,7 +126,7 @@
 
 - type: entity
   id: CMUYautjaPlasmaEradicatorShockWave
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: TimedDespawn
     lifetime: 0.8
@@ -139,7 +139,7 @@
   parent: BaseBullet
   id: CMUYautjaPlasmaBoltBase
   abstract: true
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: YautjaTechItem
     blockPickup: false
@@ -189,65 +189,33 @@
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaPlasmaPistolBolt
   name: plasma pistol bolt
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: Projectile
     impactEffect: CMUYautjaPlasmaImpactEffect
     damage:
       types:
-        Heat: 18
-  - type: TriggerOnCollide
-    fixtureID: projectile
-  - type: ExplodeOnTrigger
-  - type: Explosive
-    explosionType: RMC
-    maxIntensity: 8
-    intensitySlope: 5
-    totalIntensity: 24
-    maxTileBreak: 0
-  - type: CMExplosionEffect
-    explosion: CMUYautjaPlasmaImpactEffect
-    shockWave: CMUYautjaPlasmaSmallShockWave
-    minShrapnel: 0
-    maxShrapnel: 0
-  - type: RMCScorchEffect
-    count: 1
-    scatterRadius: 0.5
-    radius: 0
+        Heat: 40
+  - type: ProjectileMaxRange
+    max: 22
 
 - type: entity
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaPlasmaRifleBolt
   name: plasma rifle bolt
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: Projectile
     impactEffect: CMUYautjaPlasmaHeavyImpactEffect
     damage:
       types:
-        Heat: 32
-        Structural: 8
-  - type: IgniteOnCollide
-    fireStacks: 0.35
-  - type: TriggerOnCollide
-    fixtureID: projectile
-  - type: ExplodeOnTrigger
-  - type: Explosive
-    explosionType: RMC
-    maxIntensity: 18
-    intensitySlope: 6
-    totalIntensity: 70
-    maxTileBreak: 1
-  - type: CMExplosionEffect
-    explosion: CMUYautjaPlasmaHeavyImpactEffect
-    shockWave: CMUYautjaPlasmaHeavyShockWave
-    minShrapnel: 3
-    maxShrapnel: 6
-    shrapnelSpeed: 5
-  - type: RMCScorchEffect
-    count: 2
-    scatterRadius: 1
-    radius: 1
+        Heat: 55
+  - type: CMArmorPiercing
+    amount: 50
+  - type: ProjectileMaxRange
+    max: 22
+  - type: YautjaIncendiaryPlasmaProjectile
+  - type: YautjaPlasmaRifleBolt
   - type: PointLight
     color: "#55c7ff"
     radius: 4.25
@@ -257,37 +225,27 @@
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterStunBolt
   name: stun bolt
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
-  - type: StaminaDamageOnCollide
-    damage: 105
-  - type: StunOnCollide
-    stunAmount: 3
-    knockdownAmount: 3
+  - type: YautjaCasterStunProjectile
   - type: Projectile
     impactEffect: CMUYautjaPlasmaImpactEffect
     damage:
       types:
         Heat: 0
+  - type: ProjectileMaxRange
+    max: 22
 
 - type: entity
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterImmobilizerBolt
   name: plasma immobilizer
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: Sprite
     layers:
     - state: bluespace
       shader: unshaded
-  - type: StaminaDamageOnCollide
-    damage: 142.5
-  - type: StunOnCollide
-    stunAmount: 4
-    knockdownAmount: 4
-    slowdownAmount: 3
-    walkSpeedModifier: 0.45
-    sprintSpeedModifier: 0.45
   - type: Projectile
     impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
     damage:
@@ -298,11 +256,14 @@
     radius: 3
     energy: 1.5
 
+  - type: YautjaCasterImmobilizerProjectile
+  - type: ProjectileMaxRange
+    max: 20
 - type: entity
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterLethalBolt
   name: plasma bolt
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: Sprite
     layers:
@@ -312,16 +273,18 @@
     impactEffect: CMUYautjaPlasmaHeavyImpactEffect
     damage:
       types:
-        Heat: 38
-        Structural: 12
+        Heat: 75
+  - type: ProjectileMaxRange
+    max: 22
+  - type: YautjaCasterSingleLethalProjectile
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: RMC
-    maxIntensity: 30
+    maxIntensity: 50
     intensitySlope: 6
-    totalIntensity: 120
+    totalIntensity: 50
     maxTileBreak: 2
   - type: CMExplosionEffect
     explosion: CMUYautjaPlasmaHeavyImpactEffect
@@ -363,7 +326,7 @@
   parent: CMUYautjaCasterLethalBolt
   id: CMUYautjaBadBloodCasterLethalBolt
   name: unstable plasma bolt
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: Projectile
     impactEffect: CMUYautjaPlasmaHeavyImpactEffect
@@ -392,7 +355,7 @@
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterEradicatorBolt
   name: plasma eradicator
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
   components:
   - type: Sprite
     layers:
@@ -402,16 +365,18 @@
     impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
     damage:
       types:
-        Heat: 70
-        Structural: 24
+        Heat: 55
+  - type: ProjectileMaxRange
+    max: 8
+  - type: YautjaCasterEradicatorProjectile
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: RMC
-    maxIntensity: 60
+    maxIntensity: 50
     intensitySlope: 6
-    totalIntensity: 320
+    totalIntensity: 170
     maxTileBreak: 2
   - type: CMExplosionEffect
     explosion: CMUYautjaPlasmaEradicatorImpactEffect
@@ -428,3 +393,20 @@
     color: "#2da4ff"
     radius: 6.5
     energy: 4.2
+- type: entity
+  parent: CMUYautjaPlasmaPistolBolt
+  id: CMUYautjaPlasmaPistolIncendiaryBolt
+  name: incendiary plasma pistol bolt
+  categories: [HideSpawnMenu]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 10
+  - type: YautjaIncendiaryPlasmaProjectile
+
+- type: entity
+  parent: CMUYautjaCasterLethalBolt
+  id: CMUYautjaCasterLanceBolt
+  name: plasma lance bolt
+  categories: [HideSpawnMenu]

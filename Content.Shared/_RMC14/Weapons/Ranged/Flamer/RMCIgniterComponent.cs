@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Audio;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Weapons.Ranged.Flamer;
@@ -15,6 +15,12 @@ public sealed partial class RMCIgniterComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundPathSpecifier? Sound = new("/Audio/_RMC14/Weapons/Handling/flamer_ignition.ogg");
+
+    [DataField, AutoNetworkedField]
+    public SoundPathSpecifier? IgniteSound;
+
+    [DataField, AutoNetworkedField]
+    public SoundPathSpecifier? ExtinguishSound;
 
     [DataField, AutoNetworkedField]
     public LocId Popup = "rmc-flamer-ignite-first";
