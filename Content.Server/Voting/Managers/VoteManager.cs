@@ -220,7 +220,7 @@ namespace Content.Server.Voting.Managers
                 var optionCarryoverVotes = GetCarryoverVotes(carryoverKey, optionKey);
                 optionKeys[i] = optionKey;
                 carryoverVotes[i] = optionCarryoverVotes;
-                entries[i] = new VoteEntry(option.data, GetCarryoverOptionText(option.text, optionCarryoverVotes, optionCarryoverVotes / 2)); // CMU14
+                entries[i] = new VoteEntry(option.data, GetCarryoverOptionText(option.text, optionCarryoverVotes / 2)); // CMU14
             }
 
             var start = _timing.RealTime;
@@ -472,10 +472,9 @@ namespace Content.Server.Voting.Managers
             return options.CarryoverKey ?? options.Title;
         }
 
-        // CMU14: show the halved effective value and the raw banked carryover, e.g. "Option [+12(25)]"
-        private static string GetCarryoverOptionText(string text, int carryoverVotes, int effectiveVotes)
-            // return carryoverVotes > 0 ? $"{text} [+{effectiveVotes}]" : text; // [+12]
-            => carryoverVotes > 0 ? $"{text} [+{effectiveVotes}({carryoverVotes})]" : text; // [+12(25)]
+        // CMU14: show only the carryover that contributes to this ballot.
+        private static string GetCarryoverOptionText(string text, int effectiveVotes)
+            => effectiveVotes > 0 ? $"{text} [+{effectiveVotes}]" : text;
 
         private int GetCarryoverVotes(string? carryoverKey, string optionKey)
         {
