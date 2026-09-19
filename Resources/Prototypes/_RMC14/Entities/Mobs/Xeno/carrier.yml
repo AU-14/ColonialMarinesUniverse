@@ -174,9 +174,6 @@
     - ActionXenoDevolve
   - type: XenoParasiteThrower
   - type: XenoEvolution
-    max: 500
-    evolvesTo:
-    - CMXenoReaper
     strains:
     - RMCXenoCarrierEggsac
   - type: RMCActionOrder

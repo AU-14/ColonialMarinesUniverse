@@ -10,6 +10,7 @@
     commandElement: true
   - type: NpcFactionMember
     factions:
+    - AUColonist
     - CLF
   - type: CLFMember
     statusIcon: CLFFactionLeader

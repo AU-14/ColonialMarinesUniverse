@@ -106,6 +106,7 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORMilitaryDoctor
 
 - type: startingGear
   id: AU14GearOPFORMilitaryDoctor

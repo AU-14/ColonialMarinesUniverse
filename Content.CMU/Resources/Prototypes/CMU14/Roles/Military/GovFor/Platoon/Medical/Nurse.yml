@@ -139,6 +139,7 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORNurse
 
 - type: startingGear
   id: AU14GearOPFORNurse

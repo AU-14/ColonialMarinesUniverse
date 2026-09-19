@@ -1142,6 +1142,27 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 records.Take(Math.Max(0, recentRounds)).ToList());
         }
 
+        // CMU14 method: flat playtime rows for the cmuleaderboard panel
+        public async Task<List<CMUPlaytimeLeaderboardRow>> GetCMUPlaytimeLeaderboardRows(
+            IReadOnlyCollection<string> trackers,
+            CancellationToken cancel = default)
+        {
+            await using var db = await GetDb();
+
+            var rows = await db.DbContext.PlayTime
+                .AsNoTracking()
+                .Where(time => trackers.Contains(time.Tracker))
+                .Join(db.DbContext.Player,
+                    time => time.PlayerId,
+                    player => player.UserId,
+                    (time, player) => new { time.Tracker, time.TimeSpent, player.UserId, player.LastSeenUserName })
+                .ToListAsync(cancel);
+
+            return rows
+                .Select(row => new CMUPlaytimeLeaderboardRow(row.UserId, row.Tracker, row.LastSeenUserName, row.TimeSpent.TotalHours))
+                .ToList();
+        }
+
         private CMURoundOutcomeRecord MakeCMURoundOutcomeRecord(CMURoundOutcome outcome)
         {
             var preset = Enum.TryParse(outcome.PresetId, out CMURoundStatisticsPreset parsedPreset)

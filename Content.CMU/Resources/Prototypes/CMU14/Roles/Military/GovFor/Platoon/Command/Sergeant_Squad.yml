@@ -158,6 +158,7 @@
   dummyStartingGear: AU14GearOpforSquadSergeantDummy
   accessGroups:
   - AU14OpforFTL
+  useLoadoutOfJob: AU14JobGOVFORSquadSergeant
 
 - type: startingGear
   id: AU14GearOpforSquadSergeant

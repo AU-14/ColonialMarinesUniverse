@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created for CMU14 by ak105intow. AGPL-3.0-only.",
+  "size": {
+    "x": 128,
+    "y": 128
+  },
+  "states": [
+      {
+          "name": "kudzu_11"
+      },
+      {
+          "name": "kudzu_21"
+      },
+      {
+          "name": "kudzu_31"
+      }
+  ]
+}

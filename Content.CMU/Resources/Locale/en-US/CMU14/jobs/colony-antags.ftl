@@ -7,6 +7,9 @@ cmu-antag-arsonist-name = Arsonist
 cmu-antag-arsonist-objective = Watch it all burn.
 cmu-antag-arsonist-greeting = The colony took everything from you. Now you will take everything from the colony. You have a flamethrower and a grudge. Light it up, but don't get caught with the torch.
 
+reagent-name-cmu-phoron-fuel = Phoron Fuel Mix
+reagent-desc-cmu-phoron-fuel = A stabilized phoron slurry for incinerator units. Burns long, spreads on its own, and shrugs off extinguishers.
+
 cmu-antag-bounty-hunter-name = Bounty Hunter
 cmu-antag-bounty-hunter-objective = Track down the colony's wanted and collect the bounties.
 cmu-antag-bounty-hunter-greeting = You hunt people for a living, and this colony is crawling with bounties. You will be briefed with the current wanted list shortly. Bring them in alive when you can, dead when you must, and don't ask too many questions.

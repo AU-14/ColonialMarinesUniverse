@@ -1,0 +1,12 @@
+# Used by CMUWideAirtightSystem to fix the leaks on multi-tile entities (doors).
+# Engine airtightness only covers the anchored tile.
+- type: entity
+  id: CMUAirtightSeal
+  name: airtight seal
+  description: A structural membrane sealing the hull. It should never be visible.
+  suffix: CMU
+  components:
+  - type: Transform
+  - type: Airtight
+    fixVacuum: true
+    noAirWhenFullyAirBlocked: false

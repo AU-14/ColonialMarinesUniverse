@@ -142,6 +142,7 @@
   accessGroups:
   - AU14OpforSecurity
   - aulegacygroupmilp
+  useLoadoutOfJob: AU14JobGOVFORMilitaryPoliceMan
 
 - type: startingGear
   id: AU14GearOPFORMilitaryPoliceMan

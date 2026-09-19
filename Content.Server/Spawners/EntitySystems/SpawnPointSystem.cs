@@ -3,10 +3,14 @@ using Content.Server.GameTicking;
 using Content.Server.CMU14.Roles;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.Map; // CMU14
+using Content.Shared.Maps; // CMU14
 using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.CMU14;
 using Content.Shared.Roles;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components; // CMU14
+using Robust.Shared.Maths; // CMU14
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -21,6 +25,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
     [Dependency] private StationSystem _stationSystem = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!; // CMU14
 
     public override void Initialize()
     {
@@ -205,7 +210,14 @@ public sealed partial class SpawnPointSystem : EntitySystem
             else
             {
                 Log.Error($"No spawn points were available!\nRunLevel: {_gameTicker.RunLevel} Station: {ToPrettyString(args.Station)} Job: {args.Job}");
-                return;
+
+                // CMU14: a map with no spawn points at all must not lock valid roles out of the
+                // round. Fall back to the first unblocked tile near the largest grid's middle.
+                // return; // CMU14
+                if (!TryGetFallbackSpawn(args.Station, out var fallback))
+                    return;
+
+                possiblePositions.Add(fallback);
             }
         }
 
@@ -215,6 +227,46 @@ public sealed partial class SpawnPointSystem : EntitySystem
 
         args.SpawnResult = _stationSpawning.SpawnPlayerMob(
             spawnLoc, args.Job, args.HumanoidCharacterProfile, args.Station);
+    }
+
+    // CMU14 method: last ditch spawn for stations with no spawn points. Walks outward from
+    // the middle of the largest grid's bounding box to the first tile nothing blocks.
+    private bool TryGetFallbackSpawn(EntityUid? station, out EntityCoordinates coords)
+    {
+        coords = default;
+
+        if (station is not { } stationUid
+            || _stationSystem.GetLargestGrid(stationUid) is not { } gridUid
+            || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
+
+        var aabb = grid.LocalAABB;
+        var center = new Vector2i((int) ((aabb.Left + aabb.Right) / 2f), (int) ((aabb.Bottom + aabb.Top) / 2f));
+        var reach = (int) MathF.Max(aabb.Width, aabb.Height) / 2 + 1;
+
+        for (var radius = 0; radius <= reach; radius++)
+        {
+            for (var dx = -radius; dx <= radius; dx++)
+            {
+                for (var dy = -radius; dy <= radius; dy++)
+                {
+                    if (Math.Max(Math.Abs(dx), Math.Abs(dy)) != radius)
+                        continue;
+
+                    var tile = new EntityCoordinates(gridUid, center + new Vector2i(dx, dy));
+                    // CMU14: IsTileBlocked ignores empty space, the ring can walk off the hull
+                    if (_rmcMap.TryGetTileDef(tile, out var def)
+                        && def.ID != ContentTileDefinition.SpaceID
+                        && !_rmcMap.IsTileBlocked(tile))
+                    {
+                        coords = tile;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     private bool IsOnShip(

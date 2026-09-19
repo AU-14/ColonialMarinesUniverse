@@ -99,6 +99,8 @@
     key: walls
   - type: Occluder
   - type: Airtight
+  - type: RadiationBlocker # CMU14
+    resistance: 5
   - type: Fixtures
     fixtures:
       fix1:

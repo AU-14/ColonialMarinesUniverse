@@ -156362,7 +156362,7 @@ entities:
     - type: Transform
       pos: 255.7445,-155.43619
       parent: 1
-- proto: GasPipeStraightAlt2
+- proto: CMUGasPipeStraightAlt2
   entities:
   - uid: 12961
     components:
@@ -156378,7 +156378,7 @@ entities:
     - type: Transform
       pos: 113.5,-4.5
       parent: 1
-- proto: GasThermoMachineFreezer
+- proto: CMUGasThermoMachineFreezer
   entities:
   - uid: 12963
     components:
@@ -162690,7 +162690,7 @@ entities:
       fuel: 5
       lit: True
     - type: AlwaysHot
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 14575
     components:
@@ -169951,7 +169951,7 @@ entities:
       parent: 16290
     - type: Physics
       canCollide: False
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 16280
     components:
@@ -430969,4 +430969,242 @@ entities:
       containers:
         rmc_xeno_tunnel_mob_container: !type:Container
           ents: []
+- proto: AU14SpawnPointGOVFORAdjutant
+  entities:
+  - uid: 84969
+    components:
+    - type: Transform
+      pos: 62.5,10.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORPlatCo
+  entities:
+  - uid: 84970
+    components:
+    - type: Transform
+      pos: 62.5,10.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORadvisor
+  entities:
+  - uid: 84971
+    components:
+    - type: Transform
+      pos: 68.5,4.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORAuxSupportSynth
+  entities:
+  - uid: 84972
+    components:
+    - type: Transform
+      pos: 54.5,3.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORAuxTech
+  entities:
+  - uid: 84973
+    components:
+    - type: Transform
+      pos: 99.5,-1.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORDCC
+  entities:
+  - uid: 84974
+    components:
+    - type: Transform
+      pos: 43.5,-2.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORDSPilot
+  entities:
+  - uid: 84975
+    components:
+    - type: Transform
+      pos: 43.5,-1.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORMilitaryDoctor
+  entities:
+  - uid: 84976
+    components:
+    - type: Transform
+      pos: 16.5,-18.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORMilitaryPoliceMan
+  entities:
+  - uid: 84977
+    components:
+    - type: Transform
+      pos: 45.5,18.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORPlatoonCorpsman
+  entities:
+  - uid: 84978
+    components:
+    - type: Transform
+      pos: 26.5,-24.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORPlatOp
+  entities:
+  - uid: 84979
+    components:
+    - type: Transform
+      pos: 64.5,1.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORRadioTelephoneOperator
+  entities:
+  - uid: 84980
+    components:
+    - type: Transform
+      pos: 26.5,-16.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORSectionSergeant
+  entities:
+  - uid: 84981
+    components:
+    - type: Transform
+      pos: 24.5,-18.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORSquadAutomaticRifleman
+  entities:
+  - uid: 84982
+    components:
+    - type: Transform
+      pos: 26.5,-28.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORSquadCombatTech
+  entities:
+  - uid: 84983
+    components:
+    - type: Transform
+      pos: 26.5,-20.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORSquadRifleman
+  entities:
+  - uid: 84984
+    components:
+    - type: Transform
+      pos: 116.5,-28.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORSquadSergeant
+  entities:
+  - uid: 84985
+    components:
+    - type: Transform
+      pos: 24.5,-16.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORCombatCorrespondent
+  entities:
+  - uid: 84986
+    components:
+    - type: Transform
+      pos: 62.5,10.5
+      parent: 1
+- proto: AU14SpawnPointGOVFOREngineeringTech
+  entities:
+  - uid: 84987
+    components:
+    - type: Transform
+      pos: 43.5,-2.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORNurse
+  entities:
+  - uid: 84988
+    components:
+    - type: Transform
+      pos: 16.5,-18.5
+      parent: 1
+- proto: AU14SpawnPointGOVFOROfficerEngi
+  entities:
+  - uid: 84989
+    components:
+    - type: Transform
+      pos: 43.5,-2.5
+      parent: 1
+- proto: AU14SpawnPointGOVFOROfficerIntel
+  entities:
+  - uid: 84990
+    components:
+    - type: Transform
+      pos: 65.5,1.5
+      parent: 1
+- proto: AU14SpawnPointGOVFOROfficerLogistics
+  entities:
+  - uid: 84991
+    components:
+    - type: Transform
+      pos: 97.5,0.5
+      parent: 1
+- proto: AU14SpawnPointGOVFOROfficerMP
+  entities:
+  - uid: 84992
+    components:
+    - type: Transform
+      pos: 45.5,18.5
+      parent: 1
+- proto: AU14SpawnPointGOVFOROfficerMedical
+  entities:
+  - uid: 84993
+    components:
+    - type: Transform
+      pos: 16.5,-18.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORRadioTrafficOperator
+  entities:
+  - uid: 84994
+    components:
+    - type: Transform
+      pos: 26.5,-16.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORVehicleCommander
+  entities:
+  - uid: 84995
+    components:
+    - type: Transform
+      pos: 114.5,-28.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORVehicleCrewman
+  entities:
+  - uid: 84996
+    components:
+    - type: Transform
+      pos: 114.5,-28.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORWeaponsSpecialist
+  entities:
+  - uid: 84997
+    components:
+    - type: Transform
+      pos: 44.5,-30.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORWorkingJoe
+  entities:
+  - uid: 84998
+    components:
+    - type: Transform
+      pos: 68.5,4.5
+      parent: 1
+- proto: CMUSpawnPointGOVFORAdjutantDress
+  entities:
+  - uid: 84999
+    components:
+    - type: Transform
+      pos: 62.5,10.5
+      parent: 1
+- proto: CMUSpawnPointGOVFORBrigadierGeneral
+  entities:
+  - uid: 85000
+    components:
+    - type: Transform
+      pos: 62.5,10.5
+      parent: 1
+- proto: CMUSpawnPointGOVFORDroneOperator
+  entities:
+  - uid: 85001
+    components:
+    - type: Transform
+      pos: 43.5,-1.5
+      parent: 1
+- proto: CMUSpawnPointGOVFORVipEscort
+  entities:
+  - uid: 85002
+    components:
+    - type: Transform
+      pos: 68.5,4.5
+      parent: 1
 ...

@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Ladder;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
 using Content.Shared.Coordinates;
@@ -33,6 +34,7 @@ namespace Content.Shared._RMC14.Construction;
 public sealed partial class RMCConstructionSystem : EntitySystem
 {
     [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private FixtureSystem _fixture = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private TurfSystem _turf = default!;
@@ -90,7 +92,8 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         var query = EntityQueryEnumerator<RMCReplaceOnHijackLandComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (!TryComp(uid, out TransformComponent? xform) || xform.MapUid != ev.Map)
+            if (!TryComp(uid, out TransformComponent? xform)
+                || !_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             if (comp.Id is not { } id)

@@ -194,6 +194,7 @@ entities:
     - type: MetaData
       name: Mapping USS George Bush
     - type: Transform
+    - type: Warship
     - type: MapGrid
       chunks:
         -1,-1:

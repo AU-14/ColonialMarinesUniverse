@@ -7,6 +7,7 @@
   roundComponents:
   - type: NpcFactionMember
     factions:
+    - AUColonist
     - CLF
   - type: CLFMember
     statusIcon: CLFFactionMedic

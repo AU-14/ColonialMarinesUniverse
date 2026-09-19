@@ -53,6 +53,6 @@
 - type: startingGear
   id: CMUGearArsonist
   equipment:
-    suitstorage: RMCWeaponFlamerColony
-    pocket1: RMCTankFlamerColony
-    pocket2: RMCTankFlamerColony
+    suitstorage: CMUWeaponArsonistFlamer
+    pocket1: CMUTankFlamerPhoron
+    pocket2: CMUTankFlamerPhoron

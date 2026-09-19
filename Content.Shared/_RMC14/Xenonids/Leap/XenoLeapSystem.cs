@@ -35,6 +35,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Physics; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Pulling.Events;
 using Content.Shared.Standing;
@@ -219,6 +220,20 @@ public sealed partial class XenoLeapSystem : EntitySystem
         var length = direction.Length();
         var distance = Math.Clamp(length, 0.1f, xeno.Comp.Range.Float());
         direction *= distance / length;
+
+        // CMU14: dashes must not cross barricade lines; the flight only stops on a
+        // direct fixture hit, so check the path up front. Barbed wire keeps its block.
+        var ray = new CollisionRay(origin.Position, direction.Normalized(), (int) CollisionGroup.BarricadeImpassable);
+        foreach (var result in _physics.IntersectRayWithPredicate(origin.MapId, ray, distance, e => !Transform(e).Anchored))
+        {
+            if (TryComp(result.HitEntity, out RMCLeapProtectionComponent? protection) &&
+                AttemptBlockLeap(result.HitEntity, protection.StunDuration, protection.BlockSound, xeno, _transform.GetMoverCoordinates(xeno), protection.FullProtection))
+                return;
+
+            _popup.PopupClient(Loc.GetString("cmu-xeno-dash-blocked"), xeno, xeno);
+            return;
+        }
+
         var impulse = direction.Normalized() * xeno.Comp.Strength * physics.Mass;
 
         leaping.Origin = _transform.GetMoverCoordinates(xeno);
@@ -668,6 +683,19 @@ public sealed partial class XenoLeapSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
+
+        // CMU14: a deleted leap target leaves LastHit dangling, which spams PVS resolve errors.
+        var leapers = EntityQueryEnumerator<XenoLeapComponent>();
+        while (leapers.MoveNext(out var uid, out var leap))
+        {
+            if (leap.LastHit is { } last && TerminatingOrDeleted(last))
+            {
+                leap.LastHit = null;
+                leap.LastHitAt = null;
+                Dirty(uid, leap);
+            }
+        }
+
         var leaping = EntityQueryEnumerator<XenoLeapingComponent>();
         while (leaping.MoveNext(out var uid, out var comp))
         {

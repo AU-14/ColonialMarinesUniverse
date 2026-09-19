@@ -67297,7 +67297,7 @@ entities:
     - type: Transform
       pos: -62.5,-172.5
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 320104
     components:

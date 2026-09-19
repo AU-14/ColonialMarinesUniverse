@@ -150,12 +150,15 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
         if (HasComp<RMCPowerReceiverComponent>(ent))
             return;
 
-        // Wired into a vanilla APC net, leave it to PowerNetSystem.
-        if (HasComp<ExtensionCableReceiverComponent>(ent))
-            return;
+        // CMU14: wired devices are adopted too; on a map without an APC net they never
+        // powered at all, so the old early return only left them dark.
+        //if (HasComp<ExtensionCableReceiverComponent>(ent))
+        //    return;
 
         var receiver = EnsureComp<RMCPowerReceiverComponent>(ent);
         receiver.Channel = RMCPowerChannel.Environment;
+        // CMU14: ActiveLoad is a MapInit snapshot; later vanilla Load changes
+        // (PowerChargeSystem, GasThermoMachineSystem) do not resync it
         receiver.ActiveLoad = (int) ent.Comp.Load;
         // RMC owns the draw now; a nonzero vanilla Load would still be demanded from the APC net
         // and overload vanilla maps (TestApcLoad).
@@ -295,6 +298,8 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
             return;
 
         _nextUpdate = _timing.CurTime + _updateEvery;
+
+        UpdateCMUGenerators(); // CMU14: gate dual-mode generator grid supply on reactor state
 
         _toRemove.Clear();
         foreach (var (map, apcs) in _apcs)

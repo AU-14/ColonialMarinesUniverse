@@ -22,6 +22,24 @@
     Plastic: 100
     Glass: 100
 
+- type: latheRecipe # CMU14
+  parent: BasePartRecipe
+  id: CMUIgniter
+  result: Igniter
+  materials:
+    CMSteel: 300
+    RMCPlastic: 100
+    CMGlass: 100
+
+- type: latheRecipe # CMU14
+  parent: BasePartRecipe
+  id: RMCGeigerCounter
+  result: RMCGeigerCounter
+  materials:
+    CMSteel: 300
+    RMCPlastic: 100
+    CMGlass: 150
+
 - type: latheRecipe
   parent: BaseWeaponRecipe
   id: ChemicalPayload

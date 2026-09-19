@@ -11,6 +11,7 @@ using Content.Shared.CMU14.Fishing.Components;
 using Content.Shared.CMU14.Fishing.Systems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Physics;
 using Robust.Server.GameObjects;
@@ -31,6 +32,7 @@ public sealed partial class FishingSystem : SharedFishingSystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     public override void Initialize()
     {
@@ -57,6 +59,9 @@ public sealed partial class FishingSystem : SharedFishingSystem
         if (!FishSpotQuery.TryComp(attachedEnt, out var spotComp))
         {
             if (args.OtherBody.BodyType == BodyType.Static)
+                return;
+
+            if (_mobState.IsAlive(attachedEnt))
                 return;
 
             Anchor(ent, attachedEnt);

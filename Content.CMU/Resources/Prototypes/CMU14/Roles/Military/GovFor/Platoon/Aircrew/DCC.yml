@@ -181,6 +181,7 @@
   - AU14OpforPilot
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORDCC
 
 - type: startingGear
   id: AU14GearopforDCC

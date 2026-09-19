@@ -26,3 +26,4 @@ cmu-warp-location-mycelium-cluster = mycelium cluster
 cmu-warp-location-plasma-node = plasma node
 cmu-warp-location-mycelium-pylon = mycelium pylon
 cmu-warp-location-sporecaster = sporecaster
+cmu-warp-location-hotspot = the hotspot

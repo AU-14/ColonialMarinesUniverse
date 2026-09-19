@@ -1,0 +1,6 @@
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideRoleRider
+  name: cmu-guide-entry-antag-rider
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Roles/Rider.xml"

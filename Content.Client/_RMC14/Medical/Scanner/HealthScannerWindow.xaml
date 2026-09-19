@@ -98,7 +98,9 @@
                                 <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
                                     <Label Name="CMUBigTempValue" Access="Public"
                                            Text="--" StyleClasses="LabelHeading" />
-                                    <Label Text="{Loc cmu-medical-scanner-stat-temp}" Modulate="#7CA5B3" />
+                                    <!-- CMU14: unit label set from client temperature preference -->
+                                    <Label Name="CMUBigTempLabel" Access="Public"
+                                           Text="{Loc cmu-medical-scanner-stat-temp}" Modulate="#7CA5B3" />
                                 </BoxContainer>
                                 <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                                     <Label Name="CMUBigShockRiskValue" Access="Public"

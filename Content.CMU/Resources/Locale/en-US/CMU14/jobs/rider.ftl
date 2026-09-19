@@ -2,7 +2,7 @@ ent-CMURiderHatchling = writhing parasite
     .desc = A small, writhing thing that moves far too deliberately for an animal.
 
 ghost-role-information-rider-name = the writhing parasite
-ghost-role-information-rider-description = A catalogued-impossible Weyland-Yutani hatchling. Slip inside an unconscious or willing host, whisper from the dark, and never be seen. Bullets bounce off the hide; fire is the only thing that kills it quickly.
+ghost-role-information-rider-description = A catalogued-impossible Weyland-Yutani hatchling. Slip inside a sleeping, willing or dead host, whisper from the dark, and never be seen. Bullets bounce off the hide; fire is the only thing that kills it quickly.
 ghost-role-information-rider-rules = You are a solo antagonist. Hide, ride, and scheme. You may kill to survive or to serve a scheme, not for revenge.
 
 roles-antag-rider-role-name = The Rider
@@ -21,11 +21,8 @@ rider-role-greeting = You are the thing that got out. Small. Old. Clever.
 
 rider-latch-invalid = Your hooks find no purchase. Not this one.
 rider-latch-riding = You already have a host.
-rider-latch-awake = That one is awake. They must let you in themselves.
 rider-latch-start = You coil, ready to leap...
 rider-latch-failed = They shifted. You missed.
-
-rider-verb-accept = Let it in
 
 rider-host-latched = Something is inside you. It whispers. Doctors could cut it out. Or you can listen.
 rider-host-latched-wrap = *"Something is inside you. It whispers. Doctors could cut it out. Or you can listen."*
@@ -35,9 +32,15 @@ rider-grip-low = Your grip is too weak for that.
 
 rider-whisper-wrap = Something whispers: { $text }
 rider-whisper-echo = You whisper to your host: { $text }
+rider-whisper-ghost = {"["}color=#3cb371][font size=14][bold]Rider Whisper ({$rider} -> {$host}):[/bold] "{$message}"[/font][/color]
 rider-speak-blocked = Their throat will not answer.
 
 rider-punish-host = Something burns behind your eyes!
+
+rider-mute-cast = You clamp your host's throat shut.
+rider-mute-host = Your throat seizes. No sound comes out.
+rider-mute-blocked = Your throat refuses to make a sound.
+rider-mute-end = The clamp inside your throat lets go.
 
 rider-seize-host = Your body moves on its own. You watch from somewhere behind your own eyes.
 rider-seize-end-host = Control floods back. Your hands are yours again - for now.
@@ -62,6 +65,22 @@ rider-admin-inspect = Rider: {$rider}
     Total ride time: {$minutes} min
 
 rider-vent-examine = A small shape slips into the vent and is gone.
+
+rider-squeeze-through = You flatten yourself and pour through the gap.
+
+rider-offer-sent = You press close and put the question to them.
+rider-offer-pending = You have already asked. They are thinking.
+rider-offer-title = Something asks
+rider-offer-message = Something small and cold presses against you, wanting in. It whispers of what it can offer. Let it inside?
+rider-offer-accept = Let it in
+rider-offer-refuse = Refuse
+rider-offer-refused = They refused you.
+rider-offer-far = They are no longer within your reach.
+
+rider-ghost-host-name = Stirring corpse
+rider-ghost-host-description = A dead body that has stopped being dead. Something coiled inside it wants a driver.
+rider-ghost-host-rules = You are the host, not the thing inside it. It whispers, hurts, and bargains. Resist, bargain, or cooperate as your character would.
+rider-ghost-host-takeover = Cold. You remember dying, and then a second heartbeat that is not yours. Something is in your skull.
 
 cmu-summary-detail-rider-riding = Rode {$hosts} host(s) for {$minutes} minutes and was still riding someone at round end.
 cmu-summary-detail-rider-free = Rode {$hosts} host(s) for {$minutes} minutes and ended the round hostless.
@@ -112,3 +131,6 @@ ent-CMURiderManifest = flickering parasite
 rider-locator-title = Rider locator
 rider-locator-follow = Jump to rider
 rider-locator-free = free-roaming
+rider-grip-feel = Something inside you coils tighter.
+rider-mask-slip = Your hold falters. A wet click rolls off their tongue mid-word.
+rider-offer-lapsed = The moment to let it in has passed.

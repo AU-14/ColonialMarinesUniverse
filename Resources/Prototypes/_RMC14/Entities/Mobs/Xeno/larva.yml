@@ -103,13 +103,17 @@
     - RMCSynthGrabbable
   - type: RMCBuckleOffset
     offset: 0, 0
-  - type: XenoRankNames
+  - type: XenoRankNames # CMU14
     rankNames:
       0: rmc-xeno-young-larva
       2: rmc-xeno-mature-larva
       3: rmc-xeno-elder-larva
-      4: rmc-xeno-elder-larva
-      5: rmc-xeno-elder-larva
+      4: rmc-xeno-ancient-larva
+      5: rmc-xeno-prime-larva
+      6: rmc-xeno-apex-larva
+      7: rmc-xeno-royal-larva
+      8: rmc-xeno-nemesis
+      9: rmc-xeno-nemesis
   - type: FixedIdentity
     name: cmu-job-name-xeno-unknown
   - type: VentCrawler

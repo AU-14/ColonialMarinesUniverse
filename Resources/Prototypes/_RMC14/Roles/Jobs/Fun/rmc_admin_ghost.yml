@@ -28,10 +28,12 @@
     - MeleeDebug200
     - MeleeDebugGibInsane # CMU14
     - CMUDebugLightningStick # CMU14
-    - ToolDebug
+#   - ToolDebug # CMU14
+    - AU14MaintenanceJackSpecialAdmin # CMU14
     - AU14TabletGovfor #CMU14
     - AU14TabletOpfor # CMU14
     - RMCWelderAdmin
     - CMMultitool
     - CMTRayScanner # CMU14
     - CMUAtmosScanner # CMU14
+    - HolofanProjectorDebug # CMU14

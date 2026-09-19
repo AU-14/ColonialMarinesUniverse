@@ -296175,7 +296175,7 @@ entities:
     - type: Transform
       pos: -40.5,60.5
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 45454
     components:

@@ -1,4 +1,4 @@
-﻿rmc-xeno-name-number = {$baseName} ({$prefix}-{$number}{$postfix})
+rmc-xeno-name-number = {$baseName} ({$prefix}-{$number}{$postfix})
 rmc-xeno-name-leader = Leader
 
 rmc-xeno-name = {$baseName} ({$prefix}{$postfix})
@@ -9,16 +9,25 @@ rmc-xeno-ancient = Ancient {$baseName}
 rmc-xeno-prime = Prime {$baseName}
 rmc-xeno-apex = Apex {$baseName}
 rmc-xeno-royal = Royal {$baseName}
+rmc-xeno-nemesis = Nemesis {$baseName}
+
+# Queen's 8/9 tier
+rmc-xeno-empress = Empress {$baseName}
 
 rmc-xeno-mature-parasite = Fledgling {$baseName}
 rmc-xeno-elder-parasite = Veteran {$baseName}
 rmc-xeno-ancient-parasite = Baneful {$baseName}
-rmc-xeno-prime-parasite = Merciless {$baseName}
+rmc-xeno-prime-parasite = Virulent {$baseName}
+rmc-xeno-apex-parasite = Ruinous {$baseName}
+rmc-xeno-royal-parasite = Cataclysmic {$baseName}
 
 # Only 1 because getting king multiple times will be rare
-rmc-xeno-mature-king = Ruthless {$baseName}
+rmc-xeno-mature-king = Merciless {$baseName}
 
-# Only 3 because it's a larva
 rmc-xeno-young-larva = Little {$baseName}
 rmc-xeno-mature-larva = Mature {$baseName}
 rmc-xeno-elder-larva = Big {$baseName}
+rmc-xeno-ancient-larva = Mega {$baseName}
+rmc-xeno-prime-larva = Colossal {$baseName}
+rmc-xeno-apex-larva = Titan {$baseName}
+rmc-xeno-royal-larva = Cosmic {$baseName}

@@ -12,3 +12,17 @@
     duration: 15
   - type: RMCIgniteOnCollide
     intensity: 25
+
+# Tile fire spawned by the atmos tritium fire (TritiumFireReaction). Burning
+# tritium is radioactive: intensity 9 reads Extreme adjacent, Low by ~10 tiles
+# and dies out past that, so the geiger tracks the visible fire.
+- type: entity
+  parent: RMCTileFireGreen
+  id: CMUTileFireTritium
+  components:
+  - type: TileFire
+    id: CMUTileFireTritium
+    duration: 15
+  - type: RadiationSource
+    intensity: 9
+    slope: 0.75

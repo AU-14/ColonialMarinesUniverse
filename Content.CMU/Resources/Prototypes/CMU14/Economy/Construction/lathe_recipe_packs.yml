@@ -11,6 +11,8 @@
   - DoorElectronics
   - AlertsComputerCircuitboard
   - AtmosMonitoringComputerCircuitboard
+  - CMUIgniter
+  - RMCGeigerCounter
 
 - type: latheRecipePack
   id: AU14ArmylatheRecipes

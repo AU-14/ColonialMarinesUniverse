@@ -827,7 +827,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var xform = Transform(dropship);
         var worldPosition = _transform.GetWorldPosition(dropship) + rotation.RotateVec(offset);
         if (xform.MapUid is { } map &&
-            TryProjectToGroundEffectMap(map, mapOffset, worldPosition, out coords))
+            _zLevels.TryProjectToGroundEffectMap(map, mapOffset, worldPosition, out coords))
         {
             return true;
         }
@@ -837,50 +837,6 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
 
         coords = new MapCoordinates(worldPosition, xform.MapID);
         return true;
-    }
-
-    private bool TryProjectToGroundEffectMap(
-        Entity<CMUZLevelMapComponent?> sourceMap,
-        int startOffset,
-        Vector2 worldPosition,
-        out MapCoordinates coords)
-    {
-        coords = default;
-
-        if (startOffset >= 0)
-            startOffset = -1;
-
-        MapComponent? lowestMap = null;
-
-        for (var offset = startOffset;
-             _zLevels.TryMapOffset(sourceMap, offset, out var projectedMap, out var projectedMapComp);
-             offset--)
-        {
-            lowestMap = projectedMapComp;
-
-            if (!HasSolidProjectionTile(projectedMap.Value.Owner, worldPosition))
-                continue;
-
-            coords = new MapCoordinates(worldPosition, projectedMapComp.MapId);
-            return true;
-        }
-
-        if (lowestMap == null)
-            return false;
-
-        coords = new MapCoordinates(worldPosition, lowestMap.MapId);
-        return true;
-    }
-
-    private bool HasSolidProjectionTile(EntityUid mapUid, Vector2 worldPosition)
-    {
-        if (!TryComp(mapUid, out MapGridComponent? grid) ||
-            !_map.TryGetTileRef(mapUid, grid, worldPosition, out var tileRef))
-        {
-            return false;
-        }
-
-        return !CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, _tile);
     }
 
     private void CleanupHoverEffects(Entity<DropshipTacticalHoverComponent> hover)

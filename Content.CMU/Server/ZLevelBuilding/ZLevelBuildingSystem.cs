@@ -733,8 +733,12 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                 string? wallProto = null;
                 foreach (var anchored in _map.GetAnchoredEntities(sourceGridUid, sourceGrid, sourceTile))
                 {
+                    // Anchored entities can be deleted mid-shutdown; MetaData throws on those.
+                    if (!TryComp<MetaDataComponent>(anchored, out var anchoredMeta))
+                        continue;
+
                     // Admin-editable border set (Z-Sync Lists tool) - see TryGetBorderWallAbove.
-                    if (MetaData(anchored).EntityPrototype is { } proto && _borderSync.ShouldReflect(proto.ID))
+                    if (anchoredMeta.EntityPrototype is { } proto && _borderSync.ShouldReflect(proto.ID))
                     {
                         wallProto = proto.ID;
                         break;

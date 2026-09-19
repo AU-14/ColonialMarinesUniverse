@@ -3,6 +3,7 @@ using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Doors;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -107,7 +108,7 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
         _adminLog.Add(LogType.RMCAlertLevel, $"{ToPrettyString(user)} set alert level to {level}");
 
         var almayers = new HashSet<EntityUid>();
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent>(); // CMU14
         while (almayerQuery.MoveNext(out var uid, out _))
         {
             almayers.Add(uid);

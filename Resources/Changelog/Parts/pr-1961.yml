@@ -1,0 +1,8 @@
+author: ArturUr1
+category: CMU
+changes:
+- message: Methamphetamine has been nerfed. Speed multiplier reduced from 1.4 to 1.2.
+    Poison damage increased.
+  type: Tweak
+time: '2026-09-16T02:36:45.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1961

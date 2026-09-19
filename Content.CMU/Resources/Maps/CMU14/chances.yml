@@ -84403,7 +84403,7 @@ entities:
     - type: Transform
       pos: 15.549503,75.45019
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 7583
     components:

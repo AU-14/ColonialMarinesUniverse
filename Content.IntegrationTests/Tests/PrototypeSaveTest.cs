@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Components;
+using Content.Shared.CMU14.Language;
 using Content.Shared.Coordinates;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
@@ -120,6 +121,14 @@ public sealed class PrototypeSaveTest : GameTest
                         compNames.Add(compName);
 
                         if (compType == typeof(MetaDataComponent) || compType == typeof(TransformComponent) || compType == typeof(FixturesComponent))
+                            continue;
+
+                        if (compName == "Language" && entityMan.HasComponent<AllLanguagesComponent>(uid)) // CMU14
+                            continue;
+
+                        // CMU14: subfloor and anchor systems add these at spawn.
+                        if (prototype.ID == "CMUExhaustVent"
+                            && (compName == "Visibility" || compName == "CollideOnAnchor"))
                             continue;
 
                         MappingDataNode compMapping;

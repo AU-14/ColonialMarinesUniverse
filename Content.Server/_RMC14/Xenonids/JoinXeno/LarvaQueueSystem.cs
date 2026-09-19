@@ -178,6 +178,10 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return;
 
         CancelPendingClaim(ev.Player.UserId, timedOut: false);
+
+        if (IsQueueRetainedRole(ev.Entity)) // CMU14
+            return;
+
         RemoveFromAllQueues(ev.Player.UserId);
     }
 
@@ -435,6 +439,17 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         return false;
     }
 
+    private bool IsQueueRetainedRole(EntityUid entity) // CMU14
+    {
+        if (HasComp<XenoParasiteComponent>(entity))
+            return true;
+
+        if (TryComp(entity, out XenoComponent? xeno))
+            return xeno.Role == LesserDroneRole;
+
+        return false;
+    }
+
     private void OpenPendingClaim(
         NetUserId userId,
         ICommonSession session,
@@ -500,7 +515,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
 
         if (!_player.TryGetSessionById(ev.UserId, out var session) ||
             session.AttachedEntity is not { } attached ||
-            !_ghostQuery.HasComp(attached))
+            !_ghostQuery.HasComp(attached) && !IsQueueRetainedRole(attached)) // CMU14
         {
             TryClaimNextForHive(pending.Hive);
             return;
@@ -690,7 +705,8 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         if (!_player.TryGetSessionById(userId, out session!))
             return false;
 
-        if (session.AttachedEntity is { } attached && _ghostQuery.HasComp(attached))
+        if (session.AttachedEntity is { } attached &&
+            (_ghostQuery.HasComp(attached) || IsQueueRetainedRole(attached))) // CMU14
             return true;
 
         RemoveFromAllQueues(userId);

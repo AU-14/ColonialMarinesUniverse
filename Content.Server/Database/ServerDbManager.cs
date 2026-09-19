@@ -236,6 +236,11 @@ namespace Content.Server.Database
             int recentRounds,
             CancellationToken cancel = default);
 
+        // CMU14 method
+        Task<List<CMUPlaytimeLeaderboardRow>> GetCMUPlaytimeLeaderboardRows(
+            IReadOnlyCollection<string> trackers,
+            CancellationToken cancel = default);
+
         #endregion
 
         #region Admin Logs
@@ -886,6 +891,15 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetCMURoundStatisticsDashboard(recentRounds, cancel));
+        }
+
+        // CMU14 method
+        public Task<List<CMUPlaytimeLeaderboardRow>> GetCMUPlaytimeLeaderboardRows(
+            IReadOnlyCollection<string> trackers,
+            CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetCMUPlaytimeLeaderboardRows(trackers, cancel));
         }
 
         public Task UpdateAdminRankAsync(AdminRank rank, CancellationToken cancel = default)

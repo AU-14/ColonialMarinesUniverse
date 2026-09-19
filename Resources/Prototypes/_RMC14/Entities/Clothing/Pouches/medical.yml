@@ -88,8 +88,8 @@
     - id: CMEmergencyAutoInjector
       amount: 2
     - id: CMFireExtinguisherPortable
-    - id: Stimpack
-      amount: 3
+    - id: Stimpack # CMU14
+      amount: 2
 
 - type: entity
   parent: RMCPouchMedicalSocDutch

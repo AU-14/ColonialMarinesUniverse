@@ -942,7 +942,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
             CMURoundStatisticsOutcome.XenoMinorHijackLoss => "Xeno minor - hijack loss / xenowipe",
             CMURoundStatisticsOutcome.MarineMinorHiveCollapse => "Marine minor - hive collapse",
             CMURoundStatisticsOutcome.MarineMajorXenoWipe => "Marine major - pre-hijack xeno wipe",
-            CMURoundStatisticsOutcome.DrawAlmayerAutodestruct => "Draw - Almayer autodestruct",
+            CMURoundStatisticsOutcome.DrawAlmayerAutodestruct => "Draw - Warship selfdestruct",
             CMURoundStatisticsOutcome.InsurgencyClfVictory => "CLF victory",
             CMURoundStatisticsOutcome.InsurgencyGovforVictory => "Govfor victory",
             CMURoundStatisticsOutcome.ColonyFallThreatVictory => "Threat victory",

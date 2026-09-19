@@ -104,6 +104,8 @@
   - aulegacygroupcommand
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFOROfficerLogistics
+
 - type: startingGear
   id: AU14GearGOVFOROfficerLogistics
   equipment:

@@ -164,7 +164,7 @@
   parent: RMCCrateScience
   id: CMUCrateRadsuit
   name: radiation suit crate
-  description: A crate that contains a standard radiation suit.
+  description: A crate that contains a "Salamander" RS-2 radiation suit and its RH-2 hood. Rated for fire and radiation, though only with the hood worn.
   components:
   - type: StorageFill
     contents:
@@ -172,6 +172,17 @@
       amount: 1
     - id: RMCHeadRadiationHood
       amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEVA
+  name: EVA suit crate
+  description: A crate that contains two pressure suits with their helmets. For work on the wrong side of a hull breach, or under it.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUSuitEVA
+      amount: 2
 
 - type: entity
   parent: RMCCrateScience
@@ -329,7 +340,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMUPortableGeneratorDragon
+    - id: CMUGeneratorPortableDragon
       amount: 1
     - id: CMSheetPhoron
       amount: 1

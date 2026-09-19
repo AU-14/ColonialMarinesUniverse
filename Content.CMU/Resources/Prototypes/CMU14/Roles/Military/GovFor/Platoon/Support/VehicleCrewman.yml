@@ -80,8 +80,8 @@
   dummyStartingGear: AU14GearOPFORVehicleCrewmanDummy
   accessGroups:
   - AU14OpforVehicleCrew
+  useLoadoutOfJob: AU14JobGOVFORVehicleCrewman
 
-# ├──[ Starting Gear ]───────────────────────────────────────────────┤
 - type: startingGear
   id: AU14GearGOVFORVehicleCrewman
   equipment:

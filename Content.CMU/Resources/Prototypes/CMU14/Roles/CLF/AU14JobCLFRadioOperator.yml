@@ -9,6 +9,7 @@
     suffix: ROMEO
   - type: NpcFactionMember
     factions:
+    - AUColonist
     - CLF
   - type: CLFMember
   - type: ANPRCRadioUser

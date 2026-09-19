@@ -36,7 +36,7 @@
       - cost: 350
         crate: RMCCrateReplacementLights
       - cost: 350
-        crate: CMUPortableGeneratorDragon
+        crate: CMUGeneratorPortableDragon
       - cost: 350
         crate: RMCCratePacmanParts
       - cost: 375

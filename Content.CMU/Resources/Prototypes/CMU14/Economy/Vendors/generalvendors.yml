@@ -501,5 +501,6 @@
   - type: AccessReader
     access:
     - [ "AU14AccessGovforSquadWeaponsSpecialist" ]
+    - [ "AU14AccessOpforSquadWeaponsSpecialist" ]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/specialist_gear.rsi

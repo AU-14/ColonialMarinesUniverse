@@ -63753,7 +63753,7 @@ entities:
       anchored: False
       pos: -3.5,173.5
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 328215
     components:

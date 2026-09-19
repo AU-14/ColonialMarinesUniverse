@@ -229,12 +229,12 @@
       persists: false
       effect: !type:PlantChangeTraits
         trait: PlantTraitLigneous
-    # CMU14: no kudzu-spreading plant mutation
-    # - name: Kudzufication
-    #   baseOdds: 0.036
-    #   persists: false
-    #   effect: !type:PlantChangeTraits
-    #     trait: PlantTraitKudzu
+    # CMU14: kudzu trait spawns flesh kudzu
+    - name: Kudzufication
+      baseOdds: 0.036
+      persists: false
+      effect: !type:PlantChangeTraits
+        trait: PlantTraitKudzu
     # CMU14: gag mutation, wrong tone
     # - name: ChangeScreaming
     #   baseOdds: 0.036

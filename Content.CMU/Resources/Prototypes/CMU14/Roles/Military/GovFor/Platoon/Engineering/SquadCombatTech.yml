@@ -146,6 +146,7 @@
   dummyStartingGear: AU14GearOPFORCTDummy
   accessGroups:
   - AU14OpforEngineer
+  useLoadoutOfJob: AU14JobGOVFORSquadCombatTech
 
 - type: startingGear
   id: AU14GearOPFORSquadCombatTech

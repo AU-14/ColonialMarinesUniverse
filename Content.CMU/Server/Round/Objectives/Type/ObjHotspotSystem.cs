@@ -29,7 +29,8 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
         if (TryComp(uid, out TransformComponent? xform))
         {
             var halfHeight = comp.HalfHeight == 0 ? comp.HalfWidth : comp.HalfHeight;
-            _tacMap.DrawTacticalMapRectangle(Color.FromHex(comp.ZoneColorHex), _transform.GetWorldPosition(xform), comp.HalfWidth, halfHeight);
+            var center = _transform.GetGridOrMapTilePosition(uid, xform);
+            _tacMap.DrawTacticalMapRectangle(Color.FromHex(comp.ZoneColorHex), center, comp.HalfWidth, halfHeight);
         }
     }
 
@@ -132,12 +133,17 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
 
         if (comp.FeedWinPoints)
             ObjCtrl.AwardRawPointsToFaction(controller, points);
-        ObjCtrl.AddHotspotPoints(controller, points);
 
         comp.TicksScored++;
         comp.TicksPerFaction.TryAdd(controller, 0);
         comp.TicksPerFaction[controller]++;
         Dirty(uid, comp);
+
+        if (comp.TicksToWin > 0 && comp.TicksPerFaction[controller] >= comp.TicksToWin)
+        {
+            ObjCtrl.CompleteObjectiveForFaction(uid, objComp, controller);
+            return;
+        }
 
         if (comp.RelocateAfterTicks > 0 && comp.TicksScored >= comp.RelocateAfterTicks)
             Relocate(uid, comp, xform);
@@ -214,7 +220,7 @@ public sealed partial class ObjHotspotSystem : ObjectiveSystem
         comp.CurrentController = string.Empty;
         comp.TicksScored = 0;
         Dirty(uid, comp);
-        _tacMap.DrawTacticalMapRectangle(Color.FromHex(comp.ZoneColorHex), _transform.GetWorldPosition(uid), comp.HalfWidth, halfHeight);
+        _tacMap.DrawTacticalMapRectangle(Color.FromHex(comp.ZoneColorHex), _transform.GetGridOrMapTilePosition(uid), comp.HalfWidth, halfHeight);
         _logs.Info($"[OBJ-HOTSPOT] Relocated '{ToPrettyString(uid)}' to marker {ToPrettyString(target)}.");
     }
 }

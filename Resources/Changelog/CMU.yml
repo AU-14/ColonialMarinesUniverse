@@ -9897,5 +9897,93 @@
   id: 652
   time: '2026-09-17T04:20:43.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1968
+- author: deepdarkdepths
+  changes:
+  - message: Made Reaper into a free T2 caste that evolves from Drone, with stat changes
+      to go along with it.
+    type: Tweak
+  id: 653
+  time: '2026-09-18T21:00:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1964
+- author: ArturUr1
+  changes:
+  - message: The loadout system for synthetic special items has been changed. They
+      no longer require customization points, and you can all be beautiful. However,
+      the maximum number of special items has been set to 2.
+    type: Tweak
+  - message: The surgery skill for third-generation synthetics is 4 again.
+    type: Fix
+  id: 654
+  time: '2026-09-18T21:01:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1960
+- author: deepdarkdepths
+  changes:
+  - message: You no longer lose your position in queue when becoming a lesser drone/facehugger.
+    type: Tweak
+  id: 655
+  time: '2026-09-19T06:04:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1973
+- author: maertayn
+  changes:
+  - message: Debug holofan (infinite charge, permanent projection)
+    type: Admin
+  - message: Airtight seal applies to multi-tile doors, before only the anchored (1-tile)
+      would stop airflow - which lead to dropship/Bush spacing for double/triple tile
+      doors - spawns a CMUAirtightSeal prototype on the offsets
+    type: Fix
+  - message: Rider guidebook entry (WIP) to provide some more clarity for the colony
+      antag, buffed some values, psychic whisper, offer hosts to let you in (willing
+      hosts provide better stats and the surge-stim ability), corpse resurrection
+      + ghost raffle, can mute hosts from speaking, actions work while in mind's eye
+      and fixes, can squeeze through welded doors/podlocks, hide under tables/objects,
+      on low-grip can slip The Hum language through the host's speech, emote/menu
+      fixes, can understand and speak all languages for scheming, resist toggle/drain
+    type: Add
+  - message: Sentries skip unshootable clutter/indestructible objects marked as hostile
+      by IFF/factions
+    type: Fix
+  - message: '`cmuleaderboard` shell command, shows the top 3 players per role and
+      your playtime standing'
+    type: Add
+  - message: dual-mode power generators and planet blackout arcs
+    type: Add
+  - message: 'planet atmos overhaul: day/night cycle temperatures, sky relaxation
+      (returns to immutable MapAtmosphereComponent normal) and exhaust vents'
+    type: Add
+  - message: Radioactive tritium fires, with rebalanced burn ratios and rads blocking
+      walls/fans, geiger counters, igniter, signaller, salamander rad&fire resistant
+      suit + EVA suit in ASRS
+    type: Add
+  - message: arsonist phoron flamer with fire spread
+    type: Add
+  - message: Force-On-Force loadout (e.g. WS/Drone fix) and objective adjustments
+      (hotspot endgame objective)
+    type: Tweak
+  - message: Xeno, medical, dropship and fire fixes (BUG-625, BUG-628, BUG-629, BUG-632,
+      BUG-637, BUG-638, BUG-643, BUG-645, BUG-648)
+    type: Fix
+  - message: '`cmu.temperature.fahrenheit` client-setting toggle instead of celsius'
+    type: Add
+  - message: CLF did not have the Colonists faction when you shift+click examine them,
+      sentries will ignore hidden factions (like CLF)
+    type: Fix
+  - message: Screwdriver the Analyzer, Maid or Straw machine to mute their sound output
+      (QOL)
+    type: Add
+  - message: Gunships fly over open-air, share look-down ground projection (gunships
+      got stuck because there were no tiles to fly on in the upper empty z-levels)
+    type: Add
+  - message: You can sell canisters filled with gases at the ASRS to make a profit
+      (not final pricing obviously) - T,Ph,F are valuable gases selling at 0.4/1.2/0.7
+      per mol
+    type: Add
+  - message: Flesh kudzu is a random plant-mutation, with new sprites by Ak5
+    type: Add
+  - message: Updated RobustToolbox from v289.0.0 to v290.0.0 (should fix sprite lookup
+      client error)
+    type: Admin
+  id: 656
+  time: '2026-09-19T10:15:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1975
 Name: CMU
 Order: -1

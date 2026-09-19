@@ -136,11 +136,6 @@
   equipment:
     back: CMUDroneOperatorChoicePackFilled
 
-- type: loadout
-  id: CMUCombatDroneOperatorPackLoadout
-  equipment:
-    back: CMUDroneOperatorChoicePackFilled
-
 - type: job
   parent: CMUJobDroneOperatorBase
   id: CMUJobOPFORDroneOperator
@@ -154,6 +149,7 @@
   accessGroups:
   - AU14OpforSquad
   ignoreAllegiance: true
+  useLoadoutOfJob: CMUJobGOVFORDroneOperator
 
 - type: startingGear
   id: CMUGearOPFORDroneOperator

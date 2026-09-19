@@ -199,6 +199,7 @@
   dummyStartingGear: AU14GearopforPlatoonSergantDummy
   accessGroups:
   - AU14OpforCommand
+  useLoadoutOfJob: AU14JobGOVFORSectionSergeant
 
 - type: startingGear
   id: AU14GearopforSectionSergeant

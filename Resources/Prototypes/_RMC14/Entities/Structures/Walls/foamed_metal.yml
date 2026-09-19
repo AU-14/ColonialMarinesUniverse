@@ -30,6 +30,8 @@
   - type: Transform
     anchored: true
   - type: Airtight
+  - type: RadiationBlocker # CMU14
+    resistance: 2
   - type: ReplaceFloorOnSpawn
     replaceableTiles:
     - Plating

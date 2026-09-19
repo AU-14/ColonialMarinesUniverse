@@ -124,6 +124,7 @@
   dummyStartingGear: AU14GearopforWeaponsSpecialistDummy
   accessGroups:
   - AU14OpforWeaponsSpecialist
+  useLoadoutOfJob: AU14JobGOVFORWeaponsSpecialist
 
 - type: startingGear
   id: AU14GearopforWeaponsSpecialist

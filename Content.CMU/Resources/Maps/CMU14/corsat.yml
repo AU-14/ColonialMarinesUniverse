@@ -114789,7 +114789,7 @@ entities:
     - type: Transform
       pos: 89.5,-90.5
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 9663
     components:

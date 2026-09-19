@@ -197195,7 +197195,7 @@ entities:
     - type: Transform
       pos: 38.757423,-1.4614179
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 21378
     components:

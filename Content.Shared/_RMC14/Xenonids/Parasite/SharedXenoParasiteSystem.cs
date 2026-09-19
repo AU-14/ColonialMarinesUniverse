@@ -839,6 +839,9 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             if (_net.IsClient)
                 continue;
 
+            if (infected.SpawnedLarva is { } spawnedLarva && TerminatingOrDeleted(spawnedLarva)) // CMU14
+                infected.SpawnedLarva = null;
+
             if (infected.BurstAt + infected.AutoBurstTime <= time && infected.SpawnedLarva != null)
             {
                 TryBurst((uid, infected));

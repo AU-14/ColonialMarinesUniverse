@@ -30,6 +30,12 @@ public sealed partial class RiddenComponent : Component
 
     public TimeSpan RideStart;
 
+    /// <summary>
+    /// When a revived corpse's owner must reclaim the body before it is
+    /// raffled to ghosts. Null when no reclaim is pending.
+    /// </summary>
+    public TimeSpan? HostReturnEndsAt;
+
     // The tongue to restore when the ride ends; mimicry may have swapped it
     public ProtoId<LanguagePrototype>? PreRideLanguage;
 }

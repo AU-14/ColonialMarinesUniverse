@@ -123,6 +123,7 @@
   accessGroups:
   - AU14OpforSquad
   - AU14OpforFTL
+  useLoadoutOfJob: AU14JobGOVFORRadioTrafficOperator
 
 - type: startingGear
   id: AU14GearopforRadioTrafficOperator

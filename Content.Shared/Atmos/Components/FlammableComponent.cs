@@ -37,7 +37,7 @@ namespace Content.Shared.Atmos.Components
         /// The mob will be paralyzed for this duration.
         /// </summary>
         [DataField, AutoNetworkedField]
-        public TimeSpan ResistTime = TimeSpan.FromSeconds(2);
+        public TimeSpan ResistTime = TimeSpan.FromSeconds(8); // CMU14: match RMC14's roll pin
 
         [DataField]
         public bool OnFire;

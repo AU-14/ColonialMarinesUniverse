@@ -61,6 +61,9 @@
   suffix: CMU
   components:
   - type: Rider
+  - type: GuideHelp # Guidebook
+    guides:
+    - CMUGuideRoleRider
   - type: GhostRole
     allowMovement: true
     allowSpeech: true
@@ -144,6 +147,13 @@
   - type: VentCrawler
     ventCrawlExamine: rider-vent-examine
     ventCrawlIcon: parasite
+  - type: XenoHide
+  - type: ActionGrant
+    actions:
+    - ActionXenoHide
+    - ActionXenoPsychicWhisper
+  - type: XenoPsychicCommunication
+    whisperRange: 7
   # Hands exist only so the hatchling can trigger vent entrance interactions;
   # the empty WhitelistPickup keeps those hands from looting anything
   - type: Hands
@@ -156,12 +166,8 @@
       location: Left
   - type: WhitelistPickup
   - type: Language
-    spokenLanguages:
-    - RiderCant
-    understoodLanguages:
-    - RiderCant
-    currentLanguage: RiderCant
     defaultLanguage: RiderCant
+  - type: AllLanguages
   - type: Speech
     allowedEmotes: []
 
@@ -172,6 +178,14 @@
   suffix: CMU
   components:
   - type: RiderSeizeProxy
+  - type: Language
+    spokenLanguages:
+    - RiderCant
+    understoodLanguages:
+    - RiderCant
+    currentLanguage: RiderCant
+    defaultLanguage: RiderCant
+  - type: AllLanguages
   - type: Eye
     drawFov: false
     visMask:
@@ -210,7 +224,7 @@
 - type: entity
   id: ActionRiderLatch
   name: Latch Onto Host
-  description: Leap onto an unconscious victim and disappear inside.
+  description: Leap onto an unconscious victim and disappear inside. The awake are asked, not taken.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -229,7 +243,7 @@
 - type: entity
   id: ActionRiderPunish
   name: Punish
-  description: Make them hurt. Costs grip.
+  description: Make them hurt. Costs 15 grip.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -245,7 +259,7 @@
 - type: entity
   id: ActionRiderSeize
   name: Seize
-  description: Take the wheel. They watch from inside. Costs grip dearly.
+  description: Take the wheel. They watch from inside. Needs 50 grip to start and drains 30 when it ends, never below 20.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -291,7 +305,7 @@
 - type: entity
   id: ActionRiderSurge
   name: Grant Resilience
-  description: Reward a willing host with a burst of borrowed strength. Willing hosts only.
+  description: Flood a willing host with combat stims, speed and fast mending. Willing hosts only. Costs 10 grip.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -307,7 +321,7 @@
 - type: entity
   id: ActionRiderCoax
   name: Coax
-  description: Ease your host's pain and knit their wounds, willing or not. The parasite's carrot.
+  description: Pour real medicine into them, willing or not. No stims, but any scanner will read it. Costs 12 grip.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -315,7 +329,7 @@
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
-      state: psychic_whisper
+      state: psychic_radiance
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:RiderCoaxActionEvent
@@ -323,7 +337,7 @@
 - type: entity
   id: ActionRiderSustain
   name: Sustain
-  description: Pour strength into the flesh around you. Damage and the wounds beneath it close together. Your rope, to match your stick.
+  description: Pour strength into the flesh around you. Damage and the wounds beneath it close together. Your rope, to match your stick. Costs 20 grip.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -335,6 +349,22 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:RiderSustainActionEvent
+
+- type: entity
+  id: ActionRiderMute
+  name: Silence Host
+  description: Clamp their throat. For a time no sound leaves them but your words. Costs 10 grip.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 120
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: neuro_sting
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderMuteActionEvent
 
 # Surgery: foreign body extraction. Cuts the rider out alive.
 - type: entity
@@ -470,6 +500,14 @@
   - type: Input
     context: "ghost"
   - type: RMCActiveInputMover
+  - type: Language
+    spokenLanguages:
+    - RiderCant
+    understoodLanguages:
+    - RiderCant
+    currentLanguage: RiderCant
+    defaultLanguage: RiderCant
+  - type: AllLanguages
 
 - type: entity
   id: ActionRiderManifest

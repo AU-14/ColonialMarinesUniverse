@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Numerics;
 using Content.Client.CMU14.Medical.Presentation.Windows;
+using Content.Client.CMU14.Temperature; // CMU14
 using Content.Client._RMC14.Medical.HUD;
 using Content.Client.Message;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
@@ -242,7 +243,10 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         {
             var celsius = TemperatureHelpers.KelvinToCelsius(temperatureKelvin);
             var fahrenheit = TemperatureHelpers.KelvinToFahrenheit(temperatureKelvin);
-            temperatureMsg.AddText($"{celsius:F1}ºC ({fahrenheit:F1}ºF)");
+            // CMU14: client temperature unit preference, display only
+            temperatureMsg.AddText(TemperatureDisplay.Fahrenheit
+                ? $"{fahrenheit:F1}ºF"
+                : $"{celsius:F1}ºC ({fahrenheit:F1}ºF)");
         }
         else
         {
@@ -355,7 +359,8 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         if (uiState.Temperature is { } kelvin)
         {
             var celsius = TemperatureHelpers.KelvinToCelsius(kelvin);
-            _window.CMUBigTempValue.Text = $"{celsius:F1}";
+            // CMU14: unit preference is display only, fever thresholds stay Celsius
+            _window.CMUBigTempValue.Text = $"{TemperatureDisplay.FromKelvin(kelvin):F1}";
             _window.CMUBigTempValue.FontColorOverride = (celsius < 35f || celsius > 39f)
                 ? Color.FromHex("#FFAA00")
                 : Color.White;

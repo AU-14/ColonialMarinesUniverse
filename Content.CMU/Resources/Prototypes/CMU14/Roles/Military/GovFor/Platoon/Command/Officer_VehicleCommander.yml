@@ -150,6 +150,7 @@
   dummyStartingGear: AU14GearOPFORVehicleCommanderDummy
   accessGroups:
   - AU14OpforVehicleCrew
+  useLoadoutOfJob: AU14JobGOVFORVehicleCommander
 
 - type: startingGear
   id: AU14GearOPFORVehicleCommander

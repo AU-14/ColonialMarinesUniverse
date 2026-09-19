@@ -15,7 +15,7 @@ public sealed partial class PlantTraitKudzuComponent : PlantTraitsComponent
     /// Which kind of kudzu this plant will turn into if it kuzuifies.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public EntProtoId KudzuPrototype = "WeakKudzu";
+    public EntProtoId KudzuPrototype = "AU14AbominationFleshKudzu"; // CMU14: kudzu plants become the biomorph tendons
 
     /// <summary>
     /// Weed level threshold at which the plant is considered overgrown and will transform into kudzu.

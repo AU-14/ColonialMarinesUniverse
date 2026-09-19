@@ -1,0 +1,96 @@
+# ├──[ Portable Generators ]─────────────────────────────────────────┤
+- type: entity
+  parent: PortableGeneratorPacman # RMCPortableGenerator redundant?
+  id: CMUGeneratorPortableDragon
+  name: '"Dragon" DR-30 portable generator'
+  suffix: Phoron, 30 kW
+  description: A fuel-burning generator rated for up to 30 kW. Eats solid phoron sheets by the fistful and breathes carbon dioxide - field crews call it the Dragon for a reason.
+  components:
+  - type: Machine
+    board: CMUGeneratorPortableDragonMachineCircuitboard
+  - type: SolidFuelGeneratorAdapter
+    fuelMaterial: CMPhoron
+  - type: MaterialStorage
+    materialWhiteList: [ CMPhoron ]
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUGeneratorPortableDragonMachineCircuitboard
+  name: '"Dragon" DR-30 generator machine board'
+  description: A machine printed circuit board for a portable generator.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUGeneratorPortableDragon
+
+# RMC portable generators only feed their own area, which makes them the area-power
+# backup loop: drag to a dead area, anchor, fuel, start.
+- type: entity
+  parent: RMCPortableGenerator2
+  id: CMUGeneratorPortableOrochi
+  name: '"Orochi" OR-30 portable generator'
+  suffix: Phoron, 30 kW
+  description: A heavy portable generator rated for 30 kW. Too big to love, too useful to leave behind.
+  components:
+  - type: RMCPortableGenerator
+    watts: 30000
+    timePerSheet: 240
+    fuelStackType: CMPhoron
+    fuelEntity: CMSheetPhoron1
+    fuelName: phoron
+
+# ├──[ Power Generators ]────────────────────────────────────────────┤
+# Dual-mode: RMC area power by default, HV grid supply on CMUMapUsesTilePower maps.
+# RMCPowerSystem gates the two channels at runtime, so one proto serves both map
+# families. Both ship damaged (randomizeDamage) for the planet repair arc; a mapper
+# wanting a roundstart-working generator uses the upstream RMCGeneratorFusion.
+- type: entity
+  parent: RMCGeneratorFusion
+  id: CMUGeneratorFusion
+  components:
+  - type: RMCFusionReactor
+    randomizeDamage: true
+  - type: PowerSupplier
+    supplyRate: 50000
+    supplyRampRate: 5000
+    supplyRampTolerance: 5000
+    enabled: false
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+
+# Anchor on an HV cable tile: the output node merges with the cable run there.
+- type: entity
+  parent: RMCGeneratorFusionColony
+  id: CMUGeneratorThermo
+  components:
+  - type: PowerSupplier
+    supplyRate: 100000
+    supplyRampRate: 5000
+    supplyRampTolerance: 5000
+    enabled: false
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+
+- type: entity
+  parent: CMUGeneratorThermo
+  id: CMUGeneratorThermoNoMapIcon
+  suffix: No Map Icon
+  components:
+  - type: RemoveComponents
+    components:
+    - type: MarineMapTracked
+    - type: XenoMapTracked
+    - type: TacticalMapTracked
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: generator

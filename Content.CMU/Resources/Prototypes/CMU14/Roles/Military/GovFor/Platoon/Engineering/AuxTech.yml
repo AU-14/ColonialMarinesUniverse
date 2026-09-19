@@ -142,6 +142,7 @@
   dummyStartingGear: AU14GearOPFORAuxTechDummy
   accessGroups:
   - AU14OpforAuxTech
+  useLoadoutOfJob: AU14JobGOVFORAuxTech
 
 - type: startingGear
   id: AU14GearOPFORAuxTech

@@ -332,6 +332,7 @@ jobs:
       - schema-validators
       - rsi-validator
       - integration-tests
+      - auto-retry-infra-kills
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -525,11 +526,17 @@ jobs:
               & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera
               & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical
               & FullyQualifiedName!~Content.IntegrationTests._CMU14.Chemistry
-          - name: cmu_medical_cameras
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Yautja
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.ZLevels
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Diagnostics
+          - name: cmu_2
             filter: >-
               FullyQualifiedName~Content.IntegrationTests._CMU14.Camera
               | FullyQualifiedName~Content.IntegrationTests._CMU14.Medical
               | FullyQualifiedName~Content.IntegrationTests._CMU14.Chemistry
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Yautja
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.ZLevels
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Diagnostics
           - name: au14
             filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
@@ -598,9 +605,8 @@ jobs:
           echo "--- $shard shard filter ---"
           echo "$FILTER"
           cd bin/Content.IntegrationTests || exit 1
-          # CMU14: upstream prototype variantization races on PLINQ parse threads, so any pair
-          # boot can die with ArgumentNullException during prototype load. One exit 1 without
-          # a retry is a coin flip. Genuine test failures stay red through all three attempts.
+          # Upstream prototype variantization races on PLINQ parse threads,
+          # so any pair boot can die with ArgumentNullException during prototype load.
           for attempt in 1 2 3; do
             echo "--- $shard attempt $attempt"
             # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
@@ -611,3 +617,38 @@ jobs:
             echo "attempt $attempt failed"
           done
           exit 1
+
+  # Auto re-run shards the hosted runner pool stopped mid-job (SIGTERM teardown
+  # of ubuntu-latest VMs, recorded as failure with no test failures).
+  auto-retry-infra-kills:
+    name: Auto-retry runner-killed jobs
+    needs: integration-tests
+    if: failure() && github.run_attempt < 3
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      actions: write
+    steps:
+      - name: Re-run jobs whose runner was stopped
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          killed=0
+          for job in $(gh api "repos/$REPO/actions/runs/$RUN_ID/jobs?per_page=100" \
+              --jq '.jobs[] | select(.conclusion == "failure") | .id'); do
+            # CMU14: teardown-killed jobs have no failed step, so --log-failed comes back
+            # empty and the signature only exists in the full job log.
+            if curl -sL -H "Authorization: Bearer $GH_TOKEN" \
+                "https://api.github.com/repos/$REPO/actions/jobs/$job/logs" | \
+                grep -q "The runner has received a shutdown signal"; then
+              killed=1
+              echo "job $job died with a runner teardown"
+            fi
+          done
+          if [ "$killed" = 1 ]; then
+            gh api -X POST "repos/$REPO/actions/runs/$RUN_ID/rerun-failed-jobs"
+          else
+            echo "no teardown signature; failures stand"
+          fi

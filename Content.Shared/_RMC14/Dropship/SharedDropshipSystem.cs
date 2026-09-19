@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared._RMC14.ARES;
@@ -40,6 +41,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -363,13 +365,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     /// <summary>
     ///     Gets the map UIDs of ALL ships in the game.
     ///     Used to filter xeno/threat hijack destinations to any ship.
-    ///     Includes AlmayerComponent maps (default marine) and all ShipFactionComponent maps.
+    ///     Includes WarshipComponent maps (default marine) and all ShipFactionComponent maps.
     /// </summary>
-    private HashSet<EntityUid> GetAllShipMaps()
+    private HashSet<EntityUid> GetAllShipMaps() // CMU14 Method
     {
         var shipMaps = new HashSet<EntityUid>();
 
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>();
         while (almayerQuery.MoveNext(out _, out _, out var xform))
         {
             AddShipMapAndConnectedZLevels(shipMaps, xform.MapUid);
@@ -693,6 +695,29 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             return;
         }
 
+        // CMU14 Begin: recall guards
+        if (terminal.Comp.LastSummonAt is { } lastSummon && _timing.CurTime - lastSummon < terminal.Comp.SummonCooldown)
+        {
+            _popup.PopupEntity("This terminal is still recharging.", terminal, args.Actor, PopupType.MediumCaution);
+            return;
+        }
+
+        // Only abandoned ships can be pulled remotely: anyone aboard, be it crew, boarders
+        // or hijackers, keeps the ship where it is.
+        if (Transform(computerId.Value).GridUid is { } shipGrid)
+        {
+            var actors = EntityQueryEnumerator<ActorComponent, TransformComponent>();
+            while (actors.MoveNext(out _, out _, out var actorXform))
+            {
+                if (actorXform.GridUid != shipGrid)
+                    continue;
+
+                _popup.PopupEntity("There is still someone aboard that dropship!", terminal, args.Actor, PopupType.MediumCaution);
+                return;
+            }
+        }
+        // CMU14 End
+
         if (!TryDropshipLaunchPopup(terminal, args.Actor, false))
             return;
 
@@ -704,6 +729,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
         _ui.CloseUi(terminal.Owner, DropshipTerminalUiKey.Key, args.Actor);
         _popup.PopupEntity("This dropship is now on its way.", terminal, args.Actor, PopupType.Medium);
+        terminal.Comp.LastSummonAt = _timing.CurTime; // CMU14
     }
 
     private void OnAttachmentPointMapInit<TComp, TEvent>(Entity<TComp> ent, ref TEvent args) where TComp : IComponent?
@@ -1111,9 +1137,24 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
         var map = _transform.GetMap(user.Owner);
 
-        // Prevent double hijack.
-        if (TryComp(map, out EvacuationProgressComponent? evacuation) &&
-            evacuation.DropShipCrashed)
+        // CMU14: Prevent double hijack. The progress component sits on the deck the first
+        // crash landed on, which need not be this hijacker's deck, so scan the ship z-network.
+        // No map means no network to scan.
+        var crashLanded = false;
+        if (map is { } hijackMap) // CMU14
+        {
+            foreach (var connectedMap in _zLevels.GetAllNetworkMaps(hijackMap))
+            {
+                if (TryComp(connectedMap, out EvacuationProgressComponent? evacuation) &&
+                    evacuation.DropShipCrashed)
+                {
+                    crashLanded = true;
+                    break;
+                }
+            }
+        }
+
+        if (crashLanded)
         {
             var msg = Loc.GetString("rmc-dropship-invalid-hijack");
 

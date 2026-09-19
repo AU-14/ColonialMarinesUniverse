@@ -173,6 +173,7 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORPlatoonCorpsman
 
 - type: startingGear
   id: AU14GearopforPlatoonCorpsman

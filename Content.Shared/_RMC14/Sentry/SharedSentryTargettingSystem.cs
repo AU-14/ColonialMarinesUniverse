@@ -15,6 +15,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Physics; // CMU14
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Sentry;
@@ -306,14 +307,16 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         // This covers corporate NPCs, synthetics, and other entities that do not carry an ID.
         if (TryComp<NpcFactionMemberComponent>(target, out var targetFaction))
         {
+            // CMU14: hidden factions (CLF) are invisible to sentries. A disguised insurgent
+            // must be judged exactly like the colonist they appear to be.
             foreach (var allianceFriendly in sentry.Comp.AllianceFriendlyNpcFactions)
             {
-                if (targetFaction.Factions.Contains(allianceFriendly))
+                if (HasVisibleFaction(targetFaction, allianceFriendly.Id))
                     return false;
             }
             foreach (var faction in sentry.Comp.FriendlyFactions)
             {
-                if (targetFaction.Factions.Contains(faction))
+                if (HasVisibleFaction(targetFaction, faction))
                     return false;
             }
         }
@@ -331,6 +334,21 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         {
             if (_prototypes.TryIndex(faction, out NpcFactionPrototype? proto) && proto.SentryProtected)
                 return true;
+        }
+
+        return false;
+    }
+
+    // CMU14 Method: true only when the member holds the faction and that faction is
+    // not hidden. Unknown faction protos count as visible.
+    private bool HasVisibleFaction(NpcFactionMemberComponent member, string faction)
+    {
+        foreach (var f in member.Factions)
+        {
+            if (f.Id != faction)
+                continue;
+
+            return !_prototypes.TryIndex(f, out NpcFactionPrototype? proto) || !proto.Hidden;
         }
 
         return false;
@@ -385,12 +403,20 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
             if (_container.IsEntityInContainer(target))
                 continue;
 
-            // CMU14: never lock what sentry fire cannot affect: bullets pass over
-            // weeds and floor resin, and invincible hive structures void all damage
-            if (HasComp<XenoWeedsComponent>(target)
-                || HasComp<ResinSlowdownModifierComponent>(target)
-                || HasComp<ResinSpeedupModifierComponent>(target)
-                || HasComp<InvincibleHiveStructureComponent>(target))
+            // CMU14: invincible hive structures void all sentry damage
+            if (HasComp<InvincibleHiveStructureComponent>(target))
+                continue;
+
+            // CMU14: replaces the per-component weed and resin filters. Projectiles only
+            // collide with hard fixtures (SharedProjectileSystem), so entities without one
+            // are overflown by sentry fire and must never be locked as targets
+            //if (HasComp<XenoWeedsComponent>(target)
+            //    || HasComp<ResinSlowdownModifierComponent>(target)
+            //    || HasComp<ResinSpeedupModifierComponent>(target))
+            //    continue;
+
+            // CMU14: mobs are always eligible, structures need a fixture bullets can hit
+            if (!HasComp<MobStateComponent>(target) && !HasHardFixture(target))
                 continue;
 
             // CMU14: factions flagged sentryProtected are never valid targets (e.g. Provost Office)
@@ -445,9 +471,25 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         {
             foreach (var f in targetNpc.Factions)
             {
-                if (_friendlyNpcFactionBuffer.Contains(f.Id))
+                // CMU14: hidden membership can never make a target friendly to the sentry
+                if (_friendlyNpcFactionBuffer.Contains(f.Id) && HasVisibleFaction(targetNpc, f.Id))
                     return true;
             }
+        }
+
+        return false;
+    }
+
+    // CMU14 Method
+    private bool HasHardFixture(EntityUid target)
+    {
+        if (!TryComp<FixturesComponent>(target, out var fixtures))
+            return false;
+
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            if (fixture.Hard)
+                return true;
         }
 
         return false;

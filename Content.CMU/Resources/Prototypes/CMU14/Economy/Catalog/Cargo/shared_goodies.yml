@@ -75,6 +75,8 @@
         crate: CMUCanisterCarbonDioxide
       - cost: 250
         crate: WaterVaporCanister
+      # The condenser can produce these; before giving it to players, check its output
+      # value per mol stays under what it consumes (economy review todo)
       - cost: 400
         crate: LiquidOxygenCanister
       - cost: 400
@@ -121,6 +123,12 @@
         crate: CMUCrateFirefightingArmor
       - cost: 800
         crate: CMUCrateAtmosFireResponse
+      - cost: 1500
+        crate: CMUCrateTychoRadsuit
+      - cost: 1800
+        crate: CMUCrateRadsuit
+      - cost: 900
+        crate: CMUCrateEVA
       - cost: 400
         crate: RMCAirPumpPortable
       - cost: 300

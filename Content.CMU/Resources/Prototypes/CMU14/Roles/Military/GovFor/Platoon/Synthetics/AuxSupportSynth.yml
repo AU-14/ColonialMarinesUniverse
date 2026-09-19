@@ -202,6 +202,7 @@
   - AU14OpforCommand
   - CMCargoTech
   - aulegacygroupcommand
+  useLoadoutOfJob: AU14JobGOVFORAuxSupportSynth
 
 - type: startingGear
   id: AU14GearOPFORAuxSupportSynth

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Content.Shared._RMC14.PowerLoader;
+using Content.Shared._RMC14.Xenonids; // CMU14
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
@@ -30,6 +31,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VehicleSystem _rmcVehicles = default!; // CMU14
 
     public override void Initialize()
     {
@@ -62,25 +64,54 @@ public sealed partial class HardpointSlotSystem : EntitySystem
             args.Cancelled = true;
     }
 
-    private void OnSlotsInteractHand(Entity<HardpointSlotsComponent> ent, ref InteractHandEvent args)
+    private void OnSlotsInteractHand(Entity<HardpointSlotsComponent> ent, ref InteractHandEvent args) // CMU14 Method
     {
-        if (!args.Handled)
-            args.Handled = TryOpenHardpointUiForPowerLoader(ent, args.User);
+        if (args.Handled)
+            return;
+
+        // entry point must fall through to VehicleSystem boarding first
+        if (_rmcVehicles.TryFindEntryPoint(ent.Owner, args.User, out _))
+            return;
+
+        args.Handled = TryOpenHardpointUi(ent, args.User); // no powerloader needed
     }
 
-    private void OnSlotsActivateInWorld(Entity<HardpointSlotsComponent> ent, ref ActivateInWorldEvent args)
+    private void OnSlotsActivateInWorld(Entity<HardpointSlotsComponent> ent, ref ActivateInWorldEvent args) // CMU14 Method
     {
-        if (!args.Handled)
-            args.Handled = TryOpenHardpointUiForPowerLoader(ent, args.User);
+        if (args.Handled)
+            return;
+
+        if (!_powerLoader.TryGetActivePowerLoader(args.User, out _))
+            return;
+
+        args.Handled = TryOpenHardpointUi(ent, args.User);
     }
 
-    private bool TryOpenHardpointUiForPowerLoader(Entity<HardpointSlotsComponent> ent, EntityUid user)
+    // CMU14 Begin: powerloader-only gate disabled, players open the hardpoint menu bare-handed again
+    //private bool TryOpenHardpointUiForPowerLoader(Entity<HardpointSlotsComponent> ent, EntityUid user)
+    //{
+    //    if (!_powerLoader.TryGetInteractionUser(user, out var actor) ||
+    //        !_powerLoader.TryGetActivePowerLoader(user, out _))
+    //    {
+    //        return false;
+    //    }
+    //
+    //    if (!_ui.TryOpenUi(ent.Owner, HardpointUiKey.Key, actor))
+    //        return false;
+    //
+    //    _hardpoints.UpdateHardpointUi(ent.Owner, ent.Comp);
+    //    return true;
+    //}
+    // CMU14 End
+
+    private bool TryOpenHardpointUi(Entity<HardpointSlotsComponent> ent, EntityUid user) // CMU14 Method
     {
-        if (!_powerLoader.TryGetInteractionUser(user, out var actor) ||
-            !_powerLoader.TryGetActivePowerLoader(user, out _))
-        {
+        // CMU14: xenos could otherwise strip hardpoints
+        if (HasComp<XenoComponent>(user))
             return false;
-        }
+
+        if (!_powerLoader.TryGetInteractionUser(user, out var actor))
+            return false;
 
         if (!_ui.TryOpenUi(ent.Owner, HardpointUiKey.Key, actor))
             return false;

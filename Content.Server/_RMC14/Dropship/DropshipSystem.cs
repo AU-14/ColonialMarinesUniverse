@@ -12,6 +12,7 @@ using Content.Server.GameTicking;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
+using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.AlertLevel;
@@ -1472,13 +1473,13 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
     }
 
     /// <summary>
-    ///     Checks if any grid on the given map entity has AlmayerComponent or ShipFactionComponent.
+    ///     Checks if any grid on the given map entity has WarshipComponent or ShipFactionComponent.
     ///     These components are placed on grid entities, not on the map entity itself,
     ///     so we can't just HasComp on the map UID.
     /// </summary>
     private bool IsShipMap(EntityUid mapUid)
     {
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>(); // CMU14
         while (almayerQuery.MoveNext(out _, out _, out var xform))
         {
             if (_zLevels.IsSameZNetwork(xform.MapUid, mapUid)) // CMU14
@@ -1518,8 +1519,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             }
         }
 
-        // Fall back to Almayer (default marine ship)
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>(); // CMU14
         while (almayerQuery.MoveNext(out _, out _, out var almayerXform))
         {
             if (almayerXform.MapUid is { } foundMap)

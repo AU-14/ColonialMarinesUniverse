@@ -68,7 +68,8 @@
     id: fetchoreobj
     factionNeutral: true
     allowedPresets:
-    - ForceOnForce
+    - Insurgency
+    - ColonyFall
     factions:
     - opfor
     repeating: true
@@ -126,7 +127,8 @@
     id: fetchcrownobj
     factionNeutral: false
     allowedPresets:
-    - ForceOnForce
+    - Insurgency
+    - ColonyFall
     factions:
     - opfor
     - govfor

@@ -52,7 +52,17 @@ public sealed partial class ObjectiveControlSystem
             MarkAllFactionsCompleted(objective, factionKey);
             Dirty(uid, objective);
             _logs.Debug($"[OBJ-REPEAT] Objective '{objective.ObjectiveDescription}' reached max repeats ({maxRepeat}), marking as completed.");
-            _objConsole.RefreshConsolesForFaction(completingFaction);
+            // Neutral objectives flip every listed faction to Completed here, so every listed
+            // faction's console needs refreshing, not just the completer's.
+            if (objective.FactionNeutral)
+            {
+                foreach (var faction in objective.Factions)
+                    _objConsole.RefreshConsolesForFaction(faction);
+            }
+            else
+            {
+                _objConsole.RefreshConsolesForFaction(completingFaction);
+            }
             return;
         }
 
@@ -157,17 +167,6 @@ public sealed partial class ObjectiveControlSystem
 
     public void AwardRawPointsToFaction(string faction, int points) => ApplyWinPoints(faction, points);
 
-    // CMU14 method: standalone hotspot tally, not part of RequiredWinPoints
-    public void AddHotspotPoints(string faction, int points)
-    {
-        if (GetOrReselectObjMaster() is not { } master)
-            return;
-
-        var data = master.GetOrCreateFactionData(faction.ToLowerInvariant());
-        data.HotspotPoints += points;
-        DirtyObjectiveMaster();
-    }
-
     private void ApplyWinPoints(string faction, int points)
     {
         if (GetOrReselectObjMaster() is not { } master)
@@ -238,6 +237,18 @@ public sealed partial class ObjectiveControlSystem
         {
             _logs.Warning($"[OBJ-TIER] Next tier prototype '{protoIdStr}' does not contain a CMUObjectiveComponent or is missing!");
             return;
+        }
+
+        // Repeating objectives re-unlock the tier on every completion; one live copy per
+        // faction is enough, and neutral tiers are shared so any active copy blocks.
+        foreach (var (uid, comp) in _allObjectives)
+        {
+            if (!comp.Active || !Exists(uid) || MetaData(uid).EntityPrototype?.ID != protoIdStr)
+                continue;
+
+            if (string.IsNullOrEmpty(comp.Faction)
+                || comp.Faction.Equals(completingFaction, StringComparison.OrdinalIgnoreCase))
+                return;
         }
 
         var newEnt = Spawn(protoIdStr, completedXform.Coordinates);
