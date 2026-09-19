@@ -31,7 +31,11 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
     }
     private void OnReagentScanned(XRFScannedReagentEvent args)
     {
-        var dat = _generator.CreateReport(args.Reagent, false, args.SampleNum);
+        var scanner = GetEntity(args.Scanner);
+        if (!TryComp<XRFScannerComponent>(scanner, out var scannerComp))
+            return;
+        var faction = scannerComp.Faction;
+        var dat = _generator.CreateReport(args.Reagent, false, args.SampleNum, _rdat.GetClearance(faction));
         if (dat is null || !_protoMan.GetInstances<ReagentPrototype>().TryGetValue(args.Reagent, out var chem))
             return;
         var properties = _protoMan.GetInstances<ReagentPropertyPrototype>();
@@ -68,16 +72,10 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
         }
         if (chem.Class < ReagentClass.Special || (chem.Class >= ReagentClass.Special && dat.Value.Completed))
             _generator.SaveNewProperties(chemprops);
-        EntityUid scanner = GetEntity(args.Scanner);
-        if (chem.Class >= ReagentClass.Special && !_generator.IdentifiedChemicals.ContainsKey(chem.ID))
+        if (chem.Class >= ReagentClass.Special && !_rdat.GetResearch(faction).CompletedChemicals.Contains(chem.ID))
         {
             //todo: statistics
             //todo: do something when DNA Disintegrating is discovered
-            string faction = string.Empty;
-            if (TryComp<XRFScannerComponent>(scanner, out var scomp))
-            {
-                faction = scomp.Faction;
-            }
             _rdat.CompleteChemical(chem, faction, scanner);
         }
         if (scanner == EntityUid.Invalid) //PANIC!!!!!!
@@ -111,7 +109,8 @@ public sealed partial class ServerXRFScannerSystem : XRFScannerSystem
         comp.Data = GRD.Value;
         comp.Valid = dat.Value.Valid;
         comp.Completed = dat.Value.Completed;
-        _rdat.ResearchData.TryAdd( _rdat.ResearchData.Count - 1,
+        var reports = _rdat.GetResearch(faction).Reports;
+        reports.TryAdd(reports.Count,
             (GRD.Value.ID, contents, _time.CurTime, false, GRD.Value, comp.Valid, comp.Completed));
         _mets.SetEntityName(realpaper, name);
         _paper.SetContent(realpaper, contents);

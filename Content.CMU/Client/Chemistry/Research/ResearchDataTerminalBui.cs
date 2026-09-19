@@ -26,6 +26,7 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
     {
         base.Open();
         _window = this.CreateWindow<ResearchDataTerminalWindow>();
+        _window.ReduceCooldown.OnPressed += _ => SendPredictedMessage(new CMUResearchReduceCooldownBuiMsg());
         _window.Reprint.OnPressed += _ => SendPredictedMessage(PrintLast);
         _window.Upgrade.OnPressed += _ => SendPredictedMessage(UpgradeAttempt);
         if (State is ResearchDataTerminalBuiState s)
@@ -59,6 +60,7 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
         _window.Tabs.SetTabTitle(0, Loc.GetString("research-data-ui-manage"));
         _window.Tabs.SetTabTitle(1, Loc.GetString("research-data-ui-view"));
         _window.NextUpdate = state.NextUpdate;
+        _window.ReduceCooldown.Disabled = !state.Picked || state.Credits < 1 || state.NextUpdate <= _time.CurTime;
         _window.TimeLeftBar.MaxValue = (float)(state.NextUpdate - state.LastTime).TotalMilliseconds;
         _window.ChemContainer.RemoveAllChildren();
         var xLocked = state.XLockedUntil is not null && _time.CurTime < state.XLockedUntil.Value;

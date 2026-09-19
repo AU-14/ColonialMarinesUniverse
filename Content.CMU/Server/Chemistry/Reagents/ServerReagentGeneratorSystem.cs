@@ -368,7 +368,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 data.Completed = false;
                 data.Valid = false;
             }
-            if (chem.Class == ReagentClass.Special && _researchdata.Clearance >= 6)
+            if (chem.Class == ReagentClass.Special && (clearance ?? _researchdata.Clearance) >= 6)
             {
                 data.Completed = true;
             }
