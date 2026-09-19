@@ -1092,6 +1092,12 @@
       entries:
       - id: AU14MagazineRifleM20A
         amount: 200
+      - id: CMUMagazineRifleM16Extended
+        amount: 50
+      - id: CMUMagazineRifleM16AP
+        amount: 35
+      - id: CMUMagazineRifleM16APExt
+        amount: 20
       - id: CMMagazineSMGMP5
         amount: 200
       - id: RMCMagazineSMGPDW90
