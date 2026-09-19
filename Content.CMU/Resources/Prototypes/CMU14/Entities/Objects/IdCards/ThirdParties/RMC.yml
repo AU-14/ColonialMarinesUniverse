@@ -8,7 +8,7 @@
     job: AU14RMCRRTBreacher
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - FactionTWESOF
 
 - type: entity
   parent: CMIDCardBase
@@ -20,7 +20,7 @@
     job: AU14RMCRRTCommander
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - FactionTWESOF
 
 - type: entity
   parent: CMIDCardBase
@@ -32,7 +32,7 @@
     job: AU14RMCRRTCorpsman
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - FactionTWESOF
 
 - type: entity
   parent: CMIDCardBase
@@ -44,7 +44,7 @@
     job: AU14RMCRRTMarksman
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - FactionTWESOF
 
 - type: entity
   parent: CMIDCardBase
@@ -56,7 +56,7 @@
     job: AU14RMCRRTRifleman
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - FactionTWESOF
 
 - type: entity
   parent: CMIDCardBase
@@ -68,4 +68,4 @@
     job: AU14RMCRRTSmartgunner
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - FactionTWESOF

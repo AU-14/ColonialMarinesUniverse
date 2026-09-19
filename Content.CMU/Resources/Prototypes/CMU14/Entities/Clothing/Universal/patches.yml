@@ -285,3 +285,17 @@
     playerSprite:
       sprite: CMU14/Clothing/Patches/grom_patch.rsi
       state: patch
+
+- type: entity
+  parent: RMCPatchBase
+  id: CMU14SASPatch
+  name: SAS Patch
+  description: A fire-resistant shoulder patch, worn by the men and women of the Special Air Service. "WHO DARES WINS" is proudly engraved onto the insignia, sometimes read as "Who cares who wins?".
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Clothing/TWE/sas_patch.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Objects/Clothing/TWE/sas_patch.rsi
+      state: patch

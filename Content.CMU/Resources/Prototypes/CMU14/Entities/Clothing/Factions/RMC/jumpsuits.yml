@@ -65,3 +65,34 @@
     startingAccessories:
     - AU14RMCPatch
     - AU14TWEPatch
+
+- type: entity
+  parent:  [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14TWESASJumpsuit
+  name: black jumpsuit
+  description: Black one-piece jumpsuit. While looking simple, it is a high-end piece of gear, resistable to fire and cuts, used by special forces.
+  components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: Sprite
+    sprite: CMU14/Objects/Clothing/TWE/blackjumpsuit.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,11,1 # 6 slots
+  - type: FixedItemSizeStorage
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - CMU14SASPatch
+    - AU14TWEPatch
+  - type: CMArmor
+    melee: 15
+    bullet: 15
+    explosionArmor: 15
+  - type: ClothingSpeedModifier
+    walkModifier: 0.94
+    sprintModifier: 0.94

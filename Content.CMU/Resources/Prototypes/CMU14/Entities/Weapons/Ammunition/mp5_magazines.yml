@@ -100,7 +100,7 @@
     - state: mag-1
       map: [ "enum.GunVisualLayers.Mag" ]
     - state: ammo_band
-      color: "#9C9A19"
+      color: "#BA5D00"
   - type: RefillableByBulletBox
     bulletType: CMUBoxBulletsPistol9MMSH
 
@@ -126,10 +126,87 @@
     - state: mag-1
       map: [ "enum.GunVisualLayers.Mag" ]
     - state: ammo_band
+      color: "#BA5D00"
+
+- type: entity
+  parent: CMMagazineSMGMP5
+  id: CMUMagazineSMGMP5HEAP
+  name: "MP5 HEAP magazine (9mm)"
+  description: "A 9mm magazine for the MP5."
+  suffix: HEAP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSmg
+    - CMUMagazineSMGMP5HEAP
+    - CMUMagazineSMGMP5Stick
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMUCartridge9mmSMGHEAP
+    proto: CMUCartridge9mmSMGHEAP
+    capacity: 30
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/mp5.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
       color: "#9C9A19"
+
+- type: entity
+  parent: CMUMagazineSMGMP5HEAP
+  id: CMUMagazineSMGMP5HEAPDrum
+  name: MP5 HEAP magazine (9mm)
+  description: A 60-round drum magazine for MP5-pattern submachine guns, loaded with 9mm HEAP ammunition.
+  suffix: HEAP, Drum
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSmg
+    - CMUMagazineSMGMP5HEAP
+    - CMUMagazineSMGMP5Drum
+  - type: BallisticAmmoProvider
+    capacity: 60
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/Ammunition/Magazines/mp5drum.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-1
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - state: ammo_band
+      color: "#9C9A19"
+
+- type: entity
+  parent: CMCartridge10x20mm
+  id: CMUCartridge9mmSMGHEAP
+  name: HEAP cartridge (9mm SMG)
+  description: A 9mm cartridge for the mp5 submachinegun.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridge9mmSMGHEAP
+  - type: CartridgeAmmo
+    proto: CMUBullet9mmSMGHEAP
+
+- type: entity
+  parent: RMCBullet10x20mmHEAP
+  id: CMUBullet9mmSMGHEAP
+  categories: [ HideSpawnMenu ]
 
 - type: Tag
   id: CMUMagazineSMGMP5Stick
 
 - type: Tag
   id: CMUMagazineSMGMP5Drum
+
+- type: Tag
+  id: CMUCartridge9mmSMGHEAP
+
+- type: Tag
+  id: CMUMagazineSMGMP5HEAP

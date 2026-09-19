@@ -31,3 +31,32 @@
   components:
   - type: VisionCorrection
     visionBonus: -4
+
+- type: entity
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
+  id: CMU14MaskGasSAS
+  name: L22 pattern gasmask
+  description: The standard issue gasmask utilized by the Special Air Service.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Clothing/TWE/sas_gasmask.rsi
+  - type: Clothing
+    sprite: CMU14/Objects/Clothing/TWE/sas_gasmask.rsi
+  - type: HideLayerClothing
+    layers:
+      Hair: MASK
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
+  - type: CMArmor
+    melee: 20
+    bio: 30
+    explosionArmor: 10
+    bullet: 20
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - GasMask
+  - type: MycotoxinProtection
+    fullProtection: false

@@ -1,0 +1,146 @@
+- type: entity
+  parent: CMBaseWeaponSMG
+  name: MP5SD6 submachinegun
+  id: CMU14WeaponSMGMP5SD
+  description: The MP5SD6 is an integrally suppressed sub machine gun designed for Special Ops, Tier One operators and Counter Terror units, it's been used in an extraordinary amount of special forces units and police units in previous decades.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/mp5sd.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: ItemMapper
+    containerWhitelist:
+    - gun_magazine
+    mapLayers:
+      mag-0:
+        whitelist:
+          tags:
+          - CMUMagazineSMGMP5Stick
+      mag-1:
+        whitelist:
+          tags:
+          - CMUMagazineSMGMP5Drum
+  - type: Clothing
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/mp5sd.rsi
+  - type: Gun
+    shotsPerBurst: 3
+    soundGunshot:
+      collection: CMSilencedShoot
+      params:
+        maxDistance: 6
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilWielded: 1
+    recoilUnwielded: 1
+    scatterWielded: 6
+    scatterUnwielded: 12
+    baseFireRate: 6.667
+    burstScatterMult: 3
+    modifiers:
+      Burst:
+        fireDelay: 0.0999
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        maxScatterModifier: 2.25
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.5
+    accuracyMultiplierUnwielded: 1
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGMP5AP
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSMGMP5
+          - CMUMagazineSMGMP5HEAP
+  - type: AttachableHolder
+    randomAttachmentChance: 0.1
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: CMU14AttachmentSuppressorM5SD
+        whitelist:
+          tags:
+          - RMCAttachmentBarrel
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentBipod
+          - RMCAttachmentM203GrenadeLauncher
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentU7UnderbarrelShotgun
+        random:
+        - RMCAttachmentM203GrenadeLauncher
+        - RMCAttachmentLaserSight
+        - RMCAttachmentU7UnderbarrelShotgun
+        - RMCAttachmentFlashlightGrip
+        - RMCAttachmentBipod
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RMCAttachmentM54CStockCollapsible
+        whitelist:
+          tags:
+          - RMCAttachmentM54CStockCollapsible
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0, 0
+      rmc-aslot-rail: 0, 0.09
+      rmc-aslot-underbarrel: 0.3, -0.3125
+      rmc-aslot-stock: -0.75, 0.01
+  - type: GunDamageModifier
+    multiplier: 1.4
+  - type: Tag
+    tags:
+    - RMCWeaponSMG
+    - CMU14WeaponSMGMP5SD
+
+- type: entity
+  parent: RMCAttachmentSuppressor
+  id: CMU14AttachmentSuppressorM5SD
+  name: MP5SD6 suppressor
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/mp5sd.rsi
+    state: barrel
+  - type: Tag
+    tags:
+    - RMCAttachmentBarrel
+    - RMCAttachmentSuppressorCompact
+  - type: AttachableSilencer
+    sound:
+      collection: RMCSilencedShootAlt
+      params:
+        maxDistance: 6
+
+- type: Tag
+  id: CMU14WeaponSMGMP5SD

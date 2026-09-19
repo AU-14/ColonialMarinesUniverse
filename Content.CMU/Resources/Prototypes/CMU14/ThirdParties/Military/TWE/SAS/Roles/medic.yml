@@ -1,0 +1,134 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobSASMedic
+  roundSide: ThirdParty
+  roundForce: CMUSAS
+  roundRole: SASMedic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_medic
+  - type: Skills
+    skills:
+        RMCSkillFirearms: 3
+        RMCSkillFireman: 2
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 2
+        RMCSkillConstruction: 1
+        RMCSkillEngineer: 1
+        RMCSkillPolice: 2
+        RMCSkillCqc: 5
+        RMCSkillEndurance: 3
+        RMCSkillMeleeWeapons: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforplatooncorpsman
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: au14-job-name-govforplatooncorpsman
+  description: cmu-sas-description
+  playTimeTracker: CMUJobSASMedic
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    USArmy_Private1:
+      entity: CMU14ChevronSASPrivate
+      requirements: []
+  startingGear: CMUGearSASMedic
+  spawnMenuRoleName: SAS Medic (3rd party)
+  greeting: cmu-sas-greeting
+  icon: RMCJobIconParaMedicalTechnican
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-rmcrrt-commander
+  accessGroups:
+  - ColonistAllAccessNoArmory
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesSAS
+  id: CMUJobSASMedic
+  name: SAS Medic
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadSAS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-govforplatooncorpsman
+    description: cmu-sas-description
+    reregister: false
+    job: CMUJobSASMedic
+    raffle:
+      settings: short
+    rules: cmu-sas-rules
+
+- type: startingGear
+  id: CMUGearSASMedic
+  equipment:
+    jumpsuit: CMU14TWESASJumpsuit
+    outerClothing: RMCArmorParaVest
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    head: AU14HeadHelmetL1Black
+    shoes: CMBootsBlackFilled
+    ears: CMU14HeadsetTWEThirdParty
+    eyes: RMCGlassesMedicalHUDGlasses
+    mask: CMU14MaskGasSAS
+    belt: AU14BeltMedicBagRMC
+    back: RMCSatchelLightpackBlack
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKFill
+    id: AU14IDCardSASCommander
+    suitstorage: CMU14WeaponSMGMP5SD
+  storage:
+    outerClothing:
+    - CMUGasMaskFilterWY
+    - CMUGasMaskFilterWY
+    belt:
+    - CMHealthAnalyzer
+    - CMPillCanisterKelotaneDermaline
+    - RMCPillCanisterMeralyneBicaridine
+    - AU14KeloDermAutoInjector
+    - AU14MeraBicAutoInjector
+    - CMPillCanisterDylovene
+    - RMCPillCanisterIron
+    - AU14PillCanisterOxycodone
+    - AU14PillCanisterTramadol
+    - AU14PillCanisterCardiocaine
+    - AU14PillCanisterHepatocytin
+    - AU14PillCanisterNephronate
+    - AU14PillCanisterOsteoCalc
+    - AU14PillCanisterPulmovine
+    - CMUSplintItem
+    pocket1:
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    jumpsuit:
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    back:
+    - RMCTacticalPrybar
+    - AU14MRETWERMC
+    - RMCBurnAidKitFilledPVE
+    - RMCBruteAidKitFilledPVE
+    - CMSurgicalCaseFilled
+    - CMEpinephrineAutoInjector
+    - CMEpinephrineAutoInjector
+    - CMEpinephrineAutoInjector
+    - AU14CMDefibrillator
+
+- type: playTimeTracker
+  id: CMUJobSASMedic
