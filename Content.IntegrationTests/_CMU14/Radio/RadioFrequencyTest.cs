@@ -57,8 +57,8 @@ public sealed class RadioFrequencyTest : GameTest
         ["ANPRCActiveChannel"] = 0,
         ["TunableFrequencyChannel"] = 0,
         ["UNISOF"] = 176_500,
-        ["Abomination"] = 42_800,
-        ["AbominationMimic"] = 42_700,
+        ["Biomorph"] = 42_800, // CMU14
+        ["BiomorphMimic"] = 42_700, // CMU14
         ["CMUYautja"] = 154_100,
         ["CMUYautjaOverseer"] = 154_200,
         ["CMUYautjaBadBlood"] = 154_300,
@@ -191,8 +191,8 @@ public sealed class RadioFrequencyTest : GameTest
             }
 
             AssertReverseLookup(plan, 42_500, "MyceliumLink");
-            AssertReverseLookup(plan, 42_700, "AbominationMimic");
-            AssertReverseLookup(plan, 42_800, "Abomination");
+            AssertReverseLookup(plan, 42_700, "BiomorphMimic"); // CMU14
+            AssertReverseLookup(plan, 42_800, "Biomorph"); // CMU14
             Assert.That(
                 plan.TryGetChannelByFrequency(RadioFrequency.FromKilohertz(42_600), out _),
                 Is.False,

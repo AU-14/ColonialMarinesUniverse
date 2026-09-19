@@ -44,12 +44,12 @@
       percent: 100
 
 - type: entity
-  id: KillAllAbominationsRule
+  id: KillAllBiomorphsRule
   parent: BaseGameRule
-  name: Kill All Abominations
-  description: Threat wins when all abominations are dead (or when specified percent are dead). Counts disguised mimics.
+  name: Kill All Biomorphs
+  description: Threat wins when all biomorphs are dead (or when specified percent are dead). Counts disguised mimics.
   components:
-    - type: KillAllAbominationsRule
+    - type: KillAllBiomorphsRule
       percent: 100
 
 - type: entity

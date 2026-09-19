@@ -362,8 +362,8 @@ public static class ThreatVoteSelection
         if (threatId.Contains("tribal", StringComparison.OrdinalIgnoreCase))
             return "au14-threat-vote-option-tribal";
 
-        if (threatId.Contains("abomination", StringComparison.OrdinalIgnoreCase))
-            return "au14-threat-vote-option-abominations";
+        if (threatId.Contains("biomorph", StringComparison.OrdinalIgnoreCase))
+            return "au14-threat-vote-option-biomorphs";
 
         if (threatId.Contains("xeno", StringComparison.OrdinalIgnoreCase))
             return "au14-threat-vote-option-xeno";

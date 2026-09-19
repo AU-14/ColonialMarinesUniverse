@@ -5,13 +5,13 @@ using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared.CMU14.Threats.Mobs.Biomorph;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.SSDIndicator;
-using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationMimicComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
+using BiomorphComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphComponent;
 using ApeComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeComponent;
 using TribalComponent = Content.Shared.CMU14.Threats.Mobs.Tribal.TribalComponent;
 
@@ -72,7 +72,7 @@ internal sealed class ThreatRuleHelper : EntitySystem
     {
         if (HasComp<XenoComponent>(uid) || HasComp<YautjaComponent>(uid)
             || HasComp<ApeComponent>(uid) || HasComp<TribalComponent>(uid)
-            || HasComp<AbominationComponent>(uid) || HasComp<AbominationMimicComponent>(uid))
+            || HasComp<BiomorphComponent>(uid) || HasComp<BiomorphMimicComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))

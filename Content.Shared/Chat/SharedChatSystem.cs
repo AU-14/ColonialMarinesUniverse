@@ -1,6 +1,5 @@
 using System.Collections.Frozen;
 using System.Text.RegularExpressions;
-using Content.Shared.CMU14.Threats.Mobs.Abomination;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Xenonids;
