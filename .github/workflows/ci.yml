@@ -332,7 +332,6 @@ jobs:
       - schema-validators
       - rsi-validator
       - integration-tests
-      - auto-retry-infra-kills
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -520,23 +519,53 @@ jobs:
               FullyQualifiedName~Content.IntegrationTests._RMC14
               | FullyQualifiedName~Content.IntegrationTests.Tests._RMC14.
           - name: cmu
+            # Both namespace spellings are in use. Medical and chemistry need their
+            # own processes; matching only _CMU14 leaves them all in this shard.
             filter: >-
-              (FullyQualifiedName~Content.IntegrationTests._CMU14
+              (FullyQualifiedName~Content.IntegrationTests._CMU14.
               | FullyQualifiedName~Content.IntegrationTests.CMU14.)
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Chemistry
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Yautja
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.ZLevels
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Diagnostics
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Camera.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Chemistry.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Chemistry.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Yautja.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Yautja.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.ZLevels.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.ZLevels.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Diagnostics.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Diagnostics.
           - name: cmu_2
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Camera
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Medical
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Chemistry
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Yautja
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.ZLevels
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Diagnostics
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Camera.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Camera.
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Yautja.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Yautja.
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.ZLevels.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.ZLevels.
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Diagnostics.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Diagnostics.
+          - name: cmu_chemistry
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Chemistry.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Chemistry.
+          - name: cmu_medical_anatomy
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.Anatomy.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.Anatomy.
+          - name: cmu_medical_treatment
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.Treatment.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.Treatment.
+          - name: cmu_medical
+            filter: >-
+              (FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.)
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.Anatomy.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.Anatomy.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.Treatment.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.Treatment.
           - name: au14
             filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
@@ -617,38 +646,3 @@ jobs:
             echo "attempt $attempt failed"
           done
           exit 1
-
-  # Auto re-run shards the hosted runner pool stopped mid-job (SIGTERM teardown
-  # of ubuntu-latest VMs, recorded as failure with no test failures).
-  auto-retry-infra-kills:
-    name: Auto-retry runner-killed jobs
-    needs: integration-tests
-    if: failure() && github.run_attempt < 3
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      actions: write
-    steps:
-      - name: Re-run jobs whose runner was stopped
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          killed=0
-          for job in $(gh api "repos/$REPO/actions/runs/$RUN_ID/jobs?per_page=100" \
-              --jq '.jobs[] | select(.conclusion == "failure") | .id'); do
-            # CMU14: teardown-killed jobs have no failed step, so --log-failed comes back
-            # empty and the signature only exists in the full job log.
-            if curl -sL -H "Authorization: Bearer $GH_TOKEN" \
-                "https://api.github.com/repos/$REPO/actions/jobs/$job/logs" | \
-                grep -q "The runner has received a shutdown signal"; then
-              killed=1
-              echo "job $job died with a runner teardown"
-            fi
-          done
-          if [ "$killed" = 1 ]; then
-            gh api -X POST "repos/$REPO/actions/runs/$RUN_ID/rerun-failed-jobs"
-          else
-            echo "no teardown signature; failures stand"
-          fi
