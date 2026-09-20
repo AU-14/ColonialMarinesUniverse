@@ -25,6 +25,11 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     /// </summary>
     public const float ZLevelVisualOffset = 0.75f;
 
+    public float GetZLevelVisualOffset(EntityUid? map)
+    {
+        return TryComp<CMUZLevelMapComponent>(map, out var level) ? level.VisualOffset : ZLevelVisualOffset;
+    }
+
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedTransformSystem _transform = default!;

@@ -1195,6 +1195,10 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void CheckRoundShouldEnd()
     {
+        var cinematic = new Content.Shared.CMU14.Hijack.CMUShipRoundEndAttemptEvent();
+        RaiseLocalEvent(ref cinematic);
+        if (cinematic.Cancelled)
+            return;
         var query = QueryActiveRules();
         while (query.MoveNext(out var uid, out _, out var distress, out var gameRule))
         {
@@ -1919,6 +1923,10 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void EndRound(CMDistressSignalRuleComponent rule, DistressSignalRuleResult result, LocId? customMessage = null)
     {
+        var hijack = new Content.Shared.CMU14.Hijack.CMUShipRoundEndAttemptEvent();
+        RaiseLocalEvent(ref hijack);
+        if (hijack.Cancelled)
+            return;
         if (!rule.AutoEnd)
             return;
 

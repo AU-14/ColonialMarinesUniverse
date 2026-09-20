@@ -665,6 +665,13 @@ public abstract partial class CMUSharedZLevelsSystem
         return score < bestScore;
     }
 
+    protected bool HasZPhysicsParent(TransformComponent xform)
+    {
+        return xform.MapUid != null &&
+               (xform.ParentUid == xform.MapUid ||
+                xform.ParentUid == xform.GridUid && HasComp<CMUZLevelDeckComponent>(xform.ParentUid));
+    }
+
     private void StopZMovement(EntityUid uid, CMUZPhysicsComponent zPhys)
     {
         var oldVelocity = zPhys.Velocity;
@@ -1703,31 +1710,29 @@ public abstract partial class CMUSharedZLevelsSystem
         var mapCoordinates = _transform.ToMapCoordinates(coordinates);
         if (!_map.TryGetMap(mapCoordinates.MapId, out var mapUid) ||
             mapUid is not { } resolvedMapUid ||
-            !_zMapQuery.TryComp(resolvedMapUid, out var zMap) ||
-            !_gridQuery.TryComp(resolvedMapUid, out var grid))
+            !_zMapQuery.TryComp(resolvedMapUid, out var zMap))
         {
             return true;
         }
 
         var worldPosition = mapCoordinates.Position;
         Entity<CMUZLevelMapComponent?> checkingMap = (resolvedMapUid, zMap);
-        var checkingGrid = grid;
-
         for (var floor = 0; floor <= maxFloors; floor++)
         {
-            var tile = _map.WorldToTile(checkingMap, checkingGrid, worldPosition);
-            if (_map.TryGetTileRef(checkingMap, checkingGrid, tile, out var tileRef) &&
+            if (TryResolveMovementGrid(checkingMap, worldPosition, out var gridUid, out var checkingGrid) &&
+                _map.TryGetTileRef(gridUid, checkingGrid, worldPosition, out var tileRef) &&
                 !tileRef.Tile.IsEmpty)
             {
                 if (!_mapQuery.TryComp(checkingMap.Owner, out var map))
                     return false;
 
-                projected = _transform.ToCoordinates(new MapCoordinates(worldPosition, map.MapId));
+                // Preserve the supporting grid: the map entity can own an empty
+                // background grid, which makes tile-based fire resolve as space.
+                projected = _transform.ToCoordinates(gridUid, new MapCoordinates(worldPosition, map.MapId));
                 return true;
             }
 
-            if (!TryMapDown(checkingMap, out var belowMap) ||
-                !_gridQuery.TryComp(belowMap.Value, out checkingGrid))
+            if (!TryMapDown(checkingMap, out var belowMap))
             {
                 break;
             }

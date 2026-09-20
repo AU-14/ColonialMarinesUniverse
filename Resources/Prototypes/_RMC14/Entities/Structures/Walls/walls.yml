@@ -593,6 +593,7 @@
   parent: CMBaseWallInvincible
   id: CMWallShuttleBlack
   components:
+  - type: CMUCrackImmune
   - type: Sprite
     sprite: _RMC14/Structures/Walls/shuttle.rsi
     state: wall3

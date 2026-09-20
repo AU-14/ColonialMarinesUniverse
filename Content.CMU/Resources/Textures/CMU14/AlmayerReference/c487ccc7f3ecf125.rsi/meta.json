@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "CM-SS13 contributors: https://github.com/cmss13-devs/cmss13/blob/f24cf8e0532cb1736ac4ba2e3d17f3c27d18e13f/icons/turf/walls/almayer_white.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "wwall0",
+      "directions": 4
+    },
+    {
+      "name": "wwall1",
+      "directions": 4
+    },
+    {
+      "name": "wwall2",
+      "directions": 4
+    },
+    {
+      "name": "wwall3",
+      "directions": 4
+    },
+    {
+      "name": "wwall4",
+      "directions": 4
+    },
+    {
+      "name": "wwall5",
+      "directions": 4
+    },
+    {
+      "name": "wwall6",
+      "directions": 4
+    },
+    {
+      "name": "wwall7",
+      "directions": 4
+    },
+    {
+      "name": "base"
+    }
+  ]
+}

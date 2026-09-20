@@ -1,0 +1,55 @@
+# Exact CMSS13 map appearances use these bases when CMU has no matching machine.
+- type: entity
+  abstract: true
+  id: CMUAlmayerReferenceProp
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    noRot: true
+  - type: Clickable
+  - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  abstract: true
+  parent: CMUAlmayerReferenceProp
+  id: CMUAlmayerReferenceSolid
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 100
+        mask: [FullTileMask]
+        layer: [WallLayer]
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: CMUAlmayerReferenceItem
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    noRot: true
+
+- type: entity
+  parent: CMUAlmayerReferenceSolid
+  id: CMUAlmayerReferenceInvisibleWall
+  name: hull support
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    visible: false

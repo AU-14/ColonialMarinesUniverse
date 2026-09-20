@@ -389,6 +389,14 @@ public abstract partial class CMUSharedZLevelsSystem
         }
     }
 
+    private bool IsOpeningOnMap(EntityUid map, Vector2 worldPosition)
+    {
+        // The map may be an empty background for a movable ship deck. Test the
+        // actual supporting grid, otherwise every intact deck is shoot-through.
+        return !_map.TryFindGridAt(map, worldPosition, out var gridUid, out var grid) ||
+               CMUZLevelOpeningCache.IsOpeningTile(gridUid, grid, worldPosition, _map, TilDefMan);
+    }
+
     private IEnumerable<Vector2i> EnumerateZShotLine(Entity<MapGridComponent> map, Vector2 from, Vector2 to)
     {
         var localFrom = _map.WorldToLocal(map, map.Comp, from) / map.Comp.TileSize;

@@ -19,4 +19,11 @@ public sealed partial class CMUZLevelMapComponent : Component
 
     [DataField, AutoNetworkedField]
     public int Depth = 0;
+
+    /// <summary>
+    /// Screen-space height per deck. Aligned ship plans use zero so that stairs,
+    /// walls and openings on adjacent decks share the same projected tile.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float VisualOffset = 0.75f;
 }

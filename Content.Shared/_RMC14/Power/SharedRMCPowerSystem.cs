@@ -437,6 +437,8 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
     private void OnFusionReactorInteractUsing(Entity<RMCFusionReactorComponent> ent, ref InteractUsingEvent args)
     {
+        if (args.Handled)
+            return;
         var user = args.User;
         var used = args.Used;
 
@@ -592,6 +594,8 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
     private void OnFusionReactorInteractHand(Entity<RMCFusionReactorComponent> ent, ref InteractHandEvent args)
     {
+        if (args.Handled)
+            return;
         var user = args.User;
         if (!HasComp<XenoComponent>(user) || !HasComp<MeleeWeaponComponent>(user))
             return;
@@ -911,6 +915,8 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         Dirty(ent);
     }
 
+    public void RefreshFusionReactorAppearance(Entity<RMCFusionReactorComponent> ent) => UpdateAppearance(ent);
+
     private void UpdateAppearance(Entity<RMCFusionReactorComponent> ent)
     {
         switch (ent.Comp.State)
@@ -934,7 +940,11 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             return;
         }
 
-        // TODO RMC14 overloaded
+        if (TryComp(ent, out Content.Shared.CMU14.Hijack.CMUReactorOverloadComponent? overload) && overload.Overloaded)
+        {
+            _appearance.SetData(ent, RMCFusionReactorLayers.Layer, RMCFusionReactorVisuals.Overloaded);
+            return;
+        }
         // TODO RMC14 fuel use
         _appearance.SetData(ent, RMCFusionReactorLayers.Layer, RMCFusionReactorVisuals.Hundred);
     }
@@ -1004,6 +1014,16 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         powerGroup = default;
         if (mapUid is not { } map || TerminatingOrDeleted(map))
             return false;
+
+        // A wreck is vertically connected to the planet for movement, not electricity.
+        var ships = EntityQueryEnumerator<Content.Shared.CMU14.Hijack.CMUShipHijackComponent>();
+        while (ships.MoveNext(out var uid, out var ship))
+        {
+            if (!ship.ShipMaps.Contains(map))
+                continue;
+            powerGroup = uid;
+            return true;
+        }
 
         var networkUid = _zLevels.TryGetZNetwork(map, out var network)
             ? network.Value.Owner

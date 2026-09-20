@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using Content.Shared.CMU14.Hijack;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Explosion;
@@ -63,6 +64,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private CMUShipHijackSystem _shipHijack = default!;
 
     private EntityQuery<AreaComponent> _areaQuery;
     private EntityQuery<DoorComponent> _doorQuery;
@@ -111,17 +113,18 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
     private void OnDropshipHijackLanded(ref DropshipHijackLandedEvent ev)
     {
-        var evacuationProgress = EnsureComp<EvacuationProgressComponent>(ev.Map);
+        var progressMap = _shipHijack.TryGetShip(ev.Map, out var ship) ? ship.Owner : ev.Map;
+        var evacuationProgress = EnsureComp<EvacuationProgressComponent>(progressMap);
         evacuationProgress.DropShipCrashed = true;
         evacuationProgress.VictimFaction = ev.VictimFaction;
         evacuationProgress.IsHumanHijack = ev.IsHumanHijack;
-        Dirty(ev.Map, evacuationProgress);
+        Dirty(progressMap, evacuationProgress);
 
         // Only unlock doors on the victim's ship map
         var doors = EntityQueryEnumerator<EvacuationDoorComponent, TransformComponent>();
         while (doors.MoveNext(out var uid, out var door, out var xform))
         {
-            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
+            if (!IsOnEvacuatingShip(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             door.Locked = false;
@@ -137,7 +140,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var lifeboats = EntityQueryEnumerator<LifeboatComputerComponent, TransformComponent>();
         while (lifeboats.MoveNext(out var uid, out var computer, out var xform))
         {
-            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
+            if (!IsOnEvacuatingShip(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             computer.Enabled = true;
@@ -147,7 +150,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var evacuation = EntityQueryEnumerator<EvacuationComputerComponent, TransformComponent>();
         while (evacuation.MoveNext(out var computerId, out var computer, out var xform))
         {
-            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
+            if (!IsOnEvacuatingShip(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             if (computer.Mode == EvacuationComputerMode.Disabled)
@@ -164,7 +167,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var lifeboats = EntityQueryEnumerator<LifeboatComputerComponent, TransformComponent>();
         while (lifeboats.MoveNext(out var uid, out var computer, out var xform))
         {
-            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
+            if (!IsOnEvacuatingShip(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             computer.Enabled = false;
@@ -178,7 +181,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var evacuation = EntityQueryEnumerator<EvacuationComputerComponent, TransformComponent>();
         while (evacuation.MoveNext(out var computerId, out var computer, out var xform))
         {
-            if (!_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
+            if (!IsOnEvacuatingShip(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             if (computer.Mode == EvacuationComputerMode.Disabled)
@@ -207,10 +210,13 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         // if (!_config.GetCVar(CCVars.GridFill))
         //     return;
 
-        if (_map == null)
+        // CMU14: map reload/round cleanup can delete the temporary holding map.
+        // Recreate it before loading this ship's evacuation grids.
+        if (_map == null || !_mapSystem.MapExists(_map))
         {
             _mapSystem.CreateMap(out var mapId);
             _map = mapId;
+            _index = 0;
         }
 
         var offset = new Vector2(_index * 50, _index * 50);
@@ -326,6 +332,11 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     private void OnEvacuationComputerLaunch(Entity<EvacuationComputerComponent> ent, ref EvacuationComputerLaunchBuiMsg args)
     {
         var user = args.Actor;
+        if (!_shipHijack.CanLaunch(ent))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-hijack-launch-unavailable"), ent, user, PopupType.SmallCaution);
+            return;
+        }
         if (ent.Comp.Mode != EvacuationComputerMode.Ready)
         {
             Log.Warning($"{ToPrettyString(user)} tried to activate evacuation computer {ToPrettyString(ent)} that is not ready. Mode: {ent.Comp.Mode}");
@@ -397,6 +408,11 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     private void OnLifeboatComputerLaunch(Entity<LifeboatComputerComponent> ent, ref LifeboatComputerLaunchBuiMsg args)
     {
         var user = args.Actor;
+        if (!_shipHijack.CanLaunch(ent, lifeboat: true))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-hijack-launch-unavailable"), ent, user, PopupType.SmallCaution);
+            return;
+        }
         if (!ent.Comp.Enabled)
         {
             Log.Warning($"{ToPrettyString(user)} tried to activate lifeboat computer {ToPrettyString(ent)} that is not ready.");
@@ -436,7 +452,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var pumps = EntityQueryEnumerator<EvacuationPumpComponent, TransformComponent>();
         while (pumps.MoveNext(out var uid, out _, out var xform))
         {
-            if (!_zLevels.IsSameZNetwork(xform.MapUid, mapUid)) // CMU14
+            if (!IsOnEvacuatingShip(xform.MapUid, mapUid)) // CMU14
                 continue;
 
             _appearance.SetData(uid, EvacuationPumpLayers.Layer, visual);
@@ -448,7 +464,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var pumps = EntityQueryEnumerator<EvacuationPumpComponent, TransformComponent>();
         while (pumps.MoveNext(out var uid, out var pump, out var xform))
         {
-            if (!_zLevels.IsSameZNetwork(xform.MapUid, mapUid)) // CMU14
+            if (!IsOnEvacuatingShip(xform.MapUid, mapUid)) // CMU14
                 continue;
 
             _ambientSound.SetSound(uid, pump.ActiveSound);
@@ -516,6 +532,11 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     {
         if (_net.IsClient) return;
         DebugTools.Assert(map != null);
+        if (_shipHijack.TryGetShip(map.Value, out var ship))
+        {
+            ToggleHijackEvacuation(ship, startSound, cancelSound);
+            return;
+        }
         var progress = EnsureComp<EvacuationProgressComponent>(map.Value);
 
         if (progress.Enabled && progress.EnabledAt is { } enabledAt)
@@ -597,9 +618,9 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             return 0;
 
         var query = EntityQueryEnumerator<EvacuationProgressComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var progress, out var transform))
+        while (query.MoveNext(out var uid, out var progress, out _))
         {
-            if (_zLevels.IsSameZNetwork(transform.MapUid, mapUid))
+            if (IsOnEvacuatingShip(mapUid, uid))
                 return (int)progress.Progress;
         }
 
@@ -620,6 +641,10 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var query = EntityQueryEnumerator<EvacuationProgressComponent>();
         while (query.MoveNext(out var uid, out var progress))
         {
+            // These maps use ship flight objectives and manual reactor overloads.
+            if (HasComp<CMUShipHijackComponent>(uid))
+                continue;
+
             //Only start fueling once the dropship has crashed into the ship
             if (!progress.DropShipCrashed)
                 continue;

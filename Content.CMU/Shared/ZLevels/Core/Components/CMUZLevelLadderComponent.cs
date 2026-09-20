@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using System.Numerics;
 using Content.Shared.Interaction;
 using Robust.Shared.Audio;
 
@@ -28,6 +29,18 @@ public sealed partial class CMUZLevelLadderComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public int Offset = 1;
+
+    /// <summary>A through ladder can also be climbed in the other direction.</summary>
+    [DataField, AutoNetworkedField]
+    public int? AdditionalOffset;
+
+    /// <summary>Offset from this ladder to its primary exit, in the deck's local axes.</summary>
+    [DataField, AutoNetworkedField]
+    public Vector2 LandingOffset;
+
+    /// <summary>Exit offset when climbing towards AdditionalOffset.</summary>
+    [DataField, AutoNetworkedField]
+    public Vector2 AdditionalLandingOffset;
 
     /// <summary>
     /// Local Z position to apply after the move. A small positive value lets the user rest on a lower-level ladder top.

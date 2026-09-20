@@ -92,6 +92,10 @@ public sealed partial class SubFloorHideSystem : SharedSubFloorHideSystem
 
         _sprite.SetVisible((uid, args.Sprite), hasVisibleLayer || revealed);
 
+        // CMU14: revealing disposal pipes must not lift them over catwalks.
+        if (component.PreserveDrawDepth)
+            return;
+
         if (ShowAll)
         {
             // Allows sandbox mode to make wires visible over other stuff.

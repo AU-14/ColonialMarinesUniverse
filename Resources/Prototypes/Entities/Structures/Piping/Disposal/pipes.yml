@@ -17,6 +17,7 @@
   - type: Visibility
     layer: 1
   - type: SubFloorHide
+    preserveDrawDepth: true # CMU14: remain below catwalks in reveal modes.
   - type: Clickable
   - type: InteractionOutline
   - type: Physics

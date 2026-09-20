@@ -9,6 +9,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Lockers/fridge.rsi
   - type: AntiRottingContainer
+  - type: CMUNuclearShelter
 
 - type: entity
   parent: CMLockerFridge
