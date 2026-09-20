@@ -83,6 +83,9 @@
   - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ-1.yml
   mapsAbove:
   - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ1.yml
+  - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ2.yml
+  - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ3.yml
+
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

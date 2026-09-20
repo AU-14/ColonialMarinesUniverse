@@ -289,3 +289,43 @@
   parent: AU14AreaUSSGeorgeBush
   id: AU14AreaUSSGeorgeBushLowerEngineering
   name: "Lower Engineering"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushVehicleStorage
+  name: "Vehicle Storage"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushPX
+  name: "Post Exchange"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushSubDeck
+  name: "Sub-Deck Hallway"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushShootHouse
+  name: "Shoot House"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushGym
+  name: "Gym"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushAtmos
+  name: "Atmospherics Control"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushAtmos
+  name: "Auxilary Flight Deck"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushTelecomms
+  name: "Telecommunications"

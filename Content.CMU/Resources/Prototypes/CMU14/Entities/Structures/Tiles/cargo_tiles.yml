@@ -1,0 +1,11 @@
+- type: tile
+  parent: CMFloorCargoBase
+  id: CMUFloorCargoGrate
+  name: cargo grate
+  sprite: /Textures/CMU14/Tiles/Cargo/cargo1.png
+
+- type: tile
+  parent: CMFloorCargoBase
+  id: CMUFloorCargoMarked
+  name: marked cargo floor
+  sprite: /Textures/CMU14/Tiles/Cargo/cargo2.png

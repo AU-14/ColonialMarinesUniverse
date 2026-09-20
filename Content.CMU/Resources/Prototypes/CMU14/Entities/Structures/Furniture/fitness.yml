@@ -1,0 +1,39 @@
+- type: entity
+  parent: SeatBase
+  id: CMUFitnessWeightsBench
+  name: weights bench
+  description: A bench for pumping iron.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Anchorable
+  - type: Rotatable
+  - type: Sprite
+    sprite: CMU14/N14content/fitness.rsi
+    state: fitnessweight
+
+- type: entity
+  parent: CMUFitnessWeightsBench
+  id: CMUFitnessWeightLifter
+  name: weight lifter
+  components:
+  - type: Sprite
+    state: fitnesslifter
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.1"
+
+- type: entity
+  parent: BaseStructure
+  id: CMUFitnessPunchingBag
+  name: punching bag
+  description: A punching bag. Let's get big!
+  components:
+  - type: Sprite
+    sprite: CMU14/N14content/fitness.rsi
+    state: punchingbag
