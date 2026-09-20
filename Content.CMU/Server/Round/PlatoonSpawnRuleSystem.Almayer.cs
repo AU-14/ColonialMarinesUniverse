@@ -49,18 +49,26 @@ public sealed partial class PlatoonSpawnRuleSystem
                 !HasComp<DropshipHijackDestinationComponent>(uid))
                 destinations.Add(uid);
         }
-        // Port 1 (east) is Alamo; port 2 (west) is Normandy.
+        // Assign each selected airframe a separate hangar, east to west.
         destinations = destinations.OrderByDescending(uid => Transform(uid).LocalPosition.X).ToList();
-        if (destinations.Count < supply.DropshipMaps.Count)
+        if (destinations.Count == 0)
         {
-            Log.Error($"Almayer {ToPrettyString(map)} has fewer landing zones than its initial dropships.");
+            Log.Error($"Almayer {ToPrettyString(map)} has no dropship landing zones.");
             return;
         }
 
         var faction = AlmayerFaction(map);
-        for (var i = 0; i < supply.DropshipMaps.Count; i++)
+        if (supply.InitialDropshipMaps == null)
         {
-            var path = supply.DropshipMaps[i];
+            var selected = faction == "opfor" ? SelectedOpforPlatoon : SelectedGovforPlatoon;
+            var platoon = selected ?? _prototypeManager.Index(supply.DefaultPlatoon);
+            var maps = platoon.CompatibleDropships.Distinct().ToArray();
+            Random.Shared.Shuffle(maps);
+            supply.InitialDropshipMaps = maps.Take(destinations.Count).ToList();
+        }
+        for (var i = 0; i < supply.InitialDropshipMaps.Count; i++)
+        {
+            var path = supply.InitialDropshipMaps[i];
             if (supply.InitialDropships.ContainsKey(path))
                 continue;
             if (!_mapLoader.TryLoadMap(path, out var stagingMap, out var grids) || grids.Count != 1)
@@ -71,7 +79,8 @@ public sealed partial class PlatoonSpawnRuleSystem
             var grid = grids.Single();
             _mapSystem.InitializeMap(stagingMap.Value.Owner);
             SetPhonesFactionOnGrid(grid, faction);
-            _metaData.SetEntityName(grid, i == 0 ? "Alamo" : "Normandy");
+            if (string.IsNullOrWhiteSpace(Name(grid)) || Name(grid) == "grid")
+                _metaData.SetEntityName(grid, Name(stagingMap.Value));
             SpawnShuttleConsoleMarkers(grid, faction,
                 DropshipDestinationComponent.DestinationType.Dropship, "dropshipshuttlevmarker");
             var computer = FindNavComputerOnGrid(grid);

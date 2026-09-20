@@ -635,7 +635,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
             // don't open shitcode inside
             spawnedDropships = true;
-            // CMU14: use the same named pair and spawn record as the Govfor round path.
+            // CMU14: use the same platoon roster and spawn record as the Govfor round path.
             var almayerDropships = EntityManager.System<PlatoonSpawnRuleSystem>();
             almayerDropships.TryInitializeAlmayerDropships("govfor");
             _mapSystem.CreateMap(out var dropshipMap);

@@ -16,13 +16,7 @@ public sealed partial class CMUAlmayerSupplyComponent : Component
     [DataField]
     public Dictionary<ProtoId<AccessLevelPrototype>, ProtoId<AccessLevelPrototype>> LegacyAccess = new();
 
-    [DataField]
-    public List<ResPath> DropshipMaps =
-    [
-        new("/Maps/CMU14/Shuttles/alamo.yml"),
-        new("/Maps/CMU14/Shuttles/normandy.yml"),
-    ];
-
-    // Round rules and the standalone map share this record to avoid duplicate arrivals.
+    // Keep one selection from the platoon's roster across all round-start paths and retries.
+    public List<ResPath>? InitialDropshipMaps;
     public readonly Dictionary<ResPath, EntityUid> InitialDropships = new();
 }

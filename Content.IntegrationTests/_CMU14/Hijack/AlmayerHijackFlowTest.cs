@@ -8,19 +8,23 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Hijack;
+using Content.Shared.CMU14.util;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Maps;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Hijack;
 
 public sealed partial class AlmayerHijackMapTest
 {
-    [Test]
-    public async Task InitialAlamoAndNormandyArriveAtSeparateAlmayerHangarsOnlyOnce()
+    [TestCase(null)]
+    [TestCase("USCM")]
+    [TestCase("HAZOPS")]
+    public async Task PlatoonDropshipsArriveAtSeparateAlmayerHangarsOnlyOnce(string? platoonId)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         EntityUid map = default;
@@ -29,6 +33,9 @@ public sealed partial class AlmayerHijackMapTest
         {
             var entities = pair.Server.EntMan;
             map = LoadAlmayer(pair);
+            var platoons = pair.Server.System<PlatoonSpawnRuleSystem>();
+            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
+            platoons.SelectedGovforPlatoon = platoonId == null ? null : prototypes.Index<PlatoonPrototype>(platoonId);
             // Exercise the standalone round hook, then the Govfor/Distress shared path.
             entities.EventBus.RaiseEvent(EventSource.Local,
                 new GameRunLevelChangedEvent(GameRunLevel.PreRoundLobby, GameRunLevel.InRound));
@@ -36,8 +43,9 @@ public sealed partial class AlmayerHijackMapTest
             var supply = entities.GetComponent<CMUAlmayerSupplyComponent>(map);
             ships = supply.InitialDropships.Values.ToArray();
             Assert.That(ships, Has.Length.EqualTo(2));
-            Assert.That(ships.Select(uid => entities.GetComponent<MetaDataComponent>(uid).EntityName),
-                Is.EquivalentTo(new[] { "Alamo", "Normandy" }));
+            var expected = prototypes.Index<PlatoonPrototype>(platoonId ?? supply.DefaultPlatoon.Id).CompatibleDropships;
+            Assert.That(supply.InitialDropships.Keys, Is.EquivalentTo(expected),
+                "Almayer must use the chosen platoon's maps rather than a fixed Alamo/Normandy pair.");
             Assert.That(ships.Select(uid => entities.GetComponent<DropshipComponent>(uid).Destination).Distinct().Count(), Is.EqualTo(2));
         });
         await pair.Server.WaitRunTicks(900);
