@@ -118,16 +118,8 @@
     whitelist:
       tags:
       - RMCSynthGrabbable
-  - type: damageModifierSet #CMU14
-    coefficients:
-      Blunt: 0.5
-      Slash: 0.5
-      Piercing: 0.5
-      Cold: 0.5
-      Heat: 0.5
-      Radiation: 0.2
-      Caustic: 0.5
-      Shock: 0.8
+  - type: Damageable #CMU14
+    damageModifierSet: RMCSynth
 
 RMCJobSynthetic  
 - type: entity
