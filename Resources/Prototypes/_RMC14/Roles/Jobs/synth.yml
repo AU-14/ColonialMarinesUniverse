@@ -120,8 +120,7 @@
       - RMCSynthGrabbable
   - type: Damageable #CMU14
     damageModifierSet: RMCSynth
-
-RMCJobSynthetic  
+  
 - type: entity
   id: RMCSynthHudComponents
   categories: [ HideSpawnMenu ]
