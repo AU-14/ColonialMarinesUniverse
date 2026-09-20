@@ -361,7 +361,7 @@ entities:
       parent: 1
     - type: BecomesStation
       id: Almayer
-    - type: Almayer
+    - type: Warship
     - type: GasTileOverlay
     - type: RadiationGridResistance
     - type: Gravity
