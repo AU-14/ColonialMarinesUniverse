@@ -17,7 +17,7 @@ using Robust.Shared.Console;
 namespace Content.IntegrationTests.CMU14.Round;
 
 [TestFixture]
-public sealed class GovforShipRoundTest
+public sealed partial class GovforShipRoundTest
 {
     [TestPrototypes]
     private const string Prototypes = """
