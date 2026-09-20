@@ -74104,13 +74104,11 @@ entities:
   - uid: 26739
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 41.5,13.5
       parent: 33131
   - uid: 26740
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 50.5,12.5
       parent: 33131
 - proto: CMUCanisterCarbonDioxide
@@ -74118,7 +74116,6 @@ entities:
   - uid: 26742
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 46.5,13.5
       parent: 33131
 - proto: CMUCanisterOxygen
@@ -74126,7 +74123,6 @@ entities:
   - uid: 26743
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 50.5,11.5
       parent: 33131
 - proto: CMUCanisterAir
@@ -74139,31 +74135,26 @@ entities:
   - uid: 26747
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 61.5,21.5
       parent: 33131
   - uid: 26748
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 62.5,21.5
       parent: 33131
   - uid: 26749
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 59.5,21.5
       parent: 33131
   - uid: 26750
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 60.5,21.5
       parent: 33131
   - uid: 26751
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 63.5,21.5
       parent: 33131
   - uid: 26752
