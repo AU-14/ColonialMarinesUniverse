@@ -83,14 +83,10 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
         var landing = ownerXform.Coordinates.Offset(direction * action.NormalRange);
         var landingMap = _xform.ToMapCoordinates(landing);
         var landingDistance = (landingMap.Position - ownerMap.Position).Length();
-
-        // CMU14: the default interaction mask cannot see barricades, so pounces phased through cadelines
-        if (_rmcMap.IsTileBlocked(landing, CollisionGroup.Impassable | CollisionGroup.BarricadeImpassable) ||
-            !_interaction.InRangeUnobstructed(uid, landing,
-                range: landingDistance + UnobstructedRangeBuffer,
-                collisionMask: CollisionGroup.Impassable
-                | CollisionGroup.InteractImpassable
-                | CollisionGroup.BarricadeImpassable))
+        
+        if (_rmcMap.IsTileBlocked(landing) ||
+            !_interaction.InRangeUnobstructed(uid, landing, range: landingDistance + UnobstructedRangeBuffer))
+       
         {
             _popup.PopupEntity(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
             return;
@@ -186,12 +182,8 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
             return false;
         }
 
-        // CMU14: same mask as the normal pounce, barricades must block empowered lunges too
-        if (!_interaction.InRangeUnobstructed(uid, victim.Value,
-                range: action.EmpoweredRange + UnobstructedRangeBuffer,
-                collisionMask: CollisionGroup.Impassable
-                | CollisionGroup.InteractImpassable
-                | CollisionGroup.BarricadeImpassable))
+        if (!_interaction.InRangeUnobstructed(uid, victim.Value, range: action.EmpoweredRange + UnobstructedRangeBuffer))
+
         {
             _popup.PopupEntity(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
             victim = null;
