@@ -595,6 +595,7 @@ namespace Content.Server.GameTicking
         public void EndRound(string text = "")
         {
             if (DummyTicker) return;
+            // CMU14: allow the destruction cinematic to delay round end.
             var cinematic = new Content.Shared.CMU14.Hijack.CMUShipRoundEndAttemptEvent();
             RaiseLocalEvent(ref cinematic);
             if (cinematic.Cancelled)

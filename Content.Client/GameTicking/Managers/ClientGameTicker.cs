@@ -25,7 +25,7 @@ namespace Content.Client.GameTicking.Managers
         [Dependency] private IClyde _clyde = default!;
         [Dependency] private IGameTiming _timing = default!;
         [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
-        [Dependency] private ShipHijackSystem _shipHijack = default!;
+        [Dependency] private ShipHijackSystem _shipHijack = default!; // CMU14
 
         private Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>>  _jobsAvailable = new();
         private Dictionary<NetEntity, string> _stationNames = new();
@@ -203,6 +203,7 @@ namespace Content.Client.GameTicking.Managers
             // Force an update in the event of this song being the same as the last.
             RestartSound = message.RestartSound;
 
+            // CMU14: show the summary after the destruction cinematic.
             if (!_shipHijack.TryDeferRoundEndSummary(message))
                 _userInterfaceManager.GetUIController<RoundEndSummaryUIController>().OpenRoundEndSummaryWindow(message);
         }

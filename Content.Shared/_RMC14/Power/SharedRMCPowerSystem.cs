@@ -437,6 +437,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
     private void OnFusionReactorInteractUsing(Entity<RMCFusionReactorComponent> ent, ref InteractUsingEvent args)
     {
+        // CMU14: respect reactor overload interactions handled by another system.
         if (args.Handled)
             return;
         var user = args.User;
@@ -594,6 +595,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
     private void OnFusionReactorInteractHand(Entity<RMCFusionReactorComponent> ent, ref InteractHandEvent args)
     {
+        // CMU14: respect reactor overload interactions handled by another system.
         if (args.Handled)
             return;
         var user = args.User;
@@ -915,6 +917,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         Dirty(ent);
     }
 
+    // CMU14: allow the overload system to refresh reactor visuals.
     public void RefreshFusionReactorAppearance(Entity<RMCFusionReactorComponent> ent) => UpdateAppearance(ent);
 
     private void UpdateAppearance(Entity<RMCFusionReactorComponent> ent)
@@ -940,6 +943,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             return;
         }
 
+        // CMU14: display the active reactor overload.
         if (TryComp(ent, out Content.Shared.CMU14.Hijack.CMUReactorOverloadComponent? overload) && overload.Overloaded)
         {
             _appearance.SetData(ent, RMCFusionReactorLayers.Layer, RMCFusionReactorVisuals.Overloaded);
@@ -1015,7 +1019,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         if (mapUid is not { } map || TerminatingOrDeleted(map))
             return false;
 
-        // A wreck is vertically connected to the planet for movement, not electricity.
+        // CMU14: a wreck is vertically connected to the planet for movement, not electricity.
         var ships = EntityQueryEnumerator<Content.Shared.CMU14.Hijack.CMUShipHijackComponent>();
         while (ships.MoveNext(out var uid, out var ship))
         {

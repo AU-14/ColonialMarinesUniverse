@@ -16,7 +16,7 @@ namespace Content.Server.Temperature.Systems;
 public sealed partial class TemperatureSystem : SharedTemperatureSystem
 {
     [Dependency] private AtmosphereSystem _atmosphere = default!;
-    [Dependency] private AreaSystem _areas = default!;
+    [Dependency] private AreaSystem _areas = default!; // CMU14
 
     public override void Initialize()
     {
@@ -68,6 +68,7 @@ public sealed partial class TemperatureSystem : SharedTemperatureSystem
         if (transform.MapUid == null)
             return;
 
+        // CMU14: overloaded reactor rooms heat exposed entities.
         if (_areas.TryGetArea(args.Coordinates, out var area, out _) &&
             TryComp(area.Value, out CMUOverheatedAreaComponent? reactorRoom))
         {

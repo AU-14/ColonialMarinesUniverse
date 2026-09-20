@@ -64,7 +64,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
-    [Dependency] private CMUShipHijackSystem _shipHijack = default!;
+    [Dependency] private CMUShipHijackSystem _shipHijack = default!; // CMU14
 
     private EntityQuery<AreaComponent> _areaQuery;
     private EntityQuery<DoorComponent> _doorQuery;
@@ -113,12 +113,13 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
     private void OnDropshipHijackLanded(ref DropshipHijackLandedEvent ev)
     {
+        // CMU14: progress belongs to the root ship map.
         var progressMap = _shipHijack.TryGetShip(ev.Map, out var ship) ? ship.Owner : ev.Map;
         var evacuationProgress = EnsureComp<EvacuationProgressComponent>(progressMap);
         evacuationProgress.DropShipCrashed = true;
         evacuationProgress.VictimFaction = ev.VictimFaction;
         evacuationProgress.IsHumanHijack = ev.IsHumanHijack;
-        Dirty(progressMap, evacuationProgress);
+        Dirty(progressMap, evacuationProgress); // CMU14
 
         // Only unlock doors on the victim's ship map
         var doors = EntityQueryEnumerator<EvacuationDoorComponent, TransformComponent>();
@@ -212,6 +213,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
         // CMU14: map reload/round cleanup can delete the temporary holding map.
         // Recreate it before loading this ship's evacuation grids.
+        // CMU14: map reloads may remove the shared evacuation map.
         if (_map == null || !_mapSystem.MapExists(_map))
         {
             _mapSystem.CreateMap(out var mapId);
@@ -332,6 +334,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     private void OnEvacuationComputerLaunch(Entity<EvacuationComputerComponent> ent, ref EvacuationComputerLaunchBuiMsg args)
     {
         var user = args.Actor;
+        // CMU14: ship flight stages restrict evacuation launches.
         if (!_shipHijack.CanLaunch(ent))
         {
             _popup.PopupClient(Loc.GetString("cmu-hijack-launch-unavailable"), ent, user, PopupType.SmallCaution);
@@ -408,6 +411,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     private void OnLifeboatComputerLaunch(Entity<LifeboatComputerComponent> ent, ref LifeboatComputerLaunchBuiMsg args)
     {
         var user = args.Actor;
+        // CMU14: ship flight stages restrict evacuation launches.
         if (!_shipHijack.CanLaunch(ent, lifeboat: true))
         {
             _popup.PopupClient(Loc.GetString("cmu-hijack-launch-unavailable"), ent, user, PopupType.SmallCaution);
@@ -532,6 +536,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     {
         if (_net.IsClient) return;
         DebugTools.Assert(map != null);
+        // CMU14: evacuation and manual reactor overload are independent.
         if (_shipHijack.TryGetShip(map.Value, out var ship))
         {
             ToggleHijackEvacuation(ship, startSound, cancelSound);
@@ -618,6 +623,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             return 0;
 
         var query = EntityQueryEnumerator<EvacuationProgressComponent, TransformComponent>();
+        // CMU14: exclude the colony linked to a crashed ship.
         while (query.MoveNext(out var uid, out var progress, out _))
         {
             if (IsOnEvacuatingShip(mapUid, uid))
@@ -641,7 +647,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var query = EntityQueryEnumerator<EvacuationProgressComponent>();
         while (query.MoveNext(out var uid, out var progress))
         {
-            // These maps use ship flight objectives and manual reactor overloads.
+            // CMU14: these maps use ship flight objectives and manual reactor overloads.
             if (HasComp<CMUShipHijackComponent>(uid))
                 continue;
 

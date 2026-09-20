@@ -1195,6 +1195,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void CheckRoundShouldEnd()
     {
+        // CMU14: let the destruction cinematic finish before ending the round.
         var cinematic = new Content.Shared.CMU14.Hijack.CMUShipRoundEndAttemptEvent();
         RaiseLocalEvent(ref cinematic);
         if (cinematic.Cancelled)
@@ -1923,6 +1924,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void EndRound(CMDistressSignalRuleComponent rule, DistressSignalRuleResult result, LocId? customMessage = null)
     {
+        // CMU14: let the destruction cinematic finish before ending the round.
         var hijack = new Content.Shared.CMU14.Hijack.CMUShipRoundEndAttemptEvent();
         RaiseLocalEvent(ref hijack);
         if (hijack.Cancelled)

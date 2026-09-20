@@ -87,6 +87,7 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
         _windowTargets.Clear();
         _windoorTargets.Clear();
 
+        // CMU14: all decks share the root ship damage sequence.
         var cmss13 = _shipHijack.TryGetShip(ev.Map, out var ship);
         var targetMap = cmss13 ? ship.Owner : ev.Map;
         if (HasComp<RMCHijackActiveMapComponent>(targetMap))
@@ -104,7 +105,7 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
             if (comp.Category == RMCHijackRandomDamageCategory.Pipe)
             {
                 var pipe = EnsureComp<RMCHijackActivePipeComponent>(uid);
-                pipe.Map = targetMap;
+                pipe.Map = targetMap; // CMU14
 
                 if (xform.Anchored)
                     map.Pipes.Add(uid);
@@ -131,6 +132,7 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
             }
         }
 
+        // CMU14: use the ship crash sequence for opted-in ships.
         if (cmss13)
         {
             // CM-SS13 damages APCs at impact. Hull damage follows the crash path;
@@ -246,6 +248,7 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
         if (!Resolve(map, ref map.Comp, false))
             return;
 
+        // CMU14: ship crash stages use fixed barrage sizes.
         var count = TryComp(map, out CMUShipHijackComponent? ship)
             ? Math.Min(map.Comp.Pipes.Count, ship.Stage == CMUShipHijackStage.GroundCrash ? 10 : 5)
             : GetRandomCount(map.Comp.Pipes.Count, minPercent, maxPercent);
@@ -336,12 +339,14 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
         var query = EntityQueryEnumerator<RMCHijackActiveMapComponent>();
         while (query.MoveNext(out var uid, out var active))
         {
+            // CMU14: pause the barrage with its map.
             if (Paused(uid))
                 continue;
             if (active.ExplodeAt != null && time >= active.ExplodeAt.Value)
             {
                 active.ExplodeAt = null;
 
+                // CMU14: explosions shake every ship deck.
                 if (TryComp(uid, out CMUShipHijackComponent? ship))
                 {
                     foreach (var map in ship.ShipMaps)

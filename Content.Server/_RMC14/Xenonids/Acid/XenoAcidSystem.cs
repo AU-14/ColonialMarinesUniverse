@@ -21,7 +21,7 @@ public sealed partial class XenoAcidSystem : SharedXenoAcidSystem
 
         SubscribeLocalEvent<ExpendableLightComponent, CorrodingEvent>(OnExpendableLightCorrodingEvent);
         SubscribeLocalEvent<BarricadeComponent, CorrodingEvent>(OnBarricadeCorrodingEvent);
-        SubscribeLocalEvent<CMUHijackPumpComponent, CorrodingEvent>(OnFuelPumpCorroding);
+        SubscribeLocalEvent<CMUHijackPumpComponent, CorrodingEvent>(OnFuelPumpCorroding); // CMU14
 
         Subs.CVar(_config, RMCCVars.RMCCorrosiveAcidDamageTimeSeconds, obj => CorrosiveAcidDamageTimeSeconds = obj, true);
     }
@@ -37,9 +37,11 @@ public sealed partial class XenoAcidSystem : SharedXenoAcidSystem
         expendable_light.FadeOutDuration /= expendableLightDps;
     }
 
+    // CMU14: share corrosion damage with hijack fuel pumps.
     private void OnBarricadeCorrodingEvent(Entity<BarricadeComponent> target, ref CorrodingEvent args)
         => CorrodeDamageable(target, ref args);
 
+    // CMU14: fuel pumps accept acid damage only during hijack.
     private void OnFuelPumpCorroding(Entity<CMUHijackPumpComponent> target, ref CorrodingEvent args)
     {
         if (target.Comp.Broken || !EntityManager.System<CMUShipHijackSystem>().TryGetShip(target, out var ship) ||
@@ -52,6 +54,7 @@ public sealed partial class XenoAcidSystem : SharedXenoAcidSystem
         CorrodeDamageable(target, ref args);
     }
 
+    // CMU14: common damage setup for barricades and pumps.
     private void CorrodeDamageable(EntityUid target, ref CorrodingEvent args)
     {
         AddComp(target, new DamageableCorrodingComponent

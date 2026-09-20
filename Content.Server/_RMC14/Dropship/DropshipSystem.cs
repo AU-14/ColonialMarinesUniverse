@@ -539,6 +539,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
     // CMU14 method: validate and place the deck assembly before committing flight.
     public override bool FlyTo(Entity<DropshipNavigationComputerComponent> computer, EntityUid destination, EntityUid? user, bool hijack = false, float? startupTime = null, float? hyperspaceTime = null, bool offset = false)
     {
+        // CMU14: falling and jumping ships cannot accept incoming flights.
         if (!EntityManager.System<Content.Shared.CMU14.Hijack.CMUShipHijackSystem>().CanArrive(destination))
         {
             if (user is { } pilot)
@@ -961,7 +962,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, travelState);
     }
 
-    /// <summary>Return flights already inbound when a mainship jumps or starts falling.</summary>
+    /// <summary>CMU14: return flights already inbound when a mainship jumps or starts falling.</summary>
     public void DivertIncomingHijackFlights()
     {
         var hijack = EntityManager.System<Content.Shared.CMU14.Hijack.CMUShipHijackSystem>();
@@ -1520,6 +1521,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 Dirty(uid, dropship);
 
                 Audio.PlayGlobal(dropship.CrashSound, destinationFilter, true);
+                // CMU14: the ship hijack sequence owns its impact effects.
                 if (EntityManager.System<Content.Server.CMU14.Hijack.ShipHijackSystem>()
                     .TryApplyDropshipImpact(uid, destination))
                     continue;
