@@ -16,8 +16,8 @@
     hardpointType: Cannon
     vehicleFamily: Tank
     slotType: Cannon
-    damageMultiplier: 0.125
-    repairRate: 0.01
+    damageMultiplier: 0.2
+    repairRate: 0.1
   - type: HardpointIntegrity
     maxIntegrity: 550
     integrity: 550
@@ -86,8 +86,8 @@
     hardpointType: Cannon
     vehicleFamily: Tank
     slotType: Cannon
-    damageMultiplier: 0.125
-    repairRate: 0.01
+    damageMultiplier: 0.2
+    repairRate: 0.1
   - type: HardpointIntegrity
     maxIntegrity: 400
     integrity: 400
@@ -116,8 +116,8 @@
   - type: GunSpinup
     baseShotDelay: 0.7
     baseScatter: 10
-    initialWindupDelay: 0.7
-    spinUpTime: 4
+    initialWindupDelay: 0.6
+    spinUpTime: 3
     graceAfterStop: 2
     spinDownTime: 4
     minSpinLevel: 1
@@ -178,8 +178,8 @@
     hardpointType: Cannon
     vehicleFamily: Tank
     slotType: Cannon
-    damageMultiplier: 0.125
-    repairRate: 0.01
+    damageMultiplier: 0.2
+    repairRate: 0.1
   - type: HardpointIntegrity
     maxIntegrity: 550
     integrity: 550
@@ -256,7 +256,7 @@
     vehicleFamily: Tank
     slotType: Cannon
     damageMultiplier: 0.125
-    repairRate: 0.01
+    repairRate: 0.1
   - type: HardpointIntegrity
     maxIntegrity: 500
     integrity: 500
@@ -331,7 +331,7 @@
     vehicleFamily: Tank
     slotType: Cannon
     damageMultiplier: 0.125
-    repairRate: 0.01
+    repairRate: 0.1
   - type: HardpointIntegrity
     maxIntegrity: 500
     integrity: 500
@@ -404,7 +404,7 @@
     vehicleFamily: Tank
     slotType: Cannon
     damageMultiplier: 0.125
-    repairRate: 0.01
+    repairRate: 0.1
   - type: HardpointIntegrity
     maxIntegrity: 450
     integrity: 450
