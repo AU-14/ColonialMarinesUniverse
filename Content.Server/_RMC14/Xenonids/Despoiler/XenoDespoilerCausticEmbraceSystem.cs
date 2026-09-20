@@ -8,7 +8,6 @@ using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction;
-using Content.Shared.Physics; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Server.Audio;
@@ -181,7 +180,6 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("rmc-despoiler-caustic-no-target"), uid, uid);
             return false;
         }
-
         if (!_interaction.InRangeUnobstructed(uid, victim.Value, range: action.EmpoweredRange + UnobstructedRangeBuffer))
 
         {
