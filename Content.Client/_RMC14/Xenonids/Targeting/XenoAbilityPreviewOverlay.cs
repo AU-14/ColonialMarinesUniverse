@@ -61,10 +61,10 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
     private static readonly Color AcidMineOutlineColor = new Color(0.6f, 0.9f, 0.2f);
     private static readonly Color DeployTrapsOutlineColor = new Color(0.8f, 0.6f, 0.2f);
     private static readonly Color SentinelToxinOutlineColor = new Color(0.34f, 0.95f, 0.24f);
-    private static readonly Color WarlockOutlineColor = new Color(0.298f, 0.114f, 0.584f); // #4c1d95
+    // CMU14 removed private static readonly Color WarlockOutlineColor = new Color(0.298f, 0.114f, 0.584f); // #4c1d95
 
     private const float OutlineAlpha = 0.8f;
-    private const float WarlockShieldIndicatorAlpha = 0.8f;
+    // CMU14 removed private const float WarlockShieldIndicatorAlpha = 0.8f;
     private const float OutlineThickness = 0.1f;
     private const int BombardDefaultRadius = 3;
     private const float ToxicSpitDefaultRange = 7f;
@@ -102,7 +102,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
     private readonly EntityQuery<XenoDespoilerCausticEmbraceActionComponent> _causticEmbraceQ;
     private readonly EntityQuery<XenoDespoilerComponent> _despoilerQ;
     private readonly EntityQuery<XenoToxicSpitComponent> _toxicSpitQ;
-    private readonly EntityQuery<CMUXenoWarlockComponent> _warlockQ;
+    // CMU14 removed private readonly EntityQuery<CMUXenoWarlockComponent> _warlockQ;
 
     public XenoAbilityPreviewOverlay(IEntityManager ents)
     {
@@ -139,7 +139,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
         _causticEmbraceQ = ents.GetEntityQuery<XenoDespoilerCausticEmbraceActionComponent>();
         _despoilerQ = ents.GetEntityQuery<XenoDespoilerComponent>();
         _toxicSpitQ = ents.GetEntityQuery<XenoToxicSpitComponent>();
-        _warlockQ = ents.GetEntityQuery<CMUXenoWarlockComponent>();
+       // CMU14 removed _warlockQ = ents.GetEntityQuery<CMUXenoWarlockComponent>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -276,7 +276,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
                     player.Value);
                 break;
 
-            case CMUXenoPsychicBlastActionEvent:
+            /* CMU14 removed case CMUXenoPsychicBlastActionEvent:
                 if (_warlockQ.TryComp(player.Value, out var blastWarlock))
                     DrawWarlockRangeCircle(args, player.Value, originMap, blastWarlock.PsychicBlastRange);
                 break;
@@ -288,11 +288,11 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
 
             case CMUXenoPsychicShieldActionEvent:
                 DrawWarlockShieldTargetPreview(args, player.Value, originMap, mousePos);
-                break;
+                break;*/
         }
     }
 
-    private void DrawWarlockShieldTargetPreview(
+    /*private void DrawWarlockShieldTargetPreview(
         in OverlayDrawArgs args,
         EntityUid player,
         MapCoordinates originMap,
@@ -317,7 +317,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
             return _transform.GetWorldRotation(player).GetCardinalDir();
 
         return delta.ToWorldAngle().GetCardinalDir();
-    }
+    }*/
 
     // Tile-shaped range indicator that tracks the warlock's actual world position (like the
     // shield preview) instead of snapping to their tile centre. A tile is highlighted when the
@@ -331,7 +331,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
     // to accept clicks anywhere on a highlighted tile, so the true reach lives on the warlock
     // and CMUXenoWarlockSystem.TrySnapAbilityTargetToTile enforces the same closest-point-of-
     // tile rule server-side, guaranteeing every highlighted tile is a legal target.
-    private void DrawWarlockRangeCircle(
+    /*private void DrawWarlockRangeCircle(
         in OverlayDrawArgs args,
         EntityUid player,
         MapCoordinates originMap,
@@ -417,7 +417,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
         DrawEdge(handle, c2, c3, color);
         DrawEdge(handle, c3, c4, color);
         DrawEdge(handle, c4, c1, color);
-    }
+    }*/
 
     private void DrawResinSurge(
         in OverlayDrawArgs args,
