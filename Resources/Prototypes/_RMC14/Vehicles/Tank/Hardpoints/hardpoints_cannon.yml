@@ -16,8 +16,8 @@
     hardpointType: Cannon
     vehicleFamily: Tank
     slotType: Cannon
-    damageMultiplier: 0.2
-    repairRate: 0.1
+    damageMultiplier: 0.15
+    repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 550
     integrity: 550
@@ -86,8 +86,8 @@
     hardpointType: Cannon
     vehicleFamily: Tank
     slotType: Cannon
-    damageMultiplier: 0.2
-    repairRate: 0.1
+    damageMultiplier: 0.15
+    repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 400
     integrity: 400
@@ -178,8 +178,8 @@
     hardpointType: Cannon
     vehicleFamily: Tank
     slotType: Cannon
-    damageMultiplier: 0.2
-    repairRate: 0.1
+    damageMultiplier: 0.15
+    repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 550
     integrity: 550
@@ -256,7 +256,7 @@
     vehicleFamily: Tank
     slotType: Cannon
     damageMultiplier: 0.125
-    repairRate: 0.1
+    repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 500
     integrity: 500
@@ -331,7 +331,7 @@
     vehicleFamily: Tank
     slotType: Cannon
     damageMultiplier: 0.125
-    repairRate: 0.1
+    repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 500
     integrity: 500
@@ -404,7 +404,7 @@
     vehicleFamily: Tank
     slotType: Cannon
     damageMultiplier: 0.125
-    repairRate: 0.1
+    repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 450
     integrity: 450
