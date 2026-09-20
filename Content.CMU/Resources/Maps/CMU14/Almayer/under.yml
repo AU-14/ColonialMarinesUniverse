@@ -21483,7 +21483,7 @@ entities:
     - type: Transform
       pos: 125.473,-11.3124
       parent: 33131
-- proto: PortableScrubber
+- proto: RMCAirScrubberPortable
   entities:
   - uid: 25971
     components:

@@ -39750,21 +39750,21 @@ entities:
     - type: Transform
       pos: -1.0138,-14.3079
       parent: 33131
-- proto: CMStampCE
+- proto: AU14StampEO
   entities:
   - uid: 9908
     components:
     - type: Transform
       pos: 73.7067,12.9975
       parent: 33131
-- proto: CMStampCMO
+- proto: AU14StampCMO
   entities:
   - uid: 9909
     components:
     - type: Transform
       pos: -24.3042,7.7434
       parent: 33131
-- proto: CMStampCMP
+- proto: AU14StampCMP
   entities:
   - uid: 9910
     components:
@@ -39790,7 +39790,7 @@ entities:
     - type: Transform
       pos: -0.743432,-14.4082
       parent: 33131
-- proto: CMStampXO
+- proto: AU14StampAO
   entities:
   - uid: 9916
     components:
@@ -72344,7 +72344,7 @@ entities:
     - type: Transform
       pos: -40.5352,-5.48677
       parent: 33131
-- proto: GasThermoMachineFreezer
+- proto: CMUGasThermoMachineFreezer
   entities:
   - uid: 25940
     components:
@@ -74099,7 +74099,7 @@ entities:
     - type: Transform
       pos: 26.6492,18.3675
       parent: 33131
-- proto: RMCCanisterBase
+- proto: CMUCanisterEmpty
   entities:
   - uid: 26739
     components:
@@ -74113,7 +74113,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 50.5,12.5
       parent: 33131
-- proto: RMCCanisterBlack
+- proto: CMUCanisterCarbonDioxide
   entities:
   - uid: 26742
     components:
@@ -74121,7 +74121,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 46.5,13.5
       parent: 33131
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 26743
     components:
@@ -74129,7 +74129,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 50.5,11.5
       parent: 33131
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 26746
     components:
@@ -97417,7 +97417,7 @@ entities:
     - type: Transform
       pos: -8.5,-7.5
       parent: 33131
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 32321
     components:

@@ -76023,7 +76023,7 @@ entities:
     - type: Transform
       pos: 56.4194,-18.4103
       parent: 33131
-- proto: GasFilter
+- proto: CMUGasFilter
   entities:
   - uid: 23014
     components:
@@ -76041,7 +76041,7 @@ entities:
       parent: 33131
     - type: AtmosPipeColor
       color: '#0000FFFF'
-- proto: GasMixer
+- proto: CMUGasMixer
   entities:
   - uid: 23016
     components:
@@ -76054,7 +76054,7 @@ entities:
       inletOneConcentration: 0.22
     - type: AtmosPipeColor
       color: '#17E8E2FF'
-- proto: GasOutletInjector
+- proto: CMUOutletInjector
   entities:
   - uid: 23017
     components:
@@ -76071,7 +76071,7 @@ entities:
       parent: 33131
     - type: AtmosPipeColor
       color: '#17E8E2FF'
-- proto: GasPassiveVent
+- proto: CMUPassiveVent
   entities:
   - uid: 23019
     components:
@@ -76100,7 +76100,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 88.5,-15.5
       parent: 33131
-- proto: GasPort
+- proto: CMUGasPort
   entities:
   - uid: 25934
     components:
@@ -76108,7 +76108,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -19.5,-0.5
       parent: 33131
-- proto: GasPressurePump
+- proto: CMUGasPressurePump
   entities:
   - uid: 25935
     components:
@@ -76146,14 +76146,14 @@ entities:
       targetPressure: 4500
     - type: AtmosPipeColor
       color: '#FF0000FF'
-- proto: GasThermoMachineFreezer
+- proto: CMUGasThermoMachineFreezer
   entities:
   - uid: 25939
     components:
     - type: Transform
       pos: -23.5,-0.5
       parent: 33131
-- proto: GasValve
+- proto: CMUGasValve
   entities:
   - uid: 25941
     components:
@@ -76163,7 +76163,7 @@ entities:
       parent: 33131
     - type: AtmosPipeColor
       color: '#FF0000FF'
-- proto: GasVolumePump
+- proto: CMUGasVolumePump
   entities:
   - uid: 25942
     components:
@@ -76280,7 +76280,7 @@ entities:
     - type: Transform
       pos: 109.5,2.5
       parent: 33131
-- proto: PortableScrubber
+- proto: RMCAirScrubberPortable
   entities:
   - uid: 25970
     components:
@@ -78019,28 +78019,28 @@ entities:
     - type: Transform
       pos: -65.1554,-7.33099
       parent: 33131
-- proto: RMCCanisterBase
+- proto: CMUCanisterEmpty
   entities:
   - uid: 26741
     components:
     - type: Transform
       pos: 87.5,15.5
       parent: 33131
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 26744
     components:
     - type: Transform
       pos: 81.5,-16.5
       parent: 33131
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 26745
     components:
     - type: Transform
       pos: 87.5,-16.5
       parent: 33131
-- proto: RMCCanisterRed
+- proto: CMUCanisterNitrogen
   entities:
   - uid: 26753
     components:
@@ -100279,7 +100279,7 @@ entities:
     - type: Transform
       pos: 22.5,-23.5
       parent: 33131
-- proto: RMCTacticalMapTable
+- proto: CMUTacticalMapTableGovfor
   entities:
   - uid: 32320
     components:
