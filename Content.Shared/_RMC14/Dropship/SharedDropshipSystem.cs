@@ -608,7 +608,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (!_ui.IsUiOpen(terminal.Owner, DropshipTerminalUiKey.Key, args.User))
             return;
 
-        var closestLZ = FindClosestLZ(terminal);
+        var closestLZ = FindTerminalLZ(terminal); // CMU14: shipboard terminals can recall to another deck.
         if (closestLZ is not { } lz)
         {
             var failedState = new DropshipTerminalBuiState("???", []);
@@ -670,7 +670,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             return;
         }
 
-        var closestDestination = FindClosestLZ(terminal);
+        var closestDestination = FindTerminalLZ(terminal); // CMU14: use the same destination shown in the terminal UI.
         if (closestDestination == null)
         {
             _popup.PopupEntity("There are no dropship destinations near you!", terminal, args.Actor, PopupType.MediumCaution);

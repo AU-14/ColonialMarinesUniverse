@@ -72538,7 +72538,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -30.5,23.5
       parent: 33131
-- proto: RMCAIConsoleHERMES
+- proto: CMUAlmayerConsoleHERMES
   entities:
   - uid: 26064
     components:
@@ -90652,7 +90652,7 @@ entities:
       parent: 26595
     - type: Physics
       canCollide: False
-- proto: RMCGroundsideOperationsConsole
+- proto: RMCGroundsideOperationsConsoleGovfor
   entities:
   - uid: 29176
     components:
@@ -91730,7 +91730,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 46.5,16.5
       parent: 33131
-- proto: RMCOverwatchConsole
+- proto: RMCOverwatchConsoleGovforRotating
   entities:
   - uid: 29945
     components:
@@ -97551,7 +97551,7 @@ entities:
     - type: Transform
       pos: 19.5049,-16.4351
       parent: 33131
-- proto: RMCTechTreeConsole
+- proto: RMCTechTreeConsoleGovfor
   entities:
   - uid: 32410
     components:

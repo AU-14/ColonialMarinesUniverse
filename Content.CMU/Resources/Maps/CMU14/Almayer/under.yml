@@ -21806,7 +21806,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 81.5,-35.5
       parent: 33131
-- proto: RMCAIConsoleHERMES
+- proto: CMUAlmayerConsoleHERMES
   entities:
   - uid: 26073
     components:

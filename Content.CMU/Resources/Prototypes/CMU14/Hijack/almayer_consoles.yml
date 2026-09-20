@@ -1,0 +1,14 @@
+- type: entity
+  parent: RMCAIConsoleHERMES
+  id: CMUAlmayerConsoleHERMES
+  suffix: Almayer, Govfor
+  components:
+  - type: ARESExternalTerminal
+    loginFaction: GOVFOR
+    logAccessAliases:
+      CMAccessQM: AU14AccessGovforReq
+      RMCAccessCommand: AU14AccessGovforCommand
+      RMCAccessSeniorCommand: AU14AccessGovforCommand
+      CMAccessCMO: AU14AccessGovforMedical
+      RMCBaseEngineeringAccess: AU14AccessGovforEngineering
+      CMAccessDropship: AU14AccessGovforPilot

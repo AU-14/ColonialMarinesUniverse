@@ -13,6 +13,14 @@ public sealed partial class ARESExternalTerminalComponent : Component
     [DataField, AutoNetworkedField]
     public EntProtoId<IFFFactionComponent> Faction = "FactionMarine";
 
+    // CMU14 Begin: accept ship crew cards without changing the legacy log source.
+    [DataField]
+    public EntProtoId<IFFFactionComponent>? LoginFaction;
+
+    [DataField]
+    public Dictionary<ProtoId<AccessLevelPrototype>, ProtoId<AccessLevelPrototype>> LogAccessAliases = new();
+    // CMU14 End
+
     [DataField, AutoNetworkedField]
     public EntityUid? ARESCore;
 

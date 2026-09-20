@@ -6137,13 +6137,14 @@
         layer:
         - WallLayer
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObjecta332f5183f7ab26d
   name: security cameras console
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/fc057b3babfb72c1.rsi
     noRot: true
     drawdepth: Objects
@@ -6268,13 +6269,14 @@
     rot: 3.141592653589793
   - type: RMCStrapNoDrawDepthChange
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObject972d88dedc6cdda8
   name: security cameras console
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/9ec0177f92d17f6b.rsi
     noRot: true
     drawdepth: Objects
@@ -6460,13 +6462,14 @@
     energy: 0.7
     color: '#FFEFD2'
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: CMUAlmayerConsoleHERMES
   id: CMUAlmayerObject2fbc95f0d0b55547
   name: APOLLO Maintenance Controller
   description: A console built to facilitate Working Joes and their operation, allowing for simple allocation of resources.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/77dd37efafbe8592.rsi
     noRot: true
     drawdepth: Objects
@@ -7982,13 +7985,14 @@
     sprite: CMU14/AlmayerReference/790b528747ce60f0.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: CMUAlmayerConsoleHERMES
   id: CMUAlmayerObjecta4edf8406b56eabc
   name: APOLLO Maintenance Controller
   description: A console built to facilitate Working Joes and their operation, allowing for simple allocation of resources.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/fc331031cf274f74.rsi
     noRot: true
     drawdepth: Objects
@@ -9508,13 +9512,14 @@
     sprite: CMU14/AlmayerReference/8770e61475b7873b.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObjectc8e951a86c33fac8
   name: Dropship Security Cameras Console
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/8bab2a1b68bf528c.rsi
     noRot: true
     drawdepth: Objects
@@ -9525,13 +9530,14 @@
     sprite: CMU14/AlmayerReference/8bab2a1b68bf528c.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: CMComputerDropshipTerminalGovfor
   id: CMUAlmayerObjecte60e79a4b1c4a2ac
-  name: Remote dropship navigation computer
-  description: A flight computer that can be used for autopilot or long-range flights.
   suffix: Almayer CM-SS13
   components:
+  - type: DropshipTerminal
+    useShipDestinations: true
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/b9e528175ec4fa11.rsi
     noRot: true
     drawdepth: Objects
@@ -9821,13 +9827,14 @@
     mode: NoSprite
     key: tables
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObject290133123500cbd1
   name: Dropship Security Cameras Console
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/e3f0fcc650a1533d.rsi
     noRot: true
     drawdepth: Objects
@@ -9838,13 +9845,14 @@
     sprite: CMU14/AlmayerReference/e3f0fcc650a1533d.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: CMComputerDropshipTerminalGovfor
   id: CMUAlmayerObjecte95583cc6bcdbf14
-  name: Remote dropship navigation computer
-  description: A flight computer that can be used for autopilot or long-range flights.
   suffix: Almayer CM-SS13
   components:
+  - type: DropshipTerminal
+    useShipDestinations: true
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/aacc4170e1953379.rsi
     noRot: true
     drawdepth: Objects
@@ -12840,13 +12848,14 @@
     sprite: CMU14/AlmayerReference/2e5725e906779753.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObject91882b969805b67e
   name: Containment Cameras
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/eadb5a51f1107560.rsi
     noRot: true
     drawdepth: Objects
@@ -13002,13 +13011,14 @@
     needsPower: false
     powerLoad: 0
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObject2e7e5993e11f4003
   name: Containment Cameras
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/5f6a1926c68ce411.rsi
     noRot: true
     drawdepth: Objects
@@ -18555,6 +18565,7 @@
     ARES' blackbox recorder.
   suffix: Almayer CM-SS13
   components:
+  - type: ARESCore
   - type: Sprite
     sprite: CMU14/AlmayerReference/1b8c95b5a517a693.rsi
     noRot: true
@@ -19048,13 +19059,14 @@
     nameSet: true
     networkSet: true
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCTechTreeConsoleGovfor
   id: CMUAlmayerObject2d3011d32c24f45e
   name: tech control console
   description: A console used to make tech purchases.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/513b0f310c3ec564.rsi
     noRot: true
     drawdepth: Objects
@@ -19357,13 +19369,14 @@
     needsPower: false
     powerLoad: 0
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: CMUAlmayerConsoleHERMES
   id: CMUAlmayerObjecteaa2adea3f5056e2
   name: APOLLO Maintenance Controller
   description: A console built to facilitate Working Joes and their operation, allowing for simple allocation of resources.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/0a8499fe2e98eee2.rsi
     noRot: true
     drawdepth: Objects
@@ -19374,13 +19387,14 @@
     sprite: CMU14/AlmayerReference/0a8499fe2e98eee2.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObjectef3efe63f742d4b3
   name: ARES Core Cameras
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/e691705fd6c3bdad.rsi
     noRot: true
     drawdepth: Objects
@@ -19391,14 +19405,12 @@
     sprite: CMU14/AlmayerReference/e691705fd6c3bdad.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: CMUGovforRosterConsole
   id: CMUAlmayerObject4a05b7f5b3e6a94f
-  name: crew monitoring computer
-  description: Used to monitor active health sensors built into the wearer's uniform. You can see that the console highlights
-    ship areas with BLUE and remote locations with RED.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/ee82d0245b688baa.rsi
     noRot: true
     drawdepth: Objects
@@ -20207,13 +20219,14 @@
     sprite: CMU14/AlmayerReference/7ef1b1bbdc38780a.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCComputerIntelGovfor
   id: CMUAlmayerObjectb665840442c68a7d
   name: Intel Database Computer
   description: An USCM Intel Database Computer used for consulting the current intel database.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/77186e6c341c0ddf.rsi
     noRot: true
     drawdepth: Objects
@@ -20927,14 +20940,12 @@
     needsPower: false
     powerLoad: 0
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: CMUGovforRosterConsole
   id: CMUAlmayerObject6c8bce9b7d565f39
-  name: crew monitoring computer
-  description: Used to monitor active health sensors built into the wearer's uniform. You can see that the console highlights
-    ship areas with BLUE and remote locations with RED.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/be4de1ef616d4c60.rsi
     noRot: true
     drawdepth: Objects
@@ -20945,13 +20956,14 @@
     sprite: CMU14/AlmayerReference/be4de1ef616d4c60.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObjectf46d42189db4efa1
   name: security cameras console
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/abaab933d78318e5.rsi
     noRot: true
     drawdepth: Objects
@@ -21131,13 +21143,14 @@
     sprite: CMU14/AlmayerReference/0e1ebd89b4b4dd63.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObject9281cfae1dad75c7
   name: ARES Core Cameras
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/66730ff3c47b4300.rsi
     noRot: true
     drawdepth: Objects
@@ -21148,13 +21161,14 @@
     sprite: CMU14/AlmayerReference/66730ff3c47b4300.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObjecte48e5f64843b44e8
   name: security cameras console
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/a1942df57d611d89.rsi
     noRot: true
     drawdepth: Objects
@@ -23788,13 +23802,14 @@
     sprite: CMU14/AlmayerReference/12bea77fd25d3111.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: CMUAlmayerConsoleHERMES
   id: CMUAlmayerObject0eae1fa558d7ba5e
   name: APOLLO Maintenance Controller
   description: A console built to facilitate Working Joes and their operation, allowing for simple allocation of resources.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/7b20d42ad23b98a9.rsi
     noRot: true
     drawdepth: Objects
@@ -28909,13 +28924,14 @@
     sprite: CMU14/AlmayerReference/cc7d8d96764cee35.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCComputerIntelGovfor
   id: CMUAlmayerObject1dabff1a694002d1
   name: Intel Computer
   description: An USCM Intel Computer for data cataloguing and distribution.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/71cf7e28227143c9.rsi
     noRot: true
     drawdepth: WallTops
@@ -29255,13 +29271,14 @@
     rot: 0
   - type: RMCStrapNoDrawDepthChange
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCOverwatchConsoleGovforRotating
   id: CMUAlmayerObject8048216ff40ee889
   name: Overwatch Console
   description: State of the art machinery for giving orders to a squad.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/5a61d90dffa62a83.rsi
     noRot: true
     drawdepth: Objects
@@ -29272,13 +29289,14 @@
     sprite: CMU14/AlmayerReference/5a61d90dffa62a83.rsi
     state: base
 - type: entity
-  parent: CMUAlmayerReferenceProp
+  parent: RMCMonitorCameraAlmayer
   id: CMUAlmayerObject33fc7f8226e1747d
   name: Ship Security Cameras
   description: Used to access the various cameras on the station.
   suffix: Almayer CM-SS13
   components:
   - type: Sprite
+    enableOverrideDir: false
     sprite: CMU14/AlmayerReference/688500af32a7a817.rsi
     noRot: true
     drawdepth: WallTops
