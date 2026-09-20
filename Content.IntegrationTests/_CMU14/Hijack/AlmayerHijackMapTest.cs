@@ -919,7 +919,8 @@ public sealed class AlmayerHijackMapTest
             while (cameras.MoveNext(out _, out _, out var cameraTransform, out var cameraMeta))
                 if (cameraTransform.MapUid is { } deck && shipMaps.Contains(deck) && cameraMeta.EntityPrototype?.ID.StartsWith("CMUAlmayerObject") == true)
                     importedCameras++;
-            Assert.That(importedCameras, Is.EqualTo(61), "Mapped cameras, including the relocated stair rooms, must function.");
+            // Authored imported cameras: Lower 4, Bottom 18, Middle 30, Upper 8.
+            Assert.That(importedCameras, Is.EqualTo(60), "Mapped cameras, including the relocated stair rooms, must function.");
 
             var storageSystem = server.System<SharedEntityStorageSystem>();
             var storages = entities.AllEntityQueryEnumerator<EntityStorageComponent, TransformComponent, MetaDataComponent>();
