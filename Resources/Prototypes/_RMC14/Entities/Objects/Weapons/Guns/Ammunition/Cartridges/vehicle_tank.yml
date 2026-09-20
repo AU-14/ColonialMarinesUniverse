@@ -93,11 +93,11 @@
   - type: ExplodeOnTrigger
   - type: DeleteOnTrigger
   - type: CMExplosionEffect
-    minShrapnel: 40
+    minShrapnel: 50
     maxShrapnel: 100
-    shrapnelSpeed: 8
+    shrapnelSpeed: 9
   - type: RMCScorchEffect
-    radius: 4
+    radius: 5
     centerRadius: 1
   - type: Explosive
     explosionType: RMCLTBCannon
@@ -130,7 +130,7 @@
     maxFixedRange: 32
     damage:
       types:
-        Piercing: 75
+        Piercing: 85
     soundHit:
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
   - type: DamageImpactProfile
@@ -150,17 +150,17 @@
       ignoreModifiers: true
   - type: ProjectileGrenade
     evenSpread: true
-    minVelocity: 0.4
+    minVelocity: 0.5
     maxVelocity: 1.8
     fillPrototype: RMCShrapnelJagged
     rebounds: true
     capacity: 10
-    spreadAngle: 28
+    spreadAngle: 30
   - type: RMCAreaDamage
-    damageArea: 2.8
+    damageArea: 3
     falloffDistance: 1.5
   - type: CMArmorPiercing
-    amount: 30
+    amount: 35
   - type: IgnorePredictionHide
 
 - type: entity
@@ -183,7 +183,7 @@
     maxFixedRange: 32
     damage:
       types:
-        Piercing: 10
+        Piercing: 15
         Heat: 160
         Asphyxiation: 15
     soundHit:
@@ -228,7 +228,7 @@
     forceSound: true
     damage:
       types:
-        Heat: 30
+        Heat: 50
     soundHit: null
   - type: TriggerOnFixedDistanceStop
     delay: 0
@@ -259,9 +259,9 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 40
+        Piercing: 55
   - type: CMArmorPiercing
-    amount: 30
+    amount: 35
 
 - type: entity
   id: VehicleDragonFlameImpact
@@ -273,7 +273,7 @@
     proto: RMCSmokeFireSentry
     useMapCoords: true
   - type: TileFireOnTrigger
-    range: 1
+    range: 2.5
     spawn: RMCTileFireBlue
     sound: null
 
@@ -336,7 +336,7 @@
     impactEffect: BulletImpactEffect
     damage:
       types:
-        Heat: 22
+        Heat: 40
     soundHit:
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
   - type: TriggerOnFixedDistanceStop
@@ -367,5 +367,5 @@
     proto: RMCSmokeFireSentry
     useMapCoords: true
   - type: TileFireOnTrigger
-    range: 2
+    range: 2.0
     spawn: RMCTileFireBlue
