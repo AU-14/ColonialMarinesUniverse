@@ -18,13 +18,13 @@
   - type: RequireProjectileTarget
   - type: GridVehicleMover
     maxSpeed: 2.5
-    acceleration: 1.154
+    acceleration: 1.3
     deceleration: 8
-    maxReverseSpeed: 2
-    reverseAcceleration: 1.154
-    turnDelay: 1
+    maxReverseSpeed: 3
+    reverseAcceleration: 1.3
+    turnDelay: 0.6
     turnInPlace: true
-    turnInPlaceMaxSpeed: 0.5
+    turnInPlaceMaxSpeed: 0.8
     pushCooldown: 2
     canPushVehicles: true
     blockingMobBypassNudgeLimit: 2
@@ -32,10 +32,10 @@
     canXenosPush: false
     canSmashWalls: true
     wallSmashMinSpeed: 1.5
-    wallSmashWheelDamage: 0.6
-    wallSmashHullDamage: 12
+    wallSmashWheelDamage: 0.3
+    wallSmashHullDamage: 6
     wallSmashSlowdownMultiplier: 0.2
-    wallSmashSlowdownDuration: 1.5
+    wallSmashSlowdownDuration: 0.5
     speedAtZeroIntegrity: 0.7
   - type: VehicleRideSurface
     bounds:
@@ -43,8 +43,8 @@
     climbBounds:
     - -1.8,1.8,1.8,2.8
   - type: VehicleOvercharge
-    speedMultiplier: 1.2
-    duration: 5
+    speedMultiplier: 1.3
+    duration: 6
     cooldown: 24
     overchargeSound:
       path: /Audio/_RMC14/Vehicle/tank_boost_rev.wav
@@ -754,14 +754,14 @@
       radius: 1
       interiorCoords: 0.5,-1
   - type: GridVehicleMover
-    maxSpeed: 8
-    acceleration: 1.556
+    maxSpeed: 10
+    acceleration: 1.8
     deceleration: 8
     maxReverseSpeed: 4
     reverseAcceleration: 1.556
-    turnDelay: 0.7
+    turnDelay: 0.5
     turnInPlace: true
-    turnInPlaceMaxSpeed: 1
+    turnInPlaceMaxSpeed: 1.2
     pushCooldown: 2
     canPushVehicles: true
     blockingMobBypassNudgeLimit: 2
@@ -769,10 +769,10 @@
     canXenosPush: false
     canSmashWalls: true
     wallSmashMinSpeed: 1.5
-    wallSmashWheelDamage: 0.6
-    wallSmashHullDamage: 12
+    wallSmashWheelDamage: 0.2
+    wallSmashHullDamage: 4
     wallSmashSlowdownMultiplier: 0.2
-    wallSmashSlowdownDuration: 1.5
+    wallSmashSlowdownDuration: 0.5
     speedAtZeroIntegrity: 1
   - type: Fixtures
     fixtures:
