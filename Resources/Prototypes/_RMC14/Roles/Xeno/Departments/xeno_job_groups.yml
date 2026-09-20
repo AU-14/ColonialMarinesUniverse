@@ -26,9 +26,6 @@
     - CMXenoRunner
     - CMXenoSentinel
     - CMXenoSpitter
-    # CMU14
-    - CMXenoWarlock
-    # CMU14
     - CMXenoWarrior
 
 - type: entity
