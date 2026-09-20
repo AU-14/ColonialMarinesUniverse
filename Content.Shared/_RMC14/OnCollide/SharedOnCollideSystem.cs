@@ -113,6 +113,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             if (ent.Comp.Acidic)
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
             _damageable.TryChangeDamage(other, damage, ent.Comp.IgnoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
+            // CMU14: fire can destroy the target before its emote adds components.
+            if (TerminatingOrDeleted(other))
+                return;
             DoEmote(ent, other);
             didEmote = true;
         }

@@ -32159,6 +32159,9 @@ entities:
     components:
     - type: MetaData
       name: 'СП1: Стыковочный порт 1'
+    - type: DropshipDestination
+      FactionControlling: govfor
+      Home: true
     - type: Transform
       pos: -52.5,-0.5
       parent: 33131
@@ -32166,6 +32169,9 @@ entities:
     components:
     - type: MetaData
       name: 'СП2: Стыковочный порт 2'
+    - type: DropshipDestination
+      FactionControlling: govfor
+      Home: true
     - type: Transform
       pos: -74.5,-0.5
       parent: 33131

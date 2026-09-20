@@ -635,12 +635,17 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
             // don't open shitcode inside
             spawnedDropships = true;
+            // CMU14: use the same named pair and spawn record as the Govfor round path.
+            var almayerDropships = EntityManager.System<PlatoonSpawnRuleSystem>();
+            almayerDropships.TryInitializeAlmayerDropships("govfor");
             _mapSystem.CreateMap(out var dropshipMap);
             var dropshipPoints = EntityQueryEnumerator<DropshipDestinationComponent, TransformComponent>();
             var ships = new[] { new ResPath("/Maps/_RMC14/alamo.yml"), new ResPath("/Maps/_RMC14/normandy.yml") };
             var shipIndex = 0;
             while (dropshipPoints.MoveNext(out var destinationId, out _, out var destTransform))
             {
+                if (almayerDropships.IsAlmayerLanding(destinationId)) // CMU14
+                    continue;
                 if (_mapSystem.TryGetMap(destTransform.MapID, out var destinationMapId) &&
                     comp.XenoMap == destinationMapId)
                 {

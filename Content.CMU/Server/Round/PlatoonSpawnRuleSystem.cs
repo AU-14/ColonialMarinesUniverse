@@ -201,6 +201,10 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         if (platoon == null)
             return;
 
+        // Almayer has its own two hangars and airframes, independent of the planet's roster.
+        if (UsesShipDestination(planetComp, faction) && TryInitializeAlmayerDropships(faction))
+            dropshipCount = 0;
+
         var mapRandom = new Random();
         var dropships = platoon.CompatibleDropships.ToList();
         for (var i = 0; i < dropshipCount && dropships.Count > 0; i++)

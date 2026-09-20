@@ -24,6 +24,10 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
+using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.DoAfter;
 
 namespace Content.IntegrationTests.CMU14.Hijack;
 
@@ -106,6 +110,56 @@ public sealed class ShipHijackTest : GameTest
             Assert.That(damage.GetTotalDamage((ship.Pump, SEntMan.GetComponent<DamageableComponent>(ship.Pump))), Is.EqualTo(FixedPoint2.New(2500)));
             SEntMan.DeleteEntity(ship.Map);
         });
+    }
+
+    [Test]
+    public async Task MultitoolOverloadRequiresUnlockAndTrainingAndCompletesItsDoAfter()
+    {
+        EntityUid reactor = default;
+        EntityUid engineer = default;
+        EntityUid tool = default;
+        EntityCoordinates coordinates = default;
+        await Server.WaitAssertion(() =>
+        {
+            var ship = CreateShip();
+            var state = SEntMan.GetComponent<CMUShipHijackComponent>(ship.Map);
+            var gridUid = SEntMan.GetComponent<TransformComponent>(ship.Pump).GridUid!.Value;
+            var maps = Server.System<SharedMapSystem>();
+            var grid = SEntMan.GetComponent<MapGridComponent>(gridUid);
+            maps.SetTile(gridUid, grid, new Vector2i(2, 0), new Tile(1));
+            maps.SetTile(gridUid, grid, new Vector2i(2, 1), new Tile(1));
+            Server.System<AreaSystem>().ReplaceArea(SEntMan.GetComponent<AreaGridComponent>(gridUid),
+                new Vector2i(2, 0), "CMUHijackTestEngineArea");
+            coordinates = new EntityCoordinates(gridUid, new Vector2(2.5f, .5f));
+            reactor = SEntMan.SpawnEntity("RMCGeneratorFusion", coordinates);
+            SEntMan.AddComponent<CMUReactorOverloadComponent>(reactor);
+            engineer = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(gridUid, new Vector2(2.5f, 1.5f)));
+            tool = SEntMan.SpawnEntity("CMMultitool", coordinates);
+            Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(engineer, tool), Is.True);
+            var skills = Server.System<SkillsSystem>();
+            skills.SetSkill(engineer, "RMCSkillEngineer", 2);
+            Server.System<SharedInteractionSystem>().InteractUsing(engineer, tool, reactor, coordinates);
+            Assert.That(SEntMan.GetComponent<DoAfterComponent>(engineer).DoAfters, Is.Empty, "Self-destruct is locked before ship failure.");
+            state.Stage = CMUShipHijackStage.FTLCrash;
+            state.SelfDestructUnlocked = true;
+            skills.SetSkill(engineer, "RMCSkillEngineer", 0);
+            Server.System<SharedInteractionSystem>().InteractUsing(engineer, tool, reactor, coordinates);
+            Assert.That(SEntMan.GetComponent<DoAfterComponent>(engineer).DoAfters, Is.Empty, "An untrained marine cannot overload the reactor.");
+            skills.SetSkill(engineer, "RMCSkillEngineer", 2);
+            Assert.That(Server.System<SharedInteractionSystem>().InteractUsing(engineer, tool, reactor, coordinates), Is.True);
+            Assert.That(SEntMan.GetComponent<DoAfterComponent>(engineer).DoAfters, Has.Count.EqualTo(1));
+            Assert.That(SEntMan.GetComponent<CMUReactorOverloadComponent>(reactor).Overloaded, Is.False);
+        });
+        await RunSeconds(3);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<CMUReactorOverloadComponent>(reactor).Overloaded, Is.True);
+            Assert.That(Server.System<SharedInteractionSystem>().InteractUsing(engineer, tool, reactor, coordinates), Is.True);
+        });
+        await RunSeconds(3);
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.GetComponent<CMUReactorOverloadComponent>(reactor).Overloaded, Is.False,
+                "A second completed multitool action restores the reactor safeties."));
     }
 
     [Test]

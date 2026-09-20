@@ -32,7 +32,10 @@ public sealed class CMUAlmayerSupplySystem : EntitySystem
 
         var query = AllEntityQuery<CMUAlmayerSupplyComponent>();
         while (query.MoveNext(out var map, out var supply))
+        {
             InitializeSupplies(map, supply);
+            _platoons.InitializeAlmayerDropships(map, supply);
+        }
     }
 
     public void InitializeSupplies(EntityUid map, CMUAlmayerSupplyComponent supply)

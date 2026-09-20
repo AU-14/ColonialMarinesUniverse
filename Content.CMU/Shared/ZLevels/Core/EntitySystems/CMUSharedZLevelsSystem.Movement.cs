@@ -1707,6 +1707,10 @@ public abstract partial class CMUSharedZLevelsSystem
     {
         projected = coordinates;
 
+        // Delayed fire propagation can outlive its grid after destruction or round cleanup.
+        if (TerminatingOrDeleted(coordinates.EntityId))
+            return false;
+
         var mapCoordinates = _transform.ToMapCoordinates(coordinates);
         if (!_map.TryGetMap(mapCoordinates.MapId, out var mapUid) ||
             mapUid is not { } resolvedMapUid ||

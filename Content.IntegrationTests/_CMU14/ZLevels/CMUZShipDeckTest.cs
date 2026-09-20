@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared._RMC14.Atmos;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Maps;
@@ -116,6 +117,25 @@ public sealed class CMUZShipDeckTest : GameTest
             Assert.That(z.IsZShotPathOpen(upper.Map, world, world), Is.True);
             Assert.That(z.TryFindZShotOpening(lower.Map, upper.Map, 1, world, world, out _), Is.True);
         });
+    }
+
+    [Test]
+    public async Task DelayedFireStopsWhenItsDeckIsDeleted()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var deck = CreateDeck(Vector2.Zero);
+            var maps = Server.System<SharedMapSystem>();
+            var tile = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["CMFloorPlating"].TileId);
+            for (var x = -3; x <= 3; x++)
+                for (var y = -3; y <= 3; y++)
+                    maps.SetTile(deck.Grid, deck.Grid.Comp, new Vector2i(x, y), tile);
+            Server.System<SharedRMCFlammableSystem>().SpawnFireDiamond("RMCHijackPipeFire",
+                new EntityCoordinates(deck.Grid, new Vector2(.5f)), 3);
+            SEntMan.DeleteEntity(deck.Map);
+        });
+        // The next propagation timer must stop without reading the deleted grid's transform.
+        await RunSeconds(1);
     }
 
     [Test]

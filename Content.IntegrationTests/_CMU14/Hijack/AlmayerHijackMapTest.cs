@@ -54,7 +54,7 @@ namespace Content.IntegrationTests.CMU14.Hijack;
 
 [TestFixture]
 [NonParallelizable]
-public sealed class AlmayerHijackMapTest
+public sealed partial class AlmayerHijackMapTest
 {
     [Test]
     public async Task UpperCicPreservesNativeRoomAroundItsLadders()
