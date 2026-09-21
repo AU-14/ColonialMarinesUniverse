@@ -427,9 +427,12 @@ public sealed partial class CMUZLevelsSystem
             var elapsed = (float) ((pauseTime ?? _gameTiming.CurTime) - source.Comp.AudioStart).TotalSeconds;
             _audioSystem.SetPlaybackPosition(new Entity<AudioComponent?>(uid, projection), elapsed);
         }
-        if (projection!.Flags != source.Comp.Flags)
+        // Projections belong to a map position, not the source ship's physics
+        // grid. Keeping GridAudio makes clients query physics on that map.
+        var projectedFlags = source.Comp.Flags & ~AudioFlags.GridAudio;
+        if (projection!.Flags != projectedFlags)
         {
-            projection.Flags = source.Comp.Flags;
+            projection.Flags = projectedFlags;
             Dirty(uid, projection);
         }
     }
@@ -512,7 +515,7 @@ public sealed partial class CMUZLevelsSystem
                 return null;
 
             _zLevelAudioProjections.Add(projected.Entity);
-            projected.Component.Flags = flags;
+            projected.Component.Flags = flags & ~AudioFlags.GridAudio;
 
             Dirty(projected.Entity, projected.Component);
             return projected;

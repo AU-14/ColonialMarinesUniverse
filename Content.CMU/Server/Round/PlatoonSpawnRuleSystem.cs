@@ -1,5 +1,11 @@
 using System.Linq;
 using Content.Server.CMU14.ZLevels.Core;
+using Content.Server.CMU14.Dropship.MultiDeck;
+using Content.Shared.CMU14.Dropship.MultiDeck;
+using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared._RMC14.Overwatch;
+using Content.Shared._RMC14.TacticalMap;
+using Content.Shared.CMU14.Callsigns;
 using Content.Server.CMU14.VendorMarker;
 using Robust.Shared.Prototypes;
 using Content.Server.GameTicking.Rules;
@@ -33,6 +39,10 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private SharedSupplyDropSystem _supplyDrop = default!;
+    [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
+    [Dependency] private SharedOverwatchConsoleSystem _overwatch = default!;
+    [Dependency] private SharedTacticalMapSystem _tacticalMap = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     // Store selected platoons in the system
     private PlatoonPrototype? _selectedGovforPlatoon;
@@ -260,13 +270,20 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     faction,
                     DropshipDestinationComponent.DestinationType.Dropship,
                     "dropshipshuttlevmarker");
-                TryFlyShuttleToDestination(
+                var launched = TryFlyShuttleToDestination(
                     grid,
                     faction,
                     DropshipDestinationComponent.DestinationType.Dropship,
                     planetComp,
                     usedDestinations,
                     destinationRandom);
+                if (!launched && HasComp<MultiDeckDropshipComponent>(grid))
+                {
+                    // A large ship must not consume a round slot when no home pad
+                    // has enough clearance. Try another compatible design instead.
+                    QueueDel(grid);
+                    i--;
+                }
             }
         }
 
@@ -303,6 +320,39 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     {
         SetPhonesFactionOnGrid(grid, faction);
 
+        if (HasComp<MultiDeckDropshipComponent>(grid))
+        {
+            var shipFaction = EnsureComp<ShipFactionComponent>(grid);
+            shipFaction.Faction = faction;
+            Dirty(grid, shipFaction);
+            var children = Transform(grid).ChildEnumerator;
+            while (children.MoveNext(out var child))
+            {
+                if (TryComp<AU14CallsignConsoleComponent>(child, out var callsigns))
+                {
+                    callsigns.Faction = faction;
+                    Dirty(child, callsigns);
+                }
+                if (TryComp<TacticalMapComputerComponent>(child, out var tactical))
+                    _tacticalMap.SetComputerFaction((child, tactical), faction);
+                if (TryComp<OverwatchConsoleComponent>(child, out var overwatch))
+                    _overwatch.SetGroup((child, overwatch), faction.ToUpperInvariant());
+                if (faction == "opfor" && TryComp<AccessReaderComponent>(child, out var access))
+                {
+                    var groups = access.AccessLists.Select(group => group.Select(id =>
+                        new ProtoId<AccessLevelPrototype>(id.Id.Replace("AU14AccessGovfor", "AU14AccessOpfor"))).ToHashSet()).ToList();
+                    _accessReader.TrySetAccesses((child, access), groups);
+                }
+                if (!HasComp<DropshipNavigationComputerComponent>(child) &&
+                    !HasComp<DropshipTerminalWeaponsComponent>(child))
+                    continue;
+                var whitelist = EnsureComp<WhitelistedShuttleComponent>(child);
+                whitelist.Faction = faction;
+                whitelist.ShuttleType = DropshipDestinationComponent.DestinationType.Dropship;
+                Dirty(child, whitelist);
+            }
+        }
+
         if (faction == "opfor" && planetComp.OpforInShip)
             OffsetLaddersOnGrid(grid, 100);
     }
@@ -334,7 +384,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             SpawnWeaponsConsole(weaponsProto, markerUid, faction, type);
     }
 
-    private void TryFlyShuttleToDestination(
+    private bool TryFlyShuttleToDestination(
         EntityUid grid,
         string faction,
         DropshipDestinationComponent.DestinationType type,
@@ -343,18 +393,59 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         Random destinationRandom)
     {
         EntityUid? destination = null;
-        if (UsesShipDestination(planetComp, faction))
+        if (HasComp<MultiDeckDropshipComponent>(grid))
+            destination = FindMultiDeckDestination(grid, faction, planetComp, usedDestinations, destinationRandom);
+        else if (UsesShipDestination(planetComp, faction))
             destination = FindDestination(faction, type, usedDestinations, destinationRandom, grid);
 
-        destination ??= FindDestination(faction, type, usedDestinations, destinationRandom);
+        if (!HasComp<MultiDeckDropshipComponent>(grid))
+            destination ??= FindDestination(faction, type, usedDestinations, destinationRandom);
 
         var navComputer = FindNavComputerOnGrid(grid);
         if (destination == null || navComputer == null)
-            return;
+            return false;
 
         var navComp = _entityManager.GetComponent<DropshipNavigationComputerComponent>(navComputer.Value);
         var navEntity = new Entity<DropshipNavigationComputerComponent>(navComputer.Value, navComp);
-        _sharedDropshipSystem.FlyTo(navEntity, destination.Value, null);
+        if (!_sharedDropshipSystem.FlyTo(navEntity, destination.Value, null))
+            return false;
+        usedDestinations.Add(destination.Value);
+        return true;
+    }
+
+    private EntityUid? FindMultiDeckDestination(EntityUid dropship, string faction,
+        RMCPlanetMapPrototypeComponent planet, HashSet<EntityUid> used, Random random)
+    {
+        var candidates = new List<EntityUid>();
+        var destinations = AllEntityQuery<DropshipDestinationComponent, TransformComponent>();
+        while (destinations.MoveNext(out var uid, out var destination, out var transform))
+        {
+            if (used.Contains(uid) || destination.Ship != null || destination.FactionController != faction ||
+                destination.Destinationtype != DropshipDestinationComponent.DestinationType.Dropship)
+                continue;
+
+            if (UsesShipDestination(planet, faction))
+            {
+                var atHome = false;
+                var carriers = AllEntityQuery<ShipFactionComponent, TransformComponent>();
+                while (carriers.MoveNext(out var carrier, out var owner, out var carrierTransform))
+                {
+                    if (owner.Faction == faction && !HasComp<DropshipComponent>(carrier) &&
+                        IsMarkerOnShipOrZLevel(carrier, carrierTransform, transform))
+                    {
+                        atHome = true;
+                        break;
+                    }
+                }
+                if (!atHome)
+                    continue;
+            }
+
+            var origin = _multiDeck.GetLandingOrigin(dropship, transform.Coordinates, uid);
+            if (_multiDeck.IsLandingClear(dropship, origin, _transform.GetWorldRotation(uid)))
+                candidates.Add(uid);
+        }
+        return candidates.Count == 0 ? null : candidates[random.Next(candidates.Count)];
     }
 
     private EntityUid? FindDestination(

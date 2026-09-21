@@ -112,12 +112,11 @@ public sealed partial class CMUZLevelsSystem
             return false;
 
         var xform = Transform(ent);
-        // Child grids provide their own supporting surface. The Z movement loop
-        // cannot process their children and already stops them explicitly, so do
-        // not give those entities a transient falling marker during activation.
+        // Ordinary shuttles provide their own supporting surface. Linked decks
+        // opt into Z movement so occupants can traverse their boarding ramps.
         if (xform.MapUid is not { } map ||
             !HasComp<CMUZLevelMapComponent>(map) ||
-            xform.ParentUid != map ||
+            !IsZPhysicsParent(xform) ||
             xform.Anchored)
         {
             return false;
@@ -149,13 +148,13 @@ public sealed partial class CMUZLevelsSystem
 
         var xform = Transform(ent);
         if (xform.MapUid is not { } mapUid ||
-            !TryComp<MapGridComponent>(mapUid, out var grid))
+            !TryResolveMovementGrid(mapUid, _transform.GetWorldPosition(ent), out var gridUid, out var grid))
         {
             return false;
         }
 
-        map = mapUid;
-        tile = _map.TileIndicesFor(mapUid, grid, new MapCoordinates(_transform.GetWorldPosition(ent), xform.MapID));
+        map = gridUid;
+        tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(_transform.GetWorldPosition(ent), xform.MapID));
         return true;
     }
 

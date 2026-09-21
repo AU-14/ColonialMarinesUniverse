@@ -556,7 +556,9 @@ namespace Content.Server.Atmos.EntitySystems
                 HandleDecompressionFloorRip((owner, mapGrid), otherTile, otherTile.MonstermosInfo.CurrentTransferAmount);
             }
 
-            if (GridImpulse && tileCount > 0)
+            // CMU14: map grids cannot move, even when a saved map has dynamic shuttle physics.
+            // Impulses on the map accumulate invalid velocity that entities inherit when changing grids.
+            if (GridImpulse && tileCount > 0 && !HasComp<MapComponent>(owner))
             {
                 var direction = ((Vector2)_depressurizeTiles[tileCount - 1].GridIndices - tile.GridIndices).Normalized();
 

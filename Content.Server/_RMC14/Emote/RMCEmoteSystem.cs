@@ -39,6 +39,10 @@ public sealed partial class RMCEmoteSystem : SharedRMCEmoteSystem
         bool forceEmote = false,
         TimeSpan? cooldown = null)
     {
+        // Collision damage can delete its target before requesting a pain emote.
+        if (TerminatingOrDeleted(source))
+            return;
+
         var recently = EnsureComp<RecentlyEmotedComponent>(source);
         var time = _timing.CurTime;
         if (recently.Emotes.TryGetValue(emote, out var next) &&

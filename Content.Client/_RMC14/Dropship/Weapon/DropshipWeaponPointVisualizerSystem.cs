@@ -55,10 +55,19 @@ public sealed partial class DropshipWeaponPointVisualizerSystem : VisualizerSyst
             return;
         }
 
-        _sprite.LayerSetSprite((uid, spriteComp), layer, new SpriteSpecifier.Rsi(new ResPath(sprite), state));
+        // CMU14 Begin: exposed underside mounts use complete weapon frames.
+        // _sprite.LayerSetSprite((uid, spriteComp), layer, new SpriteSpecifier.Rsi(new ResPath(sprite), state));
+        var overridden = component.SpriteOverrides.TryGetValue(state, out var replacement);
+        _sprite.LayerSetSprite((uid, spriteComp), layer,
+            replacement ?? new SpriteSpecifier.Rsi(new ResPath(sprite), state));
 
-        if (Enum.TryParse<DirectionOffset>(component.DirOffset, true, out var dir))
+        // Complete underside sprites have one frame; the normal mounting variants
+        // select cropped front/wing artwork and must not rotate that frame index.
+        if (overridden)
+            _sprite.LayerSetDirOffset((uid, spriteComp), layer, DirectionOffset.None);
+        else if (Enum.TryParse<DirectionOffset>(component.DirOffset, true, out var dir))
             _sprite.LayerSetDirOffset((uid, spriteComp), layer, dir);
+        // CMU14 End
 
         if (AppearanceSystem.TryGetData(uid,
                 GunshipDirectFireVisuals.AimOffsetDegrees,

@@ -62,6 +62,16 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
+        - name: Call CLF Commandos
+          description: Sends intel to CLF High command, summoning a team of CLF commandos to aid the cell
+          cost: 50
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CLFCommandoSpawnIntel
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
         - name: Call Prodigy Armed Repair Team Yankee
           description: Summon a PMC team from PART, specifically Yankee Squad, They are not hostile to CLF but not required to help directly!
           cost: 45

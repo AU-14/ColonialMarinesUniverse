@@ -31,8 +31,17 @@
       - CMSynthGraft
       - PillPacket
       - Hypospray
-      - CMUSplintItem
+      - CMSurgicalCase
+      - CMRollerItem
+      - CMUCastItem
       - HemostaticGauzePacket
+      components:
+      - Hypospray
+      - Defibrillator
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMSurgicalCase
 
 - type: entity
   parent: AU14PouchMedicalProdigy

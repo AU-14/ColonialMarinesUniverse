@@ -113,6 +113,38 @@ public sealed class CMUZAudioLifecycleTest : GameTest
     }
 
     [Test]
+    public async Task GridAudioProjectsAsPositionalAudioAndKeepsOtherFlags()
+    {
+        EntityUid source = default;
+        NetEntity projection = default;
+        await Server.WaitAssertion(() =>
+        {
+            var played = _audio.PlayPvs(new ResolvedPathSpecifier(SoundPath), _upper, LoopParameters);
+            Assert.That(played, Is.Not.Null);
+            source = played!.Value.Entity;
+            _sources.Add(source);
+            _audio.SetGridAudio(played);
+            played.Value.Component.Flags |= AudioFlags.NoOcclusion;
+        });
+        await Pair.RunTicksSync(15);
+        await Server.WaitAssertion(() =>
+        {
+            var projected = AudioOn(_lower).Single();
+            projection = SEntMan.GetNetEntity(projected);
+            Assert.That(SComp<AudioComponent>(source).Flags.HasFlag(AudioFlags.GridAudio), Is.True);
+            Assert.That(SComp<AudioComponent>(projected).Flags, Is.EqualTo(AudioFlags.NoOcclusion));
+        });
+        await Pair.RunTicksSync(15);
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var projected = CEntMan.GetEntity(projection);
+            Assert.That(CComp<AudioComponent>(projected).Flags, Is.EqualTo(AudioFlags.NoOcclusion),
+                "The replicated projection must remain positional on subsequent refreshes.");
+        });
+    }
+
+    [Test]
     public async Task LoopCrossesUpperHoleIntoSolidRoomAndTracksMotionAndClosure()
     {
         EntityUid source = default;

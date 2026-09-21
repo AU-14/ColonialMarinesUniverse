@@ -6,10 +6,10 @@ public sealed class SquadLeaderTrackerUISystem : EntitySystem
 {
     public override void Initialize()
     {
-        SubscribeLocalEvent<SquadLeaderTrackerComponent, AfterAutoHandleStateEvent>(OnOverwatchAfterState);
+        SubscribeLocalEvent<SquadLeaderTrackerComponent, SquadLeaderTrackerStateChangedEvent>(OnOverwatchAfterState);
     }
 
-    private void OnOverwatchAfterState(Entity<SquadLeaderTrackerComponent> ent, ref AfterAutoHandleStateEvent args)
+    private void OnOverwatchAfterState(Entity<SquadLeaderTrackerComponent> ent, ref SquadLeaderTrackerStateChangedEvent args)
     {
         try
         {

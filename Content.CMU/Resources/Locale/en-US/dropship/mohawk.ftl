@@ -1,0 +1,13 @@
+cmu-mohawk-floor = Mohawk deck
+cmu-mohawk-roof = Mohawk upper hull plating
+cmu-mohawk-ramp = Mohawk boarding ramp
+cmu-mohawk-camera-omaha = Omaha cameras
+cmu-mohawk-camera-midway = Midway cameras
+cmu-mohawk-flight-interlock = The flight interlock prevents deploying the ramp or ladder.
+cmu-mohawk-landing-obstructed = The landing site does not have clearance for all three decks.
+cmu-mohawk-controls-broken = The remote connection is damaged. Repair it with a multitool.
+cmu-mohawk-controls-unskilled = You need engineering or piloting training to repair these controls.
+cmu-mohawk-controls-sabotaged = The controls spark as the hatch is forced open!
+cmu-mohawk-controls-repaired = The remote connection has been restored.
+cmu-mohawk-gunnery-only = Fire the M90 from the dedicated gunnery console.
+cmu-mohawk-gunnery-seat = You must be buckled into the gunnery seat to fire the M90.

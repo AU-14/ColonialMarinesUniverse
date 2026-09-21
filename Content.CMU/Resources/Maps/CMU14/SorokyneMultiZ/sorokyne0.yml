@@ -53502,6 +53502,8 @@ entities:
     components:
     - type: MetaData
       name: 'LZ1: Sorokyne Strata'
+    - type: DropshipDestination
+      multiDeckOffset: 1,0
     - type: Transform
       pos: 10.5,108.5
       parent: 1

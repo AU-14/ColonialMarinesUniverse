@@ -136639,6 +136639,8 @@ entities:
     components:
     - type: MetaData
       name: LZ BRAVO - South Pad
+    - type: DropshipDestination
+      multiDeckOffset: 1,6
     - type: Transform
       parent: 1
       pos: -82.5,23.5

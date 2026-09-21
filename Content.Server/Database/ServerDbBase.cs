@@ -33,6 +33,21 @@ namespace Content.Server.Database
         private readonly ISawmill _opsLog;
         public event Action<DatabaseNotification>? OnNotificationReceived;
         private readonly ISerializationManager _serialization;
+        // Bound the lock count while serializing overlapping edits/selection/deletion for each player.
+        private readonly SemaphoreSlim[] _preferenceWriteLocks = Enumerable.Range(0, 64)
+            .Select(_ => new SemaphoreSlim(1, 1)).ToArray();
+
+        private async Task<PreferenceWriteGuard> LockPreferencesAsync(NetUserId userId)
+        {
+            var semaphore = _preferenceWriteLocks[(uint) userId.GetHashCode() % (uint) _preferenceWriteLocks.Length];
+            await semaphore.WaitAsync();
+            return new PreferenceWriteGuard(semaphore);
+        }
+
+        private readonly struct PreferenceWriteGuard(SemaphoreSlim semaphore) : IDisposable
+        {
+            public void Dispose() => semaphore.Release();
+        }
 
         /// <param name="opsLog">Sawmill to trace log database operations to.</param>
         public ServerDbBase(ISawmill opsLog, ISerializationManager serialization)
@@ -65,6 +80,7 @@ namespace Content.Server.Database
 
         public async Task SaveSelectedCharacterIndexAsync(NetUserId userId, int index)
         {
+            using var preferencesLock = await LockPreferencesAsync(userId);
             await using var db = await GetDb();
 
             // Profile edits and selection messages are handled asynchronously. Make the FK check part of the
@@ -100,18 +116,20 @@ namespace Content.Server.Database
 
         public async Task SaveCharacterSlotAsync(NetUserId userId, HumanoidCharacterProfile? humanoid, int slot)
         {
+            using var preferencesLock = await LockPreferencesAsync(userId);
             await using var db = await GetDb();
+            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
 
             if (humanoid is null)
             {
                 await DeleteCharacterSlot(db.DbContext, userId, slot);
                 await db.DbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return;
             }
 
-            // EF can insert the replacement high-priority job before deleting the old one. PostgreSQL's
-            // filtered unique index checks each statement, so flush removals first in the same transaction.
-            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
+            // EF can insert replacement jobs/traits before deleting old rows. PostgreSQL's
+            // unique indexes check each statement, so flush removals first in the same transaction.
             var oldProfile = db.DbContext.Profile
                 .Include(p => p.Preference)
                 .Where(p => p.Preference.UserId == userId.UserId)
@@ -126,9 +144,10 @@ namespace Content.Server.Database
                 .AsSplitQuery()
                 .SingleOrDefault(h => h.Slot == slot);
 
-            if (oldProfile is { Jobs.Count: > 0 })
+            if (oldProfile != null && (oldProfile.Jobs.Count > 0 || oldProfile.Traits.Count > 0))
             {
                 oldProfile.Jobs.Clear();
+                oldProfile.Traits.Clear();
                 await db.DbContext.SaveChangesAsync();
             }
 
@@ -161,11 +180,28 @@ namespace Content.Server.Database
                 return;
             }
 
+            if (profile.Preference.SelectedCharacterSlot == slot)
+            {
+                var replacement = await db.Profile
+                    .Where(p => p.PreferenceId == profile.PreferenceId && p.Slot != slot)
+                    .OrderBy(p => p.Slot)
+                    .Select(p => (int?) p.Slot)
+                    .FirstOrDefaultAsync();
+
+                // Preferences must always select an existing character, including when stale UI messages arrive.
+                if (replacement == null)
+                    return;
+
+                profile.Preference.SelectedCharacterSlot = replacement.Value;
+                await db.SaveChangesAsync();
+            }
+
             db.Profile.Remove(profile);
         }
 
         public async Task<Preference> InitPrefsAsync(NetUserId userId, HumanoidCharacterProfile defaultProfile)
         {
+            using var preferencesLock = await LockPreferencesAsync(userId);
             await using var db = await GetDb();
 
             var profile = ConvertProfiles((HumanoidCharacterProfile) defaultProfile, 0);
@@ -188,12 +224,20 @@ namespace Content.Server.Database
 
         public async Task DeleteSlotAndSetSelectedIndex(NetUserId userId, int deleteSlot, int newSlot)
         {
+            using var preferencesLock = await LockPreferencesAsync(userId);
             await using var db = await GetDb();
+            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
 
-            await DeleteCharacterSlot(db.DbContext, userId, deleteSlot);
+            if (deleteSlot == newSlot || !await db.DbContext.Profile
+                    .AnyAsync(p => p.Preference.UserId == userId.UserId && p.Slot == newSlot))
+                return;
+
             await SetSelectedCharacterSlotAsync(userId, newSlot, db.DbContext);
-
+            // Release the selected-profile FK before deleting its previous target.
             await db.DbContext.SaveChangesAsync();
+            await DeleteCharacterSlot(db.DbContext, userId, deleteSlot);
+            await db.DbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
 
         public async Task SaveAdminOOCColorAsync(NetUserId userId, Color color)
