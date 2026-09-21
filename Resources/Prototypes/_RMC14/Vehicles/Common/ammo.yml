@@ -157,7 +157,7 @@
     bulletType: VehicleAmmoBoxFlareLauncher
     usedIn: Tank flare launcher, APC flare launcher
 
-- type: entity #CMU14
+- type: entity # CMU14
   parent: VehicleAmmoBoxBase
   id: VehicleAmmoBoxLTBCannon
   name: LTB HESH cannon shell
@@ -206,7 +206,7 @@
     bulletType: VehicleAmmoBoxRocketLauncher
     usedIn: Tank TOW launcher
 
-- type: entity #CMU14
+- type: entity # CMU14
   parent: VehicleAmmoBoxBase
   id: VehicleAmmoBoxAceAutocannon
   name: ACE autocannon ammo crate
@@ -231,7 +231,7 @@
     bulletType: VehicleAmmoBoxAceAutocannon
     usedIn: Tank ACE autocannon, APC Boyars dualcannon
 
-- type: entity #CMU14
+- type: entity # CMU14
   parent: VehicleAmmoBoxBase
   id: VehicleAmmoBoxRERotaryCannon
   name: RE700 rotary cannon ammo crate
@@ -346,7 +346,7 @@
     proto: VehicleBulletRERotaryCannon10x50mm
     muzzleFlash: MuzzleFlashEffectVehicleOver
 
-- type: entity #CMU14
+- type: entity # CMU14
   parent: CMBulletSentry10x50mm
   id: VehicleBulletAPCFrontalCannon10x50mm
   name: bullet (10x50mm)
@@ -364,7 +364,7 @@
     - range: 30
       falloff: 5
 
-- type: entity #CMU14
+- type: entity # CMU14
   parent: CMBulletSentry10x50mm
   id: VehicleBulletAPCFrontCannon10x50mm
   name: bullet (10x50mm)
@@ -395,7 +395,7 @@
     - range: 30
       falloff: 5
 
-- type: entity #CMU14
+- type: entity # CMU14
   parent: CMBulletSentry10x50mm
   id: VehicleBulletRERotaryCannon10x50mm
   name: bullet (10x50mm)
@@ -417,7 +417,7 @@
     proto: VehicleProjectileRocket84mmAntiArmor
     deleteOnSpawn: false
 
-- type: entity #CMU14
+- type: entity # CMU14
   parent: RMCProjectileRocket84mm
   id: VehicleProjectileRocket84mmAntiArmor
   categories: [ HideSpawnMenu ]
