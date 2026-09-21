@@ -18,7 +18,6 @@
     slotType: Cannon
     damageMultiplier: 1
     repairRate: 0.05
-    damageMultiplier: 1
   - type: HardpointIntegrity
     maxIntegrity: 550
     integrity: 550
