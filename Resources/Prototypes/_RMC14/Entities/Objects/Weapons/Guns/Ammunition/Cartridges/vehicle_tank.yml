@@ -84,7 +84,7 @@
     proto: VehicleBulletLTAAAP
 
 # Projectiles
-- type: entity
+- type: entity #CMU14
   id: VehicleLTBCannonImpact
   name: LTB HESH cannon impact
   categories: [ HideSpawnMenu ]
@@ -107,7 +107,7 @@
     tileBreakScale: 1
     maxTileBreak: 3
 
-- type: entity
+- type: entity #CMU14
   parent: RMCBaseBullet
   id: RMCProjectileAceAutocannonFlak
   name: ACE flak round
@@ -163,7 +163,7 @@
     amount: 35
   - type: IgnorePredictionHide
 
-- type: entity
+- type: entity #CMU14
   parent: RMCBaseBullet
   id: RMCProjectileElectrolaser
   name: Electrolaser Projectile
@@ -250,7 +250,7 @@
         - Impassable
         - BulletImpassable
 
-- type: entity
+- type: entity #CMU14
   parent: Bullet10x20mmAP
   id: VehicleBulletLTAAAP
   name: bullet (10x20mm-APC)
@@ -263,7 +263,7 @@
   - type: CMArmorPiercing
     amount: 35
 
-- type: entity
+- type: entity #CMU14
   id: VehicleDragonFlameImpact
   name: DRGN flame impact
   categories: [ HideSpawnMenu ]
@@ -277,7 +277,7 @@
     spawn: RMCTileFireBlue
     sound: null
 
-- type: entity
+- type: entity #CMU14
   parent: RMCBaseBullet
   id: VehicleProjectileDragonFlameShard
   name: DRGN flame jet
@@ -317,7 +317,7 @@
         - Impassable
         - BulletImpassable
 
-- type: entity
+- type: entity #CMU14
   parent: RMCBaseBullet
   id: VehicleProjectileTankFlamer
   name: tank flamer jet
@@ -357,7 +357,7 @@
         - Impassable
         - BulletImpassable
 
-- type: entity
+- type: entity #CMU14
   id: VehicleTankFlamerImpact
   name: tank flamer impact
   categories: [ HideSpawnMenu ]
