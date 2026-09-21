@@ -377,7 +377,7 @@
   - type: CMArmorPiercing
     amount: 20
 
-- type: entity
+- type: entity # CMU14
   parent: CMBulletSentry10x50mm
   id: VehicleBulletBoyarsDualCannon10x50mm
   name: bullet (10x50mm)
