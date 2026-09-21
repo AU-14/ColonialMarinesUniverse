@@ -93,11 +93,11 @@
   - type: ExplodeOnTrigger
   - type: DeleteOnTrigger
   - type: CMExplosionEffect
-    minShrapnel: 50
+    minShrapnel: 40
     maxShrapnel: 100
-    shrapnelSpeed: 9
+    shrapnelSpeed: 8
   - type: RMCScorchEffect
-    radius: 5
+    radius: 4
     centerRadius: 1
   - type: Explosive
     explosionType: RMCLTBCannon
