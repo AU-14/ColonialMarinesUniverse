@@ -1,4 +1,4 @@
-- type: entity
+- type: entity #CMU14
   id: VehicleTankBase
   abstract: true
   name: M34A2 Longstreet
