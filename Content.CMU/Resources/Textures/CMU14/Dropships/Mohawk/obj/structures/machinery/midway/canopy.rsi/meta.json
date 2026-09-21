@@ -1,0 +1,15 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 0d711eddc539ea7ac67cf6b5869a08fa33dc9391.",
+    "size": {
+        "x": 160,
+        "y": 144
+    },
+    "states": [
+        {
+            "name": "canopy",
+            "directions": 1
+        }
+    ]
+}

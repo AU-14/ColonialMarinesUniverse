@@ -1,0 +1,533 @@
+- type: entity
+  abstract: true
+  parent: RMCTacticalMapTable
+  id: CMUMohawkMapTable
+  name: tactical map table
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        # The source table occupies one column and two rows.
+        shape: !type:PhysShapeAabb
+          bounds: '-0.45,-0.45,0.45,1.45'
+        hard: true
+        density: 60
+        mask: [MachineMask]
+        layer: [MidImpassable, LowImpassable]
+
+- type: entity
+  abstract: true
+  parent: RMCNanoMed
+  id: CMUMohawkMedicalCabinet
+  name: NanoMed medical cabinet
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: ApcPowerReceiver
+    needsPower: false
+
+- type: entity
+  abstract: true
+  parent: CMIntercomCommon
+  id: CMUMohawkIntercom
+  name: dropship intercom
+  components:
+  - type: ApcPowerReceiver
+    # Aircraft equipment uses onboard power, independent of a landing site's APC.
+    needsPower: false
+  - type: Intercom
+    currentChannel: MarineCommon
+    speakerEnabled: true
+  - type: RadioMicrophone
+    broadcastChannel: MarineCommon
+  - type: RadioSpeaker
+    channels: [MarineCommon]
+    enabled: true
+  - type: Sprite
+    drawdepth: WallMountedItems
+
+- type: entity
+  abstract: true
+  parent: RMCSurveillanceCameraAlmayer
+  id: CMUMohawkCamera
+  name: dropship surveillance camera
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Sprite
+    noRot: false
+
+- type: entity
+  abstract: true
+  parent: RMCLightFixtureAlwaysPowered
+  id: CMUMohawkLight
+  name: dropship light fixture
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Sprite
+    sprite: _RMC14/Structures/Wallmounts/Lighting/light_tube.rsi
+    noRot: false
+  - type: RemoveComponents
+    components:
+    - type: RMCLightOffset
+
+- type: entity
+  abstract: true
+  parent: CMUMohawkLight
+  id: CMUMohawkBlueLight
+  name: blue dropship light fixture
+  components:
+  - type: Sprite
+    state: btube1
+    layers:
+    - state: btube1
+      map: ["enum.PoweredLightLayers.Base"]
+  - type: PointLight
+    color: '#D2E3EC'
+  - type: PoweredLightVisuals
+    spriteStateMap:
+      Empty: btube-empty
+      Off: btube0
+      On: btube1
+      Broken: btube-broken
+      Burned: btube-burned
+
+- type: entity
+  abstract: true
+  parent: RMCUtilityAttachmentPoint
+  id: CMUMohawkInternalModule
+  name: internal utility module mount
+  description: A mounting point for dropship equipment, including medevac and supply modules.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+
+- type: entity
+  parent: CMUMohawkInternalModule
+  id: CMUMohawkInternalModulePort
+  name: port internal utility module mount
+
+- type: entity
+  parent: CMUMohawkInternalModule
+  id: CMUMohawkInternalModuleStarboard
+  name: starboard internal utility module mount
+
+- type: entity
+  abstract: true
+  id: CMUMohawkDecoration
+  name: Mohawk hull
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: false
+    # Fixed ship artwork can have its origin over an empty tile. It must never
+    # traverse to the terrain/map when its own grid moves or initializes.
+    gridTraversal: false
+  - type: Sprite
+    drawdepth: Walls
+
+- type: entity
+  abstract: true
+  parent: CMBaseWallInvincible
+  id: CMUMohawkLandingGear
+  name: landing gear
+  components:
+  - type: MohawkLandingGear
+  - type: Occluder
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: '-0.5,-0.5,1.5,1.5'
+        hard: true
+        density: 1000
+        mask: [FullTileMask]
+        layer: [WallLayer]
+
+- type: entity
+  abstract: true
+  parent: CMUMohawkLandingGear
+  id: CMUMohawkLandingGearNorth
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        # Source bounds stay in map axes when the gear faces north.
+        shape: !type:PhysShapeAabb
+          bounds: '-1.5,-1.5,0.5,0.5'
+        hard: true
+        density: 1000
+        mask: [FullTileMask]
+        layer: [WallLayer]
+
+- type: entity
+  abstract: true
+  parent: CMUMohawkDecoration
+  id: CMUMohawkControl
+  name: Mohawk controls
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: WallMountedItems
+  - type: Clickable
+  - type: InteractionOutline
+  - type: MohawkControl
+
+- type: entity
+  abstract: true
+  parent: CMUMohawkDecoration
+  id: CMUMohawkHatch
+  name: ladder hatch
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: MohawkHatch
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.MohawkVisuals.HatchState:
+        enum.MohawkVisuals.Layer:
+          hatch-open: { state: hatch-open }
+          ladder-hatch-closed: { state: ladder-hatch-closed }
+          hatch-opening: { state: hatch-opening }
+          hatch-closing: { state: hatch-closing }
+
+- type: entity
+  parent: CMUMohawkDecoration
+  id: CMUMohawkLowerLadder
+  name: cockpit ladder
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: MohawkLowerLadder
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/interior_item.rsi
+    layers:
+    - state: hatch_ladder_bottom
+      visible: false
+      map: ["enum.MohawkVisuals.Layer"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.MohawkVisuals.Deployed:
+        enum.MohawkVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+
+- type: entity
+  abstract: true
+  parent: RMCDropshipDoorBase
+  id: CMUMohawkDoor
+  name: Mohawk hatch
+  components:
+  - type: Airlock
+    animatePanel: false
+    openingSpriteState: door_opening
+    closingSpriteState: door_closing
+    openSpriteState: door_open
+    closedSpriteState: door_closed
+
+- type: entity
+  id: CMUMohawkRampMarker
+  name: Mohawk ramp segment
+  categories: [HideSpawnMenu]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: MohawkRampSegment
+
+- type: entity
+  id: CMUMohawkRampSupport
+  name: boarding ramp
+  categories: [HideSpawnMenu]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    gridTraversal: false
+  - type: MohawkRampSegment
+    lower: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.MohawkVisuals.Deployed:
+        enum.MohawkVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+
+- type: entity
+  abstract: true
+  parent: CMUMohawkRampSupport
+  id: CMUMohawkRampStairs
+  components:
+  - type: MohawkRampSegment
+    # The same profile as CMUMultiZStairs, enabled only while deployed.
+    heightCurve: [1.05, 1.05, 0.575, 0.1]
+
+- type: entity
+  abstract: true
+  parent: CMUMohawkRampSupport
+  id: CMUMohawkRampBulkhead
+  name: ramp bulkhead
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: '-0.5,-0.5,0.5,0.5'
+        hard: true
+        density: 1000
+        mask: [FullTileMask]
+        layer: [WallLayer]
+
+- type: entity
+  id: CMUMohawkLandingCrush
+  name: Mohawk landing gear clearance
+  categories: [HideSpawnMenu]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: MohawkLandingCrush
+
+- type: entity
+  abstract: true
+  parent: CMUMohawkDecoration
+  id: CMUMohawkWeaponPoint
+  name: Mohawk weapon mount
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/dropship_attachment_points.rsi
+    layers:
+    - state: equip_base_front
+    - map: ["enum.DropshipWeaponPointLayers.Layer"]
+      offset: 0.5,0.5
+  - type: DropshipWeaponPoint
+    # Ordinary installed states contain only the exposed tips below a hull.
+    # The Mohawk's underside displays the complete weapon instead.
+    spriteOverrides:
+      30mm_cannon_installed: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: 30mm_cannon}
+      30mm_cannon_loaded0: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: 30mm_cannon}
+      30mm_cannon_loaded1: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: 30mm_cannon}
+      rocket_pod_installed: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: rocket_pod}
+      rocket_pod_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: rocket_pod}
+      rocket_pod_loadedb: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: rocket_pod}
+      rocket_pod_loadedk: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: rocket_pod}
+      rocket_pod_loadedf: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: rocket_pod}
+      rocket_pod_loadedn: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: rocket_pod}
+      rocket_pod_loadeds: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: rocket_pod}
+      minirocket_pod_installed: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: minirocket_pod}
+      minirocket_pod_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: minirocket_pod}
+      minirocket_pod_loaded_1: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: minirocket_pod}
+      minirocket_pod_loaded_2: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: minirocket_pod}
+      minirocket_pod_loaded_3: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: minirocket_pod}
+      minirocket_pod_loaded_4: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: minirocket_pod}
+      minirocket_pod_loaded_5: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: minirocket_pod}
+      laser_beam_installed: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: laser_beam}
+      laser_beam_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: laser_beam}
+  - type: Appearance
+  - type: Tag
+    tags: [RMCDropshipWeaponPoint]
+
+- type: entity
+  parent: CMUMohawkWeaponPoint
+  id: CMUMohawkWeaponPortWing
+  name: Mohawk port wing weapon mount
+  components:
+  - type: DropshipWeaponPoint
+    dirOffset: Clockwise
+    location: PortWing
+
+- type: entity
+  parent: CMUMohawkWeaponPoint
+  id: CMUMohawkWeaponStarboardWing
+  name: Mohawk starboard wing weapon mount
+  components:
+  - type: DropshipWeaponPoint
+    dirOffset: CounterClockwise
+    location: StarboardWing
+
+- type: entity
+  parent: CMUMohawkWeaponPoint
+  id: CMUMohawkWeaponPortFore
+  name: Mohawk port forward weapon mount
+  components:
+  - type: DropshipWeaponPoint
+    dirOffset: Flip
+    location: PortFore
+
+- type: entity
+  parent: CMUMohawkWeaponPoint
+  id: CMUMohawkWeaponStarboardFore
+  name: Mohawk starboard forward weapon mount
+  components:
+  - type: DropshipWeaponPoint
+    dirOffset: Flip
+    location: StarboardFore
+
+- type: entity
+  parent: RMCElectronicSystemAttachPoint
+  id: CMUMohawkElectronics
+  name: Mohawk electronic system mount
+  components:
+  - type: Transform
+    anchored: true
+    gridTraversal: false
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/dropship_attachment_points.rsi
+    layers:
+    - state: equip_base_front
+      map: ["enum.DropshipPointVisualsLayers.AttachedUtility"]
+    - state: equip_base_front
+      map: ["enum.DropshipPointVisualsLayers.AttachmentBase"]
+
+- type: entity
+  parent: RMCEngineAttachmentPoint
+  id: CMUMohawkEngine
+  name: Mohawk engine and fuel mount
+  components:
+  - type: Transform
+    anchored: true
+    gridTraversal: false
+  - type: Sprite
+    layers:
+    - state: fuel_base
+      map: ["enum.DropshipPointVisualsLayers.AttachedUtility"]
+      rotation: 0
+      visible: false
+    - state: fuel_base
+      map: ["enum.DropshipPointVisualsLayers.AttachmentBase"]
+      # Only the empty mount is invisible; installed equipment keeps its artwork.
+      color: '#FFFFFF00'
+  - type: DropshipPointVisuals
+    spriteOverrides:
+      fuel_enhancer_installed:
+        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment64.rsi
+        state: fuel_enhancer_omaha
+      cooling_system_installed:
+        sprite: CMU14/Dropships/Mohawk/obj/structures/props/dropship/dropship_equipment64.rsi
+        state: cooling_system_omaha
+  - type: Clickable
+    bounds:
+      all: '-0.5,-0.5,0.5,0.5'
+
+- type: entity
+  parent: CMUMohawkEngine
+  id: CMUMohawkEnginePort
+  name: port engine and fuel mount
+  components:
+  - type: Sprite
+    offset: 0.5,0.5
+
+- type: entity
+  parent: CMUMohawkEngine
+  id: CMUMohawkEngineStarboard
+  name: starboard engine and fuel mount
+  components:
+  - type: Sprite
+    offset: -0.5,0.5
+
+- type: entity
+  parent: CMUMohawkWeaponPortFore
+  id: CMUMohawkM90Point
+  name: Midway chin gun mount
+  components:
+  - type: DropshipWeaponPoint
+    dirOffset: None
+  - type: Sprite
+    layers:
+    - state: equip_base_front
+      visible: false
+    - map: ["enum.DropshipWeaponPointLayers.Layer"]
+      # BYOND's 96px bottom-left origin plus the source deployer's 16px X shift.
+      offset: 1.5,1
+  - type: ContainerContainer
+    containers:
+      rmc_dropship_weapon_point_weapon_container_slot: !type:ContainerSlot
+      rmc_dropship_weapon_point_ammo_container_slot: !type:ContainerSlot
+  - type: ContainerFill
+    containers:
+      rmc_dropship_weapon_point_weapon_container_slot: [CMUMohawkM90]
+
+- type: entity
+  parent: RMCDropshipAttachmentGau21Cannon
+  id: CMUMohawkM90
+  name: twin-linked M90 miniguns
+  description: The Midway's fixed chin-mounted twin gun system. Uses PGU-420 ammunition.
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
+    layers:
+    - state: m90_minigun
+  - type: DropshipWeapon
+    abbreviation: M90
+    ammoSpriteThresholds: []
+    gunneryOnly: true
+    fireDelay: 1
+    fireInTransport: false
+    weaponAttachedSprite:
+      sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
+      state: m90_minigun
+    ammoEmptyAttachedSprite:
+      sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
+      state: m90_minigun
+    ammoAttachedSprite:
+      sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/misc_96x96.rsi
+      state: m90_minigun
+  - type: RemoveComponents
+    components:
+    - type: PowerLoaderDetachable
+    - type: DropshipFabricatorPrintable
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoGAU
+  id: CMUMohawkM90Ammo
+  name: PGU-420 multi-purpose 90mm ammunition crate
+  description: Four hundred rounds for the Midway's twin M90 guns, fired in forty-round bursts.
+  components:
+  - type: DropshipAmmo
+    rounds: 400
+    maxRounds: 400
+    roundsPerShot: 40
+    fireMissionDelay: 2
+    travelTime: 2
+    targetSpread: 1
+    bulletSpread: 2
+    armorPiercing: 30
+    damage:
+      types:
+        Piercing: 145
+    weapon: CMUMohawkM90
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 275
+
+- type: cameraNetwork
+  id: CMUMohawkOmaha
+  name: cmu-mohawk-camera-omaha
+  configurable: true
+
+- type: cameraNetwork
+  id: CMUMohawkMidway
+  name: cmu-mohawk-camera-midway
+  configurable: true

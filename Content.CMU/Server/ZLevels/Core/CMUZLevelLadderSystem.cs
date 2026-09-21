@@ -8,6 +8,7 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.CMU14.ZLevels.Core;
 
@@ -19,6 +20,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {
@@ -58,6 +60,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
 
         if (delay > TimeSpan.Zero)
         {
+            _audio.PlayPvs(ent.Comp.StartSound, ent);
             var selfMessage = Loc.GetString("cmu-zlevel-ladder-start-self");
             var othersMessage = Loc.GetString("cmu-zlevel-ladder-start-others", ("user", user));
             _popup.PopupPredicted(selfMessage, othersMessage, user, user);
@@ -160,6 +163,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
         }
 
         var selfMessage = Loc.GetString("cmu-zlevel-ladder-finish-self");
+        _audio.PlayPvs(ent.Comp.FinishSound, user);
         var othersMessage = Loc.GetString("cmu-zlevel-ladder-finish-others", ("user", user));
         _popup.PopupPredicted(selfMessage, othersMessage, user, user);
     }

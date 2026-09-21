@@ -1,0 +1,135 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 0d711eddc539ea7ac67cf6b5869a08fa33dc9391.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "ramp-4-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-5-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-6-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-7-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-8-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-9-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-10-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-11-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-12-low",
+            "directions": 1
+        },
+        {
+            "name": "ramp-1",
+            "directions": 1
+        },
+        {
+            "name": "ramp-2",
+            "directions": 1
+        },
+        {
+            "name": "ramp-3",
+            "directions": 1
+        },
+        {
+            "name": "ramp-4",
+            "directions": 1
+        },
+        {
+            "name": "ramp-5",
+            "directions": 1
+        },
+        {
+            "name": "ramp-6",
+            "directions": 1
+        },
+        {
+            "name": "ramp-7",
+            "directions": 1
+        },
+        {
+            "name": "ramp-8",
+            "directions": 1
+        },
+        {
+            "name": "ramp-9",
+            "directions": 1
+        },
+        {
+            "name": "ramp-10",
+            "directions": 1
+        },
+        {
+            "name": "ramp-11",
+            "directions": 1
+        },
+        {
+            "name": "ramp-12",
+            "directions": 1
+        },
+        {
+            "name": "0,0",
+            "directions": 1
+        },
+        {
+            "name": "1,0",
+            "directions": 1
+        },
+        {
+            "name": "2,0",
+            "directions": 1
+        },
+        {
+            "name": "0,1",
+            "directions": 1
+        },
+        {
+            "name": "2,1",
+            "directions": 1
+        },
+        {
+            "name": "0,2",
+            "directions": 1
+        },
+        {
+            "name": "2,2",
+            "directions": 1
+        },
+        {
+            "name": "0,3",
+            "directions": 1
+        },
+        {
+            "name": "1,3",
+            "directions": 1
+        },
+        {
+            "name": "2,3",
+            "directions": 1
+        }
+    ]
+}

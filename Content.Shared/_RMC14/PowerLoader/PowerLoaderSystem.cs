@@ -126,6 +126,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         SubscribeLocalEvent<ActivePowerLoaderPilotComponent, StunnedEvent>(OnActivePilotStunned);
         SubscribeLocalEvent<ActivePowerLoaderPilotComponent, MobStateChangedEvent>(OnActivePilotMobStateChanged);
 
+        SubscribeLocalEvent<DropshipWeaponPointComponent, EntInsertedIntoContainerMessage>(OnWeaponPointContainerInserted); // CMU14
         SubscribeLocalEvent<DropshipWeaponPointComponent, EntRemovedFromContainerMessage>(OnWeaponPointContainerChanged);
         SubscribeLocalEvent<DropshipUtilityPointComponent, EntRemovedFromContainerMessage>(OnUtilityPointContainerChanged);
         SubscribeLocalEvent<DropshipEnginePointComponent, EntRemovedFromContainerMessage>(OnEnginePointContainerChanged);
@@ -1395,6 +1396,14 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             return;
 
         args.SlotId = slot.ID;
+    }
+
+    // CMU14 method: include mapped equipment in appearance updates.
+    private void OnWeaponPointContainerInserted(Entity<DropshipWeaponPointComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        // Map fills and other normal container insertions also install weapons;
+        // they do not pass through the power-loader do-after completion handler.
+        SyncAppearance(ent.Owner);
     }
 
     private void OnWeaponPointContainerChanged(Entity<DropshipWeaponPointComponent> ent, ref EntRemovedFromContainerMessage args)

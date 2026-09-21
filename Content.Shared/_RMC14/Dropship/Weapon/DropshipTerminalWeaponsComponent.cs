@@ -9,6 +9,9 @@ namespace Content.Shared._RMC14.Dropship.Weapon;
 public sealed partial class DropshipTerminalWeaponsComponent : Component
 {
     [DataField, AutoNetworkedField]
+    public bool Gunnery; // CMU14: dedicated chin-gun console
+
+    [DataField, AutoNetworkedField]
     public Screen ScreenOne;
 
     [DataField, AutoNetworkedField]

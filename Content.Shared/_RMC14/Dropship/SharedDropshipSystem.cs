@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -1271,19 +1272,53 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         }
     }
 
+    // CMU14 method: resolve secondary decks through their cabin controller.
     public bool TryGetGridDropship(EntityUid ent, out Entity<DropshipComponent> dropship)
     {
         if (TryComp(ent, out TransformComponent? xform) &&
             xform.GridUid is { } grid &&
-            !TerminatingOrDeleted(grid) &&
-            TryComp(xform.GridUid, out DropshipComponent? dropshipComp))
+            !TerminatingOrDeleted(grid))
         {
-            dropship = (grid, dropshipComp);
-            return true;
+            if (TryComp<DropshipDeckComponent>(grid, out var deck))
+                grid = deck.Ship;
+            if (!TerminatingOrDeleted(grid) && TryComp<DropshipComponent>(grid, out var dropshipComp))
+            {
+                dropship = (grid, dropshipComp);
+                return true;
+            }
         }
 
         dropship = default;
         return false;
+    }
+
+    // CMU14 method
+    /// <summary>Registers equipment loaded before a secondary deck was linked to its ship.</summary>
+    public void RegisterDeckAttachmentPoints(EntityUid ship, EntityUid grid)
+    {
+        if (_net.IsClient || !TryComp<DropshipComponent>(ship, out var dropship))
+            return;
+
+        var children = Transform(grid).ChildEnumerator;
+        while (children.MoveNext(out var uid))
+        {
+            if (HasComp<DropshipWeaponPointComponent>(uid) || HasComp<DropshipEnginePointComponent>(uid) ||
+                HasComp<DropshipUtilityPointComponent>(uid) || HasComp<DropshipElectronicSystemPointComponent>(uid))
+                dropship.AttachmentPoints.Add(uid);
+        }
+        Dirty(ship, dropship);
+    }
+
+    // CMU14 method
+    /// <summary>Unregisters the equipment of a deck removed from a dropship.</summary>
+    public void RemoveDeckAttachmentPoints(EntityUid ship, EntityUid grid)
+    {
+        if (_net.IsClient || !TryComp<DropshipComponent>(ship, out var dropship))
+            return;
+
+        if (dropship.AttachmentPoints.RemoveWhere(point =>
+                TerminatingOrDeleted(point) || Transform(point).GridUid == grid) > 0)
+            Dirty(ship, dropship);
     }
 
     public bool TryGetGridFaction(EntityUid ent, [NotNullWhen(true)] out string? faction)
@@ -1291,6 +1326,9 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         faction = null;
         if (!TryComp(ent, out TransformComponent? xform) || xform.GridUid is not { } grid)
             return false;
+
+        if (TryComp<DropshipDeckComponent>(grid, out var deck)) // CMU14: followers share the cabin's faction.
+            grid = deck.Ship;
 
         if (TryComp<ShipFactionComponent>(grid, out var shipFaction) &&
             !string.IsNullOrWhiteSpace(shipFaction.Faction))
@@ -1356,15 +1394,17 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         return dropship.Comp.State == FTLState.Travelling || dropship.Comp.State == FTLState.Arriving;
     }
 
+    // CMU14 method: include occupants on secondary decks.
     public bool IsOnDropship(EntityUid entity)
     {
-        var grid = _transform.GetGrid(entity);
-        return HasComp<DropshipComponent>(grid);
+        return TryGetGridDropship(entity, out _);
     }
 
     public bool IsOnDropship(EntityCoordinates coordinates)
     {
         var grid = _transform.GetGrid(coordinates);
+        if (TryComp<DropshipDeckComponent>(grid, out var deck)) // CMU14: resolve secondary decks.
+            grid = deck.Ship;
         return HasComp<DropshipComponent>(grid);
     }
 

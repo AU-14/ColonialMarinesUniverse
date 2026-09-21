@@ -11,7 +11,7 @@
     - English
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/alamo.yml
-  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   compatibleFighters:
     - /Maps/CMU14/Vehicles/Dropships/ud_6.yml
   possibleships:
@@ -1173,7 +1173,7 @@
       - USSBushRedux
   CompatibleDropships:
   - /Maps/CMU14/Shuttles/osprey.yml
-  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   compatibleFighters:
   - /Maps/CMU14/Vehicles/Dropships/f84owl.yml
   - /Maps/CMU14/Vehicles/Dropships/ud_6.yml

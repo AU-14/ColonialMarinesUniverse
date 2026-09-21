@@ -1,0 +1,47 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 0d711eddc539ea7ac67cf6b5869a08fa33dc9391.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "command-station-chair",
+            "directions": 1
+        },
+        {
+            "name": "jumpseat-chair",
+            "directions": 1
+        },
+        {
+            "name": "seat-north",
+            "directions": 1
+        },
+        {
+            "name": "seat-south",
+            "directions": 1
+        },
+        {
+            "name": "command_chair",
+            "directions": 4
+        },
+        {
+            "name": "passenger_chair",
+            "directions": 4
+        },
+        {
+            "name": "passenger_chair_buckled",
+            "directions": 4
+        },
+        {
+            "name": "passenger_chair_destroyed",
+            "directions": 4
+        },
+        {
+            "name": "vehicle_bars",
+            "directions": 4
+        }
+    ]
+}

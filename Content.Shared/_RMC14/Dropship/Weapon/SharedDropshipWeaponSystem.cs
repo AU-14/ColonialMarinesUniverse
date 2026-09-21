@@ -2,6 +2,8 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Shared.CMU14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.Buckle.Components; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
@@ -2378,6 +2380,22 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weaponComp, false))
             return false;
 
+        // CMU14 Begin: fixed chin weapons require their dedicated gunnery station.
+        if (weaponComp.GunneryOnly && terminalComp?.Gunnery != true)
+        {
+            if (actor is { } operatorUid)
+                _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-only"), weapon, operatorUid);
+            return false;
+        }
+
+        if (weaponComp.GunneryOnly && actor is { } gunner &&
+            (!TryComp<BuckleComponent>(gunner, out var buckle) || !HasComp<MohawkGunnerySeatComponent>(buckle.BuckledTo)))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-seat"), weapon, gunner);
+            return false;
+        }
+        // CMU14 End
+
         if (strikeType == DropshipWeaponStrikeType.FireMission &&
             !CanFireMissionAt(targetCoordinates, actor))
         {
@@ -2406,6 +2424,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         if (weapon.DirectFireOnly)
+            return false;
+
+        if (weapon.GunneryOnly && strikeType == DropshipWeaponStrikeType.FireMission) // CMU14: manual gunnery only
             return false;
 
         Entity<DropshipComponent> dropship = default;

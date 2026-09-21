@@ -1,0 +1,399 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 0d711eddc539ea7ac67cf6b5869a08fa33dc9391.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "5,0",
+            "directions": 1
+        },
+        {
+            "name": "6,0",
+            "directions": 1
+        },
+        {
+            "name": "7,0",
+            "directions": 1
+        },
+        {
+            "name": "8,0",
+            "directions": 1
+        },
+        {
+            "name": "9,0",
+            "directions": 1
+        },
+        {
+            "name": "10,0",
+            "directions": 1
+        },
+        {
+            "name": "11,0",
+            "directions": 1
+        },
+        {
+            "name": "5,1",
+            "directions": 1
+        },
+        {
+            "name": "6,1",
+            "directions": 1
+        },
+        {
+            "name": "7,1",
+            "directions": 1
+        },
+        {
+            "name": "8,1",
+            "directions": 1
+        },
+        {
+            "name": "9,1",
+            "directions": 1
+        },
+        {
+            "name": "10,1",
+            "directions": 1
+        },
+        {
+            "name": "11,1",
+            "directions": 1
+        },
+        {
+            "name": "5,2",
+            "directions": 1
+        },
+        {
+            "name": "6,2",
+            "directions": 1
+        },
+        {
+            "name": "7,2",
+            "directions": 1
+        },
+        {
+            "name": "9,2",
+            "directions": 1
+        },
+        {
+            "name": "10,2",
+            "directions": 1
+        },
+        {
+            "name": "11,2",
+            "directions": 1
+        },
+        {
+            "name": "4,3",
+            "directions": 1
+        },
+        {
+            "name": "12,3",
+            "directions": 1
+        },
+        {
+            "name": "3,8",
+            "directions": 1
+        },
+        {
+            "name": "13,8",
+            "directions": 1
+        },
+        {
+            "name": "3,9",
+            "directions": 1
+        },
+        {
+            "name": "13,9",
+            "directions": 1
+        },
+        {
+            "name": "3,10",
+            "directions": 1
+        },
+        {
+            "name": "13,10",
+            "directions": 1
+        },
+        {
+            "name": "3,11",
+            "directions": 1
+        },
+        {
+            "name": "13,11",
+            "directions": 1
+        },
+        {
+            "name": "3,12",
+            "directions": 1
+        },
+        {
+            "name": "13,12",
+            "directions": 1
+        },
+        {
+            "name": "3,13",
+            "directions": 1
+        },
+        {
+            "name": "13,13",
+            "directions": 1
+        },
+        {
+            "name": "2,14",
+            "directions": 1
+        },
+        {
+            "name": "3,14",
+            "directions": 1
+        },
+        {
+            "name": "4,14",
+            "directions": 1
+        },
+        {
+            "name": "12,14",
+            "directions": 1
+        },
+        {
+            "name": "13,14",
+            "directions": 1
+        },
+        {
+            "name": "14,14",
+            "directions": 1
+        },
+        {
+            "name": "0,15",
+            "directions": 1
+        },
+        {
+            "name": "1,15",
+            "directions": 1
+        },
+        {
+            "name": "2,15",
+            "directions": 1
+        },
+        {
+            "name": "3,15",
+            "directions": 1
+        },
+        {
+            "name": "4,15",
+            "directions": 1
+        },
+        {
+            "name": "12,15",
+            "directions": 1
+        },
+        {
+            "name": "13,15",
+            "directions": 1
+        },
+        {
+            "name": "14,15",
+            "directions": 1
+        },
+        {
+            "name": "15,15",
+            "directions": 1
+        },
+        {
+            "name": "16,15",
+            "directions": 1
+        },
+        {
+            "name": "0,16",
+            "directions": 1
+        },
+        {
+            "name": "1,16",
+            "directions": 1
+        },
+        {
+            "name": "2,16",
+            "directions": 1
+        },
+        {
+            "name": "3,16",
+            "directions": 1
+        },
+        {
+            "name": "13,16",
+            "directions": 1
+        },
+        {
+            "name": "14,16",
+            "directions": 1
+        },
+        {
+            "name": "15,16",
+            "directions": 1
+        },
+        {
+            "name": "16,16",
+            "directions": 1
+        },
+        {
+            "name": "0,17",
+            "directions": 1
+        },
+        {
+            "name": "1,17",
+            "directions": 1
+        },
+        {
+            "name": "2,17",
+            "directions": 1
+        },
+        {
+            "name": "3,17",
+            "directions": 1
+        },
+        {
+            "name": "13,17",
+            "directions": 1
+        },
+        {
+            "name": "14,17",
+            "directions": 1
+        },
+        {
+            "name": "15,17",
+            "directions": 1
+        },
+        {
+            "name": "16,17",
+            "directions": 1
+        },
+        {
+            "name": "1,18",
+            "directions": 1
+        },
+        {
+            "name": "2,18",
+            "directions": 1
+        },
+        {
+            "name": "3,18",
+            "directions": 1
+        },
+        {
+            "name": "4,18",
+            "directions": 1
+        },
+        {
+            "name": "12,18",
+            "directions": 1
+        },
+        {
+            "name": "13,18",
+            "directions": 1
+        },
+        {
+            "name": "14,18",
+            "directions": 1
+        },
+        {
+            "name": "15,18",
+            "directions": 1
+        },
+        {
+            "name": "2,19",
+            "directions": 1
+        },
+        {
+            "name": "3,19",
+            "directions": 1
+        },
+        {
+            "name": "4,19",
+            "directions": 1
+        },
+        {
+            "name": "5,19",
+            "directions": 1
+        },
+        {
+            "name": "11,19",
+            "directions": 1
+        },
+        {
+            "name": "12,19",
+            "directions": 1
+        },
+        {
+            "name": "13,19",
+            "directions": 1
+        },
+        {
+            "name": "14,19",
+            "directions": 1
+        },
+        {
+            "name": "2,20",
+            "directions": 1
+        },
+        {
+            "name": "3,20",
+            "directions": 1
+        },
+        {
+            "name": "4,20",
+            "directions": 1
+        },
+        {
+            "name": "5,20",
+            "directions": 1
+        },
+        {
+            "name": "11,20",
+            "directions": 1
+        },
+        {
+            "name": "12,20",
+            "directions": 1
+        },
+        {
+            "name": "13,20",
+            "directions": 1
+        },
+        {
+            "name": "14,20",
+            "directions": 1
+        },
+        {
+            "name": "6,21",
+            "directions": 1
+        },
+        {
+            "name": "10,21",
+            "directions": 1
+        },
+        {
+            "name": "6,22",
+            "directions": 1
+        },
+        {
+            "name": "7,22",
+            "directions": 1
+        },
+        {
+            "name": "8,22",
+            "directions": 1
+        },
+        {
+            "name": "9,22",
+            "directions": 1
+        },
+        {
+            "name": "10,22",
+            "directions": 1
+        }
+    ]
+}

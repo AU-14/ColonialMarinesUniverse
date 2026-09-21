@@ -24,6 +24,10 @@ public sealed partial class RMCBuckleVisualsSystem : EntitySystem
     private void UpdateDrawDepth<T>(Entity<T> ent, ref AfterAutoHandleStateEvent args) where T : IComponent?
     {
         _rmcSprite.UpdateDrawDepth(ent.Owner);
+        // CMU14 Begin: let linked seat presentation observe buckle state.
+        var updated = new RMCBuckleVisualsUpdatedEvent();
+        RaiseLocalEvent(ent.Owner, ref updated);
+        // CMU14 End
     }
 
     private void OnGetDrawDepth(Entity<RMCBuckleDrawDepthComponent> ent, ref GetDrawDepthEvent args)
@@ -69,3 +73,8 @@ public sealed partial class RMCBuckleVisualsSystem : EntitySystem
         return buckleDepth;
     }
 }
+
+// CMU14 event
+/// <summary>Presentation consumers can observe buckle state through its existing state handler.</summary>
+[ByRefEvent]
+public readonly record struct RMCBuckleVisualsUpdatedEvent;
