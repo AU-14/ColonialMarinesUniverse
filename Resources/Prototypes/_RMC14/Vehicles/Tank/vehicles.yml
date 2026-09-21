@@ -22,7 +22,7 @@
     deceleration: 8
     maxReverseSpeed: 3
     reverseAcceleration: 1.3
-    turnDelay: 0.6
+    turnDelay: 0.7
     turnInPlace: true
     turnInPlaceMaxSpeed: 0.8
     pushCooldown: 2
@@ -43,8 +43,8 @@
     climbBounds:
     - -1.8,1.8,1.8,2.8
   - type: VehicleOvercharge
-    speedMultiplier: 1.3
-    duration: 6
+    speedMultiplier: 1.2
+    duration: 5
     cooldown: 24
     overchargeSound:
       path: /Audio/_RMC14/Vehicle/tank_boost_rev.wav
