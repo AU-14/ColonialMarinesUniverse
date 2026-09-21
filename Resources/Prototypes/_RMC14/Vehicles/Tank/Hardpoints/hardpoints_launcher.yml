@@ -10,7 +10,7 @@
     hardpointType: Launcher
     vehicleFamily: Tank
     slotType: Launcher
-    damageMultiplier: 1
+    damageMultiplier: 0.0
     repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 300
@@ -92,7 +92,7 @@
     hardpointType: Launcher
     vehicleFamily: Tank
     slotType: Launcher
-    damageMultiplier: 1
+    damageMultiplier: 0.0
     repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 500
@@ -172,7 +172,7 @@
     hardpointType: Launcher
     vehicleFamily: Tank
     slotType: Launcher
-    damageMultiplier: 1
+    damageMultiplier: 0.0
     repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 500
@@ -248,7 +248,7 @@
     hardpointType: Launcher
     vehicleFamily: Tank
     slotType: Launcher
-    damageMultiplier: 1
+    damageMultiplier: 0.0
     repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 350
@@ -323,7 +323,7 @@
     hardpointType: Launcher
     vehicleFamily: Tank
     slotType: Launcher
-    damageMultiplier: 1
+    damageMultiplier: 0.0
     repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 350
@@ -397,7 +397,7 @@
     hardpointType: Secondary
     vehicleFamily: Tank
     slotType: Launcher
-    damageMultiplier: 1
+    damageMultiplier: 0.0
     repairRate: 0.05
   - type: HardpointIntegrity
     maxIntegrity: 350
