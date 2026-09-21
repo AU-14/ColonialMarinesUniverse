@@ -259,7 +259,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 55
+        Piercing: 50
   - type: CMArmorPiercing
     amount: 35
 
@@ -336,7 +336,7 @@
     impactEffect: BulletImpactEffect
     damage:
       types:
-        Heat: 40
+        Heat: 30
     soundHit:
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
   - type: TriggerOnFixedDistanceStop
