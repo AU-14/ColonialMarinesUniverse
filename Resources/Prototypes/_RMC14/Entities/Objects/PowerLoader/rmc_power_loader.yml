@@ -171,6 +171,8 @@
     skills:
       all:
         RMCSkillPowerLoader: 1
+  - type: CMUVehicleZTraversal
+    canUseStairs: true
   - type: Hands
   - type: GiveHands
     hands:

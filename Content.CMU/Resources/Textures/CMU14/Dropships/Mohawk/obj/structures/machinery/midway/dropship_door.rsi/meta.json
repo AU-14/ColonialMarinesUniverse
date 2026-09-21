@@ -68,10 +68,6 @@
             "directions": 4
         },
         {
-            "name": "door_bolted",
-            "directions": 4
-        },
-        {
             "name": "door_opening",
             "directions": 4,
             "delays": [
@@ -107,10 +103,6 @@
         },
         {
             "name": "door_open",
-            "directions": 4
-        },
-        {
-            "name": "door_bolted_open",
             "directions": 4
         },
         {

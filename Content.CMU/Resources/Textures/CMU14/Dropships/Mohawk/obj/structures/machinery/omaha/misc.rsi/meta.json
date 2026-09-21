@@ -8,22 +8,6 @@
     },
     "states": [
         {
-            "name": "deployer",
-            "directions": 1
-        },
-        {
-            "name": "deployer_gibber",
-            "directions": 1
-        },
-        {
-            "name": "deployer_fuel",
-            "directions": 1
-        },
-        {
-            "name": "deployer_gun",
-            "directions": 1
-        },
-        {
             "name": "hardpoint_left",
             "directions": 1
         },
@@ -32,31 +16,11 @@
             "directions": 1
         },
         {
-            "name": "hatch_ladder",
-            "directions": 1
-        },
-        {
-            "name": "hardpoint_empty",
-            "directions": 1
-        },
-        {
-            "name": "hardpoint_closed",
-            "directions": 1
-        },
-        {
             "name": "stairs_platform",
             "directions": 4
         },
         {
             "name": "platform",
-            "directions": 4
-        },
-        {
-            "name": "stairs_decal_top",
-            "directions": 4
-        },
-        {
-            "name": "stairs_decal_bot",
             "directions": 4
         },
         {

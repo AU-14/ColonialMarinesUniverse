@@ -64,30 +64,6 @@
             "directions": 1
         },
         {
-            "name": "5,2",
-            "directions": 1
-        },
-        {
-            "name": "6,2",
-            "directions": 1
-        },
-        {
-            "name": "7,2",
-            "directions": 1
-        },
-        {
-            "name": "9,2",
-            "directions": 1
-        },
-        {
-            "name": "10,2",
-            "directions": 1
-        },
-        {
-            "name": "11,2",
-            "directions": 1
-        },
-        {
             "name": "4,3",
             "directions": 1
         },
@@ -149,10 +125,6 @@
         },
         {
             "name": "3,14",
-            "directions": 1
-        },
-        {
-            "name": "4,14",
             "directions": 1
         },
         {
@@ -365,34 +337,6 @@
         },
         {
             "name": "14,20",
-            "directions": 1
-        },
-        {
-            "name": "6,21",
-            "directions": 1
-        },
-        {
-            "name": "10,21",
-            "directions": 1
-        },
-        {
-            "name": "6,22",
-            "directions": 1
-        },
-        {
-            "name": "7,22",
-            "directions": 1
-        },
-        {
-            "name": "8,22",
-            "directions": 1
-        },
-        {
-            "name": "9,22",
-            "directions": 1
-        },
-        {
-            "name": "10,22",
             "directions": 1
         }
     ]

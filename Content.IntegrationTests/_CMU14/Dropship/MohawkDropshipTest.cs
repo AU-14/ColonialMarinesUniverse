@@ -12,6 +12,11 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared.Atmos;
+using Content.Shared.Buckle;
+using Content.Shared.Buckle.Components;
+using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Systems;
+using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
@@ -90,13 +95,17 @@ public sealed class MohawkDropshipTest
             Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/omaha.yml"), out var omaha), Is.True);
             Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/ShuttlesDropships/Mohawk/midway.yml"), out var midway), Is.True);
             var ground = maps.CreateMap();
-            var reserved = entities.SpawnEntity(null, new EntityCoordinates(ground, -8.5f, 15.5f));
-            entities.AddComponent<DropshipDestinationComponent>(reserved);
+            var markerCoordinates = new EntityCoordinates(ground, -9.5f, 15.5f);
+            var reserved = entities.SpawnEntity("CMUMohawkTestOffsetDestination", markerCoordinates);
             entities.System<SharedDropshipSystem>().SetDestinationShip(reserved, omaha!.Value.Owner);
             var assembly = entities.System<MultiDeckDropshipSystem>();
-            Assert.That(assembly.IsLandingClear(midway!.Value.Owner, new EntityCoordinates(ground, 7.5f, 15.5f), Angle.Zero), Is.True,
+            Assert.That(assembly.GetLandingOrigin(omaha.Value.Owner, markerCoordinates, reserved).Position,
+                Is.EqualTo(new Vector2(-9f, 15f)), "Use the pad's large-hull offset before snapping the grid.");
+            Assert.That(assembly.GetLandingOrigin(ground, markerCoordinates, reserved), Is.EqualTo(markerCoordinates),
+                "An ordinary ship must keep its existing landing coordinates.");
+            Assert.That(assembly.IsLandingClear(midway!.Value.Owner, new EntityCoordinates(ground, 7f, 15f), Angle.Zero), Is.True,
                 "The two USS Bush pads are 16 tiles apart; the cabin envelopes meet at their edges.");
-            Assert.That(assembly.IsLandingClear(midway.Value.Owner, new EntityCoordinates(ground, 7.4f, 15.5f), Angle.Zero), Is.False,
+            Assert.That(assembly.IsLandingClear(midway.Value.Owner, new EntityCoordinates(ground, 6.9f, 15f), Angle.Zero), Is.False,
                 "Moving inside the other ship's reserved envelope must still fail.");
             entities.DeleteEntity(omaha.Value.Owner);
             entities.DeleteEntity(midway.Value.Owner);
@@ -107,6 +116,13 @@ public sealed class MohawkDropshipTest
 
     [TestPrototypes]
     private const string Prototypes = """
+- type: entity
+  id: CMUMohawkTestOffsetDestination
+  parent: CMDropshipDestination
+  components:
+  - type: DropshipDestination
+    multiDeckOffset: 1,0
+
 - type: entity
   id: CMUMohawkTestPassenger
   components:
@@ -182,8 +198,8 @@ public sealed class MohawkDropshipTest
             var start = entities.System<SharedTransformSystem>()
                 .ToMapCoordinates(new EntityCoordinates(lower, 0.5f, -7.5f)).Position;
             passenger = entities.SpawnEntity("CMUMohawkTestPassenger", new EntityCoordinates(lowerMap, start));
-            vehicle = entities.SpawnEntity("RMCMechPowerLoader", new EntityCoordinates(lowerMap, start));
-            Assert.That(entities.HasComponent<CMUVehicleZTraversalComponent>(vehicle), Is.True);
+            vehicle = entities.SpawnEntity("CMUMohawkTestPassenger", new EntityCoordinates(lowerMap, start));
+            entities.AddComponent<CMUVehicleZTraversalComponent>(vehicle);
         });
         await pair.RunTicksSync(3);
         // Small steps keep Z position continuous rather than teleporting the
@@ -197,8 +213,8 @@ public sealed class MohawkDropshipTest
                 var transform = entities.System<SharedTransformSystem>();
                 transform.SetWorldPosition(passenger,
                     transform.ToMapCoordinates(new EntityCoordinates(lower, 0.5f, y)).Position);
-                // The real power loader uses footprint sampling rather than the
-                // pedestrian's single sample. Neither path may carry it upstairs.
+                // Wheeled and tracked vehicles use footprint sampling and must
+                // remain below the stairs even when moved across their surface.
                 transform.SetWorldPosition(vehicle,
                     transform.ToMapCoordinates(new EntityCoordinates(lower, 0.5f, y)).Position);
                 Assert.That(entities.GetComponent<TransformComponent>(vehicle).MapUid,
@@ -251,6 +267,74 @@ public sealed class MohawkDropshipTest
         await pair.CleanReturnAsync();
     }
 
+    [TestCase("omaha", 0, "RMCMechPowerLoader")]
+    [TestCase("midway", 90, "RMCMechPowerLoaderGreen")]
+    [TestCase("omaha_navy", 180, "RMCMechPowerLoaderBlue")]
+    [TestCase("midway_navy", 270, "RMCMechPowerLoader")]
+    public async Task PowerLoadersWalkOverRampBulkhead(string variant, int degrees, string prototype)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        EntityUid ship = default;
+        EntityUid lower = default;
+        EntityUid loader = default;
+        EntityUid pilot = default;
+        EntityUid cabinMap = default;
+        Direction forward = default;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            cabinMap = maps.CreateMap(out var mapId);
+            Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
+                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+            ship = loaded!.Value.Owner;
+            var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
+            lower = assembly.Decks[-1];
+            var transform = entities.System<SharedTransformSystem>();
+            var rotation = Angle.FromDegrees(degrees);
+            transform.SetWorldRotation(ship, rotation);
+            Assert.That(entities.System<MultiDeckDropshipSystem>().Synchronize((ship, assembly)), Is.True);
+            Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true, true), Is.True);
+            var lowerMap = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
+            var terrain = entities.EnsureComponent<MapGridComponent>(lowerMap);
+            var tile = maps.GetAllTiles(lower, entities.GetComponent<MapGridComponent>(lower)).First().Tile;
+            for (var x = -8; x <= 8; x++)
+            for (var y = -8; y <= 8; y++)
+                maps.SetTile(lowerMap, terrain, new Vector2i(x, y), tile);
+            var start = transform.ToMapCoordinates(new EntityCoordinates(lower, 0.5f, -5.5f)).Position;
+            loader = entities.SpawnEntity(prototype, new EntityCoordinates(lowerMap, start));
+            pilot = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(lowerMap, start));
+            entities.System<SkillsSystem>().SetSkill(pilot, "RMCSkillPowerLoader", 1);
+            Assert.That(entities.System<SharedBuckleSystem>().TryBuckle(pilot, null, loader, popup: false), Is.True);
+            forward = Direction.North;
+            var mover = entities.System<SharedMoverController>();
+            var pilotInput = entities.GetComponent<InputMoverComponent>(pilot);
+            var relativeRotation = pilotInput.RelativeEntity is { } relative
+                ? transform.GetWorldRotation(relative)
+                : Angle.Zero;
+            mover.SetCameraRotation(pilot, rotation - relativeRotation, true);
+            mover.SetCameraRotation(loader, rotation - relativeRotation, true);
+            mover.SetVelocityDirection(
+                (loader, entities.GetComponent<InputMoverComponent>(loader)), forward, ushort.MaxValue, true);
+        });
+
+        // Use real movement and solid fixtures: moving the transform directly would
+        // hide a loader getting caught on the bulkhead before it reaches the cabin.
+        await pair.RunSeconds(5);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            entities.System<SharedMoverController>().SetVelocityDirection(
+                (loader, entities.GetComponent<InputMoverComponent>(loader)), forward, ushort.MaxValue, false);
+            Assert.That(entities.GetComponent<TransformComponent>(loader).MapUid, Is.EqualTo(cabinMap),
+                $"A piloted powerloader must climb above the bulkhead; stopped at {entities.GetComponent<TransformComponent>(loader).Coordinates}.");
+            Assert.That(entities.GetComponent<TransformComponent>(pilot).MapUid, Is.EqualTo(cabinMap));
+            Assert.That(entities.GetComponent<BuckleComponent>(pilot).BuckledTo, Is.EqualTo(loader));
+            entities.DeleteEntity(ship);
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [TestCase("omaha")]
     [TestCase("midway")]
     [TestCase("omaha_navy")]
@@ -300,7 +384,7 @@ public sealed class MohawkDropshipTest
                 var xform = entities.GetComponent<TransformComponent>(control.Owner);
                 controls.Add(control.Owner, (xform.GridUid!.Value, xform.LocalPosition));
             }
-            Assert.That(controls, Has.Count.EqualTo(5));
+            Assert.That(controls, Has.Count.EqualTo(variant.StartsWith("omaha") ? 5 : 3));
             var boardingTile = maps.GetAllTiles(lower, entities.GetComponent<MapGridComponent>(lower)).First();
             var rider = entities.SpawnEntity(null, new EntityCoordinates(ship, 0.5f, 0.5f));
             Assert.That(entities.GetComponent<TransformComponent>(rider).GridUid, Is.EqualTo(ship));
@@ -341,10 +425,19 @@ public sealed class MohawkDropshipTest
             var cabinObstruction = maps.CreateGridEntity(entities.GetComponent<MapComponent>(target.EntityId).MapId);
             var cabinTile = maps.GetAllTiles(ship, loaded.Comp).First();
             var cabinObstructionPosition = target.Position + Angle.FromDegrees(90).RotateVec(cabinTile.GridIndices + new Vector2(0.5f));
+            var cabinObstructionTile = new Vector2i((int) MathF.Floor(cabinObstructionPosition.X), (int) MathF.Floor(cabinObstructionPosition.Y));
+            var tileDefinitions = server.ResolveDependency<ITileDefinitionManager>();
             maps.SetTile(cabinObstruction, cabinObstruction.Comp,
-                new Vector2i((int) MathF.Floor(cabinObstructionPosition.X), (int) MathF.Floor(cabinObstructionPosition.Y)), cabinTile.Tile);
+                cabinObstructionTile, new Tile(tileDefinitions["CMFloorPlating"].TileId));
             Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.False,
                 "An occupied cabin level must still reject the landing pad.");
+            maps.SetTile(cabinObstruction, cabinObstruction.Comp,
+                cabinObstructionTile, new Tile(tileDefinitions["CMShuttleTileInvisible"].TileId));
+            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True,
+                "Open-air map anchors are not solid floors at cabin height.");
+            entities.SpawnEntity("WallSolid", new EntityCoordinates(cabinObstruction, cabinObstructionTile + new Vector2(0.5f)));
+            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.False,
+                "A wall still obstructs landing even when it stands on a transparent tile.");
             entities.DeleteEntity(cabinObstruction);
             Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True);
             // A ship still in transit must reserve its destination volume too.
@@ -393,8 +486,10 @@ public sealed class MohawkDropshipTest
             shuttles.DefaultArrivalTime = 0.5f;
             var nav = entities.EntityQuery<DropshipNavigationComputerComponent>()
                 .First(c => entities.GetComponent<TransformComponent>(c.Owner).GridUid == ship);
-            var marker = entities.SpawnEntity(null, new EntityCoordinates(finalGround, finalCabin.Position));
-            entities.AddComponent<DropshipDestinationComponent>(marker);
+            // Authored pad markers sit at tile centers. The ship must still land
+            // at the tile corner, including when it has been turned around.
+            var marker = entities.SpawnEntity("CMUMohawkTestOffsetDestination",
+                new EntityCoordinates(finalGround, finalCabin.Position + new Vector2(-0.5f, 0.5f)));
             transform.SetWorldRotation(marker, Angle.FromDegrees(180));
             Assert.That(dropships.FlyTo((nav.Owner, nav), marker, null, startupTime: 0.5f, hyperspaceTime: 2f), Is.True);
         });

@@ -9985,6 +9985,21 @@
   id: 656
   time: '2026-09-19T10:15:28.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1975
+- author: ver0098
+  changes:
+  - message: CLF Commandos can now be called through the CLF intel console they are
+      CLF aligned and should be fairly balanced
+    type: Add
+  - message: "\U0001F1EC\U0001F1E7 Chaps, we've got a fresh supply of sniper kits\
+      \ from Sol. These pack a punch and comes with night vision visors for ye helmets\
+      \ happy hunting."
+    type: Add
+  - message: "\U0001F46E Armory got restocked recently, we got M16 Extended Magazines\
+      \ and Armor Piercing again. Them gun kits got one of each too."
+    type: Add
+  id: 657
+  time: '2026-09-20T20:43:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1927
 - author: TheHellFireo
   changes:
   - message: Adds the UD-6 Mohawk Dropships
@@ -9994,7 +10009,7 @@
   - message: Allows the queen to be able to use the ramp controls to open the ramp
       of the Mohawks
     type: Tweak
-  id: 657
+  id: 658
   time: '2026-09-21T01:37:52.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1982
 Name: CMU

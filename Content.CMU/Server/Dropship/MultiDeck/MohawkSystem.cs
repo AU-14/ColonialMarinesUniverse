@@ -6,6 +6,7 @@ using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Damage;
@@ -358,6 +359,7 @@ public sealed partial class MohawkSystem : EntitySystem
             {
                 if (deployed)
                 {
+                    EnsureComp<BlockWeedsComponent>(uid);
                     if (!segment.Deployed)
                     {
                         foreach (var victim in GetRampOccupants(uid))
@@ -381,6 +383,7 @@ public sealed partial class MohawkSystem : EntitySystem
                 }
                 else
                 {
+                    RemComp<BlockWeedsComponent>(uid);
                     // A ramp can overlap a landing pad; standing on it does not
                     // necessarily reparent the occupant to the ship's lower grid.
                     if (segment.Deployed && segment.Stage != 4)

@@ -36,31 +36,7 @@
             "directions": 1
         },
         {
-            "name": "1,1",
-            "directions": 1
-        },
-        {
-            "name": "7,1",
-            "directions": 1
-        },
-        {
             "name": "0,2",
-            "directions": 1
-        },
-        {
-            "name": "1,2",
-            "directions": 1
-        },
-        {
-            "name": "2,2",
-            "directions": 1
-        },
-        {
-            "name": "6,2",
-            "directions": 1
-        },
-        {
-            "name": "7,2",
             "directions": 1
         },
         {
@@ -105,14 +81,6 @@
         },
         {
             "name": "8,7",
-            "directions": 1
-        },
-        {
-            "name": "0,8",
-            "directions": 1
-        },
-        {
-            "name": "8,8",
             "directions": 1
         },
         {

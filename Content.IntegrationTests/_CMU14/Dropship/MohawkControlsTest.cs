@@ -14,7 +14,7 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 public sealed class MohawkControlsTest
 {
     [TestCase("omaha")]
-    [TestCase("midway")]
+    [TestCase("omaha_navy")]
     public async Task SideButtonsOperateTheirOwnHatch(string variant)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });

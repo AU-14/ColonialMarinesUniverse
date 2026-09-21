@@ -632,9 +632,12 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         // the deck assembly before reserving the destination or changing flight state.
         var destTransform = Transform(destination);
         var destCoords = _transform.GetMoverCoordinates(destination, destTransform);
+        if (offset)
+            destCoords = destCoords.Offset(new Vector2(-0.5f, -0.5f));
+        if (!hijack)
+            destCoords = _multiDeck.GetLandingOrigin(dropshipId.Value, destCoords, destination);
         var rotation = _transform.GetWorldRotation(destination);
-        var clearanceCoordinates = offset ? destCoords.Offset(new Vector2(-0.5f, -0.5f)) : destCoords;
-        if (!hijack && !_multiDeck.IsLandingClear(dropshipId.Value, clearanceCoordinates, rotation))
+        if (!hijack && !_multiDeck.IsLandingClear(dropshipId.Value, destCoords, rotation))
         {
             if (user is { } pilot)
                 _popup.PopupEntity(Loc.GetString("cmu-mohawk-landing-obstructed"), computer, pilot);
@@ -733,9 +736,6 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             _physics.SetLocalCenter(dropshipId.Value, physics, Vector2.Zero);
             destCoords = destCoords.Offset(-physics.LocalCenter);
         }
-
-        if (offset)
-            destCoords = destCoords.Offset(new Vector2(-0.5f, -0.5f));
 
         if (hijack)
         {

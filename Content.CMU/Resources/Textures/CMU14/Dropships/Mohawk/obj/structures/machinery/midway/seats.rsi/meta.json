@@ -8,39 +8,11 @@
     },
     "states": [
         {
-            "name": "command-station-chair",
-            "directions": 1
-        },
-        {
-            "name": "jumpseat-chair",
-            "directions": 1
-        },
-        {
-            "name": "seat-north",
-            "directions": 1
-        },
-        {
-            "name": "seat-south",
-            "directions": 1
-        },
-        {
-            "name": "command_chair",
-            "directions": 4
-        },
-        {
             "name": "passenger_chair",
             "directions": 4
         },
         {
             "name": "passenger_chair_buckled",
-            "directions": 4
-        },
-        {
-            "name": "passenger_chair_destroyed",
-            "directions": 4
-        },
-        {
-            "name": "vehicle_bars",
             "directions": 4
         }
     ]

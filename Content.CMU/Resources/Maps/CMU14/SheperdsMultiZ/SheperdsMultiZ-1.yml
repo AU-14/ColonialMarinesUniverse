@@ -11,7 +11,7 @@ maps:
 grids:
 - 1
 orphans: []
-nullspace: [321424, 321425, 321426, 321427, 321428]
+nullspace: []
 tilemap:
   0: Space
   141: AUSheperdsGrass1

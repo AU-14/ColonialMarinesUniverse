@@ -8,27 +8,11 @@
     },
     "states": [
         {
-            "name": "deployer",
-            "directions": 1
-        },
-        {
             "name": "hardpoint_left",
             "directions": 1
         },
         {
             "name": "hardpoint_right",
-            "directions": 1
-        },
-        {
-            "name": "hatch_ladder",
-            "directions": 1
-        },
-        {
-            "name": "hardpoint_empty",
-            "directions": 1
-        },
-        {
-            "name": "hardpoint_closed",
             "directions": 1
         },
         {

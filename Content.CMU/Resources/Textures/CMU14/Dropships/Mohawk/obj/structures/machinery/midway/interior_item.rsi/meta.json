@@ -8,14 +8,6 @@
     },
     "states": [
         {
-            "name": "fire-extinguisher-cabinet",
-            "directions": 1
-        },
-        {
-            "name": "fire-extinguisher-empty",
-            "directions": 1
-        },
-        {
             "name": "intercom",
             "directions": 1
         },
@@ -78,100 +70,11 @@
             ]
         },
         {
-            "name": "hatch_ladder_bottom",
-            "directions": 1
-        },
-        {
             "name": "ramp_control",
             "directions": 1
         },
         {
-            "name": "ramp_control0",
-            "directions": 1
-        },
-        {
-            "name": "ramp_control1",
-            "directions": 1,
-            "delays": [
-                [
-                    0.1,
-                    0.1,
-                    0.1
-                ]
-            ]
-        },
-        {
-            "name": "ramp_control-denied",
-            "directions": 1,
-            "delays": [
-                [
-                    0.1,
-                    0.1
-                ]
-            ]
-        },
-        {
-            "name": "ramp_control-p",
-            "directions": 1
-        },
-        {
             "name": "doorctrl",
-            "directions": 4
-        },
-        {
-            "name": "doorctrl0",
-            "directions": 4
-        },
-        {
-            "name": "doorctrl1",
-            "directions": 4,
-            "delays": [
-                [
-                    0.1,
-                    0.1,
-                    0.1
-                ],
-                [
-                    0.1,
-                    0.1,
-                    0.1
-                ],
-                [
-                    0.1,
-                    0.1,
-                    0.1
-                ],
-                [
-                    0.1,
-                    0.1,
-                    0.1
-                ]
-            ]
-        },
-        {
-            "name": "doorctrl-denied",
-            "directions": 4,
-            "delays": [
-                [
-                    0.1,
-                    0.1
-                ],
-                [
-                    0.1,
-                    0.1
-                ],
-                [
-                    0.1,
-                    0.1
-                ],
-                [
-                    0.1,
-                    0.1
-                ]
-            ]
-        },
-        {
-            "name": "doorctrl-p",
             "directions": 4
         }
     ]

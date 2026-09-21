@@ -489,7 +489,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
             HasComp<MultiDeckDropshipComponent>(ship))
         {
             var blockedLevels = new HashSet<Vector2i>();
-            if (!_multiDeck.IsLandingClear(ship, xform.Coordinates,
+            var origin = _multiDeck.GetLandingOrigin(ship, xform.Coordinates);
+            if (!_multiDeck.IsLandingClear(ship, origin,
                     Angle.FromDegrees(-eye.Comp.RotationQuarterTurns * 90), blockedLevels))
             {
                 foreach (var offset in blockedLevels)

@@ -14,14 +14,6 @@
         {
             "name": "gear_hatch",
             "directions": 4
-        },
-        {
-            "name": "m90_minigun",
-            "directions": 1
-        },
-        {
-            "name": "m90_minigun_deployer",
-            "directions": 1
         }
     ]
 }

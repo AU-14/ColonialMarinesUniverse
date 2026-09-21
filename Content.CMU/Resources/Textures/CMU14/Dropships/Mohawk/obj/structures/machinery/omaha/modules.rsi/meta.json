@@ -8,21 +8,6 @@
     },
     "states": [
         {
-            "name": "command-module",
-            "directions": 1
-        },
-        {
-            "name": "command-module-overlay",
-            "directions": 1,
-            "delays": [
-                [
-                    0.5,
-                    0.5,
-                    0.5
-                ]
-            ]
-        },
-        {
             "name": "overwatch_module",
             "directions": 1,
             "delays": [
@@ -38,95 +23,12 @@
             "directions": 1
         },
         {
-            "name": "armory_module",
-            "directions": 1
-        },
-        {
             "name": "armory_module-full",
             "directions": 1
         },
         {
             "name": "armory_module_dummy",
             "directions": 1
-        },
-        {
-            "name": "jumpseat-console",
-            "directions": 1
-        },
-        {
-            "name": "jumpseat-console-overlay",
-            "directions": 1,
-            "delays": [
-                [
-                    0.5,
-                    0.5,
-                    0.5
-                ]
-            ]
-        },
-        {
-            "name": "locker-guns-overlay",
-            "directions": 1
-        },
-        {
-            "name": "map-table",
-            "directions": 1
-        },
-        {
-            "name": "map-table-overlay",
-            "directions": 1,
-            "delays": [
-                [
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1,
-                    1.0
-                ]
-            ]
         },
         {
             "name": "omaha_map",

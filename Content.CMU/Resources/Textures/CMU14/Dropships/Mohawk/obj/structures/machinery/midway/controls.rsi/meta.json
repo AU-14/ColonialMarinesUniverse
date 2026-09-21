@@ -30,16 +30,6 @@
             ]
         },
         {
-            "name": "console-locked",
-            "directions": 1,
-            "delays": [
-                [
-                    0.1,
-                    0.1
-                ]
-            ]
-        },
-        {
             "name": "system_monitor",
             "directions": 1,
             "delays": [

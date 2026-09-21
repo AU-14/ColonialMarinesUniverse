@@ -441,7 +441,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     continue;
             }
 
-            if (_multiDeck.IsLandingClear(dropship, transform.Coordinates, _transform.GetWorldRotation(uid)))
+            var origin = _multiDeck.GetLandingOrigin(dropship, transform.Coordinates, uid);
+            if (_multiDeck.IsLandingClear(dropship, origin, _transform.GetWorldRotation(uid)))
                 candidates.Add(uid);
         }
         return candidates.Count == 0 ? null : candidates[random.Next(candidates.Count)];

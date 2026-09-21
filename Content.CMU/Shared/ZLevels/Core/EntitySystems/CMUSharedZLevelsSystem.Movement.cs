@@ -1220,6 +1220,13 @@ public abstract partial class CMUSharedZLevelsSystem
             ref stickyGround);
     }
 
+    private bool CanClimbHighGround(EntityUid target, CMUZLevelHighGroundComponent ground)
+    {
+        return ground.AllowVehicles ||
+               !_vehicleTraversalQuery.TryComp(target, out var vehicle) ||
+               vehicle.CanUseStairs;
+    }
+
     private bool TryGetHighGroundDistanceCore(
         Entity<CMUZPhysicsComponent?> target,
         EntityUid checkingGridUid,
@@ -1258,8 +1265,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     if (!_highgroundQuery.TryComp(uid, out var heightComp))
                         continue;
 
-                    if (floor == 0 && (heightComp.SupportOnlyFromAbove ||
-                        (!heightComp.AllowVehicles && _vehicleTraversalQuery.HasComp(target))))
+                    if (floor == 0 && (heightComp.SupportOnlyFromAbove || !CanClimbHighGround(target, heightComp)))
                         continue;
 
                     if (heightComp.HeightCurve.Count == 0)
@@ -1442,7 +1448,7 @@ public abstract partial class CMUSharedZLevelsSystem
                         continue;
 
                     if (heightComp.SupportOnlyFromAbove ||
-                        (!heightComp.AllowVehicles && _vehicleTraversalQuery.HasComp(target)) ||
+                        !CanClimbHighGround(target, heightComp) ||
                         heightComp.HeightCurve.Count == 0)
                     {
                         continue;

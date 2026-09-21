@@ -54,6 +54,9 @@ public sealed class MohawkRoundSetupTest
         {
             var ticker = entities.System<GameTicker>();
             var platoons = entities.System<PlatoonSpawnRuleSystem>();
+            // Pooled worlds retain the selected platoons when entities are cleared.
+            platoons.SelectedGovforPlatoon = null;
+            platoons.SelectedOpforPlatoon = null;
             var platoon = server.ProtoMan.Index<PlatoonPrototype>(platoonId);
             Assert.That(platoon.CompatibleDropships.Select(path => path.ToString()), Is.EquivalentTo(new[]
             {
@@ -79,6 +82,8 @@ public sealed class MohawkRoundSetupTest
             ship = assembly.Owner;
             Assert.That(entities.GetComponent<MetaDataComponent>(ship).EntityName, Is.EqualTo("Midway"));
             Assert.That(entities.EntityQuery<DropshipComponent>().Count(), Is.EqualTo(2));
+            foreach (var dropship in entities.EntityQuery<DropshipComponent>())
+                Assert.That(dropship.Destination, Is.Not.Null, "Both the transport and Midway need a hangar pad.");
             Assert.That(entities.GetComponent<DropshipComponent>(ship).Destination, Is.Not.Null,
                 "Round setup must reserve a Bush landing pad for the replacement gunship.");
             destination = entities.GetComponent<DropshipComponent>(ship).Destination!.Value;

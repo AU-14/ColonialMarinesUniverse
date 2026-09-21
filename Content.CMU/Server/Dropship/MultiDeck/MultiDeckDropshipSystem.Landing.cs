@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.CMU14.Dropship.MultiDeck;
+using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -11,6 +12,24 @@ namespace Content.Server.CMU14.Dropship.MultiDeck;
 public sealed partial class MultiDeckDropshipSystem
 {
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitions = default!;
+
+    /// <summary>
+    /// Markers occupy tile centers, while a grid's origin is a tile corner. Keep
+    /// multi-deck landings aligned with the pad so the ramp joins its stairs cleanly.
+    /// Tactical destinations that already name a tile corner remain unchanged.
+    /// </summary>
+    public EntityCoordinates GetLandingOrigin(EntityUid ship, EntityCoordinates coordinates, EntityUid? destination = null)
+    {
+        if (!HasComp<MultiDeckDropshipComponent>(ship))
+            return coordinates;
+
+        coordinates = _transform.GetMoverCoordinates(coordinates);
+        if (TryComp<DropshipDestinationComponent>(destination, out var pad))
+            coordinates = coordinates.Offset(pad.MultiDeckOffset);
+        return new EntityCoordinates(coordinates.EntityId,
+            new Vector2(MathF.Floor(coordinates.X), MathF.Floor(coordinates.Y)));
+    }
 
     /// <summary>
     /// Checks the cabin and decks below it without creating maps. Upper artwork may
@@ -68,7 +87,7 @@ public sealed partial class MultiDeckDropshipSystem
                     var destination = _map.GetTileRef(other, other.Comp, indices);
                     const CollisionGroup mask = CollisionGroup.Impassable | CollisionGroup.LowImpassable |
                                                 CollisionGroup.MidImpassable | CollisionGroup.HighImpassable;
-                    if ((offset > 0 && !destination.Tile.IsEmpty) ||
+                    if ((offset > 0 && !CMUZLevelOpeningCache.IsOpeningTile(destination.Tile, _tileDefinitions)) ||
                         _turf.IsTileBlocked(destination, mask, 0.001f))
                     {
                         result = false;
@@ -91,7 +110,7 @@ public sealed partial class MultiDeckDropshipSystem
             if (reservation.Ship is not { } other || other == ship || TerminatingOrDeleted(other) ||
                 (!HasComp<MultiDeckDropshipComponent>(ship) && !HasComp<MultiDeckDropshipComponent>(other)))
                 continue;
-            var position = _transform.GetMapCoordinates(destination, destinationTransform);
+            var position = _transform.ToMapCoordinates(GetLandingOrigin(other, destinationTransform.Coordinates, destination));
             if (position.MapId != ground.MapId)
                 continue;
 
