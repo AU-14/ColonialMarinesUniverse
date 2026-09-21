@@ -1,4 +1,4 @@
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankLTBCannon
   name: LTB cannon
@@ -67,7 +67,7 @@
     vehicleState: ltb_cannon_0
     damagedVehicleState: ltb_cannon_1
 
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankLTAAAPMinigun
   name: LTAAAP minigun
@@ -158,7 +158,7 @@
     vehicleState: ltaaap_minigun_0
     damagedVehicleState: ltaaap_minigun_1
 
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankAceAutocannon
   name: ACE autocannon
@@ -232,8 +232,7 @@
     vehicleState: ace_autocannon_0
     damagedVehicleState: ace_autocannon_1
 
-
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankAutocannonTWE
   name: Improper L26A2 45mm Autocannon
@@ -308,7 +307,8 @@
   - type: HardpointVisual
     vehicleState: heavy_autocannon_0
     damagedVehicleState: heavy_autocannon_1
-- type: entity
+    
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankHeavyElectrolaserTWE
   name: Improper L215A1 Heavy Electrolaser
@@ -382,7 +382,7 @@
     vehicleState: heavy_electrolaser_0
     damagedVehicleState: heavy_electrolaser_1
 
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankDragonFlamer
   name: DRGN flamer
