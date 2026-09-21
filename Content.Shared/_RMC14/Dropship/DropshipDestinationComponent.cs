@@ -1,27 +1,27 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Dropship;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedDropshipSystem))]
 public sealed partial class DropshipDestinationComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Ship;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool AutoRecall;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool CanBePrimary = true;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int LightSearchRadius = 14;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? ArrivalSoundEntity;
 
-    [DataField("FactionControlling", required: false), AutoNetworkedField]
+    [DataField("FactionControlling", required: false)]
     public string FactionController = String.Empty;
 
 

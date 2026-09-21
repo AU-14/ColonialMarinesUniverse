@@ -3,14 +3,14 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Attachable.Components;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(AttachableToggleableSystem))]
 public sealed partial class AttachableDirectionLockedComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public List<EntityUid> AttachableList = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Direction? LockedDirection;
 }
 

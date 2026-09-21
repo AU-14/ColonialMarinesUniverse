@@ -47,6 +47,7 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
     private EntityQuery<BlockTileFireComponent> _blockQuery;
     private EntityQuery<DoorComponent> _doorQuery;
     private EntityQuery<TileFireComponent> _tileFireQuery;
+    private readonly List<EntityUid> _pendingSpreads = new();
 
     public override void Initialize()
     {
@@ -66,6 +67,7 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
     {
         var time = _timing.CurTime;
         var depth = _config.GetCVar(CCVars.CMUFireSpreadDepth);
+        _pendingSpreads.Clear();
         var query = EntityQueryEnumerator<TileFireComponent>();
         while (query.MoveNext(out var uid, out var fire))
         {
@@ -87,7 +89,20 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
 
             // Children get their NextSpread set at spawn without a MapInitEvent for this
             // component, so both spawned-from-prototype and spread children meet here.
-            if (spread.Depth <= 1 || fire.Id is not { } spawn)
+            if (spread.Depth <= 1 || fire.Id == null)
+                continue;
+
+            _pendingSpreads.Add(uid);
+        }
+
+        // Spawning adds TileFire components and invalidates the enumerator above.
+        // Check each destination at spawn time so competing parents cannot ignite it twice.
+        foreach (var uid in _pendingSpreads)
+        {
+            if (TerminatingOrDeleted(uid) ||
+                !TryComp(uid, out TileFireComponent? fire) ||
+                !TryComp(uid, out CMUSpreadingFireComponent? spread) ||
+                fire.Id is not { } spawn)
                 continue;
 
             var coordinates = Transform(uid).Coordinates;

@@ -1,12 +1,10 @@
 name: Hunt for Heisentests
 
 on:
+  # Full-suite flake hunts are opt-in; CI already tests pushes and pull requests.
   workflow_dispatch:
-  # every 15 minutes
-  schedule:
-    - cron: "*/15 * * * *"
 
-# A hunt can legitimately take over an hour; overlapping hunts only add load.
+# Avoid overlapping manually dispatched hunts.
 concurrency:
   group: heisentests
   cancel-in-progress: true

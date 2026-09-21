@@ -14,6 +14,7 @@ public sealed class DistressSignalSurvivorPrototypeTest
     {
         "AU14IntelThirdPartyMarksmanGOVFOR",
         "AU14IntelThirdPartySniperGOVFOR",
+        "CLFCellCommandosIntel",
         "CLFCellReinforcementsIntel",
         "CLFCellReinforcementsIntelEngineer",
         "CLFCellReinforcementsIntelMachineGunner",

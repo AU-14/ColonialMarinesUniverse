@@ -277,6 +277,10 @@
         crate: CMUCrateMk86
     - name: Ammo
       entries:
+      - cost: 500
+        crate: CMUCrateBoxMagazineRifleM16APExt
+      - cost: 300
+        crate: CMUCrateBoxMagazineRifleM16AP
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 650

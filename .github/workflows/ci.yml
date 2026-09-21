@@ -362,7 +362,7 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 60 # raised to leave headroom for the shard (cmu) retry loop on non-failure
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -373,15 +373,7 @@ jobs:
           - name: root_2
             root_group: 1
             root_groups: 2
-          - name: entity_spawn_delete_maps
-            filter: FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteAllEntitiesOnDifferentMaps
-          - name: entity_spawn_dirty
-            filter: FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDirtyAllEntities
-          - name: entity_counts
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.AllComponentsOneToOneDeleteTest
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteAllEntitiesInTheSameSpot
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteEntityCountTest
+          # Bulk entity/component sweeps remain in the manual Build & Test Debug workflow.
           - name: admin_access_ui
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Administration
@@ -634,15 +626,7 @@ jobs:
           echo "--- $shard shard filter ---"
           echo "$FILTER"
           cd bin/Content.IntegrationTests || exit 1
-          # Upstream prototype variantization races on PLINQ parse threads,
-          # so any pair boot can die with ArgumentNullException during prototype load.
-          for attempt in 1 2 3; do
-            echo "--- $shard attempt $attempt"
-            # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
-            if dotnet test Content.IntegrationTests.dll \
-              --verbosity normal --filter "$FILTER" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000; then
-              exit 0
-            fi
-            echo "attempt $attempt failed"
-          done
-          exit 1
+          # Runner shutdowns are retried by ci-retry-infra.yml; test failures need attention.
+          # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
+          dotnet test Content.IntegrationTests.dll \
+            --verbosity normal --filter "$FILTER" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000

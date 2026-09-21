@@ -330,19 +330,11 @@
     - name: Specialist Ammo
       entries:
       - cost: 2000
-        crate: RMCCratePyroTankMixed
-      # Sniper
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSniperM96S
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSniperM96SIncendiary
-      - cost: 2000
-        crate: AU14CrateMagazineSpecSniperM96SFlak
+        crate: CMUCrateMagazineL144SH
       - cost: 1500
-        crate: AU14CrateMagazineSpecSniperM96SMixed
-      # AMR
+        crate: CMUCrateMagazineL144
       - cost: 2000
-        crate: AU14CrateMagazineSpecAMRXM43E1
+        crate: RMCCratePyroTankMixed
       # SHARP (worst spec ever btw - kenyap)
       - cost: 2000
         crate: AU14CrateMagazineSpecSharpHE

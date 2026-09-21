@@ -123,7 +123,6 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
         SubscribeLocalEvent<XenoFruitEffectHasteComponent, MeleeHitEvent>(OnXenoFruitEffectHasteHit);
         SubscribeLocalEvent<XenoFruitEffectHasteComponent, ComponentShutdown>(OnXenoFruitEffectHasteShutdown);
         // Fruit state updates
-        SubscribeLocalEvent<XenoFruitComponent, AfterAutoHandleStateEvent>(OnXenoFruitAfterState);
         SubscribeLocalEvent<XenoFruitComponent, DestructionEventArgs>(OnXenoFruitDestruction);
         SubscribeLocalEvent<XenoFruitComponent, ComponentShutdown>(OnXenoFruitShutdown);
         SubscribeLocalEvent<XenoFruitComponent, EntityTerminatingEvent>(OnXenoFruitTerminating);
@@ -1049,12 +1048,6 @@ public sealed partial class SharedXenoFruitSystem : EntitySystem
     private void OnXenoFruitTerminating(Entity<XenoFruitComponent> fruit, ref EntityTerminatingEvent args)
     {
         XenoFruitRemoved(fruit);
-    }
-
-    private void OnXenoFruitAfterState(Entity<XenoFruitComponent> fruit, ref AfterAutoHandleStateEvent args)
-    {
-        var ev = new XenoFruitStateChangedEvent();
-        RaiseLocalEvent(fruit, ref ev);
     }
 
     private void SetFruitState(Entity<XenoFruitComponent> fruit, XenoFruitState state)

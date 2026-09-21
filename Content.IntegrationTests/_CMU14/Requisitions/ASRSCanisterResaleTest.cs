@@ -1,5 +1,4 @@
 using Content.IntegrationTests.Fixtures;
-using Content.Server._RMC14.Requisitions;
 using Content.Server.Cargo.Systems;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Requisitions;
@@ -85,23 +84,28 @@ public sealed class ASRSCanisterResaleTest : GameTest
     public async Task LoweringTheElevatorPaysTheColonyAccountLessThanCatalogCost()
     {
         var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
+        EntityUid canister = default;
+        await Server.WaitPost(() =>
         {
             var timing = Server.ResolveDependency<IGameTiming>();
             var elevator = SEntMan.SpawnEntity("CMCargoElevator", map.GridCoords);
             var comp = SEntMan.GetComponent<RequisitionsElevatorComponent>(elevator);
             comp.Faction = "colony";
             comp.RoundStartFreeCrateGiven = true;
-            var canister = SEntMan.SpawnEntity("CMUCanisterOxygen", map.GridCoords);
+            canister = SEntMan.SpawnEntity("CMUCanisterOxygen", map.GridCoords);
             comp.Mode = RequisitionsElevatorMode.Lowering;
             comp.NextMode = null;
             comp.Busy = true;
             comp.RaiseDelay = TimeSpan.Zero;
             comp.LowerDelay = TimeSpan.Zero;
             comp.ToggledAt = timing.CurTime - TimeSpan.FromSeconds(1);
+        });
 
-            Server.System<RequisitionsSystem>().Update(0f);
-
+        // Run the sale and its queued deletion in the normal game loop. Calling Update manually
+        // would let the next tick sell the canister again before the deletion queue is processed.
+        await Server.WaitRunTicks(2);
+        await Server.WaitAssertion(() =>
+        {
             Assert.That(SEntMan.EntityExists(canister), Is.False,
                 "the canister should have been sold with the lowered elevator");
 

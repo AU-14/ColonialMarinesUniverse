@@ -79,7 +79,7 @@
 - type: partySpawn
   id: ProfessorVonBandolierSpawn
   leadersToSpawn:
-    AU14PartyJobVonBandolier: 1
+    AU14PartyJobProfessorVonBandolier: 1
   scalewithpop: false
   spawnTogether: true
 
