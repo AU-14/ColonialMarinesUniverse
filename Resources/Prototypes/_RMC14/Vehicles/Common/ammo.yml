@@ -256,7 +256,7 @@
     bulletType: VehicleAmmoBoxRERotaryCannon
     usedIn: Humvee RE700 rotary cannon
 
-- type: entity 
+- type: entity
   parent: VehicleAmmoBoxBase
   id: VehicleAmmoBoxDragonFlameTank
   name: DRGN flame tank
