@@ -1,4 +1,4 @@
-- type: entity #CMU14
+- type: entity # CMU14
   id: VehicleTankBase
   abstract: true
   name: M34A2 Longstreet
@@ -16,7 +16,7 @@
     - VehicleHeavy
   - type: RMCIgnoreGhostInteractionLimits
   - type: RequireProjectileTarget
-  - type: GridVehicleMover
+  - type: GridVehicleMover 
     maxSpeed: 2.5
     acceleration: 1.3
     deceleration: 8
