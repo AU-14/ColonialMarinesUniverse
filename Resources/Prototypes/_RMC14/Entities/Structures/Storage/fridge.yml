@@ -6,6 +6,7 @@
     mode: SnapgridCenter
   components:
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Lockers/fridge.rsi
   - type: AntiRottingContainer
