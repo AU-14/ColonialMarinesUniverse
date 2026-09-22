@@ -195,6 +195,10 @@
         crate: AU14CrateBoxD18
       - cost: 330
         crate: AU14CrateAssortedKnives
+      - cost: 3000
+        crate: CMUCrateFlamerColony
+        maxStock: 1
+        stockReplenishDelay: 1800
     - name: Ammunition
       entries:
       - cost: 533

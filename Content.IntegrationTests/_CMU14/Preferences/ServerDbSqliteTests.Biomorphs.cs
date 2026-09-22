@@ -9,7 +9,7 @@ namespace Content.IntegrationTests.Tests.Preferences;
 public sealed partial class ServerDbSqliteTests
 {
     [TestCase("AbominationsThreatCF", "BiomorphsThreatCF", "ColonyFall")]
-    [TestCase("AbominationsThreatDS", "BiomorphsThreatDS", "DistressSignal")]
+    // [TestCase("AbominationsThreatDS", "BiomorphsThreatDS", "DistressSignal")]
     public async Task LegacyBiomorphPreferencesPreserveThreatConsent(string legacyId, string currentId, string preset)
     {
         var db = GetDb(Server);

@@ -478,6 +478,11 @@ public sealed partial class AntagSelectionSystem
             if (antag.Proto != proto)
                 continue;
 
+            // CMU14: a rule at its antag cap refuses instead of inflating past max.
+            // Comp.Antags holds count selectors, pass the prototype not the selector
+            if (AllAntagsAssigned(rule, proto, GetActivePlayerCount()))
+                return;
+
             // Try and assign this antag, if we fail, then try the next definition!
             PreSelectSession(rule, proto, player);
             if (TryInitializeAntag(rule, proto, player))

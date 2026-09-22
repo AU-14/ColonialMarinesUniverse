@@ -35,6 +35,10 @@
                 <CheckBox Name="AutoIngestCheckBox"
                           Text="{Loc 'cmu-ui-options-auto-ingest'}"
                           ToolTip="{Loc 'cmu-ui-options-auto-ingest-tooltip'}" />
+                <!-- CMU14: client temperature unit preference -->
+                <CheckBox Name="TemperatureFahrenheitCheckBox"
+                          Text="{Loc 'cmu-ui-options-temperature-fahrenheit'}"
+                          ToolTip="{Loc 'cmu-ui-options-temperature-fahrenheit-tooltip'}" />
 
                 <Label Text="{Loc 'cmu-ui-options-medical'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="TargetedHealingCheckBox"

@@ -34,7 +34,7 @@ public sealed partial class BiomorphConstructionComponent : Component
     [DataField, AutoNetworkedField]
     public EntProtoId NestProto = "AU14BiomorphFleshNest";
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan? NextNestAt;
 }
 

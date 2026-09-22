@@ -5,6 +5,7 @@ using Content.Shared.Maps;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Xenos;
 
@@ -56,8 +57,13 @@ public sealed partial class ResinFloorPatchSystem : EntitySystem
             return;
 
         // Reopen the hole. Cutting the resin should cost the hive the crossing, not hand the marines a free
-        // permanent floor.
-        _map.SetTile(grid.Owner, grid.Comp, indices, Tile.Empty);
+        // permanent floor. The tile write must wait until the patch is fully deleted: setting it now
+        // makes the engine detach the dying patch off the tile and log an error.
+        Timer.Spawn(TimeSpan.Zero, () =>
+        {
+            if (TryComp(grid.Owner, out MapGridComponent? gridComp))
+                _map.SetTile(grid.Owner, gridComp, indices, Tile.Empty);
+        });
     }
 
     private bool TryGetTile(EntityUid uid, out Entity<MapGridComponent> grid, out Vector2i indices)

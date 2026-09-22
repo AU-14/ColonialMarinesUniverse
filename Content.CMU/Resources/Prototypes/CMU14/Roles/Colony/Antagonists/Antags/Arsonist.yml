@@ -15,6 +15,8 @@
   - type: Arsonist
     alertThreshold: 2
     wantedThreshold: 8
+    bountyPerFire: 150
+    maxBounty: 5750
   - type: SynthGunAccess
   mindRoles:
   - MindRoleArsonist
@@ -54,5 +56,4 @@
   id: CMUGearArsonist
   equipment:
     suitstorage: CMUWeaponArsonistFlamer
-    pocket1: CMUTankFlamerPhoron
     pocket2: CMUTankFlamerPhoron

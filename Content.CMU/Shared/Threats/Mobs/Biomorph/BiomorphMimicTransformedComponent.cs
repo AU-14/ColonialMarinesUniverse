@@ -13,7 +13,7 @@ namespace Content.Shared.CMU14.Threats.Mobs.Biomorph;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class BiomorphMimicTransformedComponent : Component
 {
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan ExpiresAt;
 
     [DataField, AutoNetworkedField]

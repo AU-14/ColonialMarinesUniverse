@@ -174,6 +174,28 @@ public sealed class CMUZViewportVisibilityPlanTest
     }
 
     [Test]
+    public void PreserveLowerPassesResetKeepsGraceMasksUntilFullReset()
+    {
+        var plan = new CMUZViewportRenderPlan();
+        plan.BaseOpenings.SetOpenings(BaseMap, ViewBounds, new[] { new Box2(0f, 0f, 1f, 1f) }, complete: true);
+        plan.LowerPass(-1).SetProjected(plan.BaseOpenings, LowerMap, Vector2.Zero);
+
+        plan.Reset(preserveLowerPasses: true);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(plan.BaseOpenings.MapId, Is.EqualTo(MapId.Nullspace));
+            Assert.That(plan.FindLowerPass(-1, LowerMap), Is.Not.Null);
+            Assert.That(plan.LowerPass(-1).ClassifyBounds(new Box2(0f, 0f, 1f, 1f)), Is.EqualTo(CMUZVisibility.Unknown));
+            Assert.That(plan.LowerPass(-1).ClassifyBounds(new Box2(10f, 10f, 11f, 11f)), Is.EqualTo(CMUZVisibility.Hidden));
+        });
+
+        plan.Reset();
+
+        Assert.That(plan.FindLowerPass(-1, LowerMap), Is.Null);
+    }
+
+    [Test]
     public void RotatedStairTileUsesActualCornersForFrontHalfPlane()
     {
         var tile = new CMUZViewportRenderPlan.StairTile(new Vector2(0.8f, 1.3f), new Vector2(1.3f, 1.8f),

@@ -316,7 +316,8 @@ public sealed class ActionButton : Control, IEntityControl
     {
         _controller ??= UserInterfaceManager.GetUIController<ActionUIController>();
         if (Action != null ||
-            _controller.IsDragging && GetPositionInParent() == Parent?.ChildCount - 1)
+            // CMU14: Parent is null while the button is still being constructed; GetPositionInParent throws without one
+            _controller.IsDragging && Parent != null && GetPositionInParent() == Parent.ChildCount - 1)
         {
             Button.Texture = Action is { } action &&
                              _toggledBackground != null &&

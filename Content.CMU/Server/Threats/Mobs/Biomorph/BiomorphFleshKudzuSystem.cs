@@ -1,15 +1,20 @@
 using Content.Server.Chat.Systems;
 using Content.Server.CMU14.Threats.Mobs.Biomorph;
 using Content.Server.Spreader;
+using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
+using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -29,11 +34,17 @@ public sealed partial class BiomorphFleshKudzuSystem : EntitySystem
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private BiomorphInfectionSystem _infection = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TransformSystem _transform = default!;
     [Dependency] private SharedXenoWeedsSystem _weeds = default!;
+
+    private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
+    private const float FireProbeRadius = 0.5f;
+    private readonly HashSet<Entity<TileFireComponent>> _fireBuffer = new();
 
     public override void Initialize()
     {
@@ -86,6 +97,12 @@ public sealed partial class BiomorphFleshKudzuSystem : EntitySystem
                 HealContacts((uid, kudzu, physics));
             }
 
+            if (kudzu.NextFireTickAt <= now)
+            {
+                kudzu.NextFireTickAt = now + kudzu.FireInterval;
+                BurnFromTileFires((uid, kudzu));
+            }
+
             // Anyone knocked out / critted while on the tendons gets seeded
             // with the infection. Drag-and-dump play is intended.
             if (kudzu.NextInfectAt <= now)
@@ -119,6 +136,18 @@ public sealed partial class BiomorphFleshKudzuSystem : EntitySystem
                 }
             }
         }
+    }
+
+    private void BurnFromTileFires(Entity<BiomorphFleshKudzuComponent> ent)
+    {
+        _fireBuffer.Clear();
+        _lookup.GetEntitiesInRange(_transform.GetMoverCoordinates(ent), FireProbeRadius, _fireBuffer);
+        if (_fireBuffer.Count == 0)
+            return;
+
+        var dmg = new DamageSpecifier();
+        dmg.DamageDict[HeatDamage] = ent.Comp.FireDamage;
+        _damageable.TryChangeDamage(ent, dmg, true);
     }
 
     private void HealContacts(Entity<BiomorphFleshKudzuComponent, PhysicsComponent> ent)

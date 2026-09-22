@@ -1,6 +1,5 @@
 # Flesh kudzu (tendons) for abominations. Adapted from upstream FleshKudzu
-# but without the atmos sensitivities (no Temperature, no Barotrauma, no
-# Flammable) so it survives in space / vacuum / fires.
+# survives in space / vacuum. Fire is lethal
 #
 # - Heals abominations on contact, damages everyone else (DamageContacts).
 # - Periodically sobs / gasps via AbominationFleshKudzuSystem.
@@ -94,6 +93,8 @@
   # Heal values doubled from the original tuning so tendons are a real
   # rally point for the threat to retreat to.
   - type: BiomorphFleshKudzu
+    fireDamage: 10
+    fireInterval: 1
     heal:
       types:
         Blunt: -6

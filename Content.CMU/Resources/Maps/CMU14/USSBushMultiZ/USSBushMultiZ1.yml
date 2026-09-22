@@ -34310,7 +34310,7 @@ entities:
     components:
     - type: Transform
       parent: 1
-      pos: -11.5,-77.5
+      pos: -12.5,-77.5
 - proto: RMCStatusDisplay
   entities:
   - uid: 872

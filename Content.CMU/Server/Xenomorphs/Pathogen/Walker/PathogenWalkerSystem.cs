@@ -26,6 +26,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.StatusEffectNew;
 using Content.Server._RMC14.Language.Systems;
+using Content.Shared._RMC14.Language.Components;
 using Content.Shared.Radio.Components;
 using Content.Server.Ghost.Roles.Components;
 using Robust.Shared.Player;
@@ -111,6 +112,8 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         RemComp<CMUOrganVisionImpairmentComponent>(target);
 
         _faction.AddFaction(target, WalkerFaction);
+        // Reanimatable hosts like monkeys can lack the language component entirely.
+        EnsureComp<LanguageComponent>(target);
         _language.SetExclusiveLanguage(target, "Pathogen");
 
         EnsureComp<IntrinsicRadioReceiverComponent>(target);

@@ -53,55 +53,55 @@
 # larva to keep up with marine reinforcements. Win condition is killing
 # Govfor; threat loses when all abominations die (mimic disguises
 # counted via KillAllAbominationsRule).
-- type: threat
-  id: BiomorphsThreatDS
-  voteCooldownGroup: Biomorphs
-  lorePrimer: AU14PrimerThreatBiomorph
-  roundstartspawns: biomorphsPartyDistress
-  whitelistedgamemodes:
-  - DistressSignal
-  blacklistedgamemodes:
-  - ColonyFall
-  winconditions:
-  - KillAllGovforRule
-  - KillAllBiomorphsRule
-  minplayers: 0
+# - type: threat
+#   id: BiomorphsThreatDS
+#   voteCooldownGroup: Biomorphs
+#   lorePrimer: AU14PrimerThreatBiomorph
+#   roundstartspawns: biomorphsPartyDistress
+#   whitelistedgamemodes:
+#   - DistressSignal
+#   blacklistedgamemodes:
+#   - ColonyFall
+#   winconditions:
+#   - KillAllGovforRule
+#   - KillAllBiomorphsRule
+#   minplayers: 0
 
-# 10 abominations at base pop: 2 mimic leaders, 4 mimic grunts, 2
-# spiders, 2 skitters. Grunts join the rotation only via scaling so
-# the pop ramp gets meaningfully scarier rather than uniformly tougher.
-- type: partySpawn
-  id: biomorphsPartyDistress
-  leadersToSpawn:
-    AU14BiomorphMimic: 2
-  gruntsToSpawn:
-    AU14BiomorphMimic: 4
-    AU14BiomorphSpider: 2
-    AU14BiomorphSkitter: 2
-    AU14BiomorphGrunt: 0
-  entsToSpawn:
-    AU14BiomorphFleshNest: 1
-  # Total scaling rate ~0.20 / player (xeno larva is 0.16) — a bit
-  # heavier than the xeno ramp because abom castes are individually
-  # weaker, and the mix favours mimics so the picker pool keeps growing.
-  scaling:
-    AU14BiomorphMimic:
-      scale: 0.10
-      whenToBeginScaling: 25
-    AU14BiomorphSpider:
-      scale: 0.05
-      whenToBeginScaling: 30
-    AU14BiomorphSkitter:
-      scale: 0.03
-      whenToBeginScaling: 35
-    AU14BiomorphGrunt:
-      scale: 0.02
-      whenToBeginScaling: 45
-  Markers:
-    Member: xenocf
-    Leader: xenocf
-    Entity: xenocf
-  spawnTogether: true
+# # 10 abominations at base pop: 2 mimic leaders, 4 mimic grunts, 2
+# # spiders, 2 skitters. Grunts join the rotation only via scaling so
+# # the pop ramp gets meaningfully scarier rather than uniformly tougher.
+# - type: partySpawn
+#   id: biomorphsPartyDistress
+#   leadersToSpawn:
+#     AU14BiomorphMimic: 2
+#   gruntsToSpawn:
+#     AU14BiomorphMimic: 4
+#     AU14BiomorphSpider: 2
+#     AU14BiomorphSkitter: 2
+#     AU14BiomorphGrunt: 0
+#   entsToSpawn:
+#     AU14BiomorphFleshNest: 1
+#   # Total scaling rate ~0.20 / player (xeno larva is 0.16) — a bit
+#   # heavier than the xeno ramp because abom castes are individually
+#   # weaker, and the mix favours mimics so the picker pool keeps growing.
+#   scaling:
+#     AU14BiomorphMimic:
+#       scale: 0.10
+#       whenToBeginScaling: 25
+#     AU14BiomorphSpider:
+#       scale: 0.05
+#       whenToBeginScaling: 30
+#     AU14BiomorphSkitter:
+#       scale: 0.03
+#       whenToBeginScaling: 35
+#     AU14BiomorphGrunt:
+#       scale: 0.02
+#       whenToBeginScaling: 45
+#   Markers:
+#     Member: xenocf
+#     Leader: xenocf
+#     Entity: xenocf
+#   spawnTogether: true
 
 # Small abomination party — drawn as a third party. One mimic + one
 # skitter, no nest seed. Available on every planet/mode.

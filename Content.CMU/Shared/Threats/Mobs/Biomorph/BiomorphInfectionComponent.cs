@@ -44,11 +44,11 @@ public sealed partial class BiomorphInfectionComponent : Component
     [DataField, AutoNetworkedField]
     public int PostWindowTickDamageGain = 2;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan InfectedAt;
 
     /// <summary>Next scheduled silent poison tick.</summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextTickAt;
 
     /// <summary>Damage applied on each silent poison tick. Flat — not scaled by severity.</summary>

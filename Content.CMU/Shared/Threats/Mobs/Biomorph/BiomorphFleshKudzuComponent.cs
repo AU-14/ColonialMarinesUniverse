@@ -71,16 +71,30 @@ public sealed partial class BiomorphFleshKudzuComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan HealInterval = TimeSpan.FromSeconds(2);
 
+    /// <summary>
+    ///     Heat damage dealt per fire tick while a tile fire burns on this
+    ///     tile. Fire is the intended countermeasure and must stay lethal.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float FireDamage = 20f;
+
+    /// <summary>How often the fire tick runs while a tile fire is present.</summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan FireInterval = TimeSpan.FromSeconds(1);
+
     /// <summary>How often the tendons attempt to infect incapacitated contacts.</summary>
     [DataField, AutoNetworkedField]
     public TimeSpan InfectInterval = TimeSpan.FromSeconds(3);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextEmoteAt;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextHealAt;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextFireTickAt;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextInfectAt;
 }

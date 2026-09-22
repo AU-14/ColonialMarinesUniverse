@@ -19,7 +19,7 @@ public sealed partial class BiomorphMimicRevertingComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan JitterDuration = TimeSpan.FromSeconds(7);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan RevertAt;
 }
 

@@ -20,10 +20,13 @@
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
-        maxVol: 500
+        maxVol: 200
         reagents:
         - ReagentId: CMUPhoronFuel
-          Quantity: 500
+          Quantity: 200
+  - type: RMCFlamerTank
+    reagentWhitelist:
+    - CMUPhoronFuel
 
 - type: reagent
   parent: [ CMReagent, BasePyrotechnic ]

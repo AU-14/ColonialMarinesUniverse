@@ -35,18 +35,19 @@ public sealed partial class ScalingViewport
     private static readonly ProtoId<ShaderPrototype> StencilEqualDrawShader = "StencilEqualDraw";
     private static readonly Color StairPreviewTint = new(0.05f, 0.05f, 0.05f, 0.48f);
 
-    private CMUClientZLevelsSystem? _zLevels;
-    private SharedMapSystem? _mapSystem;
-    private SharedTransformSystem? _transform;
-    private EntityLookupSystem? _lookup;
-    private ExamineSystem? _examine;
-    private SharedContainerSystem? _containers;
-    private CMUZLevelSpriteCullingSystem? _spriteCulling;
+    // Screens are cached for the whole client process while entity systems are rebuilt on every
+    // reconnect. Resolve these per use; a cached reference is a dead system after one reconnect.
+    private CMUClientZLevelsSystem _zLevels => _entityManager.System<CMUClientZLevelsSystem>();
+    private SharedMapSystem _mapSystem => _entityManager.System<SharedMapSystem>();
+    private SharedTransformSystem _transform => _entityManager.System<SharedTransformSystem>();
+    private EntityLookupSystem _lookup => _entityManager.System<EntityLookupSystem>();
+    private ExamineSystem _examine => _entityManager.System<ExamineSystem>();
+    private SharedContainerSystem _containers => _entityManager.System<SharedContainerSystem>();
+    private CMUZLevelSpriteCullingSystem _spriteCulling => _entityManager.System<CMUZLevelSpriteCullingSystem>();
+    private EntityQuery<TransformComponent> _xformQuery => _entityManager.GetEntityQuery<TransformComponent>();
     private ShaderInstance? _stencilClearShaderInstance;
     private ShaderInstance? _stencilMaskShaderInstance;
     private ShaderInstance? _stencilEqualDrawShaderInstance;
-
-    private EntityQuery<TransformComponent>? _xformQuery;
 
     private List<Entity<MapGridComponent>> _zLevelGrids = new();
     private List<Entity<MapGridComponent>> _stairPreviewGrids = new();
@@ -75,15 +76,6 @@ public sealed partial class ScalingViewport
     private bool _zRenderDiagnostics;
 
     internal static ZLevelRenderDebugStats LastZRenderDebugStats { get; } = new();
-
-    /// <summary>
-    /// We are looking for at least one empty tile on the screen.
-    /// This is used to ensure that it makes sense to draw the z-planes and that they are visible.
-    /// </summary>
-    public bool TryFindEmptyTiles(EntityUid mapUid, IClydeViewport viewport)
-    {
-        return TryFindEmptyTiles(mapUid, viewport, null, out _);
-    }
 
     private bool TryFindEmptyTiles(
         EntityUid mapUid,
@@ -120,15 +112,11 @@ public sealed partial class ScalingViewport
     {
         combinedOpeningBounds = default;
 
-        if (_xformQuery is null || !_xformQuery.Value.TryComp(mapUid, out var xform))
+        if (!_xformQuery.TryComp(mapUid, out var xform))
             return true;
 
         var mapId = xform.MapID;
 
-        if (_mapSystem is null || _transform is null)
-            return true;
-
-        _zLevels ??= _entityManager.System<CMUClientZLevelsSystem>();
         var openingCache = _zLevels.OpeningCache;
 
         var foundOpening = openingCache.TryFindOpeningBounds(
@@ -148,10 +136,18 @@ public sealed partial class ScalingViewport
 
     internal void RenderZLevelPasses(IClydeViewport viewport)
     {
+        if (!_entityManager.EntitySysManager.TryGetEntitySystem<CMUClientZLevelsSystem>(out _))
+        {
+            ClearZLevelCompositeState();
+            ResetLowerRenderGrace();
+            viewport.Render();
+            return;
+        }
+
         using var renderState = new CMUZViewportRenderState(viewport);
         viewport.ClearColor = Color.Black;
         ClearZLevelCompositeState();
-        _zRenderPlan.Reset();
+        _zRenderPlan.Reset(LowerRenderGracePending());
         _zRenderDiagnostics = _cfg.GetCVar(CMUZLevelsCVars.ClientDiagnosticsEnabled);
         if (_zRenderDiagnostics)
             LastZRenderDebugStats.Reset();
@@ -188,17 +184,6 @@ public sealed partial class ScalingViewport
         var fallbackEye = _eye;
 
         using var zRenderProfile = _prof.Group("CMU Z Render");
-
-        // Cache frequently accessed components/systems
-        _xformQuery ??= _entityManager.GetEntityQuery<TransformComponent>();
-
-        // Cache systems and components
-        _zLevels ??= _entityManager.System<CMUClientZLevelsSystem>();
-        _mapSystem ??= _entityManager.System<SharedMapSystem>();
-        _transform ??= _entityManager.System<SharedTransformSystem>();
-        _lookup ??= _entityManager.System<EntityLookupSystem>();
-        _examine ??= _entityManager.System<ExamineSystem>();
-        _containers ??= _entityManager.System<SharedContainerSystem>();
 
         if (!TryGetZLevelViewEntity(fallbackEye, out var viewEntity, out var zLevelViewer, out var viewXform) ||
             viewXform.MapUid is null)
@@ -506,15 +491,25 @@ public sealed partial class ScalingViewport
 
     private void RenderZSpritePass(IClydeViewport viewport, CMUZVisibilityMask? mask = null)
     {
-        _zLevels ??= _entityManager.System<CMUClientZLevelsSystem>();
+        if (!_entityManager.EntitySysManager.TryGetEntitySystem<CMUClientZLevelsSystem>(out _))
+        {
+            viewport.Render();
+            return;
+        }
+
         _zLevels.RenderViewport(viewport, mask);
         if (mask is null || !_zRenderDiagnostics)
             return;
 
-        _spriteCulling ??= _entityManager.System<CMUZLevelSpriteCullingSystem>();
         LastZRenderDebugStats.SpriteCullCandidates += _spriteCulling.LastCandidates;
         LastZRenderDebugStats.SpritesCulled += _spriteCulling.LastHidden;
     }
+
+    // Grace renders the lower passes against the previous frame's aperture masks. Without them
+    // FindLowerPass misses on MapId and the whole level below renders unmasked for the window.
+    private bool LowerRenderGracePending()
+        => _zLowerRenderGraceLowestDepth < 0
+            && _timing.CurTime <= _zLowerRenderGraceUntil;
 
     private void ResetLowerRenderGrace()
     {
@@ -736,8 +731,7 @@ public sealed partial class ScalingViewport
         for (var i = 0; i < 8; i++)
         {
             if (_entityManager.TryGetComponent<CMUZLevelViewerComponent>(current, out var currentViewer) &&
-                _xformQuery is not null &&
-                _xformQuery.Value.TryComp(current, out var currentXform) &&
+                _xformQuery.TryComp(current, out var currentXform) &&
                 currentXform.MapUid is not null)
             {
                 viewEntity = current;
@@ -746,8 +740,7 @@ public sealed partial class ScalingViewport
                 return true;
             }
 
-            if (_containers is null ||
-                !_containers.TryGetContainingContainer((current, null, null), out var container))
+            if (!_containers.TryGetContainingContainer((current, null, null), out var container))
             {
                 break;
             }
@@ -760,8 +753,7 @@ public sealed partial class ScalingViewport
 
     private MapId GetWeatherSourceMapId(EntityUid baseMap, MapId fallback)
     {
-        if (_zLevels is null ||
-            !_zLevels.TryGetZNetwork(baseMap, out var network) ||
+        if (!_zLevels.TryGetZNetwork(baseMap, out var network) ||
             !_zLevels.TryGetMapAtDepth(network.Value, 0, out _, out var groundMapComp))
         {
             return fallback;
@@ -857,7 +849,7 @@ public sealed partial class ScalingViewport
         if (!_cfg.GetCVar(CMUZLevelsCVars.FaintUpperEnabled))
             return;
 
-        if (_zLevels is null || _transform is null || _mapSystem is null || viewXform.MapUid is not { } mapUid)
+        if (viewXform.MapUid is not { } mapUid)
             return;
 
         if (!_zLevels.TryMapOffset(mapUid, 1, out _, out var upperMapComp))
@@ -949,10 +941,6 @@ public sealed partial class ScalingViewport
         _zRenderPlan.StairTiles.Clear();
         _stairPreviewTileBounds.Clear();
         if (_stairPreviewViewport is null ||
-            _mapSystem is null ||
-            _transform is null ||
-            _lookup is null ||
-            _examine is null ||
             _stairPreviewOrigins.Count == 0 ||
             !TryGetViewportWorldAabb(_stairPreviewViewport, out var worldAabb))
         {
@@ -1034,9 +1022,6 @@ public sealed partial class ScalingViewport
         MapId mapId,
         Vector2 renderOffset)
     {
-        if (_examine is null)
-            return false;
-
         var target = new MapCoordinates(tile.Bounds.Center, mapId);
         foreach (var origin in _stairPreviewOrigins)
         {
@@ -1122,6 +1107,8 @@ public sealed partial class ScalingViewport
         _stairPreviewViewport?.Dispose();
         _stairPreviewViewport = null;
         _zRenderPlan.Reset();
+        // Grace must die with the masks it renders through, else the window renders unmasked.
+        ResetLowerRenderGrace();
         _stairPreviewTileBounds.Clear();
         ClearZLevelCompositeState();
     }

@@ -24,6 +24,7 @@ public sealed partial class TileWallsCommand : IConsoleCommand
 
     public static readonly ProtoId<ContentTileDefinition> TilePrototypeId = "Plating";
     public static readonly ProtoId<TagPrototype> DiagonalTag = "Diagonal";
+    public static readonly ProtoId<TagPrototype> WallTag = "Wall"; // CMU14
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -79,10 +80,9 @@ public sealed partial class TileWallsCommand : IConsoleCommand
                 continue;
             }
 
-            if (!_entManager.HasComponent<WallComponent>(child))
-            {
+            if (!_entManager.HasComponent<WallComponent>(child) // CMU14
+                && !tagSystem.HasTag(child, WallTag))
                 continue;
-            }
 
             if (tagSystem.HasTag(child, DiagonalTag))
             {

@@ -1,0 +1,13 @@
+cmu-alert-tracker-usarmy-desc = Tracks the US Army Squad Leader.
+cmu-alert-tracker-32nd-arm-desc = Tracks the US Army Squad Leader.
+cmu-alert-tracker-grom-desc = Tracks the GROM Squad Leader.
+cmu-alert-tracker-rrt-name = Royal Squad Tracker
+cmu-alert-tracker-rrt-desc = Tracks the Troop Commander
+cmu-alert-tracker-first-recon-desc = Tracks the First Recon Squad Leader.
+cmu-alert-tracker-colonial-guard-desc = Tracks the Colonial Guard Squad Leader.
+cmu-alert-tracker-territorial-defense-desc = Tracks the Territorial Defense Squad Leader.
+cmu-alert-tracker-lacn-commando-desc = Tracks the LACN Commando Squad Leader.
+cmu-alert-tracker-vaipo-desc = Tracks the VAIPO Squad Leader.
+cmu-alert-tracker-vaiso-desc = Tracks the VAISO Squad Leader.
+cmu-alert-tracker-vaisp-desc = Tracks the VAISP Squad Leader.
+cmu-alert-tracker-msg-desc = Tracks the Marine Guard Squad Leader.

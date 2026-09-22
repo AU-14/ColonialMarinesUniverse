@@ -451,8 +451,8 @@
     state: power_display_0
   - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
     state: power_display_empty
-  name: Grip
-  description: How tightly you hold on. Abilities spend it, resistance drains it, and it returns on its own.
+  name: rider-grip-name
+  description: rider-grip-desc
   minSeverity: 0
   maxSeverity: 18
 

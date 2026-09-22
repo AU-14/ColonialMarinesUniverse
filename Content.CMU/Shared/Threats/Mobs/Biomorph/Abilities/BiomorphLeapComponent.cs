@@ -31,10 +31,6 @@ public sealed partial class BiomorphLeapComponent : Component
     [DataField, AutoNetworkedField]
     public SoundSpecifier? LeapSound;
 
-    /// <summary>Cooldown before the action becomes usable again, server-managed via ActionUseDelay.</summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
-    public TimeSpan? NextUseAt;
-
     /// <summary>Maximum distance of the leap in tiles.</summary>
     [DataField, AutoNetworkedField]
     public float Range = 6f;
@@ -54,7 +50,7 @@ public sealed partial class BiomorphLeapingComponent : Component
     [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new();
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan EndsAt;
 
     [DataField, AutoNetworkedField]

@@ -19,7 +19,7 @@ public sealed partial class BiomorphComponent : Component
     [DataField, AutoNetworkedField]
     public float InfectionChance = 0.2f;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextPassiveHealAt;
 
     /// <summary>Damage applied (negative = heal) every PassiveHealInterval.</summary>
