@@ -53,7 +53,7 @@
   - type: WorldTargetAction
     event: !type:XenoDespoilerCausticEmbraceActionEvent
   - type: XenoDespoilerCausticEmbraceAction
-    normalRange: 3
+    normalRange: 1 # CMU14
     empoweredRange: 5
     splashDamage:
       types:

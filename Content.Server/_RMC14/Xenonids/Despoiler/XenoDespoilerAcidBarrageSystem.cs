@@ -211,19 +211,8 @@ public sealed partial class XenoDespoilerAcidBarrageSystem : EntitySystem
 
         for (var i = 0; i < count; i++)
         {
-            float spread;
+            var angle = baseAngle + ((float)_random.NextDouble() * 2f - 1f) * scatterRad; // CMU14
 
-            if (count == 1)
-                spread = 0f;
-            else
-            {
-                spread = MathHelper.Lerp(
-                    -scatterRad,
-                    scatterRad,
-                    (float)i / (count - 1));
-            }
-
-            var angle = baseAngle + spread;
             var unit = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
             var rangeTiles = _random.Next(action.MinRangeTiles, action.MaxRangeTiles + 1);
 
