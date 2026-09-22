@@ -42,7 +42,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         InitializePresentation();
 
         _overlay.AddOverlay(new CMUZLevelBlurOverlay());
-        _overlay.AddOverlay(new CMUZOverheadItemOverlay());
+        _overlay.AddOverlay(new CMUZOverheadEntityOverlay());
         _visibleEntityOverlay = new CMUZLevelVisibleEntityOverlay();
         _overlay.AddOverlay(_visibleEntityOverlay);
 
@@ -143,7 +143,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         base.Shutdown();
         _presentationCandidates.Clear();
         _overlay.RemoveOverlay<CMUZLevelBlurOverlay>();
-        _overlay.RemoveOverlay<CMUZOverheadItemOverlay>();
+        _overlay.RemoveOverlay<CMUZOverheadEntityOverlay>();
 
         if (_visibleEntityOverlay is not null && _overlay.HasOverlay<CMUZLevelVisibleEntityOverlay>())
             _overlay.RemoveOverlay(_visibleEntityOverlay);

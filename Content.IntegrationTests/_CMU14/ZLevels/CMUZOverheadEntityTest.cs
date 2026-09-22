@@ -3,7 +3,10 @@ using Content.Client.CMU14.ZLevels.Core;
 using Content.Client.Viewport;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.ZJump;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.DoAfter;
+using Content.Shared.Item;
 using Content.Shared.Throwing;
 using Robust.Client.Graphics;
 using Robust.Server.GameObjects;
@@ -16,7 +19,7 @@ using Robust.Shared.Map.Components;
 namespace Content.IntegrationTests.CMU14.ZLevels;
 
 [TestFixture]
-public sealed class CMUZOverheadItemTest : GameTest
+public sealed class CMUZOverheadEntityTest : GameTest
 {
     [Test]
     public async Task UpwardThrowRemainsVisibleAfterHorizontalThrowEnds()
@@ -34,48 +37,103 @@ public sealed class CMUZOverheadItemTest : GameTest
                 user: user, playSound: false), Is.True);
             Assert.That(SComp<CMUZPhysicsComponent>(item).Velocity, Is.GreaterThan(0f));
             Assert.That(SEntMan.HasComponent<CMUZFallingComponent>(item), Is.True);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.False,
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.False,
                 "On the viewer's own map the normal sprite is already visible.");
 
             // Advance the real Z boundary controller past the first upward crossing.
             scene.Z.SetZLocalPosition(item, 1.1f);
             scene.Z.Update(0f);
             Assert.That(SComp<TransformComponent>(item).MapUid, Is.EqualTo(scene.Levels[1]));
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out var projection, out var height), Is.True);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out var projection, out var height), Is.True);
             Assert.That(projection.MapId, Is.EqualTo(SComp<MapComponent>(scene.Levels[0]).MapId));
             Assert.That(height, Is.EqualTo(1.1f).Within(0.001f));
 
             SEntMan.System<ThrownItemSystem>().StopThrow(item, SComp<ThrownItemComponent>(item));
             Assert.That(SEntMan.HasComponent<ThrownItemComponent>(item), Is.False);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.True,
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.True,
                 "Ending horizontal flight must not hide an item still overhead.");
 
             scene.Transform.SetCoordinates(item, new EntityCoordinates(scene.Levels[0], new Vector2(0.5f)));
             scene.Z.SetZLocalPosition(item, 0f);
             scene.Z.SetZVelocity(item, 0f);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.False);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.False);
         });
     }
 
-    [TestCase(1)]
-    [TestCase(2)]
-    public async Task FloorsBlockProjectionAtEveryInterveningLevel(int floorDepth)
+    [TestCase("CrateGenericSteel")]
+    [TestCase("CMXenoRunner")]
+    public async Task FallingObjectsAndMobsRemainVisibleUntilTheyReachTheViewersMap(string prototype)
     {
         await Server.WaitAssertion(() =>
         {
             using var scene = new Scene(SEntMan, Server.ResolveDependency<ITileDefinitionManager>());
-            var item = scene.SpawnItem(2);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out var height), Is.True);
+            var entity = scene.SpawnEntity(2, prototype);
+            Assert.That(SEntMan.HasComponent<ItemComponent>(entity), Is.False);
+            Assert.That(SEntMan.HasComponent<ThrownItemComponent>(entity), Is.False);
+            scene.Z.SetZVelocity(entity, -1f);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(entity, scene.Levels[0], out _, out var height), Is.True);
+            Assert.That(height, Is.EqualTo(2.5f));
+
+            // Cross an actual downward boundary, retaining visibility from the map below.
+            scene.Z.SetZLocalPosition(entity, -0.1f);
+            scene.Z.Update(0f);
+            Assert.That(SComp<TransformComponent>(entity).MapUid, Is.EqualTo(scene.Levels[1]));
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(entity, scene.Levels[0], out _, out height), Is.True);
+            Assert.That(height, Is.EqualTo(1.9f).Within(0.001f));
+
+            scene.Transform.SetCoordinates(entity, new EntityCoordinates(scene.Levels[0], new Vector2(0.5f)));
+            scene.Z.SetZLocalPosition(entity, 0f);
+            scene.Z.SetZVelocity(entity, 0f);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(entity, scene.Levels[0], out _, out _), Is.False);
+        });
+    }
+
+    [Test]
+    public async Task LeapingXenoRemainsVisibleAfterCrossingUpward()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            using var scene = new Scene(SEntMan, Server.ResolveDependency<ITileDefinitionManager>());
+            var xeno = scene.SpawnEntity(0, "CMXenoRunner");
+            Assert.That(SEntMan.HasComponent<ItemComponent>(xeno), Is.False);
+            var target = new EntityCoordinates(scene.Levels[0], new Vector2(5.5f, 0.5f));
+            var leap = new CMUXenoZJumpDoAfterEvent(SEntMan.GetNetCoordinates(target));
+            leap.DoAfter = new DoAfter(0,
+                new DoAfterArgs(SEntMan, xeno, TimeSpan.Zero, leap, xeno), TimeSpan.Zero);
+            SEntMan.EventBus.RaiseLocalEvent(xeno, leap);
+            Assert.That(leap.Handled, Is.True);
+            Assert.That(SComp<CMUZPhysicsComponent>(xeno).Velocity, Is.GreaterThan(0f));
+            Assert.That(SEntMan.HasComponent<CMUZFallingComponent>(xeno), Is.True);
+
+            scene.Z.SetZLocalPosition(xeno, 1.1f);
+            scene.Z.Update(0f);
+            Assert.That(SComp<TransformComponent>(xeno).MapUid, Is.EqualTo(scene.Levels[1]));
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(xeno, scene.Levels[0], out _, out var height), Is.True);
+            Assert.That(height, Is.EqualTo(1.1f).Within(0.001f));
+        });
+    }
+
+    [TestCase(1, "Pen")]
+    [TestCase(2, "Pen")]
+    [TestCase(1, "CMXenoRunner")]
+    [TestCase(2, "CMXenoRunner")]
+    public async Task FloorsBlockProjectionAtEveryInterveningLevel(int floorDepth, string prototype)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            using var scene = new Scene(SEntMan, Server.ResolveDependency<ITileDefinitionManager>());
+            var item = scene.SpawnEntity(2, prototype);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out var height), Is.True);
             Assert.That(height, Is.EqualTo(2.5f));
 
             scene.Maps.SetTile(scene.Levels[floorDepth], scene.Grids[floorDepth], Vector2i.Zero, scene.Floor);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.False);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.False);
             scene.Maps.SetTile(scene.Levels[floorDepth], scene.Grids[floorDepth], Vector2i.Zero, Tile.Empty);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.True);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.True);
 
             var nextPosition = new Vector2(2.5f, 0.5f);
             scene.Transform.SetCoordinates(item, new EntityCoordinates(scene.Levels[2], nextPosition));
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out var projection, out _), Is.True);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out var projection, out _), Is.True);
             Assert.That(projection.Position, Is.EqualTo(nextPosition), "Projection follows the item, not its landing target.");
         });
     }
@@ -88,27 +146,29 @@ public sealed class CMUZOverheadItemTest : GameTest
             using var scene = new Scene(SEntMan, Server.ResolveDependency<ITileDefinitionManager>());
             var item = scene.SpawnItem(2);
             SEntMan.RemoveComponent<CMUZFallingComponent>(item);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.False);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.False);
             SEntMan.EnsureComponent<CMUZFallingComponent>(item);
             var holder = SEntMan.SpawnEntity(null, new EntityCoordinates(scene.Levels[2], Vector2.Zero));
             scene.Transform.SetCoordinates(item, new EntityCoordinates(holder, Vector2.Zero));
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.False);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.False);
             scene.Transform.SetCoordinates(item, new EntityCoordinates(scene.Levels[2], new Vector2(0.5f)));
             SEntMan.EnsureComponent<CMUZFallingComponent>(item);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.True);
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.True);
             Assert.That(scene.Z.TryRemoveMapFromZNetwork(scene.Levels[1]), Is.True);
-            Assert.That(scene.Z.TryGetOverheadItemProjection(item, scene.Levels[0], out _, out _), Is.False,
+            Assert.That(scene.Z.TryGetOverheadEntityProjection(item, scene.Levels[0], out _, out _), Is.False,
                 "A gap in the network must not project into an unrelated lower map.");
         });
     }
 
-    [Test]
-    public async Task PvsIncludesNearbyOverheadItemAndDropsBlockedOrDistantItems()
+    [TestCase("Pen")]
+    [TestCase("CrateGenericSteel")]
+    [TestCase("CMXenoRunner")]
+    public async Task PvsIncludesNearbyOverheadEntityAndDropsBlockedOrDistantEntities(string prototype)
     {
         await Server.WaitAssertion(() =>
         {
             using var scene = new Scene(SEntMan, Server.ResolveDependency<ITileDefinitionManager>());
-            var item = scene.SpawnItem(2);
+            var item = scene.SpawnEntity(2, prototype);
             var view = SEntMan.SpawnEntity(null, new EntityCoordinates(scene.Levels[0], new Vector2(0.5f)));
             SEntMan.EnsureComponent<EyeComponent>(view);
             var subscribers = SEntMan.System<ViewSubscriberSystem>();
@@ -141,12 +201,12 @@ public sealed class CMUZOverheadItemTest : GameTest
     }
 
     [Test]
-    public void OnlyHighestViewportPassProjectsOverheadItems()
+    public void OnlyHighestViewportPassProjectsOverheadEntities()
     {
-        Assert.That(CMUZOverheadItemOverlay.ShouldDrawForEye(new Eye()), Is.True);
-        Assert.That(CMUZOverheadItemOverlay.ShouldDrawForEye(new ScalingViewport.ZEye { Depth = -1, HighestDepth = 0 }), Is.False);
-        Assert.That(CMUZOverheadItemOverlay.ShouldDrawForEye(new ScalingViewport.ZEye { Depth = 0, HighestDepth = 1 }), Is.False);
-        Assert.That(CMUZOverheadItemOverlay.ShouldDrawForEye(new ScalingViewport.ZEye { Depth = 1, HighestDepth = 1 }), Is.True);
+        Assert.That(CMUZOverheadEntityOverlay.ShouldDrawForEye(new Eye()), Is.True);
+        Assert.That(CMUZOverheadEntityOverlay.ShouldDrawForEye(new ScalingViewport.ZEye { Depth = -1, HighestDepth = 0 }), Is.False);
+        Assert.That(CMUZOverheadEntityOverlay.ShouldDrawForEye(new ScalingViewport.ZEye { Depth = 0, HighestDepth = 1 }), Is.False);
+        Assert.That(CMUZOverheadEntityOverlay.ShouldDrawForEye(new ScalingViewport.ZEye { Depth = 1, HighestDepth = 1 }), Is.True);
     }
 
     private sealed class Scene : IDisposable
@@ -182,13 +242,13 @@ public sealed class CMUZOverheadItemTest : GameTest
             Assert.That(Z.TryAddMapsIntoZNetwork(network, levels), Is.True);
         }
 
-        public EntityUid SpawnItem(int depth)
+        public EntityUid SpawnItem(int depth) => SpawnEntity(depth, "Pen");
+
+        public EntityUid SpawnEntity(int depth, string prototype)
         {
-            var item = _entities.SpawnEntity("Pen", new EntityCoordinates(Levels[depth], new Vector2(0.5f)));
+            var item = _entities.SpawnEntity(prototype, new EntityCoordinates(Levels[depth], new Vector2(0.5f)));
             _entities.EnsureComponent<CMUZPhysicsComponent>(item);
             Z.SetZLocalPosition(item, depth == 0 ? 0f : 0.5f);
-            if (depth > 0)
-                _entities.EnsureComponent<CMUZFallingComponent>(item);
             return item;
         }
 

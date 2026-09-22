@@ -33,7 +33,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         InitializeTopology();
         InitializeSupportActivation();
 
-        SubscribeLocalEvent<ExpandPvsEvent>(OnExpandOverheadItemPvs);
+        SubscribeLocalEvent<ExpandPvsEvent>(OnExpandOverheadEntityPvs);
 
         SubscribeLocalEvent<PostGameMapLoad>(OnGameMapLoad, after: [typeof(StationSystem)]);
     }
