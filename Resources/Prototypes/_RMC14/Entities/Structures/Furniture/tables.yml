@@ -6,6 +6,7 @@
   description: A square metal surface resting on four legs. Useful to put stuff on.
   components:
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: Corrodible
     timeToApply: 4
     structure: true
