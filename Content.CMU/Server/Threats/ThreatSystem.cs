@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared.CMU14.Threats.Mobs.Biomorph;
 using Content.Shared.CMU14.util;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
@@ -31,8 +32,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationMimicComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
+using BiomorphComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphComponent;
 using ApeComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeComponent;
 using TribalComponent = Content.Shared.CMU14.Threats.Mobs.Tribal.TribalComponent;
 
@@ -1009,8 +1009,8 @@ public sealed partial class ThreatSystem : EntitySystem
             || HasComp<YautjaComponent>(uid)
             || HasComp<ApeComponent>(uid)
             || HasComp<TribalComponent>(uid)
-            || HasComp<AbominationComponent>(uid)
-            || HasComp<AbominationMimicComponent>(uid))
+            || HasComp<BiomorphComponent>(uid)
+            || HasComp<BiomorphMimicComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))

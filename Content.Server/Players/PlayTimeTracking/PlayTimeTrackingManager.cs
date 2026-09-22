@@ -152,6 +152,12 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         ["AU14JobGOVFORSquadAutomaticRiflemanWYPMC"] = "AU14JobGOVFORSquadAutomaticRifleman",
         ["AU14JobGOVFORSquadRiflemanWYPMC"] = "AU14JobGOVFORSquadRifleman",
         ["AU14JobGOVFORSquadSergeantWYPMC"] = "AU14JobGOVFORSquadSergeant",
+
+        // Abominations -> Biomorphs CMU14
+        ["AU14JobAbominationGrunt"] = "AU14JobBiomorphGrunt",
+        ["AU14JobAbominationMimic"] = "AU14JobBiomorphMimic",
+        ["AU14JobAbominationSkitter"] = "AU14JobBiomorphSkitter",
+        ["AU14JobAbominationSpider"] = "AU14JobBiomorphSpider"
     };
 
     // List of players that need some kind of update (refresh timers or resend).

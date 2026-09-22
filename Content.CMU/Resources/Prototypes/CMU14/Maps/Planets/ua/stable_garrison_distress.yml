@@ -11,7 +11,7 @@
     inRotation: false
     threats:
     - XenoThreat
-    - AbominationsThreatDS
+    - BiomorphsThreatDS
 
 - type: gameMap
   id: StableGarrisonReduxDistress

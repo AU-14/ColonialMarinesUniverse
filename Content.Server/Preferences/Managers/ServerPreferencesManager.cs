@@ -277,7 +277,7 @@ namespace Content.Server.Preferences.Managers
                     foreach (var value in values)
                     {
                         if (!string.IsNullOrWhiteSpace(value))
-                            preferences.Add(new ProtoId<ThreatPrototype>(value));
+                            preferences.Add(MigrateLegacyThreatPreference(value)); // CMU14
                     }
 
                     return preferences;
@@ -290,7 +290,7 @@ namespace Content.Server.Preferences.Managers
                     var value = JsonSerializer.Deserialize<string>(raw);
                     if (!string.IsNullOrWhiteSpace(value))
                     {
-                        preferences.Add(new ProtoId<ThreatPrototype>(value));
+                        preferences.Add(MigrateLegacyThreatPreference(value)); // CMU14
                         return preferences;
                     }
                 }
@@ -303,7 +303,7 @@ namespace Content.Server.Preferences.Managers
             foreach (var value in raw.Split(new[] { ',', ';', '|' },
                          StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                preferences.Add(new ProtoId<ThreatPrototype>(value));
+                preferences.Add(MigrateLegacyThreatPreference(value)); // CMU14
             }
 
             return preferences;
@@ -369,7 +369,7 @@ namespace Content.Server.Preferences.Managers
             foreach (var (gamemode, threats) in ConvertGamemodePrototypeSetPreferences(raw))
             {
                 preferences[gamemode] = threats
-                    .Select(threat => new ProtoId<ThreatPrototype>(threat))
+                    .Select(MigrateLegacyThreatPreference) // CMU14
                     .ToHashSet();
             }
 
