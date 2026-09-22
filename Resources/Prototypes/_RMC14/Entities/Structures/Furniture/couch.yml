@@ -9,6 +9,7 @@
     mode: SnapgridCenter
   components:
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: Transform
     anchored: true
   - type: Physics
