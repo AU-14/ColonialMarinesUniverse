@@ -8,6 +8,7 @@
     instantDestroy: true
     passOnDestroy: true
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: Transform
     anchored: true
   - type: Physics
