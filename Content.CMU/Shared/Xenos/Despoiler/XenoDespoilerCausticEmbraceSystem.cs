@@ -8,13 +8,13 @@ using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction;
-using Content.Shared.Physics; // CMU14
+using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
-using Robust.Server.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
 using Content.Shared.CMU;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -28,7 +28,7 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
     private const float TileHalfExtent = 0.5f;
     private const float UnobstructedRangeBuffer = 1f;
 
-    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -50,6 +50,11 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
 
     public override void Initialize()
     {
+
+        base.Initialize();
+
+        UpdatesAfter.Add(typeof(SharedPhysicsSystem));
+
         _lingeringQuery = GetEntityQuery<XenoDespoilerLingeringAcidComponent>();
         _physicsQuery = GetEntityQuery<PhysicsComponent>();
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
@@ -122,7 +127,7 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
                 return;
             }
 
-        /*var landing = ownerXform.Coordinates.Offset(direction * action.NormalRange);
+        var landing = ownerXform.Coordinates.Offset(direction * action.NormalRange);
         var landingMap = _xform.ToMapCoordinates(landing);
         var landingDistance = (landingMap.Position - ownerMap.Position).Length();
 
@@ -137,18 +142,6 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
             return;
         }
-
-        if (!_rmcActions.TryUseAction(args))
-            return;
-
-        _xform.SetCoordinates(uid, landing);
-
-        if (action.PounceSound is { } sound)
-            _audio.PlayPvs(sound, uid);
-
-        SpawnSplashAroundExceptBack(uid, action, landing, direction);
-
-        args.Handled = true;*/
 
         if (!_physicsQuery.TryGetComponent(uid, out var physics))
             return;
@@ -200,8 +193,8 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
         _physics.SetLinearVelocity(uid, velocity, body: physics);
         _physics.SetBodyStatus(uid, physics, BodyStatus.InAir);
 
-        if (action.PounceSound is { } sound)
-            _audio.PlayPvs(sound, uid);
+       // if (action.PounceSound is { } sound)
+          //  _audio.PlayPvs(sound, uid);
     }
 
     private void StopLeap(Entity<XenoDespoilerCausticEmbraceLeapingComponent> leaping)
