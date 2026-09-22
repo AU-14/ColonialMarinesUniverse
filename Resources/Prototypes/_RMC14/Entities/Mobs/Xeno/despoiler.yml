@@ -106,11 +106,11 @@
     - types:
         Heat: 10
     - types:
+        Heat: 10
+    - types:
         Heat: 20
     - types:
         Heat: 30
-    - types:
-        Heat: 40
     acidComponents:
     - type: UserAcided
       armorPiercing: 40
