@@ -5,6 +5,7 @@
   description: A bunch of metal shelves stacked on top of eachother. Excellent for storage purposes, less so as cover.
   components:
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: Transform
     anchored: false
   - type: Physics
