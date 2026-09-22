@@ -1,4 +1,4 @@
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankFlamer
   name: tank flamer
@@ -74,7 +74,7 @@
     vehicleState: flamer_0
     damagedVehicleState: flamer_1
 
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankGrenadeLauncher
   name: tank grenade launcher
@@ -93,7 +93,7 @@
     vehicleFamily: Tank
     slotType: Launcher
     damageMultiplier: 0.0
-    repairRate: 0.05
+    repairRate: 0.05 
   - type: HardpointIntegrity
     maxIntegrity: 500
     integrity: 500
@@ -154,7 +154,7 @@
     vehicleState: glauncher_0
     damagedVehicleState: glauncher_1
 
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankTowLauncher
   name: tank TOW launcher
@@ -230,7 +230,7 @@
     vehicleState: towlauncher_0
     damagedVehicleState: towlauncher_1
 
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankM56Cupola
   name: M56 cupola
@@ -305,7 +305,7 @@
     vehicleState: m56cupola_0
     damagedVehicleState: m56cupola_1
 
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankRERE700
   name: RE700 cupola
@@ -378,7 +378,7 @@
     vehicleState: re700cupola_0
     damagedVehicleState: m56cupola_1
 
-- type: entity
+- type: entity # CMU14
   parent: VehicleTankHardpointBase
   id: VehicleTankCupolaTWE
   name: Improper L98 10x28mm Hull General Purpose Machine Gun
