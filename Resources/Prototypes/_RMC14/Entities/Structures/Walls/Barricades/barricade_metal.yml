@@ -230,6 +230,7 @@
   description: A railing, for your hands. Woooow.
   components:
     - type: VehicleSmashable
+      selfDamageMultiplier: 0.01
     - type: Transform
       gridTraversal: false
     - type: Anchorable
