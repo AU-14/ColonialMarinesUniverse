@@ -203,6 +203,7 @@
   id: RMCCrateOpenableBase
   components:
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: CrateOpenable
     spawn:
     - id: RMCPlankWood2
