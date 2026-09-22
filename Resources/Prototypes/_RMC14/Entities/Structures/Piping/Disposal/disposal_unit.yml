@@ -8,6 +8,7 @@
     instantDestroy: true
     passOnDestroy: true
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: Sprite
     sprite: _RMC14/Structures/Piping/disposal.rsi
   - type: Fixtures
