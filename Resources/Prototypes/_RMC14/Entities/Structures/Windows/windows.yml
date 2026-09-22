@@ -53,6 +53,7 @@
     - Wall
   components:
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: MeleeSound
     soundGroups:
       Brute:
