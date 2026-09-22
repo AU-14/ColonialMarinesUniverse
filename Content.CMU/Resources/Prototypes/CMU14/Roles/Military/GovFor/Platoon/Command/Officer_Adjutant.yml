@@ -112,6 +112,8 @@
   - AU14OpforCommand
 
   # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFORAdjutant
+
 - type: startingGear
   id: AU14GearGOVFORAdjutant
   equipment:

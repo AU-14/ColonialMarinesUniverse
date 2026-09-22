@@ -490,6 +490,14 @@
       - id: RMCArmorHelmetSecurity
       - id: AU14WYPMCBallCap
       - id: RMCM5CameraGear
+    - name: Flight Visor
+      choices: { CMUPlatoonAirCrewFlightVisor: 1 }
+      entries:
+      - id: AU14GogglesLAH99VisorHighTech
+    - name: Flight Mask
+      choices: { CMUPlatoonAirCrewFlightMask: 1 }
+      entries:
+      - id: AU14MaskUSASFPilotOxygen
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }
       entries:

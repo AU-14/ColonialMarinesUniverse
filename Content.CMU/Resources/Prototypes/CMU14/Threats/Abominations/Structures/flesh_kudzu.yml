@@ -19,7 +19,7 @@
       Brute:
         path: "/Audio/Weapons/slash.ogg"
   - type: Sprite
-    sprite: Objects/Misc/fleshkudzu.rsi
+    sprite: CMU14/Objects/Misc/fleshkudzu.rsi
     state: kudzu_11
     drawdepth: HighFloorObjects
   - type: KudzuVisuals
@@ -47,6 +47,7 @@
   - type: Kudzu
     growthTickChance: 0.2
     spreadChance: 0.4
+    spriteVariants: 1 # One sprite per growth stage in the RSI, so variants must stay pinned to 1.
     damageRecovery:
       types:
         Slash: -0.5

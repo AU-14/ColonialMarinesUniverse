@@ -9,6 +9,12 @@ namespace Content.Shared.CMU14.ZLevels.Vehicles;
 public sealed partial class CMUVehicleZTraversalComponent : Component
 {
     /// <summary>
+    /// Allows walking vehicles such as powerloaders to use stairs that exclude wheeled or tracked vehicles.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CanUseStairs;
+
+    /// <summary>
     /// Maximum spacing between generated support samples inside the vehicle footprint.
     /// </summary>
     [DataField, AutoNetworkedField]

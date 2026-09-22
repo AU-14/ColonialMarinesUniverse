@@ -8,6 +8,10 @@
     state: engineering
   - type: MachineBoard
     prototype: CMUGasThermoMachineFreezer
+    stackRequirements:
+      CMSteel: 2
+      RMCCable: 2
+      CMGlass: 1
   - type: Construction
     deconstructionTarget: null
     graph: CMUThermomachineBoard
@@ -23,6 +27,10 @@
     state: engineering
   - type: MachineBoard
     prototype: CMUGasThermoMachineHeater
+    stackRequirements:
+      CMSteel: 2
+      RMCCable: 2
+      CMGlass: 1
   - type: Construction
     deconstructionTarget: null
     graph: CMUThermomachineBoard
@@ -38,6 +46,9 @@
     state: engineering
   - type: MachineBoard
     prototype: CMUGasCondenser
+    stackRequirements:
+      CMSteel: 2
+      RMCCable: 2
 
 - type: constructionGraph
   id: CMUThermomachineBoard
@@ -57,3 +68,17 @@
       steps:
       - tool: Screwing
         doAfter: 2
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: CMUExhaustVentMachineCircuitboard
+  name: exhaust vent machine board
+  description: A machine printed circuit board for an exhaust vent.
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: CMUExhaustVent
+    stackRequirements:
+      CMSteel: 1
+      RMCCable: 1

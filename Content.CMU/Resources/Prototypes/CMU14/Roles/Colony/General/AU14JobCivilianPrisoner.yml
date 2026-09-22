@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobCivilianPrisoner
+  displayWeight: 2
   roundSide: Civilian
   roundForce: COLONY
   roundRole: CivilianPrisoner

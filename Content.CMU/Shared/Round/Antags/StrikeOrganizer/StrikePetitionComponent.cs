@@ -20,4 +20,10 @@ public sealed partial class StrikePetitionComponent : Component
 
     public bool FaxedHalf;
     public bool FaxedFull;
+
+    /// <summary>
+    /// The organizer whose gear this petition spawned in, resolved at startup from the
+    /// inventory parent chain; admin-spawned copies stay unattributed.
+    /// </summary>
+    public EntityUid? Organizer;
 }

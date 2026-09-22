@@ -1,0 +1,11 @@
+author: ArturUr1
+category: CMU
+changes:
+- message: The loadout system for synthetic special items has been changed. They no
+    longer require customization points, and you can all be beautiful. However, the
+    maximum number of special items has been set to 2.
+  type: Tweak
+- message: The surgery skill for third-generation synthetics is 4 again.
+  type: Fix
+time: '2026-09-18T21:01:00.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1960

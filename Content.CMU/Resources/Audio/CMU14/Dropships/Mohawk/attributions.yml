@@ -1,0 +1,35 @@
+- files:
+  - freesoundstock_step_ladder.ogg
+  license: CC-BY-SA-3.0
+  copyright: CM-SS13 contributors; freesoundstock, mountain852, nightcustard; see
+    omaha_ramp_contributors.txt for the ramp mix. Stereo sources downmixed to mono
+    for positional playback.
+  source: https://github.com/PoltavskaPraca/cmss13-praca/blob/0d711eddc539ea7ac67cf6b5869a08fa33dc9391/sound/machines/freesoundstock_step_ladder.ogg
+- files:
+  - mountain852_climbing_ladder_human_after.ogg
+  license: CC-BY-SA-3.0
+  copyright: CM-SS13 contributors; freesoundstock, mountain852, nightcustard; see
+    omaha_ramp_contributors.txt for the ramp mix. Stereo sources downmixed to mono
+    for positional playback.
+  source: https://github.com/PoltavskaPraca/cmss13-praca/blob/0d711eddc539ea7ac67cf6b5869a08fa33dc9391/sound/machines/mountain852_climbing_ladder_human_after.ogg
+- files:
+  - mountain852_climbing_ladder_initial.ogg
+  license: CC-BY-SA-3.0
+  copyright: CM-SS13 contributors; freesoundstock, mountain852, nightcustard; see
+    omaha_ramp_contributors.txt for the ramp mix. Stereo sources downmixed to mono
+    for positional playback.
+  source: https://github.com/PoltavskaPraca/cmss13-praca/blob/0d711eddc539ea7ac67cf6b5869a08fa33dc9391/sound/machines/mountain852_climbing_ladder_initial.ogg
+- files:
+  - nightcustard_motor_whirring.ogg
+  license: CC-BY-SA-3.0
+  copyright: CM-SS13 contributors; freesoundstock, mountain852, nightcustard; see
+    omaha_ramp_contributors.txt for the ramp mix. Stereo sources downmixed to mono
+    for positional playback.
+  source: https://github.com/PoltavskaPraca/cmss13-praca/blob/0d711eddc539ea7ac67cf6b5869a08fa33dc9391/sound/machines/nightcustard_motor_whirring.ogg
+- files:
+  - omaha_ramp.ogg
+  license: CC-BY-SA-3.0
+  copyright: CM-SS13 contributors; freesoundstock, mountain852, nightcustard; see
+    omaha_ramp_contributors.txt for the ramp mix. Stereo sources downmixed to mono
+    for positional playback.
+  source: https://github.com/PoltavskaPraca/cmss13-praca/blob/0d711eddc539ea7ac67cf6b5869a08fa33dc9391/sound/machines/omaha_ramp.ogg

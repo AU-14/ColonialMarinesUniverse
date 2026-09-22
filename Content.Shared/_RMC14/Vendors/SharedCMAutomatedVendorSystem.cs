@@ -526,7 +526,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
             if (playerChoices >= choices.Amount)
             {
-                Log.Error($"{ToPrettyString(actor)} tried to buy too many choices.");
+                Log.Warning($"{ToPrettyString(actor)} tried to buy too many choices."); // CMU14: client UI desync, not a server fault
                 return;
             }
 
@@ -662,7 +662,8 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
                     : user.ExtraPoints?.GetValueOrDefault(vendor.Comp.PointsType) ?? 0;
                 if (userPoints < entry.Points)
                 {
-                    Log.Error(
+                    // CMU14: reachable by spam-clicking a legit client, so warning not error
+                    Log.Warning(
                         $"{ToPrettyString(actor)} with {user.Points} tried to buy {entry.Id} for {entry.Points} points without having enough points.");
                     return;
                 }

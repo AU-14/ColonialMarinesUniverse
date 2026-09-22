@@ -41388,7 +41388,7 @@ entities:
     - type: Transform
       pos: 61.5,6.5
       parent: 1
-- proto: AU14DrugDealerDrugBackpack
+- proto: CMUDrugDealerDrugBackpack
   entities:
   - uid: 16
     components:
@@ -77109,7 +77109,7 @@ entities:
     - type: Transform
       pos: 55.354004,43.357403
       parent: 1
-- proto: GasThermoMachineFreezer
+- proto: RMCSpaceHeater
   entities:
   - uid: 6304
     components:
@@ -80063,7 +80063,7 @@ entities:
     - type: Transform
       pos: -7.277093,-36.793148
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 6829
     components:
@@ -80090,7 +80090,7 @@ entities:
     - type: Transform
       pos: 45.5,-14.5
       parent: 1
-- proto: RMCCanisterOrange
+- proto: CMUCanisterPlasma
   entities:
   - uid: 6834
     components:
@@ -80117,7 +80117,7 @@ entities:
     - type: Transform
       pos: -71.121,6.7016225
       parent: 1
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 6839
     components:
@@ -84403,7 +84403,7 @@ entities:
     - type: Transform
       pos: 15.549503,75.45019
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 7583
     components:

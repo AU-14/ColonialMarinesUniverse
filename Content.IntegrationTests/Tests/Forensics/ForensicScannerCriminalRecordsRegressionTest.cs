@@ -80,7 +80,7 @@ public sealed class ForensicScannerCriminalRecordsRegressionTest : GameTest
                 scannerComponent.Fingerprints.Clear();
                 scannerComponent.Fingerprints.Add("PRINT-ONE");
 
-                var firstScan = new ForensicScannerScannedEvent(humanoid);
+                var firstScan = new ForensicScannerScannedEvent(scanner, humanoid); // CMU14
                 SEntMan.EventBus.RaiseLocalEvent(scanner, ref firstScan);
 
                 var general = records.GetRecordsOfType<GeneralStationRecord>(station).ToArray();
@@ -100,7 +100,7 @@ public sealed class ForensicScannerCriminalRecordsRegressionTest : GameTest
                 scannerComponent.DNAs.Add("DNA-TWO");
                 scannerComponent.Fingerprints.Clear();
                 scannerComponent.Fingerprints.Add("PRINT-TWO");
-                var rescan = new ForensicScannerScannedEvent(humanoid);
+                var rescan = new ForensicScannerScannedEvent(scanner, humanoid); // CMU14
                 SEntMan.EventBus.RaiseLocalEvent(scanner, ref rescan);
 
                 general = records.GetRecordsOfType<GeneralStationRecord>(station).ToArray();
@@ -113,7 +113,7 @@ public sealed class ForensicScannerCriminalRecordsRegressionTest : GameTest
                     Assert.That(general[0].Item2.Fingerprint, Is.EqualTo("PRINT-TWO"));
                 });
 
-                var nonHumanoidScan = new ForensicScannerScannedEvent(nonHumanoid);
+                var nonHumanoidScan = new ForensicScannerScannedEvent(scanner, nonHumanoid); // CMU14
                 SEntMan.EventBus.RaiseLocalEvent(scanner, ref nonHumanoidScan);
                 Assert.Multiple(() =>
                 {

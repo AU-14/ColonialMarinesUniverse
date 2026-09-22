@@ -1,7 +1,7 @@
 # Presence-based zone objective for Force on Force. The strongest alive force inside the
-# rectangular zone scores hotspot points each tick (kept separate from the muted win-point
-# pool), scaled by team size so a minority side earns more per head. Relocates to a fresh
-# objective marker after scoring ticks to keep both teams moving.
+# rectangular zone scores each tick into the faction win-point pool, scaled by team size so
+# a minority side earns more per head. Relocates to a fresh objective marker after scoring
+# ticks to keep both teams moving.
 - type: entity
   id: CMUHotspotObjective
   name: Hotspot
@@ -24,7 +24,49 @@
     tickSeconds: 10
     pointsPerTick: 1
     normalizeByTeamSize: true
+    feedWinPoints: true
     relocateAfterTicks: 5
     zoneColorHex: "#FFB300"
   - type: NavMapBeacon
     text: Hotspot
+  - type: Sprite
+    sprite: _RMC14/Markers/gm_tacmap_marks.rsi
+    state: star
+  - type: WarpPoint
+    location: cmu-warp-location-hotspot
+
+# Endgame driver: activates for a faction once its win points reach the final threshold,
+# first side to accumulate ticksToWin scoring ticks in this zone wins the round outright.
+# Replaces the retired fetch finals as the Force on Force round-ending objective.
+- type: entity
+  id: CMUHotspotFinalObjective
+  name: Hotspot
+  parent: MarkerBase
+  components:
+  - type: CMUObjective
+    id: CMUHotspotFinalObjective
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    factions:
+    - govfor
+    - opfor
+    objectiveLevel: 3
+    objectiveDescription: "Hold the final hotspot. The first force to control it long enough wins the round."
+  - type: HotspotObjective
+    catalog: true
+    halfWidth: 9
+    tickSeconds: 10
+    pointsPerTick: 1
+    normalizeByTeamSize: true
+    feedWinPoints: false
+    relocateAfterTicks: 5
+    ticksToWin: 30
+    zoneColorHex: "#FF4319"
+  - type: NavMapBeacon
+    text: Final Hotspot
+  - type: Sprite
+    sprite: _RMC14/Markers/gm_tacmap_marks.rsi
+    state: star
+  - type: WarpPoint
+    location: cmu-warp-location-hotspot

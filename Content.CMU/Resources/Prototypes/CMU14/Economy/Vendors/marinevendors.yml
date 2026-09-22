@@ -407,6 +407,8 @@
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
       - id: AU14USASFAirCrewHelmet
+      - id: AU14JungleM50Helmet
+      - id: AU14CamoM50Helmet
       - id: AU14USASFCap
     - name: Flight Visor
       choices: { CMUPlatoonAirCrewFlightVisor: 1 }

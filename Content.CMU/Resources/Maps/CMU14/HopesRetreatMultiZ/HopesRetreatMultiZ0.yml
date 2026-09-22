@@ -136639,6 +136639,8 @@ entities:
     components:
     - type: MetaData
       name: LZ BRAVO - South Pad
+    - type: DropshipDestination
+      multiDeckOffset: 1,6
     - type: Transform
       parent: 1
       pos: -82.5,23.5
@@ -175065,7 +175067,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: GasThermoMachineFreezer
+- proto: RMCSpaceHeater
   entities:
   - uid: 68534
     components:
@@ -180363,14 +180365,14 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 68536
     components:
     - type: Transform
       parent: 1
       pos: -99.5,45.495007
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 50283
     components:
@@ -180382,7 +180384,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -93.5,37.5
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 50281
     components:
@@ -183578,7 +183580,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 34.5,-26.5
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 54155
     components:
@@ -183640,7 +183642,7 @@ entities:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: generator
       color: '#FFFFFFFF'
-- proto: RMCGeneratorFusionColonyNoMapIcon
+- proto: CMUGeneratorThermoNoMapIcon
   entities:
   - uid: 60690
     components:

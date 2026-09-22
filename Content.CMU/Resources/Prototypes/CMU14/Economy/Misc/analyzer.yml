@@ -2,7 +2,7 @@
   parent: CMBaseStructure
   id: AU14AnalyzerMachine
   name: Analyzer Machine (Govfor)
-  description:  An intel analyzer
+  description: A United Americas colonial intel terminal. Intercepted traffic and asset reports go in, and actionable intelligence comes out if the operator asks the right questions. The access panel is a single screw from silence, a modification every signals tech discovers in their first week.
   components:
   - type: Transform
     anchored: false
@@ -21,6 +21,7 @@
     enabled: false
     sound:
       path: /Audio/Ambience/Objects/vending_machine_hum.ogg
+  - type: CMUAmbientMute
   - type: Fixtures
     fixtures:
       fix1:
@@ -58,7 +59,7 @@
   parent: AU14AnalyzerMachine
   id: AU14AnalyzerMachineCLF
   name: Analyzer Machine (CLF)
-  description:  An intel analyzer
+  description: A Colonial Liberation Front intelligence terminal, wired together from salvaged parts and whatever the militias could liberate. It works, mostly. The first thing anyone does to one of these is take the screw out of the panel.
   components:
   - type: ContainerContainer
     containers:
@@ -231,7 +232,7 @@
   parent: AU14AnalyzerMachine
   id: AU14AnalyzerMachineOpfor
   name: Analyzer Machine (Opfor)
-  description:  An intel analyzer
+  description: An opposition intelligence terminal, captured hardware pressed back into service against its makers. Its cooling hum has kept more sentries awake than the coffee ever did, and the worn screw on the access panel says the crew agrees.
   components:
   - type: FetchAnalyzer
     faction: opfor
@@ -241,7 +242,7 @@
   parent: AU14AnalyzerMachine
   id: AU14AnalyzerMachineWeYu
   name: Analyzer Machine (WeYu)
-  description: An intel analyzer
+  description: A Weyland-Yutani intel terminal. Corporate espionage with a service contract. It listens to everything and reports only what suits the company, and the single screw holding its panel on is the only part the manual does not cover.
   components:
   - type: FetchAnalyzer
     faction: weyu

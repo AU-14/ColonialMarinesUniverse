@@ -13,7 +13,7 @@
   overwatchShowName: true
   overwatchSortPriority: -5
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 5
   accessGroups:
   - AU14GovforFTL
 
@@ -158,6 +158,7 @@
   dummyStartingGear: AU14GearOpforSquadSergeantDummy
   accessGroups:
   - AU14OpforFTL
+  useLoadoutOfJob: AU14JobGOVFORSquadSergeant
 
 - type: startingGear
   id: AU14GearOpforSquadSergeant

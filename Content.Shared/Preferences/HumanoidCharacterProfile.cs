@@ -350,7 +350,7 @@ namespace Content.Shared.Preferences
             HideMetaInformation = hideMetaInformation;
         }
 
-        private static string NormalizePreferenceGamemode(string? gamemode)
+        private static string NormalizePreferenceGamemode(string? gamemode) // CMU14 Method
         {
             if (string.IsNullOrWhiteSpace(gamemode))
                 return string.Empty;
@@ -360,6 +360,7 @@ namespace Content.Shared.Preferences
                 "insurgency" => "Insurgency",
                 "colonyfall" => "ColonyFall",
                 "distresssignal" => "DistressSignal",
+                "forceonforce" => "DistressSignal", // FoF uses DS prefs
                 _ => gamemode.Trim()
             };
         }

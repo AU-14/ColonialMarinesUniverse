@@ -37,6 +37,7 @@
     AU14ItemLaptopCallsignGOVFOR: AU14ItemLaptopCallsignOPFOR
     AU14ItemLaptopOverwatchGOVFOR: AU14ItemLaptopOverwatchOPFOR
     CMASRSConsoleGovfor: CMASRSConsoleOpfor
+    CMComputerDropshipTerminalGovfor: CMComputerDropshipTerminalOpfor
     CMUGovforRosterConsole: CMUOpforRosterConsole
     CMUTacticalMapTableGovfor: CMUTacticalMapTableOpfor
     CMUTacticalMapTableLargeGovfor: CMUTacticalMapTableLargeOpfor

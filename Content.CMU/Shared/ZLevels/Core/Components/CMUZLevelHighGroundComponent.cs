@@ -32,6 +32,10 @@ public sealed partial class CMUZLevelHighGroundComponent : Component
     [DataField, AutoNetworkedField]
     public bool SupportOnlyFromAbove = false;
 
+    /// <summary>Whether vehicles can climb onto this surface from its own level.</summary>
+    [DataField, AutoNetworkedField]
+    public bool AllowVehicles = true;
+
     /// <summary>
     /// Allows this highground to automatically reveal a nearby preview of the level above.
     /// </summary>

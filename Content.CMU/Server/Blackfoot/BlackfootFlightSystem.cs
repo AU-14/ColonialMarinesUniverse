@@ -48,7 +48,6 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
@@ -620,7 +619,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
         var xform = Transform(flight.Owner);
         if (xform.MapUid is not { } map ||
-            !TryProjectToGroundEffectMap(map, flight.Comp.GroundMapOffset, _transform.GetWorldPosition(flight.Owner), out var coords))
+            !_zLevels.TryProjectToGroundEffectMap(map, flight.Comp.GroundMapOffset, _transform.GetWorldPosition(flight.Owner), out var coords))
         {
             return;
         }
@@ -648,7 +647,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         var xform = Transform(aircraft);
         var rotation = _transform.GetWorldRotation(aircraft);
         if (xform.MapUid is not { } map ||
-            !TryProjectToGroundEffectMap(map, shadow.Comp.ProjectedMapOffset, _transform.GetWorldPosition(aircraft), out var coords))
+            !_zLevels.TryProjectToGroundEffectMap(map, shadow.Comp.ProjectedMapOffset, _transform.GetWorldPosition(aircraft), out var coords))
         {
             return;
         }
@@ -759,56 +758,12 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         }
 
         if (xform.MapUid is not { } map ||
-            !TryProjectToGroundEffectMap(map, flight.Comp.GroundMapOffset, worldPosition, out coords))
+            !_zLevels.TryProjectToGroundEffectMap(map, flight.Comp.GroundMapOffset, worldPosition, out coords))
         {
             return false;
         }
 
         return true;
-    }
-
-    private bool TryProjectToGroundEffectMap(
-        Entity<CMUZLevelMapComponent?> sourceMap,
-        int startOffset,
-        Vector2 worldPosition,
-        out MapCoordinates coords)
-    {
-        coords = default;
-
-        if (startOffset >= 0)
-            startOffset = -1;
-
-        MapComponent? lowestMap = null;
-
-        for (var offset = startOffset;
-             _zLevels.TryMapOffset(sourceMap, offset, out var projectedMap, out var projectedMapComp);
-             offset--)
-        {
-            lowestMap = projectedMapComp;
-
-            if (!HasSolidProjectionTile(projectedMap.Value.Owner, worldPosition))
-                continue;
-
-            coords = new MapCoordinates(worldPosition, projectedMapComp.MapId);
-            return true;
-        }
-
-        if (lowestMap == null)
-            return false;
-
-        coords = new MapCoordinates(worldPosition, lowestMap.MapId);
-        return true;
-    }
-
-    private bool HasSolidProjectionTile(EntityUid mapUid, Vector2 worldPosition)
-    {
-        if (!TryComp(mapUid, out MapGridComponent? grid) ||
-            !_map.TryGetTileRef(mapUid, grid, worldPosition, out var tileRef))
-        {
-            return false;
-        }
-
-        return !CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, _tile);
     }
 
     private void DeleteDownwash(Entity<BlackfootFlightComponent> flight)

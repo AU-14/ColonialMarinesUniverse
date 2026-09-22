@@ -65743,7 +65743,7 @@ entities:
     - type: Transform
       pos: 4.5,3.5
       parent: 1
-- proto: AtmosDeviceFanTiny
+- proto: RMCTinyFan
   entities:
   - uid: 289600
     components:
@@ -294960,47 +294960,17 @@ entities:
     - type: Transform
       pos: 56,-132.5
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 319033
     components:
     - type: Transform
       pos: 33.5,100.5
       parent: 1
-  - uid: 319034
-    components:
-    - type: Transform
-      pos: 34.5,100.5
-      parent: 1
   - uid: 319035
     components:
     - type: Transform
       pos: 37.5,100.5
-      parent: 1
-  - uid: 319036
-    components:
-    - type: Transform
-      pos: 38.5,100.5
-      parent: 1
-  - uid: 319039
-    components:
-    - type: Transform
-      pos: 33.5,101.5
-      parent: 1
-  - uid: 319040
-    components:
-    - type: Transform
-      pos: 34.5,101.5
-      parent: 1
-  - uid: 319041
-    components:
-    - type: Transform
-      pos: 37.5,101.5
-      parent: 1
-  - uid: 319042
-    components:
-    - type: Transform
-      pos: 38.5,101.5
       parent: 1
 - proto: RMCGlassesMedicalHUDGlasses
   entities:

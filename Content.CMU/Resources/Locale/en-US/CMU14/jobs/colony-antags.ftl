@@ -1,9 +1,14 @@
 roles-antag-category-colony = Colony Antags
 roles-antag-category-prometheus = Prometheus Antags
 
+cmu-admin-verb-make-antag = Make {$antag}
+
 cmu-antag-arsonist-name = Arsonist
 cmu-antag-arsonist-objective = Watch it all burn.
 cmu-antag-arsonist-greeting = The colony took everything from you. Now you will take everything from the colony. You have a flamethrower and a grudge. Light it up, but don't get caught with the torch.
+
+reagent-name-cmu-phoron-fuel = Phoron Fuel Mix
+reagent-desc-cmu-phoron-fuel = A stabilized phoron slurry for incinerator units. Burns long, spreads on its own, and shrugs off extinguishers.
 
 cmu-antag-bounty-hunter-name = Bounty Hunter
 cmu-antag-bounty-hunter-objective = Track down the colony's wanted and collect the bounties.
@@ -61,6 +66,17 @@ monster-antag-role-greeting = This planet is your home, and these scientists hav
 roles-antag-runaway-synth-name = Runaway Synth
 roles-antag-synth-objective = Do whatever you must to survive.
 runawaysynth-role-greeting = You're a runaway synthetic, law enforcement is looking to deactivate you - permanently. Do whatever you must to survive.
+roles-antag-replicant-name = Synth Replicant
+roles-antag-replicant-objective = Replace someone. Live their life. Don't get caught.
+replicant-role-greeting = You are a synthetic copy that was never supposed to leave the lab. Somewhere in this colony is a life you can take: pick your target, study them, and become them when no one is watching. Your transponder card can carry their name, but only the real thing carries their access. The original cannot remain free - dead, or ruined in a cell, either serves.
+replicant-already-transformed = There is no going back. This face is yours now.
+replicant-target-lost = The pattern slips away. The link is gone.
+replicant-transform-start = You begin copying the pattern. Hold still.
+replicant-transform-finish = The copy settles over you. You are {$name} now.
+replicant-picker-title = Assume Identity
+replicant-picker-description = Choose the life you intend to take. Study them well; you will have to answer for their history.
+cmu-summary-detail-replicant-replaced = They replaced {$target}.
+cmu-summary-detail-replicant-never = They never assumed another identity.
 
 roles-antag-serialkiller-name = Serial Killer
 roles-antag-serialkiller-objective = Kill and avoid capture
@@ -84,7 +100,33 @@ cmu-antag-wy-agent-greeting = You are a Weyland-Yutani field operative. Company 
 
 cmu-bounty-hunter-empty = No active bounties on the colony's books. Someone always owes someone, though. Keep your ears open.
 cmu-bounty-hunter-list = Current bounties on the colony's books:
+suspect-description-male = Male
+suspect-description-female = Female
+suspect-description-young = young
+suspect-description-middle-aged = middle-aged
+suspect-description-elder = elder
+suspect-description-build = build
+suspect-description-hair = {$color} hair
+suspect-description-eyes = {$color} eyes
+suspect-description-skin = {$color} skin
+suspect-description-reason = {$reason}. Witness description: {$description}
+suspect-description-languages = Reportedly speaks: {$languages}.
+cmu-bounty-cover-blown = Your cover is blown. Law enforcement has your details on file. Time to disappear.
+cmu-bounty-evidence-prints = fingerprints
+cmu-bounty-evidence-dna = DNA
+cmu-bounty-evidence-history = Matching {$kind} recovered from {$item}.
+wanted-poster-verb-text = Print wanted posters
+wanted-poster-printed = Printed {$count} wanted posters.
+wanted-poster-none = No active bounties to print.
+wanted-poster-content = {$name} is wanted by the Colonial Marshals Bureau.
+
+    Bounty: ${$bounty}, payable on capture.
+
+    {$reason}
+
+    Report sightings to your local Marshal's office.
 cmu-cannibal-meal = The hunger recedes... for now. That makes {$count}.
+cmu-cannibal-diet = { CAPITALIZE(THE($food)) } turns your stomach. Only meat can sustain a hunger like yours.
 cmu-corporate-beacon-insufficient = The data link scans your belongings: {$count}/{$required} high-value items. Not enough to transmit.
 cmu-corporate-beacon-transmit = The data link hums as it transmits to {$corporation}. Payment incoming.
 cmu-petition-already-signed = You have already signed this petition.
@@ -106,6 +148,7 @@ cmu-summary-detail-saboteur = They destroyed {$count} pieces of colony infrastru
 cmu-summary-detail-strike = Their petition gathered {$count}/{$goal} signatures.
 cmu-summary-detail-vigilante = {$count} mob members were on their list.
 cmu-summary-entry = {$name} ({$user}) was the {$role}. {$detail}
+cmu-summary-header = Colony Underworld:
 cmu-summary-petition = A strike petition gathered {$count}/{$goal} signatures.
 cmu-vigilante-empty = The mob has no presence in this colony. Keep your eyes open; scum always crawls out eventually.
 cmu-vigilante-list = The mob's members in this colony:

@@ -90,6 +90,8 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         SubscribeLocalEvent<RMCApcComponent, BreakageEventArgs>(OnApcBreakage);
         SubscribeLocalEvent<RMCApcComponent, InteractUsingEvent>(OnApcInteractUsing);
         SubscribeLocalEvent<RMCApcComponent, InteractHandEvent>(OnApcInteractHand);
+        SubscribeLocalEvent<RMCApcComponent, CMUApcCellRemoveDoAfterEvent>(OnApcCellRemoveDoAfter);
+        SubscribeLocalEvent<RMCApcComponent, CMUApcCellInsertDoAfterEvent>(OnApcCellInsertDoAfter);
         SubscribeLocalEvent<RMCApcComponent, ActivatableUIOpenAttemptEvent>(OnApcActivatableUIOpenAttempt);
         SubscribeLocalEvent<RMCApcComponent, ExaminedEvent>(OnApcExamined);
 
@@ -242,18 +244,16 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             }
         }
 
-        if (HasComp<PowerCellComponent>(used) && ent.Comp.State == RMCApcState.CoverOpenNoBattery)
+        if (HasComp<PowerCellComponent>(used) && ent.Comp.State == RMCApcState.CoverOpenNoBattery) // CMU14 Statement
         {
-            var container = _container.EnsureContainer<ContainerSlot>(ent, ent.Comp.CellContainerSlot);
-            _hands.TryDropIntoContainer(user, used, container);
-            if (container.ContainedEntities.Count > 0)
+            var delay = ent.Comp.CellDelay * _skills.GetSkillDelayMultiplier(user, ent.Comp.Skill);
+            var doAfter = new DoAfterArgs(EntityManager, user, delay, new CMUApcCellInsertDoAfterEvent(), ent, used: used)
             {
-                ent.Comp.State = RMCApcState.CoverOpenBattery;
-                Dirty(ent);
-                _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
-                ToUpdate.Add(ent);
-            }
+                BreakOnMove = true,
+                DuplicateCondition = DuplicateConditions.SameEvent,
+            };
 
+            _doAfter.TryStartDoAfter(doAfter);
             return;
         }
 
@@ -290,29 +290,72 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             _damageable.SetAllDamage((ent.Owner, damageable), FixedPoint2.Zero);
     }
 
-    private void OnApcInteractHand(Entity<RMCApcComponent> ent, ref InteractHandEvent args)
+    private void OnApcInteractHand(Entity<RMCApcComponent> ent, ref InteractHandEvent args) // CMU14 Method
     {
         if (ent.Comp.State != RMCApcState.CoverOpenBattery)
             return;
 
-        if (!_container.TryGetContainer(ent, ent.Comp.CellContainerSlot, out var container))
+        if (!_container.TryGetContainer(ent, ent.Comp.CellContainerSlot, out var container)
+            || container.ContainedEntities.Count == 0)
+            return;
+
+        var delay = ent.Comp.CellDelay * _skills.GetSkillDelayMultiplier(args.User, ent.Comp.Skill);
+        var doAfter = new DoAfterArgs(EntityManager, args.User, delay, new CMUApcCellRemoveDoAfterEvent(), ent)
+        {
+            BreakOnMove = true,
+            DuplicateCondition = DuplicateConditions.SameEvent,
+        };
+
+        _doAfter.TryStartDoAfter(doAfter);
+    }
+
+    private void OnApcCellRemoveDoAfter(Entity<RMCApcComponent> ent, ref CMUApcCellRemoveDoAfterEvent args) // CMU14 Method
+    {
+        if (args.Cancelled || args.Handled)
+            return;
+
+        args.Handled = true;
+
+        if (ent.Comp.State != RMCApcState.CoverOpenBattery
+            || !_container.TryGetContainer(ent, ent.Comp.CellContainerSlot, out var container))
             return;
 
         foreach (var contained in container.ContainedEntities)
         {
-            if (_container.Remove(contained, container))
-            {
-                _hands.TryPickupAnyHand(args.User, contained);
+            if (!_container.Remove(contained, container))
+                continue;
 
-                ent.Comp.State = RMCApcState.CoverOpenNoBattery;
-                ent.Comp.ChargePercentage = 0;
-                Dirty(ent);
+            _hands.TryPickupAnyHand(args.User, contained);
 
-                _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
-                ToUpdate.Add(ent);
-                break;
-            }
+            ent.Comp.State = RMCApcState.CoverOpenNoBattery;
+            ent.Comp.ChargePercentage = 0;
+            Dirty(ent);
+
+            _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
+            ToUpdate.Add(ent);
+            break;
         }
+    }
+
+    private void OnApcCellInsertDoAfter(Entity<RMCApcComponent> ent, ref CMUApcCellInsertDoAfterEvent args) // CMU14
+    {
+        if (args.Cancelled || args.Handled || args.Used is not { } used)
+            return;
+
+        args.Handled = true;
+
+        if (ent.Comp.State != RMCApcState.CoverOpenNoBattery)
+            return;
+
+        var container = _container.EnsureContainer<ContainerSlot>(ent, ent.Comp.CellContainerSlot);
+        if (!_hands.TryDropIntoContainer(args.User, used, container) || container.ContainedEntities.Count == 0)
+            return;
+
+        ent.Comp.State = RMCApcState.CoverOpenBattery;
+        Dirty(ent);
+
+        _appearance.SetData(ent, RMCApcVisualsLayers.Layer, ent.Comp.State);
+        ToUpdate.Add(ent);
     }
 
     private void OnApcActivatableUIOpenAttempt(Entity<RMCApcComponent> ent, ref ActivatableUIOpenAttemptEvent args)

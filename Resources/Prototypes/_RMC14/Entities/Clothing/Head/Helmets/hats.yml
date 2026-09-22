@@ -805,45 +805,45 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/Beanies/tse.rsi
 
-# Radiation Suit
+# Radiation Suit # CMU14 - moved to CMU14/Entities/Structures/Atmos/atmos_gear.yml
 
-- type: entity
-  parent: ClothingHeadBase
-  id: RMCHeadRadiationHood
-  name: radiation hood
-  description: "A hood with radiation protective properties. Label: Made with lead, do not eat insulation."
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Clothing/Head/Hats/radiation_hood.rsi
-  - type: Clothing
-    sprite: _RMC14/Objects/Clothing/Head/Hats/radiation_hood.rsi
-  - type: HideLayerClothing
-    layers:
-      Hair: HEAD
-      HeadTop: HEAD
-      HeadSide: HEAD
-      Snout: HEAD
-  - type: MycotoxinProtection
-    fullProtection: true
+# - type: entity
+#   parent: ClothingHeadBase
+#   id: RMCHeadRadiationHood # CMU14 - moved
+#   name: radiation hood
+#   description: "A hood with radiation protective properties. Label: Made with lead, do not eat insulation."
+#   components:
+#   - type: Sprite
+#     sprite: _RMC14/Objects/Clothing/Head/Hats/radiation_hood.rsi
+#   - type: Clothing
+#     sprite: _RMC14/Objects/Clothing/Head/Hats/radiation_hood.rsi
+#   - type: HideLayerClothing
+#     layers:
+#       Hair: HEAD
+#       HeadTop: HEAD
+#       HeadSide: HEAD
+#       Snout: HEAD
+#   - type: MycotoxinProtection
+#     fullProtection: true
 
-- type: entity
-  parent: RMCHeadRadiationHood
-  id: RMCHeadTychoRadiationHood
-  name: Tycho 4000 radiation protection hood
-  description: The burn-resistant hood for the Weyland-Yutani Tycho 4000 Radiation Protection Suit. It's lined with lead, and it's recommended you wear a rebreather or gas mask under it.
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Clothing/Head/Hats/rad_hood_weya.rsi
-  - type: Clothing
-    sprite: _RMC14/Objects/Clothing/Head/Hats/rad_hood_weya.rsi
-  - type: CMArmor
-    bio: 100
-    melee: 25
-    bullet: 15
-    explosionArmor: 10
-    #rad: 50
-  - type: MycotoxinProtection
-    fullProtection: true
+# - type: entity
+#   parent: RMCHeadRadiationHood
+#   id: RMCHeadTychoRadiationHood # CMU14 - moved
+#   name: Tycho 4000 radiation protection hood
+#   description: The burn-resistant hood for the Weyland-Yutani Tycho 4000 Radiation Protection Suit. It's lined with lead, and it's recommended you wear a rebreather or gas mask under it.
+#   components:
+#   - type: Sprite
+#     sprite: _RMC14/Objects/Clothing/Head/Hats/rad_hood_weya.rsi
+#   - type: Clothing
+#     sprite: _RMC14/Objects/Clothing/Head/Hats/rad_hood_weya.rsi
+#   - type: CMArmor
+#     bio: 100
+#     melee: 25
+#     bullet: 15
+#     explosionArmor: 10
+#     #rad: 50
+#   - type: MycotoxinProtection
+#     fullProtection: true
 
 - type: entity
   parent: CMHeadBeret

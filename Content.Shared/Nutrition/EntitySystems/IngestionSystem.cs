@@ -120,6 +120,11 @@ public sealed partial class IngestionSystem : EntitySystem
         if (args.Handled || args.Target == null || !args.CanReach)
             return;
 
+        // CMU14: severed limbs and organs are surgery items first. An
+        // unclaimed click on a patient must not start a force-feed (BUG-638).
+        if (HasComp<OrganComponent>(entity))
+            return;
+
         args.Handled = TryIngest(args.User, args.Target.Value, entity);
     }
 

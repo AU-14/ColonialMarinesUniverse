@@ -519,9 +519,42 @@
     - id: RMCHelmetWelding
       name: Welding Helmet
       price: 25
-    - id: CMTRayScanner
-      name: T-Ray Scanner
+    - id: CMMultitool
+      name: Access Tuner
       price: 15
+    - id: CMTRayScanner
+      name: PS-9 Survey Unit
+      price: 15
+    - id: CMFireExtinguisher
+      name: Fire Extinguisher
+      price: 10
+    - id: RemoteSignaller
+      name: Remote Signaller
+      price: 10
+    - id: Igniter
+      name: Igniter
+      price: 8
+    - id: AU14MaintenanceJackSpecialAdmin
+      name: Special Maintenance Jack
+      price: 45
+    - id: CableApcStack
+      name: LV Cable Coil
+      price: 10
+    - id: CableMVStack
+      name: MV Cable Coil
+      price: 15
+    - id: CableHVStack
+      name: HV Cable Coil
+      price: 20
+    - id: RMCGeigerCounter
+      name: Geiger Counter
+      price: 20
+    - id: AirGrenade
+      name: Air Grenade
+      price: 20
+    - id: CMUFireSuppressantGrenade
+      name: Fire Suppression Grenade
+      price: 20
 
 # circuitboard - mirrors CMVendorCircuits
 - type: entity
@@ -558,6 +591,36 @@
     - id: CMUCircuitboardRecharger
       name: Recharger Circuit Board
       price: 75
+    - id: AirAlarmElectronics
+      name: Air Alarm Electronics
+      price: 20
+    - id: FireAlarmElectronics
+      name: Fire Alarm Electronics
+      price: 20
+    - id: CMUThermomachineHeaterMachineCircuitBoard
+      name: Heater Thermomachine Board
+      price: 50
+    - id: CMUThermomachineFreezerMachineCircuitBoard
+      name: Freezer Thermomachine Board
+      price: 50
+    - id: CMUCondenserMachineCircuitBoard
+      name: Condenser Board
+      price: 50
+    - id: CMUCrystallizerMachineCircuitboard
+      name: Gas Crystallizer Board
+      price: 60
+    - id: CMUPipeRiserMachineCircuitboard
+      name: Pipe Riser Board
+      price: 40
+    - id: CMUOpeningVentMachineCircuitboard
+      name: Opening Vent Board
+      price: 40
+    - id: CMUPowerRiserMachineCircuitboard
+      name: Power Riser Board
+      price: 40
+    - id: CMUAutoTransferSwitchMachineCircuitboard
+      name: Automatic Transfer Switch Board
+      price: 50
 #      - id: CMCircuitboardDispenserBooze
 #        amount: 2
 #      - id: CMCircuitboardDispenserSoda

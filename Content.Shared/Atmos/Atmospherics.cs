@@ -241,6 +241,12 @@ namespace Content.Shared.Atmos
         public const float FirePlasmaEnergyReleased = 160e3f; // methane is 16 kJ/mol, plus plasma's spark of magic
         public const float FireGrowthRate = 40000f;
 
+        // CMU14: tritium only forms in oxygen-dominated plasma fires, starting at 32:1 O2
+        // to plasma and ramping to full at 96:1. Lean-burn values (tritium starts at 10:1
+        // and is full below it) made any plasma leak in air a free tritium factory.
+        // Kept here for an easy revert:
+        // public const float SuperSaturationThreshold = 10f;
+        // public const float SuperSaturationEnds = 25f;
         public const float SuperSaturationThreshold = 96f;
         public const float SuperSaturationEnds = SuperSaturationThreshold / 3;
 

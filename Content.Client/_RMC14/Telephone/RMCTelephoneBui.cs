@@ -8,7 +8,7 @@ namespace Content.Client._RMC14.Telephone;
 
 public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    private static readonly List<string> TabOrder = new() { "MP Dept.", "Almayer", "Command", "Offices", "ARES", "Dropship", "Marine" };
+    private static readonly List<string> TabOrder = new() { "MP Dept.", "Warship", "Command", "Offices", "Apollo", "Dropship", "Marine" }; // CMU14
 
     private TelephoneWindow? _window;
 

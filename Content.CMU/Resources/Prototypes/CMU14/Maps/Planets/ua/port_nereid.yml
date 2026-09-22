@@ -28,8 +28,6 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    - AbominationsThreatDS
-    - ApeThreatDS
     # - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF
@@ -38,6 +36,7 @@
     - AbominationsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
+    thirdpartyinterval: 1800
     thirdparties:
     - FreeCompanyRaidersSurv
     - ProdigySurvLarge

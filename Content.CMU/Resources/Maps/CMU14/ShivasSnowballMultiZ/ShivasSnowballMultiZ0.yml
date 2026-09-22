@@ -108535,7 +108535,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 184.5,130.5
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 13555
     components:
@@ -111241,7 +111241,7 @@ entities:
     - type: Transform
       pos: 154.5,77.5
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 13981
     components:
@@ -111258,7 +111258,7 @@ entities:
     - type: Transform
       pos: 57.5,154.5
       parent: 1
-- proto: RMCGeneratorFusionColonyNoMapIcon
+- proto: CMUGeneratorThermoNoMapIcon
   entities:
   - uid: 13984
     components:

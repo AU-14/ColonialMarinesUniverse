@@ -299,38 +299,45 @@ public sealed partial class RMCMagneticSystem : EntitySystem
 
             var user = comp.User;
             var magnetizer = comp.Magnetizer;
-            if (!TerminatingOrDeleted(user) && !TerminatingOrDeleted(magnetizer))
+            // CMU14: dead references can never receive the item, and while they last they
+            // spam PVS resolve errors on every state send.
+            if (TerminatingOrDeleted(user)
+                || TerminatingOrDeleted(magnetizer)
+                || (comp.ReceivingItem is { } receiving && TerminatingOrDeleted(receiving)))
             {
-                if (comp.ReceivingItem is { } insertInto)
+                RemCompDeferred<RMCReturnToInventoryComponent>(uid);
+                continue;
+            }
+
+            if (comp.ReceivingItem is { } insertInto)
+            {
+                if (_container.TryGetContainer(insertInto, comp.ReceivingContainer, out var container) &&
+                    _container.Insert(uid, container, force: true))
                 {
-                    if (_container.TryGetContainer(insertInto, comp.ReceivingContainer, out var container) &&
-                        _container.Insert(uid, container, force: true))
+                    var popup = Loc.GetString("rmc-magnetize-return",
+                        ("item", uid),
+                        ("magnetizer", insertInto));
+                    _popup.PopupClient(popup, user, user, PopupType.Medium);
+
+                    comp.Returned = true;
+                    Dirty(uid, comp);
+                }
+            }
+            else
+            {
+                var slots = _inventory.GetSlotEnumerator(user, SlotFlags.SUITSTORAGE);
+                while (slots.MoveNext(out var slot))
+                {
+                    if (_inventory.TryEquip(user, uid, slot.ID, force: true))
                     {
                         var popup = Loc.GetString("rmc-magnetize-return",
                             ("item", uid),
-                            ("magnetizer", insertInto));
+                            ("magnetizer", magnetizer));
                         _popup.PopupClient(popup, user, user, PopupType.Medium);
 
                         comp.Returned = true;
                         Dirty(uid, comp);
-                    }
-                }
-                else
-                {
-                    var slots = _inventory.GetSlotEnumerator(user, SlotFlags.SUITSTORAGE);
-                    while (slots.MoveNext(out var slot))
-                    {
-                        if (_inventory.TryEquip(user, uid, slot.ID, force: true))
-                        {
-                            var popup = Loc.GetString("rmc-magnetize-return",
-                                ("item", uid),
-                                ("magnetizer", magnetizer));
-                            _popup.PopupClient(popup, user, user, PopupType.Medium);
-
-                            comp.Returned = true;
-                            Dirty(uid, comp);
-                            break;
-                        }
+                        break;
                     }
                 }
             }

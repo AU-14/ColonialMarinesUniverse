@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobLEOBase
+  displayWeight: 14
   id: AU14JobCivilianColonySecurityOfficer
   roundSide: Civilian
   roundForce: COLONY_SECURITY

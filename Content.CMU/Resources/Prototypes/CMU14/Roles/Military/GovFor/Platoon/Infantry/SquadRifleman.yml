@@ -171,6 +171,7 @@
   dummyStartingGear: AU14GearopforRiflemanDummy
   accessGroups:
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORSquadRifleman
 
 - type: startingGear
   id: AU14GearopforSquadRifleman

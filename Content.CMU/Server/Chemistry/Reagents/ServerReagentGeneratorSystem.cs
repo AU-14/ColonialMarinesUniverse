@@ -137,6 +137,11 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
 
     private void Setup()
     {
+        // LoadingMapsEvent fires on every map load, including round-start retries with no
+        // cleanup in between. PrepareChems and PrepareProperties assume empty collections.
+        ChemicalGenClassesList.Clear();
+        _propertiesList.Clear();
+        _generatedPropertiesList.Clear();
         _unfoldedConflicts = UnfoldConflicts();
         _unfoldedCombinations = UnfoldCombinations();
         PrepareProperties();

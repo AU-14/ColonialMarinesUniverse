@@ -14,7 +14,7 @@
   whitelisted: true
   whitelistParent: CMUJobSyntheticWhitelist
   isSynthetic: true
-  displayWeight: -1
+  displayWeight: 1
   accessGroups:
   - AU14GovforCommand
   - CMCargoTech
@@ -202,6 +202,7 @@
   - AU14OpforCommand
   - CMCargoTech
   - aulegacygroupcommand
+  useLoadoutOfJob: AU14JobGOVFORAuxSupportSynth
 
 - type: startingGear
   id: AU14GearOPFORAuxSupportSynth

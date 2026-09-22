@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: -1
   id: AU14JobSquadCombatTechBaseAbstract
   name: au14-job-name-govforsquadcombattech
   description: au14-job-description-govforsquadcombattech
@@ -145,6 +146,7 @@
   dummyStartingGear: AU14GearOPFORCTDummy
   accessGroups:
   - AU14OpforEngineer
+  useLoadoutOfJob: AU14JobGOVFORSquadCombatTech
 
 - type: startingGear
   id: AU14GearOPFORSquadCombatTech

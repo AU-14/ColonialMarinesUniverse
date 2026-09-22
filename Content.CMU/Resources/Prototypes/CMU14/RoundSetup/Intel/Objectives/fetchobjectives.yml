@@ -9,6 +9,54 @@
   - type: CMUObjectiveMarker
     generic: true
 
+# Category markers are also used as the parents for their objective prototypes.
+# This lets an objective placed on a map double as a spawn point for other fetch
+# objectives in the same category, while the generic marker remains a fallback
+# for older maps.
+- type: entity
+  parent: MarkerBase
+  id: fetchmedicalobjectivemarker
+  name: Fetch Medical Objective Marker
+  suffix: Medical Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchmedicalobjectivemarker
+
+- type: entity
+  parent: MarkerBase
+  id: fetchresearchobjectivemarker
+  name: Fetch Research Objective Marker
+  suffix: Research Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchresearchobjectivemarker
+
+- type: entity
+  parent: MarkerBase
+  id: fetchdataobjectivemarker
+  name: Fetch Data Objective Marker
+  suffix: Data Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchdataobjectivemarker
+
+- type: entity
+  parent: MarkerBase
+  id: fetchmilitaryobjectivemarker
+  name: Fetch Military Objective Marker
+  suffix: Military Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchmilitaryobjectivemarker
+
 - type: entity
   name: Fetch Ore Objective
   parent: MarkerBase
@@ -20,7 +68,8 @@
     id: fetchoreobj
     factionNeutral: true
     allowedPresets:
-    - ForceOnForce
+    - Insurgency
+    - ColonyFall
     factions:
     - opfor
     repeating: true
@@ -69,7 +118,7 @@
 
 - type: entity
   name: Fetch crown Objective
-  parent: fetchgenericmarker
+  parent: fetchresearchobjectivemarker
   id: fetchcrownobjective
   components:
   - type: Sprite
@@ -78,7 +127,8 @@
     id: fetchcrownobj
     factionNeutral: false
     allowedPresets:
-    - ForceOnForce
+    - Insurgency
+    - ColonyFall
     factions:
     - opfor
     - govfor
@@ -89,13 +139,13 @@
     objectiveDescription: "Retrieve the Alien Crown Artifact"
   - type: FetchObjective
     targetPrototype: ClothingHeadHatXmasCrown
-    spawnMarkerId: fetchgenericmarker
+    spawnMarkerId: fetchresearchobjectivemarker
     spawnCount: 1
     fetchCount: 1
 
 - type: entity
   name: Fetch AN/PRC-982 Objective
-  parent: fetchgenericmarker
+  parent: fetchmilitaryobjectivemarker
   id: fetchanprcobjective
   components:
   - type: Sprite
@@ -119,13 +169,13 @@
     objectiveDescription: "Retrieve the AN/PRC-982 portable radio transceiver box"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemPortableRadioTransceiver
-    spawnMarkerId: fetchgenericmarker
+    spawnMarkerId: fetchmilitaryobjectivemarker
     spawnCount: 1
     fetchCount: 1
 
 - type: entity
   name: Fetch CIR-60 Blackbox Objective
-  parent: fetchgenericmarker
+  parent: fetchdataobjectivemarker
   id: fetchblackboxobjective
   components:
   - type: Sprite
@@ -150,14 +200,14 @@
     objectiveDescription: "Retrieve the CIR-60 'blackbox' colony information recorder"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemBlackboxRecorder
-    spawnMarkerId: fetchgenericmarker
+    spawnMarkerId: fetchdataobjectivemarker
     spawnCount: 1
     fetchCount: 1
     useAnyEntity: true
 
 - type: entity
   name: Fetch Nuclear Launch Codes Booklet Objective
-  parent: fetchgenericmarker
+  parent: fetchmilitaryobjectivemarker
   id: fetchnuclearlaunchcodesobjective
   components:
   - type: Sprite
@@ -182,13 +232,13 @@
     objectiveDescription: "Retrieve the Nuclear Launch Codes Booklet"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemNuclearLaunchCodes
-    spawnMarkerId: fetchgenericmarker
+    spawnMarkerId: fetchmilitaryobjectivemarker
     spawnCount: 1
     fetchCount: 1
 
 - type: entity
   name: Fetch Theater Operations Handbook Objective
-  parent: fetchgenericmarker
+  parent: fetchmilitaryobjectivemarker
   id: fetchtheaterhandbookobjective
   components:
   - type: Sprite
@@ -213,13 +263,13 @@
     objectiveDescription: "Retrieve the Theater Operations Handbook"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemTheaterHandbook
-    spawnMarkerId: fetchgenericmarker
+    spawnMarkerId: fetchmilitaryobjectivemarker
     spawnCount: 1
     fetchCount: 1
 
 - type: entity
   name: Fetch RCS-9 ARDSU Objective
-  parent: fetchgenericmarker
+  parent: fetchdataobjectivemarker
   id: fetchattmosdatastorageunitobjective
   components:
   - type: Sprite
@@ -244,13 +294,13 @@
     objectiveDescription: "Retrieve two ARCS-9 atmospheric radar data storage units"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemAtmosphericRadarStorageUnit
-    spawnMarkerId: fetchgenericmarker
+    spawnMarkerId: fetchdataobjectivemarker
     spawnCount: 3
     fetchCount: 2
 
 - type: entity
   name: Fetch WY Laptop Objective
-  parent: fetchgenericmarker
+  parent: fetchresearchobjectivemarker
   id: fetchwylaptopobjective
   components:
   - type: Sprite
@@ -273,6 +323,6 @@
     objectiveDescription: "Retrieve the Weyland-Yutani Research laptop."
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemWYLaptop
-    spawnMarkerId: fetchgenericmarker
+    spawnMarkerId: fetchresearchobjectivemarker
     spawnCount: 1
     fetchCount: 1

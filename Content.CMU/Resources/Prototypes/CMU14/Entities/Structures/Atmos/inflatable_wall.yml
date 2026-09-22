@@ -84,6 +84,10 @@
       behaviors:
       - !type:DoActsBehavior
         acts: ["Destruction"]
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
   - type: DisassembleOnAltVerb
     prototypeToSpawn: CMUInflatableDoorFolded1
     disassembleTime: 3

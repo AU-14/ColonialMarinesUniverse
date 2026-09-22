@@ -114,10 +114,11 @@
     - JuiceThatMakesYouWeh
     - CogChamp
     - Laughter
-  - quantity: 5
-    weight: 0.02 # Ultra rare mega hit farming table
-    reagents:
-      - Cognizine
+  # CMU14: no cognizine from plant chemical mutations
+  # - quantity: 5
+  #   weight: 0.02 # Ultra rare mega hit farming table
+  #   reagents:
+  #     - Cognizine
 
 - type: weightedRandomFillSolution
   id: EvilRandomFillSolution

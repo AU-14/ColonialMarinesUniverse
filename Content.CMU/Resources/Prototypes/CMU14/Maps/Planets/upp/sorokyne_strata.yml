@@ -25,7 +25,9 @@
     govforinship: true
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
+    - FreeCompanyRaiders
     - UPPLineSquadSurv
     - ProdigySurvLarge
     - ProdigySurvMedium
@@ -57,8 +59,6 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    - AbominationsThreatDS
-    - ApeThreatDS
     # - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF

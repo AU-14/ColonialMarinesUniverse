@@ -18,6 +18,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
+using Robust.Shared.Log;
 using Robust.Shared.Timing;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.Station.Components;
@@ -365,13 +366,23 @@ namespace Content.Server.RoundEnd
 
         private void AfterEndRoundRestart()
         {
+            // CMU14: log every timer outcome; a silently swallowed restart is indistinguishable
+            // from a stuck round end for anyone watching from outside the server log.
+            var sawmill = Logger.GetSawmill("roundend");
             if (_gameTicker.RunLevel != GameRunLevel.PostRound)
+            {
+                sawmill.Info($"Restart timer fired but RunLevel is {_gameTicker.RunLevel}; skipping restart.");
                 return;
+            }
 
             // RMC14: Keep the finished round available until the rules release it.
             if (_cfg.GetCVar(RMCCVars.RMCDelayRoundEnd))
+            {
+                sawmill.Info("Restart timer fired but rmc.delay_round_end is on; holding the finished round.");
                 return;
+            }
 
+            sawmill.Info("Restart timer fired; restarting round into the lobby.");
             Reset();
             _gameTicker.RestartRound();
         }

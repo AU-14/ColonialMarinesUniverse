@@ -1,7 +1,7 @@
 - type: partySpawn
   id: ProdigySurvSpawnLarge
   leadersToSpawn:
-    CMU14JobCivilianProdigyGuardLeaderSurv: 1
+    CMU14JobProdigySurvGoonLeader: 1
   gruntsToSpawn:
     CMU14JobProdigySurvMedic: 2
     CMU14JobProdigySurvGoon: 5

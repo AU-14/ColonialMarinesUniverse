@@ -75,14 +75,24 @@
         amount: 4
       - id: CMUCanisterAir
         amount: 2
-      - id: SpaceHeater
+      - id: RMCSpaceHeater
         amount: 2
-      - id: PortableScrubber
+      - id: RMCAirScrubberPortable
         amount: 2
       - id: RMCGasTankOxygenFilled
         amount: 4
       - id: CMUCanisterPhoron
         amount: 1
+      - id: CMUCanisterEmpty
+        amount: 2
+      - id: RMCAirPumpPortable
+        amount: 2
+      - id: CMUFireHelmet
+        amount: 2
+      - id: CMUSuitFirefighter
+        amount: 2
+      - id: CMUFireSuppressantGrenade
+        amount: 2
 
 - type: entity
   parent: CMVendorTool

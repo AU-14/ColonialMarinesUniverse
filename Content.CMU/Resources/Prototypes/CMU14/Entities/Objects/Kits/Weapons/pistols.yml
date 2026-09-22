@@ -135,7 +135,7 @@
         amount: 1
       - id: CMU14MagazinePistolGlock75Rubber
         amount: 10
-  
+
 - type: entity
   parent: RMCKitBase
   id: CMU14KitWeaponGlock77
@@ -421,12 +421,12 @@
     - id: AU14WeaponPistolM50HAZOPS
     - id: AU14MagazinePistolM50
       amount: 6
-      
+
 - type: entity
   parent: RMCGunCaseBase
   id: AU14KitWeaponRXFM
   name: RXF-M5 EVA Laser pistol case
-  description: A case containing an older but reliable WEY-YU EVA laser pistol. 
+  description: A case containing an older but reliable WEY-YU EVA laser pistol.
   components:
     - type: Storage
       maxItemSize: Huge

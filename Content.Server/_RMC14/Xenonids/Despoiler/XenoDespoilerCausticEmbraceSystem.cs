@@ -8,6 +8,7 @@ using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction;
+using Content.Shared.Physics; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Server.Audio;
@@ -125,8 +126,13 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
         var landingMap = _xform.ToMapCoordinates(landing);
         var landingDistance = (landingMap.Position - ownerMap.Position).Length();
 
-        if (_rmcMap.IsTileBlocked(landing) ||
-            !_interaction.InRangeUnobstructed(uid, landing, range: landingDistance + UnobstructedRangeBuffer))
+        // CMU14: the default interaction mask cannot see barricades, so pounces phased through cadelines
+        if (_rmcMap.IsTileBlocked(landing, CollisionGroup.Impassable | CollisionGroup.BarricadeImpassable) ||
+            !_interaction.InRangeUnobstructed(uid, landing,
+                range: landingDistance + UnobstructedRangeBuffer,
+                collisionMask: CollisionGroup.Impassable
+                | CollisionGroup.InteractImpassable
+                | CollisionGroup.BarricadeImpassable))
         {
             _popup.PopupEntity(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
             return;
@@ -349,7 +355,12 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
             return false;
         }
 
-        if (!_interaction.InRangeUnobstructed(uid, victim.Value, range: action.EmpoweredRange + UnobstructedRangeBuffer))
+        // CMU14: same mask as the normal pounce, barricades must block empowered lunges too
+        if (!_interaction.InRangeUnobstructed(uid, victim.Value,
+                range: action.EmpoweredRange + UnobstructedRangeBuffer,
+                collisionMask: CollisionGroup.Impassable
+                | CollisionGroup.InteractImpassable
+                | CollisionGroup.BarricadeImpassable))
         {
             _popup.PopupEntity(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
             victim = null;

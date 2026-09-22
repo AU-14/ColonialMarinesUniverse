@@ -721,7 +721,9 @@ namespace Content.Server.GameTicking
                 return;
             }
 
-            DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName);
+            // CMU14: DoSpawn can fail when no spawn point exists; skip this player, not the round.
+            if (!DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName))
+                return;
 
 /*
             // Deadcode
@@ -751,6 +753,9 @@ namespace Content.Server.GameTicking
             }
 */
 
+            // CMU14: give back the player's old role slots before the new assignment takes
+            // one, so respawning reopens closed roles instead of burning a slot per death.
+            _stationJobs.RefundPlayerJobs(player.UserId);
             _stationJobs.TryAssignJob(station, jobPrototype, player.UserId);
 
             if (lateJoin)
@@ -803,7 +808,7 @@ namespace Content.Server.GameTicking
         /// <summary>
         /// Creates a mob on the specified station, creates the new mind, equips job-specific starting gear and loadout
         /// </summary>
-        public void DoSpawn(
+        public bool DoSpawn(
             ICommonSession player,
             HumanoidCharacterProfile character,
             EntityUid station,
@@ -822,8 +827,26 @@ namespace Content.Server.GameTicking
             jobPrototype = ProtoMan.Index<JobPrototype>(jobId);
 
             var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, jobId, character);
-            DebugTools.AssertNotNull(mobMaybe);
-            mob = mobMaybe!.Value;
+            // CMU14 Begin: a missing spawn point used to throw here and abort round start.
+            // DebugTools.AssertNotNull(mobMaybe);
+            // mob = mobMaybe!.Value;
+            if (mobMaybe is not { } spawned || !spawned.IsValid())
+            {
+                mob = EntityUid.Invalid;
+                jobName = jobPrototype.Name;
+
+                if (LobbyEnabled)
+                    PlayerJoinLobby(player);
+                else
+                    JoinAsObserver(player);
+
+                _chatManager.DispatchServerMessage(player,
+                    Loc.GetString("game-ticker-player-no-spawn-point-when-joining", ("job", jobName)));
+                return false;
+            }
+
+            mob = spawned;
+            // CMU14 End
 
             // Apply origin effects (components, accents, items) after the character exists.
             _originSystem.ApplyOrigin(mob, character);
@@ -838,6 +861,7 @@ namespace Content.Server.GameTicking
             _roles.MindAddJobRole(newMind, silent: silent, jobPrototype: jobId);
             jobName = _jobs.MindTryGetJobName(newMind);
             _admin.UpdatePlayerList(player);
+            return true; // CMU14
         }
 
         public void Respawn(ICommonSession player)

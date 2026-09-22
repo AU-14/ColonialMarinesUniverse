@@ -50,6 +50,7 @@ using Content.Shared._RMC14.Item;
 using Content.Shared._RMC14.Light;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared._RMC14.Marines.HyperSleep;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Rules;
@@ -779,7 +780,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (TryComp(spawner, out TransformComponent? xform) &&
                     xform.GridUid != null)
                 {
-                    EnsureComp<AlmayerComponent>(xform.GridUid.Value);
+                    EnsureComp<WarshipComponent>(xform.GridUid.Value); // CMU14
                 }
 
                 if (comp.SetHunger && TryComp(ev.SpawnResult, out SatiationComponent? satiation))
@@ -886,7 +887,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             }
 
             // Also include Almayer maps as fallback
-            var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+            var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>(); // CMU14
             while (almayerQuery.MoveNext(out _, out var aXform))
             {
                 AddShipMapAndConnectedZLevelMapIds(targetShipMaps, aXform.MapUid);
@@ -1002,8 +1003,15 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             //Get the maximum of either remaining marines or minimum amount
             var surgeAmount = Math.Max((int)Math.Ceiling(totalHostWeights * _hijackShipWeight) - xenoAmount, _hijackMinBurrowed);
             var rules = QueryActiveRules();
-            while (rules.MoveNext(out _, out var rule, out _))
+            // CMU14: hijack rewards apply once per round, a repeat hijack must not refund larva or refill the surge
+            while (rules.MoveNext(out var ruleUid, out _, out var rule, out _))
             {
+                if (rule.HijackBoostsApplied)
+                    continue;
+
+                rule.HijackBoostsApplied = true;
+                Dirty(ruleUid, rule);
+
                 // Reset Hivecore Cooldown
                 var hiveComp = EnsureComp<HiveComponent>(rule.Hive);
                 // Add all the stranded xenos up.
@@ -2103,7 +2111,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void AddAllShipMapIds(ICollection<MapId> shipMaps)
     {
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>(); // CMU14
         while (almayerQuery.MoveNext(out _, out var xform))
         {
             AddShipMapAndConnectedZLevelMapIds(shipMaps, xform.MapUid);

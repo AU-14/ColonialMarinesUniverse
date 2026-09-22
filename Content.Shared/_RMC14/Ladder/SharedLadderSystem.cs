@@ -355,7 +355,9 @@ public abstract partial class SharedLadderSystem : EntitySystem
             if (!_toUpdateIds.TryGetValue(ladder.Id, out var ids))
                 continue;
 
-            if (ids.FirstOrNull(e => e.Owner != uid) is not { } toUpdate)
+            // CMU14: queued ladders can be deleted before they are paired, which would link
+            // Other to a dead uid forever and spam PVS resolve errors.
+            if (ids.FirstOrNull(e => e.Owner != uid && !TerminatingOrDeleted(e.Owner)) is not { } toUpdate)
                 continue;
 
             if (toUpdate.Owner == uid)

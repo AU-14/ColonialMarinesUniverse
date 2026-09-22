@@ -1,6 +1,9 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared._RMC14.Storage; // CMU14
+using Content.Shared.Item; // CMU14
 using Content.Shared.Roles;
+using Content.Shared.Storage; // CMU14
 using Content.Server.Storage.EntitySystems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Collections;
@@ -61,6 +64,15 @@ public sealed class StartingGearPrototypeStorageTest : GameTest
 
                     foreach (var ent in ents)
                     {
+                        // CMU14: Runtime gear fills raise this so RMC storage can expand
+                        // its grid. Without it a pre-filled bag fails CanInsert in the test.
+                        if (server.EntMan.TryGetComponent<ItemComponent>(ent, out var item))
+                        {
+                            var storage = server.EntMan.GetComponent<StorageComponent>(bag);
+                            var ev = new CMStorageItemFillEvent((ent, item), storage);
+                            server.EntMan.EventBus.RaiseLocalEvent(bag, ref ev);
+                        }
+
                         if (!storageSystem.CanInsert(bag, ent, out _))
                         {
                             var entity = server.EntMan.GetComponent<MetaDataComponent>(ent).EntityPrototype?.ID ?? ent.ToString();

@@ -21,6 +21,10 @@ public sealed partial class AgainstWall : IConstructionCondition
     /// </summary>
     [DataField("offset")] private Angle _offset = Angle.FromDegrees(180);
 
+    // CMU14: RMC/CM walls carry the Wall tag instead of WallComponent, so the
+    // check below must accept the tag too or building always fails.
+    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
+
     public bool Condition(EntityUid user, EntityCoordinates location, Direction direction)
     {
         var entManager = IoCManager.Resolve<IEntityManager>();
@@ -33,7 +37,8 @@ public sealed partial class AgainstWall : IConstructionCondition
 
         foreach (var entity in lookupSys.GetEntitiesIntersecting(againstLocation, LookupFlags.Approximate | LookupFlags.Static))
         {
-            if (!entManager.HasComponent<WallComponent>(entity))
+            if (!entManager.HasComponent<WallComponent>(entity) // CMU14
+                && !tagSys.HasTag(entity, WallTag))
                 continue;
 
             if (tagSys.HasTag(entity, DiagonalTag)

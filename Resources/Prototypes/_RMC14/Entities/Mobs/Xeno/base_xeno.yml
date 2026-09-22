@@ -43,6 +43,26 @@
       components:
       - EntityStorage
   - type: Damageable
+  - type: DamageOverlay # CMU14: red damage vignette, xenos have no MobDamageable parent to inherit it from
+  # CMU14: xenos take ambient heat damage from phoron/plasma fires; cold-immune like
+  # the wizden xeno NPC. NOTE: Disabled until we're ready.
+# - type: AtmosExposed # CMU14
+# - type: Temperature # CMU14
+#   specificHeat: 42
+# - type: ThermalRegulator # CMU14
+#   metabolismHeat: 800
+#   radiatedHeat: 100
+#   implicitHeatRegulation: 500
+#   sweatHeatRegulation: 2000
+#   shiveringHeatRegulation: 2000
+#   normalBodyTemperature: 310.15
+#   thermalRegulationTemperatureThreshold: 25
+# - type: TemperatureDamage # CMU14
+#   heatDamageThreshold: 1073.15 # 800 C, phoron fire territory
+#   coldDamageThreshold: -150
+#   heatDamage:
+#     types:
+#       Heat: 5
   - type: Injurable
     damageContainer: Xeno
   - type: Destructible

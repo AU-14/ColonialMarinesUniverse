@@ -1,0 +1,11 @@
+author: OverusedMeme
+category: CMU
+changes:
+- message: 'Removed the `type: UseDelay` from the M240 and M240-T that somehow got
+    applied again.'
+  type: Remove
+- message: Fixed an issue which lead to double the amount of time required to wield
+    and fire the M240 and M240-T, again.
+  type: Fix
+time: '2026-09-14T07:32:26.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1954

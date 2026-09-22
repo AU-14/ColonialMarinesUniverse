@@ -202,7 +202,7 @@ entities:
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
-    - type: Almayer
+    - type: Warship
     - type: MapGrid
       chunks:
         0,0:
@@ -38350,7 +38350,7 @@ entities:
     - type: Transform
       pos: -30.5,11.5
       parent: 1
-- proto: GasPipeBend
+- proto: CMUGasPipeBend
   entities:
   - uid: 4221
     components:
@@ -38451,7 +38451,7 @@ entities:
     - type: Transform
       pos: 88.5,-0.5
       parent: 1
-- proto: GasPipeFourway
+- proto: CMUGasPipeFourway
   entities:
   - uid: 4236
     components:
@@ -38497,7 +38497,7 @@ entities:
     - type: Transform
       pos: 73.5,-6.5
       parent: 1
-- proto: GasPipeStraight
+- proto: CMUGasPipeStraight
   entities:
   - uid: 4244
     components:
@@ -43489,7 +43489,7 @@ entities:
     - type: Transform
       pos: 6.5,-2.5
       parent: 1
-- proto: GasPipeTJunction
+- proto: CMUGasPipeTJunction
   entities:
   - uid: 4993
     components:

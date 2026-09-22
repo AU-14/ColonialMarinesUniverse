@@ -219,6 +219,26 @@ public sealed partial class StationJobsSystem : EntitySystem
         return jobsComponent.PlayerJobs.Remove(userId);
     }
 
+    /// <summary>
+    /// Refunds every job slot a player currently holds across all stations and clears their
+    /// record. Death never frees slots, so without this each respawn cycle permanently
+    /// consumes one slot of the player's old role (a dead commander stays closed forever).
+    /// </summary>
+    public void RefundPlayerJobs(NetUserId userId) // CMU14 Method // CMU14 Method // CMU14 Method // CMU14 Method
+    {
+        var query = EntityQueryEnumerator<StationJobsComponent>();
+        while (query.MoveNext(out var station, out var stationJobs))
+        {
+            if (!stationJobs.PlayerJobs.TryGetValue(userId, out var jobs))
+                continue;
+
+            foreach (var job in jobs)
+                TryAdjustJobSlot(station, job, 1, clamp: true, stationJobs: stationJobs);
+
+            stationJobs.PlayerJobs.Remove(userId);
+        }
+    }
+
     /// <inheritdoc cref="TrySetJobSlot(Robust.Shared.GameObjects.EntityUid,string,int,bool,Content.Server.Station.Components.StationJobsComponent?)"/>
     /// <param name="station">Station to adjust the job slot on.</param>
     /// <param name="jobPrototype">Job prototype to adjust.</param>

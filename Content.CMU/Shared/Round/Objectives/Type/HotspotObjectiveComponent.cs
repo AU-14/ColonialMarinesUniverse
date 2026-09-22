@@ -31,9 +31,8 @@ public sealed partial class HotspotObjectiveComponent : Robust.Shared.GameObject
     [DataField] public bool NormalizeByTeamSize { get; private set; } = true;
 
     /// <summary>
-    /// Also feeds scored points into the faction win-point pool. Off by default: that pool's
-    /// threshold is muted and other objective types already feed it, so hotspot points are
-    /// tallied separately on the objective master instead.
+    /// Feeds scored points into the faction win-point pool shown on the objectives console and
+    /// intel readouts; the pool's threshold unlocks the final objective.
     /// </summary>
     [DataField] public bool FeedWinPoints { get; private set; }
 
@@ -46,6 +45,9 @@ public sealed partial class HotspotObjectiveComponent : Robust.Shared.GameObject
 
     /// <summary>Move the zone to a fresh marker after this many scoring ticks; 0 is static.</summary>
     [DataField] public int RelocateAfterTicks { get; private set; }
+
+    /// <summary>Scoring ticks one faction needs in total to win the round outright; 0 is no win condition.</summary>
+    [DataField] public int TicksToWin { get; private set; }
 
     [AutoNetworkedField] public string CurrentController = string.Empty;
 

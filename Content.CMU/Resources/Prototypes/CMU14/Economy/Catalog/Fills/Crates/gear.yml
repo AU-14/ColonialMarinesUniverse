@@ -164,7 +164,7 @@
   parent: RMCCrateScience
   id: CMUCrateRadsuit
   name: radiation suit crate
-  description: A crate that contains a standard radiation suit.
+  description: A crate that contains a "Salamander" RS-2 radiation suit and its RH-2 hood. Rated for fire and radiation, though only with the hood worn.
   components:
   - type: StorageFill
     contents:
@@ -172,6 +172,17 @@
       amount: 1
     - id: RMCHeadRadiationHood
       amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEVA
+  name: EVA suit crate
+  description: A crate that contains two pressure suits with their helmets. For work on the wrong side of a hull breach, or under it.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUSuitEVA
+      amount: 2
 
 - type: entity
   parent: RMCCrateScience
@@ -200,9 +211,9 @@
     contents:
     - id: CMUAtmosScanner
       amount: 2
-    - id: PortableScrubber
+    - id: RMCAirScrubberPortable
       amount: 1
-    - id: SpaceHeater
+    - id: RMCSpaceHeater
       amount: 1
     - id: CMUCanisterAir
       amount: 2
@@ -240,6 +251,32 @@
       amount: 1
     - id: CMUInflatableDoorFolded1
       amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateFirefightingArmor
+  name: firefighting armor crate
+  description: A crate that contains two PyroTex LT firesuit armors and two fire helmets. The helmets are not optional; the armor only holds up with a fire-rated head.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUArmorFirefighter
+      amount: 2
+    - id: CMUFireHelmet
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateAtmosFireResponse
+  name: atmos fire response crate
+  description: A crate of twelve "Salamander" FS-4 fire suppression grenades and twelve air grenades. For when the phoron you ordered decides to burn instead.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUFireSuppressantGrenade
+      amount: 12
+    - id: AirGrenade
+      amount: 12
 
 - type: entity
   parent: RMCCrateConstruction
@@ -303,7 +340,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMUPortableGeneratorDragon
+    - id: CMUGeneratorPortableDragon
       amount: 1
     - id: CMSheetPhoron
       amount: 1

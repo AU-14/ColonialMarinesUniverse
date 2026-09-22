@@ -1,0 +1,28 @@
+# Tile fire spawned by the atmos phoron fire (PhoronFireReaction), so standing
+# in burning phoron behaves like any RMC tile fire: ignite, panic, pat or roll.
+# Intensity 25 outranks flamer fire (15) but stays under the firesuits' 80
+# ignition resistance. The short duration keeps it tied to the burning gas;
+# the reaction respawns it every tick while phoron keeps burning.
+- type: entity
+  parent: RMCTileFire
+  id: CMUTileFirePhoron
+  components:
+  - type: TileFire
+    id: CMUTileFirePhoron
+    duration: 15
+  - type: RMCIgniteOnCollide
+    intensity: 25
+
+# Tile fire spawned by the atmos tritium fire (TritiumFireReaction). Burning
+# tritium is radioactive: intensity 9 reads Extreme adjacent, Low by ~10 tiles
+# and dies out past that, so the geiger tracks the visible fire.
+- type: entity
+  parent: RMCTileFireGreen
+  id: CMUTileFireTritium
+  components:
+  - type: TileFire
+    id: CMUTileFireTritium
+    duration: 15
+  - type: RadiationSource
+    intensity: 9
+    slope: 0.75

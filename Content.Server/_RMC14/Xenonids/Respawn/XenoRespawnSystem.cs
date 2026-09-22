@@ -103,7 +103,8 @@ public sealed partial class XenoRespawnSystem : EntitySystem
             if (TryComp(ghost, out actor))
             {
                 _hive.ChangeBurrowedLarva((respawn.Hive.Value, hiveComp), 1);
-                _hive.JoinBurrowedLarva((respawn.Hive.Value, hiveComp), actor.PlayerSession);
+                // CMU14: ignorePoolGate keeps reincarnation working where the pool is disabled (Colony Fall)
+                _hive.JoinBurrowedLarva((respawn.Hive.Value, hiveComp), actor.PlayerSession, ignorePoolGate: true);
             }
 
             _popup.PopupEntity(Loc.GetString("rmc-xeno-respawn-fail"), ghost, ghost, PopupType.Large);

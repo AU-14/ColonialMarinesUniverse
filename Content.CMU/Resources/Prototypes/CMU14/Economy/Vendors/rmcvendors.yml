@@ -599,6 +599,10 @@
       - id: RMCVisorPilotPurple
       - id: RMCVisorPilotRed
       - id: RMCVisorPilotYellow
+    - name: Flight Mask
+      choices: { CMUPlatoonAirCrewFlightMask: 1 }
+      entries:
+      - id: AU14MaskUSASFPilotOxygen
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }
       entries:
@@ -1097,6 +1101,11 @@
       sharedSpecLimit: 1
       entries:
       - id: AU14KitRMCMarksmanL64A3
+        giveSquadRoleName: au14-job-name-govforspecialist-marksmanRMC
+        givePrefix: au14-job-prefix-govforspecialist-marksmanRMC
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: CMU14KitRMCMarksmanL144
         giveSquadRoleName: au14-job-name-govforspecialist-marksmanRMC
         givePrefix: au14-job-prefix-govforspecialist-marksmanRMC
         isAppendSquadRoleName: false

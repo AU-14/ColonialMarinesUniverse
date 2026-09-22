@@ -134,7 +134,13 @@
       - id: AU14WeaponRifleM16A1
         amount: 1
       - id: RMCMagazineRifleM16
-        amount: 9
+        amount: 5
+      - id: CMUMagazineRifleM16APExt
+        amount: 1
+      - id: CMUMagazineRifleM16AP
+        amount: 1
+      - id: CMUMagazineRifleM16Extended
+        amount: 2
 
 - type: entity
   parent: RMCKitBase
@@ -156,7 +162,13 @@
       - id: AU14WeaponRifleM16A2
         amount: 1
       - id: RMCMagazineRifleM16
-        amount: 9
+        amount: 5
+      - id: CMUMagazineRifleM16APExt
+        amount: 1
+      - id: CMUMagazineRifleM16AP
+        amount: 1
+      - id: CMUMagazineRifleM16Extended
+        amount: 2
 
 - type: entity
   parent: RMCKitBase

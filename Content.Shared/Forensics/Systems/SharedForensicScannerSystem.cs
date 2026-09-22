@@ -85,7 +85,8 @@ public sealed partial class SharedForensicScannerSystem : EntitySystem
                 nameof(ForensicScannerComponent.Residues),
                 nameof(ForensicScannerComponent.LastScannedName));
 
-            var scanned = new ForensicScannerScannedEvent(args.Args.Target.Value);
+            // CMU14: event carries the scanner for broadcast consumers
+            var scanned = new ForensicScannerScannedEvent(scanner, args.Args.Target.Value);
             RaiseLocalEvent(scanner.Owner, ref scanned);
         }
 

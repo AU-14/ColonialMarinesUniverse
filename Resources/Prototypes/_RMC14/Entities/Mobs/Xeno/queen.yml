@@ -310,6 +310,17 @@
   - type: XenoToggleChargingKnockback
     enabled: false
   - type: XenoToggleChargingStop
+  - type: XenoRankNames # CMU14
+    rankNames:
+      0: rmc-xeno-young
+      2: rmc-xeno-mature
+      3: rmc-xeno-elder
+      4: rmc-xeno-ancient
+      5: rmc-xeno-prime
+      6: rmc-xeno-apex
+      7: rmc-xeno-royal
+      8: rmc-xeno-empress
+      9: rmc-xeno-empress
   - type: FixedIdentity
     name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart

@@ -575770,14 +575770,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 54.5,3.625
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 83427
     components:
     - type: Transform
       parent: 1
       pos: -3.5,-23.5
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 83430
     components:
@@ -587501,7 +587501,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -184.4514,-44.27175
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 85719
     components:
@@ -587526,7 +587526,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -46.5,7.5
-- proto: RMCGeneratorFusionColonyNoMapIcon
+- proto: CMUGeneratorThermoNoMapIcon
   entities:
   - uid: 85725
     components:

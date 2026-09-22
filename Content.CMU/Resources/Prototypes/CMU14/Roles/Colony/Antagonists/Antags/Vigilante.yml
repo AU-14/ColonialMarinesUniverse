@@ -11,6 +11,10 @@
     color: DarkRed
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
   startingGear: CMUGearVigilante
+  startingSkills:
+    RMCSkillCqc: 2
+    RMCSkillMeleeWeapons: 3
+    RMCSkillPolice: 2
   components:
   - type: Vigilante
   - type: SynthGunAccess
@@ -25,8 +29,11 @@
   - type: AntagSelection
     selectionTime: JobsAssigned
     antags:
-    - !type:FixedAntagCount
+    - !type:RandomAntagCount
       proto: Vigilante
+      range:
+        min: 1
+        max: 2
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -48,7 +55,18 @@
 - type: startingGear
   id: CMUGearVigilante
   equipment:
-    mask: RMCMaskBalaclava
-    suitstorage: RMCBaseballBat
+    head: AU14HeadBeanieclava
+    suitstorage: CMUBaseballBatVigilante
     pocket1: RMCZipties
     pocket2: RMCZipties
+
+- type: entity
+  parent: RMCBaseballBatMetal
+  id: CMUBaseballBatVigilante
+  name: inscribed metal baseball bat
+  description: A heavy metal bat, balanced for breaking more than pitches. A single word, JUSTICE, is stamped into the grip.
+  components:
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 42

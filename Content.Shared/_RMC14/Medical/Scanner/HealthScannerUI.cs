@@ -38,6 +38,7 @@ public sealed class HealthScannerBuiState(
     public bool? CMUHeartStopped;
     public CMUPainShockRisk? CMUPainShockRisk;
     public bool CMUPainShockSuppressed;
+    public string? CMURiderReading;
     public bool CMUExternalBleeding;
     public bool CMUSyntheticPhysiology;
     public HealthScannerDamageReadout Damage = new();

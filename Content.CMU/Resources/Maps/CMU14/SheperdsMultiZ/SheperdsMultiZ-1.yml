@@ -11,7 +11,7 @@ maps:
 grids:
 - 1
 orphans: []
-nullspace: [321424, 321425, 321426, 321427, 321428]
+nullspace: []
 tilemap:
   0: Space
   141: AUSheperdsGrass1
@@ -12895,7 +12895,7 @@ entities:
         chunkSize: 4
     - type: ExplosionAirtightGrid
     - type: ChunkContainer
-- proto: AtmosDeviceFanTiny
+- proto: RMCTinyFan
   entities:
   - uid: 319627
     components:
@@ -67297,7 +67297,7 @@ entities:
     - type: Transform
       pos: -62.5,-172.5
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 320104
     components:

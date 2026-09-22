@@ -4,6 +4,7 @@ using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Power.Nodes;
+using Content.Shared.CMU14.Power;
 using Content.Shared.Coordinates;
 using Content.Shared.NodeContainer;
 using Content.Shared.Power.Components;
@@ -1264,6 +1265,9 @@ namespace Content.IntegrationTests.Tests.Power
             {
                 var map = mapSys.CreateMap(out var mapId);
                 var grid = mapSys.CreateGridEntity(mapId);
+
+                // CMU14: models vanilla APC wiring, keep the map out of RMC area power adoption.
+                entityManager.AddComponent<CMUMapUsesTilePowerComponent>(map);
 
                 const int range = 5;
 

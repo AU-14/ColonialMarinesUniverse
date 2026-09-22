@@ -120,6 +120,8 @@
   - AU14OpforCommand
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFORPlatCo
+
 - type: startingGear
   id: AU14GearGOVFORPlatCo
   equipment:

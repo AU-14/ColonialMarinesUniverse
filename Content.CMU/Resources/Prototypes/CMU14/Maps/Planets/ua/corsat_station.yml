@@ -28,8 +28,6 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    # - AbominationsThreatDS # no xenocf markers
-    - ApeThreatDS
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers
@@ -38,7 +36,9 @@
     # - AbominationsThreatCF # no xenocf markers
     - TribalsThreatCF
     - ApeThreatCF
+    thirdpartyinterval: 1800
     thirdparties:
+    - FreeCompanyRaiders
     - FreelancersSurv
     - WEYUSurvLarge
     - WEYUSurvMedium

@@ -131,11 +131,12 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
 
         _criminalRecords.TryChangeStatus(key.Value, msg.Status, msg.Reason, officer);
 
+        // CMU14: the status strings use {$job}; leaving it out logged an unknown-variable error.
         (string, object)[] args;
         if (reason != null)
-            args = new (string, object)[] { ("name", name), ("officer", officer), ("reason", reason) };
+            args = new (string, object)[] { ("name", name), ("officer", officer), ("reason", reason), ("job", jobName) };
         else
-            args = new (string, object)[] { ("name", name), ("officer", officer) };
+            args = new (string, object)[] { ("name", name), ("officer", officer), ("job", jobName) };
 
         // figure out which radio message to send depending on transition
         var statusString = (oldStatus, msg.Status) switch

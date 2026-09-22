@@ -11,7 +11,7 @@
   playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   overwatchSortPriority: -3
   overwatchRoleName: Fire Team Leaders
-  displayWeight: 5
+  displayWeight: 3
   accessGroups:
   - AU14GovforFTL
 
@@ -155,6 +155,7 @@
   supervisors: au14-job-supervisors-opfor
   accessGroups:
   - AU14OpforFTL
+  useLoadoutOfJob: AU14JobGOVFORRadioTelephoneOperator
 
 - type: startingGear
   id: AU14GearopforRadioTelephoneOperator

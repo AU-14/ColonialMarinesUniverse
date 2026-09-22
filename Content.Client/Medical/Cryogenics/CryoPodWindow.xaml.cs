@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.CMU14.Temperature; // CMU14
 using Content.Client.UserInterface.Controls;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Atmos;
@@ -59,10 +60,12 @@ public sealed partial class CryoPodWindow : FancyWindow
 
         if (hasGas)
         {
-            var celsius = TemperatureHelpers.KelvinToCelsius(msg.GasMix.Temperature);
+            // CMU14: client temperature unit preference
+            var displayTemp = TemperatureDisplay.FromKelvin(msg.GasMix.Temperature);
             Temperature.Text = Loc.GetString("gas-analyzer-window-temperature-val-text",
                                              ("tempK", $"{msg.GasMix.Temperature:0.0}"),
-                                             ("tempC", $"{celsius:0.0}"));
+                                             ("tempC", $"{displayTemp:0.0}"),
+                                             ("unit", TemperatureDisplay.Unit));
         }
 
         // Gas mix segmented bar chart

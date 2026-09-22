@@ -60,11 +60,11 @@
       - cost: 100
         crate: CMUAtmosScanner
       - cost: 400
-        crate: PortableScrubber
+        crate: RMCAirScrubberPortable
       - cost: 300
-        crate: SpaceHeater
+        crate: RMCSpaceHeater
       - cost: 150
-        crate: StorageCanister
+        crate: CMUCanisterEmpty
       - cost: 200
         crate: CMUCanisterAir
       - cost: 200
@@ -75,6 +75,8 @@
         crate: CMUCanisterCarbonDioxide
       - cost: 250
         crate: WaterVaporCanister
+      # The condenser can produce these; before giving it to players, check its output
+      # value per mol stays under what it consumes (economy review todo)
       - cost: 400
         crate: LiquidOxygenCanister
       - cost: 400
@@ -85,10 +87,10 @@
         crate: LiquidCarbonDioxideCanister
       - cost: 500
         crate: CMUCanisterNitrousOxide
-      - cost: 800
+      - cost: 1600
         crate: CMUCanisterPlasma
-      - cost: 2000
-        crate: CMUCanisterPhoron
+      # - cost: 2000
+      #   crate: CMUCanisterPhoron
       - cost: 600
         crate: CMUGasCrystallizer
       - cost: 400
@@ -109,9 +111,29 @@
         crate: CMUGasMinerNitrogenPortable
         maxStock: 1
         stockReplenishDelay: 3600
-      - cost: 800
-        crate: TritiumCanister
-      - cost: 800
-        crate: FrezonCanister
+      # - cost: 800
+      #   crate: TritiumCanister
+      # - cost: 800
+      #   crate: FrezonCanister
       - cost: 700
         crate: CMUCratePhoronSheets
+      - cost: 600
+        crate: AU14CrateBoxFirefighting
+      - cost: 1200
+        crate: CMUCrateFirefightingArmor
+      - cost: 800
+        crate: CMUCrateAtmosFireResponse
+      - cost: 1500
+        crate: CMUCrateTychoRadsuit
+      - cost: 1800
+        crate: CMUCrateRadsuit
+      - cost: 900
+        crate: CMUCrateEVA
+      - cost: 400
+        crate: RMCAirPumpPortable
+      - cost: 300
+        crate: RMCRadiator
+      - cost: 250
+        crate: RMCDirectionalFan
+      - cost: 150
+        crate: RMCTinyFan

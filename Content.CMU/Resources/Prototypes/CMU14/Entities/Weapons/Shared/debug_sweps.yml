@@ -99,3 +99,13 @@
   components:
   - type: Electrified
     enabled: false
+
+- type: entity
+  parent: HolofanProjector
+  id: HolofanProjectorDebug
+  name: holofan projector (debug)
+  description: Debug version with infinite charges.
+  components:
+  - type: HolosignProjector
+    signProto: HoloFan
+    chargeUse: 0

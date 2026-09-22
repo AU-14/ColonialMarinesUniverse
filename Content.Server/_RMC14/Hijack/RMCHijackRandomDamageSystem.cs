@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Hijack;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -18,11 +19,12 @@ namespace Content.Server._RMC14.Hijack;
 
 /// <summary>
 ///     Applies shipwide randomized structural damage after a hijacked dropship lands.
-///     Percentages are calculated from the currently existing targets on the landing map.
+///     Percentages are calculated from the currently existing targets on the ship z-network.
 /// </summary>
 public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
     [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
@@ -81,11 +83,13 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
 
         var map = EnsureComp<RMCHijackActiveMapComponent>(ev.Map);
 
-        // Build pools from the landing map only; hijack damage must never spill into other maps.
+        // Build pools from every deck of the ship z-network; hijack damage is shipwide but
+        // must never spill into maps outside the network.
         var query = EntityQueryEnumerator<RMCHijackRandomDamageTargetComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var comp, out var xform))
         {
-            if (!comp.Enabled || xform.MapUid != ev.Map)
+            if (!comp.Enabled
+                || !_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
 
             if (comp.Category == RMCHijackRandomDamageCategory.Pipe)

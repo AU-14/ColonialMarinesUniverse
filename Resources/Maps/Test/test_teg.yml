@@ -15,6 +15,7 @@ entities:
     - type: MetaData
     - type: Transform
     - type: Map
+    - type: CMUMapUsesTilePower # CMU14: TEG testbed runs the wizden grid, not RMC area power
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree

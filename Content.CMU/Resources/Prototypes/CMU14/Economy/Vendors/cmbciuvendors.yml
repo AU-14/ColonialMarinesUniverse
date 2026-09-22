@@ -476,6 +476,14 @@
       entries:
       - id: AU14CMBCIUHelmet
       - id: RMCHeadCapBureau
+    - name: Flight Visor
+      choices: { CMUPlatoonAirCrewFlightVisor: 1 }
+      entries:
+      - id: AU14GogglesLAH99VisorHighTech
+    - name: Flight Mask
+      choices: { CMUPlatoonAirCrewFlightMask: 1 }
+      entries:
+      - id: AU14MaskUSASFPilotOxygen
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }
       entries:
@@ -646,7 +654,7 @@
       - id: RMCArmorM4RMarshallMedium
         amount: 5
       - id: RMCArmorM4RLight
-        amount: 5 
+        amount: 5
     - name: Backpack
       entries:
       - id: RMCBackpackRTO
@@ -879,7 +887,7 @@
       - id: RMCMagazineSMGPDW90
         amount: 60
       - id: RMCMagazineRifleMAR40
-        amount: 60 
+        amount: 60
       - id: RMCMagazineRifleM16
         amount: 60
     - name: Handguns
@@ -1075,15 +1083,22 @@
         amount: 3
       - id: RMCXM51Case
         amount: 2
-      - id: RMCWeaponLMGM60 
+      - id: RMCWeaponLMGM60
         amount: 2
       - id: RMCWeaponMar50LMG
         amount: 1
       - id: RMCWeaponShotgunXM38
+        amount: 1
     - name: primary ammunition
       entries:
       - id: AU14MagazineRifleM20A
         amount: 200
+      - id: CMUMagazineRifleM16Extended
+        amount: 50
+      - id: CMUMagazineRifleM16AP
+        amount: 35
+      - id: CMUMagazineRifleM16APExt
+        amount: 20
       - id: CMMagazineSMGMP5
         amount: 200
       - id: RMCMagazineSMGPDW90
@@ -1106,7 +1121,7 @@
         amount: 10
       - id: RMCMagazineShotgunXM51
         amount: 10
-      - id: RMCMagazineLMGM60 
+      - id: RMCMagazineLMGM60
         amount: 40
       - id: RMCMagazineMar50LMG
         amount: 20
@@ -1131,7 +1146,7 @@
       - id: RMCCrateBoxBulletsRifle
         amount: 2
       - id: RMCBoxMagazineRifleM16
-        amount: 2 
+        amount: 2
       - id: CMUBoxMagazineSMGMP5
         amount: 2
       - id: CMUBoxMagazineSMGPDW90

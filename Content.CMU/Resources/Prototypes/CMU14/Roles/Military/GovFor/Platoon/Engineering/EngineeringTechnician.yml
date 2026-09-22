@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 1
   id: AU14JobEngineeringTechBaseAbstract
   name: au14-job-name-govforengineeringtech
   description: au14-job-description-govforengineeringtech
@@ -130,6 +131,7 @@
   dummyStartingGear: AU14GearOPFOREngineeringTechDummy
   accessGroups:
   - AU14OpforEngineer
+  useLoadoutOfJob: AU14JobGOVFOREngineeringTech
 
 - type: startingGear
   id: AU14GearOPFOREngineeringTech

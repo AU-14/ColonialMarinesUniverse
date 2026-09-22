@@ -1,0 +1,2607 @@
+# Source: https://github.com/cmss13-devs/cmss13/pull/12866
+meta:
+  format: 7
+  category: Map
+  engineVersion: 264.0.0
+  forkId: ''
+  forkVersion: ''
+  time: '2026-09-18T00:00:00'
+  entityCount: 333
+maps:
+- 333
+grids:
+- 1
+orphans: []
+nullspace: []
+tilemap:
+  0: Space
+  1: CMShuttleTileInvisible
+  2: CMUMohawkTile04d8a493a33e
+  3: CMUMohawkTile07377fd50c5a
+  4: CMUMohawkTile1a8b5607580d
+  5: CMUMohawkTile1e31fae43bed
+  6: CMUMohawkTile3d52b4b4cb32
+  7: CMUMohawkTilea45b4b18c2a7
+  8: CMUMohawkTilea77b3efb8241
+  9: CMUMohawkTileab90cc6ce96c
+  10: CMUMohawkTileaeefcbf1422c
+  11: CMUMohawkTiled34b27335b56
+  12: CMUMohawkTiledf4cccfde2d2
+  13: CMUMohawkTilee9c571ca2285
+  14: CMUMohawkTileed90f4b2ecc8
+  15: CMUMohawkTilef21b2038adc7
+  16: CMUMohawkTilefd3b681183fe
+entities:
+- proto: ''
+  entities:
+  - uid: 1
+    components:
+    - type: MetaData
+      name: Omaha (Navy)
+    - type: Transform
+      parent: 333
+    - type: MapGrid
+      canSplit: false
+      chunks:
+        -1,-1:
+          ind: -1,-1
+          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAABQAAAAAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAABQAAAAAAAAIAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAABQAAAAAAAAUAAAAAAAACAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAUAAAAAAAAFAAAAAAAAAgAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAFAAAAAAAABQAAAAAAAAIAAAAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAABQAAAAAAAAUAAAAAAAACAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAUAAAAAAAAFAAAAAAAAAgAAAAAAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAABQAAAAAAAAIAAAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAgAAAAAAAA==
+          version: 7
+        -1,0:
+          ind: -1,0
+          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAAAAAAAAUAAAAAAAACAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAAAAABAAAAAAAAAQAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAUAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAIAAAAAAAACAAAAAAAAAQAAAAAAAAUAAAAAAAACAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAACAAAAAAAAAgAAAAAAAAEAAAAAAAAFAAAAAAAAAgAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAgAAAAAAAAIAAAAAAAABAAAAAAAAAQAAAAAAAAUAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAACAAAAAAAAAgAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAgAAAAAAAAIAAAAAAAACAAAAAAAAAQAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAABQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+        0,-1:
+          ind: 0,-1
+          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAgAAAAAAAAIAAAAAAAAFAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAACAAAAAAAABQAAAAAAAAUAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAJAAAAAAAAAgAAAAAAAAUAAAAAAAAFAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANAAAAAAAAAwAAAAAAAAIAAAAAAAAFAAAAAAAABQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAAAAAgAAAAAAAACAAAAAAAABQAAAAAAAAUAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AAAAAAAAGAAAAAAAAAgAAAAAAAAUAAAAAAAAFAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAABQAAAAAAAAIAAAAAAAAFAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAIAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+        0,0:
+          ind: 0,0
+          tiles: BQAAAAAAAAIAAAAAAAACAAAAAAAABQAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAACAAAAAAAAAQAAAAAAAAEAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAgAAAAAAAAUAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAIAAAAAAAACAAAAAAAABQAAAAAAAAEAAAAAAAACAAAAAAAAAgAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAACAAAAAAAAAgAAAAAAAAUAAAAAAAABAAAAAAAAAgAAAAAAAAIAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAAAAAgAAAAAAAAUAAAAAAAABAAAAAAAAAQAAAAAAAAIAAAAAAAACAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAIAAAAAAAACAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAACAAAAAAAAAQAAAAAAAAIAAAAAAAACAAAAAAAAAgAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAABQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAUAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+    - type: Physics
+      bodyType: Dynamic
+      fixedRotation: false
+    - type: Fixtures
+      fixtures: {}
+    - type: Gravity
+      enabled: true
+    - type: GridAtmosphere
+      version: 2
+      data:
+        tiles:
+          -2,-3:
+            0: 32768
+          -2,-2:
+            0: 34952
+          -2,-1:
+            0: 2184
+          -2,0:
+            0: 60416
+          -2,1:
+            0: 52974
+          -2,2:
+            0: 8
+          -1,-3:
+            0: 65518
+          -1,-2:
+            0: 65535
+          -1,-1:
+            0: 65535
+          -1,0:
+            0: 65535
+          -1,1:
+            0: 65535
+          -1,2:
+            0: 3279
+          0,-3:
+            0: 65535
+          0,-2:
+            0: 65535
+          0,-1:
+            0: 65535
+          0,0:
+            0: 65535
+          0,1:
+            0: 65535
+          0,2:
+            0: 1919
+          1,-3:
+            0: 12544
+          1,-2:
+            0: 13107
+          1,-1:
+            0: 4915
+          1,0:
+            0: 63249
+          1,1:
+            0: 32767
+          1,2:
+            0: 3
+        uniqueMixes:
+        - volume: 2500
+          temperature: 293.15
+          moles:
+          - 21.824879
+          - 82.10312
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+        chunkSize: 4
+    - type: Shuttle
+    - type: Dropship
+      tacticalLandFootprint: 17,24
+    - type: MultiDeckDropship
+      landingOffset: 1
+      exteriorDecks:
+      - -1
+      deckPaths:
+        -1: /Maps/CMU14/ShuttlesDropships/Mohawk/omaha_navy_lower.yml
+        1: /Maps/CMU14/ShuttlesDropships/Mohawk/omaha_navy_upper.yml
+    - type: ShipFaction
+      faction: govfor
+    - type: MohawkMechanisms
+- proto: WarpPoint
+  entities:
+  - uid: 2
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,0.5
+      gridTraversal: false
+    - type: MetaData
+      name: Omaha (Navy) cabin
+- proto: CMUMohawkOmahaNavyLeft306ff5bc5730
+  entities:
+  - uid: 3
+    components:
+    - type: Transform
+      parent: 1
+      pos: -7.5,5.5
+- proto: CMUMohawkOmahaNavyLeft201cece01db9
+  entities:
+  - uid: 4
+    components:
+    - type: Transform
+      parent: 1
+      pos: -7.5,4.5
+- proto: CMUMohawkOmahaNavyLeft108b3e9ecc51
+  entities:
+  - uid: 5
+    components:
+    - type: Transform
+      parent: 1
+      pos: -7.5,3.5
+- proto: CMUMohawkOmahaNavyLeft013781c390e7
+  entities:
+  - uid: 6
+    components:
+    - type: Transform
+      parent: 1
+      pos: -6.5,6.5
+- proto: CMUMohawkOmahaNavyLeft3144df0047c4
+  entities:
+  - uid: 7
+    components:
+    - type: Transform
+      parent: 1
+      pos: -6.5,5.5
+- proto: CMUMohawkOmahaNavyLeft218699321e20
+  entities:
+  - uid: 8
+    components:
+    - type: Transform
+      parent: 1
+      pos: -6.5,4.5
+- proto: CMUMohawkOmahaNavyLeft11ae98e585a4
+  entities:
+  - uid: 9
+    components:
+    - type: Transform
+      parent: 1
+      pos: -6.5,3.5
+- proto: CMUMohawkOmahaNavyLeft21dfa8647a5a
+  entities:
+  - uid: 10
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,8.5
+- proto: CMUMohawkOmahaNavyLeft11f55749379a
+  entities:
+  - uid: 11
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,7.5
+- proto: CMUMohawkOmahaNavyLeft02977b444e83
+  entities:
+  - uid: 12
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,6.5
+- proto: CMUMohawkOmahaNavyLeft32b5253f45cd
+  entities:
+  - uid: 13
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,5.5
+- proto: CMUMohawkOmahaNavyLeft22ca03c778f8
+  entities:
+  - uid: 14
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,4.5
+- proto: CMUMohawkOmahaNavyLeft1285d6a24335
+  entities:
+  - uid: 15
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,3.5
+- proto: CMUMohawkOmahaNavyLeft00bb2a2576ca
+  entities:
+  - uid: 16
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,2.5
+- proto: CMUMohawkOmahaNavyLowerLeftWingd8bba1680b
+  entities:
+  - uid: 17
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,2.5
+- proto: CMUMohawkOmahaNavyLeft222b77cb66ae
+  entities:
+  - uid: 18
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,8.5
+- proto: CMUMohawkOmahaNavyLeft12ad57dcb37b
+  entities:
+  - uid: 19
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,7.5
+- proto: CMUMohawkOmahaNavyLeft03e65ae59529
+  entities:
+  - uid: 20
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,6.5
+- proto: CMUMohawkOmahaNavyLeft33f378f3fb91
+  entities:
+  - uid: 21
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,5.5
+- proto: CMUMohawkOmahaNavyLeft23037ecebf29
+  entities:
+  - uid: 22
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,4.5
+- proto: CMUMohawkOmahaNavyLeft13ef5bd6517d
+  entities:
+  - uid: 23
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,3.5
+- proto: CMUMohawkOmahaNavyLeft01ea95ae6b08
+  entities:
+  - uid: 24
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,2.5
+- proto: CMUMohawkOmahaNavyBody50ee8449c7fc
+  entities:
+  - uid: 25
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,1.5
+- proto: CMUMohawkOmahaNavyBody406094c2d2b4
+  entities:
+  - uid: 26
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,0.5
+- proto: CMUMohawkOmahaNavyBody309f5b2892b6
+  entities:
+  - uid: 27
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-0.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha2f44fc2d03
+  entities:
+  - uid: 28
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-1.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha669a53303f
+  entities:
+  - uid: 29
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-2.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha57d9c599f3
+  entities:
+  - uid: 30
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-3.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha6d47e71abe
+  entities:
+  - uid: 31
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-4.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha70b56a2033
+  entities:
+  - uid: 32
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-5.5
+- proto: CMUMohawkOmahaNavyDropshipOmahae3d02524f6
+  entities:
+  - uid: 33
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-6.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha7d66ebb64b
+  entities:
+  - uid: 34
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-7.5
+- proto: CMUMohawkOmahaNavyBottom30e5557891f8
+  entities:
+  - uid: 35
+    components:
+    - type: Transform
+      parent: 1
+      pos: -4.5,-8.5
+- proto: CMUMohawkOmahaNavyLeft23bc48707837
+  entities:
+  - uid: 36
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,8.5
+- proto: CMUMohawkOmahaNavyLeft13331c343dc2
+  entities:
+  - uid: 37
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,7.5
+- proto: CMUMohawkOmahaNavyLeft04f33d402a90
+  entities:
+  - uid: 38
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,6.5
+- proto: CMUMohawkOmahaNavyWeaponHardpointLeft776347df35
+  entities:
+  - uid: 39
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,6.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha1fbc647019
+  entities:
+  - uid: 40
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,5.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha3e8a58d9cc
+  entities:
+  - uid: 41
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,4.5
+- proto: CMUMohawkOmahaNavyLeft14a24dc877d3
+  entities:
+  - uid: 42
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,3.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha7d0db1495b
+  entities:
+  - uid: 43
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,3.5
+- proto: CMUMohawkOmahaNavyLeft03d1fabb5043
+  entities:
+  - uid: 44
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,2.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha6eb29e319e
+  entities:
+  - uid: 45
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,2.5
+- proto: CMUMohawkOmahaNavyOmaha6a2fd58c52
+  entities:
+  - uid: 46
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,1.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha71577ed921
+  entities:
+  - uid: 47
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,1.5
+- proto: CMUMohawkOmahaNavyLight9338e70f86
+  entities:
+  - uid: 48
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,0.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha2f44fc2d03
+  entities:
+  - uid: 49
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-0.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha61fb934e52
+  entities:
+  - uid: 50
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-1.5
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 51
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-2.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 52
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-2.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyLightd7964ff1ef
+  entities:
+  - uid: 53
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-3.5
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 54
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-3.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 55
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-3.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 56
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-4.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 57
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-4.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 58
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-5.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 59
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-5.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 60
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-6.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 61
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-6.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha1ca49d6025
+  entities:
+  - uid: 62
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-7.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha7d66ebb64b
+  entities:
+  - uid: 63
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-8.5
+- proto: CMUMohawkOmahaNavyBottom30e5557891f8
+  entities:
+  - uid: 64
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-9.5
+- proto: CMUMohawkOmahaNavyLeft241732a27456
+  entities:
+  - uid: 65
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,8.5
+- proto: CMUMohawkOmahaNavyLeft146932739127
+  entities:
+  - uid: 66
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,7.5
+- proto: CMUMohawkOmahaNavyWeaponHardpointLeft776347df35
+  entities:
+  - uid: 67
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,7.5
+- proto: CMUMohawkOmahaNavyDropshipOmahaa169ecc0fb
+  entities:
+  - uid: 68
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,6.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha3947bd89f9
+  entities:
+  - uid: 69
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,5.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha5856d33933
+  entities:
+  - uid: 70
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,4.5
+- proto: CMUMohawkOmahaNavyLightd7964ff1ef
+  entities:
+  - uid: 71
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,4.5
+- proto: CMUMohawkOmahaNavyDropshipd87acb8c7a
+  entities:
+  - uid: 72
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,3.5
+- proto: CMUMohawkOmahaNavyDropshipVendorDummy12aea5ecec
+  entities:
+  - uid: 73
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,3.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha7c81f7728f
+  entities:
+  - uid: 74
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,2.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha07607ac10e
+  entities:
+  - uid: 75
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,1.5
+- proto: CMUMohawkOmahaNavyOmaha3098f2de4a
+  entities:
+  - uid: 76
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,0.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha1359023939
+  entities:
+  - uid: 77
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-0.5
+- proto: CMUMohawkOmahaNavyOmaha6a2fd58c52
+  entities:
+  - uid: 78
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-1.5
+- proto: CMUMohawkOmahaNavyWallMedd286513314
+  entities:
+  - uid: 79
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-1.5
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 80
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-2.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 81
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-2.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 82
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-3.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 83
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-3.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 84
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-4.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 85
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-4.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 86
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-5.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 87
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-5.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 88
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-6.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha1ca49d6025
+  entities:
+  - uid: 89
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-8.5
+- proto: CMUMohawkOmahaNavyDropshipOmahad5ac8f1828
+  entities:
+  - uid: 90
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-9.5
+- proto: CMUMohawkOmahaNavyBottom104727a9d354
+  entities:
+  - uid: 91
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-10.5
+- proto: CMUMohawkOmahaNavyBottom00f8376e3156
+  entities:
+  - uid: 92
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-11.5
+- proto: CMUMohawkOmahaNavyNose10f3b028a60b
+  entities:
+  - uid: 93
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,10.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyNose00816d9a4567
+  entities:
+  - uid: 94
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,9.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha4dc2a71e8c
+  entities:
+  - uid: 95
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,8.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha3c21072e2d
+  entities:
+  - uid: 96
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,7.5
+- proto: CMUMohawkOmahaNavyDropshipOmahaa6b1243ad6
+  entities:
+  - uid: 97
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,6.5
+- proto: CMUMohawkOmahaNavyOmahaPilota3b48b63a9
+  entities:
+  - uid: 98
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,5.5
+- proto: CMUMohawkOmahaNavyOmahaPilotba141ec2be
+  entities:
+  - uid: 99
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,5.5
+- proto: CMUMohawkOmahaNavyPanelHalf25309b594f
+  entities:
+  - uid: 100
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,4.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPanelHalf25309b594f
+  entities:
+  - uid: 101
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,3.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyOmahaPilot0ca6fca404
+  entities:
+  - uid: 102
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,2.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmahaPilot38b358d7ef
+  entities:
+  - uid: 103
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,2.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha26681e347f
+  entities:
+  - uid: 104
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,1.5
+- proto: CMUMohawkOmahaNavyOmahaHatchLeft4678809d3a
+  entities:
+  - uid: 105
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,0.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha3860e36895
+  entities:
+  - uid: 106
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-0.5
+- proto: CMUMohawkOmahaNavyPlatformDecal308146182e
+  entities:
+  - uid: 107
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-1.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal308146182e
+  entities:
+  - uid: 108
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-2.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal308146182e
+  entities:
+  - uid: 109
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-3.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal308146182e
+  entities:
+  - uid: 110
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-4.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPanelHalfbd53cf9061
+  entities:
+  - uid: 111
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-5.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal308146182e
+  entities:
+  - uid: 112
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-5.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPanelHalfbd53cf9061
+  entities:
+  - uid: 113
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-6.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal308146182e
+  entities:
+  - uid: 114
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-6.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal308146182e
+  entities:
+  - uid: 115
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-7.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyOmahaPassenger94464fb642
+  entities:
+  - uid: 116
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmahaPassengere2e1338868
+  entities:
+  - uid: 117
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal308146182e
+  entities:
+  - uid: 118
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-8.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha3703ae4832
+  entities:
+  - uid: 119
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-9.5
+- proto: CMUMohawkOmahaNavyBottom119da1cce715
+  entities:
+  - uid: 120
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-10.5
+- proto: CMUMohawkOmahaNavyBottom0191a9cf3a34
+  entities:
+  - uid: 121
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-11.5
+- proto: CMUMohawkOmahaNavyNose1184de6b2624
+  entities:
+  - uid: 122
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,10.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmaha48279cda78
+  entities:
+  - uid: 123
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,9.5
+- proto: CMUMohawkOmahaNavyOmahaPilot9e5b91c0ba
+  entities:
+  - uid: 124
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,9.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyNose013ae82d81dc
+  entities:
+  - uid: 125
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,9.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyPanelFull49fca88761
+  entities:
+  - uid: 126
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,9.5
+- proto: CMUMohawkOmahaNavyPlatformd32a6bf939
+  entities:
+  - uid: 127
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyPanelFull49fca88761
+  entities:
+  - uid: 128
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,8.5
+- proto: CMUMohawkOmahaNavyDropshipOmahac543afc4e9
+  entities:
+  - uid: 129
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,7.5
+- proto: CMUMohawkOmahaNavyDecal94430644fb
+  entities:
+  - uid: 130
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,7.5
+- proto: CMUMohawkOmahaNavyDropshipOmahac3bbabb17c
+  entities:
+  - uid: 131
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,6.5
+- proto: CMUMohawkOmahaNavyOmaha6a2fd58c52
+  entities:
+  - uid: 132
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,5.5
+- proto: CMUMohawkOmahaNavyDecal94430644fb
+  entities:
+  - uid: 133
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,5.5
+- proto: CMUMohawkOmahaNavyOmaha00ceda5e26
+  entities:
+  - uid: 134
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,1.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 135
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-1.5
+    - type: MohawkRampSegment
+      stage: 4
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 136
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-2.5
+    - type: MohawkRampSegment
+      stage: 3
+- proto: CMUMohawkOmahaNavyBorder300548053a52
+  entities:
+  - uid: 137
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-2.5
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 138
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-3.5
+    - type: MohawkRampSegment
+      stage: 2
+- proto: CMUMohawkOmahaNavyBorder206cff84cd98
+  entities:
+  - uid: 139
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-3.5
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 140
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-4.5
+    - type: MohawkRampSegment
+      stage: 1
+- proto: CMUMohawkOmahaNavyBorder1005af785755
+  entities:
+  - uid: 141
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-4.5
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 142
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-5.5
+    - type: MohawkRampSegment
+      stage: 0
+- proto: CMUMohawkOmahaNavyBorder007f701006c3
+  entities:
+  - uid: 143
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-5.5
+- proto: CMUMohawkOmahaNavyDropshipOmahacc59123a16
+  entities:
+  - uid: 144
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-6.5
+- proto: CMUMohawkOmahaNavyOmahaPassenger735764f85c
+  entities:
+  - uid: 145
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-7.5
+- proto: CMUMohawkOmahaNavyOmahaPassenger94464fb642
+  entities:
+  - uid: 146
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmahaPassengere2e1338868
+  entities:
+  - uid: 147
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha50bfdb4449
+  entities:
+  - uid: 148
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-9.5
+- proto: CMUMohawkOmahaNavyBottom12a624818e0c
+  entities:
+  - uid: 149
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-10.5
+- proto: CMUMohawkOmahaNavyBottom02e4e1928357
+  entities:
+  - uid: 150
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-11.5
+- proto: CMUMohawkOmahaNavyNose123e7df2a41e
+  entities:
+  - uid: 151
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,10.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmahac853dc36ee
+  entities:
+  - uid: 152
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,9.5
+- proto: CMUMohawkOmahaNavyStairsPlatformebced932be
+  entities:
+  - uid: 153
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDecal94430644fb
+  entities:
+  - uid: 154
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,7.5
+- proto: CMUMohawkOmahaNavyOmaha35179224a8
+  entities:
+  - uid: 155
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,6.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDecal94430644fb
+  entities:
+  - uid: 156
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,5.5
+- proto: CMUMohawkOmahaNavyOmahaff3cff27b9
+  entities:
+  - uid: 157
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,3.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha882932eced
+  entities:
+  - uid: 158
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,2.5
+- proto: CMUMohawkOmahaNavyDropshipOmahab96b34e24c
+  entities:
+  - uid: 159
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,1.5
+- proto: CMUMohawkOmahaNavyOmahaAftc2defca88a
+  entities:
+  - uid: 160
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,0.5
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 161
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-1.5
+    - type: MohawkRampSegment
+      stage: 4
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 162
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-2.5
+    - type: MohawkRampSegment
+      stage: 3
+- proto: CMUMohawkOmahaNavyBorder31ad136672f2
+  entities:
+  - uid: 163
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-2.5
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 164
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-3.5
+    - type: MohawkRampSegment
+      stage: 2
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 165
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-4.5
+    - type: MohawkRampSegment
+      stage: 1
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 166
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-5.5
+    - type: MohawkRampSegment
+      stage: 0
+- proto: CMUMohawkOmahaNavyBorder01bf0c46482d
+  entities:
+  - uid: 167
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-5.5
+- proto: CMUMohawkOmahaNavyLight9338e70f86
+  entities:
+  - uid: 168
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-5.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha6f0f823869
+  entities:
+  - uid: 169
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-6.5
+- proto: CMUMohawkOmahaNavyOmahaPassenger0bd6b0d17d
+  entities:
+  - uid: 170
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-7.5
+- proto: CMUMohawkOmahaNavyOmahaPassenger735764f85c
+  entities:
+  - uid: 171
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-7.5
+- proto: CMUMohawkOmahaNavyOmahaPassengere2e1338868
+  entities:
+  - uid: 172
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmahaPassenger94464fb642
+  entities:
+  - uid: 173
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyLight9338e70f86
+  entities:
+  - uid: 174
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-8.5
+- proto: CMUMohawkOmahaNavyDropshipOmahae070bdfa6f
+  entities:
+  - uid: 175
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-9.5
+- proto: CMUMohawkOmahaNavyBottom135245d7ec28
+  entities:
+  - uid: 176
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-10.5
+- proto: CMUMohawkOmahaNavyBottom03468fecf2b7
+  entities:
+  - uid: 177
+    components:
+    - type: Transform
+      parent: 1
+      pos: 0.5,-11.5
+- proto: CMUMohawkOmahaNavyNose13e8970c38f7
+  entities:
+  - uid: 178
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,10.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDropshipOmahab722f7bee0
+  entities:
+  - uid: 179
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,9.5
+- proto: CMUMohawkOmahaNavyOmahaPilot9e5b91c0ba
+  entities:
+  - uid: 180
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,9.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyNose02e02aa6ff05
+  entities:
+  - uid: 181
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,9.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyPanelFull49fca88761
+  entities:
+  - uid: 182
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,9.5
+- proto: CMUMohawkOmahaNavyOmaha5bd1df0d2c
+  entities:
+  - uid: 183
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,8.5
+- proto: CMUMohawkOmahaNavyPlatformd32a6bf939
+  entities:
+  - uid: 184
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyPanelFull49fca88761
+  entities:
+  - uid: 185
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,8.5
+- proto: CMUMohawkOmahaNavyOmahaa6e99a8ffd
+  entities:
+  - uid: 186
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,7.5
+- proto: CMUMohawkOmahaNavyOmahacac2b68048
+  entities:
+  - uid: 187
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,7.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDecal94430644fb
+  entities:
+  - uid: 188
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,7.5
+- proto: CMUMohawkOmahaNavyLight9338e70f86
+  entities:
+  - uid: 189
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,7.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha36d32ca803
+  entities:
+  - uid: 190
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,6.5
+- proto: CMUMohawkOmahaNavyDecal94430644fb
+  entities:
+  - uid: 191
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,5.5
+- proto: CMUMohawkOmahaNavyWallMede96e054ca8
+  entities:
+  - uid: 192
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,5.5
+- proto: CMUMohawkOmahaNavyOmaha00ceda5e26
+  entities:
+  - uid: 193
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,1.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 194
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-1.5
+    - type: MohawkRampSegment
+      stage: 4
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 195
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-2.5
+    - type: MohawkRampSegment
+      stage: 3
+- proto: CMUMohawkOmahaNavyBorder32fcc8cff1cb
+  entities:
+  - uid: 196
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-2.5
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 197
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-3.5
+    - type: MohawkRampSegment
+      stage: 2
+- proto: CMUMohawkOmahaNavyBorder21b4cb92ba9d
+  entities:
+  - uid: 198
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-3.5
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 199
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-4.5
+    - type: MohawkRampSegment
+      stage: 1
+- proto: CMUMohawkOmahaNavyBorder11bb6aeff949
+  entities:
+  - uid: 200
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-4.5
+- proto: CMUMohawkRampMarker
+  entities:
+  - uid: 201
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-5.5
+    - type: MohawkRampSegment
+      stage: 0
+- proto: CMUMohawkOmahaNavyBorder0218059c512b
+  entities:
+  - uid: 202
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-5.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha3860e36895
+  entities:
+  - uid: 203
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-6.5
+- proto: CMUMohawkOmahaNavyOmahaPassenger0bd6b0d17d
+  entities:
+  - uid: 204
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-7.5
+- proto: CMUMohawkOmahaNavyOmahaPassengere2e1338868
+  entities:
+  - uid: 205
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmahaPassenger94464fb642
+  entities:
+  - uid: 206
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha9009c43a11
+  entities:
+  - uid: 207
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-9.5
+- proto: CMUMohawkOmahaNavyBottom147c6ae76471
+  entities:
+  - uid: 208
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-10.5
+- proto: CMUMohawkOmahaNavyBottom04b999c56a3d
+  entities:
+  - uid: 209
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,-11.5
+- proto: CMUMohawkOmahaNavyNose1499ab6b292d
+  entities:
+  - uid: 210
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,10.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyNose03556a206c65
+  entities:
+  - uid: 211
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,9.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha4de876682d
+  entities:
+  - uid: 212
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,8.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha1b4489e2d5
+  entities:
+  - uid: 213
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,7.5
+- proto: CMUMohawkOmahaNavyDropshipOmahac34ea84eec
+  entities:
+  - uid: 214
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,6.5
+- proto: CMUMohawkOmahaNavyOmahaPilotba141ec2be
+  entities:
+  - uid: 215
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,5.5
+- proto: CMUMohawkOmahaNavyOmahaPilota3b48b63a9
+  entities:
+  - uid: 216
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,5.5
+- proto: CMUMohawkOmahaNavyPanelHalfbd53cf9061
+  entities:
+  - uid: 217
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,4.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPanelHalfbd53cf9061
+  entities:
+  - uid: 218
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,3.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyOmahaPilot38b358d7ef
+  entities:
+  - uid: 219
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,2.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmahaPilot0ca6fca404
+  entities:
+  - uid: 220
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,2.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha2fd575a54a
+  entities:
+  - uid: 221
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,1.5
+- proto: CMUMohawkOmahaNavyOmahaHatchRight2926f6bbc5
+  entities:
+  - uid: 222
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,0.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmahacc59123a16
+  entities:
+  - uid: 223
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-0.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha78b9d5179f
+  entities:
+  - uid: 224
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-1.5
+- proto: CMUMohawkOmahaNavyPlatformDecal67d084f449
+  entities:
+  - uid: 225
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-1.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal67d084f449
+  entities:
+  - uid: 226
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-2.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal67d084f449
+  entities:
+  - uid: 227
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-3.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal67d084f449
+  entities:
+  - uid: 228
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-4.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPanelHalf25309b594f
+  entities:
+  - uid: 229
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-5.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal67d084f449
+  entities:
+  - uid: 230
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-5.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPanelHalf25309b594f
+  entities:
+  - uid: 231
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-6.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal67d084f449
+  entities:
+  - uid: 232
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-6.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal67d084f449
+  entities:
+  - uid: 233
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-7.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyOmahaPassengere2e1338868
+  entities:
+  - uid: 234
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyOmahaPassenger94464fb642
+  entities:
+  - uid: 235
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-8.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkOmahaNavyPlatformDecal67d084f449
+  entities:
+  - uid: 236
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-8.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmahadfe1e44d6d
+  entities:
+  - uid: 237
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-9.5
+- proto: CMUMohawkOmahaNavyBottom15d1497f78f3
+  entities:
+  - uid: 238
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-10.5
+- proto: CMUMohawkOmahaNavyBottom05d16297de97
+  entities:
+  - uid: 239
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-11.5
+- proto: CMUMohawkOmahaNavyRight210378da27bf
+  entities:
+  - uid: 240
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,8.5
+- proto: CMUMohawkOmahaNavyRight11b066112a16
+  entities:
+  - uid: 241
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,7.5
+- proto: CMUMohawkOmahaNavyWeaponHardpointRight7c1ef09864
+  entities:
+  - uid: 242
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,7.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha2f59bbd22b
+  entities:
+  - uid: 243
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,6.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha31af2389c3
+  entities:
+  - uid: 244
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,5.5
+- proto: CMUMohawkOmahaNavyOmahaCommanderaa7ac8be36
+  entities:
+  - uid: 245
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,4.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyLightc896f21898
+  entities:
+  - uid: 246
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,4.5
+- proto: CMUMohawkOmahaNavyOmaha8cbb4145b0
+  entities:
+  - uid: 247
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,3.5
+- proto: CMUMohawkOmahaNavyOmahaCommander5f182aff80
+  entities:
+  - uid: 248
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,3.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyOverwatchDummyc35470fc58
+  entities:
+  - uid: 249
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,3.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha03de5e4a37
+  entities:
+  - uid: 250
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,2.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha560ef56bdd
+  entities:
+  - uid: 251
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,1.5
+- proto: CMUMohawkOmahaNavyOmaha25bd513ae7
+  entities:
+  - uid: 252
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,0.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha6f0f823869
+  entities:
+  - uid: 253
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-0.5
+- proto: CMUMohawkOmahaNavyOmaha6a2fd58c52
+  entities:
+  - uid: 254
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-1.5
+- proto: CMUMohawkOmahaNavyWallMedcc93eb820a
+  entities:
+  - uid: 255
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-1.5
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 256
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-2.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 257
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-2.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 258
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-3.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 259
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-3.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 260
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-4.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 261
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-4.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 262
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-5.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer91a71b7f04
+  entities:
+  - uid: 263
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-5.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerfae113eec8
+  entities:
+  - uid: 264
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-6.5
+      rot: 1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha2f44fc2d03
+  entities:
+  - uid: 265
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-8.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha474156813c
+  entities:
+  - uid: 266
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-9.5
+- proto: CMUMohawkOmahaNavyBottom16c080b0573a
+  entities:
+  - uid: 267
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-10.5
+- proto: CMUMohawkOmahaNavyBottom06fa88450e15
+  entities:
+  - uid: 268
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-11.5
+- proto: CMUMohawkOmahaNavyRight227dcd286d81
+  entities:
+  - uid: 269
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,8.5
+- proto: CMUMohawkOmahaNavyRight1205927f3a19
+  entities:
+  - uid: 270
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,7.5
+- proto: CMUMohawkOmahaNavyRight0166d663cebc
+  entities:
+  - uid: 271
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,6.5
+- proto: CMUMohawkOmahaNavyWeaponHardpointRight7c1ef09864
+  entities:
+  - uid: 272
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,6.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha6dd2371606
+  entities:
+  - uid: 273
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,5.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha951050d941
+  entities:
+  - uid: 274
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,4.5
+- proto: CMUMohawkOmahaNavyRight106e8ca5c1c1
+  entities:
+  - uid: 275
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,3.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha073b06e7cc
+  entities:
+  - uid: 276
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,3.5
+- proto: CMUMohawkOmahaNavyRight00f0afd400f1
+  entities:
+  - uid: 277
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,2.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha7e946dd0fb
+  entities:
+  - uid: 278
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,2.5
+- proto: CMUMohawkOmahaNavyOmaha6a2fd58c52
+  entities:
+  - uid: 279
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,1.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha5856d33933
+  entities:
+  - uid: 280
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,1.5
+- proto: CMUMohawkOmahaNavyLight9338e70f86
+  entities:
+  - uid: 281
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,0.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha1ca49d6025
+  entities:
+  - uid: 282
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-0.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha7d66ebb64b
+  entities:
+  - uid: 283
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-1.5
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 284
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-2.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 285
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-2.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyLightc896f21898
+  entities:
+  - uid: 286
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-3.5
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 287
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-3.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 288
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-3.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 289
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-4.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 290
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-4.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 291
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-5.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 292
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-5.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayer7d1bd1f6c5
+  entities:
+  - uid: 293
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-6.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyAdjustableLayerf84e8b9774
+  entities:
+  - uid: 294
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-6.5
+      rot: -1.5707963267948966 rad
+- proto: CMUMohawkOmahaNavyDropshipOmaha2f44fc2d03
+  entities:
+  - uid: 295
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-7.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha474156813c
+  entities:
+  - uid: 296
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-8.5
+- proto: CMUMohawkOmahaNavyBottom36d3625b6158
+  entities:
+  - uid: 297
+    components:
+    - type: Transform
+      parent: 1
+      pos: 4.5,-9.5
+- proto: CMUMohawkOmahaNavyRight237222d1af01
+  entities:
+  - uid: 298
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,8.5
+- proto: CMUMohawkOmahaNavyRight13311f994cf9
+  entities:
+  - uid: 299
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,7.5
+- proto: CMUMohawkOmahaNavyRight02e61695d4c7
+  entities:
+  - uid: 300
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,6.5
+- proto: CMUMohawkOmahaNavyRight30e6fa010833
+  entities:
+  - uid: 301
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,5.5
+- proto: CMUMohawkOmahaNavyRight2066a9173d44
+  entities:
+  - uid: 302
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,4.5
+- proto: CMUMohawkOmahaNavyRight11f650b92539
+  entities:
+  - uid: 303
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,3.5
+- proto: CMUMohawkOmahaNavyRight01f767331fdf
+  entities:
+  - uid: 304
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,2.5
+- proto: CMUMohawkOmahaNavyBody51ba44fa8c85
+  entities:
+  - uid: 305
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,1.5
+- proto: CMUMohawkOmahaNavyBody419b6bb2ac7a
+  entities:
+  - uid: 306
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,0.5
+- proto: CMUMohawkOmahaNavyBody313b06c96bd8
+  entities:
+  - uid: 307
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-0.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha1ca49d6025
+  entities:
+  - uid: 308
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-1.5
+- proto: CMUMohawkOmahaNavyDropshipOmahaea81968d66
+  entities:
+  - uid: 309
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-2.5
+- proto: CMUMohawkOmahaNavyDropshipOmahaece21473a3
+  entities:
+  - uid: 310
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-3.5
+- proto: CMUMohawkOmahaNavyDropshipOmahac7a17ce6d6
+  entities:
+  - uid: 311
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-4.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha2ec109e968
+  entities:
+  - uid: 312
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-5.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha9e03db933d
+  entities:
+  - uid: 313
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-6.5
+- proto: CMUMohawkOmahaNavyDropshipOmaha61fb934e52
+  entities:
+  - uid: 314
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-7.5
+- proto: CMUMohawkOmahaNavyBottom36d3625b6158
+  entities:
+  - uid: 315
+    components:
+    - type: Transform
+      parent: 1
+      pos: 5.5,-8.5
+- proto: CMUMohawkOmahaNavyRight24d6b667865a
+  entities:
+  - uid: 316
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,8.5
+- proto: CMUMohawkOmahaNavyRight1410a0eec3e8
+  entities:
+  - uid: 317
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,7.5
+- proto: CMUMohawkOmahaNavyRight031107bf46d2
+  entities:
+  - uid: 318
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,6.5
+- proto: CMUMohawkOmahaNavyRight314e60f928be
+  entities:
+  - uid: 319
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,5.5
+- proto: CMUMohawkOmahaNavyRight213bdc29f1aa
+  entities:
+  - uid: 320
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,4.5
+- proto: CMUMohawkOmahaNavyRight120888954f91
+  entities:
+  - uid: 321
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,3.5
+- proto: CMUMohawkOmahaNavyRight028115801b93
+  entities:
+  - uid: 322
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,2.5
+- proto: CMUMohawkOmahaNavyLowerRightWing852117d392
+  entities:
+  - uid: 323
+    components:
+    - type: Transform
+      parent: 1
+      pos: 6.5,2.5
+- proto: CMUMohawkOmahaNavyRight0497994c7b1f
+  entities:
+  - uid: 324
+    components:
+    - type: Transform
+      parent: 1
+      pos: 7.5,6.5
+- proto: CMUMohawkOmahaNavyRight3254b9f49ae6
+  entities:
+  - uid: 325
+    components:
+    - type: Transform
+      parent: 1
+      pos: 7.5,5.5
+- proto: CMUMohawkOmahaNavyRight2228030a7118
+  entities:
+  - uid: 326
+    components:
+    - type: Transform
+      parent: 1
+      pos: 7.5,4.5
+- proto: CMUMohawkOmahaNavyRight13db347a6cbe
+  entities:
+  - uid: 327
+    components:
+    - type: Transform
+      parent: 1
+      pos: 7.5,3.5
+- proto: CMUMohawkOmahaNavyRight335e04a8a681
+  entities:
+  - uid: 328
+    components:
+    - type: Transform
+      parent: 1
+      pos: 8.5,5.5
+- proto: CMUMohawkOmahaNavyRight239cdb1483ca
+  entities:
+  - uid: 329
+    components:
+    - type: Transform
+      parent: 1
+      pos: 8.5,4.5
+- proto: CMUMohawkOmahaNavyRight149897523d40
+  entities:
+  - uid: 330
+    components:
+    - type: Transform
+      parent: 1
+      pos: 8.5,3.5
+- proto: CMUMohawkInternalModulePort
+  entities:
+  - uid: 331
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-7.5
+- proto: CMUMohawkInternalModuleStarboard
+  entities:
+  - uid: 332
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,-7.5
+- proto: ''
+  entities:
+  - uid: 333
+    components:
+    - type: Map
+    - type: Transform
+      parent: invalid

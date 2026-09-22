@@ -71,3 +71,6 @@ cmu-guide-entry-research-rdt = The Research Data Terminal
 cmu-guide-entry-research-xrf = The XRF Scanner
 cmu-guide-entry-research-simulator = The Synthesis Simulator
 cmu-guide-entry-research-hydroponics = Hydroponics
+
+# Antagonists
+cmu-guide-entry-antag-rider = The Rider

@@ -90,6 +90,13 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
 
+    // CMU14: Round setup can assign a loaded ship to either faction.
+    public void SetGroup(Entity<OverwatchConsoleComponent> console, string group)
+    {
+        console.Comp.Group = group;
+        Dirty(console);
+    }
+
     public override void Initialize()
     {
         _actor = GetEntityQuery<ActorComponent>();

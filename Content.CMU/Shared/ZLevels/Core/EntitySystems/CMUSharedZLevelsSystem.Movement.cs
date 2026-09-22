@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevels;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -58,6 +59,8 @@ public abstract partial class CMUSharedZLevelsSystem
     private EntityQuery<FixturesComponent> _fixturesQuery;
     private EntityQuery<CMUZLevelHighGroundComponent> _highgroundQuery;
     private EntityQuery<CMUVehicleZTraversalComponent> _vehicleTraversalQuery;
+    private EntityQuery<DropshipDeckComponent> _dropshipDeckQuery;
+    private readonly List<Entity<MapGridComponent>> _movementDeckCandidates = new();
     private readonly HashSet<EntityUid> _moveSnapSuppressed = new();
     private readonly HashSet<EntityUid> _fallImpactVictims = new();
     private readonly HashSet<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshes = new();
@@ -88,6 +91,7 @@ public abstract partial class CMUSharedZLevelsSystem
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
         _highgroundQuery = GetEntityQuery<CMUZLevelHighGroundComponent>();
         _vehicleTraversalQuery = GetEntityQuery<CMUVehicleZTraversalComponent>();
+        _dropshipDeckQuery = GetEntityQuery<DropshipDeckComponent>();
         Subs.CVar(_configuration, CMUZLevelsCVars.DebugFalling, value => _debugFalling = value, true);
 
         SubscribeLocalEvent<DamageableComponent, CMUZLevelHitEvent>(OnFallDamage);
@@ -131,10 +135,10 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!ShouldProcessMoveGroundSnap(_net.IsClient, _timing.ApplyingState))
             return;
 
-        // Container insertion also raises MoveEvent. Only snap entities directly on
-        // a map; reparenting a contained item here breaks the insertion in progress.
+        // Containers and ordinary shuttle interiors are excluded. Linked decks
+        // opt in because their boarding ramps cross between maps.
         var xform = Transform(ent);
-        if (xform.MapUid is not { } map || xform.ParentUid != map || xform.Anchored)
+        if (xform.MapUid is not { } map || !IsZPhysicsParent(xform) || xform.Anchored)
             return;
 
         var oldVelocity = ent.Comp.Velocity;
@@ -247,7 +251,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
             processed++;
 
-            if (xform.ParentUid != xform.MapUid)
+            if (!IsZPhysicsParent(xform))
             {
                 if (profiling)
                     _profileZMovementStoppedParent++;
@@ -837,13 +841,13 @@ public abstract partial class CMUSharedZLevelsSystem
         var xform = Transform(uid);
         if (xform.MapUid is not { } mapUid ||
             !_zMapQuery.TryComp(mapUid, out _) ||
-            !_gridQuery.TryComp(mapUid, out var mapGrid))
+            !TryResolveMovementGrid(mapUid, _transform.GetWorldPosition(uid), out var gridUid, out var mapGrid))
         {
             return false;
         }
 
-        var worldPosI = _transform.GetGridOrMapTilePosition(uid);
-        var queryHigh = _map.GetAnchoredEntitiesEnumerator(mapUid, mapGrid, worldPosI);
+        var worldPosI = _map.WorldToTile(gridUid, mapGrid, _transform.GetWorldPosition(uid));
+        var queryHigh = _map.GetAnchoredEntitiesEnumerator(gridUid, mapGrid, worldPosI);
         while (queryHigh.MoveNext(out var anchoredUid))
         {
             if (_highgroundQuery.HasComp(anchoredUid))
@@ -1033,16 +1037,8 @@ public abstract partial class CMUSharedZLevelsSystem
                 DebugLogFalling(target.Owner, "distance-no-z-map", $"inputMap={mapUid} sampleWorld={worldPos}");
             return 0;
         }
-        if (!TryResolveMovementGrid(resolvedMap, worldPos, out var checkingGridUid, out var mapGrid))
-        {
-            if (_debugFalling)
-                DebugLogFalling(target.Owner, "distance-no-grid", $"inputMap={resolvedMap} sampleWorld={worldPos}");
-            return 0;
-        }
-
         //Select current map by default
         Entity<CMUZLevelMapComponent> checkingMap = (resolvedMap, zMapComp);
-        MapGridComponent checkingGrid = mapGrid;
         var profiling = Prof.IsEnabled;
 
         for (var floor = 0; floor <= maxFloors; floor++)
@@ -1063,22 +1059,12 @@ public abstract partial class CMUSharedZLevelsSystem
                 }
 
                 checkingMap = tempCheckingMap.Value;
-                if (!TryResolveMovementGrid(
-                        checkingMap.Owner,
-                        worldPos,
-                        out checkingGridUid,
-                        out var tempCheckingGrid))
-                {
-                    if (_debugFalling)
-                        DebugLogFalling(
-                            target.Owner,
-                            "distance-map-down-no-grid",
-                            $"floor={floor} checkingMap={checkingMap.Owner} sampleWorld={worldPos}");
-                    continue;
-                }
-
-                checkingGrid = tempCheckingGrid;
             }
+
+            // A ship's ramp can leave a hole on a map that has no terrain grid.
+            // Continue down through that empty level to find its lower deck.
+            if (!TryResolveMovementGrid(checkingMap.Owner, worldPos, out var checkingGridUid, out var checkingGrid))
+                continue;
 
             var checkingTile = _map.WorldToTile(checkingGridUid, checkingGrid, worldPos);
 
@@ -1154,12 +1140,28 @@ public abstract partial class CMUSharedZLevelsSystem
         return maxFloors;
     }
 
-    private bool TryResolveMovementGrid(
+    protected bool TryResolveMovementGrid(
         EntityUid mapUid,
         Vector2 worldPosition,
         out EntityUid gridUid,
         [NotNullWhen(true)] out MapGridComponent? grid)
     {
+        // A deployed ramp sits on top of the landing pad. Prefer its supporting
+        // surface to the terrain floor when both grids occupy the same tile.
+        _movementDeckCandidates.Clear();
+        var candidates = _movementDeckCandidates;
+        _map.FindGridsIntersecting(mapUid, Box2.CenteredAround(worldPosition, new Vector2(0.01f)), ref candidates);
+        foreach (var candidate in _movementDeckCandidates)
+        {
+            if (_dropshipDeckQuery.HasComp(candidate.Owner) &&
+                _map.TryGetTileRef(candidate.Owner, candidate.Comp,
+                    _map.WorldToTile(candidate.Owner, candidate.Comp, worldPosition), out var deckTile) && !deckTile.Tile.IsEmpty)
+            {
+                gridUid = candidate.Owner;
+                grid = candidate.Comp;
+                return true;
+            }
+        }
         if (_map.TryFindGridAt(mapUid, worldPosition, out gridUid, out grid))
             return true;
 
@@ -1218,6 +1220,13 @@ public abstract partial class CMUSharedZLevelsSystem
             ref stickyGround);
     }
 
+    private bool CanClimbHighGround(EntityUid target, CMUZLevelHighGroundComponent ground)
+    {
+        return ground.AllowVehicles ||
+               !_vehicleTraversalQuery.TryComp(target, out var vehicle) ||
+               vehicle.CanUseStairs;
+    }
+
     private bool TryGetHighGroundDistanceCore(
         Entity<CMUZPhysicsComponent?> target,
         EntityUid checkingGridUid,
@@ -1256,7 +1265,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     if (!_highgroundQuery.TryComp(uid, out var heightComp))
                         continue;
 
-                    if (floor == 0 && heightComp.SupportOnlyFromAbove)
+                    if (floor == 0 && (heightComp.SupportOnlyFromAbove || !CanClimbHighGround(target, heightComp)))
                         continue;
 
                     if (heightComp.HeightCurve.Count == 0)
@@ -1439,6 +1448,7 @@ public abstract partial class CMUSharedZLevelsSystem
                         continue;
 
                     if (heightComp.SupportOnlyFromAbove ||
+                        !CanClimbHighGround(target, heightComp) ||
                         heightComp.HeightCurve.Count == 0)
                     {
                         continue;
@@ -1540,7 +1550,7 @@ public abstract partial class CMUSharedZLevelsSystem
     {
         if (heightComp.Corner)
         {
-            var dir = _transform.GetWorldRotation(highGround).GetCardinalDir();
+            var dir = GetHighGroundGridDirection(highGround);
             return dir switch
             {
                 Direction.East => (local.X + 1f - local.Y) / 2f,
@@ -1559,7 +1569,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private bool TryGetHighGroundRampAxes(EntityUid highGround, Vector2 local, out float ramp, out float side)
     {
-        var dir = _transform.GetWorldRotation(highGround).GetCardinalDir();
+        var dir = GetHighGroundGridDirection(highGround);
 
         (ramp, side) = dir switch
         {
@@ -1572,6 +1582,19 @@ public abstract partial class CMUSharedZLevelsSystem
 
         return dir is Direction.East or Direction.West or Direction.North or Direction.South;
     }
+
+    private Direction GetHighGroundGridDirection(EntityUid highGround)
+    {
+        var xform = Transform(highGround);
+        // Samples are already in grid coordinates, so rotating a deck must not
+        // rotate its height curve a second time.
+        return (_dropshipDeckQuery.HasComp(xform.ParentUid)
+            ? xform.LocalRotation
+            : _transform.GetWorldRotation(highGround)).GetCardinalDir();
+    }
+
+    protected bool IsZPhysicsParent(TransformComponent xform)
+        => xform.ParentUid == xform.MapUid || _dropshipDeckQuery.HasComp(xform.ParentUid);
 
     private static bool IsFlatHighGround(CMUZLevelHighGroundComponent heightComp)
     {
@@ -1639,10 +1662,11 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!TryMapUp(currentMapUid.Value, out var mapAboveUid))
             return false;
 
-        if (!_gridQuery.TryComp(mapAboveUid.Value, out var mapAboveGrid))
+        var world = _transform.GetWorldPosition(ent);
+        if (!TryResolveMovementGrid(mapAboveUid.Value, world, out var aboveGrid, out var mapAboveGrid))
             return false;
 
-        if (_map.TryGetTileRef(mapAboveUid.Value, mapAboveGrid, _transform.GetWorldPosition(ent), out var tileRef) &&
+        if (_map.TryGetTileRef(aboveGrid, mapAboveGrid, world, out var tileRef) &&
             !tileRef.Tile.IsEmpty)
             return true;
 
@@ -1662,10 +1686,11 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!TryMapUp(map, out var mapAboveUid))
             return false;
 
-        if (!_gridQuery.TryComp(mapAboveUid.Value, out var mapAboveGrid))
+        var world = new Vector2(indices.X + 0.5f, indices.Y + 0.5f);
+        if (!TryResolveMovementGrid(mapAboveUid.Value, world, out var aboveGrid, out var mapAboveGrid))
             return false;
 
-        if (_map.TryGetTileRef(mapAboveUid.Value, mapAboveGrid, indices, out var tileRef) &&
+        if (_map.TryGetTileRef(aboveGrid, mapAboveGrid, world, out var tileRef) &&
             !tileRef.Tile.IsEmpty)
             return true;
 

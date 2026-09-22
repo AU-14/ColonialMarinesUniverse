@@ -793,10 +793,10 @@ public sealed partial class AntagSelectionSystem : GameRuleSystem<AntagSelection
         _loadout.Equip(antag, gear, prototype.RoleLoadout);
 
         // CMU14: Grant starting skills without overriding existing higher levels
-        foreach (var skill in prototype.StartingSkills)
+        foreach (var (type, level) in prototype.StartingSkills)
         {
-            if (_skills.GetSkill(antag, skill.Type) < skill.Level)
-                _skills.SetSkill(antag, skill.Type, skill.Level);
+            if (_skills.GetSkill(antag, type) < level)
+                _skills.SetSkill(antag, type, level);
         }
 
         // Ensure that we have the right mind for our entity.

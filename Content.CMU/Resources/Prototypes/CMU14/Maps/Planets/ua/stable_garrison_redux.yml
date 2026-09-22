@@ -25,6 +25,7 @@
     govforinship: false
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
     - ICRCReliefParty
     - TimeSharesSalesman
@@ -60,8 +61,6 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    - AbominationsThreatDS
-    - ApeThreatDS
     # - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF
@@ -110,7 +109,7 @@
             AU14JobCivilianFoodServiceWorker: [3, 3]
             AU14JobCivilianWasteManagementSpecialist: [3, 3]
 
-            AU14JobCivilianColonySynthetic: [1, 1]
+            AU14JobCivilianColonySynthetic: [2, 2]
             AU14JobColonyWorkingJoe: [2, 2]
 
             # Colony Command (non department)

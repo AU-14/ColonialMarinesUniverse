@@ -1,0 +1,35 @@
+- type: entity
+  id: CMUPlanetStableGarrisonDistress
+  parent: CMUPlanetStableGarrisonRedux
+  name: Stable Garrison
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Stable Garrison"
+    mapId: StableGarrisonReduxDistress
+    announcement: "A distress signal has been received from Stable Garrison. A response force has been dispatched to investigate."
+    daycycleenabled: false
+    inRotation: false
+    threats:
+    - XenoThreat
+    - AbominationsThreatDS
+
+- type: gameMap
+  id: StableGarrisonReduxDistress
+  mapName: Stable Garrison Distress
+  allegiance: UA
+  mapPath: /Maps/CMU14/StableGarrisonDistressMultiZ/StableGarrisonDistressMultiZ0.yml
+  mapsAbove:
+  - /Maps/CMU14/StableGarrisonDistressMultiZ/StableGarrisonDistressMultiZ1.yml
+  - /Maps/CMU14/StableGarrisonDistressMultiZ/StableGarrisonDistressMultiZ2.yml
+  - /Maps/CMU14/StableGarrisonDistressMultiZ/StableGarrisonDistressMultiZ3.yml
+  - /Maps/CMU14/StableGarrisonDistressMultiZ/StableGarrisonDistressMultiZ4.yml
+  minPlayers: 0
+  maxPlayers: 250
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    StableGarrisonRedux:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Stable Garrison Distress'

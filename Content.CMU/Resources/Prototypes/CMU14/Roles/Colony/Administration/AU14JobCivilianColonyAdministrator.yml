@@ -65,7 +65,7 @@
   - AU14AccessColonyAdministrator
   - AU14AccessColonyMarshall
   roleWeight: 0.25
-  displayWeight: 10
+  displayWeight: 22
 
 - type: startingGear
   id: AU14GearCivilianColonyAdministrator

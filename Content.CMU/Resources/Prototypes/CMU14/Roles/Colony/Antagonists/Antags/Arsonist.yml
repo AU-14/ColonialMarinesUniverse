@@ -13,7 +13,7 @@
   startingGear: CMUGearArsonist
   components:
   - type: Arsonist
-    alertThreshold: 1
+    alertThreshold: 2
     wantedThreshold: 8
   - type: SynthGunAccess
   mindRoles:
@@ -27,8 +27,11 @@
   - type: AntagSelection
     selectionTime: JobsAssigned
     antags:
-    - !type:FixedAntagCount
+    - !type:RandomAntagCount
       proto: Arsonist
+      range:
+        min: 1
+        max: 3
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -50,6 +53,6 @@
 - type: startingGear
   id: CMUGearArsonist
   equipment:
-    suitstorage: RMCWeaponFlamerColony
-    pocket1: RMCTankFlamerColony
-    pocket2: RMCTankFlamerColony
+    suitstorage: CMUWeaponArsonistFlamer
+    pocket1: CMUTankFlamerPhoron
+    pocket2: CMUTankFlamerPhoron

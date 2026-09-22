@@ -32,6 +32,8 @@ public sealed class StationJobsMergeRegressionTest : GameTest
     private static readonly ProtoId<JobPrototype> ThirdPartyLeader = "AU14JobThirdPartyLeader";
     private static readonly ProtoId<JobPrototype> GovforSaw = "AU14JobGOVFORSquadAutomaticRifleman";
     private static readonly ProtoId<JobPrototype> OpforSaw = "AU14JobOPFORSquadAutomaticRifleman";
+    private static readonly ProtoId<JobPrototype> GovforNurse = "AU14JobGOVFORNurse";
+    private static readonly ProtoId<JobPrototype> OpforNurse = "AU14JobOPFORNurse";
 
     [TestPrototypes]
     private const string Prototypes = $@"
@@ -329,6 +331,98 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         {
             await Server.WaitPost(() => SetCurrentPreset(ticker, originalCurrentPreset));
         }
+    }
+
+    [Test]
+    public async Task AssignJobsForceOnForceReadsDistressSignalPreferences()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var originalCurrentPreset = ticker.CurrentPreset;
+
+        EntityUid station = default;
+        await Server.WaitPost(() =>
+        {
+            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map);
+        });
+
+        var dummies = await Server.AddDummySessions(2);
+        // The editor writes military role preferences under the DistressSignal key.
+        // The flatten below mirrors what GameTicker.SpawnPlayers does before AssignJobs.
+        var profiles = dummies.ToDictionary(
+            session => session.UserId,
+            _ => new HumanoidCharacterProfile()
+                .WithGamemodeJobPriority("DistressSignal", GovforNurse, JobPriority.High)
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, forceOnForce);
+
+                foreach (var nurse in new[] { GovforNurse, OpforNurse })
+                {
+                    Assert.That(jobs.TrySetJobSlot(station, nurse.Id, 1, true), Is.True);
+                    jobs.SetRoundStartJobSlot(station, nurse, 1);
+                }
+
+                var flattened = profiles.ToDictionary(
+                    pair => pair.Key,
+                    pair => pair.Value.WithJobPriorities(
+                        pair.Value.GetJobPrioritiesForGamemode("ForceOnForce")));
+
+                var assigned = jobs.AssignJobs(flattened, [station]);
+                Assert.That(assigned, Has.Count.EqualTo(2),
+                    "a queued nurse preference must translate into a nurse assignment, not overflow");
+                var dealt = new[]
+                {
+                    assigned[dummies[0].UserId].Item1,
+                    assigned[dummies[1].UserId].Item1,
+                };
+                Assert.That(dealt, Is.EquivalentTo(new ProtoId<JobPrototype>?[] { GovforNurse, OpforNurse }),
+                    "the dealt GOVFOR slot takes the queued nurse directly and the dealt OPFOR slot takes its mirror");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() =>
+            {
+                SEntMan.DeleteEntity(station);
+                SetCurrentPreset(ticker, originalCurrentPreset);
+            });
+        }
+    }
+
+    [Test]
+    public async Task EveryQueueableSideJobHasAnOpposingSideMirror()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var missing = new List<string>();
+            foreach (var job in SProtoMan.EnumeratePrototypes<JobPrototype>())
+            {
+                if (job.Abstract || !job.SetPreference || job.Hidden)
+                    continue;
+
+                foreach (var (source, mirror) in new[] { ("GOVFOR", "OPFOR"), ("OPFOR", "GOVFOR") })
+                {
+                    if (!job.ID.Contains(source))
+                        continue;
+
+                    var twin = job.ID.Replace(source, mirror);
+                    if (!SProtoMan.HasIndex<JobPrototype>(twin))
+                        missing.Add($"{job.ID} -> {twin}");
+                }
+            }
+
+            Assert.That(missing, Is.Empty,
+                "ForceOnForce side mirroring swaps GOVFOR/OPFOR in queued job ids, so every "
+                + "queueable side job needs its mirror: " + string.Join(", ", missing));
+        });
     }
 
     [Test]

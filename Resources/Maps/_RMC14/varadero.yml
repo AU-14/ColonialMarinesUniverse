@@ -152122,7 +152122,7 @@ entities:
     - type: Transform
       pos: 70.3125,57.71875
       parent: 1
-- proto: GasPassiveGate
+- proto: CMUGasPassiveGate
   entities:
   - uid: 20649
     components:
@@ -152158,7 +152158,7 @@ entities:
     - type: Transform
       pos: 52.5,116.5
       parent: 1
-- proto: GasPort
+- proto: CMUGasPort
   entities:
   - uid: 20655
     components:

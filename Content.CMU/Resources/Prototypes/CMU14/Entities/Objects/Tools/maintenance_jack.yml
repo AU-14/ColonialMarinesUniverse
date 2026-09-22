@@ -1,3 +1,4 @@
+# ├──[ MAINT JACK ]──────────────────────────────────────────────────┤
 - type: entity
   parent: [BaseItem, RMCBaseMeleeWeapon]
   id: AU14MaintenanceJack
@@ -59,18 +60,14 @@
     useSound:
       path: /Audio/Items/jaws_pry.ogg
 
+# ├──[ ADMIN JACK ]──────────────────────────────────────────────────┤
 - type: entity
   parent: AU14MaintenanceJack
-  id: AU14MaintenanceJackSpecial
-  name: K92-S Special Maintenance Jack
-  description: A very-heavy combination crowbar, wrench, screwdriver, and generally large bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks. Incredibly hefty, though.
-  suffix: CMU, Synth
+  id: AU14MaintenanceJackSpecialAdmin
+  name: K92-S Modified Maintenance Jack
+  description: A combination crowbar, wrench, screwdriver, and generally large bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks. A K92-S Special with a severe weight reduction, so anyone can lift it.
+  suffix: Admin, DO NOT MAP, CMU
   components:
-  - type: RMCSynthItemRestriction
-  - type: WhitelistPickupBy
-    whitelist:
-      components:
-        - Synth
   - type: Tag
     tags:
     - Wrench
@@ -121,6 +118,20 @@
           sprite: CMU14/Objects/Tools/maintenance_jack.rsi
           state: icon
         useSound: /Audio/Items/jaws_pry.ogg
+
+# ├──[ SYNTH JACK ]──────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14MaintenanceJackSpecialAdmin
+  id: AU14MaintenanceJackSpecial
+  name: K92-S Special Maintenance Jack
+  description: A very-heavy combination crowbar, wrench, screwdriver, and generally large bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks. Incredibly hefty, though.
+  suffix: CMU, Synth
+  components:
+  - type: RMCSynthItemRestriction
+  - type: WhitelistPickupBy
+    whitelist:
+      components:
+        - Synth
   - type: DamageImpactProfile
     melee:
       contact: Crush

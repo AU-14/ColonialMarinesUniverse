@@ -217872,7 +217872,7 @@ entities:
     - type: Transform
       pos: 22.959236,-81.51034
       parent: 1
-- proto: GasVentPump
+- proto: CMVentPump
   entities:
   - uid: 26157
     components:
@@ -242355,7 +242355,7 @@ entities:
     - type: Transform
       pos: -181.18642,-97.40619
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 30043
     components:
@@ -242517,7 +242517,7 @@ entities:
     - type: Transform
       pos: 2.741615,-97.40286
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 30047
     components:

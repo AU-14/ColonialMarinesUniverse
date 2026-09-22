@@ -534,10 +534,20 @@
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
+      - id: AU14JungleM50Helmet
+      - id: AU14CamoM50Helmet
       - id: AU14UPPPatrolCap
       - id: AU14UPPBoonie
       - id: AU14UPPUshanka
       - id: CMHeadCapSPPBeret
+    - name: Flight Visor
+      choices: { CMUPlatoonAirCrewFlightVisor: 1 }
+      entries:
+      - id: AU14GogglesLAH99VisorHighTech
+    - name: Flight Mask
+      choices: { CMUPlatoonAirCrewFlightMask: 1 }
+      entries:
+      - id: AU14MaskUSASFPilotOxygen
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }
       entries:

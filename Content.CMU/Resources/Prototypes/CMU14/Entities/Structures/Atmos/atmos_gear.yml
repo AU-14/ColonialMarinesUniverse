@@ -1,8 +1,9 @@
+# ├──[ SCRUBBERS ]───────────────────────────────────────────────────┤
 - type: entity
   parent: PortableScrubber
   id: RMCAirScrubberPortable
   name: '"Maid" SC-3 portable air scrubber'
-  description: A boxy scrubber that inhales a room's problems and traps them inside. Field crews call it the Maid; leave it in a room, come back to breathable air.
+  description: A boxy scrubber that inhales a room's problems and traps them inside. Field crews call it the Maid; leave it in a room, come back to breathable air. The access panel is held on by a single screw that rarely survives the first shift.
   components:
   - type: Transform
     noRot: false # maps rotate it, inherited noRot aborts map loads
@@ -36,12 +37,13 @@
     blacklist:
       components:
       - Xeno
+  - type: CMUAmbientMute
 
 - type: entity
   parent: RMCAirScrubberPortable
   id: RMCAirScrubberStationary
   name: '"Maid" SC-3S stationary air scrubber'
-  description: The bolted-down model of the Maid line. Same appetite as the portable, none of the wandering.
+  description: The bolted-down model of the Maid line. Same appetite as the portable, none of the wandering. The access panel rides on the same single screw, and it comes to the same end.
   components:
   - type: Transform
     noRot: false
@@ -59,11 +61,12 @@
     readyState: scrubber_0
     fullState: scrubber_0
 
+# ├──[ SIPHONS ]─────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCAirScrubberPortable
   id: RMCAirPumpPortable
   name: '"Straw" AP-4 portable air pump'
-  description: Siphons a room's air out and bottles it in its tank. Field crews call it the Straw, usually while standing in the room it is draining.
+  description: Siphons a room's air out and bottles it in its tank. Field crews call it the Straw, usually while standing in the room it is draining. Louder than the Maid and prouder of it; the panel comes off with one screw, and most screws go missing before the crate is unpacked.
   components:
   - type: Transform
     noRot: false
@@ -89,7 +92,7 @@
   parent: RMCAirPumpPortable
   id: RMCAirPumpStationary
   name: '"Straw" AP-4S stationary air pump'
-  description: The stationary model. Large, securely attached, and every bit as thirsty as the portable.
+  description: The stationary model. Large, securely attached, and every bit as thirsty as the portable. The panel is still one screw away from silence.
   components:
   - type: Transform
     noRot: false
@@ -107,6 +110,7 @@
     readyState: siphon_0
     fullState: siphon_0
 
+# ├──[ TEMPERATURE CONTROL ]─────────────────────────────────────────┤
 - type: entity
   parent: SpaceHeater
   id: RMCSpaceHeater
@@ -201,6 +205,82 @@
           Heating: { state: radiator-r }
           Cooling: { state: radiator-r }
 
+# ├──[ FIRE SUPPRESSION ]────────────────────────────────────────────┤
+# One burst reclaims what a pile of air grenades could not: kills tile fires,
+# hotspots and burning mobs in range, while the cold flood chokes the reaction.
+# Frezon *pending* is the coolant, which means the room comes out slightly N2O.
+- type: entity
+  parent: [ BaseEngineeringContraband, VolatileGrenadeBase, TimerGrenadeBase ]
+  id: CMUFireSuppressantGrenade
+  name: '"Salamander" FS-4 fire suppression grenade'
+  description: A chemical burst grenade that fights fire with a flood of freezing coolant. Clear the room, pull the pin, walk away. The atmos techs will find the nitrous oxide later.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/airboom.rsi
+    color: '#4E7FBD'
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    sound: /Audio/Items/smoke_grenade_smoke.ogg
+    positional: true
+  - type: TimerTriggerVisuals
+    primingSound:
+      path: /Audio/Items/smoke_grenade_prime.ogg
+  - type: TimerTrigger
+    delay: 3
+  - type: CMUFireSuppressantOnTrigger
+    radius: 4.5
+  - type: ReleaseGasOnTrigger
+    keysIn:
+    - timer
+    removeFraction: 0.2
+    air:
+      volume: 1000
+      moles:
+        Nitrogen: 2800
+        Frezon: 200
+      temperature: 90
+  - type: GenericVisualizer
+    visuals:
+      enum.ReleaseGasOnTriggerVisuals.Key:
+        enabled:
+          True: { state: active }
+          False: { state: spent }
+  - type: RemoveComponentsOnTrigger
+    keysIn:
+    - timer
+    triggerOnce: true
+    components:
+    - type: TriggerOnUse
+    - type: TimerTrigger
+    - type: Destructible
+
+# ├──[ ATMOSIAN FIRE GEAR ]───────────────────────────────────────────────┤
+- type: entity
+  parent: ClothingHeadBase
+  id: CMUFireHelmet
+  name: '"Salamander" FH-2 fire helmet'
+  description: A brimmed firefighting helmet rated for reentry into a burning compartment. The brim keeps embers off your collar and the ratings keep the paperwork happy.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/firefighter.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/firefighter.rsi
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET
+  - type: CMArmor
+    melee: 20
+    bio: 10
+    explosionArmor: 10
+  - type: FireProtection
+    reduction: 0.15
+  - type: TemperatureProtection
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.2
+
 - type: entity
   parent: [RMCAllowSuitStorageClothingChefApron, ClothingOuterBase]
   id: CMUSuitFirefighter
@@ -221,6 +301,10 @@
     coolingCoefficient: 0.3
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
+  - type: FireProtection
+    reduction: 0.9
+  - type: CMUFireCoverage
+    uncoveredHeadPenalty: 0.6
   - type: AllowSuitStorage
     whitelist:
       components:
@@ -257,6 +341,10 @@
     coolingCoefficient: 0.3
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
+  - type: FireProtection
+    reduction: 0.75
+  - type: CMUFireCoverage
+    uncoveredHeadPenalty: 0.65
   - type: AllowSuitStorage
     whitelist:
       components:
@@ -284,6 +372,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/firefighter.rsi
 
+# ├──[ EXTRA VEHICULAR ]─────────────────────────────────────────────┤
 - type: entity
   parent: RMCSuitEVABase
   id: CMUSuitEVA
@@ -294,3 +383,234 @@
         ent: null
         showEnts: False
         occludes: True
+
+# ├──[ RADIATION PROTECTION ]────────────────────────────────────────┤
+- type: entity
+  parent: RMCBaseArmor
+  id: RMCSuitTychoRadiationSuit
+  name: Tycho 4000 radiation suit
+  description: The burn-resistant Weyland-Yutani Tycho 4000 Radiation Protection Suit. Lead-lined, this heavy piece of PPE must be worn with its respective gloves, boots, and radiation hood.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/radsuit_weya.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/radsuit_weya.rsi
+  - type: CMArmor
+    bio: 100
+    melee: 25
+    bullet: 15
+    explosionArmor: 10
+  - type: ClothingSpeedModifier
+    walkModifier: .5
+    sprintModifier: .5
+  - type: CMHardArmor
+  - type: RMCArmorSpeedTier
+    speedTier: heavy
+  - type: CMURadProtection
+    reduction: 0.9
+  - type: CMURadCoverage
+    uncoveredHeadPenalty: 0.4
+
+- type: entity
+  parent: ClothingHeadBase
+  id: RMCHeadTychoRadiationHood
+  name: Tycho 4000 radiation protection hood
+  description: The burn-resistant hood for the Weyland-Yutani Tycho 4000 Radiation Protection Suit. It's lined with lead, and it's recommended you wear a rebreather or gas mask under it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/rad_hood_weya.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/rad_hood_weya.rsi
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+      HeadTop: HEAD
+      HeadSide: HEAD
+      Snout: HEAD
+  - type: MycotoxinProtection
+    fullProtection: true
+  - type: CMArmor
+    bio: 100
+    melee: 25
+    bullet: 15
+    explosionArmor: 10
+  - type: CMURadProtection
+    reduction: 0.6
+
+- type: entity
+  parent: RMCHandsVeteran
+  id: RMCHandsTychoGloves
+  name: Tycho 4000 radiation protection gloves
+  description: The burn-resistant gloves for the Weyland-Yutani Tycho 4000 Radiation Protection Suit. It's lined with lead, and is pretty heavy, but it'll keep you safe from Radiological materials.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Hands/Gloves/rad_gloves_weya.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Hands/Gloves/rad_gloves_weya.rsi
+  - type: CMArmor
+    bio: 100
+    melee: 25
+    bullet: 15
+    explosionArmor: 10
+
+- type: entity
+  parent: ClothingShoesBase
+  id: RMCShoesTychoBoots
+  name: Tycho 4000 radiation protection boots
+  description: The burn-resistant boots for the Weyland-Yutani Tycho 4000 Radiation Protection Suit. It's lined with lead, and the boot is steel-toed, perfect for trouncing around detonated nuclear reactors and avoiding radiation poisoning.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/rad_boots_weya.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/rad_boots_weya.rsi
+
+- type: entity
+  parent: RMCSuitTychoRadiationSuit
+  id: RMCSuitRadiation
+  name: '"Salamander" RS-2 radiation suit'
+  description: Salamander's lead-lined take on the radiation suit, rated for burning and glowing work sites alike. The rad rating is only as good as the hood, so wear the hood.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/radiation_suit.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/radiation_suit.rsi
+  - type: CMArmor
+    bio: 30
+  - type: CMURadProtection
+    reduction: 0.5
+  - type: FireProtection
+    reduction: 0.9
+  - type: TemperatureProtection
+    heatingCoefficient: 0.001
+    coolingCoefficient: 0.3
+  - type: RMCImmuneToIgnition
+    immuneToDirectHits: false
+  - type: CMUFireCoverage
+    uncoveredHeadPenalty: 0.6
+
+- type: entity
+  parent: RMCHeadTychoRadiationHood
+  id: RMCHeadRadiationHood
+  name: '"Salamander" RH-2 radiation hood'
+  description: The lead-lined hood that completes the RS-2 rating. Without it the suit protects everything except the part you think with.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/radiation_hood.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/radiation_hood.rsi
+  - type: CMURadProtection
+    reduction: 0.35
+  - type: FireProtection
+    reduction: 0.15
+  - type: TemperatureProtection
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.2
+
+# ├──[ DEV / PLAYTEST ]──────────────────────────────────────────────┤
+# NOTE: Temporary workaround to spacing
+- type: entity
+  parent: AtmosDeviceFanTiny
+  id: RMCTinyFan
+  name: '"Zephyr" TF-2 tiny fan'
+  description: A low fan that holds a room's air in while letting people walk through it. Field crews call it the Zephyr. The breeze is decorative, the seal is not.
+  components:
+  - type: Construction
+    graph: RMCTinyFanGraph
+    node: built
+  - type: RadiationBlocker
+    resistance: 5
+
+# NOTE: Temporary workaround to spacing
+- type: entity
+  parent: AtmosDeviceFanDirectional
+  id: RMCDirectionalFan
+  name: '"Doorstop" DF-1 directional fan'
+  description: A slim fan that seals one side of a doorway while leaving the lane open for foot traffic. Field crews call it the Doorstop; point it at the draft and it minds the gap all shift.
+  components:
+  - type: Construction
+    graph: RMCDirectionalFanGraph
+    node: built
+  - type: RadiationBlocker
+    resistance: 5
+
+- type: constructionGraph
+  id: RMCTinyFanGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2
+  - node: built
+    entity: RMCTinyFan
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: constructionGraph
+  id: RMCDirectionalFanGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2
+  - node: built
+    entity: RMCDirectionalFan
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: construction
+  id: RMCTinyFanRecipe
+  name: tiny fan
+  description: A walk-through plug for leaking doorways and hull breaches.
+  graph: RMCTinyFanGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-atmospherics
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: RMCDirectionalFanRecipe
+  name: directional fan
+  description: Seals one side of a gap against gases while leaving the other open.
+  graph: RMCDirectionalFanGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-atmospherics
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  isCM: true
+  conditions:
+  - !type:TileNotBlocked

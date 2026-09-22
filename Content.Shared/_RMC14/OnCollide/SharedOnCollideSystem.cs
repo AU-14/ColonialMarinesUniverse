@@ -124,6 +124,11 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             _damageable.TryChangeDamage(other, damage, ent.Comp.IgnoreResistances);
         }
 
+        // CMU14: the damage above can delete the target outright, and everything after
+        // this point adds components or status effects to it.
+        if (TerminatingOrDeleted(other))
+            return;
+
         _xenoSpit.SetAcidCombo(other, ent.Comp.AcidComboDuration, ent.Comp.AcidComboDamage, ent.Comp.AcidComboParalyze, ent.Comp.AcidComboResists);
 
         // CMU Related Change

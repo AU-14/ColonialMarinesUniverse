@@ -24845,7 +24845,7 @@ entities:
     - type: Transform
       pos: 31.074274,1.9265835
       parent: 2
-- proto: RMCCanisterBase
+- proto: CMUCanisterPhoron
   entities:
   - uid: 1966
     components:

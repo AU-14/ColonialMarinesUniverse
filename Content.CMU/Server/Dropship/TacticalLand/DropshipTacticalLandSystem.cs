@@ -3,6 +3,8 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.CMU14.Dropship.Integrity;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Dropship.MultiDeck;
+using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server._RMC14.Dropship;
 using Content.Shared.CMU14.Dropship.TacticalLand;
@@ -55,6 +57,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private DropshipIntegritySystem _integrity = default!;
+    [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private AuRoundSystem _round = default!;
 
@@ -482,6 +485,24 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
             blocked.AddRange(footprintOffsets);
         }
 
+        if (eye.Comp.Console is { } shipConsole && Transform(shipConsole).GridUid is { } ship &&
+            HasComp<MultiDeckDropshipComponent>(ship))
+        {
+            var blockedLevels = new HashSet<Vector2i>();
+            var origin = _multiDeck.GetLandingOrigin(ship, xform.Coordinates);
+            if (!_multiDeck.IsLandingClear(ship, origin,
+                    Angle.FromDegrees(-eye.Comp.RotationQuarterTurns * 90), blockedLevels))
+            {
+                foreach (var offset in blockedLevels)
+                {
+                    if (!blocked.Contains(offset))
+                        blocked.Add(offset);
+                }
+                if (blockedLevels.Count == 0)
+                    blocked.AddRange(footprintOffsets);
+            }
+        }
+
         var clear = blocked.Count == 0;
         if (eye.Comp.ClearForLanding == clear &&
             eye.Comp.BlockedTiles.Count == blocked.Count &&
@@ -676,9 +697,12 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var hover = EnsureComp<DropshipTacticalHoverComponent>(dropshipGrid);
         CleanupHoverEffects((dropshipGrid, hover));
 
+        if (TryComp<MultiDeckDropshipComponent>(dropshipGrid, out var assembly))
+            hover.GroundMapOffset = -1 - assembly.LandingOffset;
+
         hover.HoverDestination = ent.Owner;
         if (Transform(dropshipGrid).MapUid is { } hoverMap &&
-            _zLevels.TryMapOffset(hoverMap, -1, out var groundMap))
+            _zLevels.TryMapOffset(hoverMap, hover.GroundMapOffset, out var groundMap))
         {
             hover.GroundMap = groundMap.Value.Owner;
         }
@@ -827,7 +851,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var xform = Transform(dropship);
         var worldPosition = _transform.GetWorldPosition(dropship) + rotation.RotateVec(offset);
         if (xform.MapUid is { } map &&
-            TryProjectToGroundEffectMap(map, mapOffset, worldPosition, out coords))
+            _zLevels.TryProjectToGroundEffectMap(map, mapOffset, worldPosition, out coords))
         {
             return true;
         }
@@ -837,50 +861,6 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
 
         coords = new MapCoordinates(worldPosition, xform.MapID);
         return true;
-    }
-
-    private bool TryProjectToGroundEffectMap(
-        Entity<CMUZLevelMapComponent?> sourceMap,
-        int startOffset,
-        Vector2 worldPosition,
-        out MapCoordinates coords)
-    {
-        coords = default;
-
-        if (startOffset >= 0)
-            startOffset = -1;
-
-        MapComponent? lowestMap = null;
-
-        for (var offset = startOffset;
-             _zLevels.TryMapOffset(sourceMap, offset, out var projectedMap, out var projectedMapComp);
-             offset--)
-        {
-            lowestMap = projectedMapComp;
-
-            if (!HasSolidProjectionTile(projectedMap.Value.Owner, worldPosition))
-                continue;
-
-            coords = new MapCoordinates(worldPosition, projectedMapComp.MapId);
-            return true;
-        }
-
-        if (lowestMap == null)
-            return false;
-
-        coords = new MapCoordinates(worldPosition, lowestMap.MapId);
-        return true;
-    }
-
-    private bool HasSolidProjectionTile(EntityUid mapUid, Vector2 worldPosition)
-    {
-        if (!TryComp(mapUid, out MapGridComponent? grid) ||
-            !_map.TryGetTileRef(mapUid, grid, worldPosition, out var tileRef))
-        {
-            return false;
-        }
-
-        return !CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, _tile);
     }
 
     private void CleanupHoverEffects(Entity<DropshipTacticalHoverComponent> hover)

@@ -8,6 +8,7 @@ using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -68,6 +69,7 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
         new SoundCollectionSpecifier("RMCHijack", AudioParams.Default.WithVolume(-8));
 
     private bool _hijackSongPlayed;
+    private bool _surgeFired;
     private float _hijackShipWeight;
     private int _hijackMinBurrowed;
 
@@ -101,16 +103,6 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
                 if (TryComp(xeno, out ActorComponent? actor))
                 {
                     var session = actor.PlayerSession;
-                    Entity<MindComponent> mind;
-
-                    if (_mind.TryGetMind(session, out var mindId, out var mindComp))
-                        mind = (mindId, mindComp);
-                    else
-                        mind = _mind.CreateMind(session.UserId);
-
-                    var ghost = _ghost.SpawnGhost((mind.Owner, mind.Comp), xeno);
-                    if (ghost != null)
-                        EnsureComp<JoinXenoCooldownIgnoreComponent>(ghost.Value);
 
                     var origin = _transform.GetMoverCoordinates(xeno);
                     _popup.PopupCoordinates(
@@ -120,8 +112,30 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
                         true,
                         PopupType.MediumXeno);
 
+                    var rejoined = false;
                     if (comp.CountedInSlots && _hive.GetHive(xeno) is { } hive)
-                        _larvaQueue.AddToLarvaQueueFront(hive, session.UserId);
+                    {
+                        if (_hive.JoinBurrowedLarva(hive, session, ignorePoolGate: true))
+                            rejoined = true;
+                        else
+                            _larvaQueue.AddToLarvaQueueFront(hive, session.UserId);
+
+                        _hive.ChangeBurrowedLarva(hive, 1);
+                    }
+
+                    if (!rejoined)
+                    {
+                        Entity<MindComponent> mind;
+
+                        if (_mind.TryGetMind(session, out var mindId, out var mindComp))
+                            mind = (mindId, mindComp);
+                        else
+                            mind = _mind.CreateMind(session.UserId);
+
+                        var ghost = _ghost.SpawnGhost((mind.Owner, mind.Comp), xeno);
+                        if (ghost != null)
+                            EnsureComp<JoinXenoCooldownIgnoreComponent>(ghost.Value);
+                    }
                 }
 
                 QueueDel(xeno);
@@ -134,8 +148,14 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
         if (ev.HijackerType == DropshipHijackerType.Pathogen)
             return;
 
+        // Planet xeno cleanup above still runs on repeat hijacks. The surge pool itself is once per round.
+        if (_surgeFired)
+            return;
+
+        _surgeFired = true;
+
         var shipMapIds = new HashSet<MapId>();
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>();
         while (almayerQuery.MoveNext(out _, out var xform))
             AddShipMapAndConnectedZLevelMapIds(shipMapIds, xform.MapUid);
 
@@ -224,6 +244,7 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _hijackSongPlayed = false;
+        _surgeFired = false;
     }
 
     private bool HasActiveDistressRule()

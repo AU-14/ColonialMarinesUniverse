@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: -2
   id: AU14JobNurseBaseAbstract
   name: au14-job-name-govfornurse
   description: au14-job-description-govfornurse
@@ -138,6 +139,7 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORNurse
 
 - type: startingGear
   id: AU14GearOPFORNurse

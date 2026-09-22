@@ -1,0 +1,3 @@
+# Imported BYOND object sprites are assets, not MSBuild intermediates.
+!/obj/
+!/obj/**

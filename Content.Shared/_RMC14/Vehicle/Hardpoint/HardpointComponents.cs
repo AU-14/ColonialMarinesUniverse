@@ -156,6 +156,9 @@ public sealed partial class HardpointIntegrityComponent : Component
     public bool BypassEntryOnZero;
 
     [NonSerialized]
+    public float NativeMaxIntegrity; // CMU14: configured pool, restored while no hardpoints are mounted
+
+    [NonSerialized]
     public bool Repairing;
 }
 

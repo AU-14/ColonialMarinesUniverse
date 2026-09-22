@@ -1076,6 +1076,7 @@ public sealed partial class DropshipTacticalLandSystem
                     rotation,
                     boundaryOnly: step < steps,
                     candidatesPrepared: true,
+                    allowUnmappedAir: true,
                     out blockers))
             {
                 completedFraction = (step - 1f) / steps;
@@ -1166,7 +1167,7 @@ public sealed partial class DropshipTacticalLandSystem
         Vector2 targetPosition,
         Angle targetRotation)
     {
-        return IsGunshipFootprintClear(dropship, targetMap, targetPosition, targetRotation, out _);
+        return IsGunshipFootprintClear(dropship, targetMap, targetPosition, targetRotation, false, out _);
     }
 
     private bool IsGunshipFootprintClear(
@@ -1174,10 +1175,11 @@ public sealed partial class DropshipTacticalLandSystem
         EntityUid targetMap,
         Vector2 targetPosition,
         Angle targetRotation,
+        bool allowUnmappedAir,
         out HashSet<EntityUid> blockers)
     {
         return IsGunshipFootprintClear(dropship, targetMap, targetPosition, targetRotation,
-            boundaryOnly: false, candidatesPrepared: false, out blockers);
+            boundaryOnly: false, candidatesPrepared: false, allowUnmappedAir, out blockers);
     }
 
     private bool IsGunshipFootprintClear(
@@ -1187,6 +1189,7 @@ public sealed partial class DropshipTacticalLandSystem
         Angle targetRotation,
         bool boundaryOnly,
         bool candidatesPrepared,
+        bool allowUnmappedAir,
         out HashSet<EntityUid> blockers)
     {
         if (TryComp(dropship.Owner, out DropshipTacticalHoverComponent? hover))
@@ -1231,7 +1234,15 @@ public sealed partial class DropshipTacticalLandSystem
         {
             var sample = targetPosition + rotatedCenter;
             if (!_map.TryGetTileRef(targetMap, targetGrid, sample, out var targetTile))
-                return false;
+            {
+                // Open-air flight levels (generated z-layers) have no tile chunks. Unmapped
+                // sky is flyable while world still exists below the sample; past the lowest
+                // level it is outside the flight zone.
+                if (!allowUnmappedAir || !HasFlightWorldBelow(targetMap, sample))
+                    return false;
+
+                continue;
+            }
 
             var opening = CMUZLevelOpeningCache.IsOpeningTile(targetTile.Tile, _tile);
             if (targetTile.Tile.IsEmpty && !opening)
@@ -1359,6 +1370,21 @@ public sealed partial class DropshipTacticalLandSystem
         }
 
         return !blocked;
+    }
+
+    // True while some lower z-network level still has a mapped tile at this position.
+    // Defines the flight zone edge for open-air flight levels.
+    private bool HasFlightWorldBelow(EntityUid mapUid, Vector2 worldPosition)
+    {
+        for (var offset = -1; ; offset--)
+        {
+            if (!_zLevels.TryMapOffset(mapUid, offset, out var lower))
+                return false;
+
+            if (TryComp(lower.Value.Owner, out MapGridComponent? grid)
+                && _map.TryGetTileRef(lower.Value.Owner, grid, worldPosition, out _))
+                return true;
+        }
     }
 
     private bool PrepareGunshipCollisionCandidates(
@@ -1627,7 +1653,13 @@ public sealed partial class DropshipTacticalLandSystem
         var snappedDegrees = Math.Round(currentRotation.Degrees / 90d) * 90d;
         var snappedRotation = Angle.FromDegrees(snappedDegrees);
 
-        var clear = IsGunshipFootprintClear((grid, dropshipGrid), targetMap.Value.Owner, position, snappedRotation, out var blockers);
+        // Landings still demand real floor on the target level. Flight over
+        // unmapped sky is decided inside the footprint check.
+        var landing = offset < 0 &&
+            (hover.GroundMap == targetMap.Value.Owner || hover.GroundMap is null && hover.GroundMapOffset == -1);
+
+        var clear = IsGunshipFootprintClear((grid, dropshipGrid), targetMap.Value.Owner, position, snappedRotation,
+            !landing, out var blockers);
         if (!clear && !CanGunshipCrashThrough(blockers))
         {
             _popup.PopupEntity(Loc.GetString("cmu-gunship-target-level-blocked"), seat, pilot, PopupType.MediumCaution);
@@ -1639,8 +1671,7 @@ public sealed partial class DropshipTacticalLandSystem
         hover.GunshipAngularVelocityDegrees = 0f;
         hover.AltitudeTargetMap = targetMap.Value.Owner;
         hover.AltitudeOffset = offset;
-        hover.AltitudeLanding = offset < 0 &&
-            (hover.GroundMap == targetMap.Value.Owner || hover.GroundMap is null && hover.GroundMapOffset == -1);
+        hover.AltitudeLanding = landing;
         hover.AltitudePilot = pilot;
         hover.AltitudeTransitionAt = _timing.CurTime + GunshipAltitudeTransitionTime;
 
@@ -1718,7 +1749,8 @@ public sealed partial class DropshipTacticalLandSystem
 
         var position = _transform.GetWorldPosition(hover.Owner);
         var rotation = _transform.GetWorldRotation(hover.Owner);
-        var clear = IsGunshipFootprintClear((hover.Owner, dropshipGrid), map, position, rotation, out var blockers);
+        var clear = IsGunshipFootprintClear((hover.Owner, dropshipGrid), map, position, rotation,
+            !landing, out var blockers);
         if (!clear)
         {
             if (!CanGunshipCrashThrough(blockers))

@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobMilitaryBase
+  displayWeight: 9
   id: CMUJobGOVFORAdjutantDress
   roundRole: AdjutantDress
   roundProfiles:
@@ -78,6 +79,7 @@
 
 - type: job
   parent: AU14JobMilitaryBase
+  displayWeight: 10
   id: CMUJobGOVFORBrigadierGeneral
   roundRole: BrigadierGeneral
   roundProfiles:
@@ -224,6 +226,7 @@
 
 - type: job
   parent: AU14JobMilitaryBase
+  displayWeight: 9
   id: CMUJobOPFORAdjutantDress
   roundSide: Opfor
   roundForce: OPFOR
@@ -300,6 +303,7 @@
 
 - type: job
   parent: AU14JobMilitaryBase
+  displayWeight: 10
   id: CMUJobOPFORBrigadierGeneral
   roundSide: Opfor
   roundForce: OPFOR

@@ -11,15 +11,21 @@
     text: fugitive-role-greeting
     color: CornflowerBlue
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingSkills:
+    RMCSkillCqc: 2
+    RMCSkillMeleeWeapons: 2
+    RMCSkillFirearms: 2
+    RMCSkillPolice: 2
+    RMCSkillEndurance: 2
   components:
   - type: Fugitive
   - type: ColonyBounty
     bounty: 1550
     reason: Fugitive from justice
-    recordNamePrefix: "Fugitive: "
-    attachToOwnRecord: true
+    recordName: Fugitive (Unknown)
     includePrints: true
     includeDna: true
+    includeLanguages: true
     deadCounts: false
     capturedFaxPaper: AUPaperFugitiveCaptured
   mindRoles:
@@ -35,8 +41,11 @@
   - type: AntagSelection
     selectionTime: JobsAssigned
     antags:
-    - !type:FixedAntagCount
+    - !type:RandomAntagCount
       proto: Fugitive
+      range:
+        min: 1
+        max: 3
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -59,3 +68,8 @@
   id: AU14GearFugitive
   equipment:
     pocket1: AU14ObjectiveItemWYLaptop
+  storage:
+    back:
+    - AUPaperFugitive
+    - RMCLighter
+    - ForensicScanner

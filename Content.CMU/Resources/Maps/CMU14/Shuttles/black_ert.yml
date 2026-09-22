@@ -172,7 +172,7 @@ entities:
           - 0
           - 0
         chunkSize: 4
-- proto: AtmosDeviceFanTiny
+- proto: RMCTinyFan
   entities:
   - uid: 57
     components:

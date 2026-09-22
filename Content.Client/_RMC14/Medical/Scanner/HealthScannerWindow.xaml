@@ -66,6 +66,14 @@
                         </BoxContainer>
                     </PanelContainer>
 
+                    <PanelContainer Name="CMURiderBanner" Access="Public" Visible="False" Margin="0 0 0 8">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#8B2F35" BorderColor="#D46A6A" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <Label Name="CMURiderLabel" Access="Public" StyleClasses="LabelHeading"
+                               FontColorOverride="White" Margin="12 7" />
+                    </PanelContainer>
+
                     <PanelContainer Margin="0 0 0 8">
                         <PanelContainer.PanelOverride>
                             <graphics:StyleBoxFlat BackgroundColor="#151E24" BorderColor="#2E4650" BorderThickness="1" />
@@ -90,7 +98,9 @@
                                 <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
                                     <Label Name="CMUBigTempValue" Access="Public"
                                            Text="--" StyleClasses="LabelHeading" />
-                                    <Label Text="{Loc cmu-medical-scanner-stat-temp}" Modulate="#7CA5B3" />
+                                    <!-- CMU14: unit label set from client temperature preference -->
+                                    <Label Name="CMUBigTempLabel" Access="Public"
+                                           Text="{Loc cmu-medical-scanner-stat-temp}" Modulate="#7CA5B3" />
                                 </BoxContainer>
                                 <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                                     <Label Name="CMUBigShockRiskValue" Access="Public"

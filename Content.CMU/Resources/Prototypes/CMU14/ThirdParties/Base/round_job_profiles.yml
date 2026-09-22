@@ -12,6 +12,7 @@
     CLF:
     - type: NpcFactionMember
       factions:
+      - AUColonist
       - CLF
     PSC:
     - type: NpcFactionMember

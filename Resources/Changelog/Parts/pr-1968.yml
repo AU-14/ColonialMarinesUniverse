@@ -1,0 +1,97 @@
+author: maertayn
+category: CMU
+changes:
+- message: 'Added Rider antag, a morphling parasite that fuses with a willing/unwilling
+    host to survive, based on the thing from the series, 3 versions: hitchhiker (survive
+    within a host), leapfrog (ride 3 hosts), puppeteer (seize an objective item)'
+  type: Add
+- message: Added Replicant (evil-twin) synth colony antagonist, steals Id and name
+    of their selected quarry
+  type: Add
+- message: Cannibal fixes, meat-only diet, can chop/spike non-rotten bodies
+  type: Fix
+- message: APC Batteries require a doAfter that scales with skill (saboteur) - not
+    a free battery swap min. 7 seconds
+  type: Tweak
+- message: Up to 3 antags of same type, spawn with your wanted paper as antag (and
+    lighter to burn it), first pass at forensics and detain system, starting supplemental
+    skills for many antags
+  type: Add
+- message: Bounty Hunters (and CMB) gain forensic suspect descriptions and wanted
+    posters
+  type: Add
+- message: CMB has to detain people in the system to get rewards, not complete yet
+  type: Tweak
+- message: Merged CorporateSpy & WeylandYutaniAgent into Corporate Rivals - can spawn
+    in tandem as opposers, or individually alone
+  type: Tweak
+- message: Admin verbs/smites for manually setting players to colony antags
+  type: Admin
+- message: Special metal bat for the vigilante, drug dealer satchel can be anchored
+    and hidden under tiles, CLF veteran custom-revolver and AP-ammo + telebaton
+  type: Add
+- message: Yautja armor and stats reduced
+  type: Tweak
+- message: Turret targeting prioritizes mobs over structures
+  type: Fix
+- message: Cross-z shots work against dropships
+  type: Fix
+- message: Van repair restored after wheel loss, now uses hull integrity
+  type: Fix
+- message: Survivors spawn with starting equipment
+  type: Fix
+- message: M2C doorgunner barrel no longer stops movement, a well-placed xeno-leap
+    can commandeer gunships
+  type: Fix
+- message: Filled CMU canisters deployed across maps replacing the old props
+  type: Map
+- message: CI timeouts and shard split
+  type: Code
+- message: Beanieclava completely hides your identity when you fold/unfold it
+  type: Fix
+- message: Squad preferences respect your setting, transfers to Opfor / FoF also
+  type: Fix
+- message: Threat vote respects user preferences
+  type: Fix
+- message: Dead harbinger cyclones, synths irreparable heart damage from defibs, xeno
+    damage vignette, head of engineering access, mortar camera views, lifeboats/escape-pods,
+    larva surge happening more than once, identity obfuscation disabled, acid ball
+    cooldown on failed casts
+  type: Fix
+- message: Fire suppression grenade, breathable air grenades available in ASRS
+  type: Add
+- message: Salamander firehelmet, required for the firesuit to protect you against
+    fires
+  type: Add
+- message: Fire, pressure, heat, asphyxiation damages are still disabled until ready
+  type: Tweak
+- message: Gas fires spawn RMC tile fires (phoron, plasma, tritium)
+  type: Add
+- message: Xeno reincarnation not working with borrowed pool disabled
+  type: Fix
+- message: 2 Colony Synths for Garrison (v1/redux) in tune with other maps
+  type: Tweak
+- message: Barker's lament not loading due to baked runtimes, reagent generator cache
+    not resetting when maps do
+  type: Fix
+- message: Various runtime and server exceptions, no fuel in tank popup, leaps not
+    receiving nulled doAfters on shutdown, tunnel removal skips during deletion cascade
+  type: Fix
+- message: Third party shuttle spawns now fall back to ground spawn if there is no
+    landing/parking space
+  type: Fix
+- message: Colony jobs fall back to their job markers instead of a random spawn (like
+    warship)
+  type: Fix
+- message: Sprite lookup client spam, reapplying networked visuals during a rollback
+    (diverged states)
+  type: Fix
+- message: Inherit vmarker rotation when spawning entities
+  type: Fix
+- message: Tweaked Govfor & Colony roles on the Ghost Warp closer to hierarchy/function
+  type: Tweak
+- message: Deploy third parties after 10 minutes of interest and cleanup unused after
+    4min, and added to DS
+  type: Tweak
+time: '2026-09-17T04:20:43.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1968

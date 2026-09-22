@@ -168,6 +168,56 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// Walks down the z-network from <paramref name="startOffset"/> and returns the coordinates of the first
+    /// level with a solid (non-opening) tile at this world position. Falls back to the lowest level's
+    /// coordinates when no level has solid ground, so hover effects always have a map to live on.
+    /// </summary>
+    [PublicAPI]
+    public bool TryProjectToGroundEffectMap(
+        Entity<CMUZLevelMapComponent?> sourceMap,
+        int startOffset,
+        Vector2 worldPosition,
+        out MapCoordinates coords)
+    {
+        coords = default;
+
+        if (startOffset >= 0)
+            startOffset = -1;
+
+        MapComponent? lowestMap = null;
+
+        for (var offset = startOffset;
+             TryMapOffset(sourceMap, offset, out var projectedMap, out var projectedMapComp);
+             offset--)
+        {
+            lowestMap = projectedMapComp;
+
+            if (!HasSolidProjectionTile(projectedMap.Value.Owner, worldPosition))
+                continue;
+
+            coords = new MapCoordinates(worldPosition, projectedMapComp.MapId);
+            return true;
+        }
+
+        if (lowestMap == null)
+            return false;
+
+        coords = new MapCoordinates(worldPosition, lowestMap.MapId);
+        return true;
+    }
+
+    private bool HasSolidProjectionTile(EntityUid mapUid, Vector2 worldPosition)
+    {
+        if (!TryComp(mapUid, out MapGridComponent? grid) ||
+            !_map.TryGetTileRef(mapUid, grid, worldPosition, out var tileRef))
+        {
+            return false;
+        }
+
+        return !CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan);
+    }
+
     [PublicAPI]
     public bool TryMapOffset(
         Entity<CMUZLevelMapComponent?> inputMapUid,

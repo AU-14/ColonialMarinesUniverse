@@ -25,7 +25,9 @@
     govforinship: false
     opforinship: true
     daycycleenabled: false
+    thirdpartyinterval: 1800
     thirdparties:
+    - FreeCompanyRaiders
     - USArmy
     - USArmyAlt
     - USArmyAlt2
@@ -58,8 +60,6 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    - AbominationsThreatDS
-    - ApeThreatDS
     # - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF

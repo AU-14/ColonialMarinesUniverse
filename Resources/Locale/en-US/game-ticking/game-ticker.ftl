@@ -29,6 +29,8 @@ lobby-info-players-value = {$count} ({$ready} ready)
 game-ticker-no-map-selected = [color=#FFB500]Map not yet selected![/color]
 game-ticker-no-map-selected-plain = Map not yet selected!
 game-ticker-player-no-jobs-available-when-joining = When attempting to join to the game, no jobs were available.
+# CMU14: shown when a player's job has no spawn point, instead of crashing round start.
+game-ticker-player-no-spawn-point-when-joining = When attempting to join the game, no spawn point was available for job "{$job}".
 
 # Displayed in chat to admins when a player joins
 player-join-message = Player {$name} joined.

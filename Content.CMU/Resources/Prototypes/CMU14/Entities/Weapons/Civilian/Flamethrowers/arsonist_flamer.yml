@@ -1,0 +1,72 @@
+- type: entity
+  parent: RMCWeaponFlamerColony
+  id: CMUWeaponArsonistFlamer
+  name: LC9-P incinerator unit
+  description: An LC9 with its intensity limiter gutted and a pressurized phoron feed bolted in. Whatever it touches keeps burning, and the burn does not stay where you put it.
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        startingItem: CMUTankFlamerPhoron
+
+- type: entity
+  parent: RMCTankFlamerColony
+  id: CMUTankFlamerPhoron
+  name: LC9-P phoron tank
+  description: A pressurized drum of stabilized phoron fuel for the LC9-P. The fire it feeds lingers and creeps, and it shrugs off extinguishers.
+  components:
+  - type: Sprite
+    color: "#b558d6"
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 500
+        reagents:
+        - ReagentId: CMUPhoronFuel
+          Quantity: 500
+
+- type: reagent
+  parent: [ CMReagent, BasePyrotechnic ]
+  id: CMUPhoronFuel
+  name: reagent-name-cmu-phoron-fuel
+  desc: reagent-desc-cmu-phoron-fuel
+  physicalDesc: reagent-physical-desc-shiny
+  flavor: bitter
+  color: "#b558d6"
+  intensity: 30
+  duration: 20
+  radius: 5
+  fireEntity: CMUTileFirePhoronArsonist
+  fireSpread: true
+
+- type: entity
+  parent: RMCTileFire
+  id: CMUTileFirePhoronArsonist
+  suffix: Phoron, creeping
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "base" ]
+      state: purple_4
+  - type: PointLight
+    color: "#b558d6"
+  - type: RMCIgniteOnCollide
+    intensity: 30
+    duration: 20
+    burnColor: "#b558d6"
+  - type: TileFire
+    id: CMUTileFirePhoronArsonist
+    extinguishInstantly: false
+    sprayExtinguishMultiplier: 1
+    duration: 180
+  - type: CMUSpreadingFire
+    depth: 3
+    spreadEvery: 8
+  - type: GenericVisualizer
+    visuals:
+      enum.TileFireLayers.Base:
+        base:
+          One: { state: purple_1 }
+          Two: { state: purple_2 }
+          Three: { state: purple_3 }
+          Four: { state: purple_4 }

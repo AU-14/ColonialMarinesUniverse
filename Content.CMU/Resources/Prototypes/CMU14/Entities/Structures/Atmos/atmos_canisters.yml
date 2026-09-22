@@ -1,92 +1,221 @@
 - type: entity
+  parent: StorageCanister
+  id: CMUCanisterEmpty
+  name: empty canister
+  description: A canister that can contain any type of gas. This one contains none of them yet, which is rather the point. It can be attached to connector ports using a wrench.
+  components:
+  # CMU economy: intact must outprice its broken scrap (125) but stay under catalog cost (150)
+  - type: StaticPrice
+    price: 130
+  - type: Sprite
+    sprite: _RMC14/Structures/atmos.rsi
+    layers:
+    - state: grey
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
+
+  - type: CargoSellWhitelist
+
+- type: entity
   parent: AirCanister
   id: CMUCanisterAir
   components:
+  - type: StaticPrice
+    price: 130
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     layers:
     - state: grey # TODO: verify colors
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
+
+  - type: CargoSellWhitelist
 
 - type: entity
   parent: OxygenCanister
   id: CMUCanisterOxygen
   components:
+  - type: StaticPrice
+    price: 130
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     layers:
-    - state: can-o0
+    - state: blue
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
+  - type: CargoSellWhitelist
 
 - type: entity
   parent: NitrogenCanister
   id: CMUCanisterNitrogen
   components:
+  - type: StaticPrice
+    price: 130
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     layers:
     - state: red
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
+
+  - type: CargoSellWhitelist
 
 - type: entity
   parent: PlasmaCanister
   id: CMUCanisterPlasma
   components:
+  - type: StaticPrice
+    price: 130
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     layers:
     - state: orange
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
+
+  - type: CargoSellWhitelist
 
 - type: entity
   parent: CarbonDioxideCanister
   id: CMUCanisterCarbonDioxide
   components:
+  - type: StaticPrice
+    price: 130
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     layers:
     - state: black
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
+
+  - type: CargoSellWhitelist
 
 - type: entity
   parent: NitrousOxideCanister
   id: CMUCanisterNitrousOxide
   components:
+  - type: StaticPrice
+    price: 130
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     layers:
     - state: redws
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
+
+  - type: CargoSellWhitelist
 
 - type: entity
   parent: PlasmaCanister
@@ -94,19 +223,34 @@
   name: phoron canister
   description: A canister that can contain any type of gas. This one is supposed to contain refined phoron. It can be attached to connector ports using a wrench.
   components:
+  - type: StaticPrice
+    price: 130
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     layers:
     - state: yellow
   - type: GenericVisualizer
     visuals:
-      enum.LockVisuals.Locked:
-        locked:
-          False: { sprite: Structures/Storage/canister.rsi }
-          True: { sprite: Structures/Storage/canister.rsi }
+      enum.AnchorVisuals.Anchored:
+        connectedToPort:
+          False: { state: can-connector, visible: false }
+          True: { state: can-connector, visible: true }
+      enum.GasCanisterVisuals.TankInserted:
+        tankInserted:
+          False: { state: can-open, visible: false }
+          True: { state: can-open, visible: true }
+      enum.GasCanisterVisuals.PressureState:
+        pressureLight:
+          0: { state: can-o0, shader: "unshaded" }
+          1: { state: can-o1, shader: "unshaded" }
+          2: { state: can-o2, shader: "unshaded" }
+          3: { state: can-o3, shader: "unshaded" }
+  - type: AccessReader
+    access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
   - type: GasCanister
     air:
       volume: 1500
       moles:
         Phoron: 2769.36
       temperature: 293.15
+  - type: CargoSellWhitelist

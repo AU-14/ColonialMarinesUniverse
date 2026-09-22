@@ -178,6 +178,11 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
                     || !TryComp(objectiveUid, out CMUObjectiveComponent? auComp))
                 continue;
 
+            // Completed or capped objectives stay marked on entities; without this check their
+            // counters keep climbing on every death long after the objective stopped scoring.
+            if (!auComp.Active)
+                continue;
+
             if (!comp.CreditedObjectives.Add(objectiveUid))
                 continue;
 

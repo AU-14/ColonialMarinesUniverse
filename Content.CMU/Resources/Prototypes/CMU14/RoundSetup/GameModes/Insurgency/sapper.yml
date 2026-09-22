@@ -12,6 +12,7 @@
   roundComponents:
   - type: NpcFactionMember
     factions:
+    - AUColonist
     - CLF
   - type: CLFMember
   # Marks the mob as a trained sapper: the only role that can deploy sapper traps.

@@ -1,0 +1,109 @@
+# Warrant notices handed to spawn-time bounty antags so they know what the CMB has on them.
+# Bounty figures and evidence notes must match the ColonyBounty component on each antagSpecifier.
+- type: entity
+  parent: CMUPaperCMB
+  id: CMUPaperWantedSynthInfiltrator
+  name: Synth Infiltrator Alert
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: Colonial Marshals Bureau
+    content: >2-
+                     [color=#0f2042]⬢[/color] [head=2]Colonial Marshals Bureau[/head] [color=#0f2042]⬢[/color]
+                      [color=#e2b842]★[/color] [italic][color=#8a9baf]Interstellar Jurisdiction // Sector Office[/italic] [color=#e2b842]★[/color]
+      [head=2][bold][color=#0f2042]===================================[/color][/bold][/head][/color]
+      [bold]REGISTRY DETAILS :[/bold]  [bold]Form: [/bold][color=#0f2042]CMB-C-SYNTH[/color]
+
+      [mono]This transmission serves as an official law enforcement ledger authorized under the [bold][color=#0f2042]Interstellar Marshal Council[/color][/bold]. All jurisdiction protocols, asset seizures, and operational warrants must log compliance with these parameters.[/mono]
+      [color=#0f2042]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[/color]
+      [bold]To:[/bold] [italic]CMB Office Staff[/italic]
+      [bold]From:[/bold] [bold]CMB Sectoral HQ[/bold] ||
+      [mono][color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color][/mono]
+
+      Sheriff,
+
+      • Colonial Marshals Bureau has confirmed that a [color=DarkRed][bold]malfunctioning synthetic infiltrator[/bold][/color] is operating within your jurisdiction. No prints or biometric data are on file; assume no identity is genuine.
+
+      • A bounty of [bolditalic][color=OliveDrab]$2,600[/color][/bolditalic] has been authorized for the unit's capture or destruction. The case file is available on your Records Console.
+
+      [bold]Signed,[/bold]
+      [color=#dfc189][bolditalic]Regional HQ  [color=black]|[/color][/bolditalic]
+      [color=#0f2042]==================================================[/color]
+
+      [color=#0f2042]⬢ [mono]Additional Information.[/mono] ⬢[/color]
+
+      [color=#0f2042]Property of the Colonial Marshals Bureau. Unauthorized alteration, interception, or failure to route this directive through official CMB channels is a direct violation of Interstellar Colonial Law.[/color][/color]
+
+- type: entity
+  parent: CMUPaperCMB
+  id: CMUPaperWantedWYOperative
+  name: Black Operations Alert
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: Colonial Marshals Bureau
+    content: >2-
+                     [color=#0f2042]⬢[/color] [head=2]Colonial Marshals Bureau[/head] [color=#0f2042]⬢[/color]
+                      [color=#e2b842]★[/color] [italic][color=#8a9baf]Interstellar Jurisdiction // Sector Office[/italic] [color=#e2b842]★[/color]
+      [head=2][bold][color=#0f2042]===================================[/color][/bold][/head][/color]
+      [bold]REGISTRY DETAILS :[/bold]  [bold]Form: [/bold][color=#0f2042]CMB-C-WYOPS[/color]
+
+      [mono]This transmission serves as an official law enforcement ledger authorized under the [bold][color=#0f2042]Interstellar Marshal Council[/color][/bold]. All jurisdiction protocols, asset seizures, and operational warrants must log compliance with these parameters.[/mono]
+      [color=#0f2042]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[/color]
+      [bold]To:[/bold] [italic]CMB Office Staff[/italic]
+      [bold]From:[/bold] [bold]CMB Sectoral HQ[/bold] ||
+      [mono][color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color][/mono]
+
+      Sheriff,
+
+      • Intelligence indicates a [color=DarkRed][bold]Weyland-Yutani field operative[/bold][/color] is conducting black operations within your colony. The suspect's latent prints have been logged; their identity remains unknown.
+
+      • A bounty of [bolditalic][color=OliveDrab]$1,675[/color][/bolditalic] has been authorized for the operative's capture or termination. Proceed with extreme caution; corporate assets rarely travel alone.
+
+      [bold]Signed,[/bold]
+      [color=#dfc189][bolditalic]Regional HQ  [color=black]|[/color][/bolditalic]
+      [color=#0f2042]==================================================[/color]
+
+      [color=#0f2042]⬢ [mono]Additional Information.[/mono] ⬢[/color]
+
+      [color=#0f2042]Property of the Colonial Marshals Bureau. Unauthorized alteration, interception, or failure to route this directive through official CMB channels is a direct violation of Interstellar Colonial Law.[/color][/color]
+
+- type: entity
+  parent: CMUPaperCMB
+  id: CMUPaperWantedCorporateSpy
+  name: Espionage Alert
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: Colonial Marshals Bureau
+    content: >2-
+                     [color=#0f2042]⬢[/color] [head=2]Colonial Marshals Bureau[/head] [color=#0f2042]⬢[/color]
+                      [color=#e2b842]★[/color] [italic][color=#8a9baf]Interstellar Jurisdiction // Sector Office[/italic] [color=#e2b842]★[/color]
+      [head=2][bold][color=#0f2042]===================================[/color][/bold][/head][/color]
+      [bold]REGISTRY DETAILS :[/bold]  [bold]Form: [/bold][color=#0f2042]CMB-C-ESPON[/color]
+
+      [mono]This transmission serves as an official law enforcement ledger authorized under the [bold][color=#0f2042]Interstellar Marshal Council[/color][/bold]. All jurisdiction protocols, asset seizures, and operational warrants must log compliance with these parameters.[/mono]
+      [color=#0f2042]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[/color]
+      [bold]To:[/bold] [italic]CMB Office Staff[/italic]
+      [bold]From:[/bold] [bold]CMB Sectoral HQ[/bold] ||
+      [mono][color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color][/mono]
+
+      Sheriff,
+
+      • Reports indicate an operative of a [color=DarkRed][bold]rival corporation[/bold][/color] is engaged in the theft of Weyland-Yutani research within your jurisdiction. Latent prints and speech pattern analysis are on file.
+
+      • A bounty of [bolditalic][color=OliveDrab]$1,625[/color][/bolditalic] has been authorized for the operative's capture or termination. Review your Records Console for the case file.
+
+      [bold]Signed,[/bold]
+      [color=#dfc189][bolditalic]Regional HQ  [color=black]|[/color][/bolditalic]
+      [color=#0f2042]==================================================[/color]
+
+      [color=#0f2042]⬢ [mono]Additional Information.[/mono] ⬢[/color]
+
+      [color=#0f2042]Property of the Colonial Marshals Bureau. Unauthorized alteration, interception, or failure to route this directive through official CMB channels is a direct violation of Interstellar Colonial Law.[/color][/color]

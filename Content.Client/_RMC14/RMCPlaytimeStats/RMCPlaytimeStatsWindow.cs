@@ -45,6 +45,9 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
     private TimeSpan _amethystTime;
     private TimeSpan _prismaticTime;
 
+    // CMU14: marine dept medals scale with the rank factor, xeno dept raw
+    private float _marineRankScale = 1f;
+
     public RMCPlaytimeStatsWindow()
     {
         IoCManager.InjectDependencies(this);
@@ -144,6 +147,7 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
 
     private void LoadMedalTimes()
     {
+        _marineRankScale = _config.GetCVar(RMCCVars.RMCPlaytimeMarineRankScaleFactor); // CMU14
         _bronzeTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeBronzeMedalTimeHours));
         _silverTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeSilverMedalTimeHours));
         _goldTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeGoldMedalTimeHours));
@@ -154,19 +158,19 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         _prismaticTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimePrismaticMedalTimeHours));
     }
 
-    private RMCPlaytimeMedalType? GetMedalType(TimeSpan playtime)
+    private RMCPlaytimeMedalType? GetMedalType(TimeSpan playtime, float scale = 1f) // CMU14 Method
     {
-        if (playtime >= _prismaticTime)
+        if (playtime >= _prismaticTime * scale)
             return RMCPlaytimeMedalType.Prismatic;
-        else if (playtime >= _amethystTime)
+        else if (playtime >= _amethystTime * scale)
             return RMCPlaytimeMedalType.Amethyst;
-        else if (playtime >= _rubyTime)
+        else if (playtime >= _rubyTime * scale)
             return RMCPlaytimeMedalType.Ruby;
-        else if (playtime >= _emeraldTime)
+        else if (playtime >= _emeraldTime * scale)
             return RMCPlaytimeMedalType.Emerald;
-        else if (playtime >= _platinumTime)
+        else if (playtime >= _platinumTime * scale)
             return RMCPlaytimeMedalType.Platinum;
-        else if (playtime >= _goldTime)
+        else if (playtime >= _goldTime * scale)
             return RMCPlaytimeMedalType.Gold;
         else if (playtime >= _silverTime)
             return RMCPlaytimeMedalType.Silver;
@@ -189,7 +193,9 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         if (!_prototypeManager.TryIndex<JobPrototype>(jobId, out var job) || job.Medals == null)
             return null;
 
-        var medalType = GetMedalType(playtime);
+        var medalType = departmentId == "CMXeno" // CMU14
+            ? GetMedalType(playtime)
+            : GetMedalType(playtime, _marineRankScale);
         if (medalType == null)
             return null;
 

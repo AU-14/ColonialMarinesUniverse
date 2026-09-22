@@ -2,6 +2,7 @@
   abstract: true
   parent: AU14JobMilitaryBaseAbstract
   id: AU14JobMilitaryDoctorBase
+  displayWeight: 6
   roundRole: MilitaryDoctor
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
@@ -105,6 +106,7 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORMilitaryDoctor
 
 - type: startingGear
   id: AU14GearOPFORMilitaryDoctor

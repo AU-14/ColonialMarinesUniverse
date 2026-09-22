@@ -27,6 +27,13 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
 
     public int LineLimit { get; private set; }
 
+    // CMU14: Ships loaded for either round faction configure their consoles through their owner.
+    public void SetComputerFaction(Entity<TacticalMapComputerComponent> computer, string? faction)
+    {
+        computer.Comp.Faction = NormalizeMapFaction(faction);
+        Dirty(computer);
+    }
+
     public static bool TryNormalizeHumanFaction(string? faction, out string normalized)
     {
         normalized = MarinesFaction;

@@ -27,7 +27,8 @@ public sealed partial class GasCanisterSystem : SharedGasCanisterSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<GasCanisterComponent, PriceCalculationEvent>(CalculateCanisterPrice);
+        // CMU14: GasCanisterPricingSystem owns canister pricing; two subscribers double-price and crash IoC
+        // SubscribeLocalEvent<GasCanisterComponent, PriceCalculationEvent>(CalculateCanisterPrice);
         SubscribeLocalEvent<GasCanisterComponent, GasAnalyzerScanEvent>(OnAnalyzed);
     }
 
@@ -150,10 +151,11 @@ public sealed partial class GasCanisterSystem : SharedGasCanisterSystem
         containerAir.Multiply(containerAir.Volume / buffer.Volume);
     }
 
-    private void CalculateCanisterPrice(EntityUid uid, GasCanisterComponent component, ref PriceCalculationEvent args)
-    {
-        args.Price += _atmos.GetPrice(component.Air);
-    }
+    // CMU14: upstream canister pricing removed, GasCanisterPricingSystem is the single pricer
+    // private void CalculateCanisterPrice(EntityUid uid, GasCanisterComponent component, ref PriceCalculationEvent args)
+    // {
+    //     args.Price += _atmos.GetPrice(component.Air);
+    // }
 
     /// <summary>
     /// Returns the gas mixture for the gas analyzer

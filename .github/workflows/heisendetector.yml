@@ -1,14 +1,18 @@
 name: Hunt for Heisentests
 
 on:
+  # Full-suite flake hunts are opt-in; CI already tests pushes and pull requests.
   workflow_dispatch:
-  # every 15 minutes
-  schedule:
-    - cron: "*/15 * * * *"
+
+# Avoid overlapping manually dispatched hunts.
+concurrency:
+  group: heisentests
+  cancel-in-progress: true
 
 jobs:
   hunt:
     runs-on: ubuntu-latest
+    timeout-minutes: 100
     outputs:
       matrix: ${{ steps.get_fails.outputs.matrix }}
       count: ${{ steps.get_fails.outputs.count }}
@@ -62,6 +66,7 @@ jobs:
   report:
     needs: [ hunt ]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       issues: write
     strategy:

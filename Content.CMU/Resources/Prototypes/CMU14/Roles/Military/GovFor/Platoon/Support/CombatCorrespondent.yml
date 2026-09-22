@@ -146,6 +146,7 @@
   dummyStartingGear: AU14GearOPFORCombatCorrespondentDummy
   accessGroups:
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORCombatCorrespondent
 
 - type: startingGear
   id: AU14GearOPFORCombatCorrespondent

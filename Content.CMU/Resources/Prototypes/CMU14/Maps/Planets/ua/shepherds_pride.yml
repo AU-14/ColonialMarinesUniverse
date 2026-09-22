@@ -25,6 +25,7 @@
     govforinship: true
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
     - FreelancersSurv
     - USArmy
@@ -64,8 +65,6 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    - AbominationsThreatDS
-    - ApeThreatDS
     # - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF

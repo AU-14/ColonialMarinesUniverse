@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 1
   id: CMUJobDroneOperatorBaseAbstract
   name: cmu-job-name-govfordroneoperator
   description: cmu-job-description-govfordroneoperator
@@ -135,11 +136,6 @@
   equipment:
     back: CMUDroneOperatorChoicePackFilled
 
-- type: loadout
-  id: CMUCombatDroneOperatorPackLoadout
-  equipment:
-    back: CMUDroneOperatorChoicePackFilled
-
 - type: job
   parent: CMUJobDroneOperatorBase
   id: CMUJobOPFORDroneOperator
@@ -153,6 +149,7 @@
   accessGroups:
   - AU14OpforSquad
   ignoreAllegiance: true
+  useLoadoutOfJob: CMUJobGOVFORDroneOperator
 
 - type: startingGear
   id: CMUGearOPFORDroneOperator

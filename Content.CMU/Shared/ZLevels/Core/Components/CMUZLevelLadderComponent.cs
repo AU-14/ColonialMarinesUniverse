@@ -1,5 +1,6 @@
 using Robust.Shared.GameStates;
 using Content.Shared.Interaction;
+using Robust.Shared.Audio;
 
 namespace Content.Shared.CMU14.ZLevels.Core.Components;
 
@@ -33,4 +34,10 @@ public sealed partial class CMUZLevelLadderComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float LandingLocalPosition = 0.05f;
+
+    [DataField]
+    public SoundSpecifier? StartSound;
+
+    [DataField]
+    public SoundSpecifier? FinishSound;
 }

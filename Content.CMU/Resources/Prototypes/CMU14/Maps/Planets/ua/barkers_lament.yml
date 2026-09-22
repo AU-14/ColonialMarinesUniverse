@@ -25,6 +25,7 @@
     govforinship: false
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
     - DiplomaticAttachesSurv
     - ICRCReliefParty
@@ -54,8 +55,6 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    - AbominationsThreatDS
-    - ApeThreatDS
     # - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF

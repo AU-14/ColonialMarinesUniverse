@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -40,6 +42,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -363,13 +366,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     /// <summary>
     ///     Gets the map UIDs of ALL ships in the game.
     ///     Used to filter xeno/threat hijack destinations to any ship.
-    ///     Includes AlmayerComponent maps (default marine) and all ShipFactionComponent maps.
+    ///     Includes WarshipComponent maps (default marine) and all ShipFactionComponent maps.
     /// </summary>
-    private HashSet<EntityUid> GetAllShipMaps()
+    private HashSet<EntityUid> GetAllShipMaps() // CMU14 Method
     {
         var shipMaps = new HashSet<EntityUid>();
 
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>();
         while (almayerQuery.MoveNext(out _, out _, out var xform))
         {
             AddShipMapAndConnectedZLevels(shipMaps, xform.MapUid);
@@ -693,6 +696,29 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             return;
         }
 
+        // CMU14 Begin: recall guards
+        if (terminal.Comp.LastSummonAt is { } lastSummon && _timing.CurTime - lastSummon < terminal.Comp.SummonCooldown)
+        {
+            _popup.PopupEntity("This terminal is still recharging.", terminal, args.Actor, PopupType.MediumCaution);
+            return;
+        }
+
+        // Only abandoned ships can be pulled remotely: anyone aboard, be it crew, boarders
+        // or hijackers, keeps the ship where it is.
+        if (Transform(computerId.Value).GridUid is { } shipGrid)
+        {
+            var actors = EntityQueryEnumerator<ActorComponent, TransformComponent>();
+            while (actors.MoveNext(out _, out _, out var actorXform))
+            {
+                if (actorXform.GridUid != shipGrid)
+                    continue;
+
+                _popup.PopupEntity("There is still someone aboard that dropship!", terminal, args.Actor, PopupType.MediumCaution);
+                return;
+            }
+        }
+        // CMU14 End
+
         if (!TryDropshipLaunchPopup(terminal, args.Actor, false))
             return;
 
@@ -704,6 +730,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
         _ui.CloseUi(terminal.Owner, DropshipTerminalUiKey.Key, args.Actor);
         _popup.PopupEntity("This dropship is now on its way.", terminal, args.Actor, PopupType.Medium);
+        terminal.Comp.LastSummonAt = _timing.CurTime; // CMU14
     }
 
     private void OnAttachmentPointMapInit<TComp, TEvent>(Entity<TComp> ent, ref TEvent args) where TComp : IComponent?
@@ -1111,9 +1138,24 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
         var map = _transform.GetMap(user.Owner);
 
-        // Prevent double hijack.
-        if (TryComp(map, out EvacuationProgressComponent? evacuation) &&
-            evacuation.DropShipCrashed)
+        // CMU14: Prevent double hijack. The progress component sits on the deck the first
+        // crash landed on, which need not be this hijacker's deck, so scan the ship z-network.
+        // No map means no network to scan.
+        var crashLanded = false;
+        if (map is { } hijackMap) // CMU14
+        {
+            foreach (var connectedMap in _zLevels.GetAllNetworkMaps(hijackMap))
+            {
+                if (TryComp(connectedMap, out EvacuationProgressComponent? evacuation) &&
+                    evacuation.DropShipCrashed)
+                {
+                    crashLanded = true;
+                    break;
+                }
+            }
+        }
+
+        if (crashLanded)
         {
             var msg = Loc.GetString("rmc-dropship-invalid-hijack");
 
@@ -1230,19 +1272,53 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         }
     }
 
+    // CMU14 method: resolve secondary decks through their cabin controller.
     public bool TryGetGridDropship(EntityUid ent, out Entity<DropshipComponent> dropship)
     {
         if (TryComp(ent, out TransformComponent? xform) &&
             xform.GridUid is { } grid &&
-            !TerminatingOrDeleted(grid) &&
-            TryComp(xform.GridUid, out DropshipComponent? dropshipComp))
+            !TerminatingOrDeleted(grid))
         {
-            dropship = (grid, dropshipComp);
-            return true;
+            if (TryComp<DropshipDeckComponent>(grid, out var deck))
+                grid = deck.Ship;
+            if (!TerminatingOrDeleted(grid) && TryComp<DropshipComponent>(grid, out var dropshipComp))
+            {
+                dropship = (grid, dropshipComp);
+                return true;
+            }
         }
 
         dropship = default;
         return false;
+    }
+
+    // CMU14 method
+    /// <summary>Registers equipment loaded before a secondary deck was linked to its ship.</summary>
+    public void RegisterDeckAttachmentPoints(EntityUid ship, EntityUid grid)
+    {
+        if (_net.IsClient || !TryComp<DropshipComponent>(ship, out var dropship))
+            return;
+
+        var children = Transform(grid).ChildEnumerator;
+        while (children.MoveNext(out var uid))
+        {
+            if (HasComp<DropshipWeaponPointComponent>(uid) || HasComp<DropshipEnginePointComponent>(uid) ||
+                HasComp<DropshipUtilityPointComponent>(uid) || HasComp<DropshipElectronicSystemPointComponent>(uid))
+                dropship.AttachmentPoints.Add(uid);
+        }
+        Dirty(ship, dropship);
+    }
+
+    // CMU14 method
+    /// <summary>Unregisters the equipment of a deck removed from a dropship.</summary>
+    public void RemoveDeckAttachmentPoints(EntityUid ship, EntityUid grid)
+    {
+        if (_net.IsClient || !TryComp<DropshipComponent>(ship, out var dropship))
+            return;
+
+        if (dropship.AttachmentPoints.RemoveWhere(point =>
+                TerminatingOrDeleted(point) || Transform(point).GridUid == grid) > 0)
+            Dirty(ship, dropship);
     }
 
     public bool TryGetGridFaction(EntityUid ent, [NotNullWhen(true)] out string? faction)
@@ -1250,6 +1326,9 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         faction = null;
         if (!TryComp(ent, out TransformComponent? xform) || xform.GridUid is not { } grid)
             return false;
+
+        if (TryComp<DropshipDeckComponent>(grid, out var deck)) // CMU14: followers share the cabin's faction.
+            grid = deck.Ship;
 
         if (TryComp<ShipFactionComponent>(grid, out var shipFaction) &&
             !string.IsNullOrWhiteSpace(shipFaction.Faction))
@@ -1315,15 +1394,17 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         return dropship.Comp.State == FTLState.Travelling || dropship.Comp.State == FTLState.Arriving;
     }
 
+    // CMU14 method: include occupants on secondary decks.
     public bool IsOnDropship(EntityUid entity)
     {
-        var grid = _transform.GetGrid(entity);
-        return HasComp<DropshipComponent>(grid);
+        return TryGetGridDropship(entity, out _);
     }
 
     public bool IsOnDropship(EntityCoordinates coordinates)
     {
         var grid = _transform.GetGrid(coordinates);
+        if (TryComp<DropshipDeckComponent>(grid, out var deck)) // CMU14: resolve secondary decks.
+            grid = deck.Ship;
         return HasComp<DropshipComponent>(grid);
     }
 

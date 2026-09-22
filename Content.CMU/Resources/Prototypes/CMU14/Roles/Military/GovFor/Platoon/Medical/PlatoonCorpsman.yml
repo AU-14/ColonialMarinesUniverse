@@ -11,7 +11,7 @@
   playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
   overwatchSortPriority: -2
-  displayWeight: 3
+  displayWeight: 2
   accessGroups:
   - AU14GovforCorpsman
   - AU14GovforSquad
@@ -173,6 +173,7 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORPlatoonCorpsman
 
 - type: startingGear
   id: AU14GearopforPlatoonCorpsman

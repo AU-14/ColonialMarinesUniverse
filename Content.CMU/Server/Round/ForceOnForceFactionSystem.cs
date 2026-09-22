@@ -15,10 +15,10 @@ using Robust.Server.Player;
 namespace Content.Server.CMU14.Round;
 
 /// <summary>
-/// Tracks which faction each player spawned as during Force on Force. Mid-round spawns
-/// (latejoin and respawn) stay locked to that faction so round intel stays one-sided, and
-/// unrestricted joiners are steered to whichever side is behind. Round-start dealing lives
-/// in StationJobsSystem.AssignJobs.
+/// Tracks which faction each player spawned as during Force on Force for the mid-round
+/// balance count. The per-player faction lock is currently disabled: it let dead players
+/// on the leading side respawn straight back into it, which defeated the MaxGap balancer.
+/// Round-start dealing lives in StationJobsSystem.AssignJobs.
 /// </summary>
 public sealed class ForceOnForceFactionSystem : EntitySystem
 {
@@ -93,11 +93,13 @@ public sealed class ForceOnForceFactionSystem : EntitySystem
             return false;
 
         string target;
-        if (_factions.TryGetValue(player.UserId, out var locked))
-        {
-            target = locked;
-        }
-        else
+        // Faction lock disabled: every spawn runs the balance check, otherwise locked
+        // respawners keep feeding the leading side past MaxGap. Uncomment to restore.
+        // if (_factions.TryGetValue(player.UserId, out var locked))
+        // {
+        //     target = locked;
+        // }
+        // else
         {
             var govfor = 0;
             var opfor = 0;
@@ -161,6 +163,7 @@ public sealed class ForceOnForceFactionSystem : EntitySystem
 
         priorities.TryAdd(target == "GOVFOR" ? GovforRifleman : OpforRifleman, JobPriority.Low);
 
+        var rifleman = target == "GOVFOR" ? GovforRifleman : OpforRifleman;
         var stations = _station.GetStations().ToList();
         _random.Shuffle(stations);
         foreach (var candidate in stations)
@@ -173,6 +176,13 @@ public sealed class ForceOnForceFactionSystem : EntitySystem
             return true;
         }
 
-        return false;
+        // The behind side has no open slots left; returning false would free-pick the joiner
+        // into the leading side and the buffer could never recover. Force the rifleman through.
+        if (disallowed.Contains(rifleman))
+            return false;
+
+        job = rifleman;
+        jobStation = stations.FirstOrDefault();
+        return jobStation != EntityUid.Invalid;
     }
 }

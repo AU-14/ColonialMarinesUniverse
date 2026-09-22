@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared._RMC14.Xenonids.Devour;
@@ -229,9 +230,9 @@ public sealed partial class XenoTunnelSystem : EntitySystem
             return;
         }
 
-        if (_transform.GetGrid(location) is not { } gridId ||
-            !TryComp(gridId, out MapGridComponent? grid) ||
-            HasComp<AlmayerComponent>(gridId))
+        if (_transform.GetGrid(location) is not { } gridId // CMU14
+            || !TryComp(gridId, out MapGridComponent? grid)
+            || HasComp<WarshipComponent>(gridId))
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-construction-bad-area-tunnel"), xenoBuilder, xenoBuilder);
             return;
@@ -773,6 +774,11 @@ public sealed partial class XenoTunnelSystem : EntitySystem
     private void RemoveFromTunnel(EntityUid tunneledMob, EntityUid tunnel)
     {
         RemCompDeferred<InXenoTunnelComponent>(tunneledMob);
+
+        // CMU14: during a deletion cascade the tunnel is terminating and cannot be a drop parent
+        if (TerminatingOrDeleted(tunnel))
+            return;
+
         _transform.DropNextTo(tunneledMob, tunnel);
     }
 

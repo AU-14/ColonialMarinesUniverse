@@ -106281,6 +106281,13 @@ entities:
       rot: 3.141592653589793 rad
       pos: 24.5,-35.5
       parent: 1
+- proto: ForensicScanner
+  entities:
+  - uid: 49404
+    components:
+    - type: Transform
+      pos: 236.5,-53.5
+      parent: 1
 - proto: ComputerCriminalRecords
   entities:
   - uid: 5720
@@ -135625,7 +135632,7 @@ entities:
     - type: Transform
       pos: -12.312223,-137.44511
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 11001
     components:
@@ -135905,7 +135912,7 @@ entities:
       parent: 11053
     - type: Physics
       canCollide: False
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 11043
     components:

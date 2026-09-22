@@ -11,7 +11,7 @@
   playTimeTracker: AU14JobGOVFOROfficerEngi
   requireAdminNotify: true
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 7
   accessGroups:
   - AU14GovforCommand
   - AU14GovforEngineer
@@ -101,6 +101,8 @@
   - aulegacygroupcommand
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFOROfficerEngi
+
 - type: startingGear
   id: AU14GearGOVFOROfficerEngi
   equipment:
