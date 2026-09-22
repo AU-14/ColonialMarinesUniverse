@@ -10,6 +10,7 @@
   - type: Transform
     noRot: true
   - type: VehicleSmashable
+    selfDamageMultiplier: 0.01
   - type: Physics
     bodyType: Static
   - type: Sprite
