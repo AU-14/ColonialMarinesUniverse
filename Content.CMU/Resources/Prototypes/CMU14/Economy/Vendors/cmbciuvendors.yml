@@ -459,6 +459,7 @@
     - name: External Webbing
       choices: { CMUPlatoonAirCrewVest: 1 }
       entries:
+      - id: CMArmorM3VLFlakVest
       - id: RMCOuterClothingExternalWebbingBlack
       - id: RMCArmorVestSquad
         amount: 2
@@ -480,6 +481,15 @@
       choices: { CMUPlatoonAirCrewFlightVisor: 1 }
       entries:
       - id: AU14GogglesLAH99VisorHighTech
+    - name: Pilot HUD
+      choices: { CMUPlatoonAirCrewPilotHUD: 1 }
+      entries:
+      - id: RMCVisorPilotBlack
+      - id: RMCVisorPilotDarkblue
+      - id: RMCVisorPilotLightblue
+      - id: RMCVisorPilotPurple
+      - id: RMCVisorPilotRed
+      - id: RMCVisorPilotYellow
     - name: Flight Mask
       choices: { CMUPlatoonAirCrewFlightMask: 1 }
       entries:
