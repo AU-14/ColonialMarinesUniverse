@@ -1,6 +1,7 @@
+using Robust.Shared.GameStates;
 namespace Content.Shared._RMC14.Xenonids.Despoiler;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class XenoDespoilerLingeringAcidComponent : Component
 {
     [DataField]
