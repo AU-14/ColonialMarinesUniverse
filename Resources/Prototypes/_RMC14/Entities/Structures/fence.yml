@@ -15,6 +15,7 @@
   - type: VehicleSmashable
     deleteOnHit: false
     damageOnHit: 50
+    selfDamageMultiplier: 0.01
   - type: IconSmooth
     key: fences
     base: fence
