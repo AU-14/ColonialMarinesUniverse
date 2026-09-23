@@ -72,7 +72,7 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         _classic = _cfg.GetCVar(CCVars.CMUTacMapClassic);
         UsingReconstruction = !_classic;
         // Existing actions and computers keep their normal BUI key and classic implementation.
-        if (_classic && uiKey is not CMUReconstructionUiKey)
+        if (_classic && UiKey is not CMUReconstructionUiKey)
             return;
         _actor = PlayerManager.LocalEntity;
         if (!_classic)
@@ -155,7 +155,7 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         if (message is CMUReconSnapshotMessage or CMUReconFeedbackMessage { LocalizationKey: "cmu-recon-no-map" })
             StopSurveyRetry();
         if (message is CMUReconFeedbackMessage { LocalizationKey: "cmu-recon-no-map" } &&
-            uiKey is not CMUReconstructionUiKey && UsingReconstruction)
+            UiKey is not CMUReconstructionUiKey && UsingReconstruction)
         {
             _window?.Dispose();
             _window = null;
