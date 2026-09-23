@@ -13,6 +13,68 @@ namespace Content.IntegrationTests.CMU14.TacticalMap;
 public sealed partial class CMUReconstructionTest
 {
 #pragma warning disable RA0002 // Fixture inputs model the existing, separately published faction and squad feeds.
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task FirstSurveyReplyIncludesCurrentAuthorizedRoleIcons(bool dropFirstRequest)
+    {
+        var session = ServerSession!;
+        var original = session.AttachedEntity;
+        NetEntity console = default;
+        CMUReconHandshakeTestSystem probe = null;
+        CMUReconHandshakeTestSystem serverProbe = null;
+        var commander = new TacticalMapBlip
+        {
+            Indices = new(2, 3), Color = Color.Cyan,
+            Image = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "rmc_commander"),
+        };
+        try
+        {
+            await Server.WaitPost(() =>
+            {
+                _ui.CloseUi(_console, Key, _actor);
+                var map = SEntMan.EnsureComponent<TacticalMapComponent>(_upper);
+                map.GovforBlips = new() { [_actor.Id] = commander };
+                map.OpforBlips = new() { [_console.Id] = commander with { Indices = new(7, 7) } };
+                map.NextUpdate = TimeSpan.MaxValue;
+                foreach (var faction in map.NextUpdatePerFaction.Keys.ToArray()) map.NextUpdatePerFaction[faction] = TimeSpan.MaxValue;
+                SComp<TacticalMapComputerComponent>(_console).Blips.Clear();
+                Server.PlayerMan.SetAttachedEntity(session, _actor);
+                console = SEntMan.GetNetEntity(_console);
+                serverProbe = SEntMan.System<CMUReconHandshakeTestSystem>();
+                serverProbe.Target = _console;
+                serverProbe.DropRequest = dropFirstRequest;
+            });
+            await Pair.RunUntilSynced();
+            await Client.WaitPost(() =>
+            {
+                probe = CEntMan.System<CMUReconHandshakeTestSystem>();
+                probe.Target = CEntMan.GetEntity(console);
+                // Initial icons must accompany metadata, not depend on a later contact refresh packet.
+                probe.DropContacts = true;
+            });
+            await Server.WaitPost(() => _ui.TryOpenUi(_console, Key, _actor));
+            await Pair.RunSeconds(1);
+            await Client.WaitAssertion(() =>
+            {
+                var view = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView;
+                Assert.That(view.Scene, Is.Not.Null, "A dropped opening request should recover within one second.");
+                Assert.That(view.TrackedContacts.Select(c => c.Blip), Is.EquivalentTo(new[] { commander }),
+                    "The first survey reply must contain the commander icon and omit unauthorized enemy contacts.");
+            });
+        }
+        finally
+        {
+            await Client.WaitPost(() => { if (probe != null) { probe.DropContacts = false; probe.Target = default; } });
+            await Server.WaitPost(() =>
+            {
+                _ui.CloseUi(_console, Key, _actor);
+                if (serverProbe != null) { serverProbe.Target = default; serverProbe.DropRequest = false; }
+                Server.PlayerMan.SetAttachedEntity(session, original);
+            });
+            await Pair.RunUntilSynced();
+        }
+    }
+
     [Test]
     public async Task PersonalMapReceivesRoleIconsAndFreshSquadPositionsOverTheWire()
     {
@@ -48,7 +110,7 @@ public sealed partial class CMUReconstructionTest
             await Client.WaitAssertion(() =>
             {
                 var view = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView;
-                Assert.That(view.TrackedContacts, Is.EquivalentTo(new CMUReconContact[] { new(0, commander, _actor.Id), new(0, leader, _console.Id, true) }),
+                Assert.That(view.TrackedContacts, Is.EquivalentTo(new CMUReconContact[] { new(0, commander), new(0, leader) }),
                     "Preserve actual job sprites, faction colours and fireteam badges; prefer live squad positions and exclude disabled factions.");
             });
             leader = leader with { Indices = new(6, 5) };

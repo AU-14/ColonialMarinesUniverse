@@ -42,32 +42,32 @@ public sealed partial class CMUTacticalReconstructionSystem
     {
         var contacts = new List<CMUReconContact>();
         var seen = new HashSet<int>();
-        void Add(Dictionary<int, TacticalMapBlip> blips, bool live)
+        void Add(Dictionary<int, TacticalMapBlip> blips)
         {
             foreach (var (id, blip) in blips)
             {
                 if (!seen.Add(id) || !TryComp<TransformComponent>(new EntityUid(id), out var transform)) continue;
                 var level = Array.IndexOf(survey.Atlas.Maps, transform.MapUid);
-                if (level >= 0) contacts.Add(new CMUReconContact(survey.Atlas.MinDepth + level, blip, id, live));
+                if (level >= 0) contacts.Add(new CMUReconContact(survey.Atlas.MinDepth + level, blip));
             }
         }
         if (TryComp<TacticalMapUserComponent>(source, out var user))
         {
             // The classic squad tab has a separate authorized live feed (including SL and fireteam badges).
             // Prefer it over an older published faction snapshot; do not look up unfiltered tracked actors.
-            if (user.HasSquad) Add(user.SquadBlips, true);
-            if (user.Marines) Add(user.MarineBlips, user.LiveUpdate);
-            if (user.Xenos) { Add(user.XenoBlips, user.LiveUpdate); Add(user.XenoStructureBlips, user.LiveUpdate); }
-            if (user.Opfor) Add(user.OpforBlips, user.LiveUpdate);
-            if (user.Govfor) Add(user.GovforBlips, user.LiveUpdate);
-            if (user.Clf) Add(user.ClfBlips, user.LiveUpdate);
-            if (user.WeYu) Add(user.WeYuBlips, user.LiveUpdate);
-            if (user.Abomination) Add(user.AbominationBlips, user.LiveUpdate);
+            if (user.HasSquad) Add(user.SquadBlips);
+            if (user.Marines) Add(user.MarineBlips);
+            if (user.Xenos) { Add(user.XenoBlips); Add(user.XenoStructureBlips); }
+            if (user.Opfor) Add(user.OpforBlips);
+            if (user.Govfor) Add(user.GovforBlips);
+            if (user.Clf) Add(user.ClfBlips);
+            if (user.WeYu) Add(user.WeYuBlips);
+            if (user.Abomination) Add(user.AbominationBlips);
         }
         else if (TryComp<TacticalMapComputerComponent>(source, out var computer))
         {
-            Add(computer.SquadBlips, true);
-            Add(computer.Blips, true);
+            Add(computer.SquadBlips);
+            Add(computer.Blips);
         }
         var operatorLevel = Array.IndexOf(survey.Atlas.Maps, Transform(actor).MapUid);
         return new CMUReconContactsMessage(survey.Generation, contacts.ToArray())

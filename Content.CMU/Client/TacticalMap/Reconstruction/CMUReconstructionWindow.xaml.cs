@@ -83,6 +83,7 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
                 {
                     if (View.TryResume(scene))
                     {
+                        View.TrackedContacts = scene.Contacts;
                         _incoming = null;
                         IsRefreshing = false;
                         _canOrder = scene.CanOrder;
@@ -96,6 +97,12 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
                     if (CMUReconSceneData.Initialize(scene))
                     {
                         _incoming = scene;
+                        _incomingContacts = new CMUReconContactsMessage(scene.Generation, scene.Contacts)
+                        {
+                            OperatorPosition = scene.OperatorPosition,
+                            OperatorDepth = scene.OperatorDepth,
+                        };
+                        View.TrackedContacts = scene.Contacts;
                         var saved = View.Scene;
                         if (saved.MapChoice == scene.MapChoice && saved.Origin == scene.Origin &&
                             saved.Width == scene.Width && saved.Height == scene.Height &&
@@ -112,6 +119,7 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
                     break;
                 }
                 View.SetScene(scene);
+                View.TrackedContacts = scene.Contacts;
                 if (_views.TryGetValue(scene.MapChoice, out var previous))
                 {
                     View.Draft = previous.Draft;

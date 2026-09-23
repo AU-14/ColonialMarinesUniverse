@@ -173,9 +173,14 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
         survey.NextRequest = _timing.CurTime + TimeSpan.FromSeconds(2);
         survey.NextSwitch = _timing.CurTime + TimeSpan.FromSeconds(0.25);
         _surveys[key] = survey;
-        // Metadata first. Geometry follows in bounded chunk batches.
-        _ui.ServerSendUiMessage(ent, UiKey(ent), Snapshot(survey, args.Actor, CanOrder(ent, args.Actor), false), args.Actor);
-        SendContacts(ent, args.Actor, survey);
+        if (computer != null)
+            EntityManager.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>().RefreshReconstructionContacts((ent, computer));
+        var contacts = Contacts(ent, args.Actor, survey);
+        var snapshot = Snapshot(survey, args.Actor, CanOrder(ent, args.Actor), false);
+        snapshot.Contacts = contacts.Contacts;
+        survey.LastContacts = contacts;
+        // Metadata and current authorized icons arrive together. Terrain follows in bounded batches.
+        _ui.ServerSendUiMessage(ent, UiKey(ent), snapshot, args.Actor);
     }
 
     /// <summary>Detached diagnostics copy. Opening the UI never sends this full allocation.</summary>

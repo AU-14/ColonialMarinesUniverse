@@ -100,7 +100,8 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         StopSurveyRetry();
         _surveyRetry = new CancellationTokenSource();
         // A predicted reopen can send before the server subscribes us, or lose the reply while
-        // the old window closes. Keep requesting metadata until this window receives a baseline.
+        // the old window closes. Recover the opening race quickly, then back off until a baseline arrives.
+        Timer.Spawn(TimeSpan.FromSeconds(0.5), RequestSurvey, _surveyRetry.Token);
         Timer.SpawnRepeating(TimeSpan.FromSeconds(2), RequestSurvey, _surveyRetry.Token);
         RequestSurvey();
     }

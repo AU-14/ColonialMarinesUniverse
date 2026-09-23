@@ -12,13 +12,7 @@ public sealed partial class CMUReconstructionControl
 {
     [Dependency] private IGameTiming _timing = default!;
     public bool ShowContacts = true;
-    private CMUReconContact[] _trackedContacts = [];
-    private readonly CMUReconContactMotion _contactMotion = new();
-    public CMUReconContact[] TrackedContacts
-    {
-        get => _trackedContacts;
-        set { _trackedContacts = value; _contactMotion.Update(value, _timing.RealTime); }
-    }
+    public CMUReconContact[] TrackedContacts = [];
     private static readonly ResPath BlipRsi = new("/Textures/_RMC14/Interface/map_blips.rsi");
     private static readonly SpriteSpecifier.Rsi DefaultBlip = new(BlipRsi, "background");
     private static readonly SpriteSpecifier.Rsi HiveLeaderBlip = new(BlipRsi, "xenoleader");
@@ -33,8 +27,7 @@ public sealed partial class CMUReconstructionControl
         {
             if (contact.Depth != scene.MinDepth + _selectedLevel) continue;
             var blip = contact.Blip;
-            var position = _contactMotion.Position(contact, _timing.RealTime);
-            var point = Project(new Vector3(position - (Vector2) scene.Origin + new Vector2(0.5f), _selectedLevel * 3 + 0.4f));
+            var point = Project(new Vector3((Vector2) (blip.Indices - scene.Origin) + new Vector2(0.5f), _selectedLevel * 3 + 0.4f));
             if (!PixelSizeBox.Contains(new Vector2i((int) point.X, (int) point.Y))) continue;
             var rect = UIBox2.FromDimensions(point - new Vector2(10 * UIScale), new Vector2(20 * UIScale));
             if (blip.Background is { } background) handle.DrawTextureRect(sprites.GetFrame(background, _timing.CurTime), rect, blip.Color);

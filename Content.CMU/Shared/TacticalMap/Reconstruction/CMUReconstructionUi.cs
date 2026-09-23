@@ -123,6 +123,8 @@ public sealed class CMUReconSnapshotMessage(int generation, Vector2i origin, int
     public byte[] Directions = [];
     public CMUReconSurface[] Surfaces = [];
     public CMUReconLabel[] Labels = [];
+    // Opening intel travels with its generation so a separate contact packet cannot arrive too early.
+    public CMUReconContact[] Contacts = [];
     public Vector2i OperatorTile;
     public Vector2? OperatorPosition;
     public int OperatorDepth;
@@ -163,7 +165,7 @@ public sealed class CMUReconFeedbackMessage(string localizationKey) : BoundUserI
 }
 
 [Serializable, NetSerializable]
-public readonly record struct CMUReconContact(int Depth, TacticalMapBlip Blip, int Id = 0, bool Live = false);
+public readonly record struct CMUReconContact(int Depth, TacticalMapBlip Blip);
 
 [Serializable, NetSerializable]
 public sealed class CMUReconContactsMessage(int generation, CMUReconContact[] contacts) : BoundUserInterfaceMessage

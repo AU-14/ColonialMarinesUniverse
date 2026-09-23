@@ -1107,6 +1107,7 @@ public sealed class CMUReconHandshakeTestSystem : EntitySystem
     public EntityUid Target;
     public bool DropRequest;
     public bool DropSnapshot;
+    public bool DropContacts;
     public int Requests;
     public int Chunks;
     public int ChunkBytes;
@@ -1122,6 +1123,8 @@ public sealed class CMUReconHandshakeTestSystem : EntitySystem
     {
         if (args.Target != Target)
             return;
+        if (args.Message is CMUReconContactsMessage && DropContacts)
+            args.Cancel();
         if (args.Message is CMUReconPatchMessage patch)
         {
             Chunks += patch.Chunks.Length;

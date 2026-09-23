@@ -89,7 +89,15 @@ public sealed partial class CMUReconstructionTest
     {
         var session = ServerSession!;
         var original = session.AttachedEntity;
-        await Server.WaitPost(() => Server.PlayerMan.SetAttachedEntity(session, _actor));
+        System.Collections.IDictionary pending = null;
+        await Server.WaitPost(() =>
+        {
+            pending = (System.Collections.IDictionary) typeof(Content.Server.CMU14.TacticalMap.Reconstruction.CMUTacticalReconstructionSystem)
+                .GetField("_preloads", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(_recon)!;
+            // Pooled sessions can retain an idle rate-limit entry from an earlier authorized preload.
+            pending.Remove(session);
+            Server.PlayerMan.SetAttachedEntity(session, _actor);
+        });
         await Pair.RunUntilSynced();
         try
         {
@@ -98,8 +106,6 @@ public sealed partial class CMUReconstructionTest
             await Server.WaitAssertion(() =>
             {
                 Assert.That(SEntMan.HasComponent<TacticalMapUserComponent>(_actor), Is.False);
-                var pending = (System.Collections.IDictionary) typeof(Content.Server.CMU14.TacticalMap.Reconstruction.CMUTacticalReconstructionSystem)
-                    .GetField("_preloads", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(_recon)!;
                 Assert.That(pending.Contains(session), Is.False);
             });
             await Client.WaitPost(() => Client.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.CMUTacMapClassic, true));
