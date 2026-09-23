@@ -14,6 +14,7 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
     public Action? OnClear;
     public Action<CMUReconSendMessage>? OnSend;
     public Action<CMUReconMapChoice>? OnMapSelected;
+    public event Action? OnClosing;
     public bool CenterOnOpening { get; set; }
     private bool _centerPending;
     private int _requestId;
@@ -205,9 +206,18 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
         if (scene.HasPlanet || scene.HasShip) MapSelection.SelectId((int) scene.MapChoice);
     }
 
-    public void RestoreCached(CMUReconSnapshotMessage scene, CMUReconCamera camera)
+    public override void Close()
     {
-        View.SetScene(scene);
+        // BaseWindow removes its children from the tree before raising OnClose.
+        // Transfer the survey resources before the view releases them on exit.
+        if (IsOpen) OnClosing?.Invoke();
+        base.Close();
+    }
+
+    public void RestoreCached(CMUReconSnapshotMessage scene, CMUReconCamera camera, CMUReconRenderData? render = null)
+    {
+        if (render == null) View.SetScene(scene);
+        else View.RestoreScene(scene, render);
         View.RestoreCamera(camera);
         ConfigureFloors(scene);
         ConfigureMaps(scene);

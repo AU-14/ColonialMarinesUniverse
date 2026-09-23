@@ -79,15 +79,15 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         {
             _window = this.CreateWindow<CMUReconstructionWindow>();
             _window.CenterOnOpening = _cfg.GetCVar(CCVars.CMUTacMapCenterOnOpen);
-            if (_actor is { } actor && EntMan.System<CMUReconstructionCacheSystem>().TryTake(Owner, actor, out var scene, out var camera,
+            if (_actor is { } actor && EntMan.System<CMUReconstructionCacheSystem>().TryTake(Owner, actor, out var scene, out var camera, out var render,
                     _cfg.GetCVar(CCVars.CMUTacMapPlanetOnShip)))
-                _window.RestoreCached(scene, camera);
+                _window.RestoreCached(scene, camera, render);
             _window.OnRoute += SendMessage;
             _window.OnSend += SendMessage;
             _window.OnCancelOrder += SendMessage;
             _window.OnClear += () => SendMessage(new CMUReconClearOrdersMessage());
             _window.OnClose += StopSurveyRetry;
-            _window.OnClose += Remember;
+            _window.OnClosing += Remember;
             _window.OnMapSelected += SelectMap;
             _requestId = EntMan.System<CMUReconstructionCacheSystem>().NextRequestId();
             _window.BeginViewRequest(_requestId, keepScene: true);
@@ -179,6 +179,7 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         if (_remembered || _actor is not { } actor || PlayerManager.LocalEntity != actor || _window?.SurveyView.Scene is not { } scene)
             return;
         _remembered = true;
-        EntMan.System<CMUReconstructionCacheSystem>().Remember(Owner, actor, scene, _window.SurveyView.CaptureCamera());
+        EntMan.System<CMUReconstructionCacheSystem>().Remember(Owner, actor, scene,
+            _window.SurveyView.CaptureCamera(), _window.SurveyView.TakeRenderData());
     }
 }

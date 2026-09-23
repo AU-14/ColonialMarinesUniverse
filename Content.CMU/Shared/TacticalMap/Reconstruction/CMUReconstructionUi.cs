@@ -39,6 +39,23 @@ public sealed class CMUReconViewMessage(Vector2i offset) : BoundUserInterfaceMes
 [Serializable, NetSerializable]
 public sealed class CMUReconClassicMessage : BoundUserInterfaceMessage;
 
+// Personal geometry only. The server resolves the actor, faction and destination from the session.
+[Serializable, NetSerializable]
+public sealed class CMUReconPreloadRequest(int requestId, bool preferPlanetOnShip, bool cancel = false) : EntityEventArgs
+{
+    public int RequestId = requestId;
+    public bool PreferPlanetOnShip = preferPlanetOnShip;
+    public bool Cancel = cancel;
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUReconPreloadState(int requestId, CMUReconSnapshotMessage? snapshot, CMUReconPatchMessage? patch) : EntityEventArgs
+{
+    public int RequestId = requestId;
+    public CMUReconSnapshotMessage? Snapshot = snapshot;
+    public CMUReconPatchMessage? Patch = patch;
+}
+
 [Serializable, NetSerializable]
 public sealed class CMUReconOrderMessage(int generation, int depth, Vector2i tile, CMUReconOrderKind kind) : BoundUserInterfaceMessage
 {
@@ -146,7 +163,7 @@ public sealed class CMUReconFeedbackMessage(string localizationKey) : BoundUserI
 }
 
 [Serializable, NetSerializable]
-public readonly record struct CMUReconContact(int Depth, TacticalMapBlip Blip);
+public readonly record struct CMUReconContact(int Depth, TacticalMapBlip Blip, int Id = 0, bool Live = false);
 
 [Serializable, NetSerializable]
 public sealed class CMUReconContactsMessage(int generation, CMUReconContact[] contacts) : BoundUserInterfaceMessage

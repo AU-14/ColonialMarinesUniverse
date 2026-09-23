@@ -18,9 +18,11 @@
             <Button Name="TopDown" Text="{Loc cmu-recon-top-down}" />
             <Button Name="Reset" Text="{Loc cmu-recon-reset}" />
             <Button Name="CenterPlayer" Text="{Loc cmu-recon-center-player}" Disabled="True" />
-            <CheckBox Name="Pencil" Text="{Loc cmu-recon-pencil}" Margin="12,0,0,0" />
-            <CheckBox Name="PlaceText" Text="{Loc cmu-recon-place-text}" />
-            <Button Name="Send" Text="{Loc cmu-recon-send}" Disabled="True" />
+            <BoxContainer Name="DrawingToolbar" Orientation="Horizontal" SeparationOverride="6" Visible="False">
+              <CheckBox Name="Pencil" Text="{Loc cmu-recon-pencil}" Margin="12,0,0,0" />
+              <CheckBox Name="PlaceText" Text="{Loc cmu-recon-place-text}" />
+              <Button Name="Send" Text="{Loc cmu-recon-send}" Disabled="True" />
+            </BoxContainer>
           </BoxContainer>
           <recon:CMUReconstructionControl Name="View" HorizontalExpand="True" VerticalExpand="True" RectClipContent="True" />
           <RichTextLabel Name="Controls" Text="{Loc cmu-recon-controls}" />
@@ -35,14 +37,16 @@
             <CheckBox Name="Isolate" Text="{Loc cmu-recon-isolate}" />
             <CheckBox Name="Labels" Text="{Loc cmu-recon-labels}" Pressed="True" />
             <CheckBox Name="Contacts" Text="{Loc cmu-recon-contacts}" Pressed="True" />
-            <Label Text="{Loc cmu-recon-draw}" FontColorOverride="#E7BC78" Margin="0,12,0,0" />
-            <GridContainer Name="Colors" Columns="3" />
-            <Label Text="{Loc cmu-recon-width}" />
-            <OptionButton Name="StrokeWidth" />
-            <LineEdit Name="MarkerText" PlaceHolder="{Loc cmu-recon-text-placeholder}" />
-            <RichTextLabel Text="{Loc cmu-recon-draw-help}" />
-            <Button Name="Undo" Text="{Loc cmu-recon-undo-drawing}" Disabled="True" />
-            <Button Name="Clear" Text="{Loc cmu-recon-clear-drawings}" Disabled="True" />
+            <BoxContainer Name="DrawingSidebar" Orientation="Vertical" SeparationOverride="7" Visible="False">
+              <Label Text="{Loc cmu-recon-draw}" FontColorOverride="#E7BC78" Margin="0,12,0,0" />
+              <GridContainer Name="Colors" Columns="3" />
+              <Label Text="{Loc cmu-recon-width}" />
+              <OptionButton Name="StrokeWidth" />
+              <LineEdit Name="MarkerText" PlaceHolder="{Loc cmu-recon-text-placeholder}" />
+              <RichTextLabel Text="{Loc cmu-recon-draw-help}" />
+              <Button Name="Undo" Text="{Loc cmu-recon-undo-drawing}" Disabled="True" />
+              <Button Name="Clear" Text="{Loc cmu-recon-clear-drawings}" Disabled="True" />
+            </BoxContainer>
           </BoxContainer>
         </ScrollContainer>
       </BoxContainer>

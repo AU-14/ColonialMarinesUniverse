@@ -1,7 +1,11 @@
 using Content.Client.CMU14.TacticalMap.Reconstruction;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using Content.Shared._RMC14.TacticalMap;
+using System.Reflection;
+using Moq;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.CMU14.TacticalMap;
@@ -44,7 +48,7 @@ public sealed partial class CMUReconstructionTest
             await Client.WaitAssertion(() =>
             {
                 var view = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView;
-                Assert.That(view.TrackedContacts, Is.EquivalentTo(new CMUReconContact[] { new(0, commander), new(0, leader) }),
+                Assert.That(view.TrackedContacts, Is.EquivalentTo(new CMUReconContact[] { new(0, commander, _actor.Id), new(0, leader, _console.Id, true) }),
                     "Preserve actual job sprites, faction colours and fireteam badges; prefer live squad positions and exclude disabled factions.");
             });
             leader = leader with { Indices = new(6, 5) };
@@ -69,14 +73,18 @@ public sealed partial class CMUReconstructionTest
     }
 #pragma warning restore RA0002
 
-    [Test]
-    public async Task WarmReopenReusesFrozenTerrainAndOnlyTransfersMissingChunks()
+    [TestCase(0)]
+    [TestCase(600)]
+    public async Task WarmReopenReusesFrozenTerrainAndOnlyTransfersMissingChunks(int idleSeconds)
     {
         var session = ServerSession!;
         var original = session.AttachedEntity;
         NetEntity console = default;
         CMUReconHandshakeTestSystem probe = null;
         CMUReconSnapshotMessage saved = null;
+        object terrain = null;
+        object appearance = null;
+        object occupancy = null;
         try
         {
             await Server.WaitPost(() =>
@@ -101,10 +109,36 @@ public sealed partial class CMUReconstructionTest
                 Assert.That(saved.LoadedChunks, Is.EqualTo(saved.TotalChunks));
                 Assert.That(saved.Revisions, Has.All.GreaterThan(0));
                 Assert.That(probe.ChunkBytes, Is.LessThan(saved.TotalChunks * 800), "Repeated floor cells should compress on the wire.");
+                var view = window.SurveyView;
+                while (((System.Collections.ICollection) RenderField(view, "_pendingUploads")).Count > 0)
+                    Dispatch(view, "UploadPending");
+                terrain = RenderField(view, "_terrain");
+                appearance = RenderField(view, "_appearance");
+                occupancy = RenderField(view, "_occupancy");
                 TestContext.Out.WriteLine($"Cold fixture: {probe.Chunks} chunks, {probe.ChunkBytes} estimated geometry bytes.");
                 window.Close();
             });
             await Pair.RunTicksSync(15);
+            await Client.WaitAssertion(() =>
+            {
+                // Advance only the cache's observed wall clock; no real ten-minute wait or
+                // changes to network/simulation time are needed to exercise idle eviction.
+                var timing = Client.ResolveDependency<IGameTiming>();
+                var clock = typeof(GameTiming).GetField("_realTimer", BindingFlags.Instance | BindingFlags.NonPublic)!;
+                var originalClock = clock.GetValue(timing);
+                var elapsed = timing.RealTime + TimeSpan.FromSeconds(idleSeconds);
+                var agedClock = new Mock<IStopwatch>();
+                agedClock.SetupGet(watch => watch.Elapsed).Returns(elapsed);
+                try
+                {
+                    clock.SetValue(timing, agedClock.Object);
+                    CEntMan.System<CMUReconstructionCacheSystem>().Update(0);
+                }
+                finally
+                {
+                    clock.SetValue(timing, originalClock);
+                }
+            });
             await Client.WaitPost(() => probe.Chunks = probe.ChunkBytes = 0);
             await Server.WaitPost(() => _ui.TryOpenUi(_console, Key, _actor));
             await Pair.RunTicksSync(20);
@@ -115,6 +149,12 @@ public sealed partial class CMUReconstructionTest
                 Assert.That(window.IsRefreshing, Is.False);
                 Assert.That(window.SurveyView.Scene!.Cells, Is.SameAs(saved.Cells));
                 Assert.That(probe.Chunks, Is.Zero, "An unchanged reopening must not transfer a second terrain baseline.");
+                Assert.That(RenderField(window.SurveyView, "_terrain"), Is.SameAs(terrain),
+                    "Reopening must retain uploaded terrain, not allocate and refill a new texture.");
+                Assert.That(RenderField(window.SurveyView, "_appearance"), Is.SameAs(appearance));
+                Assert.That(RenderField(window.SurveyView, "_occupancy"), Is.SameAs(occupancy));
+                Assert.That(((System.Collections.ICollection) RenderField(window.SurveyView, "_pendingUploads")).Count,
+                    Is.Zero, "A completed map must have no terrain uploads to repeat on reopening.");
                 TestContext.Out.WriteLine($"Warm fixture: {probe.Chunks} chunks, {probe.ChunkBytes} geometry bytes.");
                 // Retain a partial baseline as well as a complete one (e.g. closing during first load).
                 window.SurveyView.Scene.Revisions[0] = 0;
@@ -147,6 +187,43 @@ public sealed partial class CMUReconstructionTest
             });
             await Pair.RunUntilSynced();
         }
+    }
+
+    private static object RenderField(CMUReconstructionControl view, string name)
+    {
+        var render = typeof(CMUReconstructionControl).GetField("_render", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(view)!;
+        var member = char.ToUpperInvariant(name[1]) + name[2..];
+        return typeof(CMUReconRenderData).GetField(member, BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(render)!;
+    }
+
+    [Test]
+    public async Task ReadOnlySurveyHidesDrawingToolsAndRestoresThemWhenAuthorized()
+    {
+        CMUReconSnapshotMessage scene = null;
+        await Server.WaitPost(() => scene = _recon.BuildSnapshot(_console, _actor)!);
+        await Client.WaitAssertion(() =>
+        {
+            using var window = new CMUReconstructionWindow();
+            window.OpenCentered();
+            scene.CanOrder = false;
+            window.Receive(scene);
+            void AssertTools(bool visible)
+            {
+                foreach (var name in new[] { "Pencil", "PlaceText", "Send", "Colors", "StrokeWidth", "MarkerText", "Undo", "Clear" })
+                    Assert.That(window.FindControl<Control>(name).VisibleInTree, Is.EqualTo(visible), name);
+                foreach (var name in new[] { "TopDown", "Reset", "MapSelection", "Floor", "Contacts" })
+                    Assert.That(window.FindControl<Control>(name).VisibleInTree, Is.True, name);
+            }
+            AssertTools(false);
+            Assert.That(window.SurveyView.DrawingEnabled || window.SurveyView.TextEnabled, Is.False);
+            window.Receive(new CMUReconPatchMessage(scene.Generation, [], [], true));
+            AssertTools(true);
+            window.FindControl<CheckBox>("Pencil").Pressed = true;
+            window.Receive(new CMUReconPatchMessage(scene.Generation, [], [], false));
+            AssertTools(false);
+            Assert.That(window.SurveyView.DrawingEnabled || window.SurveyView.TextEnabled, Is.False);
+            window.Close();
+        });
     }
 
     [Test]

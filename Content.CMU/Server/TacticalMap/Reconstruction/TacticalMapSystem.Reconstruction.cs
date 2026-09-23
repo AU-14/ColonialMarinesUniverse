@@ -9,6 +9,13 @@ namespace Content.Server._RMC14.TacticalMap;
 public sealed partial class TacticalMapSystem
 {
     private readonly Dictionary<(EntityUid Scope, string Faction), TimeSpan> _reconstructionAnnouncements = new();
+    public void PrepareReconstructionMap(Entity<TacticalMapUserComponent> user)
+    {
+        if (!TryGetTacticalMap(out var map) || user.Comp.Map == map.Owner) return;
+        user.Comp.Map = map.Owner;
+        Dirty(user);
+    }
+
     public void ResolveReconstructionFaction(Entity<TacticalMapComputerComponent> computer, EntityUid actor)
     {
         if (NormalizeMapFaction(computer.Comp.Faction) == null && _skills.HasSkill(actor, computer.Comp.Skill, computer.Comp.SkillLevel))

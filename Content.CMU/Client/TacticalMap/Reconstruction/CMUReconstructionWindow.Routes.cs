@@ -78,6 +78,7 @@ public sealed partial class CMUReconstructionWindow
 
     private void UpdateDrawingControls()
     {
+        DrawingToolbar.Visible = DrawingSidebar.Visible = _canOrder && !IsRefreshing;
         var enabled = _canOrder && !IsRefreshing && !View.Draft.Sending;
         Pencil.Disabled = !enabled;
         PlaceText.Disabled = !enabled;
@@ -90,6 +91,6 @@ public sealed partial class CMUReconstructionWindow
         Clear.Disabled = Undo.Disabled = !enabled || View.Draft.Additions.Count == 0 && !View.Orders.Any(o => !View.Draft.Removals.Contains(o.Id));
         Send.Disabled = !enabled || !View.Draft.Changed;
         Send.Text = Loc.GetString(View.Draft.Sending ? "cmu-recon-sending" : "cmu-recon-send");
-        Controls.Text = Loc.GetString(PlaceText.Pressed ? "cmu-recon-text-controls" : Pencil.Pressed ? "cmu-recon-pencil-controls" : "cmu-recon-controls");
+        Controls.Text = Loc.GetString(View.TextEnabled ? "cmu-recon-text-controls" : View.DrawingEnabled ? "cmu-recon-pencil-controls" : "cmu-recon-controls");
     }
 }

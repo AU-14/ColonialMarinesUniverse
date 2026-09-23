@@ -101,6 +101,7 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeNetworkEvent<CMUReconPreloadRequest>(OnPreload);
         SubscribeLocalEvent<CMUTacticalReconstructionComponent, GetVerbsEvent<AlternativeVerb>>(OnVerb);
         RegisterInterface<CMUTacticalReconstructionComponent>(Key);
         RegisterInterface<TacticalMapUserComponent>(TacticalMapUserUi.Key);
@@ -135,24 +136,9 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
         var targets = GetMapTargets(survey.Actor, boundMap, faction);
         if ((survey.MapChoice == CMUReconMapChoice.Ship ? targets.Ship : targets.Planet) != survey.Root)
             return false;
-        if (!TryComp<CMUZLevelMapComponent>(survey.Root, out var zMap))
-            return atlas.Network == survey.Root && atlas.Maps.Length == 1 &&
-                   atlas.Maps[0] == survey.Root && HasComp<MapGridComponent>(survey.Root);
-        if (zMap.NetworkUid != atlas.Network ||
-            !TryComp<CMUZLevelsNetworkComponent>(atlas.Network, out var network) || network.ZLevels.Count == 0 ||
-            network.ZLevels.Keys.Min() != atlas.MinDepth ||
-            (long) network.ZLevels.Keys.Max() - atlas.MinDepth + 1 != atlas.Maps.Length)
-            return false;
-        IReadOnlyDictionary<int, EntityUid?> currentMaps = network.ZLevels;
-        for (var i = 0; i < atlas.Maps.Length; i++)
-        {
-            currentMaps.TryGetValue(atlas.MinDepth + i, out var map);
-            if (map is { } uid && (TerminatingOrDeleted(uid) || !HasComp<MapGridComponent>(uid)))
-                map = null;
-            if (map != atlas.Maps[i])
-                return false;
-        }
-        return true;
+        // The captured floor layout is immutable too. Digging/building may add linked
+        // levels, but it must not invalidate and resurvey the original map.
+        return !TerminatingOrDeleted(survey.Root) && atlas.Maps.Any(m => m is { } uid && !TerminatingOrDeleted(uid));
     }
 
     private void OnVerb(Entity<CMUTacticalReconstructionComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
@@ -231,7 +217,7 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
         var choice = CMUReconMapSelection.Choose(request.MapChoice, targets.AboardShip, request.PreferPlanetOnShip,
             targets.Planet != null, targets.Ship != null);
         var selected = choice == CMUReconMapChoice.Ship ? targets.Ship : targets.Planet;
-        if (selected is not { } root || !TryMapLayout(root, out var networkUid, out var min, out var maps)) return false;
+        if (selected is not { } root) return false;
         Survey Create(Atlas source)
         {
             var result = CreateSurvey(source, faction);
@@ -263,12 +249,14 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
             }
             return result;
         }
-        if (_atlases.TryGetValue(networkUid, out var retained) &&
-            retained.MinDepth == min && retained.Maps.SequenceEqual(maps))
+        // Key lifetime to the surveyed maps, not the mutable Z network membership.
+        foreach (var retained in _atlases.Values)
         {
+            if (!retained.Maps.Contains(root)) continue;
             survey = Create(retained);
             return true;
         }
+        if (!TryMapLayout(root, out var networkUid, out var min, out var maps)) return false;
         var low = new Vector2(float.PositiveInfinity);
         var high = new Vector2(float.NegativeInfinity);
         foreach (var uid in maps)
@@ -296,8 +284,7 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
         if (!CMUReconGeometry.ValidDimensions(width, height, maps.Length))
             return false;
 
-        if (!_atlases.TryGetValue(networkUid, out var atlas) || atlas.Origin != origin || atlas.Width != width ||
-            atlas.Height != height || atlas.MinDepth != min || !atlas.Maps.SequenceEqual(maps))
+        if (!_atlases.TryGetValue(root, out var atlas))
         {
             var count = width * height * maps.Length;
             atlas = new Atlas
@@ -328,7 +315,7 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
                         atlas.Loaded++;
                     }
                 }
-            _atlases[networkUid] = atlas;
+            _atlases[root] = atlas;
         }
         survey = Create(atlas);
         return true;
@@ -513,7 +500,7 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
         base.Update(frameTime);
         // Finish each initial survey even if its window closes. Reopening must not trigger a rescan.
         // Completed geometry remains available until the map is removed, independently of client caches.
-        var active = _atlases.Values.Where(a => !TerminatingOrDeleted(a.Network) &&
+        var active = _atlases.Values.Where(a => a.Maps.Any(m => m is { } uid && !TerminatingOrDeleted(uid)) &&
             (a.Pending.Count > 0 || a.WorkId >= 0)).ToArray();
         var timer = Stopwatch.StartNew();
         for (var work = 0; active.Length > 0 && work < 128 && timer.Elapsed.TotalMilliseconds < 2; work++)
@@ -535,43 +522,22 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
                 if (!TerminatingOrDeleted(key.Console)) _ui.CloseUi(key.Console, UiKey(key.Console), key.Actor);
                 continue;
             }
-            var atlas = survey.Atlas;
-            var chunks = new List<CMUReconChunk>();
-            var bytes = 0;
-            // Empty chunks cost only coordinates; keep the same byte budget while filling sparse floors faster.
-            for (var scanned = 0; survey.ScannedVersion != atlas.Version && scanned < atlas.Revisions.Length && chunks.Count < 128; scanned++)
-            {
-                survey.Cursor %= atlas.Revisions.Length;
-                var id = survey.ChunkOrder[survey.Cursor++];
-                if (survey.Sent[id] == atlas.Revisions[id]) continue;
-                var chunk = CopyChunk(atlas, id);
-                var cost = CMUReconChunkEncoding.EstimatedBytes(chunk);
-                if (bytes + cost > 44 * 1024) { survey.Cursor--; break; }
-                chunks.Add(chunk);
-                bytes += cost;
-                if (survey.Sent[id] == 0) survey.Loaded++;
-                survey.Sent[id] = atlas.Revisions[id];
-            }
-            if (chunks.Count == 0) survey.ScannedVersion = atlas.Version;
-            var palette = atlas.Surfaces.Skip(survey.SurfaceCount).ToArray();
-            survey.SurfaceCount = atlas.Surfaces.Count;
+            var patch = GeometryPatch(survey, 128, 44 * 1024);
             var orders = Orders(survey);
             var ordersChanged = orders.Count != survey.SentOrders.Length ||
                 orders.Where((order, index) => order.Id != survey.SentOrders[index]).Any();
             if (ordersChanged) survey.SentOrders = orders.Select(order => order.Id).ToArray();
             var canOrder = CanOrder(key.Console, key.Actor);
-            if (chunks.Count == 0 && palette.Length == 0 && !ordersChanged && survey.SentCanOrder == canOrder) continue;
+            if (patch.Chunks.Length == 0 && patch.Surfaces.Length == 0 && !ordersChanged && survey.SentCanOrder == canOrder) continue;
             survey.SentCanOrder = canOrder;
-            _ui.ServerSendUiMessage(key.Console, UiKey(key.Console), new CMUReconPatchMessage(survey.Generation, chunks.ToArray(),
-                ordersChanged ? orders.ToArray() : [], canOrder)
-            {
-                OrdersChanged = ordersChanged,
-                Surfaces = palette, LoadedChunks = survey.Loaded, TotalChunks = atlas.Revisions.Length,
-            }, key.Actor);
+            patch.Orders = ordersChanged ? orders.ToArray() : [];
+            patch.OrdersChanged = ordersChanged;
+            patch.CanOrder = canOrder;
+            _ui.ServerSendUiMessage(key.Console, UiKey(key.Console), patch, key.Actor);
         }
+        UpdatePreloads();
         SendContacts();
-        foreach (var key in _atlases.Keys.Where(k => TerminatingOrDeleted(k) ||
-                     !_atlases[k].Maps.Any(m => m is { } uid && !TerminatingOrDeleted(uid))).ToArray())
+        foreach (var key in _atlases.Keys.Where(k => !_atlases[k].Maps.Any(m => m is { } uid && !TerminatingOrDeleted(uid))).ToArray())
             _atlases.Remove(key);
         foreach (var key in _orders.Keys.Where(k => TerminatingOrDeleted(k.Network)).ToArray())
         {

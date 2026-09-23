@@ -153,6 +153,48 @@ public sealed partial class CMUReconstructionTest : GameTest
     }
 
     [Test]
+    public async Task FrozenSurveySurvivesConstructionAndLinkedFloorChanges()
+    {
+        EntityUid extra = default;
+        CMUReconSnapshotMessage before = null;
+        EntityUid wall = default;
+        try
+        {
+            await Server.WaitPost(() => wall = SEntMan.SpawnEntity("WallSolid", new EntityCoordinates(_upper, new Vector2(3.5f))));
+            await Pair.RunTicksSync(40);
+            await Server.WaitPost(() =>
+            {
+                before = _recon.BuildSnapshot(_console, _actor)!;
+                _ui.CloseUi(_console, Key, _actor);
+                SEntMan.DeleteEntity(wall);
+                SEntMan.SpawnEntity("WallSolid", new EntityCoordinates(_upper, new Vector2(5.5f)));
+                var building = SEntMan.System<Content.Server.CMU14.ZLevelBuilding.ZLevelBuildingSystem>();
+                Assert.That(building.EnsureNeighborLevel(_upper, 1, _upper, Vector2.Zero, out extra, out var grid), Is.True);
+                _maps.SetTile(grid, SComp<MapGridComponent>(grid), Vector2i.Zero,
+                    new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId));
+            });
+            await Pair.RunTicksSync(40);
+            await Server.WaitPost(() =>
+            {
+                Assert.That(_ui.TryOpenUi(_console, Key, _actor), Is.True);
+                Send(new CMUReconViewMessage(Vector2i.Zero));
+            });
+            await Pair.RunTicksSync(40);
+            await Server.WaitAssertion(() =>
+            {
+                var after = _recon.BuildSnapshot(_console, _actor)!;
+                Assert.That(after.AtlasId, Is.EqualTo(before.AtlasId), "The same surviving map must never take a second structural survey.");
+                Assert.That(after.Cells, Is.EqualTo(before.Cells), "Keep destroyed structures and omit newly built walls.");
+                Assert.That(after.Levels, Is.EqualTo(before.Levels), "The saved survey includes only its original floors.");
+            });
+        }
+        finally
+        {
+            if (extra.IsValid()) await Pair.DeleteEntityTreeLeafFirst(extra);
+        }
+    }
+
+    [Test]
     public async Task OrdersValidateCurrentGeometryGenerationTrainingAndFaction()
     {
         var tile = new Vector2i(4, 4);
@@ -1061,6 +1103,7 @@ public sealed partial class CMUReconstructionTest : GameTest
 /// <summary>Deterministically drops an opening handshake without replacing the real BUI transport.</summary>
 public sealed class CMUReconHandshakeTestSystem : EntitySystem
 {
+    public void RequestPreload() => RaiseNetworkEvent(new CMUReconPreloadRequest(12345, false));
     public EntityUid Target;
     public bool DropRequest;
     public bool DropSnapshot;

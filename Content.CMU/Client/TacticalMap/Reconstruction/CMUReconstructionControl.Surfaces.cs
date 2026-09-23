@@ -22,7 +22,7 @@ public sealed partial class CMUReconstructionControl
 
     private void UploadChunk(int x, int y, int level)
     {
-        if (Scene is not { } scene || _terrain == null || _appearance == null || _occupancy == null)
+        if (Scene is not { } scene || _render.Terrain == null || _render.Appearance == null || _render.Occupancy == null)
             return;
         const int size = CMUReconGeometry.ChunkSize;
         var cells = _cellUpload.AsSpan();
@@ -39,15 +39,15 @@ public sealed partial class CMUReconstructionControl
             occupied |= scene.Cells[index] != 0 || (style & 0xffff) != 0;
         }
         var offset = new Vector2i(level % 4 * scene.Width + x * size, level / 4 * scene.Height + y * size);
-        _terrain.SetSubImage(offset, new Vector2i(size, size), cells);
-        _appearance.SetSubImage(offset, new Vector2i(size, size), styles);
+        _render.Terrain.SetSubImage(offset, new Vector2i(size, size), cells);
+        _render.Appearance.SetSubImage(offset, new Vector2i(size, size), styles);
         var chunk = offset / size;
-        _chunkPixels[chunk.Y * _occupancy.Width + chunk.X] = new Rgba32(occupied ? (byte) 255 : (byte) 0, 0, 0, 255);
+        _render.ChunkPixels[chunk.Y * _render.Occupancy.Width + chunk.X] = new Rgba32(occupied ? (byte) 255 : (byte) 0, 0, 0, 255);
     }
 
     private void AddSurfaces(CMUReconSurface[] surfaces)
     {
-        foreach (var surface in surfaces) _pendingSurfaces.Enqueue(surface);
+        foreach (var surface in surfaces) _render.PendingSurfaces.Enqueue(surface);
     }
 
     private void LoadSurfaces(CMUReconSurface[] surfaces)
@@ -55,7 +55,7 @@ public sealed partial class CMUReconstructionControl
         var sprites = _entities.System<SpriteSystem>();
         foreach (var surface in surfaces)
         {
-            if (surface.Id == 0 || surface.Id >= CMUReconGeometry.MaxSurfaces || _surfaceTextures.ContainsKey(surface.Id))
+            if (surface.Id == 0 || surface.Id >= CMUReconGeometry.MaxSurfaces || _render.SurfaceTextures.ContainsKey(surface.Id))
                 continue;
             Texture[] textures;
             UIBox2? region = null;
@@ -97,52 +97,52 @@ public sealed partial class CMUReconstructionControl
                 region = UIBox2.FromDimensions(new Vector2(variant * 32, 0), new Vector2(32));
                 textures = [texture];
             }
-            _surfaceTextures.Add(surface.Id, (textures, region, tint));
-            _newSurfaces.Add(surface.Id);
+            _render.SurfaceTextures.Add(surface.Id, (textures, region, tint));
+            _render.NewSurfaces.Add(surface.Id);
             _redraw = true;
         }
     }
 
     private void RenderSurfaces(DrawingHandleScreen handle)
     {
-        if (_furnitureModels == null)
+        if (_render.FurnitureModels == null)
         {
             var bytes = CMUReconFurniture.EncodeTexture();
             var pixels = new Rgba32[bytes.Length / 4];
             for (var i = 0; i < pixels.Length; i++)
                 pixels[i] = new Rgba32(bytes[i * 4], bytes[i * 4 + 1], bytes[i * 4 + 2], bytes[i * 4 + 3]);
-            _furnitureModels = _clyde.CreateBlankTexture<Rgba32>(
+            _render.FurnitureModels = _clyde.CreateBlankTexture<Rgba32>(
                 new Vector2i(CMUReconFurniture.TextureWidth, CMUReconFurniture.TextureHeight),
                 name: "cmu-reconstruction-furniture",
                 loadParams: new TextureLoadParameters { Srgb = false, SampleParameters = new TextureSampleParameters { Filter = false } });
-            _furnitureModels.SetSubImage(Vector2i.Zero, _furnitureModels.Size, pixels.AsSpan());
+            _render.FurnitureModels.SetSubImage(Vector2i.Zero, _render.FurnitureModels.Size, pixels.AsSpan());
         }
-        if (_surfaceAtlas == null)
+        if (_render.SurfaceAtlas == null)
         {
-            _surfaceAtlas = _clyde.CreateRenderTarget(new Vector2i(2048, 2048), RenderTargetColorFormat.Rgba8Srgb,
+            _render.SurfaceAtlas = _clyde.CreateRenderTarget(new Vector2i(2048, 2048), RenderTargetColorFormat.Rgba8Srgb,
                 new TextureSampleParameters { Filter = true }, "cmu-reconstruction-surfaces");
-            _clearSurfaces = true;
+            _render.ClearSurfaces = true;
         }
-        if (!_clearSurfaces && _newSurfaces.Count == 0)
+        if (!_render.ClearSurfaces && _render.NewSurfaces.Count == 0)
             return;
         var previous = handle.GetTransform();
         try
         {
-            handle.RenderInRenderTarget(_surfaceAtlas, () =>
+            handle.RenderInRenderTarget(_render.SurfaceAtlas, () =>
             {
                 handle.SetTransform(Matrix3x2.Identity);
-                foreach (var id in _newSurfaces)
+                foreach (var id in _render.NewSurfaces)
                 {
-                    var (textures, region, tint) = _surfaceTextures[id];
+                    var (textures, region, tint) = _render.SurfaceTextures[id];
                     var rect = UIBox2.FromDimensions(new Vector2(id % 64 * 32, id / 64 * 32), new Vector2(32));
                     foreach (var texture in textures)
                         handle.DrawTextureRectRegion(texture, rect, region, tint);
                 }
-            }, _clearSurfaces ? Color.Transparent : null);
+            }, _render.ClearSurfaces ? Color.Transparent : null);
         }
         finally { handle.SetTransform(previous); }
-        _clearSurfaces = false;
-        _newSurfaces.Clear();
+        _render.ClearSurfaces = false;
+        _render.NewSurfaces.Clear();
     }
 
     private void DrawLabels(DrawingHandleScreen handle, CMUReconSnapshotMessage scene)

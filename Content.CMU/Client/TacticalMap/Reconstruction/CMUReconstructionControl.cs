@@ -22,20 +22,7 @@ public sealed partial class CMUReconstructionControl : Control
     [Dependency] private IEntityManager _entities = default!;
     [Dependency] private IComponentFactory _components = default!;
 
-    private ShaderInstance? _shader;
-    private OwnedTexture? _terrain;
-    private OwnedTexture? _furnitureModels;
-    private OwnedTexture? _appearance;
-    private OwnedTexture? _occupancy;
-    private Rgba32[] _chunkPixels = [];
-    private IRenderTexture? _surfaceAtlas;
-    private readonly Dictionary<ushort, (Texture[] Textures, UIBox2? Region, Color Tint)> _surfaceTextures = new();
-    private readonly List<ushort> _newSurfaces = new();
-    private readonly Queue<CMUReconSurface> _pendingSurfaces = new();
-    private readonly Queue<(int X, int Y, int Level)> _pendingUploads = new();
-    private readonly HashSet<(int X, int Y, int Level)> _queuedUploads = new();
-    private bool _clearSurfaces;
-    private IRenderTexture? _target;
+    private CMUReconRenderData _render = new();
     private readonly Font _font;
     private bool _redraw = true;
     private TimeSpan _nextSceneDraw;
@@ -71,47 +58,72 @@ public sealed partial class CMUReconstructionControl : Control
         var hasCells = scene.Cells.Length != 0;
         if (!CMUReconSceneData.Initialize(scene))
             return;
+        if (_render.Disposed) _render = new CMUReconRenderData();
         Scene = scene;
         _center = new Vector2(scene.Width, scene.Height) / 2;
         Orders = scene.Orders;
         TrackedContacts = [];
         CancelStroke();
         _selectedLevel = Math.Clamp(-scene.MinDepth, 0, scene.Levels - 1);
-        _terrain?.Dispose();
-        _appearance?.Dispose();
-        _occupancy?.Dispose();
-        _surfaceTextures.Clear();
-        _newSurfaces.Clear();
-        _pendingSurfaces.Clear();
-        _pendingUploads.Clear();
-        _queuedUploads.Clear();
-        _clearSurfaces = true;
+        _render.Terrain?.Dispose();
+        _render.Appearance?.Dispose();
+        _render.Occupancy?.Dispose();
+        _render.SurfaceTextures.Clear();
+        _render.NewSurfaces.Clear();
+        _render.PendingSurfaces.Clear();
+        _render.PendingUploads.Clear();
+        _render.QueuedUploads.Clear();
+        _render.ClearSurfaces = true;
         var load = TextureLoadParameters.Default;
         load.Srgb = false; // These are byte-valued cells, not colors. sRGB decoding corrupts material IDs.
         load.SampleParameters = new TextureSampleParameters { Filter = false };
         var atlasSize = new Vector2i(scene.Width * Math.Min(4, scene.Levels), scene.Height * ((scene.Levels + 3) / 4));
-        _terrain = _clyde.CreateBlankTexture<Rgba32>(atlasSize,
+        _render.Terrain = _clyde.CreateBlankTexture<Rgba32>(atlasSize,
             name: "cmu-reconstruction-cells", loadParams: load);
-        _appearance = _clyde.CreateBlankTexture<Rgba32>(atlasSize, name: "cmu-reconstruction-appearance", loadParams: load);
+        _render.Appearance = _clyde.CreateBlankTexture<Rgba32>(atlasSize, name: "cmu-reconstruction-appearance", loadParams: load);
         // The zeroed occupancy mask hides uninitialized terrain, including shader neighbour reads.
         // Upload each occupied chunk before publishing its occupancy bit; no map-sized clear upload.
         var chunkSize = atlasSize / CMUReconGeometry.ChunkSize;
-        _occupancy = _clyde.CreateBlankTexture<Rgba32>(chunkSize, name: "cmu-reconstruction-chunks", loadParams: load);
-        _chunkPixels = new Rgba32[chunkSize.X * chunkSize.Y];
-        _occupancy.SetSubImage(Vector2i.Zero, chunkSize, _chunkPixels.AsSpan());
+        _render.Occupancy = _clyde.CreateBlankTexture<Rgba32>(chunkSize, name: "cmu-reconstruction-chunks", loadParams: load);
+        _render.ChunkPixels = new Rgba32[chunkSize.X * chunkSize.Y];
+        _render.Occupancy.SetSubImage(Vector2i.Zero, chunkSize, _render.ChunkPixels.AsSpan());
         for (var level = 0; hasCells && level < scene.Levels; level++)
         for (var y = 0; y < scene.Height / CMUReconGeometry.ChunkSize; y++)
         for (var x = 0; x < scene.Width / CMUReconGeometry.ChunkSize; x++)
             if (HasGeometry(scene, x, y, level)) QueueUpload(x, y, level);
-        _occupancy.SetSubImage(Vector2i.Zero, chunkSize, _chunkPixels.AsSpan());
+        _render.Occupancy.SetSubImage(Vector2i.Zero, chunkSize, _render.ChunkPixels.AsSpan());
         AddSurfaces(scene.Surfaces);
         _redraw = true;
         _fit = true;
     }
 
+    public CMUReconRenderData TakeRenderData()
+    {
+        var render = _render;
+        _render = new CMUReconRenderData();
+        return render;
+    }
+
+    public void RestoreScene(CMUReconSnapshotMessage scene, CMUReconRenderData render)
+    {
+        if (render.Disposed || render.Terrain == null)
+        {
+            render.Dispose();
+            SetScene(scene);
+            return;
+        }
+        _render.Dispose();
+        _render = render;
+        Scene = scene;
+        Orders = scene.Orders;
+        TrackedContacts = [];
+        CancelStroke();
+        _redraw = true;
+    }
+
     public void Apply(CMUReconPatchMessage patch)
     {
-        if (Scene is not { } scene || patch.Generation != scene.Generation || _terrain == null)
+        if (Scene is not { } scene || patch.Generation != scene.Generation || _render.Terrain == null)
             return;
         CMUReconSceneData.Apply(scene, patch);
         Orders = scene.Orders;
@@ -120,10 +132,10 @@ public sealed partial class CMUReconstructionControl : Control
         {
             if (!CMUReconSceneData.ValidChunk(scene, chunk))
                 continue;
-            var across = _occupancy!.Width;
+            var across = _render.Occupancy!.Width;
             var at = (chunk.Level / 4 * scene.Height / CMUReconGeometry.ChunkSize + chunk.Y) * across +
                      chunk.Level % 4 * scene.Width / CMUReconGeometry.ChunkSize + chunk.X;
-            if (chunk.Empty && _chunkPixels[at].R == 0) continue;
+            if (chunk.Empty && _render.ChunkPixels[at].R == 0) continue;
             QueueUpload(chunk.X, chunk.Y, chunk.Level);
         }
     }
@@ -158,21 +170,21 @@ public sealed partial class CMUReconstructionControl : Control
 
     private void QueueUpload(int x, int y, int level)
     {
-        if (_queuedUploads.Add((x, y, level))) _pendingUploads.Enqueue((x, y, level));
+        if (_render.QueuedUploads.Add((x, y, level))) _render.PendingUploads.Enqueue((x, y, level));
     }
 
     private void UploadPending()
     {
         var timer = System.Diagnostics.Stopwatch.StartNew();
         var uploaded = 0;
-        while (uploaded < 24 && timer.Elapsed.TotalMilliseconds < 2 && _pendingUploads.TryDequeue(out var chunk))
+        while (uploaded < 24 && timer.Elapsed.TotalMilliseconds < 2 && _render.PendingUploads.TryDequeue(out var chunk))
         {
-            _queuedUploads.Remove(chunk);
+            _render.QueuedUploads.Remove(chunk);
             UploadChunk(chunk.X, chunk.Y, chunk.Level);
             uploaded++;
         }
-        if (uploaded == 0 || _occupancy == null) return;
-        _occupancy.SetSubImage(Vector2i.Zero, _occupancy.Size, _chunkPixels.AsSpan());
+        if (uploaded == 0 || _render.Occupancy == null) return;
+        _render.Occupancy.SetSubImage(Vector2i.Zero, _render.Occupancy.Size, _render.ChunkPixels.AsSpan());
         _redraw = true;
     }
 
@@ -260,26 +272,35 @@ public sealed partial class CMUReconstructionControl : Control
         up = Vector3.Cross(right, forward);
     }
 
+    public bool ResourcesReady => _render.PendingUploads.Count == 0 && _render.PendingSurfaces.Count == 0;
+
+    /// <summary>Bounded uploads can run before the map has a visible window.</summary>
+    public void PrepareResources()
+    {
+        UploadPending();
+        var timer = System.Diagnostics.Stopwatch.StartNew();
+        for (var i = 0; i < 4 && timer.Elapsed.TotalMilliseconds < 2 && _render.PendingSurfaces.TryDequeue(out var surface); i++)
+            LoadSurfaces([surface]);
+    }
+
     protected override void Draw(DrawingHandleScreen handle)
     {
         base.Draw(handle);
         handle.DrawRect(PixelSizeBox, Color.FromHex("#10191F"));
-        if (Scene is not { } scene || _terrain == null || _appearance == null || _occupancy == null || PixelWidth <= 0 || PixelHeight <= 0)
+        if (Scene is not { } scene || _render.Terrain == null || _render.Appearance == null || _render.Occupancy == null || PixelWidth <= 0 || PixelHeight <= 0)
             return;
-        UploadPending();
-        var surfaceTimer = System.Diagnostics.Stopwatch.StartNew();
-        for (var i = 0; i < 4 && surfaceTimer.Elapsed.TotalMilliseconds < 2 && _pendingSurfaces.TryDequeue(out var surface); i++) LoadSurfaces([surface]);
+        PrepareResources();
         RenderSurfaces(handle);
-        _shader ??= _prototypes.Index(ShaderId).InstanceUnique();
+        _render.Shader ??= _prototypes.Index(ShaderId).InstanceUnique();
 
         // Cap fragment workload; labels remain at full UI resolution. No scene pass when unchanged.
         var moving = _rotating || _panning;
         var scale = Math.Min(1f, (moving ? 880f : 1440f) / Math.Max(PixelWidth, PixelHeight));
         var size = new Vector2i(Math.Max(1, (int) (PixelWidth * scale)), Math.Max(1, (int) (PixelHeight * scale)));
-        if (_target == null || _target.Size != size)
+        if (_render.Target == null || _render.Target.Size != size)
         {
-            _target?.Dispose();
-            _target = _clyde.CreateRenderTarget(size, RenderTargetColorFormat.Rgba8Srgb, new TextureSampleParameters { Filter = true }, "cmu-reconstruction-view");
+            _render.Target?.Dispose();
+            _render.Target = _clyde.CreateRenderTarget(size, RenderTargetColorFormat.Rgba8Srgb, new TextureSampleParameters { Filter = true }, "cmu-reconstruction-view");
             _redraw = true;
             _nextSceneDraw = TimeSpan.Zero;
         }
@@ -305,34 +326,34 @@ public sealed partial class CMUReconstructionControl : Control
         }
         Camera(out var origin, out var forward, out var right, out var up);
         if (_redraw && (_timing.RealTime >= _nextSceneDraw || moving ||
-            scene.LoadedChunks == scene.TotalChunks && _pendingUploads.Count == 0 && _pendingSurfaces.Count == 0))
+            scene.LoadedChunks == scene.TotalChunks && _render.PendingUploads.Count == 0 && _render.PendingSurfaces.Count == 0))
         {
-            _shader.SetParameter("terrain", _terrain);
-            _shader.SetParameter("furnitureModels", _furnitureModels!);
-            _shader.SetParameter("appearance", _appearance);
-            _shader.SetParameter("occupancy", _occupancy);
-            _shader.SetParameter("surfaceAtlas", _surfaceAtlas!.Texture);
-            _shader.SetParameter("mapSize", new Vector2(scene.Width, scene.Height));
-            _shader.SetParameter("atlasSize", (Vector2) _terrain.Size);
-            _shader.SetParameter("pixelFootprint", _distance * 0.9f / PixelHeight);
-            _shader.SetParameter("levels", (float) scene.Levels);
-            _shader.SetParameter("visibleLevels", (float) _selectedLevel + 1);
-            _shader.SetParameter("cameraOrigin", origin);
-            _shader.SetParameter("cameraForward", forward);
-            _shader.SetParameter("cameraRight", right);
-            _shader.SetParameter("cameraUp", up);
-            _shader.SetParameter("aspect", PixelWidth / (float) PixelHeight);
-            _shader.SetParameter("orthographic", _overhead ? 1f : 0f);
-            _shader.SetParameter("orthoScale", _distance * 0.45f);
-            _shader.SetParameter("wallScale", _wallScale);
-            _shader.SetParameter("isolateLevel", _isolate ? 1f : 0f);
+            _render.Shader.SetParameter("terrain", _render.Terrain);
+            _render.Shader.SetParameter("furnitureModels", _render.FurnitureModels!);
+            _render.Shader.SetParameter("appearance", _render.Appearance);
+            _render.Shader.SetParameter("occupancy", _render.Occupancy);
+            _render.Shader.SetParameter("surfaceAtlas", _render.SurfaceAtlas!.Texture);
+            _render.Shader.SetParameter("mapSize", new Vector2(scene.Width, scene.Height));
+            _render.Shader.SetParameter("atlasSize", (Vector2) _render.Terrain.Size);
+            _render.Shader.SetParameter("pixelFootprint", _distance * 0.9f / PixelHeight);
+            _render.Shader.SetParameter("levels", (float) scene.Levels);
+            _render.Shader.SetParameter("visibleLevels", (float) _selectedLevel + 1);
+            _render.Shader.SetParameter("cameraOrigin", origin);
+            _render.Shader.SetParameter("cameraForward", forward);
+            _render.Shader.SetParameter("cameraRight", right);
+            _render.Shader.SetParameter("cameraUp", up);
+            _render.Shader.SetParameter("aspect", PixelWidth / (float) PixelHeight);
+            _render.Shader.SetParameter("orthographic", _overhead ? 1f : 0f);
+            _render.Shader.SetParameter("orthoScale", _distance * 0.45f);
+            _render.Shader.SetParameter("wallScale", _wallScale);
+            _render.Shader.SetParameter("isolateLevel", _isolate ? 1f : 0f);
             var previous = handle.GetTransform();
             try
             {
-                handle.RenderInRenderTarget(_target, () =>
+                handle.RenderInRenderTarget(_render.Target, () =>
                 {
                     handle.SetTransform(Matrix3x2.Identity);
-                    handle.UseShader(_shader);
+                    handle.UseShader(_render.Shader);
                     handle.DrawTextureRect(Texture.White, UIBox2.FromDimensions(Vector2.Zero, size));
                     handle.UseShader(null);
                 }, Color.Black);
@@ -345,7 +366,7 @@ public sealed partial class CMUReconstructionControl : Control
             _redraw = false;
             _nextSceneDraw = _timing.RealTime + TimeSpan.FromSeconds(0.1);
         }
-        handle.DrawTextureRect(_target.Texture, PixelSizeBox);
+        handle.DrawTextureRect(_render.Target.Texture, PixelSizeBox);
         DrawFrame(handle, scene);
         if (ShowLabels) DrawLabels(handle, scene);
         foreach (var order in Orders)
@@ -444,20 +465,7 @@ public sealed partial class CMUReconstructionControl : Control
     protected override void ExitedTree()
     {
         base.ExitedTree();
-        _target?.Dispose();
-        _terrain?.Dispose();
-        _appearance?.Dispose();
-        _occupancy?.Dispose();
-        _surfaceAtlas?.Dispose();
-        _furnitureModels?.Dispose();
-        _shader?.Dispose();
-        _target = null;
-        _terrain = null;
-        _furnitureModels = null;
-        _appearance = null;
-        _occupancy = null;
-        _surfaceAtlas = null;
-        _shader = null;
+        _render.Dispose();
         _input.FirstChanceOnKeyEvent -= OnMiddleMouse;
         _rotating = false;
         _panning = false;

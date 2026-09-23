@@ -17,8 +17,8 @@ targets; no native graphics calls, additional context, or third-party renderer i
    personal maps retain their normal `CanDraw` permission.
 3. The whole map streams automatically from its initial survey. Later construction, destruction,
    tile changes and door movement do not update that geometry. The server keeps the survey for the
-   map's lifetime, including across long periods with no viewers. Reopening within five minutes also
-   reuses the client's terrain, camera, floor and cutaway settings; only missing chunks download.
+   map's lifetime, including across long periods with no viewers. Reopening in the same session also
+   reuses the client's uploaded terrain, camera, floor and cutaway settings; only missing chunks download.
 4. Drag to pan by default; middle-drag orbits. Scroll zooms toward the cursor.
    **Top down** looks straight down at the current location. **Reset** restores the initial
    3D orientation and frames the map. Right-drag also pans while the pencil is selected.
@@ -83,9 +83,12 @@ orientation. A bounded palette references existing tile variants and entity prot
 The opening metadata request retries every two seconds until a baseline arrives, so closing and
 reopening during subscription updates cannot leave the window waiting indefinitely. Retries stop
 on receipt, an unavailable-map response, or window closure.
-One partial or completed CPU survey is retained clientside for at most five minutes, scoped to the actor, table,
-faction and map binding, and cleared on connection state changes. No closed-window GPU resources
-are retained. A stable atlas ID and per-chunk revisions allow a reopening to adopt current metadata immediately and reuse geometry and surface textures already queued in the window. If the atlas was replaced, a refreshing window assembles a separate baseline before swapping its geometry and
+One partial or completed survey, including its GPU textures, surface atlas and pending uploads, is retained clientside for the game session. It is scoped to the actor, table, faction, map binding and location, and cleared on connection/body changes or map deletion. Closing transfers ownership before the window leaves the UI tree. Reopening reuses the actual uploaded textures; an idle interval does not expire them or queue another upload. A stable atlas ID and per-chunk revisions allow a reopening to adopt current metadata immediately, transferring only missing chunks.
+
+After three seconds in a stable player context, the client preloads the likely personal map when there is no open tactical map or retained view. The usual ship/planet preference applies. The server derives access, actor and faction from the authenticated session; the request cannot select another source. Preloading has no drawing subscription, orders or contact feed. It shares initial extraction and a global round-robin background transfer budget of eight chunks/16 KiB per 0.1 seconds, after visible UI transfers. Requests are rate limited and subscriptions time out after two minutes. Client uploads and surface loading use the same bounded work as visible maps. Opening during a preload transfers its partial resources and fetches only what remains. Classic-map users do not preload, and a retained tablet/console view takes precedence.
+
+Live contacts carry a stable identity and a live-feed flag. The client smooths updates and predicts at most 250 ms ahead, capped at six tiles per second, then settles back to the last authoritative tile if updates stop. Published snapshots stay fixed. Removed contacts, floor changes, teleports and long gaps discard movement history. This uses only the already-authorized contact feed and does not expose nearby world entities.
+If the atlas was replaced, a refreshing window assembles a separate baseline before swapping its geometry and
 palette together; contacts still update during that refresh and cached appearance IDs are never mixed with a new atlas. Camera settings survive
 that swap. Building caps, vertical faces and exposed edges receive distinct shading, and labels
 use measured text bounds with a smaller density budget at wide zoom.
@@ -94,7 +97,7 @@ Initial extraction uses one global budget of at most
 128 chunks or two milliseconds per frame across active networks, checking the budget between rows
 and committing whole chunks. Initial extraction prioritizes the operator's floor and nearby tiles.
 There are no terrain change subscriptions or rolling rescans. Extraction finishes even if all viewers
-close their windows, and the server retains that baseline until its map is removed. Reopening never
+close their windows, and the server retains that baseline until all of its surveyed maps are removed. The captured floor layout also stays fixed: digging or construction that adds linked levels cannot trigger a new survey of existing walls. Reopening never
 rebuilds it from later world changes. Completed atlases skip extraction and per-viewer revision scans.
 Absent chunks on sparse floors bypass cell extraction. Contacts and drawings continue updating independently.
 
@@ -111,7 +114,7 @@ prototype appearances. The catalogue includes metal/folding/wooden/winged/office
 stools, handed benches, sofas and couch sections, metal/wood tables, panelled desks, counters,
 beds, bunks, operating tables, open racks and bookcases. Each model has at most eight solid parts.
 A 2,176-byte RGBA8 lookup texture contains the shared centimetre bounds and part finishes, uploaded
-once per window and reused across map selections. It adds no per-entity geometry to network packets.
+once per retained render resource set and reused across map selections and reopening. It adds no per-entity geometry to network packets.
 Prototype paint/upholstery colours are sampled separately from metal, wood, mattress and pillow parts.
 The first survey also includes explicitly tagged movable furniture; folded and contained furniture,
 actors and loose items are excluded. Subsequent movement does not change the saved survey.
@@ -122,11 +125,13 @@ atlas. Warm directional light, neutral ambient light, exposed-edge bevels, seams
 give structures depth. Distance filtering reduces texture shimmer when the whole map is visible.
 
 The cached view target is capped at 1440 pixels on its longest side (880 while dragging). GPU uploads
-are queued, including cached reopening, with at most 24 chunks or two milliseconds per frame. Empty chunks skip GPU uploads unless clearing existing geometry. Surface
+are queued only for newly received geometry, with at most 24 chunks or two milliseconds per frame. Empty chunks skip GPU uploads unless clearing existing geometry. Surface
 icon creation is limited to four entries or two milliseconds per frame, and incremental loading redraws
 the volume at most ten times per second. Labels and order markers use
 native UI resolution. Camera, geometry, surface or viewport changes invalidate the cache.
-Contact shadows are bounded and disabled at distant zoom. The initialized occupancy mask also guards neighbour/shadow reads, so terrain textures need no map-sized clear allocation or upload on opening. GPU resources are released with the view.
+Contact shadows are bounded and disabled at distant zoom. The initialized occupancy mask also guards neighbour/shadow reads, so terrain textures need no map-sized clear allocation or upload on opening. GPU resources are released when their cached survey is replaced, invalidated or disconnected.
+
+Read-only viewers see navigation and viewing controls only; the pencil, text, Send, colour, width, undo and clear UI is hidden until the server confirms drawing access.
 
 Batched edits carry a generation, request ID, bounded additions and removals. Each addition contains continuous map points, color, width, signed floor and optional plain text. The server validates the whole batch before applying any mutation and acknowledges it before the client discards its draft. The server checks open UI,
 access, range, leadership, generation, current faction/network membership, finite coordinates, map bounds,
