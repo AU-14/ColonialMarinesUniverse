@@ -1,4 +1,4 @@
-# Opt-in live structural survey prototype; does not change normal tactical-map intelligence.
+# Development table for the initial structural survey and normal tactical contacts.
 - type: entity
   parent: CMUTacticalMapTableGovfor
   id: CMUTacticalReconstructionTableGovfor

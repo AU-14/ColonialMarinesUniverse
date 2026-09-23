@@ -8,6 +8,8 @@ using Content.Shared.CMU14;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.TacticalMap;
+using Content.Shared.Doors.Components;
+using Content.Shared.Doors.Systems;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Shared.Input;
@@ -87,13 +89,16 @@ public sealed partial class CMUReconstructionTest : GameTest
     }
 
     [Test]
-    public async Task LiveSurveyTracksWallRemovalAndKeepsFloorsDistinct()
+    public async Task SurveyKeepsInitialGeometryAfterWorldChangesAndIdleReopen()
     {
         EntityUid wall = default;
+        EntityUid door = default;
+        CMUReconSnapshotMessage initial = null;
         var tile = new Vector2i(3, 3);
         await Server.WaitAssertion(() =>
         {
             wall = SEntMan.SpawnEntity("WallSolid", new EntityCoordinates(_upper, new Vector2(3.5f)));
+            door = SEntMan.SpawnEntity("CMDoubleDoorAlmayerSolid", new EntityCoordinates(_upper, new Vector2(4.5f, 3.5f)));
             Assert.That(_recon.ReadCell(_upper, tile), Is.EqualTo((byte) CMUReconMaterial.Wall));
             Assert.That(_recon.ReadCell(_lower, tile), Is.EqualTo((byte) CMUReconMaterial.Floor));
         });
@@ -104,24 +109,46 @@ public sealed partial class CMUReconstructionTest : GameTest
             var local = tile - snapshot.Origin;
             Assert.That(snapshot.MinDepth, Is.EqualTo(-1));
             Assert.That(snapshot.Levels, Is.EqualTo(2));
+            Assert.That(snapshot.LoadedChunks, Is.EqualTo(snapshot.TotalChunks));
             Assert.That(snapshot.Cells[CMUReconGeometry.Index(local.X, local.Y, 1, snapshot.Width, snapshot.Height)], Is.EqualTo((byte) CMUReconMaterial.Wall));
+            initial = snapshot;
             SEntMan.DeleteEntity(wall);
-        });
-        await Pair.RunTicksSync(40);
-        await Server.WaitAssertion(() =>
-        {
-            var snapshot = _recon.BuildSnapshot(_console, _actor)!;
-            var local = tile - snapshot.Origin;
-            Assert.That(snapshot.Cells[CMUReconGeometry.Index(local.X, local.Y, 1, snapshot.Width, snapshot.Height)], Is.EqualTo((byte) CMUReconMaterial.Floor));
             _maps.SetTile(_upper, SComp<MapGridComponent>(_upper), tile, Tile.Empty);
+            _maps.SetTile(_upper, SComp<MapGridComponent>(_upper), new Vector2i(160, -90),
+                new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId));
+            SEntMan.SpawnEntity("WallSolid", new EntityCoordinates(_upper, new Vector2(5.5f, 3.5f)));
+            Assert.That(SEntMan.System<SharedDoorSystem>().SetState(door, DoorState.Open), Is.True);
+            Assert.That(_recon.ReadCell(_upper, tile), Is.Zero);
+            Assert.That(_recon.ReadCell(_upper, new(5, 3)), Is.EqualTo((byte) CMUReconMaterial.Wall));
+            Assert.That(_recon.ReadCell(_upper, new(4, 3)), Is.EqualTo((byte) CMUReconMaterial.OpenDoubleDoor));
         });
         await Pair.RunTicksSync(40);
         await Server.WaitAssertion(() =>
         {
             var snapshot = _recon.BuildSnapshot(_console, _actor)!;
-            var local = tile - snapshot.Origin;
-            Assert.That(snapshot.Cells[CMUReconGeometry.Index(local.X, local.Y, 1, snapshot.Width, snapshot.Height)], Is.Zero);
-            Assert.That(snapshot.Cells[CMUReconGeometry.Index(local.X, local.Y, 0, snapshot.Width, snapshot.Height)], Is.EqualTo((byte) CMUReconMaterial.Floor));
+            Assert.That(snapshot.Cells, Is.EqualTo(initial.Cells), "World changes must not update the displayed terrain.");
+            Assert.That(snapshot.Appearance, Is.EqualTo(initial.Appearance), "Door textures must remain part of the initial survey.");
+            Assert.That(snapshot.Revisions, Is.EqualTo(initial.Revisions));
+            _ui.CloseUi(_console, Key, _actor);
+        });
+        // Exceed the former five-minute server cache lifetime; request without a client cache.
+        await RunSeconds(310);
+        await Server.WaitAssertion(() =>
+        {
+            // The unprotected test human can die during the idle interval. A fresh viewer must
+            // receive the same server baseline without relying on either viewer's client cache.
+            SEntMan.DeleteEntity(_actor);
+            _actor = SEntMan.SpawnEntity("MobHuman", new EntityCoordinates(_upper, new Vector2(0.5f, 1.5f)));
+            SEntMan.System<SkillsSystem>().SetSkill(_actor, "RMCSkillLeadership", 2);
+            Assert.That(_ui.TryOpenUi(_console, Key, _actor), Is.True);
+            Send(new CMUReconViewMessage(Vector2i.Zero));
+            var reopened = _recon.BuildSnapshot(_console, _actor)!;
+            Assert.That(reopened.AtlasId, Is.EqualTo(initial.AtlasId));
+            Assert.That((reopened.Origin, reopened.Width, reopened.Height), Is.EqualTo((initial.Origin, initial.Width, initial.Height)),
+                "New tiles beyond the original map bounds must not expand the survey on reopening.");
+            Assert.That(reopened.Cells, Is.EqualTo(initial.Cells));
+            Assert.That(reopened.Appearance, Is.EqualTo(initial.Appearance));
+            Assert.That(reopened.Directions, Is.EqualTo(initial.Directions));
         });
     }
 
@@ -720,31 +747,49 @@ public sealed partial class CMUReconstructionTest : GameTest
     public async Task FullMapIncludesDistantTilesAndTheirRealFloorAppearance()
     {
         var distant = new Vector2i(160, -90);
-        await Server.WaitAssertion(() =>
+        EntityUid map = default;
+        EntityUid console = default;
+        EntityUid actor = default;
+        try
         {
-            _ui.CloseUi(_console, Key, _actor);
-            var tile = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
-            _maps.SetTile(_upper, SComp<MapGridComponent>(_upper), distant, tile);
-            Assert.That(_ui.TryOpenUi(_console, Key, _actor), Is.True);
-            Send(new CMUReconViewMessage(Vector2i.Zero));
-        });
-        await Pair.RunTicksSync(160);
-        await Server.WaitAssertion(() =>
+            await Server.WaitAssertion(() =>
+            {
+                // Set up a fresh map before its first survey; later tile additions are intentionally ignored.
+                map = _maps.CreateMap(runMapInit: true);
+                var grid = SEntMan.EnsureComponent<MapGridComponent>(map);
+                var tile = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
+                _maps.SetTile(map, grid, Vector2i.Zero, tile);
+                _maps.SetTile(map, grid, distant, tile);
+                console = SEntMan.SpawnEntity("CMUTacticalReconstructionTableGovfor", new EntityCoordinates(map, new Vector2(0.5f)));
+                SEntMan.RemoveComponent<AccessReaderComponent>(console);
+                actor = SEntMan.SpawnEntity("MobHuman", new EntityCoordinates(map, new Vector2(0.5f, 1.5f)));
+                SEntMan.System<SkillsSystem>().SetSkill(actor, "RMCSkillLeadership", 2);
+                Assert.That(_ui.TryOpenUi(console, Key, actor), Is.True);
+                SEntMan.EventBus.RaiseLocalEvent(console, new CMUReconViewMessage(Vector2i.Zero) { Actor = actor, UiKey = Key });
+            });
+            await Pair.RunTicksSync(160);
+            await Server.WaitAssertion(() =>
+            {
+                var snapshot = _recon.BuildSnapshot(console, actor)!;
+                var local = distant - snapshot.Origin;
+                Assert.That(local.X, Is.LessThan(snapshot.Width));
+                Assert.That(local.Y, Is.InRange(0, snapshot.Height - 1));
+                Assert.That(snapshot.Width, Is.GreaterThan(CMUReconGeometry.Size));
+                var index = CMUReconGeometry.Index(local.X, local.Y, 0, snapshot.Width, snapshot.Height);
+                Assert.That(snapshot.Cells[index], Is.EqualTo((byte) CMUReconMaterial.Floor));
+                var style = snapshot.Surfaces.Single(s => s.Id == (snapshot.Appearance[index] & 0xffff));
+                Assert.That(style.Prototype, Is.EqualTo("Plating"));
+                Assert.That(style.Entity, Is.False);
+                Assert.That(snapshot.LoadedChunks, Is.EqualTo(snapshot.TotalChunks));
+                SEntMan.EventBus.RaiseLocalEvent(console, new CMUReconOrderMessage(snapshot.Generation, 0, distant, CMUReconOrderKind.Rally)
+                    { Actor = actor, UiKey = Key });
+                Assert.That(_recon.BuildSnapshot(console, actor)!.Orders.Single().Tile, Is.EqualTo(distant));
+            });
+        }
+        finally
         {
-            var snapshot = _recon.BuildSnapshot(_console, _actor)!;
-            var local = distant - snapshot.Origin;
-            Assert.That(local.X, Is.LessThan(snapshot.Width));
-            Assert.That(local.Y, Is.InRange(0, snapshot.Height - 1));
-            Assert.That(snapshot.Width, Is.GreaterThan(CMUReconGeometry.Size));
-            var index = CMUReconGeometry.Index(local.X, local.Y, 1, snapshot.Width, snapshot.Height);
-            Assert.That(snapshot.Cells[index], Is.EqualTo((byte) CMUReconMaterial.Floor));
-            var style = snapshot.Surfaces.Single(s => s.Id == (snapshot.Appearance[index] & 0xffff));
-            Assert.That(style.Prototype, Is.EqualTo("Plating"));
-            Assert.That(style.Entity, Is.False);
-            Assert.That(snapshot.LoadedChunks, Is.EqualTo(snapshot.TotalChunks));
-            Send(new CMUReconOrderMessage(snapshot.Generation, 0, distant, CMUReconOrderKind.Rally));
-            Assert.That(_recon.BuildSnapshot(_console, _actor)!.Orders.Single().Tile, Is.EqualTo(distant));
-        });
+            if (map.IsValid()) await Pair.DeleteEntityTreeLeafFirst(map);
+        }
     }
 
     [Test]

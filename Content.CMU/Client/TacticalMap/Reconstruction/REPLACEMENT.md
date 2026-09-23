@@ -78,9 +78,10 @@ and fit the current eight-level and 1024-by-1024 limits. This confirms layout co
 in-game verification. Other inspected rotation layouts fit those limits. Detect future maps that
 exceed the limits with an actionable error rather than an indefinite loading message.
 
-The development survey currently streams live unseen structures. During migration, distinguish
-base-map geometry from live changes and preserve the intended tactical intelligence rules; reusing
-filtered contact icons alone does not settle structural visibility or update timing.
+The survey captures then-present structures incrementally on its first request and freezes them for
+the map's lifetime. It does not publish later structural changes, including after reopening. It can
+still include unseen structures present during that first survey; a true round-start or authored-map
+baseline remains separate work. Filtered contacts and shared annotations continue updating.
 
 ## Completion checks
 

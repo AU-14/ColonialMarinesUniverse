@@ -70,7 +70,7 @@ public sealed partial class CMUReconstructionTest
 #pragma warning restore RA0002
 
     [Test]
-    public async Task WarmReopenReusesTerrainAndOnlyTransfersChangedChunks()
+    public async Task WarmReopenReusesFrozenTerrainAndOnlyTransfersMissingChunks()
     {
         var session = ServerSession!;
         var original = session.AttachedEntity;
@@ -130,10 +130,11 @@ public sealed partial class CMUReconstructionTest
             {
                 var scene = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView.Scene!;
                 var tile = new Vector2i(3, 3) - scene.Origin;
-                Assert.That(scene.Cells[CMUReconGeometry.Index(tile.X, tile.Y, 1, scene.Width, scene.Height)], Is.EqualTo((byte) CMUReconMaterial.Wall));
+                Assert.That(scene.Cells[CMUReconGeometry.Index(tile.X, tile.Y, 1, scene.Width, scene.Height)], Is.EqualTo((byte) CMUReconMaterial.Floor),
+                    "Reopening must not reveal a wall built after the initial survey.");
                 Assert.That(probe.Snapshot.ReuseGeometry, Is.True, "An incomplete cached baseline must also be reusable.");
                 Assert.That(scene.LoadedChunks, Is.EqualTo(scene.TotalChunks));
-                Assert.That(probe.Chunks, Is.EqualTo(2), "Send the missing chunk and changed wall chunk, not another full baseline.");
+                Assert.That(probe.Chunks, Is.EqualTo(1), "Only resend the missing chunk from the original survey.");
             });
         }
         finally

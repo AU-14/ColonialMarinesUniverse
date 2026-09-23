@@ -15,8 +15,10 @@ targets; no native graphics calls, additional context, or third-party renderer i
    `CMUTacticalReconstructionTableGovfor` and Opfor variant remain available for isolated tests.
 2. Existing access and drawing permissions apply. Table drawing requires leadership level 2;
    personal maps retain their normal `CanDraw` permission.
-3. The whole map streams automatically. Reopening within five minutes retains the loaded terrain
-   (including incomplete loads), camera, floor and cutaway settings. Only changed or missing chunks download.
+3. The whole map streams automatically from its initial survey. Later construction, destruction,
+   tile changes and door movement do not update that geometry. The server keeps the survey for the
+   map's lifetime, including across long periods with no viewers. Reopening within five minutes also
+   reuses the client's terrain, camera, floor and cutaway settings; only missing chunks download.
 4. Drag to pan by default; middle-drag orbits. Scroll zooms toward the cursor.
    **Top down** looks straight down at the current location. **Reset** restores the initial
    3D orientation and frames the map. Right-drag also pans while the pencil is selected.
@@ -54,9 +56,9 @@ input or truncating the beginning of the stroke. Unchanged strokes are not resen
 
 ## Scope
 
-- This is a **live structural survey**, including unseen structures, now accessible from standard
-  actions and computers. Tracked contacts retain the normal feed's visibility rules.
-  Production reconnaissance still needs an observed-change policy for geometry.
+- This is a **static structural survey**, captured incrementally when the map is first requested,
+  including then-present unseen structures. It is not a round-start snapshot or a live geometry feed.
+  Tracked contacts retain the normal feed's visibility rules and continue updating.
 - The structural survey does not export actors or inventories. Tracked icons come separately from the normal faction-filtered tactical feed. Orders are markers for people reading
   faction tables; they do not add pathfinding, automatic movement, radio announcements or squad HUDs.
   Pencil drawings are unrestricted annotations, not navigable paths.
@@ -88,11 +90,13 @@ palette together; contacts still update during that refresh and cached appearanc
 that swap. Building caps, vertical faces and exposed edges receive distinct shading, and labels
 use measured text bounds with a smaller density budget at wide zoom.
 
-Tile, anchor and door events mark chunks dirty. Extraction uses one global budget of at most
+Initial extraction uses one global budget of at most
 128 chunks or two milliseconds per frame across active networks, checking the budget between rows
 and committing whole chunks. Initial extraction prioritizes the operator's floor and nearby tiles.
-A rolling sweep checks one chunk per map per 100 ms when idle. Unchanged atlases skip per-viewer
-revision scans. Absent chunks on sparse floors bypass cell extraction. Closing all viewers retains the CPU atlas for five minutes; changes continue marking retained chunks dirty.
+There are no terrain change subscriptions or rolling rescans. Extraction finishes even if all viewers
+close their windows, and the server retains that baseline until its map is removed. Reopening never
+rebuilds it from later world changes. Completed atlases skip extraction and per-viewer revision scans.
+Absent chunks on sparse floors bypass cell extraction. Contacts and drawings continue updating independently.
 
 The client packs four floors across data textures and skips empty chunks during ray traversal.
 A 2048-square surface atlas contains up to 4095 actual tile/prop images. Data uploads reverse UV Y
@@ -123,7 +127,7 @@ dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restor
 ```
 
 Coverage includes stacked floors, occlusion, map-edge rays, directional footprints, floors underneath
-props, distant orders, live removal, actual floor appearances, connected chunk delivery and order
+props, distant orders, frozen geometry after world changes and idle reopening, actual floor appearances, connected chunk delivery and order
 authorization. Reopening checks drop the first request or metadata reply and verify recovery,
 complete chunk delivery, and retry cancellation on success and closure.
 Further checks cover camera retention, cached refresh staging, malformed drawing payloads, strokes
