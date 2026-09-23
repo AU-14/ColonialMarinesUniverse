@@ -7,6 +7,13 @@
                 <Button Name="OpenUiSetupButton" Text="{Loc 'cmu-ui-setup-open'}" Margin="0 0 0 8" />
                 <ui:CmuAppearanceOptions Name="Appearance" />
 
+                <!-- CMU14: tactical map preferences -->
+                <Label Text="{Loc cmu-options-tacmap}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
+                <CheckBox Name="ClassicTacMapCheckBox" Text="{Loc cmu-options-tacmap-classic}"
+                          ToolTip="{Loc cmu-options-tacmap-classic-tooltip}" />
+                <CheckBox Name="CenterTacMapCheckBox" Text="{Loc cmu-options-tacmap-center}"
+                          ToolTip="{Loc cmu-options-tacmap-center-tooltip}" />
+
                 <Label Text="{Loc 'ui-options-cmu-runechat'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="RunechatSpeechBubblesCheckBox" Text="{Loc 'ui-options-runechat-speech'}" />
                 <ui:OptionSlider Name="RunechatSpeechBubbleScaleSlider" Title="{Loc 'ui-options-runechat-speech-scale'}" />

@@ -675,11 +675,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
     private void OnUserBUIClosed(Entity<TacticalMapUserComponent> ent, ref BoundUIClosedEvent args)
     {
+        EntityManager.System<Content.Server.CMU14.TacticalMap.Reconstruction.CMUTacticalReconstructionSystem>().CloseSurvey(ent.Owner, args.Actor); // CMU14
         RemCompDeferred<ActiveTacticalMapUserComponent>(ent);
     }
 
     private void OnUserUpdateCanvasMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapUpdateCanvasMsg args)
     {
+        if (!ValidReconstructionCanvas(args)) return; // CMU14: validate the shared drawing payload.
         var user = args.Actor;
         if (!ent.Comp.CanDraw)
             return;
@@ -718,6 +720,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
     private void OnComputerUpdateCanvasMsg(Entity<TacticalMapComputerComponent> ent, ref TacticalMapUpdateCanvasMsg args)
     {
+        if (!ValidReconstructionCanvas(args)) return; // CMU14: validate the shared drawing payload.
         var user = args.Actor;
         if (!_skills.HasSkill(user, ent.Comp.Skill, ent.Comp.SkillLevel))
             return;

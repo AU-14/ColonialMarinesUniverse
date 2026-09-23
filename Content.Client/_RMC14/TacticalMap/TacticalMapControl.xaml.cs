@@ -475,7 +475,10 @@ public sealed partial class TacticalMapControl : TextureRect
 
     private void AddLineToCanvas(Vector2i start, Vector2i end)
     {
-        Lines.Add(new TacticalMapLine(start, end, Color, LineThickness));
+        // CMU14: retain fractional world coordinates for the shared 2D/3D canvas.
+        Lines.Add(new TacticalMapLine(start, end, Color, LineThickness,
+            [Content.Shared.CMU14.TacticalMap.Reconstruction.CMUReconDrawingCoordinates.ToWorld(start, _min, _min + _delta),
+             Content.Shared.CMU14.TacticalMap.Reconstruction.CMUReconDrawingCoordinates.ToWorld(end, _min, _min + _delta)]));
         LineThicknesses.Add(LineThickness);
 
         while (LineLimit >= 0 && Lines.Count > LineLimit)
@@ -737,7 +740,21 @@ public sealed partial class TacticalMapControl : TextureRect
             TacticalMapLine line = Lines[i];
             float thickness = line.Thickness > 0 ? line.Thickness :
                            (i < LineThicknesses.Count ? LineThicknesses[i] : 2.0f);
-            DrawLineWithThickness(handle, line, overlayScale, actualTopLeft, thickness);
+            // CMU14: render shared freehand strokes in classic map coordinates.
+            if (line.WorldPoints is { Length: > 0 } points)
+            {
+                Vector2i Canvas(Vector2 point)
+                {
+                    var p = Content.Shared.CMU14.TacticalMap.Reconstruction.CMUReconDrawingCoordinates.ToCanvas(point, _min, _min + _delta);
+                    return new Vector2i((int) MathF.Round(p.X), (int) MathF.Round(p.Y));
+                }
+                for (var point = 1; point < points.Length; point++)
+                    DrawLineWithThickness(handle, new TacticalMapLine(Canvas(points[point - 1]), Canvas(points[point]), line.Color),
+                        overlayScale, actualTopLeft, thickness);
+                if (points.Length == 1)
+                    handle.DrawCircle((Vector2) Canvas(points[0]) * overlayScale + actualTopLeft, thickness * overlayScale / 2, line.Color);
+            }
+            else DrawLineWithThickness(handle, line, overlayScale, actualTopLeft, thickness);
         }
     }
 
