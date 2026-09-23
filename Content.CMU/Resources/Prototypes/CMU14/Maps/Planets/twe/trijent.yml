@@ -79,11 +79,13 @@
 - type: gameMap
   id: AUTrijentMap
   mapName: Trijent
-  mapPath: /Maps/CMU14/trijent.yml
+  mapPath: /Maps/CMU14/TrijentMultiZ/TrijentMultiZ0.yml
   mapsBelow:
-  - /Maps/CMU14/trijent_below.yml
+  - /Maps/CMU14/TrijentMultiZ/TrijentMultiZ-1.yml
   mapsAbove:
-  - /Maps/CMU14/trijent_above.yml
+  - /Maps/CMU14/TrijentMultiZ/TrijentMultiZ1.yml
+  - /Maps/CMU14/TrijentMultiZ/TrijentMultiZ2.yml
+  - /Maps/CMU14/TrijentMultiZ/TrijentMultiZ3.yml
   minPlayers: 0
   maxPlayers: 500
   maxRandomOffset: 0

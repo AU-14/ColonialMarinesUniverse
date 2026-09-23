@@ -189,6 +189,14 @@
     RMCPlastic: 1250 # 1000
 
 - type: latheRecipe
+  id: RMCVial
+  result: RMCVial
+  completetime: 4
+  materials:
+    CMGlass: 125
+    RMCPlastic: 25
+
+- type: latheRecipe
   id: RMCVialBox
   result: RMCVialBox
   completetime: 4

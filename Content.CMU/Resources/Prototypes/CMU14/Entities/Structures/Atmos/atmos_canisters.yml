@@ -55,6 +55,26 @@
     access: [["CMAccessCombatTechPrep"], ["CMAccessEngineering"], ["CMAccessColonyEngineering"], ["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"], ["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
+  parent: TritiumCanister
+  id: CMUTritiumCanister
+  components:
+  - type: Sprite
+    sprite: Structures/Storage/canister.rsi
+    layers:
+    - state: tritium
+      sprite: CMU14/Structures/Atmos/tritium_canister.rsi
+    - state: paper
+      visible: false
+      map: [ "enum.PaperLabelVisuals.Layer" ]
+    - state: integrity-unshaded-0
+      map: [ "enum.MaxPressureVisualLayers.BaseUnshaded" ]
+      shader: unshaded
+      visible: false
+    - state: mask-green
+      map: [ "enum.MaxPressureVisualLayers.Base" ]
+      visible: false
+
+- type: entity
   parent: OxygenCanister
   id: CMUCanisterOxygen
   components:

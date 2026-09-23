@@ -322,7 +322,7 @@
 
 - type: entity
   parent: AU14AreaUSSGeorgeBush
-  id: AU14AreaUSSGeorgeBushAtmos
+  id: AU14AreaUSSGeorgeBushAuxFlightDeck
   name: "Auxilary Flight Deck"
 
 - type: entity
