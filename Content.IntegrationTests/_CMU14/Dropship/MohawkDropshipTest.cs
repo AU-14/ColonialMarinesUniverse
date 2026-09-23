@@ -411,8 +411,7 @@ public sealed class MohawkDropshipTest
                 new EntityCoordinates(destination, new Vector2(37, -19)), out var target), Is.True);
             var groundTarget = new EntityCoordinates(destination, new Vector2(37, -19));
             Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True);
-            // Carrier roof trim may overlap the ship's upper artwork. Only the
-            // cabin and underside participate in landing clearance.
+            // Terrain on every level is ignored for Mohawk landing clearance.
             Assert.That(zLevels.TryMapOffset(target.EntityId, 1, out var roofMap), Is.True);
             var obstruction = maps.CreateGridEntity(entities.GetComponent<MapComponent>(roofMap!.Value).MapId);
             var roofTile = maps.GetAllTiles(upper, entities.GetComponent<MapGridComponent>(upper)).First();
@@ -429,15 +428,15 @@ public sealed class MohawkDropshipTest
             var tileDefinitions = server.ResolveDependency<ITileDefinitionManager>();
             maps.SetTile(cabinObstruction, cabinObstruction.Comp,
                 cabinObstructionTile, new Tile(tileDefinitions["CMFloorPlating"].TileId));
-            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.False,
-                "An occupied cabin level must still reject the landing pad.");
+            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True,
+                "A floor at cabin height must not reject a Mohawk landing.");
             maps.SetTile(cabinObstruction, cabinObstruction.Comp,
                 cabinObstructionTile, new Tile(tileDefinitions["CMShuttleTileInvisible"].TileId));
             Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True,
                 "Open-air map anchors are not solid floors at cabin height.");
             entities.SpawnEntity("WallSolid", new EntityCoordinates(cabinObstruction, cabinObstructionTile + new Vector2(0.5f)));
-            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.False,
-                "A wall still obstructs landing even when it stands on a transparent tile.");
+            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True,
+                "A wall must not reject a Mohawk landing.");
             entities.DeleteEntity(cabinObstruction);
             Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True);
             // A ship still in transit must reserve its destination volume too.

@@ -33,7 +33,8 @@ public sealed partial class MultiDeckDropshipSystem
 
     /// <summary>
     /// Checks the cabin and decks below it without creating maps. Upper artwork may
-    /// overlap a carrier's roof; floors at cabin height still obstruct landing.
+    /// overlap a carrier's roof. Mohawks ignore terrain clearance but still
+    /// respect other ships' landing reservations.
     /// </summary>
     public bool IsLandingClear(EntityUid ship, EntityCoordinates ground, Angle rotation,
         ISet<Vector2i>? blocked = null)
@@ -48,6 +49,9 @@ public sealed partial class MultiDeckDropshipSystem
 
         if (!_map.TryGetMap(coordinates.MapId, out var groundMap))
             return false;
+
+        if (HasComp<MohawkMechanismsComponent>(ship))
+            return true;
 
         var clear = CheckDeck(ship, assembly.LandingOffset);
         foreach (var (offset, grid) in assembly.Decks)

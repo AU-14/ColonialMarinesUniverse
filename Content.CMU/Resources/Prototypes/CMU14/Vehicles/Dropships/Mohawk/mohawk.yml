@@ -456,6 +456,7 @@
   components:
   - type: DropshipWeaponPoint
     dirOffset: None
+    fixedWeapon: true
   - type: Sprite
     layers:
     - state: equip_base_front

@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/22/2026 09:27:06
-  entityCount: 28515
+  entityCount: 28514
 maps:
 - 1
 grids:
@@ -136377,16 +136377,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 167.5,114.5
-- proto: CMUBosenmoriProjectionViewer1x1
-  entities:
-  - uid: 52040
-    components:
-    - type: Transform
-      parent: 1
-      pos: 22.5,34.5
-    - type: RMCTeleporterViewer
-      projectionEnabled: True
-      id: bosenmori-construction-site-1
 - proto: CMUCanisterOxygen
   entities:
   - uid: 47431
