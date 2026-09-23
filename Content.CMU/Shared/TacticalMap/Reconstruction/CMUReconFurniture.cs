@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Numerics;
 
 namespace Content.Shared.CMU14.TacticalMap.Reconstruction;
@@ -20,7 +21,8 @@ public static class CMUReconFurniture
 
     public sealed class Model(params Part[] parts)
     {
-        public ReadOnlySpan<Part> Parts => parts;
+        // The client sandbox rejects span return types; keep one immutable copy instead.
+        public ImmutableArray<Part> Parts { get; } = ImmutableArray.CreateRange(parts);
         public float Height { get; } = GetHeight(parts);
         public Vector2 HalfSize { get; } = GetHalfSize(parts);
 
@@ -51,7 +53,7 @@ public static class CMUReconFurniture
             }
             origin += new Vector3(0.5f, 0.5f, 0);
             distance = float.PositiveInfinity;
-            foreach (var part in parts)
+            foreach (var part in Parts)
                 if (CMUReconGeometry.IntersectBox(origin, ray, part.Min, part.Max, out var near, out _))
                     distance = Math.Min(distance, Math.Max(near, 0));
             return float.IsFinite(distance);
