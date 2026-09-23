@@ -18,6 +18,9 @@ public static class CMUReconSceneData
         if (scene.Directions.Length == 0) scene.Directions = new byte[count];
         var chunks = count / (CMUReconGeometry.ChunkSize * CMUReconGeometry.ChunkSize);
         if (scene.Revisions.Length != chunks) scene.Revisions = new int[chunks];
+        if (scene.EmptyChunks.Length == (chunks + 7) / 8)
+            for (var i = 0; i < chunks; i++)
+                if ((scene.EmptyChunks[i / 8] & (1 << (i % 8))) != 0) scene.Revisions[i] = 1;
         return true;
     }
 

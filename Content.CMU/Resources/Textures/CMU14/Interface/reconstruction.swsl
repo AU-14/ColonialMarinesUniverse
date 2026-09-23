@@ -28,10 +28,12 @@ highp vec2 cellUv(highp vec3 cell) {
 highp vec2 cellData(highp vec3 cell) {
     if (cell.x < 0.0 || cell.y < 0.0 || cell.z < isolateLevel * (visibleLevels - 1.0) ||
         cell.x >= mapSize.x || cell.y >= mapSize.y || cell.z >= visibleLevels) return vec2(0.0);
+    if (texture2D(occupancy, cellUv(cell)).r < 0.5) return vec2(0.0);
     return floor(texture2D(terrain, cellUv(cell)).rg * 255.0 + 0.5);
 }
 highp float materialAt(highp vec3 cell) { return cellData(cell).x; }
 highp vec2 stylesAt(highp vec3 cell) {
+    if (texture2D(occupancy, cellUv(cell)).r < 0.5) return vec2(0.0);
     highp vec4 data = floor(texture2D(appearance, cellUv(cell)) * 255.0 + 0.5);
     return vec2(data.r + data.g * 256.0, data.b + data.a * 256.0);
 }
@@ -68,7 +70,7 @@ highp vec2 halfSize(highp float m, highp float rotation) {
     if (m > 4.5 && m < 5.5) extent.y = 0.18;
     if ((m > 6.5 && m < 7.5) || (m > 8.5 && m < 9.5)) extent = vec2(0.42);
     if (m > 7.5 && m < 8.5) extent = vec2(0.42, 0.36);
-    if (m > 9.5 && m < 10.5) extent = vec2(0.38);
+    if (m > 9.5 && m < 10.5) extent = vec2(rotation >= 128.0 ? 0.5 : 0.38);
     return mod(rotation, 2.0) > 0.5 ? extent.yx : extent;
 }
 // Small assemblies inside the authoritative cell envelope. No extra network geometry.
@@ -126,6 +128,7 @@ void partBounds(highp float m, highp float rotation, highp float height, highp i
         if (part == 0) { low = vec3(0.43, 0.43, 0.0); high = vec3(0.57, 0.57, 1.65); }
         if (part == 1) { low = vec3(0.12, 0.12, 1.0); high = vec3(0.88, 0.88, 2.35); }
         if (part == 2) { low = vec3(0.23, 0.23, 1.75); high = vec3(0.77, 0.77, 2.8); }
+        if (rotation >= 128.0 && part > 0) { low.xy = max(vec2(0.0), low.xy - 0.12); high.xy = min(vec2(1.0), high.xy + 0.12); }
     } else if (m > 10.5 && m < 11.5) {
         if (part == 0) high.z = 1.38;
         else { low = vec3(0.045, 0.045, 1.34); high = vec3(0.955, 0.955, 1.8); }
@@ -378,7 +381,7 @@ void fragment() {
         highp vec2 q = p.xy - cell.xy;
         highp float elevation = p.z - hit.z;
         highp float closeDetail = 1.0 - smoothstep(0.07, 0.5, pixelFootprint);
-        highp vec2 texUv = rotateUv(vec2(q.x, 1.0 - q.y), floor(data.y / 4.0));
+        highp vec2 texUv = rotateUv(vec2(q.x, 1.0 - q.y), mod(floor(data.y / 4.0), 8.0));
         highp float id = ids.x;
         if (hit.w > 0.2 || hit.y > 13.5) {
             id = ids.y;

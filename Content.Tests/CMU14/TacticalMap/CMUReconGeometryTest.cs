@@ -10,6 +10,20 @@ public sealed class CMUReconGeometryTest
 {
     private static byte[] Cells(int levels) => new byte[CMUReconGeometry.Size * CMUReconGeometry.Size * levels];
 
+    [Test]
+    public void LargeTreeCanopyRemainsPickableAtItsWiderEdge()
+    {
+        var cells = Cells(1);
+        var directions = new byte[cells.Length];
+        var index = CMUReconGeometry.Index(4, 4, 0);
+        cells[index] = (byte) CMUReconMaterial.Tree;
+        var origin = new Vector3(4.03f, 4.5f, 10);
+        Assert.That(CMUReconGeometry.TryPick(cells, 1, 0, origin, -Vector3.UnitZ, out _, out _, out _, directions: directions), Is.False);
+        directions[index] = 128;
+        Assert.That(CMUReconGeometry.TryPick(cells, 1, 0, origin, -Vector3.UnitZ, out _, out var tile, out _, directions: directions), Is.True);
+        Assert.That(tile, Is.EqualTo(new Vector2i(4, 4)));
+    }
+
     [TestCase(0), TestCase(1), TestCase(6)]
     public void CutawaySelectsTheExactFloorAtIdenticalCoordinates(int cut)
     {

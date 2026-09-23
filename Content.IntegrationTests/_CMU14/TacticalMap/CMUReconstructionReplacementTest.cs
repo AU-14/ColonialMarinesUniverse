@@ -66,6 +66,13 @@ public sealed partial class CMUReconstructionTest
                 SEntMan.EventBus.RaiseLocalEvent(table, (object) send);
             });
             await Pair.RunTicksSync(40);
+            // This test exercises canvas interoperability, independently of announcement throttling.
+            await Server.WaitPost(() =>
+            {
+#pragma warning disable RA0002
+                SComp<TacticalMapComputerComponent>(table).NextAnnounceAt = TimeSpan.Zero;
+#pragma warning restore RA0002
+            });
             await Client.WaitAssertion(() =>
             {
                 var window = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<TacticalMapWindow>().Single();
@@ -202,6 +209,10 @@ public sealed partial class CMUReconstructionTest
             {
                 new(new(18, 30), new(30, 12), Color.Cyan, 4),
             };
+            // Classic submission has the normal announcement cooldown; isolate canvas conversion here.
+#pragma warning disable RA0002
+            SComp<TacticalMapComputerComponent>(table).NextAnnounceAt = TimeSpan.Zero;
+#pragma warning restore RA0002
             SendTable(new TacticalMapUpdateCanvasMsg(classicLines, new() { [new(-2, 1)] = "Advance" }));
             var roundTrip = _recon.BuildSnapshot(table, _actor)!.Orders;
             var retained = roundTrip.Single(o => o.Depth == -1);

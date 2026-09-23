@@ -49,7 +49,7 @@ next opening, including normal personal actions and tactical computers.
 Published planet drawings share the existing faction canvas with classic maps. Fractional stroke
 paths, colour, width and floor survive classic resubmission; classic canvas coordinates are converted
 using the map's actual origin and inverted Y axis. Text pins share tactical labels. Overwatch canvases
-remain scoped to their assigned squad. A classic canvas refresh preserves unsent local edits.
+remain scoped to their assigned squad and appear on that squad's personal 3D maps. Publication uses the classic faction/hive announcement and published-contact path, with announcement cooldowns. Ordinary human personal maps and ghosts remain read-only; consoles/tablets retain their normal access, range and leadership requirements. Fresh observers can request geometry and see their authorized faction drawings. A classic canvas refresh preserves unsent local edits.
 Drawing waits for a refreshed baseline when
 reopening a cached map. Pencil sampling compacts long strokes to at most 512 points without stopping
 input or truncating the beginning of the stroke. Unchanged strokes are not resent with terrain patches.
@@ -60,11 +60,11 @@ input or truncating the beginning of the stroke. Unchanged strokes are not resen
   including then-present unseen structures. It is not a round-start snapshot or a live geometry feed.
   Tracked contacts retain the normal feed's visibility rules and continue updating.
 - The structural survey does not export actors or inventories. Tracked icons come separately from the normal faction-filtered tactical feed. Orders are markers for people reading
-  faction tables; they do not add pathfinding, automatic movement, radio announcements or squad HUDs.
+  faction tables; they do not add pathfinding, automatic movement or squad HUDs. Sending a plan does produce the normal update announcement.
   Pencil drawings are unrestricted annotations, not navigable paths.
 - Single-level map-as-grid maps and Z networks support up to eight level slots and a 1024 by 1024 tile footprint.
   Redux's full linked footprint fits this budget. Moving grids and imported meshes are not supported.
-- Geometry is reconstructed from tiles and anchored structures, not individually authored 3D models.
+- Geometry is reconstructed from tiles, anchored structures and static scenery, not individually authored 3D models. One spatial query per surveyed chunk includes unanchored trees, bushes, rocks and static props while excluding dynamic entities and inventory. Large trees have broader rounded crowns.
   It distinguishes walls, directional doors/glass/barricades/rails, machinery, furniture, crates,
   vegetation, rocks and stairs. Props have inset footprints and independent floors underneath.
   Double doors use both facing leaves and directional closed/open sprite frames; open doors retain their jambs and header. Water entities are shallow textured surfaces. Irregular props such as chairs and beds use alpha-cutout sprite cards with an overhead representation, preserving their silhouette instead of inventing a solid box.
@@ -78,7 +78,7 @@ input or truncating the beginning of the stroke. Unchanged strokes are not resen
 
 `CMUTacticalReconstructionSystem` maintains a shared atlas per open Z network. Actual map bounds
 replace the old 48-tile sector. Metadata arrives first; 16 by 16 chunks follow in batches of at most
-128 every 0.1 seconds per viewer within an approximate 44 KiB payload budget. A lossless chunk palette compresses repeated cells, with raw fallback for highly varied chunks. Empty chunks carry coordinates without cell arrays. Encoded chunks are cached per revision and shared between viewers. Both extraction and transmission prioritize the operator's floor and nearby tiles. Each cell carries material, floor/structure appearance IDs and
+128 every 0.1 seconds per viewer within an approximate 44 KiB payload budget. A lossless chunk palette compresses repeated cells, with raw fallback for highly varied chunks. Chunks absent at initial layout discovery are represented by a compact bitmask in the metadata, without individual chunk messages; other empty chunks carry coordinates without cell arrays. Encoded chunks are cached per revision and shared between viewers. Both extraction and transmission prioritize the operator's floor and nearby tiles. Each cell carries material, floor/structure appearance IDs and
 orientation. A bounded palette references existing tile variants and entity prototypes.
 The opening metadata request retries every two seconds until a baseline arrives, so closing and
 reopening during subscription updates cannot leave the window waiting indefinitely. Retries stop
@@ -98,7 +98,7 @@ close their windows, and the server retains that baseline until its map is remov
 rebuilds it from later world changes. Completed atlases skip extraction and per-viewer revision scans.
 Absent chunks on sparse floors bypass cell extraction. Contacts and drawings continue updating independently.
 
-The client packs four floors across data textures and skips empty chunks during ray traversal.
+The client packs up to four floors across data textures (only the required columns for one to three floors) and skips empty chunks during ray traversal.
 A 2048-square surface atlas contains up to 4095 actual tile/prop images. Data uploads reverse UV Y
 to match Clyde's top-left `SetSubImage` convention. CPU picking uses the same bounds, footprints,
 heights, cutaway and isolation rules as `reconstruction.swsl`, using coarse cell envelopes rather
@@ -113,7 +113,7 @@ are queued, including cached reopening, with at most 24 chunks or two millisecon
 icon creation is limited to four entries or two milliseconds per frame, and incremental loading redraws
 the volume at most ten times per second. Labels and order markers use
 native UI resolution. Camera, geometry, surface or viewport changes invalidate the cache.
-Contact shadows are bounded and disabled at distant zoom. GPU resources are released with the view.
+Contact shadows are bounded and disabled at distant zoom. The initialized occupancy mask also guards neighbour/shadow reads, so terrain textures need no map-sized clear allocation or upload on opening. GPU resources are released with the view.
 
 Batched edits carry a generation, request ID, bounded additions and removals. Each addition contains continuous map points, color, width, signed floor and optional plain text. The server validates the whole batch before applying any mutation and acknowledges it before the client discards its draft. The server checks open UI,
 access, range, leadership, generation, current faction/network membership, finite coordinates, map bounds,

@@ -113,6 +113,8 @@ public sealed class CMUReconSnapshotMessage(int generation, Vector2i origin, int
     public int AtlasId;
     public bool ReuseGeometry;
     public int[] Revisions = [];
+    // One bit per chunk known to be empty in the initial survey; avoids individual empty packets.
+    public byte[] EmptyChunks = [];
 }
 
 [Serializable, NetSerializable]

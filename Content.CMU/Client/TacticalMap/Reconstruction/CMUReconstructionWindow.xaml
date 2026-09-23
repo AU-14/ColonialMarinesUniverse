@@ -43,10 +43,6 @@
             <RichTextLabel Text="{Loc cmu-recon-draw-help}" />
             <Button Name="Undo" Text="{Loc cmu-recon-undo-drawing}" Disabled="True" />
             <Button Name="Clear" Text="{Loc cmu-recon-clear-drawings}" Disabled="True" />
-            <Label Text="{Loc cmu-recon-legend}" FontColorOverride="#829DA9" Margin="0,12,0,0" />
-            <Label Text="{Loc cmu-recon-legend-wall}" FontColorOverride="#B7DDE0" />
-            <Label Text="{Loc cmu-recon-legend-door}" FontColorOverride="#E7BC78" />
-            <Label Text="{Loc cmu-recon-legend-glass}" FontColorOverride="#54BDC9" />
           </BoxContainer>
         </ScrollContainer>
       </BoxContainer>

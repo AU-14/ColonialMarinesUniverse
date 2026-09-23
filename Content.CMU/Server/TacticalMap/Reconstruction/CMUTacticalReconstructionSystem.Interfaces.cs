@@ -23,6 +23,11 @@ public sealed partial class CMUTacticalReconstructionSystem
 
     public void CloseSurvey(EntityUid source, EntityUid actor) => _surveys.Remove((source, actor));
 
+    private static bool HasDrawingFaction(string? faction) => faction is
+        SharedTacticalMapSystem.MarinesFaction or SharedTacticalMapSystem.XenosFaction or
+        SharedTacticalMapSystem.GovforFaction or SharedTacticalMapSystem.OpforFaction or
+        SharedTacticalMapSystem.ClfFaction or SharedTacticalMapSystem.WeYuFaction;
+
     private bool TrySource(EntityUid source, out EntityUid? map, out string faction)
     {
         if (TryComp<TacticalMapUserComponent>(source, out var user))
@@ -32,13 +37,14 @@ public sealed partial class CMUTacticalReconstructionSystem
                 user.Opfor ? SharedTacticalMapSystem.OpforFaction :
                 user.Clf ? SharedTacticalMapSystem.ClfFaction :
                 user.WeYu ? SharedTacticalMapSystem.WeYuFaction :
-                user.Xenos ? SharedTacticalMapSystem.XenosFaction : SharedTacticalMapSystem.MarinesFaction;
+                user.Xenos ? SharedTacticalMapSystem.XenosFaction : user.Marines ? SharedTacticalMapSystem.MarinesFaction : "";
             return true;
         }
         if (TryComp<TacticalMapComputerComponent>(source, out var computer))
         {
             map = computer.Map;
             faction = SharedTacticalMapSystem.NormalizeMapFaction(computer.Faction) ?? SharedTacticalMapSystem.MarinesFaction;
+            if (!HasDrawingFaction(faction)) faction = "";
             return true;
         }
         map = null;

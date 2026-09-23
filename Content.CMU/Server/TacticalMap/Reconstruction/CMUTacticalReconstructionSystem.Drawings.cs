@@ -12,9 +12,9 @@ public sealed partial class CMUTacticalReconstructionSystem
     private sealed record CanvasBaseline(List<TacticalMapLine> Lines, Dictionary<Vector2i, string> Labels);
     private readonly Dictionary<(EntityUid Network, string Faction), CanvasBaseline> _canvasBaselines = new();
 
-    private void ImportCanvas(Survey survey, List<CMUReconOrder> orders)
+    private void ImportCanvas(Survey survey, EntityUid scope, string faction, List<CMUReconOrder> orders)
     {
-        var key = (survey.DrawingScope, survey.Faction);
+        var key = (DrawingScope: scope, Faction: faction);
         if (!EntityManager.System<TacticalMapSystem>().TryReconstructionCanvas(key.DrawingScope, key.Faction, out var lines, out var labels)) return;
         if (_canvasBaselines.TryGetValue(key, out var old) && ReferenceEquals(old.Lines, lines) &&
             old.Labels.Count == labels.Count && old.Labels.All(p => labels.TryGetValue(p.Key, out var text) && text == p.Value)) return;
@@ -65,7 +65,7 @@ public sealed partial class CMUTacticalReconstructionSystem
             else if (order.Waypoints is { Length: > 0 } points)
                 lines.Add(new TacticalMapLine(default, default, order.Color ?? CMUReconDrawingCoordinates.InkColor(order.Ink), order.Width, points, order.Depth));
         }
-        EntityManager.System<TacticalMapSystem>().SetReconstructionCanvas(survey.DrawingScope, survey.Faction, lines, labels);
+        EntityManager.System<TacticalMapSystem>().SetReconstructionCanvas(survey.Source, survey.Actor, survey.DrawingScope, survey.Faction, lines, labels);
         _canvasBaselines[key] = new CanvasBaseline(lines, new Dictionary<Vector2i, string>(labels));
     }
 }

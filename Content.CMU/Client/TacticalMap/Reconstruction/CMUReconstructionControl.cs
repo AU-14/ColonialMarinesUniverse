@@ -88,13 +88,12 @@ public sealed partial class CMUReconstructionControl : Control
         var load = TextureLoadParameters.Default;
         load.Srgb = false; // These are byte-valued cells, not colors. sRGB decoding corrupts material IDs.
         load.SampleParameters = new TextureSampleParameters { Filter = false };
-        var atlasSize = new Vector2i(scene.Width * 4, scene.Height * ((scene.Levels + 3) / 4));
+        var atlasSize = new Vector2i(scene.Width * Math.Min(4, scene.Levels), scene.Height * ((scene.Levels + 3) / 4));
         _terrain = _clyde.CreateBlankTexture<Rgba32>(atlasSize,
             name: "cmu-reconstruction-cells", loadParams: load);
         _appearance = _clyde.CreateBlankTexture<Rgba32>(atlasSize, name: "cmu-reconstruction-appearance", loadParams: load);
-        var pixels = new Rgba32[atlasSize.X * atlasSize.Y];
-        _terrain.SetSubImage(Vector2i.Zero, atlasSize, pixels.AsSpan());
-        _appearance.SetSubImage(Vector2i.Zero, atlasSize, pixels.AsSpan());
+        // The zeroed occupancy mask hides uninitialized terrain, including shader neighbour reads.
+        // Upload each occupied chunk before publishing its occupancy bit; no map-sized clear upload.
         var chunkSize = atlasSize / CMUReconGeometry.ChunkSize;
         _occupancy = _clyde.CreateBlankTexture<Rgba32>(chunkSize, name: "cmu-reconstruction-chunks", loadParams: load);
         _chunkPixels = new Rgba32[chunkSize.X * chunkSize.Y];

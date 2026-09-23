@@ -56,7 +56,7 @@ public static class CMUReconGeometry
             CMUReconMaterial.Barricade => new Vector2(0.5f, 0.18f),
             CMUReconMaterial.Machinery or CMUReconMaterial.Crate => new Vector2(0.42f),
             CMUReconMaterial.Furniture => new Vector2(0.42f, 0.36f),
-            CMUReconMaterial.Tree => new Vector2(0.38f),
+            CMUReconMaterial.Tree => new Vector2((direction & 128) != 0 ? 0.5f : 0.38f),
             _ => new Vector2(0.5f),
         };
         if ((direction & 1) != 0)

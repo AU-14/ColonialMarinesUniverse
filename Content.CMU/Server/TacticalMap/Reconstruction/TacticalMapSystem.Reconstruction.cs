@@ -1,11 +1,14 @@
+using System.Linq;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Overwatch;
+using Robust.Shared.Audio;
 
 namespace Content.Server._RMC14.TacticalMap;
 
 public sealed partial class TacticalMapSystem
 {
+    private readonly Dictionary<(EntityUid Scope, string Faction), TimeSpan> _reconstructionAnnouncements = new();
     public void ResolveReconstructionFaction(Entity<TacticalMapComputerComponent> computer, EntityUid actor)
     {
         if (NormalizeMapFaction(computer.Comp.Faction) == null && _skills.HasSkill(actor, computer.Comp.Skill, computer.Comp.SkillLevel))
@@ -34,6 +37,10 @@ public sealed partial class TacticalMapSystem
         HasComp<TacticalMapComponent>(map) && TryComp<OverwatchConsoleComponent>(source, out var console) && console.Squad is { } squad &&
         HasComp<SquadTeamComponent>(GetEntity(squad)) ? GetEntity(squad) : map;
 
+    public EntityUid? ReconstructionViewerSquad(EntityUid source) =>
+        TryComp<TacticalMapUserComponent>(source, out var user) && user.HasSquad &&
+        _squad.TryGetMemberSquad(source, out var squad) ? squad.Owner : null;
+
     public bool TryReconstructionCanvas(EntityUid scope, string faction,
         out List<TacticalMapLine> lines, out Dictionary<Vector2i, string> labels)
     {
@@ -59,9 +66,10 @@ public sealed partial class TacticalMapSystem
         return false;
     }
 
-    public void SetReconstructionCanvas(EntityUid scope, string faction, List<TacticalMapLine> lines,
+    public void SetReconstructionCanvas(EntityUid source, EntityUid actor, EntityUid scope, string faction, List<TacticalMapLine> lines,
         Dictionary<Vector2i, string> labels)
     {
+        var announce = BeginReconstructionAnnouncement(source, scope, faction, out var sound);
         if (TryComp<SquadTeamComponent>(scope, out var squad))
         {
             squad.TacMapLines = lines; squad.TacMapLabels = labels;
@@ -70,26 +78,58 @@ public sealed partial class TacticalMapSystem
                 if (!TryComp<TacticalMapUserComponent>(member, out var user)) continue;
                 user.SquadLines = lines; user.SquadLabels = labels; Dirty(member, user);
             }
+            if (announce)
+                _marineAnnounce.AnnounceOverwatchSquad(actor, "The squad tactical map has been updated.", scope, squad.Color, Name(scope));
             return;
         }
-        if (!TryComp<TacticalMapComponent>(scope, out var map)) return;
-        switch (faction)
+        if (!TryComp<TacticalMapComponent>(scope, out var map))
         {
-            case XenosFaction: map.XenoLines = lines; map.XenoLabels = labels; break;
-            case GovforFaction: map.GovforLines = lines; map.GovforLabels = labels; break;
-            case OpforFaction: map.OpforLines = lines; map.OpforLabels = labels; break;
-            case ClfFaction: map.ClfLines = lines; map.ClfLabels = labels; break;
-            case WeYuFaction: map.WeYuLines = lines; map.WeYuLabels = labels; break;
-            default: map.MarineLines = lines; map.MarineLabels = labels; break;
+            if (announce) AnnounceReconstructionUpdate(actor, faction, sound);
+            return;
         }
-        map.MapDirty = true;
-        // Reuse the normal recipients and filtering. A Send makes both views current immediately.
-        var computers = EntityQueryEnumerator<TacticalMapComputerComponent>();
-        while (computers.MoveNext(out var uid, out var computer))
-            if (computer.Map == scope && _ui.IsUiOpen(uid, TacticalMapComputerUi.Key)) UpdateMapData((uid, computer), map);
+        // Use the classic publication path: faction canvas, last-published contacts, alerts and audit event.
+        // Limit it to the selected map so ship/planet drawings cannot overwrite one another.
+        UpdateCanvas(lines, labels, faction == MarinesFaction, faction == XenosFaction, faction == OpforFaction,
+            faction == GovforFaction, faction == ClfFaction, actor, sound, scope, announce, faction == WeYuFaction);
         var users = EntityQueryEnumerator<ActiveTacticalMapUserComponent, TacticalMapUserComponent>();
         while (users.MoveNext(out var uid, out _, out var user))
             if (user.Map == scope) UpdateUserData((uid, user), map);
+    }
+
+    private bool BeginReconstructionAnnouncement(EntityUid source, EntityUid scope, string faction, out SoundSpecifier? sound)
+    {
+        sound = null;
+        TryComp<TacticalMapUserComponent>(source, out var user);
+        TryComp<TacticalMapComputerComponent>(source, out var computer);
+        if (user != null) sound = user.Sound;
+        var time = _timing.CurTime;
+        if (time < _reconstructionAnnouncements.GetValueOrDefault((scope, faction)) ||
+            user != null && time < user.NextAnnounceAt || computer != null && time < computer.NextAnnounceAt)
+            return false;
+        _reconstructionAnnouncements[(scope, faction)] = time + _announceCooldown;
+        foreach (var key in _reconstructionAnnouncements.Keys.Where(k => TerminatingOrDeleted(k.Scope)).ToArray())
+            _reconstructionAnnouncements.Remove(key);
+        if (user != null)
+        {
+            user.LastAnnounceAt = time;
+            user.NextAnnounceAt = time + _announceCooldown;
+            Dirty(source, user);
+        }
+        if (computer != null)
+        {
+            computer.LastAnnounceAt = time;
+            computer.NextAnnounceAt = time + _announceCooldown;
+            Dirty(source, computer);
+        }
+        return true;
+    }
+
+    private void AnnounceReconstructionUpdate(EntityUid actor, string faction, SoundSpecifier? sound)
+    {
+        if (faction == XenosFaction)
+            _xenoAnnounce.AnnounceSameHive(actor, "There's a shift in the hivemind's tactical picture. The mental map sharpens.", sound);
+        else
+            AnnounceHumanTacticalMapUpdated(actor, sound, faction);
     }
 
     /// <summary>Use exactly the computer's normal faction, sensor and infrastructure filtering.</summary>

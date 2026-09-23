@@ -76,6 +76,7 @@
         requireInputValidation: false
       enum.TacticalMapUserUi.Key:
         type: TacticalMapUserBui
+        requireInputValidation: false # CMU14: ghosts can request the read-only reconstruction survey.
       enum.ViewIntelObjectivesUI.Key:
         type: ViewIntelObjectivesBui
   - type: IntrinsicUI
