@@ -105,6 +105,18 @@ public sealed partial class CMUReconstructionControl
 
     private void RenderSurfaces(DrawingHandleScreen handle)
     {
+        if (_furnitureModels == null)
+        {
+            var bytes = CMUReconFurniture.EncodeTexture();
+            var pixels = new Rgba32[bytes.Length / 4];
+            for (var i = 0; i < pixels.Length; i++)
+                pixels[i] = new Rgba32(bytes[i * 4], bytes[i * 4 + 1], bytes[i * 4 + 2], bytes[i * 4 + 3]);
+            _furnitureModels = _clyde.CreateBlankTexture<Rgba32>(
+                new Vector2i(CMUReconFurniture.TextureWidth, CMUReconFurniture.TextureHeight),
+                name: "cmu-reconstruction-furniture",
+                loadParams: new TextureLoadParameters { Srgb = false, SampleParameters = new TextureSampleParameters { Filter = false } });
+            _furnitureModels.SetSubImage(Vector2i.Zero, _furnitureModels.Size, pixels.AsSpan());
+        }
         if (_surfaceAtlas == null)
         {
             _surfaceAtlas = _clyde.CreateRenderTarget(new Vector2i(2048, 2048), RenderTargetColorFormat.Rgba8Srgb,

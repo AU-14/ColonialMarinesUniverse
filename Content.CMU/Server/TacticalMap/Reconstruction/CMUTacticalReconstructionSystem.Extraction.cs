@@ -3,6 +3,7 @@ using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
+using Content.Shared.Foldable;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Wall;
@@ -22,7 +23,7 @@ public sealed partial class CMUTacticalReconstructionSystem
     private readonly HashSet<EntityUid> _staticCandidates = new();
     private readonly record struct Cell(byte Material, uint Appearance, byte Direction);
 
-    /// <summary>Static structures and scenery only, with no inventory or actor state.</summary>
+    /// <summary>Initial structures, scenery and opted-in furniture, with no inventory or actor state.</summary>
     public byte ReadCell(EntityUid? map, Vector2i tile) => ReadDetails(map, tile, null).Material;
 
     private Cell ReadDetails(EntityUid? map, Vector2i tile, Atlas? atlas, MapGridComponent? grid = null)
@@ -51,7 +52,9 @@ public sealed partial class CMUTacticalReconstructionSystem
             var prototype = MetaData(entity).EntityPrototype?.ID;
             if (prototype == null)
                 return;
-            var kind = Kind(prototype);
+            if (TryComp<FoldableComponent>(entity, out var folded) && folded.IsFolded)
+                return;
+            var kind = TryComp<CMUReconFurnitureComponent>(entity, out var furniture) ? furniture.Material : Kind(prototype);
             if (TryComp<DoorComponent>(entity, out var door))
                 kind = HasComp<CMDoubleDoorComponent>(entity)
                     ? door.State == DoorState.Open ? CMUReconMaterial.OpenDoubleDoor : CMUReconMaterial.DoubleDoor
@@ -73,7 +76,7 @@ public sealed partial class CMUTacticalReconstructionSystem
             priority = score;
             material = kind;
             var rotation = (int) Math.Round(Transform(entity).LocalRotation.Theta / (Math.PI / 2));
-            direction = (byte) ((direction & ~3) | (rotation & 3));
+            direction = (byte) ((direction & 28) | (rotation & 3));
             if (kind == CMUReconMaterial.Tree && prototype.Contains("Large", StringComparison.OrdinalIgnoreCase))
                 direction |= 128; // Larger canopy; lower bits retain facing and floor rotation.
             if (atlas != null)
@@ -101,7 +104,7 @@ public sealed partial class CMUTacticalReconstructionSystem
         _staticCandidates.Clear();
         var bounds = new Box2((Vector2) origin, (Vector2) origin + new Vector2(size));
         _lookup.GetEntitiesIntersecting(map, _transform.GetWorldMatrix(map).TransformBox(bounds), _staticCandidates,
-            LookupFlags.StaticSundries | LookupFlags.Approximate);
+            LookupFlags.StaticSundries | LookupFlags.Dynamic | LookupFlags.Sundries | LookupFlags.Approximate);
     }
 
     private bool StaticSceneryAt(EntityUid entity, EntityUid map, Vector2i origin, int size, out Vector2i tile)
@@ -111,12 +114,17 @@ public sealed partial class CMUTacticalReconstructionSystem
             transform.Anchored || transform.ParentUid != map ||
             MetaData(entity).EntityPrototype is not { } prototype)
             return false;
-        // Trees, rocks and other map scenery often have static physics without being grid-anchored.
-        // Never capture loose items, vehicles, actors or inventory through the broadphase query.
-        var kind = Kind(prototype.ID);
-        if (kind is not (CMUReconMaterial.Tree or CMUReconMaterial.Rock or CMUReconMaterial.Sprite or
-                CMUReconMaterial.Furniture or CMUReconMaterial.Crate or CMUReconMaterial.Machinery or CMUReconMaterial.Railing) ||
-            TryComp<PhysicsComponent>(entity, out var body) && body.BodyType != Robust.Shared.Physics.BodyType.Static)
+        // Office/wooden chairs are movable. Capture only explicitly opted-in furniture from
+        // dynamic bodies; actors, loose items, vehicles and contained entities remain excluded.
+        var isFurniture = TryComp<CMUReconFurnitureComponent>(entity, out var furniture) &&
+            CMUReconFurniture.TryGet((byte) furniture.Material, out _);
+        var kind = isFurniture ? furniture!.Material : Kind(prototype.ID);
+        if (!isFurniture && kind is not (CMUReconMaterial.Tree or CMUReconMaterial.Rock or CMUReconMaterial.Sprite or
+                CMUReconMaterial.Furniture or CMUReconMaterial.Crate or CMUReconMaterial.Machinery or CMUReconMaterial.Railing))
+            return false;
+        if (TryComp<PhysicsComponent>(entity, out var body) && !isFurniture && body.BodyType != Robust.Shared.Physics.BodyType.Static)
+            return false;
+        if (TryComp<FoldableComponent>(entity, out var folded) && folded.IsFolded)
             return false;
         if (body == null && kind is not (CMUReconMaterial.Tree or CMUReconMaterial.Rock or CMUReconMaterial.Sprite)) return false;
         tile = new Vector2i((int) MathF.Floor(transform.LocalPosition.X), (int) MathF.Floor(transform.LocalPosition.Y));
@@ -170,7 +178,7 @@ public sealed partial class CMUTacticalReconstructionSystem
         return kind;
     }
 
-    private static int Priority(CMUReconMaterial material) => material switch
+    private static int Priority(CMUReconMaterial material) => CMUReconFurniture.TryGet((byte) material, out _) ? 20 : material switch
     {
         CMUReconMaterial.Wall => 100,
         CMUReconMaterial.Rock => 95,

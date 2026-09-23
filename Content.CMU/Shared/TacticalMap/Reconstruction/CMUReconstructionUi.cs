@@ -8,7 +8,14 @@ namespace Content.Shared.CMU14.TacticalMap.Reconstruction;
 public enum CMUReconstructionUiKey : byte { Key }
 
 [Serializable, NetSerializable]
-public enum CMUReconMaterial : byte { Empty, Floor, Wall, Door, Glass, Barricade, Ground, Machinery, Furniture, Crate, Tree, Rock, Stairs, Railing, Water, DoubleDoor, OpenDoor, OpenDoubleDoor, Sprite }
+public enum CMUReconMaterial : byte
+{
+    Empty, Floor, Wall, Door, Glass, Barricade, Ground, Machinery, Furniture, Crate, Tree, Rock,
+    Stairs, Railing, Water, DoubleDoor, OpenDoor, OpenDoubleDoor, Sprite,
+    Chair, FoldingChair, OfficeChair, Armchair, Stool, BenchLeft, BenchRight, Sofa, Bed, BunkBed,
+    Desk, Shelf, Bookcase, WoodChair, WoodWingChair, Table, WoodTable, OperatingTable, Counter,
+    CouchMiddle, CouchLeft, CouchRight,
+}
 
 [Serializable, NetSerializable]
 public enum CMUReconOrderKind : byte { Rally, Move, Route, Text }

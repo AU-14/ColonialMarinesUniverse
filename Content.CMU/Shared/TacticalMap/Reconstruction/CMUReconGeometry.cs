@@ -19,7 +19,7 @@ public static class CMUReconGeometry
 
     public static int Index(int x, int y, int level, int width = Size, int height = Size) => (level * height + y) * width + x;
 
-    public static float Height(byte material) => (CMUReconMaterial) material switch
+    public static float Height(byte material) => CMUReconFurniture.TryGet(material, out var model) ? model.Height : (CMUReconMaterial) material switch
     {
         CMUReconMaterial.Wall => 2.8f,
         CMUReconMaterial.Door or CMUReconMaterial.DoubleDoor or CMUReconMaterial.OpenDoor or CMUReconMaterial.OpenDoubleDoor => 2.6f,
@@ -48,7 +48,7 @@ public static class CMUReconGeometry
 
     public static void Footprint(byte material, byte direction, out Vector2 min, out Vector2 max)
     {
-        var half = (CMUReconMaterial) material switch
+        var half = CMUReconFurniture.TryGet(material, out var model) ? model.HalfSize : (CMUReconMaterial) material switch
         {
             CMUReconMaterial.Door or CMUReconMaterial.OpenDoor => new Vector2(0.5f, 0.12f),
             CMUReconMaterial.DoubleDoor or CMUReconMaterial.OpenDoubleDoor => new Vector2(0.12f, 0.5f),
@@ -100,10 +100,17 @@ public static class CMUReconGeometry
                                     material is >= (byte) CMUReconMaterial.DoubleDoor and <= (byte) CMUReconMaterial.OpenDoubleDoor))
                 cellHeight *= wallScale;
             var min = new Vector3(x, y, z * LevelHeight);
-            Footprint(material, directions is { Length: > 0 } ? directions[index] : (byte) 0, out var footprintMin, out var footprintMax);
+            var rotation = directions is { Length: > 0 } ? directions[index] : (byte) 0;
+            Footprint(material, rotation, out var footprintMin, out var footprintMax);
             var nearest = float.PositiveInfinity;
-            if (cellHeight > 0 && IntersectBox(origin, direction, min + new Vector3(footprintMin, 0),
-                    min + new Vector3(footprintMax, cellHeight), out var near, out var far) && far >= distance - 0.001f)
+            float near, far;
+            if (CMUReconFurniture.TryGet(material, out var model))
+            {
+                if (model.TryPick(origin - min, direction, rotation, out near) && near >= distance - 0.001f)
+                    nearest = near;
+            }
+            else if (cellHeight > 0 && IntersectBox(origin, direction, min + new Vector3(footprintMin, 0),
+                    min + new Vector3(footprintMax, cellHeight), out near, out far) && far >= distance - 0.001f)
                 nearest = Math.Max(near, 0);
             // Props sit on an independently textured floor; their reduced footprint must not create holes.
             if (appearance is { Length: > 0 } && (appearance[index] & 0xffff) != 0 &&

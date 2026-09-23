@@ -24,6 +24,7 @@ public sealed partial class CMUReconstructionControl : Control
 
     private ShaderInstance? _shader;
     private OwnedTexture? _terrain;
+    private OwnedTexture? _furnitureModels;
     private OwnedTexture? _appearance;
     private OwnedTexture? _occupancy;
     private Rgba32[] _chunkPixels = [];
@@ -307,6 +308,7 @@ public sealed partial class CMUReconstructionControl : Control
             scene.LoadedChunks == scene.TotalChunks && _pendingUploads.Count == 0 && _pendingSurfaces.Count == 0))
         {
             _shader.SetParameter("terrain", _terrain);
+            _shader.SetParameter("furnitureModels", _furnitureModels!);
             _shader.SetParameter("appearance", _appearance);
             _shader.SetParameter("occupancy", _occupancy);
             _shader.SetParameter("surfaceAtlas", _surfaceAtlas!.Texture);
@@ -447,9 +449,11 @@ public sealed partial class CMUReconstructionControl : Control
         _appearance?.Dispose();
         _occupancy?.Dispose();
         _surfaceAtlas?.Dispose();
+        _furnitureModels?.Dispose();
         _shader?.Dispose();
         _target = null;
         _terrain = null;
+        _furnitureModels = null;
         _appearance = null;
         _occupancy = null;
         _surfaceAtlas = null;

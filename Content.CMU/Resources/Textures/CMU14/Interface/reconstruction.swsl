@@ -5,6 +5,7 @@ uniform sampler2D terrain;
 uniform sampler2D appearance;
 uniform sampler2D occupancy;
 uniform sampler2D surfaceAtlas;
+uniform sampler2D furnitureModels;
 uniform highp vec2 mapSize;
 uniform highp vec2 atlasSize;
 uniform highp float pixelFootprint;
@@ -37,7 +38,14 @@ highp vec2 stylesAt(highp vec3 cell) {
     highp vec4 data = floor(texture2D(appearance, cellUv(cell)) * 255.0 + 0.5);
     return vec2(data.r + data.g * 256.0, data.b + data.a * 256.0);
 }
+// Shared CMUReconFurniture catalogue: header + eight pairs of centimetre bounds per row.
+// Point sampling and the same row reversal as terrain preserve exact geometry and finish IDs.
+highp vec4 furnitureData(highp float m, highp float column) {
+    highp vec2 uv = vec2((column + 0.5) / 17.0, 1.0 - (m - 19.0 + 0.5) / 32.0);
+    return floor(texture2D(furnitureModels, uv) * 255.0 + 0.5);
+}
 highp float heightOf(highp float m) {
+    if (m > 18.5) return furnitureData(m, 0.0).r / 100.0;
     if (m > 17.5) return 1.6;
     if (m > 14.5) return 2.6;
     if (m > 13.5) return 0.2;
@@ -71,10 +79,12 @@ highp vec2 halfSize(highp float m, highp float rotation) {
     if ((m > 6.5 && m < 7.5) || (m > 8.5 && m < 9.5)) extent = vec2(0.42);
     if (m > 7.5 && m < 8.5) extent = vec2(0.42, 0.36);
     if (m > 9.5 && m < 10.5) extent = vec2(rotation >= 128.0 ? 0.5 : 0.38);
+    if (m > 18.5) extent = furnitureData(m, 0.0).gb / 100.0;
     return mod(rotation, 2.0) > 0.5 ? extent.yx : extent;
 }
 // Small assemblies inside the authoritative cell envelope. No extra network geometry.
 highp int partCount(highp float m) {
+    if (m > 18.5) return int(furnitureData(m, 0.0).a);
     if (m > 17.5) return 3;
     if (m > 16.5) return 2;
     if (m > 15.5) return 3;
@@ -92,10 +102,13 @@ highp int partCount(highp float m) {
 }
 void partBounds(highp float m, highp float rotation, highp float height, highp int part,
     out highp vec3 low, out highp vec3 high) {
-    highp vec2 extent = halfSize(m, 0.0);
+    highp vec2 extent = m > 18.5 ? vec2(0.5) : halfSize(m, 0.0);
     low = vec3(0.5 - extent, 0.0);
     high = vec3(0.5 + extent, height);
-    if (m > 17.5) {
+    if (m > 18.5) {
+        low = furnitureData(m, 1.0 + float(part) * 2.0).rgb / 100.0;
+        high = furnitureData(m, 2.0 + float(part) * 2.0).rgb / 100.0;
+    } else if (m > 17.5) {
         low = vec3(0.0, 0.493, 0.18); high = vec3(1.0, 0.507, height);
         if (part == 1) { low.xy = vec2(0.493, 0.0); high.xy = vec2(0.507, 1.0); }
         if (part == 2) { low = vec3(0.0, 0.0, 0.24); high = vec3(1.0, 1.0, 0.25); }
@@ -166,12 +179,15 @@ highp float occupied(highp vec3 p) {
     if (data.x < 0.5) return 0.0;
     highp vec3 q = p - cell * vec3(1.0, 1.0, 3.0);
     highp float h = displayedHeight(data.x, cell.z);
+    highp int count = partCount(data.x);
     if (partOccupied(q, data, h, 0) > 0.5) return 1.0;
-    if (partCount(data.x) > 1 && partOccupied(q, data, h, 1) > 0.5) return 1.0;
-    if (partCount(data.x) > 2 && partOccupied(q, data, h, 2) > 0.5) return 1.0;
-    if (partCount(data.x) > 3 && partOccupied(q, data, h, 3) > 0.5) return 1.0;
-    if (partCount(data.x) > 4 && partOccupied(q, data, h, 4) > 0.5) return 1.0;
-    if (partCount(data.x) > 5 && partOccupied(q, data, h, 5) > 0.5) return 1.0;
+    if (count > 1 && partOccupied(q, data, h, 1) > 0.5) return 1.0;
+    if (count > 2 && partOccupied(q, data, h, 2) > 0.5) return 1.0;
+    if (count > 3 && partOccupied(q, data, h, 3) > 0.5) return 1.0;
+    if (count > 4 && partOccupied(q, data, h, 4) > 0.5) return 1.0;
+    if (count > 5 && partOccupied(q, data, h, 5) > 0.5) return 1.0;
+    if (count > 6 && partOccupied(q, data, h, 6) > 0.5) return 1.0;
+    if (count > 7 && partOccupied(q, data, h, 7) > 0.5) return 1.0;
     return 0.0;
 }
 highp float visibility(highp vec3 p, highp vec3 normal) {
@@ -202,7 +218,7 @@ highp vec3 boxNormal(highp vec3 p, highp vec3 low, highp vec3 high) {
 highp vec4 partHit(highp vec3 origin, highp vec3 ray, highp vec3 inv, highp vec3 cell,
     highp vec2 data, highp float height, highp float distance, highp int part) {
     highp vec4 miss = vec4(1000000.0, 0.0, 0.0, 1.0);
-    if (data.x > 17.5 && ((abs(ray.z) > 0.85) != (part == 2))) return miss;
+    if (data.x > 17.5 && data.x < 18.5 && ((abs(ray.z) > 0.85) != (part == 2))) return miss;
     highp vec3 low; highp vec3 high;
     partBounds(data.x, data.y, height, part, low, high);
     low += cell * vec3(1.0, 1.0, 3.0);
@@ -228,7 +244,7 @@ highp vec4 partHit(highp vec3 origin, highp vec3 ray, highp vec3 inv, highp vec3
         normal = boxNormal(origin + ray * max(near, 0.0), low, high);
     }
     if (far < max(near, 0.0) || far < distance - 0.001) return miss;
-    if (data.x > 17.5) {
+    if (data.x > 17.5 && data.x < 18.5) {
         highp vec3 p = origin + ray * max(near, 0.0) - cell * vec3(1.0, 1.0, 3.0);
         highp vec2 uv = part == 2 ? vec2(p.x, 1.0 - p.y) : vec2(abs(normal.x) > 0.5 ? p.y : p.x, 1.0 - (p.z - 0.18) / (height - 0.18));
         highp float id = stylesAt(cell).y;
@@ -238,35 +254,46 @@ highp vec4 partHit(highp vec3 origin, highp vec3 ray, highp vec3 inv, highp vec3
     return vec4(max(near, 0.0), normal);
 }
 highp vec4 shapeHit(highp vec3 origin, highp vec3 ray, highp vec3 inv, highp vec3 cell,
-    highp vec2 data, highp float height, highp float distance) {
+    highp vec2 data, highp float height, highp float distance, out highp float selectedPart) {
     // Explicit candidates avoid GL driver miscompilation of the nearest-hit reduction
     // when partBounds' out parameters are evaluated inside a loop.
+    selectedPart = 0.0;
+    highp int count = partCount(data.x);
     highp vec4 best = partHit(origin, ray, inv, cell, data, height, distance, 0);
-    if (partCount(data.x) > 1) {
+    if (count > 1) {
         highp vec4 candidate = partHit(origin, ray, inv, cell, data, height, distance, 1);
-        if (candidate.x < best.x) best = candidate;
+        if (candidate.x < best.x) { best = candidate; selectedPart = 1.0; }
     }
-    if (partCount(data.x) > 2) {
+    if (count > 2) {
         highp vec4 candidate = partHit(origin, ray, inv, cell, data, height, distance, 2);
-        if (candidate.x < best.x) best = candidate;
+        if (candidate.x < best.x) { best = candidate; selectedPart = 2.0; }
     }
-    if (partCount(data.x) > 3) {
+    if (count > 3) {
         highp vec4 candidate = partHit(origin, ray, inv, cell, data, height, distance, 3);
-        if (candidate.x < best.x) best = candidate;
+        if (candidate.x < best.x) { best = candidate; selectedPart = 3.0; }
     }
-    if (partCount(data.x) > 4) {
+    if (count > 4) {
         highp vec4 candidate = partHit(origin, ray, inv, cell, data, height, distance, 4);
-        if (candidate.x < best.x) best = candidate;
+        if (candidate.x < best.x) { best = candidate; selectedPart = 4.0; }
     }
-    if (partCount(data.x) > 5) {
+    if (count > 5) {
         highp vec4 candidate = partHit(origin, ray, inv, cell, data, height, distance, 5);
-        if (candidate.x < best.x) best = candidate;
+        if (candidate.x < best.x) { best = candidate; selectedPart = 5.0; }
+    }
+    if (count > 6) {
+        highp vec4 candidate = partHit(origin, ray, inv, cell, data, height, distance, 6);
+        if (candidate.x < best.x) { best = candidate; selectedPart = 6.0; }
+    }
+    if (count > 7) {
+        highp vec4 candidate = partHit(origin, ray, inv, cell, data, height, distance, 7);
+        if (candidate.x < best.x) { best = candidate; selectedPart = 7.0; }
     }
     return best;
 }
 // Distance, material, base elevation, occupied height; negative distance means sky.
-highp vec4 traceDetailed(highp vec3 origin, highp vec3 ray, out highp vec3 hitNormal) {
+highp vec4 traceDetailed(highp vec3 origin, highp vec3 ray, out highp vec3 hitNormal, out highp float hitFinish) {
     hitNormal = vec3(0.0, 0.0, 1.0);
+    hitFinish = 0.0;
     highp vec3 inv = (step(vec3(0.0), ray) * 2.0 - 1.0) / max(abs(ray), vec3(0.000001));
     highp vec2 bounds = boxHit(origin, inv, vec3(0.0, 0.0, isolateLevel * (visibleLevels - 1.0) * 3.0),
         vec3(mapSize, visibleLevels * 3.0));
@@ -287,8 +314,9 @@ highp vec4 traceDetailed(highp vec3 origin, highp vec3 ray, out highp vec3 hitNo
             highp vec3 low = cell * vec3(1.0, 1.0, 3.0);
             highp vec3 bestNormal = vec3(0.0, 0.0, 1.0);
             highp vec4 best = vec4(1000000.0, data.x, low.z, height);
+            highp float selectedPart = 0.0;
             if (height > 0.0) {
-                highp vec4 shape = shapeHit(origin, ray, inv, cell, data, height, distance);
+                highp vec4 shape = shapeHit(origin, ray, inv, cell, data, height, distance, selectedPart);
                 best.x = shape.x;
                 bestNormal = shape.yzw;
             }
@@ -300,7 +328,11 @@ highp vec4 traceDetailed(highp vec3 origin, highp vec3 ray, out highp vec3 hitNo
                     bestNormal = boxNormal(origin + ray * best.x, low, low + vec3(1.0, 1.0, 0.18));
                 }
             }
-            if (best.x < 1000000.0) { hitNormal = bestNormal; return best; }
+            if (best.x < 1000000.0) {
+                hitNormal = bestNormal;
+                if (best.y > 18.5) hitFinish = furnitureData(best.y, 1.0 + selectedPart * 2.0).a;
+                return best;
+            }
         }
         highp vec3 boundary = (floor(p / stepSize) + step(vec3(0.0), ray)) * stepSize;
         highp vec3 next = max((boundary - p) * inv, vec3(0.0));
@@ -313,7 +345,8 @@ highp vec4 traceDetailed(highp vec3 origin, highp vec3 ray, out highp vec3 hitNo
 }
 highp vec4 traceScene(highp vec3 origin, highp vec3 ray) {
     highp vec3 normal;
-    return traceDetailed(origin, ray, normal);
+    highp float finish;
+    return traceDetailed(origin, ray, normal, finish);
 }
 highp vec2 rotateUv(highp vec2 uv, highp float rotation) {
     if (rotation > 3.5) uv.x = 1.0 - uv.x;
@@ -359,7 +392,8 @@ void fragment() {
         ray = cameraForward;
     }
     highp vec3 normal;
-    highp vec4 hit = traceDetailed(origin, ray, normal);
+    highp float finish;
+    highp vec4 hit = traceDetailed(origin, ray, normal, finish);
     highp vec3 color = mix(vec3(0.011, 0.020, 0.029), vec3(0.025, 0.039, 0.051), UV2.y);
     highp float datumZ = isolateLevel * (visibleLevels - 1.0) * 3.0 - 0.28;
     highp float datumT = (datumZ - origin.z) / min(ray.z, -0.000001);
@@ -388,12 +422,27 @@ void fragment() {
             texUv = top > 0.5 || (hit.y > 13.5 && hit.y < 14.5) ? (q - 0.5) / (extent * 2.0) + 0.5 :
                 vec2(abs(normal.x) > 0.5 ? q.y : q.x, 1.0 - elevation / hit.w);
             if (hit.y < 14.5 && (hit.y < 2.5 || hit.y > 3.5)) texUv = rotateUv(texUv, mod(data.y, 4.0));
-            if (hit.y > 17.5 && top < 0.5) texUv.y = 1.0 - (elevation - 0.18) / (hit.w - 0.18);
+            if (hit.y > 17.5 && hit.y < 18.5 && top < 0.5) texUv.y = 1.0 - (elevation - 0.18) / (hit.w - 0.18);
         }
         highp vec4 tex = filteredSurface(id, texUv);
         // The surface target is composited over transparency, so recover its straight albedo.
         highp vec3 albedo = clamp(tex.rgb / max(tex.a, 0.03), 0.0, 1.0);
         highp vec3 base = mix(materialColor(hit.y), albedo, tex.a * 0.95);
+        if (hit.y > 18.5) {
+            // Use the actual prototype's upholstery/paint colour on solid model parts, without
+            // stamping a tiny picture of the entire chair on each seat, arm or leg.
+            highp vec4 swatch = surface(id, vec2(0.4, 0.4)) + surface(id, vec2(0.6, 0.4))
+                + surface(id, vec2(0.5, 0.55)) + surface(id, vec2(0.5, 0.65));
+            highp vec3 paint = swatch.a > 0.05 ? clamp(swatch.rgb / swatch.a, 0.0, 1.0) : materialColor(hit.y);
+            base = paint;
+            if (finish > 0.5 && finish < 1.5) base = mix(vec3(0.22, 0.25, 0.27), paint, 0.18);
+            if (finish > 1.5 && finish < 2.5) {
+                base = mix(vec3(0.35, 0.20, 0.095), paint, 0.65);
+                base *= 0.96 + sin(q.x * 73.0 + q.y * 9.0) * 0.045 * closeDetail;
+            }
+            if (finish > 2.5 && finish < 3.5) base = mix(paint, albedo, tex.a * 0.35);
+            if (finish > 3.5) base = vec3(0.82, 0.84, 0.81);
+        }
         highp float luminance = dot(base, vec3(0.2126, 0.7152, 0.0722));
         base = max(vec3(0.0), mix(vec3(luminance), base, 1.16));
 

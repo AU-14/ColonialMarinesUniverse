@@ -102,7 +102,20 @@ The client packs up to four floors across data textures (only the required colum
 A 2048-square surface atlas contains up to 4095 actual tile/prop images. Data uploads reverse UV Y
 to match Clyde's top-left `SetSubImage` convention. CPU picking uses the same bounds, footprints,
 heights, cutaway and isolation rules as `reconstruction.swsl`, using coarse cell envelopes rather
-than the shader's individual decorative parts. Pencil strokes intersect the selected floor plane.
+than the shader's individual decorative parts. Furniture instead shares its individual part bounds
+between CPU picking and the shader, so rays pass through gaps under seats and between shelves.
+Pencil strokes intersect the selected floor plane.
+
+Furniture prototypes opt in with `CMUReconFurniture`; inherited colour variants retain their original
+prototype appearances. The catalogue includes metal/folding/wooden/winged/office/padded chairs,
+stools, handed benches, sofas and couch sections, metal/wood tables, panelled desks, counters,
+beds, bunks, operating tables, open racks and bookcases. Each model has at most eight solid parts.
+A 2,176-byte RGBA8 lookup texture contains the shared centimetre bounds and part finishes, uploaded
+once per window and reused across map selections. It adds no per-entity geometry to network packets.
+Prototype paint/upholstery colours are sampled separately from metal, wood, mattress and pillow parts.
+The first survey also includes explicitly tagged movable furniture; folded and contained furniture,
+actors and loose items are excluded. Subsequent movement does not change the saved survey.
+The existing one-structure-per-tile limit still applies, including furniture sharing a tile.
 
 Surface colors preserve prototype sprite tint and recover straight color from the alpha-composited
 atlas. Warm directional light, neutral ambient light, exposed-edge bevels, seams and contact shadows
@@ -122,7 +135,7 @@ color and payload size. Terrain clearance is irrelevant to pencil annotations.
 ## Focused checks
 
 ```powershell
-dotnet test Content.Tests/Content.Tests.csproj --no-restore --filter 'FullyQualifiedName~CMUReconGeometryTest|FullyQualifiedName~CMUReconRoutesTest'
+dotnet test Content.Tests/Content.Tests.csproj --no-restore --filter 'FullyQualifiedName~CMUReconGeometryTest|FullyQualifiedName~CMUReconFurnitureTest|FullyQualifiedName~CMUReconRoutesTest'
 dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restore --filter FullyQualifiedName~CMUReconstructionTest
 ```
 
