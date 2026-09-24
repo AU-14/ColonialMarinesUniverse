@@ -1,4 +1,5 @@
 using Content.Server.Administration;
+using Content.Server.CMU14.Round; // CMU14
 using Content.Server.GameTicking.Presets;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
@@ -46,6 +47,7 @@ namespace Content.Server.GameTicking.Commands
                 return;
             }
 
+            _entity.System<AuRoundSystem>().StopVoteSequence(); // CMU14
             ticker.SetGamePreset(preset, false, decoy, rounds);
             if (decoy == null)
                 shell.WriteLine(Loc.GetString("set-game-preset-preset-set-finite", ("preset", preset.ID), ("rounds", rounds.ToString())));

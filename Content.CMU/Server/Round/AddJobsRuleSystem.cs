@@ -28,9 +28,6 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-
-
-
         PlatoonPrototype? platoon = null;
         var planet = _auRoundSystem.GetSelectedPlanet();
         var protoMgr = IoCManager.Resolve<IPrototypeManager>();

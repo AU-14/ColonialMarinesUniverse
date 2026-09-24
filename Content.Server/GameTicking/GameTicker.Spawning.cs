@@ -692,6 +692,11 @@ namespace Content.Server.GameTicking
             if (jobBans != null)
                 restrictedRoles.UnionWith(jobBans);
 
+            // CMU14: confirm before the FoF balancer sends a joiner to the opposite side.
+            if (lateJoin
+                && _fof.TryOpenBalanceConfirm(player, station, jobId))
+                return;
+
             // CMU14: ForceOnForce faction lock and mid-round balance.
             if (lateJoin
                 && _fof.TryDecideSpawn(player, station, jobId, character, restrictedRoles, out var fofJob, out var fofStation))

@@ -2,30 +2,31 @@ using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Station.Systems;
 using System.Linq;
+using Content.Shared.CCVar;
+using Content.Shared.CMU14.Ops.ForceOnForce;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Server.Player;
+using Robust.Shared.Timing;
 
-namespace Content.Server.CMU14.Round;
+namespace Content.Server.CMU14.Ops.ForceOnForce;
 
 /// <summary>
 /// Tracks which faction each player spawned as during Force on Force for the mid-round
 /// balance count. The per-player faction lock is currently disabled: it let dead players
-/// on the leading side respawn straight back into it, which defeated the MaxGap balancer.
+/// on the leading side respawn straight back into it, which defeated the gap balancer.
 /// Round-start dealing lives in StationJobsSystem.AssignJobs.
 /// </summary>
 public sealed class ForceOnForceFactionSystem : EntitySystem
 {
-    // joiners may only pick the leading side once the gap exceeds this; dead-but-connected
-    // players count toward their side (they respawn into it), disconnected ones do not
-    private const int MaxGap = 3;
-
+    private const double ConfirmValiditySeconds = 60;
     private static readonly ProtoId<JobPrototype> GovforRifleman = "AU14JobGOVFORSquadRifleman";
     private static readonly ProtoId<JobPrototype> OpforRifleman = "AU14JobOPFORSquadRifleman";
 
@@ -35,16 +36,21 @@ public sealed class ForceOnForceFactionSystem : EntitySystem
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly StationJobsSystem _stationJobs = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IServerNetManager _netManager = default!;
 
     private readonly Dictionary<NetUserId, string> _factions = new();
-
+    private readonly Dictionary<NetUserId, PendingBalanceJoin> _pendingJoins = new();
     private readonly HashSet<ProtoId<JobPrototype>> _govforJobs = new();
     private readonly HashSet<ProtoId<JobPrototype>> _opforJobs = new();
+    private sealed record PendingBalanceJoin(EntityUid Station, ProtoId<JobPrototype> Job, TimeSpan ConfirmedAt);
 
     public override void Initialize()
     {
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnSpawnComplete);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        _netManager.RegisterNetMessage<FoFBalanceConfirmMessage>(OnBalanceConfirmed);
 
         foreach (var job in ProtoMan.EnumeratePrototypes<JobPrototype>())
         {
@@ -69,6 +75,7 @@ public sealed class ForceOnForceFactionSystem : EntitySystem
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         _factions.Clear();
+        _pendingJoins.Clear();
     }
 
     /// <summary>
@@ -88,46 +95,31 @@ public sealed class ForceOnForceFactionSystem : EntitySystem
         job = default;
         jobStation = default;
 
-        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
-        if (presetId is not ("ForceOnForce" or "forceonforce"))
+        if (!IsFoFRound())
             return false;
 
         string target;
         // Faction lock disabled: every spawn runs the balance check, otherwise locked
-        // respawners keep feeding the leading side past MaxGap. Uncomment to restore.
+        // respawners keep feeding the leading side past the gap
         // if (_factions.TryGetValue(player.UserId, out var locked))
-        // {
         //     target = locked;
-        // }
         // else
         {
-            var govfor = 0;
-            var opfor = 0;
-            foreach (var (userId, faction) in _factions)
-            {
-                if (!_playerManager.TryGetSessionById(userId, out _))
-                    continue;
+            CountSides(out var govfor, out var opfor);
 
-                if (faction == "GOVFOR")
-                    govfor++;
-                else
-                    opfor++;
-            }
-
-            if (Math.Abs(govfor - opfor) <= MaxGap)
+            if (Math.Abs(govfor - opfor) <= _cfg.GetCVar(CCVars.FoFMaxGap))
                 return false;
 
             target = govfor < opfor ? "GOVFOR" : "OPFOR";
         }
 
-        var other = target == "GOVFOR" ? "OPFOR" : "GOVFOR";
         var otherJobs = target == "GOVFOR" ? _opforJobs : _govforJobs;
 
         if (requestedJob is { } requested)
         {
             var req = new ProtoId<JobPrototype>(requested);
             if (!_govforJobs.Contains(req) && !_opforJobs.Contains(req))
-                return false; // non-faction job, not our business
+                return false;
 
             if (!otherJobs.Contains(req))
             {
@@ -135,33 +127,13 @@ public sealed class ForceOnForceFactionSystem : EntitySystem
                 jobStation = station;
                 return true;
             }
-            // requested the wrong side; fall through to a mapped pick
             _chat.DispatchServerMessage(player, Loc.GetString("cmu-fof-faction-lock-forced"));
         }
 
         var banned = new HashSet<ProtoId<JobPrototype>>(disallowed);
         banned.UnionWith(otherJobs);
 
-        // map the player's preferences onto the allowed side, rifleman as guaranteed landing
-        var priorities = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
-        foreach (var (pref, priority) in profile.JobPriorities)
-        {
-            var id = pref.Id;
-            if (id.Contains(other))
-            {
-                id = id.Replace(other, target);
-                if (!ProtoMan.HasIndex<JobPrototype>(id))
-                    continue; // no equivalent role on the allowed side
-            }
-            else if (!id.Contains(target))
-            {
-                continue;
-            }
-
-            priorities[new ProtoId<JobPrototype>(id)] = priority;
-        }
-
-        priorities.TryAdd(target == "GOVFOR" ? GovforRifleman : OpforRifleman, JobPriority.Low);
+        var priorities = FofJobs.MapSide(profile.JobPriorities, target, keepNeutral: false, ProtoMan);
 
         var rifleman = target == "GOVFOR" ? GovforRifleman : OpforRifleman;
         var stations = _station.GetStations().ToList();
@@ -176,13 +148,106 @@ public sealed class ForceOnForceFactionSystem : EntitySystem
             return true;
         }
 
-        // The behind side has no open slots left; returning false would free-pick the joiner
-        // into the leading side and the buffer could never recover. Force the rifleman through.
+        foreach (var candidate in stations)
+        {
+            var overflowJobs = _stationJobs.GetOverflowJobs(candidate);
+            var open = _stationJobs.GetAvailableJobs(candidate)
+                .Where(id => id.Id.Contains(target)
+                    && !overflowJobs.Contains(id)
+                    && !banned.Contains(id))
+                .ToList();
+
+            if (open.Count == 0)
+                continue;
+
+            job = _random.Pick(open);
+            jobStation = candidate;
+            return true;
+        }
+
         if (disallowed.Contains(rifleman))
             return false;
 
         job = rifleman;
         jobStation = stations.FirstOrDefault();
         return jobStation != EntityUid.Invalid;
+    }
+
+    private bool IsFoFRound()
+    {
+        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+        return presetId is "ForceOnForce" or "forceonforce";
+    }
+
+    private void CountSides(out int govfor, out int opfor)
+    {
+        govfor = 0;
+        opfor = 0;
+        foreach (var (userId, faction) in _factions)
+        {
+            if (!_playerManager.TryGetSessionById(userId, out _))
+                continue;
+
+            if (faction == "GOVFOR")
+                govfor++;
+            else
+                opfor++;
+        }
+    }
+
+    /// <summary>
+    /// Opens the balance confirm popup when the requested job sits on the leading side and the
+    /// gap is past the cvar. Returns true when the popup was sent and the spawn must wait.
+    /// </summary>
+    public bool TryOpenBalanceConfirm(ICommonSession player, EntityUid station, string? jobId)
+    {
+        if (jobId is not { } requested
+            || !IsFoFRound())
+            return false;
+
+        CountSides(out var govfor, out var opfor);
+
+        var maxGap = _cfg.GetCVar(CCVars.FoFMaxGap);
+        if (Math.Abs(govfor - opfor) <= maxGap)
+            return false;
+
+        var target = govfor < opfor ? "GOVFOR" : "OPFOR";
+        var leadingJobs = target == "GOVFOR" ? _opforJobs : _govforJobs;
+        if (!leadingJobs.Contains(new ProtoId<JobPrototype>(requested)))
+            return false;
+
+        if (_pendingJoins.Remove(player.UserId, out var pending)
+            && pending.Job.Id == requested
+            && pending.ConfirmedAt != TimeSpan.MinValue
+            && _timing.RealTime - pending.ConfirmedAt <= TimeSpan.FromSeconds(ConfirmValiditySeconds))
+            return false;
+
+        _pendingJoins[player.UserId] = new PendingBalanceJoin(
+            station,
+            new ProtoId<JobPrototype>(requested),
+            TimeSpan.MinValue);
+        RaiseNetworkEvent(new FoFBalanceConfirmEvent(govfor, opfor, maxGap), player.Channel);
+        return true;
+    }
+
+    private void OnBalanceConfirmed(FoFBalanceConfirmMessage message)
+    {
+        var userId = message.MsgChannel.UserId;
+        if (!_pendingJoins.TryGetValue(userId, out var pending)
+            || pending.ConfirmedAt != TimeSpan.MinValue)
+            return;
+
+        if (!_playerManager.TryGetSessionById(userId, out var session))
+            return;
+
+        if (_gameTicker.PlayerGameStatuses.TryGetValue(userId, out var status)
+            && status == PlayerGameStatus.JoinedGame)
+        {
+            _pendingJoins.Remove(userId);
+            return;
+        }
+
+        _pendingJoins[userId] = pending with { ConfirmedAt = _timing.RealTime };
+        _gameTicker.MakeJoinGame(session, pending.Station, pending.Job.Id);
     }
 }

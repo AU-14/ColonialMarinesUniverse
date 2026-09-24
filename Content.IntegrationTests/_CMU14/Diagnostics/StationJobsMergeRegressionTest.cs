@@ -17,7 +17,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests.Tests.Station;
+namespace Content.IntegrationTests.CMU14.Diagnostics;
 
 [TestFixture]
 [TestOf(typeof(StationJobsSystem))]
@@ -214,6 +214,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
             await Server.WaitAssertion(() =>
             {
                 SetCurrentPreset(ticker, preset);
+                jobs.AssignJobs(new Dictionary<NetUserId, HumanoidCharacterProfile>(), [station]);
                 var blocked = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
                 jobs.AssignOverflowJobs(ref blocked, profiles.Keys, profiles, [station]);
                 Assert.That(blocked[player], Is.EqualTo(((ProtoId<JobPrototype>?) null, EntityUid.Invalid)),
@@ -222,8 +223,10 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                 profiles[player] = profiles[player].WithJobPriority(Opfor, JobPriority.Low);
                 var accepted = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
                 jobs.AssignOverflowJobs(ref accepted, profiles.Keys, profiles, [station]);
-                Assert.That(accepted[player], Is.EqualTo(((ProtoId<JobPrototype>?) Opfor, station)),
-                    "An accepted overflow role must remain available when the mode's usual role is Never.");
+                var expected = presetId == "ForceOnForce" ? Govfor : Opfor;
+                Assert.That(accepted[player], Is.EqualTo(((ProtoId<JobPrototype>?) expected, station)),
+                    "An accepted overflow role must remain available when the mode's usual role is Never, "
+                    + "mirrored onto the dealt side in ForceOnForce.");
             });
         }
         finally
@@ -286,6 +289,59 @@ public sealed class StationJobsMergeRegressionTest : GameTest
     }
 
     [Test]
+    public async Task OverflowDealtGovforRemapsQueuedOpforRoles()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var originalCurrentPreset = ticker.CurrentPreset;
+
+        EntityUid station = default;
+        await Server.WaitPost(() =>
+        {
+            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map);
+        });
+
+        var dummies = await Server.AddDummySessions(2);
+        var opforOnlyProfiles = dummies.ToDictionary(
+            session => session.UserId,
+            _ => new HumanoidCharacterProfile()
+                .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
+                .WithJobPriority(OpforSaw, JobPriority.Low)
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, forceOnForce);
+                // AssignJobs is the round boundary; it also resets the alternation to GOVFOR.
+                jobs.AssignJobs(new Dictionary<NetUserId, HumanoidCharacterProfile>(), [station]);
+
+                var assigned = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
+                jobs.AssignOverflowJobs(
+                    ref assigned,
+                    new[] { dummies[0].UserId, dummies[1].UserId },
+                    opforOnlyProfiles,
+                    [station]);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(assigned[dummies[0].UserId].Item1, Is.EqualTo((ProtoId<JobPrototype>?) GovforSaw),
+                        "a dealt GOVFOR slot must remap the queued OPFOR role onto its GOVFOR mirror");
+                    Assert.That(assigned[dummies[1].UserId].Item1, Is.EqualTo((ProtoId<JobPrototype>?) OpforSaw),
+                        "a dealt OPFOR slot takes the queued OPFOR role directly");
+                });
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SetCurrentPreset(ticker, originalCurrentPreset));
+        }
+    }
+
+    [Test]
     public async Task OverflowDealtOpforIsNotCapturedByGovforOnlyStations()
     {
         var jobs = Server.System<StationJobsSystem>();
@@ -334,7 +390,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
     }
 
     [Test]
-    public async Task AssignJobsForceOnForceReadsDistressSignalPreferences()
+    public async Task AssignJobsForceOnForceReadsInsurgencyPreferences()
     {
         var jobs = Server.System<StationJobsSystem>();
         var stations = Server.System<StationSystem>();
@@ -350,12 +406,12 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         });
 
         var dummies = await Server.AddDummySessions(2);
-        // The editor writes military role preferences under the DistressSignal key.
+        // FoF preferences live under the Insurgency key.
         // The flatten below mirrors what GameTicker.SpawnPlayers does before AssignJobs.
         var profiles = dummies.ToDictionary(
             session => session.UserId,
             _ => new HumanoidCharacterProfile()
-                .WithGamemodeJobPriority("DistressSignal", GovforNurse, JobPriority.High)
+                .WithGamemodeJobPriority("Insurgency", GovforNurse, JobPriority.High)
                 .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
 
         try

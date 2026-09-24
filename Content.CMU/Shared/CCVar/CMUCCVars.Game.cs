@@ -1,3 +1,5 @@
+using Content.Shared.Administration;
+using Content.Shared.CCVar.CVarAccess;
 using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
@@ -30,4 +32,8 @@ public sealed partial class CCVars
 
     public static readonly CVarDef<bool> CritWhisper =
         CVarDef.Create("cmu.game.crit_whisper", true, CVar.SERVERONLY);
+
+    [CVarControl(AdminFlags.VarEdit, min: 0, max: 255)]
+    public static readonly CVarDef<int> FoFMaxGap =
+        CVarDef.Create("cmu.game.fof_max_force_balance_gap", 3, CVar.SERVERONLY);
 }

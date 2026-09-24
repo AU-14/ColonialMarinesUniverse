@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
+using Content.Server.CMU14.Ops.ForceOnForce; // CMU14
 using Content.Server.CMU14.Round;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
@@ -175,19 +176,7 @@ public sealed partial class StationJobsSystem
                 {
                     var profile = profiles[player];
                     var target = nextGovfor ? "GOVFOR" : "OPFOR";
-                    var other = nextGovfor ? "OPFOR" : "GOVFOR";
-                    var rewritten = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
-                    foreach (var (job, priority) in profile.JobPriorities)
-                    {
-                        var id = job.Id;
-                        if (id.Contains(other))
-                        {
-                            id = id.Replace(other, target);
-                            if (!ProtoMan.HasIndex<JobPrototype>(id))
-                                continue; // no equivalent role on the assigned side
-                        }
-                        rewritten[new ProtoId<JobPrototype>(id)] = priority;
-                    }
+                    var rewritten = FofJobs.MapSide(profile.JobPriorities, target, keepNeutral: true, ProtoMan);
                     profiles[player] = profile.WithJobPriorities(rewritten);
                     nextGovfor = !nextGovfor;
                 }
@@ -448,8 +437,8 @@ public sealed partial class StationJobsSystem
                     }
                 }
 
-                // CMU14 Force on Force: overflow sees raw GOVFOR-only queues, so a dealt OPFOR slot
-                // remaps them onto the OPFOR mirrors. Queues for the dealt side pass through.
+                // CMU14 Force on Force: overflow sees raw prefs, so a dealt-side slot remaps the
+                // opposite side's picks onto its mirrors. Queues for the dealt side pass through.
                 if (chosenOverflow == null && !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var wantGov = _forceOnForceNextGovfor;
@@ -458,23 +447,7 @@ public sealed partial class StationJobsSystem
                         ? new HashSet<ProtoId<JobPrototype>>()
                         : bannedRoles.Select(role => new ProtoId<JobPrototype>(role)).ToHashSet();
 
-                    var priorities = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
-                    foreach (var (prefId, priority) in profile.JobPriorities)
-                    {
-                        var id = prefId.Id;
-                        if (!wantGov && id.Contains("GOVFOR"))
-                        {
-                            id = id.Replace("GOVFOR", "OPFOR");
-                            if (!ProtoMan.HasIndex<JobPrototype>(id))
-                                continue; // no equivalent role on the dealt side
-                        }
-                        else if (!id.Contains(target))
-                        {
-                            continue;
-                        }
-
-                        priorities[new ProtoId<JobPrototype>(id)] = priority;
-                    }
+                    var priorities = FofJobs.MapSide(profile.JobPriorities, target, keepNeutral: false, ProtoMan);
 
                     if (PickBestAvailableJobWithPriority(station, priorities, true, banned) is { } picked)
                         chosenOverflow = picked;
@@ -488,12 +461,20 @@ public sealed partial class StationJobsSystem
                 if (chosenOverflow == null)
                 {
                     var overflows = stationOverflows.ToList();
-                    if (!string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase) && !_forceOnForceNextGovfor)
-                        overflows.RemoveAll(id => id.Id.Contains("GOVFOR"));
+                    // CMU14
+                    var fofFallback = !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase);
+                    if (fofFallback)
+                    {
+                        var wrong = _forceOnForceNextGovfor ? "OPFOR" : "GOVFOR";
+                        overflows.RemoveAll(id => id.Id.Contains(wrong));
+                    }
+
                     _random.Shuffle(overflows);
                     if (overflows.Count == 0)
                         continue;
                     chosenOverflow = overflows[0];
+                    if (fofFallback)
+                        _forceOnForceNextGovfor = !_forceOnForceNextGovfor;
                 }
 
                 assignedJobs.Add(player, (chosenOverflow, station));

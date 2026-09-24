@@ -360,7 +360,7 @@ namespace Content.Shared.Preferences
                 "insurgency" => "Insurgency",
                 "colonyfall" => "ColonyFall",
                 "distresssignal" => "DistressSignal",
-                "forceonforce" => "DistressSignal", // FoF uses DS prefs
+                "forceonforce" => "Insurgency", // CMU14: FoF uses Ins prefs
                 _ => gamemode.Trim()
             };
         }

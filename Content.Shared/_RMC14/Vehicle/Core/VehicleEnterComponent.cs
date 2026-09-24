@@ -99,6 +99,11 @@ public record struct VehicleExitAttemptEvent(EntityUid User, EntityUid Exit)
 [ByRefEvent]
 public readonly record struct VehicleExitedEvent(EntityUid User, EntityUid Exit, MapCoordinates ExitCoordinates);
 
+// CMU14: raised once when a vehicle interior finishes loading, before the interior is
+// sealed, so opfor vehicles can swap their baked consoles before anyone sees them
+[ByRefEvent]
+public readonly record struct VehicleInteriorLoadedEvent(EntityUid Vehicle, EntityUid MapUid, EntityUid Grid, string? Faction);
+
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(VehicleSystem))]
 public sealed partial class VehicleDriverSeatComponent : Component
