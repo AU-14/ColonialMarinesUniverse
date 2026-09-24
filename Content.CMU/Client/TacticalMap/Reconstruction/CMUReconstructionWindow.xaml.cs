@@ -17,6 +17,9 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
     public Action<CMUReconLayerMessage>? OnLayerSelected;
     public event Action? OnClosing;
     public bool CenterOnOpening { get; set; }
+    public Func<int, CMUReconCamera?>? LoadView;
+    public Action<int, CMUReconCamera>? SaveView;
+    private bool _viewReceived;
     private bool _centerPending;
     private int _requestId;
     private readonly Dictionary<CMUReconMapChoice, (CMUReconDraft Draft, CMUReconCamera Camera)> _views = new();
@@ -131,12 +134,16 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
                 if (_views.TryGetValue(scene.MapChoice, out var previous))
                 {
                     View.Draft = previous.Draft;
-                    View.RestoreCamera(previous.Camera);
-                    LowWalls.Pressed = previous.Camera.LowWalls;
-                    Isolate.Pressed = previous.Camera.Isolated;
-                    Labels.Pressed = previous.Camera.Labels;
+                    RestoreView(previous.Camera);
+                    _centerPending = false;
                 }
                 else View.Draft = new CMUReconDraft();
+                if (LoadView?.Invoke(scene.AtlasId) is { } savedCamera)
+                {
+                    RestoreView(savedCamera);
+                    _centerPending = false;
+                }
+                _viewReceived = true;
                 ApplyOpeningCenter();
                 _canOrder = scene.CanOrder;
                 ConfigureFloors(scene);
@@ -196,9 +203,9 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
     public void BeginViewRequest(int requestId, bool keepScene = false)
     {
         View.FinishStroke();
-        if (View.Scene is { } scene) _views[scene.MapChoice] = (View.Draft, View.CaptureCamera());
+        RememberView();
         _requestId = requestId;
-        _centerPending = CenterOnOpening;
+        _centerPending = CenterOnOpening && !(keepScene && _viewReceived);
         _incoming = null;
         _incomingContacts = null;
         if (!keepScene) View.ClearScene();
@@ -214,6 +221,26 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
     {
         if (_centerPending) View.CenterOnPlayer();
         _centerPending = false;
+        _viewReceived = true;
+    }
+
+    public void RememberView()
+    {
+        // Preloaded geometry has not been viewed yet and must not replace the player's choices.
+        if (!_viewReceived || View.Scene is not { } scene) return;
+        var camera = View.CaptureCamera();
+        _views[scene.MapChoice] = (View.Draft, camera);
+        SaveView?.Invoke(scene.AtlasId, camera);
+    }
+
+    private void RestoreView(CMUReconCamera camera)
+    {
+        View.RestoreCamera(camera);
+        LowWalls.Pressed = camera.LowWalls;
+        Isolate.Pressed = camera.Isolated;
+        Labels.Pressed = camera.Labels;
+        Contacts.Pressed = camera.Contacts;
+        MarineNames.Pressed = camera.Names;
     }
 
     private void ConfigureMaps(CMUReconSnapshotMessage scene)
@@ -256,12 +283,11 @@ public sealed partial class CMUReconstructionWindow : DefaultWindow
     {
         if (render == null) View.SetScene(scene);
         else View.RestoreScene(scene, render);
-        View.RestoreCamera(camera);
+        var savedView = LoadView?.Invoke(scene.AtlasId);
+        _viewReceived = savedView != null;
+        RestoreView(savedView ?? camera);
         ConfigureFloors(scene);
         ConfigureMaps(scene);
-        LowWalls.Pressed = camera.LowWalls;
-        Isolate.Pressed = camera.Isolated;
-        Labels.Pressed = camera.Labels;
         IsRefreshing = true;
         _canOrder = false;
         ConfigureLayers(scene);

@@ -557,7 +557,8 @@ public sealed partial class CMUReconstructionTest : GameTest
             Assert.That(window.SurveyView.Draft.Additions.Single().Points[0], Is.EqualTo(new Vector2(1, 2)), "Switching maps preserves unpublished work in its own map.");
             Assert.That(window.SurveyView.CaptureCamera().LowWalls, Is.False);
             Assert.That(window.FindControl<CheckBox>("LowWalls").Pressed, Is.False, "Cutaway controls must match the restored map's camera.");
-            Assert.That(window.SurveyView.CaptureCamera().Center, Is.EqualTo(new Vector2(6, 7)));
+            Assert.That(window.SurveyView.CaptureCamera().Center, Is.EqualTo(new Vector2(2.25f, 4.75f)),
+                "Returning to a map keeps its last view instead of recentering on the operator.");
 
             window.CenterOnOpening = false;
             window.SurveyView.Pan(new Vector2(2, 1));

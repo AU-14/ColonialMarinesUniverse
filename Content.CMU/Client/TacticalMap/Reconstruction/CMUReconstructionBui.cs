@@ -82,6 +82,9 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         if (!_classic)
         {
             _window = this.CreateWindow<CMUReconstructionWindow>();
+            var cache = EntMan.System<CMUReconstructionCacheSystem>();
+            _window.LoadView = cache.GetView;
+            _window.SaveView = cache.SaveView;
             _window.CenterOnOpening = _cfg.GetCVar(CCVars.CMUTacMapCenterOnOpen);
             if (_actor is { } actor && EntMan.System<CMUReconstructionCacheSystem>().TryTake(Owner, actor, out var scene, out var camera, out var render,
                     _cfg.GetCVar(CCVars.CMUTacMapPlanetOnShip)))
@@ -234,6 +237,7 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         if (_remembered || _actor is not { } actor || PlayerManager.LocalEntity != actor || _window?.SurveyView.Scene is not { } scene)
             return;
         _remembered = true;
+        _window.RememberView();
         EntMan.System<CMUReconstructionCacheSystem>().Remember(Owner, actor, scene,
             _window.SurveyView.CaptureCamera(), _window.SurveyView.TakeRenderData());
     }

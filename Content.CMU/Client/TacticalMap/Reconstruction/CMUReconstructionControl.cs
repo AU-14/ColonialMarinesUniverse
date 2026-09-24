@@ -208,7 +208,8 @@ public sealed partial class CMUReconstructionControl : Control
         _redraw = true;
     }
     public CMUReconCamera CaptureCamera() => new(_center + (Vector2) (Scene?.Origin ?? Vector2i.Zero), _yaw, _pitch,
-        _distance, (Scene?.MinDepth ?? 0) + _selectedLevel, _overhead, _wallScale < 1, _isolate, ShowLabels, _fit);
+        _distance, (Scene?.MinDepth ?? 0) + _selectedLevel, _overhead, _wallScale < 1, _isolate, ShowLabels, _fit,
+        ShowContacts, ShowNames);
 
     public void RestoreCamera(CMUReconCamera camera)
     {
@@ -222,6 +223,8 @@ public sealed partial class CMUReconstructionControl : Control
         _isolate = camera.Isolated;
 
         ShowLabels = camera.Labels;
+        ShowContacts = camera.Contacts;
+        ShowNames = camera.Names;
         _selectedLevel = Math.Clamp(camera.Depth - scene.MinDepth, 0, scene.Levels - 1);
         _fit = camera.Fit;
         _redraw = true;

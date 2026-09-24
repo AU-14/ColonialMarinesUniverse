@@ -242,7 +242,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         MapCoordinates fromCoordinates,
         MapCoordinates toCoordinates,
         out MapCoordinates adjustedFromCoordinates,
-        out MapCoordinates adjustedToCoordinates)
+        out MapCoordinates adjustedToCoordinates,
+        float? maximumRange = null)
     {
         adjustedFromCoordinates = fromCoordinates;
         adjustedToCoordinates = toCoordinates;
@@ -270,7 +271,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return true;
         }
 
-        var clampedTo = ClampCrossZShotTarget(fromCoordinates.Position, toCoordinates.Position);
+        var clampedTo = ClampCrossZShotTarget(fromCoordinates.Position, toCoordinates.Position, maximumRange ?? CrossZShotRange);
         if (!_zLevels.TryFindZShotOpening(
                 shooterMap.Value,
                 targetMap.Value,
@@ -297,7 +298,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             out var projectileTo);
 
         adjustedFromCoordinates = new MapCoordinates(projectileFrom, map.MapId);
-        adjustedToCoordinates = new MapCoordinates(projectileTo, map.MapId);
+        // Lobbed bombard shots retain their aimed landing point beyond the opening.
+        adjustedToCoordinates = new MapCoordinates(maximumRange != null ? clampedTo : projectileTo, map.MapId);
         return true;
     }
 
@@ -447,15 +449,15 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         return opening + Vector2.Normalize(sourceDirection) * CrossZOpeningSourceNudge;
     }
 
-    private static Vector2 ClampCrossZShotTarget(Vector2 from, Vector2 to)
+    private static Vector2 ClampCrossZShotTarget(Vector2 from, Vector2 to, float range = CrossZShotRange)
     {
         var delta = to - from;
         var distance = delta.Length();
 
-        if (distance <= CrossZShotRange || distance <= 0.001f)
+        if (distance <= range || distance <= 0.001f)
             return to;
 
-        return from + delta / distance * CrossZShotRange;
+        return from + delta / distance * range;
     }
 
     private void PopupSelf(EntityUid user, string message)

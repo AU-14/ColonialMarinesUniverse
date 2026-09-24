@@ -147,6 +147,7 @@ public sealed partial class CMUReconstructionTest
         object terrain = null;
         object appearance = null;
         object occupancy = null;
+        CMUReconCamera savedCamera = default;
         try
         {
             await Server.WaitPost(() =>
@@ -177,6 +178,10 @@ public sealed partial class CMUReconstructionTest
                 terrain = RenderField(view, "_terrain");
                 appearance = RenderField(view, "_appearance");
                 occupancy = RenderField(view, "_occupancy");
+                view.SetTopDown();
+                view.SelectLevel(0);
+                view.Pan(new Vector2(2, 1));
+                savedCamera = view.CaptureCamera();
                 TestContext.Out.WriteLine($"Cold fixture: {probe.Chunks} chunks, {probe.ChunkBytes} estimated geometry bytes.");
                 window.Close();
             });
@@ -209,6 +214,8 @@ public sealed partial class CMUReconstructionTest
                 var window = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single();
                 Assert.That(probe.Snapshot.ReuseGeometry, Is.True);
                 Assert.That(window.IsRefreshing, Is.False);
+                Assert.That(window.SurveyView.CaptureCamera(), Is.EqualTo(savedCamera),
+                    "A warm reopening must retain the selected floor, top-down mode and camera.");
                 Assert.That(window.SurveyView.Scene!.Cells, Is.SameAs(saved.Cells));
                 Assert.That(probe.Chunks, Is.Zero, "An unchanged reopening must not transfer a second terrain baseline.");
                 Assert.That(RenderField(window.SurveyView, "_terrain"), Is.SameAs(terrain),

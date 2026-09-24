@@ -6,7 +6,8 @@ using Robust.Client;
 namespace Content.Client.CMU14.TacticalMap.Reconstruction;
 
 public readonly record struct CMUReconCamera(Vector2 Center, float Yaw, float Pitch, float Distance,
-    int Depth, bool Overhead, bool LowWalls, bool Isolated, bool Labels, bool Fit);
+    int Depth, bool Overhead, bool LowWalls, bool Isolated, bool Labels, bool Fit,
+    bool Contacts = true, bool Names = false);
 
 /// <summary>One recent survey, including partial loads and uploaded textures, retained for this game session.</summary>
 public sealed partial class CMUReconstructionCacheSystem : EntitySystem
@@ -14,6 +15,15 @@ public sealed partial class CMUReconstructionCacheSystem : EntitySystem
     [Dependency] private IBaseClient _client = default!;
     private Entry? _entry;
     private int _requestId;
+    // Camera preferences contain no contacts or orders and outlive the disposable terrain cache.
+    private readonly Dictionary<int, CMUReconCamera> _views = new();
+
+    public CMUReconCamera? GetView(int atlasId) => _views.TryGetValue(atlasId, out var camera) ? camera : null;
+
+    public void SaveView(int atlasId, CMUReconCamera camera)
+    {
+        if (atlasId != 0) _views[atlasId] = camera;
+    }
 
     public int NextRequestId() => ++_requestId;
 
@@ -32,6 +42,7 @@ public sealed partial class CMUReconstructionCacheSystem : EntitySystem
     {
         _client.RunLevelChanged -= OnRunLevelChanged;
         CancelPreload(false);
+        _views.Clear();
         Clear();
         base.Shutdown();
     }
@@ -40,6 +51,7 @@ public sealed partial class CMUReconstructionCacheSystem : EntitySystem
     {
         CancelPreload(false);
         _preloadContext = null;
+        _views.Clear();
         Clear();
     }
 
