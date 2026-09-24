@@ -52,7 +52,7 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     /// </summary>
     private void OnFragTrigger(Entity<ProjectileGrenadeComponent> entity, ref TriggerEvent args)
     {
-        if (args.Key != entity.Comp.TriggerKey)
+        if (args.Key != null && args.Key != entity.Comp.TriggerKey) // CMU14: null triggers activate every payload, including airbursts.
             return;
 
         FragmentIntoProjectiles(entity.Owner, entity.Comp);

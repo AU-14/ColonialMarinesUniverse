@@ -147,7 +147,7 @@
           cost: 25
           events:
           - !type:TechPartySpawnEvent
-            thirdPartyId: USArmy
+            thirdPartyId: CMUUSArmyReinforcements
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A US Army infantry squad has been dispatched to aid with the operation.

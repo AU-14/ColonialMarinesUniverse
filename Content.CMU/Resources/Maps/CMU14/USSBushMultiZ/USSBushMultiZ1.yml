@@ -11935,7 +11935,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: CMUResearchDataTerminal
+- proto: CMUResearchDataTerminalGovfor
   entities:
   - uid: 890
     components:

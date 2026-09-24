@@ -70,6 +70,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLogs = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDestructibleSystem _destructible = default!; // CMU14
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedGameTicker _gameTicker = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
@@ -815,6 +816,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
                 }
             }
 
+            ClearResinObstructions(coordinates); // CMU14: only after validation and payment.
             var structure = Spawn(structureToSpawn, coordinates);
             _hive.SetSameHive(xeno.Owner, structure);
             if (TryComp(structure, out DesignNodeComponent? nodeComp))
@@ -971,6 +973,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return;
 
         var coordinates = target.SnapToGrid(EntityManager);
+        ClearResinObstructions(coordinates); // CMU14
         var structure = Spawn(args.StructureId, coordinates);
 
         _hive.SetSameHive(xeno.Owner, structure);
@@ -1491,8 +1494,32 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         return _turf.GetTileRef(target) is { } tile &&
                !_turf.IsSpace(tile) &&
                _turf.GetContentTileDefinition(tile).Sturdy &&
-               !_turf.IsTileBlocked(tile, Impassable) &&
+               !_turf.IsTileBlocked(tile.GridUid, tile.GridIndices, Impassable,
+                   ignore: uid => IsClearableOnTile(uid, tile)) && // CMU14
                !_xenoNest.HasAdjacentNestFacing(target);
+    }
+
+    // CMU14: do not clear neighboring vegetation whose fixture overlaps the construction tile.
+    private bool IsClearableOnTile(EntityUid uid, TileRef tile)
+        => HasComp<ResinClearableComponent>(uid) &&
+           _turf.GetTileRef(Transform(uid).Coordinates) is { } other &&
+           other.GridUid == tile.GridUid && other.GridIndices == tile.GridIndices &&
+           _destructible.CanDestroy(uid);
+
+    private void ClearResinObstructions(EntityCoordinates coordinates)
+    {
+        if (!_net.IsServer || _turf.GetTileRef(coordinates) is not { } tile)
+            return;
+
+        // Include fixtureless grass on tile edges; the exact tile check below excludes neighboring scenery.
+        var obstructions = new HashSet<EntityUid>();
+        _entityLookup.GetEntitiesIntersecting(tile.GridUid, _entityLookup.GetWorldBounds(tile), obstructions,
+            LookupFlags.Uncontained | LookupFlags.Approximate);
+        foreach (var uid in obstructions)
+        {
+            if (IsClearableOnTile(uid, tile))
+                _destructible.DestroyEntity(uid);
+        }
     }
 
     private bool InRangePopup(EntityUid xeno, EntityCoordinates target, float range, float minRange = 0, bool popup = true)
@@ -1622,6 +1649,9 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
                 return false;
             }
+
+            if (HasComp<ResinClearableComponent>(uid) && _destructible.CanDestroy(uid.Value)) // CMU14
+                continue;
 
             if (!HasComp<BarricadeComponent>(uid))
             {

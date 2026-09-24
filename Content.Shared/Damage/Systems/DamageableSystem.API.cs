@@ -272,6 +272,8 @@ public sealed partial class DamageableSystem
             return damageDone;
         }
 
+        damage = before.Damage; // CMU14: retain replacements such as the gunship's acid vulnerability multiplier.
+
         // Apply resistances
         if (!ignoreResistances)
         {

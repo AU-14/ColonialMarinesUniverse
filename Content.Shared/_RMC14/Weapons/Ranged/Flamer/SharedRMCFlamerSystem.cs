@@ -331,6 +331,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         var chainComp = EnsureComp<RMCFlamerChainComponent>(chain);
         chainComp.Spawn = reagent.FireEntity;
         chainComp.Tiles = tiles;
+        chainComp.Origin = fromCoordinates; // CMU14
         chainComp.Reagent = reagent.ID;
         chainComp.MaxIntensity = tank.Value.Comp.MaxIntensity;
         chainComp.MaxDuration = tank.Value.Comp.MaxDuration;
@@ -624,6 +625,12 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
                     continue;
 
                 comp.Tiles.RemoveAt(i);
+                if (!_line.CanReachTile(comp.Origin, _transform.ToCoordinates(tile.Coordinates), hitBlocker: true)) // CMU14
+                {
+                    i--;
+                    continue;
+                }
+
                 if (!_zLevels.TryProjectToGround(_transform.ToCoordinates(tile.Coordinates), out var fireCoordinates))
                 {
                     i--;

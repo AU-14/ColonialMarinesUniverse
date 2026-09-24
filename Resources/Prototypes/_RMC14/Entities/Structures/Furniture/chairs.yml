@@ -9,6 +9,7 @@
   name: abstract chair
   suffix: RMC
   components:
+  - type: ResinClearable # CMU14
   - type: CMUReconFurniture
     material: Chair
   - type: CMUZPhysics 

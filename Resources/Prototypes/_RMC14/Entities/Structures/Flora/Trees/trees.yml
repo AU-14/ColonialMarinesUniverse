@@ -3,6 +3,7 @@
   description: Yep, it's a tree.
   abstract: true
   components:
+  - type: ResinClearable # CMU14
   - type: SpriteFade
   - type: Clickable
   - type: OreVein

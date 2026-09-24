@@ -113,7 +113,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
     private bool _dropshipReusable;
 
     private const float DepartureLocationSearchRange = 12;
-    private const string ThirdPartyAutoReturnAnnouncement = "Automatic return to deep space in 2 minutes.";
+    private const string ThirdPartyAutoReturnAnnouncement = "Automatic return to deep space in 30 seconds."; // CMU14: two minutes total with inactivity.
 
     public override void Initialize()
     {

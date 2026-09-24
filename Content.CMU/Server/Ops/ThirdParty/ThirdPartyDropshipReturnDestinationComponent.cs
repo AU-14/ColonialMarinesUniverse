@@ -17,7 +17,7 @@ public sealed partial class ThirdPartyDropshipDeactivatedConsoleComponent : Comp
 public sealed partial class ThirdPartyDropshipAutoReturnComponent : Component
 {
     [DataField]
-    public TimeSpan InactivityDelay = TimeSpan.FromMinutes(5);
+    public TimeSpan InactivityDelay = TimeSpan.FromSeconds(90);
 
     [DataField]
     public TimeSpan LastActivity;
@@ -29,7 +29,7 @@ public sealed partial class ThirdPartyDropshipAutoReturnComponent : Component
     public TimeSpan? ReturnAt;
 
     [DataField]
-    public TimeSpan ReturnDelay = TimeSpan.FromMinutes(2);
+    public TimeSpan ReturnDelay = TimeSpan.FromSeconds(30);
 
     [DataField(required: true)]
     public EntityUid ReturnDestination;

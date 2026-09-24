@@ -110,12 +110,12 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
             if (_threatRuleHelper.IsEvacuated(uid))
                 continue;
 
-            if (hijackLanded && _rmcPlanet.IsOnPlanet(Transform(uid)) && mobState.CurrentState != MobState.Dead)
+            if (hijackLanded && _rmcPlanet.IsOnPlanet(Transform(uid)) && !_threatRuleHelper.IsEliminated(uid, mobState))
                 continue;
 
             total++;
 
-            if (mobState.CurrentState == MobState.Dead)
+            if (_threatRuleHelper.IsEliminated(uid, mobState))
                 eliminated++;
             else if (HasPrisonJumpsuit(uid)
                 || (countArrests && ((TryComp(uid, out CuffableComponent? cuffable)

@@ -6,12 +6,14 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
+using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.SSDIndicator;
+using Content.Shared.Zombies;
 using BiomorphComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphComponent;
 using ApeComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeComponent;
 using TribalComponent = Content.Shared.CMU14.Threats.Mobs.Tribal.TribalComponent;
@@ -77,17 +79,22 @@ internal sealed class ThreatRuleHelper : EntitySystem
     {
         if (HasComp<XenoComponent>(uid) || HasComp<YautjaComponent>(uid)
             || HasComp<ApeComponent>(uid) || HasComp<TribalComponent>(uid)
-            || HasComp<BiomorphComponent>(uid) || HasComp<BiomorphMimicComponent>(uid))
+            || HasComp<BiomorphComponent>(uid) || HasComp<BiomorphMimicComponent>(uid)
+            || HasComp<ZombieSummonerComponent>(uid) || HasComp<ZombieSummonerMinionComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))
             return true;
 
-        if (mobState.CurrentState == MobState.Dead)
+        if (IsEliminated(uid, mobState))
             return false;
 
         // Alive and nested/SSD
         return HasComp<XenoNestedComponent>(uid)
             || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD);
     }
+
+    // Reanimating a casualty as a hostile zombie does not restore a human survivor.
+    internal bool IsEliminated(EntityUid uid, MobStateComponent mobState)
+        => mobState.CurrentState == MobState.Dead || HasComp<ZombieComponent>(uid);
 }

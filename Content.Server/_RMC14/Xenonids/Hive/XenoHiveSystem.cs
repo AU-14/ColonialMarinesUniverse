@@ -296,7 +296,7 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
                 Dirty(hiveId, hive);
             }
 
-            if (!hive.AnnouncedHiveCoreCooldownOver && hive.NewCoreAt.HasValue && roundTime >= hive.NewCoreAt)
+            if (!hive.AnnouncedHiveCoreCooldownOver && hive.NewCoreAt.HasValue && _timing.CurTime >= hive.NewCoreAt) // CMU14: absolute deadline
             {
                 var corePopup = Loc.GetString("rmc-hive-core-cooldown-over");
                 _xenoAnnounce.AnnounceToHive(EntityUid.Invalid, hiveId, corePopup, hive.AnnounceSound);

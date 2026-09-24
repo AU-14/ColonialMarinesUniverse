@@ -1,0 +1,140 @@
+- type: roleLoadout
+  id: JobAU14JobCivilianHeadOfService
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
+
+- type: roleLoadout
+  id: JobAU14JobCivilianEthicsAndWellnessAdvisor
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivHatsAU14
+  - CivGlassesAU14
+  - CivJumpsuitAU14
+  - CivJacketAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
+
+- type: roleLoadout
+  id: JobAU14JobCivilianShopkeep
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivHatsAU14
+  - CivGlassesAU14
+  - CivJumpsuitAU14
+  - CivJacketAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
+
+- type: roleLoadout
+  id: JobAU14JobCivilianOrbitalLawyer
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
+
+- type: roleLoadout
+  id: JobAU14JobMobBoss
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivHatsAU14
+  - CivGlassesAU14
+  - CivJumpsuitAU14
+  - CivJacketAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
+
+- type: roleLoadout
+  id: JobAU14JobMobGoon
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivHatsAU14
+  - CivGlassesAU14
+  - CivJumpsuitAU14
+  - CivJacketAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
+
+- type: roleLoadout
+  id: JobAU14JobCivilianPrisoner
+  points: 7
+  groups:
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: roleLoadout
+  id: JobAU14JobLEOBase
+  points: 7
+  groups:
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
+
+- type: roleLoadout
+  id: JobAU14JobLEOLeaderBase
+  points: 7
+  groups:
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
+
+- type: roleLoadout
+  id: JobAU14JobWorkingJoeBase
+  points: 7
+  groups:
+  - PaperworkRMC
+  - RecreationalRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14

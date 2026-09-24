@@ -5,6 +5,7 @@
   name: table
   description: A square metal surface resting on four legs. Useful to put stuff on.
   components:
+  - type: ResinClearable # CMU14
   - type: CMUReconFurniture
     material: Table
   - type: VehicleSmashable
