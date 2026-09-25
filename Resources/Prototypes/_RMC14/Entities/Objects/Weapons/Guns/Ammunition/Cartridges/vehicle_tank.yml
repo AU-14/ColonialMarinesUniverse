@@ -1,4 +1,4 @@
-- type: entity
+RMCTileFireHCNapalm- type: entity
   parent: CMBaseCartridgeRifle
   id: VehicleCartridgeLTBCannon
   name: cartridge (LTB cannon, HESH)
@@ -273,8 +273,8 @@
     proto: RMCSmokeFireSentry
     useMapCoords: true
   - type: TileFireOnTrigger
-    range: 1
-    spawn: RMCTileFireBlue
+    range: 1.5 
+    spawn: RMCTileFireHCNapalm
     sound: null
 
 - type: entity
@@ -368,4 +368,4 @@
     useMapCoords: true
   - type: TileFireOnTrigger
     range: 2
-    spawn: RMCTileFireBlue
+    spawn: RMCTileFireHCNapalm
