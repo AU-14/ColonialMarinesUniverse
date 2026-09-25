@@ -1,4 +1,4 @@
-RMCTileFireHCNapalm- type: entity
+  type: entity
   parent: CMBaseCartridgeRifle
   id: VehicleCartridgeLTBCannon
   name: cartridge (LTB cannon, HESH)
