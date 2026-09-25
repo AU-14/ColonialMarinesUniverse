@@ -10419,5 +10419,21 @@
   id: 681
   time: '2026-09-24T20:11:37.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2014
+- author: maertayn
+  changes:
+  - message: Force on Force late joins now ask before being placed on the other side
+      when
+    type: Add
+  - message: Setting the planet, platoon, ship or preset now cancels pending setup
+      votes
+    type: Admin
+  - message: GOVFOR/OPFOR job mirroring unified in one shared helper
+    type: Code
+  - message: '`cmu.game.fof_max_force_balance_gap` (default: 3) sets the FoF balancer
+      player gap'
+    type: Admin
+  id: 682
+  time: '2026-09-24T23:29:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2015
 Name: CMU
 Order: -1
