@@ -5,7 +5,7 @@
   name: au14-job-name-govforplatooncorpsman
   description: au14-job-description-govforplatooncorpsman
   icon: "AU14JobIconCorpsman"
-  spawnMenuRoleName: Hospital Corpsman (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-hospital-corpsman-govfor 
   startingGear: AU14GearGOVFORPlatoonCorpsman
   dummyStartingGear: AU14GearGOVFORCorpsmanDummy
   playTimeTracker: AU14JobGOVFORPlatoonCorpsman

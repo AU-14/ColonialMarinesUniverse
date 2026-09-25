@@ -1,6 +1,6 @@
 - type: entity
   parent: CMBaseStructureCorrodible
-  id: VehicleSupplyConsole
+  id: VehicleSupplyConsole # CMU14: filtered by platoon, without research gates.
   name: vehicle supply console
   description: A console for ordering vehicles and their hardpoints.
   components:
@@ -35,6 +35,21 @@
         type: VehicleSupplyBui
   - type: VehicleSupplyConsole
     vehicles:
+    # CMU14: fighter and portable faction-owned VTOL pad.
+    - name: Two-seat VTOL fighter
+      vehicle: CMUFighterGround
+      group: vehicle-fighter
+      bundle:
+      - CMUFighterLandingPadFolded
+      hardpoints:
+      - CMUFighterLandingPadFolded
+      - RMCDropshipAttachmentRocketPod
+      - RMCDropshipAttachmentAmmoGAU
+      - RMCDropshipAttachmentAmmoRocketMiniMike
+      - RMCDropshipAttachmentAmmoRocketKeeper
+      - RMCDropshipAttachmentAmmoRocketWidowmaker
+      - RMCDropshipAttachmentAmmoRocketHarpoon
+      - RMCDropshipAttachmentAmmoRocketNapalm
     - name: M2420 JTMV Armed
       vehicle: VehicleHumvee
       group: vehicle-support
@@ -67,9 +82,7 @@
       hardpoints:
       - VehicleHumveeTurret
       - VehicleHumveeTurretArmed
-      - VehicleHumveeARCTurret
       - VehicleHumveeCannon
-      - VehicleHumveeARCCannon
       - VehicleHumveeLauncher
       - VehicleHumveeSnowplow
       - VehicleHumveeOverlight
@@ -127,10 +140,35 @@
       - VehicleHumveeSnowplow
       - VehicleHumveeOverlight
       - VehicleHumveeWheel
-    # CMU14 Begin: ARC humvee, granted by the WY tech tree node; no group so the grant is never blocked
+    # CMU14: ARC equipment is available only through the WY platoon catalog.
     - name: M2420 JTMV Armed (ARC)
       vehicle: VehicleHumveeARC
-      unlock: VehicleHumveeARC
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleHumveeARCTurret
+          name: ARC turret
+          item: VehicleHumveeARCTurret
+          slot: turret
+      - id: wheels
+        name: Wheels
+        options:
+        - id: VehicleHumveeWheel
+          name: wheel
+          item: VehicleHumveeWheel
+          slot: wheel-1
+      - id: support
+        name: Support
+        options:
+        - id: VehicleHumveeSnowplow
+          name: snowplow
+          item: VehicleHumveeSnowplow
+          slot: front
+        - id: VehicleHumveeOverlight
+          name: overlight
+          item: VehicleHumveeOverlight
+          slot: roof
       hardpoints:
       - VehicleHumveeTurret
       - VehicleHumveeTurretArmed
@@ -873,33 +911,33 @@
 #      - VehicleBlackfootThrusters
 #      - VehicleBlackfootLaunchers
 #      - VehicleBlackfootReconSystem
-#    - name: AE-71E VTOL (Assault)
-#      vehicle: VehicleBlackfootDoorGunVariant
-#      bundle:
-#      - CMUBlackfootLandingPadFoldedProp
-#      - CMUBlackfootFuelPumpCrate
-#      - CMUBlackfootFlightComputerCrate
-#      - CMUBlackfootAerospaceTug
-#      loadoutCategories:
-#      - id: primary
-#        name: Primary
-#        options:
-#        - id: VehicleBlackfootDoorGun
-#          name: M866 AGL
-#          item: VehicleBlackfootDoorGun
-#          slot: door-gun
-#      - id: secondary
-#        name: Secondary
-#        options:
-#        - id: VehicleBlackfootLaunchers
-#          name: flare launchers
-#          item: VehicleBlackfootLaunchers
-#          slot: launchers
-#      hardpoints:
-#      - VehicleBlackfootThrusters
-#      - VehicleBlackfootLaunchers
-#      - VehicleBlackfootDoorGun
-#      - VehicleBlackfootReconSystem
+    - name: AD-71E Blackfoot (Armed)
+      vehicle: VehicleBlackfootDoorGunVariant
+      group: vehicle-vtol
+      bundle:
+      - CMUBlackfootLandingPadFoldedProp
+      - CMUBlackfootFuelPumpCrate
+      - CMUBlackfootFlightComputerCrate
+      - CMUBlackfootAerospaceTug
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleBlackfootDoorGun
+          name: M866 AGL
+          item: VehicleBlackfootDoorGun
+          slot: door-gun
+      - id: secondary
+        name: Secondary
+        options:
+        - id: VehicleBlackfootLaunchers
+          name: flare launchers
+          item: VehicleBlackfootLaunchers
+          slot: launchers
+      hardpoints:
+      - VehicleBlackfootThrusters
+      - VehicleBlackfootLaunchers
+      - VehicleBlackfootDoorGun
 #    - name: AE-71E VTOL (Recon) # Temporarily unavailable from vehicle storage.
 #      vehicle: VehicleBlackfootRecon
 #      group: vehicle-support
@@ -935,10 +973,9 @@
 #      - VehicleBlackfootLaunchers
 #      - VehicleBlackfootReconSystem
 #      - VehicleBlackfootSensorArray
-    # CMU14 Begin: commandeered civilian vehicles, added to lifts via GovFor tech tree
+    # CMU14: civilian choices for the appropriate platoon catalogs.
     - name: Civilian Van
       vehicle: AU14VehicleCivVan
-      unlock: AU14VehicleCivVan
       group: vehicle-civ
       loadoutCategories:
       - id: wheels
@@ -952,7 +989,6 @@
       - RMCVanWheel
     - name: Civilian Truck
       vehicle: AU14VehicleCivTruck
-      unlock: AU14VehicleCivTruck
       group: vehicle-civ
       loadoutCategories:
       - id: wheels
@@ -966,7 +1002,6 @@
       - RMCVanWheel
     - name: Civilian Armored Truck
       vehicle: AU14VehicleCivArmoredTruck
-      unlock: AU14VehicleCivArmoredTruck
       group: vehicle-civ
       loadoutCategories:
       - id: wheels
@@ -980,7 +1015,6 @@
       - RMCVanWheel
     - name: Paddy Wagon
       vehicle: AU14VehicleCivHSVan
-      unlock: AU14VehicleCivHSVan
       group: vehicle-civ
       loadoutCategories:
       - id: wheels
@@ -994,7 +1028,6 @@
       - RMCVanWheel
     - name: EMS Ambulance
       vehicle: AU14VehicleCivEMSAmbulance
-      unlock: AU14VehicleCivEMSAmbulance
       group: vehicle-civ
       loadoutCategories:
       - id: wheels
@@ -1007,36 +1040,28 @@
       hardpoints:
       - RMCVanWheel
     # CMU14 End
-#    - name: blackfoot (transport)
-#      vehicle: VehicleBlackfootTransport
-#      group: vehicle-support
-#      bundle:
-#      - CMUBlackfootLandingPadFoldedProp
-#      - CMUBlackfootFuelPumpCrate
-#      - CMUBlackfootFlightComputerCrate
-#      - CMUBlackfootAerospaceTug
-#      loadoutCategories:
-#      - id: primary
-#        name: Primary
-#        options:
-#        - id: VehicleBlackfootLaunchers
-#          name: flare launchers
-#          item: VehicleBlackfootLaunchers
-#          slot: launchers
-#      - id: armor
-#        name: Armor
-#        options: []
-#      - id: support
-#        name: Support
-#        options:
-#        - id: VehicleBlackfootReconSystem
-#          name: recon system
-#          item: VehicleBlackfootReconSystem
-#          slot: support
-#      hardpoints:
-#      - VehicleBlackfootThrusters
-#      - VehicleBlackfootLaunchers
-#      - VehicleBlackfootReconSystem
+    - name: AD-71E Blackfoot (Transport)
+      vehicle: VehicleBlackfootTransport
+      group: vehicle-vtol
+      bundle:
+      - CMUBlackfootLandingPadFoldedProp
+      - CMUBlackfootFuelPumpCrate
+      - CMUBlackfootFlightComputerCrate
+      - CMUBlackfootAerospaceTug
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleBlackfootLaunchers
+          name: flare launchers
+          item: VehicleBlackfootLaunchers
+          slot: launchers
+      - id: armor
+        name: Armor
+        options: []
+      hardpoints:
+      - VehicleBlackfootThrusters
+      - VehicleBlackfootLaunchers
   - type: PointLight
     radius: 1.5
     energy: 1.6

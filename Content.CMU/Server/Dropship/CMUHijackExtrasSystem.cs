@@ -2,6 +2,7 @@ using Content.Server.Ghost;
 using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.Stunnable;
+using Content.Server.Destructible;
 using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CameraShake;
@@ -11,8 +12,10 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared.CMU14.Marines;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
+using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.CMU14;
 using Content.Shared.Coordinates;
@@ -50,9 +53,11 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private DestructibleSystem _destruction = default!;
     [Dependency] private LarvaQueueSystem _larvaQueue = default!;
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private XenoMaturingSystem _maturing = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private RMCCameraShakeSystem _rmcCameraShake = default!;
@@ -89,8 +94,28 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
             || HasActiveDistressRule())
             return;
 
-        // Classic rule deletes planet-bound xenos here; mirror it so stranded neomorphs can't
-        // linger on the planet after the hijack endgame moves to the ship
+        // Remove limited structures across every planet level, regardless of the departure grid.
+        var hiveStructures = EntityQueryEnumerator<HiveConstructionLimitedComponent, TransformComponent>();
+        while (hiveStructures.MoveNext(out var structure, out _, out var xform))
+        {
+            if ((ev.Dropship != null && xform.GridUid == ev.Dropship) || !_rmcPlanet.IsOnPlanetLevel(xform))
+                continue;
+
+            EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(structure);
+            _destruction.DestroyEntity(structure);
+        }
+
+        var secretions = EntityQueryEnumerator<XenoSecretionLimitedComponent, TransformComponent>();
+        while (secretions.MoveNext(out var structure, out _, out var xform))
+        {
+            if ((ev.Dropship != null && xform.GridUid == ev.Dropship) || !_rmcPlanet.IsOnPlanetLevel(xform))
+                continue;
+
+            EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(structure);
+            _destruction.DestroyEntity(structure);
+        }
+
+        // Return stranded xenos to the burrowed queue before removing their bodies.
         var xenoAmount = 0;
         var xenos = EntityQueryEnumerator<XenoComponent, MobStateComponent, TransformComponent>();
         while (xenos.MoveNext(out var xeno, out var comp, out _, out var xform))
@@ -98,7 +123,7 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
             if (_mobState.IsDead(xeno))
                 continue;
 
-            if (xform.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(xeno.ToCoordinates()))
+            if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform))
             {
                 if (TryComp(xeno, out ActorComponent? actor))
                 {
@@ -143,6 +168,14 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
             }
 
             xenoAmount++;
+        }
+
+        // Preserve the queen maturation previously handled by the global distress-rule listener.
+        var queens = EntityQueryEnumerator<XenoMaturingComponent, MobStateComponent>();
+        while (queens.MoveNext(out var queen, out var maturing, out _))
+        {
+            if (!_mobState.IsDead(queen))
+                _maturing.Mature((queen, maturing));
         }
 
         if (ev.HijackerType == DropshipHijackerType.Pathogen)

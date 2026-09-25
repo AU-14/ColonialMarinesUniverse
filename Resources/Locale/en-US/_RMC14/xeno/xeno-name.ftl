@@ -11,8 +11,8 @@ rmc-xeno-apex = Apex {$baseName}
 rmc-xeno-royal = Royal {$baseName}
 rmc-xeno-nemesis = Nemesis {$baseName}
 
-# Queen's 8/9 tier
-rmc-xeno-empress = Empress {$baseName}
+# CMU14: Queen's 8/9 tier uses Empress as the title, with the rank first.
+rmc-xeno-empress = Prime Empress
 
 rmc-xeno-mature-parasite = Fledgling {$baseName}
 rmc-xeno-elder-parasite = Veteran {$baseName}

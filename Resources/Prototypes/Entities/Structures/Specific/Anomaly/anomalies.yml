@@ -256,13 +256,7 @@
       - MobFleshGolem
       - MobFleshClamp
       - MobFleshLover
-    - settings:
-        spawnOnSuperCritical: true
-        minAmount: 5
-        maxAmount: 8
-        maxRange: 10
-      spawns:
-      - FleshKudzu
+    # CMU: Flesh anomalies no longer spawn spreading flesh kudzu.
     - settings:
         spawnOnShutdown: true
         maxAmount: 2
@@ -272,7 +266,6 @@
       - MobFleshGolem
       - MobFleshClamp
       - MobFleshLover
-      - FleshKudzu
 
 - type: entity
   id: AnomalyBluespace

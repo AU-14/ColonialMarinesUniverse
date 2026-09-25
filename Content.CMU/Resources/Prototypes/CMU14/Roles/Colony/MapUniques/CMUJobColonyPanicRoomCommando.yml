@@ -27,7 +27,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: cmu-colony-supervisors-colonist
-  spawnMenuRoleName: Colony Panic Room Commando (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-panic-room-commando-cmu 
   accessGroups:
   - Colonist
   - auwy

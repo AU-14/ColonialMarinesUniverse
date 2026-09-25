@@ -1,0 +1,7 @@
+author: johnnny34y
+category: CMU
+changes:
+- message: HAZOPS XMP5A6 damage modified buffed to 1.35 and spread reduced by one.
+  type: Tweak
+time: '2026-09-06T13:20:09.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1888

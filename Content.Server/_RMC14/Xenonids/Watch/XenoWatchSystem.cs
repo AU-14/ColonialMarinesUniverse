@@ -4,9 +4,11 @@ using Content.Shared.CMU14.Xenomorphs.Pathogen; // CMU14
 using Content.Shared._RMC14.TacticalMap; // CMU14
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
+using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Watch;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
@@ -133,6 +135,26 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
         }
 
         _ui.SetUiState(ent.Owner, XenoWatchUIKey.Key, new XenoWatchBuiState(xenos, hive.Comp.BurrowedLarva));
+    }
+
+    // CMU14: tactical maps may expose watch targets only to their living queen.
+    public bool CanQueenWatch(EntityUid queen, EntityUid target) =>
+        queen != target && !TerminatingOrDeleted(queen) && !TerminatingOrDeleted(target) &&
+        HasComp<QueenEyeActionComponent>(queen) && HasComp<XenoComponent>(queen) &&
+        !HasComp<GhostComponent>(queen) && HasComp<XenoComponent>(target) &&
+        !_mobState.IsDead(queen) && !_mobState.IsDead(target) && _hive.FromSameHive(queen, target);
+
+    public void WatchFromTacticalMap(EntityUid queen, EntityUid target)
+    {
+        if (!CanQueenWatch(queen, target) || !TryComp(queen, out ActorComponent? actor))
+            return;
+        if (TryGetWatched(queen, out var watched))
+        {
+            if (watched == target && TryComp(queen, out EyeComponent? view) && view.Target == target) return;
+            // Release the previous view subscription when switching between map icons.
+            Unwatch(queen, actor.PlayerSession);
+        }
+        Watch(queen, target);
     }
 
     public override void Watch(Entity<HiveMemberComponent?, ActorComponent?, EyeComponent?> watcher, Entity<HiveMemberComponent?> toWatch)

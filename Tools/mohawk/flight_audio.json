@@ -1,0 +1,42 @@
+{
+  "sample_rate": 48000,
+  "channels": 1,
+  "peak_dbfs_before_encoding": -6,
+  "takeoff_duration_seconds": 6.360645833333334,
+  "takeoff_edge_fades_seconds": 0.01,
+  "flight_duration_seconds": 30,
+  "plasma_source_range_seconds": [
+    4,
+    35
+  ],
+  "plasma_loop_crossfade_seconds": 1,
+  "reactor_rms_relative_to_plasma_db": -12,
+  "sources": [
+    {
+      "title": "Spaceship Whoosh 2",
+      "author": "steshystesh",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "page": "https://freesound.org/people/steshystesh/sounds/336741/",
+      "download": "https://cdn.freesound.org/previews/336/336741_3034244-hq.mp3",
+      "sha256": "12a0534aa481b7ed940e59cb84d2dfa3454687b8054750b00ca61a0bfa24d624"
+    },
+    {
+      "title": "plasma engine fx",
+      "author": "Insu (Freesound)",
+      "license": "Pixabay Content License",
+      "license_url": "https://pixabay.com/service/terms/",
+      "page": "https://pixabay.com/sound-effects/film-special-effects-plasma-engine-fx-33559/",
+      "download": "https://cdn.pixabay.com/audio/2022/03/10/audio_472768a080.mp3",
+      "sha256": "1944f49a2ca5e6debce4ab505b41ccba4e2e023441ef0bc8689a924a493ba475"
+    },
+    {
+      "title": "Rustbound Reactor 02 (Loop)",
+      "author": "TommasoMotteran",
+      "license": "CC0-1.0",
+      "page": "https://freesound.org/people/TommasoMotteran/sounds/851916/",
+      "download": "https://cdn.freesound.org/previews/851/851916_18681946-hq.mp3",
+      "sha256": "988793cfb12812e313997d7cc313228d831fa298a8e7da6ae90075911d99c755"
+    }
+  ]
+}

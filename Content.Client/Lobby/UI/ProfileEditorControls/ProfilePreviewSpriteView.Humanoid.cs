@@ -67,9 +67,10 @@ public sealed partial class ProfilePreviewSpriteView
 
             GiveDummyJobClothes(humanoid, job);
 
-            if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID)))
+            var (key, loadoutPrototype) = LoadoutSystem.GetJobLoadoutInfo(job.ID, _prototypeManager); // CMU14
+            if (loadoutPrototype != null)
             {
-                var loadout = humanoid.GetLoadoutOrDefault(LoadoutSystem.GetJobPrototype(job.ID), _playerManager.LocalSession, humanoid.Species, EntMan, _prototypeManager);
+                var loadout = humanoid.GetLoadoutOrDefault(key, _playerManager.LocalSession, humanoid.Species, EntMan, _prototypeManager);
                 GiveDummyLoadout(loadout);
             }
         }
@@ -113,55 +114,7 @@ public sealed partial class ProfilePreviewSpriteView
         if (!inventorySys.TryGetSlots(PreviewDummy, out var slots))
             return;
 
-        // Apply loadout
-        if (profile.Loadouts.TryGetValue(job.ID, out var jobLoadout))
-        {
-            foreach (var loadouts in jobLoadout.SelectedLoadouts.Values)
-            {
-                foreach (var loadout in loadouts)
-                {
-                    if (!_prototypeManager.Resolve(loadout.Prototype, out var loadoutProto))
-                        continue;
-
-                    // TODO: Need some way to apply starting gear to an entity and replace existing stuff coz holy fucking shit dude.
-                    foreach (var slot in slots)
-                    {
-                        // Try startinggear first
-                        if (_prototypeManager.Resolve(loadoutProto.StartingGear, out var loadoutGear))
-                        {
-                            var itemType = ((IEquipmentLoadout) loadoutGear).GetGear(slot.Name);
-
-                            if (inventorySys.TryUnequip(PreviewDummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-                            {
-                                EntMan.DeleteEntity(unequippedItem.Value);
-                            }
-
-                            if (itemType != string.Empty)
-                            {
-                                var item = EntMan.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                                inventorySys.TryEquip(PreviewDummy, item, slot.Name, true, true);
-                            }
-                        }
-                        else
-                        {
-                            var itemType = ((IEquipmentLoadout) loadoutProto).GetGear(slot.Name);
-
-                            if (inventorySys.TryUnequip(PreviewDummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-                            {
-                                EntMan.DeleteEntity(unequippedItem.Value);
-                            }
-
-                            if (itemType != string.Empty)
-                            {
-                                var item = EntMan.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                                inventorySys.TryEquip(PreviewDummy, item, slot.Name, true, true);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        // CMU14: apply base clothing once; the caller then overlays the selected loadout.
         if (!_prototypeManager.Resolve(job.StartingGear, out var gear))
             return;
 

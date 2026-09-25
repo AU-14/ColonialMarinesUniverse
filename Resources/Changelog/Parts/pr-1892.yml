@@ -1,0 +1,14 @@
+author: CatoChristopherMrow
+category: CMU
+changes:
+- message: Added sidearms for Colony Admin
+  type: Add
+- message: Removed the mataba from stable garrison redux
+  type: Remove
+- message: Colony Admins can now spend points to customize their skills, to better
+    suit their previous carrier
+  type: Add
+- message: Robbed the XO of their mataba
+  type: Remove
+time: '2026-09-06T13:20:56.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1892

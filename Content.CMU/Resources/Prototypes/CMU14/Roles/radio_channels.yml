@@ -351,7 +351,7 @@
 - type: radioChannel
   id: UNISOF
   name: chat-radio-unisc
-  keycode: 'u'
+  keycode: 'ĝ' # collides with radioOpforCharlie (BUG-652); all letters and digits are taken
   frequency: 176.5
   color: "#3d82b8"
   longRange: true

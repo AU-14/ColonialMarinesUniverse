@@ -45,6 +45,7 @@
   abstract: true
   name: grass
   components:
+  - type: ResinClearable # CMU14
   - type: Sprite
     sprite: Decals/Flora/flora_grass.rsi
 

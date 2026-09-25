@@ -6,6 +6,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Events;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Water;
 using Content.Shared.Body;
 using Content.Shared.CCVar;
@@ -120,8 +121,9 @@ public sealed partial class ShuttleSystem
     {
         var query = AllEntityQuery<FTLMapComponent>();
 
-        while (query.MoveNext(out var uid, out _))
+        while (query.MoveNext(out var uid, out var existing))
         {
+            SetFtlParallax(uid, existing); // CMU
             return uid;
         }
 
@@ -131,10 +133,21 @@ public sealed partial class ShuttleSystem
         _metadata.SetEntityName(mapUid, "FTL");
         Log.Debug($"Setup hyperspace map at {mapUid}");
         DebugTools.Assert(!_mapSystem.IsPaused(mapId));
-        var parallax = EnsureComp<ParallaxComponent>(mapUid);
-        parallax.Parallax = ftlMap.Parallax;
+        SetFtlParallax(mapUid, ftlMap); // CMU
 
         return mapUid;
+    }
+
+    // CMU: visual travel must not depend on grid interpolation or a deck's
+    // replicated position. Those can stall or jump while changing Z levels.
+    private void SetFtlParallax(EntityUid map, FTLMapComponent ftl)
+    {
+        var parallax = EnsureComp<ParallaxComponent>(map);
+        var velocity = new Vector2(0, FTLMapComponent.TravelSpeed);
+        if (parallax.Parallax == ftl.Parallax && parallax.TravelVelocity == velocity) return;
+        parallax.Parallax = ftl.Parallax;
+        parallax.TravelVelocity = velocity;
+        Dirty(map, parallax);
     }
 
     public StartEndTime GetStateTime(FTLComponent component)
@@ -370,7 +383,14 @@ public sealed partial class ShuttleSystem
 
         component = AddComp<FTLComponent>(uid);
         component.State = FTLState.Starting;
-        var audio = _audio.PlayPvs(_startupSound, uid);
+        var startupSound = _startupSound;
+        if (TryComp<DropshipComponent>(uid, out var dropship))
+        {
+            startupSound = dropship.StartupSound ?? startupSound;
+            component.TravelSound = dropship.TravelSound ?? component.TravelSound;
+        }
+
+        var audio = _audio.PlayPvs(startupSound, uid);
         _audio.SetGridAudio(audio);
         component.StartupStream = audio?.Entity;
 
@@ -420,7 +440,7 @@ public sealed partial class ShuttleSystem
         // Just so we don't clip
         if (fromMapUid != null && TryComp(comp.StartupStream, out AudioComponent? startupAudio))
         {
-            var clippedAudio = _audio.PlayStatic(_startupSound, Filter.Broadcast(),
+            var clippedAudio = _audio.PlayStatic(new SoundPathSpecifier(startupAudio.FileName), Filter.Broadcast(),
                 new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner)), true, startupAudio.Params);
 
             _audio.SetPlaybackPosition(clippedAudio, entity.Comp1.StartupTime);
@@ -444,7 +464,7 @@ public sealed partial class ShuttleSystem
         comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - DefaultArrivalTime);
 
         Enable(uid, component: body);
-        _physics.SetLinearVelocity(uid, new Vector2(0f, 20f), body: body);
+        _physics.SetLinearVelocity(uid, new Vector2(0f, FTLMapComponent.TravelSpeed), body: body);
         _physics.SetAngularVelocity(uid, 0f, body: body);
 
         _dockSystem.SetDockBolts(uid, true);
@@ -488,7 +508,16 @@ public sealed partial class ShuttleSystem
         _dropship.RaiseUpdate(entity);
 
         // RMC14
-        var audio = _audio.PlayPvs(_arrivalSound, entity.Owner);
+        // Use the same authored landing cue aboard the dropship and at its LZ.
+        // Preserve the existing five-decibel boost for passengers.
+        var arrivalSound = _arrivalSound;
+        var arrivalParams = arrivalSound.Params;
+        if (TryComp<DropshipComponent>(entity.Owner, out var dropship))
+        {
+            arrivalSound = dropship.ArrivalSound;
+            arrivalParams = arrivalSound.Params.AddVolume(5f);
+        }
+        var audio = _audio.PlayPvs(arrivalSound, entity.Owner, arrivalParams);
         _audio.SetGridAudio(audio);
     }
 

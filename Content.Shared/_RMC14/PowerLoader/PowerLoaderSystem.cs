@@ -548,6 +548,10 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         if (!TryGetPointContainer(args, out var user, out _, out var contained, out var slot))
             return;
 
+        // CMU14: enforce fixed mounts again when the removal finishes.
+        if (ent.Comp.FixedWeapon && slot.ID == ent.Comp.WeaponContainerSlotId)
+            return;
+
         _container.Remove(contained, slot);
 
         if (TryComp(contained, out DropshipAmmoComponent? ammo) &&
@@ -881,6 +885,11 @@ public sealed partial class PowerLoaderSystem : EntitySystem
     [NotNullWhen(true)] out ContainerSlot? slot)
     {
         slot = null;
+        // CMU14: ammunition remains removable on a fixed weapon mount.
+        if (TryComp<DropshipWeaponPointComponent>(target, out var point) &&
+            point.FixedWeapon && containerId == point.WeaponContainerSlotId)
+            return false;
+
         if (!Resolve(user, ref user.Comp, false))
         {
             return false;

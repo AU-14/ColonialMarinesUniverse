@@ -46,7 +46,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
-  spawnMenuRoleName: Prodigy Lawyer (CMU)
+  spawnMenuRoleName: cmu-spawn-role-prodigy-lawyer-cmu 
   accessGroups:
   - Colonist
   - auadmin

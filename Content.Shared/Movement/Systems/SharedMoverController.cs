@@ -854,7 +854,23 @@ public abstract partial class SharedMoverController : VirtualController
                 {
                     var previousButtons = tileMovement.CurrentSlideMoveButtons;
                     var previousInitialKeyDownTime = tileMovement.MovementKeyInitialDownTime;
-                    InitializeSlideToCenter(physicsUid, tileMovement);
+
+                    // cmu change
+                    var crossedZLevel = XformQuery.TryGetComponent(tileMovement.Origin.EntityId, out var originParentXform) &&
+                        originParentXform.MapUid != targetTransform.MapUid;
+
+                    if (crossedZLevel && previousButtons != MoveButtons.None)
+                    {
+                        var offset = DirVecForButtons(previousButtons);
+                        offset = inputMover.TargetRelativeRotation.RotateVec(offset);
+                        InitializeSlideToTarget(physicsUid, tileMovement, targetTransform.LocalPosition + offset, previousButtons);
+                    }
+                    else
+                    {
+                        InitializeSlideToCenter(physicsUid, tileMovement);
+                    }
+                    // cmu change
+
                     tileMovement.CurrentSlideMoveButtons = previousButtons;
                     tileMovement.MovementKeyInitialDownTime = previousInitialKeyDownTime;
                     UpdateSlide(physicsUid, physicsUid, tileMovement, inputMover);

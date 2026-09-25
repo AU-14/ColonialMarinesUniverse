@@ -35,6 +35,10 @@ public sealed partial class CMUZLevelViewerComponent : Component
     [DataField, AutoNetworkedField]
     public bool StairPreviewUp;
 
+    /// <summary>Upper grid revealed in full by a nearby boarding ramp, if any.</summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? StairPreviewGrid;
+
     /// <summary>
     /// Number of stair preview origins currently active.
     /// </summary>

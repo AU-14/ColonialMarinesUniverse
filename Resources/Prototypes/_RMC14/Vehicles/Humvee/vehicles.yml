@@ -1,5 +1,5 @@
 - type: entity
-  id: VehicleHumveeBase
+  id: VehicleHumveeBase # CMU14
   abstract: true
   name: humvee
   description: A fast armored utility vehicle outfitted for patrols and support.
@@ -17,22 +17,24 @@
     maxSpeed: 6
     acceleration: 5
     deceleration: 12
-    maxRotationSpeedDegrees: 90
-    rotationAccelerationDegrees: 90
-    rotationDecelerationDegrees: 120
+    maxRotationSpeedDegrees: 120
+    alignmentAssistDegrees: 8
+    ignoreLightObstacleDamage: true
+    rotationAccelerationDegrees: 240
+    rotationDecelerationDegrees: 300
     turnDelay: 0.25
     pushCooldown: 2
     xenoBlockMinimumSize: Xeno
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
     wallSmashMinSpeed: 7
-    wallSmashWheelDamage: 0.9
-    wallSmashHullDamage: 45
+    wallSmashWheelDamage: 0.3
+    wallSmashHullDamage: 18
     wallSmashSlowdownMultiplier: 0.75
     wallSmashSlowdownDuration: 0.25
     mobCollisionHullDamage: 8
-    speedAtZeroIntegrity: 0.35
-    crashImmobileDuration: 8
+    speedAtZeroIntegrity: 0.6
+    crashImmobileDuration: 3
     crashImmobileMinSpeed: 8
     mobCrashImmobileDuration: 4
     mobCrashImmobileMinSpeed: 5
@@ -253,7 +255,7 @@
     integrity: 1000
 - type: entity
   parent: VehicleHumveeBase
-  id: VehicleHumveeMedical
+  id: VehicleHumveeMedical # CMU14
   name: humvee (medical)
   description: A medical-configured humvee outfitted for field triage.
   components:
@@ -280,7 +282,7 @@
   - type: PointLight
     radius: 6
   - type: Damageable
-    damageModifierSet: StructuralMarine
+    damageModifierSet: VehicleFrameHumvee
   - type: Injurable
     damageContainer: StructuralMarine
   - type: HardpointIntegrity

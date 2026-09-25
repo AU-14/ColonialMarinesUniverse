@@ -65,7 +65,7 @@
   - type: VehicleSmashable
     deleteOnHit: true
     damageOnHit: 600
-    selfDamageMultiplier: 0.1
+    selfDamageMultiplier: 0
     slowdownMultiplier: 0.2
     slowdownDuration: 1.5
     requiredVehicleTag: VehicleHeavy
@@ -113,6 +113,7 @@
   name: thick resin door
   description: A thick resin door, which is more durable.
   components:
+  - type: VehicleReinforcedObstacle
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_door.rsi
     layers:

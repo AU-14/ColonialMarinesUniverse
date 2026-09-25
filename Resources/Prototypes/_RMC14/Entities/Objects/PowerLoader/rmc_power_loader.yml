@@ -36,8 +36,8 @@
   - type: Physics
     bodyType: KinematicController
   - type: Clickable
-  - type: CMUZPhysics # RuMC edit
-  - type: CMUVehicleZTraversal # RuMC edit
+  - type: CMUZPhysics 
+  - type: CMUVehicleZTraversal 
   - type: Fixtures
     fixtures:
       fix1:

@@ -1,0 +1,71 @@
+<lobby:LobbyLineupPanel xmlns="https://spacestation14.io"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:lobby="clr-namespace:Content.Client.CMU14.Lobby" Visible="False">
+    <PanelContainer Name="Backing">
+        <BoxContainer Orientation="Vertical" Margin="12" SeparationOverride="6">
+            <BoxContainer Orientation="Horizontal">
+                <Label Name="Title" Text="{Loc 'cmu-lobby-lineup-title'}" StyleClasses="LabelHeading" HorizontalExpand="True" ClipText="True" />
+                <Label Name="ReadyCount" FontColorOverride="#A7C7AE" />
+            </BoxContainer>
+            <Label Text="{Loc 'cmu-lobby-lineup-preferences'}" ClipText="True" FontColorOverride="#80989E"
+                   ToolTip="{Loc 'cmu-lobby-lineup-role-hint'}" />
+            <Control VerticalExpand="True" RectClipContent="True">
+                <Label Name="EmptyLabel" Text="{Loc 'cmu-lobby-lineup-empty'}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <lobby:LobbyLineupGrid Name="Sections" Sections="True" />
+            </Control>
+            <PanelContainer Name="ActionDeck">
+                <BoxContainer Orientation="Vertical" Margin="8 5" SeparationOverride="5">
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+                        <Label Name="PlayerIdentity" HorizontalExpand="True" ClipText="True" FontColorOverride="#C3D3CE" />
+                        <Label Name="ActionStatus" FontColorOverride="#80ABA7" />
+                    </BoxContainer>
+                    <WrapContainer Name="Actions" SeparationOverride="16" CrossSeparationOverride="5">
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="3">
+                            <Label Text="{Loc 'cmu-lobby-lineup-quick'}" FontColorOverride="#80ABA7" Margin="0 0 5 0" />
+                            <Button Name="Salute" Text="{Loc 'cmu-lobby-lineup-action-salute'}" />
+                            <Button Name="Wave" Text="{Loc 'cmu-lobby-lineup-action-wave'}" />
+                            <Button Name="Gear" Text="{Loc 'cmu-lobby-lineup-action-gear'}" />
+                            <Button Name="Stretch" Text="{Loc 'cmu-lobby-lineup-action-stretch'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="3">
+                            <Label Text="{Loc 'cmu-lobby-lineup-solo'}" FontColorOverride="#80ABA7" Margin="0 0 5 0" />
+                            <Button Name="PreviousMove" Text="‹" ToolTip="{Loc 'cmu-lobby-lineup-previous-move'}" />
+                            <Label Name="MoveName" SetWidth="150" ClipText="True" Align="Center" />
+                            <Button Name="NextMove" Text="›" ToolTip="{Loc 'cmu-lobby-lineup-next-move'}" />
+                            <Button Name="PerformMove" Text="{Loc 'cmu-lobby-lineup-perform-move'}" SetWidth="80"
+                                    ToolTip="{Loc 'cmu-lobby-lineup-solo-hint'}" />
+                            <Button Name="RandomMove" Text="{Loc 'cmu-lobby-lineup-random-move'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="3">
+                            <Label Text="{Loc 'cmu-lobby-lineup-team'}" FontColorOverride="#80ABA7" Margin="0 0 5 0" />
+                            <Button Name="PreviousTeam" Text="‹" ToolTip="{Loc 'cmu-lobby-lineup-previous-team'}" />
+                            <Label Name="TeamName" SetWidth="150" ClipText="True" Align="Center" />
+                            <Button Name="NextTeam" Text="›" ToolTip="{Loc 'cmu-lobby-lineup-next-team'}" />
+                            <Button Name="PerformTeam" Text="{Loc 'cmu-lobby-lineup-perform-team'}" SetWidth="80"
+                                    ToolTip="{Loc 'cmu-lobby-lineup-team-hint'}" />
+                            <Button Name="AllTeams" Text="{Loc 'cmu-lobby-lineup-all-teams'}" Visible="False" />
+                        </BoxContainer>
+                    </WrapContainer>
+                    <WrapContainer SeparationOverride="6">
+                        <Button Name="Flyby" Text="{Loc 'cmu-lobby-party-flyby'}" ToolTip="{Loc 'cmu-lobby-party-flyby-hint'}" />
+                        <Button Name="Parade" Text="{Loc 'cmu-lobby-party-parade'}" ToolTip="{Loc 'cmu-lobby-party-parade-hint'}" />
+                        <Button Name="StopShow" Text="{Loc 'cmu-lobby-party-stop'}" Visible="False" />
+                        <CheckBox Name="PartySounds" Text="{Loc 'cmu-lobby-party-sounds'}" ToolTip="{Loc 'cmu-lobby-party-sounds-hint'}" Pressed="True" />
+                    </WrapContainer>
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                        <Label Text="{Loc 'cmu-lobby-lineup-ooc'}" FontColorOverride="#80ABA7" Margin="0 0 5 0"
+                               ToolTip="{Loc 'cmu-lobby-lineup-ooc-hint'}" />
+                        <LineEdit Name="MessageInput" PlaceHolder="{Loc 'cmu-lobby-lineup-chat-placeholder'}" HorizontalExpand="True"
+                                  ToolTip="{Loc 'cmu-lobby-lineup-ooc-hint'}" />
+                        <Button Name="Send" Text="{Loc 'cmu-lobby-lineup-send'}" />
+                    </BoxContainer>
+                    <WrapContainer SeparationOverride="12">
+                        <CheckBox Name="Bubbles" Text="{Loc 'cmu-lobby-lineup-bubbles'}" Pressed="True" />
+                        <CheckBox Name="Ambient" Text="{Loc 'cmu-lobby-lineup-ambient'}" Pressed="True" />
+                        <CheckBox Name="DemoBanter" Text="{Loc 'cmu-lobby-lineup-banter'}" Pressed="True" Visible="False" />
+                    </WrapContainer>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </PanelContainer>
+</lobby:LobbyLineupPanel>

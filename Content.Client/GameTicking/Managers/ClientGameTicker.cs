@@ -35,6 +35,7 @@ namespace Content.Client.GameTicking.Managers
         [ViewVariables] public ProtoId<LobbyBackgroundPrototype>? LobbyBackground { get; private set; }
         [ViewVariables] public bool DisallowedLateJoin { get; private set; }
         [ViewVariables] public string? ServerInfoBlob { get; private set; }
+        public IReadOnlyList<Content.Shared.CMU14.Lobby.LobbyLineupEntry> LobbyLineup { get; private set; } = Array.Empty<Content.Shared.CMU14.Lobby.LobbyLineupEntry>();
         [ViewVariables] public IReadOnlyList<LobbyRoundInfoField> ServerRoundInfo { get; private set; } = Array.Empty<LobbyRoundInfoField>();
         [ViewVariables] public TimeSpan StartTime { get; private set; }
         [ViewVariables] public new bool Paused { get; private set; }
@@ -154,6 +155,7 @@ namespace Content.Client.GameTicking.Managers
         {
             ServerInfoBlob = message.TextBlob;
             ServerRoundInfo = message.RoundInfo;
+            LobbyLineup = message.Lineup;
 
             InfoBlobUpdated?.Invoke();
         }

@@ -1,0 +1,7 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Crusher is now properly rooted for its entire charge doafter.
+  type: Fix
+time: '2026-08-25T23:23:41.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1867

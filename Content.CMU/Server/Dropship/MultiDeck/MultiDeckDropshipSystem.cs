@@ -7,6 +7,7 @@ using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.PowerLoader;
+using Content.Shared._RMC14.Pulling;
 using Content.Shared.Parallax;
 using Content.Shared.Shuttles.Components;
 using Robust.Server.GameObjects;
@@ -31,6 +32,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
     [Dependency] private SharedDropshipSystem _dropships = default!;
     [Dependency] private PowerLoaderSystem _powerLoader = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private RMCPullingSystem _pulling = default!;
 
     private readonly HashSet<EntityUid> _pending = new();
 
@@ -145,9 +147,11 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
                 var background = TryComp<ParallaxComponent>(map, out var primaryParallax)
                     ? primaryParallax.Parallax
                     : ftlMap.Parallax;
-                if (parallax.Parallax != background)
+                var velocity = primaryParallax?.TravelVelocity ?? new Vector2(0, FTLMapComponent.TravelSpeed);
+                if (parallax.Parallax != background || parallax.TravelVelocity != velocity)
                 {
                     parallax.Parallax = background;
+                    parallax.TravelVelocity = velocity;
                     Dirty(deckMap, parallax);
                 }
             }
@@ -178,6 +182,10 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
                     }
                 }
 
+                // A ground occupant left behind cannot retain a physics joint to
+                // equipment travelling with the deck onto another map.
+                foreach (var occupant in groundOccupants)
+                    _pulling.TryStopAllPullsFromAndOn(occupant.Uid);
                 _transform.SetCoordinates((grid, gridTransform, MetaData(grid)), new EntityCoordinates(deckMap, position), rotation: rotation);
                 // Move the deck first so ordinary grid traversal cannot attach
                 // these entities straight back onto its old footprint.

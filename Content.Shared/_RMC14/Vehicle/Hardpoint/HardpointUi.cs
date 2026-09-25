@@ -102,3 +102,10 @@ public sealed class HardpointRemoveMessage : BoundUserInterfaceMessage
         SlotId = slotId;
     }
 }
+
+// CMU14
+[Serializable, NetSerializable]
+public sealed class HardpointRepairMessage(string? slotId) : BoundUserInterfaceMessage
+{
+    public readonly string? SlotId = slotId;
+}

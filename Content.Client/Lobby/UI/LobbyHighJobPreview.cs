@@ -43,17 +43,15 @@ internal static class LobbyHighJobPreview
         " (OPFOR)"
     };
 
-    // Every gamePreset in _CMU14/RoundSetup/GameModes/game_presets.yml. Missing entries here mean
-    // a character whose high-priority jobs are only set for that mode shows no job at all.
     private static readonly (string Key, string Label)[] Gamemodes =
     {
-        ("ForceOnForce", "FOF"),
+        //("ForceOnForce", "FOF"),
         ("Insurgency", "INS"),
         ("DistressSignal", "DS"),
         ("ColonyFall", "CF"),
-        ("Jailbreak", "JB"),
-        ("Prometheus", "PRO"),
-        ("Criminal", "CRI")
+        // ("Jailbreak", "JB"),
+        // ("Prometheus", "PRO"),
+        // ("Criminal", "CRI")
     };
 
     public static string GetDisplayJobName(JobPrototype job)

@@ -269,7 +269,11 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
             // Make sure custom names get handled, what is gameticker control flow whoopy.
             if (loadout != null && loadoutProto != null)
+            {
+                // CMU14: custom job bodies also receive their selected equipment.
+                EquipRoleLoadout(jobEntity, loadout, loadoutProto, applyEffects: false);
                 EquipRoleName(jobEntity, loadout, loadoutProto);
+            }
 
             DoJobSpecials(job, jobEntity);
             if (loadout != null && loadoutProto != null)

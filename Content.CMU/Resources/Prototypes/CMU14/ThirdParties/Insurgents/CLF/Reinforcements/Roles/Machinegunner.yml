@@ -48,7 +48,7 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFMachineGunnerReinforcement
-  spawnMenuRoleName: CLF Machinegunner (Reinforcements)
+  spawnMenuRoleName: cmu-spawn-role-clf-machinegunner-reinforcements 
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
   joinNotifyCrew: false

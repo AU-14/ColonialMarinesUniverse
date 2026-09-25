@@ -52,6 +52,13 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
 
+    // CMU14: Vehicle interiors inherit their supplying faction.
+    public void SetComputerFaction(Entity<MarineCommunicationsComputerComponent> computer, string faction)
+    {
+        computer.Comp.Faction = faction;
+        Dirty(computer);
+    }
+
     public override void Initialize()
     {
         SubscribeLocalEvent<MarineCommunicationsComputerComponent, EchoSquadReasonEvent>(OnEchoSquadReason);

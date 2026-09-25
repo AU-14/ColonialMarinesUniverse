@@ -6,7 +6,7 @@
   name: au14-job-name-govforsquadcombattech
   description: au14-job-description-govforsquadcombattech
   icon: "AU14JobIconGovCT"
-  spawnMenuRoleName: Combat Technician (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-combat-technician-govfor 
   playTimeTracker: AU14JobGOVFORSquadCombatTech
   startingGear: AU14GearGOVFORSquadCombatTech
   dummyStartingGear: AU14GearGOVFORCTDummy

@@ -1,0 +1,8 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Queen now has separate ability bar ordering for both immature and mature
+    states to avoid having to redo them every time you spawn in.
+  type: Fix
+time: '2026-09-10T04:53:34.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1917

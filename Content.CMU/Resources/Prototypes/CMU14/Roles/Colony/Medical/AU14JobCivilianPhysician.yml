@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   displayWeight: 12
   id: AU14JobCivilianPhysician
   roundSide: Civilian

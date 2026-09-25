@@ -1,0 +1,12 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed deleted sentries causing repeated network-state failures and delayed
+    updates.
+  type: Fix
+- message: Fixed several equipment, interaction, stamp, and character-save errors.
+  type: Fix
+- message: Added bounded error summaries and phase timings to server stall reports.
+  type: Admin
+time: '2026-09-09T20:38:28.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1915

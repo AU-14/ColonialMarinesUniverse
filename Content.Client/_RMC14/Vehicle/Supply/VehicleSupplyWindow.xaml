@@ -16,6 +16,9 @@
         <BoxContainer Orientation="Vertical" Margin="14" SeparationOverride="12" HorizontalExpand="True" VerticalExpand="True">
             <BoxContainer Orientation="Horizontal" SeparationOverride="12" HorizontalExpand="True">
                 <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" VerticalExpand="True">
+                    <!-- CMU14 -->
+                    <Label Name="AllowanceLabel" Access="Public"/>
+                    <Label Name="IssuedLabel" Access="Public"/>
                     <Label Name="StatusLabel" Access="Public" FontColorOverride="#9DB5D1"/>
                 </BoxContainer>
             </BoxContainer>

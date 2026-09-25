@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCLFCellLeader
   roundSide: ThirdParty
   roundForce: CLF
@@ -71,7 +71,7 @@
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clfcellleader
-  spawnMenuRoleName: CLF Cell Leader (CMU)
+  spawnMenuRoleName: cmu-spawn-role-clf-cell-leader-cmu 
   accessGroups:
   - Colonist
   roleWeight: 0.25

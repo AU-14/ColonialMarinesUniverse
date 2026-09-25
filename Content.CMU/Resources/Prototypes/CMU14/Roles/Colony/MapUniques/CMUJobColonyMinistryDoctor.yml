@@ -27,7 +27,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: cmu-colony-supervisors-colonist
-  spawnMenuRoleName: Colony Ministry of Health Doctor (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-ministry-of-health-doctor-cmu 
   accessGroups:
   - Colonist
   roleWeight: 0.25

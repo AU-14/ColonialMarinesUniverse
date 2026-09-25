@@ -86,7 +86,7 @@
 - type: loadout
   id: HazardVestAU14
   equipment:
-    jumpsuit: RMCHazardVest
+    outerClothing: RMCHazardVest
 
 - type: loadout
   id: CivilianWeYuEngineerClothesAU14

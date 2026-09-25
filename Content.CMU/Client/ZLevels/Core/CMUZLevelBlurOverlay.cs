@@ -47,8 +47,7 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
 
     internal static bool ShouldBlurPass(ScalingViewport.ZEye zEye)
     {
-        return zEye.Depth < 0 ||
-               zEye.Depth == 0 && zEye.BlurCurrentLevel;
+        return zEye.ApplyZLevelBlur && (zEye.Depth < 0 || zEye.Depth == 0 && zEye.BlurCurrentLevel);
     }
 
     private bool IsBlurEnabled()

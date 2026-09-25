@@ -6,9 +6,9 @@ meta:
   forkId: ''
   forkVersion: ''
   time: '2026-09-18T00:00:00'
-  entityCount: 282
+  entityCount: 288
 maps:
-- 286
+- 288
 grids:
 - 1
 orphans: []
@@ -40,7 +40,7 @@ entities:
     - type: MetaData
       name: Midway
     - type: Transform
-      parent: 286
+      parent: 288
     - type: MapGrid
       canSplit: false
       chunks:
@@ -137,6 +137,17 @@ entities:
     - type: Shuttle
     - type: Dropship
       tacticalLandFootprint: 17,24
+      startupSound:
+        path: /Audio/CMU14/Dropships/Mohawk/takeoff.ogg
+        params:
+          volume: 6
+      travelSound:
+        path: /Audio/CMU14/Dropships/Mohawk/flight.ogg
+        params:
+          volume: -3
+          loop: true
+      arrivalSound:
+        path: /Audio/CMU14/Dropships/Mohawk/landing.ogg
     - type: MultiDeckDropship
       landingOffset: 1
       exteriorDecks:
@@ -147,6 +158,8 @@ entities:
     - type: ShipFaction
       faction: govfor
     - type: MohawkMechanisms
+      rampPreviewFullDeck: true
+      keepRampThreshold: true
 - proto: WarpPoint
   entities:
   - uid: 2
@@ -570,6 +583,14 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,1.5
+- proto: CMUMohawkMidwayMidway8e223701ef
+  entities:
+  - uid: 62
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,0.5
+      rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayWall914b05a60374
   entities:
   - uid: 63
@@ -628,7 +649,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-3.5
-- proto: CMUGunshipHardpointAttachmentPoint
+- proto: CMUMohawkInternalModulePort
   entities:
   - uid: 71
     components:
@@ -768,6 +789,14 @@ entities:
     - type: Transform
       parent: 1
       pos: -1.5,1.5
+- proto: CMUMohawkMidwayMidwayHatchLeft17cd21d658
+  entities:
+  - uid: 90
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,0.5
+      rot: -1.5707963267948966 rad
 - proto: CMUMohawkMidwayWall9226ba718ee1
   entities:
   - uid: 91
@@ -1209,7 +1238,7 @@ entities:
       pos: 0.5,-5.5
     - type: MohawkRampSegment
       stage: 0
-- proto: CMUGunshipHardpointAttachmentPoint
+- proto: CMUMohawkInternalModuleAft
   entities:
   - uid: 149
     components:
@@ -1514,6 +1543,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 2.5,1.5
+- proto: CMUMohawkMidwayMidwayHatchRight213aa8e792
+  entities:
+  - uid: 190
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,0.5
+      rot: 1.5707963267948966 rad
 - proto: CMUMohawkMidwayWall9336ba077758
   entities:
   - uid: 191
@@ -1707,6 +1744,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 3.5,1.5
+- proto: CMUMohawkMidwayMidwaybbd6b8ad32
+  entities:
+  - uid: 217
+    components:
+    - type: Transform
+      parent: 1
+      pos: 3.5,0.5
+      rot: 1.5707963267948966 rad
 - proto: CMUMohawkMidwayWall94573c92e988
   entities:
   - uid: 218
@@ -1758,7 +1803,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 3.5,-3.5
-- proto: CMUGunshipHardpointAttachmentPoint
+- proto: CMUMohawkInternalModuleStarboard
   entities:
   - uid: 225
     components:
@@ -2188,9 +2233,25 @@ entities:
     - type: Transform
       parent: 1
       pos: 8.5,3.5
-- proto: ''
+- proto: CMUMohawkMidwayOmahaPilot9e5b91c0ba
   entities:
   - uid: 286
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,9.5
+      rot: 3.141592653589793 rad
+- proto: CMUMohawkMidwayOmahaPilot9e5b91c0ba
+  entities:
+  - uid: 287
+    components:
+    - type: Transform
+      parent: 1
+      pos: 1.5,9.5
+      rot: 3.141592653589793 rad
+- proto: ''
+  entities:
+  - uid: 288
     components:
     - type: Map
     - type: Transform

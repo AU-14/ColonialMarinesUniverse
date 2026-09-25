@@ -1,0 +1,113 @@
+- type: parallax
+  id: CMUFighterEmpty
+  layers: []
+
+- type: entity
+  id: CMUFighterHull
+  name: experimental two-seat fighter
+  description: A tandem strike and reconnaissance aircraft undergoing flight trials.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/jetfighter.rsi
+    state: jetfighter
+    scale: 2, 2
+    drawdepth: FloorObjects
+  - type: Transform
+    rot: 180
+  - type: AmbientSound
+    enabled: false
+    range: 12
+    volume: -8
+    sound:
+      path: /Audio/CMU14/Fighter/jet-cockpit.ogg
+
+- type: entity
+  id: CMUFighterCanopy
+  name: fighter canopy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    rot: 180
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/jetfighter.rsi
+    scale: 2, 2
+    drawdepth: OverMobs
+    layers:
+    - state: jetfighter
+      shader: CMUFighterCockpitFrame
+    - state: canopyglass
+      color: "#FFFFFF38"
+
+- type: entity
+  parent: RMCSeatArmored
+  id: CMUFighterPilotSeat
+  name: fighter pilot seat
+  description: The front flight-control seat. Strap in to plan an approach and control altitude and speed.
+  components:
+  - type: Transform
+    anchored: false
+    rot: 180
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/pilotseats.rsi
+    state: frontseat
+    scale: 2, 2
+    rotation: 0
+    noRot: false
+    drawdepth: Objects
+  - type: Strap
+    buckleOffset: 0, 0
+    modifyBuckleDrawDepth: false
+  # RMC's buckle renderer has its own depth rules, separate from Strap above.
+  - type: RMCStrapNoDrawDepthChange
+  - type: FighterSeat
+    pilot: true
+
+- type: entity
+  parent: CMUFighterPilotSeat
+  id: CMUFighterObserverSeat
+  name: fighter weapons officer seat
+  description: The rear reconnaissance seat, with independent optics and shared ground marks.
+  components:
+  - type: Sprite
+    state: rearseat
+  - type: FighterSeat
+    pilot: false
+
+- type: entity
+  id: CMUFighterCamera
+  name: fighter observation camera
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: Eye
+    drawFov: false
+  - type: ContentEye
+
+- type: gamePreset
+  id: CMUFighterDev
+  alias: [ fighterdev ]
+  name: cmu-fighter-preset-name
+  description: cmu-fighter-preset-description
+  showInVote: false
+  rules: []
+
+- type: gameMap
+  id: CMUFighterTrijent
+  mapName: Trijent fighter flight trial
+  mapPath: /Maps/CMU14/trijent.yml
+  mapsBelow:
+  - /Maps/CMU14/trijent_below.yml
+  mapsAbove:
+  - /Maps/CMU14/trijent_above.yml
+  minPlayers: 0
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    AUTrijent:
+      stationProto: StandardStationArena
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: Trijent fighter flight trial
+      - type: StationJobs
+        availableJobs:
+          Passenger: [ -1, -1 ]

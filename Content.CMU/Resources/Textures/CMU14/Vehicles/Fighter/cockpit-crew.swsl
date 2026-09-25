@@ -1,0 +1,15 @@
+// Crop full-size ground crew to their seat's opening, in the current viewport.
+light_mode unshaded;
+
+uniform bool clip_enabled;
+uniform highp vec2 window_origin;
+uniform highp vec2 window_x;
+uniform highp vec2 window_y;
+
+void fragment() {
+    highp vec4 source = zTexture(UV);
+    highp vec2 delta = SCREEN_UV - window_origin;
+    highp vec2 p = abs(vec2(dot(delta, window_x), dot(delta, window_y)));
+    highp float aperture = step(max(p.x, p.y), 1.0) * step(p.x + p.y, 1.85);
+    COLOR = source * (clip_enabled ? aperture : 1.0);
+}

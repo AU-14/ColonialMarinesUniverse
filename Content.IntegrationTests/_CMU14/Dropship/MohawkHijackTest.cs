@@ -14,15 +14,18 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkHijackTest
 {
-    [TestCase("omaha")]
-    [TestCase("midway")]
-    public async Task HijackCrashesOnlyTheCabinAndDisablesBoarding(string variant)
+    [TestCase("omaha", false)]
+    [TestCase("omaha", true)]
+    [TestCase("midway", false)]
+    [TestCase("midway", true)]
+    public async Task HijackCrashesOnlyTheCabinAndDisablesBoarding(string variant, bool humanHijack)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
         EntityUid ship = default;
         EntityUid targetMap = default;
         EntityUid lowerMap = default;
         EntityUid passenger = default;
+        EntityUid hijacker = default;
         EntityUid bystander = default;
         EntityUid[] secondaryDecks = [];
         NetEntity[] secondaryNets = [];
@@ -41,6 +44,10 @@ public sealed class MohawkHijackTest
             var lower = assembly.Decks[-1];
             lowerMap = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
             passenger = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ship, 0.5f, 0.5f));
+            hijacker = humanHijack ? passenger : entities.SpawnEntity("CMXenoQueen", new EntityCoordinates(ship, 1.5f, 0.5f));
+#pragma warning disable RA0002 // Exercise the same accepted crash flight with both hijacker types.
+            entities.EnsureComponent<DropshipHijackerComponent>(hijacker).IsHumanHijacker = humanHijack;
+#pragma warning restore RA0002
             bystander = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(lower, -2.5f, 1.5f));
             var mechanisms = entities.System<MohawkSystem>();
             Assert.That(mechanisms.SetRampDeployed(ship, true, true), Is.True);
@@ -65,7 +72,7 @@ public sealed class MohawkHijackTest
             dropship.DidExplosion = true;
 #pragma warning restore RA0002
             entities.System<ShuttleSystem>().DefaultArrivalTime = 0.5f;
-            Assert.That(entities.System<SharedDropshipSystem>().FlyTo((nav.Owner, nav), marker, null,
+            Assert.That(entities.System<SharedDropshipSystem>().FlyTo((nav.Owner, nav), marker, hijacker,
                 hijack: true, startupTime: 0.5f, hyperspaceTime: 2f), Is.True);
             Assert.That(entities.HasComponent<MultiDeckDropshipComponent>(ship), Is.False);
             Assert.That(entities.HasComponent<DropshipDeckComponent>(ship), Is.False);

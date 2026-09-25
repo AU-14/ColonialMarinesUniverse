@@ -61,6 +61,12 @@ public sealed class VehicleSupplyBui : BoundUserInterface
         if (_window == null)
             return;
 
+        // CMU14: show the shared round allowance, including lost hulls.
+        _window.AllowanceLabel.Text = state.PlatoonName == null
+            ? Loc.GetString("cmu-vehicle-supply-unassigned")
+            : Loc.GetString("cmu-vehicle-supply-allowance", ("platoon", state.PlatoonName),
+                ("used", state.IssuedVehicles.Count), ("limit", state.VehicleLimit));
+        _window.IssuedLabel.Text = string.Join(", ", state.IssuedVehicles);
         var modeText = state.LiftMode?.ToString() ?? "No lift";
         var activeText = string.IsNullOrWhiteSpace(state.ActiveVehicleId) ? "none" : state.ActiveVehicleId;
         var busyText = state.Busy ? "busy" : "idle";

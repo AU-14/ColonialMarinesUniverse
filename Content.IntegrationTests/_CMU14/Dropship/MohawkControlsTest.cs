@@ -3,6 +3,7 @@ using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Doors.Components;
 using Content.Shared.Interaction;
+using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -13,9 +14,13 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkControlsTest
 {
-    [TestCase("omaha")]
-    [TestCase("omaha_navy")]
-    public async Task SideButtonsOperateTheirOwnHatch(string variant)
+    [TestCase("omaha", false)]
+    [TestCase("omaha_navy", false)]
+    [TestCase("midway", false)]
+    [TestCase("midway_navy", false)]
+    [TestCase("midway", true)]
+    [TestCase("midway_navy", true)]
+    public async Task SideButtonsOperateTheirOwnHatch(string variant, bool deployment)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -24,13 +29,24 @@ public sealed class MohawkControlsTest
         EntityUid port = default;
         EntityUid starboard = default;
         EntityUid starboardButton = default;
+        EntityUid portButton = default;
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
-            entities.System<SharedMapSystem>().CreateMap(out var mapId);
-            Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
-            ship = loaded!.Value.Owner;
+            var loader = entities.System<MapLoaderSystem>();
+            if (deployment)
+            {
+                Assert.That(loader.TryLoadMap(new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}_deployment.yml"),
+                    out _, out var grids, DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
+                ship = grids!.Single().Owner;
+            }
+            else
+            {
+                entities.System<SharedMapSystem>().CreateMap(out var mapId);
+                Assert.That(loader.TryLoadGrid(mapId,
+                    new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                ship = loaded!.Value.Owner;
+            }
             var doors = entities.EntityQuery<DoorComponent>()
                 .Where(d => entities.GetComponent<TransformComponent>(d.Owner).GridUid == ship).ToArray();
             Assert.That(doors.Count(d => d.Location == DoorLocation.Port), Is.EqualTo(1));
@@ -53,6 +69,7 @@ public sealed class MohawkControlsTest
                 Assert.That(owner.Owner, Is.EqualTo(ship));
             }
             starboardButton = controls.Single(c => c.Group == MohawkControlGroup.Starboard).Owner;
+            portButton = controls.Single(c => c.Group == MohawkControlGroup.Port).Owner;
             user = entities.SpawnEntity(null, new EntityCoordinates(ship, 0.5f, 0.5f));
             var use = new InteractHandEvent(user, starboardButton);
             entities.EventBus.RaiseLocalEvent(starboardButton, use);
@@ -72,6 +89,23 @@ public sealed class MohawkControlsTest
         await server.WaitAssertion(() =>
         {
             Assert.That(server.EntMan.GetComponent<DoorComponent>(starboard).State, Is.EqualTo(DoorState.Closed));
+            var use = new InteractHandEvent(user, portButton);
+            server.EntMan.EventBus.RaiseLocalEvent(portButton, use);
+            Assert.That(use.Handled, Is.True);
+        });
+        await pair.RunSeconds(1);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.GetComponent<DoorComponent>(port).State, Is.EqualTo(DoorState.Open));
+            Assert.That(server.EntMan.GetComponent<DoorComponent>(starboard).State, Is.EqualTo(DoorState.Closed),
+                "A port command must not operate the starboard hatch.");
+            var use = new InteractHandEvent(user, portButton);
+            server.EntMan.EventBus.RaiseLocalEvent(portButton, use);
+        });
+        await pair.RunSeconds(1);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.GetComponent<DoorComponent>(port).State, Is.EqualTo(DoorState.Closed));
             server.EntMan.DeleteEntity(ship);
         });
         await pair.CleanReturnAsync();

@@ -24,6 +24,7 @@
   parent: [BasePlasticExplosive, BaseSyndicateContraband]
   id: AU14IED
   components:
+  - type: LandMine
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container
@@ -67,6 +68,7 @@
   parent: [BasePlasticExplosive, BaseSyndicateContraband]
   id: AU14IEDLarge
   components:
+  - type: LandMine
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container

@@ -1,14 +1,15 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Components;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.PowerLoader;
 using Content.Shared.Coordinates;
 using Content.Shared.DoAfter;
 using Content.Shared.Popups;
-using Content.Shared.Prototypes;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -24,6 +25,7 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private RMCComponentsSystem _components = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private INetManager _net = default!;
@@ -103,7 +105,7 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
         if (args.Id == default || !_prototypes.TryIndex(args.Id, out var proto))
             return;
 
-        if (!proto.TryComp(out DropshipFabricatorPrintableComponent? printable, _compFactory))
+        if (!TryGetPrintable(proto, out var printable))
             return;
 
         var actor = args.Actor;
@@ -164,7 +166,7 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
             ent.Comp.Queue.RemoveAt(0);
 
             if (!_prototypes.TryIndex(entry.Id, out var proto) ||
-                !proto.TryComp(out DropshipFabricatorPrintableComponent? printable, _compFactory))
+                !TryGetPrintable(proto, out var printable))
             {
                 RefundQueuedCost(ent, entry.Cost);
                 continue;
@@ -214,12 +216,24 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
         var prototypes = _prototypes.EnumeratePrototypes<EntityPrototype>();
         foreach (var prototype in prototypes)
         {
-            if (prototype.HasComponent<DropshipFabricatorPrintableComponent>(_compFactory))
+            if (TryGetPrintable(prototype, out _))
                 printables.Add(prototype);
         }
 
         printables.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase));
         Printables = printables.Select(e => new EntProtoId<DropshipFabricatorPrintableComponent>(e.ID)).ToImmutableArray();
+    }
+
+    private bool TryGetPrintable(EntityPrototype prototype,
+        [NotNullWhen(true)] out DropshipFabricatorPrintableComponent? printable)
+    {
+        printable = null;
+
+        // RemoveComponents runs on spawned entities, but the catalog and print requests use prototypes.
+        if (_components.RemovesComponent<DropshipFabricatorPrintableComponent>(prototype))
+            return false;
+
+        return prototype.TryComp(out printable, _compFactory);
     }
 
     public void ChangeBudget(int amount)

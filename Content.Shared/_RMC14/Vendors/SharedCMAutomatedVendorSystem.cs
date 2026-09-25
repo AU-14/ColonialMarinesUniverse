@@ -454,7 +454,8 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
             user = EnsureComp<CMVendorUserComponent>(actor);
             if (!user.TakeAll.Add((takeAll, entry.Id)))
             {
-                Log.Error($"{ToPrettyString(actor)} tried to buy too many take-alls.");
+                // CMU14: handled guard, not an error - players hitting the limit is routine.
+                Log.Warning($"{ToPrettyString(actor)} tried to buy too many take-alls.");
                 return;
             }
 
@@ -466,7 +467,8 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
             user = EnsureComp<CMVendorUserComponent>(actor);
             if (!user.TakeOne.Add(takeOne))
             {
-                Log.Error($"{ToPrettyString(actor)} tried to buy too many take-ones.");
+                // CMU14: same - routine limit, keep it out of the ERRO feed.
+                Log.Warning($"{ToPrettyString(actor)} tried to buy too many take-ones.");
                 return;
             }
 

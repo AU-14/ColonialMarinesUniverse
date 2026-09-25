@@ -37,7 +37,7 @@ public sealed partial class WendigoHeadbiteAudioComponent : Component
     [DataField, AutoNetworkedField]
     public float GlobalVolume = -3f;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan? LastGlobalPlayed;
 
     /// <summary>

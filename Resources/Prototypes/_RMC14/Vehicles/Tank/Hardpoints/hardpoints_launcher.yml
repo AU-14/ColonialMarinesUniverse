@@ -1,6 +1,6 @@
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankFlamer
+  id: VehicleTankFlamer # CMU14
   name: tank flamer
   description: A tank-mounted flamethrower hardpoint.
   components:
@@ -17,6 +17,8 @@
     integrity: 300
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
     pixelOffsetNorth: "0,-10"
@@ -76,7 +78,7 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankGrenadeLauncher
+  id: VehicleTankGrenadeLauncher # CMU14
   name: tank grenade launcher
   description: A tank-mounted grenade launcher hardpoint.
   components:
@@ -99,6 +101,8 @@
     integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
     pixelOffsetNorth: "0,-10"
@@ -156,7 +160,7 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankTowLauncher
+  id: VehicleTankTowLauncher # CMU14
   name: tank TOW launcher
   description: A tank-mounted TOW launcher hardpoint.
   components:
@@ -179,6 +183,8 @@
     integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
     pixelOffsetNorth: "0,0"
@@ -232,7 +238,7 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankM56Cupola
+  id: VehicleTankM56Cupola # CMU14
   name: M56 cupola
   description: A cupola-mounted weapon hardpoint.
   components:
@@ -255,6 +261,8 @@
     integrity: 350
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
     pixelOffsetNorth: "0,-10"
@@ -307,7 +315,7 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankRERE700
+  id: VehicleTankRERE700 # CMU14
   name: RE700 cupola
   description: A dual-barrel cupola-mounted weapon hardpoint. The integrated IFF component seems to be missing.
   components:
@@ -330,6 +338,8 @@
     integrity: 350
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
     pixelOffsetNorth: "0,-10"
@@ -380,7 +390,7 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankCupolaTWE
+  id: VehicleTankCupolaTWE # CMU14
   name: Improper L98 10x28mm Hull General Purpose Machine Gun
   description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
   components:
@@ -404,6 +414,8 @@
     integrity: 350
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: false
     useDirectionalOffsets: false
     pixelOffsetNorth: "0,0"

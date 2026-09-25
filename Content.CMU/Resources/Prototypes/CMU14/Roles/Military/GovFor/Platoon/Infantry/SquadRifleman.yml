@@ -5,7 +5,7 @@
   name: au14-job-name-govforsquadrifleman
   description: au14-job-description-govforsquadrifleman
   icon: "AU14JobIconGovRifleman"
-  spawnMenuRoleName: Rifleman (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-rifleman-govfor
   startingGear: AU14GearGOVFORSquadRifleman
   dummyStartingGear: AU14GearGOVFORRiflemanDummy
   playTimeTracker: AU14JobGOVFORSquadRifleman

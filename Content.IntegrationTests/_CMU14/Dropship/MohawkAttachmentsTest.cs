@@ -30,6 +30,88 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkAttachmentsTest
 {
+    [Test]
+    public async Task FixedChinGunStaysMountedWhileAmmoAndWingGunsRemainServiceable()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var maps = entities.System<SharedMapSystem>();
+            var map = maps.CreateMap(out var mapId);
+            var grid = maps.CreateGridEntity(mapId);
+            var coordinates = new EntityCoordinates(grid, 0.5f, 0.5f);
+            var containers = entities.System<SharedContainerSystem>();
+            var doAfter = entities.System<SharedDoAfterSystem>();
+            var point = entities.SpawnEntity("CMUMohawkM90Point", coordinates);
+            var mount = entities.GetComponent<DropshipWeaponPointComponent>(point);
+            var weaponSlot = containers.GetContainer(point, mount.WeaponContainerSlotId);
+            var gun = weaponSlot.ContainedEntities.Single();
+            Assert.That(mount.FixedWeapon, Is.True);
+            var loader = entities.SpawnEntity("RMCMechPowerLoader", coordinates);
+
+            var request = new GetAttachmentSlotEvent(entities.GetNetEntity(loader), entities.GetNetEntity(gun))
+            {
+                BeingAttached = false,
+            };
+            entities.EventBus.RaiseLocalEvent(point, request);
+            Assert.That(request.CanUse, Is.False, "The fixed gun must not be offered as a removal target.");
+
+            // A completed removal must also enforce the mount restriction.
+            var detach = new DropshipDetachDoAfterEvent(entities.GetNetEntity(point), entities.GetNetEntity(gun), weaponSlot.ID);
+            Assert.That(doAfter.TryStartDoAfter(new DoAfterArgs(entities, loader, TimeSpan.Zero, detach, point, point)), Is.True);
+            Assert.That(weaponSlot.Contains(gun), Is.True, "A completed removal must leave the chin gun installed.");
+
+            var ammo = entities.SpawnEntity("CMUMohawkM90Ammo", coordinates);
+            request = new GetAttachmentSlotEvent(entities.GetNetEntity(loader), entities.GetNetEntity(ammo));
+            entities.EventBus.RaiseLocalEvent(point, request);
+            Assert.That(request.CanUse, Is.True);
+            Assert.That(request.SlotId, Is.EqualTo(mount.AmmoContainerSlotId));
+            var attach = new DropshipAttachDoAfterEvent(entities.GetNetEntity(point), entities.GetNetEntity(ammo), request.SlotId);
+            Assert.That(doAfter.TryStartDoAfter(new DoAfterArgs(entities, loader, TimeSpan.Zero, attach, point, point)), Is.True);
+            var ammoSlot = containers.GetContainer(point, mount.AmmoContainerSlotId);
+            Assert.That(ammoSlot.Contains(ammo), Is.True);
+            request = new GetAttachmentSlotEvent(entities.GetNetEntity(loader), entities.GetNetEntity(ammo))
+            {
+                BeingAttached = false,
+            };
+            entities.EventBus.RaiseLocalEvent(point, request);
+            Assert.That(request.CanUse, Is.True, "Fixed weapons must retain ammunition servicing.");
+            Assert.That(request.SlotId, Is.EqualTo(ammoSlot.ID));
+            detach = new DropshipDetachDoAfterEvent(entities.GetNetEntity(point), entities.GetNetEntity(ammo), request.SlotId);
+            Assert.That(doAfter.TryStartDoAfter(new DoAfterArgs(entities, loader, TimeSpan.Zero, detach, point, point)), Is.True);
+            Assert.That(ammoSlot.Contains(ammo), Is.False);
+            Assert.That(weaponSlot.Contains(gun), Is.True);
+            entities.DeleteEntity(loader);
+
+            var wing = entities.SpawnEntity("CMUMohawkWeaponPortFore", coordinates);
+            var wingMount = entities.GetComponent<DropshipWeaponPointComponent>(wing);
+            Assert.That(wingMount.FixedWeapon, Is.False);
+            var wingGun = entities.SpawnEntity("RMCDropshipAttachmentGau21Cannon", coordinates);
+            loader = entities.SpawnEntity("RMCMechPowerLoader", coordinates);
+            request = new GetAttachmentSlotEvent(entities.GetNetEntity(loader), entities.GetNetEntity(wingGun));
+            entities.EventBus.RaiseLocalEvent(wing, request);
+            Assert.That(request.CanUse, Is.True);
+            Assert.That(request.SlotId, Is.EqualTo(wingMount.WeaponContainerSlotId));
+            attach = new DropshipAttachDoAfterEvent(entities.GetNetEntity(wing), entities.GetNetEntity(wingGun), request.SlotId);
+            Assert.That(doAfter.TryStartDoAfter(new DoAfterArgs(entities, loader, TimeSpan.Zero, attach, wing, wing)), Is.True);
+            var wingSlot = containers.GetContainer(wing, wingMount.WeaponContainerSlotId);
+            Assert.That(wingSlot.Contains(wingGun), Is.True);
+            request = new GetAttachmentSlotEvent(entities.GetNetEntity(loader), entities.GetNetEntity(wingGun))
+            {
+                BeingAttached = false,
+            };
+            entities.EventBus.RaiseLocalEvent(wing, request);
+            Assert.That(request.CanUse, Is.True, "Ordinary wing weapons must remain removable.");
+            Assert.That(request.SlotId, Is.EqualTo(wingSlot.ID));
+            detach = new DropshipDetachDoAfterEvent(entities.GetNetEntity(wing), entities.GetNetEntity(wingGun), request.SlotId);
+            Assert.That(doAfter.TryStartDoAfter(new DoAfterArgs(entities, loader, TimeSpan.Zero, detach, wing, wing)), Is.True);
+            Assert.That(wingSlot.Contains(wingGun), Is.False);
+            entities.DeleteEntity(map);
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [TestCase("omaha")]
     [TestCase("midway")]
     public async Task EnginesWeaponsAndMedevacOperateThroughTheCabinController(string variant)

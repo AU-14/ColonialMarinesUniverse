@@ -841,6 +841,9 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
             if (!_entityWhitelistSystem.IsWhitelistPass(attachable.Comp.ActionsToRelayWhitelist, actionUid))
                 continue;
 
+            if (!TryComp(actionUid, out ActionComponent? action) || action.AttachedEntity != user) // CMU14
+                continue;
+
             _actionsSystem.RemoveProvidedAction(user, attachable.Owner, actionUid);
         }
     }

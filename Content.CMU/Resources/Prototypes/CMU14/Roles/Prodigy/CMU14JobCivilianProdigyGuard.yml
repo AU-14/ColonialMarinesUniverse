@@ -73,7 +73,7 @@
     - Epilepsy
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
-  spawnMenuRoleName: Prodigy Corporate Goon (CMU)
+  spawnMenuRoleName: cmu-spawn-role-prodigy-corporate-goon-cmu 
   accessGroups:
   - auprodigy
   - AUPrisonStaff

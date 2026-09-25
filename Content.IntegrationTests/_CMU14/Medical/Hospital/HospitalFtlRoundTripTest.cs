@@ -17,8 +17,8 @@ namespace Content.IntegrationTests.CMU14.Medical.Hospital;
 [TestFixture]
 public sealed class HospitalFtlRoundTripTest
 {
-    [Test, Category("HospitalTransport"), Timeout(180000)]
-    public async Task RealDeliveryAndPickupRetryCooldownAndSettleOnceAfterReturning()
+    [TestCase(false), TestCase(true), Category("HospitalTransport"), Timeout(180000)]
+    public async Task RealDeliveryAndPickupRetryCooldownAndSettleOnceAfterReturning(bool staleReservation)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -149,6 +149,25 @@ public sealed class HospitalFtlRoundTripTest
                 Assert.That(hospital.LastPayout, Is.EqualTo(expectedReward));
                 Assert.That(CashTotal(), Is.EqualTo(expectedReward), "Repeated completion/release cannot issue a second payment.");
             });
+
+            // The next incident is the third shuttle call, using the same landing pad.
+            await server.WaitAssertion(() =>
+            {
+                if (staleReservation)
+                    server.System<SharedDropshipSystem>().SetDestinationShip(landing, pickup);
+                server.System<HospitalEmergencySystem>().SetNextIncidentDelay(TimeSpan.FromSeconds(1));
+            });
+            await WaitForPhase(HospitalEmergencyStatus.AwaitingApproval, 5);
+            await server.WaitAssertion(() =>
+            {
+                entities.EventBus.RaiseLocalEvent(computer, new HospitalEmergencyApproveLandingMsg { Actor = actor });
+                Assert.That(hospital.Status, Is.EqualTo(HospitalEmergencyStatus.Arriving), hospital.TransportFailure);
+                delivery = CaptureTransport();
+                patient = hospital.Patients.Single();
+                entities.EnsureComponent<CMInStasisComponent>(patient);
+            });
+            await WaitForPhase(HospitalEmergencyStatus.ManualUnloading, 10);
+            await server.WaitAssertion(() => AssertLanded(delivery));
         }
         finally
         {

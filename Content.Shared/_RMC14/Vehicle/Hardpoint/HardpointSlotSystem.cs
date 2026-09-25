@@ -10,6 +10,7 @@ using Content.Shared.Popups;
 using Content.Shared.Tools;
 using Content.Shared.Tools.Systems;
 using Content.Shared.UserInterface;
+using Content.Shared.Verbs;
 using Content.Shared.Vehicle;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
@@ -33,10 +34,12 @@ public sealed partial class HardpointSlotSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VehicleSystem _rmcVehicles = default!; // CMU14
 
+    // CMU14 method: vehicle damage and usability.
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<HardpointSlotsComponent, GetVerbsEvent<AlternativeVerb>>(OnMaintenanceVerb);
         SubscribeLocalEvent<HardpointSlotsComponent, ItemSlotInsertAttemptEvent>(OnInsertAttempt);
         SubscribeLocalEvent<HardpointSlotsComponent, HardpointInsertDoAfterEvent>(OnInsertDoAfter);
         SubscribeLocalEvent<HardpointSlotsComponent, InteractUsingEvent>(OnSlotsInteractUsing, before: new[] { typeof(ItemSlotsSystem) });
@@ -50,6 +53,20 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         SubscribeLocalEvent<HardpointSlotsComponent, HardpointRemoveDoAfterEvent>(OnHardpointRemoveDoAfter);
         SubscribeLocalEvent<HardpointSlotsComponent, ItemSlotEjectAttemptEvent>(OnHardpointEjectAttempt);
         SubscribeLocalEvent<HardpointItemComponent, PowerLoaderInteractEvent>(OnHardpointPowerLoaderInteract);
+    }
+
+    // CMU14 method: vehicle damage and usability.
+    private void OnMaintenanceVerb(Entity<HardpointSlotsComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract || HasComp<XenoComponent>(args.User))
+            return;
+
+        var user = args.User;
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Text = Loc.GetString("rmc-hardpoint-maintenance-verb"),
+            Act = () => TryOpenHardpointUi(ent, user),
+        });
     }
 
     private void OnHardpointEjectAttempt(Entity<HardpointSlotsComponent> ent, ref ItemSlotEjectAttemptEvent args)
@@ -466,6 +483,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         _hardpoints.RefreshCanRun(ent.Owner);
     }
 
+    // CMU14 method: vehicle damage and usability.
     private void TryStartHardpointRemoval(
         EntityUid uid,
         HardpointSlotsComponent component,
@@ -576,7 +594,9 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         {
             if (!TryGetHardpointRemovalTool(user, location.Slots, out var tool))
             {
-                const string error = "You need a prying tool to remove this hardpoint.";
+                var error = Loc.GetString(IsVanHardpointFamily(location.Slots)
+                    ? "rmc-hardpoint-removal-prying-tool"
+                    : "rmc-hardpoint-removal-tool");
                 _popup.PopupEntity(error, user, user);
                 SetError(error);
                 RefreshUi();

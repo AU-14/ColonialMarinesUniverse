@@ -51,6 +51,16 @@
 
 - type: entity
   parent: AU14HeadsetGovforMarine
+  id: CMU14HeadsetTWEThirdParty
+  name: TWE SOF radio headset
+  description: Issued to TWE SOF units.
+  components:
+  - type: RMCHeadset
+    channels:
+    - TWESOF
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
   id: AU14HeadsetVAI
   name: vanguard's arrow headset
   description: A special headset used by Vanguard's Arrow Incorporated mercenaries, features a non-standard brace.

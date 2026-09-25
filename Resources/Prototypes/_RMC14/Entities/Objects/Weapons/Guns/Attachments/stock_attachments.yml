@@ -330,6 +330,8 @@
     - RMCAttachmentDoubleBarrelShotgunStock
   - type: AttachableWieldDelayMods
     modifiers: []
+  - type: AttachableSizeMods # CMU14: the launcher's built-in breech is already included in its base size.
+    modifiers: []
 
 - type: entity
   parent: RMCStockAttachmentBase

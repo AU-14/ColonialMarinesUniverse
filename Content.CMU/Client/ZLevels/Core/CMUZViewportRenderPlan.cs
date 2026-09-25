@@ -8,6 +8,8 @@ namespace Content.Client.CMU14.ZLevels.Core;
 /// <summary>
 /// Reusable storage owned by a ScalingViewport. All decisions are rebuilt within its synchronous
 /// render; only the existing grid opening cache persists across camera or world changes.
+/// Lower-pass masks are the one exception: during the lower-render grace window the previous
+/// frame's masks are kept, so a vanishing opening fades out instead of revealing the whole level.
 /// </summary>
 internal sealed class CMUZViewportRenderPlan
 {
@@ -37,14 +39,17 @@ internal sealed class CMUZViewportRenderPlan
         return mask.MapId == mapId ? mask : null;
     }
 
-    public void Reset()
+    public void Reset(bool preserveLowerPasses = false)
     {
         BaseOpenings.Clear();
         LowerChain.Clear();
         StairPreview.Clear();
         StairTiles.Clear();
-        foreach (var mask in _lowerPasses)
-            mask.Clear();
+        if (!preserveLowerPasses)
+        {
+            foreach (var mask in _lowerPasses)
+                mask.Clear();
+        }
     }
 
     /// <summary>Exact world corners for drawing, and conservative bounds for sprite inclusion.</summary>

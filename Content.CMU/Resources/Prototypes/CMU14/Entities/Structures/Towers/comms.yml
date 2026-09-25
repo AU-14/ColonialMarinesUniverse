@@ -4,8 +4,8 @@
   name: field antenna mast
   prototype: AU14CommsMastField
   noRotate: true
-  doAfterTime: 8
+  doAfterTime: 25
   doAfterTimeMin: 4
-  materialCost: 10
+  materialCost: 50
   skill: RMCSkillEngineer
   requiredSkillLevel: 2

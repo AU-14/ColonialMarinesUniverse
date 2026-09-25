@@ -11,13 +11,14 @@
 
 - type: entity
   parent: VehicleSPPAPCHardpointBase
-  id: VehicleSPPAPCWheel
+  id: VehicleSPPAPCWheel # CMU14
   name: UPP APC wheel
   description: A reinforced APC wheel produced for UPP vehicles.
   components:
   - type: Sprite
     state: spp_tires
   - type: HardpointItem
+    damageRegion: Sides
     hardpointType: Wheel
     vehicleFamily: APC
     slotType: Wheel

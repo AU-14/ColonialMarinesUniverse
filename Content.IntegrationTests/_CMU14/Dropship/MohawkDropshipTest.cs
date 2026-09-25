@@ -8,6 +8,7 @@ using Content.Server.Shuttles.Components;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Vehicles;
+using Content.Shared.Doors.Components;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
@@ -83,7 +84,7 @@ public sealed class MohawkDropshipTest
     }
 
     [Test]
-    public async Task AdjacentOmahaAndMidwayPadsMayTouchWithoutOverlapping()
+    public async Task MohawkPadsAlignWithoutRejectingOverlappingReservations()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         await pair.Server.WaitAssertion(() =>
@@ -105,8 +106,8 @@ public sealed class MohawkDropshipTest
                 "An ordinary ship must keep its existing landing coordinates.");
             Assert.That(assembly.IsLandingClear(midway!.Value.Owner, new EntityCoordinates(ground, 7f, 15f), Angle.Zero), Is.True,
                 "The two USS Bush pads are 16 tiles apart; the cabin envelopes meet at their edges.");
-            Assert.That(assembly.IsLandingClear(midway.Value.Owner, new EntityCoordinates(ground, 6.9f, 15f), Angle.Zero), Is.False,
-                "Moving inside the other ship's reserved envelope must still fail.");
+            Assert.That(assembly.IsLandingClear(midway.Value.Owner, new EntityCoordinates(ground, 6.9f, 15f), Angle.Zero), Is.True,
+                "Mohawks no longer reject sites inside another ship's reserved envelope.");
             entities.DeleteEntity(omaha.Value.Owner);
             entities.DeleteEntity(midway.Value.Owner);
         });
@@ -384,7 +385,7 @@ public sealed class MohawkDropshipTest
                 var xform = entities.GetComponent<TransformComponent>(control.Owner);
                 controls.Add(control.Owner, (xform.GridUid!.Value, xform.LocalPosition));
             }
-            Assert.That(controls, Has.Count.EqualTo(variant.StartsWith("omaha") ? 5 : 3));
+            Assert.That(controls, Has.Count.EqualTo(5));
             var boardingTile = maps.GetAllTiles(lower, entities.GetComponent<MapGridComponent>(lower)).First();
             var rider = entities.SpawnEntity(null, new EntityCoordinates(ship, 0.5f, 0.5f));
             Assert.That(entities.GetComponent<TransformComponent>(rider).GridUid, Is.EqualTo(ship));
@@ -411,8 +412,7 @@ public sealed class MohawkDropshipTest
                 new EntityCoordinates(destination, new Vector2(37, -19)), out var target), Is.True);
             var groundTarget = new EntityCoordinates(destination, new Vector2(37, -19));
             Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True);
-            // Carrier roof trim may overlap the ship's upper artwork. Only the
-            // cabin and underside participate in landing clearance.
+            // Terrain on every level is ignored for Mohawk landing clearance.
             Assert.That(zLevels.TryMapOffset(target.EntityId, 1, out var roofMap), Is.True);
             var obstruction = maps.CreateGridEntity(entities.GetComponent<MapComponent>(roofMap!.Value).MapId);
             var roofTile = maps.GetAllTiles(upper, entities.GetComponent<MapGridComponent>(upper)).First();
@@ -429,25 +429,25 @@ public sealed class MohawkDropshipTest
             var tileDefinitions = server.ResolveDependency<ITileDefinitionManager>();
             maps.SetTile(cabinObstruction, cabinObstruction.Comp,
                 cabinObstructionTile, new Tile(tileDefinitions["CMFloorPlating"].TileId));
-            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.False,
-                "An occupied cabin level must still reject the landing pad.");
+            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True,
+                "A floor at cabin height must not reject a Mohawk landing.");
             maps.SetTile(cabinObstruction, cabinObstruction.Comp,
                 cabinObstructionTile, new Tile(tileDefinitions["CMShuttleTileInvisible"].TileId));
             Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True,
                 "Open-air map anchors are not solid floors at cabin height.");
             entities.SpawnEntity("WallSolid", new EntityCoordinates(cabinObstruction, cabinObstructionTile + new Vector2(0.5f)));
-            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.False,
-                "A wall still obstructs landing even when it stands on a transparent tile.");
+            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True,
+                "A wall must not reject a Mohawk landing.");
             entities.DeleteEntity(cabinObstruction);
             Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True);
-            // A ship still in transit must reserve its destination volume too.
+            // Mohawks also bypass reservations from ships still in transit.
             var transitMap = maps.CreateMap(out var transitId);
             var inbound = maps.CreateGridEntity(transitId);
             maps.SetTile(inbound, inbound.Comp, Vector2i.Zero, roofTile.Tile);
             var reservation = entities.SpawnEntity(null, groundTarget);
             entities.AddComponent<DropshipDestinationComponent>(reservation);
             dropships.SetDestinationShip(reservation, inbound.Owner);
-            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.False);
+            Assert.That(multiDeck.IsLandingClear(ship, groundTarget, Angle.FromDegrees(90)), Is.True);
             entities.DeleteEntity(reservation);
             entities.DeleteEntity(transitMap);
             transform.SetCoordinates((ship, entities.GetComponent<TransformComponent>(ship), entities.GetComponent<MetaDataComponent>(ship)), target, rotation: Angle.FromDegrees(90));
@@ -492,6 +492,18 @@ public sealed class MohawkDropshipTest
                 new EntityCoordinates(finalGround, finalCabin.Position + new Vector2(-0.5f, 0.5f)));
             transform.SetWorldRotation(marker, Angle.FromDegrees(180));
             Assert.That(dropships.FlyTo((nav.Owner, nav), marker, null, startupTime: 0.5f, hyperspaceTime: 2f), Is.True);
+        });
+        await pair.RunSeconds(1);
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            foreach (var door in entities.EntityQuery<DoorComponent>()
+                         .Where(d => entities.GetComponent<TransformComponent>(d.Owner).GridUid == travellingShip))
+            {
+                Assert.That(entities.GetComponent<DoorBoltComponent>(door.Owner).BoltsDown,
+                    Is.EqualTo(door.Location != DoorLocation.Cockpit),
+                    "Takeoff must secure exterior hatches while leaving cockpit access usable.");
+            }
         });
         await pair.RunSeconds(8);
         await server.WaitAssertion(() =>

@@ -198,7 +198,7 @@ namespace Content.Server.GameTicking
 
         private TickerLobbyInfoEvent GetInfoMsg()
         {
-            return new (GetInfoText(), GetRoundInfoFields());
+            return new (GetInfoText(), GetRoundInfoFields(), GetLobbyLineup());
         }
 
         private TickerRoundStatusEvent GetRoundStatusMsg()
@@ -313,6 +313,7 @@ namespace Content.Server.GameTicking
                     continue;
                 RaiseNetworkEvent(GetStatusMsg(playerSession), playerSession.Channel);
             }
+            UpdateInfoText();
         }
 
         public void ToggleReady(ICommonSession player, bool ready)

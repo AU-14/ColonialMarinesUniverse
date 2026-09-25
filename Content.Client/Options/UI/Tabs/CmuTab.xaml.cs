@@ -32,9 +32,14 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ChatEnableRunechatBubbles, RunechatSpeechBubblesCheckBox);
         Control.AddOptionPercentSlider(CCVars.ChatRunechatBubbleScale, RunechatSpeechBubbleScaleSlider, 0.5f, 2f);
         Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
+        // CMU14: tactical map preferences.
+        Control.AddOptionCheckBox(CCVars.CMUTacMapClassic, ClassicTacMapCheckBox);
+        Control.AddOptionCheckBox(CCVars.CMUTacMapCenterOnOpen, CenterTacMapCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUAutoIngestEnabled, AutoIngestCheckBox);
+        // CMU14: client temperature unit preference
+        Control.AddOptionCheckBox(CCVars.CMUTemperatureFahrenheit, TemperatureFahrenheitCheckBox);
         Control.AddOptionCheckBox(CCVars.ExplosionScreenShakeEnabled, ExplosionScreenShakeEnabledCheckBox);
         Control.AddOptionCheckBox(CCVars.ExplosionScreenShakeIgnoreFar, ExplosionScreenShakeIgnoreFarCheckBox);
         Control.AddOptionCheckBox(CCVars.FirearmScreenShakeEnabled, FirearmScreenShakeEnabledCheckBox);

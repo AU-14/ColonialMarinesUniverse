@@ -5,7 +5,7 @@
   name: au14-job-name-radiotelephoneoperator
   description: au14-job-description-radiotelephoneoperator
   icon: "AU14JobIconFTL"
-  spawnMenuRoleName: Fireteam Leader (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-fireteam-leader-govfor 
   startingGear: AU14GearGOVFORRadioTelephoneOperator
   dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   playTimeTracker: AU14JobGOVFORRadioTelephoneOperator

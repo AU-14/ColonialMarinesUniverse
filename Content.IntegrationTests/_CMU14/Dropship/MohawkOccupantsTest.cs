@@ -12,6 +12,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Stunnable;
+using Content.Shared.Throwing;
 using Robust.Client.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
@@ -30,6 +31,8 @@ public sealed class MohawkOccupantsTest
 {
     [TestCase("omaha")]
     [TestCase("midway")]
+    [TestCase("omaha_navy")]
+    [TestCase("midway_navy")]
     public async Task SeatsKeepPassengersOutOfWallsAndReplicateVisualOffsets(string variant)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
@@ -41,7 +44,10 @@ public sealed class MohawkOccupantsTest
             ship = LoadShip(entities, variant);
             var transform = entities.System<SharedTransformSystem>();
             var seats = entities.EntityQuery<MohawkSeatComponent>().ToArray();
-            Assert.That(seats, Has.Length.EqualTo(variant == "omaha" ? 64 : 19));
+            Assert.That(seats, Has.Length.EqualTo(variant.StartsWith("omaha") ? 64 : 21));
+            foreach (var x in new[] { -0.5f, 1.5f })
+                Assert.That(seats.Count(s => entities.GetComponent<TransformComponent>(s.Owner).LocalPosition == new Vector2(x, 9.5f)),
+                    Is.EqualTo(1), "Both cockpit crew consoles need a seat.");
             foreach (var seat in seats)
             {
                 var xform = entities.GetComponent<TransformComponent>(seat.Owner);
@@ -203,7 +209,7 @@ public sealed class MohawkOccupantsTest
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         EntityUid ship = default;
         EntityUid lowerMap = default;
-        var riders = new List<(EntityUid Uid, float Height, Vector2 Position)>();
+        var riders = new List<(EntityUid Uid, EntityUid Map, float Height, Vector2 Position)>();
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
@@ -213,7 +219,9 @@ public sealed class MohawkOccupantsTest
             foreach (var row in new[] { 0, 3 })
             {
                 var rider = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ship, 0.5f, row - 5.5f));
-                riders.Add((rider, row == 3 ? 0.8125f : 0f, new Vector2(0.5f, row - 6.5f)));
+                var threshold = variant == "midway" && row == 3;
+                riders.Add((rider, threshold ? entities.GetComponent<TransformComponent>(ship).MapUid!.Value : lowerMap,
+                    row == 3 && !threshold ? 0.8125f : 0f, new Vector2(0.5f, row - (threshold ? 5.5f : 6.5f))));
             }
             entities.System<MohawkSystem>().SetRampDeployed(ship, true);
         });
@@ -221,9 +229,9 @@ public sealed class MohawkOccupantsTest
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
-            foreach (var (rider, height, position) in riders)
+            foreach (var (rider, map, height, position) in riders)
             {
-                Assert.That(entities.GetComponent<TransformComponent>(rider).MapUid, Is.EqualTo(lowerMap));
+                Assert.That(entities.GetComponent<TransformComponent>(rider).MapUid, Is.EqualTo(map));
                 Assert.That(Vector2.Distance(entities.GetComponent<TransformComponent>(rider).LocalPosition, position), Is.LessThan(0.05f),
                     "The passenger follows the entire ramp one tile aft, without moving the raised floor.");
                 Assert.That(entities.GetComponent<CMUZPhysicsComponent>(rider).LocalPosition, Is.EqualTo(height).Within(0.05f));
@@ -235,22 +243,134 @@ public sealed class MohawkOccupantsTest
         await pair.CleanReturnAsync();
     }
 
+    [TestCase("midway", 0, 2)]
+    [TestCase("midway", 90, 3)]
+    [TestCase("midway_navy", 0, 3)]
+    [TestCase("midway_navy", 90, 2)]
+    [TestCase("omaha", 180, 2)]
+    public async Task FallingOntoRampDuringLoweringDoesNotCrushPassenger(string variant, int degrees, int stage)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        EntityUid ship = default;
+        EntityUid lowerMap = default;
+        EntityUid passenger = default;
+        float damageAfterFall = 0;
+        var entryTime = stage == 2 ? 0.1f : 1.1f;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            ship = LoadShip(entities, variant);
+            var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
+            var lower = assembly.Decks[-1];
+            var transform = entities.System<SharedTransformSystem>();
+            transform.SetWorldRotation(ship, Angle.FromDegrees(degrees));
+            entities.System<MultiDeckDropshipSystem>().Synchronize((ship, assembly));
+            lowerMap = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
+            var maps = entities.System<SharedMapSystem>();
+            var terrain = entities.EnsureComponent<MapGridComponent>(lowerMap);
+            var tile = maps.GetAllTiles(lower, entities.GetComponent<MapGridComponent>(lower)).First().Tile;
+            for (var x = -8; x <= 8; x++)
+            for (var y = -8; y <= 8; y++)
+                maps.SetTile(lowerMap, terrain, new Vector2i(x, y), tile);
+            passenger = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ship, 0.5f, -1.5f));
+            Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true), Is.True);
+        });
+        await pair.RunSeconds(entryTime);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var transform = entities.System<SharedTransformSystem>();
+            // Enter the opening while descending from a jump onto the next row,
+            // which has not yet reached the ground. Let Z physics cross the decks.
+            transform.SetCoordinates((passenger, entities.GetComponent<TransformComponent>(passenger),
+                entities.GetComponent<MetaDataComponent>(passenger)), new EntityCoordinates(ship, 0.5f, stage - 6.5f));
+            entities.System<CMUZLevelsSystem>().SetZVelocity(passenger, -2f);
+            Assert.That(entities.HasComponent<MohawkRampMovingComponent>(ship), Is.True);
+        });
+        await pair.RunSeconds(0.65f);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            Assert.That(entities.GetComponent<TransformComponent>(passenger).MapUid, Is.EqualTo(lowerMap),
+                "Reproduce a passenger falling from the cabin before the next ramp section lowers.");
+            damageAfterFall = entities.System<DamageableSystem>().GetTotalDamage(passenger).Float();
+        });
+        await pair.RunSeconds(2.3f - entryTime - 0.65f);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            Assert.That(entities.GetComponent<MohawkMechanismsComponent>(ship).RampDeployed, Is.True);
+            Assert.That(entities.HasComponent<MohawkRampMovingComponent>(ship), Is.False,
+                "The ramp must finish lowering in two seconds.");
+            Assert.That(entities.System<DamageableSystem>().GetTotalDamage(passenger).Float(), Is.EqualTo(damageAfterFall),
+                "Finishing the ramp must not add crush damage to someone who arrived from above during lowering.");
+            Assert.That(entities.GetComponent<MohawkMechanismsComponent>(ship).RampCrushTargets, Is.Empty);
+            Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, false), Is.True);
+        });
+        await pair.RunSeconds(2.3f);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            Assert.That(entities.GetComponent<MohawkMechanismsComponent>(ship).RampDeployed, Is.False);
+            Assert.That(entities.HasComponent<MohawkRampMovingComponent>(ship), Is.False,
+                "Retraction must also finish in two seconds.");
+            entities.DeleteEntity(ship);
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [TestCase("omaha")]
     [TestCase("midway")]
     public async Task LoweringHitsSomeoneUnderTheRampOnce(string variant)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        EntityUid ship = default;
+        EntityUid lower = default;
+        EntityUid rider = default;
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
-            var ship = LoadShip(entities, variant);
-            var lower = entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1];
-            var rider = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(lower, 0.5f, -5.5f));
+            ship = LoadShip(entities, variant);
+            lower = entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1];
+            rider = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(lower, 0.5f, -5.5f));
             entities.System<MohawkSystem>().SetRampDeployed(ship, true);
             var damage = entities.System<DamageableSystem>().GetAllDamage(rider);
             Assert.That(damage.DamageDict["Blunt"].Float(), Is.EqualTo(40f));
             Assert.That(entities.HasComponent<KnockedDownComponent>(rider), Is.True);
             Assert.That(entities.GetComponent<PhysicsComponent>(rider).LinearVelocity.Length(), Is.GreaterThan(0f));
+        });
+        // The first hit can throw someone into a section that has not lowered yet.
+        // Put them there deterministically instead of relying on the random throw angle.
+        foreach (var y in new[] { -4.5f, -3.5f })
+        {
+            await pair.Server.WaitAssertion(() =>
+            {
+                var entities = pair.Server.EntMan;
+                if (entities.TryGetComponent<ThrownItemComponent>(rider, out var thrown))
+                    entities.System<ThrownItemSystem>().StopThrow(rider, thrown);
+                entities.System<SharedPhysicsSystem>().SetLinearVelocity(rider, Vector2.Zero);
+                entities.System<SharedTransformSystem>().SetCoordinates(
+                    (rider, entities.GetComponent<TransformComponent>(rider), entities.GetComponent<MetaDataComponent>(rider)),
+                    new EntityCoordinates(lower, 0.5f, y));
+            });
+            await pair.RunSeconds(1.15f);
+            await pair.Server.WaitAssertion(() =>
+                Assert.That(pair.Server.EntMan.System<DamageableSystem>().GetAllDamage(rider).DamageDict["Blunt"].Float(),
+                    Is.EqualTo(40f), "Later ramp sections must not crush the same person again."));
+        }
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var mechanisms = entities.System<MohawkSystem>();
+            mechanisms.SetRampDeployed(ship, true, true);
+            Assert.That(entities.System<DamageableSystem>().GetAllDamage(rider).DamageDict["Blunt"].Float(), Is.EqualTo(40f));
+            mechanisms.SetRampDeployed(ship, false, true);
+            entities.System<SharedTransformSystem>().SetCoordinates(
+                (rider, entities.GetComponent<TransformComponent>(rider), entities.GetComponent<MetaDataComponent>(rider)),
+                new EntityCoordinates(lower, 0.5f, -5.5f));
+            mechanisms.SetRampDeployed(ship, true, true);
+            Assert.That(entities.System<DamageableSystem>().GetAllDamage(rider).DamageDict["Blunt"].Float(), Is.EqualTo(80f),
+                "A new lowering cycle must still detect someone already underneath.");
             entities.DeleteEntity(ship);
         });
         await pair.CleanReturnAsync();

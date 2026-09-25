@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianEthicsAndWellnessAdvisor
   displayWeight: 8
   roundSide: Civilian

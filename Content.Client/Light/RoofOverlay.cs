@@ -26,6 +26,7 @@ public sealed partial class RoofOverlay : Overlay
     private readonly TurfSystem _turf;
 
     private List<Entity<MapGridComponent>> _grids = new();
+    private readonly HashSet<Vector2i> _entityRoofTiles = new(); // CMU14
 
     public override OverlaySpace Space => OverlaySpace.BeforeLighting;
 
@@ -119,6 +120,9 @@ public sealed partial class RoofOverlay : Overlay
 
                     var tileEnumerator = _mapSystem.GetTilesIntersecting(grid.Owner, grid, bounds);
                     var roofEnt = (grid.Owner, grid.Comp, roof);
+                    // CMU14: only tiles near entity roofs need the expensive exact lookup.
+                    var localBounds = _xformSystem.GetInvWorldMatrix(grid.Owner).TransformBox(bounds.CalcBoundingBox());
+                    _roof.GetEntityRoofTiles(grid, localBounds, _entityRoofTiles);
 
                     // Due to stencilling we essentially draw on unrooved tiles
                     while (tileEnumerator.MoveNext(out var tileRef))
@@ -126,7 +130,7 @@ public sealed partial class RoofOverlay : Overlay
                         if (_turf.IsSpace(tileRef))
                             continue;
 
-                        var color = _roof.GetColor(roofEnt, tileRef.GridIndices);
+                        var color = _roof.GetColor(roofEnt, tileRef.GridIndices, _entityRoofTiles.Contains(tileRef.GridIndices)); // CMU14
 
                         if (color == null)
                         {

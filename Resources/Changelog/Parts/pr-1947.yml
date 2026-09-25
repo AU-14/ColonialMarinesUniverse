@@ -1,0 +1,7 @@
+author: flex5hybrid
+category: CMU
+changes:
+- message: Made additional spawn menu role names localizable.
+  type: Code
+time: '2026-09-14T00:03:29.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1947

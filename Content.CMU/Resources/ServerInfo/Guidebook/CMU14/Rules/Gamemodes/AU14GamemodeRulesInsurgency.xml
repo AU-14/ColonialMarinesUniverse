@@ -1,47 +1,128 @@
 ﻿<Document>
+
   #INSURGENCY RULES
-    These rules apply to the Insurgency gamemode.
+
+  These rules apply to the Insurgency game mode.
+
+
 
   ##General Rules
+
     No player may kill another player within the first 5 minutes of the round.
+
+
 
     Colonists and other non-affiliated roles must have a valid in-character reason to participate in hostilities.
 
+
+
     ##Insurgent Rules
 
+
+
     You are a radical devoted to your cause.
-    - Direct orders from the Cell Leader must be followed unless they directly contradict insurgent ideology or server rules. You must refuse orders to indiscriminately kill civilians.
+
+    - Direct orders from the Cell Leader must be followed unless they directly contradict insurgent ideology or server rules.
+
+    - You must refuse orders to indiscriminately kill civilians.
+
+    - You may not intentionally go about round removing other players without a valid RP reason. You are freedom fighters and not a murder cult.
+      - You may round remove GOVFOR Command personnel and may round remove colonists going out of their way to seek harm to the Insurgency or for trying to reveal the location of the hideout.
+
+
 
     Insurgents may not kill or harm civilians unless they are clearly hostile toward the insurgency.
+
     - Ambassadors, liaisons, administrators and other unarmed government/corporate personnel are considered civilians under this rule.
+
     - Colony Law Enforcement, Corporate Security and armed government/corporate personnel are not considered civilians under this rule.
+
+    - Hostile toward the insurgency means that they are collaborating with colony law enforcement and/or GOVFOR. Or are actively fighting the Insurgency.
+
+
 
     Insurgents may NOT kill or harm Colony Law Enforcement, Corporate Security and/or armed government/corporate personnel until 10 minutes into the round.
 
+
+
     Insurgents may NOT attack groundside GOVFOR bases or attempt to board the GOVFOR ship until 30 minutes into the round. FOBs are not considered groundside bases.
+
+
+
+    Insurgents must try to avoid massharm to the colonies citizens.
+
+    - This means insurgents may not openly take over the colony hospital, as that would make it a genuine target.
+
+    - They may also not use non-hostile colonists as meat shields, nor may you strap a bomb to them against their will.
+
+    - You may, however, intimidate Colonists and stalk them to make sure they don't rat you out.
+
+    - You may capture legitimate civilian targets to use them as hostages.
+      - IE Liaison, Corporate Assistant, Ambassador, Colony Admin, Deputy Admin and Colony Law Enforcement.
+
+
+
+    Forcing Colonists to join the Insurgency makes the tattoo gun null and void, meaning they can betray you at any time with no warning.
+    - This is because the tattoo has a prompt forcing you to stay aligned with the insurgency, as it should be a free, irreversible choice, and it is seen as taking advantage of that mechanic.
+
+
+    Insurgents may start becoming more hostile after 3 hours into the round, using more destructive weaponry in a desperate attempt to take out GOVFOR.
+    - This also means you can be more destructive to the colony and its citizens and round remove GOVFOR personnel.
+
+
+
+    As an Insurgent, you may defect or rebel against the Cell Leader if they commit atrocities and go against the [Your Insurgent faction] ideology or server rules.
+
+
 
     ##GOVFOR Rules
 
+
+
     GOVFOR may not enter the colony unless:
-    - They are explicitly alerted by the Colony Command
-    - 30 minutes have passed since round start.
-    - If GOVFOR spawn on a ship, they may deploy to their primary LZ and secure an FOB before the thirty minute mark, but must not leave their FOB.
+
+    - They are explicitly alerted by a credible source
+      - Credible sources are: Colony Law Enforcement, Colonial Administration, Ambassadors and Weyland-Yutani (or other corporate faction).
+        - This excludes GOVFOR personnel.
+
+    - 45 minutes have passed since the round started.
+      - In the form of anti-insurgency patrols
+
+    - If GOVFOR spawn on a ship, they may deploy to their primary LZ and secure an FOB before the forty-five-minute mark, but must not leave their FOB.
+
+
 
     GOVFOR may not shoot civilians without reasonable cause such as:
-    - Ignoring one clear warnings to leave while in sight.
-    - Wearing or possessing illegal firearms or equipment.
-    - Being reported to be carrying explosives.
-    - They are using lethal force or you have seen them use lethal force.
 
-    GOVFOR may not raid an insurgent base unless:
-    - They are actively following an insurgent member to it.
-    - They have received credible intelligence about its location.
+    - Ignoring one clear warning to leave while in sight.
+
+    - Wearing or possessing illegal firearms or equipment.
+
+    - Being reported to be carrying explosives.
+
+    - They are using lethal force, or you have seen them use lethal force.
+
+
+
+    GOVFOR must find out in IC where the Insurgent base is located and may not check 'usual' spots as soon as the CLF are to be confirmed within the colony.
+
+    - GOVFOR may search for the CLF hideout when they are confirmed but again may not rush 'usual' spots due to it being metagaming.
+
+
 
     ##Colony Command Rules
 
-    A valid in-character reason is required to request GOVFOR assistance such as:
+
+
+    A valid in-character reason is required to request GOVFOR assistance, such as:
+
     - Insurgents openly carrying illegal weapons.
-    - Law Enforcement or multiple civilians being killed.
-    - Explicit IC death threats.
+
+    - Multiple Law Enforcement and/or civilians being killed.
+
     - An attempt on the life of a colony command member.
+
+    - An attack on Colonial Administration, Public spaces or Law Enforcement in a significant way.
+      - A significant way is defined as a way that either instils terror in the population and involves multiple attackers or uses explosives to instil terror and fear in the population.
+
 </Document>

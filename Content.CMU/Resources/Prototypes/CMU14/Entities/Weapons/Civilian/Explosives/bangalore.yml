@@ -33,7 +33,14 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: CMUBangalore
-    totalIntensity: 230
-    intensitySlope: 5
+    totalIntensity: 1783
+    intensitySlope: 8
     maxIntensity: 20
     canCreateVacuum: false
+  - type: ProjectileGrenade
+    fillPrototype: CMProjectileShrapnel
+    capacity: 20
+  - type: ClusterLimitHits
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container

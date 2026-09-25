@@ -1,0 +1,17 @@
+author: CatoChristopherMrow
+category: CMU
+changes:
+- message: Entirely reworked gunships
+  type: Add
+- message: AEVs now act like bulldozers
+  type: Tweak
+- message: Fixed deployable dropship sentries not updating to the alliance console
+    settings if deployed after the settings were changed
+  type: Fix
+- message: Leadership skill now automatically grants the marine orders button.
+  type: Fix
+- message: disabled the blackfoot in favor of the new gunship system (for now at least.
+    It might come to some specific platoons again.)
+  type: Tweak
+time: '2026-08-31T20:43:49.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1816

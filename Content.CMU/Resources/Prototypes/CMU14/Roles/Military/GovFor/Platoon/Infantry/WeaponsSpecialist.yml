@@ -5,7 +5,7 @@
   name: au14-job-name-govforweaponsspecialist
   description: au14-job-description-govforweaponsspecialist
   icon: "AU14JobIconGovWeaponsSpecialist"
-  spawnMenuRoleName: Weapons Specialist (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-weapons-specialist-govfor 
   startingGear: AU14GearGOVFORWeaponsSpecialist
   dummyStartingGear: AU14GearGOVFORRiflemanDummy
   playTimeTracker: AU14JobGOVFORWeaponsSpecialist

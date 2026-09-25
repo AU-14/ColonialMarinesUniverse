@@ -140,6 +140,8 @@ namespace Content.Shared.GameTicking
     [Serializable, NetSerializable]
     public sealed partial class TickerLobbyInfoEvent : EntityEventArgs
     {
+        public List<Content.Shared.CMU14.Lobby.LobbyLineupEntry> Lineup { get; }
+
         public string TextBlob { get; }
 
         /// <summary>
@@ -147,10 +149,12 @@ namespace Content.Shared.GameTicking
         /// </summary>
         public List<LobbyRoundInfoField> RoundInfo { get; }
 
-        public TickerLobbyInfoEvent(string textBlob, List<LobbyRoundInfoField>? roundInfo = null)
+        public TickerLobbyInfoEvent(string textBlob, List<LobbyRoundInfoField>? roundInfo = null,
+            List<Content.Shared.CMU14.Lobby.LobbyLineupEntry>? lineup = null)
         {
             TextBlob = textBlob;
             RoundInfo = roundInfo ?? new List<LobbyRoundInfoField>();
+            Lineup = lineup ?? new();
         }
     }
 

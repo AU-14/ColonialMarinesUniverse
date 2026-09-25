@@ -246,6 +246,28 @@
     tags:
     - AU14WeaponRifleXM4RA1SOPMOD
 
+- type: entity
+  parent: AU14WeaponRifleXM4RA1SOPMOD
+  id: CMU14WeaponRifleXM4RA1SOPMODFilled
+  suffix: Filled, AP
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        startingItem: CMMagazineRifleM4SPRAP
+        whitelist:
+          tags:
+          - CMMagazineRifleM4SPR
+          - CMMagazineRifleM4SPRAP
+          - CMMagazineRifleM4SPRExt
+          - RMCMagazineRifleM4SPRWP
+          - RMCMagazineRifleM4SPRIncendiary
+          - RMCMagazineRifleM4SPRHEAP
+
 - type: Tag
   id: AU14WeaponRifleXM4RA1
 

@@ -51,6 +51,7 @@ public sealed partial class VehicleLockSystem : EntitySystem
             return;
 
         EnsureVehicleKeyId(ent.Owner);
+        _vehicle.CaptureInteriorFaction(ent); // CMU14
     }
 
     public void EnableLockAction(EntityUid user, EntityUid vehicle)

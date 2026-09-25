@@ -91,6 +91,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         Dirty(uid, mover);
     }
 
+    // CMU14 method: vehicle damage and usability.
     private bool UpdateDynamicDriveMovement(
         EntityUid uid,
         GridVehicleMoverComponent mover,
@@ -140,6 +141,18 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 MathF.Max(0f, angularAcceleration) * frameTime);
         }
 
+        // Help the driver finish a near-cardinal alignment at parking speed.
+        // This uses the same collision checks as manual steering.
+        if (steering == 0f && throttle != 0f && mover.AlignmentAssistDegrees > 0f &&
+            GridVehicleMotionSimulator.CanSteer(mover.TurnInPlace, mover.CurrentSpeed) &&
+            MathF.Abs(mover.CurrentSpeed) <= mover.AlignmentAssistMaxSpeed)
+        {
+            var aligned = rotation.GetCardinalDir().ToAngle();
+            var delta = Angle.ShortestDistance(rotation, aligned).Degrees;
+            if (Math.Abs(delta) <= mover.AlignmentAssistDegrees)
+                mover.AngularVelocityDegrees = (float) Math.Clamp(delta / Math.Max(frameTime, 0.001f), -30f, 30f);
+        }
+
         if (MathF.Abs(mover.AngularVelocityDegrees) > 0.001f)
         {
             var desiredRotation = rotation + Angle.FromDegrees(mover.AngularVelocityDegrees * frameTime);
@@ -158,6 +171,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         var hasThrottle = throttle != 0f;
         var profile = GetDriveProfile(uid, mover);
+        // CMU14: preserve analog throttle from aircraft taxi assistance.
+        var throttleScale = Math.Clamp(MathF.Abs(throttle), 0, 1);
+        profile = profile with { MaxSpeed = profile.MaxSpeed * throttleScale, MaxReverseSpeed = profile.MaxReverseSpeed * throttleScale };
         var throttleDirection = throttle < 0f ? new Vector2i(0, -1) : new Vector2i(0, 1);
         var speedResult = hasThrottle
             ? GridVehicleMotionSimulator.StepDriveSpeed(
@@ -189,7 +205,20 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             forward = -forward;
 
         var target = mover.Position + forward * travel;
-        var moved = TryMoveContinuous(uid, mover, grid, target, rotation, out var blocked);
+        bool blocked;
+        bool moved;
+        var cardinal = rotation.GetCardinalDir();
+        if (steering == 0f && mover.AlignmentAssistDegrees > 0f &&
+            MathF.Abs(mover.CurrentSpeed) <= mover.AlignmentAssistMaxSpeed &&
+            Math.Abs(Angle.ShortestDistance(rotation, cardinal.ToAngle()).Degrees) < 0.1f)
+        {
+            var direction = cardinal.ToIntVec() * (mover.CurrentSpeed < 0f ? -1 : 1);
+            moved = TryMoveWithLaneGuidance(uid, mover, grid, gridComp, direction, rotation, travel, frameTime, out blocked);
+        }
+        else
+        {
+            moved = TryMoveContinuous(uid, mover, grid, target, rotation, out blocked);
+        }
         if (blocked)
             mover.CurrentSpeed = 0f;
 
@@ -1287,19 +1316,19 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             mover.Deceleration);
     }
 
+    // CMU14 method: vehicle damage and usability.
     private float GetModifiedMaxSpeed(EntityUid uid, GridVehicleMoverComponent mover)
     {
         if (_timing.CurTime < mover.ImmobileUntil)
             return 0f;
 
-        var maxSpeed = mover.MaxSpeed * GetSmashSlowdownMultiplier(mover) * GetIntegritySpeedMultiplier(uid, mover);
+        var maxSpeed = mover.MaxSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, false);
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
-        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
-            maxSpeed *= failureMod.SpeedMultiplier;
+
         maxSpeed *= GetBlackfootAirSpeedMultiplier(uid);
         if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
             maxSpeed *= taxiMultiplier.Speed;
@@ -1309,19 +1338,19 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return maxSpeed;
     }
 
+    // CMU14 method: vehicle damage and usability.
     private float GetModifiedMaxReverseSpeed(EntityUid uid, GridVehicleMoverComponent mover)
     {
         if (_timing.CurTime < mover.ImmobileUntil)
             return 0f;
 
-        var maxSpeed = mover.MaxReverseSpeed * GetSmashSlowdownMultiplier(mover) * GetIntegritySpeedMultiplier(uid, mover);
+        var maxSpeed = mover.MaxReverseSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, true);
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
-        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
-            maxSpeed *= failureMod.ReverseSpeedMultiplier;
+
         maxSpeed *= GetBlackfootAirSpeedMultiplier(uid);
         if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
             maxSpeed *= taxiMultiplier.Speed;
@@ -1374,6 +1403,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return false;
     }
 
+    // CMU14 method: vehicle damage and usability.
     private float GetIntegritySpeedMultiplier(EntityUid uid, GridVehicleMoverComponent mover)
     {
         if (mover.SpeedAtZeroIntegrity >= 1f)
@@ -1383,9 +1413,18 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return 1f;
 
         var ratio = Math.Clamp(integrity.Integrity / integrity.MaxIntegrity, 0f, 1f);
-        return mover.SpeedAtZeroIntegrity + (1f - mover.SpeedAtZeroIntegrity) * ratio;
+        return VehicleDamageRules.GetConditionMultiplier(ratio, mover.FullSpeedIntegrityFraction, mover.SpeedAtZeroIntegrity);
     }
 
+    private float GetDamageSpeedMultiplier(EntityUid uid, GridVehicleMoverComponent mover, bool reversing)
+    {
+        var multiplier = GetIntegritySpeedMultiplier(uid, mover);
+        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failure))
+            multiplier *= reversing ? failure.ReverseSpeedMultiplier : failure.SpeedMultiplier;
+        return MathF.Max(mover.MinimumDamageSpeedMultiplier, multiplier);
+    }
+
+    // CMU14 method: vehicle damage and usability.
     private float GetAccelerationModifier(EntityUid uid)
     {
         var multiplier = 1f;
@@ -1393,6 +1432,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             multiplier = MathF.Max(0.05f, accelMod.AccelerationMultiplier);
         if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
             multiplier *= MathF.Max(0.05f, failureMod.AccelerationMultiplier);
+        if (TryComp<GridVehicleMoverComponent>(uid, out var mover))
+            multiplier = MathF.Max(mover.MinimumDamageSpeedMultiplier, multiplier);
         if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
             multiplier *= taxiMultiplier.Acceleration;
 

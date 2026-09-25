@@ -1138,6 +1138,12 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
         var map = _transform.GetMap(user.Owner);
 
+        // Resolve the colony below a multi-deck cabin before checking hijack eligibility.
+        if (map is { } cabinMap && TryGetGridDropship(computer, out var ship) &&
+            TryComp<MultiDeckDropshipComponent>(ship, out var decks) &&
+            _zLevels.TryMapOffset(cabinMap, -decks.LandingOffset, out var groundMap))
+            map = groundMap;
+
         // CMU14: Prevent double hijack. The progress component sits on the deck the first
         // crash landed on, which need not be this hijacker's deck, so scan the ship z-network.
         // No map means no network to scan.

@@ -52,6 +52,7 @@ public sealed partial class CMUZLevelsSystem
     private readonly List<(Vector2 Center, float Distance)> _probeOpeningCandidates = new();
     private readonly List<Entity<MapGridComponent>> _probeOpeningGrids = new();
     private readonly List<Vector2> _stairPreviewPositions = new(CMUZLevelViewerComponent.MaxStairPreviewPositions);
+    private List<Entity<MapGridComponent>> _stairPreviewGrids = new();
     private int _profilePvsSkippedViewers;
     private int _profilePvsWantedDepths;
     private int _profilePvsExistingProbeEyes;
@@ -415,8 +416,9 @@ public sealed partial class CMUZLevelsSystem
             return;
         }
 
-        var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), xform, map.Value, globalPos, _stairPreviewPositions);
-        SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions);
+        var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), xform, map.Value, globalPos,
+            _stairPreviewPositions, out var previewGrid);
+        SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions, previewGrid);
         BuildWantedProbeDepths(map.Value, probeGlobalPos, _wantedProbeDepths, stairPreviewUp);
 
         if (!_viewerProbeEyes.TryGetValue(ent.Owner, out var probes))
@@ -804,13 +806,14 @@ public sealed partial class CMUZLevelsSystem
         TransformComponent viewerXform,
         EntityUid map,
         Vector2 globalPos,
-        List<Vector2> previewPositions)
+        List<Vector2> previewPositions,
+        out EntityUid? previewGrid)
     {
         if (!Prof.IsEnabled)
-            return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions);
+            return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions, out previewGrid);
 
         using var profile = Prof.Group("CMU Z PVS StairPreview");
-        return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions);
+        return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions, out previewGrid);
     }
 
     private bool CanPreviewUpperZFromStairCore(
@@ -818,67 +821,86 @@ public sealed partial class CMUZLevelsSystem
         TransformComponent viewerXform,
         EntityUid map,
         Vector2 globalPos,
-        List<Vector2> previewPositions)
+        List<Vector2> previewPositions,
+        out EntityUid? previewGrid)
     {
         previewPositions.Clear();
+        previewGrid = null;
 
-        if (!TryMapUp(map, out _) ||
-            !_viewGridQuery.TryComp(map, out var grid))
-        {
+        if (!TryMapUp(map, out var upperMap))
             return false;
-        }
 
         var origin = new MapCoordinates(globalPos, viewerXform.MapID);
-        var centerTile = _map.WorldToTile(map, grid, globalPos);
-        var tileRadius = Math.Max(1, (int) MathF.Ceiling(StairPreviewProbeRadius / grid.TileSize));
         var profiling = Prof.IsEnabled;
+        var nearestFullGrid = float.MaxValue;
 
-        for (var x = -tileRadius; x <= tileRadius; x++)
+        // Dropship ramps are anchored to moving grids, even when the viewer is
+        // standing on an overlapping landing pad. Search every nearby grid.
+        _stairPreviewGrids.Clear();
+        _map.FindGridsIntersecting(viewerXform.MapID,
+            Box2.CenteredAround(globalPos, new Vector2(StairPreviewProbeRadius * 2)),
+            ref _stairPreviewGrids, approx: true, includeMap: true);
+        foreach (var (gridUid, grid) in _stairPreviewGrids)
         {
-            for (var y = -tileRadius; y <= tileRadius; y++)
+            var centerTile = _map.WorldToTile(gridUid, grid, globalPos);
+            var tileRadius = Math.Max(1, (int) MathF.Ceiling(StairPreviewProbeRadius / grid.TileSize));
+            for (var x = -tileRadius; x <= tileRadius; x++)
             {
-                if (profiling)
-                    _profilePvsStairTiles++;
-
-                var tile = centerTile + new Vector2i(x, y);
-                var query = _map.GetAnchoredEntitiesEnumerator(map, grid, tile);
-                while (query.MoveNext(out var uid))
+                for (var y = -tileRadius; y <= tileRadius; y++)
                 {
                     if (profiling)
-                        _profilePvsStairAnchored++;
+                        _profilePvsStairTiles++;
 
-                    if (uid is not { } highGroundUid ||
-                        !_viewHighGroundQuery.TryComp(highGroundUid, out var highGround) ||
-                        !highGround.PreviewUpLevel ||
-                        highGround.SupportOnlyFromAbove ||
-                        highGround.PreviewRange <= 0f)
+                    var tile = centerTile + new Vector2i(x, y);
+                    var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+                    while (query.MoveNext(out var uid))
                     {
-                        continue;
-                    }
+                        if (profiling)
+                            _profilePvsStairAnchored++;
 
-                    var target = _transform.GetMapCoordinates(highGroundUid);
-                    var range = Math.Min(highGround.PreviewRange + 0.05f, ExamineSystemShared.MaxRaycastRange);
-                    if (highGround.PreviewRange + 0.05f > ExamineSystemShared.MaxRaycastRange)
-                        Logger.GetSawmill("content").Warning($"CanPreviewUpperZFromStairCore: range ({highGround.PreviewRange + 0.05f}) exceeds max raycast range ({ExamineSystemShared.MaxRaycastRange})!");
+                        if (uid is not { } highGroundUid ||
+                            !_viewHighGroundQuery.TryComp(highGroundUid, out var highGround) ||
+                            !highGround.PreviewUpLevel ||
+                            highGround.SupportOnlyFromAbove ||
+                            highGround.PreviewRange <= 0f)
+                        {
+                            continue;
+                        }
 
-                    if (Vector2.DistanceSquared(origin.Position, target.Position) > range * range)
-                        continue;
+                        var target = _transform.GetMapCoordinates(highGroundUid);
+                        var range = Math.Min(highGround.PreviewRange + 0.05f, ExamineSystemShared.MaxRaycastRange);
+                        if (highGround.PreviewRange + 0.05f > ExamineSystemShared.MaxRaycastRange)
+                            Logger.GetSawmill("content").Warning($"CanPreviewUpperZFromStairCore: range ({highGround.PreviewRange + 0.05f}) exceeds max raycast range ({ExamineSystemShared.MaxRaycastRange})!");
 
-                    if (profiling)
-                    {
-                        _profilePvsStairCandidates++;
-                        _profilePvsStairLosChecks++;
-                    }
+                        if (Vector2.DistanceSquared(origin.Position, target.Position) > highGround.PreviewRange * highGround.PreviewRange)
+                            continue;
 
-                    if (_examine.InRangeUnOccluded(origin, target, range, ent => ent == viewer.Owner || ent == highGroundUid))
-                    {
-                        AddStairPreviewPosition(previewPositions, target.Position);
-                        if (previewPositions.Count >= CMUZLevelViewerComponent.MaxStairPreviewPositions)
-                            return true;
+                        if (profiling)
+                        {
+                            _profilePvsStairCandidates++;
+                            _profilePvsStairLosChecks++;
+                        }
+
+                        if (_examine.InRangeUnOccluded(origin, target, range, ent => ent == viewer.Owner || ent == highGroundUid))
+                        {
+                            if (previewPositions.Count < CMUZLevelViewerComponent.MaxStairPreviewPositions)
+                                AddStairPreviewPosition(previewPositions, target.Position);
+
+                            var distance = Vector2.DistanceSquared(origin.Position, target.Position);
+                            if (highGround.PreviewGrid is { } fullGrid &&
+                                _viewGridQuery.HasComp(fullGrid) &&
+                                Transform(fullGrid).MapUid == upperMap.Value.Owner &&
+                                distance < nearestFullGrid)
+                            {
+                                previewGrid = fullGrid;
+                                nearestFullGrid = distance;
+                            }
+                        }
                     }
                 }
             }
         }
+        _stairPreviewGrids.Clear();
 
         return previewPositions.Count > 0;
     }
@@ -897,24 +919,32 @@ public sealed partial class CMUZLevelsSystem
     private void SetStairPreviewUp(
         Entity<CMUZLevelViewerComponent> viewer,
         bool enabled,
-        IReadOnlyList<Vector2>? previewPositions = null)
+        IReadOnlyList<Vector2>? previewPositions = null,
+        EntityUid? previewGrid = null)
     {
         if (Prof.IsEnabled)
         {
             using var profile = Prof.Group("CMU Z PVS SetStairPreview");
-            SetStairPreviewUpCore(viewer, enabled, previewPositions);
+            SetStairPreviewUpCore(viewer, enabled, previewPositions, previewGrid);
             return;
         }
 
-        SetStairPreviewUpCore(viewer, enabled, previewPositions);
+        SetStairPreviewUpCore(viewer, enabled, previewPositions, previewGrid);
     }
 
     private void SetStairPreviewUpCore(
         Entity<CMUZLevelViewerComponent> viewer,
         bool enabled,
-        IReadOnlyList<Vector2>? previewPositions = null)
+        IReadOnlyList<Vector2>? previewPositions = null,
+        EntityUid? previewGrid = null)
     {
         var changed = false;
+        var fullGrid = enabled ? previewGrid : null;
+        if (viewer.Comp.StairPreviewGrid != fullGrid)
+        {
+            viewer.Comp.StairPreviewGrid = fullGrid;
+            changed = true;
+        }
 
         if (viewer.Comp.StairPreviewUp != enabled)
         {

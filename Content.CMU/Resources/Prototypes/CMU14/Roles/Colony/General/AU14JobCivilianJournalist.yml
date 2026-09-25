@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianJournalist
   displayWeight: 4
   roundSide: Civilian
@@ -31,7 +31,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
-  spawnMenuRoleName: Journalist (CMU)
+  spawnMenuRoleName: cmu-spawn-role-journalist-cmu 
   accessGroups:
   - Colonist
   - aunews

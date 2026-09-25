@@ -168,7 +168,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         eyeComp.Console = ent;
         eyeComp.Footprint = GetFootprint(ent, dropship);
         eyeComp.BlockedTiles.Clear();
-        eyeComp.ClearForLanding = false;
+        eyeComp.ClearForLanding = HasComp<MohawkMechanismsComponent>(gridUid);
         Dirty(eye, eyeComp);
         _zLevels.EnsureZLevelViewer(eye);
 
@@ -429,6 +429,13 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
 
     private void UpdateFootprint(Entity<DropshipPilotEyeComponent> eye, TransformComponent xform)
     {
+        if (eye.Comp.Console is { } mohawkConsole && Transform(mohawkConsole).GridUid is { } mohawk &&
+            HasComp<MohawkMechanismsComponent>(mohawk))
+        {
+            UpdateFootprintState(eye, Array.Empty<Vector2i>());
+            return;
+        }
+
         var allowUnmappedAir = CanHoverOverUnmappedAir(eye.Comp, xform);
         var footprintOffsets = GetRotatedFootprintOffsets(eye.Comp);
         var blocked = eye.Comp.BlockedTilesScratch;
@@ -503,6 +510,11 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
             }
         }
 
+        UpdateFootprintState(eye, blocked);
+    }
+
+    private void UpdateFootprintState(Entity<DropshipPilotEyeComponent> eye, IReadOnlyList<Vector2i> blocked)
+    {
         var clear = blocked.Count == 0;
         if (eye.Comp.ClearForLanding == clear &&
             eye.Comp.BlockedTiles.Count == blocked.Count &&

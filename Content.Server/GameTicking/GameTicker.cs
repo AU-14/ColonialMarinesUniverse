@@ -1,8 +1,8 @@
 using Content.Server._RMC14.Rules;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Server.CMU14.Ops.ForceOnForce; // CMU14
 using Content.Server.CMU14.Round.Objectives;
-using Content.Server.CMU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Database;
@@ -95,6 +95,7 @@ namespace Content.Server.GameTicking
             InitializeStatusShell();
             InitializeCVars();
             InitializePlayer();
+            _prefsManager.SelectedCharacterChanged += OnLineupCharacterChanged;
             InitializeLobbyBackground();
             InitializeGamePreset();
             DebugTools.Assert(ProtoMan.Index(FallbackOverflowJob).Name == FallbackOverflowJobName,
@@ -120,6 +121,7 @@ namespace Content.Server.GameTicking
 
         public override void Shutdown()
         {
+            _prefsManager.SelectedCharacterChanged -= OnLineupCharacterChanged;
             base.Shutdown();
 
             SendServerShutdownDiscordMessage();

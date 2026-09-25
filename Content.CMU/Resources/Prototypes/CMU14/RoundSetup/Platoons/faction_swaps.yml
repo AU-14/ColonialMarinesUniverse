@@ -50,6 +50,10 @@
     RMCGroundsideOperationsConsoleGovfor: RMCGroundsideOperationsConsoleOpfor
     RMCOverwatchConsoleGovforRotating: RMCOverwatchConsoleOpforRotating
     RMCOverwatchConsoleGovfor: RMCOverwatchConsoleOpfor
+    RMCOverwatchConsoleGovforTOCMap: RMCOverwatchConsoleOpforTOCMap
+    RMCOverwatchConsoleGovforTOCMapRotating: RMCOverwatchConsoleOpforTOCMapRotating
+    RMCOverwatchConsoleGovforTOCShuttle: RMCOverwatchConsoleOpforTOCShuttle
+    RMCOverwatchConsoleGovforTOCShuttleRotating: RMCOverwatchConsoleOpforTOCShuttleRotating
     RMCTechTreeConsoleGovfor: RMCTechTreeConsoleOpfor
     AU14AllianceConsoleGovfor: AU14AllianceConsoleOpfor
     AU14AnalyzerMachine: AU14AnalyzerMachineOpfor

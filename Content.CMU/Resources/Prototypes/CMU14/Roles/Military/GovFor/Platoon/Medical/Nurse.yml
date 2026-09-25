@@ -6,7 +6,7 @@
   name: au14-job-name-govfornurse
   description: au14-job-description-govfornurse
   icon: "AU14JobIconCorpsman"
-  spawnMenuRoleName: Nurse (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-nurse-govfor 
   startingGear: AU14GearGOVFORNurse
   dummyStartingGear: AU14GearGOVFORNurseDummy
   playTimeTracker: AU14JobGOVFORNurse

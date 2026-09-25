@@ -1,0 +1,28 @@
+// Procedural aerial cloud material. The opaque unit ellipse matches FighterFlight.CloudBlocks.
+
+highp float cloudHash(highp vec2 p) {
+    return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453);
+}
+highp float cloudNoise(highp vec2 p) {
+    highp vec2 i = floor(p);
+    highp vec2 f = fract(p);
+    f = f*f*(3.0-2.0*f);
+    return mix(mix(cloudHash(i),cloudHash(i+vec2(1.0,0.0)),f.x),
+               mix(cloudHash(i+vec2(0.0,1.0)),cloudHash(i+vec2(1.0,1.0)),f.x),f.y);
+}
+highp float cloudBody(highp vec2 p) {
+    return cloudNoise(p)*0.5+cloudNoise(p*2.07+17.0)*0.27+cloudNoise(p*4.17+31.0)*0.15+cloudNoise(p*8.31)*0.08;
+}
+void fragment() {
+    highp vec2 q = (UV-0.5)*3.6;
+    // Detail remains attached to the world-space cloud, without opposing UV drift.
+    highp vec2 p = q*2.6;
+    highp float broad = cloudBody(p);
+    highp float detail = cloudBody(p*1.9+vec2(broad*1.8));
+    highp float radius = length(q);
+    highp float edge = radius+(detail-0.5)*max(0.0,radius-1.0)*0.9;
+    highp float mask = 1.0-smoothstep(1.0,1.72,edge);
+    highp float light = clamp((broad-cloudBody(p+vec2(-0.35,-0.27)))*2.8+0.57,0.0,1.0);
+    highp vec3 shade = mix(vec3(0.46,0.55,0.59),vec3(0.94,0.96,0.92),light*0.7+detail*0.3);
+    COLOR = vec4(shade,mask);
+}

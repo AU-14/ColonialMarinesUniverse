@@ -6,7 +6,7 @@
   name: cmu-job-name-govfordroneoperator
   description: cmu-job-description-govfordroneoperator
   icon: "AU14JobIconGovRifleman"
-  spawnMenuRoleName: Drone Operator (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-drone-operator-govfor 
   startingGear: CMUGearGOVFORDroneOperator
   dummyStartingGear: CMUGearGOVFORDroneOperatorDummy
   playTimeTracker: CMUJobGOVFORDroneOperator

@@ -5,6 +5,9 @@
   name: table
   description: A square metal surface resting on four legs. Useful to put stuff on.
   components:
+  - type: ResinClearable # CMU14
+  - type: CMUReconFurniture
+    material: Table
   - type: VehicleSmashable
   - type: Corrodible
     timeToApply: 4
@@ -131,6 +134,8 @@
   name: reinforced table
   description: A square metal surface resting on four legs. This one has side panels, making it useful as a desk.
   components:
+  - type: CMUReconFurniture
+    material: Desk
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/Tables/reinforced.rsi
   - type: Icon
@@ -155,6 +160,8 @@
   id: CMTableReinforcedRequisition
   description: A square metal surface resting on its fat metal bottom.
   components:
+  - type: CMUReconFurniture
+    material: Counter
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/Tables/requisition.rsi
   - type: Icon
@@ -194,6 +201,8 @@
   name: wooden table
   description: A square wood surface resting on four legs. Useful to put stuff on.
   components:
+  - type: CMUReconFurniture
+    material: WoodTable
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/Tables/wood.rsi
   - type: Icon
@@ -314,6 +323,8 @@
   description: A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip.
   suffix: Hunter
   components:
+  - type: CMUReconFurniture
+    material: Desk
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/Tables/hunter.rsi
   - type: Icon
@@ -338,6 +349,8 @@
   name: table
   description: A manually placed table variant.
   components:
+  - type: CMUReconFurniture
+    material: Table
   - type: Transform
     anchored: false
   - type: Physics

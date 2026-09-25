@@ -6,7 +6,7 @@
   name: au14-job-name-govforengineeringtech
   description: au14-job-description-govforengineeringtech
   icon: "AU14JobIconGovCT"
-  spawnMenuRoleName: Engineering Technician (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-engineering-technician-govfor 
   startingGear: AU14GearGOVFOREngineeringTech
   dummyStartingGear: AU14GearGOVFOREngineeringTechDummy
   playTimeTracker: AU14JobGOVFOREngineeringTech

@@ -1,0 +1,161 @@
+- type: entity
+  parent: BaseStructure
+  id: CMUFighterGround
+  name: two-seat VTOL fighter
+  description: A strike and reconnaissance fighter. Board the cockpit, taxi into clear air, and take off vertically. The six pylons and internal GAU feed can be serviced on the ground with a power loader.
+  components:
+  - type: Transform
+    anchored: false
+    rot: 180
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/jetfighter.rsi
+    state: folded
+    scale: 0.65, 0.65
+    rotation: 0
+    noRot: false
+    drawdepth: FloorObjects
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: true
+    linearDamping: 8
+  - type: Vehicle
+    movementKind: Grid
+    transferDamage: false
+  - type: GridVehicleMover
+    maxSpeed: 3
+    maxReverseSpeed: 1.5
+    acceleration: 2
+    reverseAcceleration: 1.5
+    deceleration: 6
+    maxRotationSpeedDegrees: 45
+    rotationAccelerationDegrees: 90
+    rotationDecelerationDegrees: 120
+    canSmashWalls: false
+  - type: CMUZPhysics
+    applySpriteElevation: false
+  - type: CMUVehicleZTraversal
+  - type: CMUZLevelViewer
+  - type: RequireProjectileTarget
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fuselage:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.715,-0.325,0.715,2.145"
+        density: 1000
+        layer:
+        - LargeMobLayer
+        mask:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        - BarricadeImpassable
+        - LargeMobLayer
+      cockpit:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.403,-2.015,0.403,-0.325"
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      nose:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.156,-3.38,0.156,-2.015"
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      tail:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.456,2.145,1.456,3.38"
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      foldedWings:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.884,0.13,0.884,1.885"
+        density: 1000
+        layer: [ LargeMobLayer ]
+        mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
+      wings:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-2.704,0.364,2.704,1.651"
+        density: 100
+        hard: false
+        layer: []
+        mask: []
+  - type: Pullable
+  - type: FighterGround
+  - type: FighterIFF
+  - type: VehicleSupplyStorage
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ Destruction ]
+
+- type: entity
+  parent: CMUFighterGround
+  id: CMUFighterGroundLoaded
+  suffix: Fully equipped, mixed missiles
+  components:
+  - type: FighterGround
+    startingMissiles:
+    - RMCDropshipAttachmentAmmoRocketWidowmaker
+    - RMCDropshipAttachmentAmmoRocketKeeper
+    - RMCDropshipAttachmentAmmoRocketHarpoon
+    - RMCDropshipAttachmentAmmoRocketNapalm
+    - RMCDropshipAttachmentAmmoRocketBanshee
+    - RMCDropshipAttachmentAmmoRocketThermobaric
+    startingGauAmmo: RMCDropshipAttachmentAmmoGAU
+
+- type: entity
+  id: CMUFighterVtolWash
+  name: VTOL downwash
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: FighterVtolVisual
+  - type: TimedDespawn
+    lifetime: 11
+
+# Presentation only: the real fighter remains in its route simulation.
+- type: entity
+  id: CMUFighterFlyby
+  name: passing fighter shadow
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: FighterFlyby
+  - type: Sprite
+    sprite: CMU14/Vehicles/Fighter/jetfighter.rsi
+    state: jetfighter
+    scale: 0.65, 0.65
+    rotation: 180
+    noRot: false
+    drawdepth: FloorObjects
+    color: "#00000050"
+
+- type: entity
+  id: CMUFighterAirBurst
+  name: aircraft countermeasure burst
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: FighterAirBurst
+  - type: FighterEffects
+  - type: PointLight
+    color: "#FFD8A0"
+    radius: 5
+    energy: 1
+  - type: TimedDespawn
+    lifetime: 3

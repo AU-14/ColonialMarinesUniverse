@@ -1,0 +1,21 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: The 3D tactical map now shows friendly marine names beside their icons,
+    with an option to hide the names.
+  type: Add
+- message: Overwatch operators can click marine icons on the 3D tactical map to open
+    their helmet cameras.
+  type: Add
+- message: Queens can click living xeno icons on either tactical map to watch members
+    of their hive.
+  type: Add
+- message: Moving the queen eye no longer interrupts resin construction or hive construction
+    orders.
+  type: Fix
+- message: Queen-eye teleporting works from both tactical maps, including while watching
+    another xeno. Click a weeded tile to move the eye; dragging on the 3D map still
+    pans.
+  type: Fix
+time: '2026-09-24T00:07:59.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2006

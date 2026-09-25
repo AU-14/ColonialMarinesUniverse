@@ -27,7 +27,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: cmu-colony-supervisors-colonist
-  spawnMenuRoleName: Colony Xenobiologist (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-xenobiologist-cmu 
   accessGroups:
   - Colonist
   roleWeight: 0.25

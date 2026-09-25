@@ -101,6 +101,7 @@
     replenishInterval: 60
     callableParties:
       RMCRRT: 9000
+      SAS: 7000
       NSPAInvestigationParty: 5000
 
 # Independent Systems Ambassador Console

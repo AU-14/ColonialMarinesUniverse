@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Robust.Client.GameObjects;
+using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Utility;
 using static Robust.Client.GameObjects.SpriteComponent;
 
@@ -61,12 +62,18 @@ public sealed partial class DropshipWeaponPointVisualizerSystem : VisualizerSyst
         _sprite.LayerSetSprite((uid, spriteComp), layer,
             replacement ?? new SpriteSpecifier.Rsi(new ResPath(sprite), state));
 
-        // Complete underside sprites have one frame; the normal mounting variants
-        // select cropped front/wing artwork and must not rotate that frame index.
-        if (overridden)
-            _sprite.LayerSetDirOffset((uid, spriteComp), layer, DirectionOffset.None);
-        else if (Enum.TryParse<DirectionOffset>(component.DirOffset, true, out var dir))
-            _sprite.LayerSetDirOffset((uid, spriteComp), layer, dir);
+        // Direction offsets select the four mounting variants. Single-direction
+        // states (including the M90 and fallback artwork) have no other entries.
+        // Always reset the offset when equipment or its displayed state changes.
+        var dirOffset = DirectionOffset.None;
+        if (!overridden &&
+            _sprite.LayerGetDirections((uid, spriteComp), layer) == RsiDirectionType.Dir4 &&
+            Enum.TryParse<DirectionOffset>(component.DirOffset, true, out var dir))
+        {
+            dirOffset = dir;
+        }
+
+        _sprite.LayerSetDirOffset((uid, spriteComp), layer, dirOffset);
         // CMU14 End
 
         if (AppearanceSystem.TryGetData(uid,

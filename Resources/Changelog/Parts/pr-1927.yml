@@ -1,0 +1,14 @@
+author: ver0098
+category: CMU
+changes:
+- message: CLF Commandos can now be called through the CLF intel console they are
+    CLF aligned and should be fairly balanced
+  type: Add
+- message: 🇬🇧 Chaps, we've got a fresh supply of sniper kits from Sol. These pack
+    a punch and comes with night vision visors for ye helmets happy hunting.
+  type: Add
+- message: 👮 Armory got restocked recently, we got M16 Extended Magazines and Armor
+    Piercing again. Them gun kits got one of each too.
+  type: Add
+time: '2026-09-20T20:43:00.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1927

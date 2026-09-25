@@ -34,6 +34,13 @@ public sealed partial class CMUZPhysicsComponent : Component
     // Visuals
 
     /// <summary>
+    /// Apply elevation through the generic Z renderer. Multipart visuals can
+    /// disable this and compose elevation with their own sprites and click bounds.
+    /// </summary>
+    [DataField]
+    public bool ApplySpriteElevation = true;
+
+    /// <summary>
     /// Used only by the client.
     /// Blocks the rotation of an object if it has <see cref="LocalPosition"/> > 0,
     /// and saves the original NoRot value in SpriteComponent here so that it can be restored in the future.

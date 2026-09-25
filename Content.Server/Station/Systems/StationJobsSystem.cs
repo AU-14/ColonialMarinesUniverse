@@ -224,7 +224,7 @@ public sealed partial class StationJobsSystem : EntitySystem
     /// record. Death never frees slots, so without this each respawn cycle permanently
     /// consumes one slot of the player's old role (a dead commander stays closed forever).
     /// </summary>
-    public void RefundPlayerJobs(NetUserId userId) // CMU14 Method // CMU14 Method // CMU14 Method // CMU14 Method
+    public void RefundPlayerJobs(NetUserId userId) // CMU14 Method
     {
         var query = EntityQueryEnumerator<StationJobsComponent>();
         while (query.MoveNext(out var station, out var stationJobs))

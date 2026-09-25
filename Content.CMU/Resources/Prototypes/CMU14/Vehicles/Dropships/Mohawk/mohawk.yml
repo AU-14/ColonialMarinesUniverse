@@ -49,6 +49,8 @@
   - type: RadioSpeaker
     channels: [MarineCommon]
     enabled: true
+  - type: ActiveRadio
+    channels: [MarineCommon]
   - type: Sprite
     drawdepth: WallMountedItems
 
@@ -123,6 +125,11 @@
   parent: CMUMohawkInternalModule
   id: CMUMohawkInternalModuleStarboard
   name: starboard internal utility module mount
+
+- type: entity
+  parent: CMUMohawkInternalModule
+  id: CMUMohawkInternalModuleAft
+  name: aft internal utility module mount
 
 - type: entity
   abstract: true
@@ -454,6 +461,7 @@
   components:
   - type: DropshipWeaponPoint
     dirOffset: None
+    fixedWeapon: true
   - type: Sprite
     layers:
     - state: equip_base_front

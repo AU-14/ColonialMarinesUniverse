@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Administration;
+using Content.Server.CMU14.Round; // CMU14
 using Content.Server.GameTicking.Presets;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
@@ -36,6 +37,7 @@ namespace Content.Server.GameTicking.Commands
                 return;
             }
 
+            EntityManager.System<AuRoundSystem>().StopVoteSequence(); // CMU14
             _ticker.SetGamePreset(type, true);
             shell.WriteLine(Loc.GetString($"cmd-forcepreset-success", ("preset", name)));
             _ticker.UpdateInfoText();

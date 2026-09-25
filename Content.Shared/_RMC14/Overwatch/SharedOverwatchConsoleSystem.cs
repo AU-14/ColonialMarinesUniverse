@@ -439,46 +439,64 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         if (args.Target == default || !TryGetEntity(args.Target, out var target))
             return;
 
-        Entity<OverwatchCameraComponent?> camera;
-        if (TryGetAccessibleMemberSquad(ent.Comp, target.Value, out _) &&
-            _inventory.TryGetInventoryEntity<OverwatchCameraComponent>(target.Value, out var marineCamera))
+        ToggleWatchFromConsole(ent, args.Actor, target.Value);
+    }
+
+    // CMU14: Tactical map shortcuts share the console's faction and equipment checks.
+    public bool TryGetWatchCamera(OverwatchConsoleComponent console, EntityUid target, out Entity<OverwatchCameraComponent?> camera)
+    {
+        if (TryGetAccessibleMemberSquad(console, target, out _) &&
+            _inventory.TryGetInventoryEntity<OverwatchCameraComponent>(target, out var marineCamera))
         {
             camera = marineCamera;
+            return true;
         }
-        else if (TryComp(target, out RMCOverwatchTripodCameraComponent? tripod) &&
+        if (TryComp(target, out RMCOverwatchTripodCameraComponent? tripod) &&
                  tripod.Deployed &&
                  tripod.Squad is { } tripodSquad &&
                  TryComp(tripodSquad, out SquadTeamComponent? tripodTeam) &&
-                 CanAccessSquad(ent.Comp, tripodTeam) &&
+                 CanAccessSquad(console, tripodTeam) &&
                  TryComp(target, out OverwatchCameraComponent? tripodCamera))
         {
-            camera = (target.Value, tripodCamera);
+            camera = (target, tripodCamera);
+            return true;
         }
-        else
-        {
-            return;
-        }
+        camera = default;
+        return false;
+    }
 
-        if (HasComp<ScopingComponent>(args.Actor))
+    public void ToggleWatchFromConsole(Entity<OverwatchConsoleComponent> console, EntityUid actor, EntityUid target)
+    {
+        if (!TryGetWatchCamera(console.Comp, target, out var camera))
+            return;
+
+        if (HasComp<ScopingComponent>(actor))
         {
             if (_net.IsServer)
             {
-                _popup.PopupCursor("You're too busy peering through optics.", args.Actor, PopupType.MediumCaution);
+                _popup.PopupCursor("You're too busy peering through optics.", actor, PopupType.MediumCaution);
             }
             return;
         }
 
         if (_net.IsServer &&
-            TryComp(args.Actor, out OverwatchWatchingComponent? watching) &&
+            TryComp(actor, out OverwatchWatchingComponent? watching) &&
             watching.Watching == camera.Owner &&
-            TryComp(args.Actor, out ActorComponent? actor) &&
-            TryComp(args.Actor, out EyeComponent? eye))
+            TryComp(actor, out ActorComponent? player) &&
+            TryComp(actor, out EyeComponent? eye))
         {
-            Unwatch((args.Actor, eye), actor.PlayerSession);
+            Unwatch((actor, eye), player.PlayerSession);
             return;
         }
 
-        Watch(args.Actor, camera);
+        Watch(actor, camera);
+    }
+
+    public void StopWatchingCamera(EntityUid actor, EntityUid camera)
+    {
+        if (TryComp(actor, out OverwatchWatchingComponent? watching) && watching.Watching == camera &&
+            TryComp(actor, out ActorComponent? player))
+            Unwatch(actor, player.PlayerSession);
     }
 
     private void OnOverwatchHideBui(Entity<OverwatchConsoleComponent> ent, ref OverwatchConsoleHideBuiMsg args)

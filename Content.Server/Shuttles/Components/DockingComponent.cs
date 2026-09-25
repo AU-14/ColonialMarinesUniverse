@@ -7,6 +7,10 @@ namespace Content.Server.Shuttles.Components;
 [RegisterComponent]
 public sealed partial class DockingComponent : SharedDockingComponent
 {
+    /// <summary>Automatically operate the bolts during departure and arrival.</summary>
+    [DataField]
+    public bool BoltOnFTL = true;
+
     [DataField]
     public EntityUid? DockedWith;
 

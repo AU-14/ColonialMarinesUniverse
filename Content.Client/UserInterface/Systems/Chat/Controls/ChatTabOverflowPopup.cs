@@ -53,7 +53,7 @@ public sealed class ChatTabOverflowPopup : Popup
             var active = string.Equals(tab.Id, activeTabId, StringComparison.OrdinalIgnoreCase);
             var button = new Button
             {
-                Text = tab.Title,
+                Text = ChatUserSettings.GetDisplayTitle(tab), // CMU14 hardcode Localization 
                 ToggleMode = true,
                 Pressed = active,
                 HorizontalExpand = true,

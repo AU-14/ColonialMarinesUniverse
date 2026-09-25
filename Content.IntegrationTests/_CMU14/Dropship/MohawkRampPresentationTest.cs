@@ -8,6 +8,7 @@ using Robust.Client.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -27,6 +28,7 @@ public sealed class MohawkRampPresentationTest
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
         EntityUid ship = default;
         var parts = new Dictionary<Vector2, NetEntity>();
+        var cabinTiles = new Dictionary<Vector2i, Tile>();
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
@@ -34,6 +36,14 @@ public sealed class MohawkRampPresentationTest
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
                 new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
+            var maps = entities.System<SharedMapSystem>();
+            var cabin = entities.GetComponent<MapGridComponent>(ship);
+            for (var y = -6; y <= -3; y++)
+            for (var x = -1; x <= 1; x++)
+            {
+                var indices = new Vector2i(x, y);
+                cabinTiles.Add(indices, maps.GetTileRef(ship, cabin, indices).Tile);
+            }
             foreach (var part in entities.EntityQuery<MohawkRampSegmentComponent>().Where(p => p.Lower))
                 parts.Add(entities.GetComponent<TransformComponent>(part.Owner).LocalPosition, entities.GetNetEntity(part.Owner));
             Assert.That(parts, Has.Count.EqualTo(12));
@@ -47,6 +57,15 @@ public sealed class MohawkRampPresentationTest
             await pair.Server.WaitAssertion(() =>
             {
                 var entities = pair.Server.EntMan;
+                var maps = entities.System<SharedMapSystem>();
+                var cabin = entities.GetComponent<MapGridComponent>(ship);
+                foreach (var (indices, original) in cabinTiles)
+                {
+                    var keepThreshold = variant.StartsWith("midway") && indices.Y == -3;
+                    Assert.That(maps.GetTileRef(ship, cabin, indices).Tile,
+                        Is.EqualTo(deployed && !keepThreshold ? Tile.Empty : original),
+                        "Midway keeps its three cabin-end ramp tiles while the remaining floor lowers.");
+                }
                 var stairs = (CMUZLevelHighGroundComponent) pair.Server.ResolveDependency<IPrototypeManager>()
                     .Index<EntityPrototype>("CMUMultiZStairs").Components["CMUZLevelHighGround"].Component;
                 foreach (var (position, net) in parts)

@@ -4,7 +4,7 @@
 # civilian spawn behavior (the CLF spawn system routes any "CLF" job through the guerilla/safehouse path).
 
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCLFSapper
   roundSide: ThirdParty
   roundForce: CLF

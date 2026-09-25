@@ -5,7 +5,7 @@
   name: au14-job-name-govforauxsupportsynth
   description: au14-job-description-govforauxsupportsynth
   icon: "AU14JobIconGovSynth"
-  spawnMenuRoleName: Support Synth (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-support-synth-govfor 
   startingGear: AU14GearGOVFORAuxSupportSynth
   dummyStartingGear: AU14GearGOVFORAuxSupportSynthDummy
   supervisors: au14-job-supervisors-govforplatco

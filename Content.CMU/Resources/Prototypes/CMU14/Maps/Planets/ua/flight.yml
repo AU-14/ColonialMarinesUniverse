@@ -41,7 +41,7 @@
     - USArmyAlt
     - USArmyAlt2
    # - cultistThirdParty
-    - abominationThirdParty
+    - biomorphThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy

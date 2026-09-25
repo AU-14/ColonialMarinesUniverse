@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: HAZOPSCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad ]
   components:
   - type: RequisitionsComputer
     categories:

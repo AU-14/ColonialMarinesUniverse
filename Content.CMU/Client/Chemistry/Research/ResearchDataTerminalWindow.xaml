@@ -25,6 +25,8 @@
                     <RichTextLabel Name="Clearance" Access="Public" Text="[color=#ffbf00][head=2]Clearance Level 1[/head][/color]"
                                    Margin="10,10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <uiControls:VSpacer HorizontalAlignment="Center" HorizontalExpand="True"></uiControls:VSpacer>
+                    <Button Name="ReduceCooldown" Access="Public" Margin="1,10"
+                            Text="{Loc cmu-research-reduce-cooldown}" Disabled="True"/>
                     <Button Name ="Reprint" Access="Public" Margin="1,10" HorizontalAlignment="Right" VerticalAlignment="Center"
                             Disabled="False">
                         <Button.StyleBoxOverride>

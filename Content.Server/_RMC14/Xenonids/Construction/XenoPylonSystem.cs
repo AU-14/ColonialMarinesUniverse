@@ -56,13 +56,19 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
 
     private void OnHiveCoreDestruction(Entity<HiveCoreComponent> ent, ref DestructionEventArgs args)
     {
-        if (_hive.GetHive(ent.Owner) is {} hive &&
-            _gameTicker.RoundDuration() > hive.Comp.PreSetupCutoff)
+        if (_hive.GetHive(ent.Owner) is not { } hive)
+            return;
+
+        // CMU14: setup replacements are free, including when a previous cooldown was saved.
+        if (_gameTicker.RoundDuration() < hive.Comp.PreSetupCutoff)
         {
-            hive.Comp.NewCoreAt = _timing.CurTime + hive.Comp.NewCoreCooldown;
-            hive.Comp.AnnouncedHiveCoreCooldownOver = false;
+            _hive.ResetHiveCoreCooldown(hive);
+            return;
         }
 
+        hive.Comp.NewCoreAt = _timing.CurTime + hive.Comp.NewCoreCooldown;
+        hive.Comp.AnnouncedHiveCoreCooldownOver = false;
+        Dirty(hive);
     }
 
     private void OnXenoSpawnerUsed(Entity<XenoComponent> xeno, ref GhostRoleSpawnerUsedEvent args)

@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Server._RMC14.Announce;
 using Content.Server._RMC14.Marines;
 using Content.Server._RMC14.Rules;
+using Content.Server._RMC14.Xenonids.Watch;
 using Content.Server.Administration.Logs;
 using Content.Server.GameTicking.Events;
 using Content.Shared._RMC14.Announce;
@@ -72,7 +73,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private SharedXenoWeedsSystem _weeds = default!;
+    [Dependency] private QueenEyeSystem _queenEye = default!;
     [Dependency] private SharedXenoHiveSystem _xenoHive = default!;
     [Dependency] private XenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivableSystem = default!;
@@ -177,6 +178,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 subs.Event<BoundUIClosedEvent>(OnUserBUIClosed);
                 subs.Event<TacticalMapUpdateCanvasMsg>(OnUserUpdateCanvasMsg);
                 subs.Event<TacticalMapQueenEyeMoveMsg>(OnUserQueenEyeMoveMsg);
+                subs.Event<TacticalMapQueenWatchMsg>(OnUserQueenWatchMsg);
             });
 
         Subs.BuiEvents<TacticalMapComputerComponent>(TacticalMapComputerUi.Key,
@@ -511,7 +513,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             !_transformQuery.TryComp(vehicle.Owner, out var xform) ||
             xform.GridUid is not { } gridId ||
             !_mapGridQuery.TryComp(gridId, out var gridComp) ||
-            !_tacticalMapQuery.TryComp(gridId, out var tacticalMap) ||
+            !TryGetTrackingMap(gridId, out var trackingMap) || // CMU14: keep contacts across linked floors.
             !_transform.TryGetGridTilePosition((vehicle.Owner, xform), out var indices, gridComp))
         {
             var maps = EntityQueryEnumerator<TacticalMapComponent>();
@@ -523,10 +525,11 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             return;
         }
 
-        if (_activeTacticalMapTrackedQuery.TryComp(vehicle.Owner, out var active) && active.Map != gridId)
+        var tacticalMap = trackingMap.Comp;
+        if (_activeTacticalMapTrackedQuery.TryComp(vehicle.Owner, out var active) && active.Map != trackingMap.Owner)
         {
             BreakTracking((vehicle.Owner, active));
-            active.Map = gridId;
+            active.Map = trackingMap.Owner;
         }
 
         var status = hasOccupants && totalLive == 0 ? TacticalMapBlipStatus.Defibabble : TacticalMapBlipStatus.Alive;
@@ -675,11 +678,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
     private void OnUserBUIClosed(Entity<TacticalMapUserComponent> ent, ref BoundUIClosedEvent args)
     {
+        EntityManager.System<Content.Server.CMU14.TacticalMap.Reconstruction.CMUTacticalReconstructionSystem>().CloseSurvey(ent.Owner, args.Actor); // CMU14
         RemCompDeferred<ActiveTacticalMapUserComponent>(ent);
     }
 
     private void OnUserUpdateCanvasMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapUpdateCanvasMsg args)
     {
+        if (!ValidReconstructionCanvas(args)) return; // CMU14: validate the shared drawing payload.
         var user = args.Actor;
         if (!ent.Comp.CanDraw)
             return;
@@ -718,6 +723,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
     private void OnComputerUpdateCanvasMsg(Entity<TacticalMapComputerComponent> ent, ref TacticalMapUpdateCanvasMsg args)
     {
+        if (!ValidReconstructionCanvas(args)) return; // CMU14: validate the shared drawing payload.
         var user = args.Actor;
         if (!_skills.HasSkill(user, ent.Comp.Skill, ent.Comp.SkillLevel))
             return;
@@ -1024,43 +1030,22 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         Delete
     }
 
-    private void OnUserQueenEyeMoveMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapQueenEyeMoveMsg args)
+    private void OnUserQueenWatchMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapQueenWatchMsg args)
     {
-        var user = args.Actor;
-        HandleQueenEyeMove(user, args.Position);
+        if (args.Actor != ent.Owner || !_ui.IsUiOpen(ent.Owner, TacticalMapUserUi.Key, args.Actor) ||
+            !ent.Comp.Xenos || !ent.Comp.XenoBlips.TryGetValue(args.TargetId, out var blip) ||
+            blip.Image?.RsiState == "enemy_blip")
+            return;
+        EntityManager.System<XenoWatchSystem>().WatchFromTacticalMap(args.Actor, new EntityUid(args.TargetId));
     }
 
-    private void HandleQueenEyeMove(EntityUid user, Vector2i position)
+    private void OnUserQueenEyeMoveMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapQueenEyeMoveMsg args)
     {
-        if (!TryComp<QueenEyeActionComponent>(user, out var queenEyeComp) ||
-            queenEyeComp.Eye == null)
+        // CMU14: use the grid displayed to this queen, not an arbitrary tactical map.
+        if (args.Actor != ent.Owner || !_ui.IsUiOpen(ent.Owner, TacticalMapUserUi.Key, args.Actor) ||
+            ent.Comp.Map is not { } map || !TryComp(map, out MapGridComponent? grid))
             return;
-
-        var eye = queenEyeComp.Eye.Value;
-
-        if (!TryGetTacticalMap(out var map) ||
-            !TryComp<MapGridComponent>(map.Owner, out var grid))
-            return;
-
-        var queenTransform = Transform(user);
-        var eyeTransform = Transform(eye);
-        var mapTransform = Transform(map.Owner);
-
-        if (queenTransform.MapID != mapTransform.MapID)
-            return;
-
-        var tileCoords = new Vector2(position.X, position.Y);
-        var targetCoords = new EntityCoordinates(map.Owner, tileCoords * grid.TileSize);
-
-        if (!_weeds.IsOnWeeds((map.Owner, grid), targetCoords))
-        {
-            _popup.PopupCursor(Loc.GetString("rmc-xeno-queen-eye-no-weeds"), user, PopupType.MediumCaution);
-            return;
-        }
-
-        var worldPos = _transform.ToMapCoordinates(targetCoords);
-
-        _transform.SetWorldPosition(eye, worldPos.Position);
+        _queenEye.TryTeleport(args.Actor, EntityManager.System<SharedMapSystem>().GridTileToLocal(map, grid, args.Position));
     }
 
     public new void OpenComputerMap(Entity<TacticalMapComputerComponent?> computer, EntityUid user)
@@ -1456,7 +1441,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         if (!_transformQuery.TryComp(ent.Owner, out var xform) ||
             xform.GridUid is not { } gridId ||
             !_mapGridQuery.TryComp(gridId, out var gridComp) ||
-            !_tacticalMapQuery.TryComp(gridId, out var tacticalMap) ||
+            !TryGetTrackingMap(gridId, out var trackingMap) || // CMU14: keep contacts across linked floors.
             !_transform.TryGetGridTilePosition((ent.Owner, xform), out var indices, gridComp))
         {
             BreakTracking(ent);
@@ -1472,10 +1457,11 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             return;
         }
 
-        if (ent.Comp.Map != xform.GridUid)
+        var tacticalMap = trackingMap.Comp;
+        if (ent.Comp.Map != trackingMap.Owner)
         {
             BreakTracking(ent);
-            ent.Comp.Map = xform.GridUid;
+            ent.Comp.Map = trackingMap.Owner;
         }
 
         var status = TacticalMapBlipStatus.Alive;
@@ -1896,11 +1882,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         return null;
     }
 
-    private void UpdateCanvas(List<TacticalMapLine> lines, Dictionary<Vector2i, string> labels, bool marine, bool xeno, bool opfor, bool govfor, bool clf, EntityUid user, SoundSpecifier? sound = null)
+    private void UpdateCanvas(List<TacticalMapLine> lines, Dictionary<Vector2i, string> labels, bool marine, bool xeno, bool opfor, bool govfor, bool clf, EntityUid user, SoundSpecifier? sound = null,
+        EntityUid? onlyMap = null, bool announce = true, bool weyu = false) // CMU14: shared 3D publication.
     {
         var maps = EntityQueryEnumerator<TacticalMapComponent>();
         while (maps.MoveNext(out var mapId, out var map))
         {
+            if (onlyMap != null && mapId != onlyMap) continue; // CMU14
             map.MapDirty = true;
 
             // Collect infra IDs (comms, sensors, tunnels) so they will not be converted to enemy_blip
@@ -1985,7 +1973,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 if (TeamHasActiveSensors("MARINES"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateMarineBlips, "MARINES");
 
-                AnnounceHumanTacticalMapUpdated(user, sound, "MARINES");
+                if (announce) AnnounceHumanTacticalMapUpdated(user, sound, "MARINES");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the marine tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -1995,7 +1983,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 map.XenoLabels = new Dictionary<Vector2i, string>(labels);
                 map.LastUpdateXenoBlips = map.XenoBlips.ToDictionary();
                 map.LastUpdateXenoStructureBlips = map.XenoStructureBlips.ToDictionary();
-                _xenoAnnounce.AnnounceSameHive(user, "There's a shift in the hivemind's tactical picture. The mental map sharpens.", sound);
+                if (announce) _xenoAnnounce.AnnounceSameHive(user, "There's a shift in the hivemind's tactical picture. The mental map sharpens.", sound);
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the xenonid tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -2021,7 +2009,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 // Convert others to enemy blips for opfor updates
                 if (TeamHasActiveSensors("OPFOR"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateOpforBlips, "OPFOR");
-                AnnounceHumanTacticalMapUpdated(user, sound, "OPFOR");
+                if (announce) AnnounceHumanTacticalMapUpdated(user, sound, "OPFOR");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the opfor tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -2045,7 +2033,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 }
                 if (TeamHasActiveSensors("GOVFOR"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateGovforBlips, "GOVFOR");
-                AnnounceHumanTacticalMapUpdated(user, sound, "GOVFOR");
+                if (announce) AnnounceHumanTacticalMapUpdated(user, sound, "GOVFOR");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the govfor tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -2069,10 +2057,19 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 }
                 if (TeamHasActiveSensors("CLF"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateClfBlips, "CLF");
-                AnnounceHumanTacticalMapUpdated(user, sound, "CLF");
+                if (announce) AnnounceHumanTacticalMapUpdated(user, sound, "CLF");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the clf tactical map for {ToPrettyString(mapId)}");
             }
 
+            // CMU14: WeYu uses the same faction-isolated publication contract.
+            if (weyu)
+            {
+                map.WeYuLines = lines;
+                map.WeYuLabels = new Dictionary<Vector2i, string>(labels);
+                map.LastUpdateWeYuBlips = map.WeYuBlips.ToDictionary();
+                if (announce) AnnounceHumanTacticalMapUpdated(user, sound, WeYuFaction);
+                _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the WeYu tactical map for {ToPrettyString(mapId)}");
+            }
             RaiseLocalEvent(ref ev);
             // Immediately update open tactical computers on this map so canvases reflect the enemy_blip changes
             var computers = EntityQueryEnumerator<TacticalMapComputerComponent>();

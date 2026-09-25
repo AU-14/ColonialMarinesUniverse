@@ -59,6 +59,16 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         out bool pushing)
     {
         pushing = false;
+        // CMU14: fighter seats and docking assists provide vehicle controls.
+        var controls = new VehicleDriveInputEvent();
+        RaiseLocalEvent(uid, ref controls);
+        if (controls.Handled)
+        {
+            _activeXenoPushers.Remove(uid);
+            return new VehicleControlInput(Vector2i.Zero,
+                Math.Clamp(controls.Throttle, -1f, 1f), Math.Clamp(controls.Steering, -1f, 1f));
+        }
+
         if (vehicle.Operator is { } op && TryComp<InputMoverComponent>(op, out var inputComp))
         {
             _activeXenoPushers.Remove(uid);

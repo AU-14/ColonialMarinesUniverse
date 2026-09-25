@@ -54,6 +54,18 @@ public sealed partial class PlatoonPrototype : IPrototype
     public string Reqlist { get; private set; } = string.Empty;
 
     [DataField]
+    public HashSet<EntProtoId> VehicleSupplyCatalog = new();
+
+    [DataField]
+    public int MaxSuppliedVehicles = 2;
+
+    [DataField]
+    public int MaxSuppliedTanks = 1;
+
+    [DataField]
+    public int MaxSuppliedVtols = 1;
+
+    [DataField]
     public ProtoId<PlatoonVendorSetPrototype>? VendorSet { get; private set; }
 
     [DataField]

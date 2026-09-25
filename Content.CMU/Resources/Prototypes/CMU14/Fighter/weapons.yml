@@ -1,0 +1,38 @@
+- type: entity
+  parent: BaseStructure
+  id: CMUFighterHardpoint
+  name: fighter weapon pylon
+  description: A direct missile mount, or a mount for a LAU-229 rocket pod. Use a power loader to fit ordnance between passes.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/dropship_attachments.rsi
+    state: rocket_pod_installed
+    scale: 0.6, 0.6
+  - type: FighterHardpoint
+  - type: Tag
+    tags:
+    - RMCDropshipWeaponPoint
+  - type: ContainerContainer
+    containers:
+      fighter-equipment: !type:ContainerSlot
+      fighter-ammo: !type:ContainerSlot
+
+- type: entity
+  parent: CMUFighterHardpoint
+  id: CMUFighterGauFeed
+  name: internal GAU ammunition feed
+  description: The fighter's fixed GAU-21 cannon. Accepts PGU-100 and PGU-105 ammunition crates; only the pilot can fire it.
+  components:
+  - type: Sprite
+    state: 30mm_cannon_installed
+  - type: FighterHardpoint
+    internal: true
+
+- type: entity
+  parent: RMCFlareCAS
+  id: CMUFighterTrialFlare
+  suffix: Fighter trial, 30 minutes
+  categories: [ DoNotMap, HideSpawnMenu ]
+  components:
+  - type: ExpendableLight
+    glowDuration: 1800

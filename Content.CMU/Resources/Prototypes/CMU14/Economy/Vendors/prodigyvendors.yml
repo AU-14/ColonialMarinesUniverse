@@ -1161,6 +1161,8 @@
         amount: 4
       - id: AU14SynthResetKeyProdigy
         amount: 2
+      - id: MineDetector
+        amount: 2
     - name: RTO Packs
       entries:
       - id: AU14BackpackRTOPackGray

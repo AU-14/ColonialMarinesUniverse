@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Content.Client._CMU14.Interface;
 using Content.Client._RMC14.Chat;
@@ -260,13 +260,19 @@ public partial class ChatBox : UIWidget
 
         msg.Read = true;
 
-        UpdateInactiveTabUnreads(msg);
+        // CMU14 TabUnread Begin: tab gains unread when no open page displayed the message
+        var shownInActive = IsMessageVisibleInActiveTab(msg);
+        var shownInSecondary = IsMessageVisibleInSecondaryTab(msg);
 
-        if (IsMessageVisibleInActiveTab(msg))
+        if (shownInActive)
             AddLine(msg, Contents, _primaryRepeatQueue);
 
-        if (IsMessageVisibleInSecondaryTab(msg))
+        if (shownInSecondary)
             AddLine(msg, SecondaryContents, _secondaryRepeatQueue);
+
+        if (!shownInActive && !shownInSecondary)
+            UpdateInactiveTabUnreads(msg);
+        // CMU14 End
     }
 
     private void OnHighlightsUpdated(string highlights)
@@ -380,7 +386,7 @@ public partial class ChatBox : UIWidget
             {
                 ToggleMode = true,
                 Mode = BaseButton.ActionMode.Release,
-                MinWidth = Math.Max(58, tab.Title.Length * 9),
+                MinWidth = Math.Max(58, ChatUserSettings.GetDisplayTitle(tab).Length * 9), // CMU14 hardcode Localization
                 StyleClasses = { StyleNano.StyleClassChatChannelSelectorButton },
                 CanDrag = !isAll
             };
@@ -416,7 +422,12 @@ public partial class ChatBox : UIWidget
             tabId = _tabButtons.Keys.FirstOrDefault() ?? ChatUserSettings.AllTabId;
 
         _activeTabId = tabId;
-        _tabUnread[tabId] = 0;
+        // CMU14 TabUnread Begin: All tab renders every msg read
+        if (IsAllTab(GetActiveTab()))
+            _tabUnread.Clear();
+        else
+            _tabUnread[tabId] = 0;
+        // CMU14 End
         UpdateTabButtons();
         SyncFilterPopup();
 
@@ -785,7 +796,11 @@ public partial class ChatBox : UIWidget
 
     private string GetTabTitle(string tabId)
     {
-        return _tabs.FirstOrDefault(tab => tab.Id == tabId)?.Title ?? "TAB";
+        // CMU hardcode Localization Begin: fix hardcode localization for forks
+        return _tabs.FirstOrDefault(tab => tab.Id == tabId) is { } found
+            ? ChatUserSettings.GetDisplayTitle(found)
+            : "TAB";
+        // CMU hardcode Localization End
     }
 
     private void SyncFilterPopup()

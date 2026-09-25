@@ -1,4 +1,5 @@
 using Robust.Shared.Serialization;
+using System.Numerics; // CMU14
 
 namespace Content.Shared._RMC14.TacticalMap;
 
@@ -19,6 +20,13 @@ public sealed class TacticalMapUpdateCanvasMsg(List<TacticalMapLine> lines, Dict
 public sealed class TacticalMapQueenEyeMoveMsg(Vector2i position) : BoundUserInterfaceMessage
 {
     public readonly Vector2i Position = position;
+}
+
+// CMU14: this is the ID in the authorized blip dictionary, not a client entity ID.
+[Serializable, NetSerializable]
+public sealed class TacticalMapQueenWatchMsg(int targetId) : BoundUserInterfaceMessage
+{
+    public readonly int TargetId = targetId;
 }
 
 [Serializable, NetSerializable]
@@ -50,4 +58,6 @@ public sealed class TacticalMapMoveLabelMsg(Vector2i oldPosition, Vector2i newPo
 
 [DataRecord]
 [Serializable, NetSerializable]
-public readonly partial record struct TacticalMapLine(Vector2i Start, Vector2i End, Color Color, float Thickness = 2.0f);
+// CMU14: preserve continuous drawing coordinates and floor across both renderers.
+public readonly partial record struct TacticalMapLine(Vector2i Start, Vector2i End, Color Color, float Thickness = 2.0f,
+    Vector2[]? WorldPoints = null, int Depth = 0);

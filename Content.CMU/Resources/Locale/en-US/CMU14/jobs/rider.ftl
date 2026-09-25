@@ -29,6 +29,8 @@ rider-host-latched-wrap = *"Something is inside you. It whispers. Doctors could 
 
 rider-no-host = You have no host.
 rider-grip-low = Your grip is too weak for that.
+rider-grip-name = Grip
+rider-grip-desc = How tightly the grip. Abilities spend, resistance drains.
 
 rider-whisper-wrap = Something whispers: { $text }
 rider-whisper-echo = You whisper to your host: { $text }

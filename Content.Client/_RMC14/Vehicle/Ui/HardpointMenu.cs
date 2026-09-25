@@ -26,6 +26,7 @@ namespace Content.Client._RMC14.Vehicle.Ui;
 public sealed partial class HardpointMenu : FancyWindow
 {
     public event Action<string>? OnRemove;
+    public event Action<string?>? OnRepair;
     private readonly IEntityManager _entManager = IoCManager.Resolve<IEntityManager>();
     public EntityUid? VehicleEntity;
     private bool _vehicleIconSet;
@@ -68,6 +69,7 @@ public sealed partial class HardpointMenu : FancyWindow
     public HardpointMenu()
     {
         RobustXamlLoader.Load(this);
+        RepairFrameButton.OnPressed += _ => OnRepair?.Invoke(null);
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -107,6 +109,7 @@ public sealed partial class HardpointMenu : FancyWindow
         _vehicleIconSet = true;
     }
 
+    // CMU14 method: vehicle damage and usability.
     public void Update(
         IReadOnlyList<HardpointUiEntry> hardpoints,
         float frameIntegrity,
@@ -163,14 +166,6 @@ public sealed partial class HardpointMenu : FancyWindow
                         ? Color.FromHex("#2D5E8E")
                         : Color.FromHex("#314155"),
                 BorderThickness = new Thickness(1.5f)
-            };
-            panel.OnKeyBindDown += args =>
-            {
-                if (args.Function != EngineKeyFunctions.UIClick || !canRemove)
-                    return;
-
-                OnRemove?.Invoke(slotId);
-                args.Handle();
             };
 
             var root = new BoxContainer
@@ -301,6 +296,24 @@ public sealed partial class HardpointMenu : FancyWindow
 
                 rightColumn.AddChild(barRow);
             }
+
+            var actions = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 4 };
+            var repair = new Button
+            {
+                Text = Loc.GetString("rmc-hardpoint-ui-repair"),
+                ToolTip = Loc.GetString("rmc-hardpoint-ui-repair-tooltip"),
+                Disabled = !hardpoint.HasItem || isRemoving,
+            };
+            repair.OnPressed += _ => OnRepair?.Invoke(slotId);
+            var remove = new Button
+            {
+                Text = Loc.GetString("rmc-hardpoint-ui-remove"),
+                Disabled = !canRemove,
+            };
+            remove.OnPressed += _ => OnRemove?.Invoke(slotId);
+            actions.AddChild(repair);
+            actions.AddChild(remove);
+            rightColumn.AddChild(actions);
 
             root.AddChild(centerColumn);
             root.AddChild(rightColumn);

@@ -1,0 +1,34 @@
+- type: shader
+  id: CMUFighterClouds
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/clouds.swsl
+
+- type: shader
+  id: CMUFighterAtmosphere
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/canopy-atmosphere.swsl
+
+- type: shader
+  id: CMUFighterSensor
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/sensor.swsl
+
+- type: shader
+  id: CMUFighterParticles
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/fighter_particles.swsl
+
+- type: shader
+  id: CMUFighterVtolHeat
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/vtol_heat.swsl
+
+- type: shader
+  id: CMUFighterCockpitCrew
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/cockpit-crew.swsl
+
+- type: shader
+  id: CMUFighterCockpitFrame
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/cockpit-frame.swsl

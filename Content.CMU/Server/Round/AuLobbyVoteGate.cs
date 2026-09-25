@@ -13,7 +13,9 @@ public static class AuLobbyVoteGate
         if (!lobbyEnabled)
             return false;
 
-        return runLevel != GameRunLevel.PreRoundLobby ||
-               LobbyMinimumPlayerGate.HasEnoughPlayers(playerCount, minimumPlayers);
+        if (runLevel != GameRunLevel.PreRoundLobby)
+            return false;
+
+        return LobbyMinimumPlayerGate.HasEnoughPlayers(playerCount, minimumPlayers);
     }
 }

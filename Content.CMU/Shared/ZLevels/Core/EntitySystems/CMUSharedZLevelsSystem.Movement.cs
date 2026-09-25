@@ -6,7 +6,7 @@ using Content.Shared.CMU14.ZLevels;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared._RMC14.Fireman;
-using Content.Shared.Buckle.Components; // RuMC edit
+using Content.Shared.Buckle.Components;
 using Content.Shared.Chasm;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -202,7 +202,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
         foreach (var victim in _fallImpactVictims)
         {
-            if (victim == ent.Owner || IsBuckledTo(victim, ent.Owner)) // RuMC edit
+            if (victim == ent.Owner || IsBuckledTo(victim, ent.Owner))
                 continue;
 
             var knockdownTime = MathF.Min(args.ImpactPower * ent.Comp.Mass * 0.1f, 10f);
@@ -215,12 +215,10 @@ public abstract partial class CMUSharedZLevelsSystem
         }
     }
 
-    // RuMC edit start
     private bool IsBuckledTo(EntityUid victim, EntityUid strap)
     {
         return TryComp<BuckleComponent>(victim, out var buckle) && buckle.BuckledTo == strap;
     }
-    // RuMC edit end
 
 
     protected void UpdateZMovement(float frameTime)

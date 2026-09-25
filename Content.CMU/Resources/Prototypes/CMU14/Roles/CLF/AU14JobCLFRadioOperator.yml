@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCLFRadioOperator
   roundSide: ThirdParty
   roundForce: CLF
@@ -61,7 +61,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clflrs
-  spawnMenuRoleName: CLF Radio Operator (CMU)
+  spawnMenuRoleName: cmu-spawn-role-clf-radio-operator-cmu 
   accessGroups:
   - Colonist
   roleWeight: 0.25

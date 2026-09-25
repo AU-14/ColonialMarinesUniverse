@@ -118,7 +118,7 @@ public sealed class MohawkUndercarriageTest
             var startup = entities.GetComponent<FTLComponent>(ship).StartupStream;
             Assert.That(startup, Is.Not.Null);
             Assert.That(entities.GetComponent<AudioComponent>(startup!.Value).FileName,
-                Is.EqualTo("/Audio/_RMC14/Machines/Shuttle/engine_startup.ogg"));
+                Is.EqualTo("/Audio/CMU14/Dropships/Mohawk/takeoff.ogg"));
         });
         await pair.RunSeconds(1);
         await pair.Server.WaitAssertion(() =>
@@ -150,7 +150,7 @@ public sealed class MohawkUndercarriageTest
             Assert.That(entities.HasComponent<ParallaxComponent>(destinationGround), Is.False,
                 "Landing must not overwrite a destination's background with the flight effect.");
             Assert.That(entities.EntityQuery<AudioComponent>().Any(a =>
-                a.FileName == "/Audio/_RMC14/Machines/Shuttle/engine_landing.ogg"), Is.True);
+                a.FileName == "/Audio/CMU14/Dropships/Mohawk/landing.ogg"), Is.True);
             Assert.That(entities.GetComponent<TransformComponent>(entities.GetEntity(cabinWarp)).ParentUid, Is.EqualTo(ship));
             foreach (var (net, position) in rampEdges)
             {

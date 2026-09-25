@@ -261,7 +261,8 @@
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
-                <BoxContainer Orientation="Vertical">
+                <!-- CMU14: strip-level FoF annotation, overlaid on the tab header row -->
+                <Control VerticalExpand="True">
                     <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
                             <ScrollContainer VerticalExpand="True">
@@ -284,7 +285,10 @@
                             </ScrollContainer>
                         </BoxContainer>
                     </TabContainer>
-                </BoxContainer>
+                    <Label Text="{Loc 'humanoid-profile-editor-fof-included-label'}"
+                           HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 3 6 0"
+                           MouseFilter="Ignore" StyleClasses="CrtText" />
+                </Control>
                 <BoxContainer Orientation="Vertical">
                     <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">

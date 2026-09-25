@@ -15,6 +15,11 @@ rmc-hardpoint-remove-verb = Remove {$slot}
 rmc-hardpoint-repaired = Hardpoint repaired.
 rmc-hardpoint-intact = Hardpoint is already intact.
 rmc-hardpoint-integrity-examine = Integrity: [color={$color}]{$current}/{$max} ({$percent}%)[/color]
+rmc-vehicle-damage-examine-verb = Vehicle damage
+rmc-vehicle-damage-examine-description = Inspect condition and active faults.
+rmc-vehicle-damage-examine-no-faults = No active faults.
+rmc-vehicle-damage-examine-faults = [bold]Active faults[/bold]
+rmc-vehicle-damage-examine-fault = {$fault}: {$effect}
 rmc-hardpoint-armor-modifiers-examine = Damage modifiers: acid {$acid}, slash {$slash}, bullet {$bullet}, explosive {$explosive}, blunt {$blunt}
 rmc-hardpoint-condition-pristine = It is in pristine condition.
 rmc-hardpoint-condition-good = It is in good condition.
@@ -128,3 +133,15 @@ rmc-vehicle-key-invalid = The key does not fit this vehicle.
 rmc-vehicle-key-examine-blank = [color=lightblue]This blank key can be imprinted onto a vehicle by using it on the vehicle.[/color]
 rmc-vehicle-key-examine-duplicator = [color=lightblue]This blank key can copy an existing vehicle key by using it on that key.[/color]
 rmc-vehicle-key-examine-bound = [color=lightblue]This key is bound to a vehicle lock.[/color]
+
+rmc-hardpoint-ui-repair = Repair
+rmc-hardpoint-ui-repair-frame = Repair frame fault
+rmc-hardpoint-ui-repair-tooltip = Service this installed module using the tool in your active hand.
+rmc-hardpoint-repair-tool-unsuitable = This tool cannot perform the selected repair.
+rmc-hardpoint-maintenance-verb = Vehicle maintenance
+rmc-hardpoint-removal-tool = Hold a maintenance jack to remove this module.
+rmc-hardpoint-removal-prying-tool = Hold a crowbar or maintenance jack to remove this module.
+
+# CMU14
+cmu-vehicle-supply-unassigned = No platoon assigned to this depot.
+cmu-vehicle-supply-allowance = {$platoon} — Vehicles issued: {$used}/{$limit} (maximum one tank and one VTOL)

@@ -183,7 +183,7 @@ public sealed partial class LoadoutSystem : EntitySystem
 
     /// <summary>
     /// Returns the profile key and RoleLoadoutPrototype for a job, example key: JobAU14JobGOVFORPlatCo
-    /// The prototype is the concrete job's own loadout, falls back to immediate parent
+    /// The prototype is the concrete job's own loadout, falling back to its nearest ancestor.
     /// </summary>
     public static (string ProfileKey, RoleLoadoutPrototype? Prototype) GetJobLoadoutInfo(ProtoId<JobPrototype> jobId, IPrototypeManager protoMan)
     {
@@ -193,18 +193,21 @@ public sealed partial class LoadoutSystem : EntitySystem
     }
 
     /// <summary>
-    /// Returns the RoleLoadoutPrototype for a job, or null if not found, falls back to immediate parent job
+    /// Returns the RoleLoadoutPrototype for a job, or null if neither it nor its ancestors define one.
     /// </summary>
     private static RoleLoadoutPrototype? GetRoleLoadout(ProtoId<JobPrototype> jobId, IPrototypeManager protoMan)
     {
-        if (protoMan.TryIndex(GetJobPrototype(jobId), out RoleLoadoutPrototype? loadout))
-            return loadout;
+        // CMU14: derived roles such as military and hazmat Working Joes have more than one level of job inheritance.
+        while (true)
+        {
+            if (protoMan.TryIndex(GetJobPrototype(jobId), out RoleLoadoutPrototype? loadout))
+                return loadout;
 
-        // Immediate parent fallback
-        if (protoMan.TryIndex(jobId, out JobPrototype? jobProto)
-            && jobProto.Parents?.FirstOrDefault() is { } parentId)
-            return protoMan.TryIndex(GetJobPrototype(parentId), out loadout) ? loadout : null;
+            if (!protoMan.TryIndex(jobId, out JobPrototype? jobProto)
+                || jobProto.Parents?.FirstOrDefault() is not { } parentId)
+                return null;
 
-        return null;
+            jobId = parentId;
+        }
     }
 }

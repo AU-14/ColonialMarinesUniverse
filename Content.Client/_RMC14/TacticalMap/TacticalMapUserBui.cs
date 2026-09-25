@@ -1,15 +1,17 @@
 using System.Numerics;
+using Content.Client.CMU14.TacticalMap.Reconstruction; // CMU14
 using Content.Client._RMC14.UserInterface;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.Controls;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.TacticalMap;
+using Content.Shared._RMC14.Xenonids.Eye;
 using JetBrains.Annotations;
 
 namespace Content.Client._RMC14.TacticalMap;
 
 [UsedImplicitly]
-public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<TacticalMapWindow>(owner, uiKey)
+public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : CMUReconstructionBui(owner, uiKey) // CMU14: standard and classic map integration
 {
     [Dependency] private IPlayerManager _player = default!;
     private static readonly ISawmill _logger = Logger.GetSawmill("tactical_map_settings");
@@ -21,7 +23,14 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
     protected override void Open()
     {
         base.Open();
+        // CMU14: use the replacement unless classic was selected.
+        if (UsingReconstruction) return;
+        OpenClassicWindow();
+    }
 
+    // CMU14 method
+    protected override void OpenClassicWindow()
+    {
         EntityUid? mapEntity = null;
 
         if (EntMan.TryGetComponent(Owner, out TacticalMapUserComponent? user) && user.Map != null)
@@ -69,6 +78,16 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
 
         Window.Wrapper.SetupUpdateButton(msg => SendPredictedMessage(msg));
         Window.Wrapper.Map.OnQueenEyeMove += position => SendPredictedMessage(new TacticalMapQueenEyeMoveMsg(position));
+        Window.Wrapper.Map.CanQueenWatchBlip = id =>
+        {
+            if (_player.LocalEntity != Owner || !EntMan.HasComponent<QueenEyeActionComponent>(Owner) ||
+                !EntMan.TryGetComponent(Owner, out TacticalMapUserComponent? current) || !current.Xenos)
+                return false;
+            var blips = current.XenoBlips;
+            return blips.TryGetValue(id, out var blip) && blip.Status == TacticalMapBlipStatus.Alive &&
+                blip.Image?.RsiState != "enemy_blip";
+        };
+        Window.Wrapper.Map.OnQueenWatch += id => SendPredictedMessage(new TacticalMapQueenWatchMsg(id));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
@@ -131,7 +150,8 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             Window.Wrapper.Map.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
-        if (_refreshed)
+        // CMU14: retain unpublished edits when the shared canvas updates.
+        if (_refreshed && KeepClassicDraft(Window.Wrapper.Canvas, Window.Wrapper.Map))
             return;
 
         Window.Wrapper.Canvas.Lines.Clear();
@@ -159,6 +179,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
         }
 
         _refreshed = true;
+        RememberClassicCanvas(Window.Wrapper.Canvas, Window.Wrapper.Map); // CMU14
     }
 
     private void UpdateBlips()

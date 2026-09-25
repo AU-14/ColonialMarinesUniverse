@@ -749,6 +749,8 @@
         amount: 4
       - id: RMCSentryLaptop
         amount: 4
+      - id: MineDetector
+        amount: 2
     - name: RTO Packs
       entries:
       - id: AU14BackpackRTOPackJungle

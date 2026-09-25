@@ -35,7 +35,7 @@
       tags:
       - CMU14SquadProdigy
 
-  name: Combat Medic
+  name: cmu-job-name-combat-medic
   description: au14-job-description-wyguard
   setPreference: true
   ranks:
@@ -68,7 +68,7 @@
     - Epilepsy
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
-  spawnMenuRoleName: Prodigy Corporate Combat Medic (CMU, Surv)
+  spawnMenuRoleName: cmu-spawn-role-prodigy-corporate-combat-medic-cmu-surv
   accessGroups:
   - auprodigy
   - AUPrisonStaff

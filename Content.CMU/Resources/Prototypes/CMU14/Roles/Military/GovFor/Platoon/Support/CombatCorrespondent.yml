@@ -5,7 +5,7 @@
   name: au14-job-name-govforcombatcorrespondent
   description: au14-job-description-govforcombatcorrespondent
   icon: "AU14JobIconGovRifleman"
-  spawnMenuRoleName: Combat Correspondent (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-combat-correspondent-govfor 
   startingGear: AU14GearGOVFORCombatCorrespondent
   dummyStartingGear: AU14GearGOVFORCombatCorrespondentDummy
   playTimeTracker: AU14JobGOVFORCombatCorrespondent

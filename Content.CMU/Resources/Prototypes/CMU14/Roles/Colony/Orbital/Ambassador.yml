@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianAmbassadorCCA
   roundSide: Civilian
   roundForce: CCA

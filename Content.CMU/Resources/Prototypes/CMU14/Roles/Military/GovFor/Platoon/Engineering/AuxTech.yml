@@ -6,7 +6,7 @@
   name: au14-job-name-govforAuxTech
   description: au14-job-description-govforAuxTech
   icon: "AU14JobIconAuxTech"
-  spawnMenuRoleName: Logistics Technician (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-logistics-technician-govfor 
   startingGear: AU14GearGOVFORAuxTech
   dummyStartingGear: AU14GearGOVFORAuxTechDummy
   playTimeTracker: AU14JobGOVFORAuxTech

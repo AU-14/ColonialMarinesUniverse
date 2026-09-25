@@ -1,5 +1,5 @@
 - type: entity
-  id: VehicleAPCBase
+  id: VehicleAPCBase # CMU14
   abstract: true
   name: armored personnel carrier
   description: A rugged armored personnel carrier outfitted for battlefield support.
@@ -20,9 +20,10 @@
     maxSpeed: 5
     acceleration: 4
     deceleration: 10
-    maxRotationSpeedDegrees: 72
-    rotationAccelerationDegrees: 72
-    rotationDecelerationDegrees: 96
+    maxRotationSpeedDegrees: 90
+    alignmentAssistDegrees: 8
+    rotationAccelerationDegrees: 150
+    rotationDecelerationDegrees: 210
     turnDelay: 0.4
     xenoBlockMinimumSize: Immobile
     canXenosPush: false

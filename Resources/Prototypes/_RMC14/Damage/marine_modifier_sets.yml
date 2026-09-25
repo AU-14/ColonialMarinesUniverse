@@ -165,12 +165,12 @@
     Structural: 0.8
 
 - type: damageModifierSet
-  id: VehicleFrameHumvee
+  id: VehicleFrameHumvee # CMU14
   coefficients:
-    Blunt: 2
-    Slash: 1
-    Piercing: 2
-    Heat: 2
+    Blunt: 0.8
+    Slash: 0.8
+    Piercing: 0.35
+    Heat: 0.8
     Structural: 1
 
 - type: damageModifierSet

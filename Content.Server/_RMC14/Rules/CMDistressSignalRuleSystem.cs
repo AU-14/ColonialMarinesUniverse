@@ -870,6 +870,11 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
+        // CMU14: other presets own their cleanup and larva accounting in CMUHijackExtrasSystem.
+        var activeRules = QueryActiveRules();
+        if (!activeRules.MoveNext(out _, out _, out _) || ev.HijackerType == DropshipHijackerType.Other)
+            return;
+
         // For human hijacks, build a set of map IDs belonging to the hijacker's faction ship(s).
         // For xeno hijacks, keep legacy behavior (Almayer maps).
         var targetShipMaps = new HashSet<MapId>();
@@ -905,19 +910,21 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             var hiveStructures = EntityQueryEnumerator<HiveConstructionLimitedComponent, TransformComponent>();
             while (hiveStructures.MoveNext(out var id, out _, out var xform))
             {
-                EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
-
-                if (xform.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(id.ToCoordinates()))
+                if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform)) // CMU14
+                {
+                    EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
                     _destruction.DestroyEntity(id);
+                }
             }
 
             var xenoLimitedStructures = EntityQueryEnumerator<XenoSecretionLimitedComponent, TransformComponent>();
             while (xenoLimitedStructures.MoveNext(out var id, out _, out var xform))
             {
-                EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
-
-                if (xform.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(id.ToCoordinates()))
+                if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform)) // CMU14
+                {
+                    EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
                     _destruction.DestroyEntity(id);
+                }
             }
 
             var xenos = EntityQueryEnumerator<XenoComponent, MobStateComponent, TransformComponent>();
@@ -929,7 +936,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (_mobState.IsDead(xeno))
                     continue;
 
-                if (transformComp.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(xeno.ToCoordinates()))
+                if ((ev.Dropship == null || transformComp.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(transformComp)) // CMU14
                 {
                     if (comp.CountedInSlots)
                         larva++;

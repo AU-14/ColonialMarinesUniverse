@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Evasion;
+using Content.Shared._RMC14.Evasion;
 using Content.Shared.Damage.Systems;
 using Robust.Shared.Timing;
 using Content.Shared.Jittering;
@@ -61,6 +61,9 @@ public sealed partial class DamageEvasionSystem : EntitySystem
         Entity<DamageEvasionComponent> ent,
         ref DamageChangedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (!args.DamageIncreased || args.DamageDelta == null)
             return;
 

@@ -390,6 +390,9 @@ public sealed partial class DockingSystem : SharedDockingSystem
 
         foreach (var entity in _dockingBoltSet)
         {
+            if (!entity.Comp1.BoltOnFTL)
+                continue;
+
             if (enabled)
                 _dropship.LockDoor((entity, entity));
             else

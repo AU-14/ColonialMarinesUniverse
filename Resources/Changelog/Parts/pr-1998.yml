@@ -1,0 +1,25 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Bangalores now deal enough structural damage to destroy multiple reinforced
+    walls, have a much larger blast radius and contain shrapnel (basically a complete
+    buff).
+  type: Tweak
+- message: Mine detectors can now alert you to IEDs. Two mine detectors can be found
+    in req vendors.
+  type: Tweak
+- message: Combat technician racks now have free mine detectors and have cable coil
+    for 1 point.
+  type: Add
+- message: Reduced the price of breaching charges, wood, sandbags and HESCOs in combat
+    technician gear racks.
+  type: Tweak
+- message: Field antenna masts now require more material and take longer to build.
+  type: Tweak
+- message: Fixed tile movement getting you stuck on stairs and pretty much any z-level
+    change.
+  type: Fix
+- message: Halved the rate at which fire spreads.
+  type: Tweak
+time: '2026-09-23T04:03:55.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1998

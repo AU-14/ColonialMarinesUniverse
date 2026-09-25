@@ -1,0 +1,12 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed stale area-power references and power loads after equipment is removed
+    or moved.
+  type: Fix
+- message: Fixed missing fighters in small CLF survivor groups.
+  type: Fix
+- message: Improved gameplay stall and client synchronization diagnostics.
+  type: Admin
+time: '2026-09-10T13:35:04.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1921

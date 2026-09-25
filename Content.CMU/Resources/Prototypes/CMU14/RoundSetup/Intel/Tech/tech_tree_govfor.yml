@@ -46,26 +46,6 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Unlock Civilian Vehicle Pool
-          description: Unlocks commandeered civilian vehicles for vehicle supply. Requires a vehicle lift.
-          cost: 8
-          events:
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivVan
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivTruck
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivArmoredTruck
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivHSVan
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivEMSAmbulance
-          - !type:TechAnnounceEvent
-            author: SPECIAL ASSETS AUTHORIZED
-            message: Requisitioned civilian vehicles have been authorised for this operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: misc
         - name: Unlock Tier 2
           description: Transitions the tree to another tier.
           cost: 3
@@ -145,19 +125,6 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Additional M2420 JTMV Armed
-          description: Adds an extra armed humvee to vehicle supply lifts. Requires a vehicle lift.
-          cost: 18
-          events:
-          - !type:TechUnlockVehicleEvent
-            unlock: VehicleHumvee
-            additional: true
-          - !type:TechAnnounceEvent
-            author: SPECIAL ASSETS AUTHORIZED
-            message: Armed humvee deployment has been authorised for this operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: humvee
         - name: Unlock Tier 3
           description: Transitions the tree to another tier.
           cost: 5
@@ -180,7 +147,7 @@
           cost: 25
           events:
           - !type:TechPartySpawnEvent
-            thirdPartyId: USArmy
+            thirdPartyId: CMUUSArmyReinforcements
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A US Army infantry squad has been dispatched to aid with the operation.

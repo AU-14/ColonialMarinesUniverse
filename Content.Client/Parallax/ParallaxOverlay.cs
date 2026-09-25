@@ -1,9 +1,8 @@
 using System.Numerics;
 using Content.Client.Parallax.Managers;
 using Content.Client.Viewport;
-using Content.Shared.CMU14.ZLevels;
-using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CCVar;
+using Content.Shared.Parallax;
 using Content.Shared.Parallax.Biomes;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -24,7 +23,6 @@ public sealed partial class ParallaxOverlay : Overlay
     [Dependency] private IParallaxManager _manager = default!;
     private readonly SharedMapSystem _mapSystem;
     private readonly ParallaxSystem _parallax;
-    private readonly CMUSharedZLevelsSystem _zLevel; //CMU
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowWorld;
 
@@ -34,7 +32,6 @@ public sealed partial class ParallaxOverlay : Overlay
         IoCManager.InjectDependencies(this);
         _mapSystem = _entManager.System<SharedMapSystem>();
         _parallax = _entManager.System<ParallaxSystem>();
-        _zLevel = _entManager.System<CMUSharedZLevelsSystem>(); //CMU
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -42,16 +39,12 @@ public sealed partial class ParallaxOverlay : Overlay
         if (args.MapId == MapId.Nullspace || _entManager.HasComponent<BiomeComponent>(_mapSystem.GetMapOrInvalid(args.MapId)))
             return false;
 
-        //CMU draw parallax only for lowest zlevel
+        // CMU: draw exactly once, on the lowest pass actually rendered. A plain
+        // eye is a single-pass viewport, even when its map has lower Z levels.
         if (args.Viewport.Eye is ScalingViewport.ZEye zEye)
             return zEye.LowestDepth == zEye.Depth;
 
-        if (!_configurationManager.GetCVar(CMUZLevelsCVars.Enabled) ||
-            !_configurationManager.GetCVar(CMUZLevelsCVars.RenderEnabled))
-            return true;
-
-        return !_zLevel.TryMapDown(args.MapUid, out _);
-        //CMU end
+        return true;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -66,7 +59,8 @@ public sealed partial class ParallaxOverlay : Overlay
         var worldHandle = args.WorldHandle;
 
         var layers = _parallax.GetParallaxLayers(args.MapId);
-        var realTime = (float) _timing.RealTime.TotalSeconds;
+        var realTime = _timing.RealTime.TotalSeconds;
+        _entManager.TryGetComponent(args.MapUid, out ParallaxComponent? background);
 
         foreach (var layer in layers)
         {
@@ -89,10 +83,26 @@ public sealed partial class ParallaxOverlay : Overlay
             // (For values 0.0 to 1.0 this is in effect a lerp, but it's deliberately unclamped.)
             // The ParallaxAnchor adapts the parallax for station positioning and possibly map-specific tweaks.
             var home = layer.Config.WorldHomePosition + _manager.ParallaxAnchor;
-            var scrolled = layer.Config.Scrolling * realTime;
+            var velocity = layer.Config.Scrolling;
 
             // Origin - start with the parallax shift itself.
-            var originBL = (position - home) * layer.Config.Slowness + scrolled;
+            var originBL = (position - home) * layer.Config.Slowness;
+
+            // CMU: FTL is an abstract transit scene. Anchor the backdrop to this
+            // viewport and scroll at flight speed, independent of networked grid
+            // corrections. All decks use the same clock and texture phase.
+            if (background?.TravelVelocity is { } travel)
+            {
+                originBL = position - home * layer.Config.Slowness;
+                velocity -= travel * (1 - layer.Config.Slowness);
+            }
+            // Keep tiled offsets small before converting to floats, including
+            // after long sessions. Large time-derived offsets lose pixel precision.
+            var scrollX = velocity.X * realTime;
+            var scrollY = velocity.Y * realTime;
+            originBL += layer.Config.Tiled
+                ? new Vector2((float) (scrollX % size.X), (float) (scrollY % size.Y))
+                : new Vector2((float) scrollX, (float) scrollY);
 
             // Place at the home.
             originBL += home;
@@ -131,4 +141,3 @@ public sealed partial class ParallaxOverlay : Overlay
         worldHandle.UseShader(null);
     }
 }
-

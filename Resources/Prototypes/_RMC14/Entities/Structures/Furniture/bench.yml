@@ -8,6 +8,8 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUReconFurniture
+    material: BenchLeft
   - type: Strap
     enabled: false
   - type: Physics
@@ -46,6 +48,8 @@
   id: RMCBenchRight
   suffix: Right
   components:
+  - type: CMUReconFurniture
+    material: BenchRight
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/bench.rsi
     state: bench_right

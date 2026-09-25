@@ -360,7 +360,7 @@ public sealed partial class GunSystem : SharedGunSystem
                     if (!cartridge.DeleteOnSpawn &&
                         !Containers.IsEntityInContainer(ent!.Value))
                     {
-                        EjectCartridge(ent.Value, angle);
+                        EjectCartridge(ent.Value, angle, ejectCoordinates: Transform(gun).Coordinates); // CMU14
                     }
 
                     if (IsClientSide(ent!.Value))

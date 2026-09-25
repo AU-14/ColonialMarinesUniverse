@@ -19,6 +19,6 @@ public sealed partial class ResearchDataTerminalWindow : DefaultWindow
         base.FrameUpdate(args);
         var time = IoCManager.Resolve<IGameTiming>().CurTime;
         TimeLeftBar.Value = (float)(NextUpdate - time).TotalMilliseconds;
-        TimeLeft.Text = Loc.GetString("research-data-ui-time-left", ("TIME", (int)(NextUpdate - time).TotalSeconds));
+        TimeLeft.Text = Loc.GetString("research-data-ui-time-left", ("TIME", Math.Max(0, (int)(NextUpdate - time).TotalSeconds)));
     }
 }

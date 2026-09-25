@@ -11,8 +11,26 @@ namespace Content.Shared.CMU14.Dropship.MultiDeck;
 [RegisterComponent]
 public sealed partial class MohawkMechanismsComponent : Component
 {
+    [DataField]
+    public EntityUid? Radio;
+
     public bool RampDeployed;
     public bool HatchDeployed;
+
+    /// <summary>Delay between the ramp's two movement steps.</summary>
+    [DataField]
+    public TimeSpan RampStepDelay = TimeSpan.FromSeconds(1);
+
+    /// <summary>People underneath when lowering began, removed after their first crush hit.</summary>
+    public readonly HashSet<EntityUid> RampCrushTargets = new();
+
+    /// <summary>Boarders near a deployed ramp can preview the whole cabin grid.</summary>
+    [DataField]
+    public bool RampPreviewFullDeck;
+
+    /// <summary>Keep the cabin end of the raised ramp as a fixed boarding threshold.</summary>
+    [DataField]
+    public bool KeepRampThreshold;
     public readonly Dictionary<EntityUid, Vector2> CabinRampMarkers = new();
     public readonly Dictionary<EntityUid, Vector2> CabinRampEdging = new();
 
@@ -23,6 +41,10 @@ public sealed partial class MohawkMechanismsComponent : Component
     /// <summary>Deployed ramp displacement from its raised cabin floor, in ship-local axes.</summary>
     [DataField]
     public Vector2 LoweredRampOffset = new(0, -1);
+
+    /// <summary>Additional ship-local clearance for vehicles leaving the lowering ramp.</summary>
+    [DataField]
+    public Vector2 VehicleUnloadOffset = new(0, -3);
 
     [DataField]
     public HashSet<MohawkControlGroup> BrokenControls = new();
@@ -134,3 +156,7 @@ public readonly record struct DropshipBoardingChangedEvent;
 /// <summary>A hijack flight has been accepted and is about to enter its launch sequence.</summary>
 [ByRefEvent]
 public readonly record struct DropshipHijackFlightEvent;
+
+/// <summary>The paradrop targeting system has enabled or disabled the ship's exits.</summary>
+[ByRefEvent]
+public readonly record struct DropshipParadropChangedEvent(bool Enabled);

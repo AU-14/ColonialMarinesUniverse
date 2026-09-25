@@ -1,0 +1,98 @@
+- type: entity
+  parent: [ BaseItem, BaseItemDestructible ]
+  id: CMUFighterManpad
+  name: EMBLR MANPAD
+  suffix: Operator IFF
+  description: A shoulder-fired anti-air launcher. Load an EMBLR 70mm rocket, wield it with both hands and use Aim at airspace to intercept hostile aircraft crossing your sector. Lowering or dropping it cancels the lock. Reload after each launch.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/UPP/emblr/emblr_icon.rsi
+    state: base
+  - type: Item
+    size: Huge
+    sprite: CMU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
+    slots: [ Back, suitStorage ]
+  - type: Wieldable
+  - type: Appearance
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMURocketAmmo70mm
+    capacity: 1
+    proto: null
+    cycleable: true
+    mayTransfer: false
+    insertDelay: 6.0
+    cycleDelay: 6.0
+    soundInsert:
+      path: /Audio/_RMC14/Weapons/Guns/Cock/m5_ammo.ogg
+  - type: FighterManpad
+
+- type: entity
+  parent: CMUFighterManpad
+  id: CMUFighterManpadGovfor
+  suffix: GOVFOR
+  components:
+  - type: FighterManpad
+    faction: govfor
+
+- type: entity
+  parent: CMUFighterManpad
+  id: CMUFighterManpadOpfor
+  suffix: OPFOR
+  components:
+  - type: FighterManpad
+    faction: opfor
+
+- type: entity
+  parent: CMUFighterManpad
+  id: CMUFighterManpadNoIFF
+  name: EMBLR MANPAD
+  suffix: No IFF, targets all aircraft
+  description: A shoulder-fired anti-air launcher with its IFF interlock bypassed. It automatically engages ANY crewed aircraft crossing your sector while wielded and aimed, including friendly aircraft. Uses EMBLR 70mm ammunition.
+  components:
+  - type: FighterManpad
+    ignoreIFF: true
+
+- type: entity
+  parent: ActionMarineToggleable
+  id: CMUActionManpadAim
+  name: Aim at airspace
+  description: Raise the wielded MANPAD to cover your current sector. Automatically acquire and fire at hostile aircraft. Toggle again to lower it and cancel acquisition.
+  components:
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: sniper_aim
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:FighterManpadAimActionEvent
+
+- type: entity
+  id: CMUFighterManpadLaunch
+  name: MANPAD exhaust
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: FighterManpadVisual
+  - type: TimedDespawn
+    lifetime: 8
+
+- type: entity
+  id: CMUFighterManpadFlash
+  name: MANPAD ignition flash
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: PointLight
+    color: "#FFB45E"
+    radius: 8
+    energy: 5
+  - type: TimedDespawn
+    lifetime: 0.55

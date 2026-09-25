@@ -51,7 +51,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: cm-job-supervisors-nobody
-  spawnMenuRoleName: Prodigy Supervisor (CMU)
+  spawnMenuRoleName: cmu-spawn-role-prodigy-supervisor-cmu 
   accessGroups:
   - Colonist
   - auadmin

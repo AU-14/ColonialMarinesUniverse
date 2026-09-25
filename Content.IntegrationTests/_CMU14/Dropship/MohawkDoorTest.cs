@@ -55,7 +55,7 @@ public sealed class MohawkDoorTest
                 var xeno = entities.SpawnEntity("CMXenoDrone", new EntityCoordinates(ship, position));
                 doors.Add((door.Owner, xeno, entities.GetNetEntity(door.Owner)));
             }
-            Assert.That(doors.Count, Is.EqualTo(variant.StartsWith("omaha") ? 5 : 1));
+            Assert.That(doors.Count, Is.EqualTo(variant.StartsWith("omaha") ? 5 : 3));
         });
         await pair.RunSeconds(1);
         await pair.Server.WaitAssertion(() =>

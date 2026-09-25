@@ -1,0 +1,14 @@
+author: Vencallium
+category: CMU
+changes:
+- message: Added independent GOVFOR, OPFOR, colony, and Weyland-Yutani research terminals
+    to their respective ASRS catalogs.
+  type: Add
+- message: Researchers can spend 1 research point to reduce their faction's contract
+    cooldown by 60 seconds.
+  type: Add
+- message: Research contracts, points, clearance, reports, and scan rewards are tracked
+    separately for each faction.
+  type: Tweak
+time: '2026-09-22T19:34:07.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1944

@@ -94,7 +94,7 @@ public sealed partial class HumanoidProfileEditor
         RefreshSynthetic();
 
         foreach (var value in Enum.GetValues<ArmorPreference>())
-            ArmorPreferenceButton.AddItem(value.ToString(), (int)value);
+            ArmorPreferenceButton.AddItem(Loc.GetString($"humanoid-profile-editor-preference-armor-{value.ToString().ToLowerInvariant()}"), (int)value);
 
         ArmorPreferenceButton.OnItemSelected += args =>
         {
@@ -863,7 +863,7 @@ public sealed partial class HumanoidProfileEditor
     {
         target.AddChild(new Label
         {
-            Text = "THREATS",
+            Text = Loc.GetString("humanoid-profile-editor-threats-label"), 
             Margin = new Thickness(6f, 4f, 0f, 6f),
             StyleClasses = { StyleNano.StyleClassCrtHeading },
         });
@@ -964,22 +964,31 @@ public sealed partial class HumanoidProfileEditor
         if (id.EndsWith("OnMarker", StringComparison.OrdinalIgnoreCase))
         {
             id = id[..^"OnMarker".Length];
-            suffix = " (Marker)";
+            suffix = " " + Loc.GetString("humanoid-profile-editor-threat-marker-suffix"); 
         }
 
-        if (id.EndsWith("CF", StringComparison.OrdinalIgnoreCase))
+        if (id.EndsWith("CF", StringComparison.OrdinalIgnoreCase) ||
+            id.EndsWith("DS", StringComparison.OrdinalIgnoreCase)) 
+        {
             id = id[..^2];
+        }
         if (id.EndsWith("Threat", StringComparison.OrdinalIgnoreCase))
             id = id[..^"Threat".Length];
 
-        return id.ToLowerInvariant() switch
+        var key = id.ToLowerInvariant() switch
         {
-            "xeno" => "Xenomorph" + suffix,
-            "ape" => "Apes" + suffix,
-            "cultist" => "Cultists" + suffix,
-            "wendigo" => "Wendigo" + suffix,
-            _ => HumanizePrototypeId(id) + suffix,
+            "xeno" => "humanoid-profile-editor-threat-xeno",
+            "ape" => "humanoid-profile-editor-threat-ape",
+            "cultist" => "humanoid-profile-editor-threat-cultist",
+            "wendigo" => "humanoid-profile-editor-threat-wendigo",
+            "abominations" => "humanoid-profile-editor-threat-abomination",
+            "tribals" => "humanoid-profile-editor-threat-tribal",
+            "neomorphs" => "humanoid-profile-editor-threat-neomorph",
+            "badbloodclan" => "humanoid-profile-editor-threat-badbloodclan",
+            _ => null,
         };
+
+        return (key != null ? Loc.GetString(key) : HumanizePrototypeId(id)) + suffix;
     }
 
     private static string HumanizePrototypeId(string id)

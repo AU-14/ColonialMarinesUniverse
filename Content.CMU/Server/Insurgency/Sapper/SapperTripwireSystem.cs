@@ -9,6 +9,7 @@ using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.StepTrigger.Systems;
 using Content.Shared.Trigger.Systems;
@@ -25,7 +26,7 @@ namespace Content.Server.CMU14.Insurgency.Sapper;
 ///     The two-part tripwire. Planting the charge hands the sapper the wire's "other end"; they carry it to
 ///     where they want the line to run and use it there. If that spot is in a straight line, in range, and in
 ///     line of sight, a near-invisible wire is strung between the two points with a trip trigger on every tile
-///     between them. Anything that isn't a friendly crossing any part of the wire detonates the charge and
+///     between them. A non-friendly mob crossing any part of the wire detonates the charge and
 ///     every explosive lashed to it.
 ///
 ///     Planting, arming, hiding, and disarming are the ordinary <see cref="SapperTrapComponent"/> lifecycle
@@ -318,7 +319,8 @@ public sealed partial class SapperTripwireSystem : EntitySystem
             return;
         }
 
-        args.Continue = trap.Armed && !HasComp<CLFMemberComponent>(args.Tripper);
+        args.Continue = trap.Armed && HasComp<MobStateComponent>(args.Tripper) &&
+                        !HasComp<CLFMemberComponent>(args.Tripper);
     }
 
     private void OnSegmentStepped(Entity<SapperTripwireSegmentComponent> seg, ref StepTriggeredOffEvent args)

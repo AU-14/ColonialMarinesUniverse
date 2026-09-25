@@ -215,8 +215,11 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
             return;
         }
 
+        var previous = watching.PreviousTarget is { } target && !TerminatingOrDeleted(target)
+            ? target
+            : default(EntityUid?);
         if (TryComp(user, out EyeComponent? eye))
-            _eye.SetTarget(user, watching.PreviousTarget, eye);
+            _eye.SetTarget(user, previous, eye);
 
         if (watching.PeekTarget is { } peekTarget &&
             Exists(peekTarget))

@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Light;
 using Content.Shared._RMC14.PowerLoader;
 using Content.Shared._RMC14.PowerLoader.Events;
+using Content.Shared.CMU14.Dropship.AttachmentPoint;
 using Content.Shared.Physics;
 using Content.Shared.Radio.Components;
 using Robust.Client.GameObjects;
@@ -60,12 +61,17 @@ public sealed class MohawkEquipmentTest
                 .Where(p => entities.GetComponent<TransformComponent>(p.Owner).ParentUid == ship &&
                             entities.GetComponent<MetaDataComponent>(p.Owner).EntityPrototype?.ID.StartsWith("CMUMohawkInternal") == true)
                 .ToArray();
-            Assert.That(mounts, Has.Length.EqualTo(variant.StartsWith("omaha") ? 2 : 0));
+            Assert.That(mounts, Has.Length.EqualTo(variant.StartsWith("omaha") ? 2 : 3));
+            var expectedMounts = variant.StartsWith("omaha")
+                ? new[] { new Vector2(-2.5f, -7.5f), new Vector2(3.5f, -7.5f) }
+                : new[] { new Vector2(-2.5f, -4.5f), new Vector2(0.5f, -7.5f), new Vector2(3.5f, -4.5f) };
+            Assert.That(mounts.Select(m => entities.GetComponent<TransformComponent>(m.Owner).LocalPosition),
+                Is.EquivalentTo(expectedMounts));
             foreach (var mount in mounts)
             {
                 var xform = entities.GetComponent<TransformComponent>(mount.Owner);
                 Assert.That(xform.Anchored, Is.True);
-                Assert.That(xform.LocalPosition, Is.AnyOf(new Vector2(-2.5f, -7.5f), new Vector2(3.5f, -7.5f)));
+                Assert.That(entities.HasComponent<GunshipHardpointAttachmentPointComponent>(mount.Owner), Is.False);
                 Assert.That(entities.System<SharedDropshipSystem>().TryGetGridDropship(mount.Owner, out var owner), Is.True);
                 Assert.That(owner.Owner, Is.EqualTo(ship));
                 Assert.That(owner.Comp.AttachmentPoints, Does.Contain(mount.Owner));

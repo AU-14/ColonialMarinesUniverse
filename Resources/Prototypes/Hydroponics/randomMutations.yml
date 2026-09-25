@@ -229,9 +229,9 @@
       persists: false
       effect: !type:PlantChangeTraits
         trait: PlantTraitLigneous
-    # CMU14: kudzu trait spawns flesh kudzu
+    # CMU14: kudzu-spreading plant mutation
     - name: Kudzufication
-      baseOdds: 0.036
+      baseOdds: 0.012
       persists: false
       effect: !type:PlantChangeTraits
         trait: PlantTraitKudzu

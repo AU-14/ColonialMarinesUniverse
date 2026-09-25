@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
@@ -32,7 +33,10 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         SubscribeLocalEvent<VehicleTurretComponent, EntInsertedIntoContainerMessage>(OnInserted);
         SubscribeLocalEvent<VehicleTurretComponent, EntRemovedFromContainerMessage>(OnRemoved);
         SubscribeLocalEvent<VehicleTurretComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<VehicleTurretComponent, AttemptShootEvent>(OnAttemptShoot);
+        // CMU14: constrain the shot from its final muzzle position before checking the firing arc.
+        SubscribeLocalEvent<VehicleTurretComponent, AttemptShootEvent>(OnAttemptShoot,
+            after: new[] { typeof(GunMuzzleOffsetSystem), typeof(VehicleTurretMuzzleSystem) },
+            before: new[] { typeof(GunFireArcSystem) });
         SubscribeNetworkEvent<VehicleTurretRotateEvent>(OnRotateEvent);
     }
 

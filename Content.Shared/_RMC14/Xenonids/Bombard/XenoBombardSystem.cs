@@ -11,6 +11,7 @@ using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Map; // CMU14
 using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.Xenonids.Bombard;
@@ -41,11 +42,17 @@ public sealed partial class XenoBombardSystem : EntitySystem
     {
         var source = _transform.GetMapCoordinates(ent);
         var target = _transform.ToMapCoordinates(args.Target);
-        if (!_zLevelShooting.TryAdjustShotMapCoordinates(ent, source, target, out var adjustedSource, out var adjustedTarget) ||
+        // CMU14 Begin: bombard retains its own range and landing point when aiming through a z-level opening.
+        var aim = target.Position - source.Position;
+        if (aim.Length() > ent.Comp.Range)
+            target = new MapCoordinates(source.Position + aim.Normalized() * ent.Comp.Range, target.MapId);
+        if (!_zLevelShooting.TryAdjustShotMapCoordinates(ent, source, target, out var adjustedSource, out var adjustedTarget,
+                maximumRange: ent.Comp.Range) ||
             adjustedSource.MapId != adjustedTarget.MapId)
         {
             return;
         }
+        // CMU14 End
 
         _zLevelShooting.TryGetProjectileVisualOffset(ent, source, adjustedSource, out var projectileVisualOffset);
 

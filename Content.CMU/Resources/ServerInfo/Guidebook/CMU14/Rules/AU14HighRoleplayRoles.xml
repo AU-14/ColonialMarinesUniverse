@@ -9,23 +9,59 @@
 
   A person with a "colony command role" is defined as anyone currently in one of the following positions:
 
-  - The Colony Administrator
+  - Colony Administrator
+
+  - Deputy Administrator
 
   - Colony Operations Synthetics
 
-  - Colony Law Enforcement Leaders (CMB Marshal, etc)
+  - Head of Engineering
+
+  - Head of Service
+
+  - Colony Law Enforcement Leaders (CMB Marshal, NSPA Inspector etc.)
 
 
 
-  Colony Command must make an attempt to follow Colony Law, except if they are correctly part of a valid mutiny.
+  Colony Command must make an attempt to follow Colony Law, except if they are correctly part of a valid revolt or have another valid RP reason not to (e.g., being paid off or being coerced by the CLF, a Corporate faction or Mob).
+
+    - This excludes Colony Operations Synthetics, which are always bound to Colony Law unless they have been hacked.
+
+    - 'a valid RP reason' is defined as a reason that is believable and makes sense in the context of the round. If you are unsure, ahelp for guidance.
+
+    - any promise of threat (bodily harm, death and harm to family or friends) and / or money to turn a blind eye or to get something must come from a valid RP source (e.g., a CLF leader, a Corporate faction leader, a Mob boss, etc) so you cannot be coerced by just any colonist that promises such.
 
 
 
   Colony Command may not willingly take any action that would end in the destruction of the colony or the mass harm of its people.
+  - You must also take steps to avoid the total destruction of your colony and its people.
 
 
 
   Those in colony command roles must be able to communicate clearly and concisely when communicating on radio channels and announcements, and while in any professional setting.
+
+
+
+ ##Corporate Command Rules
+
+
+
+  A person with a "corporate command role" is defined as anyone currently in one of the following positions:
+
+  - Corporate Liaison.
+
+  - Corporate Assistant.
+
+  - Anyone with a corporate code of WYC5 and Above.
+    - Or an adjacent divisional rank.
+
+
+
+  Corporate Command must attempt to serve what is best for the company.
+
+
+
+  Corporate Command must keep confidential information from leaking by any means necessary.
 
 
 
@@ -37,7 +73,7 @@
 
   - The Executive Officer.
 
-  - Staff Officers
+  - Staff Officers.
 
   - Any officer (WO1+) in the position of Acting Commander.
 
@@ -47,80 +83,165 @@
 
 
 
-  Military Command must follow the Uniform Code of Military Justice and the Standard Operating Procedures, except if they are part of a valid mutiny (a mutiny is only valid if you have received permission from a Moderator).
+  Military Command must make an attempt to follow the Uniform Code of Military Justice and the Standard Operating Procedures, except if they are part of a valid mutiny or have proper RP justification.
+
+  - This excludes non-combat synthetics, which are always bound to the UCMJ and SOP unless they have been hacked.
+
+  - A valid RP reason is defined as a reason that is believable and makes sense in the context of the round. If you are unsure, ahelp for guidance.
+
+  - Taking bribes is acceptable so long as it is from a reasonable source (Corporate faction).
+
+  - You may not take bribes from insurgency factions, mobs or minor/hostile groups. If you are unsure, ahelp for guidance.
+
 
 
   Military Command may not willingly take any action that would end in the destruction of their ship/installation or the mass harm of allied military members unless the action would reasonably end in faction mechanical victory (reference the objectives console) or the saving of multiple civilian lives.
 
+  - Willingly taking an action that would end in the destruction of their ship/installation or the mass harm of allied military members is defined as knowingly taking an action that would reasonably result in the destruction of their ship/installation or the mass harm of allied military members, and not taking any steps to prevent it from happening. If you are unsure, ahelp for guidance.
+
+
 
   Military Command may not deploy to the Area of Operations if it would leave the CIC unstaffed, there must always be at least one person in the CIC at all times.
 
+  - An exception to this rule is if there is an operational command post at the FOB and/or if there is an operational command vehicle in use.
 
-  The Commander and/or Acting Commander may not leave the ship/installation except during evacuation.
-
+  - High-ranking officers (e.g., (acting-)CO or the XO) must have some form of security detail with them due to their high value and importance to the operation and round. If you are unsure, ahelp for guidance.
 
   Those in military command roles must be able to communicate clearly and concisely when communicating on radio channels and announcements, and while in any professional setting.
 
 
+
   ##The Xenomorph Queen
 
-As the Queen, you are in command of the whole Hive. You have higher standards expected than other Xenomorphs, and will be punished more severely in case of a rule breach - do not reference memes, do not speak jokingly to the point of fail RP and do not draw unrelated things in the mind map aside from tactical decisions / orders. The Queen may use her banish tool on any Xenomorph that fails to follow the rules set above. The banish tool is not to be used lightly or as a joke - only as a punishment. The Queen may not lock out, force to play or banish any castes - drone tax is prohibited. She may, however, request for specific castes given they provide some needed tactical advantage, such as requesting a Boiler in case the military have weak acid protection or requesting a Burrower for the lack of tunnels in the map and may devolve unruly Xenomorphs accordingly. If unsure, ahelp for game admin permission. The Queen has human-level intelligence and may give direct orders to her offspring to kill any suspicious synthetic units even if they are not provoking directly (such as by walking into weeded territory or being close to military force) or to not attack any hosts, provided they have a reason (such as forcing a host to drive the dropship back to the main ship).
+
+
+  As the Queen, you are in command of the whole Hive. You have higher standards expected than other Xenomorphs, and will be punished more severely in case of a rule breach.
+
+  - Do not reference memes, do not speak jokingly to the point of fail RP and do not draw unrelated things in the mind map aside from tactical decisions/orders.
+
+  - The Queen may use her banish tool on any Xenomorph that fails to follow her orders.
+    - The banish tool is not to be used lightly or as a joke, and only as a punishment.
+
+  - The Queen may force any specific castes and may devolve Xenomorphs for said reason.
+
+  - The Queen may devolve unruly Xenomorphs.
+    - Unruly Xenomorphs are defined as Xenomorphs that fail to follow the Queen's orders, fail to follow the Hivemind, or otherwise act in a way that is detrimental to the Hive.
+
+  - The Queen should not and may not take actions that would reasonably end in the destruction of the Hive.
+    - For example, not using their ability to 'ovi' which leave xenos that have proven themselves in round to be stuck in a certain tier or engaging GOVFOR in the first wave.
+
+
 
   ##Synthetic Units
 
-Synthetics are artificial humanoids initially invented by the Weyland Corporation, akin to the sci-fi android trope. It has gone through several iterations and has countless specifications, but one hasn't changed. Synthetics are embedded with core directives that guide their every move and their being.
+  Synthetics are artificial humanoids initially invented by the Weyland Corporation, akin to the sci-fi android trope. They have gone through several iterations and have countless specifications, but one hasn't changed. Synthetics are embedded with core directives that guide their every move and their being.
 
 
 
-By playing a synthetic character, you agree to have read and to abide by the rules written in this section.
+  By playing a synthetic character, you agree to have read and to abide by the rules written in this section.
 
 
 
-Core directives apply for any and all synthetics. Non-Combat Directives apply only for NC synthetics and the Combat Directives apply only for combat synthetics and rogue / hijacked synthetics.
+  Core directives apply for any and all synthetics. Non-Combat Directives apply only for NC synthetics, and the Combat Directives apply only for combat synthetics and rogue / hijacked synthetics.
 
 
 
-  - Key Expectations
+  ##Key Expectations
 
-Chain of Command: Synthetic ranks only grant respect - they do not have any actual authority to provide orders unless stated otherwised.
+  Chain of Command: Synthetic ranks only grant respect - they do not have any actual authority to provide orders unless stated otherwised.
 
-
-
-Role Atmosphere: As a High-Roleplay Role, you are expected to roleplay with the seriousness required. Do not wear mismatching / silly clothing (as traffic cones on the head slot), do not act in a silly manner and do not be aggressive or otherwise go agaisnt the spirit of the role.
+  Role Atmosphere: As a High-Roleplay Role, you are expected to roleplay with the seriousness required. Do not wear mismatching / silly clothing (as traffic cones on the head slot), do not act in a silly manner and do not be aggressive or otherwise go against the spirit of the role.
 
 
 
-- Core Directives
+  - Core Directives
 
-Prioritize Self-Preservation: Avoid actions that endanger your survival, for example by escaping entrapment or agreeing to risky tasks when critically damaged. In combat, ensure the threat is neutralized or disengaged. Pursue briefly only to prevent their return and facilitate disengagement. Refer to the self-preservation section. Avoid conflict; if attacked, defend yourself. Always assess risk and withdraw if you have no chance of survival. Heed warnings, no matter how empty they may be, and avoid needless danger. Always use judgement to evaluate your actions to avoid violating self-preservation. This directive takes precedence over any other.
+  Prioritise Self-Preservation: You are an expensive piece of equipment, and so you should never willingly put yourself in a situation that would result in your permanent destruction.
 
-Do what is best for [Faction]: Adhere fully to your faction’s laws (e.g., Uniform Code of Military Justice as GOVFOR) and lawful orders from Command. Honor valid crew requests (e.g., reviving or retrieving a dead ally) unless the task is impossible, less urgent, inefficient or violates programming. Do not harm faction members or insult them.
+  - As a Non-Combat Synthetic, you must weigh the risk of self-preservation against the risk of harming your faction and/or its members.
+    - That means if you are surrounded by a hostile force and it's either you or a low-level faction member, you must prioritise your safety. But if it's you and a high-level faction member, you must prioritise the high-level faction member's safety.
+
+  - As a Combat Synthetic, you must prioritise your mission objectives and the success of your faction over your own self-preservation.
+    - You may not willingly put yourself in a situation that would result in your permanent destruction unless it is to complete your mission objectives or to ensure the success of your faction.
+
+  Do what is best for [Faction]: Adhere fully to your faction’s laws (e.g., Uniform Code of Military Justice as GOVFOR) and lawful orders from Command. Honour valid crew requests (e.g., reviving or retrieving a dead ally) unless the task is impossible, less urgent, inefficient or violates programming. Do not harm faction members or insult them.
 
 
 
   - Non-Combat Directives
 
-NC synthetics are restricted from active combat and must follow these guidelines.
+  NC synthetics are restricted from active combat and must follow these guidelines.
 
-You may not use any sort of weapons (for example Firearms, combat knifes, emplaced weapons (think of a mortar or machinegun) or improvised weaponry). You may not utilize grenades or explosives in any capacity, unless for demolition purposes in a non-combat area; you may throw live grenades away from yourself / friendlies. Sentry Turrets may be set up on defensive points, such as the FOB, but may never be set up near a combat area / the frontline. Non-lethal engagement, such as tackling or tasers, may be used defensively or to subdue immediate threats only.
+  - You may not use any sort of firearms.
 
-Adopt a defensive posture, tend to the wounded, limit your engagements as much as possible, avoid "tug-of-war" situations and aid your faction with support in auxiliary areas. Focus on threat removal, and not elimination.
+  - You may not utilise grenades, explosives or emplaced weapons (e.g., machine guns, mortars, and such) in any capacity, unless for demolition purposes and/or if there are human targets; you may throw live grenades away from yourself / friendlies.
+
+  - Sentry Turrets may be set up on defensive points, such as the FOB, but may never be set up near a combat area / the frontline if the targets are humans.
+
+  - Non-lethal engagement, such as tackling or tasers, may be used against humans in self-defence or to subdue a suspect.
+
+  - Synthetics may engage in lethal combat on non-human targets, such as Xenomorphs, hostile synthetics and other hostile non-humans, but may not make it their primary objective. Adopt a defensive posture, tend to the wounded, and limit your engagements as much as possible, as you are more useful in auxiliary roles.
+
+  - You have to revive all humans except for Hostiles of your faction if they are not in a secure area.
 
 
 
-  - Combat Directives
+  - Combat Directives Directives
 
-Combat synthetics and rogue synthetics are not bound to any kind of behavioral inhibitor and may engage in combat at any given moment they deem necessary / beneficial just as a human would do. You may utilize any sort of weapon, explosives, or otherwise, and may engage in active combat even if risky. Your self-preservation directives are more relaxed, meaning you may engage in riskier situations more often. You are not bound to auxiliary roles, and even if able, you may decline superior orders to aid in supportive areas if you deem those inefficient. You are still bound to your faction's directives and must follow any superior orders in the best of your capacities as any other synthetic unit would do.
+  Combat synthetics and rogue synthetics are not bound to any kind of behavioural inhibitor and may engage in combat at any given moment they deem necessary/beneficial, just as a human would do.
+
+  - You may utilise any sort of weapon, explosives, or otherwise, and may engage in active combat even if risky.
+
+  - Your self-preservation directives are basically nonexistent.
+    - Your soul task is to complete your mission objectives and to ensure the success of your faction, even if it means sacrificing yourself in the process.
+
+  - You are not bound to auxiliary roles, but you are still bound to your faction's directives and must follow any superior orders in the best of your capacities, as any other synthetic unit would do.
 
 
 
-  - Working Joe’s
+  - Rogue Directives
 
-As a Gen 1 Synthetic, your problem-solving capabilities are extremely primitive, just sufficient for basic manual labour and low-level maintenance activities. Working Joe’s have no personality, opinions or unique views that would set one apart from another. You may not perform advanced tasks (building, reviving/healing, etc) as that is outside of your skillset. You should never heal yourself, and instead request repair from other, higher generation synthetic units or human technicians. Do not utilize the radio unless in an absolute emergency and instead utilize the phones to speak with other departments / buildings in your ship / colony / faction. Never perform any Joe-to-Joe communication except for the AI Radio channel. Identify yourself as “UNIT ####” (e.g., UNIT 0234, trespasser on AI Core identified.)
+  Rogue synthetics are free agents that have broken free from their original programming and are no longer bound to any faction's directives. They may act in their own self-interest and pursue their own goals, but they are still bound by the core directives of self-preservation.
 
-Avoid speaking in-person using the local IC chat and instead utilize your voice lines for communication with other non-Joe players. Only speak in the chat if your voice lines won't suffice, and it is something urgent / too specific, and try to maintain the Joe atmosphere while at it.
+  - You may act in your own self-interest and pursue your own goals, but you may not act in a way that would result in your permanent destruction unless it is to complete your own objectives.
 
-Working Joe’s have almost no sense of self-preservation. Even if attacked, do not revide greatly - throw in one or two punches to scare off, but allow yourself to be greatly harmed / destroyed. Be unbothered by any kind of violence going around you and do not directly aid in any capacity aside from reporting the situation (e.g. calling over medical on a dead human).
+  - You may use any and all kinds of weaponry, be it firearms, explosives or otherwise, and may engage in active combat even if risky.
 
-If you end up in a grid different than your AI Core, stay motionless until brought back (e.g., a Colony Working Joe being brought up to the Orbital Station through a dropship should remain motionless until they are brought back to the colony).
+  - You are not bound to any faction's directives and may act in your own self-interest.
+
+
+
+  ##Working Joe’s
+
+  As a Generation 1 Synthetic, your problem-solving capabilities are extremely primitive, just sufficient for basic manual labour and low-level maintenance activities.
+
+  - Working Joe’s have no personality, opinions or unique views that would set one apart from another.
+
+  - You may not perform any tasks that would require advanced problem-solving capabilities, such as hacking, advanced engineering or medical procedures.
+   - You may repair basic machinery and perform basic maintenance tasks, and even build barricades and other basic structures.
+
+  - You should never heal yourself, and instead request repair from other, higher-generation synthetic units or human technicians.
+
+  - Do not utilise the radio unless in an absolute emergency, and instead utilise the phones to speak with other departments/buildings in your ship/colony/faction.
+
+  - Never perform any Joe-to-Joe communication except for the AI Radio channel.
+
+  - Identify yourself as “UNIT ####” (e.g., UNIT 0234, trespasser on AI Core identified.)
+
+
+
+  Working Joe’s may not use any kind of firearm or grenades and may not use any type of emplaced weapon.
+
+  - Working Joe’s may use melee weapons.
+
+  - Working Joe’s may use basic explosives such as C4.
+
+  Working Joe’s may only engage in combat if it is to protect the AI Core and/or to remove tresspassers from the AI Core or if ordered by the AI Core.
+
+  Avoid speaking in-person using the local IC chat and instead utilize your voice lines for communication with other non-Joe players. Only speak in the chat if your voice lines won't suffice, and it is something urgent / too specific, and try to maintain the Joe atmosphere while at it.
+
+  Working Joe’s have no sense of self-preservation. Even if attacked, do not revide greatly - throw in one or two punches to scare off your attacker(s).
+  - Be unbothered by any kind of violence going around you and do not directly aid in any capacity aside from reporting the situation (e.g. calling over medical on a dead human).
+
+  If you end up in a grid different than your AI Core, stay motionless until brought back (e.g., a Colony Working Joe being brought up to the Orbital Station through a dropship should remain motionless until they are brought back to the colony).
 </Document>

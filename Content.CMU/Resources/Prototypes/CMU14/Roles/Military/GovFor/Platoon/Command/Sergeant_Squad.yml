@@ -5,7 +5,7 @@
   name: au14-job-name-govforsquadsergeant
   description: au14-job-description-govforsquadsergeant
   icon: "AU14JobIconSquadSgt"
-  spawnMenuRoleName: Squad Leader (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-squad-leader-govfor 
   startingGear: AU14GearGOVFORSquadSergeant
   dummyStartingGear: AU14GearGOVFORSquadSergeantDummy
   playTimeTracker: AU14JobGOVFORSquadSergeant
@@ -189,7 +189,7 @@
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantCMBCIU
   roundForce: CMBCIU
-  name: Team Leader
+  name: cmu-job-name-team-leader 
   spawnMenuRoleName: Squad Leader (CMBCIU)
   overwatchRoleName: Squad Leader
   ranks:

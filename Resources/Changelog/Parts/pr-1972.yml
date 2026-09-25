@@ -1,0 +1,13 @@
+author: potatoed6
+category: CMU
+changes:
+- message: Added SAS third party for TWE ambassasdor
+  type: Add
+- message: added MP5SD6
+  type: Add
+- message: added MP5 HEAP drum mag and normal mag
+  type: Add
+- message: Changed MP5 family sprites
+  type: Tweak
+time: '2026-09-22T19:11:46.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1972

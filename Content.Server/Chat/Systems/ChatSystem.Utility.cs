@@ -64,6 +64,7 @@ public sealed partial class ChatSystem
     /// <summary>
     /// Sends a chat message to players in voice range of the source.
     /// </summary>
+    // CMU14: anchor relayed vehicle speech bubbles at the exterior hull.
     private void SendInVoiceRange(
         ChatChannel channel,
         string message,
@@ -102,7 +103,7 @@ public sealed partial class ChatSystem
                 channel,
                 ev.Message,
                 GetYautjaVisibleWrappedMessage(ev.WrappedMessage, source, session),
-                source,
+                channel is ChatChannel.Local or ChatChannel.Emotes ? data.BubbleSource ?? source : source,
                 ev.EntHideChat,
                 session.Channel,
                 author: author,
@@ -278,11 +279,13 @@ public sealed partial class ChatSystem
         return recipients;
     }
 
+    // CMU14: anchor relayed vehicle speech bubbles at the exterior hull.
     public readonly record struct ICChatRecipientData(
         float Range,
         bool Observer,
         bool? HideChatOverride = null,
-        bool HasLOS = true);
+        bool HasLOS = true,
+        EntityUid? BubbleSource = null);
 
     private string ObfuscateMessageReadability(string message, float chance)
     {

@@ -152,6 +152,31 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 break;
         }
         AddEntryToCategory(ent, null, "Research", entry);
+        AddResearchTerminalToCatalog(ent, comp); // CMU14
+    }
+
+    // CMU14 method: supply the terminal for this ASRS faction, including map-authored catalogs.
+    private void AddResearchTerminalToCatalog(EntityUid ent, RequisitionsComputerComponent comp)
+    {
+        var terminal = comp.Faction switch
+        {
+            "govfor" => "CMUCrateResearchTerminalGovfor",
+            "opfor" => "CMUCrateResearchTerminalOpfor",
+            "colony" => "CMUCrateResearchTerminalColony",
+            "corporate" => "CMUCrateResearchTerminal",
+            _ => null,
+        };
+        if (terminal == null)
+            return;
+        // Catalog prototypes and other consoles can share category instances.
+        comp.Categories = comp.Categories.Select(category => new RequisitionsCategory
+        {
+            Name = category.Name,
+            Entries = category.Entries.Where(entry => !entry.Crate.Id.StartsWith("CMUCrateResearchTerminal", StringComparison.Ordinal)).ToList(),
+        }).ToList();
+        if (!comp.Categories.Any(category => category.Name == "Research"))
+            comp.Categories.Add(new RequisitionsCategory { Name = "Research" });
+        AddEntryToCategory(ent, comp, "Research", new RequisitionsEntry { Cost = 100, Crate = terminal });
     }
 
     private void ApplyPlatoonCatalogToComputer(EntityUid consoleUid, RequisitionsComputerComponent comp)
@@ -1176,6 +1201,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         while (computers.MoveNext(out var uid, out var comp))
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
+            AddResearchTerminalToCatalog(uid, comp); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);
         }

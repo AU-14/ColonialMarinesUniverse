@@ -116,6 +116,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private readonly HashSet<EntityUid> _immobileAnnounced = new();
     private readonly Dictionary<EntityUid, PoweredDemolitionContact> _poweredDemolitionContacts = new();
     private readonly VehicleCollisionCooldownTracker _wallSmashCooldowns = new();
+    private readonly VehicleCollisionContactTracker _collisionDamageContacts = new();
     private static readonly TimeSpan ImmobilePopupCooldown = TimeSpan.FromSeconds(4);
     // Longer than the AEV's damage-pulse cooldown so a slow server frame cannot
     // make uninterrupted forward pressure restart the demolition warmup.
@@ -215,10 +216,21 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         _immobileAnnounced.Remove(ent.Owner);
         _poweredDemolitionContacts.Remove(ent.Owner);
         _wallSmashCooldowns.RemoveVehicle(ent.Owner);
+        _collisionDamageContacts.RemoveVehicle(ent.Owner);
     }
 
     private void OnMoverMove(Entity<GridVehicleMoverComponent> ent, ref MoveEvent args)
     {
+        if (!_net.IsClient && _collisionDamageContacts.HasContacts(ent.Owner) &&
+            fixtureQ.TryComp(ent.Owner, out var fixtures) &&
+            TryGetFixtureAabb(fixtures, physics.GetPhysicsTransform(ent.Owner), out var bounds))
+        {
+            if (args.ParentChanged)
+                _collisionDamageContacts.RemoveVehicle(ent.Owner);
+            else
+                _collisionDamageContacts.Update(ent.Owner, bounds);
+        }
+
         if (!args.ParentChanged)
             return;
 

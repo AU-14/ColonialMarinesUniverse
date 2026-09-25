@@ -9,7 +9,10 @@
   name: abstract chair
   suffix: RMC
   components:
-  - type: CMUZPhysics # RuMC edit
+  - type: ResinClearable # CMU14
+  - type: CMUReconFurniture
+    material: Chair
+  - type: CMUZPhysics 
   - type: Corrodible
     timeToApply: 4
     structure: true
@@ -56,6 +59,8 @@
   name: chair
   description: A rectangular metallic frame sitting on four legs with a back panel. Designed to fit the sitting position, more or less comfortably.
   components:
+  - type: CMUReconFurniture
+    material: FoldingChair
   - type: Transform
     anchored: true
   - type: Physics
@@ -132,6 +137,8 @@
   name: stool
   description: Apply butt.
   components:
+  - type: CMUReconFurniture
+    material: Stool
   - type: Sprite
     state: stool
   - type: Construction
@@ -147,6 +154,8 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUReconFurniture
+    material: Armchair
   - type: Sprite
     state: comfychair
   - type: RMCStrapNoDrawDepthChange
@@ -278,6 +287,8 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUReconFurniture
+    material: Sofa
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/Couches/sofa.rsi
     state: sofa
@@ -309,6 +320,8 @@
   id: CMChairOfficeDark
   name: dark office chair
   components: # RMC14 Non-parity: Not rotatable
+  - type: CMUReconFurniture
+    material: OfficeChair
   - type: Sprite
     state: officechair_dark
   - type: RMCStrapNoDrawDepthChange
@@ -338,6 +351,8 @@
   name: wooden chair
   description: Old is never too old to not be in fashion.
   components:
+  - type: CMUReconFurniture
+    material: WoodChair
   - type: Sprite
     state: wooden_chair
   - type: RMCStrapNoDrawDepthChange
@@ -381,5 +396,7 @@
   id: CMChairWoodWings
   description: Old is never too old to not be in fashion.
   components:
+  - type: CMUReconFurniture
+    material: WoodWingChair
   - type: Sprite
     state: wooden_chair_wings

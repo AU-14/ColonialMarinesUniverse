@@ -6,7 +6,7 @@
   name: au14-job-name-radiotrafficoperator
   description: au14-job-description-radiotrafficoperator
   icon: "AU14JobIconRTO"
-  spawnMenuRoleName: Radio Traffic Operator (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-radio-traffic-operator-govfor 
   startingGear: AU14GearGOVFORRadioTrafficOperator
   dummyStartingGear: AU14GearGOVFORRadioTrafficOperatorDummy
   playTimeTracker: AU14JobGOVFORRadioTrafficOperator

@@ -9,6 +9,8 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: VehicleSmashable
+    selfDamageMultiplier: 0
   - type: Transform
     anchored: true
   - type: Physics
@@ -83,6 +85,7 @@
     anchored: true
   - type: Physics
     bodyType: Static
+    canCollide: false
   - type: Anchorable
     flags:
     - Anchorable

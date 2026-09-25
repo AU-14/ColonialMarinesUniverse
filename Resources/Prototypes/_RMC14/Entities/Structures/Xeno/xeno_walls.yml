@@ -23,7 +23,7 @@
   - type: VehicleSmashable
     deleteOnHit: true
     damageOnHit: 900
-    selfDamageMultiplier: 0.6
+    selfDamageMultiplier: 0
     slowdownMultiplier: 0.2
     slowdownDuration: 1.5
     requiredVehicleTag: VehicleHeavy
@@ -94,6 +94,7 @@
   name: thick resin wall
   description: Weird slime solidified into a thick wall.
   components:
+  - type: VehicleReinforcedObstacle
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_wall.rsi
   - type: Icon

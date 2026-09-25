@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Shared._RMC14.Barricade;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Entrenching;
+using Content.Shared._RMC14.Movement; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.GasToggle;
 using Content.Shared._RMC14.Xenonids.Neurotoxin;
@@ -30,6 +31,8 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components; // CMU14
+using Robust.Shared.Physics.Collision.Shapes; // CMU14
 using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared._RMC14.Xenonids.Stab;
@@ -56,6 +59,7 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedRMCLagCompensationSystem _lagCompensation = default!; // CMU14
 
     private const int AttackMask = (int)(CollisionGroup.MobMask | CollisionGroup.Opaque);
     private const int TailStabMaxTargets = 1;
@@ -96,6 +100,8 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
         if (userCoords.MapId != targetCoords.MapId)
             return;
 
+        _lagCompensation.SendLastRealTick(); // CMU14: use the same view tick as melee and projectile hits.
+
         if (TryComp(stab, out MeleeWeaponComponent? melee))
         {
             if (_timing.CurTime < melee.NextAttack)
@@ -108,8 +114,7 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
         var tailRange = stab.Comp.TailRange.Float();
         var box = new Box2(userCoords.Position.X - 0.10f, userCoords.Position.Y, userCoords.Position.X + 0.10f, userCoords.Position.Y + tailRange);
 
-        var matrix = Vector2.Transform(targetCoords.Position, _transform.GetInvWorldMatrix(transform));
-        var rotation = _transform.GetWorldRotation(stab).RotateVec(-matrix).ToWorldAngle();
+        var rotation = (userCoords.Position - targetCoords.Position).ToWorldAngle(); // CMU14: map-space aim.
         var boxRotated = new Box2Rotated(box, rotation, userCoords.Position);
         LastTailAttack = boxRotated;
 
@@ -123,37 +128,69 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
 
         bool Ignored(EntityUid uid)
         {
-            if (uid == stab.Owner)
-                return true;
-
-            if (HasComp<BarricadeComponent>(uid))
-                return false;
-
-            if (!HasComp<MobStateComponent>(uid))
-                return true;
-
-            return _hive.IsMember(uid, hive);
+            // CMU14: stationary barricades use the broadphase; mobs are tested at their historical pose below.
+            return uid == stab.Owner || !HasComp<BarricadeComponent>(uid);
         }
 
-        // dont open allocations ahead
-        // entity lookups dont work properly with Box2Rotated
-        // so we do one ray cast on each side instead since its narrow enough
-        // im sure you could calculate the ray bounds more efficiently
-        // but have you seen these allocations either way
         var intersect = _physics.IntersectRayWithPredicate(transform.MapID, leftRay, tailRange, Ignored, false);
         intersect = intersect.Concat(_physics.IntersectRayWithPredicate(transform.MapID, rightRay, tailRange, Ignored, false));
-        var results = intersect
-            .Select(r => r.HitEntity)
-            .Distinct()
-            .OrderBy(x =>
-                (_transform.GetMapCoordinates(x).Position - userCoords.Position).LengthSquared())
-            .ToList();
+        var hits = new Dictionary<EntityUid, MapCoordinates>();
+        foreach (var result in intersect)
+            hits[result.HitEntity] = _transform.GetMapCoordinates(result.HitEntity);
+
+        // CMU14: a moving target may have left the current physics ray by the time the input arrives.
+        // Test mob fixtures in the attacker's view, without moving live entities or rewinding the world.
+        TryComp(stab, out ActorComponent? actor);
+        var localBox = new Box2(-0.1f, 0f, 0.1f, tailRange);
+        var mobs = EntityQueryEnumerator<MobStateComponent, FixturesComponent, PhysicsComponent, TransformComponent>();
+        while (mobs.MoveNext(out var uid, out _, out var fixtures, out var body, out var xform))
+        {
+            if (uid == stab.Owner || !body.CanCollide || xform.MapID != userCoords.MapId || _hive.IsMember(uid, hive))
+                continue;
+
+            var (coordinates, angle) = _lagCompensation.GetCoordinatesAngle(uid, actor?.PlayerSession, xform);
+            if (!coordinates.IsValid(EntityManager))
+                continue;
+
+            var mapCoordinates = _transform.ToMapCoordinates(coordinates);
+            if (mapCoordinates.MapId != userCoords.MapId)
+                continue;
+
+            var position = (-rotation).RotateVec(mapCoordinates.Position - userCoords.Position);
+            if (position.LengthSquared() > (tailRange + 1f) * (tailRange + 1f))
+                continue;
+
+            var localAngle = _transform.GetWorldRotation(coordinates.EntityId) + angle - rotation;
+            var pose = new Transform(position, localAngle);
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if ((fixture.CollisionLayer & AttackMask) == 0)
+                    continue;
+
+                var hit = false;
+                if (fixture.Shape is PhysShapeCircle circle)
+                    hit = new Circle(position + localAngle.RotateVec(circle.Position), circle.Radius).Intersects(localBox);
+                else
+                {
+                    for (var child = 0; child < fixture.Shape.ChildCount; child++)
+                        hit |= fixture.Shape.ComputeAABB(pose, child).Intersects(localBox);
+                }
+
+                if (!hit)
+                    continue;
+
+                hits[uid] = mapCoordinates;
+                break;
+            }
+        }
+
+        var results = hits.OrderBy(hit => (hit.Value.Position - userCoords.Position).LengthSquared());
 
         var actualResults = new List<EntityUid>();
         var range = tailRange;
-        foreach (var result in results)
+        foreach (var (result, coordinates) in results)
         {
-            if (!_interaction.InRangeUnobstructed(stab.Owner, result, range: range))
+            if (!_interaction.InRangeUnobstructed(stab.Owner, coordinates, range: range, predicate: uid => uid == result)) // CMU14
                 continue;
 
             actualResults.Add(result);
@@ -163,7 +200,6 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
 
 
         // TODO RMC14 sounds
-        // TODO RMC14 lag compensation
         var damaged = false;
         var damage = new DamageSpecifier(stab.Comp.TailDamage);
         var eve = new RMCGetTailStabBonusDamageEvent(new DamageSpecifier());
@@ -194,8 +230,8 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
             {
                 var hit = originalHit;
 
-                var targetPosition = _transform.GetMoverCoordinates(hit).Position;
-                var userPosition = _transform.GetMoverCoordinates(stab).Position;
+                var targetPosition = hits[hit].Position; // CMU14: blockers share the compensated map-space ray.
+                var userPosition = userCoords.Position;
 
                 var entities = GetNetEntityList(_melee.ArcRayCast(
                         userPosition,
@@ -250,6 +286,7 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
                 }
             }
 
+            var matrix = Vector2.Transform(targetCoords.Position, _transform.GetInvWorldMatrix(transform)); // CMU14
             var localPos = transform.LocalRotation.RotateVec(matrix);
 
             var length = localPos.Length();

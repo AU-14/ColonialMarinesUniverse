@@ -1739,6 +1739,8 @@
   - type: AccessReader
     access:
     - - AU14AccessGovforPilot
+  - type: Docking
+    boltOnFTL: false
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/dropship_door.rsi
     offset: 0,0
@@ -2021,6 +2023,8 @@
   - type: AccessReader
     access:
     - - AU14AccessGovforPilot
+  - type: Docking
+    boltOnFTL: false
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/dropship_door.rsi
     offset: 0,0
@@ -5384,6 +5388,8 @@
   - type: AccessReader
     access:
     - - AU14AccessGovforPilot
+  - type: Docking
+    boltOnFTL: false
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/dropship_door.rsi
     offset: 0,0
@@ -5666,6 +5672,8 @@
   - type: AccessReader
     access:
     - - AU14AccessGovforPilot
+  - type: Docking
+    boltOnFTL: false
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/dropship_door.rsi
     offset: 0,0
@@ -9108,6 +9116,8 @@
   - type: AccessReader
     access:
     - - AU14AccessGovforPilot
+  - type: Docking
+    boltOnFTL: false
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/midway/dropship_door.rsi
     offset: 0,0
@@ -10884,6 +10894,36 @@
     state: 16,15
   - type: Occluder
     enabled: false
+- type: entity
+  parent: CMSeatPilot
+  id: CMUMohawkMidwayOmahaPilot9e5b91c0ba
+  name: pilot seat
+  suffix: Mohawk, Midway
+  components:
+  - type: Transform
+    anchored: true
+    rot: 3.141592653589793 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer
 - type: entity
   parent: CMBaseWallInvincible
   id: CMUMohawkMidwayNavyLeft30940aca3faa
@@ -12703,6 +12743,8 @@
   - type: AccessReader
     access:
     - - AU14AccessGovforPilot
+  - type: Docking
+    boltOnFTL: false
   - type: Sprite
     sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/mohawk_navy/dropship_door.rsi
     offset: 0,0
@@ -14479,3 +14521,33 @@
     state: 16,15
   - type: Occluder
     enabled: false
+- type: entity
+  parent: CMSeatPilot
+  id: CMUMohawkMidwayNavyOmahaPilot9e5b91c0ba
+  name: pilot seat
+  suffix: Mohawk, Midway, Navy
+  components:
+  - type: Transform
+    anchored: true
+    rot: 3.141592653589793 rad
+  - type: Strap
+    buckleOffset: 0,0
+  - type: MohawkSeat
+    visualOffset: -0,0.25
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StrapVisuals.State:
+        enum.MohawkVisuals.Layer:
+          'True':
+            state: passenger_chair_buckled
+          'False':
+            state: passenger_chair
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/structures/machinery/omaha/seats.rsi
+    offset: -0,0.25
+    noRot: false
+    layers:
+    - state: passenger_chair
+      map:
+      - enum.MohawkVisuals.Layer

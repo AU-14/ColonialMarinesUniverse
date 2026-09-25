@@ -28,7 +28,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Professor Von Bandolier
+  name: cmu-job-name-professor-von-bandolier 
   description: Find the biggest and most dangerous game, whether that is space alien or a man with a gun and eloquently shoot them.
   setPreference: true
   playTimeTracker: AU14JobCivilianProfessorVonBandolier

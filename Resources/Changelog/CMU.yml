@@ -10012,5 +10012,412 @@
   id: 658
   time: '2026-09-21T01:37:52.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1982
+- author: ArturUr1
+  changes:
+  - message: Colonists now receive the corresponding ribbons instead of medals. This
+      also applies to the CLF.
+    type: Tweak
+  id: 659
+  time: '2026-09-22T19:10:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1985
+- author: ArturUr1
+  changes:
+  - message: Hardcode for the lobby has been replaced. Localization keys for the roles
+      have been added. English translations of the localization keys have been added
+    type: Code
+  id: 660
+  time: '2026-09-22T19:10:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1984
+- author: potatoed6
+  changes:
+  - message: Added SAS third party for TWE ambassasdor
+    type: Add
+  - message: added MP5SD6
+    type: Add
+  - message: added MP5 HEAP drum mag and normal mag
+    type: Add
+  - message: Changed MP5 family sprites
+    type: Tweak
+  id: 661
+  time: '2026-09-22T19:11:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1972
+- author: Vencallium
+  changes:
+  - message: Added independent GOVFOR, OPFOR, colony, and Weyland-Yutani research
+      terminals to their respective ASRS catalogs.
+    type: Add
+  - message: Researchers can spend 1 research point to reduce their faction's contract
+      cooldown by 60 seconds.
+    type: Add
+  - message: Research contracts, points, clearance, reports, and scan rewards are
+      tracked separately for each faction.
+    type: Tweak
+  id: 662
+  time: '2026-09-22T19:34:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1944
+- author: deepdarkdepths
+  changes:
+  - message: Gamemode votes exclude the last played mode until another round starts,
+      while retaining the sole eligible option. Server hosts can disable this with
+      `cmu.game.vote_exclude_last_played`; it is enabled by default.
+    type: Add
+  - message: Vote carryover labels now show only the effective bonus.
+    type: Tweak
+  id: 663
+  time: '2026-09-22T20:34:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1966
+- author: TheHellFireo
+  changes:
+  - message: Repeated contact with the same obstacle no longer stacks vehicle damage.
+      Unreinforced obstacles and basic resin no longer damage heavy vehicles; Humvees
+      ignore light smashable obstacles.
+    type: Fix
+  - message: Armor protects modules before damage is distributed. Direct hits affect
+      an exposed module with limited spillover instead of damaging every module at
+      full strength.
+    type: Fix
+  - message: Malfunctions are rare after serious damage. Minor wear keeps full performance
+      and severe damage slowdowns have a floor.
+    type: Tweak
+  - message: Improved tank pivots, reverse acceleration, APC and Humvee steering,
+      and low-speed alignment.
+    type: Tweak
+  - message: Improved Humvee damage resistance and reduced wall-crash damage and downtime.
+    type: Tweak
+  - message: Vehicle maintenance lets you repair a selected installed module without
+      removing it. Wheels and treads still use a maintenance jack; heavy module removal
+      still needs a power loader.
+    type: Add
+  - message: Vehicle damage examine view shows condition, faults and their effects
+      without repair instructions.
+    type: Add
+  - message: Vehicles can crush streetlights and traffic lights, broken lights no
+      longer block them, and surviving closed shutters stop movement.
+    type: Fix
+  - message: Tank guns can fire during turret traverse along the actual barrel direction.
+    type: Fix
+  - message: Gunner view loads the exterior area correctly and crew speech bubbles
+      appear at the vehicle for outside listeners.
+    type: Fix
+  - message: Platoons now have their own vehicle, loadout and spare-parts catalogs,
+      available from round start.
+    type: Add
+  - message: Each side can issue two new vehicles per round across all lifts, with
+      at most one tank and one VTOL. Returning a vehicle keeps its condition and equipment
+      without using another slot; destroyed vehicles do not refund slots.
+    type: Tweak
+  - message: USCM, LACN, WY PMC and VAI can order armed or transport Blackfoots. CMB
+      and HAZOPS can order transport Blackfoots. Orders include the landing pad, fuel
+      pump, flight computer and tug.
+    type: Add
+  - message: Vehicle supply consoles show issued vehicles and the shared allowance.
+      Compatible spare parts remain available after the vehicle allowance is spent.
+    type: Add
+  - message: Vehicle research unlocks and additional-vehicle research purchases.
+    type: Remove
+  id: 664
+  time: '2026-09-22T22:31:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1990
+- author: TheHellFireo
+  changes:
+  - message: Xenomorphs can no longer evolve into Warlock.
+    type: Remove
+  id: 665
+  time: '2026-09-22T23:22:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1992
+- author: TheHellFireo
+  changes:
+  - message: Renamed the flesh abomination threat to biomorphs.
+    type: Tweak
+  id: 666
+  time: '2026-09-22T23:30:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1993
+- author: TheHellFireo
+  changes:
+  - message: Airborne objects and mobs no longer disappear when crossing overhead
+      z-levels.
+    type: Fix
+  id: 667
+  time: '2026-09-22T23:36:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1991
+- author: OverusedMeme
+  changes:
+  - message: M3VL flak vest as an option in the CIU aircrew vendor
+    type: Add
+  - message: added the missing Mk30 visor options to CIU aircrew vendor
+    type: Fix
+  id: 668
+  time: '2026-09-23T00:30:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1995
+- author: TheHellFireo
+  changes:
+  - message: Added a 3D tactical map with floor cutaways, tracked role icons and player
+      centering.
+    type: Add
+  - message: Added colored pencil drafts, adjustable stroke widths and text pins with
+      Send.
+    type: Add
+  - message: Standard tactical-map actions and computers open the new map, with a
+      classic-map option in CMU settings.
+    type: Tweak
+  - message: Synchronized published planet drawings between classic and 3D maps and
+      improved reopening after interrupted loads.
+    type: Fix
+  id: 669
+  time: '2026-09-23T00:43:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1996
+- author: troytroy400
+  changes:
+  - message: Bangalores now deal enough structural damage to destroy multiple reinforced
+      walls, have a much larger blast radius and contain shrapnel (basically a complete
+      buff).
+    type: Tweak
+  - message: Mine detectors can now alert you to IEDs. Two mine detectors can be found
+      in req vendors.
+    type: Tweak
+  - message: Combat technician racks now have free mine detectors and have cable coil
+      for 1 point.
+    type: Add
+  - message: Reduced the price of breaching charges, wood, sandbags and HESCOs in
+      combat technician gear racks.
+    type: Tweak
+  - message: Field antenna masts now require more material and take longer to build.
+    type: Tweak
+  - message: Fixed tile movement getting you stuck on stairs and pretty much any z-level
+      change.
+    type: Fix
+  - message: Halved the rate at which fire spreads.
+    type: Tweak
+  id: 670
+  time: '2026-09-23T04:03:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1998
+- author: TheHellFireo
+  changes:
+  - message: The 3D tactical map retains its initial terrain survey and reduces first-open
+      loading work.
+    type: Tweak
+  - message: Restore tactical-map publication announcements, squad drawing delivery
+      and fresh ghost access.
+    type: Fix
+  - message: Include static forest scenery and keep drawing permissions restricted
+      to authorized tactical-map sources.
+    type: Fix
+  - message: Render distinct chair, table, bed, couch and shelving models in the 3D
+      tactical map.
+    type: Add
+  - message: Remove the Structures legend from the 3D tactical-map sidebar.
+    type: Tweak
+  id: 671
+  time: '2026-09-23T14:34:42.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1999
+- author: TheHellFireo
+  changes:
+  - message: Keep the 3D tactical survey frozen when construction adds linked floors.
+    type: Fix
+  - message: Retain uploaded tactical-map terrain between openings and preload the
+      likely personal map.
+    type: Tweak
+  - message: Smooth live tactical-map contacts with bounded movement prediction.
+    type: Tweak
+  - message: Hide tactical-map drawing and sending controls from read-only viewers.
+    type: Fix
+  id: 672
+  time: '2026-09-23T17:02:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2003
+- author: TheHellFireo
+  changes:
+  - message: Removed inaccurate prediction and bouncing from 3D tactical-map tracking
+      icons.
+    type: Fix
+  - message: Tactical-map icons arrive with the opening survey, with faster recovery
+      when an opening request is missed.
+    type: Fix
+  id: 673
+  time: '2026-09-23T17:55:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2004
+- author: TheHellFireo
+  changes:
+  - message: Fixed hospital shuttles getting stuck on landing pads reserved by deleted
+      shuttles.
+    type: Fix
+  - message: Fixed dragged machinery detonating tripwire traps.
+    type: Fix
+  - message: Fixed ordinary dropship and gunship crashes causing premature victory
+      while Xenos are still alive.
+    type: Fix
+  - message: Fixed spent casings appearing on another floor and falling onto the shooter
+      when firing across levels.
+    type: Fix
+  - message: Fixed OPFOR vehicle interiors requiring GOVFOR access and using GOVFOR
+      command equipment settings.
+    type: Fix
+  - message: Corrected the highest Queen title from Empress Queen to Prime Empress.
+    type: Fix
+  id: 674
+  time: '2026-09-24T00:03:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2007
+- author: TheHellFireo
+  changes:
+  - message: The 3D tactical map now shows friendly marine names beside their icons,
+      with an option to hide the names.
+    type: Add
+  - message: Overwatch operators can click marine icons on the 3D tactical map to
+      open their helmet cameras.
+    type: Add
+  - message: Queens can click living xeno icons on either tactical map to watch members
+      of their hive.
+    type: Add
+  - message: Moving the queen eye no longer interrupts resin construction or hive
+      construction orders.
+    type: Fix
+  - message: Queen-eye teleporting works from both tactical maps, including while
+      watching another xeno. Click a weeded tile to move the eye; dragging on the
+      3D map still pans.
+    type: Fix
+  id: 675
+  time: '2026-09-24T00:07:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2006
+- author: TheHellFireo
+  changes:
+  - message: Bush research terminals now display and spend GOVFOR research credits.
+    type: Fix
+  - message: AGM airburst grenades now release their damaging payloads.
+    type: Fix
+  - message: HJRA kits no longer lose the launcher tube while filling.
+    type: Fix
+  - message: Restored loadout selection for service, law enforcement, ethics, mob,
+      prisoner, Working Joe, orbital counsel, and shopkeeper roles.
+    type: Fix
+  - message: The orange hazard vest no longer replaces the uniform, and character
+      previews retain their other clothing.
+    type: Fix
+  - message: Flamethrower spray stops at closed airlocks, including doors closed while
+      flames are travelling.
+    type: Fix
+  - message: Kill-threat objectives now recognize threat members without a generic
+      threat job and retain their assignment after evolution.
+    type: Fix
+  - message: Reanimated zombies and summoned EO units no longer count as surviving
+      humans.
+    type: Fix
+  - message: US Army tech reinforcements arrive aboard their shuttle even when landing
+      zones are unavailable.
+    type: Fix
+  - message: Tail stab accounts for moving targets' positions when the attacker saw
+      them.
+    type: Fix
+  - message: Building resin removes grass, trees, chairs, and tables from the chosen
+      tile after successful placement.
+    type: Fix
+  - message: Lexington takes projectile damage and applies its acid-spit vulnerability
+      to hull pieces.
+    type: Fix
+  - message: Destroying a hive core during the first 15 minutes allows immediate replacement.
+    type: Fix
+  - message: Becoming an imaginary friend from mghost preserves the mentor's current
+      body.
+    type: Fix
+  - message: Hijacking from another grid clears stranded xenos and limited hive structures
+      across planet levels.
+    type: Fix
+  - message: Third-party ships automatically depart after two minutes total, including
+      a 30-second warning.
+    type: Tweak
+  id: 676
+  time: '2026-09-24T00:17:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2008
+- author: TheHellFireo
+  changes:
+  - message: Added the missing Midway cockpit seats and stopped cockpit hatches automatically
+      bolting during flight.
+    type: Fix
+  - message: Mohawk ramps now carry overlapping vehicles in both directions, and stair
+      previews open and close at 1.2 tiles.
+    type: Fix
+  - message: Corrected Mohawk paradrop exits and queen hijack access from its elevated
+      cabin.
+    type: Fix
+  - message: Added custom Mohawk takeoff, plasma/reactor flight ambience and ten-second
+      landing sounds.
+    type: Add
+  id: 677
+  time: '2026-09-24T00:40:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2009
+- author: TheHellFireo
+  changes:
+  - message: Tactical maps now remember your top-down view, selected floor and display
+      settings when reopened.
+    type: Fix
+  - message: Xenos can travel through hive tunnels between floors of the same battlefield.
+    type: Fix
+  - message: Boiler bombard retains its normal range when aimed upstairs, and its
+      gas spreads through open air as well as across floors.
+    type: Fix
+  id: 678
+  time: '2026-09-24T17:01:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2012
+- author: TheHellFireo
+  changes:
+  - message: Added two-seat VTOL fighters with custom attack passes, reconnaissance
+      optics, six weapon mounts and sector air combat.
+    type: Add
+  - message: Added reloadable, IFF-aware MANPAD kits to both sides' requisitions,
+      restocking every 15 minutes.
+    type: Add
+  - message: Added separate Party Time combat flyby and parade variants.
+    type: Add
+  - message: Added fighter and MANPAD launch, flight and ground-impact effects with
+      new sounds.
+    type: Tweak
+  - message: Removed Mohawk landing-clearance restrictions.
+    type: Remove
+  id: 679
+  time: '2026-09-24T17:56:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2011
+- author: twinkle
+  changes:
+  - message: Mutiny Rules.
+    type: Add
+  - message: Corporate Rules
+    type: Add
+  - message: (Self-) Antag Rules
+    type: Add
+  - message: Roleplay Rules
+    type: Tweak
+  - message: Insurgency Rules
+    type: Tweak
+  - message: High Ropleplay Roles Rules
+    type: Tweak
+  - message: Rules (go read em)
+    type: Tweak
+  - message: Rule Changes
+    type: Admin
+  - message: '''fixed'' certain rules and how they read'
+    type: Fix
+  - message: More rule related stuff
+    type: Tweak
+  id: 680
+  time: '2026-09-24T20:06:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1988
+- author: TheHellFireo
+  changes:
+  - message: Stabilized FTL backgrounds across decks and corrected fighter taxi input
+      and camera updates.
+    type: Fix
+  - message: Enabled read-only fighter visuals for spectators and corrected the cockpit
+      shader startup error.
+    type: Fix
+  - message: Restricted fighter weapon release to runs inside the AO and randomized
+      holding-point parachute drops.
+    type: Tweak
+  - message: Added MANPAD airspace radar, a separate no-IFF launcher, and automatic
+      boiler plasma air defense.
+    type: Add
+  - message: Moved Mohawk vehicle unloading clear of the ramp and added vehicle radios
+      to both aircraft.
+    type: Tweak
+  id: 681
+  time: '2026-09-24T20:11:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2014
 Name: CMU
 Order: -1
