@@ -10435,5 +10435,64 @@
   id: 682
   time: '2026-09-24T23:29:37.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2015
+- author: troytroy400
+  changes:
+  - message: Complete LACN sprite and equipment Redux done by Pato.
+    type: Add
+  - message: Complete rework of ALL faction sprites including armor attachments, armor,
+      fatigues, camo for all environments, tons more customization, shipside uniforms
+      for engineering, medical, requisitions, MP, flight crew and command.
+    type: Add
+  - message: Added LACN belts, webbings, bags, gas masks, goggles, aircrew NVGs, and
+      ration packs.
+    type: Add
+  - message: Added LACN Redux weapons. Kramer Karbine, Kramer Mobile Support Weapon,
+      civilian and enforcer Kramers, TPR9 civilian, breacher and Penta shotguns, the
+      Judge shotgun revolver, and an emplaced 30mm autocannon with HE and HEAP ammo
+      links.
+    type: Add
+  - message: The Kramer AR, LSW and TPR23B now use their new LACN Redux sprites, and
+      Kramer magazine and box sprites have been updated.
+    type: Tweak
+  - message: Added Kramer attachments. 2x scope, smart-scope, bipod, underbarrel grenade
+      launcher, underbarrel shotgun and two new kramer stock variants.
+    type: Add
+  - message: Added LACN doctor, requisitions, engineering staff, combat technician,
+      MP and RTO vendors.
+    type: Add
+  - message: Split the Pilot Officer into Transport Pilot, Gunship Pilot, Fighter
+      Pilot and Fighter Systems Officer.
+    type: Add
+  - message: Dump pouches now fit three empty magazines in the space of each full
+      one, meaning you can use it as a dump pouch finally.
+    type: Tweak
+  - message: Kramer rifles now handle closer to the M41A MK1/MK2 and are easier to
+      hit your target with.
+    type: Tweak
+  - message: LACN commando sniper team now uses the new commando gear.
+    type: Tweak
+  - message: Royal Marine Commando fatigues camo now match the map. Updated RMC Rapid
+      Response Team to use them.
+    type: Tweak
+  - message: Every platoon now gets an engineering staff gear rack.
+    type: Tweak
+  - message: Loreified the standard MRE.
+    type: Tweak
+  - message: Removed the old RTO backpack from platoon command vendors.
+    type: Remove
+  - message: USCM armor kit pieces now change camouflage with the map.
+    type: Fix
+  - message: Kramer and M20A magazine sprites now properly appear and disappear with
+      the magazine.
+    type: Fix
+  - message: The not whitelisted message now informs players to apply on the forums
+      rather than the discord.
+    type: Tweak
+  - message: New vendor markers still need placing on maps. VMarkerShipReqEquipment,
+      VMarkerGovforReqEquipment, VMarkerShipEngiEquipment and VMarkerGovforEngiEquipment.
+    type: Admin
+  id: 683
+  time: '2026-09-25T21:43:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2020
 Name: CMU
 Order: -1
