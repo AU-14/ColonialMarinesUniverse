@@ -263,7 +263,7 @@
   - type: CMArmorPiercing
     amount: 30
 
-- type: entity
+- type: entity # CMU14
   id: VehicleDragonFlameImpact
   name: DRGN flame impact
   categories: [ HideSpawnMenu ]
@@ -357,7 +357,7 @@
         - Impassable
         - BulletImpassable
 
-- type: entity
+- type: entity # CMU14
   id: VehicleTankFlamerImpact
   name: tank flamer impact
   categories: [ HideSpawnMenu ]
