@@ -82,6 +82,8 @@
 - type: job
   parent: AU14JobOfficerEngiBase
   id: AU14JobGOVFOROfficerEngi
+  marineAuthorityLevel: 9
+  spawnPointJob: CMChiefEngineer
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

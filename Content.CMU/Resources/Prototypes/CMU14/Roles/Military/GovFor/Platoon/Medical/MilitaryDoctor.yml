@@ -73,6 +73,7 @@
 - type: job
   parent: AU14JobMilitaryDoctorBase
   id: AU14JobGOVFORMilitaryDoctor
+  spawnPointJob: CMDoctor
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

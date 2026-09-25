@@ -102,6 +102,8 @@
 - type: job
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCo
+  marineAuthorityLevel: 15
+  spawnPointJob: CMCommandingOfficer
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

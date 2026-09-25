@@ -85,6 +85,8 @@
 - type: job
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobGOVFOROfficerLogistics
+  marineAuthorityLevel: 8
+  spawnPointJob: CMQuartermaster
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

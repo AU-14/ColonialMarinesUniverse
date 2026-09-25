@@ -90,6 +90,8 @@
 - type: job
   parent: AU14JobOfficerMPBase
   id: AU14JobGOVFOROfficerMP
+  marineAuthorityLevel: 11
+  spawnPointJob: CMChiefMP
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

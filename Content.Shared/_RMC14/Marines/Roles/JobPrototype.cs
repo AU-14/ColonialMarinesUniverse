@@ -136,6 +136,14 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
     public string? RoundRole { get; private set; }
 
     /// <summary>
+    /// A legacy job spawn point to reuse when a map has no marker for this role.
+    /// This lets faction-specific roles reuse a deliberate station location rather than
+    /// falling back to an unrelated job's spawn point.
+    /// </summary>
+    [DataField]
+    public ProtoId<JobPrototype>? SpawnPointJob { get; private set; }
+
+    /// <summary>
     /// Reusable role profiles applied before <see cref="RoundComponents"/>.
     /// Use this for faction/family defaults so individual job files only need their unique overlays.
     /// </summary>

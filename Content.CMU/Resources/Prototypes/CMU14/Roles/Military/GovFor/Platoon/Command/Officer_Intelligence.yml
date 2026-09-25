@@ -91,6 +91,8 @@
 - type: job
   parent: AU14JobOfficerIntelBase
   id: AU14JobGOVFOROfficerIntel
+  marineAuthorityLevel: 6
+  spawnPointJob: CMRifleman
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

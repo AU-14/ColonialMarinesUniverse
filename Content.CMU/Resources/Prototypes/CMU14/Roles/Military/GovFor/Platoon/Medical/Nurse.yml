@@ -108,6 +108,7 @@
 - type: job
   parent: AU14JobNurseBase
   id: AU14JobGOVFORNurse
+  spawnPointJob: CMNurse
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

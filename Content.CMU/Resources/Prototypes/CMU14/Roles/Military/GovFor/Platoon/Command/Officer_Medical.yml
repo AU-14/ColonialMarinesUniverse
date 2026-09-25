@@ -86,6 +86,8 @@
 - type: job
   parent: AU14JobOfficerMedicalBase
   id: AU14JobGOVFOROfficerMedical
+  marineAuthorityLevel: 10
+  spawnPointJob: CMCMO
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

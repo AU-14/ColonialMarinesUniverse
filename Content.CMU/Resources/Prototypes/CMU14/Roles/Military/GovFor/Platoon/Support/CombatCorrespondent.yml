@@ -102,6 +102,7 @@
 - type: job
   parent: AU14JobGOVFORCombatCorrespondentBase
   id: AU14JobGOVFORCombatCorrespondent
+  spawnPointJob: CMCorrespondent
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

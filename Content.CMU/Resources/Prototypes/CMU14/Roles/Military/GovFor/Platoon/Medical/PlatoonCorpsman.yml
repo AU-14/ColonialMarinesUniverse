@@ -142,6 +142,8 @@
 - type: job
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsman
+  marineAuthorityLevel: 1
+  spawnPointJob: CMHospitalCorpsman
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

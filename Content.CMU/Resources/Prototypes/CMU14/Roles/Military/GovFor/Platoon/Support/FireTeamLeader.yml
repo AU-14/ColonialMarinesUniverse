@@ -125,6 +125,8 @@
 - type: job
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperator
+  marineAuthorityLevel: 1
+  spawnPointJob: CMFireteamLeader
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

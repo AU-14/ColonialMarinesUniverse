@@ -157,6 +157,7 @@
 - type: job
   parent: AU14JobAuxSupportSynthBase
   id: AU14JobGOVFORAuxSupportSynth
+  spawnPointJob: CMRifleman
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

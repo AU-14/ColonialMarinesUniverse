@@ -94,6 +94,8 @@
 - type: job
   parent: AU14JobAdjutantBase
   id: AU14JobGOVFORAdjutant
+  marineAuthorityLevel: 14
+  spawnPointJob: CMExecutiveOfficer
   hidden: false
   setPreference: true
   basePlaytimeTracker: true
