@@ -149,7 +149,7 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
                 | CollisionGroup.InteractImpassable
                 | CollisionGroup.BarricadeImpassable))
         {
-            _popup.PopupClient(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
+            _popup.PopupEntity(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
             return;
         }
 
@@ -372,14 +372,14 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
         victim = null;
         if (dist > action.EmpoweredRange)
         {
-            _popup.PopupClient(Loc.GetString("rmc-despoiler-pounce-out-of-range"), uid, uid);
+            _popup.PopupEntity(Loc.GetString("rmc-despoiler-pounce-out-of-range"), uid, uid);
             return false;
         }
 
         victim = FindEmpoweredVictim(uid, args);
         if (victim is null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-despoiler-caustic-no-target"), uid, uid);
+            _popup.PopupEntity(Loc.GetString("rmc-despoiler-caustic-no-target"), uid, uid);
             return false;
         }
 
@@ -390,7 +390,7 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
                 | CollisionGroup.InteractImpassable
                 | CollisionGroup.BarricadeImpassable))
         {
-            _popup.PopupClient(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
+            _popup.PopupEntity(Loc.GetString("rmc-despoiler-pounce-blocked"), uid, uid);
             victim = null;
             return false;
         }
