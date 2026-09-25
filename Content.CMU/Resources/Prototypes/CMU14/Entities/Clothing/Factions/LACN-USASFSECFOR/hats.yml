@@ -5,9 +5,9 @@
   description: A standard cap made for the LACN.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/HelmetsHats/lacnnavycap.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Hats/LACNcap.rsi
   - type: Clothing
-    sprite: CMU14/Clothing/LACN/HelmetsHats/lacnnavycap.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Hats/LACNcap.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -30,3 +30,163 @@
     sprite: CMU14/Clothing/USASFSecurityForces/beret.rsi
   - type: Clothing
     sprite: CMU14/Clothing/USASFSecurityForces/beret.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNHeadsetCap
+  name: LACN headset cap
+  description: A standard LACN cap worn with a headset.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Hats/LACNheadsetcap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Hats/LACNheadsetcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNSailorCap
+  name: LACN sailor cap
+  description: A sailor's cap worn by enlisted crew of the Latin American Colonial Navy.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Hats/LACNsailorcap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Hats/LACNsailorcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNHeadsetSailorCap
+  name: LACN headset sailor cap
+  description: A sailor's cap worn with a headset by enlisted crew of the Latin American Colonial Navy.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Hats/LACNheadsetsailorcap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Hats/LACNheadsetsailorcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNCommandoBeret
+  name: LACN commando beret
+  description: A beret worn by the Naval Commandos of the LACN.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNberet.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNberet.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNCommandoHeadsetBeret
+  name: LACN commando headset beret
+  description: A beret worn with a headset by the Naval Commandos of the LACN.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNheadsetberet.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNheadsetberet.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNOfficerCap
+  name: LACN officer's peaked cap
+  description: A peaked cap worn by commissioned officers of the Latin American Colonial Navy.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNofficercap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNofficercap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNOfficerHeadsetCap
+  name: LACN officer's headset cap
+  description: A peaked cap worn with a headset by commissioned officers of the Latin American Colonial Navy.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNofficerheadsetcap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNofficerheadsetcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNCommandingOfficerCap
+  name: LACN commanding officer's peaked cap
+  description: A peaked cap reserved for LACN commanding officers.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNCOcap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNCOcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNBoonie
+  name: LACN boonie hat
+  description: A wide-brimmed boonie hat issued to LACN landing forces.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNboonie.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNboonie.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNboonie.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNboonie.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNboonie.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNboonie.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNboonie.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNPatrolBoonie
+  name: LACN patrol boonie hat
+  description: A boonie hat issued to LACN landing forces on patrol duty.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolboonie.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolboonie.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolboonie.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNpatrolboonie.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNpatrolboonie.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolboonie.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNpatrolboonie.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNFieldCap
+  name: LACN field cap
+  description: A camouflaged field cap issued to LACN landing forces.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNcamocap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNcamocap.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNcamocap.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNcamocap.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNcamocap.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNcamocap.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNcamocap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: CMULACNPatrolFieldCap
+  name: LACN patrol field cap
+  description: A camouflaged field cap issued to LACN landing forces on patrol duty.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolcamocap.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolcamocap.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolcamocap.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNpatrolcamocap.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNpatrolcamocap.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNpatrolcamocap.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNpatrolcamocap.rsi

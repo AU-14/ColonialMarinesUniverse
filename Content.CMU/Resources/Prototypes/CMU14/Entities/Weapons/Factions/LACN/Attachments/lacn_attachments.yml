@@ -1,0 +1,163 @@
+- type: entity
+  parent: RMCAttachmentS42xTelescopicMiniscope
+  id: CMULACNAttachmentKramer2xScope
+  name: Kramer 2x scope
+  description: A compact Kramer Metallarbeiten 2x optic made for the Kramer rifle family. Fixed at a modest 2x zoom.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/scopes.rsi
+    state: kramer-2x-scope
+  - type: AttachableVisuals
+    suffix: ""
+    showActive: true
+    offset: 0.016, 0.0625
+
+- type: entity
+  parent: RMCAttachmentB8SmartScope
+  id: CMULACNAttachmentKramerSmartScope
+  name: Kramer smart-scope
+  description: A Kramer Metallarbeiten smart-scope with integrated IFF, made for the Kramer rifle family.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/scopes.rsi
+    state: kramer-smartscope
+  - type: AttachableVisuals
+    suffix: ""
+    showActive: true
+    offset: -0.031, -0.031
+
+- type: entity
+  parent: RMCAttachmentBipod
+  id: CMULACNAttachmentBipod
+  name: LACN bipod
+  description: A folding bipod used on LACN support weapons. When deployed, greatly increases accuracy, fire-rate and reduces recoil, but when folded also increases weapon size and slows fire-rate.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/underbarrel.rsi
+    state: bipod
+  - type: AttachableVisuals
+    suffix: ""
+    showActive: true
+    offset: -0.0625, 0.219
+
+- type: entity
+  parent: RMCAttachmentU1GrenadeLauncher
+  id: CMULACNAttachmentUnderbarrelGrenadeLauncher
+  name: LACN underbarrel grenade launcher
+  description: A weapon-mounted, reloadable grenade launcher used by the LACN landing forces.
+  components:
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/underbarrel.rsi
+      state: ubgl
+      map: [ "enum.BreechVisuals.Open" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BreechVisuals.Open:
+        enum.BreechVisuals.Open:
+          True: { state: ubgl }
+          False: { state: ubgl }
+  - type: AttachableVisuals
+    suffix: ""
+    offset: 0.0, 0.31
+    redrawOnAppearanceChange: true
+
+- type: entity
+  parent: RMCAttachmentU7UnderbarrelShotgun
+  id: CMULACNAttachmentUnderbarrelShotgun
+  name: LACN underbarrel shotgun
+  description: A compact underbarrel shotgun used by the LACN landing forces. Only capable of loading up to five buckshot shells. Specialized for breaching into buildings.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/underbarrel.rsi
+    state: ubs
+  - type: AttachableVisuals
+    suffix: ""
+    offset: -0.016, 0.219
+
+- type: entity
+  parent: RMCAttachmentM54CStockSolid
+  id: CMULACNAttachmentKramerStock
+  name: Kramer rifle stock
+  description: The standard stock of the Kramer assault rifle and light support weapon. Reduces recoil and scatter, but at a reduction to handling and agility.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/stocks.rsi
+    state: kramer-stock
+  - type: AttachableVisuals
+    suffix: ""
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - CMULACNAttachmentKramerStock
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: RMCAttachmentM54CStockCollapsible
+  id: CMULACNAttachmentKarbineStock
+  name: Kramer Karbine folding stock
+  description: The folding stock of the Kramer Karbine. When extended, reduces recoil and scatter at a small cost to handling.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/stocks.rsi
+    state: karbine-stock
+  - type: AttachableVisuals
+    suffix: ""
+    showActive: true
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - CMULACNAttachmentKarbineStock
+  - type: AttachableToggleable
+    doAfterBreakOnMove: false
+    doAfter: 0.5
+    icon:
+      sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/stocks.rsi
+      state: karbine-stock
+    iconActive:
+      sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/stocks.rsi
+      state: karbine-stock-on
+    actionName: Toggle Kramer Karbine Folding Stock
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: RMCAttachmentM890Stock
+  id: CMULACNAttachmentBreacherStock
+  name: LACN breacher shotgun stock
+  description: A stock for the LACN breacher shotgun. Improves accuracy when wielded at a small cost to handling.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/stocks.rsi
+    state: breachershotgun-stock
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - CMULACNAttachmentBreacherStock
+
+- type: entity
+  parent: RMCAttachmentM890Stock
+  id: CMULACNAttachmentPentaStock
+  name: LACN penta shotgun stock
+  description: A stock for the LACN penta shotgun. Improves accuracy when wielded at a small cost to handling.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/attachments/stocks.rsi
+    state: pentashotgun-stock
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - CMULACNAttachmentPentaStock
+
+- type: Tag
+  id: CMULACNAttachmentKramerStock
+
+- type: Tag
+  id: CMULACNAttachmentKarbineStock
+
+- type: Tag
+  id: CMULACNAttachmentBreacherStock
+
+- type: Tag
+  id: CMULACNAttachmentPentaStock

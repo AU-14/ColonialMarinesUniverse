@@ -39,7 +39,10 @@
       AU14JobGOVFOROfficerEngi: 1
       AU14JobGOVFORVehicleCrewman: 2
       AU14JobGOVFORVehicleCommander: 1
-      AU14JobGOVFORDSPilot: 2
+      AU14JobGOVFORDSPilot: 1
+      AU14JobGOVFORGunshipPilot: 1
+      AU14JobGOVFORFighterPilot: 1
+      AU14JobGOVFORFighterSystemsOfficer: 1
       AU14JobGOVFORDCC: 2
       AU14JobGOVFORAuxSupportSynth: 2
       AU14JobGOVFORWorkingJoe: 1
@@ -78,7 +81,10 @@
       AU14JobOPFOROfficerEngi: 1
       AU14JobOPFORVehicleCrewman: 2
       AU14JobOPFORVehicleCommander: 1
-      AU14JobOPFORDSPilot: 2
+      AU14JobOPFORDSPilot: 1
+      AU14JobOPFORGunshipPilot: 1
+      AU14JobOPFORFighterPilot: 1
+      AU14JobOPFORFighterSystemsOfficer: 1
       AU14JobOPFORDCC: 2
       AU14JobOPFORAuxSupportSynth: 2
       AU14JobOPFORWorkingJoe: 1
