@@ -96,7 +96,9 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 18
+        Blunt: 6
+        Slash: 6
+        Piercing: 6
         Heat: 7
   - type: XenoDespoiler
     finishingStabBonusByTier:
