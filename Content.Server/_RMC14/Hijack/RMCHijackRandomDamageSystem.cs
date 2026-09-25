@@ -5,7 +5,7 @@ using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Hijack;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Power;
-using Content.Shared.CMU14.Hijack;
+using Content.Shared.CMU14.Hijack; // CMU14: add the opted-in ship crash path.
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Destructible;
 using Content.Shared.Damage;
@@ -34,9 +34,9 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private CMUShipHijackSystem _shipHijack = default!;
+    [Dependency] private CMUShipHijackSystem _shipHijack = default!; // CMU14: resolve the full ship network.
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
-    [Dependency] private RMCCameraShakeSystem _shake = default!;
+    [Dependency] private RMCCameraShakeSystem _shake = default!; // CMU14: broadcast shipwide explosions.
 
     private static readonly EntProtoId BrokenPipe = "GasPipeBroken";
     private static readonly EntProtoId PipeFire = "RMCHijackPipeFire";

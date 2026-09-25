@@ -8,7 +8,6 @@ using Content.Server.Station.Systems;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.util;
 using Content.Shared.CCVar;
-using Content.Shared.Corvax.CCCVars;
 using Content.Shared.GameTicking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles.Jobs;
@@ -63,10 +62,8 @@ public sealed partial class GovforShipRoundTest
         var stationJobs = entities.System<StationJobsSystem>();
         var zLevels = entities.System<CMUZLevelsSystem>();
         var platoon = server.ProtoMan.Index<PlatoonPrototype>(platoonId);
-        // Disable the external voice service before connecting the client, which requests its catalog in the lobby.
         await server.WaitPost(() =>
         {
-            server.CfgMan.SetCVar(CCCVars.TTSEnabled, false);
             server.CfgMan.SetCVar(CCVars.GameLobbyEnabled, true);
             server.CfgMan.SetCVar(CCVars.GameDummyTicker, false);
             ticker.RestartRound();

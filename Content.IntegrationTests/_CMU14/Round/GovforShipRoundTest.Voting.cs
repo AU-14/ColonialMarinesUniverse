@@ -7,7 +7,6 @@ using Content.Server.Voting;
 using Content.Server.Voting.Managers;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14;
-using Content.Shared.Corvax.CCCVars;
 using Content.Shared.GameTicking;
 using Moq;
 using Robust.Shared.Player;
@@ -48,7 +47,6 @@ public sealed partial class GovforShipRoundTest
         var votes = server.ResolveDependency<IVoteManager>();
         await server.WaitPost(() =>
         {
-            server.CfgMan.SetCVar(CCCVars.TTSEnabled, false);
             server.CfgMan.SetCVar(CCVars.GameLobbyEnabled, true);
             server.CfgMan.SetCVar(CCVars.GameDummyTicker, false);
             server.CfgMan.SetCVar(CCVars.VoteCarryoverEnabled, false);

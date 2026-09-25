@@ -46,7 +46,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
         var side = _roundJobProfiles.GetRoundSide(job, jobId);
         bool isOpfor = side == RoundJobSide.Opfor;
         bool isGovfor = side == RoundJobSide.Govfor;
-        var spawnPointJob = job?.SpawnPointJob;
+        var spawnPointJob = job?.SpawnPointJob; // CMU14: read the role's intentional legacy marker alias.
 
         // --- AU14: Faction spawn routing ---
         // If the player is govfor or opfor we decide where they spawn based solely on
@@ -91,6 +91,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 // Use this job's marker (or its explicit legacy alias), then a designated
                 // late-join marker. Never guess by picking another role's spawn point.
                 // We NEVER fall through to the general logic below.
+                // CMU14 Begin: use an exact marker, explicit role alias, or late-join marker only.
                 var preferred = new List<EntityCoordinates>();
                 var legacyPreferred = new List<EntityCoordinates>();
                 var fallback  = new List<EntityCoordinates>();
@@ -123,6 +124,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 var loc = preferred.Count > 0 ? _random.Pick(preferred) :
                     legacyPreferred.Count > 0 ? _random.Pick(legacyPreferred) :
                     _random.Pick(fallback);
+                // CMU14 End
                 args.SpawnResult = _stationSpawning.SpawnPlayerMob(
                     loc, args.Job, args.HumanoidCharacterProfile, args.Station);
                 return; // hard return — never touches planet logic
@@ -131,6 +133,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
             {
                 // PLANET-SIDE SPAWN
                 // Only use spawn points that are NOT on any faction ship grid.
+                // CMU14 Begin: prefer the exact role marker before its configured alias.
                 var preferred = new List<EntityCoordinates>();
                 var legacyPreferred = new List<EntityCoordinates>();
                 var fallback  = new List<EntityCoordinates>();
@@ -169,6 +172,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
                     var loc = preferred.Count > 0 ? _random.Pick(preferred) :
                         legacyPreferred.Count > 0 ? _random.Pick(legacyPreferred) :
                         _random.Pick(fallback);
+                    // CMU14 End
                     args.SpawnResult = _stationSpawning.SpawnPlayerMob(
                         loc, args.Job, args.HumanoidCharacterProfile, args.Station);
                     return;
@@ -304,6 +308,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
         return _stationSystem.GetOwningStation(grid) is { } station && shipStations.Contains(station);
     }
 
+    // CMU14 method
     private static bool IsJobSpawnPoint(
         SpawnPointComponent spawnPoint,
         ProtoId<JobPrototype>? job)
@@ -311,6 +316,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
         return job != null && spawnPoint.Job == job;
     }
 
+    // CMU14 method
     private static bool IsLegacyJobSpawnPoint(
         SpawnPointComponent spawnPoint,
         ProtoId<JobPrototype>? spawnPointJob)

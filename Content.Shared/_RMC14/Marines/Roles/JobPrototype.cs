@@ -140,7 +140,7 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
     /// This lets faction-specific roles reuse a deliberate station location rather than
     /// falling back to an unrelated job's spawn point.
     /// </summary>
-    [DataField]
+    [DataField] // CMU14: bind a role to an explicit legacy spawn marker.
     public ProtoId<JobPrototype>? SpawnPointJob { get; private set; }
 
     /// <summary>

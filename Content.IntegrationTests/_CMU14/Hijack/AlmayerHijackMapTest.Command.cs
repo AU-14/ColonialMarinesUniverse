@@ -11,7 +11,6 @@ using Content.Shared._RMC14.Overwatch;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
-using Content.Shared.Corvax.CCCVars;
 using Content.Shared.Inventory;
 using Content.Shared.UserInterface;
 using Robust.Shared.GameObjects;
@@ -28,7 +27,6 @@ public sealed partial class AlmayerHijackMapTest
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
-        await server.WaitPost(() => server.CfgMan.SetCVar(CCCVars.TTSEnabled, false));
         var sessions = await server.AddDummySessions(8);
         await server.WaitRunTicks(3);
         await server.WaitAssertion(() =>

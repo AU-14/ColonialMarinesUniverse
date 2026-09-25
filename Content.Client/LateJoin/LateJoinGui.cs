@@ -7,7 +7,7 @@ using Content.Client.Lobby.UI;
 using Content.Client.UserInterface.Controls;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Stylesheets;
-using Content.Shared.CMU14.Round.Roles;
+using Content.Shared.CMU14.Round.Roles; // CMU14: filter faction-specific late-join jobs.
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
@@ -113,6 +113,7 @@ namespace Content.Client.LateJoin
             if (string.IsNullOrEmpty(_factionFilter))
                 return true;
 
+            // CMU14 Begin: keep faction and legacy ship departments out of the colonist window.
             if (_factionFilter is "hunt" or "hunters")
                 return department.Roles.Contains("CMUYautjaHunter");
 
@@ -124,6 +125,7 @@ namespace Content.Client.LateJoin
             {
                 return false;
             }
+            // CMU14 End
 
             // Prefer explicit faction field if present on the department prototype
             if (!string.IsNullOrEmpty(department.Faction))
@@ -264,6 +266,7 @@ namespace Content.Client.LateJoin
                         if (!stationAvailable.ContainsKey(jobId))
                             continue;
 
+                        // CMU14: apply the faction filter to every job in a department.
                         var job = _prototypeManager.Index<JobPrototype>(jobId);
                         if (!JobMatchesFilter(_factionFilter, job))
                             continue;
@@ -398,6 +401,7 @@ namespace Content.Client.LateJoin
             CrtLobbyTheme.Apply(_base);
         }
 
+        // CMU14 method
         private static bool JobMatchesFilter(string? factionFilter, JobPrototype job)
         {
             factionFilter = factionFilter?.ToLowerInvariant();

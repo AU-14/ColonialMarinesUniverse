@@ -23,6 +23,7 @@ using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared.CMU14;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 
 namespace Content.Server.CMU14.Round;
 
@@ -41,6 +42,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private FactionSwapSystem _factionSwap = default!;
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     // Store selected platoons in the system
     private PlatoonPrototype? _selectedGovforPlatoon;
