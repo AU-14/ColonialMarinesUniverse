@@ -1,22 +1,18 @@
 - type: entity
-  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  parent: AU14BaseArmor
   id: AU14LACNArmorStandard
   name: LACN BL-1 Armor
-  description: A set of ballistic armor used by the LACN landing forces.
+  description: A set of ballistic armor used by the LACN landing forces. BL-1 pattern arm guards, leg guards, pauldrons, collars and plates can be clipped onto it.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/Armor/lacninfantryarmor.rsi
-  - type: RMCArmorSpeedTier
-    speedTier: light
-  - type: ClothingSpeedModifier
-    walkModifier: .725
-    sprintModifier: .725
-  - type: CMArmor
-    melee: 30
-    bullet: 15
-    bio: 20
-    explosionArmor: 10
-  - type: CMHardArmor
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNarmorvest.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNarmorvest.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNarmorvest.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNarmorvest.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNarmorvest.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNarmorvest.rsi
 
 - type: entity
   parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
@@ -65,7 +61,7 @@
   description: A set of ballistic armor used by the LACN naval commandos.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/Armor/lacncommandoarmor.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNarmorvest.rsi
   - type: RMCArmorSpeedTier
     speedTier: light
   - type: ClothingSpeedModifier
@@ -156,7 +152,7 @@
   description: A set of ballistic armor used by LACN aircrew with an attached oxygen tank.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/PilotGear/armor.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNpilotvest.rsi
   - type: RMCArmorSpeedTier
     speedTier: light
   - type: CMArmor
@@ -186,3 +182,85 @@
     delays:
       gasTank:
         length: 1.0
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: CMULACNFlightVest
+  name: LACN ICPS-1 flight vest
+  description: A lightweight ballistic vest worn by LACN flight deck and dropship crews. Offers some protection from shrapnel without getting in the way of the controls.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNflightvest.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: CMULACNArmorMP
+  name: LACN BL-1P military police vest
+  description: A BL-1 pattern ballistic vest issued to the LACN shipboard military police.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/MilitaryPolice/LACNMParmorvest.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: CMULACNLogisticsVest
+  name: LACN support vest
+  description: A work vest worn by LACN medical, requisitions and logistics personnel aboard ship.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Shared/LACNlogivest.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Shared/LACNlogivest.rsi
+
+- type: entity
+  parent: CMCoatOfficer
+  id: CMULACNCoatOfficer
+  name: LACN officer's service coat
+  description: A tailored service coat worn by commissioned officers of the Latin American Colonial Navy.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNofficercoat.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNofficercoat.rsi
+
+- type: entity
+  parent: CMCoatOfficer
+  id: CMULACNCoatCommandingOfficer
+  name: LACN commanding officer's greatcoat
+  description: A heavy greatcoat reserved for LACN commanding officers.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNCOcoat.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNCOcoat.rsi
+
+- type: entity
+  parent: RMCOuterClothingExternalWebbing
+  id: CMULACNExternalWebbing
+  name: LACN external webbing
+  description: LACN pattern load-bearing webbing, designed to be worn over fatigues rather than clipped on.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/LACNexternalwebbing.rsi

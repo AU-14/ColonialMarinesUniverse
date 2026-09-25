@@ -176,6 +176,16 @@
         entity: CMU14ChevronLACNFirstClassSergeant
         requirements: []
 
+    AU14JobGOVFORFighterPilot:
+      CMU14RankLACNEnsign:
+        entity: CMU14ChevronLACNEnsign
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      CMU14RankLACNEnsign:
+        entity: CMU14ChevronLACNEnsign
+        requirements: []
+
     AU14JobAuxTechBase:
       CMU14RankLACNSecondClassCorporal:
         entity: CMU14ChevronLACNSecondClassCorporal
@@ -487,6 +497,16 @@
           time: 36000 #10 hours
       UPP_WarrantOfficer:
         entity: AU14ChevronUPPNIWarrantOfficer
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
         requirements: []
 
     AU14JobAuxTechBase:
@@ -803,6 +823,16 @@
         entity: AU14ChevronWeYuPilot
         requirements: []
 
+    AU14JobGOVFORFighterPilot:
+      AU14RankWeYuPilot:
+        entity: AU14ChevronWeYuPilot
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      AU14RankWeYuPilot:
+        entity: AU14ChevronWeYuPilot
+        requirements: []
+
     AU14JobAuxTechBase:
       AU14RankWeYuEnforcer:
         entity: AU14ChevronWeYuEnforcer
@@ -1081,6 +1111,16 @@
         entity: AU14ChevronCMBDeputy
         requirements: []
 
+    AU14JobGOVFORFighterPilot:
+      AU14RankCMBSrDeputy:
+        entity: AU14ChevronCMBSrDeputy
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      AU14RankCMBSrDeputy:
+        entity: AU14ChevronCMBSrDeputy
+        requirements: []
+
     AU14JobAuxTechBase:
       AU14RankCMBDeputy:
         entity: AU14ChevronCMBDeputy
@@ -1335,6 +1375,16 @@
           time: 36000 #10 hours
       AU14RankPrDPilot:
         entity: AU14ChevronPrDPilot
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      AU14RankPrDCommander:
+        entity: AU14ChevronPrDCommander
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      AU14RankPrDCommander:
+        entity: AU14ChevronPrDCommander
         requirements: []
 
     AU14JobAuxTechBase:
@@ -1602,6 +1652,16 @@
         entity: CMU14ChevronVASCDepartamentLeader
         requirements: []
 
+    AU14JobGOVFORFighterPilot:
+      VAI_VASCDepartamentLeader:
+        entity: CMU14ChevronVASCDepartamentLeader
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      VAI_VASCDepartamentLeader:
+        entity: CMU14ChevronVASCDepartamentLeader
+        requirements: []
+
     AU14JobAuxTechBase:
       VAI_VASCSpecialist:
         entity: CMU14ChevronVASCSpecialist
@@ -1819,6 +1879,16 @@
           time: 36000 #10 hours
       RMC_WarrantOfficer2:
         entity: AU14ChevronRMCWarrantOfficer2
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      RMC_2Lieutenant:
+        entity: AU14ChevronRMCSecondLieutenant
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      RMC_2Lieutenant:
+        entity: AU14ChevronRMCSecondLieutenant
         requirements: []
 
     AU14JobAuxTechBase:

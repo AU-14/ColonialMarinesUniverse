@@ -1,0 +1,164 @@
+- type: entity
+  parent: RMCWeaponShotgunHG3712
+  id: CMUWeaponShotgunLACNBreacher
+  name: LACN breacher shotgun
+  description: A compact pump-action shotgun issued to LACN landing forces for door breaching and close quarters work. Accepts breaching shells.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/breachershotgun.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/breachershotgun.rsi
+  - type: BallisticAmmoProvider
+    proto: CMShellShotgunBuckshot
+    whitelist:
+      tags:
+      - RMCShellShotgunBuckshot
+      - RMCShellShotgunSlugs
+      - RMCShellShotgunFlechette
+      - RMCShellShotgunIncendiaryBuckshot
+      - RMCShellShotgunIncendiary
+      - RMCShellShotgunBeanbag
+      - RMCShellShotgunBreaching
+    capacity: 8
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentRecoilCompensator
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+      rmc-aslot-stock:
+        whitelist:
+          tags:
+          - CMULACNAttachmentBreacherStock
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.78, .02
+      rmc-aslot-rail: -0.18, 0.125
+      rmc-aslot-stock: -0.5, 0
+      rmc-aslot-underbarrel: 0.32, -0.31
+  - type: Tag
+    tags:
+    - RMCWeaponShotgun
+    - CMUWeaponShotgunLACNBreacher
+
+- type: entity
+  parent: WeaponShotgunM890
+  id: CMUWeaponShotgunLACNPenta
+  name: LACN Penta shotgun
+  description: A semi-automatic combat shotgun used by the LACN landing forces. Named for its five-shell tube magazine.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/pentashotgun.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/pentashotgun.rsi
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      tags:
+      - RMCShellShotgun
+    capacity: 5
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-stock:
+        whitelist:
+          tags:
+          - CMULACNAttachmentPentaStock
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentLaserSight
+  - type: Tag
+    tags:
+    - RMCWeaponShotgun
+    - CMUWeaponShotgunLACNPenta
+
+- type: entity
+  parent: RMCBaseWeaponShotgun
+  id: CMUWeaponRevolverLACNJudge
+  name: LACN Judge
+  description: A heavy five-shot revolver chambered for 12 gauge shotgun shells. A favourite sidearm of LACN officers for its stopping power at close range.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/judge.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/judge.rsi
+    slots:
+    - suitStorage
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_shotgun_small.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 2
+    recoilUnwielded: 3
+    scatterWielded: 10
+    scatterUnwielded: 15
+    baseFireRate: 1.25
+    burstScatterMult: 5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      tags:
+      - RMCShellShotgun
+    capacity: 5
+    proto: null
+    soundInsert:
+      collection: CMShotgunLoad
+  - type: Tag
+    tags:
+    - Sidearm
+    - RMCRevolver
+    - CMUWeaponRevolverLACNJudge
+
+- type: Tag
+  id: CMUWeaponShotgunLACNBreacher
+
+- type: Tag
+  id: CMUWeaponShotgunLACNPenta
+
+- type: Tag
+  id: CMUWeaponRevolverLACNJudge
