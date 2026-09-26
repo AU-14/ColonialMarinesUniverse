@@ -228,8 +228,12 @@ public sealed class CMUCombatHearingSystem : EntitySystem
                 if (HasComp<CMUCombatEarProtectionComponent>(item))
                     return true;
 
+                // Plain headgear has no attached items to inspect.
+                if (!TryComp<ContainerManagerComponent>(item, out var manager))
+                    continue;
+
                 // Ear gear clipped onto a worn helmet, like a headset helmet accessory.
-                foreach (var container in _container.GetAllContainers(item))
+                foreach (var container in _container.GetAllContainers(item, manager))
                 {
                     foreach (var attached in container.ContainedEntities)
                     {
@@ -250,7 +254,11 @@ public sealed class CMUCombatHearingSystem : EntitySystem
 
     private bool IsSuppressed(EntityUid gun)
     {
-        foreach (var container in _container.GetAllContainers(gun))
+        // Guns such as grappling launchers have no attachment containers.
+        if (!TryComp<ContainerManagerComponent>(gun, out var manager))
+            return false;
+
+        foreach (var container in _container.GetAllContainers(gun, manager))
         {
             foreach (var contained in container.ContainedEntities)
             {
