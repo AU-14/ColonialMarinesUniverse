@@ -2,7 +2,7 @@
 
 ## Role roll
 
-The character editor has a Force on Force tab with separate GOVFOR and OPFOR role lists. Side and job are assigned in one roll, with team sizes differing by at most one. Role capacity, bans, playtime, whitelists, synthetic eligibility and character allegiance still apply. Late joins cannot join the larger side.
+The character editor has a Force on Force tab with one Roles list. Role priorities apply to equivalent GOVFOR and OPFOR roles, while the preferred side and fallback policy determine allowed sides. Existing side-specific priorities appear in the shared list; editing a role replaces its old preferences on both sides. Side and job are assigned in one roll, with team sizes differing by at most one. Role capacity, bans, playtime, whitelists, synthetic eligibility and character allegiance still apply. Late joins cannot join the larger side.
 
 Players select a preferred side (or either side) and one fallback policy:
 
@@ -17,11 +17,15 @@ The roll maximizes balanced assignments, then prefers higher role priorities and
 
 ## Dropships
 
+Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
+
 In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.
 
 Humans and xenos have a single **Initiate hijack** action. The server chooses a valid destination at random when pressed. FoF humans only target the opposing faction's carrier: GOVFOR attacks OPFOR and OPFOR attacks GOVFOR. The human FoF route uses the queen-style crash sequence. Xenos retain the existing valid carrier set and queen decline option. Legacy human intel hijacks outside FoF retain their landing-zone behavior with random selection.
 
 Ordinary navigation respects both carrier ownership (including connected decks) and landing-zone faction whitelists. A hostile passenger on a launched dropship triggers the owning faction's ship announcement, including passengers on other dropship decks.
+
+When a FoF hijack flight starts, living attackers on the ground or their own carrier receive a **Join / Stay** popup offering transport aboard the hijacked dropship. Living defenders on the ground or the attackers' carrier receive the same choice to return to their own carrier's spawn area. Players already aboard the hijacking dropship or defending carrier are not prompted. Closing the popup counts as staying. The offer expires at landing, on death, or when the player changes body, faction or eligible location; acceptance is validated on the server and requires a clear floor tile.
 
 Admin commands support faction recipients:
 
@@ -62,9 +66,13 @@ Asset-level attribution is in `Resources/Audio/CMU14/ForceOnForce/attributions.y
 
 ## Identification and respawn
 
-The marine HUD replaces faction, role, squad and fireteam markers with a large, thick red X with a black outline when someone is missing a recognized uniform. The whitelist follows their issued platoon, plus their issued specialist uniform. Wearing an opposing uniform does not impersonate that faction. Recognition updates when equipment changes.
+Options → CMU → Identification has a personal "Show question marks for unfamiliar enemy uniforms in FoF" toggle. Its saved client CVar, `cmu.fof.unidentified_marker_enabled`, defaults to `false`. When enabled, the HUD replaces faction, role, squad and fireteam markers with a red question mark with a black outline for other factions wearing uniforms the viewer does not recognize, including missing uniforms. Teammates never receive the question mark, even with no uniform or a foreign uniform. Recognition includes the selected platoon's resolved vendor stock (including shipside and specialist vendors), its explicit uniform list and the viewer's issued uniform. It matches exact uniform prototypes; inheriting another uniform's components does not establish faction identity. Other factions wearing a recognized uniform do not receive the question mark. Applying the setting and changing equipment update recognition without respawning.
 
-FoF respawning waits five minutes from death, tracked by account through ghosting and reconnecting. Revival cancels that death's eligibility; a subsequent death starts a new five-minute wait. The round reset clears the history.
+The question mark does not require marine HUD gear. Normal role and squad identifiers retain their existing HUD requirements.
+
+Dead bodies display neither the question mark nor marine identification icons. Revived enemies are evaluated normally again.
+
+FoF respawning waits five minutes from death, tracked by account through ghosting and reconnecting. An account's first GOVFOR or OPFOR spawn locks every subsequent life to that side for the rest of the round, including after changing character. The job list, assignment roll and final spawn check enforce the lock. Revival cancels that death's eligibility; a subsequent death starts a new five-minute wait. The round reset clears the timer and side lock. Existing population balance limits still apply; a returning player waits if their original side is larger.
 
 ## Fighter crashes
 

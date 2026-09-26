@@ -580,7 +580,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                faction == "opfor" && planetComp.OpforInShip;
     }
 
-    private bool TryResolvePlatoonVendor(
+    public bool TryResolvePlatoonVendor(
         PlatoonPrototype platoon,
         PlatoonMarkerClass markerClass,
         out EntProtoId vendorProtoId)

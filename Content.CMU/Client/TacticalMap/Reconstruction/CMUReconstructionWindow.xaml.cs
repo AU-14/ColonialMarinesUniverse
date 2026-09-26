@@ -17,7 +17,6 @@ public sealed partial class CMUReconstructionWindow : RMCPopOutWindow
     public Action<CMUReconSendMessage>? OnSend;
     public Action<CMUReconMapChoice>? OnMapSelected;
     public Action<CMUReconLayerMessage>? OnLayerSelected;
-    public Action? OnStaticMap;
     public event Action? OnClosing;
     public bool CenterOnOpening { get; set; }
     public Func<int, CMUReconCamera?>? LoadView;
@@ -46,7 +45,6 @@ public sealed partial class CMUReconstructionWindow : RMCPopOutWindow
         };
         TopDown.OnPressed += _ => View.SetTopDown();
         Reset.OnPressed += _ => View.ResetCamera();
-        StaticMap.OnPressed += _ => OnStaticMap?.Invoke();
         CenterPlayer.OnPressed += _ => { if (View.CenterOnPlayer() && View.Scene is { } scene) ConfigureFloors(scene); };
         MapSelection.OnItemSelected += args =>
         {
