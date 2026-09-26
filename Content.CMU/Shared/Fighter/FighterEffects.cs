@@ -20,7 +20,7 @@ public sealed partial class FighterEffectsComponent : Component
 public enum FighterEffectKind : byte
 {
     Gau, Rocket, Missile, Interceptor, Flares, Hit, Evaded,
-    Launch, Pass, Return, Holding, Repaired, Overheat, Laser, LaserLock,
+    Launch, Pass, Return, Holding, Repaired, Overheat, Laser, LaserLock, Crash,
 }
 
 [Serializable, NetSerializable]

@@ -60,6 +60,7 @@ public sealed record FighterTarget(NetEntity Id, string Name, Vector2 Position, 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class FighterLaserComponent : Component
 {
+    [DataField, AutoNetworkedField] public Color BeamColor = Color.FromHex("#FF3636");
     [DataField, AutoNetworkedField] public EntityUid Aircraft;
     [DataField, AutoNetworkedField] public EntityUid Seat;
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]

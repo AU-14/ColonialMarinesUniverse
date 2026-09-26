@@ -1,0 +1,24 @@
+- files: [siren-1.ogg, siren-2.ogg, siren-3.ogg, siren-4.ogg]
+  license: CC-BY-3.0
+  copyright: "Alarm_Loop_00 and Alarm_Loop_01 by Little Robot Sound Factory (https://www.littlerobotsoundfactory.com). Selected audition sounds S2 and S3. CMU edits: mono, looping to eight seconds, fades and normalization; variants 3/4 also lower the pitch. Rebuild with Tools/force-on-force/generate-bombardment-audio.py."
+  source: https://opengameart.org/content/sci-fi-sound-effects-library
+
+- files: [laser-1.ogg, laser-3.ogg]
+  license: CC0-1.0
+  copyright: "Space Laser by bart. Selected audition sound L1. CMU edits: mono, fades and normalization; variant 3 also lowers the pitch and adds echoes."
+  source: https://opengameart.org/content/space-laser
+
+- files: [laser-2.ogg, laser-4.ogg]
+  license: CC-BY-3.0
+  copyright: "Laser_05 by Little Robot Sound Factory (https://www.littlerobotsoundfactory.com). Selected audition sound L2. CMU edits: mono, fades and normalization; variant 4 also lowers the pitch and adds echoes."
+  source: https://opengameart.org/content/sci-fi-sound-effects-library
+
+- files: [flyby-1.ogg, flyby-2.ogg, flyby-3.ogg, flyby-4.ogg]
+  license: CC0-1.0
+  copyright: "F-18 fly-over-and-circle above-DR070cut.wav by Ears68 and 2 Royal Dutch Airforce F-16 Fighting Falcons flyby by Rudmer_Rotteveel. Derived from the existing CMU fighter mix; mono, excerpts, pitch/duration, fades and normalization."
+  source: "https://freesound.org/people/Ears68/sounds/150328/ ; https://freesound.org/people/Rudmer_Rotteveel/sounds/343746/"
+
+- files: [impact-1.ogg, impact-2.ogg, impact-3.ogg, impact-4.ogg]
+  license: CC0-1.0
+  copyright: "Fire Explosion by Iwan 'qubodup' Gabovitch, extracted from EOD Broll package by Seaman Kelly Meyer / AFN Okinawa (18 November 2020). Derived from the existing CMU fighter mix; mono, pitch/duration, echoes, fades and normalization."
+  source: https://freesound.org/people/qubodup/sounds/855898/

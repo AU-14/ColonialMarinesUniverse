@@ -423,6 +423,9 @@ namespace Content.Server.Database
                 ? null
                 : JsonSerializer.Serialize(humanoid.ThreatPreferences.Select(t => t.Id).OrderBy(id => id));
             profile.GamemodeJobPriorities = SerializeGamemodeJobPriorities(humanoid.GamemodeJobPriorities);
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            profile.FoFSide = (int) humanoid.FoFSide;
+            profile.FoFFallback = (int) humanoid.FoFFallback;
             profile.GamemodeAntagPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeAntagPreferences);
             profile.GamemodeThreatPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeThreatPreferences);
             profile.RankPreferences = humanoid.RankPreferences.Count == 0
