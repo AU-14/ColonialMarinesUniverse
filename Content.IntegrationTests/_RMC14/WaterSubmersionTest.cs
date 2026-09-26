@@ -24,6 +24,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
+using Robust.Shared.Physics; // CMU14: empty-fixture surface regression.
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -34,6 +35,32 @@ namespace Content.IntegrationTests._RMC14;
 public sealed class WaterSubmersionTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    // CMU14: client surface updates also run on entities without collision fixtures.
+    [Test]
+    public async Task EmptyFixturesDoNotCrashSurfaceSampling()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var maps = Client.System<SharedMapSystem>();
+            var mapUid = maps.CreateMap(out var mapId);
+            var grid = maps.CreateGridEntity(mapId);
+            var tiles = Client.ResolveDependency<ITileDefinitionManager>();
+            maps.SetTile(grid, Vector2i.Zero, new Tile(tiles["Plating"].TileId));
+            var coords = new EntityCoordinates(grid, new Vector2(0.5f, 0.5f));
+            var user = CEntMan.SpawnEntity(null, coords);
+            var fixtures = CEntMan.EnsureComponent<FixturesComponent>(user);
+            Assert.That(fixtures.Fixtures, Is.Empty);
+            var system = Client.System<RMCWaterSystem>();
+            Assert.That(system.TryGetWaterSurface(user, out _, out _, out _), Is.False);
+
+            var water = CEntMan.SpawnEntity("CMFloorDeepWaterEntity", coords);
+            Assert.That(system.TryGetWaterSurface(user, out var surface, out var depth, out _), Is.True);
+            Assert.That(surface, Is.EqualTo(water), "Anchored water remains detectable without collision fixtures.");
+            Assert.That(depth, Is.GreaterThan(0));
+            CEntMan.DeleteEntity(mapUid);
+        });
+    }
 
     [Test]
     public async Task WaterDepthSoundAndCoverFollowTheOccupiedTile()
