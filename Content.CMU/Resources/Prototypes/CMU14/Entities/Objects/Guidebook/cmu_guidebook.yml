@@ -1,0 +1,20 @@
+- type: guideEntry
+  parent: RMC
+  id: CMUGuidebook
+  name: cmu-guide-entry-cmu
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/CMUGuidebook.xml"
+  children:
+  - AU14Comms
+  - AU14MedicalV2
+  - CMUGuideMortar
+  - CMUResearchIndex
+  - CMUGuideHearingLoss
+  - CMUGuideRoleRider
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMortar
+  name: cmu-guide-entry-mortar
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUMortar.xml"

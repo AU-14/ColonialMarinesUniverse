@@ -123,6 +123,8 @@
         crate: CMUCrateGasMaskFilter
       - cost: 1500
         crate: CMUCrateGasMaskFilterHAZOPS
+      - cost: 110
+        crate: CMUCrateElectronicHearingProtection
       - cost: 350
         crate: CMUCrateBiosuitSecurity
     - name: Medical

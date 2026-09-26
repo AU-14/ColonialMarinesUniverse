@@ -57,7 +57,7 @@ cmu-guide-entry-cclaw-precautionary = Precautionary Confinement
 cmu-guide-entry-cclaw-emergency = Administrative Emergency Powers
 
 # Communications
-cmu-guide-entry-comms = Communications Reference
+cmu-guide-entry-comms = Communications Guide
 cmu-guide-entry-comms-network = Getting On The Net
 cmu-guide-entry-comms-anprc = AN/PRC-117G Radio
 cmu-guide-entry-comms-headsets = Field Headsets
@@ -74,3 +74,6 @@ cmu-guide-entry-research-hydroponics = Hydroponics
 
 # Antagonists
 cmu-guide-entry-antag-rider = The Rider
+cmu-guide-entry-hearing-loss = Hearing Loss
+cmu-guide-entry-cmu = Guidebook
+cmu-guide-entry-mortar = Mortar

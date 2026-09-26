@@ -1,0 +1,14 @@
+<Document>
+  # Hearing Loss
+
+  Loud gunfire and explosions near you hurt your hearing if your ears are not covered. It builds up slowly. If it gets bad, you will go deaf for short periods.
+
+  To stay safe, wear a headset or hearing protection.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUHeadElectronicHearingProtection" Caption="Hearing protection"/>
+    <GuideEntityEmbed Entity="AU14HeadsetGovforMarine" Caption="Headset"/>
+  </Box>
+
+  Not sure if something protects your ears? Examine it.
+</Document>

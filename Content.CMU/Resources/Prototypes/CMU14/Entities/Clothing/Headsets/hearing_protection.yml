@@ -1,0 +1,5 @@
+- type: entity
+  parent: RMCHeadUNMCHeadset
+  id: CMUHeadElectronicHearingProtection
+  name: electronic hearing protection
+  description: Over-ear electronic hearing protection. It lets quiet sounds and voices through while clamping down on gunfire and explosions. Can be worn on its own or clipped onto a helmet.
