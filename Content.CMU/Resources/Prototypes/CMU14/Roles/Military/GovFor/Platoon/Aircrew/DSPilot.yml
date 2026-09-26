@@ -93,6 +93,9 @@
       prefix: au14-job-prefix-AU14JobGOVFORDSPilotWYPMC
 
   requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsFlightCrew
+    time: 10800 # 3 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement

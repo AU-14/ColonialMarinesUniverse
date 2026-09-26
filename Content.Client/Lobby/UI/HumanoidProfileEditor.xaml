@@ -79,13 +79,17 @@
                         <!-- appearanceList -->
                         <BoxContainer Orientation="Vertical">
                             <BoxContainer Margin="10" Orientation="Vertical" HorizontalExpand="True">
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-preferred-squad-label'}" />
                                     <Control HorizontalExpand="True" />
                                     <OptionButton Name="SquadPreferenceButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
                                 <!-- Armor Preference -->
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-preferred-armor-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="ArmorPreferenceButton" HorizontalAlignment="Right" />
@@ -118,7 +122,9 @@
                                 </BoxContainer>
                                 <cc:HSeparator Color="#16823E" Margin="0 5" />
                                 <!-- Species -->
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-species-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <TextureButton Name="SpeciesInfoButton" Scale="0.3 0.3"
@@ -133,7 +139,9 @@
                                     <OptionButton Name="SexButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
                                 <!-- Voice -->
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-voice-label'}" />
                                     <Control HorizontalExpand="True" />
                                     <OptionButton Name="VoiceButton" HorizontalAlignment="Right" />
@@ -151,7 +159,9 @@
                                     <Button Name="ShowClothes" Pressed="True" ToggleMode="True" Text="{Loc 'humanoid-profile-editor-clothing-show'}" HorizontalAlignment="Right" />
                                 </BoxContainer>
                                 <!-- Spawn Priority -->
-                                <BoxContainer HorizontalExpand="True">
+                                <!-- cmu edit start -->
+                                <BoxContainer HorizontalExpand="True" Visible="False">
+                                <!-- cmu edit end -->
                                     <Label Text="{Loc 'humanoid-profile-editor-spawn-priority-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
@@ -160,16 +170,41 @@
                                 <BoxContainer Name="SyntheticContainer" Orientation="Vertical" />
                             </BoxContainer>
                             <!-- Skin -->
-                            <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">
+                            <!-- cmu edit start -->
+                            <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical" Visible="False">
+                            <!-- cmu edit end -->
                                 <Label Text="{Loc 'humanoid-profile-editor-skin-color-label'}" />
                                 <Slider HorizontalExpand="True" Name="Skin" MinValue="0" MaxValue="100" Value="20" />
                                 <BoxContainer Name="RgbSkinColorContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True" />
                             </BoxContainer>
                             <!-- Eyes -->
-                            <BoxContainer Margin="10" Orientation="Vertical">
+                            <!-- cmu edit start -->
+                            <BoxContainer Margin="10" Orientation="Vertical" Visible="False">
+                            <!-- cmu edit end -->
                                 <Label Text="{Loc 'humanoid-profile-editor-eyes-label'}" />
                                 <humanoid:EyeColorPicker Name="EyeColorPicker" />
                             </BoxContainer>
+                            <!-- cmu edit start -->
+                            <!-- Character appearance -->
+                            <BoxContainer Margin="10" Orientation="Vertical" SeparationOverride="12" HorizontalExpand="True">
+                                <cc:HSeparator Color="#16823E" Margin="0 5" />
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                </BoxContainer>
+                                <Slider Name="CharacterSkinSlider" HorizontalExpand="True" MinValue="0" MaxValue="100" />
+                                <ColorSelectorSliders Name="CharacterSkinColorPicker" HorizontalExpand="True" />
+                                <BoxContainer Name="CharacterHairPickers" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6" />
+                                <cc:HSeparator Color="#16823E" Margin="0 5" />
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                </BoxContainer>
+                                <ColorSelectorSliders Name="CharacterEyeColorPicker" HorizontalExpand="True" />
+                            </BoxContainer>
+                            <!-- cmu edit end -->
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
@@ -214,24 +249,9 @@
                                 <Control HorizontalExpand="True"/>
                                 <OptionButton Name="BuildButton" HorizontalAlignment="Right" />
                             </BoxContainer>
-                            <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
-                            </BoxContainer>
-                            <ColorSelectorSliders Name="CharacterSkinColorPicker" HorizontalExpand="True" />
-                            <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <Label Name="HairColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
-                            </BoxContainer>
-                            <ColorSelectorSliders Name="CharacterHairColorPicker" HorizontalExpand="True" />
-                            <BoxContainer HorizontalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
-                                <Control HorizontalExpand="True"/>
-                                <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
-                            </BoxContainer>
-                            <ColorSelectorSliders Name="CharacterEyeColorPicker" HorizontalExpand="True" />
+                            <!-- cmu edit start -->
+                            <!-- skin tone, hair color and eye color moved to the Appearance tab -->
+                            <!-- cmu edit end -->
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-hide-meta-label'}" ToolTip="{Loc 'humanoid-profile-editor-hide-meta-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
@@ -240,10 +260,19 @@
                             <cc:HSeparator Color="#16823E" Margin="0 5" />
                             <Label Text="{Loc 'humanoid-profile-editor-full-description-label'}" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
                             <TextEdit Name="FullDescriptionEdit" MinSize="220 90" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
+                            <!-- cmu edit start -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <!-- cmu edit end -->
                             <Label Text="{Loc 'humanoid-profile-editor-medical-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
                             <TextEdit Name="MedicalRecordEdit" MinSize="220 90" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
+                            <!-- cmu edit start -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <!-- cmu edit end -->
                             <Label Text="{Loc 'humanoid-profile-editor-criminal-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
                             <TextEdit Name="CriminalRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
+                            <!-- cmu edit start -->
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <!-- cmu edit end -->
                             <Label Text="{Loc 'humanoid-profile-editor-general-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
                             <TextEdit Name="GeneralRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
                         </BoxContainer>
@@ -345,7 +374,9 @@
                 </BoxContainer>
                 <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10">
                     <!-- Markings -->
-                    <humanoid:MarkingPicker Name="Markings" HorizontalExpand="True" VerticalExpand="True" />
+                    <!-- cmu edit start -->
+                    <humanoid:MarkingPicker Name="Markings" IgnoreLayers="Hair,FacialHair" HorizontalExpand="True" VerticalExpand="True" />
+                    <!-- cmu edit end -->
                 </BoxContainer>
                 <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">
                     <!-- Named Items -->

@@ -25,6 +25,8 @@
     suffix: ""
     showActive: true
     offset: -0.031, -0.031
+  - type: AttachableIFF
+    preventFriendlyFire: true
 
 - type: entity
   parent: RMCAttachmentBipod

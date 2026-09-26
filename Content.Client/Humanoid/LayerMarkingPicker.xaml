@@ -5,7 +5,9 @@
     </ScrollContainer>
     <ScrollContainer Name="OrderingItems" HorizontalExpand="True" VerticalExpand="True" Visible="False">
     </ScrollContainer>
-    <BoxContainer HorizontalExpand="True" Margin="4">
+    <!-- cmu edit start -->
+    <BoxContainer Name="Footer" HorizontalExpand="True" Margin="4">
+    <!-- cmu edit end -->
         <Label Name="MarkingsStatus" HorizontalExpand="True" />
         <Button Name="ReorderButton" ToggleMode="True" Text="{Loc 'markings-reorder'}" />
     </BoxContainer>

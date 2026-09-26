@@ -34,6 +34,9 @@
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_vc
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 43200 # 12 hours
   - !type:TraitsRequirement
     inverted: true
     traits:

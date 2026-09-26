@@ -354,7 +354,7 @@
     - USSBushRedux
   #platoonflag: uaflag
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   techTree: CMUIntelTechTree_GOVFOR
 
@@ -702,7 +702,6 @@
   - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical
-  - VehicleHumveeARC
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
   name: WY PMC
@@ -1284,6 +1283,7 @@
   - AU14VehicleCivArmoredTruck
   - AU14VehicleCivTruck
   - AU14VehicleCivEMSAmbulance
+  - VehicleAev
   name: Prodigy Security Forces
   lorePrimer: AU14PrimerPlatoonProdigySF
   reqlist: ProdigyCargoCatalog
@@ -1572,6 +1572,7 @@
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
+  - VehicleAev
   name: VAI Primary Operations
   lorePrimer: AU14PrimerPlatoonVAIPO
   reqlist: VAIPOCargoCatalog
