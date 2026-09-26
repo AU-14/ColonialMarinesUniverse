@@ -10494,5 +10494,63 @@
   id: 683
   time: '2026-09-25T21:43:40.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2020
+- author: TheHellFireo
+  changes:
+  - message: Added pie throws, banana slips, and confetti cannons that interact with
+      other lobby characters.
+    type: Add
+  - message: Lobby burst fire and spray now target random crewmates with overlapping
+      dodge and tumble reactions.
+    type: Tweak
+  - message: Added the global Supply Scramble lobby show with runaway carts, flying
+      crates, and a conga exit.
+    type: Add
+  id: 684
+  time: '2026-09-26T12:36:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2024
+- author: troytroy400
+  changes:
+  - message: Rocket launchers now have backblast. Anyone standing in the two tiles
+      behind the shooter is knocked back and down, deafened, stuttering and dizzy.
+      They also take 5-15 brute and 5-15 burn, have a 30% chance to be set on fire
+      and a 5% chance to get a concussion. Modified from the works of Harro365 on
+      github.
+    type: Add
+  - message: Added the Kramer emplaced machine gun for the LACN, sprited by Pato.
+      One can be found in req.
+    type: Add
+  - message: Added the Heavyweight Drunk trait, for those who can hold their liquor.
+      Ported from the work of CatsAndHats on github.
+    type: Add
+  - message: Playtime requirements for roundstart roles.
+    type: Add
+  - message: The LACN Landing Forces equipment vendor now properly loads, which means
+      you can get the LACN gas mask and ration packs now.
+    type: Fix
+  - message: The LACN now have the Mohawk dropship instead of the Alamo.
+    type: Tweak
+  - message: Prodigy and VAIPO can now order the AEV.
+    type: Tweak
+  - message: The Kramer Mobile Support Weapon now comes with the folding stock instead
+      of the full stock.
+    type: Tweak
+  - message: Cleaned up the character customization menu, removed unused upstream
+      features/selections from it and moved hair from markings back to appearance.
+    type: Tweak
+  - message: New characters and ghost roles no longer spawn with random markings.
+    type: Tweak
+  - message: The Humvee ARC is no longer orderable.
+    type: Remove
+  - message: The Kramer smart-scope and the B8 smart-scope now properly stop you firing
+      when friendlies are in the line of fire.
+    type: Fix
+  - message: Deployed Kramer autocannons, dropship M2Cs and M56Ds now show proper
+      names and descriptions instead of placeholder text.
+    type: Fix
+  - message: Hair color sliders in the character editor now move while you drag them.
+    type: Fix
+  id: 685
+  time: '2026-09-26T12:49:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2025
 Name: CMU
 Order: -1
