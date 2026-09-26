@@ -14,6 +14,7 @@ namespace Content.Client.CMU14.Fighter;
 
 public sealed partial class FighterGroundVisualSystem : EntitySystem
 {
+    private static readonly Color WreckColor = Color.FromHex("#918579");
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IOverlayManager _overlays = default!;
@@ -47,8 +48,10 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
         {
             var altitude = Math.Clamp((flyby.Height - FighterFlight.MinimumHeight) /
                 (FighterFlight.MaximumHeight - FighterFlight.MinimumHeight), 0, 1);
-            _sprites.SetColor(uid, Color.Black.WithAlpha(.32f - altitude * .25f));
+            _sprites.SetColor(uid, flyby.Crashing ? Color.FromHex("#88776A") : Color.Black.WithAlpha(.32f - altitude * .25f));
             _sprites.SetScale(uid, new Vector2((.5f + altitude * .25f) * FighterGroundComponent.SizeMultiplier));
+            // Keep the south-facing source art aligned with the north-facing flight transform.
+            _sprites.SetRotation(uid, new Angle(Math.PI + (flyby.Crashing ? Math.Sin(_timing.CurTime.TotalSeconds * 8) * .22 : 0)));
         }
         _visibleCrew.Clear();
         var query = EntityQueryEnumerator<FighterGroundComponent, SpriteComponent>();
@@ -59,13 +62,14 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
             offset += GroundElevationOffset(uid);
             _sprites.SetOffset(uid, offset);
             _sprites.SetScale(uid, new Vector2(FighterGroundComponent.SpriteScale * scale));
-            _sprites.SetColor(uid, Color.White.WithAlpha(opacity));
+            var color = ground.State == FighterGroundState.Crashed ? WreckColor : Color.White.WithAlpha(opacity);
+            _sprites.SetColor(uid, color);
             foreach (var part in new[] { ground.FrontSeat, ground.RearSeat, ground.Canopy })
             {
                 if (part is not { } entity || !TryComp(entity, out SpriteComponent? partSprite) || Transform(entity).ParentUid != uid) continue;
                 _sprites.SetOffset(entity, AttachmentOffset(uid, (entity, partSprite), offset, scale));
                 _sprites.SetScale(entity, new Vector2(FighterGroundComponent.SpriteScale * scale));
-                _sprites.SetColor(entity, Color.White.WithAlpha(opacity));
+                _sprites.SetColor(entity, color);
                 if (part == ground.Canopy)
                     _sprites.LayerSetRsiState(entity, 0, ground.State == FighterGroundState.Grounded ? "folded" : "vtolmode");
                 if (TryComp(entity, out FighterSeatComponent? seat) && seat.Occupant is { } crew && TryComp(crew, out SpriteComponent? sprite))
@@ -113,7 +117,7 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
             }
             _sprites.SetScale(uid, new Vector2((onGround ? .6f * FighterGroundComponent.AttachmentScale : .6f) * scale));
             _sprites.SetOffset(uid, offset);
-            _sprites.SetColor(uid, Color.White.WithAlpha(opacity));
+            _sprites.SetColor(uid, ground?.State == FighterGroundState.Crashed ? WreckColor : Color.White.WithAlpha(opacity));
         }
     }
 

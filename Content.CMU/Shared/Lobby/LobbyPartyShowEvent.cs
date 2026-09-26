@@ -8,6 +8,7 @@ public enum LobbyPartyShow : byte
 {
     Flyby,
     Parade,
+    SupplyScramble,
 }
 
 /// <summary>The server chooses the cast and random seed; clients only request the routine.</summary>

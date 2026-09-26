@@ -73,6 +73,13 @@ public sealed partial class HiveCollapseRuleSystem : GameRuleSystem<HiveCollapse
         if (_hiveCollapseTime == null || _timing.CurTime < _hiveCollapseTime)
             return;
 
+        // Revalidate before ending the round, including queens restored after the timer was armed.
+        if (AnyHiveHasQueen())
+        {
+            _hiveCollapseTime = null;
+            return;
+        }
+
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
         _roundStats.RecordThreatDefeatedRule("HiveCollapseRule");
         _gameTicker.EndRound(string.IsNullOrEmpty(winMessage) ? DefaultWinMsg : winMessage);

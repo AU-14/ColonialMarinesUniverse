@@ -76,11 +76,11 @@
   equipment:
     id: AU14IDCardLACNCommandoSniper
     outerClothing: AU14LACNCommandoArmorStandard
-    jumpsuit: AU14LACNUniformCoat
+    jumpsuit: CMULACNCommandoUniform
     shoes: AU14LACNBoots
-    eyes: AU14GogglesM1A1Ballistic
+    eyes: CMUGogglesLACNSolarFlare
     mask: RMCMaskScarfTan
-    head: AU14LACNNavyCap
+    head: CMULACNCommandoBeret
     gloves: AU14LACNGloves
     belt: AU14BeltHolsterPistolLACNTPR23B
     pocket1: RMCPouchToolsSocMarineRaiderFill

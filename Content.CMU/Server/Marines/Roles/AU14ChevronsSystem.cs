@@ -277,35 +277,40 @@ public sealed partial class ChevronSystem : EntitySystem
     {
         if (platoon?.ChevronOverrides != null)
         {
+            Dictionary<ProtoId<RankPrototype>, ChevronDefinition>? best = null;
+            var bestDistance = int.MaxValue;
             foreach (var (overrideJobId, overrideChevrons) in platoon.ChevronOverrides)
             {
-                if (JobInheritsFrom(job.ID, overrideJobId.Id))
+                if (InheritanceDistance(job.ID, overrideJobId.Id) is { } distance && distance < bestDistance)
                 {
-                    return overrideChevrons.ToDictionary(
-                        kvp => kvp.Key.Id,
-                        kvp => kvp.Value);
+                    best = overrideChevrons;
+                    bestDistance = distance;
                 }
             }
+
+            if (best != null)
+                return best.ToDictionary(kvp => kvp.Key.Id, kvp => kvp.Value);
         }
 
         return job.Chevrons;
     }
 
-    private bool JobInheritsFrom(string jobId, string ancestorId)
+    private int? InheritanceDistance(string jobId, string ancestorId)
     {
         if (jobId == ancestorId)
-            return true;
+            return 0;
 
         if (!_prototypes.TryIndex<JobPrototype>(jobId, out var job) || job.Parents == null)
-            return false;
+            return null;
 
+        int? closest = null;
         foreach (var parent in job.Parents)
         {
-            if (JobInheritsFrom(parent, ancestorId))
-                return true;
+            if (InheritanceDistance(parent, ancestorId) is { } distance && (closest == null || distance + 1 < closest))
+                closest = distance + 1;
         }
 
-        return false;
+        return closest;
     }
 
     private void TrySpawnFirstValidChevron(

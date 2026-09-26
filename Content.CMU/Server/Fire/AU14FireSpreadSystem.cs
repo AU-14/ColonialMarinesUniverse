@@ -60,7 +60,7 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     private static readonly TimeSpan TileFireStepDelay = TimeSpan.FromSeconds(1.3);
 
     private static readonly ProtoId<DamageTypePrototype> HeatDamageType = "Heat";
-    private static readonly EntProtoId TileFireProto = "AU14TileFire";
+    private static readonly EntProtoId TileFireProto = "AU14SpreadTileFire";
     private static readonly EntProtoId FireVisualProto = "AU14FireVisualOverlay";
     private const float TileFireSpawnChance = 0.6f;
 

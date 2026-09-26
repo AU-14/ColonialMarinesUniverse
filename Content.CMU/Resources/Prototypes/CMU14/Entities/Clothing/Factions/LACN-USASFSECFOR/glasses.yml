@@ -61,3 +61,40 @@
     rsi:
       sprite: CMU14/Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
       state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbToggleableBase
+  id: CMUGogglesLACNGunship
+  name: GG-4 gunship goggles
+  description: Helmet-mounted goggles issued to LACN gunship crews. They keep dust, debris and glare out of one's eyes.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNgunshipgoggles.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNgunshipgoggles.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNgunshipgoggles.rsi
+      state: helmet
+    toggledRsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNgunshipgoggles.rsi
+      state: helmet-down
+
+- type: entity
+  parent: RMCGogglesBallistic
+  id: CMUGogglesLACNSolarFlare
+  name: SF-1 solar flare goggles
+  description: Heavily tinted LACN goggles made to protect the eyes from harsh stellar glare. They can be worn over the eyes or mounted atop a helmet.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/solarflaregoggles.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/solarflaregoggles.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Universal/solarflaregoggles.rsi
+      state: helmet
+    toggledRsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Universal/solarflaregoggles.rsi
+      state: helmet-down

@@ -26,6 +26,7 @@
   description: au14-job-description-civilianengineer
   setPreference: true
   playTimeTracker: AU14JobCivilianEngineer
+  requirements: []
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianEngineer

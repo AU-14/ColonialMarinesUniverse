@@ -1,0 +1,13 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Tactical maps now remember your top-down view, selected floor and display
+    settings when reopened.
+  type: Fix
+- message: Xenos can travel through hive tunnels between floors of the same battlefield.
+  type: Fix
+- message: Boiler bombard retains its normal range when aimed upstairs, and its gas
+    spreads through open air as well as across floors.
+  type: Fix
+time: '2026-09-24T17:01:41.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2012

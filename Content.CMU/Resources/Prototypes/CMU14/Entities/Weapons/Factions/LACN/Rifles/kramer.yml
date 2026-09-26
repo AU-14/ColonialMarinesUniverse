@@ -1,18 +1,20 @@
 - type: entity
-  parent: CMBaseWeaponRifle
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: Kramer Assault Rifle
   id: AU14WeaponRifleKramerAR
   description: Alternately referred to as the Kramer or KAR, it is an automatic assault rifle manufactured by Kramer Metallarbeiten GmbH and is used by many military forces across the United Americas.
   components:
   - type: Sprite
-    sprite: CMU14/Weapons/Guns/LACN/kramer.rsi
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramerrifle/kramericon.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramerrifle/kramer32x32.rsi
   - type: Clothing
-    sprite: CMU14/Weapons/Guns/LACN/kramer.rsi
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramerrifle/kramer32x32.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -25,17 +27,17 @@
     - FullAuto
     soundGunshot:
       collection: CMM54CShoot
-    shotsPerBurst: 5
+    shotsPerBurst: 4
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
     - Burst
     - FullAuto
-    recoilUnwielded: 5
-    scatterWielded: 4
+    recoilUnwielded: 4
+    scatterWielded: 5
     scatterUnwielded: 20
-    baseFireRate: 6
-    burstScatterMult: 2
+    baseFireRate: 4
+    burstScatterMult: 1
     modifiers:
       Burst:
         fireDelay: 0.1665
@@ -45,13 +47,13 @@
         shotsToMaxScatter: 6
       FullAuto:
         fireDelay: 0
-        maxScatterModifier: 8
+        maxScatterModifier: 12
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 4
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.2
-    accuracyMultiplierUnwielded: 0.75
+    accuracyMultiplierUnwielded: 0.65
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -65,7 +67,7 @@
           - AU14WeaponRifleKramerMagazineAP
         startingItem: AU14WeaponRifleKramerMagazineStandard
   - type: GunDamageModifier
-    multiplier: 1.15
+    multiplier: 1.1
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
@@ -83,6 +85,12 @@
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentB8SmartScope
+      rmc-aslot-stock:
+        startingAttachable: CMULACNAttachmentKramerStock
+        whitelist:
+          tags:
+          - CMULACNAttachmentKramerStock
       rmc-aslot-underbarrel:
         whitelist:
           tags:
@@ -91,11 +99,14 @@
           - RMCAttachmentExtinguisher
           - RMCAttachmentFlamer
           - RMCAttachmentLaserSight
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-rail: -0.18, 0.12
-      rmc-aslot-barrel: 0.63, 0.031
-      rmc-aslot-underbarrel: 0.29, -0.31
+      rmc-aslot-rail: -0.0625, -0.0625
+      rmc-aslot-barrel: 0.755, 0.031
+      rmc-aslot-stock: -0.44, 0
+      rmc-aslot-underbarrel: -1.40625, -0.84375
 
 - type: entity
   parent: AU14WeaponRifleKramerAR
@@ -130,7 +141,7 @@
       tags:
       - CMCartridgeRifle10x24mm
     proto: CMCartridgeRifle10x24mm
-    capacity: 40
+    capacity: 80
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Ammo/Magazines/kramermag.rsi
     layers:
@@ -157,6 +168,7 @@
       tags:
       - CMCartridgeRifle10x24mmAP
     proto: CMCartridgeRifle10x24mmAP
+    capacity: 40
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Ammo/Magazines/kramermag.rsi
     layers:
@@ -168,6 +180,201 @@
       color: "#1F951F"
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifleAP
+
+- type: entity
+  parent: AU14WeaponRifleKramerAR
+  id: CMUWeaponRifleKramerKarbine
+  name: Kramer Karbine
+  description: A shortened carbine variant of the Kramer assault rifle with a folding stock. It trades some accuracy for a higher rate of fire and easier handling in close quarters. Takes standard Kramer magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramerkarbine/kramericon.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramerkarbine/kramer32x32.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramerkarbine/kramer32x32.rsi
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 4
+    scatterWielded: 6
+    scatterUnwielded: 18
+    baseFireRate: 4.5
+    burstScatterMult: 1
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.1
+    accuracyMultiplierUnwielded: 0.7
+  - type: GunDamageModifier
+    multiplier: 1.05
+  - type: WieldDelay
+    baseDelay: 0.4
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentB8SmartScope
+      rmc-aslot-stock:
+        startingAttachable: CMULACNAttachmentKarbineStock
+        whitelist:
+          tags:
+          - CMULACNAttachmentKarbineStock
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentLaserSight
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.0625, -0.0625
+      rmc-aslot-barrel: 0.755, 0.031
+      rmc-aslot-stock: -0.44, 0
+      rmc-aslot-underbarrel: -1.40625, -0.84375
+
+- type: entity
+  parent: AU14WeaponRifleKramerAR
+  id: CMUWeaponRifleKramerCivilian
+  name: Kramer civilian rifle
+  description: A semi-automatic civilian model of the Kramer assault rifle, sold across the United Americas for sport and self-defense. Takes standard Kramer magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramercivilian/kramericon.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramercivilian/kramer32x32.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramercivilian/kramer32x32.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      collection: CMM54CShoot
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilUnwielded: 4
+    scatterWielded: 5
+    scatterUnwielded: 20
+    baseFireRate: 3
+    burstScatterMult: 1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS42xTelescopicMiniscope
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.22, 0.15
+
+- type: entity
+  parent: AU14WeaponRifleKramerAR
+  id: CMUWeaponRifleKramerEnforcer
+  name: Kramer enforcer rifle
+  description: A law enforcement model of the Kramer assault rifle limited to semi-automatic and burst fire, issued to colonial police and security forces. Takes standard Kramer magazines and has a built in 2x sight.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramericon.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
+  - type: Gun
+    selectedMode: Burst
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      collection: CMM54CShoot
+    shotsPerBurst: 3
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilUnwielded: 4
+    scatterWielded: 5
+    scatterUnwielded: 20
+    baseFireRate: 4
+    burstScatterMult: 1
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+      rmc-aslot-rail:
+        locked: true
+        startingAttachable: CMULACNAttachmentKramer2xScope
+        whitelist:
+          tags:
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentLaserSight
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.22, 0.21
+      rmc-aslot-barrel: 0.97, 0.031
+      rmc-aslot-underbarrel: 0.56, -0.31
 
 - type: Tag
   id: AU14WeaponRifleKramerAR

@@ -1,0 +1,212 @@
+- type: entity
+  parent: CMUBeltCombatSidearmRig
+  id: CMULACNBeltStandard
+  name: LACN standard load rig
+  description: The standard load-bearing belt of the LACN landing forces. It has a holster for a sidearm and pouches for two pistol magazines and three rifle magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNstandardbelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNstandardbelt.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMarine
+  id: CMULACNBeltMagazine
+  name: LACN magazine rig
+  description: An LACN load-bearing belt fitted with pouches for rifle magazines only.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmagazinebelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmagazinebelt.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,9,1
+    whitelist:
+      tags:
+      - CMMagazineRifle
+      - CMMagazineSniper
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltUtility
+  id: CMULACNBeltUtility
+  name: LACN utility rig
+  description: An LACN load-bearing belt made to carry tools rather than ammunition.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: CMULACNBeltMedical
+  name: LACN lifesaver bag
+  description: An LACN load-bearing belt mounting a duffel bag filled with a range of injectors and light medical supplies. Common among corpsmen.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmedbelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmedbelt.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: RMCBeltGrenade
+  id: CMULACNBeltGrenade
+  name: LACN grenade rig
+  description: An LACN load-bearing belt made to carry grenades.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNgrenadebelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNgrenadebelt.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: RMCBeltBaseStorageNoVisuals
+  id: CMULACNBeltShotgun
+  name: LACN shotgun shell rig
+  description: An LACN load-bearing belt made to carry shotgun shells.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNshotgunbelt.rsi
+    state: icon
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNshotgunbelt.rsi
+  - type: Item
+    size: Large
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,13,3
+    whitelist:
+      tags:
+      - RMCShellShotgun
+      - RMCCartridge458SOCOM
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RMCBeltHolsterPistol
+  id: CMULACNBeltHolsterPistol
+  name: LACN handgun holster rig
+  description: An LACN load-bearing belt with a holster for most common pistols and side pouches for pistol magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNhandgunbelt.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: _m77
+      map: [ "_m77_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984
+      map: [ "m1984_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: mk80
+      map: [ "mk80_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: b92fs
+      map: [ "b92fs_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m13
+      map: [ "m13_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: highpower
+      map: [ "mk45_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: tt
+      map: [ "t73_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: l54
+      map: [ "l54_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: deagle
+      map: [ "handcannon_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: g_deagle
+      map: [ "g_handcannon_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: c_deagle
+      map: [ "co_handcannon_fill" ]
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNhandgunbelt.rsi
+  - type: ItemMapper
+    spriteLayers:
+    - _m77_fill
+    - m1984_fill
+    - mk80_fill
+    - b92fs_fill
+    - mk45_fill
+    - t73_fill
+    - m13_fill
+    - l54_fill
+    - handcannon_fill
+    - g_handcannon_fill
+    - co_handcannon_fill
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: RMCBeltHolsterRevolver
+  id: CMULACNBeltHolsterRevolver
+  name: LACN revolver holster rig
+  description: An LACN load-bearing belt with a holster made for Taurus revolvers, though it fits most others, and six pouches for speedloaders or shotgun shells.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNtaurusbelt.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m44r
+      map: [ "enum.CMHolsterLayers.Fill" ]
+      visible: false
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNtaurusbelt.rsi
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCRevolver
+      - RMCMagazineRevolver
+      - RMCShellShotgun
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMULACNBeltUtility
+  id: CMULACNBeltUtilityFilled
+  name: LACN utility tools rig
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWrench
+    - id: RMCWelderPVE
+    - id: CMCrowbar
+    - id: CMWirecutter
+    - id: RMCCableCoil30
+    - id: CMMultitool
+    - id: CMEntrenchingTool

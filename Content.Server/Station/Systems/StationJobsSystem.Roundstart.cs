@@ -98,6 +98,11 @@ public sealed partial class StationJobsSystem
         if (profiles.Count == 0)
             return new();
 
+// CMU14: Force on Force roles, hijacking, announcements and identification.
+
+        if (IsForceOnForce)
+            return AssignForceOnForceJobs(profiles, stations);
+
         // We need to modify this collection later, so make a copy of it.
         profiles = profiles.ShallowClone();
 
@@ -356,6 +361,15 @@ public sealed partial class StationJobsSystem
         // Overflow opt-in does not override Never for individual jobs.
         // Determine the current preset so we can apply gamemode specific overflow behaviour.
         var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        // The joint roll has already considered both fallback options and team capacities.
+        if (IsForceOnForce)
+        {
+            foreach (var player in allPlayersToAssign)
+                assignedJobs.TryAdd(player, (null, EntityUid.Invalid));
+            return;
+        }
 
         foreach (var player in allPlayersToAssign)
         {

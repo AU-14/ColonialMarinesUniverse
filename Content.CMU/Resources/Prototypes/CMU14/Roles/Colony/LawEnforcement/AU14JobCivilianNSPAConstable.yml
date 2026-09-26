@@ -33,6 +33,8 @@
   description: au14-job-description-civiliannspaConstable
   setPreference: true
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 7200 # 2 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
