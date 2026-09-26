@@ -46,6 +46,18 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
+        - name: S&R K9 Team
+          description: Summon a search-and-rescue handler and their canine companion.
+          cost: 6
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: AU14IntelThirdPartyK9
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A search-and-rescue K9 team has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: medic_qol
         - name: Unlock Tier 2
           description: Transitions the tree to another tier.
           cost: 3
@@ -87,18 +99,6 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: S&R K9 Team
-          description: Summon a search-and-rescue handler and their canine companion.
-          cost: 15
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: AU14IntelThirdPartyK9
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A search-and-rescue K9 team has been dispatched to aid with the operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: medic_qol
         - name: Dropship Fabricator Budget
           description: Distributes resources to the dropship part fabricator.
           cost: 12
