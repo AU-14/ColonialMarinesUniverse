@@ -101,6 +101,8 @@
 - type: job
   parent: AU14JobEngineeringTechBase
   id: AU14JobGOVFOREngineeringTech
+  marineAuthorityLevel: 1
+  spawnPointJob: CMMaintTech
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

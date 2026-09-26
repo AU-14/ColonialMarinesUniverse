@@ -164,6 +164,8 @@
 - type: job
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeant
+  spawnPointJob: CMRifleman
+  marineAuthorityLevel: 5
   # hidden: false # plt. sgt. is disabled
   # setPreference: true # don't show in loadout menu
   basePlaytimeTracker: true

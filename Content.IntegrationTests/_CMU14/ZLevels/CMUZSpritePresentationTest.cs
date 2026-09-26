@@ -1,4 +1,6 @@
 using System.Numerics;
+using System.Linq;
+using Robust.Shared.GameObjects;
 using Content.Client.CMU14.ZLevels.Core;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.CMU14.ZLevels;
@@ -16,6 +18,118 @@ namespace Content.IntegrationTests.CMU14.ZLevels;
 [TestFixture]
 public sealed class CMUZSpritePresentationTest : GameTest
 {
+    [Test]
+    public async Task ImportedAlmayerAirlocksHaveRequiredClientLayers()
+    {
+        await Pair.Client.WaitAssertion(() =>
+        {
+            var entities = Pair.Client.EntMan;
+            var sprites = Pair.Client.System<SpriteSystem>();
+            var checkedCount = 0;
+            foreach (var prototype in Pair.Client.ProtoMan.EnumeratePrototypes<Robust.Shared.Prototypes.EntityPrototype>())
+            {
+                if (!prototype.ID.StartsWith("CMUAlmayerObject") || !prototype.Components.ContainsKey("Airlock"))
+                    continue;
+                var uid = entities.SpawnEntity(prototype.ID, MapCoordinates.Nullspace);
+                try
+                {
+                    var sprite = entities.GetComponent<SpriteComponent>(uid);
+                    foreach (var layer in new[] { Content.Shared.Doors.Components.DoorVisualLayers.Base,
+                                 Content.Shared.Doors.Components.DoorVisualLayers.BaseUnlit,
+                                 Content.Shared.Doors.Components.DoorVisualLayers.BaseBolted,
+                                 Content.Shared.Doors.Components.DoorVisualLayers.BaseEmergencyAccess })
+                        Assert.That(sprites.LayerMapTryGet((uid, sprite), layer, out _, false), Is.True,
+                            $"{prototype.ID} is missing {layer}");
+                    checkedCount++;
+                }
+                finally
+                {
+                    entities.DeleteEntity(uid);
+                }
+            }
+            Assert.That(checkedCount, Is.GreaterThan(2));
+        });
+    }
+
+    [Test]
+    public async Task RevealedDisposalStaysBelowCatwalk()
+    {
+        await Pair.Client.WaitAssertion(() =>
+        {
+            var entities = Pair.Client.EntMan;
+            var system = Pair.Client.System<Content.Client.SubFloor.SubFloorHideSystem>();
+            var appearance = Pair.Client.System<SharedAppearanceSystem>();
+            var catwalk = entities.SpawnEntity("CMCatwalk", MapCoordinates.Nullspace);
+            var prototypes = Pair.Client.ProtoMan.EnumeratePrototypes<Robust.Shared.Prototypes.EntityPrototype>()
+                .Where(p => p.ID.StartsWith("CMUAlmayerObject") && p.Components.TryGetValue("SubFloorHide", out var entry) &&
+                    ((Content.Shared.SubFloor.SubFloorHideComponent) entry.Component).PreserveDrawDepth)
+                .Select(p => p.ID).Append("DisposalPipe").ToArray();
+            Assert.That(prototypes.Length, Is.GreaterThan(1));
+            try
+            {
+                foreach (var proto in prototypes)
+                {
+                    var uid = entities.SpawnEntity(proto, MapCoordinates.Nullspace);
+                    try
+                    {
+                        var sprite = entities.GetComponent<SpriteComponent>(uid);
+                        var app = entities.GetComponent<AppearanceComponent>(uid);
+                        foreach (var revealAll in new[] { false, true })
+                        {
+                            system.ShowAll = revealAll;
+                            appearance.SetData(uid, Content.Shared.SubFloor.SubFloorVisuals.Covered, true);
+                            appearance.SetData(uid, Content.Shared.SubFloor.SubFloorVisuals.ScannerRevealed, !revealAll);
+                            var ev = new AppearanceChangeEvent
+                            {
+                                Component = app, Sprite = sprite,
+                                AppearanceData = new System.Collections.Generic.Dictionary<System.Enum, object>(),
+                            };
+                            entities.EventBus.RaiseLocalEvent(uid, ref ev);
+                            Assert.That(sprite.Visible, Is.True);
+                            Assert.That(sprite.DrawDepth, Is.LessThan(entities.GetComponent<SpriteComponent>(catwalk).DrawDepth), proto);
+                        }
+                    }
+                    finally
+                    {
+                        entities.DeleteEntity(uid);
+                    }
+                }
+            }
+            finally
+            {
+                system.ShowAll = false;
+                entities.DeleteEntity(catwalk);
+            }
+        });
+    }
+
+    [Test]
+    public async Task ImportedAlmayerLaddersRenderAboveItemsAndBelowMobs()
+    {
+        await Pair.Client.WaitAssertion(() =>
+        {
+            var checkedCount = 0;
+            foreach (var prototype in Pair.Client.ProtoMan.EnumeratePrototypes<Robust.Shared.Prototypes.EntityPrototype>())
+            {
+                if (!prototype.ID.StartsWith("CMUAlmayerObject") || !prototype.Components.ContainsKey("CMUZLevelLadder"))
+                    continue;
+                var uid = Pair.Client.EntMan.Spawn(prototype.ID);
+                try
+                {
+                    var sprite = Pair.Client.EntMan.GetComponent<SpriteComponent>(uid);
+                    Assert.That(sprite.DrawDepth, Is.GreaterThan((int) DrawDepth.Items));
+                    Assert.That(sprite.DrawDepth, Is.LessThan((int) DrawDepth.Mobs));
+                    checkedCount++;
+                }
+                finally
+                {
+                    Pair.Client.EntMan.DeleteEntity(uid);
+                }
+            }
+            Assert.That(checkedCount, Is.GreaterThan(0));
+        });
+    }
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task GroundedSpritesKeepCurrentPresentation(bool snapCardinals)

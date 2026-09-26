@@ -96,6 +96,8 @@
 - type: job
   parent: AU14JobWeaponsSpecialistBase
   id: AU14JobGOVFORWeaponsSpecialist
+  marineAuthorityLevel: 1
+  spawnPointJob: CMWeaponsSpecialist
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

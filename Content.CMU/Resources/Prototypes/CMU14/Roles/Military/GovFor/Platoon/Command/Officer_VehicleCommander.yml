@@ -106,6 +106,7 @@
 - type: job
   parent: AU14JobVehicleCommanderBase
   id: AU14JobGOVFORVehicleCommander
+  spawnPointJob: CMRifleman
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Clock;
 using Content.Shared.Coordinates;
 using Content.Shared.GameTicking;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -18,6 +19,7 @@ public sealed partial class ARESCoreSystem : EntitySystem
     [Dependency] private SharedGameTicker _ticker = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; // CMU14
 
 
     private List<Entity<ARESCoreComponent>> _cores = new();
@@ -88,7 +90,7 @@ public sealed partial class ARESCoreSystem : EntitySystem
     {
         foreach (var core in _cores)
         {
-            if (_transform.GetMapId(core.Owner) != mapId)
+            if (!_zLevels.IsSameZNetwork(_transform.GetMapId(core.Owner), mapId)) // CMU14: logs span ship decks.
                 continue;
             ares = (core.Owner, core.Comp);
             return true;
@@ -97,7 +99,7 @@ public sealed partial class ARESCoreSystem : EntitySystem
         var query = EntityQueryEnumerator<ARESCoreComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (_transform.GetMapId(uid) != mapId)
+            if (!_zLevels.IsSameZNetwork(_transform.GetMapId(uid), mapId)) // CMU14
                 continue;
             ares = (uid, comp);
             return true;
@@ -117,7 +119,7 @@ public sealed partial class ARESCoreSystem : EntitySystem
     {
         foreach (var core in _cores)
         {
-            if (_transform.GetMap(core.Owner) != map)
+            if (!_zLevels.IsSameZNetwork(_transform.GetMapId(core.Owner), map.Comp.MapId)) // CMU14
                 continue;
             ares = (core.Owner, core.Comp);
             return true;
@@ -126,7 +128,7 @@ public sealed partial class ARESCoreSystem : EntitySystem
         var query = EntityQueryEnumerator<ARESCoreComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (_transform.GetMap(uid) != map)
+            if (!_zLevels.IsSameZNetwork(_transform.GetMapId(uid), map.Comp.MapId)) // CMU14
                 continue;
             ares = (uid, comp);
             return true;
@@ -146,7 +148,7 @@ public sealed partial class ARESCoreSystem : EntitySystem
     {
         foreach (var core in _cores)
         {
-            if (_transform.GetMap(core.Owner) != _transform.GetMap(entity))
+            if (!_zLevels.IsSameZNetwork(_transform.GetMapId(core.Owner), _transform.GetMapId(entity))) // CMU14
                 continue;
             ares = (core.Owner, core.Comp);
             return true;
@@ -155,7 +157,7 @@ public sealed partial class ARESCoreSystem : EntitySystem
         var query = EntityQueryEnumerator<ARESCoreComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (_transform.GetMap(uid) != _transform.GetMap(entity))
+            if (!_zLevels.IsSameZNetwork(_transform.GetMapId(uid), _transform.GetMapId(entity))) // CMU14
                 continue;
             ares = (uid, comp);
             return true;

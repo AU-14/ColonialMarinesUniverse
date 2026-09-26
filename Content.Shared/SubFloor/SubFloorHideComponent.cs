@@ -50,5 +50,9 @@ namespace Content.Shared.SubFloor
         /// </summary>
         [DataField]
         public int? OriginalDrawDepth;
+
+        // CMU14: disposal pipes stay below catwalks even when revealed for mapping.
+        [DataField]
+        public bool PreserveDrawDepth;
     }
 }

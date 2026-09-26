@@ -1,0 +1,985 @@
+# CM-SS13 areas adapted for the five-deck CMU Almayer.
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleCommandAiroom
+  name: Middle Deck - Command Airoom
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperCommandAiroom
+  name: Upper Deck - Command Airoom
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperCommandCicconference
+  name: Upper Deck - Command Cicconference
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperCommandCombat_correspondent
+  name: Upper Deck - Command Combat_Correspondent
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperCommandComputerlab
+  name: Upper Deck - Command Computerlab
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleCommandCorporateliaison
+  name: Middle Deck - Command Corporateliaison
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperCommandCorporateliaison
+  name: Upper Deck - Command Corporateliaison
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperCommandSecurestorage
+  name: Upper Deck - Command Securestorage
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerEngineeringLowerEngine_core
+  name: Lower Deck - Engineering Lower Engine_Core
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerEngineeringLowerWorkshop
+  name: Lower Deck - Engineering Lower Workshop
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerEngineeringLowerWorkshopHangar
+  name: Lower Deck - Engineering Lower Workshop Hangar
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperEngineeringUpper_engineering
+  name: Upper Deck - Engineering Upper_Engineering
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerHallwaysHangar
+  name: Lower Deck - Hallways Hangar
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerHallwaysLowerPort_fore_hallway
+  name: Lower Deck - Hallways Lower Port_Fore_Hallway
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerHallwaysLowerPort_midship_hallway
+  name: Lower Deck - Hallways Lower Port_Midship_Hallway
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerHallwaysLowerRepair_bay
+  name: Lower Deck - Hallways Lower Repair_Bay
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerHallwaysLowerStarboard_fore_hallway
+  name: Lower Deck - Hallways Lower Starboard_Fore_Hallway
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerHallwaysLowerStarboard_midship_hallway
+  name: Lower Deck - Hallways Lower Starboard_Midship_Hallway
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerHallwaysLowerVehiclehangar
+  name: Lower Deck - Hallways Lower Vehiclehangar
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperHallwaysUpperFore_hallway
+  name: Upper Deck - Hallways Upper Fore_Hallway
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperHallwaysUpperMidship_hallway
+  name: Upper Deck - Hallways Upper Midship_Hallway
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperLifeboat_pumpsNorth1
+  name: Upper Deck - Lifeboat_Pumps North1
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperLifeboat_pumpsNorth2
+  name: Upper Deck - Lifeboat_Pumps North2
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperLifeboat_pumpsSouth1
+  name: Upper Deck - Lifeboat_Pumps South1
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperLifeboat_pumpsSouth2
+  name: Upper Deck - Lifeboat_Pumps South2
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperLivingBridgebunks
+  name: Upper Deck - Living Bridgebunks
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingBriefing
+  name: Lower Deck - Living Briefing
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperLivingChapel
+  name: Upper Deck - Living Chapel
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingCryo_cells
+  name: Lower Deck - Living Cryo_Cells
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingGrunt_rnr
+  name: Lower Deck - Living Grunt_Rnr
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingGym
+  name: Lower Deck - Living Gym
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperLivingIntel
+  name: Upper Deck - Living Intel
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperLivingNumbertwobunks
+  name: Upper Deck - Living Numbertwobunks
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingOffices
+  name: Lower Deck - Living Offices
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingOfficesFlight
+  name: Lower Deck - Living Offices Flight
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleLivingOfficesFlight
+  name: Middle Deck - Living Offices Flight
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingPilotbunks
+  name: Lower Deck - Living Pilotbunks
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingPort_emb
+  name: Lower Deck - Living Port_Emb
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingStarboard_emb
+  name: Lower Deck - Living Starboard_Emb
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerLivingTankerbunks
+  name: Lower Deck - Living Tankerbunks
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerL_a_p
+  name: Lower Deck - Maint Hull Lower L_A_P
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerL_a_s
+  name: Lower Deck - Maint Hull Lower L_A_S
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerL_f_p
+  name: Lower Deck - Maint Hull Lower L_F_P
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerL_f_s
+  name: Lower Deck - Maint Hull Lower L_F_S
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerL_m_p
+  name: Lower Deck - Maint Hull Lower L_M_P
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerL_m_s
+  name: Lower Deck - Maint Hull Lower L_M_S
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerP_bow
+  name: Lower Deck - Maint Hull Lower P_Bow
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerS_bow
+  name: Lower Deck - Maint Hull Lower S_Bow
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintHullLowerStairs
+  name: Lower Deck - Maint Hull Lower Stairs
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMaintHullLowerStairs
+  name: Middle Deck - Maint Hull Lower Stairs
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintHullUpperP_bow
+  name: Upper Deck - Maint Hull Upper P_Bow
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintHullUpperS_bow
+  name: Upper Deck - Maint Hull Upper S_Bow
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintHullUpperU_a_p
+  name: Upper Deck - Maint Hull Upper U_A_P
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintHullUpperU_a_s
+  name: Upper Deck - Maint Hull Upper U_A_S
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintHullUpperU_m_p
+  name: Upper Deck - Maint Hull Upper U_M_P
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintHullUpperU_m_s
+  name: Upper Deck - Maint Hull Upper U_M_S
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMaintLowerCryo_cells
+  name: Lower Deck - Maint Lower Cryo_Cells
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintUpperMess
+  name: Upper Deck - Maint Upper Mess
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintUpperU_f_p
+  name: Upper Deck - Maint Upper U_F_P
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintUpperU_f_s
+  name: Upper Deck - Maint Upper U_F_S
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintUpperU_m_p
+  name: Upper Deck - Maint Upper U_M_P
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMaintUpperU_m_s
+  name: Upper Deck - Maint Upper U_M_S
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMedicalContainment
+  name: Middle Deck - Medical Containment
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMedicalContainment
+  name: Upper Deck - Medical Containment
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMedicalContainmentCell
+  name: Middle Deck - Medical Containment Cell
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMedicalContainmentCellCl
+  name: Middle Deck - Medical Containment Cell Cl
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMedicalHydroponics
+  name: Upper Deck - Medical Hydroponics
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerMedicalLower_medical_lobby
+  name: Lower Deck - Medical Lower_Medical_Lobby
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMedicalMedical_science
+  name: Upper Deck - Medical Medical_Science
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMedicalMorgue
+  name: Upper Deck - Medical Morgue
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperMedicalUpper_medical
+  name: Upper Deck - Medical Upper_Medical
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckBriefing
+  name: Middle Deck - Briefing
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckEngineer
+  name: Middle Deck - Engineer
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckHanger
+  name: Middle Deck - Hanger
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMaintenanceAft
+  name: Middle Deck - Maintenance Aft
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMaintenanceBow
+  name: Middle Deck - Maintenance Bow
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMaintenancePaft
+  name: Middle Deck - Maintenance Paft
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMaintenancePb
+  name: Middle Deck - Maintenance Pb
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMaintenanceSaft
+  name: Middle Deck - Maintenance Saft
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMaintenanceSb
+  name: Middle Deck - Maintenance Sb
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMaintenanceSf
+  name: Middle Deck - Maintenance Sf
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMaintenanceSp
+  name: Middle Deck - Maintenance Sp
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckMedical
+  name: Middle Deck - Medical
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleMiddeckReq
+  name: Middle Deck - Req
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddlePoweredAgent
+  name: Middle Deck - Powered Agent
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperShipboardBrig
+  name: Upper Deck - Shipboard Brig
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleShipboardBrigArmory
+  name: Middle Deck - Shipboard Brig Armory
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperShipboardBrigCryo
+  name: Upper Deck - Shipboard Brig Cryo
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperShipboardBrigEvidence_storage
+  name: Upper Deck - Shipboard Brig Evidence_Storage
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleShipboardBrigExecution
+  name: Middle Deck - Shipboard Brig Execution
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleShipboardBrigExecution_storage
+  name: Middle Deck - Shipboard Brig Execution_Storage
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperShipboardBrigGeneral_equipment
+  name: Upper Deck - Shipboard Brig General_Equipment
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleShipboardBrigLower
+  name: Middle Deck - Shipboard Brig Lower
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleShipboardNavigation
+  name: Middle Deck - Shipboard Navigation
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerShipboardPanic
+  name: Lower Deck - Shipboard Panic
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerShipboardPort_point_defense
+  name: Lower Deck - Shipboard Port_Point_Defense
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerShipboardSea_office
+  name: Lower Deck - Shipboard Sea_Office
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerShipboardStarboard_point_defense
+  name: Lower Deck - Shipboard Starboard_Point_Defense
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerShipboardWeapon_room
+  name: Lower Deck - Shipboard Weapon_Room
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerSquadsAlpha
+  name: Lower Deck - Squads Alpha
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerSquadsDelta
+  name: Lower Deck - Squads Delta
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerSquadsReq
+  name: Lower Deck - Squads Req
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerStair_cloneLowerPort_aft
+  name: Lower Deck - Stair_Clone Lower Port_Aft
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleStair_cloneLowerPort_aft
+  name: Middle Deck - Stair_Clone Lower Port_Aft
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerStair_cloneLowerPort_fore
+  name: Lower Deck - Stair_Clone Lower Port_Fore
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleStair_cloneLowerPort_fore
+  name: Middle Deck - Stair_Clone Lower Port_Fore
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerStair_cloneLowerStarboard_aft
+  name: Lower Deck - Stair_Clone Lower Starboard_Aft
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleStair_cloneLowerStarboard_aft
+  name: Middle Deck - Stair_Clone Lower Starboard_Aft
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerLowerStair_cloneLowerStarboard_fore
+  name: Lower Deck - Stair_Clone Lower Starboard_Fore
+  components:
+  - type: Area
+    zLevel: 0
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleStair_cloneLowerStarboard_fore
+  name: Middle Deck - Stair_Clone Lower Starboard_Fore
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleStair_cloneUpperPort_aft
+  name: Middle Deck - Stair_Clone Upper Port_Aft
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperStair_cloneUpperPort_aft
+  name: Upper Deck - Stair_Clone Upper Port_Aft
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleStair_cloneUpperPort_fore
+  name: Middle Deck - Stair_Clone Upper Port_Fore
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperStair_cloneUpperPort_fore
+  name: Upper Deck - Stair_Clone Upper Port_Fore
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperStair_cloneUpperStarboard_aft
+  name: Upper Deck - Stair_Clone Upper Starboard_Aft
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerMiddleStair_cloneUpperStarboard_fore
+  name: Middle Deck - Stair_Clone Upper Starboard_Fore
+  components:
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUpperStair_cloneUpperStarboard_fore
+  name: Upper Deck - Stair_Clone Upper Starboard_Fore
+  components:
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerBottomUnderdeck
+  name: Bottom Deck (CM-SS13) - Underdeck
+  components:
+  - type: Area
+    zLevel: -2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerUnderUnderdeckEngineering
+  name: Under Deck - Engineering
+  components:
+  - type: Area
+    zLevel: -1
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerBottomUnderdeckHangar
+  name: Bottom Deck (CM-SS13) - Hangar
+  components:
+  - type: Area
+    zLevel: -2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerBottomUnderdeckReq
+  name: Bottom Deck (CM-SS13) - Req
+  components:
+  - type: Area
+    zLevel: -2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerBottomUnderdeckVehicle
+  name: Bottom Deck (CM-SS13) - Vehicle
+  components:
+  - type: Area
+    zLevel: -2
+
+- type: entity
+  parent: RMCAreaAlmayer
+  id: CMUAlmayerBottomDockUscm
+  name: Bottom Deck (CM-SS13) - Dock Uscm
+  components:
+  - type: Area
+    zLevel: -2

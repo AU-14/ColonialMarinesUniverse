@@ -4,7 +4,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._RMC14.Evacuation;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
-[Access(typeof(SharedEvacuationSystem))]
+[Access(typeof(SharedEvacuationSystem), typeof(Content.Shared.CMU14.Hijack.CMUShipHijackSystem))] // CMU14
 public sealed partial class EvacuationProgressComponent : Component
 {
     [DataField, AutoNetworkedField]

@@ -152,6 +152,7 @@
 - type: job
   parent: AU14JobDCCBase
   id: AU14JobGOVFORDCC
+  spawnPointJob: CMDropshipCrewChief
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

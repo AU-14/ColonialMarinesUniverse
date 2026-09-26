@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "CM-SS13 contributors; lossless directional DMI extraction from https://github.com/cmss13-devs/cmss13/blob/f24cf8e0532cb1736ac4ba2e3d17f3c27d18e13f/icons/obj/items/storage/medical.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "base"
+    },
+    {
+      "name": "firstaid"
+    },
+    {
+      "name": "ointment"
+    },
+    {
+      "name": "firefirstaid"
+    },
+    {
+      "name": "antitoxin"
+    },
+    {
+      "name": "radfirstaid"
+    },
+    {
+      "name": "purplefirstaid"
+    },
+    {
+      "name": "o2"
+    },
+    {
+      "name": "bezerk"
+    },
+    {
+      "name": "advfirstaid"
+    },
+    {
+      "name": "kit_empty"
+    },
+    {
+      "name": "softpack_empty"
+    },
+    {
+      "name": "softpack_basic"
+    },
+    {
+      "name": "softpack_brute"
+    },
+    {
+      "name": "softpack_burn"
+    },
+    {
+      "name": "firstaid-inhand-right"
+    },
+    {
+      "name": "ointment-inhand-right"
+    },
+    {
+      "name": "antitoxin-inhand-right"
+    },
+    {
+      "name": "advfirstaid-inhand-right"
+    },
+    {
+      "name": "o2-inhand-right"
+    },
+    {
+      "name": "firstaid-inhand-left"
+    },
+    {
+      "name": "ointment-inhand-left"
+    },
+    {
+      "name": "antitoxin-inhand-left"
+    },
+    {
+      "name": "advfirstaid-inhand-left"
+    },
+    {
+      "name": "o2-inhand-left"
+    },
+    {
+      "name": "firefirstaid-inhand-left"
+    },
+    {
+      "name": "firefirstaid-inhand-right"
+    },
+    {
+      "name": "purplefirstaid-inhand-left"
+    },
+    {
+      "name": "purplefirstaid-inhand-right"
+    },
+    {
+      "name": "radfirstaid-inhand-left"
+    },
+    {
+      "name": "radfirstaid-inhand-right"
+    },
+    {
+      "name": "beserk-inhand-left"
+    },
+    {
+      "name": "beserk-inhand-right"
+    }
+  ]
+}

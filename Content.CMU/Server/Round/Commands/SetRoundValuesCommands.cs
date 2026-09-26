@@ -229,7 +229,7 @@ namespace Content.Server.CMU14.Round.Commands
         {
             var protoMan = IoCManager.Resolve<IPrototypeManager>();
             return protoMan.EnumeratePrototypes<PlatoonPrototype>()
-                .SelectMany(p => p.PossibleShips)
+                .SelectMany(p => p.PossibleShips.Concat(p.GovforShips ?? p.PossibleShips))
                 .Distinct()
                 .OrderBy(id => id)
                 .ToList();

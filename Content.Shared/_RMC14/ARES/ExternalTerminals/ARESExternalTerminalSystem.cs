@@ -108,7 +108,8 @@ public sealed partial class ARESExternalTerminalSystem : EntitySystem
     {
         SetAres(ent);
         if (!_idCard.TryFindIdCard(args.Actor, out var idCard) || !TryComp<AccessComponent>(idCard, out var access) ||
-            idCard.Comp.FullName == null || idCard.Comp._jobTitle == null || !_iffSystem.HasFaction(idCard, ent.Comp.Faction))
+            idCard.Comp.FullName == null || idCard.Comp._jobTitle == null ||
+            !_iffSystem.HasFaction(idCard, ent.Comp.LoginFaction ?? ent.Comp.Faction)) // CMU14: Govfor crew cards.
             return;
 
         _core.CreateARESLog(ent.Comp.Faction,
@@ -134,7 +135,8 @@ public sealed partial class ARESExternalTerminalSystem : EntitySystem
 
                 foreach (var permission in ent.Comp.Accesses)
                 {
-                    if (!logPermission.Contains(permission))
+                    if (!logPermission.Contains(permission) &&
+                        !logPermission.Any(required => ent.Comp.LogAccessAliases.TryGetValue(required, out var alias) && alias == permission)) // CMU14
                         continue;
 
                     ent.Comp.ShownLogs.Add(logType);

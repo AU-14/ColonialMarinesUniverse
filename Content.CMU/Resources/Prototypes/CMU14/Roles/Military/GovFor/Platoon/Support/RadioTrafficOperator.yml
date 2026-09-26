@@ -95,6 +95,7 @@
 - type: job
   parent: AU14JobRadioTrafficOperatorBase
   id: AU14JobGOVFORRadioTrafficOperator
+  spawnPointJob: CMRifleman
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

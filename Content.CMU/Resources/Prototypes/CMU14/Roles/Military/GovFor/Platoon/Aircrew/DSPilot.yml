@@ -164,6 +164,8 @@
   name: au14-job-name-govfortransportpilot
   description: au14-job-description-govfortransportpilot
   spawnMenuRoleName: au14-spawn-role-name-govfor-transport-pilot
+  marineAuthorityLevel: 7
+  spawnPointJob: CMRifleman
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

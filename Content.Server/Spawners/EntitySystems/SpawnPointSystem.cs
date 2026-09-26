@@ -46,6 +46,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
         var side = _roundJobProfiles.GetRoundSide(job, jobId);
         bool isOpfor = side == RoundJobSide.Opfor;
         bool isGovfor = side == RoundJobSide.Govfor;
+        var spawnPointJob = job?.SpawnPointJob; // CMU14: read the role's intentional legacy marker alias.
 
         // --- AU14: Faction spawn routing ---
         // If the player is govfor or opfor we decide where they spawn based solely on
@@ -87,10 +88,12 @@ public sealed partial class SpawnPointSystem : EntitySystem
             if (factionInShip)
             {
                 // SHIP-SIDE SPAWN
-                // Any spawn point on the faction's ship is valid — type does not matter.
-                // Prefer job-specific matches; fall back to everything else on the ship.
+                // Use this job's marker (or its explicit legacy alias), then a designated
+                // late-join marker. Never guess by picking another role's spawn point.
                 // We NEVER fall through to the general logic below.
+                // CMU14 Begin: use an exact marker, explicit role alias, or late-join marker only.
                 var preferred = new List<EntityCoordinates>();
+                var legacyPreferred = new List<EntityCoordinates>();
                 var fallback  = new List<EntityCoordinates>();
 
                 var pts = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
@@ -101,20 +104,27 @@ public sealed partial class SpawnPointSystem : EntitySystem
                     if (sp.SpawnType == SpawnPointType.Observer)
                         continue;
 
-                    if (sp.Job != null && sp.Job == args.Job)
+                    if (IsJobSpawnPoint(sp, args.Job))
                         preferred.Add(xform.Coordinates);
-                    else
+                    else if (IsLegacyJobSpawnPoint(sp, spawnPointJob))
+                        legacyPreferred.Add(xform.Coordinates);
+                    else if (sp.SpawnType == SpawnPointType.LateJoin ||
+                             (isGovfor && sp.SpawnType == SpawnPointType.LateJoinGovfor) ||
+                             (isOpfor && sp.SpawnType == SpawnPointType.LateJoinOpfor))
                         fallback.Add(xform.Coordinates);
                 }
 
-                if (preferred.Count == 0 && fallback.Count == 0)
+                if (preferred.Count == 0 && legacyPreferred.Count == 0 && fallback.Count == 0)
                 {
                     Log.Error($"[SpawnPointSystem] No spawn points found on ship for faction " +
                               $"{(isGovfor ? "govfor" : "opfor")} — player cannot spawn!");
                     return;
                 }
 
-                var loc = preferred.Count > 0 ? _random.Pick(preferred) : _random.Pick(fallback);
+                var loc = preferred.Count > 0 ? _random.Pick(preferred) :
+                    legacyPreferred.Count > 0 ? _random.Pick(legacyPreferred) :
+                    _random.Pick(fallback);
+                // CMU14 End
                 args.SpawnResult = _stationSpawning.SpawnPlayerMob(
                     loc, args.Job, args.HumanoidCharacterProfile, args.Station);
                 return; // hard return — never touches planet logic
@@ -123,7 +133,9 @@ public sealed partial class SpawnPointSystem : EntitySystem
             {
                 // PLANET-SIDE SPAWN
                 // Only use spawn points that are NOT on any faction ship grid.
+                // CMU14 Begin: prefer the exact role marker before its configured alias.
                 var preferred = new List<EntityCoordinates>();
+                var legacyPreferred = new List<EntityCoordinates>();
                 var fallback  = new List<EntityCoordinates>();
 
                 var pts = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
@@ -134,9 +146,19 @@ public sealed partial class SpawnPointSystem : EntitySystem
                         continue;
 
                     if ((sp.SpawnType == SpawnPointType.Job || sp.SpawnType == SpawnPointType.Unset) &&
-                        (args.Job == null || sp.Job == args.Job))
+                        args.Job == null)
                     {
                         preferred.Add(xform.Coordinates);
+                    }
+                    else if ((sp.SpawnType == SpawnPointType.Job || sp.SpawnType == SpawnPointType.Unset) &&
+                             IsJobSpawnPoint(sp, args.Job))
+                    {
+                        preferred.Add(xform.Coordinates);
+                    }
+                    else if ((sp.SpawnType == SpawnPointType.Job || sp.SpawnType == SpawnPointType.Unset) &&
+                             IsLegacyJobSpawnPoint(sp, spawnPointJob))
+                    {
+                        legacyPreferred.Add(xform.Coordinates);
                     }
                     else if ((isOpfor  && sp.SpawnType == SpawnPointType.LateJoinOpfor) ||
                              (isGovfor && sp.SpawnType == SpawnPointType.LateJoinGovfor))
@@ -145,9 +167,12 @@ public sealed partial class SpawnPointSystem : EntitySystem
                     }
                 }
 
-                if (preferred.Count > 0 || fallback.Count > 0)
+                if (preferred.Count > 0 || legacyPreferred.Count > 0 || fallback.Count > 0)
                 {
-                    var loc = preferred.Count > 0 ? _random.Pick(preferred) : _random.Pick(fallback);
+                    var loc = preferred.Count > 0 ? _random.Pick(preferred) :
+                        legacyPreferred.Count > 0 ? _random.Pick(legacyPreferred) :
+                        _random.Pick(fallback);
+                    // CMU14 End
                     args.SpawnResult = _stationSpawning.SpawnPlayerMob(
                         loc, args.Job, args.HumanoidCharacterProfile, args.Station);
                     return;
@@ -281,5 +306,21 @@ public sealed partial class SpawnPointSystem : EntitySystem
             return true;
 
         return _stationSystem.GetOwningStation(grid) is { } station && shipStations.Contains(station);
+    }
+
+    // CMU14 method
+    private static bool IsJobSpawnPoint(
+        SpawnPointComponent spawnPoint,
+        ProtoId<JobPrototype>? job)
+    {
+        return job != null && spawnPoint.Job == job;
+    }
+
+    // CMU14 method
+    private static bool IsLegacyJobSpawnPoint(
+        SpawnPointComponent spawnPoint,
+        ProtoId<JobPrototype>? spawnPointJob)
+    {
+        return spawnPointJob != null && spawnPoint.Job == spawnPointJob;
     }
 }

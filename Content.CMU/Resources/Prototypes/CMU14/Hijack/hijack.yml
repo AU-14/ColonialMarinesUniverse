@@ -1,0 +1,77 @@
+- type: entity
+  parent: RMCFuelPump
+  id: CMUHijackFuelPump
+  suffix: CM-SS13 hijack
+  components:
+  - type: CMUHijackPump
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-2.49,-0.49,1.49,0.49"
+        density: 100
+        hard: true
+        mask: [MachineMask]
+        layer: [MidImpassable, LowImpassable]
+  - type: Damageable
+  - type: Injurable
+    damageContainer: CMUHijackPump
+  - type: ApcPowerReceiver
+    needsPower: false
+  - type: Corrodible
+    structure: true
+  - type: Sprite
+    sprite: CMU14/Hijack/fuel_pump.rsi
+    offset: -0.5,0
+    layers:
+    - state: fuelpump_off
+      map: [unpowered]
+    - state: fuelpump_0
+      map: ["enum.EvacuationPumpLayers.Layer"]
+      visible: false
+    - state: fuelpump_destroyed
+      map: [broken]
+      visible: false
+    - state: "+fuelpump_health_90"
+      map: [health]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUHijackPumpVisuals.Broken:
+        broken:
+          True: {visible: true}
+          False: {visible: false}
+        enum.EvacuationPumpLayers.Layer:
+          True: {visible: false}
+        unpowered:
+          True: {visible: false}
+      enum.CMUHijackPumpVisuals.Health:
+        health:
+          0: {visible: false}
+          90: {state: "+fuelpump_health_90", visible: true}
+          80: {state: "+fuelpump_health_80", visible: true}
+          60: {state: "+fuelpump_health_60", visible: true}
+          30: {state: "+fuelpump_health_30", visible: true}
+
+- type: entity
+  parent: RMCHijackPipeExplosionWarning
+  id: CMUHijackPumpExplosionWarning
+  components:
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: damageContainer
+  id: CMUHijackPump
+  supportedGroups: [Brute]
+  supportedTypes: [Caustic]
+
+- type: parallax
+  id: CMUHijackFTL
+  layers:
+  - texture:
+      !type:ImageParallaxTextureSource
+      path: /Textures/Parallaxes/layer1.png
+    slowness: 0.5
+    scrolling: "-30, 0"
+    scale: "3, 0.3"
+  layersLQUseHQ: true

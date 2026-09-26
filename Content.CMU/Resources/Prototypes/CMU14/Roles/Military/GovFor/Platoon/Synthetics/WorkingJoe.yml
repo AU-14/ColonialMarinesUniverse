@@ -47,6 +47,7 @@
 - type: job
   parent: AU14JobGOVFORWorkingJoeBase
   id: AU14JobGOVFORWorkingJoe
+  spawnPointJob: CMRifleman
   requirements:
   - !type:TraitsRequirement
     inverted: true

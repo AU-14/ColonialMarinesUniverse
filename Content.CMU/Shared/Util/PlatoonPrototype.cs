@@ -77,6 +77,12 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField("possibleships")]
     public List<string> PossibleShips { get; private set; } = new();
 
+    /// <summary>
+    /// Overrides the shared ship list for Govfor; omitted lists use PossibleShips.
+    /// </summary>
+    [DataField("govforShips")]
+    public List<string>? GovforShips { get; private set; }
+
     [DataField("jobClassOverride")]
     public Dictionary<PlatoonJobClass, string> JobClassOverride { get; private set; } = new();
     [DataField("PlatoonFlag")]

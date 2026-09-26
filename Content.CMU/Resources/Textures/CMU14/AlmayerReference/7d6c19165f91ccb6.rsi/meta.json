@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "CM-SS13 contributors; lossless directional DMI extraction from https://github.com/cmss13-devs/cmss13/blob/f24cf8e0532cb1736ac4ba2e3d17f3c27d18e13f/icons/obj/items/new_assemblies.dmi",
+  "size": {
+    "x": 32,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "base"
+    }
+  ]
+}

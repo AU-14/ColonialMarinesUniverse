@@ -13,6 +13,10 @@ public sealed partial class DropshipTerminalComponent : Component
     [DataField, AutoNetworkedField]
     public string? Faction;
 
+    // CMU14: Shipboard recall terminals may sit on a different deck from their home landing zones.
+    [DataField, AutoNetworkedField]
+    public bool UseShipDestinations;
+
     // CMU14 Begin: summon pacing
     /// <summary>Minimum time between remote summons from this terminal.</summary>
     [DataField, AutoNetworkedField]

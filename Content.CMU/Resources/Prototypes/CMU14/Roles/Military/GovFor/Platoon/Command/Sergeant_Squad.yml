@@ -128,6 +128,8 @@
 - type: job
   parent: AU14JobSquadSergeantBase # parent does the heavy lifting
   id: AU14JobGOVFORSquadSergeant # Default Squad Leader
+  marineAuthorityLevel: 2
+  spawnPointJob: CMSquadLeader
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

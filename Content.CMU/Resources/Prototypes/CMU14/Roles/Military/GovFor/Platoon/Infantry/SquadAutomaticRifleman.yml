@@ -126,6 +126,8 @@
 - type: job
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRifleman
+  marineAuthorityLevel: 1
+  spawnPointJob: CMRifleman
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

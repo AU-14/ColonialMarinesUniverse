@@ -106,6 +106,7 @@
 - type: job
   parent: CMUJobDroneOperatorBase
   id: CMUJobGOVFORDroneOperator
+  spawnPointJob: CMRifleman
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

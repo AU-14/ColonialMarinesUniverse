@@ -87,6 +87,8 @@
 - type: job
   parent: AU14JobPlatOpBase
   id: AU14JobGOVFORPlatOp
+  marineAuthorityLevel: 13
+  spawnPointJob: CMStaffOfficer
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

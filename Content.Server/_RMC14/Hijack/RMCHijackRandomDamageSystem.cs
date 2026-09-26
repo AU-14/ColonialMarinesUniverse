@@ -3,7 +3,11 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Hijack;
+using Content.Shared._RMC14.CameraShake;
+using Content.Shared._RMC14.Power;
+using Content.Shared.CMU14.Hijack; // CMU14: add the opted-in ship crash path.
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.Destructible;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -24,13 +28,15 @@ namespace Content.Server._RMC14.Hijack;
 public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
     [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUShipHijackSystem _shipHijack = default!; // CMU14: resolve the full ship network.
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private RMCCameraShakeSystem _shake = default!; // CMU14: broadcast shipwide explosions.
 
     private static readonly EntProtoId BrokenPipe = "GasPipeBroken";
     private static readonly EntProtoId PipeFire = "RMCHijackPipeFire";
@@ -81,21 +87,25 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
         _windowTargets.Clear();
         _windoorTargets.Clear();
 
-        var map = EnsureComp<RMCHijackActiveMapComponent>(ev.Map);
+        // CMU14: all decks share the root ship damage sequence.
+        var cmss13 = _shipHijack.TryGetShip(ev.Map, out var ship);
+        var targetMap = cmss13 ? ship.Owner : ev.Map;
+        if (HasComp<RMCHijackActiveMapComponent>(targetMap))
+            return;
+        var map = EnsureComp<RMCHijackActiveMapComponent>(targetMap);
 
         // Build pools from every deck of the ship z-network; hijack damage is shipwide but
         // must never spill into maps outside the network.
         var query = EntityQueryEnumerator<RMCHijackRandomDamageTargetComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var comp, out var xform))
         {
-            if (!comp.Enabled
-                || !_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
+            if (!comp.Enabled || !_zLevels.IsSameZNetwork(xform.MapUid, targetMap)) // CMU14
                 continue;
 
             if (comp.Category == RMCHijackRandomDamageCategory.Pipe)
             {
                 var pipe = EnsureComp<RMCHijackActivePipeComponent>(uid);
-                pipe.Map = ev.Map;
+                pipe.Map = targetMap; // CMU14
 
                 if (xform.Anchored)
                     map.Pipes.Add(uid);
@@ -122,11 +132,28 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
             }
         }
 
-        ApplyRandomDamage(_wallTargets, WallMinPercent, WallMaxPercent);
-        ApplyRandomDamage(_windowTargets, WindowMinPercent, WindowMaxPercent);
-        ApplyRandomDamage(_windoorTargets, WindoorMinPercent, WindoorMaxPercent);
-
-        DoPipeBarrage(ev.Map, PipeInitialMinPercent, PipeInitialMaxPercent);
+        // CMU14: use the ship crash sequence for opted-in ships.
+        if (cmss13)
+        {
+            // CM-SS13 damages APCs at impact. Hull damage follows the crash path;
+            // arbitrary percentages of remote walls are the legacy CMU behavior.
+            var apcs = EntityQueryEnumerator<RMCApcComponent, TransformComponent>();
+            while (apcs.MoveNext(out var uid, out _, out var transform))
+            {
+                if (!_zLevels.IsSameZNetwork(transform.MapUid, targetMap) || !_random.Prob(0.85f))
+                    continue;
+                var broken = new BreakageEventArgs();
+                RaiseLocalEvent(uid, broken);
+            }
+            DoPipeBarrage(targetMap);
+        }
+        else
+        {
+            ApplyRandomDamage(_wallTargets, WallMinPercent, WallMaxPercent);
+            ApplyRandomDamage(_windowTargets, WindowMinPercent, WindowMaxPercent);
+            ApplyRandomDamage(_windoorTargets, WindoorMinPercent, WindoorMaxPercent);
+            DoPipeBarrage(targetMap, PipeInitialMinPercent, PipeInitialMaxPercent);
+        }
     }
 
     private void OnPipeRemove<T>(Entity<RMCHijackActivePipeComponent> ent, ref T args)
@@ -221,7 +248,10 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
         if (!Resolve(map, ref map.Comp, false))
             return;
 
-        var count = GetRandomCount(map.Comp.Pipes.Count, minPercent, maxPercent);
+        // CMU14: ship crash stages use fixed barrage sizes.
+        var count = TryComp(map, out CMUShipHijackComponent? ship)
+            ? Math.Min(map.Comp.Pipes.Count, ship.Stage == CMUShipHijackStage.GroundCrash ? 10 : 5)
+            : GetRandomCount(map.Comp.Pipes.Count, minPercent, maxPercent);
         if (count == 0)
         {
             RemCompDeferred<RMCHijackActiveMapComponent>(map);
@@ -309,9 +339,22 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
         var query = EntityQueryEnumerator<RMCHijackActiveMapComponent>();
         while (query.MoveNext(out var uid, out var active))
         {
+            // CMU14: pause the barrage with its map.
+            if (Paused(uid))
+                continue;
             if (active.ExplodeAt != null && time >= active.ExplodeAt.Value)
             {
                 active.ExplodeAt = null;
+
+                // CMU14: explosions shake every ship deck.
+                if (TryComp(uid, out CMUShipHijackComponent? ship))
+                {
+                    foreach (var map in ship.ShipMaps)
+                    {
+                        if (!TerminatingOrDeleted(map))
+                            _shake.ShakeCamera(Robust.Shared.Player.Filter.BroadcastMap(Transform(map).MapID), 30, 1);
+                    }
+                }
 
                 try
                 {

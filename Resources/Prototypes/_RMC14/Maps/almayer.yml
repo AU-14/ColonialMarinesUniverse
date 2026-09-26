@@ -1,12 +1,20 @@
-# The Almayer map file is currently considered private content by RMC14.
-# The Almayer map file is to serve as a solution for a test fail that would result from the lack of its existence otherwise.
+# CMU14: Five aligned decks; the original technical deck and CM-SS13 bottom hull are separate.
 - type: gameMap
   id: Almayer
   mapName: Almayer
-  mapPath: /Maps/_RMC14/almayer.yml
+  mapPath: /Maps/CMU14/Almayer/almayer.yml
+  mapsBelow:
+  - /Maps/CMU14/Almayer/under.yml
+  - /Maps/CMU14/Almayer/bottom.yml
+  mapsAbove:
+  - /Maps/CMU14/Almayer/middle.yml
+  - /Maps/CMU14/Almayer/upper.yml
   minPlayers: 0 # TODO RMC14 74
   maxRandomOffset: 0
   randomRotation: false
+  zLevelsComponentOverrides:
+  - type: CMUZLevelMap
+    visualOffset: 0
   fallback: true
   stations:
     Almayer:

@@ -119,6 +119,8 @@
 - type: job
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTech
+  marineAuthorityLevel: 1
+  spawnPointJob: CMCombatTech
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

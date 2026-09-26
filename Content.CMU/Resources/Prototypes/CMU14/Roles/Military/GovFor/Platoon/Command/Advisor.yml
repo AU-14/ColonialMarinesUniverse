@@ -104,6 +104,8 @@
 - type: job
   parent: AU14JobadvisorBase
   id: AU14JobGOVFORadvisor
+  marineAuthorityLevel: 12
+  spawnPointJob: CMAuxiliarySupportOfficer
   hidden: false
   setPreference: true
   basePlaytimeTracker: true

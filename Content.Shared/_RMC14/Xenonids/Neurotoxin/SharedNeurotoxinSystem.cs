@@ -445,6 +445,9 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
         }
     }
 
+    /// <summary>CMU14: one hallucination without applying neurotoxin or its other effects.</summary>
+    public void DoHallucination(EntityUid victim) => DoNeuroHallucination(victim, new NeurotoxinComponent());
+
     private void DoNeuroHallucination(EntityUid victim, NeurotoxinComponent neurotoxin)
     {
         var hallucination = _random.Pick(neurotoxin.Hallucinations);

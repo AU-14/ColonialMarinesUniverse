@@ -160,8 +160,7 @@ public sealed partial class CMUZLevelVisibleEntityOverlay : Overlay
         var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
         var bounds = _sprite.GetLocalBounds((player, sprite));
         var topCenter = new Vector2(worldPos.X + bounds.Center.X, worldPos.Y + bounds.Top + 0.25f);
-        Angle rotation = zEye.Rotation * -1;
-        var zPassOffset = rotation.ToWorldVec() * CMUClientZLevelsSystem.ZLevelOffset * zEye.Depth;
+        var zPassOffset = zEye.VisualZOffset;
         var screenPosition = args.ViewportControl.WorldToScreen(topCenter - zPassOffset) - new Vector2(5f, 24f);
 
         _screenLabels.Add(screenPosition);
