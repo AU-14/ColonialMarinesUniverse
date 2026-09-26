@@ -57,6 +57,8 @@ public sealed partial class StationJobsSystem
             foreach (var (id, _, side) in jobs)
             {
                 var job = ProtoMan.Index(id);
+                if (!EntityManager.System<ForceOnForceRespawnSystem>().CanJoinSide(player, side))
+                    continue;
                 var cost = GetForceOnForceJobCost(profile, job);
                 if (cost == null || _gameTicker.ResolveProfileForAllegiance(player, profile, id.Id) == null) continue;
                 // Resolve character eligibility before balancing; candidate events then enforce
@@ -98,17 +100,7 @@ public sealed partial class StationJobsSystem
         var otherSide = desired != RoundJobSide.None && job.RoundSide != desired;
         if (otherSide && !profile.FoFFallback.HasFlag(ForceOnForceFallback.OtherSide)) return null;
 
-        var priorities = profile.GetJobPrioritiesForGamemode("ForceOnForce");
-        var priority = priorities.GetValueOrDefault(job.ID, JobPriority.Never);
-        if (profile.FoFFallback.HasFlag(ForceOnForceFallback.OtherSide) && job.RoundRole != null)
-        {
-            foreach (var (id, pref) in priorities)
-            {
-                if (pref > priority && ProtoMan.TryIndex(id, out var source) && source.RoundRole == job.RoundRole &&
-                    source.RoundSide is RoundJobSide.Govfor or RoundJobSide.Opfor)
-                    priority = pref;
-            }
-        }
+        var priority = profile.GetForceOnForceJobPriority(job, ProtoMan);
         if (priority > JobPriority.Never) return ((int) JobPriority.High - (int) priority) * 100 + (otherSide ? 50 : 0);
         return profile.FoFFallback.HasFlag(ForceOnForceFallback.OtherRole) && job.RoundRole == "SquadRifleman"
             ? 400 + (otherSide ? 50 : 0)

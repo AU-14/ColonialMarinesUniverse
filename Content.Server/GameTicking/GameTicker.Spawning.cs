@@ -733,7 +733,14 @@ namespace Content.Server.GameTicking
 
             if (lateJoin && CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true)
             {
-                var remaining = EntityManager.System<Content.Server.CMU14.ForceOnForce.ForceOnForceRespawnSystem>().Remaining(player.UserId);
+                var respawn = EntityManager.System<Content.Server.CMU14.ForceOnForce.ForceOnForceRespawnSystem>();
+                if (_prototypeManager.TryIndex<JobPrototype>(jobId, out var respawnJob) &&
+                    !respawn.CanJoinSide(player.UserId, respawnJob.RoundSide))
+                {
+                    _chatManager.DispatchServerMessage(player, Loc.GetString("cmu-fof-respawn-side-locked"));
+                    return;
+                }
+                var remaining = respawn.Remaining(player.UserId);
                 if (remaining > TimeSpan.Zero)
                 {
                     _chatManager.DispatchServerMessage(player,
@@ -742,7 +749,9 @@ namespace Content.Server.GameTicking
                 }
                 if (!_stationJobs.CanJoinForceOnForceSide(jobId))
                 {
-                    _chatManager.DispatchServerMessage(player, Loc.GetString("cmu-fof-side-full"));
+                    // CMU14: faction gameplay fixes.
+                    _chatManager.DispatchServerMessage(player, Loc.GetString(respawn.HasLockedSide(player.UserId)
+                        ? "cmu-fof-locked-side-full" : "cmu-fof-side-full"));
                     return;
                 }
             }

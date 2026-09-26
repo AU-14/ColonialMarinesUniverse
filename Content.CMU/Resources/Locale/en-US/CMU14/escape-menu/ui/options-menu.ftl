@@ -1,6 +1,10 @@
 cmu-ui-options-examine-log-in-chat = Show detailed examine breakdown of characters in chat
 cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat like in SS13
 
+cmu-ui-options-identification = Identification
+cmu-ui-options-fof-unidentified-marker = Show question marks for unfamiliar enemy uniforms in FoF
+cmu-ui-options-fof-unidentified-marker-tooltip = Shows a question mark above living enemies whose uniform is not issued or sold by your platoon. Works without HUD gear and never marks teammates or dead bodies.
+
 cmu-ui-options-accessibility = Accessibility
 cmu-ui-options-chat-crt-haze = CRT haze over chat
 cmu-ui-options-chat-crt-haze-tooltip = Draw scanlines over chat. Turn this off for clear text while keeping CRT effects elsewhere.

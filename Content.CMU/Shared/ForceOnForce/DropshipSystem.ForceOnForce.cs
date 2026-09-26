@@ -66,7 +66,7 @@ public abstract partial class SharedDropshipSystem
     }
 
     /// <summary>Resolves the carrier on every connected deck, including destinations with no explicit controller.</summary>
-    protected string? GetCarrierFaction(EntityUid destination)
+    public string? GetCarrierFaction(EntityUid destination)
     {
         // Two carrier grids can share a space map. Prefer the marker's actual ancestors
         // before resolving connected decks, rather than accepting the first ship on a map.

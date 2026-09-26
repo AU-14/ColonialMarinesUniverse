@@ -848,6 +848,13 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             // Add 10 seconds to compensate for the arriving times
             dropship.HijackLandAt = _timing.CurTime + TimeSpan.FromSeconds(hyperspaceTime.Value) + TimeSpan.FromSeconds(10);
             Dirty(dropshipId.Value, dropship);
+
+            // CMU14: offer both factions a choice only after the hijack flight is accepted.
+            if (user is { } hijacker && IsForceOnForceHijacker(computer, hijacker))
+            {
+                var join = new Content.Shared.CMU14.ForceOnForce.ForceOnForceHijackStartedEvent(hijacker, destination);
+                RaiseLocalEvent(dropshipId.Value, ref join);
+            }
         }
 
         _adminLog.Add(LogType.RMCDropshipLaunch,
