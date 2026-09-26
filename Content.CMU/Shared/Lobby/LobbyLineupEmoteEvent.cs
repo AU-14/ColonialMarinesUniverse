@@ -38,6 +38,9 @@ public enum LobbyLineupEmote : byte
     GrenadeOops,
     SquadVolley,
     SquadXeno,
+    PieToss,
+    BananaPeel,
+    ConfettiCannon,
 }
 
 /// <summary>Only requests an action. The server determines the sender and squad membership.</summary>
@@ -48,7 +51,8 @@ public sealed class LobbyLineupEmoteRequest(LobbyLineupEmote emote) : EntityEven
 }
 
 [Serializable, NetSerializable]
-public sealed class LobbyLineupEmoteEvent(NetUserId sender, LobbyLineupEmote emote, List<NetUserId> participants) : EntityEventArgs
+public sealed class LobbyLineupEmoteEvent(NetUserId sender, LobbyLineupEmote emote, List<NetUserId> participants,
+    List<NetUserId>? targets = null, int seed = 0) : EntityEventArgs
 {
     public const float ActionCooldown = 3f;
     public const float SquadCooldown = 8f;
@@ -61,4 +65,7 @@ public sealed class LobbyLineupEmoteEvent(NetUserId sender, LobbyLineupEmote emo
     public NetUserId Sender { get; } = sender;
     public LobbyLineupEmote Emote { get; } = emote;
     public List<NetUserId> Participants { get; } = participants;
+    /// <summary>Server-selected recipients, aligned with participants. Empty when nobody else is ready.</summary>
+    public List<NetUserId> Targets { get; } = targets ?? new();
+    public int Seed { get; } = seed;
 }

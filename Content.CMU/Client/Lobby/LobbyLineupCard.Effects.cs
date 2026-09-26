@@ -85,6 +85,8 @@ public sealed partial class LobbyLineupCard
         {
             case LobbyLineupEmote.BurstFire:
             case LobbyLineupEmote.SprayAndPray:
+                if (HasInteractionAim)
+                    break; // The lineup overlay draws the aimed weapon and its cross-card tracers.
                 // The east-facing wielded layer has the same 32px canvas as the humanoid.
                 // Its barrel, recoil, flash, tracer and brass all use the same shot clock.
                 Sprite("/Textures/CMU14/Weapons/Guns/USCM/m41mk2.rsi", "wielded-inhand-right", center, 64, RsiDirection.East);
