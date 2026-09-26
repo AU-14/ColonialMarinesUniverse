@@ -10651,5 +10651,36 @@
   id: 689
   time: '2026-09-26T18:22:01.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2029
+- author: TheHellFireo
+  changes:
+  - message: Choose whether to join your faction's hijack or return to defend your
+      ship.
+    type: Add
+  - message: Enemy identification now uses your faction's uniforms, ignores friendlies
+      and bodies, and has an optional question-mark display in settings.
+    type: Fix
+  - message: Opposing factions now have separate dropship part fabricator budgets.
+    type: Fix
+  - message: Respawns stay on your original faction for the rest of the round.
+    type: Fix
+  - message: FoF uses one role preference list for both factions.
+    type: Tweak
+  - message: Missiles hit more often; early flares and higher aircraft speed improve
+      evasion.
+    type: Tweak
+  - message: Midway launch audio continues until takeoff, and human hijack alerts
+      display readable text.
+    type: Fix
+  - message: Prevented a client water-surface crash on entities without collision
+      fixtures.
+    type: Fix
+  - message: Prevented combat-hearing checks from crashing on grappling launchers
+      and plain headgear.
+    type: Fix
+  - message: Removed the Static map button from the reconstruction window.
+    type: Remove
+  id: 690
+  time: '2026-09-26T19:16:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2030
 Name: CMU
 Order: -1
