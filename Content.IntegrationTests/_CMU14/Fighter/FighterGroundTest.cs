@@ -7,6 +7,7 @@ using Content.Shared.Buckle.Components;
 using Content.Shared.ParaDrop;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Physics;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Vehicle.Supply;
@@ -16,6 +17,8 @@ using Robust.Shared.Audio.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
+using Robust.Shared.Physics.Dynamics;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.IntegrationTests._CMU14.Fighter;
 
@@ -197,6 +200,75 @@ public sealed class FighterGroundTest : GameTest
             Assert.That(Transform.GetWorldPosition(_officer), Is.EqualTo(officerPosition));
             Assert.That(SEntMan.GetComponent<FighterSeatComponent>(_aircraft.Comp.FrontSeat!.Value).Occupant, Is.Null);
             Assert.That(SEntMan.GetComponent<FighterSeatComponent>(_aircraft.Comp.RearSeat!.Value).Occupant, Is.Null);
+            CleanWorld();
+        });
+    }
+
+    [TestCase(0, false, false)]
+    [TestCase(90, true, false)]
+    [TestCase(180, false, false)]
+    [TestCase(270, true, false)]
+    [TestCase(0, false, true)]
+    [TestCase(180, true, true)]
+    public async Task GroundExitUsesClearSideAndCannotCrossWalls(int degrees, bool rear, bool bothBlocked)
+    {
+        await CreateWorld();
+        await Server.WaitAssertion(() =>
+        {
+            Transform.SetLocalRotation(_hull, Angle.FromDegrees(degrees));
+            var rotation = Server.Transform(_hull).LocalRotation;
+            var walls = new List<EntityUid>();
+            for (var y = -4; y <= 2; y++)
+            foreach (var side in bothBlocked ? new[] { -1, 1 } : new[] { 1 })
+                walls.Add(SEntMan.SpawnEntity("CMWallMetal", _site.Offset(rotation.RotateVec(new Vector2(side, y)))));
+
+            var crew = rear ? _officer : _pilot;
+            var buckle = SEntMan.System<SharedBuckleSystem>();
+            Assert.That(buckle.TryUnbuckle(crew, crew), Is.EqualTo(!bothBlocked));
+            Assert.That(SEntMan.GetComponent<BuckleComponent>(crew).BuckledTo == null, Is.EqualTo(!bothBlocked));
+            if (!bothBlocked)
+            {
+                var local = Vector2.Transform(Transform.GetWorldPosition(crew), Transform.GetInvWorldMatrix(_hull));
+                Assert.That(local.X, Is.LessThan(-.5f), "The blocked side must not be used or crossed.");
+                Assert.That(Server.Transform(crew).ParentUid, Is.EqualTo(_site.EntityId));
+                var collisions = new HashSet<FixtureProxy>();
+                var point = Transform.GetMapCoordinates(crew);
+                SEntMan.System<EntityLookupSystem>().GetFixturesIntersecting(point.MapId,
+                    new Box2(point.Position - new Vector2(.35f), point.Position + new Vector2(.35f)), collisions,
+                    new FixtureQueryArgs(new QueryFilter { LayerBits = -1, MaskBits = (int) CollisionGroup.MobMask }));
+                Assert.That(collisions.Any(f => f.Entity != crew && f.Fixture.Hard && f.Body.CanCollide &&
+                    (f.Fixture.CollisionLayer & (int) CollisionGroup.MobMask) != 0), Is.False);
+            }
+            foreach (var wall in walls) SEntMan.DeleteEntity(wall);
+            CleanWorld();
+        });
+    }
+
+    [TestCase(0)]
+    [TestCase(90)]
+    public async Task HullCollisionFollowsTaperedSpriteAndWingState(int degrees)
+    {
+        await CreateWorld();
+        await Server.WaitAssertion(() =>
+        {
+            Transform.SetLocalRotation(_hull, Angle.FromDegrees(degrees));
+            bool Collides(float x, float y)
+            {
+                var point = Transform.ToMapCoordinates(new EntityCoordinates(_hull, x, y));
+                var fixtures = new HashSet<FixtureProxy>();
+                SEntMan.System<EntityLookupSystem>().GetFixturesIntersecting(point.MapId,
+                    new Box2(point.Position - new Vector2(.02f), point.Position + new Vector2(.02f)), fixtures,
+                    new FixtureQueryArgs(new QueryFilter { LayerBits = -1, MaskBits = (int) CollisionGroup.MobMask }));
+                return fixtures.Any(f => f.Entity == _hull && f.Fixture.Hard);
+            }
+            Assert.That(Collides(0, 1), Is.True, "The central airframe remains solid.");
+            Assert.That(Collides(1.1f, 3.15f), Is.True, "The tail fins remain solid.");
+            Assert.That(Collides(1.2f, 2.3f), Is.False, "Empty space beside the tapered tail must be passable.");
+            Assert.That(Collides(0, 3.2f), Is.False, "The gap between tail fins is outside the hull.");
+            Assert.That(Collides(1.8f, 1.4f), Is.False, "Folded wings leave space beside the fuselage.");
+            Assert.That(System.TryTakeoff(_pilot), Is.True);
+            Assert.That(Collides(1.8f, 1.4f), Is.True, "Extended wings regain collision.");
+            Assert.That(Collides(2.4f, .55f), Is.False, "Wing collision must follow the swept edge.");
             CleanWorld();
         });
     }

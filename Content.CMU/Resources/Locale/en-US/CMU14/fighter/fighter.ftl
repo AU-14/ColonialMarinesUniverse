@@ -289,3 +289,4 @@ ent-CMUFighterGroundLoaded = two-seat VTOL fighter
 
 cmu-fighter-crash-warning = AIRFRAME FAILURE — EJECT! Impact in { $seconds } seconds!
 cmu-fighter-crashed = AIRFRAME LOST — Aircraft cannot be repaired.
+cmu-fighter-exit-blocked = There is no clear footing beside the cockpit to climb out.
