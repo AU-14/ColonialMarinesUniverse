@@ -74,8 +74,6 @@
   - CMU14ProdigySuitBlack
   - CMU14ProdigySuitGrey
   - CMU14ProdigyJumpsuitGrey
-  - ProdigyUniformSynth
-  - ProdigyUniform
 
 - type: forceOnForceUniform
   id: VAIPO

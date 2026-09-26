@@ -13,10 +13,15 @@
   copyright: "Laser_05 by Little Robot Sound Factory (https://www.littlerobotsoundfactory.com). Selected audition sound L2. CMU edits: mono, fades and normalization; variant 4 also lowers the pitch and adds echoes."
   source: https://opengameart.org/content/sci-fi-sound-effects-library
 
-- files: [flyby-1.ogg, flyby-2.ogg, flyby-3.ogg, flyby-4.ogg]
+- files: [flyby-1.ogg, flyby-3.ogg]
   license: CC0-1.0
-  copyright: "F-18 fly-over-and-circle above-DR070cut.wav by Ears68 and 2 Royal Dutch Airforce F-16 Fighting Falcons flyby by Rudmer_Rotteveel. Derived from the existing CMU fighter mix; mono, excerpts, pitch/duration, fades and normalization."
-  source: "https://freesound.org/people/Ears68/sounds/150328/ ; https://freesound.org/people/Rudmer_Rotteveel/sounds/343746/"
+  copyright: "F-18 fly-over-and-circle above-DR070cut.wav by Ears68. Derived from the existing CMU fighter jet-pass recording; mono, excerpts, pitch/duration, fades and normalization."
+  source: https://freesound.org/people/Ears68/sounds/150328/
+
+- files: [flyby-2.ogg, flyby-4.ogg]
+  license: CC0-1.0
+  copyright: "2 Royal Dutch Airforce F-16 Fighting Falcons flyby by Rudmer_Rotteveel. Derived from the existing CMU fighter jet-pass-high and jet-exterior recordings; mono, excerpts, pitch/duration, fades and normalization."
+  source: https://freesound.org/people/Rudmer_Rotteveel/sounds/343746/
 
 - files: [impact-1.ogg, impact-2.ogg, impact-3.ogg, impact-4.ogg]
   license: CC0-1.0
