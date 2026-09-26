@@ -692,8 +692,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     /// <summary>
     /// Applies the heavy-smash tread + hull integrity damage to the vehicle. Called for both
     /// hard-wall smashes and vehicle-smashable passes (windows/shutters/doors/etc.).
-    /// Charges self-damage once per substantial impact. Heavy vehicles only take
-    /// damage from reinforced obstacles, and must move clear before another impact.
+    // CMU14: vehicle damage and conscious controls.
+    /// Charges self-damage once per substantial impact. Vehicles must move clear
+    /// before the same obstacle can charge another impact.
     /// <paramref name="targetDamageMultiplier"/> scales the vehicle's self-damage — set below 1
     /// for softer targets (e.g. resin walls) so they're cheaper to plow through.
     /// </summary>
@@ -722,13 +723,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     {
         if (_net.IsClient || (wheelDamage <= 0f && hullDamage <= 0f) ||
             MathF.Abs(mover.CurrentSpeed) < MathF.Max(mover.CollisionDamageMinSpeed, mover.WallSmashMinSpeed))
-            return;
-
-        if (_tag.HasTag(vehicle, VehicleHeavyTag) && !HasComp<VehicleReinforcedObstacleComponent>(target))
-            return;
-
-        if (mover.IgnoreLightObstacleDamage && HasComp<VehicleSmashableComponent>(target) &&
-            !HasComp<VehicleReinforcedObstacleComponent>(target))
             return;
 
         if (!fixtureQ.TryComp(vehicle, out var vehicleFixtures) ||

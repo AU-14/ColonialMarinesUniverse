@@ -20,7 +20,7 @@ public sealed partial class CMUXenoDirectSporeInfectComponent : Component
 
     /// <summary>Embryo prototype to inject into the victim.</summary>
     [DataField, AutoNetworkedField]
-    public EntProtoId EmbryoSpawn = "CMUXenoBloodburster";
+    public EntProtoId EmbryoSpawn = "CMU14XenoBloodburster";
 
     [DataField, AutoNetworkedField]
     public TimeSpan InfectDelay = TimeSpan.FromSeconds(1.5);

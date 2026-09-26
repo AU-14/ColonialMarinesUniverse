@@ -68,6 +68,10 @@ public sealed partial class XenoClawsSystem : EntitySystem
 
         if (hasRequiredClaws || hasRequiredTier)
         {
+            // CMU14: preserve valid claw damage.
+            if (receiver.UseWeaponDamage)
+                return;
+
             args.Damage = new DamageSpecifier(_protoManager.Index(_clawsDamageGroup),
                                               receiver.MaxHealth / receiver.HitsToDestroy);
         }

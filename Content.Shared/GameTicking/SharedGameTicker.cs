@@ -99,15 +99,20 @@ namespace Content.Shared.GameTicking
         public bool YouAreReady { get; }
         // UTC.
         public TimeSpan StartTime { get; }
+        // CMU14: map preload status.
+        public TimeSpan PreloadTime { get; }
+        public bool MapsLoaded { get; }
         public TimeSpan RoundStartTimeSpan { get; }
         public bool Paused { get; }
 
-        public TickerLobbyStatusEvent(bool isRoundStarted, ProtoId<LobbyBackgroundPrototype>? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused)
+        public TickerLobbyStatusEvent(bool isRoundStarted, ProtoId<LobbyBackgroundPrototype>? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused, bool mapsLoaded = false)
         {
             IsRoundStarted = isRoundStarted;
             LobbyBackground = lobbyBackground;
             YouAreReady = youAreReady;
             StartTime = startTime;
+            PreloadTime = preloadTime;
+            MapsLoaded = mapsLoaded;
             RoundStartTimeSpan = roundStartTimeSpan;
             Paused = paused;
         }

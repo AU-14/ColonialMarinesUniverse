@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Content.Shared.CMU14.ForceOnForce;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Marines;
@@ -25,6 +26,8 @@ namespace Content.Client._RMC14.Marines;
 public sealed partial class MarineOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> ShadedShader = "shaded";
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    private static readonly Color UnidentifiedColor = Color.FromHex("#FF3030");
 
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _players = default!;
@@ -43,8 +46,12 @@ public sealed partial class MarineOverlay : Overlay
     private readonly SpriteSystem _sprite;
     private readonly TransformSystem _transform;
     private readonly EntityLookupSystem _lookup;
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    private readonly ForceOnForceUniformSystem _uniforms;
 
     private readonly ShaderInstance _shader;
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    private readonly Vector2[] _unidentifiedVertices = new Vector2[4];
     private readonly Texture _fireteamOneIcon;
     private readonly Texture _fireteamTwoIcon;
     private readonly Texture _fireteamThreeIcon;
@@ -76,6 +83,8 @@ public sealed partial class MarineOverlay : Overlay
         _sprite = _entity.System<SpriteSystem>();
         _transform = _entity.System<TransformSystem>();
         _lookup = _entity.System<EntityLookupSystem>();
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        _uniforms = _entity.System<ForceOnForceUniformSystem>();
 
         _npcFactionMemberQuery = _entity.GetEntityQuery<NpcFactionMemberComponent>();
         _fireteamLeaderQuery = _entity.GetEntityQuery<FireteamLeaderComponent>();
@@ -161,6 +170,19 @@ public sealed partial class MarineOverlay : Overlay
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
 
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            if (_uniforms.IsUnidentified(uid))
+            {
+                var center = new Vector2(0, (bounds.Height + sprite.Offset.Y) / 2f + .3f);
+                // A bold red X replaces every faction, role, squad, and fireteam identifier.
+                // Keep its contrast in dim lighting while retaining the overlay's normal FOV.
+                handle.UseShader(null);
+                DrawUnidentifiedCross(handle, center, .27f, .07f, Color.Black);
+                DrawUnidentifiedCross(handle, center, .24f, .035f, UnidentifiedColor);
+                handle.UseShader(_shader);
+                continue;
+            }
+
             var icon = GetCachedMarineIcon(uid, marineHudComp.Factions, isSpectator);
 
             if (icon.Icon != null)
@@ -219,6 +241,23 @@ public sealed partial class MarineOverlay : Overlay
 
         handle.SetTransform(Matrix3x2.Identity);
         handle.UseShader(null);
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    }
+
+    private void DrawUnidentifiedCross(DrawingHandleWorld handle, Vector2 center, float radius, float halfWidth, Color color)
+    {
+        var vertices = _unidentifiedVertices;
+        for (var direction = -1; direction <= 1; direction += 2)
+        {
+            var start = center + new Vector2(-radius, -radius * direction);
+            var end = center + new Vector2(radius, radius * direction);
+            var width = new Vector2(-halfWidth * direction, halfWidth);
+            vertices[0] = start + width;
+            vertices[1] = start - width;
+            vertices[2] = end + width;
+            vertices[3] = end - width;
+            handle.DrawPrimitives(DrawPrimitiveTopology.TriangleStrip, vertices, color);
+        }
     }
 
     private Texture GetTexture(SpriteSpecifier specifier)

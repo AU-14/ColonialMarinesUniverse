@@ -17,7 +17,9 @@ namespace Content.IntegrationTests.CMU14.Lobby;
 [EnsureCVar(Side.Server, typeof(CCVars), nameof(CCVars.LobbyPartyTime), true)]
 public sealed class LobbyPartyShowTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { InLobby = true };
+    // Shows leave a round-wide cooldown, even after the participant unreadies.
+    // Recycle the round before another test borrows this pair.
+    public override PoolSettings PoolSettings => new() { InLobby = true, Dirty = true };
 
     [SetUp]
     public async Task EnableShows()

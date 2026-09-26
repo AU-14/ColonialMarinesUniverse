@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Chat.Systems;
+using Content.Server._RMC14.Language.Systems;
 using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
 using Content.Shared._RMC14.Marines.Skills;
@@ -68,6 +69,7 @@ public sealed partial class BiomorphMimicSystem : EntitySystem
     [Dependency] private GunIFFSystem _gunIff = default!;
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private LanguageSystem _language = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private PolymorphSystem _polymorph = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -253,6 +255,8 @@ public sealed partial class BiomorphMimicSystem : EntitySystem
         Dirty(disguisedUid, tracker);
 
         ApplyProfile(disguisedUid, profile);
+        // Changing bodies preserves the mimic's learned languages, including Primitive.
+        _language.CopyLanguages(mimic.Owner, disguisedUid);
 
         // Mimics wearing human or animal skin are immune to xeno parasites —
         // the flesh underneath isn't compatible host material.

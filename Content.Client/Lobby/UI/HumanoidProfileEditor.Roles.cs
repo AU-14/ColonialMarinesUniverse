@@ -306,6 +306,9 @@ public sealed partial class HumanoidProfileEditor
 
     private IEnumerable<BoxContainer> GetGamemodeJobLists()
     {
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        yield return FoFGovernmentJobList;
+        yield return FoFOppositionJobList;
         yield return InsurgencyGovernmentJobList;
         yield return InsurgencyInsurgentJobList;
         yield return InsurgencyCivilianJobList;
@@ -374,6 +377,14 @@ public sealed partial class HumanoidProfileEditor
         JobPrototype job,
         string departmentName)
     {
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        if (department.Faction is "govfor" or "opfor")
+        {
+            var (key, title) = GetMilitaryJobSegment(job);
+            yield return (department.Faction == "govfor" ? FoFGovernmentJobList : FoFOppositionJobList,
+                GamemodeForceOnForce, $"fof-{department.Faction}-{key}", title);
+        }
+
         if (department.Faction == "govfor")
         {
             var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);

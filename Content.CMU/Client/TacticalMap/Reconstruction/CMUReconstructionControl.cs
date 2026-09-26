@@ -468,10 +468,15 @@ public sealed partial class CMUReconstructionControl : Control
     protected override void ExitedTree()
     {
         base.ExitedTree();
-        _render.Dispose();
         _input.FirstChanceOnKeyEvent -= OnMiddleMouse;
         _rotating = false;
         _panning = false;
         CancelStroke();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing) _render.Dispose();
+        base.Dispose(disposing);
     }
 }

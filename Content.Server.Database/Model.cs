@@ -638,6 +638,9 @@ namespace Content.Server.Database
         public bool Synthetic { get; set; }
         public string? ThreatPreference { get; set; }
         public string? GamemodeJobPriorities { get; set; }
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        public int FoFSide { get; set; }
+        public int FoFFallback { get; set; }
         public string? GamemodeAntagPreferences { get; set; }
         public string? GamemodeThreatPreferences { get; set; }
         public string ShortExamine { get; set; } = string.Empty;

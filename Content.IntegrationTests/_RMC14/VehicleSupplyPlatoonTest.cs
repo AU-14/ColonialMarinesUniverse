@@ -32,7 +32,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
     [TestCase("USCM", "VehicleTank", "VehicleSPPTank", true, true)]
     [TestCase("LACN", "VehicleAPC", "VehicleAPCCommand", true, true)]
     [TestCase("UPP", "VehicleSPPTank", "VehicleTank", false, false)]
-    [TestCase("WEYU", "VehicleHumveeARC", "VehicleTank", true, true)]
+    [TestCase("WEYU", "VehicleTankPMC", "VehicleTank", true, true)]
     [TestCase("CMBCIU", "AU14VehicleCivHSVan", "VehicleHumvee", false, true)]
     [TestCase("HAZOPS", "VehicleAev", "VehicleTank", false, true)]
     [TestCase("ProdigySF", "AU14VehicleCivTruck", "VehicleAPC", false, false)]
@@ -56,7 +56,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             var parts = Parts(vendor);
             Assert.That(parts.Contains("VehicleBlackfootDoorGun"), Is.EqualTo(armed));
             Assert.That(parts.Contains("VehicleBlackfootThrusters"), Is.EqualTo(transport));
-            Assert.That(parts.Contains("VehicleHumveeARCCannon"), Is.EqualTo(platoon == "WEYU"));
+            Assert.That(parts, Does.Not.Contain("VehicleHumveeARCCannon"));
 
             // A stale or forged client choice must also be rejected server-side.
             Queue(depot, excluded);
@@ -94,6 +94,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
 
     [TestCase("VehicleTank", "VehicleTank")]
     [TestCase("VehicleBlackfootDoorGunVariant", "VehicleBlackfootTransport")]
+    [TestCase("CMUFighterGround", "CMUFighterGround")]
     public async Task TankAndVtolLimitsIncludePendingOrders(string first, string second)
     {
         var map = await Pair.CreateTestMap();
@@ -113,6 +114,35 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             ResetLift(b);
             Queue(b, "VehicleHumvee");
             Assert.That(b.Lift.Comp.PendingVehicle, Is.EqualTo("VehicleHumvee"));
+            if (first == "CMUFighterGround")
+                SEntMan.DeleteEntity(a.Lift.Comp.ActiveVehicle!.Value);
+        });
+    }
+
+    [Test]
+    public async Task FighterAllowanceIsSharedAcrossDepotsButSeparateForEachFaction()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            Configure(map.GridCoords);
+            var first = CreateDepot(map.GridCoords);
+            var second = CreateDepot(map.GridCoords.Offset(new Vector2(30, 0)));
+            var enemy = CreateDepot(map.GridCoords.Offset(new Vector2(60, 0)), "opfor");
+            Queue(first, "CMUFighterGround");
+            Queue(second, "CMUFighterGround");
+            Queue(enemy, "CMUFighterGround");
+            Assert.That(first.Lift.Comp.PendingVehicle, Is.EqualTo("CMUFighterGround"));
+            Assert.That(second.Lift.Comp.PendingVehicle, Is.Empty);
+            Assert.That(enemy.Lift.Comp.PendingVehicle, Is.EqualTo("CMUFighterGround"));
+            Complete(first);
+            ResetLift(second);
+            Assert.That(State(second).Available.Select(entry => entry.Id), Does.Not.Contain("CMUFighterGround"));
+            Queue(second, "CMUFighterGround");
+            Assert.That(second.Lift.Comp.PendingVehicle, Is.Empty);
+            // Delete the aircraft while its landing map still exists, so its
+            // cockpit is cleaned up before GameTest removes the map.
+            SEntMan.DeleteEntity(first.Lift.Comp.ActiveVehicle!.Value);
         });
     }
 

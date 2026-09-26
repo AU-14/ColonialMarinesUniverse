@@ -510772,6 +510772,8 @@ entities:
   entities:
   - uid: 2916
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: LZ1 - Albacetrie Regional Spaceport
     - type: Transform
@@ -510779,6 +510781,8 @@ entities:
       pos: 218.5,-66.5
   - uid: 12639
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: LZ2 - CMB Precinct
     - type: Transform
@@ -510788,6 +510792,8 @@ entities:
   entities:
   - uid: 2917
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: GOVOFR LZ 1 - South Pad
     - type: Transform
@@ -510795,6 +510801,8 @@ entities:
       pos: 86.5,-27.5
   - uid: 2918
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: GOVOFR LZ 2 - North Pad
     - type: Transform
@@ -510804,6 +510812,8 @@ entities:
   entities:
   - uid: 2920
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Western Jungle
     - type: Transform
@@ -510811,6 +510821,8 @@ entities:
       pos: 25.5,-99.5
   - uid: 2921
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Eastern Desert
     - type: Transform
@@ -510818,6 +510830,8 @@ entities:
       pos: 89.5,-101.5
   - uid: 2922
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Northern Colony
     - type: Transform

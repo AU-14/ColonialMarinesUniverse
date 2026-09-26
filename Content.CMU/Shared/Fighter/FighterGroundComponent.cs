@@ -8,7 +8,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared.CMU14.Fighter;
 
 [Serializable, NetSerializable]
-public enum FighterGroundState : byte { Airborne, Grounded, TakingOff, Returning, Landing }
+public enum FighterGroundState : byte { Airborne, Grounded, TakingOff, Returning, Landing, Crashing, Crashed }
 
 /// <summary>The persistent, supply-lift-delivered airframe and its takeoff site.</summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]

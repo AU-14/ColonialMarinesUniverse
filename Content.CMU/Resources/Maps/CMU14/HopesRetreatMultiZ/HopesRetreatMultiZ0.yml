@@ -136614,6 +136614,8 @@ entities:
   entities:
   - uid: 69855
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: Hope's Retreat (LZ1)
     - type: Transform
@@ -136621,6 +136623,8 @@ entities:
       pos: 111.5,62.5
   - uid: 70003
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: Octanis Complex Starport (LZ2)
     - type: Transform
@@ -136630,6 +136634,8 @@ entities:
   entities:
   - uid: 72494
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: LZ ALPHA - North Pad
     - type: Transform
@@ -136640,6 +136646,7 @@ entities:
     - type: MetaData
       name: LZ BRAVO - South Pad
     - type: DropshipDestination
+      forceOnForceFaction: govfor
       multiDeckOffset: 1,6
     - type: Transform
       parent: 1
@@ -136648,18 +136655,24 @@ entities:
   entities:
   - uid: 775
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 56.5,18.5
   - uid: 776
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -5.5,5.5
   - uid: 75695
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
