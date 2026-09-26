@@ -13,7 +13,7 @@
     layers:
     - state: alive
       map: [ "enum.XenoVisualLayers.Base" ]
-    - sprite: CMU14/Mobs/Xenonids/Pathogen/bloodburster_bloody.rsi
+    - sprite: CMU14/Mobs/Xenonids/Pathogen/aberration_bloodburster_bloody.rsi
       state: alive_bloody
       map: [ "bloody" ]
       visible: false

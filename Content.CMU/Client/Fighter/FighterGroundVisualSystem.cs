@@ -47,8 +47,9 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
         {
             var altitude = Math.Clamp((flyby.Height - FighterFlight.MinimumHeight) /
                 (FighterFlight.MaximumHeight - FighterFlight.MinimumHeight), 0, 1);
-            _sprites.SetColor(uid, Color.Black.WithAlpha(.32f - altitude * .25f));
+            _sprites.SetColor(uid, flyby.Crashing ? Color.FromHex("#88776A") : Color.Black.WithAlpha(.32f - altitude * .25f));
             _sprites.SetScale(uid, new Vector2((.5f + altitude * .25f) * FighterGroundComponent.SizeMultiplier));
+            _sprites.SetRotation(uid, flyby.Crashing ? new Angle(Math.Sin(_timing.CurTime.TotalSeconds * 8) * .22) : Angle.Zero);
         }
         _visibleCrew.Clear();
         var query = EntityQueryEnumerator<FighterGroundComponent, SpriteComponent>();
@@ -59,7 +60,7 @@ public sealed partial class FighterGroundVisualSystem : EntitySystem
             offset += GroundElevationOffset(uid);
             _sprites.SetOffset(uid, offset);
             _sprites.SetScale(uid, new Vector2(FighterGroundComponent.SpriteScale * scale));
-            _sprites.SetColor(uid, Color.White.WithAlpha(opacity));
+            _sprites.SetColor(uid, ground.State == FighterGroundState.Crashed ? Color.FromHex("#50463F") : Color.White.WithAlpha(opacity));
             foreach (var part in new[] { ground.FrontSeat, ground.RearSeat, ground.Canopy })
             {
                 if (part is not { } entity || !TryComp(entity, out SpriteComponent? partSprite) || Transform(entity).ParentUid != uid) continue;

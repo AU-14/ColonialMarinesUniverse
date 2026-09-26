@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.DamageOverlay;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.Mobs;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -76,6 +77,10 @@ public sealed partial class DamageOverlay : Overlay
         CritLevel = damageComp.CritLevel;
         OxygenLevel = damageComp.OxygenLevel;
         PainLevel = damageComp.PainLevel;
+        // CMU14: use effective pain severity.
+        // CMU body-part injuries use effective pain tiers, independently of aggregate damage.
+        if (_entityManager.TryGetComponent(_playerManager.LocalEntity, out PainShockComponent? pain))
+            PainLevel = (float) pain.Tier / (float) PainTier.Shock;
 
         /*
          * Here's the rundown:

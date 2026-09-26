@@ -9,6 +9,9 @@ using Robust.Shared.Map;
 using Robust.Shared.Random;
 using System.Numerics;
 using Content.Shared.Explosion.EntitySystems;
+// CMU14: activate scattered flares.
+using Content.Server.Light.EntitySystems;
+using Content.Shared.Light.Components;
 
 namespace Content.Server.Explosion.EntitySystems;
 
@@ -19,6 +22,8 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
     [Dependency] private ThrowingSystem _throwingSystem = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
     [Dependency] private TriggerSystem _trigger = default!;
+    // CMU14: activate scattered flares.
+    [Dependency] private ExpendableLightSystem _expendableLight = default!;
 
     public override void Initialize()
     {
@@ -88,6 +93,12 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
                         direction *= _random.NextFloat(component.RandomThrowDistanceMin, component.RandomThrowDistanceMax);
                     else
                         direction *= component.Distance;
+
+                    // CMU14: activate scattered flares.
+                    // Flare payloads must be lit before their landing event creates
+                    // the signal target (which prevents subsequent activation).
+                    if (component.ToggleContents && TryComp<ExpendableLightComponent>(contentUid, out var light))
+                        _expendableLight.TryActivate((contentUid, light));
 
                     _throwingSystem.TryThrow(contentUid, direction, component.Velocity);
 

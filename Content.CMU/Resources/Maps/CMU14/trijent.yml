@@ -71898,6 +71898,8 @@ entities:
   entities:
   - uid: 1468
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: 'LZ1: Airstrip'
     - type: Transform
@@ -71905,6 +71907,8 @@ entities:
       parent: 1
   - uid: 1469
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: 'LZ2: Aerodrome'
     - type: Transform
@@ -71914,6 +71918,8 @@ entities:
   entities:
   - uid: 1470
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Improvised LZ
     - type: Transform
@@ -71921,6 +71927,8 @@ entities:
       parent: 1
   - uid: 1471
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Parking Lot
     - type: Transform

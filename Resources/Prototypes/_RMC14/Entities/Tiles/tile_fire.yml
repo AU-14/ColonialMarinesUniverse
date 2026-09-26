@@ -74,6 +74,21 @@
     id: AU14TileFire
     duration: 145
 
+# CMU14: gameplay bug fixes.
+- type: entity
+  parent: AU14TileFire
+  id: AU14SpreadTileFire
+  suffix: AU14, spreading
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "base" ]
+      state: red_1
+  - type: TileFire
+    id: AU14SpreadTileFire
+    growthDuration: 12
+    bigFireDuration: 0
+
 - type: entity
   parent: RMCTileFire
   id: RMCTileFireGreen
