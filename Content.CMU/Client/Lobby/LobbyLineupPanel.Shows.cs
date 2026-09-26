@@ -18,6 +18,7 @@ public sealed partial class LobbyLineupPanel
     {
         Flyby.OnPressed += _ => PerformShow(LobbyPartyShow.Flyby);
         Parade.OnPressed += _ => PerformShow(LobbyPartyShow.Parade);
+        SupplyScramble.OnPressed += _ => PerformShow(LobbyPartyShow.SupplyScramble);
         StopShow.OnPressed += _ =>
         {
             ReleaseShow();
@@ -92,6 +93,7 @@ public sealed partial class LobbyLineupPanel
             var cast = pending.Participants.Where(_cards.ContainsKey).Select(id => _cards[id]).ToArray();
             if (cast.Length > 0)
             {
+                _interactions.Clear();
                 _partyShow = new LobbyPartyShowControl(pending, cast,
                     _configuration.GetCVar(CCVars.ReducedMotion), PartySounds.Pressed);
                 var show = _partyShow;
@@ -127,7 +129,7 @@ public sealed partial class LobbyLineupPanel
         if (!LobbyPartySettings.TryNextShow(_configuration, _nextShowcaseKind, out var next))
             return;
         OnShow(new LobbyPartyShowEvent(next, _random.Next(), _entries.Select(entry => entry.UserId).ToList(), true));
-        _nextShowcaseKind = next == LobbyPartyShow.Flyby ? LobbyPartyShow.Parade : LobbyPartyShow.Flyby;
+        _nextShowcaseKind = LobbyPartySettings.Next(next);
         _nextShowcaseShow = LobbyPartyShowEvent.AutomaticInterval;
     }
 
@@ -137,14 +139,17 @@ public sealed partial class LobbyLineupPanel
         var unavailable = busy || _showCooldown > 0 || !_entries.Any(entry => entry.UserId == _selected);
         Flyby.Visible = LobbyPartySettings.IsShowEnabled(_configuration, LobbyPartyShow.Flyby);
         Parade.Visible = LobbyPartySettings.IsShowEnabled(_configuration, LobbyPartyShow.Parade);
+        SupplyScramble.Visible = LobbyPartySettings.IsShowEnabled(_configuration, LobbyPartyShow.SupplyScramble);
         Flyby.Disabled = unavailable || !Flyby.Visible;
         Parade.Disabled = unavailable || !Parade.Visible;
+        SupplyScramble.Disabled = unavailable || !SupplyScramble.Visible;
         StopShow.Visible = _partyShow != null || _pendingShow != null;
         var status = _showCooldown > 0
             ? Loc.GetString("cmu-lobby-party-cooldown", ("seconds", (int) Math.Ceiling(_showCooldown)))
             : Loc.GetString("cmu-lobby-party-ready");
         Flyby.ToolTip = Loc.GetString("cmu-lobby-party-flyby-hint") + "\n" + status;
         Parade.ToolTip = Loc.GetString("cmu-lobby-party-parade-hint") + "\n" + status;
+        SupplyScramble.ToolTip = Loc.GetString("cmu-lobby-party-supply-hint") + "\n" + status;
     }
 
     private void ReleaseShow()
