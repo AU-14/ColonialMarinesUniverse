@@ -659,10 +659,6 @@
         amount: 5
       - id: CMU14ProdigySuitBlackSkirt
         amount: 5
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill

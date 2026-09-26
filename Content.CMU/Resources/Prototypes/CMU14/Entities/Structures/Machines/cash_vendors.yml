@@ -438,6 +438,12 @@
   - type: AU14CashVendor
     percentToColony: 0.6
     items:
+    - id: PackPaperRolling
+      name: Rolling Paper
+      price: 2
+    - id: PackPaperRollingFilters
+      name: Rolling Paper and Filters
+      price: 3
     - id: RMCCigarettePackLuckySloths
       name: Lucky Sloths
       price: 5

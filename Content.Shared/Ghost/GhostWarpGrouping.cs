@@ -252,7 +252,7 @@ public static class GhostWarpGrouping
 
     private static string? GetMilitaryRoleSection(string? jobId)
     {
-        if (ContainsAny(jobId, "Pilot", "DCC", "Dropship", "Crew"))
+        if (ContainsAny(jobId, "Pilot", "DCC", "Dropship", "Crew", "FighterSystems")) // CMU14: fighter systems officer
             return SectionPilotsCrew;
 
         if (ContainsAny(

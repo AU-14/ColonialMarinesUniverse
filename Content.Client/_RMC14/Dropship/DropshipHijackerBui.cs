@@ -1,4 +1,4 @@
-﻿using Content.Client.Message;
+using Content.Client.Message;
 using Content.Client._RMC14.UserInterface;
 using Content.Shared._RMC14.Dropship;
 using JetBrains.Annotations;
@@ -34,30 +34,22 @@ public sealed class DropshipHijackerBui(EntityUid owner, Enum uiKey) : BoundUser
         if (_window == null)
         {
             _window = this.CreateWindow<DropshipHijackerWindow>();
-            _window.Header.SetMarkup($"[bold]{Loc.GetString("cmu-dropship-hijack-header")}[/bold]");
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            _window.Header.SetMarkup(Loc.GetString("cmu-dropship-hijack-random-header"));
             _window.DeclineHijackButton.OnPressed += _ => OpenDeclineConfirmation();
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            _window.InitiateHijackButton.OnPressed += _ =>
+            {
+                SendPredictedMessage(new DropshipHijackerInitiateBuiMsg());
+                Close();
+            };
         }
 
         _window.DeclineSeparator.Visible = s.CanDeclineHijack;
         _window.DeclineHijackButton.Visible = s.CanDeclineHijack;
 
-        _window.Destinations.DisposeAllChildren();
-        foreach (var (id, name) in s.Destinations)
-        {
-            var button = new Button
-            {
-                Text = name,
-                StyleClasses = { "OpenBoth" }
-            };
-
-            button.OnPressed += _ =>
-            {
-                SendPredictedMessage(new DropshipHijackerDestinationChosenBuiMsg(id));
-                Close();
-            };
-
-            _window.Destinations.AddChild(button);
-        }
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        _window.InitiateHijackButton.Disabled = !s.CanHijack;
     }
 
     private void OpenDeclineConfirmation()

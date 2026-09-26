@@ -3,7 +3,7 @@ using Robust.Shared.Configuration;
 
 namespace Content.Shared.CMU14.Lobby;
 
-/// <summary>The base lineup and its two optional shows can each be enabled independently.</summary>
+/// <summary>The base lineup, air show, and parade routines can each be enabled independently.</summary>
 public static class LobbyPartySettings
 {
     public static bool IsEnabled(IConfigurationManager config) =>
@@ -13,16 +13,26 @@ public static class LobbyPartySettings
     public static bool IsShowEnabled(IConfigurationManager config, LobbyPartyShow show) => show switch
     {
         LobbyPartyShow.Flyby => config.GetCVar(CCVars.LobbyPartyTimeFlyby),
-        LobbyPartyShow.Parade => config.GetCVar(CCVars.LobbyPartyTimeParade),
+        LobbyPartyShow.Parade or LobbyPartyShow.SupplyScramble => config.GetCVar(CCVars.LobbyPartyTimeParade),
         _ => false,
     };
 
     public static bool TryNextShow(IConfigurationManager config, LobbyPartyShow preferred, out LobbyPartyShow show)
     {
         show = preferred;
-        if (IsShowEnabled(config, show))
-            return true;
-        show = preferred == LobbyPartyShow.Flyby ? LobbyPartyShow.Parade : LobbyPartyShow.Flyby;
-        return IsShowEnabled(config, show);
+        for (var attempt = 0; attempt < 3; attempt++)
+        {
+            if (IsShowEnabled(config, show))
+                return true;
+            show = Next(show);
+        }
+        return false;
     }
+
+    public static LobbyPartyShow Next(LobbyPartyShow show) => show switch
+    {
+        LobbyPartyShow.Flyby => LobbyPartyShow.Parade,
+        LobbyPartyShow.Parade => LobbyPartyShow.SupplyScramble,
+        _ => LobbyPartyShow.Flyby,
+    };
 }

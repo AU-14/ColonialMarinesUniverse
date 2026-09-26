@@ -32,6 +32,13 @@ public sealed partial class FighterCockpitControl
         else FlightHelp.Warning = false;
         FlightDisplay.Warning = aircraft.ForcedRetreat;
         if (aircraft.ForcedRetreat) FlightDisplay.Text = FlightHelp.Text;
+        if (aircraft.GroundState is FighterGroundState.Crashing or FighterGroundState.Crashed)
+        {
+            FlightHelp.Warning = FlightDisplay.Warning = true;
+            FlightHelp.Text = FlightDisplay.Text = Loc.GetString(
+                aircraft.GroundState == FighterGroundState.Crashing ? "cmu-fighter-crash-warning" : "cmu-fighter-crashed",
+                ("seconds", Seconds(aircraft.GroundStateEndsAt - now)));
+        }
 
         if (_chart.CoverageMode)
         {

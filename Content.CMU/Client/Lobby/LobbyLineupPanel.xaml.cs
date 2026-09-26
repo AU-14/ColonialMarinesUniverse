@@ -28,6 +28,7 @@ public sealed partial class LobbyLineupPanel : Control
     [Dependency] private IConfigurationManager _configuration = default!;
     private readonly Dictionary<NetUserId, LobbyLineupCard> _cards = new();
     private readonly Dictionary<string, LobbyLineupSection> _sections = new();
+    private readonly LobbyLineupInteractionOverlay _interactions;
     private ClientGameTicker? _ticker;
     private LobbyLineupSystem? _social;
     private ChatUIController? _chatUi;
@@ -53,6 +54,8 @@ public sealed partial class LobbyLineupPanel : Control
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
+        _interactions = new LobbyLineupInteractionOverlay();
+        AddChild(_interactions);
         Backing.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#081114EF") };
         ActionDeck.PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#0B222ADF") };
         Salute.OnPressed += _ => Perform(LobbyLineupEmote.Salute);
@@ -182,6 +185,7 @@ public sealed partial class LobbyLineupPanel : Control
 
     private void BeginStageMotion(bool leaving)
     {
+        _interactions.Clear();
         if (leaving)
             ReleaseShow();
         ReleaseStageMotion();
@@ -229,6 +233,7 @@ public sealed partial class LobbyLineupPanel : Control
 
     public void SetShowcase(IReadOnlyList<LobbyLineupEntry>? entries, bool showcaseControls = false, LobbyPartyShow? initialShow = null)
     {
+        _interactions.Clear();
         ReleaseShow();
         _showCooldown = 0;
         _nextShowcaseShow = 20;
@@ -295,6 +300,7 @@ public sealed partial class LobbyLineupPanel : Control
                 {
                     card = new LobbyLineupCard();
                     card.Selected += SelectCharacter;
+                    card.AmbientEmote += OnAmbientEmote;
                     _cards.Add(entry.UserId, card);
                     section.Cards.AddChild(card);
                 }
@@ -354,7 +360,7 @@ public sealed partial class LobbyLineupPanel : Control
             var participants = LobbyLineupEmoteEvent.IsTeamEmote(emote)
                 ? _entries.Where(other => other.SectionId == entry.SectionId).Select(other => other.UserId).ToList()
                 : new List<NetUserId> { entry.UserId };
-            PlayEmote(new LobbyLineupEmoteEvent(entry.UserId, emote, participants));
+            PlayEmote(CreateLocalEmote(entry.UserId, emote, participants));
         }
         _cooldown = Math.Max(LobbyLineupEmoteEvent.ActionCooldown,
             LobbyLineupChoreography.Duration(LobbyLineupChoreography.TeamMember(emote, 0).Move));
@@ -379,10 +385,17 @@ public sealed partial class LobbyLineupPanel : Control
         {
             if (_cards.TryGetValue(user, out var card))
             {
-                var (move, delay) = LobbyLineupChoreography.TeamMember(ev.Emote, index++);
+                var participantIndex = index++;
+                var (move, delay) = LobbyLineupChoreography.TeamMember(ev.Emote, participantIndex);
                 duration = Math.Max(duration, LobbyLineupChoreography.Duration(move) + delay);
                 card.PlayEmote(move, delay);
+                if (participantIndex < ev.Targets.Count && _cards.TryGetValue(ev.Targets[participantIndex], out var target))
+                    _interactions.Add(card, target, move, ev.Seed + participantIndex, delay);
+                else if (ev.Targets.Count == 0 && move is LobbyLineupEmote.PieToss or LobbyLineupEmote.BananaPeel or LobbyLineupEmote.ConfettiCannon)
+                    _interactions.Add(card, card, move, ev.Seed, delay);
             }
+            else
+                index++;
         }
         if (LobbyLineupEmoteEvent.IsTeamEmote(ev.Emote))
         {
@@ -495,6 +508,7 @@ public sealed partial class LobbyLineupPanel : Control
         }
         if (_partyShow != null)
             return;
+        _interactions.Advance(args.DeltaSeconds);
         if (_showcase != null && Ambient.Pressed && (_nextFormation -= args.DeltaSeconds) <= 0)
             PlayShowcaseFormations();
         if (_showcase == null || !DemoBanter.Pressed || _showcase.Count == 0 || (_nextBanter -= args.DeltaSeconds) > 0)
@@ -512,7 +526,11 @@ public sealed partial class LobbyLineupPanel : Control
             var variation = _banterIndex + sectionIndex++;
             card.ShowBubble(Loc.GetString("cmu-lobby-lineup-banter-" + variation % 12));
             if (Ambient.Pressed && !card.IsPerforming)
-                card.PlayEmote(LobbyLineupChoreography.SoloMoves[_random.Next(LobbyLineupChoreography.SoloMoves.Length)]);
+            {
+                var move = LobbyLineupChoreography.SoloMoves[_random.Next(LobbyLineupChoreography.SoloMoves.Length)];
+                card.PlayEmote(move);
+                OnAmbientEmote(card, move);
+            }
         }
         _banterIndex++;
     }
@@ -528,7 +546,7 @@ public sealed partial class LobbyLineupPanel : Control
             if (!_showcaseControls && group.Any(entry => entry.UserId == _selected))
                 continue;
             var routine = LobbyLineupChoreography.TeamMoves[index++ % LobbyLineupChoreography.TeamMoves.Length];
-            PlayEmote(new LobbyLineupEmoteEvent(group.First().UserId, routine, group.Select(entry => entry.UserId).ToList()));
+            PlayEmote(CreateLocalEmote(group.First().UserId, routine, group.Select(entry => entry.UserId).ToList()));
         }
         _nextFormation = 12;
         UpdateActions();
@@ -536,6 +554,7 @@ public sealed partial class LobbyLineupPanel : Control
 
     private void Clear()
     {
+        _interactions.Clear();
         ReleaseShow();
         _showCooldown = 0;
         ReleaseStageMotion();
@@ -548,5 +567,24 @@ public sealed partial class LobbyLineupPanel : Control
         _cards.Clear();
         _sections.Clear();
         _entries = Array.Empty<LobbyLineupEntry>();
+    }
+
+    private LobbyLineupEmoteEvent CreateLocalEmote(NetUserId sender, LobbyLineupEmote move, List<NetUserId> participants)
+    {
+        var seed = _random.Next();
+        return new LobbyLineupEmoteEvent(sender, move, participants,
+            LobbyLineupInteractions.SelectTargets(move, participants, _entries.Select(entry => entry.UserId).ToArray(), seed), seed);
+    }
+
+    private void OnAmbientEmote(LobbyLineupCard source, LobbyLineupEmote move)
+    {
+        if (!LobbyLineupInteractions.CanTarget(move) || _partyShow != null || _stageMotion != null || _arrivalPending || _departing)
+            return;
+        var sender = _cards.FirstOrDefault(pair => pair.Value == source).Key;
+        var ev = CreateLocalEmote(sender, move, new List<NetUserId> { sender });
+        if (ev.Targets.Count > 0 && _cards.TryGetValue(ev.Targets[0], out var target))
+            _interactions.Add(source, target, move, ev.Seed);
+        else if (!LobbyLineupInteractionChoreography.IsGun(move))
+            _interactions.Add(source, source, move, ev.Seed);
     }
 }

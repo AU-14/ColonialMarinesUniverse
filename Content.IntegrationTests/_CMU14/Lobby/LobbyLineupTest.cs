@@ -28,6 +28,68 @@ public sealed class LobbyLineupTest : GameTest
     public override PoolSettings PoolSettings => new() { InLobby = true };
 
     [Test]
+    public async Task CrossCardImpactsLayerOverMovesAndReleaseDisconnectedTargets()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var ui = Client.ResolveDependency<IUserInterfaceManager>();
+            var holder = new Control();
+            ui.WindowRoot.AddChild(holder);
+            try
+            {
+                var entries = LobbyLineupShowcaseCommand.CreateEntries(CProtoMan, 3);
+                var cards = new List<LobbyLineupCard>();
+                foreach (var entry in entries)
+                {
+                    var card = new LobbyLineupCard { AmbientEnabled = false };
+                    holder.AddChild(card);
+                    card.SetEntry(entry, cards.Count);
+                    cards.Add(card);
+                }
+                var effects = new LobbyLineupInteractionOverlay();
+                holder.AddChild(effects);
+                cards[0].PlayEmote(LobbyLineupEmote.BurstFire);
+                cards[1].PlayEmote(LobbyLineupEmote.Dance);
+                var danceRevision = cards[1].EmoteRevision;
+                effects.Add(cards[0], cards[1], LobbyLineupEmote.BurstFire, 17);
+                effects.Advance(0.8f);
+                Assert.That(cards[1].IsReacting, Is.False, "The first tracer has not arrived yet.");
+                effects.Advance(0.05f);
+                Assert.That(cards[1].IsReacting, Is.True);
+                Assert.That(cards[1].IsPerforming, Is.True);
+                Assert.That(cards[1].EmoteRevision, Is.EqualTo(danceRevision), "Hits must not replace the recipient's dance.");
+
+                cards[2].PlayEmote(LobbyLineupEmote.PieToss);
+                effects.Add(cards[2], cards[1], LobbyLineupEmote.PieToss, 12);
+                effects.Advance(1.5f);
+                Assert.That(effects.ActiveCount, Is.EqualTo(2), "A pie and a volley must coexist.");
+                Assert.That(cards[1].EmoteRevision, Is.EqualTo(danceRevision));
+                cards[1].PlayEmote(LobbyLineupEmote.Backflip);
+                Assert.That(cards[1].React(LobbyLineupEmote.PieToss, 0), Is.EqualTo(LobbyLineupReaction.Duck),
+                    "The visual effect must receive the same dodge outcome as the character pose.");
+                var targetEntity = cards[1].StageEntity!.Value;
+                cards[1].Orphan();
+                cards[1].Dispose();
+                effects.Advance(0.1f);
+                Assert.That(CEntMan.Deleted(targetEntity), Is.True);
+                Assert.That(effects.ActiveCount, Is.Zero);
+                Assert.That(cards[0].HasInteractionAim, Is.False);
+
+                effects.Add(cards[0], cards[2], LobbyLineupEmote.BurstFire, 4);
+                cards[0].PlayEmote(LobbyLineupEmote.Salute);
+                effects.Advance(0.1f);
+                Assert.That(effects.ActiveCount, Is.Zero, "Changing a move must cancel its unfinished projectiles.");
+                effects.Clear();
+            }
+            finally
+            {
+                holder.Orphan();
+                holder.Dispose();
+            }
+        });
+    }
+
+    [Test]
     public async Task EmotesRequireReadinessAndRejectInvalidOrRepeatedRequests()
     {
         var ticker = SEntMan.System<GameTicker>();

@@ -159,6 +159,21 @@ namespace Content.Server.GameTicking
                 return;
 
             }
+            var respawn = EntityManager.System<Content.Server.CMU14.ForceOnForce.ForceOnForceRespawnSystem>();
+            if (respawn.HasSpawned(args.SenderSession.UserId) && !respawn.HasDied(args.SenderSession.UserId))
+            {
+                _chatManager.DispatchServerMessage(args.SenderSession, Loc.GetString("cmu-fof-respawn-alive"));
+                return;
+            }
+
+            var remaining = respawn.Remaining(args.SenderSession.UserId);
+            if (remaining > TimeSpan.Zero)
+            {
+                _chatManager.DispatchServerMessage(args.SenderSession,
+                    Loc.GetString("cmu-fof-respawn-wait", ("seconds", (int) Math.Ceiling(remaining.TotalSeconds))));
+                return;
+            }
+
             // Send the requesting player to the lobby
             PlayerJoinLobby(args.SenderSession);
         }

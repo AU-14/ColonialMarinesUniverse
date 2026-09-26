@@ -90,13 +90,7 @@
   thirdPartyRatio: 0.10
   maxThirdParties: 4
   supportedPlanets:
-  - SharedPlanetPool # Only Maintained maps can process feedback (Shep doesn't have base)
-# - AUPlanetGixensCaverns
-# - AUPlanetFlight
-# - AUPlanetLV759 # Hybrisa Metro
-# - AUPlanetCorsatStation
-# - AUPlanetSorokyne
-# - AUPlanetTrijent
+  - ForceOnForcePlanetPool
   rules:
   - AuVoteRule
   - PlatoonSpawn

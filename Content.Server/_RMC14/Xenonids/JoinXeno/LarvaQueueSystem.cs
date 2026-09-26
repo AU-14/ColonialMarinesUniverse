@@ -45,6 +45,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     private static readonly ProtoId<TagPrototype> LarvaTag = "RMCXenoLarva";
     private static readonly ProtoId<JobPrototype> LarvaRole = "CMXenoLarva";
     private static readonly ProtoId<JobPrototype> BloodbursterRole = "CMUJobPathogenBloodburster";
+    private static readonly ProtoId<JobPrototype> PopperRole = "CMU14JobPathogenPopper";
     private static readonly TimeSpan ClaimConfirmDuration = TimeSpan.FromSeconds(30);
 
     private readonly Dictionary<EntityUid, LarvaQueueState> _queues = [];
@@ -399,7 +400,8 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return false;
         }
 
-        return xeno.Role != LesserDroneRole;
+        // CMU14: xeno feedback and lifecycle.
+        return xeno.Role != LesserDroneRole && xeno.Role != PopperRole;
     }
 
     private bool TryOfferEntityClaim(EntityUid uid, Entity<HiveComponent> hive, LarvaQueueState queue)

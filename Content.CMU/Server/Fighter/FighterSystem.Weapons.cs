@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared._RMC14.Rangefinder;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.Light.Components;
 using Robust.Shared.Containers;
@@ -82,14 +83,22 @@ public sealed partial class FighterSystem
         return new(point.Comp.Index, kind, name, ammo?.Rounds ?? 0, ammo?.RoundsPerShot ?? 1, point.Comp.ReadyAt);
     }
 
-    private bool TryGetFlare(EntityUid uid, FighterAircraftComponent aircraft, FighterWeaponsComponent weapons, out FighterTarget flare)
+    private bool TryGetGroundDesignation(EntityUid uid, FighterAircraftComponent aircraft, FighterWeaponsComponent weapons, out FighterTarget flare)
     {
         flare = default!;
-        if (TerminatingOrDeleted(uid) || !HasComp<FlareSignalComponent>(uid) ||
+        if (TerminatingOrDeleted(uid) ||
             !TryComp(uid, out DropshipTargetComponent? target) || !target.IsTargetableByWeapons ||
-            !TryComp(uid, out ExpendableLightComponent? light) || !light.Activated ||
             _containers.IsEntityInContainer(uid) || Transform(uid).MapUid != aircraft.TerrainMap ||
             !FighterIFFSystem.Same(weapons.Faction, target.CreatorFaction)) return false;
+
+        if (TryComp(uid, out LaserDesignatorTargetComponent? laser))
+        {
+            if (!TryComp(laser.LaserDesignator, out ActiveLaserDesignatorComponent? active) || active.Target != uid)
+                return false;
+        }
+        else if (!HasComp<FlareSignalComponent>(uid) ||
+                 !TryComp(uid, out ExpendableLightComponent? light) || !light.Activated)
+            return false;
         var position = _transform.GetWorldPosition(uid);
         if (!aircraft.Battlefield.Contains(position)) return false;
         flare = new(GetNetEntity(uid), target.Abbreviation, position, _areas.CanCAS(Transform(uid).Coordinates));
@@ -104,9 +113,9 @@ public sealed partial class FighterSystem
             if (!TerminatingOrDeleted(uid) && TryComp(uid, out FighterHardpointComponent? point))
                 weapons.Loadout.Add(GetWeaponStatus((uid, point)));
         weapons.Targets.Clear();
-        var flares = EntityQueryEnumerator<FlareSignalComponent, DropshipTargetComponent>();
-        while (flares.MoveNext(out var uid, out _, out _))
-            if (TryGetFlare(uid, aircraft.Comp, weapons, out var flare)) weapons.Targets.Add(flare);
+        var targets = EntityQueryEnumerator<DropshipTargetComponent>();
+        while (targets.MoveNext(out var uid, out _))
+            if (TryGetGroundDesignation(uid, aircraft.Comp, weapons, out var target)) weapons.Targets.Add(target);
         foreach (var seatUid in new[] { aircraft.Comp.FrontSeat, aircraft.Comp.RearSeat })
             if (seatUid is { } seat && TryComp(seat, out FighterSeatComponent? operatorSeat) &&
                 operatorSeat.Laser is { } laser && TryGetTarget(laser, aircraft, weapons, out var designation))

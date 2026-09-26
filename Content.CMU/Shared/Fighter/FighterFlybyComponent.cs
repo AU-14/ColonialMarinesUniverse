@@ -7,6 +7,7 @@ namespace Content.Shared.CMU14.Fighter;
 public sealed partial class FighterFlybyComponent : Component
 {
     [DataField, AutoNetworkedField] public float Height;
+    [DataField, AutoNetworkedField] public bool Crashing;
 }
 
 /// <summary>A fixed release point for flares and airbursts viewed from the ground.</summary>

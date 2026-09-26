@@ -663,7 +663,8 @@ namespace Content.Server.Atmos.EntitySystems
                 return;
             }
 
-            _damageableSystem.TryChangeDamage(uid, damage, true, false, origin: uid);
+            // CMU14: fire growth and synthetic resistance.
+            _rmcFlammable.DamageFromFire(uid, damage, interruptsDoAfters: false, origin: uid);
         }
 
         public void CopyComponent(Entity<FlammableComponent?> entity, EntityUid clone)

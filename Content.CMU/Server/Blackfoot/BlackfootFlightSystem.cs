@@ -7,6 +7,7 @@ using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Audio;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
@@ -40,6 +41,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         CollisionGroup.DropshipImpassable;
 
     [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private SharedAmbientSoundSystem _ambient = default!;
@@ -1381,7 +1383,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         vehicle = default;
         flight = default;
 
-        if (performer != ent.Owner ||
+        if (performer != ent.Owner || !_actionBlocker.CanConsciouslyPerformAction(performer) ||
             ent.Comp.Vehicle is not { } vehicleUid ||
             !TryComp(vehicleUid, out BlackfootFlightComponent? flightComp))
         {

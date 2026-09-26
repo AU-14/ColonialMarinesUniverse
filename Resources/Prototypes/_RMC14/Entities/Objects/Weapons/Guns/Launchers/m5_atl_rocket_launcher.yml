@@ -83,6 +83,11 @@
   - type: Corrodible
     isCorrodible: false
   - type: RMCMagneticItem
+  # cmu edit start
+  - type: CMUBackblast
+    nearEffect: CMUBackblastSmokeNear
+    farEffect: CMUBackblastSmokeFar
+  # cmu edit end
   - type: InteractedBlacklist
     blacklist:
       components:
@@ -124,6 +129,11 @@
   - type: Corrodible
     isCorrodible: false
   - type: RMCMagneticItem
+  # cmu edit start
+  - type: CMUBackblast
+    nearEffect: CMUBackblastSmokeNear
+    farEffect: CMUBackblastSmokeFar
+  # cmu edit end
   - type: InteractedBlacklist
     blacklist:
       components:

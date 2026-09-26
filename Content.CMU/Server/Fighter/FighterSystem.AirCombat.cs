@@ -46,7 +46,8 @@ public sealed partial class FighterSystem
     }
 
     private bool HasCombatPilot(FighterAircraftComponent aircraft) =>
-        aircraft.FrontSeat is { } seat && TryComp(seat, out FighterSeatComponent? pilot) && pilot.Occupant != null;
+        aircraft.FrontSeat is { } seat && TryComp(seat, out FighterSeatComponent? pilot) &&
+        pilot.Occupant is { } occupant && _actionBlocker.CanConsciouslyPerformAction(occupant);
 
     private void UpdateAirCombat()
     {
@@ -73,6 +74,12 @@ public sealed partial class FighterSystem
                     FighterFlight.Abort(aircraft);
                     combat.CoveredSectors.Clear();
                     combat.RecoveryUntil = default;
+                    combat.HitsTaken++;
+                    if (combat.CrashHitLimit == 0) combat.CrashHitLimit = _combatRandom.Next(2, 5);
+                    if (combat.HitsTaken >= combat.CrashHitLimit ||
+                        aircraft.GroundEntity is { } hull && TryComp(hull, out FighterGroundComponent? ground) &&
+                        (ground.LaunchCoordinates is not { } launch || !GroundSiteClear(hull, launch)))
+                        BeginCrash((uid, aircraft), combat);
                     foreach (var seatUid in new[] { aircraft.FrontSeat, aircraft.RearSeat })
                         if (seatUid is { } seat && TryComp(seat, out FighterSeatComponent? occupant))
                         {

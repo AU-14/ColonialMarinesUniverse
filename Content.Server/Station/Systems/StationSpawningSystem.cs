@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.CMU14.Roles;
 using Content.Server.CMU14.Diagnostics.Performance; // CMU14
@@ -895,6 +896,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         }
 
         _accessSystem.SetAccessToJob(cardId, jobPrototype, extendedAccess);
+        // CMU14: side-specific specialist access.
+        SetWeaponsSpecialistAccess(cardId, jobPrototype, jobPrototype);
 
         if (pdaComponent != null)
             _pdaSystem.SetOwner(idUid.Value, pdaComponent, entity, characterName);
@@ -943,10 +946,27 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             _accessSystem.SetAccessToJob(cardId, accessJobPrototype, extendedAccess);
         }
 
+        // CMU14: side-specific specialist access.
+        SetWeaponsSpecialistAccess(cardId, titleJobPrototype, accessJobPrototype);
         if (pdaComponent != null)
             _pdaSystem.SetOwner(idUid.Value, pdaComponent, entity, characterName);
     }
 
+    private void SetWeaponsSpecialistAccess(EntityUid card, JobPrototype role, JobPrototype sideJob)
+    {
+        var specialist = role.RoundRole == "WeaponsSpecialist" || sideJob.RoundRole == "WeaponsSpecialist";
+        foreach (var job in new[] { role, sideJob })
+        foreach (var group in job.AccessGroups)
+            specialist |= group.Id is "AU14GovforWeaponsSpecialist" or "AU14OpforWeaponsSpecialist";
+        if (!specialist || !TryComp(card, out AccessComponent? access)) return;
+        var side = _roundJobProfiles.GetRoundSide(sideJob);
+        if (side is not (RoundJobSide.Govfor or RoundJobSide.Opfor)) return;
+        // Platoon equipment jobs can inherit the GOVFOR specialist base even when selected for OPFOR.
+        var tags = new HashSet<ProtoId<AccessLevelPrototype>>(access.Tags);
+        tags.Remove(side == RoundJobSide.Opfor ? "AU14AccessGovforSquadWeaponsSpecialist" : "AU14AccessOpforSquadWeaponsSpecialist");
+        tags.Add(side == RoundJobSide.Opfor ? "AU14AccessOpforSquadWeaponsSpecialist" : "AU14AccessGovforSquadWeaponsSpecialist");
+        _accessSystem.TrySetTags(card, tags, access);
+    }
 
     #endregion Player spawning helpers
 }

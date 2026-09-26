@@ -24,6 +24,9 @@
         sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: doctor
   requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement

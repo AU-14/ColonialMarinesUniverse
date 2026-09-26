@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Pulling;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.Atmos;
+using Content.Shared.ActionBlocker;
 using Content.Shared.Audio;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
@@ -33,6 +34,7 @@ public sealed partial class FighterSystem : EntitySystem
     [Dependency] private ITileDefinitionManager _tiles = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
 
     public override void Initialize()
     {
@@ -174,7 +176,7 @@ public sealed partial class FighterSystem : EntitySystem
 
     private void OnPlayerAttached(PlayerAttachedEvent ev)
     {
-        if (!TryGetSeat(ev.Entity, out var seat, out _))
+        if (!TryGetSeat(ev.Entity, out var seat, out _, requireConscious: false))
             return;
         if (seat.Comp.Camera is { } camera) _views.AddViewSubscriber(camera, ev.Player);
         if (seat.Comp.Aircraft is { } aircraft) _views.AddViewSubscriber(aircraft, ev.Player);
@@ -184,7 +186,7 @@ public sealed partial class FighterSystem : EntitySystem
     private void OnPlayerDetached(PlayerDetachedEvent ev)
     {
         RemoveSpectatorViews(ev.Player);
-        if (!TryGetSeat(ev.Entity, out var seat, out _))
+        if (!TryGetSeat(ev.Entity, out var seat, out _, requireConscious: false))
             return;
         seat.Comp.Input = FighterInput.None;
         if (seat.Comp.Aircraft is { } aircraft) _views.RemoveViewSubscriber(aircraft, ev.Player);
@@ -236,11 +238,13 @@ public sealed partial class FighterSystem : EntitySystem
             Dirty(seat);
     }
 
-    private bool TryGetSeat(EntityUid? player, out Entity<FighterSeatComponent> seat, out Entity<FighterAircraftComponent> aircraft)
+    private bool TryGetSeat(EntityUid? player, out Entity<FighterSeatComponent> seat, out Entity<FighterAircraftComponent> aircraft,
+        bool requireConscious = true)
     {
         seat = default;
         aircraft = default;
-        if (player is not { } user || !TryComp(user, out BuckleComponent? buckle) || buckle.BuckledTo is not { } seatUid ||
+        if (player is not { } user || requireConscious && !_actionBlocker.CanConsciouslyPerformAction(user) ||
+            !TryComp(user, out BuckleComponent? buckle) || buckle.BuckledTo is not { } seatUid ||
             !TryComp(seatUid, out FighterSeatComponent? component) || component.Occupant != user ||
             component.Aircraft is not { } aircraftUid || !TryComp(aircraftUid, out FighterAircraftComponent? flight))
             return false;
@@ -387,7 +391,8 @@ public sealed partial class FighterSystem : EntitySystem
         var query = EntityQueryEnumerator<FighterAircraftComponent>();
         while (query.MoveNext(out var uid, out var aircraft))
         {
-            UpdateGround((uid, aircraft), frameTime);
+            if (aircraft.GroundState == FighterGroundState.Crashing) UpdateCrash((uid, aircraft));
+            else UpdateGround((uid, aircraft), frameTime);
             var previousSensorMode = aircraft.SensorMode;
             FighterOptics.Update(aircraft, _timing.CurTime);
             if (previousSensorMode == FighterSensorMode.Thermal && aircraft.SensorMode != previousSensorMode)
@@ -450,7 +455,7 @@ public sealed partial class FighterSystem : EntitySystem
     }
 
     private FighterInput ActiveInput(FighterSeatComponent seat) =>
-        seat.Occupant is { } player && TryComp(player, out ActorComponent? _) &&
+        seat.Occupant is { } player && TryComp(player, out ActorComponent? _) && _actionBlocker.CanConsciouslyPerformAction(player) &&
         _timing.CurTime - seat.LastInput < TimeSpan.FromSeconds(1) ? seat.Input : FighterInput.None;
 
     private void UpdateCamera(Entity<FighterSeatComponent> seat, FighterAircraftComponent aircraft)

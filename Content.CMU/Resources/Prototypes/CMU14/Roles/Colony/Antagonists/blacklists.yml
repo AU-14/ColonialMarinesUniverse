@@ -71,6 +71,9 @@
     - AU14JobGOVFORAuxSupportSynth
     - AU14JobGOVFORWorkingJoe
     - AU14JobGOVFORDSPilot
+    - AU14JobGOVFORGunshipPilot
+    - AU14JobGOVFORFighterPilot
+    - AU14JobGOVFORFighterSystemsOfficer
     - AU14JobGOVFORDCC
     - AU14JobGOVFORVehicleCrewman
     - AU14JobGOVFORVehicleCommander
@@ -110,6 +113,9 @@
     - AU14JobOPFORAuxSupportSynth
     - AU14JobOPFORWorkingJoe
     - AU14JobOPFORDSPilot
+    - AU14JobOPFORGunshipPilot
+    - AU14JobOPFORFighterPilot
+    - AU14JobOPFORFighterSystemsOfficer
     - AU14JobOPFORDCC
     - AU14JobOPFORVehicleCrewman
 
@@ -133,6 +139,9 @@
     - AU14JobGOVFORSectionSergeant
     - AU14JobGOVFORSquadSergeant
     - AU14JobGOVFORDSPilot
+    - AU14JobGOVFORGunshipPilot
+    - AU14JobGOVFORFighterPilot
+    - AU14JobGOVFORFighterSystemsOfficer
     - AU14JobGOVFORDCC
     - AU14JobGOVFORVehicleCrewman
     - AU14JobGOVFORVehicleCommander
@@ -157,6 +166,9 @@
     - AU14JobOPFORSectionSergeant
     - AU14JobOPFORSquadSergeant
     - AU14JobOPFORDSPilot
+    - AU14JobOPFORGunshipPilot
+    - AU14JobOPFORFighterPilot
+    - AU14JobOPFORFighterSystemsOfficer
     - AU14JobOPFORDCC
     - AU14JobOPFORVehicleCrewman
     - AU14JobOPFORVehicleCommander

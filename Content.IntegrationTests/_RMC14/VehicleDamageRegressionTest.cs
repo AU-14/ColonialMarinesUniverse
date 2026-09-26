@@ -76,7 +76,8 @@ public sealed class VehicleDamageRegressionTest : GameTest
     [TestCase("AU14TallFloodlight")]
     [TestCase("AU14Streetlight")]
     [TestCase("RMCTallFloodlight")]
-    public async Task HeavyVehicleCrushesLightObstaclesWithoutDamagingModules(string obstaclePrototype)
+    // CMU14: vehicle damage and conscious controls.
+    public async Task HeavyVehiclePaysOneDamageBudgetToCrushLightObstacles(string obstaclePrototype)
     {
         var map = await Pair.CreateTestMap();
         EntityUid obstacle = default;
@@ -104,9 +105,12 @@ public sealed class VehicleDamageRegressionTest : GameTest
             {
                 foreach (var module in modules)
                 {
-                    Assert.That(SEntMan.GetComponent<HardpointIntegrityComponent>(module).Integrity, Is.EqualTo(100f));
+                    // CMU14: vehicle damage and conscious controls.
+                    Assert.That(SEntMan.GetComponent<HardpointIntegrityComponent>(module).Integrity, Is.LessThan(100f));
                     Assert.That(SEntMan.HasComponent<VehicleHardpointFailureComponent>(module), Is.False);
                 }
+                Assert.That(modules.Sum(uid => 100f - SEntMan.GetComponent<HardpointIntegrityComponent>(uid).Integrity),
+                    Is.InRange(0.01f, 12.001f), "one destroyed obstacle charges at most one collision budget");
             });
         });
         await Server.WaitRunTicks(1);
@@ -138,10 +142,11 @@ public sealed class VehicleDamageRegressionTest : GameTest
         });
     }
 
-    [TestCase("CMWallMetal", 2f, 0f)]
+    // CMU14: vehicle damage and conscious controls.
+    [TestCase("CMWallMetal", 2f, 12f)]
     [TestCase("CMWallReinforced", 2f, 12f)]
     [TestCase("CMWallReinforced", 0.2f, 0f)]
-    public async Task OnlyReinforcedWallsChargeOneCollisionDamageBudget(string wallPrototype, float speed, float expectedDamage)
+    public async Task ObstaclesChargeOneCollisionDamageBudget(string wallPrototype, float speed, float expectedDamage)
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>

@@ -90979,6 +90979,8 @@ entities:
   entities:
   - uid: 3378
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: LZ1 Landing Zone
     - type: Transform
@@ -90986,6 +90988,8 @@ entities:
       parent: 1
   - uid: 3379
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: LZ2 Landing Zone
     - type: Transform
@@ -90995,6 +90999,8 @@ entities:
   entities:
   - uid: 3380
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: Space Port Garrison
     - type: Transform
@@ -91004,6 +91010,8 @@ entities:
   entities:
   - uid: 3381
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: Transform
       pos: -50.5,-139.5
       parent: 1

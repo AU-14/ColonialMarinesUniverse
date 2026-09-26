@@ -115006,6 +115006,8 @@ entities:
   entities:
   - uid: 1323
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: 'LZ1: Communications Landing Zone'
     - type: Transform
@@ -115013,6 +115015,8 @@ entities:
       parent: 1
   - uid: 1324
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: 'LZ2: Engineering Landing Zone'
     - type: Transform
@@ -115020,6 +115024,8 @@ entities:
       parent: 1
   - uid: 1325
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Outskirts LZ
     - type: Transform
@@ -115028,6 +115034,8 @@ entities:
       parent: 1
   - uid: 1326
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: Desert LZ
     - type: Transform
@@ -115037,6 +115045,8 @@ entities:
   entities:
   - uid: 55292
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: Transform
       pos: 244.5,-248.5
       parent: 1

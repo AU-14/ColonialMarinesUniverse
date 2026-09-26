@@ -52,7 +52,6 @@ public sealed partial class RMCProjectileSystem : EntitySystem
         SubscribeLocalEvent<PreventCollideWithDeadComponent, PreventCollideEvent>(OnPreventCollideWithDead);
         SubscribeLocalEvent<RMCProjectileSkipXenosComponent, PreventCollideEvent>(OnSkipXenosPreventCollide);
 
-        SubscribeLocalEvent<VehicleDamageMultiplierComponent, ProjectileHitEvent>(OnVehicleDamageMultiplierProjectileHit);
     }
 
     private void OnSkipXenosPreventCollide(Entity<RMCProjectileSkipXenosComponent> projectile, ref PreventCollideEvent args)
@@ -72,17 +71,6 @@ public sealed partial class RMCProjectileSystem : EntitySystem
         {
             args.Cancelled = true;
         }
-    }
-
-    private void OnVehicleDamageMultiplierProjectileHit(Entity<VehicleDamageMultiplierComponent> ent, ref ProjectileHitEvent args)
-    {
-        if (ent.Comp.Multiplier <= 1f)
-            return;
-
-        if (!HasComp<HardpointSlotsComponent>(args.Target))
-            return;
-
-        args.Damage *= ent.Comp.Multiplier;
     }
 
     private void OnDeleteOnCollideStartCollide(Entity<DeleteOnCollideComponent> ent, ref StartCollideEvent args)

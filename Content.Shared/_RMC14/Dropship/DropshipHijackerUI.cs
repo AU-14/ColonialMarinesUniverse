@@ -1,21 +1,21 @@
-﻿using Robust.Shared.Serialization;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship;
 
 [Serializable, NetSerializable]
 public sealed class DropshipHijackerBuiState(
-    List<(NetEntity Id, string Name)> destinations,
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    bool canHijack,
     bool canDeclineHijack) : BoundUserInterfaceState
 {
-    public List<(NetEntity Id, string Name)> Destinations = destinations;
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    public bool CanHijack = canHijack;
     public bool CanDeclineHijack = canDeclineHijack;
 }
 
 [Serializable, NetSerializable]
-public sealed class DropshipHijackerDestinationChosenBuiMsg(NetEntity destination) : BoundUserInterfaceMessage
-{
-    public NetEntity Destination = destination;
-}
+// CMU14: Force on Force roles, hijacking, announcements and identification.
+public sealed class DropshipHijackerInitiateBuiMsg : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
 public sealed class DropshipHijackerDeclineBuiMsg : BoundUserInterfaceMessage;

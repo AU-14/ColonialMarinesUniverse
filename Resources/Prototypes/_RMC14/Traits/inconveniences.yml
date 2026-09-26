@@ -10,7 +10,10 @@
   id: LightweightDrunk
   name: trait-lightweight-name
   description: trait-lightweight-desc
-  category: Quirks
+  # cmu edit start
+  category: CMUDrinkingTraits
+  cost: 1
+  # cmu edit end
   components:
   - type: LightweightDrunk
     boozeStrengthMultiplier: 2

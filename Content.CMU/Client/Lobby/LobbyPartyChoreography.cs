@@ -4,7 +4,7 @@ using Content.Shared.CMU14.Lobby;
 namespace Content.Client.CMU14.Lobby;
 
 /// <summary>Screen-space choreography. Positions scale with the window; timing never depends on frame rate.</summary>
-public static class LobbyPartyChoreography
+public static partial class LobbyPartyChoreography
 {
     public const float FlybyDuration = 28;
     public const float ParadeDuration = 31;
@@ -21,7 +21,12 @@ public static class LobbyPartyChoreography
     public readonly record struct MarchPose(Vector2 Position, float Rotation, float Height = 0, bool Backwards = false);
 
     public static float Duration(LobbyPartyShow show, bool reduced) => reduced ? 5 :
-        show == LobbyPartyShow.Flyby ? FlybyDuration : ParadeDuration;
+        show switch
+        {
+            LobbyPartyShow.Flyby => FlybyDuration,
+            LobbyPartyShow.SupplyScramble => SupplyDuration,
+            _ => ParadeDuration,
+        };
 
     public static float PassStart(int pass) => 2.5f + pass * 7.2f;
     public static float ShotTime(int pass, int shot) => PassStart(pass) + 1.9f + shot * 0.042f;

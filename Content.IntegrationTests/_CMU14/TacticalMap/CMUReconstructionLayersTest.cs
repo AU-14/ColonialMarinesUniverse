@@ -76,6 +76,11 @@ public sealed partial class CMUReconstructionTest
                 user.GovforBlips = new() { [_actor.Id] = platoonBlip };
                 user.OpforBlips = new() { [_console.Id] = enemyBlip };
                 user.XenoBlips = new() { [viewer.Id] = xenoBlip };
+                // Reopening refreshes the observer from the map's live feeds.
+                var map = SComp<TacticalMapComponent>(_upper);
+                map.GovforBlips = user.GovforBlips;
+                map.OpforBlips = user.OpforBlips;
+                map.XenoBlips = user.XenoBlips;
                 if (!ghost) user.SquadBlips = new() { [squadContact.Id] = squadBlip };
             });
             await Pair.RunTicksSync(20);
@@ -89,8 +94,7 @@ public sealed partial class CMUReconstructionTest
                 Assert.That(window.FindControl<Control>("DrawingToolbar").VisibleInTree, Is.False);
                 var choices = window.FindControl<OptionButton>("LayerSelection");
                 var expected = ghost
-                    ? new[] { CMUReconLayer.Combined, CMUReconLayer.Marines, CMUReconLayer.Govfor, CMUReconLayer.Opfor,
-                        CMUReconLayer.Xenos, CMUReconLayer.Clf, CMUReconLayer.WeYu, CMUReconLayer.Abomination, CMUReconLayer.Yautja }
+                    ? new[] { CMUReconLayer.Combined, CMUReconLayer.Govfor, CMUReconLayer.Opfor, CMUReconLayer.Xenos }
                     : new[] { CMUReconLayer.Combined, CMUReconLayer.Platoon, CMUReconLayer.Squad };
                 Assert.That(Enumerable.Range(0, choices.ItemCount).Select(i => (CMUReconLayer) choices.GetItemId(i)), Is.EquivalentTo(expected));
                 generation = view.Scene.Generation;
@@ -108,7 +112,6 @@ public sealed partial class CMUReconstructionTest
                 ? new[] { (CMUReconLayer.Govfor, new[] { Color.Blue }, new[] { "Platoon plan" }),
                     (CMUReconLayer.Opfor, new[] { Color.Red }, new[] { "OPFOR plan" }),
                     (CMUReconLayer.Xenos, new[] { Color.Purple }, new[] { "Hive plan" }),
-                    (CMUReconLayer.Marines, Array.Empty<Color>(), Array.Empty<string>()),
                     (CMUReconLayer.Combined, new[] { Color.Blue, Color.Red, Color.Purple }, new[] { "Platoon plan", "OPFOR plan", "Hive plan" }) }
                 : new[] { (CMUReconLayer.Platoon, new[] { Color.Blue }, new[] { "Platoon plan" }),
                     (CMUReconLayer.Squad, new[] { Color.Green }, new[] { "Squad plan" }),
@@ -141,6 +144,10 @@ public sealed partial class CMUReconstructionTest
                     message.Actor = viewer; message.UiKey = TacticalMapUserUi.Key;
                     SEntMan.EventBus.RaiseLocalEvent(viewer, (object) message);
                 }
+                // Yautja has a reserved layer ID but no tactical-map feed, even for observers.
+                Request(new CMUReconLayerMessage(generation, CMUReconLayer.Yautja));
+                Request(new CMUReconLayerMessage(generation, CMUReconLayer.Marines));
+                Assert.That(_recon.BuildSnapshot(viewer, viewer)!.Layer, Is.EqualTo(before.Layer));
                 Request(new CMUReconLayerMessage(generation, ghost ? CMUReconLayer.Squad : CMUReconLayer.Opfor));
                 Request(new CMUReconLayerMessage(generation, CMUReconLayer.Combined | CMUReconLayer.Opfor));
                 Request(new CMUReconLayerMessage(generation - 1, ghost ? CMUReconLayer.Xenos : CMUReconLayer.Squad));

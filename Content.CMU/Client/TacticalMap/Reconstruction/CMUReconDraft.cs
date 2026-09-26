@@ -35,7 +35,7 @@ public sealed class CMUReconDraft
 
     public CMUReconSendMessage? Send(int generation)
     {
-        if (Sending || !Changed) return null;
+        if (Sending) return null;
         Sending = true;
         return new CMUReconSendMessage(generation, ++_request, Additions.ToArray(), Removals.ToArray());
     }

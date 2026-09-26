@@ -66,6 +66,9 @@ public sealed partial class PlatoonPrototype : IPrototype
     public int MaxSuppliedVtols = 1;
 
     [DataField]
+    public int MaxSuppliedFighters = 1;
+
+    [DataField]
     public ProtoId<PlatoonVendorSetPrototype>? VendorSet { get; private set; }
 
     [DataField]

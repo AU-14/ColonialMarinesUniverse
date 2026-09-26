@@ -684,10 +684,6 @@
     sprite: CMU14/Structures/Vendors/uscmcommandclothes.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill

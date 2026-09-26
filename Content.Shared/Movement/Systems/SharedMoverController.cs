@@ -577,7 +577,7 @@ public abstract partial class SharedMoverController : VirtualController
     {
         sound = null;
 
-        if (!CanSound() || !_tags.HasTag(uid, FootstepSoundTag))
+        if (!CanSound())
             return false;
 
         var coordinates = xform.Coordinates;
@@ -611,6 +611,18 @@ public abstract partial class SharedMoverController : VirtualController
             return false;
 
         mobMover.StepSoundDistance -= distanceNeeded;
+
+        // CMU14: water movement overrides footwear, including silent walking.
+        var mobSound = new GetMobFootstepSoundEvent();
+        RaiseLocalEvent(uid, ref mobSound);
+        if (mobSound.Handled)
+        {
+            sound = mobSound.Sound;
+            return sound != null;
+        }
+
+        if (!_tags.HasTag(uid, FootstepSoundTag))
+            return false;
 
         if (FootstepModifierQuery.TryComp(uid, out var moverModifier))
         {

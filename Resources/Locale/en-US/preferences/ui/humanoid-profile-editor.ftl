@@ -62,7 +62,9 @@ humanoid-profile-editor-allegiance-label = Allegiance:
 humanoid-profile-editor-allegiance-none = None
 humanoid-profile-editor-origin-label = Origin:
 humanoid-profile-editor-origin-none = None
-humanoid-profile-editor-character-description-tab = Character
+# cmu edit start
+humanoid-profile-editor-character-description-tab = Character Records
+# cmu edit end
 humanoid-profile-editor-short-examine-label = Short Examine Text:
 humanoid-profile-editor-height-label = Height:
 humanoid-profile-editor-weight-label = Weight:

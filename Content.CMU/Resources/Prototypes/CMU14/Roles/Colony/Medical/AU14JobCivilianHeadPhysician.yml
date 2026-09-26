@@ -28,11 +28,11 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadPhysician
   requirements:
-  - !type:DepartmentTimeRequirement
-    department: AU14DepartmentColonyMedical
-    time: 36000 # 10 hours
   - !type:OverallPlaytimeRequirement
-    time: 86400 # 24 hours
+    time: 43200 # 12 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 54000 # 15 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement

@@ -255,6 +255,21 @@ public sealed partial class LanguageSystem : SharedLanguageSystem
         return ObfuscateMessage(speakerMessage, language);
     }
 
+    // CMU14 method: preserve the disguised body's actual language restrictions.
+    public void CopyLanguages(EntityUid source, EntityUid target)
+    {
+        if (!TryComp<LanguageComponent>(source, out var original))
+            return;
+
+        var copy = EnsureComp<LanguageComponent>(target);
+        copy.SpokenLanguages = new(original.SpokenLanguages);
+        copy.UnderstoodLanguages = new(original.UnderstoodLanguages);
+        copy.CurrentLanguage = original.CurrentLanguage;
+        copy.DefaultLanguage = original.DefaultLanguage;
+        copy.Preset = original.Preset;
+        Dirty(target, copy);
+    }
+
     public void SetExclusiveLanguage(Entity<LanguageComponent?> ent, ProtoId<LanguagePrototype> language)
     {
         if (!Resolve(ent, ref ent.Comp))

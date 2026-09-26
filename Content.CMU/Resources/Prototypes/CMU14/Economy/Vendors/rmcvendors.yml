@@ -19,10 +19,8 @@
     sections:
     - name: Fatigues
       entries:
-      - id: AU14FatiguesDesertRMC
-        amount: 40
-      - id: AU14FatiguesBlackRMC
-        amount: 40
+      - id: CMUFatiguesRMC
+        amount: 80
     - name: Footwear
       entries:
       - id: RMCBootsRoyal
@@ -758,10 +756,8 @@
       entries:
       - id: AU14FatiguesServiceRMC
         amount: 3
-      - id: AU14FatiguesBlackRMCTeamlead
-        amount: 2
-      - id: AU14FatiguesDesertRMCTeamlead
-        amount: 2
+      - id: CMUFatiguesRMCTeamlead
+        amount: 4
     - name: Footwear
       entries:
       - id: RMCBootsRoyal
@@ -782,10 +778,6 @@
       - id: AU14JunglePatrolCap
         amount: 5
       - id: AU14DesertPatrolCap
-        amount: 5
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
         amount: 5
     - name: Pouches
       entries:
@@ -890,8 +882,7 @@
     - name: Uniforms
       choices: { AU14Uniform: 1 }
       entries:
-      - id: AU14FatiguesBlackRMCTeamlead
-      - id: AU14FatiguesDesertRMCTeamlead
+      - id: CMUFatiguesRMCTeamlead
     - name: Equipment
       takeAll: CMStandard
       entries:
@@ -933,8 +924,7 @@
     - name: Uniforms
       choices: { AU14Uniform: 1 }
       entries:
-      - id: AU14FatiguesBlackRMCTeamlead
-      - id: AU14FatiguesDesertRMCTeamlead
+      - id: CMUFatiguesRMCTeamlead
     - name: Squad Leader Essentials
       takeAll: CMStandard
       entries:
@@ -1592,10 +1582,8 @@
         amount: 15
     - name: Fatigues
       entries:
-      - id: AU14FatiguesDesertRMC
-        amount: 40
-      - id: AU14FatiguesBlackRMC
-        amount: 40
+      - id: CMUFatiguesRMC
+        amount: 80
     - name: Footwear
       entries:
       - id: RMCBootsRoyal

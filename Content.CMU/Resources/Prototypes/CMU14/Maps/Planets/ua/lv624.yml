@@ -22,7 +22,7 @@
     - VAIPO
     defaultgovfor: USCM
     defaultopfor: UPP
-    govforinship: false
+    govforinship: true
     opforinship: true
     daycycleenabled: true
     thirdparties:

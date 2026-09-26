@@ -12,7 +12,7 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> LobbyPartyTimeFlyby =
         CVarDef.Create("cmu.lobby_party_time_flyby", false, CVar.SERVER | CVar.REPLICATED);
 
-    /// <summary>Enable the lobby lineup and its automatic/requested parade independently.</summary>
+    /// <summary>Enable the lobby lineup and its automatic/requested parade and supply scramble independently.</summary>
     public static readonly CVarDef<bool> LobbyPartyTimeParade =
         CVarDef.Create("cmu.lobby_party_time_parade", false, CVar.SERVER | CVar.REPLICATED);
 }

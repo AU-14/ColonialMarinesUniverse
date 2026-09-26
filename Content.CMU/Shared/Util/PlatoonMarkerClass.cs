@@ -35,6 +35,8 @@ namespace Content.Shared.CMU14.util
         Deco6,
         ReqVend,
         VehicleCrew,
-        SentryDeployer
+        SentryDeployer,
+        ReqEquipment,
+        EngiEquipment
     }
 }

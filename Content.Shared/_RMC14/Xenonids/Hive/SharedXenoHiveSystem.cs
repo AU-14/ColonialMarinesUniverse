@@ -586,6 +586,12 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
     private bool TryGetBurrowedLarvaSpawnPosition(Entity<HiveComponent> hive, out EntityCoordinates position)
     {
+        // CMU14: xeno feedback and lifecycle.
+        // Hijack evacuates the hive before the old core finishes being destroyed.
+        if (hive.Comp.HijackSurged &&
+            TryGetBurrowedLarvaSpawnPositionAt<XenoEvolutionGranterComponent>(hive, out position))
+            return true;
+
         if (TryGetBurrowedLarvaSpawnPositionAt<HiveCoreComponent>(hive, out position) ||
             TryGetBurrowedLarvaSpawnPositionAt<XenoEvolutionGranterComponent>(hive, out position) ||
             TryGetBurrowedLarvaSpawnPositionAtXeno(hive, out position))

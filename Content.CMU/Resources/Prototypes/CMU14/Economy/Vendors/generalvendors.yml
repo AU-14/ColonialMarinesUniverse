@@ -16,6 +16,8 @@
 - type: vendingMachineInventory
   id: AU14VendorKoorCigs
   startingInventory:
+    PackPaperRolling: 20
+    PackPaperRollingFilters: 10
     AU14CigaretteKoorlander: 50
     AU14CigaretteLadyFingers: 20
     RMCMatchboxFull: 15

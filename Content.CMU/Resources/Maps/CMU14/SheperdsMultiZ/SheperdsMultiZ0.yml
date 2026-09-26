@@ -85264,6 +85264,8 @@ entities:
   entities:
   - uid: 1195
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: 'LZ1: Southwest Jungle'
     - type: Transform
@@ -85271,6 +85273,8 @@ entities:
       parent: 1
   - uid: 1197
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: 'LZ2: Northwest Jungle'
     - type: Transform
@@ -85278,6 +85282,8 @@ entities:
       parent: 1
   - uid: 1199
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: 'LZ3: North Colony'
     - type: Transform
@@ -85287,6 +85293,8 @@ entities:
   entities:
   - uid: 984
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: South Colony
     - type: Transform
@@ -85294,6 +85302,8 @@ entities:
       parent: 1
   - uid: 354134
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: North Colony
     - type: Transform

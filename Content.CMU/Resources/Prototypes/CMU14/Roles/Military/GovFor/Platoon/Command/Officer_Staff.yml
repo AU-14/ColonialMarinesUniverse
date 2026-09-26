@@ -54,6 +54,11 @@
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORPlatOpWYPMC
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 43200 # 12 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -184,7 +189,12 @@
   parent: AU14JobPlatOpBase
   id: AU14JobGOVFORPlatOpUPP
   roundForce: UPP
-  requirements: []
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 43200 # 12 hours
   name: Staff Officer
   spawnMenuRoleName: Staff Officer (UPP)
   ranks:
@@ -198,7 +208,12 @@
   parent: AU14JobPlatOpBase
   id: AU14JobGOVFORPlatOpWYPMC
   roundForce: WYPMC
-  requirements: []
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 43200 # 12 hours
   name: PMC Operations Adjutant
   description: au14-job-description-govforplatop
   spawnMenuRoleName: Staff Officer (WYPMC)

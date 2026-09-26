@@ -75,7 +75,7 @@
 # Equipment
 
 - type: entity
-  parent: RMCBeltHolsterPistolTSE
+  parent: CMULACNBeltHolsterPistol
   id: AU14BeltHolsterPistolLACNTPR23B
   suffix: LACN, Filled, TPR23B
   components:
@@ -114,11 +114,11 @@
     - id: CMEntrenchingTool
     - id: CMMRE
     - id: CMCanteen
-    - id: RMCMagazineRifleL42AWP
-    - id: RMCMagazineRifleL42AWP
-    - id: RMCMagazineRifleL42A
-    - id: RMCMagazineRifleL42A
-    - id: RMCMagazineRifleL42A
+    - id: AU14WeaponRifleKramerMagazineAP
+    - id: AU14WeaponRifleKramerMagazineAP
+    - id: AU14WeaponRifleKramerMagazineStandard
+    - id: AU14WeaponRifleKramerMagazineStandard
+    - id: AU14WeaponRifleKramerMagazineStandard
 
 - type: entity
   parent: AU14LACNBackpack

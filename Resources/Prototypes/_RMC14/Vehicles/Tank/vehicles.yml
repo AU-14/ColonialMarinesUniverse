@@ -16,6 +16,9 @@
     - VehicleHeavy
   - type: RMCIgnoreGhostInteractionLimits
   - type: RequireProjectileTarget
+    # CMU14: vehicle damage and conscious controls.
+    alwaysHitWhitelist:
+      components: [XenoAcidProjectile, VehicleDamageMultiplier]
   - type: GridVehicleMover
     maxSpeed: 2.5
     acceleration: 1.8
@@ -112,6 +115,8 @@
     damageContainer: StructuralMarine
   - type: ReceiverXenoClaws
     minimumClawStrength: Sharp
+    # CMU14: vehicle damage and conscious controls.
+    useWeaponDamage: true
   - type: InteractionOutline
   - type: Sprite
     drawdepth: Mobs

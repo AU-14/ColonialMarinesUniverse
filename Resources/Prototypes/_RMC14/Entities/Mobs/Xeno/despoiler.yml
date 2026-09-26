@@ -74,6 +74,9 @@
     - RMCActionXenoDespoilerCatalyze
     - ActionXenoDevolve
   - type: XenoHeavy
+  # CMU14: xeno feedback and lifecycle.
+  - type: XenoClaws
+    clawType: Sharp
   - type: XenoDevolve
     devolvesTo:
     - CMXenoSpitter

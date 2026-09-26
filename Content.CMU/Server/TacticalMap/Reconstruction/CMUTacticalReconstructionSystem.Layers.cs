@@ -13,14 +13,13 @@ public sealed partial class CMUTacticalReconstructionSystem
         if (!TryComp<TacticalMapUserComponent>(survey.Source, out var user)) return layers;
         if (HasComp<GhostComponent>(survey.Actor))
         {
-            if (user.Marines) layers |= CMUReconLayer.Marines;
-            if (user.Govfor) layers |= CMUReconLayer.Govfor;
-            if (user.Opfor) layers |= CMUReconLayer.Opfor;
-            if (user.Xenos) layers |= CMUReconLayer.Xenos;
-            if (user.Clf) layers |= CMUReconLayer.Clf;
-            if (user.WeYu) layers |= CMUReconLayer.WeYu;
-            if (user.Abomination) layers |= CMUReconLayer.Abomination;
-            if (user.Yautja) layers |= CMUReconLayer.Yautja;
+            if (user.Marines && user.MarineBlips.Count > 0) layers |= CMUReconLayer.Marines;
+            if (user.Govfor && user.GovforBlips.Count > 0) layers |= CMUReconLayer.Govfor;
+            if (user.Opfor && user.OpforBlips.Count > 0) layers |= CMUReconLayer.Opfor;
+            if (user.Xenos && (user.XenoBlips.Count > 0 || user.XenoStructureBlips.Count > 0)) layers |= CMUReconLayer.Xenos;
+            if (user.Clf && user.ClfBlips.Count > 0) layers |= CMUReconLayer.Clf;
+            if (user.WeYu && user.WeYuBlips.Count > 0) layers |= CMUReconLayer.WeYu;
+            if (user.Abomination && user.AbominationBlips.Count > 0) layers |= CMUReconLayer.Abomination;
         }
         else if (!CanOrder(survey.Source, survey.Actor) &&
                  EntityManager.System<TacticalMapSystem>().ReconstructionViewerSquad(survey.Source) != null)

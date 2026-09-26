@@ -49,6 +49,7 @@
                     <WrapContainer SeparationOverride="6">
                         <Button Name="Flyby" Text="{Loc 'cmu-lobby-party-flyby'}" ToolTip="{Loc 'cmu-lobby-party-flyby-hint'}" />
                         <Button Name="Parade" Text="{Loc 'cmu-lobby-party-parade'}" ToolTip="{Loc 'cmu-lobby-party-parade-hint'}" />
+                        <Button Name="SupplyScramble" Text="{Loc 'cmu-lobby-party-supply'}" ToolTip="{Loc 'cmu-lobby-party-supply-hint'}" />
                         <Button Name="StopShow" Text="{Loc 'cmu-lobby-party-stop'}" Visible="False" />
                         <CheckBox Name="PartySounds" Text="{Loc 'cmu-lobby-party-sounds'}" ToolTip="{Loc 'cmu-lobby-party-sounds-hint'}" Pressed="True" />
                     </WrapContainer>

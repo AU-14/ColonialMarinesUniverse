@@ -96,3 +96,33 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.94
     sprintModifier: 0.94
+
+- type: entity
+  parent: AU14FatiguesDesertRMC
+  id: CMUFatiguesRMC
+  name: royal marine fatigues
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/RMC/jumpsuits/black.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/RMC/jumpsuits/black.rsi
+      Desert: CMU14/Clothing/RMC/jumpsuits/desert.rsi
+      Snow: CMU14/Clothing/RMC/jumpsuits/black.rsi
+      Classic: CMU14/Clothing/RMC/jumpsuits/black.rsi
+      Urban: CMU14/Clothing/RMC/jumpsuits/black.rsi
+
+- type: entity
+  parent: AU14FatiguesDesertRMCTeamlead
+  id: CMUFatiguesRMCTeamlead
+  name: royal marine team leader fatigues
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/RMC/jumpsuits/black_team_lead.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/RMC/jumpsuits/black_team_lead.rsi
+      Desert: CMU14/Clothing/RMC/jumpsuits/desert_team_lead.rsi
+      Snow: CMU14/Clothing/RMC/jumpsuits/black_team_lead.rsi
+      Classic: CMU14/Clothing/RMC/jumpsuits/black_team_lead.rsi
+      Urban: CMU14/Clothing/RMC/jumpsuits/black_team_lead.rsi

@@ -15,7 +15,7 @@ public static class FighterFlight
     public const float CorridorHalfWidth = 8;
 
     public static Vector2 Forward(float heading) => new(MathF.Sin(heading), MathF.Cos(heading));
-    public static bool InAirspace(FighterAircraftComponent a) => a.GroundState is FighterGroundState.Airborne or FighterGroundState.Returning;
+    public static bool InAirspace(FighterAircraftComponent a) => a.GroundState is FighterGroundState.Airborne or FighterGroundState.Returning or FighterGroundState.Crashing;
     public static bool GroundScene(FighterAircraftComponent a) => a.GroundEntity != null && !InAirspace(a);
     public static bool InAttackRun(FighterAircraftComponent a) => a.GroundState == FighterGroundState.Airborne &&
         a.Flying && a.Phase is FighterPhase.Approach or FighterPhase.Pass && a.Battlefield.Contains(a.Position);
@@ -127,7 +127,7 @@ public static class FighterFlight
 
     public static void Step(FighterAircraftComponent a, FighterInput input, float seconds)
     {
-        if (!InAirspace(a)) return;
+        if (!InAirspace(a) || a.GroundState == FighterGroundState.Crashing) return;
         if (!float.IsFinite(seconds) || seconds <= 0)
             return;
         seconds = Math.Min(seconds, StepSeconds);

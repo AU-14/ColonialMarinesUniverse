@@ -35,3 +35,5 @@ reagent-effect-guidebook-cure-biomorph-infection = Cures [color=#a83a55]biomorph
 biomorph-mimic-draw-venom = A syringe of clotted, dark fluid slips free of your borrowed skin.
 
 name-identifier-format-biomorph = Biomorph-{$number}
+
+au14-threat-vote-option-biomorphs = Biomorph Threat

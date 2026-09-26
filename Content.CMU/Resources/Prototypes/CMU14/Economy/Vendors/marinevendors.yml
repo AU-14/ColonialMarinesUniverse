@@ -615,10 +615,6 @@
         name: Black Beret
       - id: AU14CamoPatrolCap
         amount: 10
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill

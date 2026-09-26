@@ -244,6 +244,69 @@ public sealed class MohawkOccupantsTest
     }
 
     [TestCase("midway", 0, 2)]
+    [TestCase("midway_navy", 90, 3)]
+    [TestCase("omaha", 180, 2)]
+    [TestCase("omaha_navy", 270, 3)]
+    public async Task WalkingOffPartiallyLoweredRampStaysSupported(string variant, int degrees, int stage)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        EntityUid ship = default;
+        EntityUid passenger = default;
+        EntityUid lowerMap = default;
+        var start = stage - 5.5f;
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            ship = LoadShip(entities, variant);
+            var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
+            var lower = assembly.Decks[-1];
+            var transform = entities.System<SharedTransformSystem>();
+            transform.SetWorldRotation(ship, Angle.FromDegrees(degrees));
+            entities.System<MultiDeckDropshipSystem>().Synchronize((ship, assembly));
+            lowerMap = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
+            var maps = entities.System<SharedMapSystem>();
+            var terrain = entities.EnsureComponent<MapGridComponent>(lowerMap);
+            var tile = maps.GetAllTiles(lower, entities.GetComponent<MapGridComponent>(lower)).First().Tile;
+            for (var x = -8; x <= 8; x++)
+            for (var y = -8; y <= 8; y++)
+                maps.SetTile(lowerMap, terrain, new Vector2i(x, y), tile);
+            passenger = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ship, 0.5f, start));
+            Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true), Is.True);
+        });
+
+        await pair.RunSeconds(stage == 2 ? 0.1f : 1.1f);
+        for (var y = start - 0.1f; y >= -6.2f; y -= 0.1f)
+        {
+            var nextY = y;
+            await pair.Server.WaitAssertion(() =>
+            {
+                var entities = pair.Server.EntMan;
+                var transform = entities.System<SharedTransformSystem>();
+                var world = transform.ToMapCoordinates(new EntityCoordinates(ship, 0.5f, nextY)).Position;
+                var map = entities.GetComponent<TransformComponent>(passenger).MapUid!.Value;
+                transform.SetCoordinates(passenger, new EntityCoordinates(map, world));
+                var physics = entities.GetComponent<CMUZPhysicsComponent>(passenger);
+                var distance = entities.System<CMUZLevelsSystem>().DistanceToGround((passenger, physics), out _);
+                Assert.That(MathF.Abs(distance), Is.LessThan(0.15f),
+                    $"The moving ramp must provide continuous support at ship-local y={nextY}.");
+                Assert.That(physics.Velocity, Is.GreaterThan(-1f), "Walking down the ramp must not enter free fall.");
+            });
+            await pair.RunTicksSync(1);
+        }
+        await pair.RunSeconds(3);
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            Assert.That(entities.GetComponent<TransformComponent>(passenger).MapUid, Is.EqualTo(lowerMap));
+            Assert.That(entities.System<DamageableSystem>().GetTotalDamage(passenger).Float(), Is.Zero);
+            Assert.That(entities.HasComponent<KnockedDownComponent>(passenger), Is.False);
+            Assert.That(entities.GetComponent<MohawkMechanismsComponent>(ship).RampDeployed, Is.True);
+            entities.DeleteEntity(ship);
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase("midway", 0, 2)]
     [TestCase("midway", 90, 3)]
     [TestCase("midway_navy", 0, 3)]
     [TestCase("midway_navy", 90, 2)]

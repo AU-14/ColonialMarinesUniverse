@@ -47,6 +47,8 @@
   playTimeTracker: AU14JobCLFRadioOperator
   basePlaytimeTracker: true
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:

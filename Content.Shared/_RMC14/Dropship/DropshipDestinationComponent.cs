@@ -25,6 +25,11 @@ public sealed partial class DropshipDestinationComponent : Component
     [DataField("FactionControlling", required: false)]
     public string FactionController = String.Empty;
 
+    // CMU14: aircraft landing and protected CAS.
+    /// <summary>Overrides this landing zone's owner during Force on Force map initialization.</summary>
+    [DataField]
+    public string? ForceOnForceFaction;
+
 
     [DataField("destinationtype")]
     public  DestinationType Destinationtype = DestinationType.Dropship;

@@ -91,10 +91,34 @@
 - type: entity
   parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORDSPilot
-  name: dropship pilot ID card
+  name: transport pilot ID card
   components:
   - type: PresetIdCard
     job: AU14JobOPFORDSPilot
+
+- type: entity
+  parent: AU14IDCardOPFORDSPilot
+  id: AU14IDCardOPFORGunshipPilot
+  name: gunship pilot ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORGunshipPilot
+
+- type: entity
+  parent: AU14IDCardOPFORDSPilot
+  id: AU14IDCardOPFORFighterPilot
+  name: fighter pilot ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORFighterPilot
+
+- type: entity
+  parent: AU14IDCardOPFORDSPilot
+  id: AU14IDCardOPFORFighterSystemsOfficer
+  name: fighter systems officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORFighterSystemsOfficer
 
 - type: entity
   parent: AU14IDCardOPFOR

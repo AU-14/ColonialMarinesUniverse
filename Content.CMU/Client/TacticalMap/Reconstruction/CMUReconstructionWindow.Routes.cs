@@ -89,7 +89,8 @@ public sealed partial class CMUReconstructionWindow
         View.TextEnabled = enabled && PlaceText.Pressed;
         if (!enabled) View.CancelStroke();
         Clear.Disabled = Undo.Disabled = !enabled || View.Draft.Additions.Count == 0 && !View.Orders.Any(o => !View.Draft.Removals.Contains(o.Id));
-        Send.Disabled = !enabled || !View.Draft.Changed;
+        // Republishing an unchanged canvas refreshes the faction's contact positions.
+        Send.Disabled = !enabled;
         Send.Text = Loc.GetString(View.Draft.Sending ? "cmu-recon-sending" : "cmu-recon-send");
         Controls.Text = Loc.GetString(View.TextEnabled ? "cmu-recon-text-controls" : View.DrawingEnabled ? "cmu-recon-pencil-controls" : "cmu-recon-controls");
     }

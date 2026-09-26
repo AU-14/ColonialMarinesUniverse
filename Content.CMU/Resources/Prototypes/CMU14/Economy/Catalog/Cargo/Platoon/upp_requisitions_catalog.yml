@@ -382,6 +382,8 @@
         crate: RMCDropshipTargetingSystem
     - name: Dropship Munitions
       entries:
+      - cost: 900
+        crate: CMUCrateBlackfootM866Ammo
       - cost: 400
         crate: RMCDropshipAttachmentAmmoRocketHarpoon
       - cost: 800

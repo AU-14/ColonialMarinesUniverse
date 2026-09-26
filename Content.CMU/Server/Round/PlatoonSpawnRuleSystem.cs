@@ -198,6 +198,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                 continue;
             var spawnedEnt = _entityManager.SpawnAttachedTo(vendorProto.ID, transform.Coordinates, rotation: transform.LocalRotation);
+            SetRequisitionsVendorAccess(spawnedEnt, markerComp.Class, markerComp.Govfor ? "govfor" : "opfor");
             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawnedEnt, out var spawnedPhone2))
             {
                 spawnedPhone2.Faction = markerComp.Govfor ? "govfor" : "opfor";
@@ -398,11 +399,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         EntityUid? destination = null;
         if (HasComp<MultiDeckDropshipComponent>(grid))
             destination = FindMultiDeckDestination(grid, faction, planetComp, usedDestinations, destinationRandom);
-        else if (UsesShipDestination(planetComp, faction))
-            destination = FindDestination(faction, type, usedDestinations, destinationRandom, grid);
-
-        if (!HasComp<MultiDeckDropshipComponent>(grid))
-            destination ??= FindDestination(faction, type, usedDestinations, destinationRandom);
+        else
+            destination = FindDestination(faction, type, usedDestinations, destinationRandom, planetComp);
 
         var navComputer = FindNavComputerOnGrid(grid);
         if (destination == null || navComputer == null)
@@ -427,22 +425,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 destination.Destinationtype != DropshipDestinationComponent.DestinationType.Dropship)
                 continue;
 
-            if (UsesShipDestination(planet, faction))
-            {
-                var atHome = false;
-                var carriers = AllEntityQuery<ShipFactionComponent, TransformComponent>();
-                while (carriers.MoveNext(out var carrier, out var owner, out var carrierTransform))
-                {
-                    if (owner.Faction == faction && !HasComp<DropshipComponent>(carrier) &&
-                        _factionSwap.IsMarkerOnShipOrZLevel(carrier, carrierTransform, transform))
-                    {
-                        atHome = true;
-                        break;
-                    }
-                }
-                if (!atHome)
-                    continue;
-            }
+            if (!IsStartingDestination(transform, faction, planet))
+                continue;
 
             var origin = _multiDeck.GetLandingOrigin(dropship, transform.Coordinates, uid);
             if (_multiDeck.IsLandingClear(dropship, origin, _transform.GetWorldRotation(uid)))
@@ -456,7 +440,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         DropshipDestinationComponent.DestinationType type,
         HashSet<EntityUid> usedDestinations,
         Random destinationRandom,
-        EntityUid? gridUid = null)
+        RMCPlanetMapPrototypeComponent planet)
     {
         var candidates = new List<EntityUid>();
         var query = AllEntityQuery<DropshipDestinationComponent>();
@@ -468,11 +452,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             if (comp.FactionController != faction || comp.Destinationtype != type)
                 continue;
 
-            if (gridUid != null &&
-                _entityManager.GetComponent<TransformComponent>(destUid).GridUid != gridUid)
-            {
+            if (!IsStartingDestination(Transform(destUid), faction, planet))
                 continue;
-            }
 
             candidates.Add(destUid);
         }
@@ -481,8 +462,23 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             return null;
 
         var picked = candidates[destinationRandom.Next(candidates.Count)];
-        usedDestinations.Add(picked);
         return picked;
+    }
+
+    private bool IsStartingDestination(TransformComponent destination, string faction, RMCPlanetMapPrototypeComponent planet)
+    {
+        if (!UsesShipDestination(planet, faction))
+            return HasComp<RMCPlanetComponent>(destination.GridUid) || HasComp<RMCPlanetComponent>(destination.MapUid);
+
+        var carriers = AllEntityQuery<ShipFactionComponent, TransformComponent>();
+        while (carriers.MoveNext(out var carrier, out var owner, out var transform))
+        {
+            if (owner.Faction == faction && !HasComp<DropshipComponent>(carrier) &&
+                _factionSwap.IsMarkerOnShipOrZLevel(carrier, transform, destination))
+                return true;
+        }
+
+        return false;
     }
 
     private List<EntityUid> FindMarkersOnGrid(EntityUid grid, string markerProtoId)
@@ -608,16 +604,18 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
     private void SetRequisitionsVendorAccess(EntityUid vendor, PlatoonMarkerClass markerClass, string faction)
     {
-        if (markerClass != PlatoonMarkerClass.ReqVend ||
+        if (markerClass is not (PlatoonMarkerClass.ReqVend or PlatoonMarkerClass.SWeapons) ||
             !TryComp<AccessReaderComponent>(vendor, out var accessReader))
         {
             return;
         }
 
-        ProtoId<AccessLevelPrototype>? access = faction switch
+        ProtoId<AccessLevelPrototype>? access = (faction, markerClass) switch
         {
-            "govfor" => "AU14AccessGovforReq",
-            "opfor" => "AU14AccessOpforReq",
+            ("govfor", PlatoonMarkerClass.ReqVend) => "AU14AccessGovforReq",
+            ("opfor", PlatoonMarkerClass.ReqVend) => "AU14AccessOpforReq",
+            ("govfor", PlatoonMarkerClass.SWeapons) => "AU14AccessGovforSquadWeaponsSpecialist",
+            ("opfor", PlatoonMarkerClass.SWeapons) => "AU14AccessOpforSquadWeaponsSpecialist",
             _ => null,
         };
 

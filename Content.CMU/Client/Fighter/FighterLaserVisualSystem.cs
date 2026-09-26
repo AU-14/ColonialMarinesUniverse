@@ -18,7 +18,6 @@ public sealed partial class FighterLaserVisualSystem : EntitySystem
 
 public sealed class FighterLaserOverlay(IEntityManager entities) : Overlay
 {
-    private static readonly Color BeamColor = Color.FromHex("#FF3636");
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
     private readonly SharedTransformSystem _transform = entities.System<SharedTransformSystem>();
     private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
@@ -40,7 +39,7 @@ public sealed class FighterLaserOverlay(IEntityManager entities) : Overlay
             var incomingAge = (float) (_timing.CurTime - laser.IncomingAt).TotalSeconds;
             var power = Math.Clamp(age * 3, 0, 1);
             if (laser.Incoming) power *= .35f + .65f * (.5f + .5f * MathF.Sin(incomingAge * MathF.Tau * 3));
-            CargoGuildBeam.Draw(_particles, Vector2.Zero, power, age, color: BeamColor);
+            CargoGuildBeam.Draw(_particles, Vector2.Zero, power, age, color: laser.BeamColor);
             if (laser.Incoming)
             {
                 LastIncomingDrawAt = _timing.CurTime;
@@ -49,7 +48,7 @@ public sealed class FighterLaserOverlay(IEntityManager entities) : Overlay
                     var phase = incomingAge * 1.5f + i * .5f;
                     phase -= MathF.Floor(phase);
                     var radius = .4f + phase * 1.8f;
-                    var tint = BeamColor.WithAlpha((1 - phase) * .95f);
+                    var tint = laser.BeamColor.WithAlpha((1 - phase) * .95f);
                     const int segments = 48;
                     for (var segment = 0; segment < segments; segment++)
                     {

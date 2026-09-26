@@ -64,12 +64,17 @@ public sealed partial class LobbyPartyShowControl : Control
         }
         if (_show == LobbyPartyShow.Parade)
             InitializeParade();
-        else
+        else if (_show == LobbyPartyShow.Flyby)
             InitializeBattlefield();
         AddChild(new Foreground(this) { MouseFilter = MouseFilterMode.Ignore });
         _caption = new Label
         {
-            Text = Loc.GetString(_show == LobbyPartyShow.Flyby ? "cmu-lobby-party-flyby-title" : "cmu-lobby-party-parade-title"),
+            Text = Loc.GetString(_show switch
+            {
+                LobbyPartyShow.Flyby => "cmu-lobby-party-flyby-title",
+                LobbyPartyShow.SupplyScramble => "cmu-lobby-party-supply-title",
+                _ => "cmu-lobby-party-parade-title",
+            }),
             Align = Label.AlignMode.Center,
             ClipText = true,
             FontColorOverride = Color.FromHex("#E5EFCB"),
@@ -95,6 +100,8 @@ public sealed partial class LobbyPartyShowControl : Control
         {
             if (_show == LobbyPartyShow.Flyby)
                 AdvanceFlyby(previous);
+            else if (_show == LobbyPartyShow.SupplyScramble)
+                AdvanceSupply(previous);
             else
                 AdvanceParade(previous);
         }
@@ -138,7 +145,9 @@ public sealed partial class LobbyPartyShowControl : Control
             }
             var pose = _show == LobbyPartyShow.Parade
                 ? LobbyPartyChoreography.March(_elapsed, i, _actors.Count, Size, _reduced, _seed)
-                : HumanTargetPose(i);
+                : _show == LobbyPartyShow.SupplyScramble
+                    ? LobbyPartyChoreography.SupplyCrew(_elapsed, i, _actors.Count, Size, _reduced, _seed)
+                    : HumanTargetPose(i);
             view.Scale = new Vector2(_show == LobbyPartyShow.Parade
                 ? LobbyPartyChoreography.ActorScale(_actors.Count) * Unit
                 : LobbyPartyChoreography.FlybyActorScale(_actors.Count, Size));
@@ -253,6 +262,8 @@ public sealed partial class LobbyPartyShowControl : Control
             DrawBattlefield(handle);
             DrawTargets(handle);
         }
+        else if (_show == LobbyPartyShow.SupplyScramble)
+            DrawSupply(handle);
         else
             DrawParade(handle);
         handle.SetTransform(previous);
@@ -266,6 +277,8 @@ public sealed partial class LobbyPartyShowControl : Control
             handle.SetTransform(Matrix3x2.CreateScale(UIScale) * previous);
             if (owner._show == LobbyPartyShow.Flyby)
                 owner.DrawFlyby(handle);
+            else if (owner._show == LobbyPartyShow.SupplyScramble)
+                owner.DrawSupplyCargo(handle);
             else
                 owner.DrawConfetti(handle);
             handle.SetTransform(previous);

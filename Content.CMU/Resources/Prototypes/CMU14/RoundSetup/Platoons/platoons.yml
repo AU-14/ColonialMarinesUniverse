@@ -176,6 +176,16 @@
         entity: CMU14ChevronLACNFirstClassSergeant
         requirements: []
 
+    AU14JobGOVFORFighterPilot:
+      CMU14RankLACNEnsign:
+        entity: CMU14ChevronLACNEnsign
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      CMU14RankLACNEnsign:
+        entity: CMU14ChevronLACNEnsign
+        requirements: []
+
     AU14JobAuxTechBase:
       CMU14RankLACNSecondClassCorporal:
         entity: CMU14ChevronLACNSecondClassCorporal
@@ -344,7 +354,7 @@
     - USSBushRedux
   #platoonflag: uaflag
   CompatibleDropships:
-  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   techTree: CMUIntelTechTree_GOVFOR
 
@@ -487,6 +497,16 @@
           time: 36000 #10 hours
       UPP_WarrantOfficer:
         entity: AU14ChevronUPPNIWarrantOfficer
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
         requirements: []
 
     AU14JobAuxTechBase:
@@ -682,7 +702,6 @@
   - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical
-  - VehicleHumveeARC
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
   name: WY PMC
@@ -799,6 +818,16 @@
         - !type:RoleTimeRequirement
           role: AU14JobGOVFORDSPilot
           time: 36000 #10 hours
+      AU14RankWeYuPilot:
+        entity: AU14ChevronWeYuPilot
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      AU14RankWeYuPilot:
+        entity: AU14ChevronWeYuPilot
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
       AU14RankWeYuPilot:
         entity: AU14ChevronWeYuPilot
         requirements: []
@@ -1081,6 +1110,16 @@
         entity: AU14ChevronCMBDeputy
         requirements: []
 
+    AU14JobGOVFORFighterPilot:
+      AU14RankCMBSrDeputy:
+        entity: AU14ChevronCMBSrDeputy
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      AU14RankCMBSrDeputy:
+        entity: AU14ChevronCMBSrDeputy
+        requirements: []
+
     AU14JobAuxTechBase:
       AU14RankCMBDeputy:
         entity: AU14ChevronCMBDeputy
@@ -1244,6 +1283,7 @@
   - AU14VehicleCivArmoredTruck
   - AU14VehicleCivTruck
   - AU14VehicleCivEMSAmbulance
+  - VehicleAev
   name: Prodigy Security Forces
   lorePrimer: AU14PrimerPlatoonProdigySF
   reqlist: ProdigyCargoCatalog
@@ -1335,6 +1375,16 @@
           time: 36000 #10 hours
       AU14RankPrDPilot:
         entity: AU14ChevronPrDPilot
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      AU14RankPrDCommander:
+        entity: AU14ChevronPrDCommander
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      AU14RankPrDCommander:
+        entity: AU14ChevronPrDCommander
         requirements: []
 
     AU14JobAuxTechBase:
@@ -1522,6 +1572,7 @@
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
+  - VehicleAev
   name: VAI Primary Operations
   lorePrimer: AU14PrimerPlatoonVAIPO
   reqlist: VAIPOCargoCatalog
@@ -1598,6 +1649,16 @@
         requirements: []
 
     AU14JobDSPilotBase:
+      VAI_VASCDepartamentLeader:
+        entity: CMU14ChevronVASCDepartamentLeader
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      VAI_VASCDepartamentLeader:
+        entity: CMU14ChevronVASCDepartamentLeader
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
       VAI_VASCDepartamentLeader:
         entity: CMU14ChevronVASCDepartamentLeader
         requirements: []
@@ -1819,6 +1880,16 @@
           time: 36000 #10 hours
       RMC_WarrantOfficer2:
         entity: AU14ChevronRMCWarrantOfficer2
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      RMC_2Lieutenant:
+        entity: AU14ChevronRMCSecondLieutenant
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      RMC_2Lieutenant:
+        entity: AU14ChevronRMCSecondLieutenant
         requirements: []
 
     AU14JobAuxTechBase:

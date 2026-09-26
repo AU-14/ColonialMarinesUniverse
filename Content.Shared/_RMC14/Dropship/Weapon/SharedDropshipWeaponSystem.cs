@@ -1575,7 +1575,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         var xform = Transform(ent);
-        if (!CasDebug && !HasComp<RMCPlanetComponent>(xform.GridUid))
+        // CMU14: aircraft landing and protected CAS.
+        if (!CasDebug && !IsPlanetTarget(xform))
             return false;
         if (!ent.Comp.IsTargetableByWeapons)
         {
@@ -1583,6 +1584,24 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
 
         return true;
+    }
+
+    // CMU14: aircraft landing and protected CAS.
+    private bool IsPlanetTarget(TransformComponent xform)
+    {
+        if (HasComp<RMCPlanetComponent>(xform.GridUid) || HasComp<RMCPlanetComponent>(xform.MapUid))
+            return true;
+
+        if (xform.MapUid is not { } map || !_zLevels.TryGetZNetwork(map, out var network))
+            return false;
+
+        foreach (var (_, member) in _zLevels.GetOrderedNetworkMaps(network.Value))
+        {
+            if (HasComp<RMCPlanetComponent>(member))
+                return true;
+        }
+
+        return false;
     }
 
     public string GetUserAbbreviation(EntityUid user, int id)
@@ -1821,6 +1840,11 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
                 var landing = flight.Target.Offset(spread);
 
+                // Dispersion can move a permitted target underneath a protected
+                // ceiling. Check the actual impact before applying any payload.
+                if (!CasDebug && !_area.CanCAS(landing))
+                    continue;
+
                 var targetMap = _transform.ToMapCoordinates(landing.SnapToGrid(EntityManager));
         // CMU14: publish the actual dispersed payload impact for fighter effects.
         var impact = new DropshipWeaponImpactEvent(targetMap);
@@ -1873,38 +1897,42 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                                 break;
 
                             var tile = _random.PickAndTake(tiles);
-                            var coords = flight.Target.Offset(tile);
+                            // CMU14: aircraft landing and protected CAS.
+                            var coords = landing.Offset(tile);
                             _rmcFlammable.SpawnFire(coords,
                                 flight.Fire.Type,
                                 chain,
                                 flight.Fire.Range,
                                 flight.Fire.Intensity,
                                 flight.Fire.Duration,
-                                out _
+                                out _,
+                                canSpawn: CanSpawnCASFire
                             );
                         }
                     }
                     else
                     {
                         _rmcFlammable.SpawnFireLines(flight.Fire.Type,
-                            flight.Target,
+                            landing,
                             flight.Fire.CardinalRange,
                             flight.Fire.OrdinalRange,
                             flight.Fire.Intensity,
-                            flight.Fire.Duration);
+                            flight.Fire.Duration,
+                            canSpawn: CanSpawnCASFire);
 
                         for (var x = -flight.Fire.Range; x <= flight.Fire.Range; x++)
                         {
                             for (var y = -flight.Fire.Range; y <= flight.Fire.Range; y++)
                             {
-                                var coords = flight.Target.Offset(new Vector2(x, y));
+                                var coords = landing.Offset(new Vector2(x, y));
                                 _rmcFlammable.SpawnFire(coords,
                                     flight.Fire.Type,
                                     chain,
                                     flight.Fire.Range,
                                     flight.Fire.Intensity,
                                     flight.Fire.Duration,
-                                    out _
+                                    out _,
+                                    canSpawn: CanSpawnCASFire
                                 );
                             }
                         }
@@ -1957,6 +1985,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return !HasComp<ThrownItemComponent>(uid) &&
                _zLevels.DistanceToGround(uid, out _) <= 0;
     }
+
+    // CMU14: aircraft landing and protected CAS.
+    private bool CanSpawnCASFire(EntityCoordinates coordinates) => CasDebug || _area.CanCAS(coordinates);
 
     public static Angle GetImpactEffectRotation(Angle randomRotation, bool hasOccluder)
     {

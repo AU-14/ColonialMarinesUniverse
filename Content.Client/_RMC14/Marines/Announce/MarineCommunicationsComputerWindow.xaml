@@ -1,4 +1,4 @@
-﻿<controls:MarineCommunicationsComputerWindow
+<controls:MarineCommunicationsComputerWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Marines.Announce"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
@@ -18,6 +18,11 @@
             <Button Name="MedalButton" Access="Public" Text="Give a medal" StyleClasses="OpenBoth" />
             <Button Name="TacticalMapButton" Access="Public" Text="Tactical Map" StyleClasses="OpenBoth" />
             <Button Name="OverwatchButton" Access="Public" Text="Overwatch" StyleClasses="OpenBoth" />
+            <!-- CMU14: faction command bombardment controls. -->
+            <BoxContainer Name="BombardmentSection" Access="Public" Orientation="Vertical" Visible="False">
+                <OptionButton Name="BombardmentVariant" Access="Public" />
+                <Button Name="BombardmentButton" Access="Public" Text="{Loc 'cmu-fof-bombardment-launch'}" />
+            </BoxContainer>
             <cc:HSeparator Color="#4972A1" Margin="0 5" />
             <Button Name="EchoButton" Access="Public" Text="Designate Echo Squad" StyleClasses="OpenBoth" />
             <cc:HSeparator Name="EchoSeparator" Access="Public" Color="#4972A1" Margin="0 5" />

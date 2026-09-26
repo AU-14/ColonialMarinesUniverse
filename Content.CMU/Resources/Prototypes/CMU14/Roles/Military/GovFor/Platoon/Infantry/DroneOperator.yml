@@ -38,6 +38,9 @@
         state: rifleman
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 36000 # 10 hours
   - !type:TraitsRequirement
     inverted: true
     traits:

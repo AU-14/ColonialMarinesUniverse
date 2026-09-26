@@ -38,6 +38,11 @@
   - auorbitalmanagement
   roleWeight: 0.25
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 36000 # 10 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobCivilianOrbitalLawyer
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement

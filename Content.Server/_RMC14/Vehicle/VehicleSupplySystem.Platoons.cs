@@ -96,7 +96,8 @@ public sealed partial class VehicleSupplySystem
         }
         return count < platoon.MaxSuppliedVehicles &&
             (group != "vehicle-tank" || groupCount < platoon.MaxSuppliedTanks) &&
-            (group != "vehicle-vtol" || groupCount < platoon.MaxSuppliedVtols);
+            (group != "vehicle-vtol" || groupCount < platoon.MaxSuppliedVtols) &&
+            (group != "vehicle-fighter" || groupCount < platoon.MaxSuppliedFighters);
     }
 
     private bool CanSelectVehicle(Entity<VehicleSupplyLiftComponent> lift, VehicleSupplyEntry entry, string? side)

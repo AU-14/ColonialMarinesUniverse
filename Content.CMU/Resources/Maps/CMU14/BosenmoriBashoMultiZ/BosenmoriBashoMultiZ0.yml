@@ -99770,6 +99770,8 @@ entities:
   entities:
   - uid: 42276
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: LZ2
     - type: Transform
@@ -99777,6 +99779,8 @@ entities:
       pos: 37.5,43.5
   - uid: 42277
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: LZ1
     - type: Transform
@@ -99791,6 +99795,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 154.5,206.5
     - type: DropshipDestination
+      forceOnForceFaction: opfor
       canBePrimary: False
 - proto: CMFax
   entities:

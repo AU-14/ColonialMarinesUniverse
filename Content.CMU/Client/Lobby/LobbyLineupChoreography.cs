@@ -17,6 +17,7 @@ public static class LobbyLineupChoreography
         LobbyLineupEmote.BurstFire, LobbyLineupEmote.SprayAndPray, LobbyLineupEmote.XenoHug,
         LobbyLineupEmote.Facehugger, LobbyLineupEmote.Chestburst, LobbyLineupEmote.XenoMorph,
         LobbyLineupEmote.DodgeRoll, LobbyLineupEmote.GrenadeOops,
+        LobbyLineupEmote.PieToss, LobbyLineupEmote.BananaPeel, LobbyLineupEmote.ConfettiCannon,
     });
 
     public static readonly ImmutableArray<LobbyLineupEmote> TeamMoves = ImmutableArray.CreateRange(new[]
@@ -58,6 +59,7 @@ public static class LobbyLineupChoreography
         LobbyLineupEmote.DodgeRoll => 2.7f,
         LobbyLineupEmote.FakeFaint => 3.8f,
         LobbyLineupEmote.GrenadeOops => 5.0f,
+        LobbyLineupEmote.PieToss or LobbyLineupEmote.BananaPeel or LobbyLineupEmote.ConfettiCannon => 3.6f,
         LobbyLineupEmote.VictorySpin or LobbyLineupEmote.Shadowbox => 4.2f,
         _ => IsDance(emote) ? 5.6f : 2.8f,
     };
@@ -110,6 +112,14 @@ public static class LobbyLineupChoreography
         var fullTurn = false;
         switch (emote)
         {
+            case LobbyLineupEmote.PieToss:
+            case LobbyLineupEmote.BananaPeel:
+            case LobbyLineupEmote.ConfettiCannon:
+                facing = Direction.East;
+                var throwBlend = Envelope(phase, 1.4f, 0.4f, 0.6f);
+                rotation = -throwBlend * 0.17f;
+                offset.X = throwBlend * 0.09f;
+                break;
             case LobbyLineupEmote.Salute:
             case LobbyLineupEmote.SquadRally:
                 offset.Y = -0.025f;

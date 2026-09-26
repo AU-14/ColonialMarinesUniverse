@@ -5,14 +5,16 @@
   description: Also referred to as the Kramer or KAR, the Kramer Light Support Weapon is an automatic squad support variant of the standard Kramer assault rifle. Manufactured by Kramer Metallarbeiten GmbH, the KAR sees widespread use across United Americas.
   components:
     - type: Sprite
-      sprite: CMU14/Weapons/Guns/LACN/kramerLMG.rsi
+      sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramermg/kramericon.rsi
       layers:
         - state: base
           map: ["enum.GunVisualLayers.Base"]
         - state: mag-0
           map: ["enum.GunVisualLayers.Mag"]
+    - type: Item
+      sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramermg/kramer32x32.rsi
     - type: Clothing
-      sprite: CMU14/Weapons/Guns/LACN/kramerLMG.rsi
+      sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramermg/kramer32x32.rsi
     - type: Gun
       selectedMode: FullAuto
       availableModes:
@@ -24,7 +26,7 @@
         - FullAuto
       recoilUnwielded: 5
       scatterWielded: 5
-      baseFireRate: 4 
+      baseFireRate: 6
       burstScatterMult: 2
       modifiers:
         Burst:
@@ -58,11 +60,15 @@
     - type: AttachableHolder
       slots:
         rmc-aslot-rail:
-          startingAttachable: AU14AttachmentTwoPointSling
           whitelist:
             tags:
               - RMCAttachmentRailFlashlight
               - RMCAttachmentMagneticHarness
+        rmc-aslot-stock:
+          startingAttachable: CMULACNAttachmentKramerStock
+          whitelist:
+            tags:
+              - CMULACNAttachmentKramerStock
         rmc-aslot-underbarrel:
           whitelist:
             tags:
@@ -71,6 +77,12 @@
               - RMCAttachmentVerticalGrip
               - RMCAttachmentFlashlightGrip
               - RMCAttachmentBurstFireAssembly
+    - type: AttachableHolderVisuals
+      offsets:
+        rmc-aslot-rail: -0.2, 0.12
+        rmc-aslot-barrel: 0.82, 0.031
+        rmc-aslot-stock: -0.59, 0
+        rmc-aslot-underbarrel: 0.44, -0.31
     - type: GunRequiresWield
     - type: Corrodible
       isCorrodible: false
@@ -147,6 +159,72 @@
           map: ["enum.GunVisualLayers.Mag"]
     - type: RefillableByBulletBox
       bulletType: RMCBoxBulletsRifleAP
+
+- type: entity
+  parent: AU14WeaponRifleKramerLSW
+  id: CMUWeaponRifleKramerLSWShort
+  name: Kramer Mobile Support Weapon
+  description: A short-barreled variant of the Kramer Light Support Weapon. Lighter and quicker to bring to bear, at the cost of some accuracy. Takes Kramer LSW box magazines.
+  components:
+    - type: Sprite
+      sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramermgshort/kramericon.rsi
+      layers:
+        - state: base
+          map: ["enum.GunVisualLayers.Base"]
+        - state: mag-0
+          map: ["enum.GunVisualLayers.Mag"]
+    - type: Item
+      sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramermgshort/kramer32x32.rsi
+    - type: Clothing
+      sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/kramermgshort/kramer32x32.rsi
+    - type: RMCSelectiveFire
+      baseFireModes:
+        - SemiAuto
+        - FullAuto
+      recoilUnwielded: 5
+      scatterWielded: 6
+      scatterUnwielded: 20
+      baseFireRate: 5
+      burstScatterMult: 2
+      modifiers:
+        FullAuto:
+          fireDelay: 0
+          maxScatterModifier: 14
+          useBurstScatterMult: true
+          unwieldedScatterMultiplier: 2
+          shotsToMaxScatter: 30
+    - type: RMCWeaponAccuracy
+      accuracyMultiplier: 1
+      accuracyMultiplierUnwielded: 0.5
+    - type: WieldDelay
+      baseDelay: 0.5
+    - type: AttachableHolder
+      slots:
+        rmc-aslot-rail:
+          whitelist:
+            tags:
+              - RMCAttachmentRailFlashlight
+              - RMCAttachmentMagneticHarness
+        rmc-aslot-stock:
+          startingAttachable: CMULACNAttachmentKarbineStock
+          whitelist:
+            tags:
+              - CMULACNAttachmentKarbineStock
+        rmc-aslot-underbarrel:
+          whitelist:
+            tags:
+              - RMCAttachmentAngledGrip
+              - RMCAttachmentBipod
+              - RMCAttachmentVerticalGrip
+              - RMCAttachmentFlashlightGrip
+              - RMCAttachmentBurstFireAssembly
+    - type: Tag
+      tags:
+        - AU14WeaponRifleKramerLSW
+        - CMUWeaponRifleKramerLSWShort
+
+- type: Tag
+  id: CMUWeaponRifleKramerLSWShort
 
 - type: Tag
   id: AU14WeaponRifleKramerLSW

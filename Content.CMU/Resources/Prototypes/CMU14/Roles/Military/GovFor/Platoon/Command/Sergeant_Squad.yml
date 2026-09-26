@@ -62,6 +62,12 @@
       prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantCMBCIU
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORRadioTelephoneOperator
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -207,7 +213,13 @@
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantUPP
   roundForce: UPP
-  requirements: []
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORRadioTelephoneOperator
+    time: 18000 # 5 hours
   spawnMenuRoleName: Squad Leader (UPP)
   overwatchRoleName: Squad Leader
   ranks:
@@ -217,7 +229,13 @@
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantWYPMC
   roundForce: WYPMC
-  requirements: []
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORRadioTelephoneOperator
+    time: 18000 # 5 hours
   name: PMC Squad Leader
   ranks:
     AU14RankWeYuEnforcerSenior:

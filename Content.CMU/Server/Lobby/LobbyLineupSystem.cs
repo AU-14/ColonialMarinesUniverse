@@ -94,7 +94,10 @@ public sealed partial class LobbyLineupSystem : EntitySystem
         var participants = rally
             ? lineup.Where(entry => entry.SectionId == sender.SectionId).Select(entry => entry.UserId).ToList()
             : new List<NetUserId> { session.UserId };
-        RaiseNetworkEvent(new LobbyLineupEmoteEvent(session.UserId, emote, participants));
+        var seed = _random.Next();
+        var targets = LobbyLineupInteractions.SelectTargets(emote, participants,
+            lineup.Select(entry => entry.UserId).ToArray(), seed);
+        RaiseNetworkEvent(new LobbyLineupEmoteEvent(session.UserId, emote, participants, targets, seed));
         return true;
     }
 }

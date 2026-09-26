@@ -52,7 +52,7 @@ public sealed partial class FighterSystem
         }
         else StopGroundEngine(aircraft);
 
-        var airborne = a.GroundState is FighterGroundState.Airborne or FighterGroundState.Returning;
+        var airborne = FighterFlight.InAirspace(a);
         // Holding still has an engine inside the cockpit, but no jet over the battlefield.
         if (a.Hull is { } cabin) _ambient.SetAmbience(cabin, airborne);
         if (!airborne || !a.Flying || !a.Battlefield.Enlarged(40).Contains(a.Position) || TerminatingOrDeleted(a.TerrainMap))
@@ -75,6 +75,7 @@ public sealed partial class FighterSystem
         _transform.SetWorldRotation(uid, new Angle(-a.Heading));
         var flyby = Comp<FighterFlybyComponent>(uid);
         flyby.Height = a.Height;
+        flyby.Crashing = a.GroundState == FighterGroundState.Crashing;
         Dirty(uid, flyby);
         var altitude = Math.Clamp((a.Height - FighterFlight.MinimumHeight) /
             (FighterFlight.MaximumHeight - FighterFlight.MinimumHeight), 0, 1);

@@ -306,6 +306,9 @@ public sealed partial class HumanoidProfileEditor
 
     private IEnumerable<BoxContainer> GetGamemodeJobLists()
     {
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        yield return FoFGovernmentJobList;
+        yield return FoFOppositionJobList;
         yield return InsurgencyGovernmentJobList;
         yield return InsurgencyInsurgentJobList;
         yield return InsurgencyCivilianJobList;
@@ -374,6 +377,14 @@ public sealed partial class HumanoidProfileEditor
         JobPrototype job,
         string departmentName)
     {
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        if (department.Faction is "govfor" or "opfor")
+        {
+            var (key, title) = GetMilitaryJobSegment(job);
+            yield return (department.Faction == "govfor" ? FoFGovernmentJobList : FoFOppositionJobList,
+                GamemodeForceOnForce, $"fof-{department.Faction}-{key}", title);
+        }
+
         if (department.Faction == "govfor")
         {
             var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
@@ -481,6 +492,8 @@ public sealed partial class HumanoidProfileEditor
         var id = job.ID;
         var name = job.LocalizedName;
 
+        if (job.RoundRole is "DropshipPilot" or "DropshipCrewChief") // CMU14: flightcrew section
+            return ("flightcrew", Loc.GetString("cmu-humanoid-profile-editor-segment-flightcrew"));
         if (id is "AU14JobGOVFORVehicleCommander")
             return ("flight", Loc.GetString("humanoid-profile-editor-segment-flight"));
         if (ContainsAny(id, name, "MilitaryDoctor"))
@@ -525,10 +538,11 @@ public sealed partial class HumanoidProfileEditor
         {
             "command" => 0,
             "officer" => 1,
-            "flight" => 2,
-            "support" => 3,
-            "leader" => 4,
-            _ => 5,
+            "flightcrew" => 2, // CMU14: flightcrew section
+            "flight" => 3,
+            "support" => 4,
+            "leader" => 5,
+            _ => 6,
         };
     }
 
@@ -715,26 +729,32 @@ public sealed partial class HumanoidProfileEditor
     {
         if (platoon.ChevronOverrides != null)
         {
-            foreach (var (overrideJob, overrideChevrons) in platoon.ChevronOverrides)
-            {
-                if (!JobInheritsFrom(job.ID, overrideJob.Id))
-                    continue;
+            // CMU14: prefer the override for the closest ancestor job, not the first match
+            var best = platoon.ChevronOverrides
+                .Select(pair => (Chevrons: pair.Value, Distance: InheritanceDistance(job.ID, pair.Key.Id)))
+                .Where(pair => pair.Distance != null)
+                .OrderBy(pair => pair.Distance)
+                .FirstOrDefault();
 
-                return overrideChevrons.ToDictionary(pair => pair.Key.Id, pair => pair.Value);
-            }
+            if (best.Chevrons != null)
+                return best.Chevrons.ToDictionary(pair => pair.Key.Id, pair => pair.Value);
         }
 
         return job.Chevrons;
     }
 
-    private bool JobInheritsFrom(string jobId, string ancestorId)
+    // CMU14 method
+    private int? InheritanceDistance(string jobId, string ancestorId)
     {
         if (jobId == ancestorId)
-            return true;
+            return 0;
         if (!_prototypeManager.TryIndex<JobPrototype>(jobId, out var job) || job.Parents == null)
-            return false;
+            return null;
 
-        return job.Parents.Any(parent => JobInheritsFrom(parent, ancestorId));
+        return job.Parents
+            .Select(parent => InheritanceDistance(parent, ancestorId))
+            .Where(distance => distance != null)
+            .Min() + 1;
     }
 
     private (bool Unlocked, string? RequirementsText) EvaluateChevronRequirements(

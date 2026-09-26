@@ -26,6 +26,7 @@ public sealed class MohawkSeatSystem : EntitySystem
         SubscribeLocalEvent<MohawkSeatComponent, StrappedEvent>(OnStrapped);
         SubscribeLocalEvent<MohawkSeatComponent, UnstrappedEvent>(OnUnstrapped);
         SubscribeLocalEvent<MohawkSeatComponent, RMCBuckleVisualsUpdatedEvent>(OnStrapState);
+        SubscribeLocalEvent<BuckleComponent, RMCBuckleVisualsUpdatedEvent>(OnRiderState);
     }
 
     private void OnStartup(Entity<MohawkSeatComponent> ent, ref ComponentStartup args)
@@ -45,6 +46,16 @@ public sealed class MohawkSeatSystem : EntitySystem
 
     private void OnStrapped(Entity<MohawkSeatComponent> ent, ref StrappedEvent args)
         => AddRider(args.Buckle.Owner, ent);
+
+    private void OnRiderState(Entity<BuckleComponent> ent, ref RMCBuckleVisualsUpdatedEvent args)
+    {
+        // Prediction corrections can change the rider without changing the seat's
+        // occupant list. Reconcile both ends so a rejected click leaves no offset.
+        if (ent.Comp.BuckledTo is { } seat && HasComp<MohawkSeatComponent>(seat))
+            AddRider(ent, seat);
+        else
+            RemoveRider(ent);
+    }
 
     private void OnUnstrapped(Entity<MohawkSeatComponent> ent, ref UnstrappedEvent args)
         => RemoveRider(args.Buckle.Owner);

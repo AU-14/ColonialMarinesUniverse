@@ -44,6 +44,9 @@
         state: mp
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement

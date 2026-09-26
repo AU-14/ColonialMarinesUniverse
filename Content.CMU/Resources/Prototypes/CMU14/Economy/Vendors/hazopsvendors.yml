@@ -378,10 +378,6 @@
         amount: 4
       - id: AU14JunglePatrolCap
         amount: 2
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
