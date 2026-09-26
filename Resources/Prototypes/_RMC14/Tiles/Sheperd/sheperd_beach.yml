@@ -38,15 +38,11 @@
         - ItemMask
         density: 1000
         hard: false
-  - type: FootstepModifier
-    footstepSoundCollection:
-      collection: FootstepWater
-      params:
-        volume: 8
   - type: BlockWeeds
   - type: MinimapColor
     color: "#94b0d59c"
   - type: RMCWater
+    depth: 4
     cover:
       tags:
       - Catwalk
@@ -65,6 +61,8 @@
   parent: AUShepFloorWaterEntity
   id: AUEntityShepBeachCornerEdge
   components:
+  - type: RMCWater
+    depth: 2
   - type: Sprite
     state: shallow_corner_edge
 
