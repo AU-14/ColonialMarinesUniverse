@@ -44,4 +44,5 @@
       - id: AU14MaskGasHAZOPSM17Flamer
       - id: RMCBackpackFlamer
       - id: RMCPouchFuelTank
+      - id: RMCAttachmentUnderbarrelExtinguisherSpec
         amount: 2
