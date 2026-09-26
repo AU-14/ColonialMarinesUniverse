@@ -8,12 +8,12 @@
     sprite: CMU14/Clothing/HAZOPS/poweredwarfightingarmor.rsi
   - type: CMArmor
     bio: 35
-    bullet: 10
+    bullet: 15
     explosionArmor: 10
     melee: 18
   - type: ClothingSpeedModifier
-    walkModifier: .75
-    sprintModifier: .75
+    walkModifier: .80
+    sprintModifier: .80
   - type: Clothing
     sprite: CMU14/Clothing/HAZOPS/poweredwarfightingarmor.rsi
     equipSound:
@@ -29,9 +29,9 @@
     sprite: CMU14/Clothing/HAZOPS/cbrnarmor.rsi
   - type: CMArmor
     bio: 35
-    bullet: 10
+    bullet: 15
     explosionArmor: 10
     melee: 18
   - type: ClothingSpeedModifier
-    walkModifier: .75
-    sprintModifier: .75
+    walkModifier: .80
+    sprintModifier: .80
