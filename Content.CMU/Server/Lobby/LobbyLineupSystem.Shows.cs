@@ -59,7 +59,7 @@ public sealed partial class LobbyLineupSystem
         if (lineup.Count == 0)
             return;
         BroadcastShow(show, lineup, true);
-        _automaticShow = show == LobbyPartyShow.Flyby ? LobbyPartyShow.Parade : LobbyPartyShow.Flyby;
+        _automaticShow = LobbyPartySettings.Next(show);
     }
 
     private void BroadcastShow(LobbyPartyShow show, IReadOnlyList<LobbyLineupEntry> lineup, bool automatic)
