@@ -123,7 +123,8 @@ namespace Content.Server.GameTicking
         ///     If the selected profile doesn't match, searches other profiles.
         ///     Returns null if no matching profile is found and the player isn't ignoring allegiance.
         /// </summary>
-        private HumanoidCharacterProfile? ResolveProfileForAllegiance(NetUserId userId,
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        internal HumanoidCharacterProfile? ResolveProfileForAllegiance(NetUserId userId,
             HumanoidCharacterProfile selectedProfile,
             string? jobId)
         {
@@ -692,6 +693,9 @@ namespace Content.Server.GameTicking
             if (jobBans != null)
                 restrictedRoles.UnionWith(jobBans);
 
+            /* CMU14: the joint FoF roll owns fallback choices; direct late joins keep the
+             * selected job and use the capacity check below. Retain the old hooks here
+             * for upstream merge context, but never silently replace that job or side.
             // CMU14: confirm before the FoF balancer sends a joiner to the opposite side.
             if (lateJoin
                 && _fof.TryOpenBalanceConfirm(player, station, jobId))
@@ -704,6 +708,7 @@ namespace Content.Server.GameTicking
                 jobId = fofJob;
                 station = fofStation;
             }
+            */
 
             // Pick best job best on prefs.
             string? presetId = CurrentPreset?.ID ?? Preset?.ID;
@@ -724,6 +729,22 @@ namespace Content.Server.GameTicking
                 _chatManager.DispatchServerMessage(player,
                     Loc.GetString("game-ticker-player-no-jobs-available-when-joining"));
                 return;
+            }
+
+            if (lateJoin && CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                var remaining = EntityManager.System<Content.Server.CMU14.ForceOnForce.ForceOnForceRespawnSystem>().Remaining(player.UserId);
+                if (remaining > TimeSpan.Zero)
+                {
+                    _chatManager.DispatchServerMessage(player,
+                        Loc.GetString("cmu-fof-respawn-wait", ("seconds", (int) Math.Ceiling(remaining.TotalSeconds))));
+                    return;
+                }
+                if (!_stationJobs.CanJoinForceOnForceSide(jobId))
+                {
+                    _chatManager.DispatchServerMessage(player, Loc.GetString("cmu-fof-side-full"));
+                    return;
+                }
             }
 
             // CMU14: DoSpawn can fail when no spawn point exists; skip this player, not the round.

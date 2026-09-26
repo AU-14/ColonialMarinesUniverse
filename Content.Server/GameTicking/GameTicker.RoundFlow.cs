@@ -236,6 +236,7 @@ namespace Content.Server.GameTicking
             }
 
             LoadAdminFaxHubMap();
+            SendStatusToAll();
         }
 
         private static readonly ResPath AdminFaxHubMapPath = new("/Maps/CMU14/Admin/adminfaxhub.yml");

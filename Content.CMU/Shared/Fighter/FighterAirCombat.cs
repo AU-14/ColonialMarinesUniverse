@@ -13,7 +13,14 @@ public sealed partial class FighterAirCombatComponent : Component
     [DataField] public TimeSpan CoverageArmTime = TimeSpan.FromSeconds(8);
     [DataField] public TimeSpan InterceptCooldown = TimeSpan.FromSeconds(15);
     [DataField] public TimeSpan MissileFlightTime = TimeSpan.FromSeconds(5);
-    [DataField] public TimeSpan RecoveryDuration = TimeSpan.FromSeconds(30);
+    [DataField] public TimeSpan RecoveryDuration = TimeSpan.FromMinutes(3);
+    // Damage is cumulative for this airframe, including after completed repairs.
+    [DataField, AutoNetworkedField] public int HitsTaken;
+    [DataField] public int CrashHitLimit;
+    [DataField] public TimeSpan CrashDuration = TimeSpan.FromSeconds(8);
+    [DataField] public Vector2 CrashStart;
+    [DataField] public Vector2 CrashTarget;
+    [DataField] public float CrashHeight;
     [DataField, AutoNetworkedField] public float FlareEvasionChance = .65f;
     [DataField, AutoNetworkedField] public bool Incoming;
     [DataField, AutoNetworkedField] public bool IncomingFromGround;

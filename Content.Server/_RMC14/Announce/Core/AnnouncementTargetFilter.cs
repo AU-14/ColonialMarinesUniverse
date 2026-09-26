@@ -23,6 +23,14 @@ public sealed class AnnouncementTargetFilter
 
         switch (target)
         {
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            case AnnouncementTarget.Govfor:
+            case AnnouncementTarget.Opfor:
+                var faction = target == AnnouncementTarget.Govfor ? "govfor" : "opfor";
+                return Filter.Empty().AddWhereAttachedEntity(entity =>
+                    _entityManager.TryGetComponent<MarineComponent>(entity, out var marine) &&
+                    string.Equals(marine.Faction, faction, StringComparison.OrdinalIgnoreCase));
+
             case AnnouncementTarget.Marines:
                 var marineFilter = new List<ICommonSession>();
                 foreach (var session in allPlayers.Recipients)
