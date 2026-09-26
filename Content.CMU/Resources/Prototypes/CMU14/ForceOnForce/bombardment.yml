@@ -13,7 +13,7 @@
   name: orbital bombardment shockwave
   categories: [ HideSpawnMenu, DoNotMap ]
   components:
-  - type: FighterStrikeVisual
+  - type: ForceOnForceBombardmentVisual
   - type: PointLight
     color: "#FFD8A0"
     radius: 5

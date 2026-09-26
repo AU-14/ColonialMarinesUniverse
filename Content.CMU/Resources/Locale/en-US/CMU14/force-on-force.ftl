@@ -29,4 +29,5 @@ cmu-fof-bombardment-variant-2 = Meteor strike
 cmu-fof-bombardment-variant-3 = Shock and awe
 cmu-fof-bombardment-cooldown = Orbital support is available in {$seconds} seconds.
 cmu-fof-bombardment-no-targets = No opposing units are detected on the ground.
-cmu-fof-bombardment-warning = ORBITAL BOMBARDMENT ALERT. Air operations are commencing. All ground personnel, take cover.
+cmu-fof-bombardment-warning = ORBITAL BOMBARDMENT ALERT. Incoming orbital fire. All ground personnel, take cover.
+cmu-fof-bombardment-popup = ORBITAL BOMBARDMENT ALARM — TAKE COVER!
