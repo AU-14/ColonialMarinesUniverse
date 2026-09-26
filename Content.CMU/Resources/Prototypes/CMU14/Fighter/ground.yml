@@ -173,3 +173,16 @@
     energy: 1
   - type: TimedDespawn
     lifetime: 3
+
+- type: entity
+  parent: CMUFighterAirBurst
+  id: CMUFighterCrashBurst
+  name: aircraft crash fireball
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: PointLight
+    color: "#FF9B42"
+    radius: 8
+    energy: 2
+  - type: TimedDespawn
+    lifetime: 8

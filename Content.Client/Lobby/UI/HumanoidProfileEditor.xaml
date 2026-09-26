@@ -367,6 +367,27 @@
                     </TabContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical" Margin="10">
+                    <!-- CMU14: separate FoF priorities and explicit side/role fallbacks. -->
+                    <Label Text="{Loc 'cmu-fof-balancing'}" />
+                    <BoxContainer Orientation="Horizontal" Margin="0 5">
+                        <Label Text="{Loc 'cmu-fof-preferred-side'}" />
+                        <OptionButton Name="FoFSideButton" />
+                    </BoxContainer>
+                    <BoxContainer Orientation="Horizontal" Margin="0 5">
+                        <Label Text="{Loc 'cmu-fof-fallback-label'}" />
+                        <OptionButton Name="FoFFallbackButton" />
+                    </BoxContainer>
+                    <Label Text="{Loc 'cmu-fof-fallback-explanation'}" />
+                    <TabContainer Name="ForceOnForceTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
+                        <ScrollContainer VerticalExpand="True">
+                            <BoxContainer Name="FoFGovernmentJobList" Orientation="Vertical" />
+                        </ScrollContainer>
+                        <ScrollContainer VerticalExpand="True">
+                            <BoxContainer Name="FoFOppositionJobList" Orientation="Vertical" />
+                        </ScrollContainer>
+                    </TabContainer>
+                </BoxContainer>
+                <BoxContainer Orientation="Vertical" Margin="10">
                     <!-- Traits -->
                     <ScrollContainer VerticalExpand="True">
                         <BoxContainer Name="TraitsList" Orientation="Vertical" />
