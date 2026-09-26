@@ -273,7 +273,7 @@
     proto: RMCSmokeFireSentry
     useMapCoords: true
   - type: TileFireOnTrigger
-    range: 2
+    range: 2.0
     spawn: RMCTileFireHCNapalm
     sound: null
 
@@ -367,5 +367,5 @@
     proto: RMCSmokeFireSentry
     useMapCoords: true
   - type: TileFireOnTrigger
-    range: 2
+    range: 2.0
     spawn: RMCTileFireHCNapalm
