@@ -126,6 +126,13 @@ public sealed class CMUCombatHearingSystem : EntitySystem
             if (comp.Exposure <= 0f)
                 continue;
 
+            if (HasComp<SynthComponent>(uid))
+            {
+                comp.Exposure = 0f;
+                comp.Tier = 0;
+                continue;
+            }
+
             comp.Exposure = MathF.Max(0f, comp.Exposure - comp.DecayPerSecond * elapsed);
             UpdateTier((uid, comp));
 

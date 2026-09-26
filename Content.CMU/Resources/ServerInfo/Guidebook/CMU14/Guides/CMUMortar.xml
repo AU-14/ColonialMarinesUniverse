@@ -1,0 +1,67 @@
+<Document>
+  # Mortar Operations
+
+  The mortar is an [italic]indirect fire[/italic] weapon. It lobs shells over walls and obstacles onto a spot you pick, from a long way back. It works best with a spotter feeding you targets.
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCMortarKit" Caption="M402 mortar"/>
+    <GuideEntityEmbed Entity="AU14MortarKitRMC" Caption="L53A1 light mortar"/>
+  </Box>
+
+  ## What You Need
+  - [bold]Skill[/bold]: [color=#FFFF00]Engineering 1[/color]. The mortar kit comes with two mortar operator pamphlets if your role doesn't have it.
+  - [bold]A wrench[/bold]: to pack the mortar back up once it's deployed.
+  - [bold]A target[/bold]: coordinates from a rangefinder or laser designator, either your own or called in by someone else.
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCRangefinder"/>
+    <GuideEntityEmbed Entity="RMCLaserDesignator"/>
+  </Box>
+
+  The mortar kit case holds the mortar, two pamphlets, two mortar belts, a mortar backpack, three incendiary shells and two flare shells.
+
+  ## Setting Up
+  - Hold the mortar and use it in your hand [color=#FFA500][keybind="ActivateItemInHand"][/color] to deploy it. This takes 4 seconds.
+  - It has to be [bold]outdoors[/bold]. You can't deploy or fire it under a roof.
+  - Use a wrench on it to pack it back up.
+  - Right-click it and pick [bold]Toggle Targeting Mode[/bold] to switch between [bold]coordinate mode[/bold] and [bold]laser mode[/bold].
+
+  ## Shells
+  Load a shell by using it on the deployed mortar. It fires as soon as it's loaded. Shells take about 4.5 seconds to land, and anyone near the impact gets a warning just before.
+
+  <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="RMCMortarShellHE"/></Box>
+  - [bold]M889 HE[/bold]: a big explosion that knocks back and stuns everything nearby. Punches through roofs on multi-level maps.
+
+  <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="AU14MortarShellHEATMP"/></Box>
+  - [bold]M971 HEAT-MP[/bold]: a smaller blast than HE but far more destructive in the middle. Good against vehicles and hard targets, and opens holes between floors.
+
+  <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="RMCMortarShellIncendiary"/></Box>
+  - [bold]M902 HE-INC[/bold]: a small blast that leaves a wide patch of fire. Good for area denial and cutting off retreats.
+
+  <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="RMCMortarShellFlare"/></Box>
+  - [bold]M853 ILLUM-OBS[/bold]: no damage. Drops a flare that lights up the area and a camera you can watch from the mortar's [bold]View[/bold] button for about 3 minutes. Use it to spot targets and walk your shots in.
+
+  ## Range
+  The mortar can hit anything between [color=#FFFF00]8 tiles[/color] and [color=#FFFF00]165 tiles[/color] away. It won't fire outside that range, into the landing zone, or at underground or roofed-over targets it can't reach.
+
+  Since it fires from far back, the mortar crew is an easy target for flankers. Keep someone watching your back.
+
+  ## Coordinate Mode
+  Type the target's X and Y into the mortar and press [color=#00FF00]Set Target[/color]. Aiming takes 3 seconds.
+
+  - +X is east, -X is west.
+  - +Y is north, -Y is south.
+
+  [bold]Accuracy[/bold]: coordinate mode isn't perfect.
+  - When you set a target, the mortar picks a hidden aiming error of up to [bold]1 tile for every 20 tiles of distance[/bold] on each axis. That error stays the same until you press Set Target again.
+  - On top of that, every shot can land [bold]1 tile off[/bold] in either direction.
+
+  [bold]Dialing[/bold]: [color=#00FF00]Dial Offset[/color] shifts your aim up to [bold]10 tiles[/bold] in any direction without resetting the target, which takes 1 second. Because the aiming error stays fixed until you set a new target, you can drop a flare shell, watch where it lands on the camera, then dial your shots onto the target.
+
+  ## Laser Mode
+  Switch the mortar to laser mode, then use a laser designator on the mortar to link it (3 seconds). From then on, whatever that designator lases becomes the mortar's target.
+
+  - Laser mode is [bold]precise[/bold]. There's no aiming error and no random spread.
+  - The mortar takes a second to update each time the laser moves. It beeps when the new target is good and warns you if it isn't.
+  - If the designator stops lasing, the mortar has nothing to fire at.
+</Document>

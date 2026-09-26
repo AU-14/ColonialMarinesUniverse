@@ -67,7 +67,7 @@ public sealed class CMUBurnPanicSystem : EntitySystem
             if (panic.ForceRollAt == null && !panic.Forcing)
                 continue;
 
-            if (!flammable.OnFire || flammable.FireStacks <= 0 || !_mobState.IsAlive(uid))
+            if (!flammable.OnFire || flammable.FireStacks <= 0 || !_mobState.IsAlive(uid) || HasComp<SynthComponent>(uid))
             {
                 Stop(panic);
                 continue;
