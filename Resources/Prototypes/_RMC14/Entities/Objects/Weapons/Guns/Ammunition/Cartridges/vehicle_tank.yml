@@ -274,7 +274,7 @@
     useMapCoords: true
   - type: TileFireOnTrigger
     range: 1.5 
-    spawn: RMCTileFireHCNapalm
+    spawn: RMCTileFireBlue
     sound: null
 
 - type: entity
@@ -368,4 +368,4 @@
     useMapCoords: true
   - type: TileFireOnTrigger
     range: 2
-    spawn: RMCTileFireHCNapalm
+    spawn: RMCTileFireBlue
