@@ -10552,5 +10552,68 @@
   id: 685
   time: '2026-09-26T12:49:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2025
+- author: TheHellFireo
+  changes:
+  - message: Fixed OPFOR specialist and requisitions access, inherited pilot loadout
+      saving, and missing ammunition orders.
+    type: Fix
+  - message: Corrected FoF map rotation, faction landing zones and carrier starts.
+    type: Map
+  - message: Fixed incapacitated aircraft controls, friendly laser tracking and boiler
+      acid damage to the Lexington.
+    type: Fix
+  - message: Added lasting fighter damage, three-minute repairs and emergency crash/ejection
+      sequences; adjusted vehicle durability.
+    type: Tweak
+  - message: Fixed synthetic burns, spreading fires, burning-item extinguishing, pain
+      feedback and several hive lifecycle issues.
+    type: Fix
+  - message: Restored tactical-map refresh and window controls, hid inactive layers,
+      and corrected CAS ceiling and flare handling.
+    type: Fix
+  - message: Synchronized multi-Z sky lighting and kept passengers supported on lowering
+      Mohawk ramps.
+    type: Fix
+  - message: Limited fighter supply to one jet per faction per round.
+    type: Tweak
+  - message: Added fuel to LACN engineering backpacks and allowed AM sniper magazines
+      in LACN magazine rigs.
+    type: Fix
+  - message: Prevented fighter exits into walls and tightened collision around the
+      airframe, tail and wings.
+    type: Fix
+  id: 686
+  time: '2026-09-26T15:49:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2026
+- author: TheHellFireo
+  changes:
+  - message: Added depth-based water effects, splashes and wading sounds.
+    type: Add
+  id: 687
+  time: '2026-09-26T15:49:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2028
+- author: TheHellFireo
+  changes:
+  - message: Added FoF role preferences with explicit side and role fallbacks, leader
+      dropship hijacking and faction command bombardment.
+    type: Add
+  - message: Added faction-targeted ship announcements, hostile dropship passenger
+      warnings and a five-minute FoF respawn delay.
+    type: Add
+  - message: Unrecognized faction uniforms now show a large red X, and hijacking chooses
+      one valid destination at random.
+    type: Tweak
+  - message: Prevented ordinary dropships from landing on opposing carriers or enemy-controlled
+      landing zones.
+    type: Fix
+  - message: Orbital bombardments now use distinct shell, laser, meteor and shockwave
+      effects with sporadic patterns, red ground warnings and no jets.
+    type: Tweak
+  - message: Fighters now crash nose-first with dramatic impact effects, readable
+      scorched cockpits and persistent wreck flames and smoke.
+    type: Tweak
+  id: 688
+  time: '2026-09-26T15:59:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2027
 Name: CMU
 Order: -1
