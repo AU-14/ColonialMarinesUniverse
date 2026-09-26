@@ -42,9 +42,20 @@ public sealed partial class HumanoidProfileEditor
     {
         foreach (var (gamemode, jobId, selector) in _jobPriorities)
         {
-            var priority = Profile?.GetJobPriorityForGamemode(gamemode, jobId) ?? JobPriority.Never;
+            // CMU14: faction gameplay fixes.
+            var priority = gamemode == GamemodeForceOnForce && _prototypeManager.TryIndex<JobPrototype>(jobId, out var job)
+                ? Profile?.GetForceOnForceJobPriority(job, _prototypeManager) ?? JobPriority.Never
+                : Profile?.GetJobPriorityForGamemode(gamemode, jobId) ?? JobPriority.Never;
             selector.Select((int) priority);
         }
+    // CMU14: faction gameplay fixes.
+    }
+
+    private void SetJobPriority(string gamemode, string jobId, JobPriority priority)
+    {
+        Profile = gamemode == GamemodeForceOnForce && _prototypeManager.TryIndex<JobPrototype>(jobId, out var job)
+            ? Profile?.WithForceOnForceJobPriority(job, priority, _prototypeManager)
+            : Profile?.WithGamemodeJobPriority(gamemode, jobId, priority);
     }
 
     public void RefreshLoadouts()
@@ -225,7 +236,8 @@ public sealed partial class HumanoidProfileEditor
         selector.OnSelected += selectedPriority =>
         {
             var selectedJobPriority = (JobPriority) selectedPriority;
-            Profile = Profile?.WithGamemodeJobPriority(gamemode, job.ID, selectedJobPriority);
+            // CMU14: faction gameplay fixes.
+            SetJobPriority(gamemode, job.ID, selectedJobPriority);
 
             foreach (var (otherGamemode, jobId, other) in _jobPriorities)
             {
@@ -242,7 +254,8 @@ public sealed partial class HumanoidProfileEditor
                     continue;
 
                 other.Select((int) JobPriority.Medium);
-                Profile = Profile?.WithGamemodeJobPriority(gamemode, jobId, JobPriority.Medium);
+                // CMU14: faction gameplay fixes.
+                SetJobPriority(gamemode, jobId, JobPriority.Medium);
             }
 
             ReloadPreview();
@@ -306,6 +319,8 @@ public sealed partial class HumanoidProfileEditor
 
     private IEnumerable<BoxContainer> GetGamemodeJobLists()
     {
+        // CMU14: shared FoF role priorities.
+        yield return FoFJobList;
         yield return InsurgencyGovernmentJobList;
         yield return InsurgencyInsurgentJobList;
         yield return InsurgencyCivilianJobList;
@@ -374,6 +389,14 @@ public sealed partial class HumanoidProfileEditor
         JobPrototype job,
         string departmentName)
     {
+        // CMU14: shared FoF role priorities.
+        if (department.Faction == "govfor")
+        {
+            var (key, title) = GetMilitaryJobSegment(job);
+            // CMU14: faction gameplay fixes.
+            yield return (FoFJobList, GamemodeForceOnForce, $"fof-{key}", title);
+        }
+
         if (department.Faction == "govfor")
         {
             var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);

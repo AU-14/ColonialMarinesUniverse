@@ -16,6 +16,9 @@
   - type: ClothingLimit
     slot: All
     id: RMCCassettePlayer
+  # cmu edit start
+  - type: CMUCombatEarProtection
+  # cmu edit end
 
 - type: entity
   abstract: true

@@ -13,10 +13,15 @@ public sealed partial class FighterStrikeOverlay
         {
             if (xform.MapID != args.MapId) continue;
             var origin = _transform.GetWorldPosition(uid);
-            if (!args.WorldAABB.Enlarged(10).Contains(origin)) continue;
+            if (!args.WorldAABB.Enlarged(24).Contains(origin)) continue;
             foreach (var cue in effects.Cues)
             {
                 var age = FighterEffects.Age(effects, cue, now);
+                if (cue.Kind == FighterEffectKind.Crash)
+                {
+                    if (FighterEffects.Active(effects, cue, now)) DrawCrashImpact(origin, age, cue.Direction);
+                    continue;
+                }
                 if (age < 0 || age >= 3) continue;
                 var flares = cue.Kind == FighterEffectKind.Flares;
                 var fade = 1 - age / 3;

@@ -37,14 +37,18 @@ public sealed partial class HumanoidProfileEditor
     private const int InsurgencyTabIndex = 3;
     private const int ColonyFallTabIndex = 4;
     private const int DistressSignalTabIndex = 5;
-    private const int TraitsTabIndex = 6;
-    private const int MarkingsTabIndex = 7;
-    private const int NamedItemsTabIndex = 8;
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    private const int ForceOnForceTabIndex = 6;
+    private const int TraitsTabIndex = 7;
+    private const int MarkingsTabIndex = 8;
+    private const int NamedItemsTabIndex = 9;
 
     private const float HighJobPreviewScrollDelay = 2.75f;
     private const string GamemodeInsurgency = "Insurgency";
     private const string GamemodeColonyFall = "ColonyFall";
     private const string GamemodeDistressSignal = "DistressSignal";
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    private const string GamemodeForceOnForce = "ForceOnForce";
 
     private readonly List<AllegiancePrototype> _allegiances = new();
     private readonly List<OriginPrototype> _origins = new();
@@ -76,6 +80,8 @@ public sealed partial class HumanoidProfileEditor
         TabContainer.SetTabTitle(TraitsTabIndex, Loc.GetString("humanoid-profile-editor-traits-tab"));
         TabContainer.SetTabTitle(MarkingsTabIndex, Loc.GetString("humanoid-profile-editor-markings-tab"));
         SetupGamemodeTabTitles();
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        InitializeForceOnForcePreferences();
         TabContainer.OnTabChanged += _ => ReloadPreview(false);
 
         RefreshAllegiances();
@@ -138,6 +144,9 @@ public sealed partial class HumanoidProfileEditor
         XenoPostfix.OnTextChanged += args => SetXenoPostfix(args.Text);
 
         RefreshThreatPreferences();
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        FoFSideButton.SelectId((int) (Profile?.FoFSide ?? ForceOnForceSide.Either));
+        FoFFallbackButton.SelectId((int) (Profile?.FoFFallback ?? ForceOnForceFallback.StayInLobby));
         InitializeNamedItems();
         CrtLobbyTheme.Apply(this);
     }
@@ -292,6 +301,9 @@ public sealed partial class HumanoidProfileEditor
 
     private void UpdateCmuControls()
     {
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        FoFSideButton.SelectId((int) (Profile?.FoFSide ?? ForceOnForceSide.Either));
+        FoFFallbackButton.SelectId((int) (Profile?.FoFFallback ?? ForceOnForceFallback.StayInLobby));
         MarkPreviewJobsDirty();
         UpdateRegulationHairPickers();
         UpdateAllegianceControls();

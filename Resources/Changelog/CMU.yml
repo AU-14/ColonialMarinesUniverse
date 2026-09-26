@@ -10552,5 +10552,135 @@
   id: 685
   time: '2026-09-26T12:49:12.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2025
+- author: TheHellFireo
+  changes:
+  - message: Fixed OPFOR specialist and requisitions access, inherited pilot loadout
+      saving, and missing ammunition orders.
+    type: Fix
+  - message: Corrected FoF map rotation, faction landing zones and carrier starts.
+    type: Map
+  - message: Fixed incapacitated aircraft controls, friendly laser tracking and boiler
+      acid damage to the Lexington.
+    type: Fix
+  - message: Added lasting fighter damage, three-minute repairs and emergency crash/ejection
+      sequences; adjusted vehicle durability.
+    type: Tweak
+  - message: Fixed synthetic burns, spreading fires, burning-item extinguishing, pain
+      feedback and several hive lifecycle issues.
+    type: Fix
+  - message: Restored tactical-map refresh and window controls, hid inactive layers,
+      and corrected CAS ceiling and flare handling.
+    type: Fix
+  - message: Synchronized multi-Z sky lighting and kept passengers supported on lowering
+      Mohawk ramps.
+    type: Fix
+  - message: Limited fighter supply to one jet per faction per round.
+    type: Tweak
+  - message: Added fuel to LACN engineering backpacks and allowed AM sniper magazines
+      in LACN magazine rigs.
+    type: Fix
+  - message: Prevented fighter exits into walls and tightened collision around the
+      airframe, tail and wings.
+    type: Fix
+  id: 686
+  time: '2026-09-26T15:49:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2026
+- author: TheHellFireo
+  changes:
+  - message: Added depth-based water effects, splashes and wading sounds.
+    type: Add
+  id: 687
+  time: '2026-09-26T15:49:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2028
+- author: TheHellFireo
+  changes:
+  - message: Added FoF role preferences with explicit side and role fallbacks, leader
+      dropship hijacking and faction command bombardment.
+    type: Add
+  - message: Added faction-targeted ship announcements, hostile dropship passenger
+      warnings and a five-minute FoF respawn delay.
+    type: Add
+  - message: Unrecognized faction uniforms now show a large red X, and hijacking chooses
+      one valid destination at random.
+    type: Tweak
+  - message: Prevented ordinary dropships from landing on opposing carriers or enemy-controlled
+      landing zones.
+    type: Fix
+  - message: Orbital bombardments now use distinct shell, laser, meteor and shockwave
+      effects with sporadic patterns, red ground warnings and no jets.
+    type: Tweak
+  - message: Fighters now crash nose-first with dramatic impact effects, readable
+      scorched cockpits and persistent wreck flames and smoke.
+    type: Tweak
+  id: 688
+  time: '2026-09-26T15:59:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2027
+- author: troytroy400
+  changes:
+  - message: Combat deafness. Gunfire and explosions near you slowly damage your hearing.
+      You get warnings as it builds up and at higher levels explosions and gunfire
+      can knock your hearing out for a while, with deaf spells coming on by themselves
+      at the worst stage. It slowly recovers over time.
+    type: Add
+  - message: Headsets (worn or clipped onto a helmet), earpieces, earmuffs, headphones
+      (including cassette players) and certain helmets protect your hearing. Examining
+      an item tells you if it protects your hearing.
+    type: Add
+  - message: Electronic hearing protection is now available in all platoon equipment
+      vendors and orderable by colony requisitions if for some reason you are not
+      wearing your headset.
+    type: Add
+  - message: Added the Hyperacusis trait. Gunfire and explosions damage your hearing
+      twice as fast.
+    type: Add
+  - message: Added PTSD. Humans now scream horribly when set on fire. If you don't
+      attempt to put out flames within 10 seconds, your character will automatically
+      start rolling on the floor to try and save themselves.
+    type: Add
+  - message: The MK481 heavy shotgun can now be stored in suit storage.
+    type: Tweak
+  - message: The upstream guidebook is no longer visible and a CMU guidebook section
+      has been added in its place.
+    type: Tweak
+  - message: Added upstream mortar guide to the CMU guidebook with edits to be accurate
+      to our server content.
+    type: Add
+  - message: GOVFOR/OPFOR support synths no longer have access to non-faction or civilian
+      clothing.
+    type: Remove
+  id: 689
+  time: '2026-09-26T18:22:01.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2029
+- author: TheHellFireo
+  changes:
+  - message: Choose whether to join your faction's hijack or return to defend your
+      ship.
+    type: Add
+  - message: Enemy identification now uses your faction's uniforms, ignores friendlies
+      and bodies, and has an optional question-mark display in settings.
+    type: Fix
+  - message: Opposing factions now have separate dropship part fabricator budgets.
+    type: Fix
+  - message: Respawns stay on your original faction for the rest of the round.
+    type: Fix
+  - message: FoF uses one role preference list for both factions.
+    type: Tweak
+  - message: Missiles hit more often; early flares and higher aircraft speed improve
+      evasion.
+    type: Tweak
+  - message: Midway launch audio continues until takeoff, and human hijack alerts
+      display readable text.
+    type: Fix
+  - message: Prevented a client water-surface crash on entities without collision
+      fixtures.
+    type: Fix
+  - message: Prevented combat-hearing checks from crashing on grappling launchers
+      and plain headgear.
+    type: Fix
+  - message: Removed the Static map button from the reconstruction window.
+    type: Remove
+  id: 690
+  time: '2026-09-26T19:16:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2030
 Name: CMU
 Order: -1

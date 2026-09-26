@@ -29,3 +29,11 @@
   category: Disabilities
   components:
   - type: CMUProstheticRightLeg
+
+- type: trait
+  id: CMUHyperacusis
+  name: trait-cmu-hyperacusis-name
+  description: trait-cmu-hyperacusis-desc
+  category: Disabilities
+  components:
+  - type: CMUHyperacusis

@@ -115,7 +115,9 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
 
         landingZones.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
 
-        var state = new MarineCommunicationsComputerBuiState(planet, operation, landingZones);
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        var forceOnForce = EntityManager.System<Content.Server.GameTicking.GameTicker>().CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true;
+        var state = new MarineCommunicationsComputerBuiState(planet, operation, landingZones, forceOnForce);
         _ui.SetUiState(computer.Owner, MarineCommunicationsComputerUI.Key, state);
     }
 

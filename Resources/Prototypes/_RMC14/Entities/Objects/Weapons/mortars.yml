@@ -7,7 +7,9 @@
   components:
   - type: GuideHelp
     guides:
-    - RMCGuideRoleMortar
+    # cmu edit start
+    - CMUGuideMortar
+    # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/mortar/classic.rsi
     layers:

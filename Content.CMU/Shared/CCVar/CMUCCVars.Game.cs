@@ -6,6 +6,12 @@ namespace Content.Shared.CCVar;
 
 public sealed partial class CCVars
 {
+    /// <summary>
+    /// Replace marine HUD identifiers with a question mark for other factions without a uniform recognized by the viewer.
+    /// </summary>
+    public static readonly CVarDef<bool> ForceOnForceUnidentifiedMarkerEnabled =
+        CVarDef.Create("cmu.fof.unidentified_marker_enabled", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> EnableEvacSfx =
         CVarDef.Create("cmu.game.enable_evac_sfx", false, CVar.SERVERONLY | CVar.ARCHIVE);
 

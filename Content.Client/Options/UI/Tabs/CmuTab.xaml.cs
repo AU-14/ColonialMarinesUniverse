@@ -32,6 +32,8 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ChatEnableRunechatBubbles, RunechatSpeechBubblesCheckBox);
         Control.AddOptionPercentSlider(CCVars.ChatRunechatBubbleScale, RunechatSpeechBubbleScaleSlider, 0.5f, 2f);
         Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
+        // CMU14: faction gameplay fixes.
+        Control.AddOptionCheckBox(CCVars.ForceOnForceUnidentifiedMarkerEnabled, FoFUnidentifiedMarkerCheckBox);
         // CMU14: tactical map preferences.
         Control.AddOptionCheckBox(CCVars.CMUTacMapClassic, ClassicTacMapCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUTacMapCenterOnOpen, CenterTacMapCheckBox);

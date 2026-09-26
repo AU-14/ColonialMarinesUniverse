@@ -120,7 +120,7 @@ public sealed class MohawkFlightFeaturesTest
             Assert.That(ui.IsUiOpen(nav.Owner, DropshipHijackerUiKey.Key, queen), Is.True,
                 "The cabin is one Z level above the RMCPlanet map; it must still permit a planetside queen hijack.");
             var state = (DropshipHijackerBuiState) entities.GetComponent<UserInterfaceComponent>(nav.Owner).States[DropshipHijackerUiKey.Key];
-            Assert.That(state.Destinations.Select(d => d.Id), Does.Contain(entities.GetNetEntity(marker)));
+            Assert.That(state.CanHijack, Is.True, "The single hijack action must enable when the server has a valid carrier destination.");
             Assert.That(state.CanDeclineHijack, Is.True);
             entities.DeleteEntity(ship);
             entities.DeleteEntity(carrier);

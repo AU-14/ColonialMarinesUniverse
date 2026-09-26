@@ -141,9 +141,10 @@ public sealed partial class FighterSystem
             MoveFighterMounts((hull, ground), aircraft, true);
             _groundPhysics.SetBodyType(hull, BodyType.Static);
         }
-        var burst = Spawn("CMUFighterAirBurst", destination);
+        var burst = Spawn("CMUFighterCrashBurst", destination);
         var effects = Comp<FighterEffectsComponent>(burst);
-        FighterEffects.Add(effects, FighterEffectKind.Hit, _timing.CurTime, duration: 3);
+        FighterEffects.Add(effects, FighterEffectKind.Crash, _timing.CurTime,
+            direction: FighterFlight.Forward(a.Heading), duration: FighterEffects.HistorySeconds);
         Dirty(burst, effects);
         _fighterAudio.PlayGround(new SoundPathSpecifier("/Audio/CMU14/Fighter/airburst.ogg"), destination, 75, 0);
         ClearFlyby(a);

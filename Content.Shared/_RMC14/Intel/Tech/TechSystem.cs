@@ -81,7 +81,9 @@ public sealed partial class TechSystem : EntitySystem
 
     private void OnTechDropshipBudget(TechDropshipBudgetEvent ev)
     {
-        _dropshipFabricator.ChangeBudget(ev.Amount);
+        // CMU14: faction gameplay fixes.
+        var faction = string.IsNullOrEmpty(ev.Team) || ev.Team == Team.None ? null : ev.Team;
+        _dropshipFabricator.ChangeBudget(ev.Amount, faction);
     }
 
     private void OnTechLogisticsDelivery(TechLogisticsDeliveryEvent ev)

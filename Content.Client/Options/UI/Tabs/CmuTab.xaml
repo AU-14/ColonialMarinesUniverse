@@ -7,7 +7,12 @@
                 <Button Name="OpenUiSetupButton" Text="{Loc 'cmu-ui-setup-open'}" Margin="0 0 0 8" />
                 <ui:CmuAppearanceOptions Name="Appearance" />
 
-                <!-- CMU14: tactical map preferences -->
+                <!-- CMU14: faction gameplay options. -->
+                <Label Text="{Loc 'cmu-ui-options-identification'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
+                <CheckBox Name="FoFUnidentifiedMarkerCheckBox"
+                          Text="{Loc 'cmu-ui-options-fof-unidentified-marker'}"
+                          ToolTip="{Loc 'cmu-ui-options-fof-unidentified-marker-tooltip'}" />
+
                 <Label Text="{Loc cmu-options-tacmap}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="ClassicTacMapCheckBox" Text="{Loc cmu-options-tacmap-classic}"
                           ToolTip="{Loc cmu-options-tacmap-classic-tooltip}" />

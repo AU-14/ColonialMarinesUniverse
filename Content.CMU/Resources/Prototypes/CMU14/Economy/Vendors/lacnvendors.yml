@@ -242,6 +242,10 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+    - name: Hearing Protection
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+        amount: 60
     - name: Miscellaneous
       entries:
       #- id: CMMap

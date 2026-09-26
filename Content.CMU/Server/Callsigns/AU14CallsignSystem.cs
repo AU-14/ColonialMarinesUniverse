@@ -1,11 +1,14 @@
+using Content.Server.CMU14.Hearing;
 using Content.Server.CMU14.Radio;
 using Content.Server._RMC14.Marines.Roles.Ranks;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.CMU14.CCVar;
 using Content.Shared.CMU14.Callsigns;
+using Content.Shared.CMU14.Hearing;
 using Content.Shared.CMU14.Radio;
 using Content.Shared.CMU14.Threats.Mobs.CLF;
+using Content.Shared._RMC14.Deafness;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Tracker.SquadLeader;
@@ -31,6 +34,7 @@ public sealed partial class AU14CallsignSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private AU14CommsToggleSystem _comms = default!;
+    [Dependency] private CMUCombatHearingSystem _combatHearing = default!;
 
     private static readonly Dictionary<string, string> DefaultCommandWords = new()
     {
@@ -149,6 +153,9 @@ public sealed partial class AU14CallsignSystem : EntitySystem
 
     private void OnHeadsetExamined(Entity<HeadsetComponent> ent, ref ExaminedEvent args)
     {
+        if (!HasComp<RMCEarProtectionComponent>(ent) && !HasComp<CMUCombatEarProtectionComponent>(ent))
+            _combatHearing.PushProtectionExamine(args);
+
         if (!_commsEnabled ||
             !TryComp(args.Examiner, out AU14CallsignComponent? callsign) ||
             string.IsNullOrEmpty(callsign.Callsign))

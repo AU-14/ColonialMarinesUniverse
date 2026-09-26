@@ -40,6 +40,7 @@ public sealed partial class FighterSystem
             !TryComp(aircraft, out FighterAirCombatComponent? combat) || !combat.Incoming ||
             combat.FlaresUsed || _timing.CurTime >= combat.IncomingAt) return false;
         combat.FlaresUsed = true;
+        combat.DeployedFlareEvasionChance = FighterAirCombat.FlareEvasion(aircraft.Comp, combat, _timing.CurTime);
         PlayEffect(aircraft, FighterEffectKind.Flares, duration: 4);
         Dirty(aircraft.Owner, combat);
         return true;
@@ -63,7 +64,7 @@ public sealed partial class FighterSystem
             {
                 combat.Incoming = false;
                 combat.IncomingAudio = _audio.Stop(combat.IncomingAudio);
-                var evaded = combat.FlaresUsed && _combatRandom.Prob(Math.Clamp(combat.FlareEvasionChance, 0, 1));
+                var evaded = combat.FlaresUsed && _combatRandom.Prob(combat.DeployedFlareEvasionChance);
                 combat.Result = evaded ? FighterAirResult.Evaded : FighterAirResult.Hit;
                 combat.ResultUntil = now + TimeSpan.FromSeconds(4);
                 PlayEffect(uid, evaded ? FighterEffectKind.Evaded : FighterEffectKind.Hit,
@@ -143,6 +144,7 @@ public sealed partial class FighterSystem
         combat.IncomingFromGround = fromGround;
         combat.IncomingPlasma = plasma;
         combat.FlaresUsed = false;
+        combat.DeployedFlareEvasionChance = 0;
         combat.IncomingAt = _timing.CurTime + flightTime;
         combat.IncomingStartedAt = _timing.CurTime;
         var incoming = source - target.Comp1.Position;

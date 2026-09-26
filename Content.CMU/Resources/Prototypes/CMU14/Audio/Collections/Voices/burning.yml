@@ -1,0 +1,32 @@
+- type: emote
+  id: CMUBurning
+  name: cmu-chat-emote-name-burning
+  category: Vocal
+  available: false
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    tags:
+    - WorkingJoe
+  chatMessages: ["cmu-chat-emote-msg-burning"]
+
+- type: soundCollection
+  id: CMUMaleBurning
+  files:
+  - /Audio/CMU14/Voice/Burning/Male/m_burn1.ogg
+  - /Audio/CMU14/Voice/Burning/Male/m_burn2.ogg
+  - /Audio/CMU14/Voice/Burning/Male/m_burn3.ogg
+  - /Audio/CMU14/Voice/Burning/Male/m_burn4.ogg
+  - /Audio/CMU14/Voice/Burning/Male/m_burn5.ogg
+  - /Audio/CMU14/Voice/Burning/Male/m_burn6.ogg
+
+- type: soundCollection
+  id: CMUFemaleBurning
+  files:
+  - /Audio/CMU14/Voice/Burning/Female/f_burn1.ogg
+  - /Audio/CMU14/Voice/Burning/Female/f_burn2.ogg
+  - /Audio/CMU14/Voice/Burning/Female/f_burn3.ogg
+  - /Audio/CMU14/Voice/Burning/Female/f_burn4.ogg
+  - /Audio/CMU14/Voice/Burning/Female/f_burn5.ogg
+  - /Audio/CMU14/Voice/Burning/Female/f_burn6.ogg
