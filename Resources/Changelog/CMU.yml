@@ -10615,5 +10615,41 @@
   id: 688
   time: '2026-09-26T15:59:25.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2027
+- author: troytroy400
+  changes:
+  - message: Combat deafness. Gunfire and explosions near you slowly damage your hearing.
+      You get warnings as it builds up and at higher levels explosions and gunfire
+      can knock your hearing out for a while, with deaf spells coming on by themselves
+      at the worst stage. It slowly recovers over time.
+    type: Add
+  - message: Headsets (worn or clipped onto a helmet), earpieces, earmuffs, headphones
+      (including cassette players) and certain helmets protect your hearing. Examining
+      an item tells you if it protects your hearing.
+    type: Add
+  - message: Electronic hearing protection is now available in all platoon equipment
+      vendors and orderable by colony requisitions if for some reason you are not
+      wearing your headset.
+    type: Add
+  - message: Added the Hyperacusis trait. Gunfire and explosions damage your hearing
+      twice as fast.
+    type: Add
+  - message: Added PTSD. Humans now scream horribly when set on fire. If you don't
+      attempt to put out flames within 10 seconds, your character will automatically
+      start rolling on the floor to try and save themselves.
+    type: Add
+  - message: The MK481 heavy shotgun can now be stored in suit storage.
+    type: Tweak
+  - message: The upstream guidebook is no longer visible and a CMU guidebook section
+      has been added in its place.
+    type: Tweak
+  - message: Added upstream mortar guide to the CMU guidebook with edits to be accurate
+      to our server content.
+    type: Add
+  - message: GOVFOR/OPFOR support synths no longer have access to non-faction or civilian
+      clothing.
+    type: Remove
+  id: 689
+  time: '2026-09-26T18:22:01.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2029
 Name: CMU
 Order: -1

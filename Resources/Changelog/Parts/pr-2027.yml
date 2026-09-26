@@ -1,0 +1,23 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Added FoF role preferences with explicit side and role fallbacks, leader
+    dropship hijacking and faction command bombardment.
+  type: Add
+- message: Added faction-targeted ship announcements, hostile dropship passenger warnings
+    and a five-minute FoF respawn delay.
+  type: Add
+- message: Unrecognized faction uniforms now show a large red X, and hijacking chooses
+    one valid destination at random.
+  type: Tweak
+- message: Prevented ordinary dropships from landing on opposing carriers or enemy-controlled
+    landing zones.
+  type: Fix
+- message: Orbital bombardments now use distinct shell, laser, meteor and shockwave
+    effects with sporadic patterns, red ground warnings and no jets.
+  type: Tweak
+- message: Fighters now crash nose-first with dramatic impact effects, readable scorched
+    cockpits and persistent wreck flames and smoke.
+  type: Tweak
+time: '2026-09-26T15:59:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2027

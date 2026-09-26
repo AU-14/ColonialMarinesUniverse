@@ -1,0 +1,6 @@
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideHearingLoss
+  name: cmu-guide-entry-hearing-loss
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Hazards/CMUHearingLoss.xml"

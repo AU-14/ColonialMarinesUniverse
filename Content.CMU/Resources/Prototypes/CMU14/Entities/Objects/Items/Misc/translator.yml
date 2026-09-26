@@ -12,6 +12,7 @@
   - type: Clothing
     slots:
     - ears             # or whichever slot makes sense
+  - type: CMUCombatEarProtection
   - type: TranslatorDevice
     spokenLanguages:
       - Yautja

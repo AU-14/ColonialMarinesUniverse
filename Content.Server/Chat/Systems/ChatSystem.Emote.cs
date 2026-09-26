@@ -47,7 +47,9 @@ public sealed partial class ChatSystem
         out string? speechBubbleMessage,
         out string? speechStyleClass)
     {
-        if (emote.ID == ScreamEmoteId)
+        // cmu edit start
+        if (emote.ID == ScreamEmoteId || emote.ID == "CMUBurning")
+        // cmu edit end
         {
             speechBubbleMessage = _random.Pick(RunechatScreamMessages);
             speechStyleClass = CMURunechatStyles.Scream;

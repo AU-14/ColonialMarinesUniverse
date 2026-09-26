@@ -188,6 +188,25 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         {
             guides = _prototypeManager.EnumerateCM<GuideEntryPrototype>()
                 .ToDictionary(x => new ProtoId<GuideEntryPrototype>(x.ID), x => (GuideEntry)x);
+
+            // cmu edit start
+            // The full guidebook only shows the CMU section, RMC's own guides stay hidden.
+            if (guides.ContainsKey(CMUGuidebookRoot))
+            {
+                if (rootEntries == null)
+                {
+                    rootEntries = new List<ProtoId<GuideEntryPrototype>>();
+                    foreach (var root in CMUGuidebookRoots)
+                    {
+                        if (guides.ContainsKey(root))
+                            rootEntries.Add(root);
+                    }
+                }
+
+                if (selected == null && (_guideWindow.Selected is not { } last || !IsUnderCMURoot(last, guides)))
+                    selected = CMUGuidebookRoot;
+            }
+            // cmu edit end
         }
         else if (includeChildren)
         {
@@ -242,6 +261,43 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
 
         OpenGuidebook(guides, rootEntries, forceRoot, includeChildren, selected);
     }
+
+    // cmu edit start
+    private static readonly ProtoId<GuideEntryPrototype> CMUGuidebookRoot = "CMUGuidebook";
+
+    // Top-level entries shown when the guidebook is opened normally.
+    private static readonly ProtoId<GuideEntryPrototype>[] CMUGuidebookRoots =
+    {
+        "RMCOverview",
+        "AU14SOP",
+        "AU14UCMJ",
+        "AU14CCLaw",
+        CMUGuidebookRoot,
+    };
+
+    private static bool IsUnderCMURoot(
+        ProtoId<GuideEntryPrototype> id,
+        Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry> guides)
+    {
+        var stack = new Stack<ProtoId<GuideEntryPrototype>>();
+        var seen = new HashSet<ProtoId<GuideEntryPrototype>>();
+        foreach (var root in CMUGuidebookRoots)
+            stack.Push(root);
+        while (stack.TryPop(out var current))
+        {
+            if (current == id)
+                return true;
+
+            if (!seen.Add(current) || !guides.TryGetValue(current, out var entry))
+                continue;
+
+            foreach (var child in entry.Children)
+                stack.Push(child);
+        }
+
+        return false;
+    }
+    // cmu edit end
 
     public void CloseGuidebook()
     {
