@@ -392,3 +392,16 @@
   components:
   - type: SkillPamphlet
     language: Primitive
+
+# gives k9 handler training
+- type: entity
+  parent: CMPamphlet
+  id: CMPamphletK9Handler
+  name: K9 handler instructional pamphlet
+  description: A pamphlet used to quickly impart vital knowledge on handling synthetic K9 units.
+  components:
+  - type: Sprite
+    state: pamphlet_k9_handler
+  - type: SkillPamphlet
+    addComps:
+    - type: K9Handler

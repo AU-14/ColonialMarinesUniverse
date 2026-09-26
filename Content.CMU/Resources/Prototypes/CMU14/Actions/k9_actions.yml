@@ -1,0 +1,116 @@
+- type: entity
+  id: RMCActionK9ArmGrab
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_hold
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:K9ArmGrabActionEvent
+
+- type: entity
+  id: RMCActionK9TrackMaster
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
+      state: focus
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:K9TrackMasterActionEvent
+
+- type: entity
+  id: RMCActionK9RequestMaster
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Clothing/Uniforms/Synthetic/k9_tags.rsi
+      state: k9_dogtags
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 2
+  - type: EntityTargetAction
+    event: !type:K9RequestMasterActionEvent
+
+- type: entity
+  id: RMCActionK9Tame
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Misc/pamphlets.rsi
+      state: pamphlet_k9_handler
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 2.5
+  - type: EntityTargetAction
+    event: !type:K9TameActionEvent
+
+- type: entity
+  id: RMCActionK9SicEm
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: spotter_target
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 15
+  - type: EntityTargetAction
+    event: !type:K9SicEmActionEvent
+
+- type: entity
+  id: RMCActionK9Evacuate
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
+      state: move
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 15
+  - type: EntityTargetAction
+    event: !type:K9EvacuateActionEvent
+
+- type: entity
+  id: RMCActionK9GoodBoy
+  parent: ActionMarineBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/map_blips.rsi
+      state: synth_k9
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 2
+  - type: EntityTargetAction
+    event: !type:K9GoodBoyActionEvent
