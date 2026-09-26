@@ -83362,6 +83362,8 @@ entities:
   entities:
   - uid: 894
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: 'LZ2: Robotics Landing Zone'
     - type: Transform
@@ -83369,6 +83371,8 @@ entities:
       parent: 1
   - uid: 895
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: 'LZ1: Nexus Landing Zone'
     - type: Transform
@@ -83376,6 +83380,8 @@ entities:
       parent: 1
   - uid: 896
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: LACN Armory LZ "Rogain"
     - type: Transform
@@ -83384,6 +83390,8 @@ entities:
       parent: 1
   - uid: 897
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -139.5,-0.5

@@ -1548,15 +1548,22 @@ namespace Content.Shared.Preferences
 
             foreach (var (roleName, loadouts) in _loadouts)
             {
-                if (!prototypeManager.HasIndex<RoleLoadoutPrototype>(roleName))
+                // CMU14: concrete pilot jobs can inherit their loadout from a parent job.
+                var resolvedRole = roleName;
+                if (!prototypeManager.HasIndex<RoleLoadoutPrototype>(resolvedRole))
                 {
-                    toRemove.Add(roleName);
-                    continue;
+                    var jobId = roleName.StartsWith("Job") ? roleName.Substring(3) : roleName;
+                    var (_, inherited) = LoadoutSystem.GetJobLoadoutInfo(jobId, prototypeManager);
+                    if (inherited == null)
+                    {
+                        toRemove.Add(roleName);
+                        continue;
+                    }
+                    resolvedRole = inherited.ID;
                 }
 
-                // This happens after we verify the prototype exists
-                // These values are set equal in the database and we need to make sure they're equal here too!
-                loadouts.Role = roleName;
+                // CMU14: preserve the concrete selection key while validating the inherited loadout.
+                loadouts.Role = resolvedRole;
                 loadouts.EnsureValid(this, session, collection);
             }
 

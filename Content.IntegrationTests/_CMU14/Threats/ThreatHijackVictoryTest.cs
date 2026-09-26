@@ -1,11 +1,14 @@
 using Content.Server.CMU14.Threats.Rules;
+using Content.Server.CMU14.Dropship.Integrity;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.CMU14.Threats.Rules;
+using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Shared.GameTicking;
 using Content.Shared.Mobs;
+using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.CMU14.Threats;
 
@@ -47,9 +50,14 @@ public sealed class ThreatHijackVictoryTest
             survivors.Add(queen);
             Assert.That(entities.GetComponent<HiveComponent>(hive).CurrentQueen, Is.EqualTo(queen));
 
-            var wreck = entities.SpawnEntity(null, map.GridCoords);
-            var dropship = entities.AddComponent<DropshipComponent>(wreck);
-            entities.System<SharedDropshipSystem>().SetDropshipCrashed((wreck, dropship), true);
+            // Exercise the Lexington's hull-failure route instead of just setting a wreck flag.
+            var wreck = entities.System<SharedMapSystem>().CreateGridEntity(map.MapId);
+            entities.AddComponent<DropshipComponent>(wreck);
+            var integrity = entities.EnsureComponent<DropshipIntegrityComponent>(wreck);
+            integrity.CrashWarningTime = TimeSpan.Zero;
+            entities.System<DropshipIntegritySystem>().DamageIntegrity((wreck, integrity), integrity.MaxIntegrity);
+            Assert.That(integrity.Crashing, Is.True);
+            Assert.That(entities.System<ThreatRuleHelper>().HasLandedDropshipHijack(), Is.False);
             var casualty = entities.SpawnEntity("CMXenoDrone", map.GridCoords);
             mobs.ChangeMobState(casualty, MobState.Dead);
             Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.InRound),

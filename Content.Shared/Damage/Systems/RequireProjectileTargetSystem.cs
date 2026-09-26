@@ -2,6 +2,8 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Standing;
 using Content.Shared.Weapons.Ranged.Components;
+// CMU14: accept acid and anti-vehicle attacks.
+using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
 using Robust.Shared.Physics.Events;
 
@@ -10,6 +12,8 @@ namespace Content.Shared.Damage.Systems;
 public sealed partial class RequireProjectileTargetSystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _container = default!;
+    // CMU14: accept acid and anti-vehicle attacks.
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {
@@ -27,6 +31,10 @@ public sealed partial class RequireProjectileTargetSystem : EntitySystem
             return;
 
         var other = args.OtherEntity;
+        // CMU14: accept acid and anti-vehicle attacks.
+        if (_whitelist.IsWhitelistPass(ent.Comp.AlwaysHitWhitelist, other))
+            return;
+
         if (TryComp(other, out ProjectileComponent? projectile) &&
             CompOrNull<TargetedProjectileComponent>(other)?.Target != ent)
         {

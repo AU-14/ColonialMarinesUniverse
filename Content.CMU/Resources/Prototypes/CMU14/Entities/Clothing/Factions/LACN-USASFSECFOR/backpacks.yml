@@ -30,13 +30,18 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNsmallbackpack.rsi
 
 - type: entity
-  parent: CMBackpackEngineer
+  parent: CMBackpackWelder
   id: CMULACNBackpackEngineer
   name: LACN engineering backpack
-  description: A tough pack issued to LACN engineers. Designed to lug tools and explosives into the battlefield.
+  description: A tough pack issued to LACN engineers, with a fuel tank for refilling welders in the field.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNengibackpack.rsi
+  - type: Storage
+    grid:
+    - 0,0,20,1
+  - type: ItemCamouflage
+    camouflageVariations: { }
 
 - type: entity
   parent: CMSatchelMarine

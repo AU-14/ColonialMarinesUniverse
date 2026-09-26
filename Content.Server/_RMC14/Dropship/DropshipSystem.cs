@@ -135,6 +135,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         SubscribeLocalEvent<DropshipInFlyByComponent, FTLCompletedEvent>(OnInFlyByFTLCompleted);
         SubscribeLocalEvent<ThirdPartyDropshipDeactivatedConsoleComponent, InteractHandEvent>(OnDeactivatedThirdPartyConsoleInteract);
 
+        SubscribeLocalEvent<DropshipDestinationComponent, MapInitEvent>(OnForceOnForceDestinationMapInit); // CMU14
         SubscribeLocalEvent<DropshipDestinationComponent, DropshipRelayedEvent<FTLStartedEvent>>(OnDepartureLocationFTLStarted);
         SubscribeLocalEvent<DropshipDestinationComponent, DropshipRelayedEvent<FTLCompletedEvent>>(OnDestinationLocationFTLCompleted);
         SubscribeLocalEvent<DropshipDestinationComponent, DropshipRelayedEvent<FTLUpdatedEvent>>(OnDestinationLocationFTLUpdated);
