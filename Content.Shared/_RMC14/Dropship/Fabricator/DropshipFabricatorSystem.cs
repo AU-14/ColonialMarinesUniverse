@@ -7,6 +7,9 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Components;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.PowerLoader;
+using Content.Shared.CMU14;
+using Content.Shared.CMU14.Dropship.MultiDeck;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Coordinates;
 using Content.Shared.DoAfter;
 using Content.Shared.Popups;
@@ -34,6 +37,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    // CMU14: faction gameplay fixes.
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private int _startingPoints;
     private TimeSpan _gainEvery;
@@ -70,8 +75,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
 
     private void OnFabricatorMapInit(Entity<DropshipFabricatorComponent> ent, ref MapInitEvent args)
     {
-        if (_net.IsServer)
-            ent.Comp.Account = EnsurePoints();
+        // CMU14: faction gameplay fixes.
+        EnsureAccount(ent);
     }
 
     private void OnDropshipPartRecycled(Entity<DropshipFabricatorComponent> ent, ref DropshipFabricatoreRecycleDoafterEvent args)
@@ -79,6 +84,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
         if (args.Cancelled || args.Handled)
             return;
 
+        // CMU14: faction gameplay fixes.
+        EnsureAccount(ent);
         if (!TryComp(args.Used, out DropshipFabricatorPrintableComponent? printable) ||
             !TryComp(ent.Comp.Account, out DropshipFabricatorPointsComponent? points))
         {
@@ -93,7 +100,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
 
         points.Points += (int) (refund * printable.RecycleMultiplier);
         Dirty(ent.Comp.Account.Value, points);
-        SendUIStateAll(points.Points);
+        // CMU14: faction gameplay fixes.
+        SendUIStateAll((ent.Comp.Account.Value, points));
         Del(args.Used);
 
         _audio.PlayPvs(ent.Comp.RecycleSound, ent);
@@ -109,6 +117,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
             return;
 
         var actor = args.Actor;
+        // CMU14: faction gameplay fixes.
+        EnsureAccount(ent);
         if (!TryComp(ent.Comp.Account, out DropshipFabricatorPointsComponent? points))
             return;
 
@@ -126,7 +136,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
 
         points.Points -= printable.Cost;
         Dirty(ent.Comp.Account.Value, points);
-        SendUIStateAll(points.Points);
+        // CMU14: faction gameplay fixes.
+        SendUIStateAll((ent.Comp.Account.Value, points));
 
         ent.Comp.Queue.Add(new DropshipFabricatorQueueEntry(proto.ID, printable.Cost));
         Dirty(ent);
@@ -137,6 +148,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
 
     private void OnCancelQueueMsg(Entity<DropshipFabricatorComponent> ent, ref DropshipFabricatorCancelQueueMsg args)
     {
+        // CMU14: faction gameplay fixes.
+        EnsureAccount(ent);
         if (args.Index < 0 || args.Index >= ent.Comp.Queue.Count)
             return;
 
@@ -147,7 +160,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
         {
             points.Points += entry.Cost;
             Dirty(ent.Comp.Account.Value, points);
-            SendUIStateAll(points.Points);
+            // CMU14: faction gameplay fixes.
+            SendUIStateAll((ent.Comp.Account.Value, points));
         }
 
         Dirty(ent);
@@ -193,19 +207,76 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
 
         points.Points += cost;
         Dirty(ent.Comp.Account.Value, points);
-        SendUIStateAll(points.Points);
+        // CMU14: faction gameplay fixes.
+        SendUIStateAll((ent.Comp.Account.Value, points));
     }
 
-    private Entity<DropshipFabricatorPointsComponent> EnsurePoints()
+    // CMU14: faction gameplay fixes.
+    private void EnsureAccount(Entity<DropshipFabricatorComponent> ent)
+    {
+        if (_net.IsClient)
+            return;
+
+        // Carrier maps initialize before their ShipFaction is assigned. Bind once ownership is available.
+        // Keep a funded account stable afterwards, including while orders are queued.
+        if (TryComp(ent.Comp.Account, out DropshipFabricatorPointsComponent? current) && current.Faction != null)
+            return;
+
+        var faction = GetFaction(ent.Owner);
+        if (current != null && faction == null)
+            return;
+
+        var account = EnsurePoints(faction);
+        ent.Comp.Account = account.Owner;
+        ent.Comp.Points = account.Comp.Points;
+        Dirty(ent);
+    }
+
+    private string? GetFaction(EntityUid fabricator)
+    {
+        var parent = fabricator;
+        while (TryComp(parent, out TransformComponent? transform))
+        {
+            if (TryComp<ShipFactionComponent>(parent, out var ship) && !string.IsNullOrWhiteSpace(ship.Faction))
+                return ship.Faction;
+
+            if (TryComp<DropshipDeckComponent>(parent, out var deck) &&
+                TryComp<ShipFactionComponent>(deck.Ship, out var carrier) && !string.IsNullOrWhiteSpace(carrier.Faction))
+            {
+                return carrier.Faction;
+            }
+
+            parent = transform.ParentUid;
+        }
+
+        // Other decks may be separate maps whose faction is held by the carrier's primary deck.
+        if (Transform(fabricator).MapUid is { } map && _zLevels.TryGetZNetwork(map, out var network))
+        {
+            IReadOnlyDictionary<int, EntityUid?> levels = network.Value.Comp.ZLevels;
+            foreach (var level in levels.Values)
+            {
+                if (TryComp<ShipFactionComponent>(level, out var ship) && !string.IsNullOrWhiteSpace(ship.Faction))
+                    return ship.Faction;
+            }
+        }
+
+        return null;
+    }
+
+    private Entity<DropshipFabricatorPointsComponent> EnsurePoints(string? faction)
     {
         var query = EntityQueryEnumerator<DropshipFabricatorPointsComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            return (uid, comp);
+            // CMU14: faction gameplay fixes.
+            if (string.Equals(comp.Faction, faction, StringComparison.OrdinalIgnoreCase))
+                return (uid, comp);
         }
 
         var points = Spawn(null, MapCoordinates.Nullspace);
         var pointsComp = EnsureComp<DropshipFabricatorPointsComponent>(points);
+        // CMU14: faction gameplay fixes.
+        pointsComp.Faction = faction;
         pointsComp.Points = _startingPoints;
         return (points, pointsComp);
     }
@@ -236,23 +307,34 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
         return prototype.TryComp(out printable, _compFactory);
     }
 
-    public void ChangeBudget(int amount)
+    // CMU14: faction gameplay fixes.
+    public void ChangeBudget(int amount, string? faction = null)
     {
         var accountQuery = EntityQueryEnumerator<DropshipFabricatorPointsComponent>();
         while (accountQuery.MoveNext(out var uid, out var comp))
         {
+            // CMU14: faction gameplay fixes.
+            if (faction != null && !string.Equals(comp.Faction, faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             comp.Points += amount;
             Dirty(uid, comp);
-            SendUIStateAll(comp.Points);
+            // CMU14: faction gameplay fixes.
+            SendUIStateAll((uid, comp));
         }
     }
 
-    private void SendUIStateAll(int points)
+    // CMU14: faction gameplay fixes.
+    private void SendUIStateAll(Entity<DropshipFabricatorPointsComponent> account)
     {
         var fabricatorQuery = EntityQueryEnumerator<DropshipFabricatorComponent>();
         while (fabricatorQuery.MoveNext(out var fabricatorId, out var fabricator))
         {
-            fabricator.Points = points;
+            // CMU14: faction gameplay fixes.
+            if (fabricator.Account != account.Owner)
+                continue;
+
+            fabricator.Points = account.Comp.Points;
             Dirty(fabricatorId, fabricator);
         }
     }
@@ -266,6 +348,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
         var allFabricatorQuery = EntityQueryEnumerator<DropshipFabricatorComponent, TransformComponent>();
         while (allFabricatorQuery.MoveNext(out var uid, out var comp, out var xform))
         {
+            // CMU14: faction gameplay fixes.
+            EnsureAccount((uid, comp));
             if (comp.Printing == null)
             {
                 TryStartNextPrint((uid, comp));
@@ -296,7 +380,8 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
             points.Points++;
             Dirty(pointsId, points);
 
-            SendUIStateAll(points.Points);
+            // CMU14: faction gameplay fixes.
+            SendUIStateAll((pointsId, points));
         }
     }
 }
