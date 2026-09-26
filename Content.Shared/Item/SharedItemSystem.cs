@@ -1,3 +1,5 @@
+using Content.Shared.Weapons.Ranged.Components; // CMU14
+using Content.Shared.CMU14.Items; // CMU14
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Item;
 using Content.Shared.Examine;
@@ -196,6 +198,15 @@ public abstract partial class SharedItemSystem : EntitySystem
 
         if (_fixedItemSizeStorageQuery.TryComp(storage, out var fixedComp))
         {
+            // CMU14: empty magazines take a smaller slot in storages like the dump pouch
+            if (TryComp(storage, out CMUEmptyMagazineStorageComponent? emptyStorage) &&
+                TryComp(uid, out BallisticAmmoProviderComponent? ballistic) &&
+                ballistic.UnspawnedCount + (ballistic.Container?.ContainedEntities.Count ?? 0) == 0)
+            {
+                emptyStorage.CachedEmptyShape ??= [Box2i.FromDimensions(Vector2i.Zero, emptyStorage.EmptySize - Vector2i.One)];
+                return emptyStorage.CachedEmptyShape;
+            }
+
             fixedComp.CachedSize ??= [Box2i.FromDimensions(Vector2i.Zero, fixedComp.Size - Vector2i.One)];
             return fixedComp.CachedSize;
         }

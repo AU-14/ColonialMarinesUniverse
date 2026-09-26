@@ -2,6 +2,15 @@
   id: CMUTileMovement
   name: trait-cmu-tile-movement-name
   description: trait-cmu-tile-movement-desc
-  category: Quirks
   components:
   - type: CMUTileMovement
+
+- type: trait
+  id: CMUHeavyweightDrunk
+  name: cmu-trait-heavyweight-name
+  description: cmu-trait-heavyweight-desc
+  category: CMUDrinkingTraits
+  cost: 1
+  components:
+  - type: LightweightDrunk
+    boozeStrengthMultiplier: 0.5

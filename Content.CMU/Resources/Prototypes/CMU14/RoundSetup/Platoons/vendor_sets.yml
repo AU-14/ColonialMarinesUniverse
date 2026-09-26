@@ -10,6 +10,7 @@
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
     VehicleCrew: AU14USCMVehicleCrewmanVendor
     SentryDeployer: RMCDeployerSentry
+    EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
   id: USCM
@@ -27,11 +28,13 @@
     SquadSergeant: AU14USCMsquadleaderequipmentvendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
     ReqVend: AU14USCMRequisitionVendor
+    EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
   id: LACN
   parent: AU14BasePlatoonVendorSet
   vendors:
+    Rifleman: AU14LACNequipmentvendor
     Clothing: AU14LACNclothingequipmentvendor
     ShipsideUniform: AU14LACNShipsideUniformVendor
     Weapons: AU14LACNWeaponsVendor
@@ -44,6 +47,11 @@
     SquadSergeant: AU14LACNsquadleaderequipmentvendor
     MilitaryPolice: AU14MilitaryPolicemanVendorLACN
     ReqVend: AU14LACNRequisitionVendor
+    MilitaryDoctor: CMULACNMilitaryDoctorVendor
+    ReqEquipment: CMULACNRequisitionsEquipmentVendor
+    EngiEquipment: CMULACNEngineeringEquipmentVendor
+    combattech: CMULACNComtechGearVendor
+    Rto: CMULACNRTOVendor
 
 - type: platoonVendorSet
   id: UPP
@@ -63,6 +71,7 @@
     Pilot: AU14UPPAirCrewWeaponsVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUPP
     ReqVend: AU14UPPRequisitionVendor
+    EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
   id: WYPMC
@@ -81,6 +90,7 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14WYPMCRequisitionVendor
     SentryDeployer: AU14DeployerSentryWeYu
+    EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
   id: CMBCIU
@@ -99,6 +109,7 @@
     Pilot: AU14CMBCIUPilotVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
     ReqVend: AU14CMBCIURequisitionVendor
+    EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
   id: HAZOPS
@@ -116,6 +127,7 @@
     SquadSergeant: AU14HAZOPSsquadleaderequipmentvendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
     ReqVend: AU14HAZOPSRequisitionVendor
+    EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
   id: ProdigySF
@@ -133,6 +145,7 @@
     SquadSergeant: AU14prodigysquadleaderequipmentvendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14ProdigyRequisitionVendor
+    EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
   id: VAIPO
@@ -150,6 +163,7 @@
     SquadSergeant: AU14VAIPOsquadleaderequipmentvendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14VAIPORequisitionVendor
+    EngiEquipment: AU14EngineeringStaffVendor
 
 - type: platoonVendorSet
   id: RMC
@@ -171,3 +185,4 @@
     combattech: AU14RMCComtechGearVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14RMCRequisitionVendor
+    EngiEquipment: AU14EngineeringStaffVendor

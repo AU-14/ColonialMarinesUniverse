@@ -10,6 +10,12 @@
 - type: job
   parent: AU14JobCivilianCorporateLiaisonBase
   id: AU14JobCivilianCorporateLiaison
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentCorporate
+    time: 18000 # 5 hours
   roundSide: Civilian
   roundForce: WY
   roundRole: CivilianCorporateLiaison

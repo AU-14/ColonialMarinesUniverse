@@ -5,7 +5,7 @@
   description: The standard-issue pack of LACN landing forces. Designed to lug gear into the battlefield.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/Storage/lacnpack.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNbackpack.rsi
   - type: Storage
     maxItemSize: Large
     grid:
@@ -18,4 +18,44 @@
   description: The standard-issue pack of LACN landing forces with an extra ammo can attached to it. Designed to lug gear into the battlefield.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/Storage/lacnammopack.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNammocarrierpack.rsi
+
+- type: entity
+  parent: CMBackpack
+  id: CMULACNBackpackSmall
+  name: LACN lightweight backpack
+  description: A smaller pack issued to LACN landing forces for lighter loads.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNsmallbackpack.rsi
+
+- type: entity
+  parent: CMBackpackEngineer
+  id: CMULACNBackpackEngineer
+  name: LACN engineering backpack
+  description: A tough pack issued to LACN engineers. Designed to lug tools and explosives into the battlefield.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNengibackpack.rsi
+
+- type: entity
+  parent: CMSatchelMarine
+  id: CMULACNSatchel
+  name: LACN satchel
+  description: A lightweight satchel issued to LACN landing forces.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNsatchel.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMSatchelMarineTech
+  id: CMULACNSatchelEngineer
+  name: LACN engineering satchel
+  description: A lightweight satchel issued to LACN engineers.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNengisatchel.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
