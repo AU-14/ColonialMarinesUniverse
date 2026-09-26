@@ -16,6 +16,11 @@
   - AU14AccessColonyHeadEngineer
   - AU14AccessColonyHeadOfService
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsSecurity
+    time: 36000 # 10 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement

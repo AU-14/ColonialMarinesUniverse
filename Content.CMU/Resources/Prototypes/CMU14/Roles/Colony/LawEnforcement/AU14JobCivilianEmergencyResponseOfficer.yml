@@ -28,6 +28,10 @@
   description: au14-job-description-colonyemergencyresponseofficer
   setPreference: true
   playTimeTracker: AU14JobCivilianEmergencyResponseOfficer
+  requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 18000 # 5 hours
   ranks:
     RMCRankCivilianSeniorOfficer:
     - !type:RoleTimeRequirement

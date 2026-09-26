@@ -1080,6 +1080,8 @@
       entries:
       - id: CMUKramerAutocannonCase
         amount: 1
+      - id: CMUKramerEmplacedMGCase
+        amount: 1
       - id: CMUWeaponShotgunLACNBreacher
         amount: 5
       - id: CMUWeaponShotgunLACNPenta

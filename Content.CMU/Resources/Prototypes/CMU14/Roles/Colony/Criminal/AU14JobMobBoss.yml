@@ -25,6 +25,10 @@
   description: au14-job-description-mobboss
   setPreference: true
   playTimeTracker: AU14JobMobBoss
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentCriminal
+    time: 18000 # 5 hours
   startingGear: AU14GearMobBoss
   icon: "AU14JobIconColonyMobBoss"
   hasIcon: false

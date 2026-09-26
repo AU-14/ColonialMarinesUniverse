@@ -198,6 +198,26 @@
       accuracyMultiplierUnwielded: 0.5
     - type: WieldDelay
       baseDelay: 0.5
+    - type: AttachableHolder
+      slots:
+        rmc-aslot-rail:
+          whitelist:
+            tags:
+              - RMCAttachmentRailFlashlight
+              - RMCAttachmentMagneticHarness
+        rmc-aslot-stock:
+          startingAttachable: CMULACNAttachmentKarbineStock
+          whitelist:
+            tags:
+              - CMULACNAttachmentKarbineStock
+        rmc-aslot-underbarrel:
+          whitelist:
+            tags:
+              - RMCAttachmentAngledGrip
+              - RMCAttachmentBipod
+              - RMCAttachmentVerticalGrip
+              - RMCAttachmentFlashlightGrip
+              - RMCAttachmentBurstFireAssembly
     - type: Tag
       tags:
         - AU14WeaponRifleKramerLSW

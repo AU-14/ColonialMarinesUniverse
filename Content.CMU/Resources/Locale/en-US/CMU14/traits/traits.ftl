@@ -142,3 +142,7 @@ trait-cmu-prosthetic-right-leg-desc = Your right leg has been replaced with a ro
 
 trait-cmu-tile-movement-name = Tile Movement
 trait-cmu-tile-movement-desc = You move from tile to tile instead of walking freely, just like the forebears who came before you.
+
+cmu-trait-category-drinking = Alcohol Tolerance
+cmu-trait-heavyweight-name = Heavyweight drunk
+cmu-trait-heavyweight-desc = This is someone that can hold their liquor.

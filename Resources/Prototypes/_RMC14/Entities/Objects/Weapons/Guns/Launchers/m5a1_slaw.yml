@@ -18,6 +18,11 @@
     cycleable: false
     whitelist:
       tags: []
+  # cmu edit start
+  - type: CMUBackblast
+    nearEffect: CMUBackblastSmokeNear
+    farEffect: CMUBackblastSmokeFar
+  # cmu edit end
   - type: RMCFoldableGun
     foldDelay: 2
     foldText: rmc-gun-foldable-launcher-fold-self

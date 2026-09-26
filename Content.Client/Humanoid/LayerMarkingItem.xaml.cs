@@ -108,7 +108,10 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
         {
             for (var i = 0; i < _markingPrototype.Sprites.Count; i++)
             {
-                sliders[i].Color = marking.MarkingColors[i];
+                // cmu edit start
+                if (sliders[i].Color != marking.MarkingColors[i])
+                    sliders[i].Color = marking.MarkingColors[i];
+                // cmu edit end
             }
         }
     }
