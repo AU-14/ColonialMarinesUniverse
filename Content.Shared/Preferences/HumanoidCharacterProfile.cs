@@ -360,7 +360,8 @@ namespace Content.Shared.Preferences
                 "insurgency" => "Insurgency",
                 "colonyfall" => "ColonyFall",
                 "distresssignal" => "DistressSignal",
-                "forceonforce" => "Insurgency", // CMU14: FoF uses Ins prefs
+                // CMU14: Force on Force roles, hijacking, announcements and identification.
+                "forceonforce" => "ForceOnForce",
                 _ => gamemode.Trim()
             };
         }
@@ -490,6 +491,9 @@ namespace Content.Shared.Preferences
                 other.Build,
                 other.HideMetaInformation)
         {
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            FoFSide = other.FoFSide;
+            FoFFallback = other.FoFFallback;
         }
 
         /// <summary>
@@ -1203,6 +1207,8 @@ namespace Content.Shared.Preferences
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            if (FoFSide != other.FoFSide || FoFFallback != other.FoFFallback) return false;
             if (SpawnPriority != other.SpawnPriority) return false;
             if (SquadPreference != other.SquadPreference) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -1522,6 +1528,9 @@ namespace Content.Shared.Preferences
             _gamemodeJobPriorities = gamemodeJobPriorities;
 
             PreferenceUnavailable = prefsUnavailableMode;
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            if (!Enum.IsDefined(FoFSide)) FoFSide = ForceOnForceSide.Either;
+            if (!Enum.IsDefined(FoFFallback)) FoFFallback = ForceOnForceFallback.StayInLobby;
 
             _antagPreferences.Clear();
             _antagPreferences.UnionWith(antags);
@@ -1539,15 +1548,22 @@ namespace Content.Shared.Preferences
 
             foreach (var (roleName, loadouts) in _loadouts)
             {
-                if (!prototypeManager.HasIndex<RoleLoadoutPrototype>(roleName))
+                // CMU14: concrete pilot jobs can inherit their loadout from a parent job.
+                var resolvedRole = roleName;
+                if (!prototypeManager.HasIndex<RoleLoadoutPrototype>(resolvedRole))
                 {
-                    toRemove.Add(roleName);
-                    continue;
+                    var jobId = roleName.StartsWith("Job") ? roleName.Substring(3) : roleName;
+                    var (_, inherited) = LoadoutSystem.GetJobLoadoutInfo(jobId, prototypeManager);
+                    if (inherited == null)
+                    {
+                        toRemove.Add(roleName);
+                        continue;
+                    }
+                    resolvedRole = inherited.ID;
                 }
 
-                // This happens after we verify the prototype exists
-                // These values are set equal in the database and we need to make sure they're equal here too!
-                loadouts.Role = roleName;
+                // CMU14: preserve the concrete selection key while validating the inherited loadout.
+                loadouts.Role = resolvedRole;
                 loadouts.EnsureValid(this, session, collection);
             }
 
@@ -1695,6 +1711,9 @@ namespace Content.Shared.Preferences
             hashCode.Add((int)ArmorPreference);
             hashCode.Add(SquadPreference);
             hashCode.Add((int)PreferenceUnavailable);
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            hashCode.Add(FoFSide);
+            hashCode.Add(FoFFallback);
             hashCode.Add(NamedItems);
             hashCode.Add(PlaytimePerks);
             hashCode.Add(XenoPrefix);

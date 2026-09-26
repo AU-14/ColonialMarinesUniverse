@@ -239,12 +239,25 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
     /// </summary>
     private void OnProjectileHit(Entity<DropshipHullComponent> target, ref ProjectileHitTargetEvent args)
     {
-        if (HasComp<DamageableComponent>(target) ||
-            !Transform(target).Anchored ||
+        if (!Transform(target).Anchored ||
             !TryGetDropship(target, out var dropship))
         {
             return;
         }
+
+        if (TryComp(args.Projectile, out DropshipAcidProjectileComponent? acid) &&
+            !dropship.Comp.Crashing && !dropship.Comp.Wrecked)
+        {
+            var coating = EnsureComp<DropshipAcidCoatingComponent>(dropship);
+            coating.DamagePerSecond = Math.Max(coating.DamagePerSecond, acid.DamagePerSecond);
+            coating.ExpiresAt = _timing.CurTime + acid.Duration;
+            if (coating.NextDamageAt == TimeSpan.Zero)
+                coating.NextDamageAt = _timing.CurTime + TimeSpan.FromSeconds(1);
+        }
+
+        // Damageable hull pieces already forward direct damage through DamageChangedEvent.
+        if (HasComp<DamageableComponent>(target))
+            return;
 
         var multiplier = HasComp<XenoAcidProjectileComponent>(args.Projectile)
             ? dropship.Comp.XenoAcidProjectileDamageMultiplier
@@ -846,6 +859,25 @@ public sealed partial class DropshipIntegritySystem : EntitySystem
     public override void Update(float frameTime)
     {
         ProcessPendingImpactAdoptions();
+
+        var acidQuery = EntityQueryEnumerator<DropshipAcidCoatingComponent, DropshipIntegrityComponent>();
+        while (acidQuery.MoveNext(out var hull, out var coating, out var pool))
+        {
+            if (pool.Crashing || pool.Wrecked)
+            {
+                RemCompDeferred<DropshipAcidCoatingComponent>(hull);
+                continue;
+            }
+
+            while (coating.NextDamageAt <= _timing.CurTime && coating.NextDamageAt <= coating.ExpiresAt)
+            {
+                DamageIntegrity((hull, pool), coating.DamagePerSecond);
+                coating.NextDamageAt += TimeSpan.FromSeconds(1);
+            }
+
+            if (_timing.CurTime >= coating.ExpiresAt)
+                RemCompDeferred<DropshipAcidCoatingComponent>(hull);
+        }
 
         var query = EntityQueryEnumerator<DropshipIntegrityComponent>();
         while (query.MoveNext(out var uid, out var integrity))

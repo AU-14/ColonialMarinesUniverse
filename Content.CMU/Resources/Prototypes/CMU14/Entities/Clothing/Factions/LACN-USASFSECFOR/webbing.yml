@@ -1,0 +1,84 @@
+- type: entity
+  parent: AU14WebbingMagazine
+  id: CMULACNWebbingMagazine
+  name: LACN magazine webbing
+  description: LACN pattern synthcotton webbing with three pockets to hold your magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNmagazinewebbing.rsi
+    state: webbing
+  - type: Webbing
+    playerSprite:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNmagazinewebbing.rsi
+      state: equipped
+
+- type: entity
+  parent: AU14WebbingUtility
+  id: CMULACNWebbingUtility
+  name: LACN utility webbing
+  description: LACN pattern synthcotton webbing with pockets for general gear.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNutilitywebbing.rsi
+    state: webbing
+  - type: Webbing
+    playerSprite:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNutilitywebbing.rsi
+      state: equipped
+
+- type: entity
+  parent: RMCWebbingDropPouch
+  id: CMULACNWebbingDropPouch
+  name: LACN drop pouch webbing
+  description: An LACN pattern drop pouch to carry loose items around.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNdroppouchwebbing.rsi
+    state: webbing
+
+- type: entity
+  parent: RMCWebbingGrenade
+  id: CMULACNWebbingGrenade
+  name: LACN grenade webbing
+  description: LACN pattern webbing made to store a few grenades.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNgrenadewebbing.rsi
+    state: webbing
+
+- type: entity
+  parent: CMWebbingBase
+  id: CMULACNWebbingShotgun
+  name: LACN shotgun shell webbing
+  description: LACN pattern webbing lined with loops for shotgun shells.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNshotgunwebbing.rsi
+    state: webbing
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,1
+    whitelist:
+      tags:
+      - RMCShellShotgun
+  - type: FixedItemSizeStorage
+  - type: Webbing
+    playerSprite:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNshotgunwebbing.rsi
+      state: equipped
+    components:
+    - type: Storage
+      maxItemSize: Small
+      grid:
+      - 0,0,9,1
+      whitelist:
+        tags:
+        - RMCShellShotgun
+    - type: FixedItemSizeStorage
+    - type: RMCStorageEjectHand
+      state: Open
+    - type: ExplosionResistance
+      damageCoefficient: 0
+      worn: false
+    - type: StoreAfterFailedInteract

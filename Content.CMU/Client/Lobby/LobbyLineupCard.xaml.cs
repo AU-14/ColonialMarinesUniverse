@@ -68,6 +68,8 @@ public sealed partial class LobbyLineupCard : Control
         if (moving)
         {
             _gesture = null;
+            ClearInteractions();
+            EmoteRevision++;
             ClearBubble();
         }
         else
@@ -173,6 +175,8 @@ public sealed partial class LobbyLineupCard : Control
 
     public void PlayEmote(LobbyLineupEmote emote, float delay = 0)
     {
+        _interactionTarget = null;
+        EmoteRevision++;
         _gesture = emote;
         _gestureDuration = LobbyLineupChoreography.Duration(emote);
         _gestureRemaining = _gestureDuration;
@@ -261,11 +265,17 @@ public sealed partial class LobbyLineupCard : Control
         _gestureDelay = Math.Max(0, _gestureDelay - delta);
         _gestureRemaining = Math.Max(0, _gestureRemaining - animationDelta);
         if (_gestureRemaining <= 0)
+        {
             _gesture = null;
+            _interactionTarget = null;
+        }
 
         if (AmbientEnabled && !reduced && _gesture == null && (_nextIdle -= delta) <= 0)
+        {
             PlayEmote(_idleIndex++ % 3 == 0 ? LobbyLineupEmote.CheckGear :
                 LobbyLineupChoreography.SoloMoves[_idleIndex % LobbyLineupChoreography.SoloMoves.Length]);
+            AmbientEmote?.Invoke(this, _gesture!.Value);
+        }
 
         var active = _gestureDelay <= 0 ? _gesture : null;
         var statusLocale = active == null
@@ -278,6 +288,7 @@ public sealed partial class LobbyLineupCard : Control
         }
         var phase = _gestureDuration - _gestureRemaining;
         var pose = LobbyLineupChoreography.Sample(active, phase, reduced);
+        ApplyInteractions(ref pose, delta, reduced);
         Preview.OverrideDirection = pose.Facing;
         var rotation = new Angle(pose.Rotation);
         // Camera rotation is cancelled by upright humanoid layers. Rotate only this local preview's sprite.
@@ -324,6 +335,9 @@ public sealed partial class LobbyLineupCard : Control
         LobbyLineupEmote.GrenadeOops => "cmu-lobby-lineup-emote-grenade",
         LobbyLineupEmote.SquadVolley => "cmu-lobby-lineup-emote-volley",
         LobbyLineupEmote.SquadXeno => "cmu-lobby-lineup-emote-squad-xeno",
+        LobbyLineupEmote.PieToss => "cmu-lobby-lineup-emote-pie",
+        LobbyLineupEmote.BananaPeel => "cmu-lobby-lineup-emote-banana",
+        LobbyLineupEmote.ConfettiCannon => "cmu-lobby-lineup-emote-confetti",
         _ => "cmu-lobby-lineup-emote-rally",
     };
 

@@ -51,7 +51,7 @@
   parent: CMWebbingBase
   id: AU14WebbingDumpPouch
   name: dump pouch webbing
-  description: A pouch to dump your empty mags into.
+  description: A pouch to dump your empty mags into. Holds three full magazines, or three empty ones in the space of each full one.
   components:
     - type: Sprite
       sprite: CMU14/Clothing/UniversalWebbing/dumpouch.rsi
@@ -59,8 +59,10 @@
     - type: Storage
       maxItemSize: Normal
       grid:
-            - 0,0,5,1 # 3 slots
+        - 0,0,8,0 # 3 slots, or 9 empty magazines
     - type: FixedItemSizeStorage
+      size: 3,1
+    - type: CMUEmptyMagazineStorage
     - type: IgnoreContentsSize
       items:
         tags:
@@ -76,7 +78,7 @@
         - type: Storage
           maxItemSize: Small
           grid:
-            - 0,0,5,1 # 3 slots
+            - 0,0,8,0 # 3 slots, or 9 empty magazines
         - type: IgnoreContentsSize
           items:
             tags:
@@ -89,6 +91,8 @@
               - PillCanister
               - CMSurgicalCase
         - type: FixedItemSizeStorage
+          size: 3,1
+        - type: CMUEmptyMagazineStorage
         - type: RMCStorageEjectHand
           state: Open
         - type: ExplosionResistance

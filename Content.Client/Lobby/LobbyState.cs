@@ -256,6 +256,14 @@ namespace Content.Client.Lobby
 
             Lobby!.ClockCaption.Text = Loc.GetString("cmu-lobby-clock-caption-countdown");
 
+            // CMU14: map preload status.
+            if (!_gameTicker.MapsLoaded && _gameTicker.StartTime - _gameTiming.CurTime <= _gameTicker.PreloadTime)
+            {
+                SetClockFace(Loc.GetString("cmu-lobby-clock-loading-map"), Loc.GetString("cmu-lobby-clock-loading-map"));
+                SetCountdownUrgency(CmuCountdownUrgency.Level.Normal);
+                return;
+            }
+
             if (_gameTicker.StartTime < _gameTiming.CurTime)
             {
                 SetCountdownUrgency(CmuCountdownUrgency.Level.Imminent);

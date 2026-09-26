@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMBaseWeaponRifle
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: M20a Pulse Rifle
   id: AUWeaponRifleM20A
   description: More commonly known as the Harrington Rifle, a past designation of the USCMC and the phased out predecessor of the M41A Pulse Rifle. More commonly seen in the hands of territorial guard or in colony armories for emergencies.

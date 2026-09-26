@@ -4,6 +4,7 @@ public static class ContentPostShaderIds
 {
     public const string Stealth = "stealth";
     public const string FloorOcclusion = "floor-occlusion";
+    public const string WaterSubmersion = "rmc-water-submersion";
     public const string Holopad = "holopad";
     public const string InteractionOutline = "interaction-outline";
     public const string TargetOutline = "target-outline";
@@ -20,6 +21,7 @@ public static class ContentPostShaderIds
     {
         Stealth,
         FloorOcclusion,
+        WaterSubmersion,
         Holopad,
     };
 }

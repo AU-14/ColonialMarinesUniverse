@@ -1,0 +1,350 @@
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbArms
+  name: BL-1 arm guards
+  description: An armor piece made to be clipped onto LACN BL-1 pattern armor.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNarms.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNarms.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNarms.rsi
+      state: equipped
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNarms.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/Attachments/LACNarms.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/Attachments/LACNarms.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNarms.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/Attachments/LACNarms.rsi
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbCollar
+  name: BL-1 collar guard
+  description: An armor piece made to be clipped onto LACN BL-1 pattern armor.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNcollar.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNcollar.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNcollar.rsi
+      state: equipped
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNcollar.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/Attachments/LACNcollar.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/Attachments/LACNcollar.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNcollar.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/Attachments/LACNcollar.rsi
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbLegs
+  name: BL-1 leg guards
+  description: An armor piece made to be clipped onto LACN BL-1 pattern armor.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNlegs.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNlegs.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNlegs.rsi
+      state: equipped
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNlegs.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/Attachments/LACNlegs.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/Attachments/LACNlegs.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNlegs.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/Attachments/LACNlegs.rsi
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbPauldrons
+  name: BL-1 pauldrons
+  description: An armor piece made to be clipped onto LACN BL-1 pattern armor.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNpauldrons.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNpauldrons.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNpauldrons.rsi
+      state: equipped
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNpauldrons.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/Attachments/LACNpauldrons.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/Attachments/LACNpauldrons.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNpauldrons.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/Attachments/LACNpauldrons.rsi
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbPlate
+  name: BL-1 armor plate
+  description: An armor piece made to be clipped onto LACN BL-1 pattern armor.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNplate.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNplate.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNplate.rsi
+      state: equipped
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNplate.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/Attachments/LACNplate.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/Attachments/LACNplate.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/Attachments/LACNplate.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/Attachments/LACNplate.rsi
+
+- type: entity
+  parent: RMCKitBase
+  id: CMULACNKitArmor
+  name: BL-1 armor customization kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: CMULACNArmorGarbArms
+    - id: CMULACNArmorGarbCollar
+    - id: CMULACNArmorGarbLegs
+    - id: CMULACNArmorGarbPauldrons
+    - id: CMULACNArmorGarbPlate
+
+- type: entity
+  parent: RMCKitBase
+  id: CMULACNKitArmorColdWeather
+  name: BL-1 cold weather kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: CMULACNArmorGarbHeatChest
+    - id: CMULACNArmorGarbHeatCollar
+    - id: CMULACNArmorGarbHeatLegs
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbGhillieJacket
+  name: GS-3 ghillie jacket
+  description: A ghillie jacket made to be clipped onto LACN BL-1 pattern armor, breaking up the wearer's silhouette.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNghilliejacket.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNghilliejacket.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNghilliejacket.rsi
+      state: equipped
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNghilliejacket.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNghilliejacket.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNghilliejacket.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNghilliejacket.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNghilliejacket.rsi
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbGhillieLegs
+  name: GS-3 desert ghillie leggings
+  description: Desert ghillie leggings made to be clipped onto LACN BL-1 pattern armor.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNghillielegs.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNghillielegs.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNghillielegs.rsi
+      state: equipped
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbHeatChest
+  name: HW-2 heated chest liner
+  description: A heated chest liner made to be clipped onto LACN BL-1 pattern armor in arctic conditions.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatchest.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatchest.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatchest.rsi
+      state: equipped
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbHeatCollar
+  name: HW-2 heated collar
+  description: A heated collar made to be clipped onto LACN BL-1 pattern armor in arctic conditions.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatcollar.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatcollar.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatcollar.rsi
+      state: equipped
+
+- type: entity
+  parent: BaseItem
+  id: CMULACNArmorGarbHeatLegs
+  name: HW-2 heated leg wraps
+  description: Heated leg wraps made to be clipped onto LACN BL-1 pattern armor in arctic conditions.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatlegs.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatlegs.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNheatlegs.rsi
+      state: equipped
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: CMULACNHelmetGarbCombatVisor
+  name: BK-9 combat visor
+  description: A combat visor made to be attached to LACN BK-9 helmets. Commonly issued to section leaders.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/combatvisor.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/combatvisor.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/combatvisor.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: CMULACNHelmetGarbComms
+  name: BK-9 comms unit
+  description: A helmet-mounted communications unit made to be attached to LACN BK-9 helmets. Commonly issued to section leaders.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/comms.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/comms.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/comms.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: CMULACNHelmetGarbMic
+  name: BK-9 boom mic
+  description: A boom microphone made to be attached to LACN BK-9 helmets. Commonly issued to section leaders.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/mic.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/mic.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/HelmetAttachments/mic.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: CMULACNHelmetGarbFaceMask
+  name: BK-9 urban face mask
+  description: A face mask made to be attached to LACN BK-9 helmets, used by urban units.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/helmetfacemask.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/helmetfacemask.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/helmetfacemask.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: CMULACNHelmetGarbFaceShield
+  name: BK-9 urban face shield
+  description: A face shield made to be attached to LACN BK-9 helmets, used by urban units.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/helmetfaceshield.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/helmetfaceshield.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/helmetfaceshield.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbNightVision
+  id: CMULACNHelmetGarbNightVision
+  name: NV-2 aircrew night vision goggles
+  description: A flip-down night vision mount issued to LACN aircrew. This pair's optics are not powered.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNnvgs.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNnvgs.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNnvgs.rsi
+      state: helmet
+    toggledRsi:
+      sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNnvgs.rsi
+      state: helmet-down

@@ -33,6 +33,9 @@
   - AU14JobGOVFORVehicleCrewman
   - AU14JobGOVFORVehicleCommander
   - AU14JobGOVFORDSPilot
+  - AU14JobGOVFORGunshipPilot
+  - AU14JobGOVFORFighterPilot
+  - AU14JobGOVFORFighterSystemsOfficer
   - AU14JobGOVFORDCC
   - AU14JobGOVFORAuxSupportSynth
   - AU14JobGOVFORWorkingJoe

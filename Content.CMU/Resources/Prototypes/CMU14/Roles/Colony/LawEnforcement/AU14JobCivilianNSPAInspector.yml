@@ -38,6 +38,11 @@
   setPreference: false
   canBeAntag: false
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsSecurity
+    time: 36000 # 10 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
