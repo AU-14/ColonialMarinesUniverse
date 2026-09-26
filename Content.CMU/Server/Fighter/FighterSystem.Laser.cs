@@ -103,7 +103,7 @@ public sealed partial class FighterSystem
         target = default!;
         if (TerminatingOrDeleted(uid)) return false;
         if (!TryComp(uid, out FighterLaserComponent? laser))
-            return TryGetFlare(uid, aircraft.Comp, weapons, out target);
+            return TryGetGroundDesignation(uid, aircraft.Comp, weapons, out target);
         if (laser.Aircraft != aircraft.Owner || _timing.CurTime >= laser.ExpiresAt ||
             !TryComp(laser.Seat, out FighterSeatComponent? owner) || owner.Laser != uid || owner.Occupant == null ||
             Transform(uid).MapUid != aircraft.Comp.TerrainMap) return false;

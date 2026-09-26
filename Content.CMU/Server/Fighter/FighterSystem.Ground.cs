@@ -319,6 +319,7 @@ public sealed partial class FighterSystem
         if (a.GroundEntity is not { } hull || !TryComp(hull, out FighterGroundComponent? component)) return;
         var ground = new Entity<FighterGroundComponent>(hull, component);
         var now = _timing.CurTime;
+        if (a.GroundState == FighterGroundState.Crashed) return;
         if (a.GroundState == FighterGroundState.Airborne && (a.ForcedRetreat || !HasCombatPilot(a))) ReturnToGround(aircraft);
         if (a.GroundState == FighterGroundState.Grounded)
         {
@@ -333,7 +334,11 @@ public sealed partial class FighterSystem
         if (a.GroundState == FighterGroundState.Returning && a.Phase == FighterPhase.Holding && now >= component.EndsAt)
         {
             if (component.LaunchCoordinates is not { } launchCoordinates || !GroundSiteClear(hull, launchCoordinates))
-            { a.RecoveryHandoff = false; component.EndsAt = now + TimeSpan.FromSeconds(2); return; }
+            {
+                if (a.ForcedRetreat && TryComp(aircraft, out FighterAirCombatComponent? combat)) BeginCrash(aircraft, combat);
+                else { a.RecoveryHandoff = false; component.EndsAt = now + TimeSpan.FromSeconds(2); }
+                return;
+            }
             if (!a.RecoveryHandoff)
             {
                 SetGroundState(ground, aircraft, FighterGroundState.Returning, TimeSpan.FromSeconds(1.2));
@@ -393,6 +398,7 @@ public sealed partial class FighterSystem
             a.Position = FighterFlight.HoldingPoint(a);
             a.Height = a.TargetHeight;
             SetGroundState(ground, aircraft, FighterGroundState.Returning, TimeSpan.FromSeconds(2));
+            if (a.ForcedRetreat && TryComp(aircraft, out FighterAirCombatComponent? combat)) BeginCrash(aircraft, combat);
         }
     }
 
