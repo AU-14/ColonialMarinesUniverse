@@ -4,6 +4,8 @@
   categories: [ HideSpawnMenu ]
   name: CMU human appearance
   components:
+  - type: CMUBurnPanic
+  - type: CMUCombatHearing
   - type: Inventory
     femaleDisplacements:
       jumpsuit:

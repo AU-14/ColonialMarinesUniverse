@@ -375,6 +375,11 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
 
         _audio.PlayStatic(sound, filter, mapEntityCoords, true, sound.Params);
 
+        // cmu edit start
+        var cmuExplosionEv = new Content.Server.CMU14.Hearing.CMUExplosionSpawnedEvent(pos, iterationIntensity.Count);
+        RaiseLocalEvent(ref cmuExplosionEv);
+        // cmu edit end
+
         // play far sound
         // far sound should play for anyone who wasn't in range of any of the effects of the bomb
         var farAudioRange = iterationIntensity.Count * 5;

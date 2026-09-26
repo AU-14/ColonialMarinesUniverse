@@ -176,3 +176,6 @@
     hatRsi:
       sprite: _RMC14/Objects/Clothing/Head/Hats/unmc_headset.rsi
       state: hat
+  # cmu edit start
+  - type: CMUCombatEarProtection
+  # cmu edit end
