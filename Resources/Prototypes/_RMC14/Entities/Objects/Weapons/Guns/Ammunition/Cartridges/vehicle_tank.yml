@@ -273,7 +273,7 @@
     proto: RMCSmokeFireSentry
     useMapCoords: true
   - type: TileFireOnTrigger
-    range: 1.5 
+    range: 2
     spawn: RMCTileFireBlue
     sound: null
 
