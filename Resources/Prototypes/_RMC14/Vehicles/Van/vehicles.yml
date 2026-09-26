@@ -11,6 +11,9 @@
   - type: Clickable
   - type: RMCIgnoreGhostInteractionLimits
   - type: RequireProjectileTarget
+    # CMU14: vehicle damage and conscious controls.
+    alwaysHitWhitelist:
+      components: [XenoAcidProjectile, VehicleDamageMultiplier]
   - type: GridVehicleMover
     maxSpeed: 8
     acceleration: 5

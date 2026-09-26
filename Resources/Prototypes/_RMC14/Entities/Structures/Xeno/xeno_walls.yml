@@ -23,7 +23,8 @@
   - type: VehicleSmashable
     deleteOnHit: true
     damageOnHit: 900
-    selfDamageMultiplier: 0
+    # CMU14: xeno feedback and lifecycle.
+    selfDamageMultiplier: 0.25
     slowdownMultiplier: 0.2
     slowdownDuration: 1.5
     requiredVehicleTag: VehicleHeavy

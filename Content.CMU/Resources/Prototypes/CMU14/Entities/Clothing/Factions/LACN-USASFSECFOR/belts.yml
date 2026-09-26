@@ -28,6 +28,7 @@
     whitelist:
       tags:
       - CMMagazineRifle
+      - CMMagazineSniper
   - type: ItemCamouflage
     camouflageVariations: { }
 

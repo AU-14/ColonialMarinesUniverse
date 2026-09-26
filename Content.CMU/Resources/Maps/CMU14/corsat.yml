@@ -74495,6 +74495,8 @@ entities:
   entities:
   - uid: 1919
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: 'LZ1: Gamma Landing Zone'
     - type: Transform
@@ -74502,6 +74504,8 @@ entities:
       parent: 1
   - uid: 1920
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: 'LZ2: Sigma Landing Zone'
     - type: Transform
@@ -74511,6 +74515,8 @@ entities:
   entities:
   - uid: 1921
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Snow Terrarium
     - type: Transform
@@ -74518,6 +74524,8 @@ entities:
       parent: 1
   - uid: 1922
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Jungle Terrarium
     - type: Transform
@@ -74525,6 +74533,8 @@ entities:
       parent: 1
   - uid: 1923
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Mesa Terrarium
     - type: Transform
