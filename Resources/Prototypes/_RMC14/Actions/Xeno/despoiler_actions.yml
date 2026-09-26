@@ -20,7 +20,7 @@
     scatterDegrees: 30
     chargingSpeedMultiplier: 0.5
     projectileId: RMCProjectileDespoilerAcidShot
-    lingeringAcidChance: 0.25
+    lingeringAcidChance: 1
     projectileSpeed: 12
     minRangeTiles: 1
     maxRangeTiles: 6
@@ -61,7 +61,7 @@
     empoweredDamage:
       types:
         Heat: 30
-    lingeringAcidChance: 0.3
+    lingeringAcidChance: 1
     empoweredWeakenDuration: 1
     telegraphProto: RMCEffectDespoilerCausticTelegraph
     lingeringAcidProto: RMCEffectDespoilerLingeringAcid
@@ -89,7 +89,7 @@
     baseRadius: 1
     severityHpThreshold1: 0.7
     severityHpThreshold2: 0.3
-    lingeringAcidChance: 0.2
+    lingeringAcidChance: 1
     distanceDelayPerTile: 0.2
     telegraphProto: RMCEffectDespoilerOozingTelegraph
     acidSprayProto: RMCEffectDespoilerAcidSpray

@@ -27,7 +27,7 @@ public sealed partial class XenoDespoilerCausticEmbraceActionComponent : Compone
     };
 
     [DataField]
-    public float LingeringAcidChance = 0.3f;
+    public float LingeringAcidChance = 1f;
 
     [DataField]
     public TimeSpan EmpoweredWeakenDuration = TimeSpan.FromSeconds(1);

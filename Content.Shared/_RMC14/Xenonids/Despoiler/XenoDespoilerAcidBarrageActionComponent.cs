@@ -28,7 +28,7 @@ public sealed partial class XenoDespoilerAcidBarrageActionComponent : Component
     public EntProtoId ProjectileId = "RMCProjectileDespoilerAcidShot";
 
     [DataField]
-    public float LingeringAcidChance = 0.25f;
+    public float LingeringAcidChance = 1f;
 
     [DataField]
     public float ProjectileSpeed = 12f;
