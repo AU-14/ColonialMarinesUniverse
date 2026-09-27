@@ -22,7 +22,8 @@ public sealed partial class DamageOverlay : Overlay
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
 
-    public override OverlaySpace Space => OverlaySpace.WorldSpace;
+    // CMU14: draw once after multi-Z composition has restored the player's eye.
+    public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 
     private readonly ShaderInstance _critShader;
     private readonly ShaderInstance _oxygenShader;
@@ -83,9 +84,16 @@ public sealed partial class DamageOverlay : Overlay
          * The crit overlay also occasionally reduces its alpha as a "blink"
          */
 
-        var viewport = args.WorldAABB;
-        var handle = args.WorldHandle;
+        // CMU14: use the final screen viewport after multi-Z composition.
+        var viewport = (UIBox2) args.ViewportBounds;
+        var handle = args.ScreenHandle;
         var distance = args.ViewportBounds.Width;
+
+        // CMU14: screen overlays can occupy only part of the window. Center the shader on this view.
+        var viewportSize = (Vector2) args.ViewportBounds.Size;
+        _bruteShader.SetParameter("viewportSize", viewportSize);
+        _oxygenShader.SetParameter("viewportSize", viewportSize);
+        _critShader.SetParameter("viewportSize", viewportSize);
 
         var time = (float) _timing.RealTime.TotalSeconds;
         var lastFrameTime = (float) _timing.FrameTime.TotalSeconds;

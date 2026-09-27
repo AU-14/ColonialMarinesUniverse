@@ -186,6 +186,6 @@ highp vec4 obRender(highp vec2 uv, highp vec2 data) {
 }
 // KERNEL END
 void fragment() {
-    highp vec4 sampleColor = obRender(UV, UV2);
-    COLOR = vec4(sampleColor.rgb, sampleColor.a * COLOR.a);
+    // COLOR is the output; Clyde applies particle opacity through MODULATE afterward.
+    COLOR = obRender(UV, UV2);
 }
