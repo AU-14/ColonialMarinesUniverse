@@ -186,7 +186,7 @@ public sealed class VehicleSupplyLoadoutTest
             AssertEntryGroup(entries, "VehicleSPPTank", "vehicle-tank");
 
             Assert.That(TankHardpoints, Does.Not.Contain("VehicleTankLTBCannon"));
-            Assert.That(SppTankHardpoints, Does.Not.Contain("VehicleSPPTankRailgun"));
+            Assert.That(SppTankHardpoints, Does.Contain("VehicleSPPTankRailgun"));
         });
 
         await pair.CleanReturnAsync();
@@ -594,6 +594,7 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleTankTreads",
         "VehicleTankReinforcedTreads",
         "VehicleSPPTankP17702",
+        "VehicleSPPTankRailgun",
         "VehicleSPPTankHJ35TLauncher",
         "VehicleSPPTankCupola",
         "VehicleSPPTankReactiveArmor",

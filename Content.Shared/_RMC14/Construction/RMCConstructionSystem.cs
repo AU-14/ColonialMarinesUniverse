@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Ladder;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared._RMC14.Water;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
@@ -40,6 +41,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private RMCWaterSystem _water = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
@@ -489,6 +491,16 @@ public sealed partial class RMCConstructionSystem : EntitySystem
 
         if (proto.TryComp(out BarricadeComponent? barricade, _componentFactory))
         {
+            var anchored = _rmcMap.GetAnchoredEntitiesEnumerator(coordinates);
+            while (anchored.MoveNext(out var uid))
+            {
+                if (!_water.IsActiveWater(uid, user ?? uid))
+                    continue;
+
+                popup = Loc.GetString("rmc-construction-not-proper-surface", ("construction", proto.Name));
+                return false;
+            }
+
             return !_weaponMount.HasWeaponMountNearbyPopup((gridId, grid), coordinates, proto, user: user);
         }
 

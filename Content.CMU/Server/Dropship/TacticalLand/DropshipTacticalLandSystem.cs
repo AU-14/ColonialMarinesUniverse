@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.Server.CMU14.Dropship.Integrity;
-using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.ZLevels.Core;
@@ -59,7 +58,6 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
     [Dependency] private DropshipIntegritySystem _integrity = default!;
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
-    [Dependency] private AuRoundSystem _round = default!;
 
     private static readonly TimeSpan FootprintTickInterval = TimeSpan.FromMilliseconds(150);
     private static readonly TimeSpan HoverEffectUpdateInterval = TimeSpan.FromMilliseconds(50);
@@ -554,13 +552,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
             return false;
         }
 
-        return AllowsUnmappedHoverAir(_round.SelectedPreset?.ID, level.Depth);
-    }
-
-    private static bool AllowsUnmappedHoverAir(string? preset, int depth)
-    {
-        return depth == 1 &&
-               string.Equals(preset, "DistressSignal", StringComparison.OrdinalIgnoreCase);
+        return level.Depth == 1;
     }
 
     private IReadOnlyList<Vector2i> GetRotatedFootprintOffsets(DropshipPilotEyeComponent eye)

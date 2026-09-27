@@ -216,6 +216,14 @@
         amount: 5
       - id: CMWelder
         amount: 5
+    - name: Engineering Supplies
+      entries:
+      - id: CMSheetMetal50
+        amount: 2
+      - id: BarbedWire15
+        amount: 4
+      - id: RMCCableCoil
+        amount: 15
     - name: Flare and light
       entries:
       - id: RMCFlashlight # Combat Flashlight
