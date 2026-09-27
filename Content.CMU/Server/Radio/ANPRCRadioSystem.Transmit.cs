@@ -127,6 +127,22 @@ public sealed partial class ANPRCRadioSystem
             return false;
         }
 
+        // EMCON: listen-silent is exactly that
+        if (radio.Emcon)
+        {
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-emcon-no-transmit"), user);
+            return false;
+        }
+
+        // one handset, and it is on a call. the net waits until it hangs up
+        if (_telephone.AU14InCall(ent))
+        {
+            if (!quiet)
+                _cmChat.ChatMessageToOne(Loc.GetString("anprc-call-net-blocked"), user);
+            return false;
+        }
+
         if (radio.MonitorEnabled)
         {
             if (!quiet)
@@ -153,7 +169,9 @@ public sealed partial class ANPRCRadioSystem
 
     private static float GetTransmitCost(ANPRCRadioComponent radio)
     {
-        return radio.TransmitChargeCost * radio.TxPower.ChargeMultiplier() * radio.Mode.ChargeMultiplier();
+        var cost = radio.TransmitChargeCost * radio.TxPower.ChargeMultiplier() * radio.Mode.ChargeMultiplier();
+
+        return radio.Burst ? cost * radio.BurstChargeMultiplier : cost;
     }
 
     private void OnSpeak(Entity<WearingANPRCComponent> ent, ref EntitySpokeEvent args)
@@ -282,6 +300,8 @@ public sealed partial class ANPRCRadioSystem
                 $"{TunableFrequencySystem.FormatFreq(frequency)} MHz",
                 outMessage);
 
+            radio.LastTransmit = _timing.CurTime;
+
             UpdateBuiState(pack);
             return;
         }
@@ -371,6 +391,8 @@ public sealed partial class ANPRCRadioSystem
             FormatLogChannel(radio, channel),
             outMessage);
 
+        radio.LastTransmit = _timing.CurTime;
+
         UpdateBuiState(pack);
     }
 
@@ -416,6 +438,10 @@ public sealed partial class ANPRCRadioSystem
         }
 
         var chance = (baseChance + radio.DFAccumulation) * radio.TxPower.DFMultiplier();
+
+        // BURST: the sentence is on the air for a fraction of the time
+        if (radio.Burst)
+            chance *= radio.BurstDFMultiplier;
 
         if (_garble.GetJamIntensity(source) != RadioJamIntensity.None)
             chance += radio.DFChanceJamBonus;
@@ -567,18 +593,18 @@ public sealed partial class ANPRCRadioSystem
         }
     }
 
-    private static string ShortBearing(Direction direction)
+    private string ShortBearing(Direction direction)
     {
         return direction switch
         {
-            Direction.North => "N",
-            Direction.NorthEast => "NE",
-            Direction.East => "E",
-            Direction.SouthEast => "SE",
-            Direction.South => "S",
-            Direction.SouthWest => "SW",
-            Direction.West => "W",
-            Direction.NorthWest => "NW",
+            Direction.North => Loc.GetString("anprc-bearing-n"),
+            Direction.NorthEast => Loc.GetString("anprc-bearing-ne"),
+            Direction.East => Loc.GetString("anprc-bearing-e"),
+            Direction.SouthEast => Loc.GetString("anprc-bearing-se"),
+            Direction.South => Loc.GetString("anprc-bearing-s"),
+            Direction.SouthWest => Loc.GetString("anprc-bearing-sw"),
+            Direction.West => Loc.GetString("anprc-bearing-w"),
+            Direction.NorthWest => Loc.GetString("anprc-bearing-nw"),
             _ => "?"
         };
     }

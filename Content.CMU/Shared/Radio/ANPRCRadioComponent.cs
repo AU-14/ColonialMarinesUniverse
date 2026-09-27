@@ -80,7 +80,97 @@ public sealed partial class ANPRCRadioComponent : Component
     public string OperatorFaction = string.Empty;
 
     [DataField("transmitChargeCost")]
-    public float TransmitChargeCost = 10f;
+    public float TransmitChargeCost = 18f;
+
+    // draw per second while the set is switched on and worn or staked. the set owns its idle
+    // drain rather than PowerCellDraw, so POWER SAVE and EMCON can turn it down
+    [DataField]
+    public float IdleChargePerSecond = 2f;
+
+    // extra draw per second while the set is anchoring nets for the headsets around it, on top
+    // of the idle draw. scaled by TX power, so a set shouting on HIGH for the whole platoon pays for it
+    [DataField]
+    public float RelayChargePerSecond = 1f;
+
+    #region Expert techniques
+
+    // everything in this region is worked from the faceplate only. the guided panel shows what
+    // is set and offers one button to put the lot back to AUTO, never the controls themselves
+
+    // BURST: each sentence goes out compressed. harder to direction-find and cheaper to send
+    [DataField, AutoNetworkedField]
+    public bool Burst;
+
+    [DataField]
+    public float BurstDFMultiplier = 0.5f;
+
+    [DataField]
+    public float BurstChargeMultiplier = 0.7f;
+
+    // POWER SAVE: the receiver duty-cycles between messages. costs SCAN and PRIORITY WATCH,
+    // which need the receiver awake
+    [DataField, AutoNetworkedField]
+    public bool PowerSave;
+
+    [DataField]
+    public float PowerSaveIdleMultiplier = 0.6f;
+
+    // PRIORITY WATCH: a second memory the operator hears while working the active one. -1 off
+    [DataField, AutoNetworkedField]
+    public int PriorityWatchSlot = -1;
+
+    // EMCON: listen-silent. no transmitting, no relaying, nothing to direction-find, and the
+    // set sips power. it still hears and logs everything
+    [DataField, AutoNetworkedField]
+    public bool Emcon;
+
+    [DataField]
+    public float EmconIdleMultiplier = 0.25f;
+
+    // RETRANS: a staked set repeats traffic between two of its memories. -1 off
+    [DataField, AutoNetworkedField]
+    public int RetransSlotA = -1;
+
+    [DataField, AutoNetworkedField]
+    public int RetransSlotB = -1;
+
+    // ANTENNA PEAK: a staked set whose antenna has been aimed and tuned covers further, until it
+    // is packed up
+    [DataField, AutoNetworkedField]
+    public bool AntennaPeaked;
+
+    [DataField]
+    public float PeakRangeMultiplier = 1.25f;
+
+    [DataField]
+    public TimeSpan PeakDelay = TimeSpan.FromSeconds(15);
+
+    // OTAR: push a recrypto's new key to friendly sets over the air
+    [DataField]
+    public float OtarChargeCost = 100f;
+
+    [DataField]
+    public TimeSpan OtarCooldown = TimeSpan.FromSeconds(30);
+
+    public TimeSpan OtarLast;
+
+    // JAMMER DF: two bearings on the same jammer from far enough apart fix it on the map
+    public EntityUid? JammerBearingTarget;
+
+    public System.Numerics.Vector2 JammerBearingPosition;
+
+    public TimeSpan JammerBearingTime;
+
+    [DataField]
+    public float JammerFixBaseline = 12f;
+
+    [DataField]
+    public TimeSpan JammerBearingExpiry = TimeSpan.FromMinutes(3);
+
+    [DataField]
+    public TimeSpan JammerFixDuration = TimeSpan.FromMinutes(2);
+
+    #endregion
 
     [DataField("dfReportFactions")]
     public List<string> DFReportFactions = new();
@@ -126,6 +216,23 @@ public sealed partial class ANPRCRadioComponent : Component
     // and cannot open the panel to tune it
     [DataField]
     public List<ANPRCDefaultSlot> DefaultSlots = new();
+
+    // the nets the panel's quick setup loads besides the wearer's own squad net. empty
+    // falls back to DefaultSlots, so a set that ships tuned sets up the same way
+    [DataField]
+    public List<ANPRCDefaultSlot> StandardNets = new();
+
+    // the link and battery an open panel was last told about, so the refresh only pushes
+    // state when one of them moved. NaN is never-sent
+    public float PanelLinkQuality = float.NaN;
+
+    public float PanelBatteryFraction = float.NaN;
+
+    // when the set last keyed up and last took traffic, so the panel lights its TX and RX
+    // lamps off what the radio actually did rather than off a UI guess
+    public TimeSpan LastTransmit;
+
+    public TimeSpan LastReceive;
 
     #region Band sweep
 
@@ -196,6 +303,16 @@ public sealed partial class ANPRCRadioComponent : Component
 
     [DataField("sweepChargeCostPerSecond")]
     public float SweepChargeCostPerSecond = 3f;
+
+    // DWELL: the head parked on one contact instead of walking the band. -1 kHz is off. each fresh
+    // burst of traffic on it counts this many times over, but nothing else on the band is heard
+    [DataField, AutoNetworkedField]
+    public int SweepDwellKilohertz = -1;
+
+    public TimeSpan SweepDwellLastEmission;
+
+    [DataField]
+    public float DwellConfidenceMultiplier = 2f;
 
     public TimeSpan SweepLastUpdate;
 

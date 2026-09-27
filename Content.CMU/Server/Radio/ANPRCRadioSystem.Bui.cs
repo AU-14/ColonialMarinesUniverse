@@ -36,6 +36,18 @@ public sealed partial class ANPRCRadioSystem
         if (ent.Comp.Planted && ent.Comp.Enabled && !ent.Comp.RelayOnly)
             AddHandsetVerbs(ent, user, ref args);
 
+        // the phone, for whoever is at a planted set or wearing this one
+        if (HasComp<ANPRCPhoneComponent>(ent) &&
+            (ent.Comp.Planted || (ent.Comp.IsEquipped && Transform(ent).ParentUid == user)))
+        {
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("anprc-verb-phone"),
+                Priority = 3,
+                Act = () => UsePhone(ent, user),
+            });
+        }
+
         if (!HasComp<ANPRCRadioUserComponent>(user))
             return;
 
@@ -289,6 +301,10 @@ public sealed partial class ANPRCRadioSystem
     private void OnSetScan(Entity<ANPRCRadioComponent> ent, ref ANPRCSetScanMsg args)
     {
         ent.Comp.ScanEnabled = args.Enabled;
+
+        // scanning keeps the receiver awake on every memory
+        if (args.Enabled)
+            ent.Comp.PowerSave = false;
         Dirty(ent);
 
         UpdateEquippedChannels(ent);
@@ -460,33 +476,33 @@ public sealed partial class ANPRCRadioSystem
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine(interceptsOnly
-            ? "[head=2]INTERCEPT LOG[/head]"
-            : "[head=2]NET LOG[/head]");
+        sb.AppendLine("[head=2]" + Loc.GetString(interceptsOnly
+            ? "anprc-log-report-title-intercepts"
+            : "anprc-log-report-title") + "[/head]");
 
         var station = !string.IsNullOrEmpty(ent.Comp.Callsign)
             ? ent.Comp.Callsign
             : GetWearerCallsign(ent.Owner);
 
         if (string.IsNullOrEmpty(station))
-            station = "UNKNOWN STATION";
+            station = Loc.GetString("anprc-unknown-station");
 
-        sb.AppendLine($"[bold]STATION:[/bold] {station}");
-        sb.AppendLine($"[bold]ENTRIES:[/bold] {entries.Count}");
+        sb.AppendLine($"[bold]{Loc.GetString("anprc-log-report-station")}[/bold] {station}");
+        sb.AppendLine($"[bold]{Loc.GetString("anprc-log-report-entries")}[/bold] {entries.Count}");
         sb.AppendLine();
 
         foreach (var entry in entries)
         {
             var ts = TimeSpan.FromSeconds(entry.Timestamp);
             var time = $"{(int) ts.TotalMinutes:D2}:{ts.Seconds:D2}";
-            var marker = entry.Intercepted ? " [bold](INTERCEPT)[/bold]" : string.Empty;
+            var marker = entry.Intercepted ? $" [bold]{Loc.GetString("anprc-log-report-intercept")}[/bold]" : string.Empty;
 
             sb.AppendLine($"[{time}] {entry.SenderName} - {entry.ChannelDisplay}{marker}");
             sb.AppendLine($"  {entry.Message}");
         }
 
         sb.AppendLine();
-        sb.Append("[italic]Transcribed from an AN/PRC-117G net log. Times are set clock, not local.[/italic]");
+        sb.Append("[italic]" + Loc.GetString("anprc-log-report-footer") + "[/italic]");
 
         return sb.ToString();
     }
@@ -529,12 +545,17 @@ public sealed partial class ANPRCRadioSystem
             ? _battery.GetChargeLevel(battery!.Value.AsNullable())
             : 0f;
 
-        var antennaLabel = "NONE";
+        var linkQuality = GetLinkQuality(ent);
+
+        ent.Comp.PanelLinkQuality = linkQuality;
+        ent.Comp.PanelBatteryFraction = batteryFraction;
+
+        var antennaLabel = string.Empty;
 
         if (TryGetRadioSlot(ent.Owner, AntennaSlotId, out var antennaSlot) &&
             TryComp(antennaSlot.Item, out ANPRCAntennaComponent? antenna))
         {
-            antennaLabel = antenna.Label;
+            antennaLabel = Loc.GetString(antenna.Label);
         }
 
         _ui.SetUiState(
@@ -567,7 +588,9 @@ public sealed partial class ANPRCRadioSystem
                 BuildChannelFrequencies(ent.Comp),
                 ent.Comp.SweepEnabled,
                 ent.Comp.SweepPosition,
-                BuildSweepContacts(ent.Comp)));
+                BuildSweepContacts(ent.Comp),
+                BuildPanelInfo(ent, linkQuality),
+                BuildExpertState(ent)));
     }
 
     // the client only ever learns the operator's own nets, the unfactioned ones, and

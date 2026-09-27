@@ -1,0 +1,220 @@
+<Document>
+  # Guided panel
+
+  The guided panel is the default interface for the AN/PRC-117G.
+
+  It is designed to handle the basics without making you learn the full radio. The display at the top shows what the set is doing, the banner underneath tells you if something needs attention, and the tabs separate the remaining controls into a few simple pages.
+
+  By default, the guided panel keeps the radio in [bold]AUTO[/bold]:
+
+  - FH waveform
+  - MED output power
+  - squelch 3
+  - your own callsign
+
+  That is enough for normal radio operation.
+
+  More advanced controls, including output power, waveforms, fixed station callsigns, direct frequencies, the search receiver, and operator techniques, are available through the [textlink="expert faceplate" link="AU14CommsANPRCExpert"].
+
+  You do not need any of them just to get on the air.
+
+  ## Opening the panel
+
+  Wear the radio, then alt-click it, or right-click it, and select [bold]Open Radio Panel[/bold].
+
+  Only trained operators can open the panel. See [textlink="the AN/PRC-117G" link="AU14CommsANPRC"] for the roles that start with radio training.
+
+  The first time you open it, a short briefing appears. Press [bold]GOT IT[/bold] when you are finished.
+
+  The [bold]? HELP[/bold] button at the top opens the briefing again and gives you access to this guide.
+
+  Press [bold]VIEW[/bold] to switch between the guided panel and the expert faceplate.
+
+  The radio remembers which view you used last.
+
+  ## The screen
+
+  The display at the top gives you the information you usually need at a glance.
+
+  ### What am I transmitting on?
+
+  The display shows your working memory, its frequency, and the loaded net.
+
+  The [bold]TALK[/bold] line tells you whether a message sent with [color=#a4885c]:r[/color] will actually transmit.
+
+  ### Is my traffic secure?
+
+  The display shows the current waveform and one of the following:
+
+  - [bold]SECURE[/bold]
+  - [bold]NOT SECURE[/bold]
+  - [bold]IN CLEAR[/bold]
+
+  ### Am I connected?
+
+  [bold]SIG[/bold] shows the quality of your own connection to the working net.
+
+  [bold]RELAY[/bold] shows how many nets your radio is currently carrying for nearby headsets and the range of that coverage.
+
+  If the display reads [bold]NOT RELAYING[/bold], your radio is not currently providing headset coverage.
+
+  The banner below the screen will usually tell you why. Common causes include the radio being switched off, not being worn, or being carried by somebody without radio training.
+
+  ## The banner
+
+  The banner below the display is the easiest place to look when something is wrong.
+
+  It shows the next problem preventing normal operation, in roughly the order it needs to be solved: missing battery, radio switched off, radio not worn, no nets loaded, no fill card, and so on.
+
+  When possible, the banner also gives you a button that fixes the problem directly.
+
+  A green banner means the radio is ready.
+
+  ## NETS tab
+
+  The NETS tab manages the radio's memories.
+
+  The AN/PRC can hold up to four. Each memory card shows what it contains and whether it is currently being used for transmission or relay coverage.
+
+  - [bold]LOAD STANDARD NETS[/bold], or [bold]TURN ON AND LOAD STANDARD NETS[/bold], switches the radio on, fills available memories with your squad and command nets, and selects your squad net for transmission.
+  - Existing memories that you tuned manually are not overwritten.
+  - The button only appears while one or more standard nets are missing.
+  - [bold]USE[/bold] selects that memory as your working net. It will be marked [bold]ON AIR[/bold].
+  - [bold]EDIT[/bold] opens the controls for that memory.
+
+  Inside the editor:
+
+  - [bold]Pick a net[/bold] selects which net the memory contains.
+  - Your own squad net is marked [bold][YOUR SQUAD][/bold].
+  - Recommended nets are marked [bold][STANDARD][/bold].
+  - Nets already loaded somewhere in the radio are marked [bold][IN MEMORY][/bold].
+  - Enemy nets resolved by the search receiver are marked [bold][INTERCEPT][/bold].
+  - [bold]Rename[/bold] changes the memory's label, up to eight letters. This name is only visible to you.
+  - [bold]EMPTY IT[/bold] clears the contents while keeping the memory slot.
+  - [bold]DELETE MEMORY[/bold] removes the memory entirely and requires confirmation.
+  - [bold]DONE[/bold] closes the editor.
+
+  [bold]+ ADD MEMORY[/bold] creates a new empty memory. Give it a label, then use EDIT to assign a net.
+
+  Every friendly combat net loaded into memory is relayed to nearby headsets, even if that memory is not currently ON AIR.
+
+  This means you can, for example, transmit on command while still providing relay coverage for your squad net.
+
+  Direct frequencies are entered from the expert faceplate.
+
+  ## LOG tab
+
+  The LOG tab keeps the last [bold]50[/bold] lines of radio traffic handled by the set, with the newest entries first.
+
+  This includes both received and transmitted traffic.
+
+  - Use the search box to filter the log by sender or message text.
+  - [bold]INTERCEPTS[/bold] shows only enemy traffic.
+  - [bold]ALL NETS[/bold] cycles through the nets represented in the log.
+  - [bold]PRINT LOG[/bold] prints the full log.
+  - [bold]PRINT INTERCEPTS[/bold] prints only intercepted traffic.
+  - Printed logs are placed directly into your hand.
+  - The radio must be worn or staked down before it can print.
+  - A badge on the LOG tab shows how many new entries arrived while you were viewing another page.
+
+  ## SECURITY tab
+
+  The SECURITY tab shows whether your traffic is encrypted and the state of the installed fill card.
+
+  - [bold]ENCRYPTED[/bold] - the loaded fill card is current and your secured traffic is protected. Enemy receivers without the matching key hear static.
+  - [bold]NOT ENCRYPTED[/bold] - no valid fill card is loaded. Use your fill card on the radio.
+  - [bold]FILL SUPERSEDED[/bold] - your side has performed a recrypto and the loaded card is now out of date. Replace it with a current card or have an expert operator send the new key over the air.
+  - [bold]IN THE CLEAR (PT)[/bold] - the radio has been placed into plain-text mode. Use RETURN TO AUTO on the SETTINGS tab to restore the normal FH configuration.
+
+  ### Fill actions
+
+  These actions require confirmation and cannot be undone.
+
+  - [bold]ZEROIZE[/bold] removes the active fill from the radio and returns the card to your hand.
+  - [bold]DESTROY FILL[/bold] removes the fill and destroys the card.
+  - [bold]ORDER RECRYPTO[/bold] supersedes every existing fill card belonging to your side. This requires command authority.
+
+  ZEROIZE or DESTROY can be used when you need to prevent a loaded fill card from being captured.
+
+  ORDER RECRYPTO is used when an existing card or radio can no longer be trusted.
+
+  ## SETTINGS tab
+
+  The SETTINGS tab shows how the radio is currently configured.
+
+  ### How the set is running
+
+  [bold]HOW THE SET IS RUNNING[/bold] displays [bold]AUTO[/bold] in green while the radio is using the guided panel's standard configuration.
+
+  If somebody has changed settings through the expert faceplate, those changes are listed here.
+
+  This can include:
+
+  - output power
+  - waveform
+  - squelch
+  - station callsign
+  - burst transmission
+  - power save
+  - priority watch
+  - EMCON
+  - a retrans bridge
+  - an active search
+
+  ### Return to auto
+
+  [bold]RETURN TO AUTO[/bold] appears whenever the radio has been taken out of its standard guided configuration.
+
+  Pressing it restores the normal automatic settings and stops an active search.
+
+  It does [bold]not[/bold] remove your loaded memories or fill card.
+
+  If you inherit a radio that behaves unexpectedly, RETURN TO AUTO is a useful way to bring its operating settings back to a known state.
+
+  For example, a radio left in EMCON will not transmit or relay until EMCON is disabled.
+
+  ### Monitor
+
+  [bold]MONITOR[/bold] listens to every loaded net at once.
+
+  While MONITOR is enabled, the radio is receive-only and [color=#a4885c]:r[/color] cannot transmit.
+
+  ### Scan
+
+  [bold]SCAN[/bold] listens to every loaded net.
+
+  When traffic arrives on one of them, the radio moves ON AIR to that memory.
+
+  It does not automatically return to the previous one afterwards.
+
+  ### Station
+
+  [bold]STATION[/bold] shows the callsign currently used by the radio.
+
+  [bold]OPEN NET DIRECTORY[/bold] shows which callsigns are currently assigned to stations on your side.
+
+  [bold]PHONE[/bold] opens the field-phone directory.
+
+  For more on phone calls, see the phone section of [textlink="the AN/PRC-117G" link="AU14CommsANPRC"].
+
+  ## The expert faceplate
+
+  You can operate the radio for an entire round through the guided panel.
+
+  The [textlink="expert faceplate" link="AU14CommsANPRCExpert"] is available when you need more control over how the set behaves.
+
+  It gives access to features such as:
+
+  - changing output power and waveform
+  - setting a fixed station callsign
+  - using direct frequencies
+  - reducing battery use with power save
+  - using EMCON for receive-only operation
+  - watching another net with priority watch
+  - bridging two nets from a staked radio
+  - sending replacement encryption keys over the air
+  - searching for unknown radio nets
+  - locating active jammers
+
+  None of these are required for basic operation, but they can be useful when the situation calls for them.
+</Document>

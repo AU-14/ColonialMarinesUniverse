@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Radio.ANPRC;
 using Content.Shared.CMU14.Radio;
 using Robust.Client.UserInterface;
 
@@ -32,10 +33,23 @@ public sealed class ANPRCRadioBoundUserInterface : BoundUserInterface
         _window.OnCryptoRecrypto += () => SendMessage(new ANPRCCryptoRecryptoMsg());
         _window.OnRadioCheck += () => SendMessage(new ANPRCRadioCheckMsg());
         _window.OnOpenDirectory += () => SendMessage(new ANPRCOpenDirectoryMsg());
+        _window.OnOpenPhone += () => SendMessage(new ANPRCOpenPhoneMsg());
+        _window.OnSetBurst += enabled => SendMessage(new ANPRCSetBurstMsg(enabled));
+        _window.OnSetPowerSave += enabled => SendMessage(new ANPRCSetPowerSaveMsg(enabled));
+        _window.OnSetPriorityWatch += slot => SendMessage(new ANPRCSetPriorityWatchMsg(slot));
+        _window.OnSetEmcon += enabled => SendMessage(new ANPRCSetEmconMsg(enabled));
+        _window.OnSetRetrans += (a, b) => SendMessage(new ANPRCSetRetransMsg(a, b));
+        _window.OnPeakAntenna += () => SendMessage(new ANPRCPeakAntennaMsg());
+        _window.OnOtar += () => SendMessage(new ANPRCOtarMsg());
+        _window.OnSetDwell += kilohertz => SendMessage(new ANPRCSetDwellMsg(kilohertz));
+        _window.OnJammerBearing += () => SendMessage(new ANPRCJammerBearingMsg());
+        _window.OnReturnToAuto += () => SendMessage(new ANPRCReturnToAutoMsg());
         _window.OnManualFrequency += (slot, text) => SendMessage(new ANPRCManualFrequencyMsg(slot, text));
         _window.OnSetSweep += enabled => SendMessage(new ANPRCSetSweepMsg(enabled));
         _window.OnTuneContact += (slot, freq) => SendMessage(new ANPRCTuneContactMsg(slot, freq));
         _window.OnPrintLog += intercepts => SendMessage(new ANPRCPrintLogMsg(intercepts));
+        _window.OnQuickSetup += () => SendMessage(new ANPRCQuickSetupMsg());
+        _window.OnRenameSlot += (slot, label) => SendMessage(new ANPRCRenameSlotMsg(slot, label));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

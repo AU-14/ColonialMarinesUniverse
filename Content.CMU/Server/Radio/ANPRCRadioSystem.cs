@@ -136,9 +136,13 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             subs.Event<ANPRCManualFrequencyMsg>(OnManualFrequency);
             subs.Event<ANPRCRadioCheckMsg>(OnRadioCheck);
             subs.Event<ANPRCOpenDirectoryMsg>(OnOpenDirectory);
+            subs.Event<ANPRCOpenPhoneMsg>(OnOpenPhone);
             subs.Event<ANPRCSetSweepMsg>(OnSetSweep);
             subs.Event<ANPRCTuneContactMsg>(OnTuneContact);
             subs.Event<ANPRCPrintLogMsg>(OnPrintLog);
+            subs.Event<ANPRCQuickSetupMsg>(OnQuickSetup);
+            subs.Event<ANPRCRenameSlotMsg>(OnRenameSlot);
+            subs.Event<BoundUIOpenedEvent>(OnUiOpened);
         });
 
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCPlantDoAfterEvent>(OnPlantDoAfter);
@@ -157,6 +161,9 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCRadioComponent, PowerCellSlotEmptyEvent>(OnBatteryEmpty);
         SubscribeLocalEvent<ANPRCRadioComponent, EntInsertedIntoContainerMessage>(OnAntennaInserted);
         SubscribeLocalEvent<ANPRCRadioComponent, EntRemovedFromContainerMessage>(OnAntennaRemoved);
+
+        InitializePhone();
+        InitializeExpert();
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
@@ -169,6 +176,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
         if (!radio.Enabled || (!radio.IsEquipped && !radio.Planted))
             return;
+
+        TryQueueRetrans(ent, ref args);
 
         var wearer = Transform(ent.Owner).ParentUid;
 
@@ -234,6 +243,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
                 heard,
                 intercepted,
                 args.Language);
+
+            radio.LastReceive = _timing.CurTime;
 
             UpdateBuiState(ent);
 
@@ -366,13 +377,28 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             return;
         }
 
-        if (radio.Comp.ActiveSlot < 0 ||
-            !radio.Comp.Presets.TryGetValue(radio.Comp.ActiveSlot, out var activeChannel))
+        if (radio.Comp.ActiveSlot >= 0 &&
+            radio.Comp.Presets.TryGetValue(radio.Comp.ActiveSlot, out var activeChannel))
         {
-            return;
+            GrantChannel(radio.Comp, active, activeChannel);
         }
 
-        GrantChannel(radio.Comp, active, activeChannel);
+        // PRIORITY WATCH: the second memory stays in the operator's ear while they work the first
+        if (radio.Comp.PriorityWatchSlot >= 0 &&
+            radio.Comp.Presets.TryGetValue(radio.Comp.PriorityWatchSlot, out var watched))
+        {
+            GrantChannel(radio.Comp, active, watched);
+        }
+
+        // RETRANS: a bridging set has to hear both sides of the bridge
+        if (radio.Comp.Planted && radio.Comp.RetransSlotA >= 0 && radio.Comp.RetransSlotB >= 0)
+        {
+            if (radio.Comp.Presets.TryGetValue(radio.Comp.RetransSlotA, out var netA))
+                GrantChannel(radio.Comp, active, netA);
+
+            if (radio.Comp.Presets.TryGetValue(radio.Comp.RetransSlotB, out var netB))
+                GrantChannel(radio.Comp, active, netB);
+        }
     }
 
     private static void GrantChannel(
@@ -425,7 +451,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         if (TerminatingOrDeleted(ent.Owner))
             return;
 
-        if ((!ent.Comp.IsEquipped && !ent.Comp.Planted) || !ent.Comp.Enabled)
+        // EMCON is silence: a set that anchors a net is transmitting for everyone on it
+        if ((!ent.Comp.IsEquipped && !ent.Comp.Planted) || !ent.Comp.Enabled || ent.Comp.Emcon)
         {
             RemComp<ANPRCRelayAnchorComponent>(ent.Owner);
             return;
@@ -448,6 +475,9 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         anchor.Channels.Clear();
 
         var rangeMultiplier = ent.Comp.TxPower.RangeMultiplier();
+
+        if (ent.Comp.Planted && ent.Comp.AntennaPeaked)
+            rangeMultiplier *= ent.Comp.PeakRangeMultiplier;
 
         anchor.RangeMultiplier = rangeMultiplier;
         anchor.Planted = ent.Comp.Planted;
@@ -550,7 +580,10 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         args.Handled = true;
 
         ent.Comp.Planted = false;
+        ClearStakedTechniques(ent);
         Dirty(ent);
+
+        UpdateEquippedChannels(ent);
 
         if (!ent.Comp.IsEquipped)
         {
@@ -581,6 +614,11 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     }
 
     private void OnBatteryEmpty(Entity<ANPRCRadioComponent> ent, ref PowerCellSlotEmptyEvent args)
+    {
+        HandleBatteryEmpty(ent);
+    }
+
+    private void HandleBatteryEmpty(Entity<ANPRCRadioComponent> ent)
     {
         if (!ent.Comp.Enabled)
             return;
@@ -703,6 +741,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             args.Message,
             intercepted,
             args.Language);
+
+        ent.Comp.LastReceive = _timing.CurTime;
 
         UpdateBuiState(ent);
     }

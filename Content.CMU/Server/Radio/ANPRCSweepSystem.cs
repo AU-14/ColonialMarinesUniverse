@@ -142,15 +142,43 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
 
         DecayContacts(radio, seconds);
 
-        var start = radio.SweepPosition;
-        var advance = Math.Max(1, (int) MathF.Round(radio.SweepKilohertzPerSecond * seconds));
-
         var xform = Transform(ent.Owner);
         var position = _transform.GetWorldPosition(xform);
         var map = xform.MapID;
 
         var cutoff = now - radio.SweepActivityWindow;
         var rangeSquared = radio.SweepInterceptRange * radio.SweepInterceptRange;
+
+        // DWELL: the head sits on one contact. every fresh burst of traffic on it counts, and counts
+        // double, but the rest of the band goes unheard until the operator lets the head walk again
+        if (radio.SweepDwellKilohertz >= 0)
+        {
+            var dwell = RadioFrequency.FromKilohertz(radio.SweepDwellKilohertz);
+            radio.SweepPosition = dwell;
+
+            if (_band.TryGetValue(dwell, out var heard) &&
+                heard.Time > radio.SweepDwellLastEmission &&
+                heard.Time >= cutoff &&
+                heard.Map == map &&
+                (heard.Position - position).LengthSquared() <= rangeSquared)
+            {
+                radio.SweepDwellLastEmission = heard.Time;
+                RegisterHit(ent, dwell, heard.Count, radio.DwellConfidenceMultiplier);
+            }
+
+            // fixed: nothing left to dwell for
+            if (radio.DiscoveredFrequencies.Contains(dwell))
+                radio.SweepDwellKilohertz = -1;
+
+            Dirty(ent);
+
+            var dwellEv = new ANPRCSweepUpdatedEvent();
+            RaiseLocalEvent(ent.Owner, ref dwellEv);
+            return;
+        }
+
+        var start = radio.SweepPosition;
+        var advance = Math.Max(1, (int) MathF.Round(radio.SweepKilohertzPerSecond * seconds));
 
         foreach (var (frequency, emission) in _band)
         {
@@ -195,7 +223,7 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
         }
     }
 
-    private void RegisterHit(Entity<ANPRCRadioComponent> ent, RadioFrequency frequency, int traffic)
+    private void RegisterHit(Entity<ANPRCRadioComponent> ent, RadioFrequency frequency, int traffic, float boost = 1f)
     {
         var radio = ent.Comp;
 
@@ -225,7 +253,7 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
         var previous = radio.SweepContacts.GetValueOrDefault(frequency);
         var previousTier = TierOf(radio, previous);
 
-        var confidence = previous + radio.SweepConfidencePerHit * multiplier;
+        var confidence = previous + radio.SweepConfidencePerHit * multiplier * boost;
         var tier = TierOf(radio, confidence);
 
         if (tier < radio.SweepTierThresholds.Count)
@@ -267,6 +295,7 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
 
         ent.Comp.SweepEnabled = false;
         ent.Comp.SweepLastUpdate = TimeSpan.Zero;
+        ent.Comp.SweepDwellKilohertz = -1;
         Dirty(ent);
 
         var wearer = Transform(ent.Owner).ParentUid;

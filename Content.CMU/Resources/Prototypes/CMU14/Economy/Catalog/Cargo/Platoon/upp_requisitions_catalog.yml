@@ -111,6 +111,8 @@
         crate: ANPRCFillCardResupplyCrateOPFOR
       - cost: 1500
         crate: ANPRCRadioResupplyCrateOPFOR
+      - cost: 2500
+        crate: AU14CrateMastAntennaHead
       - cost: 1200
         crate: AU14CrateTacticalMonocular
       - cost: 1700

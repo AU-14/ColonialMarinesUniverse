@@ -1,19 +1,5 @@
 anprc-window-title = AN/PRC-117G Tactical Radio
 
-anprc-transmit-hint-header = TRANSMIT
-anprc-transmit-hint-active = :r transmits on active preset
-
-anprc-power-off-button = POWER OFF
-anprc-power-on-button = POWER ON
-
-anprc-status-equipped = EQUIPPED
-anprc-status-unequipped = UNEQUIPPED
-anprc-status-on = ON
-anprc-status-off = OFF
-
-anprc-slot-empty-display = NO CHANNEL
-
-
 anprc-radio-off = The radio makes no sound. It is switched off.
 anprc-not-authorized = The radio clicks. You are not trained to operate this equipment.
 anprc-no-active-slot = No preset slot is active. Add a net first.
@@ -75,8 +61,6 @@ anprc-recrypto-stale-card = This card has already been superseded. Insert a curr
 anprc-recrypto-foreign-card = CHANGEOVER DENIED - loaded fill does not match this radio's issuing authority.
 anprc-recrypto-ordered = COMSEC CHANGEOVER ORDERED: all { $faction } fill cards issued before this order are now superseded. Request replacement fill through the normal resupply channel.
 anprc-recrypto-not-authorized = CHANGEOVER DENIED - recrypto requires command COMSEC authority.
-anprc-recrypto-button = ORDER RECRYPTO - SUPERSEDE FACTION FILL
-anprc-recrypto-button-confirm = PRESS AGAIN TO CONFIRM - SUPERSEDES ALL FACTION FILLS
 anprc-recrypto-superseded-notice = COMSEC CHANGEOVER - your loaded fill has been superseded. Request replacement fill.
 
 anprc-battery-depleted = The radio has no charge. Insert a battery.
@@ -123,3 +107,70 @@ anprc-log-frequency-unknown = FREQ UNK
 
 # languages that do not carry over the air
 anprc-language-no-radio = { $language } does not carry over a radio net.
+
+anprc-quick-setup-loaded = Standard nets loaded: { $nets }.
+anprc-quick-setup-nothing = Standard nets already loaded.
+anprc-quick-setup-full = No free memory for: { $nets }. Delete or empty a memory first.
+
+# phone (ANPRCRadioSystem.Phone)
+anprc-call-says = { $name } says, "{ $message }"
+anprc-call-no-fill = No COMSEC fill loaded. The set has no side to call on.
+anprc-call-no-link = NO LINK. The set is off, stowed, jammed, flat or searching.
+anprc-call-no-link-target = NO LINK. That station is out of reach - no relay coverage between you and no direct path.
+anprc-call-incoming = Your AN/PRC-117G is ringing: { $caller }. Take the handset to answer.
+anprc-call-incoming-connected = Incoming call from { $caller } - connected on your handset.
+anprc-call-ended = You hang up.
+anprc-call-far-end-hung-up = The line goes dead. The other end hung up.
+anprc-call-link-lost = The call drops. Link lost.
+anprc-call-net-blocked = The handset is on a call. Hang up to get back on the net.
+anprc-verb-phone = Use Phone
+
+# expert techniques (ANPRCRadioSystem.Expert)
+anprc-emcon-on = EMCON: the set is silent. It will not transmit, relay or ring, and it sips power. It still hears everything.
+anprc-emcon-off = EMCON lifted. The set transmits and relays again.
+anprc-emcon-no-transmit = The set is in EMCON - it will not transmit. Lift EMCON on the faceplate's OPT page.
+anprc-retrans-needs-staked = Retrans only works on a set staked in the ground.
+anprc-retrans-needs-nets = Pick two different memories, each holding a named net.
+anprc-retrans-bridged = Retrans up: traffic on { $a } is repeated on { $b }, and back.
+anprc-retrans-relayed = [RXMT] { $speaker }: { $message }
+anprc-return-to-auto-done = The set is back on AUTO.
+anprc-peak-needs-staked = Stake the set down and switch it on before peaking the antenna.
+anprc-peak-already = The antenna is already peaked.
+anprc-peak-start = You start aiming and tuning the antenna...
+anprc-peak-done = Antenna peaked. The set covers further until it is packed up.
+anprc-otar-needs-current-fill = You need your side's current key loaded to push it over the air.
+anprc-otar-cooldown = The set is still cycling from the last key push.
+anprc-otar-none = No set in reach is behind on the key.
+anprc-otar-sent = Key pushed over the air to { $count ->
+    [one] one set
+   *[other] { $count } sets
+}.
+anprc-otar-received = Your set's COMSEC key was updated over the air by { $station }.
+anprc-dwell-needs-search = Start a band search before parking the head.
+anprc-dwell-on = Head parked on the contact. The rest of the band goes unheard until you release it.
+anprc-dwell-lost = That contact has faded or been fixed.
+anprc-jammer-none = No jammer is covering the set.
+anprc-jammer-bearing-first = Jammer bearing { $bearing }. Move at least { $baseline } tiles and take a second bearing to fix it.
+anprc-jammer-baseline-short = Jammer bearing { $bearing }, but you have only moved { $moved } of { $baseline } tiles from the first. Move further before the second bearing.
+anprc-jammer-fixed = FIX: bearings cross at { $bearing }, about { $distance } tiles out. Jammer marked on your side's map for { $minutes } minutes.
+
+# server-side words that used to be English literals
+anprc-antenna-none = NONE
+anprc-log-report-title = NET LOG
+anprc-log-report-title-intercepts = INTERCEPT LOG
+anprc-log-report-station = STATION:
+anprc-log-report-entries = ENTRIES:
+anprc-log-report-intercept = (INTERCEPT)
+anprc-log-report-footer = Transcribed from an AN/PRC-117G net log. Times are set clock, not local.
+anprc-bearing-n = N
+anprc-bearing-ne = NE
+anprc-bearing-e = E
+anprc-bearing-se = SE
+anprc-bearing-s = S
+anprc-bearing-sw = SW
+anprc-bearing-w = W
+anprc-bearing-nw = NW
+
+anprc-antenna-whip = WHIP
+anprc-antenna-wire = WIRE
+anprc-antenna-mast = MAST

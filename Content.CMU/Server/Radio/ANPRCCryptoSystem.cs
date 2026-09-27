@@ -270,6 +270,28 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
         return fill.Generation == GetGeneration(fill.Faction);
     }
 
+    /// <summary>
+    ///     Brings a superseded fill card in this set up to its faction's current key, as an over-the-air
+    ///     rekey from another set does. Whoever holds the set gets the key - a captured set with the card
+    ///     still in it included, which is why a set is zeroized before it is abandoned.
+    /// </summary>
+    public bool TryRekeyOverAir(EntityUid anprc)
+    {
+        if (!TryGetFillCard(anprc, out var fill, out var cardUid) || string.IsNullOrEmpty(fill.Faction))
+            return false;
+
+        var current = GetGeneration(fill.Faction);
+
+        if (fill.Generation == current)
+            return false;
+
+        fill.Generation = current;
+        Dirty(cardUid, fill);
+        RaiseLocalEvent(anprc, new ANPRCCryptoChangedEvent());
+
+        return true;
+    }
+
     public string GetFillFaction(EntityUid anprc)
     {
         return TryGetFillCard(anprc, out var fill, out _)
