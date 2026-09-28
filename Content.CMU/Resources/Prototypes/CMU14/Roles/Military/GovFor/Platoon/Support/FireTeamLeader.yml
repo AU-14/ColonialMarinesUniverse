@@ -23,6 +23,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     radioTag: FTL
   - type: ANPRCRadioUser # radio trained so an FTL can run the manpack if the RTO drops, they don't spawn with one

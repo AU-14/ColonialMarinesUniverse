@@ -109,9 +109,9 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     SetPhonesFactionForParent(shipUid, shipFaction.Faction);
 
                 PlatoonPrototype? shipPlatoon = null;
-                if (shipFaction.Faction == "govfor" && planetComp.GovforInShip && govPlatoon != null)
+                if (shipFaction.Faction == "govfor" && planetComp.GovforInShip)
                     shipPlatoon = govPlatoon;
-                else if (shipFaction.Faction == "opfor" && planetComp.OpforInShip && opPlatoon != null)
+                else if (shipFaction.Faction == "opfor" && planetComp.OpforInShip)
                     shipPlatoon = opPlatoon;
                 else
                     continue;
@@ -126,6 +126,9 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     {
                         continue;
                     }
+
+                    if (TrySpawnFactionTerminal(markerComp.Class, shipFaction.Faction, transform))
+                        continue;
 
                     if (markerComp.Class == PlatoonMarkerClass.DropshipDestination)
                     {
@@ -178,10 +181,15 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         {
             var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
 
-            // Skip markers that are both or neither
-            if ((markerComp.Govfor && markerComp.Opfor) || (!markerComp.Govfor && !markerComp.Opfor))
+            // Ship markers are resolved only by the owning ship, never by a fixed faction flag.
+            if (markerComp.Ship ||
+                (markerComp.Govfor ? 1 : 0) + (markerComp.Opfor ? 1 : 0) + (markerComp.Colony ? 1 : 0) != 1)
                 continue;
             if (!usedMarkers.Add(markerUid)) // already in set so skip
+                continue;
+
+            var faction = markerComp.Govfor ? "govfor" : markerComp.Opfor ? "opfor" : "colony";
+            if (TrySpawnFactionTerminal(markerComp.Class, faction, transform))
                 continue;
 
             PlatoonPrototype? platoon = null;
@@ -620,6 +628,31 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
         vendorProtoId = default;
         return false;
+    }
+
+    private bool TrySpawnFactionTerminal(PlatoonMarkerClass markerClass, string faction, TransformComponent transform)
+    {
+        var suffix = faction switch
+        {
+            "govfor" => "Govfor",
+            "opfor" => "Opfor",
+            "colony" => "Colony",
+            _ => null,
+        };
+        if (suffix == null)
+            return false;
+
+        var prototype = markerClass switch
+        {
+            PlatoonMarkerClass.ResearchTerminal => "CMUResearchDataTerminal" + suffix,
+            PlatoonMarkerClass.HospitalEmergencyComputer => "AU14HospitalEmergencyComputer" + suffix,
+            _ => null,
+        };
+        if (prototype == null)
+            return false;
+
+        _entityManager.SpawnAttachedTo(prototype, transform.Coordinates, rotation: transform.LocalRotation);
+        return true;
     }
 
     private void SetRequisitionsVendorAccess(EntityUid vendor, PlatoonMarkerClass markerClass, string faction)

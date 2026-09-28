@@ -24,6 +24,7 @@
     - type: Anchorable
       flags:
       - Anchorable
+      - Unanchorable
     - type: Pullable
     - type: Sprite
       sprite: Structures/Piping/Atmospherics/miners.rsi

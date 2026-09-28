@@ -2,7 +2,7 @@
   parent: GasMinerOxygen
   id: CMUGasMinerOxygenPortable
   name: OM-2 portable oxygen miner
-  suffix: Portable, Permanent, 150kPa
+  suffix: Portable, 150kPa
   description: A trailer-sized atmospheric extractor. Trickles out breathable-pressure oxygen while powered - the colony breathes through it, so its power bill is never late.
   placement:
     mode: SnapgridCenter
@@ -12,7 +12,7 @@
   - type: Physics
     bodyType: Static
   - type: Anchorable
-    flags: None
+    flags: [Anchorable, Unanchorable]
   - type: GasMiner
     maxExternalPressure: 150
     spawnAmount: 40
@@ -27,7 +27,7 @@
   parent: CMUGasMinerOxygenPortable
   id: CMUGasMinerNitrogenPortable
   name: NM-2 portable nitrogen miner
-  suffix: Portable, Permanent, 150kPa
+  suffix: Portable, 150kPa
   description: 'A trailer-sized atmospheric extractor. Trickles out breathable-pressure nitrogen while powered, for blending air, not filling tanks. The name is honest: that is mostly what nitrogen is.'
   components:
   - type: GasMiner
@@ -39,7 +39,7 @@
   parent: CMUGasMinerOxygenPortable
   id: CMUGasMinerPlasmaPortableAdmin
   name: PM-2 portable plasma miner
-  suffix: Admin Only, Permanent, 150kPa
+  suffix: Admin Only, Portable, 150kPa
   description: An administrator-only atmospheric extractor that produces plasma while powered.
   components:
   - type: GasMiner
@@ -49,7 +49,7 @@
   parent: CMUGasMinerOxygenPortable
   id: CMUGasMinerPhoronPortableAdmin
   name: PHM-2 portable phoron miner
-  suffix: Admin Only, Permanent, 150kPa
+  suffix: Admin Only, Portable, 150kPa
   description: An administrator-only atmospheric extractor that produces phoron while powered.
   components:
   - type: GasMiner
@@ -59,7 +59,7 @@
   parent: CMUGasMinerOxygenPortable
   id: CMUGasMinerCarbonDioxidePortableAdmin
   name: CM-2 portable carbon dioxide miner
-  suffix: Admin Only, Permanent, 150kPa
+  suffix: Admin Only, Portable, 150kPa
   description: An administrator-only atmospheric extractor that produces carbon dioxide while powered.
   components:
   - type: GasMiner
@@ -69,7 +69,7 @@
   parent: CMUGasMinerOxygenPortable
   id: CMUGasMinerAirPortableAdmin
   name: AM-2 portable air miner
-  suffix: Admin Only, Permanent, 150kPa
+  suffix: Admin Only, Portable, 150kPa
   description: An administrator-only atmospheric extractor that produces a breathable oxygen and nitrogen mixture while powered.
   components:
   - type: CMUGasMinerMixture
@@ -81,7 +81,7 @@
   parent: CMUGasMinerOxygenPortable
   id: CMUGasMinerNitrousOxidePortableAdmin
   name: NOM-2 portable nitrous oxide miner
-  suffix: Admin Only, Permanent, 150kPa
+  suffix: Admin Only, Portable, 150kPa
   description: An administrator-only atmospheric extractor that produces nitrous oxide while powered.
   components:
   - type: GasMiner
@@ -91,7 +91,7 @@
   parent: CMUGasMinerOxygenPortable
   id: CMUGasMinerTritiumPortableAdmin
   name: TM-2 portable tritium miner
-  suffix: Admin Only, Permanent, 150kPa
+  suffix: Admin Only, Portable, 150kPa
   description: An administrator-only atmospheric extractor that produces tritium while powered.
   components:
   - type: GasMiner
