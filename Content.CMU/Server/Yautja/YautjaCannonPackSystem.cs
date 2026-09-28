@@ -36,7 +36,7 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<YautjaCannonPackComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<YautjaCannonPackComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<YautjaCannonPackComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<YautjaCannonPackComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<YautjaCannonPackComponent, GotEquippedEvent>(OnEquipped);
@@ -52,7 +52,7 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
         SubscribeLocalEvent<YautjaCannonPackProjectileRefundComponent, EntityTerminatingEvent>(OnCannonProjectileTerminating);
     }
 
-    private void OnStartup(Entity<YautjaCannonPackComponent> ent, ref ComponentStartup args)
+    private void OnMapInit(Entity<YautjaCannonPackComponent> ent, ref MapInitEvent args)
     {
         EnsureInternalCannon(ent);
     }

@@ -268,7 +268,7 @@ public sealed class YautjaFeedbackRegressionTest
     }
 
     [Test]
-    public async Task ColdRankCacheResolvesPersistedRankForCharacterInfo()
+    public async Task RankAndProfileCapabilitiesUseTheSameClanCache()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
         var server = pair.Server;
@@ -277,12 +277,18 @@ public sealed class YautjaFeedbackRegressionTest
         var ranks = server.ResolveDependency<YautjaRankManager>();
 
         await db.SetYautjaRank(userId.UserId, YautjaRank.Elite);
-        // Refresh the clan-resolution layer, then evict only the rank-manager
-        // cache to model character-info opening before rank priming completes.
         await ranks.Refresh(userId);
-        ranks.InvalidateCached(userId);
 
         Assert.That(ranks.ResolveCached(userId), Is.EqualTo(YautjaRank.Elite));
+        Assert.That(ranks.ResolveProfileCapabilitiesCached(userId).Rank, Is.EqualTo(YautjaRank.Elite));
+
+        server.ResolveDependency<YautjaClanManager>().InvalidateCache(userId);
+        Assert.That(ranks.ResolveCached(userId), Is.EqualTo(YautjaRank.Blooded));
+        Assert.That(ranks.ResolveProfileCapabilitiesCached(userId).Rank, Is.EqualTo(YautjaRank.Blooded));
+
+        await ranks.Prime(userId);
+        Assert.That(ranks.ResolveCached(userId), Is.EqualTo(YautjaRank.Elite));
+        Assert.That(ranks.ResolveProfileCapabilitiesCached(userId).Rank, Is.EqualTo(YautjaRank.Elite));
         await pair.CleanReturnAsync();
     }
 

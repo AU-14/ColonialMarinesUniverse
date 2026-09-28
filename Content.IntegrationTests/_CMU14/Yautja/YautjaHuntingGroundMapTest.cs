@@ -39,6 +39,70 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaHuntingGroundMapTest
 {
+    [Test]
+    public async Task TeleporterDialogRejectsResponsesFromThePreviousActor()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        await server.WaitAssertion(() =>
+        {
+            var em = server.EntMan;
+            var teleporter = em.SpawnEntity("CMUHunterShipTeleporterYautjaShip", map.GridCoords);
+            var destination = em.SpawnEntity(null, map.GridCoords.Offset(new Vector2(10, 0)));
+            var first = em.SpawnEntity(null, map.GridCoords.Offset(new Vector2(1, 0)));
+            var second = em.SpawnEntity(null, map.GridCoords.Offset(new Vector2(2, 0)));
+            try
+            {
+                em.EnsureComponent<YautjaTechAuthorizedComponent>(first);
+                em.EnsureComponent<YautjaTechAuthorizedComponent>(second);
+                var target = em.EnsureComponent<YautjaHuntTeleportDestinationComponent>(destination);
+                target.Kind = YautjaHuntTeleporterKind.Ship;
+                target.Id = "dialog-regression";
+                em.GetComponent<YautjaHuntTeleporterComponent>(teleporter).DestinationId = target.Id;
+                var firstPosition = em.GetComponent<TransformComponent>(first).Coordinates;
+                var secondPosition = em.GetComponent<TransformComponent>(second).Coordinates;
+                var firstStep = new StepTriggeredOnEvent(teleporter, first);
+                em.EventBus.RaiseLocalEvent(teleporter, ref firstStep);
+                var secondStep = new StepTriggeredOnEvent(teleporter, second);
+                em.EventBus.RaiseLocalEvent(teleporter, ref secondStep);
+
+                BoundUserInterfaceMessage[] staleResponses =
+                [
+                    new DialogConfirmBuiMsg(),
+                    new DialogOptionBuiMsg(0),
+                    new DialogInputBuiMsg("stale"),
+                ];
+                foreach (var response in staleResponses)
+                {
+                    response.Actor = first;
+                    response.UiKey = DialogUiKey.Key;
+                    em.EventBus.RaiseLocalEvent(teleporter, (object) response);
+                    Assert.That(em.HasComponent<DialogComponent>(teleporter), Is.True);
+                    Assert.That(em.GetComponent<TransformComponent>(second).Coordinates, Is.EqualTo(secondPosition));
+                }
+                em.EventBus.RaiseLocalEvent(teleporter, new BoundUIClosedEvent(DialogUiKey.Key, teleporter, first));
+                Assert.That(em.HasComponent<DialogComponent>(teleporter), Is.True);
+
+                em.EventBus.RaiseLocalEvent(teleporter, new DialogConfirmBuiMsg
+                {
+                    Actor = second,
+                    UiKey = DialogUiKey.Key,
+                });
+                Assert.That(em.GetComponent<TransformComponent>(second).Coordinates,
+                    Is.EqualTo(em.GetComponent<TransformComponent>(destination).Coordinates));
+                Assert.That(em.GetComponent<TransformComponent>(first).Coordinates, Is.EqualTo(firstPosition));
+                Assert.That(em.HasComponent<DialogComponent>(teleporter), Is.False);
+            }
+            finally
+            {
+                foreach (var uid in new[] { teleporter, destination, first, second })
+                    em.DeleteEntity(uid);
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
+
     private static readonly ResPath JungleMoonPath = new("/Maps/CMU14/HuntingGrounds/jungle_moon.yml");
     private static readonly ResPath DesertMoonPath = new("/Maps/CMU14/HuntingGrounds/desert_moon.yml");
     private static readonly ResPath DesertMoonCavesPath = new("/Maps/CMU14/HuntingGrounds/desert_moon_caves.yml");

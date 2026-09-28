@@ -16,7 +16,6 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -37,6 +36,7 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private FixtureSystem _fixtures = default!;
+    private bool _refreshPending;
 
     public override void Initialize()
     {
@@ -52,66 +52,31 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
+        if (!_refreshPending)
+            return;
+
+        _refreshPending = false;
         RefreshAllRacks();
     }
 
     private void OnStartup(Entity<YautjaGearRackComponent> ent, ref ComponentStartup args)
     {
-        NormalizeVendorStock(ent.Owner);
-        RefreshRun(ent);
+        _refreshPending = true;
     }
 
     private void OnMapInit(Entity<YautjaGearRackComponent> ent, ref MapInitEvent args)
     {
-        NormalizeVendorStock(ent.Owner);
-        RefreshRun(ent);
+        _refreshPending = true;
     }
 
     private void OnShutdown(Entity<YautjaGearRackComponent> ent, ref ComponentShutdown args)
     {
-        RefreshRun(ent);
+        _refreshPending = true;
     }
 
     private void OnMove(Entity<YautjaGearRackComponent> ent, ref MoveEvent args)
     {
-        RefreshRun(ent);
-    }
-
-    private void NormalizeVendorStock(EntityUid uid)
-    {
-        if (!TryComp<CMAutomatedVendorComponent>(uid, out var vendor))
-            return;
-
-        var changed = false;
-        foreach (var section in vendor.Sections)
-        {
-            foreach (var entry in section.Entries)
-            {
-                // Yautja racks are shared catalogs. Their stock is infinite; the
-                // per-player limit below is the only exhaustion mechanism.
-                if (entry.Amount != null)
-                {
-                    entry.Amount = null;
-                    changed = true;
-                }
-
-                if (entry.MaxPerUser != null)
-                    continue;
-
-                // Point-priced spare gear is replenishable, while kits, armor,
-                // weapons and attachments are one-per-player loadout choices.
-                entry.MaxPerUser = entry.Points != null ? 10 : 1;
-                changed = true;
-            }
-        }
-
-        if (changed)
-            Dirty(uid, vendor);
-    }
-
-    private void RefreshRun(Entity<YautjaGearRackComponent> ent)
-    {
-        Timer.Spawn(0, RefreshAllRacks);
+        _refreshPending = true;
     }
 
     private void RefreshAllRacks()

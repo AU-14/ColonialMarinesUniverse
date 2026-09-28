@@ -174,7 +174,8 @@
     sprite: CMU14/HunterShip/obj/items/chemistry.rsi
     layers:
     - state: "beakersilver"
-    - state: "beakersilver"
+    - sprite: _RMC14/Objects/Medical/large_beaker.rsi
+      state: beakerlarge1
       map: ["enum.SolutionContainerLayers.Fill"]
       visible: false
   - type: Icon
@@ -182,14 +183,10 @@
     state: "beakersilver"
   - type: Item
     sprite: _RMC14/Objects/Medical/large_beaker.rsi
-  - type: SolutionContainerVisuals
-    fillSprite:
-      sprite: _RMC14/Objects/Medical/large_beaker.rsi
-      state: beakerlarge1
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 240
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 240
   - type: SolutionTransfer
     transferAmount: 5
     maxTransferAmount: 240

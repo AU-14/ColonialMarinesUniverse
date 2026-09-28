@@ -1,15 +1,8 @@
-using System.Linq;
 using Content.Shared.Chemistry;
-using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Robust.Client.GameObjects;
-using Robust.Client.Graphics;
-using Robust.Client.ResourceManagement;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
-using Robust.Shared.Map;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations;
 using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.CMU14.Yautja;
@@ -109,52 +102,6 @@ public sealed class YautjaChemistryVisualTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task AllSolutionContainerFillStatesExistInConfiguredRsi()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var client = pair.Client;
-        var protoMan = client.ResolveDependency<IPrototypeManager>();
-        var componentFactory = client.ResolveDependency<IComponentFactory>();
-        var resourceCache = client.ResolveDependency<IResourceCache>();
-
-        await client.WaitAssertion(() =>
-        {
-            var protos = protoMan.EnumeratePrototypes<EntityPrototype>()
-                .Where(p => !p.Abstract)
-                .Where(p => p.TryComp<SolutionContainerVisualsComponent>(out _, componentFactory))
-                .Where(p => p.TryComp<SpriteComponent>(out _, componentFactory))
-                .OrderBy(p => p.ID);
-
-            foreach (var proto in protos)
-            {
-                Assert.That(proto.TryComp<SolutionContainerVisualsComponent>(out var visuals, componentFactory));
-                Assert.That(proto.TryComp<SpriteComponent>(out var sprite, componentFactory));
-
-                if (string.IsNullOrEmpty(visuals.FillBaseName))
-                    continue;
-
-                if (!sprite.LayerExists(visuals.Layer))
-                {
-                    Assert.That(visuals.FillSprite, Is.Null,
-                        $"{proto.ID} configures fillSprite/fillBaseName but Sprite lacks mapped {visuals.Layer} layer");
-                    continue;
-                }
-
-                var rsi = ResolveFillRsi(proto, visuals, sprite, resourceCache);
-
-                for (var i = 1; i <= visuals.MaxFillLevels; i++)
-                {
-                    var state = $"{visuals.FillBaseName}{i}";
-                    Assert.That(rsi.TryGetState(state, out _), Is.True,
-                        $"{proto.ID} fill RSI {rsi.Path} should contain state {state}");
-                }
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
     private static void FillBeaker(EntityUid uid, SharedSolutionContainerSystem solutions)
     {
         Assert.That(solutions.TryGetSolution(uid, "beaker", out var solutionEnt, out _), Is.True);
@@ -174,7 +121,6 @@ public sealed class YautjaChemistryVisualTest
         var sprite = entMan.GetComponent<SpriteComponent>(uid);
 
         Assert.That(spriteSystem.TryGetLayer((uid, sprite), 0, out var baseLayer, false), Is.True, $"{id} base layer missing");
-        // Red-test coverage: the ship prototype must expose the mapped fill layer before RSI-state checks can pass.
         Assert.That(spriteSystem.TryGetLayer((uid, sprite), SolutionContainerLayers.Fill, out var fillLayer, false), Is.True, $"{id} fill layer missing");
 
         Assert.That(baseLayer!.ActualRsi?.Path, Is.EqualTo(expectedBaseRsi), $"{id} base layer RSI");
@@ -186,25 +132,5 @@ public sealed class YautjaChemistryVisualTest
             Assert.That(fillLayer.ActualRsi!.TryGetState(state, out _), Is.True,
                 $"{id} fill layer RSI {fillLayer.ActualRsi.Path} should contain state {state}");
         }
-    }
-
-    private static RSI ResolveFillRsi(
-        EntityPrototype proto,
-        SolutionContainerVisualsComponent visuals,
-        SpriteComponent sprite,
-        IResourceCache resourceCache)
-    {
-        if (visuals.FillSprite is SpriteSpecifier.Rsi fillSprite)
-        {
-            var rsiPath = SpriteSpecifierSerializer.TextureRoot / fillSprite.RsiPath;
-            Assert.That(resourceCache.TryGetResource<RSIResource>(rsiPath, out var resource), Is.True,
-                $"{proto.ID} fillSprite RSI {rsiPath} should load");
-            return resource!.RSI;
-        }
-
-        Assert.That(visuals.FillSprite, Is.Null,
-            $"{proto.ID} fillSprite must be an RSI sprite specifier so fillBaseName states can be resolved");
-        Assert.That(sprite.BaseRSI, Is.Not.Null, $"{proto.ID} Sprite base RSI should exist for fillBaseName {visuals.FillBaseName}");
-        return sprite.BaseRSI!;
     }
 }

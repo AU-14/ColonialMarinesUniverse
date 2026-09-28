@@ -1300,157 +1300,160 @@
       - id: CMUYautjaHuntingEquipmentBundle
         name: Hunting Equipment
         choices: {CMUYautjaEssentials: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaArmorBundle
         name: Armor
         choices: {CMUYautjaArmor: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
     - name: Main Weapons (CHOOSE 1)
       choices: {CMUYautjaPrimary: 1}
       entries:
       - id: CMUYautjaClanSword
         name: The Primary Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaRendingSword
         name: The Rending Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaPiercingSword
         name: The Piercing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSeveringSword
         name: The Severing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCruelStaff
         name: The Taruulan Staff
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainwhip
         name: The Sundering Chain-Whip
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDualWarScythe
         name: The Cleaving War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDoubleWarScythe
         name: The Ripping War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCombistick
         name: The Adaptive Combi-Stick
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarAxe
         name: The Butchering War Axe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarGlaive
         name: The Lumbering Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCleavingGlaive
         name: The Imposing Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaLongaxe
         name: The Crushing Longaxe
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Bracer Attachments
       entries:
       - id: CMUYautjaWristBladesBundle
         name: Wrist Blades
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBracerShieldAttachment
         name: The Compact Shield
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaFearsomeScimitarsBundle
         name: The Fearsome Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSkeweringScimitarsBundle
         name: The Skewering Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainGauntletsBundle
         name: The Chain Gauntlets
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Support Equipment (CHOOSE 2)
       choices: {CMUYautjaSupport: 2}
       entries:
       - id: CMUYautjaFalconDrone
         name: The Agile Drone
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaClanShield
         name: The Steadfast Shield
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaHeavyClanArmor
         name: The Formidable Plate Armor
-        amount: 1
+        maxPerUser: 1
         replaceSlot: OUTERCLOTHING
       - id: CMUYautjaSpikeLauncher
         name: The Fleeting Spike Launcher
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaSmartDisc
         name: The Purifying Smart-Disc
-        amount: 1
+        maxPerUser: 1
     - name: Ranged Equipment (CHOOSE 1)
       choices: {CMUYautjaRanged: 1}
       entries:
       - id: CMUYautjaPlasmaPistol
         name: The Swift Plasma Pistol
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaQuiverStrapFilled
         name: The Firm Bow
-        amount: 1
+        maxPerUser: 1
     - name: Clothing Accessory (CHOOSE 1)
       choices: {CMUYautjaAccessory: 1}
       entries:
       - id: CMUYautjaCapeQuarter
         name: Quarter-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeThird
         name: Third-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeHalf
         name: Half-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapePoncho
         name: Poncho
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
     - name: Spare Equipment
       entries:
       - id: CMUYautjaFalconDrone
         name: Falcon Drone
         points: 20
+        maxPerUser: 10
       - id: CMUYautjaHuntingTrap
         name: Hunting Trap
         points: 10
+        maxPerUser: 10
       - id: CMUYautjaArrow
         name: Arrow - Explosive
         points: 10
+        maxPerUser: 10
       - id: CMUYautjaSnareArrow
         name: Arrow - Snare
         points: 15
-
+        maxPerUser: 10
 - type: entity
   parent: CMUYautjaBracer
   id: CMUYautjaBracerRetro
@@ -2714,178 +2717,182 @@
       - id: CMUYautjaHuntingEquipmentBundle
         name: Hunting Equipment
         choices: {CMUYautjaEssentials: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaArmorBundle
         name: Armor
         choices: {CMUYautjaArmor: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
     - name: Main Weapons (CHOOSE 1)
       choices: {CMUYautjaPrimary: 1}
       entries:
       - id: CMUYautjaClanSword
         name: The Primary Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaRendingSword
         name: The Rending Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaPiercingSword
         name: The Piercing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSeveringSword
         name: The Severing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCruelStaff
         name: The Taruulan Staff
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainwhip
         name: The Sundering Chain-Whip
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDualWarScythe
         name: The Cleaving War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDoubleWarScythe
         name: The Ripping War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCombistick
         name: The Adaptive Combi-Stick
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarAxe
         name: The Butchering War Axe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarGlaive
         name: The Lumbering Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCleavingGlaive
         name: The Imposing Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaLongaxe
         name: The Crushing Longaxe
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Bracer Attachments
       entries:
       - id: CMUYautjaWristBladesBundle
         name: Wrist Blades
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBracerShieldAttachment
         name: The Compact Shield
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaFearsomeScimitarsBundle
         name: The Fearsome Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSkeweringScimitarsBundle
         name: The Skewering Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainGauntletsBundle
         name: The Chain Gauntlets
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Support Equipment (CHOOSE 2)
       choices: {CMUYautjaSupport: 2}
       entries:
       - id: CMUYautjaFalconDrone
         name: The Agile Drone
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaClanShield
         name: The Steadfast Shield
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaAncientShield
         name: "The Gilded Warlord’s Aegis"
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaAncientShieldAlt
         name: "The Dread Hunter’s Bulwark"
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaHeavyClanArmor
         name: The Formidable Plate Armor
-        amount: 1
+        maxPerUser: 1
         replaceSlot: OUTERCLOTHING
       - id: CMUYautjaSpikeLauncher
         name: The Fleeting Spike Launcher
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaSmartDisc
         name: The Purifying Smart-Disc
-        amount: 1
+        maxPerUser: 1
     - name: Ranged Equipment (CHOOSE 1)
       choices: {CMUYautjaRanged: 1}
       entries:
       - id: CMUYautjaPlasmaPistol
         name: The Swift Plasma Pistol
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaQuiverStrapFilled
         name: The Firm Bow
-        amount: 1
+        maxPerUser: 1
     - name: Clothing Accessory (CHOOSE 1)
       choices: {CMUYautjaAccessory: 1}
       entries:
       - id: CMUYautjaCapeQuarter
         name: Quarter-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeThird
         name: Third-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeHalf
         name: Half-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapePoncho
         name: Poncho
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeDamaged
         name: Damaged-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeFull
         name: Full-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeCeremonial
         name: Ceremonial Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
     - name: Spare Equipment
       entries:
       - id: CMUYautjaFalconDrone
         name: Falcon Drone
         points: 20
+        maxPerUser: 10
       - id: CMUYautjaHuntingTrap
         name: Hunting Trap
         points: 10
+        maxPerUser: 10
       - id: CMUYautjaSmartDisc
         name: Smart-Disc
         points: 20
+        maxPerUser: 10
       - id: CMUYautjaArrow
         name: Arrow - Explosive
         points: 10
+        maxPerUser: 10
       - id: CMUYautjaSnareArrow
         name: Arrow - Snare
         points: 15
-
+        maxPerUser: 10
 - type: entity
   parent: CMUYautjaLoadoutVendor
   id: CMUYautjaYoungbloodLoadoutVendor
@@ -2906,85 +2913,85 @@
       - id: CMUYautjaYoungbloodHuntingEquipmentBundle
         name: Hunting Equipment
         choices: {CMUYautjaEssentials: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaArmorBundle
         name: Armor
         choices: {CMUYautjaArmor: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
     - name: Main Weapons (CHOOSE 1)
       choices: {CMUYautjaPrimary: 1}
       entries:
       - id: CMUYautjaClanSword
         name: The Primary Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaRendingSword
         name: The Rending Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaPiercingSword
         name: The Piercing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSeveringSword
         name: The Severing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainwhip
         name: The Sundering Chain-Whip
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDualWarScythe
         name: The Cleaving War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDoubleWarScythe
         name: The Ripping War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCombistick
         name: The Adaptive Combi-Stick
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarAxe
         name: The Butchering War Axe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarGlaive
         name: The Lumbering Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCleavingGlaive
         name: The Imposing Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaLongaxe
         name: The Crushing Longaxe
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Bracer Attachments
       entries:
       - id: CMUYautjaWristBladesBundle
         name: Wrist Blades
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaFearsomeScimitarsBundle
         name: The Fearsome Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSkeweringScimitarsBundle
         name: The Skewering Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainGauntletsBundle
         name: The Chain Gauntlets
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
 
 - type: entity
@@ -3004,70 +3011,70 @@
       - id: CMUYautjaThrallHuntingEquipmentBundle
         name: Hunting Equipment
         choices: {CMUYautjaEssentials: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
     - name: Armor Material (CHOOSE 1)
       choices: {CMUYautjaArmor: 1}
       entries:
       - id: CMUYautjaThrallArmorEbonyBundle
         name: Ebony
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaThrallArmorSilverBundle
         name: Silver
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaThrallArmorGoldBundle
         name: Gold
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaThrallArmorCrimsonBundle
         name: Crimson
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaThrallArmorBoneBundle
         name: Bone
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Main Weapons (CHOOSE 1)
       choices: {CMUYautjaAccessory: 1}
       entries:
       - id: CMUYautjaClanSword
         name: The Primary Hunting Sword
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaRendingSword
         name: The Rending Hunting Sword
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaPiercingSword
         name: The Piercing Hunting Sword
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaSeveringSword
         name: The Severing Hunting Sword
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaChainwhip
         name: The Sundering Chain-Whip
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaDualWarScythe
         name: The Cleaving War-Scythe
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaDoubleWarScythe
         name: The Ripping War-Scythe
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaCombistick
         name: The Adaptive Combi-Stick
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaWarAxe
         name: The Butchering War Axe
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaWarGlaive
         name: The Lumbering Glaive
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaCleavingGlaive
         name: The Imposing Glaive
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaLongaxe
         name: The Crushing Longaxe
-        amount: 1
+        maxPerUser: 1
 
 - type: entity
   parent: CMUYautjaLoadoutVendor
@@ -3086,51 +3093,51 @@
       - id: CMUYautjaBloodedThrallEquipmentBundle
         name: Blooded Equipment
         choices: {CMUYautjaRanged: 1}
-        amount: 1
+        maxPerUser: 1
     - name: Blooded Bracer Material (CHOOSE 1)
       choices: {CMUYautjaBracer: 1}
       entries:
       - id: CMUYautjaBloodedThrallBracerEbonyBundle
         name: Ebony
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaBloodedThrallBracerSilverBundle
         name: Silver
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaBloodedThrallBracerGoldBundle
         name: Gold
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaBloodedThrallBracerCrimsonBundle
         name: Crimson
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaBloodedThrallBracerBoneBundle
         name: Bone
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Clothing Accessory (CHOOSE 1)
       choices: {CMUYautjaAccessory: 1}
       entries:
       - id: CMUYautjaCapeQuarter
         name: Quarter-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
         mandatory: true
       - id: CMUYautjaCapeThird
         name: Third-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
         mandatory: true
       - id: CMUYautjaCapeHalf
         name: Half-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
         mandatory: true
       - id: CMUYautjaCapePoncho
         name: Poncho
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
         mandatory: true
 
@@ -3164,196 +3171,199 @@
       - id: CMUYautjaBadBloodHuntingEquipmentBundle
         name: Hunting Equipment
         choices: {CMUYautjaEssentials: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
     - name: Armor Set
       choices: {CMUYautjaArmor: 1}
       entries:
       - id: CMUYautjaBadBloodArmorPatchworkBundle
         name: Patchwork Armor
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBadBloodArmorPatchworkAltBundle
         name: Patchwork Armor (Alt)
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBadBloodArmorLunaticBundle
         name: Lunatic Armor
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBadBloodArmorScavengerBundle
         name: Scavenger Armor
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBadBloodArmorScavengerAltBundle
         name: Scavenger Armor (Alt)
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBadBloodArmorVenatorBundle
         name: Venator Armor
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBadBloodArmorCommandoBundle
         name: Commando Armor
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBadBloodArmorCommandoAltBundle
         name: Commando Armor (Alt)
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBadBloodArmorEmissaryBundle
         name: Emissary Armor
-        amount: 1
+        maxPerUser: 1
         mandatory: true
     - name: Main Weapons (CHOOSE 1)
       choices: {CMUYautjaPrimary: 1}
       entries:
       - id: CMUYautjaClanSword
         name: The Primary Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaRendingSword
         name: The Rending Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaPiercingSword
         name: The Piercing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSeveringSword
         name: The Severing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCruelStaff
         name: The Taruulan Staff
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainwhip
         name: The Sundering Chain-Whip
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDualWarScythe
         name: The Cleaving War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDoubleWarScythe
         name: The Ripping War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCombistick
         name: The Adaptive Combi-Stick
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarAxe
         name: The Butchering War Axe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarGlaive
         name: The Lumbering Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCleavingGlaive
         name: The Imposing Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaLongaxe
         name: The Crushing Longaxe
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Bracer Attachments
       entries:
       - id: CMUYautjaWristBladesBundle
         name: Wrist Blades
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBracerShieldAttachment
         name: The Compact Shield
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaFearsomeScimitarsBundle
         name: The Fearsome Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSkeweringScimitarsBundle
         name: The Skewering Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainGauntletsBundle
         name: The Chain Gauntlets
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Support Equipment (CHOOSE 2)
       choices: {CMUYautjaSupport: 2}
       entries:
       - id: CMUYautjaFalconDroneBadBlood
         name: The Agile Drone
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaClanShield
         name: The Steadfast Shield
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaHeavyClanArmor
         name: The Formidable Plate Armor
-        amount: 1
+        maxPerUser: 1
         replaceSlot: OUTERCLOTHING
       - id: CMUYautjaSpikeLauncher
         name: The Fleeting Spike Launcher
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaSmartDisc
         name: The Purifying Smart-Disc
-        amount: 1
+        maxPerUser: 1
     - name: Ranged Equipment (CHOOSE 1)
       choices: {CMUYautjaRanged: 1}
       entries:
       - id: CMUYautjaQuiverStrapDynamic
         name: The Firm Bow
-        amount: 1
+        maxPerUser: 1
     - name: Clothing Accessory (CHOOSE 1)
       choices: {CMUYautjaAccessory: 1}
       entries:
       - id: CMUYautjaCapeQuarter
         name: Quarter-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeThird
         name: Third-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeHalf
         name: Half-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapePoncho
         name: Poncho
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeDamaged
         name: Damaged-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeFull
         name: Full-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
     - name: Spare Equipment
       entries:
       - id: CMUYautjaFalconDroneBadBlood
         name: Falcon Drone
         points: 20
+        maxPerUser: 10
       - id: CMUYautjaHuntingTrap
         name: Hunting Trap
         points: 10
+        maxPerUser: 10
       - id: CMUYautjaDynamicArrow
         name: Arrow - Dynamic Warhead
         points: 10
+        maxPerUser: 10
       - id: CMUYautjaSnareArrow
         name: Arrow - Snare
         points: 15
-
+        maxPerUser: 10
 - type: entity
   parent: CMUYautjaLoadoutVendor
   id: CMUYautjaStrandedLoadoutVendor
@@ -3384,158 +3394,162 @@
       - id: CMUYautjaStrandedHuntingEquipmentBundle
         name: Hunting Equipment
         choices: {CMUYautjaEssentials: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaStrandedArmorBundle
         name: Armor
         choices: {CMUYautjaArmor: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
     - name: Main Weapons (CHOOSE 1)
       choices: {CMUYautjaPrimary: 1}
       entries:
       - id: CMUYautjaClanSword
         name: The Primary Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaRendingSword
         name: The Rending Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaPiercingSword
         name: The Piercing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSeveringSword
         name: The Severing Hunting Sword
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCruelStaff
         name: The Taruulan Staff
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainwhip
         name: The Sundering Chain-Whip
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDualWarScythe
         name: The Cleaving War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaDoubleWarScythe
         name: The Ripping War-Scythe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCombistick
         name: The Adaptive Combi-Stick
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarAxe
         name: The Butchering War Axe
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaWarGlaive
         name: The Lumbering Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaCleavingGlaive
         name: The Imposing Glaive
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaLongaxe
         name: The Crushing Longaxe
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Bracer Attachments
       entries:
       - id: CMUYautjaWristBladesBundle
         name: Wrist Blades
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         mandatory: true
       - id: CMUYautjaBracerShieldAttachment
         name: The Compact Shield
         choices: {CMUYautjaBracer: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaFearsomeScimitarsBundle
         name: The Fearsome Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaSkeweringScimitarsBundle
         name: The Skewering Scimitars
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
       - id: CMUYautjaChainGauntletsBundle
         name: The Chain Gauntlets
         choices: {CMUYautjaPrimary: 1}
-        amount: 1
+        maxPerUser: 1
         recommended: true
     - name: Support Equipment (CHOOSE 2)
       choices: {CMUYautjaSupport: 2}
       entries:
       - id: CMUYautjaFalconDrone
         name: The Agile Drone
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaClanShield
         name: The Steadfast Shield
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaHeavyClanArmor
         name: The Formidable Plate Armor
-        amount: 1
+        maxPerUser: 1
         replaceSlot: OUTERCLOTHING
       - id: CMUYautjaSpikeLauncher
         name: The Fleeting Spike Launcher
-        amount: 1
+        maxPerUser: 1
       - id: CMUYautjaSmartDisc
         name: The Purifying Smart-Disc
-        amount: 1
+        maxPerUser: 1
     - name: Ranged Equipment (CHOOSE 1)
       choices: {CMUYautjaRanged: 1}
       entries:
       - id: CMUYautjaQuiverStrapFilled
         name: The Firm Bow
-        amount: 1
+        maxPerUser: 1
     - name: Clothing Accessory (CHOOSE 1)
       choices: {CMUYautjaAccessory: 1}
       entries:
       - id: CMUYautjaCapeQuarter
         name: Quarter-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeThird
         name: Third-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeHalf
         name: Half-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapePoncho
         name: Poncho
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeDamaged
         name: Damaged-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
       - id: CMUYautjaCapeFull
         name: Full-Cape
-        amount: 1
+        maxPerUser: 1
         replaceSlot: back
     - name: Spare Equipment
       entries:
       - id: CMUYautjaFalconDrone
         name: Falcon Drone
         points: 20
+        maxPerUser: 10
       - id: CMUYautjaHuntingTrap
         name: Hunting Trap
         points: 15
+        maxPerUser: 10
       - id: CMUYautjaArrow
         name: Arrow - Explosive
         points: 15
+        maxPerUser: 10
       - id: CMUYautjaSnareArrow
         name: Arrow - Snare
         points: 20
+        maxPerUser: 10

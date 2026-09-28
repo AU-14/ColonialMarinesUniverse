@@ -52,11 +52,13 @@ public sealed class HunterShipYautjaMachineryTest
             {
                 var prototype = prototypes.Index<EntityPrototype>(row.Id);
 
-                Assert.That(prototype.Parents, Does.Contain(row.FunctionalParent),
+                var parents = prototypes.EnumerateAllParents<EntityPrototype>(prototype.ID)
+                    .Select(parent => parent.id).ToArray();
+                Assert.That(parents, Does.Contain(row.FunctionalParent),
                     $"{row.Id} maps CMSS13 {row.SourcePath} to the local gameplay backend.");
-                Assert.That(prototype.Parents, Does.Contain(row.YautjaParent),
+                Assert.That(parents, Does.Contain(row.YautjaParent),
                     $"{row.Id} also inherits the local Yautja source/static surface for {row.SourcePath}.");
-                Assert.That(prototype.Parents, Does.Not.Contain("CMUHunterShipVisualBase"),
+                Assert.That(parents, Does.Not.Contain("CMUHunterShipVisualBase"),
                     $"{row.Id} must not remain a generated visual-only placeholder.");
                 Assert.That(prototype.Name, Is.EqualTo(row.Name), row.Id);
                 Assert.That(prototype.Description, Is.EqualTo(row.Description), row.Id);

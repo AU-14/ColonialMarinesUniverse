@@ -145,154 +145,35 @@ public sealed class YautjaBowTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task ArrowProjectileStatsMatchCmss13AmmoDatums()
+    [TestCase("CMUYautjaArrowProjectile", "Piercing", 110, 20, 14f)]
+    [TestCase("CMUYautjaSnareArrowProjectile", "Piercing", 30, 15, 7f)]
+    [TestCase("CMUYautjaExplosiveArrowProjectile", "Heat", 110, 20, 14f)]
+    [TestCase("CMUYautjaEmpArrowProjectile", "Heat", 110, 20, 14f)]
+    [TestCase("CMUYautjaSpikeProjectile", "Piercing", 30, 50, 12f)]
+    [TestCase("CMUYautjaPlasmaPistolBolt", "Heat", 40, null, 22f)]
+    [TestCase("CMUYautjaPlasmaPistolIncendiaryBolt", "Heat", 10, null, 22f)]
+    [TestCase("CMUYautjaPlasmaRifleBolt", "Heat", 55, 50, 22f)]
+    [TestCase("CMUYautjaCasterStunBolt", "Heat", 0, null, 22f)]
+    [TestCase("CMUYautjaCasterImmobilizerBolt", "Heat", 0, null, 20f)]
+    [TestCase("CMUYautjaCasterLethalBolt", "Heat", 75, null, 22f)]
+    [TestCase("CMUYautjaCasterEradicatorBolt", "Heat", 55, null, 8f)]
+    public async Task ProjectileStatsMatchCmss13AmmoDatums(
+        string prototype, string damageType, int damage, int? armorPiercing, float maxRange)
     {
         await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
+        await pair.Server.WaitAssertion(() =>
         {
-            var entMan = server.EntMan;
-            var arrow = entMan.SpawnEntity("CMUYautjaArrowProjectile", MapCoordinates.Nullspace);
-            var snare = entMan.SpawnEntity("CMUYautjaSnareArrowProjectile", MapCoordinates.Nullspace);
-
+            var em = pair.Server.EntMan;
+            var projectile = em.SpawnEntity(prototype, MapCoordinates.Nullspace);
             try
             {
-                AssertArrowProjectileStats(entMan, arrow, 110, 20, 14);
-                AssertArrowProjectileStats(entMan, snare, 30, 15, 7);
+                AssertProjectileStats(em, projectile, damageType, damage, armorPiercing, maxRange, prototype);
             }
             finally
             {
-                if (!entMan.Deleted(arrow))
-                    entMan.DeleteEntity(arrow);
-                if (!entMan.Deleted(snare))
-                    entMan.DeleteEntity(snare);
+                em.DeleteEntity(projectile);
             }
         });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ActiveWarheadProjectileStatsMatchCmss13AmmoDatums()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var explosive = entMan.SpawnEntity("CMUYautjaExplosiveArrowProjectile", MapCoordinates.Nullspace);
-            var emp = entMan.SpawnEntity("CMUYautjaEmpArrowProjectile", MapCoordinates.Nullspace);
-
-            try
-            {
-                AssertArrowProjectileStats(entMan, explosive, "Heat", 110, 20, 14);
-                AssertArrowProjectileStats(entMan, emp, "Heat", 110, 20, 14);
-            }
-            finally
-            {
-                if (!entMan.Deleted(explosive))
-                    entMan.DeleteEntity(explosive);
-                if (!entMan.Deleted(emp))
-                    entMan.DeleteEntity(emp);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task YautjaRangedProjectileStatsMatchCmss13AmmoDatums()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var spike = entMan.SpawnEntity("CMUYautjaSpikeProjectile", MapCoordinates.Nullspace);
-            var pistol = entMan.SpawnEntity("CMUYautjaPlasmaPistolBolt", MapCoordinates.Nullspace);
-            var incendiary = entMan.SpawnEntity("CMUYautjaPlasmaPistolIncendiaryBolt", MapCoordinates.Nullspace);
-            var rifle = entMan.SpawnEntity("CMUYautjaPlasmaRifleBolt", MapCoordinates.Nullspace);
-            var casterStun = entMan.SpawnEntity("CMUYautjaCasterStunBolt", MapCoordinates.Nullspace);
-            var casterImmobilizer = entMan.SpawnEntity("CMUYautjaCasterImmobilizerBolt", MapCoordinates.Nullspace);
-            var casterLethal = entMan.SpawnEntity("CMUYautjaCasterLethalBolt", MapCoordinates.Nullspace);
-            var casterEradicator = entMan.SpawnEntity("CMUYautjaCasterEradicatorBolt", MapCoordinates.Nullspace);
-
-            try
-            {
-                AssertProjectileStats(entMan,
-                    spike,
-                    "Piercing",
-                    30,
-                    50,
-                    12,
-                    "CMSS13 /datum/ammo/alloy_spike: damage = 30, penetration = ARMOR_PENETRATION_TIER_10, max_range = 12.");
-                AssertProjectileStats(entMan,
-                    pistol,
-                    "Heat",
-                    40,
-                    null,
-                    22,
-                    "CMSS13 /datum/ammo/energy/yautja/pistol: BURN damage = 40, inherited base ammo max_range = 22.");
-                AssertProjectileStats(entMan,
-                    incendiary,
-                    "Heat",
-                    10,
-                    null,
-                    22,
-                    "CMSS13 /datum/ammo/energy/yautja/pistol/incendiary: BURN damage = 10, inherited base ammo max_range = 22.");
-                AssertProjectileStats(entMan,
-                    rifle,
-                    "Heat",
-                    55,
-                    50,
-                    22,
-                    "CMSS13 /datum/ammo/energy/yautja/rifle/bolt: BURN damage = 55, penetration = ARMOR_PENETRATION_TIER_10, inherited base ammo max_range = 22.");
-                AssertProjectileStats(entMan,
-                    casterStun,
-                    "Heat",
-                    0,
-                    null,
-                    22,
-                    "CMSS13 /datum/ammo/energy/yautja/caster/bolt/single_stun: damage = 0, inherited base ammo max_range = 22.");
-                AssertProjectileStats(entMan,
-                    casterImmobilizer,
-                    "Heat",
-                    0,
-                    null,
-                    20,
-                    "CMSS13 /datum/ammo/energy/yautja/caster/sphere/aoe_stun: damage = 0, max_range = 20.");
-                AssertProjectileStats(entMan,
-                    casterLethal,
-                    "Heat",
-                    75,
-                    null,
-                    22,
-                    "CMSS13 /datum/ammo/energy/yautja/caster/bolt/single_lethal: damage = 75, inherited base ammo max_range = 22.");
-                AssertProjectileStats(entMan,
-                    casterEradicator,
-                    "Heat",
-                    55,
-                    null,
-                    8,
-                    "CMSS13 /datum/ammo/energy/yautja/caster/aoe_lethal: damage = 55, max_range = 8.");
-            }
-            finally
-            {
-                foreach (var uid in new[]
-                         {
-                             spike, pistol, incendiary, rifle, casterStun, casterImmobilizer, casterLethal, casterEradicator
-                         })
-                {
-                    if (!entMan.Deleted(uid))
-                        entMan.DeleteEntity(uid);
-                }
-            }
-        });
-
         await pair.CleanReturnAsync();
     }
 
@@ -11680,7 +11561,7 @@ public sealed class YautjaBowTest
                 var item = entMan.GetComponent<ItemComponent>(launcher);
                 var clothing = entMan.GetComponent<ClothingComponent>(launcher);
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
                 var gun = entMan.GetComponent<GunComponent>(launcher);
 
                 Assert.Multiple(() =>
@@ -11698,16 +11579,6 @@ public sealed class YautjaBowTest
                         "CMSS13 spike launcher regenerates after world.time > last_regen + 100, i.e. 10 seconds.");
                     Assert.That(recharge.RechargeChance, Is.EqualTo(0.70f),
                         "CMSS13 spike launcher process gates each due regeneration attempt with prob(70).");
-                    Assert.That(recharge.StartWithCooldown, Is.True,
-                        "CMSS13 spike launcher Initialize() sets last_regen = world.time.");
-                    Assert.That(recharge.StrictCooldownBoundary, Is.True,
-                        "CMSS13 spike launcher process uses world.time > last_regen + 100, not equality.");
-                    Assert.That(recharge.AdvanceOnFailedRecharge, Is.False,
-                        "CMSS13 failed prob(70) rolls leave last_regen unchanged.");
-                    Assert.That(recharge.PreserveCooldownWhenFull, Is.True,
-                        "CMSS13 tracks last_regen independently from current spike count.");
-                    Assert.That(recharge.ResetOverdueCooldown, Is.False,
-                        "CMSS13 firing a spike does not reset an overdue last_regen threshold.");
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
                     AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/woodhit.ogg");
@@ -11746,11 +11617,10 @@ public sealed class YautjaBowTest
 
                 launcher = entMan.SpawnEntity("CMUYautjaSpikeLauncher", MapCoordinates.Nullspace);
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 Assert.That(gun.UpdateBasicEntityAmmoCount((launcher, ammo), 11), Is.True);
                 recharge.RechargeChance = 1f;
-                entMan.Dirty(launcher, recharge);
             });
 
             await pair.RunTicksSync(1);
@@ -11759,7 +11629,7 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
                 var timing = server.ResolveDependency<IGameTiming>();
 
                 Assert.Multiple(() =>
@@ -11777,21 +11647,20 @@ public sealed class YautjaBowTest
                 var timing = server.ResolveDependency<IGameTiming>();
                 var gun = server.System<Content.Server.Weapons.Ranged.Systems.GunSystem>();
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 Assert.That(gun.UpdateBasicEntityAmmoCount((launcher, ammo), 11), Is.True);
                 recharge.RechargeChance = 1f;
                 dueAtBoundary = timing.CurTime;
                 recharge.NextCharge = dueAtBoundary;
-                entMan.Dirty(launcher, recharge);
-                server.System<RechargeBasicEntityAmmoSystem>().Update(0);
+                server.System<YautjaSpikeLauncherSystem>().Update(0);
             });
 
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 Assert.Multiple(() =>
                 {
@@ -11805,11 +11674,10 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var timing = server.ResolveDependency<IGameTiming>();
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 successAttemptStart = timing.CurTime;
                 recharge.NextCharge = timing.CurTime - timing.TickPeriod;
-                entMan.Dirty(launcher, recharge);
             });
 
             await pair.RunTicksSync(1);
@@ -11818,7 +11686,7 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 Assert.Multiple(() =>
                 {
@@ -11835,13 +11703,12 @@ public sealed class YautjaBowTest
                 var timing = server.ResolveDependency<IGameTiming>();
                 var gun = server.System<Content.Server.Weapons.Ranged.Systems.GunSystem>();
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 Assert.That(gun.UpdateBasicEntityAmmoCount((launcher, ammo), 10), Is.True);
                 recharge.RechargeChance = 0f;
                 failedDueAt = timing.CurTime - TimeSpan.FromSeconds(1);
                 recharge.NextCharge = failedDueAt;
-                entMan.Dirty(launcher, recharge);
             });
 
             await pair.RunTicksSync(1);
@@ -11850,7 +11717,7 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 Assert.Multiple(() =>
                 {
@@ -11865,11 +11732,10 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var timing = server.ResolveDependency<IGameTiming>();
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 recharge.RechargeChance = 1f;
                 successAttemptStart = timing.CurTime;
-                entMan.Dirty(launcher, recharge);
             });
 
             await pair.RunTicksSync(1);
@@ -11878,7 +11744,7 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(launcher);
-                var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(launcher);
+                var recharge = entMan.GetComponent<YautjaSpikeLauncherComponent>(launcher);
 
                 Assert.Multiple(() =>
                 {

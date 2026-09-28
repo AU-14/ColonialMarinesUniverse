@@ -23,6 +23,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.CMU14.Yautja;
 
@@ -1088,7 +1089,7 @@ public sealed partial class YautjaCannonPackComponent : Component
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class YautjaCannonPackLinkedCannonComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [ViewVariables, AutoNetworkedField]
     public EntityUid Pack;
 
     [DataField, AutoNetworkedField]
@@ -3473,8 +3474,24 @@ public sealed partial class YautjaCasterEradicatorProjectileComponent : Componen
     public TimeSpan InteriorCrashKnockdown = TimeSpan.FromSeconds(2);
 }
 
-[RegisterComponent]
-public sealed partial class YautjaSpikeLauncherComponent : Component;
+[RegisterComponent, AutoGenerateComponentPause]
+public sealed partial class YautjaSpikeLauncherComponent : Component
+{
+    [DataField]
+    public float RechargeCooldown = 10f;
+
+    [DataField]
+    public float RechargeChance = 0.7f;
+
+    [DataField]
+    public SoundSpecifier? RechargeSound = new SoundPathSpecifier("/Audio/Magic/forcewall.ogg")
+    {
+        Params = AudioParams.Default.AddVolume(-5f),
+    };
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextCharge;
+}
 
 [RegisterComponent]
 public sealed partial class YautjaSpikeLauncherProjectileRefundComponent : Component

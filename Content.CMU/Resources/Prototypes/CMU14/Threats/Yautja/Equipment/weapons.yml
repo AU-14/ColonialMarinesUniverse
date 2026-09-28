@@ -998,14 +998,6 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/CMU14/Yautja/woodhit.ogg
-  - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 10
-    rechargeChance: 0.70
-    startWithCooldown: true
-    strictCooldownBoundary: true
-    advanceOnFailedRecharge: false
-    preserveCooldownWhenFull: true
-    resetOverdueCooldown: false
   - type: BasicEntityAmmoProvider
     proto: CMUYautjaSpikeProjectile
     capacity: 12
@@ -1526,6 +1518,10 @@
     - state: solution1
       map: [mark]
       visible: false
+    - sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+      state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
   - type: Item
     size: Small
   - type: Tool
@@ -1623,6 +1619,9 @@
     - sprite: CMU14/Yautja/bow.rsi
       state: arrow_trap_active
       map: [snare-trap]
+      visible: false
+    - state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
       visible: false
   - type: CartridgeAmmo
     proto: CMUYautjaSnareArrowProjectile

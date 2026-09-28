@@ -15,20 +15,10 @@ public sealed partial class YautjaRankManager : IPostInjectInit
 {
     [Dependency] private YautjaClanManager _clanManager = default!;
     [Dependency] private UserDbDataManager _userDb = default!;
-    private readonly Dictionary<NetUserId, YautjaRank> _cache = new();
-    private readonly Dictionary<NetUserId, long> _cacheVersions = new();
 
     public async Task<YautjaRank> Resolve(NetUserId userId, bool youngbloodRole = false)
     {
-        if (youngbloodRole)
-            return YautjaRank.YoungBlood;
-
-        var requestVersion = GetCacheVersion(userId);
-        var rank = (await _clanManager.Resolve(userId)).Rank;
-        if (IsCacheVersionCurrent(requestVersion, GetCacheVersion(userId)))
-            _cache[userId] = rank;
-
-        return rank;
+        return (await _clanManager.Resolve(userId, youngbloodRole)).Rank;
     }
 
     public async Task Prime(NetUserId userId)
@@ -38,16 +28,9 @@ public sealed partial class YautjaRankManager : IPostInjectInit
 
     public YautjaRank ResolveCached(NetUserId userId, bool youngbloodRole = false)
     {
-        if (youngbloodRole)
-            return YautjaRank.YoungBlood;
-
-        if (_cache.TryGetValue(userId, out var rank))
-            return rank;
-
-        // Character info can be opened before the asynchronous player-data load
-        // primes the cache. Resolve the persisted rank on a cold cache instead of
-        // presenting every uncached hunter as Blooded.
-        return Resolve(userId).GetAwaiter().GetResult();
+        // Use the same cache as profile capabilities. Player-data loading and
+        // refreshes prime it asynchronously; never wait for database work here.
+        return _clanManager.ResolveCached(userId, youngbloodRole).Rank;
     }
 
     public YautjaProfileCapabilities ResolveProfileCapabilitiesCached(
@@ -87,7 +70,7 @@ public sealed partial class YautjaRankManager : IPostInjectInit
         if (!IsPersistentRank(rank))
             throw new ArgumentException("Young Blood is reserved for the special hunt role.", nameof(rank));
 
-        InvalidateCached(userId);
+        _clanManager.InvalidateCache(userId);
         if (!await _clanManager.SetMaintenanceRank(userId, rank))
             throw new InvalidOperationException("The player's Yautja clan no longer exists or is inactive.");
 
@@ -97,26 +80,7 @@ public sealed partial class YautjaRankManager : IPostInjectInit
     public async Task Refresh(NetUserId userId)
     {
         _clanManager.InvalidateCache(userId);
-        InvalidateCached(userId);
         await Prime(userId);
-    }
-
-    public void InvalidateCached(NetUserId userId)
-    {
-        NextCacheVersion(userId);
-        _cache.Remove(userId);
-    }
-
-    private long GetCacheVersion(NetUserId userId)
-    {
-        return _cacheVersions.TryGetValue(userId, out var version) ? version : 0;
-    }
-
-    private long NextCacheVersion(NetUserId userId)
-    {
-        var version = GetCacheVersion(userId) + 1;
-        _cacheVersions[userId] = version;
-        return version;
     }
 
     public static YautjaRank Sanitize(YautjaRank? rank)
@@ -130,11 +94,6 @@ public sealed partial class YautjaRankManager : IPostInjectInit
     public static bool IsPersistentRank(YautjaRank rank)
     {
         return Enum.IsDefined(rank) && rank != YautjaRank.YoungBlood;
-    }
-
-    public static bool IsCacheVersionCurrent(long requestVersion, long currentVersion)
-    {
-        return requestVersion == currentVersion;
     }
 
     private async Task LoadData(ICommonSession session, CancellationToken cancel)

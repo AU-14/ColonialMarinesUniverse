@@ -26,19 +26,6 @@ public sealed class YautjaRankPersistenceTest
         Assert.That(YautjaRankManager.CanonicalHunterSpawnRank(stored), Is.EqualTo(expected));
     }
 
-    [TestCase(0, 0, true)]
-    [TestCase(1, 1, true)]
-    [TestCase(1, 2, false)]
-    public void StaleDatabaseResultsCannotUpdateNewerCacheVersion(
-        long requestVersion,
-        long currentVersion,
-        bool expectedCurrent)
-    {
-        Assert.That(
-            YautjaRankManager.IsCacheVersionCurrent(requestVersion, currentVersion),
-            Is.EqualTo(expectedCurrent));
-    }
-
     [Test]
     public void InvalidatedClanResolutionRejectsStaleInFlightCompletion()
     {
@@ -64,15 +51,17 @@ public sealed class YautjaRankPersistenceTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task RankCacheMissFailsClosedWithoutThrowing()
+    [TestCase(false, YautjaRank.Blooded)]
+    [TestCase(true, YautjaRank.YoungBlood)]
+    public void RankCacheMissDoesNotAccessDatabase(bool youngblood, YautjaRank expected)
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var manager = pair.Server.ResolveDependency<YautjaRankManager>();
+        // No database is injected: the shared rank/profile cache must not query it.
+        var manager = new YautjaClanManager();
         var userId = new NetUserId(Guid.NewGuid());
 
-        Assert.That(manager.ResolveCached(userId), Is.EqualTo(YautjaRank.Blooded));
-        await pair.CleanReturnAsync();
+        Assert.That(manager.ResolveCached(userId, youngblood).Rank, Is.EqualTo(expected));
+        manager.InvalidateCache(userId);
+        Assert.That(manager.ResolveCached(userId, youngblood).Rank, Is.EqualTo(expected));
     }
 
     [Test]

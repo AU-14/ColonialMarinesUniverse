@@ -1,7 +1,6 @@
-using Content.Client.Lobby.UI;
+using Content.Client._CMU14.Lobby;
 using Content.Client.LateJoin;
 using Content.Shared.Roles;
-using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Lobby;
@@ -17,10 +16,15 @@ public sealed class LobbyRoleTabsTest
 
         await client.WaitAssertion(() =>
         {
-            var lobby = new LobbyGui();
+            var lobby = new JoinRoundWindow();
             try
             {
-                Assert.That(lobby.FindControl<Button>("JoinHuntButton"), Is.Not.Null);
+                lobby.OpenCentered();
+                Assert.That(lobby.JoinHuntButton.VisibleInTree, Is.False);
+                lobby.SetHuntVisible(true);
+                Assert.That(lobby.JoinHuntButton.VisibleInTree, Is.True);
+                lobby.SetHuntVisible(false);
+                Assert.That(lobby.JoinHuntButton.VisibleInTree, Is.False);
 
                 var prototypes = client.ResolveDependency<IPrototypeManager>();
                 var threat = prototypes.Index<DepartmentPrototype>("AU14DepartmentThreat");

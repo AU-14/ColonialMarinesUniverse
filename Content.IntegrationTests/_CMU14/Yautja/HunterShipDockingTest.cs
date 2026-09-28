@@ -7,6 +7,7 @@ using Content.Server.Shuttles.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Doors.Components;
 using Content.Shared._RMC14.Evacuation;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
@@ -14,6 +15,8 @@ using Robust.Shared.Maths;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Utility;
 
@@ -91,6 +94,20 @@ public sealed class HunterShipDockingTest
             }
 
             Assert.That(shuttle, Is.Not.EqualTo(EntityUid.Invalid), "The roundstart Hunter Shuttle must be loaded.");
+            Assert.That(entMan.GetComponent<ShuttleComponent>(shuttle).Enabled, Is.True,
+                "Loading stationary Hunter Ship decks must not disable the mobile shuttle.");
+            var decks = entMan.EntityQueryEnumerator<MapGridComponent, TransformComponent, PhysicsComponent>();
+            var deckCount = 0;
+            while (decks.MoveNext(out var deck, out _, out var xform, out var physics))
+            {
+                if (deck == shuttle || xform.MapUid is not { } mapUid ||
+                    !entMan.HasComponent<CMUZLevelMapComponent>(mapUid))
+                    continue;
+
+                Assert.That(physics.BodyType, Is.EqualTo(BodyType.Static));
+                deckCount++;
+            }
+            Assert.That(deckCount, Is.EqualTo(3), "All three authored decks must stay stationary.");
             Assert.That(grid, Is.Not.Null);
             Assert.That(grid!.LocalAABB.Width, Is.EqualTo(7f), $"Loaded shuttle AABB: {grid.LocalAABB}");
             Assert.That(grid.LocalAABB.Height, Is.EqualTo(13f), $"Loaded shuttle AABB: {grid.LocalAABB}");

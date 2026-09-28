@@ -36,6 +36,9 @@ public sealed partial class DialogSystem : EntitySystem
 
     private void OnDialogOption(Entity<DialogComponent> ent, ref DialogOptionBuiMsg args)
     {
+        if (ent.Comp.Actor != args.Actor)
+            return;
+
         var index = args.Index;
         object? optionEvent = null;
         var valid = false;
@@ -59,6 +62,9 @@ public sealed partial class DialogSystem : EntitySystem
 
     private void OnDialogInput(Entity<DialogComponent> ent, ref DialogInputBuiMsg args)
     {
+        if (ent.Comp.Actor != args.Actor)
+            return;
+
         var inputEvent = ent.Comp.InputEvent;
         var msg = TrimToLimit(args.Input, ent.Comp.CharacterLimit, ent.Comp.SmartCheck);
 
@@ -73,6 +79,9 @@ public sealed partial class DialogSystem : EntitySystem
 
     private void OnDialogConfirm(Entity<DialogComponent> ent, ref DialogConfirmBuiMsg args)
     {
+        if (ent.Comp.Actor != args.Actor)
+            return;
+
         var confirmEvent = ent.Comp.ConfirmEvent;
 
         CloseDialog(ent, true);
@@ -83,7 +92,7 @@ public sealed partial class DialogSystem : EntitySystem
 
     private void OnDialogClosed(Entity<DialogComponent> ent, ref BoundUIClosedEvent args)
     {
-        if (_timing.ApplyingState)
+        if (_timing.ApplyingState || ent.Comp.Actor != args.Actor)
             return;
 
         if (!ent.Comp.SuppressCancelEvent && ent.Comp.CancelEvent != null)
@@ -108,7 +117,7 @@ public sealed partial class DialogSystem : EntitySystem
 
     public void OpenOptions(EntityUid target, EntityUid actor, string title, List<DialogOption> options, string message = "", object? cancelEvent = null, TimeSpan? timeout = null)
     {
-        var dialog = EnsureComp<DialogComponent>(target);
+        var dialog = BeginDialog(target, actor);
         dialog.Title = title;
         dialog.Message = new DialogOption(message);
         dialog.DialogType = DialogType.Options;
@@ -130,7 +139,7 @@ public sealed partial class DialogSystem : EntitySystem
 
     public void OpenInput(EntityUid target, EntityUid actor, string message, DialogInputEvent? ev, bool largeInput = false, int characterLimit = 200, int minCharacterLimit = 0, bool smartCheck = false, bool autoFocus = true, string title = "")
     {
-        var dialog = EnsureComp<DialogComponent>(target);
+        var dialog = BeginDialog(target, actor);
         dialog.DialogType = DialogType.Input;
         dialog.Title = title;
         dialog.Message = new DialogOption(message, ev);
@@ -157,7 +166,7 @@ public sealed partial class DialogSystem : EntitySystem
 
     public void OpenConfirmation(EntityUid target, EntityUid actor, string title, string message, object ev)
     {
-        var dialog = EnsureComp<DialogComponent>(target);
+        var dialog = BeginDialog(target, actor);
         dialog.DialogType = DialogType.Confirm;
         dialog.Title = title;
         dialog.Message = new DialogOption(message, ev);
@@ -174,6 +183,18 @@ public sealed partial class DialogSystem : EntitySystem
     public void OpenConfirmation(EntityUid actor, string title, string message, object ev)
     {
         OpenConfirmation(actor, actor, title, message, ev);
+    }
+
+    private DialogComponent BeginDialog(EntityUid target, EntityUid actor)
+    {
+        // One entity stores one dialog state. Dismiss its previous owner before
+        // replacing that state, and reject messages from any other actor.
+        if (TryComp<DialogComponent>(target, out var previous) && previous.Actor != actor)
+            CloseDialog((target, previous), false);
+
+        var dialog = EnsureComp<DialogComponent>(target);
+        dialog.Actor = actor;
+        return dialog;
     }
 
     public int CalculateEffectiveLength(ReadOnlySpan<char> text, bool smartCheck = false)

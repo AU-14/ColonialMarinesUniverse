@@ -77,7 +77,7 @@
 - type: tile
   parent: RMCFloorHybrisaBasicBase
   id: RMCFloorHybrisaCarpetColorable
-  name: colorable carpet
+  name: cmu-tile-hybrisa-carpet-colorable
   sprite: /Textures/CMU14/HunterShip/turf/floors/hybrisafloors.rsi/carpet_colorable.png
 
 - type: tile
