@@ -12,13 +12,13 @@ public sealed class AttentionRoleTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [Test]
-    public async Task OnlyMilitaryLeadershipExceptCommanderAndExecutiveCanCallAttention()
+    public async Task OnlyMilitaryLeadershipAndPoliceExceptCommanderAndExecutiveCanCallAttention()
     {
-        var leadership = new HashSet<string>
+        var eligibleRoles = new HashSet<string>
         {
             "Advisor", "EngineeringOfficer", "IntelOfficer", "LogisticsOfficer", "CMO", "ChiefMP",
             "JuniorOfficer", "VehicleCommander", "SectionSergeant", "SquadSergeant", "RadioTelephoneOperator",
-            "AdjutantDress", "BrigadierGeneral",
+            "AdjutantDress", "BrigadierGeneral", "MilitaryPolice",
         };
         await Server.WaitAssertion(() =>
         {
@@ -29,7 +29,7 @@ public sealed class AttentionRoleTest : GameTest
 
                 var present = job.RoundComponents.TryGetValue("AU14CallToAttentionAbility", out var entry);
                 var seniorOfficer = job.RoundRole is "PlatoonCommander" or "ExecutiveOfficer";
-                Assert.That(present, Is.EqualTo(leadership.Contains(job.RoundRole) || seniorOfficer), job.ID);
+                Assert.That(present, Is.EqualTo(eligibleRoles.Contains(job.RoundRole) || seniorOfficer), job.ID);
                 if (present)
                 {
                     var ability = (AU14CallToAttentionAbilityComponent) entry!.Component;
@@ -67,8 +67,10 @@ public sealed class AttentionRoleTest : GameTest
         });
     }
 
-    [Test]
-    public async Task LeadershipCallsStillFocusOnTheImmuneCommander()
+    [TestCase("AU14JobGOVFORPlatOp")]
+    [TestCase("AU14JobGOVFORMilitaryPoliceMan")]
+    [TestCase("AU14JobOPFORMilitaryPoliceMan")]
+    public async Task AuthorizedCallsStillFocusOnTheImmuneCommander(string jobId)
     {
         var map = await Pair.CreateTestMap();
         EntityUid leader = default, commander = default, marine = default;
@@ -77,7 +79,8 @@ public sealed class AttentionRoleTest : GameTest
             leader = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             commander = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 2)));
             marine = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-            SEntMan.AddComponents(leader, SProtoMan.Index<JobPrototype>("AU14JobGOVFORPlatOp").RoundComponents);
+            SEntMan.AddComponents(leader, SProtoMan.Index<JobPrototype>(jobId).RoundComponents);
+            Assert.That(SEntMan.GetComponent<AU14CallToAttentionAbilityComponent>(leader).ActionEntity, Is.Not.Null);
             SEntMan.AddComponents(commander, SProtoMan.Index<JobPrototype>("AU14JobGOVFORPlatCo").RoundComponents);
             SEntMan.EnsureComponent<OriginalRoleComponent>(marine).Job = "AU14JobGOVFORSquadRifleman";
             SEntMan.GetComponent<AU14CallToAttentionAbilityComponent>(leader).ResponseStagger = TimeSpan.Zero;
