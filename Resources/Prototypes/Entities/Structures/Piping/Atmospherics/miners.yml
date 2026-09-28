@@ -24,7 +24,7 @@
     - type: Anchorable
       flags:
       - Anchorable
-      - Unanchorable
+      - Unanchorable # CMU14: allow gas miners to be unwrenched
     - type: Pullable
     - type: Sprite
       sprite: Structures/Piping/Atmospherics/miners.rsi

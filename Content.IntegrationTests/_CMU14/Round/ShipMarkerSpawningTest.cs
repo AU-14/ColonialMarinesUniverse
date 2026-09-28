@@ -100,9 +100,9 @@ public sealed class ShipMarkerSpawningTest
                     Is.EqualTo(faction == "govfor" ? 2 : 0));
                 Assert.That(spawned.Count(c => c.Prototype == "CMUResearchDataTerminalOpfor"),
                     Is.EqualTo(faction == "opfor" ? 2 : 0));
-                Assert.That(spawned.Count(c => c.Prototype == "AU14HospitalEmergencyComputerGovfor"),
+                Assert.That(spawned.Count(c => c.Prototype == "CMUHospitalEmergencyComputerGovfor"),
                     Is.EqualTo(faction == "govfor" ? 1 : 0));
-                Assert.That(spawned.Count(c => c.Prototype == "AU14HospitalEmergencyComputerOpfor"),
+                Assert.That(spawned.Count(c => c.Prototype == "CMUHospitalEmergencyComputerOpfor"),
                     Is.EqualTo(faction == "opfor" ? 1 : 0));
 
                 var hospitals = entities.AllEntityQueryEnumerator<HospitalEmergencyComputerComponent, TransformComponent>();
@@ -138,12 +138,12 @@ public sealed class ShipMarkerSpawningTest
             foreach (var (ship, faction) in new[] { (govShip, "govfor"), (opShip, "opfor") })
             {
                 entities.EnsureComponent<ShipFactionComponent>(ship.GridCoords.EntityId).Faction = faction;
-                var marker = entities.SpawnEntity("VMarkerShipResearchTerminal", ship.GridCoords);
+                var marker = entities.SpawnEntity("CMUVMarkerShipResearchTerminal", ship.GridCoords);
                 // Ship ownership must override baked faction flags and avoid a second ground spawn.
                 entities.GetComponent<VendorMarkerComponent>(marker).Govfor = true;
-                entities.SpawnEntity("VMarkerShipHospitalEmergencyComputer", ship.GridCoords);
+                entities.SpawnEntity("CMUVMarkerShipHospitalEmergencyComputer", ship.GridCoords);
             }
-            entities.SpawnEntity("VMarkerColonyHospitalEmergencyComputer", colony.GridCoords);
+            entities.SpawnEntity("CMUVMarkerColonyHospitalEmergencyComputer", colony.GridCoords);
             Assert.That(ticker.StartGameRule("PlatoonSpawn"), Is.True);
 
             var terminals = entities.AllEntityQueryEnumerator<ResearchDataTerminalComponent, TransformComponent>();
@@ -172,7 +172,7 @@ public sealed class ShipMarkerSpawningTest
                 computerCount++;
                 var faction = grid == govShip.GridCoords.EntityId ? "Govfor" : grid == opShip.GridCoords.EntityId ? "Opfor" : "Colony";
                 Assert.That(entities.GetComponent<MetaDataComponent>(uid).EntityPrototype!.ID,
-                    Is.EqualTo("AU14HospitalEmergencyComputer" + faction));
+                    Is.EqualTo("CMUHospitalEmergencyComputer" + faction));
                 var reader = entities.GetComponent<AccessReaderComponent>(uid);
                 foreach (var credential in credentials)
                     Assert.That(access.IsAllowed(new List<ProtoId<AccessLevelPrototype>> { credential }, [], uid, reader),

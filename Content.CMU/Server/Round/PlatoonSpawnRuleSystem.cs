@@ -645,7 +645,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         var prototype = markerClass switch
         {
             PlatoonMarkerClass.ResearchTerminal => "CMUResearchDataTerminal" + suffix,
-            PlatoonMarkerClass.HospitalEmergencyComputer => "AU14HospitalEmergencyComputer" + suffix,
+            PlatoonMarkerClass.HospitalEmergencyComputer => "CMUHospitalEmergencyComputer" + suffix,
             _ => null,
         };
         if (prototype == null)

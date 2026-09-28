@@ -26,12 +26,12 @@
 
 - type: entity
   parent: AU14HospitalEmergencyComputer
-  id: AU14HospitalEmergencyComputerColony
+  id: CMUHospitalEmergencyComputerColony
   suffix: Hospital, Colony
 
 - type: entity
   parent: AU14HospitalEmergencyComputer
-  id: AU14HospitalEmergencyComputerGovfor
+  id: CMUHospitalEmergencyComputerGovfor
   suffix: Hospital, GOVFOR
   components:
   - type: AccessReader
@@ -39,7 +39,7 @@
 
 - type: entity
   parent: AU14HospitalEmergencyComputer
-  id: AU14HospitalEmergencyComputerOpfor
+  id: CMUHospitalEmergencyComputerOpfor
   suffix: Hospital, OPFOR
   components:
   - type: AccessReader

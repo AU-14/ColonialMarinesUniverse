@@ -6508,7 +6508,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -12.332339,45.378567
-- proto: VMarkerShipHospitalEmergencyComputer
+- proto: CMUVMarkerShipHospitalEmergencyComputer
   entities:
   - uid: 1178
     components:
@@ -21026,7 +21026,7 @@ entities:
       pos: 24.5,12.5
     - type: AtmosPipeColor
       color: '#03FCD3FF'
-- proto: VMarkerShipResearchTerminal
+- proto: CMUVMarkerShipResearchTerminal
   entities:
   - uid: 890
     components:

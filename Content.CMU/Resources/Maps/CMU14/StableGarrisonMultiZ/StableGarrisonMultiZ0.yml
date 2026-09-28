@@ -484175,7 +484175,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 218.5,-66.5
-- proto: VMarkerColonyHospitalEmergencyComputer
+- proto: CMUVMarkerColonyHospitalEmergencyComputer
   entities:
   - uid: 12645
     components:
