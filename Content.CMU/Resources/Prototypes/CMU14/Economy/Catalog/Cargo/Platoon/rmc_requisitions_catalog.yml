@@ -308,6 +308,10 @@
       - cost: 600
         crate: RMCCrateBoxMagazineSentryFire
       - cost: 300
+        crate: RMCCrateBoxMagazineSentryFireBlue
+      - cost: 600
+        crate: RMCCrateBoxMagazineSentryFireSmoke
+      - cost: 600
         crate: RMCCrateBoxShellsShotgunSlugs
       - cost: 300
         crate: RMCCrateBoxShellsShotgunFlechette
