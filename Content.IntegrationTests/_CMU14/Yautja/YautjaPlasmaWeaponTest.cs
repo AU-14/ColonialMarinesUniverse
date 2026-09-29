@@ -473,6 +473,7 @@ public sealed class YautjaPlasmaWeaponTest
         {
             var entMan = server.EntMan;
             var batterySystem = entMan.System<BatterySystem>();
+            var plasmaSystem = entMan.System<YautjaPlasmaWeaponSystem>();
             var rifle = entMan.SpawnEntity("CMUYautjaPlasmaRifle", MapCoordinates.Nullspace);
             var pistol = entMan.SpawnEntity("CMUYautjaPlasmaPistol", MapCoordinates.Nullspace);
             var carbine = entMan.SpawnEntity("CMUYautjaPlasmaCarbine", MapCoordinates.Nullspace);
@@ -486,7 +487,7 @@ public sealed class YautjaPlasmaWeaponTest
                 batterySystem.SetCharge((pistol, pistolBattery), 20);
                 batterySystem.SetCharge((carbine, carbineBattery), 20);
 
-                batterySystem.Update(0.5f);
+                plasmaSystem.Update(0.5f);
 
                 Assert.Multiple(() =>
                 {
@@ -498,7 +499,7 @@ public sealed class YautjaPlasmaWeaponTest
                         "CMSS13 plasma carbine process() increments charge_time by one only when the object process runs; half a local second should not create fractional charge.");
                 });
 
-                batterySystem.Update(0.5f);
+                plasmaSystem.Update(0.5f);
 
                 Assert.Multiple(() =>
                 {
@@ -510,7 +511,7 @@ public sealed class YautjaPlasmaWeaponTest
                         "After one accumulated process tick, the carbine gains exactly one charge_time.");
                 });
 
-                batterySystem.Update(2.25f);
+                plasmaSystem.Update(2.25f);
 
                 Assert.Multiple(() =>
                 {
@@ -545,31 +546,32 @@ public sealed class YautjaPlasmaWeaponTest
         {
             var entMan = server.EntMan;
             var batterySystem = entMan.System<BatterySystem>();
+            var plasmaSystem = entMan.System<YautjaPlasmaWeaponSystem>();
             var rifle = entMan.SpawnEntity("CMUYautjaPlasmaRifle", MapCoordinates.Nullspace);
 
             try
             {
                 var rifleBattery = entMan.GetComponent<BatteryComponent>(rifle);
-                var rifleRecharger = entMan.GetComponent<BatterySelfRechargerComponent>(rifle);
+                var rifleRecharger = entMan.GetComponent<YautjaPlasmaWeaponComponent>(rifle);
                 batterySystem.SetCharge((rifle, rifleBattery), 50);
 
                 for (var i = 0; i < 60; i++)
-                    batterySystem.Update(1f / 60f);
+                    plasmaSystem.Update(1f / 60f);
 
                 Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(51),
                     "Exactly sixty 1/60-second frames must reach the first one-second recharge boundary.");
 
                 for (var i = 60; i < 300; i++)
-                    batterySystem.Update(1f / 60f);
+                    plasmaSystem.Update(1f / 60f);
 
                 Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(55),
                     "Five seconds split into 300 frames must produce all five whole recharge intervals.");
 
                 batterySystem.SetCharge((rifle, rifleBattery), 50);
-                rifleRecharger.AutoRechargeAccumulatorSeconds = default;
+                rifleRecharger.RechargeAccumulatorSeconds = default;
 
                 for (var i = 0; i < 100; i++)
-                    batterySystem.Update(0.01f);
+                    plasmaSystem.Update(0.01f);
 
                 Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, rifleBattery)), Is.EqualTo(51),
                     "One hundred 0.01-second frames must reach the same one-second boundary without float drift.");

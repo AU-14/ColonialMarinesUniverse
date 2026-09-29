@@ -12048,7 +12048,7 @@ public sealed class YautjaBowTest
                 var gun = entMan.GetComponent<GunComponent>(pistol);
                 var ammo = entMan.GetComponent<BatteryAmmoProviderComponent>(pistol);
                 var battery = entMan.GetComponent<BatteryComponent>(pistol);
-                var recharge = entMan.GetComponent<BatterySelfRechargerComponent>(pistol);
+                var recharge = entMan.GetComponent<YautjaPlasmaWeaponComponent>(pistol);
                 var fireModes = entMan.GetComponent<BatteryWeaponFireModesComponent>(pistol);
 
                 Assert.Multiple(() =>
@@ -12067,8 +12067,8 @@ public sealed class YautjaBowTest
                         "CMSS13 plasma pistol has charge_time = 40.");
                     Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((pistol, battery)), Is.EqualTo(40),
                         "CMSS13 plasma pistol starts at its maximum charge_time.");
-                    Assert.That(recharge.AutoRechargeRate, Is.GreaterThan(0));
-                    Assert.That(recharge.AutoRechargeRate, Is.EqualTo(1),
+                    Assert.That(recharge.RechargeRate, Is.GreaterThan(0));
+                    Assert.That(recharge.RechargeRate, Is.EqualTo(1),
                         "CMSS13 process() restores one charge_time per tick until 40.");
                     Assert.That(fireModes.FireModes, Has.Count.EqualTo(2));
                     Assert.That(fireModes.FireModes[0].Prototype.Id, Is.EqualTo("CMUYautjaPlasmaPistolBolt"));
@@ -12151,7 +12151,7 @@ public sealed class YautjaBowTest
                 var gun = entMan.GetComponent<GunComponent>(rifle);
                 var ammo = entMan.GetComponent<BatteryAmmoProviderComponent>(rifle);
                 var battery = entMan.GetComponent<BatteryComponent>(rifle);
-                var recharge = entMan.GetComponent<BatterySelfRechargerComponent>(rifle);
+                var recharge = entMan.GetComponent<YautjaPlasmaWeaponComponent>(rifle);
 
                 Assert.Multiple(() =>
                 {
@@ -12170,8 +12170,8 @@ public sealed class YautjaBowTest
                         "CMSS13 plasma rifle has charge_time = 100.");
                     Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((rifle, battery)), Is.EqualTo(100),
                         "CMSS13 plasma rifle starts at its maximum charge_time.");
-                    Assert.That(recharge.AutoRechargeRate, Is.GreaterThan(0));
-                    Assert.That(recharge.AutoRechargeRate, Is.EqualTo(1),
+                    Assert.That(recharge.RechargeRate, Is.GreaterThan(0));
+                    Assert.That(recharge.RechargeRate, Is.EqualTo(1),
                         "CMSS13 plasma rifle process() restores one charge_time per tick until 100.");
                     Assert.That(entMan.HasComponent<WieldableComponent>(rifle), Is.True,
                         "CMSS13 plasma rifle still has flags_item = ITEM_PREDATOR|TWOHANDED.");
@@ -12211,7 +12211,7 @@ public sealed class YautjaBowTest
                 var gun = entMan.GetComponent<GunComponent>(carbine);
                 var ammo = entMan.GetComponent<BatteryAmmoProviderComponent>(carbine);
                 var battery = entMan.GetComponent<BatteryComponent>(carbine);
-                var recharge = entMan.GetComponent<BatterySelfRechargerComponent>(carbine);
+                var recharge = entMan.GetComponent<YautjaPlasmaWeaponComponent>(carbine);
                 var fireModes = entMan.GetComponent<BatteryWeaponFireModesComponent>(carbine);
                 var wieldable = entMan.GetComponent<WieldableComponent>(carbine);
 
@@ -12247,8 +12247,8 @@ public sealed class YautjaBowTest
                         "CMSS13 plasma carbine has charge_time = 40.");
                     Assert.That(entMan.System<Content.Shared.Power.EntitySystems.SharedBatterySystem>().GetCharge((carbine, battery)), Is.EqualTo(40),
                         "CMSS13 plasma carbine starts at its maximum charge_time.");
-                    Assert.That(recharge.AutoRechargeRate, Is.GreaterThan(0));
-                    Assert.That(recharge.AutoRechargeRate, Is.EqualTo(1),
+                    Assert.That(recharge.RechargeRate, Is.GreaterThan(0));
+                    Assert.That(recharge.RechargeRate, Is.EqualTo(1),
                         "CMSS13 process() restores one charge_time per tick until 40.");
                     Assert.That(fireModes.FireModes, Has.Count.EqualTo(2));
                     Assert.That(fireModes.FireModes[0].Prototype.Id, Is.EqualTo("CMUYautjaPlasmaRifleBolt"));

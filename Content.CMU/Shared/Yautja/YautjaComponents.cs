@@ -3507,6 +3507,15 @@ public sealed partial class YautjaSpikeLauncherProjectileRefundComponent : Compo
 public sealed partial class YautjaPlasmaWeaponComponent : Component
 {
     [DataField]
+    public float RechargeRate;
+
+    [DataField]
+    public TimeSpan RechargeInterval = TimeSpan.FromSeconds(1);
+
+    [ViewVariables]
+    public decimal RechargeAccumulatorSeconds;
+
+    [DataField]
     public bool ShowFireMode;
 
     [DataField]

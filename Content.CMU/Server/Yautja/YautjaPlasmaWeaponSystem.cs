@@ -31,6 +31,25 @@ public sealed partial class YautjaPlasmaWeaponSystem : EntitySystem
         SubscribeLocalEvent<YautjaPlasmaWeaponProjectileRefundComponent, EntityTerminatingEvent>(OnProjectileTerminating);
     }
 
+    public override void Update(float frameTime)
+    {
+        var query = EntityQueryEnumerator<YautjaPlasmaWeaponComponent, BatteryComponent>();
+        while (query.MoveNext(out var uid, out var plasma, out var battery))
+        {
+            if (plasma.RechargeRate <= 0 || plasma.RechargeInterval <= TimeSpan.Zero)
+                continue;
+
+            var interval = (decimal) plasma.RechargeInterval.TotalSeconds;
+            plasma.RechargeAccumulatorSeconds += (decimal) frameTime;
+            var elapsed = decimal.Floor(plasma.RechargeAccumulatorSeconds / interval) * interval;
+            if (elapsed <= 0)
+                continue;
+
+            plasma.RechargeAccumulatorSeconds -= elapsed;
+            _battery.ChangeCharge((uid, battery), plasma.RechargeRate * (float) elapsed);
+        }
+    }
+
     private void OnExamined(Entity<YautjaPlasmaWeaponComponent> ent, ref ExaminedEvent args)
     {
         if (!HasComp<YautjaComponent>(args.Examiner))

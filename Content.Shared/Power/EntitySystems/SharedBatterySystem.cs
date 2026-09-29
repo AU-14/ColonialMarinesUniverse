@@ -109,9 +109,7 @@ public abstract partial class SharedBatterySystem : EntitySystem
         if (_timing.CurTime < ent.Comp.NextAutoRecharge)
             return; // Still on cooldown
 
-        // CMU14: interval recharge is advanced by the server in discrete steps.
-        if (ent.Comp.AutoRechargeInterval <= TimeSpan.Zero)
-            args.NewChargeRate += ent.Comp.AutoRechargeRate;
+        args.NewChargeRate += ent.Comp.AutoRechargeRate;
     }
 
     public override void Update(float frameTime)
