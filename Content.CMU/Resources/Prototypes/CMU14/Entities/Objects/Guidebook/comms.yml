@@ -10,6 +10,14 @@
   - AU14CommsHeadsets
   - AU14CommsVoiceProcedure
   - AU14CommsQuickRef
+  - CMUGuideTowers
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideTowers
+  name: cmu-guide-entry-towers
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Comms/CMUTowers.xml"
 
 - type: guideEntry
   parent: RMC

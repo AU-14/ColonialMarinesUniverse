@@ -139,6 +139,12 @@
         amount: 25
       - id: RMCVial
         amount: 35
+      - id: CMMaskGasMedical
+        amount: 6
+      - id: CMAnestheticTankFilled
+        amount: 4
+      - id: CMUMedicalOxygenTankFilled
+        amount: 6
      # FixOVien
 
 - type: entity

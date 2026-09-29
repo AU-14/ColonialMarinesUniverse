@@ -77,7 +77,9 @@
 - type: entity
   parent: RMCBaseSentry
   id: RMCSentryConstruct
-  name: UN 571-C sentry gun
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 571-C sentry gun
+  # cmu edit end
   description: A deployable, semi-automated turret with AI targeting capabilities. Armed with an M30 Autocannon and a 500-round drum magazine.
   components:
   - type: UserIFF
@@ -121,7 +123,9 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentryMini
-  name: UA 512-M mini sentry
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 512-M mini sentry
+  # cmu edit end
   description: A compact version of the USCMC defenses. Designed for quick deployment of the associated type in the field.
   components:
   - type: UserIFF
@@ -206,7 +210,9 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentrySniper
-  name: UA 725-D sniper sentry
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 725-D sniper sentry
+  # cmu edit end
   description: A fully-automated defence turret with long-range targeting capabilities. Armed with a modified M32-S Autocannon and an internal belt feed.
   components:
   - type: UserIFF
@@ -269,7 +275,9 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentryOmni
-  name: UA 571-D omnidirectional sentry gun
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 571-D omnidirectional sentry gun
+  # cmu edit end
   description: A deployable, semi-automated turret with 360 degree range AI targeting capabilities. Armed with an M30 Autocannon and a 500-round drum magazine.
   components:
   - type: UserIFF
@@ -316,7 +324,9 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentryShotgun
-  name: UA 12-G Shotgun Sentry
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 12-G Shotgun Sentry
+  # cmu edit end
   description: A deployable, semi-automated turret with specialized for close range combat. Protects itself with sturdier plating and steel tusks.
   components:
   - type: UserIFF
@@ -385,7 +395,9 @@
 - type: entity
   parent: RMCBaseTurret
   id: RMCTurretGaussDumb
-  name: damaged UA-577 gauss turret
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: damaged 577 gauss turret
+  # cmu edit end
   description: A deployable, semi-automated turret with AI targeting capabilities. Armed with an M30 Autocannon and a high-capacity drum magazine. This one's IFF system has been fried via acid damage, and it will open fire on any targets within range.
   components:
   - type: UserIFF
@@ -422,8 +434,12 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentryMiniFire
-  name: UN 45-FM mini sentry
-  description: The Mini Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the UN 571-C Sentry gun, this sentry has IFF but the fire that lingers doesn't.
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 45-FM mini sentry
+  # cmu edit end
+  # cmu edit start: no UA/UN prefix on sentry descriptions
+  description: The Mini Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the 571-C Sentry gun, this sentry has IFF but the fire that lingers doesn't.
+  # cmu edit end
   components:
   - type: UserIFF
     factions: []
@@ -491,8 +507,12 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentryFire
-  name: UN 55-FA assault sentry flamer
-  description: The Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the UA 571-C Sentry gun, this sentry has IFF but the fire that lingers doesn't.
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 55-FA assault sentry flamer
+  # cmu edit end
+  # cmu edit start: no UA/UN prefix on sentry descriptions
+  description: The Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the 571-C Sentry gun, this sentry has IFF but the fire that lingers doesn't.
+  # cmu edit end
   components:
   - type: UserIFF
     factions: []
@@ -522,8 +542,12 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentrySniperFire
-  name: UN 60-FP plasma sentry
-  description: The Plasma Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the UA 571-C Sentry gun, this sentry has IFF but the phosphorus that lingers doesn't.
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 60-FP plasma sentry
+  # cmu edit end
+  # cmu edit start: no UA/UN prefix on sentry descriptions
+  description: The Plasma Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the 571-C Sentry gun, this sentry has IFF but the phosphorus that lingers doesn't.
+  # cmu edit end
   components:
   - type: UserIFF
     factions: []
@@ -586,7 +610,9 @@
 - type: entity
   parent: RMCTurretGaussDumb
   id: RMCTurretGaussModifiedCLF
-  name: modified UN-577 gauss turret
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: modified 577 gauss turret
+  # cmu edit end
   description: A deployable, semi-automated turret with AI targeting capabilities. Armed with an M30 Autocannon and a high-capacity drum magazine. This one's IFF system has been fried via acid damage, and it will open fire on any targets within range.
   components:
   - type: EntityIFF

@@ -1,0 +1,40 @@
+<Document>
+  # Opening and Closing
+
+  Almost every surgery starts by opening the body part up, and ends by closing it. The surgery window runs these steps for you as part of whatever surgery you pick, but it helps to know them.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMScalpel" Caption="Scalpel"/>
+    <GuideEntityEmbed Entity="CMHemostat" Caption="Hemostat"/>
+    <GuideEntityEmbed Entity="CMRetractor" Caption="Retractor"/>
+    <GuideEntityEmbed Entity="CMCircularSaw" Caption="Circular saw"/>
+    <GuideEntityEmbed Entity="CMBoneGel" Caption="Bone gel"/>
+    <GuideEntityEmbed Entity="CMCautery" Caption="Cautery"/>
+  </Box>
+
+  ## Open Incision
+  Needed for almost everything, on any body part.
+  1. Cut with a [bold]scalpel[/bold].
+
+  2. Clamp the bleeders with a [bold]hemostat[/bold].
+
+  3. Retract the skin with a [bold]retractor[/bold].
+
+  ## Open Bone Cavity
+  Needed for anything inside the chest or head: organs, and fractures of the ribs or skull. Open the incision first.
+  1. Saw through the ribcage or skull with a [bold]circular saw[/bold].
+
+  2. Prise the bones open with a [bold]retractor[/bold].
+
+  ## Close Incision
+  1. Cauterize the incision shut with a [bold]cautery[/bold].
+
+  ## Close Bone Cavity
+  1. Put the bones back with a [bold]retractor[/bold].
+
+  2. Mend the ribcage or skull with [bold]bone gel[/bold].
+
+  3. Cauterize the incision shut with a [bold]cautery[/bold].
+
+  Most surgeries end with these closing steps built in, so you usually close up by finishing the surgery. If you want to do another surgery on the same part first, start it before closing.
+</Document>

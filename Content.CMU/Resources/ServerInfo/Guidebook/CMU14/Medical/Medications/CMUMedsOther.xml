@@ -1,0 +1,23 @@
+<Document>
+  # Other Medications
+
+  ## Cryogenics
+  These only work when the patient is very cold, below about 170 K, which in practice means inside a cryo pod. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"].
+  - [bold]Cryoxadone[/bold]: heals brute, burn, toxin, suffocation and genetic damage all at once.
+  - [bold]Clonexadone[/bold]: a stronger cryoxadone. Heals brute, burn, toxin and genetic damage faster.
+
+  ## Body Temperature
+  - [bold]Leporazine[/bold]: brings body temperature back to normal, treating both hypothermia and heatstroke. It also stops cryogenics working, so don't give it to someone going into a cryo pod. Overdosing causes extreme drowsiness.
+
+  ## Everything Else
+  - [bold]Ethylredoxrazine[/bold]: neutralizes alcohol in the blood, sobering the patient up over time. It doesn't stop the drunkenness they already have. Toxic in high doses.
+  - [bold]Methylphenidate[/bold]: a stimulant that sharpens focus.
+  - [bold]Lipozine[/bold]: burns off fat and makes the patient hungry. Mainly used against obesity.
+
+  <GuideReagentEmbed Reagent="CMCryoxadone"/>
+  <GuideReagentEmbed Reagent="CMClonexadone"/>
+  <GuideReagentEmbed Reagent="CMLeporazine"/>
+  <GuideReagentEmbed Reagent="CMEthylredoxrazine"/>
+  <GuideReagentEmbed Reagent="RMCMethylphenidate"/>
+  <GuideReagentEmbed Reagent="RMCLipozine"/>
+</Document>

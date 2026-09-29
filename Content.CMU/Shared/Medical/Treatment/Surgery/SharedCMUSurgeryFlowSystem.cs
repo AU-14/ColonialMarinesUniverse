@@ -58,6 +58,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     [Dependency] protected ItemToggleSystem ItemToggle = default!;
     [Dependency] protected SharedPopupSystem Popup = default!;
     [Dependency] protected SharedPainShockSystem Pain = default!;
+    [Dependency] protected CMUSurgeryHoldDownSystem HoldDown = default!;
     [Dependency] protected CMUSurgerySessionSystem SurgerySessions = default!;
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
     [Dependency] protected StatusEffectsSystem Status = default!;
@@ -769,8 +770,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         Popup.PopupEntity(Loc.GetString(locKey), user, user, PopupType.SmallCaution);
     }
 
-    private bool IsPainControlledForSurgery(EntityUid patient)
+    private bool IsPainControlledForSurgery(EntityUid patient, EntityUid surgeon)
     {
+        // Someone else pinning the patient still stands in for painkillers.
+        if (HoldDown.IsHeldDownFor(patient, surgeon))
+            return true;
+
         if (TryComp<MobStateComponent>(patient, out var mobState)
             && mobState.CurrentState != MobState.Alive)
         {
@@ -793,9 +798,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             || Pain.GetTierSuppression(patient) >= SurgeryPainSuppressionTierMinimum;
     }
 
-    private bool ShouldRejectSurgeryStepForPain(EntityUid patient)
+    private bool ShouldRejectSurgeryStepForPain(EntityUid patient, EntityUid surgeon)
     {
-        if (IsPainControlledForSurgery(patient))
+        if (IsPainControlledForSurgery(patient, surgeon))
             return false;
 
         return TryComp<PainShockComponent>(patient, out var pain)
@@ -890,7 +895,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                 return true;
             }
 
-            if (ShouldRejectSurgeryStepForPain(patient))
+            if (ShouldRejectSurgeryStepForPain(patient, user))
             {
                 ShowSurgeryPainFailure(patient, user, applyReaction: false);
                 return true;
@@ -1099,7 +1104,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             || (Net.IsServer && !SurgerySessions.IsAttemptCurrent(patient, ev.Attempt, ev.User, ev.Used, ev.Target, ev.StepId))
             || (Net.IsServer && !IsAttemptTargetStillValid(patient, armed, ev.Target))
             || !CanOperateOnPatient(patient, ev.User)
-            || ShouldRejectSurgeryStepForPain(patient))
+            || ShouldRejectSurgeryStepForPain(patient, ev.User))
         {
             args.Cancel();
         }
@@ -1128,7 +1133,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                     return;
                 }
 
-                if (ShouldRejectSurgeryStepForPain(patient))
+                if (ShouldRejectSurgeryStepForPain(patient, args.User))
                     ShowSurgeryPainFailure(patient, args.User, applyReaction: true);
 
                 ReturnToAwaitingAction(patient, armed);
@@ -1147,7 +1152,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             return;
         }
 
-        if (ShouldRejectSurgeryStepForPain(patient))
+        if (ShouldRejectSurgeryStepForPain(patient, args.User))
         {
             ShowSurgeryPainFailure(patient, args.User, applyReaction: true);
             SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId);
