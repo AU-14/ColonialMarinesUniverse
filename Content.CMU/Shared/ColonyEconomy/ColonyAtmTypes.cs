@@ -25,6 +25,7 @@ public enum AtmScreen : byte
     TransferAmount,
     TransferConfirm,
     Result,
+    History,
 }
 
 /// <summary>
@@ -47,3 +48,24 @@ public sealed class SkimmedAccount
     public string Name = string.Empty;
     public int Pin;
 }
+
+/// <summary>
+///     What moved money in or out of an account, as listed on the ATM's history screen.
+/// </summary>
+[Serializable, NetSerializable]
+public enum AtmHistoryKind : byte
+{
+    Withdrawal,
+    Deposit,
+    /// <summary>Cash paid in to this account by someone at an ATM, with or without a card.</summary>
+    CashDeposit,
+    TransferOut,
+    TransferIn,
+}
+
+/// <summary>
+///     One line of an account's history. <see cref="Amount"/> is always positive; the kind says
+///     which way it went. <see cref="OtherAccount"/> is the other side of a transfer, otherwise 0.
+/// </summary>
+[Serializable, NetSerializable]
+public readonly record struct ColonyAccountHistoryEntry(TimeSpan Time, AtmHistoryKind Kind, int Amount, int OtherAccount);

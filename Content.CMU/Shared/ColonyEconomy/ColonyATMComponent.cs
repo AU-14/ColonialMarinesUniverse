@@ -48,6 +48,11 @@ public sealed partial class ColonyAtmComponent : Component
     public int RemoteDepositTarget;
 
     /// <summary>
+    ///     History screen: how many of the newest entries are scrolled past.
+    /// </summary>
+    public int HistoryOffset;
+
+    /// <summary>
     ///     Who is operating the ATM right now (for forensics / deposits).
     /// </summary>
     public EntityUid? CurrentUser;

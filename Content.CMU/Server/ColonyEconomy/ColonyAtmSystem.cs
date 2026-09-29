@@ -33,6 +33,9 @@ public sealed partial class ColonyAtmSystem : EntitySystem
     private const int MaxAmountDigits = 9;
     private const int MaxRecentLogins = 10;
 
+    // History lines per page: as many as the screen shows, with room for one to wrap.
+    private const int HistoryPageSize = 6;
+
     // Stack type shared by every dollar-bill denomination (RMCSpaceCash1, 10, 100, 1000, ...).
     private const string CashStackType = "Dollar";
 
@@ -46,6 +49,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmDigitBuiMsg>(OnDigit);
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmBackspaceBuiMsg>(OnBackspace);
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmConfirmBuiMsg>(OnConfirm);
+        SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmScrollHistoryBuiMsg>(OnScrollHistory);
     }
 
     // ─── Activation (no card) ──────────────────────────────────────────────
@@ -93,6 +97,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         comp.PendingAmount = 0;
         comp.PendingTransferTarget = 0;
         comp.RemoteDepositTarget = 0;
+        comp.HistoryOffset = 0;
     }
 
     // ─── Card swipe ────────────────────────────────────────────────────────
@@ -203,6 +208,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
             case AtmScreen.TransferAmount:        HandleTransferAmountConfirm(uid, comp); break;
             case AtmScreen.TransferConfirm:       ExecuteTransfer(uid, comp); break;
             case AtmScreen.PinLocked:             Eject(uid, comp); break;
+            case AtmScreen.History:               GoBack(uid, comp); break;
             case AtmScreen.Result:
                 comp.Screen = comp.PinAuthenticated && comp.SwipedCard != null
                     ? AtmScreen.MainMenu : AtmScreen.Welcome;
@@ -211,6 +217,20 @@ public sealed partial class ColonyAtmSystem : EntitySystem
                 RefreshUi(uid, comp);
                 break;
         }
+    }
+
+    private void OnScrollHistory(EntityUid uid, ColonyAtmComponent comp, ColonyAtmScrollHistoryBuiMsg msg)
+    {
+        if (msg.Actor != comp.CurrentUser || comp.Screen != AtmScreen.History || !TryGetSessionCard(comp, out var cardUid, out _))
+            return;
+
+        // Page by page; ignore scrolling past either end.
+        var offset = comp.HistoryOffset + (msg.Older ? HistoryPageSize : -HistoryPageSize);
+        if (offset < 0 || offset >= _bank.GetHistory(cardUid).Count)
+            return;
+
+        comp.HistoryOffset = offset;
+        RefreshUi(uid, comp);
     }
 
     private void HandleWelcomeMenu(EntityUid uid, ColonyAtmComponent comp, string digit)
@@ -240,7 +260,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
             case "2": comp.Screen = AtmScreen.Deposit; break;
             case "3": comp.Screen = AtmScreen.Transfer; break;
             case "4": comp.Screen = AtmScreen.RemoteDeposit; break;
-            case "5": Eject(uid, comp); return;
+            case "5": comp.Screen = AtmScreen.History; comp.HistoryOffset = 0; break;
+            case "6": Eject(uid, comp); return;
         }
         RefreshUi(uid, comp);
     }
@@ -254,6 +275,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
             case AtmScreen.Withdraw:
             case AtmScreen.Deposit:
             case AtmScreen.Transfer:
+            case AtmScreen.History:
                 comp.Screen = AtmScreen.MainMenu;
                 break;
             case AtmScreen.RemoteDeposit:
@@ -408,6 +430,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
         card.AccountBalance -= amount;
         Dirty(cardUid, card);
+        _bank.RecordTransaction(cardUid, AtmHistoryKind.Withdrawal, amount);
 
         var taxRate = _adminConsole.GetIncomeTax();
         var taxAmount = (int)Math.Floor(amount * taxRate);
@@ -441,6 +464,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         ConsumeCash(comp.CurrentUser.Value, amount);
         card.AccountBalance += amount;
         Dirty(cardUid, card);
+        _bank.RecordTransaction(cardUid, AtmHistoryKind.Deposit, amount);
         ShowResult(uid, comp, $"Deposited ${amount}. Balance: ${card.AccountBalance}.");
     }
 
@@ -501,6 +525,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         ConsumeCash(comp.CurrentUser.Value, amount);
         found.Value.card.AccountBalance += amount;
         Dirty(found.Value.uid, found.Value.card);
+        _bank.RecordTransaction(found.Value.uid, AtmHistoryKind.CashDeposit, amount);
         ShowResult(uid, comp, $"Deposited ${amount} to #{comp.RemoteDepositTarget}.");
     }
 
@@ -576,6 +601,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         Dirty(senderUid, sender);
         target.Value.card.AccountBalance += amount;
         Dirty(target.Value.uid, target.Value.card);
+        _bank.RecordTransaction(senderUid, AtmHistoryKind.TransferOut, amount, target.Value.card.AccountNumber);
+        _bank.RecordTransaction(target.Value.uid, AtmHistoryKind.TransferIn, amount, sender.AccountNumber);
 
         ShowResult(uid, comp, $"Transferred ${amount}. Balance: ${sender.AccountBalance}.");
     }
@@ -587,6 +614,16 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         IdCardComponent? card = null;
         if (comp.SwipedCard != null)
             TryComp(comp.SwipedCard.Value, out card);
+
+        // Like the balance, the history is only sent once the PIN has been entered, and only to the history screen.
+        ColonyAccountHistoryEntry[]? history = null;
+        var historyTotal = 0;
+        if (comp.Screen == AtmScreen.History && TryGetSessionCard(comp, out var historyCard, out _))
+        {
+            var all = _bank.GetHistory(historyCard);
+            historyTotal = all.Count;
+            history = all.Reverse().Skip(comp.HistoryOffset).Take(HistoryPageSize).ToArray();
+        }
 
         _bank.IsLocked(card, out var lockExpiry);
 
@@ -602,7 +639,10 @@ public sealed partial class ColonyAtmSystem : EntitySystem
             comp.Screen == AtmScreen.PinEntry ? new string('*', comp.KeypadBuffer.Length) : comp.KeypadBuffer,
             EmptyLabels,
             EmptyLabels,
-            HasComp<ColonyAtmTamperedComponent>(uid)
+            HasComp<ColonyAtmTamperedComponent>(uid),
+            history,
+            comp.HistoryOffset,
+            historyTotal
         );
 
         _ui.SetUiState(uid, ColonyAtmUi.Key, state);

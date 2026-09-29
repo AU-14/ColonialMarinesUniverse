@@ -36,6 +36,17 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
     /// <summary>Whether the ATM has been tampered with by a siphon rig (shows the tampered card reader art).</summary>
     public bool Tampered { get; }
 
+    /// <summary>
+    ///     One page of the account's history, newest first. Only sent while the PIN-unlocked history screen is open.
+    /// </summary>
+    public ColonyAccountHistoryEntry[] History { get; }
+
+    /// <summary>How many newer entries come before this page.</summary>
+    public int HistoryOffset { get; }
+
+    /// <summary>How many entries the account's history holds in total.</summary>
+    public int HistoryTotal { get; }
+
     public ColonyAtmBuiState(
         AtmScreen screen,
         int balance,
@@ -47,7 +58,10 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
         string keypadBuffer,
         string[] leftLabels,
         string[] rightLabels,
-        bool tampered = false)
+        bool tampered = false,
+        ColonyAccountHistoryEntry[]? history = null,
+        int historyOffset = 0,
+        int historyTotal = 0)
     {
         Screen = screen;
         Balance = balance;
@@ -60,6 +74,9 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
         LeftLabels = leftLabels;
         RightLabels = rightLabels;
         Tampered = tampered;
+        History = history ?? Array.Empty<ColonyAccountHistoryEntry>();
+        HistoryOffset = historyOffset;
+        HistoryTotal = historyTotal;
     }
 }
 
@@ -88,6 +105,15 @@ public sealed class ColonyAtmBackspaceBuiMsg : BoundUserInterfaceMessage { }
 /// <summary>Player pressed the Confirm (green) key.</summary>
 [Serializable, NetSerializable]
 public sealed class ColonyAtmConfirmBuiMsg : BoundUserInterfaceMessage { }
+
+/// <summary>Player pressed a scroll arrow on the history screen.</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmScrollHistoryBuiMsg : BoundUserInterfaceMessage
+{
+    /// <summary>True to page towards older entries, false towards newer ones.</summary>
+    public bool Older { get; }
+    public ColonyAtmScrollHistoryBuiMsg(bool older) => Older = older;
+}
 
 /// <summary>Player pressed the Cancel (red) key.</summary>
 [Serializable, NetSerializable]

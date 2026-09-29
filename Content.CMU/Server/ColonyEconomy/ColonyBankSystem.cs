@@ -1,4 +1,6 @@
+using Content.Server.GameTicking;
 using Content.Shared.Access.Components;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.GameTicking;
 using Robust.Shared.Timing;
 using Robust.Shared.Random;
@@ -12,6 +14,7 @@ public sealed partial class ColonyBankSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GameTicker _ticker = default!;
 
     private const int PinMin = 1000;
     private const int PinMax = 9999;
@@ -19,6 +22,9 @@ public sealed partial class ColonyBankSystem : EntitySystem
     private const int AcctMax = 99999;
     public const int MaxPinAttempts = 3;
     private static readonly TimeSpan LockDuration = TimeSpan.FromMinutes(5);
+
+    // How many entries an account keeps; the ATM pages through them.
+    public const int MaxHistoryEntries = 30;
 
     // Every account number and PIN handed out this round, so no two cards ever share one.
     private readonly HashSet<int> _usedAccounts = new();
@@ -135,6 +141,27 @@ public sealed partial class ColonyBankSystem : EntitySystem
         }
         unlockAt = null;
         return false;
+    }
+
+    /// <summary>
+    ///     Adds a line to the card's account history, dropping the oldest once it is full.
+    /// </summary>
+    public void RecordTransaction(EntityUid cardUid, AtmHistoryKind kind, int amount, int otherAccount = 0)
+    {
+        var history = EnsureComp<ColonyAccountHistoryComponent>(cardUid);
+        history.Entries.Add(new ColonyAccountHistoryEntry(_ticker.RoundDuration(), kind, amount, otherAccount));
+        if (history.Entries.Count > MaxHistoryEntries)
+            history.Entries.RemoveAt(0);
+    }
+
+    /// <summary>
+    ///     The card's recent account history, oldest first.
+    /// </summary>
+    public IReadOnlyList<ColonyAccountHistoryEntry> GetHistory(EntityUid cardUid)
+    {
+        return TryComp<ColonyAccountHistoryComponent>(cardUid, out var history)
+            ? history.Entries
+            : Array.Empty<ColonyAccountHistoryEntry>();
     }
 
     // ── Internal helpers ─────────────────────────────────────────────────

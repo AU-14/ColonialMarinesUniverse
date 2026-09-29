@@ -44,6 +44,10 @@ public sealed partial class ColonyAtmBui(EntityUid owner, Enum uiKey) : BoundUse
         _window.BtnEnter.OnPressed += _ => { Play(EnterSound, -2f);  SendPredictedMessage(new ColonyAtmConfirmBuiMsg()); };
         _window.BtnOk.OnPressed    += _ => { Play(EnterSound, -2f);  SendPredictedMessage(new ColonyAtmConfirmBuiMsg()); };
         _window.BtnDel.OnPressed   += _ => { Play(SelectSound, -4f); SendPredictedMessage(new ColonyAtmBackspaceBuiMsg()); };
+
+        // History scroll arrows.
+        _window.BtnScrollUp.OnPressed   += _ => { Play(SelectSound, -4f); SendPredictedMessage(new ColonyAtmScrollHistoryBuiMsg(false)); };
+        _window.BtnScrollDown.OnPressed += _ => { Play(SelectSound, -4f); SendPredictedMessage(new ColonyAtmScrollHistoryBuiMsg(true)); };
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

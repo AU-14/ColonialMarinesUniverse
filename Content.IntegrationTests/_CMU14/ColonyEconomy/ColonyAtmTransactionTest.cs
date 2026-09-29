@@ -175,7 +175,7 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         await Delete();
         Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu), "DEL on an empty entry did not step back");
 
-        await Type("5", enter: false);              // 5) EXIT
+        await Type("6", enter: false);              // 6) EXIT
         Assert.Multiple(() =>
         {
             Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome));

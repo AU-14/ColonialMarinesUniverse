@@ -64,6 +64,8 @@ public sealed class ColonyAtmWindow : BaseWindow
     public readonly Button BtnEnter;
     public readonly Button BtnOk;
     public readonly Button BtnDel;
+    public readonly Button BtnScrollUp;
+    public readonly Button BtnScrollDown;
 
     public ColonyAtmWindow()
     {
@@ -98,6 +100,12 @@ public sealed class ColonyAtmWindow : BaseWindow
         Btn7 = Key(462, 575); Btn8 = Key(510, 575); Btn9 = Key(558, 575);
         BtnDel = Key(462, 627); Btn0 = Key(510, 627); BtnOk = Key(558, 627);
         BtnEnter = KeyRect(451, 678, 120, 55);
+
+        // History scroll arrows, drawn on the CRT in its bottom-right corner.
+        BtnScrollUp = new ScrollButton(up: true);
+        BtnScrollDown = new ScrollButton(up: false);
+        _layout.Add(BtnScrollUp, ScreenX + ScreenW - 62f, ScreenY + ScreenH - 32f, 26f, 26f);
+        _layout.Add(BtnScrollDown, ScreenX + ScreenW - 32f, ScreenY + ScreenH - 32f, 26f, 26f);
 
         _layout.Add(new ResizeGrip(), NativeW - GripSize, NativeH - GripSize, GripSize, GripSize);
 
@@ -224,6 +232,11 @@ public sealed class ColonyAtmWindow : BaseWindow
         var input   = IsInputScreen(s.Screen);
 
         _screen.SetState(header, balance, BuildBody(s), BuildBuffer(s), input);
+
+        var history = s.Screen == AtmScreen.History;
+        BtnScrollUp.Visible = BtnScrollDown.Visible = history && s.HistoryTotal > s.History.Length;
+        BtnScrollUp.Disabled = s.HistoryOffset <= 0;
+        BtnScrollDown.Disabled = s.HistoryOffset + s.History.Length >= s.HistoryTotal;
     }
 
     private static string BuildBody(ColonyAtmBuiState s)
@@ -233,7 +246,7 @@ public sealed class ColonyAtmWindow : BaseWindow
             AtmScreen.Welcome => "COLONY FINANCIAL TERMINAL\nv2.7  UN TREASURY\n\n1) REMOTE DEPOSIT\n\nInsert ID card for account access.",
             AtmScreen.PinEntry => Combine("ENTER PIN:", s.StatusMessage),
             AtmScreen.PinLocked => "** CARD LOCKED **\nToo many incorrect attempts. Please try again later.",
-            AtmScreen.MainMenu => $"Welcome, {s.OwnerName}.\n\n1) WITHDRAW\n2) DEPOSIT\n3) TRANSFER\n4) REMOTE DEPOSIT\n5) EXIT",
+            AtmScreen.MainMenu => $"Welcome, {s.OwnerName}.\n\n1) WITHDRAW\n2) DEPOSIT\n3) TRANSFER\n4) REMOTE DEPOSIT\n5) HISTORY\n6) EXIT",
             AtmScreen.Withdraw => Combine("WITHDRAW\nEnter amount:", s.StatusMessage),
             AtmScreen.WithdrawConfirm => $"{s.StatusMessage}\n\nENTER = confirm   DEL = cancel",
             AtmScreen.Deposit => Combine("DEPOSIT\nEnter amount:", s.StatusMessage),
@@ -244,8 +257,37 @@ public sealed class ColonyAtmWindow : BaseWindow
             AtmScreen.TransferAmount => s.StatusMessage,
             AtmScreen.TransferConfirm => $"{s.StatusMessage}\n\nENTER = confirm   DEL = cancel",
             AtmScreen.Result => $"{s.StatusMessage}\n\nENTER to continue.",
+            AtmScreen.History => BuildHistory(s),
             _ => string.Empty,
         };
+    }
+
+    // One page, newest first, one line each, e.g. "01:42 -$100 WITHDRAWAL".
+    private static string BuildHistory(ColonyAtmBuiState s)
+    {
+        var sb = new StringBuilder("ACCOUNT HISTORY");
+        if (s.History.Length == 0)
+            sb.Append("\nNo transactions yet.");
+        else if (s.HistoryTotal > s.History.Length)
+            sb.Append($" {s.HistoryOffset + 1}-{s.HistoryOffset + s.History.Length}/{s.HistoryTotal}");
+
+        foreach (var entry in s.History)
+        {
+            var time = $"{(int) entry.Time.TotalHours:00}:{entry.Time.Minutes:00}";
+            var line = entry.Kind switch
+            {
+                AtmHistoryKind.Withdrawal => $"-${entry.Amount} WITHDRAWAL",
+                AtmHistoryKind.Deposit => $"+${entry.Amount} DEPOSIT",
+                AtmHistoryKind.CashDeposit => $"+${entry.Amount} CASH DEPOSIT",
+                AtmHistoryKind.TransferOut => $"-${entry.Amount} TO #{entry.OtherAccount}",
+                AtmHistoryKind.TransferIn => $"+${entry.Amount} FROM #{entry.OtherAccount}",
+                _ => $"{entry.Amount}",
+            };
+            sb.Append('\n').Append(time).Append(' ').Append(line);
+        }
+
+        sb.Append("\nENTER = back");
+        return sb.ToString();
     }
 
     private static string BuildBuffer(ColonyAtmBuiState s)
@@ -344,6 +386,41 @@ public sealed class ColonyAtmWindow : BaseWindow
     }
 
     // ─── Transparent keypad hotspot ────────────────────────────────────────
+
+    // A green arrow drawn on the CRT; dimmed when there is nothing further to scroll to.
+    private sealed class ScrollButton : Button
+    {
+        private static readonly Color Green = Color.FromHex("#46ff77");
+        private static readonly Color Dim = Color.FromHex("#1f9c43").WithAlpha(0.5f);
+        private static readonly Color Hover = new(0.27f, 1f, 0.42f, 0.16f);
+
+        private readonly bool _up;
+
+        public ScrollButton(bool up)
+        {
+            _up = up;
+            Visible = false;
+            StyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.Transparent };
+            // The button stylesheet tints by state, which would darken the green; the colours are drawn below.
+            ModulateSelfOverride = Color.White;
+        }
+
+        protected override void Draw(DrawingHandleScreen handle)
+        {
+            base.Draw(handle);
+            var size = PixelSize;
+            if (!Disabled && DrawMode is DrawModeEnum.Hover or DrawModeEnum.Pressed)
+                handle.DrawRect(PixelSizeBox, Hover);
+
+            var pad = size.X * 0.22f;
+            var (top, bottom) = (pad, size.Y - pad);
+            var tip = new Vector2(size.X / 2f, _up ? top : bottom);
+            var left = new Vector2(pad, _up ? bottom : top);
+            var right = new Vector2(size.X - pad, _up ? bottom : top);
+            handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, new[] { tip, left, right }, Disabled ? Dim : Green);
+            handle.DrawRect(new UIBox2(Vector2.Zero, size), Disabled ? Dim : Green, filled: false);
+        }
+    }
 
     private sealed class KeyButton : Button
     {
