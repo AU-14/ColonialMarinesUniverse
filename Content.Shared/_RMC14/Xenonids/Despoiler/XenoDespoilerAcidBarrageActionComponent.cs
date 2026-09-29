@@ -37,7 +37,7 @@ public sealed partial class XenoDespoilerAcidBarrageActionComponent : Component
     public int MinRangeTiles = 2;
 
     [DataField]
-    public int MaxRangeTiles = 8;
+    public int MaxRangeTiles = 6;
 
     [DataField]
     public float MinProjectileScale = 0.9f;
