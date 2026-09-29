@@ -1,0 +1,59 @@
+<Document>
+  # Wounds and Bleeding
+
+  Every hit leaves a wound on the body part it struck: cuts, stab wounds, gunshot wounds, bruises and burns. Wounds bleed, and while they're untreated they lower that body part's maximum health.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMGauze10" Caption="Gauze"/>
+    <GuideEntityEmbed Entity="CMTraumaKit10" Caption="Trauma kit"/>
+    <GuideEntityEmbed Entity="CMOintment10" Caption="Ointment"/>
+    <GuideEntityEmbed Entity="CMBurnKit10" Caption="Burn kit"/>
+  </Box>
+
+  ## Treating Wounds
+  - Use a treatment item on the patient. If several body parts are wounded, you pick which one to treat.
+  - Bigger wounds need more than one application before they count as treated. Small cuts take one; the worst wounds take up to four.
+  - Once every wound on a body part is treated, they close up over time and the part can heal back to full health.
+  - Without medical training you can still use most items, but they're slower and heal less.
+
+  ## What Treats What
+  - [bold]Gauze[/bold]: dresses cuts, stab wounds, gunshot wounds and bruises. It can't stop arterial bleeding.
+  - [bold]Trauma kit[/bold]: dresses two brute wounds per use and heals some damage. It also stops arterial bleeding. A trained medic applies it instantly.
+  - [bold]Hemostatic gauze packet[/bold]: open it to get hemostatic gauze, a single-use dressing that treats a brute wound instantly and to the best standard.
+  - [bold]Ointment[/bold]: treats two burns per use, instantly, and heals a little burn damage.
+  - [bold]Burn kit[/bold]: treats two burns per use and heals more burn damage. A trained medic applies it instantly.
+  - [bold]Surgical line[/bold]: stops arterial bleeding and restores a body part's health. It doesn't dress wounds, so dress them first. Trained medics only.
+  - [bold]Synth graft[/bold]: restores health to a burned body part. It doesn't treat burns, so treat them first. Trained medics only.
+
+  <Box>
+    <GuideEntityEmbed Entity="AU14HemostaticGauzePacket" Caption="Hemostatic gauze packet"/>
+    <GuideEntityEmbed Entity="AU14Tourniquet" Caption="CAT tourniquet"/>
+  </Box>
+
+  ## Bleeding
+  Open wounds bleed. The injury report and health analyzer show how badly: minor, moderate, severe or [color=red]arterial[/color].
+  - [bold]Arterial bleeding[/bold] is the most dangerous and drains blood fast. Gauze won't stop it; use a trauma kit, a packed trauma kit, surgical line or a tourniquet.
+  - [bold]Packed gauze[/bold] and [bold]packed trauma kits[/bold] can be used just to control bleeding. Packed gauze only works on non-arterial bleeding; a packed trauma kit also stops arterial bleeding.
+  - Blood loss starves the body of oxygen. Replace lost blood with blood packs or IV drips.
+
+  ## Tourniquets
+  - Put a tourniquet on an arm or leg to stop that limb bleeding. It's quick enough to put on yourself under fire.
+  - [color=red]After 5 minutes, the limb dies[/color] and becomes necrotic. Treat the wounds properly and take the tourniquet off before then, using the [bold]Remove tourniquet[/bold] option. Taking it off gives it back.
+
+  ## Internal Bleeding
+  - Some injuries bleed inside the body, where no dressing can reach: compound and shattered fractures, very heavy blunt hits, and failing organs.
+  - A health analyzer shows internal bleeding to anyone with basic medical training.
+  - It needs surgery: see [textlink="Surgery" link="CMUGuideMedicalSurgery"].
+
+  ## Burns and Eschar
+  - Burns are wounds too, treated with ointment or a burn kit.
+  - Taking 30 or more burn damage to one body part in a single hit can leave [bold]eschar[/bold], a full-thickness burn. It's painful and doesn't go away on its own, even once the burn is healed.
+  - Eschar has to be cut away with the [bold]Debride Eschar[/bold] surgery. This is a single step using a burn kit or ointment, and can be done on your own arms and legs.
+
+  ## Shrapnel
+  - Explosions and some rounds leave fragments embedded in a body part. They hurt whenever you move.
+  - Remove them with a scalpel or knife: right-click the patient and choose [bold]Remove shrapnel[/bold].
+
+  ## Synthetics
+  Synthetics don't bleed or bandage. Repair brute damage with a welder and burns with cable coils. For the full process, including the maintenance station and rebooting with a reset key, see [textlink="Repairing Synthetics" link="CMUGuideEngSynths"].
+</Document>

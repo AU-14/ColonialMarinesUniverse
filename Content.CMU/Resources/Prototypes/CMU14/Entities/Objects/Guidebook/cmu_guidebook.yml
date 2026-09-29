@@ -6,13 +6,11 @@
   text: "/ServerInfo/Guidebook/CMU14/CMUGuidebook.xml"
   children:
   - AU14Comms
-  - AU14MedicalV2
   - CMUGuideMortar
-  - CMUGuidePipeBomb
-  - CMUGuideForensics
-  - CMUGuideDefibrillators
+  - CMUGuideMedical
+  - CMUGuideLawEnforcement
+  - CMUGuideEngineering
   - CMUResearchIndex
-  - CMUGuideHearingLoss
   - CMUGuideRoleRider
   - CMUChemicals
 
@@ -25,10 +23,148 @@
 
 - type: guideEntry
   parent: RMC
-  id: CMUGuidePipeBomb
-  name: cmu-guide-entry-pipe-bomb
+  id: CMUGuideEngineering
+  name: cmu-guide-entry-engineering
   priority: 2
-  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUPipeBomb.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngineering.xml"
+  children:
+  - CMUGuideEngGear
+  - CMUGuideEngConstruction
+  - CMUGuideEngPower
+  - CMUGuideEngAtmos
+  - CMUGuideEngHazards
+  - CMUGuideEngFortify
+  - CMUGuideEngSentries
+  - CMUGuideEngBreach
+  - CMUGuideEngVehicles
+  - CMUGuideEngSynths
+  - CMUGuideEngOrdnance
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngGear
+  name: cmu-guide-entry-eng-gear
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngGear.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngConstruction
+  name: cmu-guide-entry-eng-construction
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngConstruction.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngPower
+  name: cmu-guide-entry-eng-power
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngPower.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngAtmos
+  name: cmu-guide-entry-eng-atmos
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngAtmos.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngHazards
+  name: cmu-guide-entry-eng-hazards
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngHazards.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngFortify
+  name: cmu-guide-entry-eng-fortify
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngFortify.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngSentries
+  name: cmu-guide-entry-eng-sentries
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngSentries.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngBreach
+  name: cmu-guide-entry-eng-breach
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngBreach.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngVehicles
+  name: cmu-guide-entry-eng-vehicles
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngVehicles.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngSynths
+  name: cmu-guide-entry-eng-synths
+  priority: 9
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngSynths.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngOrdnance
+  name: cmu-guide-entry-eng-ordnance
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngOrdnance.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawEnforcement
+  name: cmu-guide-entry-law-enforcement
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawEnforcement.xml"
+  children:
+  - CMUGuideLawRoles
+  - CMUGuideLawBasics
+  - CMUGuideLawDispatch
+  - CMUGuideLawRecords
+  - CMUGuideLawArrests
+  - CMUGuideForensics
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawRoles
+  name: cmu-guide-entry-law-roles
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawRoles.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawBasics
+  name: cmu-guide-entry-law-basics
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawBasics.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawDispatch
+  name: cmu-guide-entry-law-dispatch
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawDispatch.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawRecords
+  name: cmu-guide-entry-law-records
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawRecords.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawArrests
+  name: cmu-guide-entry-law-arrests
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawArrests.xml"
 
 - type: guideEntry
   parent: RMC
@@ -39,9 +175,206 @@
 
 - type: guideEntry
   parent: RMC
+  id: CMUGuideMedical
+  name: cmu-guide-entry-medical
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedical.xml"
+  children:
+  - CMUGuideMedicalInfantry
+  - CMUGuideMedicalDiagnosis
+  - CMUGuideMedicalWounds
+  - CMUGuideMedicalFieldCare
+  - CMUGuideMedicalBones
+  - CMUGuideMedicalPain
+  - CMUGuideMedicalOrgans
+  - CMUGuideMedicalSurgery
+  - CMUGuideMedicalResuscitation
+  - CMUGuideMedications
+  - CMUGuideMedicalMachines
+  - CMUGuideDefibrillators
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalInfantry
+  name: cmu-guide-entry-medical-infantry
+  priority: -1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalInfantry.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalDiagnosis
+  name: cmu-guide-entry-medical-diagnosis
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalDiagnosis.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalWounds
+  name: cmu-guide-entry-medical-wounds
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalWounds.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalFieldCare
+  name: cmu-guide-entry-medical-field-care
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalFieldCare.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalBones
+  name: cmu-guide-entry-medical-bones
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalBones.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalPain
+  name: cmu-guide-entry-medical-pain
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalPain.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalOrgans
+  name: cmu-guide-entry-medical-organs
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalOrgans.xml"
+  children:
+  - CMUGuideHearingLoss
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalSurgery
+  name: cmu-guide-entry-medical-surgery
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalSurgery.xml"
+  children:
+  - CMUGuideSurgeryOpening
+  - CMUGuideSurgeryFractures
+  - CMUGuideSurgeryBleeding
+  - CMUGuideSurgeryOrgans
+  - CMUGuideSurgeryLimbs
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryOpening
+  name: cmu-guide-entry-surgery-opening
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryOpening.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryFractures
+  name: cmu-guide-entry-surgery-fractures
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryFractures.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryBleeding
+  name: cmu-guide-entry-surgery-bleeding
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryBleeding.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryOrgans
+  name: cmu-guide-entry-surgery-organs
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryOrgans.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryLimbs
+  name: cmu-guide-entry-surgery-limbs
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryLimbs.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalResuscitation
+  name: cmu-guide-entry-medical-resuscitation
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalResuscitation.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalMachines
+  name: cmu-guide-entry-medical-machines
+  priority: 9
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalMachines.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedications
+  name: cmu-guide-entry-medications
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedications.xml"
+  children:
+  - CMUGuideMedsBrute
+  - CMUGuideMedsBurn
+  - CMUGuideMedsToxin
+  - CMUGuideMedsSuffocation
+  - CMUGuideMedsPain
+  - CMUGuideMedsOrgans
+  - CMUGuideMedsOther
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsBrute
+  name: cmu-guide-entry-meds-brute
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsBrute.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsBurn
+  name: cmu-guide-entry-meds-burn
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsBurn.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsToxin
+  name: cmu-guide-entry-meds-toxin
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsToxin.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsSuffocation
+  name: cmu-guide-entry-meds-suffocation
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsSuffocation.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsPain
+  name: cmu-guide-entry-meds-pain
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsPain.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsOrgans
+  name: cmu-guide-entry-meds-organs
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsOrgans.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsOther
+  name: cmu-guide-entry-meds-other
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsOther.xml"
+
+- type: guideEntry
+  parent: RMC
   id: CMUGuideDefibrillators
   name: cmu-guide-entry-defibrillators
-  priority: 2
+  priority: 8
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUDefibrillators.xml"
 
 - type: guideEntry

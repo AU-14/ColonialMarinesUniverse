@@ -768,7 +768,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             return false;
 
         ApplySurgeryFailure(patient, surgeon, tool);
-        if (ShouldAgitatePatientOnSurgeryFailure(patient))
+        if (ShouldAgitatePatientOnSurgeryFailure(patient, surgeon))
             ApplySurgeryPainFeedback(patient);
 
         return true;
@@ -883,11 +883,12 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             PopupType.MediumCaution);
     }
 
-    private bool ShouldAgitatePatientOnSurgeryFailure(EntityUid patient)
+    private bool ShouldAgitatePatientOnSurgeryFailure(EntityUid patient, EntityUid surgeon)
     {
         return CanFeelSurgeryPain(patient)
             && !HasAnesthesiaForSurgery(patient)
-            && !HasPainSuppressionForSurgery(patient);
+            && !HasPainSuppressionForSurgery(patient)
+            && !HoldDown.IsHeldDownFor(patient, surgeon);
     }
 
     private bool HasAnesthesiaForSurgery(EntityUid patient)

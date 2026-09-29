@@ -66,12 +66,12 @@ public sealed class CMUDefibChargeSystem : EntitySystem
     private static readonly (int Joules, float HealMultiplier, int? ShockDamage, int Burn, float EscharChance)[] Settings =
     {
         (50, 0.4f, 0, 0, 0f),
-        (70, 0.5f, 5, 0, 0f),
+        (70, 37f / 75f, 5, 0, 0f), // 37 of the Lifepak's 75
         (100, 0.6f, 10, 0, 0f),
         (120, 0.8f, 18, 0, 0f),
         (150, 1f, null, 0, 0f),
         (170, 1.2f, null, 5, 0.1f),
-        (200, 1.5f, null, 10, 0.25f),
+        (200, 115f / 75f, null, 10, 0.25f), // 115 of the Lifepak's 75
     };
 
     /// <summary>

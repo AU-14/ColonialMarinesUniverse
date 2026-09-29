@@ -1,0 +1,31 @@
+<Document>
+  # Limb Surgery
+
+  <Box>
+    <GuideEntityEmbed Entity="CMCircularSaw" Caption="Circular saw"/>
+    <GuideEntityEmbed Entity="CMULimbPrinter" Caption="Limb printer"/>
+  </Box>
+
+  These work on arms, hands, legs and feet.
+
+  ## Remove Limb
+  Amputates a limb that can't be saved, such as one killed by a tourniquet left on too long.
+  1. [italic]Open the incision.[/italic]
+
+  2. Amputate the limb with a [bold]circular saw[/bold].
+
+  ## Reattach Limb
+  Attaches a severed limb, or a replacement.
+  1. [italic]Open the incision.[/italic]
+
+  2. Trim the dead tissue off the stump with a [bold]circular saw[/bold].
+
+  3. Prep the socket with a [bold]hemostat[/bold].
+
+  4. Attach the limb: hold it in your hand and use it on the patient. It has to be the right limb for the empty slot.
+
+  5. Cauterize the incision shut with a [bold]cautery[/bold].
+
+  ## Replacement Limbs
+  The [bold]limb printer[/bold] makes new limbs. It grows human limbs from biogenic matrix, and builds robotic limbs from metal sheets.
+</Document>

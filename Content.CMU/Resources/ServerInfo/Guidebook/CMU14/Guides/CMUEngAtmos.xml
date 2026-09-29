@@ -1,0 +1,22 @@
+<Document>
+  # Atmospherics
+
+  # WORK IN PROGRESS
+  [color=red][bold]Atmospherics is not finished. The implementation is incomplete, so some of what's described here may change or not work yet, and some things may be missing from this guide.[/bold][/color]
+
+  ## Outdoor Air and Temperature
+  - On planets, the outside air flows in through anything open to the sky, so a roofless or breached room takes on the outdoor atmosphere.
+  - The outdoor temperature follows a [bold]day and night cycle[/bold]: warmest a quarter of the way through, coldest three quarters through. Expect cold nights to drag down the temperature of anywhere open to the outside.
+
+  ## Exhaust Vents
+  <Box>
+    <GuideEntityEmbed Entity="CMUExhaustVent" Caption="EX-1 exhaust vent"/>
+  </Box>
+  - The [bold]EX-1 exhaust vent[/bold] dumps the gas in its pipe straight out into the open sky. It's faster than venting through a passive vent and needs no power.
+  - It only works on a tile open to the sky.
+  - Use a screwdriver to open or close it. Use a multitool to open its panel, then pry it to deconstruct it.
+
+  ## Refining Phoron
+  - The [bold]"Rock Candy" C-7 gas crystallizer[/bold] turns piped gas into solid sheets, as long as the gas is held in the right temperature window. Raw plasma won't crystallize on its own.
+  - A phoron refining crate has everything you need to start: plasma and nitrogen canisters, a heater, a freezer and a crystallizer.
+</Document>

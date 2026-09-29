@@ -355,6 +355,13 @@
   name: field antenna mast
   suffix: Field-Built, Both Sides
   components:
+  # field masts only relay while powered, unlike the passive CP masts
+  - type: ApcPowerReceiver
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 1000
+    channel: Equipment
   - type: AU14NetSpliceTarget
     carriers: 2
     probes: 24
