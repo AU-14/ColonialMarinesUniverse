@@ -1,0 +1,56 @@
+﻿- type: entity
+  parent: RMCMagazineRifleType71
+  id: RuMCMagazineRifleType71Tracer
+  name: "Type71 magazine (5.45x39mm Tracer)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - RMCMagazineRifleType71
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgeRifle545x39mm
+      - RuMCCartridgeRifle545x39mmTracer
+    proto: RuMCCartridgeRifle545x39mmTracer
+    capacity: 60
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/type71.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsRifleType71
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: RuMCCartridgeRifle545x39mmTracer
+  name: 5.45x39mm Tracer
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBullet545x39mmTracer
+  - type: Tag
+    tags:
+    - Cartridge
+    - RuMCCartridgeRifle545x39mmTracer
+
+- type: entity
+  parent: RMCBulletRifle545x39mm
+  id: RuMCBullet545x39mmTracer
+  name: bullet (5.45x39mm Tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#00ff66"
+    radius: 2
+    energy: 8.0
+
+- type: Tag
+  id: RuMCCartridgeRifle545x39mmTracer

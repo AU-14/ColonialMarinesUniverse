@@ -84,6 +84,8 @@
   storage:
     back:
     - AU14GuidebookLawColonial
+    - CMURecordsTablet
+    - ForensicScanner
 
 - type: entity
   parent: CMSpawnPointJobBase

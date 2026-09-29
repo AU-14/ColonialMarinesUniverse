@@ -1,0 +1,311 @@
+- type: entity
+  parent: RMCPouchMagazine
+  id: RuMCUPPPouchMagazine
+  name: PM-74-Magazine
+  description: A compact, reinforced pouch for standard assault rifle magazines. Designed for quick access and reliable retention during high-mobility operations. Standard issue for all UPP riflemen.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/medium_ammo_mag.rsi
+
+- type: entity
+  parent: RuMCUPPPouchMagazine
+  id: RuMCUPPPouchMagazineLarge
+  name: PM-74-Magazine modified
+  description: An extended variant of the PM-74. Carries a heavy combat load of rifle magazines. Used by automatic riflemen and troops expecting prolonged engagements.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/large_ammo_mag.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,7,1
+
+- type: entity
+  parent: RMCPouchConstruction
+  id: RuMCUPPPouchConstruction
+  name: PM-18-Construction
+  description: The engineer's universal bag. It is equipped with loops and pockets for glass sheets, metal rods, barbed wire, cable coils, and empty sandbags. It also has two external hooks for trench tools or interchangeable lighting devices.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/construction.rsi
+
+- type: entity
+  parent: RMCPouchBayonet
+  id: RuMCUPPPouchBayonet
+  name: PM-6-Bayonet
+  description: A secure mount for a bayonet or large combat knife. Provides access to the blade while securely holding it in place, ensuring that it does not get lost during movement. The command still does not understand why troops need these pouches.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/bayonet.rsi
+
+- type: entity
+  parent: RMCPouchFuelTank
+  id: RuMCUPPPouchFuelTank
+  name: PM-12-Fuel
+  description: A specialized harness with two ring straps designed to securely carry a napalm tank. Handle with care. A single leak could turn a soldier into a torch.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/fueltank.rsi
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: RuMCUPPPouchGeneralLarge
+  name: PM-47-General
+  description: A large, general-purpose pouch. Used for carrying a variety of different-sized items, from medical supplies to extra rations. Not designed for a specific role, but useful for almost any.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/large_drop.rsi
+
+- type: entity
+  parent: RMCPouchExplosive
+  id: RuMCUPPPouchExplosive
+  name: PM-54-Explosive
+  description: A robust pouch with reinforced stitching and a secure flap. Designed to safely carry grenades, plastic explosives, and mine components. The universal choice for sappers and demolition experts.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/large_explosive.rsi
+
+- type: entity
+  parent: RMCPouchMagazinePistolLarge
+  id: RuMCUPPPouchMagazinePistolLarge
+  name: PM-18-Pistol modified
+  description: An oversized pistol magazine pouch, often used by special forces for high-capacity sidearms or to carry additional speedloaders for heavy revolvers. Bulky but effective.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/large_pistol_mag.rsi
+
+- type: entity
+  parent: RMCPouchMagazinePistol
+  id: RuMCUPPPouchMagazinePistol
+  name: PM-18-Pistol
+  description: A lightweight pouch for sidearm magazines and revolver speedloaders. Preferred by officers, vehicle crews, and anyone who values having a backup weapon fully loaded. Keeps its contents secure without unnecessary bulk.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/medium_pistol_mag.rsi
+
+- type: entity
+  parent: RMCPouchShotgunLarge
+  id: RuMCUPPPouchShotgunLarge
+  name: PM-23-Shotgun modified
+  description: An expanded shotgun shell pouch. Carries a significant ammunition load for sustained close-quarters combat. Essential for those clearing rooms or holding tight corners.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/large_shotshells.rsi
+
+- type: entity
+  parent: RMCPouchShotgun
+  id: RuMCUPPPouchShotgun
+  name: PM-23-Shotgun
+  description: Designed for 12-gauge and 23mm shotgun shells. Holds enough rounds for a few intense exchanges at close quarters. A must-have for breachers and pointmen.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/medium_shotshells.rsi
+    layers:
+    - state: icon
+    - state: half
+      visible: false
+    - state: full
+      visible: false
+
+- type: entity
+  parent: RMCPouchTools
+  id: RuMCUPPPouchTools
+  name: PM-66-Tools
+  description: A dedicated pouch for maintenance tools. Designed to hold screwdrivers, wrenches, cable coils, and a detachable hook for a light replacer. The mark of a field engineer.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/tools.rsi
+
+- type: entity
+  parent: RMCPouchDrumPMC
+  id: RuMCUPPPouchDrum
+  name: PM-27-Drum
+  description: A heavy, reinforced pouch specifically designed to carry bulky drum magazines. Provides secure transport for large-capacity magazines, preventing them from clattering or catching on obstacles.
+  components:
+  - type: Tag
+    tags:
+    - RuMCUPPPouchDrum
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/sgdrums_ammo.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,5,1 #3 slots
+    whitelist:
+      tags:
+      - RMCMagazineSmartGun
+      - RMCMagazineSmartGunirradiated
+      - RMCMagazineSMGType19Drum
+      - RMCMagazineLMGQYJ72
+      - RuMCMagazineTachanka
+      - RuMCMagazineUTES-C
+      - RuMCMagazineUTES-CTracter
+      - AU14MagazineSmartGunUPP
+      - RuMCMagazineAH12
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - RMCMagazineSmartGun
+      - RMCMagazineSmartGunirradiated
+      - RMCMagazineSMGType19Drum
+      - RMCMagazineLMGQYJ72
+      - RuMCMagazineTachanka
+      - RuMCMagazineUTES-C
+      - RuMCMagazineUTES-CTracter
+      - AU14MagazineSmartGunUPP
+      - RuMCMagazineAH12
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: AU14PouchIFAK
+  id: RuMCUPPPouchIFAK
+  name: PM-61-Medical
+  description: A field medical pouch with reinforced stitching. Holds bandages, hemostatic agents, and essential trauma supplies. Clearly marked for quick identification, keeping vital tools within arm's reach.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/medical.rsi
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,13,1 #7 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - Pill
+      - Bottle
+      - Syringe
+      - PillCanister
+      - CMTraumaKit
+      - CMBurnKit
+      - CMOintment
+      - Brutepack
+      - CMBloodPack
+      #      - TODO RMC14 splint
+      - RMCPenlight
+      - CMAutoInjector
+      - CMFireExtinguisherPortable
+      - RMCSyringeCase
+      - CMSurgicalLine
+      - CMSynthGraft
+      - PillPacket
+      - Hypospray
+      components:
+      - Hypospray
+      - CMUSplintItem
+      - SpawnItemsOnUse
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RuMCUPPPouchIFAK
+  id: RuMCUPPPouchIFAKFill
+  name: PM-61-Medical
+  description: A field medical pouch with reinforced stitching. Holds bandages, hemostatic agents, and essential trauma supplies. Clearly marked for quick identification, keeping vital tools within arm's reach.
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14HemostaticGauzePacket
+    - id: AU14HemostaticGauzePacket
+    - id: AU14Tourniquet
+    - id: CMPacketPillsTricordrazine
+    - id: AU14PacketPillsTramadol
+    - id: CMUSplintItem
+    - id: CMUSplintItem
+
+- type: entity
+  parent: RMCPouchFlare
+  id: RuMCUPPPouchFlare
+  name: PM-44-Flare
+  description: A compact pouch for signal flares, smoke markers, and illumination devices. Keeps pyrotechnics safe from impact and moisture, ready for immediate deployment.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/flare.rsi
+    layers:
+    - state: icon
+    - state: open
+      map: [ "partialLayer" ]
+    - state: closed
+      map: [ "fullLayer" ]
+  - type: CMItemSlots
+    cooldown: 1
+    cooldownPopup: You need to wait before taking another flare!
+    count: 16
+    slot:
+      name: Flare
+      whitelist:
+        tags:
+        - RuMCFlareRedCAS
+        - RuMCFlareWhite
+
+- type: entity
+  parent: RuMCUPPPouchFlare
+  id: RuMCUPPPouchFlareFill
+  name: PM-44-Flare
+  description: A compact pouch for signal flares, smoke markers, and illumination devices. Keeps pyrotechnics safe from impact and moisture, ready for immediate deployment.
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: RuMCFlareWhite
+    cooldown: 1
+    cooldownPopup: You need to wait before taking another flare!
+    count: 16
+    slot:
+      name: Flare
+      whitelist:
+        tags:
+        - RuMCFlareRedCAS
+        - RuMCFlareWhite
+
+- type: entity
+  parent: AU14PouchPistolAlt
+  id: RuMCUPPPouchPistolAlt
+  name: PM-18-Pistol
+  description: A lightweight pouch for sidearm magazines and revolver speedloaders. Preferred by officers, vehicle crews, and anyone who values having a backup weapon fully loaded. Keeps its contents secure without unnecessary bulk.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/pistol.rsi
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: _m77
+      map: [ "_m77_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984
+      map: [ "m1984_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m13
+      map: [ "m13_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m44r
+      map: [ "m44r_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: mk80
+      map: [ "mk80_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: smartpistol
+      map: [ "su6_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: cmateba
+      map: [ "mateba_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: b92fs
+      map: [ "b92fs_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: highpower
+      map: [ "mk45_fill" ]
+    - state: icon
+    - state: closed
+      map: [ "holstered" ]
+
+- type: entity
+  parent: RMCPouchDocument
+  id: RuMCUPPPouchDocument
+  name: PM-68-Document
+  description: It can contain papers, folders, disks, technical manuals, and clipboards.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/pouches/document.rsi
+
+- type: Tag
+  id: RuMCUPPPouchDrum

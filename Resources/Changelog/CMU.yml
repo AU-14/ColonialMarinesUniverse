@@ -10972,5 +10972,156 @@
   id: 702
   time: '2026-09-28T02:53:44.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2042
+- author: TheHellFireo
+  changes:
+  - message: Reduced repeated simulation, spatial-query, and network-state work.
+    type: Code
+  - message: Added server performance cost and retention diagnostics and log-comparison
+      tools.
+    type: Admin
+  id: 703
+  time: '2026-09-28T21:33:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2045
+- author: deepdarkdepths
+  changes:
+  - message: Xeno rank thresholds have been reverted back to what they previously
+      were.
+    type: Tweak
+  id: 704
+  time: '2026-09-28T22:03:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2017
+- author: Vencallium
+  changes:
+  - message: "Added ship research terminal markers that select the owning faction\u2019\
+      s research network."
+    type: Add
+  - message: Identical ships used by opposing factions now receive the correct research
+      and hospital terminals.
+    type: Fix
+  - message: "Matched the research cooldown purchase button to the terminal\u2019\
+      s amber styling and changed its label to \u201C-60s 1CR\u201D."
+    type: Tweak
+  - message: All gas miners can now be unwrenched, moved, and reanchored.
+    type: Tweak
+  - message: "Removed misleading \u201CPermanent\u201D labels from portable and administrator\
+      \ gas miners."
+    type: Tweak
+  - message: Added Colony, GOVFOR, and OPFOR hospital emergency computer variants.
+    type: Add
+  - message: "Restricted hospital computer variants to their faction\u2019s medical\
+      \ and command access."
+    type: Fix
+  - message: Added ship and fixed-faction hospital computer markers, including colony
+      markers.
+    type: Add
+  - message: Prevented ship markers with fixed faction flags from spawning an additional
+      ground-faction terminal.
+    type: Fix
+  - message: Replaced USS Bush research terminals and its hospital computer with ship
+      faction markers.
+    type: Map
+  - message: "Replaced Stable Garrison\u2019s hospital computer with a colony marker."
+    type: Map
+  - message: Hospital computers can now locate landing zones on other decks of their
+      own ship.
+    type: Fix
+  - message: "Hospital shuttle delivery, pickup, and recovery now use the landing\
+      \ zone\u2019s deck as the hospital destination."
+    type: Fix
+  - message: Granted room attention to advisors, engineering/intelligence/logistics/medical
+      officers, vehicle commanders, section and squad sergeants, fireteam leaders,
+      and high-command staff.
+    type: Add
+  - message: Removed the room-attention action from CO/XO and ordinary military police.
+    type: Remove
+  - message: Personnel now face visible CO/XO when another leader calls attention,
+      prioritizing CO over XO and staff officers.
+    type: Fix
+  - message: Added regression coverage for faction terminals, hospital access, movable
+      miners, attention permissions, officer focus, and cross-deck hospital transport.
+    type: Code
+  id: 705
+  time: '2026-09-28T22:05:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2043
+- author: HubaBub
+  changes:
+  - message: Added the bear third party
+    type: Add
+  id: 706
+  time: '2026-09-28T22:18:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2044
+- author: troytroy400
+  changes:
+  - message: Emergency vehicles now have a driver button for red/blue emergency lights
+      with light stage options.
+    type: Add
+  - message: Colony Shot Alert System. This new structure alerts CMB radio to gunfire
+      or explosions within 25 tiles, at most once every 60 seconds. They are to be
+      only mapped at important locations like hospitals, police stations and administration.
+    type: Add
+  - message: Every phone now has a 911 tab. Callers choose Fire/Medical or Law Enforcement,
+      answer the automated dispatcher's questions and the call is reported on CMB
+      and Colony Medical radio as 911 Dispatch.
+    type: Add
+  - message: Colony Medical radio channel (:z).
+    type: Add
+  - message: Mobile phones. Use one in hand to call, answer or hang up. It takes the
+      name of whoever picks it up first, shows up as "[name]'s Mobile Phone" under
+      the Mobile Phones tab and its caller name can be changed with a screwdriver.
+    type: Add
+  - message: Colony command, corporate leadership, Head Physician, Foreman, Journalist,
+      Psychologist, ambassadors and orbital staff  now start with a mobile phone.
+    type: Add
+  - message: Mobile criminal records tablet. Basically just a mobile criminal records
+      computer.
+    type: Add
+  - message: Every character now starts with $25-150 in their bank account depending
+      on their job.
+    type: Add
+  - message: All colonists and CLF now appear on the criminal records computer automatically
+      round start, with round pertinent information not shown.
+    type: Add
+  - message: Status changes on the criminal records computer are now announced over
+      CMB radio.
+    type: Add
+  - message: People now leave DNA on things they touch with bare hands and scanning
+      a person with the forensic scanner shows their DNA and fingerprints.
+    type: Add
+  - message: All colony police/security roles now start with a forensic scanner.
+    type: Add
+  - message: Colony locked variants of all medical doors, colony department variants
+      of the Hybrisa doors and CMB, Colony Medical, Engineering/Logistics and GOVFOR/OPFOR
+      windoors in glass, blue and reinforced.
+    type: Add
+  - message: The Emergency Response Officer is now the Paramedic, with Firefighter
+      as an optional ID. Paramedics also get CMB radio to coordinate with them.
+    type: Tweak
+  - message: The Ethics and Wellness Advisor is now the Psychologist, with Therapist
+      and Psychiatrist ID options.
+    type: Tweak
+  - message: Freight Systems Specialist is now Logistics Specialist, Waste Management
+      Specialist is now Waste Management, Colony Engineer is now Engineer and Colony
+      Atmospheric Technician is now Atmospheric Technician.
+    type: Tweak
+  - message: The criminal records computer now uses the CRT UI.
+    type: Tweak
+  - message: Bounties are now set only by the game and can no longer be changed by
+      hand to prevent the infinite money glitch.
+    type: Tweak
+  - message: The "Eliminated" criminal status is now "Deceased".
+    type: Tweak
+  - message: Arsonists now start with only a lighter instead of a flamethrower and
+      their briefing has been rewritten, meaning they must obtain the materials to
+      start a major fire.
+    type: Tweak
+  - message: The VAI radio channel has moved from :z to :+.
+    type: Tweak
+  - message: The Nearsighted trait blur works again.
+    type: Fix
+  - message: The forensic scanner no longer errors when opening its results.
+    type: Fix
+  id: 707
+  time: '2026-09-29T00:40:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2047
 Name: CMU
 Order: -1

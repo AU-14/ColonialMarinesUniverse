@@ -324,6 +324,31 @@ public sealed partial class RMCCVars : CVars
     public static readonly CVarDef<int> RMCPlaytimeXenoPostfixTwoTimeHours =
         CVarDef.Create("rmc.playtime_xeno_postfix_two_time_hours", 0, CVar.REPLICATED | CVar.SERVER);
 
+    // CMU14: split from the main CVars so tuning xeno rank tiers doesn't also modify govfor stuff
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankTwoTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_mature_time_hours", 10, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankThreeTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_elder_time_hours", 25, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankFourTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_ancient_time_hours", 50, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankFiveTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_prime_time_hours", 75, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankSixTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_apex_time_hours", 100, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankSevenTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_royal_time_hours", 150, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankEightTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_nemesis_time_hours", 200, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankNineTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_ascendant_time_hours", 250, CVar.REPLICATED | CVar.SERVER);
+
     public static readonly CVarDef<int> RMCDisconnectedXenoGhostRoleTimeSeconds =
         CVarDef.Create("rmc.disconnected_xeno_ghost_role_time_seconds", 600, CVar.REPLICATED | CVar.SERVER);
 

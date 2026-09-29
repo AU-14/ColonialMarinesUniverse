@@ -53,11 +53,11 @@
   id: AU14GearCivilianEmergencyResponseOfficer
   equipment:
     shoes: RMCBootsPMC
-    ears: CMHeadsetColony
+    ears: CMUHeadsetColonyEmergency
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCivilianEmergencyResponseOfficer
-  name: Spawn Point Civilian Emergency Response Officer
+  name: Spawn Point Civilian Paramedic
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianEmergencyResponseOfficer

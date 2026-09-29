@@ -1,0 +1,69 @@
+- type: entity
+  abstract: true
+  parent: RuMCIRPComponentBase
+  id: RuMCIRPSnackComponentBase
+  description: Пакет для различных снеков.
+  components:
+  - type: Sprite
+    state: pack
+
+- type: entity
+  parent: RuMCIRPSnackComponentBase
+  id: RuMCIRPComponentFish
+  name: salted fish pouch
+  description: A sealed pouch containing salted fish. Stone-like to the touch. Knead it before use, or risk breaking a tooth.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodFish
+
+- type: entity
+  parent: RuMCIRPSnackComponentBase
+  id: RuMCIRPComponentPie
+  name: meat pie pouch
+  description: A sealed pouch containing a simple proletarian pie filled with meat and vegetables. Nothing fancy, but it fills the stomach.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodPie
+
+- type: entity
+  parent: RuMCIRPSnackComponentBase
+  id: RuMCIRPComponentChicken
+  name: canned chicken pouch
+  description: A sealed pouch containing tender canned chicken in its own broth. Not bad for field rations, though the texture leaves something to be desired.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodChicken
+
+- type: entity
+  parent: RuMCIRPSnackComponentBase
+  id: RuMCIRPComponentMashedPotatoes
+  name: mashed potatoes pouch
+  description: A sealed pouch containing instant mashed potatoes. Add water, stir, and enjoy the taste of the frontline.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodMashedPotatoes
+
+# ГАЛЕТЫ
+
+- type: entity
+  abstract: true
+  parent: RuMCIRPComponentBase
+  id: RuMCIRPGalletComponentBase
+  description: Пакет для галет.
+  components:
+  - type: Sprite
+    state: gallet_pack
+
+- type: entity
+  parent: RuMCIRPGalletComponentBase
+  id: RuMCIRPComponentGallet
+  name: hardtack biscuit pouch
+  description: A sealed pouch containing dense, dry biscuits that could outlast any war. Best soaked in tea or water before consumption.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodGallet

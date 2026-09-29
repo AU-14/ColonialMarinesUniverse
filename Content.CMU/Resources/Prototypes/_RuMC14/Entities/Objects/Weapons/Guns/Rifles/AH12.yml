@@ -1,0 +1,490 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: AH-12
+  id: RuMCRifleAH12
+  description: This is not just a machine gun. It is a tool for those who are used to ending conversations before they begin. Massive, rough, designed for the unique 12.7×55 cartridge, it does not require a queue. One shot breaks through a door. A second shot demolishes a wall.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Rifles/AH12/AH12_inhands.rsi
+    layers:
+    - state: base
+      sprite: _RuMC14/Objects/Weapons/Guns/Rifles/AH12/AH12.rsi
+    - state: bolt-open
+      sprite: _RuMC14/Objects/Weapons/Guns/Rifles/AH12/AH12.rsi
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      sprite: _RuMC14/Objects/Weapons/Guns/Rifles/AH12/AH12.rsi
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/Rifles/AH12/AH12_inhands.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RuMC14/Weapons/Guns/Gunshots/gun_UTES-C.ogg
+      params:
+        volume: -1
+        variation: 0.05
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - FullAuto
+    recoilUnwielded: 4
+    scatterWielded: 4
+    scatterUnwielded: 11
+    baseFireRate: 4
+    modifiers:
+      FullAuto:
+        maxScatterModifier: 15
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 5
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.1
+    accuracyMultiplierUnwielded: 0.5
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RuMCMagazineAH12Large
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RuMCMagazineAH12
+  - type: GunDamageModifier
+    multiplier: 1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RuMCAttachmentSuppressorAH12
+        whitelist:
+          tags:
+          - RuMCAttachmentSuppressorAH
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: 0, 0.1
+      rmc-aslot-underbarrel: 0.28, -0.3
+      rmc-aslot-barrel: 0.4355, 0.0345931415
+      rmc-aslot-stock: 0.2, -0.2
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - RuMCRifleAH12
+  - type: Wieldable
+  - type: WieldableSpeedModifiers
+    base: 0.75
+    light: 0.75
+    medium: 0.8
+    heavy: 0.75
+  - type: WieldDelay
+    baseDelay: 0.5
+  - type: GunRequiresWield
+
+- type: entity
+  parent: RuMCRifleAH12
+  id: RuMCRifleAH12Tactical
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RuMCAttachmentSuppressorAH12
+        whitelist:
+          tags:
+          - RuMCAttachmentSuppressorAH
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentAngledGrip
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+
+# Magazines
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazineAH12
+  name: AH-12 magazine (12.7x55mm)
+  description: Magazine with 12.7x55 mm cartridges.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazineAH12
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridgeHMG127x55mm
+    proto: RuMCCartridgeHMG127x55mm
+    capacity: 10
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/AH12.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Item
+    size: Large
+
+- type: entity
+  parent: RuMCMagazineAH12
+  id: RuMCMagazineAH12Large
+  name: AH-12 large magazine (12.7x55mm)
+  description: Large magazine with 12.7x55 mm cartridges.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazineAH12
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridgeHMG127x55mm
+    proto: RuMCCartridgeHMG127x55mm
+    capacity: 20
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/AH12.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#e5b13c"
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Item
+    size: Large
+
+- type: entity
+  parent: RuMCMagazineAH12
+  id: RuMCMagazineAH12AP
+  name: AH-12 magazine (12.7x55mm AP)
+  description: Magazine with 12.7x55 mm (AP) cartridges.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/AH12.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#212121"
+  - type: Tag
+    tags:
+    - RuMCMagazineAH12
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridgeHMG127x55mmAP
+    proto: RuMCCartridgeHMG127x55mmAP
+    capacity: 10
+    deleteWhenEmpty: false
+
+- type: entity
+  parent: RuMCMagazineAH12
+  id: RuMCMagazineAH12Tracer
+  name: AH-12 magazine (12.7x55mm Tracer)
+  description: Magazine with 12.7x55 mm (Tracer) cartridges.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/AH12.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Tag
+    tags:
+    - RuMCMagazineAH12
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridgeHMG127x55mmTracer
+    proto: RuMCCartridgeHMG127x55mmTracer
+    capacity: 10
+    deleteWhenEmpty: false
+
+- type: entity
+  parent: RuMCMagazineAH12
+  id: RuMCMagazineAH12JHP
+  name: AH-12 magazine (12.7x55mm JHP)
+  description: Magazine with 12.7x55 mm (JHP) cartridges
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/AH12.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#00CDEA"
+  - type: Tag
+    tags:
+    - RuMCMagazineAH12
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridgeHMG127x55mmJHP
+    proto: RuMCCartridgeHMG127x55mmJHP
+    capacity: 10
+    deleteWhenEmpty: false
+
+# Cartridges
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: RuMCCartridgeHMG127x55mm
+  name: 12.7x55mm
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: CartridgeAmmo
+    proto: RuMCBulletHMG127x55mm
+  - type: Tag
+    tags:
+    - RuMCCartridgeHMG127x55mm
+
+- type: entity
+  parent: RuMCCartridgeHMG127x55mm
+  id: RuMCCartridgeHMG127x55mmTracer
+  name: 12.7x55mm Tracer
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBulletHMG127x55mmTracer
+  - type: Tag
+    tags:
+    - RuMCCartridgeHMG127x55mmTracer
+
+- type: entity
+  parent: RuMCCartridgeHMG127x55mm
+  id: RuMCCartridgeHMG127x55mmJHP
+  name: 12.7x55mm (JHP) #ударки
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBulletHMG127x55mmJHP
+  - type: Tag
+    tags:
+    - RuMCCartridgeHMG127x55mmJHP
+
+- type: entity
+  parent: RuMCCartridgeHMG127x55mm
+  id: RuMCCartridgeHMG127x55mmAP
+  name: 12.7x55mm (AP)
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBulletHMG127x55mmAP
+  - type: Tag
+    tags:
+    - RuMCCartridgeHMG127x55mmAP
+
+# Projectiles
+- type: entity
+  parent: CMBulletBase
+  id: RuMCBulletHMG127x55mm
+  name: bullet (12.7x55mm)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/bullet_projectiles.rsi
+    layers:
+    - state: bullet
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 70
+  - type: CMArmorPiercing
+    amount: 10
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 7
+      falloff: 4
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 16
+      falloff: 10
+  - type: RMCStunOnHit
+    stuns:
+    - whitelist:
+        minMobSize: VerySmallXeno
+      maxRange: 1
+      slowTime: 0.5
+    - whitelist:
+        components:
+        - Marine
+      maxRange: 1
+      slowTime: 2
+
+- type: entity
+  parent: RuMCBulletHMG127x55mm
+  id: RuMCBulletHMG127x55mmTracer
+  name: bullet (12.7x55mm Tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#00ff66"
+    radius: 2
+    energy: 8.0
+
+- type: entity
+  parent: RuMCBulletHMG127x55mm
+  id: RuMCBulletHMG127x55mmJHP
+  name: bullet (12.7x55mm JHP)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/bullet_projectiles.rsi
+    layers:
+    - state: bullet
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 75
+  - type: CMArmorPiercing
+    amount: 10
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 15
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 7
+      falloff: 4
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 16
+      falloff: 10
+  - type: RMCStunOnHit
+    stuns:
+    - whitelist:
+        minMobSize: VerySmallXeno
+      maxRange: 5
+      slowTime: 0.5
+    - whitelist:
+        components:
+        - Marine
+      maxRange: 5
+      slowTime: 2
+
+- type: entity
+  parent: RuMCBulletHMG127x55mm
+  id: RuMCBulletHMG127x55mmAP
+  name: bullet (12.7x55mm AP)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/bullet_projectiles.rsi
+    layers:
+    - state: bullet
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 50
+  - type: CMArmorPiercing
+    amount: 40
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 20
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 7
+      falloff: 4
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 16
+      falloff: 10
+  - type: RMCStunOnHit
+    stuns:
+    - whitelist:
+        minMobSize: VerySmallXeno
+      maxRange: 1
+      slowTime: 0.5
+    - whitelist:
+        components:
+        - Marine
+      maxRange: 1
+      slowTime: 2
+
+# Tags
+
+- type: Tag
+  id: RuMCRifleAH12
+
+- type: Tag
+  id: RuMCMagazineAH12
+
+- type: Tag
+  id: RuMCCartridgeHMG127x55mm
+
+- type: Tag
+  id: RuMCCartridgeHMG127x55mmTracer
+
+- type: Tag
+  id: RuMCCartridgeHMG127x55mmJHP
+
+- type: Tag
+  id: RuMCCartridgeHMG127x55mmAP
+

@@ -20,7 +20,7 @@ au14-spawn-role-name-govfor-dropship-crew-chief = Dropship Crew Chief (GOVFOR)
 au14-spawn-role-name-govfor-vehicle-commander = Vehicle Commander (GOVFOR)
 au14-spawn-role-name-govfor-vehicle-crewman = Vehicle Crewman (GOVFOR)
 
-au14-spawn-role-name-colony-prisoner = Colony Prisoner (CMU)
+au14-spawn-role-name-colony-prisoner = Prisoner (CMU)
 au14-spawn-role-name-wy-liaison = WY Liaison (CMU)
 au14-spawn-role-name-wy-scientist = WY Scientist (CMU)
 au14-spawn-role-name-working-joe-colony = Working Joe (Colony)
@@ -28,8 +28,8 @@ au14-spawn-role-name-wy-corporate-goon = WY Corporate Goon (CMU)
 
 cmu-spawn-role-clf-cell-leader-cmu = CLF Cell Leader (CMU)
 cmu-spawn-role-clf-radio-operator-cmu = CLF Radio Operator (CMU)
-cmu-spawn-role-colony-engineer-cmu = Colony Engineer (CMU)
-cmu-spawn-role-colony-atmospheric-technician = Colony Atmospheric Technician
+cmu-spawn-role-colony-engineer-cmu = Engineer (CMU)
+cmu-spawn-role-colony-atmospheric-technician = Atmospheric Technician
 cmu-spawn-role-colonist-cmu = Colonist (CMU)
 cmu-spawn-role-journalist-cmu = Journalist (CMU)
 cmu-spawn-role-colony-miner-cmu = Colony Miner (CMU)

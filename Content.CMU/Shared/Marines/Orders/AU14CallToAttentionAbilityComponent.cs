@@ -11,6 +11,12 @@ namespace Content.Shared.CMU14.Marines.Orders;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AU14CallToAttentionAbilityComponent : Component
 {
+    /// <summary>
+    /// Officers can remain an attention focus without receiving the order action.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CanCall = true;
+
     [DataField, AutoNetworkedField]
     public EntProtoId Action = "ActionMarineCallToAttention";
 

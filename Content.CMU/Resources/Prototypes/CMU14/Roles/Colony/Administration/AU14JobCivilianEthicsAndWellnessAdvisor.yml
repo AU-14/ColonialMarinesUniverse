@@ -52,14 +52,15 @@
   equipment:
     jumpsuit: AU14CivilianWorkwearPink
     shoes: RMCShoesBlack
-    id: AU14IDCardColonyEthicsAndWellnessAdvisor
     outerClothing: AU14CivilianJacketGrayPufferJacket
     back: CMSatchel
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCivilianEthicsAndWellnessAdvisor
-  name: Spawn Point Civilian Ethics And Wellness Advisor
+  name: Spawn Point Civilian Psychologist
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianEthicsAndWellnessAdvisor

@@ -15,11 +15,17 @@ public sealed partial class LadderSystem : SharedLadderSystem
 
         SubscribeLocalEvent<LadderWatchingComponent, ComponentRemove>(OnWatchingRemove);
         SubscribeLocalEvent<LadderWatchingComponent, EntityTerminatingEvent>(OnWatchingRemove);
+        SubscribeLocalEvent<LadderWatchingComponent, PlayerDetachedEvent>(OnWatcherDetached);
+    }
+
+    private void OnWatcherDetached(Entity<LadderWatchingComponent> ent, ref PlayerDetachedEvent args)
+    {
+        Unwatch(ent.Owner, args.Player);
     }
 
     private void OnWatchingRemove<T>(Entity<LadderWatchingComponent> ent, ref T args)
     {
-        RemoveWatcher(ent);
+        RemoveWatcher(ent.Owner, watching: ent.Comp);
     }
 
     protected override void Watch(Entity<ActorComponent?, EyeComponent?> watcher, Entity<LadderComponent?> toWatch)
@@ -41,7 +47,7 @@ public sealed partial class LadderSystem : SharedLadderSystem
         _eye.SetTarget(watcher, toWatch, watcher);
         _viewSubscriber.AddViewSubscriber(toWatch, watcher.Comp1.PlayerSession);
 
-        RemoveWatcher(watcher);
+        RemoveWatcher(watcher, toWatch.Owner);
         EnsureComp<LadderWatchingComponent>(watcher).Watching = toWatch;
         toWatch.Comp.Watching.Add(watcher);
         Dirty(toWatch);
@@ -62,10 +68,19 @@ public sealed partial class LadderSystem : SharedLadderSystem
         RemoveWatcher(watcher);
     }
 
-    private void RemoveWatcher(EntityUid toRemove)
+    private void RemoveWatcher(EntityUid toRemove, EntityUid? keepView = null, LadderWatchingComponent? watching = null)
     {
-        if (!TryComp(toRemove, out LadderWatchingComponent? watching))
+        // ComponentRemove runs after the component is marked deleted; retain the event's instance.
+        if (watching == null && !TryComp(toRemove, out watching))
             return;
+
+        if (watching.Watching is { } oldView && oldView != keepView &&
+            TryComp<ActorComponent>(toRemove, out var actor))
+            _viewSubscriber.RemoveViewSubscriber(oldView, actor.PlayerSession);
+
+        if (watching.Watching != keepView && TryComp<EyeComponent>(toRemove, out var eye) &&
+            eye.Target == watching.Watching && !TerminatingOrDeleted(toRemove))
+            _eye.SetTarget(toRemove, null, eye);
 
         if (TryComp(watching.Watching, out LadderComponent? watched))
         {

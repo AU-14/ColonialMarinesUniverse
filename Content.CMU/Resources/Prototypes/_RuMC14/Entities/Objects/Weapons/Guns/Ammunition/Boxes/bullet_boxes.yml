@@ -1,0 +1,357 @@
+- type: entity
+  abstract: true
+  parent: RMCBoxBulletsBase
+  id: RuMCBoxBulletsBase
+  name: rifle ammunition box (???)
+  description: An unknown ammunition box. It comes with a leather strap allowing someone to wear it on their back.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Boxes/modular_boxes.rsi
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_box_marking
+      color: "#8a9ba8"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#0000ff"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - type: Appearance
+  - type: RMCUnfoldCardboard
+    spawns:
+    - id: RMCSheetCardboard1
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Back
+  - type: DropOnUseInHand
+  - type: BulletBox
+  - type: DeployableItem
+    leftClickPickup: true
+  - type: Tag
+    tags:
+    - RMCAmmoBox
+
+
+
+# -- 9.7x16mm Rifle Ammunition Box --
+- type: entity
+  parent: RuMCBoxBulletsBase
+  id: RuMCBoxBulletsRifleAG80
+  name: rifle ammunition box (9,7x16mm)
+  description: A 9,7x16mm ammunition box.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_box_marking
+      color: "#8a9ba8"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleAG80
+
+- type: entity
+  parent: RuMCBoxBulletsRifleAG80
+  id: RuMCBoxBulletsRifleAG80Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxBulletsRifleAG80Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleAG80
+    amount: 0
+
+#   -- AP 9.7x16mm Rifle Ammunition Box --
+- type: entity
+  parent: RuMCBoxBulletsBase
+  id: RuMCBoxBulletsRifleAG80AP
+  name: rifle ammunition box (9.7x16mm AP)
+  description: A 9.7x16mm ammunition box.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_box_marking
+      color: "#212121"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#5e5b57"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleAG80AP
+
+- type: entity
+  parent: RuMCBoxBulletsRifleAG80AP
+  id: RuMCBoxBulletsRifleAG80APEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxBulletsRifleAG80Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleAG80AP
+    amount: 0
+
+
+
+#   -- REG 5.45x39mm Rifle Ammunition Box --
+- type: entity
+  parent: RuMCBoxBulletsBase
+  id: RuMCBoxBulletsRifleType71
+  name: rifle ammunition box (5.45x39mm)
+  description: A 5.45x39mm ammunition box.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_box_marking
+      color: "#8a9ba8"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleType71
+
+- type: entity
+  parent: RuMCBoxBulletsRifleType71
+  id: RuMCBoxBulletsRifleType71Empty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxBulletsRifleType71Empty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleType71
+    amount: 0
+
+#   -- AP 5.45x39mm Rifle Ammunition Box --
+- type: entity
+  parent: RuMCBoxBulletsBase
+  id: RuMCBoxBulletsRifleType71AP
+  name: rifle ammunition box (5.45x39mm AP)
+  description: A 5.45x39mm ammunition box.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_box_marking
+      color: "#212121"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#5e5b57"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleType71AP
+
+- type: entity
+  parent: RuMCBoxBulletsRifleType71AP
+  id: RuMCBoxBulletsRifleType71APEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxBulletsRifleType71APEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsRifleType71AP
+    amount: 0
+
+
+
+#   -- REG 10x24mm Rifle Ammunition Box --
+- type: entity
+  parent: RuMCBoxBulletsBase
+  id: RuMCBoxBulletsRifle10x24mm
+  name: rifle ammunition box (10x24mm)
+  description: A 10x24mm ammunition box.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_box_marking
+      color: "#8a9ba8"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: BulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: RuMCBoxBulletsRifle10x24mm
+  id: RuMCBoxBulletsRifle10x24mmEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxBulletsRifle10x24mmEmpty
+  - type: BulletBox
+    bulletType: RMCBoxBulletsRifle
+    amount: 0
+
+#   -- AP 10x24mm Rifle Ammunition Box --
+- type: entity
+  parent: RuMCBoxBulletsBase
+  id: RuMCBoxBulletsRifle10x24mmAP
+  name: rifle ammunition box (10x24mm AP)
+  description: A 10x24mm ammunition box.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_box_marking
+      color: "#212121"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#5e5b57"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: BulletBox
+    bulletType: RMCBoxBulletsRifleAP
+
+- type: entity
+  parent: RuMCBoxBulletsRifle10x24mmAP
+  id: RuMCBoxBulletsRifle10x24mmAPEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxBulletsRifle10x24mmAPEmpty
+  - type: BulletBox
+    bulletType: RMCBoxBulletsRifleAP
+    amount: 0
+
+
+
+#   -- REG 10x20mm SMG Ammunition Box --
+- type: entity
+  parent: RuMCBoxBulletsBase
+  id: RuMCBoxBulletsSMG10x20mm
+  name: SMG ammunition box (10x20mm)
+  description: A 10x20mm ammunition box.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#4a545c"
+    - state: rifle_box_marking
+      color: "#8a9ba8"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: BulletBox
+    bulletType: RMCBoxBulletsSMG
+
+- type: entity
+  parent: RuMCBoxBulletsSMG10x20mm
+  id: RuMCBoxBulletsSMG10x20mmEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxBulletsSMG10x20mmEmpty
+  - type: BulletBox
+    bulletType: RMCBoxBulletsSMG
+    amount: 0
+
+#   -- REG 7.62x25mm SMG Ammunition Box --
+- type: entity
+  parent: RuMCBoxBulletsBase
+  id: RuMCBoxBulletsPistol762x25mm
+  name: pistol ammunition box (7.62x25mm)
+  description: A 7.62x25mm ammunition box.
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#4a545c"
+    - state: rifle_box_marking
+      color: "#8a9ba8"
+    - state: rifle_box_generic
+      color: "#f5e6a3"
+    - state: rifle_ammo_full_rounds_base
+      map: [ "enum.BulletBoxLayers.Fill" ]
+    - state: rifle_ammo_full_rounds_color
+      map: [ "enum.BulletBoxLayers2.Fill" ]
+      color: "#ffc000"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMGType19
+
+- type: entity
+  parent: RuMCBoxBulletsPistol762x25mm
+  id: RuMCBoxBulletsPistol762x25mmEmpty
+  suffix: Empty
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxBulletsPistol762x25mmEmpty
+  - type: BulletBox
+    bulletType: CMUBoxBulletsSMGType19
+    amount: 0

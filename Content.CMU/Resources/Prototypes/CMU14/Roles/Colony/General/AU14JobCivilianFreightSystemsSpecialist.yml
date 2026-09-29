@@ -55,7 +55,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCivilianFreightSystemsSpecialist
-  name: Spawn Point Freight Systems Specialist
+  name: Spawn Point Logistics Specialist
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianFreightSystemsSpecialist

@@ -1,0 +1,55 @@
+- type: entity
+  parent: SquadBase
+  id: RuMCSquadBEAR
+  name: PMC BEAR
+  components:
+  - type: SquadTeam
+    color: "#1f0e0f"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UPPSOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_spp_alpha
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: upp_lt
+    canSupplyDrop: false
+    group: BEAR
+  - type: Tag
+    tags:
+    - RuMCSquadBEAR
+
+- type: entity
+  parent: SquadBase
+  id: RuMCSquadLiquidator
+  name: Liquidators
+  components:
+  - type: SquadTeam
+    color: "#1f0e0f"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UPPSOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_spp_alpha
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: upp_lt
+    canSupplyDrop: false
+    group: Liquidators
+  - type: Tag
+    tags:
+    - RuMCSquadLiquidator
+
+- type: Tag
+  id: RuMCSquadLiquidator
+
+- type: Tag
+  id: RuMCSquadBEAR

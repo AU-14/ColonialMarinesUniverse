@@ -72,6 +72,7 @@
     back:
     - AU14GuidebookLawColonial
     - ForensicScanner
+    - CMURecordsTablet
     - AU14StampCMBM
 
 - type: entity

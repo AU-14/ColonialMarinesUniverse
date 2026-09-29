@@ -40,6 +40,7 @@
     state: On
     channels:
     - Colony
+    - ColonyMedical
     - radioWEYU
     - radioCMB
     - radioCLF
@@ -133,6 +134,7 @@
     state: Off
     channels:
     - Colony
+    - ColonyMedical
     - radioWEYU
     - radioCMB
     - radioCLF

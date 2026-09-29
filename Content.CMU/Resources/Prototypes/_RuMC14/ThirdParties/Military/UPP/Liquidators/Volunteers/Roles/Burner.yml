@@ -1,0 +1,130 @@
+- type: job
+  parent: CMJobBase
+  id: RuMCUPPLiquidatorBurner
+  roundSide: ThirdParty
+  roundForce: UPP
+  roundRole: RuMCUPPLiquidatorBurner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: upp_pvt
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RuMCSquadLiquidator
+  - type: Skills
+    skills:
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 1
+      RMCSkillFireman: 4
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 1
+  - type: JobPrefix
+    prefix: Rifleman
+  - type: MarineOrders
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    understoodLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    currentLanguage: Russian
+    defaultLanguage: Russian
+
+  name: Burner
+  description: Liquidator
+  playTimeTracker: RuMCJobUPPLiquidatorBurner
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Private:
+      entity: AU14ChevronUPPNIPrivate
+      requirements: []
+    UPP_Gefreiter:
+      entity: AU14ChevronUPPNIGefreiter
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPLiquidatorBurner
+        time: 1800 # 0.5 hours
+    UPP_SeniorGefreiter:
+      entity: AU14ChevronUPPNISeniorGefreiter
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPLiquidatorBurner
+        time: 5400 # 1.5 hours
+  spawnMenuRoleName: Liquidator
+  startingGear: RuMCGearUPPLiquidatorBurner
+  greeting: Вы член группы ликвидаторов UPP! Ваша задача выжечь дотла всю биологическую угрозу на колонии, ни шагу назад!
+  icon: "RuMCJobIconUPPLiquidatorBurner"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: RuMCBaseMobSpeciesOrganicUPPBEAR
+  id: RuMCJobUPPLiquidatorBurner
+  name: Liquidator
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: RuMCSquadLiquidator
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Liquidator
+    description: Вы член группы ликвидаторов UPP! Ваша задача выжечь дотла всю биологическую угрозу на колонии, ни шагу назад!
+    job: RuMCUPPLiquidatorBurner
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: RuMCGearUPPBEARbase
+  id: RuMCGearUPPLiquidatorBurner
+  equipment:
+    id: RuCMIDCardUPPLiquidatorBurner
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: CMJumpsuitSPPEngi
+    shoes: RMCBootsSPPFilled
+    head: RMCHardhatOrange
+    belt: AU14BeltUtilityFilled
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: RMCBackpackFlamer
+    ears: RuMCHeadsetLiquidator
+    suitstorage: RMCWeaponFlamerSPP
+  storage:
+    back:
+    - RuMCTankFlamerUPP
+    - RuMCTankFlamerUPP
+    - RuMCTankFlamerUPP
+  inhand:
+    - AU14CBRNKitUPP
+    - RuMCTankFlamerUPP
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconUPPLiquidatorBurner
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: upp_pvt
+
+- type: playTimeTracker
+  id: RuMCJobUPPLiquidatorBurner

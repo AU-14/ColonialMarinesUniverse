@@ -47,21 +47,7 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
         if (!Resolve(actor, ref actor.Comp, false))
             return;
 
-        // Faction gating: only remove subscriber if it would have been added
-        string? consoleFaction = null;
-        if (TryComp(terminal.Owner, out WhitelistedShuttleComponent? whitelist))
-            consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
-
-        string? creatorFaction = null;
-        if (TryComp(target, out DropshipTargetComponent? targetComp))
-            creatorFaction = string.IsNullOrWhiteSpace(targetComp.CreatorFaction) ? null : targetComp.CreatorFaction;
-
-        if (!string.IsNullOrEmpty(consoleFaction) && !string.IsNullOrEmpty(creatorFaction) &&
-            !consoleFaction.Equals(creatorFaction, StringComparison.OrdinalIgnoreCase))
-        {
-            return;
-        }
-
+        // Faction may have changed since subscribing. Cleanup must still release the old view.
         _viewSubscriber.RemoveViewSubscriber(target, actor.Comp.PlayerSession);
     }
 

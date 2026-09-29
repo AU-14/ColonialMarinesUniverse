@@ -35,6 +35,7 @@ namespace Content.Server.Light.EntitySystems
         [Dependency] private SharedAppearanceSystem _appearance = default!;
         [Dependency] private StackSystem _stackSystem = default!;
         [Dependency] private NameModifierSystem _nameModifier = default!;
+        [Dependency] private EntityQuery<MetaDataComponent> _updateMetadataQuery = default!;
 
         // RMC14
         [Dependency] private SharedPhysicsSystem _physics = default!;
@@ -57,9 +58,13 @@ namespace Content.Server.Light.EntitySystems
 
         public override void Update(float frameTime)
         {
-            var query = EntityQueryEnumerator<ExpendableLightComponent>();
+            var query = AllEntityQuery<ExpendableLightComponent>();
             while (query.MoveNext(out var uid, out var light))
             {
+                if (!light.Activated ||
+                    !_updateMetadataQuery.TryComp(uid, out var metadata) || metadata.EntityPaused)
+                    continue;
+
                 UpdateLight((uid, light), frameTime);
             }
         }

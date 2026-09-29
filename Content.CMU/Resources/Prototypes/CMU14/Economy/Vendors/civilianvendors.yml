@@ -334,7 +334,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14CivilianEmergencyResponderOfficerVendor
-  name: Civilian Emergency Response Officer Vendor
+  name: Civilian Paramedic Vendor
   description: A wardrobe containing all the clothes and supplies an ERO would ever need.
   suffix: Civ
   components:

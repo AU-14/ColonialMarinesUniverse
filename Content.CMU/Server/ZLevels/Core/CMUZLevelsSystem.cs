@@ -54,6 +54,12 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         UpdateView(frameTime);
     }
 
+    public override void Shutdown()
+    {
+        ClearOverheadPvsStorage();
+        base.Shutdown();
+    }
+
     private void OnGameMapLoad(PostGameMapLoad ev)
     {
         if (ev.GameMap.MapsAbove.Count == 0 && ev.GameMap.MapsBelow.Count == 0)

@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -228,54 +229,65 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
             return;
 
         // Not every mob has the modifier component so do it as a separate query.
-        var npcs = new (EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)[Count<ActiveNPCComponent>()];
-
-        var query = EntityQueryEnumerator<ActiveNPCComponent, NPCSteeringComponent, InputMoverComponent, TransformComponent>();
-        var index = 0;
-
-        while (query.MoveNext(out var uid, out _, out var steering, out var mover, out var xform))
+        var count = Count<ActiveNPCComponent>();
+        if (count == 0)
         {
-            npcs[index] = (uid, steering, mover, xform);
-            index++;
+            ActiveSteeringGauge.Set(0);
+            if (_subscribedSessions.Count == 0)
+                return;
         }
 
-        // Dependency issues across threads.
-        var options = new ParallelOptions
+        var npcs = ArrayPool<(EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)>.Shared.Rent(count);
+        try
         {
-            MaxDegreeOfParallelism = 1,
-        };
-        var curTime = _timing.CurTime;
 
-        _activeSteeringCount = 0;
+            var query = EntityQueryEnumerator<ActiveNPCComponent, NPCSteeringComponent, InputMoverComponent, TransformComponent>();
+            var index = 0;
 
-        Parallel.For(0, index, options, i =>
-        {
-            var (uid, steering, mover, xform) = npcs[i];
-            Steer(uid, steering, mover, xform, frameTime, curTime);
-        });
+            while (query.MoveNext(out var uid, out _, out var steering, out var mover, out var xform))
+            {
+                npcs[index] = (uid, steering, mover, xform);
+                index++;
+            }
 
-        ActiveSteeringGauge.Set(_activeSteeringCount);
+            // Steering has cross-entity dependencies and must remain sequential.
+            var curTime = _timing.CurTime;
 
-        if (_subscribedSessions.Count > 0)
-        {
-            var data = new List<NPCSteeringDebugData>(index);
+            _activeSteeringCount = 0;
 
             for (var i = 0; i < index; i++)
             {
-                var (uid, steering, mover, _) = npcs[i];
-
-                data.Add(new NPCSteeringDebugData(
-                    GetNetEntity(uid),
-                    mover.CurTickSprintMovement,
-                    steering.Interest,
-                    steering.Danger,
-                    steering.DangerPoints));
+                var (uid, steering, mover, xform) = npcs[i];
+                Steer(uid, steering, mover, xform, frameTime, curTime);
             }
 
-            var filter = Filter.Empty();
-            filter.AddPlayers(_subscribedSessions);
+            ActiveSteeringGauge.Set(_activeSteeringCount);
 
-            RaiseNetworkEvent(new NPCSteeringDebugEvent(data), filter);
+            if (_subscribedSessions.Count > 0)
+            {
+                var data = new List<NPCSteeringDebugData>(index);
+
+                for (var i = 0; i < index; i++)
+                {
+                    var (uid, steering, mover, _) = npcs[i];
+
+                    data.Add(new NPCSteeringDebugData(
+                        GetNetEntity(uid),
+                        mover.CurTickSprintMovement,
+                        steering.Interest,
+                        steering.Danger,
+                        steering.DangerPoints));
+                }
+
+                var filter = Filter.Empty();
+                filter.AddPlayers(_subscribedSessions);
+
+                RaiseNetworkEvent(new NPCSteeringDebugEvent(data), filter);
+            }
+        }
+        finally
+        {
+            ArrayPool<(EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)>.Shared.Return(npcs, clearArray: true);
         }
     }
 

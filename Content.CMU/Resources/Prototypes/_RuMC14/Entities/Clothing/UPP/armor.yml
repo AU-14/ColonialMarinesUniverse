@@ -1,0 +1,16 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: RuMCUPPHeavyArmor
+  name: 6B99-2 pattern UPP heavy assault armor
+  description: An extreme sidegrade of 6B92 armor, with the intent to increase soldiers survivability as much, as possible. An ablative layers of composite armor weighting more than 100 pounds, supported by the servo-assisters in each limb, and powered by the baterries for 24 hours of estimated work. Due to the lack of powerful heat dispersion system, the suit becomes an oven to its owner, and each step takes more and more strenght even with servo-assisters. Yet still, it is the best answer to the question of life and death.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/armor/upplargearmor.rsi
+  - type: CMArmor
+    melee: 30
+    bullet: 45
+    bio: 15
+    explosionArmor: 45
+  - type: ClothingSpeedModifier
+    walkModifier: 0.62
+    sprintModifier: 0.62

@@ -36,9 +36,11 @@ public sealed partial class ForensicScannerCriminalRecordsSystem : EntitySystem
         if (!HasComp<HumanoidProfileComponent>(target))
             return;
 
-        var station = _station.GetOwningStation(scanner);
+        // cmu edit start
+        var station = EntityManager.System<Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem>().GetRecords();
         if (station == null)
             return;
+        // cmu edit end
 
         var name = MetaData(target).EntityName;
         var dna = CompOrNull<DnaComponent>(target)?.DNA;

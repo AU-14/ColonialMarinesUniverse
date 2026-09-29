@@ -1,0 +1,765 @@
+#Reg Mag "#ffc000" Marking "#8a9ba8"
+#AP  Mag "#95918c" Marking "#212121"
+#Tracer Mag "#1f951f" Marking "#318b11"
+#EXT Mag "#ffcb26" Marking "#ffcb26"
+
+- type: entity
+  abstract: true
+  parent: RMCBoxMagazineRifleBase
+  id: RuMCBoxMagazineRifleBase
+  name: generic magazine box (? x ?)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineRifleAK4047Empty
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Boxes/modular_boxes.rsi
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_box_47
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: rifle_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+
+- type: entity
+  abstract: true
+  parent: RMCBoxMagazineSMGBase
+  id: RuMCBoxMagazineSMGBase
+  name: generic smg magazine box (? x ?)
+  description: A box of SMG magazines.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Boxes/modular_boxes.rsi
+    layers:
+    - state: smg_box
+      color: "#4a545c"
+    - state: rifle_ammo_full_mags_base # "size"_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color # "size"_ammo_full_color - Type Colour
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: smg_box_64
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: smg_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: smg_lid
+      map: [ "lid" ]
+      color: "#4a545c"
+    - state: smg_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+
+- type: entity
+  abstract: true
+  parent: RMCBoxMagazineSMGBase
+  id: RuMCBoxMagazinePistolBase
+  name: generic smg magazine box (? x ?)
+  description: A box of pistol magazines.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Boxes/modular_boxes.rsi
+    layers:
+    - state: smg_box
+      color: "#4a545c"
+    - state: rifle_ammo_full_mags_base # "size"_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color # "size"_ammo_full_color - Type Colour
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: smg_box_64
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: smg_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: smg_lid
+      map: [ "lid" ]
+      color: "#4a545c"
+    - state: smg_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+#Rifles
+
+#AK4047
+#Reg Mag "#ffc000" Marking "#8a9ba8"
+- type: entity
+  parent: RuMCBoxMagazineRifleBase
+  id: RuMCBoxMagazineRifleAK4047Empty
+  name: magazine box (AK4047 x 10)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineRifleAK4047Empty
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_box_47
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: rifle_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleAK4047
+
+- type: entity
+  parent: RuMCBoxMagazineRifleAK4047Empty
+  id: RuMCBoxMagazineRifleAK4047
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineRifleAK4047
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleAK4047
+
+#AP  Mag "#95918c" Marking "#212121"
+
+- type: entity
+  parent: RuMCBoxMagazineRifleBase
+  id: RuMCBoxMagazineRifleAK4047EmptyAP
+  name: magazine box (AK4047 x 10)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineRifleAK4047EmptyAP
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#95918c"
+    - state: rifle_box_47
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: rifle_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#212121"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#212121"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleAK4047AP
+
+- type: entity
+  parent: RuMCBoxMagazineRifleAK4047EmptyAP
+  id: RuMCBoxMagazineRifleAK4047AP
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineRifleAK4047AP
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleAK4047AP
+
+#Tracer Mag "#1f951f" Marking "#318b11"
+#
+#- type: entity
+#  parent: RuMCBoxMagazineRifleBase
+#  id: RuMCBoxMagazineRifleAK4047EmptyTracer
+#  name: magazine box (AK4047 x 10)
+#  components:
+#  - type: Construction
+#    graph: RMCBoxMagazine
+#    node: RuMCBoxMagazineRifleAK4047EmptyTracer
+#  - type: Sprite
+#    layers:
+#    - state: rifle_box
+#      color: "#6d7b56"
+#    - state: rifle_ammo_full_mags_base
+#      map: [ "enum.CMItemSlotsLayers.Fill" ]
+#    - state: rifle_ammo_full_mags_color
+#      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+#      color: "#1f951f"
+#    - state: rifle_box_47
+#      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+#      color: "#f5e6a3"
+#    - state: star
+#      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+#      color: "#c62828"
+#    - state: rifle_box_marking
+#      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+#      color: "#318b11"
+#    - state: rifle_lid
+#      map: [ "lid" ]
+#      color: "#6d7b56"
+#    - state: rifle_lid_marking
+#      map: [ "lid_marking" ]
+#      color: "#318b11"
+#  - type: CMItemSlots
+#    count: 10
+#    slot:
+#      whitelist:
+#        tags:
+#        - RMCMagazineRifleAK4047AP
+#
+#- type: entity
+#  parent: RuMCBoxMagazineRifleAK4047EmptyTracer
+#  id: RuMCBoxMagazineRifleAK4047Tracer
+#  suffix: Full
+#  components:
+#  - type: CMItemSlots
+#    startingItem: RMCMagazineRifleAK4047AP
+#    count: 10
+#    slot:
+#      whitelist:
+#        tags:
+#        - RMCMagazineRifleAK4047AP
+
+#EXT Mag "#ffcb26" Marking "#ffcb26"
+
+#- type: entity
+#  parent: RuMCBoxMagazineRifleBase
+#  id: RuMCBoxMagazineRifleAK4047EmptyEXT
+#  name: magazine box (AK4047 x 10)
+#  components:
+#  - type: Construction
+#    graph: RMCBoxMagazine
+#    node: RuMCBoxMagazineRifleAK4047EmptyEXT
+#  - type: Sprite
+#    layers:
+#    - state: rifle_box
+#      color: "#6d7b56"
+#    - state: rifle_ammo_full_mags_base
+#      map: [ "enum.CMItemSlotsLayers.Fill" ]
+#    - state: rifle_ammo_full_mags_color
+#      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+#      color: "#ffcb26"
+#    - state: rifle_box_47
+#      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+#      color: "#f5e6a3"
+#    - state: star
+#      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+#      color: "#c62828"
+#    - state: rifle_box_marking
+#      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+#      color: "#ffcb26"
+#    - state: rifle_lid
+#      map: [ "lid" ]
+#      color: "#6d7b56"
+#    - state: rifle_lid_marking
+#      map: [ "lid_marking" ]
+#      color: "#ffcb26"
+#  - type: CMItemSlots
+#    count: 10
+#    slot:
+#      whitelist:
+#        tags:
+#        - RMCMagazineRifleAK4047AP
+#
+#- type: entity
+#  parent: RuMCBoxMagazineRifleAK4047EmptyEXT
+#  id: RuMCBoxMagazineRifleAK4047EXT
+#  suffix: Full
+#  components:
+#  - type: CMItemSlots
+#    startingItem: RMCMagazineRifleAK4047AP
+#    count: 10
+#    slot:
+#      whitelist:
+#        tags:
+#        - RMCMagazineRifleAK4047AP
+#AK4047 end
+
+
+#AG80
+#Reg Mag "#ffc000" Marking "#8a9ba8"
+- type: entity
+  parent: RuMCBoxMagazineRifleBase
+  id: RuMCBoxMagazineRifleAG80Empty
+  name: magazine box (AG80 x 10)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineRifleAG80Empty
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_box_80
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: rifle_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleAG80
+
+- type: entity
+  parent: RuMCBoxMagazineRifleAG80Empty
+  id: RuMCBoxMagazineRifleAG80
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: AU14MagazineRifleAG80
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleAG80
+
+#AP  Mag "#95918c" Marking "#212121"
+
+- type: entity
+  parent: RuMCBoxMagazineRifleBase
+  id: RuMCBoxMagazineRifleAG80EmptyAP
+  name: magazine box (AG80 x 10)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineRifleAG80EmptyAP
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#95918c"
+    - state: rifle_box_80
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: rifle_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#212121"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#212121"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleAG80AP
+
+- type: entity
+  parent: RuMCBoxMagazineRifleAG80EmptyAP
+  id: RuMCBoxMagazineRifleAG80AP
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: AU14MagazineRifleAG80AP
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleAG80AP
+
+#EXT Mag "#ffcb26" Marking "#ffcb26"
+
+- type: entity
+  parent: RuMCBoxMagazineRifleBase
+  id: RuMCBoxMagazineRifleAG80EmptyEXT
+  name: magazine box (AG80 x 10)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineRifleAG80EmptyEXT
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffcb26"
+    - state: rifle_box_80
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: rifle_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#ffcb26"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#ffcb26"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleAG80Ext
+
+- type: entity
+  parent: RuMCBoxMagazineRifleAG80EmptyEXT
+  id: RuMCBoxMagazineRifleAG80EXT
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: AU14MagazineRifleAG80Ext
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleAG80Ext
+#AG80 end
+
+#Type71
+#Reg Mag "#ffc000" Marking "#8a9ba8"
+- type: entity
+  parent: RuMCBoxMagazineRifleBase
+  id: RuMCBoxMagazineRifleType71Empty
+  name: magazine box (Type71 x 10)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineRifleType71Empty
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_box_71
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: rifle_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleType71
+
+- type: entity
+  parent: RuMCBoxMagazineRifleType71Empty
+  id: RuMCBoxMagazineRifleType71
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineRifleType71
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleType71
+
+#AP  Mag "#95918c" Marking "#212121"
+
+- type: entity
+  parent: RuMCBoxMagazineRifleBase
+  id: RuMCBoxMagazineRifleType71EmptyAP
+  name: magazine box (Type71 x 10)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineRifleType71EmptyAP
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#6d7b56"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#95918c"
+    - state: rifle_box_71
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: rifle_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#212121"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#212121"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleType71AP
+
+- type: entity
+  parent: RuMCBoxMagazineRifleType71EmptyAP
+  id: RuMCBoxMagazineRifleType71AP
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineRifleType71AP
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleType71AP
+#Type71 end
+
+
+
+#Pistols-SMG
+
+#Type64
+#Reg Mag "#ffc000" Marking "#8a9ba8"
+- type: entity
+  parent: RuMCBoxMagazineSMGBase
+  id: RuMCBoxMagazineSMGType64Empty
+  name: magazine box (Type64 x 10)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazineSMGType64Empty
+  - type: Sprite
+    layers:
+    - state: smg_box
+      color: "#4a545c"
+    - state: rifle_ammo_full_mags_base # "size"_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color # "size"_ammo_full_color - Type Colour
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: smg_box_64
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: smg_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: smg_lid
+      map: [ "lid" ]
+      color: "#4a545c"
+    - state: smg_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineSMGType64
+
+- type: entity
+  parent: RuMCBoxMagazineSMGType64Empty
+  id: RuMCBoxMagazineSMGType64
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineSMGType64
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineSMGType64
+#Type64 end
+
+#Type73
+#Reg Mag "#ffc000" Marking "#8a9ba8"
+- type: entity
+  parent: RuMCBoxMagazinePistolBase
+  id: RuMCBoxMagazinePistolType73Empty
+  name: magazine box (Type73 x 15)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazinePistolType73Empty
+  - type: Sprite
+    layers:
+    - state: smg_box
+      color: "#4a545c"
+    - state: rifle_ammo_full_mags_base # "size"_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color # "size"_ammo_full_color - Type Colour
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: pistol_box_73
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: smg_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: smg_lid
+      map: [ "lid" ]
+      color: "#4a545c"
+    - state: smg_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+  - type: CMItemSlots
+    count: 15
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazinePistolT73
+
+- type: entity
+  parent: RuMCBoxMagazinePistolType73Empty
+  id: RuMCBoxMagazinePistolType73
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazinePistolT73
+    count: 15
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazinePistolT73
+#Type73 end
+
+#NP92
+#Reg Mag "#ffc000" Marking "#8a9ba8"
+- type: entity
+  parent: RuMCBoxMagazinePistolBase
+  id: RuMCBoxMagazinePistolNP92Empty
+  name: magazine box (NP92 x 15)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RuMCBoxMagazinePistolNP92Empty
+  - type: Sprite
+    layers:
+    - state: smg_box
+      color: "#4a545c"
+    - state: rifle_ammo_full_mags_base # "size"_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color # "size"_ammo_full_color - Type Colour
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: pistol_box_92
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#f5e6a3"
+    - state: star #Star.
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+    - state: smg_box_marking
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#8a9ba8"
+    - state: smg_lid
+      map: [ "lid" ]
+      color: "#4a545c"
+    - state: smg_lid_marking
+      map: [ "lid_marking" ]
+      color: "#8a9ba8"
+  - type: CMItemSlots
+    count: 15
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazinePistolNP92
+
+- type: entity
+  parent: RuMCBoxMagazinePistolNP92Empty
+  id: RuMCBoxMagazinePistolNP92
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazinePistolNP92
+    count: 15
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazinePistolNP92
+#NP92 end

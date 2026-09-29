@@ -68,11 +68,11 @@ namespace Content.Server.Hands.Systems
         private void GetComponentState(EntityUid uid, HandsComponent hands, ref ComponentGetState args)
         {
             // If we only switch hands don't send a full state.
-            if (args.FromTick > hands.CreationTick && hands.LastUnclassifiedDirty >= args.FromTick)
+            if (args.FromTick > hands.CreationTick)
             {
                 var aspects = EntityManager.GetModifiedAspects(hands, args.FromTick);
 
-                if (aspects == ActiveHandIdIndex)
+                if (aspects == (1UL << ActiveHandIdIndex))
                 {
                     args.State = new HandsComponentActiveHandDeltaState(hands.ActiveHandId);
                     return;

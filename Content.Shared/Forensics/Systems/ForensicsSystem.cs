@@ -320,7 +320,14 @@ public sealed partial class ForensicsSystem : EntitySystem
         }
 
         if (_fingerprintQuery.TryComp(user, out var fingerprint) && CanAccessFingerprint(user, out _))
+        {
             component.Fingerprints.Add(fingerprint.Fingerprint ?? "");
+
+            // cmu edit start
+            if (_dnaQuery.TryComp(user, out var dna) && dna.DNA != null)
+                component.DNAs.Add(dna.DNA);
+            // cmu edit end
+        }
 
         Dirty(target, component);
     }

@@ -212,6 +212,8 @@ public sealed class ExpendableLightReplicationTest : GameTest
             system.Update(0f);
             AssertSpent(flare);
         });
+        // Surface synchronization failures in this test rather than the generic teardown.
+        await Pair.RunUntilSynced();
     }
 
     [Test]

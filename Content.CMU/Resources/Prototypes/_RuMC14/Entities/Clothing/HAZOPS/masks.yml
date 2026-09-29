@@ -1,0 +1,35 @@
+- type: entity
+  parent: RMCMaskSWAT
+  id: RuMCM17GasMask
+  name: M17 gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/HAZOPS/M17gasmask.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/HAZOPS/M17gasmask.rsi
+    slots:
+    - Mask
+    - Suitstorage
+  - type: Item
+    size: Small
+  - type: CMArmor
+    bio: 20
+
+- type: entity
+  parent: RMCMaskSWAT
+  id: RuMCM40GasMask
+  name: М40 gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/HAZOPS/M40gasmask.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/HAZOPS/M40gasmask.rsi
+    slots:
+    - Mask
+    - Suitstorage
+  - type: Item
+    size: Small
+  - type: CMArmor
+    bio: 20

@@ -1,0 +1,31 @@
+- type: entity
+  parent: BaseItem
+  id: CMUMobilePhone
+  name: mobile phone
+  description: A ProtonCall XL portable telephone. A Weyland-Yutani brickphone for calling other phones around the colony. Use it in hand to call, answer or hang up. The caller name can be changed with a screwdriver.
+  components:
+  - type: Sprite
+    sprite: CMU14/Items/IEDs/signaller.rsi
+    state: advanced
+  - type: Item
+    size: Small
+    inhandVisuals:
+      left:
+      - state: advanced-inhand-left
+      right:
+      - state: advanced-inhand-right
+  - type: CMUMobilePhone
+  - type: RotaryPhone
+    category: Mobile Phones
+    canDnd: true
+    tryGetHolderName: false
+  - type: UserInterface
+    interfaces:
+      enum.RMCTelephoneUiKey.Key:
+        type: RMCTelephoneBui
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: StaticPrice
+    price: 30

@@ -86,6 +86,8 @@
     back:
     - AU14GuidebookLawColonial
     - AU14StampNSPA
+    - CMURecordsTablet
+    - ForensicScanner
 
 - type: entity
   parent: CMSpawnPointJobBase

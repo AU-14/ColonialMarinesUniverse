@@ -116,6 +116,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
 
     private void OnReset(RoundRestartCleanupEvent ev)
     {
+        CancelPreparation();
         _explosionQueue.Clear();
         _queuedExplosions.Clear();
         if (_activeExplosion != null)
@@ -127,6 +128,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
 
     public override void Shutdown()
     {
+        CancelPreparation();
         base.Shutdown();
         _nodeGroupSystem.PauseUpdating = false;
         _pathfindingSystem.PauseUpdating = false;
@@ -354,13 +356,11 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     ///     information about the affected tiles for the explosion system to process. It will also trigger the
     ///     camera shake and sound effect.
     /// </summary>
-    private Explosion? SpawnExplosion(QueuedExplosion queued)
+    private Explosion? SpawnExplosion(QueuedExplosion queued, (int, List<float>, ExplosionSpaceTileFlood?, Dictionary<EntityUid, ExplosionGridTileFlood>, Matrix3x2)? results)
     {
         var pos = queued.Epicenter;
         if (!_map.MapExists(pos.MapId))
             return null;
-
-        var results = GetExplosionTiles(pos, queued.Proto.ID, queued.TotalIntensity, queued.Slope, queued.MaxTileIntensity);
 
         if (results == null)
             return null;
