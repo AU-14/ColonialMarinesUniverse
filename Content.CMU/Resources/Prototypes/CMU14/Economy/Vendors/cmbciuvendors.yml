@@ -227,7 +227,7 @@
         amount: 2
     - name: Gas Mask
       entries:
-      - id: CMMaskGas
+      - id: RMCMaskSWAT
         amount: 40
       - id: CMMaskPrescriptionGas
         amount: 10
