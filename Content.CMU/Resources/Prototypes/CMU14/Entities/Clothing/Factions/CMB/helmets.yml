@@ -1,10 +1,27 @@
 - type: entity
-  parent: RMCMarineHelmetBase
+  parent: RMCArmorHelmetM10CMB
   id: AU14CMBCIUHelmet
   name: CMB CIU Helmet
   description: A CMB Crisis Intervention Unit riot helmet.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/uacghelmet.rsi
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/CMB/cmb_helmet.rsi
   - type: Clothing
-    sprite: CMU14/Clothing/uacghelmet.rsi
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/CMB/cmb_helmet.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: CMArmor
+    melee: 25
+    bullet: 25
+    bio: 15
+    explosionArmor: 25
+    # armor_energy = 30
+  - type: RMCEarProtection
+
+- type: entity
+  parent: RMCArmorHelmetM10CMB
+  id: RMCArmorHelmetM10CMBVisorSWAT
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCVisorSWAT
