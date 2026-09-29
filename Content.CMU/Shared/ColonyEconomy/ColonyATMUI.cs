@@ -118,11 +118,3 @@ public sealed class ColonyAtmScrollHistoryBuiMsg : BoundUserInterfaceMessage
 /// <summary>Player pressed the Cancel (red) key.</summary>
 [Serializable, NetSerializable]
 public sealed class ColonyAtmCancelBuiMsg : BoundUserInterfaceMessage { }
-
-// ── Legacy withdraw message kept for backwards compat (unused after revamp) ──
-[Serializable, NetSerializable]
-public sealed class ColonyAtmWithdrawBuiMsg : BoundUserInterfaceMessage
-{
-    public int Amount { get; }
-    public ColonyAtmWithdrawBuiMsg(int amount) => Amount = amount;
-}
