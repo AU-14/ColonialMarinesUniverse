@@ -7,37 +7,37 @@ namespace Content.Shared._RMC14.Xenonids.Despoiler;
 public sealed partial class XenoDespoilerAcidBarrageActionComponent : Component
 {
     [DataField]
-    public float MaxChargeSeconds = 3f;
+    public float MaxChargeSeconds = 4f;
 
     [DataField]
     public int MinProjectiles = 1;
 
     [DataField]
-    public int MaxProjectiles = 8;
+    public int MaxProjectiles = 6;
 
     [DataField]
-    public int EmpowerBonusProjectiles = 6;
+    public int EmpowerBonusProjectiles = 5;
 
     [DataField]
-    public float ScatterDegrees = 30f;
+    public float ScatterDegrees = 50f;
 
     [DataField]
-    public float ChargingSpeedMultiplier = 0.5f;
+    public float ChargingSpeedMultiplier = 0.4f;
 
     [DataField]
     public EntProtoId ProjectileId = "RMCProjectileDespoilerAcidShot";
 
     [DataField]
-    public float LingeringAcidChance = 0.25f;
+    public float LingeringAcidChance = 1.0f;
 
     [DataField]
     public float ProjectileSpeed = 12f;
 
     [DataField]
-    public int MinRangeTiles = 1;
+    public int MinRangeTiles = 2;
 
     [DataField]
-    public int MaxRangeTiles = 6;
+    public int MaxRangeTiles = 8;
 
     [DataField]
     public float MinProjectileScale = 0.9f;
@@ -46,7 +46,7 @@ public sealed partial class XenoDespoilerAcidBarrageActionComponent : Component
     public float MaxProjectileScale = 1.33f;
 
     [DataField]
-    public TimeSpan PostFireCooldown = TimeSpan.FromSeconds(12);
+    public TimeSpan PostFireCooldown = TimeSpan.FromSeconds(15);
 
     [DataField]
     public TimeSpan ChargeGracePeriod = TimeSpan.FromSeconds(30);
