@@ -31,6 +31,7 @@ using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Humanoid;
 using Content.Shared._RMC14.Rules;
@@ -111,6 +112,8 @@ public sealed class YautjaPredatorRoleTest
         {
             await server.WaitPost(() =>
             {
+                // CMU defaults identity hiding off; this regression exercises its enabled path.
+                server.CfgMan.SetCVar(RMCCVars.HidePlayerIdentities, true);
                 var entMan = server.EntMan;
                 var session = server.PlayerMan.Sessions.Single();
                 var yautja = YautjaCharacterProfile.Default.WithSkinColor(skinColor);

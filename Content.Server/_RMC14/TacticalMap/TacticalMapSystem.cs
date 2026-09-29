@@ -775,7 +775,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
                 _marineAnnounce.AnnounceOverwatchSquad(
                     user,
-                    Loc.GetString("rmc-tactical-map-squad-update"), // RuMC edit
+                    "The squad tactical map has been updated.",
                     overwatchSquadUid,
                     overwatchSquadTeam.Color,
                     Name(overwatchSquadUid));
@@ -1686,6 +1686,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             var xenoStructureBlips = user.Comp.LiveUpdate ? map.XenoStructureBlips : map.LastUpdateXenoStructureBlips;
             var hiveMembers = new HashSet<int>();
             var hasHive = false;
+            var isGhost = HasComp<GhostComponent>(user);
 
             if (_xenoHive.GetHive(user.Owner) is { } hive)
             {
@@ -1699,10 +1700,10 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             }
 
             user.Comp.XenoBlips = xenoBlips
-                .Where(blip => hiveMembers.Contains(blip.Key) || (!hasHive && blip.Key == playerId))
+                .Where(blip => isGhost || hiveMembers.Contains(blip.Key) || (!hasHive && blip.Key == playerId))
                 .ToDictionary();
             user.Comp.XenoStructureBlips = xenoStructureBlips
-                .Where(blip => hiveMembers.Contains(blip.Key))
+                .Where(blip => isGhost || hiveMembers.Contains(blip.Key))
                 .ToDictionary();
 
             if (!user.Comp.LiveUpdate)
@@ -1719,7 +1720,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 if (!comp.VisibleToXenos)
                     continue;
 
-                if (TryComp(uid, out HiveMemberComponent? alwaysVisibleMember) &&
+                if (!isGhost && TryComp(uid, out HiveMemberComponent? alwaysVisibleMember) &&
                     alwaysVisibleMember is not null &&
                     !hiveMembers.Contains(uid.Id))
                 {
@@ -2055,7 +2056,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 map.XenoLabels = new Dictionary<Vector2i, string>(labels);
                 map.LastUpdateXenoBlips = map.XenoBlips.ToDictionary();
                 map.LastUpdateXenoStructureBlips = map.XenoStructureBlips.ToDictionary();
-                if (announce) _xenoAnnounce.AnnounceSameHive(user, Loc.GetString("rmc-tactical-map-xeno-update"), sound); // RuMC edit
+                if (announce) _xenoAnnounce.AnnounceSameHive(user, "There's a shift in the hivemind's tactical picture. The mental map sharpens.", sound);
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the xenonid tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -2161,7 +2162,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
     private void AnnounceHumanTacticalMapUpdated(EntityUid user, SoundSpecifier? sound, string faction)
     {
-        string message = Loc.GetString("rmc-tactical-map-faction-update", ("faction", faction)); // RuMC edit
+        string message = $"The {faction} tactical map has been updated.";
         _marineAnnounce.AnnounceARESStaging(user, message, sound, null, faction);
 
         var request = new AnnouncementRequest

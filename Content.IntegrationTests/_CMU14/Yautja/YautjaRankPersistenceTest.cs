@@ -5,7 +5,9 @@ using Robust.Shared.Network;
 
 namespace Content.IntegrationTests.CMU14.Yautja;
 
-[TestFixture]
+// A clean return releases the pair before the final await-using disposal.
+// Serialize this fixture so disposal cannot race another fixture borrowing that pair.
+[TestFixture, NonParallelizable]
 public sealed class YautjaRankPersistenceTest
 {
     [TestCase(null, YautjaRank.Blooded)]

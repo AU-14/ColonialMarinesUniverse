@@ -30,8 +30,9 @@ public sealed class YautjaShipWeaponWrapperTest
 
             foreach (var wrapper in wrappers)
             {
-                Assert.That(wrapper.Parents, Does.Contain("CMUYautjaHarpoon"), wrapper.ID);
-                Assert.That(wrapper.Parents, Does.Not.Contain("CMUYautjaSpikeLauncher"), wrapper.ID);
+                var parents = prototypes.EnumerateAllParents<EntityPrototype>(wrapper.ID).Select(parent => parent.id).ToArray();
+                Assert.That(parents, Does.Contain("CMUYautjaHarpoon"), wrapper.ID);
+                Assert.That(parents, Does.Not.Contain("CMUYautjaSpikeLauncher"), wrapper.ID);
                 Assert.That(wrapper.TryComp<GunComponent>(out _, componentFactory), Is.False, wrapper.ID);
                 Assert.That(wrapper.TryComp<BasicEntityAmmoProviderComponent>(out _, componentFactory), Is.False, wrapper.ID);
                 Assert.That(wrapper.TryComp<YautjaSpikeLauncherComponent>(out _, componentFactory), Is.False, wrapper.ID);
