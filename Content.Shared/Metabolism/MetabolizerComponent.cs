@@ -17,7 +17,19 @@ public sealed partial class MetabolizerComponent : Component
     ///     The next time that reagents will be metabolized.
     /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
-    public TimeSpan NextUpdate;
+    public TimeSpan NextUpdate
+    {
+        get => _nextUpdate;
+        set
+        {
+            _nextUpdate = value;
+            DeadlineChanged?.Invoke(this);
+        }
+    }
+
+    private TimeSpan _nextUpdate;
+    internal Action<MetabolizerComponent>? DeadlineChanged;
+    internal EntityUid ScheduledOwner;
 
     /// <summary>
     ///     How often to metabolize reagents.

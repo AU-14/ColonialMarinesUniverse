@@ -71,6 +71,8 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
     [Dependency] private ItemSlotsSystem _itemSlot = default!;
     [Dependency] private SharedGasMaskSystem _mask = default!;
 
+    private readonly List<(EntityUid, UserDamageOverTimeComponent)> _damagedUsers = new(); // CMU14
+
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
@@ -263,6 +265,17 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             return;
 
         var modifyTotal = args.Damage.GetTotal();
+        // Structural blast damage cannot consume a human's remaining damage budget.
+        // Injurable discards unsupported types when committing the damage.
+        if (TryComp<InjurableComponent>(ent, out var injurable))
+        {
+            modifyTotal = FixedPoint2.Zero;
+            foreach (var (type, amount) in args.Damage.DamageDict)
+            {
+                if (_damageable.CanBeDamagedBy((ent.Owner, injurable), type))
+                    modifyTotal += amount;
+            }
+        }
         var totalDamage = _damageable.GetTotalDamage((ent.Owner, damageable));
         if (modifyTotal <= FixedPoint2.Zero || totalDamage + modifyTotal <= ent.Comp.Max)
             return;
@@ -651,8 +664,14 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             }
         }
 
+        // CMU14: DoDamage can kill entities and mutate this component set through death
+        // hooks, which invalidates the live enumerator mid-scan. Iterate a snapshot.
+        _damagedUsers.Clear();
         var userDamageOverTimeQuery = EntityQueryEnumerator<UserDamageOverTimeComponent>();
         while (userDamageOverTimeQuery.MoveNext(out var user, out var userDamage))
+            _damagedUsers.Add((user, userDamage));
+
+        foreach (var (user, userDamage) in _damagedUsers)
         {
             if (time < userDamage.NextDamageAt)
                 continue;

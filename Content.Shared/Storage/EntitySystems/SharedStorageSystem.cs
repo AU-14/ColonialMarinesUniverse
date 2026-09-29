@@ -225,7 +225,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
     private void OnStorageGetState(EntityUid uid, StorageComponent component, ref ComponentGetState args)
     {
-        var storedItems = new Dictionary<NetEntity, ItemStorageLocation>();
+        var storedItems = new Dictionary<NetEntity, ItemStorageLocation>(component.StoredItems.Count);
 
         foreach (var (ent, location) in component.StoredItems)
         {

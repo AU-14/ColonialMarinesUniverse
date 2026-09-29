@@ -11,7 +11,7 @@ namespace Content.Server.Atmos.Reactions
     [DataDefinition]
     public sealed partial class TritiumFireReaction : IGasReactionEffect
     {
-        private static readonly EntProtoId TileFire = "RMCTileFireGreen"; // CMU14: green fire, the anti-xeno variant
+        private static readonly EntProtoId TileFire = "CMUTileFireTritium"; // CMU14: green fire, the anti-xeno variant, and radioactive while it burns
 
         public ReactionResult React(GasMixture mixture, IGasMixtureHolder? holder, AtmosphereSystem atmosphereSystem, float heatScale)
         {

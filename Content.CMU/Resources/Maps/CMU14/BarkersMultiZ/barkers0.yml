@@ -587501,7 +587501,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -184.4514,-44.27175
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 85719
     components:
@@ -587526,7 +587526,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -46.5,7.5
-- proto: RMCGeneratorFusionColonyNoMapIcon
+- proto: CMUGeneratorThermoNoMapIcon
   entities:
   - uid: 85725
     components:

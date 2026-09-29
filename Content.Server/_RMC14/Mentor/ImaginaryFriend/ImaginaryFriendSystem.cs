@@ -132,7 +132,7 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
         if (TerminatingOrDeleted(imaginer))
             return;
 
-        if (!_mind.TryGetMind(newFriend, out var mindId, out _))
+        if (!_mind.TryGetMind(newFriend, out var mindId, out var mind))
             return;
 
         EnsureComp<HasImaginaryFriendComponent>(imaginer, out var hasFriend);
@@ -195,8 +195,13 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
                 _stationSpawning.EquipStartingGear(friend, startingGear, raiseEvent: false);
         }
 
+        // CMU14: mghost is a visit. Keep ownership of the mentor's current body and role.
+        var returnToBody = mind.VisitingEntity != null && mind.OwnedEntity != null;
         _mind.UnVisit(mindId);
-        _mind.TransferTo(mindId, friend, createGhost: false);
+        if (returnToBody)
+            _mind.Visit(mindId, friend, mind);
+        else
+            _mind.TransferTo(mindId, friend, createGhost: false);
 
         hasFriend.Friends.Add(friend);
         Dirty(imaginer, hasFriend);
@@ -244,10 +249,15 @@ public sealed partial class ImaginaryFriendSystem : SharedImaginaryFriendSystem
         if (TerminatingOrDeleted(friend))
             return;
 
-        if (_mind.TryGetMind(friend, out var mindId, out var mind)
-                && mind.OriginalOwnedEntity is { } originalEntNet
-                && TryGetEntity(originalEntNet, out var originalEntity))
-            _mind.TransferTo(mindId, originalEntity.Value, mind: mind);
+        // CMU14: ending a visit returns to the retained body, not the first body of the round.
+        if (_mind.TryGetMind(friend, out var mindId, out var mind))
+        {
+            if (mind.VisitingEntity == friend)
+                _mind.UnVisit(mindId, mind);
+            else if (mind.OriginalOwnedEntity is { } originalEntNet &&
+                     TryGetEntity(originalEntNet, out var originalEntity))
+                _mind.TransferTo(mindId, originalEntity.Value, mind: mind);
+        }
 
         QueueDel(friend);
     }

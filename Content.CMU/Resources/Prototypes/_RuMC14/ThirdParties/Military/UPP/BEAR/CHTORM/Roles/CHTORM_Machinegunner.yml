@@ -1,0 +1,143 @@
+- type: job
+  parent: CMJobBase
+  id: RuMCUPPBEARMachinegunner
+  roundSide: ThirdParty
+  roundForce: BEAR
+  roundRole: RuMCUPPBEARMachinegunner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: upp_sapper
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RuMCSquadBEAR
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 1
+      RMCSkillEndurance: 2
+      RMCSkillSmartGun: 1
+  - type: EquipEntityPreset
+    preset: RuMCBEARmachinegunPreset
+  - type: JobPrefix
+    prefix: Machinegunner
+  - type: MarineOrders
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Russian
+    defaultLanguage: Russian
+
+  name: Machine Gunner
+  description: CHTORM Machine Gunner
+  playTimeTracker: RuMCJobUPPBEARMachinegunner
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Private:
+      entity: AU14ChevronUPPNIPrivate
+      requirements: []
+    UPP_Gefreiter:
+      entity: AU14ChevronUPPNIGefreiter
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARMachinegunner
+        time: 1800 # 0.5 hours
+    UPP_SeniorGefreiter:
+      entity: AU14ChevronUPPNISeniorGefreiter
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARMachinegunner
+        time: 5400 # 1.5 hours
+    UPP_Corporal:
+      entity: AU14ChevronUPPNICorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARMachinegunner
+        time: 7200 # 2 hours
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARMachinegunner
+        time: 10800 # 3 hours
+  spawnMenuRoleName: CHTORM Machine Gunner
+  startingGear: RuMCGearUPPBEARMachinegunner
+  greeting: Вы член секретного спецподразделения ЧВК «Медведи» (BEAR) при СПН! Существование связи между BEAR и СПН строжайше секретно. Никто не должен знать, кто вы и что вы здесь делаете. Вы дружественны к СПН. Враждебны к ЧВК VAI и ЧВК We-Y. Работайте скрытно. Выполняйте задачи. Не оставляйте следов.
+  icon: "RuMCJobIconUPPBEARMachinegunner"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: RuMCBaseMobSpeciesOrganicUPPBEAR
+  id: RuMCJobUPPBEARMachinegunner
+  name: CHTORM Machine Gunner
+  components:
+  - type: EquipEntityPreset
+    preset: RuMCBEARmachinegunPreset
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: RuMCSquadBEAR
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: CHTORM Machine Gunner
+    description: Fire support operator of the BEAR PMC. Armed with the PKP-MS machine gun with a 150-round box magazine. Tasked with suppressing enemy fire points and holding positions. Works in tandem with the grenadier.
+    job: RuMCUPPBEARMachinegunner
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: RuMCGearUPPBEARbase
+  id: RuMCGearUPPBEARMachinegunner
+  equipment:
+    id: RuCMIDCardUPPBEARMachinegunner
+    ears: RuMCHeadsetBEAR
+  storage:
+    back:
+    - AU14GrenadeHighExplosiveUPP
+    - AU14GrenadeHighExplosiveUPP
+    - AU14GrenadeHighExplosiveUPP
+    - AU14GrenadeSmokeUPP
+    - RMCExplosiveBreachingCharge
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconUPPBEARMachinegunner
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: upp_sapper
+
+- type: playTimeTracker
+  id: RuMCJobUPPBEARMachinegunner

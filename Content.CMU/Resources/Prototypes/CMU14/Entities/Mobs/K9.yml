@@ -11,7 +11,7 @@
   - MobDamageable
   id: AU14MobK9
   name: Synthetic K9
-  description: "A Weyland-Yutani produced synthetic dog."
+  description: "An Interdyne-produced synthetic dog. Standard model without special harness gear."
   components:
   - type: RandomMetadata
     nameSegments:
@@ -105,14 +105,23 @@
         variation: 0
         volume: 0.9
     angle: 30
-    animation: WeaponArcFist
+    animation: WeaponArcBite
+    wideAnimation: WeaponArcBite
     attackRate: 1.4
     damage:
       types:
-        Blunt: 5
-        Piercing: 3
-        Slash: 15
+        Slash: 30
   - type: Synth
+  - type: ComplexInteraction
+  - type: Access
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: K9Dog
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
 
 - type: soundCollection
   id: AU14DogAttack
@@ -130,7 +139,7 @@
   components:
   - type: GhostRole
     name: Synthetic K9
-    description: A Weyland-Yutani produced synthetic dog.
+    description: An Interdyne-produced synthetic dog. Standard model without special harness gear.
     raffle:
       settings: short
 
@@ -139,7 +148,7 @@
   parent: AU14MobK9
   id: AU14MobK9BagMedic
   name: Search and Rescue K9
-  description: "A Weyland-Yutani produced synthetic dog. This model is designed to aid in search and rescue and comes equipped with medical equipment storage."
+  description: "An Interdyne-produced synthetic dog in a harness for carrying medical supplies."
   suffix: "S&R"
   components:
   - type: Sprite
@@ -226,8 +235,8 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: Synthetic Search and Rescue K9
-    description: A Weyland-Yutani produced synthetic dog.
+    name: Search and Rescue K9
+    description: An Interdyne-produced synthetic dog in a harness for carrying medical supplies.
     raffle:
       settings: short
   - type: NpcFactionMember
@@ -239,7 +248,7 @@
   parent: AU14MobK9
   id: AU14MobK9Bag
   name: Synthetic K9
-  description: "A Weyland-Yutani produced synthetic dog. This one comes equipped with general equipment storage."
+  description: "An Interdyne-produced synthetic dog. Standard model without special harness gear."
   suffix: Backpack
   components:
   - type: Sprite
@@ -279,7 +288,7 @@
   components:
   - type: GhostRole
     name: Synthetic K9
-    description: A Weyland-Yutani produced synthetic dog.
+    description: An Interdyne-produced synthetic dog. Standard model without special harness gear.
     raffle:
       settings: short
 
@@ -287,8 +296,8 @@
 - type: entity
   parent: AU14MobK9
   id: AU14MobK9MP
-  name: Synthetic K9
-  description: "A Weyland-Yutani produced synthetic dog designed to support Military Police personnel."
+  name: Military Police K9
+  description: "An Interdyne-produced synthetic dog in a military police harness."
   suffix: MP
   components:
   - type: Sprite
@@ -312,49 +321,54 @@
   suffix: "MP, Ghost Role"
   components:
   - type: GhostRole
-    name: Synthetic Military Police K9
-    description: A Weyland-Yutani produced synthetic dog.
+    name: Military Police K9
+    description: An Interdyne-produced synthetic dog in a military police harness.
     raffle:
       settings: short
 
 
-# - type: entity
-#   parent: AU14MobK9BagMedic
-#   id: AU14MobK9BagMedicGhostRoleGOVFOR
-#   suffix: "S&R, GOVFOR"
-#   components:
-#   - type: NpcFactionMember
-#     factions:
-#     - GOVFOR
-#
-# - type: entity
-#   parent: AU14MobK9Bag
-#   id: AU14MobK9BagGhostRoleGOVFOR
-#   suffix: "Backpack, GOVFOR"
-#   components:
-#   - type: NpcFactionMember
-#     factions:
-#     - GOVFOR
-#
-# - type: entity
-#   parent: AU14MobK9MP
-#   id: AU14MobK9MPGhostRoleGOVFOR
-#   suffix: "MP, GOVFOR"
-#   components:
-#   - type: NpcFactionMember
-#     factions:
-#     - GOVFOR
-#
-# - type: entity
-#   parent: AU14MobK9
-#   id: AU14MobK9GhostRoleGOVFOR
-#   suffix: "GOVFOR"
-#   components:
-#   - type: NpcFactionMember
-#     factions:
-#     - GOVFOR
-#
-#
+- type: entity
+  parent: AU14MobK9
+  id: AU14MobK9GhostRoleGOVFOR
+  suffix: "GOVFOR, Ghost Role"
+  components:
+  - type: GhostRole
+    name: Synthetic K9
+    description: An Interdyne-produced synthetic dog. Standard model without special harness gear.
+    raffle:
+      settings: short
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: AU14MobK9BagMedic
+  id: AU14MobK9BagMedicGhostRoleGOVFOR
+  suffix: "S&R, GOVFOR"
+  components:
+  - type: GhostRole
+    name: Search and Rescue K9
+    description: An Interdyne-produced synthetic dog in a harness for carrying medical supplies.
+    raffle:
+      settings: short
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: AU14MobK9MP
+  id: AU14MobK9MPGhostRoleGOVFOR
+  suffix: "MP, GOVFOR"
+  components:
+  - type: GhostRole
+    name: Military Police K9
+    description: An Interdyne-produced synthetic dog in a military police harness.
+    raffle:
+      settings: short
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+
 # - type: entity
 #   parent: AU14MobK9BagMedic
 #   id: AU14MobK9BagMedicGhostRoleOPFOR

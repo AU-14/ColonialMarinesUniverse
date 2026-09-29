@@ -8,6 +8,9 @@ namespace Content.Shared.CMU14.Chemistry.Research;
 public sealed partial class ResearchDataTerminalComponent : Component
 {
     [DataField, AutoNetworkedField]
+    public string Faction = "corporate";
+
+    [DataField, AutoNetworkedField]
     public int Clearance = 1;
     [DataField, AutoNetworkedField]
     public bool SyncClearance = false; // for 'public' terminals

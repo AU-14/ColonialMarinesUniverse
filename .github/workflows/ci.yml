@@ -362,7 +362,7 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 60 # raised to leave headroom for the shard (cmu) retry loop on non-failure
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -373,15 +373,7 @@ jobs:
           - name: root_2
             root_group: 1
             root_groups: 2
-          - name: entity_spawn_delete_maps
-            filter: FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteAllEntitiesOnDifferentMaps
-          - name: entity_spawn_dirty
-            filter: FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDirtyAllEntities
-          - name: entity_counts
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.AllComponentsOneToOneDeleteTest
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteAllEntitiesInTheSameSpot
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteEntityCountTest
+          # Bulk entity/component sweeps remain in the manual Build & Test Debug workflow.
           - name: admin_access_ui
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Administration
@@ -519,17 +511,53 @@ jobs:
               FullyQualifiedName~Content.IntegrationTests._RMC14
               | FullyQualifiedName~Content.IntegrationTests.Tests._RMC14.
           - name: cmu
+            # Both namespace spellings are in use. Medical and chemistry need their
+            # own processes; matching only _CMU14 leaves them all in this shard.
             filter: >-
-              (FullyQualifiedName~Content.IntegrationTests._CMU14
+              (FullyQualifiedName~Content.IntegrationTests._CMU14.
               | FullyQualifiedName~Content.IntegrationTests.CMU14.)
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Chemistry
-          - name: cmu_medical_cameras
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Camera.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Chemistry.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Chemistry.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Yautja.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Yautja.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.ZLevels.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.ZLevels.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Diagnostics.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Diagnostics.
+          - name: cmu_2
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Camera
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Medical
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Chemistry
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Camera.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Camera.
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Yautja.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Yautja.
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.ZLevels.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.ZLevels.
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Diagnostics.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Diagnostics.
+          - name: cmu_chemistry
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Chemistry.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Chemistry.
+          - name: cmu_medical_anatomy
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.Anatomy.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.Anatomy.
+          - name: cmu_medical_treatment
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.Treatment.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.Treatment.
+          - name: cmu_medical
+            filter: >-
+              (FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.
+              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.)
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.Anatomy.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.Anatomy.
+              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.Treatment.
+              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.Treatment.
           - name: au14
             filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
@@ -565,6 +593,12 @@ jobs:
 
       - name: Run ${{ matrix.shard.name }}
         shell: bash
+        env:
+          # RT v290's parallel YAML loader mutates the variant dictionary without
+          # synchronization. A single PLINQ worker avoids losing prototypes during
+          # startup (e.g. GasOutletInjector in PushKindInheritance).
+          # Keep this test-process workaround until the engine loader is fixed.
+          DOTNET_PROCESSOR_COUNT: "1"
         run: |
           export DOTNET_gcServer=1
           shard="${{ matrix.shard.name }}"
@@ -598,16 +632,19 @@ jobs:
           echo "--- $shard shard filter ---"
           echo "$FILTER"
           cd bin/Content.IntegrationTests || exit 1
-          # CMU14: upstream prototype variantization races on PLINQ parse threads, so any pair
-          # boot can die with ArgumentNullException during prototype load. One exit 1 without
-          # a retry is a coin flip. Genuine test failures stay red through all three attempts.
-          for attempt in 1 2 3; do
-            echo "--- $shard attempt $attempt"
-            # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
-            if dotnet test Content.IntegrationTests.dll \
-              --verbosity normal --filter "$FILTER" -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000; then
-              exit 0
-            fi
-            echo "attempt $attempt failed"
-          done
-          exit 1
+          # Runner shutdowns are retried by ci-retry-infra.yml; test failures need attention.
+          # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
+          dotnet test Content.IntegrationTests.dll \
+            --verbosity normal --filter "$FILTER" \
+            --blame-hang-timeout 5m --blame-hang-dump-type none \
+            --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
+            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000
+
+      - name: Upload test diagnostics
+        if: failure() || cancelled()
+        uses: actions/upload-artifact@v7
+        with:
+          name: integration-test-results-${{ matrix.shard.name }}
+          path: bin/Content.IntegrationTests/TestResults/
+          if-no-files-found: ignore
+          retention-days: 7

@@ -35,8 +35,11 @@ namespace Content.Client.GameTicking.Managers
         [ViewVariables] public ProtoId<LobbyBackgroundPrototype>? LobbyBackground { get; private set; }
         [ViewVariables] public bool DisallowedLateJoin { get; private set; }
         [ViewVariables] public string? ServerInfoBlob { get; private set; }
+        public IReadOnlyList<Content.Shared.CMU14.Lobby.LobbyLineupEntry> LobbyLineup { get; private set; } = Array.Empty<Content.Shared.CMU14.Lobby.LobbyLineupEntry>();
         [ViewVariables] public IReadOnlyList<LobbyRoundInfoField> ServerRoundInfo { get; private set; } = Array.Empty<LobbyRoundInfoField>();
         [ViewVariables] public TimeSpan StartTime { get; private set; }
+        public TimeSpan PreloadTime { get; private set; }
+        public bool MapsLoaded { get; private set; }
         [ViewVariables] public new bool Paused { get; private set; }
         [ViewVariables] public string CurrentMapName { get; private set; } = string.Empty;
         [ViewVariables] public string CurrentShipMapName { get; private set; } = string.Empty;
@@ -141,6 +144,9 @@ namespace Content.Client.GameTicking.Managers
         private void LobbyStatus(TickerLobbyStatusEvent message)
         {
             StartTime = message.StartTime;
+            // CMU14: map preload status.
+            PreloadTime = message.PreloadTime;
+            MapsLoaded = message.MapsLoaded;
             RoundStartTimeSpan = message.RoundStartTimeSpan;
             IsGameStarted = message.IsRoundStarted;
             AreWeReady = message.YouAreReady;
@@ -154,6 +160,7 @@ namespace Content.Client.GameTicking.Managers
         {
             ServerInfoBlob = message.TextBlob;
             ServerRoundInfo = message.RoundInfo;
+            LobbyLineup = message.Lineup;
 
             InfoBlobUpdated?.Invoke();
         }

@@ -1,0 +1,14 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Keep the 3D tactical survey frozen when construction adds linked floors.
+  type: Fix
+- message: Retain uploaded tactical-map terrain between openings and preload the likely
+    personal map.
+  type: Tweak
+- message: Smooth live tactical-map contacts with bounded movement prediction.
+  type: Tweak
+- message: Hide tactical-map drawing and sending controls from read-only viewers.
+  type: Fix
+time: '2026-09-23T17:02:50.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2003

@@ -27,6 +27,18 @@ public sealed partial class CMUServerPerformanceCommand : IConsoleCommand
                 else
                     shell.WriteError(Loc.GetString("cmu-cmd-server-perf-report-unavailable"));
                 break;
+            case "pvs":
+                if (_diagnostics.CapturePvsReport())
+                    shell.WriteLine(Loc.GetString("cmu-cmd-server-perf-pvs-written"));
+                else
+                    shell.WriteError(Loc.GetString("cmu-cmd-server-perf-report-unavailable"));
+                break;
+            case "physics":
+                if (_diagnostics.CapturePhysicsReport())
+                    shell.WriteLine(Loc.GetString("cmu-cmd-server-perf-physics-written"));
+                else
+                    shell.WriteError(Loc.GetString("cmu-cmd-server-perf-report-unavailable"));
+                break;
             case "reset":
                 if (_diagnostics.ResetBaselines())
                     shell.WriteLine(Loc.GetString("cmu-cmd-server-perf-reset"));
@@ -42,7 +54,7 @@ public sealed partial class CMUServerPerformanceCommand : IConsoleCommand
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         return args.Length == 1
-            ? CompletionResult.FromOptions(["status", "report", "reset"])
+            ? CompletionResult.FromOptions(["status", "report", "pvs", "physics", "reset"])
             : CompletionResult.Empty;
     }
 }

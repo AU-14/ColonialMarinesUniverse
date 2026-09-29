@@ -40,6 +40,9 @@ public sealed partial class RequisitionsComputerComponent : Component
 
     public readonly Dictionary<(int Category, int Order), RequisitionsStockStatus> Stock = new();
 
+    /// <summary>Server stock keys match the catalogue. Clear when changing category entries.</summary>
+    public bool StockEntriesInitialized;
+
     public TimeSpan NextStockUiUpdate;
 
     [DataField]

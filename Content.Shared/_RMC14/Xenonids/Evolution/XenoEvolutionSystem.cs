@@ -1006,7 +1006,10 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         var overrides = EntityQueryEnumerator<EvolutionOverrideComponent>();
         while (overrides.MoveNext(out var comp))
         {
-            evoOverride = comp.Amount;
+            // CMU14: xeno feedback and lifecycle.
+            // Overrides can overlap (for example a hive boon and the hijack surge).
+            // Entity iteration order must not let the weaker effect mask the stronger one.
+            evoOverride = evoOverride is { } previous ? FixedPoint2.Max(previous, comp.Amount) : comp.Amount;
         }
 
         var evolution = EntityQueryEnumerator<XenoEvolutionComponent>();

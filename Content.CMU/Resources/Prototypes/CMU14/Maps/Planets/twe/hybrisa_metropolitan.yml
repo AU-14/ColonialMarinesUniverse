@@ -62,7 +62,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
       AU14JobLEOBase: AU14JobCivilianNSPAConstable

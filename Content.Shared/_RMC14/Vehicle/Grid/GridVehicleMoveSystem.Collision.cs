@@ -60,6 +60,79 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         bool IsVehicle,
         bool IsUnpoweredDoor);
 
+    // Occupancy checks can recurse while handling a collision. Match the separate
+    // hit buffers so a nested check cannot replace the outer pass's sort keys.
+    private readonly CollisionHitSortBuffer[] _collisionHitSortBuffers = { new(), new(), new() };
+    private Func<EntityUid, Box2>? _collisionSortBounds;
+
+    private Box2 GetCollisionSortBounds(EntityUid uid) => lookup.GetWorldAABB(uid);
+
+    private sealed class CollisionHitSortBuffer
+    {
+        private readonly List<CollisionSortKey> _keys = new();
+
+        public void Sort(
+            List<EntityUid> hits,
+            Vector2 movementStart,
+            Vector2 movementTarget,
+            Vector2 movementHalfExtents,
+            Func<EntityUid, Box2> getBounds)
+        {
+            _keys.Clear();
+            if (hits.Count < 2)
+                return;
+
+            // Bounds and sweep calculations are per candidate, not per comparison.
+            // These keys only decide order; the effects loop rebuilds each collision
+            // candidate after earlier contacts may have moved or destroyed entities.
+            foreach (var hit in hits)
+            {
+                var bounds = getBounds(hit);
+                _keys.Add(new CollisionSortKey(
+                    hit,
+                    bounds,
+                    ImpactEnergySolver.GetSweptAabbContactTime(
+                        movementStart,
+                        movementTarget,
+                        movementHalfExtents,
+                        bounds),
+                    ImpactEnergySolver.GetContactOrder(movementStart, movementTarget, bounds.Center)));
+            }
+
+            _keys.Sort();
+            for (var i = 0; i < hits.Count; i++)
+                hits[i] = _keys[i].Entity;
+        }
+    }
+
+    private readonly record struct CollisionSortKey(
+        EntityUid Entity,
+        Box2 Bounds,
+        float ContactTime,
+        float ContactOrder) : IComparable<CollisionSortKey>
+    {
+        public int CompareTo(CollisionSortKey other)
+        {
+            var order = ContactTime.CompareTo(other.ContactTime);
+            if (order != 0)
+                return order;
+            order = ContactOrder.CompareTo(other.ContactOrder);
+            if (order != 0)
+                return order;
+            order = Bounds.Left.CompareTo(other.Bounds.Left);
+            if (order != 0)
+                return order;
+            order = Bounds.Bottom.CompareTo(other.Bounds.Bottom);
+            if (order != 0)
+                return order;
+            order = Bounds.Right.CompareTo(other.Bounds.Right);
+            if (order != 0)
+                return order;
+            order = Bounds.Top.CompareTo(other.Bounds.Top);
+            return order != 0 ? order : Entity.Id.CompareTo(other.Entity.Id);
+        }
+    }
+
     private bool CanOccupyTransform(
         EntityUid uid,
         GridVehicleMoverComponent mover,
@@ -114,7 +187,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             fixtureBounds,
             _intersectingPhysics,
             LookupFlags.Dynamic | LookupFlags.Static);
-        var hits = _hitsBuffers[_hitsDepth++];
+        var hitsDepth = _hitsDepth++;
+        var hits = _hitsBuffers[hitsDepth];
         hits.Clear();
         foreach (var hit in _intersectingPhysics)
         {
@@ -122,41 +196,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         }
         var movementStart = transform.GetWorldPosition(uid);
         var movementHalfExtents = aabb.Size * 0.5f;
-        hits.Sort((left, right) =>
-        {
-            var leftBounds = lookup.GetWorldAABB(left);
-            var rightBounds = lookup.GetWorldAABB(right);
-            var leftTime = ImpactEnergySolver.GetSweptAabbContactTime(
-                movementStart,
-                tx.Position,
-                movementHalfExtents,
-                leftBounds);
-            var rightTime = ImpactEnergySolver.GetSweptAabbContactTime(
-                movementStart,
-                tx.Position,
-                movementHalfExtents,
-                rightBounds);
-            var order = leftTime.CompareTo(rightTime);
-            if (order != 0)
-                return order;
-
-            var leftOrder = ImpactEnergySolver.GetContactOrder(movementStart, tx.Position, leftBounds.Center);
-            var rightOrder = ImpactEnergySolver.GetContactOrder(movementStart, tx.Position, rightBounds.Center);
-            order = leftOrder.CompareTo(rightOrder);
-            if (order != 0)
-                return order;
-            order = leftBounds.Left.CompareTo(rightBounds.Left);
-            if (order != 0)
-                return order;
-            order = leftBounds.Bottom.CompareTo(rightBounds.Bottom);
-            if (order != 0)
-                return order;
-            order = leftBounds.Right.CompareTo(rightBounds.Right);
-            if (order != 0)
-                return order;
-            order = leftBounds.Top.CompareTo(rightBounds.Top);
-            return order != 0 ? order : left.Id.CompareTo(right.Id);
-        });
+        _collisionHitSortBuffers[hitsDepth].Sort(
+            hits,
+            movementStart,
+            tx.Position,
+            movementHalfExtents,
+            _collisionSortBounds ??= GetCollisionSortBounds);
         var playedCollisionSound = false;
         var mobHits = new ValueList<EntityUid>(0);
 
@@ -175,7 +220,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             // The containing grid supplies the vehicle's local coordinate space;
             // its child walls and structures are blockers, but the grid entity
             // itself must never be treated as one.
-            if (other == uid || other == grid)
+            if (other == uid || other == grid || TerminatingOrDeleted(other) || EntityManager.IsQueuedForDeletion(other))
                 continue;
 
             if (TryComp(other, out VehicleRideSurfaceRiderComponent? rider) && rider.Vehicle == uid)
@@ -413,6 +458,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                HasComp<CMUZLevelHighGroundComponent>(other);
     }
 
+    // CMU14 method: vehicle damage and usability.
     private bool TryBuildCollisionCandidate(
         EntityUid vehicle,
         FixturesComponent vehicleFixtures,
@@ -481,8 +527,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         var doorPowerKnown = TryGetDoorPowered(other, out var doorPowered);
         var isUnpoweredDoor = hasDoor && doorPowerKnown && !doorPowered;
-        if (!canSmashWalls && hasDoor && isSmashable && doorPowerKnown && doorPowered && door != null && _door.CanOpen(other, door, operatorUid))
-            collisionClass = VehicleCollisionClass.Ignore;
 
         var collisionAabb = GetCollisionAabb(collisionClass, vehicleAabb, movementAabb);
         if (!HasCollisionOverlap(collisionAabb, otherAabb))
@@ -525,7 +569,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             if (applyEffects)
             {
                 PlayMobCollisionSound(vehicle, ref playedCollisionSound);
-                ApplyWheelCollisionDamage(vehicle, mover, wheelDamage);
+                ApplyCollisionSelfDamage(vehicle, mover, xeno, wheelDamage, 0f);
             }
 
             AddBlockingCollision(vehicle, xeno, collisionAabb, xenoAabb, clearance, mapId, debug, blockers);
@@ -540,11 +584,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (PushMobOutOfVehicle(vehicle, xeno, vehicleAabb, xenoAabb, vehicleMove))
             return CollisionHandlingResult.Continue;
 
-        ApplyWheelCollisionDamage(vehicle, mover, wheelDamage);
+        ApplyCollisionSelfDamage(vehicle, mover, xeno, wheelDamage, 0f);
         AddBlockingCollision(vehicle, xeno, collisionAabb, xenoAabb, clearance, mapId, debug, blockers);
         return CollisionHandlingResult.Blocked;
     }
 
+    // CMU14 method: vehicle damage and usability.
     private CollisionHandlingResult HandleBreakableCollision(
         EntityUid vehicle,
         GridVehicleMoverComponent mover,
@@ -571,7 +616,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             if (applyEffects)
             {
                 PlayCollisionSound(vehicle, ref playedCollisionSound);
-                ApplyWheelCollisionDamage(vehicle, mover, wheelDamage);
+                ApplyCollisionSelfDamage(vehicle, mover, other, wheelDamage, 0f);
             }
 
             AddBlockingCollision(vehicle, other, collisionAabb, otherAabb, clearance, mapId, debug, blockers);
@@ -588,7 +633,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             {
                 var preCollisionSpeed = MathF.Abs(mover.CurrentSpeed);
                 PlayCollisionSound(vehicle, ref playedCollisionSound);
-                ApplyWheelCollisionDamage(vehicle, mover, wheelDamage);
+                ApplyCollisionSelfDamage(vehicle, mover, other, wheelDamage, 0f);
                 if (IsSmashingCapable(mover) && ShouldApplyCrashImmobility(mover, preCollisionSpeed))
                     ApplyCrashImmobility(vehicle, mover);
             }
@@ -603,7 +648,11 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             // Apply this before spending momentum; otherwise a successful smash
             // can lower CurrentSpeed below WallSmashMinSpeed and skip self-damage.
             ApplyHeavySmashSelfDamage(vehicle, mover, other, selfDamageScale);
-            TrySmash(other, vehicle, plowImpact, ref playedCollisionSound);
+            if (!TrySmash(other, vehicle, plowImpact, ref playedCollisionSound))
+            {
+                AddBlockingCollision(vehicle, other, collisionAabb, otherAabb, clearance, mapId, debug, blockers);
+                return CollisionHandlingResult.Blocked;
+            }
         }
 
         return CollisionHandlingResult.Continue;
@@ -688,9 +737,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     /// <summary>
     /// Applies the heavy-smash tread + hull integrity damage to the vehicle. Called for both
     /// hard-wall smashes and vehicle-smashable passes (windows/shutters/doors/etc.).
-    /// No-op if the vehicle isn't a smasher or already paid self-damage for this target recently.
-    /// Breakable structures are guaranteed-smash collision targets, so damage is charged whenever
-    /// one is actually cleared even if an earlier obstacle already spent most of the vehicle's speed.
+    // CMU14: vehicle damage and conscious controls.
+    /// Charges self-damage once per substantial impact. Vehicles must move clear
+    /// before the same obstacle can charge another impact.
     /// <paramref name="targetDamageMultiplier"/> scales the vehicle's self-damage — set below 1
     /// for softer targets (e.g. resin walls) so they're cheaper to plow through.
     /// </summary>
@@ -703,30 +752,35 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (!mover.CanSmashWalls)
             return;
 
-        if (IsWallSmashOnCooldown(vehicle, target))
+        var multiplier = (HasPlowInstalled(vehicle) ? mover.WallSmashPlowDamageMultiplier : 1f) * targetDamageMultiplier;
+        ApplyCollisionSelfDamage(vehicle, mover, target,
+            mover.WallSmashWheelDamage * multiplier,
+            mover.WallSmashHullDamage * multiplier);
+    }
+
+    // CMU14 method: vehicle damage and usability.
+    private void ApplyCollisionSelfDamage(
+        EntityUid vehicle,
+        GridVehicleMoverComponent mover,
+        EntityUid target,
+        float wheelDamage,
+        float hullDamage)
+    {
+        if (_net.IsClient || (wheelDamage <= 0f && hullDamage <= 0f) ||
+            MathF.Abs(mover.CurrentSpeed) < MathF.Max(mover.CollisionDamageMinSpeed, mover.WallSmashMinSpeed))
             return;
 
-        StartWallSmashCooldown(vehicle, target, mover.WallSmashCooldown);
-
-        if (_net.IsClient)
+        if (!fixtureQ.TryComp(vehicle, out var vehicleFixtures) ||
+            !fixtureQ.TryComp(target, out var targetFixtures) ||
+            !TryGetFixtureAabb(vehicleFixtures, physics.GetPhysicsTransform(vehicle), out var vehicleBounds) ||
+            !TryGetFixtureAabb(targetFixtures, physics.GetPhysicsTransform(target), out var targetBounds) ||
+            !_collisionDamageContacts.TryStart(vehicle, target, vehicleBounds, targetBounds))
             return;
 
-        var selfDamageMult = HasPlowInstalled(vehicle) ? mover.WallSmashPlowDamageMultiplier : 1f;
-        selfDamageMult *= targetDamageMultiplier;
-
-        if (mover.WallSmashWheelDamage > 0f)
-        {
-            var wheelDmg = mover.WallSmashWheelDamage * selfDamageMult;
-            if (wheelDmg > 0f)
-                _wheels.DamageWheels(vehicle, wheelDmg);
-        }
-
-        if (mover.WallSmashHullDamage > 0f)
-        {
-            var hull = mover.WallSmashHullDamage * selfDamageMult;
-            if (hull > 0f)
-                _hardpoints.DamageVehicleHull(vehicle, hull);
-        }
+        if (wheelDamage > 0f)
+            _wheels.DamageWheels(vehicle, wheelDamage);
+        if (hullDamage > 0f)
+            _hardpoints.DamageVehicleHull(vehicle, hullDamage);
     }
 
     private CollisionHandlingResult HandleHardCollision(
@@ -787,7 +841,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 if (ShouldApplyCrashImmobility(mover, preCollisionSpeed))
                     ApplyCrashImmobility(vehicle, mover);
             }
-            ApplyWheelCollisionDamage(vehicle, mover, wheelDamage);
+            ApplyCollisionSelfDamage(vehicle, mover, other, wheelDamage, 0f);
         }
 
         AddBlockingCollision(vehicle, other, collisionAabb, otherAabb, clearance, mapId, debug, blockers);
@@ -938,6 +992,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 : HeavySmashResult.Destroyed;
         }
 
+        ApplyHeavySmashSelfDamage(vehicle, mover, target);
+
         var rawDamage = availableRawDamage;
         if (query.HasRemovalThreshold)
         {
@@ -972,22 +1028,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 },
             };
             _damageable.TryChangeDamage(target, damage, true, origin: vehicle, tool: vehicle);
-        }
-
-        var selfDamageMult = HasPlowInstalled(vehicle) ? mover.WallSmashPlowDamageMultiplier : 1f;
-
-        if (mover.WallSmashWheelDamage > 0f)
-        {
-            var wheelDmg = mover.WallSmashWheelDamage * selfDamageMult;
-            if (wheelDmg > 0f)
-                _wheels.DamageWheels(vehicle, wheelDmg);
-        }
-
-        if (mover.WallSmashHullDamage > 0f)
-        {
-            var hull = mover.WallSmashHullDamage * selfDamageMult;
-            if (hull > 0f)
-                _hardpoints.DamageVehicleHull(vehicle, hull);
         }
 
         if (query.HasRemovalThreshold && !query.CanDestroy)
@@ -1325,14 +1365,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return false;
     }
 
-    private void ApplyWheelCollisionDamage(EntityUid vehicle, GridVehicleMoverComponent mover, float damage)
-    {
-        if (_net.IsClient || damage <= 0f)
-            return;
-
-        _wheels.DamageWheels(vehicle, damage);
-    }
-
     private float GetWheelCollisionDamage(EntityUid vehicle, GridVehicleMoverComponent mover)
     {
         if (!TryComp(vehicle, out VehicleWheelSlotsComponent? wheels))
@@ -1508,6 +1540,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return new Vector2i(0, Math.Sign(direction.Y));
     }
 
+    // CMU14 method: vehicle damage and usability.
     private bool TrySmash(EntityUid target, EntityUid vehicle, bool plowImpact, ref bool playedCollisionSound)
     {
         if (!TryComp(target, out VehicleSmashableComponent? smashable))
@@ -1550,9 +1583,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (smashable.SmashSound != null)
             _audio.PlayPvs(smashable.SmashSound, Transform(target).Coordinates);
 
-        SmashTarget(target, vehicle, smashable);
-
-        return true;
+        return SmashTarget(target, vehicle, smashable);
     }
 
     /// <summary>
@@ -1580,7 +1611,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         playedCollisionSound = true;
     }
 
-    private void SmashTarget(EntityUid target, EntityUid vehicle, VehicleSmashableComponent smashable)
+    // CMU14 method: vehicle damage and usability.
+    private bool SmashTarget(EntityUid target, EntityUid vehicle, VehicleSmashableComponent smashable)
     {
         var damage = new DamageSpecifier
         {
@@ -1592,13 +1624,14 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         _damageable.TryChangeDamage(target, damage, true, origin: vehicle, tool: vehicle);
 
-        if (!smashable.DeleteOnHit)
-            return;
+        if (TerminatingOrDeleted(target) || EntityManager.IsQueuedForDeletion(target))
+            return true;
 
-        if (TerminatingOrDeleted(target))
-            return;
+        if (smashable.DeleteOnHit && _destructible.DestroyEntity(target))
+            return true;
 
-        _destructible.DestroyEntity(target);
+        return !physicsQ.TryComp(target, out var body) || !body.CanCollide ||
+            TryComp(target, out DoorComponent? door) && door.State == DoorState.Open;
     }
 
     private void PlayCollisionSound(EntityUid uid, ref bool played)
@@ -2221,9 +2254,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return VehicleCollisionClass.Ignore;
 
         if (isSmashable)
-            return VehicleCollisionClass.Breakable;
-
-        if (isBarricade && (hasDoor || isFoldable))
             return VehicleCollisionClass.Breakable;
 
         if (isFoldable && !hardCollidable)

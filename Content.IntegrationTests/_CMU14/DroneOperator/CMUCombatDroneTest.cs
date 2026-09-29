@@ -66,6 +66,8 @@ public sealed class CMUCombatDroneTest
             var entities = server.EntMan;
             var hands = entities.System<SharedHandsSystem>();
             user = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            // Assembly and piloting copy the operator's IFF before any projectiles are fired.
+            entities.System<GunIFFSystem>().SetUserFaction((user, null), "GOVFOR");
             entities.AddComponent<CMUDroneOperatorComponent>(user);
             tablet = entities.SpawnEntity("CMUDroneControlTablet", map.GridCoords);
             hull = entities.SpawnEntity("CMUCombatDroneHull", map.GridCoords.Offset(new Vector2(0.8f, 0)));
@@ -143,7 +145,6 @@ public sealed class CMUCombatDroneTest
             Assert.That(entities.GetComponent<MetaDataComponent>(bullet).EntityPrototype!.ID, Is.EqualTo("BulletRifle10x24mm"));
 
             var iff = entities.System<GunIFFSystem>();
-            iff.SetUserFaction((user, null), "GOVFOR");
             var friendlyCollision = new PreventCollideEvent(bullet, user,
                 entities.GetComponent<PhysicsComponent>(bullet), entities.GetComponent<PhysicsComponent>(user), null!, null!);
             entities.EventBus.RaiseLocalEvent(bullet, ref friendlyCollision);

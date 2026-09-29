@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Threading;
@@ -107,115 +108,137 @@ public sealed partial class PathfindingSystem
 
             // TODO: Often we invalidate the entire chunk when it might be something as simple as an airlock change
             // Would be better to handle that though this was safer and max it's taking is like 1-2ms every half-second.
-            var dirt = new GridPathfindingChunk[comp.DirtyChunks.Count];
-            var idx = 0;
-
-            foreach (var origin in comp.DirtyChunks)
+            var dirtyCount = comp.DirtyChunks.Count;
+            var dirt = ArrayPool<GridPathfindingChunk>.Shared.Rent(dirtyCount);
+            try
             {
-                var chunk = GetChunk(origin, uid, pathfinding);
-                dirt[idx] = chunk;
-                idx++;
-            }
+                var idx = 0;
 
-            // We force clear portals in a single-threaded context to be safe
-            // as they may not be thread-safe to touch.
-            foreach (var chunk in dirt)
-            {
-                foreach (var (_, poly) in chunk.PortalPolys)
+                foreach (var origin in comp.DirtyChunks)
                 {
-                    ClearPoly(poly);
+                    var chunk = GetChunk(origin, uid, pathfinding);
+                    dirt[idx] = chunk;
+                    idx++;
                 }
 
-                chunk.PortalPolys.Clear();
-
-                foreach (var portal in chunk.Portals)
+                // We force clear portals in a single-threaded context to be safe
+                // as they may not be thread-safe to touch.
+                for (var i = 0; i < dirtyCount; i++)
                 {
-                    dirtyPortals.Add(portal);
+                    var chunk = dirt[i];
+                    foreach (var (_, poly) in chunk.PortalPolys)
+                    {
+                        ClearPoly(poly);
+                    }
+
+                    chunk.PortalPolys.Clear();
+
+                    foreach (var portal in chunk.Portals)
+                    {
+                        dirtyPortals.Add(portal);
+                    }
                 }
-            }
 
-            // TODO: Inflate grid bounds slightly and get chunks.
-            // This is for map <> grid pathfinding
+                // TODO: Inflate grid bounds slightly and get chunks.
+                // This is for map <> grid pathfinding
 
-            // Without parallel this is roughly 3x slower on my desktop.
-            Parallel.For(0, dirt.Length, options, i =>
-            {
-                BuildBreadcrumbs(dirt[i], (uid, mapGridComp));
-            });
-
-            const int Division = 4;
-
-            // You can safely do this in parallel as long as no neighbor chunks are being touched in the same iteration.
-            // You essentially do bottom left, bottom right, top left, top right in quadrants.
-            // For each 4x4 block of chunks.
-
-            // i.e. first iteration: 0,0; 2,0; 0,2
-            // second iteration: 1,0; 3,0; 1;2
-            // third iteration: 0,1; 2,1; 0,3 etc
-
-            for (var it = 0; it < Division; it++)
-            {
-                var it1 = it;
-
-                Parallel.For(0, dirt.Length, options, j =>
+                if (dirtyCount == 1)
                 {
-                    var chunk = dirt[j];
-                    // Check if the chunk is safe on this iteration.
-                    var x = Math.Abs(chunk.Origin.X % 2);
-                    var y = Math.Abs(chunk.Origin.Y % 2);
-                    var index = x * 2 + y;
-
-                    if (index != it1)
-                        return;
-
-                    ClearOldPolys(chunk);
-                });
-            }
-
-            // TODO: You can probably skimp on some neighbor chunk caches
-            for (var it = 0; it < Division; it++)
-            {
-                var it1 = it;
-
-                Parallel.For(0, dirt.Length, options, j =>
-                {
-                    var chunk = dirt[j];
-                    // Check if the chunk is safe on this iteration.
-                    var x = Math.Abs(chunk.Origin.X % 2);
-                    var y = Math.Abs(chunk.Origin.Y % 2);
-                    var index = x * 2 + y;
-
-                    if (index != it1)
-                        return;
-
-                    BuildNavmesh(chunk, pathfinding);
+                    BuildBreadcrumbs(dirt[0], (uid, mapGridComp));
+                    ClearOldPolys(dirt[0]);
+                    BuildNavmesh(dirt[0], pathfinding);
 #if DEBUG
-                    Interlocked.Increment(ref updateCount);
+                    updateCount++;
 #endif
-                });
-            }
+                }
+                else
+                {
+                    // Without parallel this is roughly 3x slower on my desktop.
+                    Parallel.For(0, dirtyCount, options, i =>
+                    {
+                        BuildBreadcrumbs(dirt[i], (uid, mapGridComp));
+                    });
 
-            // Handle portals at the end after having cleared their neighbors above.
-            // We do this because there's no guarantee of where these are for chunks.
-            foreach (var portal in dirtyPortals)
+                    const int Division = 4;
+
+                    // You can safely do this in parallel as long as no neighbor chunks are being touched in the same iteration.
+                    // You essentially do bottom left, bottom right, top left, top right in quadrants.
+                    // For each 4x4 block of chunks.
+
+                    // i.e. first iteration: 0,0; 2,0; 0,2
+                    // second iteration: 1,0; 3,0; 1;2
+                    // third iteration: 0,1; 2,1; 0,3 etc
+
+                    for (var it = 0; it < Division; it++)
+                    {
+                        var it1 = it;
+
+                        Parallel.For(0, dirtyCount, options, j =>
+                        {
+                            var chunk = dirt[j];
+                            // Check if the chunk is safe on this iteration.
+                            var x = Math.Abs(chunk.Origin.X % 2);
+                            var y = Math.Abs(chunk.Origin.Y % 2);
+                            var index = x * 2 + y;
+
+                            if (index != it1)
+                                return;
+
+                            ClearOldPolys(chunk);
+                        });
+                    }
+
+                    // TODO: You can probably skimp on some neighbor chunk caches
+                    for (var it = 0; it < Division; it++)
+                    {
+                        var it1 = it;
+
+                        Parallel.For(0, dirtyCount, options, j =>
+                        {
+                            var chunk = dirt[j];
+                            // Check if the chunk is safe on this iteration.
+                            var x = Math.Abs(chunk.Origin.X % 2);
+                            var y = Math.Abs(chunk.Origin.Y % 2);
+                            var index = x * 2 + y;
+
+                            if (index != it1)
+                                return;
+
+                            BuildNavmesh(chunk, pathfinding);
+#if DEBUG
+                            Interlocked.Increment(ref updateCount);
+#endif
+                        });
+                    }
+
+                }
+
+                // Handle portals at the end after having cleared their neighbors above.
+                // We do this because there's no guarantee of where these are for chunks.
+                foreach (var portal in dirtyPortals)
+                {
+                    var polyA = GetPoly(portal.CoordinatesA);
+                    var polyB = GetPoly(portal.CoordinatesB);
+
+                    if (polyA == null || polyB == null)
+                        continue;
+
+                    DebugTools.Assert((polyA.Data.Flags & PathfindingBreadcrumbFlag.Invalid) == 0x0);
+                    DebugTools.Assert((polyB.Data.Flags & PathfindingBreadcrumbFlag.Invalid) == 0x0);
+                    var chunkA = GetChunk(polyA.ChunkOrigin, polyA.GraphUid);
+                    var chunkB = GetChunk(polyB.ChunkOrigin, polyB.GraphUid);
+
+                    chunkA.PortalPolys.TryAdd(portal, polyA);
+                    chunkB.PortalPolys.TryAdd(portal, polyB);
+                    AddNeighbors(polyA, polyB);
+                }
+
+                comp.DirtyChunks.Clear();
+            }
+            finally
             {
-                var polyA = GetPoly(portal.CoordinatesA);
-                var polyB = GetPoly(portal.CoordinatesB);
-
-                if (polyA == null || polyB == null)
-                    continue;
-
-                DebugTools.Assert((polyA.Data.Flags & PathfindingBreadcrumbFlag.Invalid) == 0x0);
-                DebugTools.Assert((polyB.Data.Flags & PathfindingBreadcrumbFlag.Invalid) == 0x0);
-                var chunkA = GetChunk(polyA.ChunkOrigin, polyA.GraphUid);
-                var chunkB = GetChunk(polyB.ChunkOrigin, polyB.GraphUid);
-
-                chunkA.PortalPolys.TryAdd(portal, polyA);
-                chunkB.PortalPolys.TryAdd(portal, polyB);
-                AddNeighbors(polyA, polyB);
+                ArrayPool<GridPathfindingChunk>.Shared.Return(dirt, clearArray: true);
             }
-
-            comp.DirtyChunks.Clear();
         }
     }
 

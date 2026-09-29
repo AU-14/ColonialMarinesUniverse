@@ -6,7 +6,7 @@
   name: cmu-job-name-govfordroneoperator
   description: cmu-job-description-govfordroneoperator
   icon: "AU14JobIconGovRifleman"
-  spawnMenuRoleName: Drone Operator (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-drone-operator-govfor 
   startingGear: CMUGearGOVFORDroneOperator
   dummyStartingGear: CMUGearGOVFORDroneOperatorDummy
   playTimeTracker: CMUJobGOVFORDroneOperator
@@ -38,6 +38,9 @@
         state: rifleman
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 36000 # 10 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -136,11 +139,6 @@
   equipment:
     back: CMUDroneOperatorChoicePackFilled
 
-- type: loadout
-  id: CMUCombatDroneOperatorPackLoadout
-  equipment:
-    back: CMUDroneOperatorChoicePackFilled
-
 - type: job
   parent: CMUJobDroneOperatorBase
   id: CMUJobOPFORDroneOperator
@@ -154,6 +152,7 @@
   accessGroups:
   - AU14OpforSquad
   ignoreAllegiance: true
+  useLoadoutOfJob: CMUJobGOVFORDroneOperator
 
 - type: startingGear
   id: CMUGearOPFORDroneOperator

@@ -6,6 +6,7 @@
     xmlns:vote="clr-namespace:Content.Client.Voting.UI"
     xmlns:style="clr-namespace:Content.Client.Stylesheets"
     xmlns:lobbyUi="clr-namespace:Content.Client.Lobby.UI"
+    xmlns:lineup="clr-namespace:Content.Client.CMU14.Lobby"
     xmlns:info="clr-namespace:Content.Client.Info"
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Chat.Widgets"
     xmlns:cmu="clr-namespace:Content.Client._CMU14.Interface">
@@ -80,6 +81,8 @@
                         <!-- Voting Popups -->
                         <BoxContainer Orientation="Vertical" SeparationOverride="4" Name="VoteContainer"
                                       Access="Public" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0 8" />
+                        <lineup:LobbyLineupPanel Name="Lineup" Access="Public" VerticalExpand="True"
+                                                 HorizontalExpand="True" Margin="0 4 8 110" />
                     </BoxContainer>
                     <!-- Vertical Padding-->
                     <Control VerticalExpand="True" />

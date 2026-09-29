@@ -60,7 +60,11 @@ public sealed partial class DropshipPointVisualizerSystem : VisualizerSystem<Dro
             return;
         }
 
-        _sprite.LayerSetSprite((uid, spriteComp), attachedUtility, new SpriteSpecifier.Rsi(new ResPath(sprite), state));
+        // CMU14 Begin: use equipment artwork suited to this mount.
+        // _sprite.LayerSetSprite((uid, spriteComp), attachedUtility, new SpriteSpecifier.Rsi(new ResPath(sprite), state));
+        _sprite.LayerSetSprite((uid, spriteComp), attachedUtility,
+            component.SpriteOverrides.GetValueOrDefault(state) ?? new SpriteSpecifier.Rsi(new ResPath(sprite), state));
+        // CMU14 End
 
         //if (Enum.TryParse<SpriteComponent.DirectionOffset>(component.DirOffset, true, out var dir))
         //spriteComp.LayerSetDirOffset(layer, dir);

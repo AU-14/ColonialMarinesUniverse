@@ -62,7 +62,6 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
-    private const string ThirdPartyFaction = "thirdparty";
     private readonly ISawmill _sawmill = Logger.GetSawmill("thirdparty");
 
     // --- State for round third party spawning ---
@@ -256,38 +255,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
         // Maintain compatibility with existing code that uses these locals.
         bool useDropship = entryMethod.Equals("shuttle", StringComparison.OrdinalIgnoreCase);
 
-        // CMU14 Begin: aborting dropped the whole party when every LZ was claimed or re-factioned
-        // by a visiting military dropship. Ground insertion still delivers the party.
-        var chosenDestination = EntityUid.Invalid;
         if (useDropship)
         {
-            EntityQueryEnumerator<DropshipDestinationComponent, TransformComponent> destQuery = _entityManager
-                .EntityQueryEnumerator<DropshipDestinationComponent, TransformComponent>();
-            while (destQuery.MoveNext(out EntityUid destUid, out DropshipDestinationComponent? destComp,
-                out TransformComponent? destXform))
-            {
-                if (IsAvailableThirdPartyDropshipDestination(destUid, destComp))
-                {
-                    chosenDestination = destUid;
-                    break;
-                }
-            }
-
-            if (chosenDestination == EntityUid.Invalid)
-            {
-                _sawmill.Warning(
-                    "[ThirdPartySystem] No valid third-party dropship landing destination found. Falling back to ground spawn.");
-                useDropship = false;
-                entryMethod = "ground";
-            }
-        }
-        // CMU14 End
-
-        if (useDropship)
-        {
-            EntityUid destination = chosenDestination;
-            _sawmill.Debug($"[ThirdPartySystem] Found valid dropship destination: {destination}");
-
+            // Reinforcements spawn aboard their shuttle even while all landing zones are occupied.
+            // The navigation console resolves available destinations when the crew launches.
             DeserializationOptions deserializationOpts = DeserializationOptions.Default with { InitializeMaps = true };
             if (!TryLoadDropshipGrid(party.dropshippath, deserializationOpts, out mainGridUid))
                 return false;
@@ -319,7 +290,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             EnsureComp<DropshipComponent>(mainGridUid);
             _sharedDropshipSystem.SetDropshipDestination(mainGridUid, returnDestination);
 
-            _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch to destination {destination}.");
+            _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch.");
 
             // Collect markers on dropship grid
             EntityQueryEnumerator<AuInsertMarkerComponent> query = _entityManager
@@ -844,16 +815,6 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private static bool IsOnGrid(TransformComponent transform, EntityUid gridUid)
         => (transform.GridUid.HasValue && transform.GridUid.Value == gridUid) ||
             transform.ParentUid == gridUid;
-
-    private bool IsAvailableThirdPartyDropshipDestination(
-        EntityUid destination,
-        DropshipDestinationComponent destinationComponent)
-    {
-        return destinationComponent.Ship == null &&
-               !destinationComponent.Home &&
-               !HasComp<ThirdPartyDropshipReturnDestinationComponent>(destination) &&
-               string.Equals(destinationComponent.FactionController, ThirdPartyFaction, StringComparison.OrdinalIgnoreCase);
-    }
 
     private bool TryLoadDropshipGrid(ResPath path, DeserializationOptions options, out EntityUid gridUid)
     {

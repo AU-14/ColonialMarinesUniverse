@@ -300662,7 +300662,7 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 276.5,-101.5
-- proto: GasPipeStraightAlt2
+- proto: CMUGasPipeStraightAlt2
   entities:
   - uid: 9230
     components:

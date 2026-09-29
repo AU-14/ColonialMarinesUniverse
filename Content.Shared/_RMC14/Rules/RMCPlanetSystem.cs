@@ -124,6 +124,10 @@ public sealed partial class RMCPlanetSystem : EntitySystem
         return IsOnPlanet(_transform.ToCoordinates(coordinates));
     }
 
+    // CMU14: endgame cleanup includes underground and elevated planet levels.
+    public bool IsOnPlanetLevel(TransformComponent xform)
+        => IsOnPlanet(xform) || TryGetPlanetSurfaceCoordinates(_transform.GetMapCoordinates(xform), out _);
+
     /// <summary>
     /// Resolves coordinates on a connected Z-level to the depth-zero planet map.
     /// Coordinates already on a planet map or grid are returned unchanged.

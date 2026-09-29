@@ -122,7 +122,8 @@ public sealed partial class CMUClientZLevelsSystem
 
     private void ApplySpritePresentation(EntityUid uid, SpriteComponent sprite, TransformComponent xform, IEye eye)
     {
-        var height = TryComp(uid, out CMUZPhysicsComponent? zPhysics) ? zPhysics.LocalPosition : 0f;
+        var height = TryComp(uid, out CMUZPhysicsComponent? zPhysics) && zPhysics.ApplySpriteElevation
+            ? zPhysics.LocalPosition : 0f;
         var worldOffset = Vector2.Zero;
         if (TryComp(uid, out CMUZLevelPredictedProjectileVisualOffsetComponent? predicted))
             worldOffset += predicted.Offset;

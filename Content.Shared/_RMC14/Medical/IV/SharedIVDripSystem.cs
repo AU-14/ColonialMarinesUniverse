@@ -382,6 +382,9 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
     protected bool InRange(EntityUid iv, EntityUid to, float range)
     {
+        if (TerminatingOrDeleted(iv) || TerminatingOrDeleted(to))
+            return false;
+
         var ivPos = _transform.GetMapCoordinates(iv);
         var toPos = _transform.GetMapCoordinates(to);
         return ivPos.InRange(toPos, range);
@@ -417,6 +420,9 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         iv.Comp.AttachedTo = default;
         Dirty(iv);
+
+        if (TerminatingOrDeleted(target))
+            return;
 
         if (rip)
             DoRip(iv.Comp.RipDamage, target, user, iv.Comp.RipEmote, predict);
@@ -454,6 +460,9 @@ public abstract partial class SharedIVDripSystem : EntitySystem
 
         pack.Comp.AttachedTo = default;
         Dirty(pack);
+
+        if (TerminatingOrDeleted(target))
+            return;
 
         if (rip)
             DoRip(pack.Comp.RipDamage, target, user, pack.Comp.RipEmote, predict);
@@ -530,6 +539,9 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         }
 
         _powerCell.SetDrawEnabled((dialysis.Owner, null), false);
+
+        if (TerminatingOrDeleted(target))
+            return;
 
         if (rip)
             DoRip(dialysis.Comp.RipDamage, target, user, dialysis.Comp.RipEmote, predict);

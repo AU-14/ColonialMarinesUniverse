@@ -1,5 +1,6 @@
 #pragma warning disable RA0002 // The fixture controls phase durations and inspects committed transport state.
 using Content.Server.CMU14.Hospital;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Shared._RMC14.Dropship;
@@ -17,12 +18,13 @@ namespace Content.IntegrationTests.CMU14.Medical.Hospital;
 [TestFixture]
 public sealed class HospitalFtlRoundTripTest
 {
-    [Test, Category("HospitalTransport"), Timeout(180000)]
-    public async Task RealDeliveryAndPickupRetryCooldownAndSettleOnceAfterReturning()
+    [TestCase(false, false), TestCase(true, false), TestCase(false, true), Category("HospitalTransport"), Timeout(180000)]
+    public async Task RealDeliveryAndPickupRetryCooldownAndSettleOnceAfterReturning(bool staleReservation, bool differentDeck)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
+        var computerDeck = differentDeck ? await pair.CreateTestMap() : map;
         var entities = server.EntMan;
         var originalArrivalTime = server.CfgMan.GetCVar(CCVars.FTLArrivalTime);
         var transportEntities = new HashSet<EntityUid>();
@@ -34,6 +36,7 @@ public sealed class HospitalFtlRoundTripTest
         EntityUid delivery = default;
         EntityUid pickup = default;
         EntityUid pickupReturnMap = default;
+        EntityUid? deckNetwork = null;
         HospitalEmergencyComputerComponent hospital = default!;
         var initialMaps = 0;
         var initialGrids = 0;
@@ -47,7 +50,15 @@ public sealed class HospitalFtlRoundTripTest
                 // are shortened; no successful FTL completion is injected by this test.
                 Assert.That(server.CfgMan.GetCVar(CCVars.FTLCooldown), Is.EqualTo(60f));
                 server.CfgMan.SetCVar(CCVars.FTLArrivalTime, 0.1f);
-                computer = entities.SpawnEntity("AU14HospitalEmergencyComputer", map.GridCoords);
+                if (differentDeck)
+                {
+                    var zLevels = server.System<CMUZLevelsSystem>();
+                    var network = zLevels.CreateZNetwork();
+                    deckNetwork = network.Owner;
+                    Assert.That(zLevels.TryAddMapsIntoZNetwork(network,
+                        new Dictionary<EntityUid, int> { [map.MapUid] = 0, [computerDeck.MapUid] = 1 }), Is.True);
+                }
+                computer = entities.SpawnEntity("AU14HospitalEmergencyComputer", computerDeck.GridCoords);
                 actor = entities.SpawnEntity("CMMobHuman", map.GridCoords);
                 entities.EnsureComponent<CMInStasisComponent>(actor);
                 // Keep the landing shuttle away from the hospital and its patient.
@@ -149,6 +160,25 @@ public sealed class HospitalFtlRoundTripTest
                 Assert.That(hospital.LastPayout, Is.EqualTo(expectedReward));
                 Assert.That(CashTotal(), Is.EqualTo(expectedReward), "Repeated completion/release cannot issue a second payment.");
             });
+
+            // The next incident is the third shuttle call, using the same landing pad.
+            await server.WaitAssertion(() =>
+            {
+                if (staleReservation)
+                    server.System<SharedDropshipSystem>().SetDestinationShip(landing, pickup);
+                server.System<HospitalEmergencySystem>().SetNextIncidentDelay(TimeSpan.FromSeconds(1));
+            });
+            await WaitForPhase(HospitalEmergencyStatus.AwaitingApproval, 5);
+            await server.WaitAssertion(() =>
+            {
+                entities.EventBus.RaiseLocalEvent(computer, new HospitalEmergencyApproveLandingMsg { Actor = actor });
+                Assert.That(hospital.Status, Is.EqualTo(HospitalEmergencyStatus.Arriving), hospital.TransportFailure);
+                delivery = CaptureTransport();
+                patient = hospital.Patients.Single();
+                entities.EnsureComponent<CMInStasisComponent>(patient);
+            });
+            await WaitForPhase(HospitalEmergencyStatus.ManualUnloading, 10);
+            await server.WaitAssertion(() => AssertLanded(delivery));
         }
         finally
         {
@@ -160,6 +190,8 @@ public sealed class HospitalFtlRoundTripTest
                     if (entities.EntityExists(uid))
                         entities.DeleteEntity(uid);
                 }
+                if (deckNetwork is { } network && entities.EntityExists(network))
+                    entities.DeleteEntity(network);
             });
         }
         await pair.CleanReturnAsync();
@@ -172,7 +204,7 @@ public sealed class HospitalFtlRoundTripTest
             var query = entities.EntityQueryEnumerator<StackComponent, MetaDataComponent, TransformComponent>();
             while (query.MoveNext(out _, out var stack, out var metadata, out var transform))
             {
-                if (metadata.EntityPrototype?.ID == hospital.CashPrototype.Id && transform.MapUid == map.MapUid)
+                if (metadata.EntityPrototype?.ID == hospital.CashPrototype.Id && transform.MapUid == computerDeck.MapUid)
                     total += stack.Count;
             }
             return total;

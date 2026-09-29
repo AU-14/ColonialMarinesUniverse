@@ -76721,7 +76721,7 @@ entities:
     - type: Transform
       pos: 187.57178,-120.36726
       parent: 1
-- proto: GasPipeStraightAlt2
+- proto: CMUGasPipeStraightAlt2
   entities:
   - uid: 2691
     components:
@@ -85756,62 +85756,17 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 124.5,-56.5
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 4195
     components:
     - type: Transform
       pos: 130.5,-74.5
       parent: 1
-  - uid: 4196
-    components:
-    - type: Transform
-      pos: 131.5,-77.5
-      parent: 1
-  - uid: 4197
-    components:
-    - type: Transform
-      pos: 131.5,-74.5
-      parent: 1
-  - uid: 4198
-    components:
-    - type: Transform
-      pos: 129.5,-77.5
-      parent: 1
-  - uid: 4199
-    components:
-    - type: Transform
-      pos: 129.5,-74.5
-      parent: 1
-  - uid: 4200
-    components:
-    - type: Transform
-      pos: 132.5,-77.5
-      parent: 1
   - uid: 4201
     components:
     - type: Transform
       pos: 301.5,-148.5
-      parent: 1
-  - uid: 4202
-    components:
-    - type: Transform
-      pos: 301.5,-149.5
-      parent: 1
-  - uid: 4203
-    components:
-    - type: Transform
-      pos: 301.5,-147.5
-      parent: 1
-  - uid: 4204
-    components:
-    - type: Transform
-      pos: 132.5,-74.5
-      parent: 1
-  - uid: 4205
-    components:
-    - type: Transform
-      pos: 130.5,-77.5
       parent: 1
 - proto: RMCGeneratorFusionCell
   entities:

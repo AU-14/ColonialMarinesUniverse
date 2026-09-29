@@ -13,7 +13,7 @@
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
   startingGear: CMUGearDrugDealer
   startingSkills:
-    RMCSkillMedical: 2
+    RMCSkillMedical: 3
     RMCSkillSurgery: 1
   components:
   - type: DrugDealer
@@ -93,6 +93,8 @@
     - id: CMUBottleMethylphenidate
     - id: CMUBottleOxycodone
     - id: CMUBottleEpinephrine
+    - id: CMScrewdriver
+    - id: CMBeaker
 
 - type: entity
   parent: ClothingBackpackSatchelSmugglerUnanchored

@@ -1448,6 +1448,14 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("gamemode_antag_preferences");
 
+                    b.Property<int>("FoFSide")
+                        .HasColumnType("integer")
+                        .HasColumnName("fo_f_side");
+
+                    b.Property<int>("FoFFallback")
+                        .HasColumnType("integer")
+                        .HasColumnName("fo_f_fallback");
+
                     b.Property<string>("GamemodeJobPriorities")
                         .HasColumnType("text")
                         .HasColumnName("gamemode_job_priorities");

@@ -1,0 +1,12 @@
+# Tech call-ins arrive aboard a shuttle; the USArmy variants remain round-start survivors.
+- type: thirdParty
+  id: CMUUSArmyReinforcements
+  displayName: US Army Infantry Reinforcements
+  partyspawn: USArmySpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 8
+  roundstart: false

@@ -218,13 +218,14 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankTreads
+  id: VehicleTankTreads # CMU14
   name: tank treads
   description: Heavy duty tank treads.
   components:
   - type: Sprite
     state: treads
   - type: HardpointItem
+    damageRegion: Sides
     hardpointType: Wheel
     vehicleFamily: Tank
     slotType: Treads
@@ -239,7 +240,7 @@
     - type: PowerLoaderGrabbable
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankTreadsTWE
+  id: VehicleTankTreadsTWE # CMU14
   name: tank treads
   description: Heavy duty tank treads.
   components:
@@ -247,6 +248,7 @@
     sprite: CMU14/Structures/vehicles/fv150/icons.rsi
     state: treads
   - type: HardpointItem
+    damageRegion: Sides
     hardpointType: Wheel
     vehicleFamily: Tank
     slotType: Treads
@@ -261,13 +263,14 @@
     - type: PowerLoaderGrabbable
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankReinforcedTreads
+  id: VehicleTankReinforcedTreads # CMU14
   name: reinforced tank treads
   description: Heavier tank treads with better durability and acid resistance at the cost of acceleration.
   components:
   - type: Sprite
     state: treads
   - type: HardpointItem
+    damageRegion: Sides
     hardpointType: Wheel
     vehicleFamily: Tank
     slotType: Treads

@@ -13,7 +13,7 @@ public sealed class ExplosionSpaceTileFlood : ExplosionTileFlood
     ///     about what grid (which could be more than one), and in what directions the space-based explosion is allowed
     ///     to propagate from this tile.
     /// </summary>
-    private Dictionary<Vector2i, BlockedSpaceTile> _gridBlockMap;
+    private Dictionary<Vector2i, BlockedSpaceTile> _gridBlockMap = new();
 
     /// <summary>
     ///     After every iteration, this data set will store all the grid-tiles that were reached as a result of the
@@ -23,13 +23,18 @@ public sealed class ExplosionSpaceTileFlood : ExplosionTileFlood
 
     public ushort TileSize = ExplosionSystem.DefaultTileSize;
 
-    public ExplosionSpaceTileFlood(ExplosionSystem system, MapCoordinates epicentre, EntityUid? referenceGrid, List<EntityUid> localGrids, float maxDistance)
+    public IEnumerable<bool> Prepare(ExplosionSystem system, MapCoordinates epicentre, EntityUid? referenceGrid,
+        IReadOnlyDictionary<EntityUid, ExplosionSystem.ExplosionGridSnapshot> geometry, float maxDistance)
     {
-        (_gridBlockMap, TileSize) = system.TransformGridEdges(epicentre, referenceGrid, localGrids, maxDistance);
-        system.GetUnblockedDirections(_gridBlockMap, TileSize);
+        var edges = new ExplosionSystem.GridEdgePreparation();
+        foreach (var step in system.PrepareGridEdges(epicentre, referenceGrid, geometry, maxDistance, edges))
+            yield return step;
+        _gridBlockMap = edges.Edges;
+        TileSize = edges.TileSize;
+        foreach (var step in system.PrepareUnblockedDirections(_gridBlockMap, TileSize)) yield return step;
     }
 
-    public int AddNewTiles(int iteration, HashSet<Vector2i> inputSpaceTiles)
+    public IEnumerable<bool> PrepareNewTiles(int iteration, HashSet<Vector2i> inputSpaceTiles)
     {
         NewTiles = new();
         NewBlockedTiles = new();
@@ -38,19 +43,20 @@ public sealed class ExplosionSpaceTileFlood : ExplosionTileFlood
 
         // Adjacent tiles
         if (TileLists.TryGetValue(iteration - 2, out var adjacent))
-            AddNewAdjacentTiles(iteration, adjacent);
+            foreach (var step in AddNewAdjacentTiles(iteration, adjacent)) yield return step;
         if (FreedTileLists.TryGetValue((iteration - 2) % 3, out var delayedAdjacent))
-            AddNewAdjacentTiles(iteration, delayedAdjacent);
+            foreach (var step in AddNewAdjacentTiles(iteration, delayedAdjacent)) yield return step;
 
         // Diagonal tiles
         if (TileLists.TryGetValue(iteration - 3, out var diagonal))
-            AddNewDiagonalTiles(iteration, diagonal);
+            foreach (var step in AddNewDiagonalTiles(iteration, diagonal)) yield return step;
         if (FreedTileLists.TryGetValue((iteration - 3) % 3, out var delayedDiagonal))
-            AddNewDiagonalTiles(iteration, delayedDiagonal);
+            foreach (var step in AddNewDiagonalTiles(iteration, delayedDiagonal)) yield return step;
 
         // Tiles entering space from some grid.
         foreach (var tile in inputSpaceTiles)
         {
+            yield return true;
             ProcessNewTile(iteration, tile, AtmosDirection.All);
         }
 
@@ -62,7 +68,7 @@ public sealed class ExplosionSpaceTileFlood : ExplosionTileFlood
         FreedTileLists[iteration % 3] = NewFreedTiles;
 
         // return new tile count
-        return NewTiles.Count + NewBlockedTiles.Count;
+        yield break;
     }
 
     private void JumpToGrid(BlockedSpaceTile blocker)
@@ -81,10 +87,11 @@ public sealed class ExplosionSpaceTileFlood : ExplosionTileFlood
         }
     }
 
-    private void AddNewAdjacentTiles(int iteration, IEnumerable<Vector2i> tiles)
+    private IEnumerable<bool> AddNewAdjacentTiles(int iteration, IEnumerable<Vector2i> tiles)
     {
         foreach (var tile in tiles)
         {
+            yield return true;
             var unblockedDirections = GetUnblockedDirectionOrAll(tile);
 
             if (unblockedDirections == AtmosDirection.Invalid)

@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCLFGuerilla
   roundSide: ThirdParty
   roundForce: CLF
@@ -7,6 +7,7 @@
   roundComponents:
   - type: NpcFactionMember
     factions:
+    - AUColonist
     - CLF
   - type: CLFMember
   - type: Skills
@@ -38,6 +39,9 @@
   setPreference: true
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFGuerilla
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   basePlaytimeTracker: true
   ranks:
     RMCRankCivilian: []

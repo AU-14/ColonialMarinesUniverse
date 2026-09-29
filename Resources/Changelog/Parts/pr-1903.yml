@@ -1,0 +1,7 @@
+author: CatoChristopherMrow
+category: CMU
+changes:
+- message: Fixed the pilot hud and the dropship movement
+  type: Fix
+time: '2026-09-07T04:41:05.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1903

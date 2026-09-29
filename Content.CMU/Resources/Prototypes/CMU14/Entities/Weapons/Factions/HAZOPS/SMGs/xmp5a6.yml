@@ -5,14 +5,14 @@
   description: Winner of the 2172 HAZOPS Close Quarters Weapon program, this German-based "SMG" answers the question; "What if we put the standard USCMC rifle caliber in a machinepistol?". Despite low accuracy, it has a high firerate and impressive stopping power. Chambered in 10x24mm. Can load M41A magazines.
   components:
   - type: Sprite
-    sprite: CMU14/Weapons/Guns/HAZOPS/XMP5A6.rsi
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/XMP5A6.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: CMU14/Weapons/Guns/HAZOPS/XMP5A6.rsi
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/XMP5A6.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -69,6 +69,11 @@
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS84xTelescopicScope
           - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: RMCAttachmentM54CMK1StockCollapsible
+        whitelist:
+          tags:
+          - RMCAttachmentM54CStockCollapsible
       rmc-aslot-underbarrel:
         startingAttachable: AU14AttachmentM203A4GrenadeLauncher
         whitelist:
@@ -78,8 +83,8 @@
     offsets:
       rmc-aslot-barrel: 0.75, 0.03
       rmc-aslot-rail: -0.07, 0.18
-      rmc-aslot-stock: -0.78, 0.0325
-      rmc-aslot-underbarrel: 0, 0
+      rmc-aslot-stock: -0.75, 0.01
+      rmc-aslot-underbarrel: 0.22, -0.06
   - type: Tag
     tags:
     - AU14WeaponSMGXMP5A6HAZOPS
@@ -94,9 +99,9 @@
   description: A weapon-mounted, reloadable grenade launcher.
   components:
   - type: Sprite
-    sprite: CMU14/Weapons/Guns/Attachments/hazops_under.rsi
+    sprite: CMU14/Objects/Weapons/Guns/Attachments/under.rsi
     layers:
-    - state: grenade
+    - state: grenade-m203
       map: [ "enum.BreechVisuals.Open" ]
   - type: Item
     size: Normal
@@ -150,8 +155,8 @@
     visuals:
       enum.BreechVisuals.Open:
         enum.BreechVisuals.Open:
-          True: { state: grenade-open }
-          False: { state: grenade }
+          True: { state: grenade-m203-open }
+          False: { state: grenade-m203 }
   - type: AttachableToggleable
     userOnly: true
     attachedOnly: true
@@ -162,11 +167,11 @@
     actionName: Switch to the M203A4 Grenade Launcher
     actionDesc: Switch to using the underbarrel grenade launcher.
     icon:
-      sprite: CMU14/Weapons/Guns/Attachments/hazops_under.rsi
-      state: grenade
+      sprite: CMU14/Objects/Weapons/Guns/Attachments/under.rsi
+      state: grenade-m203
     iconActive:
-      sprite: CMU14/Weapons/Guns/Attachments/hazops_under.rsi
-      state: grenade-on
+      sprite: CMU14/Objects/Weapons/Guns/Attachments/under.rsi
+      state: grenade-m203-on
   - type: AttachableVisuals
     redrawOnAppearanceChange: true
   - type: Tag

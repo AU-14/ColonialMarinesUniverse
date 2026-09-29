@@ -1,0 +1,38 @@
+- type: emote
+  id: CMUPushups
+  name: cmu-emote-name-pushups
+  category: Hands
+  icon: Interface/Emotes/salute.png
+  whitelist:
+    requireAll: true
+    components:
+    - Hands
+    - HumanoidProfile
+  chatMessages: ["cmu-emote-msg-pushups"]
+  chatTriggers:
+  - pushups
+  - push ups
+  - push-ups
+  - does pushups
+  - does push ups
+  - starts doing pushups
+  - drops and does pushups
+
+- type: emote
+  id: CMUSitups
+  name: cmu-emote-name-situps
+  category: Hands
+  icon: Interface/Emotes/salute.png
+  whitelist:
+    requireAll: true
+    components:
+    - Hands
+    - HumanoidProfile
+  chatMessages: ["cmu-emote-msg-situps"]
+  chatTriggers:
+  - situps
+  - sit ups
+  - sit-ups
+  - does situps
+  - does sit ups
+  - starts doing situps

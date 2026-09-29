@@ -36,8 +36,12 @@ public sealed partial class HolosignSystem : EntitySystem
         if (args.Handled
             || !args.CanReach // prevent placing out of range
             || HasComp<StorageComponent>(args.Target) // if it's a storage component like a bag, we ignore usage so it can be stored
-            || !_powerCell.TryUseCharge(ent.Owner, ent.Comp.ChargeUse, user: args.User, predicted: true) // if no battery or no charge, doesn't work
+            // || !_powerCell.TryUseCharge(ent.Owner, ent.Comp.ChargeUse, user: args.User, predicted: true) // if no battery or no charge, doesn't work // CMU14
             )
+            return;
+
+        // CMU14 Infinite charges if chargeUse is 0 (debug tools)
+        if (ent.Comp.ChargeUse > 0 && !_powerCell.TryUseCharge(ent.Owner, ent.Comp.ChargeUse, user: args.User, predicted: true))
             return;
 
         // overlapping of the same holo on one tile remains allowed to allow holofan refreshes

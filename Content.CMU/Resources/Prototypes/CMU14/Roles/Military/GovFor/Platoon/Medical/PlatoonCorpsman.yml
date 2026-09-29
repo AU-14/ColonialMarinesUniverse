@@ -5,7 +5,7 @@
   name: au14-job-name-govforplatooncorpsman
   description: au14-job-description-govforplatooncorpsman
   icon: "AU14JobIconCorpsman"
-  spawnMenuRoleName: Hospital Corpsman (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-hospital-corpsman-govfor 
   startingGear: AU14GearGOVFORPlatoonCorpsman
   dummyStartingGear: AU14GearGOVFORCorpsmanDummy
   playTimeTracker: AU14JobGOVFORPlatoonCorpsman
@@ -90,6 +90,9 @@
       prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanCMBCIU
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -173,6 +176,7 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORPlatoonCorpsman
 
 - type: startingGear
   id: AU14GearopforPlatoonCorpsman

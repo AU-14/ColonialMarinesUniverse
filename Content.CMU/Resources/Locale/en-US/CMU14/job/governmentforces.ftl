@@ -40,6 +40,22 @@ au14-job-name-govfordspilot = Dropship Pilot
 au14-job-description-govfordspilot = Fly the dropship. Insert troops, extract casualties, and deliver fire support.
 au14-job-prefix-govfordspilot = DP
 
+au14-job-name-govfortransportpilot = Transport Pilot
+au14-job-description-govfortransportpilot = Fly the dropship. Insert troops, extract casualties, and move supplies between the ship and the front.
+au14-job-prefix-govfortransportpilot = TP
+
+au14-job-name-govforgunshippilot = Gunship Pilot
+au14-job-description-govforgunshippilot = Fly the gunship. Provide close air support and suppress enemy positions.
+au14-job-prefix-govforgunshippilot = GP
+
+au14-job-name-govforfighterpilot = Fighter Pilot
+au14-job-description-govforfighterpilot = Fly the fighter. Win air superiority, intercept enemy aircraft and mark targets.
+au14-job-prefix-govforfighterpilot = FP
+
+au14-job-name-govforfightersystemsofficer = Fighter Systems Officer
+au14-job-description-govforfightersystemsofficer = Crew the fighter's back seat. Run its weapon systems and strike targets.
+au14-job-prefix-govforfightersystemsofficer = FSO
+
 au14-job-name-govfordcc = Dropship Crew Chief
 au14-job-description-govfordcc = Maintain the dropships. Coordinate cargo, passengers, and assist the pilots.
 au14-job-prefix-govfordcc = DCC

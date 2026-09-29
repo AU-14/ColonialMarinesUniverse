@@ -26,6 +26,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: "7"
     commandElement: true
@@ -199,6 +200,7 @@
   dummyStartingGear: AU14GearopforPlatoonSergantDummy
   accessGroups:
   - AU14OpforCommand
+  useLoadoutOfJob: AU14JobGOVFORSectionSergeant
 
 - type: startingGear
   id: AU14GearopforSectionSergeant

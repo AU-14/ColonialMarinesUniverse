@@ -1,0 +1,12 @@
+// Optics presentation over the unlit, roof-occluded camera render.
+uniform highp float thermal;
+
+void fragment() {
+    highp vec4 source = zTexture(UV);
+    highp float luminance = dot(source.rgb, vec3(0.2126, 0.7152, 0.0722));
+    highp float enhanced = pow(clamp(luminance, 0.0, 1.0), 0.7);
+    // Clear night vision: no grain, vignette, blur, or reduced field of view.
+    highp vec3 night = vec3(0.32, 1.0, 0.42) * enhanced;
+    highp vec3 monochrome = vec3(smoothstep(0.04, 0.92, luminance));
+    COLOR = vec4(mix(night, monochrome, thermal), source.a);
+}

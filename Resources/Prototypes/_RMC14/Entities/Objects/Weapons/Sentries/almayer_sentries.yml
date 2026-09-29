@@ -7,6 +7,18 @@
   - type: UserIFF
     factions: []
   - type: EntityIFF
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        - BulletImpassable
   - type: InteractionPopup
     interactDelay: 0.2
     successChance: 0.8

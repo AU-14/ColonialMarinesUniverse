@@ -5,6 +5,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.FixedPoint;
+using Content.Shared.Inventory; // CMU14
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameStates;
@@ -22,6 +23,10 @@ public sealed partial class DamageableSystem : EntitySystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedChemistryGuideDataSystem _chemistryGuideData = default!;
     [Dependency] private SharedExplosionSystem _explosion = default!;
+
+    // CMU14: wearable rad shielding, relayed to inventory on irradiation
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private EntityQuery<InventoryComponent> _inventoryQuery = default!;
 
     [Dependency] private EntityQuery<AppearanceComponent> _appearanceQuery = default!;
     [Dependency] private EntityQuery<DamageableComponent> _damageableQuery = default!;

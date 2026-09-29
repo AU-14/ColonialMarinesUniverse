@@ -39,6 +39,12 @@ ipintel_contact_email = ""
 # IPIntel score to reject connections.
 ipintel_bad_rating = 0.95
 
+# CMU14: Gamemode voting.
+[cmu.game]
+# Exclude the last played gamemode from new votes, unless it is the only eligible option.
+# Set to false to allow consecutive repeats. Changes apply to newly created votes.
+vote_exclude_last_played = true
+
 [ic]
 # Allows visibility and editing of flavor text (character descriptions)
 flavor_text = false

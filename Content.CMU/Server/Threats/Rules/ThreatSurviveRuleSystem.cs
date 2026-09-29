@@ -2,7 +2,7 @@ using Content.Server.CMU14.RoundStatistics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
-using Content.Server.RoundEnd;
+using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.Timing;
 using ThreatSurviveRuleComponent = Content.Shared.CMU14.Threats.Rules.ThreatSurviveRuleComponent;
@@ -14,7 +14,6 @@ public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurvi
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
-    [Dependency] private RoundEndSystem _roundEnd = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private TimeSpan? _endTime;
@@ -33,7 +32,8 @@ public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurvi
     {
         base.ActiveTick(uid, component, gameRule, frameTime);
 
-        if (_endTime == null || !(_timing.CurTime >= _endTime))
+        if (_gameTicker.RunLevel != GameRunLevel.InRound ||
+            _endTime == null || !(_timing.CurTime >= _endTime))
             return;
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
@@ -41,6 +41,8 @@ public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurvi
         _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage)
             ? winMessage
             : $"Threat victory: Survived {_minutes} minutes.");
-        _roundEnd.EndRound();
+        // GameTicker owns restart scheduling and may leave the round running for an admin hold.
+        if (_gameTicker.RunLevel == GameRunLevel.PostRound)
+            _endTime = null;
     }
 }

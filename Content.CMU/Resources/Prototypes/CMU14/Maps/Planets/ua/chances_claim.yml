@@ -53,7 +53,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     threats:
     - XenoThreat
     - NeomorphsThreat
@@ -62,7 +62,7 @@
     - NeomorphsThreatCF
     - CultistThreatCF
     - WendigoThreatCF
-    - AbominationsThreatCF
+    - BiomorphsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
     jobScalingFof: DefaultGovforOpforScale

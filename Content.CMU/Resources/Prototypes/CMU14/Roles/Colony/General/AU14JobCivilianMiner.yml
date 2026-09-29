@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianMiner
   displayWeight: 4
   roundSide: Civilian
@@ -30,7 +30,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-foreman
-  spawnMenuRoleName: Colony Miner (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-miner-cmu 
   accessGroups:
   - Colonist
   roleWeight: 0.25

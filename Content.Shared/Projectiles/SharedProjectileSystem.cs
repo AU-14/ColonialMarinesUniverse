@@ -162,6 +162,13 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (ev.Handled)
             return;
 
+        // CMU14: intact dropship hulls forward hits to their grid's integrity pool without Damageable.
+        if (_net.IsServer)
+        {
+            var targetHit = new ProjectileHitTargetEvent(ev.Damage, uid, component.Shooter);
+            RaiseLocalEvent(target, ref targetHit);
+        }
+
         var impact = DamageImpact.ForProjectile(ev.Damage);
         if (TryComp<DamageImpactProfileComponent>(uid, out var impactProfile))
             impact = impactProfile.GetProjectileImpact(impact);

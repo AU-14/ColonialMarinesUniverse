@@ -25,6 +25,7 @@
     govforinship: false
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
     - ICRCReliefParty
     - TimeSharesSalesman
@@ -46,7 +47,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     - tribalThirdParty
     - DrugSmuggler
     - CMBParoleeTransport
@@ -65,7 +66,7 @@
     - NeomorphsThreatCF
     - CultistThreatCF
     - WendigoThreatCF
-    - AbominationsThreatCF
+    - BiomorphsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
     joboverrides:

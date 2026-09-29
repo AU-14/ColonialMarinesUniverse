@@ -6,5 +6,8 @@
         <Button Name="GhostWarpButton" Text="{Loc ghost-gui-ghost-warp-button}" />
         <Button Name="GhostRolesButton" />
         <Button Name="LateJoinButton" Text="Respawn" />
+        <!-- cmu edit start -->
+        <Button Name="CMUGhostColorButton" Text="{Loc cmu-ghost-gui-color-button}" />
+        <!-- cmu edit end -->
     </BoxContainer>
 </widgets:GhostGui>

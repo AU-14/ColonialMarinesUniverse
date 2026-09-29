@@ -3,6 +3,8 @@ using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.ControlComputer;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.TacticalMap;
+using Content.Shared.CMU14.ForceOnForce;
+using Robust.Client.Player;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 using Robust.Shared.Utility;
@@ -18,6 +20,8 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
     private MarineAnnounceSystem? _marineAnnounce;
 
     private bool _confirmingEvacuation;
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    private bool _confirmingBombardment;
 
     protected override void Open()
     {
@@ -26,6 +30,20 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
             return;
 
         _window = this.CreateWindow<MarineCommunicationsComputerWindow>();
+
+// CMU14: Force on Force roles, hijacking, announcements and identification.
+
+        for (var variant = 0; variant < 4; variant++)
+            _window.BombardmentVariant.AddItem(Loc.GetString($"cmu-fof-bombardment-variant-{variant}"), variant);
+        _window.BombardmentVariant.OnItemSelected += args => _window.BombardmentVariant.SelectId(args.Id);
+        _window.BombardmentButton.OnPressed += _ =>
+        {
+            if (_confirmingBombardment)
+                SendMessage(new ForceOnForceBombardmentMessage(_window.BombardmentVariant.SelectedId));
+            _confirmingBombardment = !_confirmingBombardment;
+            _window.BombardmentButton.Text = Loc.GetString(_confirmingBombardment
+                ? "cmu-fof-bombardment-confirm" : "cmu-fof-bombardment-launch");
+        };
 
         if (EntMan.TryGetComponent(Owner, out MarineCommunicationsComputerComponent? communications) &&
             communications.CanGiveMedals)
@@ -97,6 +115,10 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
 
         if (State is MarineCommunicationsComputerBuiState s)
         {
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            var local = IoCManager.Resolve<IPlayerManager>().LocalEntity;
+            _window.BombardmentSection.Visible = s.ForceOnForce && local is { } user &&
+                EntMan.System<ForceOnForceSystem>().CanCommand(user);
             _window.LandingZonesContainer.DisposeAllChildren();
             _window.PlanetName.Text = s.Planet;
             _window.OperationName.Text = s.Operation;

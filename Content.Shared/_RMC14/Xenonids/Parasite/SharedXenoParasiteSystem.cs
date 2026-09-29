@@ -839,6 +839,9 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             if (_net.IsClient)
                 continue;
 
+            if (infected.SpawnedLarva is { } spawnedLarva && TerminatingOrDeleted(spawnedLarva)) // CMU14
+                infected.SpawnedLarva = null;
+
             if (infected.BurstAt + infected.AutoBurstTime <= time && infected.SpawnedLarva != null)
             {
                 TryBurst((uid, infected));
@@ -1373,7 +1376,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         LarvaLinked(victim, spawned);
 
         if (HasComp<XenoComponent>(spawned))
-            _hive.SetHive(spawned, victim.Comp.Hive);
+            // CMU14: xeno feedback and lifecycle.
+            _hive.SetHive(spawned, victim.Comp.Hive ?? _hive.GetHive(spawned)?.Owner);
     }
 
     public void SetBurstsFromBack(Entity<VictimInfectedComponent> victim, bool burstsFromBack)

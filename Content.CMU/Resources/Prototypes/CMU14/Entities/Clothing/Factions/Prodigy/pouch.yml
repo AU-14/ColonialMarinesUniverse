@@ -31,8 +31,17 @@
       - CMSynthGraft
       - PillPacket
       - Hypospray
-      - CMUSplintItem
+      - CMSurgicalCase
+      - CMRollerItem
+      - CMUCastItem
       - HemostaticGauzePacket
+      components:
+      - Hypospray
+      - Defibrillator
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMSurgicalCase
 
 - type: entity
   parent: AU14PouchMedicalProdigy
@@ -113,7 +122,7 @@
   - type: Storage
     maxItemSize: Large
     grid:
-    - 0,0,13,1 #7 slots
+    - 0,0,15,1 #8 slots
     whitelist:
       tags:
       - DiscreteHealthAnalyzer
@@ -137,6 +146,7 @@
       - PillPacket
       - Hypospray
       - HemostaticGauzePacket
+      - CMUCPRMask
       components:
       - Hypospray
       - CMUSplintItem
@@ -155,3 +165,4 @@
     - id: CMUSplintItem
     - id: CMBicaridineAutoInjector
     - id: CMKelotaneAutoInjector
+    - id: CMUMaskCPR

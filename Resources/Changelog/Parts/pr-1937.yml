@@ -1,0 +1,9 @@
+author: jok989372-lgtm
+category: CMU
+changes:
+- message: Added new main gun for WY PMC.
+  type: Add
+- message: Added many new accessories for WY PMC.
+  type: Add
+time: '2026-09-14T01:48:22.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1937

@@ -2,7 +2,7 @@
   id: SynthEquipmentAU14
   name: au14-loadout-group-synth-equipment
   minLimit: 0
-  maxLimit: 9
+  maxLimit: 2
   loadouts:
   - SynthBreachingHammerAU14
   - MaintenanceJackAU14

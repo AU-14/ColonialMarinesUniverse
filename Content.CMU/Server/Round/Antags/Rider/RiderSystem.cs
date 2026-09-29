@@ -3,12 +3,16 @@ using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.DoAfter;
+using Content.Server.EUI;
+using Content.Server.Ghost;
+using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Language.Prototypes;
-// The chat enum, not the same-named RMC language enum
 using InGameICChatType = Content.Shared.Chat.InGameICChatType;
+using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
@@ -19,26 +23,34 @@ using Content.Shared.CCVar;
 using Content.Shared.CMU14.Round.Antags.Rider;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.Chat;
+using Content.Shared.Chat.Prototypes;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
+using Content.Shared.Emoting;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
+using Content.Shared.Traits.Assorted;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.DoAfter;
+using Content.Shared.Doors.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Examine;
 using Content.Shared.Eye;
 using Content.Shared.Forensics.Components;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
+using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Rejuvenate;
 using Content.Shared.Rounding;
 using Content.Shared.Radio;
 using Content.Shared.Stunnable;
@@ -49,7 +61,9 @@ using Robust.Shared.Containers;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
+using Robust.Shared.Map;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -92,15 +106,44 @@ public sealed partial class RiderSystem : EntitySystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    // Kept for the disabled stun-on-eject block in Eject
     [Dependency] private readonly SharedStunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly SharedPainShockSystem _pain = default!;
     [Dependency] private readonly VisibilitySystem _visibility = default!;
     [Dependency] private readonly SharedEyeSystem _eye = default!;
+    [Dependency] private readonly EuiManager _eui = default!;
+    [Dependency] private readonly DialogSystem _dialog = default!;
+    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
 
     private const string RiderContainerSlot = "rider_hatchling_slot";
     private static readonly ProtoId<DamageTypePrototype> PunishDamage = "Blunt";
+
+    private static readonly (string Reagent, float Dose)[] SurgeMix =
+    [
+        ("Epinephrine", 8f),
+        ("Ephedrine", 10f),
+        ("Stimulants", 6f),
+        ("Bicaridine", 15f),
+        ("Kelotane", 15f),
+    ];
+
+    private static readonly (string Reagent, float Dose)[] CoaxMix =
+    [
+        ("Tricordrazine", 10f),
+        ("Bicaridine", 10f),
+        ("Dermaline", 8f),
+    ];
+
+    // The phantom carries the rider's action bar.
+    private static readonly string[] ManifestActions =
+    [
+        "ActionRiderPunish",
+        "ActionRiderExit",
+        "ActionRiderSurge",
+        "ActionRiderCoax",
+        "ActionRiderSustain",
+        "ActionRiderMute",
+    ];
     private static readonly ProtoId<LanguagePrototype> RiderCantLanguage = "RiderCant";
     private static readonly ProtoId<AlertPrototype> GripAlert = "CMUGrip";
 
@@ -113,14 +156,20 @@ public sealed partial class RiderSystem : EntitySystem
         SubscribeLocalEvent<RiderComponent, ComponentStartup>(OnHatchlingStartup);
         SubscribeLocalEvent<RiderComponent, RiderLatchActionEvent>(OnLatchAction);
         SubscribeLocalEvent<RiderComponent, RiderLatchDoAfterEvent>(OnLatchDoAfter);
+        SubscribeLocalEvent<RiderComponent, StartCollideEvent>(OnSqueezeTouch);
+        SubscribeLocalEvent<RiderComponent, EndCollideEvent>(OnSqueezeLeave);
+        SubscribeLocalEvent<RiderOfferEvent>(OnRiderOfferAnswer);
         SubscribeLocalEvent<RiderComponent, InGameICMessageAttemptEvent>(OnICMessageAttempt);
+        SubscribeAllEvent<PlayEmoteMessage>(OnRiderPlayEmote);
+        SubscribeLocalEvent<RiderComponent, EmoteAttemptEvent>(OnRiderEmoteAttempt);
+        SubscribeLocalEvent<RiderComponent, BeforeEmoteEvent>(OnRiderBeforeEmote);
         SubscribeLocalEvent<RiderManifestComponent, InGameICMessageAttemptEvent>(OnManifestMessageAttempt);
         SubscribeLocalEvent<RiderSeizeProxyComponent, InGameICMessageAttemptEvent>(OnSeizeProxyMessageAttempt);
         SubscribeLocalEvent<RiderComponent, RiderPunishActionEvent>(OnPunishAction);
         SubscribeLocalEvent<RiderComponent, RiderSeizeActionEvent>(OnSeizeAction);
         SubscribeLocalEvent<RiderComponent, RiderExitActionEvent>(OnExitAction);
-        SubscribeLocalEvent<RiderComponent, GetVerbsEvent<Verb>>(OnRiderVerbs);
         SubscribeLocalEvent<RiderComponent, ComponentShutdown>(OnHatchlingShutdown);
+        SubscribeLocalEvent<RiderComponent, MobStateChangedEvent>(OnRiderMobState);
 
         SubscribeLocalEvent<RiddenComponent, HostResistActionEvent>(OnHostResist);
         SubscribeLocalEvent<RiddenComponent, RiderExitActionEvent>(OnHostExitAction);
@@ -128,6 +177,8 @@ public sealed partial class RiderSystem : EntitySystem
         SubscribeLocalEvent<RiddenComponent, ComponentShutdown>(OnHostShutdown);
         SubscribeLocalEvent<RiddenComponent, GetVerbsEvent<Verb>>(OnHostAdminVerbs);
         SubscribeLocalEvent<RiddenComponent, HeadsetRadioReceiveRelayEvent>(OnHostRadio);
+        SubscribeLocalEvent<RiddenComponent, InGameICMessageAttemptEvent>(OnHostICMessageAttempt);
+        SubscribeLocalEvent<RiddenComponent, TakeGhostRoleEvent>(OnHostTakeGhostRole);
         SubscribeLocalEvent<RiddenComponent, GetVisMaskEvent>(OnHostGetVisMask);
 
         SubscribeLocalEvent<RiderSurgeryConditionComponent, CMSurgeryValidEvent>(OnParasiteSurgeryValid);
@@ -136,8 +187,15 @@ public sealed partial class RiderSystem : EntitySystem
         SubscribeLocalEvent<RiderComponent, RiderSurgeActionEvent>(OnSurgeAction);
         SubscribeLocalEvent<RiderComponent, RiderCoaxActionEvent>(OnCoaxAction);
         SubscribeLocalEvent<RiderComponent, RiderSustainActionEvent>(OnSustainAction);
+        SubscribeLocalEvent<RiderComponent, RiderMuteActionEvent>(OnMuteAction);
         SubscribeLocalEvent<RiderComponent, RiderManifestActionEvent>(OnManifestAction);
         SubscribeLocalEvent<RiderManifestComponent, RiderWithdrawActionEvent>(OnManifestWithdraw);
+        SubscribeLocalEvent<RiderManifestComponent, RiderPunishActionEvent>(OnManifestPunish);
+        SubscribeLocalEvent<RiderManifestComponent, RiderExitActionEvent>(OnManifestExit);
+        SubscribeLocalEvent<RiderManifestComponent, RiderSurgeActionEvent>(OnManifestSurge);
+        SubscribeLocalEvent<RiderManifestComponent, RiderCoaxActionEvent>(OnManifestCoax);
+        SubscribeLocalEvent<RiderManifestComponent, RiderSustainActionEvent>(OnManifestSustain);
+        SubscribeLocalEvent<RiderManifestComponent, RiderMuteActionEvent>(OnManifestMute);
     }
 
     private void OnHatchlingStartup(Entity<RiderComponent> ent, ref ComponentStartup args)
@@ -149,6 +207,7 @@ public sealed partial class RiderSystem : EntitySystem
         _actions.AddAction(ent, ref ent.Comp.SurgeAction, "ActionRiderSurge");
         _actions.AddAction(ent, ref ent.Comp.CoaxAction, "ActionRiderCoax");
         _actions.AddAction(ent, ref ent.Comp.SustainAction, "ActionRiderSustain");
+        _actions.AddAction(ent, ref ent.Comp.MuteAction, "ActionRiderMute");
         _actions.AddAction(ent, ref ent.Comp.ManifestAction, "ActionRiderManifest");
         ent.Comp.NextCrawlResidueAt = _timing.CurTime + TimeSpan.FromSeconds(8);
         ent.Comp.NextChoirAt = _timing.CurTime + TimeSpan.FromSeconds(30);
@@ -175,9 +234,11 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
-        if (!IsUnconscious(target))
+        // An awake mind gets asked; crit, sleep and the dead are simply taken
+        if (_mobState.IsAlive(target) && !IsUnconscious(target))
         {
-            _popup.PopupEntity(Loc.GetString("rider-latch-awake"), target, ent);
+            args.Handled = true;
+            OfferRide(ent, target);
             return;
         }
 
@@ -199,7 +260,7 @@ public sealed partial class RiderSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!IsRideable(target) || !IsUnconscious(target))
+        if (!IsRideable(target) || (_mobState.IsAlive(target) && !IsUnconscious(target)))
         {
             _popup.PopupEntity(Loc.GetString("rider-latch-failed"), target, ent);
             return;
@@ -208,31 +269,26 @@ public sealed partial class RiderSystem : EntitySystem
         LatchOnto(ent, target, willing: false);
     }
 
-    private void OnRiderVerbs(Entity<RiderComponent> ent, ref GetVerbsEvent<Verb> args)
-    {
-        if (!args.CanAccess || !args.CanInteract)
-            return;
-
-        // The willing door: a conscious host offers themselves
-        if (ent.Comp.Host != null || !IsRideable(args.User) || IsUnconscious(args.User))
-            return;
-
-        var acceptingHost = args.User;
-        args.Verbs.Add(new Verb
-        {
-            Text = Loc.GetString("rider-verb-accept"),
-            Act = () => LatchOnto(ent, acceptingHost, willing: true),
-        });
-    }
-
     private void LatchOnto(Entity<RiderComponent> ent, EntityUid host, bool willing)
     {
-        if (ent.Comp.Host != null || !IsRideable(host))
+        if (ent.Comp.Host != null || !IsRideable(host) || _mobState.IsDead(ent.Owner))
             return;
 
+        var fromCorpse = _mobState.IsDead(host);
+
+        // Gate the insert before reviving: a corpse ride that fails to insert would
+        // orphan the revival and a half-built RiddenComponent on the host
         var container = _container.EnsureContainer<ContainerSlot>(host, RiderContainerSlot);
+        if (!_container.CanInsert(ent.Owner, container))
+            return;
+
+        if (fromCorpse)
+            ReviveCorpse(ent, host);
+
         if (!_container.Insert(ent.Owner, container))
             return;
+
+        ent.Comp.SqueezingDoor = null;
 
         var ridden = EnsureComp<RiddenComponent>(host);
         ridden.Rider = ent.Owner;
@@ -249,17 +305,6 @@ public sealed partial class RiderSystem : EntitySystem
         _visibility.RefreshVisibility(marker);
         ent.Comp.LatchMarker = marker;
 
-        // One way: the parasite borrows the host's tongues, never the reverse.
-        // The host knowing RiderCant would give the rider away with one hiss
-        foreach (var language in _language.GetSpokenLanguages(host))
-        {
-            if (_language.CanUnderstand(ent.Owner, language))
-                continue;
-
-            ent.Comp.InheritedLanguages.Add(language);
-            _language.AddLanguage(ent.Owner, language);
-        }
-
         if (_language.TryGetCurrentLanguage(host, out var hostLanguage))
             ridden.PreRideLanguage = hostLanguage;
 
@@ -273,7 +318,7 @@ public sealed partial class RiderSystem : EntitySystem
         ent.Comp.NextShedAt = _timing.CurTime + TimeSpan.FromMinutes(20);
 
         _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
-            $"{ToPrettyString(ent):rider} latched onto {ToPrettyString(host):host} ({(willing ? "willing" : "unconscious")})");
+            $"{ToPrettyString(ent):rider} latched onto {ToPrettyString(host):host} ({(willing ? "willing" : fromCorpse ? "corpse" : "unconscious")})");
 
         SendToHost(ent.Owner, host, Loc.GetString("rider-host-latched"),
             Loc.GetString("rider-host-latched-wrap"));
@@ -281,12 +326,13 @@ public sealed partial class RiderSystem : EntitySystem
 
     private bool IsRideable(EntityUid uid)
     {
-        if (!TryComp<MobStateComponent>(uid, out var state)
-            || !_mobState.IsAlive(uid, state) && !_mobState.IsCritical(uid, state))
+        // Any mob state rides: alive, critical, or dead
+        if (!HasComp<MobStateComponent>(uid))
             return false;
 
         return HasComp<HumanoidProfileComponent>(uid)
             && !HasComp<SynthComponent>(uid)
+            && !HasComp<UnrevivableComponent>(uid)
             && !HasComp<RiddenComponent>(uid)
             && !HasComp<RiderComponent>(uid);
     }
@@ -295,6 +341,191 @@ public sealed partial class RiderSystem : EntitySystem
         => HasComp<SleepingComponent>(uid)
            || HasComp<ForcedSleepingStatusEffectComponent>(uid)
            || _mobState.IsCritical(uid);
+
+    private void RiderPopup(Entity<RiderComponent> ent, string key)
+    {
+        var view = ent.Comp.Manifest ?? ent.Owner;
+        _popup.PopupEntity(Loc.GetString(key), view, view);
+    }
+
+    // The punish methodology: calm is half strength, harm mode is real.
+    private float RideIntensity(Entity<RiderComponent> ent)
+        => _combatMode.IsInCombatMode(ent.Comp.Manifest ?? ent.Owner) ? 1f : 0.5f;
+
+    private void ReviveCorpse(Entity<RiderComponent> ent, EntityUid host)
+    {
+        // The parasite rebuilds the dead flesh whole; rot and injuries reset with it
+        RaiseLocalEvent(host, new RejuvenateEvent());
+        _mobState.ChangeMobState(host, MobState.Alive);
+
+        _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
+            $"{ToPrettyString(ent):rider} revived the corpse of {ToPrettyString(host):host}");
+
+        if (_mind.TryGetMind(host, out var mindId, out var mind))
+        {
+            if (_players.TryGetSessionById(mind.UserId, out var session))
+            {
+                if (mind.CurrentEntity != host || mind.IsVisitingEntity)
+                {
+                    _eui.OpenEui(new ReturnToBodyEui(mind, _mind, _players), session);
+                    EnsureComp<RiddenComponent>(host).HostReturnEndsAt =
+                        _timing.CurTime + ent.Comp.HostReturnWindow;
+                }
+                return;
+            }
+
+            _mind.TransferTo(mindId, null);
+        }
+
+        OpenHostRaffle(host);
+    }
+
+    private void OpenHostRaffle(EntityUid host)
+    {
+        var ghostRole = EnsureComp<GhostRoleComponent>(host);
+        ghostRole.RoleName = Loc.GetString("rider-ghost-host-name");
+        ghostRole.RoleDescription = Loc.GetString("rider-ghost-host-description");
+        ghostRole.RoleRules = Loc.GetString("rider-ghost-host-rules");
+        EnsureComp<GhostTakeoverAvailableComponent>(host);
+    }
+
+    private void OfferRide(Entity<RiderComponent> ent, EntityUid host)
+    {
+        // No player, no answer; sleeping NPCs are still taken the normal way
+        if (!HasComp<ActorComponent>(host))
+        {
+            _popup.PopupEntity(Loc.GetString("rider-latch-invalid"), host, ent);
+            return;
+        }
+
+        if (ent.Comp.OfferedTo == host && _timing.CurTime < ent.Comp.OfferExpiresAt)
+        {
+            _popup.PopupEntity(Loc.GetString("rider-offer-pending"), ent, ent);
+            return;
+        }
+
+        ent.Comp.OfferedTo = host;
+        ent.Comp.OfferExpiresAt = _timing.CurTime + ent.Comp.OfferCooldown;
+
+        var options = new List<DialogOption>
+        {
+            new DialogOption(Loc.GetString("rider-offer-accept"), new RiderOfferEvent(GetNetEntity(ent), true)),
+            new DialogOption(Loc.GetString("rider-offer-refuse"), new RiderOfferEvent(GetNetEntity(ent), false)),
+        };
+
+        _dialog.OpenOptions(host, host, Loc.GetString("rider-offer-title"), options,
+            Loc.GetString("rider-offer-message"));
+        _popup.PopupEntity(Loc.GetString("rider-offer-sent"), ent, ent);
+        _adminLogger.Add(LogType.Chat, LogImpact.Low,
+            $"{ToPrettyString(ent):rider} offered itself to {ToPrettyString(host):host}");
+    }
+
+    private void OnRiderOfferAnswer(RiderOfferEvent args)
+    {
+        if (!TryGetEntity(args.Rider, out var riderNet)
+            || riderNet is not { } riderUid
+            || !TryComp<RiderComponent>(riderUid, out var rider)
+            || rider.OfferedTo is not { } host)
+            return;
+
+        if (!args.Accept)
+        {
+            rider.OfferedTo = null;
+            _popup.PopupEntity(Loc.GetString("rider-offer-refused"), riderUid, riderUid);
+            return;
+        }
+
+        if (_timing.CurTime >= rider.OfferExpiresAt)
+        {
+            _popup.PopupEntity(Loc.GetString("rider-offer-lapsed"), host, host);
+            return;
+        }
+
+        // A spent dialog answers once; a refused or missed host needs a fresh offer
+        rider.OfferedTo = null;
+
+        // They may have walked off while thinking it over
+        if (Transform(riderUid).MapID != Transform(host).MapID
+            || (_xform.GetWorldPosition(riderUid) - _xform.GetWorldPosition(host)).Length() > 3f)
+        {
+            _popup.PopupEntity(Loc.GetString("rider-offer-far"), riderUid, riderUid);
+            return;
+        }
+
+        LatchOnto((riderUid, rider), host, willing: true);
+    }
+
+    private void OnHostTakeGhostRole(Entity<RiddenComponent> ent, ref TakeGhostRoleEvent args)
+    {
+        _chat.ChatMessageToOne(ChatChannel.Local,
+            Loc.GetString("rider-ghost-host-takeover"),
+            Loc.GetString("rider-ghost-host-takeover"),
+            ent,
+            false,
+            args.Player.Channel);
+    }
+
+    private void OnSqueezeTouch(Entity<RiderComponent> ent, ref StartCollideEvent args)
+    {
+        // Latched riders sit in a container and never touch doors
+        if (ent.Comp.Host != null || ent.Comp.SqueezingDoor != null)
+            return;
+
+        // Contact only exists for doors that physically block SmallMobMask:
+        // welded airlocks (LayerChangeOnWeld swaps the layer to WallLayer),
+        // shutters (WallLayer) and poddoors (FullTileLayer).
+        if (!TryComp<DoorComponent>(args.OtherEntity, out var door)
+            || door.State is not (DoorState.Closed or DoorState.Closing or DoorState.Welded))
+            return;
+
+        ent.Comp.SqueezingDoor = args.OtherEntity;
+        ent.Comp.SqueezeDoneAt = _timing.CurTime + ent.Comp.SqueezeDuration;
+    }
+
+    private void OnSqueezeLeave(Entity<RiderComponent> ent, ref EndCollideEvent args)
+    {
+        if (ent.Comp.SqueezingDoor != args.OtherEntity)
+            return;
+
+        ent.Comp.SqueezingDoor = null;
+    }
+
+    private void SqueezeThrough(Entity<RiderComponent> ent, EntityUid door)
+    {
+        // Corpses do not crawl; a body shoved against a hatch stays put
+        if (_mobState.IsDead(ent))
+            return;
+
+        var doorPos = _xform.GetWorldPosition(door);
+        var delta = doorPos - _xform.GetWorldPosition(ent);
+        if (delta.Length() < 0.01f)
+            return;
+
+        // Cardinal exit only: a diagonal corner approach must not land the
+        // hatchling inside a wall tile flanking the door
+        var exit = delta.Normalized();
+        if (MathF.Abs(exit.X) >= MathF.Abs(exit.Y))
+            exit.Y = 0;
+        else
+            exit.X = 0;
+
+        // The far tile must be standing room: a wall or vacuum opposite the door
+        // would swallow the crossing
+        var landing = new MapCoordinates(doorPos + exit, Transform(ent).MapID);
+        if (!_rmcMap.TryGetTileDef(landing, out var landingTile)
+            || landingTile.ID == ContentTileDefinition.SpaceID
+            || _rmcMap.IsTileBlocked(landing))
+            return;
+
+        _xform.SetWorldPosition(ent, doorPos + exit);
+
+        // The crossing marks the frame; dusting finds the trail
+        var forensics = EnsureComp<ForensicsComponent>(door);
+        forensics.Residues.Add(Loc.GetString("rider-crawl-residue"));
+        Dirty(door, forensics);
+
+        _popup.PopupEntity(Loc.GetString("rider-squeeze-through"), ent, ent);
+    }
 
     #endregion
 
@@ -325,14 +556,23 @@ public sealed partial class RiderSystem : EntitySystem
             // and all, so ":h" speaks on the host's channels
             if (!_blocker.CanSpeak(host))
             {
-                _popup.PopupEntity(Loc.GetString("rider-speak-blocked"), ent, ent);
+                RiderPopup(ent, "rider-speak-blocked");
                 return;
             }
 
-            if (!SpendGrip(ent, ent.Comp.SpeakCost))
+            if (!SpendGrip(ent, ent.Comp.SpeakCost, felt: false))
             {
-                _popup.PopupEntity(Loc.GetString("rider-grip-low"), ent, ent);
+                RiderPopup(ent, "rider-grip-low");
                 return;
+            }
+
+            // A starving rider cannot hold the throat: one word clicks over
+            // into RiderCant, and sharp ears learn what that means
+            if (ent.Comp.Grip < ent.Comp.MaskSlipGripBelow
+                && _random.Prob(ent.Comp.MaskSlipChance))
+            {
+                raw = SlipMask(raw);
+                RiderPopup(ent, "rider-mask-slip");
             }
 
             // Mimicry follows the rider's chosen tongue when the host can
@@ -367,50 +607,163 @@ public sealed partial class RiderSystem : EntitySystem
 
         SendToHost(ent.Owner, host, shown, Loc.GetString("rider-whisper-wrap", ("text", shown)));
 
-        if (_mind.TryGetMind(ent.Owner, out _, out var riderMind)
-            && _players.TryGetSessionById(riderMind.UserId, out var riderSession))
+        NetUserId? author = null;
+        if (_mind.TryGetMind(ent.Owner, out _, out var riderMind))
         {
-            _chat.ChatMessageToOne(ChatChannel.Local, shown,
-                Loc.GetString("rider-whisper-echo", ("text", shown)), ent.Owner, false, riderSession.Channel);
+            author = riderMind.UserId;
+
+            if (_players.TryGetSessionById(riderMind.UserId, out var riderSession))
+            {
+                _chat.ChatMessageToOne(ChatChannel.Local, shown,
+                    Loc.GetString("rider-whisper-echo", ("text", shown)), ent.Owner, false, riderSession.Channel);
+            }
         }
+
+        // Ghost copies keep aghosts in the conversation; living crew get nothing
+        var ghosts = Filter.Empty().AddWhereAttachedEntity(HasComp<GhostComponent>);
+        _chat.ChatMessageToMany(shown,
+            Loc.GetString("rider-whisper-ghost",
+                ("rider", ent.Owner),
+                ("host", host),
+                ("message", shown)),
+            ghosts,
+            ChatChannel.Local,
+            ent.Owner,
+            recordReplay: true,
+            author: author);
+
+        _adminLogger.Add(LogType.Chat, LogImpact.Low,
+            $"{ToPrettyString(ent):rider} whispered to {ToPrettyString(host):host}: {heard}");
+    }
+
+    // The emote menu sends PlayEmoteMessage straight to TryEmoteWithChat and
+    // never raises InGameICMessageAttemptEvent, so OnICMessageAttempt never
+    // sees menu emotes. Cancel the hatchling's own emote below and replay the
+    // chosen emote from the host instead, same as typed emotes do above.
+    private void OnRiderPlayEmote(PlayEmoteMessage msg, EntitySessionEventArgs args)
+    {
+        if (args.SenderSession.AttachedEntity is not { } player
+            || !_proto.TryIndex(msg.ProtoId, out EmotePrototype? proto)
+            || proto.ChatTriggers.Count == 0)
+            return;
+
+        // The phantom projects from the same body, so its menu emotes come
+        // out of the host exactly like the hatchling's
+        Entity<RiderComponent> rider;
+        if (TryComp<RiderComponent>(player, out var hatchling))
+            rider = new Entity<RiderComponent>(player, hatchling);
+        else if (TryComp<RiderManifestComponent>(player, out var manifest)
+            && TryComp<RiderComponent>(manifest.Rider, out var projected))
+            rider = new Entity<RiderComponent>(manifest.Rider, projected);
+        else
+            return;
+
+        if (rider.Comp.Host is not { } host)
+            return;
+
+        _say.TryEmoteWithChat(host, proto);
+    }
+
+    // While riding, the hatchling never emotes under its own name; the emote
+    // comes out of the host or not at all
+    private void OnRiderEmoteAttempt(Entity<RiderComponent> ent, ref EmoteAttemptEvent args)
+    {
+        if (ent.Comp.Host is not null)
+            args.Cancel();
+    }
+
+    // Deathgasp and suffocation gasps ignore action blocker, so they skip the
+    // attempt event and land here instead
+    private void OnRiderBeforeEmote(Entity<RiderComponent> ent, ref BeforeEmoteEvent args)
+    {
+        if (ent.Comp.Host is not null)
+            args.Cancel();
     }
 
     private void OnManifestMessageAttempt(Entity<RiderManifestComponent> ent, ref InGameICMessageAttemptEvent args)
     {
-        args.Cancelled = true;
-
         if (!TryComp<RiderComponent>(ent.Comp.Rider, out var rider))
+        {
+            args.Cancelled = true;
             return;
+        }
 
-        var whisper = args with { Type = InGameICChatType.Whisper, Cancelled = false };
-        OnICMessageAttempt((ent.Comp.Rider, rider), ref whisper);
+        // The phantom itself never talks. Whatever it says leaves the host:
+        // speech with radio prefixes, whispers, typed emotes
+        args.Cancelled = true;
+        var relayed = args with { Cancelled = false };
+        OnICMessageAttempt((ent.Comp.Rider, rider), ref relayed);
     }
 
     private void OnSeizeProxyMessageAttempt(Entity<RiderSeizeProxyComponent> ent, ref InGameICMessageAttemptEvent args)
         => args.Cancelled = true;
 
+    // The mute eats the host's own chat input only. The rider's mimicry is
+    // forwarded with a null session, so the impostor keeps the mouth while
+    // the owner cannot tattle. Never during a seize: the body speaks for the
+    // rider then, and the clamped owner is parked on the proxy.
+    private void OnHostICMessageAttempt(Entity<RiddenComponent> ent, ref InGameICMessageAttemptEvent args)
+    {
+        if (args.Cancelled || args.Session == null)
+            return;
+
+        if (!TryComp<RiderComponent>(ent.Comp.Rider, out var rider)
+            || rider.SeizeActive
+            || _timing.CurTime >= rider.MutedUntil)
+        {
+            return;
+        }
+
+        args.Cancelled = true;
+        _popup.PopupEntity(Loc.GetString("rider-mute-blocked"), ent, ent);
+    }
+
     private void OnPunishAction(Entity<RiderComponent> ent, ref RiderPunishActionEvent args)
     {
         if (ent.Comp.Host is not { } host)
         {
-            _popup.PopupEntity(Loc.GetString("rider-no-host"), ent, ent);
+            RiderPopup(ent, "rider-no-host");
             return;
         }
 
         if (!SpendGrip(ent, ent.Comp.PunishCost))
         {
-            _popup.PopupEntity(Loc.GetString("rider-grip-low"), ent, ent);
+            RiderPopup(ent, "rider-grip-low");
             return;
         }
 
         // The stick. Willingness is a one-way door set at accept. A deep
         // grip pool hits harder, but harm mode is what turns the press lethal.
-        var multiplier = _combatMode.IsInCombatMode(ent.Owner) ? 1f : 0.5f;
+        var multiplier = RideIntensity(ent);
         var severity = (_random.NextFloat(10, 20) + ent.Comp.Grip * ent.Comp.PunishGripDamageScale) * multiplier;
-        _damageable.TryChangeDamage(host, new DamageSpecifier(_proto.Index(PunishDamage), severity));
+        // Pressure from inside, not structural trauma: the body-only projection
+        // skips part localization, so punish can crit a host but never fracture
+        // bones, hit organs, or leave anything that needs a doctor
+        _damageable.ApplyBodyDamageProjection(host, new DamageSpecifier(_proto.Index(PunishDamage), severity));
         _popup.PopupEntity(Loc.GetString("rider-punish-host"), host, host, PopupType.LargeCaution);
         _adminLogger.Add(LogType.Damaged, LogImpact.Medium,
             $"{ToPrettyString(ent):rider} punished {ToPrettyString(host):host}");
+    }
+
+    private void OnMuteAction(Entity<RiderComponent> ent, ref RiderMuteActionEvent args)
+    {
+        if (ent.Comp.Host is not { } host)
+        {
+            RiderPopup(ent, "rider-no-host");
+            return;
+        }
+
+        if (!SpendGrip(ent, ent.Comp.MuteCost))
+        {
+            RiderPopup(ent, "rider-grip-low");
+            return;
+        }
+
+        ent.Comp.MutedUntil = _timing.CurTime + ent.Comp.MuteDuration;
+        _popup.PopupEntity(Loc.GetString("rider-mute-host"), host, host, PopupType.MediumCaution);
+        RiderPopup(ent, "rider-mute-cast");
+        _adminLogger.Add(LogType.Chat, LogImpact.Medium,
+            $"{ToPrettyString(ent):rider} muted {ToPrettyString(host):host}");
     }
 
     private void OnSeizeAction(Entity<RiderComponent> ent, ref RiderSeizeActionEvent args)
@@ -503,15 +856,37 @@ public sealed partial class RiderSystem : EntitySystem
             $"{ToPrettyString(ent):rider} ended a seizure of {ToPrettyString(host):host}");
     }
 
-    private bool SpendGrip(Entity<RiderComponent> ent, float cost)
+    private bool SpendGrip(Entity<RiderComponent> ent, float cost, bool felt = true)
     {
         if (ent.Comp.Grip < ent.Comp.GripDisableBelow
             || ent.Comp.Grip < cost)
             return false;
 
         ent.Comp.Grip -= cost;
+
+        // The host feels the leash tug on every spend. Speech opts out: the
+        // host already watches their own mouth move in the chat log
+        if (felt && ent.Comp.Host is { } feelHost)
+            _popup.PopupEntity(Loc.GetString("rider-grip-feel"), feelHost, feelHost);
+
         UpdateGripAlert(ent);
         return true;
+    }
+
+    // One word of the line goes over to the rider's own wet clicking, drawn
+    // from RiderCant's own syllables so crew can learn to recognize it
+    private string SlipMask(string raw)
+    {
+        var words = raw.Split(' ');
+
+        // The leading ":u" style token is a channel key, never a word to garble
+        var first = raw.StartsWith(':') ? 1 : 0;
+        if (words.Length <= first)
+            return raw;
+
+        var pick = _random.Next(first, words.Length);
+        words[pick] = _language.ObfuscateMessage(words[pick], RiderCantLanguage);
+        return string.Join(' ', words);
     }
 
     private void UpdateGripAlert(Entity<RiderComponent> ent)
@@ -534,6 +909,17 @@ public sealed partial class RiderSystem : EntitySystem
             && ent.Comp.SeizeProxy is { } proxy
             && !TerminatingOrDeleted(proxy))
             _alerts.ShowAlert((proxy, null), GripAlert, (short) severity, dynamicMessage: message);
+
+        if (ent.Comp.Manifest is { } manifest
+            && !TerminatingOrDeleted(manifest))
+            _alerts.ShowAlert((manifest, null), GripAlert, (short) severity, dynamicMessage: message);
+
+        // A willing partner reads the same gauge. An unwilling host never
+        // gets to count the cards
+        if (ent.Comp.Host is { } bonded
+            && !TerminatingOrDeleted(bonded)
+            && CompOrNull<RiddenComponent>(bonded)?.Willing == true)
+            _alerts.ShowAlert((bonded, null), GripAlert, (short) severity, dynamicMessage: message);
     }
 
     #endregion
@@ -544,7 +930,7 @@ public sealed partial class RiderSystem : EntitySystem
     {
         if (ent.Comp.Host is not { } host)
         {
-            _popup.PopupEntity(Loc.GetString("rider-no-host"), ent, ent);
+            RiderPopup(ent, "rider-no-host");
             return;
         }
 
@@ -561,6 +947,16 @@ public sealed partial class RiderSystem : EntitySystem
         var riderEnt = new Entity<RiderComponent>(ent.Comp.Rider, rider);
         EndSeize(riderEnt, false);
         Eject(riderEnt, ent.Owner, loud: true, stunned: true);
+    }
+
+    // Symmetry with host death: a dead parasite left inside would keep the
+    // voice hijack and block re-latching forever
+    private void OnRiderMobState(Entity<RiderComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (args.NewMobState != MobState.Dead || ent.Comp.Host is not { } host)
+            return;
+
+        Eject(ent, host, loud: true);
     }
 
     private void OnHostShutdown(Entity<RiddenComponent> ent, ref ComponentShutdown args)
@@ -597,10 +993,18 @@ public sealed partial class RiderSystem : EntitySystem
 
         var manifest = Spawn("CMURiderManifest", _xform.GetMoverCoordinates(host));
         Comp<RiderManifestComponent>(manifest).Rider = ent.Owner;
+
         _visibility.AddLayer(manifest, (int) VisibilityFlags.Rider, false);
         _visibility.RemoveLayer(manifest, (int) VisibilityFlags.Normal, false);
         _visibility.RefreshVisibility(manifest);
+        EnsureComp<AlertsComponent>(manifest);
         _actions.AddAction(manifest, ref ent.Comp.WithdrawAction, "ActionRiderWithdraw");
+
+        // Minds eye is the same body in a different skin: the whole bar comes
+        // along, and abilities run on the buried body via the manifest relays
+        foreach (var action in ManifestActions)
+            _actions.AddAction(manifest, action);
+
         ent.Comp.Manifest = manifest;
         _mind.Visit(riderMindId, manifest);
         _eye.RefreshVisibilityMask(host);
@@ -615,6 +1019,56 @@ public sealed partial class RiderSystem : EntitySystem
             return;
 
         EndManifest(new Entity<RiderComponent>(ent.Comp.Rider, rider));
+    }
+
+    // Manifest actions belong to the phantom; the ability itself runs on the
+    // buried body, whose handlers aim feedback at the player via RiderPopup
+    private bool RelayManifest<T>(Entity<RiderManifestComponent> ent, out Entity<T> rider) where T : IComponent
+    {
+        if (TryComp<T>(ent.Comp.Rider, out var comp))
+        {
+            rider = new Entity<T>(ent.Comp.Rider, comp);
+            return true;
+        }
+
+        rider = default;
+        return false;
+    }
+
+    private void OnManifestPunish(Entity<RiderManifestComponent> ent, ref RiderPunishActionEvent args)
+    {
+        if (RelayManifest(ent, out Entity<RiderComponent> rider))
+            OnPunishAction(rider, ref args);
+    }
+
+    private void OnManifestExit(Entity<RiderManifestComponent> ent, ref RiderExitActionEvent args)
+    {
+        if (RelayManifest(ent, out Entity<RiderComponent> rider))
+            OnExitAction(rider, ref args);
+    }
+
+    private void OnManifestSurge(Entity<RiderManifestComponent> ent, ref RiderSurgeActionEvent args)
+    {
+        if (RelayManifest(ent, out Entity<RiderComponent> rider))
+            OnSurgeAction(rider, ref args);
+    }
+
+    private void OnManifestCoax(Entity<RiderManifestComponent> ent, ref RiderCoaxActionEvent args)
+    {
+        if (RelayManifest(ent, out Entity<RiderComponent> rider))
+            OnCoaxAction(rider, ref args);
+    }
+
+    private void OnManifestSustain(Entity<RiderManifestComponent> ent, ref RiderSustainActionEvent args)
+    {
+        if (RelayManifest(ent, out Entity<RiderComponent> rider))
+            OnSustainAction(rider, ref args);
+    }
+
+    private void OnManifestMute(Entity<RiderManifestComponent> ent, ref RiderMuteActionEvent args)
+    {
+        if (RelayManifest(ent, out Entity<RiderComponent> rider))
+            OnMuteAction(rider, ref args);
     }
 
     private void EndManifest(Entity<RiderComponent> ent)
@@ -652,7 +1106,7 @@ public sealed partial class RiderSystem : EntitySystem
         EndManifest(ent);
         RemoveLatchMarker(ent);
 
-        StripRideLanguages(ent, host);
+        RestoreHostLanguage(host);
 
         if (TerminatingOrDeleted(host) || TerminatingOrDeleted(ent.Owner))
         {
@@ -691,6 +1145,9 @@ public sealed partial class RiderSystem : EntitySystem
             if (ridden.ResistAction is { } action)
                 _actions.RemoveAction(host, action);
 
+            // The partner's gauge goes dark with the ride
+            _alerts.ClearAlert((host, null), GripAlert);
+
             RemComp<RiddenComponent>(host);
         }
     }
@@ -708,7 +1165,14 @@ public sealed partial class RiderSystem : EntitySystem
         if (ent.Comp.Host is not { } host)
             return;
 
-        StripRideLanguages(ent, host);
+        RestoreHostLanguage(host);
+
+        // Component removal on a live rider must free it from the host's slot;
+        // a contained hatchling has no exit once RiddenComponent is gone
+        if (!TerminatingOrDeleted(host)
+            && !TerminatingOrDeleted(ent.Owner)
+            && _container.TryGetContainer(host, RiderContainerSlot, out var container))
+            _container.Remove(ent.Owner, container, force: true);
 
         ent.Comp.Host = null;
 
@@ -717,23 +1181,15 @@ public sealed partial class RiderSystem : EntitySystem
             if (ridden.ResistAction is { } action)
                 _actions.RemoveAction(host, action);
 
+            _alerts.ClearAlert((host, null), GripAlert);
+
             RemComp<RiddenComponent>(host);
         }
     }
 
-    private void StripRideLanguages(Entity<RiderComponent> rider, EntityUid host)
+    // Mimicry may have left the host speaking a tongue they never chose
+    private void RestoreHostLanguage(EntityUid host)
     {
-        foreach (var language in rider.Comp.InheritedLanguages)
-        {
-            _language.RemoveLanguage((rider.Owner, null), language);
-        }
-
-        rider.Comp.InheritedLanguages.Clear();
-
-        if (_language.TryGetCurrentLanguage(rider.Owner, out var riderCurrent)
-            && !_language.CanSpeak(rider.Owner, riderCurrent))
-            _language.SetLanguage((rider.Owner, null), RiderCantLanguage);
-
         if (TryComp<RiddenComponent>(host, out var ridden)
             && ridden.PreRideLanguage is { } preRide)
             _language.SetLanguage((host, null), preRide);
@@ -745,6 +1201,10 @@ public sealed partial class RiderSystem : EntitySystem
             return;
 
         ent.Comp.ResistActive = !ent.Comp.ResistActive;
+
+        // The button must show the state it is in, or hosts fight blind
+        _actions.SetToggled(ent.Comp.ResistAction, ent.Comp.ResistActive);
+
         if (!ent.Comp.ResistActive)
             return;
 
@@ -857,7 +1317,7 @@ public sealed partial class RiderSystem : EntitySystem
     {
         if (ent.Comp.Host is not { } host)
         {
-            _popup.PopupEntity(Loc.GetString("rider-no-host"), ent, ent);
+            RiderPopup(ent, "rider-no-host");
             return;
         }
 
@@ -866,18 +1326,18 @@ public sealed partial class RiderSystem : EntitySystem
 
         if (!ridden.Willing)
         {
-            _popup.PopupEntity(Loc.GetString("rider-surge-refused"), ent, ent);
+            RiderPopup(ent, "rider-surge-refused");
             return;
         }
 
-        if (!_solutions.TryGetSolution(host, "bloodstream", out var solution)
-            || !_solutions.TryAddReagent(solution.Value, "Epinephrine", FixedPoint2.New(5)))
+        if (!_solutions.TryGetSolution(host, "bloodstream", out var soln)
+            || !PourMix(soln.Value, SurgeMix, RideIntensity(ent)))
             return;
 
         // Spend only after the dose lands; a full bloodstream must not eat grip
         if (!SpendGrip(ent, ent.Comp.SurgeCost))
         {
-            _popup.PopupEntity(Loc.GetString("rider-grip-low"), ent, ent);
+            RiderPopup(ent, "rider-grip-low");
             return;
         }
 
@@ -886,32 +1346,35 @@ public sealed partial class RiderSystem : EntitySystem
             $"{ToPrettyString(ent):rider} granted resilience to {ToPrettyString(host):host}");
     }
 
+    private bool PourMix(Entity<SolutionComponent> soln, (string Reagent, float Dose)[] mix, float scale)
+    {
+        var poured = false;
+        foreach (var (reagent, dose) in mix)
+            poured |= _solutions.TryAddReagent(soln, reagent, FixedPoint2.New(dose * scale), out _);
+
+        return poured;
+    }
+
     private void OnCoaxAction(Entity<RiderComponent> ent, ref RiderCoaxActionEvent args)
     {
         if (ent.Comp.Host is not { } host)
         {
-            _popup.PopupEntity(Loc.GetString("rider-no-host"), ent, ent);
+            RiderPopup(ent, "rider-no-host");
             return;
         }
+
+        // The carrot for a host who has not accepted you: real medicine, no
+        // stims, visible to any scanner. The dose lands before grip is spent.
+        if (!_solutions.TryGetSolution(host, "bloodstream", out var soln)
+            || !PourMix(soln.Value, CoaxMix, RideIntensity(ent)))
+            return;
 
         if (!SpendGrip(ent, ent.Comp.CoaxCost))
         {
-            _popup.PopupEntity(Loc.GetString("rider-grip-low"), ent, ent);
+            RiderPopup(ent, "rider-grip-low");
             return;
         }
 
-        // The carrot for a host who has not accepted you. Weaker than the
-        // willing surge, but it works on anyone
-        var heal = new DamageSpecifier
-        {
-            DamageDict =
-            {
-                ["Blunt"] = -6,
-                ["Slash"] = -6,
-                ["Burn"] = -6,
-            },
-        };
-        _damageable.TryChangeDamage(host, heal);
         _popup.PopupEntity(Loc.GetString("rider-coax-host"), host, host);
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
             $"{ToPrettyString(ent):rider} coaxed {ToPrettyString(host):host}");
@@ -921,13 +1384,13 @@ public sealed partial class RiderSystem : EntitySystem
     {
         if (ent.Comp.Host is not { } host)
         {
-            _popup.PopupEntity(Loc.GetString("rider-no-host"), ent, ent);
+            RiderPopup(ent, "rider-no-host");
             return;
         }
 
         if (!SpendGrip(ent, ent.Comp.SustainCost))
         {
-            _popup.PopupEntity(Loc.GetString("rider-grip-low"), ent, ent);
+            RiderPopup(ent, "rider-grip-low");
             return;
         }
 
@@ -983,6 +1446,19 @@ public sealed partial class RiderSystem : EntitySystem
         {
             if (comp.Host == null)
             {
+                if (comp.SqueezingDoor is { } door)
+                {
+                    if (TerminatingOrDeleted(door)
+                        || !TryComp<DoorComponent>(door, out var doorComp)
+                        || doorComp.State is not (DoorState.Closed or DoorState.Closing or DoorState.Welded))
+                        comp.SqueezingDoor = null;
+                    else if (_timing.CurTime >= comp.SqueezeDoneAt)
+                    {
+                        comp.SqueezingDoor = null;
+                        SqueezeThrough((uid, comp), door);
+                    }
+                }
+
                 // Crawl residue: the hatchling's trail feeds the scanner's unused
                 // Residues field and gives marshals a colony-first discovery path
                 if (_timing.CurTime >= comp.NextCrawlResidueAt)
@@ -1048,13 +1524,16 @@ public sealed partial class RiderSystem : EntitySystem
             var ridden = CompOrNull<RiddenComponent>(host);
             var resisting = ridden?.ResistActive == true;
 
-            var perMinute = resisting
-                ? 0
-                : ridden?.Willing == true
-                    ? comp.GripCoopRegenPerMinute
-                    : comp.GripRegenPerMinute;
+            var baseRegen = ridden?.Willing == true
+                ? comp.GripCoopRegenPerMinute
+                : comp.GripRegenPerMinute;
 
-            comp.GripAccumulator += perMinute * frameTime / 60f;
+            // Resisting strangles the refill by how empty the tank is: a full
+            // hold barely notices, a starving one barely refills at all
+            var fill = comp.GripMax > 0 ? comp.Grip / comp.GripMax : 1f;
+            var suppression = resisting ? comp.GripResistRegenSuppression * (1f - fill) : 0f;
+
+            comp.GripAccumulator += baseRegen * (1f - suppression) * frameTime / 60f;
             if (comp.GripAccumulator >= 1)
             {
                 var whole = MathF.Floor(comp.GripAccumulator);
@@ -1064,7 +1543,9 @@ public sealed partial class RiderSystem : EntitySystem
 
             if (resisting)
             {
-                comp.Grip -= comp.ResistDrainPerSecond * frameTime;
+                // Drain is a fraction of the pool per second, so resistance
+                // is a percentage war, not a flat trickle
+                comp.Grip -= comp.GripMax / comp.ResistDrainSeconds * frameTime;
                 _stamina.TakeStaminaDamage(host, 5 * frameTime, visual: false);
                 if (comp.Grip <= 0)
                 {
@@ -1072,6 +1553,30 @@ public sealed partial class RiderSystem : EntitySystem
                     Eject((uid, comp), host, loud: true);
                     continue;
                 }
+            }
+
+            if (comp.MutedUntil != TimeSpan.Zero && _timing.CurTime >= comp.MutedUntil)
+            {
+                comp.MutedUntil = TimeSpan.Zero;
+                _popup.PopupEntity(Loc.GetString("rider-mute-end"), host, host);
+            }
+
+            // An owner who never reclaimed the revived body loses it to the raffle
+            if (ridden is { HostReturnEndsAt: { } returnBy } && _timing.CurTime >= returnBy)
+            {
+                ridden.HostReturnEndsAt = null;
+
+                var claimed = false;
+                if (_mind.TryGetMind(host, out var mindId, out var mind))
+                {
+                    if (mind.CurrentEntity == host && !mind.IsVisitingEntity)
+                        claimed = true;
+                    else
+                        _mind.TransferTo(mindId, null);
+                }
+
+                if (!claimed)
+                    OpenHostRaffle(host);
             }
 
             if (comp.Grip >= comp.SootheThreshold)
@@ -1110,24 +1615,24 @@ public sealed partial class RiderSystem : EntitySystem
                 {
                     // TODO: fauna agitation
                     _popup.PopupEntity(Loc.GetString("rider-tell-heavy", ("entName", host)), host, Filter.Pvs(host), true);
-                    comp.NextTellAt += TimeSpan.FromSeconds(25);
+                    comp.NextTellAt = _timing.CurTime + TimeSpan.FromSeconds(25);
                 }
                 else if (ride >= TimeSpan.FromMinutes(25))
                 {
                     _popup.PopupEntity(Loc.GetString("rider-tell-medium", ("entName", host)), host, Filter.Pvs(host), true);
-                    comp.NextTellAt += TimeSpan.FromSeconds(40);
+                    comp.NextTellAt = _timing.CurTime + TimeSpan.FromSeconds(40);
                 }
                 else
                 {
                     _popup.PopupEntity(Loc.GetString("rider-tell-mild", ("entName", host)), host, Filter.Pvs(host), true);
-                    comp.NextTellAt += TimeSpan.FromSeconds(60);
+                    comp.NextTellAt = _timing.CurTime + TimeSpan.FromSeconds(60);
                 }
             }
 
             // Bedding and clothing traces after twenty minutes
             if (_timing.CurTime >= comp.NextShedAt)
             {
-                comp.NextShedAt += TimeSpan.FromMinutes(2);
+                comp.NextShedAt = _timing.CurTime + TimeSpan.FromMinutes(2);
                 ShedResidue(host);
             }
 

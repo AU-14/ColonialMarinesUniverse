@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: VAIPOCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad ]
   components:
   - type: RequisitionsComputer
     categories:
@@ -263,20 +263,28 @@
         crate: RMCCrateMOU53
       - cost: 400
         crate: RMCCrateM85A1
+        maxStock: 1
+        stockReplenishDelay: 1200
       - cost: 100
         crate: AU14CrateAssortedKnives
       - cost: 1500
         crate: AU14CrateM5A1SLAW
+        maxStock: 1
+        stockReplenishDelay: 1200
       - cost: 800
         crate: RMCCrateM34
       - cost: 2200
         crate: AU14CrateM7SLAW
+        maxStock: 1
+        stockReplenishDelay: 1200
       - cost: 1500
         crate: RMCCrateML66D
       - cost: 1000
         crate: RMCCrateM2C
       - cost: 1700
         crate: CMUCrateMk86
+        maxStock: 1
+        stockReplenishDelay: 1200
     - name: Ammo
       entries:
       - cost: 400
@@ -321,6 +329,14 @@
         crate: RMCCrateMagazineBGel
     - name: Specialist Ammo
       entries:
+      - cost: 700
+        crate: CMUCrateEMBLRAP
+      - cost: 600
+        crate: CMUCrateEMBLRMixed
+      - cost: 700
+        crate: CMUCrateEMBLRHE
+      - cost: 900
+        crate: CMUCrateEMBLRWP
       - cost: 2000
         crate: RMCCratePyroTankMixed
       # Sniper
@@ -376,6 +392,8 @@
         crate: RMCDropshipTargetingSystem
     - name: Dropship Munitions
       entries:
+      - cost: 900
+        crate: CMUCrateBlackfootM866Ammo
       - cost: 400
         crate: RMCDropshipAttachmentAmmoRocketHarpoon
       - cost: 800

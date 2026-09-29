@@ -62,15 +62,15 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
 
         int requiredPercentXeno = Math.Clamp(ruleComp.PercentXeno, 1, 100);
         int requiredPercentCultist = Math.Clamp(ruleComp.PercentCultist, 1, 100);
-        bool crashedDropship = _threatRuleHelper.HasCrashedDropship();
+        bool hijackLanded = _threatRuleHelper.HasLandedDropshipHijack();
         int totalXeno = 0, deadXeno = 0;
         int totalCultist = 0, deadCultist = 0;
 
         EntityQueryEnumerator<MobStateComponent> query = _entMan.EntityQueryEnumerator<MobStateComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState))
         {
-            // Planet-side survivors stop counting once a dropship has crashed; the endgame is ship-side
-            if (crashedDropship &&
+            // Planet-side survivors stop counting after the hijack lands; the endgame is ship-side.
+            if (hijackLanded &&
                 mobState.CurrentState != MobState.Dead &&
                 _rmcPlanet.IsOnPlanet(Transform(uid)))
             {

@@ -1,0 +1,48 @@
+- type: guideEntry
+  parent: RMC
+  id: CMUGuidebook
+  name: cmu-guide-entry-cmu
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/CMUGuidebook.xml"
+  children:
+  - AU14Comms
+  - AU14MedicalV2
+  - CMUGuideMortar
+  - CMUResearchIndex
+  - CMUGuideHearingLoss
+  - CMUGuideRoleRider
+  - CMUChemicals
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMortar
+  name: cmu-guide-entry-mortar
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUMortar.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUChemicals
+  name: guide-entry-chemicals
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Chemicals/CMUChemicals.xml"
+  children:
+  - CMUMedicine
+  - CMUOrdinanceChemicals
+  filterEnabled: True
+
+- type: guideEntry
+  parent: RMC
+  id: CMUMedicine
+  name: guide-entry-medicine
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Chemicals/CMUMedicine.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  parent: RMC
+  id: CMUOrdinanceChemicals
+  name: "OT Chemicals"
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Chemicals/CMUOrdinanceChemicals.xml"
+  filterEnabled: True

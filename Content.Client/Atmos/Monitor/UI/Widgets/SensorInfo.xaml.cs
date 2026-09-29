@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Temperature; // CMU14
 using Content.Client.Message;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.EntitySystems;
@@ -46,7 +47,8 @@ public sealed partial class SensorInfo : BoxContainer
                     ("pressure", $"{data.Pressure:0.##}")));
         TemperatureLabel.SetMarkup(Loc.GetString("air-alarm-ui-window-temperature-indicator",
                 ("color", AirAlarmWindow.ColorForThreshold(data.Temperature, data.TemperatureThreshold)),
-                ("tempC", $"{TemperatureHelpers.KelvinToCelsius(data.Temperature):0.#}"),
+                ("tempC", $"{TemperatureDisplay.FromKelvin(data.Temperature):0.#}"), // CMU14: client temperature unit preference
+                ("unit", TemperatureDisplay.Unit), // CMU14
                 ("temperature", $"{data.Temperature:0.##}")));
 
         foreach (var (gas, amount) in data.Gases)
@@ -120,7 +122,9 @@ public sealed partial class SensorInfo : BoxContainer
                     ("pressure", $"{data.Pressure:0.##}")));
         TemperatureLabel.SetMarkup(Loc.GetString("air-alarm-ui-window-temperature-indicator",
                 ("color", AirAlarmWindow.ColorForThreshold(data.Temperature, data.TemperatureThreshold)),
-                ("tempC", $"{TemperatureHelpers.KelvinToCelsius(data.Temperature):0.#}"),
+                // CMU14: client temperature unit preference
+                ("tempC", $"{TemperatureDisplay.FromKelvin(data.Temperature):0.#}"),
+                ("unit", TemperatureDisplay.Unit),
                 ("temperature", $"{data.Temperature:0.##}")));
 
         foreach (var (gas, amount) in data.Gases)

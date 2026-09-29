@@ -71,9 +71,9 @@
   - type: MachineBoard
     prototype: CMUGasCrystallizer
     stackRequirements:
-      Manipulator: 2
-      Cable: 2
-      Glass: 1
+      CMSteel: 2
+      RMCCable: 2
+      CMGlass: 1
 
 - type: entity
   parent: GasThermoMachineHeater

@@ -2,6 +2,8 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Shared.CMU14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.Buckle.Components; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
@@ -1035,6 +1037,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             var paraDrop = EnsureComp<ActiveParaDropComponent>(dropship);
             paraDrop.DropTarget = ent.Comp.Target;
             Dirty(dropship, paraDrop);
+            var changed = new DropshipParadropChangedEvent(true);
+            RaiseLocalEvent(dropship, ref changed);
         }
         else
         {
@@ -1571,7 +1575,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         var xform = Transform(ent);
-        if (!CasDebug && !HasComp<RMCPlanetComponent>(xform.GridUid))
+        // CMU14: aircraft landing and protected CAS.
+        if (!CasDebug && !IsPlanetTarget(xform))
             return false;
         if (!ent.Comp.IsTargetableByWeapons)
         {
@@ -1579,6 +1584,24 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
 
         return true;
+    }
+
+    // CMU14: aircraft landing and protected CAS.
+    private bool IsPlanetTarget(TransformComponent xform)
+    {
+        if (HasComp<RMCPlanetComponent>(xform.GridUid) || HasComp<RMCPlanetComponent>(xform.MapUid))
+            return true;
+
+        if (xform.MapUid is not { } map || !_zLevels.TryGetZNetwork(map, out var network))
+            return false;
+
+        foreach (var (_, member) in _zLevels.GetOrderedNetworkMaps(network.Value))
+        {
+            if (HasComp<RMCPlanetComponent>(member))
+                return true;
+        }
+
+        return false;
     }
 
     public string GetUserAbbreviation(EntityUid user, int id)
@@ -1817,7 +1840,15 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
                 var landing = flight.Target.Offset(spread);
 
+                // Dispersion can move a permitted target underneath a protected
+                // ceiling. Check the actual impact before applying any payload.
+                if (!CasDebug && !_area.CanCAS(landing))
+                    continue;
+
                 var targetMap = _transform.ToMapCoordinates(landing.SnapToGrid(EntityManager));
+        // CMU14: publish the actual dispersed payload impact for fighter effects.
+        var impact = new DropshipWeaponImpactEvent(targetMap);
+        RaiseLocalEvent(uid, ref impact);
 
                 foreach (var effect in flight.ImpactEffects)
                 {
@@ -1866,38 +1897,42 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                                 break;
 
                             var tile = _random.PickAndTake(tiles);
-                            var coords = flight.Target.Offset(tile);
+                            // CMU14: aircraft landing and protected CAS.
+                            var coords = landing.Offset(tile);
                             _rmcFlammable.SpawnFire(coords,
                                 flight.Fire.Type,
                                 chain,
                                 flight.Fire.Range,
                                 flight.Fire.Intensity,
                                 flight.Fire.Duration,
-                                out _
+                                out _,
+                                canSpawn: CanSpawnCASFire
                             );
                         }
                     }
                     else
                     {
                         _rmcFlammable.SpawnFireLines(flight.Fire.Type,
-                            flight.Target,
+                            landing,
                             flight.Fire.CardinalRange,
                             flight.Fire.OrdinalRange,
                             flight.Fire.Intensity,
-                            flight.Fire.Duration);
+                            flight.Fire.Duration,
+                            canSpawn: CanSpawnCASFire);
 
                         for (var x = -flight.Fire.Range; x <= flight.Fire.Range; x++)
                         {
                             for (var y = -flight.Fire.Range; y <= flight.Fire.Range; y++)
                             {
-                                var coords = flight.Target.Offset(new Vector2(x, y));
+                                var coords = landing.Offset(new Vector2(x, y));
                                 _rmcFlammable.SpawnFire(coords,
                                     flight.Fire.Type,
                                     chain,
                                     flight.Fire.Range,
                                     flight.Fire.Intensity,
                                     flight.Fire.Duration,
-                                    out _
+                                    out _,
+                                    canSpawn: CanSpawnCASFire
                                 );
                             }
                         }
@@ -1950,6 +1985,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return !HasComp<ThrownItemComponent>(uid) &&
                _zLevels.DistanceToGround(uid, out _) <= 0;
     }
+
+    // CMU14: aircraft landing and protected CAS.
+    private bool CanSpawnCASFire(EntityCoordinates coordinates) => CasDebug || _area.CanCAS(coordinates);
 
     public static Angle GetImpactEffectRotation(Angle randomRotation, bool hasOccluder)
     {
@@ -2378,6 +2416,22 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weaponComp, false))
             return false;
 
+        // CMU14 Begin: fixed chin weapons require their dedicated gunnery station.
+        if (weaponComp.GunneryOnly && terminalComp?.Gunnery != true)
+        {
+            if (actor is { } operatorUid)
+                _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-only"), weapon, operatorUid);
+            return false;
+        }
+
+        if (weaponComp.GunneryOnly && actor is { } gunner &&
+            (!TryComp<BuckleComponent>(gunner, out var buckle) || !HasComp<MohawkGunnerySeatComponent>(buckle.BuckledTo)))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-seat"), weapon, gunner);
+            return false;
+        }
+        // CMU14 End
+
         if (strikeType == DropshipWeaponStrikeType.FireMission &&
             !CanFireMissionAt(targetCoordinates, actor))
         {
@@ -2406,6 +2460,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         if (weapon.DirectFireOnly)
+            return false;
+
+        if (weapon.GunneryOnly && strikeType == DropshipWeaponStrikeType.FireMission) // CMU14: manual gunnery only
             return false;
 
         Entity<DropshipComponent> dropship = default;
@@ -2598,3 +2655,8 @@ public record struct DropshipWeaponShotEvent(
     RMCFire? Fire,
     int SoundEveryShots
 );
+
+// CMU14 event
+/// <summary>Raised at an actual dropship payload impact for world presentation.</summary>
+[ByRefEvent]
+public record struct DropshipWeaponImpactEvent(MapCoordinates Coordinates);

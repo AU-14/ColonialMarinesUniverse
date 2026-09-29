@@ -5,6 +5,7 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.GameTicking;
 using Robust.Shared.Timing;
 using HiveCollapseRuleComponent = Content.Shared.CMU14.Threats.Rules.HiveCollapseRuleComponent;
 
@@ -70,11 +71,21 @@ public sealed partial class HiveCollapseRuleSystem : GameRuleSystem<HiveCollapse
     {
         base.ActiveTick(uid, component, gameRule, frameTime);
 
-        if (_hiveCollapseTime == null || _timing.CurTime < _hiveCollapseTime)
+        if (_gameTicker.RunLevel != GameRunLevel.InRound ||
+            _hiveCollapseTime == null || _timing.CurTime < _hiveCollapseTime)
             return;
+
+        // Revalidate before ending the round, including queens restored after the timer was armed.
+        if (AnyHiveHasQueen())
+        {
+            _hiveCollapseTime = null;
+            return;
+        }
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
         _roundStats.RecordThreatDefeatedRule("HiveCollapseRule");
         _gameTicker.EndRound(string.IsNullOrEmpty(winMessage) ? DefaultWinMsg : winMessage);
+        if (_gameTicker.RunLevel == GameRunLevel.PostRound)
+            _hiveCollapseTime = null;
     }
 }

@@ -26,6 +26,9 @@
 
   name: au14-job-name-civiliancorporateassistant
   playTimeTracker: AU14JobCivilianCorporateAssistant
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 7200 # 2 hours
   description: au14-job-description-civiliancorporateassistant
   setPreference: true
   ranks:

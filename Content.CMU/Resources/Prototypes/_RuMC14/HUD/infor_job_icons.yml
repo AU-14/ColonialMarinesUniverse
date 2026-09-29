@@ -1,0 +1,121 @@
+#Lasalle Bionational
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconLasalleBionational_Reg
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: Las-Bio_reg
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconLasalleBionational_Eng
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: Las-Bio_eng
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconLasalleBionational_SL
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: Las-Bio_sl
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconLasalleBionational_Kom
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: Las-Bio_kom
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconLasalleBionational_Med
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: Las-Bio_med
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconLasalleBionational_Sint
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: Las-Bio_sint
+
+#VAISO
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconSaboteursVAISO_Reg
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: sab-VAISO_reg
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconSaboteursVAISO_SL
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: sab-VAISO_sl
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconSaboteursVAISO_Med
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: sab-VAISO_med
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconSaboteursVAISO_Eng
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: sab-VAISO_eng
+
+# Mafia
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconBlackMafia_Kom
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: black-Mafia_kom
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconBlackMafia_Eng
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: black-Mafia_eng
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconBlackMafia_Surg
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: black-Mafia_surg
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconBlackMafia_Recruit
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: black-Mafia_recruit
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconBlackMafia_Sint
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: black-Mafia_sint
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconBlackMafia_Reg
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: black-Mafia_reg
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconBlackMafia_Med
+  icon:
+    sprite: _RuMC14/Interface/job_icons.rsi
+    state: black-Mafia_med

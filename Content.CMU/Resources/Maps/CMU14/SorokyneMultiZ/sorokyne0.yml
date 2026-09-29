@@ -53502,6 +53502,9 @@ entities:
     components:
     - type: MetaData
       name: 'LZ1: Sorokyne Strata'
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
+      multiDeckOffset: 1,0
     - type: Transform
       pos: 10.5,108.5
       parent: 1
@@ -53509,6 +53512,8 @@ entities:
   entities:
   - uid: 1004
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: South West Landing Zone
     - type: Transform
@@ -53516,6 +53521,8 @@ entities:
       parent: 1
   - uid: 1005
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Western Clearing
     - type: Transform
@@ -53523,6 +53530,8 @@ entities:
       parent: 1
   - uid: 1006
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: Maintenance LZ
     - type: Transform
@@ -53530,6 +53539,8 @@ entities:
       parent: 1
   - uid: 1007
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Carp Lake
     - type: Transform
@@ -82645,7 +82656,7 @@ entities:
     - type: Transform
       pos: 217.5,138.5
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 5047
     components:
@@ -82744,7 +82755,7 @@ entities:
     - type: Transform
       pos: 37.5,115.5
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 5066
     components:

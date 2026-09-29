@@ -60,6 +60,7 @@
     outerClothing: RMCJacketCorporateBlue
   inhand:
   - RMCRadioHandheldColonyOff
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

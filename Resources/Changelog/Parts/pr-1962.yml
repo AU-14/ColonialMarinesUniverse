@@ -1,0 +1,8 @@
+author: ArturUr1
+category: CMU
+changes:
+- message: Instant wall construction through the G-menu has been removed. Now you
+    can quickly place frames through it, and build walls through those.
+  type: Tweak
+time: '2026-09-16T03:09:45.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1962

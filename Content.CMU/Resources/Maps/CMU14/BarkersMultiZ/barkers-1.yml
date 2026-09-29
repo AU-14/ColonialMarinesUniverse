@@ -16959,7 +16959,7 @@ entities:
     - type: Transform
       pos: 109.5,-103.5
       parent: 1
-- proto: RMCGeneratorFusionColonyNoMapIcon
+- proto: CMUGeneratorThermoNoMapIcon
   entities:
   - uid: 1895
     components:

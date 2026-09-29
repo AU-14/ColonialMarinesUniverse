@@ -993,7 +993,9 @@ public sealed class ServerPerformanceCommand : IConsoleCommand
         frameCount = 0;
         invalidFrames = 0;
 
-        var buffer = prof.Buffer.Snapshot();
+        // This synchronous main-thread pass completes before any console output or profiler writes.
+        // Capturing the struct fixes the read offsets without cloning the entire history ring.
+        var buffer = prof.Buffer;
         if (buffer.LogBuffer.Length == 0 || buffer.IndexBuffer.Length == 0 || buffer.IndexWriteOffset == 0)
             return false;
 
@@ -1008,7 +1010,7 @@ public sealed class ServerPerformanceCommand : IConsoleCommand
             if (index.Type != ProfIndexType.Frame)
                 continue;
 
-            if (index.StartPos < earliestLog || index.EndPos > buffer.LogWriteOffset || index.EndPos <= index.StartPos)
+            if (index.StartPos < 0 || index.StartPos < earliestLog || index.EndPos > buffer.LogWriteOffset || index.EndPos <= index.StartPos)
             {
                 invalidFrames++;
                 continue;

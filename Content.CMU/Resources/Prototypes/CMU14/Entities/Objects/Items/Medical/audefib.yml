@@ -101,3 +101,11 @@
   parent: AU14BaseDefibrillator
   id: AUDefibrillatorInfinite
   suffix: AU14, Infinite
+
+- type: entity
+  parent: RMCDefibrillatorCompact
+  id: CMUDefibrillatorCompact
+  suffix: CMU, No Skill
+  components:
+  - type: RequiresSkill
+    skills: {}

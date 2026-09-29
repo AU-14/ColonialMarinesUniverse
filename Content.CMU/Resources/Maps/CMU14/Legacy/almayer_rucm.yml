@@ -193,7 +193,7 @@ entities:
     - type: Transform
     - type: BecomesStation
       id: Almayer
-    - type: Almayer
+    - type: Warship
     - type: Broadphase
     - type: Map
       mapPaused: True

@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   displayWeight: 18
   id: AU14JobCivilianOrbitalManager
   roundSide: Civilian
@@ -72,6 +72,7 @@
     pocket1: AU14StampOrbitalMan
   inhand:
     - AU14BriefcaseLawBundle
+    - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

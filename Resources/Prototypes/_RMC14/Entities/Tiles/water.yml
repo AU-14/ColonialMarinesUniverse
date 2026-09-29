@@ -12,7 +12,6 @@
     sprite: _RMC14/Tiles/planet/water.rsi
     layers:
     - state: seashallow
-  - type: FloorOccluder
   - type: Transform
     anchored: true
   - type: SyncSprite
@@ -56,15 +55,11 @@
         - HighImpassable
         density: 1000
         hard: false
-  - type: FootstepModifier
-    footstepSoundCollection:
-      collection: FootstepWater
-      params:
-        volume: 8
   - type: BlockWeeds
   - type: MinimapColor
     color: "#94b0d59c"
   - type: RMCWater
+    depth: 8
     cover:
       tags:
       - Catwalk
@@ -84,6 +79,8 @@
     sprite: _RMC14/Tiles/planet/water.rsi
     layers:
     - state: seadeep
+  - type: RMCWater
+    depth: 18
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.25
     sprintSpeedModifier: 0.25

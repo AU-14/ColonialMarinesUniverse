@@ -1,0 +1,11 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Gamemode votes exclude the last played mode until another round starts,
+    while retaining the sole eligible option. Server hosts can disable this with `cmu.game.vote_exclude_last_played`;
+    it is enabled by default.
+  type: Add
+- message: Vote carryover labels now show only the effective bonus.
+  type: Tweak
+time: '2026-09-22T20:34:18.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1966

@@ -202,6 +202,12 @@
       amount: 1
     RMCPhosphorus:
       amount: 1
+  # CMU14 Begin: cooking gas leak cut, colony cook rooms have no atmos counterplay
+  # effects:
+  # - !type:CreateGas
+  #   gas: NitrousOxide
+  #   moles: 1
+  # CMU14 End
   products:
     CMUFentanyl: 1
 
@@ -214,6 +220,12 @@
       amount: 1
     RMCPhosphorus:
       amount: 1
+  # CMU14 Begin: cooking gas leak cut
+  # effects:
+  # - !type:CreateGas
+  #   gas: Ammonia
+  #   moles: 1
+  # CMU14 End
   products:
     CMUMethPrecursor: 3
 

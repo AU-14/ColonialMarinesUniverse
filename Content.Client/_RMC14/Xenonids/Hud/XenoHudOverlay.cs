@@ -35,8 +35,8 @@ using static Robust.Shared.Utility.SpriteSpecifier;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.FixedPoint;
-using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationMimicTransformedComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicTransformedComponent;
+using BiomorphComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphComponent; // CMU14
+using BiomorphMimicTransformedComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphMimicTransformedComponent; // CMU14
 
 namespace Content.Client._RMC14.Xenonids.Hud;
 
@@ -148,13 +148,13 @@ public sealed partial class XenoHudOverlay : Overlay
         var isAdminGhost = _entity.TryGetComponent(_players.LocalEntity, out GhostComponent? ghost) &&
                            ghost.CanGhostInteract;
         var isXeno = _entity.HasComponent<XenoComponent>(_players.LocalEntity);
-        var isAbomination = _entity.HasComponent<AbominationComponent>(_players.LocalEntity) ||
-                             _entity.HasComponent<AbominationMimicTransformedComponent>(_players.LocalEntity);
+        var isBiomorph = _entity.HasComponent<BiomorphComponent>(_players.LocalEntity) || // CMU14
+                         _entity.HasComponent<BiomorphMimicTransformedComponent>(_players.LocalEntity); // CMU14
         var isGhost = false;
 
         if (!_entity.HasComponent<CMGhostXenoHudComponent>(_players.LocalEntity))
         {
-            if (!isXeno && !isAdminGhost && !isAbomination)
+            if (!isXeno && !isAdminGhost && !isBiomorph) // CMU14
                 return;
         }
         else
@@ -190,7 +190,7 @@ public sealed partial class XenoHudOverlay : Overlay
         if (isXeno || isAdminGhost)
             DrawInfectedIcon(in args, scaleMatrix, rotationMatrix);
 
-        if (isXeno || isAdminGhost || isAbomination)
+        if (isXeno || isAdminGhost || isBiomorph) // CMU14
             DrawSynthIcon(in args, scaleMatrix, rotationMatrix);
 
         handle.UseShader(null);

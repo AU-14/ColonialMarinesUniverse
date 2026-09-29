@@ -18,7 +18,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Pizza Delivery Boy
+  name: cmu-job-name-pizza-delivery-boy
   description: You are a Pizza Galaxy deliveryman sent with an assortment of refreshing beverages and a choice of pizza to sell to anyone you may encounter.
   setPreference: true
   playTimeTracker: AU14JobCivilianDeliveryPizzaBoy

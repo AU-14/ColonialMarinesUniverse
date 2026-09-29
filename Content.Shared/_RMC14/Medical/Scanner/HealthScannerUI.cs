@@ -52,6 +52,9 @@ public sealed class HealthScannerBuiState(
     public bool VictimBurst;
     public bool VictimInfected;
     public bool HolocardXeno;
+    // cmu edit start
+    public TimeSpan? CMUTimeUntilUnrevivable;
+    // cmu edit end
 }
 
 /// <summary>A diagnostic projection never exposes reagent-instance metadata or unknown prototypes.</summary>

@@ -41,6 +41,7 @@
     prefix: au14-job-prefix-govforplatco
   - type: AU14SilenceOrderAbility
   - type: AU14CallToAttentionAbility
+    canCall: false
     attentionFocusPriority: 300
   - type: AU14CallToAttentionImmune
   - type: RMCSpeechBubbleSpecificStyle
@@ -120,6 +121,8 @@
   - AU14OpforCommand
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFORPlatCo
+
 - type: startingGear
   id: AU14GearGOVFORPlatCo
   equipment:

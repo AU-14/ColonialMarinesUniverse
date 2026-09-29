@@ -40,6 +40,8 @@ namespace Content.Server.Preferences.Managers
     /// </summary>
     public sealed partial class ServerPreferencesManager : IServerPreferencesManager, IPostInjectInit
     {
+        public event Action<NetUserId>? SelectedCharacterChanged;
+
         [Dependency] private IServerNetManager _netManager = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IServerDbManager _db = default!;
@@ -264,7 +266,7 @@ namespace Content.Server.Preferences.Managers
                 Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average,
                 profile.HideMetaInformation,
                 YautjaProfileSerializer.DeserializeYautjaProfile(profile.YautjaProfile)
-            );
+            ).WithForceOnForcePreferences((ForceOnForceSide) profile.FoFSide, (ForceOnForceFallback) profile.FoFFallback);
         }
 
         private static HashSet<ProtoId<ThreatPrototype>> ConvertThreatPreferences(string? raw)
@@ -281,7 +283,7 @@ namespace Content.Server.Preferences.Managers
                     foreach (var value in values)
                     {
                         if (!string.IsNullOrWhiteSpace(value))
-                            preferences.Add(new ProtoId<ThreatPrototype>(value));
+                            preferences.Add(MigrateLegacyThreatPreference(value)); // CMU14
                     }
 
                     return preferences;
@@ -294,7 +296,7 @@ namespace Content.Server.Preferences.Managers
                     var value = JsonSerializer.Deserialize<string>(raw);
                     if (!string.IsNullOrWhiteSpace(value))
                     {
-                        preferences.Add(new ProtoId<ThreatPrototype>(value));
+                        preferences.Add(MigrateLegacyThreatPreference(value)); // CMU14
                         return preferences;
                     }
                 }
@@ -307,7 +309,7 @@ namespace Content.Server.Preferences.Managers
             foreach (var value in raw.Split(new[] { ',', ';', '|' },
                          StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
-                preferences.Add(new ProtoId<ThreatPrototype>(value));
+                preferences.Add(MigrateLegacyThreatPreference(value)); // CMU14
             }
 
             return preferences;
@@ -373,7 +375,7 @@ namespace Content.Server.Preferences.Managers
             foreach (var (gamemode, threats) in ConvertGamemodePrototypeSetPreferences(raw))
             {
                 preferences[gamemode] = threats
-                    .Select(threat => new ProtoId<ThreatPrototype>(threat))
+                    .Select(MigrateLegacyThreatPreference) // CMU14
                     .ToHashSet();
             }
 
@@ -464,6 +466,7 @@ namespace Content.Server.Preferences.Managers
             }
 
             prefsData.Prefs = new PlayerPreferences(curPrefs.Characters, index, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            SelectedCharacterChanged?.Invoke(userId);
             _afkManager.PlayerDidAction(message.MsgChannel);
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))
@@ -509,6 +512,7 @@ namespace Content.Server.Preferences.Managers
             };
 
             prefsData.Prefs = new PlayerPreferences(profiles, slot, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            SelectedCharacterChanged?.Invoke(userId);
 
             if (ShouldStorePrefs(session.Channel.AuthType))
                 await _db.SaveCharacterSlotAsync(userId, profile, slot);
@@ -574,6 +578,7 @@ namespace Content.Server.Preferences.Managers
             arr.Remove(slot);
 
             prefsData.Prefs = new PlayerPreferences(arr, nextSlot ?? curPrefs.SelectedCharacterIndex, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            SelectedCharacterChanged?.Invoke(userId);
             _afkManager.PlayerDidAction(message.MsgChannel);
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))

@@ -97,6 +97,9 @@ public sealed partial class ShuttleSystem
     {
         QueueDel(ent.Comp.VisualizerEntity);
         ent.Comp.VisualizerEntity = null;
+        // CMU14: faction gameplay fixes.
+        if (TryComp(ent.Comp.StartupStream, out AudioComponent? startup) && startup.Params.Loop)
+            ent.Comp.StartupStream = _audio.Stop(ent.Comp.StartupStream);
     }
 
     private void OnStationPostInit(ref StationPostInitEvent ev)
@@ -121,8 +124,9 @@ public sealed partial class ShuttleSystem
     {
         var query = AllEntityQuery<FTLMapComponent>();
 
-        while (query.MoveNext(out var uid, out _))
+        while (query.MoveNext(out var uid, out var existing))
         {
+            SetFtlParallax(uid, existing); // CMU
             return uid;
         }
 
@@ -132,10 +136,21 @@ public sealed partial class ShuttleSystem
         _metadata.SetEntityName(mapUid, "FTL");
         Log.Debug($"Setup hyperspace map at {mapUid}");
         DebugTools.Assert(!_mapSystem.IsPaused(mapId));
-        var parallax = EnsureComp<ParallaxComponent>(mapUid);
-        parallax.Parallax = ftlMap.Parallax;
+        SetFtlParallax(mapUid, ftlMap); // CMU
 
         return mapUid;
+    }
+
+    // CMU: visual travel must not depend on grid interpolation or a deck's
+    // replicated position. Those can stall or jump while changing Z levels.
+    private void SetFtlParallax(EntityUid map, FTLMapComponent ftl)
+    {
+        var parallax = EnsureComp<ParallaxComponent>(map);
+        var velocity = new Vector2(0, FTLMapComponent.TravelSpeed);
+        if (parallax.Parallax == ftl.Parallax && parallax.TravelVelocity == velocity) return;
+        parallax.Parallax = ftl.Parallax;
+        parallax.TravelVelocity = velocity;
+        Dirty(map, parallax);
     }
 
     public StartEndTime GetStateTime(FTLComponent component)
@@ -275,10 +290,11 @@ public sealed partial class ShuttleSystem
         float? hyperspaceTime = null,
         string? priorityTag = null)
     {
-        if (!TrySetupFTL(shuttleUid, component, out var hyperspace))
+        // CMU14: faction gameplay fixes.
+        startupTime ??= DefaultStartupTime;
+        if (!TrySetupFTL(shuttleUid, component, startupTime.Value, out var hyperspace))
             return;
 
-        startupTime ??= DefaultStartupTime;
         hyperspaceTime ??= DefaultTravelTime;
 
         hyperspace.StartupTime = startupTime.Value;
@@ -310,10 +326,11 @@ public sealed partial class ShuttleSystem
         float? hyperspaceTime = null,
         string? priorityTag = null)
     {
-        if (!TrySetupFTL(shuttleUid, component, out var hyperspace))
+        // CMU14: faction gameplay fixes.
+        startupTime ??= DefaultStartupTime;
+        if (!TrySetupFTL(shuttleUid, component, startupTime.Value, out var hyperspace))
             return;
 
-        startupTime ??= DefaultStartupTime;
         hyperspaceTime ??= DefaultTravelTime;
 
         var config = _dockSystem.GetDockingConfig(shuttleUid, target, priorityTag);
@@ -345,7 +362,8 @@ public sealed partial class ShuttleSystem
         }
     }
 
-    private bool TrySetupFTL(EntityUid uid, ShuttleComponent shuttle, [NotNullWhen(true)] out FTLComponent? component)
+    // CMU14: faction gameplay fixes.
+    private bool TrySetupFTL(EntityUid uid, ShuttleComponent shuttle, float startupTime, [NotNullWhen(true)] out FTLComponent? component)
     {
         component = null;
 
@@ -371,7 +389,22 @@ public sealed partial class ShuttleSystem
 
         component = AddComp<FTLComponent>(uid);
         component.State = FTLState.Starting;
-        var audio = _audio.PlayPvs(_startupSound, uid);
+        var startupSound = _startupSound;
+        if (TryComp<DropshipComponent>(uid, out var dropship))
+        {
+            startupSound = dropship.StartupSound ?? startupSound;
+            component.TravelSound = dropship.TravelSound ?? component.TravelSound;
+        }
+
+        // CMU14: faction gameplay fixes.
+        var resolvedStartup = _audio.ResolveSound(startupSound);
+        var startupParams = startupSound.Params;
+        if (dropship?.StartupSound != null &&
+            _audio.GetAudioLength(resolvedStartup).TotalSeconds < startupTime)
+        {
+            startupParams = startupParams.WithLoop(true);
+        }
+        var audio = _audio.PlayPvs(resolvedStartup, uid, startupParams);
         _audio.SetGridAudio(audio);
         component.StartupStream = audio?.Entity;
 
@@ -421,13 +454,28 @@ public sealed partial class ShuttleSystem
         // Just so we don't clip
         if (fromMapUid != null && TryComp(comp.StartupStream, out AudioComponent? startupAudio))
         {
-            var clippedAudio = _audio.PlayStatic(_startupSound, Filter.Broadcast(),
-                new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner)), true, startupAudio.Params);
+            // CMU14: faction gameplay fixes.
+            var playback = entity.Comp1.StartupTime;
+            if (startupAudio.Params.Loop)
+            {
+                var length = (float) _audio.GetAudioLength(new ResolvedPathSpecifier(startupAudio.FileName)).TotalSeconds;
+                playback = length > 0 ? playback % length : 0;
+            }
+            var tailParams = startupAudio.Params;
+            var clippedAudio = _audio.PlayStatic(new SoundPathSpecifier(startupAudio.FileName), Filter.Broadcast(),
+                // CMU14: faction gameplay fixes.
+                new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner)), true, tailParams.WithLoop(false));
 
-            _audio.SetPlaybackPosition(clippedAudio, entity.Comp1.StartupTime);
+            // CMU14: faction gameplay fixes.
+            _audio.SetPlaybackPosition(clippedAudio, playback);
             if (clippedAudio != null)
                 clippedAudio.Value.Component.Flags |= AudioFlags.NoOcclusion;
         }
+        // CMU14: faction gameplay fixes.
+
+        // A repeated custom startup cue must not follow the ship and play over its flight ambience.
+        if (TryComp(comp.StartupStream, out AudioComponent? loopedStartup) && loopedStartup.Params.Loop)
+            comp.StartupStream = _audio.Stop(comp.StartupStream);
 
         // Offset the start by buffer range just to avoid overlap.
         var ftlStart = new EntityCoordinates(ftlMap, new Vector2(_index + width / 2f, 0f) - shuttleCenter);
@@ -445,7 +493,7 @@ public sealed partial class ShuttleSystem
         comp.StateTime = StartEndTime.FromCurTime(_gameTiming, comp.TravelTime - DefaultArrivalTime);
 
         Enable(uid, component: body);
-        _physics.SetLinearVelocity(uid, new Vector2(0f, 20f), body: body);
+        _physics.SetLinearVelocity(uid, new Vector2(0f, FTLMapComponent.TravelSpeed), body: body);
         _physics.SetAngularVelocity(uid, 0f, body: body);
 
         _dockSystem.SetDockBolts(uid, true);
@@ -489,7 +537,16 @@ public sealed partial class ShuttleSystem
         _dropship.RaiseUpdate(entity);
 
         // RMC14
-        var audio = _audio.PlayPvs(_arrivalSound, entity.Owner);
+        // Use the same authored landing cue aboard the dropship and at its LZ.
+        // Preserve the existing five-decibel boost for passengers.
+        var arrivalSound = _arrivalSound;
+        var arrivalParams = arrivalSound.Params;
+        if (TryComp<DropshipComponent>(entity.Owner, out var dropship))
+        {
+            arrivalSound = dropship.ArrivalSound;
+            arrivalParams = arrivalSound.Params.AddVolume(5f);
+        }
+        var audio = _audio.PlayPvs(arrivalSound, entity.Owner, arrivalParams);
         _audio.SetGridAudio(audio);
     }
 

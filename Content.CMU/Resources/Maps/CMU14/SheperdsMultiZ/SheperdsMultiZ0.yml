@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/31/2026 09:55:14
-  entityCount: 43505
+  entityCount: 43499
 maps:
 - 1
 grids:
@@ -85264,6 +85264,8 @@ entities:
   entities:
   - uid: 1195
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: 'LZ1: Southwest Jungle'
     - type: Transform
@@ -85271,6 +85273,8 @@ entities:
       parent: 1
   - uid: 1197
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: 'LZ2: Northwest Jungle'
     - type: Transform
@@ -85278,6 +85282,8 @@ entities:
       parent: 1
   - uid: 1199
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: 'LZ3: North Colony'
     - type: Transform
@@ -85287,6 +85293,8 @@ entities:
   entities:
   - uid: 984
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: South Colony
     - type: Transform
@@ -85294,6 +85302,8 @@ entities:
       parent: 1
   - uid: 354134
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: North Colony
     - type: Transform
@@ -294960,47 +294970,17 @@ entities:
     - type: Transform
       pos: 56,-132.5
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 319033
     components:
     - type: Transform
       pos: 33.5,100.5
       parent: 1
-  - uid: 319034
-    components:
-    - type: Transform
-      pos: 34.5,100.5
-      parent: 1
   - uid: 319035
     components:
     - type: Transform
       pos: 37.5,100.5
-      parent: 1
-  - uid: 319036
-    components:
-    - type: Transform
-      pos: 38.5,100.5
-      parent: 1
-  - uid: 319039
-    components:
-    - type: Transform
-      pos: 33.5,101.5
-      parent: 1
-  - uid: 319040
-    components:
-    - type: Transform
-      pos: 34.5,101.5
-      parent: 1
-  - uid: 319041
-    components:
-    - type: Transform
-      pos: 37.5,101.5
-      parent: 1
-  - uid: 319042
-    components:
-    - type: Transform
-      pos: 38.5,101.5
       parent: 1
 - proto: RMCGlassesMedicalHUDGlasses
   entities:

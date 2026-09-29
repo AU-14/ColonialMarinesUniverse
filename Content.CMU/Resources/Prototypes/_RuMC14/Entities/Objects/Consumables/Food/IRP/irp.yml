@@ -1,0 +1,128 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: RuMCIRPComponentBase
+  name: IRP component
+  description: Базовый прототип для всех продуктов, что входят в состав стандартного IRP UPP.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+  - type: Item
+    size: Small
+  - type: SpawnItemsOnUse
+    sound:
+      collection: CMFoodRip
+  - type: MREItem
+
+- type: entity
+  parent: CMMRE
+  id: RuMCirpUPP
+  name: UPP ration pack
+  description: "With love and the soul of the homeland." # С любовью и душой от родины.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_spp.rsi
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: { state: "open" }
+          False: { state: "closed" }
+  - type: Storage
+    grid:
+    - 0,0,9,1
+    whitelist: null
+  - type: StorageFill
+    contents:
+    - id: RuMCFoodTinIRPMeat
+      orGroup: main
+    - id: RuMCFoodTinIRPMeat
+      orGroup: main
+    - id: RuMCFoodTinIRPMeat
+      orGroup: main
+    - id: RuMCFoodTinIRPMeat2
+      orGroup: main
+    - id: RuMCFoodTinIRPPorridge
+      orGroup: main
+    - id: RuMCFoodTinIRPPorridge
+      orGroup: main
+    - id: RuMCFoodTinIRPPorridge2
+      orGroup: main
+    - id: RuMCFoodTinIRPPorridge2
+      orGroup: main
+    - id: RuMCFoodTinIRPPorridge3
+      orGroup: main
+    - id: RuMCFoodTinIRPPorridge3
+      orGroup: main
+    - id: RuMCFoodTinIRPMilk
+      orGroup: main
+    - id: RuMCFoodTinIRPMilk2
+      orGroup: main
+
+    - id: RuMCFoodLightTinIRPBuckwheat
+      orGroup: main2
+    - id: RuMCFoodLightTinIRPRise
+      orGroup: main2
+
+    - id: RuMCFoodLightTinIRPStew
+      orGroup: main3
+    - id: RuMCFoodLightTinIRPStew2
+      orGroup: main3
+
+    - id: RuMCIRPComponentMashedPotatoes
+      orGroup: side
+    - id: RuMCIRPComponentChicken
+      orGroup: side
+    - id: RuMCIRPComponentPie
+      orGroup: side
+    - id: RuMCIRPComponentFish
+      orGroup: side
+
+    - id: RuMCIRPComponentCandies
+      orGroup: dessert
+    - id: RuMCIRPComponentCandiesToffees
+      orGroup: dessert
+    - id: RuMCIRPComponentChocolateCurd
+      orGroup: dessert
+    - id: RuMCIRPComponentChocolate
+      orGroup: dessert
+    - id: RuMCIRPComponentHematogen
+      orGroup: dessert
+
+    - id: RuMCDrinkUPPwaterBottle
+      orGroup: drink
+    - id: RuMCDrinkUPPwaterBottle
+      orGroup: drink
+    - id: RuMCDrinkUPPwaterBottle
+      orGroup: drink
+    - id: RuMCDrinkUPPwaterBottle
+      orGroup: drink
+    - id: RuMCDrinkUPPwaterBottle
+      orGroup: drink
+    - id: RuMCDrinkUPPwaterBottle
+      orGroup: drink
+    - id: RuMCDrinkUPPBugJuice
+      orGroup: drink
+    - id: RuMCDrinkUPPBugJuice
+      orGroup: drink
+
+    - id: RuMCCigaretteSouz
+      orGroup: Cigaret
+    - id: RuMCCigaretteStolica
+      orGroup: Cigaret
+
+    - id: RuMCIRPComponentGallet
+    - id: RuMCIRPComponentGallet
+    - id: RuMCIRPComponentGallet
+    - id: RMCSpoonPlastic
+    - id: CMBrownMatchBook
+
+- type: entity
+  parent: RMCBoxMREEmpty
+  name: box of UPP Ration Packs (x12)
+  description: A box of UPP Ration Packs.
+  id: RuMCBoxIRPUPP
+  suffix: Filled, UPP
+  components:
+  - type: CMItemSlots
+    startingItem: RuMCirpUPP

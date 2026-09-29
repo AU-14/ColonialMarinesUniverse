@@ -50,7 +50,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     - IASFSurvLarge
     - IASFSurvMedium
     - IASFSurvSmall
@@ -65,7 +65,7 @@
     - NeomorphsThreatCF
     - CultistThreatCF
     - WendigoThreatCF
-    - AbominationsThreatCF
+    - BiomorphsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
     joboverrides:

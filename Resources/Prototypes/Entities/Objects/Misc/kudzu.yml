@@ -194,7 +194,7 @@
         path:
           "/Audio/Weapons/slash.ogg"
   - type: Sprite
-    sprite: Objects/Misc/fleshkudzu.rsi
+    sprite: CMU14/Objects/Misc/fleshkudzu.rsi # CMU14
     state: kudzu_11
     drawdepth: Overdoors
   - type: KudzuVisuals
@@ -220,6 +220,7 @@
   - type: Kudzu
     growthTickChance: 0.1
     spreadChance: 0.4
+    spriteVariants: 1 # CMU14: RSI has one sprite per growth stage
     # Heals each time it manages to do a growth tick:
     damageRecovery:
       types:

@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianColonyAdministrator
   roundSide: Civilian
   roundForce: COLONY
@@ -78,6 +78,7 @@
     pocket2: AU14StampAdmin
   inhand:
   - RMCRadioHandheldColonyOff
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

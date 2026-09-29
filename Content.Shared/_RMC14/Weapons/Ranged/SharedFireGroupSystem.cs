@@ -16,6 +16,8 @@ public sealed partial class SharedFireGroupSystem : EntitySystem
     {
         SubscribeLocalEvent<RMCFireGroupComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<RMCFireGroupComponent, ShotAttemptedEvent>(OnShotAttempt);
+        // CMU14: a deleted gun left in LastGun spams PVS resolve errors on every state send.
+        SubscribeLocalEvent<RMCFireGroupComponent, EntityTerminatingEvent>(OnFireGroupTerminating);
     }
 
     private void OnGunShot(Entity<RMCFireGroupComponent> ent, ref GunShotEvent args)
@@ -67,6 +69,31 @@ public sealed partial class SharedFireGroupSystem : EntitySystem
             fireGroup.LastGun.GetValueOrDefault(ent.Comp.Group) != ent.Owner)
         {
             args.Cancel();
+        }
+    }
+
+    private void OnFireGroupTerminating(Entity<RMCFireGroupComponent> ent, ref EntityTerminatingEvent args)
+    {
+        var query = EntityQueryEnumerator<RMCUserFireGroupComponent>();
+        while (query.MoveNext(out var uid, out var userGroup))
+        {
+            List<string>? remove = null;
+            foreach (var (group, gun) in userGroup.LastGun)
+            {
+                if (gun != ent.Owner)
+                    continue;
+
+                remove ??= new List<string>();
+                remove.Add(group);
+            }
+
+            if (remove == null)
+                continue;
+
+            foreach (var group in remove)
+                userGroup.LastGun.Remove(group);
+
+            Dirty(uid, userGroup);
         }
     }
 }

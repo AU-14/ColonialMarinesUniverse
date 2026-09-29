@@ -131,8 +131,8 @@
         amount: 3
       - id: RMCBoxLatexGloves
         amount: 3
-      - id: RMCDefibrillatorCompact
-        amount: 2
+      - id: CMUDefibrillatorCompact
+        amount: 1
       - id: AU14CMDefibrillator
         amount: 10
       - id: CMHealthAnalyzer

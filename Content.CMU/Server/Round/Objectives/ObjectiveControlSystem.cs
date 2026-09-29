@@ -335,6 +335,14 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
                     && (x.Comp.ObjectiveLevel != 3 || x.Comp.RollAnyway))
                 .ToList();
 
+            // Hotspot zones always activate: they are the FoF king-of-the-hill backbone, and a
+            // lottery loss silently removes the mode's centerpiece zone for the whole round.
+            var hotspots = neutralCandidates
+                .Where(x => HasComp<HotspotObjectiveComponent>(x.Uid))
+                .ToList();
+            foreach (var hotspot in hotspots)
+                neutralCandidates.Remove(hotspot);
+
             int neutralCap = GetRandomObjectiveCount(master.MaxNeutralObjectives, master.MinNeutralObjectives);
             _logs.Info($"[OBJ-CTRL] Neutral: Found {neutralCandidates.Count} candidates, max allowed = {neutralCap}");
 
@@ -345,6 +353,12 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
             {
                 if (ActivateObjective(uid, obj))
                     _logs.Debug($"[OBJ-CTRL] Activated neutral objective '{obj.ObjectiveDescription}'");
+            }
+
+            foreach (var (uid, obj) in hotspots)
+            {
+                if (ActivateObjective(uid, obj))
+                    _logs.Debug($"[OBJ-CTRL] Activated hotspot objective '{obj.ObjectiveDescription}'");
             }
         }
         catch (Exception ex) { _logs.Error($"[OBJ-CTRL] Failed to activate neutral objectives: {ex.Message}!"); }

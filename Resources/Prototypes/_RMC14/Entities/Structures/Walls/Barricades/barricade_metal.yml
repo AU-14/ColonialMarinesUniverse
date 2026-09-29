@@ -426,6 +426,8 @@
   name: folding metal barricade
   description: A folding metal barricade weaker than the non-folding counterpart. Able to be opened and closed at a moment's notice. Repair with a welder.
   components:
+  - type: VehicleSmashable
+    requiredVehicleTag: VehicleHeavy
   - type: Anchorable
   - type: MeleeSound
     soundGroups:

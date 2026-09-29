@@ -202,7 +202,9 @@ entities:
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
-    - type: Almayer
+    # CMU14: AlmayerComponent renamed to WarshipComponent
+    # - type: Almayer
+    - type: Warship
     - type: MapGrid
       chunks:
         0,0:

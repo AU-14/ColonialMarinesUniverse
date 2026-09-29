@@ -5,7 +5,7 @@ namespace Content.Shared._RMC14.Xenonids.Name;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class XenoRankNamesComponent : Component
 {
-    [DataField]
+    [DataField] // CMU14
     public Dictionary<int, LocId> RankNames = new()
     {
         {0, "rmc-xeno-young"},
@@ -15,5 +15,7 @@ public sealed partial class XenoRankNamesComponent : Component
         {5, "rmc-xeno-prime"},
         {6, "rmc-xeno-apex"},
         {7, "rmc-xeno-royal"},
+        {8, "rmc-xeno-nemesis"},
+        {9, "rmc-xeno-nemesis"},
     };
 }

@@ -61,6 +61,9 @@ public sealed partial class DamageEvasionSystem : EntitySystem
         Entity<DamageEvasionComponent> ent,
         ref DamageChangedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (!args.DamageIncreased || args.DamageDelta == null)
             return;
 

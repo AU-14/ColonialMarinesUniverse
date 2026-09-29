@@ -1,0 +1,11 @@
+- type: roundGroup
+  id: OpforBearPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: BEAR
+  groupId: OpforPlatoon:BEAR
+
+- type: roundGroup
+  id: GovforBearPlatoonRoundGroup
+  kind: Platoon
+  sourcePrototypeId: BEAR
+  groupId: GovforPlatoon:BEAR

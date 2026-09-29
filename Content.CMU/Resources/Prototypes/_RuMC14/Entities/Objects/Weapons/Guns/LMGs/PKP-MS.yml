@@ -1,0 +1,340 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: PKP-MS "SIBIR"
+  id: RuMCMachineGunPKP_MS
+  description: Effective at all distances, but requires the right stance.
+  components:
+  - type: Item
+    size: Huge
+  - type: Appearance
+  - type: Corrodible
+    isCorrodible: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/LMGs/PKP-MS/PKP_inhands.rsi
+    layers:
+    - state: base
+      sprite: _RuMC14/Objects/Weapons/Guns/LMGs/PKP-MS/PKP.rsi
+    - state: bolt-open
+      sprite: _RuMC14/Objects/Weapons/Guns/LMGs/PKP-MS/PKP.rsi
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      sprite: _RuMC14/Objects/Weapons/Guns/LMGs/PKP-MS/PKP.rsi
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/LMGs/PKP-MS/PKP_inhands.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m60.ogg
+      params:
+        volume: -4
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - FullAuto
+    recoilUnwielded: 5
+    scatterWielded: 10
+    scatterUnwielded: 22
+    baseFireRate: 5
+    modifiers:
+      FullAuto:
+        maxScatterModifier: 15
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 25
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1
+    accuracyMultiplierUnwielded: 0.5
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RuMCMagazinePKP_MS
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RuMCMagazinePKP_MS
+  - type: GunDamageModifier
+    multiplier: 1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RuMCAttachmentPKPStockCollapsible
+        whitelist:
+          tags:
+          - RuMCAttachmentPP13MStockCollapsible
+          - RuMCAttachmentAK13StockCollapsible
+          - RuMCAttachmentPKPStockCollapsible
+      rmc-aslot-underbarrel:
+        #startingAttachable: RMCAttachmentBipod
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.84, 0
+      rmc-aslot-rail: -0.42, 0.12
+      rmc-aslot-stock: -0.65, 0
+      rmc-aslot-underbarrel: 0.15, -0.29
+  - type: Tag
+    tags:
+    - RuMCWeaponLMGPKP_MS
+    - RMCWeaponLMGQYJ72
+  - type: WieldDelay
+    baseDelay: 1.9
+  - type: WieldableSpeedModifiers
+    base: 0.5
+    light: 0.69
+    medium: 0.75
+    heavy: 0.806
+  - type: GunRequiresWield
+
+- type: entity
+  parent: RuMCMachineGunPKP_MS
+  id: RuMCMachineGunPKP_MSTactical
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentExtendedCompensator
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RuMCAttachmentPKPStockCollapsible
+        whitelist:
+          tags:
+          - RuMCAttachmentPP13MStockCollapsible
+          - RuMCAttachmentAK13StockCollapsible
+          - RuMCAttachmentPKPStockCollapsible
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentBipod
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+
+- type: entity
+  parent: RuMCMachineGunPKP_MS
+  id: RuMCMachineGunPKP_MSTactical_alt
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentSuppressor
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RuMCAttachmentAK13StockCollapsible
+        whitelist:
+          tags:
+          - RuMCAttachmentPP13MStockCollapsible
+          - RuMCAttachmentAK13StockCollapsible
+          - RuMCAttachmentPKPStockCollapsible
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentVerticalGrip
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+
+# Magazines
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazinePKP_MS
+  name: PKP-MS box magazine (7.62x54R)
+  description: A 150-round belt-fed box magazine for the PKP-MS general-purpose machine gun.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazinePKP_MS
+    - RMCMagazineLMGQYJ72
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridge762x54R
+    proto: RuMCCartridge762x54R
+    capacity: 200
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/LMGs/PKP-MS/mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    #- state: ammo_band
+    #  color: "#e5b13c"
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Item
+    size: Large
+
+- type: entity
+  parent: RuMCMagazinePKP_MS
+  id: RuMCMagazinePKP_MSTracer
+  name: PKP-MS box magazine (7.62x54R Tracer)
+  description: A 150-round belt-fed tracer box magazine for the PKP-MS general-purpose machine gun.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazinePKP_MS
+    - RMCMagazineLMGQYJ72
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridge762x54RTracer
+      - RuMCCartridge762x54R
+    proto: RuMCCartridge762x54RTracer
+    capacity: 200
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/LMGs/PKP-MS/mag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Item
+    size: Large
+
+#ammo
+- type: entity
+  parent: RMCCartridgeRifleAR10
+  id: RuMCCartridge762x54R
+  name: cartridge (7.62x54mmR)
+  description: A 7.62x54mmR cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - RuMCCartridge762x54R
+  - type: CartridgeAmmo
+    proto: RMCBulletLMGQYJ72
+
+- type: entity
+  parent: RMCBaseBullet
+  id: RuMCBullet762x54R
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 40
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 22
+      falloff: 9999
+      ignoreModifiers: true
+  - type: CMArmorPiercing
+    amount: 15
+  - type: RMCProjectileAccuracy
+    accuracy: 95
+    thresholds:
+    - range: 14
+      falloff: 10
+
+#Tags
+
+- type: Tag
+  id: RuMCCartridge762x54R
+
+- type: Tag
+  id: RuMCWeaponLMGPKP_MS
+
+- type: Tag
+  id: RuMCMagazinePKP_MS
+
+

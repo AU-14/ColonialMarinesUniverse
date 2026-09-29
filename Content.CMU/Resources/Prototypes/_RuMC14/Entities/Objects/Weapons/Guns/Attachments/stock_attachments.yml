@@ -1,0 +1,95 @@
+- type: entity
+  parent: RMCAttachmentM54CStockCollapsible
+  id: RuMCAttachmentAK13StockCollapsible
+  name: AK13 folding stock
+  description: The standard back end of any gun starting with 'AK'.
+  components:
+  - type: AttachableVisuals
+    suffix: ""
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+    state: stock_Light
+  - type: AttachableToggleable
+    active: true
+    doAfterBreakOnMove: false
+    doAfter: 0.5
+    icon:
+      sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+      state: stock_Light
+    iconActive:
+      sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+      state: stock_Light-on
+    actionName: Toggle AK13 Folding Stock
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - RuMCAttachmentAK13StockCollapsible
+
+- type: entity
+  parent: RMCAttachmentM54CStockCollapsible
+  id: RuMCAttachmentPKPStockCollapsible
+  name: PKP-MS folding stock
+  description: The standard back end of any gun starting with PKP-MS.
+  components:
+  - type: AttachableVisuals
+    suffix: ""
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+    state: stock_Medium
+  - type: AttachableToggleable
+    active: true
+    doAfterBreakOnMove: false
+    doAfter: 0.5
+    icon:
+      sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+      state: stock_Medium
+    iconActive:
+      sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+      state: stock_Medium-on
+    actionName: Toggle PKP-MS Folding Stock
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - RuMCAttachmentPKPStockCollapsible
+
+- type: entity
+  parent: RMCAttachmentM54CStockCollapsible
+  id: RuMCAttachmentPP13MStockCollapsible
+  name: PP13-M folding stock
+  description: The standard back end of any gun starting with PP13-M.
+  components:
+  - type: AttachableVisuals
+    suffix: ""
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+    state: stock_Mini
+  - type: AttachableToggleable
+    active: true
+    doAfterBreakOnMove: false
+    doAfter: 0.5
+    icon:
+      sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+      state: stock_Mini
+    iconActive:
+      sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Stock/rumc_NewK_stock.rsi
+      state: stock_Mini-on
+    actionName: Toggle PP13-M Folding Stock
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - RuMCAttachmentPP13MStockCollapsible
+
+- type: Tag
+  id: RuMCAttachmentPP13MStockCollapsible
+
+- type: Tag
+  id: RuMCAttachmentPKPStockCollapsible
+
+- type: Tag
+  id: RuMCAttachmentAK13StockCollapsible

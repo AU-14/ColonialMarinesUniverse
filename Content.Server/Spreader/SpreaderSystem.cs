@@ -57,6 +57,7 @@ public sealed partial class SpreaderSystem : EntitySystem
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypeReload);
 
         SubscribeLocalEvent<EdgeSpreaderComponent, EntityTerminatingEvent>(OnTerminating);
+        SubscribeLocalEvent<EdgeSpreaderComponent, MapInitEvent>(OnSpreaderMapInit); // CMU14
         SetupPrototypes();
     }
 
@@ -129,23 +130,26 @@ public sealed partial class SpreaderSystem : EntitySystem
             if (!TryComp(uid, out TransformComponent? xform))
                 continue;
 
-            if (xform.GridUid == null)
-            {
-                RemComp(uid, comp);
-                continue;
-            }
-
-            if (!_gridUpdates.TryGetValue(xform.GridUid.Value, out var groupUpdates))
-                continue;
-
+            // CMU14 Begin: airborne gas uses its map's spread budget when no grid exists.
             if (!_edgeSpreaderQuery.TryGetComponent(uid, out var spreader))
             {
                 RemComp(uid, comp);
                 continue;
             }
 
+            var gridUid = GetSpreadingGrid(xform, spreader.Id);
+            if (gridUid == null)
+            {
+                RemComp(uid, comp);
+                continue;
+            }
+
+            if (!_gridUpdates.TryGetValue(gridUid.Value, out var groupUpdates))
+                continue;
+
             var updateKey = GetUpdateKey(spreader);
-            var updates = ResolveUpdates(xform.GridUid.Value, groupUpdates, spreader, updateKey);
+            var updates = ResolveUpdates(gridUid.Value, groupUpdates, spreader, updateKey);
+            // CMU14 End
 
             if (updates < 1)
                 continue;
@@ -204,6 +208,10 @@ public sealed partial class SpreaderSystem : EntitySystem
             Neighbors = neighbors,
             Updates = updates,
         };
+        // CMU14: no TileRef exists on a generated level without a grid.
+        if (!HasComp<MapGridComponent>(GetSpreadingGrid(xform, prototype)) &&
+            ProtoMan.Resolve(prototype, out var proto) && CanSpreadOnOpenAir(xform, proto))
+            ev.NeighborFreeCoordinates = GetAirNeighbors(xform);
 
         RaiseLocalEvent(uid, ref ev);
         updates = ev.Updates;
@@ -221,17 +229,21 @@ public sealed partial class SpreaderSystem : EntitySystem
         if (!ProtoMan.Resolve(prototype, out var spreaderPrototype))
             return;
 
-        if (!TryComp<MapGridComponent>(comp.GridUid, out var grid))
+        // CMU14 Begin: resolve the terrain grid independently of whether this gas cloud is anchored.
+        var gridUid = GetSpreadingGrid(comp, prototype);
+        if (!TryComp<MapGridComponent>(gridUid, out var grid))
             return;
 
-        var tile = _map.TileIndicesFor(comp.GridUid.Value, grid, comp.Coordinates);
+        var tile = _map.TileIndicesFor(gridUid.Value, grid, comp.Coordinates);
+        var openAir = CanSpreadOnOpenAir(comp, spreaderPrototype);
+        // CMU14 End
         var blockedAtmosDirs = AtmosDirection.Invalid;
 
         // Due to docking ports they may not necessarily be opposite directions.
         var neighborTiles = new ValueList<(EntityUid entity, MapGridComponent grid, Vector2i Indices, AtmosDirection OtherDir, AtmosDirection OurDir)>();
 
         // Check if anything on our own tile blocking that direction.
-        var ourEnts = _map.GetAnchoredEntities(comp.GridUid.Value, grid, tile);
+        var ourEnts = _map.GetAnchoredEntities(gridUid.Value, grid, tile); // CMU14
 
         while (ourEnts.MoveNext(out var ent))
         {
@@ -274,7 +286,7 @@ public sealed partial class SpreaderSystem : EntitySystem
         {
             var atmosDir = (AtmosDirection)(1 << i);
             var neighborPos = tile.Offset(atmosDir);
-            neighborTiles.Add((comp.GridUid.Value, grid, neighborPos, atmosDir, i.ToOppositeDir()));
+            neighborTiles.Add((gridUid.Value, grid, neighborPos, atmosDir, i.ToOppositeDir())); // CMU14
         }
 
         foreach (var (neighborEnt, neighborGrid, neighborPos, ourAtmosDir, otherAtmosDir) in neighborTiles)
@@ -283,11 +295,14 @@ public sealed partial class SpreaderSystem : EntitySystem
             if ((blockedAtmosDirs & ourAtmosDir) != 0x0)
                 continue;
 
-            if (!_map.TryGetTileRef(neighborEnt, neighborGrid, neighborPos, out var tileRef) || tileRef.Tile.IsEmpty)
+            // CMU14 Begin: opt-in gas can occupy missing tiles on connected z-level maps.
+            var tileRef = _map.GetTileRef(neighborEnt, neighborGrid, neighborPos);
+            if (tileRef.Tile.IsEmpty && !openAir)
                 continue;
 
-            if (spreaderPrototype.PreventSpreadOnSpaced && _turf.IsSpace(tileRef))
+            if (spreaderPrototype.PreventSpreadOnSpaced && _turf.IsSpace(tileRef) && !(openAir && tileRef.Tile.IsEmpty))
                 continue;
+            // CMU14 End
 
             var directionEnumerator = _map.GetAnchoredEntities(neighborEnt, neighborGrid, neighborPos);
             var occupied = false;

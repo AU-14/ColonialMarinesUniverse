@@ -25,6 +25,27 @@
     access: [["CMAccessColonyMedbay"], ["AU14AccessColonyHeadPhysician"], ["CMAccessColonyCommand"]]
 
 - type: entity
+  parent: AU14HospitalEmergencyComputer
+  id: CMUHospitalEmergencyComputerColony
+  suffix: Hospital, Colony
+
+- type: entity
+  parent: AU14HospitalEmergencyComputer
+  id: CMUHospitalEmergencyComputerGovfor
+  suffix: Hospital, GOVFOR
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforMedical"], ["AU14AccessGovforCommand"]]
+
+- type: entity
+  parent: AU14HospitalEmergencyComputer
+  id: CMUHospitalEmergencyComputerOpfor
+  suffix: Hospital, OPFOR
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforMedical"], ["AU14AccessOpforCommand"]]
+
+- type: entity
   parent: CMDropshipDestinationThirdPartyWhitelist
   id: AU14HospitalDropshipLandingZone
   name: hospital dropship landing zone

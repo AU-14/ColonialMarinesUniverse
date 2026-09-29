@@ -1,0 +1,11 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardSASCommander
+  name: SAS commander ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobSASCommander
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF

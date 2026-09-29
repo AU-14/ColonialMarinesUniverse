@@ -17,6 +17,7 @@ using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Humanoid.Markings;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Access.Components;
 using Content.Shared.Actions;
@@ -79,6 +80,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private GunIFFSystem _iff = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private HTNSystem _htn = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
@@ -1275,6 +1277,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     {
         var droneComp = EnsureComp<CMUDroneAndroidComponent>(drone);
         droneComp.Operator = user;
+        CopyOperatorIFF(drone, user);
         SuppressSsdIndicator(drone);
         RefreshDroneDormantEffect((drone, droneComp));
 
@@ -1449,6 +1452,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         tabletComp.LinkedDrone = resolvedDrone;
         droneComp.Operator = ent.Owner;
         droneComp.Tablet = resolvedTablet;
+        CopyOperatorIFF(resolvedDrone, ent.Owner);
 
         tablet = (resolvedTablet, tabletComp);
         drone = (resolvedDrone, droneComp);
@@ -1683,6 +1687,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         droneComp.Operator = user;
         droneComp.Tablet = tablet.Owner;
 
+        CopyOperatorIFF(linkedDrone, user);
         _mind.Visit(resolvedMind, linkedDrone, mind);
         SuppressSsdIndicator(linkedDrone);
         _blocker.UpdateCanMove(user);
@@ -1756,6 +1761,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         operatorComp.Drone = drone;
         operatorComp.Tablet = tablet.Owner;
 
+        CopyOperatorIFF(drone, user);
+
         if (!silent)
         {
             _popup.PopupEntity(
@@ -1765,6 +1772,15 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         }
 
         return true;
+    }
+
+    private void CopyOperatorIFF(EntityUid drone, EntityUid user)
+    {
+        var factions = new HashSet<EntProtoId<IFFFactionComponent>>();
+        _iff.TryGetFactions(user, factions);
+        _iff.ClearUserFactions(drone);
+        foreach (var faction in factions)
+            _iff.AddUserFaction(drone, faction);
     }
 
     private bool CanUseLinkedDrone(

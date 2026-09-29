@@ -1377,6 +1377,14 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("gamemode_antag_preferences");
 
+                    b.Property<int>("FoFSide")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("fo_f_side");
+
+                    b.Property<int>("FoFFallback")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("fo_f_fallback");
+
                     b.Property<string>("GamemodeJobPriorities")
                         .HasColumnType("TEXT")
                         .HasColumnName("gamemode_job_priorities");

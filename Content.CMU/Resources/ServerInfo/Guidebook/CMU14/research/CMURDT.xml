@@ -19,7 +19,9 @@ This tab shows you a list of chemicals you could potentially make, alongside the
 
 [bold]Hard chemicals[/bold] require special ingredients only obtained through [textlink="Hydroponics" link="CMUBotany"], and give you 7 credits.
 
-You can only pick one chemical every six minutes.
+Each faction has its own offers, points, clearance, reports, and six-minute wait after picking a chemical. Other factions taking contracts do not affect your terminal.
+
+The cooldown button spends 1 research point to remove 60 seconds from the remaining wait. You can purchase it repeatedly; finishing the wait immediately refreshes your faction's offers.
 
 ## View Chemicals
 This tab shows you every chemical you have scanned in the [textlink="XRF Scanner" link="CMUXRF"], ordered from earliest scan to latest scan.

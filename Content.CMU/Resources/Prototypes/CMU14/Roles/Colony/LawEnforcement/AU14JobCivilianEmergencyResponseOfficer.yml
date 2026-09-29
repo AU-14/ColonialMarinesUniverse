@@ -28,6 +28,10 @@
   description: au14-job-description-colonyemergencyresponseofficer
   setPreference: true
   playTimeTracker: AU14JobCivilianEmergencyResponseOfficer
+  requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 18000 # 5 hours
   ranks:
     RMCRankCivilianSeniorOfficer:
     - !type:RoleTimeRequirement
@@ -49,11 +53,11 @@
   id: AU14GearCivilianEmergencyResponseOfficer
   equipment:
     shoes: RMCBootsPMC
-    ears: CMHeadsetColony
+    ears: CMUHeadsetColonyEmergency
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCivilianEmergencyResponseOfficer
-  name: Spawn Point Civilian Emergency Response Officer
+  name: Spawn Point Civilian Paramedic
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianEmergencyResponseOfficer

@@ -56,6 +56,12 @@
     - Spanish
   roundStart: true
 
+- type: Origin
+  id: UAArtificialWomb
+  name: origin-ua-artificial-womb-name
+  description: origin-ua-artificial-womb-description
+  roundStart: true
+
 # Three World Empire
 - type: Origin
   id: TWEJapan

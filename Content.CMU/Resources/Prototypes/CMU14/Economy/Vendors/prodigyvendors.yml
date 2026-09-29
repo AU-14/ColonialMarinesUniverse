@@ -246,6 +246,8 @@
         name: infantry first aid kit (Full)
         recommended: true
         amount: 30
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -343,6 +345,8 @@
       - id: CMU14KitWeaponGlock77
     - name: General Medical Supplies
       entries:
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 60
       - id: AU14Tourniquet
@@ -658,10 +662,6 @@
       - id: CMU14ProdigySuitGreySkirt
         amount: 5
       - id: CMU14ProdigySuitBlackSkirt
-        amount: 5
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
         amount: 5
     - name: Pouches
       entries:
@@ -1160,6 +1160,8 @@
       - id: AU14ProdigyLaptop
         amount: 4
       - id: AU14SynthResetKeyProdigy
+        amount: 2
+      - id: MineDetector
         amount: 2
     - name: RTO Packs
       entries:

@@ -1,4 +1,12 @@
 using Content.Shared._RMC14.Cassette;
+using Content.Shared._RMC14.Armor.Magnetic;
+using Content.Shared._RMC14.Attachable.Components;
+using Content.Shared._RMC14.Deploy;
+using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Tracker.SquadLeader;
+using Content.Shared._RMC14.Xenonids.Fruit.Components;
+using Content.Shared._RMC14.Xenonids.Weeds;
+using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.Sentry.Laptop;
 using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
@@ -31,6 +39,15 @@ public sealed class StaleEntityStateTest
     [TestCase(typeof(XenoIntoxicatedComponent), nameof(XenoIntoxicatedComponent.LastSource))]
     [TestCase(typeof(XenoParasiteComponent), nameof(XenoParasiteComponent.InfectedVictim))]
     [TestCase(typeof(ProduceComponent), nameof(ProduceComponent.PlantData))]
+    [TestCase(typeof(SeedComponent), nameof(SeedComponent.PlantData))]
+    [TestCase(typeof(XenoWeedsComponent), nameof(XenoWeedsComponent.Source))]
+    [TestCase(typeof(XenoFruitComponent), nameof(XenoFruitComponent.Hive))]
+    [TestCase(typeof(XenoFruitComponent), nameof(XenoFruitComponent.Planter))]
+    [TestCase(typeof(SquadLeaderTrackerComponent), nameof(SquadLeaderTrackerComponent.Target))]
+    [TestCase(typeof(SquadLeaderTrackerComponent), nameof(SquadLeaderTrackerComponent.BattleBuddy))]
+    [TestCase(typeof(RMCReturnToInventoryComponent), nameof(RMCReturnToInventoryComponent.ReceivingItem))]
+    [TestCase(typeof(DropshipDestinationComponent), nameof(DropshipDestinationComponent.Ship))]
+    [TestCase(typeof(DropshipDestinationComponent), nameof(DropshipDestinationComponent.ArrivalSoundEntity))]
     public async Task OptionalReferencesSurviveSourceDeletion(Type componentType, string field)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
@@ -63,6 +80,65 @@ public sealed class StaleEntityStateTest
             Assert.That(GetReference(), Is.EqualTo(NetEntity.Invalid), "Deleted references must serialize without resolution errors.");
         });
 
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase(typeof(RMCDeployedEntityComponent), nameof(RMCDeployedEntityComponent.OriginalEntity))]
+    [TestCase(typeof(CMUSurgeryInFlightComponent), nameof(CMUSurgeryInFlightComponent.Surgeon))]
+    [TestCase(typeof(RMCReturnToInventoryComponent), nameof(RMCReturnToInventoryComponent.User))]
+    [TestCase(typeof(RMCReturnToInventoryComponent), nameof(RMCReturnToInventoryComponent.Magnetizer))]
+    public async Task RequiredReferencesSurviveSourceDeletion(Type componentType, string field)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var owner = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var source = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var component = (Component) Activator.CreateInstance(componentType)!;
+            entities.AddComponent(owner, component);
+            SetField(component, field, source);
+            object GetReference()
+            {
+                var state = entities.GetComponentState(entities.EventBus, component, null, GameTick.Zero)!;
+                return state.GetType().GetProperty(field)!.GetValue(state);
+            }
+
+            Assert.That(GetReference(), Is.EqualTo(entities.GetNetEntity(source)));
+            entities.DeleteEntity(source);
+            Assert.That(GetReference(), Is.EqualTo(NetEntity.Invalid));
+            Assert.That(componentType.GetField(field)!.GetValue(component), Is.EqualTo(source),
+                "State generation must not mutate authoritative gameplay state.");
+            entities.DeleteEntity(owner);
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase(typeof(XenoWeedsComponent), nameof(XenoWeedsComponent.Spread))]
+    [TestCase(typeof(XenoWeedsComponent), nameof(XenoWeedsComponent.LocalWeeded))]
+    [TestCase(typeof(XenoWeedsComponent), nameof(XenoWeedsComponent.WeedboundStructures))]
+    [TestCase(typeof(AttachableDirectionLockedComponent), nameof(AttachableDirectionLockedComponent.AttachableList))]
+    public async Task DeletedListEntriesAreFilteredWithoutChangingGameplayState(Type componentType, string field)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var owner = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var live = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var dead = entities.SpawnEntity(null, MapCoordinates.Nullspace);
+            var component = (Component) Activator.CreateInstance(componentType)!;
+            entities.AddComponent(owner, component);
+            var originals = new List<EntityUid> { dead, live, dead };
+            SetField(component, field, originals);
+            entities.DeleteEntity(dead);
+            var state = entities.GetComponentState(entities.EventBus, component, null, GameTick.Zero)!;
+            var actual = state.GetType().GetProperty(field)!.GetValue(state);
+            Assert.That(actual, Is.EqualTo(new[] { entities.GetNetEntity(live) }));
+            Assert.That(originals, Is.EqualTo(new[] { dead, live, dead }));
+            entities.DeleteEntity(owner);
+            entities.DeleteEntity(live);
+        });
         await pair.CleanReturnAsync();
     }
 
@@ -136,6 +212,27 @@ public sealed class StaleEntityStateTest
             SetField(produce, nameof(ProduceComponent.PlantProtoId), (EntProtoId?) new EntProtoId("CarrotPlants"));
             components.Add(produce);
 
+            var seed = entities.AddComponent<SeedComponent>(owner);
+            SetField(seed, nameof(seed.PlantData), (EntityUid?) source);
+            SetField(seed, nameof(seed.PlantProtoId), new EntProtoId("CarrotPlants"));
+            SetField(seed, nameof(seed.HealthOverride), (float?) 42f);
+            components.Add(seed);
+
+            var surgery = entities.AddComponent<CMUSurgeryInFlightComponent>(owner);
+            SetField(surgery, nameof(surgery.Surgeon), source);
+            SetField(surgery, nameof(surgery.SurgeonName), "Historical surgeon");
+            SetField(surgery, nameof(surgery.LeafSurgeryId), "test-operation");
+            SetField(surgery, nameof(surgery.LeafSurgeryDisplayName), "Test operation");
+            components.Add(surgery);
+
+            var destination = entities.AddComponent<DropshipDestinationComponent>(owner);
+            SetField(destination, nameof(destination.Ship), (EntityUid?) source);
+            SetField(destination, nameof(destination.ArrivalSoundEntity), (EntityUid?) source);
+            SetField(destination, nameof(destination.AutoRecall), true);
+            SetField(destination, nameof(destination.LightSearchRadius), 8);
+            SetField(destination, nameof(destination.FactionController), "GOVFOR");
+            components.Add(destination);
+
             var boons = entities.AddComponent<HiveBoonsComponent>(owner);
             SetField(boons, nameof(HiveBoonsComponent.RoyalResin), 7);
             SetField(boons, nameof(HiveBoonsComponent.Active), new Dictionary<EntProtoId<HiveBoonDefinitionComponent>, EntityUid>
@@ -163,6 +260,9 @@ public sealed class StaleEntityStateTest
                 var intoxicated = entities.GetComponent<XenoIntoxicatedComponent>(clientOwner);
                 var parasite = entities.GetComponent<XenoParasiteComponent>(clientOwner);
                 var produce = entities.GetComponent<ProduceComponent>(clientOwner);
+                var seed = entities.GetComponent<SeedComponent>(clientOwner);
+                var surgery = entities.GetComponent<CMUSurgeryInFlightComponent>(clientOwner);
+                var destination = entities.GetComponent<DropshipDestinationComponent>(clientOwner);
                 var boons = entities.GetComponent<HiveBoonsComponent>(clientOwner);
                 Assert.Multiple(() =>
                 {
@@ -199,6 +299,18 @@ public sealed class StaleEntityStateTest
                     Assert.That(parasite.LeapCollisionActive, Is.True);
                     Assert.That(produce.PlantData, Is.EqualTo(expected));
                     Assert.That(produce.PlantProtoId, Is.EqualTo((EntProtoId?) new EntProtoId("CarrotPlants")));
+                    Assert.That(seed.PlantData, Is.EqualTo(expected));
+                    Assert.That(seed.PlantProtoId, Is.EqualTo(new EntProtoId("CarrotPlants")));
+                    Assert.That(seed.HealthOverride, Is.EqualTo(42f));
+                    Assert.That(surgery.Surgeon, Is.EqualTo(expected));
+                    Assert.That(surgery.SurgeonName, Is.EqualTo("Historical surgeon"));
+                    Assert.That(surgery.LeafSurgeryId, Is.EqualTo("test-operation"));
+                    Assert.That(surgery.LeafSurgeryDisplayName, Is.EqualTo("Test operation"));
+                    Assert.That(destination.Ship, Is.EqualTo(expected));
+                    Assert.That(destination.ArrivalSoundEntity, Is.EqualTo(expected));
+                    Assert.That(destination.AutoRecall, Is.True);
+                    Assert.That(destination.LightSearchRadius, Is.EqualTo(8));
+                    Assert.That(destination.FactionController, Is.EqualTo("GOVFOR"));
                     Assert.That(boons.Active[boonId], Is.EqualTo(expected));
                     Assert.That(boons.RoyalResin, Is.EqualTo(7));
                 });

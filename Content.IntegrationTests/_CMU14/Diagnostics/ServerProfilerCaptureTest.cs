@@ -11,6 +11,50 @@ namespace Content.IntegrationTests.CMU14.Diagnostics;
 public sealed class ServerProfilerCaptureTest
 {
     [Test]
+    public async Task ManualPhysicsCaptureReportsBodiesWithoutMutatingThem()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var entities = pair.Server.EntMan;
+            var wall = entities.SpawnEntity("CMWallRock", map.GridCoords);
+            var body = entities.GetComponent<Robust.Shared.Physics.Components.PhysicsComponent>(wall);
+            var before = (body.Awake, body.CanCollide, body.ContactCount, body.SleepingAllowed);
+            var diagnostics = pair.Server.ResolveDependency<ICMUServerPerformanceDiagnostics>();
+            var logger = pair.Server.ResolveDependency<ILogManager>().GetSawmill("cmu.server-performance");
+            var capture = new OperationCapture();
+            logger.AddHandler(capture);
+            try
+            {
+                Assert.That(diagnostics.CapturePhysicsReport(), Is.True);
+                var census = capture.Messages.Single(message => message.StartsWith("[CMU-PERF] physics-census "));
+                Assert.That(census, Does.Contain("includesPaused=true"));
+                Assert.That(census, Does.Contain("contactEdges="));
+                Assert.That(capture.Messages.Any(message => message.StartsWith("[CMU-PERF] physics-bodies ") &&
+                    message.Contains("prototype=CMWallRock ")), Is.True);
+                Assert.That(capture.Messages.Any(message => message.StartsWith("[CMU-PERF] physics-controller-window ") &&
+                    message.Contains("metricsEnabled=")), Is.True);
+                if (!pair.Server.System<Robust.Shared.Physics.Systems.SharedPhysicsSystem>().MetricsEnabled)
+                {
+                    var stages = capture.Messages.Where(message =>
+                        message.StartsWith("[CMU-PERF] physics-controller-window ")).ToArray();
+                    Assert.That(stages, Has.Length.EqualTo(1), "Disabled timers should not flood the report.");
+                    Assert.That(stages[0], Does.Contain("status=metrics-disabled"));
+                    Assert.That(stages[0], Does.Contain("totalMs=unavailable"));
+                }
+                Assert.That((body.Awake, body.CanCollide, body.ContactCount, body.SleepingAllowed), Is.EqualTo(before));
+            }
+            finally
+            {
+                logger.RemoveHandler(capture);
+                entities.DeleteEntity(wall);
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task SlowOperationSurvivesOutsideProfilerHistory()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
@@ -25,6 +69,12 @@ public sealed class ServerProfilerCaptureTest
                 using (diagnostics.MeasureOperation("regression-fill", "TestPrototype"))
                     GC.KeepAlive(new byte[2 * 1024 * 1024]);
                 Assert.That(diagnostics.CaptureManualReport(), Is.True);
+                var memory = capture.Messages.Single(message => message.StartsWith("[CMU-PERF] memory "));
+                Assert.That(memory, Does.Contain("processRssBytes="));
+                Assert.That(memory, Does.Contain("managedBytes="));
+                Assert.That(memory, Does.Contain("heapBytesAtLastGc="));
+                Assert.That(memory, Does.Contain("gen2Collections="));
+                Assert.That(memory, Does.Contain("memorySampleAgeSeconds="));
                 var operation = capture.Messages.Single(message => message.Contains("name=regression-fill "));
                 Assert.That(operation, Does.Contain("prototype=TestPrototype "));
                 Assert.That(operation, Does.Contain("source=content-scope"));

@@ -1,12 +1,13 @@
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankArmorBallistic
+  id: VehicleTankArmorBallistic # CMU14
   name: ballistic armor plating
   description: Ballistic armor plating for a tank.
   components:
   - type: Sprite
     state: ballistic_armor
   - type: HardpointItem
+    damageRegion: Front
     hardpointType: Armor
     vehicleFamily: Tank
     slotType: Armor
@@ -24,13 +25,14 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankArmorConcussive
+  id: VehicleTankArmorConcussive # CMU14
   name: concussive armor plating
   description: Concussive armor plating for a tank.
   components:
   - type: Sprite
     state: concussive_armor
   - type: HardpointItem
+    damageRegion: Front
     hardpointType: Armor
     vehicleFamily: Tank
     slotType: Armor
@@ -49,13 +51,14 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankArmorCaustic
+  id: VehicleTankArmorCaustic # CMU14
   name: caustic armor plating
   description: Caustic armor plating for a tank.
   components:
   - type: Sprite
     state: caustic_armor
   - type: HardpointItem
+    damageRegion: Front
     hardpointType: Armor
     vehicleFamily: Tank
     slotType: Armor
@@ -73,13 +76,14 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankArmorPaladin
+  id: VehicleTankArmorPaladin # CMU14
   name: paladin armor plating
   description: Paladin armor plating for a tank.
   components:
   - type: Sprite
     state: paladin_armor
   - type: HardpointItem
+    damageRegion: Front
     hardpointType: Armor
     vehicleFamily: Tank
     slotType: Armor

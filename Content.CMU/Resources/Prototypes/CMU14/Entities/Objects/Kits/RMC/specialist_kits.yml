@@ -111,6 +111,39 @@
 
 - type: entity
   parent: RMCKitBase
+  id: CMU14KitRMCMarksmanL144
+  name: RMC L144 Sniper Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,5
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14HeadHelmetRMCSniper
+        amount: 1
+      - id: AU14KitSpotter
+        amount: 1
+      - id: CMUSniperRifleTWE
+      - id: CMUMagazineSniperL144SH
+        amount: 6
+      - id: CMUMagazineSniperL144
+        amount: 8
+      - id: RMCVisorNightVision
+        amount: 1
+      - id: RMCScoutShoes
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: SniperWhitelist
+
+- type: entity
+  parent: RMCKitBase
   id: AU14KitRMCMarksmanL164A3
   name: RMC L164A3 Grenade Launcher Kit
   components:

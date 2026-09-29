@@ -16,6 +16,9 @@ public sealed partial class TacticalMapComputerComponent : Component
     [DataField, AutoNetworkedField]
     public Dictionary<int, TacticalMapBlip> Blips = new();
 
+    /// <summary>Local revision of feeds published by UpdateMapData; not a permission token.</summary>
+    public ulong BlipRevision;
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan NextUpdate;
 

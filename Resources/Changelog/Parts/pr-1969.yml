@@ -1,0 +1,11 @@
+author: Vencallium
+category: CMU
+changes:
+- message: Updated and repaired the Stable Garrison map and added a Distress Signal
+    variant.
+  type: Map
+- message: Fetch objectives now use medical, research, data, and military placement
+    categories.
+  type: Tweak
+time: '2026-09-17T04:09:41.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1969

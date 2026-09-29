@@ -264,7 +264,9 @@
 - type: edgeSpreader
   id: RMCSmokeAcid
   updatesPerSecond: 2
+  spreadOnOpenAir: true # CMU14: gas also fills empty tiles on connected z-levels.
 
 - type: edgeSpreader
   id: RMCSmokeNeurotoxin
   updatesPerSecond: 2
+  spreadOnOpenAir: true # CMU14: gas also fills empty tiles on connected z-levels.

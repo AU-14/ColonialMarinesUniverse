@@ -10,6 +10,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._RMC14.Vehicle;
 
@@ -42,6 +43,12 @@ public sealed partial class HardpointItemComponent : Component
 
     [DataField]
     public float MinimumPerformanceMultiplier = 0.35f;
+
+    [DataField]
+    public float FullPerformanceIntegrityFraction = 0.7f; // CMU14
+
+    [DataField]
+    public VehicleDamageRegion DamageRegion = VehicleDamageRegion.Exterior; // CMU14
 }
 
 
@@ -56,7 +63,12 @@ public sealed partial class HardpointSlotsComponent : Component
     public List<HardpointSlot> Slots = new();
 
     [DataField]
-    public float FrameDamageFractionWhileIntact = 0.25f;
+    // CMU14: vehicle damage and conscious controls.
+    public float FrameDamageFractionWhileIntact = 0.5f;
+
+    /// <summary>Fraction of a direct hit that can reach one additional module.</summary>
+    [DataField]
+    public float DamageSpilloverFraction = 0.1f; // CMU14
 
     [DataField]
     public ProtoId<ToolQualityPrototype> RemoveToolQuality = "VehicleServicing";
@@ -116,7 +128,7 @@ public sealed partial class HardpointSlot
     public EntityWhitelist? Whitelist { get; set; }
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class HardpointIntegrityComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -124,6 +136,26 @@ public sealed partial class HardpointIntegrityComponent : Component
 
     [DataField, AutoNetworkedField]
     public float Integrity;
+
+    /// <summary>Only substantial hits to a seriously damaged part can cause a fault.</summary>
+    [DataField]
+    public float FailureIntegrityThreshold = 0.4f;
+
+    [DataField]
+    public float FailureMinimumDamageFraction = 0.08f;
+
+    [DataField]
+    public float FailureChance = 0.05f;
+
+    /// <summary>Shared by all parts when this integrity component belongs to a vehicle.</summary>
+    [DataField]
+    public TimeSpan FailureRollCooldown = TimeSpan.FromSeconds(60);
+
+    [DataField]
+    public int MaxVehicleFailures = 2;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextFailureRoll;
 
     [DataField]
     public FixedPoint2 FuelPerSecond = FixedPoint2.New(1);
@@ -226,9 +258,11 @@ public sealed partial class HardpointRemoveDoAfterEvent : DoAfterEvent
 [Serializable, NetSerializable]
 public sealed partial class HardpointRepairDoAfterEvent : DoAfterEvent
 {
+    public float RepairAmount;
+
     public override DoAfterEvent Clone()
     {
-        return new HardpointRepairDoAfterEvent();
+        return new HardpointRepairDoAfterEvent { RepairAmount = RepairAmount };
     }
 }
 

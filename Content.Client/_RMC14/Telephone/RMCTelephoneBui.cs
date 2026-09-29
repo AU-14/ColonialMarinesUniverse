@@ -8,7 +8,7 @@ namespace Content.Client._RMC14.Telephone;
 
 public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    private static readonly List<string> TabOrder = new() { "MP Dept.", "Almayer", "Command", "Offices", "ARES", "Dropship", "Marine" };
+    private static readonly List<string> TabOrder = new() { "MP Dept.", "Warship", "Command", "Offices", "Apollo", "Dropship", "Marine" }; // CMU14
 
     private TelephoneWindow? _window;
 
@@ -117,6 +117,13 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
             _window.Tabs.AddChild(category);
             TabContainer.SetTabTitle(category, categoryName);
         }
+
+        // cmu edit start: 911 dispatch
+        var emergencyTab = Content.Client.CMU14.Telephone.CMUEmergencyCallTab.Create(service =>
+            SendMessage(new Content.Shared.CMU14.Telephone.CMUEmergencyCallBuiMsg(service)));
+        _window.Tabs.AddChild(emergencyTab);
+        TabContainer.SetTabTitle(emergencyTab, Loc.GetString("cmu-911-tab"));
+        // cmu edit end
 
         _window.Buttons.DisposeAllChildren();
         if (state.Dnd)

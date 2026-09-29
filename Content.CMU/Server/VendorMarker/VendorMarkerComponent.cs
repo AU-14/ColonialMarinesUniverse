@@ -18,6 +18,9 @@ namespace Content.Server.CMU14.VendorMarker
         [DataField("opfor")]
         public bool Opfor { get; set; } = false;
 
+        [DataField("colony")]
+        public bool Colony { get; set; } = false;
+
         [DataField("dropship")]
         public bool DropShip { get; set; } = false;
 

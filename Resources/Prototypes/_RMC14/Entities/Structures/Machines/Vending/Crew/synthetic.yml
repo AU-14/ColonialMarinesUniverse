@@ -422,6 +422,7 @@
   - type: CMVendorBundle
     bundle:
     - CMHeadsetMedical
+    - CMPamphletK9Handler
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
@@ -432,3 +433,4 @@
   - type: CMVendorBundle
     bundle:
     - CMHeadsetMPO
+    - CMPamphletK9Handler

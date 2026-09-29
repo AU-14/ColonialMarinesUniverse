@@ -179,10 +179,13 @@ namespace Content.Client.Lobby.UI
 
             #region Name
 
-            NameEdit.OnTextChanged += args => { SetName(args.Text); };
-            NameEdit.IsValid = args => args.Length <= _maxNameLength;
+            // cmu edit start
+            CMUSetupNameEdits();
+            // cmu edit end
             RandomizeUnlockedButton.OnPressed += args => { RandomizeProfile(); };
-            WarningLabel.SetMarkup($"[color=red]{Loc.GetString("humanoid-profile-editor-naming-rules-warning")}[/color]");
+            // cmu edit start
+            WarningLabel.SetMarkup(Loc.GetString("humanoid-profile-editor-naming-rules-warning"));
+            // cmu edit end
 
             #endregion Name
 
@@ -465,6 +468,9 @@ namespace Content.Client.Lobby.UI
 
             _loadoutWindow?.Dispose();
             _loadoutWindow = null;
+            // cmu edit start
+            UnsubscribeDividerColors();
+            // cmu edit end
         }
 
         protected override void EnteredTree()
@@ -476,6 +482,10 @@ namespace Content.Client.Lobby.UI
         private void UpdateSaveButton()
         {
             SaveButton.Disabled = Profile is null || !IsDirty;
+            // cmu edit start
+            if (!CMUHasRequiredName())
+                SaveButton.Disabled = true;
+            // cmu edit end
             ResetButton.Disabled = Profile is null || !IsDirty;
         }
 

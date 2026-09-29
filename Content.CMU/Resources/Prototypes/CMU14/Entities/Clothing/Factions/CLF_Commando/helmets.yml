@@ -1,0 +1,12 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: CMU14CLFCommandoHelmet
+  name: repainted M10 pattern helmet
+  description: A M10 helmet that has been repainted with a darker color scheme, and has been modified by its user. This custom model is used by the few professional members of the Colonial Liberation Front.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/CLF_Commandos/clfspechelmet.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/CLF_Commandos/clfspechelmet.rsi
+
+

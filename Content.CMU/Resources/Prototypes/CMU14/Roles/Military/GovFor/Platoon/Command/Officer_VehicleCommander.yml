@@ -23,6 +23,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: "6"
     commandElement: true
@@ -58,6 +59,9 @@
         sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: vcc
   requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsVehicleCrew
+    time: 18000 # 5 hours
 #  - !type:RoleTimeRequirement
 #    role: AU14JobGOVFORVehicleCrewman
 #    time: 14400 # 4 hours
@@ -150,6 +154,7 @@
   dummyStartingGear: AU14GearOPFORVehicleCommanderDummy
   accessGroups:
   - AU14OpforVehicleCrew
+  useLoadoutOfJob: AU14JobGOVFORVehicleCommander
 
 - type: startingGear
   id: AU14GearOPFORVehicleCommander

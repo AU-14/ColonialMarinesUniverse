@@ -287,30 +287,33 @@ public sealed partial class RMCCVars : CVars
     public static readonly CVarDef<float> RMCPlaytimeLarvaRankScaleFactor =
         CVarDef.Create("rmc.playtime_larva_rank_scale_factor", 3.0f, CVar.REPLICATED | CVar.SERVER);
 
-    public static readonly CVarDef<int> RMCPlaytimeBronzeMedalTimeHours =
-        CVarDef.Create("rmc.playtime_bronze_medal_time_hours", 10, CVar.REPLICATED | CVar.SERVER);
+    // CMU14: scales marine medal tiers 4-9 up, xeno keeps raw times
+    public static readonly CVarDef<float> RMCPlaytimeMarineRankScaleFactor =
+        CVarDef.Create("rmc.playtime_marine_rank_scale_factor", 3.5f, CVar.REPLICATED | CVar.SERVER);
 
-    public static readonly CVarDef<int> RMCPlaytimeSilverMedalTimeHours =
-        CVarDef.Create("rmc.playtime_silver_medal_time_hours", 25, CVar.REPLICATED | CVar.SERVER);
+    public static readonly CVarDef<int> RMCPlaytimeBronzeMedalTimeHours = // CMU14
+        CVarDef.Create("rmc.playtime_bronze_medal_time_hours", 6, CVar.REPLICATED | CVar.SERVER);
 
-    public static readonly CVarDef<int> RMCPlaytimeGoldMedalTimeHours =
-        CVarDef.Create("rmc.playtime_gold_medal_time_hours", 50, CVar.REPLICATED | CVar.SERVER);
+    public static readonly CVarDef<int> RMCPlaytimeSilverMedalTimeHours = // CMU14
+        CVarDef.Create("rmc.playtime_silver_medal_time_hours", 10, CVar.REPLICATED | CVar.SERVER);
 
-    public static readonly CVarDef<int> RMCPlaytimePlatinumMedalTimeHours =
-        CVarDef.Create("rmc.playtime_platinum_medal_time_hours", 70, CVar.REPLICATED | CVar.SERVER);
+    public static readonly CVarDef<int> RMCPlaytimeGoldMedalTimeHours = // CMU14
+        CVarDef.Create("rmc.playtime_gold_medal_time_hours", 15, CVar.REPLICATED | CVar.SERVER); // Marines: 52.5
 
-    public static readonly CVarDef<int> RMCPlaytimeRubyMedalTimeHours =
-        CVarDef.Create("rmc.playtime_ruby_medal_time_hours", 100, CVar.REPLICATED | CVar.SERVER);
+    public static readonly CVarDef<int> RMCPlaytimePlatinumMedalTimeHours = // CMU14
+        CVarDef.Create("rmc.playtime_platinum_medal_time_hours", 24, CVar.REPLICATED | CVar.SERVER); // Marines: 84
 
-    public static readonly CVarDef<int> RMCPlaytimeAmethystMedalTimeHours =
-        CVarDef.Create("rmc.playtime_amethyst_medal_time_hours", 120, CVar.REPLICATED | CVar.SERVER);
+    public static readonly CVarDef<int> RMCPlaytimeRubyMedalTimeHours = // CMU14
+        CVarDef.Create("rmc.playtime_ruby_medal_time_hours", 30, CVar.REPLICATED | CVar.SERVER); // Marines: 105
 
-    public static readonly CVarDef<int> RMCPlaytimeEmeraldMedalTimeHours =
-        CVarDef.Create("rmc.playtime_emerald_medal_time_hours", 1000, CVar.REPLICATED | CVar.SERVER);
+    public static readonly CVarDef<int> RMCPlaytimeAmethystMedalTimeHours = // CMU14
+        CVarDef.Create("rmc.playtime_amethyst_medal_time_hours", 40, CVar.REPLICATED | CVar.SERVER); // Marines: 140
 
-    public static readonly CVarDef<int> RMCPlaytimePrismaticMedalTimeHours =
-        CVarDef.Create("rmc.playtime_prismatic_medal_time_hours", 1500, CVar.REPLICATED | CVar.SERVER);
-    // For the future coder: 2100, 2800, 3600, 4500
+    public static readonly CVarDef<int> RMCPlaytimeEmeraldMedalTimeHours = // CMU14
+        CVarDef.Create("rmc.playtime_emerald_medal_time_hours", 52, CVar.REPLICATED | CVar.SERVER); // Marines: 182
+
+    public static readonly CVarDef<int> RMCPlaytimePrismaticMedalTimeHours = // CMU14
+        CVarDef.Create("rmc.playtime_prismatic_medal_time_hours", 64, CVar.REPLICATED | CVar.SERVER); // Marines: 224
 
     public static readonly CVarDef<int> RMCPlaytimeXenoPrefixThreeTimeHours =
         CVarDef.Create("rmc.playtime_xeno_prefix_three_time_hours", 0, CVar.REPLICATED | CVar.SERVER);
@@ -320,6 +323,31 @@ public sealed partial class RMCCVars : CVars
 
     public static readonly CVarDef<int> RMCPlaytimeXenoPostfixTwoTimeHours =
         CVarDef.Create("rmc.playtime_xeno_postfix_two_time_hours", 0, CVar.REPLICATED | CVar.SERVER);
+
+    // CMU14: split from the main CVars so tuning xeno rank tiers doesn't also modify govfor stuff
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankTwoTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_mature_time_hours", 10, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankThreeTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_elder_time_hours", 25, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankFourTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_ancient_time_hours", 50, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankFiveTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_prime_time_hours", 75, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankSixTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_apex_time_hours", 100, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankSevenTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_royal_time_hours", 150, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankEightTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_nemesis_time_hours", 200, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCPlaytimeXenoRankNineTimeHours =
+        CVarDef.Create("rmc.playtime_xeno_ascendant_time_hours", 250, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCDisconnectedXenoGhostRoleTimeSeconds =
         CVarDef.Create("rmc.disconnected_xeno_ghost_role_time_seconds", 600, CVar.REPLICATED | CVar.SERVER);
@@ -570,7 +598,9 @@ public sealed partial class RMCCVars : CVars
     public static readonly CVarDef<float> RMCNewToJobPopupTime =
         CVarDef.Create("game.new_to_job_popup_time", 15f, CVar.SERVER | CVar.REPLICATED);
     public static readonly CVarDef<bool> RMCGhostCanBoo =
-        CVarDef.Create("rmc.ghosts_can_boo", true, CVar.SERVER | CVar.SERVERONLY);
+        // cmu edit start
+        CVarDef.Create("rmc.ghosts_can_boo", false, CVar.SERVER | CVar.SERVERONLY);
+        // cmu edit end
 
     public static readonly CVarDef<int> RMCRoyalResinEveryMinutes =
         CVarDef.Create("rmc.royal_resin_every_minutes", 5, CVar.REPLICATED | CVar.SERVER);

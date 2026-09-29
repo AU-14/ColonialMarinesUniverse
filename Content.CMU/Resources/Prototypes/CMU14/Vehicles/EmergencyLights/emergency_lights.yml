@@ -1,0 +1,78 @@
+- type: entity
+  id: CMUActionVehicleEmergencyLights
+  parent: BaseAction
+  name: Toggle Emergency Lights
+  description: Cycle the vehicle's red and blue emergency lights between off, slow, medium and fast.
+  components:
+  - type: InstantAction
+    event: !type:CMUEmergencyLightsActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: Structures/Wallmounts/Lighting/emergency-light.rsi
+      state: emergency_light_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: Structures/Wallmounts/Lighting/emergency-light.rsi
+      state: emergency_light_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+
+- type: entity
+  id: CMUEmergencyLightbarBase
+  abstract: true
+  name: emergency lightbar
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: PointLight
+    radius: 5
+    energy: 3
+    softness: 1
+    color: "#FF1A1A"
+
+- type: entity
+  parent: CMUEmergencyLightbarBase
+  id: CMUEmergencyLightbarSlow
+  components:
+  - type: LightBehaviour
+    behaviours:
+    - !type:ColorCycleBehaviour
+      interpolate: Nearest
+      maxDuration: 1.2
+      isLooped: true
+      enabled: true
+      colors:
+      - "#FF1A1A"
+      - "#1A3CFF"
+
+- type: entity
+  parent: CMUEmergencyLightbarBase
+  id: CMUEmergencyLightbarMedium
+  components:
+  - type: LightBehaviour
+    behaviours:
+    - !type:ColorCycleBehaviour
+      interpolate: Nearest
+      maxDuration: 0.7
+      isLooped: true
+      enabled: true
+      colors:
+      - "#FF1A1A"
+      - "#1A3CFF"
+
+- type: entity
+  parent: CMUEmergencyLightbarBase
+  id: CMUEmergencyLightbarFast
+  components:
+  - type: LightBehaviour
+    behaviours:
+    - !type:ColorCycleBehaviour
+      interpolate: Nearest
+      maxDuration: 0.3
+      isLooped: true
+      enabled: true
+      colors:
+      - "#FF1A1A"
+      - "#1A3CFF"

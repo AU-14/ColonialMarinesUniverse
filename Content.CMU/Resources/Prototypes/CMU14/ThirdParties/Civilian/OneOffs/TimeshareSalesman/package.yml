@@ -21,7 +21,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Timeshares Salesperson
+  name: cmu-job-name-timeshares-salesperson 
   description: You are a timeshares salesperson sent to the frontier to sell vacation packages. You travel from colony to colony trying to convince people to buy into shared properties.
   setPreference: true
   playTimeTracker: AU14JobCivilianDeliveryPizzaBoy

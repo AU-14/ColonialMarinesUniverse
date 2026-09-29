@@ -7,6 +7,7 @@ using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
+using Robust.Shared.Localization; 
 using Robust.Shared.Maths;
 
 namespace Content.Client.UserInterface.Systems.Chat;
@@ -350,6 +351,21 @@ public static class ChatUserSettings
         };
     }
 
+    // CMU14 fix hardcode Localization Begin: fix hardcode localization for forks
+    public static string GetDisplayTitle(ChatTabSettings tab)
+    {
+        if (string.Equals(tab.Id, AllTabId, StringComparison.OrdinalIgnoreCase))
+            return Loc.GetString("chat-tab-all");
+
+        if (string.Equals(tab.Id, RadioTabId, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(tab.Title, "RADIO", StringComparison.Ordinal))
+        {
+            return Loc.GetString("chat-tab-radio");
+        }
+
+        return tab.Title;
+    }
+    // CMU14 fix hardcode Localization End
     public static string CreateCustomTabId()
     {
         return string.Concat("custom-", Guid.NewGuid().ToString("N").Substring(0, 8));

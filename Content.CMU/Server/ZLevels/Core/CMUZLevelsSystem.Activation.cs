@@ -57,7 +57,7 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnZPhysicsMove(Entity<CMUZPhysicsComponent> ent, ref MoveEvent args)
     {
-        OnZPhysicsMoveGroundSnap(ent, ref args);
+        OnZPhysicsMoveGroundSnap(ent, ref args, out var unchangedGround);
 
         if (!TryGetFallCheckTile(ent, out var map, out var tile))
             return;
@@ -71,7 +71,7 @@ public sealed partial class CMUZLevelsSystem
 
         ent.Comp.LastFallCheckMap = map;
         ent.Comp.LastFallCheckTile = tile;
-        CheckActivation(ent);
+        CheckActivation(ent, unchangedGround);
     }
 
     private void OnZPhysicsTileChanged(ref TileChangedEvent args)
@@ -89,7 +89,7 @@ public sealed partial class CMUZLevelsSystem
         }
     }
 
-    private void CheckActivation(Entity<CMUZPhysicsComponent> ent)
+    private void CheckActivation(Entity<CMUZPhysicsComponent> ent, ZGroundContact? unchangedGround = null)
     {
         if (!CanUseZPhysics(ent))
         {
@@ -97,7 +97,7 @@ public sealed partial class CMUZLevelsSystem
             return;
         }
 
-        SetActiveStatus(ent, true);
+        SetActiveStatus(ent, true, unchangedGround);
     }
 
     private bool CanUseZPhysics(Entity<CMUZPhysicsComponent> ent)
@@ -112,12 +112,11 @@ public sealed partial class CMUZLevelsSystem
             return false;
 
         var xform = Transform(ent);
-        // Child grids provide their own supporting surface. The Z movement loop
-        // cannot process their children and already stops them explicitly, so do
-        // not give those entities a transient falling marker during activation.
+        // Ordinary shuttles provide their own supporting surface. Linked decks
+        // opt into Z movement so occupants can traverse their boarding ramps.
         if (xform.MapUid is not { } map ||
             !HasComp<CMUZLevelMapComponent>(map) ||
-            xform.ParentUid != map ||
+            !IsZPhysicsParent(xform) ||
             xform.Anchored)
         {
             return false;
@@ -132,10 +131,10 @@ public sealed partial class CMUZLevelsSystem
         return true;
     }
 
-    private void SetActiveStatus(EntityUid ent, bool active)
+    private void SetActiveStatus(EntityUid ent, bool active, ZGroundContact? unchangedGround = null)
     {
         if (active)
-            WakeZPhysics(ent);
+            WakeZPhysics(ent, unchangedGround);
         else
         {
             RemCompDeferred<CMUZFallingComponent>(ent);
@@ -149,13 +148,13 @@ public sealed partial class CMUZLevelsSystem
 
         var xform = Transform(ent);
         if (xform.MapUid is not { } mapUid ||
-            !TryComp<MapGridComponent>(mapUid, out var grid))
+            !TryResolveMovementGrid(mapUid, _transform.GetWorldPosition(ent), out var gridUid, out var grid))
         {
             return false;
         }
 
-        map = mapUid;
-        tile = _map.TileIndicesFor(mapUid, grid, new MapCoordinates(_transform.GetWorldPosition(ent), xform.MapID));
+        map = gridUid;
+        tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(_transform.GetWorldPosition(xform), xform.MapID));
         return true;
     }
 

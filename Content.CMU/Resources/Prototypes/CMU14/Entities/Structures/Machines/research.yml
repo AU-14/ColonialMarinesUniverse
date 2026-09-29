@@ -42,6 +42,46 @@
         type: ResearchDataTerminalBui
 
 - type: entity
+  parent: CMUResearchDataTerminal
+  id: CMUResearchDataTerminalGovfor
+  name: GOVFOR research data terminal
+  suffix: GOVFOR
+  description: A terminal connected to the GOVFOR research network.
+  components:
+  - type: ResearchDataTerminal
+    faction: govfor
+
+- type: entity
+  parent: CMUResearchDataTerminal
+  id: CMUResearchDataTerminalOpfor
+  name: OPFOR research data terminal
+  suffix: OPFOR
+  description: A terminal connected to the OPFOR research network.
+  components:
+  - type: ResearchDataTerminal
+    faction: opfor
+
+- type: entity
+  parent: CMUResearchDataTerminal
+  id: CMUResearchDataTerminalColony
+  name: colony research data terminal
+  suffix: Colony
+  description: A terminal connected to the Colony research network.
+  components:
+  - type: ResearchDataTerminal
+    faction: colony
+
+- type: entity
+  parent: CMUResearchDataTerminal
+  id: CMUResearchDataTerminalCorporate
+  name: Weyland-Yutani research data terminal
+  suffix: Weyland-Yutani
+  description: A terminal connected to the Weyland-Yutani research network.
+  components:
+  - type: ResearchDataTerminal
+    faction: corporate
+
+- type: entity
   parent: CMBaseStructure
   id: CMUAdminChemicalContractConsole
   name: chemical contract materializer

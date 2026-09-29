@@ -69,7 +69,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
-  spawnMenuRoleName: Prodigy Liaison (CMU)
+  spawnMenuRoleName: cmu-spawn-role-prodigy-liaison-cmu 
   accessGroups:
   - Colonist
   - auadmin

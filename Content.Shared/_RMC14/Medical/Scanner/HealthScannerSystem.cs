@@ -361,6 +361,11 @@ public sealed partial class HealthScannerSystem : EntitySystem
              _rmcUnrevivable.IsUnrevivable(target) ||
              HasComp<RMCDefibrillatorBlockedComponent>(target));
 
+        // cmu edit start
+        if (_mob.IsDead(target) && !state.PermaDead)
+            state.CMUTimeUntilUnrevivable = _rmcUnrevivable.GetTimeUntilUnrevivable(target);
+        // cmu edit end
+
         FillAdviceReadout(state, chemicals);
     }
 

@@ -18,9 +18,9 @@
   setPreference: true
   playTimeTracker: AUJobThreatLeader
   requirements:
-  - !type:RoleTimeRequirement
-      role: AUJobThreatMember
-      time: 18000 # 5 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentThreat
+    time: 18000 # 5 hours
   supervisors: cm-job-supervisors-nobody
   icon: "AU14JobIconThreatLeader"
   jobPreviewEntity: RMCPlayerXenoQueenPreview

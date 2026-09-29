@@ -39480,7 +39480,7 @@ entities:
     - type: Transform
       pos: 83.69706,242.47818
       parent: 2
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 6927
     components:

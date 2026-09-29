@@ -291,6 +291,7 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
             if (cat.Name == category)
             {
                 cat.Entries.Add(entry);
+                comp.StockEntriesInitialized = false;
                 return;
             }
         }

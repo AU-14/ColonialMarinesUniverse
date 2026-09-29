@@ -19,25 +19,25 @@ public enum RiderFlavor : byte
 public sealed partial class RiderComponent : Component
 {
     [DataField]
-    public float GripMax = 100;
+    public float GripMax = 150;
 
     [DataField]
-    public float GripTightThreshold = 70;
+    public float GripTightThreshold = 105;
 
     [DataField]
-    public float GripStart = 45;
+    public float GripStart = 68;
 
     [DataField]
-    public float GripRegenPerMinute = 10;
+    public float GripRegenPerMinute = 20;
 
     [DataField]
-    public float GripCoopRegenPerMinute = 18;
+    public float GripCoopRegenPerMinute = 30;
 
     [DataField]
-    public float GripDisableBelow = 15;
+    public float GripDisableBelow = 22;
 
     [DataField]
-    public float SootheThreshold = 70;
+    public float SootheThreshold = 105;
 
     [DataField]
     public float PunishCost = 15;
@@ -50,6 +50,14 @@ public sealed partial class RiderComponent : Component
     [DataField]
     public float SpeakCost = 5;
 
+    // Starving riders lose the throat: below this much grip, spoken mimicry
+    // starts clicking over into RiderCant. The last gasp before full disable
+    [DataField]
+    public float MaskSlipGripBelow = 30;
+
+    [DataField]
+    public float MaskSlipChance = 0.2f;
+
     [DataField]
     public float SurgeCost = 10;
 
@@ -60,7 +68,10 @@ public sealed partial class RiderComponent : Component
     public float SustainCost = 20;
 
     [DataField]
-    public float SeizeCost = 45;
+    public float MuteCost = 10;
+
+    [DataField]
+    public float SeizeCost = 30;
 
     /// <summary>
     /// Seize requires grip at or above this; the cost alone can never drop
@@ -95,10 +106,44 @@ public sealed partial class RiderComponent : Component
     public float SoothePainDecayBonus = 0.25f;
 
     [DataField]
-    public TimeSpan SeizeDuration = TimeSpan.FromSeconds(25);
+    public TimeSpan SeizeDuration = TimeSpan.FromSeconds(90);
+
+    /// <summary>
+    /// How long a mute keeps the host's voice clamped shut.
+    /// </summary>
+    [DataField]
+    public TimeSpan MuteDuration = TimeSpan.FromMinutes(1);
+
+    /// <summary>
+    /// How long pressing against a blocking door takes to squeeze through.
+    /// Never applies to plain closed airlocks: See RiderSystem.OnSqueezeTouch.
+    /// </summary>
+    [DataField]
+    public TimeSpan SqueezeDuration = TimeSpan.FromSeconds(2);
+
+    /// <summary>
+    /// A fresh offer may not be spammed at the same host for this long.
+    /// </summary>
+    [DataField]
+    public TimeSpan OfferCooldown = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// How long a revived corpse's original owner has to answer the return
+    /// prompt before the body is raffled to ghosts.
+    /// </summary>
+    [DataField]
+    public TimeSpan HostReturnWindow = TimeSpan.FromSeconds(90);
 
     [DataField]
-    public float ResistDrainPerSecond = 1;
+    public float ResistDrainSeconds = 150;
+
+    /// <summary>
+    /// How hard resisting strangles regen at an empty tank, scaling down to
+    /// nothing at a full one. 0.8 leaves a starving rider a fifth of their
+    /// refill, and a full one loses nothing.
+    /// </summary>
+    [DataField]
+    public float GripResistRegenSuppression = 0.8f;
 
     [DataField]
     public TimeSpan LatchDuration = TimeSpan.FromSeconds(2);
@@ -112,9 +157,6 @@ public sealed partial class RiderComponent : Component
     public EntityUid? Host;
     public float Grip;
 
-    // Languages borrowed from the current host; returned when the ride ends
-    public List<ProtoId<LanguagePrototype>> InheritedLanguages = new();
-
     /// <summary>
     /// Partial-tick accumulator; regen is per-minute, updates are per-frame.
     /// </summary>
@@ -125,6 +167,23 @@ public sealed partial class RiderComponent : Component
     public EntityUid? SeizeExitAction;
     public TimeSpan SeizeEndsAt;
     public bool Soothing;
+
+    /// <summary>
+    /// While CurTime is below this the host's own chat input is swallowed.
+    /// </summary>
+    public TimeSpan MutedUntil;
+
+    /// <summary>
+    /// The blocking door currently being squeezed through, if any.
+    /// </summary>
+    public EntityUid? SqueezingDoor;
+    public TimeSpan SqueezeDoneAt;
+
+    /// <summary>
+    /// Host with an open latch offer; cleared on answer or expiry.
+    /// </summary>
+    public EntityUid? OfferedTo;
+    public TimeSpan OfferExpiresAt;
 
     /// <summary>
     /// The phantom projected into the host's mind's eye; null while the rider
@@ -145,6 +204,7 @@ public sealed partial class RiderComponent : Component
     public EntityUid? SurgeAction;
     public EntityUid? CoaxAction;
     public EntityUid? SustainAction;
+    public EntityUid? MuteAction;
     public EntityUid? ManifestAction;
 
     public TimeSpan NextTellAt;

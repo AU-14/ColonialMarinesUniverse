@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Temperature; // CMU14
 using Content.Client.Resources;
 using Content.Client.Stylesheets;
 using Content.Shared.Atmos;
@@ -91,10 +92,11 @@ public sealed partial class AtmosMonitoringEntryContainer : BoxContainer
         // Update temperature
         var isNotVacuum = updatedData.TotalMolData > 1e-6f;
         var tempK = (FixedPoint2)updatedData.TemperatureData;
-        var tempC = (FixedPoint2)TemperatureHelpers.KelvinToCelsius(tempK.Float());
+        // CMU14: client temperature unit preference
+        var tempC = (FixedPoint2)TemperatureDisplay.FromKelvin(tempK.Float());
 
         TemperatureLabel.Text = isNotVacuum ?
-            Loc.GetString("atmos-alerts-window-temperature-value", ("valueInC", tempC), ("valueInK", tempK)) :
+            Loc.GetString("atmos-alerts-window-temperature-value", ("valueInC", tempC), ("valueInK", tempK), ("unit", TemperatureDisplay.Unit)) : // CMU14
             Loc.GetString("atmos-alerts-window-invalid-value");
 
         TemperatureLabel.FontColorOverride = isNotVacuum ? Color.DarkGray : StyleNano.DisabledFore;

@@ -1,0 +1,70 @@
+- type: entity
+  parent: [RMCBaseWeaponMount, BaseItem]
+  id: RuMCUTES-CMount
+  name: UTES-C heavy machine gun
+  description: The disassembled UTES-C HMG, with its telescopic tripods folded up and unable to fire.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/HMGs/UTES-C.rsi
+    state: utes-c_gun_mount
+    layers:
+    - state: utes-c
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - state: utes-c_magazine
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+    - state: utes-c_gun_mount
+      map: [ "enum.WeaponMountComponentVisualLayers.Folded" ]
+      visible: false
+    - state: utes-c_gun_mount_broken
+      map: [ "enum.WeaponMountComponentVisualLayers.Broken" ]
+      visible: false
+    - state: mag-0
+      map: [ "enum.WeaponMountComponentVisualLayers.FoldedAmmo" ]
+      visible: false
+    - state: utes-c_overheat
+      map: [ "enum.WeaponMountComponentVisualLayers.Overheated" ]
+      visible: false
+  - type: Strap
+    enabled: false
+  - type: Clothing
+    slots:
+    - suitStorage
+    - Back
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 130
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Breakage" ]
+  - type: CollisionWake
+  - type: WeaponMount
+    fixedWeaponPrototype: "RuMCMachineGunUTES-C"
+    isWeaponSecured: true
+    isWeaponLocked: true
+    canRotateWithoutTool: true
+    mountOnDeploy: false
+    mountExclusionAreaSize: 0
+    barricadeExclusionAreaSize: 2
+    assembleDelay: 3
+    undeploySound: null
+    acidableWhileUndeployed: true
+  - type: Tag
+    tags:
+    - UTES-CMount
+  - type: Foldable
+    folded: true
+    isLocked: true
+  - type: Corrodible
+    isCorrodible: true
+
+- type: Tag
+  id: UTES-CMount

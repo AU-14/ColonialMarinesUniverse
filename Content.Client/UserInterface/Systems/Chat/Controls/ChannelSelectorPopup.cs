@@ -11,8 +11,10 @@ public sealed class ChannelSelectorPopup : Popup
     public static readonly ChatSelectChannel[] ChannelSelectorOrder =
     {
         ChatSelectChannel.Local,
-        ChatSelectChannel.Whisper,
+        // cmu edit start
         ChatSelectChannel.Emotes,
+        ChatSelectChannel.Whisper,
+        // cmu edit end
         ChatSelectChannel.Radio,
         ChatSelectChannel.LOOC,
         ChatSelectChannel.OOC,

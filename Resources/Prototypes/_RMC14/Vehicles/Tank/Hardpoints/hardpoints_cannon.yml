@@ -1,6 +1,6 @@
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankLTBCannon
+  id: VehicleTankLTBCannon # CMU14
   name: LTB cannon
   description: A light tank cannon hardpoint.
   components:
@@ -23,6 +23,8 @@
     integrity: 550
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
     pixelOffsetNorth: "0,30"
@@ -162,7 +164,7 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankAceAutocannon
+  id: VehicleTankAceAutocannon # CMU14
   name: ACE autocannon
   description: An ACE autocannon hardpoint.
   components:
@@ -185,6 +187,8 @@
     integrity: 550
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     showOverlay: true
     useDirectionalOffsets: true
@@ -238,7 +242,7 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankAutocannonTWE
+  id: VehicleTankAutocannonTWE # CMU14
   name: Improper L26A2 45mm Autocannon
   description: Tosubishi Heavy Industrial Manufacturing main gun for the FV150. Its rapid fire rate and multipurpose ammunition offers stopping power against infantry, structures, and medium armor. Careful use can even disable tanks.
   components:
@@ -262,6 +266,8 @@
     integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     showOverlay: true
     useDirectionalOffsets: true
@@ -313,7 +319,7 @@
     damagedVehicleState: heavy_autocannon_1
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankHeavyElectrolaserTWE
+  id: VehicleTankHeavyElectrolaserTWE # CMU14
   name: Improper L215A1 Heavy Electrolaser
   description: An experimental prototype made by Tosubishi Heavy Industrial Manufacturing. An arcing electroshock laser assisted cannon, currently going through field testing. Theoretically it has limitless firing potential, as long as it is powered.
   components:
@@ -337,6 +343,8 @@
     integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     showOverlay: true
     useDirectionalOffsets: true
@@ -387,7 +395,7 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankDragonFlamer
+  id: VehicleTankDragonFlamer # CMU14
   name: DRGN flamer
   description: A DRGN flamer hardpoint.
   components:
@@ -410,6 +418,8 @@
     integrity: 450
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
     overlayState: drgn_flamer_0

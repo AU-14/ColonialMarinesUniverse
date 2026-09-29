@@ -189,6 +189,8 @@ public sealed partial class ChatUIController : UIController
     public event Action<ChatSelectChannel>? SelectableChannelsChanged;
     public event Action<ChatChannel, int?>? UnreadMessageCountsUpdated;
     public event Action<ChatMessage>? MessageAdded;
+    // CMU14: let transient lobby bubbles honor moderation deletions too.
+    public event Action<MsgDeleteChatMessagesBy>? MessagesDeleted;
 
     private readonly List<MsgDeleteChatMessagesBy> _deleteMessages = new();
     private int? _deletingHistoryIndex;
@@ -1110,6 +1112,7 @@ public sealed partial class ChatUIController : UIController
 
     public void OnDeleteChatMessagesBy(MsgDeleteChatMessagesBy msg)
     {
+        MessagesDeleted?.Invoke(msg);
         _deleteMessages.Add(msg);
         _deletingHistoryIndex = History.Count - 1;
     }

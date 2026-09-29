@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
@@ -32,7 +33,10 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         SubscribeLocalEvent<VehicleTurretComponent, EntInsertedIntoContainerMessage>(OnInserted);
         SubscribeLocalEvent<VehicleTurretComponent, EntRemovedFromContainerMessage>(OnRemoved);
         SubscribeLocalEvent<VehicleTurretComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<VehicleTurretComponent, AttemptShootEvent>(OnAttemptShoot);
+        // CMU14: constrain the shot from its final muzzle position before checking the firing arc.
+        SubscribeLocalEvent<VehicleTurretComponent, AttemptShootEvent>(OnAttemptShoot,
+            after: new[] { typeof(GunMuzzleOffsetSystem), typeof(VehicleTurretMuzzleSystem) },
+            before: new[] { typeof(GunFireArcSystem) });
         SubscribeNetworkEvent<VehicleTurretRotateEvent>(OnRotateEvent);
     }
 
@@ -118,6 +122,9 @@ public sealed partial class VehicleTurretSystem : EntitySystem
             return;
 
         if (!TryGetVehicle(turretUid, out var vehicle))
+            return;
+
+        if (TryComp<VehicleMaintenanceComponent>(vehicle, out var maintenance) && maintenance.ControlsLocked)
             return;
 
         if (!_net.IsClient)
@@ -536,6 +543,9 @@ public sealed partial class VehicleTurretSystem : EntitySystem
 
     private void UpdateTurretRotation(EntityUid turretUid, VehicleTurretComponent turret, EntityUid vehicle, float frameTime)
     {
+        if (TryComp<VehicleMaintenanceComponent>(vehicle, out var maintenance) && maintenance.ControlsLocked)
+            return;
+
         if (!turret.RotateToCursor)
             return;
 

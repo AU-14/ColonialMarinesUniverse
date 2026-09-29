@@ -40,6 +40,8 @@ public abstract partial class SharedIdCardSystem : EntitySystem
 
         SubscribeLocalEvent<IdCardComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<IdCardComponent, AfterAutoHandleStateEvent>(OnHandleState);
+        SubscribeLocalEvent<IdCardComponent, ComponentRemove>(OnCardRemove);
+        SubscribeLocalEvent<OriginalIdCardsComponent, EntityTerminatingEvent>(OnOriginalOwnerTerminating);
         SubscribeLocalEvent<TryGetIdentityShortInfoEvent>(OnTryGetIdentityShortInfo);
         SubscribeLocalEvent<EntityRenamedEvent>(OnRename);
 
@@ -62,7 +64,29 @@ public abstract partial class SharedIdCardSystem : EntitySystem
 
     private void OnMapInit(EntityUid uid, IdCardComponent id, MapInitEvent args)
     {
+        if (id.OriginalOwner is { } owner && !TerminatingOrDeleted(owner))
+            EnsureComp<OriginalIdCardsComponent>(owner).Cards.Add(uid);
+
         UpdateEntityName(uid, id);
+    }
+
+    private void OnCardRemove(Entity<IdCardComponent> ent, ref ComponentRemove args)
+    {
+        if (TryComp<OriginalIdCardsComponent>(ent.Comp.OriginalOwner, out var owner))
+            owner.Cards.Remove(ent.Owner);
+    }
+
+    private void OnOriginalOwnerTerminating(Entity<OriginalIdCardsComponent> ent, ref EntityTerminatingEvent args)
+    {
+        foreach (var card in ent.Comp.Cards)
+        {
+            if (!TryComp<IdCardComponent>(card, out var id) || id.OriginalOwner != ent.Owner)
+                continue;
+
+            id.OriginalOwner = null;
+            Dirty(card, id);
+        }
+        ent.Comp.Cards.Clear();
     }
 
     private void OnTryGetIdentityShortInfo(TryGetIdentityShortInfoEvent ev)
@@ -364,11 +388,15 @@ public abstract partial class SharedIdCardSystem : EntitySystem
         if (!Resolve(uid, ref id))
             return false;
 
-        if (player == null)
+        if (player == null || TerminatingOrDeleted(player))
             return false;
 
+        EnsureComp<OriginalIdCardsComponent>(player.Value).Cards.Add(uid);
         if (id.OriginalOwner == player)
             return true;
+
+        if (TryComp<OriginalIdCardsComponent>(id.OriginalOwner, out var previous))
+            previous.Cards.Remove(uid);
 
         id.OriginalOwner = player.Value;
         Dirty(uid, id);

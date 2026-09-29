@@ -1,0 +1,49 @@
+author: murdocstarsim
+category: CMU
+changes:
+- message: Lots of SOP / UCMJ changes below.
+  type: Add
+- message: All junior officers have been executed, not to worry we have now replaced
+    them with staff officers, all mention of junior officers have been removed from
+    SOP.
+  type: Add
+- message: Blind drops have been altered, there is no limit on how many personnel
+    may drop, however it must be volountary, also we have prohibited Command Staff
+    and Shipside Staff from blind dropping. We didn't particularly like seeing our
+    auxiliarry technicians blind drop...
+  type: Add
+- message: A primary LZ must now be chosen and defended. Hopefully no more random
+    hijacks...
+  type: Add
+- message: EO has been granted permission for ship construction and deconstruction
+    of non vital area's to create whatever they wish! EO to Brig, I need a donut dispenser
+    please.
+  type: Add
+- message: Rank pins are now mandatory under uniform regulations, trooper where is
+    your rank pin!
+  type: Add
+- message: IO's and EO's are now no longer breaking SOP by deploying before a FOB
+    has been established! Not that anyone noticed...
+  type: Add
+- message: Department Heads (CMP, CMO, LO) can now deploy to the FOB if they are the
+    only members of their department, you can't hide from the law son...
+  type: Add
+- message: Provost has bestowed the gift of executions upon Whitelisted Commanders,
+    Commanders may now execute members of the military for breaking capital crimes.
+    Better get in line or risk losing your head!
+  type: Add
+- message: 6 New capital crimes have been added, most to do with civilians and unlawfully
+    harming them or their property, check your fire!
+  type: Add
+- message: Transfer of commandership has been simplified. No longer will you argue
+    for twenty minutes over who becomes commander.
+  type: Add
+- message: DNR's have been added as their own section alongside executions. CMO please
+    DNR me because I can't stand it surrounded by idiots...
+  type: Add
+- message: Geneva based crime temporarily removed as the new capital crimes serve
+    as a replacement in a much shorter and non 40 paragraph section. Less reading,
+    simplier crimes, more taser beating by MPs!
+  type: Add
+time: '2026-08-25T22:57:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1853

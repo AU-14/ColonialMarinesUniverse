@@ -37,6 +37,7 @@
     AU14ItemLaptopCallsignGOVFOR: AU14ItemLaptopCallsignOPFOR
     AU14ItemLaptopOverwatchGOVFOR: AU14ItemLaptopOverwatchOPFOR
     CMASRSConsoleGovfor: CMASRSConsoleOpfor
+    CMComputerDropshipTerminalGovfor: CMComputerDropshipTerminalOpfor
     CMUGovforRosterConsole: CMUOpforRosterConsole
     CMUTacticalMapTableGovfor: CMUTacticalMapTableOpfor
     CMUTacticalMapTableLargeGovfor: CMUTacticalMapTableLargeOpfor
@@ -49,6 +50,10 @@
     RMCGroundsideOperationsConsoleGovfor: RMCGroundsideOperationsConsoleOpfor
     RMCOverwatchConsoleGovforRotating: RMCOverwatchConsoleOpforRotating
     RMCOverwatchConsoleGovfor: RMCOverwatchConsoleOpfor
+    RMCOverwatchConsoleGovforTOCMap: RMCOverwatchConsoleOpforTOCMap
+    RMCOverwatchConsoleGovforTOCMapRotating: RMCOverwatchConsoleOpforTOCMapRotating
+    RMCOverwatchConsoleGovforTOCShuttle: RMCOverwatchConsoleOpforTOCShuttle
+    RMCOverwatchConsoleGovforTOCShuttleRotating: RMCOverwatchConsoleOpforTOCShuttleRotating
     RMCTechTreeConsoleGovfor: RMCTechTreeConsoleOpfor
     AU14AllianceConsoleGovfor: AU14AllianceConsoleOpfor
     AU14AnalyzerMachine: AU14AnalyzerMachineOpfor

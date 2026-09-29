@@ -39,8 +39,16 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
     private readonly CMUPerformanceErrorTracker _errors = new();
     private readonly CMUPerformancePhaseTracker _phases = new();
     private readonly CMUPerformanceSpikeCapture _spikeCapture = new();
+    private readonly CMUPerformanceDiagnosticsCost _updateCost = new();
+    private readonly CMUPerformanceDiagnosticsCost _detailCost = new();
+    private readonly CMUPerformanceDetailGate _detailGate = new();
     private readonly CMUPerformanceRollingWindow _shortRates = new(ShortRateWindowSeconds);
     private readonly CMUPerformanceRollingWindow _churnRates = new(ChurnRateWindowSeconds);
+
+    private HashSet<string>? _entitySystemNames;
+    private readonly Dictionary<string, string> _sanitizedNames = new(StringComparer.Ordinal);
+    private IReadOnlySet<string> EntitySystemNames => _entitySystemNames ??=
+        _entitySystemManager.GetEntitySystemTypes().Select(type => type.Name).ToHashSet(StringComparer.Ordinal);
 
     private ISawmill _sawmill = default!;
     private GameTicker? _ticker;
@@ -147,6 +155,8 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         _config.OnValueChanged(CVars.ProfEnabled, OnProfilerEnabledChanged);
 
         InitializeMetrics();
+        _pvsMetrics = new(Prometheus.Metrics.DefaultFactory, _timing.RealTime);
+        InitializePhysicsMetrics();
 
         if (_enabled)
         {
@@ -183,7 +193,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             $"perfIncidentId={_activeIncidentId} serverTps={_lastObservation?.AchievedTps ?? 0:F2} ",
             $"serverTpsValid={_lastObservation?.TpsValid ?? false} perfSampleAgeSeconds={(_lastObservation == null ? -1 : (now - _lastObservation.RealTime).TotalSeconds):F2} ",
             $"lastStallTick={_lastStallTick} lastStallMs={_lastStallMs:F2} ",
-            $"lastStallAgeSeconds={(_lastStallTime == null ? -1 : (now - _lastStallTime.Value).TotalSeconds):F2}");
+            $"lastStallAgeSeconds={(_lastStallTime == null ? -1 : (now - _lastStallTime.Value).TotalSeconds):F2} ") + DescribeMemory();
     }
 
     public void Update()
@@ -194,6 +204,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         if (!_enabled)
             return;
 
+        using var cost = _updateCost.Measure();
         TimeSpan now = _timing.RealTime;
         ObserveRuntime(now);
         RetryCompletedProfile();
@@ -234,6 +245,9 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             SetProfilerCVar(false);
         _profilerEnabledByDiagnostics = false;
         _meter?.Dispose();
+        _memory.Dispose();
+        _entitySystemNames = null;
+        _sanitizedNames.Clear();
         _initialized = false;
     }
 
@@ -254,7 +268,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             $"entities={observation.EntityCount} components={observation.ComponentCount} ",
             $"players={observation.Players} profiler={_profiler.IsEnabled} metrics={_config.GetCVar(CVars.MetricsEnabled)} ",
             $"profilerEventCapacity={_profiler.Buffer.LogBuffer.Length} profilerIndexCapacity={_profiler.Buffer.IndexBuffer.Length} ",
-            $"churnIncidents={_config.GetCVar(CCVars.CMUServerPerformanceChurnIncidents)} capturePhase=input-post-engine");
+            $"churnIncidents={_config.GetCVar(CCVars.CMUServerPerformanceChurnIncidents)} capturePhase=input-post-engine ") + DescribeMemory() + " " + DescribeDiagnosticsCost();
     }
 
     public bool CaptureManualReport()
@@ -588,9 +602,22 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         string source,
         bool bypassCooldown)
     {
+        // Stall/incident summaries are emitted independently. Bound repeated automatic
+        // parsing and detail logs without discarding their occurrence or worst scalars.
+        if (source != "manual" && !_detailGate.TryCapture(_timing.RealTime,
+                observation.FrameMilliseconds, observation.AllocatedBytes))
+        {
+            _suppressedDetailReports++;
+            _detailPending = true;
+            if (_nextDetailTime < _detailGate.NextAllowed) _nextDetailTime = _detailGate.NextAllowed;
+            return;
+        }
+        using var cost = _detailCost.Measure();
         using var reportScope = _profiler.Group("CMU Diagnostics Report");
         _detailPending = false;
         _lastDetailTime = observation.RealTime;
+        _memory.Sample(_timing.RealTime);
+        _sawmill.Warning(Invariant($"[CMU-PERF] memory incidentId={_activeIncidentId} source={source} ") + DescribeMemory() + " " + DescribePvsRetention());
         LogOperations();
         if (_spikeCapture.ShouldCapture(observation.RealTime, observation.FrameMilliseconds, observation.AllocatedBytes,
                 GetStallThreshold(), _config.GetCVar(CCVars.CMUServerPerformanceAllocationMiBPerFrame) * BytesPerMiB))
@@ -604,9 +631,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         int top = Math.Clamp(_config.GetCVar(CCVars.CMUServerPerformanceReportTop), 1, 25);
         CMUPerformanceChurnSnapshot current = _churn.Snapshot();
         CMUPerformanceChurnSnapshot baseline = _churnBaseline ?? current;
-        var systemNames = _entitySystemManager.GetEntitySystemTypes()
-            .Select(type => type.Name)
-            .ToHashSet(StringComparer.Ordinal);
+        var systemNames = EntitySystemNames;
         int frames = Math.Clamp(_config.GetCVar(CCVars.CMUServerPerformanceProfileFrames), 1, 64);
         int maxEvents = Math.Clamp(_config.GetCVar(CCVars.CMUServerPerformanceProfileMaxEvents), 128, 100000);
         CMUPerformanceProfileReport profile = CMUPerformanceProfilerReader.Capture(
@@ -632,6 +657,8 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             $"baselineComponentsAdded={baseline.ComponentsAdded} currentComponentsAdded={current.ComponentsAdded}"));
 
         LogProfile(profile, top);
+        LogPvsStages();
+        LogPhysicsStages();
         foreach (var phase in _phases.Drain().OrderByDescending(row => row.MaxMs))
         {
             _sawmill.Warning(Invariant(
@@ -656,6 +683,8 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
 
         _sawmill.Warning(Invariant(
             $"[CMU-PERF] detail-end incidentId={_activeIncidentId} source={source}"));
+        // Completed scopes only: this report is included in the next status/report.
+        _sawmill.Warning("[CMU-PERF] diagnostics-cost " + DescribeDiagnosticsCost());
 
         // The report itself allocates and runs inside the current profiler frame. Skip that frame so diagnostics do not
         // attribute their own bounded report generation to gameplay or open a follow-up allocation incident.
@@ -696,7 +725,8 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         _retryProfileAfterIndex = null;
         if (_retryProfileIncidentId != _activeIncidentId)
             return;
-        var names = _entitySystemManager.GetEntitySystemTypes().Select(type => type.Name).ToHashSet(StringComparer.Ordinal);
+        using var cost = _detailCost.Measure();
+        var names = EntitySystemNames;
         var report = CMUPerformanceProfilerReader.Capture(_profiler, names,
             _config.GetCVar(CCVars.CMUServerPerformanceProfileFrames),
             _config.GetCVar(CCVars.CMUServerPerformanceProfileMaxEvents));
@@ -715,6 +745,13 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
 
         CaptureDetailedReport(observation, "cooldown-expired", bypassCooldown: false);
     }
+
+    private string DescribeDiagnosticsCost() => Invariant(
+        $"updateCalls={_updateCost.Calls} updateTotalMs={_updateCost.TotalMilliseconds:F3} updateMaxMs={_updateCost.MaximumMilliseconds:F3} ",
+        $"updateAllocatedBytes={_updateCost.AllocatedBytes} detailCalls={_detailCost.Calls} detailTotalMs={_detailCost.TotalMilliseconds:F3} ",
+        $"detailMaxMs={_detailCost.MaximumMilliseconds:F3} detailAllocatedBytes={_detailCost.AllocatedBytes} ",
+        $"coalescedDetails={_detailGate.Coalesced} coalescedWorstFrameMs={_detailGate.WorstFrameMilliseconds:F3} ",
+        $"coalescedWorstAllocatedBytes={_detailGate.WorstAllocatedBytes} elapsedMainThread=true detailIncludedInUpdate=true cumulative=true");
 
     private void LogProfile(CMUPerformanceProfileReport profile, int top)
     {
@@ -841,7 +878,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             $"sentPacketsTotal={observation.SentPacketsTotal} receivedPacketsTotal={observation.ReceivedPacketsTotal} ",
             $"profileFrame={observation.ProfileFrame?.ToString(CultureInfo.InvariantCulture) ?? "unknown"} ",
             $"allocatedBytes={observation.AllocatedBytes} profiler={_profiler.IsEnabled} ",
-            $"metrics={_config.GetCVar(CVars.MetricsEnabled)}");
+            $"metrics={_config.GetCVar(CVars.MetricsEnabled)} ") + DescribeMemory();
     }
 
     private IReadOnlyList<CMUNetworkMessageRate> CaptureMessageRates(double elapsed)
@@ -946,6 +983,8 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         _detector.Reset();
         _spikeCapture.Clear();
         _operations.Clear();
+        _pvsMetrics.Reset(now);
+        _physicsMetrics.Reset(now);
         _lastRuntimeSample = default;
         _churnBaseline = _churn.Snapshot();
         _lastMessageBandwidth = new(_netManager.MessageBandwidthUsage);
@@ -1098,7 +1137,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         {
             _sawmill.Warning(Invariant(
                 $"[CMU-PERF] runtime-metrics-disabled metrics={metrics} runtime={runtimeMetrics} ",
-                $"retainedHeapRssThreadPoolUnavailable=true gcPauseWindowAvailable=true action=enable-and-scrape-runtime-metrics"));
+                $"memoryLogSamplesAvailable=true gcPauseWindowAvailable=true action=enable-and-scrape-runtime-metrics-for-continuous-history"));
         }
     }
 
@@ -1306,9 +1345,19 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         return double.IsFinite(value) ? value : 0;
     }
 
-    private static string SanitizeName(string name)
+    private string SanitizeName(string name)
     {
-        return name.Replace(' ', '_').Replace('\r', '_').Replace('\n', '_');
+        if (name.AsSpan().IndexOfAny(' ', '\r', '\n') < 0) return name;
+        if (_sanitizedNames.TryGetValue(name, out var cached)) return cached;
+        var sanitized = string.Create(name.Length, name, static (chars, source) =>
+        {
+            for (var i = 0; i < source.Length; i++)
+                chars[i] = source[i] is ' ' or '\r' or '\n' ? '_' : source[i];
+        });
+        // Names can originate in diagnostics extensions. Bound retained count and string length.
+        if (name.Length <= 256 && _sanitizedNames.Count < 2048)
+            _sanitizedNames.Add(name, sanitized);
+        return sanitized;
     }
 
     internal static string Invariant(params FormattableString[] values)

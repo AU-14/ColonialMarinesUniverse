@@ -44,6 +44,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
     private bool _medicalEnabled;
     private bool _bodyPartEnabled;
     private float _bodyPartDamagePropagation;
+    private float _explosionLimbSeveranceMultiplier;
     private bool _severanceHeadDisabled;
     private bool _severanceTorsoDisabled;
 
@@ -59,6 +60,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.BodyPartEnabled, v => _bodyPartEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.BodyPartDamagePropagation, v => _bodyPartDamagePropagation = v, true);
+        Cfg.OnValueChanged(CMUMedicalCCVars.ExplosionLimbSeveranceMultiplier,
+            v => _explosionLimbSeveranceMultiplier = MathF.Max(0f, v), true);
         Cfg.OnValueChanged(CMUMedicalCCVars.SeveranceHeadDisabled, v => _severanceHeadDisabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.SeveranceTorsoDisabled, v => _severanceTorsoDisabled = v, true);
     }
@@ -327,10 +330,16 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             ? DamageImpactSeverance.Calculate(modified, impact) * (FixedPoint2)_bodyPartDamagePropagation
             : FixedPoint2.Zero;
 
+        // Blast damage is spread across the whole body. Increase its ability to sever
+        // exposed limbs without multiplying health damage or changing head/torso rules.
+        if (impact.Delivery == DamageImpactDelivery.Explosion &&
+            partType is BodyPartType.Arm or BodyPartType.Hand or BodyPartType.Leg or BodyPartType.Foot)
+            severanceDeduction *= (FixedPoint2)_explosionLimbSeveranceMultiplier;
+
         health.Current -= deduction;
         if (severanceDeduction > FixedPoint2.Zero)
             health.SeveranceDamage += severanceDeduction;
-        Dirty(partUid, health);
+        DirtyHealth(partUid, health, deduction != FixedPoint2.Zero, severanceDeduction > FixedPoint2.Zero);
 
         var organs = CollectOrgans(partUid);
         var trauma = Trauma.CreateContactResult(partType, modified, organs.Count > 0, origin, tool, impact, mechanism, targetZone);
@@ -383,12 +392,13 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             return;
 
         var prev = health.Current;
+        var previousSeverance = health.SeveranceDamage;
         var healed = FixedPoint2.Min(missing, remaining);
         var next = prev + healed;
 
         health.Current = next;
         health.SeveranceDamage = FixedPoint2.Max(FixedPoint2.Zero, health.SeveranceDamage - healed);
-        Dirty(partUid, health);
+        DirtyHealth(partUid, health, prev != next, previousSeverance != health.SeveranceDamage);
         RaiseHealedThresholdEvent(body, partUid, part.PartType, health, prev, next);
 
         remaining -= healed;
@@ -590,11 +600,12 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (newCurrent > part.Comp.Max)
             newCurrent = part.Comp.Max;
         var prev = part.Comp.Current;
+        var previousSeverance = part.Comp.SeveranceDamage;
         part.Comp.Current = newCurrent;
         part.Comp.SeveranceDamage = FixedPoint2.Min(
             part.Comp.SeveranceDamage,
             FixedPoint2.Max(FixedPoint2.Zero, part.Comp.Max - newCurrent));
-        Dirty(part.Owner, part.Comp);
+        DirtyHealth(part.Owner, part.Comp, prev != newCurrent, previousSeverance != part.Comp.SeveranceDamage);
 
         if (part.Comp.Max <= FixedPoint2.Zero)
             return;
@@ -604,6 +615,17 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         var prevFraction = prev.Float() / part.Comp.Max.Float();
         var nextFraction = newCurrent.Float() / part.Comp.Max.Float();
         RaisePainThresholdEvents(body, part.Owner, partBody.PartType, prevFraction, nextFraction);
+    }
+
+    private void DirtyHealth(EntityUid uid, BodyPartHealthComponent health, bool currentChanged, bool severanceChanged)
+    {
+        // RT generates single-field deltas; a change to both fields needs a full state.
+        if (currentChanged && severanceChanged)
+            Dirty(uid, health);
+        else if (currentChanged)
+            DirtyField(uid, health, nameof(health.Current));
+        else if (severanceChanged)
+            DirtyField(uid, health, nameof(health.SeveranceDamage));
     }
 
     public void RestoreToFractionCap(Entity<BodyPartHealthComponent?> part, float capFraction)

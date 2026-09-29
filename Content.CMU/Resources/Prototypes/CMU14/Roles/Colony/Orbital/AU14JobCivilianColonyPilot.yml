@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   displayWeight: 6
   id: AU14JobCivilianColonyPilot
   roundSide: Civilian
@@ -49,7 +49,7 @@
   dummyStartingGear: AU14GearCivilianColonyPilotDummy
   icon: "AU14JobIconCivilianColonyPilot"
   requireAdminNotify: true
-  spawnMenuRoleName: Commercial Pilot (Orbital)
+  spawnMenuRoleName: cmu-spawn-role-commercial-pilot-orbital 
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-orbital
   accessGroups:

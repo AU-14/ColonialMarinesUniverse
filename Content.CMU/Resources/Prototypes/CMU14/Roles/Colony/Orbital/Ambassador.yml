@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianAmbassadorCCA
   roundSide: Civilian
   roundForce: CCA
@@ -62,6 +62,7 @@
     pocket1: AU14StampCCAA
   inhand:
   - AU14PortableVendorCCA
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -156,6 +157,7 @@
     pocket1: AU14StampICSCA
   inhand:
   - AU14PortableVendorICSC
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -250,6 +252,7 @@
     pocket1: AU14StampTWEA
   inhand:
   - AU14PortableVendorTWE
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -343,6 +346,7 @@
     pocket1: AU14StampUAA
   inhand:
   - AU14PortableVendorUA
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -435,6 +439,7 @@
     pocket1: AU14StampUPPA
   inhand:
   - AU14PortableVendorUPP
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

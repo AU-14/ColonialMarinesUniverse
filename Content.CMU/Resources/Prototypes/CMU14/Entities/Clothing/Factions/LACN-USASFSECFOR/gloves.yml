@@ -6,10 +6,39 @@
   components:
   - type: Insulated
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/lacngloves.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi
   - type: Clothing
-    sprite: CMU14/Clothing/LACN/lacngloves.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNglovesbrown.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNglovesblack.rsi
   - type: Fiber
     fiberMaterial: fibers-black
     fiberColor: fibers-black
   - type: FingerprintMask
+
+- type: entity
+  parent: CMHandsWhite
+  id: CMULACNGlovesWhite
+  name: LACN white gloves
+  description: White gloves worn by LACN crew aboard ship.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Shared/LACNgloveswhite.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Shared/LACNgloveswhite.rsi
+
+- type: entity
+  parent: CMHandsWhiteDress
+  id: CMULACNGlovesService
+  name: LACN service gloves
+  description: Service gloves worn by commissioned officers of the Latin American Colonial Navy.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNservicegloves.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNservicegloves.rsi

@@ -20,8 +20,11 @@ public sealed partial class RMCSmokeSystem : SharedRMCSmokeSystem
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!; // CMU14
 
     private readonly List<(MapGridComponent Grid, TileRef Tile)> _tiles = new();
+    private readonly List<EntityCoordinates> _spreadCoordinates = new(); // CMU14
+    private readonly HashSet<Entity<EvenSmokeComponent>> _nearbySmoke = new(); // CMU14
 
     private EntityQuery<EvenSmokeComponent> _evenSmokeQuery;
     private EntityQuery<TimedDespawnComponent> _timedDespawnQuery;
@@ -57,15 +60,22 @@ public sealed partial class RMCSmokeSystem : SharedRMCSmokeSystem
                 _tiles.Add(neighborTile);
         }
 
+        // CMU14 Begin: terrain tiles and air without a grid share the same bounded smoke spread.
+        _spreadCoordinates.Clear();
+        _spreadCoordinates.AddRange(args.NeighborFreeCoordinates);
         foreach (var tile in _tiles)
-        {
-            var coords = _map.GridTileToLocal(tile.Tile.GridUid, tile.Grid, tile.Tile.GridIndices);
+            _spreadCoordinates.Add(_map.GridTileToLocal(tile.Tile.GridUid, tile.Grid, tile.Tile.GridIndices));
 
-            var smokeEnumerator = _rmcMap.GetAnchoredEntitiesEnumerator(coords);
+        foreach (var coords in _spreadCoordinates)
+        {
             var blockSmoke = false;
-            while (smokeEnumerator.MoveNext(out var uid))
+            // Gas cannot anchor to an empty air tile. Include unanchored clouds when
+            // checking occupancy so neighboring fronts cannot multiply on the same tile.
+            _nearbySmoke.Clear();
+            _lookup.GetEntitiesInRange(coords, 0.1f, _nearbySmoke);
+            foreach (var smokeEntity in _nearbySmoke)
             {
-                if (TryComp<EvenSmokeComponent>(uid, out var evenSmoke) && evenSmoke.Spawn == ent.Comp.Spawn)
+                if (smokeEntity.Comp.Spawn == ent.Comp.Spawn)
                 {
                     blockSmoke = true;
                     break;
@@ -74,6 +84,7 @@ public sealed partial class RMCSmokeSystem : SharedRMCSmokeSystem
 
             if (blockSmoke)
                 continue;
+            // CMU14 End
 
             var smoke = SpawnAtPosition(ent.Comp.Spawn, coords);
             _hive.SetSameHive(ent.Owner, smoke);

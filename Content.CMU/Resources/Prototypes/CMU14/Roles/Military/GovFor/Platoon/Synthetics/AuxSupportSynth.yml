@@ -5,7 +5,7 @@
   name: au14-job-name-govforauxsupportsynth
   description: au14-job-description-govforauxsupportsynth
   icon: "AU14JobIconGovSynth"
-  spawnMenuRoleName: Support Synth (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-support-synth-govfor 
   startingGear: AU14GearGOVFORAuxSupportSynth
   dummyStartingGear: AU14GearGOVFORAuxSupportSynthDummy
   supervisors: au14-job-supervisors-govforplatco
@@ -167,19 +167,14 @@
   groups:
   - GOVFORSynthSpecializationAU14
   - SynthBackpackAU14
-  - SynthUniformAU14
-  - SynthUniformAccessoriesAU14
   - SynthEquipmentAU14
   - SynthAccesoriesSpecialAU14
-  - SynthSuitAU14
   - SynthSuitSpecialAU14
   - SynthBeltAU14
   - SynthPouchesLeftAU14
   - SynthPouchesRightAU14
-  - SynthHeadwearAU14
   - SynthGlassesAU14
   - SynthGlovesAU14
-  - SynthShoesRMC
   - SynthMasksAU14
   - HelmetGarbsRMC
   - SmokablesRMC
@@ -202,6 +197,7 @@
   - AU14OpforCommand
   - CMCargoTech
   - aulegacygroupcommand
+  useLoadoutOfJob: AU14JobGOVFORAuxSupportSynth
 
 - type: startingGear
   id: AU14GearOPFORAuxSupportSynth

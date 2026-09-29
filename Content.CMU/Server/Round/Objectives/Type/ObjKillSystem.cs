@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.Roles.Jobs;
 using Content.Shared.CMU14.Round.Objectives.Type;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Server.CMU14.Round.Objectives.Components;
 using Content.Shared._RMC14.Synth;
@@ -84,7 +85,6 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
     {
         var uid = ev.Uid;
         if (_shuttingDown) return;
-        if (HasComp<KillMarkedForComponent>(uid)) return;
         if (!TryComp(uid, out MetaDataComponent? meta)) return;
 
         var protoId = meta.EntityPrototype?.ID ?? string.Empty;
@@ -108,7 +108,10 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
             string? jobId = null;
             if (!string.IsNullOrEmpty(killComp.SpecificJob))
             {
-                if (TryComp<MindContainerComponent>(uid, out var mindCont) &&
+                if (TryComp<ThreatComponent>(uid, out var threat) && threat.ObjectiveJob is { } threatJob
+                    && threatJob.Id.Equals(killComp.SpecificJob, StringComparison.OrdinalIgnoreCase))
+                    jobId = threatJob.Id;
+                else if (TryComp<MindContainerComponent>(uid, out var mindCont) &&
                     _jobSystem.MindTryGetJob(mindCont.Mind, out var jobProto))
                     jobId = jobProto.ID;
 
@@ -149,7 +152,10 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
             string? jobId = null;
             if (!string.IsNullOrEmpty(comp.SpecificJob))
             {
-                if (TryComp<MindContainerComponent>(ent, out var mindCont)
+                if (TryComp<ThreatComponent>(ent, out var threat) && threat.ObjectiveJob is { } threatJob
+                    && threatJob.Id.Equals(comp.SpecificJob, StringComparison.OrdinalIgnoreCase))
+                    jobId = threatJob.Id;
+                else if (TryComp<MindContainerComponent>(ent, out var mindCont)
                         && _jobSystem.MindTryGetJob(mindCont.Mind, out var jobProto))
                     jobId = jobProto.ID;
 
@@ -176,6 +182,11 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
         {
             if (!TryComp(objectiveUid, out KillObjectiveComponent? killComp)
                     || !TryComp(objectiveUid, out CMUObjectiveComponent? auComp))
+                continue;
+
+            // Completed or capped objectives stay marked on entities; without this check their
+            // counters keep climbing on every death long after the objective stopped scoring.
+            if (!auComp.Active)
                 continue;
 
             if (!comp.CreditedObjectives.Add(objectiveUid))

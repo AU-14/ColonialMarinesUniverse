@@ -83,6 +83,18 @@
       amount: 1
 
 - type: entity
+  id: CMUCrateFlamerColony
+  parent: RMCCrateWeapons
+  name: LC9 Incinerator Crate (1x LC9, 2x LC9 Fuel Tank)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponFlamerColony
+      amount: 1
+    - id: RMCTankFlamerColony
+      amount: 2
+
+- type: entity
   id: CMUCrateWYSentryAmmo
   parent: RMCCrateWeapons
   name: M30 ammo drum crate

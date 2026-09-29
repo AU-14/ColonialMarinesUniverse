@@ -3,7 +3,7 @@
 # This loads whenever TOOLS is defined: Debug, DebugOpt and Tools builds; not Release
 # LoadBuildConfigPresets() and config.preset_development=true config.preset_debug=true
 [build]
-engine_version = "v289.0.0"
+engine_version = "v290.0.0"
 
 [game]
 defaultpreset = "Insurgency"

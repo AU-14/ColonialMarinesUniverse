@@ -27,7 +27,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: cmu-colony-supervisors-colonist
-  spawnMenuRoleName: Colony PMC Medic (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-pmc-medic-cmu 
   accessGroups:
   - Colonist
   roleWeight: 0.25

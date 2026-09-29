@@ -546,58 +546,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         if (!_inventory.TryGetSlots(dummy, out var slots))
             return;
 
-        // Apply loadout
-        var (key, _) = LoadoutSystem.GetJobLoadoutInfo(job.ID, _prototypeManager);
-        if (profile.Loadouts.TryGetValue(key, out var jobLoadout))
-        {
-            foreach (var loadouts in jobLoadout.SelectedLoadouts.Values)
-            {
-                foreach (var loadout in loadouts)
-                {
-                    if (!_prototypeManager.TryIndex(loadout.Prototype, out var loadoutProto))
-                        continue;
-
-                    // TODO: Need some way to apply starting gear to an entity and replace existing stuff coz holy fucking shit dude.
-                    foreach (var slot in slots)
-                    {
-                        // Try startinggear first
-                        if (_prototypeManager.TryIndex(loadoutProto.StartingGear, out var loadoutGear))
-                        {
-                            var itemType = ((IEquipmentLoadout)loadoutGear).GetGear(slot.Name);
-
-                            if (_inventory.TryUnequip(dummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-                            {
-                                EntityManager.DeleteEntity(unequippedItem.Value);
-                            }
-
-                            if (itemType != string.Empty)
-                            {
-                                var item = EntityManager.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                                MarkPreviewEntity(item);
-                                _inventory.TryEquip(dummy, item, slot.Name, true, true);
-                            }
-                        }
-                        else
-                        {
-                            var itemType = ((IEquipmentLoadout)loadoutProto).GetGear(slot.Name);
-
-                            if (_inventory.TryUnequip(dummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-                            {
-                                EntityManager.DeleteEntity(unequippedItem.Value);
-                            }
-
-                            if (itemType != string.Empty)
-                            {
-                                var item = EntityManager.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                                MarkPreviewEntity(item);
-                                _inventory.TryEquip(dummy, item, slot.Name, true, true);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        // CMU14: apply base clothing once; the caller then overlays the selected loadout.
         if (!_prototypeManager.TryIndex(job.StartingGear, out var gear))
             return;
 
@@ -656,7 +605,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
             // Special type like borg or AI, do not spawn a human just spawn the entity.
             dummyEnt = EntityManager.SpawnEntity(previewEntity, MapCoordinates.Nullspace);
             MarkPreviewEntity(dummyEnt);
-            return dummyEnt;
+            // CMU14: custom job bodies must also display their selected loadout below.
         }
         else if (humanoid is not null)
         {
@@ -670,7 +619,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
             MarkPreviewEntity(dummyEnt);
         }
 
-        if (humanoid is not null)
+        if (humanoid is not null && previewEntity == null) // CMU14: retain the custom body's appearance.
         {
             _visualBody.ApplyProfileTo(dummyEnt, humanoid);
             _humanoidProfile.ApplyProfileTo(dummyEnt, humanoid);

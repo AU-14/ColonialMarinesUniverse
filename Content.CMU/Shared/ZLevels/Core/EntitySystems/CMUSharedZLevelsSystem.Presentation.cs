@@ -31,6 +31,7 @@ public abstract partial class CMUSharedZLevelsSystem
             ent.Owner,
             ent.Comp.LifeStage <= ComponentLifeStage.Running &&
             !TerminatingOrDeleted(ent.Owner) &&
+            ent.Comp.ApplySpriteElevation &&
             ent.Comp.LocalPosition != 0f);
         RaiseLocalEvent(ref ev);
     }

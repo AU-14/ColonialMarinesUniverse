@@ -54,12 +54,13 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     [Dependency] private TransformSystem _transform = default!;
 
     private const float BaseSpreadRadiusTiles = 3.35f;
+    private const float SpreadChanceMultiplier = 0.5f;
     private static readonly TimeSpan BaseSpreadInterval = TimeSpan.FromSeconds(70);
     private static readonly TimeSpan DamageInterval = TimeSpan.FromSeconds(2);
     private static readonly TimeSpan TileFireStepDelay = TimeSpan.FromSeconds(1.3);
 
     private static readonly ProtoId<DamageTypePrototype> HeatDamageType = "Heat";
-    private static readonly EntProtoId TileFireProto = "AU14TileFire";
+    private static readonly EntProtoId TileFireProto = "AU14SpreadTileFire";
     private static readonly EntProtoId FireVisualProto = "AU14FireVisualOverlay";
     private const float TileFireSpawnChance = 0.6f;
 
@@ -396,7 +397,7 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
             if (candidateFlam.OnFire || candidateFlam.Burnt)
                 continue;
 
-            if (!_random.Prob(sourceChance * candidateFlam.Chance))
+            if (!_random.Prob(sourceChance * candidateFlam.Chance * SpreadChanceMultiplier))
                 continue;
 
             Ignite(candidate, candidateFlam);

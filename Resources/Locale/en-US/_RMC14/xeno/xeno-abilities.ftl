@@ -110,6 +110,9 @@ rmc-xeno-headbutt-too-far = We can't headbutt from this distance with our crest 
 cm-xeno-leap-blocked = We cannot do that while squeezing and scuttling!
 cm-xeno-leap-cancelled = We cancel our leap!
 
+# CMU14
+cmu-xeno-dash-blocked = Something blocks the dash!
+
 # Plant weeds
 cm-xeno-weeds-source-already-here = There is already a resin node here!
 rmc-xeno-weeds-blocked = We can't do that here.

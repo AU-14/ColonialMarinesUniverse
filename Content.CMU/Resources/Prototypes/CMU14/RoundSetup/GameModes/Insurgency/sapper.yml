@@ -4,7 +4,7 @@
 # civilian spawn behavior (the CLF spawn system routes any "CLF" job through the guerilla/safehouse path).
 
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCLFSapper
   roundSide: ThirdParty
   roundForce: CLF
@@ -12,6 +12,7 @@
   roundComponents:
   - type: NpcFactionMember
     factions:
+    - AUColonist
     - CLF
   - type: CLFMember
   # Marks the mob as a trained sapper: the only role that can deploy sapper traps.
@@ -47,6 +48,9 @@
   setPreference: true
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFSapper
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   basePlaytimeTracker: true
   ranks:
     RMCRankCivilian: []

@@ -1,0 +1,116 @@
+// CC0-1.0. Lift exhaust with a hot throat, shock diamonds, entrained vapor and rolling ground wash.
+light_mode unshaded;
+uniform highp float clock;
+uniform highp float seed;
+uniform highp vec2 jetOffset;
+
+highp float hoverHash(highp vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7)) + seed) * 43758.5453);
+}
+
+highp float hoverNoise(highp vec2 p) {
+    highp vec2 cell = floor(p);
+    highp vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hoverHash(cell), hoverHash(cell + vec2(1.0, 0.0)), f.x),
+        mix(hoverHash(cell + vec2(0.0, 1.0)), hoverHash(cell + vec2(1.0)), f.x), f.y);
+}
+
+highp float hoverTurbulence(highp vec2 p) {
+    return hoverNoise(p) * 0.57 + hoverNoise(p * 2.07 + vec2(13.4, 7.8)) * 0.29
+        + hoverNoise(p * 4.13 + vec2(5.1, 19.2)) * 0.14;
+}
+
+void fragment() {
+    // Sample at the game's pixel density, with softer density changes inside each exhaust layer.
+    // World quads have bottom-up UVs. Reverse the plume so the hot throat stays at
+    // the nozzle and the exhaust travels down to the ground, not up into the hull.
+    highp vec2 p = (floor(vec2(UV.x, 1.0 - UV.y) * vec2(192.0, 224.0)) + 0.5) / 32.0 - 3.0;
+    highp float t = clock + seed;
+    // The ground contact is below the nozzle in the view. Flatten the spreading wash onto
+    // that plane, so the plume visibly terminates in its own illuminated impact patch.
+    highp vec2 contact = vec2(0.0, 1.55) + jetOffset;
+    highp vec2 ground = (p - contact) * vec2(1.0, 1.9);
+    highp float radius = length(ground);
+    highp float edgeFade = 1.0 - smoothstep(2.55, 2.96, radius);
+
+    // Staggered parcels accelerate outwards and curl as they expand. Each fades before wrapping,
+    // avoiding a synchronized expanding ring and the angular shimmer of a radial scrolling texture.
+    highp float clouds = 0.0;
+    highp float streaks = 0.0;
+    for (int i = 0; i < 10; i++) {
+        highp float index = float(i);
+        highp float life = 1.7 + fract(index * 0.381 + seed * 0.13) * 0.8;
+        highp float age = fract(t / life + index * 0.618);
+        highp float angle = index * 2.39996 + seed + age * 0.48;
+        highp vec2 outward = vec2(cos(angle), sin(angle));
+        highp vec2 across = vec2(-outward.y, outward.x);
+        highp float travel = 0.36 + age * 2.35;
+        highp vec2 delta = ground - outward * travel - vec2(age * 0.12, age * 0.24);
+        highp vec2 q = vec2(dot(delta, outward) / (0.16 + age * 0.40),
+            dot(delta, across) / (0.20 + age * 0.74));
+        highp float fade = smoothstep(0.0, 0.13, age) * (1.0 - smoothstep(0.48, 1.0, age));
+        clouds += exp(-dot(q, q) * 1.8) * fade;
+
+        // Thin, short trails entrained in the flow, kept faint enough to read as swept particles.
+        highp vec2 trail = vec2(dot(delta, outward) / (0.19 + age * 0.2),
+            (dot(delta, across) - 0.11) / 0.024);
+        streaks += exp(-dot(trail, trail) * 2.0) * fade * (1.0 - age);
+    }
+    highp vec2 eddy = ground * 3.4 + vec2(sin(t * 0.7 + ground.y) * 0.45, -t * 0.65);
+    highp float grain = hoverTurbulence(eddy);
+    highp float erosion = smoothstep(0.2, 0.76, grain);
+    highp float dust = clamp(clouds * (0.23 + erosion * 0.54) + streaks * 0.12, 0.0, 0.56);
+    dust *= edgeFade * smoothstep(0.22, 0.55, radius);
+
+    // Broad cobalt sheath, cyan combustion tongues and a white-hot throat. The exhaust stays
+    // attached to the nozzle while its cooler end wanders and tears apart in the surrounding air.
+    highp vec2 axis = normalize(contact);
+    highp vec2 plume = vec2(dot(p, vec2(axis.y, -axis.x)), dot(p, axis));
+    highp float along = plume.y + 0.16;
+    highp float throttle = 0.94 + 0.045 * sin(t * 5.7) + 0.015 * sin(t * 31.0);
+    highp float jetLength = length(contact) + 0.27;
+    highp float progress = clamp(along / jetLength, 0.0, 1.0);
+    highp float bend = (sin(along * 5.0 - t * 11.0) * 0.045
+        + sin(along * 11.0 - t * 18.0) * 0.023) * progress;
+    highp float width = (0.23 + progress * 0.46) * (1.0 - progress * 0.48);
+    highp float gate = smoothstep(-0.08, 0.06, along) * (1.0 - smoothstep(0.72, 1.0, progress));
+    highp float lateral = (plume.x - bend) / width;
+    highp vec2 stream = vec2(plume.x * 9.0, along * 4.0 - t * 12.0);
+    highp float flameNoise = hoverTurbulence(stream);
+    highp float tornEdge = (flameNoise - 0.5) * progress * 0.85;
+    highp float sheath = exp(-lateral * lateral * 1.25) * gate;
+    highp float flame = (1.0 - smoothstep(0.24, 1.12, abs(lateral) + tornEdge)) * gate;
+    highp float ribbonAxis = (plume.x - bend * 1.7 - sin(along * 8.0 - t * 17.0) * 0.035 * progress)
+        / (0.075 + progress * 0.11);
+    highp float ribbon = exp(-ribbonAxis * ribbonAxis * 1.4) * gate * (0.7 + flameNoise * 0.3);
+
+    // A few discrete diamonds read as supersonic shock cells instead of a striped light beam.
+    highp float diamonds = 0.0;
+    for (int cell = 0; cell < 4; cell++) {
+        highp float index = float(cell);
+        highp float center = (0.27 + index * 0.36) * jetLength / 1.82 + sin(t * 7.0 + index) * 0.015;
+        highp float diamond = abs(plume.x - bend) / (0.11 + index * 0.013)
+            + abs(along - center) / (0.14 + index * 0.015);
+        diamonds += (1.0 - smoothstep(0.15, 1.15, diamond)) * (1.0 - index * 0.16);
+    }
+    highp vec2 throatPosition = vec2(plume.x / 0.17, (along - 0.09) / 0.19);
+    highp float throat = exp(-dot(throatPosition, throatPosition) * 1.8);
+    highp float hot = clamp(throat * 1.3 + diamonds * 0.9 + ribbon * 0.30 * (1.0 - progress), 0.0, 1.0);
+    highp vec3 jetColor = mix(vec3(0.045, 0.14, 0.82), vec3(0.12, 0.68, 1.0), flame);
+    jetColor = mix(jetColor, vec3(0.88, 0.98, 1.0), hot);
+    highp float jetAlpha = clamp((sheath * 0.32 + flame * 0.69 + hot * 0.42) * throttle, 0.0, 0.98);
+
+    // Diffuse light catches the inner wash; the vapor grows softer and less blue as it travels away.
+    highp vec2 lightPosition = ground * vec2(1.15, 0.95);
+    highp float glow = exp(-dot(lightPosition, lightPosition) * 3.1) * 0.28 * throttle;
+    highp float illumination = exp(-radius * radius * 1.4);
+    highp vec3 dustColor = mix(vec3(0.37, 0.39, 0.40), vec3(0.41, 0.65, 0.83), illumination * 0.7);
+    dustColor += vec3(0.075) * erosion;
+    highp float floorAlpha = glow + dust * (1.0 - glow);
+    highp vec3 floorColor = (vec3(0.055, 0.39, 0.90) * glow
+        + dustColor * dust * (1.0 - glow)) / max(floorAlpha, 0.001);
+    highp float alpha = jetAlpha + floorAlpha * (1.0 - jetAlpha);
+    COLOR = vec4((jetColor * jetAlpha + floorColor * floorAlpha * (1.0 - jetAlpha)) / max(alpha, 0.001),
+        alpha);
+}

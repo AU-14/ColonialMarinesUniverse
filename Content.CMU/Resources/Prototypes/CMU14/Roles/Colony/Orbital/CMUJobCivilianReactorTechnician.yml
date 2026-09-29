@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   displayWeight: 12
   id: CMUJobColonyReactorTechnician
   name: cmu-colony-name-reactor-technician
@@ -11,7 +11,7 @@
   startingGear: CMUGearColonyReactorTechnician
   icon: AU14JobIconColonyColonist
   supervisors: cmu-colony-supervisors-colonist
-  spawnMenuRoleName: Colony Reactor Technician (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-reactor-technician-cmu 
   playTimeTracker: CMUJobColonyReactorTechnician
   ranks:
     RMCRankCivilian: []

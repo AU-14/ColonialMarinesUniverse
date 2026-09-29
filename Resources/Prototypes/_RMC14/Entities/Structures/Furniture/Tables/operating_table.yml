@@ -4,6 +4,8 @@
   name: operating table
   description: Used for advanced medical procedures.
   components:
+  - type: CMUReconFurniture
+    material: OperatingTable
   - type: Transform
     anchored: true
     noRot: true

@@ -1,0 +1,116 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobSASRifleman
+  roundSide: ThirdParty
+  roundForce: CMUSAS
+  roundRole: SASRifleman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    skills:
+        RMCSkillCqc: 5
+        RMCSkillConstruction: 1
+        RMCSkillEndurance: 3
+        RMCSkillEngineer: 1
+        RMCSkillFirearms: 3
+        RMCSkillFireman: 2
+        RMCSkillJtac: 4
+        RMCSkillMedical: 1
+        RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: au14-job-name-govforsquadrifleman
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: au14-job-name-govforsquadrifleman
+  description: cmu-sas-description
+  playTimeTracker: CMUJobSASRifleman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    USArmy_Private1:
+      entity: CMU14ChevronSASPrivate
+      requirements: []
+  startingGear: CMUGearSASRifleman
+  spawnMenuRoleName: SAS Rifleman (3rd party)
+  greeting: cmu-sas-greeting
+  icon: RMCJobIconParamarine
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-rmcrrt-commander
+  accessGroups:
+  - ColonistAllAccessNoArmory
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesSAS
+  id: CMUJobSASRifleman
+  name: SAS Rifleman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadSAS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-govforsquadrifleman
+    description: cmu-sas-description
+    reregister: false
+    job: CMUJobSASRifleman
+    raffle:
+      settings: short
+    rules: cmu-sas-rules
+
+- type: startingGear
+  id: CMUGearSASRifleman
+  equipment:
+    jumpsuit: CMU14TWESASJumpsuit
+    outerClothing: RMCArmorParaVest
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    head: AU14HeadHelmetL1Black
+    shoes: CMBootsBlackFilled
+    ears: CMU14HeadsetTWEThirdParty
+    mask: CMU14MaskGasSAS
+    belt: RMCBeltPMC
+    back: CMUSatchelRaider
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKFill
+    id: AU14IDCardSASCommander
+    suitstorage: CMU14WeaponSMGMP5SD
+  storage:
+    outerClothing:
+    - CMUGasMaskFilterWY
+    - CMUGasMaskFilterWY
+    belt:
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    pocket1:
+    - CMUMagazineSMGMP5HEAPDrum
+    - CMUMagazineSMGMP5APDrum
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    jumpsuit:
+    - AU14PacketGrenadeHighExplosiveRMCFilled
+    - AU14PacketGrenadeTearGasFilled
+    - AU14PacketGrenadeTearGasFilled
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    - CMUMagazineSMGMP5AP
+    back:
+    - RMCTacticalPrybar
+    - AU14MRETWERMC
+    - AU14KeloDermAutoInjector
+    - AU14MeraBicAutoInjector
+
+- type: playTimeTracker
+  id: CMUJobSASRifleman

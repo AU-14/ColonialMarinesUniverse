@@ -14,9 +14,9 @@
     baseFireRate: 10
     burstScatterMult: 5
   - type: Sprite
-    sprite: CMU14/Weapons/Guns/LACN/TPR23B.rsi
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/TPR9.rsi
   - type: Clothing
-    sprite: CMU14/Weapons/Guns/LACN/TPR23B.rsi
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/TPR9.rsi
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.2
   - type: ItemSlots
@@ -51,3 +51,14 @@
           tags:
           - CMMagazinePistolM1984
           - RMCMagazinePistolM1984AP
+
+- type: entity
+  parent: AU14WeaponPistolTPR23B
+  id: CMUWeaponPistolTPR9Civilian
+  name: TPR9 civilian handgun
+  description: A civilian-market model of the LACN's TPR service pistol, sold across the United Americas for self-defense. This weapon takes M4A3 magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/TPR9civilian.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/TPR9civilian.rsi

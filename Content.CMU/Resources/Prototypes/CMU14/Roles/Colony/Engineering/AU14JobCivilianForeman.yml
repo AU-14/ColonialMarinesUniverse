@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   displayWeight: 16
   id: AU14JobCivilianForeman
   roundSide: Civilian
@@ -31,7 +31,7 @@
   playTimeTracker: AU14JobCivilianForeman
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 43200 # 12 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -66,6 +66,8 @@
     id: AU14IDCardColonyForeman
     ears: AU14ColonyAdminHeadset
     pocket1: AU14StampFore
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

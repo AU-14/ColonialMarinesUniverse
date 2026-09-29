@@ -570,6 +570,7 @@
     rsi:
       sprite: CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
       state: helmet
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
@@ -593,6 +594,7 @@
     rsi:
       sprite: CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
       state: helmet
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
@@ -616,6 +618,7 @@
     rsi:
       sprite: CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
       state: helmet
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
@@ -639,6 +642,7 @@
     rsi:
       sprite: CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
       state: helmet
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
@@ -662,6 +666,7 @@
     rsi:
       sprite: CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
       state: helmet
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
@@ -685,6 +690,7 @@
     rsi:
       sprite: CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
       state: helmet
+  - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi

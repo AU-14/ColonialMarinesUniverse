@@ -1,0 +1,129 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobSASCommander
+  roundSide: ThirdParty
+  roundForce: CMUSAS
+  roundRole: SASCommander
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_commander
+  - type: Skills
+    skills:
+        RMCSkillCqc: 5
+        RMCSkillConstruction: 2
+        RMCSkillEndurance: 3
+        RMCSkillEngineer: 2
+        RMCSkillFirearms: 3
+        RMCSkillFireman: 2
+        RMCSkillIntel: 2
+        RMCSkillJtac: 4
+        RMCSkillLeadership: 3
+        RMCSkillMedical: 2
+        RMCSkillNavigations: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au-14-job-prefix-rmcrrt-commander
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: au-14-job-name-rmcrrt-commander
+  description: cmu-sas-description
+  playTimeTracker: CMUJobSASCommander
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    IASF_Captain:
+      entity: AU14ChevronIASFCaptain
+      requirements: []
+  startingGear: CMUGearSASCommander
+  spawnMenuRoleName: SAS Commander (3rd party)
+  greeting: cmu-sas-greeting
+  icon: RMCJobIconParaCommander
+  joinNotifyCrew: false
+  supervisors: au14-job-name-civilianambassadortwe
+  accessGroups:
+  - ColonistAllAccessNoArmory
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesSAS
+  id: CMUJobSASCommander
+  name: SAS Commander
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadSAS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-rmcrrt-commander
+    description: cmu-sas-description
+    reregister: false
+    job: CMUJobSASCommander
+    raffle:
+      settings: short
+    rules: cmu-sas-rules
+
+- type: startingGear
+  id: CMUGearSASCommander
+  equipment:
+    jumpsuit: CMU14TWESASJumpsuit
+    outerClothing: RMCArmorParaVest
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: CMBootsBlackFilled
+    ears: CMU14HeadsetTWEThirdParty
+    mask: CMU14MaskGasSAS
+    belt: RMCBeltHolsterPistolPara
+    back: CMUSatchelRaider
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKFill
+    id: AU14IDCardSASCommander
+    suitstorage: CMU14WeaponRifleXM4RA1SOPMODFilled
+  storage:
+    outerClothing:
+    - CMUGasMaskFilterWY
+    - CMUGasMaskFilterWY
+    - RMCTacticalPrybar
+    belt: 
+    - AU14WeaponPistolM48A4
+    - AU14MagazinePistolM48A4
+    - AU14MagazinePistolM48A4
+    - AU14MagazinePistolM48A4
+    - AU14MagazinePistolM48A4
+    - AU14MagazinePistolM48A4
+    - AU14MagazinePistolM48A4
+    - AU14MagazinePistolM48A4
+    pocket1:
+    - CMMagazineRifleM4SPRAP
+    - CMMagazineRifleM4SPRAP
+    - CMMagazineRifleM4SPRAP
+    - CMMagazineRifleM4SPRAP
+    jumpsuit:
+    - CMMagazineRifleM4SPRExt
+    - CMMagazineRifleM4SPRExt
+    - CMMagazineRifleM4SPRExt
+    - CMMagazineRifleM4SPRExt
+    - AU14PacketGrenadeHighExplosiveRMCFilled
+    - AU14PacketGrenadeHighExplosiveRMCFilled
+    back:
+    - AU14CamoBoonieHat
+    - CMTarbackCigar
+    - RMCZippoGold
+    - RMCLaserDesignator
+    - AU14MRETWERMC
+    - AU14KeloDermAutoInjector
+    - AU14MeraBicAutoInjector
+
+- type: playTimeTracker
+  id: CMUJobSASCommander

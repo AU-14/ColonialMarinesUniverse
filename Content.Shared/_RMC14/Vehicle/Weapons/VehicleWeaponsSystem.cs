@@ -48,7 +48,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedContentEyeSystem _eyeSystem = default!;
+    [Dependency] private VehicleGunnerViewSystem _gunnerView = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -561,6 +561,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         }
     }
 
+    // CMU14 method: vehicle damage and usability.
     private void UpdateGunnerView(
         EntityUid user,
         EntityUid vehicle,
@@ -572,7 +573,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         if (removeOnly)
         {
             if (RemCompDeferred<VehicleGunnerViewUserComponent>(user))
-                _eyeSystem.UpdatePvsScale(user);
+                _gunnerView.RefreshView(user, removing: true);
 
             return;
         }
@@ -612,12 +613,12 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             view.CursorOffsetSpeed = cursorOffsetSpeed;
             view.CursorPvsIncrease = cursorPvsIncrease;
             Dirty(user, view);
-            _eyeSystem.UpdatePvsScale(user);
+            _gunnerView.RefreshView(user);
             return;
         }
 
         if (RemCompDeferred<VehicleGunnerViewUserComponent>(user))
-            _eyeSystem.UpdatePvsScale(user);
+            _gunnerView.RefreshView(user, removing: true);
     }
 
     private static bool HasBaseGunnerView(VehicleWeaponsSeatComponent seatComp)

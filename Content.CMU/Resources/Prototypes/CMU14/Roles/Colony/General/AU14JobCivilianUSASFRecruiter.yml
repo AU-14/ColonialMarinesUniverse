@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianUSASFRecruiter
   displayWeight: 10
   roundSide: Civilian
@@ -25,6 +25,11 @@
   description: au14-job-description-usasfrecruiter
   setPreference: true
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 36000 # 10 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:

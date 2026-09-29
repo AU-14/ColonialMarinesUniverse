@@ -184,7 +184,7 @@ public sealed class YautjaHuntingGroundMapTest
             var resources = server.ResolveDependency<IResourceManager>();
             var errors = new List<string>();
 
-            foreach (var mapPath in GetPlayablePlanetMapPaths(prototypes, componentFactory))
+            foreach (var mapPath in GetPlayablePlanetMapPaths(prototypes, componentFactory, pair.IsTestPrototype))
             {
                 var markerCount = CountMapPrototypes(resources, mapPath)
                     .GetValueOrDefault("CMUYautjaGroundRelayDestination");
@@ -221,7 +221,7 @@ public sealed class YautjaHuntingGroundMapTest
 
             try
             {
-                var mapPaths = GetPlayablePlanetMapPaths(prototypes, componentFactory);
+                var mapPaths = GetPlayablePlanetMapPaths(prototypes, componentFactory, pair.IsTestPrototype);
                 Assert.That(mapPaths, Is.Not.Empty,
                     "Every currently playable primary planet map must be checked.");
 
@@ -1353,7 +1353,8 @@ public sealed class YautjaHuntingGroundMapTest
 
     private static IReadOnlyList<ResPath> GetPlayablePlanetMapPaths(
         IPrototypeManager prototypes,
-        IComponentFactory componentFactory)
+        IComponentFactory componentFactory,
+        Func<EntityPrototype, bool> isTestPrototype)
     {
         var checkedPaths = new HashSet<ResPath>();
         var paths = new List<ResPath>();
@@ -1364,7 +1365,8 @@ public sealed class YautjaHuntingGroundMapTest
 
         foreach (var planetPrototype in prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (!planetPrototype.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory) ||
+            if (isTestPrototype(planetPrototype) ||
+                !planetPrototype.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory) ||
                 !(planet!.InRotation || presetPlanets.Contains(planetPrototype.ID)))
             {
                 continue;

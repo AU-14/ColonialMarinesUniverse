@@ -1,0 +1,27 @@
+- type: entity
+  parent: RMCCigarettePackLuckySloths
+  id: RuMCCigaretteStolica
+  name: "пачка сигарет 'СТОЛИЦА'"
+  description: "Пачка сигарет с узнаваемым красно-белым дизайном. Ароматный, но крепкий табак. Предпочтительный выбор городских жителей и офицеров, ценящих стабильность и порядок. Говорят, их курили ещё до войны."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Smokeables/Cigarettes/stolica.rsi
+
+- type: entity
+  parent: RMCCigarettePackLuckySloths
+  id: RuMCCigaretteSouz
+  name: "пачка сигарет 'СОЮЗ'"
+  description: "Классические сигареты с мягким, сбалансированным вкусом. Символ единства и общей цели. Их предпочитают те, кто верит в общее дело и не боится трудностей. Часто встречаются в пайках полевых подразделений."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Smokeables/Cigarettes/souz.rsi
+
+#sigar pack
+- type: entity
+  parent: RMCTarbackCase
+  id: RuMCCigaretPackBelomor
+  name: "коробка сигар 'Беломор'"
+  description: "Классика для любителей - дорогие сигары с импортным табаком."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Smokeables/Cigars/belomor.rsi

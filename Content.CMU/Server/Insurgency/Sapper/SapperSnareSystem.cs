@@ -62,7 +62,8 @@ public sealed partial class SapperSnareSystem : EntitySystem
     private void OnSnareTriggered(EntityUid uid, SapperSnareComponent comp, ref TriggerEvent args)
     {
         // The step gate already spared friendlies, but re-check in case something else set it off.
-        if (args.User is not { } tripper || TerminatingOrDeleted(tripper) || HasComp<CLFMemberComponent>(tripper))
+        if (args.User is not { } tripper || TerminatingOrDeleted(tripper) ||
+            !HasComp<DoAfterComponent>(tripper) || HasComp<CLFMemberComponent>(tripper))
             return;
 
         if (HasComp<SapperSnaredComponent>(tripper))

@@ -83,17 +83,17 @@
   equipment:
     id: AU14IDCardLACNCommandoSpotter
     outerClothing: AU14LACNCommandoArmorStandard
-    jumpsuit: AU14LACNUniformCoat
+    jumpsuit: CMULACNCommandoUniform
     shoes: AU14LACNBoots
     mask: RMCMaskScarfTanDown
-    head: AU14LACNCommandoBeanie
+    head: CMULACNCommandoHeadsetBeret
     gloves: AU14LACNGloves
     belt: AU14BeltHolsterPistolLACNTPR23B
     pocket1: AU14PouchSlingBinocs
     pocket2: AU14PouchIFAKFill
     back: AU14LACNBackpackSpotter
     ears: AU14HeadsetGovforMarine
-    suitstorage: RMCWeaponRifleL42A
+    suitstorage: CMUWeaponRifleKramerKarbine
 
 - type: playTimeTracker
   id: AU14LACNCommandoSpotter

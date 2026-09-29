@@ -15,6 +15,7 @@ public sealed partial class ClientResearchDataTerminalSystem : SharedResearchDat
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => ResetResearchAccounts());
         SubscribeNetworkEvent<UpdateResearchConsoleEvent>(OnConsoleUpdate);
     }
 

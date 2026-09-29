@@ -3,6 +3,9 @@ hud-chatbox-info-talk = {$talk-key} to talk.
 hud-chatbox-info-cycle = Click here to talk, {$cycle-key} to cycle channels.
 hud-chatbox-info-unbound = Click here to talk.
 
+chat-tab-all = ALL
+chat-tab-radio = RADIO
+
 hud-chatbox-select-name-prefixed = {$prefix} {$name}
 hud-chatbox-select-channel-Admin = Admin
 hud-chatbox-select-channel-Console = Console

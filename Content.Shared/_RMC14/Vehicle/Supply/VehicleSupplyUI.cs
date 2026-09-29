@@ -38,6 +38,9 @@ public sealed class VehicleSupplyBuiState : BoundUserInterfaceState
     public VehicleSupplyPreviewState? Preview;
     public List<VehicleSupplyEntryState> Available;
     public List<VehicleSupplyLoadoutCategoryState> Loadouts;
+    public string? PlatoonName; // CMU14
+    public int VehicleLimit = 2; // CMU14
+    public List<string> IssuedVehicles = new(); // CMU14
 
     public VehicleSupplyBuiState(
         VehicleSupplyLiftMode? liftMode,

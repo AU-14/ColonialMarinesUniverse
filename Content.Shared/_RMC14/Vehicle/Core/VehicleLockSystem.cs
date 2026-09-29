@@ -51,6 +51,7 @@ public sealed partial class VehicleLockSystem : EntitySystem
             return;
 
         EnsureVehicleKeyId(ent.Owner);
+        _vehicle.CaptureInteriorFaction(ent); // CMU14
     }
 
     public void EnableLockAction(EntityUid user, EntityUid vehicle)
@@ -198,6 +199,14 @@ public sealed partial class VehicleLockSystem : EntitySystem
         if (!_tool.HasQuality(args.Used, lockComp.RepairToolQuality))
             return;
 
+        // CMU14: wreck locks are beyond repair too.
+        if (HasComp<ActiveTankCookOffComponent>(ent.Owner))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-tank-cook-off-unrepairable"), ent.Owner, args.User);
+            args.Handled = true;
+            return;
+        }
+
         var repairDoAfter = new DoAfterArgs(EntityManager, args.User, (float) lockComp.RepairDelay.TotalSeconds, new VehicleLockRepairDoAfterEvent(), ent.Owner, ent.Owner, args.Used)
         {
             BreakOnMove = true,
@@ -234,6 +243,10 @@ public sealed partial class VehicleLockSystem : EntitySystem
 
     private void OnLockRepairDoAfter(Entity<VehicleLockComponent> ent, ref VehicleLockRepairDoAfterEvent args)
     {
+        // CMU14: ignition can happen during the repair.
+        if (HasComp<ActiveTankCookOffComponent>(ent.Owner))
+            return;
+
         if (_net.IsClient || args.Cancelled || args.Handled || !ent.Comp.Broken)
             return;
 

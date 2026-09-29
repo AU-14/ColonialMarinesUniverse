@@ -71,6 +71,8 @@
   description: A customisable counter. The shopkeeper can stock it with any items and set prices. Prices are subject to the colony sales tax.
   suffix: Shopkeeper
   components:  
+  - type: CMUReconFurniture
+    material: Shelf
   - type: Sprite
     sprite: CMU14/Structures/hybrisiaracks.rsi
     layers:

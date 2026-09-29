@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   displayWeight: 10
   id: CMUJobColonyPrisonGuard
   name: cmu-colony-name-prison-guard
@@ -11,7 +11,7 @@
   startingGear: CMUGearColonyPrisonGuard
   icon: AU14JobIconColonyColonist
   supervisors: cmu-colony-supervisors-colonist
-  spawnMenuRoleName: Colony Prison Guard (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-prison-guard-cmu 
   playTimeTracker: CMUJobColonyPrisonGuard
   ranks:
     RMCRankCivilian: []

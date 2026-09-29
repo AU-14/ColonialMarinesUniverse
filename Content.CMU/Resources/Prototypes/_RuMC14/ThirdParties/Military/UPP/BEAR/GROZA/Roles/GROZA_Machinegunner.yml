@@ -1,0 +1,134 @@
+- type: job
+  parent: CMJobBase
+  id: RuMCUPPBEARMachinegunnerGROZA
+  roundSide: ThirdParty
+  roundForce: BEAR
+  roundRole: RuMCUPPBEARMachinegunnerGROZA
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: upp_sapper
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RuMCSquadBEAR
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 1
+      RMCSkillPolice: 2
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 1
+      RMCSkillEndurance: 2
+  - type: EquipEntityPreset
+    preset: RuMCBEARmachinegunPresetGROZA
+  - type: JobPrefix
+    prefix: Machinegunner
+  - type: MarineOrders
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Russian
+    defaultLanguage: Russian
+
+  name: Machine Gunner
+  description: GROZA Machine Gunner
+  playTimeTracker: RuMCJobUPPBEARMachinegunner
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Private:
+      entity: AU14ChevronUPPNIPrivate
+      requirements: []
+    UPP_Gefreiter:
+      entity: AU14ChevronUPPNIGefreiter
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARMachinegunner
+        time: 1800 # 0.5 hours
+    UPP_SeniorGefreiter:
+      entity: AU14ChevronUPPNISeniorGefreiter
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARMachinegunner
+        time: 5400 # 1.5 hours
+    UPP_Corporal:
+      entity: AU14ChevronUPPNICorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARMachinegunner
+        time: 7200 # 2 hours
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARMachinegunner
+        time: 10800 # 3 hours
+  spawnMenuRoleName: GROZA Machine Gunner
+  startingGear: RuMCGearUPPBEARMachinegunnerGROZA
+  greeting: Вы член секретного спецподразделения ЧВК «Медведи» (BEAR) при СПН! Существование связи между BEAR и СПН строжайше секретно. Никто не должен знать, кто вы и что вы здесь делаете. Вы дружественны к СПН. Враждебны к ЧВК VAI и ЧВК We-Y. Работайте скрытно. Выполняйте задачи. Не оставляйте следов.
+  icon: "RuMCJobIconUPPBEARMachinegunner"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: RuMCBaseMobSpeciesOrganicUPPBEAR
+  id: RuMCJobUPPBEARMachinegunnerGROZA
+  name: GROZA Machine Gunner
+  components:
+  - type: EquipEntityPreset
+    preset: RuMCBEARmachinegunPresetGROZA
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: RuMCSquadBEAR
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: GROZA Machine Gunner
+    description: Fire support operator in the PMC “BEAR”. Armed with a UTES-C machine gun. The task is to suppress enemy firing points and hold positions.
+    job: RuMCUPPBEARMachinegunnerGROZA
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: RuMCGearUPPBEARbaseHeavy
+  id: RuMCGearUPPBEARMachinegunnerGROZA
+  equipment:
+    id: RuCMIDCardUPPBEARMachinegunner
+    ears: RuMCHeadsetBEARGROZA
+  storage:
+    back:
+    - CMSheetMetal
+    - CMSheetPlasteel50
+    - AU14GrenadeHighExplosiveUPP
+    - RuMCMagazinePP13M
+    - RuMCMagazinePP13M
+    - RMCVisorWelding
+  inhand:
+    - RuMCUTESCCase_GROZA

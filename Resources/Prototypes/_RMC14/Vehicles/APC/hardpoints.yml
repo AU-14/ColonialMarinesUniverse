@@ -14,13 +14,14 @@
 
 - type: entity
   parent: RMCAPCHardpointBase
-  id: RMCAPCWheel
+  id: RMCAPCWheel # CMU14
   name: APC wheel
   description: A reinforced APC wheel.
   components:
   - type: Sprite
     state: tires
   - type: HardpointItem
+    damageRegion: Sides
     hardpointType: Wheel
     vehicleFamily: APC
     slotType: Wheel

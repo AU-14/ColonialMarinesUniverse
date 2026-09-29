@@ -10,13 +10,14 @@
 
 - type: entity
   parent: VehicleHumveeHardpointBase
-  id: VehicleHumveeWheel
+  id: VehicleHumveeWheel # CMU14
   name: humvee wheel
   description: A reinforced humvee wheel.
   components:
   - type: Sprite
     state: tires
   - type: HardpointItem
+    damageRegion: Sides
     hardpointType: Wheel
     vehicleFamily: Humvee
     slotType: Wheel

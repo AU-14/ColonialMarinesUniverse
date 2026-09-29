@@ -127,20 +127,16 @@ public static partial class PoolManager
             systems.LoadExtraSystemType<TestDestructibleListenerSystem>();
         };
 
-        var server = new RobustIntegrationTest.ServerIntegrationInstance(options);
-        try
-        {
-            await server.WaitIdleAsync();
-            server.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
-            server.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
-            return (server, logHandler);
-        }
-        catch
-        {
-            // The caller cannot dispose a server that failed before it was returned.
-            server.Dispose();
-            throw;
-        }
+        var server = await PrototypeStartup.Start(
+            () => new RobustIntegrationTest.ServerIntegrationInstance(options),
+            async instance =>
+            {
+                await instance.WaitIdleAsync();
+                instance.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
+                instance.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
+            },
+            testOut);
+        return (server, logHandler);
     }
 
     public static void Startup(params Assembly[] extra)

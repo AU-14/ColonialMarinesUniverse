@@ -70,6 +70,11 @@ public sealed partial class HospitalEmergencySystem
             lease.Comp.Failure = Loc.GetString("hospital-emergency-transport-waiting-navigation");
             return false;
         }
+        // A destroyed transport can leave a reservation behind. It no longer
+        // occupies the pad, but a surviving ship must retain its reservation.
+        if (target.Ship is { } previousOccupant && Deleted(previousOccupant))
+            _dropship.SetDestinationShip(destination, null);
+
         if ((target.Ship is { } occupant && occupant != ship) ||
             ((purpose is HospitalShuttlePurpose.InboundPatients or HospitalShuttlePurpose.PickupInbound or HospitalShuttlePurpose.None) &&
              (!IsOriginalHospitalMap(lease.Comp) || mapUid != lease.Comp.HospitalMap)))

@@ -39,6 +39,21 @@ public sealed class BlurryVisionOverlayTest
         Assert.That(ShouldDrawForViewportEye(zEye, playerEye), Is.True);
     }
 
+    // cmu edit start
+    [Test]
+    public void CurrentZLevelEyeDrawsPlayerBlurWhenNotLookingUp()
+    {
+        var playerEye = new GraphicsEye();
+        var zEye = new ScalingViewport.ZEye
+        {
+            Depth = 0,
+            BlurCurrentLevel = false,
+        };
+
+        Assert.That(ShouldDrawForViewportEye(zEye, playerEye), Is.True);
+    }
+    // cmu edit end
+
     [Test]
     public void LookedUpZLevelEyeDoesNotDrawPlayerBlurAgain()
     {

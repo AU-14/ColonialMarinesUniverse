@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.CMU14.Power;
 using Content.Shared.Coordinates;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
@@ -40,8 +41,12 @@ public sealed class PowerStateTest : GameTest
 
         await server.WaitAssertion(() =>
         {
-            mapSys.CreateMap(out var mapId);
+            // mapSys.CreateMap(out var mapId);
+            var mapUid = mapSys.CreateMap(out var mapId); // CMU14
             var grid = mapSys.CreateGridEntity(mapId);
+
+            // CMU14: keeps RMC area power from claiming the receiver and zeroing its load.
+            entManager.AddComponent<CMUMapUsesTilePowerComponent>(mapUid);
 
             mapSys.SetTile(grid, Vector2i.Zero, new Tile(1));
 
@@ -81,8 +86,12 @@ public sealed class PowerStateTest : GameTest
 
         await server.WaitAssertion(() =>
         {
-            mapSys.CreateMap(out var mapId);
+            // mapSys.CreateMap(out var mapId);
+            var mapUid = mapSys.CreateMap(out var mapId); // CMU14
             var grid = mapSys.CreateGridEntity(mapId);
+
+            // CMU14: keeps RMC area power from claiming the receiver and zeroing its load.
+            entManager.AddComponent<CMUMapUsesTilePowerComponent>(mapUid);
 
             mapSys.SetTile(grid, Vector2i.Zero, new Tile(1));
 
@@ -131,8 +140,12 @@ public sealed class PowerStateTest : GameTest
 
         await server.WaitAssertion(() =>
         {
-            mapSys.CreateMap(out var mapId);
+            // mapSys.CreateMap(out var mapId);
+            var mapUid = mapSys.CreateMap(out var mapId); // CMU14
             var grid = mapSys.CreateGridEntity(mapId);
+
+            // CMU14: keeps RMC area power from claiming the receiver and zeroing its load.
+            entManager.AddComponent<CMUMapUsesTilePowerComponent>(mapUid);
 
             mapSys.SetTile(grid, Vector2i.Zero, new Tile(1));
 

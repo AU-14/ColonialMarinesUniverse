@@ -50,6 +50,7 @@ using Content.Shared._RMC14.Item;
 using Content.Shared._RMC14.Light;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared._RMC14.Marines.HyperSleep;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Rules;
@@ -779,7 +780,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (TryComp(spawner, out TransformComponent? xform) &&
                     xform.GridUid != null)
                 {
-                    EnsureComp<AlmayerComponent>(xform.GridUid.Value);
+                    EnsureComp<WarshipComponent>(xform.GridUid.Value); // CMU14
                 }
 
                 if (comp.SetHunger && TryComp(ev.SpawnResult, out SatiationComponent? satiation))
@@ -869,6 +870,11 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
+        // CMU14: other presets own their cleanup and larva accounting in CMUHijackExtrasSystem.
+        var activeRules = QueryActiveRules();
+        if (!activeRules.MoveNext(out _, out _, out _) || ev.HijackerType == DropshipHijackerType.Other)
+            return;
+
         // For human hijacks, build a set of map IDs belonging to the hijacker's faction ship(s).
         // For xeno hijacks, keep legacy behavior (Almayer maps).
         var targetShipMaps = new HashSet<MapId>();
@@ -886,7 +892,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             }
 
             // Also include Almayer maps as fallback
-            var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+            var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>(); // CMU14
             while (almayerQuery.MoveNext(out _, out var aXform))
             {
                 AddShipMapAndConnectedZLevelMapIds(targetShipMaps, aXform.MapUid);
@@ -904,19 +910,21 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             var hiveStructures = EntityQueryEnumerator<HiveConstructionLimitedComponent, TransformComponent>();
             while (hiveStructures.MoveNext(out var id, out _, out var xform))
             {
-                EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
-
-                if (xform.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(id.ToCoordinates()))
+                if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform)) // CMU14
+                {
+                    EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
                     _destruction.DestroyEntity(id);
+                }
             }
 
             var xenoLimitedStructures = EntityQueryEnumerator<XenoSecretionLimitedComponent, TransformComponent>();
             while (xenoLimitedStructures.MoveNext(out var id, out _, out var xform))
             {
-                EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
-
-                if (xform.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(id.ToCoordinates()))
+                if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform)) // CMU14
+                {
+                    EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(id);
                     _destruction.DestroyEntity(id);
+                }
             }
 
             var xenos = EntityQueryEnumerator<XenoComponent, MobStateComponent, TransformComponent>();
@@ -928,7 +936,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (_mobState.IsDead(xeno))
                     continue;
 
-                if (transformComp.ParentUid != ev.Dropship && _rmcPlanet.IsOnPlanet(xeno.ToCoordinates()))
+                if ((ev.Dropship == null || transformComp.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(transformComp)) // CMU14
                 {
                     if (comp.CountedInSlots)
                         larva++;
@@ -2110,7 +2118,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void AddAllShipMapIds(ICollection<MapId> shipMaps)
     {
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        var almayerQuery = EntityQueryEnumerator<WarshipComponent, TransformComponent>(); // CMU14
         while (almayerQuery.MoveNext(out _, out var xform))
         {
             AddShipMapAndConnectedZLevelMapIds(shipMaps, xform.MapUid);

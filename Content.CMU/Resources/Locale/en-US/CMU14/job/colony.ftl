@@ -53,7 +53,7 @@ au14-job-name-civilianshopkeep = Shopkeep
 au14-job-description-civilianshopkeep = Keep the colony shop stocked, handle trade, and provide daily essentials.
 au14-job-prefix-civilianshopkeep = SHOP
 
-au14-job-name-civilianwastemanagementspecialist = Waste Management Specialist
+au14-job-name-civilianwastemanagementspecialist = Waste Management
 au14-job-description-civilianwastemanagementspecialist = Clean, sanitize, and dispose. Sanity starts with sanitation.
 au14-job-prefix-civilianwastemanagementspecialist = WMS
 
@@ -66,9 +66,9 @@ au14-job-description-civiliancolonyadministrator = Oversee all colony operations
 au14-job-prefix-colonyadministrator = ADMIN
 au14-loadout-group-colony-administrator-skills = Skills
 
-au14-job-name-civilianfreightsystemsspecialist = Freight Systems Specialist
+au14-job-name-civilianfreightsystemsspecialist = Logistics Specialist
 au14-job-description-civilianfreightsystemsspecialist = Manage the ASRS and coordinate incoming and outgoing supplies.
-au14-job-prefix-freightsystemsspecialist = FSS
+au14-job-prefix-freightsystemsspecialist = LS
 
 au14-job-name-civilianengineer = Engineer
 au14-job-description-civilianengineer = Keep the colony’s lights on and repair broken infrastructure.
@@ -109,13 +109,13 @@ au14-job-name-civiliannurse = Nurse
 au14-job-description-civiliannurse = Support the physician with patient care and medical logistics.
 au14-job-prefix-nurse = NURS
 
-au14-job-name-ethicsandwellnessadvisor = Ethics And Wellness Advisor
-au14-job-description-ethicsandwellnessadvisor = Offer counseling, moral support and spiritual guidance.
-au14-job-prefix-ethicsandwellnessadvisor = EWA
+au14-job-name-ethicsandwellnessadvisor = Psychologist
+au14-job-description-ethicsandwellnessadvisor = Look after the mental health of the colony. Offer counseling, therapy and psychological support.
+au14-job-prefix-ethicsandwellnessadvisor = Psych.
 
-au14-job-name-colonyemergencyresponseofficer = Emergency Response Officer
+au14-job-name-colonyemergencyresponseofficer = Paramedic
 au14-job-description-colonyemergencyresponseofficer = Provide medical attention and care in hard to reach areas. Work with local security/law enforcement to do search and rescue.
-au14-job-prefix-emergencyresponseofficer = ERO
+au14-job-prefix-emergencyresponseofficer = Para.
 
 au14-med-vendor-locked = Medical supplies are restricted until Government Forces have deployed planetside.
 

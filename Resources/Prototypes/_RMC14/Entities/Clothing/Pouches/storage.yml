@@ -555,6 +555,7 @@
       - MachineBoard
       - LightReplacer
       - EntrenchingTool
+      - Nailgun
   - type: FixedItemSizeStorage
 
 # Tactical Tools Pouch
@@ -703,6 +704,9 @@
   id: RMCPouchToolsSocRCMPVEAssaultEngi
   suffix: Filled, RCM, PVE
   components:
+  - type: Storage
+    grid:
+    - 0,0,17,1 #9 slots
   - type: StorageFill
     contents:
     - id: CMFireExtinguisherPortable

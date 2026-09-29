@@ -1,0 +1,18 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Added two-seat VTOL fighters with custom attack passes, reconnaissance
+    optics, six weapon mounts and sector air combat.
+  type: Add
+- message: Added reloadable, IFF-aware MANPAD kits to both sides' requisitions, restocking
+    every 15 minutes.
+  type: Add
+- message: Added separate Party Time combat flyby and parade variants.
+  type: Add
+- message: Added fighter and MANPAD launch, flight and ground-impact effects with
+    new sounds.
+  type: Tweak
+- message: Removed Mohawk landing-clearance restrictions.
+  type: Remove
+time: '2026-09-24T17:56:50.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2011

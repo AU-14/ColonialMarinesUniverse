@@ -14,6 +14,9 @@
 *.userprefs
 
 # Build results
+/.codex-build/
+/Content.CMU/DressUp/dist/
+/Content.CMU/DressUp/.qa/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -332,3 +335,4 @@ settings.local.json
 # personal agent configs
 AGENTS.md
 CLAUDE.md
+Content.CMU/Resources/Prototypes/CMU14/Entities/Structures/Atmos/exhaust_vents.yml

@@ -135632,7 +135632,7 @@ entities:
     - type: Transform
       pos: -12.312223,-137.44511
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 11001
     components:
@@ -135912,7 +135912,7 @@ entities:
       parent: 11053
     - type: Physics
       canCollide: False
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 11043
     components:

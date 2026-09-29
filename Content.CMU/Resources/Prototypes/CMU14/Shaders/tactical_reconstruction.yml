@@ -1,0 +1,4 @@
+- type: shader
+  id: CMUTacticalReconstruction
+  kind: source
+  path: /Textures/CMU14/Interface/reconstruction.swsl

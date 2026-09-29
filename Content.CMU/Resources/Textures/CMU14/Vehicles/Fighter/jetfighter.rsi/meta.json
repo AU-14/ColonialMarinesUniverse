@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Original artwork by nzzy on Discord, supplied by the contributor. Folded-wing adaptation by CMU.",
+  "size": {
+    "x": 266,
+    "y": 335
+  },
+  "states": [
+    {
+      "name": "jetfighter"
+    },
+    {
+      "name": "canopyglass"
+    },
+    {
+      "name": "vtolmode"
+    },
+    {
+      "name": "folded"
+    }
+  ]
+}

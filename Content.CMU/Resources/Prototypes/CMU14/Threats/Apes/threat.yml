@@ -40,27 +40,27 @@
   id: CMUMobApeLeader
   suffix: Threat leader
 
-# Distress Signal
-- type: threat
-  id: ApeThreatDS
-  voteCooldownGroup: Ape
-  lorePrimer: AU14PrimerThreatApe
-  roundstartspawns: apeParty
-  whitelistedgamemodes:
-  - DistressSignal
-  blacklistedgamemodes:
-  - ColonyFall
-  jobScaling: DefaultDistressScale
-  winconditions:
-  - KillAllGovforRule
-  - KillAllApeRule
-  maxplayers: 45
+# Distress Signal variant
+# - type: threat
+#   id: ApeThreatDS
+#   voteCooldownGroup: Ape
+#   lorePrimer: AU14PrimerThreatApe
+#   roundstartspawns: apeParty
+#   whitelistedgamemodes:
+#   - DistressSignal
+#   blacklistedgamemodes:
+#   - ColonyFall
+#   jobScaling: DefaultDistressScale
+#   winconditions:
+#   - KillAllGovforRule
+#   - KillAllApeRule
+#   maxplayers: 45
 
-- type: partySpawn
-  id: apeParty
-  leadersToSpawn:
-    CMUMobApe: 1
-  gruntsToSpawn:
-    CMUMobApe: 11
-  scalewithpop: false
-  spawnTogether: true
+# - type: partySpawn
+#   id: apeParty
+#   leadersToSpawn:
+#     CMUMobApe: 1
+#   gruntsToSpawn:
+#     CMUMobApe: 11
+#   scalewithpop: false
+#   spawnTogether: true

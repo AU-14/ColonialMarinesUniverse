@@ -93,8 +93,9 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
     private int NextLogId => Interlocked.Increment(ref _currentLogId);
     private GameRunLevel _runLevel = GameRunLevel.PreRoundLobby;
 
-    // 1 when saving, 0 otherwise
-    private int _savingLogs;
+    private readonly SemaphoreSlim _saveLock = new(1, 1);
+    // Keep failed batches separate: they already have round IDs and cache entries.
+    private List<AdminLog>? _retryLogs;
     private int _logsDropped;
 
     public void Initialize()
@@ -134,14 +135,32 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
 
     public async Task Shutdown()
     {
-        if (!_logQueue.IsEmpty)
+        // Wait for an in-flight write before flushing the remaining queue.
+        await _saveLock.WaitAsync();
+        try
         {
-            await SaveLogs();
+            while (_retryLogs != null || !_logQueue.IsEmpty ||
+                   (_runLevel != GameRunLevel.PreRoundLobby && !_preRoundLogQueue.IsEmpty))
+            {
+                if (!await SaveLogs())
+                    break;
+            }
+        }
+        finally
+        {
+            _saveLock.Release();
         }
     }
 
     public async void Update()
     {
+        if (_retryLogs != null)
+        {
+            if (_timing.RealTime >= _nextUpdateTime)
+                await TrySaveLogs();
+            return;
+        }
+
         if (_runLevel == GameRunLevel.PreRoundLobby)
         {
             await PreRoundUpdate();
@@ -196,7 +215,7 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
 
     private async Task TrySaveLogs()
     {
-        if (Interlocked.Exchange(ref _savingLogs, 1) == 1)
+        if (!await _saveLock.WaitAsync(0))
             return;
 
         try
@@ -205,17 +224,18 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
         }
         finally
         {
-            Interlocked.Exchange(ref _savingLogs, 0);
+            _saveLock.Release();
         }
     }
 
-    private async Task SaveLogs()
+    private async Task<bool> SaveLogs()
     {
         _nextUpdateTime = _timing.RealTime.Add(_queueSendDelay);
 
-        // TODO ADMIN LOGS array pool
-        var copy = new List<AdminLog>(_logQueue.Count + _preRoundLogQueue.Count);
-        copy.AddRange(_logQueue);
+        // Bound each database transaction and drain atomically. Snapshot + Clear loses logs
+        // that producers append between those two operations.
+        var batchSize = Math.Max(1, _queueMax);
+        var copy = _retryLogs ?? new List<AdminLog>(batchSize);
 
         if (_logQueue.Count >= _queueMax)
         {
@@ -228,28 +248,37 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
             _sawmill.Error($"Dropped {dropped} logs. Current max threshold: {_dropThreshold}");
         }
 
-        if (_runLevel == GameRunLevel.PreRoundLobby && !_preRoundLogQueue.IsEmpty)
+        if (_retryLogs == null)
         {
-            _sawmill.Error($"Dropping {_preRoundLogQueue.Count} pre-round logs. Current cap: {_preRoundQueueMax}");
-        }
-        else
-        {
-            foreach (var log in _preRoundLogQueue)
+            if (_runLevel == GameRunLevel.PreRoundLobby)
             {
-                log.RoundId = _currentRoundId;
-                CacheLog(log);
+                // There is no database round to attach these to yet. Limit the drop to
+                // this snapshot so concurrent additions survive for the next batch.
+                var toDrop = _preRoundLogQueue.Count;
+                for (var i = 0; i < toDrop; i++)
+                    _preRoundLogQueue.TryDequeue(out _);
+                if (toDrop > 0)
+                    _sawmill.Error($"Dropping {toDrop} pre-round logs. Current cap: {_preRoundQueueMax}");
+            }
+            else
+            {
+                // Flush the lobby history first so a busy round cannot starve it indefinitely.
+                while (copy.Count < batchSize && _preRoundLogQueue.TryDequeue(out var log))
+                {
+                    log.RoundId = _currentRoundId;
+                    CacheLog(log);
+                    copy.Add(log);
+                }
             }
 
-            copy.AddRange(_preRoundLogQueue);
+            while (copy.Count < batchSize && _logQueue.TryDequeue(out var roundLog))
+                copy.Add(roundLog);
         }
 
-        _logQueue.Clear();
-        Queue.Set(0);
-
-        _preRoundLogQueue.Clear();
-        PreRoundQueue.Set(0);
-
-        var task = _db.AddAdminLogs(copy);
+        Queue.Set(_logQueue.Count);
+        PreRoundQueue.Set(_preRoundLogQueue.Count);
+        if (copy.Count == 0)
+            return true;
 
         _sawmill.Debug($"Saving {copy.Count} admin logs.");
 
@@ -257,37 +286,27 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
         {
             if (_metricsEnabled)
             {
-                LogsSent.Inc(copy.Count);
-
                 using (DatabaseUpdateTime.NewTimer())
                 {
-                    await task;
+                    await _db.AddAdminLogs(copy);
                 }
+                LogsSent.Inc(copy.Count);
             }
             else
             {
-                await task;
+                await _db.AddAdminLogs(copy);
             }
+
+            _retryLogs = null;
+            return true;
         }
         catch (Exception ex)
         {
             _sawmill.Error($"Failed to save logs: {ex.Message}");
-            _sawmill.Warning("Re-enqueueing logs and retrying at the next update.");
-
-            foreach (var log in copy)
-            {
-                if (log.RoundId == _currentRoundId)
-                {
-                    _logQueue.Enqueue(log);
-                }
-                else
-                {
-                    _preRoundLogQueue.Enqueue(log);
-                }
-            }
-
-            Queue.Set(_logQueue.Count);
-            PreRoundQueue.Set(_preRoundLogQueue.Count);
+            _sawmill.Warning("Retaining the batch and retrying after the send delay.");
+            _retryLogs = copy;
+            _nextUpdateTime = _timing.RealTime.Add(_queueSendDelay);
+            return false;
         }
     }
 

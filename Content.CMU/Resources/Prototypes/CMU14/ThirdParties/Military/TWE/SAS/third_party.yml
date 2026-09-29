@@ -1,0 +1,21 @@
+- type: partySpawn
+  id: SASSpawn
+  leadersToSpawn:
+    CMUJobSASCommander: 1
+  gruntsToSpawn:
+    CMUJobSASBreacher: 1
+    CMUJobSASMedic: 1
+    CMUJobSASRifleman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: SAS
+  partyspawn: SASSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: false

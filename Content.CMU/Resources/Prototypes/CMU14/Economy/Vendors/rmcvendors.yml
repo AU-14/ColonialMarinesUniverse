@@ -19,10 +19,8 @@
     sections:
     - name: Fatigues
       entries:
-      - id: AU14FatiguesDesertRMC
-        amount: 40
-      - id: AU14FatiguesBlackRMC
-        amount: 40
+      - id: CMUFatiguesRMC
+        amount: 80
     - name: Footwear
       entries:
       - id: RMCBootsRoyal
@@ -267,6 +265,8 @@
         name: infantry first aid kit (Full)
         recommended: true
         amount: 30
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -369,6 +369,10 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+    - name: Hearing Protection
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+        amount: 60
     - name: Optics
       entries:
       - id: RMCLaserDesignatorPVE
@@ -446,6 +450,8 @@
         amount: 9
     - name: General Medical Supplies
       entries:
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 60
       - id: AU14Tourniquet
@@ -758,10 +764,8 @@
       entries:
       - id: AU14FatiguesServiceRMC
         amount: 3
-      - id: AU14FatiguesBlackRMCTeamlead
-        amount: 2
-      - id: AU14FatiguesDesertRMCTeamlead
-        amount: 2
+      - id: CMUFatiguesRMCTeamlead
+        amount: 4
     - name: Footwear
       entries:
       - id: RMCBootsRoyal
@@ -782,10 +786,6 @@
       - id: AU14JunglePatrolCap
         amount: 5
       - id: AU14DesertPatrolCap
-        amount: 5
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
         amount: 5
     - name: Pouches
       entries:
@@ -890,8 +890,7 @@
     - name: Uniforms
       choices: { AU14Uniform: 1 }
       entries:
-      - id: AU14FatiguesBlackRMCTeamlead
-      - id: AU14FatiguesDesertRMCTeamlead
+      - id: CMUFatiguesRMCTeamlead
     - name: Equipment
       takeAll: CMStandard
       entries:
@@ -933,8 +932,7 @@
     - name: Uniforms
       choices: { AU14Uniform: 1 }
       entries:
-      - id: AU14FatiguesBlackRMCTeamlead
-      - id: AU14FatiguesDesertRMCTeamlead
+      - id: CMUFatiguesRMCTeamlead
     - name: Squad Leader Essentials
       takeAll: CMStandard
       entries:
@@ -1105,6 +1103,11 @@
         givePrefix: au14-job-prefix-govforspecialist-marksmanRMC
         isAppendSquadRoleName: false
         isAppendPrefix: true
+      - id: CMU14KitRMCMarksmanL144
+        giveSquadRoleName: au14-job-name-govforspecialist-marksmanRMC
+        givePrefix: au14-job-prefix-govforspecialist-marksmanRMC
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
       - id: AU14KitRMCPointmanL23B
         giveSquadRoleName: au14-job-name-govforspecialist-pointmanRMC
         givePrefix: au14-job-prefix-govforspecialist-pointmanRMC
@@ -1235,16 +1238,18 @@
         recommended: true
       - id: AU14HescoKit
         name: HESCO barricade kit
-        points: 4
+        points: 2
         recommended: true
       - id: CMSandbagEmpty50
         name: sandbags x50
-        points: 4
+        points: 2
       - id: RMCPlankWood
         name: wood x50
-        points: 2
+        points: 1
     - name: Engineering Supplies
       entries:
+      - id: RMCCableCoil
+        points: 1
       - id: CMFoldingBarricadesMB6x3
         name: MB-6 folding barricade x3
         points: 2
@@ -1288,7 +1293,7 @@
         points: 6
         recommended: true
       - id: RMCExplosiveBreachingCharge
-        points: 6
+        points: 5
       - id: RMCPacketGrenadeMetalFoamFilled
         points: 8
       - id: RMCRocketM5510Brute
@@ -1504,6 +1509,8 @@
         amount: 4
       - id: RMCSentryLaptop
         amount: 4
+      - id: MineDetector
+        amount: 2
     - name: RTO Packs
       entries:
       - id: AU14BackpackRTOPackJungle
@@ -1583,10 +1590,8 @@
         amount: 15
     - name: Fatigues
       entries:
-      - id: AU14FatiguesDesertRMC
-        amount: 40
-      - id: AU14FatiguesBlackRMC
-        amount: 40
+      - id: CMUFatiguesRMC
+        amount: 80
     - name: Footwear
       entries:
       - id: RMCBootsRoyal

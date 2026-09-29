@@ -260,7 +260,7 @@ public sealed partial class ChannelFilterPopup : Popup
             var isAll = string.Equals(tab.Id, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase);
             var button = new ChatTabButton(tab.Id)
             {
-                Text = tab.Title,
+                Text = ChatUserSettings.GetDisplayTitle(tab), // CMU14 hardcode Localization
                 ToggleMode = true,
                 Mode = BaseButton.ActionMode.Release,
                 Pressed = tab.Id == activeTabId,

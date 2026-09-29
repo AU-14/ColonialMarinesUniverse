@@ -36,6 +36,6 @@ public sealed partial class MarineSystem : SharedMarineSystem
         if (!_idCard.TryFindIdCard(ent, out var card))
             return;
 
-        card.Comp.OriginalOwner = ent.Owner;
+        _idCard.TryChangeOriginalOwner(card, ent.Owner, card.Comp);
     }
 }

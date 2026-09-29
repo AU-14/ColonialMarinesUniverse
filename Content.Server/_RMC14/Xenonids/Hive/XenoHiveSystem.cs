@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Evolution; // CMU14
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Chat;
@@ -45,6 +46,7 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private XenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private XenoEvolutionSystem _xenoEvolution = default!; // CMU14
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private SharedRMCSpriteSystem _rmcSprite = default!;
     [Dependency] private ISerializationManager _serialization = default!;
@@ -277,7 +279,9 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
                 }
             }
 
-            if (_announce.Count > 0)
+            // CMU14: with no living members only ghosts would hear it, skip entirely
+            if (_announce.Count > 0
+                && _xenoEvolution.HasLiving<XenoComponent>(1, hive: hiveId))
             {
                 var popup = Loc.GetString("rmc-hive-supports-castes", ("castes", string.Join(", ", _announce)));
                 _xenoAnnounce.AnnounceToHive(EntityUid.Invalid, hiveId, popup, hive.AnnounceSound, PopupType.Large);
@@ -292,7 +296,7 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
                 Dirty(hiveId, hive);
             }
 
-            if (!hive.AnnouncedHiveCoreCooldownOver && hive.NewCoreAt.HasValue && roundTime >= hive.NewCoreAt)
+            if (!hive.AnnouncedHiveCoreCooldownOver && hive.NewCoreAt.HasValue && _timing.CurTime >= hive.NewCoreAt) // CMU14: absolute deadline
             {
                 var corePopup = Loc.GetString("rmc-hive-core-cooldown-over");
                 _xenoAnnounce.AnnounceToHive(EntityUid.Invalid, hiveId, corePopup, hive.AnnounceSound);

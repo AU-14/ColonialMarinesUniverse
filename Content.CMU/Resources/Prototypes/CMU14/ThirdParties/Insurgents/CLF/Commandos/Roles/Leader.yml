@@ -1,0 +1,106 @@
+- type: job
+  parent: CMJobBase
+  id: CMU14JobCLFCommandoLeader
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: CLF
+  roundRole: CLFGuerillaReinforcement
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: AU14CLFGuerillaReinforcement
+  - type: CLFMember
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillLeadership: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 3
+      RMCSkillMedical: 2
+      RMCSkillVehicles: 1
+      RMCSkillPowerLoader: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillJtac: 4
+      RMCSkillPolice: 2
+      RMCSkillSpecialistWeapons: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfguerilla
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
+
+  name: au14-job-name-clfguerilla
+  description: au14-job-description-clfguerilla-alt
+  playTimeTracker: AU14JobCLFGuerilla
+  setPreference: true
+  ignoreAllegiance: true
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 7200 # 2 hours
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMU14GearCLFCommandoLeader
+  spawnMenuRoleName: CLF Commando Leader (Reinforcements)
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  hidden: false
+
+- type: startingGear
+  id: CMU14GearCLFCommandoLeader
+  equipment:
+    head: CMU14CLFCommandoHelmet
+    mask: RMCCombatUtilityKnifeA
+    ears: RMCHeadsetDistressCLF
+    jumpsuit: CMU14FatiguesCLFCommandoLeader
+    outerClothing: CMU14CLFCommandoArmor
+    gloves: CMHandsInsulated
+    shoes: RMCShoesBrown
+    id: AU14IDCardColonyColonist
+    belt: RMCBeltHolsterRevolverZHNK72Fill
+    back: RMCSatchelLightpackWelder
+    pocket1: AU14PouchMagazineLargeFilledM16
+    pocket2: AU14PouchIFAKFill
+  inhand:
+  - AU14WeaponRifleM16A1Tac
+  - RMCScabbardKatanaFilled
+  storage:
+    back:
+    - CMUMagazineRifleM16Extended
+    - RMCGrenadeIED
+    - RMCGrenadeIED
+    - RMCMRECLF
+    - CMUMagazineRifleM16APExt
+    - CMUMagazineRifleM16APExt
+    outerClothing:
+    - CMUMagazineRifleM16APExt
+    - CMUMagazineRifleM16APExt
+
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCLF
+  id: AU14IntelThirdPartyCLFCommandoLeaderReinforcements
+  name: Commando Leader
+  components:
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Commando leader Reinforcements
+    description: You have been sent from a neighboring insurgent cell to aid the uprising in this area. Report to the local cell for orders
+    job: CMU14JobCLFCommandoLeader
+    raffle:
+      settings: short

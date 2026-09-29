@@ -6,7 +6,7 @@ namespace Content.Shared.CMU14.TacticalMap;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
 public sealed partial class YautjaTrackedPreyComponent : Component
 {
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan ExpiresAt;
 
     [DataField, AutoNetworkedField]

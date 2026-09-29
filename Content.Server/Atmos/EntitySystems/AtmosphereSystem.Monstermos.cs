@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Diagnostics.CodeAnalysis; // CMU14
 using System.Numerics;
 using Content.Server.Atmos.Components;
 using Content.Server.Doors.Systems;
@@ -47,8 +48,8 @@ namespace Content.Server.Atmos.EntitySystems
             {
                 var direction = (AtmosDirection) (1 << i);
                 if (!tile.AdjacentBits.IsFlagSet(direction)) continue;
-                var other = tile.AdjacentTiles[i];
-                if (other?.Air == null) continue;
+                // CMU14: validate both directions and schedule broken links for repair.
+                if (!TryGetEqualizationNeighbor(tile, i, out var other) || other.Air == null) continue;
                 var comparisonMoles = other.Air.TotalMoles;
                 if (!(MathF.Abs(comparisonMoles - startingMoles) > Atmospherics.MinimumMolesDeltaToMove)) continue;
                 runAtmos = true;
@@ -84,8 +85,8 @@ namespace Content.Server.Atmos.EntitySystems
                 {
                     var direction = (AtmosDirection) (1 << j);
                     if (!exploring.AdjacentBits.IsFlagSet(direction)) continue;
-                    var adj = exploring.AdjacentTiles[j];
-                    if (adj?.Air == null) continue;
+                    // CMU14: validate both directions and schedule broken links for repair.
+                    if (!TryGetEqualizationNeighbor(exploring, j, out var adj) || adj.Air == null) continue;
                     if(adj.MonstermosInfo.LastQueueCycle == queueCycle) continue;
                     adj.MonstermosInfo = new MonstermosInfo {LastQueueCycle = queueCycle};
 
@@ -156,7 +157,9 @@ namespace Content.Server.Atmos.EntitySystems
                     {
                         var direction = (AtmosDirection) (1 << j);
                         if (!otherTile.AdjacentBits.IsFlagSet(direction)) continue;
-                        var tile2 = otherTile.AdjacentTiles[j]!;
+                        var tile2 = otherTile.AdjacentTiles[j];
+                        if (tile2 == null || tile2.AdjacentTiles[j.ToOppositeIndex()] != otherTile)
+                            continue;
                         DebugTools.Assert(tile2.AdjacentBits.IsFlagSet(direction.GetOpposite()));
 
                         // skip anything that isn't part of our current processing block.
@@ -176,7 +179,9 @@ namespace Content.Server.Atmos.EntitySystems
                         var direction = (AtmosDirection) (1 << j);
                         if (!eligibleDirections.IsFlagSet(direction)) continue;
 
-                        AdjustEqMovement(otherTile, direction, molesToMove);
+                        // CMU14: a rejected transfer must not dereference its missing neighbor.
+                        if (!AdjustEqMovement(otherTile, direction, molesToMove))
+                            continue;
                         otherTile.MonstermosInfo.MoleDelta -= molesToMove;
                         otherTile.AdjacentTiles[j]!.MonstermosInfo.MoleDelta += molesToMove;
                     }
@@ -229,6 +234,7 @@ namespace Content.Server.Atmos.EntitySystems
 
                             var otherTile2 = otherTile.AdjacentTiles[k];
                             if (otherTile2 == null || otherTile2.MonstermosInfo.LastQueueCycle != queueCycle) continue;
+                            if (otherTile2.AdjacentTiles[k.ToOppositeIndex()] != otherTile) continue;
                             DebugTools.Assert(otherTile2.AdjacentBits.IsFlagSet(direction.GetOpposite()));
                             if (otherTile2.MonstermosInfo.LastSlowQueueCycle == queueCycleSlow) continue;
                             _equalizeQueue[queueLength++] = otherTile2;
@@ -262,7 +268,9 @@ namespace Content.Server.Atmos.EntitySystems
                         var otherTile = _equalizeQueue[i];
                         if (otherTile.MonstermosInfo.CurrentTransferAmount != 0 && otherTile.MonstermosInfo.CurrentTransferDirection != AtmosDirection.Invalid)
                         {
-                            AdjustEqMovement(otherTile, otherTile.MonstermosInfo.CurrentTransferDirection, otherTile.MonstermosInfo.CurrentTransferAmount);
+                            // CMU14: a rejected transfer must not dereference its missing neighbor.
+                            if (!AdjustEqMovement(otherTile, otherTile.MonstermosInfo.CurrentTransferDirection, otherTile.MonstermosInfo.CurrentTransferAmount))
+                                continue;
                             otherTile.AdjacentTiles[otherTile.MonstermosInfo.CurrentTransferDirection.ToIndex()]!
                                 .MonstermosInfo.CurrentTransferAmount += otherTile.MonstermosInfo.CurrentTransferAmount;
                             otherTile.MonstermosInfo.CurrentTransferAmount = 0;
@@ -295,6 +303,7 @@ namespace Content.Server.Atmos.EntitySystems
 
                             if (taker.MonstermosInfo.MoleDelta >= 0) break; // We're done here now. Let's not do more work than needed.
                             if (otherTile2 == null || otherTile2.AdjacentBits == 0 || otherTile2.MonstermosInfo.LastQueueCycle != queueCycle) continue;
+                            if (otherTile2.AdjacentTiles[k.ToOppositeIndex()] != otherTile) continue;
                             DebugTools.Assert(otherTile2.AdjacentBits.IsFlagSet(direction.GetOpposite()));
                             if (otherTile2.MonstermosInfo.LastSlowQueueCycle == queueCycleSlow) continue;
                             _equalizeQueue[queueLength++] = otherTile2;
@@ -329,7 +338,9 @@ namespace Content.Server.Atmos.EntitySystems
                         if (otherTile.MonstermosInfo.CurrentTransferAmount == 0 || otherTile.MonstermosInfo.CurrentTransferDirection == AtmosDirection.Invalid)
                             continue;
 
-                        AdjustEqMovement(otherTile, otherTile.MonstermosInfo.CurrentTransferDirection, otherTile.MonstermosInfo.CurrentTransferAmount);
+                        // CMU14: a rejected transfer must not dereference its missing neighbor.
+                        if (!AdjustEqMovement(otherTile, otherTile.MonstermosInfo.CurrentTransferDirection, otherTile.MonstermosInfo.CurrentTransferAmount))
+                            continue;
 
                         otherTile.AdjacentTiles[otherTile.MonstermosInfo.CurrentTransferDirection.ToIndex()]!
                             .MonstermosInfo.CurrentTransferAmount += otherTile.MonstermosInfo.CurrentTransferAmount;
@@ -353,8 +364,8 @@ namespace Content.Server.Atmos.EntitySystems
                     if (!otherTile.AdjacentBits.IsFlagSet(direction))
                         continue;
 
-                    var otherTile2 = otherTile.AdjacentTiles[j]!;
-                    if (otherTile2.AdjacentBits == 0)
+                    var otherTile2 = otherTile.AdjacentTiles[j];
+                    if (otherTile2 == null || otherTile2.AdjacentBits == 0 || otherTile2.AdjacentTiles[j.ToOppositeIndex()] != otherTile)
                         continue;
 
                     DebugTools.Assert(otherTile2.AdjacentBits.IsFlagSet(direction.GetOpposite()));
@@ -556,7 +567,9 @@ namespace Content.Server.Atmos.EntitySystems
                 HandleDecompressionFloorRip((owner, mapGrid), otherTile, otherTile.MonstermosInfo.CurrentTransferAmount);
             }
 
-            if (GridImpulse && tileCount > 0)
+            // CMU14: map grids cannot move, even when a saved map has dynamic shuttle physics.
+            // Impulses on the map accumulate invalid velocity that entities inherit when changing grids.
+            if (GridImpulse && tileCount > 0 && !HasComp<MapComponent>(owner))
             {
                 var direction = ((Vector2)_depressurizeTiles[tileCount - 1].GridIndices - tile.GridIndices).Normalized();
 
@@ -636,8 +649,8 @@ namespace Content.Server.Atmos.EntitySystems
                 var direction = (AtmosDirection) (1 << i);
                 if (!tile.AdjacentBits.IsFlagSet(direction)) continue;
                 var amount = transferDirections[i];
-                var otherTile = tile.AdjacentTiles[i];
-                if (otherTile?.Air == null) continue;
+                // CMU14: links may change between scheduling and finalization.
+                if (!TryGetEqualizationNeighbor(tile, i, out var otherTile) || otherTile.Air == null) continue;
                 DebugTools.Assert(otherTile.AdjacentBits.IsFlagSet(direction.GetOpposite()));
                 if (amount <= 0) continue;
 
@@ -661,37 +674,57 @@ namespace Content.Server.Atmos.EntitySystems
             {
                 var direction = (AtmosDirection) (1 << i);
                 var amount = transferDirs[i];
-                // Since AdjacentBits is set, AdjacentTiles[i] wouldn't be null, and neither would its air.
-                if(amount < 0 && tile.AdjacentBits.IsFlagSet(direction))
-                    FinalizeEq(ent, tile.AdjacentTiles[i]!);  // A bit of recursion if needed.
+                // CMU14: recursive finalization also requires a valid reciprocal neighbor.
+                if (amount < 0 && tile.AdjacentBits.IsFlagSet(direction) &&
+                    TryGetEqualizationNeighbor(tile, i, out var neighbor) && neighbor.Air != null)
+                    FinalizeEq(ent, neighbor);  // A bit of recursion if needed.
             }
         }
 
-        private void AdjustEqMovement(TileAtmosphere tile, AtmosDirection direction, float amount)
+        // CMU14 method: return transfer success instead of logging a stack and continuing with a null link.
+        private bool AdjustEqMovement(TileAtmosphere tile, AtmosDirection direction, float amount)
         {
-            DebugTools.AssertNotNull(tile);
-            DebugTools.Assert(tile.AdjacentBits.IsFlagSet(direction));
-            DebugTools.Assert(tile.AdjacentTiles[direction.ToIndex()] != null);
-            // Every call to this method already ensures that the adjacent tile won't be null.
-
-            // Turns out: no they don't. Temporary debug checks to figure out which caller is causing problems:
-            if (tile == null)
-            {
-                Log.Error($"Encountered null-tile in {nameof(AdjustEqMovement)}. Trace: {Environment.StackTrace}");
-                return;
-            }
-
             var idx = direction.ToIndex();
-            var adj = tile.AdjacentTiles[idx];
-            if (adj == null)
-            {
-                var nonNull = tile.AdjacentTiles.Where(x => x != null).Count();
-                Log.Error($"Encountered null adjacent tile in {nameof(AdjustEqMovement)}. Dir: {direction}, Tile: ({tile.GridIndex}, {tile.GridIndices}), non-null adj count: {nonNull}, Trace: {Environment.StackTrace}");
-                return;
-            }
+            if (!TryGetEqualizationNeighbor(tile, idx, out var adj))
+                return false;
 
             tile.MonstermosInfo[direction] += amount;
             adj.MonstermosInfo[idx.ToOppositeDir()] -= amount;
+            return true;
+        }
+
+        // CMU14: bound adjacency diagnostics without retaining tiles or stack traces.
+        private TimeSpan _nextEqualizationLinkWarning;
+        private int _suppressedEqualizationLinkWarnings;
+
+        // CMU14 method
+        private bool TryGetEqualizationNeighbor(TileAtmosphere tile, int index,
+            [NotNullWhen(true)] out TileAtmosphere? neighbor)
+        {
+            var direction = index.ToAtmosDirection();
+            neighbor = tile.AdjacentTiles[index];
+            if (tile.AdjacentBits.IsFlagSet(direction) && neighbor != null &&
+                neighbor.AdjacentBits.IsFlagSet(index.ToOppositeDir()) &&
+                neighbor.AdjacentTiles[index.ToOppositeIndex()] == tile)
+                return true;
+
+            // Revalidation runs before the next equalization pass. Do not transfer through a
+            // one-way link or leave it silently broken for the rest of the round.
+            InvalidateTile(tile.GridIndex, tile.GridIndices);
+            if (neighbor != null)
+                InvalidateTile(neighbor.GridIndex, neighbor.GridIndices);
+            if (_gameTiming.RealTime >= _nextEqualizationLinkWarning)
+            {
+                Log.Warning($"invalid-equalization-link grid={tile.GridIndex} tile={tile.GridIndices} " +
+                            $"direction={direction} adjacentPresent={neighbor != null} " +
+                            $"bits={tile.AdjacentBits} adjacentBits={neighbor?.AdjacentBits} " +
+                            $"suppressed={_suppressedEqualizationLinkWarnings} action=revalidate");
+                _nextEqualizationLinkWarning = _gameTiming.RealTime + TimeSpan.FromSeconds(30);
+                _suppressedEqualizationLinkWarnings = 0;
+            }
+            else
+                _suppressedEqualizationLinkWarnings++;
+            return false;
         }
 
         private void HandleDecompressionFloorRip(Entity<MapGridComponent> mapGrid, TileAtmosphere tile, float sum)

@@ -43,7 +43,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: cmu14-job-name-lawyer
-  spawnMenuRoleName: Prodigy PPO (CMU)
+  spawnMenuRoleName: cmu-spawn-role-prodigy-ppo-cmu 
   accessGroups:
   - Colonist
   - auadmin

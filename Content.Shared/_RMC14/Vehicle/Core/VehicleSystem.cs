@@ -61,6 +61,7 @@ public sealed partial class VehicleSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeTankCookOff(); // CMU14: catastrophic tank destruction
         SubscribeLocalEvent<VehicleEnterComponent, ActivateInWorldEvent>(OnVehicleEnterActivate);
         SubscribeLocalEvent<VehicleEnterComponent, ComponentShutdown>(OnVehicleEnterShutdown);
         SubscribeLocalEvent<VehicleExitComponent, ActivateInWorldEvent>(OnVehicleExitActivate);
@@ -307,6 +308,12 @@ public sealed partial class VehicleSystem : EntitySystem
 
         var link = EnsureComp<VehicleInteriorLinkComponent>(mapUid);
         link.Vehicle = ent.Owner;
+
+        // CMU14: Opfor twins swap in first, purges shared
+        CaptureInteriorFaction(ent);
+        var swapEv = new VehicleInteriorLoadedEvent(ent.Owner, mapUid, interiorGrid, ent.Comp.InteriorFaction);
+        RaiseLocalEvent(ent.Owner, ref swapEv);
+        ConfigureInteriorFaction(ent, mapId);
 
         ProtectInteriorEntities(mapId);
         SpawnVehicleInteriorKey(ent.Owner, mapId);
@@ -1026,6 +1033,10 @@ public sealed partial class VehicleSystem : EntitySystem
 
     private bool IsExitBlockedByLock(EntityUid vehicle, EntityUid user)
     {
+        // CMU14: occupants may escape during the ignition warning.
+        if (HasComp<ActiveTankCookOffComponent>(vehicle))
+            return false;
+
         if (HasComp<GhostComponent>(user))
             return false;
 

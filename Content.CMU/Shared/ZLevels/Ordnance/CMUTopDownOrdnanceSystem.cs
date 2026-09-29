@@ -229,6 +229,15 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         CMUTopDownOrdnanceKind kind,
         out CMUTopDownOrdnanceBlockReason blockReason)
     {
+        if (!_map.TryGetMap(coordinates.MapId, out var mapUid)
+            || mapUid is not { } map
+            || !TryComp(map, out TransformComponent? mapXform)
+            || mapXform.MapID != coordinates.MapId)
+        {
+            blockReason = CMUTopDownOrdnanceBlockReason.NoMap;
+            return false;
+        }
+
         var entityCoordinates = _transform.ToCoordinates(coordinates);
         switch (kind)
         {

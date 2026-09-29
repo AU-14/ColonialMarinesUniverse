@@ -99,15 +99,20 @@ namespace Content.Shared.GameTicking
         public bool YouAreReady { get; }
         // UTC.
         public TimeSpan StartTime { get; }
+        // CMU14: map preload status.
+        public TimeSpan PreloadTime { get; }
+        public bool MapsLoaded { get; }
         public TimeSpan RoundStartTimeSpan { get; }
         public bool Paused { get; }
 
-        public TickerLobbyStatusEvent(bool isRoundStarted, ProtoId<LobbyBackgroundPrototype>? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused)
+        public TickerLobbyStatusEvent(bool isRoundStarted, ProtoId<LobbyBackgroundPrototype>? lobbyBackground, bool youAreReady, TimeSpan startTime, TimeSpan preloadTime, TimeSpan roundStartTimeSpan, bool paused, bool mapsLoaded = false)
         {
             IsRoundStarted = isRoundStarted;
             LobbyBackground = lobbyBackground;
             YouAreReady = youAreReady;
             StartTime = startTime;
+            PreloadTime = preloadTime;
+            MapsLoaded = mapsLoaded;
             RoundStartTimeSpan = roundStartTimeSpan;
             Paused = paused;
         }
@@ -140,6 +145,8 @@ namespace Content.Shared.GameTicking
     [Serializable, NetSerializable]
     public sealed partial class TickerLobbyInfoEvent : EntityEventArgs
     {
+        public List<Content.Shared.CMU14.Lobby.LobbyLineupEntry> Lineup { get; }
+
         public string TextBlob { get; }
 
         /// <summary>
@@ -147,10 +154,12 @@ namespace Content.Shared.GameTicking
         /// </summary>
         public List<LobbyRoundInfoField> RoundInfo { get; }
 
-        public TickerLobbyInfoEvent(string textBlob, List<LobbyRoundInfoField>? roundInfo = null)
+        public TickerLobbyInfoEvent(string textBlob, List<LobbyRoundInfoField>? roundInfo = null,
+            List<Content.Shared.CMU14.Lobby.LobbyLineupEntry>? lineup = null)
         {
             TextBlob = textBlob;
             RoundInfo = roundInfo ?? new List<LobbyRoundInfoField>();
+            Lineup = lineup ?? new();
         }
     }
 

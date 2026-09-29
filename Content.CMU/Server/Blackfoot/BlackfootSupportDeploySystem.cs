@@ -106,6 +106,9 @@ public sealed partial class BlackfootSupportDeploySystem : EntitySystem
             LinkPadAttachment(deployed, landingPad, ent.Comp.LandingPadAttachment);
         }
 
+        var deployedEvent = new BlackfootSupportDeployedEvent(deployed, args.User);
+        RaiseLocalEvent(ent, ref deployedEvent);
+
         if (ent.Comp.DeleteOnDeploy)
             QueueDel(ent.Owner);
 

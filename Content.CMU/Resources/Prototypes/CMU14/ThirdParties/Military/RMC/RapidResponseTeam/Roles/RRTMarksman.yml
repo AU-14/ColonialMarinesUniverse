@@ -62,7 +62,7 @@
   equipment:
     id: AU14IDCardRMCRRTMarksman
     outerClothing: AU14ArmorRMC
-    jumpsuit: AU14FatiguesBlackRMC
+    jumpsuit: CMUFatiguesRMC
     shoes: RMCBootsRoyalFilled
     eyes: AU14GogglesM1A1Ballistic
     mask: RMCMaskScarfTan

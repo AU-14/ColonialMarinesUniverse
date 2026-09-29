@@ -1,0 +1,51 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 0d711eddc539ea7ac67cf6b5869a08fa33dc9391.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "hardpoint_left",
+            "directions": 1
+        },
+        {
+            "name": "hardpoint_right",
+            "directions": 1
+        },
+        {
+            "name": "stairs_platform",
+            "directions": 4
+        },
+        {
+            "name": "platform",
+            "directions": 4
+        },
+        {
+            "name": "stairs_decal_top",
+            "directions": 4
+        },
+        {
+            "name": "stairs_decal_bot",
+            "directions": 4
+        },
+        {
+            "name": "platform_decal",
+            "directions": 4
+        },
+        {
+            "name": "panel_half",
+            "directions": 4
+        },
+        {
+            "name": "panel_full",
+            "directions": 4
+        },
+        {
+            "name": "decal",
+            "directions": 4
+        }
+    ]
+}

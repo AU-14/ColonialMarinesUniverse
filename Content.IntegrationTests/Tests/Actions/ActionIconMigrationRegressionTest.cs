@@ -25,7 +25,7 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
     [
         "ActionXenoBase",
         "ActionZombieSummonerOpen",
-        "ActionAbominationSpiderLeap",
+        "ActionBiomorphSpiderLeap", // CMU14
         "ActionMarineBase",
         "ActionVehicleToggleView",
         "ActionVehicleLock",
@@ -49,7 +49,7 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
 
                 AssertBackground("ActionXenoBase", "template_active_big");
                 AssertBackground("ActionZombieSummonerOpen", "template_active_big");
-                AssertBackground("ActionAbominationSpiderLeap", "template_active_big");
+                AssertBackground("ActionBiomorphSpiderLeap", "template_active_big"); // CMU14
                 AssertBackground("RMCActionToggleRecoil", "template_on_big");
 
                 AssertStyle("ActionVehicleToggleView", ItemActionIconStyle.BigAction);

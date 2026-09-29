@@ -22,7 +22,7 @@
     - VAIPO
     defaultgovfor: USCM
     defaultopfor: UPP
-    govforinship: false
+    govforinship: true
     opforinship: true
     daycycleenabled: true
     thirdparties:
@@ -54,7 +54,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     - tribalThirdParty
     - DrugSmuggler
     - CMBParoleeTransport

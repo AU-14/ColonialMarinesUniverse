@@ -563,6 +563,56 @@
     tags:
     - CMUSquadUPPLine
 
+- type: entity
+  parent: SquadBase
+  id: CMUSquadParamarines
+  name: TWE Royal Paramarines
+  components:
+  - type: SquadTeam
+    color: "#1c4f9c"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: Colony
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_para
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: para_teamleader_alt
+    canSupplyDrop: false
+    group: CMUParamarines
+  - type: Tag
+    tags:
+    - CMUSquadParamarines
+
+- type: entity
+  parent: SquadBase
+  id: CMUSquadSAS
+  name: SAS
+  components:
+  - type: SquadTeam
+    color: "#1c4f9c"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: Colony
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_para
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: para_teamleader_alt
+    canSupplyDrop: false
+    group: CMUSAS
+  - type: Tag
+    tags:
+    - CMUSquadSAS
+
 - type: Tag
   id: CMUSquadUPPLine
 
@@ -599,30 +649,8 @@
 - type: Tag
   id: AU14SquadUNISC
 
-- type: entity
-  parent: SquadBase
-  id: CMUSquadParamarines
-  name: TWE Royal Paramarines
-  components:
-  - type: SquadTeam
-    color: "#1c4f9c"
-    blacklistedSquadArmor:
-    - Helmet
-    - Goggles
-    - Armor
-    - Gloves
-    radio: Colony
-    minimapBackground:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: background_para
-    leaderIcon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: para_teamleader_alt
-    canSupplyDrop: false
-    group: CMUParamarines
-  - type: Tag
-    tags:
-    - CMUSquadParamarines
-
 - type: Tag
   id: CMUSquadParamarines
+
+- type: Tag
+  id: CMUSquadSAS

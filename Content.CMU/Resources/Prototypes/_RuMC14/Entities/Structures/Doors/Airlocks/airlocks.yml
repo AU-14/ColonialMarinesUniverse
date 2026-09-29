@@ -1,0 +1,55 @@
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockDebug
+  name: airlock
+  description: Airlock that has no power needs.
+  suffix: Debug
+  components:
+  - type: Airlock
+    powered: true
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: AccessReader
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMAirlockGlassDebug
+  name: glass airlock
+  description: Airlock that has no power needs.
+  suffix: Debug
+  components:
+  - type: Airlock
+    powered: true
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: AccessReader
+
+- type: entity
+  parent: CMDoubleDoorGenericGlass
+  id: CMDoubleDoorGenericGlassDebug
+  name: double glass door
+  description: Airlock that has no power needs.
+  suffix: Debug
+  components:
+  - type: Airlock
+    powered: true
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: AccessReader
+
+- type: entity
+  parent: CMDoubleDoorGenericSolid
+  id: CMDoubleDoorGenericSolidDebug
+  name: double solid door
+  description: Airlock that has no power needs.
+  suffix: Debug
+  components:
+  - type: Airlock
+    powered: true
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: AccessReader

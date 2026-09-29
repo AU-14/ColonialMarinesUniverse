@@ -28,9 +28,6 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-
-
-
         PlatoonPrototype? platoon = null;
         var planet = _auRoundSystem.GetSelectedPlanet();
         var protoMgr = IoCManager.Resolve<IPrototypeManager>();
@@ -116,7 +113,22 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                 // (i.e. colony jobs that live on the station already). We'll scale those directly on the station.
                 var stationOnlyScaling = new Dictionary<ProtoId<JobPrototype>, JobScaleEntry>();
 
+                // GOVFOR and OPFOR scale 1:1
+                var scaledJobs = new Dictionary<string, JobScaleEntry>();
                 foreach (var (jobId, entry) in scaleDef.Jobs)
+                {
+                    scaledJobs[jobId] = entry;
+
+                    var mirror = jobId.Contains("GOVFOR")
+                        ? jobId.Replace("GOVFOR", "OPFOR")
+                        : jobId.Contains("OPFOR")
+                            ? jobId.Replace("OPFOR", "GOVFOR")
+                            : null;
+                    if (mirror != null && !scaleDef.Jobs.ContainsKey(mirror) && !scaledJobs.ContainsKey(mirror))
+                        scaledJobs[mirror] = entry;
+                }
+
+                foreach (var (jobId, entry) in scaledJobs)
                 {
                     var jobProtoId = new ProtoId<JobPrototype>(jobId);
                     var isComponentJob = component.Jobs.ContainsKey(jobProtoId);

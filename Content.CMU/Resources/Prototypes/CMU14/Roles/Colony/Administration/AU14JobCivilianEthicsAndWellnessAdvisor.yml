@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianEthicsAndWellnessAdvisor
   displayWeight: 8
   roundSide: Civilian
@@ -26,7 +26,7 @@
   playTimeTracker: AU14JobCivilianEthicsAndWellnessAdvisor
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 7200 # 2 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -52,14 +52,15 @@
   equipment:
     jumpsuit: AU14CivilianWorkwearPink
     shoes: RMCShoesBlack
-    id: AU14IDCardColonyEthicsAndWellnessAdvisor
     outerClothing: AU14CivilianJacketGrayPufferJacket
     back: CMSatchel
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCivilianEthicsAndWellnessAdvisor
-  name: Spawn Point Civilian Ethics And Wellness Advisor
+  name: Spawn Point Civilian Psychologist
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianEthicsAndWellnessAdvisor

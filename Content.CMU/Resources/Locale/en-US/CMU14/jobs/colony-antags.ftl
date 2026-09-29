@@ -5,7 +5,10 @@ cmu-admin-verb-make-antag = Make {$antag}
 
 cmu-antag-arsonist-name = Arsonist
 cmu-antag-arsonist-objective = Watch it all burn.
-cmu-antag-arsonist-greeting = The colony took everything from you. Now you will take everything from the colony. You have a flamethrower and a grudge. Light it up, but don't get caught with the torch.
+cmu-antag-arsonist-greeting = The colony took everything from you. Now, you’ll take everything from them. Scavenge what you can, improvise more incendiary weapons, and reduce everything they built to ash. When the flames spread, they’ll finally understand what it feels like to lose everything.
+
+reagent-name-cmu-phoron-fuel = Phoron Fuel Mix
+reagent-desc-cmu-phoron-fuel = A stabilized phoron slurry for incinerator units. Burns long, spreads on its own, and shrugs off extinguishers.
 
 cmu-antag-bounty-hunter-name = Bounty Hunter
 cmu-antag-bounty-hunter-objective = Track down the colony's wanted and collect the bounties.

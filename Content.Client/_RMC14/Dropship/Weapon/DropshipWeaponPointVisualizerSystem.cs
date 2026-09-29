@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Robust.Client.GameObjects;
+using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Utility;
 using static Robust.Client.GameObjects.SpriteComponent;
 
@@ -55,10 +56,25 @@ public sealed partial class DropshipWeaponPointVisualizerSystem : VisualizerSyst
             return;
         }
 
-        _sprite.LayerSetSprite((uid, spriteComp), layer, new SpriteSpecifier.Rsi(new ResPath(sprite), state));
+        // CMU14 Begin: exposed underside mounts use complete weapon frames.
+        // _sprite.LayerSetSprite((uid, spriteComp), layer, new SpriteSpecifier.Rsi(new ResPath(sprite), state));
+        var overridden = component.SpriteOverrides.TryGetValue(state, out var replacement);
+        _sprite.LayerSetSprite((uid, spriteComp), layer,
+            replacement ?? new SpriteSpecifier.Rsi(new ResPath(sprite), state));
 
-        if (Enum.TryParse<DirectionOffset>(component.DirOffset, true, out var dir))
-            _sprite.LayerSetDirOffset((uid, spriteComp), layer, dir);
+        // Direction offsets select the four mounting variants. Single-direction
+        // states (including the M90 and fallback artwork) have no other entries.
+        // Always reset the offset when equipment or its displayed state changes.
+        var dirOffset = DirectionOffset.None;
+        if (!overridden &&
+            _sprite.LayerGetDirections((uid, spriteComp), layer) == RsiDirectionType.Dir4 &&
+            Enum.TryParse<DirectionOffset>(component.DirOffset, true, out var dir))
+        {
+            dirOffset = dir;
+        }
+
+        _sprite.LayerSetDirOffset((uid, spriteComp), layer, dirOffset);
+        // CMU14 End
 
         if (AppearanceSystem.TryGetData(uid,
                 GunshipDirectFireVisuals.AimOffsetDegrees,

@@ -478,10 +478,15 @@ public sealed partial class AccessReaderSystem : EntitySystem
     /// </summary>
     /// <param name="ent">The access reader entity which is having its list of access permissions replaced.</param>
     /// <param name="accesses">The list of access permissions replacing the original one.</param>
-    public void TrySetAccesses(Entity<AccessReaderComponent> ent, List<HashSet<ProtoId<AccessLevelPrototype>>> accesses)
+    /// <param name="updateOriginal">CMU14: Also establish the default requirements shown on examination during initial faction setup.</param>
+    public void TrySetAccesses(Entity<AccessReaderComponent> ent, List<HashSet<ProtoId<AccessLevelPrototype>>> accesses,
+        bool updateOriginal = false) // CMU14: Faction setup also establishes the displayed access requirements.
     {
         if (CanConfigureAccessReader(ent))
         {
+            if (updateOriginal) // CMU14: Keep examination in sync with the initial faction setup.
+                ent.Comp.AccessListsOriginal = accesses.Select(group => new HashSet<ProtoId<AccessLevelPrototype>>(group)).ToList();
+
             SetAccesses(ent, accesses);
         }
     }

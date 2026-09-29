@@ -76,7 +76,7 @@
   # AU14: every air-breathing simple mob (rats, monkeys, cats, dogs, etc.)
   # can be infected / assimilated by abominations. Adds rats/monkeys/etc.
   # to the mimic pool under their entity-prototype name.
-  - type: AbominationInfectable
+  - type: BiomorphInfectable # CMU14
   - type: Satiation
     satiations:
       Hunger:

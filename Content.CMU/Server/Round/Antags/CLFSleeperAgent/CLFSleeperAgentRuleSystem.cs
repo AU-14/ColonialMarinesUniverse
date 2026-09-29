@@ -80,16 +80,17 @@ public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleepe
 
     private static string BuildGovforFax(string intelBranch)
     {
-        return "[head=3][color=#1a3a6e]Intelligence Advisory — CONFIDENTIAL[/color][/head]\n\n" +
+        return "[head=3][color=#1a3a6e]Intelligence Advisory | CONFIDENTIAL[/color][/head]\n\n" +
                "[color=#1a3a6e]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n\n" +
                "[bold]To:[/bold] [italic]Platoon Commander[/italic]\n" +
                $"[bold]From:[/bold] [bold]{intelBranch}[/bold]\n" +
                "[color=#1a3a6e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
                "Commander,\n" +
-               "  Pre-deployment intelligence suggests CLF operatives may have infiltrated your unit " +
-               "prior to embarkation. Exercise caution with personnel in leadership and security roles. " +
+               "  Pre-deployment counterintelligence believes a foreign asset was embedded in your unit " +
+               "prior to embarkation. Affiliation and identity remain unconfirmed. Exercise caution with " +
+               "personnel in leadership and security roles. " +
                "Conduct internal security screening at your discretion and report any suspicious activity " +
-               "to command. Treat this advisory with the highest confidentiality — do not distribute.\n\n" +
+               "to command. Treat this advisory with the highest confidentiality. Do not distribute.\n\n" +
                "Signed,\n" +
                $"[color=#1a3a6e][bolditalic]{intelBranch}[/bolditalic][/color]\n" +
                "[color=#1a3a6e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";

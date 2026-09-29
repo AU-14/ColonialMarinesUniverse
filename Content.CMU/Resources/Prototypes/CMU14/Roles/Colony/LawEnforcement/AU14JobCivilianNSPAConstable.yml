@@ -33,6 +33,8 @@
   description: au14-job-description-civiliannspaConstable
   setPreference: true
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 7200 # 2 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -64,7 +66,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
-  spawnMenuRoleName: NSPA Constable (CMU)
+  spawnMenuRoleName: cmu-spawn-role-nspa-constable-cmu 
   accessGroups:
   - aucmb
   - Colonist
@@ -89,6 +91,8 @@
   storage:
     back:
     - AU14GuidebookLawColonial
+    - CMURecordsTablet
+    - ForensicScanner
 
 - type: entity
   parent: CMSpawnPointJobBase

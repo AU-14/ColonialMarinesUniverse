@@ -21,7 +21,7 @@ public sealed partial class HiveComponent : Component
     };
 
     [DataField, AutoNetworkedField]
-    public Dictionary<EntProtoId, int> FreeSlots = new() {["CMXenoHivelord"] = 1, ["CMXenoCarrier"] = 1, ["CMXenoBurrower"] = 1};
+    public Dictionary<EntProtoId, int> FreeSlots = new() {["CMXenoHivelord"] = 1, ["CMXenoCarrier"] = 1, ["CMXenoBurrower"] = 1, ["CMXenoReaper"] = 1}; // CMU14 modified
 
     [DataField, AutoNetworkedField]
     public Dictionary<EntProtoId, int> HiveStructureSlots = new() { ["HiveCoreXeno"] = 1, ["HiveClusterXeno"] = 8, ["HivePylonXeno"] = 2, ["HiveEggMorpherXeno"] = 6, ["HiveRecoveryNodeXeno"] = 6, ["HivePlasmaTreeXeno"] = 3 };
@@ -102,7 +102,7 @@ public sealed partial class HiveComponent : Component
     public TimeSpan NewCoreCooldown = TimeSpan.FromMinutes(5);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan PreSetupCutoff = TimeSpan.FromMinutes(20);
+    public TimeSpan PreSetupCutoff = TimeSpan.FromMinutes(15); // CMU14
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan? NewCoreAt;

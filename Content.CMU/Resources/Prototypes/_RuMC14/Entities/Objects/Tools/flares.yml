@@ -1,0 +1,469 @@
+- type: entity
+  parent: CMFlare
+  id: RuMCFlareWhite
+  name: RSP-1 signal flare
+  description: A standard-issue UPP signal flare. Pull the cord, and it burns with a bright white light. Used for illumination and marking positions.
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 1.0
+        friction: 0.2
+  - type: Tag
+    tags:
+    - RuMCFlare
+    - RuMCFlareWhite
+  - type: ExpendableLight
+    spentName: spent RSP-1 flare
+    spentDesc: A used signal flare. The casing is still warm.
+    glowDuration: 550
+    fadeOutDuration: 30
+    iconStateSpent: flare_spent
+    turnOnBehaviourID: turn_on
+    fadeOutBehaviourID: fade_out
+    litSound:
+      path: /Audio/_RMC14/Machines/flare_activate_2.ogg
+      params:
+        variation: 0.08
+    loopedSound: /Audio/Items/Flare/flare_burn.ogg
+  - type: Sprite
+    sprite: _RuMC14/Objects/Misc/flares.rsi
+    layers:
+      - map: [ "enum.ExpendableLightVisualLayers.Base" ]
+        state: flare
+      - map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+        state: flare_flame
+        color: "#F5E6C8"
+        visible: false
+      - map: [ "enum.ExpendableLightVisualLayers.Overlay" ]
+        state: overlay
+  - type: Icon
+    sprite: _RuMC14/Objects/Misc/flares.rsi
+    state: icon
+  - type: Item
+    size: Small
+    heldPrefix: unlit
+  - type: Appearance
+  - type: PointLight
+    enabled: false
+    color: "#FDF5E6"
+    radius: 1.5
+    energy: 6.0
+    netsync: false
+  - type: LightBehaviour
+    behaviours:
+      - !type:FadeBehaviour
+        id: turn_on
+        maxDuration: 5.0
+        startValue: 2.5
+        endValue: 8.0
+      - !type:FadeBehaviour
+        id: fade_out
+        maxDuration: 520
+        startValue: 8.0
+        endValue: 1.0
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+    proto: RuMCFlareWhiteBullet
+  - type: RMCAirProjectile
+    prototype: RuMCAirFlareWhite
+
+- type: entity
+  parent: RuMCFlareWhite
+  id: RuMCFlareRedCAS
+  name: RSP-17 signal flare
+  description: A UPP signal flare with a bright red flame. Used to indicate targets or request support. Visible from long distances.
+  components:
+  - type: Tag
+    tags:
+    - RuMCFlare
+    - RuMCFlareRedCAS
+  - type: Sprite
+    sprite: _RuMC14/Objects/Misc/flares.rsi
+    layers:
+      - map: [ "enum.ExpendableLightVisualLayers.Base" ]
+        state: cas_flare
+      - map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+        state: cas_flare_flame
+        color: "#FFA7A7"
+        visible: false
+      - map: [ "enum.ExpendableLightVisualLayers.Overlay" ]
+        state: cas_overlay
+  - type: Icon
+    sprite: _RuMC14/Objects/Misc/flares.rsi
+    state: flare
+    inhandVisuals:
+      left:
+      - state: cas_inhand-left
+      right:
+      - state: cas_inhand-right
+  - type: PointLight
+    color: "#FFCCCC"
+  - type: FlareSignal
+  - type: ExpendableLight
+    spentName: spent RSP-17 flare
+    spentDesc: A used signal flare. The casing is still warm.
+    iconStateSpent: cas_flare_spent
+    glowDuration: 180
+  - type: LightBehaviour
+    behaviours:
+    - !type:FadeBehaviour # faster then base flares
+      id: turn_on
+      maxDuration: 5.0
+      startValue: 2.5
+      endValue: 7.0
+    - !type:FadeBehaviour # burns out slower
+      id: fade_out
+      maxDuration: 150
+      startValue: 7.0
+      endValue: 1.0
+  - type: CartridgeAmmo
+    proto: RuMCFlareRedCASBullet
+  - type: RMCAirProjectile
+    prototype: RuMCAirFlareRedCAS
+  - type: RMCStaticZoomLevel
+  - type: Eye
+    zoom: 0.5, 0.5
+    drawFov: false
+
+  #_RuMC14/Objects/Misc/flares.rsi
+  #FFA7A7
+  #FFCCCC
+
+- type: entity
+  parent: BaseItem
+  id: RuMCFlareGreen
+  name: RSP-3 signal flare
+  description: A UPP signal flare with a green flame. Used for marking friendly positions or safe landing zones.
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 1.0
+        friction: 0.2
+  - type: Tag
+    tags:
+    - RuMCFlare
+    - RuMCFlareGreen
+  - type: ExpendableLight
+    spentName: spent RSP-3 flare
+    spentDesc: A used signal flare. The casing is still warm.
+    glowDuration: 450
+    fadeOutDuration: 30
+    iconStateSpent: flare_spent
+    turnOnBehaviourID: turn_on
+    fadeOutBehaviourID: fade_out
+    litSound:
+      path: /Audio/_RMC14/Machines/flare_activate_2.ogg
+      params:
+        variation: 0.08
+    loopedSound: /Audio/Items/Flare/flare_burn.ogg
+  - type: Sprite
+    sprite: _RuMC14/Objects/Misc/flares.rsi
+    layers:
+      - map: [ "enum.ExpendableLightVisualLayers.Base" ]
+        state: flare
+      - map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+        state: flare_flame
+        color: "#55AA55"
+        visible: false
+      - map: [ "enum.ExpendableLightVisualLayers.Overlay" ]
+        state: overlay
+  - type: Icon
+    sprite: _RuMC14/Objects/Misc/flares.rsi
+    state: icon
+  - type: Item
+    size: Small
+    heldPrefix: unlit
+  - type: Appearance
+  - type: PointLight
+    enabled: false
+    color: "#77CC77"
+    radius: 1.5
+    energy: 6.0
+    netsync: false
+  - type: LightBehaviour
+    behaviours:
+      - !type:FadeBehaviour
+        id: turn_on
+        maxDuration: 5.0
+        startValue: 2.5
+        endValue: 8.0
+      - !type:FadeBehaviour
+        id: fade_out
+        maxDuration: 420
+        startValue: 8.0
+        endValue: 1.0
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+    proto: RuMCFlareGreenBullet
+  - type: RMCAirProjectile
+    prototype: RuMCAirFlareGreen
+
+#box flare
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: RuMCPackFlareBase
+  name: RSP flare pack
+  description: A packet of eight RSP signal flares. Standard for UPP.
+  components:
+  - type: Item
+    size: Normal
+  - type: Tag
+    tags:
+    - RuMCFlarePack
+  - type: CMItemSlots
+    count: 8
+    slot:
+      name: Flare
+      whitelist:
+        tags:
+        - RuMCFlare
+  - type: Sprite
+    sprite: _RuMC14/Objects/Misc/flares.rsi
+    layers:
+    - state: rsp_open
+      map: [ "emptyLayer" ]
+    - state: rsp
+      map: [ "fullLayer" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMItemSlotsLayers.Fill:
+        fullLayer:
+          Empty: { visible: false }
+          Low: { visible: true }
+          Medium: { visible: true }
+          High: { visible: true }
+          Full: { visible: true }
+        emptyLayer:
+          Empty: { visible: true }
+          Low: { visible: false }
+          Medium: { visible: false }
+          High: { visible: false }
+          Full: { visible: false }
+
+- type: entity
+  parent: RuMCPackFlareBase
+  id: RuMCPackFlareWhite
+  name: RSP white flare pack
+  description: A packet of eight RSP signal flares. Standard for UPP.
+  suffix: White, Filled
+  components:
+  - type: Tag
+    tags:
+    - RuMCFlarePack
+    - RuMCPackFlareWhite
+  - type: CMItemSlots
+    startingItem: RuMCFlareWhite
+
+- type: entity
+  parent: RuMCPackFlareBase
+  id: RuMCPackFlareRed
+  name: GRACH flare pack
+  description: A pack of eight GRACH flares. The flyer resembles an RSP in shape, but is made of metal parts. Standard for UPP.
+  suffix: Red, Filled
+  components:
+  - type: Tag
+    tags:
+    - RuMCFlarePack
+    - RuMCPackFlareRed
+  - type: Sprite
+    sprite: _RuMC14/Objects/Misc/flares.rsi
+    layers:
+    - state: rsp_open
+      map: [ "emptyLayer" ]
+    - state: cas_rsp
+      map: [ "fullLayer" ]
+  - type: CMItemSlots
+    startingItem: RuMCFlareRedCAS
+
+- type: entity
+  parent: RuMCPackFlareBase
+  id: RuMCPackFlareGreen
+  suffix: Green, Filled
+  components:
+  - type: Tag
+    tags:
+    - RuMCFlarePack
+    - RuMCPackFlareGreen
+  - type: CMItemSlots
+    startingItem: RuMCFlareGreen
+
+- type: entity
+  parent: RMCFlareBullet
+  id: RuMCFlareWhiteBullet
+  name: RSP-1 flare projectile
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/airburst_projectiles.rsi
+    layers:
+    - state: flare
+  - type: ScatteringGrenade
+    fillPrototype: RuMCFlareWhite
+  - type: PointLight
+    enabled: true
+    color: "#F5E6C8"
+    radius: 2.0
+    energy: 7.0
+
+- type: entity
+  parent: RMCAirFlare
+  id: RuMCAirFlareWhite
+  name: air flare
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ExpendableLight
+    startsActivated: true
+    glowDuration: 150
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/air_flare.rsi
+    layers:
+    - map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+      state: air_flame
+      color: "#F5E6C8"
+  - type: LightBehaviour
+    behaviours:
+      - !type:FadeBehaviour
+       id: turn_on
+       maxDuration: 5.0
+       startValue: 2.5
+       endValue: 7.0
+      - !type:FadeBehaviour
+       id: fade_out
+       maxDuration: 30
+       startValue: 7.0
+       endValue: 1.0
+  - type: PointLight
+    enabled: true
+    color: "#FDF5E6"
+
+- type: entity
+  parent: RuMCFlareWhiteBullet
+  id: RuMCFlareRedCASBullet
+  name: RSP-17 flare projectile
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ScatteringGrenade
+    fillPrototype: RuMCFlareRedCAS
+  - type: PointLight
+    color: "#FFD700"
+
+- type: entity
+  parent: RMCAirFlareCAS
+  id: RuMCAirFlareRedCAS
+  name: air flare
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ExpendableLight
+    startsActivated: true
+    glowDuration: 150
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/air_flare.rsi
+    layers:
+    - map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+      state: air_flame
+      color: "#FFA7A7"
+  - type: LightBehaviour
+    behaviours:
+      - !type:FadeBehaviour
+        id: turn_on
+        maxDuration: 5
+        startValue: 2.5
+        endValue: 5
+      - !type:FadeBehaviour
+        id: phase_1
+        maxDuration: 145
+        startValue: 5
+        endValue: 5
+      - !type:FadeBehaviour
+        id: fade_out
+        maxDuration: 30
+        startValue: 5
+        endValue: 1
+  - type: PointLight
+    enabled: true
+    color: "#FFCCCC"
+
+- type: entity
+  parent: RuMCFlareWhiteBullet
+  id: RuMCFlareGreenBullet
+  name: RSP-3 flare projectile
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ScatteringGrenade
+    fillPrototype: RuMCFlareGreen
+  - type: PointLight
+    color: "#33FF33"
+
+- type: entity
+  parent: RMCAirFlare
+  id: RuMCAirFlareGreen
+  name: air flare
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ExpendableLight
+    startsActivated: true
+    glowDuration: 150
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/air_flare.rsi
+    layers:
+    - map: [ "enum.ExpendableLightVisualLayers.Glow" ]
+      state: air_flame
+      color: "#33FF33"
+  - type: LightBehaviour
+    behaviours:
+      - !type:FadeBehaviour
+       id: turn_on
+       maxDuration: 5.0
+       startValue: 2.5
+       endValue: 7.0
+      - !type:FadeBehaviour
+       id: fade_out
+       maxDuration: 30
+       startValue: 7.0
+       endValue: 1.0
+  - type: PointLight
+    enabled: true
+    color: "#33FF33"
+
+#tags
+
+- type: Tag
+  id: RuMCFlare
+
+- type: Tag
+  id: RuMCFlareWhite
+
+- type: Tag
+  id: RuMCFlareRedCAS
+
+- type: Tag
+  id: RuMCFlareGreen
+
+- type: Tag
+  id: RuMCFlarePack
+
+- type: Tag
+  id: RuMCPackFlareWhite
+
+- type: Tag
+  id: RuMCPackFlareRed
+
+- type: Tag
+  id: RuMCPackFlareGreen

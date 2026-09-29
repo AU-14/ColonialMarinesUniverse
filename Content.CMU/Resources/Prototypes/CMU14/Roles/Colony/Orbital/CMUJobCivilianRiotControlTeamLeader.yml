@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   displayWeight: 16
   id: CMUJobColonyRiotControlTeamLeader
   name: cmu-colony-name-riot-control-team-leader
@@ -11,7 +11,7 @@
   startingGear: CMUGearColonyRiotControlTeamLeader
   icon: RMCJobIconBureauDeputy
   supervisors: cmu-colony-supervisors-colonist
-  spawnMenuRoleName: Colony Riot Control Team Leader (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-riot-control-team-leader-cmu 
   playTimeTracker: CMUJobColonyRiotControlTeamLeader
   ranks:
     RMCRankCivilian: []

@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   displayWeight: 12
   id: AU14JobCivilianEngineer
   roundSide: Civilian
@@ -26,6 +26,7 @@
   description: au14-job-description-civilianengineer
   setPreference: true
   playTimeTracker: AU14JobCivilianEngineer
+  requirements: []
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianEngineer
@@ -34,7 +35,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonyadministrator
-  spawnMenuRoleName: Colony Engineer (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-engineer-cmu 
   accessGroups:
   - Colonist
   - auengi

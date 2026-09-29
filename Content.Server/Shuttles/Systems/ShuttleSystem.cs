@@ -116,7 +116,13 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
             return;
         }
 
-        if (component.Enabled)
+        // CMU14: legacy planet maps can contain saved shuttle physics.
+        // A map cannot move, but its stored velocity is inherited when boarding a grid.
+        if (HasComp<MapComponent>(uid))
+        {
+            Disable(uid, component: physicsComponent);
+        }
+        else if (component.Enabled)
         {
             Enable(uid, component: physicsComponent, shuttle: component);
         }
@@ -145,6 +151,13 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     {
         if (!Resolve(uid, ref manager, ref component, ref shuttle, false))
             return;
+
+        // CMU14: toggling a saved map's shuttle must not make its physics movable again.
+        if (HasComp<MapComponent>(uid))
+        {
+            Disable(uid, manager, component);
+            return;
+        }
 
         _physics.SetBodyType(uid, BodyType.Dynamic, manager: manager, body: component);
         _physics.SetBodyStatus(uid, component, BodyStatus.InAir);

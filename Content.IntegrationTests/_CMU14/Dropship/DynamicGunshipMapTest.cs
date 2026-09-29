@@ -34,7 +34,9 @@ public sealed class DynamicGunshipMapTest
 
             var descendants = 0;
             CountDescendants(grid.Owner, ref descendants);
-            Assert.That(descendants, Is.EqualTo(70));
+            // 72 includes the 2 invisible CMUAirtightSeal companions the wide-airtight
+            // system spawns under the multi-tile aft door.
+            Assert.That(descendants, Is.EqualTo(72));
 
             maps.DeleteMap(map!.Value.Comp.MapId);
         });

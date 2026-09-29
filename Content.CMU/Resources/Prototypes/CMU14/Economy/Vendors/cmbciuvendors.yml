@@ -241,6 +241,8 @@
         name: infantry first aid kit (Full)
         recommended: true
         amount: 30
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -337,6 +339,8 @@
       - id: AU14BeltMedicBagBlack
     - name: General Medical Supplies
       entries:
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 60
       - id: AU14Tourniquet
@@ -459,6 +463,7 @@
     - name: External Webbing
       choices: { CMUPlatoonAirCrewVest: 1 }
       entries:
+      - id: CMArmorM3VLFlakVest
       - id: RMCOuterClothingExternalWebbingBlack
       - id: RMCArmorVestSquad
         amount: 2
@@ -480,6 +485,15 @@
       choices: { CMUPlatoonAirCrewFlightVisor: 1 }
       entries:
       - id: AU14GogglesLAH99VisorHighTech
+    - name: Pilot HUD
+      choices: { CMUPlatoonAirCrewPilotHUD: 1 }
+      entries:
+      - id: RMCVisorPilotBlack
+      - id: RMCVisorPilotDarkblue
+      - id: RMCVisorPilotLightblue
+      - id: RMCVisorPilotPurple
+      - id: RMCVisorPilotRed
+      - id: RMCVisorPilotYellow
     - name: Flight Mask
       choices: { CMUPlatoonAirCrewFlightMask: 1 }
       entries:
@@ -654,10 +668,6 @@
       - id: RMCArmorM4RMarshallMedium
         amount: 5
       - id: RMCArmorM4RLight
-        amount: 5
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
         amount: 5
     - name: Pouches
       entries:
@@ -1088,10 +1098,17 @@
       - id: RMCWeaponMar50LMG
         amount: 1
       - id: RMCWeaponShotgunXM38
+        amount: 1
     - name: primary ammunition
       entries:
       - id: AU14MagazineRifleM20A
         amount: 200
+      - id: CMUMagazineRifleM16Extended
+        amount: 50
+      - id: CMUMagazineRifleM16AP
+        amount: 35
+      - id: CMUMagazineRifleM16APExt
+        amount: 20
       - id: CMMagazineSMGMP5
         amount: 200
       - id: RMCMagazineSMGPDW90
@@ -1260,6 +1277,8 @@
         amount: 4
       - id: RMCSentryLaptop
         amount: 4
+      - id: MineDetector
+        amount: 2
     - name: RTO Packs
       entries:
       - id: AU14BackpackRTOPackJungle

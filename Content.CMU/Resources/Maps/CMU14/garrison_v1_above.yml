@@ -14,7 +14,7 @@ orphans: []
 nullspace: []
 tilemap:
   1: Space
-  2: CMFloorPlating
+  2: CMShuttleTileInvisible
   0: Plating
 entities:
 - proto: ""

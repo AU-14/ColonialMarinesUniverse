@@ -45,8 +45,10 @@ public sealed partial class CMUPathogenSporeSacComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan? BurstAt;
 
-    /// <summary>The xeno that placed this sac (for cleanup + hive lookup).</summary>
-    [DataField, AutoNetworkedField]
+    /// <summary>
+    /// The xeno that placed this sac (for cleanup + hive lookup)
+    /// </summary>
+    [DataField]
     public EntityUid? Placer;
 
     [DataField, AutoNetworkedField]

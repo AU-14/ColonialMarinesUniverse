@@ -3,6 +3,8 @@ using System.Linq;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines; // CMU14
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared._RMC14.Xenonids.Devour;
@@ -63,6 +65,7 @@ public sealed partial class XenoTunnelSystem : EntitySystem
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private SharedXenoWeedsSystem _xenoWeeds = default!;
     [Dependency] private SharedXenoConstructionSystem _xenoConstruct = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; // CMU14
 
     private readonly List<string> _greekLetters = new()
     {
@@ -229,9 +232,9 @@ public sealed partial class XenoTunnelSystem : EntitySystem
             return;
         }
 
-        if (_transform.GetGrid(location) is not { } gridId ||
-            !TryComp(gridId, out MapGridComponent? grid) ||
-            HasComp<AlmayerComponent>(gridId))
+        if (_transform.GetGrid(location) is not { } gridId // CMU14
+            || !TryComp(gridId, out MapGridComponent? grid)
+            || HasComp<WarshipComponent>(gridId))
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-construction-bad-area-tunnel"), xenoBuilder, xenoBuilder);
             return;
@@ -496,11 +499,13 @@ public sealed partial class XenoTunnelSystem : EntitySystem
             return;
 
         var destinationTunnel = GetEntity(args.DestinationTunnel);
-        if (!HasComp<XenoTunnelComponent>(destinationTunnel))
+        // CMU14: validate the linked battlefield before starting the travel do-after.
+        if (!TryComp<XenoTunnelComponent>(destinationTunnel, out var destination) ||
+            !CanTravelBetween(startingTunnel, destinationTunnel))
             return;
 
         var mobContainer = _container.EnsureContainer<Container>(destinationTunnel, XenoTunnelComponent.ContainedMobsContainerId);
-        if (mobContainer.Count >= xenoTunnel.Comp.MaxMobs)
+        if (mobContainer.Count >= destination.MaxMobs) // CMU14: use the destination's capacity.
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-construction-tunnel-full-xeno-failure"), traversingXeno, traversingXeno);
             return;
@@ -549,7 +554,8 @@ public sealed partial class XenoTunnelSystem : EntitySystem
             return;
         }
 
-        _container.Insert(enteringEntity, mobContainer);
+        if (!_container.Insert(enteringEntity, mobContainer)) // CMU14: only open after a successful transfer.
+            return;
         OpenDestinationUI(xenoTunnel, enteringEntity);
 
         args.Handled = true;
@@ -567,7 +573,7 @@ public sealed partial class XenoTunnelSystem : EntitySystem
         if (!_container.ContainsEntity(startingTunnel, traversingXeno))
             return;
 
-        if (_transform.GetMap(startingTunnel) != _transform.GetMap(destinationXenoTunnel.Owner))
+        if (!CanTravelBetween(startingTunnel, destinationXenoTunnel.Owner)) // CMU14: allow linked z-levels.
             return;
 
         var mobContainer = _container.EnsureContainer<Container>(destinationXenoTunnel, XenoTunnelComponent.ContainedMobsContainerId);
@@ -577,10 +583,20 @@ public sealed partial class XenoTunnelSystem : EntitySystem
             return;
         }
 
-        _container.Insert(traversingXeno, mobContainer);
+        if (!_container.Insert(traversingXeno, mobContainer)) // CMU14: do not report a failed transfer as complete.
+            return;
         OpenDestinationUI(destinationXenoTunnel, args.User);
 
         args.Handled = true;
+    }
+
+    // CMU14 method
+    private bool CanTravelBetween(EntityUid source, EntityUid destination)
+    {
+        // Floors in one battlefield share tunnels; unrelated maps still cannot be reached.
+        return Transform(destination).MapUid is { } map &&
+            _zLevels.IsSameZNetwork(Transform(source).MapUid, map) &&
+            _hive.FromSameHive(source, destination);
     }
 
     private void OnGetRenameVerb(Entity<XenoTunnelComponent> xenoTunnel, ref GetVerbsEvent<ActivationVerb> args)
@@ -620,6 +636,8 @@ public sealed partial class XenoTunnelSystem : EntitySystem
         Dictionary<string, NetEntity> netHiveTunnels = new();
         foreach (var (name, tunnel) in hiveTunnels)
         {
+            if (!CanTravelBetween(destinationXenoTunnel, tunnel)) // CMU14: only offer reachable destinations.
+                continue;
             netHiveTunnels.Add(name, GetNetEntity(tunnel));
         }
 

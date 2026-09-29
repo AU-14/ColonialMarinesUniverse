@@ -5,7 +5,7 @@
   name: au14-job-name-govforcombatcorrespondent
   description: au14-job-description-govforcombatcorrespondent
   icon: "AU14JobIconGovRifleman"
-  spawnMenuRoleName: Combat Correspondent (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-combat-correspondent-govfor 
   startingGear: AU14GearGOVFORCombatCorrespondent
   dummyStartingGear: AU14GearGOVFORCombatCorrespondentDummy
   playTimeTracker: AU14JobGOVFORCombatCorrespondent
@@ -38,6 +38,9 @@
         state: rifleman
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -146,6 +149,7 @@
   dummyStartingGear: AU14GearOPFORCombatCorrespondentDummy
   accessGroups:
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORCombatCorrespondent
 
 - type: startingGear
   id: AU14GearOPFORCombatCorrespondent

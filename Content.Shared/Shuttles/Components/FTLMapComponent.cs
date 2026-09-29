@@ -8,6 +8,8 @@ namespace Content.Shared.Shuttles.Components;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class FTLMapComponent : Component
 {
+    public const float TravelSpeed = 20f; // CMU: shared by FTL physics and its visual backdrop.
+
     /// <summary>
     /// Offset for FTLing shuttles so they don't overlap each other.
     /// </summary>

@@ -7,6 +7,8 @@
   name: trait-category-speech
   maxTraitPoints: 1
 
-- type: traitCategory
-  id: Quirks
-  name: trait-category-quirks
+# cmu edit start
+#- type: traitCategory
+#  id: Quirks
+#  name: trait-category-quirks
+# cmu edit end

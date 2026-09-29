@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attachment Offset Editor</title>
+<style>
+  :root {
+    --bg: #1b1d22; --panel: #24272e; --panel2: #2c3038; --text: #e6e8ec; --muted: #9aa1ad;
+    --accent: #5aa9ff; --accent2: #ffb454; --danger: #ff6b6b; --border: #3a3f49;
+    --checker1: #2a2d33; --checker2: #33373e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, sans-serif; }
+  header { padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 15px; margin: 0 8px 0 0; }
+  .muted { color: var(--muted); }
+  main { display: grid; grid-template-columns: 360px 1fr 360px; gap: 0; height: calc(100vh - 49px); }
+  @media (max-width: 1100px) { main { grid-template-columns: 1fr; height: auto; } }
+  section { padding: 12px; overflow: auto; border-right: 1px solid var(--border); }
+  section:last-child { border-right: 0; border-left: 1px solid var(--border); }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+  h2:first-child { margin-top: 0; }
+  label { display: block; color: var(--muted); font-size: 12px; margin: 6px 0 2px; }
+  input[type=text], input[type=number], select, textarea {
+    width: 100%; background: var(--panel2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 4px; padding: 5px 6px; font: inherit;
+  }
+  input[type=number] { width: 80px; }
+  textarea { font-family: ui-monospace, Consolas, monospace; font-size: 12px; min-height: 90px; resize: vertical; }
+  button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 5px 10px; cursor: pointer; font: inherit; }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); color: #0b1220; border-color: var(--accent); font-weight: 600; }
+  .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .slot { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+  .slot.selected { border-color: var(--accent2); box-shadow: 0 0 0 1px var(--accent2) inset; }
+  .slot-head { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+  .slot-name { font-weight: 600; font-family: ui-monospace, Consolas, monospace; }
+  .xy { display: flex; gap: 4px; align-items: center; }
+  .xy span { color: var(--muted); font-size: 11px; }
+  #stageWrap { position: relative; overflow: hidden; background: var(--bg); }
+  #stage { display: block; width: 100%; height: 100%; cursor: crosshair; image-rendering: pixelated; }
+  .stage-bar { position: absolute; top: 8px; left: 8px; right: 8px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; pointer-events: none; }
+  .stage-bar > * { pointer-events: auto; }
+  .pill { background: rgba(36,39,46,.9); border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; }
+  pre#out { background: var(--panel2); border: 1px solid var(--border); border-radius: 6px; padding: 8px; white-space: pre; overflow: auto; font-size: 12px; }
+  .status { font-size: 12px; color: var(--muted); }
+  .ok { color: #7bd88f; } .warn { color: var(--accent2); } .err { color: var(--danger); }
+  kbd { background: var(--panel2); border: 1px solid var(--border); border-radius: 3px; padding: 0 4px; font-size: 11px; }
+  ul.help { padding-left: 18px; margin: 4px 0; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Attachment Offset Editor</h1>
+  <label class="row" style="margin:0"><button id="pickTextures" class="primary" type="button">Load Textures folder…</button></label>
+  <input id="dirInput" type="file" webkitdirectory directory multiple hidden>
+  <span id="indexStatus" class="status">Load <code>Resources/Textures</code> and/or <code>Content.CMU/Resources/Textures</code> (you can load both).</span>
+</header>
+
+<main>
+  <section>
+    <h2>Gun</h2>
+    <label for="gunRsi">Gun RSI (path under Textures/)</label>
+    <input id="gunRsi" type="text" list="rsiList" placeholder="CMU14/Weapons/Guns/.../kramericon.rsi">
+    <label for="gunState">State</label>
+    <select id="gunState"></select>
+
+    <h2>Paste gun YAML (optional)</h2>
+    <textarea id="yamlIn" placeholder="Paste the gun entity (or just its AttachableHolderVisuals block). Sprite path, base state and slot offsets are read from it."></textarea>
+    <div class="row" style="margin-top:6px">
+      <button id="parseYaml" type="button">Load from YAML</button>
+      <span id="yamlStatus" class="status"></span>
+    </div>
+
+    <h2>Slots</h2>
+    <div id="slots"></div>
+    <div class="row">
+      <input id="newSlotName" type="text" placeholder="rmc-aslot-…" style="flex:1">
+      <button id="addSlot" type="button">Add slot</button>
+    </div>
+    <datalist id="rsiList"></datalist>
+  </section>
+
+  <div id="stageWrap">
+    <canvas id="stage"></canvas>
+    <div class="stage-bar">
+      <span class="pill">Zoom <input id="zoom" type="range" min="2" max="24" value="10" style="vertical-align:middle;width:110px"> <span id="zoomVal">10x</span></span>
+      <label class="pill" style="margin:0;color:var(--text)"><input id="showGrid" type="checkbox" checked> pixel grid</label>
+      <label class="pill" style="margin:0;color:var(--text)"><input id="showFrames" type="checkbox" checked> frames</label>
+      <span class="pill">Drag moves: <select id="dragTarget" style="width:auto;padding:1px 4px"><option value="slot">slot offset</option><option value="attach">attachment offset</option></select></span>
+      <span id="cursorInfo" class="pill muted"></span>
+    </div>
+  </div>
+
+  <section>
+    <h2>AttachableHolderVisuals</h2>
+    <pre id="out"></pre>
+    <div class="row">
+      <button id="copyOut" class="primary" type="button">Copy YAML</button>
+      <button id="roundAll" type="button">Round slots to whole pixels</button>
+      <span id="copyStatus" class="status"></span>
+    </div>
+
+    <h2>Attachment offsets (AttachableVisuals)</h2>
+    <pre id="outAttach"></pre>
+
+    <h2>Controls</h2>
+    <ul class="help">
+      <li>Click a slot card or an attachment on the canvas to select it.</li>
+      <li>Drag to move it. Moves snap to whole pixels (1 px = 0.03125 tiles).</li>
+      <li><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> nudge the selected slot 1 px, <kbd>Shift</kbd> for 4 px.</li>
+      <li>"Drag moves" switches between editing the gun's slot offset and the attachment's own <code>AttachableVisuals.offset</code>.</li>
+      <li>Pick the attached state name the game draws: usually the item state + <code>_a</code> (e.g. <code>miniscope_a</code>), or the plain state if the attachment sets <code>suffix: ""</code>.</li>
+      <li>Only the first frame (south direction) of each state is shown.</li>
+    </ul>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const PX_PER_TILE = 32;
+  const DEFAULT_SLOTS = ["rmc-aslot-barrel", "rmc-aslot-rail", "rmc-aslot-stock", "rmc-aslot-underbarrel"];
+  const SLOT_COLORS = ["#5aa9ff", "#ffb454", "#7bd88f", "#ff7ab6", "#c792ea", "#4dd0e1", "#ffd866"];
+
+  const files = new Map();
+  const rsiPaths = new Set();
+  const rsiCache = new Map();
+
+  const $ = id => document.getElementById(id);
+  const dirInput = $("dirInput");
+  $("pickTextures").onclick = () => dirInput.click();
+  dirInput.onchange = () => {
+    let added = 0;
+    for (const f of dirInput.files) {
+      const rel = f.webkitRelativePath.replace(/\\/g, "/");
+      const i = rel.indexOf("Textures/");
+      if (i < 0) continue;
+      const key = rel.slice(i + "Textures/".length);
+      if (!key.includes(".rsi/")) continue;
+      files.set(key, f);
+      if (key.endsWith(".rsi/meta.json")) { rsiPaths.add(key.slice(0, -"/meta.json".length)); added++; }
+    }
+    rsiCache.clear();
+    const dl = $("rsiList");
+    dl.innerHTML = "";
+    for (const p of [...rsiPaths].sort()) { const o = document.createElement("option"); o.value = p; dl.appendChild(o); }
+    $("indexStatus").innerHTML = added
+      ? `<span class="ok">Indexed ${rsiPaths.size} RSIs.</span> Load another folder to add more.`
+      : `<span class="err">No RSIs found. Pick a folder named Textures (or one containing it).</span>`;
+    dirInput.value = "";
+    refreshAll();
+  };
+
+  function loadRsi(path) {
+    path = (path || "").trim().replace(/^\/?Textures\//, "").replace(/\/$/, "");
+    if (!path) return Promise.resolve(null);
+    if (rsiCache.has(path)) return rsiCache.get(path);
+    const p = (async () => {
+      const mf = files.get(path + "/meta.json");
+      if (!mf) return null;
+      const meta = JSON.parse(await mf.text());
+      return { path, meta, images: new Map() };
+    })();
+    rsiCache.set(path, p);
+    return p;
+  }
+
+  async function stateFrame(rsi, state) {
+    if (!rsi || !state) return null;
+    if (rsi.images.has(state)) return rsi.images.get(state);
+    const f = files.get(`${rsi.path}/${state}.png`);
+    if (!f) { rsi.images.set(state, null); return null; }
+    const sheet = await createImageBitmap(f);
+    const w = rsi.meta.size?.x ?? 32, h = rsi.meta.size?.y ?? 32;
+    const frame = await createImageBitmap(sheet, 0, 0, Math.min(w, sheet.width), Math.min(h, sheet.height));
+    rsi.images.set(state, frame);
+    return frame;
+  }
+
+  function stateNames(rsi) { return rsi ? rsi.meta.states.map(s => s.name) : []; }
+
+  const model = {
+    gun: { rsi: "", state: "" },
+    slots: DEFAULT_SLOTS.map(name => newSlot(name)),
+    selected: 0,
+  };
+  function newSlot(name, x = 0, y = 0) {
+    return { name, x, y, ax: 0, ay: 0, rsi: "", state: "", visible: true };
+  }
+
+  const STORE_KEY = "attachment-offset-editor-v1";
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    if (saved && Array.isArray(saved.slots)) Object.assign(model, saved);
+  } catch { }
+  function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(model)); } catch { } }
+
+  function fmt(v) {
+    const r = Math.round(v * 100000) / 100000;
+    let s = String(r === 0 ? 0 : r);
+    return s;
+  }
+  function px(v) { return Math.round(v * PX_PER_TILE * 100) / 100; }
+
+  const gunRsiEl = $("gunRsi"), gunStateEl = $("gunState");
+  gunRsiEl.value = model.gun.rsi;
+  gunRsiEl.onchange = async () => { model.gun.rsi = gunRsiEl.value.trim(); model.gun.state = ""; await refreshGun(); save(); draw(); };
+  gunStateEl.onchange = () => { model.gun.state = gunStateEl.value; save(); draw(); };
+
+  async function fillStates(selectEl, rsiPath, current, preferred) {
+    const rsi = await loadRsi(rsiPath);
+    const names = stateNames(rsi);
+    selectEl.innerHTML = "";
+    if (!names.length) { const o = document.createElement("option"); o.textContent = rsiPath ? (files.size ? "(RSI not found)" : "(load Textures first)") : "(none)"; o.value = ""; selectEl.appendChild(o); return ""; }
+    for (const n of names) { const o = document.createElement("option"); o.value = n; o.textContent = n; selectEl.appendChild(o); }
+    let pick = names.includes(current) ? current : (preferred.find(p => names.includes(p)) ?? names[0]);
+    selectEl.value = pick;
+    return pick;
+  }
+
+  async function refreshGun() {
+    model.gun.state = await fillStates(gunStateEl, model.gun.rsi, model.gun.state, ["base", "icon"]);
+  }
+
+  const slotsEl = $("slots");
+  function renderSlots() {
+    slotsEl.innerHTML = "";
+    model.slots.forEach((s, i) => {
+      const card = document.createElement("div");
+      card.className = "slot" + (i === model.selected ? " selected" : "");
+      card.style.borderLeft = `4px solid ${SLOT_COLORS[i % SLOT_COLORS.length]}`;
+      card.innerHTML = `
+        <div class="slot-head">
+          <span class="slot-name"></span>
+          <span class="row">
+            <label class="row" style="margin:0"><input type="checkbox" data-k="visible"> show</label>
+            <button type="button" data-act="remove" title="Remove slot">✕</button>
+          </span>
+        </div>
+        <label>Slot offset (tiles) <span class="muted" data-px="slot"></span></label>
+        <div class="xy"><span>x</span><input type="number" step="0.03125" data-k="x"><span>y</span><input type="number" step="0.03125" data-k="y"></div>
+        <label>Attachment RSI</label>
+        <input type="text" list="rsiList" data-k="rsi" placeholder="_RMC14/Objects/Weapons/Guns/Attachments/rail.rsi">
+        <label>Attached state</label>
+        <select data-k="state"></select>
+        <label>Attachment offset (AttachableVisuals.offset)</label>
+        <div class="xy"><span>x</span><input type="number" step="0.03125" data-k="ax"><span>y</span><input type="number" step="0.03125" data-k="ay"></div>`;
+      card.querySelector(".slot-name").textContent = s.name;
+      card.querySelector('[data-px="slot"]').textContent = `(${px(s.x)}, ${px(s.y)} px)`;
+      for (const inp of card.querySelectorAll("[data-k]")) {
+        const k = inp.dataset.k;
+        if (inp.type === "checkbox") inp.checked = s[k];
+        else if (inp.tagName !== "SELECT") inp.value = s[k];
+        inp.addEventListener("change", async () => {
+          if (inp.type === "checkbox") s[k] = inp.checked;
+          else if (inp.type === "number") s[k] = parseFloat(inp.value) || 0;
+          else s[k] = inp.value.trim();
+          if (k === "rsi") { s.state = ""; await fillStates(card.querySelector('select[data-k="state"]'), s.rsi, s.state, []).then(v => s.state = v); }
+          save(); renderSlots(); draw();
+        });
+      }
+      fillStates(card.querySelector('select[data-k="state"]'), s.rsi, s.state, []).then(v => { if (s.rsi) s.state = v; draw(); });
+      card.addEventListener("mousedown", e => { if (!e.target.closest("input,select,button")) { model.selected = i; renderSlots(); draw(); } });
+      card.querySelector('[data-act="remove"]').onclick = () => { model.slots.splice(i, 1); model.selected = Math.min(model.selected, model.slots.length - 1); save(); renderSlots(); draw(); };
+      slotsEl.appendChild(card);
+    });
+    renderOutput();
+  }
+
+  $("addSlot").onclick = () => {
+    const n = $("newSlotName").value.trim();
+    if (!n || model.slots.some(s => s.name === n)) return;
+    model.slots.push(newSlot(n)); model.selected = model.slots.length - 1;
+    $("newSlotName").value = ""; save(); renderSlots(); draw();
+  };
+
+  $("parseYaml").onclick = async () => {
+    const t = $("yamlIn").value.replace(/\r\n/g, "\n");
+    const msgs = [];
+    const sm = t.match(/- type: Sprite[^\n]*\n(?:\s+[^\n]*\n)*?\s+sprite:\s*(\S+\.rsi)/);
+    if (sm) { model.gun.rsi = sm[1]; gunRsiEl.value = sm[1]; msgs.push("sprite"); }
+    const bm = t.match(/-\s*state:\s*(\S+)\s*\n\s*map:\s*\[\s*"?enum\.GunVisualLayers\.Base/) || t.match(/-\s*state:\s*(\S+)/);
+    if (bm) model.gun.state = bm[1];
+    const offsets = new Map();
+    const lines = t.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+      if (!/^\s*offsets:\s*$/.test(lines[i])) continue;
+      for (let j = i + 1; j < lines.length; j++) {
+        const m = lines[j].match(/^\s+([\w-]+):\s*([-\d.]+)\s*,\s*([-\d.]+)\s*(#.*)?$/);
+        if (!m) break;
+        offsets.set(m[1], [parseFloat(m[2]), parseFloat(m[3])]);
+      }
+    }
+    const names = [];
+    for (const m of t.matchAll(/^\s+(rmc-aslot-[\w-]+):\s*(#.*)?$/gm)) if (!names.includes(m[1])) names.push(m[1]);
+    for (const k of offsets.keys()) if (!names.includes(k)) names.push(k);
+    const n = offsets.size;
+    if (names.length) {
+      model.slots = names.map(name => {
+        const prev = model.slots.find(s => s.name === name);
+        const s = prev ? { ...prev } : newSlot(name);
+        const o = offsets.get(name);
+        s.x = o ? o[0] : 0; s.y = o ? o[1] : 0;
+        return s;
+      });
+      model.selected = 0;
+    }
+    await refreshGun();
+    save(); renderSlots(); draw();
+    $("yamlStatus").innerHTML = (sm || n)
+      ? `<span class="ok">Loaded ${[sm ? "sprite" : null, n ? n + " offsets" : null].filter(Boolean).join(", ")}.</span>`
+      : `<span class="warn">Nothing recognised.</span>`;
+  };
+
+  function renderOutput() {
+    const lines = ["  - type: AttachableHolderVisuals", "    offsets:"];
+    for (const s of model.slots) lines.push(`      ${s.name}: ${fmt(s.x)}, ${fmt(s.y)}`);
+    $("out").textContent = lines.join("\n");
+    const a = model.slots.filter(s => s.ax || s.ay).map(s =>
+      `# ${s.name}${s.rsi ? " – " + s.rsi.split("/").pop() + ":" + s.state : ""}\n  - type: AttachableVisuals\n    offset: ${fmt(s.ax)}, ${fmt(s.ay)}`);
+    $("outAttach").textContent = a.length ? a.join("\n\n") : "(no attachment offsets set)";
+  }
+  $("copyOut").onclick = async () => {
+    try { await navigator.clipboard.writeText($("out").textContent); $("copyStatus").innerHTML = '<span class="ok">Copied.</span>'; }
+    catch { $("copyStatus").innerHTML = '<span class="warn">Clipboard blocked – select the text and copy it.</span>'; }
+  };
+  $("roundAll").onclick = () => {
+    for (const s of model.slots) { s.x = Math.round(s.x * PX_PER_TILE) / PX_PER_TILE; s.y = Math.round(s.y * PX_PER_TILE) / PX_PER_TILE; }
+    save(); renderSlots(); draw();
+  };
+
+  const canvas = $("stage"), ctx = canvas.getContext("2d");
+  const zoomEl = $("zoom");
+  const view = { zoom: +zoomEl.value, panX: 0, panY: 0 };
+  zoomEl.oninput = () => { view.zoom = +zoomEl.value; $("zoomVal").textContent = view.zoom + "x"; draw(); };
+  $("showGrid").onchange = draw; $("showFrames").onchange = draw;
+
+  function resize() {
+    const r = canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.floor(r.width * dpr));
+    canvas.height = Math.max(1, Math.floor(Math.max(r.height, 480) * dpr));
+    canvas.style.height = Math.max(r.height, 480) + "px";
+    draw();
+  }
+  window.addEventListener("resize", resize);
+
+  function origin() {
+    const dpr = window.devicePixelRatio || 1;
+    return { cx: Math.round(canvas.width / 2 + view.panX * dpr), cy: Math.round(canvas.height / 2 + view.panY * dpr), z: view.zoom * dpr };
+  }
+
+  let drawToken = 0;
+  const hitBoxes = [];
+  async function draw() {
+    const token = ++drawToken;
+    const gunRsi = await loadRsi(model.gun.rsi);
+    const gunImg = await stateFrame(gunRsi, model.gun.state);
+    const slotImgs = [];
+    for (const s of model.slots) slotImgs.push(s.visible ? await stateFrame(await loadRsi(s.rsi), s.state) : null);
+    if (token !== drawToken) return;
+
+    const { cx, cy, z } = origin();
+    ctx.imageSmoothingEnabled = false;
+    const cs = z * 4;
+    for (let y = 0; y < canvas.height; y += cs)
+      for (let x = 0; x < canvas.width; x += cs) {
+        ctx.fillStyle = ((Math.floor((x - cx) / cs) + Math.floor((y - cy) / cs)) & 1) ? "#2a2d33" : "#33373e";
+        ctx.fillRect(x, y, cs, cs);
+      }
+
+    const place = (img, ox, oy) => {
+      const w = img.width, h = img.height;
+      return { x: cx + ox * PX_PER_TILE * z - (w * z) / 2, y: cy - oy * PX_PER_TILE * z - (h * z) / 2, w: w * z, h: h * z };
+    };
+
+    if (gunImg) {
+      const r = place(gunImg, 0, 0);
+      ctx.drawImage(gunImg, r.x, r.y, r.w, r.h);
+      if ($("showFrames").checked) { ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.lineWidth = 1; ctx.strokeRect(r.x + .5, r.y + .5, r.w - 1, r.h - 1); }
+    }
+
+    hitBoxes.length = 0;
+    model.slots.forEach((s, i) => {
+      const img = slotImgs[i];
+      if (!img) return;
+      const r = place(img, s.x + s.ax, s.y + s.ay);
+      ctx.globalAlpha = i === model.selected ? 1 : 0.9;
+      ctx.drawImage(img, r.x, r.y, r.w, r.h);
+      ctx.globalAlpha = 1;
+      hitBoxes.push({ i, ...r, img });
+      if ($("showFrames").checked || i === model.selected) {
+        ctx.strokeStyle = SLOT_COLORS[i % SLOT_COLORS.length];
+        ctx.lineWidth = i === model.selected ? 2 : 1;
+        ctx.setLineDash(i === model.selected ? [] : [4, 4]);
+        ctx.strokeRect(r.x + .5, r.y + .5, r.w - 1, r.h - 1);
+        ctx.setLineDash([]);
+      }
+    });
+
+    if ($("showGrid").checked && z >= 6) {
+      ctx.strokeStyle = "rgba(0,0,0,.18)"; ctx.lineWidth = 1;
+      const x0 = ((cx % z) + z) % z, y0 = ((cy % z) + z) % z;
+      ctx.beginPath();
+      for (let x = x0; x < canvas.width; x += z) { ctx.moveTo(Math.round(x) + .5, 0); ctx.lineTo(Math.round(x) + .5, canvas.height); }
+      for (let y = y0; y < canvas.height; y += z) { ctx.moveTo(0, Math.round(y) + .5); ctx.lineTo(canvas.width, Math.round(y) + .5); }
+      ctx.stroke();
+    }
+    ctx.strokeStyle = "rgba(255,90,90,.9)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx - 8, cy + .5); ctx.lineTo(cx + 8, cy + .5); ctx.moveTo(cx + .5, cy - 8); ctx.lineTo(cx + .5, cy + 8); ctx.stroke();
+
+    if (!files.size) {
+      ctx.fillStyle = "#9aa1ad"; ctx.font = `${14 * (window.devicePixelRatio || 1)}px system-ui`; ctx.textAlign = "center";
+      ctx.fillText("Load a Textures folder to begin", canvas.width / 2, canvas.height / 2 + 60 * (window.devicePixelRatio || 1));
+    }
+    renderOutput();
+  }
+
+  const probe = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+  function hitTest(mx, my) {
+    for (let k = hitBoxes.length - 1; k >= 0; k--) {
+      const b = hitBoxes[k];
+      if (mx < b.x || my < b.y || mx >= b.x + b.w || my >= b.y + b.h) continue;
+      const { z } = origin();
+      const ix = Math.floor((mx - b.x) / z), iy = Math.floor((my - b.y) / z);
+      probe.canvas.width = b.img.width; probe.canvas.height = b.img.height;
+      probe.clearRect(0, 0, b.img.width, b.img.height); probe.drawImage(b.img, 0, 0);
+      if (probe.getImageData(ix, iy, 1, 1).data[3] > 0) return b.i;
+    }
+    for (let k = hitBoxes.length - 1; k >= 0; k--) {
+      const b = hitBoxes[k];
+      if (mx >= b.x && my >= b.y && mx < b.x + b.w && my < b.y + b.h) return b.i;
+    }
+    return -1;
+  }
+
+  let drag = null;
+  function canvasPoint(e) {
+    const r = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr };
+  }
+  canvas.addEventListener("mousedown", e => {
+    const p = canvasPoint(e);
+    if (e.button === 1 || e.button === 2 || e.altKey) { drag = { pan: true, sx: e.clientX, sy: e.clientY, px: view.panX, py: view.panY }; return; }
+    const i = hitTest(p.x, p.y);
+    if (i >= 0) { model.selected = i; renderSlots(); }
+    const s = model.slots[model.selected];
+    if (!s) return;
+    const field = $("dragTarget").value === "attach" ? ["ax", "ay"] : ["x", "y"];
+    drag = { sx: p.x, sy: p.y, ox: s[field[0]], oy: s[field[1]], field };
+    draw();
+  });
+  canvas.addEventListener("contextmenu", e => e.preventDefault());
+  window.addEventListener("mousemove", e => {
+    const p = canvasPoint(e);
+    const { cx, cy, z } = origin();
+    $("cursorInfo").textContent = `cursor ${fmt((p.x - cx) / z / PX_PER_TILE)}, ${fmt(-(p.y - cy) / z / PX_PER_TILE)} tiles`;
+    if (!drag) return;
+    if (drag.pan) { view.panX = drag.px + (e.clientX - drag.sx); view.panY = drag.py + (e.clientY - drag.sy); draw(); return; }
+    const s = model.slots[model.selected];
+    const dxPx = Math.round((p.x - drag.sx) / z), dyPx = Math.round((p.y - drag.sy) / z);
+    s[drag.field[0]] = drag.ox + dxPx / PX_PER_TILE;
+    s[drag.field[1]] = drag.oy - dyPx / PX_PER_TILE;
+    draw();
+  });
+  window.addEventListener("mouseup", () => { if (drag) { drag = null; save(); renderSlots(); } });
+  canvas.addEventListener("wheel", e => {
+    e.preventDefault();
+    zoomEl.value = Math.min(24, Math.max(2, view.zoom + (e.deltaY < 0 ? 1 : -1)));
+    zoomEl.oninput();
+  }, { passive: false });
+
+  window.addEventListener("keydown", e => {
+    if (e.target instanceof Element && e.target.closest("input,textarea,select")) return;
+    const s = model.slots[model.selected];
+    if (!s) return;
+    const step = (e.shiftKey ? 4 : 1) / PX_PER_TILE;
+    const [fx, fy] = $("dragTarget").value === "attach" ? ["ax", "ay"] : ["x", "y"];
+    const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, step], ArrowDown: [0, -step] };
+    const m = moves[e.key];
+    if (!m) return;
+    e.preventDefault();
+    s[fx] += m[0]; s[fy] += m[1];
+    save(); renderSlots(); draw();
+  });
+
+  function refreshAll() { refreshGun().then(() => { renderSlots(); draw(); }); }
+  renderSlots();
+  resize();
+})();
+</script>
+</body>
+</html>

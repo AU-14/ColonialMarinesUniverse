@@ -62,13 +62,26 @@ namespace Content.Server.Atmos.EntitySystems
 
         [Dependency] private EntityQuery<InventoryComponent> _inventoryQuery = default!;
         [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+        // CMU14: only alert-capable mobs take the per-second fire alert pass.
+        [Dependency] private EntityQuery<AlertsComponent> _alertsQuery = default!;
 
         private static readonly TimeSpan UpdateTime = TimeSpan.FromSeconds(1);
 
         private readonly Dictionary<Entity<FlammableComponent>, float> _fireEvents = new();
 
-        // CMU14: retain snapshot capacity between updates without retaining component references.
+        // CMU14: retains snapshot capacity between updates; entries live until the next rebuild.
         private readonly List<(EntityUid Uid, FlammableComponent Flammable)> _flammableUpdateQueue = new();
+
+        // CMU14: bound corrupt-fire diagnostics without retaining entity references.
+        private TimeSpan _nextInvalidFireWarning;
+        private int _suppressedInvalidFireWarnings;
+
+        // CMU14 Flammable Update Begin
+        // The snapshot is rebuilt once per second and consumed in per-tick slices; rescanning every
+        // flammable entity every tick dominated the system at map-wide counts (weeds, resin).
+        private TimeSpan _nextSnapshot;
+        private int _snapshotCursor;
+        // CMU14 End
 
         // RMC14
         private EntityQuery<SteppingOnFireComponent> _steppingOnFireQuery;
@@ -78,6 +91,8 @@ namespace Content.Server.Atmos.EntitySystems
             UpdatesAfter.Add(typeof(AtmosphereSystem));
 
             SubscribeLocalEvent<FlammableComponent, MapInitEvent>(OnMapInit);
+            // CMU14: components gained mid-cycle join the live snapshot without waiting for a rebuild.
+            SubscribeLocalEvent<FlammableComponent, ComponentInit>(OnFlammableInit);
             SubscribeLocalEvent<FlammableComponent, InteractUsingEvent>(OnInteractUsing);
             SubscribeLocalEvent<FlammableComponent, StartCollideEvent>(OnCollide);
             SubscribeLocalEvent<FlammableComponent, IsHotEvent>(OnIsHot);
@@ -148,6 +163,10 @@ namespace Content.Server.Atmos.EntitySystems
             if (component.Count == 0)
                 RemCompDeferred<IgniteOnCollideComponent>(uid);
         }
+
+        // CMU14 method
+        private void OnFlammableInit(Entity<FlammableComponent> ent, ref ComponentInit args)
+            => _flammableUpdateQueue.Add((ent.Owner, ent.Comp));
 
         private void OnMapInit(EntityUid uid, FlammableComponent component, MapInitEvent args)
         {
@@ -315,8 +334,10 @@ namespace Content.Server.Atmos.EntitySystems
 
             if (flammable.Displacement != null)
                 _appearance.SetData(uid, FireVisuals.FireDisplacement, flammable.Displacement.Value.Id, appearance);
-            else
-                _appearance.RemoveData(uid, FireVisuals.FireDisplacement);
+            // CMU14: RemoveData dirties appearance unconditionally, paid per tile-fire tick by every
+            // flammable; nothing in this fork sets Displacement so the key is never there to remove
+            // else
+            //     _appearance.RemoveData(uid, FireVisuals.FireDisplacement);
 
             // Also enable toggleable-light visuals
             // This is intended so that matches & candles can re-use code for un-shaded layers on in-hand sprites.
@@ -338,6 +359,14 @@ namespace Content.Server.Atmos.EntitySystems
             if (!Resolve(uid, ref flammable))
                 return;
 
+            // CMU14: NaN survives Min/Max and would poison every subsequent damage update.
+            if (!float.IsFinite(stacks) || !float.IsFinite(flammable.MinimumFireStacks) ||
+                !float.IsFinite(flammable.MaximumFireStacks))
+            {
+                WarnInvalidFire(uid, flammable, "set-stacks", stacks);
+                return;
+            }
+
             var attemptEv = new RMCIgniteAttemptEvent();
             RaiseLocalEvent(uid, attemptEv);
 
@@ -346,6 +375,9 @@ namespace Content.Server.Atmos.EntitySystems
                 return;
             }
 
+            // CMU14: Ignite no longer dirties unconditionally, so stack moves sync here; RMC fuel
+            // raises the networked MaximumFireStacks right before this call.
+            var oldStacks = flammable.FireStacks;
             flammable.FireStacks = MathF.Min(MathF.Max(flammable.MinimumFireStacks, stacks), flammable.MaximumFireStacks);
 
             if (flammable.FireStacks <= 0)
@@ -355,6 +387,8 @@ namespace Content.Server.Atmos.EntitySystems
             else
             {
                 flammable.OnFire |= ignite;
+                if (flammable.FireStacks != oldStacks || ignite)
+                    Dirty(uid, flammable);
                 UpdateAppearance(uid, flammable);
             }
         }
@@ -388,6 +422,14 @@ namespace Content.Server.Atmos.EntitySystems
             if (!ent.Comp.OnFire || !ent.Comp.CanExtinguish)
                 return false;
 
+            // CMU14: share extinguish cleanup with recovery of corrupt fire state.
+            ExtinguishFire((ent.Owner, ent.Comp));
+            return true;
+        }
+
+        // CMU14 method
+        private void ExtinguishFire(Entity<FlammableComponent> ent)
+        {
             _adminLogger.Add(LogType.Flammable, $"{ToPrettyString(ent):entity} stopped being on fire damage");
             ent.Comp.OnFire = false;
             ent.Comp.FireStacks = 0;
@@ -401,7 +443,6 @@ namespace Content.Server.Atmos.EntitySystems
             RaiseLocalEvent(ent, ref rmcExtinguished);
 
             UpdateAppearance(ent, ent.Comp);
-            return true;
         }
 
         public void Ignite(EntityUid uid, EntityUid ignitionSource, FlammableComponent? flammable = null,
@@ -410,9 +451,14 @@ namespace Content.Server.Atmos.EntitySystems
             if (!Resolve(uid, ref flammable))
                 return;
 
-            if (flammable.AlwaysCombustible)
+            // CMU14: dirty only on a real state change; tile-fire events re-ignite already burning
+            // entities several times a second and PVS paid for every no-op dirty.
+            var changed = false;
+            if (flammable.AlwaysCombustible
+                && flammable.FireStacks < flammable.FirestacksOnIgnite)
             {
-                flammable.FireStacks = Math.Max(flammable.FirestacksOnIgnite, flammable.FireStacks);
+                flammable.FireStacks = flammable.FirestacksOnIgnite;
+                changed = true;
             }
 
             if (flammable.FireStacks > 0 && !flammable.OnFire)
@@ -422,12 +468,15 @@ namespace Content.Server.Atmos.EntitySystems
                 else
                     _adminLogger.Add(LogType.Flammable, $"{ToPrettyString(uid):target} set on fire by {ToPrettyString(ignitionSource):actor}");
                 flammable.OnFire = true;
+                changed = true;
 
                 var extinguished = new IgnitedEvent();
                 RaiseLocalEvent(uid, ref extinguished);
             }
 
-            Dirty(uid, flammable);
+            if (changed)
+                Dirty(uid, flammable);
+
             UpdateAppearance(uid, flammable);
         }
 
@@ -469,6 +518,10 @@ namespace Content.Server.Atmos.EntitySystems
 
             _popup.PopupEntity(Loc.GetString("flammable-component-resist-message"), uid, uid);
             _stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime);
+            // CMU14: RMC rolls take their stacks off on the press itself; the window only
+            // suppresses the fade so a long pin cannot regrow what the roll removed.
+            if (TryComp<OnFireComponent>(uid, out var rmcFire))
+                AdjustFireStacks(uid, rmcFire.ResistStacks, flammable);
             return true;
         }
 
@@ -477,6 +530,13 @@ namespace Content.Server.Atmos.EntitySystems
             // process all fire events
             foreach (var (flammable, deltaTemp) in _fireEvents)
             {
+                // CMU14: keep invalid atmosphere input out of fire arithmetic.
+                if (!float.IsFinite(deltaTemp))
+                {
+                    WarnInvalidFire(flammable, flammable.Comp, "tile-temperature", deltaTemp);
+                    continue;
+                }
+
                 // 100 -> 1, 200 -> 2, 400 -> 3...
                 var fireStackMod = Math.Max(MathF.Log2(deltaTemp / 100) + 1, 0);
                 var fireStackDelta = fireStackMod - flammable.Comp.FireStacks;
@@ -488,14 +548,8 @@ namespace Content.Server.Atmos.EntitySystems
             }
             _fireEvents.Clear();
 
-            try
-            {
-                UpdateFlammables();
-            }
-            finally
-            {
-                _flammableUpdateQueue.Clear();
-            }
+            // CMU14: the snapshot persists across ticks now; UpdateFlammables manages its lifecycle.
+            UpdateFlammables();
         }
 
         private void UpdateFlammables()
@@ -505,19 +559,52 @@ namespace Content.Server.Atmos.EntitySystems
             // TODO: This needs cleanup to take off the crust from TemperatureComponent and shit.
             // CMU14: fire protection and damage handlers can add FlammableComponents mid-iteration
             // and invalidate the query enumerator, so iterate over a snapshot instead
-            var query = EntityQueryEnumerator<FlammableComponent, TransformComponent>();
-            while (query.MoveNext(out var uid, out var flammable, out _))
-                _flammableUpdateQueue.Add((uid, flammable));
-
-            foreach (var (uid, flammable) in _flammableUpdateQueue)
+            // CMU14 Flammable Update Begin
+            // Rebuild once per second, then walk a per-tick slice. The slice keeps the per-second
+            // passes spread across ticks; entities not yet due simply wait for the next pass.
+            if (curTime >= _nextSnapshot)
             {
-                if (flammable.Deleted)
+                _nextSnapshot = curTime + UpdateTime;
+                _snapshotCursor = 0;
+                _flammableUpdateQueue.Clear();
+                var query = EntityQueryEnumerator<FlammableComponent, TransformComponent>();
+                while (query.MoveNext(out var uid, out var flammable, out _))
+                    _flammableUpdateQueue.Add((uid, flammable));
+            }
+
+            var count = _flammableUpdateQueue.Count;
+            if (count == 0)
+                return;
+
+            // CMU14: Small populations scan fully; larger ones take a slice sized to finish a traversal
+            // within one second at the current tick rate.
+            var take = count > _timing.TickRate
+                ? count / _timing.TickRate + 1
+                : count;
+
+            for (var i = 0; i < take; i++)
+            {
+                var (uid, flammable) = _flammableUpdateQueue[(_snapshotCursor + i) % count];
+
+                // CMU14: Snapshots age up to a second now, so skip components removed mid-cycle.
+                if (flammable.Deleted
+                    || flammable.LifeStage >= ComponentLifeStage.Stopping)
                     continue;
 
                 if (curTime < flammable.NextUpdate)
                     continue;
 
                 flammable.NextUpdate += UpdateTime;
+
+                // CMU14: recover corrupted state before temperature or damage arithmetic. This
+                // is data repair even for an otherwise unextinguishable fire, not a gameplay action.
+                if (!float.IsFinite(flammable.FireStacks) || !float.IsFinite(12500 * flammable.FireStacks) ||
+                    flammable.OnFire && !float.IsFinite(flammable.FirestackFade))
+                {
+                    WarnInvalidFire(uid, flammable, "update", flammable.FireStacks);
+                    ExtinguishFire((uid, flammable));
+                    continue;
+                }
 
                 // Check if we finished resisting.
                 if (curTime > flammable.ResistCompleteTime)
@@ -528,12 +615,17 @@ namespace Content.Server.Atmos.EntitySystems
                     flammable.FireStacks = MathF.Min(0, flammable.FireStacks + 1);
 
                 // RMC14: acid burns also use the fire alert to stop, drop, and roll.
-                var showAlert = new ShowFireAlertEvent(flammable.OnFire);
-                RaiseLocalEvent(uid, ref showAlert);
-                if (showAlert.Show)
-                    _alertsSystem.ShowAlert(uid, flammable.FireAlert);
-                else
-                    _alertsSystem.ClearAlert(uid, flammable.FireAlert);
+                // CMU14: only alert-capable mobs take this path; weeds and resin paid the
+                // per-second dispatch for a guaranteed no-op at map-wide flammable counts.
+                if (_alertsQuery.HasComp(uid))
+                {
+                    var showAlert = new ShowFireAlertEvent(flammable.OnFire);
+                    RaiseLocalEvent(uid, ref showAlert);
+                    if (showAlert.Show)
+                        _alertsSystem.ShowAlert(uid, flammable.FireAlert);
+                    else
+                        _alertsSystem.ClearAlert(uid, flammable.FireAlert);
+                }
 
                 if (!flammable.OnFire)
                     continue;
@@ -569,16 +661,26 @@ namespace Content.Server.Atmos.EntitySystems
 
                 ApplyFireDamage(uid, flammable, ev.Multiplier);
 
-                var fireStackAdjustment = HasComp<YautjaComponent>(uid) ? -2f : flammable.FirestackFade;
-                if (!HasComp<YautjaComponent>(uid) && flammable.Resisting && TryComp<OnFireComponent>(uid, out var rmcFire))
-                    fireStackAdjustment = rmcFire.ResistStacks;
-
-                AdjustFireStacks(uid, fireStackAdjustment, flammable, flammable.OnFire);
+                if (HasComp<YautjaComponent>(uid))
+                    AdjustFireStacks(uid, -2f, flammable, flammable.OnFire);
+                // CMU14: the roll removes stacks on the press; don't regrow them while pinned.
+                else if (!flammable.Resisting)
+                    AdjustFireStacks(uid, flammable.FirestackFade, flammable, flammable.OnFire);
             }
+
+            _snapshotCursor = (_snapshotCursor + take) % count;
+            // CMU14 End
         }
 
         private void ApplyFireDamage(EntityUid uid, FlammableComponent flammable, float protectionMultiplier)
         {
+            // CMU14: invalid protection must not throw and interrupt other burning entities.
+            if (!float.IsFinite(protectionMultiplier) || !float.IsFinite(flammable.FireStacks))
+            {
+                WarnInvalidFire(uid, flammable, "damage-protection", protectionMultiplier);
+                return;
+            }
+
             if (!TryComp<OnFireComponent>(uid, out var rmcFire) ||
                 rmcFire.Intensity <= 0 ||
                 rmcFire.Duration <= 0)
@@ -606,7 +708,27 @@ namespace Content.Server.Atmos.EntitySystems
                 return;
             }
 
-            _damageableSystem.TryChangeDamage(uid, damage, true, false, origin: uid);
+            // CMU14: fire growth and synthetic resistance.
+            _rmcFlammable.DamageFromFire(uid, damage, interruptsDoAfters: false, origin: uid);
+        }
+
+        // CMU14 method
+        private void WarnInvalidFire(EntityUid uid, FlammableComponent flammable, string stage, float value)
+        {
+            // One warning per system per 30 seconds, without retaining entities or building traces.
+            if (_timing.RealTime < _nextInvalidFireWarning)
+            {
+                _suppressedInvalidFireWarnings++;
+                return;
+            }
+
+            _nextInvalidFireWarning = _timing.RealTime + TimeSpan.FromSeconds(30);
+            TryComp<OnFireComponent>(uid, out var fire);
+            Log.Warning($"invalid-fire-state entity={ToPrettyString(uid)} stage={stage} value={value} " +
+                        $"stacks={flammable.FireStacks} fade={flammable.FirestackFade} " +
+                        $"intensity={fire?.Intensity} duration={fire?.Duration} " +
+                        $"suppressed={_suppressedInvalidFireWarnings}");
+            _suppressedInvalidFireWarnings = 0;
         }
 
         public void CopyComponent(Entity<FlammableComponent?> entity, EntityUid clone)

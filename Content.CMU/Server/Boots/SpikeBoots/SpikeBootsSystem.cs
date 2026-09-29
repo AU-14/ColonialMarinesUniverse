@@ -1,4 +1,3 @@
-using Content.Shared.CMU14.Threats.Mobs.Abomination;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Xenonids;
@@ -6,6 +5,7 @@ using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared._RMC14.Xenonids.Weeds;
+using Content.Shared.CMU14.Threats.Mobs.Biomorph;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
@@ -36,7 +36,7 @@ public sealed partial class SpikeBootsSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
 
     private EntityQuery<XenoWeedsComponent> _weedsQuery;
-    private EntityQuery<AbominationFleshKudzuComponent> _abominationFleshKudzuQuery;
+    private EntityQuery<BiomorphFleshKudzuComponent> _biomorphFleshKudzuQuery;
     private EntityQuery<XenoConstructComponent> _xenoConstructQuery;
     private EntityQuery<MobStateComponent> _mobStateQuery;
     private EntityQuery<XenoComponent> _xenoQuery;
@@ -67,7 +67,7 @@ public sealed partial class SpikeBootsSystem : EntitySystem
         base.Initialize();
 
         _weedsQuery = GetEntityQuery<XenoWeedsComponent>();
-        _abominationFleshKudzuQuery = GetEntityQuery<AbominationFleshKudzuComponent>();
+        _biomorphFleshKudzuQuery = GetEntityQuery<BiomorphFleshKudzuComponent>();
         _xenoConstructQuery = GetEntityQuery<XenoConstructComponent>();
         _mobStateQuery = GetEntityQuery<MobStateComponent>();
         _xenoQuery = GetEntityQuery<XenoComponent>();
@@ -233,7 +233,7 @@ public sealed partial class SpikeBootsSystem : EntitySystem
 
     private bool IsCrushableResin(EntityUid target)
     {
-        if (_abominationFleshKudzuQuery.HasComp(target))
+        if (_biomorphFleshKudzuQuery.HasComp(target))
             return true;
 
         return _weedsQuery.HasComp(target) &&

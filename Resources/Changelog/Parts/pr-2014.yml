@@ -1,0 +1,20 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Stabilized FTL backgrounds across decks and corrected fighter taxi input
+    and camera updates.
+  type: Fix
+- message: Enabled read-only fighter visuals for spectators and corrected the cockpit
+    shader startup error.
+  type: Fix
+- message: Restricted fighter weapon release to runs inside the AO and randomized
+    holding-point parachute drops.
+  type: Tweak
+- message: Added MANPAD airspace radar, a separate no-IFF launcher, and automatic
+    boiler plasma air defense.
+  type: Add
+- message: Moved Mohawk vehicle unloading clear of the ramp and added vehicle radios
+    to both aircraft.
+  type: Tweak
+time: '2026-09-24T20:11:37.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2014
