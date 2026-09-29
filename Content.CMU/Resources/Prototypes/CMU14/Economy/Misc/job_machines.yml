@@ -415,7 +415,7 @@
   parent: RMCCommunicationsConsoleBase
   id: AUColonyATM
   name: Colony ATM
-  description: Swipe your ID card on the machine to withdraw cash from your personal account.
+  description: Swipe your ID card, enter your PIN, then withdraw cash, deposit funds, or transfer to another account.
   components:
   - type: Sprite
     sprite: CMU14/Structures/Machines/atm.rsi

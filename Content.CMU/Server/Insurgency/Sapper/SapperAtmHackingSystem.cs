@@ -12,6 +12,7 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
@@ -39,6 +40,7 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
     [Dependency] private SharedRequisitionsSystem _requisitions = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     // Loud one-shot for the big console/ASRS drains so the theft reads as a major event.
     private static readonly SoundSpecifier BigDrainSound =
@@ -53,6 +55,7 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
 
         // Registered before the real ATM system so a disrupted machine buzzes instead of opening.
         SubscribeLocalEvent<SapperAtmHackedComponent, InteractUsingEvent>(OnHackedInteractUsing, before: new[] { typeof(ColonyAtmSystem) });
+        SubscribeLocalEvent<SapperAtmHackedComponent, ActivateInWorldEvent>(OnHackedActivate, before: new[] { typeof(ColonyAtmSystem) });
     }
 
     // Only the three finance-device types are valid siphon targets.
@@ -182,6 +185,9 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
 
         if (!TryCommitSiphon("ATM", ent.Comp.CashPrototype, atm, user, debits, out var haul))
             return;
+
+        // Kick anyone mid-transaction off the now-malfunctioning screen.
+        _ui.CloseUi(atm, ColonyAtmUi.Key);
 
         if (ent.Comp.SuccessSound is { } success)
             _audio.PlayPvs(success, atm);
@@ -366,6 +372,17 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
     private void OnHackedInteractUsing(Entity<SapperAtmHackedComponent> ent, ref InteractUsingEvent args)
     {
         if (args.Handled)
+            return;
+
+        args.Handled = true;
+        _audio.PlayPvs(ent.Comp.BuzzSound, ent);
+        _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-malfunction"), ent, args.User, PopupType.LargeCaution);
+    }
+
+    // The ATM screen also opens on a plain click, so block that too. Other hacked devices keep their own UIs.
+    private void OnHackedActivate(Entity<SapperAtmHackedComponent> ent, ref ActivateInWorldEvent args)
+    {
+        if (args.Handled || !HasComp<ColonyAtmComponent>(ent) || !_ui.HasUi(ent, ColonyAtmUi.Key))
             return;
 
         args.Handled = true;

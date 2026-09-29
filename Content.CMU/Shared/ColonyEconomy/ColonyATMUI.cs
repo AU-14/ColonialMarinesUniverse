@@ -2,35 +2,101 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ColonyEconomy;
 
+// ── UI Key ────────────────────────────────────────────────────────────────
+
 [Serializable, NetSerializable]
 public enum ColonyAtmUi
 {
     Key,
 }
 
+// ── BUI State (server → client) ──────────────────────────────────────────
+
+/// <summary>
+///     Full ATM display state sent to every client that has the UI open.
+///     The client renders exactly what the server tells it.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmBuiState : BoundUserInterfaceState
+{
+    public AtmScreen Screen { get; }
+    public int Balance { get; }
+    public string OwnerName { get; }
+    public int AccountNumber { get; }
+    public float IncomeTaxPercent { get; }
+    public TimeSpan? LockExpiry { get; }
+    public string StatusMessage { get; }
+    public string KeypadBuffer { get; }
+
+    /// <summary>Left side button labels (indices 0-2 = L1, L2, L3). Empty string hides the button.</summary>
+    public string[] LeftLabels { get; }
+    /// <summary>Right side button labels (indices 0-2 = R1, R2, R3). Empty string hides the button.</summary>
+    public string[] RightLabels { get; }
+
+    /// <summary>Whether the ATM has been tampered with by a siphon rig (shows the tampered card reader art).</summary>
+    public bool Tampered { get; }
+
+    public ColonyAtmBuiState(
+        AtmScreen screen,
+        int balance,
+        string ownerName,
+        int accountNumber,
+        float incomeTaxPercent,
+        TimeSpan? lockExpiry,
+        string statusMessage,
+        string keypadBuffer,
+        string[] leftLabels,
+        string[] rightLabels,
+        bool tampered = false)
+    {
+        Screen = screen;
+        Balance = balance;
+        OwnerName = ownerName;
+        AccountNumber = accountNumber;
+        IncomeTaxPercent = incomeTaxPercent;
+        LockExpiry = lockExpiry;
+        StatusMessage = statusMessage;
+        KeypadBuffer = keypadBuffer;
+        LeftLabels = leftLabels;
+        RightLabels = rightLabels;
+        Tampered = tampered;
+    }
+}
+
+// ── BUI Messages (client → server) ───────────────────────────────────────
+
+/// <summary>Player pressed one of the 6 side buttons.</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmSideButtonBuiMsg : BoundUserInterfaceMessage
+{
+    public AtmSideButton Button { get; }
+    public ColonyAtmSideButtonBuiMsg(AtmSideButton button) => Button = button;
+}
+
+/// <summary>Player pressed a digit key on the numpad (value "0"-"9").</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmDigitBuiMsg : BoundUserInterfaceMessage
+{
+    public string Digit { get; }
+    public ColonyAtmDigitBuiMsg(string digit) => Digit = digit;
+}
+
+/// <summary>Player pressed the Backspace (yellow) key.</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmBackspaceBuiMsg : BoundUserInterfaceMessage { }
+
+/// <summary>Player pressed the Confirm (green) key.</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmConfirmBuiMsg : BoundUserInterfaceMessage { }
+
+/// <summary>Player pressed the Cancel (red) key.</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmCancelBuiMsg : BoundUserInterfaceMessage { }
+
+// ── Legacy withdraw message kept for backwards compat (unused after revamp) ──
 [Serializable, NetSerializable]
 public sealed class ColonyAtmWithdrawBuiMsg : BoundUserInterfaceMessage
 {
     public int Amount { get; }
-
-    public ColonyAtmWithdrawBuiMsg(int amount)
-    {
-        Amount = amount;
-    }
+    public ColonyAtmWithdrawBuiMsg(int amount) => Amount = amount;
 }
-
-[Serializable, NetSerializable]
-public sealed class ColonyAtmBuiState : BoundUserInterfaceState
-{
-    public int Balance { get; }
-    public string OwnerName { get; }
-    public float IncomeTaxPercent { get; }
-
-    public ColonyAtmBuiState(int balance, string ownerName, float incomeTaxPercent = 0f)
-    {
-        Balance = balance;
-        OwnerName = ownerName;
-        IncomeTaxPercent = incomeTaxPercent;
-    }
-}
-

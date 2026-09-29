@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.Station.Systems;
 using Content.Shared.Access.Components;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
@@ -14,6 +15,7 @@ namespace Content.IntegrationTests.CMU14.ColonyEconomy;
 public sealed class ColonyAtmTest
 {
     private const string IdCard = "AU14IDCardCLFCivilian";
+    private const string Atm = "AUColonyATM";
 
     /// <summary>
     ///     A colonist's ID card has its account and PIN the moment the job spawn finishes, in the same
@@ -81,6 +83,63 @@ public sealed class ColonyAtmTest
                 Assert.That(cards.Select(c => c.AccountNumber).Distinct().Count(), Is.EqualTo(cards.Count), "Two cards share an account number");
                 Assert.That(cards.Select(c => c.AtmPin).Distinct().Count(), Is.EqualTo(cards.Count), "Two cards share a PIN");
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AtmOnlyTakesInputFromItsUser()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var atm = entMan.SpawnEntity(Atm, testMap.GridCoords);
+            var owner = entMan.SpawnEntity(null, testMap.GridCoords);
+            var stranger = entMan.SpawnEntity(null, testMap.GridCoords);
+            var cardUid = entMan.SpawnEntity(IdCard, testMap.GridCoords);
+            var card = entMan.GetComponent<IdCardComponent>(cardUid);
+            var comp = entMan.GetComponent<ColonyAtmComponent>(atm);
+
+            // The owner has swiped their card and is at the PIN prompt.
+            comp.CurrentUser = owner;
+            comp.SwipedCard = cardUid;
+            comp.Screen = AtmScreen.PinEntry;
+
+            void Press(EntityUid actor, string digit) =>
+                entMan.EventBus.RaiseLocalEvent(atm, new ColonyAtmDigitBuiMsg(digit) { Actor = actor });
+            void Confirm(EntityUid actor) =>
+                entMan.EventBus.RaiseLocalEvent(atm, new ColonyAtmConfirmBuiMsg { Actor = actor });
+
+            var pin = card.AtmPin;
+            var pinText = pin.ToString();
+
+            // Someone else pressing keys on the same ATM does nothing.
+            foreach (var digit in pinText)
+                Press(stranger, digit.ToString());
+            Confirm(stranger);
+            Assert.That(comp.KeypadBuffer, Is.Empty);
+            Assert.That(comp.PinAuthenticated, Is.False);
+
+            // The PIN only accepts four digits; extra presses are dropped.
+            foreach (var digit in pinText + "99")
+                Press(owner, digit.ToString());
+            Assert.That(comp.KeypadBuffer, Has.Length.EqualTo(4));
+
+            Confirm(owner);
+            Assert.Multiple(() =>
+            {
+                Assert.That(comp.PinAuthenticated, Is.True);
+                Assert.That(comp.Screen, Is.EqualTo(AtmScreen.MainMenu));
+            });
+
+            // A stranger can't drive an authenticated session either.
+            Press(stranger, "1");
+            Assert.That(comp.Screen, Is.EqualTo(AtmScreen.MainMenu));
         });
 
         await pair.CleanReturnAsync();
