@@ -112,6 +112,9 @@ public sealed class StunBatonTests : InteractionTest
             var cancelled = RmcStaminaTarget();
             var ineligible = SEntMan.SpawnEntity(null, MapData.GridCoords);
             SEntMan.EnsureComponent<YautjaComponent>(immune);
+            // Keep an eligible stamina target so the test exercises Taser immunity,
+            // rather than passing solely because Yautja initialization removes stamina.
+            SEntMan.EnsureComponent<RMCStaminaComponent>(immune).Current = 100;
 
             Assert.That(ItemToggleSys.TryActivate(baton, SPlayer), Is.True);
             Assert.Multiple(() =>

@@ -98,6 +98,8 @@
   suffix: Z-Level, Up
   components:
   - type: CMUZLevelLadder
+    canMoveUp: true
+    canMoveDown: false
     offset: 1
     landingLocalPosition: 0.05
   - type: CMUZLevelHighGround
@@ -113,6 +115,8 @@
   suffix: Z-Level, Down
   components:
   - type: CMUZLevelLadder
+    canMoveUp: false
+    canMoveDown: true
     offset: -1
     landingLocalPosition: 0
 

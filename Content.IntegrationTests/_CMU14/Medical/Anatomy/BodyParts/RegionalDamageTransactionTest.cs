@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Events;
 #pragma warning disable RA0002 // Regression assertions inspect the committed damage and anatomy ledgers.
 
 using System.Collections.Generic;

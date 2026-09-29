@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Pheromones;
 using Content.Shared.Access;
 using Content.Shared.Alert;
@@ -37,6 +37,9 @@ public sealed partial class XenoComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool CountedInSlots = true;
+
+    [DataField, AutoNetworkedField]
+    public bool AutoAssignHive = true;
 
     [DataField, AutoNetworkedField]
     public bool BypassTierCount;

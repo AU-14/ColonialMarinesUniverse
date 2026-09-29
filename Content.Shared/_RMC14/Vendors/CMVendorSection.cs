@@ -54,10 +54,20 @@ public sealed partial record CMVendorEntry
     public EntProtoId Id;
 
     [DataField]
+    public (string Id, int Amount)? Choices;
+
+    [DataField]
     public string? Name;
 
     [DataField]
     public int? Amount;
+
+    /// <summary>
+    /// Maximum number of units this player may receive from this entry.
+    /// A null Amount remains an infinite shared vendor stock.
+    /// </summary>
+    [DataField]
+    public int? MaxPerUser;
 
     [DataField]
     public int? Points;
@@ -67,6 +77,9 @@ public sealed partial record CMVendorEntry
 
     [DataField]
     public bool Recommended;
+
+    [DataField]
+    public bool Mandatory;
 
     [DataField]
     public int? Multiplier;

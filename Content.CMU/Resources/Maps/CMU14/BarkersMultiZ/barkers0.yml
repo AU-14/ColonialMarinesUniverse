@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/11/2026 23:33:51
-  entityCount: 91964
+  entityCount: 91965
 maps:
 - 1
 grids:
@@ -610749,4 +610749,17 @@ entities:
     - type: Transform
       parent: 1
       pos: -46.5,126.5
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000003
+    components:
+    - type: MetaData
+      name: Barkers Lament ground relay
+    - type: Transform
+      pos: 23.5,-25.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: barkers-lament.ground.relay
+      displayName: Barker's Lament Ground Relay
 ...

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Content.Server.CMU14.Diagnostics.Performance;
 using NUnit.Framework;
 
@@ -29,11 +30,19 @@ public sealed class CMUPerformanceDiagnosticsCostTest
         Assert.That(cost.Calls, Is.EqualTo(1));
         Assert.That(cost.AllocatedBytes, Is.GreaterThanOrEqualTo(4096));
         Assert.That(cost.MaximumMilliseconds, Is.GreaterThan(0));
-        for (var i = 0; i < 100; i++) { using (cost.Measure()) { } }
+        // Warm the same loop that is measured, including its optimized runtime path.
+        MeasureEmptyScopes(cost);
+        var allocated = MeasureEmptyScopes(cost);
+        Assert.That(allocated, Is.Zero);
+        Assert.That(cost.Calls, Is.EqualTo(20001));
+    }
+
+    // Keep NUnit assertion setup and its lazy initialization outside the measured method.
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static long MeasureEmptyScopes(CMUPerformanceDiagnosticsCost cost)
+    {
         var before = GC.GetAllocatedBytesForCurrentThread();
         for (var i = 0; i < 10000; i++) { using (cost.Measure()) { } }
-        var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-        Assert.That(allocated, Is.Zero);
-        Assert.That(cost.Calls, Is.EqualTo(10101));
+        return GC.GetAllocatedBytesForCurrentThread() - before;
     }
 }

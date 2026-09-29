@@ -30,6 +30,7 @@
     - type: ContainerContainer
       containers:
         med_slot: !type:ContainerSlot {}
+        storagebase: !type:Container {}
     - type: Storage
       maxItemSize: Normal
       grid:

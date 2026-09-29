@@ -9,9 +9,6 @@
   id: RuMCBoxMagazineRifleBase
   name: generic magazine box (? x ?)
   components:
-  - type: Construction
-    graph: RMCBoxMagazine
-    node: RuMCBoxMagazineRifleAK4047Empty
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Boxes/modular_boxes.rsi
     layers:
@@ -113,7 +110,7 @@
   name: magazine box (AK4047 x 10)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineAK4047
     node: RuMCBoxMagazineRifleAK4047Empty
   - type: Sprite
     layers:
@@ -167,7 +164,7 @@
   name: magazine box (AK4047 x 10)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineAK4047
     node: RuMCBoxMagazineRifleAK4047EmptyAP
   - type: Sprite
     layers:
@@ -331,7 +328,7 @@
   name: magazine box (AG80 x 10)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineAG80
     node: RuMCBoxMagazineRifleAG80Empty
   - type: Sprite
     layers:
@@ -385,7 +382,7 @@
   name: magazine box (AG80 x 10)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineAG80
     node: RuMCBoxMagazineRifleAG80EmptyAP
   - type: Sprite
     layers:
@@ -439,7 +436,7 @@
   name: magazine box (AG80 x 10)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineAG80
     node: RuMCBoxMagazineRifleAG80EmptyEXT
   - type: Sprite
     layers:
@@ -494,7 +491,7 @@
   name: magazine box (Type71 x 10)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineType71
     node: RuMCBoxMagazineRifleType71Empty
   - type: Sprite
     layers:
@@ -548,7 +545,7 @@
   name: magazine box (Type71 x 10)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineType71
     node: RuMCBoxMagazineRifleType71EmptyAP
   - type: Sprite
     layers:
@@ -607,7 +604,7 @@
   name: magazine box (Type64 x 10)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineType64
     node: RuMCBoxMagazineSMGType64Empty
   - type: Sprite
     layers:
@@ -662,7 +659,7 @@
   name: magazine box (Type73 x 15)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineType73
     node: RuMCBoxMagazinePistolType73Empty
   - type: Sprite
     layers:
@@ -717,7 +714,7 @@
   name: magazine box (NP92 x 15)
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxMagazineNP92
     node: RuMCBoxMagazinePistolNP92Empty
   - type: Sprite
     layers:

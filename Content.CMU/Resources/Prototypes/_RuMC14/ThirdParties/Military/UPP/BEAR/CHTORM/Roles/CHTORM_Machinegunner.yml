@@ -8,7 +8,7 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: upp_sapper
+      state: spp_sapper
   - type: AssignSquad
     whitelist:
       tags:
@@ -30,7 +30,7 @@
   - type: EquipEntityPreset
     preset: RuMCBEARmachinegunPreset
   - type: JobPrefix
-    prefix: Machinegunner
+    prefix: rumc-job-prefix-machinegunner
   - type: MarineOrders
   - type: RMCTrackable
   - type: RMCPointing
@@ -89,7 +89,7 @@
         time: 10800 # 3 hours
   spawnMenuRoleName: CHTORM Machine Gunner
   startingGear: RuMCGearUPPBEARMachinegunner
-  greeting: Вы член секретного спецподразделения ЧВК «Медведи» (BEAR) при СПН! Существование связи между BEAR и СПН строжайше секретно. Никто не должен знать, кто вы и что вы здесь делаете. Вы дружественны к СПН. Враждебны к ЧВК VAI и ЧВК We-Y. Работайте скрытно. Выполняйте задачи. Не оставляйте следов.
+  greeting: rumc-bear-greeting
   icon: "RuMCJobIconUPPBEARMachinegunner"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor
