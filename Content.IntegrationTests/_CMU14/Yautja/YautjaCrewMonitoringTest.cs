@@ -45,7 +45,10 @@ public sealed class YautjaCrewMonitoringTest
                 var prototype = prototypes.Index<EntityPrototype>(id);
                 Assert.That(prototype.TryGetComponent<YautjaCrewMonitoringConsoleComponent>(out _, factory), Is.True, id);
                 if (id != "CMUYautjaHunterShuttleHealthMonitor")
-                    Assert.That(prototype.Parents, Does.Contain("CMUYautjaHunterShuttleHealthMonitor"), id);
+                {
+                    var parents = prototypes.EnumerateAllParents<EntityPrototype>(id).Select(parent => parent.id);
+                    Assert.That(parents, Does.Contain("CMUYautjaHunterShuttleHealthMonitor"), id);
+                }
             }
         });
 
