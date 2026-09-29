@@ -453,11 +453,11 @@
       ]
     },
     {
-      "name": "thick resin",
+      "name": "thick_resin",
       "directions": 4
     },
     {
-      "name": "thick resinclosing",
+      "name": "thick_resinclosing",
       "directions": 4,
       "delays": [
         [
@@ -499,11 +499,11 @@
       ]
     },
     {
-      "name": "thick resinopen",
+      "name": "thick_resinopen",
       "directions": 4
     },
     {
-      "name": "thick resinopening",
+      "name": "thick_resinopening",
       "directions": 4,
       "delays": [
         [
@@ -569,7 +569,7 @@
       "name": "Egg"
     },
     {
-      "name": "Egg Opening",
+      "name": "Egg_Opening",
       "delays": [
         [
           0.1,
@@ -586,10 +586,10 @@
       ]
     },
     {
-      "name": "Egg Opened"
+      "name": "Egg_Opened"
     },
     {
-      "name": "Egg Exploding",
+      "name": "Egg_Exploding",
       "delays": [
         [
           0.1,
@@ -603,13 +603,13 @@
       ]
     },
     {
-      "name": "Egg Exploded"
+      "name": "Egg_Exploded"
     },
     {
       "name": "egg_item"
     },
     {
-      "name": "Egg Growing"
+      "name": "Egg_Growing"
     },
     {
       "name": "fast"
@@ -1731,7 +1731,7 @@
       "name": "xeno_telegraph_red"
     },
     {
-      "name": "DESIGNER CONTENT"
+      "name": "DESIGNER_CONTENT"
     },
     {
       "name": "static_speednode"
@@ -1809,11 +1809,11 @@
       ]
     },
     {
-      "name": "weedbound resin",
+      "name": "weedbound_resin",
       "directions": 4
     },
     {
-      "name": "weedbound resinclosing",
+      "name": "weedbound_resinclosing",
       "directions": 4,
       "delays": [
         [
@@ -1855,11 +1855,11 @@
       ]
     },
     {
-      "name": "weedbound resinopen",
+      "name": "weedbound_resinopen",
       "directions": 4
     },
     {
-      "name": "weedbound resinopening",
+      "name": "weedbound_resinopening",
       "directions": 4,
       "delays": [
         [
@@ -1901,11 +1901,11 @@
       ]
     },
     {
-      "name": "thick weedbound resin",
+      "name": "thick_weedbound_resin",
       "directions": 4
     },
     {
-      "name": "thick weedbound resinclosing",
+      "name": "thick_weedbound_resinclosing",
       "directions": 4,
       "delays": [
         [
@@ -1947,11 +1947,11 @@
       ]
     },
     {
-      "name": "thick weedbound resinopen",
+      "name": "thick_weedbound_resinopen",
       "directions": 4
     },
     {
-      "name": "thick weedbound resinopening",
+      "name": "thick_weedbound_resinopening",
       "directions": 4,
       "delays": [
         [

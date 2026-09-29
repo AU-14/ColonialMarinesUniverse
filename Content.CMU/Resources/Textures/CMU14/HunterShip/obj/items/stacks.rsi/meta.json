@@ -8,7 +8,7 @@
   },
   "states": [
     {
-      "name": "SHEETS WITH STACK SPRITES"
+      "name": "SHEETS_WITH_STACK_SPRITES"
     },
     {
       "name": "sheet-sandstone-4"
@@ -71,7 +71,7 @@
       "name": "sheet-plastic-4"
     },
     {
-      "name": "SHEETS WITHOUT STACK SPRITES"
+      "name": "SHEETS_WITHOUT_STACK_SPRITES"
     },
     {
       "name": "rods"

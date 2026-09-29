@@ -17,7 +17,7 @@
       "name": "handblood"
     },
     {
-      "name": "on_mob blood"
+      "name": "on_mob_blood"
     },
     {
       "name": "hands_blood",
@@ -108,7 +108,7 @@
       "directions": 4
     },
     {
-      "name": "THE REST"
+      "name": "THE_REST"
     },
     {
       "name": "gibarm",

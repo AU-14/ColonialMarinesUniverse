@@ -26,43 +26,43 @@
       "directions": 8
     },
     {
-      "name": "Diamond ore"
+      "name": "Diamond_ore"
     },
     {
       "name": "mars_sand"
     },
     {
-      "name": "Glass ore"
+      "name": "Glass_ore"
     },
     {
       "name": "volcanic_sand"
     },
     {
-      "name": "Gold ore"
+      "name": "Gold_ore"
     },
     {
-      "name": "Iron ore"
+      "name": "Iron_ore"
     },
     {
       "name": "ore"
     },
     {
-      "name": "Phoron ore"
+      "name": "Phoron_ore"
     },
     {
-      "name": "Silver ore"
+      "name": "Silver_ore"
     },
     {
       "name": "slag"
     },
     {
-      "name": "Coal ore"
+      "name": "Coal_ore"
     },
     {
-      "name": "Uranium ore"
+      "name": "Uranium_ore"
     },
     {
-      "name": "Platinum ore"
+      "name": "Platinum_ore"
     },
     {
       "name": "orebox0"

@@ -8,7 +8,7 @@
   },
   "states": [
     {
-      "name": "supply crates"
+      "name": "supply_crates"
     },
     {
       "name": "closed_basic"
@@ -182,13 +182,13 @@
       "name": "chest_white"
     },
     {
-      "name": "chest_white-o (unused)"
+      "name": "chest_white-o_(unused)"
     },
     {
       "name": "chest"
     },
     {
-      "name": "chest-o (unused)"
+      "name": "chest-o_(unused)"
     },
     {
       "name": "packed_in_paper"
@@ -224,7 +224,7 @@
       "name": "delivery_tag"
     },
     {
-      "name": "large crates \u0026 cases"
+      "name": "large_crates_\u0026_cases"
     },
     {
       "name": "densecrate"
@@ -254,7 +254,7 @@
       "name": "M56D_case"
     },
     {
-      "name": "mini crates"
+      "name": "mini_crates"
     },
     {
       "name": "mini_crate"
@@ -287,7 +287,7 @@
       "name": "mini_medcase"
     },
     {
-      "name": "secure crates"
+      "name": "secure_crates"
     },
     {
       "name": "securecratesparks",

@@ -8,11 +8,11 @@
   },
   "states": [
     {
-      "name": "glass door closed",
+      "name": "glass_door_closed",
       "directions": 4
     },
     {
-      "name": "glass door opening",
+      "name": "glass_door_opening",
       "directions": 4,
       "delays": [
         [

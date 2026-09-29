@@ -12,7 +12,7 @@
       "name": "base"
     },
     {
-      "name": "ARMOR OVERLAYS"
+      "name": "ARMOR_OVERLAYS"
     },
     {
       "name": "std-armor",
@@ -103,7 +103,7 @@
       "name": "overalls_red"
     },
     {
-      "name": "ERT ARMOR"
+      "name": "ERT_ARMOR"
     },
     {
       "name": "hefadier"
@@ -115,7 +115,7 @@
       "name": "dutch_armor"
     },
     {
-      "name": "MISC SUITS"
+      "name": "MISC_SUITS"
     },
     {
       "name": "souto_man"
@@ -124,7 +124,7 @@
       "name": "bear_armor"
     },
     {
-      "name": "LEGACY BAY"
+      "name": "LEGACY_BAY"
     },
     {
       "name": "gladiator"

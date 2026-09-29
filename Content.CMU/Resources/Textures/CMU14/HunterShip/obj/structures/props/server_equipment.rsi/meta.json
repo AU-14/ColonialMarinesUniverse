@@ -41,7 +41,7 @@
       "name": "blackbox_empty"
     },
     {
-      "name": "broadcast receiver",
+      "name": "broadcast_receiver",
       "delays": [
         [
           0.2,
@@ -50,7 +50,7 @@
       ]
     },
     {
-      "name": "broadcast receiver_off"
+      "name": "broadcast_receiver_off"
     },
     {
       "name": "broadcaster"

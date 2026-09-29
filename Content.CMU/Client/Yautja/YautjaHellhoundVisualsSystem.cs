@@ -9,10 +9,10 @@ namespace Content.Client.CMU14.Yautja;
 
 public sealed partial class YautjaHellhoundVisualsSystem : EntitySystem
 {
-    private const string Walking = "Normal Hellhound Walking";
-    private const string Sleeping = "Normal Hellhound Sleeping";
-    private const string KnockedDown = "Normal Hellhound Knocked Down";
-    private const string Dead = "Normal Hellhound Dead";
+    private const string Walking = "Normal_Hellhound_Walking";
+    private const string Sleeping = "Normal_Hellhound_Sleeping";
+    private const string KnockedDown = "Normal_Hellhound_Knocked_Down";
+    private const string Dead = "Normal_Hellhound_Dead";
 
     [Dependency] private AppearanceSystem _appearance = default!;
     [Dependency] private SpriteSystem _sprite = default!;

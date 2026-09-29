@@ -28,15 +28,15 @@
     sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
-      state: "Normal Hellhound Walking"
+      state: "Normal_Hellhound_Walking"
   - type: DamageStateVisuals
     states:
       Alive:
-        Base: "Normal Hellhound Walking"
+        Base: "Normal_Hellhound_Walking"
       Critical:
-        Base: "Normal Hellhound Knocked Down"
+        Base: "Normal_Hellhound_Knocked_Down"
       Dead:
-        Base: "Normal Hellhound Dead"
+        Base: "Normal_Hellhound_Dead"
   - type: Fixtures
     fixtures:
       fix1:

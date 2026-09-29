@@ -120,7 +120,7 @@
     drawdepth: SmallObjects
     offset: 0.5,0.5
     layers:
-    - state: "Normal Hellhound Sleeping"
+    - state: "Normal_Hellhound_Sleeping"
   - type: InteractionOutline
   - type: UserInterface
     interfaces:
@@ -128,7 +128,7 @@
         type: DialogBui
   - type: Icon
     sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
-    state: "Normal Hellhound Sleeping"
+    state: "Normal_Hellhound_Sleeping"
   - type: YautjaSleepingHellhound
 
 - type: entity

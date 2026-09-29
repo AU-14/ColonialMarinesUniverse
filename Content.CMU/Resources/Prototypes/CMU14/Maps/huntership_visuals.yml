@@ -1915,11 +1915,11 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Egg Growing"
+    - state: "Egg_Growing"
       map: [ "enum.XenoEggLayers.Base" ]
   - type: Icon
     sprite: CMU14/HunterShip/mob/xenos/effects.rsi
-    state: "Egg Growing"
+    state: "Egg_Growing"
   - type: XenoEgg
     state: Growing
     spawn: CMXenoLarva
@@ -1928,10 +1928,10 @@
     fragileSprite: CMU14/HunterShip/mob/xenos/effects.rsi
     sustainedSprite: CMU14/HunterShip/mob/xenos/effects.rsi
     currentSprite: CMU14/HunterShip/mob/xenos/effects.rsi
-    growingState: "Egg Growing"
+    growingState: "Egg_Growing"
     grownState: "Egg"
-    openingState: "Egg Opening"
-    openedState: "Egg Opened"
+    openingState: "Egg_Opening"
+    openedState: "Egg_Opened"
   - type: CMUHunterShipHiveAssignment
     hive: Forsaken
 
@@ -8051,10 +8051,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Coal ore"
+    - state: "Coal_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Coal ore"
+    state: "Coal_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -8094,10 +8094,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Coal ore"
+    - state: "Coal_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Coal ore"
+    state: "Coal_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -8277,10 +8277,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Diamond ore"
+    - state: "Diamond_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Diamond ore"
+    state: "Diamond_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -8320,10 +8320,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Diamond ore"
+    - state: "Diamond_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Diamond ore"
+    state: "Diamond_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -8359,10 +8359,10 @@
     fragileSprite: CMU14/HunterShip/mob/xenos/effects.rsi
     sustainedSprite: CMU14/HunterShip/mob/xenos/effects.rsi
     currentSprite: CMU14/HunterShip/mob/xenos/effects.rsi
-    growingState: "Egg Growing"
+    growingState: "Egg_Growing"
     grownState: "Egg"
-    openingState: "Egg Opening"
-    openedState: "Egg Opened"
+    openingState: "Egg_Opening"
+    openedState: "Egg_Opened"
 
 
 - type: entity
@@ -8703,10 +8703,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Glass ore"
+    - state: "Glass_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Glass ore"
+    state: "Glass_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -8746,10 +8746,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Gold ore"
+    - state: "Gold_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Gold ore"
+    state: "Gold_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -8789,10 +8789,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Gold ore"
+    - state: "Gold_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Gold ore"
+    state: "Gold_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -8831,10 +8831,10 @@
     noRot: true
     enableOverrideDir: true
     layers:
-    - state: "Iron ore"
+    - state: "Iron_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Iron ore"
+    state: "Iron_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -8990,10 +8990,10 @@
     noRot: true
     enableOverrideDir: true
     layers:
-    - state: "Phoron ore"
+    - state: "Phoron_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Phoron ore"
+    state: "Phoron_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -9141,10 +9141,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Platinum ore"
+    - state: "Platinum_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Platinum ore"
+    state: "Platinum_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -9184,10 +9184,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Platinum ore"
+    - state: "Platinum_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Platinum ore"
+    state: "Platinum_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -10466,10 +10466,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Silver ore"
+    - state: "Silver_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Silver ore"
+    state: "Silver_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -10509,10 +10509,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Silver ore"
+    - state: "Silver_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Silver ore"
+    state: "Silver_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -10973,10 +10973,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Uranium ore"
+    - state: "Uranium_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Uranium ore"
+    state: "Uranium_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -11016,10 +11016,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Uranium ore"
+    - state: "Uranium_ore"
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/mining.rsi
-    state: "Uranium ore"
+    state: "Uranium_ore"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer
@@ -11182,12 +11182,12 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "broadcast receiver_off"
-    - state: "broadcast receiver"
+    - state: "broadcast_receiver_off"
+    - state: "broadcast_receiver"
       map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Icon
     sprite: CMU14/HunterShip/obj/structures/props/server_equipment.rsi
-    state: "broadcast receiver"
+    state: "broadcast_receiver"
   - type: ApcPowerReceiver
     needsPower: false
     powerLoad: 0
@@ -14696,10 +14696,10 @@
     enableOverrideDir: true
     overrideDir: South
     layers:
-    - state: "Normal Hellhound Sleeping"
+    - state: "Normal_Hellhound_Sleeping"
   - type: Icon
     sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
-    state: "Normal Hellhound Sleeping"
+    state: "Normal_Hellhound_Sleeping"
   - type: RemoveComponents
     components:
     - type: GenericVisualizer

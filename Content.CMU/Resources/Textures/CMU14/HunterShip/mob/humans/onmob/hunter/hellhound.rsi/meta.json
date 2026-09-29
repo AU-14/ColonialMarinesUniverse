@@ -8,22 +8,22 @@
   },
   "states": [
     {
-      "name": "Normal Hellhound Running",
+      "name": "Normal_Hellhound_Running",
       "directions": 4
     },
     {
-      "name": "Normal Hellhound Walking",
+      "name": "Normal_Hellhound_Walking",
       "directions": 4
     },
     {
-      "name": "Normal Hellhound Sleeping",
+      "name": "Normal_Hellhound_Sleeping",
       "directions": 4
     },
     {
-      "name": "Normal Hellhound Dead"
+      "name": "Normal_Hellhound_Dead"
     },
     {
-      "name": "Normal Hellhound Knocked Down"
+      "name": "Normal_Hellhound_Knocked_Down"
     },
     {
       "name": "wounds"
