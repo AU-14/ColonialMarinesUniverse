@@ -1031,6 +1031,10 @@
   - AU14VehicleCivVan
   - AU14VehicleCivEMSAmbulance
   - VehicleBlackfootTransport
+  - VehicleAPC
+  - VehicleAPCMed
+  - VehicleHumvee
+  - VehicleBlackfootDoorGunVariant
   name: CMB Crisis Intervention
   lorePrimer: AU14PrimerPlatoonCMBCIU
   Allegiance: UA
