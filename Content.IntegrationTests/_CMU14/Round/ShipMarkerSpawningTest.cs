@@ -25,6 +25,7 @@ public sealed class ShipMarkerSpawningTest
           components:
           - type: RMCPlanetMapPrototype
             mapId: USSBushRedux
+            inRotation: false
             govforinship: true
             opforinship: true
             govfordropships: 0

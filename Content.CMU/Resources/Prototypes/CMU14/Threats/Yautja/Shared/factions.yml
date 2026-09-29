@@ -3,8 +3,25 @@
   hostile:
   - RMCXeno
 
+- type: npcFaction
+  id: CMUYautjaBadBlood
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: CMUYautjaStranded
+  hostile:
+  - RMCXeno
+
 - type: entity
   id: FactionYautja
   categories: [ HideSpawnMenu ]
   components:
   - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - CMUYautja
+    - CMUYautjaOverseer
+    - CMUYautjaBadBlood
+    - CMUYautjaStranded
+    - CMUYautjaMilitary

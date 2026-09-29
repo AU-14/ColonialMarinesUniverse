@@ -46,7 +46,7 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, YautjaOpenMarkPanelActionEvent>(OnOpenMarkPanel);
         SubscribeLocalEvent<YautjaBracerComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<YautjaComponent, ComponentRemove>(OnYautjaRemoved);
-        SubscribeLocalEvent<YautjaMarkComponent, MobStateChangedEvent>(OnMarkedMobStateChanged);
+        InitializeTransitions();
         SubscribeLocalEvent<NewXenoEvolvedEvent>(OnNewXenoEvolved);
         SubscribeLocalEvent<XenoDevolvedEvent>(OnXenoDevolved);
         SubscribeLocalEvent<EntityTerminatingEvent>(OnEntityTerminating);
@@ -80,6 +80,8 @@ public sealed partial class YautjaMarkSystem : EntitySystem
             var newMarks = EnsureComp<YautjaMarkComponent>(newXeno);
             foreach (var (kind, hunter) in oldMarks.Marks)
                 newMarks.Marks[kind] = hunter;
+            foreach (var (kind, reason) in oldMarks.Reasons)
+                newMarks.Reasons[kind] = reason;
 
             Dirty(newXeno, newMarks);
             EnsureComp<StatusIconComponent>(newXeno);
@@ -133,19 +135,13 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         RemCompDeferred<YautjaHuntJournalComponent>(ent.Owner);
     }
 
-    private void OnMarkedMobStateChanged(Entity<YautjaMarkComponent> ent, ref MobStateChangedEvent args)
-    {
-        if (_net.IsClient || args.NewMobState != MobState.Dead)
-            return;
-        foreach (var (kind, hunter) in ent.Comp.Marks.ToArray())
-            TryClearMark(ent.Owner, kind, hunter);
-    }
-
     private void OnEntityTerminating(ref EntityTerminatingEvent args)
     {
         if (_net.IsClient)
             return;
         var uid = args.Entity.Owner;
+        if (TryComp(uid, out YautjaMarkComponent? marks))
+            ClearTargetMarks((uid, marks), targetDestroyed: true);
         var query = EntityQueryEnumerator<YautjaHuntJournalComponent>();
         while (query.MoveNext(out _, out var journal))
         {
@@ -197,6 +193,8 @@ public sealed partial class YautjaMarkSystem : EntitySystem
     {
         if (_net.IsClient || !TryResolveRecord(args.Actor, args.RecordId, args.Revision, out var target))
             return;
+        if (RequiresReason(args.Kind) && string.IsNullOrWhiteSpace(args.Reason))
+            return;
         if (TryMark(ent, args.Actor, target, args.Kind, args.Reason))
             UpdateUi(ent, args.Actor);
     }
@@ -206,13 +204,26 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         if (_net.IsClient || !CanUsePanel(ent, args.Actor) ||
             !TryResolveRecord(args.Actor, args.RecordId, args.Revision, out var target))
             return;
-        if (TryClearMark(target, args.Kind, args.Actor))
+        if (IsBadBloodHonorRestricted(args.Actor, args.Kind, popup: true))
+            return;
+        if (TryGetMarkOwner(target, args.Kind, out var owner) && owner != args.Actor &&
+            IsHonorOrDishonorMark(args.Kind))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-mark-unmark-not-owner"), args.Actor, args.Actor, PopupType.SmallCaution);
+            return;
+        }
+        // A gear-carrier warning can be cleared by any hunter who has observed the target.
+        // Other marks retain the journal's ownership check.
+        if (RemoveMark(target, args.Kind, args.Kind == YautjaMarkKind.GearCarrier ? null : args.Actor,
+                showPreyRemoved: true, actor: args.Actor))
             UpdateUi(ent, args.Actor);
     }
 
     private void OnChangeMsg(Entity<YautjaBracerComponent> ent, ref YautjaMarkPanelChangeMsg args)
     {
         if (_net.IsClient || !TryResolveRecord(args.Actor, args.RecordId, args.Revision, out var target))
+            return;
+        if (RequiresReason(args.NewKind) && string.IsNullOrWhiteSpace(args.Reason))
             return;
         if (TryChangeMark(ent, args.Actor, target, args.OldKind, args.NewKind, args.Reason))
             UpdateUi(ent, args.Actor);
@@ -221,7 +232,8 @@ public sealed partial class YautjaMarkSystem : EntitySystem
     public bool TryMark(Entity<YautjaBracerComponent> bracer, EntityUid hunter, EntityUid target,
         YautjaMarkKind kind, string? reason)
     {
-        if (_net.IsClient || !CanUsePanel(bracer, hunter) || !IsDefined(kind) || Deleted(target))
+        if (_net.IsClient || !CanUsePanel(bracer, hunter) || !IsDefined(kind) || Deleted(target) ||
+            hunter == target || IsBadBloodHonorRestricted(hunter, kind, popup: true))
             return false;
 
         var journal = EnsureComp<YautjaHuntJournalComponent>(hunter);
@@ -229,9 +241,21 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         var hasOwnedMark = HasOwnedMark(target, hunter);
         if (record == null || !journal.Recent.Contains(record.Id) && !hasOwnedMark)
             return false;
-        if (!CanMarkTarget(target, kind) ||
-            TryComp(target, out YautjaMarkComponent? existing) && existing.Marks.ContainsKey(kind) ||
-            kind == YautjaMarkKind.Prey && HunterHasPrey(hunter, target))
+        if (!CanMarkTarget(target, kind))
+            return false;
+        if (kind == YautjaMarkKind.Prey && HunterHasPrey(hunter, target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-mark-already-hunting"), hunter, hunter, PopupType.SmallCaution);
+            return false;
+        }
+        if (TryComp(target, out YautjaMarkComponent? existing) && existing.Marks.TryGetValue(kind, out var owner) &&
+            !IsRelationshipMark(kind))
+        {
+            _popup.PopupEntity(Loc.GetString(GetAlreadyMarkedText(kind), ("target", target), ("hunter", owner), ("mentor", owner),
+                ("reason", GetMarkReason(target, kind) ?? string.Empty)), hunter, hunter, PopupType.SmallCaution);
+            return false;
+        }
+        if (reason != null && RequiresReason(kind) && string.IsNullOrWhiteSpace(reason))
             return false;
 
         var mark = EnsureComp<YautjaMarkComponent>(target);
@@ -245,14 +269,17 @@ public sealed partial class YautjaMarkSystem : EntitySystem
             return false;
         }
 
-        mark.Marks.Add(kind, hunter);
+        if (!mark.Marks.TryAdd(kind, hunter))
+            return false;
+        if (trimmed != null)
+            mark.Reasons[kind] = trimmed;
         Dirty(target, mark);
-        if (!HasComp<YautjaComponent>(target))
-            EnsureComp<StatusIconComponent>(target);
+        EnsureComp<StatusIconComponent>(target);
         RecordMutation(hunter, target, record, journal);
         LogApply(hunter, target, kind, trimmed);
         if (!IsRelationshipMark(kind))
             NotifyApplied(hunter, target, kind);
+        BroadcastTransition(hunter, target, kind, false, trimmed);
         var applied = new YautjaMarkAppliedEvent(hunter, target, kind, trimmed);
         RaiseLocalEvent(target, ref applied);
         return true;
@@ -262,7 +289,10 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         YautjaMarkKind oldKind, YautjaMarkKind newKind, string? reason)
     {
         if (_net.IsClient || !CanUsePanel(bracer, hunter) || !IsDefined(oldKind) || !IsDefined(newKind) ||
-            oldKind == newKind || Deleted(target) || !CanMarkTarget(target, newKind) ||
+            oldKind == newKind || Deleted(target) || hunter == target || !CanMarkTarget(target, newKind) ||
+            IsBadBloodHonorRestricted(hunter, oldKind, popup: true) ||
+            IsBadBloodHonorRestricted(hunter, newKind, popup: true) ||
+            reason != null && RequiresReason(newKind) && string.IsNullOrWhiteSpace(reason) ||
             oldKind == YautjaMarkKind.Thrall && newKind == YautjaMarkKind.Blooded ||
             !TryComp(target, out YautjaMarkComponent? mark) ||
             !mark.Marks.TryGetValue(oldKind, out var owner) || owner != hunter ||
@@ -291,8 +321,13 @@ public sealed partial class YautjaMarkSystem : EntitySystem
             return false;
 
         foreach (var removal in removals)
+        {
             mark.Marks.Remove(removal);
+            mark.Reasons.Remove(removal);
+        }
         mark.Marks.Add(newKind, hunter);
+        if (trimmed != null)
+            mark.Reasons[newKind] = trimmed;
         Dirty(target, mark);
         foreach (var removal in removals)
         {
@@ -301,6 +336,8 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         }
         var applied = new YautjaMarkAppliedEvent(hunter, target, newKind, trimmed);
         RaiseLocalEvent(target, ref applied);
+        BroadcastTransition(hunter, target, oldKind, true, null);
+        BroadcastTransition(hunter, target, newKind, false, trimmed);
         RecordMutation(hunter, target, record, journal);
         _adminLog.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(hunter):actor} changed Yautja mark {oldKind} to {newKind} on {ToPrettyString(target):target}{ReasonSuffix(trimmed)}");
@@ -314,12 +351,17 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         return true;
     }
 
-    public void ForceMark(EntityUid hunter, EntityUid target, YautjaMarkKind kind, bool addStatusIcon = true)
+    public void ForceMark(EntityUid hunter, EntityUid target, YautjaMarkKind kind, bool addStatusIcon = true,
+        string? reason = null)
     {
         if (_net.IsClient || !IsDefined(kind))
             return;
         var mark = EnsureComp<YautjaMarkComponent>(target);
         mark.Marks[kind] = hunter;
+        if (TrimReason(reason) is { } trimmed)
+            mark.Reasons[kind] = trimmed;
+        else
+            mark.Reasons.Remove(kind);
         Dirty(target, mark);
         if (addStatusIcon)
             EnsureComp<StatusIconComponent>(target);
@@ -343,13 +385,17 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         if (_mob.IsDead(target))
             return false;
         var humanoid = HasComp<HumanoidProfileComponent>(target);
+        var human = humanoid && !HasComp<YautjaComponent>(target);
         var xeno = HasComp<XenoComponent>(target);
         return kind switch
         {
-            YautjaMarkKind.Thrall or YautjaMarkKind.Blooded => humanoid && !HasComp<YautjaComponent>(target),
-            YautjaMarkKind.Honored or YautjaMarkKind.GearCarrier => humanoid,
-            YautjaMarkKind.Student => HasComp<YautjaComponent>(target),
-            YautjaMarkKind.Prey or YautjaMarkKind.Dishonored => humanoid || xeno,
+            YautjaMarkKind.Thrall => humanoid && !HasComp<YautjaComponent>(target),
+            YautjaMarkKind.Blooded => humanoid &&
+                (!HasComp<YautjaComponent>(target) || HasComp<YautjaYoungbloodComponent>(target)),
+            YautjaMarkKind.Honored => human,
+            YautjaMarkKind.GearCarrier => humanoid,
+            YautjaMarkKind.Student => HasComp<YautjaYoungbloodComponent>(target),
+            YautjaMarkKind.Prey or YautjaMarkKind.Dishonored => human || xeno,
             _ => false,
         };
     }
@@ -383,7 +429,7 @@ public sealed partial class YautjaMarkSystem : EntitySystem
             }
         }
         foreach (var (target, kind) in owned)
-            TryClearMark(target, kind, hunter);
+            RemoveMark(target, kind, hunter, cleanupOnly: true);
     }
 
     public bool IsMarkedBy(EntityUid target, YautjaMarkKind kind, EntityUid hunter)
@@ -392,46 +438,23 @@ public sealed partial class YautjaMarkSystem : EntitySystem
                mark.Marks.TryGetValue(kind, out var owner) && owner == hunter;
     }
 
-    public bool TryClearMark(EntityUid target, YautjaMarkKind kind, EntityUid? hunter = null)
+    public bool TryGetMarkOwner(EntityUid target, YautjaMarkKind kind, out EntityUid hunter)
     {
-        if (_net.IsClient || !IsDefined(kind) ||
-            !TryComp(target, out YautjaMarkComponent? mark) ||
-            !mark.Marks.TryGetValue(kind, out var owner) ||
-            hunter is { } required && owner != required)
-            return false;
+        hunter = default;
+        return TryComp(target, out YautjaMarkComponent? mark) && mark.Marks.TryGetValue(kind, out hunter);
+    }
 
-        var removals = GetRemovalKinds(mark, owner, kind);
-        foreach (var removal in removals)
-        {
-            var attempt = new YautjaMarkRemoveAttemptEvent(owner, target, removal);
-            RaiseLocalEvent(target, ref attempt);
-            if (attempt.Cancelled)
-                return false;
-        }
-        foreach (var removal in removals)
-            mark.Marks.Remove(removal);
-        if (mark.Marks.Count == 0)
-            RemCompDeferred<YautjaMarkComponent>(target);
-        else
-            Dirty(target, mark);
-        foreach (var removal in removals)
-        {
-            var removed = new YautjaMarkRemovedEvent(owner, target, removal);
-            RaiseLocalEvent(target, ref removed);
-        }
-        if (TryComp(owner, out YautjaHuntJournalComponent? journal) &&
-            journal.Targets.TryGetValue(target, out var recordId) && journal.Records.TryGetValue(recordId, out var record))
-            RecordMutation(owner, target, record, journal);
-        _adminLog.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(owner):actor} removed Yautja mark {kind} from {ToPrettyString(target):target}");
-        if (kind != YautjaMarkKind.Thrall)
-        {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-mark-removed", ("target", target),
-                ("kind", Loc.GetString(GetMarkName(kind)))), owner, owner);
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-mark-removed-target",
-                ("kind", Loc.GetString(GetMarkName(kind)))), target, target);
-        }
-        return true;
+    public string? GetMarkReason(EntityUid target, YautjaMarkKind kind)
+    {
+        return TryComp(target, out YautjaMarkComponent? mark) && mark.Reasons.TryGetValue(kind, out var reason)
+            ? reason
+            : null;
+    }
+
+    public bool TryClearMark(EntityUid target, YautjaMarkKind kind, EntityUid? hunter = null,
+        bool showPreyRemoved = false)
+    {
+        return RemoveMark(target, kind, hunter, showPreyRemoved: showPreyRemoved);
     }
 
     private static List<YautjaMarkKind> GetRemovalKinds(YautjaMarkComponent mark, EntityUid hunter,

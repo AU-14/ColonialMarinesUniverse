@@ -8,7 +8,7 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: upp_pvt
+      state: spp_pvt
   - type: AssignSquad
     whitelist:
       tags:
@@ -26,7 +26,7 @@
       RMCSkillMedical: 2
       RMCSkillSurgery: 3
   - type: JobPrefix
-    prefix: Rifleman
+    prefix: rumc-job-prefix-rifleman
   - type: MarineOrders
   - type: RMCTrackable
   - type: RMCPointing
@@ -71,7 +71,7 @@
         time: 5400 # 1.5 hours
   spawnMenuRoleName: Liquidator Medic
   startingGear: RuMCGearUPPLiquidatorMedic
-  greeting: Вы член группы ликвидаторов UPP! Ваша задача выжечь дотла всю биологическую угрозу на колонии, ни шагу назад!
+  greeting: rumc-liquidator-greeting
   icon: "RuMCJobIconUPPLiquidatorMedic"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor

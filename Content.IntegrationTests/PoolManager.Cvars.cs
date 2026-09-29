@@ -1,5 +1,6 @@
 #nullable enable
 using Content.Shared.CMU14.BalanceRating;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CCVar;
 using Robust.Shared;
 
@@ -42,5 +43,7 @@ public static partial class PoolManager
         (CCVars.MovementMobPushing.Name,       "false"),
         (CCVars.ResourceUploadingStoreDeletionDays.Name, "0"),
         (CMUBalanceRatingCVars.AutomaticEnabled.Name, "false"),
+        // Tests that exercise automatic hunts opt in; pooled round restarts must not load extra maps.
+        (YautjaPredatorRoundCVars.RandomEnabled.Name, "false"),
     };
 }

@@ -7,10 +7,13 @@ using Content.Server.CMU14.Round;
 using Content.Shared.Access.Components; // CMU14: ATM card details in character notes
 using Content.Shared.Mind;
 using Content.Server.GameTicking;
+using Content.Server.CMU14.Yautja;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Util;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.util;
+using Content.Shared.CMU14.util;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CharacterInfo;
 using Content.Shared.Inventory;
 using Content.Shared.Objectives;
@@ -35,6 +38,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ColonyBankSystem _bank = default!; // CMU14: ATM card details in character notes
+    [Dependency] private YautjaRankManager _yautjaRank = default!;
 
     private (int roundId, string? threatId) _knowledgeKey = (-1, null);
     private string? _roundKnowledgeLine;
@@ -90,6 +94,15 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
             // Get briefing
             briefing = _roles.MindGetBriefing(mindId);
+        }
+
+        // The character info panel must use the server-owned whitelist rank.
+        // A Yautja may be clanless, so the entity's ClanRank is not authoritative here.
+        if (HasComp<YautjaComponent>(entity) && jobId != "CMUYautjaBadBlood")
+        {
+            var youngbloodRole = jobId == "CMUYautjaYoungblood";
+            var rank = _yautjaRank.ResolveCached(args.SenderSession.UserId, youngbloodRole);
+            jobTitle = Loc.GetString(YautjaRankMetadata.For(rank).LocalizedName);
         }
 
         var isThreatRole = mind != null && IsThreatMind(mind);
@@ -273,9 +286,9 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
         if (selectedPlanet.LorePrimer is { } planetPrimerId &&
             _prototypes.TryIndex(planetPrimerId, out LorePrimerPrototype? primer) &&
-            !string.IsNullOrWhiteSpace(primer.PlanetText))
+            primer.PlanetText is { } planetTextKey) // RuMC edit
         {
-            lines.Add(primer.PlanetText);
+            lines.Add(Loc.GetString(planetTextKey)); // RuMC edit
             return;
         }
 
@@ -290,17 +303,17 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
         if (platoon.LorePrimer is { } platoonPrimerId &&
             _prototypes.TryIndex(platoonPrimerId, out LorePrimerPrototype? primer) &&
-            !string.IsNullOrWhiteSpace(primer.PlatoonInfo))
+            // RuMC edit start
+            primer.PlatoonInfo is { } platoonInfoKey)
         {
-            var platoonInfo = primer.PlatoonInfo.Trim();
-            lines.Add(platoonInfo.StartsWith("Platoon:", StringComparison.OrdinalIgnoreCase)
-                ? platoonInfo
-                : $"Platoon: {platoonInfo}");
+            lines.Add(Loc.GetString("lore-primer-platoon-label",
+                ("info", Loc.GetString(platoonInfoKey))));
+            // RuMC edit end
             return;
         }
 
         if (!string.IsNullOrWhiteSpace(platoon.Name))
-            lines.Add($"Platoon: {platoon.Name}");
+            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", platoon.Name))); // RuMC edit
     }
 
     private bool IsThreatMind(MindComponent mind)

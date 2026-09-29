@@ -98,6 +98,8 @@
   - type: Icon
     sprite: _RuMC14/Objects/Misc/flares.rsi
     state: flare
+  - type: Item
+    sprite: _RuMC14/Objects/Misc/flares.rsi
     inhandVisuals:
       left:
       - state: cas_inhand-left
