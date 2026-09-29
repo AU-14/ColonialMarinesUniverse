@@ -1,0 +1,42 @@
+<Document>
+  # Pipe Bombs
+
+  A pipe bomb is a crude, homemade explosive. It is cheap to make from common parts, has a short and unpredictable fuse, and throws out a burst of shrapnel. It is a favourite of insurgents and anyone else who can't get real grenades.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUPipeBomb" Caption="Pipe bomb"/>
+  </Box>
+
+  ## What You Need
+  - [bold]5 metal sheets[/bold] in a single stack.
+  - [bold]A welder[/bold] with at least 5 units of fuel.
+  - [bold]A lighter[/bold]. It is used up to make the fuse, so bring a second one to light the bomb.
+  - [bold]5 lengths of cable[/bold] in a single coil.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMSheetMetal10"/>
+    <GuideEntityEmbed Entity="CMWelder"/>
+    <GuideEntityEmbed Entity="RMCLighter"/>
+    <GuideEntityEmbed Entity="RMCCableCoil"/>
+  </Box>
+
+  ## Making It
+  Every step is a short do-after, so stand still until it finishes.
+
+  <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="CMUPipeBombCasing" Caption="Casing"/></Box>
+  - [bold]1. Casing[/bold]: turn your welder on and use it on the stack of metal sheets. After 5 seconds it uses 5 sheets and 5 fuel and gives you an empty pipe bomb casing.
+
+  <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="CMUPipeBombFuse" Caption="Casing with fuse"/></Box>
+  - [bold]2. Fuse[/bold]: use a lighter on the casing. After 2 seconds the lighter is used up and the casing is ready for wiring.
+
+  <Box HorizontalAlignment="Left"><GuideEntityEmbed Entity="CMUPipeBomb" Caption="Finished pipe bomb"/></Box>
+  - [bold]3. Wiring[/bold]: use a cable coil on it. After 2 seconds it uses 5 cable and you have a finished pipe bomb.
+
+  ## Using It
+  - Light the fuse by using a lit lighter or another igniter on the pipe bomb, then throw it.
+  - The fuse is [color=#FFA500]random[/color]: it goes off anywhere from 1 to 4 seconds after lighting. Don't hold on to it.
+  - It explodes and throws out 20 pieces of shrapnel in every direction. Anyone standing near it will be hurt badly.
+  ## Tips
+  - Make the casings ahead of time. Metal and fuel are the slow part, and a casing is harmless until it's wired.
+  - Throw it around corners or over cover. The short fuse leaves little time for the target to run.
+</Document>

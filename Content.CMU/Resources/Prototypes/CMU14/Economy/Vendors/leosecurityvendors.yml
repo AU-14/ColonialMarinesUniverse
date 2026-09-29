@@ -63,6 +63,7 @@
       entries:
       - id: RMCGunCasePistolM1984
       - id: AU14GunCasePistolHG45
+      - id: CMUGunCasePistolTPR9Civilian
     - name: Restraining Gear
       entries:
       - id: RMCHandcuffs

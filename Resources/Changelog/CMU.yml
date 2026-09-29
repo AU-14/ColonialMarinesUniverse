@@ -11123,5 +11123,64 @@
   id: 707
   time: '2026-09-29T00:40:51.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2047
+- author: troytroy400
+  changes:
+  - message: Added a Forensics guide to the guidebook, a defib guide and a guide on
+      how to make pipebombs in game.
+    type: Add
+  - message: The forensic scanner now shows time since death, gunshot residue, and
+      hair and skin DNA left on clothes. Fingerprints and DNA can be copied from the
+      results.
+    type: Add
+  - message: Scanning a person or body with a forensics scanner now gives a full injury
+      report, with cause of death for bodies. DNA now only shows a match if that person's
+      info is in the criminal records computer.
+    type: Add
+  - message: Payphone booths now work.
+    type: Add
+  - message: Colony requisitions can now order mobile phones, colony headsets, the
+      civilian Kramer and its magazines, and the TPR9 civilian handgun, which replaces
+      the military TPR pistol.
+    type: Add
+  - message: The CMB equipment vendor now offers a TPR9 civilian handgun case.
+    type: Add
+  - message: Defib times across the board are now way quicker.
+    type: Tweak
+  - message: Defibrillators now have energy settings from 50 J to 200 J. The Lifepak
+      can be raised or lowered by hand, lower energies heal less but burn less, and
+      higher energies heal more but leave chest burns and risk eschar. This system
+      is optional, you can still use a lifepak like normal.
+    type: Add
+  - message: AEDs now analyze the patient before every shock, pick their own energy
+      and refuse to charge when no shock is needed.
+    type: Add
+  - message: The Lifepak can be set down and hooked up to a patient as a monitor,
+      with a screen showing ECG, pleth and CO2 traces, heart rate, heart health, SpO2,
+      blood pressure, EtCO2 and patient temperature.
+    type: Add
+  - message: The Lifepak monitor can analyze the patient and select the best energy
+      and can charge and shock hands free through its leads if connected to a patient.
+    type: Add
+  - message: New AED and Lifepak voice prompts, charge, shock, heartbeat, flatline
+      and alarm sounds.
+    type: Add
+  - message: The stethoscope now plays breath sounds that match the state of the patient's
+      lungs.
+    type: Add
+  - message: The lifepak sprite now has proper working visuals.
+    type: Tweak
+  - message: Using the Lifepak's monitor and switching it on or off now need medical
+      training.
+    type: Tweak
+  - message: The handheld radio crate in colony requisitions now costs 150.
+    type: Tweak
+  - message: Removed the stun when climbing out of lockers, you still drop all items
+      when entering one however.
+    type: Remove
+  - message: The Z-level tab in the building menu is now properly hidden.
+    type: Remove
+  id: 708
+  time: '2026-09-29T17:24:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2049
 Name: CMU
 Order: -1

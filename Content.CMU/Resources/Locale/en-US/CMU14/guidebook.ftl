@@ -77,3 +77,6 @@ cmu-guide-entry-antag-rider = The Rider
 cmu-guide-entry-hearing-loss = Hearing Loss
 cmu-guide-entry-cmu = Guidebook
 cmu-guide-entry-mortar = Mortar
+cmu-guide-entry-pipe-bomb = Pipe Bombs
+cmu-guide-entry-forensics = Forensics
+cmu-guide-entry-defibrillators = Defibrillators

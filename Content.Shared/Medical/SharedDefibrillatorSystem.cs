@@ -150,6 +150,13 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
         if (!CanZap(ent, target, user))
             return false;
 
+        // cmu edit start: an AED analyzes the rhythm first and won't charge without a shockable one
+        var cmuAttempt = new Content.Shared.CMU14.Medical.Defibrillator.CMUDefibZapAttemptEvent(user, target);
+        RaiseLocalEvent(ent.Owner, ref cmuAttempt);
+        if (cmuAttempt.Cancelled)
+            return false;
+        // cmu edit end
+
         var delay = ent.Comp.DoAfterDuration +
                     ent.Comp.SkillMultiplierDuration * _skills.GetSkillDelayMultiplier(user, ent.Comp.Skill);
         var doAfter = new DoAfterArgs(EntityManager, user, delay, new DefibrillatorZapDoAfterEvent(),
@@ -168,6 +175,10 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
             return false;
 
         _rmcDefibrillator.StartChargingAudio((ent.Owner, ent.Comp), user);
+        // cmu edit start: voice prompts are timed against the charge
+        var cmuStarted = new Content.Shared.CMU14.Medical.Defibrillator.CMUDefibZapStartedEvent(user, target, delay);
+        RaiseLocalEvent(ent.Owner, ref cmuStarted);
+        // cmu edit end
         _popup.PopupEntity(Loc.GetString("defibrillator-begin", ("name", Identity.Entity(user, EntityManager)), ("target", Identity.Entity(target, EntityManager))), target, PopupType.SmallCaution);
         return true;
     }
@@ -299,10 +310,15 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
             }
         }
 
+        // cmu edit start: the shock damage follows the selected energy
+        var zapDamage = EntityManager.System<Content.Shared.CMU14.Medical.Defibrillator.CMUDefibChargeSystem>()
+            .GetZapDamage(ent.Owner, ent.Comp.ZapDamage);
+        // cmu edit end
+
         _electrocution.TryDoElectrocution(
             target,
             ent.Owner,
-            ent.Comp.ZapDamage,
+            zapDamage, // cmu edit
             ent.Comp.WritheDuration,
             true,
             ignoreInsulation: isOriginal

@@ -8,6 +8,9 @@
   - AU14Comms
   - AU14MedicalV2
   - CMUGuideMortar
+  - CMUGuidePipeBomb
+  - CMUGuideForensics
+  - CMUGuideDefibrillators
   - CMUResearchIndex
   - CMUGuideHearingLoss
   - CMUGuideRoleRider
@@ -19,6 +22,27 @@
   name: cmu-guide-entry-mortar
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUMortar.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuidePipeBomb
+  name: cmu-guide-entry-pipe-bomb
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUPipeBomb.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideForensics
+  name: cmu-guide-entry-forensics
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUForensics.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideDefibrillators
+  name: cmu-guide-entry-defibrillators
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUDefibrillators.xml"
 
 - type: guideEntry
   parent: RMC
