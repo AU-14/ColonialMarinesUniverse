@@ -36,3 +36,14 @@ public enum AtmSideButton : byte
     L1, L2, L3,
     R1, R2, R3,
 }
+
+/// <summary>
+///     An account login cached by an ATM, which a siphon rig can leak.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class SkimmedAccount
+{
+    public int AccountNumber;
+    public string Name = string.Empty;
+    public int Pin;
+}

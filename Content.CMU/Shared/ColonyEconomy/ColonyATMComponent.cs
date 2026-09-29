@@ -51,4 +51,10 @@ public sealed partial class ColonyAtmComponent : Component
     ///     Who is operating the ATM right now (for forensics / deposits).
     /// </summary>
     public EntityUid? CurrentUser;
+
+    /// <summary>
+    ///     The most recent card logins at this ATM, with the PIN that was typed (newest last).
+    ///     Server-only; a sapper's siphon rig dumps and wipes this list when it hacks the machine.
+    /// </summary>
+    public List<SkimmedAccount> RecentLogins = new();
 }

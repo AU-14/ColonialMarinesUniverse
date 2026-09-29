@@ -52,6 +52,7 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
 
         SubscribeLocalEvent<SapperAtmHackingComponent, AfterInteractEvent>(OnToolAfterInteract);
         SubscribeLocalEvent<SapperAtmHackingComponent, SapperAtmHackDoAfterEvent>(OnHackFinished);
+        SubscribeLocalEvent<SapperAtmHackingComponent, BoundUIOpenedEvent>(OnRigUiOpened);
 
         // Registered before the real ATM system so a disrupted machine buzzes instead of opening.
         SubscribeLocalEvent<SapperAtmHackedComponent, InteractUsingEvent>(OnHackedInteractUsing, before: new[] { typeof(ColonyAtmSystem) });
@@ -189,9 +190,47 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
         // Kick anyone mid-transaction off the now-malfunctioning screen.
         _ui.CloseUi(atm, ColonyAtmUi.Key);
 
+        // The card reader stays visibly tampered with (and multitool-detectable) after the self-repair.
+        EnsureComp<ColonyAtmTamperedComponent>(atm);
+        var leaked = LeakLogins(ent, atm);
+
         if (ent.Comp.SuccessSound is { } success)
             _audio.PlayPvs(success, atm);
         _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-hacked", ("amount", haul)), atm, user);
+        if (leaked > 0)
+            _popup.PopupEntity(Loc.GetString("cmu-sapper-atm-logins-leaked", ("count", leaked)), user, user);
+    }
+
+    /// <summary>
+    ///     While clamped on, the rig also reads out the ATM's cached card logins (account numbers and PINs)
+    ///     and wipes them from the machine. Returns how many were leaked.
+    /// </summary>
+    private int LeakLogins(Entity<SapperAtmHackingComponent> rig, EntityUid atm)
+    {
+        if (!TryComp(atm, out ColonyAtmComponent? atmComp) || atmComp.RecentLogins.Count == 0)
+            return 0;
+
+        var leaked = atmComp.RecentLogins.Count;
+        foreach (var login in atmComp.RecentLogins)
+        {
+            rig.Comp.CapturedAccounts.RemoveAll(a => a.AccountNumber == login.AccountNumber);
+            rig.Comp.CapturedAccounts.Add(login);
+        }
+
+        atmComp.RecentLogins.Clear();
+        UpdateRigUi(rig);
+        return leaked;
+    }
+
+    private void OnRigUiOpened(Entity<SapperAtmHackingComponent> ent, ref BoundUIOpenedEvent args)
+    {
+        UpdateRigUi(ent);
+    }
+
+    private void UpdateRigUi(Entity<SapperAtmHackingComponent> rig)
+    {
+        var state = new SapperSiphonRigBuiState(new List<SkimmedAccount>(rig.Comp.CapturedAccounts));
+        _ui.SetUiState(rig.Owner, SapperSiphonRigUiKey.Key, state);
     }
 
     // ----- budget console: drain the colony budget in full, big feedback ------------------------------

@@ -89,7 +89,7 @@ public sealed class ColonyAtmTest
     }
 
     [Test]
-    public async Task AtmOnlyTakesInputFromItsUser()
+    public async Task AtmOnlyTakesInputFromItsUserAndCachesLogin()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -129,12 +129,17 @@ public sealed class ColonyAtmTest
             foreach (var digit in pinText + "99")
                 Press(owner, digit.ToString());
             Assert.That(comp.KeypadBuffer, Has.Length.EqualTo(4));
+            Assert.That(comp.RecentLogins, Is.Empty, "Login cached before the PIN was entered");
 
             Confirm(owner);
             Assert.Multiple(() =>
             {
                 Assert.That(comp.PinAuthenticated, Is.True);
                 Assert.That(comp.Screen, Is.EqualTo(AtmScreen.MainMenu));
+                // Cached for a siphon rig to leak.
+                Assert.That(comp.RecentLogins, Has.Count.EqualTo(1));
+                Assert.That(comp.RecentLogins[0].AccountNumber, Is.EqualTo(card.AccountNumber));
+                Assert.That(comp.RecentLogins[0].Pin, Is.EqualTo(pin));
             });
 
             // A stranger can't drive an authenticated session either.

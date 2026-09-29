@@ -31,6 +31,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
     private const int PinLength = 4;
     private const int MaxAmountDigits = 9;
+    private const int MaxRecentLogins = 10;
 
     // Stack type shared by every dollar-bill denomination (RMCSpaceCash1, 10, 100, 1000, ...).
     private const string CashStackType = "Dollar";
@@ -338,6 +339,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
             comp.PinAuthenticated = true;
             comp.Screen = AtmScreen.MainMenu;
             comp.StatusMessage = string.Empty;
+
+            RecordLogin(comp, card);
         }
         else if (locked)
         {
@@ -349,6 +352,23 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         }
 
         RefreshUi(uid, comp);
+    }
+
+    /// <summary>
+    ///     Caches the login so a siphon rig clamped onto this ATM can leak it later.
+    /// </summary>
+    private static void RecordLogin(ColonyAtmComponent comp, IdCardComponent card)
+    {
+        comp.RecentLogins.RemoveAll(a => a.AccountNumber == card.AccountNumber);
+        comp.RecentLogins.Add(new SkimmedAccount
+        {
+            AccountNumber = card.AccountNumber,
+            Name = card.FullName ?? "Unknown",
+            Pin = card.AtmPin,
+        });
+
+        if (comp.RecentLogins.Count > MaxRecentLogins)
+            comp.RecentLogins.RemoveAt(0);
     }
 
     // ─── Withdraw ──────────────────────────────────────────────────────────
