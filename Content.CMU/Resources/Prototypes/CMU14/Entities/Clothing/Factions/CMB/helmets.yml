@@ -1,5 +1,5 @@
 - type: entity
-  parent: ArmorHelmetM10
+  parent: RMCArmorHelmetM10CMB
   id: AU14CMBCIUHelmet
   name: CMB CIU Helmet
   description: A CMB Crisis Intervention Unit riot helmet.
