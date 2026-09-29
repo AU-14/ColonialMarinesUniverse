@@ -10160,6 +10160,8 @@
     overrideDir: South
     layers:
     - state: "sheet-phoronglass"
+  - type: Stack
+    layerStates: []
   - type: Icon
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
     state: "sheet-phoronglass"
@@ -10203,6 +10205,8 @@
     overrideDir: South
     layers:
     - state: "sheet-phoronrglass"
+  - type: Stack
+    layerStates: []
   - type: Icon
     sprite: CMU14/HunterShip/obj/items/stacks.rsi
     state: "sheet-phoronrglass"

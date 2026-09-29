@@ -117,6 +117,8 @@
   name: SVAROG sniper rifle case
   description: Case for the sniper rifle SVAROG
   components:
+  - type: Item
+    size: Ginormous
   - type: Storage
     maxItemSize: Ginormous
     grid:
@@ -355,6 +357,8 @@
   name: Type23 case
   description: Case for the Type23
   components:
+  - type: Item
+    size: Ginormous
   - type: Storage
     maxItemSize: Ginormous
     grid:

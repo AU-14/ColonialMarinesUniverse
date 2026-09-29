@@ -17,6 +17,7 @@ using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Storage.Components;
+using Content.Shared.Stacks;
 using Content.Shared.VendingMachines;
 using Content.Shared.Verbs;
 using Content.Server.CMU14.Light;
@@ -44,6 +45,36 @@ namespace Content.IntegrationTests.CMU14.HunterShip;
 [TestFixture]
 public sealed class HunterShipVisualRegressionTest
 {
+    [TestCase("CMUHunterShipPlacedBaseItemSheetPhoronglassSouth", "sheet-phoronglass")]
+    [TestCase("CMUHunterShipPlacedBaseItemSheetPhoronrglassSouthOffset2x4", "sheet-phoronrglass")]
+    public async Task HunterShipGlassStackKeepsItsSpriteWhenCountChanges(string prototype, string state)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+        EntityUid stack = default;
+        await server.WaitPost(() => stack = server.EntMan.SpawnEntity(prototype, map.GridCoords));
+
+        foreach (var count in new[] { 1, 25, 50 })
+        {
+            await server.WaitPost(() => server.System<SharedStackSystem>().SetCount(stack, count));
+            await pair.RunTicksSync(5);
+            await client.WaitAssertion(() =>
+            {
+                var uid = client.EntMan.GetEntity(server.EntMan.GetNetEntity(stack));
+                var sprite = client.EntMan.GetComponent<SpriteComponent>(uid);
+                Assert.That(client.EntMan.GetComponent<StackComponent>(uid).Count, Is.EqualTo(count));
+                Assert.That(sprite.AllLayers.Count(), Is.EqualTo(1));
+                Assert.That(sprite.AllLayers.Single().RsiState.Name, Is.EqualTo(state));
+                Assert.That(sprite.AllLayers.Single().Visible, Is.True);
+            });
+        }
+
+        await server.WaitPost(() => server.EntMan.DeleteEntity(stack));
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task HunterShipLadderWrappersDeclareCmss13Directions()
     {
