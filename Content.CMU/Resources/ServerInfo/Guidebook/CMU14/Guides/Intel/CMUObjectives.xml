@@ -1,0 +1,32 @@
+<Document>
+  # Objectives
+
+  Your objectives are picked at the start of the round and shown on your faction's objectives console. There are [bold]minor[/bold] and [bold]major[/bold] objectives, which are worth more, and one [bold]final objective[/bold] that unlocks once you've earned enough points. Some objectives repeat, and can be completed again for more points.
+
+  ## Kill
+  Kill enemy fighters, a specific target such as the enemy commander, or creatures.
+  - Threat kills only count when your faction does the killing. A creature that evolves, bleeds out, or turns into something else doesn't count.
+
+  ## Fetch
+  Find an objective item somewhere on the map and bring it to your faction's [bold]Analyzer Machine[/bold].
+  - Use the item on the Analyzer to scan it in. For something too big to carry, bring it next to the Analyzer and use its [bold]Scan[/bold] option instead.
+  - Objective items show up on a data detector. See [textlink="Intel" link="CMUGuideIntel"].
+
+  ## Capture
+  Raise your faction's flag on a flagpole. It takes a few seconds, and you can tear down an enemy flag to put yours up. Holding it earns points over time.
+
+  ## Hold the Zone
+  Some objectives mark out a zone on the map. Whichever side controls it earns points every few seconds. Some zones move to a new spot after a while.
+
+  ## Destroy
+  Destroy a specific target, such as a piece of equipment or a structure.
+
+  ## Arrest
+  Capture a specific person alive by restraining them.
+
+  ## Interact
+  Work on something in the world, such as hacking a computer or repairing equipment. Some need particular training, access or tools.
+
+  ## Final Objective
+  Once your faction's points reach the target shown on the objectives console, a final objective unlocks. Complete it to win.
+</Document>
