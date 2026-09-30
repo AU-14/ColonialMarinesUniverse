@@ -55,6 +55,10 @@
     sound:
       path: "/Audio/Effects/flash_bang.ogg"
     positional: true
+  # cmu edit start
+  - type: FlashOnTrigger
+    range: 7
+  # cmu edit end
   - type: DeleteOnTrigger
   - type: SpawnOnTrigger
     proto: GrenadeFlashEffect
