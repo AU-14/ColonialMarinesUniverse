@@ -30,16 +30,16 @@
     - potatoes
     - salty
     - Fruit
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodTinIRPTrash
@@ -70,16 +70,16 @@
     flavors:
     - salty
     - meaty
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodTinIRPTrashMeat
@@ -110,16 +110,16 @@
     - bacon
     - meaty
     - salty
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodTinIRPTrashMeat2
@@ -151,16 +151,16 @@
     - bacon
     - vegetables
     - salty
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 20
         - ReagentId: Protein
           Quantity: 25
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodTinIRPTrashPorridge
@@ -192,16 +192,16 @@
     - bacon
     - vegetables
     - salty
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodTinIRPTrashPorridge2
@@ -233,16 +233,16 @@
     - bacon
     - vegetables
     - salty
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodTinIRPTrashPorridge3
@@ -272,16 +272,16 @@
     flavors:
     - sweet
     - creamy
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodTinIRPTrashMilk
@@ -311,16 +311,16 @@
     flavors:
     - sweet
     - creamy
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodTinIRPTrashMilk2
@@ -351,16 +351,16 @@
     - salty
     - vegetables
     - meaty
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 10
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodLightTinIRPTrashStew
@@ -388,16 +388,16 @@
     flavors:
     - salty
     - vegetables
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 5
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodLightTinIRPTrashStew2
@@ -427,16 +427,16 @@
     - rice
     - vegetables
     - bacon
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 10
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodLightTinIRPTrashBuckwheat
@@ -466,16 +466,16 @@
     - rice
     - vegetables
     - fishy
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 10
         - ReagentId: Protein
           Quantity: 10
-  - type: Food
+  - type: Edible
     transferAmount: 10
     trash:
     - RuMCFoodLightTinIRPTrashRise

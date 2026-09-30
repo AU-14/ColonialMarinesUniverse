@@ -4,14 +4,18 @@
   name: UPP bottled spring water
   description: Ozonated water is completely safe for consumption.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 50
-        reagents:
-        - ReagentId: Water
-          Quantity: 45
-  - type: Drink
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Water
+        Quantity: 45
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    utensil: None
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Drink/upp_water_bottle.rsi
     layers:
@@ -48,13 +52,13 @@
   name: UPP packaging of pineapple juice
   description:
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 50
-        reagents:
-        - ReagentId: RMCJuiceBug
-          Quantity: 45
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: RMCJuiceBug
+        Quantity: 45
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Drink/upp_juice.rsi
     layers:

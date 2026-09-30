@@ -9,7 +9,7 @@
 #  - type: Sprite
 #    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
 #    state: cookie-peanutbutter
-#  - type: Food
+#  - type: Edible
 #    transferAmount: 3
 #  - type: SolutionContainerManager
 #    solutions:
@@ -54,7 +54,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: gallet
-  - type: Food
+  - type: Edible
     transferAmount: 3
   - type: SolutionContainerManager
     solutions:
@@ -76,7 +76,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: fish
-  - type: Food
+  - type: Edible
     transferAmount: 1
   - type: SolutionContainerManager
     solutions:
@@ -102,7 +102,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: pie
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -130,7 +130,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: chicken
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -156,7 +156,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: mashed_potatoes
-  - type: Food
+  - type: Edible
     transferAmount: 5
   - type: SolutionContainerManager
     solutions:
@@ -183,7 +183,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: candies
-  - type: Food
+  - type: Edible
     transferAmount: 2
   - type: SolutionContainerManager
     solutions:
@@ -207,7 +207,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: toffees
-  - type: Food
+  - type: Edible
     transferAmount: 2
   - type: SolutionContainerManager
     solutions:
@@ -231,7 +231,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: curd
-  - type: Food
+  - type: Edible
     transferAmount: 9
   - type: SolutionContainerManager
     solutions:
@@ -259,7 +259,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: chocolate
-  - type: Food
+  - type: Edible
     transferAmount: 4
   - type: SolutionContainerManager
     solutions:
@@ -284,7 +284,7 @@
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
     state: hematogen
-  - type: Food
+  - type: Edible
     transferAmount: 6
   - type: SolutionContainerManager
     solutions:

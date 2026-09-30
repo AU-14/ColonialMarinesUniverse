@@ -1,6 +1,0 @@
-- type: jobIcon
-  parent: CMJobIconBase
-  id: AU14JobIconOPFORWeaponsSpecialist
-  icon:
-    sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: ws
