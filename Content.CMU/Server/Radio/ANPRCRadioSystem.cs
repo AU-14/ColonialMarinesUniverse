@@ -46,7 +46,6 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 {
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedAU14CallsignConsoleSystem _consoleAccess = default!;
@@ -61,6 +60,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private LanguageSystem _language = default!;
     [Dependency] private ANPRCRangeSystem _range = default!;
     [Dependency] private ANPRCSweepSystem _sweep = default!;
+    [Dependency] private ANPRCChatSystem _anprcChat = default!;
     [Dependency] private AU14CommsToggleSystem _comms = default!;
     [Dependency] private PaperSystem _paper = default!;
     [Dependency] private BatterySystem _battery = default!;
@@ -189,7 +189,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             TryComp(ctWearing.Radio, out ANPRCRadioComponent? ctRadio) &&
             ctRadio.Mode == RadioMode.CipherText &&
             !string.IsNullOrEmpty(args.Channel.Faction) &&
-            !_crypto.HasMatchingCrypto(ent.Owner, args.Channel))
+            !_crypto.HasMatchingCrypto(ent.Owner, args.Channel) &&
+            !_crypto.HasBrokenKey(ent.Owner, args.Channel.Faction))
         {
             return;
         }
@@ -258,17 +259,21 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
                     args.Language,
                     args.MessageSource);
 
-                var senderName = FormattedMessage.EscapeText(GetSenderDisplayName(args.MessageSource));
-                var message = FormattedMessage.EscapeText(heard);
-                var wrapped = $"[color=#FF6B6B]{senderName}: {message}[/color]";
-
-                _chatManager.ChatMessageToOne(
-                    ChatChannel.Radio,
-                    heard,
-                    wrapped,
-                    args.MessageSource,
-                    false,
-                    actor.PlayerSession.Channel);
+                // somebody else's net goes under its own tag; one of the operator's own nets
+                // reads exactly as the headset would have drawn it
+                if (intercepted)
+                {
+                    _anprcChat.Intercept(
+                        actor.PlayerSession,
+                        args.MessageSource,
+                        GetSenderDisplayName(args.MessageSource),
+                        args.Channel.LocalizedName,
+                        heard);
+                }
+                else
+                {
+                    _anprcChat.Traffic(actor.PlayerSession, args.ChatMsg.Message, heard);
+                }
             }
         }
 
@@ -286,7 +291,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             UpdateRelayAnchor(ent);
             UpdateBuiState(ent);
 
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString(
                     "anprc-scan-switched",
                     ("slot", slot + 1),
@@ -832,7 +837,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     public bool KnowsFrequency(ANPRCRadioComponent radio, RadioChannelPrototype channel)
     {
         if (string.IsNullOrEmpty(channel.Faction) ||
-            string.IsNullOrEmpty(radio.OperatorFaction) ||
+            !string.IsNullOrEmpty(radio.OperatorFaction) &&
             string.Equals(channel.Faction, radio.OperatorFaction, StringComparison.OrdinalIgnoreCase))
         {
             return true;

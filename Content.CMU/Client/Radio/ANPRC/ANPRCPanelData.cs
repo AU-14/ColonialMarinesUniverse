@@ -213,6 +213,7 @@ public sealed class ANPRCRadioActions
     public Action Otar = () => { };
     public Action<int> SetDwell = _ => { };
     public Action JammerBearing = () => { };
+    public Action<string, string> KeyTrial = (_, _) => { };
     public Action ReturnToAuto = () => { };
     public Action<bool> SetSweep = _ => { };
     public Action<int, RadioFrequency> TuneContact = (_, _) => { };

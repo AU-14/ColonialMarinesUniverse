@@ -146,6 +146,7 @@ public sealed class ANPRCScreenActions
     public required Action Otar;
     public required Action<int> SetDwell;
     public required Action JammerBearing;
+    public required Action<string, string> KeyTrial;
 
     public required Action CryptoZeroize;
     public required Action CryptoDestroy;

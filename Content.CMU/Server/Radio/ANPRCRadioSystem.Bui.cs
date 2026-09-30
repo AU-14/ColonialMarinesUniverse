@@ -90,7 +90,7 @@ public sealed partial class ANPRCRadioSystem
     {
         if (ent.Comp.SlotLabels.Count >= ANPRCRadioComponent.MaxSlots)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-slot-max-reached"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-slot-max-reached"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -195,7 +195,7 @@ public sealed partial class ANPRCRadioSystem
         if (!RadioFrequencyInput.TryParseAnprcScreenInput(args.FrequencyText, out var frequency) ||
             frequency == RadioFrequency.Off)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-frequency-invalid"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-frequency-invalid"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -213,7 +213,7 @@ public sealed partial class ANPRCRadioSystem
         }
         else
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-frequency-out-of-band"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-frequency-out-of-band"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -230,7 +230,7 @@ public sealed partial class ANPRCRadioSystem
         // say what the number landed on. a frequency that matches no net used to get
         // the same confirmation as one that does, and operators walked away thinking
         // they were on a net when they were keying dead air
-        _cmChat.ChatMessageToOne(
+        _anprcChat.Notice(
             onNet && _prototype.TryIndex(channel, out var channelProto)
                 ? Loc.GetString(
                     "anprc-frequency-set-net",
@@ -260,7 +260,7 @@ public sealed partial class ANPRCRadioSystem
     {
         if (!ent.Comp.Enabled && !_powerCell.HasCharge(ent.Owner, 1f))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-battery-depleted"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-battery-depleted"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -326,7 +326,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (!ent.Comp.Enabled || (!ent.Comp.IsEquipped && !ent.Comp.Planted))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-needs-online"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-sweep-needs-online"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -338,7 +338,7 @@ public sealed partial class ANPRCRadioSystem
         UpdateEquippedChannels(ent);
         UpdateBuiState(ent);
 
-        _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-started"), args.Actor);
+        _anprcChat.Notice(Loc.GetString("anprc-sweep-started"), args.Actor);
     }
 
     // tuning a fixed contact writes the raw frequency, so the operator never has to
@@ -370,7 +370,7 @@ public sealed partial class ANPRCRadioSystem
         UpdateRelayAnchor(ent);
         UpdateBuiState(ent);
 
-        _cmChat.ChatMessageToOne(
+        _anprcChat.Notice(
             onNet && _prototype.TryIndex(channel, out var channelProto)
                 ? Loc.GetString(
                     "anprc-frequency-set-net",
@@ -434,7 +434,7 @@ public sealed partial class ANPRCRadioSystem
     {
         if (!ent.Comp.Enabled || (!ent.Comp.IsEquipped && !ent.Comp.Planted))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-needs-online"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-sweep-needs-online"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -453,7 +453,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (entries.Count == 0)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-log-print-empty"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-log-print-empty"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -464,7 +464,7 @@ public sealed partial class ANPRCRadioSystem
 
         _hands.TryPickupAnyHand(args.Actor, paper);
 
-        _cmChat.ChatMessageToOne(
+        _anprcChat.Notice(
             Loc.GetString("anprc-log-printed", ("count", entries.Count)),
             args.Actor);
     }
@@ -608,7 +608,7 @@ public sealed partial class ANPRCRadioSystem
             var frequency = _freqPlan.GetFrequency(proto);
 
             var known = string.IsNullOrEmpty(proto.Faction) ||
-                        string.IsNullOrEmpty(radio.OperatorFaction) ||
+                        !string.IsNullOrEmpty(radio.OperatorFaction) &&
                         string.Equals(proto.Faction, radio.OperatorFaction, StringComparison.OrdinalIgnoreCase) ||
                         radio.DiscoveredFrequencies.Contains(frequency);
 

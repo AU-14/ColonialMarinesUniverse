@@ -98,7 +98,7 @@ public sealed partial class ANPRCRadioSystem
         UpdateRelayAnchor(ent);
         UpdateBuiState(ent);
 
-        _cmChat.ChatMessageToOne(
+        _anprcChat.Notice(
             Loc.GetString(args.Enabled ? "anprc-emcon-on" : "anprc-emcon-off"),
             args.Actor);
     }
@@ -117,7 +117,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (!ent.Comp.Planted)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-retrans-needs-staked"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-retrans-needs-staked"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -126,7 +126,7 @@ public sealed partial class ANPRCRadioSystem
             !ent.Comp.Presets.ContainsKey(args.SlotA) ||
             !ent.Comp.Presets.ContainsKey(args.SlotB))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-retrans-needs-nets"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-retrans-needs-nets"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -137,7 +137,7 @@ public sealed partial class ANPRCRadioSystem
         UpdateEquippedChannels(ent);
         UpdateBuiState(ent);
 
-        _cmChat.ChatMessageToOne(
+        _anprcChat.Notice(
             Loc.GetString("anprc-retrans-bridged",
                 ("a", ent.Comp.SlotLabels.GetValueOrDefault(args.SlotA, $"P{args.SlotA + 1}")),
                 ("b", ent.Comp.SlotLabels.GetValueOrDefault(args.SlotB, $"P{args.SlotB + 1}"))),
@@ -168,7 +168,7 @@ public sealed partial class ANPRCRadioSystem
         UpdateRelayAnchor(ent);
         UpdateBuiState(ent);
 
-        _cmChat.ChatMessageToOne(Loc.GetString("anprc-return-to-auto-done"), args.Actor);
+        _anprcChat.Notice(Loc.GetString("anprc-return-to-auto-done"), args.Actor);
     }
 
     private static bool IsOffAuto(ANPRCRadioComponent radio)
@@ -193,13 +193,13 @@ public sealed partial class ANPRCRadioSystem
     {
         if (!ent.Comp.Planted || !ent.Comp.Enabled)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-peak-needs-staked"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-peak-needs-staked"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
         if (ent.Comp.AntennaPeaked)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-peak-already"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-peak-already"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -321,13 +321,13 @@ public sealed partial class ANPRCRadioSystem
 
         if (!radio.Enabled || (!radio.IsEquipped && !radio.Planted))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-radio-off"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-radio-off"), args.Actor);
             return;
         }
 
         if (radio.Emcon)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-emcon-no-transmit"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-emcon-no-transmit"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -335,14 +335,14 @@ public sealed partial class ANPRCRadioSystem
 
         if (string.IsNullOrEmpty(faction) || _crypto.IsFillStale(ent))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-otar-needs-current-fill"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-otar-needs-current-fill"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
         // the cooldown only starts once a key has actually been pushed
         if (radio.OtarLast != TimeSpan.Zero && _timing.CurTime < radio.OtarLast + radio.OtarCooldown)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-otar-cooldown"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-otar-cooldown"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -350,13 +350,13 @@ public sealed partial class ANPRCRadioSystem
 
         if (targets.Count == 0)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-otar-none"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-otar-none"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
         if (!_powerCell.TryUseCharge(ent.Owner, radio.OtarChargeCost))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-battery-insufficient"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-battery-insufficient"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
@@ -390,7 +390,7 @@ public sealed partial class ANPRCRadioSystem
             TryDirectionFind(ent.Owner, radio, netProto, false);
         }
 
-        _cmChat.ChatMessageToOne(Loc.GetString("anprc-otar-sent", ("count", targets.Count)), args.Actor);
+        _anprcChat.Notice(Loc.GetString("anprc-otar-sent", ("count", targets.Count)), args.Actor, ANPRCNotice.Good);
         UpdateBuiState(ent);
     }
 
@@ -438,11 +438,16 @@ public sealed partial class ANPRCRadioSystem
 
         if (!ent.Comp.SweepEnabled)
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-dwell-needs-search"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-dwell-needs-search"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
-        // the panel only ever holds the masked number. find the contact it stands for
+        // the panel only ever holds the masked number. find the contact it stands for: two
+        // contacts can share the digits shown so far, so the strongest one is the one on the
+        // glass. a contact too faint to be listed at all is never a match
+        RadioFrequency? best = null;
+        var bestConfidence = float.MinValue;
+
         foreach (var (frequency, confidence) in ent.Comp.SweepContacts)
         {
             if (ent.Comp.DiscoveredFrequencies.Contains(frequency))
@@ -450,20 +455,29 @@ public sealed partial class ANPRCRadioSystem
 
             var tier = ANPRCSweepSystem.TierOf(ent.Comp, confidence);
 
-            if (ANPRCSweepSystem.MaskFrequency(frequency, tier).Kilohertz != args.Kilohertz)
+            if (tier <= 0 ||
+                ANPRCSweepSystem.MaskFrequency(frequency, tier).Kilohertz != args.Kilohertz ||
+                confidence <= bestConfidence)
+            {
                 continue;
+            }
 
-            ent.Comp.SweepDwellKilohertz = frequency.Kilohertz;
-            ent.Comp.SweepDwellLastEmission = _timing.CurTime;
-            ent.Comp.SweepPosition = frequency;
-            Dirty(ent);
+            best = frequency;
+            bestConfidence = confidence;
+        }
 
-            UpdateBuiState(ent);
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-dwell-on"), args.Actor);
+        if (best is not { } target)
+        {
+            _anprcChat.Notice(Loc.GetString("anprc-dwell-lost"), args.Actor, ANPRCNotice.Warn);
             return;
         }
 
-        _cmChat.ChatMessageToOne(Loc.GetString("anprc-dwell-lost"), args.Actor);
+        ent.Comp.SweepDwellKilohertz = target.Kilohertz;
+        ent.Comp.SweepPosition = target;
+        Dirty(ent);
+
+        UpdateBuiState(ent);
+        _anprcChat.Notice(Loc.GetString("anprc-dwell-on"), args.Actor);
     }
 
     #endregion
@@ -476,14 +490,14 @@ public sealed partial class ANPRCRadioSystem
 
         if (!radio.Enabled || (!radio.IsEquipped && !radio.Planted))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-radio-off"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-radio-off"), args.Actor);
             return;
         }
 
         if (!_garble.TryGetNearestJammer(ent.Owner, out var jammer, out var jammerPosition))
         {
             radio.JammerBearingTarget = null;
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-jammer-none"), args.Actor);
+            _anprcChat.Notice(Loc.GetString("anprc-jammer-none"), args.Actor, ANPRCNotice.Warn);
             UpdateBuiState(ent);
             return;
         }
@@ -500,7 +514,7 @@ public sealed partial class ANPRCRadioSystem
             radio.JammerBearingPosition = here;
             radio.JammerBearingTime = now;
 
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString("anprc-jammer-bearing-first",
                     ("bearing", FormatBearing(bearing)),
                     ("baseline", (int) radio.JammerFixBaseline)),
@@ -514,12 +528,12 @@ public sealed partial class ANPRCRadioSystem
 
         if (moved < radio.JammerFixBaseline)
         {
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString("anprc-jammer-baseline-short",
                     ("bearing", FormatBearing(bearing)),
                     ("moved", (int) moved),
                     ("baseline", (int) radio.JammerFixBaseline)),
-                args.Actor);
+                args.Actor, ANPRCNotice.Warn);
 
             UpdateBuiState(ent);
             return;
@@ -538,12 +552,12 @@ public sealed partial class ANPRCRadioSystem
 
         var distance = (jammerPosition - here).Length();
 
-        _cmChat.ChatMessageToOne(
+        _anprcChat.Notice(
             Loc.GetString("anprc-jammer-fixed",
                 ("bearing", FormatBearing(bearing)),
                 ("distance", (int) distance),
                 ("minutes", (int) radio.JammerFixDuration.TotalMinutes)),
-            args.Actor);
+            args.Actor, ANPRCNotice.Good);
 
         UpdateBuiState(ent);
     }
@@ -651,6 +665,7 @@ public sealed partial class ANPRCRadioSystem
             Jammed = radio.Enabled && _garble.GetJamIntensity(ent.Owner) != RadioJamIntensity.None,
             JammerBaselineNeeded = radio.JammerFixBaseline,
             DrawPerSecond = GetDrawPerSecond(ent),
+            KeyAnalyses = _crypto.BuildAnalysisStates(ent.Owner, radio),
         };
 
         if (radio.SweepDwellKilohertz >= 0)

@@ -66,6 +66,7 @@ public sealed class ANPRCRadioWindow : DefaultWindow
     public event Action? OnOtar;
     public event Action<int>? OnSetDwell;
     public event Action? OnJammerBearing;
+    public event Action<string, string>? OnKeyTrial;
     public event Action? OnReturnToAuto;
     public event Action<int, string>? OnManualFrequency;
     public event Action<bool>? OnSetSweep;
@@ -304,6 +305,7 @@ public sealed class ANPRCRadioWindow : DefaultWindow
             Otar = () => OnOtar?.Invoke(),
             SetDwell = kilohertz => OnSetDwell?.Invoke(kilohertz),
             JammerBearing = () => OnJammerBearing?.Invoke(),
+            KeyTrial = (faction, trial) => OnKeyTrial?.Invoke(faction, trial),
             ReturnToAuto = () => OnReturnToAuto?.Invoke(),
             SetSweep = enabled => OnSetSweep?.Invoke(enabled),
             TuneContact = (slot, frequency) => OnTuneContact?.Invoke(slot, frequency),

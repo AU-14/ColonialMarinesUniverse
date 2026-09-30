@@ -206,7 +206,7 @@ public sealed partial class ANPRCRadioSystem
         var notify = holder ?? user;
 
         if (notify != null && !TerminatingOrDeleted(notify.Value))
-            _cmChat.ChatMessageToOne(Loc.GetString(messageKey), notify.Value);
+            _anprcChat.Notice(Loc.GetString(messageKey), notify.Value);
     }
 
     private void OnPhoneRing(ref RMCTelephoneRingEvent args)
@@ -229,14 +229,14 @@ public sealed partial class ANPRCRadioSystem
         if (radio.HandsetUser is { } holder && HasComp<ANPRCHandsetUserComponent>(holder))
         {
             _telephone.AU14Answer(pack, holder);
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-call-incoming-connected", ("caller", callerName)), holder);
+            _anprcChat.Notice(Loc.GetString("anprc-call-incoming-connected", ("caller", callerName)), holder);
             return;
         }
 
         var wearer = Transform(pack).ParentUid;
 
         if (radio.IsEquipped && wearer.IsValid() && HasComp<ActorComponent>(wearer))
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-call-incoming", ("caller", callerName)), wearer);
+            _anprcChat.Notice(Loc.GetString("anprc-call-incoming", ("caller", callerName)), wearer);
     }
 
     #endregion
@@ -381,7 +381,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (!_powerCell.TryUseCharge(pack.Owner, cost))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-battery-insufficient"), speaker);
+            _anprcChat.Notice(Loc.GetString("anprc-battery-insufficient"), speaker, ANPRCNotice.Warn);
             return true;
         }
 
@@ -450,7 +450,7 @@ public sealed partial class ANPRCRadioSystem
                 _telephone.AU14HangUp(caller, actor);
 
                 if (!TerminatingOrDeleted(actor))
-                    _cmChat.ChatMessageToOne(Loc.GetString("anprc-call-no-link-target"), actor);
+                    _anprcChat.Notice(Loc.GetString("anprc-call-no-link-target"), actor, ANPRCNotice.Warn);
             }
 
             _noLinkCalls.Clear();

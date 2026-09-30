@@ -97,6 +97,9 @@ public sealed class ANPRCExpertState
     public float DrawPerSecond;
     public float BatteryMinutes = -1f;
 
+    // key analysis on every enemy faction whose net this set has fixed, or has worked on before
+    public List<ANPRCKeyAnalysisState> KeyAnalyses = new();
+
     // anything set away from the factory AUTO defaults, so the guided panel can say so and offer
     // the one button that resets it
     public bool OffAuto;

@@ -82,8 +82,12 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
             transmitterWearing != null &&
             _crypto.HasMatchingCrypto(transmitterWearing.Radio, args.Channel))
         {
-            if (receiverAnprc != null && !_crypto.HasMatchingCrypto(receiverAnprc.Value, args.Channel))
+            if (receiverAnprc != null &&
+                !_crypto.HasMatchingCrypto(receiverAnprc.Value, args.Channel) &&
+                !_crypto.HasBrokenKey(receiverAnprc.Value, args.Channel.Faction))
+            {
                 needsCryptoGarble = true;
+            }
 
             if (txMode == RadioMode.CipherText && receiverAnprc == null)
                 needsCryptoGarble = true;
@@ -348,8 +352,12 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         if (string.IsNullOrEmpty(channel.Faction))
             return message;
 
-        if (_crypto.HasMatchingCrypto(receiverAnprc, channel))
+        // a key this set has broken reads as well as a fill, for listening only
+        if (_crypto.HasMatchingCrypto(receiverAnprc, channel) ||
+            _crypto.HasBrokenKey(receiverAnprc, channel.Faction))
+        {
             return message;
+        }
 
         if (TryComp(messageSource, out WearingANPRCComponent? txWearing) &&
             TryComp(txWearing.Radio, out ANPRCRadioComponent? txRadio))

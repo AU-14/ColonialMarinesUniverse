@@ -35,11 +35,14 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
             subs.Event<ANPRCCryptoDestroyMsg>(OnDestroy);
             subs.Event<ANPRCCryptoRecryptoMsg>(OnRecrypto);
         });
+
+        InitializeAnalysis();
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _generation.Clear();
+        _keys.Clear();
     }
 
     private void OnFillCardMapInit(Entity<ANPRCFillCardComponent> ent, ref MapInitEvent args)

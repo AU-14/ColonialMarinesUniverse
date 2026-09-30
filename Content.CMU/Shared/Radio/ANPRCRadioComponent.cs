@@ -271,25 +271,50 @@ public sealed partial class ANPRCRadioComponent : Component
     [DataField("sweepActivityWindow")]
     public TimeSpan SweepActivityWindow = TimeSpan.FromSeconds(20);
 
-    // how far away a transmitter can be and still be intercepted
+    // how far away a transmitter can be and still be intercepted, at MED power. the
+    // transmitter's own TX power scales it (LO 0.6, HI 1.5): shouting carries further
     [DataField("sweepInterceptRange")]
-    public float SweepInterceptRange = 60f;
+    public float SweepInterceptRange = 120f;
 
+    // each intercepted line on a contact is worth this much, once. three lines fix a net
+    // that talks once a minute (about three minutes); a busy net falls in about one
     [DataField("sweepConfidencePerHit")]
-    public float SweepConfidencePerHit = 0.25f;
+    public float SweepConfidencePerHit = 0.7f;
 
-    // contacts rot, but slower than a caught pass builds them, so progress survives
-    // between flybys and a net that goes quiet loses its fix over a few minutes
+    // contacts rot only once their net has been quiet for the grace, so a net that keeps
+    // talking never costs the operator ground between catches
     [DataField("sweepConfidenceDecayPerSecond")]
     public float SweepConfidenceDecayPerSecond = 0.005f;
 
-    // a busy net is easier to fix than a disciplined one. traffic caught in the
-    // window multiplies the hit up to this ceiling, so chatter is what gets you found
+    [DataField("sweepDecayGrace")]
+    public TimeSpan SweepDecayGrace = TimeSpan.FromSeconds(120);
+
+    // a busy net is easier to fix than a disciplined one. every other line in the
+    // traffic window adds to the hit, up to this ceiling
     [DataField("sweepTrafficBonusPerEmission")]
-    public float SweepTrafficBonusPerEmission = 0.5f;
+    public float SweepTrafficBonusPerEmission = 0.25f;
 
     [DataField("sweepTrafficMultiplierMax")]
-    public float SweepTrafficMultiplierMax = 2f;
+    public float SweepTrafficMultiplierMax = 1.5f;
+
+    // contact -> the newest emission already counted, so one line is only ever worth one hit
+    // however many passes of the head it sits under
+    public Dictionary<RadioFrequency, TimeSpan> SweepContactLastCounted = new();
+
+    // contact -> when it last gained ground, for the decay grace
+    public Dictionary<RadioFrequency, TimeSpan> SweepContactLastHit = new();
+
+    // DF on a fixed net: every line on it gives a bearing and a rough range, at most this often
+    // per net, so a chatty net cannot flood the operator
+    [DataField("fixedNetDFInterval")]
+    public TimeSpan FixedNetDFInterval = TimeSpan.FromSeconds(10);
+
+    public Dictionary<RadioFrequency, TimeSpan> FixedNetDFLast = new();
+
+    // how long a fixed-net bearing stays on the side's tacmap: long enough to glance at, short
+    // enough that it marks where somebody was, not where they are
+    [DataField("fixedNetDFBlipDuration")]
+    public TimeSpan FixedNetDFBlipDuration = TimeSpan.FromSeconds(8);
 
     // confidence gates for each step of the fix. the head gives the number up a digit
     // at a time - band half, hundreds, tens, then the exact frequency and the net's
@@ -308,8 +333,6 @@ public sealed partial class ANPRCRadioComponent : Component
     // burst of traffic on it counts this many times over, but nothing else on the band is heard
     [DataField, AutoNetworkedField]
     public int SweepDwellKilohertz = -1;
-
-    public TimeSpan SweepDwellLastEmission;
 
     [DataField]
     public float DwellConfidenceMultiplier = 2f;

@@ -43,6 +43,7 @@ public sealed class ANPRCRadioBoundUserInterface : BoundUserInterface
         _window.OnOtar += () => SendMessage(new ANPRCOtarMsg());
         _window.OnSetDwell += kilohertz => SendMessage(new ANPRCSetDwellMsg(kilohertz));
         _window.OnJammerBearing += () => SendMessage(new ANPRCJammerBearingMsg());
+        _window.OnKeyTrial += (faction, trial) => SendMessage(new ANPRCKeyTrialMsg(faction, trial));
         _window.OnReturnToAuto += () => SendMessage(new ANPRCReturnToAutoMsg());
         _window.OnManualFrequency += (slot, text) => SendMessage(new ANPRCManualFrequencyMsg(slot, text));
         _window.OnSetSweep += enabled => SendMessage(new ANPRCSetSweepMsg(enabled));

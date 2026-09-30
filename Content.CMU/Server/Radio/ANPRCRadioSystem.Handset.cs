@@ -412,7 +412,7 @@ public sealed partial class ANPRCRadioSystem
         }
 
         _popup.PopupEntity(Loc.GetString("anprc-handset-taken", ("radio", pack.Owner)), user, user);
-        _cmChat.ChatMessageToOne(Loc.GetString("anprc-handset-hint"), user);
+        _anprcChat.Notice(Loc.GetString("anprc-handset-hint"), user);
     }
 
     private void ReleaseHandset(Entity<ANPRCHandsetUserComponent> ent, string? messageKey = null)
@@ -440,7 +440,7 @@ public sealed partial class ANPRCRadioSystem
         RemComp<ANPRCHandsetUserComponent>(ent.Owner);
 
         if (messageKey != null && !TerminatingOrDeleted(ent.Owner))
-            _cmChat.ChatMessageToOne(Loc.GetString(messageKey), ent.Owner);
+            _anprcChat.Notice(Loc.GetString(messageKey), ent.Owner);
     }
 
     private void OnHandsetChatGetPrefix(Entity<ANPRCHandsetUserComponent> ent, ref ChatGetPrefixEvent args)
@@ -470,7 +470,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (radio.Mode == RadioMode.CipherText && string.IsNullOrEmpty(_crypto.GetFillFaction(ent.Comp.Radio)))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-ct-mode-no-fill"), ent.Owner);
+            _anprcChat.Notice(Loc.GetString("anprc-ct-mode-no-fill"), ent.Owner, ANPRCNotice.Warn);
             args.Channel = null;
             return;
         }
@@ -484,9 +484,9 @@ public sealed partial class ANPRCRadioSystem
         if (!radio.Presets.TryGetValue(radio.ActiveSlot, out var channelId) ||
             string.IsNullOrEmpty(channelId.Id))
         {
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString("anprc-slot-empty", ("slot", radio.ActiveSlot + 1)),
-                ent.Owner);
+                ent.Owner, ANPRCNotice.Warn);
 
             args.Channel = null;
             return;

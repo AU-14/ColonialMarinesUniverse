@@ -319,6 +319,7 @@ public sealed class ANPRCFaceplate : PanelContainer
             Otar = () => _radio.Otar(),
             SetDwell = kilohertz => _radio.SetDwell(kilohertz),
             JammerBearing = () => _radio.JammerBearing(),
+            KeyTrial = (faction, trial) => _radio.KeyTrial(faction, trial),
 
             CryptoZeroize = () => _radio.CryptoZeroize(),
             CryptoDestroy = () => _radio.CryptoDestroy(),

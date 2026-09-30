@@ -84,6 +84,32 @@ public sealed class ANPRCSearchScreen : ANPRCScreen
             BuildContacts(context, rows, searching);
         }
 
+        // ----- key analysis -----------------------------------------------------------------------
+
+        rows.Add(ANPRCScreenRow.Heading(Loc.GetString("anprc-fp-srch-keys")));
+
+        if (expert.KeyAnalyses.Count == 0)
+        {
+            rows.Add(ANPRCScreenRow.Note(Loc.GetString("anprc-fp-srch-keys-none")));
+        }
+        else
+        {
+            foreach (var work in expert.KeyAnalyses)
+            {
+                var faction = work.Faction;
+
+                rows.Add(new ANPRCScreenRow
+                {
+                    Label = faction.ToUpperInvariant(),
+                    Value = work.Broken
+                        ? Loc.GetString("anprc-fp-key-broken")
+                        : Loc.GetString("anprc-fp-key-depth", ("depth", work.Depth), ("max", work.DepthMax)),
+                    Style = work.Broken ? ANPRCRowStyle.Good : ANPRCRowStyle.Normal,
+                    Activate = () => Host.Push(new ANPRCKeyScreen(faction)),
+                });
+            }
+        }
+
         // ----- jammer direction finding ------------------------------------------------------------
 
         rows.Add(ANPRCScreenRow.Heading(Loc.GetString("anprc-fp-srch-jammer")));

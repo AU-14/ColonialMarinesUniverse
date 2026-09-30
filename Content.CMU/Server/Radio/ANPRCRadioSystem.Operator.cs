@@ -48,7 +48,7 @@ public sealed partial class ANPRCRadioSystem
         {
             if (!_powerCell.HasCharge(ent.Owner, 1f))
             {
-                _cmChat.ChatMessageToOne(Loc.GetString("anprc-battery-depleted"), args.Actor);
+                _anprcChat.Notice(Loc.GetString("anprc-battery-depleted"), args.Actor, ANPRCNotice.Warn);
                 return;
             }
 
@@ -113,7 +113,7 @@ public sealed partial class ANPRCRadioSystem
         if (skipped.Count > 0)
             message += " " + Loc.GetString("anprc-quick-setup-full", ("nets", string.Join(", ", skipped)));
 
-        _cmChat.ChatMessageToOne(message, args.Actor);
+        _anprcChat.Notice(message, args.Actor);
     }
 
     private static int? SlotHolding(ANPRCRadioComponent radio, ProtoId<RadioChannelPrototype> channel)
