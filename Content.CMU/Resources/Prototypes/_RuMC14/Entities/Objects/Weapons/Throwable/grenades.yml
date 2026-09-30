@@ -34,12 +34,9 @@
       path: /Audio/Effects/Smoke-grenade.ogg
   - type: SpawnOnTrigger
     proto: RuMCSmokeTermobaricMini
-<<<<<<< HEAD
-=======
   - type: EmitSoundOnTrigger
     positional: true
     sound: /Audio/Effects/smoke.ogg
->>>>>>> 0db467e411c1d01ed41e811e5c0cf892482b319b
 
 - type: entity
   parent: RuMCSmokeTermobaricNoSpread

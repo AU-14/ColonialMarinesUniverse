@@ -73,21 +73,12 @@
   - type: Solution
     id: food
     solution:
-<<<<<<< HEAD
         maxVol: 30
         reagents:
         - ReagentId: Nutriment
           Quantity: 15
         - ReagentId: Protein
           Quantity: 10
-=======
-      maxVol: 30
-      reagents:
-      - ReagentId: Nutriment
-        Quantity: 15
-      - ReagentId: Protein
-        Quantity: 10
->>>>>>> 0db467e411c1d01ed41e811e5c0cf892482b319b
   - type: Edible
     transferAmount: 10
     trash:
