@@ -9,7 +9,10 @@ using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Round.Objectives;
+using Content.Shared.FixedPoint;
 using Content.Shared.Maps;
+using Content.Shared.Placeable;
+using Content.Shared._RMC14.Intel;
 using Robust.Server.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -127,6 +130,15 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 
         SpawnMissingCatalogObjectives(bestPlanetGrid.Value, mapId, presetId);
 
+        // RMC intel only spawned under RMC's own distress signal rule, which our presets don't use.
+        // Documents and devices are processed at each faction's Analyzer Machine.
+        if (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase)
+            || presetId.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase))
+        {
+            SeedIncidentalIntelSpawners(mapId);
+            _intel.RunSpawners();
+        }
+
         bool hasPlanetMaster = false;
         var masterScan = EntityQueryEnumerator<CMUObjectiveMasterComponent, TransformComponent>();
         while (masterScan.MoveNext(out var mUid, out _, out var mXform))
@@ -171,6 +183,95 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         Timer.Spawn(0, Main);
     }
 
+    private const float CabinetIntelChance = 0.04f;
+    private const float TableIntelChance = 0.01f;
+
+    /// <summary>Spawn points to place on a map that has no intel spawners of its own.</summary>
+    private const int FallbackIntelSpawnPoints = 30;
+
+    private static readonly string[] FilingCabinetBases = ["BaseFilingCabinet", "CMFilingCabinetBase"];
+    private static readonly EntProtoId[] IncidentalIntelSpawners =
+        ["RMCSpawnerIntelClose", "RMCSpawnerIntelMedium", "RMCSpawnerIntelFar"];
+    private static readonly EntProtoId[] FallbackIntelSpawners =
+        ["RMCSpawnerIntelClose", "RMCSpawnerIntelMedium", "RMCSpawnerIntelFar", "RMCSpawnerIntelScience"];
+
+    /// <summary>
+    /// Turns a small random share of the planet's filing cabinets and tables into extra intel spawn points, so
+    /// intel can turn up anywhere, just rarely. A map with no intel spawners of its own instead gets
+    /// <see cref="FallbackIntelSpawnPoints"/> of them spread over random cabinets and tables. Intel landing on a
+    /// cabinet goes into its drawers.
+    /// </summary>
+    private void SeedIncidentalIntelSpawners(MapId planetMap)
+    {
+        var planetMaps = _zLevels.GetAllNetworkMapIds(planetMap);
+        var cabinetProtos = new HashSet<string>();
+        foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
+        {
+            foreach (var baseId in FilingCabinetBases)
+            {
+                if (proto.ID == baseId || _proto.EnumerateParents<EntityPrototype>(proto.ID).Any(p => p.ID == baseId))
+                {
+                    cabinetProtos.Add(proto.ID);
+                    break;
+                }
+            }
+        }
+
+        var hasMappedSpawners = false;
+        var spawnerQuery = EntityQueryEnumerator<IntelSpawnerComponent, TransformComponent>();
+        while (spawnerQuery.MoveNext(out _, out _, out var spawnerXform))
+        {
+            if (!planetMaps.Contains(spawnerXform.MapID))
+                continue;
+
+            hasMappedSpawners = true;
+            break;
+        }
+
+        var candidates = new List<(EntityCoordinates Coords, float Chance)>();
+        var query = EntityQueryEnumerator<MetaDataComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var meta, out var xform))
+        {
+            if (!xform.Anchored || !planetMaps.Contains(xform.MapID))
+                continue;
+
+            var chance = meta.EntityPrototype is { } proto && cabinetProtos.Contains(proto.ID)
+                ? CabinetIntelChance
+                : HasComp<PlaceableSurfaceComponent>(uid) ? TableIntelChance : 0f;
+
+            if (chance > 0f)
+                candidates.Add((xform.Coordinates, chance));
+        }
+
+        List<EntityCoordinates> spots;
+        EntProtoId[] spawnerTypes;
+        if (hasMappedSpawners)
+        {
+            spots = candidates.Where(c => Random.Shared.NextSingle() < c.Chance).Select(c => c.Coords).ToList();
+            spawnerTypes = IncidentalIntelSpawners;
+        }
+        else
+        {
+            // No mapped spawners: spread a full set over random cabinets and tables. Every spawner type is used so
+            // none of RMC's intel rolls are wasted on a type the map has no spawner for.
+            spots = candidates.Select(c => c.Coords).OrderBy(_ => Random.Shared.Next()).Take(FallbackIntelSpawnPoints).ToList();
+            spawnerTypes = FallbackIntelSpawners;
+        }
+
+        for (var i = 0; i < spots.Count; i++)
+        {
+            // The fallback cycles through the types so each gets an even share; incidental ones are random.
+            var type = hasMappedSpawners
+                ? spawnerTypes[Random.Shared.Next(spawnerTypes.Length)]
+                : spawnerTypes[i % spawnerTypes.Length];
+            Spawn(type, spots[i]);
+        }
+
+        _logs.Info(hasMappedSpawners
+            ? $"[OBJ-CTRL] Seeded {spots.Count} incidental intel spawn points on cabinets and tables."
+            : $"[OBJ-CTRL] Map has no intel spawners; placed {spots.Count} fallback intel spawn points on cabinets and tables.");
+    }
+
     private void ActivateObjectiveMaster()
     {
         if (!TryComp(_objectiveMasterUid, out CMUObjectiveMasterComponent? master)) return;
@@ -191,8 +292,13 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 
         var key = ev.Team.ToLowerInvariant();
         var data = master.GetOrCreateFactionData(key);
-        data.CurrentWinPoints = Math.Max(0, data.CurrentWinPoints - ev.Amount);
+        data.CurrentWinPoints = FixedPoint2.Max(FixedPoint2.Zero, data.CurrentWinPoints - ev.Amount);
         DirtyObjectiveMaster();
+
+        // Keep every display of the balance in step: vendors, the tech console's combined total, objectives consoles.
+        _vendorSystem.UpdateVendorFactionPointsCache(key, data.CurrentWinPoints.Int());
+        _intel.UpdateTree(_intel.EnsureTechTree(key));
+        _objConsole.RefreshConsolesForFaction(key);
     }
 
     private CMUObjectiveMasterComponent? GetOrReselectObjMaster()
@@ -220,10 +326,18 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
             Dirty(_objectiveMasterUid, master);
     }
 
+    /// <summary>Win points rounded down to whole points, for vendors that charge whole points.</summary>
     public (int current, int required) GetWinPoints(string faction)
     {
+        var (current, required) = GetWinPointsExact(faction);
+        return (current.Int(), required);
+    }
+
+    /// <summary>Win points including fractions (partial kill and intel rewards).</summary>
+    public (FixedPoint2 current, int required) GetWinPointsExact(string faction)
+    {
         if (GetOrReselectObjMaster() is not { } master)
-            return (0, 0);
+            return (FixedPoint2.Zero, 0);
 
         var key = faction.ToLowerInvariant();
         var data = master.GetOrCreateFactionData(key);

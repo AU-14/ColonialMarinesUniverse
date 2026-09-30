@@ -8,6 +8,11 @@ using Content.Server.CMU14.Round.Objectives.Components;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Prototypes;
+using Content.Shared._RMC14.Marines;
+using Content.Shared.Projectiles;
+using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 using Content.Shared.Mind.Components;
 using Robust.Shared.Map;
 
@@ -17,6 +22,8 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
 {
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private JobSystem _jobSystem = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     private bool _shuttingDown;
 
     public override void Initialize()
@@ -90,7 +97,7 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
         var protoId = meta.EntityPrototype?.ID ?? string.Empty;
         var factions = new List<string>();
         if (TryComp<NpcFactionMemberComponent>(uid, out var factionComp))
-            factions.AddRange(factionComp.Factions.Select(f => f.ToString().ToLowerInvariant()));
+            factions.AddRange(GetFactionsWithAncestors(factionComp));
 
         var map = Transform(uid).MapID;
         var interested = ObjInt.GetInterestedObjectives(map, factions);
@@ -139,7 +146,7 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
             if (ent == uid || !searchMaps.Contains(xform.MapID))
                 continue;
 
-            var factions = factionComp.Factions.Select(f => f.ToString().ToLowerInvariant()).ToList();
+            var factions = GetFactionsWithAncestors(factionComp);
             if (factions.Count == 0) continue;
 
             if (!string.IsNullOrEmpty(comp.TargetPrototype) && meta.EntityPrototype?.ID != comp.TargetPrototype)
@@ -172,11 +179,41 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
         }
     }
 
+    /// <summary>
+    /// An entity's factions plus every faction they inherit from, lowercased. Xenos, apes and other
+    /// threat creatures carry a child faction (e.g. RMCXeno) whose parent is THREAT, so a "kill THREAT"
+    /// objective has to look up the chain or it only ever sees the few bodies tagged at round start.
+    /// </summary>
+    private List<string> GetFactionsWithAncestors(NpcFactionMemberComponent factionComp)
+    {
+        var result = new List<string>();
+        var pending = new Stack<string>();
+        foreach (var faction in factionComp.Factions)
+            pending.Push(faction.Id);
+
+        while (pending.TryPop(out var id))
+        {
+            var key = id.ToLowerInvariant();
+            if (result.Contains(key))
+                continue;
+
+            result.Add(key);
+            if (_proto.TryIndex<NpcFactionPrototype>(id, out var proto) && proto.Parents is { } parents)
+            {
+                foreach (var parent in parents)
+                    pending.Push(parent);
+            }
+        }
+
+        return result;
+    }
+
     private void OnMobStateChanged(EntityUid uid, KillMarkedForComponent comp, ref MobStateChangedEvent args)
     {
-        if (args.NewMobState != MobState.Dead)
+        if (args.NewMobState != MobState.Dead || TerminatingOrDeleted(uid))
             return;
 
+        var origin = args.Origin;
         var objectivesToRemove = new List<EntityUid>();
         foreach (var (objectiveUid, factionToCredit) in comp.AssociatedObjectives)
         {
@@ -187,6 +224,11 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
             // Completed or capped objectives stay marked on entities; without this check their
             // counters keep climbing on every death long after the objective stopped scoring.
             if (!auComp.Active)
+                continue;
+
+            // Only a kill by the credited faction counts. The body stays marked, so if it's revived and
+            // then killed by that faction later, it still scores.
+            if (killComp.RequireFactionKill && !IsKillerInFaction(origin, factionToCredit.ToLowerInvariant()))
                 continue;
 
             if (!comp.CreditedObjectives.Add(objectiveUid))
@@ -206,6 +248,44 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
 
         if (HasComp<ArrestMarkedForComponent>(uid) && objectivesToRemove.Any(o => TryComp(o, out KillObjectiveComponent? k) && k.CountArrest))
             RemComp<ArrestMarkedForComponent>(uid);
+    }
+
+    /// <summary>
+    /// Whether whatever caused a death belongs to <paramref name="faction"/>. Follows a projectile back to its
+    /// shooter, and a held or worn weapon back to its wielder.
+    /// </summary>
+    private bool IsKillerInFaction(EntityUid? origin, string faction)
+    {
+        if (origin is not { } current)
+            return false;
+
+        for (var depth = 0; depth < 4 && !TerminatingOrDeleted(current); depth++)
+        {
+            if (TryComp(current, out NpcFactionMemberComponent? factions) &&
+                GetFactionsWithAncestors(factions).Contains(faction))
+            {
+                return true;
+            }
+
+            if (TryComp(current, out MarineComponent? marine) &&
+                string.Equals(marine.Faction, faction, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (TryComp(current, out ProjectileComponent? projectile) && projectile.Shooter is { } shooter)
+            {
+                current = shooter;
+                continue;
+            }
+
+            if (!_container.TryGetContainingContainer(current, out var container))
+                return false;
+
+            current = container.Owner;
+        }
+
+        return false;
     }
 
 }

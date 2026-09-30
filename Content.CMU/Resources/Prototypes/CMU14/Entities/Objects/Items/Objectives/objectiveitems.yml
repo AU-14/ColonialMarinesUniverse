@@ -4,6 +4,7 @@
   name: "AN/PRC-982 portable radio transceiver box"
   description: A gray radio box that is used to receive long-range communications. It also records all radio traffic it receives.
   components:
+  - type: IntelDetectorTracked # objective items show on intel detectors
   - type: Item
     size: Small
   - type: Sprite
@@ -18,6 +19,8 @@
   name: "CIR-60 'blackbox' colony information recorder"
   description: A small red box that records colony announcements, colonist flatlines and other key readouts. Usually refered to the black box, although this one comes in bloody red.
   components:
+  - type: CMUIntelSurveyOnAnalyze # prints the top intel areas when recovered at an Analyzer
+  - type: IntelDetectorTracked # objective items show on intel detectors
   - type: Item
     size: Normal
   - type: Sprite
@@ -32,6 +35,7 @@
   name: "ARCS-9 atmospheric radar data storage unit"
   description: A black data box that is used to store information from atmospheric radar arrays.
   components:
+  - type: IntelDetectorTracked # objective items show on intel detectors
   - type: Item
     size: Large
   - type: Sprite
@@ -46,6 +50,7 @@
   name: Weyland-Yutani Research Laptop
   description: A portable computer containing research data from Weyland-Yutani. Password protected and encrypted, this will take a lot to crack.
   components:
+  - type: IntelDetectorTracked # objective items show on intel detectors
   - type: Item
     size: Normal
   - type: Sprite
@@ -60,6 +65,7 @@
   name: Theater Operations Handbook
   description: A highly classified book containing the battle plans of a major faction within the current theater of war.
   components:
+  - type: IntelDetectorTracked # objective items show on intel detectors
   - type: Item
     size: Small
   - type: Sprite
@@ -74,6 +80,7 @@
   name: Nuclear Launch Codes Booklet
   description: A highly classified book containing nuclear launch codes.
   components:
+  - type: IntelDetectorTracked # objective items show on intel detectors
   - type: Item
     size: Small
   - type: Sprite
@@ -90,6 +97,7 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: IntelDetectorTracked # objective items show on intel detectors
   - type: InteractionOutline
   - type: Clickable
   - type: Corrodible
@@ -146,6 +154,7 @@
   name: "field operations computer"
   description: A ruggedized military laptop containing encrypted communications data. It can be hacked to extract critical intelligence.
   components:
+  - type: IntelDetectorTracked # objective items show on intel detectors
   - type: Item
     size: Normal
   - type: Sprite

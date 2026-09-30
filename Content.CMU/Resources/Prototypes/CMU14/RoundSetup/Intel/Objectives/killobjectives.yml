@@ -267,6 +267,7 @@
     factionToKill: THREAT
     killCount: 1
     specificJob: AU14JobThreatLeader
+    requireFactionKill: true
 
 - type: entity
   name: "Kill the threat (DS)"
@@ -282,15 +283,17 @@
     - DistressSignal
     factions:
     - govfor
-    repeating: true
+    repeating: true # no maxRepeatable, so it never runs out
     objectiveLevel: 1
-    customPoints: 10
+    customPoints: 2
     objectiveDescription: "Eliminate the threat."
     roundEndMessage: "By killing the threat."
+  # Any THREAT-descended creature counts (burrowed larvae, hugger-born xenos, evolutions), not
+  # just the handful of bodies tagged as members at round start.
   - type: KillObjective
     factionToKill: THREAT
     killCount: 1
-    specificJob: AU14JobThreatMember
+    requireFactionKill: true
 
 - type: entity
   name: Kill the Carp

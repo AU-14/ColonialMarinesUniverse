@@ -17,6 +17,10 @@
         - Document
         - Folder
         - Write
+      # cmu edit start: intel (documents and devices) and objective items spawn in cabinets, so they have to fit
+      components:
+        - IntelDetectorTracked
+      # cmu edit end
   - type: Sprite
     sprite: _RMC14/Structures/Storage/filing_cabinet.rsi
     noRot: true
@@ -112,6 +116,10 @@
         - Document
         - Folder
         - Write
+      # cmu edit start: intel (documents and devices) and objective items spawn in cabinets, so they have to fit
+      components:
+        - IntelDetectorTracked
+      # cmu edit end
   - type: Sprite
     state: chestdrawer
     layers:
@@ -175,3 +183,7 @@
         - Document
         - Folder
         - Write
+      # cmu edit start: intel (documents and devices) and objective items spawn in cabinets, so they have to fit
+      components:
+        - IntelDetectorTracked
+      # cmu edit end

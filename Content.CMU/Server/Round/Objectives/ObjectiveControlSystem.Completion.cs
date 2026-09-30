@@ -4,6 +4,7 @@ using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Vendors;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 
 namespace Content.Server.CMU14.Round.Objectives;
@@ -17,7 +18,9 @@ public sealed partial class ObjectiveControlSystem
 
     public void CompleteObjectiveForFaction(EntityUid uid, CMUObjectiveComponent objective, string completingFaction, bool awardPoints = true, ISawmill? sawmill = null)
     {
-        if (_planetMapId == MapId.Nullspace || Transform(uid).MapID != _planetMapId)
+        // Any z-level of the planet counts; objectives placed on an upper or lower level of a
+        // multi-Z planet were otherwise impossible to complete.
+        if (_planetMapId == MapId.Nullspace || !_zLevels.IsSameZNetwork(Transform(uid).MapID, _planetMapId))
             return;
 
         if (objective.StatusesPerFaction.ContainsValue(CMUObjectiveComponent.ObjectiveStatus.Completed))
@@ -161,13 +164,29 @@ public sealed partial class ObjectiveControlSystem
     }
 
     public void AwardPointsToFaction(string faction, CMUObjectiveComponent objective)
-        => ApplyWinPoints(faction, objective.CustomPoints == 0
+    {
+        if (objective.FractionalPoints > 0)
+        {
+            ApplyWinPoints(faction, FixedPoint2.New(objective.FractionalPoints));
+            return;
+        }
+
+        ApplyWinPoints(faction, objective.CustomPoints == 0
             ? (objective.ObjectiveLevel == 1 ? 5 : 20)
             : objective.CustomPoints);
+    }
+
+    /// <summary>What an objective is worth per completion, for display.</summary>
+    public static float GetDisplayPoints(CMUObjectiveComponent objective)
+        => objective.FractionalPoints > 0
+            ? objective.FractionalPoints
+            : objective.CustomPoints != 0 ? objective.CustomPoints : (objective.ObjectiveLevel == 1 ? 5 : 20);
 
     public void AwardRawPointsToFaction(string faction, int points) => ApplyWinPoints(faction, points);
 
-    private void ApplyWinPoints(string faction, int points)
+    public void AwardRawPointsToFaction(string faction, FixedPoint2 points) => ApplyWinPoints(faction, points);
+
+    private void ApplyWinPoints(string faction, FixedPoint2 points)
     {
         if (GetOrReselectObjMaster() is not { } master)
             return;
@@ -176,7 +195,7 @@ public sealed partial class ObjectiveControlSystem
         var data = master.GetOrCreateFactionData(key);
         data.CurrentWinPoints += points;
         DirtyObjectiveMaster();
-        _vendorSystem.UpdateVendorFactionPointsCache(key, data.CurrentWinPoints);
+        _vendorSystem.UpdateVendorFactionPointsCache(key, data.CurrentWinPoints.Int());
         _intel.UpdateTree(_intel.EnsureTechTree(key));
 
         if (!master.FactionsGivenFinalObjective.Contains(key) && data.CurrentWinPoints >= data.RequiredWinPoints)
