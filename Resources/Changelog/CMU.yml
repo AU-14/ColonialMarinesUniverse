@@ -11240,5 +11240,58 @@
   id: 711
   time: '2026-09-29T22:56:37.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1648
+- author: troytroy400
+  changes:
+  - message: Intel now properly spawns during Distress Signal and Force on Force.
+      Bring intel items to your faction's Analyzer Machine or intel computer respectively
+      and click the machine with them to process them for intel points and clues to
+      the next intel.
+    type: Add
+  - message: Intel can now spawn in any filing cabinet or on any table. Maps with
+      no intel spawners use this as a fallback set of random spawns, but maps with
+      intel spawns already mapped can also utilize it partially based on RNG.
+    type: Add
+  - message: Objective items now show up on data detectors.
+    type: Add
+  - message: Encrypted data disks. These spawn with the rest of the intel and can
+      only be cracked at an intel computer. Solve the code in the decryption terminal
+      to upload it's intel points
+    type: Add
+  - message: Recovering the CIR-60 blackbox objective at an Analyzer now prints an
+      intel survey listing the three areas with the most remaining intel.
+    type: Add
+  - message: Intel & Objectives guidebook section covering objectives, points, intel,
+      the intel computer and data disks.
+    type: Add
+  - message: All fetch objectives are now completed by scanning the item at your Analyzer.
+      Fetch return point markers have been removed.
+    type: Tweak
+  - message: The tech tree console now shows your combined objective + intel points
+      and spends from both, using intel points first.
+    type: Tweak
+  - message: Killing threat members in Distress Signal is now worth 2 points per kill
+      and repeats forever.
+    type: Tweak
+  - message: Threat and threat leader kills only count when your faction does the
+      killing. Evolving or otherwise dying to unrelated causes no longer counts.
+    type: Tweak
+  - message: The ICRC Relief Party has been moved to Tier 1 of the GOVFOR tech tree.
+    type: Tweak
+  - message: Maps with planetside GOVFOR have been removed from the Force on Force
+      and Distress Signal rotation.
+    type: Tweak
+  - message: Fixed the kill threat and kill threat leader objectives not counting
+      kills.
+    type: Fix
+  - message: Objectives on other z-levels of the planet can now be completed.
+    type: Fix
+  - message: The Analyzer Machine's sprite now shows its states properly when destroyed
+      or scanning items.
+    type: Fix
+  - message: Intel items now fit in filing cabinets.
+    type: Fix
+  id: 712
+  time: '2026-09-30T16:36:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2056
 Name: CMU
 Order: -1
