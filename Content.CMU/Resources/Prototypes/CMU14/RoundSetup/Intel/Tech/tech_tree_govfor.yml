@@ -58,6 +58,18 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: medic_qol
+        - name: ICRC Relief Party
+          description: Summon a Red Cross relief party. Neutral medics for everyone.
+          cost: 15
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ICRCReliefParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: An ICRC relief party has been dispatched to provide humanitarian aid.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
         - name: Unlock Tier 2
           description: Transitions the tree to another tier.
           cost: 3
@@ -84,18 +96,6 @@
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A CMB parolee transport has been dispatched to process detainees.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: beacon
-        - name: ICRC Relief Party
-          description: Summon a Red Cross relief party. Neutral medics for everyone.
-          cost: 15
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: ICRCReliefParty
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: An ICRC relief party has been dispatched to provide humanitarian aid.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon

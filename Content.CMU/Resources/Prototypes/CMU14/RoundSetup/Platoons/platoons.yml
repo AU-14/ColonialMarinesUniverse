@@ -1034,6 +1034,8 @@
   - VehicleAPC
   - VehicleAPCMed
   - VehicleHumvee
+  - VehicleHumveeTransport
+  - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   name: CMB Crisis Intervention
   lorePrimer: AU14PrimerPlatoonCMBCIU
@@ -1253,10 +1255,12 @@
 - type: platoon
   id: HAZOPS
   vehicleSupplyCatalog:
+  - VehicleTank
   - CMUFighterGround
   - VehicleAev
   - VehicleAPC
   - VehicleAPCMed
+  - VehicleHumvee
   - VehicleHumveeMedical
   - VehicleHumveeTransport
   - VehicleBlackfootTransport
@@ -1282,7 +1286,9 @@
   id: ProdigySF
   vehicleSupplyCatalog:
   - CMUFighterGround
+  - VehicleTank
   - VehicleHumvee
+  - VehicleHumveeMedical
   - VehicleHumveeTransport
   - AU14VehicleCivArmoredTruck
   - AU14VehicleCivTruck
@@ -1570,6 +1576,7 @@
   id: VAIPO
   vehicleSupplyCatalog:
   - CMUFighterGround
+  - VehicleTank
   - VehicleAPC
   - VehicleHumvee
   - VehicleHumveeTransport
@@ -1762,6 +1769,7 @@
   vehicleSupplyCatalog:
   - CMUFighterGround
   - VehicleTankTWE
+  - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical
   name: TWE Royal Marine Commandos

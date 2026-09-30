@@ -10,9 +10,42 @@
   - CMUGuideMedical
   - CMUGuideLawEnforcement
   - CMUGuideEngineering
+  - CMUGuideIntelObjectives
   - CMUResearchIndex
   - CMUGuideRoleRider
   - CMUChemicals
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideIntelObjectives
+  name: cmu-guide-entry-intel-objectives
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/Intel/CMUIntelObjectives.xml"
+  children:
+  - CMUGuideObjectives
+  - CMUGuideObjectivePoints
+  - CMUGuideIntel
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideObjectives
+  name: cmu-guide-entry-objectives
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Guides/Intel/CMUObjectives.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideObjectivePoints
+  name: cmu-guide-entry-objective-points
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/Intel/CMUObjectivePoints.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideIntel
+  name: cmu-guide-entry-intel
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/Intel/CMUIntel.xml"
 
 - type: guideEntry
   parent: RMC

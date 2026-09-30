@@ -1,11 +1,17 @@
+using Content.Shared._RMC14.Intel.Detector;
 using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared.CMU14.Round.Objectives.Type;
-using Content.Shared.DragDrop;
-using Content.Shared.Interaction.Events;
-using Content.Shared.Movement.Pulling.Events;
 using Robust.Shared.Map;
 
 namespace Content.Server.CMU14.Round.Objectives.Type;
+
+public enum FetchAnalyzeResult : byte
+{
+    NotObjective,
+    WrongFaction,
+    AlreadyFetched,
+    Fetched,
+}
 
 public sealed partial class ObjFetchSystem : ObjectiveSystem
 {
@@ -19,11 +25,13 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
         SubscribeLocalEvent<FetchObjectiveComponent, ObjectiveActivatedEvent>(OnActivated);
         SubscribeLocalEvent<FetchObjectiveComponent, ObjectiveResetEvent>(OnReset);
         SubscribeLocalEvent<ObjectiveWatchedEntityStartupEvent>(OnEntityMetaStartup);
-        SubscribeLocalEvent<FetchItemComponent, DroppedEvent>(OnDropped);
-        SubscribeLocalEvent<FetchItemComponent, PullStoppedMessage>(OnUndragged);
-        SubscribeLocalEvent<FetchReturnPointComponent, DragDropTargetEvent>(OnReturnPointDragDrop);
         SubscribeLocalEvent<FetchItemComponent, EntityTerminatingEvent>(OnFetchItemDestroyed);
+        SubscribeLocalEvent<FetchItemComponent, ComponentStartup>(OnFetchItemStartup);
     }
+
+    /// <summary>Objective items show up on intel detectors, the same as RMC intel.</summary>
+    private void OnFetchItemStartup(EntityUid uid, FetchItemComponent comp, ref ComponentStartup args)
+        => EnsureComp<IntelDetectorTrackedComponent>(uid);
 
     private void OnActivated(EntityUid uid, FetchObjectiveComponent fetchComp, ref ObjectiveActivatedEvent args)
     {
@@ -259,70 +267,61 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             ObjCtrl.LateSpawnFetchObjectiveForItem(uid, objectiveProto);
     }
 
-    private void OnDropped(EntityUid uid, FetchItemComponent item, ref DroppedEvent _) => TryCompleteFetch(uid, item);
-    private void OnUndragged(EntityUid uid, FetchItemComponent item, ref PullStoppedMessage _) => TryCompleteFetch(uid, item);
-
-    private void OnReturnPointDragDrop(EntityUid uid, FetchReturnPointComponent comp, ref DragDropTargetEvent args)
+    /// <summary>
+    /// Hands an objective item in at an Analyzer Machine. Credits the Analyzer's faction, or the objective's own
+    /// faction for an Analyzer with none set.
+    /// </summary>
+    public FetchAnalyzeResult TryFetchAtAnalyzer(EntityUid analyzerUid, EntityUid itemUid)
     {
-        if (TryComp(args.Dragged, out FetchItemComponent? item))
-            TryCompleteFetch(args.Dragged, item);
-    }
+        var proto = MetaData(itemUid).EntityPrototype?.ID;
+        if (string.IsNullOrEmpty(proto))
+            return FetchAnalyzeResult.NotObjective;
 
-    private void TryCompleteFetch(EntityUid itemUid, FetchItemComponent item)
-    {
-        if (item.Fetched
-                || !TryComp(item.ObjectiveUid, out FetchObjectiveComponent? fetchComp)
-                || !TryComp(item.ObjectiveUid, out CMUObjectiveComponent? auComp))
-            return;
+        if (TryComp(itemUid, out FetchItemComponent? existing) && existing.Fetched)
+            return FetchAnalyzeResult.AlreadyFetched;
 
-        var xform = Transform(itemUid);
-        var coords = xform.Coordinates;
-        var gridId = _xformSys.GetGrid(coords);
-        var pos = _xformSys.GetWorldPosition(xform);
+        var analyzerFaction = TryComp(analyzerUid, out FetchAnalyzerComponent? a) ? a.Faction.ToLowerInvariant() : string.Empty;
+        var wrongFaction = false;
 
-        FetchReturnPointComponent? matched = null;
-        foreach (var ent in _lookup.GetEntitiesInRange(coords, 10f))
+        var query = EntityQueryEnumerator<FetchObjectiveComponent, CMUObjectiveComponent>();
+        while (query.MoveNext(out var objUid, out var fetchComp, out var auComp))
         {
-            if (!TryComp(ent, out FetchReturnPointComponent? rp))
+            if (!auComp.Active || !string.Equals(fetchComp.TargetPrototype, proto, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            var rpXform = Transform(ent);
-            if (_xformSys.GetGrid(rpXform.Coordinates) != gridId)
+            // An item already claimed by a different objective only counts for that one.
+            if (existing != null && existing.ObjectiveUid.IsValid() && existing.ObjectiveUid != objUid)
                 continue;
 
-            var rpPos = _xformSys.GetWorldPosition(rpXform);
-            if ((int)pos.X != (int)rpPos.X || (int)pos.Y != (int)rpPos.Y)
-                continue;
-
-            var returnId = fetchComp.CustomReturnPointId;
-            if (!string.IsNullOrEmpty(returnId))
+            if (!string.IsNullOrEmpty(analyzerFaction) && !auComp.FactionNeutral && auComp.Faction.ToLowerInvariant() != analyzerFaction)
             {
-                if (rp.FetchId == returnId || (string.IsNullOrEmpty(rp.FetchId) && rp.Generic))
-                { matched = rp; break; }
+                wrongFaction = true;
+                continue;
             }
-            else if (rp.Generic)
-            { matched = rp; break; }
+
+            var creditFaction = string.IsNullOrEmpty(analyzerFaction) ? auComp.Faction.ToLowerInvariant() : analyzerFaction;
+            if (string.IsNullOrEmpty(creditFaction))
+                continue;
+
+            var item = EnsureComp<FetchItemComponent>(itemUid);
+            item.ObjectiveUid = objUid;
+            item.Fetched = true;
+            fetchComp.AmountFetchedPerFaction.TryAdd(creditFaction, 0);
+            fetchComp.AmountFetchedPerFaction[creditFaction]++;
+
+            if (ShouldCompleteForFaction(auComp, creditFaction, fetchComp.AmountFetchedPerFaction[creditFaction], fetchComp.FetchCount))
+            {
+                ObjInt.UnregisterInterest(objUid);
+                ObjCtrl.CompleteObjectiveForFaction(objUid, auComp, creditFaction, sawmill: _logs);
+            }
+
+            return FetchAnalyzeResult.Fetched;
         }
 
-        if (matched is not { } rpComp || string.IsNullOrEmpty(rpComp.ReturnPointFaction))
-            return;
-
-        var faction = rpComp.ReturnPointFaction.ToLowerInvariant();
-        if (!auComp.FactionNeutral && faction != auComp.Faction.ToLowerInvariant())
-            return;
-
-        fetchComp.AmountFetchedPerFaction.TryAdd(faction, 0);
-        fetchComp.AmountFetchedPerFaction[faction]++;
-        item.Fetched = true;
-
-        if (ShouldCompleteForFaction(auComp, faction, fetchComp.AmountFetchedPerFaction[faction], fetchComp.FetchCount))
-        {
-            ObjInt.UnregisterInterest(item.ObjectiveUid);
-            ObjCtrl.CompleteObjectiveForFaction(item.ObjectiveUid, auComp, faction, sawmill: _logs);
-        }
+        return wrongFaction ? FetchAnalyzeResult.WrongFaction : FetchAnalyzeResult.NotObjective;
     }
 
-    public int ScanForFetchItems(EntityUid analyzerUid)
+    public int ScanForFetchItems(EntityUid analyzerUid, List<EntityUid>? fetched = null)
     {
         if (!TryComp(analyzerUid, out TransformComponent? analyzerXform))
             return 0;
@@ -356,6 +355,7 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
                 fetchComp.AmountFetchedPerFaction[creditFaction]++;
                 item.Fetched = true;
                 totalFetched++;
+                fetched?.Add(ent);
             }
 
             if (ShouldCompleteForFaction(auComp, creditFaction, fetchComp.AmountFetchedPerFaction.GetValueOrDefault(creditFaction), fetchComp.FetchCount))

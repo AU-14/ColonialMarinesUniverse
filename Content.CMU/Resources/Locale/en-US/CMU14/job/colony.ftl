@@ -140,10 +140,10 @@ au14-job-description-civilianscientist = You're a scientist employed by the Weyl
 au14-job-prefix-civilianscientist = SCI.
 
 au14-job-name-usasfrecruiter = UA Recruiter
-au14-job-description-usasfrecruiter = You're a recruiter from the United States Military. You've been stationed on the colony to legally enlist civilians into the UA Military. (Role available on LV-624)
+au14-job-description-usasfrecruiter = You're a recruiter from the United Americas. You've been stationed on the colony to legally enlist civilians into the UA Military. (Role available on LV-624)
 au14-job-prefix-usasfrecruiter = UA RECR
 
-au14-job-name-civiliancolonysynthetic = Colony Operations Synthetic
+au14-job-name-civiliancolonysynthetic = Operations Synthetic
 au14-job-description-civiliancolonysynthetic = You're an artificial person created by the Weyland-Yutani Corporation. Aid the colony personnel in their day to day tasks. You are incapable of utilizing ballistic weaponry. (WARNING: THIS ROLE REQUIRES HIGH ROLEPLAY PROWESS)
 au14-job-prefix-civiliancolonysynthetic = CSYNTH
 

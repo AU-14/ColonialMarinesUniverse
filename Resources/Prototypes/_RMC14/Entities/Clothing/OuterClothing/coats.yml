@@ -1077,15 +1077,17 @@
       - PillPacket
       - PillCanister
       - CMSurgicalCase
-  - type: CMArmor
-    melee: 30
-    bullet: 15
-    bio: 20
-    explosionArmor: 0
-  - type: CMHardArmor
-  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_VERY_LIGHT
-    walkModifier: 0.897
-    sprintModifier: 0.897
+  # cmu edit start
+  # - type: CMArmor
+  #   melee: 30
+  #   bullet: 15
+  #   bio: 20
+  #   explosionArmor: 0
+  # - type: CMHardArmor
+  # - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_VERY_LIGHT
+  #   walkModifier: 0.897
+  #   sprintModifier: 0.897
+  # cmu edit end
 #AU-14 - end
 
 - type: entity
