@@ -95,28 +95,6 @@
     fetchId: fetchoreobjectivemarker
 
 - type: entity
-  name: Fetch Generic Return point Opfor
-  parent: MarkerBase
-  id: fetchreturnopfor
-  components:
-  - type: Sprite
-    state: red
-  - type: FetchReturnPoint
-    returnPointFaction: opfor
-    generic: true
-
-- type: entity
-  name: Fetch Generic Return point Govfor
-  parent: MarkerBase
-  id: fetchreturngovfor
-  components:
-  - type: Sprite
-    state: red
-  - type: FetchReturnPoint
-    returnPointFaction: govfor
-    generic: true
-
-- type: entity
   name: Fetch crown Objective
   parent: fetchresearchobjectivemarker
   id: fetchcrownobjective

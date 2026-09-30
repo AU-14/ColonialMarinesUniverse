@@ -46,7 +46,6 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 {
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedAU14CallsignConsoleSystem _consoleAccess = default!;
@@ -61,6 +60,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private LanguageSystem _language = default!;
     [Dependency] private ANPRCRangeSystem _range = default!;
     [Dependency] private ANPRCSweepSystem _sweep = default!;
+    [Dependency] private ANPRCChatSystem _anprcChat = default!;
     [Dependency] private AU14CommsToggleSystem _comms = default!;
     [Dependency] private PaperSystem _paper = default!;
     [Dependency] private BatterySystem _battery = default!;
@@ -136,9 +136,13 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             subs.Event<ANPRCManualFrequencyMsg>(OnManualFrequency);
             subs.Event<ANPRCRadioCheckMsg>(OnRadioCheck);
             subs.Event<ANPRCOpenDirectoryMsg>(OnOpenDirectory);
+            subs.Event<ANPRCOpenPhoneMsg>(OnOpenPhone);
             subs.Event<ANPRCSetSweepMsg>(OnSetSweep);
             subs.Event<ANPRCTuneContactMsg>(OnTuneContact);
             subs.Event<ANPRCPrintLogMsg>(OnPrintLog);
+            subs.Event<ANPRCQuickSetupMsg>(OnQuickSetup);
+            subs.Event<ANPRCRenameSlotMsg>(OnRenameSlot);
+            subs.Event<BoundUIOpenedEvent>(OnUiOpened);
         });
 
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCPlantDoAfterEvent>(OnPlantDoAfter);
@@ -157,6 +161,9 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<ANPRCRadioComponent, PowerCellSlotEmptyEvent>(OnBatteryEmpty);
         SubscribeLocalEvent<ANPRCRadioComponent, EntInsertedIntoContainerMessage>(OnAntennaInserted);
         SubscribeLocalEvent<ANPRCRadioComponent, EntRemovedFromContainerMessage>(OnAntennaRemoved);
+
+        InitializePhone();
+        InitializeExpert();
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
@@ -170,6 +177,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         if (!radio.Enabled || (!radio.IsEquipped && !radio.Planted))
             return;
 
+        TryQueueRetrans(ent, ref args);
+
         var wearer = Transform(ent.Owner).ParentUid;
 
         if (!wearer.IsValid())
@@ -180,7 +189,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             TryComp(ctWearing.Radio, out ANPRCRadioComponent? ctRadio) &&
             ctRadio.Mode == RadioMode.CipherText &&
             !string.IsNullOrEmpty(args.Channel.Faction) &&
-            !_crypto.HasMatchingCrypto(ent.Owner, args.Channel))
+            !_crypto.HasMatchingCrypto(ent.Owner, args.Channel) &&
+            !_crypto.HasBrokenKey(ent.Owner, args.Channel.Faction))
         {
             return;
         }
@@ -235,6 +245,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
                 intercepted,
                 args.Language);
 
+            radio.LastReceive = _timing.CurTime;
+
             UpdateBuiState(ent);
 
             if (!covered && TryComp(wearer, out ActorComponent? actor))
@@ -247,17 +259,21 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
                     args.Language,
                     args.MessageSource);
 
-                var senderName = FormattedMessage.EscapeText(GetSenderDisplayName(args.MessageSource));
-                var message = FormattedMessage.EscapeText(heard);
-                var wrapped = $"[color=#FF6B6B]{senderName}: {message}[/color]";
-
-                _chatManager.ChatMessageToOne(
-                    ChatChannel.Radio,
-                    heard,
-                    wrapped,
-                    args.MessageSource,
-                    false,
-                    actor.PlayerSession.Channel);
+                // somebody else's net goes under its own tag; one of the operator's own nets
+                // reads exactly as the headset would have drawn it
+                if (intercepted)
+                {
+                    _anprcChat.Intercept(
+                        actor.PlayerSession,
+                        args.MessageSource,
+                        GetSenderDisplayName(args.MessageSource),
+                        args.Channel.LocalizedName,
+                        heard);
+                }
+                else
+                {
+                    _anprcChat.Traffic(actor.PlayerSession, args.ChatMsg.Message, heard);
+                }
             }
         }
 
@@ -275,7 +291,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             UpdateRelayAnchor(ent);
             UpdateBuiState(ent);
 
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString(
                     "anprc-scan-switched",
                     ("slot", slot + 1),
@@ -366,13 +382,28 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             return;
         }
 
-        if (radio.Comp.ActiveSlot < 0 ||
-            !radio.Comp.Presets.TryGetValue(radio.Comp.ActiveSlot, out var activeChannel))
+        if (radio.Comp.ActiveSlot >= 0 &&
+            radio.Comp.Presets.TryGetValue(radio.Comp.ActiveSlot, out var activeChannel))
         {
-            return;
+            GrantChannel(radio.Comp, active, activeChannel);
         }
 
-        GrantChannel(radio.Comp, active, activeChannel);
+        // PRIORITY WATCH: the second memory stays in the operator's ear while they work the first
+        if (radio.Comp.PriorityWatchSlot >= 0 &&
+            radio.Comp.Presets.TryGetValue(radio.Comp.PriorityWatchSlot, out var watched))
+        {
+            GrantChannel(radio.Comp, active, watched);
+        }
+
+        // RETRANS: a bridging set has to hear both sides of the bridge
+        if (radio.Comp.Planted && radio.Comp.RetransSlotA >= 0 && radio.Comp.RetransSlotB >= 0)
+        {
+            if (radio.Comp.Presets.TryGetValue(radio.Comp.RetransSlotA, out var netA))
+                GrantChannel(radio.Comp, active, netA);
+
+            if (radio.Comp.Presets.TryGetValue(radio.Comp.RetransSlotB, out var netB))
+                GrantChannel(radio.Comp, active, netB);
+        }
     }
 
     private static void GrantChannel(
@@ -425,7 +456,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         if (TerminatingOrDeleted(ent.Owner))
             return;
 
-        if ((!ent.Comp.IsEquipped && !ent.Comp.Planted) || !ent.Comp.Enabled)
+        // EMCON is silence: a set that anchors a net is transmitting for everyone on it
+        if ((!ent.Comp.IsEquipped && !ent.Comp.Planted) || !ent.Comp.Enabled || ent.Comp.Emcon)
         {
             RemComp<ANPRCRelayAnchorComponent>(ent.Owner);
             return;
@@ -448,6 +480,9 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         anchor.Channels.Clear();
 
         var rangeMultiplier = ent.Comp.TxPower.RangeMultiplier();
+
+        if (ent.Comp.Planted && ent.Comp.AntennaPeaked)
+            rangeMultiplier *= ent.Comp.PeakRangeMultiplier;
 
         anchor.RangeMultiplier = rangeMultiplier;
         anchor.Planted = ent.Comp.Planted;
@@ -550,7 +585,10 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         args.Handled = true;
 
         ent.Comp.Planted = false;
+        ClearStakedTechniques(ent);
         Dirty(ent);
+
+        UpdateEquippedChannels(ent);
 
         if (!ent.Comp.IsEquipped)
         {
@@ -581,6 +619,11 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     }
 
     private void OnBatteryEmpty(Entity<ANPRCRadioComponent> ent, ref PowerCellSlotEmptyEvent args)
+    {
+        HandleBatteryEmpty(ent);
+    }
+
+    private void HandleBatteryEmpty(Entity<ANPRCRadioComponent> ent)
     {
         if (!ent.Comp.Enabled)
             return;
@@ -704,6 +747,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             intercepted,
             args.Language);
 
+        ent.Comp.LastReceive = _timing.CurTime;
+
         UpdateBuiState(ent);
     }
 
@@ -792,7 +837,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     public bool KnowsFrequency(ANPRCRadioComponent radio, RadioChannelPrototype channel)
     {
         if (string.IsNullOrEmpty(channel.Faction) ||
-            string.IsNullOrEmpty(radio.OperatorFaction) ||
+            !string.IsNullOrEmpty(radio.OperatorFaction) &&
             string.Equals(channel.Faction, radio.OperatorFaction, StringComparison.OrdinalIgnoreCase))
         {
             return true;

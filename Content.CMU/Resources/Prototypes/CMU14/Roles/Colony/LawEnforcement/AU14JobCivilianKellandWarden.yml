@@ -29,7 +29,7 @@
 
   name: au14-job-name-civiliankellandwarden
   description: au14-job-description-civiliankellandwarden
-  setPreference: true
+  setPreference: false
   playTimeTracker: AU14JobCivilianKellandWarden
   ranks:
     RMCRankCivilian: [ ]

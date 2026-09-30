@@ -20,7 +20,7 @@ public sealed partial class ObjectiveIntelWindow : FancyWindow
         string defaultTitle,
         List<ObjectiveIntelTierEntry>? tiers,
         int unlockedTier,
-        int factionPoints,
+        float factionPoints,
         Action<int>? unlockCallback = null)
     {
         Title = Loc.GetString("objective-intel-window-title");
@@ -36,7 +36,7 @@ public sealed partial class ObjectiveIntelWindow : FancyWindow
                 "objective-intel-next-tier",
                 ("current", unlockedTier),
                 ("total", tiers.Count));
-        FactionPointsLabel.Text = factionPoints.ToString();
+        FactionPointsLabel.Text = factionPoints.ToString("0.##");
 
         UnlockedBox.DisposeAllChildren();
         NextBox.DisposeAllChildren();

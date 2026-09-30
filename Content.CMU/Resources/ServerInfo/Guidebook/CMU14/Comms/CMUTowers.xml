@@ -21,10 +21,11 @@
     <GuideEntityEmbed Entity="AU14CommsMastField" Caption="Field antenna mast"/>
   </Box>
   When there's no working tower nearby, you can raise your own. A [bold]field antenna mast[/bold] relays the combat nets (the squad, command, intel, JTAC and MP channels) around it, so a forward position or command post can stay on the net.
-  - [bold]Building it[/bold]: use a stack of [bold]metal[/bold] in your hand and pick the field antenna mast from the build menu. It costs [bold]50 metal[/bold] and takes 25 seconds, less with more engineering skill. You need [bold]engineering training[/bold] (level 2) to build one.
+  - [bold]Building it[/bold]: it's a staged job for someone with [bold]engineering training[/bold] (level 2). Pick [bold]antenna mast parts[/bold] from the metal build menu, lay a footing on open ground, raise and weld the lattice, guy it, fit an antenna head from requisitions and tune the feed. The full step list is in [textlink="the AN/PRC-117G guide" link="AU14CommsANPRC"].
+  - [bold]Keying it[/bold]: a mast only carries the nets of sides whose [bold]COMSEC fill card[/bold] has been loaded into its open feed. An unkeyed mast carries nothing.
   - [bold]Range[/bold]: full signal out to about 75 tiles, and a weaker signal out to about 100.
   - [bold]It needs power.[/bold] An unpowered mast relays nothing, so build it in an area whose APC has power, with its equipment channel on. In the field, bring a PACMAN generator and APC electronics to power the area (see [textlink="Power" link="CMUGuideEngPower"]).
-  - [color=red]It relays both sides' nets.[/color] A mast is a mast: whoever is near it can use it, enemies included, and hostile saboteurs can splice a tap into it to listen in. Put it somewhere you can hold.
+  - [color=red]It can be taken over.[/color] Anyone who opens the feed can load their own side's card into it, and hostile saboteurs can splice a tap into it to listen in. Put it somewhere you can hold.
   - If it's damaged, weld it back up with a blowtorch. If it's destroyed, everyone relying on it drops off the net.
 
   ## Sensor Towers
