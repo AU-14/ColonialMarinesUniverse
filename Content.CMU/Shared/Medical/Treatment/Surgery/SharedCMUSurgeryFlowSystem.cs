@@ -1134,11 +1134,11 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     private void OnPainTierChanged(ref PainTierChangedEvent args)
     {
         if (!Net.IsServer
-            || !ShouldRejectSurgeryStepForPain(args.Body)
             || !TryComp<CMUSurgeryArmedStepComponent>(args.Body, out var armed)
             || !SurgerySessions.TryGetSession(args.Body, out var session)
             || session.ActiveAttempt is not { } attempt
             || session.ActiveSurgeon is not { } surgeon
+            || !ShouldRejectSurgeryStepForPain(args.Body, surgeon)
             || !SurgerySessions.CancelActiveAttempt(args.Body))
         {
             return;
