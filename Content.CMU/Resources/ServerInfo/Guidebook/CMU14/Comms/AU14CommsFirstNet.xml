@@ -463,6 +463,8 @@
 
   Removing a splice takes approximately eight seconds and returns its keying module.
 
+  Opening the feed of a spliced [bold]field antenna mast[/bold] also knocks the tap loose, and its keying module drops at the foot of the mast.
+
   The recovered module can read CLF traffic until CLF leadership performs a recrypto.
 
   A deployed [bold]relay set[/bold] can also be packed up by anyone.

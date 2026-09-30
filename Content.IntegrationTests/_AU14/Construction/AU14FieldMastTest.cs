@@ -114,6 +114,55 @@ public sealed class AU14FieldMastTest
         await pair.CleanReturnAsync();
     }
 
+    // the splice does not survive the entity swap, so opening the feed has to shake the tap loose and
+    // leave its keying module behind, the same reward as pulling the tap by hand
+    [Test]
+    public async Task OpeningTheFeedDropsASpliceTapsModule()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        EntityUid tap = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var mast = entities.SpawnEntity(Govfor, testMap.GridCoords);
+            tap = entities.SpawnEntity("AU14CLFNetSpliceTap", testMap.GridCoords);
+
+            entities.EnsureComponent<AU14NetSpliceTapComponent>(tap).Target = mast;
+            entities.EnsureComponent<AU14NetSplicedComponent>(mast).Tap = tap;
+
+            Assert.That(server.System<ConstructionSystem>().ChangeNode(mast, null, "feedOpen"), Is.True);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var modules = 0;
+            var cards = entities.EntityQueryEnumerator<ANPRCFillCardComponent, MetaDataComponent>();
+
+            while (cards.MoveNext(out _, out _, out var meta))
+            {
+                if (meta.EntityPrototype?.ID == "ANPRCFillCardCLF")
+                    modules++;
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.Deleted(tap), Is.True, "the tap falls off the opened feed");
+                Assert.That(modules, Is.EqualTo(1), "its keying module drops at the mast");
+            });
+
+            entities.DeleteEntity(FindMast(entities));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task BadSiteReturnsTheFooting()
     {

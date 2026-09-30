@@ -271,6 +271,10 @@
     - MAGPIE
     dfReportFactions:
     - GOVFOR
+    # a fixed station on a long watch, not a manpack working the net: the old flat 1 charge a second
+    # while relaying, so a high-capacity cell holds the safehouse for well over two hours
+    idleChargePerSecond: 0.5
+    relayChargePerSecond: 0.5
     # comes up tuned so the leader can work it without a trained operator present
     defaultSlots:
     - label: CELL
@@ -323,6 +327,10 @@
     relayOnly: true
     dfReportFactions:
     - GOVFOR
+    # a cache relay is left alone for hours and has no POWER SAVE to reach for. keep it on the
+    # old flat rate, so a high-capacity cell lasts well over two hours
+    idleChargePerSecond: 0.5
+    relayChargePerSecond: 0.5
     defaultSlots:
     - label: CELL
       channel: radioCLF

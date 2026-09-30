@@ -248,6 +248,7 @@
   - junctions spark while being worked and while faulted
   - an installed tap can be removed in eight seconds
   - removing a tap returns a CLF fill card
+  - opening a spliced field mast's feed knocks the tap off and drops its CLF fill card
 
   ## Antennas
 
