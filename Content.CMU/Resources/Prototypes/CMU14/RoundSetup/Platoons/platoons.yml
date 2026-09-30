@@ -1576,6 +1576,7 @@
   id: VAIPO
   vehicleSupplyCatalog:
   - CMUFighterGround
+  - VehicleTank
   - VehicleAPC
   - VehicleHumvee
   - VehicleHumveeTransport
