@@ -376,6 +376,73 @@
       rmc-aslot-barrel: 0.97, 0.031
       rmc-aslot-underbarrel: 0.56, -0.31
 
+- type: entity
+  parent: AU14WeaponRifleKramerAR
+  id: CMUWeaponRifleKramerEnforcerNoScope
+  name: Kramer enforcer rifle
+  description: A law enforcement model of the Kramer assault rifle limited to semi-automatic and burst fire, issued to colonial police and security forces. Takes standard Kramer magazines.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramericon.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/misc/kramerenforcer/kramer32x32.rsi
+  - type: Gun
+    selectedMode: Burst
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      collection: CMM54CShoot
+    shotsPerBurst: 3
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilUnwielded: 4
+    scatterWielded: 5
+    scatterUnwielded: 20
+    baseFireRate: 4
+    burstScatterMult: 1
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentLaserSight
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.22, 0.21
+      rmc-aslot-barrel: 0.97, 0.031
+      rmc-aslot-underbarrel: 0.56, -0.31
+
 - type: Tag
   id: AU14WeaponRifleKramerAR
 

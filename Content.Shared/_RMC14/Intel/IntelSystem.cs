@@ -696,7 +696,10 @@ public sealed partial class IntelSystem : EntitySystem
                 continue;
             }
 
-            var spawner = _random.Pick(spawners);
+            // cmu edit start
+            // var spawner = _random.Pick(spawners);
+            var spawner = PickSpreadSpawner(spawners);
+            // cmu edit end
             var coords = _transform.GetMoverCoordinates(spawner);
             var intel = Spawn(proto, coords);
             items.Add(intel);
@@ -817,6 +820,9 @@ public sealed partial class IntelSystem : EntitySystem
 
     public void RunSpawners()
     {
+        // cmu edit start
+        ResetCMUSpread();
+        // cmu edit end
         try
         {
             var spawnerQuery = EntityQueryEnumerator<IntelSpawnerComponent>();
@@ -851,6 +857,9 @@ public sealed partial class IntelSystem : EntitySystem
             SpawnIntel(ExperimentalDevicesProto, _experimentalDevices, _experimentalDeviceChances);
             // SpawnIntel(ResearchPaperProto, _researchPapers, _researchPaperChances);
             // SpawnIntel(VialBoxProto, _vialBoxes, _vialBoxChances);
+            // cmu edit start
+            LogCMUSpread();
+            // cmu edit end
 
             tree.Comp.Tree.Documents.Total = _paperScraps + _progressReports + _folders + _technicalManuals;
             tree.Comp.Tree.UploadData.Total = _disks;
@@ -886,6 +895,9 @@ public sealed partial class IntelSystem : EntitySystem
         finally
         {
             _spawners.Clear();
+            // cmu edit start
+            ResetCMUSpread();
+            // cmu edit end
         }
     }
 
