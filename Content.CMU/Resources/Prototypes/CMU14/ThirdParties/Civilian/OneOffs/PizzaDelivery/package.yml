@@ -69,6 +69,7 @@
   maxplayers: 400
   GhostsNeeded: 2
   roundstart: false
+  ghostCallable: true
 
 - type: startingGear
   id: AU14GearPizzaDeliveryBoy

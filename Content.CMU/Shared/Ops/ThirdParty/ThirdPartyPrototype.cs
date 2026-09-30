@@ -47,6 +47,13 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     [DataField("maxplayers")]
     public int MaxPlayers { get; private set; } = 100;
 
+    /// <summary>
+    ///     If true, ghosts may call this party in through the ghost role menu once enough players are dead.
+    ///     Meant for minor civilian drop-ins, not heavy forces.
+    /// </summary>
+    [DataField]
+    public bool GhostCallable { get; private set; }
+
     [DataField("minplayers")]
     public int MinPlayers { get; private set; }
 

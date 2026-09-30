@@ -16,6 +16,7 @@
   maxplayers: 49
   GhostsNeeded: 5
   roundstart: false
+  ghostCallable: true
   whitelistedgamemodes:
     - insurgency
     - colonyfall
@@ -38,6 +39,7 @@
   maxplayers: 100
   GhostsNeeded: 7
   roundstart: false
+  ghostCallable: true
   whitelistedgamemodes:
     - insurgency
     - colonyfall
@@ -60,6 +62,7 @@
   maxplayers: 400
   GhostsNeeded: 9
   roundstart: false
+  ghostCallable: true
   whitelistedgamemodes:
     - insurgency
     - colonyfall
