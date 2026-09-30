@@ -17,9 +17,9 @@ public sealed partial class ObjectivesConsoleWindow : FancyWindow
         CloseButton.OnPressed += _ => Close();
     }
 
-    public void UpdateObjectives(List<ObjectiveEntry> objectives, int currentWinPoints, int requiredWinPoints)
+    public void UpdateObjectives(List<ObjectiveEntry> objectives, float currentWinPoints, int requiredWinPoints)
     {
-        CurrentWinPointsLabel.Text = $"Current Win Points: {currentWinPoints}";
+        CurrentWinPointsLabel.Text = $"Current Win Points: {currentWinPoints:0.##}";
         RequiredWinPointsLabel.Text = $"Points to Final Objective: {requiredWinPoints}";
 
         ObjectivesList.DisposeAllChildren();

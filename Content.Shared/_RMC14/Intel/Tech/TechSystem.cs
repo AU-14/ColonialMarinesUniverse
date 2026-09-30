@@ -131,8 +131,10 @@ public sealed partial class TechSystem : EntitySystem
         if (option.Purchased && !option.Repurchasable)
             return;
 
-        if (!_intel.TryUsePoints(team, option.CurrentCost))
+        // cmu edit start: spend from the combined objective + intel pool shown on the console (intel first)
+        if (!_intel.TrySpendCombinedPoints(team, option.CurrentCost))
             return;
+        // cmu edit end
 
         tier[args.Index] = option with
         {
@@ -141,10 +143,12 @@ public sealed partial class TechSystem : EntitySystem
         };
         Dirty(ent);
 
-        // Raise a shared event so the authoritative ObjectiveMaster/Objective system can deduct AU win points server-side.
-        var auAmount =option.CurrentCost;
-        var spendEv = new SpendWinPointsEvent { Team = team, Amount = auAmount };
-        RaiseLocalEvent(spendEv);
+        // cmu edit start: TrySpendCombinedPoints already took any objective points it needed, so the old
+        // unconditional win-point deduction here would charge twice.
+        // var auAmount =option.CurrentCost;
+        // var spendEv = new SpendWinPointsEvent { Team = team, Amount = auAmount };
+        // RaiseLocalEvent(spendEv);
+        // cmu edit end
 
         foreach (var ev in option.Events)
         {
