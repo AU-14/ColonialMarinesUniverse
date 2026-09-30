@@ -19,6 +19,7 @@
     - ProdigySF
     platoonsOpfor:
     - LACN
+    - BEAR
     - UPP
     defaultgovfor: RMC
     defaultopfor: UPP
