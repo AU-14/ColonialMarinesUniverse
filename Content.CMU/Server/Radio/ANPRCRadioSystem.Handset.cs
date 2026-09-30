@@ -21,6 +21,11 @@ public sealed partial class ANPRCRadioSystem
 
     public override void Update(float frameTime)
     {
+        RefreshOpenPanels(frameTime);
+        UpdatePhones(frameTime);
+        UpdateBatteryDrain(frameTime);
+        FlushRetrans();
+
         List<(Entity<ANPRCHandsetUserComponent> User, string Reason)>? toRelease = null;
 
         var query = EntityQueryEnumerator<ANPRCHandsetUserComponent>();
@@ -96,12 +101,20 @@ public sealed partial class ANPRCRadioSystem
         if (ent.Comp.RelayOnly)
             return;
 
+        // a set that is also a phone shares this slot with the RMC exchange, which may already have
+        // spawned the handset into it. adopt that one rather than fighting over the slot
+        if (_container.TryGetContainer(ent, ANPRCRadioComponent.HandsetContainerId, out var slot) &&
+            slot.ContainedEntities.Count > 0 &&
+            HasComp<ANPRCHandsetComponent>(slot.ContainedEntities[0]))
+        {
+            BindPhoneHandset(ent, slot.ContainedEntities[0]);
+            return;
+        }
+
         if (!TrySpawnInContainer(ent.Comp.HandsetId, ent, ANPRCRadioComponent.HandsetContainerId, out var handset))
             return;
 
-        ent.Comp.Handset = handset;
-        Comp<ANPRCHandsetComponent>(handset.Value).Radio = ent;
-        Dirty(ent);
+        BindPhoneHandset(ent, handset.Value);
     }
 
     private void OnHandsetTerminating(Entity<ANPRCHandsetComponent> ent, ref EntityTerminatingEvent args)
@@ -355,6 +368,13 @@ public sealed partial class ANPRCRadioSystem
 
     private void TakeHandset(EntityUid user, Entity<ANPRCRadioComponent> pack)
     {
+        // taking the handset off a ringing set answers it
+        if (_telephone.AU14IsRinging(pack))
+        {
+            AnswerCall(pack, user);
+            return;
+        }
+
         if (pack.Comp.HandsetUser is { } current &&
             current != user &&
             !TerminatingOrDeleted(current) &&
@@ -376,9 +396,7 @@ public sealed partial class ANPRCRadioSystem
                 return;
             }
 
-            pack.Comp.Handset = spawned;
-            Comp<ANPRCHandsetComponent>(spawned.Value).Radio = pack.Owner;
-            Dirty(pack);
+            BindPhoneHandset(pack, spawned.Value);
             item = spawned.Value;
         }
 
@@ -394,11 +412,15 @@ public sealed partial class ANPRCRadioSystem
         }
 
         _popup.PopupEntity(Loc.GetString("anprc-handset-taken", ("radio", pack.Owner)), user, user);
-        _cmChat.ChatMessageToOne(Loc.GetString("anprc-handset-hint"), user);
+        _anprcChat.Notice(Loc.GetString("anprc-handset-hint"), user);
     }
 
     private void ReleaseHandset(Entity<ANPRCHandsetUserComponent> ent, string? messageKey = null)
     {
+        // hanging the handset up ends any call on it. the exchange puts the handset back itself
+        if (TryComp(ent.Comp.Radio, out ANPRCRadioComponent? callRadio) && _telephone.AU14InCall(ent.Comp.Radio))
+            EndCall((ent.Comp.Radio, callRadio), ent.Owner, null);
+
         RevokeHandsetHearing(ent);
 
         if (TryComp(ent.Comp.Radio, out ANPRCRadioComponent? radio))
@@ -418,7 +440,7 @@ public sealed partial class ANPRCRadioSystem
         RemComp<ANPRCHandsetUserComponent>(ent.Owner);
 
         if (messageKey != null && !TerminatingOrDeleted(ent.Owner))
-            _cmChat.ChatMessageToOne(Loc.GetString(messageKey), ent.Owner);
+            _anprcChat.Notice(Loc.GetString(messageKey), ent.Owner);
     }
 
     private void OnHandsetChatGetPrefix(Entity<ANPRCHandsetUserComponent> ent, ref ChatGetPrefixEvent args)
@@ -448,7 +470,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (radio.Mode == RadioMode.CipherText && string.IsNullOrEmpty(_crypto.GetFillFaction(ent.Comp.Radio)))
         {
-            _cmChat.ChatMessageToOne(Loc.GetString("anprc-ct-mode-no-fill"), ent.Owner);
+            _anprcChat.Notice(Loc.GetString("anprc-ct-mode-no-fill"), ent.Owner, ANPRCNotice.Warn);
             args.Channel = null;
             return;
         }
@@ -462,9 +484,9 @@ public sealed partial class ANPRCRadioSystem
         if (!radio.Presets.TryGetValue(radio.ActiveSlot, out var channelId) ||
             string.IsNullOrEmpty(channelId.Id))
         {
-            _cmChat.ChatMessageToOne(
+            _anprcChat.Notice(
                 Loc.GetString("anprc-slot-empty", ("slot", radio.ActiveSlot + 1)),
-                ent.Owner);
+                ent.Owner, ANPRCNotice.Warn);
 
             args.Channel = null;
             return;
@@ -491,6 +513,15 @@ public sealed partial class ANPRCRadioSystem
         }
 
         var pack = new Entity<ANPRCRadioComponent>(ent.Comp.Radio, radio);
+
+        // while a call is up the handset is the call's: plain speech goes down the line, never the net
+        if (!ent.Comp.PendingTransmit &&
+            args.Channel == null &&
+            HandsetInReach(ent.Owner, ent.Comp.Radio) &&
+            TryDeliverCallSpeech(ent.Owner, pack, args.Message))
+        {
+            return;
+        }
 
         if (ent.Comp.PendingTransmit)
         {
