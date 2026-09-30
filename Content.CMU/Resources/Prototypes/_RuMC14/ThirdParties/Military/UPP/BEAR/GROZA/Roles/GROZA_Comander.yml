@@ -126,7 +126,7 @@
   id: RuMCGearUPPBEARCommanderGROZA
   equipment:
     id: RuCMIDCardUPPBEARCommander
-    ears: RuMCHeadsetBEAR
+    ears: RuMCHeadsetBEARGROZA
   storage:
     outerClothing:
     - RMCLaserDesignator

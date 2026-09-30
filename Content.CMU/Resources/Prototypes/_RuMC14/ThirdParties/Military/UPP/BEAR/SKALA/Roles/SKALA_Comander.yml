@@ -126,7 +126,7 @@
   id: RuMCGearUPPBEARCommanderSKALA
   equipment:
     id: RuCMIDCardUPPBEARCommander
-    ears: RuMCHeadsetBEAR
+    ears: RuMCHeadsetBEARSKALA
   storage:
     outerClothing:
     - RMCLaserDesignator

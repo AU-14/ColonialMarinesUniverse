@@ -122,7 +122,7 @@
   id: RuMCGearUPPBEARRiflemanSKALA
   equipment:
     id: RuCMIDCardUPPBEARRifleman
-    ears: RuMCHeadsetBEAR
+    ears: RuMCHeadsetBEARSKALA
   storage:
     back:
     - RMCMRESPP

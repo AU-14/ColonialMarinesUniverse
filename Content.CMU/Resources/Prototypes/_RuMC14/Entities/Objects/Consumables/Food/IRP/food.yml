@@ -56,13 +56,13 @@
     state: gallet
   - type: Edible
     transferAmount: 3
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 7
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 7
   - type: FlavorProfile
     flavors:
     - bread
@@ -78,15 +78,15 @@
     state: fish
   - type: Edible
     transferAmount: 1
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 15
-        - ReagentId: Protein
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+      - ReagentId: Protein
+        Quantity: 10
   - type: FlavorProfile
     flavors:
     - garlic
@@ -104,15 +104,15 @@
     state: pie
   - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 10
-        - ReagentId: Protein
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 5
   - type: FlavorProfile
     flavors:
     - bread
@@ -132,15 +132,15 @@
     state: chicken
   - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 10
-        - ReagentId: Protein
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 10
   - type: FlavorProfile
     flavors:
     - garlic
@@ -158,15 +158,15 @@
     state: mashed_potatoes
   - type: Edible
     transferAmount: 5
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 19
-        - ReagentId: Protein
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 19
+      - ReagentId: Protein
+        Quantity: 1
   - type: FlavorProfile
     flavors:
     - potatoes
@@ -185,15 +185,15 @@
     state: candies
   - type: Edible
     transferAmount: 2
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
-        - ReagentId: Sugar
-          Quantity: 7
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: Sugar
+        Quantity: 7
   - type: FlavorProfile
     flavors:
     - sweet
@@ -209,15 +209,15 @@
     state: toffees
   - type: Edible
     transferAmount: 2
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: Sugar
-          Quantity: 11
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: Sugar
+        Quantity: 11
   - type: FlavorProfile
     flavors:
     - sweet
@@ -233,17 +233,17 @@
     state: curd
   - type: Edible
     transferAmount: 9
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 10
-        - ReagentId: Protein
-          Quantity: 3
-        - ReagentId: Sugar
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 3
+      - ReagentId: Sugar
+        Quantity: 5
   - type: FlavorProfile
     flavors:
     - sweet
@@ -261,15 +261,15 @@
     state: chocolate
   - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 10
-        - ReagentId: Sugar
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Sugar
+        Quantity: 10
   - type: FlavorProfile
     flavors:
     - sweet
@@ -286,19 +286,19 @@
     state: hematogen
   - type: Edible
     transferAmount: 6
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 12
-        - ReagentId: RMCPeanutButter
-          Quantity: 1
-        - ReagentId: Protein
-          Quantity: 10
-        - ReagentId: Sugar
-          Quantity: 7
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 12
+      - ReagentId: RMCPeanutButter
+        Quantity: 1
+      - ReagentId: Protein
+        Quantity: 10
+      - ReagentId: Sugar
+        Quantity: 7
   - type: FlavorProfile
     flavors:
     - nutty

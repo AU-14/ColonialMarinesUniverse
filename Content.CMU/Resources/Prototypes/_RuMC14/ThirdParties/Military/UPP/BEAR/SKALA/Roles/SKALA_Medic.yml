@@ -124,7 +124,7 @@
   id: RuMCGearUPPBEARMedicSKALA
   equipment:
     id: RuCMIDCardUPPBEARMedic
-    ears: RuMCHeadsetBEAR
+    ears: RuMCHeadsetBEARSKALA
   storage:
     back:
     - AU14GrenadeSmokeUPP

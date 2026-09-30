@@ -5,7 +5,7 @@
   description: An extreme sidegrade of 6B92 armor, with the intent to increase soldiers survivability as much, as possible. An ablative layers of composite armor weighting more than 100 pounds, supported by the servo-assisters in each limb, and powered by the baterries for 24 hours of estimated work. Due to the lack of powerful heat dispersion system, the suit becomes an oven to its owner, and each step takes more and more strenght even with servo-assisters. Yet still, it is the best answer to the question of life and death.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/armor/uppheavyarmor.rsi
+    sprite: CMU14/Clothing/UPP/armor/upplargearmor.rsi
   - type: CMArmor
     melee: 30
     bullet: 45

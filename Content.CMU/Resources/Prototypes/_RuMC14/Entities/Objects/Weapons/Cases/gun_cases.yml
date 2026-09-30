@@ -251,7 +251,6 @@
     whitelist:
       tags:
       - RuMCWeaponRifleAK13
-      - RuMCMagazineAK13
       - RMCMagazineRifleAK4047
       - RMCMagazineRifleAK4047AP
       - RuMCMagazineRifleAK4047bakelite

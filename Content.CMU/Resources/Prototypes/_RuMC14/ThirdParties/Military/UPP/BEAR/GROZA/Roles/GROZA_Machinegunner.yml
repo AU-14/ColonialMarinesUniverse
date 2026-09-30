@@ -121,7 +121,7 @@
   id: RuMCGearUPPBEARMachinegunnerGROZA
   equipment:
     id: RuCMIDCardUPPBEARMachinegunner
-    ears: RuMCHeadsetBEAR
+    ears: RuMCHeadsetBEARGROZA
   storage:
     back:
     - CMSheetMetal

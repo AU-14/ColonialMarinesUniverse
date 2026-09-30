@@ -121,7 +121,7 @@
         startingAttachable: RuMCAttachmentSuppressorAH12
         whitelist:
           tags:
-          - RuMCAttachmentSuppressorAH12
+          - RuMCAttachmentSuppressorAH
       rmc-aslot-rail:
         startingAttachable: AU14AttachmentTwoPointSling
         whitelist:

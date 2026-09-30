@@ -124,7 +124,7 @@
   id: RuMCGearUPPBEARMedicGROZA
   equipment:
     id: RuCMIDCardUPPBEARMedic
-    ears: RuMCHeadsetBEAR
+    ears: RuMCHeadsetBEARGROZA
   storage:
     back:
     - AU14GrenadeSmokeUPP

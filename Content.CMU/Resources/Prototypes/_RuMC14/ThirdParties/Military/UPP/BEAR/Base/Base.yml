@@ -194,7 +194,7 @@
     contents:
     - id: RuMCMagazinePKP_MS
       amount: 2
-    - id: RuMCMachineMagazineTracerPKP_MS
+    - id: RuMCMagazinePKP_MSTracer
       amount: 1
 
 - type: entity
@@ -206,7 +206,7 @@
     contents:
     - id: RuMCMagazinePKP_MS
       amount: 5
-    - id: RuMCMachineMagazineTracerPKP_MS
+    - id: RuMCMagazinePKP_MSTracer
       amount: 2
 
 - type: entity
@@ -314,6 +314,30 @@
     defaultMode: SquadLeader
     trackerModes:
     - BEARCommandingOfficer
+    - SquadLeader
+    - BattleBuddy
+    - PrimaryLandingZone
+
+- type: entity
+  parent: RuMCHeadsetBEAR
+  id: RuMCHeadsetBEARGROZA
+  suffix: RuMC, BEAR, GROZA
+  components:
+  - type: GrantSquadLeaderTracker
+    trackerModes:
+    - BEARGROZACommandingOfficer
+    - SquadLeader
+    - BattleBuddy
+    - PrimaryLandingZone
+
+- type: entity
+  parent: RuMCHeadsetBEAR
+  id: RuMCHeadsetBEARSKALA
+  suffix: RuMC, BEAR, SKALA
+  components:
+  - type: GrantSquadLeaderTracker
+    trackerModes:
+    - BEARSKALACommandingOfficer
     - SquadLeader
     - BattleBuddy
     - PrimaryLandingZone
