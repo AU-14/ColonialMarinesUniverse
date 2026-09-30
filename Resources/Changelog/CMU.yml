@@ -11293,5 +11293,116 @@
   id: 712
   time: '2026-09-30T16:36:56.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2056
+- author: murdocstarsim
+  changes:
+  - message: Fixed the department in SOP that was displaying an incorrect name and
+      was missing headers.
+    type: Fix
+  id: 713
+  time: '2026-09-30T21:26:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2057
+- author: troytroy400
+  changes:
+  - message: CMB and NSPA equipment vendors have a Long Arms section with options
+      for an HG 37-12 shotgun, Kramer enforcer rifle or MP5.
+    type: Add
+  - message: CMB and NSPA equipment vendors now stock evidence marker boxes, spare
+      forensic scanners and nitrile gloves.
+    type: Add
+  - message: Ambassadors now spawn with a universal translator.
+    type: Add
+  - message: Flashbangs now blind and slow everyone in range with line of sight.
+    type: Tweak
+  - message: Colony law enforcement roles no longer spawn with a gun case. Sidearms
+      and long arms are available from their vendors.
+    type: Tweak
+  - message: The CMB Marshal now spawns with a revolver and has the Marshal coat.
+    type: Tweak
+  - message: The CMB Deputy now spawns in the Bureau deputy coat instead of the parka.
+    type: Tweak
+  - message: CMB windbreakers now fit the same suit storage items as the deputy parka.
+    type: Tweak
+  - message: The CMB deputy parka no longer provides armor or slows you down.
+    type: Tweak
+  - message: The CLF Surgeon has been merged into the CLF Physician, which now has
+      full surgery skill and the surgical kit. Insurgency now has 2 CLF Physician
+      slots.
+    type: Tweak
+  - message: Distress Signal gets more Intelligence Officer slots at higher population.
+      2 at 61 players, 3 at 86 and 4 at 111.
+    type: Tweak
+  - message: The Kelland Warden has been removed from role selection.
+    type: Tweak
+  - message: Renamed the Colony Operations Synthetic to Operations Synthetic.
+    type: Tweak
+  - message: The UA recruiter description now properly says the United Americas instead
+      of US.
+    type: Tweak
+  - message: Intel now spreads out across the map instead of sometimes piling up in
+      a few areas.
+    type: Fix
+  - message: Backpacks are no longer backs of holding, all backpacks can no-longer
+      store other backpacks, rigs, pouches, etc.
+    type: Fix
+  - message: The Separated HUD layout is now the default for new players as certain
+      chat features are locked behind it. This can be changed by the player anytime
+      in settings.
+    type: Tweak
+  id: 714
+  time: '2026-09-30T22:52:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2062
+- author: rokudara-sen
+  changes:
+  - message: The AN/PRC-117G now has a guided panel that shows its current status,
+      tells you what needs fixing, and can automatically load your standard nets
+    type: Add
+  - message: The AN/PRC-117G now has a full expert faceplate with output power, waveforms,
+      Burst TX, Power Save, Priority Watch, EMCON, retrans bridging, antenna peaking,
+      OTA rekeying, station callsigns and direct frequencies
+    type: Add
+  - message: The AN/PRC-117G can now be used as a field phone to call other radios
+      and command-post or ship phones
+    type: Add
+  - message: The AN/PRC-117G now has a 5x2 storage compartment
+    type: Add
+  - message: Field antenna masts are now built in stages and must be loaded with faction
+      COMSEC keys before they relay those factions' nets
+    type: Add
+  - message: Radio operators can analyze intercepted encrypted traffic and break a
+      fixed enemy net's key
+    type: Add
+  - message: The search receiver now fixes nets faster, has a 120-tile base range
+      scaled by transmitter power, and provides direction-finding information from
+      resolved nets
+    type: Tweak
+  - message: AN/PRC radio notices and intercepts now use 117G and INT chat rows
+    type: Tweak
+  - message: The AN/PRC-117G now drains battery based on its current activity, and
+      RTOs receive three spare cells
+    type: Tweak
+  - message: DF pings and jammer fixes now appear correctly on the 3D battlefield
+      reconstruction tactical map
+    type: Fix
+  - message: Reworked the AN/PRC-117G guidebook with separate overview, guided-panel
+      and expert-faceplate guides
+    type: Add
+  - message: Opening the feed of a spliced field mast knocks the CLF tap off and drops
+      its keying module
+    type: Tweak
+  id: 715
+  time: '2026-09-30T22:55:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2059
+- author: Ignies
+  changes:
+  - message: ID cards now have their own ATM PIN, shown in your character notes.
+    type: Add
+  - message: 'Reworked the colony ATM: enter your PIN to withdraw, deposit or transfer
+      money.'
+    type: Tweak
+  - message: The Sapper's siphon rig also steals the PINs of the ATM's recent customers.
+    type: Add
+  id: 716
+  time: '2026-09-30T22:56:23.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2048
 Name: CMU
 Order: -1
