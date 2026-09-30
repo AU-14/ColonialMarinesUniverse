@@ -1,0 +1,26 @@
+- type: entity
+  parent: RMCIntelBase
+  id: CMUIntelDataDisk
+  name: encrypted data disk
+  description: A computer disk full of scrambled data. The Analyzer can't make sense of it; it needs to be cracked at an intel computer.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/computer_disks.rsi
+    state: disk3
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Misc/computer_disks.rsi
+    inhandVisuals:
+      left:
+      - state: disk3-inhand-left
+      right:
+      - state: disk3-inhand-right
+  - type: Tag
+    tags:
+    - RMCDataDisk
+  - type: CMUIntelDataDisk
+    value: 1
+  - type: UserInterface
+    interfaces:
+      enum.CMUIntelDecryptUiKey.Key:
+        type: CMUIntelDecryptBui
