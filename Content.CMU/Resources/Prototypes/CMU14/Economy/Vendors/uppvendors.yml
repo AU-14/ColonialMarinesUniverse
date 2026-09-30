@@ -1354,7 +1354,7 @@
       - id: RuMCMagazineRifleAK4047bakelite
         amount: 30
       - id: RuMCMagazineRifleAK4047bakeliteLarge
-        amount: 5
+        amount: 10
       - id: RMCMagazineRifleAK4047AP
         amount: 3
       - id: RuMCMagazineRifleAK4047APbakelite
@@ -1362,7 +1362,7 @@
       - id: RuMCMagazineRifleAK4047Tracer
         amount: 15
       - id: RuMCMagazineRifleAK4047buben
-        amount: 1
+        amount: 3
       - id: RuMCMagazineVAL
         amount: 60
       - id: RuMCMagazineVALAP

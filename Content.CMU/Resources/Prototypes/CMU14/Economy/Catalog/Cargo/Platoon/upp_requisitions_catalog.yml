@@ -305,6 +305,34 @@
         crate: RuMCCrateUTES-C
     - name: Ammo
       entries:
+      - cost: 450
+        crate: RuMCCrateUTES-CMagazine
+      - cost: 200
+        crate: RuMCCrateBulletsSMG10x20mm
+      - cost: 200
+        crate: RuMCCrateBulletsPistol762x25mm
+      - cost: 200
+        crate: RuMCCrateBoxBulletsRifle10x24mm
+      - cost: 200
+        crate: RuMCCrateBoxBulletsRifleType71
+      - cost: 200
+        crate: RuMCCrateBoxBulletsRifleAG80
+      - cost: 700
+        crate: RuMCCrateMagazineRifleAG80EXT
+      - cost: 350
+        crate: RuMCCrateMagazineRifleAG80
+      - cost: 350
+        crate: RuMCCrateMagazineRifleType71
+      - cost: 400
+        crate: RuMCCrateMagazineRifleAK4047
+      - cost: 350
+        crate: RuMCCrateMagazineSMGType64
+      - cost: 300
+        crate: RuMCCrateMagazinePistolNP92
+      - cost: 300
+        crate: RuMCCrateMagazinePistolType73
+      #- cost: 3000000000
+      #  crate: RuMCCrateMagazinePistolType73
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 650
