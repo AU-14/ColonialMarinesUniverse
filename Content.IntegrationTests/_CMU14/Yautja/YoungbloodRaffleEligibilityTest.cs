@@ -40,30 +40,39 @@ public sealed class YoungbloodRaffleEligibilityTest : GameTest
             var playtime = Server.ResolveDependency<PlayTimeTrackingManager>();
             playtime.AddTimeToTracker(ServerSession!, tracker, TimeSpan.FromHours(5) - TimeSpan.FromMinutes(1));
             playtime.AddTimeToTracker(ServerSession!, "CMJobXenoDrone", TimeSpan.FromHours(5));
-            typeof(YautjaYoungbloodSystem).GetField("_chat", BindingFlags.Instance | BindingFlags.NonPublic)!
-                .SetValue(Server.System<YautjaYoungbloodSystem>(), chat.Object);
         });
         await Pair.RunTicksSync(5);
         await Server.WaitAssertion(() =>
         {
-            var roles = Server.System<GhostRoleSystem>();
-            var component = SEntMan.GetComponent<GhostRoleComponent>(role);
-            var id = component.Identifier;
-            var passiveCheck = new GhostRoleRequestAttemptEvent(ServerSession!, role, component);
-            SEntMan.EventBus.RaiseLocalEvent(role, ref passiveCheck);
-            Assert.That(passiveCheck.Cancelled, Is.True);
-            Assert.That(chat.Invocations, Is.Empty, "Passive eligibility checks must not spam the player's chat.");
-            roles.Request(ServerSession!, id);
-            Assert.That(SEntMan.HasComponent<GhostRoleRaffleComponent>(role), Is.False);
-            Assert.That(chat.Invocations.Where(i => i.Method.Name == nameof(IChatManager.ChatMessageToOne))
-                    .Select(i => i.Arguments[1]),
-                Does.Contain(Loc.GetString("cmu-yautja-youngblood-raffle-experience", ("hours", 5))));
-            Server.ResolveDependency<PlayTimeTrackingManager>()
-                .AddTimeToTracker(ServerSession!, tracker, TimeSpan.FromMinutes(1));
-            roles.Request(ServerSession!, id);
-            Assert.That(SEntMan.TryGetComponent<GhostRoleRaffleComponent>(role, out var raffle), Is.True,
-                "Confirming the role with five hours of CMU squad and xeno time must start its raffle.");
-            Assert.That(raffle!.CurrentMembers, Does.Contain(ServerSession));
+            var youngblood = Server.System<YautjaYoungbloodSystem>();
+            var chatField = typeof(YautjaYoungbloodSystem).GetField("_chat", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var originalChat = chatField.GetValue(youngblood);
+            chatField.SetValue(youngblood, chat.Object);
+            try
+            {
+                var roles = Server.System<GhostRoleSystem>();
+                var component = SEntMan.GetComponent<GhostRoleComponent>(role);
+                var id = component.Identifier;
+                var passiveCheck = new GhostRoleRequestAttemptEvent(ServerSession!, role, component);
+                SEntMan.EventBus.RaiseLocalEvent(role, ref passiveCheck);
+                Assert.That(passiveCheck.Cancelled, Is.True);
+                Assert.That(chat.Invocations, Is.Empty, "Passive eligibility checks must not spam the player's chat.");
+                roles.Request(ServerSession!, id);
+                Assert.That(SEntMan.HasComponent<GhostRoleRaffleComponent>(role), Is.False);
+                Assert.That(chat.Invocations.Where(i => i.Method.Name == nameof(IChatManager.ChatMessageToOne))
+                        .Select(i => i.Arguments[1]),
+                    Does.Contain(Loc.GetString("cmu-yautja-youngblood-raffle-experience", ("hours", 5))));
+                Server.ResolveDependency<PlayTimeTrackingManager>()
+                    .AddTimeToTracker(ServerSession!, tracker, TimeSpan.FromMinutes(1));
+                roles.Request(ServerSession!, id);
+                Assert.That(SEntMan.TryGetComponent<GhostRoleRaffleComponent>(role, out var raffle), Is.True,
+                    "Confirming the role with five hours of CMU squad and xeno time must start its raffle.");
+                Assert.That(raffle!.CurrentMembers, Does.Contain(ServerSession));
+            }
+            finally
+            {
+                chatField.SetValue(youngblood, originalChat);
+            }
         });
     }
 }
