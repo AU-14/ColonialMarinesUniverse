@@ -83,7 +83,7 @@ public sealed class YautjaYoungbloodTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase("youngblood_solo", 1, 1, 0, 0, 5)]
+    [TestCase("youngblood_solo", 1, 1, 2, 0, 5)]
     [TestCase("youngblood_solo_experienced", 1, 1, 7, 5, 5)]
     [TestCase("youngblood_three_inexperienced", 2, 3, 2, 0, 5)]
     [TestCase("youngblood_three_intermediate", 2, 3, 5, 2, 10)]
@@ -2332,20 +2332,22 @@ public sealed class YautjaYoungbloodTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public void SoloYoungbloodCallRejectsZeroHourCandidateLikeUpstream()
+    [TestCase(0, true)]
+    [TestCase(7199, true)]
+    [TestCase(7200, false)]
+    public void SoloYoungbloodCallAllowsCandidatesUnderTwoHours(int previousSeconds, bool allowed)
     {
-        var option = YoungbloodOption("youngblood_solo");
+        var option = new YautjaHuntConsoleComponent().BloodingCallOptions.Single(o => o.Id == "youngblood_solo");
         var result = YautjaYoungbloodSystem.CheckEligibility(
             option,
             adultWhitelisted: false,
             jobBanned: false,
-            youngbloodTime: TimeSpan.Zero,
+            youngbloodTime: TimeSpan.FromSeconds(previousSeconds),
             squadTime: TimeSpan.FromHours(5),
             xenoTime: TimeSpan.FromHours(5));
 
-        Assert.That(result.Allowed, Is.False);
-        Assert.That(result.Reason, Is.EqualTo(YautjaYoungbloodRejection.MaximumYoungbloodTime));
+        Assert.That(result.Allowed, Is.EqualTo(allowed));
+        Assert.That(result.Reason, Is.EqualTo(allowed ? null : (YautjaYoungbloodRejection?) YautjaYoungbloodRejection.MaximumYoungbloodTime));
     }
 
     [Test]
@@ -3470,7 +3472,7 @@ public sealed class YautjaYoungbloodTest
             "youngblood_solo" => new YautjaHuntCallOption
             {
                 Id = id,
-                MaximumYoungbloodTime = TimeSpan.Zero,
+                MaximumYoungbloodTime = TimeSpan.FromHours(2),
                 RejectionYoungbloodTime = TimeSpan.Zero,
                 RequiredSquadAndXenoTime = TimeSpan.FromHours(5),
             },

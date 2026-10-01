@@ -8,4 +8,5 @@ public record struct GhostRoleRequestAttemptEvent(
     ICommonSession Player,
     EntityUid Role,
     GhostRoleComponent Component,
-    bool Cancelled = false);
+    bool Cancelled = false,
+    bool ExplicitRequest = false); // CMU14: distinguish requests from passive raffle eligibility checks.

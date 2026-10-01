@@ -36661,6 +36661,8 @@ entities:
     - type: Transform
       parent: 1
       pos: 7.5,15.5
+    - type: VendorMarker
+      landingOffset: -0.5,-0.5
   - uid: 3567
     components:
     - type: MetaData
@@ -36668,6 +36670,8 @@ entities:
     - type: Transform
       parent: 1
       pos: -8.5,15.5
+    - type: VendorMarker
+      landingOffset: -0.5,-0.5
 - proto: filingCabinetRandom
   entities:
   - uid: 3568

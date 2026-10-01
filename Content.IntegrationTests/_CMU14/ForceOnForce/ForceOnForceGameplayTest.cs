@@ -393,6 +393,45 @@ public sealed class ForceOnForceGameplayTest : GameTest
         });
     }
 
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task GibbingStartsTheRespawnWaitWithoutRestartingAnExistingWait(bool alreadyDead)
+    {
+        var map = await Pair.CreateTestMap();
+        var player = ServerSession!.UserId;
+        EntityUid body = default;
+        await Server.WaitAssertion(() =>
+        {
+            body = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var minds = Server.System<MindSystem>();
+            var mind = minds.CreateMind(player);
+            minds.TransferTo(mind, body);
+            Assert.That(Server.System<MobStateSystem>().IsAlive(body), Is.True);
+            if (alreadyDead)
+                Server.System<MobStateSystem>().ChangeMobState(body, MobState.Dead);
+        });
+        if (alreadyDead)
+            await Pair.RunSeconds(60);
+        await Server.WaitAssertion(() =>
+        {
+            var respawn = Server.System<ForceOnForceRespawnSystem>();
+            var expected = alreadyDead ? respawn.Remaining(player) : ForceOnForceRespawnSystem.RespawnDelay;
+            Assert.That(expected, Is.GreaterThan(TimeSpan.Zero));
+            if (alreadyDead)
+                Assert.That(expected, Is.LessThan(ForceOnForceRespawnSystem.RespawnDelay));
+            Server.System<Content.Shared.Gibbing.GibbingSystem>().Gib(body);
+            Assert.That(respawn.HasDied(player), Is.True, "Dropship gibbing must count as death even without a dead mob-state transition.");
+            Assert.That(respawn.Remaining(player), Is.EqualTo(expected));
+        });
+        await Pair.RunTicksSync(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.Deleted(body), Is.True);
+            Assert.That(Server.System<ForceOnForceRespawnSystem>().HasDied(player), Is.True,
+                "Deleting the gibbed body must retain the account's death record.");
+        });
+    }
+
     [Test]
     public async Task DeathWaitSurvivesGhostingAndRevivalStartsAFreshWait()
     {
