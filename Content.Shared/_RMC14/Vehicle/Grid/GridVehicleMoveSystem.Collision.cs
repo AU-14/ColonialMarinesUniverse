@@ -759,7 +759,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     }
 
     // CMU14 method: vehicle damage and usability.
-    private void ApplyCollisionSelfDamage(
+    private bool ApplyCollisionSelfDamage(
         EntityUid vehicle,
         GridVehicleMoverComponent mover,
         EntityUid target,
@@ -768,19 +768,20 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     {
         if (_net.IsClient || (wheelDamage <= 0f && hullDamage <= 0f) ||
             MathF.Abs(mover.CurrentSpeed) < MathF.Max(mover.CollisionDamageMinSpeed, mover.WallSmashMinSpeed))
-            return;
+            return false;
 
         if (!fixtureQ.TryComp(vehicle, out var vehicleFixtures) ||
             !fixtureQ.TryComp(target, out var targetFixtures) ||
             !TryGetFixtureAabb(vehicleFixtures, physics.GetPhysicsTransform(vehicle), out var vehicleBounds) ||
             !TryGetFixtureAabb(targetFixtures, physics.GetPhysicsTransform(target), out var targetBounds) ||
             !_collisionDamageContacts.TryStart(vehicle, target, vehicleBounds, targetBounds))
-            return;
+            return false;
 
         if (wheelDamage > 0f)
             _wheels.DamageWheels(vehicle, wheelDamage);
         if (hullDamage > 0f)
             _hardpoints.DamageVehicleHull(vehicle, hullDamage);
+        return true;
     }
 
     private CollisionHandlingResult HandleHardCollision(
@@ -803,6 +804,16 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     {
         if (isVehicle && TryPushVehicle(vehicle, mover, grid, gridPos, other, applyEffects))
             return CollisionHandlingResult.Continue;
+
+        // CMU14: vehicle impacts use a hull budget, never wall-demolition energy.
+        if (isVehicle)
+        {
+            if (applyEffects)
+                CMUApplyVehicleCollision(vehicle, mover, other, wheelDamage, ref playedCollisionSound);
+
+            AddBlockingCollision(vehicle, other, collisionAabb, otherAabb, clearance, mapId, debug, blockers);
+            return CollisionHandlingResult.Blocked;
+        }
 
         var preCollisionSpeed = MathF.Abs(mover.CurrentSpeed);
 
