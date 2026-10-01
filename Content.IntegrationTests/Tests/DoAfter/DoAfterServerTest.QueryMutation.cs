@@ -116,4 +116,57 @@ public sealed partial class DoAfterServerTest
         });
         await Pair.DeleteEntityTreeLeafFirst(map.Grid);
     }
+    [Test]
+    public async Task CallbackReentryDoesNotRepeatChecksOrRetainSnapshots()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var user = SEntMan.SpawnEntity("DoAfterDummy", map.GridCoords);
+            try
+            {
+                var system = Server.System<SharedDoAfterSystem>();
+                var armed = false;
+                var reenter = false;
+                var checks = 0;
+                var args = new DoAfterArgs(SEntMan, user, TimeSpan.FromSeconds(10), new TestDoAfterEvent(), null)
+                {
+                    Broadcast = true,
+                    AttemptFrequency = AttemptFrequency.EveryTick,
+                    ExtraCheck = () =>
+                    {
+                        if (!armed)
+                            return true;
+                        checks++;
+                        if (reenter)
+                        {
+                            reenter = false;
+                            system.Update(0);
+                        }
+                        return true;
+                    },
+                };
+                Assert.That(system.TryStartDoAfter(args), Is.True);
+                armed = reenter = true;
+                system.Update(0);
+                Assert.That(checks, Is.EqualTo(1), "Reentry must not run an active callback twice.");
+                system.Update(0);
+                Assert.That(checks, Is.EqualTo(2), "The following update must still run.");
+
+                var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+                var buffers = (System.Collections.IEnumerable) typeof(SharedDoAfterSystem)
+                    .GetField("_doAfterBuffers", flags)!.GetValue(system)!;
+                foreach (System.Collections.ICollection buffer in buffers)
+                    Assert.That(buffer.Count, Is.Zero, "Reusable buffers must release callback references.");
+                var users = (System.Collections.ICollection) typeof(SharedDoAfterSystem)
+                    .GetField("_activeDoAfters", flags)!.GetValue(system)!;
+                Assert.That(users.Count, Is.Zero);
+            }
+            finally
+            {
+                SEntMan.DeleteEntity(user);
+            }
+        });
+        await Pair.DeleteEntityTreeLeafFirst(map.Grid);
+    }
 }

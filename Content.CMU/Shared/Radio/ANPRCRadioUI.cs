@@ -232,11 +232,84 @@ public sealed class ANPRCRadioCheckMsg : BoundUserInterfaceMessage;
 [Serializable, NetSerializable]
 public sealed class ANPRCOpenDirectoryMsg : BoundUserInterfaceMessage;
 
+// pops the phone book, to call another set or a fixed phone on the handset
+[Serializable, NetSerializable]
+public sealed class ANPRCOpenPhoneMsg : BoundUserInterfaceMessage;
+
 [Serializable, NetSerializable]
 public sealed class ANPRCManualFrequencyMsg(int slot, string frequencyText) : BoundUserInterfaceMessage
 {
     public readonly int Slot = slot;
     public readonly string FrequencyText = frequencyText;
+}
+
+// one press that does the routine part of getting on the air: switches the set on and
+// loads whichever of the standard nets are missing. it never touches mode, fill or
+// power output, those are the operator's calls
+[Serializable, NetSerializable]
+public sealed class ANPRCQuickSetupMsg : BoundUserInterfaceMessage;
+
+// renames a memory in place. the older panel deleted and re-added it, which emptied it
+[Serializable, NetSerializable]
+public sealed class ANPRCRenameSlotMsg(int slot, string label) : BoundUserInterfaceMessage
+{
+    public readonly int Slot = slot;
+    public readonly string Label = label;
+}
+
+// a net the quick setup would load, and the memory label it would give it
+[Serializable, NetSerializable]
+public sealed class ANPRCStandardNet(string label, ProtoId<RadioChannelPrototype> channel, bool squad)
+{
+    public readonly string Label = label;
+    public readonly ProtoId<RadioChannelPrototype> Channel = channel;
+
+    // the wearer's own squad net, as opposed to one the pack is issued with
+    public readonly bool Squad = squad;
+}
+
+// what the set is doing for everyone around it, and the readings the panel needs beyond the
+// radio's settings. the relay half was invisible before, and it is the part of the job a new
+// operator most needs to know about
+[Serializable, NetSerializable]
+public sealed class ANPRCPanelInfo(
+    List<ANPRCStandardNet> standardNets,
+    bool relaying,
+    List<ProtoId<RadioChannelPrototype>> relayedNets,
+    float fullRange,
+    float partialRange,
+    float linkQuality,
+    bool wearerTrained,
+    bool hasDirectory,
+    bool handsetOut,
+    TimeSpan lastTransmit,
+    TimeSpan lastReceive)
+{
+    public readonly List<ANPRCStandardNet> StandardNets = standardNets;
+
+    // the pack is anchoring nets right now
+    public readonly bool Relaying = relaying;
+    public readonly List<ProtoId<RadioChannelPrototype>> RelayedNets = relayedNets;
+
+    // tiles of clear and of degraded coverage the pack gives headsets around it
+    public readonly float FullRange = fullRange;
+    public readonly float PartialRange = partialRange;
+
+    // the set's own link on its working net, 1 on top of an anchor down to 0 at the fringe.
+    // negative where it does not apply: set down, searching, or on a raw frequency
+    public readonly float LinkQuality = linkQuality;
+
+    // a worn pack only relays for a trained operator
+    public readonly bool WearerTrained = wearerTrained;
+
+    public readonly bool HasDirectory = hasDirectory;
+
+    // the handset is off its hook: the set is being worked as a field phone
+    public readonly bool HandsetOut = handsetOut;
+
+    // server clock stamps, compared against the client's synced clock to light the TX/RX lamps
+    public readonly TimeSpan LastTransmit = lastTransmit;
+    public readonly TimeSpan LastReceive = lastReceive;
 }
 
 [Serializable, NetSerializable]
@@ -267,9 +340,14 @@ public sealed class ANPRCRadioState(
     Dictionary<string, RadioFrequency> channelFrequencies,
     bool sweepEnabled,
     RadioFrequency sweepPosition,
-    List<ANPRCSweepContact> sweepContacts)
+    List<ANPRCSweepContact> sweepContacts,
+    ANPRCPanelInfo info,
+    ANPRCExpertState expert)
     : BoundUserInterfaceState
 {
+    public readonly ANPRCPanelInfo Info = info;
+    public readonly ANPRCExpertState Expert = expert;
+
     public readonly bool SweepEnabled = sweepEnabled;
     public readonly RadioFrequency SweepPosition = sweepPosition;
     public readonly List<ANPRCSweepContact> SweepContacts = sweepContacts;

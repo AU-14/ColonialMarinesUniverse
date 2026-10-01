@@ -12,6 +12,7 @@ using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Threading;
+using Robust.Shared.Profiling;
 
 namespace Content.Server.Power.EntitySystems
 {
@@ -26,6 +27,7 @@ namespace Content.Server.Power.EntitySystems
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IParallelManager _parMan = default!;
         [Dependency] private BatterySystem _battery = default!;
+        [Dependency] private ProfManager _prof = default!;
 
         [Dependency] private EntityQuery<ApcPowerReceiverBatteryComponent> _apcBatteryQuery = default!;
         [Dependency] private EntityQuery<PowerNetworkBatteryComponent> _powerNetworkBatteryQuery = default!;
@@ -272,23 +274,30 @@ namespace Content.Server.Power.EntitySystems
         {
             base.Update(frameTime);
 
-            ReconnectNetworks();
+            using (_prof.Group("CMU Power Reconnect"))
+                ReconnectNetworks();
 
             // Synchronize batteries
-            RaiseLocalEvent(new NetworkBatteryPreSync());
+            using (_prof.Group("CMU Power Battery PreSync"))
+                RaiseLocalEvent(new NetworkBatteryPreSync());
 
             // Run power solver.
-            _solver.Tick(frameTime, _powerState, _parMan);
+            using (_prof.Group("CMU Power Solver"))
+                _solver.Tick(frameTime, _powerState, _parMan);
 
             // Synchronize batteries, the other way around.
-            RaiseLocalEvent(new NetworkBatteryPostSync());
+            using (_prof.Group("CMU Power Battery PostSync"))
+                RaiseLocalEvent(new NetworkBatteryPostSync());
 
             // Send events where necessary.
             // TODO: Instead of querying ALL power components every tick, and then checking if an event needs to be
             // raised, should probably assemble a list of entity Uids during the actual solver steps.
-            UpdateApcPowerReceiver(frameTime);
-            UpdatePowerConsumer();
-            UpdateNetworkBattery();
+            using (_prof.Group("CMU Power APC Receivers"))
+                UpdateApcPowerReceiver(frameTime);
+            using (_prof.Group("CMU Power Consumers"))
+                UpdatePowerConsumer();
+            using (_prof.Group("CMU Power Network Batteries"))
+                UpdateNetworkBattery();
         }
 
         private void ReconnectNetworks()

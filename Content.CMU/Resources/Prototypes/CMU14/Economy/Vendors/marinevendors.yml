@@ -1115,6 +1115,11 @@
       - id: RMCBoxPackFlareCAS
       - id: RMCFulton20
       - id: RMCOverwatchCameraTripod
+    # a working set gets through a cell in under an hour. the operator carries spares
+    - name: Spare Batteries
+      entries:
+      - id: RMCPowerCellHigh
+        amount: 3
 
 # AirCrew Weapons (universal)
 - type: entity
@@ -1666,6 +1671,8 @@
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel

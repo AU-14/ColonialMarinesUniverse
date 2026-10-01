@@ -105,6 +105,9 @@
     state: On
     channels:
     - Colony
+    # cmu edit start
+    - ColonyMedical
+    # cmu edit end
     - MarineCommand
     - MarineMedical
     - MarineEngineer

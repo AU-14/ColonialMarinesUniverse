@@ -197,7 +197,11 @@ public sealed partial class ChatSystem
         var languageIcon = hideLanguageName ? null : languagePrototype?.DisplayedLanguageIcon;
         var visibleLanguage = !(languagePrototype?.NeedsSpeech ?? true);
 
-        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange, ignoreXenos))
+        foreach (var (session, data) in GetRecipients(
+                     source,
+                     WhisperMuffledRange,
+                     ChatRecipientPurpose.Speech,
+                     ignoreXenos))
         {
             if (session.AttachedEntity is not { Valid: true } listener)
                 continue;
@@ -340,7 +344,11 @@ public sealed partial class ChatSystem
         var visibleLanguage = !(languagePrototype?.NeedsSpeech ?? true);
         var transformedName = nameOverride ?? Identity.Name(source, EntityManager).Name;
 
-        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange, ignoreXenos))
+        foreach (var (session, data) in GetRecipients(
+                     source,
+                     WhisperMuffledRange,
+                     ChatRecipientPurpose.Speech,
+                     ignoreXenos))
         {
             if (session.AttachedEntity is not { Valid: true } listener)
                 continue;
@@ -472,7 +480,7 @@ public sealed partial class ChatSystem
         string? transformedName = null,
         bool needsLos = false)
     {
-        foreach (var (session, data) in GetRecipients(source, VoiceRange))
+        foreach (var (session, data) in GetRecipients(source, VoiceRange, ChatRecipientPurpose.Speech))
         {
             if ((channel == ChatChannel.Local || channel == ChatChannel.Emotes) &&
                 !CanHearYautjaLocalSpeech(source, session, data))

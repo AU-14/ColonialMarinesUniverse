@@ -118,6 +118,13 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
             TabContainer.SetTabTitle(category, categoryName);
         }
 
+        // cmu edit start: 911 dispatch
+        var emergencyTab = Content.Client.CMU14.Telephone.CMUEmergencyCallTab.Create(service =>
+            SendMessage(new Content.Shared.CMU14.Telephone.CMUEmergencyCallBuiMsg(service)));
+        _window.Tabs.AddChild(emergencyTab);
+        TabContainer.SetTabTitle(emergencyTab, Loc.GetString("cmu-911-tab"));
+        // cmu edit end
+
         _window.Buttons.DisposeAllChildren();
         if (state.Dnd)
         {

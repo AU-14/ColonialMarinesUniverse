@@ -430,7 +430,10 @@
     slots:
     - Suitstorage
   - type: EntrenchingTool
+  # cmu edit start: shovel digs 30% faster
   - type: RMCShovel
+    speedMultiplier: 1.3
+  # cmu edit end
   - type: UseDelay
     delay: 0.25
   - type: Appearance

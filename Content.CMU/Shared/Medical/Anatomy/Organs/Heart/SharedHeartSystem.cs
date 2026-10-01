@@ -109,7 +109,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
 
     private void OnHeartRemovedFromBody(Entity<HeartComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (_net.IsClient || !TryComp<BodyComponent>(args.OldBody, out var bodyComponent))
+        if (Timing.ApplyingState || _net.IsClient || !TryComp<BodyComponent>(args.OldBody, out var bodyComponent))
             return;
 
         Entity<BodyComponent> body = (args.OldBody, bodyComponent);

@@ -41,6 +41,7 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
     {
         SubscribeLocalEvent<CriminalRecordsConsoleComponent, RecordModifiedEvent>(UpdateUserInterface);
         SubscribeLocalEvent<CriminalRecordsConsoleComponent, GeneralRecordCreatedEvent>(UpdateUserInterface);
+        CMUInitialize(); // cmu edit
 
         Subs.BuiEvents<CriminalRecordsConsoleComponent>(CriminalRecordsConsoleKey.Key, subs =>
         {
@@ -51,7 +52,9 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
             subs.Event<CriminalRecordAddHistory>(OnAddHistory);
             subs.Event<CriminalRecordDeleteHistory>(OnDeleteHistory);
             subs.Event<CriminalRecordSetStatusFilter>(OnStatusFilterPressed);
-            subs.Event<CriminalRecordSetBounty>(OnSetBounty);
+            // cmu edit start: bounties are set by the game only
+            // subs.Event<CriminalRecordSetBounty>(OnSetBounty);
+            // cmu edit end
         });
     }
 
@@ -103,8 +106,13 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
         if (msg.Reason != null)
         {
             reason = msg.Reason.Trim();
-            if (reason.Length < 1 || reason.Length > ent.Comp.MaxStringLength)
+            // cmu edit start
+            if (reason.Length > ent.Comp.MaxStringLength)
                 return;
+
+            if (reason.Length < 1)
+                reason = null;
+            // cmu edit end
         }
 
         var oldStatus = record.Status;
@@ -129,7 +137,7 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
         if (entry != null)
             jobName = entry.JobTitle;
 
-        _criminalRecords.TryChangeStatus(key.Value, msg.Status, msg.Reason, officer);
+        _criminalRecords.TryChangeStatus(key.Value, msg.Status, reason, officer); // cmu edit
 
         // CMU14: the status strings use {$job}; leaving it out logged an unknown-variable error.
         (string, object)[] args;
@@ -166,10 +174,19 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
             // this is impossible
             _ => "not-wanted"
         };
+        // cmu edit start
+        var statusName = Loc.GetString($"criminal-records-status-{msg.Status.ToString().ToLowerInvariant()}");
+        var reasonRequested = msg.Status is SecurityStatus.Wanted or SecurityStatus.Suspected or SecurityStatus.Hostile;
+        var radioMessage = reasonRequested && reason != null
+            ? Loc.GetString("cmu-criminal-records-status-changed-reason",
+                ("officer", officer), ("name", name), ("status", statusName), ("reason", reason))
+            : Loc.GetString("cmu-criminal-records-status-changed",
+                ("officer", officer), ("name", name), ("status", statusName));
         _radio.SendRadioMessage(ent,
-            Loc.GetString($"criminal-records-console-{statusString}", args),
+            radioMessage,
             ent.Comp.SecurityChannel,
             ent);
+        // cmu edit end
 
         _adminLogger.Add(LogType.Identity, LogImpact.Low, $"{ToPrettyString(mob.Value):name} changed criminal status for {name} to \"{statusString}\"");
 
@@ -212,7 +229,7 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
     private void OnSetBounty(Entity<CriminalRecordsConsoleComponent> ent, ref CriminalRecordSetBounty msg)
     {
         // Reconstruct the StationRecordKey from the record key and the owning station
-        var owningStation = _station.GetOwningStation(ent);
+        var owningStation = CMUGetRecordsStation(ent); // cmu edit
         if (owningStation == null)
             return;
         var stationRecordKey = new StationRecordKey(msg.RecordKey, owningStation.Value);
@@ -241,7 +258,7 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
     private void UpdateUserInterface(Entity<CriminalRecordsConsoleComponent> ent)
     {
         var (uid, console) = ent;
-        var owningStation = _station.GetOwningStation(uid);
+        var owningStation = CMUGetRecordsStation(uid); // cmu edit
 
         if (!TryComp<StationRecordsComponent>(owningStation, out var stationRecords))
         {
@@ -300,7 +317,7 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
             return false;
 
         // checking the console's station since the user might be off-grid using on-grid console
-        if (_station.GetOwningStation(ent) is not { } station)
+        if (CMUGetRecordsStation(ent) is not { } station) // cmu edit
             return false;
 
         key = new StationRecordKey(id, station);

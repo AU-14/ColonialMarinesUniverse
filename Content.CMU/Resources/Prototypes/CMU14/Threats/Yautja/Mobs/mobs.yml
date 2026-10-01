@@ -1,6 +1,6 @@
 - type: entity
   save: false
-  parent: [ AppearanceYautja, CMMobHuman ]
+  parent: [AppearanceYautja, CMMobHuman]
   id: CMUMobYautja
   name: Yautja Hunter
   suffix: Yautja, Event
@@ -36,19 +36,12 @@
     interfaces:
       enum.TacticalMapUserUi.Key:
         type: TacticalMapUserBui
-  - type: YautjaHeatResistance
   - type: IgnoreXenoWeedsSlowdown
   - type: Skills
-    skills:
-      RMCSkillMedical: 3
-      RMCSkillSurgery: 2
+    preset: CMUSkillPresetYautjaWarrior
   - type: Loadout
     prototypes:
-    - CMUYautjaHunterGear
-    - CMUYautjaHunterGearBronze
-    - CMUYautjaHunterGearSilver
-    - CMUYautjaHunterGearCrimson
-    - CMUYautjaHunterGearBone
+    - CMUYautjaHunterSpawnGear
   - type: Icon
     sprite: CMU14/Yautja/body.rsi
     state: full
@@ -126,6 +119,7 @@
   components:
   - type: YautjaBadBlood
   - type: Yautja
+    npcFaction: CMUYautjaBadBlood
     skinHueMin: 0.0
     skinHueMax: 0.03
     skinSaturationMin: 0.4
@@ -164,6 +158,7 @@
   components:
   - type: YautjaBadBlood
   - type: Yautja
+    npcFaction: CMUYautjaBadBlood
     skinHueMin: 0.0
     skinHueMax: 0.03
     skinSaturationMin: 0.4
@@ -193,4 +188,124 @@
   parent: AppearanceYautja
   id: CMUMobYautjaDummy
   name: Yautja Dummy
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
+- type: entity
+  parent: CMUMobYautja
+  id: CMUMobYautjaMilitaryCasteSoldier
+  name: Yautja Military Caste Soldier
+  suffix: Yautja, Military Caste, Event
+  components:
+  - type: YautjaMilitaryCaste
+    caste: Soldier
+  - type: Loadout
+    prototypes:
+    - CMUYautjaMilitaryCasteSoldierGear
+
+- type: entity
+  parent: CMUMobYautja
+  id: CMUMobYautjaMilitaryCasteEnforcer
+  name: Yautja Military Caste Enforcer
+  suffix: Yautja, Military Caste, Event
+  components:
+  - type: YautjaMilitaryCaste
+    caste: Enforcer
+  - type: Loadout
+    prototypes:
+    - CMUYautjaMilitaryCasteEnforcerGear
+
+- type: entity
+  parent: CMUMobYautja
+  id: CMUMobYautjaBadBlood
+  name: Yautja Bad Blood
+  suffix: Yautja, Bad Blood, Event
+  components:
+  - type: YautjaBadBlood
+  - type: Yautja
+    npcFaction: CMUYautjaBadBlood
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  - type: Loadout
+    prototypes:
+    - CMUYautjaBadBloodSpawnGear
+
+- type: entity
+  save: false
+  parent:
+  - AppearanceYautja
+  - CMMobHuman
+  id: CMUMobYautjaYoungblood
+  name: Yautja Youngblood
+  suffix: Yautja, Youngblood, Event
+  components:
+  - type: Yautja
+  - type: YautjaYoungblood
+  - type: IgnoreXenoWeedsSlowdown
+  - type: Skills
+    preset: CMUSkillPresetYautjaWarrior
+  - type: Icon
+    sprite: CMU14/Yautja/body.rsi
+    state: full
+  - type: FixedIdentity
+    name: species-name-yautja
+  - type: Speech
+    speechSounds: CMUYautjaSpeech
+    allowedEmotes:
+    - Scream
+    - Laugh
+    - Growl
+    - Warcry
+    - CMUYautjaClick
+    - CMUYautjaRoar
+    - CMUYautjaLaugh
+    - CMUYautjaGrowl
+    - CMUYautjaPain
+    - CMUYautjaDeathCry
+    - CMUYautjaDeathLaugh
+  - type: Vocal
+  - type: Body
+  - type: MeleeWeapon
+    soundHit:
+      collection: Punch
+    angle: 0
+    animation: WeaponArcFist
+    attackRate: 1.15
+    damage:
+      types:
+        Blunt: 12
+        Structural: 3
+  - type: Damageable
+    damageModifierSet: CMUYautja
+  - type: Injurable
+    damageContainer: Biological
+    healthBarThreshold: 5
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: CMUYautjaBlood
+        Quantity: 650
+    maxBleedAmount: 35
+    bleedReductionAmount: 0
+    bloodRefreshAmount: 0.2
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.35
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    damageBleedModifiers: CMBloodlossHuman
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.4
+    baseSprintSpeed: 8.4
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      240: Critical
+      340: Dead
+  - type: MaxDamage
+    max: 900
+  - type: EmoteOnDamage
+    emotes:
+    - CMUYautjaPain
+    emoteCooldown: 8
+    hiddenFromChatWindow: true

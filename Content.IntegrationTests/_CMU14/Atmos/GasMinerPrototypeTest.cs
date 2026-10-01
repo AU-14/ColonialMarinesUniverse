@@ -28,7 +28,7 @@ public sealed class GasMinerPrototypeTest
     };
 
     [Test]
-    public async Task PortableGasMinersHavePermanentFortyMoleContracts()
+    public async Task PortableGasMinersHaveMovableFortyMoleContracts()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -41,7 +41,7 @@ public sealed class GasMinerPrototypeTest
             foreach (var (id, gas) in SingleGasMiners)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                AssertPermanentMiner(prototype, factory, id);
+                AssertMovableMiner(prototype, factory, id);
 
                 Assert.That(prototype.TryComp<GasMinerComponent>(out var miner, factory), Is.True, id.ToString());
                 Assert.That(miner!.SpawnGas, Is.EqualTo(gas), id.ToString());
@@ -52,7 +52,7 @@ public sealed class GasMinerPrototypeTest
 
             const string airId = "CMUGasMinerAirPortableAdmin";
             var air = prototypes.Index<EntityPrototype>(airId);
-            AssertPermanentMiner(air, factory, airId);
+            AssertMovableMiner(air, factory, airId);
             Assert.That(air.TryComp<GasMinerComponent>(out var airMiner, factory), Is.True);
             Assert.That(airMiner!.SpawnAmount, Is.EqualTo(40f));
             Assert.That(airMiner.MaxExternalPressure, Is.EqualTo(150f));
@@ -65,7 +65,28 @@ public sealed class GasMinerPrototypeTest
         await pair.CleanReturnAsync();
     }
 
-    private static void AssertPermanentMiner(
+    [Test]
+    public async Task AllGasMinersCanBeWrenchedAndUnwrenched()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var factory = pair.Server.EntMan.ComponentFactory;
+            var prototypes = pair.Server.ProtoMan.EnumeratePrototypes<EntityPrototype>();
+            foreach (var prototype in prototypes)
+            {
+                if (prototype.Abstract || !prototype.TryComp<GasMinerComponent>(out _, factory))
+                    continue;
+
+                Assert.That(prototype.TryComp<AnchorableComponent>(out var anchorable, factory), Is.True, prototype.ID);
+                Assert.That(anchorable!.Flags,
+                    Is.EqualTo(AnchorableFlags.Anchorable | AnchorableFlags.Unanchorable), prototype.ID);
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    private static void AssertMovableMiner(
         EntityPrototype prototype,
         IComponentFactory factory,
         EntProtoId id)
@@ -77,7 +98,8 @@ public sealed class GasMinerPrototypeTest
         Assert.That(physics!.BodyType, Is.EqualTo(BodyType.Static), id.ToString());
 
         Assert.That(prototype.TryComp<AnchorableComponent>(out var anchorable, factory), Is.True, id.ToString());
-        Assert.That(anchorable!.Flags, Is.EqualTo(AnchorableFlags.None), id.ToString());
+        Assert.That(anchorable!.Flags,
+            Is.EqualTo(AnchorableFlags.Anchorable | AnchorableFlags.Unanchorable), id.ToString());
 
         Assert.That(prototype.TryComp<ApcPowerReceiverComponent>(out var power, factory), Is.True, id.ToString());
         Assert.That(power!.Load, Is.Zero, id.ToString());

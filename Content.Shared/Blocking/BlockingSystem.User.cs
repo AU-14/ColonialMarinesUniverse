@@ -1,8 +1,14 @@
 using Content.Shared.Blocking.Components;
+using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared.Projectiles;
+using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Random;
 
 namespace Content.Shared.Blocking;
 
@@ -10,6 +16,7 @@ public sealed partial class BlockingSystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private void InitializeUser()
     {
@@ -42,6 +49,24 @@ public sealed partial class BlockingSystem
     {
         if (entity.Comp.BlockingItem is not { } item || !_blockQuery.TryComp(item, out var blocking))
             return;
+        if (TryComp<YautjaSourceShieldBlockComponent>(item, out var sourceBlock) &&
+            sourceBlock.ShieldType is YautjaSourceShieldType.Directional or YautjaSourceShieldType.DirectionalTwoHands &&
+            args.Origin is { } attacker &&
+            !IsShieldFacingAttacker(entity, attacker))
+        {
+            return;
+        }
+
+        if (sourceBlock != null)
+        {
+            var blockChance = (float) (blocking.IsRaised ? sourceBlock.ReadiedBlock : sourceBlock.PassiveBlock) / 100f;
+            if (args.Tool is { } tool && HasComp<ProjectileComponent>(tool))
+                blockChance *= sourceBlock.ProjectileBlockFraction;
+
+            if (blockChance <= 0f || (blockChance < 1f && !_random.Prob(blockChance)))
+                return;
+        }
+
 
         if (args.Damage.GetTotal() <= 0)
             return;
@@ -62,6 +87,16 @@ public sealed partial class BlockingSystem
 
         if (blocking.IsRaised && damage.AnyPositive())
             _audio.PlayPvs(blocking.BlockSound, entity);
+    }
+
+    private bool IsShieldFacingAttacker(EntityUid user, EntityUid attacker)
+    {
+        var delta = _transformSystem.GetWorldPosition(attacker) - _transformSystem.GetWorldPosition(user);
+        if (delta.LengthSquared() <= 0.0001f)
+            return true;
+
+        var forward = _transformSystem.GetWorldRotation(user).ToWorldVec();
+        return Vector2.Dot(forward, delta) >= 0;
     }
 
     private void OnEntityTerminating(Entity<BlockingUserComponent> entity, ref EntityTerminatingEvent args)

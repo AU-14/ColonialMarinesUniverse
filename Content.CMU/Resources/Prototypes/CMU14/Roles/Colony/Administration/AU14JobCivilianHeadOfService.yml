@@ -61,6 +61,8 @@
     id: AU14IDCardColonyHeadOfService
     outerClothing: RMCMedicalApron
     pocket1: AU14StampHOS
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

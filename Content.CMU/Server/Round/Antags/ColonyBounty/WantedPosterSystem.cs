@@ -20,9 +20,9 @@ namespace Content.Server.CMU14.Round.Antags.ColonyBounty;
 public sealed partial class WantedPosterSystem : EntitySystem
 {
     [Dependency] private readonly AccessReaderSystem _access = default!;
+    [Dependency] private Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem _universalRecords = default!;
     [Dependency] private readonly PaperSystem _paper = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
 
     public override void Initialize()
@@ -51,7 +51,7 @@ public sealed partial class WantedPosterSystem : EntitySystem
             return;
         }
 
-        var station = _station.GetOwningStation(ent);
+        var station = _universalRecords.GetRecords();
         if (station == null)
             return;
 

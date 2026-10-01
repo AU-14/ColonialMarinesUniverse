@@ -10972,5 +10972,464 @@
   id: 702
   time: '2026-09-28T02:53:44.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2042
+- author: TheHellFireo
+  changes:
+  - message: Reduced repeated simulation, spatial-query, and network-state work.
+    type: Code
+  - message: Added server performance cost and retention diagnostics and log-comparison
+      tools.
+    type: Admin
+  id: 703
+  time: '2026-09-28T21:33:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2045
+- author: deepdarkdepths
+  changes:
+  - message: Xeno rank thresholds have been reverted back to what they previously
+      were.
+    type: Tweak
+  id: 704
+  time: '2026-09-28T22:03:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2017
+- author: Vencallium
+  changes:
+  - message: "Added ship research terminal markers that select the owning faction\u2019\
+      s research network."
+    type: Add
+  - message: Identical ships used by opposing factions now receive the correct research
+      and hospital terminals.
+    type: Fix
+  - message: "Matched the research cooldown purchase button to the terminal\u2019\
+      s amber styling and changed its label to \u201C-60s 1CR\u201D."
+    type: Tweak
+  - message: All gas miners can now be unwrenched, moved, and reanchored.
+    type: Tweak
+  - message: "Removed misleading \u201CPermanent\u201D labels from portable and administrator\
+      \ gas miners."
+    type: Tweak
+  - message: Added Colony, GOVFOR, and OPFOR hospital emergency computer variants.
+    type: Add
+  - message: "Restricted hospital computer variants to their faction\u2019s medical\
+      \ and command access."
+    type: Fix
+  - message: Added ship and fixed-faction hospital computer markers, including colony
+      markers.
+    type: Add
+  - message: Prevented ship markers with fixed faction flags from spawning an additional
+      ground-faction terminal.
+    type: Fix
+  - message: Replaced USS Bush research terminals and its hospital computer with ship
+      faction markers.
+    type: Map
+  - message: "Replaced Stable Garrison\u2019s hospital computer with a colony marker."
+    type: Map
+  - message: Hospital computers can now locate landing zones on other decks of their
+      own ship.
+    type: Fix
+  - message: "Hospital shuttle delivery, pickup, and recovery now use the landing\
+      \ zone\u2019s deck as the hospital destination."
+    type: Fix
+  - message: Granted room attention to advisors, engineering/intelligence/logistics/medical
+      officers, vehicle commanders, section and squad sergeants, fireteam leaders,
+      and high-command staff.
+    type: Add
+  - message: Removed the room-attention action from CO/XO and ordinary military police.
+    type: Remove
+  - message: Personnel now face visible CO/XO when another leader calls attention,
+      prioritizing CO over XO and staff officers.
+    type: Fix
+  - message: Added regression coverage for faction terminals, hospital access, movable
+      miners, attention permissions, officer focus, and cross-deck hospital transport.
+    type: Code
+  id: 705
+  time: '2026-09-28T22:05:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2043
+- author: HubaBub
+  changes:
+  - message: Added the bear third party
+    type: Add
+  id: 706
+  time: '2026-09-28T22:18:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2044
+- author: troytroy400
+  changes:
+  - message: Emergency vehicles now have a driver button for red/blue emergency lights
+      with light stage options.
+    type: Add
+  - message: Colony Shot Alert System. This new structure alerts CMB radio to gunfire
+      or explosions within 25 tiles, at most once every 60 seconds. They are to be
+      only mapped at important locations like hospitals, police stations and administration.
+    type: Add
+  - message: Every phone now has a 911 tab. Callers choose Fire/Medical or Law Enforcement,
+      answer the automated dispatcher's questions and the call is reported on CMB
+      and Colony Medical radio as 911 Dispatch.
+    type: Add
+  - message: Colony Medical radio channel (:z).
+    type: Add
+  - message: Mobile phones. Use one in hand to call, answer or hang up. It takes the
+      name of whoever picks it up first, shows up as "[name]'s Mobile Phone" under
+      the Mobile Phones tab and its caller name can be changed with a screwdriver.
+    type: Add
+  - message: Colony command, corporate leadership, Head Physician, Foreman, Journalist,
+      Psychologist, ambassadors and orbital staff  now start with a mobile phone.
+    type: Add
+  - message: Mobile criminal records tablet. Basically just a mobile criminal records
+      computer.
+    type: Add
+  - message: Every character now starts with $25-150 in their bank account depending
+      on their job.
+    type: Add
+  - message: All colonists and CLF now appear on the criminal records computer automatically
+      round start, with round pertinent information not shown.
+    type: Add
+  - message: Status changes on the criminal records computer are now announced over
+      CMB radio.
+    type: Add
+  - message: People now leave DNA on things they touch with bare hands and scanning
+      a person with the forensic scanner shows their DNA and fingerprints.
+    type: Add
+  - message: All colony police/security roles now start with a forensic scanner.
+    type: Add
+  - message: Colony locked variants of all medical doors, colony department variants
+      of the Hybrisa doors and CMB, Colony Medical, Engineering/Logistics and GOVFOR/OPFOR
+      windoors in glass, blue and reinforced.
+    type: Add
+  - message: The Emergency Response Officer is now the Paramedic, with Firefighter
+      as an optional ID. Paramedics also get CMB radio to coordinate with them.
+    type: Tweak
+  - message: The Ethics and Wellness Advisor is now the Psychologist, with Therapist
+      and Psychiatrist ID options.
+    type: Tweak
+  - message: Freight Systems Specialist is now Logistics Specialist, Waste Management
+      Specialist is now Waste Management, Colony Engineer is now Engineer and Colony
+      Atmospheric Technician is now Atmospheric Technician.
+    type: Tweak
+  - message: The criminal records computer now uses the CRT UI.
+    type: Tweak
+  - message: Bounties are now set only by the game and can no longer be changed by
+      hand to prevent the infinite money glitch.
+    type: Tweak
+  - message: The "Eliminated" criminal status is now "Deceased".
+    type: Tweak
+  - message: Arsonists now start with only a lighter instead of a flamethrower and
+      their briefing has been rewritten, meaning they must obtain the materials to
+      start a major fire.
+    type: Tweak
+  - message: The VAI radio channel has moved from :z to :+.
+    type: Tweak
+  - message: The Nearsighted trait blur works again.
+    type: Fix
+  - message: The forensic scanner no longer errors when opening its results.
+    type: Fix
+  id: 707
+  time: '2026-09-29T00:40:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2047
+- author: troytroy400
+  changes:
+  - message: Added a Forensics guide to the guidebook, a defib guide and a guide on
+      how to make pipebombs in game.
+    type: Add
+  - message: The forensic scanner now shows time since death, gunshot residue, and
+      hair and skin DNA left on clothes. Fingerprints and DNA can be copied from the
+      results.
+    type: Add
+  - message: Scanning a person or body with a forensics scanner now gives a full injury
+      report, with cause of death for bodies. DNA now only shows a match if that person's
+      info is in the criminal records computer.
+    type: Add
+  - message: Payphone booths now work.
+    type: Add
+  - message: Colony requisitions can now order mobile phones, colony headsets, the
+      civilian Kramer and its magazines, and the TPR9 civilian handgun, which replaces
+      the military TPR pistol.
+    type: Add
+  - message: The CMB equipment vendor now offers a TPR9 civilian handgun case.
+    type: Add
+  - message: Defib times across the board are now way quicker.
+    type: Tweak
+  - message: Defibrillators now have energy settings from 50 J to 200 J. The Lifepak
+      can be raised or lowered by hand, lower energies heal less but burn less, and
+      higher energies heal more but leave chest burns and risk eschar. This system
+      is optional, you can still use a lifepak like normal.
+    type: Add
+  - message: AEDs now analyze the patient before every shock, pick their own energy
+      and refuse to charge when no shock is needed.
+    type: Add
+  - message: The Lifepak can be set down and hooked up to a patient as a monitor,
+      with a screen showing ECG, pleth and CO2 traces, heart rate, heart health, SpO2,
+      blood pressure, EtCO2 and patient temperature.
+    type: Add
+  - message: The Lifepak monitor can analyze the patient and select the best energy
+      and can charge and shock hands free through its leads if connected to a patient.
+    type: Add
+  - message: New AED and Lifepak voice prompts, charge, shock, heartbeat, flatline
+      and alarm sounds.
+    type: Add
+  - message: The stethoscope now plays breath sounds that match the state of the patient's
+      lungs.
+    type: Add
+  - message: The lifepak sprite now has proper working visuals.
+    type: Tweak
+  - message: Using the Lifepak's monitor and switching it on or off now need medical
+      training.
+    type: Tweak
+  - message: The handheld radio crate in colony requisitions now costs 150.
+    type: Tweak
+  - message: Removed the stun when climbing out of lockers, you still drop all items
+      when entering one however.
+    type: Remove
+  - message: The Z-level tab in the building menu is now properly hidden.
+    type: Remove
+  id: 708
+  time: '2026-09-29T17:24:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2049
+- author: troytroy400
+  changes:
+  - message: Added a full Medical guide, covering every single medical mechanic in
+      the game.
+    type: Add
+  - message: Added a Colony Law Enforcement guide.
+    type: Add
+  - message: Added an Engineering guide.
+    type: Add
+  - message: Added a Comms and Sensor Towers guide to the Communications guide.
+    type: Add
+  - message: Added the ability to hold a patient down for surgery. If you have no
+      pain killers, you can now have someone (who is not the surgeon) hold the patient
+      down to negate the need for painkillers.
+    type: Add
+  - message: Breathing from an oxygen tank on internals now clears suffocation damage
+      three times as fast.
+    type: Tweak
+  - message: Medical gas masks, anesthetic tanks and medical oxygen tanks are now
+      stocked in the medical supply vendor.
+    type: Add
+  - message: Full size shovels now dig 30% faster instead of only 10%.
+    type: Tweak
+  - message: Field antenna masts now need power to relay radio, bring your PACMAN
+      or repair those FOB APCs.
+    type: Tweak
+  - message: Loreified sentry names/descriotions.
+    type: Tweak
+  - message: Removed the outdated Medical V2 guide. The pipe bomb guide has moved
+      into the Engineering guide's Ordnance page.
+    type: Remove
+  id: 709
+  time: '2026-09-29T22:21:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2053
+- author: murdocstarsim
+  changes:
+  - message: Provosts finally decided to quit being lazy and finish up their paperwork.
+      We've rewritten the GOVFOR SOP to be more suitable. This includes a long list
+      of changes such as deployments, departments, reduced clutter, vehicle clarification
+      and much more. You can view the full changes here ->
+    type: Add
+  id: 710
+  time: '2026-09-29T22:23:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2041
+- author: TheMaiji
+  changes:
+  - message: Expanded Yautja roles, profile customization, clan progression, equipment,
+      and support creatures.
+    type: Add
+  - message: Added Hunter Ship content and hunting grounds with deployment and return
+      routes.
+    type: Add
+  - message: Fixed Yautja medical treatment, bracer tracking, cloaking, and weapon
+      interactions with current gameplay systems.
+    type: Fix
+  id: 711
+  time: '2026-09-29T22:56:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1648
+- author: troytroy400
+  changes:
+  - message: Intel now properly spawns during Distress Signal and Force on Force.
+      Bring intel items to your faction's Analyzer Machine or intel computer respectively
+      and click the machine with them to process them for intel points and clues to
+      the next intel.
+    type: Add
+  - message: Intel can now spawn in any filing cabinet or on any table. Maps with
+      no intel spawners use this as a fallback set of random spawns, but maps with
+      intel spawns already mapped can also utilize it partially based on RNG.
+    type: Add
+  - message: Objective items now show up on data detectors.
+    type: Add
+  - message: Encrypted data disks. These spawn with the rest of the intel and can
+      only be cracked at an intel computer. Solve the code in the decryption terminal
+      to upload it's intel points
+    type: Add
+  - message: Recovering the CIR-60 blackbox objective at an Analyzer now prints an
+      intel survey listing the three areas with the most remaining intel.
+    type: Add
+  - message: Intel & Objectives guidebook section covering objectives, points, intel,
+      the intel computer and data disks.
+    type: Add
+  - message: All fetch objectives are now completed by scanning the item at your Analyzer.
+      Fetch return point markers have been removed.
+    type: Tweak
+  - message: The tech tree console now shows your combined objective + intel points
+      and spends from both, using intel points first.
+    type: Tweak
+  - message: Killing threat members in Distress Signal is now worth 2 points per kill
+      and repeats forever.
+    type: Tweak
+  - message: Threat and threat leader kills only count when your faction does the
+      killing. Evolving or otherwise dying to unrelated causes no longer counts.
+    type: Tweak
+  - message: The ICRC Relief Party has been moved to Tier 1 of the GOVFOR tech tree.
+    type: Tweak
+  - message: Maps with planetside GOVFOR have been removed from the Force on Force
+      and Distress Signal rotation.
+    type: Tweak
+  - message: Fixed the kill threat and kill threat leader objectives not counting
+      kills.
+    type: Fix
+  - message: Objectives on other z-levels of the planet can now be completed.
+    type: Fix
+  - message: The Analyzer Machine's sprite now shows its states properly when destroyed
+      or scanning items.
+    type: Fix
+  - message: Intel items now fit in filing cabinets.
+    type: Fix
+  id: 712
+  time: '2026-09-30T16:36:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2056
+- author: murdocstarsim
+  changes:
+  - message: Fixed the department in SOP that was displaying an incorrect name and
+      was missing headers.
+    type: Fix
+  id: 713
+  time: '2026-09-30T21:26:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2057
+- author: troytroy400
+  changes:
+  - message: CMB and NSPA equipment vendors have a Long Arms section with options
+      for an HG 37-12 shotgun, Kramer enforcer rifle or MP5.
+    type: Add
+  - message: CMB and NSPA equipment vendors now stock evidence marker boxes, spare
+      forensic scanners and nitrile gloves.
+    type: Add
+  - message: Ambassadors now spawn with a universal translator.
+    type: Add
+  - message: Flashbangs now blind and slow everyone in range with line of sight.
+    type: Tweak
+  - message: Colony law enforcement roles no longer spawn with a gun case. Sidearms
+      and long arms are available from their vendors.
+    type: Tweak
+  - message: The CMB Marshal now spawns with a revolver and has the Marshal coat.
+    type: Tweak
+  - message: The CMB Deputy now spawns in the Bureau deputy coat instead of the parka.
+    type: Tweak
+  - message: CMB windbreakers now fit the same suit storage items as the deputy parka.
+    type: Tweak
+  - message: The CMB deputy parka no longer provides armor or slows you down.
+    type: Tweak
+  - message: The CLF Surgeon has been merged into the CLF Physician, which now has
+      full surgery skill and the surgical kit. Insurgency now has 2 CLF Physician
+      slots.
+    type: Tweak
+  - message: Distress Signal gets more Intelligence Officer slots at higher population.
+      2 at 61 players, 3 at 86 and 4 at 111.
+    type: Tweak
+  - message: The Kelland Warden has been removed from role selection.
+    type: Tweak
+  - message: Renamed the Colony Operations Synthetic to Operations Synthetic.
+    type: Tweak
+  - message: The UA recruiter description now properly says the United Americas instead
+      of US.
+    type: Tweak
+  - message: Intel now spreads out across the map instead of sometimes piling up in
+      a few areas.
+    type: Fix
+  - message: Backpacks are no longer backs of holding, all backpacks can no-longer
+      store other backpacks, rigs, pouches, etc.
+    type: Fix
+  - message: The Separated HUD layout is now the default for new players as certain
+      chat features are locked behind it. This can be changed by the player anytime
+      in settings.
+    type: Tweak
+  id: 714
+  time: '2026-09-30T22:52:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2062
+- author: rokudara-sen
+  changes:
+  - message: The AN/PRC-117G now has a guided panel that shows its current status,
+      tells you what needs fixing, and can automatically load your standard nets
+    type: Add
+  - message: The AN/PRC-117G now has a full expert faceplate with output power, waveforms,
+      Burst TX, Power Save, Priority Watch, EMCON, retrans bridging, antenna peaking,
+      OTA rekeying, station callsigns and direct frequencies
+    type: Add
+  - message: The AN/PRC-117G can now be used as a field phone to call other radios
+      and command-post or ship phones
+    type: Add
+  - message: The AN/PRC-117G now has a 5x2 storage compartment
+    type: Add
+  - message: Field antenna masts are now built in stages and must be loaded with faction
+      COMSEC keys before they relay those factions' nets
+    type: Add
+  - message: Radio operators can analyze intercepted encrypted traffic and break a
+      fixed enemy net's key
+    type: Add
+  - message: The search receiver now fixes nets faster, has a 120-tile base range
+      scaled by transmitter power, and provides direction-finding information from
+      resolved nets
+    type: Tweak
+  - message: AN/PRC radio notices and intercepts now use 117G and INT chat rows
+    type: Tweak
+  - message: The AN/PRC-117G now drains battery based on its current activity, and
+      RTOs receive three spare cells
+    type: Tweak
+  - message: DF pings and jammer fixes now appear correctly on the 3D battlefield
+      reconstruction tactical map
+    type: Fix
+  - message: Reworked the AN/PRC-117G guidebook with separate overview, guided-panel
+      and expert-faceplate guides
+    type: Add
+  - message: Opening the feed of a spliced field mast knocks the CLF tap off and drops
+      its keying module
+    type: Tweak
+  id: 715
+  time: '2026-09-30T22:55:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2059
+- author: Ignies
+  changes:
+  - message: ID cards now have their own ATM PIN, shown in your character notes.
+    type: Add
+  - message: 'Reworked the colony ATM: enter your PIN to withdraw, deposit or transfer
+      money.'
+    type: Tweak
+  - message: The Sapper's siphon rig also steals the PINs of the ATM's recent customers.
+    type: Add
+  id: 716
+  time: '2026-09-30T22:56:23.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2048
+- author: troytroy400
+  changes:
+  - message: Removed a number of hair styles that were absurdly long, defied gravity,
+      clashed with the sprite style or that were out of place/theme with a gritty
+      Alien game.
+    type: Remove
+  - message: All synths now use regulation appearance.
+    type: Tweak
+  id: 717
+  time: '2026-10-01T00:24:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2063
+- author: troytroy400
+  changes:
+  - message: Gas masks now slightly darken the edges and corners of your screen while
+      worn.
+    type: Add
+  - message: Use any item that isn't a gun on a multi-Z ladder to toss it up or down
+      the ladder after a short delay.
+    type: Add
+  - message: Added an emergency phone, a wall-mounted phone from Alien Isolation.
+      Sprite and original work by Lopz.
+    type: Add
+  - message: All faction requisitions vendors now stock 2 bangalores.
+    type: Add
+  id: 718
+  time: '2026-10-01T06:24:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2064
 Name: CMU
 Order: -1

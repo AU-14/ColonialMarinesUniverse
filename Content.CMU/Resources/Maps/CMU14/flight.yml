@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 01/27/2026 01:39:51
-  entityCount: 47878
+  entityCount: 47769
 maps:
 - 1
 grids:
@@ -309927,4 +309927,17 @@ entities:
     - type: Transform
       pos: 20.5,353.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000007
+    components:
+    - type: MetaData
+      name: Flight ground relay
+    - type: Transform
+      pos: -15.5,440.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: flight.ground.relay
+      displayName: Flight Ground Relay
 ...

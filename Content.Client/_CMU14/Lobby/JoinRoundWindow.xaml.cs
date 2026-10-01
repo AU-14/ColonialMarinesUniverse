@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Content.Client.Lobby.UI;
 using Content.Client._CMU14.Interface;
 using Content.Client.Stylesheets;
@@ -66,6 +66,9 @@ public sealed partial class JoinRoundWindow : DefaultWindow
     private readonly CmuChoiceCard _govfor;
     private readonly CmuChoiceCard _opfor;
     private readonly CmuChoiceCard _other;
+    private readonly CmuChoiceCard _hunt;
+    public Button JoinHuntButton => _hunt.Button;
+    public void SetHuntVisible(bool visible) => _hunt.Visible = visible;
 
     public JoinRoundWindow()
     {
@@ -80,6 +83,9 @@ public sealed partial class JoinRoundWindow : DefaultWindow
         _govfor = AddCard("rmc-lobby-join-govfor", "cmu-lobby-join-govfor-desc", GovforPalette, buttonOnLeft: false);
         _opfor = AddCard("rmc-lobby-join-opfor", "cmu-lobby-join-opfor-desc", OpforPalette, buttonOnLeft: true);
         _other = AddCard("rmc-lobby-join-other", "cmu-lobby-join-other-desc", OtherPalette, buttonOnLeft: false);
+
+        _hunt = AddCard("rmc-lobby-join-hunt", "cmu-lobby-join-hunt-desc", GovforPalette, buttonOnLeft: true);
+        _hunt.Visible = false;
 
         ApplyCrtPalette();
 
@@ -129,5 +135,6 @@ public sealed partial class JoinRoundWindow : DefaultWindow
         _govfor.ApplyPalette();
         _opfor.ApplyPalette();
         _other.ApplyPalette();
+        _hunt.ApplyPalette();
     }
 }

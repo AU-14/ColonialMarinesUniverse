@@ -1,0 +1,44 @@
+<Document>
+  # Medical
+
+  [bold]Not a medic?[/bold] Start with [textlink="Infantry First Aid" link="CMUGuideMedicalInfantry"]. It covers everything in your IFAK and how to keep yourself and your squad alive until a medic arrives.
+
+  Injuries are tracked on each part of the body. A gunshot to the arm leaves a wound on that arm, a heavy blow can break a bone, and enough trauma to the chest can damage the organs inside it. Treating a patient means finding each of those problems and fixing them one by one.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMHealthAnalyzer" Caption="Health analyzer"/>
+    <GuideEntityEmbed Entity="CMTraumaKit10" Caption="Trauma kit"/>
+    <GuideEntityEmbed Entity="CMBurnKit10" Caption="Burn kit"/>
+    <GuideEntityEmbed Entity="CMScalpel" Caption="Scalpel"/>
+  </Box>
+
+  ## How Injuries Work
+  - [bold]Body parts[/bold]: the head, torso, arms, hands, legs and feet each have their own health. Damage lands on the part that was hit.
+  - [bold]Wounds[/bold]: damage leaves wounds on the part it hit. Untreated wounds lower that part's maximum health and can bleed.
+  - [bold]Bones[/bold]: heavy hits can fracture a bone, from a hairline crack up to a shattered bone.
+  - [bold]Organs[/bold]: the heart, lungs, liver, kidneys, stomach, brain and eyes each have their own health, and damaged organs cause their own problems.
+  - [bold]Blood[/bold]: open wounds and internal bleeding drain blood, which starves the body of oxygen.
+  - [bold]Pain[/bold]: injuries hurt. Pain slows you down, ruins your aim and can put you into shock.
+
+  ## Aiming at a Body Part
+  In combat you can choose which part of the body to aim for. The keys to cycle or pick a body zone are under [bold]CMU Medical[/bold] in the controls menu. Aiming only nudges where a hit lands; it doesn't guarantee it.
+
+  ## Medical Training
+  Most medical work checks your medical skill:
+  - [bold]No training[/bold]: you can still use basic first aid like gauze and ointment, just more slowly.
+  - [bold]Basic training (medical 1)[/bold]: listen with a stethoscope, see fractures and internal bleeding on a health analyzer, hook up and read a patient monitor.
+  - [bold]Trained medic (medical 2)[/bold]: see organ damage on a health analyzer, use kits at full speed and strength, and use defibrillators.
+  - [bold]Surgery[/bold] uses a separate surgery skill. See [textlink="Surgery" link="CMUGuideMedicalSurgery"].
+
+  ## In This Guide
+  - [textlink="Start Here: Infantry First Aid" link="CMUGuideMedicalInfantry"]: using your IFAK, for riflemen and anyone who isn't a medic.
+  - [textlink="Diagnosis" link="CMUGuideMedicalDiagnosis"]: working out what's wrong with a patient.
+  - [textlink="Wounds and Bleeding" link="CMUGuideMedicalWounds"]: dressing wounds, stopping bleeding and burns.
+  - [textlink="Field Treatment Mixing" link="CMUGuideMedicalFieldCare"]: making dressings in the field.
+  - [textlink="Fractures" link="CMUGuideMedicalBones"]: splints, casts and setting bones.
+  - [textlink="Pain" link="CMUGuideMedicalPain"]: pain, shock and painkillers.
+  - [textlink="Organs" link="CMUGuideMedicalOrgans"]: organ damage and how to fix it.
+  - [textlink="Surgery" link="CMUGuideMedicalSurgery"]: operating on a patient.
+  - [textlink="Resuscitation" link="CMUGuideMedicalResuscitation"]: CPR, the recovery position and bringing back the dead.
+  - [textlink="Defibrillators" link="CMUGuideDefibrillators"]: the Lifepak, the AED and patient monitoring.
+</Document>

@@ -347,14 +347,22 @@
     - radioOpforJTAC
     - radioOpforMILP
 
-# field-built antenna mast, raised from metal by engineering-trained personnel.
-# relays both sides' combat nets: a mast is a mast, whoever stands next to it
+# field-built antenna mast, the last stage of AU14CommsMastGraph (comms.yml). relays only
+# the nets of the sides keyed into it with a COMSEC fill card - AU14MastAssemblySystem
+# fills the channel list from the keys, so it is empty here
 - type: entity
-  parent: AU14CommsMastBase
+  parent: [ AU14CommsMastBase, AU14MastKeyedBase ]
   id: AU14CommsMastField
   name: field antenna mast
-  suffix: Field-Built, Both Sides
+  suffix: Field-Built, Unkeyed
   components:
+  # field masts only relay while powered, unlike the passive CP masts
+  - type: ApcPowerReceiver
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 1000
+    channel: Equipment
   - type: AU14NetSpliceTarget
     carriers: 2
     probes: 24
@@ -362,18 +370,28 @@
   - type: ANPRCRelayAnchor
     fullRange: 75
     partialRange: 100
-    channels:
-    - radioGovforAlpha
-    - radioGovforBravo
-    - radioGovforCharlie
-    - radioGovforCommand
-    - radioGovforIntel
-    - radioGovforJTAC
-    - radioGovforMILP
-    - radioOpforAlpha
-    - radioOpforBravo
-    - radioOpforCharlie
-    - radioOpforCommand
-    - radioOpforIntel
-    - radioOpforJTAC
-    - radioOpforMILP
+    channels: []
+  - type: AU14MastAssembly
+    examineHint: false
+  - type: Construction
+    graph: AU14CommsMastGraph
+    node: mast
+
+# admin / mapper spawns of a finished mast already keyed to one side
+- type: entity
+  parent: AU14CommsMastField
+  id: AU14CommsMastFieldGovfor
+  suffix: Field-Built, GOVFOR
+  components:
+  - type: AU14MastKey
+    keys:
+    - govfor
+
+- type: entity
+  parent: AU14CommsMastField
+  id: AU14CommsMastFieldOpfor
+  suffix: Field-Built, OPFOR
+  components:
+  - type: AU14MastKey
+    keys:
+    - opfor

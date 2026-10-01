@@ -7,6 +7,16 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager
 {
     private CMUPerformancePvsMetrics _pvsMetrics = default!;
 
+    /// <summary>Captures stage counters without traversing the entity census or profiler history.</summary>
+    public bool CapturePvsReport()
+    {
+        if (!_initialized || !_enabled)
+            return false;
+        _sawmill.Warning($"[CMU-PERF] manual-pvs {GetCorrelationContext()}");
+        LogPvsStages();
+        return true;
+    }
+
     private void LogPvsStages()
     {
         var window = _pvsMetrics.Drain(_timing.RealTime);

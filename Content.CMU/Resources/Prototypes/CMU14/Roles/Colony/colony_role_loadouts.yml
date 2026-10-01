@@ -15,6 +15,7 @@
   id: JobAU14JobCivilianEthicsAndWellnessAdvisor
   points: 7
   groups:
+  - CMUCivilianPsychologistSpecialization
   - CivSatchelAU14
   - CivFootwearAU14
   - CivHatsAU14

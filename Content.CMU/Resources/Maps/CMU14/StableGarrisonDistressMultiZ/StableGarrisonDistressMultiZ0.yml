@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 08/24/2026 10:28:06
-  entityCount: 61077
+  entityCount: 61099
 maps:
 - 1
 grids:
@@ -155128,73 +155128,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -16.5,-136.5
-      parent: 1
-- proto: fetchreturngovfor
-  entities:
-  - uid: 12486
-    components:
-    - type: Transform
-      pos: 64.5,-0.5
-      parent: 1
-  - uid: 12487
-    components:
-    - type: Transform
-      pos: 64.5,-1.5
-      parent: 1
-  - uid: 12488
-    components:
-    - type: Transform
-      pos: 64.5,-2.5
-      parent: 1
-  - uid: 12489
-    components:
-    - type: Transform
-      pos: 64.5,-3.5
-      parent: 1
-  - uid: 12490
-    components:
-    - type: Transform
-      pos: 65.5,-2.5
-      parent: 1
-  - uid: 12491
-    components:
-    - type: Transform
-      pos: 65.5,-1.5
-      parent: 1
-  - uid: 12492
-    components:
-    - type: Transform
-      pos: 65.5,-3.5
-      parent: 1
-  - uid: 12493
-    components:
-    - type: Transform
-      pos: 66.5,-1.5
-      parent: 1
-  - uid: 12494
-    components:
-    - type: Transform
-      pos: 66.5,-2.5
-      parent: 1
-  - uid: 12495
-    components:
-    - type: Transform
-      pos: 66.5,-3.5
-      parent: 1
-  - uid: 12496
-    components:
-    - type: Transform
-      pos: 67.5,-1.5
-      parent: 1
-  - uid: 12497
-    components:
-    - type: Transform
-      pos: 67.5,-2.5
-      parent: 1
-  - uid: 12498
-    components:
-    - type: Transform
-      pos: 67.5,-3.5
       parent: 1
 - proto: fetchwylaptopobjective
   entities:
@@ -431207,4 +431140,17 @@ entities:
     - type: Transform
       pos: 68.5,4.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 85003
+    components:
+    - type: MetaData
+      name: Stable Garrison Distress ground relay
+    - type: Transform
+      pos: 201.5,-110.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: stable-garrison-distress.ground.relay
+      displayName: Stable Garrison Distress Ground Relay
 ...

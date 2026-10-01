@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -62,6 +63,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private AnchoredTileCacheSystem _anchorTiles = default!;
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private TagSystem _tag = default!;
@@ -76,7 +78,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
     private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
-    private readonly List<EntityUid> _igniteContacts = new(); // CMU14: igniting anchors new fire on the tile, mutating the anchored set mid-enumeration
+    private readonly HashSet<Entity<RMCIgniteOnCollideComponent>> _nearbyFires = new();
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
 
@@ -814,10 +816,10 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     }
 
     // CMU14: fire growth and synthetic resistance.
-    /// <summary>Fire bypasses worn armor, but must respect a synthetic body's heat resistance.</summary>
+    /// <summary>Fire bypasses worn armor, but respects synthetic and Yautja heat resistance.</summary>
     public void DamageFromFire(EntityUid target, DamageSpecifier damage, bool interruptsDoAfters = true, EntityUid? origin = null)
     {
-        _damageable.TryChangeDamage(target, damage, ignoreResistances: !HasComp<SynthComponent>(target),
+        _damageable.TryChangeDamage(target, damage, ignoreResistances: !HasComp<SynthComponent>(target) && !HasComp<YautjaComponent>(target),
             interruptsDoAfters: interruptsDoAfters, origin: origin);
     }
 
@@ -941,7 +943,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         }
 
         stepping.LastPosition = coords;
-        Dirty(ent);
+        // The caller compares the complete final state after all tile effects have run.
     }
 
     /// <summary>
@@ -997,12 +999,12 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             var applyQuery = EntityQueryEnumerator<RMCIgniteOnCollideComponent>();
             while (applyQuery.MoveNext(out var uid, out var apply))
             {
-                var enumerator = _rmcMap.GetAnchoredEntitiesEnumerator(uid);
-                _igniteContacts.Clear(); // CMU14: snapshot the tile, igniting mutates the anchored set
-                while (enumerator.MoveNext(out var contact))
-                    _igniteContacts.Add(contact);
-                foreach (var contact in _igniteContacts)
-                    TryIgnite((uid, apply), contact, true);
+                // The immutable membership snapshot survives ignition callbacks that
+                // anchor new fire. Damage/immunity are still evaluated every update.
+                foreach (var contact in _anchorTiles.Get(uid))
+                {
+                    if (!TerminatingOrDeleted(contact)) TryIgnite((uid, apply), contact, true);
+                }
 
                 if (apply.InitDamaged)
                     continue;
@@ -1146,8 +1148,8 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             while (steppingQuery.MoveNext(out var uid, out var stepping, out var body))
             {
                 var previousArmorMultiplier = stepping.ArmorMultiplier;
+                var previousState = (stepping.ArmorMultiplier, stepping.Distance, stepping.UpdateAt, stepping.LastPosition);
                 stepping.ArmorMultiplier = 1;
-                Dirty(uid, stepping);
 
                 var isStepping = false;
                 foreach (var contact in _physics.GetContactingEntities(uid, body, approximate: true))
@@ -1163,10 +1165,11 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                 // Entities with a static body type do not have any contacts with tile fires, so we do another standing on fire check.
                 if (!isStepping)
                 {
-                    var nearbyEntities = _entityLookup.GetEntitiesInRange<RMCIgniteOnCollideComponent>(Transform(uid).Coordinates, 0.35f);
-                    if (nearbyEntities.Count != 0)
+                    _nearbyFires.Clear();
+                    _entityLookup.GetEntitiesInRange(Transform(uid).Coordinates, 0.35f, _nearbyFires);
+                    if (_nearbyFires.Count != 0)
                     {
-                        var nearbyEntity = nearbyEntities.First();
+                        var nearbyEntity = _nearbyFires.First();
                         ApplyTileEffect((uid, stepping), nearbyEntity.Comp, nearbyEntity.Owner);
                         isStepping = true;
                     }
@@ -1174,13 +1177,24 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
                 if (!isStepping)
                     RemCompDeferred<SteppingOnFireComponent>(uid);
-                else if (stepping.ArmorMultiplier != previousArmorMultiplier)
-                    _armor.UpdateArmorValue((uid, null));
+                else
+                {
+                    if (previousState != (stepping.ArmorMultiplier, stepping.Distance, stepping.UpdateAt, stepping.LastPosition))
+                        Dirty(uid, stepping);
+                    if (stepping.ArmorMultiplier != previousArmorMultiplier)
+                        _armor.UpdateArmorValue((uid, null));
+                }
+
+                _nearbyFires.Clear();
             }
         }
         catch (Exception e)
         {
             Log.Error($"Error processing {nameof(SteppingOnFireComponent)}:\n{e}");
+        }
+        finally
+        {
+            _nearbyFires.Clear();
         }
     }
 

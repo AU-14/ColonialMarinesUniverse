@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Timing;
 using Content.Shared.CMU14.Medical.Anatomy.Metabolism.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Medical.Stasis;
@@ -36,9 +37,33 @@ public sealed partial class MetabolizerSystem : EntitySystem
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
 
     [Dependency] private EntityQuery<OrganComponent> _organQuery = default!;
+    [Dependency] private EntityQuery<MetaDataComponent> _updateMetadataQuery = default!;
     [Dependency] private EntityQuery<SolutionManagerComponent> _solutionQuery = default!;
 
     private readonly Stack<List<ReagentQuantity>> _reagentSnapshots = new();
+    private readonly DeadlineQueue<MetabolizerComponent> _scheduledMetabolizers = new();
+    private readonly Stack<List<MetabolizerComponent>> _dueMetabolizerSnapshots = new();
+    private readonly HashSet<MetabolizerComponent> _metabolizersInProgress = new();
+
+    [SubscribeLocalEvent]
+    private void OnMetabolizerStartup(Entity<MetabolizerComponent> ent, ref ComponentStartup args)
+    {
+        ent.Comp.ScheduledOwner = ent.Owner;
+        ent.Comp.DeadlineChanged = ScheduleMetabolizer;
+        ScheduleMetabolizer(ent.Comp);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnMetabolizerShutdown(Entity<MetabolizerComponent> ent, ref ComponentShutdown args)
+    {
+        ent.Comp.DeadlineChanged = null;
+        _scheduledMetabolizers.Remove(ent.Comp);
+    }
+
+    private void ScheduleMetabolizer(MetabolizerComponent comp)
+    {
+        _scheduledMetabolizers.Schedule(comp, comp.NextUpdate);
+    }
 
     private readonly struct ReagentSnapshot : IDisposable
     {
@@ -87,17 +112,49 @@ public sealed partial class MetabolizerSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<MetabolizerComponent>();
-
-        while (query.MoveNext(out var uid, out var comp))
+        var dueMetabolizers = _dueMetabolizerSnapshots.TryPop(out var reusable)
+            ? reusable : new List<MetabolizerComponent>();
+        try
         {
-            // Only update as frequently as it should
-            if (_gameTiming.CurTime < comp.NextUpdate)
-                continue;
+            var now = _gameTiming.CurTime;
+            // Snapshot due work before publishing effects. An overdue metabolizer still
+            // runs at most once per update, and callbacks may reschedule or remove organs.
+            while (_scheduledMetabolizers.TryTakeDue(now, out var due))
+                dueMetabolizers.Add(due);
 
-            comp.NextUpdate += comp.AdjustedUpdateInterval;
-            TryMetabolize((uid, comp));
-            Dirty(uid, comp);
+            foreach (var comp in dueMetabolizers)
+            {
+                var uid = comp.ScheduledOwner;
+                if (_metabolizersInProgress.Contains(comp) || comp.DeadlineChanged == null ||
+                    TerminatingOrDeleted(uid) || comp.NextUpdate > now ||
+                    !_updateMetadataQuery.TryComp(uid, out var metadata) || metadata.EntityPaused)
+                    continue;
+
+                // The setter schedules even an unchanged value (including zero intervals).
+                comp.NextUpdate += comp.AdjustedUpdateInterval;
+                if (!_metabolizersInProgress.Add(comp)) continue;
+                try
+                {
+                    TryMetabolize((uid, comp));
+                    if (!comp.Deleted) Dirty(uid, comp);
+                }
+                finally
+                {
+                    _metabolizersInProgress.Remove(comp);
+                }
+            }
+        }
+        finally
+        {
+            // Retain unprocessed due work if an effect throws. This also drops removed organs.
+            foreach (var comp in dueMetabolizers)
+            {
+                if (comp.DeadlineChanged != null &&
+                    _updateMetadataQuery.TryComp(comp.ScheduledOwner, out var metadata) && !metadata.EntityPaused)
+                    ScheduleMetabolizer(comp);
+            }
+            dueMetabolizers.Clear();
+            _dueMetabolizerSnapshots.Push(dueMetabolizers);
         }
     }
 

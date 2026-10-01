@@ -7,9 +7,19 @@
   children:
   - AU14CommsFirstNet
   - AU14CommsANPRC
+  - AU14CommsANPRCGuided
+  - AU14CommsANPRCExpert
   - AU14CommsHeadsets
   - AU14CommsVoiceProcedure
   - AU14CommsQuickRef
+  - CMUGuideTowers
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideTowers
+  name: cmu-guide-entry-towers
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Comms/CMUTowers.xml"
 
 - type: guideEntry
   parent: RMC
@@ -24,6 +34,20 @@
   name: cmu-guide-entry-comms-anprc
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsANPRC.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CommsANPRCGuided
+  name: cmu-guide-entry-comms-anprc-guided
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsANPRCGuided.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CommsANPRCExpert
+  name: cmu-guide-entry-comms-anprc-expert
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsANPRCExpert.xml"
 
 - type: guideEntry
   parent: RMC

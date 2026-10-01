@@ -124,6 +124,10 @@ public sealed partial class CPRSystem : EntitySystem
         var received = EnsureComp<CPRReceivedComponent>(target);
         received.Last = _timing.CurTime;
 
+        // cmu edit start: hair and skin samples between performer and patient
+        EntityManager.System<Content.Shared.Forensics.Systems.ForensicsSystem>().CMUApplyPersonContact(performer, target);
+        // cmu edit end
+
         if (_net.IsClient)
             return;
 

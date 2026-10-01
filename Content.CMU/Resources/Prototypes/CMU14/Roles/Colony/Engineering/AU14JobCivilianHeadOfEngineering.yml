@@ -68,6 +68,8 @@
     id: AU14IDCardColonyHeadOfEngineering
     ears: AU14ColonyAdminHeadset
     pocket1: AU14StampHENG
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -1,0 +1,26 @@
+<Document>
+  # Painkillers
+
+  Painkillers mask pain so the patient can keep going, and strong enough ones let you operate on an awake patient. They don't heal anything. For how pain works, see [textlink="Pain" link="CMUGuideMedicalPain"].
+
+  From weakest to strongest:
+  - [bold]Paracetamol[/bold]: mild relief for light pain. Too weak for surgery. Overdose at 60 units.
+  - [bold]Tramadol[/bold]: moderate relief, strong enough for surgery. Over 30 units it makes the patient drunk and starts poisoning them.
+  - [bold]Sleen[/bold]: a strong experimental painkiller. Overdose at 20 units.
+  - [bold]Oxycodone[/bold]: strong relief, but it makes the patient [color=#FFA500]loopy[/color]: their vision blurs and darkens at the edges. Over 20 units they act drunk and hallucinate, and it poisons them.
+  - [bold]Fentanyl[/bold]: the strongest, and the most dangerous. It blurs vision heavily, and overdoses at only 10 units, where it starts to stop the patient breathing.
+  - [bold]Soporific[/bold]: a strong painkiller that also puts the patient to sleep at 8 units or more. Overdose at 30 units.
+
+  Every painkiller hurts the patient when overdosed, usually with poison, and at the highest doses by stopping their breathing.
+
+  ## Reversing an Overdose
+  [bold]Naloxone[/bold] flushes painkillers out of the body at once and clears toxin damage. The patient vomits, and any pain the drugs were masking comes straight back.
+
+  <GuideReagentEmbed Reagent="CMUParacetamol"/>
+  <GuideReagentEmbed Reagent="CMUTramadol"/>
+  <GuideReagentEmbed Reagent="CMUSleen"/>
+  <GuideReagentEmbed Reagent="CMUOxycodone"/>
+  <GuideReagentEmbed Reagent="CMUFentanyl"/>
+  <GuideReagentEmbed Reagent="CMUSoporific"/>
+  <GuideReagentEmbed Reagent="AU14Naloxone"/>
+</Document>

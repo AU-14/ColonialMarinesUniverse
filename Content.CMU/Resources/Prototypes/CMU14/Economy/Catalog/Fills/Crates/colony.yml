@@ -419,6 +419,60 @@
 
 - type: entity
   parent: RMCCrateBase
+  id: CMUCrateMobilePhones
+  name: Mobile Phone Crate (5x mobile phone)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMobilePhone
+      amount: 5
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateColonyHeadsets
+  name: Colony Headset Crate (5x colony headset)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHeadsetColony
+      amount: 5
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxTPR9Civilian
+  name: TPR9 civilian handgun crate (x1 TPR9 civilian handgun, x4 M4A3 magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponPistolTPR9Civilian
+      amount: 1
+    - id: CMMagazinePistolM1984
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxKramerCivilian
+  name: Kramer civilian rifle crate (x1 Kramer civilian rifle, x4 Kramer magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponRifleKramerCivilian
+      amount: 1
+    - id: AU14WeaponRifleKramerMagazineStandard
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxKramerMagazines
+  name: Kramer magazine crate (x6 Kramer magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleKramerMagazineStandard
+      amount: 6
+
+- type: entity
+  parent: RMCCrateBase
   id: AU14CrateBoxCivBinocs
   name: Binoculars Crate (3x binoculars)
   components:

@@ -318,3 +318,14 @@ When the monitor opens a sustained memory/performance incident:
 - Metrics use no player, UID, prototype, component, map, round, or incident labels.
 - Player identities are never written by this monitor.
 - A one-time world count seed occurs at startup/re-enable/entity flush; incident capture itself does not scan the world.
+
+
+## Physics and power attribution
+
+The Debug-admin command cmuperf physics writes controller timing windows and an explicit physics-body census. Automatic detailed reports read only the controller counters; they do not run this census.
+
+Controller rows use the engine's existing before-solve and after-solve histograms. Recording requires metrics.enabled = true; the command does not change that setting. Rows include metricsEnabled, calls, observed total/average milliseconds, and window duration. Disabled capture with no observations emits one metrics-disabled row. Other unobserved timers use no-observations with unavailable costs. Windows begin at diagnostics initialization/reset or the previous drain. Timers are process-wide and may overlap other profiler scopes; their sum is not total physics time.
+
+The manual census includes paused bodies and reports total body count, awake count, collision-enabled count, sleep-disabled count, and contact-edge count. It logs at most 20 prototype/body-type groups, ordered by contact edges, awake count, then population. Contact edges can count the same contact on both bodies and include non-touching contacts; they are not unique collisions, callback rates, or wake-event counts. No entity identifiers are retained or logged. censusMs exposes the scan's own cost; use it sparingly on a busy server.
+
+Power profiling now separates Reconnect, Battery PreSync, Solver, Battery PostSync, APC Receivers, Consumers, and Network Batteries, each with the CMU Power prefix. These are nested profiler scopes with the existing profiler's enablement and retention limits. Battery synchronization, charge updates, and consumer-notification semantics are unchanged.

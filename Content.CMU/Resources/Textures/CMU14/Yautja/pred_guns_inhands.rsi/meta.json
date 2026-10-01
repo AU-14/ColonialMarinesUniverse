@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/mob/humans/onmob/inhands/weapons/guns/pred_guns_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/mob/humans/onmob/inhands/weapons/guns/pred_guns_righthand.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "spikelauncher-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "spikelauncher_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "plasmarifle-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "plasmarifle_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "plasmapistol-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "plasmapistol_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "defoliator-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "defoliator_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "plasmacarbine-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "plasmacarbine_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "spikelauncher-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "spikelauncher_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "plasmarifle-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "plasmarifle_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "plasmapistol-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "plasmapistol_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "defoliator-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "defoliator_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "plasmacarbine-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "plasmacarbine_w-inhand-right",
+      "directions": 4
+    }
+  ]
+}

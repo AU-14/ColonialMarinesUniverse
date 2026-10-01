@@ -82,6 +82,8 @@ public sealed partial class VisualBodySystem
                     ? appearance.EyeColor
                     : appearance.SkinColor);
 
+            ApplyYautjaSkinShader(body.Owner, index, appearance.SkinColor, layer.Color, organ.Comp2.Layer.Equals(HumanoidVisualLayers.Eyes));
+
             if (organ.Comp2.SexStateOverrides?.TryGetValue(sex, out var state) == true)
                 _sprite.LayerSetRsiState(body.Owner, index, state);
 
@@ -101,6 +103,7 @@ public sealed partial class VisualBodySystem
                 (organ.Owner, organ.Comp2),
                 body.Owner,
                 markings,
+                appearance.SkinColor,
                 localMarkingLayers);
         }
     }
@@ -173,6 +176,7 @@ public sealed partial class VisualBodySystem
         Entity<VisualOrganMarkingsComponent> organ,
         Entity<SpriteComponent?> body,
         IReadOnlyDictionary<HumanoidVisualLayers, List<Marking>> markings,
+        Color skinColor,
         Dictionary<string, (EntityUid Organ, HumanoidVisualLayers Layer)> localMarkingLayers)
     {
         if (!Resolve(body, ref body.Comp))
@@ -208,6 +212,9 @@ public sealed partial class VisualBodySystem
                     marking.MarkingColors is not null && i < marking.MarkingColors.Count
                         ? marking.MarkingColors[i]
                         : Color.White);
+
+                if (proto.BodyPart == HumanoidVisualLayers.Hair)
+                    ApplyYautjaSkinShader(body.Owner, spriteLayer, skinColor, body.Comp[spriteLayer].Color);
 
                 localMarkingLayers[layerId] = (organ.Owner, proto.BodyPart);
 

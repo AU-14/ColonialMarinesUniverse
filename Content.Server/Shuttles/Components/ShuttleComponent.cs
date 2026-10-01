@@ -5,7 +5,7 @@ namespace Content.Server.Shuttles.Components
     [RegisterComponent]
     public sealed partial class ShuttleComponent : Component
     {
-        [ViewVariables]
+        [DataField]
         public bool Enabled = true;
 
         [ViewVariables]

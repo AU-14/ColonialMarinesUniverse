@@ -331,23 +331,23 @@ public sealed class ForceOnForceGameplayTest : GameTest
     }
 
     [Test]
-    public async Task UniformMarkerSettingDefaultsOffAndCanBeChangedLocally()
+    public async Task UniformMarkerSettingDefaultsOnAndCanBeChangedLocally()
     {
         await Client.WaitAssertion(() =>
         {
             var configuration = Client.ResolveDependency<IConfigurationManager>();
-            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.False);
+            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.True);
             using var tab = new CmuTab();
             var checkbox = tab.FindControl<CheckBox>("FoFUnidentifiedMarkerCheckBox");
-            Assert.That(checkbox.Pressed, Is.False);
-            checkbox.Pressed = true;
-            tab.Control.ApplyChanges();
-            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.True);
-            tab.Control.ReloadValues();
             Assert.That(checkbox.Pressed, Is.True);
             checkbox.Pressed = false;
             tab.Control.ApplyChanges();
             Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.False);
+            tab.Control.ReloadValues();
+            Assert.That(checkbox.Pressed, Is.False);
+            checkbox.Pressed = true;
+            tab.Control.ApplyChanges();
+            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.True);
         });
     }
 

@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/hunter/prey_items.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "SKULLS"
+    },
+    {
+      "name": "queen_skull"
+    },
+    {
+      "name": "king_skull"
+    },
+    {
+      "name": "crusher_skull"
+    },
+    {
+      "name": "praetorian_skull"
+    },
+    {
+      "name": "corroder_skull"
+    },
+    {
+      "name": "despoiler_skull"
+    },
+    {
+      "name": "deacon_skull"
+    },
+    {
+      "name": "ravager_skull"
+    },
+    {
+      "name": "boiler_skull"
+    },
+    {
+      "name": "defender_skull"
+    },
+    {
+      "name": "warrior_skull"
+    },
+    {
+      "name": "carrier_skull"
+    },
+    {
+      "name": "hivelord_skull"
+    },
+    {
+      "name": "burrower_skull"
+    },
+    {
+      "name": "hunter_skull"
+    },
+    {
+      "name": "lurker_skull"
+    },
+    {
+      "name": "sentinel_skull"
+    },
+    {
+      "name": "spitter_skull"
+    },
+    {
+      "name": "runner_skull"
+    },
+    {
+      "name": "drone_skull"
+    },
+    {
+      "name": "PELTS"
+    },
+    {
+      "name": "queen_pelt"
+    },
+    {
+      "name": "king_pelt"
+    },
+    {
+      "name": "crusher_pelt"
+    },
+    {
+      "name": "praetorian_pelt"
+    },
+    {
+      "name": "ravager_pelt"
+    },
+    {
+      "name": "boiler_pelt"
+    },
+    {
+      "name": "defender_pelt"
+    },
+    {
+      "name": "warrior_pelt"
+    },
+    {
+      "name": "carrier_pelt"
+    },
+    {
+      "name": "hivelord_pelt"
+    },
+    {
+      "name": "burrower_pelt"
+    },
+    {
+      "name": "lurker_pelt"
+    },
+    {
+      "name": "sentinel_pelt"
+    },
+    {
+      "name": "spitter_pelt"
+    },
+    {
+      "name": "runner_pelt"
+    },
+    {
+      "name": "drone_pelt"
+    },
+    {
+      "name": "larva_pelt"
+    },
+    {
+      "name": "hunter_pelt"
+    },
+    {
+      "name": "deacon_pelt"
+    },
+    {
+      "name": "corroder_pelt"
+    },
+    {
+      "name": "despoiler_pelt"
+    }
+  ]
+}
