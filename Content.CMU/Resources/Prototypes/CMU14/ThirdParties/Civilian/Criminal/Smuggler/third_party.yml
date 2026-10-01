@@ -14,10 +14,10 @@
   weight: 20
   minplayers: 10
   maxplayers: 100
-  GhostsNeeded: 2
   roundstart: false
-  ghostCallable: true
-  whitelistedgamemodes:
+  ghostsNeeded: 2
+  ghostsCallable: true
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
     - forceonforce

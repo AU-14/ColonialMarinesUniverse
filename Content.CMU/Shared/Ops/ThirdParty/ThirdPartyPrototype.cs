@@ -27,21 +27,19 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     public List<string> WhitelistedThreats { get; private set; } = new();
 
     // The preferred field is the string 'entrymethod' (values: "ground", "shuttle", "parachute").
-    [DataField("entrymethod", required: false)]
+    [DataField("entrymethod")]
     public string? EntryMethod { get; private set; }
 
-    [DataField("dropshippath", required: false)]
+    [DataField]
     public ResPath dropshippath { get; private set; } = new("/Maps/CMU14/Shuttles/black_ert.yml");
 
-    // used if enterbyshuttle is true
-
-    [DataField("blacklistedgamemodes")]
+    [DataField]
     public List<string> BlacklistedGamemodes { get; private set; } = new();
 
-    [DataField("whitelistedgamemodes")]
-    public List<string> whitelistedgamemodes { get; private set; } = new();
+    [DataField]
+    public List<string> WhitelistedGamemodes { get; private set; } = new();
 
-    [DataField("weight", required: false)]
+    [DataField]
     public int weight { get; private set; } = 1;
 
     [DataField("maxplayers")]
@@ -52,22 +50,18 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     ///     Meant for minor civilian drop-ins, not heavy forces.
     /// </summary>
     [DataField]
-    public bool GhostCallable { get; private set; }
+    public bool GhostsCallable { get; private set; }
 
     [DataField("minplayers")]
     public int MinPlayers { get; private set; }
 
-// for rolling
-
-    [DataField("GhostsNeeded")]
+    [DataField]
     public int GhostsNeeded { get; private set; } = 10;
 
-    // used if this isn't a roundstart spawn
-
-    [DataField("blacklistedPlatoons", required: false)]
+    [DataField]
     public List<string> BlacklistedPlatoons { get; private set; } = new();
 
-    [DataField("WhitelistedPlatoons", required: false)]
+    [DataField]
     public List<string> WhitelistedPlatoons { get; private set; } = new();
 
     [DataField("roundstart", required: false)]
@@ -82,14 +76,14 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     [DataField("partyspawn", required: true)]
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; }
 
-    [DataField("announcearrival", required: false)]
+    [DataField("announcearrival")]
     public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict zone.";
 
     /// <summary>
     ///     Announced when a scheduled party goes ready and starts gathering ghost volunteers,
     ///     before it deploys. Worded as responders en route so a delayed landing reads as intended.
     /// </summary>
-    [DataField("announceinbound", required: false)]
+    [DataField("announceinbound")]
     public string? AnnounceInbound { get; private set; } = "Long range arrays detect an unidentified force moving to answer the distress call. Arrival expected shortly.";
 
     [IdDataField]

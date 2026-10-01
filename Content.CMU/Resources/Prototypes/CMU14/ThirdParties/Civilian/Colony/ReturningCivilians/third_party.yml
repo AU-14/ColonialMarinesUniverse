@@ -14,10 +14,10 @@
   weight: 30
   minplayers: 3
   maxplayers: 49
-  GhostsNeeded: 5
+  ghostsNeeded: 5
   roundstart: false
-  ghostCallable: true
-  whitelistedgamemodes:
+  ghostsCallable: true
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
 
@@ -37,10 +37,10 @@
   weight: 30
   minplayers: 50
   maxplayers: 100
-  GhostsNeeded: 7
+  ghostsNeeded: 7
   roundstart: false
-  ghostCallable: true
-  whitelistedgamemodes:
+  ghostsCallable: true
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
 
@@ -60,9 +60,9 @@
   weight: 30
   minplayers: 101
   maxplayers: 400
-  GhostsNeeded: 9
+  ghostsNeeded: 9
   roundstart: false
-  ghostCallable: true
-  whitelistedgamemodes:
+  ghostsCallable: true
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
