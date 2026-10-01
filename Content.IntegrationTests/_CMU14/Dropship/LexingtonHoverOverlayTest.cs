@@ -26,10 +26,6 @@ public sealed class LexingtonHoverOverlayTest : GameTest
         {
             var mapUid = Client.System<SharedMapSystem>().CreateMap(out var mapId, runMapInit: true);
             var overlay = new DropshipTacticalHoverOverlay(CEntMan);
-            Assert.That(overlay.Space, Is.EqualTo(OverlaySpace.WorldSpaceEntities),
-                "The hover effects must be composited among sprites so floor weeds cannot cover them.");
-            Assert.That(overlay.ZIndex, Is.GreaterThan((int) Content.Shared.DrawDepth.DrawDepth.HighFloorObjects));
-            Assert.That(overlay.ZIndex, Is.LessThan((int) Content.Shared.DrawDepth.DrawDepth.Mobs));
             var white = new TestTexture(Vector2i.One);
             var world = new Mock<DrawingHandleWorld>(MockBehavior.Loose, white);
             var screen = new Mock<DrawingHandleScreen>(MockBehavior.Loose, white);

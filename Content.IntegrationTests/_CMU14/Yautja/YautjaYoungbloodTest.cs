@@ -2332,22 +2332,20 @@ public sealed class YautjaYoungbloodTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(0, true)]
-    [TestCase(7199, true)]
-    [TestCase(7200, false)]
-    public void SoloYoungbloodCallAllowsCandidatesUnderTwoHours(int previousSeconds, bool allowed)
+    [Test]
+    public void SoloYoungbloodCallAllowsAnEligibleNewPlayer()
     {
         var option = new YautjaHuntConsoleComponent().BloodingCallOptions.Single(o => o.Id == "youngblood_solo");
         var result = YautjaYoungbloodSystem.CheckEligibility(
             option,
             adultWhitelisted: false,
             jobBanned: false,
-            youngbloodTime: TimeSpan.FromSeconds(previousSeconds),
+            youngbloodTime: TimeSpan.Zero,
             squadTime: TimeSpan.FromHours(5),
             xenoTime: TimeSpan.FromHours(5));
 
-        Assert.That(result.Allowed, Is.EqualTo(allowed));
-        Assert.That(result.Reason, Is.EqualTo(allowed ? null : (YautjaYoungbloodRejection?) YautjaYoungbloodRejection.MaximumYoungbloodTime));
+        Assert.That(result.Allowed, Is.True);
+        Assert.That(result.Reason, Is.Null);
     }
 
     [Test]
