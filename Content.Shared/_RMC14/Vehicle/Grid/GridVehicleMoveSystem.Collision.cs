@@ -276,7 +276,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                     world.Position,
                     world.MapId,
                     candidate.Entity,
-                    aabb,
+                    // aabb,
+                    fixtureBounds, // CMU14: push against the rotated hull, not its world-axis bounding box.
                     candidate.Aabb,
                     candidate.CollisionAabb,
                     clearance,
@@ -547,6 +548,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return true;
     }
 
+    // CMU14 method: resolve xeno contacts against the proposed rotated hull.
     private CollisionHandlingResult HandleSoftXenoCollision(
         EntityUid vehicle,
         GridVehicleMoverComponent mover,
@@ -554,7 +556,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         Vector2 vehicleWorldPosition,
         MapId mapId,
         EntityUid xeno,
-        Box2 vehicleAabb,
+        Box2Rotated vehicleBounds,
         Box2 xenoAabb,
         Box2 collisionAabb,
         float clearance,
@@ -564,6 +566,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         float wheelDamage,
         ref bool playedCollisionSound)
     {
+        if (!GetMobBoundsInHullSpace(vehicleBounds, GetCenteredMobAabb(xeno, xenoAabb)).Intersects(vehicleBounds.Box))
+            return CollisionHandlingResult.Continue;
+
         if (ShouldBlockXeno(mover, xeno))
         {
             if (applyEffects)
@@ -581,7 +586,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         PlayMobCollisionSound(vehicle, ref playedCollisionSound);
         var vehicleMove = GetVehicleMoveDelta(grid, vehicleWorldPosition, mapId, mover);
-        if (PushMobOutOfVehicle(vehicle, xeno, vehicleAabb, xenoAabb, vehicleMove))
+        if (PushMobOutOfVehicle(vehicle, xeno, vehicleBounds, xenoAabb, vehicleMove))
             return CollisionHandlingResult.Continue;
 
         ApplyCollisionSelfDamage(vehicle, mover, xeno, wheelDamage, 0f);
@@ -1772,14 +1777,15 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return worldPos - currentWorld.Position;
     }
 
-    private bool PushMobOutOfVehicle(EntityUid vehicle, EntityUid mob, Box2 vehicleAabb, Box2 mobAabb, Vector2 vehicleMove)
+    // CMU14 method: retain the hull's orientation when resolving a push.
+    private bool PushMobOutOfVehicle(EntityUid vehicle, EntityUid mob, Box2Rotated vehicleBounds, Box2 mobAabb, Vector2 vehicleMove)
     {
         var xform = Transform(mob);
         if (xform.Anchored)
             return false;
 
         var centeredAabb = GetCenteredMobAabb(mob, mobAabb);
-        if (!TryGetMobPush(vehicle, mob, vehicleAabb, centeredAabb, vehicleMove, out var target))
+        if (!TryGetMobPush(vehicle, mob, vehicleBounds, centeredAabb, vehicleMove, out var target))
             return false;
 
         if (!_net.IsClient || ShouldPredictVehicleInteractions(vehicle))
@@ -1855,21 +1861,23 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         }
     }
 
+    // CMU14 method: choose exits in hull space so angled contacts follow the actual bumper.
     private bool TryGetMobPush(
         EntityUid vehicle,
         EntityUid mob,
-        Box2 vehicleAabb,
+        Box2Rotated vehicleBounds,
         Box2 mobAabb,
         Vector2 vehicleMove,
         out EntityCoordinates target)
     {
         target = EntityCoordinates.Invalid;
 
-        var vehicleHalf = vehicleAabb.Size / 2f;
-        var mobHalf = mobAabb.Size / 2f;
+        var localMob = GetMobBoundsInHullSpace(vehicleBounds, mobAabb);
+        var vehicleHalf = vehicleBounds.Box.Size / 2f;
+        var mobHalf = localMob.Size / 2f;
 
-        var vehicleCenter = vehicleAabb.Center;
-        var mobCenter = mobAabb.Center;
+        var vehicleCenter = vehicleBounds.Box.Center;
+        var mobCenter = localMob.Center;
 
         var diff = mobCenter - vehicleCenter;
         var overlapX = vehicleHalf.X + mobHalf.X - Math.Abs(diff.X);
@@ -1888,7 +1896,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             ? new Vector2(0f, Math.Sign(diff.Y == 0f ? 1f : diff.Y) * overlapY)
             : Vector2.Zero;
 
-        var vehicleBounds = vehicleAabb;
         if (TryGetMovementPushTarget(
                 vehicle,
                 mob,
@@ -1900,7 +1907,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return true;
         }
 
-        if (vehicleMove.LengthSquared() > 0.0001f)
+        if (vehicleMove.LengthSquared() > MinMoveDistance * MinMoveDistance)
             return false;
 
         var useX = overlapX < overlapY;
@@ -1910,8 +1917,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             useX = lastUseX;
         }
 
-        var first = useX ? pushX : pushY;
-        var second = useX ? pushY : pushX;
+        var first = vehicleBounds.Rotation.RotateVec(useX ? pushX : pushY);
+        var second = vehicleBounds.Rotation.RotateVec(useX ? pushY : pushX);
 
         if (TryGetSidePushTarget(vehicle, mob, mobAabb, vehicleBounds, first, out target))
         {
@@ -1928,38 +1935,57 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return false;
     }
 
-    // CMU14 method: resolve a moving hull along its travel direction, never across its width.
+    // CMU14 method: slide toward the nearer side of travel without falling back across the hull.
     private bool TryGetMovementPushTarget(
         EntityUid vehicle,
         EntityUid mob,
         Box2 mobAabb,
-        Box2 vehicleBounds,
+        Box2Rotated vehicleBounds,
         Vector2 vehicleMove,
         out EntityCoordinates target)
     {
         target = EntityCoordinates.Invalid;
 
-        if (vehicleMove.LengthSquared() <= 0.0001f)
+        if (vehicleMove.LengthSquared() <= MinMoveDistance * MinMoveDistance)
             return false;
 
-        var direction = Vector2.Normalize(vehicleMove);
-        var exitX = direction.X > 0f ? (vehicleBounds.Right - mobAabb.Left) / direction.X
-            : direction.X < 0f ? (vehicleBounds.Left - mobAabb.Right) / direction.X : float.PositiveInfinity;
-        var exitY = direction.Y > 0f ? (vehicleBounds.Top - mobAabb.Bottom) / direction.Y
-            : direction.Y < 0f ? (vehicleBounds.Bottom - mobAabb.Top) / direction.Y : float.PositiveInfinity;
-        var push = direction * MathF.Min(exitX, exitY);
-        if (!TryGetSidePushTarget(vehicle, mob, mobAabb, vehicleBounds, push, out target))
-            return false;
+        var movement = (-vehicleBounds.Rotation).RotateVec(Vector2.Normalize(vehicleMove));
+        var side = new Vector2(-movement.Y, movement.X);
+        var localMob = GetMobBoundsInHullSpace(vehicleBounds, mobAabb);
+        var positive = GetHullExitDistance(vehicleBounds.Box, localMob, side);
+        var negative = GetHullExitDistance(vehicleBounds.Box, localMob, -side);
+        var localPush = positive <= negative ? side * positive : -side * negative;
+        var push = vehicleBounds.Rotation.RotateVec(localPush);
 
-        _lastMobPushAxis[mob] = exitX <= exitY;
-        return true;
+        return TryGetSidePushTarget(vehicle, mob, mobAabb, vehicleBounds, push, out target);
     }
 
+    // CMU14 method: project the mob's extent onto the hull axes without expanding the rotated hull.
+    private static Box2 GetMobBoundsInHullSpace(Box2Rotated hull, Box2 mob)
+    {
+        var inverse = -hull.Rotation;
+        var center = hull.Origin + inverse.RotateVec(mob.Center - hull.Origin);
+        var size = Vector2.Abs(inverse.RotateVec(new Vector2(mob.Width, 0))) +
+                   Vector2.Abs(inverse.RotateVec(new Vector2(0, mob.Height)));
+        return Box2.CenteredAround(center, size);
+    }
+
+    // CMU14 method: distance to the first hull edge in this direction, including the mob's extent.
+    private static float GetHullExitDistance(Box2 hull, Box2 mob, Vector2 direction)
+    {
+        var exitX = direction.X > 0f ? (hull.Right - mob.Left) / direction.X
+            : direction.X < 0f ? (hull.Left - mob.Right) / direction.X : float.PositiveInfinity;
+        var exitY = direction.Y > 0f ? (hull.Top - mob.Bottom) / direction.Y
+            : direction.Y < 0f ? (hull.Bottom - mob.Top) / direction.Y : float.PositiveInfinity;
+        return MathF.Min(exitX, exitY);
+    }
+
+    // CMU14 method: require clearance from the rotated hull and from obstacles along the slide.
     private bool TryGetSidePushTarget(
         EntityUid vehicle,
         EntityUid mob,
         Box2 mobAabb,
-        Box2 vehicleBounds,
+        Box2Rotated vehicleBounds,
         Vector2 push,
         out EntityCoordinates target)
     {
@@ -1971,7 +1997,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var adjusted = push + Vector2.Normalize(push) * Clearance;
 
         var targetAabb = mobAabb.Translated(adjusted);
-        if (targetAabb.Intersects(vehicleBounds))
+        if (GetMobBoundsInHullSpace(vehicleBounds, targetAabb).Intersects(vehicleBounds.Box))
             return false;
 
         if (IsPushBlocked(vehicle, mob, mobAabb, adjusted))
@@ -2121,6 +2147,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return false;
     }
 
+    // CMU14 method: check the swept path as well as the destination, so a slide cannot cross an obstacle.
     private bool IsPushBlocked(EntityUid vehicle, EntityUid mob, Box2 mobAabb, Vector2 push)
     {
         if (push == Vector2.Zero)
@@ -2138,9 +2165,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var checkAabb = targetAabb.Enlarged(-PushWallSkin);
         if (!checkAabb.IsValid())
             checkAabb = targetAabb;
+        var startAabb = checkAabb.Translated(-push);
 
         _pushBlockedIntersecting.Clear();
-        lookup.GetEntitiesIntersecting(mapId, checkAabb, _pushBlockedIntersecting, LookupFlags.Dynamic | LookupFlags.Static);
+        lookup.GetEntitiesIntersecting(mapId, startAabb.Union(checkAabb), _pushBlockedIntersecting, LookupFlags.Dynamic | LookupFlags.Static);
         foreach (var other in _pushBlockedIntersecting)
         {
             if (other == mob || other == vehicle)
@@ -2157,10 +2185,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 continue;
 
             if (HasComp<MobStateComponent>(other) ||
-                HasComp<VehicleSmashableComponent>(other) ||
-                HasComp<FoldableComponent>(other) ||
-                TryComp<DoorComponent>(other, out _) ||
-                HasComp<BarricadeComponent>(other))
+                !otherXform.Anchored && otherBody.BodyType != BodyType.Static && !HasComp<VehicleComponent>(other))
             {
                 continue;
             }
@@ -2173,14 +2198,18 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 if (!fixture.Hard)
                     continue;
 
-                if ((fixture.CollisionLayer & (int) CollisionGroup.Impassable) != 0)
+                if ((fixture.CollisionLayer & (int) GridVehiclePushHardBlockMask) != 0)
                 {
                     wallLike = true;
                     for (var i = 0; i < fixture.Shape.ChildCount; i++)
                     {
                         var otherAabb = fixture.Shape.ComputeAABB(otherTx, i);
                         var intersection = otherAabb.Intersect(checkAabb);
-                        if (Box2.Area(intersection) > PushWallOverlapArea)
+                        // Existing overlap may be escaped, but never cross a new blocker on the way out.
+                        var crosses = !startAabb.Intersects(otherAabb) &&
+                                      ImpactEnergySolver.GetSweptAabbContactTime(
+                                          startAabb.Center, checkAabb.Center, checkAabb.Size / 2f, otherAabb) <= 1f;
+                        if (Box2.Area(intersection) > PushWallOverlapArea || crosses)
                         {
                             overlaps = true;
                             break;
