@@ -2028,7 +2028,7 @@ public sealed partial class YautjaHuntConsoleComponent : Component
 
         return new List<YautjaHuntCallOption>
         {
-            YoungbloodCall("youngblood_solo", "cmu-yautja-blooding-call-solo", 1, 1, 0, 0, 5, youngblood),
+            YoungbloodCall("youngblood_solo", "cmu-yautja-blooding-call-solo", 1, 1, 2, 0, 5, youngblood),
             YoungbloodCall("youngblood_solo_experienced", "cmu-yautja-blooding-call-solo-experienced", 1, 1, 7, 5, 5, youngblood),
             YoungbloodCall("youngblood_three_inexperienced", "cmu-yautja-blooding-call-three-inexperienced", 2, 3, 2, 0, 5, youngblood),
             YoungbloodCall("youngblood_three_intermediate", "cmu-yautja-blooding-call-three-intermediate", 2, 3, 5, 2, 10, youngblood),

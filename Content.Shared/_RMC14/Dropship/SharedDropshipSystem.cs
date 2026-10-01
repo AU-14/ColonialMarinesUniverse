@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics; // CMU14
 using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
@@ -1523,6 +1524,16 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         }
     }
 
+
+    // CMU14: preserve the authored landing offset when creating destinations from markers.
+    public void SetLandingOffset(Entity<DropshipDestinationComponent?> destination, Vector2 offset)
+    {
+        if (!Resolve(destination, ref destination.Comp))
+            return;
+
+        destination.Comp.LandingOffset = offset;
+        Dirty(destination);
+    }
 
     public void SetDestinationType(EntityUid uid, string destinationtype)
     {
