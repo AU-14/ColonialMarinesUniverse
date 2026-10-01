@@ -8,6 +8,7 @@ using Content.Shared.Camera;
 using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Placement;
 using Robust.Client.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -24,6 +25,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private CMUZLevelSpriteCullingSystem _culling = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlacementManager _placement = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SpriteTreeSystem _spriteTree = default!;

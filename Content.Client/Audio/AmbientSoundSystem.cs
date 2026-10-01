@@ -308,6 +308,10 @@ public sealed partial class AmbientSoundSystem : SharedAmbientSoundSystem
                 _playingSounds[sourceEntity] = (stream.Value.Entity, comp.Sound, key);
                 playingCount++;
 
+                // CMU14: Enforce the per-sound budget within this batch of nearby emitters.
+                if (playingCount >= MaxSingleSound)
+                    break;
+
                 if (_playingSounds.Count >= _maxAmbientCount)
                     break;
             }
