@@ -39,6 +39,7 @@ public sealed class AnchoredTileCacheTest : GameTest
 
     [TestCase(1)]
     [TestCase(32)]
+    [Explicit("Anchored-query timing comparison; run explicitly in Release.")]
     public async Task CompareWarmMembershipAndContactSnapshotCosts(int population)
     {
         var map = await Pair.CreateTestMap();
@@ -108,23 +109,7 @@ public sealed class AnchoredTileCacheTest : GameTest
             Assert.That(original, Does.Contain(uid));
             cache.Get(map.Grid, Vector2i.Zero);
             var misses = cache.CacheMisses;
-            var start = Stopwatch.GetTimestamp();
-            var matches = 0;
-            for (var i = 0; i < 10000; i++)
-                if (cache.Get(map.Grid, Vector2i.Zero).Contains(uid)) matches++;
-            var cachedMs = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
-            Assert.That(matches, Is.EqualTo(10000));
-            matches = 0;
-            start = Stopwatch.GetTimestamp();
-            for (var i = 0; i < 10000; i++)
-            {
-                var entities = maps.GetAnchoredEntitiesEnumerator(map.Grid, map.Grid.Comp, Vector2i.Zero);
-                while (entities.MoveNext(out var entity))
-                    if (entity == uid) matches++;
-            }
-            var directMs = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
-            Assert.That(matches, Is.EqualTo(10000));
-            TestContext.Progress.WriteLine($"PERF anchor_cache lookups=10000 cachedMs={cachedMs:F3} directMs={directMs:F3}");
+            Assert.That(cache.Get(map.Grid, Vector2i.Zero), Does.Contain(uid));
             Assert.That(cache.CacheMisses, Is.EqualTo(misses));
 
             transform.Unanchor(uid);

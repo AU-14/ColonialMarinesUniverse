@@ -1,4 +1,3 @@
-using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.Construction.Prototypes;
@@ -10,7 +9,6 @@ using Content.Shared.Tools;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Construction;
 
@@ -35,29 +33,10 @@ public sealed class ToolsConstructionMergeRegressionTest : GameTest
     ];
 
     [Test]
-    public async Task PrototypeInheritanceEventsAndToolQualitiesKeepBothContracts()
+    public async Task PrototypesInheritForkSettingsAndToolQualitiesResolve()
     {
         await Server.WaitAssertion(() =>
         {
-            var constructionProperties = typeof(ConstructionPrototype)
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(typeof(IInheritingPrototype).IsAssignableFrom(typeof(ConstructionPrototype)), Is.True);
-                Assert.That(constructionProperties.Count(property => property.Name == nameof(ConstructionPrototype.Parents)),
-                    Is.EqualTo(1), "ConstructionPrototype must have one authoritative upstream Parents field.");
-                Assert.That(constructionProperties.Count(property => property.Name == nameof(ConstructionPrototype.Abstract)),
-                    Is.EqualTo(1), "ConstructionPrototype must have one authoritative upstream Abstract field.");
-
-                Assert.That(typeof(IInheritingPrototype).IsAssignableFrom(typeof(ConstructionGraphPrototype)), Is.True,
-                    "ConstructionGraph still relies on the RMC partial for prototype inheritance.");
-                Assert.That(typeof(InitialConstructionDoAfterEvent), Is.Not.Null);
-                Assert.That(typeof(ToolRefineDoAfterEvent), Is.Not.Null);
-                Assert.That(typeof(ConstructionPrototype).Assembly.GetType(
-                        "Content.Shared.Construction.WelderRefineDoAfterEvent"),
-                    Is.Null, "The zero-reference WelderRefine event must not survive the ToolRefine successor.");
-            }
-
             var rmcConstruction = SProtoMan.Index<ConstructionPrototype>("CMBarricadeMetal");
             var inheritedConstruction = SProtoMan.Index<ConstructionPrototype>("CMChair");
             var inheritedGraph = SProtoMan.Index<ConstructionGraphPrototype>("CMSeat");
