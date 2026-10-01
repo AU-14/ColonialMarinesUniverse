@@ -11415,5 +11415,21 @@
   id: 717
   time: '2026-10-01T00:24:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2063
+- author: troytroy400
+  changes:
+  - message: Gas masks now slightly darken the edges and corners of your screen while
+      worn.
+    type: Add
+  - message: Use any item that isn't a gun on a multi-Z ladder to toss it up or down
+      the ladder after a short delay.
+    type: Add
+  - message: Added an emergency phone, a wall-mounted phone from Alien Isolation.
+      Sprite and original work by Lopz.
+    type: Add
+  - message: All faction requisitions vendors now stock 2 bangalores.
+    type: Add
+  id: 718
+  time: '2026-10-01T06:24:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2064
 Name: CMU
 Order: -1
