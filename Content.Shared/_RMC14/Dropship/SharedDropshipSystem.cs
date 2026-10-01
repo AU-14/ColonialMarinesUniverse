@@ -72,6 +72,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private RMCPlanetSystem _planet = default!; // CMU14
     // CMU14: Force on Force roles, hijacking, announcements and identification.
     [Dependency] private IRobustRandom _hijackRandom = default!;
 
@@ -1236,9 +1237,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             return false;
         }
 
-        // Prevent shipside hijacks by immature xeno queens (xeno-specific check).
+        // CMU14: colony grids and connected underground levels are planets too.
+        // Preserve the cabin-to-colony map resolution above and the shipside maturity restriction.
+        var onPlanet = _planet.IsOnPlanetLevel(Transform(user)) ||
+            map is { } colonyMap && _planet.IsOnPlanetLevel(Transform(colonyMap));
         if (HasComp<XenoMaturingComponent>(user) &&
-            !HasComp<RMCPlanetComponent>(map))
+            // !HasComp<RMCPlanetComponent>(map))
+            !onPlanet)
         {
             var msg = Loc.GetString("rmc-dropship-invalid-hijack");
 

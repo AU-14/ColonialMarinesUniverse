@@ -1889,14 +1889,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             : Vector2.Zero;
 
         var vehicleBounds = vehicleAabb;
-        if (TryGetMovementSidePushTarget(
+        if (TryGetMovementPushTarget(
                 vehicle,
                 mob,
                 mobAabb,
                 vehicleBounds,
                 vehicleMove,
-                pushX,
-                pushY,
                 out target))
         {
             return true;
@@ -1930,14 +1928,13 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return false;
     }
 
-    private bool TryGetMovementSidePushTarget(
+    // CMU14 method: resolve a moving hull along its travel direction, never across its width.
+    private bool TryGetMovementPushTarget(
         EntityUid vehicle,
         EntityUid mob,
         Box2 mobAabb,
         Box2 vehicleBounds,
         Vector2 vehicleMove,
-        Vector2 pushX,
-        Vector2 pushY,
         out EntityCoordinates target)
     {
         target = EntityCoordinates.Invalid;
@@ -1945,25 +1942,17 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (vehicleMove.LengthSquared() <= 0.0001f)
             return false;
 
-        var vehicleMovesX = MathF.Abs(vehicleMove.X) >= MathF.Abs(vehicleMove.Y);
-        var sidePush = vehicleMovesX ? pushY : pushX;
-        if (sidePush == Vector2.Zero)
+        var direction = Vector2.Normalize(vehicleMove);
+        var exitX = direction.X > 0f ? (vehicleBounds.Right - mobAabb.Left) / direction.X
+            : direction.X < 0f ? (vehicleBounds.Left - mobAabb.Right) / direction.X : float.PositiveInfinity;
+        var exitY = direction.Y > 0f ? (vehicleBounds.Top - mobAabb.Bottom) / direction.Y
+            : direction.Y < 0f ? (vehicleBounds.Bottom - mobAabb.Top) / direction.Y : float.PositiveInfinity;
+        var push = direction * MathF.Min(exitX, exitY);
+        if (!TryGetSidePushTarget(vehicle, mob, mobAabb, vehicleBounds, push, out target))
             return false;
 
-        var useX = !vehicleMovesX;
-        if (TryGetSidePushTarget(vehicle, mob, mobAabb, vehicleBounds, sidePush, out target))
-        {
-            _lastMobPushAxis[mob] = useX;
-            return true;
-        }
-
-        if (TryGetSidePushTarget(vehicle, mob, mobAabb, vehicleBounds, -sidePush, out target))
-        {
-            _lastMobPushAxis[mob] = useX;
-            return true;
-        }
-
-        return false;
+        _lastMobPushAxis[mob] = exitX <= exitY;
+        return true;
     }
 
     private bool TryGetSidePushTarget(
@@ -1978,11 +1967,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (push == Vector2.Zero)
             return false;
 
-        var adjusted = push;
-        if (Math.Abs(adjusted.X) > 0f)
-            adjusted.X += Math.Sign(adjusted.X) * Clearance;
-        if (Math.Abs(adjusted.Y) > 0f)
-            adjusted.Y += Math.Sign(adjusted.Y) * Clearance;
+        // CMU14: clearance must preserve diagonal travel as well as cardinal pushes.
+        var adjusted = push + Vector2.Normalize(push) * Clearance;
 
         var targetAabb = mobAabb.Translated(adjusted);
         if (targetAabb.Intersects(vehicleBounds))
