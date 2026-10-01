@@ -20,6 +20,13 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
 
     private readonly HashSet<Entity<KeycardDeviceComponent>> _devices = new();
 
+    // CMU14: severity ladder for stepping. Green/blue/red move one rung per ceremony;
+    // levels outside it (delta as current, yellow and future members as targets)
+    // bypass the ladder and jump directly. Order is fixed here, not by enum value,
+    // so new members can be inserted anywhere in the enum.
+    private static readonly RMCAlertLevels[] AlertLadder =
+        [RMCAlertLevels.Green, RMCAlertLevels.Blue, RMCAlertLevels.Red];
+
     public override void Initialize()
     {
         SubscribeLocalEvent<KeycardDeviceComponent, InteractHandEvent>(OnInteractHand);
@@ -36,15 +43,36 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
         }
 
         // TODO RMC14 ERT, enable/disable maintenance security
-        var options = new List<DialogOption>
+        // CMU14: offer every alert level except delta and the current one.
+        var current = _alertLevel.Get() ?? RMCAlertLevels.Green;
+        var targets = new List<RMCAlertLevels>();
+        for (var i = AlertLadder.Length - 1; i >= 0; i--)
+            targets.Add(AlertLadder[i]);
+        foreach (var level in Enum.GetValues<RMCAlertLevels>())
         {
-            new(Loc.GetString("rmc-alert-red-alert"), new KeycardDeviceSetModeEvent(KeycardDeviceMode.RedAlert)),
-        };
+            if (!AlertLadder.Contains(level))
+                targets.Add(level);
+        }
+
+        var options = new List<DialogOption>();
+        foreach (var level in targets)
+        {
+            if (level == RMCAlertLevels.Delta
+                || level == current)
+                continue;
+
+            var text = Loc.GetString($"rmc-alert-{level.ToString().ToLowerInvariant()}");
+            options.Add(new DialogOption(text, new KeycardDeviceSetModeEvent(level)));
+        }
+
+        // CMU14: state the current level in the dialog message
+        var message = Loc.GetString("rmc-keycard-device-current",
+            ("level", Loc.GetString($"rmc-alert-{current.ToString().ToLowerInvariant()}")));
         _dialog.OpenOptions(ent,
             args.User,
             Loc.GetString("rmc-keycard-device"),
             options,
-            Loc.GetString("rmc-keycard-device-description")
+            message
         );
     }
 
@@ -67,23 +95,63 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
         }
 
         var time = _timing.CurTime;
+
+        // CMU14: cluster cooldown between alert steps, one step per ceremony
+        if (ent.Comp.LastStep is { } lastStep && lastStep + ent.Comp.Cooldown > time)
+        {
+            var remaining = lastStep + ent.Comp.Cooldown - time;
+            _popup.PopupClient(Loc.GetString("rmc-keycard-device-cooldown",
+                ("seconds", (int) remaining.TotalSeconds)), ent, args.User, PopupType.SmallCaution);
+            return;
+        }
+
         ent.Comp.LastActivated = time;
         Dirty(ent);
 
         if (!AllEnabled(ent))
             return;
 
-        switch (ent.Comp.Mode)
+        // CMU14: was a fixed red alert switch, now steps one level toward the armed target
+        // switch (ent.Comp.Mode)
+        // {
+        //     case KeycardDeviceMode.None:
+        //         return;
+        //     case KeycardDeviceMode.RedAlert:
+        //         _alertLevel.Set(RMCAlertLevels.Red, args.User);
+        //         break;
+        //     default:
+        //         Log.Warning($"Unknown {nameof(KeycardDeviceMode)}: {ent.Comp.Mode}");
+        //         return;
+        // }
+        if (ent.Comp.Mode is not { } target)
+            return;
+
+        var current = _alertLevel.Get() ?? RMCAlertLevels.Green;
+        if (target == current)
         {
-            case KeycardDeviceMode.None:
-                return;
-            case KeycardDeviceMode.RedAlert:
-                _alertLevel.Set(RMCAlertLevels.Red, args.User);
-                break;
-            default:
-                Log.Warning($"Unknown {nameof(KeycardDeviceMode)}: {ent.Comp.Mode}");
-                return;
+            var name = Loc.GetString($"rmc-alert-{current.ToString().ToLowerInvariant()}");
+            _popup.PopupClient(Loc.GetString("rmc-keycard-device-already", ("level", name)),
+                ent, args.User, PopupType.SmallCaution);
+            return;
         }
+
+        // CMU14: ladder levels step one rung toward the target
+        var currentIdx = Array.IndexOf(AlertLadder, current);
+        var targetIdx = Array.IndexOf(AlertLadder, target);
+        var step = currentIdx < 0 || targetIdx < 0
+            ? target
+            : AlertLadder[currentIdx + Math.Sign(targetIdx - currentIdx)];
+
+        // CMU14: stamp the cooldown on every device in the cluster, not just this one
+        _devices.Clear();
+        _entityLookup.GetEntitiesInRange(ent.Owner.ToCoordinates(), ent.Comp.Range, _devices);
+        foreach (var device in _devices)
+        {
+            device.Comp.LastStep = time;
+            Dirty(device);
+        }
+
+        _alertLevel.Set(step, args.User);
     }
 
     private bool AllEnabled(Entity<KeycardDeviceComponent> ent)

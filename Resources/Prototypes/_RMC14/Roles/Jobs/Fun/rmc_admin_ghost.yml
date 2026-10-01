@@ -14,26 +14,25 @@
 
 - type: startingGear
   parent: MobAghostGear
-  id: RMCMobAghostGear
+  id: RMCMobAghostGear # CMU14
   equipment:
     back: ClothingBackpackSatchelHolding
     id: RMCAdminPDA
   storage:
     back:
-    - CMUAdminAccessConfigurator # CMU14
-    - HandheldHealthAnalyzer # CMU14
+    - CMUAdminAccessConfigurator
+    - HandheldHealthAnalyzer
     - CMHealthAnalyzer
     - DoorRemoteAll
     - AdminHypo
     - MeleeDebug200
-    - MeleeDebugGibInsane # CMU14
-    - CMUDebugLightningStick # CMU14
-#   - ToolDebug # CMU14
-    - AU14MaintenanceJackSpecialAdmin # CMU14
-    - AU14TabletGovfor #CMU14
-    - AU14TabletOpfor # CMU14
+    - MeleeDebugGibInsane
+    - CMUDebugLightningStick
+#   - ToolDebug
+    - AU14MaintenanceJackSpecialAdmin
+    - CMUCommandTabletAdmin # CMU14
     - RMCWelderAdmin
     - CMMultitool
-    - CMTRayScanner # CMU14
-    - CMUAtmosScanner # CMU14
-    - HolofanProjectorDebug # CMU14
+    - CMTRayScanner
+    - CMUAtmosScanner
+    - HolofanProjectorDebug

@@ -9,4 +9,8 @@ rmc-alert-level-which = What alert would you like to set it as?
 rmc-alert-green = Green
 rmc-alert-blue = Blue
 rmc-alert-red = Red
+# CMU14: admin tablet alert level control
+rmc-alert-delta = Delta
+# CMU14: ready for the Yellow member planned for another branch
+rmc-alert-yellow = Yellow
 rmc-alert-change-level = Change alert level
