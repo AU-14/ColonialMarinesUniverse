@@ -11473,5 +11473,52 @@
   id: 720
   time: '2026-10-01T18:59:02.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2066
+- author: TheHellFireo
+  changes:
+  - message: Moving vehicles now slide xenos toward the nearer side of the hull, including
+      while reversing diagonally, without pushing them through obstacles.
+    type: Fix
+  id: 721
+  time: '2026-10-01T21:21:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2067
+- author: TheHellFireo
+  changes:
+  - message: Cannibals can carve corpses with their starting kitchen knife using right-click
+      Slice.
+    type: Fix
+  - message: Butchering requires the right-click Slice verb.
+    type: Tweak
+  - message: We-Yu experiment crates keep their eggs when the round starts.
+    type: Fix
+  - message: Blood puddles leave visible footprints and drag trails again.
+    type: Fix
+  id: 722
+  time: '2026-10-01T21:21:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2068
+- author: TheHellFireo
+  changes:
+  - message: Deputy chevrons display the correct rank after being reapplied.
+    type: Fix
+  - message: DRAGON generators accept phoron fuel stacks correctly.
+    type: Fix
+  - message: Overlapping Oozing Wounds patches no longer hit the same target repeatedly
+      in one cast.
+    type: Fix
+  - message: Despoiler Acid Barrage can target other Z levels.
+    type: Fix
+  - message: Vehicle collisions no longer apply wall-demolition damage to drivers
+      or repeatedly charge the same contact.
+    type: Fix
+  - message: Neomorph hive pylons retain their pathogen offspring.
+    type: Fix
+  - message: Combat UGVs appear in xeno night vision and reject CPR.
+    type: Fix
+  - message: Repairing chemicals work on barricades and combat UGVs.
+    type: Fix
+  - message: Switching guns no longer bypasses queen screech scatter.
+    type: Fix
+  id: 723
+  time: '2026-10-01T21:22:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2069
 Name: CMU
 Order: -1
