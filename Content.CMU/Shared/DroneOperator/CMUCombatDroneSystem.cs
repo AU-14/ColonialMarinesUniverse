@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared._RMC14.Atmos;
+using Content.Shared._RMC14.Medical.CPR;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -41,7 +42,13 @@ public sealed partial class CMUCombatDroneSystem : EntitySystem
         SubscribeLocalEvent<CMUCombatDroneComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CMUCombatDroneComponent, RMCIgniteAttemptEvent>(OnIgniteAttempt);
         SubscribeLocalEvent<CMUCombatDroneComponent, RMCGetFireImmunityEvent>(OnGetFireImmunity);
+        SubscribeLocalEvent<CMUCombatDroneComponent, ReceiveCPRAttemptEvent>(OnReceiveCPRAttempt);
         SubscribeAllEvent<CMUCombatDroneAimEvent>(OnAim);
+    }
+
+    private void OnReceiveCPRAttempt(Entity<CMUCombatDroneComponent> ent, ref ReceiveCPRAttemptEvent args)
+    {
+        args.Cancelled = true;
     }
 
     private void OnAim(CMUCombatDroneAimEvent args, EntitySessionEventArgs session)
