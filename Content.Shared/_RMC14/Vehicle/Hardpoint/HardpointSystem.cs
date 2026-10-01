@@ -556,7 +556,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (frameIntegrity.NativeMaxIntegrity <= 0f)
                 return false;
 
-            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity;
+            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity - frameIntegrity.RepairWear;
             totalIntegrity = Math.Clamp(frameIntegrity.Integrity, 0f, totalMaxIntegrity);
         }
         // CMU14 Frame End
@@ -1502,7 +1502,9 @@ public sealed partial class HardpointSystem : EntitySystem
 
     private void OnHardpointIntegrityInit(Entity<HardpointIntegrityComponent> ent, ref ComponentInit args)
     {
-        ent.Comp.NativeMaxIntegrity = ent.Comp.MaxIntegrity; // CMU14: cache configured max before derived refreshes replace it
+        // CMU14: retain the unworn cap when loading an already repaired part.
+        if (ent.Comp.NativeMaxIntegrity <= 0f)
+            ent.Comp.NativeMaxIntegrity = ent.Comp.MaxIntegrity + ent.Comp.RepairWear;
         if (ent.Comp.Integrity <= 0f)
             ent.Comp.Integrity = ent.Comp.MaxIntegrity;
 
@@ -2134,6 +2136,12 @@ public sealed partial class HardpointSystem : EntitySystem
         }
 
         var previousIntegrity = ent.Comp.Integrity;
+        var capacityFloor = MathF.Max(previousIntegrity,
+            ent.Comp.NativeMaxIntegrity * Math.Clamp(ent.Comp.MinimumRepairCapacityFraction, 0f, 1f));
+        var wear = MathF.Min(MathF.Max(0f, ent.Comp.MaxIntegrity - capacityFloor),
+            repairAmount * Math.Clamp(ent.Comp.RepairWearFraction, 0f, 1f));
+        ent.Comp.RepairWear += wear;
+        ent.Comp.MaxIntegrity -= wear;
         ent.Comp.Integrity = MathF.Min(ent.Comp.MaxIntegrity, ent.Comp.Integrity + repairAmount);
 
         Dirty(ent.Owner, ent.Comp);
