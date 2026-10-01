@@ -11431,5 +11431,23 @@
   id: 718
   time: '2026-10-01T06:24:29.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2064
+- author: TheHellFireo
+  changes:
+  - message: Corrected Bush dropship alignment and crushing outside the hull.
+    type: Fix
+  - message: Fixed Force on Force respawning after being gibbed.
+    type: Fix
+  - message: Fixed Youngblood raffle eligibility and added explanations when joining
+      is denied.
+    type: Fix
+  - message: Solo Youngblood accepts players with under two hours of Youngblood experience.
+    type: Tweak
+  - message: Lexington shadows and exhaust now appear above weeds.
+    type: Fix
+  - message: OPFOR nurses can access military doctor vendors.
+    type: Fix
+  id: 719
+  time: '2026-10-01T14:41:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2065
 Name: CMU
 Order: -1
