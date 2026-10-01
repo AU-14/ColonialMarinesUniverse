@@ -44,7 +44,7 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
 
         // TODO RMC14 ERT, enable/disable maintenance security
         // CMU14: offer every alert level except delta and the current one.
-        var current = _alertLevel.Get() ?? RMCAlertLevels.Green;
+        var current = _alertLevel.Get(ent) ?? RMCAlertLevels.Green; // CMU14
         var targets = new List<RMCAlertLevels>();
         for (var i = AlertLadder.Length - 1; i >= 0; i--)
             targets.Add(AlertLadder[i]);
@@ -126,7 +126,7 @@ public sealed partial class KeycardDeviceSystem : EntitySystem
         if (ent.Comp.Mode is not { } target)
             return;
 
-        var current = _alertLevel.Get() ?? RMCAlertLevels.Green;
+        var current = _alertLevel.Get(ent) ?? RMCAlertLevels.Green; // CMU14
         if (target == current)
         {
             var name = Loc.GetString($"rmc-alert-{current.ToString().ToLowerInvariant()}");

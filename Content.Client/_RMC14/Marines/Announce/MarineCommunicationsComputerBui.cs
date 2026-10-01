@@ -78,7 +78,7 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
                 var name = Loc.GetString($"rmc-alert-{((RMCAlertLevels) level).ToString().ToLowerInvariant()}");
                 _window.AlertLevelOption.AddItem(name, level);
             }
-            var current = (int) (EntMan.System<RMCAlertLevelSystem>().Get() ?? RMCAlertLevels.Green);
+            var current = (int) (EntMan.System<RMCAlertLevelSystem>().Get(Owner) ?? RMCAlertLevels.Green);
             _window.AlertLevelOption.SelectId(current);
             _window.AlertLevelOption.OnItemSelected += args => _window.AlertLevelOption.SelectId(args.Id);
             _window.AlertLevelButton.OnPressed += _ =>

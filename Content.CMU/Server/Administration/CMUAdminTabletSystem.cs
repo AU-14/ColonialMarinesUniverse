@@ -9,7 +9,9 @@ namespace Content.Server.CMU14.Administration;
 public sealed class CMUAdminTabletSystem : EntitySystem
 {
     [Dependency] private RMCAlertLevelSystem _alertLevel = default!;
+    [Dependency] private SharedMarineControlComputerSystem _control = default!;
     [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private SharedTacticalMapSystem _tacMap = default!;
 
     public override void Initialize()
     {
@@ -33,15 +35,9 @@ public sealed class CMUAdminTabletSystem : EntitySystem
         _marineAnnounce.SetComputerFaction((ent, comms), faction);
 
         if (TryComp(ent, out TacticalMapComputerComponent? tacMap))
-        {
-            tacMap.Faction = faction;
-            Dirty(ent, tacMap);
-        }
+            _tacMap.SetComputerFaction((ent, tacMap), faction);
 
         if (TryComp(ent, out MarineControlComputerComponent? control))
-        {
-            control.Faction = faction;
-            Dirty(ent, control);
-        }
+            _control.SetComputerFaction((ent, control), faction);
     }
 }

@@ -31,7 +31,7 @@ public sealed partial class MarineCommunicationsComputerWindow : FancyWindow
             return;
 
         _alertLevel ??= _entMan.System<RMCAlertLevelSystem>();
-        var current = _alertLevel.Get() ?? RMCAlertLevels.Green;
+        var current = _alertLevel.Get(Tablet) ?? RMCAlertLevels.Green;
         if (current != _lastAlert)
         {
             _lastAlert = current;
