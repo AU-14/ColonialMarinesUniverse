@@ -271,6 +271,9 @@
         crate: RMCCrateXM88
       - cost: 800
         crate: CMUCrateOlympiets
+      - cost: 800
+        crate: RuMCCrateAK4047
+        maxStock: 2
       - cost: 1500
         crate: RuMCCrateAH12
         maxStock: 1
@@ -333,6 +336,12 @@
         crate: RuMCCrateMagazinePistolNP92
       - cost: 300
         crate: RuMCCrateMagazinePistolType73
+      - cost: 400
+        crate: RuMCCrateAK4047Magazine
+      - cost: 400
+        crate: RuMCCrateVALMagazine
+      - cost: 400
+        crate: RuMCCrateVALMagazine_AP
       #- cost: 3000000000
       #  crate: RuMCCrateMagazinePistolType73
       - cost: 400
@@ -375,6 +384,14 @@
         crate: RMCCrateMagazineBGel
     - name: Specialist Ammo
       entries:
+      - cost: 400
+        crate: RuMCCrateAH12Magazine
+      - cost: 400
+        crate: RuMCCrateAH12Magazine_Large
+      - cost: 400
+        crate: RuMCCrateAH12Magazine_AP
+      - cost: 400
+        crate: RuMCCrateAH12Magazine_JHP
       - cost: 700
         crate: CMUCrateEMBLRAP
       - cost: 600
