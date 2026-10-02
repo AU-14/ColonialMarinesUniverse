@@ -382,8 +382,20 @@ jobs:
             filter: >-
               FullyQualifiedName~CMU14.ZLevels.
               | FullyQualifiedName~CMU14.Camera.
-              | FullyQualifiedName~CMU14.Yautja.
               | FullyQualifiedName~Content.IntegrationTests.CMU.
+          # CMU14: keep the largest Yautja fixtures in separate test processes.
+          - name: cmu_yautja
+            filter: >-
+              FullyQualifiedName~CMU14.Yautja.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaBowTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaPredatorRoleTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaSmokeTest.
+          - name: cmu_yautja_weapons
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaBowTest.
+          - name: cmu_yautja_roles
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest.
+          - name: cmu_yautja_smoke
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
           - name: cmu_diagnostics
             filter: >-
               FullyQualifiedName~CMU14.Diagnostics.
@@ -451,7 +463,7 @@ jobs:
           workers=4
           hang_timeout=5m
           case "$shard" in
-            root_1|cmu|cmu_spatial) workers=2 ;;
+            root_1|cmu|cmu_spatial|cmu_yautja*) workers=2 ;;
             map_loading) workers=1; hang_timeout=20m ;;
           esac
 
