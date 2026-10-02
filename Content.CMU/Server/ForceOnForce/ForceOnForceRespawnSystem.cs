@@ -3,6 +3,7 @@ using Content.Server.GameTicking.Events;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.GameTicking;
+using Content.Shared.Gibbing;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -28,9 +29,18 @@ public sealed partial class ForceOnForceRespawnSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<MindContainerComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<MindContainerComponent, BeingGibbedEvent>(OnBeingGibbed);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnSpawn);
         SubscribeLocalEvent<GetDisallowedJobsEvent>(OnGetDisallowedJobs);
+    }
+
+    private void OnBeingGibbed(Entity<MindContainerComponent> ent, ref BeingGibbedEvent args)
+    {
+        // Gibbing can delete a living body without a MobStateChangedEvent. Keep an
+        // existing death time when a corpse is gibbed so its wait does not restart.
+        if (TryComp<MindComponent>(ent.Comp.Mind, out var mind) && mind.UserId is { } player)
+            _deaths.TryAdd(player, _timing.CurTime);
     }
 
     private void OnMobStateChanged(Entity<MindContainerComponent> ent, ref MobStateChangedEvent args)

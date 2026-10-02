@@ -343,7 +343,9 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     {
         if (!TryComp(uid, out BursterComponent? burster) ||
             !TryComp(burster.BurstFrom, out VictimInfectedComponent? infected) ||
-            infected.SpawnedLarva != uid ||
+            // CMU14: BurstFrom is available during initialization, before SpawnLarva can store its return value.
+            // infected.SpawnedLarva != uid ||
+            (infected.SpawnedLarva is { } linkedLarva && linkedLarva != uid) ||
             !(infected.InfectorWantsLarva || infected.InfectorLarvaClaimPending) ||
             infected.InfectorUser is not { } userId)
         {

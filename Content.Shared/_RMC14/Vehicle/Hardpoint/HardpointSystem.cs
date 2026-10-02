@@ -530,6 +530,9 @@ public sealed partial class HardpointSystem : EntitySystem
             return false;
         }
 
+        // CMU14: capture the frame's own capacity before mounted parts replace it.
+        EnsureNativeMaxIntegrity(frameIntegrity);
+
         var totalIntegrity = 0f;
         var totalMaxIntegrity = 0f;
         var visited = new HashSet<EntityUid>();
@@ -556,7 +559,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (frameIntegrity.NativeMaxIntegrity <= 0f)
                 return false;
 
-            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity;
+            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity - frameIntegrity.RepairWear;
             totalIntegrity = Math.Clamp(frameIntegrity.Integrity, 0f, totalMaxIntegrity);
         }
         // CMU14 Frame End
@@ -1500,9 +1503,16 @@ public sealed partial class HardpointSystem : EntitySystem
         return scaled;
     }
 
+    // CMU14 method: persist the unworn baseline only when gameplay first needs it.
+    // ComponentInit also runs in the map editor, where untouched prototypes must stay unchanged.
+    private static void EnsureNativeMaxIntegrity(HardpointIntegrityComponent integrity)
+    {
+        if (integrity.NativeMaxIntegrity <= 0f)
+            integrity.NativeMaxIntegrity = integrity.MaxIntegrity + integrity.RepairWear;
+    }
+
     private void OnHardpointIntegrityInit(Entity<HardpointIntegrityComponent> ent, ref ComponentInit args)
     {
-        ent.Comp.NativeMaxIntegrity = ent.Comp.MaxIntegrity; // CMU14: cache configured max before derived refreshes replace it
         if (ent.Comp.Integrity <= 0f)
             ent.Comp.Integrity = ent.Comp.MaxIntegrity;
 
@@ -2133,7 +2143,14 @@ public sealed partial class HardpointSystem : EntitySystem
                 return;
         }
 
+        EnsureNativeMaxIntegrity(ent.Comp); // CMU14: retain the original repair floor across successive repairs.
         var previousIntegrity = ent.Comp.Integrity;
+        var capacityFloor = MathF.Max(previousIntegrity,
+            ent.Comp.NativeMaxIntegrity * Math.Clamp(ent.Comp.MinimumRepairCapacityFraction, 0f, 1f));
+        var wear = MathF.Min(MathF.Max(0f, ent.Comp.MaxIntegrity - capacityFloor),
+            repairAmount * Math.Clamp(ent.Comp.RepairWearFraction, 0f, 1f));
+        ent.Comp.RepairWear += wear;
+        ent.Comp.MaxIntegrity -= wear;
         ent.Comp.Integrity = MathF.Min(ent.Comp.MaxIntegrity, ent.Comp.Integrity + repairAmount);
 
         Dirty(ent.Owner, ent.Comp);

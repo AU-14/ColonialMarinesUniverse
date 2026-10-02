@@ -171,8 +171,8 @@ jobs:
       - name: Validate RSIs
         if: steps.changes.outputs.rsi == 'true'
         run: |
-          python3 RobustToolbox/Schemas/validate_rsis.py Resources/
-          python3 RobustToolbox/Schemas/validate_rsis.py Content.CMU/Resources/
+          # CMU14: retain upstream structural checks and recognize the existing donor-cape license.
+          python3 .github/scripts/validate_cmu_rsis.py Resources/ Content.CMU/Resources/
 
   required-checks:
     name: Required Checks
@@ -355,6 +355,12 @@ jobs:
           - name: rmc
             filter: >-
               FullyQualifiedName~RMC14.
+              & FullyQualifiedName!~RMC14.PlanetMapLoadTests.
+          # CMU14: full-rotation map sweeps exceed the normal per-test watchdog.
+          - name: map_loading
+            filter: >-
+              FullyQualifiedName~RMC14.PlanetMapLoadTests.
+              | FullyQualifiedName~CMU14.Dropship.MohawkLandingTest.
           - name: cmu_medical_anatomy
             filter: >-
               FullyQualifiedName~CMU14.Medical.Anatomy.
@@ -366,21 +372,41 @@ jobs:
               FullyQualifiedName~CMU14.Chemistry.
           - name: cmu_ships
             filter: >-
-              FullyQualifiedName~CMU14.Dropship.
+              (FullyQualifiedName~CMU14.Dropship.
               | FullyQualifiedName~CMU14.Blackfoot.
               | FullyQualifiedName~CMU14.Fighter.
               | FullyQualifiedName~CMU14.CargoVehicle.
-              | FullyQualifiedName~CMU14.Maps.
+              | FullyQualifiedName~CMU14.Maps.)
+              & FullyQualifiedName!~CMU14.Dropship.MohawkLandingTest.
           - name: cmu_spatial
             filter: >-
               FullyQualifiedName~CMU14.ZLevels.
               | FullyQualifiedName~CMU14.Camera.
-              | FullyQualifiedName~CMU14.Yautja.
               | FullyQualifiedName~Content.IntegrationTests.CMU.
+          # CMU14: keep the largest Yautja fixtures in separate test processes.
+          - name: cmu_yautja
+            filter: >-
+              FullyQualifiedName~CMU14.Yautja.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaBowTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaPredatorRoleTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaSmokeTest.
+          - name: cmu_yautja_weapons
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaBowTest.
+          - name: cmu_yautja_roles
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest.
+          - name: cmu_yautja_smoke
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
           - name: cmu_diagnostics
             filter: >-
               FullyQualifiedName~CMU14.Diagnostics.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Performance.
+          # CMU14: fresh lobby pairs need memory headroom after the gameplay fixtures.
+          - name: cmu_lobby_ui
+            filter: >-
+              FullyQualifiedName~CMU14.Round.CMUPresetVoteTest.
+              | FullyQualifiedName~CMU14.Chat.ChatLogLayoutTest.
+              | FullyQualifiedName~CMU14.Lobby.OptionsThemeRegressionTest.
+              | FullyQualifiedName~CMU14.Overwatch.SupportLaunchButtonTest.
           - name: cmu_medical
             filter: >-
               FullyQualifiedName~CMU14.Medical.
@@ -400,6 +426,10 @@ jobs:
               & FullyQualifiedName!~CMU14.Camera.
               & FullyQualifiedName!~CMU14.Yautja.
               & FullyQualifiedName!~CMU14.Diagnostics.
+              & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
+              & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
+              & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
+              & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest.
           - name: au14
             filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
@@ -440,6 +470,15 @@ jobs:
           export DOTNET_gcServer=1
           shard="${{ matrix.shard.name }}"
 
+          # CMU14: bound concurrent pairs and allow the full-rotation map sweeps to finish.
+          workers=4
+          hang_timeout=5m
+          case "$shard" in
+            root_1|cmu|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            cmu_lobby_ui) workers=1 ;;
+            map_loading) workers=1; hang_timeout=20m ;;
+          esac
+
           if [[ "$shard" == root_* ]]; then
             root_group='${{ matrix.shard.root_group }}'
             root_groups='${{ matrix.shard.root_groups }}'
@@ -475,15 +514,19 @@ jobs:
           # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
           dotnet test Content.IntegrationTests.dll \
             --verbosity normal --filter "$FILTER" \
-            --blame-hang-timeout 5m --blame-hang-dump-type none \
+            --blame-hang-timeout "$hang_timeout" --blame-hang-dump-type none \
             --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
-            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000
+            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000 \
+            NUnit.NumberOfTestWorkers="$workers" # CMU14
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-results-${{ matrix.shard.name }}
-          path: bin/Content.IntegrationTests/TestResults/
+          # CMU14: retain results and blame sequences without multi-gigabyte process dumps.
+          path: |
+            bin/Content.IntegrationTests/TestResults/
+            !bin/Content.IntegrationTests/TestResults/**/*.dmp
           if-no-files-found: ignore
           retention-days: 3

@@ -1123,9 +1123,13 @@ public sealed partial class ShuttleSystem
                 if (_bodyQuery.TryGetComponent(ent, out var mob))
                 {
                     var position = _transform.GetMapCoordinates(ent);
-                    var diff = position.Position - aabb.Center;
-                    if (!tiles.Contains(diff.Floored()))
+                    // CMU14 Begin: tile indices use the authored grid origin, including the ship's rotation.
+                    // var diff = position.Position - aabb.Center;
+                    // if (!tiles.Contains(diff.Floored()))
+                    var localPosition = _transform.ToCoordinates(uid, position).Position;
+                    if (!tiles.Contains(localPosition.Floored()))
                         continue;
+                    // CMU14 End
 
                     _logger.Add(LogType.Gib, LogImpact.Extreme, $"{ToPrettyString(ent):player} got gibbed by the shuttle" +
                                                                 $" {ToPrettyString(uid)} arriving from FTL at {xform.Coordinates:coordinates}");

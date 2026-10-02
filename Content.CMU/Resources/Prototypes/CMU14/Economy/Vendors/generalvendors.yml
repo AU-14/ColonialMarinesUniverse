@@ -363,6 +363,7 @@
     - AU14JobOPFORMilitaryDoctor
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
+    - AU14JobOPFORNurse
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment

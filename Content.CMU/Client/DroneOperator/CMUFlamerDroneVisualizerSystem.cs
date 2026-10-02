@@ -52,20 +52,30 @@ public sealed class CMUFlamerDroneVisualizerSystem : EntitySystem
             var angle = _transform.GetWorldRotation(transform) + _eye.CurrentEye.Rotation;
             var index = (int) SpriteComponent.Layer.GetDirection(RsiDirectionType.Dir4, angle.Reduced().FlipPositive());
             var firing = flamer.FlameUntil > _timing.CurTime;
-            UpdateEffect(effects.First, flamer.FirstClawOffsets[index], angle, firing);
-            UpdateEffect(effects.Second, flamer.SecondClawOffsets[index], angle, firing);
+            var color = Color.FromHex("#ff8e32");
+            var pulse = 1f;
+            if (TryComp<CMUFlamerDroneFuelComponent>(uid, out var fuel))
+            {
+                color = fuel.Glow;
+                if (fuel.SpecialFraction > 0)
+                    pulse = 1.15f + 0.25f * MathF.Sin((float) _timing.CurTime.TotalSeconds * 7);
+            }
+            UpdateEffect(effects.First, flamer.FirstClawOffsets[index], angle, firing, color, pulse);
+            UpdateEffect(effects.Second, flamer.SecondClawOffsets[index], angle, firing, color, pulse);
         }
     }
 
-    private void UpdateEffect(EntityUid effect, Vector2 screenOffset, Angle screenAngle, bool firing)
+    private void UpdateEffect(EntityUid effect, Vector2 screenOffset, Angle screenAngle, bool firing, Color color, float pulse)
     {
         // These client-only children share one nozzle position for both particles and light.
         // Undo the hull and camera rotation to keep the attachment on the rendered claw tip.
         var transform = Transform(effect);
         transform.ActivelyLerping = false;
         _transform.SetLocalPositionNoLerp(effect, (-screenAngle).RotateVec(screenOffset), transform);
-        _sprite.SetScale(effect, new Vector2(firing ? 0.5f : 0.3f));
-        _lights.SetEnergy(effect, firing ? 2f : 0.8f);
+        _sprite.SetScale(effect, new Vector2((firing ? 0.5f : 0.3f) * pulse));
+        _sprite.LayerSetColor(effect, 1, color == Color.FromHex("#ff8e32") ? Color.FromHex("#ffb45c") : color);
+        _lights.SetColor(effect, color);
+        _lights.SetEnergy(effect, (firing ? 2f : 0.8f) * pulse);
     }
 
     private void ClearEffects(EntityUid drone)
