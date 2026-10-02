@@ -171,8 +171,8 @@ jobs:
       - name: Validate RSIs
         if: steps.changes.outputs.rsi == 'true'
         run: |
-          python3 RobustToolbox/Schemas/validate_rsis.py Resources/
-          python3 RobustToolbox/Schemas/validate_rsis.py Content.CMU/Resources/
+          # CMU14: retain upstream structural checks and recognize the existing donor-cape license.
+          python3 .github/scripts/validate_cmu_rsis.py Resources/ Content.CMU/Resources/
 
   required-checks:
     name: Required Checks
