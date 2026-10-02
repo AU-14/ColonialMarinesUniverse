@@ -463,7 +463,7 @@ jobs:
           workers=4
           hang_timeout=5m
           case "$shard" in
-            root_1|cmu|cmu_spatial|cmu_yautja*) workers=2 ;;
+            root_1|cmu|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             map_loading) workers=1; hang_timeout=20m ;;
           esac
 
