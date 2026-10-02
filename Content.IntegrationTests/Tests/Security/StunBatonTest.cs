@@ -29,7 +29,7 @@ public sealed class StunBatonTests : InteractionTest
 
     private static readonly (EntProtoId Id, double RmcDamage, bool HasToggle)[] RmcBatons =
     [
-        ("RMCWeaponTaser", 15, false),
+        ("RMCWeaponTaser", 100, false), // CMU14: charged drive stuns incapacitate a healthy human.
         ("CMStunbaton", 30, true),
     ];
 

@@ -236,6 +236,9 @@
     {
       "name": "equipped-HAND-swamp",
       "directions": 4
+    },
+    {
+      "name": "icon"
     }
   ]
 }

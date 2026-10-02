@@ -276,6 +276,18 @@ public sealed class VehicleDamageRegressionTest : GameTest
             Assert.That(integrity.MaxIntegrity, Is.EqualTo(wornCapacity));
             Assert.That(integrity.Integrity, Is.GreaterThan(repairedIntegrity));
 
+            // Removing the last module must restore the frame's own capacity, not its last derived total.
+            var itemSlots = SEntMan.GetComponent<ItemSlotsComponent>(vehicle);
+            foreach (var slot in itemSlots.Slots.Keys.ToArray())
+            {
+                var removal = new HardpointRemoveDoAfterEvent(slot);
+                removal.DoAfter = new DoAfter(0,
+                    new DoAfterArgs(SEntMan, user, TimeSpan.Zero, removal, vehicle, vehicle), SGameTiming.CurTime);
+                SEntMan.EventBus.RaiseLocalEvent(vehicle, removal);
+                Assert.That(itemSlots.Slots[slot].Item, Is.Null);
+            }
+            Assert.That(frame.MaxIntegrity, Is.EqualTo(100f));
+
             HardpointRepairDoAfterEvent Repair()
             {
                 var ev = new HardpointRepairDoAfterEvent { RepairAmount = 5 };

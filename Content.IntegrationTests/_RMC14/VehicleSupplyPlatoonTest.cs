@@ -29,15 +29,16 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
 
     private readonly record struct Depot(Entity<VehicleSupplyConsoleComponent> Console, Entity<VehicleSupplyLiftComponent> Lift);
 
+    // CMU14 method: reject foreign chassis while allowing each platoon's current catalog.
     [TestCase("USCM", "VehicleTank", "VehicleSPPTank", true, true)]
     [TestCase("LACN", "VehicleAPC", "VehicleAPCCommand", true, true)]
     [TestCase("UPP", "VehicleSPPTank", "VehicleTank", false, false)]
     [TestCase("WEYU", "VehicleTankPMC", "VehicleTank", true, true)]
-    [TestCase("CMBCIU", "AU14VehicleCivHSVan", "VehicleHumvee", false, true)]
-    [TestCase("HAZOPS", "VehicleAev", "VehicleTank", false, true)]
+    [TestCase("CMBCIU", "AU14VehicleCivHSVan", "VehicleSPPTank", true, true)]
+    [TestCase("HAZOPS", "VehicleAev", "VehicleSPPTank", false, true)]
     [TestCase("ProdigySF", "AU14VehicleCivTruck", "VehicleAPC", false, false)]
-    [TestCase("VAIPO", "VehicleAPC", "VehicleTank", true, true)]
-    [TestCase("RMC", "VehicleTankTWE", "VehicleHumvee", false, false)]
+    [TestCase("VAIPO", "VehicleAPC", "VehicleSPPTank", true, true)]
+    [TestCase("RMC", "VehicleTankTWE", "VehicleSPPTank", false, false)]
     public async Task PlatoonCatalogRestrictsChassisVtolAndParts(string platoon, string allowed, string excluded, bool armed, bool transport)
     {
         var map = await Pair.CreateTestMap();

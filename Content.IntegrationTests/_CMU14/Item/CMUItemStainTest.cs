@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.Client.CMU14.Item.Stain;
 using Content.Shared.CMU14.Item.Stain;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -16,8 +17,9 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Forensics;
 using Content.Shared.Forensics.Components;
 using Content.Shared.Forensics.Systems;
+using Content.Shared.FootPrint;
+using Content.Shared.Gravity;
 using Content.Shared.Inventory;
-using Content.Shared.StepTrigger.Systems;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -351,47 +353,52 @@ public sealed class CMUItemStainTest
     public async Task PuddlesStainAndCleanEquippedShoesButIgnoreBareFeet()
     {
         await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
         var server = pair.Server;
+        EntityUid wearer = default, barefoot = default, shoes = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var maps = server.System<SharedMapSystem>();
+            for (var x = 0; x < 6; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
+            entMan.EnsureComponent<GravityComponent>(map.Grid).Enabled = true;
             var inventory = entMan.System<InventorySystem>();
-            var wearer = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var barefoot = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var shoes = entMan.SpawnEntity("CMBootsBlack", MapCoordinates.Nullspace);
-            var bloodPuddle = entMan.SpawnEntity("PuddleBlood", MapCoordinates.Nullspace);
-            var waterPuddle = entMan.SpawnEntity(WaterPuddle, MapCoordinates.Nullspace);
+            wearer = entMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
+            barefoot = entMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 1.5f, 0.5f));
+            shoes = entMan.SpawnEntity("CMBootsBlack", map.GridCoords);
+            entMan.SpawnEntity("PuddleBlood", new EntityCoordinates(map.Grid, 2.5f, 0.5f));
+            entMan.SpawnEntity(WaterPuddle, new EntityCoordinates(map.Grid, 4.5f, 0.5f));
 
-            try
+            Assert.That(inventory.TryEquip(wearer, shoes, CMUItemStainSystem.ShoesSlot, silent: true, force: true), Is.True);
+        });
+        await pair.RunTicksSync(2);
+        await server.WaitPost(() => server.System<SharedTransformSystem>()
+            .SetLocalPosition(wearer, new Vector2(2.5f, 0.5f)));
+        await pair.RunTicksSync(3);
+        await server.WaitAssertion(() =>
+        {
+            var stain = server.EntMan.GetComponent<CMUItemStainComponent>(shoes);
+            Assert.Multiple(() =>
             {
-                Assert.That(inventory.TryEquip(wearer, shoes, CMUItemStainSystem.ShoesSlot, silent: true, force: true), Is.True);
-
-                var bloodStep = new StepTriggeredOffEvent(bloodPuddle, wearer);
-                entMan.EventBus.RaiseLocalEvent(bloodPuddle, ref bloodStep);
-                var stain = entMan.GetComponent<CMUItemStainComponent>(shoes);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(stain.Kind, Is.EqualTo(CMUItemStainKind.Blood));
-                    Assert.That(stain.Color, Is.EqualTo(Color.FromHex("#800000")));
-                });
-
-                var cleanStep = new StepTriggeredOffEvent(waterPuddle, wearer);
-                entMan.EventBus.RaiseLocalEvent(waterPuddle, ref cleanStep);
-                Assert.That(stain.Color, Is.Null);
-
-                var bareStep = new StepTriggeredOffEvent(bloodPuddle, barefoot);
-                entMan.EventBus.RaiseLocalEvent(bloodPuddle, ref bareStep);
-                Assert.That(entMan.HasComponent<CMUItemStainComponent>(barefoot), Is.False);
-            }
-            finally
-            {
-                entMan.DeleteEntity(wearer);
-                entMan.DeleteEntity(barefoot);
-                entMan.DeleteEntity(shoes);
-                entMan.DeleteEntity(bloodPuddle);
-                entMan.DeleteEntity(waterPuddle);
-            }
+                Assert.That(stain.Kind, Is.EqualTo(CMUItemStainKind.Blood));
+                Assert.That(stain.Color, Is.EqualTo(Color.FromHex("#800000")));
+            });
+        });
+        await server.WaitPost(() =>
+        {
+            var transforms = server.System<SharedTransformSystem>();
+            transforms.SetLocalPosition(wearer, new Vector2(4.5f, 0.5f));
+            transforms.SetLocalPosition(barefoot, new Vector2(2.5f, 0.5f));
+        });
+        await pair.RunTicksSync(3);
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.That(entMan.GetComponent<CMUItemStainComponent>(shoes).Color, Is.Null);
+            Assert.That(entMan.GetComponent<FootPrintsComponent>(barefoot).PrintsColor.A, Is.GreaterThan(0));
+            Assert.That(entMan.HasComponent<CMUItemStainComponent>(barefoot), Is.False);
         });
 
         await pair.CleanReturnAsync();
