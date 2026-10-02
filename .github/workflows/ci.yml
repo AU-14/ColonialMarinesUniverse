@@ -400,6 +400,13 @@ jobs:
             filter: >-
               FullyQualifiedName~CMU14.Diagnostics.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Performance.
+          # CMU14: fresh lobby pairs need memory headroom after the gameplay fixtures.
+          - name: cmu_lobby_ui
+            filter: >-
+              FullyQualifiedName~CMU14.Round.CMUPresetVoteTest.
+              | FullyQualifiedName~CMU14.Chat.ChatLogLayoutTest.
+              | FullyQualifiedName~CMU14.Lobby.OptionsThemeRegressionTest.
+              | FullyQualifiedName~CMU14.Overwatch.SupportLaunchButtonTest.
           - name: cmu_medical
             filter: >-
               FullyQualifiedName~CMU14.Medical.
@@ -419,6 +426,10 @@ jobs:
               & FullyQualifiedName!~CMU14.Camera.
               & FullyQualifiedName!~CMU14.Yautja.
               & FullyQualifiedName!~CMU14.Diagnostics.
+              & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
+              & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
+              & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
+              & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest.
           - name: au14
             filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
@@ -464,6 +475,7 @@ jobs:
           hang_timeout=5m
           case "$shard" in
             root_1|cmu|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            cmu_lobby_ui) workers=1 ;;
             map_loading) workers=1; hang_timeout=20m ;;
           esac
 
