@@ -355,6 +355,12 @@ jobs:
           - name: rmc
             filter: >-
               FullyQualifiedName~RMC14.
+              & FullyQualifiedName!~RMC14.PlanetMapLoadTests.
+          # CMU14: full-rotation map sweeps exceed the normal per-test watchdog.
+          - name: map_loading
+            filter: >-
+              FullyQualifiedName~RMC14.PlanetMapLoadTests.
+              | FullyQualifiedName~CMU14.Dropship.MohawkLandingTest.
           - name: cmu_medical_anatomy
             filter: >-
               FullyQualifiedName~CMU14.Medical.Anatomy.
@@ -366,11 +372,12 @@ jobs:
               FullyQualifiedName~CMU14.Chemistry.
           - name: cmu_ships
             filter: >-
-              FullyQualifiedName~CMU14.Dropship.
+              (FullyQualifiedName~CMU14.Dropship.
               | FullyQualifiedName~CMU14.Blackfoot.
               | FullyQualifiedName~CMU14.Fighter.
               | FullyQualifiedName~CMU14.CargoVehicle.
-              | FullyQualifiedName~CMU14.Maps.
+              | FullyQualifiedName~CMU14.Maps.)
+              & FullyQualifiedName!~CMU14.Dropship.MohawkLandingTest.
           - name: cmu_spatial
             filter: >-
               FullyQualifiedName~CMU14.ZLevels.
@@ -440,10 +447,12 @@ jobs:
           export DOTNET_gcServer=1
           shard="${{ matrix.shard.name }}"
 
-          # CMU14: bound concurrent client/server pairs in the memory-heavy shards.
+          # CMU14: bound concurrent pairs and allow the full-rotation map sweeps to finish.
           workers=4
+          hang_timeout=5m
           case "$shard" in
             root_1|cmu|cmu_spatial) workers=2 ;;
+            map_loading) workers=1; hang_timeout=20m ;;
           esac
 
           if [[ "$shard" == root_* ]]; then
@@ -481,7 +490,7 @@ jobs:
           # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
           dotnet test Content.IntegrationTests.dll \
             --verbosity normal --filter "$FILTER" \
-            --blame-hang-timeout 5m --blame-hang-dump-type none \
+            --blame-hang-timeout "$hang_timeout" --blame-hang-dump-type none \
             --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
             -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000 \
             NUnit.NumberOfTestWorkers="$workers" # CMU14
@@ -491,6 +500,9 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: test-results-${{ matrix.shard.name }}
-          path: bin/Content.IntegrationTests/TestResults/
+          # CMU14: retain results and blame sequences without multi-gigabyte process dumps.
+          path: |
+            bin/Content.IntegrationTests/TestResults/
+            !bin/Content.IntegrationTests/TestResults/**/*.dmp
           if-no-files-found: ignore
           retention-days: 3
