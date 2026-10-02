@@ -440,6 +440,12 @@ jobs:
           export DOTNET_gcServer=1
           shard="${{ matrix.shard.name }}"
 
+          # CMU14: bound concurrent client/server pairs in the memory-heavy shards.
+          workers=4
+          case "$shard" in
+            root_1|cmu|cmu_spatial) workers=2 ;;
+          esac
+
           if [[ "$shard" == root_* ]]; then
             root_group='${{ matrix.shard.root_group }}'
             root_groups='${{ matrix.shard.root_groups }}'
@@ -477,7 +483,8 @@ jobs:
             --verbosity normal --filter "$FILTER" \
             --blame-hang-timeout 5m --blame-hang-dump-type none \
             --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
-            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000
+            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000 \
+            NUnit.NumberOfTestWorkers="$workers" # CMU14
 
       - name: Upload test results
         if: always()

@@ -147,15 +147,15 @@
   - type: Item
     size: Small
     sprite: CMU14/HunterShip/obj/items/food/fish.rsi
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 5
-        - ReagentId: Protein
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Protein
+        Quantity: 5
   - type: Extractable
     grindableSolutionName: food
   - type: InjectableSolution
