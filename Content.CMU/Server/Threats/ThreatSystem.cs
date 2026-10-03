@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.GameTicking;
@@ -48,6 +49,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -604,6 +606,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedList?.Add(ent);
                         _forceInterest.TrackRole(ent);
@@ -662,6 +665,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-extra-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedMembers.Add(ent);
                         AddThreatFaction(ent, ThreatMemberJobId);

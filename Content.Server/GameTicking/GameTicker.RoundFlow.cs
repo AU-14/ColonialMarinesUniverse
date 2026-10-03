@@ -514,7 +514,10 @@ namespace Content.Server.GameTicking
 
             // Just in case it hasn't been loaded previously we'll try loading it.
             _sawmill.Debug("[RoundStart] Loading maps.");
-            LoadMaps();
+            // CMU14 Begin: preserve stage costs when a long lifecycle frame overwrites profiler history.
+            using (_cmuPerformance.MeasureOperation("round-load-maps"))
+                LoadMaps();
+            // CMU14 End
             _sawmill.Debug($"[RoundStart] Map load complete. defaultMap={DefaultMap}");
             // map has been selected so update the lobby info text
             // applies to players who didn't ready up
@@ -537,10 +540,17 @@ namespace Content.Server.GameTicking
 
             // MapInitialize *before* spawning players, our codebase is too shit to do it afterwards...
             _sawmill.Debug($"[RoundStart] Initializing default map {DefaultMap}.");
-            _map.InitializeMap(DefaultMap);
-            _power.RecalculatePower();
+            // CMU14 Begin: separate map initialization and power from player spawning.
+            using (_cmuPerformance.MeasureOperation("round-map-init"))
+                _map.InitializeMap(DefaultMap);
+            using (_cmuPerformance.MeasureOperation("round-power-init"))
+                _power.RecalculatePower();
+            // CMU14 End
             _sawmill.Debug("[RoundStart] Spawning players.");
-            SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
+            // CMU14 Begin
+            using (_cmuPerformance.MeasureOperation("round-player-spawns"))
+                SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
+            // CMU14 End
             _roundStartDateTime = DateTime.UtcNow;
             RunLevel = GameRunLevel.InRound;
             _sawmill.Info(

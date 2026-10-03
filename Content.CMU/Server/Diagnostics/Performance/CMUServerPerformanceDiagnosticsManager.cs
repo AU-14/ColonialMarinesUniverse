@@ -729,7 +729,8 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         var names = EntitySystemNames;
         var report = CMUPerformanceProfilerReader.Capture(_profiler, names,
             _config.GetCVar(CCVars.CMUServerPerformanceProfileFrames),
-            _config.GetCVar(CCVars.CMUServerPerformanceProfileMaxEvents));
+            _config.GetCVar(CCVars.CMUServerPerformanceProfileMaxEvents),
+            sinceIndexOffset: index);
         _sawmill.Warning(Invariant(
             $"[CMU-PERF] profile-retry incidentId={_activeIncidentId} syncIncidentId={_retryProfileSyncIncidentId} observedTick={_timing.CurTick} ",
             $"reason=frame-completed originalIndex={index} currentIndex={_profiler.Buffer.IndexWriteOffset} ",

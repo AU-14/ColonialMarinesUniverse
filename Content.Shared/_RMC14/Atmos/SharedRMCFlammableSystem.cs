@@ -992,13 +992,20 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         }
     }
 
+    // CMU14 method: ignition damage can spawn new fire sources during processing.
     private void RunIgniteOnCollide()
     {
         try
         {
             var applyQuery = EntityQueryEnumerator<RMCIgniteOnCollideComponent>();
             while (applyQuery.MoveNext(out var uid, out var apply))
+                _cmuIgnitionSources.Add((uid, apply));
+
+            foreach (var (uid, apply) in _cmuIgnitionSources)
             {
+                if (apply.Deleted || TerminatingOrDeleted(uid))
+                    continue;
+
                 // The immutable membership snapshot survives ignition callbacks that
                 // anchor new fire. Damage/immunity are still evaluated every update.
                 foreach (var contact in _anchorTiles.Get(uid))
@@ -1023,6 +1030,10 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         catch (Exception e)
         {
             Log.Error($"Error processing {nameof(RMCIgniteOnCollideComponent)}:\n{e}");
+        }
+        finally
+        {
+            _cmuIgnitionSources.Clear();
         }
     }
 
