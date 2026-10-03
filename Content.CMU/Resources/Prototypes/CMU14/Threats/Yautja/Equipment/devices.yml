@@ -402,6 +402,7 @@
     - state: autoinjector
   - type: Hypospray
     transferAmount: 45
+    solutionName: pen
     injectOnly: true
     onlyAffectsMobs: true
     canContainerDraw: false
@@ -448,6 +449,7 @@
     - state: autoinjector
   - type: Hypospray
     transferAmount: 45
+    solutionName: pen
     injectOnly: true
     onlyAffectsMobs: true
     canContainerDraw: false

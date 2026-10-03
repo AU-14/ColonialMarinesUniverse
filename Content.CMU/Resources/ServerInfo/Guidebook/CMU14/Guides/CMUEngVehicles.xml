@@ -22,6 +22,7 @@
   ## Repairing Hardpoints
   - Hold a [bold]blowtorch[/bold] and weld the damaged hardpoint. Each pass restores a chunk of its integrity and burns fuel, so bring a full welder or a fuel tank.
   - Hardpoints can be repaired while mounted, from the hardpoint menu, or after removing them.
+  - Each repair permanently removes [color=orange]30% of the integrity restored[/color] from the part's repair ceiling, down to [bold]20% of its factory capacity[/bold]. The displayed maximum stays at factory capacity, so a worn part will no longer reach 100%.
 
   ## Repairing the Frame
   - The frame's hull integrity comes from its hardpoints. Repair the damaged hardpoints first; the frame can't be fixed while they're still broken.
@@ -29,7 +30,7 @@
   - Finish the last 25% by tightening it with a [bold]wrench[/bold].
 
   ## Faults
-  A hardpoint below 40% integrity that takes a heavy hit can develop a [bold]fault[/bold], and each hardpoint can carry up to two at once. Faults show up when you examine the vehicle and in the hardpoint menu. Pick the fault to repair, then work through each step with the right tool in your active hand. The menu tells you what each step needs.
+  A hardpoint below 75% of its remaining repair capacity that takes a heavy hit can develop a [bold]fault[/bold], and [color=orange]each hardpoint can carry up to two[/color] at once. Other hardpoints have their own allowance. Snowplows do not develop faults. Faults show up when you examine the vehicle and in the hardpoint menu. Pick the fault to repair, then work through each step with the right tool in your active hand. The menu tells you what each step needs.
 
   - [bold]Armor plating breach[/bold]: the hardpoint's armor stops protecting. Wrench, then weld.
   - [bold]Jammed feed system[/bold]: the weapon jams or misfires at random. Screwdriver, then multitool.

@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.Components;
+using Content.Server._RMC14.Language.Systems; // CMU14
 using Content.Shared.Speech.EntitySystems;
 using Content.Server.Players;
 using Content.Shared.CMU14.Threats.Mobs.Xeno;
@@ -44,6 +45,7 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private LanguageSystem _language = default!; // CMU14
 
 
     private static readonly ProtoId<ReplacementAccentPrototype> ChatSanitize = "CMChatSanitize";
@@ -107,6 +109,10 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
         bool hivebroken,
         Entity<HiveComponent>? hive)
     {
+        // CMU14: language grants must also admit their listeners through the recipient filter.
+        if (listener is { } hearer && _language.CanUnderstand(hearer, _chatSystem.GetCurrentLanguageForSpeech(source)))
+            return true;
+
         if (!hivebroken)
         {
             return HasComp<XenoComponent>(listener) ||

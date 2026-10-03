@@ -1644,6 +1644,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             if (string.IsNullOrWhiteSpace(userFaction))
                 return;
 
+            AddSensorContacts(userFaction, blips, map, infraIds); // CMU14: grant and revoke the owner's sensor feed.
             var factionHasSensors = TeamHasActiveSensors(userFaction);
             var enemyRsi = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "enemy_blip");
             var keys = blips.Keys.ToList();
@@ -1752,7 +1753,9 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         // Marines: mark enemies with enemy sprite
         if (user.Comp.Marines)
         {
-            user.Comp.MarineBlips = user.Comp.LiveUpdate ? map.MarineBlips : map.LastUpdateMarineBlips.ToDictionary();
+            // CMU14: sensor overlays must not mutate the source faction buckets.
+            // user.Comp.MarineBlips = user.Comp.LiveUpdate ? map.MarineBlips : map.LastUpdateMarineBlips.ToDictionary();
+            user.Comp.MarineBlips = (user.Comp.LiveUpdate ? map.MarineBlips : map.LastUpdateMarineBlips).ToDictionary();
 
             if (!user.Comp.LiveUpdate && map.MarineBlips.TryGetValue(playerId, out var playerMarineBlip))
                 user.Comp.MarineBlips[playerId] = playerMarineBlip;
@@ -1784,7 +1787,9 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         Dirty(user);
         if (user.Comp.Opfor)
         {
-            user.Comp.OpforBlips = user.Comp.LiveUpdate ? map.OpforBlips : map.LastUpdateOpforBlips.ToDictionary();
+            // CMU14: keep live source buckets separate from recipient sensor overlays.
+            // user.Comp.OpforBlips = user.Comp.LiveUpdate ? map.OpforBlips : map.LastUpdateOpforBlips.ToDictionary();
+            user.Comp.OpforBlips = (user.Comp.LiveUpdate ? map.OpforBlips : map.LastUpdateOpforBlips).ToDictionary();
 
             if (!user.Comp.LiveUpdate && map.OpforBlips.TryGetValue(playerId, out var playerOpforBlip))
                 user.Comp.OpforBlips[playerId] = playerOpforBlip;
@@ -1816,7 +1821,9 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         if (user.Comp.Govfor)
         {
-            user.Comp.GovforBlips = user.Comp.LiveUpdate ? map.GovforBlips : map.LastUpdateGovforBlips.ToDictionary();
+            // CMU14: keep live source buckets separate from recipient sensor overlays.
+            // user.Comp.GovforBlips = user.Comp.LiveUpdate ? map.GovforBlips : map.LastUpdateGovforBlips.ToDictionary();
+            user.Comp.GovforBlips = (user.Comp.LiveUpdate ? map.GovforBlips : map.LastUpdateGovforBlips).ToDictionary();
 
             if (!user.Comp.LiveUpdate && map.GovforBlips.TryGetValue(playerId, out var playerGovforBlip))
                 user.Comp.GovforBlips[playerId] = playerGovforBlip;
@@ -1848,7 +1855,9 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         if (user.Comp.Clf)
         {
-            user.Comp.ClfBlips = user.Comp.LiveUpdate ? map.ClfBlips : map.LastUpdateClfBlips.ToDictionary();
+            // CMU14: keep live source buckets separate from recipient sensor overlays.
+            // user.Comp.ClfBlips = user.Comp.LiveUpdate ? map.ClfBlips : map.LastUpdateClfBlips.ToDictionary();
+            user.Comp.ClfBlips = (user.Comp.LiveUpdate ? map.ClfBlips : map.LastUpdateClfBlips).ToDictionary();
 
             if (!user.Comp.LiveUpdate && map.ClfBlips.TryGetValue(playerId, out var playerClfBlip))
                 user.Comp.ClfBlips[playerId] = playerClfBlip;

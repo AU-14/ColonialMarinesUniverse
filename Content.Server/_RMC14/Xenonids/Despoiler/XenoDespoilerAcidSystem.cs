@@ -17,11 +17,12 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
     [Dependency] private XenoDespoilerHypertensionSystem _hyper = default!;
     [Dependency] private XenoSpitSystem _xenoSpit = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private XenoSystem _xeno = default!; // CMU14
 
     private EntityQuery<XenoComponent> _xenoQuery;
     private EntityQuery<XenoDespoilerComponent> _despoilerQuery;
     private EntityQuery<XenoDespoilerHypertensionComponent> _hyperQuery;
-    private EntityQuery<MarineComponent> _marineQuery;
+    // private EntityQuery<MarineComponent> _marineQuery; // CMU14: use the shared reward eligibility check
     private EntityQuery<UserAcidedComponent> _userAcidedQuery;
     private EntityQuery<XenoDespoilerAcidTierComponent> _tierQuery;
 
@@ -30,7 +31,7 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
         _xenoQuery = GetEntityQuery<XenoComponent>();
         _despoilerQuery = GetEntityQuery<XenoDespoilerComponent>();
         _hyperQuery = GetEntityQuery<XenoDespoilerHypertensionComponent>();
-        _marineQuery = GetEntityQuery<MarineComponent>();
+        // _marineQuery = GetEntityQuery<MarineComponent>(); // CMU14
         _userAcidedQuery = GetEntityQuery<UserAcidedComponent>();
         _tierQuery = GetEntityQuery<XenoDespoilerAcidTierComponent>();
 
@@ -75,6 +76,7 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
         return true;
     }
 
+    // CMU14: enemy hive rewards share the existing target rules; acid still excludes xenos.
     private void OnMeleeHit(EntityUid uid, XenoDespoilerSlashOnHitComponent comp, MeleeHitEvent args)
     {
         if (!args.IsHit || args.HitEntities.Count == 0)
@@ -87,13 +89,12 @@ public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSys
 
         foreach (var hit in args.HitEntities)
         {
-            if (hit == uid || _xenoQuery.HasComp(hit))
-                continue;
-
-            if (hyper != null && hyper.Stacks >= comp.EnhanceStacksThreshold)
+            // Resolve this hit's acid before the reward can increase its stacks.
+            if (hit != uid && !_xenoQuery.HasComp(hit) &&
+                hyper != null && hyper.Stacks >= comp.EnhanceStacksThreshold)
                 ApplyAcid(hit, uid);
 
-            if (hyper != null && _marineQuery.HasComp(hit))
+            if (hyper != null && _xeno.CanGainRewardsFromTarget(uid, hit))
                 _hyper.AddSlashPoints(uid, hyper);
         }
     }

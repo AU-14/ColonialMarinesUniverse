@@ -23,7 +23,7 @@ namespace Content.Server.Chat.Systems;
 
 public sealed partial class ChatSystem
 {
-    private ProtoId<LanguagePrototype> GetCurrentLanguageForSpeech(EntityUid source)
+    public ProtoId<LanguagePrototype> GetCurrentLanguageForSpeech(EntityUid source) // CMU14: share resolved speech language with recipient filtering
     {
         var currentLanguage = _language.GetCurrentLanguage(source);
 

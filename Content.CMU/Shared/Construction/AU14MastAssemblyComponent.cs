@@ -20,6 +20,12 @@ public sealed partial class AU14MastAssemblyComponent : Component
     [DataField, AutoNetworkedField]
     public int RequiredSkillLevel = 2;
 
+    [DataField, AutoNetworkedField]
+    public EntProtoId<SkillDefinitionComponent> AlternativeSkill = "RMCSkillJtac";
+
+    [DataField, AutoNetworkedField]
+    public int AlternativeSkillLevel = 4;
+
     /// <summary>
     ///     Whether examining tells an untrained onlooker they could not work on this. Wanted on the stages of
     ///     a job in progress, noise on a mast that is already standing and finished.

@@ -500,7 +500,7 @@
 
   - Powered shipboard [bold]communications arrays[/bold] provide coverage throughout their ship and across its decks.
   - Command-post [bold]antenna masts[/bold] provide 75 tiles of coverage without requiring power.
-  - Engineers can construct [bold]field antenna masts[/bold] to provide additional relay coverage.
+  - Engineers and RTOs can construct [bold]field antenna masts[/bold] to provide additional relay coverage.
 
   A field mast only carries the nets of factions whose COMSEC keys have been loaded into it.
 
@@ -508,7 +508,7 @@
 
   ## Field antenna mast
 
-  Only engineering-trained personnel can construct a field antenna mast.
+  Engineering level 2 or RTO/JTAC level 4 training is required to construct and service a field antenna mast.
 
   [bold]Antenna mast parts[/bold] are available from the metal-sheet construction menu.
 

@@ -113,6 +113,9 @@
         Slash: 30
   - type: Synth
   - type: ComplexInteraction
+  - type: Climbing
+  - type: Language
+    preset: AU14LanguagePresetSynth
   - type: Access
   - type: Tag
     tags:

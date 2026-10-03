@@ -81,6 +81,10 @@
       sprite: CMU14/Yautja/Structures/yautja_machines.rsi
       state: "crew"
     - type: YautjaHuntEscapeConsole
+    - type: UserInterface
+      interfaces:
+        enum.DialogUiKey.Key:
+          type: DialogBui
     - type: Clickable
     - type: InteractionOutline
 
@@ -92,6 +96,10 @@
   suffix: Yautja, Hunting Grounds
   components:
     - type: YautjaPreserveEdge
+    - type: UserInterface
+      interfaces:
+        enum.DialogUiKey.Key:
+          type: DialogBui
     - type: Clickable
     - type: InteractionOutline
 
