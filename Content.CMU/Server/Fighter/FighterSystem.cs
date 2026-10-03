@@ -41,6 +41,7 @@ public sealed partial class FighterSystem : EntitySystem
         SubscribeLocalEvent<FighterSeatComponent, StrappedEvent>(OnStrapped);
         SubscribeLocalEvent<FighterSeatComponent, UnstrappedEvent>(OnUnstrapped);
         SubscribeLocalEvent<FighterSeatComponent, ComponentShutdown>(OnSeatShutdown);
+        SubscribeLocalEvent<CMUFighterCameraOwnerComponent, EntityTerminatingEvent>(OnCameraTerminating);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnFighterRoundCleanup);
@@ -148,18 +149,9 @@ public sealed partial class FighterSystem : EntitySystem
         seat.Comp.Input = FighterInput.None;
         seat.Comp.SensorFocus = null;
         seat.Comp.LastInput = _timing.CurTime;
-        var camera = Spawn("CMUFighterCamera", Transform(seat).Coordinates);
-        seat.Comp.Camera = camera;
-        _zLevels.EnsureZLevelViewer(camera);
-        var exterior = Spawn("CMUFighterCamera", Transform(seat).Coordinates);
-        seat.Comp.ExteriorCamera = exterior;
-        _zLevels.EnsureZLevelViewer(exterior);
+        EnsureSeatCameras(seat);
         if (TryComp(args.Buckle.Owner, out ActorComponent? actor))
-        {
             _views.AddViewSubscriber(aircraftUid, actor.PlayerSession);
-            _views.AddViewSubscriber(camera, actor.PlayerSession);
-            _views.AddViewSubscriber(exterior, actor.PlayerSession);
-        }
         UpdateCamera(seat, aircraft);
         if (aircraft.GroundEntity is { } ground && TryComp(ground, out FighterGroundComponent? groundComp))
             UpdateTaxiOperator((ground, groundComp), (aircraftUid, aircraft));
@@ -178,6 +170,7 @@ public sealed partial class FighterSystem : EntitySystem
     {
         if (!TryGetSeat(ev.Entity, out var seat, out _, requireConscious: false))
             return;
+        EnsureSeatCameras(seat);
         if (seat.Comp.Camera is { } camera) _views.AddViewSubscriber(camera, ev.Player);
         if (seat.Comp.Aircraft is { } aircraft) _views.AddViewSubscriber(aircraft, ev.Player);
         if (seat.Comp.ExteriorCamera is { } exterior) _views.AddViewSubscriber(exterior, ev.Player);
@@ -460,6 +453,7 @@ public sealed partial class FighterSystem : EntitySystem
 
     private void UpdateCamera(Entity<FighterSeatComponent> seat, FighterAircraftComponent aircraft)
     {
+        EnsureSeatCameras(seat);
         if (seat.Comp.Camera is not { } camera || TerminatingOrDeleted(camera))
             return;
         if (FighterFlight.GroundScene(aircraft) && aircraft.GroundEntity is { } ground && Transform(ground).MapUid != null)
