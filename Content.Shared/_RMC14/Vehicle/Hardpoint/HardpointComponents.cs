@@ -151,8 +151,9 @@ public sealed partial class HardpointIntegrityComponent : Component
     [DataField]
     public TimeSpan FailureRollCooldown = TimeSpan.FromSeconds(30);
 
-    [DataField]
-    public int MaxVehicleFailures = 2;
+    // CMU14: VehicleHardpointFailureComponent.MaxActiveFailures caps each part instead.
+    // [DataField]
+    // public int MaxVehicleFailures = 2;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextFailureRoll;
@@ -183,10 +184,10 @@ public sealed partial class HardpointIntegrityComponent : Component
 
     // CMU14: repairs restore health at the cost of permanent structural capacity.
     [DataField]
-    public float RepairWearFraction = 0.1f;
+    public float RepairWearFraction = 0.3f; // CMU14: triple permanent wear per repair.
 
     [DataField]
-    public float MinimumRepairCapacityFraction = 0.5f;
+    public float MinimumRepairCapacityFraction = 0.2f; // CMU14: retain at least 20% of factory capacity.
 
     [DataField, AutoNetworkedField]
     public float RepairWear;

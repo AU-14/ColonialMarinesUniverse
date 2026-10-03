@@ -56,6 +56,11 @@ public sealed class VehicleDamageRegressionTest : GameTest
                 mask: [Impassable, LowImpassable, MidImpassable, BarricadeImpassable]
                 layer: [LargeMobLayer]
           - type: HardpointIntegrity
+          # CMU14: inspect the actual maintenance state sent after a repair.
+          - type: UserInterface
+            interfaces:
+              enum.HardpointUiKey.Key:
+                type: HardpointBoundUserInterface
           - type: HardpointSlots
             slots:
             - id: first
@@ -169,9 +174,10 @@ public sealed class VehicleDamageRegressionTest : GameTest
         });
     }
 
+    // CMU14: independent part limits retain the shared cooldown between impacts.
     [TestCase(false)]
     [TestCase(true)]
-    public async Task SeriousHitsRespectVehicleWideCooldownAndFaultLimit(bool useFaultLimit)
+    public async Task SeriousHitsRespectCooldownAndIndependentPartFaultLimits(bool advanceCooldown)
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -180,28 +186,39 @@ public sealed class VehicleDamageRegressionTest : GameTest
             var modules = SEntMan.System<VehicleTopologySystem>().GetMountedSlots(vehicle)
                 .Select(slot => slot.Item!.Value).ToArray();
             var hardpoints = SEntMan.System<HardpointSystem>();
-            foreach (var module in modules)
+            var frame = SEntMan.GetComponent<HardpointIntegrityComponent>(vehicle);
+            for (var round = 0; round < 3; round++)
             {
-                var integrity = SEntMan.GetComponent<HardpointIntegrityComponent>(module);
-                integrity.Integrity = 40f;
-                integrity.FailureChance = 1f;
-                hardpoints.DamageHardpoint(vehicle, module, 10f);
-                if (useFaultLimit)
+                foreach (var module in modules)
                 {
-                    var frame = SEntMan.GetComponent<HardpointIntegrityComponent>(vehicle);
-                    frame.MaxVehicleFailures = 1;
-                    frame.NextFailureRoll = TimeSpan.Zero;
+                    // Give both modules several eligible faults so the two-fault cap is exercised.
+                    SEntMan.EnsureComponent<GunComponent>(module);
+                    var integrity = SEntMan.GetComponent<HardpointIntegrityComponent>(module);
+                    integrity.Integrity = 40f;
+                    integrity.FailureChance = 1f;
+                    if (advanceCooldown)
+                        frame.NextFailureRoll = TimeSpan.Zero;
+                    hardpoints.DamageHardpoint(vehicle, module, 10f);
                 }
             }
 
             Assert.That(SEntMan.GetComponent<VehicleHardpointFailureComponent>(modules[0]).ActiveFailures,
-                Is.EquivalentTo(new[] { VehicleHardpointFailure.ElectricalShort }));
-            Assert.That(SEntMan.HasComponent<VehicleHardpointFailureComponent>(modules[1]), Is.False);
-            if (!useFaultLimit)
+                Has.Count.EqualTo(advanceCooldown ? 2 : 1));
+            if (advanceCooldown)
             {
-                Assert.That(SEntMan.GetComponent<HardpointIntegrityComponent>(vehicle).NextFailureRoll,
-                    Is.GreaterThan(SGameTiming.CurTime));
+                Assert.That(SEntMan.GetComponent<VehicleHardpointFailureComponent>(modules[1]).ActiveFailures,
+                    Has.Count.EqualTo(2), "two faults on another part must not exhaust this part's allowance");
+                var secondFailures = SEntMan.GetComponent<VehicleHardpointFailureComponent>(modules[1]);
+                secondFailures.ActiveFailures.Clear();
+                frame.NextFailureRoll = TimeSpan.Zero;
+                hardpoints.DamageHardpoint(vehicle, modules[0], 10f);
+                hardpoints.DamageHardpoint(vehicle, modules[1], 10f);
+                Assert.That(secondFailures.ActiveFailures, Has.Count.EqualTo(1),
+                    "a saturated part must not consume the cooldown and suppress a different part's fault");
             }
+            else
+                Assert.That(SEntMan.HasComponent<VehicleHardpointFailureComponent>(modules[1]), Is.False);
+            Assert.That(frame.NextFailureRoll, Is.GreaterThan(SGameTiming.CurTime));
         });
     }
 
@@ -261,15 +278,22 @@ public sealed class VehicleDamageRegressionTest : GameTest
             var completed = Repair();
             SEntMan.EventBus.RaiseLocalEvent(module, completed);
             Assert.That(integrity.Integrity, Is.GreaterThan(50), "The repair must actually restore health.");
-            Assert.That(integrity.MaxIntegrity, Is.LessThan(100), "Restoration must permanently wear the part.");
+            Assert.That(integrity.MaxIntegrity, Is.EqualTo(98.5f).Within(0.001f),
+                "CMU14: a five-point repair now wears 1.5 points of capacity, triple the old rate.");
             Assert.That(frame.MaxIntegrity, Is.LessThan(initialHullMax), "Hull capacity follows worn mounted parts.");
 
+            // CMU14: the published maintenance display keeps both factory denominators.
+            Assert.That(SEntMan.System<SharedUserInterfaceSystem>()
+                .TryGetUiState<HardpointBoundUserInterfaceState>(vehicle, HardpointUiKey.Key, out var ui), Is.True);
+            Assert.That(ui!.FrameMaxIntegrity, Is.EqualTo(initialHullMax));
+            Assert.That(ui.Hardpoints.Single(entry => entry.SlotId == "first").MaxIntegrity, Is.EqualTo(100));
+
             // A badly worn part still accepts repairs without losing capacity below its floor.
-            integrity.MaxIntegrity = 50.1f;
-            integrity.RepairWear = 49.9f;
+            integrity.MaxIntegrity = 20.1f;
+            integrity.RepairWear = 79.9f;
             integrity.Integrity = 10;
             SEntMan.EventBus.RaiseLocalEvent(module, Repair());
-            Assert.That(integrity.MaxIntegrity, Is.EqualTo(50).Within(0.001f));
+            Assert.That(integrity.MaxIntegrity, Is.EqualTo(20).Within(0.001f)); // CMU14: 20% floor.
             var wornCapacity = integrity.MaxIntegrity;
             var repairedIntegrity = integrity.Integrity;
             SEntMan.EventBus.RaiseLocalEvent(module, Repair());
