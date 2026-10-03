@@ -10,15 +10,19 @@ using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Zombies;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests._CMU14;
 
 [TestFixture]
 public sealed class ReportedRoleRegressionTest
 {
+    private static readonly ProtoId<NpcFactionPrototype> Govfor = "GOVFOR";
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task ImaginaryFriendRetainsMentorsCurrentBody(bool deleteImaginer)
@@ -92,6 +96,8 @@ public sealed class ReportedRoleRegressionTest
         {
             var entities = pair.Server.EntMan;
             var target = entities.SpawnEntity("CMXenoDrone", map.GridCoords);
+            var killer = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            entities.System<NpcFactionSystem>().AddFaction(killer, Govfor);
             if (!lateAssignment)
                 AssignThreat();
             var objective = entities.SpawnEntity("killthreatobjectiveds", map.GridCoords);
@@ -103,7 +109,12 @@ public sealed class ReportedRoleRegressionTest
             entities.EventBus.RaiseLocalEvent(objective, new ObjectiveActivatedEvent());
             if (lateAssignment)
                 AssignThreat();
-            entities.System<MobStateSystem>().ChangeMobState(target, MobState.Dead);
+            var mobStates = entities.System<MobStateSystem>();
+            mobStates.ChangeMobState(target, MobState.Dead);
+            Assert.That(kill.AmountKilledPerFaction.GetValueOrDefault("govfor"), Is.Zero,
+                "A death without a faction attacker must not consume the target's kill credit.");
+            mobStates.ChangeMobState(target, MobState.Alive);
+            mobStates.ChangeMobState(target, MobState.Dead, origin: killer);
             Assert.That(kill.AmountKilledPerFaction.GetValueOrDefault("govfor"), Is.EqualTo(1));
 
             void AssignThreat()

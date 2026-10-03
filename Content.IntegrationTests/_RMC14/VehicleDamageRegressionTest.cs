@@ -6,7 +6,9 @@ using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.DoAfter; // CMU14
 using Content.Shared.Examine;
+using Content.Shared.Item.ItemToggle; // CMU14
 using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 using Content.Shared.Verbs;
@@ -230,6 +232,68 @@ public sealed class VehicleDamageRegressionTest : GameTest
             gun.NextFire = TimeSpan.Zero;
             weapons.Update(0f);
             Assert.That(ammo.Count, Is.EqualTo(2), "clearing the fault must stop automatic discharges");
+        });
+    }
+
+    // CMU14: successful repairs permanently wear the serviced module and derived hull.
+    [Test]
+    public async Task CompletedRepairWearsModuleAndHullButCancelledRepairDoesNot()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var vehicle = SEntMan.SpawnEntity("VehicleDamageRegressionChassis", map.GridCoords);
+            var module = SEntMan.System<VehicleTopologySystem>().GetMountedSlots(vehicle)[0].Item!.Value;
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var welder = SEntMan.SpawnEntity("RMCWelderPVE", map.GridCoords);
+            SEntMan.System<ItemToggleSystem>().TryActivate(welder, user);
+            var integrity = SEntMan.GetComponent<HardpointIntegrityComponent>(module);
+            integrity.Integrity = 50;
+            var frame = SEntMan.GetComponent<HardpointIntegrityComponent>(vehicle);
+            var initialHullMax = frame.MaxIntegrity;
+
+            var cancelled = Repair();
+            cancelled.DoAfter.CancelledTime = SGameTiming.CurTime;
+            SEntMan.EventBus.RaiseLocalEvent(module, cancelled);
+            Assert.That(integrity.MaxIntegrity, Is.EqualTo(100));
+            Assert.That(integrity.Integrity, Is.EqualTo(50));
+
+            var completed = Repair();
+            SEntMan.EventBus.RaiseLocalEvent(module, completed);
+            Assert.That(integrity.Integrity, Is.GreaterThan(50), "The repair must actually restore health.");
+            Assert.That(integrity.MaxIntegrity, Is.LessThan(100), "Restoration must permanently wear the part.");
+            Assert.That(frame.MaxIntegrity, Is.LessThan(initialHullMax), "Hull capacity follows worn mounted parts.");
+
+            // A badly worn part still accepts repairs without losing capacity below its floor.
+            integrity.MaxIntegrity = 50.1f;
+            integrity.RepairWear = 49.9f;
+            integrity.Integrity = 10;
+            SEntMan.EventBus.RaiseLocalEvent(module, Repair());
+            Assert.That(integrity.MaxIntegrity, Is.EqualTo(50).Within(0.001f));
+            var wornCapacity = integrity.MaxIntegrity;
+            var repairedIntegrity = integrity.Integrity;
+            SEntMan.EventBus.RaiseLocalEvent(module, Repair());
+            Assert.That(integrity.MaxIntegrity, Is.EqualTo(wornCapacity));
+            Assert.That(integrity.Integrity, Is.GreaterThan(repairedIntegrity));
+
+            // Removing the last module must restore the frame's own capacity, not its last derived total.
+            var itemSlots = SEntMan.GetComponent<ItemSlotsComponent>(vehicle);
+            foreach (var slot in itemSlots.Slots.Keys.ToArray())
+            {
+                var removal = new HardpointRemoveDoAfterEvent(slot);
+                removal.DoAfter = new DoAfter(0,
+                    new DoAfterArgs(SEntMan, user, TimeSpan.Zero, removal, vehicle, vehicle), SGameTiming.CurTime);
+                SEntMan.EventBus.RaiseLocalEvent(vehicle, removal);
+                Assert.That(itemSlots.Slots[slot].Item, Is.Null);
+            }
+            Assert.That(frame.MaxIntegrity, Is.EqualTo(100f));
+
+            HardpointRepairDoAfterEvent Repair()
+            {
+                var ev = new HardpointRepairDoAfterEvent { RepairAmount = 5 };
+                ev.DoAfter = new DoAfter(0, new DoAfterArgs(SEntMan, user, TimeSpan.Zero, ev, module, vehicle, welder), SGameTiming.CurTime);
+                return ev;
+            }
         });
     }
 

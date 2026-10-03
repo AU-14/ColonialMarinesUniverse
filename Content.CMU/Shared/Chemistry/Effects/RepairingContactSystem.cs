@@ -1,7 +1,10 @@
 using Content.Shared.CMU14.Chemistry.Effects.Positive;
 using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Entrenching;
+using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids.Construction;
+using Content.Shared.CMU14.DroneOperator;
 using Content.Shared.Chemistry;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -32,8 +35,10 @@ public sealed partial class RepairingContactSystem : EntitySystem
         if (args.Method != ReactionMethod.Touch || HasComp<RepairableXenoStructureComponent>(ent))
             return;
 
-        var synth = HasComp<SynthComponent>(ent);
-        if (!synth &&
+        var repairsBruteBurn = HasComp<SynthComponent>(ent) ||
+                               HasComp<CMUCombatDroneComponent>(ent) ||
+                               HasComp<BarricadeComponent>(ent) && HasComp<RMCRepairableComponent>(ent);
+        if (!repairsBruteBurn &&
             (!TryComp<InjurableComponent>(ent, out var injurable) ||
              injurable.DamageContainer is null ||
              !_damageable.CanBeDamagedBy((ent.Owner, injurable), StructuralType)))
@@ -64,7 +69,7 @@ public sealed partial class RepairingContactSystem : EntitySystem
             return;
 
         DamageSpecifier healing;
-        if (synth)
+        if (repairsBruteBurn)
         {
             healing = _rmcDamageable.DistributeHealingCached(ent.Owner, BruteGroup, amount);
             healing = _rmcDamageable.DistributeHealingCached(ent.Owner, BurnGroup, amount, healing);

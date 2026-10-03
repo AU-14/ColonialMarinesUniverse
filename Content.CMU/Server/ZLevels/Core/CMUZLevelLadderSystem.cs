@@ -46,6 +46,8 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
         SubscribeLocalEvent<CMUZLevelLadderWatchingComponent, MoveInputEvent>(OnWatchingMoveInput);
         SubscribeLocalEvent<CMUZLevelLadderWatchingComponent, ComponentRemove>(OnWatchingRemove);
         SubscribeLocalEvent<CMUZLevelLadderWatchingComponent, EntityTerminatingEvent>(OnWatchingRemove);
+
+        InitializeThrow();
     }
 
     public override void Shutdown()

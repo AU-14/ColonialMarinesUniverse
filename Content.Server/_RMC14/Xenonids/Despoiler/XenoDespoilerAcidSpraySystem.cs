@@ -35,6 +35,10 @@ public sealed partial class XenoDespoilerAcidSpraySystem : EntitySystem
         if (!_mobStateQuery.HasComp(target) || _xenoQuery.HasComp(target) || _immunityQuery.HasComp(target))
             return;
 
+        // CMU14: overlapping fixtures and delayed rings must not multiply one cast's damage.
+        if (!comp.HitTargets.Add(target))
+            return;
+
         _damageable.TryChangeDamage(target, comp.Damage, ignoreResistances: false, origin: comp.Caster);
 
         if (comp.Caster is { } caster)

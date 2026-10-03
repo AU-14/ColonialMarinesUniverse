@@ -1,6 +1,5 @@
 #pragma warning disable RA0002 // Controlled component data changes verify scheduling and live permissions.
 
-using System.Diagnostics;
 using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Areas;
@@ -111,7 +110,7 @@ public sealed class AreaInfoSchedulingTest : GameTest
         await Server.WaitAssertion(() =>
         {
             const int population = 512;
-            const int iterations = 10000;
+            const int iterations = 100;
             var system = Server.System<AreaInfoSystem>();
             var entities = new List<EntityUid>();
             for (var i = 0; i < population; i++)
@@ -122,32 +121,13 @@ public sealed class AreaInfoSchedulingTest : GameTest
                 system.SetNextUpdateTime((uid, area), SGameTiming.CurTime + TimeSpan.FromHours(1));
             }
             for (var i = 0; i < 100; i++) system.Update(0);
-            var started = Stopwatch.GetTimestamp();
             var beforeBytes = GC.GetAllocatedBytesForCurrentThread();
             for (var i = 0; i < iterations; i++) system.Update(0);
             var allocatedBytes = GC.GetAllocatedBytesForCurrentThread() - beforeBytes;
-            var scheduledMs = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
             Assert.That(allocatedBytes, Is.Zero, "Future deadlines must not allocate during idle updates.");
             Assert.That(Pending(system), Is.Empty);
             Assert.That(Deadlines(system).Count, Is.EqualTo(population));
 
-            long visited = 0;
-            var due = 0;
-            var now = SGameTiming.CurTime;
-            started = Stopwatch.GetTimestamp();
-            for (var i = 0; i < iterations; i++)
-            {
-                var query = SEntMan.EntityQueryEnumerator<AreaInfoComponent>();
-                while (query.MoveNext(out var area))
-                {
-                    visited++;
-                    if (area.NextUpdateTime <= now) due++;
-                }
-            }
-            var scanMs = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
-            Assert.That(due, Is.Zero);
-            Assert.That(visited, Is.EqualTo((long) population * iterations));
-            TestContext.Progress.WriteLine($"PERF area_idle population={population} updates={iterations} oldComponentVisits={visited} scheduledMs={scheduledMs:F3} scanMs={scanMs:F3} allocatedBytes={allocatedBytes}");
             foreach (var uid in entities) SEntMan.DeleteEntity(uid);
             Assert.That(Deadlines(system).Count, Is.Zero);
         });

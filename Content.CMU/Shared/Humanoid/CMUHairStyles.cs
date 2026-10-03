@@ -53,13 +53,6 @@ namespace Content.Shared.CMU14.Humanoid
             "RMCHumanHairLongestAlt",
             "RMCHumanHairLongEmo",
             "RMCHumanHairLongOvereye",
-            "HumanHairLongBedhead",
-            "HumanHairLongBedhead2",
-            "HumanHairClassicLong2",
-            "HumanHairClassicLong3",
-            "HumanHairLong",
-            "HumanHairLong2",
-            "HumanHairLong3",
             "HumanHairLongWithBundles",
             "HumanHairLongovereye",
             "HumanHairLbangs",
@@ -67,10 +60,7 @@ namespace Content.Shared.CMU14.Humanoid
             "HumanHairLongfringe",
             "HumanHairLongsidepart",
             "HumanHairVlong",
-            "HumanHairLongest",
-            "HumanHairLongest2",
             "HumanHairVlongfringe",
-            "HumanHairSpookyLong",
             "HumanHairProtagonist",
             // Classic modern / classic wisp / modern / messy
             "HumanHairClassicModern",
@@ -162,11 +152,9 @@ namespace Content.Shared.CMU14.Humanoid
             // Twintails
             "HumanHairTwintail",
             // Two strands
-            "HumanHairTwoStrands",
             // Uneven
             "HumanHairUneven",
             // Unkept
-            "HumanHairUnkept",
             // Volaju
             "HumanHairVolaju",
             // Wisp

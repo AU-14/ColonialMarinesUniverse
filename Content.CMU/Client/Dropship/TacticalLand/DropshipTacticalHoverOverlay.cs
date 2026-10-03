@@ -12,9 +12,10 @@ using Robust.Shared.Utility;
 namespace Content.Client.CMU14.Dropship.TacticalLand;
 
 /// <summary>One cached alpha silhouette per ship, plus continuous ground-projected lift exhaust.</summary>
-public sealed class DropshipTacticalHoverOverlay(IEntityManager entities) : Overlay
+public sealed class DropshipTacticalHoverOverlay : Overlay
 {
-    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
+    public override OverlaySpace Space => OverlaySpace.WorldSpaceEntities;
+    private readonly IEntityManager _entities;
     private const float PixelsPerMeter = 32f;
     private readonly IClyde _clyde = IoCManager.Resolve<IClyde>();
     private readonly IResourceCache _resources = IoCManager.Resolve<IResourceCache>();
@@ -22,14 +23,24 @@ public sealed class DropshipTacticalHoverOverlay(IEntityManager entities) : Over
     private readonly IComponentFactory _factory = IoCManager.Resolve<IComponentFactory>();
     private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
     private readonly IEyeManager _eye = IoCManager.Resolve<IEyeManager>();
-    private readonly SharedTransformSystem _transform = entities.System<SharedTransformSystem>();
-    private readonly SpriteSystem _sprites = entities.System<SpriteSystem>();
-    private readonly PointLightSystem _lights = entities.System<PointLightSystem>();
+    private readonly SharedTransformSystem _transform;
+    private readonly SpriteSystem _sprites;
+    private readonly PointLightSystem _lights;
     private static readonly ProtoId<ShaderPrototype> ExhaustShader = "CMUDropshipHoverExhaust";
     private readonly Dictionary<EntityUid, IRenderTexture> _silhouettes = new();
     private readonly Dictionary<EntityUid, Vector2> _nozzleThrust = new();
     private readonly ShaderInstance _exhaust = IoCManager.Resolve<IPrototypeManager>()
         .Index(ExhaustShader).InstanceUnique();
+
+    public DropshipTacticalHoverOverlay(IEntityManager entities)
+    {
+        _entities = entities;
+        _transform = entities.System<SharedTransformSystem>();
+        _sprites = entities.System<SpriteSystem>();
+        _lights = entities.System<PointLightSystem>();
+        // Project onto floor coverings, while keeping walls and occupants above the ground effects.
+        ZIndex = (int) Content.Shared.DrawDepth.DrawDepth.HighFloorObjects + 1;
+    }
 
     public void Invalidate(EntityUid uid)
     {
@@ -42,7 +53,7 @@ public sealed class DropshipTacticalHoverOverlay(IEntityManager entities) : Over
     protected override void FrameUpdate(FrameEventArgs args)
     {
         var blend = 1f - MathF.Exp(-8f * args.DeltaSeconds);
-        var washes = entities.EntityQueryEnumerator<DropshipTacticalHoverDownwashComponent>();
+        var washes = _entities.EntityQueryEnumerator<DropshipTacticalHoverDownwashComponent>();
         while (washes.MoveNext(out var uid, out var wash))
         {
             if (!wash.JetExhaust)
@@ -51,7 +62,7 @@ public sealed class DropshipTacticalHoverOverlay(IEntityManager entities) : Over
             _nozzleThrust.TryGetValue(uid, out var current);
             var thrust = Vector2.Lerp(current, wash.ManeuverThrust, blend);
             _nozzleThrust[uid] = thrust;
-            if (entities.TryGetComponent<PointLightComponent>(uid, out var light))
+            if (_entities.TryGetComponent<PointLightComponent>(uid, out var light))
             {
                 // Light follows the same smoothed contact point as the shader. Its component
                 // offset is hull-local, whereas the projected exhaust stays vertical in view.
@@ -65,7 +76,7 @@ public sealed class DropshipTacticalHoverOverlay(IEntityManager entities) : Over
     protected override void Draw(in OverlayDrawArgs args)
     {
         var h = args.WorldHandle;
-        var shadows = entities.EntityQueryEnumerator<DropshipTacticalHoverShadowComponent, TransformComponent>();
+        var shadows = _entities.EntityQueryEnumerator<DropshipTacticalHoverShadowComponent, TransformComponent>();
         while (shadows.MoveNext(out var uid, out var shadow, out var xform))
         {
             if (xform.MapID != args.MapId || shadow.HullBounds.IsEmpty())
@@ -100,7 +111,7 @@ public sealed class DropshipTacticalHoverOverlay(IEntityManager entities) : Over
         // world-space nozzle position follows the ship, including when the pilot camera turns.
         var eyeRotation = args.Viewport.Eye?.Rotation ?? Angle.Zero;
         var exhaustRotation = Matrix3Helpers.CreateRotation(-eyeRotation);
-        var washes = entities.EntityQueryEnumerator<DropshipTacticalHoverDownwashComponent, TransformComponent>();
+        var washes = _entities.EntityQueryEnumerator<DropshipTacticalHoverDownwashComponent, TransformComponent>();
         while (washes.MoveNext(out var uid, out var wash, out var xform))
         {
             if (!wash.JetExhaust || xform.MapID != args.MapId ||

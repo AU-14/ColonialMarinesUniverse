@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 01:48:23
-  entityCount: 49376
+  entityCount: 49363
 maps:
 - 1
 grids:
@@ -115945,73 +115945,6 @@ entities:
     components:
     - type: Transform
       pos: 153.5,-150.5
-      parent: 1
-- proto: fetchreturngovfor
-  entities:
-  - uid: 7468
-    components:
-    - type: Transform
-      pos: 64.5,-0.5
-      parent: 1
-  - uid: 7469
-    components:
-    - type: Transform
-      pos: 64.5,-1.5
-      parent: 1
-  - uid: 7470
-    components:
-    - type: Transform
-      pos: 64.5,-2.5
-      parent: 1
-  - uid: 7471
-    components:
-    - type: Transform
-      pos: 64.5,-3.5
-      parent: 1
-  - uid: 7472
-    components:
-    - type: Transform
-      pos: 65.5,-2.5
-      parent: 1
-  - uid: 7473
-    components:
-    - type: Transform
-      pos: 65.5,-1.5
-      parent: 1
-  - uid: 7474
-    components:
-    - type: Transform
-      pos: 65.5,-3.5
-      parent: 1
-  - uid: 7475
-    components:
-    - type: Transform
-      pos: 66.5,-1.5
-      parent: 1
-  - uid: 7476
-    components:
-    - type: Transform
-      pos: 66.5,-2.5
-      parent: 1
-  - uid: 7477
-    components:
-    - type: Transform
-      pos: 66.5,-3.5
-      parent: 1
-  - uid: 7478
-    components:
-    - type: Transform
-      pos: 67.5,-1.5
-      parent: 1
-  - uid: 7479
-    components:
-    - type: Transform
-      pos: 67.5,-2.5
-      parent: 1
-  - uid: 7480
-    components:
-    - type: Transform
-      pos: 67.5,-3.5
       parent: 1
 - proto: fetchwylaptopobjective
   entities:

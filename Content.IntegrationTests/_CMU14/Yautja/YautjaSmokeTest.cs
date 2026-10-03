@@ -2437,19 +2437,15 @@ public sealed class YautjaSmokeTest
 
                 beforeAudio = AudioEntities(entMan);
 
+                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 0;
+
                 Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(CountAttachedArms(body, user), Is.EqualTo(2),
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(2.75f));
-            await server.WaitPost(() =>
-            {
-                var random = server.ResolveDependency<IRobustRandom>();
-                random.SetSeed(0);
-            });
-            await pair.RunTicksSync(pair.SecondsToTicks(0.75f));
+            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -2613,7 +2609,6 @@ public sealed class YautjaSmokeTest
                 var entMan = server.EntMan;
                 var inventory = entMan.System<InventorySystem>();
                 var hands = entMan.System<SharedHandsSystem>();
-                var random = server.ResolveDependency<IRobustRandom>();
                 var utility = entMan.System<YautjaBracerUtilitySystem>();
                 var session = server.PlayerMan.Sessions.Single();
                 previousAttached = session.AttachedEntity;
@@ -2649,7 +2644,7 @@ public sealed class YautjaSmokeTest
                 Assert.That(holderStored.AttachedWeapon, Is.Not.Null);
                 wristBlades = holderStored.AttachedWeapon.Value;
 
-                random.SetSeed(11);
+                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 11;
 
                 Assert.That(utility.TryOpenTranslator((bracer, bracerComp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
@@ -2720,7 +2715,6 @@ public sealed class YautjaSmokeTest
                 var entMan = server.EntMan;
                 var hands = entMan.System<SharedHandsSystem>();
                 var inventory = entMan.System<InventorySystem>();
-                var random = server.ResolveDependency<IRobustRandom>();
                 var utility = entMan.System<YautjaBracerUtilitySystem>();
                 var session = server.PlayerMan.Sessions.Single();
                 previousAttached = session.AttachedEntity;
@@ -2747,19 +2741,15 @@ public sealed class YautjaSmokeTest
                 var utility = entMan.System<YautjaBracerUtilitySystem>();
                 var comp = entMan.GetComponent<YautjaBracerComponent>(bracer);
 
+                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 5;
+
                 Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
                 Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(user), Is.False,
                     "CMSS13 check_random_function() delays random slot effects until after do_after(user, 3, INTERRUPT_ALL).");
             });
 
-            await pair.RunTicksSync(pair.SecondsToTicks(2.75f));
-            await server.WaitPost(() =>
-            {
-                var random = server.ResolveDependency<IRobustRandom>();
-                random.SetSeed(5);
-            });
-            await pair.RunTicksSync(pair.SecondsToTicks(0.75f));
+            await pair.RunTicksSync(pair.SecondsToTicks(3.25f));
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
@@ -2917,7 +2907,6 @@ public sealed class YautjaSmokeTest
                 var entMan = server.EntMan;
                 var hands = entMan.System<SharedHandsSystem>();
                 var inventory = entMan.System<InventorySystem>();
-                var random = server.ResolveDependency<IRobustRandom>();
                 var ui = entMan.System<SharedUserInterfaceSystem>();
                 var utility = entMan.System<YautjaBracerUtilitySystem>();
                 var session = server.PlayerMan.Sessions.Single();
@@ -2934,7 +2923,7 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaRandomFunctionChance = 1f;
                 comp.NonYautjaDelimbChance = 0f;
 
-                random.SetSeed(3);
+                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 3;
 
                 Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
@@ -3004,7 +2993,6 @@ public sealed class YautjaSmokeTest
                 var entMan = server.EntMan;
                 var hands = entMan.System<SharedHandsSystem>();
                 var inventory = entMan.System<InventorySystem>();
-                var random = server.ResolveDependency<IRobustRandom>();
                 var utility = entMan.System<YautjaBracerUtilitySystem>();
                 var session = server.PlayerMan.Sessions.Single();
                 previousAttached = session.AttachedEntity;
@@ -3052,7 +3040,7 @@ public sealed class YautjaSmokeTest
                 bracerComp.NonYautjaRandomFunctionChance = 1f;
                 bracerComp.NonYautjaDelimbChance = 0f;
 
-                random.SetSeed(10);
+                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 10;
 
                 Assert.That(utility.TryOpenTranslator((bracer, bracerComp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
@@ -3132,7 +3120,6 @@ public sealed class YautjaSmokeTest
                 var entMan = server.EntMan;
                 var hands = entMan.System<SharedHandsSystem>();
                 var inventory = entMan.System<InventorySystem>();
-                var random = server.ResolveDependency<IRobustRandom>();
                 var utility = entMan.System<YautjaBracerUtilitySystem>();
                 var session = server.PlayerMan.Sessions.Single();
                 previousAttached = session.AttachedEntity;
@@ -3148,7 +3135,7 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaRandomFunctionChance = 1f;
                 comp.NonYautjaDelimbChance = 0f;
 
-                random.SetSeed(2);
+                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 2;
 
                 Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));
@@ -3216,7 +3203,6 @@ public sealed class YautjaSmokeTest
                 var entMan = server.EntMan;
                 var hands = entMan.System<SharedHandsSystem>();
                 var inventory = entMan.System<InventorySystem>();
-                var random = server.ResolveDependency<IRobustRandom>();
                 var utility = entMan.System<YautjaBracerUtilitySystem>();
                 var session = server.PlayerMan.Sessions.Single();
                 previousAttached = session.AttachedEntity;
@@ -3233,7 +3219,7 @@ public sealed class YautjaSmokeTest
                 comp.NonYautjaRandomFunctionChance = 1f;
                 comp.NonYautjaDelimbChance = 0f;
 
-                random.SetSeed(6);
+                entMan.EnsureComponent<YautjaBracerRandomSeedTestComponent>(bracer).Seed = 6;
 
                 Assert.That(utility.TryOpenTranslator((bracer, comp), user), Is.True);
                 Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.EqualTo(1));

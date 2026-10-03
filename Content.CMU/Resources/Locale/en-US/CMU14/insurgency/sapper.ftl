@@ -86,6 +86,10 @@ insfor-sapper-workbench-detach = Detach: {$name}
 # ATM hacking.
 insfor-sapper-atm-already-hacked = This machine has already been bled dry.
 insfor-sapper-atm-hacked = The ATM shudders and spits out {$amount} in cash.
+cmu-sapper-atm-logins-leaked = The rig also dumps {$count} cached card {$count ->
+    [one] login
+   *[other] logins
+} with PINs. Use the rig in hand to read them.
 insfor-sapper-atm-malfunction = ERROR: THIS DEVICE HAS MALFUNCTIONED. PLEASE CONTACT YOUR ADMINISTRATOR.
 insfor-sapper-console-drained = The console's funds drain away - {$amount} in cash spills out.
 insfor-sapper-asrs-drained = The ASRS account empties into your hands - {$amount} in cash.

@@ -36,12 +36,14 @@
   parent: CMBeltUtility
   id: CMULACNBeltUtility
   name: LACN utility rig
-  description: An LACN load-bearing belt made to carry tools rather than ammunition.
+  description: An LACN load-bearing belt with pouches for tools and general supplies.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: Storage
+    whitelist: null
   - type: ItemCamouflage
     camouflageVariations: { }
 

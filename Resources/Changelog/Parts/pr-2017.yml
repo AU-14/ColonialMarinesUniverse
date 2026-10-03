@@ -1,0 +1,7 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Xeno rank thresholds have been reverted back to what they previously were.
+  type: Tweak
+time: '2026-09-28T22:03:55.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2017

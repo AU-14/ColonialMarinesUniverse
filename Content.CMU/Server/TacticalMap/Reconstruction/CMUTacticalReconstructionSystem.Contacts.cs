@@ -11,6 +11,7 @@ namespace Content.Server.CMU14.TacticalMap.Reconstruction;
 public sealed partial class CMUTacticalReconstructionSystem
 {
     [Dependency] private XenoWatchSystem _xenoWatch = default!;
+    [Dependency] private Content.Server._RMC14.TacticalMap.TacticalMapSystem _tacticalMaps = default!;
     private TimeSpan _nextContacts;
     private TimeSpan _nextPrototypeContacts;
 
@@ -54,8 +55,16 @@ public sealed partial class CMUTacticalReconstructionSystem
             foreach (var (id, blip) in blips)
             {
                 var target = new EntityUid(id);
-                if (!seen.Add(id) || !TryComp<TransformComponent>(target, out var transform)) continue;
-                var level = Array.IndexOf(survey.Atlas.Maps, transform.MapUid);
+                if (!seen.Add(id)) continue;
+                // an intel blip (DF ping, jammer fix) has no entity behind its key; it sits on the grid
+                // it was placed on. without this every intel blip silently vanished from the view
+                var mapUid = TryComp<TransformComponent>(target, out var transform)
+                    ? transform.MapUid
+                    : _tacticalMaps.TryGetIntelBlipGrid(id, out var intelGrid) && TryComp(intelGrid, out TransformComponent? gridTransform)
+                        ? gridTransform.MapUid
+                        : null;
+                if (mapUid == null) continue;
+                var level = Array.IndexOf(survey.Atlas.Maps, mapUid);
                 if (level < 0) continue;
                 // Sensor intel deliberately hides enemy identity, even when the entity is a marine.
                 var named = blip.Image?.RsiState != "enemy_blip" &&

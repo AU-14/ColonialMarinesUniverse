@@ -48,7 +48,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     /// </summary>
     private const string ColonyCivilianJobId = "AU14JobCivilianColonist";
 
-    private const string ClfSurgeonJobId = "AU14JobCLFSurgeon";
+    private const string ClfSurgeonJobId = "AU14JobCLFPhysician";
 
     /// <summary>
     ///     Chance (0-1) for a guerilla to spawn at a colony civilian spawn point instead of the safehouse.

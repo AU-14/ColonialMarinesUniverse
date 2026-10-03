@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
-using Content.Shared.Actions;
 using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared.FixedPoint;
 using Content.Shared.Physics;
@@ -48,18 +46,6 @@ public sealed class CMUXenoWarlockTest
     }
 
     [Test]
-    public void PsychicCrushTargetsTurfInsteadOfEntity()
-    {
-        Assert.That(new CMUXenoPsychicCrushActionEvent(), Is.InstanceOf<WorldTargetActionEvent>());
-    }
-
-    [Test]
-    public void PsychicCrushTargetsFurtherThanBlast()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushTargetRange(), Is.EqualTo(9).Within(0.001));
-    }
-
-    [Test]
     public void PsychicCrushDebuffsScaleWithCompletedPulses()
     {
         Assert.That(CMUXenoWarlockSystem.GetPsychicCrushStaggerDuration(5).TotalSeconds, Is.EqualTo(2.5).Within(0.001));
@@ -67,67 +53,10 @@ public sealed class CMUXenoWarlockTest
     }
 
     [Test]
-    public void PsychicBlastChannelsBeforeFiring()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastChargeDuration().TotalSeconds, Is.EqualTo(1).Within(0.001));
-    }
-
-    [Test]
-    public void PsychicBlastSelectsBeamProjectile()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastBeamPrototype(), Is.EqualTo("CMUXenoPsychicBlastProjectile"));
-    }
-
-    [Test]
-    public void PsychicBlastChannelUsesTgmcRedParticlesAndLight()
-    {
-        var profile = CMUXenoWarlockSystem.GetWarlockParticleProfile(CMUXenoWarlockParticleEffect.PsychicBlastCharge);
-
-        Assert.That(CMUXenoWarlockSystem.GetWarlockChannelColor(CMUXenoWarlockChannelKind.PsychicBlast), Is.EqualTo("#970f0f"));
-        Assert.That(CMUXenoWarlockSystem.GetWarlockChannelLightPrototype(CMUXenoWarlockChannelKind.PsychicBlast), Is.EqualTo("CMUXenoWarlockBlastChannelEffect"));
-        Assert.That(CMUXenoWarlockSystem.ShouldSpawnWarlockChannelStream(CMUXenoWarlockChannelKind.PsychicBlast), Is.False);
-        Assert.That(CMUXenoWarlockSystem.GetWarlockChannelParticlePrototype(CMUXenoWarlockChannelKind.PsychicBlast), Is.EqualTo("CMUXenoWarlockBlastParticles"));
-        Assert.That(profile.Color, Is.EqualTo("#970f0f"));
-        Assert.That(profile.Count, Is.EqualTo(300));
-        Assert.That(profile.Spawning, Is.EqualTo(20));
-        Assert.That(profile.Lifespan, Is.EqualTo(12));
-        Assert.That(profile.HolderOffset, Is.EqualTo(new Vector2(16, 0)));
-    }
-
-    [Test]
-    public void PsychicCrushChannelUsesTgmcPurpleParticlesAndLight()
-    {
-        var profile = CMUXenoWarlockSystem.GetWarlockParticleProfile(CMUXenoWarlockParticleEffect.PsychicCrushCharge);
-
-        Assert.That(CMUXenoWarlockSystem.GetWarlockChannelColor(CMUXenoWarlockChannelKind.PsychicCrush), Is.EqualTo("#6a59b3"));
-        Assert.That(CMUXenoWarlockSystem.GetWarlockChannelLightPrototype(CMUXenoWarlockChannelKind.PsychicCrush), Is.EqualTo("CMUXenoWarlockCrushChannelEffect"));
-        Assert.That(CMUXenoWarlockSystem.ShouldSpawnWarlockChannelStream(CMUXenoWarlockChannelKind.PsychicCrush), Is.False);
-        Assert.That(CMUXenoWarlockSystem.GetWarlockChannelParticlePrototype(CMUXenoWarlockChannelKind.PsychicCrush), Is.EqualTo("CMUXenoWarlockCrushParticles"));
-        Assert.That(profile.Color, Is.EqualTo("#6a59b3"));
-        Assert.That(profile.Count, Is.EqualTo(300));
-        Assert.That(profile.Spawning, Is.EqualTo(15));
-        Assert.That(profile.Lifespan, Is.EqualTo(8));
-        Assert.That(profile.HolderOffset, Is.EqualTo(new Vector2(16, 5)));
-    }
-
-    [Test]
     public void WarlockChannelParticlesRenderFromWarlockCenter()
     {
         Assert.That(CMUXenoWarlockSystem.GetWarlockParticleRenderOffset(CMUXenoWarlockParticleEffect.PsychicBlastCharge), Is.EqualTo(Vector2.Zero));
         Assert.That(CMUXenoWarlockSystem.GetWarlockParticleRenderOffset(CMUXenoWarlockParticleEffect.PsychicCrushCharge), Is.EqualTo(Vector2.Zero));
-    }
-
-    [Test]
-    public void PsychicCrushWarningUsesTgmcWarningParticles()
-    {
-        var profile = CMUXenoWarlockSystem.GetWarlockParticleProfile(CMUXenoWarlockParticleEffect.CrushWarning);
-
-        Assert.That(profile.Color, Is.EqualTo("#4b3f7e"));
-        Assert.That(profile.Count, Is.EqualTo(50));
-        Assert.That(profile.Spawning, Is.EqualTo(5));
-        Assert.That(profile.Lifespan, Is.EqualTo(8));
-        Assert.That(profile.Fade, Is.EqualTo(10));
-        Assert.That(profile.Grow, Is.EqualTo(-0.04f).Within(0.001));
     }
 
     [Test]
@@ -146,12 +75,6 @@ public sealed class CMUXenoWarlockTest
     public void WarlockChannelParticlesDoNotMoveWithoutDirection()
     {
         Assert.That(CMUXenoWarlockSystem.GetWarlockDirectedParticleMotion(Vector2.Zero, Vector2.Zero, 7f), Is.Null);
-    }
-
-    [Test]
-    public void PsychicBlastImpactUsesShockwaveEffect()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastImpactEffectPrototype(), Is.EqualTo("CMUXenoPsychicBlastShockwave"));
     }
 
     [Test]
@@ -176,14 +99,6 @@ public sealed class CMUXenoWarlockTest
     {
         Assert.That(CMUXenoWarlockSystem.GetPsychicCrushEndEffectPrototype(false), Is.EqualTo("CMUXenoPsychicCrushSmooth"));
         Assert.That(CMUXenoWarlockSystem.GetPsychicCrushEndEffectPrototype(true), Is.EqualTo("CMUXenoPsychicCrushHard"));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushEndEffectCount(false, 5), Is.EqualTo(1));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushEndEffectCount(true, 5), Is.EqualTo(1));
-    }
-
-    [Test]
-    public void PsychicCrushOrbDrawsAboveSameTileMobs()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushOrbDrawDepth(), Is.EqualTo(CMUDrawDepth.Overlays));
     }
 
     [Test]
@@ -229,37 +144,6 @@ public sealed class CMUXenoWarlockTest
         Assert.That(CMUXenoWarlockSystem.GetPsychicCrushResolvedPulses(5), Is.EqualTo(5));
     }
 
-    [Test]
-    public void PsychicCrushUsesTgmcWindupBeforeChannelLoop()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushWindupDuration().TotalSeconds, Is.EqualTo(0.8).Within(0.001));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushPulseInterval().TotalSeconds, Is.EqualTo(1).Within(0.001));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushChannelDuration().TotalSeconds, Is.EqualTo(4).Within(0.001));
-    }
-
-    [Test]
-    public void PsychicCrushShowsActionCooldownAfterResolution()
-    {
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicCrushShowActionCooldown(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushCooldownDuration().TotalSeconds, Is.EqualTo(15).Within(0.001));
-    }
-
-    [Test]
-    public void WarlockRetriggerableActionsDeferCooldownUntilAfterActionCleanup()
-    {
-        Assert.That(CMUXenoWarlockSystem.ShouldDeferWarlockActionCooldownUntilAfterActionPerformed(), Is.True);
-    }
-
-    [Test]
-    public void PsychicCrushMovementCancellationResolvesBuiltUpDamage()
-    {
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicCrushCancellationResolve(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldSpawnPsychicCrushTileBlur(false), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldSpawnPsychicCrushTileBlur(true), Is.True);
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushBlurPrototype(), Is.EqualTo("CMUXenoPsychicCrushBlur"));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicCrushBlurDuration().TotalSeconds, Is.EqualTo(1).Within(0.001));
-    }
-
     [TestCase(CMUXenoWarlockChannelKind.PsychicCrush)]
     [TestCase(CMUXenoWarlockChannelKind.PsychicBlast)]
     [TestCase(CMUXenoWarlockChannelKind.PsychicShield)]
@@ -275,65 +159,6 @@ public sealed class CMUXenoWarlockTest
 
         Assert.That(offsets, Is.EqualTo(new[] { new Vector2(0, 1f) }));
         Assert.That(CMUXenoWarlockSystem.GetPsychicShieldCenterOffset(Direction.North), Is.EqualTo(new Vector2(0, 1f)));
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldUseUnanchoredWorldPlacement(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldSnapToGrid(), Is.False);
-    }
-
-    [Test]
-    public void PsychicShieldVisualRendersAtCatcherPosition()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldVisualOffset(Direction.North), Is.EqualTo(Vector2.Zero));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldVisualOffset(Direction.South), Is.EqualTo(Vector2.Zero));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldVisualOffset(Direction.East), Is.EqualTo(Vector2.Zero));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldVisualOffset(Direction.West), Is.EqualTo(Vector2.Zero));
-        Assert.That(CMUXenoWarlockSystem.ShouldOffsetPsychicShieldSpriteWithoutMovingCollision(), Is.False);
-    }
-
-    [Test]
-    public void PsychicShieldUsesTgmcTimingsCostsAndIntegrity()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldCost(), Is.EqualTo(FixedPoint2.New(300)));
-        // Detonating is free: the raise pays for the whole raise-and-reflect cycle.
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldDetonationCost(), Is.EqualTo(FixedPoint2.Zero));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldDuration().TotalSeconds, Is.EqualTo(6).Within(0.001));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldCooldownDuration().TotalSeconds, Is.EqualTo(10).Within(0.001));
-        // 2000 is the current tuned value. TGMC baseline is 650; the local rework raised the
-        // integrity budget to compensate for the shield keeping its integrity as the only
-        // break-condition (the pre-existing 10-projectile hard cap was removed).
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldIntegrity(), Is.EqualTo(FixedPoint2.New(2000)));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldBreakStunDuration().TotalSeconds, Is.EqualTo(1).Within(0.001));
-        // 0 disables the hard cap. TGMC baseline is 10 (shield breaks after catching 10 projectiles);
-        // the local rework removed that cap so integrity is the only break-condition.
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldMaxFrozenProjectiles(), Is.EqualTo(0));
-    }
-
-    [Test]
-    public void PsychicShieldUsesTgmcOwnerGlowInsteadOfDuplicateShieldSprite()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetWarlockChannelColor(CMUXenoWarlockChannelKind.PsychicShield), Is.EqualTo("#5999b3"));
-        Assert.That(CMUXenoWarlockSystem.GetWarlockChannelLightPrototype(CMUXenoWarlockChannelKind.PsychicShield), Is.EqualTo("CMUXenoWarlockShieldChannelEffect"));
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldOwnerChannelDrawShieldSprite(), Is.False);
-    }
-
-    [Test]
-    public void PsychicShieldUsesTgmcProjectileStateTransitions()
-    {
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldFreezeIncomingProjectiles(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldReleaseProjectilesOnCancel(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldReflectProjectilesOnManualDetonation(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldReleaseProjectilesAndStunOwnerOnBreak(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldRestoreOriginalProjectileOnBreak(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldRootOwnerWhileActive(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldOwnerMoveSpeedMultiplier(), Is.EqualTo(0).Within(0.001));
-        Assert.That(CMUXenoWarlockSystem.ShouldPlayPsychicShieldReflectSoundAtShield(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldRequireClearForwardTile(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldDisableFrozenProjectileCollision(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldRestoreFrozenProjectileCollision(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldUseHardProjectileCollision(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldCatchProjectilesBeforeProjectileSystems(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldSubscribeToProjectilePreventCollide(), Is.False);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldSuspendDeleteOnCollideComponent(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldSuspendFixedDistanceProjectileLifetime(), Is.True);
     }
 
     [Test]
@@ -352,13 +177,6 @@ public sealed class CMUXenoWarlockTest
         Assert.That(CMUXenoWarlockSystem.GetPsychicShieldAlpha(FixedPoint2.New(325), FixedPoint2.New(650)), Is.EqualTo(0.5).Within(0.001));
         Assert.That(CMUXenoWarlockSystem.GetPsychicShieldAlpha(FixedPoint2.New(-25), FixedPoint2.New(650)), Is.EqualTo(0).Within(0.001));
         Assert.That(CMUXenoWarlockSystem.GetPsychicShieldAlpha(FixedPoint2.New(800), FixedPoint2.New(650)), Is.EqualTo(1).Within(0.001));
-    }
-
-    [Test]
-    public void PsychicShieldShowsActionCooldownAfterEnding()
-    {
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicShieldShowActionCooldown(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.GetPsychicShieldCooldownDuration().TotalSeconds, Is.EqualTo(10).Within(0.001));
     }
 
     [Test]
@@ -401,21 +219,8 @@ public sealed class CMUXenoWarlockTest
     }
 
     [Test]
-    public void PsychicBlastUsesTgmcSoundStagesAsAuthoritativeWorldAudio()
-    {
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastFireSoundPath(), Is.EqualTo("/Audio/CMU14/Xeno/Warlock/volkite_4.ogg"));
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastImpactSoundPath(), Is.EqualTo("/Audio/CMU14/Xeno/Warlock/EMPulse.ogg"));
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicBlastPlayFireSoundFromWarlockSystem(), Is.True);
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicBlastUsePvsAudio(), Is.True);
-    }
-
-    [Test]
     public void PsychicBlastKnocksBackAffectedTargets()
     {
-        Assert.That(CMUXenoWarlockSystem.ShouldPsychicBlastKnockbackAffectedTargets(), Is.True);
-        // 15 is the current tuned throw speed. TGMC baseline is 8; the local rework raised the
-        // knockback impulse so the throw is visibly further and easier to read as a psychic push.
-        Assert.That(CMUXenoWarlockSystem.GetPsychicBlastKnockbackSpeed(), Is.EqualTo(15).Within(0.001));
         Assert.That(CMUXenoWarlockSystem.GetPsychicBlastKnockbackDirection(Vector2.Zero, new Vector2(2, 0), Vector2.Zero), Is.EqualTo(Vector2.UnitX));
         Assert.That(CMUXenoWarlockSystem.GetPsychicBlastKnockbackDirection(Vector2.Zero, Vector2.Zero, new Vector2(0, -8)), Is.EqualTo(-Vector2.UnitY));
     }

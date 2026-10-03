@@ -7,7 +7,7 @@
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNbackpack.rsi
   - type: Storage
-    maxItemSize: Large
+    maxItemSize: Normal
     grid:
     - 0,0,22,1
 

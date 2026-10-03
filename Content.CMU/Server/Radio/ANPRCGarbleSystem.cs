@@ -82,8 +82,12 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
             transmitterWearing != null &&
             _crypto.HasMatchingCrypto(transmitterWearing.Radio, args.Channel))
         {
-            if (receiverAnprc != null && !_crypto.HasMatchingCrypto(receiverAnprc.Value, args.Channel))
+            if (receiverAnprc != null &&
+                !_crypto.HasMatchingCrypto(receiverAnprc.Value, args.Channel) &&
+                !_crypto.HasBrokenKey(receiverAnprc.Value, args.Channel.Faction))
+            {
                 needsCryptoGarble = true;
+            }
 
             if (txMode == RadioMode.CipherText && receiverAnprc == null)
                 needsCryptoGarble = true;
@@ -229,18 +233,33 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         return true;
     }
 
-    private (float Distance, float Range, Vector2 Position)? FindClosestCoveringJammer(EntityUid radioSource)
+    /// <summary>The jammer whose field this set is sitting in, for the faceplate's direction finding.</summary>
+    public bool TryGetNearestJammer(EntityUid source, out EntityUid jammer, out Vector2 position)
+    {
+        jammer = default;
+        position = default;
+
+        if (FindClosestCoveringJammer(source) is not { } found)
+            return false;
+
+        jammer = found.Uid;
+        position = found.Position;
+        return true;
+    }
+
+    private (float Distance, float Range, Vector2 Position, EntityUid Uid)? FindClosestCoveringJammer(EntityUid radioSource)
     {
         var closestDist = float.MaxValue;
         var closestRange = 1f;
         var closestPos = Vector2.Zero;
+        var closestUid = EntityUid.Invalid;
 
         var sourcePos = _transform.GetWorldPosition(radioSource);
         var sourceMap = Transform(radioSource).MapID;
 
         var query = EntityQueryEnumerator<ActiveRadioJammerComponent, RadioJammerComponent, TransformComponent>();
 
-        while (query.MoveNext(out _, out _, out var jam, out var xform))
+        while (query.MoveNext(out var jammerUid, out _, out var jam, out var xform))
         {
             if (xform.MapID != sourceMap)
                 continue;
@@ -259,12 +278,13 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
             closestDist = dist;
             closestRange = range;
             closestPos = jamPos;
+            closestUid = jammerUid;
         }
 
         if (closestDist == float.MaxValue)
             return null;
 
-        return (closestDist, closestRange, closestPos);
+        return (closestDist, closestRange, closestPos, closestUid);
     }
 
     public string GarbleMessage(string message, RadioJamIntensity intensity)
@@ -332,8 +352,12 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         if (string.IsNullOrEmpty(channel.Faction))
             return message;
 
-        if (_crypto.HasMatchingCrypto(receiverAnprc, channel))
+        // a key this set has broken reads as well as a fill, for listening only
+        if (_crypto.HasMatchingCrypto(receiverAnprc, channel) ||
+            _crypto.HasBrokenKey(receiverAnprc, channel.Faction))
+        {
             return message;
+        }
 
         if (TryComp(messageSource, out WearingANPRCComponent? txWearing) &&
             TryComp(txWearing.Radio, out ANPRCRadioComponent? txRadio))

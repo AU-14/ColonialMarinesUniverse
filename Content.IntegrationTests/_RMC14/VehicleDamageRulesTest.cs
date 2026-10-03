@@ -8,6 +8,7 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class VehicleDamageRulesTest
 {
+    // CMU14 method: exercise configurable fault thresholds independently of balance defaults.
     [TestCase(90f, 10f, 0f)]
     [TestCase(41f, 20f, 0f)]
     [TestCase(40f, 0.1f, 0f)]
@@ -15,9 +16,16 @@ public sealed class VehicleDamageRulesTest
     [TestCase(40f, 8f, 0.05f)]
     [TestCase(10f, 50f, 0.05f)]
     [TestCase(0f, 50f, 0f)]
-    public void OnlySubstantialHitsToSeriouslyDamagedPartsCanCauseFaults(float remaining, float damage, float chance)
+    public void ConfiguredThresholdsGateVehicleFaultChance(float remaining, float damage, float chance)
     {
-        var integrity = new HardpointIntegrityComponent { MaxIntegrity = 100f, Integrity = remaining };
+        var integrity = new HardpointIntegrityComponent
+        {
+            MaxIntegrity = 100f,
+            Integrity = remaining,
+            FailureIntegrityThreshold = 0.4f,
+            FailureMinimumDamageFraction = 0.08f,
+            FailureChance = 0.05f,
+        };
         Assert.That(VehicleFailureRules.GetChance(integrity, damage), Is.EqualTo(chance));
     }
 

@@ -6,6 +6,7 @@
   roundForce: COLONY
   roundRole: CivilianColonySynthetic
   roundComponents:
+  - type: RegulationAppearance
   - type: Language
     preset: AU14LanguagePresetSynth
   - type: LanguageLearning

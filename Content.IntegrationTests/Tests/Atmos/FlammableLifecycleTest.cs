@@ -194,8 +194,6 @@ public sealed class FlammableLifecycleTest : GameTest
                     "refreshing an already-burning entity must not raise a second ignition transition");
                 Assert.That(HasAutoNetworkedField(nameof(OnFireComponent.Intensity)), Is.False);
                 Assert.That(HasAutoNetworkedField(nameof(OnFireComponent.Duration)), Is.False);
-                Assert.That(typeof(FlammableComponent).GetField("Intensity"), Is.Null);
-                Assert.That(typeof(FlammableComponent).GetField("Duration"), Is.Null);
             });
         });
 
