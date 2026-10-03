@@ -21,7 +21,7 @@
     <GuideEntityEmbed Entity="AU14CommsMastField" Caption="Field antenna mast"/>
   </Box>
   When there's no working tower nearby, you can raise your own. A [bold]field antenna mast[/bold] relays the combat nets (the squad, command, intel, JTAC and MP channels) around it, so a forward position or command post can stay on the net.
-  - [bold]Building it[/bold]: it's a staged job for someone with [bold]engineering training[/bold] (level 2). Pick [bold]antenna mast parts[/bold] from the metal build menu, lay a footing on open ground, raise and weld the lattice, guy it, fit an antenna head from requisitions and tune the feed. The full step list is in [textlink="the AN/PRC-117G guide" link="AU14CommsANPRC"].
+  - [bold]Building it[/bold]: it's a staged job for someone with [bold]engineering training[/bold] (level 2) or [bold]RTO/JTAC training[/bold] (level 4). Pick [bold]antenna mast parts[/bold] from the metal build menu, lay a footing on open ground, raise and weld the lattice, guy it, fit an antenna head from requisitions and tune the feed. The full step list is in [textlink="the AN/PRC-117G guide" link="AU14CommsANPRC"].
   - [bold]Keying it[/bold]: a mast only carries the nets of sides whose [bold]COMSEC fill card[/bold] has been loaded into its open feed. An unkeyed mast carries nothing.
   - [bold]Range[/bold]: full signal out to about 75 tiles, and a weaker signal out to about 100.
   - [bold]It needs power.[/bold] An unpowered mast relays nothing, so build it in an area whose APC has power, with its equipment channel on. In the field, bring a PACMAN generator and APC electronics to power the area (see [textlink="Power" link="CMUGuideEngPower"]).
