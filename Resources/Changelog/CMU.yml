@@ -11537,5 +11537,40 @@
   id: 724
   time: '2026-10-02T14:59:28.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2070
+- author: evil-two-info-types
+  changes:
+  - message: Increased the amount of CLF sapper slots by 1 and decreased the Guerrilla
+      slots by 1 aswell.
+    type: Add
+  id: 725
+  time: '2026-10-03T12:11:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2055
+- author: TheHellFireo
+  changes:
+  - message: Fixed queen dispatch and hijack evolution, threat speech and victory
+      accounting, Despoiler rewards, and K9 interactions.
+    type: Fix
+  - message: Fixed hunter injectors, captive tools, Forsaken eggs, medicomp treatment,
+      and preserve controls.
+    type: Fix
+  - message: Restored CIU radio equipment, RTO antenna-mast access, tower map markers,
+      sensor faction vision, and remote peeking.
+    type: Fix
+  - message: Clear expired VTOL camera targets without disturbing a separate weapon
+      target.
+    type: Fix
+  - message: Allow field-camera tripod deployment on Stable Garrison Redux.
+    type: Map
+  - message: Civilian nurses now have Surgery 2.
+    type: Tweak
+  - message: Tanks allow two faults per hardpoint, snowplows cannot develop faults,
+      and repairs cause triple wear down to 20% capacity.
+    type: Tweak
+  - message: Vehicle health displays retain factory maximums and use clearer fault
+      formatting.
+    type: Tweak
+  id: 726
+  time: '2026-10-03T13:38:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2071
 Name: CMU
 Order: -1
