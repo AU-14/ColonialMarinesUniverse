@@ -14,7 +14,7 @@ namespace Content.Server.CMU14.Threats.Mobs.CLF;
 
 /// <summary>
 ///     Handles CLF spawning at round start (at a chosen safehouse) and additional entity spawning.
-///     Command roles (Cell Leader, Physician, Surgeon) always spawn at the safehouse.
+///     Command roles and sappers always spawn at the safehouse.
 ///     Guerilla roles have a 66% chance to spawn at colony civilian spawn points and 34% at the safehouse.
 /// </summary>
 public sealed partial class ClfSpawnSystem : EntitySystem
@@ -27,14 +27,15 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     private static readonly ProtoId<CLFSpawnConfigPrototype> ClfSpawnConfig = "CLFSpawnConfig";
 
     /// <summary>
-    ///     CLF command job IDs that always spawn at the safehouse.
+    ///     CLF job IDs that always spawn at the safehouse.
     /// </summary>
-    private static readonly HashSet<string> CommandJobIds = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly HashSet<string> SafehouseJobIds = new(StringComparer.OrdinalIgnoreCase)
     {
         "AU14JobCLFCellLeader",
         "AU14JobCLFRadioOperator",
         "AU14JobCLFPhysician",
-        "AU14JobCLFSurgeon"
+        "AU14JobCLFSurgeon",
+        "AU14JobCLFSapper"
     };
 
     private static readonly string[] ClfSurgeonRoundstartEquipment =
@@ -118,9 +119,9 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         }
 
         // Determine spawn location based on role type
-        bool isCommand = CommandJobIds.Contains(jobId);
+        bool isSafehouseRole = SafehouseJobIds.Contains(jobId);
 
-        if (!isCommand && _random.Prob(GuerillaCivilianSpawnChance))
+        if (!isSafehouseRole && _random.Prob(GuerillaCivilianSpawnChance))
         {
             // Guerilla: try to spawn at a colony civilian spawn point
             EntityCoordinates? civilianSpawnLocation = GetRandomColonyCivilianSpawnPoint();
@@ -142,15 +143,15 @@ public sealed partial class ClfSpawnSystem : EntitySystem
                 "CLF Spawn System: No colony civilian spawn points found, falling back to safehouse for guerilla.");
         }
 
-        // Command roles always spawn here; guerillas that rolled safehouse (34%) or had no civilian points also land
-        // here
+        // Command roles and sappers always spawn here.
+        // Guerillas also use it after a safehouse roll or when there are no civilian points.
         args.SpawnResult = _stationSpawning.SpawnPlayerMob(
             _chosenSafehouseLocation.Value,
             args.Job,
             args.HumanoidCharacterProfile,
             args.Station);
         SpawnJobEquipment(jobId, args.SpawnResult.Value);
-        Log.Info($"CLF Spawn System: Spawned {(isCommand ? "command" : "guerilla")} {jobId} at safehouse");
+        Log.Info($"CLF Spawn System: Spawned {jobId} at safehouse");
     }
 
     private void SpawnJobEquipment(string jobId, EntityUid mob)
