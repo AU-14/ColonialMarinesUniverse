@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared.CMU14.Timing; // CMU14
 using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
 
@@ -97,7 +96,7 @@ public sealed partial class UseDelaySystem : EntitySystem
         if (!ent.Comp.Delays.TryGetValue(id, out var entry))
             return false;
 
-        return entry.EndTime >= CmuPredictionTiming.GetSimulationTime(_gameTiming); // CMU14
+        return entry.EndTime >= _gameTiming.CurTime;
     }
 
     /// <summary>
@@ -108,7 +107,7 @@ public sealed partial class UseDelaySystem : EntitySystem
         if (!ent.Comp.Delays.TryGetValue(id, out var entry))
             return;
 
-        entry.EndTime = CmuPredictionTiming.GetSimulationTime(_gameTiming); // CMU14
+        entry.EndTime = _gameTiming.CurTime;
         Dirty(ent);
     }
 
@@ -160,7 +159,7 @@ public sealed partial class UseDelaySystem : EntitySystem
         if (!ent.Comp.Delays.TryGetValue(id, out var entry))
             return false;
 
-        var curTime = CmuPredictionTiming.GetSimulationTime(_gameTiming); // CMU14
+        var curTime = _gameTiming.CurTime;
         entry.StartTime = curTime;
         entry.EndTime = curTime - _metadata.GetPauseTime(ent) + entry.Length;
         Dirty(ent);
@@ -180,7 +179,7 @@ public sealed partial class UseDelaySystem : EntitySystem
     /// </summary>
     public void ResetAllDelays(Entity<UseDelayComponent> ent)
     {
-        var curTime = CmuPredictionTiming.GetSimulationTime(_gameTiming); // CMU14
+        var curTime = _gameTiming.CurTime;
         foreach (var entry in ent.Comp.Delays.Values)
         {
             entry.StartTime = curTime;

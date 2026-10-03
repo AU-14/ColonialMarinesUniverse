@@ -626,7 +626,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
             _audio.PlayPvs(xeno.Comp.LeapSound, xeno);
         }
 
-        if (_net.IsClient && _timing.IsFirstTimePredicted) // CMU14: replay reconstructs effects without resending.
+        if (_net.IsClient)
         {
             if (_logPrediction)
             {
@@ -650,11 +650,11 @@ public sealed partial class XenoLeapSystem : EntitySystem
                 GetNetEntity(target),
                 _rmcLagCompensation.GetLastRealTick(null),
                 _rmcLagCompensation.GetClientSubstep());
-            // CMU14: predictive dispatch already sends a network message.
-            if (_timing.InPrediction)
+            RaiseNetworkEvent(predictedEv);
+            if (_timing.InPrediction && _timing.IsFirstTimePredicted)
+            {
                 RaisePredictiveEvent(predictedEv);
-            else
-                RaiseNetworkEvent(predictedEv);
+            }
         }
 
         StopLeap(xeno);

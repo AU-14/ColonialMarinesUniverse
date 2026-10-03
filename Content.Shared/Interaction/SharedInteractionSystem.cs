@@ -1437,9 +1437,7 @@ namespace Content.Shared.Interaction
             if (!Resolve(target, ref target.Comp))
                 return false;
 
-            // CMU14: preserve the caller's explicit current-position versus viewed-position contract.
-            // return IsAccessible(user, target) && InRangeUnobstructed(user, target, range, collisionMask, predicate);
-            return IsAccessible(user, target) && InRangeUnobstructed(user, target, range, collisionMask, predicate, lagCompensate: lagCompensated);
+            return IsAccessible(user, target) && InRangeUnobstructed(user, target, range, collisionMask, predicate);
         }
 
         /// <summary>
